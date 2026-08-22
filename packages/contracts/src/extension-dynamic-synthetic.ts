@@ -6,6 +6,8 @@ export const EXTENSION_DYNAMIC_RECEIPT_SCHEMA_V1 = "chimpmaera.extension-trust/d
 export const EXTENSION_DYNAMIC_OBSERVED_SCHEMA_V1 = "chimpmaera.extension-trust/dynamic-synthetic-observed/v1" as const;
 export const EXTENSION_DYNAMIC_CLAIM_BOUNDARY_V1 = "LOCAL_SYNTHETIC_DYNAMIC_PROOF_ONLY_NO_CONTAINMENT_CLAIM_NO_THIRD_PARTY_TRUST_NO_ACTIVATION_NO_PRODUCTION" as const;
 export const EXTENSION_DYNAMIC_LOCAL_IMAGE_ID_V1 = "sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03" as const;
+export const EXTENSION_DYNAMIC_SYNTHETIC_SUBJECT_TREE_DIGEST_V1 = "00f5e0f2a16f744df208888303bc2c07f7c92c31ca8ffefae0a7d5f89d745398" as const;
+export const EXTENSION_DYNAMIC_SYNTHETIC_RUNNER_DIGEST_V1 = "08f8f4b696c08edeb2871966a8e62d7af5d6c37283a5a29a95213f9ebe0230c6" as const;
 
 export interface ExtensionDynamicConfigV1 {
   readonly schemaVersion: typeof EXTENSION_DYNAMIC_CONFIG_SCHEMA_V1;
@@ -50,8 +52,8 @@ const OBSERVED_KEYS = ["schemaVersion", "outcome", "exitCode", "timedOut", "clea
 const CLEANUP_KEYS = ["containerRemoved", "scratchRemoved", "residueCount"] as const;
 const READBACK_KEYS = ["preTreeDigest", "postTreeDigest", "egressPolicy"] as const;
 const SCENARIOS = ["success", "injected-failure", "timeout"] as const;
-const SYNTHETIC_SUBJECT_ROOT = "/srv/chimpmaera/extension-dynamic/subject";
-const SYNTHETIC_RUNNER_ROOT = "/srv/chimpmaera/extension-dynamic/runner";
+const SYNTHETIC_SUBJECT_ROOT = "/tmp/chimpmaera/extension-dynamic/subject";
+const SYNTHETIC_RUNNER_ROOT = "/tmp/chimpmaera/extension-dynamic/runner";
 const SYNTHETIC_SCRATCH_ROOT = "/tmp/chimpmaera/extension-dynamic";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -117,8 +119,8 @@ export function validateExtensionDynamicConfigV1(value: unknown): ExtensionDynam
   if (!isSafeSyntheticPath(subject.hostPath, SYNTHETIC_SUBJECT_ROOT)) {
     fail("SUBJECT_PATH", `hostPath must be a safe descendant of ${SYNTHETIC_SUBJECT_ROOT}`);
   }
-  if (digest({ id: subject.id, version: subject.version, hostPath: subject.hostPath }) !== subject.digest) {
-    fail("SUBJECT_DIGEST_DRIFT", "subject digest does not match the subject identity");
+  if (subject.digest !== EXTENSION_DYNAMIC_SYNTHETIC_SUBJECT_TREE_DIGEST_V1) {
+    fail("SUBJECT_DIGEST_DRIFT", "subject digest must match the frozen repository-owned subject tree bytes");
   }
   const image = closedKeys(config.image, IMAGE_KEYS, "image");
   if (image.name !== "node:24-bookworm-slim") {
@@ -130,6 +132,9 @@ export function validateExtensionDynamicConfigV1(value: unknown): ExtensionDynam
   }
   if (!isHex64(config.runnerDigest)) {
     fail("RUNNER_DIGEST", "runnerDigest must be a 64 character lowercase hex string");
+  }
+  if (config.runnerDigest !== EXTENSION_DYNAMIC_SYNTHETIC_RUNNER_DIGEST_V1) {
+    fail("RUNNER_DIGEST_DRIFT", "runnerDigest must match the frozen repository-owned runner bytes");
   }
   if (!isSafeSyntheticPath(config.runnerHostPath, SYNTHETIC_RUNNER_ROOT)) {
     fail("RUNNER_PATH", `runnerHostPath must be a safe descendant of ${SYNTHETIC_RUNNER_ROOT}`);
@@ -172,6 +177,8 @@ export function buildExtensionDynamicDockerArgsV1(value: unknown): readonly stri
     "docker",
     "run",
     "--rm",
+    "--pull",
+    "never",
     "--network",
     "none",
     "--read-only",

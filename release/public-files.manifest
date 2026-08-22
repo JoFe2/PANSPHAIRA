@@ -381,6 +381,7 @@ scripts/adaptive-delivery-status.mjs	scripts/adaptive-delivery-status.mjs	0755
 scripts/adaptive-controller.mjs	scripts/adaptive-controller.mjs	0755
 scripts/adaptive-evidence-gates.mjs	scripts/adaptive-evidence-gates.mjs	0755
 scripts/build-public-release.sh	scripts/build-public-release.sh	0755
+scripts/extension-dynamic-synthetic.mjs	scripts/extension-dynamic-synthetic.mjs	0644
 scripts/learning-routing-baseline.mjs	scripts/learning-routing-baseline.mjs	0644
 scripts/refresh-integrity-data.mjs	scripts/refresh-integrity-data.mjs	0644
 scripts/render-issue-candidate-evidence.mjs	scripts/render-issue-candidate-evidence.mjs	0755
@@ -440,6 +441,7 @@ tests/effective-rights.test.ts	tests/effective-rights.test.ts	0644
 tests/erp-read-connector.test.ts	tests/erp-read-connector.test.ts	0644
 tests/extension-assurance-profile.test.ts	tests/extension-assurance-profile.test.ts	0644
 tests/extension-dynamic-synthetic.test.ts	tests/extension-dynamic-synthetic.test.ts	0644
+tests/extension-dynamic-synthetic-runner.test.mjs	tests/extension-dynamic-synthetic-runner.test.mjs	0644
 tests/external-plugin-preflight.test.ts	tests/external-plugin-preflight.test.ts	0644
 tests/external-bi-service.test.ts	tests/external-bi-service.test.ts	0644
 tests/external-video-service.test.ts	tests/external-video-service.test.ts	0644
@@ -460,6 +462,8 @@ tests/fixtures/erp-read/supported-export-v1.json	tests/fixtures/erp-read/support
 tests/fixtures/extension-assurance/negative-matrix-v1.json	tests/fixtures/extension-assurance/negative-matrix-v1.json	0644
 tests/fixtures/extension-assurance/positive-profile-v1.json	tests/fixtures/extension-assurance/positive-profile-v1.json	0644
 tests/fixtures/extension-dynamic/core-v1.json	tests/fixtures/extension-dynamic/core-v1.json	0644
+tests/fixtures/extension-dynamic/runner/runner.js	tests/fixtures/extension-dynamic/runner/runner.js	0644
+tests/fixtures/extension-dynamic/subject/core.json	tests/fixtures/extension-dynamic/subject/core.json	0644
 tests/fixtures/external-plugin-preflight/dsh-benign-v1.json	tests/fixtures/external-plugin-preflight/dsh-benign-v1.json	0644
 tests/fixtures/external-plugin-preflight/mcp-risk-v1.json	tests/fixtures/external-plugin-preflight/mcp-risk-v1.json	0644
 tests/fixtures/external-plugin-preflight/package-risk-v1.json	tests/fixtures/external-plugin-preflight/package-risk-v1.json	0644

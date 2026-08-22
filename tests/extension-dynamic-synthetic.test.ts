@@ -9,6 +9,8 @@ import {
   EXTENSION_DYNAMIC_LOCAL_IMAGE_ID_V1,
   EXTENSION_DYNAMIC_OBSERVED_SCHEMA_V1,
   EXTENSION_DYNAMIC_RECEIPT_SCHEMA_V1,
+  EXTENSION_DYNAMIC_SYNTHETIC_RUNNER_DIGEST_V1,
+  EXTENSION_DYNAMIC_SYNTHETIC_SUBJECT_TREE_DIGEST_V1,
   buildExtensionDynamicDockerArgsV1,
   buildExtensionDynamicReceiptV1,
   validateExtensionDynamicConfigV1,
@@ -71,7 +73,8 @@ test("ETL-DYN closed validation accepts the seeded core fixture and freezes the 
     "LOCAL_SYNTHETIC_DYNAMIC_PROOF_ONLY_NO_CONTAINMENT_CLAIM_NO_THIRD_PARTY_TRUST_NO_ACTIVATION_NO_PRODUCTION",
   );
   assert.deepEqual(validateExtensionDynamicConfigV1(input), input);
-  assert.equal(validateExtensionDynamicConfigV1(input).subject.digest, input.subject.digest);
+  assert.equal(validateExtensionDynamicConfigV1(input).subject.digest, EXTENSION_DYNAMIC_SYNTHETIC_SUBJECT_TREE_DIGEST_V1);
+  assert.equal(validateExtensionDynamicConfigV1(input).runnerDigest, EXTENSION_DYNAMIC_SYNTHETIC_RUNNER_DIGEST_V1);
 });
 
 test("ETL-DYN builds the exact safe docker argv for the seeded core fixture", () => {
@@ -80,6 +83,8 @@ test("ETL-DYN builds the exact safe docker argv for the seeded core fixture", ()
     "docker",
     "run",
     "--rm",
+    "--pull",
+    "never",
     "--network",
     "none",
     "--read-only",
@@ -98,9 +103,9 @@ test("ETL-DYN builds the exact safe docker argv for the seeded core fixture", ()
     "--pids-limit",
     "64",
     "-v",
-    "/srv/chimpmaera/extension-dynamic/subject/core:/subject:ro",
+    "/tmp/chimpmaera/extension-dynamic/subject/core:/subject:ro",
     "-v",
-    "/srv/chimpmaera/extension-dynamic/runner/runner.js:/runner/runner.js:ro",
+    "/tmp/chimpmaera/extension-dynamic/runner/runner.js:/runner/runner.js:ro",
     "-v",
     "/tmp/chimpmaera/extension-dynamic/scratch:/scratch:rw",
     EXTENSION_DYNAMIC_LOCAL_IMAGE_ID_V1,
@@ -193,8 +198,8 @@ test("ETL-DYN denies unknown fields at every closed level", () => {
 });
 
 test("ETL-DYN denies subject digest drift and resource violations", () => {
-  const drifted = { ...fixture(), subject: { ...fixture().subject, id: "extension-dynamic-synthetic-core-drifted" } };
-  expectDenial(drifted, "SUBJECT_DIGEST_DRIFT");
+  expectDenial({ ...fixture(), subject: { ...fixture().subject, digest: "f".repeat(64) } }, "SUBJECT_DIGEST_DRIFT");
+  expectDenial({ ...fixture(), runnerDigest: "f".repeat(64) }, "RUNNER_DIGEST_DRIFT");
 
   const resources: Array<[string, unknown]> = [
     ["RESOURCES", { ...fixture(), resources: { ...fixture().resources, pidsLimit: 0 } }],
@@ -214,8 +219,8 @@ test("ETL-DYN denies subject digest drift and resource violations", () => {
 test("ETL-DYN denies unsafe or overlapping mounts before argv construction", () => {
   const cases: Array<[string, unknown]> = [
     ["SUBJECT_PATH", { ...fixture(), subject: { ...fixture().subject, hostPath: "/etc" } }],
-    ["SUBJECT_PATH", { ...fixture(), subject: { ...fixture().subject, hostPath: "/srv/chimpmaera/extension-dynamic/subject/../runner" } }],
-    ["RUNNER_PATH", { ...fixture(), runnerHostPath: "/srv/chimpmaera/extension-dynamic/subject/core/runner.js" }],
+    ["SUBJECT_PATH", { ...fixture(), subject: { ...fixture().subject, hostPath: "/tmp/chimpmaera/extension-dynamic/subject/../runner" } }],
+    ["RUNNER_PATH", { ...fixture(), runnerHostPath: "/tmp/chimpmaera/extension-dynamic/subject/core/runner.js" }],
     ["SCRATCH_PATH", { ...fixture(), scratchHostPath: "/tmp" }],
   ];
   for (const [code, value] of cases) {
