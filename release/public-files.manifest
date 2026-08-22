@@ -228,6 +228,7 @@ package-lock.json	package-lock.json	0644
 package.json	package.json	0644
 packages/contracts/src/adaptive-evidence-gates.ts	packages/contracts/src/adaptive-evidence-gates.ts	0644
 packages/contracts/src/agent-work-event.ts	packages/contracts/src/agent-work-event.ts	0644
+packages/contracts/src/agent-work-process-input.ts	packages/contracts/src/agent-work-process-input.ts	0644
 packages/contracts/src/analytics-projection.ts	packages/contracts/src/analytics-projection.ts	0644
 packages/contracts/src/azure-identity-profile.ts	packages/contracts/src/azure-identity-profile.ts	0644
 packages/contracts/src/builder-authority.ts	packages/contracts/src/builder-authority.ts	0644
@@ -403,6 +404,7 @@ tests/adaptability-benchmark-m0.test.mjs	tests/adaptability-benchmark-m0.test.mj
 tests/adaptive-controller.test.mjs	tests/adaptive-controller.test.mjs	0644
 tests/adaptive-evidence-gates.test.ts	tests/adaptive-evidence-gates.test.ts	0644
 tests/agent-work-event.test.ts	tests/agent-work-event.test.ts	0644
+tests/agent-work-process-input.test.ts	tests/agent-work-process-input.test.ts	0644
 tests/analytics-projection.test.ts	tests/analytics-projection.test.ts	0644
 tests/azure-identity-profile.test.ts	tests/azure-identity-profile.test.ts	0644
 tests/builder-agent-runtime.test.mjs	tests/builder-agent-runtime.test.mjs	0644
