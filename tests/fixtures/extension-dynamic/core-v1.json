@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "chimpmaera.extension-trust/dynamic-synthetic-config/v1",
+  "subject": {
+    "id": "extension-dynamic-synthetic-core",
+    "version": "1.0.0",
+    "digest": "e62d218bc85023b8f55536c46c00c1704fd8d106e76020cebbc72cfd6a44908e",
+    "hostPath": "/srv/chimpmaera/extension-dynamic/subject/core"
+  },
+  "image": {
+    "name": "node:24-bookworm-slim",
+    "id": "sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03"
+  },
+  "runnerDigest": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+  "runnerHostPath": "/srv/chimpmaera/extension-dynamic/runner/runner.js",
+  "scenario": "success",
+  "timeoutMs": 30000,
+  "resources": {
+    "pidsLimit": 64,
+    "memoryBytes": 536870912,
+    "cpus": 0.5
+  },
+  "scratchHostPath": "/tmp/chimpmaera/extension-dynamic/scratch"
+}

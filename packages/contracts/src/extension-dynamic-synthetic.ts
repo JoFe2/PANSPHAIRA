@@ -1,0 +1,264 @@
+import { createHash } from "node:crypto";
+import { canonicalJson } from "./canonical-json.js";
+
+export const EXTENSION_DYNAMIC_CONFIG_SCHEMA_V1 = "chimpmaera.extension-trust/dynamic-synthetic-config/v1" as const;
+export const EXTENSION_DYNAMIC_RECEIPT_SCHEMA_V1 = "chimpmaera.extension-trust/dynamic-synthetic-receipt/v1" as const;
+export const EXTENSION_DYNAMIC_OBSERVED_SCHEMA_V1 = "chimpmaera.extension-trust/dynamic-synthetic-observed/v1" as const;
+export const EXTENSION_DYNAMIC_CLAIM_BOUNDARY_V1 = "LOCAL_SYNTHETIC_DYNAMIC_PROOF_ONLY_NO_CONTAINMENT_CLAIM_NO_THIRD_PARTY_TRUST_NO_ACTIVATION_NO_PRODUCTION" as const;
+export const EXTENSION_DYNAMIC_LOCAL_IMAGE_ID_V1 = "sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03" as const;
+
+export interface ExtensionDynamicConfigV1 {
+  readonly schemaVersion: typeof EXTENSION_DYNAMIC_CONFIG_SCHEMA_V1;
+  readonly subject: { readonly id: string; readonly version: string; readonly digest: string; readonly hostPath: string };
+  readonly image: { readonly name: "node:24-bookworm-slim"; readonly id: string };
+  readonly runnerDigest: string;
+  readonly runnerHostPath: string;
+  readonly scenario: "success" | "injected-failure" | "timeout";
+  readonly timeoutMs: number;
+  readonly resources: { readonly pidsLimit: number; readonly memoryBytes: number; readonly cpus: number };
+  readonly scratchHostPath: string;
+}
+
+export interface ExtensionDynamicObservedV1 {
+  readonly schemaVersion: typeof EXTENSION_DYNAMIC_OBSERVED_SCHEMA_V1;
+  readonly outcome: "SUCCESS" | "INJECTED_FAILURE" | "TIMEOUT";
+  readonly exitCode: number;
+  readonly timedOut: boolean;
+  readonly cleanup: {
+    readonly containerRemoved: true;
+    readonly scratchRemoved: true;
+    readonly residueCount: 0;
+  };
+  readonly readback: {
+    readonly preTreeDigest: string;
+    readonly postTreeDigest: string;
+    readonly egressPolicy: "NETWORK_NONE";
+  };
+}
+
+function digest(value: unknown): string {
+  return createHash("sha256").update(canonicalJson(value)).digest("hex");
+}
+
+const CONFIG_KEYS = [
+  "schemaVersion", "subject", "image", "runnerDigest", "runnerHostPath", "scenario", "timeoutMs", "resources", "scratchHostPath",
+] as const;
+const SUBJECT_KEYS = ["id", "version", "digest", "hostPath"] as const;
+const IMAGE_KEYS = ["name", "id"] as const;
+const RESOURCE_KEYS = ["pidsLimit", "memoryBytes", "cpus"] as const;
+const OBSERVED_KEYS = ["schemaVersion", "outcome", "exitCode", "timedOut", "cleanup", "readback"] as const;
+const CLEANUP_KEYS = ["containerRemoved", "scratchRemoved", "residueCount"] as const;
+const READBACK_KEYS = ["preTreeDigest", "postTreeDigest", "egressPolicy"] as const;
+const SCENARIOS = ["success", "injected-failure", "timeout"] as const;
+const SYNTHETIC_SUBJECT_ROOT = "/srv/chimpmaera/extension-dynamic/subject";
+const SYNTHETIC_RUNNER_ROOT = "/srv/chimpmaera/extension-dynamic/runner";
+const SYNTHETIC_SCRATCH_ROOT = "/tmp/chimpmaera/extension-dynamic";
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+    && Object.getPrototypeOf(value) === Object.prototype;
+}
+
+function closedKeys(value: unknown, keys: readonly string[], path: string): Record<string, unknown> {
+  if (!isRecord(value)) fail("NOT_OBJECT", `${path} must be a plain JSON object`);
+  const present = Object.keys(value).sort();
+  const expected: string[] = [...keys].sort();
+  const unknown = present.filter((key) => !expected.includes(key));
+  if (unknown.length > 0) fail("UNKNOWN_FIELD", `${path}.${unknown.join(",")}`);
+  const missing = expected.filter((key) => !present.includes(key));
+  if (missing.length > 0) fail("MISSING_FIELD", `${path}.${missing.join(",")}`);
+  return value;
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.length > 0;
+}
+
+function isHex64(value: unknown): value is string {
+  return typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
+}
+
+function isImageId(value: unknown): value is string {
+  return typeof value === "string" && /^sha256:[a-f0-9]{64}$/.test(value);
+}
+
+function isPositiveInteger(value: unknown): value is number {
+  return Number.isSafeInteger(value) && (value as number) > 0;
+}
+
+function isPositiveNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value) && (value as number) > 0;
+}
+
+function isSafeSyntheticPath(value: unknown, root: string): value is string {
+  if (typeof value !== "string" || !value.startsWith(`${root}/`)) return false;
+  if (value !== value.normalize("NFC") || !/^\/[A-Za-z0-9._/-]+$/.test(value)) return false;
+  const parts = value.split("/");
+  return !parts.some((part, index) => index > 0 && (part.length === 0 || part === "." || part === ".."));
+}
+
+function pathsOverlap(left: string, right: string): boolean {
+  return left === right || left.startsWith(`${right}/`) || right.startsWith(`${left}/`);
+}
+
+function fail(code: string, detail: string): never {
+  throw new Error(`EXTENSION_DYNAMIC_${code}: ${detail}`);
+}
+
+export function validateExtensionDynamicConfigV1(value: unknown): ExtensionDynamicConfigV1 {
+  const config = closedKeys(value, CONFIG_KEYS, "config");
+  if (config.schemaVersion !== EXTENSION_DYNAMIC_CONFIG_SCHEMA_V1) {
+    fail("SCHEMA_VERSION", String(config.schemaVersion));
+  }
+  const subject = closedKeys(config.subject, SUBJECT_KEYS, "subject");
+  if (!isNonEmptyString(subject.id)) fail("SUBJECT", "id must be a non-empty string");
+  if (!isNonEmptyString(subject.version)) fail("SUBJECT", "version must be a non-empty string");
+  if (!isHex64(subject.digest)) fail("SUBJECT", "digest must be a 64 character lowercase hex string");
+  if (!isSafeSyntheticPath(subject.hostPath, SYNTHETIC_SUBJECT_ROOT)) {
+    fail("SUBJECT_PATH", `hostPath must be a safe descendant of ${SYNTHETIC_SUBJECT_ROOT}`);
+  }
+  if (digest({ id: subject.id, version: subject.version, hostPath: subject.hostPath }) !== subject.digest) {
+    fail("SUBJECT_DIGEST_DRIFT", "subject digest does not match the subject identity");
+  }
+  const image = closedKeys(config.image, IMAGE_KEYS, "image");
+  if (image.name !== "node:24-bookworm-slim") {
+    fail("IMAGE", "name must be the pinned synthetic image");
+  }
+  if (!isImageId(image.id)) fail("IMAGE", "id must be a sha256 image digest");
+  if (image.id !== EXTENSION_DYNAMIC_LOCAL_IMAGE_ID_V1) {
+    fail("IMAGE_ID_DRIFT", "id must match the exact locally pinned image");
+  }
+  if (!isHex64(config.runnerDigest)) {
+    fail("RUNNER_DIGEST", "runnerDigest must be a 64 character lowercase hex string");
+  }
+  if (!isSafeSyntheticPath(config.runnerHostPath, SYNTHETIC_RUNNER_ROOT)) {
+    fail("RUNNER_PATH", `runnerHostPath must be a safe descendant of ${SYNTHETIC_RUNNER_ROOT}`);
+  }
+  if (!SCENARIOS.includes(config.scenario as (typeof SCENARIOS)[number])) {
+    fail("SCENARIO", String(config.scenario));
+  }
+  if (!isPositiveInteger(config.timeoutMs) || config.timeoutMs > 60_000) {
+    fail("TIMEOUT", "timeoutMs must be an integer from 1 through 60000");
+  }
+  const resources = closedKeys(config.resources, RESOURCE_KEYS, "resources");
+  if (!isPositiveInteger(resources.pidsLimit) || (resources.pidsLimit as number) > 128) {
+    fail("RESOURCES", "pidsLimit must be an integer from 1 through 128");
+  }
+  if (!isPositiveInteger(resources.memoryBytes)
+    || (resources.memoryBytes as number) < 67_108_864
+    || (resources.memoryBytes as number) > 1_073_741_824) {
+    fail("RESOURCES", "memoryBytes must be from 64 MiB through 1 GiB");
+  }
+  if (!isPositiveNumber(resources.cpus) || (resources.cpus as number) > 1) {
+    fail("RESOURCES", "cpus must be greater than zero and no more than one");
+  }
+  if (!isSafeSyntheticPath(config.scratchHostPath, SYNTHETIC_SCRATCH_ROOT)) {
+    fail("SCRATCH_PATH", `scratchHostPath must be a safe descendant of ${SYNTHETIC_SCRATCH_ROOT}`);
+  }
+  const subjectPath = subject.hostPath as string;
+  const runnerPath = config.runnerHostPath as string;
+  const scratchPath = config.scratchHostPath as string;
+  if (pathsOverlap(subjectPath, runnerPath)
+    || pathsOverlap(subjectPath, scratchPath)
+    || pathsOverlap(runnerPath, scratchPath)) {
+    fail("PATH_OVERLAP", "subject, runner and scratch host paths must be disjoint");
+  }
+  return config as unknown as ExtensionDynamicConfigV1;
+}
+
+export function buildExtensionDynamicDockerArgsV1(value: unknown): readonly string[] {
+  const config = validateExtensionDynamicConfigV1(value);
+  return [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges",
+    "--user",
+    "1000:1000",
+    "--memory",
+    String(config.resources.memoryBytes),
+    "--memory-swap",
+    String(config.resources.memoryBytes),
+    "--cpus",
+    String(config.resources.cpus),
+    "--pids-limit",
+    String(config.resources.pidsLimit),
+    "-v",
+    `${config.subject.hostPath}:/subject:ro`,
+    "-v",
+    `${config.runnerHostPath}:/runner/runner.js:ro`,
+    "-v",
+    `${config.scratchHostPath}:/scratch:rw`,
+    config.image.id,
+    "node",
+    "/runner/runner.js",
+    "--scenario",
+    config.scenario,
+    "--timeout-ms",
+    String(config.timeoutMs),
+  ];
+}
+
+function validateObservedV1(value: unknown, scenario: ExtensionDynamicConfigV1["scenario"]): ExtensionDynamicObservedV1 {
+  const observed = closedKeys(value, OBSERVED_KEYS, "observed");
+  if (observed.schemaVersion !== EXTENSION_DYNAMIC_OBSERVED_SCHEMA_V1) {
+    fail("OBSERVED_SCHEMA_VERSION", String(observed.schemaVersion));
+  }
+  const expected = scenario === "success"
+    ? { outcome: "SUCCESS", exitCode: 0, timedOut: false }
+    : scenario === "injected-failure"
+      ? { outcome: "INJECTED_FAILURE", exitCode: 1, timedOut: false }
+      : { outcome: "TIMEOUT", exitCode: 124, timedOut: true };
+  if (observed.outcome !== expected.outcome) fail("OBSERVED_OUTCOME_MISMATCH", String(observed.outcome));
+  if (observed.exitCode !== expected.exitCode) fail("OBSERVED_EXIT_CODE_MISMATCH", String(observed.exitCode));
+  if (observed.timedOut !== expected.timedOut) fail("OBSERVED_TIMEOUT_MISMATCH", String(observed.timedOut));
+  const cleanup = closedKeys(observed.cleanup, CLEANUP_KEYS, "observed.cleanup");
+  if (cleanup.containerRemoved !== true || cleanup.scratchRemoved !== true || cleanup.residueCount !== 0) {
+    fail("OBSERVED_CLEANUP", "container and scratch removal with zero residue must be verified");
+  }
+  const readback = closedKeys(observed.readback, READBACK_KEYS, "observed.readback");
+  if (!isHex64(readback.preTreeDigest) || !isHex64(readback.postTreeDigest)) {
+    fail("OBSERVED_READBACK", "preTreeDigest and postTreeDigest must be lowercase SHA-256 digests");
+  }
+  if (readback.egressPolicy !== "NETWORK_NONE") fail("OBSERVED_EGRESS", String(readback.egressPolicy));
+  return observed as unknown as ExtensionDynamicObservedV1;
+}
+
+export function buildExtensionDynamicReceiptV1(value: unknown, observedValue?: unknown): unknown {
+  const config = validateExtensionDynamicConfigV1(value);
+  const observed = observedValue === undefined ? null : validateObservedV1(observedValue, config.scenario);
+  const body = {
+    schemaVersion: EXTENSION_DYNAMIC_RECEIPT_SCHEMA_V1,
+    claimBoundary: EXTENSION_DYNAMIC_CLAIM_BOUNDARY_V1,
+    subject: {
+      id: config.subject.id,
+      version: config.subject.version,
+      digest: config.subject.digest,
+      hostPath: config.subject.hostPath,
+    },
+    image: { name: config.image.name, id: config.image.id },
+    runnerDigest: config.runnerDigest,
+    runnerHostPath: config.runnerHostPath,
+    scenario: config.scenario,
+    timeoutMs: config.timeoutMs,
+    resources: {
+      pidsLimit: config.resources.pidsLimit,
+      memoryBytes: config.resources.memoryBytes,
+      cpus: config.resources.cpus,
+    },
+    scratchHostPath: config.scratchHostPath,
+    execution: observed === null ? "NOT_RUN" : "OBSERVED_LOCAL_SYNTHETIC",
+    outcome: observed?.outcome ?? "NOT_RUN",
+    exitCode: observed?.exitCode ?? null,
+    timedOut: observed?.timedOut ?? null,
+    cleanup: observed?.cleanup ?? "NOT_RUN",
+    readback: observed?.readback ?? "NOT_RUN",
+  };
+  return { ...body, receiptDigest: digest(body) };
+}

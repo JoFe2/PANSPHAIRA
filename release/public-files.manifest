@@ -247,6 +247,7 @@ packages/contracts/src/development-worker.ts	packages/contracts/src/development-
 packages/contracts/src/effective-rights.ts	packages/contracts/src/effective-rights.ts	0644
 packages/contracts/src/erp-read-connector.ts	packages/contracts/src/erp-read-connector.ts	0644
 packages/contracts/src/extension-assurance-profile.ts	packages/contracts/src/extension-assurance-profile.ts	0644
+packages/contracts/src/extension-dynamic-synthetic.ts	packages/contracts/src/extension-dynamic-synthetic.ts	0644
 packages/contracts/src/external-plugin-preflight.ts	packages/contracts/src/external-plugin-preflight.ts	0644
 packages/contracts/src/external-bi-service.ts	packages/contracts/src/external-bi-service.ts	0644
 packages/contracts/src/external-video-service.ts	packages/contracts/src/external-video-service.ts	0644
@@ -438,6 +439,7 @@ tests/docs-site.test.mjs	tests/docs-site.test.mjs	0644
 tests/effective-rights.test.ts	tests/effective-rights.test.ts	0644
 tests/erp-read-connector.test.ts	tests/erp-read-connector.test.ts	0644
 tests/extension-assurance-profile.test.ts	tests/extension-assurance-profile.test.ts	0644
+tests/extension-dynamic-synthetic.test.ts	tests/extension-dynamic-synthetic.test.ts	0644
 tests/external-plugin-preflight.test.ts	tests/external-plugin-preflight.test.ts	0644
 tests/external-bi-service.test.ts	tests/external-bi-service.test.ts	0644
 tests/external-video-service.test.ts	tests/external-video-service.test.ts	0644
@@ -457,6 +459,7 @@ tests/fixtures/erp-read/contract-v1.json	tests/fixtures/erp-read/contract-v1.jso
 tests/fixtures/erp-read/supported-export-v1.json	tests/fixtures/erp-read/supported-export-v1.json	0644
 tests/fixtures/extension-assurance/negative-matrix-v1.json	tests/fixtures/extension-assurance/negative-matrix-v1.json	0644
 tests/fixtures/extension-assurance/positive-profile-v1.json	tests/fixtures/extension-assurance/positive-profile-v1.json	0644
+tests/fixtures/extension-dynamic/core-v1.json	tests/fixtures/extension-dynamic/core-v1.json	0644
 tests/fixtures/external-plugin-preflight/dsh-benign-v1.json	tests/fixtures/external-plugin-preflight/dsh-benign-v1.json	0644
 tests/fixtures/external-plugin-preflight/mcp-risk-v1.json	tests/fixtures/external-plugin-preflight/mcp-risk-v1.json	0644
 tests/fixtures/external-plugin-preflight/package-risk-v1.json	tests/fixtures/external-plugin-preflight/package-risk-v1.json	0644
