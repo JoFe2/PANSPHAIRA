@@ -12,6 +12,12 @@ import {
   sha256FileV1,
   sha256TreeV1,
 } from "../scripts/extension-dynamic-synthetic.mjs";
+import {
+  EXTENSION_DYNAMIC_CONTAINER_PREFIX_V1,
+  readbackExtensionDynamicImageV1,
+  runBoundedProcessV1,
+  runExtensionDynamicScenarioV1,
+} from "../scripts/extension-dynamic-process-lifecycle.mjs";
 
 const parentRoot = path.dirname(EXTENSION_DYNAMIC_STAGE_ROOT_V1);
 const sourceSubject = path.join(EXTENSION_DYNAMIC_SOURCE_ROOT_V1, "subject");
@@ -117,4 +123,62 @@ test("ETL staging cleanup is exact-root only, idempotent and process-execution f
   assert.deepEqual(await cleanupExtensionDynamicStagingV1(), { stageRootRemoved: true, parentRemoved: true, residueCount: 0 });
   const source = await readFile("scripts/extension-dynamic-synthetic.mjs", "utf8");
   assert.doesNotMatch(source, /node:child_process|spawn\(|execFile\(/);
+});
+
+test("ETL process adapter bounds success, timeout and output", { concurrency: false }, async () => {
+  const success = await runBoundedProcessV1(process.execPath, ["-e", "process.stdout.write('ok')"], { timeoutMs: 2_000 });
+  assert.deepEqual(
+    { exitCode: success.exitCode, timedOut: success.timedOut, stdout: success.stdout },
+    { exitCode: 0, timedOut: false, stdout: "ok" },
+  );
+  const timeout = await runBoundedProcessV1(process.execPath, ["-e", "setInterval(() => {}, 60_000)"], { timeoutMs: 30 });
+  assert.equal(timeout.timedOut, true);
+  await assert.rejects(
+    runBoundedProcessV1(process.execPath, ["-e", "process.stdout.write('x'.repeat(70_000))"], { timeoutMs: 2_000 }),
+    /EXTENSION_DYNAMIC_PROCESS_OUTPUT_EXCEEDED/,
+  );
+});
+
+test("ETL actual runner produces three observed receipts and zero scoped residue", { concurrency: false, timeout: 30_000 }, async (context) => {
+  await cleanOwnedRoot();
+  try {
+    await readbackExtensionDynamicImageV1();
+  } catch (error) {
+    context.skip(`exact local Docker prerequisite absent: ${error.message}`);
+    return;
+  }
+
+  const fixture = JSON.parse(await readFile("tests/fixtures/extension-dynamic/core-v1.json", "utf8"));
+  const expected = new Map([
+    ["success", { outcome: "SUCCESS", exitCode: 0, timedOut: false }],
+    ["injected-failure", { outcome: "INJECTED_FAILURE", exitCode: 1, timedOut: false }],
+    ["timeout", { outcome: "TIMEOUT", exitCode: 124, timedOut: true }],
+  ]);
+
+  for (const [scenario, observation] of expected) {
+    const runId = `${scenario.replaceAll("-", "")}-review`;
+    const result = await runExtensionDynamicScenarioV1({
+      ...fixture,
+      scenario,
+      timeoutMs: scenario === "timeout" ? 500 : 5_000,
+    }, runId);
+    const receipt = result.receipt;
+    assert.equal(result.containerName, `${EXTENSION_DYNAMIC_CONTAINER_PREFIX_V1}${runId}`);
+    assert.deepEqual(
+      { outcome: receipt.outcome, exitCode: receipt.exitCode, timedOut: receipt.timedOut },
+      observation,
+    );
+    assert.equal(receipt.execution, "OBSERVED_LOCAL_SYNTHETIC");
+    assert.equal(receipt.cleanup.containerRemoved, true);
+    assert.equal(receipt.cleanup.residueCount, 0);
+    assert.equal(receipt.readback.preTreeDigest, EXTENSION_DYNAMIC_SUBJECT_TREE_DIGEST_V1);
+    assert.equal(receipt.readback.postTreeDigest, EXTENSION_DYNAMIC_SUBJECT_TREE_DIGEST_V1);
+    assert.equal(receipt.readback.egressPolicy, "NETWORK_NONE");
+    assert.deepEqual(result.dockerArgv.slice(0, 4), ["docker", "run", "--name", result.containerName]);
+    assert.ok(result.dockerArgv.includes("--pull"));
+    assert.ok(result.dockerArgv.includes("never"));
+    assert.ok(result.dockerArgv.includes("--network"));
+    assert.ok(result.dockerArgv.includes("none"));
+    await absent(EXTENSION_DYNAMIC_STAGE_ROOT_V1);
+  }
 });

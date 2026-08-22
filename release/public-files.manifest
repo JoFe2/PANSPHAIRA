@@ -381,6 +381,7 @@ scripts/adaptive-delivery-status.mjs	scripts/adaptive-delivery-status.mjs	0755
 scripts/adaptive-controller.mjs	scripts/adaptive-controller.mjs	0755
 scripts/adaptive-evidence-gates.mjs	scripts/adaptive-evidence-gates.mjs	0755
 scripts/build-public-release.sh	scripts/build-public-release.sh	0755
+scripts/extension-dynamic-process-lifecycle.mjs	scripts/extension-dynamic-process-lifecycle.mjs	0644
 scripts/extension-dynamic-synthetic.mjs	scripts/extension-dynamic-synthetic.mjs	0644
 scripts/learning-routing-baseline.mjs	scripts/learning-routing-baseline.mjs	0644
 scripts/refresh-integrity-data.mjs	scripts/refresh-integrity-data.mjs	0644
