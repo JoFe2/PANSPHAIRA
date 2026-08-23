@@ -17,7 +17,10 @@ import {
 const POLICY = {
   policyId: "policy:etl-security-routing-v1",
   policyVersion: "1.0.0",
-  policyDigest: "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
+  policyDigest: digest({
+    policyId: "policy:etl-security-routing-v1",
+    policyVersion: "1.0.0",
+  }),
 };
 const EVIDENCE_DIGEST = "11223344556677889900aabbccddeeff11223344556677889900aabbccddeeff";
 
@@ -59,7 +62,6 @@ function expectedRouted(decision: ReturnType<typeof decideExtensionAssuranceSecu
     severity: decision.severity,
     findingDigest: decision.findingDigest,
     evidenceDigest: decision.evidenceDigest,
-    policyId: POLICY.policyId,
     policyVersion: POLICY.policyVersion,
     policyDigest: POLICY.policyDigest,
     claimBoundary: EXTENSION_ASSURANCE_SECURITY_ROUTING_CLAIM_BOUNDARY_V1,
@@ -184,7 +186,6 @@ function expectedDenied(reasonCodes: readonly string[]) {
     severity: null,
     findingDigest: null,
     evidenceDigest: null,
-    policyId: null,
     policyVersion: null,
     policyDigest: null,
     claimBoundary: EXTENSION_ASSURANCE_SECURITY_ROUTING_CLAIM_BOUNDARY_V1,
@@ -258,7 +259,7 @@ test("EASR-09 denies a finding digest that does not bind the finding metadata", 
   assert.equal(decision.severity, null);
   assert.equal(decision.findingDigest, null);
   assert.equal(decision.evidenceDigest, null);
-  assert.equal(decision.policyId, null);
+  assert.ok(!("policyId" in decision));
   assert.equal(decision.policyVersion, null);
   assert.equal(decision.policyDigest, null);
 });
@@ -305,4 +306,29 @@ test("EASR-11 denies missing required fields at every closed level", () => {
     const value = mutated("LOW", "PUBLIC_SAFE_SYNTHETIC", "PUBLIC_EVIDENCE", apply);
     assert.deepEqual(decideExtensionAssuranceSecurityRoutingV1(value), expectedDenied(["SCHEMA_DENIED"]), label);
   }
+});
+
+test("EASR-12 denies policyId substitution when the bound policy digest is unchanged", () => {
+  const value = mutated("LOW", "PUBLIC_SAFE_SYNTHETIC", "PUBLIC_EVIDENCE", (draft) => {
+    draft.policy.policyId = "policy:substituted-security-routing-v1";
+  });
+  const decision = decideExtensionAssuranceSecurityRoutingV1(value);
+  assert.equal(decision.outcome, "DENY");
+  assert.deepEqual(decision.reasonCodes, ["POLICY_DIGEST_MISMATCH_DENIED"]);
+});
+
+test("EASR-13 never emits a claim-bearing policyId in the public decision projection", () => {
+  const claimBearingPolicyId = "policy:trust-badge-admission-approved";
+  const value = mutated("LOW", "PUBLIC_SAFE_SYNTHETIC", "PUBLIC_EVIDENCE", (draft) => {
+    draft.policy.policyId = claimBearingPolicyId;
+    draft.policy.policyDigest = digest({
+      policyId: claimBearingPolicyId,
+      policyVersion: draft.policy.policyVersion,
+    });
+  });
+  const decision = decideExtensionAssuranceSecurityRoutingV1(value);
+  const rendered = renderExtensionAssuranceSecurityRoutingDecisionV1(value);
+  assert.equal(decision.outcome, "ROUTED");
+  assert.ok(!("policyId" in decision));
+  assert.ok(!rendered.includes(claimBearingPolicyId));
 });

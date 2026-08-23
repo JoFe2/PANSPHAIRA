@@ -35,6 +35,7 @@ export const EXTENSION_ASSURANCE_SECURITY_ROUTING_REASON_CODES_V1 = [
   "SECURITY_SENSITIVE_PRIVATE",
   "HIGH_SEVERITY_PRIVATE",
   "SCHEMA_DENIED",
+  "POLICY_DIGEST_MISMATCH_DENIED",
   "FINDING_DIGEST_MISMATCH_DENIED",
   "SEVERITY_CLASSIFICATION_MISMATCH_DENIED",
   "PUBLIC_ROUTE_ATTEMPT_DENIED",
@@ -79,7 +80,6 @@ export interface ExtensionAssuranceSecurityRoutingDecisionV1 {
   readonly severity: ExtensionAssuranceSeverityV1 | null;
   readonly findingDigest: string | null;
   readonly evidenceDigest: string | null;
-  readonly policyId: string | null;
   readonly policyVersion: string | null;
   readonly policyDigest: string | null;
   readonly claimBoundary: typeof EXTENSION_ASSURANCE_SECURITY_ROUTING_CLAIM_BOUNDARY_V1;
@@ -104,7 +104,7 @@ function isId(value: unknown): value is string {
 }
 
 function isSemver(value: unknown): value is string {
-  return typeof value === "string" && /^\d+\.\d+\.\d+$/.test(value);
+  return typeof value === "string" && value.length <= 32 && /^\d+\.\d+\.\d+$/.test(value);
 }
 
 function isDigest(value: unknown): value is string {
@@ -126,6 +126,12 @@ function validEvidence(value: unknown): value is ExtensionAssuranceSecurityRouti
 function validPolicy(value: unknown): value is ExtensionAssuranceSecurityRoutingInputV1["policy"] {
   return exactKeys(value, ["policyId", "policyVersion", "policyDigest"])
     && isId(value.policyId) && isSemver(value.policyVersion) && isDigest(value.policyDigest);
+}
+
+function policyEnvelopeDigest(
+  policy: ExtensionAssuranceSecurityRoutingInputV1["policy"],
+): string {
+  return digest({ policyId: policy.policyId, policyVersion: policy.policyVersion });
 }
 
 function validInput(value: unknown): value is ExtensionAssuranceSecurityRoutingInputV1 {
@@ -150,7 +156,6 @@ function decision(
     severity: ExtensionAssuranceSecurityRoutingDecisionV1["severity"];
     findingDigest: ExtensionAssuranceSecurityRoutingDecisionV1["findingDigest"];
     evidenceDigest: ExtensionAssuranceSecurityRoutingDecisionV1["evidenceDigest"];
-    policyId: ExtensionAssuranceSecurityRoutingDecisionV1["policyId"];
     policyVersion: ExtensionAssuranceSecurityRoutingDecisionV1["policyVersion"];
     policyDigest: ExtensionAssuranceSecurityRoutingDecisionV1["policyDigest"];
   },
@@ -183,7 +188,6 @@ function deny(reasonCodes: readonly ExtensionAssuranceSecurityRoutingReasonCodeV
       severity: null,
       findingDigest: null,
       evidenceDigest: null,
-      policyId: null,
       policyVersion: null,
       policyDigest: null,
     },
@@ -199,6 +203,9 @@ export function decideExtensionAssuranceSecurityRoutingV1(value: unknown):
   const elevated = finding.severity === "HIGH" || finding.severity === "CRITICAL";
   const sensitiveClass = EXTENSION_ASSURANCE_SENSITIVE_FINDING_CLASSES_V1
     .includes(finding.findingClass as (typeof EXTENSION_ASSURANCE_SENSITIVE_FINDING_CLASSES_V1)[number]);
+  if (policyEnvelopeDigest(policy) !== policy.policyDigest) {
+    reasons.add("POLICY_DIGEST_MISMATCH_DENIED");
+  }
   if (
     extensionAssuranceFindingDigestV1({
       findingId: finding.findingId,
@@ -229,7 +236,6 @@ export function decideExtensionAssuranceSecurityRoutingV1(value: unknown):
         severity: finding.severity,
         findingDigest: finding.findingDigest,
         evidenceDigest: input.evidence.evidenceDigest,
-        policyId: policy.policyId,
         policyVersion: policy.policyVersion,
         policyDigest: policy.policyDigest,
       },
@@ -244,7 +250,6 @@ export function decideExtensionAssuranceSecurityRoutingV1(value: unknown):
       severity: finding.severity,
       findingDigest: finding.findingDigest,
       evidenceDigest: input.evidence.evidenceDigest,
-      policyId: policy.policyId,
       policyVersion: policy.policyVersion,
       policyDigest: policy.policyDigest,
     },
