@@ -283,6 +283,11 @@ test("unsafe, non-record or malformed closed inputs are denied", () => {
   fractionalIssuedAt.issuedAtMs = 1.5;
   assertDenied(checkUpdateApplyTupleLockV1(fractionalIssuedAt), "SCHEMA_DENIED");
 
+  const negativeZeroIssuedAt = structuredClone(validInput());
+  negativeZeroIssuedAt.issuedAtMs = -0;
+  assert.equal(Object.is(negativeZeroIssuedAt.issuedAtMs, -0), true);
+  assertDenied(checkUpdateApplyTupleLockV1(negativeZeroIssuedAt), "SCHEMA_DENIED");
+
   const malformedAuthority = structuredClone(validInput());
   malformedAuthority.source.authorityProfileDigest = "not-a-digest";
   assertDenied(checkUpdateApplyTupleLockV1(malformedAuthority), "SCHEMA_DENIED");

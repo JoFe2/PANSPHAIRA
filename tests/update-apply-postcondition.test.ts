@@ -330,6 +330,20 @@ test("negative zero residue is rejected at the closed input boundary", () => {
   assert.deepEqual(reasons(verifyUpdateApplyPostconditionV1(malformed, context)), ["SCHEMA_DENIED"]);
 });
 
+test("negative zero is rejected for every envelope and independent-context time field", () => {
+  const observedAtFixture = fixture();
+  const observedAt = { ...observedAtFixture.envelope, observedAtMs: -0 };
+  assert.deepEqual(reasons(verifyUpdateApplyPostconditionV1(observedAt, observedAtFixture.context)), ["SCHEMA_DENIED"]);
+
+  const evaluationTimeFixture = fixture();
+  const evaluationTime = { ...evaluationTimeFixture.context, evaluationTimeMs: -0 };
+  assert.deepEqual(reasons(verifyUpdateApplyPostconditionV1(evaluationTimeFixture.envelope, evaluationTime)), ["INDEPENDENT_CONTEXT_DENIED"]);
+
+  const maxAgeFixture = fixture();
+  const maxAge = { ...maxAgeFixture.context, maxObservationAgeMs: -0 };
+  assert.deepEqual(reasons(verifyUpdateApplyPostconditionV1(maxAgeFixture.envelope, maxAge)), ["INDEPENDENT_CONTEXT_DENIED"]);
+});
+
 test("invalid observation time denies fail-closed", () => {
   const future = fixture({ observedAtMs: EVALUATION_TIME_MS + 1_000 });
   const futureDecision = verifyUpdateApplyPostconditionV1(future.envelope, future.context);

@@ -387,9 +387,9 @@ a2600f69b954e3b1a001ea2cd8a59ffa183cd70d6abba90f4364c7d8effe9194  ./packages/con
 d2326a6b1af62ed4e8f3a65c30b1978bd285691bdc7f2e4b872b6091c68f8977  ./packages/contracts/src/signal-release-intake.ts
 54b825da8d6a83e44b6d71daece98e1ceabed3da92fdde3751c7a8843d27156f  ./packages/contracts/src/skill-admission.ts
 dccc35242f38bd7b98a0cae0d363764e95afb5ca8a4a808a287b7be6a82350a2  ./packages/contracts/src/skill-bundle.ts
-6b1b6756ac87c62caa99c33698d9d6922c680180657de8d7d90a2e0d536c4c6f  ./packages/contracts/src/update-apply-journal.ts
-30192542b92790f8b893f43b238081cebf8668ba78fa234e0ba8d14acc187394  ./packages/contracts/src/update-apply-postcondition.ts
-3707f1f92d923614cea545a8c0bfd25bb93036e70f53bcff90d632dd01164988  ./packages/contracts/src/update-apply-tuple-lock.ts
+f3e9264a694fda529aa769a2671293d10910e177421470e190f3420c5a0daf1f  ./packages/contracts/src/update-apply-journal.ts
+a9e09a64e32ab887c541a5124cd72392baf89c22be0bbdaa0be4d557d4b5f4a0  ./packages/contracts/src/update-apply-postcondition.ts
+88c6944e9899f9ce736b8dd3ebd79dd9aab1e4685b7c7a7b6bd84102e7d1eeb8  ./packages/contracts/src/update-apply-tuple-lock.ts
 02785fd8ecffe4c4c42c1a360c7a671c93d54cc702e27079705c804d24198c59  ./packages/contracts/src/update-check-plan.ts
 f548fbba7ce159f1d000818b4f9db043f2c422e7e587002f5da38a71d95ca992  ./packages/contracts/src/update-doctor.ts
 12d11e9c1db2acd9e6de4a87629e9b607ab4879b69e4ae32e6014623c784af2d  ./packages/contracts/src/usage-insights.ts
@@ -675,9 +675,9 @@ af0f2117460bf2fc8478d9a45c58b17ad1bc6c839a9a0654a325078354fb4990  ./tests/resour
 b8c70273fd4992a13e46b671603b19f75e3876e5a1e07f6e7f92045830f872dd  ./tests/skill-admission.test.ts
 b4cb7c2f3b2570316979405def59070160fb3df38ca0a9fce7a5a5dd7ad2ce28  ./tests/skill-bundle.test.ts
 33f5a2089d41efb4be46d9054ebdb6a90823674b235083481dc55bffb84df8d2  ./tests/supply-chain-verifier.test.mjs
-089573e6958e50713876205af6e525636d64d54a4f8a3c5bed3ef775bc15e398  ./tests/update-apply-journal.test.ts
-113f75e20c34f44b79002f27a27f96b42f8387967434dcce933dc484c3f925ce  ./tests/update-apply-postcondition.test.ts
-11d75553835a322a58f97bfc560743e20a96c1db6e7afda491d97732a29b6d94  ./tests/update-apply-tuple-lock.test.ts
+b109e468b23b0c71ecffeddeb280b66a1b0d4ff1565c8a9bb8c42fa77720126e  ./tests/update-apply-journal.test.ts
+b60165c6b39347c3e1a9888ad550214436c522726323001f4b285e1a263f5560  ./tests/update-apply-postcondition.test.ts
+77271e3aa0b97f6e1c73f3fc02c9a55e660de87bea8285c901888f61e064aa9e  ./tests/update-apply-tuple-lock.test.ts
 ff005fdf2f8cd21a0db2a26c01483c8977ba9dbe41116a487d7730a404ae8244  ./tests/update-check-plan.test.ts
 df2f665f8181167ca3f34627a2b22094b9bb8d999769829cc8c1faccb8b9fe8f  ./tests/update-doctor-compose-adapter.test.ts
 2857f96b93fe7c076130c82cce24c30bd0c2e5c144e5843c9b7fe4f6850134fa  ./tests/update-doctor-core.test.ts

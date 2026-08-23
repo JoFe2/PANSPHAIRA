@@ -237,7 +237,7 @@ function safeObject(entries: readonly (readonly [string, unknown])[], nullProtot
 function safeJsonClone<T>(value: T, nullPrototypeObjects = false, ancestors = new Set<object>()): T {
   if (value === null || typeof value === "string" || typeof value === "boolean") return value;
   if (typeof value === "number") {
-    if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) {
+    if (Object.is(value, -0) || !Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) {
       throw new TypeError("UNSAFE_JSON_NUMBER");
     }
     return value;
@@ -274,7 +274,7 @@ function isDigest(value: unknown): value is string {
 }
 
 function isTimestamp(value: unknown): value is number {
-  return Number.isSafeInteger(value) && (value as number) >= 0;
+  return Number.isSafeInteger(value) && !Object.is(value, -0) && (value as number) >= 0;
 }
 
 function isPositiveRevision(value: unknown): value is number {

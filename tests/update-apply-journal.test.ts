@@ -221,6 +221,16 @@ test("UD-APPLY-01 builder rejects non-canonical fixture sequences and unsafe inp
     SUCCESS_EVENTS[2]!, SUCCESS_EVENTS[3]!,
   ];
   assert.throws(() => buildUpdateApplyJournalV1(options({ events: reversedTimes })), /INVALID_APPLY_JOURNAL_FIXTURE/);
+
+  const negativeZeroTimes = SUCCESS_EVENTS.map((event) => ({ ...event }));
+  negativeZeroTimes[0]!.timestampMs = -0;
+  assert.throws(() => buildUpdateApplyJournalV1(options({ events: negativeZeroTimes })), /INVALID_APPLY_JOURNAL_FIXTURE/);
+
+  const forgedNegativeZero = toPlain(successJournal());
+  (forgedNegativeZero.entries as PlainEntry[])[0]!.timestampMs = -0;
+  const negativeZeroResult = verifyUpdateApplyJournalV1(forgedNegativeZero, contextFor());
+  assert.equal(negativeZeroResult.outcome, "DENIED");
+  assert.ok(negativeZeroResult.reasonCodes.includes("SCHEMA_DENIED" as never), negativeZeroResult.reasonCodes.join(","));
 });
 
 test("UD-APPLY-01 replay, sequence and revision gap, time reversal, and digest drift deny", () => {
