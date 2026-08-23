@@ -9,6 +9,9 @@ import {
   EXTENSION_ASSURANCE_CLAIM_BOUNDARY_V1,
   EXTENSION_ASSURANCE_RESULT_SCHEMA_V1,
   EXTENSION_ASSURANCE_RETEST_TRIGGERS_V1,
+  evaluateExtensionAssuranceProfileV1,
+  extensionAssuranceProfileDigestV1,
+  type ExtensionAssuranceProfileV1,
   type ExtensionAssuranceReasonCodeV1,
   type ExtensionAssuranceRetestTriggerV1,
 } from "./extension-assurance-profile.js";
@@ -96,9 +99,11 @@ export interface ExtensionAssuranceRetestLedgerDecisionBindingV1 {
 export interface ExtensionAssuranceRetestLedgerConformantCompletionV1 {
   readonly subjectDigest: string;
   readonly profileDigest: string;
+  readonly profile: ExtensionAssuranceProfileV1;
   readonly result: ExtensionAssuranceRetestLedgerResultBindingV1;
   readonly resultDigest: string;
   readonly evidenceRefs: readonly string[];
+  readonly completionDigest: string;
 }
 
 export interface ExtensionAssuranceRetestLedgerEntryV1 {
@@ -302,10 +307,13 @@ function validDecisionBinding(value: unknown): value is ExtensionAssuranceRetest
 }
 
 function validConformantCompletionShape(value: unknown): value is ExtensionAssuranceRetestLedgerConformantCompletionV1 {
-  return exactKeys(value, ["subjectDigest", "profileDigest", "result", "resultDigest", "evidenceRefs"])
+  return exactKeys(value, [
+    "subjectDigest", "profileDigest", "profile", "result", "resultDigest", "evidenceRefs", "completionDigest",
+  ])
     && isDigest(value.subjectDigest) && isDigest(value.profileDigest)
+    && isRecord(value.profile)
     && validResultBinding(value.result) && isDigest(value.resultDigest)
-    && isUniqueArray(value.evidenceRefs, isArtifactRef, true);
+    && isUniqueArray(value.evidenceRefs, isArtifactRef, true) && isDigest(value.completionDigest);
 }
 
 function validEntryShape(value: unknown): value is ExtensionAssuranceRetestLedgerEntryV1 {
@@ -347,6 +355,11 @@ function validLedgerShape(value: unknown): value is ExtensionAssuranceRetestLedg
 
 export function extensionAssuranceRetestLedgerResultDigestV1(value: Record<string, unknown>): string {
   return createHash("sha256").update(canonicalJson(value)).digest("hex");
+}
+
+export function extensionAssuranceRetestLedgerCompletionDigestV1(value: Record<string, unknown>): string {
+  const unsigned = Object.fromEntries(Object.entries(value).filter(([key]) => key !== "completionDigest"));
+  return createHash("sha256").update(canonicalJson(unsigned)).digest("hex");
 }
 
 export function extensionAssuranceRetestLedgerEntryDigestV1(value: Record<string, unknown>): string {
@@ -458,7 +471,23 @@ export function evaluateExtensionAssuranceRetestLedgerV1(value: unknown): Extens
       if (completion === null) {
         reasons.add("CONFORMANT_EVIDENCE_DENIED");
       } else {
-        if (completion.subjectDigest !== ledger.subject.subjectDigest) {
+        const evaluatedProfileResult = evaluateExtensionAssuranceProfileV1(completion.profile);
+        const profileDigest = evaluatedProfileResult.outcome === "PROFILE_CONFORMANT"
+          ? extensionAssuranceProfileDigestV1(completion.profile as unknown as Record<string, unknown>)
+          : null;
+        if (extensionAssuranceRetestLedgerCompletionDigestV1(
+          completion as unknown as Record<string, unknown>,
+        ) !== completion.completionDigest) {
+          reasons.add("DIGEST_MISMATCH_DENIED");
+        }
+        if (evaluatedProfileResult.outcome !== "PROFILE_CONFORMANT"
+          || canonicalJson(completion.profile.subject) !== canonicalJson(ledger.subject)
+          || completion.subjectDigest !== ledger.subject.subjectDigest
+          || completion.subjectDigest !== completion.profile.subject.subjectDigest
+          || completion.profileDigest !== completion.profile.profileDigest
+          || completion.profileDigest !== profileDigest
+          || canonicalJson(completion.result) !== canonicalJson(evaluatedProfileResult)
+          || canonicalJson(completion.evidenceRefs) !== canonicalJson(completion.profile.evidence.artifactRefs)) {
           reasons.add("CONFORMANT_EVIDENCE_DENIED");
         }
         if (completion.profileDigest === ledger.prior.profileDigest) {

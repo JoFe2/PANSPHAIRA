@@ -16,6 +16,7 @@ import {
   EXTENSION_ASSURANCE_RETEST_LEDGER_SCHEMA_V1,
   EXTENSION_ASSURANCE_RETEST_LEDGER_VERIFIER_VERSION_V1,
   evaluateExtensionAssuranceRetestLedgerV1,
+  extensionAssuranceRetestLedgerCompletionDigestV1,
   extensionAssuranceRetestLedgerDigestV1,
   extensionAssuranceRetestLedgerEntryDigestV1,
   extensionAssuranceRetestLedgerResultDigestV1,
@@ -100,13 +101,17 @@ const EVENT_STATE: Record<string, string> = {
 };
 
 function defaultCompletion(): Record<string, any> {
-  return {
+  const completion = {
     subjectDigest: priorProfile.subject.subjectDigest,
     profileDigest: newProfileDigest,
+    profile: structuredClone(newProfile),
     result: structuredClone(conformantResult),
     resultDigest: extensionAssuranceRetestLedgerResultDigestV1(conformantResult),
     evidenceRefs: [ref(71), ref(72)],
+    completionDigest: "",
   };
+  completion.completionDigest = extensionAssuranceRetestLedgerCompletionDigestV1(completion);
+  return completion;
 }
 
 interface LedgerOptions {
@@ -315,6 +320,13 @@ test("RET-04 denies digest drift at every level of the chain", () => {
   recomputeEntry(completionDrift, 2);
   assertDenied(completionDrift, "DIGEST_MISMATCH_DENIED");
 
+  const completionEnvelopeDrift = buildLedger({
+    events: ["RETEST_REQUESTED", "RETEST_STARTED", "RETEST_COMPLETED"],
+  });
+  completionEnvelopeDrift.entries[2].conformantCompletion.completionDigest = hex(67);
+  recomputeEntry(completionEnvelopeDrift, 2);
+  assertDenied(completionEnvelopeDrift, "DIGEST_MISMATCH_DENIED");
+
   const priorDrift = buildLedger({ events: ["RETEST_REQUESTED"] });
   priorDrift.prior.resultDigest = hex(63);
   priorDrift.ledgerDigest = extensionAssuranceRetestLedgerDigestV1(priorDrift);
@@ -441,6 +453,17 @@ test("RET-11 denies a completion without new conformant subject and profile evid
   recomputeEntry(nonConformant, 2);
   assertDenied(nonConformant, "CONFORMANT_EVIDENCE_DENIED");
 
+  const deniedProfile = base();
+  deniedProfile.entries[2].conformantCompletion.profile.checks[0].outcome = "FAIL";
+  deniedProfile.entries[2].conformantCompletion.profile.profileDigest =
+    extensionAssuranceProfileDigestV1(deniedProfile.entries[2].conformantCompletion.profile);
+  deniedProfile.entries[2].conformantCompletion.profileDigest =
+    deniedProfile.entries[2].conformantCompletion.profile.profileDigest;
+  deniedProfile.entries[2].conformantCompletion.completionDigest =
+    extensionAssuranceRetestLedgerCompletionDigestV1(deniedProfile.entries[2].conformantCompletion);
+  recomputeEntry(deniedProfile, 2);
+  assertDenied(deniedProfile, "CONFORMANT_EVIDENCE_DENIED");
+
   const sameProfile = base();
   sameProfile.entries[2].conformantCompletion.profileDigest = priorProfileDigest;
   recomputeEntry(sameProfile, 2);
@@ -455,6 +478,23 @@ test("RET-11 denies a completion without new conformant subject and profile evid
   noCompletionEvidence.entries[2].conformantCompletion.evidenceRefs = [];
   recomputeEntry(noCompletionEvidence, 2);
   assertDenied(noCompletionEvidence, "CONFORMANT_EVIDENCE_DENIED");
+});
+
+test("RET-11 denies a forged completion with arbitrary profile digest and self-consistent bindings", () => {
+  const forged = buildLedger({ events: ["RETEST_REQUESTED", "RETEST_STARTED", "RETEST_COMPLETED"] });
+  const completion = forged.entries[2].conformantCompletion;
+  completion.profileDigest = hex(91);
+  completion.profile.evidence.artifactRefs = [ref(92), ref(93)];
+  completion.profile.profileDigest = extensionAssuranceProfileDigestV1(completion.profile);
+  completion.evidenceRefs = [...completion.profile.evidence.artifactRefs];
+  completion.result = structuredClone(conformantResult);
+  completion.resultDigest = extensionAssuranceRetestLedgerResultDigestV1(completion.result);
+  completion.completionDigest = extensionAssuranceRetestLedgerCompletionDigestV1(completion);
+  assert.equal(evaluateExtensionAssuranceProfileV1(completion.profile).outcome, "PROFILE_CONFORMANT");
+  assert.notEqual(completion.profileDigest, completion.profile.profileDigest);
+  recomputeEntry(forged, 2);
+
+  assertDenied(forged, "CONFORMANT_EVIDENCE_DENIED");
 });
 
 test("RET-12 denies a drifted verifier version", () => {
