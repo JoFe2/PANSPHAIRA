@@ -296,6 +296,9 @@ packages/contracts/src/resource-plane-profiles.ts	packages/contracts/src/resourc
 packages/contracts/src/signal-release-intake.ts	packages/contracts/src/signal-release-intake.ts	0644
 packages/contracts/src/skill-admission.ts	packages/contracts/src/skill-admission.ts	0644
 packages/contracts/src/skill-bundle.ts	packages/contracts/src/skill-bundle.ts	0644
+packages/contracts/src/update-apply-journal.ts	packages/contracts/src/update-apply-journal.ts	0644
+packages/contracts/src/update-apply-postcondition.ts	packages/contracts/src/update-apply-postcondition.ts	0644
+packages/contracts/src/update-apply-tuple-lock.ts	packages/contracts/src/update-apply-tuple-lock.ts	0644
 packages/contracts/src/update-check-plan.ts	packages/contracts/src/update-check-plan.ts	0644
 packages/contracts/src/update-doctor.ts	packages/contracts/src/update-doctor.ts	0644
 packages/contracts/src/usage-insights.ts	packages/contracts/src/usage-insights.ts	0644
@@ -576,6 +579,9 @@ tests/signal-release-intake.test.ts	tests/signal-release-intake.test.ts	0644
 tests/skill-admission.test.ts	tests/skill-admission.test.ts	0644
 tests/skill-bundle.test.ts	tests/skill-bundle.test.ts	0644
 tests/supply-chain-verifier.test.mjs	tests/supply-chain-verifier.test.mjs	0644
+tests/update-apply-journal.test.ts	tests/update-apply-journal.test.ts	0644
+tests/update-apply-postcondition.test.ts	tests/update-apply-postcondition.test.ts	0644
+tests/update-apply-tuple-lock.test.ts	tests/update-apply-tuple-lock.test.ts	0644
 tests/update-check-plan.test.ts	tests/update-check-plan.test.ts	0644
 tests/update-doctor-compose-adapter.test.ts	tests/update-doctor-compose-adapter.test.ts	0644
 tests/update-doctor-core.test.ts	tests/update-doctor-core.test.ts	0644

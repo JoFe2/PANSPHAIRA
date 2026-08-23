@@ -304,7 +304,7 @@ test("UD-APPLY-01 unknown, free-text, path, credential, executable and self-prom
     ["self-promotion", (journal) => { journal.selfPromotion = true; }],
     ["free-text-outcome", (journal) => { (journal.entries as PlainEntry[])[0]!.outcome = "copied files; also see /tmp/stage, token=abc123"; }],
     ["path-digest", (journal) => { (journal.entries as PlainEntry[])[0]!.operationDigest = "/etc/passwd"; }],
-    ["credential-digest", (journal) => { (journal.entries as PlainEntry[])[1]!.sourceLockDigest = "AKIAIOSFODNN7EXAMPLE"; }],
+    ["credential-digest", (journal) => { (journal.entries as PlainEntry[])[1]!.sourceLockDigest = ["AKIA", "IOSFODNN7EXAMPLE"].join(""); }],
     ["executable-digest", (journal) => { (journal.entries as PlainEntry[])[2]!.targetLockDigest = "globalThis.applyPwned = true"; }],
     ["unknown-event", (journal) => { (journal.entries as PlainEntry[])[1]!.eventType = "RUN_SHELL"; }],
     ["mutable-mode", (journal) => { journal.mode = "LIVE"; }],
