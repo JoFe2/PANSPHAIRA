@@ -247,6 +247,8 @@ packages/contracts/src/development-worker.ts	packages/contracts/src/development-
 packages/contracts/src/effective-rights.ts	packages/contracts/src/effective-rights.ts	0644
 packages/contracts/src/erp-read-connector.ts	packages/contracts/src/erp-read-connector.ts	0644
 packages/contracts/src/extension-assurance-profile.ts	packages/contracts/src/extension-assurance-profile.ts	0644
+packages/contracts/src/extension-assurance-retest-policy.ts	packages/contracts/src/extension-assurance-retest-policy.ts	0644
+packages/contracts/src/extension-assurance-appeal.ts	packages/contracts/src/extension-assurance-appeal.ts	0644
 packages/contracts/src/extension-dynamic-synthetic.ts	packages/contracts/src/extension-dynamic-synthetic.ts	0644
 packages/contracts/src/external-plugin-preflight.ts	packages/contracts/src/external-plugin-preflight.ts	0644
 packages/contracts/src/external-bi-service.ts	packages/contracts/src/external-bi-service.ts	0644
@@ -441,6 +443,8 @@ tests/docs-site.test.mjs	tests/docs-site.test.mjs	0644
 tests/effective-rights.test.ts	tests/effective-rights.test.ts	0644
 tests/erp-read-connector.test.ts	tests/erp-read-connector.test.ts	0644
 tests/extension-assurance-profile.test.ts	tests/extension-assurance-profile.test.ts	0644
+tests/extension-assurance-retest-policy.test.ts	tests/extension-assurance-retest-policy.test.ts	0644
+tests/extension-assurance-appeal.test.ts	tests/extension-assurance-appeal.test.ts	0644
 tests/extension-dynamic-synthetic.test.ts	tests/extension-dynamic-synthetic.test.ts	0644
 tests/extension-dynamic-synthetic-runner.test.mjs	tests/extension-dynamic-synthetic-runner.test.mjs	0644
 tests/external-plugin-preflight.test.ts	tests/external-plugin-preflight.test.ts	0644
