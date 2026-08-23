@@ -219,7 +219,93 @@ test("ETL-M1-APPEAL routes terminal states and requires retest after a confirmed
   assert.equal(falseNegative.publicClaim, "FALSE_NEGATIVE_RETEST_REQUIRED");
 });
 
-test("ETL-M1-APPEAL denies digest drift and unknown fields fail closed", () => {
+test("ETL-M1-APPEAL denies every event appended after a terminal event", () => {
+  const postTerminal = (terminal: { type: string; state: string }) =>
+    buildAppeal((record, ctx) => {
+      const prev = record.events[2];
+      const event: Record<string, any> = {
+        sequence: 4,
+        eventType: "EVIDENCE_SUBMITTED",
+        occurredAtMs: 1_700_000_000_000 + 3_000,
+        priorResultDigest: ctx.resultDigest,
+        evidenceRefs: [ref(5)],
+        prevEventDigest: prev?.eventDigest ?? EXTENSION_ASSURANCE_APPEAL_GENESIS_DIGEST_V1,
+        eventDigest: "",
+      };
+      event.eventDigest = extensionAssuranceAppealEventDigestV1(event);
+      record.events.push(event);
+      record.revision = record.events.length;
+      record.appealDigest = extensionAssuranceAppealDigestV1(record);
+    }, terminal);
+  for (const terminal of [
+    { type: "FALSE_POSITIVE_CONFIRMED", state: "CONFIRMED_FALSE_POSITIVE" },
+    { type: "FALSE_NEGATIVE_CONFIRMED", state: "CONFIRMED_FALSE_NEGATIVE" },
+    { type: "APPEAL_REJECTED", state: "REJECTED" },
+    { type: "SUPERSEDED", state: "SUPERSEDED" },
+  ] as const) {
+    const result = evaluateExtensionAssuranceAppealRecordV1(postTerminal(terminal));
+    assert.equal(result.outcome, "DENIED", terminal.type);
+    assert.ok(
+      result.reasonCodes.includes("STATE_TRANSITION_DENIED"),
+      `${terminal.type}:${result.reasonCodes.join(",")}`,
+    );
+    assert.equal(result.publicClaim, "APPEAL_DENIED", terminal.type);
+    assert.notEqual(result.reasonCodes, ["APPEAL_RECORDED"], terminal.type);
+  }
+});
+
+test("ETL-M1-APPEAL confirmed false negative never loses its retest requirement", () => {
+  const clean = evaluateExtensionAssuranceAppealRecordV1(buildAppeal(undefined, {
+    type: "FALSE_NEGATIVE_CONFIRMED",
+    state: "CONFIRMED_FALSE_NEGATIVE",
+  }));
+  assert.equal(clean.outcome, "RETEST_REQUIRED");
+  assert.deepEqual(clean.reasonCodes, ["FALSE_NEGATIVE_RETEST_REQUIRED"]);
+
+  const postTerminal = buildAppeal((record, ctx) => {
+    const prev = record.events[2];
+    const event: Record<string, any> = {
+      sequence: 4,
+      eventType: "EVIDENCE_SUBMITTED",
+      occurredAtMs: 1_700_000_000_000 + 3_000,
+      priorResultDigest: ctx.resultDigest,
+      evidenceRefs: [ref(5)],
+      prevEventDigest: prev?.eventDigest ?? EXTENSION_ASSURANCE_APPEAL_GENESIS_DIGEST_V1,
+      eventDigest: "",
+    };
+    event.eventDigest = extensionAssuranceAppealEventDigestV1(event);
+    record.events.push(event);
+    record.revision = record.events.length;
+    record.appealDigest = extensionAssuranceAppealDigestV1(record);
+  }, { type: "FALSE_NEGATIVE_CONFIRMED", state: "CONFIRMED_FALSE_NEGATIVE" });
+  const tainted = evaluateExtensionAssuranceAppealRecordV1(postTerminal);
+  assert.equal(tainted.outcome, "DENIED");
+  assert.notEqual(tainted.outcome, "APPEAL_RECORDED");
+  assert.ok(tainted.reasonCodes.includes("STATE_TRANSITION_DENIED"));
+
+  const resetToOpen = buildAppeal((record, ctx) => {
+    const prev = record.events[2];
+    const event: Record<string, any> = {
+      sequence: 4,
+      eventType: "EVIDENCE_SUBMITTED",
+      occurredAtMs: 1_700_000_000_000 + 3_000,
+      priorResultDigest: ctx.resultDigest,
+      evidenceRefs: [ref(5)],
+      prevEventDigest: prev?.eventDigest ?? EXTENSION_ASSURANCE_APPEAL_GENESIS_DIGEST_V1,
+      eventDigest: "",
+    };
+    event.eventDigest = extensionAssuranceAppealEventDigestV1(event);
+    record.events.push(event);
+    record.revision = record.events.length;
+    record.state = "OPEN";
+    record.appealDigest = extensionAssuranceAppealDigestV1(record);
+  }, { type: "FALSE_NEGATIVE_CONFIRMED", state: "CONFIRMED_FALSE_NEGATIVE" });
+  const reopened = evaluateExtensionAssuranceAppealRecordV1(resetToOpen);
+  assert.equal(reopened.outcome, "DENIED");
+  assert.notEqual(reopened.outcome, "APPEAL_RECORDED");
+  assert.ok(reopened.reasonCodes.includes("STATE_TRANSITION_DENIED"));
+});
+  test("ETL-M1-APPEAL denies digest drift and unknown fields fail closed", () => {
   const drift = buildAppeal();
   drift.appealDigest = hex(60);
   assert.ok(evaluateExtensionAssuranceAppealRecordV1(drift).reasonCodes.includes("DIGEST_MISMATCH_DENIED"));

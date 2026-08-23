@@ -255,7 +255,11 @@ export function evaluateExtensionAssuranceAppealRecordV1(value: unknown): Extens
   }
 
   const events = value.events;
+  let sawTerminalEvent = false;
   events.forEach((event, index) => {
+    if (sawTerminalEvent) {
+      reasons.add("STATE_TRANSITION_DENIED");
+    }
     if (extensionAssuranceAppealEventDigestV1(event as unknown as Record<string, unknown>) !== event.eventDigest) {
       reasons.add("DIGEST_MISMATCH_DENIED");
     }
@@ -273,6 +277,9 @@ export function evaluateExtensionAssuranceAppealRecordV1(value: unknown): Extens
       : events[index - 1]?.eventDigest ?? EXTENSION_ASSURANCE_APPEAL_GENESIS_DIGEST_V1;
     if (event.prevEventDigest !== expectedPrev) {
       reasons.add("REPLAY_OR_GAP_DENIED");
+    }
+    if (EVENT_STATE[event.eventType] !== "OPEN") {
+      sawTerminalEvent = true;
     }
   });
 
