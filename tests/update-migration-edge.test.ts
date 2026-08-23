@@ -194,6 +194,8 @@ const DENIAL_CASES: readonly DenialCase[] = [
     reason: "SELF_LOOP_DENIED",
   },
   { name: "zero ordinal", edge: rawEdge({ ordinal: 0 }), reason: "ORDINAL_RANGE_DENIED" },
+  { name: "negative-zero ordinal", edge: (() => { const edge = rawEdge(); edge.ordinal = -0; return edge; })(), reason: "SCHEMA_DENIED" },
+  { name: "negative-zero issuedAtMs", edge: (() => { const edge = rawEdge(); edge.issuedAtMs = -0; return edge; })(), reason: "SCHEMA_DENIED" },
   { name: "ordinal gap", edge: rawEdge({ ordinal: 2 }), reason: "ORDINAL_GAP_DENIED" },
   {
     name: "source digest mismatch",

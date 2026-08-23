@@ -239,6 +239,9 @@ test("source and target tuple drift from independent context deny fail closed", 
 });
 
 test("replay and time invalidity deny fail closed", () => {
+  assertDenied(evaluateUpdateStagingEnvelopeV1({ ...fixture(), issuedAtMs: -0 }, context()), "SCHEMA_DENIED");
+  assertDenied(evaluateUpdateStagingEnvelopeV1(fixture(), context({ evaluationTimeMs: -0 })), "SCHEMA_DENIED");
+  assertDenied(evaluateUpdateStagingEnvelopeV1(fixture(), context({ maxEnvelopeAgeMs: -0 })), "SCHEMA_DENIED");
   assertDenied(evaluateUpdateStagingEnvelopeV1(fixture({ issuedAtMs: EVALUATION_TIME_MS + 1 }), context()), "REPLAY_DENIED");
   assertDenied(
     evaluateUpdateStagingEnvelopeV1(fixture({ issuedAtMs: ISSUED_AT_MS - (MAX_ENVELOPE_AGE_MS + 1) }), context()),

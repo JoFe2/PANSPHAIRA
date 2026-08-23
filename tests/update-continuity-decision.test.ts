@@ -623,3 +623,16 @@ test("UD-M1 continuity: unsafe and missing sub-objects deny before canonical dig
   delete missingKey.observation;
   asDenied(verifyUpdateContinuityDecisionV1(missingKey as unknown, context), "missing-observation");
 });
+
+test("UD-M1 continuity: negative zero time fields deny at envelope and independent-context boundaries", () => {
+  const input = buildInput();
+  const forged = structuredClone(input) as unknown as Record<string, unknown>;
+  (forged.accepted as Record<string, unknown>).observedAtMs = -0;
+  asDenied(verifyUpdateContinuityDecisionV1(forged, contextFor(input)), "negative-zero-snapshot-time");
+
+  const evaluationContext = { ...contextFor(input), evaluationTimeMs: -0 };
+  asDenied(verifyUpdateContinuityDecisionV1(input, evaluationContext), "negative-zero-evaluation-time");
+
+  const ageContext = { ...contextFor(input), maxObservationAgeMs: -0 };
+  asDenied(verifyUpdateContinuityDecisionV1(input, ageContext), "negative-zero-max-age");
+});
