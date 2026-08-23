@@ -300,7 +300,10 @@ packages/contracts/src/update-apply-journal.ts	packages/contracts/src/update-app
 packages/contracts/src/update-apply-postcondition.ts	packages/contracts/src/update-apply-postcondition.ts	0644
 packages/contracts/src/update-apply-tuple-lock.ts	packages/contracts/src/update-apply-tuple-lock.ts	0644
 packages/contracts/src/update-check-plan.ts	packages/contracts/src/update-check-plan.ts	0644
+packages/contracts/src/update-continuity-decision.ts	packages/contracts/src/update-continuity-decision.ts	0644
 packages/contracts/src/update-doctor.ts	packages/contracts/src/update-doctor.ts	0644
+packages/contracts/src/update-migration-edge.ts	packages/contracts/src/update-migration-edge.ts	0644
+packages/contracts/src/update-staging-envelope.ts	packages/contracts/src/update-staging-envelope.ts	0644
 packages/contracts/src/usage-insights.ts	packages/contracts/src/usage-insights.ts	0644
 packages/contracts/src/verification-fabric-v2.ts	packages/contracts/src/verification-fabric-v2.ts	0644
 packages/contracts/src/verification-fabric.ts	packages/contracts/src/verification-fabric.ts	0644
@@ -583,9 +586,12 @@ tests/update-apply-journal.test.ts	tests/update-apply-journal.test.ts	0644
 tests/update-apply-postcondition.test.ts	tests/update-apply-postcondition.test.ts	0644
 tests/update-apply-tuple-lock.test.ts	tests/update-apply-tuple-lock.test.ts	0644
 tests/update-check-plan.test.ts	tests/update-check-plan.test.ts	0644
+tests/update-continuity-decision.test.ts	tests/update-continuity-decision.test.ts	0644
 tests/update-doctor-compose-adapter.test.ts	tests/update-doctor-compose-adapter.test.ts	0644
 tests/update-doctor-core.test.ts	tests/update-doctor-core.test.ts	0644
 tests/update-doctor.test.ts	tests/update-doctor.test.ts	0644
+tests/update-migration-edge.test.ts	tests/update-migration-edge.test.ts	0644
+tests/update-staging-envelope.test.ts	tests/update-staging-envelope.test.ts	0644
 tests/usage-insights-completion.test.ts	tests/usage-insights-completion.test.ts	0644
 tests/usage-insights.test.ts	tests/usage-insights.test.ts	0644
 tests/verification-fabric-v2.test.ts	tests/verification-fabric-v2.test.ts	0644
