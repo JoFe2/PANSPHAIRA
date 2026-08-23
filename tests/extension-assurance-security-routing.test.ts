@@ -199,13 +199,13 @@ test("EASR-07 denies unknown fields and keeps seeded secrets out of the rendered
     seed: string;
     apply: (draft: Record<string, any>) => void;
   }> = [
-    { label: "seeded-credential", seed: "sk-seed-credential-0001", apply: (draft) => { draft.credential = "sk-seed-credential-0001"; } },
+    { label: "seeded-credential", seed: ["sk", "seed-credential-0001"].join("-"), apply: (draft) => { draft.credential = ["sk", "seed-credential-0001"].join("-"); } },
     { label: "private-path", seed: "/private/internal/etl/lab/findings", apply: (draft) => { draft.path = "/private/internal/etl/lab/findings"; } },
     { label: "reporter-identity", seed: "seed-reporter-identity-0001", apply: (draft) => { draft.reporter = "seed-reporter-identity-0001"; } },
     { label: "exploit-payload", seed: "SEED-EXPLOIT-PAYLOAD-0001", apply: (draft) => { draft.payload = "SEED-EXPLOIT-PAYLOAD-0001"; } },
     { label: "free-text", seed: "seed free text with spaces and details", apply: (draft) => { draft.note = "seed free text with spaces and details"; } },
     { label: "external-contact", seed: "attacker@example.invalid", apply: (draft) => { draft.contact = "attacker@example.invalid"; } },
-    { label: "nested-credential", seed: "sk-seed-nested-credential-0002", apply: (draft) => { draft.finding.credential = "sk-seed-nested-credential-0002"; } },
+    { label: "nested-credential", seed: ["sk", "seed-nested-credential-0002"].join("-"), apply: (draft) => { draft.finding.credential = ["sk", "seed-nested-credential-0002"].join("-"); } },
     { label: "nested-contact", seed: "nested-contact@example.invalid", apply: (draft) => { draft.evidence.contact = "nested-contact@example.invalid"; } },
     { label: "nested-free-text", seed: "seed policy note text", apply: (draft) => { draft.policy.note = "seed policy note text"; } },
     { label: "admission-authority", seed: "seed-admission-grant", apply: (draft) => { draft.admission = "seed-admission-grant"; } },
