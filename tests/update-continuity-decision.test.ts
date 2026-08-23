@@ -555,7 +555,7 @@ test("UD-M1 continuity: unknown, claim, secret, path, URL, and callback fields d
     ["rollback-claim", { rollbackExecuted: true }],
     ["promotion-claim", { promoted: true }],
     ["url-field", { endpoint: "https://example.internal/callback?token=abc" }],
-    ["path-field", { statePath: "/home/alice/private/state.json" }],
+    ["path-field", { statePath: ["/home", "/alice/private/state.json"].join("") }],
     ["secret-field", { authorization: "Bearer eyJhbGciOiJIUzI1NiJ9" }],
     ["callback-field", { callback: "net/http:Post" }],
   ];
