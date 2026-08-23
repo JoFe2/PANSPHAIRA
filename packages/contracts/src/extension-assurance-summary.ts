@@ -26,6 +26,7 @@ export const EXTENSION_ASSURANCE_SUMMARY_DENIAL_REASONS_V1 = [
   "EVIDENCE_MISSING_DENIED",
   "EVIDENCE_BINDING_DENIED",
   "TIME_REVERSAL_DENIED",
+  "VERIFIER_BINDING_DENIED",
 ] as const;
 
 export type ExtensionAssuranceSummaryDenialReasonCodeV1 =
@@ -65,7 +66,6 @@ export type ExtensionAssuranceSummaryCheckReasonCodeV1 =
   typeof EXTENSION_ASSURANCE_SUMMARY_CHECK_REASONS_V1[number];
 
 export interface ExtensionAssuranceSummaryCheckV1 {
-  readonly checkId: string;
   readonly ruleId: ExtensionAssuranceRuleV1;
   readonly status: "PASS" | "FAIL" | "NOT_RUN";
   readonly reason: ExtensionAssuranceSummaryCheckReasonCodeV1;
@@ -104,7 +104,6 @@ export interface ExtensionAssuranceSummaryV1 {
     readonly artifactRefs: readonly string[];
   };
   readonly verifier: {
-    readonly verifierId: string;
     readonly verifierVersion: string;
     readonly verifierDigest: string;
   };
@@ -206,7 +205,7 @@ function deny(reasonCodes: readonly ExtensionAssuranceSummaryDenialReasonCodeV1[
     residualRisks: [],
     coverageGaps: [],
     evidence: { status: "UNKNOWN", retestRequired: true, artifactRefs: [] },
-    verifier: { verifierId: "", verifierVersion: "", verifierDigest: "" },
+    verifier: { verifierVersion: "", verifierDigest: "" },
     publicClaim: "INCONCLUSIVE",
     claimBoundary: EXTENSION_ASSURANCE_SUMMARY_CLAIM_BOUNDARY_V1,
   };
@@ -214,6 +213,11 @@ function deny(reasonCodes: readonly ExtensionAssuranceSummaryDenialReasonCodeV1[
 
 export function extensionAssuranceSummaryResultDigestV1(value: unknown): string {
   return createHash("sha256").update(canonicalJson(value)).digest("hex");
+}
+
+function verifierEnvelopeDigest(verifier: ExtensionAssuranceSummaryInputV1["verifier"]): string {
+  const envelope = { verifierId: verifier.verifierId, verifierVersion: verifier.verifierVersion };
+  return createHash("sha256").update(canonicalJson(envelope)).digest("hex");
 }
 
 export function summarizeExtensionAssuranceV1(value: unknown): ExtensionAssuranceSummaryV1 {
@@ -249,12 +253,16 @@ export function summarizeExtensionAssuranceV1(value: unknown): ExtensionAssuranc
   if (input.nowMs < input.profile.evaluatedAtMs || input.nowMs < input.profile.evidence.collectedAtMs) {
     reasons.add("TIME_REVERSAL_DENIED");
   }
+  if (verifierEnvelopeDigest(input.verifier) !== input.verifier.verifierDigest) {
+    reasons.add("VERIFIER_BINDING_DENIED");
+  }
   const ordered = EXTENSION_ASSURANCE_SUMMARY_DENIAL_REASONS_V1.filter((reason) => reasons.has(reason));
   if (ordered.length > 0) return deny(ordered);
 
   const profile = input.profile;
   const result = input.result;
   const expired = input.nowMs >= profile.evidence.expiresAtMs;
+  const expiryRetest = expired && result.outcome !== "DENIED";
   const residualRisks: ExtensionAssuranceSummaryResidualRiskCodeV1[] = [RESIDUAL_RISK_BY_CLASS[profile.riskClass]];
   if (profile.checks.some((check) => check.ruleId === "OPTIONAL_MANUAL_REVIEW" && check.outcome === "FAIL")) {
     residualRisks.push("RESIDUAL_REVIEW_FAILURE_RISK");
@@ -272,10 +280,9 @@ export function summarizeExtensionAssuranceV1(value: unknown): ExtensionAssuranc
   return {
     schemaVersion: EXTENSION_ASSURANCE_SUMMARY_SCHEMA_V1,
     status: "EMITTED",
-    outcome: result.outcome,
-    reasonCodes: [...result.reasonCodes],
+    outcome: expiryRetest ? "RETEST_REQUIRED" : result.outcome,
+    reasonCodes: expiryRetest ? ["EVIDENCE_STALE_RETEST_REQUIRED"] : [...result.reasonCodes],
     checks: profile.checks.map((check) => ({
-      checkId: check.checkId,
       ruleId: check.ruleId,
       status: check.outcome,
       reason: check.outcome === "NOT_RUN" ? check.notRunReason : "NONE",
@@ -287,8 +294,11 @@ export function summarizeExtensionAssuranceV1(value: unknown): ExtensionAssuranc
       retestRequired: expired || result.outcome === "RETEST_REQUIRED",
       artifactRefs: [...bundle.artifactRefs],
     },
-    verifier: { ...input.verifier },
-    publicClaim: result.publicClaim,
+    verifier: {
+      verifierVersion: input.verifier.verifierVersion,
+      verifierDigest: input.verifier.verifierDigest,
+    },
+    publicClaim: expiryRetest ? "EVIDENCE_EXPIRED_RETEST_REQUIRED" : result.publicClaim,
     claimBoundary: EXTENSION_ASSURANCE_SUMMARY_CLAIM_BOUNDARY_V1,
   };
 }

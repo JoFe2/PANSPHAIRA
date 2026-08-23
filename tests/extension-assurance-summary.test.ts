@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import test from "node:test";
+import { canonicalJson } from "../packages/contracts/src/canonical-json.js";
 import {
   evaluateExtensionAssuranceProfileV1,
   extensionAssuranceProfileDigestV1,
@@ -42,6 +44,10 @@ function hex(seed: number): string {
 
 function ref(seed: number): string {
   return `artifact:sha256:${hex(seed)}`;
+}
+
+function verifierDigest(verifierId: string, verifierVersion: string): string {
+  return createHash("sha256").update(canonicalJson({ verifierId, verifierVersion })).digest("hex");
 }
 
 function reorderKeys(value: unknown, seed: number): unknown {
@@ -137,7 +143,7 @@ function buildInput(
     verifier: {
       verifierId: "verifier:etl-lab-38",
       verifierVersion: "1.0.0",
-      verifierDigest: hex(11),
+      verifierDigest: verifierDigest("verifier:etl-lab-38", "1.0.0"),
     },
     nowMs: NOW_MS,
   };
@@ -153,14 +159,12 @@ test("ETL-M1-SUMMARY emits a bounded public-safe summary for a conformant synthe
     outcome: "PROFILE_CONFORMANT",
     reasonCodes: ["PROFILE_CONFORMANT"],
     checks: [
-      ...HARD_FAIL_RULES.map((ruleId, index) => ({
-        checkId: `check:etl-38-${String(index + 1).padStart(4, "0")}`,
+      ...HARD_FAIL_RULES.map((ruleId) => ({
         ruleId,
         status: "PASS",
         reason: "NONE",
       })),
       {
-        checkId: "check:etl-38-0009",
         ruleId: "OPTIONAL_MANUAL_REVIEW",
         status: "NOT_RUN",
         reason: "NOT_APPLICABLE",
@@ -174,9 +178,8 @@ test("ETL-M1-SUMMARY emits a bounded public-safe summary for a conformant synthe
       artifactRefs: [ref(1), ref(2), ref(3), ref(4), ref(5), ref(6)],
     },
     verifier: {
-      verifierId: "verifier:etl-lab-38",
       verifierVersion: "1.0.0",
-      verifierDigest: hex(11),
+      verifierDigest: verifierDigest("verifier:etl-lab-38", "1.0.0"),
     },
     publicClaim: "LOCALLY_EVALUATED_SYNTHETIC",
     claimBoundary: EXTENSION_ASSURANCE_SUMMARY_CLAIM_BOUNDARY_V1,
@@ -192,6 +195,7 @@ test("ETL-M1-SUMMARY freezes the bounded denial, residual-risk and coverage-gap 
     "EVIDENCE_MISSING_DENIED",
     "EVIDENCE_BINDING_DENIED",
     "TIME_REVERSAL_DENIED",
+    "VERIFIER_BINDING_DENIED",
   ]);
   assert.deepEqual([...EXTENSION_ASSURANCE_SUMMARY_RESIDUAL_RISK_CODES_V1], [
     "RESIDUAL_RISK_LOW",
@@ -232,7 +236,6 @@ test("ETL-M1-SUMMARY preserves exact bounded outcome and ordered reasons for DEN
   assert.deepEqual(deniedSummary.reasonCodes, ["HARD_FAIL_DENIED"]);
   assert.equal(deniedSummary.publicClaim, "ASSURANCE_DENIED");
   assert.deepEqual(deniedSummary.checks[0], {
-    checkId: "check:etl-38-0001",
     ruleId: "MALWARE_SIGNAL",
     status: "FAIL",
     reason: "NONE",
@@ -254,9 +257,34 @@ test("ETL-M1-SUMMARY preserves exact bounded outcome and ordered reasons for DEN
   });
   const expiredSummary = summarizeExtensionAssuranceV1(expired);
   assert.equal(expiredSummary.status, "EMITTED");
-  assert.equal(expiredSummary.outcome, "PROFILE_CONFORMANT");
+  assert.equal(expiredSummary.outcome, "RETEST_REQUIRED");
+  assert.deepEqual(expiredSummary.reasonCodes, ["EVIDENCE_STALE_RETEST_REQUIRED"]);
+  assert.equal(expiredSummary.publicClaim, "EVIDENCE_EXPIRED_RETEST_REQUIRED");
   assert.equal(expiredSummary.evidence.status, "EXPIRED");
   assert.equal(expiredSummary.evidence.retestRequired, true);
+});
+
+test("ETL-M1-SUMMARY omits claim-bearing verifier and check identifiers from public bytes", () => {
+  const checkId = "check:claim-bearing-public-identifier";
+  const verifierId = "verifier:claim-bearing-public-identifier";
+  const input = buildInput((profile) => {
+    profile.checks[0].checkId = checkId;
+  }, (value) => {
+    value.verifier.verifierId = verifierId;
+    value.verifier.verifierDigest = verifierDigest(verifierId, value.verifier.verifierVersion);
+  });
+  const publicBytes = renderPublicExtensionAssuranceSummaryV1(input);
+  assert.equal(publicBytes.includes(checkId), false);
+  assert.equal(publicBytes.includes(verifierId), false);
+});
+
+test("ETL-M1-SUMMARY denies verifier substitution when the digest is unchanged", () => {
+  const substituted = buildInput(undefined, (input) => {
+    input.verifier.verifierId = "verifier:substituted-etl-lab-38";
+  });
+  const summary = summarizeExtensionAssuranceV1(substituted);
+  assert.equal(summary.status, "DENIED");
+  assert.deepEqual(summary.reasonCodes, ["VERIFIER_BINDING_DENIED"]);
 });
 
 test("ETL-M1-SUMMARY denies unknown fields and malformed digests or versions fail closed", () => {
