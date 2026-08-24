@@ -2,32 +2,32 @@
   "schemaVersion": "chimpmaera.release-governance/v1",
   "repository": "JoFe2/PANSPHAIRA",
   "currentRelease": {
-    "releaseId": 375919219,
-    "tag": "v0.2.0-poc.20260824.1",
-    "title": "PanSphaira v0.2.0-poc.20260824.1 — Canonical SemVer Bindings",
-    "increment": "Canonical SemVer",
-    "targetCommitish": "806489d07a1dfadd007c0a80a38a5af1a0cf86c5",
-    "tagObjectSha": "806489d07a1dfadd007c0a80a38a5af1a0cf86c5",
-    "publishedAt": "2026-08-24T18:52:49Z",
-    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260824.1",
+    "releaseId": 375989777,
+    "tag": "v0.2.0-poc.20260824.2",
+    "title": "PanSphaira v0.2.0-poc.20260824.2 — pre-migration checkpoint evidence",
+    "increment": "pre-migration checkpoint evidence",
+    "targetCommitish": "d629a62e3b8893822d26e1fbaa7b92a710a5aa2c",
+    "tagObjectSha": "d629a62e3b8893822d26e1fbaa7b92a710a5aa2c",
+    "publishedAt": "2026-08-24T21:04:12Z",
+    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260824.2",
     "draft": false,
     "prerelease": false,
     "mustBeLatest": true,
     "assets": [
       {
-        "name": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz",
-        "size": 1631818,
-        "sha256": "7d681d17ee6ba74aa18d128737de127ee06876c93262d71228042e3a17afd3eb"
+        "name": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz",
+        "size": 1635295,
+        "sha256": "4199957cb6d98ba583f94b4b5e7dfac35e86e9fbec0a0e06d87dc7aecfb0c5cf"
       },
       {
-        "name": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz.sha256",
-        "size": 132,
-        "sha256": "bf360baca3ca295d5eb57b8f3941971893bf1b122a74af3980d5945fe293d850"
+        "name": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz.sha256",
+        "size": 131,
+        "sha256": "855a192925811b078b7da19476abee620e0f986440c36539be37dc006c0dd8cc"
       }
     ],
     "assetManifest": {
-      "name": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz.sha256",
-      "declares": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz"
+      "name": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz.sha256",
+      "declares": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz"
     }
   },
   "policy": {
@@ -84,9 +84,9 @@
   "claimEvidence": [
     {
       "claimId": "CM-REL-001",
-      "claim": "v0.2.0-poc.20260824.1 is the current regular Latest release for canonical SemVer continuity, migration-edge and staging bindings.",
-      "evidencePaths": ["packages/contracts/src/update-continuity-decision.ts", "packages/contracts/src/update-migration-edge.ts", "packages/contracts/src/update-staging-envelope.ts", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
-      "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The increment does not perform filesystem, package, schema or service mutation, pointer switching, migration or rollback execution, activation, promotion, production deployment or external completion inference."]
+      "claim": "v0.2.0-poc.20260824.2 is the current regular Latest release for pre-migration checkpoint evidence.",
+      "evidencePaths": ["packages/contracts/src/update-migration-checkpoint.ts", "tests/update-migration-checkpoint.test.ts", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
+      "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The checkpoint is metadata evidence only and does not perform migration, restore, filesystem, package, schema or service mutation, pointer switching, activation, promotion, production deployment or external completion inference."]
     },
     {
       "claimId": "CM-REL-002",
