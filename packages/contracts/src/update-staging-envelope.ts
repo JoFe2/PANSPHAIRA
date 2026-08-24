@@ -129,9 +129,10 @@ const ENVELOPE_ID = /^staging:[a-z0-9][a-z0-9._-]{2,95}$/;
 const STAGER_ID = /^stager:[a-z0-9][a-z0-9._-]{2,95}$/;
 // Canonical SemVer 2.0.0 syntax: no leading zeros in numeric core parts or
 // all-digit pre-release identifiers, and no empty, repeated, or trailing
-// pre-release separators.
+// pre-release separators. Alphanumeric pre-release identifiers require at
+// least one letter or hyphen; a hyphen alone is sufficient.
 const SEMVER_NUMERIC = "(?:0|[1-9][0-9]*)";
-const SEMVER_PRERELEASE_IDENTIFIER = "(?:0|[1-9][0-9]*|[0-9]*[A-Za-z][0-9A-Za-z-]*)";
+const SEMVER_PRERELEASE_IDENTIFIER = "(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)";
 const CANONICAL_STAGER_VERSION = new RegExp(
   `^${SEMVER_NUMERIC}(?:\\.${SEMVER_NUMERIC}){2}(?:-${SEMVER_PRERELEASE_IDENTIFIER}(?:\\.${SEMVER_PRERELEASE_IDENTIFIER})*)?$`,
 );
