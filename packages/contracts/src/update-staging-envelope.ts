@@ -127,7 +127,14 @@ export type UpdateStagingEnvelopeVerificationResultV1 =
 
 const ENVELOPE_ID = /^staging:[a-z0-9][a-z0-9._-]{2,95}$/;
 const STAGER_ID = /^stager:[a-z0-9][a-z0-9._-]{2,95}$/;
-const EXACT_VERSION = /^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/;
+// Canonical SemVer 2.0.0 syntax: no leading zeros in numeric core parts or
+// all-digit pre-release identifiers, and no empty, repeated, or trailing
+// pre-release separators.
+const SEMVER_NUMERIC = "(?:0|[1-9][0-9]*)";
+const SEMVER_PRERELEASE_IDENTIFIER = "(?:0|[1-9][0-9]*|[0-9]*[A-Za-z][0-9A-Za-z-]*)";
+const CANONICAL_STAGER_VERSION = new RegExp(
+  `^${SEMVER_NUMERIC}(?:\\.${SEMVER_NUMERIC}){2}(?:-${SEMVER_PRERELEASE_IDENTIFIER}(?:\\.${SEMVER_PRERELEASE_IDENTIFIER})*)?$`,
+);
 const DIGEST = /^[a-f0-9]{64}$/;
 const CLAIM_TOKENS = Object.freeze([
   "copy", "switch", "activate", "activation", "promote", "promotion",
@@ -264,7 +271,7 @@ export function updateStagingEnvelopeDigestV1(value: Record<string, unknown>, di
 function validStager(value: unknown): value is UpdateStagingStagerV1 {
   return exactKeys(value, ["stagerId", "stagerVersion"])
     && typeof value.stagerId === "string" && STAGER_ID.test(value.stagerId)
-    && typeof value.stagerVersion === "string" && EXACT_VERSION.test(value.stagerVersion);
+    && typeof value.stagerVersion === "string" && CANONICAL_STAGER_VERSION.test(value.stagerVersion);
 }
 
 function validStagingInput(value: unknown): value is UpdateStagingEnvelopeInputV1 {

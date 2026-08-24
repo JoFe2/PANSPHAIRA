@@ -308,3 +308,86 @@ test("valid sealed envelope round-trips through parse with exact result and exit
   const deniedResult = denied as Extract<UpdateStagingEnvelopeVerificationResultV1, { outcome: "DENIED" }>;
   assert.equal(deniedResult.exitCode, UPDATE_STAGING_EXIT_CODES_V1.SLOT_MISMATCH_DENIED);
 });
+// PSAI #53 bounded regression: the local stager-version grammar is hardened to
+// canonical SemVer 2.0.0 syntax in both the envelope input and the trusted
+// context, before projection or rendering.
+
+const CANONICAL_STAGER_VERSIONS = ["0.0.0", "1.2.3", "1.2.3-rc.1"] as const;
+
+const NON_CANONICAL_STAGER_VERSIONS = [
+  "01.0.0",
+  "1.02.0",
+  "0.0.01",
+  "1.2.3-",
+  "1.2.3-1.",
+  "1.2.3--1",
+  "1.2.3-1..2",
+  "1.2.3-01",
+  "1.2.3-1.02",
+  "latest",
+  "mutable",
+] as const;
+
+const EXPECTED_STAGER_PROJECTION_BYTES: Readonly<Record<string, string>> = {
+  "A:0.0.0": `{"activeSlot":"A","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"af73e760354fced99c2c277a02db294fe6b48ae79e96b14e64f3753125c3e217","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"B","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"0.0.0"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "A:1.2.3": `{"activeSlot":"A","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"43cd1655f86019510eeadb999b2a951220f1c7859ebb3749244277fac9bfd876","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"B","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "A:1.2.3-rc.1": `{"activeSlot":"A","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"23c6feed222b1b9d84733175d636ceb855211f3d07720b1af525d5dc4a868b1c","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"B","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3-rc.1"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "B:0.0.0": `{"activeSlot":"B","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"ab64c91ec0a124203180d6658ef595ca879f3f02929e7d4d46a078f72428b88f","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"A","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"0.0.0"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "B:1.2.3": `{"activeSlot":"B","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"c384e35763a4893d7015cd484ae6c9ffe384abce7bbf2af57e58fdeab549d152","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"A","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "B:1.2.3-rc.1": `{"activeSlot":"B","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"0b0d7da43db103b28ef1e8491a0b154b4a8c81df8c6d397bdf6858a9dae79e2d","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"A","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3-rc.1"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+};
+
+const EXPECTED_STAGER_PROJECTION_DIGESTS: Readonly<Record<string, string>> = {
+  "A:0.0.0": "a4bc34a756ef0400571451b98945970f2dd1af3466b49ff8ad72baaae95a438d",
+  "A:1.2.3": "15f522391cb9ed29d0a4979d00317257eef5d21b6bc0d2edd0e92e6e293d744a",
+  "A:1.2.3-rc.1": "22bb5405b661a26808628f31def6da55e6237f98f0b5002d6d08b3c0eab987c1",
+  "B:0.0.0": "0fcf5e325183347c53866348b230a1ecbc195c1f9bb8db15a15f58d09a39d3f7",
+  "B:1.2.3": "f05d24c4b31e97ad851ce4e95da7ce28cdcdbba1d19cd5ffee9e12eee14d9da4",
+  "B:1.2.3-rc.1": "1a78b989001d276ceaf8089e1fd93d630a36bcb111a988338af226ec6ab39715",
+};
+
+test("fully digested stagerVersion 01.0.0 with matching trusted context denies fail closed", () => {
+  const stager = { stagerId: "stager:isolated-stager-1", stagerVersion: "01.0.0" };
+  const input = fixture({ stager });
+  const matching = context({ trustedStager: { ...stager } });
+  assert.equal(input.envelopeDigest, updateStagingEnvelopeDigestV1(input), "envelope must be fully digested");
+  assertDenied(evaluateUpdateStagingEnvelopeV1(input, matching), "SCHEMA_DENIED");
+  assert.throws(() => renderUpdateStagingEnvelopeV1(input, matching), /UNSAFE_OR_INVALID_UPDATE_STAGING/);
+});
+
+test("canonical 0.0.0, 1.2.3 and 1.2.3-rc.1 stager versions preserve exact stable projection bytes and digest for A/B and B/A", () => {
+  for (const activeSlot of ["A", "B"] as const) {
+    for (const stagerVersion of CANONICAL_STAGER_VERSIONS) {
+      const stager = { stagerId: "stager:isolated-stager-1", stagerVersion };
+      const input = fixture({ activeSlot, stager });
+      const trusted = context({ trustedStager: stager });
+      assert.deepEqual(evaluateUpdateStagingEnvelopeV1(input, trusted), { outcome: "STAGE_CHECKED", reasonCodes: ["STAGE_CHECKED"], exitCode: 0 });
+      const projection = updateStagingEnvelopeProjectionV1(input, trusted);
+      assertDeeplyFrozen(projection);
+      assert.equal(projection.activeSlot, activeSlot);
+      assert.equal(projection.inactiveSlot, oppositeSlotV1(activeSlot));
+      assert.deepEqual(projection.stager, stager);
+      const key = `${activeSlot}:${stagerVersion}`;
+      const bytes = renderUpdateStagingEnvelopeV1(input, trusted);
+      assert.equal(bytes, EXPECTED_STAGER_PROJECTION_BYTES[key]);
+      assert.equal(bytes, canonicalJson(projection));
+      const digest = updateStagingProjectionDigestV1(projection);
+      assert.equal(digest, EXPECTED_STAGER_PROJECTION_DIGESTS[key]);
+      assert.equal(digest, createHash("sha256").update(bytes).digest("hex"));
+    }
+  }
+});
+
+test("non-canonical stager versions in envelope and trusted context deny fail closed before projection or rendering", () => {
+  for (const stagerVersion of NON_CANONICAL_STAGER_VERSIONS) {
+    const stager = { stagerId: "stager:isolated-stager-1", stagerVersion };
+    const input = fixture({ stager });
+    const matching = context({ trustedStager: { ...stager } });
+    assert.equal(input.envelopeDigest, updateStagingEnvelopeDigestV1(input), "envelope must be fully digested");
+    assertDenied(evaluateUpdateStagingEnvelopeV1(input, matching), "SCHEMA_DENIED");
+    assert.throws(() => renderUpdateStagingEnvelopeV1(input, matching), /UNSAFE_OR_INVALID_UPDATE_STAGING/);
+    const canonicalEnvelope = fixture();
+    assertDenied(evaluateUpdateStagingEnvelopeV1(canonicalEnvelope, context({ trustedStager: stager })), "INDEPENDENT_CONTEXT_DENIED");
+    assert.throws(() => renderUpdateStagingEnvelopeV1(canonicalEnvelope, context({ trustedStager: stager })), /UNSAFE_OR_INVALID_UPDATE_STAGING/);
+  }
+});
