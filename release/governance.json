@@ -2,32 +2,32 @@
   "schemaVersion": "chimpmaera.release-governance/v1",
   "repository": "JoFe2/PANSPHAIRA",
   "currentRelease": {
-    "releaseId": 375287602,
-    "tag": "v0.2.0-poc.20260823.6",
-    "title": "PanSphaira v0.2.0-poc.20260823.6 — continuity, migration and staging",
-    "increment": "continuity",
-    "targetCommitish": "fd98e2c9333ed6c04928c0c281d797b7ebe52f4c",
-    "tagObjectSha": "fd98e2c9333ed6c04928c0c281d797b7ebe52f4c",
-    "publishedAt": "2026-08-23T18:13:33Z",
-    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260823.6",
+    "releaseId": 375919219,
+    "tag": "v0.2.0-poc.20260824.1",
+    "title": "PanSphaira v0.2.0-poc.20260824.1 — Canonical SemVer Bindings",
+    "increment": "Canonical SemVer",
+    "targetCommitish": "806489d07a1dfadd007c0a80a38a5af1a0cf86c5",
+    "tagObjectSha": "806489d07a1dfadd007c0a80a38a5af1a0cf86c5",
+    "publishedAt": "2026-08-24T18:52:49Z",
+    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260824.1",
     "draft": false,
     "prerelease": false,
     "mustBeLatest": true,
     "assets": [
       {
-        "name": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz",
-        "size": 1626822,
-        "sha256": "f2dc0284226d72240417ad09769a05a6b7a0d56f2e53a0ff7d919d1e386c11cc"
+        "name": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz",
+        "size": 1631818,
+        "sha256": "7d681d17ee6ba74aa18d128737de127ee06876c93262d71228042e3a17afd3eb"
       },
       {
-        "name": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz.sha256",
-        "size": 135,
-        "sha256": "9fd785a7e76b762357622ab86842d14152ec16f153744a5f37b1cc1faa691000"
+        "name": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz.sha256",
+        "size": 132,
+        "sha256": "bf360baca3ca295d5eb57b8f3941971893bf1b122a74af3980d5945fe293d850"
       }
     ],
     "assetManifest": {
-      "name": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz.sha256",
-      "declares": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz"
+      "name": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz.sha256",
+      "declares": "cm-product-increment-rc-20260824-canonical-semver-bindings.tar.gz"
     }
   },
   "policy": {
@@ -84,7 +84,7 @@
   "claimEvidence": [
     {
       "claimId": "CM-REL-001",
-      "claim": "v0.2.0-poc.20260823.6 is the current regular Latest release for the fail-closed continuity, reversible migration-edge and authority-free staging contract increment.",
+      "claim": "v0.2.0-poc.20260824.1 is the current regular Latest release for canonical SemVer continuity, migration-edge and staging bindings.",
       "evidencePaths": ["packages/contracts/src/update-continuity-decision.ts", "packages/contracts/src/update-migration-edge.ts", "packages/contracts/src/update-staging-envelope.ts", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
       "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The increment does not perform filesystem, package, schema or service mutation, pointer switching, migration or rollback execution, activation, promotion, production deployment or external completion inference."]
     },

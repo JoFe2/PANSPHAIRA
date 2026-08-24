@@ -11,10 +11,10 @@ A public release is named for the functional, evidence-backed increment it
 delivers. A date or editorial cadence may appear as provenance, but labels such
 as “Daily”, “today's release” or “previous Daily” must not be the identity of an
 active public release. The current regular release is
-`v0.2.0-poc.20260823.6`, **PanSphaira v0.2.0-poc.20260823.6 — continuity,
-migration and staging**. Its increment adds a fail-closed continuity decision,
-a canonical reversible migration-edge envelope and an authority-free A/B
-staging envelope. It performs no filesystem, package, schema or service
+`v0.2.0-poc.20260824.1`, **PanSphaira v0.2.0-poc.20260824.1 — Canonical
+SemVer Bindings**. Its increment enforces canonical SemVer across continuity,
+migration-edge and staging bindings and accepts canonical hyphen-bearing
+prerelease identifiers. It performs no filesystem, package, schema or service
 mutation, pointer switch, migration or rollback execution, activation,
 promotion, production deployment or external completion inference.
 `v0.1.0` is historical only.
