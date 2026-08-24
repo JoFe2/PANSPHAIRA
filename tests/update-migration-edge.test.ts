@@ -282,6 +282,64 @@ const DENIAL_CASES: readonly DenialCase[] = [
     ctx: context({ expectedMigrationId: "migration:planner-001", expectedPlanner: { plannerId: "planner:planner-001", plannerVersion: PLANNER_VERSION } }),
     reason: "PLANNER_INDEPENDENCE_DENIED",
   },
+  {
+    name: "leading-zero migration version",
+    edge: rawEdge({ migrationVersion: "01.4.0" }),
+    ctx: context({ expectedMigrationVersion: "01.4.0" }),
+    reason: "SCHEMA_DENIED",
+  },
+  {
+    name: "leading-zero planner version",
+    edge: rawEdge({ planner: plannerOf("01.0.0") }),
+    ctx: context({ expectedPlanner: { plannerId: PLANNER_ID, plannerVersion: "01.0.0" } }),
+    reason: "SCHEMA_DENIED",
+  },
+  {
+    name: "empty prerelease identifier",
+    edge: rawEdge({ migrationVersion: "1.4.0-" }),
+    ctx: context({ expectedMigrationVersion: "1.4.0-" }),
+    reason: "SCHEMA_DENIED",
+  },
+  {
+    name: "trailing prerelease separator",
+    edge: rawEdge({ migrationVersion: "1.4.0-rc." }),
+    ctx: context({ expectedMigrationVersion: "1.4.0-rc." }),
+    reason: "SCHEMA_DENIED",
+  },
+  {
+    name: "repeated prerelease separator",
+    edge: rawEdge({ migrationVersion: "1.4.0-rc..1" }),
+    ctx: context({ expectedMigrationVersion: "1.4.0-rc..1" }),
+    reason: "SCHEMA_DENIED",
+  },
+  {
+    name: "numeric prerelease leading zero",
+    edge: rawEdge({ migrationVersion: "1.4.0-01" }),
+    ctx: context({ expectedMigrationVersion: "1.4.0-01" }),
+    reason: "SCHEMA_DENIED",
+  },
+  {
+    name: "non-canonical migration version in independent context",
+    ctx: context({ expectedMigrationVersion: "01.4.0" }),
+    reason: "INDEPENDENT_CONTEXT_DENIED",
+  },
+  {
+    name: "non-canonical planner version in independent context",
+    ctx: context({ expectedPlanner: { plannerId: PLANNER_ID, plannerVersion: "01.0.0" } }),
+    reason: "INDEPENDENT_CONTEXT_DENIED",
+  },
+  {
+    name: "mutable migration version in independent context",
+    edge: rawEdge({ migrationVersion: "1.0.0-latest" }),
+    ctx: context({ expectedMigrationVersion: "1.0.0-latest" }),
+    reason: "MUTABLE_VERSION_DENIED",
+  },
+  {
+    name: "mutable planner version in independent context",
+    edge: rawEdge({ planner: plannerOf("1.0.0-mutable") }),
+    ctx: context({ expectedPlanner: { plannerId: PLANNER_ID, plannerVersion: "1.0.0-mutable" } }),
+    reason: "MUTABLE_VERSION_DENIED",
+  },
 ];
 
 test("fail-closed denials bind a single exact reason and exit code", () => {
@@ -306,6 +364,83 @@ test("mutable/latest versions deny fail-closed", () => {
   assert.deepEqual(planner.reasonCodes, ["MUTABLE_VERSION_DENIED"]);
   const bareLatest = verifyUpdateMigrationEdgeV1(rawEdge({ migrationVersion: "latest" }), context());
   assert.deepEqual(bareLatest.reasonCodes, ["SCHEMA_DENIED"]);
+});
+
+test("the measured fully-digested 01.4.0/01.0.0 non-canonical edge is denied before CHECKED", () => {
+  const edge = rawEdge({ migrationVersion: "01.4.0", planner: plannerOf("01.0.0") });
+  assert.equal(updateMigrationEdgeDigestV1(edge), edge.edgeDigest);
+  const ctx = context({
+    expectedMigrationVersion: "01.4.0",
+    expectedPlanner: { plannerId: PLANNER_ID, plannerVersion: "01.0.0" },
+  });
+  const result = verifyUpdateMigrationEdgeV1(edge, ctx);
+  assert.equal(result.outcome, "DENIED");
+  assert.deepEqual(result.reasonCodes, ["SCHEMA_DENIED"]);
+  assert.equal(result.exitCode, UPDATE_MIGRATION_EDGE_EXIT_CODES_V1.SCHEMA_DENIED);
+  assert.throws(() => renderVerifiedUpdateMigrationEdgeV1(edge, ctx), /UNSAFE_OR_INVALID_MIGRATION_EDGE/);
+});
+
+test("canonical 0.0.0, 1.4.0 and 1.4.0-rc.1 versions retain stable edge digest and bytes", () => {
+  const base: BuildUpdateMigrationEdgeOptionsV1 = {
+    migrationId: MIGRATION_ID,
+    migrationVersion: MIGRATION_VERSION,
+    ordinal: ORDINAL,
+    sourceTupleDigest: SOURCE_DIGEST,
+    targetTupleDigest: TARGET_DIGEST,
+    authorityProfileDigest: AUTHORITY_DIGEST,
+    planner: { plannerId: PLANNER_ID, plannerVersion: PLANNER_VERSION },
+    issuedAtMs: ISSUED_AT_MS,
+  };
+  for (const version of ["0.0.0", "1.4.0", "1.4.0-rc.1"]) {
+    const options = { ...base, migrationVersion: version };
+    const built = buildUpdateMigrationEdgeV1(options);
+    const ctx = context({ expectedMigrationVersion: version });
+    const result = verifyUpdateMigrationEdgeV1(built, ctx);
+    assert.equal(result.outcome, "CHECKED", version);
+    assert.deepEqual(result.reasonCodes, ["MIGRATION_EDGE_CHECKED"], version);
+    assert.equal(result.exitCode, 0, version);
+    assert.equal(updateMigrationEdgeDigestV1(built), built.edgeDigest, version);
+    const first = renderVerifiedUpdateMigrationEdgeV1(built, ctx);
+    const second = renderVerifiedUpdateMigrationEdgeV1(buildUpdateMigrationEdgeV1(options), ctx);
+    assert.equal(first, second, version);
+  }
+});
+
+test("the builder rejects non-canonical and mutable versions fail-closed", () => {
+  const base: BuildUpdateMigrationEdgeOptionsV1 = {
+    migrationId: MIGRATION_ID,
+    migrationVersion: MIGRATION_VERSION,
+    ordinal: ORDINAL,
+    sourceTupleDigest: SOURCE_DIGEST,
+    targetTupleDigest: TARGET_DIGEST,
+    authorityProfileDigest: AUTHORITY_DIGEST,
+    planner: { plannerId: PLANNER_ID, plannerVersion: PLANNER_VERSION },
+    issuedAtMs: ISSUED_AT_MS,
+  };
+  for (const version of ["01.4.0", "1.04.0", "1.4.00", "1.4.0-", "1.4.0-rc.", "1.4.0-rc..1", "1.4.0-01"]) {
+    assert.throws(
+      () => buildUpdateMigrationEdgeV1({ ...base, migrationVersion: version }),
+      /INVALID_MIGRATION_EDGE_FIXTURE/,
+      `migration ${version}`,
+    );
+    assert.throws(
+      () => buildUpdateMigrationEdgeV1({ ...base, planner: { plannerId: PLANNER_ID, plannerVersion: version } }),
+      /INVALID_MIGRATION_EDGE_FIXTURE/,
+      `planner ${version}`,
+    );
+  }
+  for (const version of ["1.0.0-latest", "1.0.0-mutable"]) {
+    assert.throws(
+      () => buildUpdateMigrationEdgeV1({ ...base, migrationVersion: version }),
+      /INVALID_MIGRATION_EDGE_FIXTURE/,
+      `migration ${version}`,
+    );
+    assert.throws(
+      () => buildUpdateMigrationEdgeV1({ ...base, planner: { plannerId: PLANNER_ID, plannerVersion: version } }),
+      /INVALID_MIGRATION_EDGE_FIXTURE/,
+      `planner ${version}`,
+    );
+  }
 });
 
 test("planner substitution with an unchanged digest denies fail-closed", () => {
