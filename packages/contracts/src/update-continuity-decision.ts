@@ -198,7 +198,11 @@ export interface UpdateContinuityDecisionProjectionV1 {
   readonly projectionDigest: string;
 }
 
-const EXACT_VERSION = /^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/;
+// Canonical SemVer 2.0.0 version grammar (official regular expression from
+// https://semver.org): no leading zeros in core or numeric pre-release
+// numbers, non-empty dot-separated pre-release and build identifiers, no
+// mutable dist-tag/range aliases.
+const EXACT_VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
 const DIGEST = /^[a-f0-9]{64}$/;
 const ACCEPTED_ID = /^accepted:[a-z0-9][a-z0-9._-]{2,95}$/;
 const REGISTRY_ID = /^registry:[a-z0-9][a-z0-9._-]{2,95}$/;

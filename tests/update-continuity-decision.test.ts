@@ -78,6 +78,7 @@ function digestedAccepted(options: AcceptedOverrides = {}): UpdateAcceptedSnapsh
 
 interface LkgOverrides {
   readonly lkgId?: string;
+  readonly releaseId?: string;
   readonly tupleValue?: UpdateTupleV1;
   readonly state?: "COMPLETE" | "INCOMPLETE";
   readonly revoked?: boolean;
@@ -91,7 +92,7 @@ function digestedLkg(options: LkgOverrides = {}): UpdateLkgV1 {
   const base = {
     schemaVersion: "chimpmaera.update/lkg/v1" as const,
     lkgId: options.lkgId ?? "maintenance:installation-lock-001",
-    releaseId: "1.0.0",
+    releaseId: options.releaseId ?? "1.0.0",
     state: options.state ?? "COMPLETE" as const,
     revoked: options.revoked ?? false,
     stale: options.stale ?? false,
@@ -635,4 +636,187 @@ test("UD-M1 continuity: negative zero time fields deny at envelope and independe
 
   const ageContext = { ...contextFor(input), maxObservationAgeMs: -0 };
   asDenied(verifyUpdateContinuityDecisionV1(input, ageContext), "negative-zero-max-age");
+});
+
+test("UD-M1 continuity #53: measured fully digested 01.0.0 Accepted/observer input must deny before any decision", () => {
+  // Measured live prerequisite: a fully digested input with a matching independent
+  // context whose Accepted releaseId and observerVersion are the non-canonical
+  // "01.0.0" returned PRESERVE_ACCEPTED. Canonical SemVer 2.0.0 must reject the
+  // local version grammar before any continuity decision or public projection.
+  const input = buildInput({
+    accepted: digestedAccepted({ releaseId: "01.0.0" }),
+    observer: digestedObserver({ observerVersion: "01.0.0" }),
+  });
+  const context = contextFor(input);
+  const result = verifyUpdateContinuityDecisionV1(input, context);
+  assert.equal(result.outcome, "DENIED", "measured-01.0.0-accepted-observer");
+  includesReason(result, "SCHEMA_DENIED", "measured-01.0.0-accepted-observer");
+  assert.equal(result.exitCode, UPDATE_CONTINUITY_DECISION_EXIT_CODES_V1.SCHEMA_DENIED, "measured-01.0.0-exit-code");
+  assert.throws(
+    () => projectUpdateContinuityDecisionV1(input, context),
+    /UNSAFE_OR_INVALID_CONTINUITY_DECISION/,
+    "measured-01.0.0-projection",
+  );
+});
+
+test("UD-M1 continuity #53: canonical SemVer 2.0.0 release/observer versions retain the frozen decisions", () => {
+  const canonicalVersions: readonly string[] = ["0.0.0", "1.2.3", "0.2.0-poc.20260823.6"];
+  for (const version of canonicalVersions) {
+    const input = buildInput({
+      accepted: digestedAccepted({ releaseId: version }),
+      lkg: digestedLkg({ releaseId: version }),
+      observer: digestedObserver({ observerVersion: version }),
+    });
+    const context = contextFor(input);
+    assert.deepEqual(
+      verifyUpdateContinuityDecisionV1(input, context),
+      {
+        outcome: "PRESERVE_ACCEPTED",
+        reasonCodes: ["CONTINUITY_ACCEPTED"],
+        exitCode: 0,
+        preservedTupleDigest: updateTupleDigestV1(tuple()),
+        preservedSnapshotDigest: input.accepted.snapshotDigest,
+      },
+      `canonical-${version}-preserve-accepted`,
+    );
+    const projection = projectUpdateContinuityDecisionV1(input, context);
+    assert.equal(projection.decision, "PRESERVE_ACCEPTED", `canonical-${version}-projection`);
+    assert.equal(projection.rollbackLkgDigest, CONTINUITY_NONE_DIGEST_V1, `canonical-${version}-none-digest`);
+  }
+
+  const rollbackLkg = digestedLkg({ releaseId: "0.2.0-poc.20260823.6" });
+  const rollbackInput = buildInput({
+    accepted: digestedAccepted({ revoked: true, releaseId: "1.2.3" }),
+    lkg: rollbackLkg,
+    observer: digestedObserver({ observerVersion: "0.0.0" }),
+  });
+  assert.deepEqual(
+    verifyUpdateContinuityDecisionV1(rollbackInput, contextFor(rollbackInput)),
+    {
+      outcome: "ROLLBACK_REQUIRED",
+      reasonCodes: ["CONTINUITY_ROLLBACK_REQUIRED"],
+      exitCode: UPDATE_CONTINUITY_DECISION_EXIT_CODES_V1.CONTINUITY_ROLLBACK_REQUIRED,
+      rollbackLkgDigest: rollbackLkg.lkgDigest,
+    },
+    "canonical-versions-rollback-required",
+  );
+  assert.equal(
+    projectUpdateContinuityDecisionV1(rollbackInput, contextFor(rollbackInput)).decision,
+    "ROLLBACK_REQUIRED",
+    "canonical-versions-rollback-projection",
+  );
+
+  const safeReadOnlyInput = buildInput({
+    accepted: digestedAccepted({ revoked: true, releaseId: "0.0.0" }),
+    lkg: digestedLkg({ revoked: true, releaseId: "1.2.3" }),
+    observer: digestedObserver({ observerVersion: "0.2.0-poc.20260823.6" }),
+  });
+  assert.deepEqual(
+    verifyUpdateContinuityDecisionV1(safeReadOnlyInput, contextFor(safeReadOnlyInput)),
+    {
+      outcome: "ENTER_SAFE_READ_ONLY",
+      reasonCodes: ["CONTINUITY_SAFE_READ_ONLY"],
+      exitCode: UPDATE_CONTINUITY_DECISION_EXIT_CODES_V1.CONTINUITY_SAFE_READ_ONLY,
+      readOnly: true,
+    },
+    "canonical-versions-safe-read-only",
+  );
+  assert.equal(
+    projectUpdateContinuityDecisionV1(safeReadOnlyInput, contextFor(safeReadOnlyInput)).decision,
+    "ENTER_SAFE_READ_ONLY",
+    "canonical-versions-safe-read-only-projection",
+  );
+});
+
+test("UD-M1 continuity #53: non-canonical Accepted/LKG/observer versions deny before any decision or projection", () => {
+  const rejectedVersions: readonly string[] = [
+    "01.0.0",     // leading-zero core number (measured)
+    "1.02.3",     // leading-zero core number
+    "1.2.03",     // leading-zero core number
+    "00.0.0",     // leading-zero core number
+    "1.2.3-01",   // numeric pre-release identifier with leading zero
+    "1.2.3-.",    // empty pre-release identifier after separator
+    "1.2.3-..",   // repeated pre-release separator
+    "1.2.3-a..b", // repeated pre-release separator
+    "1.2.3-a.",   // trailing pre-release separator
+    "1.2.3-",     // empty pre-release after trailing separator
+    "latest",     // mutable dist-tag alias
+    "1.2.x",      // mutable range
+    "*",          // mutable range
+    "^1.2.3",     // mutable range
+    "1.2",        // missing core component
+    "v1.2.3",     // non-canonical prefix
+    "1.2.3+",     // empty build metadata
+    "1.2.3+b..c", // empty build identifier
+  ];
+  for (const version of rejectedVersions) {
+    const acceptedInput = buildInput({ accepted: digestedAccepted({ releaseId: version }) });
+    const acceptedContext = contextFor(acceptedInput);
+    includesReason(
+      verifyUpdateContinuityDecisionV1(acceptedInput, acceptedContext),
+      "SCHEMA_DENIED",
+      `accepted-release-${version}`,
+    );
+    assert.throws(
+      () => projectUpdateContinuityDecisionV1(acceptedInput, acceptedContext),
+      /UNSAFE_OR_INVALID_CONTINUITY_DECISION/,
+      `accepted-release-projection-${version}`,
+    );
+
+    const lkgInput = buildInput({ lkg: digestedLkg({ releaseId: version }) });
+    includesReason(
+      verifyUpdateContinuityDecisionV1(lkgInput, contextFor(lkgInput)),
+      "SCHEMA_DENIED",
+      `lkg-release-${version}`,
+    );
+
+    const observerInput = buildInput({ observer: digestedObserver({ observerVersion: version }) });
+    includesReason(
+      verifyUpdateContinuityDecisionV1(observerInput, contextFor(observerInput)),
+      "SCHEMA_DENIED",
+      `observer-version-${version}`,
+    );
+  }
+});
+
+test("UD-M1 continuity #53: non-canonical independent context versions deny fail closed", () => {
+  const input = buildInput();
+  const base = contextFor(input);
+
+  const badAcceptedContext = { ...base, expectedAccepted: { ...base.expectedAccepted, releaseId: "01.0.0" } };
+  includesReason(
+    verifyUpdateContinuityDecisionV1(input, badAcceptedContext),
+    "INDEPENDENT_CONTEXT_DENIED",
+    "context-accepted-release-leading-zero",
+  );
+
+  const badLkgContext = { ...base, expectedLkg: { ...base.expectedLkg!, releaseId: "1.2.3-01" } };
+  includesReason(
+    verifyUpdateContinuityDecisionV1(input, badLkgContext),
+    "INDEPENDENT_CONTEXT_DENIED",
+    "context-lkg-release-prerelease-leading-zero",
+  );
+
+  const badObserverContext = { ...base, trustedObserver: { ...base.trustedObserver, observerVersion: "01.0.0" } };
+  includesReason(
+    verifyUpdateContinuityDecisionV1(input, badObserverContext),
+    "INDEPENDENT_CONTEXT_DENIED",
+    "context-observer-version-leading-zero",
+  );
+
+  const badObserverSeparatorContext = {
+    ...base,
+    trustedObserver: { ...base.trustedObserver, observerVersion: "1.2.3-a..b" },
+  };
+  includesReason(
+    verifyUpdateContinuityDecisionV1(input, badObserverSeparatorContext),
+    "INDEPENDENT_CONTEXT_DENIED",
+    "context-observer-version-repeated-separator",
+  );
+
+  assert.throws(
+    () => projectUpdateContinuityDecisionV1(input, badAcceptedContext),
+    /UNSAFE_OR_INVALID_CONTINUITY_DECISION/,
+    "context-projection",
+  );
 });
