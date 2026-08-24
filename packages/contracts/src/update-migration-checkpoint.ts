@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { types as nodeUtilTypes } from "node:util";
 import { canonicalJson } from "./canonical-json.js";
 
 /**
@@ -142,10 +143,8 @@ export type UpdateMigrationCheckpointResultV1 =
 
 const DIGEST = /^[a-f0-9]{64}$/;
 const RECORDER_ID = /^recorder:[a-z0-9][a-z0-9._-]{2,95}$/;
+const NEUTRAL_RECORDER_ID = /^recorder:(?:checkpoint|metadata)-(?:recorder|writer)$/;
 const CANONICAL_SEMVER = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
-const AUTHORITY_CLAIM_TOKENS = Object.freeze([
-  "apply", "execute", "migrate", "restore", "activate", "promote", "authority", "grant", "dispatch",
-]);
 const DANGEROUS_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
@@ -178,6 +177,7 @@ function isDenseStandardArray(value: unknown): value is unknown[] {
 }
 
 function safeClone<T>(value: T, ancestors = new Set<object>()): T {
+  if (nodeUtilTypes.isProxy(value)) throw new TypeError("UNSAFE_JSON_PROXY");
   if (value === null || typeof value === "string" || typeof value === "boolean") return value;
   if (typeof value === "number") {
     if (!Number.isFinite(value) || Object.is(value, -0) || (Number.isInteger(value) && !Number.isSafeInteger(value))) {
@@ -259,9 +259,8 @@ function isContext(value: unknown): value is UpdateMigrationCheckpointContextV1 
     && isSafeTimestamp(value.expectedCapturedAtMs);
 }
 
-function hasAuthorityClaim(recorderId: string): boolean {
-  const lowered = recorderId.toLowerCase();
-  return AUTHORITY_CLAIM_TOKENS.some((token) => lowered.includes(token));
+function isNeutralRecorderId(recorderId: string): boolean {
+  return NEUTRAL_RECORDER_ID.test(recorderId);
 }
 
 /** Canonical SHA-256 over the closed envelope excluding checkpointDigest. */
@@ -288,7 +287,7 @@ export function buildUpdateMigrationCheckpointV1(options: BuildUpdateMigrationCh
     || !isDigest(cloned.snapshotDigest) || !isDigest(cloned.snapshotContentDigest)
     || !isDigest(cloned.ownerStateDigest) || !isPositiveSafeInteger(cloned.checkpointOrdinal)
     || !isDigest(cloned.authorityProfileDigest) || !isRecorderIdentity(cloned.recorder)
-    || hasAuthorityClaim(cloned.recorder.recorderId) || !isSafeTimestamp(cloned.capturedAtMs)) {
+    || !isNeutralRecorderId(cloned.recorder.recorderId) || !isSafeTimestamp(cloned.capturedAtMs)) {
     throw new Error("INVALID_MIGRATION_CHECKPOINT_FIXTURE");
   }
   const unsigned = {
@@ -364,7 +363,7 @@ export function verifyUpdateMigrationCheckpointV1(
   if (checkpoint.recorder.recorderId !== expected.expectedRecorder.recorderId
     || checkpoint.recorder.recorderVersion !== expected.expectedRecorder.recorderVersion) reasons.add("RECORDER_MISMATCH_DENIED");
   if (checkpoint.capturedAtMs !== expected.expectedCapturedAtMs) reasons.add("TIME_REPLAY_DENIED");
-  if (hasAuthorityClaim(checkpoint.recorder.recorderId)) reasons.add("AUTHORITY_CLAIM_DENIED");
+  if (!isNeutralRecorderId(checkpoint.recorder.recorderId)) reasons.add("AUTHORITY_CLAIM_DENIED");
 
   if (reasons.size > 0) {
     const reasonCodes = DENIAL_ORDER.filter((reason) => reasons.has(reason));

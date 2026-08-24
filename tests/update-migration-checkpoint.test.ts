@@ -112,7 +112,7 @@ test("unchanged-digest substitutions expose digest and independent binding failu
   const substitutedRecorder = checkpoint();
   substitutedRecorder.recorder = {
     schemaVersion: UPDATE_MIGRATION_CHECKPOINT_RECORDER_SCHEMA_V1,
-    recorderId: "recorder:substituted-writer",
+    recorderId: "recorder:metadata-writer",
     recorderVersion: "1.0.0",
   };
   const result = verifyUpdateMigrationCheckpointV1(substitutedRecorder, context);
@@ -136,7 +136,7 @@ test("fully re-digested checkpoint and recorder forgeries fail beside unchanged 
   assertDenied(checkpoint({
     recorder: {
       schemaVersion: UPDATE_MIGRATION_CHECKPOINT_RECORDER_SCHEMA_V1,
-      recorderId: "recorder:substituted-writer",
+      recorderId: "recorder:metadata-writer",
       recorderVersion: "1.0.0",
     },
   }), "RECORDER_MISMATCH_DENIED");
@@ -204,6 +204,35 @@ test("claim-bearing recorder identities and authority-bearing fields are denied"
   }
 });
 
+test("authority-shaped bypass recorder identities are denied by the closed neutral allowlist", () => {
+  for (const recorderId of [
+    "recorder:executor",
+    "recorder:deployer",
+    "recorder:rollback-admin",
+    "recorder:root",
+    "recorder:commit-writer",
+    "recorder:switch-pointer",
+  ]) {
+    const bypassRecorder = {
+      schemaVersion: UPDATE_MIGRATION_CHECKPOINT_RECORDER_SCHEMA_V1,
+      recorderId,
+      recorderVersion: "1.0.0",
+    };
+    assertDenied(
+      checkpoint({ recorder: bypassRecorder }),
+      "AUTHORITY_CLAIM_DENIED",
+      expected({ expectedRecorder: { recorderId, recorderVersion: bypassRecorder.recorderVersion } }),
+    );
+    assert.throws(
+      () => buildUpdateMigrationCheckpointV1({
+        ...options,
+        recorder: { recorderId, recorderVersion: bypassRecorder.recorderVersion },
+      }),
+      /INVALID_MIGRATION_CHECKPOINT_FIXTURE/,
+    );
+  }
+});
+
 test("unsafe object shapes, accessors, symbols and unknown recorder fields deny without evaluation", () => {
   let getterCalled = false;
   const accessor = checkpoint();
@@ -230,6 +259,19 @@ test("unsafe object shapes, accessors, symbols and unknown recorder fields deny 
     },
   });
   assertDenied(recorderExtra, "SCHEMA_DENIED");
+});
+
+test("Proxy-backed inputs are rejected without evaluating attacker-controlled traps", () => {
+  let trapCalls = 0;
+  const trapped = new Proxy(checkpoint(), {
+    get: () => { trapCalls += 1; throw new Error("GET_TRAP_EVALUATED"); },
+    getOwnPropertyDescriptor: () => { trapCalls += 1; throw new Error("DESCRIPTOR_TRAP_EVALUATED"); },
+    getPrototypeOf: () => { trapCalls += 1; throw new Error("PROTOTYPE_TRAP_EVALUATED"); },
+    ownKeys: () => { trapCalls += 1; throw new Error("OWN_KEYS_TRAP_EVALUATED"); },
+  });
+
+  assertDenied(trapped, "SCHEMA_DENIED");
+  assert.equal(trapCalls, 0);
 });
 
 test("unsupported versions, invalid JSON, missing context and digest drift deny fail closed", () => {
