@@ -141,7 +141,10 @@ const CONTEXT_KEYS: readonly string[] = Object.freeze([
   "expectedPreconditionCode", "expectedPostconditionCode", "expectedPlanner", "expectedOrdinal",
 ]);
 
-const EXACT_VERSION = /^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/;
+// Canonical SemVer 2.0.0 grammar (semver.org): no leading zeros in the core or
+// numeric prerelease identifiers and no empty or repeated prerelease
+// identifiers.
+const CANONICAL_SEMVER_VERSION = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
 const DIGEST = /^[a-f0-9]{64}$/;
 const MIGRATION_ID = /^migration:[a-z0-9][a-z0-9._-]{2,95}$/;
 const PLANNER_ID = /^planner:[a-z0-9][a-z0-9._-]{2,95}$/;
@@ -272,14 +275,14 @@ function validPlanner(value: unknown): value is UpdateMigrationEdgePlannerV1 {
   return exactKeys(value, ["schemaVersion", "plannerId", "plannerVersion"])
     && value.schemaVersion === UPDATE_MIGRATION_EDGE_PLANNER_SCHEMA_V1
     && typeof value.plannerId === "string" && PLANNER_ID.test(value.plannerId)
-    && typeof value.plannerVersion === "string" && EXACT_VERSION.test(value.plannerVersion);
+    && typeof value.plannerVersion === "string" && CANONICAL_SEMVER_VERSION.test(value.plannerVersion);
 }
 
 function validEdgeShape(value: unknown): value is UpdateMigrationEdgeV1 {
   return exactKeys(value, UPDATE_MIGRATION_EDGE_KEYS_V1)
     && value.schemaVersion === UPDATE_MIGRATION_EDGE_SCHEMA_V1
     && typeof value.migrationId === "string" && MIGRATION_ID.test(value.migrationId)
-    && typeof value.migrationVersion === "string" && EXACT_VERSION.test(value.migrationVersion)
+    && typeof value.migrationVersion === "string" && CANONICAL_SEMVER_VERSION.test(value.migrationVersion)
     && Number.isSafeInteger(value.ordinal) && !Object.is(value.ordinal, -0) && (value.ordinal as number) >= 0
     && isDigest(value.sourceTupleDigest) && isDigest(value.targetTupleDigest)
     && isDigest(value.rollbackTargetDigest)
@@ -295,13 +298,13 @@ function validEdgeShape(value: unknown): value is UpdateMigrationEdgeV1 {
 function validPlannerContext(value: unknown): value is { readonly plannerId: string; readonly plannerVersion: string } {
   return exactKeys(value, ["plannerId", "plannerVersion"])
     && typeof value.plannerId === "string" && PLANNER_ID.test(value.plannerId)
-    && typeof value.plannerVersion === "string" && EXACT_VERSION.test(value.plannerVersion);
+    && typeof value.plannerVersion === "string" && CANONICAL_SEMVER_VERSION.test(value.plannerVersion);
 }
 
 function validContext(value: unknown): value is UpdateMigrationEdgeVerificationContextV1 {
   return exactKeys(value, CONTEXT_KEYS)
     && typeof value.expectedMigrationId === "string" && MIGRATION_ID.test(value.expectedMigrationId)
-    && typeof value.expectedMigrationVersion === "string" && EXACT_VERSION.test(value.expectedMigrationVersion)
+    && typeof value.expectedMigrationVersion === "string" && CANONICAL_SEMVER_VERSION.test(value.expectedMigrationVersion)
     && isDigest(value.expectedSourceTupleDigest) && isDigest(value.expectedTargetTupleDigest)
     && isDigest(value.expectedRollbackTargetDigest) && isDigest(value.expectedAuthorityProfileDigest)
     && typeof value.expectedPreconditionCode === "string" && value.expectedPreconditionCode.length > 0
@@ -436,14 +439,16 @@ export function buildUpdateMigrationEdgeV1(options: BuildUpdateMigrationEdgeOpti
   if (!exactKeys(cloned, ["migrationId", "migrationVersion", "ordinal", "sourceTupleDigest", "targetTupleDigest",
     "authorityProfileDigest", "planner", "issuedAtMs"])
     || typeof cloned.migrationId !== "string" || cloned.migrationId.length === 0
-    || typeof cloned.migrationVersion !== "string" || cloned.migrationVersion.length === 0
+    || typeof cloned.migrationVersion !== "string" || !CANONICAL_SEMVER_VERSION.test(cloned.migrationVersion)
+    || hasMutableVersion(cloned.migrationVersion)
     || !Number.isSafeInteger(cloned.ordinal) || cloned.ordinal < 1
     || !isDigest(cloned.sourceTupleDigest) || !isDigest(cloned.targetTupleDigest)
     || cloned.sourceTupleDigest === cloned.targetTupleDigest
     || !isDigest(cloned.authorityProfileDigest)
     || !exactKeys(cloned.planner, ["plannerId", "plannerVersion"])
     || typeof cloned.planner.plannerId !== "string" || cloned.planner.plannerId.length === 0
-    || typeof cloned.planner.plannerVersion !== "string" || cloned.planner.plannerVersion.length === 0
+    || typeof cloned.planner.plannerVersion !== "string" || !CANONICAL_SEMVER_VERSION.test(cloned.planner.plannerVersion)
+    || hasMutableVersion(cloned.planner.plannerVersion)
     || !isTimestamp(cloned.issuedAtMs)) {
     throw new Error("INVALID_MIGRATION_EDGE_FIXTURE");
   }
