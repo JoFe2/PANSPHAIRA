@@ -11,15 +11,12 @@ A public release is named for the functional, evidence-backed increment it
 delivers. A date or editorial cadence may appear as provenance, but labels such
 as “Daily”, “today's release” or “previous Daily” must not be the identity of an
 active public release. The current regular release is
-`v0.2.0-poc.20260821.2`, **PanSphaira v0.2.0-poc.20260821.2 - Root HOW
-Control Architecture Visual**. Its increment adds the Control Architecture
-layer as the single root README HOW visual, with byte-bound public asset
-evidence and an accessible text alternative. The visual states that the Agent
-proposes, the Gateway governs context, rights, policy and approval, provider
-readback and receipt close the loop, and evidence revision grants no runtime
-authority by itself. It does not claim production readiness, universal provider
-compatibility, security certification, default activation, external completion
-truth or customer evidence.
+`v0.2.0-poc.20260823.6`, **PanSphaira v0.2.0-poc.20260823.6 — continuity,
+migration and staging**. Its increment adds a fail-closed continuity decision,
+a canonical reversible migration-edge envelope and an authority-free A/B
+staging envelope. It performs no filesystem, package, schema or service
+mutation, pointer switch, migration or rollback execution, activation,
+promotion, production deployment or external completion inference.
 `v0.1.0` is historical only.
 
 Editorial Daily content is independent. It may describe progress, decisions,

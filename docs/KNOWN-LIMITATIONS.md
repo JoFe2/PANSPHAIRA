@@ -7,16 +7,15 @@ description: Review the explicit production, security, identity, integration, ru
 
 These limits are part of the claim discipline required by
 [The PanSphaira Canon](CANON.md). They apply to the current regular release
-`v0.2.0-poc.20260821.2` and its scoped evidence; a later documentation
+`v0.2.0-poc.20260823.6` and its scoped evidence; a later documentation
 change does not broaden the released asset claims.
 
-- The current increment adds the Control Architecture layer as the single root
-  README HOW visual. It explains Agent proposal, Gateway governance, bounded
-  provider action, authoritative readback and receipt, and evidence revision
-  without granting runtime authority. It does not claim universal provider
-  compatibility, adaptive test-depth reduction, default activation, a
-  scheduler/daemon, external completion truth, production readiness, security
-  certification or customer evidence.
+- The current increment adds fail-closed continuity, reversible migration-edge
+  and authority-free staging contracts. It does not perform filesystem,
+  package, schema or service mutation, pointer switching, migration or rollback
+  execution, activation or promotion, and it does not claim universal provider
+  compatibility, production readiness, security certification or customer
+  evidence.
 - The earlier public-spelling increment changed human-facing display spelling
   only. Repository slugs, stable filenames, schemas, APIs, protocols, packages,
   services and runtime identifiers retain their existing technical identities.

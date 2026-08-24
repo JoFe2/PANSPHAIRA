@@ -7,13 +7,12 @@ claims, maturity, evidence, trusted computing base (TCB) and non-claims. The
 ## Scope and evidence snapshot
 
 The current public regular release is
-[`v0.2.0-poc.20260821.2`](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260821.2),
-the **Root HOW Control Architecture Visual** increment. It adds the Control
-Architecture layer as the single root README HOW visual, with byte-bound public
-asset evidence and an accessible text alternative. The visual states that the
-Agent proposes, the Gateway governs context, rights, policy and approval,
-provider readback and receipt close the loop, and evidence revision grants no
-runtime authority by itself.
+[`v0.2.0-poc.20260823.6`](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260823.6),
+the **continuity, migration and staging** increment. It adds a fail-closed
+continuity decision, a canonical reversible migration-edge envelope and an
+authority-free A/B staging envelope. It performs no filesystem, package, schema
+or service mutation, pointer switch, migration or rollback execution,
+activation, promotion or external completion inference.
 `v0.1.0` is historical. Release state is governed by
 [anonymous public readback](RELEASE-GOVERNANCE.md), not inferred from a local
 branch, a tag alone, a date or an editorial update. Documentation on `main` may
