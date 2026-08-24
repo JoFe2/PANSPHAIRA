@@ -320,7 +320,6 @@ const NON_CANONICAL_STAGER_VERSIONS = [
   "0.0.01",
   "1.2.3-",
   "1.2.3-1.",
-  "1.2.3--1",
   "1.2.3-1..2",
   "1.2.3-01",
   "1.2.3-1.02",
@@ -389,5 +388,74 @@ test("non-canonical stager versions in envelope and trusted context deny fail cl
     const canonicalEnvelope = fixture();
     assertDenied(evaluateUpdateStagingEnvelopeV1(canonicalEnvelope, context({ trustedStager: stager })), "INDEPENDENT_CONTEXT_DENIED");
     assert.throws(() => renderUpdateStagingEnvelopeV1(canonicalEnvelope, context({ trustedStager: stager })), /UNSAFE_OR_INVALID_UPDATE_STAGING/);
+  }
+});
+
+// PSAI #269 bounded regression: SemVer 2.0.0 pre-release identifiers are
+// dot-separated identifiers of ASCII alphanumerics and hyphens; the only
+// numeric restriction is no leading zeroes on all-digit identifiers. A
+// hyphen alone therefore satisfies the alphanumeric branch (1.2.3--1,
+// 1.2.3-01- and 1.0.0-x-y-z.-- are canonical).
+
+const CANONICAL_HYPHEN_PRERELEASE_STAGER_VERSIONS = ["1.2.3--1", "1.2.3-01-", "1.0.0-x-y-z.--"] as const;
+
+const EXPECTED_HYPHEN_PRERELEASE_PROJECTION_BYTES: Readonly<Record<string, string>> = {
+  "A:1.2.3--1": `{"activeSlot":"A","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"8b7cad122e244e355cbf91c2738529594df1ef10c4c876d34c5284e2bc24e1da","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"B","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3--1"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "B:1.2.3--1": `{"activeSlot":"B","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"fbda15e9996aef72ead373f8667d855e6703485000e61597334a205f232fb93b","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"A","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3--1"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "A:1.2.3-01-": `{"activeSlot":"A","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"cc07c0431308951c17264b1c420069c24aec09f9fb25285285eeddd3f8f06c43","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"B","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3-01-"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "B:1.2.3-01-": `{"activeSlot":"B","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"05cbb22dce2d92d00b1d71228297a7eba7b1de881c6bc876729802b5caf4dc76","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"A","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.2.3-01-"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "A:1.0.0-x-y-z.--": `{"activeSlot":"A","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"b5316e5325aa8f693e84e6ec1805326a332a7b8b102add4c73e177bc95aec7de","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"B","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.0.0-x-y-z.--"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+  "B:1.0.0-x-y-z.--": `{"activeSlot":"B","authorityGranted":false,"authorityProfileDigest":"7777777777777777777777777777777777777777777777777777777777777777","candidateContentDigest":"3333333333333333333333333333333333333333333333333333333333333333","claimBoundary":"SYNTHETIC_ISOLATED_STAGE_CHECKED_METADATA_ONLY_NO_COPY_NO_FILESYSTEM_NO_POINTER_SWITCH_NO_PACKAGE_NO_SERVICE_NO_NETWORK_NO_ACTIVATION_NO_ROLLBACK_NO_CLEANUP_NO_EXECUTION_AUTHORITY","envelopeDigest":"bc3f877aedd67e3151343c3eeffd87f13cfedcee04048b80314c5b7cd5b2ff3a","envelopeId":"staging:synthetic-ab-001","executionAuthorized":false,"expectedPostconditionDigest":"5555555555555555555555555555555555555555555555555555555555555555","expectedStagedVerificationDigest":"4444444444444444444444444444444444444444444444444444444444444444","inactiveSlot":"A","issuedAtMs":1785819600500,"operationDigest":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","outcome":"STAGE_CHECKED","ownerStateDigest":"6666666666666666666666666666666666666666666666666666666666666666","reasonCode":"STAGE_CHECKED","schemaVersion":"chimpmaera.update/staging-envelope/v1","sourceTupleDigest":"1111111111111111111111111111111111111111111111111111111111111111","stager":{"stagerId":"stager:isolated-stager-1","stagerVersion":"1.0.0-x-y-z.--"},"targetTupleDigest":"2222222222222222222222222222222222222222222222222222222222222222"}`,
+};
+
+const EXPECTED_HYPHEN_PRERELEASE_PROJECTION_DIGESTS: Readonly<Record<string, string>> = {
+  "A:1.2.3--1": "77ca10c960353d431b2fc2e6f2c860e26a88130b616ef473b61e12f48a628a4a",
+  "B:1.2.3--1": "c2a3bd50c4e54d0ea9813b80027f17175f91e17f02516020d9bf3e4987cec773",
+  "A:1.2.3-01-": "8b5f808f513f1b8bc889510361b32f951fbb797eb229b0f7a49c5ba7c78b086b",
+  "B:1.2.3-01-": "d10ce29535750e9f7302ef2547c123f4d988c34bf2898a27012fdf5d729cb3f1",
+  "A:1.0.0-x-y-z.--": "b844e7c45021d38c6e47d8297960574349ce32b853a5d3ffd2d990249028d289",
+  "B:1.0.0-x-y-z.--": "dcaae8cbe7659bd0ad432916fa63894a849883b7226f3deb3b9aa618ee6f7569",
+};
+
+test("canonical hyphen-bearing prerelease stager versions validate the resealed envelope and exact trusted stager context", () => {
+  for (const stagerVersion of CANONICAL_HYPHEN_PRERELEASE_STAGER_VERSIONS) {
+    const stager = { stagerId: "stager:isolated-stager-1", stagerVersion };
+    const input = fixture({ stager });
+    const trusted = context({ trustedStager: stager });
+    assert.equal(input.envelopeDigest, updateStagingEnvelopeDigestV1(input), "envelope must be fully re-sealed");
+    assert.deepEqual(evaluateUpdateStagingEnvelopeV1(input, trusted), { outcome: "STAGE_CHECKED", reasonCodes: ["STAGE_CHECKED"], exitCode: 0 });
+    const projection = updateStagingEnvelopeProjectionV1(input, trusted);
+    assertDeeplyFrozen(projection);
+    assert.equal(projection.outcome, "STAGE_CHECKED");
+    assert.equal(projection.reasonCode, "STAGE_CHECKED");
+    assert.deepEqual(projection.stager, stager);
+    assert.equal(projection.authorityGranted, false);
+    assert.equal(projection.executionAuthorized, false);
+    const bytes = renderUpdateStagingEnvelopeV1(input, trusted);
+    assert.equal(bytes, canonicalJson(projection));
+    assert.equal(updateStagingProjectionDigestV1(projection), createHash("sha256").update(bytes).digest("hex"));
+  }
+});
+
+test("canonical hyphen-bearing prerelease stager versions preserve exact stable projection bytes and digest for A/B and B/A", () => {
+  for (const activeSlot of ["A", "B"] as const) {
+    for (const stagerVersion of CANONICAL_HYPHEN_PRERELEASE_STAGER_VERSIONS) {
+      const stager = { stagerId: "stager:isolated-stager-1", stagerVersion };
+      const input = fixture({ activeSlot, stager });
+      const trusted = context({ trustedStager: stager });
+      assert.deepEqual(evaluateUpdateStagingEnvelopeV1(input, trusted), { outcome: "STAGE_CHECKED", reasonCodes: ["STAGE_CHECKED"], exitCode: 0 });
+      const projection = updateStagingEnvelopeProjectionV1(input, trusted);
+      assertDeeplyFrozen(projection);
+      assert.equal(projection.activeSlot, activeSlot);
+      assert.equal(projection.inactiveSlot, oppositeSlotV1(activeSlot));
+      assert.deepEqual(projection.stager, stager);
+      const key = `${activeSlot}:${stagerVersion}`;
+      const bytes = renderUpdateStagingEnvelopeV1(input, trusted);
+      assert.equal(bytes, EXPECTED_HYPHEN_PRERELEASE_PROJECTION_BYTES[key]);
+      assert.equal(bytes, canonicalJson(projection));
+      const digest = updateStagingProjectionDigestV1(projection);
+      assert.equal(digest, EXPECTED_HYPHEN_PRERELEASE_PROJECTION_DIGESTS[key]);
+      assert.equal(digest, createHash("sha256").update(bytes).digest("hex"));
+    }
   }
 });

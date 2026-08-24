@@ -394,7 +394,7 @@ a9e09a64e32ab887c541a5124cd72392baf89c22be0bbdaa0be4d557d4b5f4a0  ./packages/con
 dcdf41cfdee1f5b809fa100e7fbc3b062eebaf52782d7b5fe97ca12feca42518  ./packages/contracts/src/update-continuity-decision.ts
 f548fbba7ce159f1d000818b4f9db043f2c422e7e587002f5da38a71d95ca992  ./packages/contracts/src/update-doctor.ts
 ca2a9b3f4b17404640b7fc93272fbc2684730116d8791503f0d7a69efcbd17d3  ./packages/contracts/src/update-migration-edge.ts
-b0a6b2f2c39c465775ce1e56c4ce65381832e0e0cb4beb5cde283cbe99700b33  ./packages/contracts/src/update-staging-envelope.ts
+f90aa145b6b80fb4049067f6ef025566befb981b590454c24f53268035f58023  ./packages/contracts/src/update-staging-envelope.ts
 12d11e9c1db2acd9e6de4a87629e9b607ab4879b69e4ae32e6014623c784af2d  ./packages/contracts/src/usage-insights.ts
 e673fd892d39fec139af7b6706420dfd23aa8c4f2f5d202a4d9e817259e062d0  ./packages/contracts/src/verification-fabric-v2.ts
 2e4948641104cbbb496dc5974c33ce823571c12997649bbb1cf7d06e6b0349e1  ./packages/contracts/src/verification-fabric.ts
@@ -687,7 +687,7 @@ df2f665f8181167ca3f34627a2b22094b9bb8d999769829cc8c1faccb8b9fe8f  ./tests/update
 2857f96b93fe7c076130c82cce24c30bd0c2e5c144e5843c9b7fe4f6850134fa  ./tests/update-doctor-core.test.ts
 911255ea325e6dbc02bad39566be2714693d7f3a9a6d3d82b0ca1563491e009d  ./tests/update-doctor.test.ts
 2c14008d67b707fe0455900c6a5671542e96f5303be9c2665b47c2470e2c8e2b  ./tests/update-migration-edge.test.ts
-7dc611baa36b04f6c0850ae201abb9a2c1a74975fee980bcc103a802f6820499  ./tests/update-staging-envelope.test.ts
+b58152c6586badc7f136db22858fdc8a65adae6510a47228ab6a0669d1b8e63c  ./tests/update-staging-envelope.test.ts
 f62470a7a45e56b533b431057804cf6e35eba9fef918d15a6069a61894fa1ecd  ./tests/usage-insights-completion.test.ts
 71ac64fea3400ccca591984cf1eca6cc4f38105a7c944d4fd5ca242979fafb29  ./tests/usage-insights.test.ts
 ac525300956733182c72a0dab7dc6ed2a78cb6ed5c3bd18402c77a3831abb143  ./tests/verification-fabric-v2.test.ts
