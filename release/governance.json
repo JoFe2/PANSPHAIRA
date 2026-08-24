@@ -2,32 +2,32 @@
   "schemaVersion": "chimpmaera.release-governance/v1",
   "repository": "JoFe2/PANSPHAIRA",
   "currentRelease": {
-    "releaseId": 374584660,
-    "tag": "v0.2.0-poc.20260821.2",
-    "title": "PanSphaira v0.2.0-poc.20260821.2 - Root HOW Control Architecture Visual",
-    "increment": "Root HOW Control Architecture Visual",
-    "targetCommitish": "e4626e3b63c855137be979c3f0dc773a85dca794",
-    "tagObjectSha": "e4626e3b63c855137be979c3f0dc773a85dca794",
-    "publishedAt": "2026-08-21T18:08:37Z",
-    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260821.2",
+    "releaseId": 375287602,
+    "tag": "v0.2.0-poc.20260823.6",
+    "title": "PanSphaira v0.2.0-poc.20260823.6 — continuity, migration and staging",
+    "increment": "continuity",
+    "targetCommitish": "fd98e2c9333ed6c04928c0c281d797b7ebe52f4c",
+    "tagObjectSha": "fd98e2c9333ed6c04928c0c281d797b7ebe52f4c",
+    "publishedAt": "2026-08-23T18:13:33Z",
+    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260823.6",
     "draft": false,
     "prerelease": false,
     "mustBeLatest": true,
     "assets": [
       {
-        "name": "cm-product-increment-rc-20260821-root-how-control-architecture.tar.gz",
-        "size": 1544921,
-        "sha256": "ddcbb92687c4614f93376ecff2312508c6e1885d22f04c70c0f844e522e288ee"
+        "name": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz",
+        "size": 1626822,
+        "sha256": "f2dc0284226d72240417ad09769a05a6b7a0d56f2e53a0ff7d919d1e386c11cc"
       },
       {
-        "name": "cm-product-increment-rc-20260821-root-how-control-architecture.tar.gz.sha256",
-        "size": 136,
-        "sha256": "b8f7e7a885242f0df69a3bf808538bb3407d3b2fce52dbd78e5f26e9498cf1ce"
+        "name": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz.sha256",
+        "size": 135,
+        "sha256": "9fd785a7e76b762357622ab86842d14152ec16f153744a5f37b1cc1faa691000"
       }
     ],
     "assetManifest": {
-      "name": "cm-product-increment-rc-20260821-root-how-control-architecture.tar.gz.sha256",
-      "declares": "cm-product-increment-rc-20260821-root-how-control-architecture.tar.gz"
+      "name": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz.sha256",
+      "declares": "cm-product-increment-rc-20260823-continuity-migration-staging.tar.gz"
     }
   },
   "policy": {
@@ -84,9 +84,9 @@
   "claimEvidence": [
     {
       "claimId": "CM-REL-001",
-      "claim": "v0.2.0-poc.20260821.2 is the current regular Latest release for the root README HOW Control Architecture visual. The visual presents Agent proposes, Gateway governs, provider readback and receipt close the loop, and evidence revision grants no runtime authority by itself.",
-      "evidencePaths": ["README.md", "assets/diagrams/layers/02-control-architecture-v3.png", "docs/ARCHITECTURE.md", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
-      "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The visual does not claim production readiness, universal provider compatibility, security certification, default activation, external completion truth or customer evidence."]
+      "claim": "v0.2.0-poc.20260823.6 is the current regular Latest release for the fail-closed continuity, reversible migration-edge and authority-free staging contract increment.",
+      "evidencePaths": ["packages/contracts/src/update-continuity-decision.ts", "packages/contracts/src/update-migration-edge.ts", "packages/contracts/src/update-staging-envelope.ts", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
+      "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The increment does not perform filesystem, package, schema or service mutation, pointer switching, migration or rollback execution, activation, promotion, production deployment or external completion inference."]
     },
     {
       "claimId": "CM-REL-002",
