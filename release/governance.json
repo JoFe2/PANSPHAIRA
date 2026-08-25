@@ -2,32 +2,32 @@
   "schemaVersion": "chimpmaera.release-governance/v1",
   "repository": "JoFe2/PANSPHAIRA",
   "currentRelease": {
-    "releaseId": 375989777,
-    "tag": "v0.2.0-poc.20260824.2",
-    "title": "PanSphaira v0.2.0-poc.20260824.2 — pre-migration checkpoint evidence",
-    "increment": "pre-migration checkpoint evidence",
-    "targetCommitish": "d629a62e3b8893822d26e1fbaa7b92a710a5aa2c",
-    "tagObjectSha": "d629a62e3b8893822d26e1fbaa7b92a710a5aa2c",
-    "publishedAt": "2026-08-24T21:04:12Z",
-    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260824.2",
+    "releaseId": 376149037,
+    "tag": "v0.2.0-poc.20260825.1",
+    "title": "PanSphaira v0.2.0-poc.20260825.1 — canonical-number hardening",
+    "increment": "canonical-number hardening",
+    "targetCommitish": "33d19f3e96ccc512038dbf06063f19489e067390",
+    "tagObjectSha": "33d19f3e96ccc512038dbf06063f19489e067390",
+    "publishedAt": "2026-08-25T04:40:35Z",
+    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260825.1",
     "draft": false,
     "prerelease": false,
     "mustBeLatest": true,
     "assets": [
       {
-        "name": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz",
-        "size": 1635295,
-        "sha256": "4199957cb6d98ba583f94b4b5e7dfac35e86e9fbec0a0e06d87dc7aecfb0c5cf"
+        "name": "cm-product-increment-rc-20260825-canonical-number.tar.gz",
+        "size": 1633238,
+        "sha256": "262143e0d51cbc83422b0fe35d2019a15c5c57c099d5054bd176c3e1649bb0ca"
       },
       {
-        "name": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz.sha256",
-        "size": 131,
-        "sha256": "855a192925811b078b7da19476abee620e0f986440c36539be37dc006c0dd8cc"
+        "name": "cm-product-increment-rc-20260825-canonical-number.tar.gz.sha256",
+        "size": 123,
+        "sha256": "596173836574279f0011aeb93979595712a8e9fa30cfd1d35c8b460a284ef7df"
       }
     ],
     "assetManifest": {
-      "name": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz.sha256",
-      "declares": "cm-product-increment-rc-20260824-pre-migration-checkpoint.tar.gz"
+      "name": "cm-product-increment-rc-20260825-canonical-number.tar.gz.sha256",
+      "declares": "cm-product-increment-rc-20260825-canonical-number.tar.gz"
     }
   },
   "policy": {
@@ -84,9 +84,9 @@
   "claimEvidence": [
     {
       "claimId": "CM-REL-001",
-      "claim": "v0.2.0-poc.20260824.2 is the current regular Latest release for pre-migration checkpoint evidence.",
-      "evidencePaths": ["packages/contracts/src/update-migration-checkpoint.ts", "tests/update-migration-checkpoint.test.ts", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
-      "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The checkpoint is metadata evidence only and does not perform migration, restore, filesystem, package, schema or service mutation, pointer switching, activation, promotion, production deployment or external completion inference."]
+      "claim": "v0.2.0-poc.20260825.1 is the current regular Latest release for canonical-number hardening.",
+      "evidencePaths": ["packages/contracts/src/verification-fabric.ts", "packages/contracts/src/extension-assurance-profile.ts", "tests/verification-fabric-negative-zero.test.ts", "tests/extension-assurance-profile-negative-zero.test.ts", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
+      "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The increment does not grant trust, admission, activation, execution, marketplace, tenant, credential or external authority."]
     },
     {
       "claimId": "CM-REL-002",

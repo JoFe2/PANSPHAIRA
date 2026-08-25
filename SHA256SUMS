@@ -195,7 +195,7 @@ f9bf95fca23d503b5c030fad3d4775dc0d539ae3f3bd7b35bd075edffd6b3a89  ./docs/EXTERNA
 e7080bf688f1fc4322c735d5f169c83b37ffe6e4368da58e0b2aa90301bc46b1  ./docs/KNOWLEDGE-ENVELOPE.md
 face3c89efe6ce34360ff644f5e472cb3c711a14df186638ca5008aaf1246ce9  ./docs/KNOWLEDGE-HARVEST.md
 7031723899cc3145522bd544e4a7f553c7176dccaea5521051d1cf63b925274d  ./docs/KNOWLEDGE-QUALITY-SERVICE.md
-9f38673d7a764ace9fffd5a7d803c4df191bb9dc43744022f0199b7200ba368a  ./docs/KNOWN-LIMITATIONS.md
+aa91d6599a69b31c5d37e660d9c8766edc65d68581087876fc1aefbe601c59db  ./docs/KNOWN-LIMITATIONS.md
 c26fc3b2689d7cf600a5481ad626d7e8c38b04ddbf98eefbff8193191ad29d89  ./docs/LEARNING-ROUTING-CONTRACTS.md
 906f4c19a4744d20eaea70c28e3911c0bb1613ea447ffb8e0624bba99593c9a6  ./docs/LOCAL-FILE-KNOWLEDGE-CORPUS.md
 cc7a1043bcb5b724ee9ec677771fa063121f52dc9333fedc962f089d455b7271  ./docs/OPENCLAW-BOUNDED-STATE-OPERATOR-GUIDE.md
@@ -206,10 +206,10 @@ f9a8acf26ff4d3e594f2fc631d54e0547e87003b6de8422e8ee0f0599f89cb56  ./docs/PANSPHA
 3bceff3db8cf694e5229f16d531562d080bcb68f46c1142528064fdfc1418968  ./docs/PUBLIC-PRODUCT-SPELLING-AUDIT.md
 c63a451c98dc15f60bb4b3c96ced59b001ca7f8bc44c08d69982aa9561db16e8  ./docs/QUICKSTART.md
 301a069e2b18da8e47cef0f7b5527c76043e2711840f353878a660ce57a429a9  ./docs/README.md
-1aa720565347f37fbc2f7e04b381ffc91709a917f0f29824de9f9923f0a60a26  ./docs/RELEASE-GOVERNANCE.md
+e14a447977a3233ce1f3adeee9c1968bfdc0fcb07f6067c00d40977a8b99f237  ./docs/RELEASE-GOVERNANCE.md
 e71b4f4f67c41f1a843c998248eca45bfbf01b4e62f23603ed970d1f6b731ecd  ./docs/RESOURCE-PLANE-PROFILES.md
 aa774bd8e7bd641990f57c62bf952e47dd1c1359cad9f444ccd0daf57f3c0f11  ./docs/SECURE-DEFAULT-PROOF.md
-492b0fd3d31bcb6d8be80f4dea2857e0ffb301dda82199aa52979c265b788dfe  ./docs/SECURITY-ASSURANCE.md
+88e7fd389ba78ccee57acc6fe9ce54f4addf98cff194d28dd5f436ed6e642d13  ./docs/SECURITY-ASSURANCE.md
 7881c777abe4f0d55d6449d6b402475cddbd221931f80c4ec1496bdb3ece4483  ./docs/SKILL-BUNDLE-CONTRACTS.md
 256508384fbc77fc94f098e98fb623824dc2dadc3a53a6cc0d3ea577d9d81ffa  ./docs/SUPPLY-CHAIN.md
 d5e8fa53a62092027cf92c428c62b677957db21287523debdc288cb6e9294998  ./docs/SYSTEM-ADVISOR-GUIDE.md
@@ -411,7 +411,7 @@ aaf2ff43fbbe308ff241d9b03f0d12e006e1e34d5bee21eebf21bd4271604032  ./packages/hmi
 dbffdad68f2d02dc88f144c20ef81fb6a7b6d9b412a88e11981b4d038b47a5f0  ./packages/setup-coordinator/src/index.ts
 cffdb4aef6035e65b23e9b8d52ef3a9e266bb9850ef1f5695f266c85631b239e  ./packages/usage-insights/src/cli.ts
 820a91361c34ca37962bd037552c7ac02f392936460f5fbd4d57c77ef145bdc5  ./packages/usage-insights/src/index.ts
-e865b37133a78efeb3e4f0a08924f870288a8f8e73078a725d0f4fc17f3c1d1d  ./release/governance.json
+9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7  ./release/governance.json
 d97884d16e2edf697cef4010a0b4e9f4354008ffb885b5cc136eb9e3db3aa121  ./release/public-files.manifest
 67fb3c2a0a37bf225e0f5c4f1d27ecfdd625a27d0b148e04e89398f82902ce9b  ./schemas/adaptability-benchmark-result-v1.schema.json
 0068ded0cba101cd568086149c2a40824733e3647b4d96f1b7a24c4f21dbe843  ./schemas/contracts/adaptive-evidence-gate-spec-v1.schema.json
@@ -742,4 +742,4 @@ b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification
 93f42b3e9e78b32cc1e1193e3f7a7ef59ca7ccd2e4116bd184d22d504987d46a  ./verification/bi-003-erp-read-connector-evidence-v1.json
 d43b38be4695e0e5c70e3a8e0ebd2a55b527974d7d9721cc43d94ee248245432  ./verification/intake-001-evidence-v1.json
 e2fa73eb5312982af288d29df015b0dc3e010f3fdba6405ce3b464b4ccece660  ./verification/lkc-qual-01-m0-evidence-v1.json
-0b579ac01a3659fbc9fcbbbab75e64b54ad77d92934d7b2ca056c472f01c77f3  ./verification/verification-dag-v2.json
+e158da42d9488813193c56551148d9364df2328776faf726866d9a160d8c984e  ./verification/verification-dag-v2.json

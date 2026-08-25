@@ -7,10 +7,10 @@ claims, maturity, evidence, trusted computing base (TCB) and non-claims. The
 ## Scope and evidence snapshot
 
 The current public regular release is
-[`v0.2.0-poc.20260824.2`](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260824.2),
-the **pre-migration checkpoint evidence** increment. It records immutable,
-digest-bound PRE_MIGRATION metadata with a closed recorder grammar and Proxy-safe
-input rejection. It performs no migration, restore, filesystem, package, schema
+[`v0.2.0-poc.20260825.1`](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260825.1),
+the **canonical-number hardening** increment. It rejects negative zero before
+canonicalization in Verification Fabric timestamps and Extension Assurance
+Profile numeric boundaries. It performs no migration, restore, filesystem, package, schema
 or service mutation, pointer switch, migration or rollback execution,
 activation, promotion or external completion inference.
 `v0.1.0` is historical. Release state is governed by

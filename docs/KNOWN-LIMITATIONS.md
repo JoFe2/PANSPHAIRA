@@ -7,11 +7,12 @@ description: Review the explicit production, security, identity, integration, ru
 
 These limits are part of the claim discipline required by
 [The PanSphaira Canon](CANON.md). They apply to the current regular release
-`v0.2.0-poc.20260824.2` and its scoped evidence; a later documentation
+`v0.2.0-poc.20260825.1` and its scoped evidence; a later documentation
 change does not broaden the released asset claims.
 
-- The current increment records PRE_MIGRATION checkpoint metadata. It does not
-  execute migration, restore, activation or promotion and does not perform filesystem,
+- The current increment rejects negative zero at two established canonical-number
+  boundaries. It does not grant trust, admission, activation, execution or marketplace
+  authority and does not perform filesystem,
   package, schema or service mutation, pointer switching, migration or rollback
   execution, activation or promotion, and it does not claim universal provider
   compatibility, production readiness, security certification or customer

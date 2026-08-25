@@ -11,10 +11,10 @@ A public release is named for the functional, evidence-backed increment it
 delivers. A date or editorial cadence may appear as provenance, but labels such
 as “Daily”, “today's release” or “previous Daily” must not be the identity of an
 active public release. The current regular release is
-`v0.2.0-poc.20260824.2`, **PanSphaira v0.2.0-poc.20260824.2 — pre-migration
-checkpoint evidence**. Its increment records immutable digest-bound checkpoint
-metadata with a closed recorder grammar and Proxy-safe input rejection. It
-performs no migration, restore, filesystem, package, schema or service
+`v0.2.0-poc.20260825.1`, **PanSphaira v0.2.0-poc.20260825.1 — canonical-number
+hardening**. Its increment rejects negative zero before canonicalization in
+Verification Fabric timestamps and Extension Assurance Profile numeric
+boundaries. It performs no migration, restore, filesystem, package, schema or service
 mutation, pointer switch, migration or rollback execution, activation,
 promotion, production deployment or external completion inference.
 `v0.1.0` is historical only.
