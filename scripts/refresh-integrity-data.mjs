@@ -114,7 +114,64 @@ proof.verifier.sha256 = digest(proof.verifier.path);
 writeJson(proofPath, proof);
 writeJson("security/secure-default-proof-evidence-v1.json", buildSecureDefaultEvidence(proof));
 
-dag.graphVersion = 15;
+dag.graphVersion = 16;
+const verificationFabricNode = dag.nodes.find(({ id }) => id === "vf-contract-v1");
+if (verificationFabricNode === undefined) throw new Error("VF_CONTRACT_V1_DAG_NODE_MISSING");
+const verificationFabricInputs = [
+  ["packages/contracts/src/verification-fabric.ts", "CONTRACT"],
+  ["schemas/contracts/verification-fabric-bundle-v1.schema.json", "SCHEMA"],
+  ["tests/fixtures/verification-fabric/positive-bundle-v1.json", "FIXTURE"],
+  ["tests/fixtures/verification-fabric/negative-matrix-v1.json", "FIXTURE"],
+  ["tests/verification-fabric.test.ts", "VALIDATOR"],
+  ["tests/verification-fabric-negative-zero.test.ts", "VALIDATOR"],
+];
+verificationFabricNode.inputs = verificationFabricInputs.map(([inputPath, role]) => ({
+  path: inputPath,
+  role,
+  sha256: digest(inputPath),
+}));
+verificationFabricNode.ownedTests = [
+  "node --test dist/tests/verification-fabric-negative-zero.test.js dist/tests/verification-fabric.test.js",
+];
+const extensionAssuranceInputs = [
+  ["packages/contracts/src/extension-assurance-profile.ts", "CONTRACT"],
+  ["schemas/contracts/extension-assurance-profile-v1.schema.json", "SCHEMA"],
+  ["tests/fixtures/extension-assurance/positive-profile-v1.json", "FIXTURE"],
+  ["tests/fixtures/extension-assurance/negative-matrix-v1.json", "FIXTURE"],
+  ["tests/extension-assurance-profile.test.ts", "VALIDATOR"],
+  ["tests/extension-assurance-profile-negative-zero.test.ts", "VALIDATOR"],
+  ["docs/EXTENSION-ASSURANCE-PROFILES.md", "DERIVED_EVIDENCE"],
+];
+let extensionAssuranceNode = dag.nodes.find(({ id }) => id === "etl-01-extension-assurance-profile-v1");
+if (extensionAssuranceNode === undefined) {
+  extensionAssuranceNode = {
+    id: "etl-01-extension-assurance-profile-v1",
+    dependsOn: ["vf-contract-v1"],
+    inputs: [],
+    ownedTests: [],
+    invariants: [
+      "The local synthetic profile grants no trust, admission, installation, activation, execution or marketplace authority.",
+      "Unknown, unsafe, fractional, negative-zero, stale, reversed, inconsistent or digest-drifting canonical numbers fail closed.",
+      "Canonical zero and safe nonnegative timestamps and counts retain deterministic digest-bound profile behavior.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(extensionAssuranceNode);
+}
+extensionAssuranceNode.inputs = extensionAssuranceInputs.map(([inputPath, role]) => ({
+  path: inputPath,
+  role,
+  sha256: digest(inputPath),
+}));
+extensionAssuranceNode.ownedTests = [
+  "node --test dist/tests/extension-assurance-profile-negative-zero.test.js dist/tests/extension-assurance-profile.test.js",
+];
+const repositoryIntegrityNode = dag.nodes.find(({ id }) => id === "repository-integrity");
+if (repositoryIntegrityNode === undefined) throw new Error("REPOSITORY_INTEGRITY_DAG_NODE_MISSING");
+if (!repositoryIntegrityNode.dependsOn.includes(extensionAssuranceNode.id)) {
+  repositoryIntegrityNode.dependsOn.push(extensionAssuranceNode.id);
+}
 const externalPluginInputs = [
   ["packages/contracts/src/external-plugin-preflight.ts", "SECURITY"],
   ["schemas/contracts/external-plugin-preflight-v1.schema.json", "SCHEMA"],

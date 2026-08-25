@@ -143,12 +143,18 @@ function isArtifactRef(value: unknown): value is string {
   return typeof value === "string" && /^artifact:sha256:[a-f0-9]{64}$/.test(value);
 }
 
+// Canonical numbers are raw values, not JSON text: -0 must fail closed even
+// though canonicalJson re-serializes it as 0 and the digest cannot tell them apart.
+function isCanonicalNonNegativeNumber(value: unknown): value is number {
+  return Number.isSafeInteger(value) && (value as number) >= 0 && !Object.is(value, -0);
+}
+
 function isTimestamp(value: unknown): value is number {
-  return Number.isSafeInteger(value) && (value as number) >= 0;
+  return isCanonicalNonNegativeNumber(value);
 }
 
 function isCount(value: unknown): value is number {
-  return Number.isSafeInteger(value) && (value as number) >= 0;
+  return isCanonicalNonNegativeNumber(value);
 }
 
 function isUniqueArray<T extends string>(

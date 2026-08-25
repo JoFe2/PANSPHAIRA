@@ -164,7 +164,8 @@ function isDigest(value: unknown): value is string {
 }
 
 function isTimestamp(value: unknown): value is number {
-  return Number.isSafeInteger(value) && (value as number) >= 0;
+  // -0 is a safe integer that satisfies >= 0; the canonical boundary is +0 or positive.
+  return Number.isSafeInteger(value) && !Object.is(value, -0) && (value as number) >= 0;
 }
 
 function isArtifactRef(value: unknown): value is string {
