@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 15,
+  "graphVersion": 16,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "e1237b3b6b57c792f13f25e214319b526ec7bdb8ce30ae93eb43211ba5e9f656"
+          "sha256": "597fc50284cbb90bbad35a641fa80ddc06abd3ec6392bc9d8594ebec71d96fb2"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -127,7 +127,7 @@
         {
           "path": "packages/contracts/src/verification-fabric.ts",
           "role": "CONTRACT",
-          "sha256": "2e4948641104cbbb496dc5974c33ce823571c12997649bbb1cf7d06e6b0349e1"
+          "sha256": "b94118b19936a089e42b90a83acb152e303925a7af1549b8a1d0db80b267b814"
         },
         {
           "path": "schemas/contracts/verification-fabric-bundle-v1.schema.json",
@@ -148,10 +148,15 @@
           "path": "tests/verification-fabric.test.ts",
           "role": "VALIDATOR",
           "sha256": "a9a6cac87fc78bd63dcbd4936edabe0d0b3f7695523294911829461676969212"
+        },
+        {
+          "path": "tests/verification-fabric-negative-zero.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "cd22857eeaa84345844476beb245862f997442bed22221c5accf503aab2d1b2f"
         }
       ],
       "ownedTests": [
-        "node --test dist/tests/verification-fabric.test.js"
+        "node --test dist/tests/verification-fabric-negative-zero.test.js dist/tests/verification-fabric.test.js"
       ],
       "invariants": [
         "V1 evidence and LKG verification remains fail closed.",
@@ -280,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "ac525300956733182c72a0dab7dc6ed2a78cb6ed5c3bd18402c77a3831abb143"
+          "sha256": "8c5a8f291871195c9ec3f7c24e1c6484152ad900d78bbdd69c17c666a8ec3ff1"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -488,18 +493,19 @@
         "vf-shadow-v2",
         "integration-profile-v1",
         "external-bi-service-v2",
-        "learning-routing-foundation"
+        "learning-routing-foundation",
+        "etl-01-extension-assurance-profile-v1"
       ],
       "inputs": [
         {
           "path": "release/governance.json",
           "role": "CONTRACT",
-          "sha256": "d6a34b36ee0386ab35a7d78caf33f41117f1dc9da6fdf53da453f2d7aa16026c"
+          "sha256": "e865b37133a78efeb3e4f0a08924f870288a8f8e73078a725d0f4fc17f3c1d1d"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "6989ee34660c2e469f01a1a4ec4749df199769fde2e3fcc4beef817543a5c482"
+          "sha256": "2d1a7333f6276fd099f0f9052908bc3f977864f0b6305925ae67996ca7a1171e"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -977,7 +983,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "4ec1ce646452fb516db6bc7fcbf5dc1aa4939e9223865fc81e0d1367fbecde52"
+          "sha256": "866115609ce07889e9aa7e60375694d64b8c53b79cf21edeb08481099ddbb1ff"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1152,7 +1158,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "c0ad06d406c6f2dbb805809b6b703232955cdd5925a62eb2acfd166876b419c0"
+          "sha256": "3fd1ca33ec7776f06b9db8d880840f3ef9b39520eb3e522ae971b5098ad9ead8"
         }
       ],
       "ownedTests": [
@@ -1430,6 +1436,59 @@
         "The feature remains Shadow-only and npm test remains authoritative until separately governed activation evidence exists."
       ],
       "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "etl-01-extension-assurance-profile-v1",
+      "dependsOn": [
+        "vf-contract-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/extension-assurance-profile.ts",
+          "role": "CONTRACT",
+          "sha256": "066802b5e4b7ca13f42a297f20e00e087197f91d34e960389f999d1497db641a"
+        },
+        {
+          "path": "schemas/contracts/extension-assurance-profile-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "d4dbcc5b9d7e9497bac3ccf5849d1b3820cb2b20f7e4d6c236374c7b4e223431"
+        },
+        {
+          "path": "tests/fixtures/extension-assurance/positive-profile-v1.json",
+          "role": "FIXTURE",
+          "sha256": "969bc85fac76e7aaa215e0c8a933aaa00ad00028e8e15bacec5ce0493645563a"
+        },
+        {
+          "path": "tests/fixtures/extension-assurance/negative-matrix-v1.json",
+          "role": "FIXTURE",
+          "sha256": "91dc4541e7e3ba00585eee31ef58af5d68f360bffbf13b19ca76e7de97093002"
+        },
+        {
+          "path": "tests/extension-assurance-profile.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "60542e9225a2c5cea00057783b71835d8896be3adae43ff9064b890ad37cbc64"
+        },
+        {
+          "path": "tests/extension-assurance-profile-negative-zero.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "85e84929568755e7815d43273ab6dd82b368bfc302b5f75998b50e0ced1fa029"
+        },
+        {
+          "path": "docs/EXTENSION-ASSURANCE-PROFILES.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4ae8afac84d763dd74a6b9cfc8805082f26fe07aea5a176cfb1accc07b25be33"
+        }
+      ],
+      "ownedTests": [
+        "node --test dist/tests/extension-assurance-profile-negative-zero.test.js dist/tests/extension-assurance-profile.test.js"
+      ],
+      "invariants": [
+        "The local synthetic profile grants no trust, admission, installation, activation, execution or marketplace authority.",
+        "Unknown, unsafe, fractional, negative-zero, stale, reversed, inconsistent or digest-drifting canonical numbers fail closed.",
+        "Canonical zero and safe nonnegative timestamps and counts retain deterministic digest-bound profile behavior."
+      ],
+      "riskClass": "HIGH",
       "globalInvalidation": false
     }
   ]

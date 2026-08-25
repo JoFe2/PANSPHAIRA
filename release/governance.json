@@ -156,6 +156,7 @@
         "schemas/contracts/verification-attestation-v2.schema.json",
         "tests/fixtures/verification-fabric/positive-bundle-v1.json",
         "tests/fixtures/verification-fabric/negative-matrix-v1.json",
+        "tests/verification-fabric-negative-zero.test.ts",
         "verification/verification-dag-v2.json",
         "scripts/verification-plan.mjs",
         "scripts/verification-shadow.mjs",
@@ -173,7 +174,8 @@
       "functionalProof": {
         "testPaths": [
           "tests/verification-fabric.test.ts",
-        "tests/verification-fabric-v2.test.ts",
+          "tests/verification-fabric-negative-zero.test.ts",
+          "tests/verification-fabric-v2.test.ts",
         "tests/adaptive-evidence-gates.test.ts",
         "tests/adaptive-controller.test.mjs"
       ],
@@ -182,6 +184,7 @@
       "safetyProof": {
         "testPaths": [
           "tests/verification-fabric.test.ts",
+          "tests/verification-fabric-negative-zero.test.ts",
           "tests/verification-fabric-v2.test.ts",
         "tests/fixtures/verification-fabric/negative-matrix-v1.json",
         "tests/adaptive-evidence-gates.test.ts",
@@ -585,21 +588,24 @@
         "schemas/contracts/extension-assurance-profile-v1.schema.json",
         "tests/fixtures/extension-assurance/positive-profile-v1.json",
         "tests/fixtures/extension-assurance/negative-matrix-v1.json",
+        "tests/extension-assurance-profile-negative-zero.test.ts",
         "tests/extension-assurance-profile.test.ts",
         "docs/EXTENSION-ASSURANCE-PROFILES.md"
       ],
       "functionalProof": {
         "testPaths": [
+          "tests/extension-assurance-profile-negative-zero.test.ts",
           "tests/extension-assurance-profile.test.ts"
         ],
-        "result": "PASS 5/5: the closed schema, exact digest, 100 canonical reorderings, expiry/retest behavior and fixed public projection verify."
+        "result": "PASS 11/11: the closed schema, exact digest, 100 canonical reorderings, canonical-zero and safe-number behavior, expiry/retest behavior and fixed public projection verify."
       },
       "safetyProof": {
         "testPaths": [
+          "tests/extension-assurance-profile-negative-zero.test.ts",
           "tests/extension-assurance-profile.test.ts",
           "tests/fixtures/extension-assurance/negative-matrix-v1.json"
         ],
-        "result": "PASS: all eight universal hard fails, missing or not-run required gates, unsafe routing, missing triggers, unknown fields and digest drift deny; stale, changed-subject and confirmed-false-negative evidence require retest; seeded disclosure bytes emitted: zero."
+        "result": "PASS: raw negative zero in every timestamp and count field, all eight universal hard fails, missing or not-run required gates, unsafe routing, missing triggers, unknown fields and digest drift deny; stale, changed-subject and confirmed-false-negative evidence require retest; seeded disclosure bytes emitted: zero."
       },
       "evidencePaths": [
         "docs/EXTENSION-ASSURANCE-PROFILES.md",
