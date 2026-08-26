@@ -22,22 +22,21 @@ only loopback service bindings.
 The current Latest release has a release-bound archive and SHA-256 sidecar.
 Download both exact public assets and verify the sidecar before extraction:
 
-Its increment claim is closed adaptive-evidence gates plus a separate
-operator-invoked controller. The controller remains default-off, persists
-atomic digest-bound state, uses a bounded lease/deadman and preserves
-`WAITING_EXTERNAL` honestly. It does not claim a scheduler, default activation,
-adaptive test-depth reduction, external completion truth, production readiness
+Its increment claim is canonical-number hardening. It rejects negative zero
+before canonicalization at established Verification Fabric timestamp and
+Extension Assurance Profile numeric boundaries. It does not grant trust,
+admission, activation, execution, marketplace authority, production readiness
 or customer evidence.
 
 ```sh
-release=v0.2.0-poc.20260821.1
-archive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz
+release=v0.2.0-poc.20260825.1
+archive=cm-product-increment-rc-20260825-canonical-number.tar.gz
 base=https://github.com/JoFe2/PANSPHAIRA/releases/download/$release
 curl -fLO "$base/$archive"
 curl -fLO "$base/$archive.sha256"
 sha256sum -c "$archive.sha256"
 tar -xzf "$archive"
-cd cm-product-increment-rc-20260821-adaptive-evidence-controller
+cd cm-product-increment-rc-20260825-canonical-number
 ```
 
 The sidecar owns the expected digest; do not substitute a checksum copied from

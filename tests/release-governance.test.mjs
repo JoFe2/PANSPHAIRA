@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -33,6 +33,20 @@ function append(root, path, value) {
 
 test("repository release governance passes", () => {
   assert.deepEqual(validateRepository(ROOT), []);
+});
+
+test("release-bound public quickstarts match the current governance tuple", () => {
+  const governance = JSON.parse(readFileSync(join(ROOT, "release", "governance.json"), "utf8"));
+  const archive = governance.currentRelease.assets.find(({ name }) => name.endsWith(".tar.gz"));
+  assert.ok(archive, "CURRENT_RELEASE_ARCHIVE_MISSING");
+  const extractedDirectory = archive.name.replace(/\.tar\.gz$/, "");
+
+  for (const path of ["README.md", "docs/QUICKSTART.md"]) {
+    const document = readFileSync(join(ROOT, path), "utf8");
+    assert.match(document, new RegExp(`^release=${governance.currentRelease.tag.replaceAll(".", "\\.")}$`, "m"), `${path}: stale release tag`);
+    assert.match(document, new RegExp(`^archive=${archive.name.replaceAll(".", "\\.")}$`, "m"), `${path}: stale archive name`);
+    assert.match(document, new RegExp(`^cd ${extractedDirectory.replaceAll(".", "\\.")}$`, "m"), `${path}: stale extracted directory`);
+  }
 });
 
 test("public release builder binds its exact file count to the manifest", () => {
@@ -146,8 +160,9 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.doesNotMatch(manifest, /^docs\/ZOO-FIELD-GUIDE\.md\t/m);
 });
 
-test("public documentation presentation gate accepts encapsulated or linked accessibility text", () => {
+test("public documentation presentation gate accepts encapsulated or linked accessibility text", (t) => {
   const root = fixture();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
   append(root, "README.md", [
     "<details>",
     "<summary>Accessible fixture description</summary>",
@@ -171,6 +186,15 @@ test("release governance negative probes fail closed", async (t) => {
     ["empty HTML image alt", "PUBLIC_DOC_IMAGE_ALT_UNUSABLE:README.md", (root) => replace(root, "README.md", "alt=\"PanSphaira control architecture from Agent Sphere through governed crossing, Gateway, capability contract, adapter provider, readback receipt, and knowledge revision.\"", "alt=\"\"")],
     ["empty Markdown image alt", "PUBLIC_DOC_IMAGE_ALT_UNUSABLE:README.md", (root) => append(root, "README.md", "![](assets/diagrams/caged-agent-gateway-constellation.svg)")],
     ["README version-bound release link", "README_STABLE_RELEASE_NAVIGATION_MISSING", (root) => replace(root, "README.md", "[Latest regular release](https://github.com/JoFe2/PANSPHAIRA/releases/latest)", "[Version-bound release](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.1.0)")],
+    ["README stale duplicate release tuple", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => append(root, "README.md", "release=v0.2.0-poc.20260821.1\narchive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz\ncd cm-product-increment-rc-20260821-adaptive-evidence-controller")],
+    ["Quickstart stale duplicate release tuple", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:docs/QUICKSTART.md", (root) => append(root, "docs/QUICKSTART.md", "release=v0.2.0-poc.20260821.1\narchive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz\ncd cm-product-increment-rc-20260821-adaptive-evidence-controller")],
+    ["release archive declaration drift", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.currentRelease.assetManifest.declares = "other.tar.gz"; writeFileSync(p, JSON.stringify(j)); }],
+    ["duplicate declared release archive", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); const archive = j.currentRelease.assets.find(({ name }) => name === j.currentRelease.assetManifest.declares); j.currentRelease.assets.push({ ...archive }); writeFileSync(p, JSON.stringify(j)); }],
+    ["README stale increment prose", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => replace(root, "README.md", "canonical-number hardening", "adaptive-evidence controller")],
+    ["Quickstart stale increment prose", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:docs/QUICKSTART.md", (root) => replace(root, "docs/QUICKSTART.md", "canonical-number hardening", "adaptive-evidence controller")],
+    ["README increment hidden in HTML comment", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => replace(root, "README.md", "This release is the **canonical-number hardening** increment.", "<!-- canonical-number hardening -->\nThis release is the current increment.")],
+    ["README indented stale tuple", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => append(root, "README.md", "```sh\n  release=v0.2.0-poc.20260821.1\n  archive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz\n  cd cm-product-increment-rc-20260821-adaptive-evidence-controller\n```")],
+    ["missing Quickstart document", "PUBLIC_QUICKSTART_MISSING:docs/QUICKSTART.md", (root) => rmSync(join(root, "docs/QUICKSTART.md"))],
     ["README Daily identity", "README_ACTIVE_DAILY_IDENTITY_DENIED", (root) => replace(root, "README.md", "Release pages own included capabilities", "Today's Daily snapshot owns included capabilities")],
     ["Knowledge OS promoted as current maturity", "README_POC_POSITIONING_MISSING", (root) => replace(root, "README.md", "broader direction is not a claim of current", "broader direction is current")],
     ["root Security static Latest claim", "ROOT_SECURITY_VERSION_BINDING_DENIED", (root) => append(root, "SECURITY.md", "The latest tagged release is v9.9.9.")],
@@ -201,8 +225,9 @@ test("release governance negative probes fail closed", async (t) => {
     ["calendar generator title", "GENERATOR_CALENDAR_RELEASE_TITLE_DENIED", (root) => replace(root, "scripts/daily-poc.mjs", "const releaseTitle = incrementCandidateTitle(manifest);", "const releaseTitle = `PanSphaira POC Daily — ${manifest.date}`;")]
   ];
   for (const [name, expected, mutate] of probes) {
-    await t.test(name, () => {
+    await t.test(name, (t) => {
       const root = fixture();
+      t.after(() => rmSync(root, { recursive: true, force: true }));
       mutate(root);
       assert.ok(validateRepository(root).some((value) => value.includes(expected)), validateRepository(root).join("\n"));
     });

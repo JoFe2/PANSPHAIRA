@@ -20,6 +20,11 @@ model.
 adaptable AI ecosystems. This broader direction is not a claim of current
 product maturity or universal live compatibility.
 
+**Planned research direction:** [Competence–Knowledge Separation and qualified
+model routing](https://github.com/JoFe2/PANSPHAIRA/issues/280) explores how
+external, evidence-bound knowledge could support the smallest qualified model.
+It is backlog research, not delivered functionality or implementation authority.
+
 **Status:** [current regular release](https://github.com/JoFe2/PANSPHAIRA/releases/latest)
 · proof of concept · Linux x86_64 · [Apache-2.0](LICENSE)
 
@@ -112,19 +117,20 @@ each combination still needs its own applicability boundary and evidence.
 For the release-bound path, download the current Latest archive and its
 published checksum sidecar, then verify before extracting:
 
-This release adds closed adaptive-evidence gates and a separate operator-invoked
-controller. The controller remains default-off, persists atomic digest-bound
-state, uses a bounded lease/deadman and preserves `WAITING_EXTERNAL` honestly.
+This release is the **canonical-number hardening** increment. It rejects
+negative zero before canonicalization in Verification Fabric timestamps and
+Extension Assurance Profile numeric fields. It grants no new trust, admission,
+activation, execution or marketplace authority.
 
 ```sh
-release=v0.2.0-poc.20260821.1
-archive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz
+release=v0.2.0-poc.20260825.1
+archive=cm-product-increment-rc-20260825-canonical-number.tar.gz
 base=https://github.com/JoFe2/PANSPHAIRA/releases/download/$release
 curl -fLO "$base/$archive"
 curl -fLO "$base/$archive.sha256"
 sha256sum -c "$archive.sha256"
 tar -xzf "$archive"
-cd cm-product-increment-rc-20260821-adaptive-evidence-controller
+cd cm-product-increment-rc-20260825-canonical-number
 ```
 
 On a supported Linux host with Docker and Compose, run there or from a
@@ -136,7 +142,7 @@ contributor checkout root:
 
 Open the loopback URL printed by the installer. The demo creates local random
 secrets and fictional fixtures. See the [full quickstart](docs/QUICKSTART.md)
-for prerequisites and troubleshooting.
+for prerequisites, expected `READY_VERIFIED` output and ownership-scoped cleanup.
 
 Remove only installer-owned resources:
 
@@ -148,6 +154,8 @@ Remove only installer-owned resources:
 
 - [Documentation and capability hub](docs/README.md): task-oriented routes and
   maturity labels.
+- [Capability and maturity matrix](docs/capabilities.md): released, locally
+  validated, candidate, planned and external-evidence surfaces.
 - [Security Assurance](docs/SECURITY-ASSURANCE.md): exact scoped claims,
   evidence, trusted computing base and non-claims.
 - [Known Limitations](docs/KNOWN-LIMITATIONS.md): production, identity,
