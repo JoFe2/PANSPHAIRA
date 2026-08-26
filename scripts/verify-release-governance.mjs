@@ -18,6 +18,29 @@ function section(markdown, heading) {
   return next < 0 ? rest : rest.slice(0, next + 3);
 }
 
+function releaseTupleMatches(markdown, release, archive) {
+  if (!archive?.name || release.assetManifest?.declares !== archive.name) return false;
+  const visibleProse = markdown
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/```[\s\S]*?```/g, "");
+  const blocks = [...markdown.matchAll(/```sh\s*\n([\s\S]*?)```/g)]
+    .map((match) => match[1])
+    .filter((block) => /^\s*release=/m.test(block));
+  if (blocks.length !== 1) return false;
+  const block = blocks[0];
+  const assignments = (name) => [...block.matchAll(new RegExp(`^\\s*${name}=([^\\s]+)\\s*$`, "gm"))].map((match) => match[1]);
+  const releaseValues = assignments("release");
+  const archiveValues = assignments("archive");
+  const directoryValues = [...block.matchAll(/^\s*cd (cm-product-increment-[^\s]+)\s*$/gm)].map((match) => match[1]);
+  return visibleProse.toLowerCase().includes(release.increment.toLowerCase())
+    && releaseValues.length === 1 && releaseValues[0] === release.tag
+    && archiveValues.length === 1 && archiveValues[0] === archive.name
+    && directoryValues.length === 1 && directoryValues[0] === archive.name.replace(/\.tar\.gz$/, "")
+    && [...markdown.matchAll(/^\s*release=/gm)].length === 1
+    && [...markdown.matchAll(/^\s*archive=/gm)].length === 1
+    && [...markdown.matchAll(/^\s*cd cm-product-increment-/gm)].length === 1;
+}
+
 function scanUnsafe(text, path) {
   const patterns = [
     ["PRIVATE_KEY", /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
@@ -99,9 +122,20 @@ export function validateRepository(root = process.cwd()) {
     }
   }
   const readme = files.get("README.md") ?? "";
+  let quickstart = "";
+  try { quickstart = read(root, "docs/QUICKSTART.md"); } catch { issues.push("PUBLIC_QUICKSTART_MISSING:docs/QUICKSTART.md"); }
   const releaseSection = section(readme, "Releases");
   const quickstartSection = section(readme, "Quickstart");
   const readmeOutsideQuickstart = readme.replace(quickstartSection, "");
+  const releaseArchives = (release.assets ?? []).filter(({ name }) => name === release.assetManifest?.declares && name.endsWith(".tar.gz"));
+  const releaseArchive = releaseArchives.length === 1 ? releaseArchives[0] : undefined;
+  for (const [path, document] of [["README.md", readme], ["docs/QUICKSTART.md", quickstart]]) {
+    issue(
+      issues,
+      releaseTupleMatches(document, release, releaseArchive),
+      `PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:${path}`,
+    );
+  }
   issue(
     issues,
     [
