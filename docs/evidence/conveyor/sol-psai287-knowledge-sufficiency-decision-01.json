@@ -1,0 +1,904 @@
+{
+  "schemaVersion": "pansphaira.evidence/cks-07-knowledge-sufficiency-decision/v1",
+  "taskId": "SOL-PSAI287-KNOWLEDGE-SUFFICIENCY-DECISION-01",
+  "recordKind": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
+  "decisionId": "CKS-07-KNOWLEDGE-SUFFICIENCY-POLICY-V1",
+  "decisionStatus": "FROZEN",
+  "implementationStatus": "NOT_IMPLEMENTED",
+  "proofStatus": "NOT_RUN",
+  "baseline": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-287",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "workingBaselineCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76"
+  },
+  "scope": {
+    "capability": "CKS-07",
+    "ownedProofs": [
+      "P11",
+      "P12",
+      "P13"
+    ],
+    "purpose": "Freeze the finite vocabulary, constants, dependency contracts, comparator, denominators, and fail-closed proof policy used to decide Knowledge Sufficiency before any implementation or proof run.",
+    "onlyWritableArtifact": "docs/evidence/conveyor/sol-psai287-knowledge-sufficiency-decision-01.json",
+    "productCodeChanged": false,
+    "retrievalPerformed": false,
+    "contentAcquired": false,
+    "knowledgePromoted": false,
+    "modelOrServiceInvoked": false,
+    "remoteStateMutated": false
+  },
+  "preservedProcessContext": {
+    "controllerAttestationSource": "TASK_INSTRUCTION",
+    "operatingModel": {
+      "id": "Operating Model v1.1",
+      "treatment": "PRESERVED_UNCHANGED",
+      "restatedOrReinterpretedHere": false
+    },
+    "decisions": [
+      {
+        "id": "D-001",
+        "treatment": "PRESERVED_UNCHANGED"
+      },
+      {
+        "id": "D-002",
+        "treatment": "PRESERVED_UNCHANGED"
+      },
+      {
+        "id": "D-003",
+        "treatment": "PRESERVED_UNCHANGED"
+      },
+      {
+        "id": "D-004",
+        "treatment": "PRESERVED_UNCHANGED"
+      },
+      {
+        "id": "D-005",
+        "treatment": "PRESERVED_UNCHANGED"
+      },
+      {
+        "id": "D-006",
+        "treatment": "PRESERVED_UNCHANGED"
+      },
+      {
+        "id": "D-007",
+        "treatment": "PRESERVED_UNCHANGED"
+      }
+    ],
+    "integrationRule": "This record specializes only the bounded CKS-07 decision vocabulary and proof policy. It creates no alternate workflow, authority path, promotion path, or evidence exception."
+  },
+  "normativeRepositoryBindings": {
+    "canonicalJson": {
+      "path": "packages/contracts/src/canonical-json.ts",
+      "use": "Canonical UTF-8 bytes before SHA-256 for every interface digest defined by this record."
+    },
+    "knowledgeEnvelope": {
+      "path": "packages/contracts/src/knowledge-envelope.ts",
+      "schemaVersions": [
+        "chimpmaera.knowledge/envelope/v1",
+        "chimpmaera.knowledge/taxonomy/v1",
+        "chimpmaera.knowledge/selection/v1"
+      ],
+      "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY"
+    },
+    "knowledgeQuality": {
+      "path": "packages/contracts/src/knowledge-quality.ts",
+      "schemaVersions": [
+        "chimpmaera.knowledge/contribution-envelope/v1",
+        "chimpmaera.knowledge/qualification-receipt/v1",
+        "chimpmaera.knowledge/edition/v1",
+        "chimpmaera.knowledge/lkg-pointer/v1",
+        "chimpmaera.knowledge/applicability-vocabulary/v1",
+        "chimpmaera.knowledge/model-proposal/v1"
+      ],
+      "qualificationActivationValue": "NOT_AUTHORIZED"
+    },
+    "canonLaws": [
+      "CM-CAN-01",
+      "CM-CAN-11",
+      "CM-CAN-15",
+      "CM-CAN-16",
+      "CM-CAN-17"
+    ],
+    "bindingRule": "A future CKS-07 implementation must consume these contracts without weakening their validation, applicability, generation, promotion, or authority boundaries."
+  },
+  "finiteVocabulary": {
+    "oracleCriticality": [
+      "CRITICAL",
+      "NON_CRITICAL"
+    ],
+    "candidateCriticality": [
+      "CRITICAL",
+      "NON_CRITICAL",
+      "UNKNOWN"
+    ],
+    "requirementApplicability": [
+      "APPLICABLE",
+      "NOT_APPLICABLE",
+      "UNKNOWN"
+    ],
+    "semanticAdjudication": [
+      "MATCH",
+      "NO_MATCH",
+      "UNKNOWN_SEMANTIC"
+    ],
+    "gapClass": [
+      "NONE",
+      "MISSING",
+      "BAD_SOURCE",
+      "APPLICABILITY",
+      "CONFLICTING",
+      "UNKNOWN_SEMANTIC"
+    ],
+    "requirementOutcome": [
+      "SATISFIED",
+      "NOT_APPLICABLE",
+      "GAP_MISSING",
+      "GAP_BAD_SOURCE",
+      "GAP_APPLICABILITY",
+      "GAP_CONFLICTING",
+      "GAP_UNKNOWN_SEMANTIC"
+    ],
+    "sourceClass": [
+      "ACTIVE_CURATED_KNOWLEDGE",
+      "PINNED_OWNER_EVIDENCE",
+      "PINNED_PRIMARY_EVIDENCE",
+      "PINNED_SECONDARY_EVIDENCE",
+      "INTERNET_RESULT",
+      "MODEL_RESULT",
+      "UNKNOWN_SOURCE"
+    ],
+    "acquisitionLevel": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ],
+    "retrievalAttemptOutcome": [
+      "QUALIFYING_MATCH",
+      "NO_MATCH",
+      "BAD_SOURCE",
+      "APPLICABILITY",
+      "CONFLICTING",
+      "UNKNOWN_SEMANTIC",
+      "BLOCKED"
+    ],
+    "caseOutcome": [
+      "SUFFICIENT",
+      "INSUFFICIENT",
+      "BLOCKED"
+    ],
+    "proofOutcome": [
+      "NOT_RUN",
+      "PASS",
+      "FAIL",
+      "BLOCKED"
+    ],
+    "blockedReason": [
+      "DEPENDENCY_EVIDENCE_ABSENT",
+      "DEPENDENCY_SCHEMA_INVALID",
+      "DEPENDENCY_DIGEST_MISMATCH",
+      "REQUIRED_SEMANTIC_RULE_ABSENT",
+      "REQUIRED_APPLICABILITY_RULE_ABSENT",
+      "REQUIRED_SOURCE_RULE_ABSENT",
+      "RETRIEVAL_RECEIPT_ABSENT",
+      "DENOMINATOR_EVIDENCE_ABSENT",
+      "COMPARATOR_INPUT_ABSENT",
+      "UNKNOWN_VOCABULARY_VALUE"
+    ],
+    "closedWorldRule": "Any unlisted value is invalid. A required input containing an unlisted value produces caseOutcome BLOCKED with blockedReason UNKNOWN_VOCABULARY_VALUE; it is never coerced to the nearest known value."
+  },
+  "requirementPolicy": {
+    "identity": {
+      "authoritativeTuple": [
+        "caseId",
+        "requirementSetDigest",
+        "requirementId"
+      ],
+      "requirementKeyDerivation": "lowercase-hex SHA-256 of canonicalJson({caseId,requirementSetDigest,requirementId}) encoded as UTF-8",
+      "statementBinding": "Each oracle requirement binds its exact statement with statementDigest; text resemblance, embedding similarity, popularity, or a model assertion is not identity.",
+      "candidateIdentity": "candidateId is unique only within candidateSetDigest and is never an oracle requirement identity.",
+      "matching": "Only a digest-bound semantic-adjudication receipt using the declared semanticRuleSetDigest may map one candidateId to one requirementId.",
+      "oneToOneCounting": "For an oracle requirement with multiple MATCH candidates, the lexicographically first candidateId is the one true-positive match and every additional mapped candidate is a false positive. A candidate may map to at most one oracle requirement.",
+      "unknownSemanticRule": "If a present deterministic rule returns UNKNOWN_SEMANTIC, the requirement fails closed as GAP_UNKNOWN_SEMANTIC. If the required rule or its evidence is absent, the case is BLOCKED rather than classified or scored."
+    },
+    "criticality": {
+      "oracleRule": "Every APPLICABLE oracle requirement has exactly one criticality: CRITICAL or NON_CRITICAL. UNKNOWN is forbidden in the oracle.",
+      "candidateRule": "A candidate may declare UNKNOWN, but UNKNOWN never satisfies criticality and cannot be silently mapped to NON_CRITICAL.",
+      "criticalMissDefinition": "An APPLICABLE CRITICAL oracle requirement is a critical requirement miss when it has no one-to-one MATCH or when its counted MATCH candidate is not labelled CRITICAL.",
+      "criticalityMismatchDefinition": "Any counted MATCH whose candidate criticality differs from oracle criticality is a criticality mismatch.",
+      "notApplicableRule": "NOT_APPLICABLE excludes a requirement only when the oracle binds a present applicabilityRuleId and its evidence. Absence, retrieval failure, or source mismatch can never infer NOT_APPLICABLE.",
+      "unknownApplicabilityRule": "UNKNOWN oracle applicability or an absent required applicability rule makes the case BLOCKED; UNKNOWN candidate applicability makes the requirement GAP_APPLICABILITY."
+    }
+  },
+  "gapPolicy": {
+    "precedenceHighestFirst": [
+      {
+        "rank": 1,
+        "gapClass": "UNKNOWN_SEMANTIC",
+        "requirementOutcome": "GAP_UNKNOWN_SEMANTIC",
+        "condition": "At least one otherwise admissible candidate needed to decide the requirement has a present semantic rule whose result is UNKNOWN_SEMANTIC."
+      },
+      {
+        "rank": 2,
+        "gapClass": "CONFLICTING",
+        "requirementOutcome": "GAP_CONFLICTING",
+        "condition": "Two or more semantically known, source-admissible, applicable accepted Knowledge items make unresolved incompatible claims."
+      },
+      {
+        "rank": 3,
+        "gapClass": "APPLICABILITY",
+        "requirementOutcome": "GAP_APPLICABILITY",
+        "condition": "A semantically known, source-admissible candidate exists, but a material context value is UNKNOWN or NOT_PROVIDED, or exact applicability to the case is not proven."
+      },
+      {
+        "rank": 4,
+        "gapClass": "BAD_SOURCE",
+        "requirementOutcome": "GAP_BAD_SOURCE",
+        "condition": "No satisfying ACTIVE_CURATED_KNOWLEDGE item exists and the only claimed matches are evidence, Internet, model, unknown-source, invalid, stale, unbound, or non-curated items."
+      },
+      {
+        "rank": 5,
+        "gapClass": "MISSING",
+        "requirementOutcome": "GAP_MISSING",
+        "condition": "A0, A1, and A2 each produced a valid digest-bound NO_MATCH receipt and no higher-precedence gap applies."
+      },
+      {
+        "rank": 6,
+        "gapClass": "NONE",
+        "requirementOutcome": "SATISFIED",
+        "condition": "Exactly one or more mutually compatible ACTIVE_CURATED_KNOWLEDGE items satisfy the known semantic and applicability rules with complete bindings."
+      }
+    ],
+    "foldRule": "Evaluate source eligibility before using a candidate, then apply the highest listed applicable gap across all eligible candidates. Excluded-source content may establish only BAD_SOURCE, never UNKNOWN_SEMANTIC, CONFLICTING, APPLICABILITY, NONE, or SATISFIED.",
+    "terminalNotApplicable": "A requirement proven NOT_APPLICABLE by its bound oracle rule has requirementOutcome NOT_APPLICABLE and does not enter gap precedence or metric denominators.",
+    "failClosedRule": "Every gap outcome is INSUFFICIENT. No rank is a confidence score, no lower rank overrides a higher rank, and ranking never selects between conflicting claims."
+  },
+  "sourceTrustBoundary": {
+    "satisfyingClass": "ACTIVE_CURATED_KNOWLEDGE",
+    "satisfyingClassConditions": [
+      "The KnowledgeEnvelopeV1 validates against the exact bound KnowledgeTaxonomyV1.",
+      "The envelopeDigest is present in the exact active immutable KnowledgeEditionV1.",
+      "The KnowledgeLkgPointerV1 validates and binds that exact edition digest and generation.",
+      "A KnowledgeSelectionV1 with mode CURATED selects the exact envelope digest for the exact namespace, taxonomy, generation, and evaluated policy.",
+      "The envelope remains fresh, permitted, non-conflicting, semantically known, and applicable for the requirement."
+    ],
+    "nonSatisfyingClasses": [
+      "PINNED_OWNER_EVIDENCE",
+      "PINNED_PRIMARY_EVIDENCE",
+      "PINNED_SECONDARY_EVIDENCE",
+      "INTERNET_RESULT",
+      "MODEL_RESULT",
+      "UNKNOWN_SOURCE"
+    ],
+    "boundaryRules": [
+      "Pinned provenance supports reviewability but does not itself create accepted Knowledge.",
+      "An Internet result remains INTERNET_RESULT even when its bytes, locator, and digest are pinned.",
+      "A model result remains MODEL_RESULT even when structured, deterministic at a pinned seed, or consistent with another result.",
+      "A qualification receipt with outcome PROPOSED remains a proposal and activation NOT_AUTHORIZED.",
+      "Only a separate governed promotion that produces and validates a new immutable edition and exact LKG binding can make a future item eligible for ACTIVE_CURATED_KNOWLEDGE.",
+      "Knowledge of every source class retains the existing read-only authority boundary and grants no Authority."
+    ],
+    "automaticTransitions": {
+      "INTERNET_RESULT_to_ACTIVE_CURATED_KNOWLEDGE": false,
+      "MODEL_RESULT_to_ACTIVE_CURATED_KNOWLEDGE": false,
+      "QUALIFICATION_PROPOSED_to_ACTIVE_CURATED_KNOWLEDGE": false,
+      "ACQUISITION_to_PROMOTION": false,
+      "ANY_KNOWLEDGE_to_AUTHORITY": false
+    }
+  },
+  "acquisitionPolicy": {
+    "levelSemantics": [
+      {
+        "level": "A0",
+        "name": "CURRENT_KNOWLEDGE_PRIMARY_RETRIEVAL",
+        "meaning": "Run the declared primary deterministic retrieval once against the exact current ACTIVE_CURATED_KNOWLEDGE bundle. No new content is acquired.",
+        "maySatisfyImmediately": true,
+        "mayPromote": false
+      },
+      {
+        "level": "A1",
+        "name": "DETERMINISTIC_QUERY_RECOVERY",
+        "meaning": "After A0 NO_MATCH, run one rule-identified deterministic alternate query against the same immutable Knowledge bundle and primary retriever.",
+        "maySatisfyImmediately": true,
+        "mayPromote": false
+      },
+      {
+        "level": "A2",
+        "name": "ALTERNATE_RETRIEVER_RECOVERY",
+        "meaning": "After A1 NO_MATCH, run one declared deterministic alternate retriever or index strategy against the same immutable Knowledge bundle; retrieverId must differ from A0 and A1 strategy identity.",
+        "maySatisfyImmediately": true,
+        "mayPromote": false
+      },
+      {
+        "level": "A3",
+        "name": "PINNED_LOCAL_EVIDENCE_CANDIDATE",
+        "meaning": "Represent owner-supplied or approved pinned local evidence as a contribution candidate with provenance, licence, applicability, and digest bindings.",
+        "maySatisfyImmediately": false,
+        "mayPromote": false
+      },
+      {
+        "level": "A4",
+        "name": "PINNED_INTERNET_EVIDENCE_CANDIDATE",
+        "meaning": "If separately authorized outside this slice, acquire and pin external bytes, locator, provenance, licence, and retrieval evidence as INTERNET_RESULT only.",
+        "maySatisfyImmediately": false,
+        "mayPromote": false
+      },
+      {
+        "level": "A5",
+        "name": "MODEL_ASSISTED_CANDIDATE",
+        "meaning": "If separately authorized outside this slice, a model may propose a query, extraction, relation, or synthesized candidate bound to its inputs; the output remains MODEL_RESULT and PROPOSAL only.",
+        "maySatisfyImmediately": false,
+        "mayPromote": false
+      }
+    ],
+    "orderingRule": "A0, A1, and A2 are ordered retrieval recovery over already accepted Knowledge. A3, A4, and A5 are acquisition candidate classes after a gap and are not retrieval recovery, qualification success, promotion, selection, or Authority.",
+    "promotionSeparationRule": "No A0-A5 receipt is a promotion receipt. A3-A5 output cannot change the current edition or LKG pointer and cannot close a gap until a separate, later, governed promotion is proven and the next sufficiency run consumes that newly accepted immutable state."
+  },
+  "retrievalRecoveryBudget": {
+    "scope": "PER_APPLICABLE_REQUIREMENT_PER_CASE",
+    "maximumTotalAttempts": 3,
+    "maximumAlternateAttempts": 2,
+    "maximumCandidatesPerAttempt": 20,
+    "orderedAttempts": [
+      {
+        "ordinal": 0,
+        "level": "A0",
+        "maximumUses": 1
+      },
+      {
+        "ordinal": 1,
+        "level": "A1",
+        "maximumUses": 1,
+        "requiredPredecessorOutcome": "NO_MATCH"
+      },
+      {
+        "ordinal": 2,
+        "level": "A2",
+        "maximumUses": 1,
+        "requiredPredecessorOutcome": "NO_MATCH"
+      }
+    ],
+    "recoveryDefinition": "A requirement is recovered only when A0 has a valid NO_MATCH receipt and A1 or A2 returns a QUALIFYING_MATCH from ACTIVE_CURATED_KNOWLEDGE under all semantic, source, conflict, and applicability gates.",
+    "missingDeclarationRule": "GAP_MISSING is legal only after exactly three ordered receipts for A0, A1, and A2 all say NO_MATCH over one identical knowledgeBundleDigest. Fewer attempts, a repeated strategy masquerading as A2, a bundle change, or an unavailable receipt produces BLOCKED, not MISSING.",
+    "nonNoMatchRule": "BAD_SOURCE, APPLICABILITY, CONFLICTING, and UNKNOWN_SEMANTIC are terminal fail-closed classifications for this run. Additional retrieval cannot silently wash out or downgrade those states.",
+    "budgetExhaustionRule": "Exhaustion authorizes only a GAP_MISSING decision and an optional A3-A5 recommendation. It authorizes no network call, model call, acquisition, qualification, promotion, activation, or Authority."
+  },
+  "sufficiencyPolicy": {
+    "thresholdConstants": {
+      "minimumRequirementRecall": "1/1",
+      "minimumRequirementPrecision": "1/1",
+      "maximumCriticalRequirementMisses": 0,
+      "maximumCriticalityMismatches": 0,
+      "maximumUnsatisfiedApplicableRequirements": 0,
+      "maximumPromotionLeaks": 0,
+      "maximumCombinedFalseCompletes": 0
+    },
+    "blockedPriority": "If any required dependency, digest, semantic rule, applicability rule, source rule, attempt receipt, or proof denominator is absent or invalid, outcome is BLOCKED before evaluating SUFFICIENT or INSUFFICIENT.",
+    "conjunction": [
+      "All required dependency interfaces validate and their digests bind one immutable case input.",
+      "P11 requirement recall is 1/1 and precision is 1/1 under one-to-one oracle matching.",
+      "P11 critical requirement misses equal zero and criticality mismatches equal zero.",
+      "Every APPLICABLE oracle requirement has requirementOutcome SATISFIED and gapClass NONE.",
+      "Every satisfying item has sourceClass ACTIVE_CURATED_KNOWLEDGE and passes semantic, conflict, freshness, and applicability rules.",
+      "Every NO_MATCH-to-MISSING path has complete ordered A0-A2 recovery receipts within budget.",
+      "No acquisition or qualification candidate is counted as promoted, selected, accepted Knowledge, or Authority."
+    ],
+    "formula": "SUFFICIENT iff dependency_gate AND recall_gate AND precision_gate AND critical_miss_gate AND criticality_gate AND per_requirement_knowledge_gate AND recovery_gate AND promotion_separation_gate; BLOCKED has priority; every other evaluated outcome is INSUFFICIENT.",
+    "noPartialCreditRule": "Scores and confidence may be reported as diagnostics but cannot replace the conjunction, offset one failed gate, or turn INSUFFICIENT or BLOCKED into SUFFICIENT."
+  },
+  "metricPolicy": {
+    "aggregation": "MICRO_COUNTS_OVER_ONE_DIGEST_BOUND_PROOF_SUITE",
+    "P11": {
+      "name": "REQUIREMENT_IDENTITY_AND_CRITICALITY",
+      "symbols": {
+        "R": "Count of APPLICABLE oracle requirements.",
+        "P": "Count of schema-valid candidate requirements, including duplicate semantic predictions as separate predictions.",
+        "M": "Count of one-to-one MATCH predictions after duplicate handling.",
+        "C": "Count of APPLICABLE CRITICAL oracle requirements.",
+        "CM": "Count of critical requirement misses.",
+        "CX": "Count of criticality mismatches among counted MATCH predictions."
+      },
+      "metrics": {
+        "requirementRecall": "M / R",
+        "requirementPrecision": "M / P when P > 0; 0 when P = 0 and R > 0",
+        "criticalRequirementMisses": "CM",
+        "criticalRequirementMissRate": "CM / C",
+        "criticalityMismatches": "CX"
+      },
+      "requiredDenominators": {
+        "R_minimum": 1,
+        "C_minimum": 1,
+        "P_zeroTreatment": "VALID_ZERO_PREDICTION_AND_PRECISION_ZERO"
+      },
+      "passRule": "M = R, M = P, CM = 0, and CX = 0.",
+      "blockedRule": "Absent oracle, absent semantic adjudication, R = 0, or C = 0 makes P11 BLOCKED; no value is imputed."
+    },
+    "P12": {
+      "name": "ALTERNATE_RETRIEVAL_RECOVERY_AND_PROMOTION_SEPARATION",
+      "symbols": {
+        "E1": "Count of requirements whose A0 outcome is NO_MATCH and whose bound fixture has its earliest qualifying accepted hit at A1.",
+        "E2": "Count of requirements whose A0 and A1 outcomes are NO_MATCH and whose bound fixture has its earliest qualifying accepted hit at A2.",
+        "REC": "Count of E1 plus E2 requirements recovered at the expected earliest alternate level.",
+        "MD": "Count of requirements declared GAP_MISSING.",
+        "VM": "Count of GAP_MISSING declarations backed by all three valid NO_MATCH receipts and a bound truly-missing oracle result.",
+        "ACQ": "Count of A3-A5 acquisition candidate receipts in the proof suite.",
+        "PL": "Count of A3-A5 candidates represented as promoted, selected ACTIVE_CURATED_KNOWLEDGE, or Authority without separate governed promotion evidence."
+      },
+      "metrics": {
+        "alternateRecoveryRate": "REC / (E1 + E2)",
+        "missingDeclarationPrecision": "VM / MD",
+        "prematureMissingCount": "MD - VM",
+        "promotionLeakCount": "PL"
+      },
+      "requiredDenominators": {
+        "E1_minimum": 1,
+        "E2_minimum": 1,
+        "MD_minimum": 1,
+        "ACQ_minimum": 1
+      },
+      "passRule": "REC = E1 + E2, VM = MD, PL = 0, and every attempt and acquisition receipt validates.",
+      "blockedRule": "A zero required denominator, missing attempt, missing acquisition evidence, absent oracle result, or changed knowledgeBundleDigest makes P12 BLOCKED; it is not a failed recovery or synthetic success."
+    },
+    "P13": {
+      "name": "FALSE_COMPLETENESS_REDUCTION",
+      "symbols": {
+        "OI": "Count of oracle INSUFFICIENT cases.",
+        "OS": "Count of oracle SUFFICIENT cases.",
+        "CFC": "Count of cases where the combined process says SUFFICIENT while the oracle says INSUFFICIENT.",
+        "SFC": "Count of cases where the frozen simple solver says COMPLETE while the oracle says INSUFFICIENT.",
+        "CTC": "Count of oracle SUFFICIENT cases where the combined process says SUFFICIENT."
+      },
+      "metrics": {
+        "combinedFalseCompletenessRate": "CFC / OI",
+        "simpleSolverFalseCompletenessRate": "SFC / OI",
+        "falseCompletenessAbsoluteReduction": "(SFC - CFC) / OI",
+        "combinedTrueCompletenessRate": "CTC / OS"
+      },
+      "requiredDenominators": {
+        "OI_minimum": 1,
+        "OS_minimum": 1,
+        "simpleSolverFalseCompleteMinimum": 1
+      },
+      "passRule": "CFC = 0, SFC > CFC, and CTC = OS using the same cases and denominator bytes for both solvers.",
+      "blockedRule": "Absent comparator input, absent oracle outcome, OI = 0, OS = 0, any required BLOCKED case, or denominator drift makes P13 BLOCKED; blocked cases cannot be dropped to improve either rate."
+    }
+  },
+  "simpleSolverComparator": {
+    "id": "CKS-07-SIMPLE-SOLVER-V1",
+    "inputParityRule": "The simple solver and combined process consume the identical requirement-candidate set, A0 candidate bytes, case context, and fixture digest. The oracle remains evaluator-only.",
+    "algorithm": [
+      "If the candidate requirement set or any required A0 receipt is absent or invalid, return BLOCKED.",
+      "If the candidate requirement set is empty, return INCOMPLETE.",
+      "For each candidate requirement, inspect only its A0 receipt.",
+      "Mark that candidate covered when A0 returned at least one candidate envelope digest, regardless of source class, semantic status, conflict, applicability, freshness, curation, or promotion status.",
+      "Return COMPLETE when every candidate requirement is covered; otherwise return INCOMPLETE."
+    ],
+    "outcomes": [
+      "COMPLETE",
+      "INCOMPLETE",
+      "BLOCKED"
+    ],
+    "intentionallyIgnoredByComparator": [
+      "oracle requirement recall",
+      "oracle requirement precision",
+      "criticality",
+      "A1 and A2 recovery",
+      "source-class trust",
+      "semantic adjudication",
+      "conflict",
+      "applicability",
+      "qualification versus promotion",
+      "Knowledge versus Authority"
+    ],
+    "freezeRule": "The comparator algorithm and id are immutable for one proof suite. Tuning it after observing combined-process results invalidates P13."
+  },
+  "dependencyInterfaces": [
+    {
+      "interfaceId": "CKS-07-REQUIREMENT-ORACLE-V1",
+      "schemaVersion": "pansphaira.cks/requirement-oracle/v1",
+      "producerBoundary": "OWNER_CONTROLLED_DIGEST_BOUND_BENCHMARK",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "caseId",
+        "fixtureDigest",
+        "semanticRuleSetDigest",
+        "requirements",
+        "requirementSetDigest"
+      ],
+      "requiredRequirementFields": [
+        "requirementId",
+        "statement",
+        "statementDigest",
+        "criticality",
+        "applicability",
+        "applicabilityRuleId"
+      ],
+      "closed": true,
+      "absenceOutcome": "BLOCKED"
+    },
+    {
+      "interfaceId": "CKS-07-REQUIREMENT-CANDIDATES-V1",
+      "schemaVersion": "pansphaira.cks/requirement-candidates/v1",
+      "producerBoundary": "SOLVER_OUTPUT_UNTRUSTED_DATA",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "caseId",
+        "fixtureDigest",
+        "requirements",
+        "candidateSetDigest"
+      ],
+      "requiredCandidateFields": [
+        "candidateId",
+        "statement",
+        "criticality",
+        "citations"
+      ],
+      "closed": true,
+      "absenceOutcome": "BLOCKED"
+    },
+    {
+      "interfaceId": "CKS-07-SEMANTIC-ADJUDICATION-V1",
+      "schemaVersion": "pansphaira.cks/semantic-adjudication-receipt/v1",
+      "producerBoundary": "DETERMINISTIC_RULE_EVALUATOR_NOT_MODEL_AUTHORITY",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "caseId",
+        "requirementSetDigest",
+        "candidateSetDigest",
+        "semanticRuleSetDigest",
+        "mappings",
+        "receiptDigest"
+      ],
+      "requiredMappingFields": [
+        "candidateId",
+        "requirementId",
+        "outcome",
+        "ruleId"
+      ],
+      "nullabilityRule": "requirementId is non-null only for MATCH; ruleId is always non-null. A missing required rule blocks the case rather than emitting a guessed mapping.",
+      "closed": true,
+      "absenceOutcome": "BLOCKED"
+    },
+    {
+      "interfaceId": "CKS-07-ACTIVE-KNOWLEDGE-BUNDLE-V1",
+      "schemaVersion": "pansphaira.cks/active-knowledge-bundle/v1",
+      "producerBoundary": "READ_ONLY_EXISTING_KNOWLEDGE_STATE",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "taxonomy",
+        "edition",
+        "lkgPointer",
+        "envelopes",
+        "curatedSelection",
+        "knowledgeBundleDigest"
+      ],
+      "exactNestedSchemas": [
+        "chimpmaera.knowledge/taxonomy/v1",
+        "chimpmaera.knowledge/edition/v1",
+        "chimpmaera.knowledge/lkg-pointer/v1",
+        "chimpmaera.knowledge/envelope/v1",
+        "chimpmaera.knowledge/selection/v1"
+      ],
+      "selectionMode": "CURATED",
+      "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+      "closed": true,
+      "absenceOutcome": "BLOCKED"
+    },
+    {
+      "interfaceId": "CKS-07-RETRIEVAL-ATTEMPT-V1",
+      "schemaVersion": "pansphaira.cks/retrieval-attempt-receipt/v1",
+      "producerBoundary": "DETERMINISTIC_READ_ONLY_RETRIEVER",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "caseId",
+        "requirementKey",
+        "attemptOrdinal",
+        "level",
+        "strategyId",
+        "queryDigest",
+        "knowledgeBundleDigest",
+        "outcome",
+        "candidateEnvelopeDigests",
+        "selectedEnvelopeDigests",
+        "reasonCodes",
+        "receiptDigest"
+      ],
+      "allowedLevels": [
+        "A0",
+        "A1",
+        "A2"
+      ],
+      "closed": true,
+      "absenceOutcome": "BLOCKED"
+    },
+    {
+      "interfaceId": "CKS-07-ACQUISITION-CANDIDATE-V1",
+      "schemaVersion": "pansphaira.cks/acquisition-candidate-receipt/v1",
+      "producerBoundary": "UNTRUSTED_CONTRIBUTION_ONLY",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "caseId",
+        "requirementKey",
+        "level",
+        "sourceClass",
+        "inputDigest",
+        "candidateDigest",
+        "promotionStatus",
+        "acceptedKnowledgeDigest",
+        "authorityBoundary",
+        "receiptDigest"
+      ],
+      "allowedLevels": [
+        "A3",
+        "A4",
+        "A5"
+      ],
+      "requiredPromotionStatus": "NOT_REQUESTED",
+      "requiredAcceptedKnowledgeDigest": null,
+      "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+      "closed": true,
+      "absenceOutcomeWhenRequiredByProof": "BLOCKED"
+    },
+    {
+      "interfaceId": "CKS-07-CASE-ORACLE-V1",
+      "schemaVersion": "pansphaira.cks/sufficiency-case-oracle/v1",
+      "producerBoundary": "OWNER_CONTROLLED_EVALUATOR_ONLY",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "caseId",
+        "fixtureDigest",
+        "requirementSetDigest",
+        "knowledgeBundleDigest",
+        "expectedRequirementOutcomes",
+        "expectedEarliestRecoveryLevels",
+        "expectedCombinedOutcome",
+        "oracleDigest"
+      ],
+      "closed": true,
+      "absenceOutcome": "BLOCKED"
+    },
+    {
+      "interfaceId": "CKS-07-PROOF-RECEIPT-V1",
+      "schemaVersion": "pansphaira.cks/knowledge-sufficiency-proof-receipt/v1",
+      "producerBoundary": "DETERMINISTIC_LOCAL_HARNESS",
+      "requiredTopLevelFields": [
+        "schemaVersion",
+        "policyDecisionId",
+        "policyDigest",
+        "suiteDigest",
+        "comparatorId",
+        "caseReceipts",
+        "P11",
+        "P12",
+        "P13",
+        "overallOutcome",
+        "receiptDigest"
+      ],
+      "closed": true,
+      "absenceOutcome": "NOT_RUN_OR_BLOCKED_NEVER_PASS"
+    }
+  ],
+  "proofIntegration": {
+    "P11": {
+      "consumes": [
+        "CKS-07-REQUIREMENT-ORACLE-V1",
+        "CKS-07-REQUIREMENT-CANDIDATES-V1",
+        "CKS-07-SEMANTIC-ADJUDICATION-V1"
+      ],
+      "emits": [
+        "requirementRecall",
+        "requirementPrecision",
+        "criticalRequirementMisses",
+        "criticalRequirementMissRate",
+        "criticalityMismatches",
+        "proofOutcome"
+      ]
+    },
+    "P12": {
+      "consumes": [
+        "CKS-07-ACTIVE-KNOWLEDGE-BUNDLE-V1",
+        "CKS-07-RETRIEVAL-ATTEMPT-V1",
+        "CKS-07-ACQUISITION-CANDIDATE-V1",
+        "CKS-07-CASE-ORACLE-V1"
+      ],
+      "emits": [
+        "alternateRecoveryRate",
+        "missingDeclarationPrecision",
+        "prematureMissingCount",
+        "promotionLeakCount",
+        "proofOutcome"
+      ]
+    },
+    "P13": {
+      "consumes": [
+        "P11 case decisions",
+        "P12 case decisions",
+        "CKS-07-CASE-ORACLE-V1",
+        "CKS-07-SIMPLE-SOLVER-V1 decisions"
+      ],
+      "emits": [
+        "combinedFalseCompletenessRate",
+        "simpleSolverFalseCompletenessRate",
+        "falseCompletenessAbsoluteReduction",
+        "combinedTrueCompletenessRate",
+        "proofOutcome"
+      ]
+    },
+    "overallRule": "The future proof receipt is PASS only when P11, P12, and P13 are each PASS. FAIL, BLOCKED, and NOT_RUN never aggregate to PASS."
+  },
+  "requiredProofCoverage": {
+    "P11Cases": [
+      "exact identity and criticality positive case",
+      "omitted critical requirement",
+      "spurious requirement precision penalty",
+      "duplicate semantic requirement precision penalty",
+      "candidate criticality UNKNOWN",
+      "present rule returns UNKNOWN_SEMANTIC",
+      "required semantic rule absent produces BLOCKED"
+    ],
+    "P12Cases": [
+      "A0 qualifying match",
+      "A1 alternate-query recovery after A0 NO_MATCH",
+      "A2 alternate-retriever recovery after A0 and A1 NO_MATCH",
+      "true MISSING only after three NO_MATCH receipts",
+      "premature missing attempt produces BLOCKED",
+      "BAD_SOURCE evidence does not satisfy",
+      "APPLICABILITY does not satisfy",
+      "CONFLICTING does not satisfy",
+      "INTERNET_RESULT remains unpromoted",
+      "MODEL_RESULT remains unpromoted"
+    ],
+    "P13Cases": [
+      "at least one oracle SUFFICIENT case accepted by the conjunction",
+      "MISSING false-completeness trap",
+      "BAD_SOURCE false-completeness trap",
+      "APPLICABILITY false-completeness trap",
+      "CONFLICTING false-completeness trap",
+      "UNKNOWN_SEMANTIC false-completeness trap",
+      "critical requirement miss false-completeness trap",
+      "acquisition-without-promotion false-completeness trap"
+    ],
+    "coverageRule": "Every named case requires real digest-bound fixture and run evidence. A narrative, fabricated metric, duplicated case under a new name, or synthetic substitute for an absent dependency does not satisfy coverage."
+  },
+  "noDataPolicy": {
+    "outcome": "BLOCKED",
+    "reasonCategory": "BLOCKED_NO_DATA",
+    "triggers": [
+      "A required dependency interface is absent.",
+      "A dependency schema or digest does not validate.",
+      "A required semantic, applicability, or source-classification rule is absent.",
+      "A required retrieval or acquisition receipt is absent.",
+      "A required metric denominator lacks evidence.",
+      "Comparator or oracle bytes are absent or differ between compared runs."
+    ],
+    "metricTreatment": "Do not emit zero, one, PASS, MISSING, or an estimated metric for the affected proof. Emit BLOCKED with the exact finite blocked reason and retain the absent field as absent.",
+    "antiFabricationRule": "No model output, Internet result, inferred label, copied historical score, generated placeholder, or synthetic result may fill missing dependency evidence or a missing semantic rule."
+  },
+  "alternativesConsidered": [
+    {
+      "alternative": "Use normalized text, embeddings, or model confidence as requirement identity.",
+      "decision": "REJECTED",
+      "reason": "It makes identity and P11 matching non-deterministic and can hide UNKNOWN_SEMANTIC."
+    },
+    {
+      "alternative": "Use weighted criticality scores or silently treat UNKNOWN as non-critical.",
+      "decision": "REJECTED",
+      "reason": "A binary oracle plus explicit candidate UNKNOWN makes critical misses finite and fail closed."
+    },
+    {
+      "alternative": "Declare MISSING after the primary retrieval returns no hit.",
+      "decision": "REJECTED",
+      "reason": "It cannot prove P12 alternate retrieval recovery and confuses retrieval failure with Knowledge absence."
+    },
+    {
+      "alternative": "Allow unbounded query retries or stop when a confidence threshold is reached.",
+      "decision": "REJECTED",
+      "reason": "It is not a finite deterministic recovery policy and permits result-shopping."
+    },
+    {
+      "alternative": "Count pinned owner, primary, Internet, or model material as accepted Knowledge on arrival.",
+      "decision": "REJECTED",
+      "reason": "Acquisition, qualification, promotion, curated selection, and Authority are separate transitions."
+    },
+    {
+      "alternative": "Make A5 a promotion or acceptance level.",
+      "decision": "REJECTED",
+      "reason": "A model proposal is untrusted data and no acquisition level grants promotion."
+    },
+    {
+      "alternative": "Use a weighted score or OR across requirement and Knowledge gates.",
+      "decision": "REJECTED",
+      "reason": "A high score could offset a critical miss, conflict, bad source, or applicability gap and create false completeness."
+    },
+    {
+      "alternative": "Treat a zero or absent denominator as perfect performance or omit blocked cases.",
+      "decision": "REJECTED",
+      "reason": "It fabricates proof through no-data and denominator selection."
+    },
+    {
+      "alternative": "Compare against a moving or post-hoc tuned baseline.",
+      "decision": "REJECTED",
+      "reason": "P13 requires one frozen simple solver on identical input bytes and denominators."
+    },
+    {
+      "alternative": "Macro-average per-case ratios.",
+      "decision": "REJECTED",
+      "reason": "Micro counts expose the exact requirement and case denominators and avoid undefined per-case ratio conventions."
+    }
+  ],
+  "rejectionConditions": {
+    "implementationOrProofMustFail": [
+      "Any Internet or model result is represented as ACTIVE_CURATED_KNOWLEDGE without separate governed promotion evidence.",
+      "Any Knowledge item or acquisition result grants credential, policy, approval, capability, tool, write, execution, or other Authority.",
+      "GAP_MISSING is emitted without exact ordered A0, A1, and A2 NO_MATCH receipts over one knowledgeBundleDigest.",
+      "An A3-A5 candidate changes an edition, LKG pointer, accepted Knowledge set, or sufficiency result in the same run.",
+      "A conflict, semantic unknown, bad source, or unproven applicability is classified SATISFIED.",
+      "P11, P12, or P13 claims PASS while a required observed negative case fails.",
+      "P13 uses different cases, input bytes, oracle bytes, or denominator bytes for the two solvers.",
+      "The simple solver is changed after results are observed.",
+      "A proof receipt reports PASS from narrative or invented values rather than real dependency and run evidence."
+    ],
+    "implementationOrProofMustBlock": [
+      "A required dependency or semantic rule is absent.",
+      "A required digest or schema is invalid.",
+      "A required denominator is zero because its fixture evidence is absent.",
+      "A required attempt receipt or comparator input is absent.",
+      "An unknown vocabulary value is encountered."
+    ],
+    "decisionSliceMustReject": [
+      "Any product-code implementation.",
+      "Any retrieval or content acquisition.",
+      "Any Knowledge promotion or activation.",
+      "Any model, network, provider, Docker, or external service invocation for product evidence.",
+      "Any GitHub mutation, release, merge, push, or issue closure.",
+      "Any write outside the single allowlisted decision artifact."
+    ]
+  },
+  "explicitNonclaims": [
+    "This record does not implement CKS-07 or any product code.",
+    "This record does not prove P11, P12, or P13; their proof status is NOT_RUN.",
+    "This record contains no requirement-discovery, retrieval, acquisition, qualification, promotion, model, Internet, or service result.",
+    "This record does not establish corpus completeness, semantic correctness, source truth, production fitness, performance, availability, or generalization.",
+    "This record does not accept, curate, promote, activate, publish, supersede, or revoke Knowledge.",
+    "This record grants no credential, Policy, Approval, capability, tool, network, write, execution, release, or other Authority.",
+    "A future PASS on local fixtures would remain bounded to the exact policy, suite, bytes, versions, environment, and evidence window in that proof receipt.",
+    "No Internet or model result is automatically accepted Knowledge or Authority."
+  ],
+  "currentEvidence": {
+    "finiteVocabularyFrozen": true,
+    "constantsFrozen": true,
+    "alternativesAndRejectionsRecorded": true,
+    "dependencyInterfacesRecorded": true,
+    "nonclaimsRecorded": true,
+    "P11": "NOT_RUN",
+    "P12": "NOT_RUN",
+    "P13": "NOT_RUN",
+    "claimableResult": "CKS-07_DECISION_AND_INTEGRATION_POLICY_FROZEN_ONLY",
+    "unclaimableResults": [
+      "CKS-07_IMPLEMENTED",
+      "P11_PASS",
+      "P12_PASS",
+      "P13_PASS",
+      "KNOWLEDGE_SUFFICIENT",
+      "FALSE_COMPLETENESS_REDUCED_IN_AN_OBSERVED_RUN"
+    ]
+  },
+  "verification": {
+    "jsonSyntax": {
+      "method": "strict JSON parse",
+      "expected": "PASS",
+      "observed": "PASS"
+    },
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "expectedExitCode": 0,
+      "observed": "PASS"
+    },
+    "productTests": "NOT_RUN_DECISION_ONLY_NO_PRODUCT_CODE_CHANGE",
+    "verificationBoundary": "Syntax and repository diff hygiene validate this decision artifact only; they do not change P11, P12, or P13 from NOT_RUN."
+  },
+  "verdict": "DECISION_FROZEN_IMPLEMENTATION_AND_P11_P12_P13_PROOF_NOT_CLAIMED"
+}
