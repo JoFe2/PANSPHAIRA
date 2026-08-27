@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
+  "receiptId": "PSAI107-INTEGRATION-PILOT-ACCEPTANCE-01",
+  "receiptVersion": 1,
+  "artifactKind": "BOUNDED_OFFICIAL_PILOT_INTEGRATION_ACCEPTANCE_RECEIPT",
+  "governance": {
+    "operatingModelVersion": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "statement": "This receipt applies the controller-reviewed operating model and decisions without restating, amending, superseding or replacing them."
+  },
+  "subject": {
+    "decisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json",
+      "commit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
+      "receiptId": "SOL-PSAI107-WIKIMEDIA-M0-ADR-01",
+      "decisionStatus": "APPROVED_BOUNDED_M0",
+      "implementationAuthorization": "RESERVED_FOR_SEPARATE_SYNTHETIC_OFFLINE_IMPLEMENTATION"
+    },
+    "stagedEdition": {
+      "identity": null,
+      "manifestDigest": null,
+      "verdict": "REJECTED_REQUIRED_EVIDENCE_MISSING"
+    }
+  },
+  "requiredEvidence": {
+    "operatorProducedOfficialPilotEvidence": {
+      "expectedPath": "verification/wikimedia-m0-evidence-v1.json",
+      "status": "ABSENT",
+      "effect": "NO_ACCEPTANCE_CREDIT"
+    },
+    "boundedAdapter": {
+      "expectedPath": "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+      "status": "ABSENT",
+      "effect": "IMPORT_REIMPORT_READBACK_COMMANDS_NOT_AVAILABLE"
+    },
+    "boundedProfileAndFixture": {
+      "expectedPaths": [
+        "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
+        "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
+        "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
+        "tests/fixtures/mediawiki-xml/negative-matrix-v1.json"
+      ],
+      "status": "ALL_ABSENT",
+      "effect": "NO_STAGED_EDITION_OR_DIGEST_BINDING_TO_VERIFY"
+    },
+    "focusedVerifier": {
+      "expectedPath": "tests/mediawiki-xml-local-adapter.test.ts",
+      "status": "ABSENT",
+      "effect": "NO_MEDIAWIKI_OFFICIAL_PILOT_VERIFIER_TO_RUN"
+    }
+  },
+  "independentInspection": {
+    "treeCommit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
+    "command": "git ls-tree -r --name-only HEAD with case-insensitive MediaWiki/Wikimedia path inspection and exact future-leaf presence inspection",
+    "result": "ONLY_DECISION_RECEIPT_PRESENT",
+    "mediaWikiOrWikimediaTrackedPaths": [
+      "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json"
+    ],
+    "requiredFutureLeavesPresent": [],
+    "requiredFutureLeavesAbsent": [
+      "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+      "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
+      "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
+      "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
+      "tests/fixtures/mediawiki-xml/negative-matrix-v1.json",
+      "tests/mediawiki-xml-local-adapter.test.ts",
+      "verification/wikimedia-m0-evidence-v1.json"
+    ],
+    "finding": "The staged edition, its operator evidence, bounded adapter, profile, fixture, focused verifier and readback material are not supplied by the inspected repository tree."
+  },
+  "commandExecution": {
+    "operatorEvidenceVerifier": {
+      "status": "NOT_EXECUTABLE_REQUIRED_EVIDENCE_AND_VERIFIER_ABSENT",
+      "reason": "No operator-produced pilot evidence or MediaWiki-focused verifier exists in the inspected tree."
+    },
+    "import": {
+      "status": "NOT_EXECUTABLE_BOUNDED_ADAPTER_AND_PROFILE_ABSENT",
+      "reason": "No staged edition or repository command can be resolved without inventing a command or input."
+    },
+    "reimport": {
+      "status": "NOT_EXECUTABLE_BOUNDED_ADAPTER_AND_PROFILE_ABSENT",
+      "reason": "No first import result or re-import command can be resolved without inventing a command or input."
+    },
+    "readback": {
+      "status": "NOT_EXECUTABLE_BOUNDED_ADAPTER_AND_EVIDENCE_ABSENT",
+      "reason": "No accepted staged edition, readback command or readback evidence can be resolved without inventing a claim."
+    },
+    "existingLocalFileCorpusVerifier": {
+      "command": "npm run local-file-corpus:test",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node v24.19.0 aborted during V8 initialization at OS::SetPermissions before npm could execute the script.",
+      "productVerdict": "NONE",
+      "scopeNote": "The existing LKC-FILES-01 verifier concerns Markdown/Text fixtures and cannot substitute for absent MediaWiki official-pilot evidence."
+    }
+  },
+  "decision": {
+    "outcome": "REJECTED",
+    "reasonCode": "REQUIRED_EVIDENCE_MISSING",
+    "reason": "Acceptance would require operator-produced bounded official-pilot evidence verified by the built verifier and independent successful import, re-import and readback. None of the required pilot artifacts or runnable commands is present; therefore success is not claimed.",
+    "acceptedEdition": null,
+    "claimsNotPromoted": [
+      "MediaWiki XML adapter implementation",
+      "official-pilot import success",
+      "re-import determinism",
+      "accepted or last-known-good staged edition",
+      "readback success",
+      "real Wikimedia compatibility",
+      "truth, licence determination, corpus, download, live retrieval, model, Docker, deployment, GitHub, release, publication or redistribution evidence"
+    ],
+    "failClosedRule": "The prior decision receipt's MWXML-M0-R024 requires DO_NOT_CLAIM_SUCCESS when required evidence is missing or failing."
+  },
+  "verification": {
+    "receiptJsonParse": {
+      "command": "python3 JSON parse and bounded semantic assertions",
+      "status": "PASS"
+    },
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "cleanWorktreeAfterLocalCommit": {
+      "command": "git status --short",
+      "status": "PASS"
+    }
+  },
+  "determinism": {
+    "volatileTimestampIncluded": false,
+    "externalContentEmbedded": false,
+    "ordering": "Object keys and arrays are authored in stable semantic order; required paths are path-sorted.",
+    "sourceBinding": "The inspected decision receipt and repository tree are bound to b4fc2a519a736d03a730723c06fcb3f05cbc2cb1."
+  },
+  "claimBoundary": "REJECTION_RECEIPT_ONLY: it records missing required evidence and an infrastructure-blocked baseline command. It does not establish implementation, pilot success, import, re-import, readback, acceptance, compatibility or any external-system result."
+}
