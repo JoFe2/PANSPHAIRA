@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json",
+  "title": "Offline MediaWiki mini dump immutable edition v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "editionId",
+    "priorEditionId",
+    "project",
+    "language",
+    "dump",
+    "site",
+    "rawTransport",
+    "provenance",
+    "license",
+    "pages",
+    "contentDigest",
+    "authorityBoundary",
+    "editionDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.knowledge/mediawiki-mini-dump-edition/v1" },
+    "editionId": { "type": "string", "pattern": "^mediawiki-mini-dump:[a-f0-9]{40}$" },
+    "priorEditionId": { "type": "null" },
+    "project": { "$ref": "#/$defs/id" },
+    "language": { "type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Za-z]{1,8})*$" },
+    "dump": { "$ref": "#/$defs/dump" },
+    "site": { "$ref": "#/$defs/site" },
+    "rawTransport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourcePath", "sourceChecksum", "byteSize"],
+      "properties": {
+        "sourcePath": { "type": "string", "pattern": "^[A-Za-z0-9._-]+\\.xml$", "maxLength": 240 },
+        "sourceChecksum": { "$ref": "#/$defs/digest" },
+        "byteSize": { "type": "integer", "minimum": 1, "maximum": 8388608 }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parserVersion", "canonicalizerVersion", "imageDigests"],
+      "properties": {
+        "parserVersion": { "const": "mediawiki-mini-dump-parser/v1" },
+        "canonicalizerVersion": { "const": "mediawiki-mini-dump-canonicalizer/v1" },
+        "imageDigests": { "type": "array", "maxItems": 0, "items": { "type": "string" } }
+      }
+    },
+    "license": { "$ref": "#/$defs/license" },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/page" }
+    },
+    "contentDigest": { "$ref": "#/$defs/digest" },
+    "authorityBoundary": { "const": "OFFLINE_SYNTHETIC_MEDIAWIKI_XML_NO_NETWORK_DOWNLOAD_WRITE_EXECUTION_OR_TRUTH_AUTHORITY" },
+    "editionDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "dump": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceUrl", "snapshotDate"],
+      "properties": {
+        "kind": { "const": "CURRENT_PAGES_MINI_DUMP" },
+        "sourceUrl": { "type": "string", "pattern": "^https://[a-z0-9][a-z0-9.-]*(?::\\d{1,5})?/[A-Za-z0-9._~!$&'()*+,;=:@%/-]*$", "maxLength": 2048 },
+        "snapshotDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+      }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "base"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "base": { "type": "string", "pattern": "^https://[a-z0-9][a-z0-9-]*(?:\\.[a-z0-9][a-z0-9-]*)+/wiki$" }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["licence", "attributionTemplate"],
+      "properties": {
+        "licence": { "enum": ["CC0-1.0", "CC-BY-4.0", "APACHE-2.0", "MIT", "OWNER_AUTHORIZED"] },
+        "attributionTemplate": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "title", "canonicalTitle", "canonicalUrl", "pageId", "revisionId", "timestamp", "project", "snapshotDate", "licence", "text", "contentDigest", "chunks"],
+      "properties": {
+        "namespace": { "const": 0 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "canonicalTitle": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "canonicalUrl": { "type": "string", "pattern": "^https://[a-z0-9][a-z0-9-]*(?:\\.[a-z0-9][a-z0-9-]*)+/wiki/.+$" },
+        "pageId": { "type": "integer", "minimum": 1 },
+        "revisionId": { "type": "integer", "minimum": 1 },
+        "timestamp": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$" },
+        "project": { "$ref": "#/$defs/id" },
+        "snapshotDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "licence": { "enum": ["CC0-1.0", "CC-BY-4.0", "APACHE-2.0", "MIT", "OWNER_AUTHORIZED"] },
+        "text": { "type": "string", "minLength": 1 },
+        "contentDigest": { "$ref": "#/$defs/digest" },
+        "chunks": { "type": "array", "minItems": 1, "maxItems": 4096, "items": { "$ref": "#/$defs/chunk" } }
+      }
+    },
+    "chunk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line", "startLine", "endLine", "text", "citationId", "citation", "chunkDigest"],
+      "properties": {
+        "line": { "type": "integer", "minimum": 1 },
+        "startLine": { "type": "integer", "minimum": 1 },
+        "endLine": { "type": "integer", "minimum": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "citationId": { "type": "string", "pattern": "^citation:[a-f0-9]{24}$" },
+        "citation": { "type": "string", "pattern": "^.+#L[1-9][0-9]*$" },
+        "chunkDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

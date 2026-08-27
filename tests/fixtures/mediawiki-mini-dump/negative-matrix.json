@@ -1,0 +1,17 @@
+[
+  { "caseId": "doctype", "expected": "MEDIAWIKI_MINI_DUMP_UNSAFE_XML_DENIED" },
+  { "caseId": "external-entity", "expected": "MEDIAWIKI_MINI_DUMP_UNSAFE_XML_DENIED" },
+  { "caseId": "media", "expected": "MEDIAWIKI_MINI_DUMP_MEDIA_DENIED" },
+  { "caseId": "namespace", "expected": "MEDIAWIKI_MINI_DUMP_NAMESPACE_DENIED" },
+  { "caseId": "duplicate-identity", "expected": "MEDIAWIKI_MINI_DUMP_PAGE_IDENTITY_DENIED" },
+  { "caseId": "missing-identity", "expected": "MEDIAWIKI_MINI_DUMP_PAGE_IDENTITY_DENIED" },
+  { "caseId": "unsupported-revision", "expected": "MEDIAWIKI_MINI_DUMP_REVISION_SHAPE_DENIED" },
+  { "caseId": "oversized-text", "expected": "MEDIAWIKI_MINI_DUMP_REVISION_SIZE_DENIED" },
+  { "caseId": "deep-text", "expected": "MEDIAWIKI_MINI_DUMP_PARSE_DEPTH_DENIED" },
+  { "caseId": "malformed-xml", "expected": "MEDIAWIKI_MINI_DUMP_MALFORMED_DENIED" },
+  { "caseId": "missing-license-attribution", "expected": "MEDIAWIKI_MINI_DUMP_LICENSE_DENIED" },
+  { "caseId": "missing-license", "expected": "MEDIAWIKI_MINI_DUMP_LICENSE_DENIED" },
+  { "caseId": "digest-drift", "expected": "MEDIAWIKI_MINI_DUMP_DIGEST_DRIFT_DENIED" },
+  { "caseId": "mixed-edition", "expected": "MEDIAWIKI_MINI_DUMP_MIXED_EDITION_DENIED" },
+  { "caseId": "disabled-profile", "expected": "MEDIAWIKI_MINI_DUMP_DISABLED" }
+]
