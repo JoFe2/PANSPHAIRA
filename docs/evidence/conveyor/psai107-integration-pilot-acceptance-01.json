@@ -1,7 +1,7 @@
 {
   "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
   "receiptId": "PSAI107-INTEGRATION-PILOT-ACCEPTANCE-01",
-  "receiptVersion": 1,
+  "receiptVersion": 2,
   "artifactKind": "BOUNDED_OFFICIAL_PILOT_INTEGRATION_ACCEPTANCE_RECEIPT",
   "governance": {
     "operatingModelVersion": "1.1",
@@ -23,50 +23,114 @@
       "commit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
       "receiptId": "SOL-PSAI107-WIKIMEDIA-M0-ADR-01",
       "decisionStatus": "APPROVED_BOUNDED_M0",
-      "implementationAuthorization": "RESERVED_FOR_SEPARATE_SYNTHETIC_OFFLINE_IMPLEMENTATION"
+      "selectedLifecycle": "chimpmaera.knowledge/mediawiki-xml-local-snapshot-lifecycle/v1"
     },
-    "stagedEdition": {
+    "operatorCandidate": {
+      "commit": "84120d6626fe2d5dafb68c4f88224d50c60e5935",
+      "subject": "feat: add offline MediaWiki mini dump editions",
+      "declaredBoundary": "OFFLINE_SYNTHETIC_MEDIAWIKI_XML_NO_NETWORK_DOWNLOAD_WRITE_EXECUTION_OR_TRUTH_AUTHORITY",
+      "trackedPaths": [
+        "packages/contracts/src/mediawiki-mini-dump.ts",
+        "schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json",
+        "tests/fixtures/mediawiki-mini-dump/manifest.json",
+        "tests/fixtures/mediawiki-mini-dump/negative-matrix.json",
+        "tests/fixtures/mediawiki-mini-dump/positive-mini.xml",
+        "tests/fixtures/mediawiki-mini-dump/reordered-mini.xml",
+        "tests/mediawiki-mini-dump.test.ts"
+      ]
+    },
+    "stagedOfficialEdition": {
       "identity": null,
       "manifestDigest": null,
-      "verdict": "REJECTED_REQUIRED_EVIDENCE_MISSING"
+      "verdict": "REJECTED_NO_OFFICIAL_PILOT_STAGE"
+    },
+    "observedSyntheticEdition": {
+      "identity": "mediawiki-mini-dump:53cf9a6e0b610f549b2268b61b51c0c6221d384e",
+      "editionDigest": "53cf9a6e0b610f549b2268b61b51c0c6221d384e73e6635e40c154cd8ceb6e72",
+      "contentDigest": "83555e2c995aea05d52cdc482dc85e51e145db768159a756aea82fdc62abe3ff",
+      "pageCount": 6,
+      "queryResultCount": 12,
+      "acceptanceCredit": "NONE_OFFICIAL_PILOT"
     }
   },
   "requiredEvidence": {
     "operatorProducedOfficialPilotEvidence": {
       "expectedPath": "verification/wikimedia-m0-evidence-v1.json",
       "status": "ABSENT",
-      "effect": "NO_ACCEPTANCE_CREDIT"
+      "effect": "NO_OFFICIAL_PILOT_ACCEPTANCE_CREDIT"
     },
-    "boundedAdapter": {
-      "expectedPath": "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+    "officialPilotSource": {
+      "path": null,
+      "sourceDigest": null,
       "status": "ABSENT",
-      "effect": "IMPORT_REIMPORT_READBACK_COMMANDS_NOT_AVAILABLE"
+      "effect": "OFFICIAL_IMPORT_REIMPORT_AND_READBACK_NOT_EXECUTABLE"
     },
-    "boundedProfileAndFixture": {
-      "expectedPaths": [
-        "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
-        "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
-        "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
-        "tests/fixtures/mediawiki-xml/negative-matrix-v1.json"
-      ],
-      "status": "ALL_ABSENT",
-      "effect": "NO_STAGED_EDITION_OR_DIGEST_BINDING_TO_VERIFY"
+    "candidateManifest": {
+      "path": "tests/fixtures/mediawiki-mini-dump/manifest.json",
+      "sha256": "3f8e575e43c355dd05cfd84c73ed5b3039151f7312e8bf9eeaffde11bfe1ff62",
+      "declaredSyntheticOnly": true,
+      "declaredPilotKind": "BOUNDED_OFFICIAL_PILOT_SNAPSHOT_METADATA_ONLY",
+      "declaredAttribution": "Synthetic fixture authored for PSAI107; no Wikimedia content.",
+      "status": "PRESENT_SYNTHETIC_METADATA_ONLY",
+      "effect": "SYNTHETIC_VERIFICATION_ONLY_NO_OFFICIAL_PILOT_CREDIT"
     },
     "focusedVerifier": {
-      "expectedPath": "tests/mediawiki-xml-local-adapter.test.ts",
-      "status": "ABSENT",
-      "effect": "NO_MEDIAWIKI_OFFICIAL_PILOT_VERIFIER_TO_RUN"
+      "path": "tests/mediawiki-mini-dump.test.ts",
+      "status": "PRESENT_SYNTHETIC_SCOPE_ONLY",
+      "readsCandidateSyntheticProfile": true,
+      "bindsManifestPilotMetadata": false,
+      "bindsOfficialPilotSourceOrReceipt": false,
+      "bindsApprovedAcceptedLkgLifecycle": false,
+      "effect": "A passing verifier establishes only the checked-in synthetic mini-dump behavior."
+    },
+    "approvedLifecycle": {
+      "requiredAdapterPath": "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+      "requiredEvidencePath": "verification/wikimedia-m0-evidence-v1.json",
+      "requiredExistingContracts": [
+        "KnowledgeEnvelopeV1",
+        "LocalFileCorpusEditionV1",
+        "LocalFileCorpusRegistryV1",
+        "activateLocalFileCorpusEditionV1",
+        "queryLocalFileCorpusV1"
+      ],
+      "status": "NOT_BOUND_BY_OPERATOR_CANDIDATE",
+      "evidence": "The candidate source contains no reference to the required existing lifecycle contracts, and all decision-leased MediaWiki XML adapter and evidence leaves remain absent.",
+      "effect": "NO_ACCEPTED_OR_LAST_KNOWN_GOOD_TRANSITION_CREDIT"
     }
   },
   "independentInspection": {
-    "treeCommit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
-    "command": "git ls-tree -r --name-only HEAD with case-insensitive MediaWiki/Wikimedia path inspection and exact future-leaf presence inspection",
-    "result": "ONLY_DECISION_RECEIPT_PRESENT",
-    "mediaWikiOrWikimediaTrackedPaths": [
-      "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json"
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "decisionCommit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
+    "operatorCandidateCommit": "84120d6626fe2d5dafb68c4f88224d50c60e5935",
+    "commands": [
+      "git diff-tree --no-commit-id --name-only -r 84120d6626fe2d5dafb68c4f88224d50c60e5935",
+      "sha256sum tests/fixtures/mediawiki-mini-dump/manifest.json tests/fixtures/mediawiki-mini-dump/positive-mini.xml tests/fixtures/mediawiki-mini-dump/reordered-mini.xml tests/mediawiki-mini-dump.test.ts packages/contracts/src/mediawiki-mini-dump.ts",
+      "git cat-file -e HEAD:<decision-leased required path> for each required leaf",
+      "bounded Python manifest and verifier-scope assertions"
     ],
-    "requiredFutureLeavesPresent": [],
-    "requiredFutureLeavesAbsent": [
+    "candidateFileBindings": [
+      {
+        "path": "packages/contracts/src/mediawiki-mini-dump.ts",
+        "sha256": "ed55c1e549b2211aa880e7750383419346b8a7e6f7dc751eb2c2fcab021e8c65"
+      },
+      {
+        "path": "tests/fixtures/mediawiki-mini-dump/manifest.json",
+        "sha256": "3f8e575e43c355dd05cfd84c73ed5b3039151f7312e8bf9eeaffde11bfe1ff62"
+      },
+      {
+        "path": "tests/fixtures/mediawiki-mini-dump/positive-mini.xml",
+        "sha256": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c"
+      },
+      {
+        "path": "tests/fixtures/mediawiki-mini-dump/reordered-mini.xml",
+        "sha256": "179966917d3501fb29bed1244da1c30becc8cc5002a19c361779b8883d3b8486"
+      },
+      {
+        "path": "tests/mediawiki-mini-dump.test.ts",
+        "sha256": "b498abb3daa8db80b9f6f79ce6076ed342591edb322fb00448c56294ae4d7c9b"
+      }
+    ],
+    "requiredDecisionLeavesAbsent": [
       "packages/contracts/src/mediawiki-xml-local-adapter.ts",
       "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
       "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
@@ -75,53 +139,96 @@
       "tests/mediawiki-xml-local-adapter.test.ts",
       "verification/wikimedia-m0-evidence-v1.json"
     ],
-    "finding": "The staged edition, its operator evidence, bounded adapter, profile, fixture, focused verifier and readback material are not supplied by the inspected repository tree."
+    "verifierScopeFacts": {
+      "candidateManifestSyntheticOnly": true,
+      "candidateManifestMetadataOnly": true,
+      "candidateManifestDeclaresNoWikimediaContent": true,
+      "verifierImportsSyntheticProfile": true,
+      "verifierReferencesPilotMetadata": false,
+      "verifierReferencesApprovedExistingLifecycle": false
+    },
+    "finding": "The operator candidate is a reproducible synthetic-only mini-dump proof. It supplies neither an official-pilot source and digest nor a verifier-bound official-pilot receipt, and it does not bind the approved existing Knowledge Envelope and Accepted/LKG lifecycle."
   },
   "commandExecution": {
     "operatorEvidenceVerifier": {
-      "status": "NOT_EXECUTABLE_REQUIRED_EVIDENCE_AND_VERIFIER_ABSENT",
-      "reason": "No operator-produced pilot evidence or MediaWiki-focused verifier exists in the inspected tree."
+      "command": "docker exec -w /workspace/materialized-pansphaira-107 dev-conveyor-lane-3 node --test dist/tests/mediawiki-mini-dump.test.js",
+      "runtime": "Node v24.19.0",
+      "status": "PASS_SYNTHETIC_SCOPE_ONLY",
+      "tests": {
+        "passed": 6,
+        "failed": 0
+      },
+      "officialPilotEvidenceRead": false,
+      "productVerdict": "SYNTHETIC_BEHAVIOR_VERIFIED_NO_OFFICIAL_PILOT_VERDICT"
+    },
+    "independentSyntheticRunner": {
+      "command": "docker exec -w /workspace/materialized-pansphaira-107 dev-conveyor-lane-3 node --input-type=module -e <independent import, re-import, validate and query assertions against the committed synthetic profile>",
+      "status": "PASS_SYNTHETIC_SCOPE_ONLY",
+      "inputClass": "SYNTHETIC_ONLY",
+      "pilotKind": "BOUNDED_OFFICIAL_PILOT_SNAPSHOT_METADATA_ONLY"
     },
     "import": {
-      "status": "NOT_EXECUTABLE_BOUNDED_ADAPTER_AND_PROFILE_ABSENT",
-      "reason": "No staged edition or repository command can be resolved without inventing a command or input."
+      "status": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+      "editionId": "mediawiki-mini-dump:53cf9a6e0b610f549b2268b61b51c0c6221d384e",
+      "editionDigest": "53cf9a6e0b610f549b2268b61b51c0c6221d384e73e6635e40c154cd8ceb6e72",
+      "contentDigest": "83555e2c995aea05d52cdc482dc85e51e145db768159a756aea82fdc62abe3ff",
+      "pageCount": 6
     },
     "reimport": {
-      "status": "NOT_EXECUTABLE_BOUNDED_ADAPTER_AND_PROFILE_ABSENT",
-      "reason": "No first import result or re-import command can be resolved without inventing a command or input."
+      "status": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+      "editionDigest": "53cf9a6e0b610f549b2268b61b51c0c6221d384e73e6635e40c154cd8ceb6e72",
+      "matchesFirstImport": true
     },
     "readback": {
-      "status": "NOT_EXECUTABLE_BOUNDED_ADAPTER_AND_EVIDENCE_ABSENT",
-      "reason": "No accepted staged edition, readback command or readback evidence can be resolved without inventing a claim."
+      "status": "PASS_SYNTHETIC_QUERY_ONLY_NOT_ACCEPTED_LKG_READBACK",
+      "resultCount": 12,
+      "firstCitation": "Alpha_Article#L1",
+      "firstExactPassage": "Alpha is the first synthetic article.",
+      "immutable": true
+    },
+    "officialPilotImportReimportReadback": {
+      "status": "NOT_EXECUTABLE_REQUIRED_OFFICIAL_SOURCE_AND_VERIFIER_BOUND_RECEIPT_ABSENT",
+      "reason": "Running the synthetic fixture again cannot manufacture official-pilot evidence or an Accepted/LKG transition."
+    },
+    "localLint": {
+      "command": "npm run lint",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Local Node v24.19.0 aborted during V8 initialization at OS::SetPermissions before npm executed TypeScript.",
+      "productVerdict": "NONE"
     },
     "existingLocalFileCorpusVerifier": {
       "command": "npm run local-file-corpus:test",
       "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
-      "evidence": "Node v24.19.0 aborted during V8 initialization at OS::SetPermissions before npm could execute the script.",
+      "evidence": "Local Node v24.19.0 aborted during V8 initialization at OS::SetPermissions before npm executed the script.",
       "productVerdict": "NONE",
-      "scopeNote": "The existing LKC-FILES-01 verifier concerns Markdown/Text fixtures and cannot substitute for absent MediaWiki official-pilot evidence."
+      "scopeNote": "The infrastructure result does not change the rejection, which is based on absent official-pilot and approved-lifecycle evidence."
     }
   },
   "decision": {
     "outcome": "REJECTED",
-    "reasonCode": "REQUIRED_EVIDENCE_MISSING",
-    "reason": "Acceptance would require operator-produced bounded official-pilot evidence verified by the built verifier and independent successful import, re-import and readback. None of the required pilot artifacts or runnable commands is present; therefore success is not claimed.",
+    "reasonCode": "OFFICIAL_PILOT_EVIDENCE_MISSING_APPROVED_LIFECYCLE_UNBOUND",
+    "reason": "The committed verifier and independent rerun pass for the repository-authored synthetic mini dump only. The manifest explicitly declares syntheticOnly, metadata-only pilot material and no Wikimedia content; the verifier does not bind that pilot metadata, no official-pilot source or evidence receipt exists, and no existing Accepted/LKG lifecycle readback is implemented. Synthetic success therefore cannot be promoted to official-pilot acceptance.",
     "acceptedEdition": null,
+    "observedSyntheticEditionIsAccepted": false,
     "claimsNotPromoted": [
-      "MediaWiki XML adapter implementation",
-      "official-pilot import success",
-      "re-import determinism",
-      "accepted or last-known-good staged edition",
-      "readback success",
-      "real Wikimedia compatibility",
+      "bounded official-pilot import success",
+      "official-pilot re-import determinism",
+      "an accepted or last-known-good staged edition",
+      "existing LocalFileCorpusRegistryV1 readback success",
+      "approved KnowledgeEnvelopeV1 and LocalFileCorpusEditionV1 lifecycle integration",
+      "real Wikimedia format, source, licence or content compatibility",
       "truth, licence determination, corpus, download, live retrieval, model, Docker, deployment, GitHub, release, publication or redistribution evidence"
     ],
-    "failClosedRule": "The prior decision receipt's MWXML-M0-R024 requires DO_NOT_CLAIM_SUCCESS when required evidence is missing or failing."
+    "failClosedRule": "MWXML-M0-R024 requires DO_NOT_CLAIM_SUCCESS when the required evidence is missing or failing; passing synthetic evidence is not substitute evidence."
   },
   "verification": {
     "receiptJsonParse": {
       "command": "python3 JSON parse and bounded semantic assertions",
       "status": "PASS"
+    },
+    "focusedSyntheticVerifier": {
+      "command": "docker exec -w /workspace/materialized-pansphaira-107 dev-conveyor-lane-3 node --test dist/tests/mediawiki-mini-dump.test.js",
+      "status": "PASS_SYNTHETIC_SCOPE_ONLY"
     },
     "requiredRepositoryCheck": {
       "command": "git diff --check origin/main...HEAD",
@@ -135,8 +242,8 @@
   "determinism": {
     "volatileTimestampIncluded": false,
     "externalContentEmbedded": false,
-    "ordering": "Object keys and arrays are authored in stable semantic order; required paths are path-sorted.",
-    "sourceBinding": "The inspected decision receipt and repository tree are bound to b4fc2a519a736d03a730723c06fcb3f05cbc2cb1."
+    "ordering": "Object keys and arrays are authored in stable semantic order; candidate and required paths are path-sorted.",
+    "sourceBinding": "The decision is bound to ADR commit b4fc2a519a736d03a730723c06fcb3f05cbc2cb1 and operator candidate commit 84120d6626fe2d5dafb68c4f88224d50c60e5935."
   },
-  "claimBoundary": "REJECTION_RECEIPT_ONLY: it records missing required evidence and an infrastructure-blocked baseline command. It does not establish implementation, pilot success, import, re-import, readback, acceptance, compatibility or any external-system result."
+  "claimBoundary": "REJECTION_RECEIPT_ONLY: it records verified synthetic import, re-import and query behavior plus the absence of required official-pilot and approved Accepted/LKG evidence. It does not establish an official pilot, accepted edition, real Wikimedia compatibility, truth, licence determination, corpus, download, live retrieval, release, publication or redistribution result."
 }
