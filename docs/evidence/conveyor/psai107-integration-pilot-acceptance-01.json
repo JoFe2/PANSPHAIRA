@@ -236,7 +236,14 @@
     },
     "cleanWorktreeAfterLocalCommit": {
       "command": "git status --short",
-      "status": "PASS"
+      "status": "BLOCKED_BY_CONCURRENT_OUTSIDE_ALLOWLIST_WRITES",
+      "evidence": [
+        "packages/local-knowledge/src/wikimedia-download-policy.ts",
+        "packages/local-knowledge/src/wikimedia-optin-download.ts",
+        "tests/fixtures/wikimedia-download/official-checksum.txt",
+        "tests/wikimedia-optin-download.test.ts"
+      ],
+      "effect": "No cleanup, staging or commit of these paths is authorized to this worker."
     }
   },
   "determinism": {
