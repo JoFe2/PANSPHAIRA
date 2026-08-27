@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pan-sphaira.dev/schemas/contracts/cks-model-tool-call-v1.schema.json",
+  "title": "PanSphaira CKS model tool call v1",
+  "description": "Closed model output envelope. The sole callable tool is cks_knowledge_query; retrieval is bounded to the exact Knowledge edition and task supplied by the runtime contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "toolName", "arguments"],
+  "properties": {
+    "schemaVersion": {"const": "pansphaira.cks/model-tool-call/v1"},
+    "toolName": {"const": "cks_knowledge_query"},
+    "arguments": {"$ref": "#/$defs/query"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "applicabilityValue": {
+      "type": "object", "additionalProperties": false, "required": ["state", "values", "provenance"],
+      "properties": {
+        "state": {"enum": ["VALUE", "UNKNOWN", "NOT_PROVIDED", "NOT_APPLICABLE", "EXPLICITLY_UNRESTRICTED"]},
+        "values": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 160}},
+        "provenance": {"type": ["string", "null"], "enum": ["DECLARED", "EVIDENCE_DERIVED", "INFERRED", null]}
+      }
+    },
+    "applicability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["domain", "knowledge_type", "role_responsibility", "industry", "organization_context", "geography_jurisdiction_policy", "process_stage", "system_config", "prerequisites_constraints_exceptions", "task_audience_outcome", "valid_time_freshness", "epistemic_status", "evidence_strength", "sensitivity", "license"],
+      "properties": {
+        "domain": {"$ref": "#/$defs/applicabilityValue"}, "knowledge_type": {"$ref": "#/$defs/applicabilityValue"}, "role_responsibility": {"$ref": "#/$defs/applicabilityValue"}, "industry": {"$ref": "#/$defs/applicabilityValue"}, "organization_context": {"$ref": "#/$defs/applicabilityValue"}, "geography_jurisdiction_policy": {"$ref": "#/$defs/applicabilityValue"}, "process_stage": {"$ref": "#/$defs/applicabilityValue"}, "system_config": {"$ref": "#/$defs/applicabilityValue"}, "prerequisites_constraints_exceptions": {"$ref": "#/$defs/applicabilityValue"}, "task_audience_outcome": {"$ref": "#/$defs/applicabilityValue"}, "valid_time_freshness": {"$ref": "#/$defs/applicabilityValue"}, "epistemic_status": {"$ref": "#/$defs/applicabilityValue"}, "evidence_strength": {"$ref": "#/$defs/applicabilityValue"}, "sensitivity": {"$ref": "#/$defs/applicabilityValue"}, "license": {"$ref": "#/$defs/applicabilityValue"}
+      }
+    },
+    "query": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "requestId", "taskId", "knowledgeEditionId", "knowledgeEditionVersion", "knowledgeEditionDigest", "needKinds", "queryText", "applicability", "requiredPreconditions", "maxResults", "maxEvidenceBytes", "reasonCode", "requestDigest"],
+      "properties": {
+        "schemaVersion": {"const": "pansphaira.cks/knowledge-query/v1"},
+        "requestId": {"type": "string", "pattern": "^KQ-0[1-3]$"},
+        "taskId": {"$ref": "#/$defs/id"},
+        "knowledgeEditionId": {"$ref": "#/$defs/id"},
+        "knowledgeEditionVersion": {"$ref": "#/$defs/id"},
+        "knowledgeEditionDigest": {"$ref": "#/$defs/digest"},
+        "needKinds": {"type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,47}$"}},
+        "queryText": {"type": "string", "minLength": 1, "maxLength": 512},
+        "applicability": {"$ref": "#/$defs/applicability"},
+        "requiredPreconditions": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$"}},
+        "maxResults": {"type": "integer", "minimum": 1, "maximum": 6},
+        "maxEvidenceBytes": {"type": "integer", "minimum": 1, "maximum": 12288},
+        "reasonCode": {"enum": ["MATERIAL_FACT_MISSING", "MATERIAL_RULE_MISSING", "MATERIAL_PROCEDURE_MISSING", "APPLICABILITY_UNRESOLVED", "PRECONDITION_UNRESOLVED", "EVIDENCE_COVERAGE_INCOMPLETE", "CONFLICT_DIFFERENTIATION_REQUIRED"]},
+        "requestDigest": {"$ref": "#/$defs/digest"}
+      }
+    }
+  }
+}

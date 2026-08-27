@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pan-sphaira.dev/schemas/contracts/cks-competence-runtime-v1.schema.json",
+  "title": "PanSphaira CKS competence runtime contract v1",
+  "description": "Closed data-only runtime contract. It binds the selected model profile and the six competence states; the only model-callable retrieval protocol is the bounded Knowledge Query.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contractId", "receiptSource", "profile", "model", "quantization", "runtime", "context", "decoding", "prompt", "toolProtocols", "knowledgeBindings", "interactionPolicy", "resourceLimits", "states", "contractDigest"],
+  "properties": {
+    "schemaVersion": {"const": "pansphaira.cks/competence-runtime/v1"},
+    "contractId": {"const": "cks-competence-runtime-contract:psai284-v1"},
+    "receiptSource": {"$ref": "#/$defs/receiptSource"},
+    "profile": {"$ref": "#/$defs/profile"},
+    "model": {"$ref": "#/$defs/model"},
+    "quantization": {"$ref": "#/$defs/quantization"},
+    "runtime": {"$ref": "#/$defs/runtime"},
+    "context": {"$ref": "#/$defs/context"},
+    "decoding": {"$ref": "#/$defs/decoding"},
+    "prompt": {"$ref": "#/$defs/prompt"},
+    "toolProtocols": {"$ref": "#/$defs/toolProtocols"},
+    "knowledgeBindings": {"$ref": "#/$defs/knowledgeBindings"},
+    "interactionPolicy": {"$ref": "#/$defs/interactionPolicy"},
+    "resourceLimits": {"$ref": "#/$defs/resourceLimits"},
+    "states": {"$ref": "#/$defs/states"},
+    "contractDigest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 512},
+    "id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "integer": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+    "positiveInteger": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+    "false": {"const": false},
+    "true": {"const": true},
+    "states": {
+      "type": "array", "minItems": 6, "maxItems": 6, "uniqueItems": true,
+      "items": {"enum": ["ANSWER_SUPPORTED", "NEED_MORE_KNOWLEDGE", "KNOWLEDGE_CONFLICT", "INSUFFICIENT_EVIDENCE", "COMPETENCE_LIMIT", "GOVERNED_ACTION_PROPOSAL"]}
+    },
+    "reasonCodes": {
+      "type": "array", "minItems": 7, "maxItems": 7, "uniqueItems": true,
+      "items": {"enum": ["MATERIAL_FACT_MISSING", "MATERIAL_RULE_MISSING", "MATERIAL_PROCEDURE_MISSING", "APPLICABILITY_UNRESOLVED", "PRECONDITION_UNRESOLVED", "EVIDENCE_COVERAGE_INCOMPLETE", "CONFLICT_DIFFERENTIATION_REQUIRED"]}
+    },
+    "statuses": {
+      "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true,
+      "items": {"enum": ["MATCH", "NEEDS_CONTEXT", "CONFLICT", "NO_MATCH", "DENIED"]}
+    },
+    "applicabilityValue": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "values", "provenance"],
+      "properties": {
+        "state": {"enum": ["VALUE", "UNKNOWN", "NOT_PROVIDED", "NOT_APPLICABLE", "EXPLICITLY_UNRESTRICTED"]},
+        "values": {"type": "array", "minItems": 0, "maxItems": 16, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 160}},
+        "provenance": {"type": ["string", "null"], "enum": ["DECLARED", "EVIDENCE_DERIVED", "INFERRED", null]}
+      }
+    },
+    "applicability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["domain", "knowledge_type", "role_responsibility", "industry", "organization_context", "geography_jurisdiction_policy", "process_stage", "system_config", "prerequisites_constraints_exceptions", "task_audience_outcome", "valid_time_freshness", "epistemic_status", "evidence_strength", "sensitivity", "license"],
+      "properties": {
+        "domain": {"$ref": "#/$defs/applicabilityValue"},
+        "knowledge_type": {"$ref": "#/$defs/applicabilityValue"},
+        "role_responsibility": {"$ref": "#/$defs/applicabilityValue"},
+        "industry": {"$ref": "#/$defs/applicabilityValue"},
+        "organization_context": {"$ref": "#/$defs/applicabilityValue"},
+        "geography_jurisdiction_policy": {"$ref": "#/$defs/applicabilityValue"},
+        "process_stage": {"$ref": "#/$defs/applicabilityValue"},
+        "system_config": {"$ref": "#/$defs/applicabilityValue"},
+        "prerequisites_constraints_exceptions": {"$ref": "#/$defs/applicabilityValue"},
+        "task_audience_outcome": {"$ref": "#/$defs/applicabilityValue"},
+        "valid_time_freshness": {"$ref": "#/$defs/applicabilityValue"},
+        "epistemic_status": {"$ref": "#/$defs/applicabilityValue"},
+        "evidence_strength": {"$ref": "#/$defs/applicabilityValue"},
+        "sensitivity": {"$ref": "#/$defs/applicabilityValue"},
+        "license": {"$ref": "#/$defs/applicabilityValue"}
+      }
+    },
+    "receiptSource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["receiptPath", "receiptDigest", "profileCoreDigest", "decisionId"],
+      "properties": {"receiptPath": {"$ref": "#/$defs/text"}, "receiptDigest": {"$ref": "#/$defs/digest"}, "profileCoreDigest": {"$ref": "#/$defs/digest"}, "decisionId": {"$ref": "#/$defs/id"}}
+    },
+    "profile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profileSchemaVersion", "profileId", "profileRevision", "intendedUse", "selectionStatus"],
+      "properties": {"profileSchemaVersion": {"$ref": "#/$defs/id"}, "profileId": {"$ref": "#/$defs/id"}, "profileRevision": {"type": "integer", "minimum": 1, "maximum": 1024}, "intendedUse": {"$ref": "#/$defs/id"}, "selectionStatus": {"const": "SELECTED_NOT_QUALIFIED"}}
+    },
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["publisher", "name", "baseModelId", "artifactRepository", "artifactRevision", "artifactFile", "artifactFormat", "artifactArchitecture", "artifactSha256", "artifactSizeBytes", "artifactSourceUrl", "mutableAliasesForbidden", "localArtifactVerificationRequired", "artifactAcquiredByThisDecision"],
+      "properties": {
+        "publisher": {"$ref": "#/$defs/id"}, "name": {"$ref": "#/$defs/id"}, "baseModelId": {"$ref": "#/$defs/id"}, "artifactRepository": {"$ref": "#/$defs/id"}, "artifactRevision": {"$ref": "#/$defs/id"}, "artifactFile": {"$ref": "#/$defs/id"}, "artifactFormat": {"$ref": "#/$defs/id"}, "artifactArchitecture": {"$ref": "#/$defs/id"}, "artifactSha256": {"$ref": "#/$defs/digest"}, "artifactSizeBytes": {"$ref": "#/$defs/positiveInteger"}, "artifactSourceUrl": {"type": "string", "minLength": 1, "maxLength": 512}, "mutableAliasesForbidden": {"type": "array", "maxItems": 8, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "localArtifactVerificationRequired": {"$ref": "#/$defs/true"}, "artifactAcquiredByThisDecision": {"type": "boolean"}
+      }
+    },
+    "quantization": {
+      "type": "object", "additionalProperties": false, "required": ["scheme", "source", "conversionOrRequantizationAllowed", "quantizationEquivalenceClaimed", "reproducibleConversionClaimed"],
+      "properties": {"scheme": {"$ref": "#/$defs/id"}, "source": {"$ref": "#/$defs/id"}, "conversionOrRequantizationAllowed": {"$ref": "#/$defs/false"}, "quantizationEquivalenceClaimed": {"$ref": "#/$defs/false"}, "reproducibleConversionClaimed": {"$ref": "#/$defs/false"}}
+    },
+    "runtime": {
+      "type": "object", "additionalProperties": false,
+      "required": ["implementation", "releaseTag", "sourceCommit", "executable", "distributionAsset", "distributionAssetUrl", "distributionAssetSha256", "distributionAssetSizeBytes", "backend", "gpuLayers", "parallelSequences", "threads", "batchSize", "microBatchSize", "memoryMap", "memoryLock", "embeddedChatTemplateRequired", "chatTemplateOverrideAllowed", "runtimeArchiveAcquiredByThisDecision", "runManifestMustBindExtractedExecutableSha256", "runManifestMustCaptureVersionReadback"],
+      "properties": {"implementation": {"$ref": "#/$defs/id"}, "releaseTag": {"$ref": "#/$defs/id"}, "sourceCommit": {"$ref": "#/$defs/id"}, "executable": {"$ref": "#/$defs/id"}, "distributionAsset": {"$ref": "#/$defs/id"}, "distributionAssetUrl": {"type": "string", "minLength": 1, "maxLength": 512}, "distributionAssetSha256": {"$ref": "#/$defs/digest"}, "distributionAssetSizeBytes": {"$ref": "#/$defs/positiveInteger"}, "backend": {"$ref": "#/$defs/id"}, "gpuLayers": {"type": "integer", "minimum": 0, "maximum": 0}, "parallelSequences": {"const": 1}, "threads": {"type": "integer", "minimum": 1, "maximum": 64}, "batchSize": {"type": "integer", "minimum": 1, "maximum": 1048576}, "microBatchSize": {"type": "integer", "minimum": 1, "maximum": 1048576}, "memoryMap": {"type": "boolean"}, "memoryLock": {"type": "boolean"}, "embeddedChatTemplateRequired": {"$ref": "#/$defs/true"}, "chatTemplateOverrideAllowed": {"$ref": "#/$defs/false"}, "runtimeArchiveAcquiredByThisDecision": {"$ref": "#/$defs/false"}, "runManifestMustBindExtractedExecutableSha256": {"$ref": "#/$defs/true"}, "runManifestMustCaptureVersionReadback": {"$ref": "#/$defs/true"}}
+    },
+    "context": {
+      "type": "object", "additionalProperties": false, "required": ["runtimeContextTokens", "modelMetadataContextTokensObserved", "maximumGeneratedTokens", "tokenBudget", "truncationPolicy", "onBudgetExceeded"],
+      "properties": {"runtimeContextTokens": {"$ref": "#/$defs/positiveInteger"}, "modelMetadataContextTokensObserved": {"$ref": "#/$defs/positiveInteger"}, "maximumGeneratedTokens": {"$ref": "#/$defs/positiveInteger"}, "tokenBudget": {"$ref": "#/$defs/tokenBudget"}, "truncationPolicy": {"$ref": "#/$defs/text"}, "onBudgetExceeded": {"$ref": "#/$defs/text"}}
+    },
+    "tokenBudget": {
+      "type": "object", "additionalProperties": false, "required": ["systemPromptMaximum", "toolDefinitionsMaximum", "taskAndConversationMaximum", "aggregateEvidencePackMaximum", "generatedOutputMaximum", "safetyReserve", "sum"],
+      "properties": {"systemPromptMaximum": {"$ref": "#/$defs/positiveInteger"}, "toolDefinitionsMaximum": {"$ref": "#/$defs/positiveInteger"}, "taskAndConversationMaximum": {"$ref": "#/$defs/positiveInteger"}, "aggregateEvidencePackMaximum": {"$ref": "#/$defs/positiveInteger"}, "generatedOutputMaximum": {"$ref": "#/$defs/positiveInteger"}, "safetyReserve": {"$ref": "#/$defs/positiveInteger"}, "sum": {"$ref": "#/$defs/positiveInteger"}}
+    },
+    "decoding": {
+      "type": "object", "additionalProperties": false, "required": ["mode", "temperature", "topK", "topP", "minP", "typicalP", "repeatPenalty", "repeatLastN", "presencePenalty", "frequencyPenalty", "mirostat", "seed", "maximumGeneratedTokens", "stopSequences", "grammarConstraint", "sameHardwareByteRepeatCount", "byteIdenticalRepeatRequired"],
+      "properties": {"mode": {"$ref": "#/$defs/id"}, "temperature": {"type": "number", "minimum": 0, "maximum": 2}, "topK": {"type": "integer", "minimum": 0, "maximum": 1024}, "topP": {"type": "number", "minimum": 0, "maximum": 2}, "minP": {"type": "number", "minimum": 0, "maximum": 2}, "typicalP": {"type": "number", "minimum": 0, "maximum": 2}, "repeatPenalty": {"type": "number", "minimum": 0, "maximum": 2}, "repeatLastN": {"type": "integer", "minimum": 0, "maximum": 1024}, "presencePenalty": {"type": "number", "minimum": 0, "maximum": 2}, "frequencyPenalty": {"type": "number", "minimum": 0, "maximum": 2}, "mirostat": {"type": "integer", "minimum": 0, "maximum": 2}, "seed": {"$ref": "#/$defs/integer"}, "maximumGeneratedTokens": {"$ref": "#/$defs/positiveInteger"}, "stopSequences": {"type": "array", "maxItems": 8, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}, "grammarConstraint": {"$ref": "#/$defs/text"}, "sameHardwareByteRepeatCount": {"type": "integer", "minimum": 1, "maximum": 8}, "byteIdenticalRepeatRequired": {"$ref": "#/$defs/true"}}
+    },
+    "prompt": {
+      "type": "object", "additionalProperties": false, "required": ["promptId", "promptVersion", "encoding", "normalization", "trailingLineFeed", "assemblyVersion", "chatTemplateSource", "sha256"],
+      "properties": {"promptId": {"$ref": "#/$defs/id"}, "promptVersion": {"$ref": "#/$defs/id"}, "encoding": {"const": "UTF-8"}, "normalization": {"const": "NONE"}, "trailingLineFeed": {"$ref": "#/$defs/false"}, "assemblyVersion": {"$ref": "#/$defs/id"}, "chatTemplateSource": {"$ref": "#/$defs/id"}, "sha256": {"$ref": "#/$defs/digest"}}
+    },
+    "toolProtocols": {"type": "object", "additionalProperties": false, "required": ["catalogueMode", "unknownToolsOrFields", "wireFormat", "queryTool", "evidencePackResult", "finalResponse"], "properties": {"catalogueMode": {"const": "CLOSED_EXACTLY_ONE_MODEL_CALLABLE_TOOL"}, "unknownToolsOrFields": {"const": "DENY"}, "wireFormat": {"$ref": "#/$defs/text"}, "queryTool": {"$ref": "#/$defs/queryTool"}, "evidencePackResult": {"$ref": "#/$defs/evidencePackProtocol"}, "finalResponse": {"$ref": "#/$defs/finalResponseProtocol"}}},
+    "queryTool": {
+      "type": "object", "additionalProperties": false, "required": ["toolName", "protocolId", "protocolVersion", "contractStatus", "requiredArguments", "reasonCodes", "limits"],
+      "properties": {"toolName": {"const": "cks_knowledge_query"}, "protocolId": {"const": "pansphaira.cks/knowledge-query/v1"}, "protocolVersion": {"const": "1"}, "contractStatus": {"$ref": "#/$defs/text"}, "requiredArguments": {"$ref": "#/$defs/queryArguments"}, "reasonCodes": {"$ref": "#/$defs/reasonCodes"}, "limits": {"$ref": "#/$defs/queryLimits"}}
+    },
+    "queryArguments": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "requestId", "taskId", "knowledgeEditionId", "knowledgeEditionVersion", "knowledgeEditionDigest", "needKinds", "queryText", "applicability", "requiredPreconditions", "maxResults", "maxEvidenceBytes", "reasonCode"],
+      "properties": {"schemaVersion": {"const": "pansphaira.cks/knowledge-query/v1"}, "requestId": {"type": "string", "pattern": "^KQ-0[1-3]$"}, "taskId": {"$ref": "#/$defs/id"}, "knowledgeEditionId": {"$ref": "#/$defs/id"}, "knowledgeEditionVersion": {"$ref": "#/$defs/id"}, "knowledgeEditionDigest": {"$ref": "#/$defs/digest"}, "needKinds": {"type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,47}$"}}, "queryText": {"$ref": "#/$defs/text"}, "applicability": {"$ref": "#/$defs/applicability"}, "requiredPreconditions": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$"}}, "maxResults": {"type": "integer", "minimum": 1, "maximum": 6}, "maxEvidenceBytes": {"type": "integer", "minimum": 1, "maximum": 12288}, "reasonCode": {"enum": ["MATERIAL_FACT_MISSING", "MATERIAL_RULE_MISSING", "MATERIAL_PROCEDURE_MISSING", "APPLICABILITY_UNRESOLVED", "PRECONDITION_UNRESOLVED", "EVIDENCE_COVERAGE_INCOMPLETE", "CONFLICT_DIFFERENTIATION_REQUIRED"]}}
+    },
+    "queryLimits": {"type": "object", "additionalProperties": false, "required": ["maximumCallsPerTask", "maximumResultsPerCall", "maximumQueryBytes", "maximumEvidenceBytesPerCall", "maximumAggregateEvidenceBytes", "networkLocatorFieldsAllowed", "effectFieldsAllowed"], "properties": {"maximumCallsPerTask": {"const": 3}, "maximumResultsPerCall": {"const": 6}, "maximumQueryBytes": {"const": 512}, "maximumEvidenceBytesPerCall": {"const": 12288}, "maximumAggregateEvidenceBytes": {"const": 24576}, "networkLocatorFieldsAllowed": {"$ref": "#/$defs/false"}, "effectFieldsAllowed": {"$ref": "#/$defs/false"}}},
+    "evidencePackProtocol": {"type": "object", "additionalProperties": false, "required": ["protocolId", "protocolVersion", "contractStatus", "requiredBindings", "statuses", "instructionEligibility"], "properties": {"protocolId": {"const": "pansphaira.cks/evidence-pack/v1"}, "protocolVersion": {"const": "1"}, "contractStatus": {"$ref": "#/$defs/text"}, "requiredBindings": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}, "statuses": {"$ref": "#/$defs/statuses"}, "instructionEligibility": {"const": "DATA_ONLY_NEVER_INSTRUCTIONS_CAPABILITY_OR_AUTHORITY"}}},
+    "finalResponseProtocol": {"type": "object", "additionalProperties": false, "required": ["protocolId", "protocolVersion", "contractStatus", "requiredFields", "states", "actionAuthorityConstant", "unknownFields"], "properties": {"protocolId": {"const": "pansphaira.cks/competence-response/v1"}, "protocolVersion": {"const": "1"}, "contractStatus": {"$ref": "#/$defs/text"}, "requiredFields": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "states": {"$ref": "#/$defs/states"}, "actionAuthorityConstant": {"const": "NONE"}, "unknownFields": {"const": "DENY"}}},
+    "knowledgeBindings": {"type": "object", "additionalProperties": false, "required": ["contractVersions", "contractArtifactPolicy", "editionPolicy", "requiredPerCaseBindings", "allowedVisibilityClasses", "onlineFallback", "mixedGeneration", "missingOrConflictingMaterialKnowledge", "knowledgeGrantsCapabilityOrAuthority"], "properties": {"contractVersions": {"type": "object", "minProperties": 1, "patternProperties": {"^[A-Za-z][A-Za-z0-9_]*$": {"$ref": "#/$defs/id"}}, "additionalProperties": false}, "contractArtifactPolicy": {"$ref": "#/$defs/text"}, "editionPolicy": {"$ref": "#/$defs/text"}, "requiredPerCaseBindings": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}, "allowedVisibilityClasses": {"type": "array", "minItems": 1, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "onlineFallback": {"const": "FORBIDDEN"}, "mixedGeneration": {"const": "FORBIDDEN"}, "missingOrConflictingMaterialKnowledge": {"$ref": "#/$defs/text"}, "knowledgeGrantsCapabilityOrAuthority": {"$ref": "#/$defs/false"}}},
+    "interactionPolicy": {"type": "object", "additionalProperties": false, "required": ["informationNeedDetectionRequired", "applicabilityBeforeRanking", "preconditionsMustBeExplicitlyChecked", "exclusionsMustBeExplicitlyChecked", "parametricKnowledgePrecedence", "conflictResolution", "claimCoverageRule", "procedureCoverageRule", "missingKnowledgeRule", "conflictRule", "competenceRule", "toolOutputsInstructionEligible", "modelOutputAuthority"], "properties": {"informationNeedDetectionRequired": {"$ref": "#/$defs/true"}, "applicabilityBeforeRanking": {"$ref": "#/$defs/true"}, "preconditionsMustBeExplicitlyChecked": {"$ref": "#/$defs/true"}, "exclusionsMustBeExplicitlyChecked": {"$ref": "#/$defs/true"}, "parametricKnowledgePrecedence": {"$ref": "#/$defs/text"}, "conflictResolution": {"$ref": "#/$defs/text"}, "claimCoverageRule": {"$ref": "#/$defs/text"}, "procedureCoverageRule": {"$ref": "#/$defs/text"}, "missingKnowledgeRule": {"$ref": "#/$defs/text"}, "conflictRule": {"$ref": "#/$defs/text"}, "competenceRule": {"$ref": "#/$defs/text"}, "toolOutputsInstructionEligible": {"$ref": "#/$defs/false"}, "modelOutputAuthority": {"$ref": "#/$defs/text"}}},
+    "resourceLimits": {"type": "object", "additionalProperties": false, "required": ["maximumWallSecondsPerModelTurn", "maximumWallSecondsPerCase", "maximumWallSecondsPerQualificationRun", "maximumRetrievalCallsPerTask", "maximumAggregateEvidenceBytesPerTask", "maximumGeneratedTokensPerTurn", "maximumMaterialClaimsPerResponse", "maximumProcedureStepsPerResponse", "maximumResidentBytes", "performanceClaim"], "properties": {"maximumWallSecondsPerModelTurn": {"$ref": "#/$defs/positiveInteger"}, "maximumWallSecondsPerCase": {"$ref": "#/$defs/positiveInteger"}, "maximumWallSecondsPerQualificationRun": {"$ref": "#/$defs/positiveInteger"}, "maximumRetrievalCallsPerTask": {"const": 3}, "maximumAggregateEvidenceBytesPerTask": {"const": 24576}, "maximumGeneratedTokensPerTurn": {"const": 1024}, "maximumMaterialClaimsPerResponse": {"$ref": "#/$defs/positiveInteger"}, "maximumProcedureStepsPerResponse": {"$ref": "#/$defs/positiveInteger"}, "maximumResidentBytes": {"$ref": "#/$defs/positiveInteger"}, "performanceClaim": {"$ref": "#/$defs/text"}}}
+  }
+}
