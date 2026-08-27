@@ -1,7 +1,7 @@
 {
   "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
   "receiptId": "PSAI107-INTEGRATION-RELEASE-NO-RELEASE-01",
-  "receiptVersion": 1,
+  "receiptVersion": 2,
   "artifactKind": "RELEASE_OR_NO_RELEASE_DECISION_INTEGRATION_RECEIPT",
   "governance": {
     "operatingModelVersion": "1.1",
@@ -19,8 +19,8 @@
   },
   "inspection": {
     "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
-    "headBeforeReceipt": "602807eb2a61c6a91c94b6d4ca2d89547eb04f7b",
-    "integratedCommitsSinceOriginMain": [
+    "headBeforeReceipt": "ddd643cffaa8f1915fee1fd84e0caa311609b9da",
+    "integratedCommitsSinceOriginMainBeforeReceipt": [
       {
         "commit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
         "subject": "docs: approve bounded MediaWiki XML M0 lifecycle"
@@ -28,13 +28,37 @@
       {
         "commit": "602807eb2a61c6a91c94b6d4ca2d89547eb04f7b",
         "subject": "docs: record PSAI107 pilot rejection"
+      },
+      {
+        "commit": "8849fc70a3a6e9be0c80446a7280f09495a7c2ba",
+        "subject": "docs: record PSAI107 no-release decision"
+      },
+      {
+        "commit": "84120d6626fe2d5dafb68c4f88224d50c60e5935",
+        "subject": "feat: add offline MediaWiki mini dump editions"
+      },
+      {
+        "commit": "1e016d7b55c52f9454ddb6f17213edcec53b2a53",
+        "subject": "docs: reject unsupported PSAI107 pilot"
+      },
+      {
+        "commit": "ddd643cffaa8f1915fee1fd84e0caa311609b9da",
+        "subject": "docs: record PSAI107 workspace blocker"
       }
     ],
     "changedPathsSinceOriginMain": [
       "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json",
-      "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json"
+      "docs/evidence/conveyor/psai107-integration-release-no-release-01.json",
+      "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json",
+      "packages/contracts/src/mediawiki-mini-dump.ts",
+      "schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json",
+      "tests/fixtures/mediawiki-mini-dump/manifest.json",
+      "tests/fixtures/mediawiki-mini-dump/negative-matrix.json",
+      "tests/fixtures/mediawiki-mini-dump/positive-mini.xml",
+      "tests/fixtures/mediawiki-mini-dump/reordered-mini.xml",
+      "tests/mediawiki-mini-dump.test.ts"
     ],
-    "finding": "The integrated range records a bounded MediaWiki XML M0 decision and a fail-closed pilot rejection. It contains no versioned product increment, release candidate, release-asset inventory, release manifest, candidate tag, or candidate public-readback record."
+    "finding": "The integrated range contains a bounded architecture decision, a synthetic-only mini-dump implementation, an earlier no-release receipt and a latest official-pilot rejection receipt with bounded synthetic verifier/readback evidence. It contains no exact candidate tag, release-asset inventory or manifest, candidate licence evidence, candidate CI-green record, or candidate anonymous public-readback record."
   },
   "releasePolicy": {
     "sources": [
@@ -59,16 +83,30 @@
       "tag": null,
       "functionalIncrement": null,
       "authorization": "NOT_AUTHORIZED",
-      "reason": "The integrated range supplies neither a candidate versioned product increment nor the policy-required candidate evidence. Existing release metadata describes the already published current release; it does not authorize a new versioned release."
+      "reason": "The integrated synthetic-only mini-dump change is not declared by repository policy as a versioned release candidate and supplies no exact expected tag or policy-required candidate evidence. Existing release metadata describes the already published current release; it does not authorize a new versioned release."
     }
   },
   "mergedEvidence": {
     "pilotAcceptanceReceipt": {
       "path": "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json",
-      "commit": "602807eb2a61c6a91c94b6d4ca2d89547eb04f7b",
+      "latestReceiptCommit": "ddd643cffaa8f1915fee1fd84e0caa311609b9da",
+      "decisionCommit": "1e016d7b55c52f9454ddb6f17213edcec53b2a53",
+      "receiptVersion": 2,
       "outcome": "REJECTED",
-      "reasonCode": "REQUIRED_EVIDENCE_MISSING",
-      "finding": "The bounded adapter, profile, synthetic fixture, focused verifier, operator-produced evidence, import, re-import and readback material are absent; the receipt explicitly does not claim release evidence."
+      "reasonCode": "OFFICIAL_PILOT_EVIDENCE_MISSING_APPROVED_LIFECYCLE_UNBOUND",
+      "syntheticVerifierAndReadback": {
+        "focusedVerifierStatus": "PASS_SYNTHETIC_SCOPE_ONLY",
+        "tests": {
+          "passed": 6,
+          "failed": 0
+        },
+        "importStatus": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+        "reimportStatus": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+        "readbackStatus": "PASS_SYNTHETIC_QUERY_ONLY_NOT_ACCEPTED_LKG_READBACK",
+        "officialPilotStatus": "NOT_EXECUTABLE_REQUIRED_OFFICIAL_SOURCE_AND_VERIFIER_BOUND_RECEIPT_ABSENT",
+        "scope": "Repository-authored synthetic fixture only; no official-pilot, accepted/LKG, licence-determination or release credit."
+      },
+      "finding": "The merged receipt verifies bounded synthetic behavior and determinism but rejects official-pilot acceptance because the official source/evidence and approved Accepted/LKG lifecycle binding are absent."
     },
     "boundedDecisionReceipt": {
       "path": "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json",
@@ -77,17 +115,40 @@
       "implementationAuthorization": "RESERVED_FOR_SEPARATE_SYNTHETIC_OFFLINE_IMPLEMENTATION",
       "releaseBoundary": "The decision does not authorize packaging, release, deployment, public redistribution or any unleased implementation leaf."
     },
+    "operatorCandidate": {
+      "commit": "84120d6626fe2d5dafb68c4f88224d50c60e5935",
+      "subject": "feat: add offline MediaWiki mini dump editions",
+      "declaredBoundary": "OFFLINE_SYNTHETIC_MEDIAWIKI_XML_NO_NETWORK_DOWNLOAD_WRITE_EXECUTION_OR_TRUTH_AUTHORITY",
+      "releaseAuthorization": "NONE"
+    },
+    "existingReleaseReadback": {
+      "source": "release/governance.json",
+      "recordCommit": "e9dd4ec9d64e5eeb19a24f4bed8c998057e83b6d",
+      "tag": "v0.2.0-poc.20260825.1",
+      "releaseId": 376149037,
+      "status": "RECORDED_FOR_EXISTING_RELEASE_ONLY",
+      "integratedRangeChangesReleasePolicyBytes": false,
+      "effect": "The existing release record supplies no authorization or public-readback credit for a new candidate."
+    },
     "candidateReproducibilityAndLicenseEvidence": {
-      "status": "MISSING_FOR_CANDIDATE",
+      "status": "INSUFFICIENT_FOR_NEW_VERSIONED_CANDIDATE",
+      "boundedSyntheticEvidence": {
+        "fileHashBindingsAtHead": "MATCH_MERGED_PILOT_RECEIPT",
+        "reimportDeterminism": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+        "licenceDeclaration": "CC0-1.0_SYNTHETIC_FIXTURE_DECLARATION_ONLY",
+        "contentBoundary": "MANIFEST_DECLARES_NO_WIKIMEDIA_CONTENT",
+        "releaseCredit": "NONE"
+      },
       "missing": [
         "Candidate release-asset inventory",
         "Candidate asset manifest",
         "Candidate SHA-256 asset digests",
         "Candidate claim-to-evidence mapping",
-        "Candidate licence evidence",
+        "Candidate licence evidence for every included release byte",
+        "Candidate CI-green record",
         "Candidate anonymous public asset readback"
       ],
-      "effect": "The policy condition that reproducibility and licence evidence remain valid is not established for any new candidate."
+      "effect": "Valid bounded synthetic hashes and deterministic re-import do not establish release-candidate reproducibility or licence validity. The policy condition is not established for any new candidate."
     },
     "requiredPilotLeavesAtHeadBeforeReceipt": {
       "status": "ALL_ABSENT",
@@ -121,6 +182,19 @@
       "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed the focused test suite.",
       "productVerdict": "NONE"
     },
+    "releasePolicyDiffInspection": {
+      "command": "git diff --exit-code origin/main...HEAD -- docs/RELEASE-GOVERNANCE.md release/governance.json",
+      "status": "PASS_NO_INTEGRATED_POLICY_BYTE_CHANGES"
+    },
+    "mergedPilotReceiptAssertions": {
+      "command": "python3 bounded JSON assertions over the merged pilot receipt",
+      "status": "PASS"
+    },
+    "syntheticHashReadback": {
+      "command": "sha256sum packages/contracts/src/mediawiki-mini-dump.ts tests/fixtures/mediawiki-mini-dump/manifest.json tests/fixtures/mediawiki-mini-dump/positive-mini.xml tests/fixtures/mediawiki-mini-dump/reordered-mini.xml tests/mediawiki-mini-dump.test.ts",
+      "status": "PASS_MATCHES_MERGED_PILOT_RECEIPT",
+      "scope": "Synthetic implementation and fixtures only; no candidate-release or official-pilot credit."
+    },
     "requiredRepositoryCheck": {
       "command": "git diff --check origin/main...HEAD",
       "status": "PASS"
@@ -134,7 +208,7 @@
   "decision": {
     "outcome": "NO_RELEASE",
     "reasonCode": "VERSIONED_RELEASE_NOT_AUTHORIZED_REQUIRED_EVIDENCE_MISSING",
-    "reason": "The repository policy permits a regular release only for a defined functional increment with complete candidate evidence and successful anonymous public readback. The integrated range contains a bounded decision and a rejection receipt, not a candidate release. Required candidate reproducibility, licence, CI and readback evidence is absent or could not be executed locally because Node exited 133 before the verifier started. Therefore no versioned release is authorized or claimed.",
+    "reason": "The repository policy permits a new regular release only for a declared functional candidate with an exact tag, complete candidate evidence, green gates and successful anonymous public readback. The integrated range includes a bounded synthetic mini-dump implementation and a merged rejection receipt: six focused tests, synthetic import/re-import/query behavior and matching file hashes retain synthetic-only scope and establish neither an official pilot nor candidate licence/release evidence. No candidate tag, asset inventory/manifest, candidate CI-green record or candidate anonymous public readback exists, and local release-policy commands exited 133 before their verifiers started. Existing release metadata/readback belongs only to v0.2.0-poc.20260825.1. Therefore no new versioned release is authorized or claimed.",
     "versionedRelease": null,
     "publicationAction": "NONE",
     "claimsNotPromoted": [
@@ -157,16 +231,27 @@
       "command": "git diff --check origin/main...HEAD",
       "status": "PASS"
     },
+    "allowlistedArtifactAfterLocalCommit": {
+      "command": "git status --short -- docs/evidence/conveyor/psai107-integration-release-no-release-01.json",
+      "status": "PASS_CLEAN"
+    },
     "cleanWorktreeAfterLocalCommit": {
-      "command": "git status --short",
-      "status": "PASS"
+      "command": "git status --short --untracked-files=all",
+      "status": "BLOCKED_BY_CONCURRENT_OUTSIDE_ALLOWLIST_WRITES",
+      "evidence": [
+        "packages/local-knowledge/src/wikimedia-download-policy.ts",
+        "packages/local-knowledge/src/wikimedia-optin-download.ts",
+        "tests/fixtures/wikimedia-download/official-checksum.txt",
+        "tests/wikimedia-optin-download.test.ts"
+      ],
+      "effect": "No cleanup, staging or commit of these paths is authorized to this worker."
     }
   },
   "determinism": {
     "volatileTimestampIncluded": false,
     "externalContentEmbedded": false,
     "ordering": "Object keys and arrays are authored in stable semantic order; paths and commits are listed deterministically.",
-    "sourceBinding": "This decision is bound to origin/main 353017c4f60e30463d0a78fd6fd2509a37d37f76 and the pre-receipt HEAD 602807eb2a61c6a91c94b6d4ca2d89547eb04f7b."
+    "sourceBinding": "This decision is bound to origin/main 353017c4f60e30463d0a78fd6fd2509a37d37f76 and the pre-receipt HEAD ddd643cffaa8f1915fee1fd84e0caa311609b9da."
   },
-  "claimBoundary": "NO_RELEASE_RECEIPT_ONLY: this artifact records the absence or non-execution of required candidate evidence and the resulting fail-closed decision. It does not establish a release, publication, tag, asset, CI result, public readback, product implementation, pilot success, external-system result or authority."
+  "claimBoundary": "NO_RELEASE_RECEIPT_ONLY: this artifact records bounded merged synthetic verifier/readback evidence, missing or infrastructure-blocked candidate evidence and the resulting fail-closed decision. It does not establish a new release, publication, tag, release asset, candidate CI result, candidate public readback, official-pilot success, real Wikimedia compatibility, licence determination, external-system result or authority."
 }
