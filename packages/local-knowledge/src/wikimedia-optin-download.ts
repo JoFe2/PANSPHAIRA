@@ -85,6 +85,18 @@ export interface FakeTransportV1 {
   fetch(request: FakeTransportRequestV1): FakeTransportResponseV1;
 }
 
+function isFakeTransportResponseV1(value: unknown): value is FakeTransportResponseV1 {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const candidate = value as Record<string, unknown>;
+  return (
+    typeof candidate.finalUrl === "string" &&
+    Number.isInteger(candidate.status) &&
+    candidate.body instanceof Uint8Array
+  );
+}
+
 export interface WikimediaOptinDownloadInputV1 {
   // Explicit opt-in flag (the "command/flag"). Absent or false — including the
   // default container invocation — denies before any transport call, so no
@@ -144,6 +156,7 @@ function deepFreeze<T>(value: T): T {
 // spaced by at least minimumRequestIntervalMs.
 export class WikimediaOptinDownloadSession {
   private requestsMade = 0;
+  private activeConnections = 0;
   private lastRequestAtMs: number | null = null;
   private readonly nowMs: () => number;
 
@@ -183,15 +196,7 @@ export class WikimediaOptinDownloadSession {
     if (entry === undefined || !checksumEntryMatchesOfficialUrl(entry, url)) {
       return { ok: false, code: CHECKSUM_NOT_DECLARED, stage: "PRE_TRANSPORT" };
     }
-    // Gate 6: bounded rate behavior (session request cap and interval).
-    if (this.requestsMade + 1 > bounds.maximumRequestsPerSession) {
-      return { ok: false, code: RATE_LIMIT_BREACH, stage: "PRE_TRANSPORT" };
-    }
-    const now = this.nowMs();
-    if (this.lastRequestAtMs !== null && now - this.lastRequestAtMs < bounds.minimumRequestIntervalMs) {
-      return { ok: false, code: RATE_LIMIT_BREACH, stage: "PRE_TRANSPORT" };
-    }
-    // Gate 7: resume ambiguity. Offline verification is possible only for a
+    // Gate 6: resume ambiguity. Offline verification is possible only for a
     // fresh fetch (0) or a fully-complete file (declared byteSize); any
     // partial offset cannot be verified against the declared full digest.
     const resumeFromByte = input.resumeFromByte ?? 0;
@@ -202,6 +207,33 @@ export class WikimediaOptinDownloadSession {
     // verifiable offline; a partial offset is ambiguous and denies.
     if (resumeFromByte !== 0 && resumeFromByte !== entry.byteSize) {
       return { ok: false, code: RESUME_AMBIGUITY, stage: "PRE_TRANSPORT" };
+    }
+    // Gate 7: bounded connection/rate behavior applies only when a transport
+    // request is needed. Verifying a fully mounted candidate remains fully
+    // offline even after the network request budget has been exhausted.
+    let requestStartedAtMs: number | null = null;
+    if (resumeFromByte === 0) {
+      if (
+        this.activeConnections + 1 > bounds.maximumConcurrentConnections ||
+        this.requestsMade + 1 > bounds.maximumRequestsPerSession
+      ) {
+        return { ok: false, code: RATE_LIMIT_BREACH, stage: "PRE_TRANSPORT" };
+      }
+      try {
+        requestStartedAtMs = this.nowMs();
+      } catch {
+        return { ok: false, code: RATE_LIMIT_BREACH, stage: "PRE_TRANSPORT" };
+      }
+      if (!Number.isSafeInteger(requestStartedAtMs) || requestStartedAtMs < 0) {
+        return { ok: false, code: RATE_LIMIT_BREACH, stage: "PRE_TRANSPORT" };
+      }
+      if (
+        this.lastRequestAtMs !== null &&
+        (requestStartedAtMs < this.lastRequestAtMs ||
+          requestStartedAtMs - this.lastRequestAtMs < bounds.minimumRequestIntervalMs)
+      ) {
+        return { ok: false, code: RATE_LIMIT_BREACH, stage: "PRE_TRANSPORT" };
+      }
     }
     const destinationResult = resolveOwnedMountDestination(
       input.mountRoot,
@@ -245,6 +277,9 @@ export class WikimediaOptinDownloadSession {
     // All pre-transport gates passed: issue the single bounded request. Count
     // the request before invoking the transport so failures cannot be retried
     // indefinitely within one session.
+    if (requestStartedAtMs === null) {
+      return { ok: false, code: RESUME_AMBIGUITY, stage: "PRE_TRANSPORT" };
+    }
     const record: OptinDownloadRequestRecordV1 = {
       url: input.url,
       userAgent: input.userAgent,
@@ -260,16 +295,23 @@ export class WikimediaOptinDownloadSession {
       },
     };
     this.requestsMade += 1;
-    this.lastRequestAtMs = now;
+    this.lastRequestAtMs = requestStartedAtMs;
+    this.activeConnections += 1;
     let response: FakeTransportResponseV1;
     try {
-      response = transport.fetch({
+      const received: unknown = transport.fetch({
         url: input.url,
         userAgent: input.userAgent,
         resumeFromByte: 0,
       });
+      if (!isFakeTransportResponseV1(received)) {
+        return { ok: false, code: UNEXPECTED_TRANSPORT_STATUS, stage: "POST_TRANSPORT" };
+      }
+      response = received;
     } catch {
       return { ok: false, code: UNEXPECTED_TRANSPORT_STATUS, stage: "POST_TRANSPORT" };
+    } finally {
+      this.activeConnections -= 1;
     }
     // Gate 8: redirect escape. The fake response must remain on the exact
     // declared official URL; same-host redirects to a different official path
@@ -287,13 +329,35 @@ export class WikimediaOptinDownloadSession {
     if (sha256Hex(response.body) !== entry.sha256) {
       return { ok: false, code: CHECKSUM_MISMATCH, stage: "POST_TRANSPORT" };
     }
+    // The transport callback is an injected trust boundary. Re-resolve the
+    // mount destination after it returns so a parent/destination symlink swap
+    // cannot move verified bytes outside the owned mount.
+    const exposureDestinationResult = resolveOwnedMountDestination(
+      input.mountRoot,
+      input.destination,
+      url.filename,
+    );
+    if (
+      !exposureDestinationResult.ok ||
+      exposureDestinationResult.destination !== destination
+    ) {
+      return { ok: false, code: DESTINATION_OUTSIDE_OWNED_MOUNT, stage: "EXPOSURE" };
+    }
     // Exposure: write outside the final path, then rename atomically.
     const partial = path.join(path.dirname(destination), `${path.basename(destination)}.partial`);
     try {
       rmSync(partial, { force: true });
-      writeFileSync(partial, response.body);
+      writeFileSync(partial, response.body, { flag: "wx", mode: 0o600 });
       renameSync(partial, destination);
     } catch {
+      // A failed rename must not leave verified-but-usable staged bytes in the
+      // mounted directory. Cleanup itself is best-effort and never authorizes
+      // fallback exposure.
+      try {
+        rmSync(partial, { force: true });
+      } catch {
+        // Fail closed below; never expose via an alternate path.
+      }
       return { ok: false, code: DESTINATION_OUTSIDE_OWNED_MOUNT, stage: "EXPOSURE" };
     }
     return deepFreeze({

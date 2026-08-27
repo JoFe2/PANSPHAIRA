@@ -266,6 +266,16 @@ export function resolveOwnedMountDestination(
   filename: string,
 ): OwnedMountDestinationResult {
   const outside = (): OwnedMountDestinationResult => ({ ok: false, code: DESTINATION_OUTSIDE_OWNED_MOUNT });
+  if (
+    typeof mountRoot !== "string" ||
+    mountRoot.length === 0 ||
+    typeof destination !== "string" ||
+    destination.length === 0 ||
+    typeof filename !== "string" ||
+    filename.length === 0
+  ) {
+    return outside();
+  }
   if (destination.split(/[\\/]/).includes("..")) {
     return outside();
   }
@@ -285,7 +295,8 @@ export function resolveOwnedMountDestination(
       return outside();
     }
     try {
-      if (lstatSync(rawDestination).isSymbolicLink()) {
+      const destinationStat = lstatSync(rawDestination);
+      if (destinationStat.isSymbolicLink() || !destinationStat.isFile()) {
         return outside();
       }
     } catch (error) {

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import {
   existsSync,
+  mkdirSync,
   mkdtempSync,
   readFileSync,
   readdirSync,
@@ -215,6 +216,33 @@ test("request records prove the identifying User-Agent and applied connection/ra
   assert.equal(meta.requestRecords[0]?.requestOrdinal, 2);
 });
 
+test("connection bound denies a re-entrant transport request", (t) => {
+  const mountRoot = makeMountRoot(t);
+  let now = 0;
+  let nestedResult: OptinDownloadResultV1 | undefined;
+  const nestedProbe = probeTransport();
+  const session = new WikimediaOptinDownloadSession(() => now);
+  const outer = session.run(
+    baseInput(mountRoot, path.join(mountRoot, ARTICLES_FILENAME)),
+    {
+      name: "offline-reentrant-fake-transport",
+      fetch() {
+        now += 2_000;
+        nestedResult = session.run(
+          { ...baseInput(mountRoot, path.join(mountRoot, META_FILENAME)), url: META_URL },
+          nestedProbe.transport,
+        );
+        return { finalUrl: ARTICLES_URL, status: 200, body: ARTICLES_BODY };
+      },
+    },
+  );
+  assert.equal(outer.ok, true);
+  assert.ok(nestedResult);
+  expectDenial(nestedResult, RATE_LIMIT_BREACH);
+  assert.equal(nestedResult.stage, "PRE_TRANSPORT");
+  assert.equal(nestedProbe.calls, 0);
+});
+
 test("no flag denies before bytes become usable", (t) => {
   const mountRoot = makeMountRoot(t);
   const destination = path.join(mountRoot, ARTICLES_FILENAME);
@@ -390,6 +418,21 @@ test("non-200 transport status denies", (t) => {
   assert.equal(existsSync(destination), false);
 });
 
+test("malformed transport response denies instead of escaping the policy boundary", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const destination = path.join(mountRoot, ARTICLES_FILENAME);
+  const session = new WikimediaOptinDownloadSession();
+  const result = session.run(baseInput(mountRoot, destination), {
+    name: "offline-malformed-fake-transport",
+    fetch() {
+      return undefined as never;
+    },
+  });
+  expectDenial(result, UNEXPECTED_TRANSPORT_STATUS);
+  assert.equal(result.stage, "POST_TRANSPORT");
+  assert.equal(existsSync(destination), false);
+});
+
 test("unavailable policy evidence denies", (t) => {
   const mountRoot = makeMountRoot(t);
   const probe = probeTransport();
@@ -459,6 +502,19 @@ test("rate interval breach denies", (t) => {
   );
   expectDenial(second, RATE_LIMIT_BREACH);
   assert.equal(second.stage, "PRE_TRANSPORT");
+});
+
+test("unavailable rate-clock evidence denies before transport", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const probe = probeTransport();
+  const session = new WikimediaOptinDownloadSession(() => Number.NaN);
+  const result = session.run(
+    baseInput(mountRoot, path.join(mountRoot, ARTICLES_FILENAME)),
+    probe.transport,
+  );
+  expectDenial(result, RATE_LIMIT_BREACH);
+  assert.equal(result.stage, "PRE_TRANSPORT");
+  assert.equal(probe.calls, 0);
 });
 
 test("session request cap denies", (t) => {
@@ -561,6 +617,31 @@ test("resume from a fully-complete file verifies without fetching", (t) => {
   assert.equal(createHash("sha256").update(readFileSync(destination)).digest("hex"), ARTICLES_SHA256);
 });
 
+test("mounted complete file remains offline after the request budget is exhausted", (t) => {
+  const mountRoot = makeMountRoot(t);
+  let now = 0;
+  const destination = path.join(mountRoot, ARTICLES_FILENAME);
+  const session = new WikimediaOptinDownloadSession(() => now);
+  const first = session.run(baseInput(mountRoot, destination), transportFor(ARTICLES_URL, ARTICLES_BODY));
+  assert.equal(first.ok, true);
+  now += 2_000;
+  const second = session.run(
+    { ...baseInput(mountRoot, path.join(mountRoot, META_FILENAME)), url: META_URL },
+    transportFor(META_URL, META_BODY),
+  );
+  assert.equal(second.ok, true);
+  const probe = probeTransport();
+  const mounted = session.run(
+    { ...baseInput(mountRoot, destination), resumeFromByte: ARTICLES_BODY.length },
+    probe.transport,
+  );
+  assert.equal(mounted.ok, true);
+  assert.equal(probe.calls, 0);
+  if (mounted.ok) {
+    assert.deepEqual(mounted.requestRecords, []);
+  }
+});
+
 test("resume from an incomplete existing file denies without fetching", (t) => {
   const mountRoot = makeMountRoot(t);
   const destination = path.join(mountRoot, ARTICLES_FILENAME);
@@ -599,6 +680,16 @@ test("destination outside the owned mount denies", (t) => {
     probe.transport,
   );
   expectDenial(renamed, DESTINATION_OUTSIDE_OWNED_MOUNT);
+  // A non-file destination is not a mounted candidate and denies before the
+  // transport runs.
+  const directoryDestination = path.join(mountRoot, ARTICLES_FILENAME);
+  mkdirSync(directoryDestination);
+  const directory = session.run(
+    { ...baseInput(mountRoot, directoryDestination) },
+    probe.transport,
+  );
+  expectDenial(directory, DESTINATION_OUTSIDE_OWNED_MOUNT);
+  rmSync(directoryDestination, { recursive: true });
   // A destination symlink must not be followed, including when its target is
   // outside the owned mount.
   const symlinked = path.join(mountRoot, ARTICLES_FILENAME);
@@ -609,6 +700,27 @@ test("destination outside the owned mount denies", (t) => {
   );
   expectDenial(symlink, DESTINATION_OUTSIDE_OWNED_MOUNT);
   assert.equal(probe.calls, 0);
+});
+
+test("transport-time parent symlink swap denies without staged or exposed bytes", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const otherRoot = makeMountRoot(t);
+  const candidateRoot = path.join(mountRoot, "candidate");
+  mkdirSync(candidateRoot);
+  const destination = path.join(candidateRoot, ARTICLES_FILENAME);
+  const session = new WikimediaOptinDownloadSession();
+  const result = session.run(baseInput(mountRoot, destination), {
+    name: "offline-mount-swap-fake-transport",
+    fetch() {
+      rmSync(candidateRoot, { recursive: true });
+      symlinkSync(otherRoot, candidateRoot, "dir");
+      return { finalUrl: ARTICLES_URL, status: 200, body: ARTICLES_BODY };
+    },
+  });
+  expectDenial(result, DESTINATION_OUTSIDE_OWNED_MOUNT);
+  assert.equal(result.stage, "EXPOSURE");
+  assert.equal(existsSync(path.join(otherRoot, ARTICLES_FILENAME)), false);
+  assert.equal(existsSync(path.join(otherRoot, `${ARTICLES_FILENAME}.partial`)), false);
 });
 
 test("official URL gate is fail-closed on protocol, port, userinfo, query and fragment", () => {
