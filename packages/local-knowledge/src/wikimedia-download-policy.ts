@@ -79,7 +79,7 @@ const MAX_EVIDENCE_CHARS = 16_384;
 const ENTRY_GRAMMAR = /^sha256 ([0-9a-f]{64}) ([1-9][0-9]{0,6}) ([a-z0-9][a-z0-9.-]{0,126}\.gz)$/;
 // Official Wikimedia dumps layout: /wikipedia/<lang>[/<variant>]/<YYYYMMDD>/<artifact>.gz
 const OFFICIAL_PATH_GRAMMAR =
-  /^\/wikipedia\/[a-z]{2,3}(\/[a-z]{2,8})?\/[0-9]{8}\/([a-z0-9][a-z0-9.-]{0,126}\.gz)$/;
+  /^\/wikipedia\/([a-z]{2,3})(?:\/[a-z]{2,8})?\/([0-9]{8})\/([a-z0-9][a-z0-9.-]{0,126}\.gz)$/;
 const USER_AGENT_GRAMMAR = /^[A-Za-z][A-Za-z0-9._-]*\/[0-9]+\.[0-9]+\.[0-9]+( \([^()]{1,200}\))?$/;
 const HOST_DIRECTIVE = `# host ${WIKIMEDIA_OFFICIAL_DOWNLOAD_HOST_V1}`;
 const BOUND_DIRECTIVE = `# maximumSourceBytes ${WIKIMEDIA_DOWNLOAD_TRANSPORT_BOUNDS_V1.maximumSourceBytes}`;
@@ -175,6 +175,8 @@ export function parseWikimediaDownloadPolicyEvidence(raw: string): PolicyEvidenc
 export interface OfficialDownloadUrlV1 {
   readonly host: string;
   readonly pathname: string;
+  readonly language: string;
+  readonly dumpDate: string;
   readonly filename: string;
 }
 
@@ -210,11 +212,29 @@ export function parseOfficialDownloadUrl(rawUrl: string): OfficialDownloadUrlRes
   if (matched === null) {
     return { ok: false };
   }
-  const filename = matched[2];
-  if (filename === undefined) {
+  const language = matched[1];
+  const dumpDate = matched[2];
+  const filename = matched[3];
+  if (language === undefined || dumpDate === undefined || filename === undefined) {
     return { ok: false };
   }
-  return { ok: true, url: { host: parsed.hostname, pathname: parsed.pathname, filename } };
+  return {
+    ok: true,
+    url: { host: parsed.hostname, pathname: parsed.pathname, language, dumpDate, filename },
+  };
+}
+
+// The checksum evidence is scoped to a specific Wikipedia language/date dump.
+// A filename alone is insufficient evidence: an otherwise official URL may
+// point at a different dump directory that happens to use the same artifact
+// basename. The conventional Wikimedia artifact prefix binds the approved
+// checksum entry to the parsed official URL without accepting a redirect or
+// implicit metadata lookup.
+export function checksumEntryMatchesOfficialUrl(
+  entry: WikimediaOfficialChecksumEntryV1,
+  url: OfficialDownloadUrlV1,
+): boolean {
+  return entry.filename === url.filename && entry.filename.startsWith(`${url.language}wiki-${url.dumpDate}-`);
 }
 
 // The request must identify the client per Wikimedia download policy.

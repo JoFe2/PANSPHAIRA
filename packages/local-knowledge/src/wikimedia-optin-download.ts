@@ -3,6 +3,7 @@ import path from "node:path";
 import {
   DESTINATION_OUTSIDE_OWNED_MOUNT,
   WIKIMEDIA_DOWNLOAD_TRANSPORT_BOUNDS_V1,
+  checksumEntryMatchesOfficialUrl,
   parseOfficialDownloadUrl,
   parseWikimediaDownloadPolicyEvidence,
   resolveOwnedMountDestination,
@@ -179,7 +180,7 @@ export class WikimediaOptinDownloadSession {
     }
     // Gate 5: the requested file must be declared by the official metadata.
     const entry = evidence.entryByFilename.get(url.filename);
-    if (entry === undefined) {
+    if (entry === undefined || !checksumEntryMatchesOfficialUrl(entry, url)) {
       return { ok: false, code: CHECKSUM_NOT_DECLARED, stage: "PRE_TRANSPORT" };
     }
     // Gate 6: bounded rate behavior (session request cap and interval).

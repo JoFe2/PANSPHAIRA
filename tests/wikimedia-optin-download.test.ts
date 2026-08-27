@@ -336,6 +336,24 @@ test("absent official checksum metadata for the requested file denies", (t) => {
   assert.equal(probe.calls, 0);
 });
 
+test("official URL outside the checksum evidence's language/date scope denies", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const probe = probeTransport();
+  const session = new WikimediaOptinDownloadSession();
+  // The basename is declared, but the URL points at a different official dump
+  // directory. Filename-only metadata must not authorize that different dump.
+  const result = session.run(
+    {
+      ...baseInput(mountRoot, path.join(mountRoot, ARTICLES_FILENAME)),
+      url: `https://dumps.wikimedia.org/wikipedia/de/20260802/${ARTICLES_FILENAME}`,
+    },
+    probe.transport,
+  );
+  expectDenial(result, CHECKSUM_NOT_DECLARED);
+  assert.equal(result.stage, "PRE_TRANSPORT");
+  assert.equal(probe.calls, 0);
+});
+
 test("mismatched checksum denies before bytes become usable", (t) => {
   const mountRoot = makeMountRoot(t);
   const destination = path.join(mountRoot, ARTICLES_FILENAME);
