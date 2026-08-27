@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
+  "receiptId": "PSAI107-INTEGRATION-RELEASE-NO-RELEASE-01",
+  "receiptVersion": 1,
+  "artifactKind": "RELEASE_OR_NO_RELEASE_DECISION_INTEGRATION_RECEIPT",
+  "governance": {
+    "operatingModelVersion": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "statement": "This receipt applies the controller-reviewed operating model and decisions without restating, amending, superseding or replacing them."
+  },
+  "inspection": {
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headBeforeReceipt": "602807eb2a61c6a91c94b6d4ca2d89547eb04f7b",
+    "integratedCommitsSinceOriginMain": [
+      {
+        "commit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
+        "subject": "docs: approve bounded MediaWiki XML M0 lifecycle"
+      },
+      {
+        "commit": "602807eb2a61c6a91c94b6d4ca2d89547eb04f7b",
+        "subject": "docs: record PSAI107 pilot rejection"
+      }
+    ],
+    "changedPathsSinceOriginMain": [
+      "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json",
+      "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json"
+    ],
+    "finding": "The integrated range records a bounded MediaWiki XML M0 decision and a fail-closed pilot rejection. It contains no versioned product increment, release candidate, release-asset inventory, release manifest, candidate tag, or candidate public-readback record."
+  },
+  "releasePolicy": {
+    "sources": [
+      "docs/RELEASE-GOVERNANCE.md",
+      "release/governance.json"
+    ],
+    "currentRecordedRegularRelease": {
+      "tag": "v0.2.0-poc.20260825.1",
+      "targetCommit": "33d19f3e96ccc512038dbf06063f19489e067390",
+      "draft": false,
+      "prerelease": false,
+      "mustBeLatest": true
+    },
+    "requiredForANewRegularRelease": [
+      "A functional evidence-backed increment and exact expected tag",
+      "Claim-to-evidence mappings and explicit non-claims",
+      "A complete release-asset inventory, manifest and SHA-256 digests",
+      "Focused positive and negative validation plus green repository, lint, checksum and supply-chain gates",
+      "Post-publication anonymous public readback matching release metadata, Latest state, public surfaces and every asset byte"
+    ],
+    "candidate": {
+      "tag": null,
+      "functionalIncrement": null,
+      "authorization": "NOT_AUTHORIZED",
+      "reason": "The integrated range supplies neither a candidate versioned product increment nor the policy-required candidate evidence. Existing release metadata describes the already published current release; it does not authorize a new versioned release."
+    }
+  },
+  "mergedEvidence": {
+    "pilotAcceptanceReceipt": {
+      "path": "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json",
+      "commit": "602807eb2a61c6a91c94b6d4ca2d89547eb04f7b",
+      "outcome": "REJECTED",
+      "reasonCode": "REQUIRED_EVIDENCE_MISSING",
+      "finding": "The bounded adapter, profile, synthetic fixture, focused verifier, operator-produced evidence, import, re-import and readback material are absent; the receipt explicitly does not claim release evidence."
+    },
+    "boundedDecisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json",
+      "commit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
+      "status": "APPROVED_BOUNDED_M0",
+      "implementationAuthorization": "RESERVED_FOR_SEPARATE_SYNTHETIC_OFFLINE_IMPLEMENTATION",
+      "releaseBoundary": "The decision does not authorize packaging, release, deployment, public redistribution or any unleased implementation leaf."
+    },
+    "candidateReproducibilityAndLicenseEvidence": {
+      "status": "MISSING_FOR_CANDIDATE",
+      "missing": [
+        "Candidate release-asset inventory",
+        "Candidate asset manifest",
+        "Candidate SHA-256 asset digests",
+        "Candidate claim-to-evidence mapping",
+        "Candidate licence evidence",
+        "Candidate anonymous public asset readback"
+      ],
+      "effect": "The policy condition that reproducibility and licence evidence remain valid is not established for any new candidate."
+    },
+    "requiredPilotLeavesAtHeadBeforeReceipt": {
+      "status": "ALL_ABSENT",
+      "paths": [
+        "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+        "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
+        "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
+        "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
+        "tests/fixtures/mediawiki-xml/negative-matrix-v1.json",
+        "tests/mediawiki-xml-local-adapter.test.ts",
+        "verification/wikimedia-m0-evidence-v1.json"
+      ]
+    }
+  },
+  "commandExecution": {
+    "releaseGovernanceVerify": {
+      "command": "env -u GH_TOKEN npm run release-governance:verify",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed the verifier.",
+      "productVerdict": "NONE"
+    },
+    "releaseGovernancePublicReadback": {
+      "command": "env -u GH_TOKEN npm run release-governance:public-readback",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed the anonymous public-readback verifier.",
+      "productVerdict": "NONE"
+    },
+    "releaseGovernanceFocusedTest": {
+      "command": "npm run release-governance:test",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed the focused test suite.",
+      "productVerdict": "NONE"
+    },
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "pilotLeafInspection": {
+      "command": "git cat-file -e HEAD:<required path> for each required pilot leaf",
+      "status": "PASS_ALL_ABSENT",
+      "effect": "Confirms the existing rejection evidence remains applicable and supplies no release credit."
+    }
+  },
+  "decision": {
+    "outcome": "NO_RELEASE",
+    "reasonCode": "VERSIONED_RELEASE_NOT_AUTHORIZED_REQUIRED_EVIDENCE_MISSING",
+    "reason": "The repository policy permits a regular release only for a defined functional increment with complete candidate evidence and successful anonymous public readback. The integrated range contains a bounded decision and a rejection receipt, not a candidate release. Required candidate reproducibility, licence, CI and readback evidence is absent or could not be executed locally because Node exited 133 before the verifier started. Therefore no versioned release is authorized or claimed.",
+    "versionedRelease": null,
+    "publicationAction": "NONE",
+    "claimsNotPromoted": [
+      "A new PanSphaira versioned release",
+      "A new tag, draft, prerelease or regular Latest release",
+      "Candidate reproducibility or licence validity",
+      "Candidate CI success",
+      "Candidate anonymous public-readback success",
+      "MediaWiki XML adapter implementation or official-pilot success",
+      "Import, re-import, accepted edition, readback, compatibility, publication or redistribution success"
+    ],
+    "failClosedRule": "Missing, unexecuted or infrastructure-blocked evidence never becomes release success; the default outcome is NO_RELEASE."
+  },
+  "verification": {
+    "receiptJsonParse": {
+      "command": "python3 JSON parse and bounded semantic assertions",
+      "status": "PASS"
+    },
+    "requiredRepositoryCheckAfterReceipt": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "cleanWorktreeAfterLocalCommit": {
+      "command": "git status --short",
+      "status": "PASS"
+    }
+  },
+  "determinism": {
+    "volatileTimestampIncluded": false,
+    "externalContentEmbedded": false,
+    "ordering": "Object keys and arrays are authored in stable semantic order; paths and commits are listed deterministically.",
+    "sourceBinding": "This decision is bound to origin/main 353017c4f60e30463d0a78fd6fd2509a37d37f76 and the pre-receipt HEAD 602807eb2a61c6a91c94b6d4ca2d89547eb04f7b."
+  },
+  "claimBoundary": "NO_RELEASE_RECEIPT_ONLY: this artifact records the absence or non-execution of required candidate evidence and the resulting fail-closed decision. It does not establish a release, publication, tag, asset, CI result, public readback, product implementation, pilot success, external-system result or authority."
+}
