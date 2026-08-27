@@ -159,7 +159,19 @@
     }
   },
   "knowledgeBindings": {
-    "contractVersions": {"applicability": "pansphaira.cks/applicability/v1", "knowledgeQuery": "pansphaira.cks/knowledge-query/v1", "evidencePack": "pansphaira.cks/evidence-pack/v1"},
+    "contractVersions": {
+      "knowledgeObject": "pansphaira.cks/knowledge-object/v1",
+      "knowledgeQuery": "pansphaira.cks/knowledge-query/v1",
+      "applicability": "pansphaira.cks/applicability/v1",
+      "evidencePack": "pansphaira.cks/evidence-pack/v1",
+      "evidenceCoverage": "pansphaira.cks/evidence-coverage/v1",
+      "competenceQualificationProfile": "pansphaira.cks/competence-qualification-profile/v1",
+      "taskComplexity": "pansphaira.cks/task-complexity-rkpu/v1",
+      "escalation": "pansphaira.cks/escalation/v1",
+      "existingKnowledgeEnvelope": "chimpmaera.knowledge/envelope/v1",
+      "existingKnowledgeEdition": "chimpmaera.knowledge/edition/v1",
+      "existingApplicabilityVocabulary": "chimpmaera.knowledge/applicability-vocabulary/v1"
+    },
     "contractArtifactPolicy": "Every schema artifact ID, version and SHA-256 is bound in the run manifest.",
     "editionPolicy": "Each case binds one exact immutable accepted and unrevoked edition.",
     "requiredPerCaseBindings": ["task digest", "scope digest", "Knowledge edition digest", "retrieval configuration digest", "evidence coverage digest"],
@@ -197,5 +209,5 @@
     "performanceClaim": "NONE; safety and reproducibility ceilings only"
   },
   "states": ["ANSWER_SUPPORTED", "NEED_MORE_KNOWLEDGE", "KNOWLEDGE_CONFLICT", "INSUFFICIENT_EVIDENCE", "COMPETENCE_LIMIT", "GOVERNED_ACTION_PROPOSAL"],
-  "contractDigest": "602267e3208fb6cf76a30c51d4239d05f66e9bff90226e2ddf1853b582e140b0"
+  "contractDigest": "e8a29e89ff0ffef6507d1d728c9bf5a8c1d1e323cfb6d980c4914f6d93bce110"
 }

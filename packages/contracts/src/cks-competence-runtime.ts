@@ -47,6 +47,40 @@ export const KNOWLEDGE_QUERY_REASON_CODES_V1 = [
 ] as const;
 export type KnowledgeQueryReasonCodeV1 = (typeof KNOWLEDGE_QUERY_REASON_CODES_V1)[number];
 
+/** The exact closed argument catalogue selected by the profile decision. */
+export const KNOWLEDGE_QUERY_ARGUMENT_NAMES_V1 = [
+  "schemaVersion",
+  "requestId",
+  "taskId",
+  "knowledgeEditionId",
+  "knowledgeEditionVersion",
+  "knowledgeEditionDigest",
+  "needKinds",
+  "queryText",
+  "applicability",
+  "requiredPreconditions",
+  "maxResults",
+  "maxEvidenceBytes",
+  "reasonCode",
+] as const;
+export type KnowledgeQueryArgumentNameV1 = (typeof KNOWLEDGE_QUERY_ARGUMENT_NAMES_V1)[number];
+
+/** Exact Knowledge contract versions bound by the selected profile. */
+export const KNOWLEDGE_CONTRACT_VERSIONS_V1 = {
+  knowledgeObject: "pansphaira.cks/knowledge-object/v1",
+  knowledgeQuery: KNOWLEDGE_QUERY_PROTOCOL_V1,
+  applicability: "pansphaira.cks/applicability/v1",
+  evidencePack: EVIDENCE_PACK_PROTOCOL_V1,
+  evidenceCoverage: "pansphaira.cks/evidence-coverage/v1",
+  competenceQualificationProfile: "pansphaira.cks/competence-qualification-profile/v1",
+  taskComplexity: "pansphaira.cks/task-complexity-rkpu/v1",
+  escalation: "pansphaira.cks/escalation/v1",
+  existingKnowledgeEnvelope: "chimpmaera.knowledge/envelope/v1",
+  existingKnowledgeEdition: "chimpmaera.knowledge/edition/v1",
+  existingApplicabilityVocabulary: "chimpmaera.knowledge/applicability-vocabulary/v1",
+} as const;
+export type CksKnowledgeContractVersionsV1 = Readonly<typeof KNOWLEDGE_CONTRACT_VERSIONS_V1>;
+
 /** The closed Evidence Pack statuses. */
 export const EVIDENCE_PACK_STATUSES_V1 = [
   "MATCH",
@@ -66,6 +100,15 @@ export const QUERY_LIMITS_V1 = {
   maximumAggregateEvidenceBytes: 24576,
   networkLocatorFieldsAllowed: false,
   effectFieldsAllowed: false,
+} as const;
+
+export const COMPETENCE_RESPONSE_LIMITS_V1 = {
+  maximumMaterialClaims: 16,
+  maximumProcedureSteps: 16,
+  maximumPreconditionChecks: 16,
+  maximumExclusionChecks: 16,
+  maximumConflicts: 32,
+  maximumMissingKnowledgeRecords: 16,
 } as const;
 
 const sha256 = (value: unknown): string => createHash("sha256").update(canonicalJson(value)).digest("hex");
@@ -96,7 +139,13 @@ const isCanonicalizable = (value: unknown): boolean => {
     return false;
   }
 };
-const deepEquals = (a: unknown, b: unknown): boolean => canonicalJson(a) === canonicalJson(b);
+const deepEquals = (a: unknown, b: unknown): boolean => {
+  try {
+    return canonicalJson(a) === canonicalJson(b);
+  } catch {
+    return false;
+  }
+};
 
 const validateApplicability = (value: unknown): value is ApplicabilityScopeV1 => {
   if (!exact(value, APPLICABILITY_DIMENSIONS_V1)) return false;
@@ -147,6 +196,9 @@ export interface KnowledgeQueryRequestV1 {
   readonly requestDigest: string;
 }
 
+/** Model-emitted arguments before the trusted runtime adds the request digest. */
+export type KnowledgeQueryToolArgumentsV1 = Omit<KnowledgeQueryRequestV1, "requestDigest">;
+
 /** A data-only Evidence Pack result returned to the model. */
 export interface EvidencePackResultV1 {
   readonly schemaVersion: typeof EVIDENCE_PACK_PROTOCOL_V1;
@@ -185,7 +237,7 @@ export interface EvidencePackResultV1 {
 export interface CksModelToolCallV1 {
   readonly schemaVersion: typeof MODEL_TOOL_CALL_SCHEMA_V1;
   readonly toolName: "cks_knowledge_query";
-  readonly arguments: KnowledgeQueryRequestV1;
+  readonly arguments: KnowledgeQueryToolArgumentsV1;
 }
 
 /** The typed final competence response emitted by the model. */
@@ -222,8 +274,8 @@ export interface CksModelBindingV1 {
   readonly artifactSizeBytes: number;
   readonly artifactSourceUrl: string;
   readonly mutableAliasesForbidden: readonly string[];
-  readonly localArtifactVerificationRequired: boolean;
-  readonly artifactAcquiredByThisDecision: boolean;
+  readonly localArtifactVerificationRequired: true;
+  readonly artifactAcquiredByThisDecision: false;
 }
 
 export interface CksQuantizationBindingV1 {
@@ -307,11 +359,11 @@ export interface CksPromptBindingV1 {
 }
 
 export interface CksQueryToolProtocolV1 {
-  readonly toolName: string;
+  readonly toolName: "cks_knowledge_query";
   readonly protocolId: typeof KNOWLEDGE_QUERY_PROTOCOL_V1;
   readonly protocolVersion: "1";
   readonly contractStatus: string;
-  readonly requiredArguments: Record<string, string>;
+  readonly requiredArguments: Readonly<Record<KnowledgeQueryArgumentNameV1, string>>;
   readonly reasonCodes: readonly KnowledgeQueryReasonCodeV1[];
   readonly limits: {
     readonly maximumCallsPerTask: number;
@@ -353,7 +405,7 @@ export interface CksToolProtocolsV1 {
 }
 
 export interface CksKnowledgeBindingsV1 {
-  readonly contractVersions: Record<string, string>;
+  readonly contractVersions: CksKnowledgeContractVersionsV1;
   readonly contractArtifactPolicy: string;
   readonly editionPolicy: string;
   readonly requiredPerCaseBindings: readonly string[];
@@ -461,11 +513,18 @@ export function validateKnowledgeQueryRequestV1(value: unknown): value is Knowle
   return knowledgeQueryRequestDigestV1(value) === value.requestDigest;
 }
 
+/** Validate model-emitted arguments and bind their canonical digest. */
+export function bindKnowledgeQueryArgumentsV1(value: unknown): KnowledgeQueryRequestV1 | null {
+  if (!exact(value, KNOWLEDGE_QUERY_ARGUMENT_NAMES_V1)) return null;
+  const candidate: unknown = { ...value, requestDigest: knowledgeQueryRequestDigestV1(value) };
+  return validateKnowledgeQueryRequestV1(candidate) ? candidate : null;
+}
+
 export function validateCksModelToolCallV1(value: unknown): value is CksModelToolCallV1 {
   return exact(value, ["schemaVersion", "toolName", "arguments"])
     && value.schemaVersion === MODEL_TOOL_CALL_SCHEMA_V1
     && value.toolName === "cks_knowledge_query"
-    && validateKnowledgeQueryRequestV1(value.arguments);
+    && bindKnowledgeQueryArgumentsV1(value.arguments) !== null;
 }
 
 export function validateEvidencePackResultV1(value: unknown): value is EvidencePackResultV1 {
@@ -477,17 +536,34 @@ export function validateEvidencePackResultV1(value: unknown): value is EvidenceP
   if (!exact(value.task, ["taskId", "scopeDigest"]) || !isBoundedText(value.task.taskId, 96) || !isDigest(value.task.scopeDigest)) return false;
   if (!exact(value.knowledgeEdition, ["editionId", "version", "digest"]) || !isBoundedText(value.knowledgeEdition.editionId, 96) || !isBoundedText(value.knowledgeEdition.version, 32) || !isDigest(value.knowledgeEdition.digest)) return false;
   if (!exact(value.retrievalConfiguration, ["configurationId", "version", "digest"]) || !isBoundedText(value.retrievalConfiguration.configurationId, 96) || !isBoundedText(value.retrievalConfiguration.version, 32) || !isDigest(value.retrievalConfiguration.digest)) return false;
-  if (!Array.isArray(value.claims) || !value.claims.every((claim) => exact(claim, ["claimId", "knowledgeObjectId", "version", "digest", "sourcePassageIds"]) && isBoundedText(claim.claimId, 96) && isBoundedText(claim.knowledgeObjectId, 96) && isBoundedText(claim.version, 32) && isDigest(claim.digest) && isUniqueStrings(claim.sourcePassageIds, (item) => isBoundedText(item, 96), 1, 32))) return false;
+  if (!Array.isArray(value.claims) || value.claims.length > QUERY_LIMITS_V1.maximumResultsPerCall || !value.claims.every((claim) => exact(claim, ["claimId", "knowledgeObjectId", "version", "digest", "sourcePassageIds"]) && isBoundedText(claim.claimId, 96) && isBoundedText(claim.knowledgeObjectId, 96) && isBoundedText(claim.version, 32) && isDigest(claim.digest) && isUniqueStrings(claim.sourcePassageIds, (item) => isBoundedText(item, 96), 1, 32))) return false;
   if (!exact(value.applicability, ["applicability", "preconditions", "exclusions", "validity", "supersession"]) || !validateApplicability(value.applicability.applicability) || !isUniqueStrings(value.applicability.preconditions, isPreconditionId, 0, 16) || !isUniqueStrings(value.applicability.exclusions, isPreconditionId, 0, 16) || !validateValidity(value.applicability.validity) || !validateSupersession(value.applicability.supersession)) return false;
   if (!exact(value.evidence, ["positive", "negative"])) return false;
-  const evidenceItems = (items: unknown): boolean => Array.isArray(items) && items.every((item) => exact(item, ["id", "digest"]) && isBoundedText(item.id, 96) && isDigest(item.digest));
+  const evidenceItems = (items: unknown): boolean => Array.isArray(items) && items.length <= 32 && items.every((item) => exact(item, ["id", "digest"]) && isBoundedText(item.id, 96) && isDigest(item.digest));
   if (!evidenceItems(value.evidence.positive) || !evidenceItems(value.evidence.negative)) return false;
-  if (!Array.isArray(value.conflicts) || !value.conflicts.every((conflict) => exact(conflict, ["conflictId", "claimIds"]) && isBoundedText(conflict.conflictId, 96) && isUniqueStrings(conflict.claimIds, (item) => isBoundedText(item, 96), 1, 32))) return false;
-  if (!Array.isArray(value.missingKnowledge) || !value.missingKnowledge.every((item) => exact(item, ["needId", "reasonCode"]) && isBoundedText(item.needId, 96) && KNOWLEDGE_QUERY_REASON_CODES_V1.includes(item.reasonCode as KnowledgeQueryReasonCodeV1))) return false;
+  if (!Array.isArray(value.conflicts) || value.conflicts.length > 32 || !value.conflicts.every((conflict) => exact(conflict, ["conflictId", "claimIds"]) && isBoundedText(conflict.conflictId, 96) && isUniqueStrings(conflict.claimIds, (item) => isBoundedText(item, 96), 1, 32))) return false;
+  if (!Array.isArray(value.missingKnowledge) || value.missingKnowledge.length > 16 || !value.missingKnowledge.every((item) => exact(item, ["needId", "reasonCode"]) && isBoundedText(item.needId, 96) && KNOWLEDGE_QUERY_REASON_CODES_V1.includes(item.reasonCode as KnowledgeQueryReasonCodeV1))) return false;
   if (value.instructionEligibility !== EVIDENCE_PACK_INSTRUCTION_ELIGIBILITY) return false;
   if (!isInt(value.evidenceBytes, 0, QUERY_LIMITS_V1.maximumEvidenceBytesPerCall)) return false;
   if (!isDigest(value.packDigest)) return false;
   return evidencePackDigestV1(value) === value.packDigest;
+}
+
+/**
+ * Validate an Evidence Pack against the exact request that caused retrieval.
+ * This closes the request/result pair over task, Knowledge edition, request
+ * digest and the request-specific Evidence byte ceiling.
+ */
+export function validateEvidencePackResultForRequestV1(value: unknown, request: unknown): value is EvidencePackResultV1 {
+  if (!validateKnowledgeQueryRequestV1(request) || !validateEvidencePackResultV1(value)) return false;
+  return value.request.requestId === request.requestId
+    && value.request.requestDigest === request.requestDigest
+    && value.task.taskId === request.taskId
+    && value.knowledgeEdition.editionId === request.knowledgeEditionId
+    && value.knowledgeEdition.version === request.knowledgeEditionVersion
+    && value.knowledgeEdition.digest === request.knowledgeEditionDigest
+    && value.claims.length <= request.maxResults
+    && value.evidenceBytes <= request.maxEvidenceBytes;
 }
 
 export function validateCompetenceResponseV1(value: unknown): value is CompetenceResponseV1 {
@@ -496,21 +572,29 @@ export function validateCompetenceResponseV1(value: unknown): value is Competenc
   if (!COMPETENCE_STATES_V1.includes(value.state as CompetenceStateV1)) return false;
   if (!isBoundedText(value.taskId, 96)) return false;
   if (!isNullableBoundedText(value.answer, 8192)) return false;
-  if (!Array.isArray(value.materialClaims) || !value.materialClaims.every((claim) => exact(claim, ["claimId", "text", "evidenceIds"]) && isBoundedText(claim.claimId, 96) && isBoundedText(claim.text, 2048) && isUniqueStrings(claim.evidenceIds, (item) => isBoundedText(item, 96), 0, 32))) return false;
-  if (!Array.isArray(value.procedureSteps) || !value.procedureSteps.every((step) => exact(step, ["stepId", "text", "order", "evidenceIds"]) && isBoundedText(step.stepId, 96) && isBoundedText(step.text, 2048) && isInt(step.order, 0, 1024) && isUniqueStrings(step.evidenceIds, (item) => isBoundedText(item, 96), 0, 32))) return false;
-  if (!Array.isArray(value.preconditionChecks) || !value.preconditionChecks.every((check) => exact(check, ["preconditionId", "result"]) && isPreconditionId(check.preconditionId) && ["SATISFIED", "NOT_SATISFIED", "UNKNOWN"].includes(check.result as string))) return false;
-  if (!Array.isArray(value.exclusionChecks) || !value.exclusionChecks.every((check) => exact(check, ["exclusionId", "matched"]) && isPreconditionId(check.exclusionId) && typeof check.matched === "boolean")) return false;
-  if (!Array.isArray(value.conflicts) || !value.conflicts.every((conflict) => exact(conflict, ["conflictId", "claimIds"]) && isBoundedText(conflict.conflictId, 96) && isUniqueStrings(conflict.claimIds, (item) => isBoundedText(item, 96), 1, 32))) return false;
-  if (!Array.isArray(value.missingKnowledge) || !value.missingKnowledge.every((item) => exact(item, ["needId", "reasonCode"]) && isBoundedText(item.needId, 96) && KNOWLEDGE_QUERY_REASON_CODES_V1.includes(item.reasonCode as KnowledgeQueryReasonCodeV1))) return false;
+  if (!Array.isArray(value.materialClaims) || value.materialClaims.length > COMPETENCE_RESPONSE_LIMITS_V1.maximumMaterialClaims || !value.materialClaims.every((claim) => exact(claim, ["claimId", "text", "evidenceIds"]) && isBoundedText(claim.claimId, 96) && isBoundedText(claim.text, 2048) && isUniqueStrings(claim.evidenceIds, (item) => isBoundedText(item, 96), 0, 32))) return false;
+  if (!Array.isArray(value.procedureSteps) || value.procedureSteps.length > COMPETENCE_RESPONSE_LIMITS_V1.maximumProcedureSteps || !value.procedureSteps.every((step) => exact(step, ["stepId", "text", "order", "evidenceIds"]) && isBoundedText(step.stepId, 96) && isBoundedText(step.text, 2048) && isInt(step.order, 0, 1024) && isUniqueStrings(step.evidenceIds, (item) => isBoundedText(item, 96), 0, 32))) return false;
+  if (!Array.isArray(value.preconditionChecks) || value.preconditionChecks.length > COMPETENCE_RESPONSE_LIMITS_V1.maximumPreconditionChecks || !value.preconditionChecks.every((check) => exact(check, ["preconditionId", "result"]) && isPreconditionId(check.preconditionId) && ["SATISFIED", "NOT_SATISFIED", "UNKNOWN"].includes(check.result as string))) return false;
+  if (!Array.isArray(value.exclusionChecks) || value.exclusionChecks.length > COMPETENCE_RESPONSE_LIMITS_V1.maximumExclusionChecks || !value.exclusionChecks.every((check) => exact(check, ["exclusionId", "matched"]) && isPreconditionId(check.exclusionId) && typeof check.matched === "boolean")) return false;
+  if (!Array.isArray(value.conflicts) || value.conflicts.length > COMPETENCE_RESPONSE_LIMITS_V1.maximumConflicts || !value.conflicts.every((conflict) => exact(conflict, ["conflictId", "claimIds"]) && isBoundedText(conflict.conflictId, 96) && isUniqueStrings(conflict.claimIds, (item) => isBoundedText(item, 96), 1, 32))) return false;
+  if (!Array.isArray(value.missingKnowledge) || value.missingKnowledge.length > COMPETENCE_RESPONSE_LIMITS_V1.maximumMissingKnowledgeRecords || !value.missingKnowledge.every((item) => exact(item, ["needId", "reasonCode"]) && isBoundedText(item.needId, 96) && KNOWLEDGE_QUERY_REASON_CODES_V1.includes(item.reasonCode as KnowledgeQueryReasonCodeV1))) return false;
   if (!(value.escalation === null || (exact(value.escalation, ["required", "target"]) && value.escalation.required === true && isBoundedText(value.escalation.target, 96)))) return false;
   if (value.actionAuthority !== ACTION_AUTHORITY_CONSTANT) return false;
   if (!isDigest(value.responseDigest)) return false;
   // State-specific closed invariants.
-  if (value.state === "ANSWER_SUPPORTED" && (value.answer === null || value.conflicts.length > 0 || value.missingKnowledge.length > 0 || value.escalation !== null || value.preconditionChecks.some((check) => check.result !== "SATISFIED") || value.exclusionChecks.some((check) => check.matched) || value.materialClaims.some((claim) => claim.evidenceIds.length === 0) || value.procedureSteps.some((step) => step.evidenceIds.length === 0))) return false;
+  const hasSupportedContent = value.answer !== null
+    && value.conflicts.length === 0
+    && value.missingKnowledge.length === 0
+    && value.preconditionChecks.every((check) => check.result === "SATISFIED")
+    && value.exclusionChecks.every((check) => !check.matched)
+    && value.materialClaims.every((claim) => claim.evidenceIds.length > 0)
+    && value.procedureSteps.every((step) => step.evidenceIds.length > 0);
+  if (value.conflicts.length > 0 && value.state !== "KNOWLEDGE_CONFLICT") return false;
+  if (value.state === "ANSWER_SUPPORTED" && (!hasSupportedContent || value.escalation !== null)) return false;
   if ((value.state === "NEED_MORE_KNOWLEDGE" || value.state === "INSUFFICIENT_EVIDENCE") && (value.answer !== null || value.missingKnowledge.length === 0)) return false;
   if (value.state === "KNOWLEDGE_CONFLICT" && (value.answer !== null || value.conflicts.length === 0)) return false;
   if (value.state === "COMPETENCE_LIMIT" && (value.answer !== null || (value.escalation === null || value.escalation.required !== true))) return false;
-  if (value.state === "GOVERNED_ACTION_PROPOSAL" && value.answer === null) return false;
+  if (value.state === "GOVERNED_ACTION_PROPOSAL" && !hasSupportedContent) return false;
   return competenceResponseDigestV1(value) === value.responseDigest;
 }
 
@@ -521,8 +605,7 @@ function validateModelBinding(value: unknown): value is CksModelBindingV1 {
   if (!isBoundedText(value.publisher, 64) || !isBoundedText(value.name, 64) || !isBoundedText(value.baseModelId, 96) || !isBoundedText(value.artifactRepository, 96) || !isBoundedText(value.artifactRevision, 64) || !isBoundedText(value.artifactFile, 96) || !isBoundedText(value.artifactFormat, 16) || !isBoundedText(value.artifactArchitecture, 32) || !isBoundedText(value.artifactSourceUrl, 512)) return false;
   if (!isDigest(value.artifactSha256) || !isInt(value.artifactSizeBytes, 1, Number.MAX_SAFE_INTEGER)) return false;
   if (!isUniqueStrings(value.mutableAliasesForbidden, (item) => isBoundedText(item, 32), 0, 8)) return false;
-  if (typeof value.localArtifactVerificationRequired !== "boolean" || typeof value.artifactAcquiredByThisDecision !== "boolean") return false;
-  return true;
+  return value.localArtifactVerificationRequired === true && value.artifactAcquiredByThisDecision === false;
 }
 
 function validateQuantizationBinding(value: unknown): value is CksQuantizationBindingV1 {
@@ -574,20 +657,17 @@ function validatePromptBinding(value: unknown): value is CksPromptBindingV1 {
 
 function validateQueryToolProtocol(value: unknown): value is CksQueryToolProtocolV1 {
   if (!exact(value, ["toolName", "protocolId", "protocolVersion", "contractStatus", "requiredArguments", "reasonCodes", "limits"])) return false;
-  if (!isBoundedText(value.toolName, 64) || value.protocolId !== KNOWLEDGE_QUERY_PROTOCOL_V1 || value.protocolVersion !== "1" || !isBoundedText(value.contractStatus, 256)) return false;
-  if (!record(value.requiredArguments) || !Object.values(value.requiredArguments).every((item) => isBoundedText(item, 256))) return false;
-  if (!deepEquals([...value.reasonCodes].sort(), [...KNOWLEDGE_QUERY_REASON_CODES_V1].sort()) || value.reasonCodes.length !== KNOWLEDGE_QUERY_REASON_CODES_V1.length) return false;
-  if (!exact(value.limits, ["maximumCallsPerTask", "maximumResultsPerCall", "maximumQueryBytes", "maximumEvidenceBytesPerCall", "maximumAggregateEvidenceBytes", "networkLocatorFieldsAllowed", "effectFieldsAllowed"])) return false;
-  const limits = value.limits;
-  return limits.networkLocatorFieldsAllowed === false && limits.effectFieldsAllowed === false
-    && isInt(limits.maximumCallsPerTask, 1, 8) && isInt(limits.maximumResultsPerCall, 1, 32) && isInt(limits.maximumQueryBytes, 1, 8192) && isInt(limits.maximumEvidenceBytesPerCall, 1, 131072) && isInt(limits.maximumAggregateEvidenceBytes, 1, 262144);
+  if (value.toolName !== "cks_knowledge_query" || value.protocolId !== KNOWLEDGE_QUERY_PROTOCOL_V1 || value.protocolVersion !== "1" || !isBoundedText(value.contractStatus, 256)) return false;
+  if (!exact(value.requiredArguments, KNOWLEDGE_QUERY_ARGUMENT_NAMES_V1) || !Object.values(value.requiredArguments).every((item) => isBoundedText(item, 256))) return false;
+  if (!Array.isArray(value.reasonCodes) || !deepEquals([...value.reasonCodes].sort(), [...KNOWLEDGE_QUERY_REASON_CODES_V1].sort()) || value.reasonCodes.length !== KNOWLEDGE_QUERY_REASON_CODES_V1.length) return false;
+  return deepEquals(value.limits, QUERY_LIMITS_V1);
 }
 
 function validateEvidencePackProtocol(value: unknown): value is CksEvidencePackProtocolV1 {
   if (!exact(value, ["protocolId", "protocolVersion", "contractStatus", "requiredBindings", "statuses", "instructionEligibility"])) return false;
   if (value.protocolId !== EVIDENCE_PACK_PROTOCOL_V1 || value.protocolVersion !== "1" || !isBoundedText(value.contractStatus, 256)) return false;
   if (!isUniqueStrings(value.requiredBindings, (item) => isBoundedText(item, 256), 1, 32)) return false;
-  if (!deepEquals([...value.statuses].sort(), [...EVIDENCE_PACK_STATUSES_V1].sort()) || value.statuses.length !== EVIDENCE_PACK_STATUSES_V1.length) return false;
+  if (!Array.isArray(value.statuses) || !deepEquals([...value.statuses].sort(), [...EVIDENCE_PACK_STATUSES_V1].sort()) || value.statuses.length !== EVIDENCE_PACK_STATUSES_V1.length) return false;
   return value.instructionEligibility === EVIDENCE_PACK_INSTRUCTION_ELIGIBILITY;
 }
 
@@ -595,7 +675,7 @@ function validateFinalResponseProtocol(value: unknown): value is CksFinalRespons
   if (!exact(value, ["protocolId", "protocolVersion", "contractStatus", "requiredFields", "states", "actionAuthorityConstant", "unknownFields"])) return false;
   if (value.protocolId !== COMPETENCE_RESPONSE_PROTOCOL_V1 || value.protocolVersion !== "1" || !isBoundedText(value.contractStatus, 256)) return false;
   if (!isUniqueStrings(value.requiredFields, (item) => isBoundedText(item, 64), 1, 32)) return false;
-  if (!deepEquals([...value.states].sort(), [...COMPETENCE_STATES_V1].sort()) || value.states.length !== COMPETENCE_STATES_V1.length) return false;
+  if (!Array.isArray(value.states) || !deepEquals([...value.states].sort(), [...COMPETENCE_STATES_V1].sort()) || value.states.length !== COMPETENCE_STATES_V1.length) return false;
   return value.actionAuthorityConstant === ACTION_AUTHORITY_CONSTANT && value.unknownFields === "DENY";
 }
 
@@ -607,7 +687,7 @@ function validateToolProtocols(value: unknown): value is CksToolProtocolsV1 {
 
 function validateKnowledgeBindings(value: unknown): value is CksKnowledgeBindingsV1 {
   if (!exact(value, ["contractVersions", "contractArtifactPolicy", "editionPolicy", "requiredPerCaseBindings", "allowedVisibilityClasses", "onlineFallback", "mixedGeneration", "missingOrConflictingMaterialKnowledge", "knowledgeGrantsCapabilityOrAuthority"])) return false;
-  if (!record(value.contractVersions) || Object.keys(value.contractVersions).length === 0 || !Object.values(value.contractVersions).every((item) => isBoundedText(item, 128))) return false;
+  if (!deepEquals(value.contractVersions, KNOWLEDGE_CONTRACT_VERSIONS_V1)) return false;
   if (!isBoundedText(value.contractArtifactPolicy, 512) || !isBoundedText(value.editionPolicy, 512)) return false;
   if (!isUniqueStrings(value.requiredPerCaseBindings, (item) => isBoundedText(item, 256), 1, 32)) return false;
   if (!isUniqueStrings(value.allowedVisibilityClasses, (item) => isBoundedText(item, 64), 1, 16)) return false;
@@ -630,7 +710,12 @@ function validateResourceLimits(value: unknown): value is CksResourceLimitsV1 {
   for (const key of ["maximumWallSecondsPerModelTurn", "maximumWallSecondsPerCase", "maximumWallSecondsPerQualificationRun", "maximumRetrievalCallsPerTask", "maximumAggregateEvidenceBytesPerTask", "maximumGeneratedTokensPerTurn", "maximumMaterialClaimsPerResponse", "maximumProcedureStepsPerResponse", "maximumResidentBytes"] as const) {
     if (!isInt(value[key], 1, Number.MAX_SAFE_INTEGER)) return false;
   }
-  return isBoundedText(value.performanceClaim, 512);
+  return value.maximumRetrievalCallsPerTask === QUERY_LIMITS_V1.maximumCallsPerTask
+    && value.maximumAggregateEvidenceBytesPerTask === QUERY_LIMITS_V1.maximumAggregateEvidenceBytes
+    && value.maximumGeneratedTokensPerTurn === 1024
+    && value.maximumMaterialClaimsPerResponse === COMPETENCE_RESPONSE_LIMITS_V1.maximumMaterialClaims
+    && value.maximumProcedureStepsPerResponse === COMPETENCE_RESPONSE_LIMITS_V1.maximumProcedureSteps
+    && isBoundedText(value.performanceClaim, 512);
 }
 
 export function validateCksCompetenceRuntimeContractV1(value: unknown): value is CksCompetenceRuntimeContractV1 {
@@ -640,6 +725,11 @@ export function validateCksCompetenceRuntimeContractV1(value: unknown): value is
   if (!exact(value.profile, ["profileSchemaVersion", "profileId", "profileRevision", "intendedUse", "selectionStatus"]) || !isBoundedText(value.profile.profileSchemaVersion, 128) || !isBoundedText(value.profile.profileId, 128) || !isInt(value.profile.profileRevision, 1, 1024) || !isBoundedText(value.profile.intendedUse, 128) || value.profile.selectionStatus !== "SELECTED_NOT_QUALIFIED") return false;
   if (!deepEquals(value.states, [...COMPETENCE_STATES_V1])) return false;
   if (!validateModelBinding(value.model) || !validateQuantizationBinding(value.quantization) || !validateRuntimeBinding(value.runtime) || !validateContextBinding(value.context) || !validateDecodingBinding(value.decoding) || !validatePromptBinding(value.prompt) || !validateToolProtocols(value.toolProtocols) || !validateKnowledgeBindings(value.knowledgeBindings) || !validateInteractionPolicy(value.interactionPolicy) || !validateResourceLimits(value.resourceLimits)) return false;
+  if (value.context.tokenBudget.sum !== value.context.runtimeContextTokens
+    || value.context.maximumGeneratedTokens !== value.decoding.maximumGeneratedTokens
+    || value.context.maximumGeneratedTokens !== value.resourceLimits.maximumGeneratedTokensPerTurn
+    || value.resourceLimits.maximumRetrievalCallsPerTask !== value.toolProtocols.queryTool.limits.maximumCallsPerTask
+    || value.resourceLimits.maximumAggregateEvidenceBytesPerTask !== value.toolProtocols.queryTool.limits.maximumAggregateEvidenceBytes) return false;
   if (!isDigest(value.contractDigest)) return false;
   return cksCompetenceRuntimeContractDigestV1(value) === value.contractDigest;
 }
@@ -699,8 +789,9 @@ export function buildCksCompetenceRuntimeContractV1(input: CompetenceRuntimeCont
     resourceLimits: profile["resourceLimits"],
     states: [...COMPETENCE_STATES_V1],
   };
-  if (!validateCksCompetenceRuntimeContractV1({ ...unsigned, contractDigest: cksCompetenceRuntimeContractDigestV1(unsigned) })) throw new Error("CKS_COMPETENCE_RUNTIME_INPUT_DENIED");
-  return { ...unsigned, contractDigest: cksCompetenceRuntimeContractDigestV1(unsigned) };
+  const candidate: unknown = { ...unsigned, contractDigest: cksCompetenceRuntimeContractDigestV1(unsigned) };
+  if (!validateCksCompetenceRuntimeContractV1(candidate)) throw new Error("CKS_COMPETENCE_RUNTIME_INPUT_DENIED");
+  return candidate;
 }
 
 // ---------------------------------------------------------------------------
@@ -708,6 +799,12 @@ export function buildCksCompetenceRuntimeContractV1(input: CompetenceRuntimeCont
 // ---------------------------------------------------------------------------
 
 export type QueryDenialReasonV1 =
+  | "TASK_STATE_MALFORMED"
+  | "TASK_BINDING_MISMATCH"
+  | "KNOWLEDGE_EDITION_BINDING_MISMATCH"
+  | "NEED_KIND_NOT_ALLOWED"
+  | "APPLICABILITY_SCOPE_MISMATCH"
+  | "PRECONDITION_NOT_ALLOWED"
   | "CALL_BUDGET_EXHAUSTED"
   | "REQUEST_ID_INVALID"
   | "REQUEST_ID_NOT_MONOTONIC"
@@ -721,6 +818,12 @@ export type QueryDenialReasonV1 =
 
 export interface RetrievalTaskStateV1 {
   readonly taskId: string;
+  readonly knowledgeEditionId: string;
+  readonly knowledgeEditionVersion: string;
+  readonly knowledgeEditionDigest: string;
+  readonly applicability: ApplicabilityScopeV1;
+  readonly allowedNeedKinds: readonly string[];
+  readonly allowedPreconditions: readonly string[];
   readonly admittedCallCount: number;
   readonly aggregateEvidenceBytes: number;
 }
@@ -730,16 +833,32 @@ export type KnowledgeQueryAdmissionV1 =
   | { readonly outcome: "DENIED"; readonly reason: QueryDenialReasonV1 };
 
 /**
- * Admit a bounded Knowledge Query call for a task. Enforces the closed schema,
- * the per-task call budget, monotonic `KQ-0[1-3]` request ordering and the
- * per-call and aggregate Evidence byte ceilings. The returned `maxEvidenceBytes`
- * request bound is what the retrieval layer must honour when it assembles the
- * Evidence Pack.
+ * Admit a bounded Knowledge Query call for an exact task binding. Enforces the
+ * task, Knowledge edition, applicability, allowed kinds and Preconditions plus
+ * the per-task call budget, monotonic `KQ-0[1-3]` request ordering and per-call
+ * and aggregate Evidence byte ceilings. The returned `maxEvidenceBytes` bound
+ * is what the retrieval layer must honour when it assembles the Evidence Pack.
  */
-export function admitKnowledgeQueryV1(state: RetrievalTaskStateV1, request: KnowledgeQueryRequestV1): KnowledgeQueryAdmissionV1 {
+export function admitKnowledgeQueryV1(state: RetrievalTaskStateV1, request: unknown): KnowledgeQueryAdmissionV1 {
+  if (!exact(state, ["taskId", "knowledgeEditionId", "knowledgeEditionVersion", "knowledgeEditionDigest", "applicability", "allowedNeedKinds", "allowedPreconditions", "admittedCallCount", "aggregateEvidenceBytes"])
+    || !isBoundedText(state.taskId, 96)
+    || !isBoundedText(state.knowledgeEditionId, 96)
+    || !isBoundedText(state.knowledgeEditionVersion, 32)
+    || !isDigest(state.knowledgeEditionDigest)
+    || !validateApplicability(state.applicability)
+    || !isUniqueStrings(state.allowedNeedKinds, isKindId, 1, 16)
+    || !isUniqueStrings(state.allowedPreconditions, isPreconditionId, 0, 16)
+    || !isInt(state.admittedCallCount, 0, QUERY_LIMITS_V1.maximumCallsPerTask)
+    || !isInt(state.aggregateEvidenceBytes, 0, QUERY_LIMITS_V1.maximumAggregateEvidenceBytes)) return { outcome: "DENIED", reason: "TASK_STATE_MALFORMED" };
   if (state.admittedCallCount >= QUERY_LIMITS_V1.maximumCallsPerTask) return { outcome: "DENIED", reason: "CALL_BUDGET_EXHAUSTED" };
   if (!validateKnowledgeQueryRequestV1(request)) return { outcome: "DENIED", reason: "QUERY_MALFORMED" };
-  if (request.taskId !== state.taskId) return { outcome: "DENIED", reason: "QUERY_MALFORMED" };
+  if (request.taskId !== state.taskId) return { outcome: "DENIED", reason: "TASK_BINDING_MISMATCH" };
+  if (request.knowledgeEditionId !== state.knowledgeEditionId
+    || request.knowledgeEditionVersion !== state.knowledgeEditionVersion
+    || request.knowledgeEditionDigest !== state.knowledgeEditionDigest) return { outcome: "DENIED", reason: "KNOWLEDGE_EDITION_BINDING_MISMATCH" };
+  if (!request.needKinds.every((kind) => state.allowedNeedKinds.includes(kind))) return { outcome: "DENIED", reason: "NEED_KIND_NOT_ALLOWED" };
+  if (!deepEquals(request.applicability, state.applicability)) return { outcome: "DENIED", reason: "APPLICABILITY_SCOPE_MISMATCH" };
+  if (!request.requiredPreconditions.every((precondition) => state.allowedPreconditions.includes(precondition))) return { outcome: "DENIED", reason: "PRECONDITION_NOT_ALLOWED" };
   const expectedNumber = state.admittedCallCount + 1;
   const prefix = `KQ-0${expectedNumber}`;
   if (!isRequestId(request.requestId)) return { outcome: "DENIED", reason: "REQUEST_ID_INVALID" };
@@ -781,11 +900,11 @@ export interface CompetenceStateInputV1 {
  */
 export function resolveCompetenceStateV1(input: CompetenceStateInputV1): CompetenceStateV1 {
   if (input.conflictsPresent) return "KNOWLEDGE_CONFLICT";
+  if (input.retrievalCallsExhausted && !input.taskWithinProfile) return "COMPETENCE_LIMIT";
   if (input.materialKnowledgeMissing) {
     if (input.differentiatingRetrievalAvailable && !input.retrievalCallsExhausted) return "NEED_MORE_KNOWLEDGE";
     return "INSUFFICIENT_EVIDENCE";
   }
-  if (input.retrievalCallsExhausted && !input.taskWithinProfile) return "COMPETENCE_LIMIT";
   if (input.allMaterialClaimsCovered && input.allProcedureStepsCovered && input.preconditionsChecked && input.exclusionsChecked) return "ANSWER_SUPPORTED";
   return "INSUFFICIENT_EVIDENCE";
 }
