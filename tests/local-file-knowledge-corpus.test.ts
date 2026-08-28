@@ -5,6 +5,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import { canonicalJson } from "../packages/contracts/src/canonical-json.js";
 import {
   activateLocalFileCorpusEditionV1,
+  buildLocalFileCorpusIndexV1,
   LOCAL_FILE_CORPUS_BOUNDARY_V1,
   LOCAL_FILE_CORPUS_PROFILE_SCHEMA_V1,
   localFileCorpusManifestDigestV1,
@@ -12,6 +13,7 @@ import {
   queryLocalFileCorpusV1,
   readLocalFileCorpusEditionV1,
   validateLocalFileCorpusEditionV1,
+  validateLocalFileCorpusIndexV1,
   type LocalFileCorpusProfileV1,
 } from "../packages/contracts/src/local-file-knowledge-corpus.js";
 
@@ -130,4 +132,18 @@ test("LKC-FILES-01 fixture bytes are local synthetic text without credential or 
   const combined = [1, 2].flatMap((edition) => ["operations.md", "policy.txt"].map((name) =>
     readFileSync(`${fixtureRoot(edition as 1 | 2)}/${name}`, "utf8"))).join("\n");
   assert.doesNotMatch(combined, /https?:\/\/|Authorization:|api[_-]?key|secret|token|\/home\/|credential/i);
+});
+
+test("LKC-FILES-01 persistent index binds Accepted and LKG to verified immutable chunks", () => {
+  const accepted = readLocalFileCorpusEditionV1(fixtureRoot(2), profiles[2]);
+  const lastKnownGood = readLocalFileCorpusEditionV1(fixtureRoot(1), profiles[1]);
+  const index = buildLocalFileCorpusIndexV1(accepted, lastKnownGood);
+  assert.equal(validateLocalFileCorpusIndexV1(index), true);
+  assert.equal(index.activeEditionId, accepted.editionId);
+  assert.equal(index.acceptedEditionId, accepted.editionId);
+  assert.equal(index.lastKnownGoodEditionId, lastKnownGood.editionId);
+  assert.ok(index.entries.length > 0);
+  assert.ok(index.entries.every((entry) => entry.editionId === accepted.editionId));
+  assert.equal(validateLocalFileCorpusIndexV1({ ...index, entries: [] }), false);
+  assert.equal(validateLocalFileCorpusIndexV1({ ...index, lastKnownGoodEditionId: accepted.editionId }), false);
 });
