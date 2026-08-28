@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "chimpmaera.cks05/run-record-template/v1",
+  "templateId": "CKS05-RUN-RECORD-TEMPLATE-V1",
+  "purpose": "Append-only terminal record contract for paired five-arm fresh-domain execution and L4 scoring handoff.",
+  "protocol": {
+    "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+    "operatingModelVersion": "Operating Model v1.1",
+    "preservedDecisionIds": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "processVariantIntroduced": false
+  },
+  "pairing": {
+    "freshnessStatus": "FRESH_SYNTHETIC_HIDDEN",
+    "blockingUnit": "armId x taskId x editionId x generationSeed",
+    "pairKeyUnit": "taskId x editionId x generationSeed",
+    "requiredArmsPerPair": 5,
+    "requiredArmIds": ["ARM-LRF-01", "ARM-SRF-02", "ARM-LSF-03", "ARM-SSF-04", "ARM-SSG-05"],
+    "knowledgeEditions": ["K0_STATIC", "K1_UPDATED"],
+    "sameTaskPartitionAcrossArms": true,
+    "sameKnowledgeEditionsAcrossArms": true,
+    "seedsAreRepeatedObservations": true,
+    "rejectIdentityDrift": true
+  },
+  "terminalRecord": {
+    "requiredFields": [
+      "runId", "pairKey", "armId", "modelProfileId", "taskId", "scenarioPairId", "domainId", "hopClass",
+      "updateSensitivity", "editionId", "editionSha256", "taskPromptCoreSha256", "goldRecordSha256",
+      "evidenceGraphSha256", "canonicalFactInventorySha256", "generationSeed", "terminalStatus", "failureCodeOrNull"
+    ],
+    "terminalStatuses": ["COMPLETED", "FAILED", "INVALIDATED"],
+    "failureCodeNullOnlyWhenCompleted": true,
+    "modelFailureCodes": ["TIMEOUT", "OOM_WITHIN_ADMITTED_ENVELOPE", "NONZERO_RUNTIME_EXIT", "MALFORMED_STREAM", "OUTPUT_LIMIT_WITHOUT_VALID_FINAL", "INVALID_JSON", "REFUSAL_NO_VALID_ANSWER", "RUNTIME_ERROR"],
+    "infrastructureInvalidationCodes": ["HOST_DRIFT", "CLOCK_INVALID", "RESOURCE_SAMPLER_GAP", "THERMAL_INVALID", "UNRELATED_PROCESS_INTERFERENCE", "HARNESS_SIGTRAP_EXIT_133", "DOCKER_ENOENT"],
+    "preservationRule": "APPEND_ONLY_NO_REPLACEMENT_RUNS",
+    "preservedEvidence": ["request", "responseIfAny", "boundedStdout", "boundedStderr", "exitStatus", "timing", "resourceSamples", "failureCodeOrNull", "allDigests"]
+  },
+  "completedEvidence": {
+    "requiredFields": ["response", "gold", "responseSha256"],
+    "responseDigestRule": "sha256(canonical(response))",
+    "resourceSampleCoverageMinimum": 0.99,
+    "oneResponsePerSeed": true,
+    "hiddenRetry": false
+  },
+  "l4Handoff": {
+    "scorer": "scripts/cks-05-score-run.mjs",
+    "scoringInput": "schemaVersion/protocol/schedule/runRecords",
+    "requiredReportIds": ["AB-MODEL-RAW", "AB-MODEL-STRUCTURED", "AB-STRUCTURED-VS-RAW-LARGE", "AB-STRUCTURED-VS-RAW-SMALL", "AB-FACTS-VS-GUIDANCE-SMALL", "AB-STATIC-VS-UPDATED", "AB-SINGLE-VS-MULTI-HOP"],
+    "confidenceLevel": 0.95,
+    "bootstrapResamples": 20000,
+    "resamplingUnits": { "armAndEditionContrasts": "taskId", "singleMultiHopContrast": "scenarioPairId" },
+    "missingEvidenceStatus": "PARTIAL_NO_CLAIM",
+    "claimGate": "L6-MODEL-SUBSTITUTION"
+  },
+  "decisionAudit": {
+    "stopRuleIds": ["STOP-01-PROFILE-COMPETENCE", "STOP-02-INTEGRITY", "STOP-03-LEAKAGE", "STOP-04-CRITICAL-VIOLATION", "STOP-05-FAILURE-RATE", "STOP-06-RESOURCE-OR-TIME", "STOP-07-NO-EARLY-SUCCESS"],
+    "simplificationRuleIds": ["SIMPLIFY-STRUCTURE", "SIMPLIFY-GUIDANCE", "SIMPLIFY-UPDATES", "SIMPLIFY-MULTI-HOP"],
+    "falsificationRuleId": "FALSIFY-SUBSTITUTION",
+    "noEarlySuccess": true,
+    "substitutionClaimRequires": ["complete schedule", "all required A/B cells", "available 95% confidence intervals", "all quality thresholds pass", "all efficiency thresholds pass"],
+    "claimWithoutBothThresholdFamilies": "DENY"
+  }
+}
