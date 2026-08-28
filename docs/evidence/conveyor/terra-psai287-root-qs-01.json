@@ -1,0 +1,218 @@
+{
+  "schemaVersion": "pansphaira.evidence/terra-psai287-root-qs-01/v1",
+  "taskId": "TERRA-PSAI287-ROOT-QS-01",
+  "recordKind": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
+  "decisionStatus": "RECONCILED_PASS_BOUNDED_TO_FROZEN_OFFLINE_FIXTURES",
+  "scope": {
+    "capability": "CKS-07",
+    "repository": "JoFe2/PANSPHAIRA",
+    "repositoryState": {
+      "commit": "8972e0bb573575adde026992718d2fe29a8dd405",
+      "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+      "branch": "conveyor/pansphaira-287"
+    },
+    "evidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC",
+    "mode": "OFFLINE_DETERMINISTIC_EMPTY_KB",
+    "network": "OFFLINE_PROFILE_ONLY",
+    "model": "DISABLED",
+    "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY"
+  },
+  "preservedProcessContext": {
+    "controllerAttestationSource": "TASK_INSTRUCTION",
+    "operatingModel": {
+      "id": "Operating Model v1.1",
+      "treatment": "PRESERVED_UNCHANGED"
+    },
+    "decisions": [
+      { "id": "D-001", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-002", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-003", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-004", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-005", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-006", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-007", "treatment": "PRESERVED_UNCHANGED" }
+    ],
+    "integrationRule": "This receipt reconciles the frozen CKS-07 proof artifacts only. It creates no workflow, authority path, promotion path, acquisition exception, or policy variant."
+  },
+  "immutableInputs": {
+    "groundTruth": {
+      "path": "tests/fixtures/cks-07/empty-kb-ground-truth-v1.json",
+      "sha256": "f4c238846994f6e057edbc5eb166baddc26e1f6616872acf211ab619c5c80878",
+      "groundTruthId": "truth:cks-07-empty-kb",
+      "suiteId": "suite:cks-07-empty-kb",
+      "semanticRuleSetDigest": "9a0ead3f5ce2b79214ce803f5436aec8d48e9b8956937e115c2a3682c7d15d9c",
+      "denominatorDigest": "3329fc11d6c54b44ec7731dd6ef37596d4b8920029e1e6526a645d37fa1b523a",
+      "requirements": {
+        "applicable": 3,
+        "criticalApplicable": 2,
+        "notApplicable": 1
+      }
+    },
+    "emptyKbCases": {
+      "path": "tests/fixtures/cks-07/empty-kb-cases-v1.json",
+      "sha256": "6095ef19924a27f340201c81a4fa79c561513de66aab0986f16e36eaf6b6b673",
+      "fixtureDigest": "a1eb4a89827038a6767c4bdd1d0a4ec5aba520eb927a8c283c53635fa3736039",
+      "caseCount": 9,
+      "denominatorDigest": "3329fc11d6c54b44ec7731dd6ef37596d4b8920029e1e6526a645d37fa1b523a"
+    },
+    "p12Positive": {
+      "path": "tests/fixtures/cks-07/gap-acquisition-positive-v1.json",
+      "sha256": "22455ad445482eeb890494e100528fcec5ef3f45a344d1f9875dd0447374c3ff"
+    },
+    "p12Negative": {
+      "path": "tests/fixtures/cks-07/gap-acquisition-negative-v1.json",
+      "sha256": "de3419eec011380d593497e6512bc3d39ba7f4be8be78b7cb69ed582ab43aef2"
+    },
+    "publicSafeDryRunReceipt": {
+      "path": "verification/cks-07-empty-kb-dry-run-evidence-v1.json",
+      "sha256": "2c978f999f5748f1f0b3d32b6df9566afeeaa906a796b300ed45c140e7dfd4bf",
+      "evidenceId": "evidence:cks-07-empty-kb-e2e-v1",
+      "receiptReplay": "DETERMINISTIC_BYTE_IDENTICAL"
+    }
+  },
+  "reconciliation": {
+    "forwardRequirementAnalysis": {
+      "status": "PASS",
+      "p11": {
+        "caseCount": 9,
+        "passCases": 1,
+        "failCases": 8,
+        "blockedCases": 0,
+        "requirementRecallMean": 0.14814814814814814,
+        "requirementPrecisionMean": 0.2222222222222222,
+        "totalCriticalRequirementMisses": 15,
+        "criticalRequirementMissCases": 8
+      },
+      "failClosedRequirementStates": [
+        "MISSING",
+        "BAD_SOURCE",
+        "APPLICABILITY",
+        "CONFLICTING",
+        "UNKNOWN_SEMANTIC"
+      ]
+    },
+    "alternateRetrievalAndGapAcquisition": {
+      "status": "PASS",
+      "alternateRecoveries": [
+        {
+          "caseId": "case:recover-a1",
+          "attemptOutcomes": ["NO_MATCH", "QUALIFYING_MATCH"],
+          "earliestQualifyingLevel": "A1"
+        },
+        {
+          "caseId": "case:recover-a2",
+          "attemptOutcomes": ["NO_MATCH", "NO_MATCH", "QUALIFYING_MATCH"],
+          "earliestQualifyingLevel": "A2"
+        }
+      ],
+      "missingGate": {
+        "caseId": "case:missing-with-candidates",
+        "state": "GAP_MISSING",
+        "requiredRetrievalLevels": ["A0", "A1", "A2"],
+        "allAttemptOutcomes": "NO_MATCH"
+      },
+      "nonAuthoritativeAcquisition": {
+        "candidateCount": 3,
+        "levels": ["A3", "A4", "A5"],
+        "disposition": "NON_AUTHORITATIVE_CANDIDATE",
+        "acceptanceStatus": "NOT_ACCEPTED",
+        "promotionStatus": "NOT_REQUESTED",
+        "acceptedKnowledgeDigest": null
+      },
+      "negativeAndFailClosedStates": [
+        { "caseId": "case:missing-too-early", "state": "BLOCKED", "reason": "INCOMPLETE_A0_A2_RECOVERY" },
+        { "caseId": "case:bad-source", "state": "GAP_BAD_SOURCE" },
+        { "caseId": "case:applicability-fail-closed", "state": "GAP_APPLICABILITY" },
+        { "caseId": "case:conflict-fail-closed", "state": "GAP_CONFLICTING" },
+        { "caseId": "case:unknown-semantic-fail-closed", "state": "GAP_UNKNOWN_SEMANTIC" },
+        { "caseId": "case:changed-bundle-blocked", "state": "BLOCKED", "reason": "KNOWLEDGE_BUNDLE_CHANGED" }
+      ],
+      "receiptReplayCount": 8
+    },
+    "forwardGapBackwardSufficiency": {
+      "status": "PASS",
+      "caseCount": 9,
+      "sufficientCaseCount": 1,
+      "insufficientCaseCount": 8,
+      "sufficientCase": "case:sufficient-minimal-kb",
+      "sufficientComponents": {
+        "forward": "PASS",
+        "gapFinder": "PASS",
+        "boundary": "PASS",
+        "backward": "PASS"
+      },
+      "insufficientCases": {
+        "combinedOutcome": "INSUFFICIENT",
+        "materialCompleteness": "NOT_MATERIAL_COMPLETE",
+        "forward": "FAIL",
+        "gapFinder": "PASS",
+        "boundary": "PASS",
+        "backward": "FAIL"
+      },
+      "acceptedKnowledgeSourceClasses": ["ACTIVE_CURATED_KNOWLEDGE"]
+    },
+    "frozenComparator": {
+      "solverId": "CKS-07-SIMPLE-SOLVER-V1",
+      "proofOutcome": "PASS",
+      "proofDigest": "dc02f9c340a4f0ceaa342ab1ad36631f7979a80c7a4fd20ad75724c96315b505",
+      "fixtureDigest": "5df2f67e3c5d3c0e0651386a14009f4b3c8c05089961f36612a067ebb3c75d9e",
+      "denominatorDigest": "3329fc11d6c54b44ec7731dd6ef37596d4b8920029e1e6526a645d37fa1b523a",
+      "metrics": {
+        "insufficientOracleCases": 8,
+        "sufficientOracleCases": 1,
+        "combinedFalseCompletenessCount": 0,
+        "simpleSolverFalseCompletenessCount": 8,
+        "combinedTrueCompletenessCount": 1,
+        "combinedFalseCompletenessRate": 0,
+        "simpleSolverFalseCompletenessRate": 1,
+        "falseCompletenessAbsoluteReduction": 1,
+        "combinedTrueCompletenessRate": 1
+      }
+    },
+    "trustBoundary": {
+      "internetAndModelAcceptedAsKnowledge": false,
+      "internetAndModelGrantedAuthority": false,
+      "promotionLeakCount": 0,
+      "acquisitionOrPromotionPerformed": false,
+      "remoteStateMutated": false
+    }
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "NODE_OPTIONS=--jitless node --test tests/cks-07-empty-kb-metrics.test.mjs",
+        "observedExitCode": 0,
+        "summary": { "tests": 5, "pass": 5, "fail": 0 }
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless node --test dist/tests/cks-gap-acquisition.test.js dist/tests/cks-sufficiency-proof.test.js",
+        "observedExitCode": 0,
+        "summary": { "tests": 8, "pass": 8, "fail": 0 }
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless node scripts/cks-07-score-empty-kb.mjs --fixture tests/fixtures/cks-07/empty-kb-cases-v1.json --dry-run",
+        "observedExitCode": 0,
+        "result": "P11_AND_P13_VALUES_RECONCILED_WITH_BOUND_FIXTURES"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "observedExitCode": 0
+      }
+    ],
+    "infrastructureEvidence": {
+      "command": "npm --version",
+      "observedExitCode": 133,
+      "signal": "SIGTRAP",
+      "classification": "LOCAL_NODE_V8_MEMORY_PERMISSION_INFRASTRUCTURE_EVIDENCE_NOT_PRODUCT_VERDICT",
+      "productImpact": "NONE; focused Node checks above completed with exit code 0 under --jitless."
+    },
+    "allowlistBoundary": "The dry-run renderer was not rerun because it writes verification/cks-07-empty-kb-dry-run-evidence-v1.json, outside this task's only writable artifact. Its committed public-safe receipt was read and hash-bound above; the no-write scorer and contract tests were independently executed."
+  },
+  "publicSafeNonClaims": [
+    "No Internet retrieval, content acquisition, model invocation, qualification, promotion, activation, or Authority was performed.",
+    "This receipt does not claim CI, merge, release, deployment, production activation, global domain quality, or parent-epic completion.",
+    "This receipt does not reproduce raw candidate statements or private material.",
+    "The reconciliation is bounded to the named immutable local fixtures, contracts, receipts, commit, and observed commands."
+  ],
+  "verdict": "PASS_FOR_THE_FROZEN_OFFLINE_EMPTY_KB_PROOF_SCOPE_ONLY"
+}
