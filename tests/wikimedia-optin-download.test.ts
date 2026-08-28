@@ -275,6 +275,17 @@ test("default container invocation denies before bytes become usable", (t) => {
   assert.equal(existsSync(`${destination}.partial`), false);
 });
 
+test("malformed runtime command input denies before bytes become usable", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const probe = probeTransport();
+  const session = new WikimediaOptinDownloadSession();
+  const result = session.run(undefined as never, probe.transport);
+  expectDenial(result, OPTIN_MISSING);
+  assert.equal(result.stage, "PRE_TRANSPORT");
+  assert.equal(probe.calls, 0);
+  assert.equal(readdirSync(mountRoot).length, 0);
+});
+
 test("non-official host denies", (t) => {
   const mountRoot = makeMountRoot(t);
   const probe = probeTransport();

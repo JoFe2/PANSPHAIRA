@@ -169,6 +169,13 @@ export class WikimediaOptinDownloadSession {
     transport: FakeTransportV1,
   ): OptinDownloadResultV1 {
     const bounds = WIKIMEDIA_DOWNLOAD_TRANSPORT_BOUNDS_V1;
+    // The command boundary is also exercised from JavaScript callers, where
+    // the TypeScript input type is not a runtime guarantee. Malformed input
+    // must preserve the disabled-by-default behavior rather than throw before
+    // the pre-transport opt-in gate can run.
+    if (typeof input !== "object" || input === null) {
+      return { ok: false, code: OPTIN_MISSING, stage: "PRE_TRANSPORT" };
+    }
     // Gate 1: explicit opt-in. No flag (or the default container invocation)
     // denies before any transport call, so no bytes can ever become usable.
     if (input.optIn !== true) {
