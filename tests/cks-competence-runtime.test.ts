@@ -203,6 +203,9 @@ test("CKS-04 schemas are strict and expose exactly one model-callable retrieval 
   assert.equal(validateTool({ schemaVersion: MODEL_TOOL_CALL_SCHEMA_V1, toolName: "cks_knowledge_query", arguments: wireRequest }), true, JSON.stringify(validateTool.errors));
   assert.equal(validateTool({ schemaVersion: MODEL_TOOL_CALL_SCHEMA_V1, toolName: "cks_knowledge_query", arguments: request() }), false);
   assert.equal(validateTool({ schemaVersion: MODEL_TOOL_CALL_SCHEMA_V1, toolName: "filesystem", arguments: wireRequest }), false);
+  const invalidApplicability = structuredClone(wireRequest) as Record<string, any>;
+  invalidApplicability.applicability.domain = { state: "VALUE", values: [], provenance: null };
+  assert.equal(validateTool({ schemaVersion: MODEL_TOOL_CALL_SCHEMA_V1, toolName: "cks_knowledge_query", arguments: invalidApplicability }), false);
   assert.equal(validateRuntime({ ...fixture, unexpected: true }), false);
 
   const changedTool = structuredClone(fixture) as Record<string, any>;

@@ -51,7 +51,13 @@
         "state": {"enum": ["VALUE", "UNKNOWN", "NOT_PROVIDED", "NOT_APPLICABLE", "EXPLICITLY_UNRESTRICTED"]},
         "values": {"type": "array", "minItems": 0, "maxItems": 16, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 160}},
         "provenance": {"type": ["string", "null"], "enum": ["DECLARED", "EVIDENCE_DERIVED", "INFERRED", null]}
-      }
+      },
+      "allOf": [
+        {"if": {"properties": {"state": {"const": "VALUE"}}, "required": ["state"]}, "then": {"properties": {"values": {"type": "array", "minItems": 1}, "provenance": {"type": "string", "enum": ["DECLARED", "EVIDENCE_DERIVED", "INFERRED"]}}}},
+        {"if": {"properties": {"state": {"const": "UNKNOWN"}}, "required": ["state"]}, "then": {"properties": {"values": {"type": "array", "maxItems": 0}, "provenance": {"type": ["string", "null"], "enum": ["INFERRED", null]}}}},
+        {"if": {"properties": {"state": {"const": "NOT_PROVIDED"}}, "required": ["state"]}, "then": {"properties": {"values": {"type": "array", "maxItems": 0}, "provenance": {"type": "null", "const": null}}}},
+        {"if": {"properties": {"state": {"enum": ["NOT_APPLICABLE", "EXPLICITLY_UNRESTRICTED"]}}, "required": ["state"]}, "then": {"properties": {"values": {"type": "array", "maxItems": 0}, "provenance": {"type": "string", "enum": ["DECLARED", "EVIDENCE_DERIVED"]}}}}
+      ]
     },
     "applicability": {
       "type": "object", "additionalProperties": false,
