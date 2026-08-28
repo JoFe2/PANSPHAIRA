@@ -286,6 +286,25 @@ test("malformed runtime command input denies before bytes become usable", (t) =>
   assert.equal(readdirSync(mountRoot).length, 0);
 });
 
+test("malformed runtime input properties deny before transport", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const probe = probeTransport();
+  const session = new WikimediaOptinDownloadSession();
+  const input = new Proxy(baseInput(mountRoot, path.join(mountRoot, ARTICLES_FILENAME)), {
+    get(target, property, receiver) {
+      if (property === "url") {
+        throw new Error("untrusted runtime input getter");
+      }
+      return Reflect.get(target, property, receiver);
+    },
+  });
+  const result = session.run(input, probe.transport);
+  expectDenial(result, NON_OFFICIAL_URL);
+  assert.equal(result.stage, "PRE_TRANSPORT");
+  assert.equal(probe.calls, 0);
+  assert.equal(readdirSync(mountRoot).length, 0);
+});
+
 test("non-official host denies", (t) => {
   const mountRoot = makeMountRoot(t);
   const probe = probeTransport();

@@ -178,24 +178,54 @@ export class WikimediaOptinDownloadSession {
     }
     // Gate 1: explicit opt-in. No flag (or the default container invocation)
     // denies before any transport call, so no bytes can ever become usable.
-    if (input.optIn !== true) {
+    let optIn: unknown;
+    try {
+      optIn = input.optIn;
+    } catch {
+      return { ok: false, code: OPTIN_MISSING, stage: "PRE_TRANSPORT" };
+    }
+    if (optIn !== true) {
       return { ok: false, code: OPTIN_MISSING, stage: "PRE_TRANSPORT" };
     }
     // Gate 2: ADR-approved official checksum metadata must be available and
     // well-formed.
-    const evidenceResult = parseWikimediaDownloadPolicyEvidence(input.policyEvidenceRaw);
+    let policyEvidenceRaw: unknown;
+    try {
+      policyEvidenceRaw = input.policyEvidenceRaw;
+    } catch {
+      return { ok: false, code: "POLICY_EVIDENCE_UNAVAILABLE", stage: "PRE_TRANSPORT" };
+    }
+    if (typeof policyEvidenceRaw !== "string") {
+      return { ok: false, code: "POLICY_EVIDENCE_UNAVAILABLE", stage: "PRE_TRANSPORT" };
+    }
+    const evidenceResult = parseWikimediaDownloadPolicyEvidence(policyEvidenceRaw);
     if (!evidenceResult.ok) {
       return { ok: false, code: evidenceResult.code, stage: "PRE_TRANSPORT" };
     }
     const evidence: WikimediaDownloadPolicyEvidenceV1 = evidenceResult.evidence;
     // Gate 3: official URL only (https, approved host, official path layout).
-    const urlResult = parseOfficialDownloadUrl(input.url);
+    let requestedUrl: unknown;
+    try {
+      requestedUrl = input.url;
+    } catch {
+      return { ok: false, code: NON_OFFICIAL_URL, stage: "PRE_TRANSPORT" };
+    }
+    if (typeof requestedUrl !== "string") {
+      return { ok: false, code: NON_OFFICIAL_URL, stage: "PRE_TRANSPORT" };
+    }
+    const urlResult = parseOfficialDownloadUrl(requestedUrl);
     if (!urlResult.ok) {
       return { ok: false, code: NON_OFFICIAL_URL, stage: "PRE_TRANSPORT" };
     }
     const url = urlResult.url;
     // Gate 4: the request must identify the client.
-    if (!validateIdentifyingUserAgent(input.userAgent)) {
+    let userAgent: unknown;
+    try {
+      userAgent = input.userAgent;
+    } catch {
+      return { ok: false, code: USER_AGENT_NOT_IDENTIFYING, stage: "PRE_TRANSPORT" };
+    }
+    if (typeof userAgent !== "string" || !validateIdentifyingUserAgent(userAgent)) {
       return { ok: false, code: USER_AGENT_NOT_IDENTIFYING, stage: "PRE_TRANSPORT" };
     }
     // Gate 5: the requested file must be declared by the official metadata.
@@ -206,7 +236,19 @@ export class WikimediaOptinDownloadSession {
     // Gate 6: resume ambiguity. Offline verification is possible only for a
     // fresh fetch (0) or a fully-complete file (declared byteSize); any
     // partial offset cannot be verified against the declared full digest.
-    const resumeFromByte = input.resumeFromByte ?? 0;
+    let requestedResumeFromByte: unknown;
+    try {
+      requestedResumeFromByte = input.resumeFromByte;
+    } catch {
+      return { ok: false, code: RESUME_AMBIGUITY, stage: "PRE_TRANSPORT" };
+    }
+    let resumeFromByte = 0;
+    if (requestedResumeFromByte !== undefined) {
+      if (typeof requestedResumeFromByte !== "number") {
+        return { ok: false, code: RESUME_AMBIGUITY, stage: "PRE_TRANSPORT" };
+      }
+      resumeFromByte = requestedResumeFromByte;
+    }
     if (!Number.isInteger(resumeFromByte) || resumeFromByte < 0 || resumeFromByte > entry.byteSize) {
       return { ok: false, code: RESUME_AMBIGUITY, stage: "PRE_TRANSPORT" };
     }
@@ -242,11 +284,18 @@ export class WikimediaOptinDownloadSession {
         return { ok: false, code: RATE_LIMIT_BREACH, stage: "PRE_TRANSPORT" };
       }
     }
-    const destinationResult = resolveOwnedMountDestination(
-      input.mountRoot,
-      input.destination,
-      url.filename,
-    );
+    let mountRoot: unknown;
+    let requestedDestination: unknown;
+    try {
+      mountRoot = input.mountRoot;
+      requestedDestination = input.destination;
+    } catch {
+      return { ok: false, code: DESTINATION_OUTSIDE_OWNED_MOUNT, stage: "EXPOSURE" };
+    }
+    if (typeof mountRoot !== "string" || typeof requestedDestination !== "string") {
+      return { ok: false, code: DESTINATION_OUTSIDE_OWNED_MOUNT, stage: "EXPOSURE" };
+    }
+    const destinationResult = resolveOwnedMountDestination(mountRoot, requestedDestination, url.filename);
     if (!destinationResult.ok) {
       return { ok: false, code: destinationResult.code, stage: "EXPOSURE" };
     }
@@ -275,7 +324,7 @@ export class WikimediaOptinDownloadSession {
         filename: url.filename,
         byteSize: entry.byteSize,
         sha256: entry.sha256,
-        mountRoot: input.mountRoot,
+        mountRoot,
         destination,
         requestRecords: [],
       });
@@ -288,8 +337,8 @@ export class WikimediaOptinDownloadSession {
       return { ok: false, code: RESUME_AMBIGUITY, stage: "PRE_TRANSPORT" };
     }
     const record: OptinDownloadRequestRecordV1 = {
-      url: input.url,
-      userAgent: input.userAgent,
+      url: requestedUrl,
+      userAgent,
       connectionIndex: 0,
       requestOrdinal: this.requestsMade + 1,
       requestedByteRange: { from: 0, toExclusive: entry.byteSize },
@@ -307,8 +356,8 @@ export class WikimediaOptinDownloadSession {
     let response: FakeTransportResponseV1;
     try {
       const received: unknown = transport.fetch({
-        url: input.url,
-        userAgent: input.userAgent,
+        url: requestedUrl,
+        userAgent,
         resumeFromByte: 0,
       });
       if (!isFakeTransportResponseV1(received)) {
@@ -323,7 +372,7 @@ export class WikimediaOptinDownloadSession {
     // Gate 8: redirect escape. The fake response must remain on the exact
     // declared official URL; same-host redirects to a different official path
     // are not covered by the declared checksum metadata.
-    if (response.finalUrl !== input.url) {
+    if (response.finalUrl !== requestedUrl) {
       return { ok: false, code: REDIRECT_ESCAPE, stage: "POST_TRANSPORT" };
     }
     if (response.status !== 200 || !(response.body instanceof Uint8Array)) {
@@ -340,8 +389,8 @@ export class WikimediaOptinDownloadSession {
     // mount destination after it returns so a parent/destination symlink swap
     // cannot move verified bytes outside the owned mount.
     const exposureDestinationResult = resolveOwnedMountDestination(
-      input.mountRoot,
-      input.destination,
+      mountRoot,
+      requestedDestination,
       url.filename,
     );
     if (
@@ -373,7 +422,7 @@ export class WikimediaOptinDownloadSession {
       filename: url.filename,
       byteSize: entry.byteSize,
       sha256: entry.sha256,
-      mountRoot: input.mountRoot,
+      mountRoot,
       destination,
       requestRecords: [record],
     });
