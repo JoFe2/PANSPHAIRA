@@ -473,6 +473,7 @@ function parseMiniDumpXml(input: string): XmlNode {
       const textStart = position;
       while (position < length && input.charAt(position) !== "<") position += 1;
       const rawText = input.slice(textStart, position);
+      if (rawText.indexOf("]]>") >= 0) fail(ERROR_MALFORMED);
       if (rawText !== "") text += decodeEntities(rawText);
     }
     return { name, attributes, children, text };
@@ -610,8 +611,7 @@ function parsePage(node: XmlNode): ParsedPage {
   if (
     pageTitle.length < 1 ||
     pageTitle.length > MEDIAWIKI_MINI_DUMP_M0_BOUNDS_V1.maximumTitleCodeUnits ||
-    pageTitle.includes("\0") ||
-    pageTitle.includes("\r") ||
+    hasForbiddenTextCodePoint(pageTitle, false) ||
     pageTitle.includes("<")
   ) {
     throw new Error(ERROR_TEXT);
@@ -651,16 +651,14 @@ function projectParsedDocument(
   if (xmlLang !== profile.language) throw new Error(ERROR_MIXED_EDITION);
   if (root.text.trim() !== "") throw new Error(ERROR_STRUCTURE);
   let site: { name: string; base: string };
-  let pagesStart = 0;
+  let pagesStart = 1;
   const firstChild = root.children[0];
-  if (firstChild !== undefined && firstChild.name === "siteinfo") {
-    site = parseSiteInfo(firstChild);
-    if (site.name !== profile.site.name || site.base !== profile.site.base) {
-      throw new Error(ERROR_MIXED_EDITION);
-    }
-    pagesStart = 1;
-  } else {
-    site = { name: profile.site.name, base: profile.site.base };
+  if (firstChild === undefined || firstChild.name !== "siteinfo") {
+    throw new Error(ERROR_STRUCTURE);
+  }
+  site = parseSiteInfo(firstChild);
+  if (site.name !== profile.site.name || site.base !== profile.site.base) {
+    throw new Error(ERROR_MIXED_EDITION);
   }
   const pageNodes = root.children.slice(pagesStart);
   if (pageNodes.length < 1) throw new Error(ERROR_STRUCTURE);
@@ -691,6 +689,16 @@ function projectParsedDocument(
 // ---------------------------------------------------------------------------
 
 const canonicalTitleOf = (title: string): string => title.replace(/ /g, "_");
+const canonicalUrlOf = (siteBase: string, canonicalTitle: string): string =>
+  `${siteBase}/${encodeURIComponent(canonicalTitle)}`;
+
+function hasForbiddenTextCodePoint(value: string, allowNewline: boolean): boolean {
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    if (code < 32 && !(allowNewline && code === 10)) return true;
+  }
+  return value.includes("\0") || value.includes("\r");
+}
 
 function chunkUnsigned(canonicalTitle: string, line: number, text: string): Omit<MediaWikiMiniDumpChunkV1, "chunkDigest"> {
   return {
@@ -750,7 +758,7 @@ function buildPageEdition(
     namespace: 0,
     title: page.title,
     canonicalTitle,
-    canonicalUrl: `${siteBase}/${encodeURIComponent(canonicalTitle)}`,
+    canonicalUrl: canonicalUrlOf(siteBase, canonicalTitle),
     pageId: page.pageId,
     revisionId: page.revisionId,
     timestamp: page.timestamp,
@@ -791,7 +799,7 @@ export function queryMediaWikiMiniDumpEditionV1(
       title: page.title,
       canonicalUrl: page.canonicalUrl,
       snapshotDate: edition.dump.snapshotDate,
-      license: edition.license,
+      license: { ...edition.license },
       contentDigest: page.contentDigest,
       editionDigest: edition.editionDigest,
     })),
@@ -913,7 +921,7 @@ export function importMediaWikiMiniDumpEditionV1(
     }
     if (entry.name.endsWith(".xml")) {
       xmlFiles.push(entry.name);
-    } else if (!entry.name.endsWith(".json")) {
+    } else if (entry.name !== "manifest.json" && entry.name !== "negative-matrix.json") {
       throw new Error(ERROR_CLOSED_MANIFEST);
     }
   }
@@ -991,6 +999,7 @@ export function validateMediaWikiMiniDumpEditionV1(value: unknown): value is Med
     typeof site.name !== "string" ||
     site.name.length < 1 ||
     site.name.length > 128 ||
+    hasForbiddenTextCodePoint(site.name, false) ||
     typeof site.base !== "string" ||
     !SITE_BASE.test(site.base)
   ) {
@@ -1039,18 +1048,41 @@ export function validateMediaWikiMiniDumpEditionV1(value: unknown): value is Med
     return false;
   }
   let totalLines = 0;
+  const seenPageIds = new Set<number>();
+  const seenTitles = new Set<string>();
+  const seenRevisionIds = new Set<number>();
   for (const rawPage of edition.pages) {
     if (!dataRecord(rawPage) || !exactKeys(rawPage, PAGE_KEYS)) return false;
     const page = rawPage as unknown as MediaWikiMiniDumpPageEditionV1;
     if (page.namespace !== 0) return false;
-    if (typeof page.title !== "string" || page.title.length < 1) return false;
+    if (
+      typeof page.title !== "string" ||
+      page.title.length < 1 ||
+      page.title.length > MEDIAWIKI_MINI_DUMP_M0_BOUNDS_V1.maximumTitleCodeUnits ||
+      hasForbiddenTextCodePoint(page.title, false) ||
+      page.title.includes("<")
+    ) return false;
     if (page.canonicalTitle !== canonicalTitleOf(page.title)) return false;
-    if (typeof page.canonicalUrl !== "string" || !page.canonicalUrl.startsWith(`${site.base}/`)) return false;
+    if (
+      typeof page.canonicalTitle !== "string" ||
+      page.canonicalTitle.length < 1 ||
+      page.canonicalTitle.length > MEDIAWIKI_MINI_DUMP_M0_BOUNDS_V1.maximumTitleCodeUnits ||
+      page.canonicalUrl !== canonicalUrlOf(site.base, page.canonicalTitle)
+    ) return false;
     if (!safeInteger(page.pageId, 1) || !safeInteger(page.revisionId, 1)) return false;
+    if (seenPageIds.has(page.pageId) || seenTitles.has(page.title) || seenRevisionIds.has(page.revisionId)) return false;
+    seenPageIds.add(page.pageId);
+    seenTitles.add(page.title);
+    seenRevisionIds.add(page.revisionId);
     if (typeof page.timestamp !== "string" || !isValidTimestamp(page.timestamp)) return false;
     if (page.project !== edition.project || page.snapshotDate !== dump.snapshotDate) return false;
     if (!isLicence(page.licence) || page.licence !== license.licence) return false;
-    if (typeof page.text !== "string" || page.text === "" || page.text.includes("\0") || page.text.includes("\r")) {
+    if (
+      typeof page.text !== "string" ||
+      page.text === "" ||
+      hasForbiddenTextCodePoint(page.text, true) ||
+      Buffer.byteLength(page.text, "utf8") > MEDIAWIKI_MINI_DUMP_M0_BOUNDS_V1.maximumDecodedRevisionBytesPerPage
+    ) {
       return false;
     }
     if (typeof page.contentDigest !== "string" || !DIGEST.test(page.contentDigest)) return false;
