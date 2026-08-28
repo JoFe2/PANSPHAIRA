@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "cks-08-synthetic-lineage-metrics-template/v1",
+  "contract": {
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "scopeClass": "LOCAL_SYNTHETIC_FIXTURE",
+    "caseSchema": "schemas/contracts/cks-synthetic-lineage-case-v1.schema.json",
+    "groundTruth": "tests/fixtures/cks-08/synthetic-lineage-ground-truth-v1.json",
+    "entryPoint": "scoreSyntheticLineageFixture",
+    "dryRunCommand": "node scripts/cks-08-score-synthetic-lineage.mjs --fixture tests/fixtures/cks-08/synthetic-lineage-cases-v1.json --dry-run"
+  },
+  "metrics": {
+    "p14Reconstructed": "count of ground-truth tasks whose six usage sets reconstruct exactly",
+    "p15Groups": "count of repetition/diversity feature groups whose raw and derived metrics match",
+    "p16Attributed": "count of seeded failure cases whose outcome, causal mode and causes match",
+    "deniedNegativeCases": "count of missing, late, replayed, cross-scope, tampered and attribution-invalid cases denied"
+  },
+  "requiredInvariants": [
+    "P14 returns searched, inspected, used, rejected, decision-supporting and outcome-contributing Knowledge, not inferred substitutes.",
+    "P15 counts identical repetitions as occurrences but removes them from distinct joint usage units and does not emit +G without two task semantics and two contexts.",
+    "P16 accepts only explicit bounded witnesses and retains CONFIRMED, SUPPORTED, POSSIBLE, UNKNOWN and multi-cause modes.",
+    "Missing, late, replayed, cross-scope and tampered lineage is denied before any partial score is emitted.",
+    "Source, applicability, freshness, contradiction, generalization and operational profile dimensions remain separate.",
+    "Every accepted result is compared with independently authored ground truth and repeated from a fresh input copy."
+  ],
+  "requiredPositiveCases": [
+    "p14-alpha",
+    "p14-delta",
+    "identical-repetition-does-not-become-generalization",
+    "independent-novelty-and-context-diversity",
+    "knowledge-stale",
+    "search-relevant-not-returned",
+    "decision-unsupported-selection",
+    "execution-action-failed",
+    "multi-contributing-execution-external",
+    "alternatives-unresolved",
+    "unknown-outcome"
+  ],
+  "requiredNegativeCases": [
+    "missing-lineage",
+    "late-lineage",
+    "replayed-lineage",
+    "cross-scope-lineage",
+    "tampered-lineage",
+    "missing-causal-witness",
+    "knowledge-causality-from-contribution-only",
+    "possible-cause-labelled-single",
+    "fourth-cause"
+  ],
+  "noSubstitutionRule": "A repeated observation, outcome contribution, profile dimension or fixture declaration cannot substitute for missing lineage, causal witness, source applicability, freshness, contradiction or independent generalization evidence."
+}
