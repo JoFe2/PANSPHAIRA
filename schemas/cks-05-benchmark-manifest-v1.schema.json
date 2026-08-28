@@ -1,0 +1,656 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.chimpmaera.dev/cks-05-benchmark-manifest-v1.schema.json",
+  "title": "ChimpMaera CKS-05 Pre-Execution Benchmark Manifest v1",
+  "description": "Fail-closed pre-execution manifest for the PSAI285 bounded benchmark protocol. It must validate before any scored run and makes task/Knowledge identity, model arm identity, allowed retrieval mode, per-run provenance, timing/resource collection, and claim eligibility comparable across arms. Protocol-pinned values are const; instance digests are pattern-validated and source-bound by tests/cks-05-benchmark-contract.test.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "manifestId",
+    "preparedAt",
+    "protocol",
+    "admission",
+    "modelProfiles",
+    "arms",
+    "crossArmIdentity",
+    "taskSuite",
+    "knowledgeEditions",
+    "generation",
+    "retrievalPolicy",
+    "runPlan",
+    "provenanceContract",
+    "timingAndResourceCollection",
+    "claimEligibility",
+    "receipt"
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "gitSha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "modelProfileSmall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileId", "role", "artifactName", "format", "byteSize", "sha256", "maxInputTokens", "maxGeneratedTokens", "responseCountPerSeed", "repairConversation", "hiddenRetry"],
+      "properties": {
+        "profileId": { "const": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A" },
+        "role": { "const": "SMALL" },
+        "artifactName": { "const": "vibethinker-3b-q8_0.gguf" },
+        "format": { "const": "GGUF" },
+        "byteSize": { "const": 3285476032 },
+        "sha256": { "const": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f" },
+        "maxInputTokens": { "const": 12000 },
+        "maxGeneratedTokens": { "const": 256 },
+        "responseCountPerSeed": { "const": 1 },
+        "repairConversation": { "const": false },
+        "hiddenRetry": { "const": false }
+      }
+    },
+    "modelProfileLarge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileId", "role", "artifactName", "format", "byteSize", "sha256", "maxInputTokens", "maxGeneratedTokens", "responseCountPerSeed", "repairConversation", "hiddenRetry"],
+      "properties": {
+        "profileId": { "const": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA" },
+        "role": { "const": "LARGE" },
+        "artifactName": { "const": "Qwen3.8-27B-Q5_K_M.gguf" },
+        "format": { "const": "GGUF" },
+        "byteSize": { "const": 19834055648 },
+        "sha256": { "const": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177" },
+        "maxInputTokens": { "const": 12000 },
+        "maxGeneratedTokens": { "const": 256 },
+        "responseCountPerSeed": { "const": 1 },
+        "repairConversation": { "const": false },
+        "hiddenRetry": { "const": false }
+      }
+    },
+    "armCommonRetrieval": {
+      "type": "object",
+      "required": ["editions", "allowedRetrievalModes", "retrievalCapabilities"],
+      "properties": {
+        "editions": { "const": ["K0_STATIC", "K1_UPDATED"] },
+        "allowedRetrievalModes": { "const": ["EMBEDDED_CONTEXT"] },
+        "retrievalCapabilities": {
+          "const": { "tools": false, "network": false, "multiTurn": false, "agenticLoop": false, "crossRunMemory": false, "effects": false }
+        }
+      }
+    },
+    "armLRF01": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/armCommonRetrieval" },
+        {
+          "required": ["armId", "name", "modelProfileId", "knowledgeRepresentation", "knowledgePayload"],
+          "properties": {
+            "armId": { "const": "ARM-LRF-01" },
+            "name": { "const": "LARGE_RAW_FACTS" },
+            "modelProfileId": { "const": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA" },
+            "knowledgeRepresentation": { "const": "RAW" },
+            "knowledgePayload": { "const": "FACTS_ONLY" }
+          }
+        }
+      ]
+    },
+    "armSRF02": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/armCommonRetrieval" },
+        {
+          "required": ["armId", "name", "modelProfileId", "knowledgeRepresentation", "knowledgePayload"],
+          "properties": {
+            "armId": { "const": "ARM-SRF-02" },
+            "name": { "const": "SMALL_RAW_FACTS" },
+            "modelProfileId": { "const": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A" },
+            "knowledgeRepresentation": { "const": "RAW" },
+            "knowledgePayload": { "const": "FACTS_ONLY" }
+          }
+        }
+      ]
+    },
+    "armLSF03": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/armCommonRetrieval" },
+        {
+          "required": ["armId", "name", "modelProfileId", "knowledgeRepresentation", "knowledgePayload"],
+          "properties": {
+            "armId": { "const": "ARM-LSF-03" },
+            "name": { "const": "LARGE_STRUCTURED_FACTS" },
+            "modelProfileId": { "const": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA" },
+            "knowledgeRepresentation": { "const": "STRUCTURED" },
+            "knowledgePayload": { "const": "FACTS_ONLY" }
+          }
+        }
+      ]
+    },
+    "armSSF04": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/armCommonRetrieval" },
+        {
+          "required": ["armId", "name", "modelProfileId", "knowledgeRepresentation", "knowledgePayload"],
+          "properties": {
+            "armId": { "const": "ARM-SSF-04" },
+            "name": { "const": "SMALL_STRUCTURED_FACTS" },
+            "modelProfileId": { "const": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A" },
+            "knowledgeRepresentation": { "const": "STRUCTURED" },
+            "knowledgePayload": { "const": "FACTS_ONLY" }
+          }
+        }
+      ]
+    },
+    "armSSG05": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/armCommonRetrieval" },
+        {
+          "required": ["armId", "name", "modelProfileId", "knowledgeRepresentation", "knowledgePayload"],
+          "properties": {
+            "armId": { "const": "ARM-SSG-05" },
+            "name": { "const": "SMALL_STRUCTURED_FACTS_AND_GUIDANCE" },
+            "modelProfileId": { "const": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A" },
+            "knowledgeRepresentation": { "const": "STRUCTURED" },
+            "knowledgePayload": { "const": "FACTS_AND_NON_ANSWER_GUIDANCE" }
+          }
+        }
+      ]
+    },
+    "knowledgeEditionK0": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["editionId", "role"],
+      "properties": {
+        "editionId": { "const": "K0_STATIC" },
+        "role": { "const": "Frozen pre-update edition" }
+      }
+    },
+    "knowledgeEditionK1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["editionId", "role"],
+      "properties": {
+        "editionId": { "const": "K1_UPDATED" },
+        "role": { "const": "Frozen post-update edition" }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.cks05/benchmark-manifest/v1" },
+    "manifestId": { "type": "string", "pattern": "^CKS-05-BENCHMARK-MANIFEST-V1-[A-Z0-9-]+$" },
+    "preparedAt": { "type": "string", "format": "date" },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protocolId", "protocolStatus", "decisionReceipt", "protocolDigestSha256", "operatingModelVersion", "preservedDecisionIds", "processVariantIntroduced", "researchQuestion"],
+      "properties": {
+        "protocolId": { "const": "PSAI285-BENCHMARK-PROTOCOL-01" },
+        "protocolStatus": { "const": "APPROVED_NOT_EXECUTED" },
+        "decisionReceipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": { "const": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json" },
+            "sha256": { "const": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a" }
+          }
+        },
+        "protocolDigestSha256": { "const": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd" },
+        "operatingModelVersion": { "const": "Operating Model v1.1" },
+        "preservedDecisionIds": { "const": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"] },
+        "processVariantIntroduced": { "const": false },
+        "researchQuestion": { "const": "Within four frozen fresh synthetic domains, can bounded structured Knowledge, optional non-answer guidance, and a compact local model match the quality of a larger local raw-facts profile while passing predeclared efficiency gates?" }
+      }
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "L1 ADMISSION_AND_IMMUTABILITY. Every artifact identity is a sealed digest; any reject condition fails closed before scored runs.",
+      "required": [
+        "harnessCommitSha1", "harnessTreeSha256", "scorerArtifactSha256", "outputSchemaSha256", "promptTemplateSha256",
+        "taskGeneratorArtifactSha256", "taskSeedDigestSha256", "taskSuiteEditionId", "taskSuiteEditionSha256",
+        "knowledgeSeedDigestSha256", "knowledgeK0EditionSha256", "knowledgeK1EditionSha256",
+        "knowledgeK0CanonicalFactInventorySha256", "knowledgeK1CanonicalFactInventorySha256",
+        "rawK0RenderingSha256", "rawK1RenderingSha256", "structuredK0RenderingSha256", "structuredK1RenderingSha256",
+        "factParityReceiptK0Sha256", "factParityReceiptK1Sha256", "guidanceArtifactSha256", "guidanceLeakageAuditSha256",
+        "generationSeedListSha256", "bootstrapSeedSha256", "scheduleSeedSha256", "armManifestSha256",
+        "smallModelSha256", "largeModelSha256", "runtimeBundleSha256", "runtimeArgvSha256",
+        "runtimeEnvironmentAllowListSha256", "hostManifestSha256", "resourceSamplerArtifactSha256", "timingClockId",
+        "admissionRejectConditions", "failClosedRule"
+      ],
+      "properties": {
+        "harnessCommitSha1": { "$ref": "#/$defs/gitSha1" },
+        "harnessTreeSha256": { "$ref": "#/$defs/sha256" },
+        "scorerArtifactSha256": { "$ref": "#/$defs/sha256" },
+        "outputSchemaSha256": { "$ref": "#/$defs/sha256" },
+        "promptTemplateSha256": { "$ref": "#/$defs/sha256" },
+        "taskGeneratorArtifactSha256": { "$ref": "#/$defs/sha256" },
+        "taskSeedDigestSha256": { "$ref": "#/$defs/sha256" },
+        "taskSuiteEditionId": { "type": "string", "pattern": "^TASK-SUITE-EDITION-[A-Z0-9-]+$" },
+        "taskSuiteEditionSha256": { "$ref": "#/$defs/sha256" },
+        "knowledgeSeedDigestSha256": { "$ref": "#/$defs/sha256" },
+        "knowledgeK0EditionSha256": { "$ref": "#/$defs/sha256" },
+        "knowledgeK1EditionSha256": { "$ref": "#/$defs/sha256" },
+        "knowledgeK0CanonicalFactInventorySha256": { "$ref": "#/$defs/sha256" },
+        "knowledgeK1CanonicalFactInventorySha256": { "$ref": "#/$defs/sha256" },
+        "rawK0RenderingSha256": { "$ref": "#/$defs/sha256" },
+        "rawK1RenderingSha256": { "$ref": "#/$defs/sha256" },
+        "structuredK0RenderingSha256": { "$ref": "#/$defs/sha256" },
+        "structuredK1RenderingSha256": { "$ref": "#/$defs/sha256" },
+        "factParityReceiptK0Sha256": { "$ref": "#/$defs/sha256" },
+        "factParityReceiptK1Sha256": { "$ref": "#/$defs/sha256" },
+        "guidanceArtifactSha256": { "$ref": "#/$defs/sha256" },
+        "guidanceLeakageAuditSha256": { "$ref": "#/$defs/sha256" },
+        "generationSeedListSha256": { "const": "350d921b7a2ed747911d1c32f9c1cb5c390d36c6b9ab769be7b0d1a79b105f84" },
+        "bootstrapSeedSha256": { "const": "6c027cd8e30f340cce31b58e32ac36f7fb5c3d5c70e773992e40977610eb3802" },
+        "scheduleSeedSha256": { "const": "2a47bf24635eb9392deb291a4db99dc9630cbc8196c4089b1f67c80878622514" },
+        "armManifestSha256": { "$ref": "#/$defs/sha256" },
+        "smallModelSha256": { "const": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f" },
+        "largeModelSha256": { "const": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177" },
+        "runtimeBundleSha256": { "const": "90097614d81dc8bfe758852b5af6002b6354fe2768b079820ed142201c516351" },
+        "runtimeArgvSha256": { "$ref": "#/$defs/sha256" },
+        "runtimeEnvironmentAllowListSha256": { "$ref": "#/$defs/sha256" },
+        "hostManifestSha256": { "$ref": "#/$defs/sha256" },
+        "resourceSamplerArtifactSha256": { "$ref": "#/$defs/sha256" },
+        "timingClockId": { "const": "CLOCK_MONOTONIC_RAW" },
+        "admissionRejectConditions": {
+          "const": [
+            "Missing, null, malformed, duplicate, mutable, unknown, or digest-mismatched field",
+            "Raw task or Knowledge seed exposed instead of a sealed digest",
+            "Unpinned model, runtime, harness, scorer, prompt, host, clock, resource sampler, or edition",
+            "Profile absence or failed fixed compatibility probe",
+            "Any service route, credential, provider, download, fallback model, or unlisted environment variable"
+          ]
+        },
+        "failClosedRule": { "const": "ANY_ADMISSION_REJECT_CONDITION_REJECTS_EXECUTION_BEFORE_SCORED_RUNS_WITHOUT_MEASUREMENT_OR_SUBSTITUTION" }
+      }
+    },
+    "modelProfiles": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "oneOf": [{ "$ref": "#/$defs/modelProfileSmall" }, { "$ref": "#/$defs/modelProfileLarge" }] }
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/armLRF01" },
+          { "$ref": "#/$defs/armSRF02" },
+          { "$ref": "#/$defs/armLSF03" },
+          { "$ref": "#/$defs/armSSF04" },
+          { "$ref": "#/$defs/armSSG05" }
+        ]
+      }
+    },
+    "crossArmIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Acceptance axis 1: identical hidden/fresh tasks and Knowledge versions across arms.",
+      "required": ["identicalAcrossArms", "neverRegeneratedPerArm", "taskQuestionBytesIdenticalAcrossEditions", "representationParity", "rejectOnArmSpecificSubstitution"],
+      "properties": {
+        "identicalAcrossArms": {
+          "const": [
+            "taskId", "taskPromptCoreSha256", "goldRecordSha256", "evidenceGraphSha256",
+            "editionId", "editionSha256", "canonicalFactInventorySha256",
+            "scenarioPairId", "domainId", "hopClass", "updateSensitivity",
+            "generationSeed", "maxInputTokens", "maxGeneratedTokens"
+          ]
+        },
+        "neverRegeneratedPerArm": { "const": true },
+        "taskQuestionBytesIdenticalAcrossEditions": { "const": true },
+        "representationParity": { "const": "SAME_CANONICAL_ATOMIC_FACT_INVENTORY_DIGEST_AND_EVIDENCE_IDS_FOR_RAW_AND_STRUCTURED_RENDERINGS_PER_EDITION" },
+        "rejectOnArmSpecificSubstitution": { "const": true }
+      }
+    },
+    "taskSuite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domainIds", "domainCount", "scenarioPairsPerDomain", "tasksPerScenarioPair", "taskIdsPerEdition", "scenarioPairCount", "hopStrata", "updateSensitivity", "freshnessDefinition"],
+      "properties": {
+        "domainIds": { "const": ["SYN-ASTER-LOGISTICS", "SYN-BOREALIS-MAINTENANCE", "SYN-CALDERA-ALLOCATIONS", "SYN-DIONE-COMPLIANCE"] },
+        "domainCount": { "const": 4 },
+        "scenarioPairsPerDomain": { "const": 4 },
+        "tasksPerScenarioPair": { "const": 2 },
+        "taskIdsPerEdition": { "const": 32 },
+        "scenarioPairCount": { "const": 16 },
+        "hopStrata": { "const": { "SINGLE_HOP": 16, "MULTI_HOP": 16 } },
+        "updateSensitivity": { "const": { "UPDATE_SENSITIVE_TASKS": 16, "EDITION_INVARIANT_CONTROL_TASKS": 16 } },
+        "freshnessDefinition": { "const": "Domain rules, entities, facts, updates, task bytes, gold labels, and evidence graphs are generated after profile lock, are entirely synthetic, are not copied from the repository or a real organization, are never used for training or tuning, and remain hidden from model operators and models until each scored request." }
+      }
+    },
+    "knowledgeEditions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "oneOf": [{ "$ref": "#/$defs/knowledgeEditionK0" }, { "$ref": "#/$defs/knowledgeEditionK1" }] }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seeds", "generationSeedListSha256", "temperature", "topK", "topP", "minP", "repeatPenalty", "presencePenalty", "frequencyPenalty", "maxGeneratedTokens", "stream", "responseCount", "responseContract", "retryPolicy"],
+      "properties": {
+        "seeds": { "const": [104729, 130363, 155921] },
+        "generationSeedListSha256": { "const": "350d921b7a2ed747911d1c32f9c1cb5c390d36c6b9ab769be7b0d1a79b105f84" },
+        "temperature": { "const": 0.7 },
+        "topK": { "const": 20 },
+        "topP": { "const": 0.8 },
+        "minP": { "const": 0 },
+        "repeatPenalty": { "const": 1 },
+        "presencePenalty": { "const": 0 },
+        "frequencyPenalty": { "const": 0 },
+        "maxGeneratedTokens": { "const": 256 },
+        "stream": { "const": true },
+        "responseCount": { "const": 1 },
+        "responseContract": { "const": "One JSON object containing answerClaims, evidenceIds, and finalAnswer; no grammar-constrained decoding and no model judge" },
+        "retryPolicy": { "const": "NO_RETRY" }
+      }
+    },
+    "retrievalPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Acceptance axis 3: exactly one allowed retrieval mode; every other mode is a closed, rejected definition.",
+      "required": ["allowedModes", "forbiddenModes", "modeDefinitions", "observedModeRule", "failClosedRule"],
+      "properties": {
+        "allowedModes": { "const": ["EMBEDDED_CONTEXT"] },
+        "forbiddenModes": { "const": ["RETRIEVAL_TOOL", "EXTERNAL_ENDPOINT", "MULTI_TURN_CONVERSATION", "AGENTIC_LOOP", "CROSS_RUN_CACHED_STATE", "OPERATOR_SUPPLIED_CORRECTION"] },
+        "modeDefinitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["EMBEDDED_CONTEXT", "RETRIEVAL_TOOL", "EXTERNAL_ENDPOINT", "MULTI_TURN_CONVERSATION", "AGENTIC_LOOP", "CROSS_RUN_CACHED_STATE", "OPERATOR_SUPPLIED_CORRECTION"],
+          "properties": {
+            "EMBEDDED_CONTEXT": { "const": "All edition-bound knowledge is embedded in the single scored request prompt; the model never initiates retrieval; exactly one response per predeclared generation seed." },
+            "RETRIEVAL_TOOL": { "const": "Rejected: the frozen model profiles have no tool, function, shell, filesystem, or network access." },
+            "EXTERNAL_ENDPOINT": { "const": "Rejected: isolated loopback-only servers with no egress route; no remote endpoint may serve knowledge." },
+            "MULTI_TURN_CONVERSATION": { "const": "Rejected: one response per predeclared generation seed; no repair conversation." },
+            "AGENTIC_LOOP": { "const": "Rejected: agent mode off; no planning loop, tool loop, or effect execution." },
+            "CROSS_RUN_CACHED_STATE": { "const": "Rejected: no cross-run memory; each run is stateless and independently derived." },
+            "OPERATOR_SUPPLIED_CORRECTION": { "const": "Rejected: a hidden retry or operator correction requires a new protocol edition and preserves the original run." }
+          }
+        },
+        "observedModeRule": { "const": "EACH_RUN_RECORD_MUST_NAME_EXACTLY_ONE_MODE_FROM_ALLOWED_MODES" },
+        "failClosedRule": { "const": "ANY_OBSERVED_FORBIDDEN_MODE_REJECTS_THE_RUN_RECORD_AS_EXECUTION_INVALID" }
+      }
+    },
+    "runPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Acceptance axis 4: per-run provenance derivation and the exact scheduled run arithmetic.",
+      "required": ["derivation", "scheduledCounts", "independenceRule", "blocking", "armOrder", "concurrentScoredRequests", "modelResidency", "serverSessionsPerProfile", "totalServerSessions", "warmup", "coldStartReporting", "steadyStateTiming"],
+      "properties": {
+        "derivation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["runId", "pairKey"],
+          "properties": {
+            "runId": { "const": "run:<sha256(protocolDigestSha256|armId|taskId|editionId|generationSeed)>" },
+            "pairKey": { "const": "pair:<sha256(protocolDigestSha256|taskId|editionId|generationSeed)>" }
+          }
+        },
+        "scheduledCounts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["arms", "taskIdsPerEdition", "knowledgeEditions", "generationSeeds", "totalScheduledRunRecords", "pairedExecutionsPerArmContrastPerEdition", "independentTaskUnitsPerArmContrastPerEdition", "pairedExecutionsPerStaticUpdatedContrastPerArm", "independentTaskUnitsPerStaticUpdatedContrastPerArm", "pairedExecutionsPerSingleMultiContrastPerArmEdition", "independentScenarioPairUnitsPerSingleMultiContrastPerArmEdition"],
+          "properties": {
+            "arms": { "const": 5 },
+            "taskIdsPerEdition": { "const": 32 },
+            "knowledgeEditions": { "const": 2 },
+            "generationSeeds": { "const": 3 },
+            "totalScheduledRunRecords": { "const": 960 },
+            "pairedExecutionsPerArmContrastPerEdition": { "const": 96 },
+            "independentTaskUnitsPerArmContrastPerEdition": { "const": 32 },
+            "pairedExecutionsPerStaticUpdatedContrastPerArm": { "const": 96 },
+            "independentTaskUnitsPerStaticUpdatedContrastPerArm": { "const": 32 },
+            "pairedExecutionsPerSingleMultiContrastPerArmEdition": { "const": 48 },
+            "independentScenarioPairUnitsPerSingleMultiContrastPerArmEdition": { "const": 16 }
+          }
+        },
+        "independenceRule": { "const": "Generation seeds are repeated observations, not independent task units. Seeds are averaged within taskId before arm or edition inference; hop inference averages within scenarioPairId." },
+        "blocking": { "const": "taskId x editionId x generationSeed" },
+        "armOrder": { "const": "DIGEST_DERIVED_BALANCED_CYCLIC_FROZEN_BEFORE_EXECUTION_NO_OPERATOR_REORDERING_AFTER_OUTPUTS_VISIBLE" },
+        "concurrentScoredRequests": { "const": 1 },
+        "modelResidency": { "const": "ONE_ISOLATED_SERVER_PER_PROFILE_PER_SEED_SESSION_PRELOADED" },
+        "serverSessionsPerProfile": { "const": 3 },
+        "totalServerSessions": { "const": 6 },
+        "warmup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["serverWarmup", "explicitHarnessWarmup", "warmupExcludedFromScoredMetrics"],
+          "properties": {
+            "serverWarmup": { "const": false },
+            "explicitHarnessWarmup": { "const": true },
+            "warmupExcludedFromScoredMetrics": { "const": true }
+          }
+        },
+        "coldStartReporting": { "const": "COLD_LOAD_WARMUP_AND_PEAK_RESIDENT_MEMORY_REPORTED_SEPARATELY_PER_SESSION_AND_NEVER_FOLDED_INTO_SCORED_EVIDENCE" },
+        "steadyStateTiming": { "const": "PRIMARY_REQUEST_EFFICIENCY_STARTS_IMMEDIATELY_BEFORE_REQUEST_BYTE_WRITE_AND_ENDS_AFTER_THE_FINAL_STREAMED_RESPONSE_BYTE" }
+      }
+    },
+    "provenanceContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "L3 BOUNDED_EXECUTION and L4 DETERMINISTIC_SCORING field contracts: single attempt, append-only, closed terminal/failure vocabularies.",
+      "required": ["attemptOrdinal", "appendOnly", "hiddenRetry", "terminalStatuses", "modelFailureCodes", "infrastructureInvalidationCodes", "failureCodeRule", "runRecordRequiredFields", "scoreRecordRequiredFields", "layerRejectCodes", "classificationRule", "preservationRule"],
+      "properties": {
+        "attemptOrdinal": { "const": 1 },
+        "appendOnly": { "const": true },
+        "hiddenRetry": { "const": false },
+        "terminalStatuses": { "const": ["COMPLETED", "FAILED", "INVALIDATED"] },
+        "modelFailureCodes": { "const": ["TIMEOUT", "OOM_WITHIN_ADMITTED_ENVELOPE", "NONZERO_RUNTIME_EXIT", "MALFORMED_STREAM", "OUTPUT_LIMIT_WITHOUT_VALID_FINAL", "INVALID_JSON", "REFUSAL_NO_VALID_ANSWER", "RUNTIME_ERROR"] },
+        "infrastructureInvalidationCodes": { "const": ["HOST_DRIFT", "CLOCK_INVALID", "RESOURCE_SAMPLER_GAP", "THERMAL_INVALID", "UNRELATED_PROCESS_INTERFERENCE", "HARNESS_SIGTRAP_EXIT_133", "DOCKER_ENOENT"] },
+        "failureCodeRule": { "const": "FAILURE_CODE_IS_NULL_EXACTLY_WHEN_TERMINAL_STATUS_IS_COMPLETED" },
+        "runRecordRequiredFields": {
+          "const": [
+            "runId", "attemptOrdinal", "scheduleOrdinal", "serverSessionId", "serverProcessId", "serverStartAuditUtc",
+            "requestStartMonotonicRawNs", "firstTokenMonotonicRawNsOrNull", "finalByteMonotonicRawNs", "clockResolutionNs",
+            "resourceSampleIntervalMs", "resourceSampleCount", "resourceSampleCoverage", "cpuTicksPerSecond",
+            "exitCodeOrNull", "terminalStatus", "failureCodeOrNull", "stdoutSha256", "stderrSha256",
+            "responseSha256OrNull", "promptTokensOrNull", "generatedTokensOrNull", "runtimeTimingRecordSha256OrNull"
+          ]
+        },
+        "scoreRecordRequiredFields": {
+          "const": [
+            "runId", "terminalStatus", "failureCodeOrNull", "scorerArtifactSha256", "goldRecordSha256",
+            "parsedResponseSha256OrNull", "taskSuccess", "atomicFactTruePositiveCount", "atomicFactFalsePositiveCount",
+            "atomicFactFalseNegativeCount", "evidenceTruePositiveCount", "evidenceFalsePositiveCount",
+            "evidenceFalseNegativeCount", "unsupportedClaimCount", "staleClaimCount", "predictedClaimCount",
+            "guidanceConstraintsPassed", "guidanceConstraintsTotal", "multiHopPathCorrectOrNull",
+            "criticalViolationCodes", "scoreRecordSha256"
+          ]
+        },
+        "layerRejectCodes": {
+          "const": { "L1": "COMPETENCE_LIMIT_OR_INTEGRITY_MISMATCH", "L2": "PAIRING_OR_INPUT_MISMATCH", "L3": "EXECUTION_INVALID", "L4": "SCORING_INVALID", "L5": "STATISTICS_INVALID_OR_CI_UNAVAILABLE", "L6": "CLAIM_GATE_DENIED" }
+        },
+        "classificationRule": { "const": "Infrastructure evidence is never a product verdict. A model failure is scored only when L1-L3 remained valid and the failure occurred inside the admitted model/runtime envelope." },
+        "preservationRule": { "const": "Original request, response if any, bounded stdout/stderr, exit status, timing, resource samples, failure code, and all digests remain append-only. Corrections use a new protocol edition and new run IDs." }
+      }
+    },
+    "timingAndResourceCollection": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Acceptance axis 5: timing/resource collection envelope, CPU-only, monotonic raw nanoseconds, no retry, single scored request at a time.",
+      "required": ["deviceMode", "primaryTimingClock", "auditClock", "wallClockAsLatency", "requestTimeoutSeconds", "protocolWallClockBudgetHours", "maxInputTokens", "maxGeneratedTokens", "maxConcurrentScoredRequests", "resourceSamplingIntervalMs", "minimumValidSampleCoverage", "cpuAccounting", "memoryAccounting", "ioAccounting", "gpuAccounting", "gpuZeroInvariant", "energyAccountingMode", "validityConditions", "requiredQualityMetricIds", "requiredEfficiencyMetricIds"],
+      "properties": {
+        "deviceMode": { "const": "CPU_ONLY" },
+        "primaryTimingClock": { "const": "CLOCK_MONOTONIC_RAW" },
+        "auditClock": { "const": "UTC_RFC3339_NANOS_AUDIT_ONLY_NEVER_USED_FOR_LATENCY" },
+        "wallClockAsLatency": { "const": false },
+        "requestTimeoutSeconds": { "const": 300 },
+        "protocolWallClockBudgetHours": { "const": 72 },
+        "maxInputTokens": { "const": 12000 },
+        "maxGeneratedTokens": { "const": 256 },
+        "maxConcurrentScoredRequests": { "const": 1 },
+        "resourceSamplingIntervalMs": { "const": 100 },
+        "minimumValidSampleCoverage": { "const": 0.99 },
+        "cpuAccounting": { "const": "Delta of /proc/<pid>/stat user and system ticks converted with the frozen _SC_CLK_TCK value, cross-checked against cgroup-v2 cpu.stat" },
+        "memoryAccounting": { "const": "100 ms samples from cgroup-v2 memory.current and /proc/<pid>/smaps_rollup plus cgroup memory.peak when available" },
+        "ioAccounting": { "const": "cgroup-v2 io.stat deltas for each request block" },
+        "gpuAccounting": { "const": "NOT_APPLICABLE_CPU_ONLY" },
+        "gpuZeroInvariant": { "const": true },
+        "energyAccountingMode": { "const": "RAPL_ALL_ARM_CONTINUOUS_OR_NOT_AVAILABLE_NEVER_USED_AS_CLAIM_GATE_WHEN_UNAVAILABLE" },
+        "validityConditions": {
+          "const": [
+            "Identical host-manifest digest and cgroup limits for every arm",
+            "No overlapping scored request, model acquisition, update, backup, build, or unrelated benchmark",
+            "No swap-in or major-fault anomaly beyond the predeclared host threshold",
+            "No thermal throttling or CPU-set drift",
+            "At least 99 percent resource-sample coverage"
+          ]
+        },
+        "requiredQualityMetricIds": { "const": ["task_success", "atomic_fact_f1", "evidence_attribution_f1", "unsupported_claim_rate", "stale_claim_rate", "guidance_adherence", "multi_hop_path_accuracy", "critical_violation_rate", "model_failure_rate"] },
+        "requiredEfficiencyMetricIds": { "const": ["time_to_first_token_ms", "time_to_final_ms", "prompt_tokens", "generated_tokens", "decode_tokens_per_second", "cpu_seconds", "peak_resident_bytes", "cold_load_ms", "energy_joules_optional"] }
+      }
+    },
+    "claimEligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Acceptance axes 2 and 6: substitution claim eligibility is DENY until quality AND efficiency thresholds both pass; stop/simplification rules can falsify or simplify the architecture.",
+      "required": ["gateId", "preExecutionStatus", "modelSubstitutionClaimBeforeExecution", "noEarlySuccess", "earlySuccessRule", "qualityThresholds", "efficiencyThresholds", "substitutionGateLogic", "architectureThresholds", "mandatoryReportIds", "missingResultStatus", "stopRuleIds", "allowedPassingWording", "forbiddenWording", "scopeStatement"],
+      "properties": {
+        "gateId": { "const": "L6-MODEL-SUBSTITUTION" },
+        "preExecutionStatus": { "const": "DENY_NOT_EXECUTED" },
+        "modelSubstitutionClaimBeforeExecution": { "const": false },
+        "noEarlySuccess": { "const": true },
+        "earlySuccessRule": { "const": "Interim evidence may stop for integrity, harm, competence, or futility, but can never pass a quality, efficiency, architecture, or substitution gate before the complete scheduled design is present." },
+        "qualityThresholds": {
+          "const": [
+            "Paired overall task_success delta lower 95 percent confidence bound is at least -0.03",
+            "Paired overall atomic_fact_f1 delta lower 95 percent confidence bound is at least -0.02",
+            "Paired multi-hop task_success delta lower 95 percent confidence bound is at least -0.05",
+            "Paired unsupported_claim_rate delta upper 95 percent confidence bound is at most +0.01",
+            "Paired stale_claim_rate delta upper 95 percent confidence bound is at most +0.01",
+            "ARM-SSG-05 absolute overall task_success lower 95 percent confidence bound is at least 0.80",
+            "ARM-SSG-05 absolute multi-hop task_success lower 95 percent confidence bound is at least 0.75",
+            "ARM-SSG-05 has zero critical violations and its exact model_failure_rate upper 95 percent confidence bound is at most 0.05"
+          ]
+        },
+        "efficiencyThresholds": {
+          "const": [
+            "ARM-SSG-05 versus ARM-LRF-01 paired time_to_final point ratio is at most 0.70 and upper 95 percent confidence bound is at most 0.80",
+            "ARM-SSG-05 versus ARM-LRF-01 paired cpu_seconds upper 95 percent ratio bound is at most 0.80",
+            "The median of the three small-to-large peak_resident_bytes session ratios is at most 0.65 and every session ratio is at most 0.75",
+            "Resource-sample coverage is at least 0.99 for both profiles and no efficiency validity condition failed"
+          ]
+        },
+        "substitutionGateLogic": { "const": "PASS_ONLY_IF_ALL_INTEGRITY_COMPLETION_CONFIDENCE_INTERVAL_QUALITY_EFFICIENCY_AND_SCOPE_GATES_PASS_SIMULTANEOUSLY_OTHERWISE_DENY" },
+        "architectureThresholds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["structuredRepresentation", "guidance", "knowledgeUpdates", "multiHop", "smallModel"],
+          "properties": {
+            "structuredRepresentation": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["comparisons", "retainOnlyIf", "failAction"],
+              "properties": {
+                "comparisons": { "const": ["ARM-LSF-03 minus ARM-LRF-01 at K1_UPDATED", "ARM-SSF-04 minus ARM-SRF-02 at K1_UPDATED"] },
+                "retainOnlyIf": { "const": "For at least one model size, task_success lower confidence bound is at least 0.00 and either atomic_fact_f1 lower confidence bound is at least +0.03 or time_to_final upper ratio bound is at most 0.90; neither model-size contrast may have task_success lower confidence bound below -0.02." },
+                "failAction": { "const": "SIMPLIFY_TO_RAW_FACTS" }
+              }
+            },
+            "guidance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["comparison", "retainOnlyIf", "failAction"],
+              "properties": {
+                "comparison": { "const": "ARM-SSG-05 minus ARM-SSF-04 at K1_UPDATED" },
+                "retainOnlyIf": { "const": "task_success lower confidence bound is at least 0.00 and guidance_adherence lower confidence bound is at least +0.05, with no increase in critical violations" },
+                "failAction": { "const": "SIMPLIFY_TO_FACTS_ONLY" }
+              }
+            },
+            "knowledgeUpdates": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["comparison", "retainOnlyIf", "failAction"],
+              "properties": {
+                "comparison": { "const": "K1_UPDATED minus K0_STATIC within ARM-SSG-05" },
+                "retainOnlyIf": { "const": "On update-sensitive tasks task_success lower confidence bound is at least +0.10 and stale_claim_rate decreases by at least 0.10 at the point estimate, while invariant-control task_success lower confidence bound is at least -0.02" },
+                "failAction": { "const": "FREEZE_K0_STATIC" }
+              }
+            },
+            "multiHop": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["comparison", "retainOnlyIf", "failAction"],
+              "properties": {
+                "comparison": { "const": "MULTI_HOP versus SINGLE_HOP within ARM-SSG-05 at K1_UPDATED" },
+                "retainOnlyIf": { "const": "The absolute multi-hop task_success lower confidence bound is at least 0.75 and the paired multi-minus-single task_success lower confidence bound is at least -0.10" },
+                "failAction": { "const": "LIMIT_TO_SINGLE_HOP" }
+              }
+            },
+            "smallModel": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["comparison", "retainAsSubstitutionCandidateOnlyIf", "failAction"],
+              "properties": {
+                "comparison": { "const": "ARM-SSG-05 versus ARM-LRF-01 at K1_UPDATED" },
+                "retainAsSubstitutionCandidateOnlyIf": { "const": "Every mandatory quality and efficiency threshold below passes" },
+                "failAction": { "const": "RETAIN_LARGE_PROFILE" }
+              }
+            }
+          }
+        },
+        "mandatoryReportIds": { "const": ["AB-MODEL-RAW", "AB-MODEL-STRUCTURED", "AB-STRUCTURED-VS-RAW-LARGE", "AB-STRUCTURED-VS-RAW-SMALL", "AB-FACTS-VS-GUIDANCE-SMALL", "AB-STATIC-VS-UPDATED", "AB-SINGLE-VS-MULTI-HOP"] },
+        "missingResultStatus": { "const": "PARTIAL_NO_CLAIM" },
+        "stopRuleIds": { "const": ["STOP-01-PROFILE-COMPETENCE", "STOP-02-INTEGRITY", "STOP-03-LEAKAGE", "STOP-04-CRITICAL-VIOLATION", "STOP-05-FAILURE-RATE", "STOP-06-RESOURCE-OR-TIME", "STOP-07-NO-EARLY-SUCCESS", "SIMPLIFY-STRUCTURE", "SIMPLIFY-GUIDANCE", "SIMPLIFY-UPDATES", "SIMPLIFY-MULTI-HOP", "FALSIFY-SUBSTITUTION"] },
+        "allowedPassingWording": { "const": "On the exact frozen fresh synthetic domains and profiles in this protocol, ARM-SSG-05 met the predeclared quality non-inferiority and efficiency thresholds relative to ARM-LRF-01." },
+        "forbiddenWording": {
+          "const": [
+            "The small model replaces the large model",
+            "The selected model is generally better, production-ready, safer, or universally more efficient",
+            "PanSphaira proves model substitution outside the tested frozen synthetic domains"
+          ]
+        },
+        "scopeStatement": { "const": "Any eventual conclusion is limited to the exact frozen fresh synthetic domains, tasks, Knowledge editions, arms, model bytes, runtime bytes, host manifest, and run records admitted by this protocol." }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Worker receipt binding: what was written, what was not done, and the required verification commands.",
+      "required": ["repository", "branch", "baseCommit", "taskId", "changedPaths", "allowlistCompliant", "requiredVerificationCommands", "actionsNotPerformed", "currentEvidenceVerdict"],
+      "properties": {
+        "repository": { "const": "JoFe2/PANSPHAIRA" },
+        "branch": { "const": "conveyor/pansphaira-285" },
+        "baseCommit": { "$ref": "#/$defs/gitSha1" },
+        "taskId": { "const": "PSAI285-L1-BENCHMARK-CONTRACT-MANIFEST" },
+        "changedPaths": {
+          "const": [
+            "docs/benchmarks/cks-05-protocol-v1.md",
+            "schemas/cks-05-benchmark-manifest-v1.schema.json",
+            "tests/fixtures/cks-05/benchmark-manifest-valid-v1.json",
+            "tests/cks-05-benchmark-contract.test.mjs"
+          ]
+        },
+        "allowlistCompliant": { "const": true },
+        "requiredVerificationCommands": {
+          "const": ["node --test tests/cks-05-benchmark-contract.test.mjs", "git diff --check origin/main...HEAD"]
+        },
+        "actionsNotPerformed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["modelInvocations", "servicesStartedOrCalled", "credentialsUsed", "benchmarkRuns", "harnessSourceModified", "push", "merge", "release"],
+          "properties": {
+            "modelInvocations": { "const": 0 },
+            "servicesStartedOrCalled": { "const": 0 },
+            "credentialsUsed": { "const": false },
+            "benchmarkRuns": { "const": 0 },
+            "harnessSourceModified": { "const": false },
+            "push": { "const": false },
+            "merge": { "const": false },
+            "release": { "const": false }
+          }
+        },
+        "currentEvidenceVerdict": { "const": "MANIFEST_DEFINED_EXECUTION_NOT_AUTHORIZED_NO_BENCHMARK_RESULT_NO_MODEL_SUBSTITUTION_CLAIM" }
+      }
+    }
+  }
+}
