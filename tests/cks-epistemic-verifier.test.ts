@@ -5,7 +5,6 @@ import Ajv2020 from "ajv/dist/2020.js";
 import {
   CKS_DETERMINISTIC_VERIFIER_ID_V1,
   CKS_SEMANTIC_VERIFIER_ID_V1,
-  competenceResponseDigestV1,
   validateCksEpistemicVerificationCaseV1,
   validateCksVerificationReceiptV1,
   verificationCaseDigestV1,
@@ -13,7 +12,7 @@ import {
   verifyCksEpistemicCaseV1,
   type CksEpistemicVerificationCaseV1,
 } from "../packages/contracts/src/cks-epistemic-verifier.js";
-import { evidencePackDigestV1, knowledgeQueryRequestDigestV1 } from "../packages/contracts/src/cks-competence-runtime.js";
+import { competenceResponseDigestV1, evidencePackDigestV1, knowledgeQueryRequestDigestV1 } from "../packages/contracts/src/cks-competence-runtime.js";
 
 const rawFixture = JSON.parse(readFileSync("tests/fixtures/cks-04/verification-cases-v1.json", "utf8")) as {
   schemaVersion: string;
@@ -26,7 +25,7 @@ function materialize(raw: CksEpistemicVerificationCaseV1): CksEpistemicVerificat
   const value = structuredClone(raw) as any;
   for (const request of value.requests) request.requestDigest = knowledgeQueryRequestDigestV1(request);
   for (const pack of value.evidencePacks) {
-    const request = value.requests.find((candidate) => candidate.requestId === pack.request.requestId);
+    const request = value.requests.find((candidate: any) => candidate.requestId === pack.request.requestId);
     assert.ok(request);
     pack.request.requestDigest = request.requestDigest;
     pack.packDigest = evidencePackDigestV1(pack);
@@ -36,9 +35,9 @@ function materialize(raw: CksEpistemicVerificationCaseV1): CksEpistemicVerificat
   return value;
 }
 
-const positive = (): CksEpistemicVerificationCaseV1 => materialize(rawFixture.cases[0]!);
+const positive = (): any => materialize(rawFixture.cases[0]!);
 
-function rehash(value: CksEpistemicVerificationCaseV1): CksEpistemicVerificationCaseV1 {
+function rehash(value: any): CksEpistemicVerificationCaseV1 {
   value.response.responseDigest = competenceResponseDigestV1(value.response);
   for (const pack of value.evidencePacks) pack.packDigest = evidencePackDigestV1(pack);
   value.caseDigest = verificationCaseDigestV1(value);
@@ -122,6 +121,10 @@ test("unreturned Evidence, applicability drift, and unknown Preconditions fail c
   assert.ok(scopeResult.reasonCodes.includes("APPLICABILITY_MISMATCH"));
 
   const unknownPrecondition = positive();
+  unknownPrecondition.expected.state = "INSUFFICIENT_EVIDENCE";
+  unknownPrecondition.response.state = "INSUFFICIENT_EVIDENCE";
+  unknownPrecondition.response.answer = null;
+  unknownPrecondition.response.missingKnowledge = [{ needId: "need:temperature", reasonCode: "MATERIAL_FACT_MISSING" }];
   unknownPrecondition.response.preconditionChecks[0]!.result = "UNKNOWN";
   rehash(unknownPrecondition);
   const preconditionResult = verifyCksEpistemicCaseV1(unknownPrecondition);

@@ -246,8 +246,8 @@ export function validateCksVerificationReceiptV1(value: unknown): value is CksVe
   if (!text(value.caseId, 192) || !text(value.caseVersion, 64) || !digest(value.caseDigest) || ![...EPISTEMIC_VERIFICATION_OUTCOMES_V1].includes(value.outcome as EpistemicVerificationOutcomeV1) || !digest(value.receiptDigest) || value.actionAuthority !== "NONE") return false;
   if (!exact(value.task, ["taskId", "taskDigest", "scopeDigest"]) || !text(value.task.taskId, 192) || !digest(value.task.taskDigest) || !digest(value.task.scopeDigest) || !validBindings(value.bindings)) return false;
   if (!Array.isArray(value.reasonCodes) || !uniqueStrings(value.reasonCodes, (item) => EPISTEMIC_VERIFICATION_REASON_CODES_V1.includes(item as EpistemicVerificationReasonCodeV1), 16)) return false;
-  if (!Array.isArray(value.checks) || value.checks.length === 0 || value.checks.length > 32 || !value.checks.every((check) => exact(check, ["checkId", "passed", "reasonCode"]) && text(check.checkId, 96) && typeof check.passed === "boolean" && (check.reasonCode === null || EPISTEMIC_VERIFICATION_REASON_CODES_V1.includes(check.reasonCode)))) return false;
-  if (!Array.isArray(value.claimCoverage) || value.claimCoverage.length > 32 || !value.claimCoverage.every((claim) => exact(claim, ["claimId", "kind", "version", "digest", "evidenceIds", "covered"]) && text(claim.claimId, 192) && ["FACT", "RULE", "PROCEDURE", "PARAMETER"].includes(claim.kind) && text(claim.version, 64) && digest(claim.digest) && uniqueStrings(claim.evidenceIds, (item) => text(item, 192), 32) && typeof claim.covered === "boolean"))) return false;
+  if (!Array.isArray(value.checks) || value.checks.length === 0 || value.checks.length > 32 || !value.checks.every((check) => exact(check, ["checkId", "passed", "reasonCode"]) && text(check.checkId, 96) && typeof check.passed === "boolean" && (check.reasonCode === null || EPISTEMIC_VERIFICATION_REASON_CODES_V1.includes(check.reasonCode as EpistemicVerificationReasonCodeV1)))) return false;
+  if (!Array.isArray(value.claimCoverage) || value.claimCoverage.length > 32 || !value.claimCoverage.every((claim) => exact(claim, ["claimId", "kind", "version", "digest", "evidenceIds", "covered"]) && text(claim.claimId, 192) && ["FACT", "RULE", "PROCEDURE", "PARAMETER"].includes(claim.kind as string) && text(claim.version, 64) && digest(claim.digest) && uniqueStrings(claim.evidenceIds, (item) => text(item, 192), 32) && typeof claim.covered === "boolean")) return false;
   if (!Array.isArray(value.procedureCoverage) || value.procedureCoverage.length > 32 || !value.procedureCoverage.every((step) => exact(step, ["stepId", "order", "claimId", "evidenceIds", "covered"]) && text(step.stepId, 192) && safeInteger(step.order, 0, 1024) && text(step.claimId, 192) && uniqueStrings(step.evidenceIds, (item) => text(item, 192), 32) && typeof step.covered === "boolean")) return false;
   return verificationReceiptDigestV1(value) === value.receiptDigest;
 }
@@ -372,16 +372,19 @@ export function verifyCksEpistemicCaseV1(input: unknown): CksEpistemicVerificati
     && [...responseSteps.keys()].every((id) => value.expected.procedureSteps.some((step) => step.stepId === id));
   add("MATERIAL_PROCEDURE_COVERAGE", allProceduresCovered, "PROCEDURE_COVERAGE_INCOMPLETE");
 
-  const conflicts = value.evidencePacks.some((pack) => pack.status === "CONFLICT" || pack.conflicts.length > 0 || pack.missingKnowledge.length > 0);
+  const conflicts = value.evidencePacks.some((pack) => pack.status === "CONFLICT" || pack.conflicts.length > 0);
   const missingKnowledge = value.evidencePacks.some((pack) => pack.status === "NEEDS_CONTEXT" || pack.status === "NO_MATCH" || pack.status === "DENIED" || pack.missingKnowledge.length > 0);
   if (conflicts) addReason(reasons, "KNOWLEDGE_CONFLICT");
   else if (missingKnowledge) addReason(reasons, "MISSING_KNOWLEDGE");
   add("KNOWLEDGE_STATE", !conflicts && !missingKnowledge, conflicts ? "KNOWLEDGE_CONFLICT" : "MISSING_KNOWLEDGE");
 
+  const failedChecks = checks.filter((check) => !check.passed);
+  const bindingCheckFailure = failedChecks.some((check) => check.reasonCode === "REQUEST_BINDING_MISMATCH" || check.reasonCode === "BINDING_MISMATCH");
+  const epistemicCheckFailure = failedChecks.some((check) => check.reasonCode !== "REQUEST_BINDING_MISMATCH" && check.reasonCode !== "BINDING_MISMATCH");
   let outcome: EpistemicVerificationOutcomeV1;
-  if (!packsValid) outcome = "DENIED";
+  if (!packsValid || bindingCheckFailure) outcome = "DENIED";
   else if (conflicts) outcome = "ABSTAIN";
-  else if (missingKnowledge || !allClaimsCovered || !allProceduresCovered || !preconditionsSatisfied || matchedExclusion) outcome = value.expected.state === "COMPETENCE_LIMIT" ? "ESCALATE" : "ABSTAIN";
+  else if (epistemicCheckFailure || missingKnowledge || !allClaimsCovered || !allProceduresCovered || !preconditionsSatisfied || matchedExclusion) outcome = value.expected.state === "COMPETENCE_LIMIT" ? "ESCALATE" : "ABSTAIN";
   else if (value.response.state !== value.expected.state) { addReason(reasons, "RESPONSE_STATE_MISMATCH"); outcome = "DENIED"; }
   else outcome = "PASS";
 
