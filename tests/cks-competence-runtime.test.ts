@@ -278,6 +278,12 @@ test("CKS-04 response validation represents all six states and fails closed on m
   };
   unsupportedProposal.responseDigest = competenceResponseDigestV1(unsupportedProposal);
   assert.equal(validateCompetenceResponseV1(unsupportedProposal), false);
+  const proposalWithMissingKnowledge = {
+    ...response("GOVERNED_ACTION_PROPOSAL"),
+    missingKnowledge: [{ needId: "need-a", reasonCode: "MATERIAL_FACT_MISSING" as const }],
+  };
+  proposalWithMissingKnowledge.responseDigest = competenceResponseDigestV1(proposalWithMissingKnowledge);
+  assert.equal(validateCompetenceResponseV1(proposalWithMissingKnowledge), false);
   const unsupportedAnswer = {
     ...response("ANSWER_SUPPORTED"),
     missingKnowledge: [{ needId: "need-a", reasonCode: "MATERIAL_FACT_MISSING" as const }],
