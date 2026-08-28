@@ -223,6 +223,7 @@ for candidate in root.rglob("*"):
         or relative.startswith(".git/")
         or relative.startswith("node_modules/")
         or relative.startswith("dist/")
+        or relative.startswith(".verify-probes/")
         or "/__pycache__/" in f"/{relative}"
         or relative.endswith(".pyc")
     ):
