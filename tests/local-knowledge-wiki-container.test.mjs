@@ -123,10 +123,24 @@ test("PSAI107 default-off offline container profile proves positive and fail-clo
       const containerId = inspected.stdout.trim();
       const inspect = docker(["inspect", "-f", "{{.HostConfig.NetworkMode}} {{json .Mounts}}", containerId]);
       assertOk(inspect, "container isolation inspection");
-      assert.match(inspect.stdout, /^none /);
-      assert.match(inspect.stdout, new RegExp(canonicalVolume));
-      assert.match(inspect.stdout, new RegExp(indexVolume));
-      assert.match(inspect.stdout, /"RW":false/);
+      const inspectOutput = inspect.stdout.trim();
+      assert.ok(inspectOutput.startsWith("none "), "container must have no network namespace");
+      const mounts = JSON.parse(inspectOutput.slice("none ".length));
+      const mountAt = (destination) => mounts.find((mount) => mount.Destination === destination);
+      assert.deepEqual(mountAt("/mnt/source"), {
+        Type: "bind",
+        Source: sourceMount,
+        Destination: "/mnt/source",
+        Mode: "ro",
+        RW: false,
+        Propagation: "rprivate",
+      }, "the dump must be the explicit read-only bind mount");
+      assert.equal(mountAt("/var/lib/local-knowledge-wiki/canonical")?.Type, "volume");
+      assert.equal(mountAt("/var/lib/local-knowledge-wiki/canonical")?.Name, canonicalVolume);
+      assert.equal(mountAt("/var/lib/local-knowledge-wiki/canonical")?.RW, true);
+      assert.equal(mountAt("/var/lib/local-knowledge-wiki/index")?.Type, "volume");
+      assert.equal(mountAt("/var/lib/local-knowledge-wiki/index")?.Name, indexVolume);
+      assert.equal(mountAt("/var/lib/local-knowledge-wiki/index")?.RW, true);
 
       const dnsHttp = compose([
         "exec", "-T", "local-knowledge-wiki", "node", "-e",
