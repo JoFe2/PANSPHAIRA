@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "chimpmaera.cks05/public-readback-fixture/v1",
+  "fixtureId": "CKS05-PUBLIC-READBACK-V1",
+  "purpose": "Deterministic replay of the admitted CKS-05 evidence chain into a public-safe report draft.",
+  "evidenceChain": {
+    "l1Manifest": {
+      "path": "tests/fixtures/cks-05/benchmark-manifest-valid-v1.json",
+      "manifestId": "CKS-05-BENCHMARK-MANIFEST-V1-PSAI285-L1-20260828"
+    },
+    "l2HiddenRunTemplate": {
+      "path": "verification/cks-05-hidden-run-manifest-template-v1.json",
+      "templateId": "CKS-05-HIDDEN-RUN-MANIFEST-TEMPLATE-V1"
+    },
+    "l3AblationMatrix": {
+      "path": "tests/fixtures/cks-05/ablation-matrix-v1.json",
+      "matrixId": "CKS05-ABLATION-MATRIX-V1"
+    },
+    "l3ParityFabric": {
+      "path": "tests/fixtures/cks-05/raw-fabric-parity-v1.json",
+      "fabricId": "CKS05-RAW-FABRIC-PARITY-V1"
+    },
+    "l4ExecutorFixture": {
+      "path": "tests/fixtures/cks-05/executor-golden-v1.json",
+      "fixtureId": "CKS05-EXECUTOR-GOLDEN-V1"
+    },
+    "l2PublicCatalog": {
+      "path": "tests/fixtures/cks-05/public-task-catalog-v1.json",
+      "catalogId": "CKS05-PUBLIC-TASK-CATALOG-V1"
+    },
+    "decisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+      "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a"
+    }
+  },
+  "reportTemplatePath": "docs/benchmarks/cks-05-falsification-report-template-v1.md",
+  "publicSafeContract": {
+    "rawTaskBytesPublished": false,
+    "rawKnowledgeSeedBytesPublished": false,
+    "rawRenderingBytesPublished": false,
+    "sealedDigestsOnly": true,
+    "preserveRunIdsAndFailureCodes": true,
+    "substitutionClaimRequiresQualityAndEfficiency": true
+  },
+  "requiredComparisons": [
+    "AB-MODEL-RAW",
+    "AB-MODEL-STRUCTURED",
+    "AB-STRUCTURED-VS-RAW-LARGE",
+    "AB-STRUCTURED-VS-RAW-SMALL",
+    "AB-FACTS-VS-GUIDANCE-SMALL",
+    "AB-STATIC-VS-UPDATED",
+    "AB-SINGLE-VS-MULTI-HOP"
+  ],
+  "reportId": "CKS05-PUBLIC-FALSIFICATION-READBACK-V1"
+}
