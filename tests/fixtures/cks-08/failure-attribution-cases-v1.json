@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "cks-08-failure-attribution-cases-v1",
+  "scopeClass": "LOCAL_SYNTHETIC_FIXTURE",
+  "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+  "contract": {
+    "evaluatorSchema": "chimpmaera.knowledge/failure-attribution-evaluator/v1",
+    "maximumCauses": 3,
+    "certaintyValues": ["CONFIRMED", "SUPPORTED", "POSSIBLE", "UNKNOWN"],
+    "causalModes": ["NOT_APPLICABLE", "SINGLE", "MULTI_CONTRIBUTING", "MULTI_JOINT", "ALTERNATIVES_UNRESOLVED", "UNKNOWN"]
+  },
+  "cases": [
+    {
+      "name": "knowledge-stale",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "KNOWLEDGE", "subtype": "STALE", "certainty": "CONFIRMED", "witness": { "kind": "KNOWLEDGE_PROFILE", "dimension": "FRESHNESS" } }
+    },
+    {
+      "name": "search-relevant-not-returned",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "SEARCH", "subtype": "RELEVANT_NOT_RETURNED", "certainty": "SUPPORTED", "witness": { "kind": "SEARCH_ORACLE", "dimension": "NONE" } }
+    },
+    {
+      "name": "decision-unsupported-selection",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "DECISION", "subtype": "UNSUPPORTED_SELECTION", "certainty": "SUPPORTED", "witness": { "kind": "DECISION_CHECK", "dimension": "NONE", "predicate": "UNSUPPORTED_SELECTION" } }
+    },
+    {
+      "name": "decision-supported-option-ignored",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "DECISION", "subtype": "SUPPORTED_OPTION_IGNORED", "certainty": "SUPPORTED", "witness": { "kind": "DECISION_CHECK", "dimension": "NONE", "predicate": "SUPPORTED_OPTION_IGNORED" } }
+    },
+    {
+      "name": "execution-action-failed",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "EXECUTION", "subtype": "ACTION_FAILED", "certainty": "CONFIRMED", "witness": { "kind": "EXECUTION_RECEIPT", "dimension": "NONE" } }
+    },
+    {
+      "name": "multi-contributing-execution-external",
+      "outcomeClass": "PARTIAL",
+      "causalMode": "MULTI_CONTRIBUTING",
+      "causes": [
+        { "class": "EXECUTION", "subtype": "ACTION_FAILED", "certainty": "SUPPORTED", "witness": { "kind": "EXECUTION_RECEIPT", "dimension": "NONE" } },
+        { "class": "EXTERNAL", "subtype": "DEPENDENCY_UNAVAILABLE", "certainty": "SUPPORTED", "witness": { "kind": "EXTERNAL_RECEIPT", "dimension": "NONE" } }
+      ]
+    },
+    {
+      "name": "alternatives-unresolved",
+      "outcomeClass": "FAILED",
+      "causalMode": "ALTERNATIVES_UNRESOLVED",
+      "causes": [
+        { "class": "EXECUTION", "subtype": "ACTION_FAILED", "certainty": "POSSIBLE", "witness": { "kind": "EXECUTION_RECEIPT", "dimension": "NONE" } },
+        { "class": "EXTERNAL", "subtype": "DEPENDENCY_UNAVAILABLE", "certainty": "POSSIBLE", "witness": { "kind": "EXTERNAL_RECEIPT", "dimension": "NONE" } }
+      ]
+    },
+    {
+      "name": "unknown-outcome",
+      "outcomeClass": "UNKNOWN",
+      "causalMode": "UNKNOWN",
+      "cause": { "class": "UNKNOWN", "subtype": "INSUFFICIENT_CAUSAL_EVIDENCE", "certainty": "UNKNOWN", "witness": { "kind": "UNKNOWN", "dimension": "NONE" } }
+    }
+  ],
+  "requiredNegativeCases": [
+    "missing-lineage",
+    "late-lineage",
+    "replayed-lineage",
+    "cross-scope-lineage",
+    "tampered-lineage",
+    "missing-causal-witness",
+    "knowledge-causality-from-contribution-only",
+    "possible-cause-labelled-single",
+    "fourth-cause"
+  ]
+}
