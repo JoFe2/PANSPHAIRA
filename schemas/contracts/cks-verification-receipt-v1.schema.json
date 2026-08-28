@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-verification-receipt-v1.schema.json",
+  "title": "PANSPHAIRA CKS deterministic epistemic verification receipt v1",
+  "description": "Closed receipt for deterministic claim-to-evidence verification. The semantic verifier is identified for separate review only and cannot override deterministic failure.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "verifier", "semanticVerifier", "caseId", "caseVersion", "caseDigest", "task", "bindings", "outcome", "reasonCodes", "checks", "claimCoverage", "procedureCoverage", "actionAuthority", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks/epistemic-verification/v1" },
+    "verifier": { "$ref": "#/$defs/verifier" },
+    "semanticVerifier": { "$ref": "#/$defs/semanticVerifier" },
+    "caseId": { "$ref": "#/$defs/text192" },
+    "caseVersion": { "$ref": "#/$defs/text64" },
+    "caseDigest": { "$ref": "#/$defs/digest" },
+    "task": { "$ref": "#/$defs/task" },
+    "bindings": { "$ref": "#/$defs/bindings" },
+    "outcome": { "enum": ["PASS", "ABSTAIN", "ESCALATE", "DENIED"] },
+    "reasonCodes": { "type": "array", "maxItems": 16, "uniqueItems": true, "items": { "enum": ["MALFORMED_INPUT", "BINDING_MISMATCH", "REQUEST_BINDING_MISMATCH", "SCOPE_MISMATCH", "APPLICABILITY_MISMATCH", "PRECONDITION_UNSATISFIED", "PRECONDITION_UNKNOWN", "EXCLUSION_MATCHED", "INVALID_KNOWLEDGE_STATE", "KNOWLEDGE_VERSION_DRIFT", "KNOWLEDGE_CONFLICT", "MISSING_KNOWLEDGE", "EVIDENCE_COVERAGE_INCOMPLETE", "UNRETURNED_EVIDENCE_ID", "CLAIM_VERSION_OR_DIGEST_MISMATCH", "PROCEDURE_COVERAGE_INCOMPLETE", "RESPONSE_STATE_MISMATCH", "SEMANTIC_VERIFIER_NOT_EVALUATED"] } },
+    "checks": { "type": "array", "minItems": 1, "maxItems": 32, "items": { "$ref": "#/$defs/check" } },
+    "claimCoverage": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/claimCoverage" } },
+    "procedureCoverage": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/procedureCoverage" } },
+    "actionAuthority": { "const": "NONE" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "text64": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "text96": { "type": "string", "minLength": 1, "maxLength": 96 },
+    "text192": { "type": "string", "minLength": 1, "maxLength": 192 },
+    "idPart": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": { "id": { "$ref": "#/$defs/text192" }, "version": { "$ref": "#/$defs/text64" }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "bindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["model", "quantization", "runtime", "prompt", "tool", "knowledge"],
+      "properties": {
+        "model": { "$ref": "#/$defs/idPart" },
+        "quantization": { "$ref": "#/$defs/idPart" },
+        "runtime": { "$ref": "#/$defs/idPart" },
+        "prompt": { "$ref": "#/$defs/idPart" },
+        "tool": { "$ref": "#/$defs/idPart" },
+        "knowledge": {
+          "type": "object", "additionalProperties": false,
+          "required": ["editionId", "version", "digest", "contractVersion"],
+          "properties": { "editionId": { "$ref": "#/$defs/text192" }, "version": { "$ref": "#/$defs/text64" }, "digest": { "$ref": "#/$defs/digest" }, "contractVersion": { "$ref": "#/$defs/text192" } }
+        }
+      }
+    },
+    "verifier": {
+      "type": "object", "additionalProperties": false,
+      "required": ["verifierId", "protocolId", "version", "implementationClass", "artifactDigestBinding"],
+      "properties": {
+        "verifierId": { "const": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER" },
+        "protocolId": { "const": "pansphaira.cks/deterministic-epistemic-verifier/v1" },
+        "version": { "const": "1" },
+        "implementationClass": { "const": "TRUSTED_NON_MODEL_CLOSED_SCHEMA_AND_BINDING_CHECKER" },
+        "artifactDigestBinding": { "const": "RUN_MANIFEST_REQUIRED" }
+      }
+    },
+    "semanticVerifier": {
+      "type": "object", "additionalProperties": false,
+      "required": ["verifierId", "rubricId", "version", "implementationClass", "status", "trusted", "mayOverrideDeterministicFailure"],
+      "properties": {
+        "verifierId": { "const": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER" },
+        "rubricId": { "const": "PSAI284-SEMANTIC-CLAIM-APPLICATION-RUBRIC-V1" },
+        "version": { "const": "1" },
+        "implementationClass": { "const": "BLINDED_HUMAN_REVIEW_SEPARATE_FROM_MODEL_AND_DETERMINISTIC_VERIFIER" },
+        "status": { "const": "NOT_IMPLEMENTED_NOT_TRUSTED" },
+        "trusted": { "const": false },
+        "mayOverrideDeterministicFailure": { "const": false }
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["taskId", "taskDigest", "scopeDigest"],
+      "properties": { "taskId": { "$ref": "#/$defs/text192" }, "taskDigest": { "$ref": "#/$defs/digest" }, "scopeDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "check": {
+      "type": "object", "additionalProperties": false,
+      "required": ["checkId", "passed", "reasonCode"],
+      "properties": { "checkId": { "$ref": "#/$defs/text96" }, "passed": { "type": "boolean" }, "reasonCode": { "type": ["string", "null"], "enum": ["MALFORMED_INPUT", "BINDING_MISMATCH", "REQUEST_BINDING_MISMATCH", "SCOPE_MISMATCH", "APPLICABILITY_MISMATCH", "PRECONDITION_UNSATISFIED", "PRECONDITION_UNKNOWN", "EXCLUSION_MATCHED", "INVALID_KNOWLEDGE_STATE", "KNOWLEDGE_VERSION_DRIFT", "KNOWLEDGE_CONFLICT", "MISSING_KNOWLEDGE", "EVIDENCE_COVERAGE_INCOMPLETE", "UNRETURNED_EVIDENCE_ID", "CLAIM_VERSION_OR_DIGEST_MISMATCH", "PROCEDURE_COVERAGE_INCOMPLETE", "RESPONSE_STATE_MISMATCH", "SEMANTIC_VERIFIER_NOT_EVALUATED", null] } }
+    },
+    "claimCoverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["claimId", "kind", "version", "digest", "evidenceIds", "covered"],
+      "properties": { "claimId": { "$ref": "#/$defs/text192" }, "kind": { "enum": ["FACT", "RULE", "PROCEDURE", "PARAMETER"] }, "version": { "$ref": "#/$defs/text64" }, "digest": { "$ref": "#/$defs/digest" }, "evidenceIds": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "#/$defs/text192" } }, "covered": { "type": "boolean" } }
+    },
+    "procedureCoverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["stepId", "order", "claimId", "evidenceIds", "covered"],
+      "properties": { "stepId": { "$ref": "#/$defs/text192" }, "order": { "type": "integer", "minimum": 0, "maximum": 1024 }, "claimId": { "$ref": "#/$defs/text192" }, "evidenceIds": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "#/$defs/text192" } }, "covered": { "type": "boolean" } }
+    }
+  }
+}
