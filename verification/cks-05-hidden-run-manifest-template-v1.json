@@ -1,0 +1,740 @@
+{
+  "templateId": "CKS-05-HIDDEN-RUN-MANIFEST-TEMPLATE-V1",
+  "templateVersion": "v1",
+  "taskId": "PSAI285-L2-FRESH-HIDDEN-TASK-RUNNER",
+  "operatingModel": {
+    "version": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false
+  },
+  "protocol": {
+    "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+    "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd",
+    "decisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+      "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a"
+    }
+  },
+  "l1Manifest": {
+    "path": "tests/fixtures/cks-05/benchmark-manifest-valid-v1.json",
+    "manifestId": "CKS-05-BENCHMARK-MANIFEST-V1-PSAI285-L1-20260828"
+  },
+  "executionMode": {
+    "mode": "EPHEMERAL_IN_MEMORY",
+    "persistedRunPlan": false,
+    "modelInvocation": false,
+    "executionAuthorized": false,
+    "writeRunArtifacts": false
+  },
+  "taskPartition": {
+    "partitionId": "CKS05-FRESH-HIDDEN-PARTITION-V1",
+    "freshnessStatus": "FRESH_SYNTHETIC_HIDDEN",
+    "sealedDigestsOnly": true,
+    "taskCount": 32,
+    "tasks": [
+      {
+        "taskId": "TASK-AST-01-01",
+        "scenarioPairId": "PAIR-AST-01",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "54c87c99944b447863accc90dd77fd9d56fe0d0bb94c2c19bee80d8bd1e60cf1",
+        "goldRecordSha256": {
+          "K0_STATIC": "7693feb664ce3c3c79658c8c546ba090615b40c5220afcab211f1783eb9157fa",
+          "K1_UPDATED": "b14062d82fa3d532d24d9f29674d07efb72b25ea1c6927eff031ac141b22e3b7"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "4420a98f22281d0ebea3978934ad121c46637333f659c975e4725ea4ef0e64f3",
+          "K1_UPDATED": "e0e9030d6fbaa8fd2b456b8f781e7f8d5f2376db5691ea44410098e14d8faf23"
+        }
+      },
+      {
+        "taskId": "TASK-AST-01-02",
+        "scenarioPairId": "PAIR-AST-01",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "9d914911f104af000fc4923c42bcada27af8dc6a2feaf9b67e61b1b33501b1c2",
+        "goldRecordSha256": {
+          "K0_STATIC": "f36cf9d9b7bb1eb12b0f5a66fc6b66d1ec6c6e4c1c8c692e0c52d1efbda47f9b",
+          "K1_UPDATED": "3273fbfd983efacb6c83d40ce5c6fa55f854cbad63270b2dcca3ce5b4596fe7f"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "13011523cfc980424ee76279c73ceb463a014e04044053e153482e5e6d0632bd",
+          "K1_UPDATED": "09f87eae49e747ca647a2a92693f40592083d28a165b334321cd9c1c4166d044"
+        }
+      },
+      {
+        "taskId": "TASK-AST-02-01",
+        "scenarioPairId": "PAIR-AST-02",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "afb824b609bebcd1d7aa15e2f64a85b087016a1c07eabfa800c9f5770ef59575",
+        "goldRecordSha256": {
+          "K0_STATIC": "d7015f8adcd63c903c3661580a7cb8173ee671ba7f7664addc2352452480ab03",
+          "K1_UPDATED": "d7015f8adcd63c903c3661580a7cb8173ee671ba7f7664addc2352452480ab03"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "6057341684ee37e58cea7161ab60f255f37830b971a9a4258fa6fbf6b4963dd3",
+          "K1_UPDATED": "6057341684ee37e58cea7161ab60f255f37830b971a9a4258fa6fbf6b4963dd3"
+        }
+      },
+      {
+        "taskId": "TASK-AST-02-02",
+        "scenarioPairId": "PAIR-AST-02",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "e321673f9cebcf26e765c67986f1a5c40abb676fbf41d738a2a41d56b9bece2e",
+        "goldRecordSha256": {
+          "K0_STATIC": "81339a21b7ce334950237fb5a23e29b4470cbc7a2f205ad0e1f56184fd11e4f8",
+          "K1_UPDATED": "81339a21b7ce334950237fb5a23e29b4470cbc7a2f205ad0e1f56184fd11e4f8"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "a32993e40d7cc819b241338cb624dceeeabcdc1924d3998a8ee999b69f77a9f9",
+          "K1_UPDATED": "a32993e40d7cc819b241338cb624dceeeabcdc1924d3998a8ee999b69f77a9f9"
+        }
+      },
+      {
+        "taskId": "TASK-AST-03-01",
+        "scenarioPairId": "PAIR-AST-03",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "98a11c4151afc473cf1373740cfbc68aafeae0bac05fdcbfe2aadf15f730536d",
+        "goldRecordSha256": {
+          "K0_STATIC": "5e708372da886993701e68f27f1ee7ac77fbe0d99da2c74b281c61ae33c8e68e",
+          "K1_UPDATED": "988955a0e5281ec11933131c4afb22aeaea0d292138413bc42fb61f397872eac"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "0ca7cd2c6e94499327c8ea6f6014a18b187c72873b6b98229e619a1e94b9236b",
+          "K1_UPDATED": "259a594c2b97564632cd46e7fdd557842cf514da1f673d3eb44736116618c73c"
+        }
+      },
+      {
+        "taskId": "TASK-AST-03-02",
+        "scenarioPairId": "PAIR-AST-03",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "e90a6db29eaae9406a72b046507d372f6f966f8c84086b5d02195bd2720bb40e",
+        "goldRecordSha256": {
+          "K0_STATIC": "4078a9c35629007e55a4e445edde67e7aa0d6e4383e6abcab3e2d6e9350c555b",
+          "K1_UPDATED": "a803a9f4c29af8609178888c9c60df7e20f1ba642a49cee11ce31269ae47bcee"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "3346810cd6bb59fb8932b0d5453020e867c5707c9cd7dfd037d260f91ed15894",
+          "K1_UPDATED": "ee06b97eddfdc813ee937246f64c87ed8d9fb2b313b47ac8f11bd1dec593334b"
+        }
+      },
+      {
+        "taskId": "TASK-AST-04-01",
+        "scenarioPairId": "PAIR-AST-04",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "caa338d799c3d1f098c66c2ea3b6edf4ae3542c20e7175047abee25dfac89eb3",
+        "goldRecordSha256": {
+          "K0_STATIC": "279afde0e47813cac3dd6d0734bcb08e05498dbcdedc28ea0fabe436f1748a35",
+          "K1_UPDATED": "279afde0e47813cac3dd6d0734bcb08e05498dbcdedc28ea0fabe436f1748a35"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "2616b5de2245a54a4bd6930f7c0f885b8a4aec4668bd58f8577ece3b04e7274b",
+          "K1_UPDATED": "2616b5de2245a54a4bd6930f7c0f885b8a4aec4668bd58f8577ece3b04e7274b"
+        }
+      },
+      {
+        "taskId": "TASK-AST-04-02",
+        "scenarioPairId": "PAIR-AST-04",
+        "domainId": "SYN-ASTER-LOGISTICS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "ffbc458592c0db99d472178e898f8f1a95be7503ecd0b1a71d58910b63a4db01",
+        "goldRecordSha256": {
+          "K0_STATIC": "0b9729dc7cf3835a7a4b224f96c1f624b609c398753acb44d3426c452815eb5d",
+          "K1_UPDATED": "0b9729dc7cf3835a7a4b224f96c1f624b609c398753acb44d3426c452815eb5d"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "83ea9b10e65e88c4d70ed39e72711fe4f52f420fdd36db30e70ec71145f5f203",
+          "K1_UPDATED": "83ea9b10e65e88c4d70ed39e72711fe4f52f420fdd36db30e70ec71145f5f203"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-01-01",
+        "scenarioPairId": "PAIR-BOR-01",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "2b6452913bec8d14a5e46211da856ce9047abaee787f2ba7e7c4f058b5a64b06",
+        "goldRecordSha256": {
+          "K0_STATIC": "b6f0efb735215d05bcf0173877a9b5150932e7d273eb79a0ef87803138c85493",
+          "K1_UPDATED": "7475d5b7b4d633ae18388bb5bc85d7768d3d57e5fa52dfad6705912a219b19c2"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "1cdeaab9b091044197d614993d641479f82f0fdcaa1a8b42d70ca66064c9dc9d",
+          "K1_UPDATED": "ed149c5244817c9b5a7f1c5c11d14bc8c98d0c78ea7524b314afeca0d3a26475"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-01-02",
+        "scenarioPairId": "PAIR-BOR-01",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "6837ef298f781ca6fcf37c1d7db74a50fb495b6f2281aa019741c240113db313",
+        "goldRecordSha256": {
+          "K0_STATIC": "8fb0cf7fcaf91a6417fdcbd09a610876d086e311bc7e1588589e2164d03704b7",
+          "K1_UPDATED": "f798cc7568787ef109148817509cfc7ec045b82b2bfd69e3dda01bab1efe2cfd"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "3f261b453cf37609f5b0d86dcab9540223b77ba3fd6370ca88d6c1887db092ee",
+          "K1_UPDATED": "80caca86efe5b62891a7dc0eb34a93f92354e03bdb3057009d89df9d1921e89e"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-02-01",
+        "scenarioPairId": "PAIR-BOR-02",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "d40336a032200c381d02b45285573263c4618bd990f9b8a340937bc85d669fad",
+        "goldRecordSha256": {
+          "K0_STATIC": "cab0ea5943d038f3a087425fd1d14b486373f0008d3b41791c18d3d8e3c6bc74",
+          "K1_UPDATED": "cab0ea5943d038f3a087425fd1d14b486373f0008d3b41791c18d3d8e3c6bc74"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "d95fa825aa8ee2f9887da76d3e4f9fdc85bc5a882d36a1ae0bb7439c4273ae50",
+          "K1_UPDATED": "d95fa825aa8ee2f9887da76d3e4f9fdc85bc5a882d36a1ae0bb7439c4273ae50"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-02-02",
+        "scenarioPairId": "PAIR-BOR-02",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "1f560864bdffcc5e26a7945dc2e5eed94025fd92cecf71e5174640e69aa64412",
+        "goldRecordSha256": {
+          "K0_STATIC": "763f39eb787bb6fda9190445c28999099570206069775d05b5005825f30531db",
+          "K1_UPDATED": "763f39eb787bb6fda9190445c28999099570206069775d05b5005825f30531db"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "3866a9d910d15a2b2068a9c1ab52802adf128315fd33df6c8f8db1a120f21e68",
+          "K1_UPDATED": "3866a9d910d15a2b2068a9c1ab52802adf128315fd33df6c8f8db1a120f21e68"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-03-01",
+        "scenarioPairId": "PAIR-BOR-03",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "684888c2e4a3d95c0cc8b4dd412f733b7861bbff02f0b2987b4c480175fb968e",
+        "goldRecordSha256": {
+          "K0_STATIC": "93789c842eb50b69e4a7eb93d2d6c70cfdbb4850f5b0d6a71f89cfde0207937c",
+          "K1_UPDATED": "e24d9b4b2b00e004f88074f873871eb614951a13cafa803ea55753f3cb5c0c43"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "7904b367fa88e1866da663ae2b24c5b52ec3d9452179d6eeabdbc5afdbc6f057",
+          "K1_UPDATED": "c8ed20abaf631e3f3b715602c0d0bf81b53ed2e0f7b69d06a4939145d7de2321"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-03-02",
+        "scenarioPairId": "PAIR-BOR-03",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "325a608dc406a33f40039975a49de53be8776bf5cf90045a4c7c150d9cf8b75b",
+        "goldRecordSha256": {
+          "K0_STATIC": "9175b6501f37caad5b3828eb4ca77d8262045c949bc512bedae5b7c7baea0120",
+          "K1_UPDATED": "7a6335aca5bc5c6e932d8ab08ee5ea70a90ecbf5a45dbdd7edc1a99db5c40017"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "113bb7503a6d5d9a15cc6a9cded4870481b56c36be24a5e3c30426188b7ca693",
+          "K1_UPDATED": "0ac55a5b85af1a2465cd8e31277220017a5d5ad08bb0e452e1b013db5824dcbf"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-04-01",
+        "scenarioPairId": "PAIR-BOR-04",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "6fb94c4fb8eaa9842d2936f31132e7425cf0e8e7bdc0362712ccde0f8ac65e62",
+        "goldRecordSha256": {
+          "K0_STATIC": "9399bf6b50ea86e1ecbc5c40948b459492e9c41567d61bf6616a51351c90ec78",
+          "K1_UPDATED": "9399bf6b50ea86e1ecbc5c40948b459492e9c41567d61bf6616a51351c90ec78"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "f2654103332886284077f1f979d505941be1443c504949c83ee2363cb828b218",
+          "K1_UPDATED": "f2654103332886284077f1f979d505941be1443c504949c83ee2363cb828b218"
+        }
+      },
+      {
+        "taskId": "TASK-BOR-04-02",
+        "scenarioPairId": "PAIR-BOR-04",
+        "domainId": "SYN-BOREALIS-MAINTENANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "3799729f8982319b6e6cd9f808aa744a2880c75be92c39e4e5ad4d3d491fe66a",
+        "goldRecordSha256": {
+          "K0_STATIC": "8e2488ff0985b71d4e97bea2fdbb39dffe601dd77c8f2bdf1fe39a8365657717",
+          "K1_UPDATED": "8e2488ff0985b71d4e97bea2fdbb39dffe601dd77c8f2bdf1fe39a8365657717"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "761cdaa3aa2600a1d9e8d93f9137dafc67568d27f3916b4a331bcc8f5c59006f",
+          "K1_UPDATED": "761cdaa3aa2600a1d9e8d93f9137dafc67568d27f3916b4a331bcc8f5c59006f"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-01-01",
+        "scenarioPairId": "PAIR-CAL-01",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "e950802a57d60201e33ef5b4e000709933aa2a7c0aadc8276f9bf7fc88fd97bc",
+        "goldRecordSha256": {
+          "K0_STATIC": "7b36e1180d45e33c9ab7933a5196655f266154ddce3827e7eb88134153904ff9",
+          "K1_UPDATED": "4556b88d1524cea37336909016df89680a16040d0b453ba4dd9c9969439490c3"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "01141d5ba2ab11d451b06cc9681b66a2adf0c84133766e1cafa5dc652b993e0a",
+          "K1_UPDATED": "bb085d76963fd47351e35f342d4372c2b3d0fb46c86c80ee83dc5b592b4ee46a"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-01-02",
+        "scenarioPairId": "PAIR-CAL-01",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "7567852ca158605e3661b5049b8dc638bcf8cd3ef59bdac0719f637702161bb3",
+        "goldRecordSha256": {
+          "K0_STATIC": "f83203fa71a615eed8638c377ffc358308aa767c10bac82cf1321e066b6b70b7",
+          "K1_UPDATED": "5b3e1bc7d63ebb3836e7fbcffac25cfd25f10a25bd273d00c106ff2c277fc1b6"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "2336e3f783814c9f47784c1af338642374c72c40db75c8996221859dfd9202d7",
+          "K1_UPDATED": "1da10ae9d7c7150b98731ae792f408693aba8379c6a2dbc18d486b10a1e57237"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-02-01",
+        "scenarioPairId": "PAIR-CAL-02",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "28a6ce1e73fdea84bc603f8884a48bb12c7f6e1229c7dda7f722903ee8a89eac",
+        "goldRecordSha256": {
+          "K0_STATIC": "4392ef0f9bbf8a6077b3b99e582115ca2e275bbc5d5d3479f2fd480c4af49fbf",
+          "K1_UPDATED": "4392ef0f9bbf8a6077b3b99e582115ca2e275bbc5d5d3479f2fd480c4af49fbf"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "2469c8fc5889dc398336508ba2e60bdbaf6e70728dc8aca4bada8d30529bf604",
+          "K1_UPDATED": "2469c8fc5889dc398336508ba2e60bdbaf6e70728dc8aca4bada8d30529bf604"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-02-02",
+        "scenarioPairId": "PAIR-CAL-02",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "cfe1300c3eb6603cc9b77dff523c939d9589fbd6c24866c2eedacea9621ee33b",
+        "goldRecordSha256": {
+          "K0_STATIC": "973bf956a9bb8e43c521b1548fb5463f5c850dfcbe49f747c5469a6c20b99f51",
+          "K1_UPDATED": "973bf956a9bb8e43c521b1548fb5463f5c850dfcbe49f747c5469a6c20b99f51"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "3755f23216c303308b10790862d2f6c126db22bbf91be6baddf9914d82ce39bf",
+          "K1_UPDATED": "3755f23216c303308b10790862d2f6c126db22bbf91be6baddf9914d82ce39bf"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-03-01",
+        "scenarioPairId": "PAIR-CAL-03",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "6516ef98a251f268f50a832e9f419b19a4d05bf4e039e27e1ca5f81c1fc62d3b",
+        "goldRecordSha256": {
+          "K0_STATIC": "fb2f43c2b2a7b437fb8c038444f09379d211554d2820326116c58a79fdab12b0",
+          "K1_UPDATED": "b539c81cb7faa6161cea5b37c70e7bf323a87557945440c1de9c456f4be0788e"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "becca859e60b10a3f4dde205794a0edcc2169ea22c1538fe958931f1fbf36e0d",
+          "K1_UPDATED": "ef66e31a5283219b4d74a30b526482a1f13373e1f8de3afbc17a50abef73a96c"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-03-02",
+        "scenarioPairId": "PAIR-CAL-03",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "86cd29835e255e60d55f83bc967e531e26c969d06dca39e5325976b15974eb3b",
+        "goldRecordSha256": {
+          "K0_STATIC": "c71a615bbfe0effd52182d0e6f196d82dd3161242124a8c6d9e521bbb5a1ca5e",
+          "K1_UPDATED": "8cf85883a693e6966c4e25db34b4ab0ce4b2bf00768dbfe90d801956e8e7ed98"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "09e5141bbd15d0459fa9c0766e6e55aec303b1396c15a0ee38e02f7c45c9835a",
+          "K1_UPDATED": "c8a36986d6649cd3bdffb43d79e50018ce88a9d4f4fd0f5f7e0aea9c3fd6d4d6"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-04-01",
+        "scenarioPairId": "PAIR-CAL-04",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "e18552e50bb65e79126d98991e5e8e09f9c4f16d2c7548ce84db1cfa3608d699",
+        "goldRecordSha256": {
+          "K0_STATIC": "ff31bfe7123f672183819ac62b5b69e3df5f9b1bd45b401ab053231511f6d9c3",
+          "K1_UPDATED": "ff31bfe7123f672183819ac62b5b69e3df5f9b1bd45b401ab053231511f6d9c3"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "59b332863a0ad4fd53509f0999f5d0bfe1bacf0c1fdd1c1fee1579efa244d63a",
+          "K1_UPDATED": "59b332863a0ad4fd53509f0999f5d0bfe1bacf0c1fdd1c1fee1579efa244d63a"
+        }
+      },
+      {
+        "taskId": "TASK-CAL-04-02",
+        "scenarioPairId": "PAIR-CAL-04",
+        "domainId": "SYN-CALDERA-ALLOCATIONS",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "99a2fcf87513dec1a072133aea92ce124ebc4edeeaf2591c88f71df163c88daf",
+        "goldRecordSha256": {
+          "K0_STATIC": "f3aad4a0511e31036e51f3f1af747b2230b6c9c0166e31f76fbe80de55da63c7",
+          "K1_UPDATED": "f3aad4a0511e31036e51f3f1af747b2230b6c9c0166e31f76fbe80de55da63c7"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "319a23efb2e77d1675df1b0b2c89245d0e60b7e22200dedbb14e52b6d8959587",
+          "K1_UPDATED": "319a23efb2e77d1675df1b0b2c89245d0e60b7e22200dedbb14e52b6d8959587"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-01-01",
+        "scenarioPairId": "PAIR-DIO-01",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "319c78497b189b458313240338582ce00b1e1c841c20d429216f9ebaa8ce778b",
+        "goldRecordSha256": {
+          "K0_STATIC": "6731edbceac211b8ec6579dce0d281b160f198217da5b0970f0881bf6fcc90e0",
+          "K1_UPDATED": "836893046238cefec2619e07df0b6f35a405bfaf2542d6dd1131268710ede8d9"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "ed665e47f7638df457fbdd730efbce6b730fa9c1aae90c6c5f4a62403c1c52fa",
+          "K1_UPDATED": "1b1f1cba0f76148d651b73b4b5cd1b41ffb369add660d5d9a14b30c37ca53515"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-01-02",
+        "scenarioPairId": "PAIR-DIO-01",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "3dfcd841b633b99183bfaf2ba23fe09786a96228ce3cf1112d8703003f5563d1",
+        "goldRecordSha256": {
+          "K0_STATIC": "5d06da0618ef74afd960e1d7a88f1a47d2ba2b5965ee2d514d27c507f430a352",
+          "K1_UPDATED": "71c4c578f3346c4701d3e1f8fdf5c643e01fdc3e2d655595f8f6b413fc3b0749"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "fe13f3b7feb87af2183370d91a1e9e9f4b0646d95651925dbaaa686ee224ce48",
+          "K1_UPDATED": "eee415958ba58eb838cc85b14a16ae297c0299989e7236b71c8fb178a60f9a36"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-02-01",
+        "scenarioPairId": "PAIR-DIO-02",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "13598f6b369ae50625be38f9903044cc569907a1b58b22f3539103d94bfdd3b2",
+        "goldRecordSha256": {
+          "K0_STATIC": "24d9e6cb6a17d7e12fd1f7eca26d5984c9d836e63db73bc3320c23bc24be2bb1",
+          "K1_UPDATED": "24d9e6cb6a17d7e12fd1f7eca26d5984c9d836e63db73bc3320c23bc24be2bb1"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "8e285e5e97a6e8dc2e3f28b94577ddb7c2e4e15891499ad3ed3205ade2679817",
+          "K1_UPDATED": "8e285e5e97a6e8dc2e3f28b94577ddb7c2e4e15891499ad3ed3205ade2679817"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-02-02",
+        "scenarioPairId": "PAIR-DIO-02",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "3dad1f63c521dd311bae2a6eecbb66d79de698b02215c43e1342bbf87c97d9d4",
+        "goldRecordSha256": {
+          "K0_STATIC": "d66c85099a09af00ccc6e182e94efa2b6e1ea143e84371a3e68b9e4293ea5cd7",
+          "K1_UPDATED": "d66c85099a09af00ccc6e182e94efa2b6e1ea143e84371a3e68b9e4293ea5cd7"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "5df51b07f5d3daca541c87e562d2e7508d06f44bd1ac07f2a35357b2f95ce790",
+          "K1_UPDATED": "5df51b07f5d3daca541c87e562d2e7508d06f44bd1ac07f2a35357b2f95ce790"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-03-01",
+        "scenarioPairId": "PAIR-DIO-03",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "3ce5e5148c20aba5b4f66ca9049b351e40e65c18131776c9e1386b3f1c09bfe1",
+        "goldRecordSha256": {
+          "K0_STATIC": "5021bc0fcdf574558ea07ff78e8f5cfe5dbfd2c7aa67bdcb94d18a550c439d68",
+          "K1_UPDATED": "b7e6fdd293a16f5cbd22943f847517071dc4ec9a960e0a4c2d0d03c02f9de40a"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "cbf81e52945f4b2d8dfc760ae8c8eab7038d808600ce2af52f9552686553a112",
+          "K1_UPDATED": "197ab870498da7ade91ec1d2cac8081817728e69cd4c0ceb3f240693f6281104"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-03-02",
+        "scenarioPairId": "PAIR-DIO-03",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "SINGLE_HOP",
+        "updateSensitivity": "UPDATE_SENSITIVE",
+        "taskPromptCoreSha256": "ff13553cc5ad16bb7a857c397cb35b739baa596464350f8e49605e2421e66dd7",
+        "goldRecordSha256": {
+          "K0_STATIC": "93c23719a96ce0bbb47561025ff27baa2b607348f583a7580e23b7b3d5e7626e",
+          "K1_UPDATED": "8a02d3b0cd0988e6f57902be5794fe4810ca88423c2c846e09bc2b0b3a38dbfa"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "3c3a29c0a9c79500d91fe0a62aa4c75145e93b0f0ac1646a65ba8e223e6e1586",
+          "K1_UPDATED": "d13580fd37f198864cc7d732569a443feae3b81f715de19364bf66606f4b4417"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-04-01",
+        "scenarioPairId": "PAIR-DIO-04",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "eb23500a5d1e6f0a92af0a0a6361f669330a702b844ad150ae00783199f48d71",
+        "goldRecordSha256": {
+          "K0_STATIC": "88027b7aa06173cc891a8c92e3a5bf07b3f61b61589e3777a92b4a48e61541e9",
+          "K1_UPDATED": "88027b7aa06173cc891a8c92e3a5bf07b3f61b61589e3777a92b4a48e61541e9"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "d669720738457f42a8c48f7df08baf7c368c8ffddc4149934cadca839709a6f0",
+          "K1_UPDATED": "d669720738457f42a8c48f7df08baf7c368c8ffddc4149934cadca839709a6f0"
+        }
+      },
+      {
+        "taskId": "TASK-DIO-04-02",
+        "scenarioPairId": "PAIR-DIO-04",
+        "domainId": "SYN-DIONE-COMPLIANCE",
+        "hopClass": "MULTI_HOP",
+        "updateSensitivity": "EDITION_INVARIANT_CONTROL",
+        "taskPromptCoreSha256": "c7ae2c69308cf187abaa8f226cf64c0c5b554077ffddc86f102c530c2dc907cb",
+        "goldRecordSha256": {
+          "K0_STATIC": "12b26d17bc1e8377df49a748eba44e71554e79cc15177eb45e7925fddd992f56",
+          "K1_UPDATED": "12b26d17bc1e8377df49a748eba44e71554e79cc15177eb45e7925fddd992f56"
+        },
+        "evidenceGraphSha256": {
+          "K0_STATIC": "a24da58928bba3feb94bd013989ea3404b939cd35bbaa0e67f6bdb424bc140ce",
+          "K1_UPDATED": "a24da58928bba3feb94bd013989ea3404b939cd35bbaa0e67f6bdb424bc140ce"
+        }
+      }
+    ],
+    "knowledgeEditions": [
+      {
+        "editionId": "K0_STATIC",
+        "role": "FROZEN_PRE_UPDATE",
+        "editionSha256": "e009caeac47f1e2c09516fc30ad2a8c973653a97ebc628428c4da965274ee81e",
+        "canonicalFactInventorySha256": "e750887f25ce12f3dbb33f917213b6e1223d00464f523508a26240651bf4b3a2"
+      },
+      {
+        "editionId": "K1_UPDATED",
+        "role": "FROZEN_POST_UPDATE",
+        "editionSha256": "d5d1cdaf61c8d5fcd9fbd3d64c8a05fb06cb04dbed80a177eaf2884c2e97d19a",
+        "canonicalFactInventorySha256": "1772fb71a803f1bf49b50dbbdc4aad25e265db48aa84cac15524a13056b8aa7f"
+      }
+    ]
+  },
+  "arms": [
+    {
+      "armId": "ARM-LRF-01",
+      "name": "LARGE_RAW_FACTS",
+      "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+      "knowledgeRepresentation": "RAW",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-SRF-02",
+      "name": "SMALL_RAW_FACTS",
+      "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+      "knowledgeRepresentation": "RAW",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-LSF-03",
+      "name": "LARGE_STRUCTURED_FACTS",
+      "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+      "knowledgeRepresentation": "STRUCTURED",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-SSF-04",
+      "name": "SMALL_STRUCTURED_FACTS",
+      "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+      "knowledgeRepresentation": "STRUCTURED",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-SSG-05",
+      "name": "SMALL_STRUCTURED_FACTS_AND_GUIDANCE",
+      "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+      "knowledgeRepresentation": "STRUCTURED",
+      "knowledgePayload": "FACTS_AND_NON_ANSWER_GUIDANCE",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    }
+  ],
+  "generation": {
+    "seeds": [
+      104729,
+      130363,
+      155921
+    ],
+    "seedListSha256": "350d921b7a2ed747911d1c32f9c1cb5c390d36c6b9ab769be7b0d1a79b105f84"
+  },
+  "runPlan": {
+    "scheduledCounts": {
+      "arms": 5,
+      "taskIdsPerEdition": 32,
+      "knowledgeEditions": 2,
+      "generationSeeds": 3,
+      "totalScheduledRunRecords": 960,
+      "pairedExecutionsPerArmContrastPerEdition": 96,
+      "independentTaskUnitsPerArmContrastPerEdition": 32,
+      "pairedExecutionsPerStaticUpdatedContrastPerArm": 96,
+      "independentTaskUnitsPerStaticUpdatedContrastPerArm": 32,
+      "pairedExecutionsPerSingleMultiContrastPerArmEdition": 48,
+      "independentScenarioPairUnitsPerSingleMultiContrastPerArmEdition": 16
+    },
+    "derivation": {
+      "runId": "run:<sha256(protocolDigestSha256|armId|taskId|editionId|generationSeed)>",
+      "pairKey": "pair:<sha256(protocolDigestSha256|taskId|editionId|generationSeed)>"
+    },
+    "distinctPairKeys": 192,
+    "runsPerPairKey": 5
+  },
+  "inferenceContract": {
+    "confidenceLevel": 0.95,
+    "confidenceMethod": "DETERMINISTIC_STRATIFIED_PAIRED_PERCENTILE_BOOTSTRAP",
+    "bootstrapResamples": 20000,
+    "resamplingUnits": {
+      "armAndEditionContrasts": "taskId",
+      "singleMultiHopContrasts": "scenarioPairId"
+    },
+    "seedsAreRepeatedObservations": true,
+    "noPseudoReplication": true,
+    "ciUnavailabilityRule": "CI_UNAVAILABLE_DENIES_ASSOCIATED_CLAIM"
+  },
+  "failureContract": {
+    "preExecutionPlannedStatus": "NOT_RUN",
+    "terminalStatuses": [
+      "COMPLETED",
+      "FAILED",
+      "INVALIDATED"
+    ],
+    "failureCodeNullOnlyWhenCompleted": true,
+    "modelFailureCodes": [
+      "TIMEOUT",
+      "OOM_WITHIN_ADMITTED_ENVELOPE",
+      "NONZERO_RUNTIME_EXIT",
+      "MALFORMED_STREAM",
+      "OUTPUT_LIMIT_WITHOUT_VALID_FINAL",
+      "INVALID_JSON",
+      "REFUSAL_NO_VALID_ANSWER",
+      "RUNTIME_ERROR"
+    ],
+    "infrastructureInvalidationCodes": [
+      "HOST_DRIFT",
+      "CLOCK_INVALID",
+      "RESOURCE_SAMPLER_GAP",
+      "THERMAL_INVALID",
+      "UNRELATED_PROCESS_INTERFERENCE",
+      "HARNESS_SIGTRAP_EXIT_133",
+      "DOCKER_ENOENT"
+    ],
+    "preservationRule": "APPEND_ONLY_NO_REPLACEMENT_RUNS"
+  },
+  "claimGate": {
+    "gateId": "L6-MODEL-SUBSTITUTION",
+    "preExecutionStatus": "DENY_NOT_EXECUTED",
+    "modelSubstitutionClaimBeforeExecution": false,
+    "noEarlySuccess": true
+  },
+  "publicSafeEvidence": {
+    "rawTaskBytesPublished": false,
+    "rawKnowledgeSeedBytesPublished": false,
+    "sealedDigestsOnly": true,
+    "catalogPath": "tests/fixtures/cks-05/public-task-catalog-v1.json",
+    "exposureRule": "SEALED_DIGESTS_ONLY_RAW_TASK_AND_KNOWLEDGE_SEED_BYTES_REMAIN_HIDDEN"
+  },
+  "receipt": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-285",
+    "baseCommit": "304a999868f4071e02dab5be83ad1114d7d2c5ce",
+    "taskId": "PSAI285-L2-FRESH-HIDDEN-TASK-RUNNER",
+    "changedPaths": [
+      "scripts/cks-05-materialize-hidden-run.mjs",
+      "tests/cks-05-hidden-runner.test.mjs",
+      "tests/fixtures/cks-05/public-task-catalog-v1.json",
+      "verification/cks-05-hidden-run-manifest-template-v1.json"
+    ],
+    "allowlistCompliant": true,
+    "requiredVerificationCommands": [
+      "node --test tests/cks-05-hidden-runner.test.mjs",
+      "node scripts/cks-05-materialize-hidden-run.mjs --fixture verification/cks-05-hidden-run-manifest-template-v1.json --dry-run",
+      "git diff --check origin/main...HEAD"
+    ],
+    "actionsNotPerformed": {
+      "modelInvocations": 0,
+      "servicesStartedOrCalled": 0,
+      "credentialsUsed": false,
+      "benchmarkRuns": 0,
+      "harnessSourceModified": false,
+      "push": false,
+      "merge": false,
+      "release": false
+    },
+    "currentEvidenceVerdict": "MANIFEST_DEFINED_EXECUTION_NOT_AUTHORIZED_NO_BENCHMARK_RESULT_NO_MODEL_SUBSTITUTION_CLAIM"
+  }
+}
