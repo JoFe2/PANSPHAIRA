@@ -220,7 +220,7 @@ const refSort = (a: RefLike, b: RefLike): number => {
   const digestValue = (ref: RefLike): string => ref.knowledgeDigest ?? ref.eventDigest ?? ref.searchDigest ?? ref.decisionDigest ?? ref.outcomeDigest ?? ref.taskDigest ?? ref.scopeDigest ?? "";
   return `${identifier(a)}|${digestValue(a)}`.localeCompare(`${identifier(b)}|${digestValue(b)}`);
 };
-function sortedUnique<T extends RefLike>(v: unknown, valid: (x: unknown) => x is T, maximum = CKS_MAX_KNOWLEDGE_REFS_V1): v is T[] {
+function sortedUnique<T extends RefLike>(v: unknown, valid: (x: unknown) => x is T, maximum: number = CKS_MAX_KNOWLEDGE_REFS_V1): v is T[] {
   if (!Array.isArray(v) || v.length > maximum || !v.every(valid) || new Set(v.map((x) => JSON.stringify(x))).size !== v.length) return false;
   return v.every((item, index) => index === 0 || refSort(v[index - 1]!, item) < 0);
 }
