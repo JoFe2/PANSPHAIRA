@@ -1,0 +1,23 @@
+{
+  "missingMandatoryDigest": {
+    "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "causalMode": "NOT_APPLICABLE",
+    "causes": []
+  },
+  "prohibitedRawContent": {
+    "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "causalMode": "NOT_APPLICABLE",
+    "causes": [],
+    "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6",
+    "content": "never retain raw content"
+  },
+  "unknownFailureSubtype": {
+    "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "causalMode": "UNKNOWN",
+    "causes": [{ "class": "UNKNOWN", "subtype": "MADE_UP", "certainty": "UNKNOWN", "causeEventRefs": [], "affectedKnowledgeRefs": [] }],
+    "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6"
+  }
+}
