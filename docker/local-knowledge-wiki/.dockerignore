@@ -1,0 +1,20 @@
+# Keep the build context source-only. The dump is always a runtime mount.
+.git
+.git/**
+node_modules
+node_modules/**
+dist
+dist/**
+tests
+tests/**
+**/*.xml
+**/*.gz
+**/*.bz2
+**/*.7z
+**/*.zim
+**/*corpus*
+**/*credential*
+**/*secret*
+**/.env*
+coverage
+.vitepress/cache

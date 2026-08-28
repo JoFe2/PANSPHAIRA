@@ -1,0 +1,47 @@
+name: pansphaira-local-knowledge-wiki
+
+services:
+  local-knowledge-wiki:
+    profiles:
+      - local-knowledge-wiki
+    build:
+      context: .
+      dockerfile: Dockerfile
+      additional_contexts:
+        repository: ../..
+      args:
+        BUILD_IMAGE_DIGEST: ${LOCAL_KNOWLEDGE_WIKI_BUILD_IMAGE_DIGEST:-sha256:0000000000000000000000000000000000000000000000000000000000000000}
+    image: ${LOCAL_KNOWLEDGE_WIKI_IMAGE:-pansphaira/local-knowledge-wiki:psai107}
+    command: ["serve"]
+    environment:
+      WIKI_SOURCE_ROOT: /mnt/source
+      WIKI_CANONICAL_ROOT: /var/lib/local-knowledge-wiki/canonical
+      WIKI_INDEX_ROOT: /var/lib/local-knowledge-wiki/index
+      WIKI_PROFILE: ${LOCAL_KNOWLEDGE_WIKI_PROFILE:-positive}
+      WIKI_BUILD_IMAGE_DIGEST: ${LOCAL_KNOWLEDGE_WIKI_BUILD_IMAGE_DIGEST:-sha256:0000000000000000000000000000000000000000000000000000000000000000}
+    volumes:
+      - type: bind
+        source: ${LOCAL_KNOWLEDGE_WIKI_DUMP:-../../tests/fixtures/local-knowledge-wiki-container/source}
+        target: /mnt/source
+        read_only: true
+      - type: volume
+        source: local-knowledge-wiki-canonical
+        target: /var/lib/local-knowledge-wiki/canonical
+      - type: volume
+        source: local-knowledge-wiki-index
+        target: /var/lib/local-knowledge-wiki/index
+    read_only: true
+    network_mode: none
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: "no"
+
+volumes:
+  local-knowledge-wiki-canonical:
+    name: ${LOCAL_KNOWLEDGE_WIKI_CANONICAL_VOLUME:-psai107-local-knowledge-wiki-canonical}
+    external: true
+  local-knowledge-wiki-index:
+    name: ${LOCAL_KNOWLEDGE_WIKI_INDEX_VOLUME:-psai107-local-knowledge-wiki-index}
+    external: true
