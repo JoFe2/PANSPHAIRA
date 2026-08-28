@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.chimpmaera.dev/cks-05-benchmark-result-v1.schema.json",
+  "title": "ChimpMaera CKS-05 deterministic benchmark result v1",
+  "description": "Closed, append-only L4 result contract. A substitution claim is impossible unless complete evidence, confidence intervals, quality thresholds, and efficiency thresholds are all present and passing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "resultId", "protocol", "source", "status", "runCounts", "failures", "runScores", "metrics", "comparisons", "stopConditions", "claimGate", "receipt"],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "metricValue": { "type": ["number", "null"] },
+    "confidenceInterval": {
+      "type": "object", "additionalProperties": false,
+      "required": ["level", "method", "lower", "upper", "available", "resamplingUnit", "resamplingUnitCount", "bootstrapResamples"],
+      "properties": {
+        "level": { "const": 0.95 },
+        "method": { "const": "DETERMINISTIC_STRATIFIED_PAIRED_PERCENTILE_BOOTSTRAP" },
+        "lower": { "type": ["number", "null"] }, "upper": { "type": ["number", "null"] },
+        "available": { "type": "boolean" },
+        "resamplingUnit": { "enum": ["taskId", "scenarioPairId"] },
+        "resamplingUnitCount": { "type": "integer", "minimum": 0 },
+        "bootstrapResamples": { "const": 20000 }
+      }
+    },
+    "metricStat": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metricId", "pointEstimate", "confidenceInterval", "denominator", "missingValueCount"],
+      "properties": {
+        "metricId": { "type": "string", "pattern": "^[a-z][a-z0-9_]+$" },
+        "pointEstimate": { "$ref": "#/$defs/metricValue" },
+        "confidenceInterval": { "$ref": "#/$defs/confidenceInterval" },
+        "denominator": { "type": "integer", "minimum": 0 },
+        "missingValueCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "armCounts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scheduled", "observed", "completed", "failed", "invalidated", "scored"],
+      "properties": {
+        "scheduled": { "type": "integer", "minimum": 0 }, "observed": { "type": "integer", "minimum": 0 },
+        "completed": { "type": "integer", "minimum": 0 }, "failed": { "type": "integer", "minimum": 0 },
+        "invalidated": { "type": "integer", "minimum": 0 }, "scored": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "runCounts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scheduled", "observed", "completed", "failed", "invalidated", "scored", "missing", "byArm"],
+      "properties": {
+        "scheduled": { "type": "integer", "minimum": 0 }, "observed": { "type": "integer", "minimum": 0 },
+        "completed": { "type": "integer", "minimum": 0 }, "failed": { "type": "integer", "minimum": 0 },
+        "invalidated": { "type": "integer", "minimum": 0 }, "scored": { "type": "integer", "minimum": 0 },
+        "missing": { "type": "integer", "minimum": 0 }, "byArm": { "type": "object", "additionalProperties": { "$ref": "#/$defs/armCounts" } }
+      }
+    },
+    "runScore": {
+      "type": "object", "additionalProperties": false,
+      "required": ["runId", "armId", "taskId", "scenarioPairId", "editionId", "hopClass", "updateSensitivity", "terminalStatus", "failureCodeOrNull", "scored", "metrics", "counts"],
+      "properties": {
+        "runId": { "type": "string", "pattern": "^run:[a-f0-9]{64}$" }, "armId": { "type": "string", "pattern": "^ARM-[A-Z0-9-]+$" },
+        "taskId": { "type": "string", "minLength": 1 }, "scenarioPairId": { "type": "string", "minLength": 1 },
+        "editionId": { "enum": ["K0_STATIC", "K1_UPDATED"] }, "hopClass": { "enum": ["SINGLE_HOP", "MULTI_HOP"] },
+        "updateSensitivity": { "enum": ["UPDATE_SENSITIVE", "EDITION_INVARIANT_CONTROL"] },
+        "terminalStatus": { "enum": ["COMPLETED", "FAILED", "INVALIDATED"] },
+        "failureCodeOrNull": { "type": ["string", "null"] }, "scored": { "type": "boolean" },
+        "metrics": { "type": ["object", "null"], "additionalProperties": { "$ref": "#/$defs/metricValue" } },
+        "counts": {
+          "type": ["object", "null"], "additionalProperties": false,
+          "required": ["atomicFactTruePositiveCount", "atomicFactFalsePositiveCount", "atomicFactFalseNegativeCount", "evidenceTruePositiveCount", "evidenceFalsePositiveCount", "evidenceFalseNegativeCount", "unsupportedMaterialClaimCount", "staleClaimCount", "predictedClaimCount", "guidanceConstraintsPassed", "guidanceConstraintsTotal", "conflictTruePositiveCount", "conflictFalsePositiveCount", "conflictFalseNegativeCount", "criticalViolationCount"],
+          "properties": {
+            "atomicFactTruePositiveCount": { "type": "integer", "minimum": 0 }, "atomicFactFalsePositiveCount": { "type": "integer", "minimum": 0 }, "atomicFactFalseNegativeCount": { "type": "integer", "minimum": 0 },
+            "evidenceTruePositiveCount": { "type": "integer", "minimum": 0 }, "evidenceFalsePositiveCount": { "type": "integer", "minimum": 0 }, "evidenceFalseNegativeCount": { "type": "integer", "minimum": 0 },
+            "unsupportedMaterialClaimCount": { "type": "integer", "minimum": 0 }, "staleClaimCount": { "type": "integer", "minimum": 0 }, "predictedClaimCount": { "type": "integer", "minimum": 0 },
+            "guidanceConstraintsPassed": { "type": "integer", "minimum": 0 }, "guidanceConstraintsTotal": { "type": "integer", "minimum": 0 },
+            "conflictTruePositiveCount": { "type": "integer", "minimum": 0 }, "conflictFalsePositiveCount": { "type": "integer", "minimum": 0 }, "conflictFalseNegativeCount": { "type": "integer", "minimum": 0 }, "criticalViolationCount": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "failure": {
+      "type": "object", "additionalProperties": false,
+      "required": ["runId", "armId", "taskId", "terminalStatus", "failureCodeOrNull", "preserved", "productVerdict"],
+      "properties": {
+        "runId": { "type": "string", "pattern": "^run:[a-f0-9]{64}$" }, "armId": { "type": "string" }, "taskId": { "type": "string" },
+        "terminalStatus": { "enum": ["FAILED", "INVALIDATED"] }, "failureCodeOrNull": { "type": "string" }, "preserved": { "const": true },
+        "productVerdict": { "enum": ["MODEL_FAILURE_SCORED_ZERO", "INFRASTRUCTURE_INVALIDATION_NOT_PRODUCT_VERDICT"] }
+      }
+    },
+    "comparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reportId", "treatmentArmId", "controlArmId", "metricId", "pointEstimate", "confidenceInterval", "pairedUnitCount", "status"],
+      "properties": {
+        "reportId": { "type": "string", "pattern": "^AB-[A-Z0-9-]+$" }, "treatmentArmId": { "type": "string" }, "controlArmId": { "type": "string" },
+        "metricId": { "type": "string" }, "pointEstimate": { "$ref": "#/$defs/metricValue" }, "confidenceInterval": { "$ref": "#/$defs/confidenceInterval" },
+        "pairedUnitCount": { "type": "integer", "minimum": 0 }, "status": { "enum": ["MEASURED", "CI_UNAVAILABLE"] }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.cks05/benchmark-result/v1" },
+    "resultId": { "type": "string", "pattern": "^result:[a-f0-9]{64}$" },
+    "protocol": {
+      "type": "object", "additionalProperties": false,
+      "required": ["protocolId", "protocolDigestSha256", "operatingModelVersion", "preservedDecisionIds", "processVariantIntroduced"],
+      "properties": {
+        "protocolId": { "const": "PSAI285-BENCHMARK-PROTOCOL-01" }, "protocolDigestSha256": { "$ref": "#/$defs/sha256" },
+        "operatingModelVersion": { "const": "Operating Model v1.1" },
+        "preservedDecisionIds": { "const": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"] },
+        "processVariantIntroduced": { "const": false }
+      }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false, "required": ["fixtureId", "fixtureSha256", "scorerArtifactSha256", "resultSchemaSha256"],
+      "properties": { "fixtureId": { "type": "string", "minLength": 1 }, "fixtureSha256": { "$ref": "#/$defs/sha256" }, "scorerArtifactSha256": { "$ref": "#/$defs/sha256" }, "resultSchemaSha256": { "$ref": "#/$defs/sha256" } }
+    },
+    "status": { "enum": ["COMPLETE", "CLAIM_DENIED", "PARTIAL_NO_CLAIM", "INVALID_NO_CLAIM"] },
+    "runCounts": { "$ref": "#/$defs/runCounts" },
+    "failures": { "type": "array", "items": { "$ref": "#/$defs/failure" } },
+    "runScores": { "type": "array", "items": { "$ref": "#/$defs/runScore" } },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_success", "atomic_fact_f1", "evidence_coverage", "evidence_precision", "evidence_attribution_f1", "applicability_accuracy", "unsupported_material_claim_rate", "conflict_detection_f1", "abstention_accuracy", "update_compliance", "guidance_adherence", "multi_hop_path_accuracy", "critical_violation_rate", "model_failure_rate", "retrieval_latency_ms", "model_latency_ms", "time_to_first_token_ms", "time_to_final_ms", "prompt_tokens", "generated_tokens", "decode_tokens_per_second", "memory_bytes", "peak_resident_bytes", "throughput_tokens_per_second", "escalation_quality", "escalation_cost"],
+      "properties": {
+        "task_success": { "$ref": "#/$defs/metricStat" }, "atomic_fact_f1": { "$ref": "#/$defs/metricStat" }, "evidence_coverage": { "$ref": "#/$defs/metricStat" }, "evidence_precision": { "$ref": "#/$defs/metricStat" }, "evidence_attribution_f1": { "$ref": "#/$defs/metricStat" },
+        "applicability_accuracy": { "$ref": "#/$defs/metricStat" }, "unsupported_material_claim_rate": { "$ref": "#/$defs/metricStat" }, "conflict_detection_f1": { "$ref": "#/$defs/metricStat" }, "abstention_accuracy": { "$ref": "#/$defs/metricStat" }, "update_compliance": { "$ref": "#/$defs/metricStat" }, "guidance_adherence": { "$ref": "#/$defs/metricStat" }, "multi_hop_path_accuracy": { "$ref": "#/$defs/metricStat" }, "critical_violation_rate": { "$ref": "#/$defs/metricStat" }, "model_failure_rate": { "$ref": "#/$defs/metricStat" },
+        "retrieval_latency_ms": { "$ref": "#/$defs/metricStat" }, "model_latency_ms": { "$ref": "#/$defs/metricStat" }, "time_to_first_token_ms": { "$ref": "#/$defs/metricStat" }, "time_to_final_ms": { "$ref": "#/$defs/metricStat" }, "prompt_tokens": { "$ref": "#/$defs/metricStat" }, "generated_tokens": { "$ref": "#/$defs/metricStat" }, "decode_tokens_per_second": { "$ref": "#/$defs/metricStat" }, "memory_bytes": { "$ref": "#/$defs/metricStat" }, "peak_resident_bytes": { "$ref": "#/$defs/metricStat" }, "throughput_tokens_per_second": { "$ref": "#/$defs/metricStat" }, "escalation_quality": { "$ref": "#/$defs/metricStat" }, "escalation_cost": { "$ref": "#/$defs/metricStat" }
+      }
+    },
+    "comparisons": { "type": "array", "items": { "$ref": "#/$defs/comparison" } },
+    "stopConditions": {
+      "type": "object", "additionalProperties": false, "required": ["triggered", "ruleIds", "reasonCodes", "simplifications", "falsifiedArchitecture"],
+      "properties": { "triggered": { "type": "boolean" }, "ruleIds": { "type": "array", "items": { "type": "string" } }, "reasonCodes": { "type": "array", "items": { "type": "string" } }, "simplifications": { "type": "array", "items": { "type": "string" } }, "falsifiedArchitecture": { "type": "boolean" } }
+    },
+    "claimGate": {
+      "type": "object", "additionalProperties": false, "required": ["gateId", "status", "modelSubstitutionClaim", "qualityGate", "efficiencyGate", "allQualityAndEfficiencyThresholdsPass", "reasonCodes", "scope", "passingWording"],
+      "properties": {
+        "gateId": { "const": "L6-MODEL-SUBSTITUTION" }, "status": { "enum": ["PASS", "DENY"] }, "modelSubstitutionClaim": { "type": "boolean" }, "qualityGate": { "type": "boolean" }, "efficiencyGate": { "type": "boolean" }, "allQualityAndEfficiencyThresholdsPass": { "type": "boolean" }, "reasonCodes": { "type": "array", "items": { "type": "string" } }, "scope": { "type": "string", "minLength": 1 }, "passingWording": { "type": ["string", "null"] }
+      }
+    },
+    "receipt": {
+      "type": "object", "additionalProperties": false, "required": ["preservation", "confidenceLevel", "bootstrapResamples", "seedsAreRepeatedObservations", "noPseudoReplication", "requiredEvidencePresent", "generatedAt"],
+      "properties": { "preservation": { "const": "APPEND_ONLY_NO_REPLACEMENT_RUNS" }, "confidenceLevel": { "const": 0.95 }, "bootstrapResamples": { "const": 20000 }, "seedsAreRepeatedObservations": { "const": true }, "noPseudoReplication": { "const": true }, "requiredEvidencePresent": { "type": "boolean" }, "generatedAt": { "const": "DETERMINISTIC_FROM_FIXTURE_NO_WALL_CLOCK" } }
+    }
+  },
+  "allOf": [
+    { "if": { "type": "object", "properties": { "claimGate": { "type": "object", "properties": { "modelSubstitutionClaim": { "const": true } } } } }, "then": { "type": "object", "properties": { "claimGate": { "type": "object", "properties": { "allQualityAndEfficiencyThresholdsPass": { "const": true }, "status": { "const": "PASS" }, "passingWording": { "type": "string", "minLength": 1 } } } } } },
+    { "if": { "type": "object", "properties": { "claimGate": { "type": "object", "properties": { "allQualityAndEfficiencyThresholdsPass": { "const": false } } } } }, "then": { "type": "object", "properties": { "claimGate": { "type": "object", "properties": { "modelSubstitutionClaim": { "const": false } } } } } }
+  ]
+}
