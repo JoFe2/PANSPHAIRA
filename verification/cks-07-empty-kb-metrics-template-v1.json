@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "pansphaira.verification/cks-07-empty-kb-metrics-template/v1",
+  "evidenceId": "cks-07-empty-kb-metrics-v1",
+  "claim": "Deterministic empty/minimal-KB synthetic cases provide complete requirement ground truth and measure P11 plus P13 false-completeness reduction offline.",
+  "commands": [
+    { "command": "node --test tests/cks-07-empty-kb-metrics.test.mjs", "expectedExitCode": 0 },
+    { "command": "node scripts/cks-07-score-empty-kb.mjs --fixture tests/fixtures/cks-07/empty-kb-cases-v1.json --dry-run", "expectedExitCode": 0 },
+    { "command": "git diff --check origin/main...HEAD", "expectedExitCode": 0 }
+  ],
+  "expectedEvidence": {
+    "caseCount": 9,
+    "insufficientOracleCases": 8,
+    "sufficientOracleCases": 1,
+    "combinedFalseCompletenessCount": 0,
+    "simpleSolverFalseCompletenessCount": 8,
+    "combinedTrueCompletenessCount": 1,
+    "falseCompletenessAbsoluteReduction": 1,
+    "combinedTrueCompletenessRate": 1,
+    "criticalRequirementMissCases": 8,
+    "totalCriticalRequirementMisses": 15,
+    "requirementRecallMean": 0.14814814814814814,
+    "requirementPrecisionMean": 0.2222222222222222
+  },
+  "invariants": [
+    "Ground truth includes every applicable and not-applicable requirement for every case.",
+    "P11 reports recall, precision, critical requirement misses and finite requirement states.",
+    "Missing, bad-source, applicability, conflicting and unknown-semantic evidence never reaches SUFFICIENT.",
+    "INTERNET_RESULT and MODEL_RESULT are never accepted as Knowledge or Authority; only ACTIVE_CURATED_KNOWLEDGE can satisfy a requirement.",
+    "The combined Sufficiency result is compared with the frozen CKS-07 simple solver on identical case bytes.",
+    "The artifact is offline, synthetic, read-only knowledge evidence and grants no credential, policy, capability, tool-write or execution authority."
+  ],
+  "authority": "NONE",
+  "network": "OFFLINE_PROFILE_ONLY",
+  "nonClaims": ["CI", "merge", "release", "deployment", "production activation", "global domain quality", "parent epic completion"]
+}
