@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "pansphaira.verification/cks-07-empty-kb-e2e-rejections/v1",
+  "fixtureClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC_FAIL_CLOSED",
+  "suiteId": "suite:cks-07-empty-kb",
+  "cases": [
+    { "caseId": "case:missing-too-early", "expectedState": "BLOCKED", "expectedReason": "INCOMPLETE_A0_A2_RECOVERY" },
+    { "caseId": "case:bad-source", "expectedState": "GAP_BAD_SOURCE" },
+    { "caseId": "case:applicability-fail-closed", "expectedState": "GAP_APPLICABILITY" },
+    { "caseId": "case:conflict-fail-closed", "expectedState": "GAP_CONFLICTING" },
+    { "caseId": "case:unknown-semantic-fail-closed", "expectedState": "GAP_UNKNOWN_SEMANTIC" },
+    { "caseId": "case:changed-bundle-blocked", "expectedState": "BLOCKED", "expectedReason": "KNOWLEDGE_BUNDLE_CHANGED" },
+    {
+      "caseId": "case:internet-not-authority",
+      "expectedState": "GAP_MISSING",
+      "assertions": ["NON_AUTHORITATIVE_CANDIDATE", "NOT_ACCEPTED", "NOT_REQUESTED"]
+    }
+  ],
+  "invariants": [
+    "Every rejection is a finite P12 state.",
+    "A blocked decision has no receipt and never fabricates completeness.",
+    "Acquisition candidates remain non-authoritative and are not promoted.",
+    "Internet and model results are never accepted Knowledge or Authority."
+  ]
+}

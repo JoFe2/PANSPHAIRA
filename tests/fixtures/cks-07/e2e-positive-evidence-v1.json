@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "pansphaira.verification/cks-07-empty-kb-e2e-positive/v1",
+  "evidenceId": "evidence:cks-07-empty-kb-e2e-v1",
+  "suiteId": "suite:cks-07-empty-kb",
+  "mode": "OFFLINE_DETERMINISTIC_EMPTY_KB",
+  "network": "OFFLINE_PROFILE_ONLY",
+  "model": "DISABLED",
+  "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+  "emptyKbFixture": "tests/fixtures/cks-07/empty-kb-cases-v1.json",
+  "p12PositiveFixture": "tests/fixtures/cks-07/gap-acquisition-positive-v1.json",
+  "p12NegativeFixture": "tests/fixtures/cks-07/gap-acquisition-negative-v1.json",
+  "rejectionsFixture": "tests/fixtures/cks-07/e2e-rejections-v1.json",
+  "expected": {
+    "emptyKbCaseCount": 9,
+    "p11": {
+      "requirementRecallMean": 0.14814814814814814,
+      "requirementPrecisionMean": 0.2222222222222222,
+      "totalCriticalRequirementMisses": 15,
+      "criticalRequirementMissCases": 8
+    },
+    "p12": {
+      "alternateRecoveryLevels": {
+        "case:recover-a1": "A1",
+        "case:recover-a2": "A2"
+      },
+      "missingCaseId": "case:missing-with-candidates",
+      "acquisitionCandidateCount": 3
+    },
+    "p13": {
+      "combinedFalseCompletenessCount": 0,
+      "simpleSolverFalseCompletenessCount": 8,
+      "combinedTrueCompletenessCount": 1
+    }
+  }
+}

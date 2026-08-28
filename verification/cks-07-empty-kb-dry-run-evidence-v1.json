@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "pansphaira.verification/cks-07-empty-kb-dry-run-evidence/v1",
+  "evidenceId": "evidence:cks-07-empty-kb-e2e-v1",
+  "evidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC",
+  "mode": "DRY_RUN",
+  "network": "OFFLINE_PROFILE_ONLY",
+  "model": "DISABLED",
+  "suiteId": "suite:cks-07-empty-kb",
+  "sourceFixtures": {
+    "positiveEvidenceFixture": "tests/fixtures/cks-07/e2e-positive-evidence-v1.json",
+    "emptyKbFixture": "tests/fixtures/cks-07/empty-kb-cases-v1.json",
+    "p12PositiveFixture": "tests/fixtures/cks-07/gap-acquisition-positive-v1.json",
+    "p12NegativeFixture": "tests/fixtures/cks-07/gap-acquisition-negative-v1.json",
+    "rejectionsFixture": "tests/fixtures/cks-07/e2e-rejections-v1.json"
+  },
+  "acceptanceCriteria": {
+    "P11": {
+      "status": "PASS",
+      "caseCount": 9,
+      "requirementRecallMean": 0.14814814814814814,
+      "requirementPrecisionMean": 0.2222222222222222,
+      "totalCriticalRequirementMisses": 15,
+      "criticalRequirementMissCases": 8,
+      "finiteRequirementStates": [
+        "SATISFIED",
+        "NOT_APPLICABLE",
+        "MISSING",
+        "BAD_SOURCE",
+        "APPLICABILITY",
+        "CONFLICTING",
+        "UNKNOWN_SEMANTIC",
+        "CRITICALITY_MISMATCH"
+      ]
+    },
+    "P12": {
+      "status": "PASS",
+      "alternateRecovery": [
+        {
+          "caseId": "case:recover-a1",
+          "terminalState": "RECOVERED",
+          "terminalLevel": "A1",
+          "attemptOutcomes": [
+            "NO_MATCH",
+            "QUALIFYING_MATCH"
+          ]
+        },
+        {
+          "caseId": "case:recover-a2",
+          "terminalState": "RECOVERED",
+          "terminalLevel": "A2",
+          "attemptOutcomes": [
+            "NO_MATCH",
+            "NO_MATCH",
+            "QUALIFYING_MATCH"
+          ]
+        }
+      ],
+      "missingAfterCompleteRecovery": {
+        "caseId": "case:missing-with-candidates",
+        "state": "GAP_MISSING",
+        "retrievalLevels": [
+          "A0",
+          "A1",
+          "A2"
+        ],
+        "acquisitionCandidateCount": 3,
+        "allCandidatesNotAccepted": true,
+        "promotionStatus": "NOT_REQUESTED",
+        "acceptedKnowledgeDigest": null
+      },
+      "negativeCases": [
+        {
+          "caseId": "case:missing-too-early",
+          "state": "BLOCKED",
+          "reason": "INCOMPLETE_A0_A2_RECOVERY",
+          "replay": "IDENTICAL_BLOCKED_DECISION"
+        },
+        {
+          "caseId": "case:bad-source",
+          "state": "GAP_BAD_SOURCE",
+          "reason": null,
+          "replay": "IDENTICAL_RECEIPT"
+        },
+        {
+          "caseId": "case:applicability-fail-closed",
+          "state": "GAP_APPLICABILITY",
+          "reason": null,
+          "replay": "IDENTICAL_RECEIPT"
+        },
+        {
+          "caseId": "case:conflict-fail-closed",
+          "state": "GAP_CONFLICTING",
+          "reason": null,
+          "replay": "IDENTICAL_RECEIPT"
+        },
+        {
+          "caseId": "case:unknown-semantic-fail-closed",
+          "state": "GAP_UNKNOWN_SEMANTIC",
+          "reason": null,
+          "replay": "IDENTICAL_RECEIPT"
+        },
+        {
+          "caseId": "case:changed-bundle-blocked",
+          "state": "BLOCKED",
+          "reason": "KNOWLEDGE_BUNDLE_CHANGED",
+          "replay": "IDENTICAL_BLOCKED_DECISION"
+        },
+        {
+          "caseId": "case:internet-not-authority",
+          "state": "GAP_MISSING",
+          "reason": null,
+          "replay": "IDENTICAL_RECEIPT"
+        }
+      ],
+      "replayedReceiptCount": 8
+    },
+    "P13": {
+      "status": "PASS",
+      "caseCount": 9,
+      "metrics": {
+        "insufficientOracleCases": 8,
+        "sufficientOracleCases": 1,
+        "combinedFalseCompletenessCount": 0,
+        "simpleSolverFalseCompletenessCount": 8,
+        "combinedTrueCompletenessCount": 1,
+        "combinedFalseCompletenessRate": 0,
+        "simpleSolverFalseCompletenessRate": 1,
+        "falseCompletenessAbsoluteReduction": 1,
+        "combinedTrueCompletenessRate": 1
+      },
+      "falseCompletenessReduced": true
+    },
+    "failClosed": {
+      "status": "PASS",
+      "finiteP12States": [
+        "RECOVERED",
+        "NOT_APPLICABLE",
+        "GAP_MISSING",
+        "GAP_BAD_SOURCE",
+        "GAP_APPLICABILITY",
+        "GAP_CONFLICTING",
+        "GAP_UNKNOWN_SEMANTIC",
+        "BLOCKED"
+      ],
+      "rejectedCaseClasses": [
+        "MISSING",
+        "BAD_SOURCE",
+        "APPLICABILITY",
+        "CONFLICTING",
+        "UNKNOWN_SEMANTIC"
+      ],
+      "internetAndModelAcceptedAsKnowledge": false,
+      "internetAndModelGrantedAuthority": false
+    }
+  },
+  "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+  "receiptReplay": "DETERMINISTIC_BYTE_IDENTICAL",
+  "nonClaims": [
+    "CI",
+    "merge",
+    "release",
+    "deployment",
+    "production activation",
+    "global domain quality",
+    "parent epic completion"
+  ]
+}
