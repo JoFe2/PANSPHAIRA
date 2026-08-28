@@ -77,7 +77,7 @@ test("paired schedule uses identical task/edition/seed identity in every five-ar
   for (const record of records) byPair.set(record.pairKey, [...(byPair.get(record.pairKey) ?? []), record]);
   for (const [pairKey, group] of byPair) {
     assert.equal(group.length, 5, pairKey);
-    assert.deepEqual(group.map((record) => record.armId).sort(), expectedArms);
+    assert.deepEqual(group.map((record) => record.armId).sort(), [...expectedArms].sort());
     for (const field of ["taskId", "scenarioPairId", "domainId", "hopClass", "updateSensitivity", "editionId", "generationSeed", "goldRecordSha256", "evidenceGraphSha256", "canonicalFactInventorySha256"]) {
       assert.equal(new Set(group.map((record) => canonical(record[field]))).size, 1, `${pairKey} ${field}`);
     }
