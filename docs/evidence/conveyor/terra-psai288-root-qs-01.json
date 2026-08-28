@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "conveyor.decision-integration-receipt/v1",
+  "receiptId": "terra-psai288-root-qs-01",
+  "taskId": "TERRA-PSAI288-ROOT-QS-01",
+  "recordStatus": "TECHNICALLY_COMPLETE_RUNTIME_UNVERIFIED",
+  "claimBoundary": "LOCAL_SYNTHETIC_DETERMINISTIC_CKS_08_RECONCILIATION_ONLY_NO_TELEMETRY_NO_RAW_CONTENT_NO_LIVE_SYSTEM_NO_PRODUCTION",
+  "processContext": {
+    "operatingModel": "Operating Model v1.1",
+    "priorDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "disposition": "PRESERVED_NO_OVERRIDE",
+    "processVariantCreated": false
+  },
+  "baseline": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "reconciledHead": "6d17a1289245a4d9671c447e92a1ea2fb36b0999",
+    "writablePathAllowlist": ["docs/evidence/conveyor/terra-psai288-root-qs-01.json"]
+  },
+  "decisionBinding": {
+    "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
+    "fileSha256": "0dfe67637d007f48f8779874e569e16097bae374641b8c4f296156a8d46465a8",
+    "declaredReceiptDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6",
+    "canonicalDigestVerified": true,
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1"
+  },
+  "reconciliation": {
+    "lineage": {
+      "stableBindings": ["Task", "Search", "Knowledge", "Decision", "Outcome"],
+      "referenceRule": "Each lineage reference binds the stable identifier and current SHA-256 digest; bare identifiers and bare digests are denied.",
+      "positiveEvidence": {
+        "source": "verification/cks-08-lineage-dry-run-evidence-v1.json",
+        "sourceSha256": "95dcdde468edc672ef5dfb7fb36a1762d2368d77e024f25095754138a0f26b1c",
+        "reportDigest": "c68942b8a0b4cb4810d94de61599ecd5626c77521d0951260d8289e27e9cb3c5",
+        "reportDigestVerified": true,
+        "boundedEventReceiptCount": 56,
+        "reconstructedTaskCount": 2,
+        "reconstructionFields": ["searched", "inspected", "used", "rejected", "decisionSupporting", "outcomeContributing"]
+      }
+    },
+    "profiles": {
+      "exactIndependentDimensions": ["source", "applicability", "freshness", "contradiction", "generalization", "operational"],
+      "compositeScoreCreated": false,
+      "crossDimensionCompensationCreated": false
+    },
+    "repetitionResistance": {
+      "identicalRepetition": {
+        "validTaskOccurrenceCount": 8,
+        "distinctTaskSemanticCount": 1,
+        "distinctContextCount": 1,
+        "distinctJointUsageUnitCount": 1,
+        "identicalRepetitionCount": 7,
+        "generalizationMarker": null
+      },
+      "diverseReuse": {
+        "validTaskOccurrenceCount": 4,
+        "distinctTaskSemanticCount": 2,
+        "distinctContextCount": 2,
+        "distinctJointUsageUnitCount": 4,
+        "identicalRepetitionCount": 0,
+        "generalizationMarker": "+G"
+      },
+      "repetitionInflationPrevented": true
+    },
+    "seededFailureAttribution": {
+      "seededCaseCount": 17,
+      "causalModes": ["ALTERNATIVES_UNRESOLVED", "MULTI_CONTRIBUTING", "SINGLE", "UNKNOWN"],
+      "certaintyClasses": ["CONFIRMED", "POSSIBLE", "SUPPORTED", "UNKNOWN"],
+      "attributionDenials": [
+        { "name": "missing-causal-witness", "reasonCode": "FAILURE_ATTRIBUTION_DENIED" },
+        { "name": "knowledge-causality-from-contribution-only", "reasonCode": "FAILURE_ATTRIBUTION_DENIED" },
+        { "name": "possible-cause-labelled-single", "reasonCode": "FAILURE_ATTRIBUTION_DENIED" },
+        { "name": "fourth-cause", "reasonCode": "SCHEMA_DENIED" }
+      ],
+      "contributionAloneAssignsKnowledgeCausality": false
+    },
+    "lineageDenials": [
+      { "name": "missing", "reasonCode": "PARENT_MISSING_DENIED" },
+      { "name": "late", "reasonCode": "LATE_EVENT_DENIED" },
+      { "name": "replayed", "reasonCode": "REPLAY_DENIED" },
+      { "name": "cross-scope", "reasonCode": "SCOPE_MISMATCH_DENIED" },
+      { "name": "tampered", "reasonCode": "PREVIOUS_DIGEST_MISMATCH_DENIED" }
+    ],
+    "failClosed": {
+      "deniedLineageCaseCount": 5,
+      "deniedAttributionCaseCount": 4,
+      "partialUsageSetsEmitted": false
+    }
+  },
+  "sourceBindings": [
+    { "path": "packages/contracts/src/cks-lineage-reconstructor.ts", "sha256": "ae544956bf0383c86affe84eee2e84a18297799fde7cc61f77721e267bdd72cb" },
+    { "path": "packages/contracts/src/cks-evidence-profile-features.ts", "sha256": "89c1298d59cc7a379d3ecea941013f1466234299e651a1aa8ffccbc1a9e14f7f" },
+    { "path": "packages/contracts/src/cks-failure-attribution-evaluator.ts", "sha256": "7f5a87937935b35a1f29fc7aa22f9a4bb133f61d75064d8eecbf7c8698997e58" },
+    { "path": "scripts/run-cks-08-lineage-dry-run.mjs", "sha256": "1df1c3d520fc0b4067f9cbb228e40e935544366da2cec3268fc3814c945c8559" },
+    { "path": "tests/cks-08-lineage-dry-run.test.mjs", "sha256": "b4e9b4a1dac95b30c54df385a22f73dda319fbb6ca8d8bd4debed235b08de6b0" },
+    { "path": "tests/fixtures/cks-08/e2e-positive-evidence-v1.json", "sha256": "4d59e1d02f75779259d6a88955be2d475c0823a54c72523c381c46a941509b69" },
+    { "path": "tests/fixtures/cks-08/e2e-rejections-v1.json", "sha256": "4009cb606163dbf76103de3d253b52e01d8d83684e03cfb738ed9c1bed7758dc" }
+  ],
+  "privacy": {
+    "evidenceClass": "LOCAL_SYNTHETIC",
+    "rawReceiptsEmitted": false,
+    "rawContentEmitted": false,
+    "credentialsOrPersonalDataEmitted": false,
+    "nonClaims": ["LIVE_SYSTEM", "TELEMETRY_COLLECTION", "MODEL_OR_PROVIDER", "PRODUCTION", "PUBLICATION", "SECURITY_CERTIFICATION"]
+  },
+  "verification": {
+    "staticIntegrity": { "status": "PASS", "checks": ["decision receipt canonical digest", "dry-run report digest", "source byte SHA-256 bindings"] },
+    "focusedTest": {
+      "command": "node --test tests/cks-08-lineage-dry-run.test.mjs",
+      "nodeVersion": "v24.19.0",
+      "status": "BLOCKED_INFRASTRUCTURE",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "failure": "V8 OS::SetPermissions errno assertion before test execution"
+    },
+    "dryRun": {
+      "command": "node scripts/run-cks-08-lineage-dry-run.mjs --fixture tests/fixtures/cks-08/e2e-positive-evidence-v1.json --dry-run",
+      "status": "BLOCKED_INFRASTRUCTURE",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "failure": "V8 OS::SetPermissions errno assertion before harness execution"
+    },
+    "requiredDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "controllerRequiredFollowUp": ["rerun focused test on pinned Node", "rerun dry-run on pinned Node", "run authoritative pinned-Node and host-Docker gates"]
+  },
+  "integration": {
+    "productCodeChanged": false,
+    "telemetryCollected": false,
+    "externalStateMutated": false,
+    "successClaimRule": "Runtime success is not claimed while the required Node commands are blocked before execution; only the recorded static reconciliation and final diff check may be claimed."
+  },
+  "receiptDigest": "e4ce2d30a27ddfd5c9507ede48644089f9283ddfdb54ca90894b2dc5992c60d8"
+}
