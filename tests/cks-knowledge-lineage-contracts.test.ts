@@ -192,6 +192,14 @@ test("P16 preserves explicit uncertainty and multi-cause attribution, while cont
   const unresolved = { ...supported, causalMode: "ALTERNATIVES_UNRESOLVED", causes: supported.causes.map((cause) => ({ ...cause, certainty: "POSSIBLE" })), failureAttributionDigest: "" } as unknown as Record<string, unknown>;
   unresolved.failureAttributionDigest = failureAttributionDigestV1(unresolved);
   assert.equal(validateFailureAttributionV1(unresolved), true);
+  const excessiveCauseEvidence = {
+    ...supported,
+    causalMode: "SINGLE",
+    causes: [{ ...supported.causes[0]!, causeEventRefs: ["1", "2", "3", "4"].map((character) => ({ eventId: `lineage-event:v1:${hex(character)}`, eventDigest: hex(character) })) }],
+    failureAttributionDigest: "",
+  } as unknown as Record<string, unknown>;
+  excessiveCauseEvidence.failureAttributionDigest = failureAttributionDigestV1(excessiveCauseEvidence);
+  assert.equal(validateFailureAttributionV1(excessiveCauseEvidence), false, "failure evidence is bounded independently from knowledge references");
   const misattributed = makeLineage() as Array<Record<string, any>>;
   const outcome = misattributed[7]!.fact.outcome;
   outcome.outcomeClass = "FAILED";
@@ -211,4 +219,12 @@ test("profiles keep source, applicability, freshness, contradiction, generalizat
   tampered.dimensions.operational.marker = "+O";
   tampered.profileDigest = knowledgeEvidenceProfileDigestV1(tampered);
   assert.equal(validateKnowledgeEvidenceProfileV1(tampered), false, "operational credit cannot be added without its raw counters");
+  const impossibleGeneralization = structuredClone(profile);
+  impossibleGeneralization.dimensions.generalization = { validTaskOccurrenceCount: 2, distinctTaskSemanticCount: 2, distinctContextCount: 2, distinctJointUsageUnitCount: 1, identicalRepetitionCount: 1, marker: "+G" };
+  impossibleGeneralization.profileDigest = knowledgeEvidenceProfileDigestV1(impossibleGeneralization);
+  assert.equal(validateKnowledgeEvidenceProfileV1(impossibleGeneralization), false, "generalization dimensions must reconcile to their joint usage units");
+  const impossibleOperational = structuredClone(profile);
+  impossibleOperational.dimensions.operational = { eligibleOutcomeOccurrenceCount: 1, distinctOperationalUnitCount: 1, distinctOutcomeUnitsByClass: { SUCCEEDED: 1, FAILED: 1, PARTIAL: 0, DENIED: 0 }, uncertainOutcomeOccurrenceCount: 0, failureCauseObservations: [], marker: "+O" };
+  impossibleOperational.profileDigest = knowledgeEvidenceProfileDigestV1(impossibleOperational);
+  assert.equal(validateKnowledgeEvidenceProfileV1(impossibleOperational), false, "operational dimensions must reconcile to their distinct units");
 });
