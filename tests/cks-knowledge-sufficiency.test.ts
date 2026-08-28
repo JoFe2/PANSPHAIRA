@@ -58,6 +58,7 @@ function digestFor(contract: string, value: Record<string, any>): string {
 function mutate(caseData: (typeof invalid.cases)[number]): unknown {
   const rootContract = caseData.contract.split("/")[0];
   const suffix = caseData.contract.split("/")[1];
+  assert.ok(rootContract !== undefined);
   const result = (suffix === undefined
     ? structuredClone(valid[rootContract])
     : structuredClone(valid[rootContract][Number(suffix)])) as Record<string, any>;
@@ -71,7 +72,9 @@ function mutate(caseData: (typeof invalid.cases)[number]): unknown {
     : caseData.contract.startsWith("knowledgeGap") ? "gapDigest"
       : caseData.contract.startsWith("acquisitionPlan") ? "planDigest"
         : caseData.contract.startsWith("sourceEvidence") ? "evidenceDigest" : "sufficiencyDigest";
-  result[digestKey] = digestFor(schemaByContract[rootContract], result);
+  const digestContract = schemaByContract[rootContract];
+  assert.ok(digestContract !== undefined);
+  result[digestKey] = digestFor(digestContract, result);
   return result;
 }
 
@@ -103,6 +106,7 @@ test("CKS-07 digests are stable under object key reordering", () => {
 test("CKS-07 negative fixture cases fail closed", () => {
   for (const caseData of invalid.cases) {
     const contract = caseData.contract.split("/")[0];
+    assert.ok(contract !== undefined);
     const value = mutate(caseData);
     const runtimeValidator = runtimeByContract[contract];
     assert.ok(runtimeValidator);

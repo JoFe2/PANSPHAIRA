@@ -18,8 +18,8 @@
     "sufficiencyDigest": { "$ref": "#/$defs/digest" }
   },
   "allOf": [
-    { "if": { "properties": { "overallOutcome": { "const": "BLOCKED" } }, "required": ["overallOutcome"] }, "then": { "properties": { "blockedReasons": { "minItems": 1 } } } },
-    { "if": { "properties": { "overallOutcome": { "enum": ["SUFFICIENT", "INSUFFICIENT"] } }, "required": ["overallOutcome"] }, "then": { "properties": { "blockedReasons": { "maxItems": 0 } } } }
+    { "if": { "properties": { "overallOutcome": { "const": "BLOCKED" } }, "required": ["overallOutcome"] }, "then": { "properties": { "blockedReasons": { "type": "array", "minItems": 1 } } } },
+    { "if": { "properties": { "overallOutcome": { "enum": ["SUFFICIENT", "INSUFFICIENT"] } }, "required": ["overallOutcome"] }, "then": { "properties": { "blockedReasons": { "type": "array", "maxItems": 0 } } } }
   ],
   "$defs": {
     "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
@@ -37,8 +37,8 @@
       },
       "allOf": [
         { "if": { "properties": { "gapClass": { "const": "NONE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE"] } } } },
-        { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "minItems": 1, "contains": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
-        { "if": { "properties": { "requirementOutcome": { "const": "NOT_APPLICABLE" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "maxItems": 0 } } } },
+        { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "minItems": 1, "contains": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
+        { "if": { "properties": { "requirementOutcome": { "const": "NOT_APPLICABLE" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "maxItems": 0 } } } },
         { "if": { "properties": { "gapClass": { "const": "MISSING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_MISSING" } } } },
         { "if": { "properties": { "gapClass": { "const": "BAD_SOURCE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_BAD_SOURCE" } } } },
         { "if": { "properties": { "gapClass": { "const": "APPLICABILITY" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_APPLICABILITY" } } } },
