@@ -463,6 +463,63 @@ test("malformed transport response denies instead of escaping the policy boundar
   assert.equal(existsSync(destination), false);
 });
 
+test("transport response metadata is snapshotted once before policy validation", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const destination = path.join(mountRoot, ARTICLES_FILENAME);
+  let finalUrlReads = 0;
+  let statusReads = 0;
+  let bodyReads = 0;
+  const session = new WikimediaOptinDownloadSession();
+  const result = session.run(baseInput(mountRoot, destination), {
+    name: "offline-changing-metadata-fake-transport",
+    fetch() {
+      return {
+        get finalUrl() {
+          finalUrlReads += 1;
+          return finalUrlReads === 1 ? "https://evil.example.com/escape.gz" : ARTICLES_URL;
+        },
+        get status() {
+          statusReads += 1;
+          return statusReads === 1 ? 503 : 200;
+        },
+        get body() {
+          bodyReads += 1;
+          return bodyReads === 1 ? Buffer.from("X".repeat(ARTICLES_BODY.length)) : ARTICLES_BODY;
+        },
+      };
+    },
+  });
+  expectDenial(result, REDIRECT_ESCAPE);
+  assert.equal(finalUrlReads, 1);
+  assert.equal(statusReads, 1);
+  assert.equal(bodyReads, 1);
+  assert.equal(existsSync(destination), false);
+});
+
+test("digest verification and atomic exposure use one captured response body", (t) => {
+  const mountRoot = makeMountRoot(t);
+  const destination = path.join(mountRoot, ARTICLES_FILENAME);
+  let bodyReads = 0;
+  const session = new WikimediaOptinDownloadSession();
+  const result = session.run(baseInput(mountRoot, destination), {
+    name: "offline-changing-body-fake-transport",
+    fetch() {
+      return {
+        finalUrl: ARTICLES_URL,
+        status: 200,
+        get body() {
+          bodyReads += 1;
+          return bodyReads === 1 ? Buffer.from("X".repeat(ARTICLES_BODY.length)) : ARTICLES_BODY;
+        },
+      };
+    },
+  });
+  expectDenial(result, CHECKSUM_MISMATCH);
+  assert.equal(bodyReads, 1);
+  assert.equal(existsSync(destination), false);
+  assert.equal(existsSync(`${destination}.partial`), false);
+});
+
 test("unavailable policy evidence denies", (t) => {
   const mountRoot = makeMountRoot(t);
   const probe = probeTransport();

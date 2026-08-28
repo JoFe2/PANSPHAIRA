@@ -85,16 +85,31 @@ export interface FakeTransportV1 {
   fetch(request: FakeTransportRequestV1): FakeTransportResponseV1;
 }
 
-function isFakeTransportResponseV1(value: unknown): value is FakeTransportResponseV1 {
+function snapshotFakeTransportResponseV1(value: unknown): FakeTransportResponseV1 | null {
   if (typeof value !== "object" || value === null) {
-    return false;
+    return null;
   }
   const candidate = value as Record<string, unknown>;
-  return (
-    typeof candidate.finalUrl === "string" &&
-    Number.isInteger(candidate.status) &&
-    candidate.body instanceof Uint8Array
-  );
+  try {
+    // Read each untrusted response field exactly once. A transport may return
+    // accessors rather than the declared readonly data properties; repeatedly
+    // reading those accessors would let validation observe different metadata
+    // or bytes than the exposure step.
+    const finalUrl = candidate.finalUrl;
+    const status = candidate.status;
+    const body = candidate.body;
+    if (
+      typeof finalUrl !== "string" ||
+      typeof status !== "number" ||
+      !Number.isInteger(status) ||
+      !(body instanceof Uint8Array)
+    ) {
+      return null;
+    }
+    return { finalUrl, status, body };
+  } catch {
+    return null;
+  }
 }
 
 export interface WikimediaOptinDownloadInputV1 {
@@ -360,10 +375,11 @@ export class WikimediaOptinDownloadSession {
         userAgent,
         resumeFromByte: 0,
       });
-      if (!isFakeTransportResponseV1(received)) {
+      const snapshot = snapshotFakeTransportResponseV1(received);
+      if (snapshot === null) {
         return { ok: false, code: UNEXPECTED_TRANSPORT_STATUS, stage: "POST_TRANSPORT" };
       }
-      response = received;
+      response = snapshot;
     } catch {
       return { ok: false, code: UNEXPECTED_TRANSPORT_STATUS, stage: "POST_TRANSPORT" };
     } finally {
@@ -375,14 +391,25 @@ export class WikimediaOptinDownloadSession {
     if (response.finalUrl !== requestedUrl) {
       return { ok: false, code: REDIRECT_ESCAPE, stage: "POST_TRANSPORT" };
     }
-    if (response.status !== 200 || !(response.body instanceof Uint8Array)) {
+    if (response.status !== 200) {
       return { ok: false, code: UNEXPECTED_TRANSPORT_STATUS, stage: "POST_TRANSPORT" };
     }
-    // Gate 9: verify declared byte count before the digest.
-    if (response.body.length !== entry.byteSize) {
+    // Gate 9: capture the body once, bounded by the declared byte count, then
+    // use only that private copy for both digest verification and exposure.
+    // This closes response-accessor and mutable-reference TOCTOU paths.
+    let responseBody: Uint8Array;
+    try {
+      if (response.body.byteLength !== entry.byteSize) {
+        return { ok: false, code: UNEXPECTED_BYTE_COUNT, stage: "POST_TRANSPORT" };
+      }
+      responseBody = new Uint8Array(response.body);
+    } catch {
+      return { ok: false, code: UNEXPECTED_TRANSPORT_STATUS, stage: "POST_TRANSPORT" };
+    }
+    if (responseBody.byteLength !== entry.byteSize) {
       return { ok: false, code: UNEXPECTED_BYTE_COUNT, stage: "POST_TRANSPORT" };
     }
-    if (sha256Hex(response.body) !== entry.sha256) {
+    if (sha256Hex(responseBody) !== entry.sha256) {
       return { ok: false, code: CHECKSUM_MISMATCH, stage: "POST_TRANSPORT" };
     }
     // The transport callback is an injected trust boundary. Re-resolve the
@@ -403,7 +430,7 @@ export class WikimediaOptinDownloadSession {
     const partial = path.join(path.dirname(destination), `${path.basename(destination)}.partial`);
     try {
       rmSync(partial, { force: true });
-      writeFileSync(partial, response.body, { flag: "wx", mode: 0o600 });
+      writeFileSync(partial, responseBody, { flag: "wx", mode: 0o600 });
       renameSync(partial, destination);
     } catch {
       // A failed rename must not leave verified-but-usable staged bytes in the
