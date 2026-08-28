@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "pansphaira.evidence/conveyor-integration-receipt/v1",
+  "taskId": "TERRA-PSAI285-INTEGRATION-ROOT-QS-01",
+  "receiptId": "TERRA-PSAI285-INTEGRATION-ROOT-QS-01",
+  "recordedAt": "2026-08-28T21:16:12Z",
+  "decision": "INTEGRATION_HOLD_PINNED_NODE_REQUIRED",
+  "decisionRationale": [
+    "The CKS-05 source chain at the exact dependency head declares the requested bounded, fail-closed controls and preserves the existing Operating Model v1.1 decisions D-001 through D-007.",
+    "Every required local Node test process terminated before test discovery with exit 133/SIGTRAP in V8 Isolate initialization (Check failed: 12 == (*__errno_location ())). No test body, model invocation, benchmark execution, sealing, or public readback was reached.",
+    "Therefore neither positive semantic-validator success nor negative fail-closed behavior is claimed as locally executed. The receipt remains a hold, not a packaging approval or model-substitution claim; the authoritative pinned-Node/host-Docker gates must decide those execution results."
+  ],
+  "governance": {
+    "operatingModelVersion": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "authority": "NONE",
+    "executionAuthorization": "NOT_GRANTED",
+    "sideEffectsPerformed": {
+      "modelInvocations": 0,
+      "benchmarkRuns": 0,
+      "sealing": 0,
+      "repositoryEffects": 0,
+      "push": false,
+      "merge": false,
+      "release": false,
+      "publicReadbackPublication": false
+    }
+  },
+  "exactDependencyHead": {
+    "commit": "54fded14c457767aa5cb73f8176ff539ffdd3120",
+    "branch": "conveyor/pansphaira-285",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "boundArtifacts": [
+      {
+        "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+        "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a"
+      },
+      {
+        "path": "tests/fixtures/cks-05/benchmark-manifest-valid-v1.json",
+        "sha256": "13bbc6a38f03286977a243e35ead7e4198e3743597919894a24ee71a37ea725e"
+      },
+      {
+        "path": "verification/cks-05-hidden-run-manifest-template-v1.json",
+        "sha256": "c9ae963f2cdff2a2c37dbb3f662b0148e6dcd366344ced3846c2a74ab913ca59"
+      },
+      {
+        "path": "tests/fixtures/cks-05/executor-golden-v1.json",
+        "sha256": "214b3abc8bbd4ff06c69bff34043e32fe040741d85c9c7d60e625c7c9e79e066"
+      },
+      {
+        "path": "verification/cks-05-public-readback-template-v1.json",
+        "sha256": "cda8f75e407b87fe98fde470f722d6fc7de060ba8687726689ec8dd5751f841e"
+      }
+    ],
+    "protocol": {
+      "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+      "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd",
+      "decisionReceiptSha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a"
+    }
+  },
+  "verifierSeparation": {
+    "deterministicVerifier": {
+      "identifier": "CKS-05-L4-DETERMINISTIC-EXACT-SCORER",
+      "implementation": "scripts/cks-05-score-run.mjs",
+      "scope": [
+        "closed fixture and terminal-status validation",
+        "run identity, response digest, evidence, applicability, conflict, abstention, update, and resource-coverage checks",
+        "deterministic paired percentile bootstrap and result-schema validation"
+      ],
+      "status": "SOURCE_IDENTIFIED_RUNTIME_UNVERIFIED_LOCAL_NODE_SIGTRAP"
+    },
+    "semanticVerifier": {
+      "identifier": "NOT_APPLICABLE_CKS05_DETERMINISTIC_EXACT_VALIDATION_ONLY",
+      "independentlyIdentified": true,
+      "implementation": null,
+      "reason": "The approved protocol explicitly uses deterministic hidden gold records and exact validators only; it authorizes no model judge, human preference judge, fuzzy semantic matcher, or post-hoc rubric judge.",
+      "status": "NOT_USED_BY_APPROVED_PROTOCOL"
+    },
+    "preconditionAndBindingVerifier": {
+      "identifier": "CKS-05-L1-L2-L4-L6-BOUNDARY",
+      "implementations": [
+        "tests/cks-05-benchmark-contract.test.mjs",
+        "scripts/cks-05-materialize-hidden-run.mjs",
+        "scripts/run-cks-05-benchmark.mjs",
+        "scripts/cks-05-replay-readback.mjs"
+      ],
+      "checks": [
+        "protocol and decision receipt IDs and SHA-256 digests",
+        "model/profile, runtime, prompt, task, Knowledge, seed, arm, scope, and pair bindings",
+        "fresh hidden partition identity, exact arm set, editions, and pre-execution denial",
+        "safe repository-relative source paths and public-safe readback fields"
+      ],
+      "status": "SOURCE_IDENTIFIED_RUNTIME_UNVERIFIED_LOCAL_NODE_SIGTRAP"
+    }
+  },
+  "acceptanceCriteria": [
+    {
+      "criterion": "Model detects information need and issues typed bounded retrieval requests.",
+      "reconciliation": "NOT_SATISFIED_BY_THIS_CKS05_SLICE",
+      "evidence": "The approved CKS-05 protocol permits EMBEDDED_CONTEXT only and sets tools, network, multiTurn, agenticLoop, crossRunMemory, and effects to false. It deliberately does not exercise an agent-issued retrieval request.",
+      "claimEffect": "No claim that typed retrieval-request behavior was validated."
+    },
+    {
+      "criterion": "Unknown synthetic facts and procedures are applied with claim-to-evidence coverage.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "CKS-05 L4 defines exact atomic fact, evidence coverage/precision/attribution, guidance, and unsupported-material-claim metrics against hidden gold records.",
+      "claimEffect": "No measured quality result is asserted."
+    },
+    {
+      "criterion": "Applicability/exclusions and parametric conflicts are respected.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "The L4 scorer checks applicabilityByFact, conflict IDs, stale/update handling, abstention, and exact typed evidence against the gold record.",
+      "claimEffect": "No semantic-quality pass is asserted."
+    },
+    {
+      "criterion": "Missing/conflicting Knowledge leads to abstention/escalation.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "The L4 response/gold contract contains expectedAbstain, conflictIds, and escalationRequired fields with abstention_accuracy, conflict_detection_f1, and escalation metrics.",
+      "claimEffect": "No executed abstention or escalation behavior is asserted."
+    },
+    {
+      "criterion": "Deterministic verifier checks IDs, versions, digests, scope and Preconditions; semantic verifier is independently identified.",
+      "reconciliation": "SOURCE_IDENTIFIED_RUNTIME_UNVERIFIED",
+      "evidence": "Verifier separation in this receipt identifies the deterministic L1/L2/L4/L6 implementations and separately identifies semantic verification as deliberately not applicable under the exact-only protocol.",
+      "claimEffect": "No locally passing validator result is asserted."
+    },
+    {
+      "criterion": "Exact model, quantization, runtime, prompt, tool and Knowledge versions are bound.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "The L1 manifest and design receipt pin model bytes and quantizations, runtime bundle and argv/environment digests, prompt and task-suite artifacts, tool capabilities, and K0_STATIC/K1_UPDATED Knowledge digests.",
+      "claimEffect": "No model or runtime compatibility is asserted."
+    },
+    {
+      "criterion": "Identical hidden/fresh tasks and Knowledge versions are used across arms.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "The L2 template declares FRESH_SYNTHETIC_HIDDEN, sealed digests only, 32 tasks, both frozen editions, and five records per pair key with immutable cross-arm identity fields.",
+      "claimEffect": "No benchmark fairness result is asserted."
+    },
+    {
+      "criterion": "Structured-vs-raw, facts-vs-guidance, static-vs-updated and single-vs-multi-hop A/B results are reported.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "L4/L6 require AB-STRUCTURED-VS-RAW-LARGE, AB-STRUCTURED-VS-RAW-SMALL, AB-FACTS-VS-GUIDANCE-SMALL, AB-STATIC-VS-UPDATED, and AB-SINGLE-VS-MULTI-HOP, alongside the two model controls.",
+      "claimEffect": "No A/B measurement is asserted."
+    },
+    {
+      "criterion": "Confidence intervals/run counts and failures are preserved.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "L4 specifies deterministic 95% paired bootstrap intervals with 20,000 resamples, preserves scheduled/observed/completed/failed/invalidated/scored counts, and retains model and infrastructure failure records without replacement.",
+      "claimEffect": "No statistical result is asserted."
+    },
+    {
+      "criterion": "Stop conditions can falsify or simplify the architecture.",
+      "reconciliation": "CONTRACT_DECLARED_RUNTIME_UNVERIFIED",
+      "evidence": "The protocol binds STOP-01 through STOP-07, SIMPLIFY-STRUCTURE, SIMPLIFY-GUIDANCE, SIMPLIFY-UPDATES, SIMPLIFY-MULTI-HOP, and FALSIFY-SUBSTITUTION; L4/L6 preserve infrastructure invalidation separately from a product verdict.",
+      "claimEffect": "No architecture conclusion is asserted."
+    },
+    {
+      "criterion": "No claim of model substitution unless quality and efficiency thresholds both pass.",
+      "reconciliation": "ENFORCED_AS_CURRENT_DENY",
+      "evidence": "The L1/L2 pre-execution status is DENY_NOT_EXECUTED and L4/L6 force modelSubstitutionClaim false unless complete valid evidence and both threshold families pass.",
+      "claimEffect": "modelSubstitutionClaim=false."
+    }
+  ],
+  "fairnessAndCustody": {
+    "freshInputCustody": "FRESH_SYNTHETIC_HIDDEN; sealed digests only; raw task, Knowledge seed, and rendering bytes remain unpublished.",
+    "armSet": [
+      "ARM-LRF-01",
+      "ARM-SRF-02",
+      "ARM-LSF-03",
+      "ARM-SSF-04",
+      "ARM-SSG-05"
+    ],
+    "knowledgeEditions": [
+      "K0_STATIC",
+      "K1_UPDATED"
+    ],
+    "scheduledRunRecords": 960,
+    "crossArmInvariant": "taskId, prompt, gold/evidence, edition, canonical fact inventory, scenario, domain, hop class, update sensitivity, and generation seed remain paired; arm-specific substitution is rejected.",
+    "publicSafety": {
+      "rawTaskBytesPublished": false,
+      "rawKnowledgeSeedBytesPublished": false,
+      "rawRenderingBytesPublished": false,
+      "sealedDigestsOnly": true,
+      "unsafeReceiptsOrEvidenceAbsentOrRedacted": true
+    }
+  },
+  "claimGuard": {
+    "gateId": "L6-MODEL-SUBSTITUTION",
+    "status": "DENY",
+    "modelSubstitutionClaim": false,
+    "qualityThresholdsPass": false,
+    "efficiencyThresholdsPass": false,
+    "allQualityAndEfficiencyThresholdsPass": false,
+    "reasonCodes": [
+      "NOT_EXECUTED",
+      "LOCAL_NODE_SIGTRAP_EXIT_133",
+      "TYPED_RETRIEVAL_REQUEST_CRITERION_NOT_SATISFIED_BY_CKS05_EMBEDDED_CONTEXT_ONLY"
+    ],
+    "permittedConclusion": "Only that the exact source-bound protocol declares these controls; no model quality, efficiency, substitution, production, safety, or generalization conclusion follows."
+  },
+  "selectedInheritedSemanticValidators": {
+    "requiredResult": "ALL_PASS_ON_EXACT_DEPENDENCY_HEAD",
+    "localResult": "UNVERIFIED_INFRASTRUCTURE_BLOCKED",
+    "attempts": [
+      {
+        "command": "node --test tests/cks-05-benchmark-contract.test.mjs",
+        "exitCode": 133,
+        "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY"
+      },
+      {
+        "command": "node --test tests/cks-05-hidden-runner.test.mjs",
+        "exitCode": 133,
+        "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY"
+      },
+      {
+        "command": "node --test tests/cks-05-metrics-statistics.test.mjs",
+        "exitCode": 133,
+        "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY"
+      },
+      {
+        "command": "node --test tests/cks-05-benchmark-executor.test.mjs",
+        "exitCode": 133,
+        "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY"
+      },
+      {
+        "command": "node --test tests/cks-05-replay-readback.test.mjs",
+        "exitCode": 133,
+        "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY"
+      }
+    ],
+    "infrastructureEvidence": "Node/V8 failed during Isolate initialization with 'Check failed: 12 == (*__errno_location ())'; the shell reported Trace/Breakpoint trap and exit 133. This is not a product verdict."
+  },
+  "negativeFailClosedCases": [
+    {
+      "case": "Missing authority, self-approval, or authority widening denies without side effects.",
+      "sourceControl": "CKS-05 execution capability is closed (no tools, network, effects, or execution authorization); this receipt records no authority and zero side effects.",
+      "localExecutionStatus": "UNVERIFIED_INFRASTRUCTURE_BLOCKED"
+    },
+    {
+      "case": "Stale, replayed, or mismatched identity, digest, receipt, or evidence bindings deny without reuse.",
+      "sourceControl": "L1/L2/L4/L6 recompute receipt/protocol/catalog/response digests, derive runId/pairKey, reject drift, and preserve append-only terminal records without replacement.",
+      "localExecutionStatus": "UNVERIFIED_INFRASTRUCTURE_BLOCKED"
+    },
+    {
+      "case": "Malformed, unknown, or non-typed inputs deny before sealing or execution.",
+      "sourceControl": "Closed schema and fixture validators reject unknown fields, invalid terminal statuses, malformed paths, incomplete pairings, unsafe fixtures, and disallowed execution mode before execution.",
+      "localExecutionStatus": "UNVERIFIED_INFRASTRUCTURE_BLOCKED"
+    },
+    {
+      "case": "Unbound or unsafe receipts, evidence, and public-readback payloads remain absent or redacted.",
+      "sourceControl": "L2/L6 require sealed digests only; raw task, Knowledge seed, rendering, response, gold-record, and final-answer bytes are excluded from public readback.",
+      "localExecutionStatus": "UNVERIFIED_INFRASTRUCTURE_BLOCKED"
+    }
+  ],
+  "verification": {
+    "gitDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS",
+      "output": ""
+    },
+    "authoritativeNextGate": "Controller-run pinned-Node and host-Docker verification of the five selected CKS-05 test commands; do not reinterpret local exit 133/SIGTRAP as a product failure or success."
+  }
+}
