@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "pansphaira.evidence/sol-psai287-release-or-no-release-01/v1",
+  "taskId": "SOL-PSAI287-RELEASE-OR-NO-RELEASE-01",
+  "recordKind": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
+  "decisionId": "PSAI287-ISSUE-SCOPED-RELEASE-DISPOSITION-V1",
+  "decisionStatus": "FINAL_LOCAL_NO_RELEASE",
+  "scope": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "issue": 287,
+    "branch": "conveyor/pansphaira-287",
+    "comparisonBase": "origin/main",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "preReceiptHeadCommit": "8525f96838a0b813b8fed6a9bf7a6a81fb71ea96",
+    "capability": "CKS-07",
+    "packageKind": "BOUNDED_PART_II_PROOF_PACKAGE",
+    "productionResearch": "EXPLICITLY_OUT_OF_SCOPE",
+    "promotionAuthorization": "ABSENT",
+    "deploymentAuthorization": "ABSENT",
+    "onlyWritableArtifact": "docs/evidence/conveyor/sol-psai287-release-or-no-release-01.json",
+    "remoteStateMutated": false
+  },
+  "preservedProcessContext": {
+    "controllerAttestationSource": "TASK_INSTRUCTION",
+    "operatingModel": {
+      "id": "Operating Model v1.1",
+      "treatment": "PRESERVED_UNCHANGED",
+      "restatedOrReinterpretedHere": false
+    },
+    "decisions": [
+      { "id": "D-001", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-002", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-003", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-004", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-005", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-006", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-007", "treatment": "PRESERVED_UNCHANGED" }
+    ],
+    "integrationRule": "This receipt records only the issue-scoped release-or-no-release disposition and its public-readback wording. It creates no process variant, workflow, acquisition path, promotion path, Knowledge acceptance path, Authority path, release authority, deployment authority, or GitHub mutation."
+  },
+  "supportingEvidence": {
+    "controllerDirection": {
+      "source": "TASK_INSTRUCTION",
+      "claim": "Issue #287 is a bounded Part-II proof package with production research explicitly outside scope and no authorization for promotion or deployment."
+    },
+    "repositoryReceipts": [
+      {
+        "path": "docs/evidence/conveyor/sol-psai287-knowledge-sufficiency-decision-01.json",
+        "sha256": "d7517fa8600d6d454e7ca1da9127ebb96a9b0cdf250eb44449d522426d1ce13c",
+        "supports": "The frozen decision separates acquisition, qualification, promotion, accepted Knowledge, and Authority and explicitly performs none of them."
+      },
+      {
+        "path": "docs/evidence/conveyor/terra-psai287-root-qs-01.json",
+        "sha256": "6c93e78893d3253cd22ac6d2cae015a567b8c9d8ad9ad8771bd1b648d7590fae",
+        "supports": "The reconciled proof is bounded to frozen offline synthetic fixtures and records no acquisition, promotion, remote mutation, production activation, or release claim."
+      },
+      {
+        "path": "docs/evidence/conveyor/int-psai287-pr-ci-package-01.json",
+        "sha256": "a0c44dcd5af006260e6d6c7e45b2d4d7d7213957b8bd34b610000578183e3702",
+        "supports": "The local integration packet records NO_RELEASE_REQUESTED and authorizes no tag, release, publication, deployment, or GitHub mutation."
+      }
+    ],
+    "rationale": [
+      "The deliverable is evidence for a bounded Part-II proof package, not a production-research increment.",
+      "No instruction or repository receipt authorizes promotion, deployment, publication, or production activation.",
+      "The proof package preserves separation among acquisition candidates, promotion, accepted Knowledge, and Authority.",
+      "Fail-closed release handling therefore requires NO_RELEASE for this issue-scoped slice."
+    ]
+  },
+  "localDisposition": {
+    "value": "NO_RELEASE",
+    "status": "RECORDED",
+    "releaseAuthorized": false,
+    "wording": "Issue #287 disposition: NO_RELEASE. The issue is a bounded Part-II proof package with production research explicitly out of scope and no authorization for promotion or deployment.",
+    "failClosedRule": "Without separate, explicit, governed release authorization and its required evidence, this issue-scoped disposition remains NO_RELEASE."
+  },
+  "integrationBoundary": {
+    "mergeAuthorizedByThisReceipt": false,
+    "laterMergeClassification": "INTEGRATION_ONLY_NOT_RELEASE",
+    "statement": "Any later merge is not a release and does not activate acquisition, promotion, Knowledge acceptance, or Authority.",
+    "doesNotActivate": {
+      "acquisition": true,
+      "promotion": true,
+      "knowledgeAcceptance": true,
+      "authority": true,
+      "productionResearch": true,
+      "deployment": true
+    },
+    "separateGovernedAuthorizationRequired": true
+  },
+  "publicReadback": {
+    "status": "WORDING_RECORDED_NOT_PUBLISHED",
+    "wording": "Issue #287 disposition: NO_RELEASE. #287 is a bounded Part-II proof package; production research is explicitly out of scope, and no promotion or deployment is authorized. Any later merge is integration only, not a release, and does not activate acquisition, promotion, Knowledge acceptance, or Authority.",
+    "publicationPerformed": false,
+    "anonymousReleaseReadbackClaimed": false,
+    "githubMutationPerformed": false
+  },
+  "releaseAndMutationReceipt": {
+    "tagCreated": false,
+    "packagePublished": false,
+    "releaseCreatedOrModified": false,
+    "assetUploaded": false,
+    "deploymentPerformed": false,
+    "githubStateMutated": false,
+    "externalStateChanged": false
+  },
+  "evidenceBoundary": {
+    "requiredReceipt": "docs/evidence/conveyor/sol-psai287-release-or-no-release-01.json",
+    "requiredEvidencePresent": true,
+    "successWithoutRequiredEvidencePermitted": false,
+    "claimBoundary": "Success is limited to recording this deterministic local NO_RELEASE disposition and integration wording; no release, merge, deployment, production activation, public publication, or external readback success is claimed."
+  },
+  "verification": {
+    "jsonSyntax": {
+      "method": "strict JSON parse",
+      "expected": "PASS",
+      "observed": "PASS"
+    },
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "expectedExitCode": 0,
+      "observedExitCode": 0,
+      "result": "PASS"
+    },
+    "productTests": "NOT_RUN_DECISION_ONLY_NO_PRODUCT_CODE_CHANGE",
+    "verificationBoundary": "Syntax and repository diff hygiene verify this bounded receipt; they do not authorize or establish a release, promotion, deployment, production-research result, Knowledge acceptance, or Authority."
+  },
+  "publicSafeNonClaims": [
+    "No tag, package publication, release, asset upload, deployment, GitHub mutation, or external state change was performed.",
+    "No acquisition, qualification, promotion, Knowledge acceptance, production activation, or Authority was performed or authorized.",
+    "No production-research fitness, production readiness, corpus completeness, or generalization is claimed.",
+    "No later merge is represented as a release."
+  ],
+  "verdict": "NO_RELEASE_FOR_ISSUE_287_BOUNDED_PART_II_PROOF_PACKAGE"
+}
