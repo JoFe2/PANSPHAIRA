@@ -1,0 +1,849 @@
+{
+  "schemaVersion": "conveyor.decision-integration-receipt/v1",
+  "receiptId": "sol-psai288-usage-lineage-decision-01",
+  "taskId": "SOL-PSAI288-USAGE-LINEAGE-DECISION-01",
+  "subject": "CKS-08_USAGE_LINEAGE_PROOF_VOCABULARY",
+  "recordStatus": "FROZEN_DECISION_ONLY",
+  "integrationStatus": "NO_PRODUCT_INTEGRATION",
+  "claimBoundary": "LOCAL_SYNTHETIC_DECISION_RECORD_ONLY_NO_IMPLEMENTATION_NO_COLLECTION_NO_TELEMETRY_NO_RAW_REASONING_NO_MODEL_NO_SERVICE_NO_PRODUCTION",
+  "baseline": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-288",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headBeforeDecision": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "artifact": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json"
+  },
+  "processContext": {
+    "operatingModel": {
+      "id": "Operating Model v1.1",
+      "disposition": "PRESERVED_NO_OVERRIDE",
+      "contentRestated": false
+    },
+    "priorDecisions": [
+      { "id": "D-001", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-002", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-003", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-004", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-005", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-006", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-007", "disposition": "PRESERVED_NO_OVERRIDE" }
+    ],
+    "rule": "This receipt freezes only the CKS-08 technical proof vocabulary. It creates no process variant and does not reinterpret prior decisions."
+  },
+  "decisionBoundary": {
+    "included": [
+      "scope, Task, Search, Knowledge, Decision, Outcome and lineage-event identifiers",
+      "mandatory identifier-and-digest reference bindings",
+      "event ordering, bounded lateness, task sealing and replay denial",
+      "deterministic reconstruction of searched, inspected, used, rejected, decision-supporting and outcome-contributing Knowledge",
+      "six independent evidence-profile dimensions",
+      "raw novelty and context-diversity features",
+      "+G and +O marker meanings",
+      "bounded failure-cause, uncertainty and multi-cause semantics",
+      "fail-closed rejection conditions and explicit nonclaims"
+    ],
+    "excluded": [
+      "product code or schema implementation",
+      "fixtures, harness changes or synthetic probe execution",
+      "telemetry, monitoring, usage collection or persistence",
+      "prompts, responses, content, raw reasoning or chain-of-thought",
+      "models, providers, services, network calls or live systems",
+      "GitHub mutation, release, merge or issue closure"
+    ]
+  },
+  "upstreamBindings": {
+    "bindingRule": "The following repository bytes at originMainCommit are the only inherited technical semantics. A missing path, digest mismatch or semantic drift requires DENIED and a successor decision; prose or fixtures cannot substitute for a binding.",
+    "sources": [
+      {
+        "role": "CANONICAL_JSON",
+        "path": "packages/contracts/src/canonical-json.ts",
+        "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826",
+        "binding": "canonicalJson plain-JSON serialization with lexicographically sorted object keys"
+      },
+      {
+        "role": "KNOWLEDGE_IDENTITY_AND_DIGEST",
+        "path": "packages/contracts/src/knowledge-envelope.ts",
+        "sha256": "e2ddaf15fae3636911a68247888883de5d80937e8cce98d9f42f80f7760db1aa",
+        "binding": "KnowledgeEnvelopeV1 envelopeId plus envelopeDigest, authority-free Knowledge boundary, source, freshness and conflict facts"
+      },
+      {
+        "role": "KNOWLEDGE_JSON_SHAPE",
+        "path": "schemas/contracts/knowledge-envelope-v1.schema.json",
+        "sha256": "914a02fa0016ec9b47be075fb3d53126955d4255956932b7a49c33589867cb31",
+        "binding": "closed JSON-visible Knowledge Envelope shape"
+      },
+      {
+        "role": "APPLICABILITY",
+        "path": "packages/contracts/src/knowledge-quality.ts",
+        "sha256": "781d2a718e083de9a94b579308aad7cf29ad7943094482995442b56b72d20ac2",
+        "binding": "APPLICABILITY_DIMENSIONS_V1, typed applicability states and acceptedContextDigest semantics"
+      },
+      {
+        "role": "CAUSAL_INPUT_PRECEDENT",
+        "path": "packages/contracts/src/agent-work-process-input.ts",
+        "sha256": "6dbcf697d48fd2108daae5aab90e1a3f7aff1bc14871cb94ed941754a6b4b43f",
+        "binding": "closed synthetic event inputs, cause references, prohibited raw fields and digest denial precedent; not wire compatibility"
+      },
+      {
+        "role": "DETERMINISTIC_ORDERING_PRECEDENT",
+        "path": "packages/contracts/src/agent-work-process-trace.ts",
+        "sha256": "d81d48048a029f634fcee0af7dbca99c60dde8f25cf72c6e5e9cfdecc298484a",
+        "binding": "causal ordering and explicit unknown-causality precedent; not wire compatibility"
+      },
+      {
+        "role": "PRIVACY_PRECEDENT",
+        "path": "packages/contracts/src/usage-insights.ts",
+        "sha256": "12d11e9c1db2acd9e6de4a87629e9b607ab4879b69e4ae32e6014623c784af2d",
+        "binding": "closed fields, sensitive-digest classification, bounded records and no prohibited content; CKS-08 is not an extension of its telemetry runtime"
+      },
+      {
+        "role": "PRIVACY_JSON_PRECEDENT",
+        "path": "schemas/contracts/usage-insights-event-v1.schema.json",
+        "sha256": "e3c736a1229d6a01bb8589cd232844be788d817fd84ebf26fd419f2b7a090ae5",
+        "binding": "closed event shape and lowercase SHA-256 syntax precedent; not wire compatibility"
+      }
+    ],
+    "applicabilityDimensions": [
+      "domain",
+      "knowledge_type",
+      "role_responsibility",
+      "industry",
+      "organization_context",
+      "geography_jurisdiction_policy",
+      "process_stage",
+      "system_config",
+      "prerequisites_constraints_exceptions",
+      "task_audience_outcome",
+      "valid_time_freshness",
+      "epistemic_status",
+      "evidence_strength",
+      "sensitivity",
+      "license"
+    ]
+  },
+  "frozenSchemaIdentifiers": {
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "scopeSchema": "chimpmaera.knowledge/usage-lineage-scope/v1",
+    "taskSchema": "chimpmaera.knowledge/usage-lineage-task/v1",
+    "searchSchema": "chimpmaera.knowledge/usage-lineage-search/v1",
+    "decisionSchema": "chimpmaera.knowledge/usage-lineage-decision/v1",
+    "outcomeSchema": "chimpmaera.knowledge/usage-lineage-outcome/v1",
+    "eventSchema": "chimpmaera.knowledge/usage-lineage-event/v1",
+    "reconstructionSchema": "chimpmaera.knowledge/usage-lineage-reconstruction/v1",
+    "profileSchema": "chimpmaera.knowledge/evidence-profile/v1",
+    "failureAttributionSchema": "chimpmaera.knowledge/failure-attribution/v1"
+  },
+  "canonicalDigestPolicy": {
+    "algorithm": "SHA-256",
+    "encoding": "UTF-8",
+    "outputPattern": "^[a-f0-9]{64}$",
+    "canonicalizer": "packages/contracts/src/canonical-json.ts#canonicalJson",
+    "recordRule": "Hash the exact closed plain-JSON object after removing only that object's own digest field. Arrays are semantically sets unless expressly stated and therefore must already be unique and lexicographically sorted before hashing.",
+    "referenceRule": "Every entity reference is an exact two-field object containing its identifier and current digest. Bare identifiers, bare digests, null references and digest substitution are forbidden.",
+    "unknownFieldRule": "Any unknown, omitted mandatory, undefined, accessor-backed, symbolic, cyclic, aliased, sparse, proxy or exotic value is DENIED before hashing.",
+    "semanticRule": "semanticRuleId is mandatory on every locally defined entity and event. No default semantic version is inferred."
+  },
+  "finiteConstants": {
+    "idEntropyBits": 256,
+    "digestHexCharacters": 64,
+    "lateWindowMs": 300000,
+    "firstScopeSequence": 0,
+    "maxTasksPerScope": 64,
+    "maxEventsPerScope": 4096,
+    "maxEventsPerTask": 256,
+    "maxSearchesPerTask": 16,
+    "maxKnowledgeRefsPerSearch": 32,
+    "maxKnowledgeRefsPerDecision": 32,
+    "maxKnowledgeRefsPerOutcome": 32,
+    "maxFailureCauses": 3,
+    "maxCauseEventRefsPerCause": 3,
+    "maxReasonCodesPerDenial": 8,
+    "generalizationMinimumDistinctTaskSemantics": 2,
+    "generalizationMinimumDistinctContexts": 2,
+    "operationalMinimumDistinctOutcomeUnits": 1,
+    "capacityRule": "A value at its maximum is accepted; the next value is DENIED. Capacity denial creates no partial lineage or profile credit."
+  },
+  "privacyPolicy": {
+    "allowedScopeClass": "LOCAL_SYNTHETIC_FIXTURE",
+    "defaultState": "ABSENT_AND_INACTIVE",
+    "retainedDataClasses": [
+      "PUBLIC_FIXED_ENUM",
+      "OPAQUE_RANDOM_IDENTIFIER",
+      "SENSITIVE_LOCAL_DIGEST",
+      "SYNTHETIC_EVENT_TIME",
+      "BOUNDED_INTEGER"
+    ],
+    "prohibitedFieldsNormalized": [
+      "actorIdentity",
+      "chainOfThought",
+      "command",
+      "content",
+      "credential",
+      "customer",
+      "email",
+      "fileName",
+      "filePath",
+      "hostname",
+      "identity",
+      "ipAddress",
+      "message",
+      "path",
+      "person",
+      "phone",
+      "prompt",
+      "rawEvent",
+      "rawPayload",
+      "rawReasoning",
+      "rawText",
+      "reasoning",
+      "response",
+      "secret",
+      "sessionId",
+      "tenantId",
+      "token",
+      "userId",
+      "username"
+    ],
+    "rules": [
+      "Identifiers are runtime-minted opaque random values except knowledgeId, which is the already validated KnowledgeEnvelopeV1 envelopeId. No identifier is derived from content, actor, tenant, session, time or filesystem location.",
+      "Task objective, search intent and applicability context enter lineage only as verified sensitive digests; their raw preimages are not retained by this vocabulary.",
+      "Digests, timestamps and linkage can remain sensitive metadata and are local synthetic proof material only; this receipt authorizes no sharing or export.",
+      "No actor, user, installation, tenant, session or cross-scope correlation identifier exists in the vocabulary.",
+      "A non-synthetic scope class is unsupported and DENIED until a separately reviewed decision exists."
+    ]
+  },
+  "identifierVocabulary": {
+    "scopeId": {
+      "pattern": "^scope:v1:[a-f0-9]{64}$",
+      "minting": "RUNTIME_RANDOM_256_BIT"
+    },
+    "taskId": {
+      "pattern": "^task:v1:[a-f0-9]{64}$",
+      "minting": "RUNTIME_RANDOM_256_BIT"
+    },
+    "searchId": {
+      "pattern": "^search:v1:[a-f0-9]{64}$",
+      "minting": "RUNTIME_RANDOM_256_BIT"
+    },
+    "knowledgeId": {
+      "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$",
+      "minting": "INHERITED_FROM_VALIDATED_KNOWLEDGE_ENVELOPE"
+    },
+    "decisionId": {
+      "pattern": "^decision:v1:[a-f0-9]{64}$",
+      "minting": "RUNTIME_RANDOM_256_BIT"
+    },
+    "outcomeId": {
+      "pattern": "^outcome:v1:[a-f0-9]{64}$",
+      "minting": "RUNTIME_RANDOM_256_BIT"
+    },
+    "eventId": {
+      "pattern": "^lineage-event:v1:[a-f0-9]{64}$",
+      "minting": "RUNTIME_RANDOM_256_BIT"
+    },
+    "globalUniquenessRule": "scopeId is unique within one proof corpus. All other locally minted IDs are unique within scope. Reuse is never treated as idempotent success."
+  },
+  "referenceVocabulary": {
+    "scopeRef": ["scopeId", "scopeDigest"],
+    "taskRef": ["taskId", "taskDigest"],
+    "searchRef": ["searchId", "searchDigest"],
+    "knowledgeRef": ["knowledgeId", "knowledgeDigest"],
+    "decisionRef": ["decisionId", "decisionDigest"],
+    "outcomeRef": ["outcomeId", "outcomeDigest"],
+    "eventRef": ["eventId", "eventDigest"],
+    "exactKeyRule": "Each reference has exactly the two listed fields. Both values are mandatory and must resolve to one already validated entity in the same scope and, except scopeRef, the same task where applicable."
+  },
+  "entityDigestBindings": {
+    "Scope": {
+      "identifier": "scopeId",
+      "digest": "scopeDigest",
+      "canonicalFieldsExcludingDigest": [
+        "schemaVersion",
+        "semanticRuleId",
+        "scopeId",
+        "scopeClass"
+      ],
+      "bindingRule": "scopeClass must equal LOCAL_SYNTHETIC_FIXTURE."
+    },
+    "Task": {
+      "identifier": "taskId",
+      "digest": "taskDigest",
+      "canonicalFieldsExcludingDigest": [
+        "schemaVersion",
+        "semanticRuleId",
+        "scopeRef",
+        "taskId",
+        "taskKind",
+        "objectiveDigest",
+        "applicabilityContextDigest",
+        "taskSemanticDigest",
+        "contextFingerprintDigest"
+      ],
+      "taskKinds": ["RETRIEVE", "DECIDE", "ACT", "VERIFY"],
+      "taskSemanticDigestPreimage": [
+        "semanticRuleId",
+        "scopeRef.scopeId",
+        "taskKind",
+        "objectiveDigest"
+      ],
+      "contextFingerprintDigestPreimage": [
+        "semanticRuleId",
+        "scopeRef.scopeId",
+        "applicabilityContextDigest"
+      ],
+      "bindingRule": "objectiveDigest and applicabilityContextDigest must each resolve to an admitted synthetic upstream object whose digest is independently recomputed. IDs, timestamps and event order are excluded from both feature digests."
+    },
+    "Search": {
+      "identifier": "searchId",
+      "digest": "searchDigest",
+      "canonicalFieldsExcludingDigest": [
+        "schemaVersion",
+        "semanticRuleId",
+        "scopeRef",
+        "taskRef",
+        "searchId",
+        "searchIntentDigest",
+        "resultKnowledgeRefs"
+      ],
+      "bindingRule": "searchIntentDigest must resolve to an admitted closed synthetic search request. resultKnowledgeRefs is a unique lexicographically sorted set; rank, score and query text are absent."
+    },
+    "Knowledge": {
+      "identifier": "knowledgeId",
+      "digest": "knowledgeDigest",
+      "canonicalFieldsExcludingDigest": [],
+      "bindingRule": "knowledgeId must equal a validated KnowledgeEnvelopeV1 envelopeId and knowledgeDigest must equal the independently recomputed envelopeDigest for those exact bytes. CKS-08 does not mint, redigest or repair Knowledge."
+    },
+    "Decision": {
+      "identifier": "decisionId",
+      "digest": "decisionDigest",
+      "canonicalFieldsExcludingDigest": [
+        "schemaVersion",
+        "semanticRuleId",
+        "scopeRef",
+        "taskRef",
+        "decisionId",
+        "decisionClass",
+        "supportingKnowledgeRefs"
+      ],
+      "decisionClasses": ["SELECTED", "REJECTED", "DEFERRED", "DENIED"],
+      "bindingRule": "supportingKnowledgeRefs is a unique lexicographically sorted subset of explicitly USED Knowledge in the same task."
+    },
+    "Outcome": {
+      "identifier": "outcomeId",
+      "digest": "outcomeDigest",
+      "canonicalFieldsExcludingDigest": [
+        "schemaVersion",
+        "semanticRuleId",
+        "scopeRef",
+        "taskRef",
+        "decisionRef",
+        "outcomeId",
+        "outcomeClass",
+        "contributingKnowledgeRefs",
+        "failureAttribution"
+      ],
+      "outcomeClasses": ["SUCCEEDED", "FAILED", "PARTIAL", "DENIED", "UNKNOWN"],
+      "bindingRule": "contributingKnowledgeRefs is a unique lexicographically sorted subset of the bound Decision's supportingKnowledgeRefs. failureAttribution is independently digest-bound and follows the frozen failure policy."
+    }
+  },
+  "eventVocabulary": {
+    "eventTypes": [
+      "TASK_OPENED",
+      "SEARCH_RECORDED",
+      "KNOWLEDGE_INSPECTED",
+      "KNOWLEDGE_DISPOSITIONED",
+      "DECISION_RECORDED",
+      "OUTCOME_RECORDED"
+    ],
+    "eventShapeExcludingDigest": [
+      "schemaVersion",
+      "semanticRuleId",
+      "eventId",
+      "eventType",
+      "scopeRef",
+      "taskRef",
+      "occurredAtMs",
+      "receivedAtMs",
+      "scopeSequence",
+      "previousEventDigest",
+      "fact",
+      "factDigest"
+    ],
+    "eventDigestField": "eventDigest",
+    "factDigestRule": "factDigest is SHA-256 over canonicalJson(fact). eventDigest is SHA-256 over the complete closed event excluding only eventDigest and therefore binds factDigest, time, sequence, prior event and all entity references.",
+    "facts": {
+      "TASK_OPENED": {
+        "exactFields": ["task"],
+        "rule": "task is the complete Task entity and must match event taskRef."
+      },
+      "SEARCH_RECORDED": {
+        "exactFields": ["search"],
+        "rule": "search is the complete Search entity and must match event scopeRef and taskRef."
+      },
+      "KNOWLEDGE_INSPECTED": {
+        "exactFields": ["scopeRef", "taskRef", "searchRef", "knowledgeRef"],
+        "rule": "searchRef must name an accepted Search whose resultKnowledgeRefs contains the exact knowledgeRef."
+      },
+      "KNOWLEDGE_DISPOSITIONED": {
+        "exactFields": ["scopeRef", "taskRef", "knowledgeRef", "disposition", "reasonCode"],
+        "dispositions": ["USED", "REJECTED"],
+        "reasonCodesByDisposition": {
+          "USED": ["SELECTED_FOR_TASK"],
+          "REJECTED": [
+            "NOT_APPLICABLE",
+            "STALE",
+            "CONTRADICTED",
+            "INSUFFICIENT_SOURCE_SUPPORT",
+            "NOT_NEEDED",
+            "POLICY_DENIED"
+          ]
+        },
+        "rule": "The exact knowledgeRef must already be inspected. One Knowledge has at most one disposition per task; USED and REJECTED are mutually exclusive."
+      },
+      "DECISION_RECORDED": {
+        "exactFields": ["decision"],
+        "rule": "decision is the complete Decision entity and freezes the task's searched, inspected, used and rejected sets."
+      },
+      "OUTCOME_RECORDED": {
+        "exactFields": ["outcome"],
+        "rule": "outcome is the complete Outcome entity, binds the one accepted Decision and seals the task."
+      }
+    }
+  },
+  "orderingLateAndReplaySemantics": {
+    "authoritativeOrder": "Per-scope accepted ingestion order is the contiguous scopeSequence hash chain. Sequence starts at firstScopeSequence; genesis previousEventDigest is null; every later previousEventDigest equals the immediately preceding accepted eventDigest.",
+    "causalOrder": [
+      "TASK_OPENED precedes every other event for its task.",
+      "SEARCH_RECORDED precedes inspection through an exact searchRef.",
+      "KNOWLEDGE_INSPECTED precedes that Knowledge's one disposition.",
+      "USED precedes inclusion in supportingKnowledgeRefs.",
+      "DECISION_RECORDED precedes OUTCOME_RECORDED.",
+      "Every cause or entity parent has lower scopeSequence and occurredAtMs less than or equal to its child."
+    ],
+    "receivedTimeRule": "receivedAtMs is a non-negative safe integer, is nondecreasing with scopeSequence, and is greater than or equal to occurredAtMs.",
+    "lateWindowRule": "Before accepting a candidate, watermarkMs is the maximum occurredAtMs among accepted events in that scope. The candidate is accepted as late only when watermarkMs minus occurredAtMs is less than or equal to lateWindowMs, receivedAtMs minus occurredAtMs is less than or equal to lateWindowMs, every parent is already accepted, and the Decision has not frozen the task. A negative difference is not late.",
+    "lateBoundary": "Exactly lateWindowMs is accepted; any greater lateness is LATE_EVENT_DENIED. There is no pending queue, retroactive repair or fixture-assisted gap fill.",
+    "freezeAndSeal": "DECISION_RECORDED rejects later Search, inspection or disposition events for that task. OUTCOME_RECORDED rejects every later non-replay event for that task. Replays remain DENIED rather than becoming successful readback.",
+    "replayRule": "A previously seen eventId, eventDigest, factDigest for the same semantic edge, or locally minted entity ID is REPLAY_DENIED even when bytes are identical. Same ID with different digest is TAMPERED_LINEAGE_DENIED. No replay earns usage, +G or +O credit.",
+    "repetitionDistinction": "A new valid Task with new entity and event IDs may intentionally repeat an earlier taskSemanticDigest and contextFingerprintDigest. It reconstructs independently but collapses to the same generalization usage unit, so repetition is not transport replay and cannot inflate +G.",
+    "canonicalReconstructionOrder": "After validation, task outputs and all set-valued references are sorted lexicographically by identifier then digest. Arrival order, object key order and fixture prose never break ties."
+  },
+  "reconstructedUsageSemantics": {
+    "completeTaskRequirements": {
+      "TASK_OPENED": 1,
+      "minimumSEARCH_RECORDED": 1,
+      "DECISION_RECORDED": 1,
+      "OUTCOME_RECORDED": 1
+    },
+    "states": {
+      "SEARCHED": "Union of exact resultKnowledgeRefs from accepted Searches in the task.",
+      "INSPECTED": "Knowledge with an accepted KNOWLEDGE_INSPECTED edge to a Search that returned it.",
+      "USED": "Inspected Knowledge with its one accepted USED disposition.",
+      "REJECTED": "Inspected Knowledge with its one accepted REJECTED disposition and retained closed reasonCode.",
+      "DECISION_SUPPORTING": "USED Knowledge included in the exact supportingKnowledgeRefs of the task's Decision.",
+      "OUTCOME_CONTRIBUTING": "DECISION_SUPPORTING Knowledge included in the exact contributingKnowledgeRefs of the Decision-bound Outcome. Contribution is lineage, not proof of sole causality or benefit."
+    },
+    "setInvariants": [
+      "INSPECTED is a subset of SEARCHED.",
+      "USED and REJECTED are disjoint subsets of INSPECTED.",
+      "DECISION_SUPPORTING is a subset of USED.",
+      "OUTCOME_CONTRIBUTING is a subset of DECISION_SUPPORTING.",
+      "Searched-only and inspected-only Knowledge remain visible and are never inferred as rejected or used."
+    ],
+    "acceptedOutput": {
+      "schemaVersion": "chimpmaera.knowledge/usage-lineage-reconstruction/v1",
+      "status": "RECONSTRUCTED",
+      "exactFields": [
+        "schemaVersion",
+        "status",
+        "scopeRef",
+        "taskRef",
+        "searched",
+        "inspected",
+        "used",
+        "rejected",
+        "decisionSupporting",
+        "outcomeContributing",
+        "decisionRef",
+        "outcomeRef",
+        "reconstructionDigest"
+      ]
+    },
+    "denialOutput": {
+      "status": "DENIED",
+      "rule": "Any invalid event, missing mandatory entity, unresolved reference or violated invariant denies the task reconstruction as a whole. No partial state set or profile mutation is emitted. Reason codes are unique and sorted, capped at maxReasonCodesPerDenial."
+    }
+  },
+  "rawFeatureAndMarkerSemantics": {
+    "generalizationEligibility": "One occurrence exists only when Knowledge is DECISION_SUPPORTING in a fully reconstructed task.",
+    "generalizationUsageUnitDigestPreimage": [
+      "semanticRuleId",
+      "scopeRef",
+      "knowledgeRef",
+      "task.taskSemanticDigest",
+      "task.contextFingerprintDigest"
+    ],
+    "rawGeneralizationFeaturesPerKnowledgePerScope": {
+      "validTaskOccurrenceCount": "Count of fully reconstructed tasks in which the Knowledge is DECISION_SUPPORTING; retained as raw repetition context but not evidence weight.",
+      "distinctTaskSemanticCount": "Cardinality of unique taskSemanticDigest values among eligible occurrences.",
+      "distinctContextCount": "Cardinality of unique contextFingerprintDigest values among eligible occurrences.",
+      "distinctJointUsageUnitCount": "Cardinality of unique generalizationUsageUnitDigest values.",
+      "identicalRepetitionCount": "validTaskOccurrenceCount minus distinctJointUsageUnitCount; never used as positive evidence."
+    },
+    "+G": {
+      "marker": "+G",
+      "assertWhen": [
+        "distinctTaskSemanticCount is greater than or equal to generalizationMinimumDistinctTaskSemantics",
+        "distinctContextCount is greater than or equal to generalizationMinimumDistinctContexts",
+        "every counted occurrence has complete accepted lineage and the same exact knowledgeRef"
+      ],
+      "meaning": "Bounded observed reuse of the exact Knowledge bytes across at least two distinct task semantics and two distinct applicability contexts within one synthetic scope.",
+      "nonMeaning": "Not universal generality, correctness, statistical significance, causal improvement, cross-scope evidence or permission to merge applicability contexts."
+    },
+    "operationalEligibility": "One occurrence exists only when Knowledge is OUTCOME_CONTRIBUTING in a fully reconstructed task with an Outcome other than UNKNOWN.",
+    "operationalUnitDigestPreimage": [
+      "generalizationUsageUnitDigest",
+      "decision.decisionClass",
+      "outcome.outcomeClass",
+      "outcome.failureAttribution.failureAttributionDigest"
+    ],
+    "rawOperationalFeaturesPerKnowledgePerScope": {
+      "eligibleOutcomeOccurrenceCount": "Count of complete non-UNKNOWN outcome-contributing occurrences.",
+      "distinctOperationalUnitCount": "Cardinality of unique operationalUnitDigest values; identical operational repetitions collapse.",
+      "distinctOutcomeUnitsByClass": "Separate counts for SUCCEEDED, FAILED, PARTIAL and DENIED; classes are never netted or averaged.",
+      "uncertainOutcomeOccurrenceCount": "Count of UNKNOWN outcomes retained outside +O eligibility."
+    },
+    "+O": {
+      "marker": "+O",
+      "assertWhen": [
+        "distinctOperationalUnitCount is greater than or equal to operationalMinimumDistinctOutcomeUnits",
+        "every counted occurrence has complete accepted outcome-contributing lineage"
+      ],
+      "meaning": "At least one bounded operational outcome observation is linked to the exact Knowledge bytes; outcome polarity and failure uncertainty remain explicit.",
+      "nonMeaning": "Not a positive score, success claim, sole-cause claim, quality endorsement, production validation or permission to hide failed, denied, partial or uncertain observations."
+    }
+  },
+  "evidenceProfileSemantics": {
+    "profileKey": ["scopeRef", "knowledgeRef"],
+    "profileDimensionsExactly": [
+      "source",
+      "applicability",
+      "freshness",
+      "contradiction",
+      "generalization",
+      "operational"
+    ],
+    "noCompositeRule": "The six dimensions are independently retained and digest-bound. No scalar score, weighted average, confidence average, rank, overwrite or cross-dimension compensation exists.",
+    "dimensions": {
+      "source": {
+        "boundInputs": ["knowledgeDigest", "attributionSetDigest", "epistemicStatus", "trust"],
+        "rule": "Copied by digest from the validated Knowledge Envelope and never upgraded from usage frequency. A confirmed KNOWLEDGE/SOURCE_DEFECT cause is retained here without changing any other dimension."
+      },
+      "applicability": {
+        "boundInputs": ["applicabilityScopeDigest", "contextFingerprintDigest", "matchState"],
+        "matchStates": ["MATCH", "NO_MATCH", "NEEDS_CONTEXT", "CONFLICT"],
+        "rule": "Each deduplicated usage unit retains its own context and match state. Contexts are never unioned into a broader applicability claim."
+      },
+      "freshness": {
+        "boundInputs": ["knowledgeDigest", "evaluatedAtMs", "freshnessState"],
+        "freshnessStates": ["FRESH", "STALE", "UNKNOWN"],
+        "rule": "Freshness is evaluated at use time from the bound envelope freshness facts. Later freshness does not rewrite earlier observations."
+      },
+      "contradiction": {
+        "boundInputs": ["knowledgeDigest", "conflictSetDigest", "contradictionState"],
+        "contradictionStates": ["NONE_DECLARED", "DECLARED_UNRESOLVED", "UNKNOWN"],
+        "rule": "NONE_DECLARED means only that the bound envelope declares no conflict; it is not a global no-contradiction claim. Usage never silently resolves a declared conflict."
+      },
+      "generalization": {
+        "boundInputs": [
+          "validTaskOccurrenceCount",
+          "distinctTaskSemanticCount",
+          "distinctContextCount",
+          "distinctJointUsageUnitCount",
+          "identicalRepetitionCount",
+          "+G"
+        ],
+        "rule": "Derived only from complete decision-supporting lineage using the frozen deduplication unit."
+      },
+      "operational": {
+        "boundInputs": [
+          "eligibleOutcomeOccurrenceCount",
+          "distinctOperationalUnitCount",
+          "distinctOutcomeUnitsByClass",
+          "uncertainOutcomeOccurrenceCount",
+          "failureCauseObservations",
+          "+O"
+        ],
+        "rule": "Retains outcome polarity, causal mode, cause class and certainty separately. Non-Knowledge failures do not downgrade source, applicability, freshness or contradiction."
+      }
+    },
+    "profileDigestRule": "profileDigest is SHA-256 over the exact profile with dimensions in the frozen names above, excluding only profileDigest. Reordering input events cannot change the canonical profile."
+  },
+  "failureCausePolicy": {
+    "classesAndSubtypes": {
+      "KNOWLEDGE": [
+        "SOURCE_DEFECT",
+        "APPLICABILITY_MISMATCH",
+        "STALE",
+        "CONTRADICTED",
+        "MISSING",
+        "UNSUPPORTED_GENERALIZATION"
+      ],
+      "SEARCH": [
+        "RELEVANT_NOT_RETURNED",
+        "RELEVANT_NOT_INSPECTED",
+        "RELEVANT_REJECTED"
+      ],
+      "DECISION": [
+        "UNSUPPORTED_SELECTION",
+        "SUPPORTED_OPTION_IGNORED"
+      ],
+      "EXECUTION": [
+        "ACTION_FAILED",
+        "READBACK_FAILED"
+      ],
+      "TASK_INPUT": [
+        "MISSING_CONTEXT",
+        "INVALID_INPUT"
+      ],
+      "EXTERNAL": [
+        "DEPENDENCY_UNAVAILABLE",
+        "ENVIRONMENT_DRIFT"
+      ],
+      "GOVERNANCE": [
+        "POLICY_DENIED",
+        "AUTHORITY_DENIED"
+      ],
+      "UNKNOWN": [
+        "INSUFFICIENT_CAUSAL_EVIDENCE"
+      ]
+    },
+    "certaintyValues": ["CONFIRMED", "SUPPORTED", "POSSIBLE", "UNKNOWN"],
+    "causalModes": [
+      "NOT_APPLICABLE",
+      "SINGLE",
+      "MULTI_CONTRIBUTING",
+      "MULTI_JOINT",
+      "ALTERNATIVES_UNRESOLVED",
+      "UNKNOWN"
+    ],
+    "causeEntryExactFields": [
+      "class",
+      "subtype",
+      "certainty",
+      "causeEventRefs",
+      "affectedKnowledgeRefs"
+    ],
+    "attributionExactFieldsExcludingDigest": [
+      "schemaVersion",
+      "semanticRuleId",
+      "causalMode",
+      "causes"
+    ],
+    "failureAttributionDigestField": "failureAttributionDigest",
+    "classEvidenceRules": {
+      "KNOWLEDGE": "Requires one or more affectedKnowledgeRefs and direct bound evidence for the named source, applicability, freshness, contradiction, missing-content or unsupported-generalization fact. Except MISSING, an affected Knowledge must be outcome-contributing. Mere contribution to a failed Outcome is insufficient.",
+      "SEARCH": "Requires a bound Search or inspection/disposition event plus synthetic oracle evidence for the missed relevant Knowledge. It never fabricates USED or outcome-contributing lineage.",
+      "DECISION": "Requires the exact Decision ref and a bound decision-check event showing unsupported selection or an ignored supported option. Knowledge presence alone is insufficient.",
+      "EXECUTION": "Requires an accepted Decision and a bound action or readback failure event. It does not assign fault to contributing Knowledge without separate KNOWLEDGE cause evidence.",
+      "TASK_INPUT": "Requires a bound task-input or context validation denial. It may have no affectedKnowledgeRefs.",
+      "EXTERNAL": "Requires a bound dependency or environment receipt. Sequence timing alone is insufficient.",
+      "GOVERNANCE": "Requires a bound policy or authority denial event. An Outcome class of DENIED alone is insufficient.",
+      "UNKNOWN": "Used exactly when available bound events cannot support or distinguish a known class. It carries no affectedKnowledgeRefs and no profile-dimension fault."
+    },
+    "outcomeRules": [
+      "SUCCEEDED requires causalMode NOT_APPLICABLE and an empty causes array.",
+      "FAILED, PARTIAL and DENIED require one through maxFailureCauses entries, or exactly one UNKNOWN/INSUFFICIENT_CAUSAL_EVIDENCE entry.",
+      "UNKNOWN outcome requires causalMode UNKNOWN and exactly one UNKNOWN/INSUFFICIENT_CAUSAL_EVIDENCE entry; it is ineligible for +O.",
+      "UNKNOWN class cannot coexist with another class. POSSIBLE is allowed only in ALTERNATIVES_UNRESOLVED. UNKNOWN certainty is allowed only for the UNKNOWN class.",
+      "SINGLE has exactly one non-UNKNOWN cause with CONFIRMED or SUPPORTED certainty.",
+      "MULTI_CONTRIBUTING and MULTI_JOINT have two through maxFailureCauses distinct non-UNKNOWN causes with CONFIRMED or SUPPORTED certainty and retain every cause without selecting a primary.",
+      "ALTERNATIVES_UNRESOLVED has two through maxFailureCauses distinct non-UNKNOWN causes, every one POSSIBLE, and makes no profile fault assignment until stronger evidence exists.",
+      "Cause entries and their reference sets are unique and lexicographically sorted before digesting. Numeric probabilities, free-text rationales, hidden weights and forced primary causes are forbidden."
+    ],
+    "profileUpdateRules": [
+      "CONFIRMED or SUPPORTED KNOWLEDGE causes update only the matching source, applicability, freshness or contradiction observation and the operational failure-cause list.",
+      "CONFIRMED or SUPPORTED SEARCH, DECISION, EXECUTION, TASK_INPUT, EXTERNAL or GOVERNANCE causes remain operational observations and do not downgrade Knowledge dimensions.",
+      "POSSIBLE and UNKNOWN causes preserve uncertainty but mutate no source, applicability, freshness or contradiction state.",
+      "Generalization and operational markers describe evidence shape, not positive quality, so a negative observation is never erased by +G or +O."
+    ]
+  },
+  "denialPolicy": {
+    "outcome": "DENIED",
+    "reasonCodes": [
+      "SCHEMA_DENIED",
+      "PROHIBITED_FIELD_DENIED",
+      "IDENTIFIER_MISSING_DENIED",
+      "IDENTIFIER_FORMAT_DENIED",
+      "DIGEST_MISSING_DENIED",
+      "DIGEST_MISMATCH_DENIED",
+      "SEMANTIC_RULE_MISSING_DENIED",
+      "SEMANTIC_RULE_VERSION_DENIED",
+      "UPSTREAM_BINDING_DENIED",
+      "SCOPE_MISMATCH_DENIED",
+      "SEQUENCE_GAP_DENIED",
+      "PREVIOUS_DIGEST_MISMATCH_DENIED",
+      "PARENT_MISSING_DENIED",
+      "CAUSAL_ORDER_DENIED",
+      "LATE_EVENT_DENIED",
+      "TASK_FROZEN_DENIED",
+      "TASK_SEALED_DENIED",
+      "REPLAY_DENIED",
+      "TAMPERED_LINEAGE_DENIED",
+      "TRANSITION_DENIED",
+      "FAILURE_ATTRIBUTION_DENIED",
+      "CAPACITY_DENIED",
+      "INCOMPLETE_LINEAGE_DENIED"
+    ],
+    "ownedNegativeCases": [
+      {
+        "case": "missing inbound ID",
+        "expected": "DENIED",
+        "reason": "IDENTIFIER_MISSING_DENIED"
+      },
+      {
+        "case": "missing inbound digest",
+        "expected": "DENIED",
+        "reason": "DIGEST_MISSING_DENIED"
+      },
+      {
+        "case": "missing semanticRuleId or unavailable semantic preimage rule",
+        "expected": "DENIED",
+        "reason": "SEMANTIC_RULE_MISSING_DENIED"
+      },
+      {
+        "case": "missing parent, sequence or complete Task/Decision/Outcome lineage",
+        "expected": "DENIED",
+        "reason": "PARENT_MISSING_DENIED or SEQUENCE_GAP_DENIED or INCOMPLETE_LINEAGE_DENIED"
+      },
+      {
+        "case": "event exceeds the inclusive late window or arrives after task freeze/seal",
+        "expected": "DENIED",
+        "reason": "LATE_EVENT_DENIED or TASK_FROZEN_DENIED or TASK_SEALED_DENIED"
+      },
+      {
+        "case": "exact or re-keyed semantic replay",
+        "expected": "DENIED",
+        "reason": "REPLAY_DENIED"
+      },
+      {
+        "case": "reference crosses scopeId or changes scopeDigest",
+        "expected": "DENIED",
+        "reason": "SCOPE_MISMATCH_DENIED"
+      },
+      {
+        "case": "record, reference, chain or ID-to-digest binding is tampered",
+        "expected": "DENIED",
+        "reason": "DIGEST_MISMATCH_DENIED or PREVIOUS_DIGEST_MISMATCH_DENIED or TAMPERED_LINEAGE_DENIED"
+      }
+    ],
+    "noSubstitutionRule": "Fixtures may instantiate the frozen rules and prose may explain them, but neither can supply a missing identifier, digest, parent, semantic rule, causal evidence or profile dimension."
+  },
+  "acceptanceMapping": {
+    "P14": {
+      "decision": "For every complete valid synthetic task, emit all six independently reconstructed Knowledge sets: searched, inspected, used, rejected with reason, decisionSupporting and outcomeContributing.",
+      "failureRule": "Any absent or invalid mandatory lineage denies the whole task without partial sets or profile credit."
+    },
+    "P15": {
+      "decision": "Generalization evidence is based on unique taskSemanticDigest and contextFingerprintDigest units, never task IDs, event counts or occurrence frequency.",
+      "repetitionRule": "Many valid repetitions with identical taskSemanticDigest, contextFingerprintDigest and knowledgeRef increase only validTaskOccurrenceCount and identicalRepetitionCount; distinct counts and +G remain unchanged."
+    },
+    "P16": {
+      "decision": "Seeded failures must satisfy the exact evidence predicate for one of the bounded cause classes. Unknown and unresolved alternatives remain explicit; two or three supported causes remain multi-cause without a fabricated primary.",
+      "misattributionRule": "Outcome contribution alone never assigns KNOWLEDGE causality, and non-Knowledge failures never downgrade Knowledge profile dimensions."
+    },
+    "profileSeparation": {
+      "decision": "source, applicability, freshness, contradiction, generalization and operational remain six exact independent dimensions with no scalar collapse."
+    },
+    "currentEvidenceCeiling": "This receipt proves only that the vocabulary and rejection semantics are frozen in one local artifact. It does not claim that P14, P15 or P16 product probes have been implemented or executed."
+  },
+  "alternativesAndRejections": [
+    {
+      "id": "ALT-01",
+      "chosen": "Opaque random local IDs with separate mandatory content digests; inherited Knowledge envelopeId plus envelopeDigest.",
+      "alternatives": ["content-derived IDs", "bare IDs", "bare digests"],
+      "rejectedBecause": "Content-derived IDs increase linkability and conflate identity with integrity; bare values cannot prove exact lineage binding.",
+      "reviewCondition": "A separately reviewed cross-system identity or privacy design."
+    },
+    {
+      "id": "ALT-02",
+      "chosen": "Contiguous per-scope hash chain, explicit parents and a 300000 ms inclusive late window.",
+      "alternatives": ["arrival order only", "zero lateness", "unbounded lateness", "retroactive fixture repair"],
+      "rejectedBecause": "Arrival order loses event-time meaning, zero lateness is unnecessarily brittle, and unbounded or repaired history cannot seal deterministic evidence.",
+      "reviewCondition": "Trusted distributed-clock and durable-stream evidence with a new schema generation."
+    },
+    {
+      "id": "ALT-03",
+      "chosen": "Replay always DENIED with zero evidence credit; intentional repeated tasks deduplicate through semantic/context units.",
+      "alternatives": ["idempotent replay success", "count every occurrence", "deduplicate only by taskId"],
+      "rejectedBecause": "Those alternatives either conceal replay or allow re-keyed identical work to inflate generalization.",
+      "reviewCondition": "A successor contract with independently proven idempotency and anti-inflation semantics."
+    },
+    {
+      "id": "ALT-04",
+      "chosen": "Six explicit monotone reconstructed usage sets with USED and REJECTED mutually exclusive.",
+      "alternatives": ["infer use from search", "infer rejection from non-use", "permit contradictory dispositions"],
+      "rejectedBecause": "Inference fabricates semantic events and contradictory dispositions make P14 nondeterministic.",
+      "reviewCondition": "A versioned correction/reconsideration event model with explicit supersession."
+    },
+    {
+      "id": "ALT-05",
+      "chosen": "+G requires both two distinct task semantics and two distinct contexts for the exact Knowledge bytes.",
+      "alternatives": ["raw repetition count", "distinct task IDs", "either task novelty or context diversity alone"],
+      "rejectedBecause": "The alternatives are weaker evidence and permit identical or single-axis repetition to masquerade as generalization.",
+      "reviewCondition": "Empirical calibration outside this local synthetic proof, without weakening raw-feature retention."
+    },
+    {
+      "id": "ALT-06",
+      "chosen": "+O means outcome-linked operational observation with polarity and uncertainty retained.",
+      "alternatives": ["success-only bonus", "caused-success claim", "net positive-minus-negative score"],
+      "rejectedBecause": "Those alternatives hide adverse observations or overclaim causality and quality.",
+      "reviewCondition": "Independent causal study or production evidence under a separately authorized scope."
+    },
+    {
+      "id": "ALT-07",
+      "chosen": "Eight bounded cause classes, typed subtypes, four certainty values and at most three causes.",
+      "alternatives": ["one guessed primary cause", "unbounded free text", "numeric probabilities", "unbounded cause arrays"],
+      "rejectedBecause": "The alternatives erase uncertainty, are nondeterministic or create an unbounded policy surface.",
+      "reviewCondition": "A schema-versioned cause taxonomy backed by new seeded failure evidence."
+    },
+    {
+      "id": "ALT-08",
+      "chosen": "Six separately retained evidence dimensions and raw counters with no composite score.",
+      "alternatives": ["weighted quality score", "single confidence grade", "usage overwrites source quality"],
+      "rejectedBecause": "Composite values hide why evidence changed and allow one dimension to compensate for a failure in another.",
+      "reviewCondition": "A separately governed presentation layer that still preserves and exposes all six source dimensions."
+    },
+    {
+      "id": "ALT-09",
+      "chosen": "LOCAL_SYNTHETIC_FIXTURE only, no collection or raw data.",
+      "alternatives": ["production telemetry", "prompt capture", "reasoning capture", "cross-scope aggregation", "model-derived causes"],
+      "rejectedBecause": "None is necessary to prove the vocabulary and each would widen privacy, authority and evidence scope.",
+      "reviewCondition": "Explicit owner authorization plus separate privacy, retention, security and evidence decisions."
+    }
+  ],
+  "explicitNonclaims": [
+    "No product implementation, executable schema, validator, fixture or test exists because of this receipt.",
+    "No telemetry, usage data, prompt, response, content, raw reasoning, identity or customer data was collected.",
+    "No model, provider, service, network, Docker or live system was invoked.",
+    "No semantic relevance, Knowledge truth, search quality, causal efficacy or universal generalization is proved.",
+    "+G is not a score or universal applicability claim; +O is not a success or sole-cause claim.",
+    "No production durability, concurrency, distributed ordering, trusted clock, retention, erasure, privacy certification or hostile-host claim is made.",
+    "No compatibility with the existing Usage Insights or Agent Work wire formats is claimed.",
+    "No release, merge, GitHub, issue-closure or protected-branch status is claimed."
+  ],
+  "integrationReceipt": {
+    "filesAllowed": [
+      "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json"
+    ],
+    "filesIntendedToChange": [
+      "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json"
+    ],
+    "productCodeChanged": false,
+    "telemetryCollected": false,
+    "externalStateMutated": false,
+    "requiredVerification": "git diff --check origin/main...HEAD",
+    "successClaimRule": "Run the required verification against the final local commit and require exit code 0 before reporting this decision slice complete. This byte record does not preclaim that post-commit command result."
+  },
+  "receiptDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6"
+}
