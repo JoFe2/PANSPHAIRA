@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-run-manifest-v1.schema.json",
+  "title": "PANSPHAIRA CKS canonical local no-fine-tune run manifest v1",
+  "description": "Closed canonical binding for one local CKS run. The manifest records exact model, quantization, runtime, prompt, tool, Knowledge, verifier and transcript digests.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "manifestId", "manifestVersion", "profile", "task", "bindings", "transcriptDigests", "execution", "manifestDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks/run-manifest/v1" },
+    "manifestId": { "$ref": "#/$defs/text192" },
+    "manifestVersion": { "const": "1" },
+    "profile": { "$ref": "#/$defs/profile" },
+    "task": { "$ref": "#/$defs/task" },
+    "bindings": { "$ref": "#/$defs/bindings" },
+    "transcriptDigests": {
+      "type": "object", "additionalProperties": false, "required": ["input", "output"],
+      "properties": { "input": { "$ref": "#/$defs/digest" }, "output": { "$ref": "#/$defs/digest" } }
+    },
+    "execution": { "$ref": "#/$defs/execution" },
+    "manifestDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "text64": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "text192": { "type": "string", "minLength": 1, "maxLength": 192 },
+    "binding": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "digest"],
+      "properties": { "id": { "$ref": "#/$defs/text192" }, "version": { "$ref": "#/$defs/text64" }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "profile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profileId", "profileRevision", "profileDigest", "selectionStatus"],
+      "properties": {
+        "profileId": { "$ref": "#/$defs/text192" },
+        "profileRevision": { "type": "integer", "minimum": 1 },
+        "profileDigest": { "$ref": "#/$defs/digest" },
+        "selectionStatus": { "const": "SELECTED_NOT_QUALIFIED" }
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false, "required": ["taskId", "taskDigest", "scopeDigest"],
+      "properties": { "taskId": { "$ref": "#/$defs/text192" }, "taskDigest": { "$ref": "#/$defs/digest" }, "scopeDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "knowledge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["editionId", "version", "digest", "contractVersion", "contractVersions"],
+      "properties": {
+        "editionId": { "$ref": "#/$defs/text192" },
+        "version": { "$ref": "#/$defs/text64" },
+        "digest": { "$ref": "#/$defs/digest" },
+        "contractVersion": { "$ref": "#/$defs/text192" },
+        "contractVersions": {
+          "type": "object", "additionalProperties": false,
+          "required": ["knowledgeObject", "knowledgeQuery", "applicability", "evidencePack", "evidenceCoverage", "competenceQualificationProfile", "taskComplexity", "escalation", "existingKnowledgeEnvelope", "existingKnowledgeEdition", "existingApplicabilityVocabulary"],
+          "properties": {
+            "knowledgeObject": { "$ref": "#/$defs/text192" }, "knowledgeQuery": { "$ref": "#/$defs/text192" }, "applicability": { "$ref": "#/$defs/text192" }, "evidencePack": { "$ref": "#/$defs/text192" }, "evidenceCoverage": { "$ref": "#/$defs/text192" }, "competenceQualificationProfile": { "$ref": "#/$defs/text192" }, "taskComplexity": { "$ref": "#/$defs/text192" }, "escalation": { "$ref": "#/$defs/text192" }, "existingKnowledgeEnvelope": { "$ref": "#/$defs/text192" }, "existingKnowledgeEdition": { "$ref": "#/$defs/text192" }, "existingApplicabilityVocabulary": { "$ref": "#/$defs/text192" }
+          }
+        }
+      }
+    },
+    "bindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["model", "quantization", "runtime", "prompt", "tool", "knowledge", "verifier"],
+      "properties": {
+        "model": { "$ref": "#/$defs/binding" },
+        "quantization": { "$ref": "#/$defs/binding" },
+        "runtime": { "$ref": "#/$defs/binding" },
+        "prompt": { "$ref": "#/$defs/binding" },
+        "tool": { "$ref": "#/$defs/binding" },
+        "knowledge": { "$ref": "#/$defs/knowledge" },
+        "verifier": { "$ref": "#/$defs/binding" }
+      }
+    },
+    "execution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["adapterSchemaVersion", "adapterVersion", "mode", "networkPolicy", "weightModification", "actionAuthority"],
+      "properties": {
+        "adapterSchemaVersion": { "const": "pansphaira.cks/oss-model-adapter/v1" },
+        "adapterVersion": { "const": "1" },
+        "mode": { "const": "LOCAL_NO_FINE_TUNE" },
+        "networkPolicy": { "const": "DENY_ALL" },
+        "weightModification": { "const": "FORBIDDEN" },
+        "actionAuthority": { "const": "NONE" }
+      }
+    }
+  }
+}

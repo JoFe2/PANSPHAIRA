@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "pansphaira.cks/adapter-transcript/v1",
+  "fixtureId": "fixture:cks-04-oss-adapter-success",
+  "input": {
+    "role": "user",
+    "content": "Which exact Knowledge fact applies to this task?"
+  },
+  "modelToolCall": {
+    "schemaVersion": "pansphaira.cks/model-tool-call/v1",
+    "toolName": "cks_knowledge_query",
+    "arguments": {
+      "schemaVersion": "pansphaira.cks/knowledge-query/v1",
+      "requestId": "KQ-01",
+      "taskId": "task:cks-04-adapter",
+      "knowledgeEditionId": "edition:cks-04-adapter",
+      "knowledgeEditionVersion": "1",
+      "knowledgeEditionDigest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "needKinds": ["FACT"],
+      "queryText": "Which exact Knowledge fact applies to this task?",
+      "applicability": {
+        "domain": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "knowledge_type": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "role_responsibility": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "industry": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "organization_context": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "geography_jurisdiction_policy": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "process_stage": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "system_config": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "prerequisites_constraints_exceptions": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "task_audience_outcome": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "valid_time_freshness": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "epistemic_status": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "evidence_strength": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "sensitivity": {"state": "NOT_PROVIDED", "values": [], "provenance": null},
+        "license": {"state": "NOT_PROVIDED", "values": [], "provenance": null}
+      },
+      "requiredPreconditions": [],
+      "maxResults": 6,
+      "maxEvidenceBytes": 12288,
+      "reasonCode": "MATERIAL_FACT_MISSING"
+    }
+  },
+  "boundaryAssertions": {
+    "modelProfile": "PSAI284-QWEN2.5-1.5B-INSTRUCT-Q4_K_M-LLAMACPP-B10661-V1",
+    "mode": "LOCAL_NO_FINE_TUNE",
+    "networkPolicy": "DENY_ALL",
+    "unknownTools": "DENY",
+    "missingOrConflictingKnowledge": "ABSTAIN_OR_ESCALATE"
+  }
+}

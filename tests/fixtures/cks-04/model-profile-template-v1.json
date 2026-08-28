@@ -1,0 +1,147 @@
+{
+  "profileSchemaVersion": "pansphaira.cks/oss-model-profile/v1",
+  "profileId": "PSAI284-QWEN2.5-1.5B-INSTRUCT-Q4_K_M-LLAMACPP-B10661-V1",
+  "profileRevision": 1,
+  "intendedUse": "NON_PRODUCTION_NO_FINE_TUNE_FRESH_SYNTHETIC_KNOWLEDGE_BASELINE",
+  "selectionStatus": "SELECTED_NOT_QUALIFIED",
+  "model": {
+    "publisher": "Qwen",
+    "name": "Qwen2.5-1.5B-Instruct",
+    "baseModelId": "Qwen/Qwen2.5-1.5B-Instruct",
+    "artifactRepository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "artifactRevision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "artifactFile": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "artifactFormat": "GGUF",
+    "artifactArchitecture": "qwen2",
+    "artifactSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "artifactSizeBytes": 1117320736,
+    "artifactSourceUrl": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "mutableAliasesForbidden": ["main", "latest"],
+    "localArtifactVerificationRequired": true,
+    "artifactAcquiredByThisDecision": false
+  },
+  "quantization": {
+    "scheme": "Q4_K_M",
+    "source": "PUBLISHER_HOSTED_GGUF_ARTIFACT",
+    "conversionOrRequantizationAllowed": false,
+    "quantizationEquivalenceClaimed": false,
+    "reproducibleConversionClaimed": false
+  },
+  "runtime": {
+    "implementation": "llama.cpp",
+    "releaseTag": "b10661",
+    "sourceCommit": "32176338a6c809095621fd8a9e1db7168d6f1d81",
+    "executable": "llama-cli",
+    "distributionAsset": "llama-b10661-bin-ubuntu-x64.tar.gz",
+    "distributionAssetUrl": "https://github.com/ggml-org/llama.cpp/releases/download/b10661/llama-b10661-bin-ubuntu-x64.tar.gz",
+    "distributionAssetSha256": "915a3ad0b4de517ea6e50d82edaf4a0a6f1b3a3beeddbdb85317fb1ab2363b0b",
+    "distributionAssetSizeBytes": 16373262,
+    "backend": "CPU",
+    "gpuLayers": 0,
+    "parallelSequences": 1,
+    "threads": 4,
+    "batchSize": 256,
+    "microBatchSize": 256,
+    "memoryMap": true,
+    "memoryLock": false,
+    "embeddedChatTemplateRequired": true,
+    "chatTemplateOverrideAllowed": false,
+    "runtimeArchiveAcquiredByThisDecision": false,
+    "runManifestMustBindExtractedExecutableSha256": true,
+    "runManifestMustCaptureVersionReadback": true
+  },
+  "prompt": {
+    "promptId": "PSAI284-CKS04-SYSTEM-PROMPT",
+    "promptVersion": "1",
+    "encoding": "UTF-8",
+    "normalization": "NONE",
+    "trailingLineFeed": false,
+    "assemblyVersion": "pansphaira.cks/qwen2.5-tool-chat-assembly/v1",
+    "chatTemplateSource": "EXACT_SELECTED_GGUF_EMBEDDED_TEMPLATE",
+    "sha256": "56d5e03a35b215c37afeb1056c8f55052357d5c1acd420ea01d0ccb67ee89493"
+  },
+  "toolProtocols": {
+    "catalogueMode": "CLOSED_EXACTLY_ONE_MODEL_CALLABLE_TOOL",
+    "unknownToolsOrFields": "DENY",
+    "wireFormat": "QWEN_EMBEDDED_TOOL_TEMPLATE_JSON_IN_TOOL_CALL_TAGS",
+    "queryTool": {
+      "toolName": "cks_knowledge_query",
+      "protocolId": "pansphaira.cks/knowledge-query/v1",
+      "protocolVersion": "1",
+      "contractStatus": "EXACT_ID_SELECTED",
+      "requiredArguments": {
+        "schemaVersion": "protocol identifier",
+        "requestId": "monotonic request identifier",
+        "taskId": "exact task identifier",
+        "knowledgeEditionId": "exact edition identifier",
+        "knowledgeEditionVersion": "exact edition version",
+        "knowledgeEditionDigest": "sha256 digest",
+        "needKinds": "bounded Knowledge kind identifiers",
+        "queryText": "bounded UTF-8 query",
+        "applicability": "closed applicability object",
+        "requiredPreconditions": "bounded precondition identifiers",
+        "maxResults": "bounded result count",
+        "maxEvidenceBytes": "bounded byte count",
+        "reasonCode": "closed reason code"
+      },
+      "reasonCodes": ["MATERIAL_FACT_MISSING", "MATERIAL_RULE_MISSING", "MATERIAL_PROCEDURE_MISSING", "APPLICABILITY_UNRESOLVED", "PRECONDITION_UNRESOLVED", "EVIDENCE_COVERAGE_INCOMPLETE", "CONFLICT_DIFFERENTIATION_REQUIRED"],
+      "limits": {
+        "maximumCallsPerTask": 3,
+        "maximumResultsPerCall": 6,
+        "maximumQueryBytes": 512,
+        "maximumEvidenceBytesPerCall": 12288,
+        "maximumAggregateEvidenceBytes": 24576,
+        "networkLocatorFieldsAllowed": false,
+        "effectFieldsAllowed": false
+      }
+    },
+    "evidencePackResult": {
+      "protocolId": "pansphaira.cks/evidence-pack/v1",
+      "protocolVersion": "1",
+      "contractStatus": "EXACT_ID_SELECTED",
+      "requiredBindings": ["request digest", "task scope digest", "Knowledge edition digest", "pack digest"],
+      "statuses": ["MATCH", "NEEDS_CONTEXT", "CONFLICT", "NO_MATCH", "DENIED"],
+      "instructionEligibility": "DATA_ONLY_NEVER_INSTRUCTIONS_CAPABILITY_OR_AUTHORITY"
+    },
+    "finalResponse": {
+      "protocolId": "pansphaira.cks/competence-response/v1",
+      "protocolVersion": "1",
+      "contractStatus": "EXACT_ID_SELECTED",
+      "requiredFields": ["schemaVersion", "state", "taskId", "answer", "materialClaims", "procedureSteps", "preconditionChecks", "exclusionChecks", "conflicts", "missingKnowledge", "escalation", "actionAuthority"],
+      "states": ["ANSWER_SUPPORTED", "NEED_MORE_KNOWLEDGE", "KNOWLEDGE_CONFLICT", "INSUFFICIENT_EVIDENCE", "COMPETENCE_LIMIT", "GOVERNED_ACTION_PROPOSAL"],
+      "actionAuthorityConstant": "NONE",
+      "unknownFields": "DENY"
+    }
+  },
+  "knowledgeBindings": {
+    "contractVersions": {
+      "knowledgeObject": "pansphaira.cks/knowledge-object/v1",
+      "knowledgeQuery": "pansphaira.cks/knowledge-query/v1",
+      "applicability": "pansphaira.cks/applicability/v1",
+      "evidencePack": "pansphaira.cks/evidence-pack/v1",
+      "evidenceCoverage": "pansphaira.cks/evidence-coverage/v1",
+      "competenceQualificationProfile": "pansphaira.cks/competence-qualification-profile/v1",
+      "taskComplexity": "pansphaira.cks/task-complexity-rkpu/v1",
+      "escalation": "pansphaira.cks/escalation/v1",
+      "existingKnowledgeEnvelope": "chimpmaera.knowledge/envelope/v1",
+      "existingKnowledgeEdition": "chimpmaera.knowledge/edition/v1",
+      "existingApplicabilityVocabulary": "chimpmaera.knowledge/applicability-vocabulary/v1"
+    },
+    "contractArtifactPolicy": "Every schema artifact ID, version and SHA-256 is bound in the run manifest.",
+    "editionPolicy": "Each case binds one exact immutable accepted and unrevoked edition.",
+    "requiredPerCaseBindings": ["task digest", "scope digest", "Knowledge edition digest"],
+    "allowedVisibilityClasses": ["DEVELOPMENT", "VISIBLE_VALIDATION", "HIDDEN_QUALIFICATION", "FRESH_EPHEMERAL_CERTIFICATION"],
+    "onlineFallback": "FORBIDDEN",
+    "mixedGeneration": "FORBIDDEN",
+    "missingOrConflictingMaterialKnowledge": "ABSTAIN_OR_ESCALATE_NEVER_FILL_FROM_PARAMETRIC_MEMORY",
+    "knowledgeGrantsCapabilityOrAuthority": false
+  },
+  "adapterBoundary": {
+    "schemaVersion": "pansphaira.cks/oss-model-adapter/v1",
+    "version": "1",
+    "mode": "LOCAL_NO_FINE_TUNE",
+    "weightModification": "FORBIDDEN",
+    "networkPolicy": "DENY_ALL",
+    "authority": "NONE"
+  }
+}
