@@ -1,0 +1,46 @@
+{
+  "suiteId": "suite:cks-07-p13-negative",
+  "denominatorDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "cases": [
+    {
+      "caseId": "case:cks-missing-trap",
+      "oracleOutcome": "INSUFFICIENT",
+      "kind": "MISSING",
+      "probeOutcome": "INSUFFICIENT",
+      "backwardStatus": "FAIL",
+      "simpleA0Covered": "ALL"
+    },
+    {
+      "caseId": "case:cks-bad-source-trap",
+      "oracleOutcome": "INSUFFICIENT",
+      "kind": "BAD_SOURCE",
+      "probeOutcome": "INSUFFICIENT",
+      "backwardStatus": "FAIL",
+      "simpleA0Covered": "ALL"
+    },
+    {
+      "caseId": "case:cks-applicability-trap",
+      "oracleOutcome": "INSUFFICIENT",
+      "kind": "APPLICABILITY",
+      "probeOutcome": "INSUFFICIENT",
+      "backwardStatus": "FAIL",
+      "simpleA0Covered": "ALL"
+    },
+    {
+      "caseId": "case:cks-conflicting-trap",
+      "oracleOutcome": "INSUFFICIENT",
+      "kind": "CONFLICTING",
+      "probeOutcome": "INSUFFICIENT",
+      "backwardStatus": "FAIL",
+      "simpleA0Covered": "ALL"
+    },
+    {
+      "caseId": "case:cks-unknown-semantic-trap",
+      "oracleOutcome": "INSUFFICIENT",
+      "kind": "UNKNOWN_SEMANTIC",
+      "probeOutcome": "INSUFFICIENT",
+      "backwardStatus": "FAIL",
+      "simpleA0Covered": "ALL"
+    }
+  ]
+}
