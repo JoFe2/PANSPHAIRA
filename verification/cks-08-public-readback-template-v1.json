@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "chimpmaera.verification/cks-08-public-readback-template/v1",
+  "templateId": "template:cks-08-public-readback-v1",
+  "taskId": "INT-PSAI288-PUBLIC-READBACK-HARNESS-01",
+  "claimBoundary": "PREPUBLICATION_LOCAL_DETERMINISTIC_VALIDATOR_PREPARATION_ONLY_NO_NETWORK_NO_PUBLICATION_NO_GITHUB_MUTATION_NO_TELEMETRY_NO_RAW_PUBLIC_CONTENT_NO_PRODUCTION",
+  "processContext": {
+    "operatingModel": "Operating Model v1.1",
+    "priorDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "disposition": "PRESERVED_NO_OVERRIDE",
+    "processVariantCreated": false
+  },
+  "precondition": {
+    "publicStateExists": false,
+    "publicationAuthorized": false,
+    "anonymousCredentialsRequired": true,
+    "networkAllowedDuringDryRun": false
+  },
+  "requiredEvidence": [
+    "RELEASE_METADATA",
+    "LATEST_RELEASE",
+    "TAG_REFERENCE",
+    "PUBLIC_ASSET_SET_AND_DIGESTS",
+    "PUBLIC_MAIN_SURFACES"
+  ],
+  "privacy": {
+    "rawPublicContentEmitted": false,
+    "credentialsOrPersonalDataEmitted": false,
+    "allowedReceiptFields": ["bounded status", "evidence identifiers", "non-sensitive digests", "reason codes"]
+  },
+  "templateDigest": "c0401a682051c512709892e911998c749ae6c6e61c9dd97e07ddc70245b01a06"
+}
