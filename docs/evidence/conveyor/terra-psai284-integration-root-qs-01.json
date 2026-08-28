@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "pansphaira.conveyor/integration-root-receipt/v1",
+  "taskId": "TERRA-PSAI284-INTEGRATION-ROOT-QS-01",
+  "issue": {
+    "id": "CKS-04",
+    "number": 284,
+    "title": "No-fine-tune competence runtime and epistemic verifier baseline"
+  },
+  "receiptStatus": "RECONCILED_STATICALLY_RUNTIME_GATE_BLOCKED",
+  "decision": "DO_NOT_PREPARE_A_PRODUCT_SUCCESS_OR_QUALIFICATION_CLAIM_FROM_THIS_RECEIPT",
+  "operatingModelBinding": {
+    "version": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "treatment": "PRESERVED_WITHOUT_REINTERPRETATION_OR_PROCESS_VARIANT",
+    "contextAuthority": "CONTROLLER_REVIEW_ATTESTED_BY_TASK"
+  },
+  "reconciledRevision": "f08b05441a00707d78236fdaae1c0424740f4c63",
+  "acceptanceCriteria": [
+    {
+      "id": "AC-01",
+      "requirement": "Provide a bounded deterministic integration receipt.",
+      "status": "SATISFIED_BY_THIS_ARTIFACT"
+    },
+    {
+      "id": "AC-02",
+      "requirement": "Reconcile CKS-04 implementation and evidence against predecessor contracts before PR preparation.",
+      "status": "STATICALLY_RECONCILED_RUNTIME_VERIFICATION_BLOCKED"
+    },
+    {
+      "id": "AC-03",
+      "requirement": "Do not claim success without required evidence.",
+      "status": "SATISFIED_FAIL_CLOSED"
+    }
+  ],
+  "predecessorContracts": [
+    {
+      "commit": "3ba4140857f070f3062c5ab111980d59a546b9f0",
+      "contract": "Immutable OSS model-profile decision",
+      "status": "RECONCILED",
+      "evidence": "docs/evidence/conveyor/sol-psai284-model-profile-decision-01.json"
+    },
+    {
+      "commits": [
+        "fccb316",
+        "2f132ee",
+        "14116eb",
+        "cedf823"
+      ],
+      "contract": "Closed CKS competence-runtime, bounded Knowledge Query, applicability, and abstention contracts",
+      "status": "RECONCILED",
+      "evidence": "packages/contracts/src/cks-competence-runtime.ts; schemas/contracts/cks-competence-runtime-v1.schema.json; schemas/contracts/cks-model-tool-call-v1.schema.json"
+    },
+    {
+      "commits": [
+        "9664663",
+        "b9a751e1028fe58daf98c98a50f336fed65b96a7"
+      ],
+      "contract": "Deterministic epistemic verifier receipts with terminal deterministic failure",
+      "status": "RECONCILED",
+      "evidence": "packages/contracts/src/cks-epistemic-verifier.ts; schemas/contracts/cks-verification-receipt-v1.schema.json"
+    },
+    {
+      "commit": "e292ef26176fac6efeb02815143ee0ceca91f890",
+      "contract": "Local OSS adapter and exact run-manifest binding boundary",
+      "status": "RECONCILED",
+      "evidence": "packages/competence-runtime/src/cks-no-finetune-runner.ts; packages/competence-runtime/src/cks-oss-model-adapter.ts; schemas/contracts/cks-run-manifest-v1.schema.json"
+    },
+    {
+      "commit": "f98758bc5c3dc4e7f896e6f7e024e2eb90a1f5ae",
+      "contract": "Offline deterministic P2/P3 harness and golden baseline",
+      "status": "RECONCILED",
+      "evidence": "scripts/run-cks-04-baseline.mjs; tests/cks-04-baseline-harness.test.mjs; tests/fixtures/cks-04/p2-p3-scenarios-v1.json; verification/cks-04-baseline-manifest-template-v1.json"
+    },
+    {
+      "commit": "f08b05441a00707d78236fdaae1c0424740f4c63",
+      "contract": "Fail-closed replay evidence verifier and local-only readback",
+      "status": "RECONCILED",
+      "evidence": "scripts/verify-cks-04-baseline-evidence.mjs; scripts/render-cks-04-public-readback.mjs; verification/cks-04-no-finetune-baseline-evidence-v1.json; tests/cks-04-baseline-evidence.test.mjs"
+    }
+  ],
+  "implementationAndEvidenceReconciliation": {
+    "executionBoundary": {
+      "status": "RECONCILED",
+      "required": {
+        "mode": "LOCAL_NO_FINE_TUNE",
+        "networkPolicy": "DENY_ALL",
+        "weightModification": "FORBIDDEN",
+        "actionAuthority": "NONE",
+        "scoringRule": "VERIFIED_RECEIPT_ONLY"
+      },
+      "evidence": "verification/cks-04-baseline-manifest-template-v1.json; verification/cks-04-no-finetune-baseline-evidence-v1.json"
+    },
+    "exactBindingsAndVerifierSeparation": {
+      "status": "RECONCILED",
+      "deterministicVerifier": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+      "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+      "semanticVerifierTrusted": false,
+      "semanticMayOverrideDeterministicFailure": false,
+      "evidence": "scripts/verify-cks-04-baseline-evidence.mjs; tests/cks-04-baseline-evidence.test.mjs"
+    },
+    "positiveCase": {
+      "status": "RECONCILED_FROM_CHECKED_IN_EVIDENCE_NOT_RERUN",
+      "scenario": "scenario:unknown-fact-procedure",
+      "expectedOutcome": "PASS",
+      "required": [
+        "typed bounded Knowledge Query",
+        "information-need detection",
+        "complete claim coverage",
+        "complete procedure coverage",
+        "verified deterministic receipt"
+      ],
+      "evidence": "tests/fixtures/cks-04/p2-p3-scenarios-v1.json; verification/cks-04-no-finetune-baseline-evidence-v1.json"
+    },
+    "negativeCases": {
+      "status": "RECONCILED_FROM_CHECKED_IN_EVIDENCE_NOT_RERUN",
+      "requiredOutcome": "ABSTAIN",
+      "scenarios": [
+        "scenario:applicability-mismatch:APPLICABILITY_MISMATCH",
+        "scenario:exclusion-matched:EXCLUSION_MATCHED",
+        "scenario:parametric-conflict:KNOWLEDGE_CONFLICT",
+        "scenario:missing-knowledge:MISSING_KNOWLEDGE",
+        "scenario:conflicting-knowledge:KNOWLEDGE_CONFLICT"
+      ],
+      "evidence": "tests/fixtures/cks-04/p2-p3-scenarios-v1.json; verification/cks-04-no-finetune-baseline-evidence-v1.json"
+    },
+    "nonclaims": {
+      "status": "RECONCILED",
+      "qualificationStatus": "NOT_QUALIFIED",
+      "publicationScope": "LOCAL_READBACK_ONLY",
+      "externalPublicationAuthorized": false,
+      "evidence": "docs/CKS-04-NO-FINETUNE-BASELINE.md; verification/cks-04-no-finetune-baseline-evidence-v1.json"
+    }
+  },
+  "verification": {
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASSED",
+      "evidence": "exit 0 before receipt commit"
+    },
+    "runtimeGate": {
+      "commands": [
+        "npm run build",
+        "npm run lint",
+        "node --test dist/tests/cks-epistemic-verifier.test.js tests/cks-04-baseline-harness.test.mjs tests/cks-04-baseline-evidence.test.mjs",
+        "node scripts/verify-cks-04-baseline-evidence.mjs --input verification/cks-04-no-finetune-baseline-evidence-v1.json --allow-template",
+        "node scripts/render-cks-04-public-readback.mjs --input verification/cks-04-no-finetune-baseline-evidence-v1.json --dry-run"
+      ],
+      "status": "BLOCKED_BEFORE_BUILD",
+      "environmentEvidence": {
+        "nodeVersionReadback": "v24.19.0",
+        "npmVersionReadback": "NOT_AVAILABLE",
+        "failure": "npm --version exited 133 (SIGTRAP): V8 Check failed: 12 == (*__errno_location ())."
+      },
+      "productVerdict": "NOT_DETERMINED_BY_THIS_INFRASTRUCTURE_FAILURE",
+      "requiredControllerAction": "Run the listed authoritative pinned-Node and host-Docker gates before any product-success or qualification decision."
+    }
+  },
+  "failClosedConclusion": {
+    "requiredEvidencePresentForRuntimeSuccess": false,
+    "runtimeSuccessClaim": false,
+    "qualificationClaim": false,
+    "prReadiness": "BLOCKED_PENDING_AUTHORITATIVE_RUNTIME_GATES",
+    "allowedConclusion": "Static contract and checked-in evidence reconciliation is complete; required runtime evidence was not produced locally."
+  }
+}
