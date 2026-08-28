@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "pansphaira.verification/cks-07-public-readback-template/v1",
+  "templateId": "template:cks-07-public-readback-preparation/v1",
+  "execution": {
+    "mode": "DRY_RUN",
+    "network": "DISABLED",
+    "publicStateEvidence": "NOT_COLLECTED_BY_DESIGN",
+    "entrypoint": "scripts/verify-release-governance.mjs",
+    "command": [
+      "node",
+      "scripts/verify-release-governance.mjs",
+      "--public-readback"
+    ],
+    "authentication": "ANONYMOUS_GH_TOKEN_UNSET",
+    "activationCondition": "POST_PUBLICATION_WITH_PUBLIC_STATE_EVIDENCE"
+  },
+  "requiredEvidence": [
+    "LOCAL_RELEASE_GOVERNANCE_PREFLIGHT",
+    "READBACK_ENTRYPOINT_BINDING"
+  ],
+  "expectedReceipt": {
+    "schemaVersion": "pansphaira.verification/cks-07-public-readback-receipt/v1",
+    "receiptId": "receipt:cks-07-public-readback-preparation/v1",
+    "decision": "PREPARED_DRY_RUN_ONLY",
+    "publicReadback": {
+      "status": "NOT_EXECUTED",
+      "reason": "PUBLIC_STATE_EVIDENCE_NOT_COLLECTED",
+      "activationCondition": "POST_PUBLICATION_WITH_PUBLIC_STATE_EVIDENCE",
+      "command": [
+        "node",
+        "scripts/verify-release-governance.mjs",
+        "--public-readback"
+      ],
+      "authentication": "ANONYMOUS_GH_TOKEN_UNSET"
+    },
+    "evidence": [
+      {
+        "evidenceId": "LOCAL_RELEASE_GOVERNANCE_PREFLIGHT",
+        "status": "PASS",
+        "command": [
+          "node",
+          "scripts/verify-release-governance.mjs"
+        ],
+        "result": "RELEASE_GOVERNANCE_PASS"
+      },
+      {
+        "evidenceId": "READBACK_ENTRYPOINT_BINDING",
+        "status": "PASS",
+        "entrypoint": "scripts/verify-release-governance.mjs",
+        "command": [
+          "node",
+          "scripts/verify-release-governance.mjs",
+          "--public-readback"
+        ],
+        "authentication": "ANONYMOUS_GH_TOKEN_UNSET"
+      }
+    ],
+    "failClosed": {
+      "successRequiresAllRequiredEvidence": true,
+      "publicReadbackSuccessClaimed": false,
+      "networkUsed": false,
+      "credentialUse": false,
+      "activationBeforePublicStateEvidenceDenied": true
+    },
+    "nonClaims": [
+      "public state exists",
+      "anonymous public readback passed",
+      "CI",
+      "merge",
+      "release",
+      "deployment",
+      "production activation"
+    ]
+  }
+}
