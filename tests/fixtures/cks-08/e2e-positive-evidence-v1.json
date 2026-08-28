@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "cks-08-e2e-positive-evidence/v1",
+  "fixtureClass": "LOCAL_SYNTHETIC_REPLAYABLE",
+  "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+  "sourceFixtures": {
+    "syntheticCases": "tests/fixtures/cks-08/synthetic-lineage-cases-v1.json",
+    "syntheticGroundTruth": "tests/fixtures/cks-08/synthetic-lineage-ground-truth-v1.json",
+    "lineagePositive": "tests/fixtures/cks-08/lineage-positive-v1.json",
+    "lineageRejections": "tests/fixtures/cks-08/lineage-rejections-v1.json"
+  },
+  "p14": {
+    "tasks": [
+      {
+        "name": "act-alpha-usage",
+        "usage": {
+          "searched": ["fixture:alpha", "fixture:beta", "fixture:gamma"],
+          "inspected": ["fixture:alpha", "fixture:beta"],
+          "used": ["fixture:alpha"],
+          "rejected": [["fixture:beta", "STALE"]],
+          "decisionSupporting": ["fixture:alpha"],
+          "outcomeContributing": ["fixture:alpha"]
+        }
+      },
+      {
+        "name": "retrieve-delta-usage",
+        "usage": {
+          "searched": ["fixture:delta", "fixture:epsilon"],
+          "inspected": ["fixture:delta", "fixture:epsilon"],
+          "used": ["fixture:delta", "fixture:epsilon"],
+          "rejected": [],
+          "decisionSupporting": ["fixture:delta", "fixture:epsilon"],
+          "outcomeContributing": ["fixture:delta"]
+        }
+      }
+    ]
+  },
+  "p15": {
+    "groups": [
+      {
+        "name": "identical-repetition-does-not-become-generalization",
+        "taskNames": ["p15-repeat-1", "p15-repeat-2", "p15-repeat-3", "p15-repeat-4", "p15-repeat-5", "p15-repeat-6", "p15-repeat-7", "p15-repeat-8"],
+        "metrics": {
+          "validTaskOccurrenceCount": 8,
+          "distinctTaskSemanticCount": 1,
+          "distinctContextCount": 1,
+          "distinctJointUsageUnitCount": 1,
+          "identicalRepetitionCount": 7,
+          "generalizationMarker": null,
+          "operationalMarker": "+O"
+        }
+      },
+      {
+        "name": "independent-novelty-and-context-diversity",
+        "taskNames": ["p15-diverse-1", "p15-diverse-2", "p15-diverse-3", "p15-diverse-4"],
+        "metrics": {
+          "validTaskOccurrenceCount": 4,
+          "distinctTaskSemanticCount": 2,
+          "distinctContextCount": 2,
+          "distinctJointUsageUnitCount": 4,
+          "identicalRepetitionCount": 0,
+          "generalizationMarker": "+G",
+          "operationalMarker": "+O"
+        }
+      }
+    ]
+  },
+  "p16": {
+    "caseNames": [
+      "knowledge-stale", "knowledge-source-defect", "knowledge-applicability-mismatch", "knowledge-contradicted", "knowledge-unsupported-generalization", "knowledge-missing",
+      "search-relevant-not-returned", "search-relevant-not-inspected", "search-relevant-rejected", "decision-unsupported-selection", "decision-supported-option-ignored",
+      "execution-action-failed", "multi-contributing-execution-external", "alternatives-unresolved", "task-input-missing-context", "governance-policy-denied", "unknown-outcome"
+    ],
+    "requiredCausalModes": ["SINGLE", "MULTI_CONTRIBUTING", "ALTERNATIVES_UNRESOLVED", "UNKNOWN"],
+    "requiredCertainties": ["CONFIRMED", "SUPPORTED", "POSSIBLE", "UNKNOWN"]
+  },
+  "failClosed": {
+    "lineageRejectionNames": ["missing", "late", "replayed", "cross-scope", "tampered"],
+    "attributionRejectionNames": ["missing-causal-witness", "knowledge-causality-from-contribution-only", "possible-cause-labelled-single", "fourth-cause"]
+  },
+  "profileDimensions": ["source", "applicability", "freshness", "contradiction", "generalization", "operational"],
+  "privacy": {
+    "evidenceClass": "LOCAL_SYNTHETIC",
+    "rawReceiptsEmitted": false,
+    "rawContentEmitted": false,
+    "credentialsOrPersonalDataEmitted": false,
+    "nonClaims": ["LIVE_SYSTEM", "TELEMETRY_COLLECTION", "MODEL_OR_PROVIDER", "PRODUCTION", "PUBLICATION", "SECURITY_CERTIFICATION"]
+  }
+}

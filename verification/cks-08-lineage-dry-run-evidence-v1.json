@@ -1,0 +1,221 @@
+{
+  "schemaVersion": "chimpmaera.verification/cks-08-lineage-dry-run/v1",
+  "status": "PASS",
+  "evidenceId": "evidence:cks-08-lineage-dry-run-v1",
+  "evidenceClass": "LOCAL_SYNTHETIC",
+  "state": "DRAFT_PRE_COMMIT",
+  "testedCommit": null,
+  "claimBoundary": "OFFLINE_DETERMINISTIC_CKS_08_PROOF_ONLY_NO_TELEMETRY_NO_RAW_CONTENT_NO_LIVE_SYSTEM_NO_PRODUCTION",
+  "processContext": {
+    "operatingModel": "Operating Model v1.1",
+    "priorDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "disposition": "PRESERVED_NO_OVERRIDE"
+  },
+  "replay": {
+    "status": "PASS",
+    "boundedReceiptCount": 56,
+    "positiveLineageTasks": [
+      {
+        "name": "act-alpha-usage",
+        "eventCount": 8,
+        "status": "RECONSTRUCTED"
+      },
+      {
+        "name": "retrieve-delta-usage",
+        "eventCount": 8,
+        "status": "RECONSTRUCTED"
+      }
+    ],
+    "deniedLineageCases": [
+      {
+        "name": "missing",
+        "eventCount": 7,
+        "status": "DENIED",
+        "reasonCodes": [
+          "PARENT_MISSING_DENIED"
+        ]
+      },
+      {
+        "name": "late",
+        "eventCount": 8,
+        "status": "DENIED",
+        "reasonCodes": [
+          "LATE_EVENT_DENIED"
+        ]
+      },
+      {
+        "name": "replayed",
+        "eventCount": 9,
+        "status": "DENIED",
+        "reasonCodes": [
+          "REPLAY_DENIED"
+        ]
+      },
+      {
+        "name": "cross-scope",
+        "eventCount": 8,
+        "status": "DENIED",
+        "reasonCodes": [
+          "SCOPE_MISMATCH_DENIED"
+        ]
+      },
+      {
+        "name": "tampered",
+        "eventCount": 8,
+        "status": "DENIED",
+        "reasonCodes": [
+          "PREVIOUS_DIGEST_MISMATCH_DENIED"
+        ]
+      }
+    ],
+    "deniedAttributionCases": [
+      {
+        "name": "missing-causal-witness",
+        "status": "DENIED",
+        "reasonCodes": [
+          "FAILURE_ATTRIBUTION_DENIED"
+        ]
+      },
+      {
+        "name": "knowledge-causality-from-contribution-only",
+        "status": "DENIED",
+        "reasonCodes": [
+          "FAILURE_ATTRIBUTION_DENIED"
+        ]
+      },
+      {
+        "name": "possible-cause-labelled-single",
+        "status": "DENIED",
+        "reasonCodes": [
+          "FAILURE_ATTRIBUTION_DENIED"
+        ]
+      },
+      {
+        "name": "fourth-cause",
+        "status": "DENIED",
+        "reasonCodes": [
+          "SCHEMA_DENIED"
+        ]
+      }
+    ]
+  },
+  "acceptance": {
+    "P14": {
+      "status": "PASS",
+      "directTaskCount": 2,
+      "scorerTaskCount": 2,
+      "exactUsageFields": [
+        "searched",
+        "inspected",
+        "used",
+        "rejected",
+        "decisionSupporting",
+        "outcomeContributing"
+      ]
+    },
+    "P15": {
+      "status": "PASS",
+      "groups": [
+        {
+          "name": "identical-repetition-does-not-become-generalization",
+          "metrics": {
+            "validTaskOccurrenceCount": 8,
+            "distinctTaskSemanticCount": 1,
+            "distinctContextCount": 1,
+            "distinctJointUsageUnitCount": 1,
+            "identicalRepetitionCount": 7,
+            "generalizationMarker": null,
+            "operationalMarker": "+O"
+          }
+        },
+        {
+          "name": "independent-novelty-and-context-diversity",
+          "metrics": {
+            "validTaskOccurrenceCount": 4,
+            "distinctTaskSemanticCount": 2,
+            "distinctContextCount": 2,
+            "distinctJointUsageUnitCount": 4,
+            "identicalRepetitionCount": 0,
+            "generalizationMarker": "+G",
+            "operationalMarker": "+O"
+          }
+        }
+      ],
+      "repetitionInflationPrevented": true
+    },
+    "P16": {
+      "status": "PASS",
+      "caseCount": 17,
+      "causalModes": [
+        "ALTERNATIVES_UNRESOLVED",
+        "MULTI_CONTRIBUTING",
+        "SINGLE",
+        "UNKNOWN"
+      ],
+      "uncertaintyClasses": [
+        "CONFIRMED",
+        "POSSIBLE",
+        "SUPPORTED",
+        "UNKNOWN"
+      ]
+    },
+    "failClosed": {
+      "status": "PASS",
+      "lineageCases": 5,
+      "attributionCases": 4,
+      "noPartialUsageSets": true
+    },
+    "independentProfileDimensions": {
+      "status": "PASS",
+      "dimensions": [
+        "source",
+        "applicability",
+        "freshness",
+        "contradiction",
+        "generalization",
+        "operational"
+      ]
+    }
+  },
+  "privacy": {
+    "rawReceiptsEmitted": false,
+    "rawContentEmitted": false,
+    "credentialsOrPersonalDataEmitted": false,
+    "evidenceContainsOnly": [
+      "bounded counts",
+      "fixture labels",
+      "validated statuses",
+      "reason codes",
+      "non-sensitive digests"
+    ]
+  },
+  "nonClaims": [
+    "LIVE_SYSTEM",
+    "TELEMETRY_COLLECTION",
+    "MODEL_OR_PROVIDER",
+    "PRODUCTION",
+    "PUBLICATION",
+    "SECURITY_CERTIFICATION"
+  ],
+  "artifactDigests": {
+    "tests/fixtures/cks-08/synthetic-lineage-cases-v1.json": "85d530d677dabbc748f007c3ccdcd1c11ba9cd414131442a85195db263ac5b50",
+    "tests/fixtures/cks-08/synthetic-lineage-ground-truth-v1.json": "fa4c13ea7e298fc6ee0c3b1bf5450b31effa7de739821e6302a7a2ccb8c11557",
+    "tests/fixtures/cks-08/lineage-positive-v1.json": "9e1b5a321a4c737f1c95bbab8231db3ba45839e47164e7853f1c71e8a5f258d8",
+    "tests/fixtures/cks-08/lineage-rejections-v1.json": "314ed5a5602e3350dcec91ec71cf3b94768a4b6c5b317dc0e4d1247da710d2a4"
+  },
+  "verification": {
+    "focusedCommand": "node --test tests/cks-08-lineage-dry-run.test.mjs",
+    "dryRunCommand": "node scripts/run-cks-08-lineage-dry-run.mjs --fixture tests/fixtures/cks-08/e2e-positive-evidence-v1.json --dry-run",
+    "authoritativeCommand": "npm test",
+    "diffCheck": "git diff --check origin/main...HEAD"
+  },
+  "reportDigest": "c68942b8a0b4cb4810d94de61599ecd5626c77521d0951260d8289e27e9cb3c5"
+}
