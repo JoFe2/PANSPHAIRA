@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "cks-08-profile-diversity-template/v1",
+  "contract": {
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "reportSchema": "https://chimpmaera.dev/schemas/contracts/cks-lineage-feature-report-v1.schema.json",
+    "scopeClass": "LOCAL_SYNTHETIC_FIXTURE",
+    "entryPoint": "computeCksLineageFeatureReportV1"
+  },
+  "fixtures": {
+    "cases": "tests/fixtures/cks-08/profile-diversity-cases-v1.json",
+    "schema": "schemas/contracts/cks-lineage-feature-report-v1.schema.json"
+  },
+  "independentDimensions": [
+    "source",
+    "applicability",
+    "freshness",
+    "contradiction",
+    "generalization",
+    "operational"
+  ],
+  "rawFeatures": {
+    "generalization": [
+      "taskSemanticDigests",
+      "contextFingerprintDigests",
+      "generalizationUsageUnitDigests"
+    ],
+    "operational": [
+      "operationalUnitDigests",
+      "outcomeClassObservations"
+    ]
+  },
+  "invariants": [
+    "identical repetitions contribute to validTaskOccurrenceCount but not distinctJointUsageUnitCount",
+    "identicalRepetitionCount equals validTaskOccurrenceCount minus distinctJointUsageUnitCount",
+    "+G requires at least two distinct task semantic digests and two distinct context fingerprint digests",
+    "+O is computed from distinct operational units, independently of the +G marker",
+    "raw digest arrays are sorted and unique",
+    "all lineages must be complete and in the requested scope"
+  ],
+  "requiredPositiveCases": [
+    "identical-repetition-does-not-become-generalization",
+    "independent-novelty-and-context-diversity"
+  ],
+  "requiredNegativeCases": [
+    "missing-lineage",
+    "cross-scope-lineage",
+    "non-frozen-thresholds"
+  ],
+  "verificationCommands": [
+    "npm run build --silent",
+    "node --test dist/tests/cks-evidence-profile-features.test.js",
+    "git diff --check origin/main...HEAD"
+  ],
+  "noSubstitutionRule": "A repeated operational observation cannot substitute for independent task semantics, context diversity, source, applicability, freshness or contradiction evidence."
+}

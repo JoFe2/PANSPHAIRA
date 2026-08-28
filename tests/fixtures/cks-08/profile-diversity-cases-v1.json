@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "cks-08-profile-diversity-fixture/v1",
+  "thresholds": {
+    "generalizationMinimumDistinctTaskSemantics": 2,
+    "generalizationMinimumDistinctContexts": 2,
+    "operationalMinimumDistinctOutcomeUnits": 1
+  },
+  "scopeRef": {
+    "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "knowledgeRef": {
+    "knowledgeId": "fixture:alpha",
+    "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "dimensions": {
+    "source": {
+      "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "attributionSetDigest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "epistemicStatus": "SUPPORTED",
+      "trust": "MEDIUM"
+    },
+    "applicability": {
+      "applicabilityScopeDigest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "matchState": "MATCH"
+    },
+    "freshness": {
+      "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "evaluatedAtMs": 1000,
+      "freshnessState": "FRESH"
+    },
+    "contradiction": {
+      "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "conflictSetDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "contradictionState": "NONE_DECLARED"
+    }
+  },
+  "cases": [
+    {
+      "name": "identical-repetition-does-not-become-generalization",
+      "repetitions": 8,
+      "taskSemanticDigests": ["3333333333333333333333333333333333333333333333333333333333333333"],
+      "contextFingerprintDigests": ["4444444444444444444444444444444444444444444444444444444444444444"],
+      "expected": {
+        "validTaskOccurrenceCount": 8,
+        "distinctTaskSemanticCount": 1,
+        "distinctContextCount": 1,
+        "distinctJointUsageUnitCount": 1,
+        "identicalRepetitionCount": 7,
+        "generalizationMarker": null,
+        "operationalMarker": "+O"
+      }
+    },
+    {
+      "name": "independent-novelty-and-context-diversity",
+      "repetitions": 4,
+      "taskSemanticDigests": ["3333333333333333333333333333333333333333333333333333333333333333", "5555555555555555555555555555555555555555555555555555555555555555"],
+      "contextFingerprintDigests": ["4444444444444444444444444444444444444444444444444444444444444444", "6666666666666666666666666666666666666666666666666666666666666666"],
+      "expected": {
+        "validTaskOccurrenceCount": 4,
+        "distinctTaskSemanticCount": 2,
+        "distinctContextCount": 2,
+        "distinctJointUsageUnitCount": 4,
+        "identicalRepetitionCount": 0,
+        "generalizationMarker": "+G",
+        "operationalMarker": "+O"
+      }
+    }
+  ]
+}
