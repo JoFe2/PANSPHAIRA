@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-knowledge-gap-v1.schema.json",
+  "title": "PANSPHAIRA CKS KnowledgeGap v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "gapId", "needDigest", "gapClass", "requirementOutcome", "sourceClasses", "evidenceDigests", "recoveryAttempts", "gapDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks/knowledge-gap/v1" },
+    "gapId": { "$ref": "#/$defs/id" },
+    "needDigest": { "$ref": "#/$defs/digest" },
+    "gapClass": { "enum": ["NONE", "MISSING", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC"] },
+    "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE", "GAP_MISSING", "GAP_BAD_SOURCE", "GAP_APPLICABILITY", "GAP_CONFLICTING", "GAP_UNKNOWN_SEMANTIC"] },
+    "sourceClasses": { "type": "array", "maxItems": 7, "uniqueItems": true, "items": { "$ref": "#/$defs/sourceClass" } },
+    "evidenceDigests": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "#/$defs/digest" } },
+    "recoveryAttempts": { "type": "array", "maxItems": 3, "items": { "$ref": "#/$defs/recoveryAttempt" } },
+    "gapDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    { "if": { "properties": { "gapClass": { "const": "NONE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE"] } } } },
+    { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "minItems": 1, "contains": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
+    { "if": { "properties": { "requirementOutcome": { "const": "NOT_APPLICABLE" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "maxItems": 0 } } } },
+    { "if": { "properties": { "gapClass": { "const": "MISSING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_MISSING" }, "recoveryAttempts": { "minItems": 3, "maxItems": 3 } } } },
+    { "if": { "properties": { "gapClass": { "const": "BAD_SOURCE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_BAD_SOURCE" } } } },
+    { "if": { "properties": { "gapClass": { "const": "APPLICABILITY" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_APPLICABILITY" } } } },
+    { "if": { "properties": { "gapClass": { "const": "CONFLICTING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_CONFLICTING" } } } },
+    { "if": { "properties": { "gapClass": { "const": "UNKNOWN_SEMANTIC" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_UNKNOWN_SEMANTIC" } } } }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "sourceClass": { "enum": ["ACTIVE_CURATED_KNOWLEDGE", "PINNED_OWNER_EVIDENCE", "PINNED_PRIMARY_EVIDENCE", "PINNED_SECONDARY_EVIDENCE", "INTERNET_RESULT", "MODEL_RESULT", "UNKNOWN_SOURCE"] },
+    "recoveryAttempt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["level", "outcome", "knowledgeBundleDigest", "receiptDigest"],
+      "properties": {
+        "level": { "enum": ["A0", "A1", "A2"] },
+        "outcome": { "enum": ["QUALIFYING_MATCH", "NO_MATCH", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC", "BLOCKED"] },
+        "knowledgeBundleDigest": { "$ref": "#/$defs/digest" },
+        "receiptDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

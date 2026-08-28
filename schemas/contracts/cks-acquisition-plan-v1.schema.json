@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-acquisition-plan-v1.schema.json",
+  "title": "PANSPHAIRA CKS AcquisitionPlan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "planId", "needDigest", "orderedLevels", "maximumTotalAttempts", "maximumAlternateAttempts", "allowedSourceClasses", "promotionStatus", "acceptedKnowledgeDigest", "authorityBoundary", "planDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks/acquisition-plan/v1" },
+    "planId": { "$ref": "#/$defs/id" },
+    "needDigest": { "$ref": "#/$defs/digest" },
+    "orderedLevels": { "type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true, "items": { "enum": ["A0", "A1", "A2", "A3", "A4", "A5"] } },
+    "maximumTotalAttempts": { "const": 3 },
+    "maximumAlternateAttempts": { "const": 2 },
+    "allowedSourceClasses": { "type": "array", "minItems": 1, "maxItems": 7, "uniqueItems": true, "items": { "$ref": "#/$defs/sourceClass" } },
+    "promotionStatus": { "const": "NOT_REQUESTED" },
+    "acceptedKnowledgeDigest": { "const": null },
+    "authorityBoundary": { "const": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY" },
+    "planDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "sourceClass": { "enum": ["ACTIVE_CURATED_KNOWLEDGE", "PINNED_OWNER_EVIDENCE", "PINNED_PRIMARY_EVIDENCE", "PINNED_SECONDARY_EVIDENCE", "INTERNET_RESULT", "MODEL_RESULT", "UNKNOWN_SOURCE"] }
+  }
+}

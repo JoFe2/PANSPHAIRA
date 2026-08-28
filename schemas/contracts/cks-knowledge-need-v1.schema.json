@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-knowledge-need-v1.schema.json",
+  "title": "PANSPHAIRA CKS KnowledgeNeed v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "needId", "caseId", "requirementId", "statement", "statementDigest", "criticality", "applicability", "applicabilityRuleId", "requirementSetDigest", "needDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks/knowledge-need/v1" },
+    "needId": { "$ref": "#/$defs/id" },
+    "caseId": { "$ref": "#/$defs/id" },
+    "requirementId": { "$ref": "#/$defs/id" },
+    "statement": { "type": "string", "minLength": 1, "maxLength": 2048, "pattern": "^[^\\u0000-\\u001f]+$" },
+    "statementDigest": { "$ref": "#/$defs/digest" },
+    "criticality": { "enum": ["CRITICAL", "NON_CRITICAL", "UNKNOWN"] },
+    "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE", "UNKNOWN"] },
+    "applicabilityRuleId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/id" }] },
+    "requirementSetDigest": { "$ref": "#/$defs/digest" },
+    "needDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [{
+    "if": { "properties": { "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE"] } }, "required": ["applicability"] },
+    "then": { "properties": { "applicabilityRuleId": { "$ref": "#/$defs/id" } } }
+  }],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

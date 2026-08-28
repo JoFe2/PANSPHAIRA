@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {"caseId":"unknown-semantic-vocabulary","contract":"knowledgeGap","path":"gapClass","value":"UNLISTED"},
+    {"caseId":"bad-source-claimed-satisfied","contract":"knowledgeGap","path":"sourceClasses","value":["INTERNET_RESULT"]},
+    {"caseId":"conflicting-claimed-satisfied","contract":"knowledgeGap","path":"gapClass","value":"CONFLICTING"},
+    {"caseId":"applicability-without-gap","contract":"knowledgeGap","path":"gapClass","value":"APPLICABILITY"},
+    {"caseId":"missing-with-two-attempts","contract":"knowledgeGapMissing","path":"recoveryAttempts","value":[]},
+    {"caseId":"missing-with-repeated-bundle","contract":"knowledgeGapMissing","path":"recoveryAttempts/2/knowledgeBundleDigest","value":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    {"caseId":"internet-accepted","contract":"sourceEvidence/0","path":"acceptanceStatus","value":"ACCEPTED"},
+    {"caseId":"model-accepted","contract":"sourceEvidence/1","path":"acceptanceStatus","value":"ACCEPTED"},
+    {"caseId":"plan-promoted","contract":"acquisitionPlan","path":"promotionStatus","value":"PROMOTED"},
+    {"caseId":"plan-accepted-digest","contract":"acquisitionPlan","path":"acceptedKnowledgeDigest","value":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    {"caseId":"need-applicable-without-rule","contract":"knowledgeNeed","path":"applicabilityRuleId","value":null},
+    {"caseId":"sufficiency-model-source","contract":"knowledgeSufficiency","path":"requirements/0/sourceClasses","value":["MODEL_RESULT"]},
+    {"caseId":"sufficiency-blocked-without-reason","contract":"knowledgeSufficiency","path":"overallOutcome","value":"BLOCKED"},
+    {"caseId":"sufficiency-unknown-field","contract":"knowledgeSufficiency","path":"inventedField","value":true}
+  ]
+}
