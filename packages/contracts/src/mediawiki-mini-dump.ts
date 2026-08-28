@@ -416,7 +416,9 @@ function parseMiniDumpXml(input: string): XmlNode {
     const attributes: Record<string, string> = {};
     let selfClosing = false;
     for (;;) {
+      const separatorStart = position;
       skipWhitespace();
+      const hasAttributeSeparator = position > separatorStart;
       if (position >= length) fail(ERROR_MALFORMED);
       if (input.startsWith("/>", position)) {
         selfClosing = true;
@@ -428,6 +430,10 @@ function parseMiniDumpXml(input: string): XmlNode {
         break;
       }
       if (input.startsWith("<", position)) fail(ERROR_MALFORMED);
+      // XML attributes must be separated from the element name and from each
+      // other by whitespace. Without this check, a byte sequence such as
+      // `xmlns="..."version="0.11"` was accepted as well-formed XML.
+      if (!hasAttributeSeparator || !NAME_START.test(input.charAt(position))) fail(ERROR_MALFORMED);
       const attributeStart = position;
       while (position < length && NAME_BODY.test(input.charAt(position))) position += 1;
       const attributeName = input.slice(attributeStart, position);

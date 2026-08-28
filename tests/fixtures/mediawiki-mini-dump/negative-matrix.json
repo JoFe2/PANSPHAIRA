@@ -9,6 +9,7 @@
   { "caseId": "oversized-text", "expected": "MEDIAWIKI_MINI_DUMP_REVISION_SIZE_DENIED" },
   { "caseId": "deep-text", "expected": "MEDIAWIKI_MINI_DUMP_PARSE_DEPTH_DENIED" },
   { "caseId": "malformed-xml", "expected": "MEDIAWIKI_MINI_DUMP_MALFORMED_DENIED" },
+  { "caseId": "malformed-attribute-separator", "expected": "MEDIAWIKI_MINI_DUMP_MALFORMED_DENIED" },
   { "caseId": "missing-siteinfo", "expected": "MEDIAWIKI_MINI_DUMP_STRUCTURE_DENIED" },
   { "caseId": "missing-license-attribution", "expected": "MEDIAWIKI_MINI_DUMP_LICENSE_DENIED" },
   { "caseId": "missing-license", "expected": "MEDIAWIKI_MINI_DUMP_LICENSE_DENIED" },

@@ -161,7 +161,7 @@ test("PSAI107 fail-closed negative matrix denies unsafe, unsupported and drifted
     caseId: string;
     expected: string;
   }>;
-  assert.equal(matrix.length, 16);
+  assert.equal(matrix.length, 17);
   const cases: Array<[string, () => void]> = [
     ["doctype", () => {
       const mutated = replaceSource(positiveProfile, (source) => `<!DOCTYPE mediawiki [<!ENTITY x SYSTEM \"https://invalid/secret\">]>\n${source}`);
@@ -202,6 +202,13 @@ test("PSAI107 fail-closed negative matrix denies unsafe, unsupported and drifted
     ["malformed-xml", () => {
       const mutated = replaceSource(positiveProfile, (source) => source.replace("</revision>", ""));
       assert.throws(() => projectMediaWikiMiniDumpEditionV1(mutated.profile, mutated.bytes), /MALFORMED_DENIED/);
+    }],
+    ["malformed-attribute-separator", () => {
+      const mutated = replaceSource(positiveProfile, (source) => source.replace('" version="0.11"', '"version="0.11"'));
+      assert.throws(
+        () => projectMediaWikiMiniDumpEditionV1(mutated.profile, mutated.bytes),
+        /MALFORMED_DENIED/,
+      );
     }],
     ["missing-siteinfo", () => {
       const mutated = replaceSource(positiveProfile, (source) => source.replace(/  <siteinfo>[\s\S]*?  <\/siteinfo>\n/, ""));
