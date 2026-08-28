@@ -37,7 +37,7 @@
       },
       "allOf": [
         { "if": { "properties": { "gapClass": { "const": "NONE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE"] } } } },
-        { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "minItems": 1, "contains": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
+        { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "minItems": 1, "items": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
         { "if": { "properties": { "requirementOutcome": { "const": "NOT_APPLICABLE" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "maxItems": 0 } } } },
         { "if": { "properties": { "gapClass": { "const": "MISSING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_MISSING" } } } },
         { "if": { "properties": { "gapClass": { "const": "BAD_SOURCE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_BAD_SOURCE" } } } },

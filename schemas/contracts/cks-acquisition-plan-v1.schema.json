@@ -9,7 +9,17 @@
     "schemaVersion": { "const": "pansphaira.cks/acquisition-plan/v1" },
     "planId": { "$ref": "#/$defs/id" },
     "needDigest": { "$ref": "#/$defs/digest" },
-    "orderedLevels": { "type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true, "items": { "enum": ["A0", "A1", "A2", "A3", "A4", "A5"] } },
+    "orderedLevels": {
+      "type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true,
+      "oneOf": [
+        { "const": ["A0"] },
+        { "const": ["A0", "A1"] },
+        { "const": ["A0", "A1", "A2"] },
+        { "const": ["A0", "A1", "A2", "A3"] },
+        { "const": ["A0", "A1", "A2", "A3", "A4"] },
+        { "const": ["A0", "A1", "A2", "A3", "A4", "A5"] }
+      ]
+    },
     "maximumTotalAttempts": { "const": 3 },
     "maximumAlternateAttempts": { "const": 2 },
     "allowedSourceClasses": { "type": "array", "minItems": 1, "maxItems": 7, "uniqueItems": true, "items": { "$ref": "#/$defs/sourceClass" } },

@@ -13,14 +13,16 @@
     "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE", "GAP_MISSING", "GAP_BAD_SOURCE", "GAP_APPLICABILITY", "GAP_CONFLICTING", "GAP_UNKNOWN_SEMANTIC"] },
     "sourceClasses": { "type": "array", "maxItems": 7, "uniqueItems": true, "items": { "$ref": "#/$defs/sourceClass" } },
     "evidenceDigests": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "#/$defs/digest" } },
-    "recoveryAttempts": { "type": "array", "maxItems": 3, "items": { "$ref": "#/$defs/recoveryAttempt" } },
+    "recoveryAttempts": {
+      "type": "array", "maxItems": 3, "items": { "$ref": "#/$defs/recoveryAttempt" }
+    },
     "gapDigest": { "$ref": "#/$defs/digest" }
   },
   "allOf": [
     { "if": { "properties": { "gapClass": { "const": "NONE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE"] } } } },
-    { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "minItems": 1, "contains": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
+    { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "minItems": 1, "items": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
     { "if": { "properties": { "requirementOutcome": { "const": "NOT_APPLICABLE" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "maxItems": 0 } } } },
-    { "if": { "properties": { "gapClass": { "const": "MISSING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_MISSING" }, "recoveryAttempts": { "type": "array", "minItems": 3, "maxItems": 3 } } } },
+    { "if": { "properties": { "gapClass": { "const": "MISSING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_MISSING" }, "recoveryAttempts": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "$ref": "#/$defs/recoveryAttempt" }, "prefixItems": [{ "type": "object", "properties": { "outcome": { "const": "NO_MATCH" } } }, { "type": "object", "properties": { "outcome": { "const": "NO_MATCH" } } }, { "type": "object", "properties": { "outcome": { "const": "NO_MATCH" } } }] } } } },
     { "if": { "properties": { "gapClass": { "const": "BAD_SOURCE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_BAD_SOURCE" } } } },
     { "if": { "properties": { "gapClass": { "const": "APPLICABILITY" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_APPLICABILITY" } } } },
     { "if": { "properties": { "gapClass": { "const": "CONFLICTING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_CONFLICTING" } } } },
