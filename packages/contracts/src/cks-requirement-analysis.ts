@@ -308,6 +308,7 @@ function analyzeValidInput(input: ForwardRequirementAnalysisInputV1): ForwardReq
       results.push({ requirementId: requirement.requirementId, criticality: requirement.criticality, applicability: requirement.applicability, state: "NOT_APPLICABLE", matchedCandidateId: null });
       continue;
     }
+    if (requirement.applicability !== "APPLICABLE") throw new Error("INTERNAL_APPLICABILITY_VALIDATION_FAILURE");
     C += requirement.criticality === "CRITICAL" ? 1 : 0;
     const matches = input.mappings.filter((mapping) => mapping.outcome === "MATCH" && mapping.requirementId === requirement.requirementId);
     const usable = matches.find((mapping) => {
@@ -401,6 +402,9 @@ function blockedAnalysis(input: unknown, reasons: readonly CksRequirementAnalysi
   const semanticRuleSetDigest = isDigest(record.semanticRuleSetDigest) ? record.semanticRuleSetDigest : digest(null);
   const requirementSetDigest = Array.isArray(record.requirements) ? safeDigest(record.requirements) : digest([]);
   const candidateSetDigest = Array.isArray(record.candidates) ? safeDigest(record.candidates) : digest([]);
+  const blockedReasons: readonly CksRequirementAnalysisBlockedReasonV1[] = reasons.length > 0
+    ? [...new Set(reasons)]
+    : ["DEPENDENCY_EVIDENCE_ABSENT"];
   const result: Omit<ForwardRequirementAnalysisV1, "analysisDigest"> = {
     schemaVersion: FORWARD_REQUIREMENT_ANALYSIS_SCHEMA_V1,
     analysisId,
@@ -410,9 +414,9 @@ function blockedAnalysis(input: unknown, reasons: readonly CksRequirementAnalysi
     requirementSetDigest,
     candidateSetDigest,
     requirements: [],
-    p11: blockedP11(reasons.length > 0 ? reasons : ["DEPENDENCY_EVIDENCE_ABSENT"]),
+    p11: blockedP11(blockedReasons),
     outcome: "BLOCKED",
-    blockedReasons: [...new Set(reasons.length > 0 ? reasons : ["DEPENDENCY_EVIDENCE_ABSENT"])],
+    blockedReasons,
   };
   return { ...result, analysisDigest: forwardRequirementAnalysisDigestV1(result) };
 }
@@ -441,18 +445,17 @@ export function validateP11MeasurementV1(value: unknown): value is P11Measuremen
     return isUniqueStrings(blockedReasons, CKS_BLOCKED_REASONS_V1.length, (item) => isOneOf(item, CKS_BLOCKED_REASONS_V1))
       && Array.isArray(blockedReasons) && blockedReasons.length > 0;
   }
-  const measured = value as Record<string, number | string>;
-  const numbersOnly = value as unknown as Record<string, number>;
-  const numbers = ["R", "P", "M", "C", "CM", "CX", "requirementRecall", "requirementPrecision", "criticalRequirementMissRate", "criticalRequirementMisses", "criticalityMismatches"];
-  if (!numbers.every((key) => isFiniteNonNegativeNumber(measured[key]))) return false;
-  return Number.isInteger(numbersOnly.R) && Number.isInteger(numbersOnly.P) && Number.isInteger(numbersOnly.M) && Number.isInteger(numbersOnly.C)
-    && Number.isInteger(numbersOnly.CM) && Number.isInteger(numbersOnly.CX) && numbersOnly.R >= 1 && numbersOnly.C >= 1
-    && numbersOnly.M <= numbersOnly.R && numbersOnly.M <= numbersOnly.P && numbersOnly.CM <= numbersOnly.C && numbersOnly.CX <= numbersOnly.M
-    && numbersOnly.requirementRecall === numbersOnly.M / numbersOnly.R
-    && numbersOnly.requirementPrecision === (numbersOnly.P === 0 ? 0 : numbersOnly.M / numbersOnly.P)
-    && numbersOnly.criticalRequirementMissRate === numbersOnly.CM / numbersOnly.C
-    && numbersOnly.criticalRequirementMisses === numbersOnly.CM && numbersOnly.criticalityMismatches === numbersOnly.CX
-    && (measured.status === "PASS" ? numbersOnly.M === numbersOnly.R && numbersOnly.M === numbersOnly.P && numbersOnly.CM === 0 && numbersOnly.CX === 0 : true);
+  const numericKeys = ["R", "P", "M", "C", "CM", "CX", "requirementRecall", "requirementPrecision", "criticalRequirementMissRate", "criticalRequirementMisses", "criticalityMismatches"] as const;
+  if (!numericKeys.every((key) => isFiniteNonNegativeNumber(value[key]))) return false;
+  const measured = value as unknown as P11MeasuredV1;
+  return Number.isInteger(measured.R) && Number.isInteger(measured.P) && Number.isInteger(measured.M) && Number.isInteger(measured.C)
+    && Number.isInteger(measured.CM) && Number.isInteger(measured.CX) && measured.R >= 1 && measured.C >= 1
+    && measured.M <= measured.R && measured.M <= measured.P && measured.CM <= measured.C && measured.CX <= measured.M
+    && measured.requirementRecall === measured.M / measured.R
+    && measured.requirementPrecision === (measured.P === 0 ? 0 : measured.M / measured.P)
+    && measured.criticalRequirementMissRate === measured.CM / measured.C
+    && measured.criticalRequirementMisses === measured.CM && measured.criticalityMismatches === measured.CX
+    && (measured.status === "PASS" ? measured.M === measured.R && measured.M === measured.P && measured.CM === 0 && measured.CX === 0 : true);
 }
 
 export function validateForwardRequirementAnalysisV1(value: unknown): value is ForwardRequirementAnalysisV1 {

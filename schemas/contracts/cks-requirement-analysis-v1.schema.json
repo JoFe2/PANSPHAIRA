@@ -24,8 +24,8 @@
       "if": { "properties": { "outcome": { "const": "BLOCKED" } }, "required": ["outcome"] },
       "then": {
         "properties": {
-          "blockedReasons": { "minItems": 1 },
-          "requirements": { "maxItems": 0 },
+          "blockedReasons": { "type": "array", "minItems": 1 },
+          "requirements": { "type": "array", "maxItems": 0 },
           "p11": { "$ref": "#/$defs/p11Blocked" }
         }
       }
@@ -34,8 +34,8 @@
       "if": { "properties": { "outcome": { "enum": ["PASS", "FAIL"] } }, "required": ["outcome"] },
       "then": {
         "properties": {
-          "blockedReasons": { "maxItems": 0 },
-          "requirements": { "minItems": 1 },
+          "blockedReasons": { "type": "array", "maxItems": 0 },
+          "requirements": { "type": "array", "minItems": 1 },
           "p11": { "$ref": "#/$defs/p11Measured" }
         }
       }

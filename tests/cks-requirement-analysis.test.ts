@@ -14,6 +14,8 @@ import {
   validateP11MeasurementV1,
   type ForwardRequirementAnalysisInputV1,
   type RequirementCandidateV1,
+  type RequirementOracleItemV1,
+  type SemanticAdjudicationV1,
 } from "../packages/contracts/src/cks-requirement-analysis.js";
 
 const golden = JSON.parse(readFileSync("tests/fixtures/cks-07/requirement-analysis-golden-v1.json", "utf8")) as {
@@ -41,8 +43,8 @@ function mutateCase(base: ForwardRequirementAnalysisInputV1, item: Record<string
   const operation = item.operation;
   const candidateId = item.candidateId;
   if (operation === "removeCandidateAndMapping") {
-    input.candidates = input.candidates.filter((candidate) => candidate.candidateId !== candidateId);
-    input.mappings = input.mappings.filter((mapping) => mapping.candidateId !== candidateId);
+    input.candidates = input.candidates.filter((candidate: RequirementCandidateV1) => candidate.candidateId !== candidateId);
+    input.mappings = input.mappings.filter((mapping: SemanticAdjudicationV1) => mapping.candidateId !== candidateId);
   } else if (operation === "addSpuriousCandidate") {
     input.candidates = [...input.candidates, candidateFrom(input, "cand:spurious")];
     input.mappings = [...input.mappings, { candidateId: "cand:spurious", requirementId: "req:unknown", outcome: "MATCH", ruleId: "rule:semantic-exact-v1" }];
@@ -51,22 +53,22 @@ function mutateCase(base: ForwardRequirementAnalysisInputV1, item: Record<string
     input.candidates = [...input.candidates, candidateFrom(input, "cand:duplicate")];
     input.mappings = [...input.mappings, { candidateId: "cand:duplicate", requirementId, outcome: "MATCH", ruleId: "rule:semantic-exact-v1" }];
   } else if (operation === "setCandidateCriticality") {
-    input.candidates = input.candidates.map((candidate) => candidate.candidateId === candidateId ? { ...candidate, criticality: "UNKNOWN" } : candidate);
+    input.candidates = input.candidates.map((candidate: RequirementCandidateV1) => candidate.candidateId === candidateId ? { ...candidate, criticality: "UNKNOWN" } : candidate);
   } else if (operation === "setMappingOutcome") {
-    input.mappings = input.mappings.map((mapping) => mapping.candidateId === candidateId ? { ...mapping, requirementId: null, outcome: item.outcome } : mapping);
+    input.mappings = input.mappings.map((mapping: SemanticAdjudicationV1) => mapping.candidateId === candidateId ? { ...mapping, requirementId: null, outcome: item.outcome } : mapping);
   } else if (operation === "setCandidateSource") {
-    input.candidates = input.candidates.map((candidate) => candidate.candidateId === candidateId ? { ...candidate, sourceClass: item.sourceClass } : candidate);
+    input.candidates = input.candidates.map((candidate: RequirementCandidateV1) => candidate.candidateId === candidateId ? { ...candidate, sourceClass: item.sourceClass } : candidate);
   } else if (operation === "setCandidateApplicability") {
-    input.candidates = input.candidates.map((candidate) => candidate.candidateId === candidateId ? { ...candidate, applicability: item.applicability } : candidate);
+    input.candidates = input.candidates.map((candidate: RequirementCandidateV1) => candidate.candidateId === candidateId ? { ...candidate, applicability: item.applicability } : candidate);
   } else if (operation === "setCandidateConflict") {
-    input.candidates = input.candidates.map((candidate) => candidate.candidateId === candidateId ? { ...candidate, conflictState: item.conflictState } : candidate);
+    input.candidates = input.candidates.map((candidate: RequirementCandidateV1) => candidate.candidateId === candidateId ? { ...candidate, conflictState: item.conflictState } : candidate);
   } else if (operation === "removeAllMappings") {
     input.mappings = [];
   } else if (operation === "setOracleApplicabilityUnknown") {
-    input.requirements = input.requirements.map((requirement) => requirement.requirementId === item.requirementId
+    input.requirements = input.requirements.map((requirement: RequirementOracleItemV1) => requirement.requirementId === item.requirementId
       ? { ...requirement, applicability: "UNKNOWN", applicabilityRuleId: null } : requirement);
   } else if (operation === "changeCandidateCriticalityWithoutFixtureRefresh") {
-    input.candidates = input.candidates.map((candidate) => candidate.candidateId === candidateId ? { ...candidate, criticality: "UNKNOWN" } : candidate);
+    input.candidates = input.candidates.map((candidate: RequirementCandidateV1) => candidate.candidateId === candidateId ? { ...candidate, criticality: "UNKNOWN" } : candidate);
     return input;
   } else assert.fail(`unhandled fixture operation ${operation}`);
   return refreshFixture(input);
