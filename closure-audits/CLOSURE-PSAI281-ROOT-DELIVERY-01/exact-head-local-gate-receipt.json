@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI281-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 281,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/281"
+  },
+  "baseCommit": "1dde2511d0cedd580807a128790e4a3bcbde2cbe",
+  "testedHead": "2e8d35b1ba5574fceb554218454e0efe1addd667",
+  "testedTree": "0377749fbe6a38f90544ca1f0defb11bb71bdefb",
+  "currentMainIntegrationHead": "2e8d35b1ba5574fceb554218454e0efe1addd667",
+  "reviewFindings": {
+    "staleGateReceipt": "CLOSED_BY_THIS_RECEIPT",
+    "callerAuthoredQualificationDigests": "CLOSED_BY_REUSING_PUBLISHED_CKS06_EXACT_PROFILE_AND_ESCALATION_CONTRACTS",
+    "coverageTrustedUnverifiedPackDigest": "CLOSED_BY_PACK_DIGEST_RECOMPUTATION",
+    "queryApplicabilityTrustedDriftedObject": "CLOSED_BY_OBJECT_SHAPE_AND_DIGEST_RECOMPUTATION",
+    "staleCurrentMainIntegration": "CLOSED_BY_FRESH_WORKTREE_FROM_BASE_COMMIT",
+    "duplicateQualificationContract": "CLOSED_BY_REUSE_WITHOUT_DUPLICATION"
+  },
+  "gates": [
+    { "command": "npm test", "outcome": "PASS" },
+    { "command": "npm run cks-contracts:test", "outcome": "PASS", "tests": 69, "passed": 69 },
+    { "command": "node --test dist/tests/verification-fabric-v2.test.js", "outcome": "PASS", "tests": 23, "passed": 23 },
+    { "command": "npm run release-governance:test", "outcome": "PASS", "tests": 54, "passed": 54 },
+    { "command": "public release staging", "outcome": "PASS", "tests": 1, "passed": 1 },
+    { "command": "nested video integrity", "outcome": "PASS", "tests": 116, "passed": 116 },
+    { "command": "node --test tests/render-ccp-m1-evidence.test.mjs", "outcome": "PASS", "tests": 3, "passed": 3 },
+    { "command": "sha256sum --check --quiet SHA256SUMS", "outcome": "PASS" },
+    { "command": "git diff --check", "outcome": "PASS" }
+  ],
+  "delivery": {
+    "readyForPr": true,
+    "releaseRequired": true,
+    "publicReadbackRequired": true,
+    "issueCloseRequired": true
+  },
+  "nonClaims": [
+    "NO_RUNTIME_ACTIVATION",
+    "NO_AUTHORITY_GRANT",
+    "NO_AUTONOMOUS_ROUTING",
+    "NO_TRUTH_OR_COMPLETENESS_CLAIM"
+  ]
+}
