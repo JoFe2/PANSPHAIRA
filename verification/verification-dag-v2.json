@@ -1744,7 +1744,7 @@
         },
         {
           "path": "scripts/render-ccp-m1-evidence.mjs",
-          "role": "EVIDENCE_RENDERER",
+          "role": "TOOLCHAIN",
           "sha256": "f36d1a202edd5a535158093cea528ff037e6f4b8df2a3e985f62fc2bb160da6d"
         },
         {
