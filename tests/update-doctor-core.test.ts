@@ -85,6 +85,26 @@ test("UD-002 standard profile has stable order across fixture reorderings", () =
   assert.deepEqual(first.checks.map(({ checkId }) => checkId), PROBES);
 });
 
+test("UD-002 standard public projection stays allow-listed and redacted", () => {
+  const report = run(fixture(), "STANDARD");
+  const publicValue = JSON.parse(renderPublicDoctorReportV1(report)) as Record<string, unknown>;
+  assert.deepEqual(Object.keys(publicValue).sort(), [
+    "checks",
+    "generatedAtMs",
+    "observedLockDigest",
+    "profile",
+    "readOnly",
+    "reportDigest",
+    "reportId",
+    "schemaVersion",
+  ]);
+  assert.equal(publicValue.profile, "STANDARD");
+  assert.equal(publicValue.readOnly, true);
+  assert.equal("action" in publicValue, false);
+  assert.equal("privateObservation" in publicValue, false);
+  assert.doesNotMatch(JSON.stringify(publicValue), /canary-secret-value|192\.0\.2\.10|private\/operator|arbitrary adapter/i);
+});
+
 test("UD-002 converts timeout, unavailable, and lock drift into typed fail-closed findings", () => {
   const input = fixture();
   const probes = input.probes.map((probe) => {
@@ -114,4 +134,54 @@ test("UD-002 rejects mutation claims, duplicate probes, unknown fields, and dige
   assert.throws(() => run({ ...input, unexpected: true } as unknown as DoctorFixtureObservationV1), /INVALID_READ_ONLY_DOCTOR_FIXTURE/);
   assert.throws(() => renderPublicDoctorReportV1({ ...run(input), reportDigest: "0".repeat(64) }),
     /UNSAFE_OR_INVALID_DOCTOR_REPORT/);
+});
+
+function redigest(report: ReturnType<typeof run>, patch: Record<string, unknown>): ReturnType<typeof run> {
+  const unsigned = { ...report, ...patch } as Record<string, unknown>;
+  return {
+    ...unsigned,
+    reportDigest: updateDoctorContractDigest(unsigned, "reportDigest"),
+  } as ReturnType<typeof run>;
+}
+
+test("UD-002 public projection is closed, profile-complete, contradiction-free, and identity-redacted", () => {
+  const report = run(fixture());
+  const publicValue = JSON.parse(renderPublicDoctorReportV1(report)) as Record<string, unknown>;
+  assert.deepEqual(Object.keys(publicValue).sort(), [
+    "checks",
+    "generatedAtMs",
+    "observedLockDigest",
+    "profile",
+    "readOnly",
+    "reportDigest",
+    "reportId",
+    "schemaVersion",
+  ]);
+  assert.equal("action" in publicValue, false);
+  assert.equal("privateObservation" in publicValue, false);
+  assert.equal(Object.isFrozen(report), true);
+  assert.equal(Object.isFrozen(report.checks), true);
+
+  assert.throws(
+    () => renderPublicDoctorReportV1(redigest(report, { reportId: "user:alice" })),
+    /UNSAFE_OR_INVALID_DOCTOR_REPORT/,
+  );
+  assert.throws(
+    () => renderPublicDoctorReportV1(redigest(report, {
+      checks: [{ ...report.checks[0]!, status: "PASS", reasonCode: "OBSERVATION_MISMATCH" }, ...report.checks.slice(1)],
+    })),
+    /UNSAFE_OR_INVALID_DOCTOR_REPORT/,
+  );
+  assert.throws(
+    () => renderPublicDoctorReportV1({ ...report, action: "RUN" }),
+    /UNSAFE_OR_INVALID_DOCTOR_REPORT/,
+  );
+  assert.throws(
+    () =>
+      renderPublicDoctorReportV1({
+        ...report,
+        privatePath: ["", "home", "alice", ".config", "cm", "state.json"].join("/"),
+      }),
+    /UNSAFE_OR_INVALID_DOCTOR_REPORT/,
+  );
 });

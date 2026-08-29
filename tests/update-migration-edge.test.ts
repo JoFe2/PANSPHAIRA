@@ -7,6 +7,12 @@ import {
   UPDATE_MIGRATION_EDGE_KEYS_V1,
   UPDATE_MIGRATION_EDGE_PLANNER_SCHEMA_V1,
   UPDATE_MIGRATION_EDGE_SCHEMA_V1,
+  UPDATE_MIGRATION_DAG_MAX_EDGES_V1,
+  UPDATE_MIGRATION_DAG_SCHEMA_V1,
+  buildUpdateMigrationDagV1,
+  parseUpdateMigrationDagV1,
+  updateMigrationDagDigestV1,
+  verifyUpdateMigrationDagV1,
   buildUpdateMigrationEdgeV1,
   parseUpdateMigrationEdgeV1,
   renderVerifiedUpdateMigrationEdgeV1,
@@ -15,6 +21,7 @@ import {
   type BuildUpdateMigrationEdgeOptionsV1,
   type UpdateMigrationEdgeReasonCodeV1,
   type UpdateMigrationEdgeVerificationContextV1,
+  type UpdateMigrationDagVerificationContextV1,
 } from "../packages/contracts/src/update-migration-edge.js";
 
 const MIGRATION_ID = "migration:schema-edge-001";
@@ -494,4 +501,70 @@ test("DENIED results are frozen and leak no input", () => {
   assert.ok(Object.isFrozen(denied.reasonCodes));
   assert.ok(!JSON.stringify(denied).includes("secret"));
   assert.throws(() => renderVerifiedUpdateMigrationEdgeV1(rawEdge({ rollbackTargetDigest: ALIEN_DIGEST }), context()));
+});
+
+function dagContext(dag: ReturnType<typeof buildUpdateMigrationDagV1>): UpdateMigrationDagVerificationContextV1 {
+  return {
+    expectedMigrationId: dag.migrationId,
+    expectedMigrationVersion: dag.migrationVersion,
+    expectedSourceTupleDigest: dag.sourceTupleDigest,
+    expectedTargetTupleDigest: dag.targetTupleDigest,
+    expectedRollbackTargetDigest: dag.rollbackTargetDigest,
+    expectedAuthorityProfileDigest: dag.authorityProfileDigest,
+    expectedPlanner: { plannerId: dag.planner.plannerId, plannerVersion: dag.planner.plannerVersion },
+    expectedEdgeDigests: dag.edges.map(({ edgeDigest }) => edgeDigest),
+  };
+}
+
+test("bounded versioned migration DAG is deterministic, chained, and CHECKED without authority", () => {
+  const dag = buildUpdateMigrationDagV1({
+    migrationId: MIGRATION_ID,
+    migrationVersion: MIGRATION_VERSION,
+    sourceTupleDigest: SOURCE_DIGEST,
+    targetTupleDigest: TARGET_DIGEST,
+    intermediateTupleDigests: ["9".repeat(64), "8".repeat(64)],
+    authorityProfileDigest: AUTHORITY_DIGEST,
+    planner: { plannerId: PLANNER_ID, plannerVersion: PLANNER_VERSION },
+    issuedAtMs: ISSUED_AT_MS,
+  });
+  assert.equal(dag.schemaVersion, UPDATE_MIGRATION_DAG_SCHEMA_V1);
+  assert.equal(dag.maxEdges, UPDATE_MIGRATION_DAG_MAX_EDGES_V1);
+  assert.equal(dag.edges.length, 3);
+  assert.equal(dag.edges[0]?.sourceTupleDigest, SOURCE_DIGEST);
+  assert.equal(dag.edges.at(-1)?.targetTupleDigest, TARGET_DIGEST);
+  assert.equal(dag.rollbackTargetDigest, SOURCE_DIGEST);
+  assert.equal(updateMigrationDagDigestV1(dag), dag.dagDigest);
+  assert.deepEqual(verifyUpdateMigrationDagV1(dag, dagContext(dag)), {
+    outcome: "CHECKED", reasonCodes: ["MIGRATION_DAG_CHECKED"], exitCode: 0,
+  });
+  assert.equal(JSON.stringify(dag), JSON.stringify(buildUpdateMigrationDagV1({
+    migrationId: MIGRATION_ID, migrationVersion: MIGRATION_VERSION, sourceTupleDigest: SOURCE_DIGEST,
+    targetTupleDigest: TARGET_DIGEST, intermediateTupleDigests: ["9".repeat(64), "8".repeat(64)],
+    authorityProfileDigest: AUTHORITY_DIGEST, planner: { plannerId: PLANNER_ID, plannerVersion: PLANNER_VERSION },
+    issuedAtMs: ISSUED_AT_MS,
+  })));
+  assert.equal("migrationId" in JSON.parse(JSON.stringify(dag)), true);
+  assert.equal("execute" in JSON.parse(JSON.stringify(dag)), false);
+});
+
+test("DAG bound, independent target, chain, digest, and version failures deny fail-closed", () => {
+  const dag = buildUpdateMigrationDagV1({
+    migrationId: MIGRATION_ID, migrationVersion: MIGRATION_VERSION, sourceTupleDigest: SOURCE_DIGEST,
+    targetTupleDigest: TARGET_DIGEST, intermediateTupleDigests: [], authorityProfileDigest: AUTHORITY_DIGEST,
+    planner: { plannerId: PLANNER_ID, plannerVersion: PLANNER_VERSION }, issuedAtMs: ISSUED_AT_MS,
+  });
+  assert.deepEqual(verifyUpdateMigrationDagV1(dag, undefined).reasonCodes, ["INDEPENDENT_CONTEXT_DENIED"]);
+  assert.deepEqual(verifyUpdateMigrationDagV1({ ...dag, dagDigest: "0".repeat(64) }, dagContext(dag)).reasonCodes, ["DAG_DIGEST_MISMATCH_DENIED"]);
+  assert.deepEqual(verifyUpdateMigrationDagV1(dag, { ...dagContext(dag), expectedTargetTupleDigest: ALIEN_DIGEST }).reasonCodes, ["DAG_TARGET_MISMATCH_DENIED"]);
+  assert.deepEqual(parseUpdateMigrationDagV1("{not-json", dagContext(dag)).reasonCodes, ["INVALID_JSON_DENIED"]);
+  assert.throws(() => buildUpdateMigrationDagV1({
+    migrationId: MIGRATION_ID, migrationVersion: MIGRATION_VERSION, sourceTupleDigest: SOURCE_DIGEST,
+    targetTupleDigest: TARGET_DIGEST, intermediateTupleDigests: Array.from({ length: UPDATE_MIGRATION_DAG_MAX_EDGES_V1 }, (_, index) => `${index + 1}`.repeat(64)),
+    authorityProfileDigest: AUTHORITY_DIGEST, planner: { plannerId: PLANNER_ID, plannerVersion: PLANNER_VERSION }, issuedAtMs: ISSUED_AT_MS,
+  }), /INVALID_MIGRATION_DAG_FIXTURE/);
+  assert.throws(() => buildUpdateMigrationDagV1({
+    migrationId: MIGRATION_ID, migrationVersion: MIGRATION_VERSION, sourceTupleDigest: SOURCE_DIGEST,
+    targetTupleDigest: TARGET_DIGEST, intermediateTupleDigests: [], authorityProfileDigest: AUTHORITY_DIGEST,
+    planner: { plannerId: PLANNER_ID, plannerVersion: PLANNER_VERSION }, issuedAtMs: ISSUED_AT_MS, execute: true,
+  } as never), /INVALID_MIGRATION_DAG_FIXTURE/);
 });

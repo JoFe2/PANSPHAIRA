@@ -80,6 +80,17 @@ export interface DoctorReportV1 {
   readonly reportDigest: string;
 }
 
+const DOCTOR_PUBLIC_REPORT_KEYS_V1 = Object.freeze([
+  "schemaVersion",
+  "reportId",
+  "profile",
+  "readOnly",
+  "observedLockDigest",
+  "checks",
+  "generatedAtMs",
+  "reportDigest",
+] as const);
+
 export interface UpdateOperationReceiptV1 {
   readonly schemaVersion: typeof UPDATE_OPERATION_RECEIPT_SCHEMA_V1;
   readonly operationId: string;
@@ -179,15 +190,15 @@ const DENIAL_ORDER: readonly UpdateDoctorReasonCodeV1[] = [
   "MUTATION_CLAIM_DENIED",
 ];
 
-const QUICK_DOCTOR_PROBES_V1: readonly DoctorProbeIdV1[] = [
+const QUICK_DOCTOR_PROBES_V1: readonly DoctorProbeIdV1[] = Object.freeze([
   "cm:doctor-installation",
   "cm:doctor-runtime",
   "cm:doctor-configuration",
   "cm:doctor-version-lock",
   "cm:doctor-health-readback",
-];
+]);
 
-const STANDARD_DOCTOR_PROBES_V1: readonly DoctorProbeIdV1[] = [
+const STANDARD_DOCTOR_PROBES_V1: readonly DoctorProbeIdV1[] = Object.freeze([
   ...QUICK_DOCTOR_PROBES_V1,
   "cm:doctor-storage",
   "cm:doctor-permissions",
@@ -196,13 +207,81 @@ const STANDARD_DOCTOR_PROBES_V1: readonly DoctorProbeIdV1[] = [
   "cm:doctor-database-schema",
   "cm:doctor-packs",
   "cm:doctor-receipts",
-];
+]);
 
 const DOCTOR_PROBE_IDS_V1 = new Set<DoctorProbeIdV1>(STANDARD_DOCTOR_PROBES_V1);
+const DOCTOR_REPORT_ID = /^cm:doctor-report-[a-z0-9][a-z0-9._-]{2,95}$/;
+const DANGEROUS_KEYS = new Set(["__proto__", "prototype", "constructor"]);
+
+function isPlainDataRecord(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) return false;
+  for (const key of Reflect.ownKeys(value)) {
+    if (typeof key !== "string" || DANGEROUS_KEYS.has(key)) return false;
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (descriptor === undefined || !("value" in descriptor) || descriptor.enumerable !== true) return false;
+  }
+  return true;
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object" && !Array.isArray(value)
-    && Object.getPrototypeOf(value) === Object.prototype;
+  return isPlainDataRecord(value) && Object.getPrototypeOf(value) === Object.prototype;
+}
+
+function isDenseArray(value: unknown): value is unknown[] {
+  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) return false;
+  const keys = Reflect.ownKeys(value);
+  const expected = [...Array.from({ length: value.length }, (_, index) => String(index)), "length"];
+  return keys.length === expected.length
+    && keys.every((key) => typeof key === "string")
+    && expected.every((key) => keys.includes(key))
+    && Array.from({ length: value.length }, (_, index) => String(index)).every((key) => {
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      return descriptor !== undefined && "value" in descriptor && descriptor.enumerable === true;
+    });
+}
+
+function safeObject(entries: readonly (readonly [string, unknown])[]): Record<string, unknown> {
+  const output = {} as Record<string, unknown>;
+  for (const [key, value] of entries) {
+    if (DANGEROUS_KEYS.has(key) || Object.prototype.hasOwnProperty.call(output, key)) {
+      throw new TypeError("UNSAFE_JSON_OBJECT_KEY");
+    }
+    Object.defineProperty(output, key, { value, enumerable: true, writable: true, configurable: true });
+  }
+  return output;
+}
+
+function safeJsonClone<T>(value: T, ancestors = new Set<object>()): T {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return value;
+  if (typeof value === "number") {
+    if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) {
+      throw new TypeError("UNSAFE_JSON_NUMBER");
+    }
+    return value;
+  }
+  if (Array.isArray(value)) {
+    if (!isDenseArray(value) || ancestors.has(value)) throw new TypeError("UNSAFE_JSON_ARRAY");
+    const next = new Set(ancestors).add(value);
+    return value.map((item) => safeJsonClone(item, next)) as T;
+  }
+  if (!isPlainDataRecord(value) || ancestors.has(value as object)) throw new TypeError("UNSAFE_JSON_OBJECT");
+  const next = new Set(ancestors).add(value as object);
+  return safeObject(Object.keys(value).map((key) => [
+    key,
+    safeJsonClone(value[key], next),
+  ] as const)) as T;
+}
+
+function deepFreeze<T>(value: T): T {
+  if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
+    for (const key of Reflect.ownKeys(value)) {
+      if (key !== "length") deepFreeze((value as Record<PropertyKey, unknown>)[key]);
+    }
+    Object.freeze(value);
+  }
+  return value;
 }
 
 function exactKeys(value: unknown, keys: readonly string[]): value is Record<string, unknown> {
@@ -222,7 +301,7 @@ function isTimestamp(value: unknown): value is number {
 }
 
 function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === "string")
+  return isDenseArray(value) && value.every((item) => typeof item === "string")
     && value.length === new Set(value).size;
 }
 
@@ -309,7 +388,8 @@ export function adaptComposeDoctorObservationV1(
 
 function validFixtureDoctorOptions(value: unknown): value is RunFixtureDoctorOptionsV1 {
   if (!exactKeys(value, ["reportId", "profile", "expectedLockDigest", "generatedAtMs", "timeoutMs", "fixture"])
-    || !isId(value.reportId) || !["QUICK", "STANDARD"].includes(value.profile as string)
+    || typeof value.reportId !== "string" || !DOCTOR_REPORT_ID.test(value.reportId)
+    || !["QUICK", "STANDARD"].includes(value.profile as string)
     || !isDigest(value.expectedLockDigest) || !isTimestamp(value.generatedAtMs)
     || !Number.isSafeInteger(value.timeoutMs) || (value.timeoutMs as number) <= 0
     || !exactKeys(value.fixture, ["schemaVersion", "observedLockDigest", "mutationCount", "probes"])) return false;
@@ -322,29 +402,44 @@ function validFixtureDoctorOptions(value: unknown): value is RunFixtureDoctorOpt
 }
 
 function validDoctorReport(value: unknown): value is DoctorReportV1 {
+  const profile = isRecord(value) && value.profile;
+  const expectedChecks = profile === "QUICK" ? QUICK_DOCTOR_PROBES_V1 : STANDARD_DOCTOR_PROBES_V1;
+  const checks = isRecord(value) && Array.isArray(value.checks) ? value.checks : [];
   return exactKeys(value, ["schemaVersion", "reportId", "profile", "readOnly", "observedLockDigest",
     "checks", "generatedAtMs", "reportDigest"])
-    && value.schemaVersion === DOCTOR_REPORT_SCHEMA_V1 && isId(value.reportId)
+    && value.schemaVersion === DOCTOR_REPORT_SCHEMA_V1
+    && typeof value.reportId === "string" && DOCTOR_REPORT_ID.test(value.reportId)
     && ["QUICK", "STANDARD"].includes(value.profile as string) && value.readOnly === true
-    && isDigest(value.observedLockDigest) && Array.isArray(value.checks) && value.checks.length > 0
-    && value.checks.every((check) => exactKeys(check, ["checkId", "status", "reasonCode"])
-      && DOCTOR_PROBE_IDS_V1.has(check.checkId as DoctorProbeIdV1)
-      && ["PASS", "FAIL", "NOT_OBSERVED"].includes(check.status as string)
-      && ["OBSERVATION_MATCHED", "OBSERVATION_MISMATCH", "OBSERVATION_UNAVAILABLE"].includes(check.reasonCode as string))
+    && isDigest(value.observedLockDigest) && isDenseArray(value.checks)
+    && value.checks.length === expectedChecks.length
+    && value.checks.every((check, index) => {
+      const expectedCheckId = expectedChecks[index];
+      return exactKeys(check, ["checkId", "status", "reasonCode"])
+        && check.checkId === expectedCheckId
+        && ((check.status === "PASS" && check.reasonCode === "OBSERVATION_MATCHED")
+          || (check.status === "FAIL" && check.reasonCode === "OBSERVATION_MISMATCH")
+          || (check.status === "NOT_OBSERVED" && check.reasonCode === "OBSERVATION_UNAVAILABLE"));
+    })
     && isTimestamp(value.generatedAtMs) && isDigest(value.reportDigest);
 }
 
 export function runFixtureDoctorV1(options: RunFixtureDoctorOptionsV1): DoctorReportV1 {
-  if (!validFixtureDoctorOptions(options)) throw new Error("INVALID_READ_ONLY_DOCTOR_FIXTURE");
-  const selected = options.profile === "QUICK" ? QUICK_DOCTOR_PROBES_V1 : STANDARD_DOCTOR_PROBES_V1;
-  const observations = new Map(options.fixture.probes.map((probe) => [probe.checkId, probe]));
+  let snapshot: RunFixtureDoctorOptionsV1;
+  try {
+    snapshot = safeJsonClone(options);
+  } catch {
+    throw new Error("INVALID_READ_ONLY_DOCTOR_FIXTURE");
+  }
+  if (!validFixtureDoctorOptions(snapshot)) throw new Error("INVALID_READ_ONLY_DOCTOR_FIXTURE");
+  const selected = snapshot.profile === "QUICK" ? QUICK_DOCTOR_PROBES_V1 : STANDARD_DOCTOR_PROBES_V1;
+  const observations = new Map(snapshot.fixture.probes.map((probe) => [probe.checkId, probe]));
   const checks: DoctorReportV1["checks"] = selected.map((checkId) => {
     const observation = observations.get(checkId);
-    const timedOut = observation !== undefined && observation.durationMs > options.timeoutMs;
+    const timedOut = observation !== undefined && observation.durationMs > snapshot.timeoutMs;
     let outcome = observation?.outcome ?? "UNAVAILABLE";
     if (timedOut) outcome = "UNAVAILABLE";
     if (checkId === "cm:doctor-version-lock" && outcome !== "UNAVAILABLE") {
-      outcome = options.fixture.observedLockDigest === options.expectedLockDigest ? "MATCH" : "MISMATCH";
+      outcome = snapshot.fixture.observedLockDigest === snapshot.expectedLockDigest ? "MATCH" : "MISMATCH";
     }
     if (outcome === "MATCH") return { checkId, status: "PASS", reasonCode: "OBSERVATION_MATCHED" };
     if (outcome === "MISMATCH") return { checkId, status: "FAIL", reasonCode: "OBSERVATION_MISMATCH" };
@@ -352,25 +447,50 @@ export function runFixtureDoctorV1(options: RunFixtureDoctorOptionsV1): DoctorRe
   });
   const unsigned = {
     schemaVersion: DOCTOR_REPORT_SCHEMA_V1,
-    reportId: options.reportId,
-    profile: options.profile,
+    reportId: snapshot.reportId,
+    profile: snapshot.profile,
     readOnly: true as const,
-    observedLockDigest: options.fixture.observedLockDigest,
+    observedLockDigest: snapshot.fixture.observedLockDigest,
     checks,
-    generatedAtMs: options.generatedAtMs,
+    generatedAtMs: snapshot.generatedAtMs,
   };
-  return {
+  return deepFreeze({
     ...unsigned,
     reportDigest: updateDoctorContractDigest(unsigned as unknown as Record<string, unknown>, "reportDigest"),
-  };
+  });
+}
+
+function projectPublicDoctorReport(value: DoctorReportV1): Record<string, unknown> {
+  const projected = safeObject([
+    ["schemaVersion", value.schemaVersion],
+    ["reportId", value.reportId],
+    ["profile", value.profile],
+    ["readOnly", value.readOnly],
+    ["observedLockDigest", value.observedLockDigest],
+    ["checks", value.checks.map((check) => safeObject([
+      ["checkId", check.checkId],
+      ["status", check.status],
+      ["reasonCode", check.reasonCode],
+    ]))],
+    ["generatedAtMs", value.generatedAtMs],
+    ["reportDigest", value.reportDigest],
+  ]);
+  if (!exactKeys(projected, DOCTOR_PUBLIC_REPORT_KEYS_V1)) throw new Error("UNSAFE_DOCTOR_PUBLIC_PROJECTION");
+  return projected;
 }
 
 export function renderPublicDoctorReportV1(value: unknown): string {
-  if (!validDoctorReport(value)
-    || updateDoctorContractDigest(value as unknown as Record<string, unknown>, "reportDigest") !== value.reportDigest) {
+  let snapshot: unknown;
+  try {
+    snapshot = safeJsonClone(value);
+  } catch {
     throw new Error("UNSAFE_OR_INVALID_DOCTOR_REPORT");
   }
-  return canonicalJson(value);
+  if (!validDoctorReport(snapshot)
+    || updateDoctorContractDigest(snapshot as unknown as Record<string, unknown>, "reportDigest") !== snapshot.reportDigest) {
+    throw new Error("UNSAFE_OR_INVALID_DOCTOR_REPORT");
+  }
+  return canonicalJson(projectPublicDoctorReport(snapshot));
 }
 
 function hasSupportedSchemaVersions(value: Record<string, unknown>): boolean {

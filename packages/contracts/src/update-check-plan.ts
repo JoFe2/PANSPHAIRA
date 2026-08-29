@@ -165,10 +165,15 @@ export interface UpdateCheckPlanV1 {
 }
 
 export interface UpdatePlanVerificationContextV1 {
+  readonly expectedUpdaterId: string;
   readonly expectedCandidate: {
     readonly candidateId: string;
     readonly releaseId: string;
     readonly candidateDigest: string;
+  };
+  readonly expectedCompatibility: {
+    readonly decisionId: string;
+    readonly decisionDigest: string;
   };
   readonly expectedTarget: {
     readonly tuple: UpdateTupleV1;
@@ -233,10 +238,17 @@ export type UpdateHealthReportVerificationResultV1 =
   | { readonly outcome: "SAFE_MODE"; readonly reasonCodes: readonly UpdateSafeModeReasonV1[]; readonly exitCode: number }
   | { readonly outcome: "DENIED"; readonly reasonCodes: readonly UpdateCheckPlanReasonCodeV1[]; readonly exitCode: number };
 
-const EXACT_VERSION = /^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/;
+// Canonical SemVer 2.0.0. Exact versions are required; ranges and mutable
+// selectors (including dist-tags such as `latest`) are deliberately invalid.
+const SEMVER_NUMERIC = "(?:0|[1-9][0-9]*)";
+const SEMVER_PRERELEASE_IDENTIFIER = "(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)";
+const EXACT_VERSION = new RegExp(
+  `^${SEMVER_NUMERIC}(?:\\.${SEMVER_NUMERIC}){2}(?:-${SEMVER_PRERELEASE_IDENTIFIER}(?:\\.${SEMVER_PRERELEASE_IDENTIFIER})*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$`,
+);
 const DIGEST = /^[a-f0-9]{64}$/;
 const PLAN_ID = /^update:[a-z0-9][a-z0-9._-]{2,95}$/;
 const CANDIDATE_ID = /^candidate:[a-z0-9][a-z0-9._-]{2,95}$/;
+const UPDATER_ID = /^updater:[a-z0-9][a-z0-9._-]{2,95}$/;
 const LKG_ID = /^(?:lkg|maintenance):[a-z0-9][a-z0-9._-]{2,95}$/;
 const DECISION_ID = /^compatibility:[a-z0-9][a-z0-9._-]{2,95}$/;
 const REPORT_ID = /^update:[a-z0-9][a-z0-9._-]{2,95}$/;
@@ -692,12 +704,16 @@ function validPlan(value: unknown): value is UpdateCheckPlanV1 {
 }
 
 function validPlanContext(value: unknown): value is UpdatePlanVerificationContextV1 {
-  if (!exactKeys(value, ["expectedCandidate", "expectedTarget", "expectedLkg", "trustedAuthorities",
+  if (!exactKeys(value, ["expectedUpdaterId", "expectedCandidate", "expectedCompatibility", "expectedTarget", "expectedLkg", "trustedAuthorities",
     "evaluationTimeMs", "maxLkgAgeMs", "revocationState"])) return false;
+  if (typeof value.expectedUpdaterId !== "string" || !UPDATER_ID.test(value.expectedUpdaterId)) return false;
   if (!exactKeys(value.expectedCandidate, ["candidateId", "releaseId", "candidateDigest"])
     || typeof value.expectedCandidate.candidateId !== "string" || !CANDIDATE_ID.test(value.expectedCandidate.candidateId)
     || typeof value.expectedCandidate.releaseId !== "string" || !EXACT_VERSION.test(value.expectedCandidate.releaseId)
     || !isDigest(value.expectedCandidate.candidateDigest)) return false;
+  if (!exactKeys(value.expectedCompatibility, ["decisionId", "decisionDigest"])
+    || typeof value.expectedCompatibility.decisionId !== "string" || !DECISION_ID.test(value.expectedCompatibility.decisionId)
+    || !isDigest(value.expectedCompatibility.decisionDigest)) return false;
   if (!exactKeys(value.expectedTarget, ["tuple", "authorityProfileDigest"])
     || !validCompleteTuple(value.expectedTarget.tuple) || !isDigest(value.expectedTarget.authorityProfileDigest)) return false;
   if (!exactKeys(value.expectedLkg, ["lkgId", "releaseId", "lkgDigest", "tuple", "authorityProfileDigest", "observedAtMs"])
@@ -749,12 +765,44 @@ function authoritiesAreIndependent(context: UpdatePlanVerificationContextV1): bo
     context.trustedAuthorities.resolvedBy,
   ];
   const aliases = identities.map(actorAlias);
+  const subjectAliases = [
+    actorAlias(context.expectedCandidate.candidateId),
+    actorAlias(context.expectedUpdaterId),
+  ];
   return new Set(aliases).size === aliases.length
-    && aliases.every((alias) => alias !== actorAlias(context.expectedCandidate.candidateId));
+    && new Set(subjectAliases).size === subjectAliases.length
+    && aliases.every((alias) => !subjectAliases.includes(alias));
 }
 
 function sameTuple(left: UpdateTupleV1, right: UpdateTupleV1): boolean {
   return canonicalJson(safeJsonClone(left)) === canonicalJson(safeJsonClone(right));
+}
+
+/**
+ * Snapshots an independently verified CHECK_ONLY plan as deeply immutable,
+ * inspectable data. The plan digest binds its candidate and compatibility
+ * decision, while independent context pins the exact tuple, content,
+ * compatibility, and authority digests.
+ *
+ * This operation does not attest, promote, or authorize execution. A candidate
+ * or its updater cannot occupy an attestation, compatibility, or promotion gate
+ * role. Any mismatch, role collision, or malformed content fails before an
+ * immutable inspection snapshot is emitted.
+ */
+export function freezeUpdateCheckPlanCandidateV1(
+  plan: UpdateCheckPlanV1,
+  context: UpdatePlanVerificationContextV1 | undefined,
+): UpdateCheckPlanV1 {
+  let snapshot: UpdateCheckPlanV1;
+  try {
+    snapshot = immutable(plan);
+  } catch {
+    throw new Error("UNSAFE_OR_INVALID_UPDATE_CANDIDATE");
+  }
+  if (verifyUpdateCheckPlanV1(snapshot, context).outcome === "DENIED") {
+    throw new Error("UNSAFE_OR_INVALID_UPDATE_CANDIDATE");
+  }
+  return snapshot;
 }
 
 export function verifyUpdateCheckPlanV1(
@@ -791,6 +839,7 @@ export function verifyUpdateCheckPlanV1(
     || updateCheckPlanDigestV1(compatibility as unknown as Record<string, unknown>, "decisionDigest") !== compatibility.decisionDigest
     || updateCheckPlanDigestV1(lkg as unknown as Record<string, unknown>, "lkgDigest") !== lkg.lkgDigest
     || candidate.digest !== verificationContext.expectedCandidate.candidateDigest
+    || compatibility.decisionDigest !== verificationContext.expectedCompatibility.decisionDigest
     || lkg.lkgDigest !== verificationContext.expectedLkg.lkgDigest) {
     reasons.add("DIGEST_MISMATCH_DENIED");
   }
@@ -808,6 +857,7 @@ export function verifyUpdateCheckPlanV1(
   }
   if (candidate.candidateId !== verificationContext.expectedCandidate.candidateId
     || candidate.releaseId !== verificationContext.expectedCandidate.releaseId
+    || compatibility.decisionId !== verificationContext.expectedCompatibility.decisionId
     || lkg.lkgId !== verificationContext.expectedLkg.lkgId
     || lkg.releaseId !== verificationContext.expectedLkg.releaseId
     || lkg.observedAtMs !== verificationContext.expectedLkg.observedAtMs) {
@@ -841,8 +891,10 @@ export function verifyUpdateCheckPlanV1(
     reasons.add("COMPATIBILITY_DENIED");
   }
   if (actorAlias(candidate.attestedBy) === actorAlias(candidate.candidateId)
+    || actorAlias(candidate.attestedBy) === actorAlias(verificationContext.expectedUpdaterId)
     || plan.selfAttestation !== false) reasons.add("SELF_ATTESTATION_DENIED");
   if (actorAlias(candidate.promotedBy) === actorAlias(candidate.candidateId)
+    || actorAlias(candidate.promotedBy) === actorAlias(verificationContext.expectedUpdaterId)
     || plan.selfPromotion !== false) reasons.add("SELF_PROMOTION_DENIED");
   if (compatibility.authorityDelta.added.length > 0 || compatibility.authorityDelta.removed.length > 0
     || plan.authorityWidened !== false) reasons.add("AUTHORITY_WIDENING_DENIED");

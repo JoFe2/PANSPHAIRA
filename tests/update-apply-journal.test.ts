@@ -384,6 +384,37 @@ test("UD-APPLY-01 unsupported contract version and wrong terminal state deny", (
   });
 });
 
+test("UD-APPLY-01 retry after rollback is deterministic, receipted at the next revision, and bound to independent expectation", () => {
+  // Attempt 1 (revision 1): postcondition failure, full rollback, zero residue.
+  const rolledBack = rollbackJournal();
+  assert.equal(rolledBack.revision, 1);
+  assert.equal(rolledBack.terminalState, "ROLLED_BACK_ZERO_RESIDUE");
+  assert.deepEqual(verifyUpdateApplyJournalV1(rolledBack, contextFor()), {
+    outcome: "ACCEPTED", reasonCodes: ["APPLY_JOURNAL_ACCEPTED"], exitCode: 0,
+  });
+
+  // Retry (revision 2): same operation and verified source/target lock digests,
+  // next revision, success ladder. The retry receipt is its own deterministic digest.
+  const retry = successJournal({ revision: 2 });
+  const retryAgain = successJournal({ revision: 2 });
+  assert.equal(retry.revision, 2);
+  assert.equal(retry.terminalState, "VERIFIED");
+  assert.equal(retry.operationDigest, rolledBack.operationDigest);
+  assert.equal(retry.sourceLockDigest, rolledBack.sourceLockDigest);
+  assert.equal(retry.targetLockDigest, rolledBack.targetLockDigest);
+  assert.equal(retry.journalDigest, retryAgain.journalDigest);
+  assert.notEqual(retry.journalDigest, rolledBack.journalDigest);
+  assert.deepEqual(verifyUpdateApplyJournalV1(retry, contextFor({ expectedRevision: 2 })), {
+    outcome: "ACCEPTED", reasonCodes: ["APPLY_JOURNAL_ACCEPTED"], exitCode: 0,
+  });
+
+  // Retry identity is bound to the independent expectation: the stale revision-1
+  // context cannot accept the revision-2 receipt, and the rollback receipt cannot
+  // masquerade as the retry receipt.
+  assert.equal(verifyUpdateApplyJournalV1(retry, contextFor()).outcome, "DENIED");
+  assert.equal(verifyUpdateApplyJournalV1(rolledBack, contextFor({ expectedRevision: 2 })).outcome, "DENIED");
+});
+
 test("UD-APPLY-01 parser fails closed without evaluating hostile fixture content", () => {
   assert.deepEqual(parseUpdateApplyJournalV1("not-json", contextFor()), {
     outcome: "DENIED",
