@@ -45,6 +45,7 @@ export type CcpFairQueueExclusionReasonV1 =
   | "SUPERSEDED_CANDIDATE"
   | "INVALIDATED_CANDIDATE"
   | "DEEP_CI_CLAIM_INELIGIBLE"
+  | "FAIRNESS_ROUND_LIMIT"
   | "MAX_ITEMS_REACHED"
   | "COST_BUDGET_EXCEEDED";
 
@@ -54,6 +55,7 @@ export const CCP_FAIR_QUEUE_EXCLUSION_REASONS_V1 = Object.freeze([
   "SUPERSEDED_CANDIDATE",
   "INVALIDATED_CANDIDATE",
   "DEEP_CI_CLAIM_INELIGIBLE",
+  "FAIRNESS_ROUND_LIMIT",
   "MAX_ITEMS_REACHED",
   "COST_BUDGET_EXCEEDED",
 ]) as readonly CcpFairQueueExclusionReasonV1[];
@@ -236,9 +238,15 @@ function makeSelection(input: CcpFairQueueSelectionInputV1): CcpFairQueueSelecti
     else exclusions.push(Object.freeze({ candidateId: candidate.candidateId, reasonCode: reason }));
   }
   eligible.sort(compareFairQueue);
+  const processedRoundKeys = new Set<string>();
   const selected: CcpFairQueueCandidateV1[] = [];
   let selectedCostUnits = 0;
   for (const candidate of eligible) {
+    if (processedRoundKeys.has(candidate.fairnessKey)) {
+      exclusions.push(Object.freeze({ candidateId: candidate.candidateId, reasonCode: "FAIRNESS_ROUND_LIMIT" }));
+      continue;
+    }
+    processedRoundKeys.add(candidate.fairnessKey);
     if (selected.length >= input.maxItems) {
       exclusions.push(Object.freeze({ candidateId: candidate.candidateId, reasonCode: "MAX_ITEMS_REACHED" }));
       continue;
@@ -293,7 +301,10 @@ function normalizeSelection(value: unknown): CcpFairQueueSelectionV1 {
   const selected = selectedRaw.map((candidate) => normalizeCandidate(candidate));
   const exclusions = exclusionsRaw.map((exclusion) => normalizeExclusion(exclusion));
   const ids = new Set<string>();
+  const fairnessKeys = new Set<string>();
   for (const candidate of selected) {
+    if (fairnessKeys.has(candidate.fairnessKey)) ccpStrictDenyV1(FAIR_QUEUE_DENIED);
+    fairnessKeys.add(candidate.fairnessKey);
     if (ids.has(candidate.candidateId) || exclusionFor(candidate.candidateId, exclusions) !== undefined) ccpStrictDenyV1(FAIR_QUEUE_DENIED);
     ids.add(candidate.candidateId);
     if (exclusionReason(candidate) !== null) ccpStrictDenyV1(FAIR_QUEUE_DENIED);
@@ -313,6 +324,11 @@ function normalizeSelection(value: unknown): CcpFairQueueSelectionV1 {
       || candidate.contributionId !== budget.contributionId) {
       ccpStrictDenyV1(FAIR_QUEUE_DENIED);
     }
+  }
+  const selectedFairnessKeys = new Set<string>();
+  for (const candidate of selected) {
+    if (selectedFairnessKeys.has(candidate.fairnessKey)) ccpStrictDenyV1(FAIR_QUEUE_DENIED);
+    selectedFairnessKeys.add(candidate.fairnessKey);
   }
   const selectedCostUnits = assertCcpSafeUnsignedIntegerV1(record.selectedCostUnits, FAIR_QUEUE_DENIED);
   const expectedCost = selected.reduce((total, candidate) => total + candidate.costUnits, 0);

@@ -31,8 +31,8 @@ const fixture = (name: string): MergeFixture =>
 // Byte-stability bindings: digests of the tuple locks produced by sealing the
 // green and failed-promotion fixture tuples. Any drift in the sealed bytes
 // changes these values.
-const GREEN_LOCK_DIGEST = "0fbc6cf201b0bac7e92e08a45cd03eb9788f7b34d8507cd64e7935fc5b046dc3";
-const FAILED_LOCK_DIGEST = "192390a22d426b9e063f1bb05ed43d8b79e867506724c55df235bc660ce4ed8c";
+const GREEN_LOCK_DIGEST = "162b1c6841c5f7ff8851a351c587928dd6ed6bfe20cfffb0cec94e6f53b79cce";
+const FAILED_LOCK_DIGEST = "a52c87849af882afe276d25bb8afc57ac96197ebd723ef41aebc8faf98ccc28a";
 
 /** Rehash a forged sealed lock with its own domain; used only to build rehashed forgeries. */
 function rehashTupleLock(record: Record<string, unknown>): void {

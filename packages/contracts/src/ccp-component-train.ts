@@ -14,6 +14,10 @@ import {
   TENANT_ID_PATTERN,
 } from "./ccp-event-envelope.js";
 import { CCP_COMPONENT_IDS_V1, CCP_RISK_CLASSES_V1 } from "./ccp-risk-routing.js";
+import {
+  parseCcpAdmissionReceiptV1,
+  type CcpAdmissionReceiptV1,
+} from "./ccp-admission-gate.js";
 
 /**
  * CCP PSAI52 bounded intake boundary (M1 merge-train side): a pure,
@@ -57,6 +61,8 @@ export const CCP_TRAIN_REASON_CODES_V1 = Object.freeze([
   "STALE_LOGICAL_TIME",
   "UNKNOWN_COMPONENT",
   "UNKNOWN_RISK_CLASS",
+  "ADMISSION_RECEIPT_UNVERIFIED",
+  "ADMISSION_RECEIPT_SUBJECT_MISMATCH",
 ]);
 
 /** One synthetic candidate offered to the component merge train. */
@@ -74,7 +80,9 @@ export interface CcpTrainCandidateV1 {
   readonly riskClass: string;
   /** Injected logical clock value; data only, never read from a wall clock. */
   readonly logicalAtMs: number;
-  /** Digest of the admission-gate receipt this candidate was admitted under; a data-only binding. */
+  /** The verified admission-gate receipt this candidate was admitted under. */
+  readonly admissionReceipt: CcpAdmissionReceiptV1;
+  /** Digest of the admission-gate receipt; must match the parsed receipt. */
   readonly admissionReceiptDigest: string;
 }
 
@@ -117,7 +125,7 @@ const TRAIN_RECEIPT_SCHEMA_DENIED = "CCP_TRAIN_RECEIPT_SCHEMA_DENIED";
 const TRAIN_CANDIDATE_KEYS = Object.freeze([
   "schemaVersion", "ledgerId", "tenantId", "repositoryId", "contributionId", "deliveryId",
   "componentId", "headDigest", "payloadDigest", "riskClass", "logicalAtMs",
-  "admissionReceiptDigest",
+  "admissionReceipt", "admissionReceiptDigest",
 ]);
 const TRAIN_CONTEXT_KEYS = Object.freeze([
   "schemaVersion", "ledgerId", "tenantId", "repositoryId", "contributionId", "componentId",
@@ -171,6 +179,11 @@ export function parseCcpTrainCandidateV1(value: unknown): CcpTrainCandidateV1 {
     ccpStrictDenyV1(TRAIN_CANDIDATE_SCHEMA_DENIED);
   }
   const identity = readTrainIdentity(record, TRAIN_CANDIDATE_SCHEMA_DENIED);
+  const admissionReceipt = parseCcpAdmissionReceiptV1(record.admissionReceipt);
+  if (admissionReceipt.disposition !== "ADMITTED"
+    || admissionReceipt.receiptDigest !== record.admissionReceiptDigest) {
+    ccpStrictDenyV1(TRAIN_CANDIDATE_SCHEMA_DENIED);
+  }
   const candidate = Object.freeze({
     schemaVersion: CCP_TRAIN_CANDIDATE_SCHEMA_V1,
     ...identity,
@@ -180,6 +193,7 @@ export function parseCcpTrainCandidateV1(value: unknown): CcpTrainCandidateV1 {
     payloadDigest: assertCcpDigestV1(record.payloadDigest, TRAIN_CANDIDATE_SCHEMA_DENIED),
     riskClass: assertKnownRiskClass(record.riskClass, TRAIN_CANDIDATE_SCHEMA_DENIED),
     logicalAtMs: assertCcpSafePositiveIntegerV1(record.logicalAtMs, TRAIN_CANDIDATE_SCHEMA_DENIED),
+    admissionReceipt,
     admissionReceiptDigest: assertCcpDigestV1(
       record.admissionReceiptDigest,
       TRAIN_CANDIDATE_SCHEMA_DENIED,
@@ -262,6 +276,24 @@ function deriveTrainDecision(
   }
   if (candidate.riskClass !== "risk:standard") {
     return { disposition: "INELIGIBLE", reasonCode: "ELEVATED_RISK_CLASS" };
+  }
+  if (candidate.admissionReceipt.candidate.ledgerId !== candidate.ledgerId
+    || candidate.admissionReceipt.candidate.tenantId !== candidate.tenantId
+    || candidate.admissionReceipt.candidate.repositoryId !== candidate.repositoryId
+    || candidate.admissionReceipt.candidate.contributionId !== candidate.contributionId
+    || candidate.admissionReceipt.candidate.deliveryId !== candidate.deliveryId
+    || candidate.admissionReceipt.candidate.componentId !== candidate.componentId
+    || candidate.admissionReceipt.candidate.headDigest !== candidate.headDigest
+    || candidate.admissionReceipt.candidate.payloadDigest !== candidate.payloadDigest
+    || candidate.admissionReceipt.candidate.riskClass !== candidate.riskClass
+    || candidate.admissionReceipt.candidate.logicalAtMs !== candidate.logicalAtMs) {
+    return { disposition: "INELIGIBLE", reasonCode: "ADMISSION_RECEIPT_SUBJECT_MISMATCH" };
+  }
+  if (candidate.admissionReceipt.disposition !== "ADMITTED"
+    || candidate.admissionReceipt.eligibility.queueEligible !== true
+    || candidate.admissionReceipt.eligibility.mergeEligible !== false
+    || candidate.admissionReceipt.receiptDigest !== candidate.admissionReceiptDigest) {
+    return { disposition: "INELIGIBLE", reasonCode: "ADMISSION_RECEIPT_UNVERIFIED" };
   }
   return { disposition: "ELIGIBLE", reasonCode: "ELIGIBLE_TRAIN_ASSIGNED" };
 }

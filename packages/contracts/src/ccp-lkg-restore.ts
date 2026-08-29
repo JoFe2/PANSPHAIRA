@@ -229,7 +229,10 @@ function derivePromotionDecision(input: {
     || candidate.componentId !== lock.componentId
     || candidate.headDigest !== lock.headDigest
     || candidate.payloadDigest !== lock.payloadDigest
-    || candidate.deliveryId !== lock.deliveryId) {
+    || candidate.deliveryId !== lock.deliveryId
+    || lock.authorityEvidence.headDigest !== lock.headDigest
+    || lock.authorityEvidence.payloadDigest !== lock.payloadDigest
+    || lock.authorityEvidence.deliveryId !== lock.deliveryId) {
     return {
       disposition: "HOLD",
       reasonCode: "EVIDENCE_IDENTITY_MISMATCH",
@@ -265,7 +268,9 @@ function derivePromotionDecision(input: {
       lkgAfterDigest: input.lkgBeforeDigest,
     };
   }
-  if (input.promoterId === candidate.deliveryId || input.promoterId === lock.verifierId) {
+  if (input.promoterId !== "promoter:gatekeeper"
+    || input.promoterId === candidate.deliveryId
+    || input.promoterId === lock.verifierId) {
     return {
       disposition: "HOLD",
       reasonCode: "UNAUTHORIZED_PROMOTER",

@@ -71,6 +71,13 @@ export interface CcpSloFairnessProjectionV1 {
   readonly selectedFairnessKeyCount: number;
   readonly coverageBps: number;
   readonly targetCoverageBps: number;
+  readonly grantsSinceContributorLastServed: readonly {
+    readonly fairnessKey: string;
+    readonly grants: number;
+  }[];
+  readonly activeEligibleContributorCount: number;
+  readonly fairnessBound: number;
+  readonly fairnessStatus: "FAIRNESS_BOUND_MET" | "FAIRNESS_BOUND_MISSED";
   readonly met: boolean;
 }
 
@@ -119,7 +126,11 @@ const INPUT_KEYS = Object.freeze(["schemaVersion", "observationId", "logicalAtMs
 const RECOVERY_KEYS = Object.freeze(["attempts", "recovered", "failed"]);
 const TARGET_KEYS = Object.freeze(["maxQueueAgeMs", "minFairnessCoverageBps", "maxSelectedCostUnits", "minRecoveryRateBps"]);
 const QUEUE_AGE_KEYS = Object.freeze(["eligibleCount", "oldestEligibleAgeMs", "p95EligibleAgeMs", "targetMaxQueueAgeMs", "met"]);
-const FAIRNESS_KEYS = Object.freeze(["eligibleFairnessKeyCount", "selectedFairnessKeyCount", "coverageBps", "targetCoverageBps", "met"]);
+const FAIRNESS_KEYS = Object.freeze([
+  "eligibleFairnessKeyCount", "selectedFairnessKeyCount", "coverageBps", "targetCoverageBps",
+  "grantsSinceContributorLastServed", "activeEligibleContributorCount", "fairnessBound", "fairnessStatus", "met",
+]);
+const GRANTS_SINCE_SERVED_KEYS = Object.freeze(["fairnessKey", "grants"]);
 const COST_KEYS = Object.freeze(["budgetUnits", "availableUnits", "selectedUnits", "remainingUnits", "targetMaxSelectedUnits", "met"]);
 const RECOVERY_PROJECTION_KEYS = Object.freeze(["attempts", "recovered", "failed", "recoveryRateBps", "targetRecoveryRateBps", "met"]);
 const REASON_COUNT_KEYS = Object.freeze(["reasonCode", "count"]);
@@ -231,6 +242,13 @@ function buildObservation(input: CcpSloObservationInputV1): CcpSloObservationV1 
     selectedFairnessKeyCount: selectedKeys.size,
     coverageBps,
     targetCoverageBps: input.targets.minFairnessCoverageBps,
+    grantsSinceContributorLastServed: Object.freeze([...eligibleKeys].sort().map((fairnessKey) => Object.freeze({
+      fairnessKey,
+      grants: selectedKeys.has(fairnessKey) ? 0 : input.selection.selectedCount,
+    }))),
+    activeEligibleContributorCount: eligibleKeys.size,
+    fairnessBound: eligibleKeys.size === 0 ? 0 : eligibleKeys.size - 1,
+    fairnessStatus: selectedKeys.size === eligibleKeys.size ? "FAIRNESS_BOUND_MET" : "FAIRNESS_BOUND_MISSED",
     met: coverageBps >= input.targets.minFairnessCoverageBps,
   });
   const cost = Object.freeze({
@@ -299,6 +317,13 @@ function normalizeObservation(value: unknown): CcpSloObservationV1 {
   };
   const queueAgeRaw = normalizeMetric(record.queueAge, QUEUE_AGE_KEYS);
   const fairnessRaw = normalizeMetric(record.fairness, FAIRNESS_KEYS);
+  const grantsRaw = readCcpDenseArrayV1(fairnessRaw.grantsSinceContributorLastServed, seen, SLO_DENIED).map((value) => {
+    const grant = readCcpClosedObjectV1(value, GRANTS_SINCE_SERVED_KEYS, new WeakSet(), SLO_DENIED);
+    return Object.freeze({
+      fairnessKey: assertCcpStringV1(grant.fairnessKey, /^fair:[a-z0-9][a-z0-9._-]{2,95}$/, SLO_DENIED),
+      grants: unsigned(grant.grants),
+    });
+  });
   const costRaw = normalizeMetric(record.cost, COST_KEYS);
   const recoveryRaw = normalizeMetric(record.recovery, RECOVERY_PROJECTION_KEYS);
   const exclusionsRaw = readCcpClosedObjectV1(record.exclusions, EXCLUSION_KEYS, seen, SLO_DENIED);
@@ -320,6 +345,14 @@ function normalizeObservation(value: unknown): CcpSloObservationV1 {
       selectedFairnessKeyCount: unsigned(fairnessRaw.selectedFairnessKeyCount),
       coverageBps: unsigned(fairnessRaw.coverageBps),
       targetCoverageBps: unsigned(fairnessRaw.targetCoverageBps),
+      grantsSinceContributorLastServed: Object.freeze(grantsRaw),
+      activeEligibleContributorCount: unsigned(fairnessRaw.activeEligibleContributorCount),
+      fairnessBound: unsigned(fairnessRaw.fairnessBound),
+      fairnessStatus: fairnessRaw.fairnessStatus === "FAIRNESS_BOUND_MET"
+        ? "FAIRNESS_BOUND_MET"
+        : fairnessRaw.fairnessStatus === "FAIRNESS_BOUND_MISSED"
+          ? "FAIRNESS_BOUND_MISSED"
+          : ccpStrictDenyV1(SLO_DENIED),
       met: booleanValue(fairnessRaw.met),
     }),
     cost: Object.freeze({

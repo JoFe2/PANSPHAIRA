@@ -42,6 +42,7 @@ import { CCP_COMPONENT_IDS_V1 } from "./ccp-risk-routing.js";
  */
 
 export const CCP_TUPLE_LOCK_SCHEMA_V1 = "cm.ccp-tuple-lock/v1" as const;
+export const CCP_TUPLE_AUTHORITY_EVIDENCE_SCHEMA_V1 = "cm.ccp-tuple-authority-evidence/v1" as const;
 
 export type CcpClaimOutcomeV1 = "PASSED" | "FAILED";
 
@@ -59,11 +60,26 @@ const TUPLE_LOCK_SCHEMA_DENIED = "CCP_TUPLE_LOCK_SCHEMA_DENIED";
 const CLAIM_ID_PATTERN = /^claim:[a-z0-9][a-z0-9._-]{2,95}$/;
 const CLAIM_OUTCOME_VOCABULARY: readonly string[] = CCP_CLAIM_OUTCOMES_V1;
 const VERIFIER_ID_PATTERN = /^verifier:[a-z0-9][a-z0-9._-]{2,95}$/;
+const TRUSTED_TUPLE_VERIFIER_ID = "verifier:tuple-suite";
+const TRUSTED_AUTHORITY_VERIFIER_ID = "verifier:upstream-ci";
 
 /** One sealed verification claim: a closed id, a closed outcome, an evidence digest. */
 export interface CcpTupleClaimV1 {
   readonly claimId: string;
   readonly outcome: CcpClaimOutcomeV1;
+  readonly evidenceDigest: string;
+}
+
+/** Independently named upstream authority observation for one candidate. */
+export interface CcpTupleAuthorityEvidenceV1 {
+  readonly schemaVersion: typeof CCP_TUPLE_AUTHORITY_EVIDENCE_SCHEMA_V1;
+  readonly authorityId: "authority:upstream-ci";
+  readonly verifierId: "verifier:upstream-ci";
+  readonly headDigest: string;
+  readonly payloadDigest: string;
+  readonly deliveryId: string;
+  readonly logicalAtMs: number;
+  readonly claims: readonly CcpTupleClaimV1[];
   readonly evidenceDigest: string;
 }
 
@@ -87,6 +103,8 @@ export interface CcpTupleLockV1 {
   readonly verifierId: string;
   /** Injected logical clock value of the verification; data only. */
   readonly logicalAtMs: number;
+  /** Verified upstream authority evidence; a digest alone is insufficient. */
+  readonly authorityEvidence: CcpTupleAuthorityEvidenceV1;
   readonly claims: readonly CcpTupleClaimV1[];
   /** Derived: true only when every sealed claim is PASSED. */
   readonly allClaimsPassed: boolean;
@@ -94,6 +112,10 @@ export interface CcpTupleLockV1 {
 }
 
 const TUPLE_CLAIM_KEYS = Object.freeze(["claimId", "outcome", "evidenceDigest"]);
+const AUTHORITY_EVIDENCE_KEYS = Object.freeze([
+  "schemaVersion", "authorityId", "verifierId", "headDigest", "payloadDigest", "deliveryId",
+  "logicalAtMs", "claims", "evidenceDigest",
+]);
 /**
  * The unsigned tuple: everything a lock seals, minus the derived
  * `allClaimsPassed` and the `lockDigest` the lock itself adds. This is the
@@ -102,7 +124,7 @@ const TUPLE_CLAIM_KEYS = Object.freeze(["claimId", "outcome", "evidenceDigest"])
 const TUPLE_LOCK_UNSIGNED_KEYS = Object.freeze([
   "schemaVersion", "ledgerId", "tenantId", "repositoryId", "contributionId", "componentId",
   "headDigest", "payloadDigest", "deliveryId", "verifierId", "logicalAtMs",
-  "claims",
+  "authorityEvidence", "claims",
 ]);
 const TUPLE_LOCK_KEYS = Object.freeze([...TUPLE_LOCK_UNSIGNED_KEYS, "allClaimsPassed", "lockDigest"]);
 
@@ -141,6 +163,7 @@ interface TupleLockCoreV1 {
   deliveryId: string;
   verifierId: string;
   logicalAtMs: number;
+  authorityEvidence: CcpTupleAuthorityEvidenceV1;
   claims: CcpTupleClaimV1[];
   /** Derived: true only when every sealed claim is PASSED. */
   allClaimsPassed: boolean;
@@ -159,7 +182,9 @@ function readTupleLockCore(record: Record<string, unknown>, seen: WeakSet<object
   const payloadDigest = assertCcpDigestV1(record.payloadDigest, TUPLE_LOCK_SCHEMA_DENIED);
   const deliveryId = assertCcpStringV1(record.deliveryId, DELIVERY_ID_PATTERN, TUPLE_LOCK_SCHEMA_DENIED);
   const verifierId = assertCcpStringV1(record.verifierId, VERIFIER_ID_PATTERN, TUPLE_LOCK_SCHEMA_DENIED);
+  if (verifierId !== TRUSTED_TUPLE_VERIFIER_ID) ccpStrictDenyV1(TUPLE_LOCK_SCHEMA_DENIED);
   const logicalAtMs = assertCcpSafePositiveIntegerV1(record.logicalAtMs, TUPLE_LOCK_SCHEMA_DENIED);
+  const authorityEvidence = parseCcpTupleAuthorityEvidenceV1(record.authorityEvidence);
   const claimsRaw = readCcpDenseArrayV1(record.claims, seen, TUPLE_LOCK_SCHEMA_DENIED);
   if (claimsRaw.length !== (CCP_TUPLE_CLAIM_IDS_V1 as readonly string[]).length) {
     ccpStrictDenyV1(TUPLE_LOCK_SCHEMA_DENIED);
@@ -176,7 +201,21 @@ function readTupleLockCore(record: Record<string, unknown>, seen: WeakSet<object
     },
   );
   const allClaimsPassed = claims.every((claim) => claim.outcome === "PASSED");
-  return { identity, componentId, headDigest, payloadDigest, deliveryId, verifierId, logicalAtMs, claims, allClaimsPassed };
+  if (canonicalJson(authorityEvidence.claims) !== canonicalJson(claims)) {
+    ccpStrictDenyV1(TUPLE_LOCK_SCHEMA_DENIED);
+  }
+  return {
+    identity,
+    componentId,
+    headDigest,
+    payloadDigest,
+    deliveryId,
+    verifierId,
+    logicalAtMs,
+    authorityEvidence,
+    claims,
+    allClaimsPassed,
+  };
 }
 
 function buildTupleLockV1(core: TupleLockCoreV1): CcpTupleLockV1 {
@@ -189,6 +228,7 @@ function buildTupleLockV1(core: TupleLockCoreV1): CcpTupleLockV1 {
     deliveryId: core.deliveryId,
     verifierId: core.verifierId,
     logicalAtMs: core.logicalAtMs,
+    authorityEvidence: core.authorityEvidence,
     claims: Object.freeze([...core.claims]),
     allClaimsPassed: core.allClaimsPassed,
   });
@@ -196,6 +236,41 @@ function buildTupleLockV1(core: TupleLockCoreV1): CcpTupleLockV1 {
     ...unsigned,
     lockDigest: ccpDigestDomainV1(CCP_TUPLE_LOCK_SCHEMA_V1, unsigned),
   });
+}
+
+/** Parse and digest-check the independent upstream authority observation. */
+export function parseCcpTupleAuthorityEvidenceV1(value: unknown): CcpTupleAuthorityEvidenceV1 {
+  const seen = new WeakSet<object>();
+  const record = readCcpClosedObjectV1(value, AUTHORITY_EVIDENCE_KEYS, seen, TUPLE_LOCK_SCHEMA_DENIED);
+  if (record.schemaVersion !== CCP_TUPLE_AUTHORITY_EVIDENCE_SCHEMA_V1
+    || record.authorityId !== "authority:upstream-ci"
+    || record.verifierId !== TRUSTED_AUTHORITY_VERIFIER_ID) {
+    ccpStrictDenyV1(TUPLE_LOCK_SCHEMA_DENIED);
+  }
+  const claimsRaw = readCcpDenseArrayV1(record.claims, seen, TUPLE_LOCK_SCHEMA_DENIED);
+  if (claimsRaw.length !== (CCP_TUPLE_CLAIM_IDS_V1 as readonly string[]).length) {
+    ccpStrictDenyV1(TUPLE_LOCK_SCHEMA_DENIED);
+  }
+  const claims = claimsRaw.map((claim, index) => {
+    const parsed = parseCcpTupleClaimV1(claim);
+    if (parsed.claimId !== (CCP_TUPLE_CLAIM_IDS_V1 as readonly string[])[index]) {
+      ccpStrictDenyV1(TUPLE_LOCK_SCHEMA_DENIED);
+    }
+    return parsed;
+  });
+  const unsigned = Object.freeze({
+    schemaVersion: CCP_TUPLE_AUTHORITY_EVIDENCE_SCHEMA_V1,
+    authorityId: "authority:upstream-ci" as const,
+    verifierId: TRUSTED_AUTHORITY_VERIFIER_ID as "verifier:upstream-ci",
+    headDigest: assertCcpDigestV1(record.headDigest, TUPLE_LOCK_SCHEMA_DENIED),
+    payloadDigest: assertCcpDigestV1(record.payloadDigest, TUPLE_LOCK_SCHEMA_DENIED),
+    deliveryId: assertCcpStringV1(record.deliveryId, DELIVERY_ID_PATTERN, TUPLE_LOCK_SCHEMA_DENIED),
+    logicalAtMs: assertCcpSafePositiveIntegerV1(record.logicalAtMs, TUPLE_LOCK_SCHEMA_DENIED),
+    claims: Object.freeze(claims),
+  });
+  const evidenceDigest = ccpDigestDomainV1(CCP_TUPLE_AUTHORITY_EVIDENCE_SCHEMA_V1, unsigned);
+  if (record.evidenceDigest !== evidenceDigest) ccpStrictDenyV1(TUPLE_LOCK_SCHEMA_DENIED);
+  return Object.freeze({ ...unsigned, evidenceDigest });
 }
 
 /**

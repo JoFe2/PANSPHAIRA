@@ -53,10 +53,10 @@ const LKG_AFTER = digest("c");
 // merge fixtures. Any drift in the sealed bytes changes these values.
 const GREEN_STATE_BEFORE_DIGEST = "2b57455f88f3e219bc06bfa7e45463a02c2ef6098d132a10699973578270d73e";
 const GREEN_STATE_AFTER_DIGEST = "09b339312eadb786233e3c89bbaae7185cb86d0703648d8cc99de853e026d90c";
-const GREEN_DECISION_DIGEST = "e5e95555dfc1df23a336b1f2e4985e3e565fd95192c164d6df0e85c196a2cc12";
-const FAILED_DECISION_DIGEST = "891c00cbbfcea475dc0c499b3a452b5a2e2e9a90d74cc186ceb05a774ee8189c";
-const GREEN_PROMOTE_RECEIPT_DIGEST = "894817bfaf65ba1c0b8846d83d00f56ef7d2532538ea95a36d85d78d65b023cf";
-const GREEN_RESTORE_RECEIPT_DIGEST = "2db839067819456513ed41d0694f2a7c8b379b2c460559a66b41da8c4d8c4b82";
+const GREEN_DECISION_DIGEST = "57b13e2e83ed6150e4ad4dcf45ae65d753fead03ae732fd7999c316cdabfb19d";
+const FAILED_DECISION_DIGEST = "f3217622ce1c79066e9b4ac7cff4a74cbebe566b48e9db70d4fd7de75eaa3235";
+const GREEN_PROMOTE_RECEIPT_DIGEST = "ae6c9d0996262a8c87d0777c2171579cd7a01f270870c44f6b90a347467be2c2";
+const GREEN_RESTORE_RECEIPT_DIGEST = "e5340e5932389ebb61a2cc924b6034c48aed81643f100310c57fffe426c08c4b";
 
 /** Rehash a forged promotion decision with its own domain; used only to build rehashed forgeries. */
 function rehashPromotionDecision(record: Record<string, unknown>): void {

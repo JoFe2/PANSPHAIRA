@@ -28,8 +28,8 @@ const fixture = (name: string): { candidate: unknown; context: unknown } =>
 
 // Byte-stability bindings: digests of the gate receipts produced from the
 // green fixture. Any drift in the receipt bytes changes these values.
-const GREEN_RECEIPT_DIGEST = "3e67dc0c27d5c79652b495684df1e35628e05c5bb2d4df51520961b30f69eece";
-const GREEN_CANDIDATE_DIGEST = "84b268bee1b4b44c65ae9d75e75a814a36c384c516bbc3f12845e3ee452fd0d1";
+const GREEN_RECEIPT_DIGEST = "ff02d6e83e15d084bb4794ce9a57f079f61498f7936b87a39d639911959f3c0a";
+const GREEN_CANDIDATE_DIGEST = "e89a7cdc62f29a0d81deed861f3cacc6857053a48ad418fcf3efe19b335ff386";
 const GREEN_CONTEXT_DIGEST = "3d5c078c1d72a944fc8f79e87804c7a4c4db613dccc9bc2f6b5880e5b1edc127";
 
 /** Rehash a forged train receipt with its own domain; used only to build rehashed forgeries. */

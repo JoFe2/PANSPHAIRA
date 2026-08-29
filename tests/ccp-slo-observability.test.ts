@@ -97,6 +97,14 @@ test("CCP-PSAI52-SLO-001 projects queue age, fairness, cost and recovery SLOs", 
     selectedFairnessKeyCount: 2,
     coverageBps: 6666,
     targetCoverageBps: 6000,
+    grantsSinceContributorLastServed: [
+      { fairnessKey: "fair:tenant-a", grants: 0 },
+      { fairnessKey: "fair:tenant-b", grants: 0 },
+      { fairnessKey: "fair:tenant-c", grants: 2 },
+    ],
+    activeEligibleContributorCount: 3,
+    fairnessBound: 2,
+    fairnessStatus: "FAIRNESS_BOUND_MISSED",
     met: true,
   });
   assert.equal(observation.cost.selectedUnits, 3);

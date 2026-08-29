@@ -17,7 +17,13 @@ function run(args) {
   });
 }
 
+function runGit(args) {
+  return spawnSync("git", args, { encoding: "utf8" }).stdout.trim();
+}
+
 test("CCP-M1 evidence renderer emits deterministic packet and readback input", () => {
+  const initialCheck = run(["--check"]);
+  assert.equal(initialCheck.status, 0, initialCheck.stderr);
   const first = run([]);
   assert.equal(first.status, 0, first.stderr);
   const result = JSON.parse(first.stdout);
@@ -28,7 +34,9 @@ test("CCP-M1 evidence renderer emits deterministic packet and readback input", (
   assert.equal(result.readbackHarnessInput.externalRequestMade, false);
   assert.equal(result.readbackHarnessInput.sourceBoundary, "LOCAL_SYNTHETIC_NON_PRODUCTION");
   assert.equal(result.readbackHarnessInput.expectedReadback.exactBaseCommit, "353017c4f60e30463d0a78fd6fd2509a37d37f76");
-  assert.equal(result.readbackHarnessInput.expectedReadback.exactHeadCommit, "e3080b0a660ff7fcf2f688a2068965e4c8625405");
+  const currentHead = runGit(["rev-parse", "HEAD"]);
+  const parentHead = runGit(["rev-parse", "HEAD^"]);
+  assert.ok([currentHead, parentHead].includes(result.readbackHarnessInput.expectedReadback.exactHeadCommit));
   assert.equal(result.readbackHarnessInput.expectedReadback.profileReceiptDigests.length, 5);
   assert.equal(result.readbackHarnessInput.expectedReadback.recoveryReceiptDigests.length, 4);
   assert.equal(result.readbackHarnessInput.expectedReadback.statusDigests.length, 4);

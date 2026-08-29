@@ -59,7 +59,8 @@ export type CcpIntakeReasonCodeV1 =
   | "UNKNOWN_ANCESTOR"
   | "STALE_ANCESTOR"
   | "LOGICAL_TIME_REGRESSION"
-  | "HEAD_ALREADY_SEEN";
+  | "HEAD_ALREADY_SEEN"
+  | "DISCONNECTED_REPLACEMENT";
 
 export type CcpSemanticEffectKindV1 = "HEAD_RECONCILED";
 
@@ -564,17 +565,20 @@ function appendParsedCcpIntakeDeliveryV1(
   } else if (knownHead !== undefined) {
     disposition = current?.semanticEffectId === knownHead.semanticEffectId ? "SEMANTIC_DUPLICATE" : "STALE";
     reasonCode = disposition === "SEMANTIC_DUPLICATE" ? "HEAD_ALREADY_CURRENT" : "HEAD_ALREADY_SEEN";
-  } else if (current !== null && event.ancestorDigest !== null) {
+  } else if (event.ancestorDigest !== null) {
     const ancestor = ledger.semanticEffects.find((effect) => effect.semanticEffectKey.headDigest === event.ancestorDigest);
     if (ancestor === undefined) {
       disposition = "QUARANTINED";
       reasonCode = "UNKNOWN_ANCESTOR";
-    } else if (ancestor.semanticEffectId !== current.semanticEffectId) {
+    } else if (current !== null && ancestor.semanticEffectId !== current.semanticEffectId) {
       disposition = "STALE";
       reasonCode = "STALE_ANCESTOR";
     } else {
       causalParentSequence = ancestor.causalSequence;
     }
+  } else if (current !== null) {
+    disposition = "QUARANTINED";
+    reasonCode = "DISCONNECTED_REPLACEMENT";
   }
 
   if (disposition === "ADMITTED") {
