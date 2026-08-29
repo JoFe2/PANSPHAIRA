@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
+  "title": "Bounded local MediaWiki XML synthetic pilot profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "enabled", "syntheticOnly", "networkAllowed", "pilot", "manifestPath", "negativeMatrixPath", "source", "site", "license", "corpus", "knowledge", "parserVersion", "canonicalizerVersion", "authorityBoundary"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.knowledge/mediawiki-xml-local-profile/v1" },
+    "enabled": { "const": true },
+    "syntheticOnly": { "const": true },
+    "networkAllowed": { "const": false },
+    "pilot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "sourceUrl", "snapshotDate", "project", "language"],
+      "properties": {
+        "kind": { "const": "BOUNDED_OFFICIAL_PILOT_SYNTHETIC_TEST_DOUBLE" },
+        "sourceUrl": { "type": "string", "pattern": "^https://[a-z0-9][a-z0-9.-]*(?::\\d{1,5})?/[A-Za-z0-9._~!$&'()*+,;=:@%/-]*$" },
+        "snapshotDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "project": { "$ref": "#/$defs/id" },
+        "language": { "type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Za-z]{1,8})*$" }
+      }
+    },
+    "manifestPath": { "$ref": "#/$defs/jsonPath" },
+    "negativeMatrixPath": { "$ref": "#/$defs/jsonPath" },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "expectedSourceDigest", "byteSize"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^[A-Za-z0-9._-]+\\.xml$" },
+        "expectedSourceDigest": { "$ref": "#/$defs/digest" },
+        "byteSize": { "type": "integer", "minimum": 1, "maximum": 8388608 }
+      }
+    },
+    "site": {
+      "type": "object", "additionalProperties": false, "required": ["name", "base"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "base": { "type": "string", "pattern": "^https://[a-z0-9][a-z0-9-]*(?:\\.[a-z0-9][a-z0-9-]*)+/wiki$" }
+      }
+    },
+    "license": {
+      "type": "object", "additionalProperties": false, "required": ["licence", "attributionTemplate"],
+      "properties": {
+        "licence": { "enum": ["CC0-1.0", "CC-BY-4.0", "APACHE-2.0", "MIT", "OWNER_AUTHORIZED"] },
+        "attributionTemplate": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    },
+    "corpus": {
+      "type": "object", "additionalProperties": false,
+      "required": ["corpusId", "editionId", "priorEditionId", "observedAtMs"],
+      "properties": {
+        "corpusId": { "$ref": "#/$defs/id" },
+        "editionId": { "$ref": "#/$defs/id" },
+        "priorEditionId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/id" }] },
+        "observedAtMs": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "knowledge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scopeNamespace", "staleAfterMs", "taxonomyId", "taxonomyGeneration", "taxonomyDigest"],
+      "properties": {
+        "scopeNamespace": { "type": "string", "minLength": 1, "maxLength": 96 },
+        "staleAfterMs": { "type": "integer", "minimum": 0 },
+        "taxonomyId": { "$ref": "#/$defs/id" },
+        "taxonomyGeneration": { "type": "integer", "minimum": 1 },
+        "taxonomyDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "parserVersion": { "const": "mediawiki-mini-dump-parser/v1" },
+    "canonicalizerVersion": { "const": "mediawiki-mini-dump-canonicalizer/v1" },
+    "authorityBoundary": { "const": "READ_ONLY_EXPLICIT_LOCAL_MEDIAWIKI_XML_SYNTHETIC_SOURCE_NO_NETWORK_DOWNLOAD_WRITE_EXECUTION_OR_TRUTH_AUTHORITY" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "jsonPath": { "type": "string", "pattern": "^[A-Za-z0-9._-]+\\.json$", "maxLength": 240 }
+  }
+}
