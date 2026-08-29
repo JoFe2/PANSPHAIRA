@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "chimpmaera.dev/cks-advisory-selector/v1",
+  "taskVector": [2, 1, 2, 1],
+  "profileFixture": "profile-binding-v1.json",
+  "candidates": [
+    {
+      "name": "exact-smallest",
+      "profileVariant": "base",
+      "profileState": "QUALIFIED",
+      "coverageBox": [2, 1, 2, 1],
+      "qualificationTierOrdinal": 2,
+      "certifiedCoverageBoxCardinality": 36,
+      "reservedCostMicros": 900,
+      "qualifiedP95ElapsedMs": 120,
+      "peakResidentBytes": 8000000,
+      "riskImpactPolicy": "ALLOW",
+      "authorityPolicy": "ALLOW",
+      "catalogAvailability": "AVAILABLE",
+      "resourceAdmission": "POSITIVE"
+    },
+    {
+      "name": "wider-qualified",
+      "profileVariant": "runtime-2",
+      "profileState": "QUALIFIED",
+      "coverageBox": [3, 3, 3, 3],
+      "qualificationTierOrdinal": 3,
+      "certifiedCoverageBoxCardinality": 256,
+      "reservedCostMicros": 100,
+      "qualifiedP95ElapsedMs": 20,
+      "peakResidentBytes": 4000000,
+      "riskImpactPolicy": "ALLOW",
+      "authorityPolicy": "ALLOW",
+      "catalogAvailability": "AVAILABLE",
+      "resourceAdmission": "POSITIVE"
+    },
+    {
+      "name": "policy-denied",
+      "profileVariant": "runtime-3",
+      "profileState": "QUALIFIED",
+      "coverageBox": [2, 2, 2, 2],
+      "qualificationTierOrdinal": 2,
+      "certifiedCoverageBoxCardinality": 81,
+      "reservedCostMicros": 1,
+      "qualifiedP95ElapsedMs": 1,
+      "peakResidentBytes": 1,
+      "riskImpactPolicy": "DENY",
+      "authorityPolicy": "ALLOW",
+      "catalogAvailability": "AVAILABLE",
+      "resourceAdmission": "POSITIVE"
+    }
+  ]
+}

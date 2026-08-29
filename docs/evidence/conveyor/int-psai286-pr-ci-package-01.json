@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/pr-ci-package-readback-manifest/v1",
+  "receiptId": "INT-PSAI286-PR-CI-PACKAGE-01",
+  "taskId": "INT-PSAI286-PR-CI-PACKAGE-01",
+  "scope": {
+    "issueNumber": 286,
+    "issueTitle": "[CKS-06] Qualification profiles and smallest-qualified R/K/P/U router",
+    "subject": "reviewable no-side-effect PR/CI package and CI readback manifest",
+    "allowedChangedPaths": [
+      "docs/evidence/conveyor/int-psai286-pr-ci-package-01.json"
+    ],
+    "claimBoundary": "OFFLINE_DETERMINISTIC_ADVISORY_EVIDENCE_ONLY_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_LEASE_ACQUISITION_NO_AUTHORITY_GRANT_NO_AUTOMATIC_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "repositoryBinding": {
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "receiptInputHeadCommit": "931d78c354c2bb3b3eac73466225c049aeacb495",
+    "reviewRange": "origin/main...HEAD",
+    "requiredDiffCheck": "git diff --check origin/main...HEAD"
+  },
+  "boundedInputs": {
+    "frozenSemanticsDecision": {
+      "path": "docs/evidence/conveyor/sol-psai286-router-semantics-decision-01.json",
+      "sha256": "54a0871510624f35560ccdb1ae3b21e542e145a9648f54c637cac011f83ea58b"
+    },
+    "rootQualityReceipt": {
+      "path": "docs/evidence/conveyor/terra-psai286-root-qs-01.json",
+      "sha256": "b6c06dc1d1dea4d30ba88be301599f74979218092b30b2308d7e8449b682aaa3"
+    },
+    "positiveRouterFixture": {
+      "path": "tests/fixtures/cks-router-dry-run/positive-evidence-v1.json",
+      "sha256": "267c618a0c557ebe67bd6c827fd17ee3f708d6624371f000a8d5282e4ccd94a5"
+    },
+    "negativeRouterFixture": {
+      "path": "tests/fixtures/cks-router-dry-run/rejections-v1.json",
+      "sha256": "f7f3b9048f5a28fe3bdba8950a95d323fdb9dbb56551b5bccb73f0a912bf7a31"
+    },
+    "generatedDryRunReceipt": {
+      "path": "verification/cks-06-router-dry-run-evidence-v1.json",
+      "sha256": "52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2",
+      "outcome": "PASS",
+      "receiptDigest": "41f09853d6249f579b0f7619cb4f794b4c7a9c88d9162df749ef01fa97a8adbe"
+    }
+  },
+  "integrationDecision": {
+    "outcome": "REVIEWABLE_LOCAL_CKS-06_PR_CI_PACKAGE",
+    "qualification": {
+      "exactProfileValidation": "VALID",
+      "boundFieldCount": 11,
+      "selectedProfileDigest": "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93"
+    },
+    "typedEscalation": {
+      "outcome": "ALL_REQUIRED_CAUSES_TYPED",
+      "causeCodes": [
+        "KNOWLEDGE_GAP",
+        "KNOWLEDGE_CONFLICT",
+        "VERIFIER_REJECTION",
+        "DECOMPOSITION_GROWTH",
+        "LOW_EVIDENCE_COVERAGE",
+        "COMPETENCE_LIMIT"
+      ]
+    },
+    "selection": {
+      "outcome": "ADVISORY_RECOMMENDATION",
+      "orderingKey": [
+        2,
+        36,
+        900,
+        120,
+        8000000,
+        "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93"
+      ]
+    },
+    "capacityAdmission": {
+      "outcome": "VALID",
+      "capacityBucketId": "parallel-128k",
+      "totalTokens": 114624,
+      "concurrentSequences": 2
+    },
+    "shadowGating": {
+      "outcome": "ACTIVATION_ELIGIBLE_FOR_SEPARATE_AUTHORIZATION",
+      "activationMode": "OFF",
+      "passedWindowCount": 2,
+      "reasonCode": "ALL_FROZEN_GATES_PASS"
+    },
+    "separationChecks": {
+      "riskImpactAndAuthorityNotInOrderingKey": true,
+      "resourceAdmissionDoesNotGrantAuthority": true,
+      "shadowEligibilityDoesNotActivateRouting": true
+    }
+  },
+  "failClosedReadback": {
+    "requiredPositiveEvidence": {
+      "missingReference": "REQUIRED_CKS_EVIDENCE_REFERENCE_COUNT",
+      "tamperedDigest": "EVIDENCE_REFERENCE_DIGEST_MISMATCH:CKS-03"
+    },
+    "negativeFixtureExpectedFailures": [
+      "REQUIRED_CKS_EVIDENCE_REFERENCE_COUNT",
+      "EVIDENCE_REFERENCE_DIGEST_MISMATCH:CKS-03",
+      "DISPOSITION_MISMATCH",
+      "LEASE_CONFLICT",
+      "CKS_EVIDENCE_NOT_POSITIVE",
+      "EFFICIENCY_GATE_FAILED"
+    ],
+    "conclusion": "Incomplete, tampered, policy-denied, admission-denied, or shadow-gate-failed evidence cannot emit a positive router receipt."
+  },
+  "ciReadbackManifest": {
+    "localWorkerChecks": [
+      {
+        "command": "NODE_OPTIONS=--jitless npm run build --silent",
+        "exitCode": 0,
+        "outcome": "PASS"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless node --test dist/tests/cks-qualification.test.js dist/tests/cks-resource-admission.test.js dist/tests/cks-shadow-evaluation.test.js dist/tests/cks-router-dry-run.test.js",
+        "exitCode": 0,
+        "passed": 49,
+        "failed": 0,
+        "outcome": "PASS"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless node scripts/run-cks-router-dry-run.mjs --fixture tests/fixtures/cks-router-dry-run/positive-evidence-v1.json",
+        "exitCode": 0,
+        "outcome": "PASS",
+        "receiptDigest": "41f09853d6249f579b0f7619cb4f794b4c7a9c88d9162df749ef01fa97a8adbe"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "exitCode": 0,
+        "outcome": "PASS"
+      }
+    ],
+    "localInfrastructureEvidence": {
+      "command": "node --test dist/tests/cks-qualification.test.js dist/tests/cks-resource-admission.test.js dist/tests/cks-shadow-evaluation.test.js dist/tests/cks-router-dry-run.test.js",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "classification": "LOCAL_NODE_V8_INITIALIZATION_INFRASTRUCTURE_EVIDENCE_NOT_A_PRODUCT_VERDICT"
+    },
+    "controllerReadbackRequired": [
+      "Run the pinned-Node CI gates without the local-worker infrastructure workaround.",
+      "Run host-Docker gates where the controller environment provides Docker.",
+      "Re-run git diff --check origin/main...HEAD against the submitted commit."
+    ],
+    "controllerAuthorityClaimed": false
+  },
+  "nonClaims": [
+    "NO_PROVIDER_CALL",
+    "NO_ROUTE_EXECUTION",
+    "NO_RESOURCE_RESERVATION_OR_LEASE_ACQUISITION",
+    "NO_AUTHORITY_GRANT",
+    "NO_AUTOMATIC_ACTIVATION",
+    "NO_CLAIM_OF_CONTROLLER_AUTHORITATIVE_PINNED_NODE_OR_HOST_DOCKER_GATE_EXECUTION"
+  ],
+  "decision": "APPROVE_BOUNDED_LOCAL_CKS-06_PR_CI_PACKAGE_FOR_CONTROLLER_READBACK"
+}

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/canonical-root-quality-scrutiny-receipt/v1",
+  "receiptId": "TERRA-PSAI286-CANONICAL-ROOT-QS-01",
+  "taskId": "CLOSURE-PSAI286-EVIDENCE-RECOVERY-01",
+  "scope": {
+    "issueNumber": 286,
+    "subject": "canonical root readback of CKS-06 evidence recovery without routing activation",
+    "allowedChangedPaths": [
+      "verification/cks-06-authorized-shadow-window-v1.json",
+      "docs/evidence/conveyor/psai286-measured-shadow-evaluation-v1.json",
+      "docs/evidence/conveyor/terra-psai286-canonical-root-qs-01.json"
+    ],
+    "claimBoundary": "ROOT_READBACK_OF_OFFLINE_EVIDENCE_ONLY_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT_NO_AUTOMATIC_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "repositoryBinding": {
+    "publicMainRef": "main",
+    "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "rebaseCommand": "git rebase main",
+    "rebaseResult": "Current branch conveyor/pansphaira-286 is up to date.",
+    "reviewedCandidateHead": "3fa6ee6c191c59330b716bc14e49621978f414c0",
+    "reviewedRange": "main...3fa6ee6c191c59330b716bc14e49621978f414c0",
+    "reviewedHeadParent": "9f9eeafb3d6654d95d8fd882ad54ac68f53afbdc"
+  },
+  "canonicalInputs": {
+    "frozenSemantics": {
+      "path": "docs/evidence/conveyor/sol-psai286-router-semantics-decision-01.json",
+      "sha256": "54a0871510624f35560ccdb1ae3b21e542e145a9648f54c637cac011f83ea58b"
+    },
+    "authorizedShadowWindowIngestion": {
+      "path": "verification/cks-06-authorized-shadow-window-v1.json",
+      "sha256": "da43b8a951fc32757829b486ab9f5dee95570300f3e85e46689bd12e797084d0",
+      "decision": "NOT_READY_FAIL_CLOSED"
+    },
+    "criterionMatrix": {
+      "path": "docs/evidence/conveyor/psai286-measured-shadow-evaluation-v1.json",
+      "sha256": "373aecc2f7067be43a8e8a06638ed556f91471452d2caac685521c8e9b5f36c9",
+      "outcome": "NOT_READY"
+    }
+  },
+  "crossIssueAndOwnerPrerequisiteReadback": {
+    "terminalPositiveReceiptCount": 0,
+    "unresolved": [
+      {
+        "id": "CKS-01",
+        "status": "MISSING_IMMUTABLE_TERMINAL_RECEIPT"
+      },
+      {
+        "id": "CKS-03",
+        "status": "REJECTED_FIXTURE_LABELLED_RECORD"
+      },
+      {
+        "id": "CKS-04",
+        "status": "REJECTED_FIXTURE_LABELLED_RECORD"
+      },
+      {
+        "id": "CKS-05",
+        "status": "REJECTED_FIXTURE_LABELLED_RECORD"
+      },
+      {
+        "id": "OWNER_AUTHORIZATION",
+        "status": "MISSING_IMMUTABLE_TERMINAL_RECEIPT"
+      }
+    ],
+    "resolutionRule": "Missing, fixture-labelled, stale, non-authoritative, or otherwise non-immutable evidence never becomes positive by local replay."
+  },
+  "measuredShadowReadback": {
+    "requiredConsecutiveWindows": 2,
+    "acceptedMeasuredWindows": 0,
+    "rejectedFixtureWindows": 2,
+    "qualityBenefit": "NOT_PROVEN",
+    "costBenefit": "NOT_PROVEN",
+    "denominatorStatus": "NO_ACCEPTED_MEASURED_DENOMINATOR",
+    "smallestQualifiedAndTypedEscalation": "CONTRACT_REPLAYED_ONLY_NOT_MEASURED_EVIDENCE",
+    "activationMode": "OFF"
+  },
+  "gateReadback": {
+    "outputDigestAlgorithm": "sha256 over captured stdout and stderr with command-substitution trailing newlines removed",
+    "records": [
+      {
+        "command": "npm run build --silent",
+        "runtimeMs": 61,
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "outputSha256": "2dc75f5a14079c7671d88c1741c920a7a8bcaa2616092b70b6cf54e0cfa684c4",
+        "classification": "LOCAL_NODE_V8_INITIALIZATION_INFRASTRUCTURE_EVIDENCE_NOT_A_PRODUCT_VERDICT"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless node --test dist/tests/cks-qualification.test.js dist/tests/cks-resource-admission.test.js dist/tests/cks-shadow-evaluation.test.js dist/tests/cks-router-dry-run.test.js",
+        "runtimeMs": 215,
+        "exitCode": 0,
+        "outputSha256": "d716547b730d4240be7a863a9320599ec167a052826020898af1543d4b0484ac",
+        "passed": 49,
+        "failed": 0,
+        "classification": "CONTRACT_REPLAY_PASS_NOT_MEASURED_EVIDENCE"
+      },
+      {
+        "command": "git diff --check main...HEAD",
+        "runtimeMs": 4,
+        "exitCode": 0,
+        "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "classification": "PASS"
+      }
+    ]
+  },
+  "effectBoundaryReadback": {
+    "activationMode": "OFF",
+    "providerRoutingActivated": false,
+    "routeExecuted": false,
+    "authorityGranted": false,
+    "releaseOrMergePerformed": false,
+    "issueClosed": false
+  },
+  "remainingCriteria": [
+    "immutable positive CKS-01 receipt",
+    "immutable positive CKS-03 receipt not labelled as fixture",
+    "immutable positive CKS-04 receipt not labelled as fixture",
+    "immutable positive CKS-05 receipt not labelled as fixture",
+    "immutable owner authorization terminal receipt",
+    "two accepted measured paired shadow windows with complete denominators",
+    "quality benefit under the frozen quality gates",
+    "cost benefit under the frozen cost gates"
+  ],
+  "verdict": "NOT_READY",
+  "decision": "FAIL_CLOSED_NO_ROUTING_ACTIVATION"
+}

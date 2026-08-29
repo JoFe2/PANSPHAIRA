@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/release-no-release-readiness-receipt/v1",
+  "receiptId": "INT-PSAI286-RELEASE-NO-RELEASE-READINESS-01",
+  "taskId": "INT-PSAI286-RELEASE-NO-RELEASE-READINESS-01",
+  "scope": {
+    "issueNumber": 286,
+    "issueTitle": "[CKS-06] Qualification profiles and smallest-qualified R/K/P/U router",
+    "subject": "deterministic release-or-no-release disposition for the advisory CKS-06 contract slice",
+    "allowedChangedPaths": [
+      "docs/evidence/conveyor/int-psai286-release-no-release-readiness-01.json"
+    ],
+    "claimBoundary": "OFFLINE_DETERMINISTIC_ADVISORY_EVIDENCE_ONLY_NO_PUBLICATION_NO_TAG_NO_RELEASE_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_LEASE_ACQUISITION_NO_AUTHORITY_GRANT_NO_AUTOMATIC_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "repositoryBinding": {
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "receiptInputHeadCommit": "845eedd8e766f4e99425b481d42b2229f0a71d91",
+    "reviewRange": "origin/main...HEAD",
+    "requiredDiffCheck": "git diff --check origin/main...HEAD"
+  },
+  "boundedInputs": {
+    "releaseGovernance": {
+      "path": "release/governance.json",
+      "schemaVersion": "chimpmaera.release-governance/v1",
+      "currentRegularReleaseTag": "v0.2.0-poc.20260825.1"
+    },
+    "releasePolicy": {
+      "path": "docs/RELEASE-GOVERNANCE.md",
+      "publicationEvidenceRequiredOnlyBeforePublication": true,
+      "anonymousPublicReadbackRequiredAfterPublication": true
+    },
+    "prCiPackageReceipt": {
+      "path": "docs/evidence/conveyor/int-psai286-pr-ci-package-01.json",
+      "sha256": "5b3dc7672630c0180e5cab389b4b4c400cb62c8757caefe375ce6b68da5f14cd"
+    },
+    "rootQualityReceipt": {
+      "path": "docs/evidence/conveyor/terra-psai286-root-qs-01.json",
+      "sha256": "b6c06dc1d1dea4d30ba88be301599f74979218092b30b2308d7e8449b682aaa3"
+    },
+    "routerDryRunEvidence": {
+      "path": "verification/cks-06-router-dry-run-evidence-v1.json",
+      "sha256": "52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2",
+      "outcome": "PASS"
+    }
+  },
+  "releaseRequirementEvaluation": {
+    "repositoryPolicyRequiresRelease": false,
+    "policyBasis": [
+      "docs/RELEASE-GOVERNANCE.md defines evidence required before and after publication for a functional product increment; it does not require publication for every advisory receipt.",
+      "release/governance.json binds the existing current regular release and its assets; it contains no required new release trigger for issue 286 or this receipt.",
+      "The bounded CKS-06 inputs are offline advisory contract and CI-readback evidence and explicitly make no release, publication, authority, activation, route-execution, or lease-acquisition claim."
+    ],
+    "releaseAuthorizationPresent": false,
+    "releaseActionsPerformed": false,
+    "failClosedRule": "A RELEASED disposition requires an explicit repository-policy release requirement, release authorization, complete publication evidence, and anonymous public readback. If any required condition is absent, do not emit RELEASED.",
+    "reasonCodes": [
+      "ADVISORY_CONTRACT_SLICE",
+      "NO_REPOSITORY_POLICY_RELEASE_TRIGGER",
+      "NO_RELEASE_AUTHORIZATION",
+      "NO_PUBLICATION_EVIDENCE_OR_ANONYMOUS_READBACK"
+    ]
+  },
+  "disposition": {
+    "outcome": "CLOSED_NO_RELEASE",
+    "terminal": true,
+    "deterministicRule": "repositoryPolicyRequiresRelease=false AND releaseAuthorizationPresent=false AND releaseActionsPerformed=false => CLOSED_NO_RELEASE",
+    "releasePublicationPermittedByThisReceipt": false,
+    "controllerAuthorityClaimed": false
+  },
+  "verification": {
+    "checks": [
+      {
+        "command": "npm run release-governance:test",
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "classification": "LOCAL_NODE_V8_INITIALIZATION_INFRASTRUCTURE_EVIDENCE_NOT_A_PRODUCT_VERDICT"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless npm run release-governance:test",
+        "exitCode": 0,
+        "passed": 54,
+        "failed": 0,
+        "outcome": "PASS"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "exitCode": 0,
+        "outcome": "PASS"
+      }
+    ],
+    "requiredEvidencePresent": true,
+    "requiredEvidenceConclusion": "The tested release-governance policy and bound advisory evidence do not establish a required release; the only supported terminal disposition is CLOSED_NO_RELEASE."
+  },
+  "nonClaims": [
+    "NO_TAG",
+    "NO_RELEASE",
+    "NO_PUBLICATION",
+    "NO_ASSET_UPLOAD",
+    "NO_PROVIDER_CALL",
+    "NO_ROUTE_EXECUTION",
+    "NO_RESOURCE_RESERVATION_OR_LEASE_ACQUISITION",
+    "NO_AUTHORITY_GRANT",
+    "NO_AUTOMATIC_ACTIVATION",
+    "NO_CLAIM_OF_CONTROLLER_AUTHORITATIVE_PINNED_NODE_OR_HOST_DOCKER_GATE_EXECUTION"
+  ],
+  "decision": "CLOSED_NO_RELEASE"
+}

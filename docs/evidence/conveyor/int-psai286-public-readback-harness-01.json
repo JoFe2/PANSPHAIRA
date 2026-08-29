@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/public-readback-close-readiness-harness-receipt/v1",
+  "receiptId": "INT-PSAI286-PUBLIC-READBACK-HARNESS-01",
+  "taskId": "INT-PSAI286-PUBLIC-READBACK-HARNESS-01",
+  "scope": {
+    "issueNumber": 286,
+    "issueTitle": "[CKS-06] Qualification profiles and smallest-qualified R/K/P/U router",
+    "subject": "offline deterministic public-readback and close-readiness harness for a separately authorized external outcome",
+    "allowedChangedPaths": [
+      "docs/evidence/conveyor/int-psai286-public-readback-harness-01.json"
+    ],
+    "claimBoundary": "OFFLINE_DETERMINISTIC_HARNESS_ONLY_NO_PUBLIC_READBACK_EXECUTION_NO_PUBLICATION_NO_TAG_NO_RELEASE_NO_ASSET_UPLOAD_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_LEASE_ACQUISITION_NO_AUTHORITY_GRANT_NO_AUTOMATIC_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "repositoryBinding": {
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "receiptInputHeadCommit": "9f9eeafb3d6654d95d8fd882ad54ac68f53afbdc",
+    "reviewRange": "origin/main...HEAD",
+    "requiredDiffCheck": "git diff --check origin/main...HEAD"
+  },
+  "boundedInputs": {
+    "releaseGovernance": {
+      "path": "release/governance.json",
+      "schemaVersion": "chimpmaera.release-governance/v1",
+      "repository": "JoFe2/PANSPHAIRA",
+      "expectedCurrentRelease": {
+        "releaseId": 376149037,
+        "tag": "v0.2.0-poc.20260825.1",
+        "targetCommitish": "33d19f3e96ccc512038dbf06063f19489e067390",
+        "tagObjectSha": "33d19f3e96ccc512038dbf06063f19489e067390",
+        "draft": false,
+        "prerelease": false,
+        "mustBeLatest": true,
+        "assetCount": 2
+      }
+    },
+    "releasePolicy": {
+      "path": "docs/RELEASE-GOVERNANCE.md",
+      "anonymousPublicReadbackRequiredAfterPublication": true,
+      "unknownMissingOrExtraEvidenceFailsClosed": true
+    },
+    "prCiPackageReceipt": {
+      "path": "docs/evidence/conveyor/int-psai286-pr-ci-package-01.json",
+      "sha256": "5b3dc7672630c0180e5cab389b4b4c400cb62c8757caefe375ce6b68da5f14cd",
+      "decision": "APPROVE_BOUNDED_LOCAL_CKS-06_PR_CI_PACKAGE_FOR_CONTROLLER_READBACK"
+    },
+    "rootQualityReceipt": {
+      "path": "docs/evidence/conveyor/terra-psai286-root-qs-01.json",
+      "sha256": "b6c06dc1d1dea4d30ba88be301599f74979218092b30b2308d7e8449b682aaa3",
+      "decision": "APPROVE_LOCAL_ADVISORY_CKS-06_CONTRACT_AND_EVIDENCE_CHAIN_SCRUTINY"
+    },
+    "noReleaseReadinessReceipt": {
+      "path": "docs/evidence/conveyor/int-psai286-release-no-release-readiness-01.json",
+      "sha256": "fc244968948ccd4397ffb18dfaa256a8ce060c9c66ac06ccf99407d05dd833b5",
+      "decision": "CLOSED_NO_RELEASE",
+      "releaseAuthorizationPresent": false,
+      "releaseActionsPerformed": false
+    },
+    "routerDryRunEvidence": {
+      "path": "verification/cks-06-router-dry-run-evidence-v1.json",
+      "sha256": "52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2",
+      "outcome": "PASS"
+    }
+  },
+  "offlineHarness": {
+    "outcome": "PREPARED_FOR_SEPARATE_AUTHORIZED_EXECUTION",
+    "externalCommand": "env -u GH_TOKEN npm run release-governance:public-readback",
+    "credentialRule": "The command must run with GH_TOKEN unset and the verifier sends no authorization header.",
+    "executionStatus": "NOT_EXECUTED_OFFLINE",
+    "readbackAssertions": [
+      "release ID, publication timestamp, URL, tag, title, target, draft, prerelease, and Latest state match the bound governance tuple",
+      "tag reference object SHA and type remain exact",
+      "public release body includes the bound increment and does not use prohibited Daily identity",
+      "asset-name set and sizes are exact with no missing or extra asset",
+      "every downloaded asset byte count and SHA-256 match the bound inventory",
+      "asset checksum manifest declares the exact bound asset digest and name",
+      "raw main public surfaces match the local bounded files"
+    ],
+    "positiveCompletionRule": "An external PUBLIC_READBACK_PASS may be recorded only after separate authorization, completed publication where applicable, anonymous command exitCode=0, and preservation of that command's complete readback result against the authorized release tuple.",
+    "failClosedRule": "Absent authorization, absent completed publication evidence, a nonzero command result, any tuple mismatch, any missing or extra asset, a digest mismatch, or a public-surface mismatch yields no public-readback success claim."
+  },
+  "closeReadiness": {
+    "outcome": "LOCAL_RECEIPT_COMPLETE_EXTERNAL_OUTCOME_BLOCKED",
+    "currentDisposition": "CLOSED_NO_RELEASE",
+    "deterministicRule": "noReleaseReadinessReceipt.releaseAuthorizationPresent=false AND noReleaseReadinessReceipt.releaseActionsPerformed=false => retain CLOSED_NO_RELEASE and do not run or claim an external public readback for the CKS-06 advisory slice",
+    "eventualAuthorizedOutcomeBoundary": "A future release or other external outcome requires its own explicit authorization and then the anonymous public-readback completion rule; this receipt neither supplies nor infers either condition.",
+    "controllerAuthorityClaimed": false
+  },
+  "verification": {
+    "checks": [
+      {
+        "command": "NODE_OPTIONS=--jitless npm run release-governance:verify",
+        "exitCode": 0,
+        "outcome": "PASS"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless npm run release-governance:test",
+        "exitCode": 0,
+        "passed": 54,
+        "failed": 0,
+        "outcome": "PASS"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "exitCode": 0,
+        "outcome": "PASS"
+      }
+    ],
+    "requiredEvidencePresent": true,
+    "requiredEvidenceConclusion": "Bounded local governance and CKS-06 evidence support preparing the offline harness only; they do not support an external public-readback success or publication claim."
+  },
+  "nonClaims": [
+    "NO_PUBLIC_READBACK_EXECUTION",
+    "NO_PUBLIC_READBACK_SUCCESS",
+    "NO_PUBLICATION",
+    "NO_TAG",
+    "NO_RELEASE",
+    "NO_ASSET_UPLOAD",
+    "NO_PROVIDER_CALL",
+    "NO_ROUTE_EXECUTION",
+    "NO_RESOURCE_RESERVATION_OR_LEASE_ACQUISITION",
+    "NO_AUTHORITY_GRANT",
+    "NO_AUTOMATIC_ACTIVATION",
+    "NO_CLAIM_OF_CONTROLLER_AUTHORITATIVE_PINNED_NODE_OR_HOST_DOCKER_GATE_EXECUTION"
+  ],
+  "decision": "APPROVE_OFFLINE_PUBLIC_READBACK_AND_CLOSE_READINESS_HARNESS_FOR_SEPARATE_AUTHORIZED_EXECUTION"
+}

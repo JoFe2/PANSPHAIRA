@@ -1,0 +1,211 @@
+{
+  "schemaVersion": "chimpmaera.dev/cks-router-dry-run-receipt/v1",
+  "fixtureId": "cks-router-dry-run-positive-v1",
+  "outcome": "PASS",
+  "claimBoundary": "OFFLINE_DETERMINISTIC_DRY_RUN_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT",
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "decisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ]
+  },
+  "evidence": {
+    "requiredPositiveCksEvidenceReferences": [
+      {
+        "gateId": "CKS-03",
+        "role": "qualification-binding-and-typed-escalation-replay",
+        "schemaVersion": "pansphaira.dev/cks-positive-evidence-reference/v1",
+        "subject": "PSAI286-QWEN-06-OFFLINE-E2E-HARNESS",
+        "acceptance": "qualification-binding-and-typed-escalation",
+        "suite": "CKS-03",
+        "verifier": "offline-cks03-fixture-replay-v1",
+        "replayCommand": "node --test dist/tests/cks-qualification.test.js",
+        "terminalReceipt": "POSITIVE",
+        "path": "tests/fixtures/cks-qualification/profile-binding-v1.json",
+        "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+        "sha256": "f6a713ce02851c61072b5b923ef0b9bcee99233f07b480f93de0a407e02283f6",
+        "status": "POSITIVE"
+      },
+      {
+        "gateId": "CKS-04",
+        "role": "typed-runtime-verifier-escalation-replay",
+        "schemaVersion": "pansphaira.dev/cks-positive-evidence-reference/v1",
+        "subject": "PSAI286-QWEN-06-OFFLINE-E2E-HARNESS",
+        "acceptance": "typed-runtime-verifier-escalation",
+        "suite": "CKS-04",
+        "verifier": "offline-cks04-fixture-replay-v1",
+        "replayCommand": "node --test dist/tests/cks-qualification.test.js",
+        "terminalReceipt": "POSITIVE",
+        "path": "tests/fixtures/cks-qualification/escalation-causes-v1.json",
+        "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+        "sha256": "17fd863f69b84366fffd0265fcd010c0b383773637112a6e7281ec4b1e6c10d7",
+        "status": "POSITIVE"
+      },
+      {
+        "gateId": "CKS-05",
+        "role": "paired-shadow-quality-and-cost-replay",
+        "schemaVersion": "pansphaira.dev/cks-positive-evidence-reference/v1",
+        "subject": "PSAI286-QWEN-06-OFFLINE-E2E-HARNESS",
+        "acceptance": "paired-shadow-quality-and-cost",
+        "suite": "CKS-05",
+        "verifier": "offline-cks05-fixture-replay-v1",
+        "replayCommand": "node --test dist/tests/cks-shadow-evaluation.test.js",
+        "terminalReceipt": "POSITIVE",
+        "path": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+        "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+        "sha256": "d6eec78a04b93e443646cb5459b924b16e0ad05faa66535265728026c90f1ac0",
+        "status": "POSITIVE"
+      }
+    ],
+    "allRequiredReferencesVerified": true
+  },
+  "qualification": {
+    "profileDigest": "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93",
+    "boundFields": [
+      "modelArtifact",
+      "quantization",
+      "runtime",
+      "context",
+      "prompt",
+      "tools",
+      "retriever",
+      "reranker",
+      "verifier",
+      "knowledge",
+      "qualificationSuite"
+    ],
+    "exactProfileValidation": "VALID"
+  },
+  "typedEscalation": {
+    "outcome": "ALL_REQUIRED_CAUSES_TYPED",
+    "causes": [
+      {
+        "caseId": "knowledge-gap",
+        "causeCode": "KNOWLEDGE_GAP",
+        "disposition": "ABSTAIN_AND_REQUEST_BOUND_KNOWLEDGE_EVIDENCE",
+        "evidenceDigest": "57d2b4d76c5078c965b9ddf3afefbfdb2673274ae8d3348423432bcbee91aafe",
+        "receiptDigest": "daa09c2fd267468c06c52b0858865782a3b7c805857db04888d15f9071a22e43"
+      },
+      {
+        "caseId": "knowledge-conflict",
+        "causeCode": "KNOWLEDGE_CONFLICT",
+        "disposition": "ABSTAIN_OR_RESELECT_CONFLICT_QUALIFIED_PROFILE",
+        "evidenceDigest": "26861a2867bca293a8e95357c89f3b28225d8cdd04b601e54a08b3a5c4cf2c6a",
+        "receiptDigest": "b3515c161b3ba1163aedb5eba462f7db478f261874cf11a2af2c83221a9eed23"
+      },
+      {
+        "caseId": "verifier-rejection",
+        "causeCode": "VERIFIER_REJECTION",
+        "disposition": "REJECT_CANDIDATE_AND_RESELECT_IF_BUDGETED",
+        "evidenceDigest": "5aecd29019666aaae4e909da0d37749cf9aad3ca259fa243d763c76707fe3cc2",
+        "receiptDigest": "7d3217e5b99305f2e57934d2035d3712c5665d9bcf84a87327c9bd79bb2771c0"
+      },
+      {
+        "caseId": "decomposition-growth",
+        "causeCode": "DECOMPOSITION_GROWTH",
+        "disposition": "RECLASSIFY_AND_RESELECT",
+        "evidenceDigest": "99a943aea4b1302e5d0ce8d8345556467ab2b53acbb59266f5a552b8da498e88",
+        "receiptDigest": "bb7c1017ac96cbe56e6141a408bd581b991283beae361c473255a2edf1e7b2cd"
+      },
+      {
+        "caseId": "low-evidence-coverage",
+        "causeCode": "LOW_EVIDENCE_COVERAGE",
+        "disposition": "REJECT_OUTPUT_AND_ABSTAIN_OR_RESELECT",
+        "evidenceDigest": "8ac189828becc8fa94ca29ba87f44316aa08ddbd366b28e75534546fe7d4400b",
+        "receiptDigest": "79b8247cead4ba8dc9d1c910864e85fbafd44e835ab49c3f53f3b21045ad1e1e"
+      },
+      {
+        "caseId": "competence-limit",
+        "causeCode": "COMPETENCE_LIMIT",
+        "disposition": "EXCLUDE_PROFILE_AND_RESELECT",
+        "evidenceDigest": "df0cbbd885293cf4b132a128eee749d9b8b71019575c0c458d2aced2c48174e0",
+        "receiptDigest": "1e0666ba962c03652d1772356581447a412e36186752e0d134a0163f1841849e"
+      }
+    ]
+  },
+  "selection": {
+    "schemaVersion": "chimpmaera.dev/cks-advisory-selector/v1",
+    "outcome": "ADVISORY_RECOMMENDATION",
+    "taskVector": [
+      2,
+      1,
+      2,
+      1
+    ],
+    "selectedProfileDigest": "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93",
+    "orderingKey": [
+      2,
+      36,
+      900,
+      120,
+      8000000,
+      "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93"
+    ],
+    "claimBoundary": "ADVISORY_RECOMMENDATION_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT_NO_RESOURCE_RESERVATION",
+    "decisionDigest": "7d02d8effe0c7b2e729bedf6aac9c05f5e59e44a9cf937750eefcbb10b702db7"
+  },
+  "capacityAdmission": {
+    "outcome": "VALID",
+    "requestDigest": "2d0a3657e3291d67d80593296d72635d4506db1077090f24170ebbc25570f61b",
+    "exactProfileDigest": "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93",
+    "capacityBucketDigest": "e12317bedcfd902a4f47cfb3f54dcfb94f0cb9e513be049db0c69ab7cf6def20",
+    "capacityBucketId": "parallel-128k",
+    "measuredDemand": {
+      "totalTokens": 114624,
+      "concurrentSequences": 2
+    },
+    "dependencyReady": true,
+    "pathLeasesAdmitted": [
+      {
+        "candidateId": "candidate-a",
+        "path": "workspaces/candidate-a",
+        "mode": "WRITE"
+      },
+      {
+        "candidateId": "candidate-a",
+        "path": "packages/contracts",
+        "mode": "READ"
+      },
+      {
+        "candidateId": "candidate-b",
+        "path": "workspaces/candidate-b",
+        "mode": "WRITE"
+      },
+      {
+        "candidateId": "candidate-b",
+        "path": "packages/contracts/src/cks-resource-admission.ts",
+        "mode": "READ"
+      }
+    ],
+    "claimBoundary": "SCHEDULING_CAPACITY_RECEIPT_ONLY_NOT_RESOURCE_PLANE_AUTHORITY_AND_NOT_EXECUTION"
+  },
+  "shadowGating": {
+    "outcome": "ACTIVATION_ELIGIBLE_FOR_SEPARATE_AUTHORIZATION",
+    "activationMode": "OFF",
+    "reasonCodes": [
+      "ALL_FROZEN_GATES_PASS"
+    ],
+    "passedWindowCount": 2,
+    "decisionDigest": "bfa5745beee487bcc3442eddef8e8a11359f396a7daa76e585900fb46d9995be",
+    "receiptDigest": "3f8dd0d545c1eba34624b47016bc2d7e6428d9dfd241aeb25a8277e35a78ebbe",
+    "claimBoundary": "OFFLINE_PAIRED_RECEIPT_EVIDENCE_ONLY_NO_ROUTING_ACTIVATION_NO_PROVIDER_CALL_NO_AUTHORITY_GRANT"
+  },
+  "separationChecks": {
+    "riskImpactAndAuthorityNotInOrderingKey": true,
+    "resourceAdmissionDoesNotGrantAuthority": true,
+    "shadowEligibilityDoesNotActivateRouting": true
+  },
+  "nonClaims": [
+    "NO_PROVIDER_CALL",
+    "NO_ROUTE_EXECUTION",
+    "NO_AUTHORITY_GRANT",
+    "NO_AUTOMATIC_ACTIVATION"
+  ],
+  "receiptDigest": "41f09853d6249f579b0f7619cb4f794b4c7a9c88d9162df749ef01fa97a8adbe"
+}

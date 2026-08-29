@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "chimpmaera.dev/cks-router-dry-run/v1",
+  "fixtureId": "cks-router-dry-run-positive-v1",
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "decisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"]
+  },
+  "requiredPositiveEvidenceReferences": [
+    {
+      "gateId": "CKS-03",
+      "role": "qualification-binding-and-typed-escalation-replay",
+      "schemaVersion": "pansphaira.dev/cks-positive-evidence-reference/v1",
+      "subject": "PSAI286-QWEN-06-OFFLINE-E2E-HARNESS",
+      "acceptance": "qualification-binding-and-typed-escalation",
+      "suite": "CKS-03",
+      "verifier": "offline-cks03-fixture-replay-v1",
+      "replayCommand": "node --test dist/tests/cks-qualification.test.js",
+      "terminalReceipt": "POSITIVE",
+      "path": "tests/fixtures/cks-qualification/profile-binding-v1.json",
+      "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+      "sha256": "f6a713ce02851c61072b5b923ef0b9bcee99233f07b480f93de0a407e02283f6"
+    },
+    {
+      "gateId": "CKS-04",
+      "role": "typed-runtime-verifier-escalation-replay",
+      "schemaVersion": "pansphaira.dev/cks-positive-evidence-reference/v1",
+      "subject": "PSAI286-QWEN-06-OFFLINE-E2E-HARNESS",
+      "acceptance": "typed-runtime-verifier-escalation",
+      "suite": "CKS-04",
+      "verifier": "offline-cks04-fixture-replay-v1",
+      "replayCommand": "node --test dist/tests/cks-qualification.test.js",
+      "terminalReceipt": "POSITIVE",
+      "path": "tests/fixtures/cks-qualification/escalation-causes-v1.json",
+      "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+      "sha256": "17fd863f69b84366fffd0265fcd010c0b383773637112a6e7281ec4b1e6c10d7"
+    },
+    {
+      "gateId": "CKS-05",
+      "role": "paired-shadow-quality-and-cost-replay",
+      "schemaVersion": "pansphaira.dev/cks-positive-evidence-reference/v1",
+      "subject": "PSAI286-QWEN-06-OFFLINE-E2E-HARNESS",
+      "acceptance": "paired-shadow-quality-and-cost",
+      "suite": "CKS-05",
+      "verifier": "offline-cks05-fixture-replay-v1",
+      "replayCommand": "node --test dist/tests/cks-shadow-evaluation.test.js",
+      "terminalReceipt": "POSITIVE",
+      "path": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+      "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+      "sha256": "d6eec78a04b93e443646cb5459b924b16e0ad05faa66535265728026c90f1ac0"
+    }
+  ],
+  "qualificationBinding": {
+    "profilePath": "tests/fixtures/cks-qualification/profile-binding-v1.json",
+    "selectorPath": "tests/fixtures/cks-qualification/smallest-qualified-v1.json",
+    "taskVector": [2, 1, 2, 1]
+  },
+  "typedEscalation": {
+    "casesPath": "tests/fixtures/cks-qualification/escalation-causes-v1.json",
+    "requiredCauses": [
+      "KNOWLEDGE_GAP",
+      "KNOWLEDGE_CONFLICT",
+      "VERIFIER_REJECTION",
+      "DECOMPOSITION_GROWTH",
+      "LOW_EVIDENCE_COVERAGE",
+      "COMPETENCE_LIMIT"
+    ]
+  },
+  "capacityAdmission": {
+    "casePath": "tests/fixtures/cks-resource-admission/admission-cases-v1.json",
+    "caseName": "parallel-admission-valid"
+  },
+  "shadowEvaluation": {
+    "inputPath": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+    "expectedActivationMode": "OFF"
+  },
+  "claimBoundary": "OFFLINE_DETERMINISTIC_DRY_RUN_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT"
+}

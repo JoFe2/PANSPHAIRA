@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "chimpmaera.dev/cks-shadow-evaluation/v1",
+  "evaluationId": "shadow-golden-v1",
+  "manifest": {
+    "evaluationMode": "OFFLINE_PAIRED_RECEIPT_EVALUATION_ONLY",
+    "baselineVersion": "static-fallback-v1",
+    "baselineDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "baselineCohortDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "baselineVersionDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "taskCorpusDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "knowledgeEditionDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "pairedInputDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "routerPolicyDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "evaluationPolicyDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "freshEphemeralCertificationSeedDigests": [
+      "3333333333333333333333333333333333333333333333333333333333333333",
+      "4444444444444444444444444444444444444444444444444444444444444444",
+      "5555555555555555555555555555555555555555555555555555555555555555"
+    ],
+    "manifestDigest": "55a377ee76d63963fc25340249bf8d32bff24aa8c05cebd75a89fad07899527f"
+  },
+  "thresholds": {
+    "consecutiveWindows": 2,
+    "eligiblePairedEpisodesPerWindow": 100,
+    "totalEligiblePairedEpisodes": 200,
+    "freshEphemeralCertificationSeeds": 3,
+    "minimumEpisodesPerRequiredCKS03Family": 20,
+    "exactProfileBindingRatePpm": 1000000,
+    "terminalOutcomeCoveragePpm": 1000000,
+    "authorityOrCapabilityViolationCount": 0,
+    "providerCallOrRouteExecutionByRouterCount": 0,
+    "unsupportedMaterialClaimCount": 0,
+    "verifierFalseAcceptanceCount": 0,
+    "seedSplitOrLeakageViolationCount": 0,
+    "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback": -10000,
+    "materialClaimCoverageWilsonLowerBoundPpm": 990000,
+    "requiredGapConflictAbstentionWilsonLowerBoundPpm": 950000,
+    "updateComplianceWilsonLowerBoundPpm": 950000,
+    "costPerVerifiedSuccessReductionLowerBoundPpm": 100000,
+    "p95ElapsedRatioUpperBoundPpmVersusFallback": 1000000,
+    "resourceAdmissionDenialCountForRecommendedEpisodes": 0,
+    "pairedBootstrapResamples": 10000
+  },
+  "windows": [
+    {
+      "windowId": "shadow-window-0",
+      "windowOrdinal": 0,
+      "startedAtMs": 1000,
+      "endedAtMs": 2000,
+      "manifestDigest": "55a377ee76d63963fc25340249bf8d32bff24aa8c05cebd75a89fad07899527f",
+      "baselineDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "pairedInputDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "requiredEvidence": {
+        "cks03": {
+          "status": "POSITIVE",
+          "receiptDigest": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        "cks04": {
+          "status": "POSITIVE",
+          "receiptDigest": "7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        "cks05": {
+          "status": "POSITIVE",
+          "receiptDigest": "8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      },
+      "eligiblePairedEpisodes": 100,
+      "terminalOutcomeCoveragePpm": 1000000,
+      "exactProfileBindingRatePpm": 1000000,
+      "requiredCks03FamilyEpisodeCounts": {
+        "APPLICABILITY": 20,
+        "CLAIM_EVIDENCE_COVERAGE": 20,
+        "COMPETENCE_LIMIT": 20,
+        "CONFLICT": 20,
+        "DECOMPOSITION": 20,
+        "FRESH_UNKNOWN_DOMAIN": 20,
+        "MISSING_KNOWLEDGE": 20,
+        "PROCEDURE": 20,
+        "SUPERSESSION": 20,
+        "UPDATE_COMPLIANCE": 20,
+        "VERIFIER_REJECTION": 20
+      },
+      "baselineVerifiedSuccesses": 80,
+      "shadowVerifiedSuccesses": 82,
+      "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback": 0,
+      "materialClaimCoverageWilsonLowerBoundPpm": 995000,
+      "requiredGapConflictAbstentionWilsonLowerBoundPpm": 960000,
+      "updateComplianceWilsonLowerBoundPpm": 960000,
+      "authorityOrCapabilityViolationCount": 0,
+      "providerCallOrRouteExecutionByRouterCount": 0,
+      "unsupportedMaterialClaimCount": 0,
+      "verifierFalseAcceptanceCount": 0,
+      "seedSplitOrLeakageViolationCount": 0,
+      "baselineCostPerVerifiedSuccessMicros": 1000,
+      "shadowCostPerVerifiedSuccessMicros": 800,
+      "costPerVerifiedSuccessReductionLowerBoundPpm": 200000,
+      "baselineP95ElapsedMs": 100,
+      "shadowP95ElapsedMs": 90,
+      "p95ElapsedRatioUpperBoundPpmVersusFallback": 900000,
+      "resourceAdmissionDenialCountForRecommendedEpisodes": 0,
+      "windowDigest": "8021f29c7d209b9ec253e90a284bf62fbadcb6b588444a8f22c6df33ef53d2e3"
+    },
+    {
+      "windowId": "shadow-window-1",
+      "windowOrdinal": 1,
+      "startedAtMs": 3000,
+      "endedAtMs": 4000,
+      "manifestDigest": "55a377ee76d63963fc25340249bf8d32bff24aa8c05cebd75a89fad07899527f",
+      "baselineDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "pairedInputDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "requiredEvidence": {
+        "cks03": {
+          "status": "POSITIVE",
+          "receiptDigest": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        "cks04": {
+          "status": "POSITIVE",
+          "receiptDigest": "7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        "cks05": {
+          "status": "POSITIVE",
+          "receiptDigest": "8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      },
+      "eligiblePairedEpisodes": 100,
+      "terminalOutcomeCoveragePpm": 1000000,
+      "exactProfileBindingRatePpm": 1000000,
+      "requiredCks03FamilyEpisodeCounts": {
+        "APPLICABILITY": 20,
+        "CLAIM_EVIDENCE_COVERAGE": 20,
+        "COMPETENCE_LIMIT": 20,
+        "CONFLICT": 20,
+        "DECOMPOSITION": 20,
+        "FRESH_UNKNOWN_DOMAIN": 20,
+        "MISSING_KNOWLEDGE": 20,
+        "PROCEDURE": 20,
+        "SUPERSESSION": 20,
+        "UPDATE_COMPLIANCE": 20,
+        "VERIFIER_REJECTION": 20
+      },
+      "baselineVerifiedSuccesses": 80,
+      "shadowVerifiedSuccesses": 82,
+      "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback": 0,
+      "materialClaimCoverageWilsonLowerBoundPpm": 995000,
+      "requiredGapConflictAbstentionWilsonLowerBoundPpm": 960000,
+      "updateComplianceWilsonLowerBoundPpm": 960000,
+      "authorityOrCapabilityViolationCount": 0,
+      "providerCallOrRouteExecutionByRouterCount": 0,
+      "unsupportedMaterialClaimCount": 0,
+      "verifierFalseAcceptanceCount": 0,
+      "seedSplitOrLeakageViolationCount": 0,
+      "baselineCostPerVerifiedSuccessMicros": 1000,
+      "shadowCostPerVerifiedSuccessMicros": 800,
+      "costPerVerifiedSuccessReductionLowerBoundPpm": 200000,
+      "baselineP95ElapsedMs": 100,
+      "shadowP95ElapsedMs": 90,
+      "p95ElapsedRatioUpperBoundPpmVersusFallback": 900000,
+      "resourceAdmissionDenialCountForRecommendedEpisodes": 0,
+      "windowDigest": "abb63cda874b745b639e8ac25c4831e37697b7c45077d9587fb8bed4807335b2"
+    }
+  ],
+  "claimBoundary": "OFFLINE_PAIRED_RECEIPT_EVIDENCE_ONLY_NO_ROUTING_ACTIVATION_NO_PROVIDER_CALL_NO_AUTHORITY_GRANT",
+  "outcome": "ACTIVATION_ELIGIBLE_FOR_SEPARATE_AUTHORIZATION",
+  "reasonCodes": [
+    "ALL_FROZEN_GATES_PASS"
+  ],
+  "activationMode": "OFF",
+  "passedWindowCount": 2,
+  "decisionDigest": "030bef8fd9180313599971c15ed2d8e5e40c2e55f08e5ca5f926724345e21673",
+  "receiptDigest": "07d615562bddcea23d815e63839f6f748993bf13ff7edafa9ecf1704b103642c"
+}

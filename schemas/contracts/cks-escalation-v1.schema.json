@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-escalation-v1.schema.json",
+  "title": "PANSPHAIRA CKS typed escalation evidence v1",
+  "description": "Closed AC-03 escalation evidence. Each finite cause has a typed trigger payload, an immutable source digest, a frozen disposition, and canonical evidence and receipt digests. The R/K/P/U vector is independent data; this contract does not infer risk, impact, Capability, or Authority and cannot execute a route.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "episodeDigest", "exactProfileDigest", "taskVector", "taskVectorDigest", "causeCode", "disposition", "triggerEvidence", "evidenceDigest", "claimBoundary", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.dev/cks-escalation/v1" },
+    "episodeDigest": { "$ref": "#/$defs/digest" },
+    "exactProfileDigest": { "$ref": "#/$defs/digest" },
+    "taskVector": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/coordinate" },
+        { "$ref": "#/$defs/coordinate" },
+        { "$ref": "#/$defs/coordinate" },
+        { "$ref": "#/$defs/coordinate" }
+      ],
+      "items": false,
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "taskVectorDigest": { "$ref": "#/$defs/digest" },
+    "causeCode": { "enum": ["KNOWLEDGE_GAP", "KNOWLEDGE_CONFLICT", "VERIFIER_REJECTION", "DECOMPOSITION_GROWTH", "LOW_EVIDENCE_COVERAGE", "COMPETENCE_LIMIT"] },
+    "disposition": { "enum": ["ABSTAIN_AND_REQUEST_BOUND_KNOWLEDGE_EVIDENCE", "ABSTAIN_OR_RESELECT_CONFLICT_QUALIFIED_PROFILE", "REJECT_CANDIDATE_AND_RESELECT_IF_BUDGETED", "RECLASSIFY_AND_RESELECT", "REJECT_OUTPUT_AND_ABSTAIN_OR_RESELECT", "EXCLUDE_PROFILE_AND_RESELECT"] },
+    "triggerEvidence": { "type": "object" },
+    "evidenceDigest": { "$ref": "#/$defs/digest" },
+    "claimBoundary": { "const": "TYPED_ESCALATION_EVIDENCE_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    { "if": { "properties": { "causeCode": { "const": "KNOWLEDGE_GAP" } } }, "then": { "properties": { "disposition": { "const": "ABSTAIN_AND_REQUEST_BOUND_KNOWLEDGE_EVIDENCE" }, "triggerEvidence": { "$ref": "#/$defs/knowledgeGap" } } } },
+    { "if": { "properties": { "causeCode": { "const": "KNOWLEDGE_CONFLICT" } } }, "then": { "properties": { "disposition": { "const": "ABSTAIN_OR_RESELECT_CONFLICT_QUALIFIED_PROFILE" }, "triggerEvidence": { "$ref": "#/$defs/knowledgeConflict" } } } },
+    { "if": { "properties": { "causeCode": { "const": "VERIFIER_REJECTION" } } }, "then": { "properties": { "disposition": { "const": "REJECT_CANDIDATE_AND_RESELECT_IF_BUDGETED" }, "triggerEvidence": { "$ref": "#/$defs/verifierRejection" } } } },
+    { "if": { "properties": { "causeCode": { "const": "DECOMPOSITION_GROWTH" } } }, "then": { "properties": { "disposition": { "const": "RECLASSIFY_AND_RESELECT" }, "triggerEvidence": { "$ref": "#/$defs/decompositionGrowth" } } } },
+    { "if": { "properties": { "causeCode": { "const": "LOW_EVIDENCE_COVERAGE" } } }, "then": { "properties": { "disposition": { "const": "REJECT_OUTPUT_AND_ABSTAIN_OR_RESELECT" }, "triggerEvidence": { "$ref": "#/$defs/lowEvidenceCoverage" } } } },
+    { "if": { "properties": { "causeCode": { "const": "COMPETENCE_LIMIT" } } }, "then": { "properties": { "disposition": { "const": "EXCLUDE_PROFILE_AND_RESELECT" }, "triggerEvidence": { "$ref": "#/$defs/competenceLimit" } } } }
+  ],
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "coordinate": { "type": "integer", "minimum": 0, "maximum": 6 },
+    "nonNegativeInteger": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "triggerBase": {
+      "type": "object",
+      "required": ["kind", "sourceReceiptDigest"],
+      "properties": {
+        "kind": { "enum": ["KNOWLEDGE_GAP", "KNOWLEDGE_CONFLICT", "VERIFIER_REJECTION", "DECOMPOSITION_GROWTH", "LOW_EVIDENCE_COVERAGE", "COMPETENCE_LIMIT"] },
+        "sourceReceiptDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "knowledgeGap": {
+      "allOf": [
+        { "$ref": "#/$defs/triggerBase" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "sourceReceiptDigest", "trigger", "materialKnowledgeObjectDigest"],
+          "properties": {
+            "kind": { "const": "KNOWLEDGE_GAP" },
+            "sourceReceiptDigest": { "$ref": "#/$defs/digest" },
+            "trigger": { "enum": ["NEED_MORE_KNOWLEDGE", "MATERIAL_KNOWLEDGE_OBJECT_ABSENT"] },
+            "materialKnowledgeObjectDigest": { "$ref": "#/$defs/digest" }
+          }
+        }
+      ]
+    },
+    "knowledgeConflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceReceiptDigest", "trigger", "conflictingEvidenceDigests", "applicabilityEvidenceDigest"],
+      "properties": {
+        "kind": { "const": "KNOWLEDGE_CONFLICT" },
+        "sourceReceiptDigest": { "$ref": "#/$defs/digest" },
+        "trigger": { "enum": ["UNRESOLVED_MATERIAL_CONFLICT", "SUPERSESSION_AMBIGUITY"] },
+        "conflictingEvidenceDigests": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/digest" } },
+        "applicabilityEvidenceDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "verifierRejection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceReceiptDigest", "verifierReceiptDigest", "verifier", "rejectedCheck"],
+      "properties": {
+        "kind": { "const": "VERIFIER_REJECTION" },
+        "sourceReceiptDigest": { "$ref": "#/$defs/digest" },
+        "verifierReceiptDigest": { "$ref": "#/$defs/digest" },
+        "verifier": { "enum": ["DETERMINISTIC", "SEMANTIC"] },
+        "rejectedCheck": { "enum": ["ID", "VERSION", "DIGEST", "SCOPE", "PRECONDITION", "CLAIM_COVERAGE", "EXPECTED_STATE"] }
+      }
+    },
+    "decompositionGrowth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceReceiptDigest", "previousDecompositionDigest", "currentDecompositionDigest", "previousNodeCount", "currentNodeCount", "previousEdgeCount", "currentEdgeCount", "previousLongestPath", "currentLongestPath", "previousContextTokens", "currentContextTokens", "previousToolSteps", "currentToolSteps", "previousDependencyCount", "currentDependencyCount", "previousPathLeaseCount", "currentPathLeaseCount"],
+      "properties": {
+        "kind": { "const": "DECOMPOSITION_GROWTH" },
+        "sourceReceiptDigest": { "$ref": "#/$defs/digest" },
+        "previousDecompositionDigest": { "$ref": "#/$defs/digest" },
+        "currentDecompositionDigest": { "$ref": "#/$defs/digest" },
+        "previousNodeCount": { "$ref": "#/$defs/nonNegativeInteger" }, "currentNodeCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "previousEdgeCount": { "$ref": "#/$defs/nonNegativeInteger" }, "currentEdgeCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "previousLongestPath": { "$ref": "#/$defs/nonNegativeInteger" }, "currentLongestPath": { "$ref": "#/$defs/nonNegativeInteger" },
+        "previousContextTokens": { "$ref": "#/$defs/nonNegativeInteger" }, "currentContextTokens": { "$ref": "#/$defs/nonNegativeInteger" },
+        "previousToolSteps": { "$ref": "#/$defs/nonNegativeInteger" }, "currentToolSteps": { "$ref": "#/$defs/nonNegativeInteger" },
+        "previousDependencyCount": { "$ref": "#/$defs/nonNegativeInteger" }, "currentDependencyCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "previousPathLeaseCount": { "$ref": "#/$defs/nonNegativeInteger" }, "currentPathLeaseCount": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "lowEvidenceCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceReceiptDigest", "coverageReceiptDigest", "coveredPpm", "applicabilityLinkPresent", "applicabilityEvidenceDigest"],
+      "properties": {
+        "kind": { "const": "LOW_EVIDENCE_COVERAGE" },
+        "sourceReceiptDigest": { "$ref": "#/$defs/digest" },
+        "coverageReceiptDigest": { "$ref": "#/$defs/digest" },
+        "coveredPpm": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "applicabilityLinkPresent": { "type": "boolean" },
+        "applicabilityEvidenceDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "competenceLimit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceReceiptDigest", "trigger", "coverageBoxDigest", "taskVectorDigest"],
+      "properties": {
+        "kind": { "const": "COMPETENCE_LIMIT" },
+        "sourceReceiptDigest": { "$ref": "#/$defs/digest" },
+        "trigger": { "enum": ["RUNTIME_COMPETENCE_LIMIT", "OUTSIDE_VERIFIED_COVERAGE_BOX"] },
+        "coverageBoxDigest": { "$ref": "#/$defs/digest" },
+        "taskVectorDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}
