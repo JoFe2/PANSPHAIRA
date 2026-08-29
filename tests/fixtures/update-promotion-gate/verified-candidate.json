@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "chimpmaera.update/promotion-gate/v1",
+  "transition": "PROMOTION_GATE_VERIFIED",
+  "phase": "PROMOTION_GATE",
+  "candidateId": "candidate:synthetic-001",
+  "updaterId": "updater:fixture-only",
+  "sourceTupleDigest": "21dcfb4af804336ad0dfcd4804e3d617e3ba04291a69a26aba73bad756526ba4",
+  "candidateTuple": {
+    "core": [
+      {
+        "componentId": "core:safe-guided",
+        "version": "1.1.0",
+        "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    ],
+    "packs": [
+      {
+        "componentId": "pack:general",
+        "version": "1.0.0",
+        "digest": "2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    ],
+    "adapters": [
+      {
+        "componentId": "adapter:dev",
+        "version": "1.0.0",
+        "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+      }
+    ],
+    "policies": [
+      {
+        "componentId": "policy:default",
+        "version": "2.0.0",
+        "digest": "4444444444444444444444444444444444444444444444444444444444444444"
+      }
+    ],
+    "schemas": [
+      {
+        "componentId": "schema:catalog",
+        "version": "1.0.0",
+        "digest": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    ],
+    "generations": [
+      {
+        "componentId": "generation:safe-guided",
+        "version": "1.0.0",
+        "digest": "6666666666666666666666666666666666666666666666666666666666666666"
+      }
+    ]
+  },
+  "candidateTupleDigest": "8f873e2a8c3dd819a2bcc68b4865c9e6f60f40fb1d20823054829e5758375088",
+  "candidateArtifactDigest": "d11fd5d8a48ccf4646ddfbcba618dff6a04ca38f723cb794e6b728ce5728ce44",
+  "identityBoundaryDigest": "de7599dddd73a8a2a2b64462366c2f90d7da04230c4a2b74bd845cc20f879f3e",
+  "verifier": {
+    "schemaVersion": "chimpmaera.update/promotion-gate-verifier/v1",
+    "verifierId": "verifier:independent-readback",
+    "verifierVersion": "1.0.0"
+  },
+  "promoterDecision": {
+    "schemaVersion": "chimpmaera.update/promotion-decision/v1",
+    "decisionId": "decision:promotion-gate",
+    "promoterId": "promoter:promotion-gate",
+    "decisionDigest": "fa0590403a90a977e14c32e5596737428347ee11eca8904d4c0a4d39a3580370"
+  },
+  "capabilityIssued": false,
+  "observedAtMs": 1787612400205,
+  "promotionGateDigest": "d66bbb171ef8a555bfdc42c56b9ec32212f114a660d96b22ece4b38c2657b951"
+}

@@ -4,9 +4,9 @@ import { canonicalJson } from "./canonical-json.js";
 /**
  * PSAI #53 UD-M1 successor micro-slice (canonical migration edge).
  *
- * Pure, local contract verification and fixture helpers for one canonical,
- * reversible source-to-target edge of a synthetic versioned DAG. This module
- * emits CHECKED metadata only: it composes no DAG, and it neither executes,
+ * Pure, local contract verification and fixture helpers for canonical,
+ * reversible source-to-target edges of a synthetic versioned DAG. This module
+ * emits CHECKED metadata only: its bounded DAG composer also neither executes,
  * checkpoints, promotes, migrates, rolls back, nor otherwise mutates
  * packages, schemas, files, services, or networks, and it grants no
  * migration or promotion authority.
@@ -498,3 +498,247 @@ export function renderVerifiedUpdateMigrationEdgeV1(
   }
   return canonicalJson(snapshot);
 }
+
+// ---------------------------------------------------------------------------
+// Bounded versioned migration DAG
+// ---------------------------------------------------------------------------
+
+/** A DAG is deliberately bounded to a short, deterministic migration path. */
+export const UPDATE_MIGRATION_DAG_SCHEMA_V1 = "chimpmaera.update/migration-dag/v1" as const;
+export const UPDATE_MIGRATION_DAG_MAX_EDGES_V1 = 8 as const;
+export const UPDATE_MIGRATION_DAG_KEYS_V1 = Object.freeze([
+  "schemaVersion", "migrationId", "migrationVersion", "sourceTupleDigest", "targetTupleDigest",
+  "rollbackTargetDigest", "authorityProfileDigest", "planner", "maxEdges", "edges", "dagDigest",
+]) as readonly string[];
+
+export interface UpdateMigrationDagV1 {
+  readonly schemaVersion: typeof UPDATE_MIGRATION_DAG_SCHEMA_V1;
+  readonly migrationId: string;
+  readonly migrationVersion: string;
+  readonly sourceTupleDigest: string;
+  readonly targetTupleDigest: string;
+  readonly rollbackTargetDigest: string;
+  readonly authorityProfileDigest: string;
+  readonly planner: UpdateMigrationEdgePlannerV1;
+  readonly maxEdges: typeof UPDATE_MIGRATION_DAG_MAX_EDGES_V1;
+  readonly edges: readonly UpdateMigrationEdgeV1[];
+  readonly dagDigest: string;
+}
+
+export interface BuildUpdateMigrationDagOptionsV1 {
+  readonly migrationId: string;
+  readonly migrationVersion: string;
+  readonly sourceTupleDigest: string;
+  readonly targetTupleDigest: string;
+  readonly intermediateTupleDigests: readonly string[];
+  readonly authorityProfileDigest: string;
+  readonly planner: { readonly plannerId: string; readonly plannerVersion: string };
+  readonly issuedAtMs: number;
+}
+
+export interface UpdateMigrationDagVerificationContextV1 {
+  readonly expectedMigrationId: string;
+  readonly expectedMigrationVersion: string;
+  readonly expectedSourceTupleDigest: string;
+  readonly expectedTargetTupleDigest: string;
+  readonly expectedRollbackTargetDigest: string;
+  readonly expectedAuthorityProfileDigest: string;
+  readonly expectedPlanner: { readonly plannerId: string; readonly plannerVersion: string };
+  readonly expectedEdgeDigests: readonly string[];
+}
+
+export type UpdateMigrationDagReasonCodeV1 =
+  | "MIGRATION_DAG_CHECKED"
+  | "INVALID_JSON_DENIED"
+  | "SCHEMA_DENIED"
+  | "UNSUPPORTED_CONTRACT_VERSION_DENIED"
+  | "INDEPENDENT_CONTEXT_DENIED"
+  | "DAG_DIGEST_MISMATCH_DENIED"
+  | "DAG_BOUND_DENIED"
+  | "DAG_EDGE_BINDING_DENIED"
+  | "DAG_CHAIN_DENIED"
+  | "DAG_TARGET_MISMATCH_DENIED";
+
+export const UPDATE_MIGRATION_DAG_EXIT_CODES_V1: Readonly<Record<UpdateMigrationDagReasonCodeV1, number>> = Object.freeze({
+  MIGRATION_DAG_CHECKED: 0,
+  INVALID_JSON_DENIED: 71,
+  SCHEMA_DENIED: 72,
+  UNSUPPORTED_CONTRACT_VERSION_DENIED: 73,
+  INDEPENDENT_CONTEXT_DENIED: 74,
+  DAG_DIGEST_MISMATCH_DENIED: 75,
+  DAG_BOUND_DENIED: 76,
+  DAG_EDGE_BINDING_DENIED: 77,
+  DAG_CHAIN_DENIED: 78,
+  DAG_TARGET_MISMATCH_DENIED: 79,
+});
+
+const DAG_CONTEXT_KEYS: readonly string[] = Object.freeze([
+  "expectedMigrationId", "expectedMigrationVersion", "expectedSourceTupleDigest",
+  "expectedTargetTupleDigest", "expectedRollbackTargetDigest", "expectedAuthorityProfileDigest",
+  "expectedPlanner", "expectedEdgeDigests",
+]);
+
+function validDag(value: unknown): value is UpdateMigrationDagV1 {
+  return exactKeys(value, UPDATE_MIGRATION_DAG_KEYS_V1)
+    && value.schemaVersion === UPDATE_MIGRATION_DAG_SCHEMA_V1
+    && typeof value.migrationId === "string" && MIGRATION_ID.test(value.migrationId)
+    && typeof value.migrationVersion === "string" && CANONICAL_SEMVER_VERSION.test(value.migrationVersion)
+    && isDigest(value.sourceTupleDigest) && isDigest(value.targetTupleDigest)
+    && isDigest(value.rollbackTargetDigest) && isDigest(value.authorityProfileDigest)
+    && validPlanner(value.planner)
+    && value.maxEdges === UPDATE_MIGRATION_DAG_MAX_EDGES_V1
+    && isDenseStandardArray(value.edges) && value.edges.length > 0 && value.edges.length <= UPDATE_MIGRATION_DAG_MAX_EDGES_V1
+    && value.edges.every(validEdgeShape)
+    && isDigest(value.dagDigest);
+}
+
+function validDagContext(value: unknown): value is UpdateMigrationDagVerificationContextV1 {
+  return exactKeys(value, DAG_CONTEXT_KEYS)
+    && typeof value.expectedMigrationId === "string" && MIGRATION_ID.test(value.expectedMigrationId)
+    && typeof value.expectedMigrationVersion === "string" && CANONICAL_SEMVER_VERSION.test(value.expectedMigrationVersion)
+    && isDigest(value.expectedSourceTupleDigest) && isDigest(value.expectedTargetTupleDigest)
+    && isDigest(value.expectedRollbackTargetDigest) && isDigest(value.expectedAuthorityProfileDigest)
+    && validPlannerContext(value.expectedPlanner)
+    && isDenseStandardArray(value.expectedEdgeDigests)
+    && value.expectedEdgeDigests.length > 0
+    && value.expectedEdgeDigests.length <= UPDATE_MIGRATION_DAG_MAX_EDGES_V1
+    && value.expectedEdgeDigests.every(isDigest);
+}
+
+/** Canonical SHA-256 over the closed DAG envelope excluding dagDigest. */
+export function updateMigrationDagDigestV1(value: object): string {
+  const cloned = safeJsonClone(value);
+  if (!isPlainDataRecord(cloned)) throw new TypeError("UNSAFE_DAG_DIGEST_INPUT");
+  const unsigned = safeObject(Object.keys(cloned)
+    .filter((key) => key !== "dagDigest")
+    .map((key) => [key, cloned[key]] as const));
+  return createHash("sha256").update(canonicalJson(unsigned)).digest("hex");
+}
+
+function denyDag(reason: UpdateMigrationDagReasonCodeV1): { readonly outcome: "DENIED"; readonly reasonCodes: readonly [UpdateMigrationDagReasonCodeV1]; readonly exitCode: number } {
+  return immutable({ outcome: "DENIED" as const, reasonCodes: [reason] as const, exitCode: UPDATE_MIGRATION_DAG_EXIT_CODES_V1[reason] });
+}
+
+export type UpdateMigrationDagCheckResultV1 =
+  | { readonly outcome: "CHECKED"; readonly reasonCodes: readonly ["MIGRATION_DAG_CHECKED"]; readonly exitCode: 0 }
+  | { readonly outcome: "DENIED"; readonly reasonCodes: readonly [UpdateMigrationDagReasonCodeV1]; readonly exitCode: number };
+
+/**
+ * Verifies a bounded DAG against an independent edge-digest list. The result
+ * is metadata only; it grants neither migration nor rollback authority.
+ */
+export function verifyUpdateMigrationDagV1(
+  value: unknown,
+  context: UpdateMigrationDagVerificationContextV1 | undefined,
+): UpdateMigrationDagCheckResultV1 {
+  let clonedValue: unknown;
+  try { clonedValue = safeJsonClone(value); } catch { return denyDag("SCHEMA_DENIED"); }
+  if (context === undefined) return denyDag("INDEPENDENT_CONTEXT_DENIED");
+  let clonedContext: unknown;
+  try { clonedContext = safeJsonClone(context); } catch { return denyDag("INDEPENDENT_CONTEXT_DENIED"); }
+  if (!exactKeys(clonedValue, UPDATE_MIGRATION_DAG_KEYS_V1)) {
+    if (isPlainDataRecord(clonedValue) && clonedValue.schemaVersion !== undefined
+      && clonedValue.schemaVersion !== UPDATE_MIGRATION_DAG_SCHEMA_V1) return denyDag("UNSUPPORTED_CONTRACT_VERSION_DENIED");
+    return denyDag("SCHEMA_DENIED");
+  }
+  if (isPlainDataRecord(clonedValue) && clonedValue.schemaVersion !== UPDATE_MIGRATION_DAG_SCHEMA_V1) {
+    return denyDag("UNSUPPORTED_CONTRACT_VERSION_DENIED");
+  }
+  if (!validDag(clonedValue)) return denyDag("SCHEMA_DENIED");
+  if (!validDagContext(clonedContext)) return denyDag("INDEPENDENT_CONTEXT_DENIED");
+  const dag = clonedValue;
+  const expected = clonedContext;
+  if (updateMigrationDagDigestV1(dag) !== dag.dagDigest) return denyDag("DAG_DIGEST_MISMATCH_DENIED");
+  if (dag.edges.length !== expected.expectedEdgeDigests.length || dag.edges.length > UPDATE_MIGRATION_DAG_MAX_EDGES_V1) {
+    return denyDag("DAG_BOUND_DENIED");
+  }
+  if (dag.migrationId !== expected.expectedMigrationId || dag.migrationVersion !== expected.expectedMigrationVersion
+    || dag.sourceTupleDigest !== expected.expectedSourceTupleDigest
+    || dag.targetTupleDigest !== expected.expectedTargetTupleDigest
+    || dag.rollbackTargetDigest !== expected.expectedRollbackTargetDigest
+    || dag.authorityProfileDigest !== expected.expectedAuthorityProfileDigest
+    || dag.planner.plannerId !== expected.expectedPlanner.plannerId
+    || dag.planner.plannerVersion !== expected.expectedPlanner.plannerVersion) {
+    return denyDag("DAG_TARGET_MISMATCH_DENIED");
+  }
+  let prior = dag.sourceTupleDigest;
+  for (const [index, edge] of dag.edges.entries()) {
+    const edgeContext: UpdateMigrationEdgeVerificationContextV1 = {
+      expectedMigrationId: expected.expectedMigrationId,
+      expectedMigrationVersion: expected.expectedMigrationVersion,
+      expectedSourceTupleDigest: prior,
+      expectedTargetTupleDigest: index === dag.edges.length - 1 ? expected.expectedTargetTupleDigest : edge.targetTupleDigest,
+      expectedRollbackTargetDigest: prior,
+      expectedAuthorityProfileDigest: expected.expectedAuthorityProfileDigest,
+      expectedPreconditionCode: MIGRATION_EDGE_PRECONDITION_CODE_V1,
+      expectedPostconditionCode: MIGRATION_EDGE_POSTCONDITION_CODE_V1,
+      expectedPlanner: expected.expectedPlanner,
+      expectedOrdinal: index + 1,
+    };
+    if (edge.edgeDigest !== expected.expectedEdgeDigests[index]
+      || verifyUpdateMigrationEdgeV1(edge, edgeContext).outcome !== "CHECKED") return denyDag("DAG_EDGE_BINDING_DENIED");
+    prior = edge.targetTupleDigest;
+  }
+  if (prior !== expected.expectedTargetTupleDigest) return denyDag("DAG_CHAIN_DENIED");
+  return immutable({ outcome: "CHECKED" as const, reasonCodes: ["MIGRATION_DAG_CHECKED"] as const, exitCode: 0 as const });
+}
+
+export function parseUpdateMigrationDagV1(
+  json: string,
+  context: UpdateMigrationDagVerificationContextV1 | undefined,
+): UpdateMigrationDagCheckResultV1 {
+  try { return verifyUpdateMigrationDagV1(JSON.parse(json) as unknown, context); }
+  catch { return denyDag("INVALID_JSON_DENIED"); }
+}
+
+/** Deterministically composes one bounded path from source through intermediates to target. */
+export function buildUpdateMigrationDagV1(options: BuildUpdateMigrationDagOptionsV1): UpdateMigrationDagV1 {
+  let cloned: BuildUpdateMigrationDagOptionsV1;
+  try { cloned = safeJsonClone(options); } catch { throw new Error("INVALID_MIGRATION_DAG_FIXTURE"); }
+  if (!exactKeys(cloned, ["migrationId", "migrationVersion", "sourceTupleDigest", "targetTupleDigest",
+    "intermediateTupleDigests", "authorityProfileDigest", "planner", "issuedAtMs"])
+    || typeof cloned.migrationId !== "string" || !MIGRATION_ID.test(cloned.migrationId)
+    || typeof cloned.migrationVersion !== "string" || !CANONICAL_SEMVER_VERSION.test(cloned.migrationVersion)
+    || hasMutableVersion(cloned.migrationVersion) || !isDigest(cloned.sourceTupleDigest)
+    || !isDigest(cloned.targetTupleDigest) || cloned.sourceTupleDigest === cloned.targetTupleDigest
+    || !isDenseStandardArray(cloned.intermediateTupleDigests)
+    || cloned.intermediateTupleDigests.length + 1 > UPDATE_MIGRATION_DAG_MAX_EDGES_V1
+    || !cloned.intermediateTupleDigests.every(isDigest)
+    || !isDigest(cloned.authorityProfileDigest) || !validPlannerContext(cloned.planner)
+    || hasMutableVersion(cloned.planner.plannerVersion) || !isTimestamp(cloned.issuedAtMs)) {
+    throw new Error("INVALID_MIGRATION_DAG_FIXTURE");
+  }
+  const tuples = [cloned.sourceTupleDigest, ...cloned.intermediateTupleDigests, cloned.targetTupleDigest];
+  if (tuples.some((tuple, index) => index > 0 && tuple === tuples[index - 1])) throw new Error("INVALID_MIGRATION_DAG_FIXTURE");
+  const edges = tuples.slice(0, -1).map((source, index) => buildUpdateMigrationEdgeV1({
+    migrationId: cloned.migrationId,
+    migrationVersion: cloned.migrationVersion,
+    ordinal: index + 1,
+    sourceTupleDigest: source!,
+    targetTupleDigest: tuples[index + 1]!,
+    authorityProfileDigest: cloned.authorityProfileDigest,
+    planner: cloned.planner,
+    issuedAtMs: cloned.issuedAtMs,
+  }));
+  const unsigned = {
+    schemaVersion: UPDATE_MIGRATION_DAG_SCHEMA_V1,
+    migrationId: cloned.migrationId,
+    migrationVersion: cloned.migrationVersion,
+    sourceTupleDigest: cloned.sourceTupleDigest,
+    targetTupleDigest: cloned.targetTupleDigest,
+    rollbackTargetDigest: cloned.sourceTupleDigest,
+    authorityProfileDigest: cloned.authorityProfileDigest,
+    planner: {
+      schemaVersion: UPDATE_MIGRATION_EDGE_PLANNER_SCHEMA_V1,
+      plannerId: cloned.planner.plannerId,
+      plannerVersion: cloned.planner.plannerVersion,
+    },
+    maxEdges: UPDATE_MIGRATION_DAG_MAX_EDGES_V1,
+    edges,
+  };
+  return immutable({ ...unsigned, dagDigest: updateMigrationDagDigestV1(unsigned) }) as UpdateMigrationDagV1;
+}
+
+export const updateMigrationDAGDigestV1 = updateMigrationDagDigestV1;
+export const buildUpdateMigrationDAGV1 = buildUpdateMigrationDagV1;
+export const verifyUpdateMigrationDAGV1 = verifyUpdateMigrationDagV1;

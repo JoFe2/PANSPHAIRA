@@ -359,6 +359,22 @@ test("UD-M1 continuity: invalid or revoked LKG with an unusable Accepted enters 
   assert.equal(projectUpdateContinuityDecisionV1(missingLkg, contextFor(missingLkg)).readOnly, true);
 });
 
+test("UD-M1 continuity: incomplete LKG cannot become a rollback requirement", () => {
+  const incompleteLkg = digestedLkg({ state: "INCOMPLETE" });
+  const input = buildInput({
+    accepted: digestedAccepted({ revoked: true }),
+    lkg: incompleteLkg,
+  });
+  const result = verifyUpdateContinuityDecisionV1(input, contextFor(input));
+  assert.deepEqual(result, {
+    outcome: "ENTER_SAFE_READ_ONLY",
+    reasonCodes: ["CONTINUITY_SAFE_READ_ONLY"],
+    exitCode: UPDATE_CONTINUITY_DECISION_EXIT_CODES_V1.CONTINUITY_SAFE_READ_ONLY,
+    readOnly: true,
+  });
+  assert.equal(projectUpdateContinuityDecisionV1(input, contextFor(input)).decision, "ENTER_SAFE_READ_ONLY");
+});
+
 test("UD-M1 continuity: a missing LKG is only consistent when the independent context also binds none", () => {
   const input = buildInput({ accepted: digestedAccepted({ revoked: true }), lkg: null });
   const noneContext = contextFor(input);
@@ -492,6 +508,34 @@ test("UD-M1 continuity: observer substitution and non-independent observer ident
     "OBSERVER_INDEPENDENCE_DENIED",
     "observer-alias-accepted",
   );
+
+  // An observer may not attest a registry-outage observation or an LKG whose
+  // normalized identity is its own, even when every envelope is re-digested
+  // and the supplied context otherwise matches it exactly.
+  const registrySelfAttestation = buildInput({
+    observation: digestedObservation({ registryId: "registry:continuity-verifier" }),
+    observer: digestedObserver({ observerId: "observer:continuity_verifier" }),
+  });
+  const lkgSelfAttestation = buildInput({
+    lkg: digestedLkg({ lkgId: "maintenance:continuity-verifier" }),
+    observer: digestedObserver({ observerId: "observer:continuity.verifier" }),
+  });
+  for (const [name, selfAttesting] of [
+    ["observer-alias-registry", registrySelfAttestation],
+    ["observer-alias-lkg", lkgSelfAttestation],
+  ] as const) {
+    const selfAttestingContext = contextFor(selfAttesting);
+    includesReason(
+      verifyUpdateContinuityDecisionV1(selfAttesting, selfAttestingContext),
+      "OBSERVER_INDEPENDENCE_DENIED",
+      name,
+    );
+    assert.throws(
+      () => projectUpdateContinuityDecisionV1(selfAttesting, selfAttestingContext),
+      /UNSAFE_OR_INVALID_CONTINUITY_DECISION/,
+      `${name}-projection`,
+    );
+  }
 });
 
 test("UD-M1 continuity: observer substitution with an unchanged digest denies via digest drift", () => {

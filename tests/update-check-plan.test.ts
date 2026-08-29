@@ -7,6 +7,7 @@ import {
   UPDATE_CHECK_PLAN_EXIT_CODES_V1,
   UPDATE_CHECK_PLAN_SCHEMA_V1,
   UPDATE_SAFE_MODE_EXIT_CODE_V1,
+  freezeUpdateCheckPlanCandidateV1,
   parseUpdateCheckPlanV1,
   parseUpdateHealthReportV1,
   renderRedactedUpdateHealthReportV1,
@@ -56,6 +57,50 @@ function alternateTuple(): UpdateTupleV1 {
   return {
     ...tuple(),
     core: axisComponent("core:alternate-plane", "1.0.0", "9"),
+  };
+}
+
+// Exact tuples and identities pinned by docs/evidence/conveyor/sol-psai53-state-reconcile-01.json
+// (`exactTuplePin` and `identityBoundary`).
+const BOUNDARY_SOURCE_TUPLE_DIGEST = "21dcfb4af804336ad0dfcd4804e3d617e3ba04291a69a26aba73bad756526ba4";
+const BOUNDARY_TARGET_TUPLE_DIGEST = "8f873e2a8c3dd819a2bcc68b4865c9e6f60f40fb1d20823054829e5758375088";
+const BOUNDARY_CANDIDATE_ID = "candidate:synthetic-001";
+const BOUNDARY_UPDATER_ID = "updater:fixture-only";
+const BOUNDARY_ATTESTOR_ID = "attestor:attestation-gate";
+const BOUNDARY_VERIFIER_ID = "verifier:independent-readback";
+const BOUNDARY_PROMOTER_ID = "promoter:promotion-gate";
+
+function boundarySourceTuple(): UpdateTupleV1 {
+  return {
+    core: axisComponent("core:safe-guided", "1.0.0", "1"),
+    packs: axisComponent("pack:general", "1.0.0", "2"),
+    adapters: axisComponent("adapter:dev", "1.0.0", "3"),
+    policies: axisComponent("policy:default", "1.0.0", "4"),
+    schemas: axisComponent("schema:catalog", "1.0.0", "5"),
+    generations: axisComponent("generation:safe-guided", "1.0.0", "6"),
+  };
+}
+
+function boundaryTargetTuple(): UpdateTupleV1 {
+  return {
+    core: axisComponent("core:safe-guided", "1.1.0", "1"),
+    packs: axisComponent("pack:general", "1.0.0", "2"),
+    adapters: axisComponent("adapter:dev", "1.0.0", "3"),
+    policies: axisComponent("policy:default", "2.0.0", "4"),
+    schemas: axisComponent("schema:catalog", "1.0.0", "5"),
+    generations: axisComponent("generation:safe-guided", "1.0.0", "6"),
+  };
+}
+
+function reorderedBoundaryTargetTuple(): UpdateTupleV1 {
+  const target = boundaryTargetTuple();
+  return {
+    generations: target.generations,
+    schemas: target.schemas,
+    policies: target.policies,
+    adapters: target.adapters,
+    packs: target.packs,
+    core: target.core.map((component) => ({ digest: component.digest, version: component.version, componentId: component.componentId })),
   };
 }
 
@@ -218,8 +263,11 @@ function buildPlan(options: BuildPlanOptions = {}): UpdateCheckPlanV1 {
 }
 
 interface ContextOverrides {
+  readonly expectedUpdaterId?: string;
   readonly expectedCandidateDigest?: string;
   readonly expectedCandidateId?: string;
+  readonly expectedCompatibilityDecisionId?: string;
+  readonly expectedCompatibilityDecisionDigest?: string;
   readonly expectedTargetTuple?: UpdateTupleV1;
   readonly expectedTargetAuthorityDigest?: string;
   readonly expectedLkgDigest?: string;
@@ -240,10 +288,15 @@ interface ContextOverrides {
 function contextFor(plan: UpdateCheckPlanV1, overrides: ContextOverrides = {}): UpdatePlanVerificationContextV1 {
   const evaluationTimeMs = overrides.evaluationTimeMs ?? EVALUATION_TIME_MS;
   return {
+    expectedUpdaterId: overrides.expectedUpdaterId ?? BOUNDARY_UPDATER_ID,
     expectedCandidate: {
       candidateId: overrides.expectedCandidateId ?? plan.candidate.candidateId,
       releaseId: plan.candidate.releaseId,
       candidateDigest: overrides.expectedCandidateDigest ?? plan.candidate.digest,
+    },
+    expectedCompatibility: {
+      decisionId: overrides.expectedCompatibilityDecisionId ?? plan.compatibility.decisionId,
+      decisionDigest: overrides.expectedCompatibilityDecisionDigest ?? plan.compatibility.decisionDigest,
     },
     expectedTarget: {
       tuple: overrides.expectedTargetTuple ?? plan.candidate.targetTuple,
@@ -377,17 +430,20 @@ test("UD-M1 canonical plan and tuple digests are stable across key reorderings",
   }
 });
 
-test("UD-M1 plan verification denies missing independent context and candidate/LKG/tuple/authority mismatch", () => {
+test("UD-M1 plan verification denies missing independent context and candidate/compatibility/LKG/tuple/authority mismatch", () => {
   const plan = buildPlan();
   const cases: readonly [string, UpdatePlanVerificationContextV1 | undefined, string][] = [
     ["missing-context", undefined, "INDEPENDENT_CONTEXT_DENIED"],
     ["candidate-digest", contextFor(plan, { expectedCandidateDigest: "a".repeat(64) }), "DIGEST_MISMATCH_DENIED"],
+    ["compatibility-digest", contextFor(plan, { expectedCompatibilityDecisionDigest: "f".repeat(64) }), "DIGEST_MISMATCH_DENIED"],
+    ["compatibility-id", contextFor(plan, { expectedCompatibilityDecisionId: "compatibility:different-001" }), "INDEPENDENT_CONTEXT_DENIED"],
     ["lkg-digest", contextFor(plan, { expectedLkgDigest: "b".repeat(64) }), "DIGEST_MISMATCH_DENIED"],
     ["target-tuple", contextFor(plan, { expectedTargetTuple: alternateTuple() }), "TUPLE_MISMATCH_DENIED"],
     ["lkg-tuple", contextFor(plan, { expectedLkgTuple: alternateTuple() }), "TUPLE_MISMATCH_DENIED"],
     ["target-authority", contextFor(plan, { expectedTargetAuthorityDigest: "c".repeat(64) }), "AUTHORITY_BINDING_DENIED"],
     ["lkg-authority", contextFor(plan, { expectedLkgAuthorityDigest: "d".repeat(64) }), "AUTHORITY_BINDING_DENIED"],
     ["candidate-id", contextFor(plan, { expectedCandidateId: "candidate:different-001" }), "INDEPENDENT_CONTEXT_DENIED"],
+    ["candidate-updater-alias", contextFor(plan, { expectedUpdaterId: "updater:synthetic_001" }), "AUTHORITY_BINDING_DENIED"],
   ];
   for (const [name, context, expected] of cases) {
     const result = verifyUpdateCheckPlanV1(plan, context);
@@ -747,4 +803,186 @@ test("UD-M1 parsers fail closed without evaluating fixture content", () => {
   const hostile = JSON.stringify({ ...plan, execute: "globalThis.planExecuted = true" });
   assert.equal(parseUpdateCheckPlanV1(hostile, contextFor(plan)).outcome, "DENIED");
   assert.equal((globalThis as Record<string, unknown>).planExecuted, false);
+});
+
+test("UD-M1 boundary-pinned source and target tuples digest to the exact frozen tuple digests", () => {
+  assert.match(BOUNDARY_SOURCE_TUPLE_DIGEST, /^[a-f0-9]{64}$/);
+  assert.match(BOUNDARY_TARGET_TUPLE_DIGEST, /^[a-f0-9]{64}$/);
+  assert.notEqual(BOUNDARY_SOURCE_TUPLE_DIGEST, BOUNDARY_TARGET_TUPLE_DIGEST);
+  assert.equal(updateTupleDigestV1(boundarySourceTuple()), BOUNDARY_SOURCE_TUPLE_DIGEST);
+  assert.equal(updateTupleDigestV1(boundaryTargetTuple()), BOUNDARY_TARGET_TUPLE_DIGEST);
+  // The pin anchors content, not key order.
+  assert.equal(updateTupleDigestV1(reorderedBoundaryTargetTuple()), BOUNDARY_TARGET_TUPLE_DIGEST);
+});
+
+test("UD-M1 the boundary-pinned candidate verifies ACCEPTED and renders inspectable canonical bytes", () => {
+  const plan = buildPlan({ targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() });
+  assert.equal(plan.candidate.candidateId, BOUNDARY_CANDIDATE_ID);
+  assert.equal(plan.candidate.attestedBy, BOUNDARY_ATTESTOR_ID);
+  assert.equal(plan.candidate.promotedBy, BOUNDARY_PROMOTER_ID);
+  assert.equal(plan.candidate.source, "SYNTHETIC_ISOLATED");
+  assert.equal(plan.candidate.synthetic, true);
+  assert.equal(plan.candidate.immutable, true);
+  assert.equal(plan.candidate.releaseId, "0.2.0-poc.20260804.4");
+  assert.equal(plan.lkg.releaseId, "0.2.0-poc.20260804.4");
+  assert.equal(plan.candidate.targetTuple.core[0]!.version, "1.1.0");
+  assert.equal(plan.candidate.targetTuple.packs[0]!.version, "1.0.0");
+  assert.equal(plan.candidate.targetTuple.adapters[0]!.version, "1.0.0");
+  assert.equal(plan.candidate.targetTuple.policies[0]!.version, "2.0.0");
+  assert.equal(plan.candidate.targetTuple.schemas[0]!.version, "1.0.0");
+  assert.equal(plan.candidate.targetTuple.generations[0]!.version, "1.0.0");
+  assert.equal(plan.candidate.targetTupleDigest, BOUNDARY_TARGET_TUPLE_DIGEST);
+  assert.equal(plan.candidate.authorityProfileDigest, TARGET_AUTHORITY_DIGEST);
+  assert.equal(plan.lkg.tupleDigest, BOUNDARY_SOURCE_TUPLE_DIGEST);
+  assert.equal(plan.lkg.authorityProfileDigest, LKG_AUTHORITY_DIGEST);
+  assert.equal(plan.compatibility.subjectCandidateDigest, plan.candidate.digest);
+  assert.equal(plan.compatibility.subjectLkgDigest, plan.lkg.lkgDigest);
+  assert.equal(plan.compatibility.verdict, "COMPATIBLE");
+  assert.match(plan.candidate.digest, /^[a-f0-9]{64}$/);
+  assert.match(plan.compatibility.decisionDigest, /^[a-f0-9]{64}$/);
+  assert.match(plan.planDigest, /^[a-f0-9]{64}$/);
+  assert.equal(plan.mode, "CHECK_ONLY");
+  assert.equal(plan.executionAuthorized, false);
+  assert.equal(plan.selfAttestation, false);
+  assert.equal(plan.selfPromotion, false);
+  assert.equal(planSchema(plan), true, JSON.stringify(planSchema.errors));
+  const context = contextFor(plan, { expectedTargetTuple: reorderedBoundaryTargetTuple() });
+  assert.deepEqual(verifyUpdateCheckPlanV1(plan, context), {
+    outcome: "ACCEPTED", reasonCodes: ["UPDATE_CHECK_ACCEPTED"], exitCode: 0,
+  });
+  const bytes = renderVerifiedUpdateCheckPlanV1(plan, context);
+  for (const pinned of [
+    BOUNDARY_SOURCE_TUPLE_DIGEST,
+    BOUNDARY_TARGET_TUPLE_DIGEST,
+    "core:safe-guided",
+    "pack:general",
+    "adapter:dev",
+    "policy:default",
+    "schema:catalog",
+    "generation:safe-guided",
+  ]) {
+    assert.ok(bytes.includes(pinned), `verified render must expose ${pinned}`);
+  }
+  assert.deepEqual(JSON.parse(bytes), plan);
+});
+
+test("UD-M1 drift from the boundary-pinned tuple fails closed and non-exact versions are rejected before digesting", () => {
+  const driftedVersion = { ...boundaryTargetTuple(), core: axisComponent("core:safe-guided", "1.2.0", "1") };
+  const driftedDigest = { ...boundaryTargetTuple(), schemas: axisComponent("schema:catalog", "1.0.0", "9") };
+  const driftCases: readonly [string, UpdateTupleV1][] = [
+    ["version-drift", driftedVersion],
+    ["digest-drift", driftedDigest],
+  ];
+  for (const [name, targetTuple] of driftCases) {
+    const plan = buildPlan({ targetTuple, lkgTuple: boundarySourceTuple() });
+    const result = verifyUpdateCheckPlanV1(plan, contextFor(plan, { expectedTargetTuple: boundaryTargetTuple() }));
+    assert.equal(result.outcome, "DENIED", name);
+    assert.ok(result.reasonCodes.includes("TUPLE_MISMATCH_DENIED"), `${name}:${result.reasonCodes.join(",")}`);
+  }
+  // selectionRules exactValuesOnly / latestRejected: dist-tags and ranges are not exact versions.
+  assert.throws(
+    () => updateTupleDigestV1({ ...boundaryTargetTuple(), core: axisComponent("core:safe-guided", "latest", "1") }),
+    /INVALID_UPDATE_TUPLE/,
+  );
+  assert.throws(
+    () => updateTupleDigestV1({ ...boundaryTargetTuple(), core: axisComponent("core:safe-guided", "^1.0.0", "1") }),
+    /INVALID_UPDATE_TUPLE/,
+  );
+  assert.throws(
+    () => updateTupleDigestV1({ ...boundaryTargetTuple(), core: axisComponent("core:safe-guided", "01.0.0", "1") }),
+    /INVALID_UPDATE_TUPLE/,
+  );
+});
+
+test("UD-M1 candidate freeze snapshots the exact immutable check-plan and rejects binding drift", () => {
+  const plan = buildPlan({ targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() });
+  const context = contextFor(plan, { expectedTargetTuple: reorderedBoundaryTargetTuple() });
+  const frozen = freezeUpdateCheckPlanCandidateV1(plan, context);
+  assert.notEqual(frozen, plan);
+  assert.deepEqual(frozen, plan);
+  assertDeeplyFrozen(frozen);
+  assert.equal(frozen.candidate.targetTupleDigest, BOUNDARY_TARGET_TUPLE_DIGEST);
+  assert.equal(frozen.candidate.digest, context.expectedCandidate.candidateDigest);
+  assert.equal(frozen.compatibility.decisionDigest, context.expectedCompatibility.decisionDigest);
+  assert.equal(frozen.candidate.authorityProfileDigest, context.expectedTarget.authorityProfileDigest);
+
+  const driftedBindings: readonly [string, UpdatePlanVerificationContextV1][] = [
+    ["content", contextFor(plan, { expectedCandidateDigest: "a".repeat(64) })],
+    ["compatibility", contextFor(plan, { expectedCompatibilityDecisionDigest: "b".repeat(64) })],
+    ["tuple", contextFor(plan, { expectedTargetTuple: alternateTuple() })],
+    ["authority", contextFor(plan, { expectedTargetAuthorityDigest: "c".repeat(64) })],
+  ];
+  for (const [name, drifted] of driftedBindings) {
+    assert.throws(
+      () => freezeUpdateCheckPlanCandidateV1(plan, drifted),
+      /UNSAFE_OR_INVALID_UPDATE_CANDIDATE/,
+      name,
+    );
+  }
+
+  (plan.candidate.targetTuple.core[0]! as { version: string }).version = "9.9.9";
+  assert.equal(frozen.candidate.targetTuple.core[0]!.version, "1.1.0");
+});
+
+test("UD-M1 candidate freeze rejects candidate/updater self-attestation or self-promotion", () => {
+  const roleClaims: readonly [string, BuildPlanOptions][] = [
+    ["candidate-attestor", { attestedBy: "attestor:synthetic-001" }],
+    ["candidate-promoter", { promotedBy: "promoter:synthetic-001" }],
+    ["updater-attestor", { attestedBy: "attestor:fixture-only" }],
+    ["updater-promoter", { promotedBy: "promoter:fixture-only" }],
+    ["updater-attestor-alias", { attestedBy: "attestor:fixture_only" }],
+    ["updater-promoter-alias", { promotedBy: "promoter:fixture.only" }],
+  ];
+  for (const [name, options] of roleClaims) {
+    const plan = buildPlan({ ...options, targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() });
+    const result = verifyUpdateCheckPlanV1(plan, contextFor(plan));
+    assert.equal(result.outcome, "DENIED", name);
+    assert.ok(result.reasonCodes.includes(
+      name.includes("attestor") ? "SELF_ATTESTATION_DENIED" : "SELF_PROMOTION_DENIED",
+    ), `${name}:${result.reasonCodes.join(",")}`);
+    assert.throws(
+      () => freezeUpdateCheckPlanCandidateV1(plan, contextFor(plan)),
+      /UNSAFE_OR_INVALID_UPDATE_CANDIDATE/,
+      name,
+    );
+  }
+
+  const sharedGate = buildPlan({
+    attestedBy: "attestor:shared-gate",
+    promotedBy: "promoter:shared_gate",
+    targetTuple: boundaryTargetTuple(),
+    lkgTuple: boundarySourceTuple(),
+  });
+  assert.throws(
+    () => freezeUpdateCheckPlanCandidateV1(sharedGate, contextFor(sharedGate)),
+    /UNSAFE_OR_INVALID_UPDATE_CANDIDATE/,
+    "shared gate roles",
+  );
+});
+
+test("UD-M1 boundary identity roles are distinct and candidate self-attestation or self-promotion aliases fail closed", () => {
+  const boundaryIds = [BOUNDARY_CANDIDATE_ID, BOUNDARY_UPDATER_ID, BOUNDARY_ATTESTOR_ID, BOUNDARY_VERIFIER_ID, BOUNDARY_PROMOTER_ID];
+  assert.equal(new Set(boundaryIds).size, 5);
+
+  // The candidate/updater can inspect but not attest or promote: the plan fixture binds the boundary
+  // candidate with the boundary attestor and promoter, and verifies ACCEPTED with no role collision.
+  const plan = buildPlan({ targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() });
+  assert.equal(verifyUpdateCheckPlanV1(plan, contextFor(plan)).outcome, "ACCEPTED");
+
+  const selfClaims: readonly [string, BuildPlanOptions, string, string][] = [
+    ["attestor-alias-dash", { attestedBy: "attestor:synthetic-001", targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() }, "SELF_ATTESTATION_DENIED", "AUTHORITY_BINDING_DENIED"],
+    ["attestor-alias-underscore", { attestedBy: "attestor:synthetic_001", targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() }, "SELF_ATTESTATION_DENIED", "AUTHORITY_BINDING_DENIED"],
+    ["attestor-alias-dot", { attestedBy: "attestor:synthetic.001", targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() }, "SELF_ATTESTATION_DENIED", "AUTHORITY_BINDING_DENIED"],
+    ["promoter-alias-dash", { promotedBy: "promoter:synthetic-001", targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() }, "SELF_PROMOTION_DENIED", "AUTHORITY_BINDING_DENIED"],
+    ["promoter-alias-underscore", { promotedBy: "promoter:synthetic_001", targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() }, "SELF_PROMOTION_DENIED", "AUTHORITY_BINDING_DENIED"],
+    ["promoter-alias-dot", { promotedBy: "promoter:synthetic.001", targetTuple: boundaryTargetTuple(), lkgTuple: boundarySourceTuple() }, "SELF_PROMOTION_DENIED", "AUTHORITY_BINDING_DENIED"],
+  ];
+  for (const [name, options, selfReason, bindingReason] of selfClaims) {
+    const denied = buildPlan(options);
+    const result = verifyUpdateCheckPlanV1(denied, contextFor(denied));
+    assert.equal(result.outcome, "DENIED", name);
+    assert.ok(result.reasonCodes.includes(selfReason as never), `${name}:${result.reasonCodes.join(",")}`);
+    assert.ok(result.reasonCodes.includes(bindingReason as never), `${name}:${result.reasonCodes.join(",")}`);
+    assert.equal(result.exitCode, UPDATE_CHECK_PLAN_EXIT_CODES_V1.AUTHORITY_BINDING_DENIED, name);
+  }
 });

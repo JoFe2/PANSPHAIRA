@@ -1,5 +1,6 @@
 import { canonicalJson } from "./canonical-json.js";
 import {
+  UPDATE_AXIS_NAMES_V1,
   UPDATE_LKG_SCHEMA_V1,
   updateCheckPlanDigestV1,
   updateTupleDigestV1,
@@ -327,6 +328,10 @@ function tupleIsDigestible(tuple: unknown): boolean {
   }
 }
 
+function tupleIsComplete(tuple: UpdateTupleV1): boolean {
+  return UPDATE_AXIS_NAMES_V1.every((axis) => tuple[axis].length > 0);
+}
+
 function actorAlias(identity: string): string {
   const separator = identity.indexOf(":");
   return identity.slice(separator + 1).toLowerCase().replace(/[._-]+/g, "-");
@@ -607,7 +612,9 @@ function evaluateUpdateContinuityDecisionV1(
   const lkgUsable = input.lkg !== null
     && ctx.expectedLkg !== null
     && !ctx.expectedLkg.revoked
-    && input.lkg.stale === false;
+    && input.lkg.stale === false
+    && input.lkg.state === "COMPLETE"
+    && tupleIsComplete(input.lkg.tuple);
 
   if (acceptedUsable) {
     return {
