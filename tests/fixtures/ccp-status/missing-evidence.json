@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "cm.ccp-contributor-status-input/v1",
+  "ledgerId": "ledger:contributor-status",
+  "tenantId": "tenant:synthetic",
+  "repositoryId": "repository:pansphaira",
+  "contributionId": "contribution:status-missing",
+  "admissionState": "ADMITTED",
+  "headState": "CURRENT",
+  "queued": true,
+  "migrationState": "CURRENT",
+  "lkgState": "UNCHANGED",
+  "requiredEvidenceRefs": [
+    "evidence:admission-receipt",
+    "evidence:queue-receipt",
+    "evidence:verification-result"
+  ],
+  "presentEvidenceRefs": [
+    "evidence:admission-receipt",
+    "evidence:queue-receipt"
+  ],
+  "admissionReceiptDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "queueReceiptDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "quarantineReceiptDigest": null,
+  "migrationReceiptDigest": null,
+  "lkgRestoreReceiptDigest": null,
+  "privateDetails": "internal reviewer note: do not publish customer@example.invalid"
+}

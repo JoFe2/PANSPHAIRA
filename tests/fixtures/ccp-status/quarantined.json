@@ -1,0 +1,54 @@
+{
+  "quarantined": {
+    "schemaVersion": "cm.ccp-contributor-status-input/v1",
+    "ledgerId": "ledger:contributor-status",
+    "tenantId": "tenant:synthetic",
+    "repositoryId": "repository:pansphaira",
+    "contributionId": "contribution:status-quarantine",
+    "admissionState": "QUARANTINED",
+    "headState": "INVALIDATED",
+    "queued": false,
+    "migrationState": "CURRENT",
+    "lkgState": "UNCHANGED",
+    "requiredEvidenceRefs": [
+      "evidence:admission-receipt",
+      "evidence:quarantine-receipt"
+    ],
+    "presentEvidenceRefs": [
+      "evidence:admission-receipt",
+      "evidence:quarantine-receipt"
+    ],
+    "admissionReceiptDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "queueReceiptDigest": null,
+    "quarantineReceiptDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "migrationReceiptDigest": null,
+    "lkgRestoreReceiptDigest": null,
+    "privateDetails": "private quarantine reason: suspicious payload fragment"
+  },
+  "restored": {
+    "schemaVersion": "cm.ccp-contributor-status-input/v1",
+    "ledgerId": "ledger:contributor-status",
+    "tenantId": "tenant:synthetic",
+    "repositoryId": "repository:pansphaira",
+    "contributionId": "contribution:status-restored",
+    "admissionState": "ADMITTED",
+    "headState": "CURRENT",
+    "queued": false,
+    "migrationState": "CURRENT",
+    "lkgState": "RESTORED",
+    "requiredEvidenceRefs": [
+      "evidence:admission-receipt",
+      "evidence:lkg-restore-receipt"
+    ],
+    "presentEvidenceRefs": [
+      "evidence:admission-receipt",
+      "evidence:lkg-restore-receipt"
+    ],
+    "admissionReceiptDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "queueReceiptDigest": null,
+    "quarantineReceiptDigest": null,
+    "migrationReceiptDigest": null,
+    "lkgRestoreReceiptDigest": "9999999999999999999999999999999999999999999999999999999999999999",
+    "privateDetails": "private restore diagnostic: failed verification details"
+  }
+}

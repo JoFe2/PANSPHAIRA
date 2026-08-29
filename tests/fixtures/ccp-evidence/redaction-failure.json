@@ -1,0 +1,5 @@
+{
+  "schemaVersion": "cm.ccp-m1-evidence-input/v1",
+  "taskId": "TERRA-PSAI52-ROOT-QS-01",
+  "privateLeak": "customer@example.invalid"
+}

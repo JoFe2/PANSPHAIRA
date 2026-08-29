@@ -1,0 +1,114 @@
+{
+  "lease": {
+    "request": {
+      "schemaVersion": "cm.ccp-runner-lease-request/v1",
+      "ledgerId": "ledger:ccp-runner",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-runner-success",
+      "candidateDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "admissionReceiptDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "runnerProfileDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "logicalAtMs": 1000,
+      "leaseOrdinal": 1,
+      "leaseDurationMs": 300,
+      "isolationMode": "EPHEMERAL_ISOLATED",
+      "networkPolicy": "DENY_ALL",
+      "secretPolicy": "DENY_ALL",
+      "mergeAuthority": "NONE"
+    },
+    "context": {
+      "schemaVersion": "cm.ccp-runner-lease-context/v1",
+      "ledgerId": "ledger:ccp-runner",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-runner-success",
+      "nextLeaseOrdinal": 1,
+      "lastIssuedLogicalAtMs": 900,
+      "activeLeaseId": null
+    }
+  },
+  "cache": {
+    "request": {
+      "schemaVersion": "cm.ccp-test-cache-request/v1",
+      "ledgerId": "ledger:ccp-runner",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-runner-success",
+      "cacheKey": {
+        "schemaVersion": "cm.ccp-test-cache-key/v1",
+        "sourceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "dependencyLockDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "testPlanDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "runnerProfileDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      }
+    },
+    "context": {
+      "schemaVersion": "cm.ccp-test-cache-context/v1",
+      "logicalAtMs": 1200,
+      "entries": [
+        {
+          "schemaVersion": "cm.ccp-test-cache-entry/v1",
+          "ledgerId": "ledger:ccp-runner",
+          "tenantId": "tenant:synthetic",
+          "repositoryId": "repository:pansphaira",
+          "contributionId": "contribution:psai52-runner-success",
+          "cacheKey": {
+            "schemaVersion": "cm.ccp-test-cache-key/v1",
+            "sourceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "dependencyLockDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "testPlanDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "runnerProfileDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          },
+          "resultDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "isolationLeaseReceiptDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+          "cleanupReceiptDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "testOutcome": "PASS",
+          "cleanupOutcome": "ZERO_RESIDUE",
+          "storedAtMs": 1100
+        },
+        {
+          "schemaVersion": "cm.ccp-test-cache-entry/v1",
+          "ledgerId": "ledger:ccp-runner",
+          "tenantId": "tenant:foreign",
+          "repositoryId": "repository:pansphaira",
+          "contributionId": "contribution:foreign",
+          "cacheKey": {
+            "schemaVersion": "cm.ccp-test-cache-key/v1",
+            "sourceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "dependencyLockDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "testPlanDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "runnerProfileDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          },
+          "resultDigest": "9999999999999999999999999999999999999999999999999999999999999999",
+          "isolationLeaseReceiptDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+          "cleanupReceiptDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "testOutcome": "PASS",
+          "cleanupOutcome": "ZERO_RESIDUE",
+          "storedAtMs": 1100
+        }
+      ]
+    }
+  },
+  "cleanup": {
+    "request": {
+      "schemaVersion": "cm.ccp-runner-cleanup-request/v1",
+      "ledgerId": "ledger:ccp-runner",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-runner-success",
+      "leaseId": "lease:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "leaseReceiptDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "ownedResourceRefs": ["resource:runner-root", "resource:runner-output"],
+      "logicalAtMs": 1000,
+      "termination": "COMPLETED"
+    },
+    "observation": {
+      "schemaVersion": "cm.ccp-runner-cleanup-observation/v1",
+      "leaseId": "lease:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "cleanupAttempted": true,
+      "remainingResourceRefs": [],
+      "logicalAtMs": 1300
+    }
+  }
+}

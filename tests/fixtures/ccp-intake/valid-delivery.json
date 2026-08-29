@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "cm.ccp-event-envelope/v1",
+  "ledgerId": "ledger:ccp-synthetic",
+  "tenantId": "tenant:synthetic",
+  "repositoryId": "repository:pansphaira",
+  "contributionId": "contribution:psai52",
+  "deliveryId": "delivery:valid-0001",
+  "headDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "payloadDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "ancestorDigest": null,
+  "logicalAtMs": 10
+}
