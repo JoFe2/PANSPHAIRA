@@ -1,0 +1,108 @@
+{
+  "$id": "https://chimpmaera.dev/schemas/contracts/cks-vocabulary-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChimpMaera competence-knowledge additive authority-free vocabulary v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "knowledgeKinds", "qualificationLevels", "maturityLevels", "complexityDimensions", "denialReasons", "authorityBoundary", "nonclaims", "vocabularyDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.cks/vocabulary/v1" },
+    "authorityBoundary": { "const": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY" },
+    "knowledgeKinds": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": false,
+      "prefixItems": [
+        { "const": "FACT" },
+        { "const": "RULE" },
+        { "const": "PROCEDURE" },
+        { "const": "GUIDE" },
+        { "const": "EXAMPLE" },
+        { "const": "COUNTEREXAMPLE" },
+        { "const": "CONSTRAINT" }
+      ]
+    },
+    "qualificationLevels": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": false,
+      "prefixItems": [
+        { "const": "Q0" },
+        { "const": "Q1" },
+        { "const": "Q2" },
+        { "const": "Q3" },
+        { "const": "Q4" },
+        { "const": "Q5" },
+        { "const": "Q6" }
+      ]
+    },
+    "maturityLevels": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": false,
+      "prefixItems": [
+        { "const": "L0" },
+        { "const": "L1" },
+        { "const": "L2" },
+        { "const": "L3" },
+        { "const": "L4" },
+        { "const": "L5" },
+        { "const": "L6" }
+      ]
+    },
+    "complexityDimensions": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": false,
+      "prefixItems": [
+        { "const": "R" },
+        { "const": "K" },
+        { "const": "P" },
+        { "const": "U" }
+      ]
+    },
+    "denialReasons": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": false,
+      "prefixItems": [
+        { "const": "SCHEMA_DENIED" },
+        { "const": "STALE_VERSION_DENIED" },
+        { "const": "AUTHORITY_DENIED" },
+        { "const": "REGISTRY_MUTATION_DENIED" },
+        { "const": "NONCLAIM_MUTATION_DENIED" },
+        { "const": "APPLICABILITY_MISMATCH_DENIED" },
+        { "const": "CROSS_SCOPE_BINDING_DENIED" },
+        { "const": "DIGEST_TAMPERED_DENIED" }
+      ]
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": false,
+      "prefixItems": [
+        { "const": "NO_KNOWLEDGE_OBJECT_SEMANTICS" },
+        { "const": "NO_QUERY_SEMANTICS" },
+        { "const": "NO_APPLICABILITY_SEMANTICS" },
+        { "const": "NO_EVIDENCE_SEMANTICS" },
+        { "const": "NO_QUALIFICATION_ASSESSMENT_SEMANTICS" },
+        { "const": "NO_ESCALATION_SEMANTICS" },
+        { "const": "NO_STORAGE_SEMANTICS" },
+        { "const": "NO_RETRIEVAL_SEMANTICS" },
+        { "const": "NO_ROUTING_OR_PROVIDER_SEMANTICS" },
+        { "const": "NO_CAPABILITY_OR_POLICY_SEMANTICS" },
+        { "const": "NO_WRITE_OR_EXECUTION_AUTHORITY" },
+        { "const": "NO_RUNTIME_ACTIVATION_SEMANTICS" },
+        { "const": "LEVELS_AND_DIMENSIONS_CARRY_NO_SCORE_WEIGHT_OR_THRESHOLD" },
+        { "const": "VOCABULARY_IS_NOT_A_TRUTH_CLAIM" }
+      ]
+    },
+    "vocabularyDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

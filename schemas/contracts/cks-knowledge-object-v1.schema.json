@@ -1,0 +1,48 @@
+{
+  "$id": "https://chimpmaera.dev/schemas/contracts/cks-knowledge-object-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChimpMaera CKS Knowledge Object binding v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "objectId", "provenance", "knowledgeKind", "qualificationLevel", "maturityLevel", "complexityDimensions", "validity", "status", "supersedes", "authority", "objectDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.cks/knowledge-object/v1" },
+    "objectId": { "$ref": "#/$defs/id" },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["envelopeId", "envelopeDigest", "scopeNamespace"],
+      "properties": { "envelopeId": { "$ref": "#/$defs/id" }, "envelopeDigest": { "$ref": "#/$defs/digest" }, "scopeNamespace": { "$ref": "#/$defs/text" } }
+    },
+    "knowledgeKind": { "enum": ["FACT", "RULE", "PROCEDURE", "GUIDE", "EXAMPLE", "COUNTEREXAMPLE", "CONSTRAINT"] },
+    "qualificationLevel": { "enum": ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6"] },
+    "maturityLevel": { "enum": ["L0", "L1", "L2", "L3", "L4", "L5", "L6"] },
+    "complexityDimensions": { "type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": { "enum": ["R", "K", "P", "U"] } },
+    "validity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["notBeforeMs", "notAfterMs"],
+      "properties": { "notBeforeMs": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }, "notAfterMs": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 } }
+    },
+    "status": { "enum": ["ACTIVE", "SUPERSEDED"] },
+    "supersedes": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "#/$defs/objectReference" } },
+    "authority": { "$ref": "#/$defs/authority" },
+    "objectDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "text": { "type": "string", "minLength": 1, "maxLength": 96, "pattern": "^[^\\u0000-\\u001f]+$" },
+    "objectReference": {
+      "type": "object", "additionalProperties": false, "required": ["objectId", "objectDigest"],
+      "properties": { "objectId": { "$ref": "#/$defs/id" }, "objectDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "authority": {
+      "type": "object", "additionalProperties": false,
+      "required": ["credentials", "policyApprovals", "capabilities", "toolAccess", "writeTargets", "executionRoutes"],
+      "properties": {
+        "credentials": { "type": "array", "maxItems": 0 }, "policyApprovals": { "type": "array", "maxItems": 0 },
+        "capabilities": { "type": "array", "maxItems": 0 }, "toolAccess": { "type": "array", "maxItems": 0 },
+        "writeTargets": { "type": "array", "maxItems": 0 }, "executionRoutes": { "type": "array", "maxItems": 0 }
+      }
+    }
+  }
+}
