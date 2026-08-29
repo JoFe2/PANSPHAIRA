@@ -1,0 +1,1128 @@
+{
+  "receiptFormatVersion": "1.0.0",
+  "receiptType": "ADR_DECISION_INTEGRATION_RECEIPT",
+  "receiptId": "SOL-PSAI52-STATE-RECONCILE-01",
+  "taskId": "SOL-PSAI52-STATE-RECONCILE-01",
+  "title": "Local deterministic M0-M2 contribution-control proof boundary",
+  "decision": {
+    "status": "ACCEPTED",
+    "scope": "LOCAL_DETERMINISTIC_SYNTHETIC_M0_M2_PROOF_BOUNDARY_ONLY",
+    "summary": "Freeze the selected live base and the additive integration boundary for a pure local contribution intake, scheduling, verification, merge-authorization and LKG-recovery simulation.",
+    "implementationStatus": "BOUNDARY_RECORDED_IMPLEMENTATION_NOT_PRESENT",
+    "acceptanceProofStatus": "NOT_CLAIMED_BY_THIS_RECEIPT",
+    "deliveryStatus": "LOCAL_RECEIPT_ONLY",
+    "authorityGranted": false
+  },
+  "governingContext": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "interpretation": "The governing decisions remain authoritative and are referenced, not restated, replaced or reinterpreted here.",
+    "newProcessVariantIntroduced": false
+  },
+  "selectedLiveBase": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "workspace": "/mnt/data2/ai/development-conveyor/docker-workspaces/lane-2/materialized-pansphaira-52",
+    "branchAtRead": "conveyor/pansphaira-52",
+    "selectedRef": "origin/main",
+    "headCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "mergeBaseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "tree": "f7d81474939d1898c305859526b34c0f545dcdf0",
+    "parentCommit": "e9dd4ec9d64e5eeb19a24f4bed8c998057e83b6d",
+    "authorDate": "2026-08-26T12:13:06+02:00",
+    "committerDate": "2026-08-26T12:13:06+02:00",
+    "subject": "docs: keep README quickstart bound to release truth (#293)",
+    "worktreeBeforeReceipt": "CLEAN",
+    "baseSelectionRule": "All status and integration decisions in this receipt come from direct reads of this exact tree. Issue text and predecessor plans are not treated as evidence of live-base status."
+  },
+  "repositoryProfile": {
+    "package": {
+      "name": "chimpmaera",
+      "version": "0.2.0-poc.20260810.5",
+      "moduleType": "module"
+    },
+    "toolchainContract": {
+      "nodeEngine": ">=24.14.1 <25",
+      "npmEngine": ">=11.11.0 <12",
+      "packageManager": "npm@11.16.0",
+      "lockfile": "package-lock.json",
+      "lockfileVersion": 3,
+      "typescriptConfig": "tsconfig.json"
+    },
+    "authoritativeCommands": {
+      "build": "npm run build",
+      "buildScript": "tsc -p tsconfig.json",
+      "lint": "npm run lint",
+      "lintScript": "tsc -p tsconfig.json --noEmit",
+      "fullTest": "npm run test",
+      "focusedExistingIntake": "npm run contribution-intake:test",
+      "focusedExistingIntakeScript": "npm run build --silent && node --test dist/tests/contribution-intake-ledger.test.js",
+      "verificationPlan": "npm run verification:plan",
+      "verificationShadow": "npm run verification:shadow",
+      "successorFocusedSimulation": "npm run build --silent && node --test dist/tests/contribution-control-plane-simulation.test.js",
+      "requiredRepositoryDiffCheck": "git diff --check origin/main...HEAD"
+    },
+    "localToolingObservation": {
+      "nodeVersionObserved": "v24.19.0",
+      "npmVersionObserved": null,
+      "status": "INFRASTRUCTURE_BLOCKED",
+      "attempt": "node --version followed by npm --version",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "diagnostic": "V8 fatal SetPermissions check: 12 == errno",
+      "productVerdict": "NONE",
+      "handling": "Record as local infrastructure evidence; do not convert it into a product failure or a passing test claim. The controller must run authoritative npm gates on pinned Node/host infrastructure."
+    }
+  },
+  "liveBaseReconciliation": {
+    "dedicatedM0M2Simulation": {
+      "status": "ABSENT_ADDITIVE_WORK_REQUIRED",
+      "observedAbsentPaths": [
+        "packages/contracts/src/contribution-control-plane-simulation.ts",
+        "schemas/contracts/contribution-control-plane-simulation-v1.schema.json",
+        "tests/contribution-control-plane-simulation.test.ts",
+        "tests/fixtures/contribution-control-plane"
+      ],
+      "statement": "The selected tree contains no dedicated local deterministic M0-M2 queue, slot, fairness, merge-authorization or recovery simulator."
+    },
+    "existingIntakeLedger": {
+      "status": "EXISTING_AND_COMPLETE_FOR_ITS_CURRENT_BOUNDED_SCOPE",
+      "source": "packages/contracts/src/contribution-intake-ledger.ts",
+      "schema": "schemas/contracts/contribution-intake-ledger-v1.schema.json",
+      "tests": "tests/contribution-intake-ledger.test.ts",
+      "developmentRecord": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
+      "publicClosureObservation": "The source, schema and test are present in release/public-files.manifest and SHA256SUMS on the selected base.",
+      "releaseClaimObservation": "No contribution-intake entry was found in release/governance.json or docs/capabilities.md; this receipt therefore makes no regular-release status claim for the ledger.",
+      "existingProfileEvidence": {
+        "tenEventFixture": true,
+        "fiftyValueInProcessArrayFixture": true,
+        "oneHundredValueInProcessArrayFixture": true,
+        "oneThousandEventProfile": false,
+        "tenThousandEventProfile": false,
+        "eventsPerHourClaim": false,
+        "existingTestCount": 27
+      },
+      "existingSemantics": [
+        "A prevalidated trust context binds ledger, tenant, repository, contribution, actor, authority-evidence and authority-scope identities.",
+        "Exact transport redelivery returns TRANSPORT_DUPLICATE without appending a second ledger entry.",
+        "Delivery-ID reuse with changed canonical delivery bytes is quarantined as tamper.",
+        "The same current head is a SEMANTIC_DUPLICATE; replay of a superseded or invalidated head is STALE and quarantined.",
+        "A new descendant or force-pushed head supersedes the prior current head; only the current appended head is deep-CI eligible.",
+        "Scope substitution, authority widening and authority change are rejected and quarantined.",
+        "Entry sequence is one-based and contiguous, previousEntryDigest forms an append-only digest chain, and full verification semantically replays from genesis."
+      ],
+      "explicitCurrentNonClaims": [
+        "events/hour",
+        "persistence",
+        "crash recovery",
+        "concurrency",
+        "throughput",
+        "memory",
+        "cost",
+        "fairness",
+        "queue age",
+        "recovery SLO",
+        "real CI slots",
+        "Git ancestry",
+        "GitHub delivery",
+        "webhooks",
+        "runners",
+        "queues",
+        "caches",
+        "merge trains",
+        "promotion",
+        "LKG fallback",
+        "automatic merge",
+        "deployment",
+        "production operation",
+        "production capacity"
+      ]
+    },
+    "existingCanonicalContract": {
+      "status": "EXISTING_AND_COMPLETE_SHARED_PRIMITIVE",
+      "typescriptSource": "packages/contracts/src/canonical-json.ts",
+      "runtimeSource": "packages/contracts/src/canonical-json.js",
+      "parityTest": "tests/canonical-json-runtime-parity.test.mjs",
+      "barrelExport": "canonicalJson",
+      "algorithm": {
+        "objectOrder": "Own enumerable string keys sorted by JavaScript Array.prototype.sort; arrays retain index order.",
+        "scalarEncoding": "JSON.stringify for null, booleans, finite numbers and strings.",
+        "acceptedContainers": "Arrays and ordinary plain objects only.",
+        "rejections": [
+          "non-finite numbers",
+          "undefined object values",
+          "non-plain objects"
+        ],
+        "bytes": "UTF-8 bytes of canonicalJson(value), with no trailing newline.",
+        "digest": "SHA-256 over the exact UTF-8 bytes, encoded as 64 lowercase hexadecimal characters.",
+        "domainSeparation": "For contribution intake, hash canonicalJson({domain, value}); the domain is an exact immutable versioned string.",
+        "trust": "A digest is a content-integrity binding, not a signature, identity assertion or authority grant."
+      },
+      "successorNumericRestriction": "The M0-M2 additive contract must accept only closed JSON data and non-negative safe integers, must reject negative zero, floats, unsafe integers, sparse or exotic arrays, accessors, symbols, cycles, dangerous keys and non-plain prototypes before canonicalization."
+    },
+    "existingVerificationFabric": {
+      "status": "EXISTING_AND_COMPLETE_SHARED_INTERFACES",
+      "v1Source": "packages/contracts/src/verification-fabric.ts",
+      "v1Schema": "schemas/contracts/verification-fabric-bundle-v1.schema.json",
+      "v1Tests": "tests/verification-fabric.test.ts",
+      "v2Source": "packages/contracts/src/verification-fabric-v2.ts",
+      "v2DagSchema": "schemas/contracts/verification-evidence-dag-v2.schema.json",
+      "v2AttestationSchema": "schemas/contracts/verification-attestation-v2.schema.json",
+      "v2Tests": "tests/verification-fabric-v2.test.ts",
+      "dag": "verification/verification-dag-v2.json",
+      "v1Purpose": "Closed verification plan, independent self-test identity, check runs, evidence bundle, verdict, revalidation trigger and LKG pointer/readback verification.",
+      "v2Purpose": "Repository evidence-DAG validation, impact planning, fail-closed fallback, attestation verification and shadow-comparison interfaces.",
+      "compositionDecision": "The successor simulator consumes these exports and emits compatible local-synthetic data. It must not fork their schema strings, reason codes, digest rules or independence checks. It must not invoke real checks or treat shadow mode as merge authority."
+    },
+    "existingVersionAndLkgContracts": {
+      "status": "EXISTING_AND_COMPLETE_SHARED_INTERFACES",
+      "tupleSource": "packages/contracts/src/update-check-plan.ts",
+      "tupleLockSource": "packages/contracts/src/update-apply-tuple-lock.ts",
+      "postconditionSource": "packages/contracts/src/update-apply-postcondition.ts",
+      "continuitySource": "packages/contracts/src/update-continuity-decision.ts",
+      "maintenanceLockSource": "packages/contracts/src/maintenance-contract-freeze.ts",
+      "decision": "Reuse the six-axis UpdateTupleV1/updateTupleDigestV1 and exact tuple-lock/LKG verification patterns as shared version-lock primitives. The contribution-control simulator adds its own closed merge-state tuple; it does not alter or relabel update/maintenance contracts and none of those contracts grants merge authority."
+    },
+    "barrel": {
+      "status": "EXISTING_AND_EXTENDABLE",
+      "path": "packages/contracts/src/index.ts",
+      "currentBindings": [
+        "export { canonicalJson } from ./canonical-json.js",
+        "export * from ./contribution-intake-ledger.js",
+        "export * from ./verification-fabric.js",
+        "export * from ./verification-fabric-v2.js",
+        "export * from ./maintenance-contract-freeze.js",
+        "export * from ./update-check-plan.js",
+        "export * from ./update-apply-postcondition.js",
+        "export * from ./update-apply-tuple-lock.js",
+        "export * from ./update-continuity-decision.js"
+      ],
+      "allowedFutureExtension": "One additive export from ./contribution-control-plane-simulation.js after its implementation and tests exist."
+    }
+  },
+  "authoritativeExports": {
+    "canonical": {
+      "module": "packages/contracts/src/canonical-json.ts",
+      "exports": [
+        "canonicalJson"
+      ]
+    },
+    "intake": {
+      "module": "packages/contracts/src/contribution-intake-ledger.ts",
+      "schemaConstants": [
+        "CONTRIBUTION_INTAKE_TRUST_CONTEXT_SCHEMA_V1",
+        "CONTRIBUTION_INTAKE_LEDGER_SCHEMA_V1",
+        "CONTRIBUTION_INTAKE_RECEIPT_SCHEMA_V1",
+        "CONTRIBUTION_DELIVERY_SCHEMA_V1",
+        "CONTRIBUTION_SUBMITTED_IDENTITY_EVIDENCE_SCHEMA_V1"
+      ],
+      "valueConstants": [
+        "CONTRIBUTION_AUTHORITY_SCOPES_V1",
+        "CONTRIBUTION_INTAKE_ENTRY_DISPOSITIONS_V1",
+        "CONTRIBUTION_INTAKE_REASON_CODES_V1",
+        "CONTRIBUTION_SUBMITTED_IDENTITY_BINDINGS_V1"
+      ],
+      "types": [
+        "ContributionAuthorityScopeV1",
+        "ContributionIntakeDispositionV1",
+        "ContributionIntakeEntryDispositionV1",
+        "ContributionIntakeReasonCodeV1",
+        "ContributionHeadStatusV1",
+        "ContributionSubmittedIdentityBindingV1",
+        "ContributionIntakeTrustContextInputV1",
+        "ContributionIntakeTrustContextV1",
+        "ContributionDeliveryV1",
+        "ContributionSubmittedIdentityEvidenceV1",
+        "ContributionIntakeEntryV1",
+        "ContributionIntakeLedgerV1",
+        "ContributionIntakeReceiptV1",
+        "ContributionIntakeClassificationV1",
+        "VerifiedContributionIntakeTrustContextV1",
+        "VerifiedContributionIntakeLedgerV1",
+        "VerifiedContributionIntakeReceiptV1"
+      ],
+      "functions": [
+        "bindPrevalidatedContributionIntakeTrustContextV1",
+        "createContributionIntakeLedgerV1",
+        "verifyContributionIntakeLedgerV1",
+        "classifyContributionDeliveryV1",
+        "verifyContributionIntakeReceiptV1",
+        "ingestContributionDeliveryV1",
+        "replayContributionIntakeV1",
+        "currentHeadEntryV1",
+        "headStatusV1",
+        "deepCiEligibleEntriesV1",
+        "isDeepCiEligibleV1",
+        "quarantinedEntriesV1"
+      ]
+    },
+    "verificationFabricV1": {
+      "module": "packages/contracts/src/verification-fabric.ts",
+      "schemaConstants": [
+        "VERIFICATION_FABRIC_BUNDLE_SCHEMA_V1",
+        "VERIFICATION_PLAN_SCHEMA_V1",
+        "VERIFICATION_CHECK_RUN_SCHEMA_V1",
+        "VERIFICATION_EVIDENCE_BUNDLE_SCHEMA_V1",
+        "VERIFICATION_VERDICT_SCHEMA_V1",
+        "VERIFICATION_SELF_TEST_IDENTITY_SCHEMA_V1",
+        "VERIFICATION_REVALIDATION_TRIGGER_SCHEMA_V1",
+        "VERIFICATION_LKG_POINTER_SCHEMA_V1",
+        "VERIFICATION_LKG_READBACK_SCHEMA_V1"
+      ],
+      "types": [
+        "VerificationReasonCodeV1",
+        "VerificationPlanV1",
+        "VerificationCheckRunV1",
+        "VerificationEvidenceBundleV1",
+        "VerificationVerdictV1",
+        "VerificationSelfTestIdentityV1",
+        "VerificationRevalidationTriggerV1",
+        "VerificationLkgPointerV1",
+        "VerificationLkgReadbackV1",
+        "VerificationFabricBundleV1",
+        "VerificationFabricResultV1"
+      ],
+      "functions": [
+        "verifyVerificationFabricBundleV1"
+      ]
+    },
+    "verificationFabricV2": {
+      "module": "packages/contracts/src/verification-fabric-v2.ts",
+      "schemaConstants": [
+        "VERIFICATION_DAG_SCHEMA_V2",
+        "VERIFICATION_IMPACT_PLAN_SCHEMA_V2",
+        "VERIFICATION_ATTESTATION_SCHEMA_V2",
+        "VERIFICATION_SHADOW_REPORT_SCHEMA_V2",
+        "DEFAULT_VERIFICATION_HARD_GATES_V2"
+      ],
+      "types": [
+        "VerificationInputRoleV2",
+        "VerificationDagInputV2",
+        "VerificationDagNodeV2",
+        "VerificationDagV2",
+        "VerificationFallbackReasonV2",
+        "VerificationImpactPlanV2",
+        "VerificationAttestationV2",
+        "VerificationAttestationDenialV2",
+        "VerificationShadowReportV2"
+      ],
+      "functions": [
+        "isSafeRepositoryPathV2",
+        "validateVerificationDagV2",
+        "verificationDagDigestV2",
+        "verificationNodeDigestV2",
+        "buildVerificationImpactPlanV2",
+        "buildVerificationImpactPlanFailClosedV2",
+        "verificationAttestationDigestV2",
+        "verifyPrototypeAttestationV2",
+        "runVerificationShadowComparatorV2"
+      ],
+      "executionFence": "runVerificationShadowComparatorV2 is an existing interface but is outside this simulator's execution boundary; the simulator records fixture outcomes as data and never launches checks or candidate code."
+    },
+    "versionLock": {
+      "tupleModule": "packages/contracts/src/update-check-plan.ts",
+      "tupleExports": [
+        "UPDATE_AXIS_NAMES_V1",
+        "UpdateAxisNameV1",
+        "UpdateAxisComponentV1",
+        "UpdateTupleV1",
+        "UPDATE_LKG_SCHEMA_V1",
+        "UpdateLkgV1",
+        "updateTupleDigestV1"
+      ],
+      "tupleAxesInAuthoritativeOrder": [
+        "core",
+        "packs",
+        "adapters",
+        "policies",
+        "schemas",
+        "generations"
+      ],
+      "tupleLockModule": "packages/contracts/src/update-apply-tuple-lock.ts",
+      "tupleLockExports": [
+        "UPDATE_APPLY_TUPLE_LOCK_SCHEMA_V1",
+        "UPDATE_APPLY_TUPLE_LOCK_STATE_V1",
+        "UpdateApplyTupleSideInputV1",
+        "UpdateApplyTupleLockInputV1",
+        "UpdateApplyTupleLockV1",
+        "updateApplyTupleLockDigestV1",
+        "checkUpdateApplyTupleLockV1"
+      ],
+      "rules": [
+        "Every axis is present and non-empty for a complete lock.",
+        "Each component has an axis-appropriate componentId, an exact immutable semantic version and a SHA-256 digest.",
+        "Component IDs are unique within an axis and are sorted by componentId before canonical projection.",
+        "Mutable aliases, latest, ranges, unresolved values, duplicate components and digest drift deny fail closed.",
+        "The authority profile digest is immutable across a checked transition.",
+        "Version-lock acceptance is not execution, merge, promotion or release authority."
+      ]
+    }
+  },
+  "pathOwnership": {
+    "thisWorkerWritablePaths": [
+      {
+        "path": "docs/evidence/conveyor/sol-psai52-state-reconcile-01.json",
+        "classification": "ADDITIVE",
+        "purpose": "This ADR decision/integration receipt only."
+      }
+    ],
+    "existingAndComplete": [
+      "packages/contracts/src/canonical-json.ts",
+      "packages/contracts/src/canonical-json.js",
+      "packages/contracts/src/contribution-intake-ledger.ts",
+      "schemas/contracts/contribution-intake-ledger-v1.schema.json",
+      "tests/contribution-intake-ledger.test.ts",
+      "packages/contracts/src/verification-fabric.ts",
+      "packages/contracts/src/verification-fabric-v2.ts",
+      "schemas/contracts/verification-fabric-bundle-v1.schema.json",
+      "schemas/contracts/verification-evidence-dag-v2.schema.json",
+      "schemas/contracts/verification-attestation-v2.schema.json",
+      "tests/verification-fabric.test.ts",
+      "tests/verification-fabric-v2.test.ts",
+      "packages/contracts/src/maintenance-contract-freeze.ts",
+      "packages/contracts/src/update-check-plan.ts",
+      "packages/contracts/src/update-apply-tuple-lock.ts",
+      "packages/contracts/src/update-apply-postcondition.ts",
+      "packages/contracts/src/update-continuity-decision.ts"
+    ],
+    "existingAndExtendableByASeparateImplementationSlice": [
+      {
+        "path": "packages/contracts/src/index.ts",
+        "extension": "Add only the new simulator barrel export."
+      },
+      {
+        "path": "package.json",
+        "extension": "Add only a focused simulator test script if the implementation slice requires it."
+      },
+      {
+        "path": "verification/verification-dag-v2.json",
+        "extension": "Add only bounded simulator source/schema/test ownership and evidence edges while preserving existing hard gates."
+      }
+    ],
+    "additivePathsFrozenForASeparateImplementationSlice": [
+      "packages/contracts/src/contribution-control-plane-simulation.ts",
+      "schemas/contracts/contribution-control-plane-simulation-v1.schema.json",
+      "tests/contribution-control-plane-simulation.test.ts",
+      "tests/fixtures/contribution-control-plane/inputs/profiles-v1.json",
+      "tests/fixtures/contribution-control-plane/inputs/faults-v1.json",
+      "tests/fixtures/contribution-control-plane/expected/profiles-v1.json",
+      "tests/fixtures/contribution-control-plane/expected/faults-v1.json"
+    ],
+    "notOwnedOrAuthorizedByThisReceipt": [
+      "product code outside the separately listed successor paths",
+      "release/governance.json",
+      "release/public-files.manifest",
+      "SHA256SUMS",
+      "CI configuration",
+      "credentials or secret stores",
+      "remotes, providers, services or external state"
+    ],
+    "rule": "No path outside docs/evidence/conveyor/sol-psai52-state-reconcile-01.json may be changed by SOL-PSAI52-STATE-RECONCILE-01. Successor path entries describe an integration boundary, not authority for this worker to modify them."
+  },
+  "fixtureContract": {
+    "root": "tests/fixtures/contribution-control-plane",
+    "statusOnSelectedBase": "ABSENT_ADDITIVE",
+    "inputRoot": "tests/fixtures/contribution-control-plane/inputs",
+    "expectedOutputRoot": "tests/fixtures/contribution-control-plane/expected",
+    "runtimeOutputLocation": "IN_MEMORY_ONLY",
+    "runtimeFilesystemWrites": false,
+    "profileEnvelope": {
+      "logicalWindowMs": 3600000,
+      "profileLabelsAreRates": false,
+      "profiles": [
+        {
+          "profileId": "profile:synthetic-10-events-per-logical-hour",
+          "eventCount": 10
+        },
+        {
+          "profileId": "profile:synthetic-50-events-per-logical-hour",
+          "eventCount": 50
+        },
+        {
+          "profileId": "profile:synthetic-100-events-per-logical-hour",
+          "eventCount": 100
+        },
+        {
+          "profileId": "profile:synthetic-1000-events-per-logical-hour",
+          "eventCount": 1000
+        },
+        {
+          "profileId": "profile:synthetic-10000-events-per-logical-hour",
+          "eventCount": 10000
+        }
+      ],
+      "maximumEventCount": 10000,
+      "syntheticContributorCount": 5,
+      "sourceOrdinal": "Each profile event wrapper carries a strict one-based contiguous sourceOrdinal. The inner ContributionDeliveryV1 remains unchanged and closed.",
+      "logicalTime": "Each event carries fixture-supplied logicalAtMs in the closed wrapper; logicalAtMs is non-decreasing and within [0, logicalWindowMs).",
+      "generation": "IDs, digests, event classes and fault positions are derived solely from the locked seed, profileId and sourceOrdinal. No wall clock or random source participates."
+    },
+    "boundedOutputs": {
+      "eventReceipts": "At most one wrapper receipt per source event.",
+      "intakeLedgerEntries": "At most eventCount; exact transport redeliveries do not append.",
+      "semanticEffects": "At most eventCount and unique by semanticEffectId.",
+      "queueRecords": "At most one live queue record per current semantic identity.",
+      "slotRecords": "At most the finite slot count per scheduling tick.",
+      "mergeEffects": "At most one authorized semantic merge effect per mergeTupleDigest.",
+      "summaries": "Exactly one canonical terminal summary per scenario."
+    },
+    "fixtureSafeContributorProjection": {
+      "closedFields": [
+        "contributorId",
+        "fixtureClass",
+        "intakeStatus",
+        "queueStatus",
+        "fairnessStatus",
+        "recoveryStatus",
+        "lastLogicalSequence",
+        "synthetic"
+      ],
+      "fixtureClass": "LOCAL_SYNTHETIC_NON_PERSON",
+      "synthetic": true,
+      "intakeStatusValues": [
+        "ADMITTED_SYNTHETIC",
+        "QUARANTINED_SYNTHETIC"
+      ],
+      "queueStatusValues": [
+        "NOT_QUEUED",
+        "QUEUED",
+        "LEASED",
+        "TERMINAL"
+      ],
+      "fairnessStatusValues": [
+        "WITHIN_SYNTHETIC_BOUND",
+        "BOUND_EXCEEDED"
+      ],
+      "recoveryStatusValues": [
+        "STABLE",
+        "RECOVERING",
+        "RESTORED",
+        "FAILED_CLOSED"
+      ],
+      "forbiddenFields": [
+        "name",
+        "email",
+        "login",
+        "organization",
+        "team",
+        "token",
+        "credential",
+        "secret",
+        "networkLocator",
+        "providerIdentity",
+        "freeText"
+      ],
+      "statusMeaning": "Fixture statuses describe only simulated state; they do not state contributor trust, employment, entitlement, reputation, review approval or merge authority."
+    },
+    "fixtureDataFence": "Fixtures are closed JSON data only. They contain no executable source, command, shell fragment, path traversal, URL, callback, package reference, credential, personal data or production payload."
+  },
+  "determinismContract": {
+    "phaseOrder": [
+      "M0_RECONCILE_COMPLETE_PROFILE",
+      "M1_SCHEDULE_CURRENT_HEADS",
+      "M2_VERIFY_AUTHORIZE_AND_READ_BACK"
+    ],
+    "canonicalSerialization": "Use the existing canonicalJson export and the stricter successor numeric/data boundary recorded above.",
+    "canonicalBytes": "UTF-8(canonicalJson(value)) with no BOM and no trailing newline.",
+    "digestAlgorithm": "SHA-256",
+    "digestEncoding": "lowercase hexadecimal, exactly 64 characters",
+    "domainRule": "Every digestable type uses canonicalJson({domain, value}) where domain is an immutable exact versioned string; self-digest fields are excluded before wrapping.",
+    "clock": {
+      "kind": "INJECTED_LOGICAL_CLOCK",
+      "input": "logicalAtMs",
+      "initialValue": 0,
+      "unit": "logical millisecond",
+      "advanceRule": "Advance only to explicit fixture times or by one scheduler tick; never read Date, Date.now, performance.now, process uptime or filesystem timestamps.",
+      "orderingUse": "Logical time measures queue age, evidence age and recovery only after sourceOrdinal has fixed causal order."
+    },
+    "seed": {
+      "kind": "INJECTED_IMMUTABLE_SEED",
+      "lockedValue": "SOL-PSAI52-M0-M2-SEED-V1",
+      "derivation": "SHA-256 of canonicalJson({domain:'cm.conveyor-fixture-derive/v1',value:{seed,profileId,label,sourceOrdinal}})",
+      "randomGenerator": "NONE",
+      "forbiddenSources": [
+        "Math.random",
+        "crypto.randomBytes",
+        "crypto.randomUUID",
+        "UUID defaults",
+        "ambient process state"
+      ]
+    },
+    "replayOracle": "Two fresh replays of canonical-equivalent cloned inputs under the same version lock, clock and seed must produce byte-identical canonical terminal state, receipts, metrics and digests. Object insertion order must not alter bytes.",
+    "versionLock": "The exact shared six-axis tuple digest, simulator contract version, canonicalizer source digest, verification DAG digest and fixture-manifest digest are inputs to every scenario digest. Mutable or missing inputs deny before M0."
+  },
+  "stateModel": {
+    "eventIdentityVersusSemanticIdentity": {
+      "eventIdentity": {
+        "keyFields": [
+          "ledgerId",
+          "tenantId",
+          "repositoryId",
+          "contributionId",
+          "deliveryId"
+        ],
+        "contentDigest": "Digest of the complete normalized ContributionDeliveryV1 under cm.contribution-delivery/v1.",
+        "exactRedelivery": "The key and complete content digest match an earlier delivery. Return TRANSPORT_DUPLICATE and the prior intake sequence; append no entry and apply no semantic effect.",
+        "keyReuseWithDifferentBytes": "Quarantine as DELIVERY_ID_REUSE_TAMPER and apply no semantic effect."
+      },
+      "semanticIdentity": {
+        "keyFields": [
+          "tenantId",
+          "repositoryId",
+          "contributionId",
+          "headDigest"
+        ],
+        "semanticEffectId": "SHA-256 domain-bound digest of the closed semantic-identity fields plus effectKind.",
+        "sameCurrentHead": "A new transport event for the same semantic identity is SEMANTIC_DUPLICATE and applies no second semantic effect.",
+        "newHead": "A distinct headDigest for the same contribution creates one HEAD_RECONCILED effect and supersedes exactly the prior current head.",
+        "exactlyOnceInvariant": "All semanticEffectId values are unique; each admitted non-duplicate current-head transition has exactly one effect, and no denied, stale, transport-duplicate or semantic-duplicate event has an effect."
+      }
+    },
+    "sequenceAndCausality": {
+      "sourceOrder": "sourceOrdinal is strict, contiguous, one-based and authoritative within a profile; missing, duplicate, regressing or gapped ordinals deny the complete profile.",
+      "intakeSequence": "Preserve ContributionIntakeLedgerV1 one-based contiguous sequences and previousEntryDigest chaining. Exact redelivery reuses its prior sequence and does not advance nextSequence.",
+      "effectSequence": "Each applied semantic effect receives the next one-based contiguous effectSequence; events with no effect do not advance it.",
+      "causalParent": "For a normal supersession, ancestorDigest equals the current head and therefore references an earlier accepted semantic identity. Unknown, future or cyclic claimed ancestry denies unless the event is explicitly classified as a force push.",
+      "tieBreak": "No wall-time sorting is allowed. Source order is sourceOrdinal; scheduler ties use enqueuedTick, semanticSequence, contributorId and candidateId in that exact order.",
+      "fullReplay": "Verification reconstructs state from genesis and recomputes every event, entry, effect, queue, lease, verification, merge and terminal-state digest. A rehashed impossible history denies."
+    },
+    "forcePushAndSupersession": {
+      "forcePush": "A context-bound distinct head with no accepted current ancestor is an explicit PR_HEAD_FORCE_PUSH transition, never an authority change by itself.",
+      "supersession": "The new head atomically becomes current and the previous current head becomes SUPERSEDED or INVALIDATED according to existing intake reason codes.",
+      "phaseBarrier": "Every bounded profile is fully reconciled in M0 before M1 queue materialization. M1 derives eligibility exclusively from deepCiEligibleEntriesV1 over the verified final ledger.",
+      "queueRule": "Only final CURRENT heads may be enqueued. Superseded, invalidated, stale, rejected, quarantined and duplicate heads receive zero queue leases and zero deepCiSlotUnits.",
+      "staleCompletionFence": "Every lease and completion is bound to current headDigest, semanticIdentityDigest, ledgerDigest and lease generation. Any mismatch after supersession is ignored, quarantined and cannot produce evidence or merge authorization."
+    },
+    "finiteComponents": {
+      "components": [
+        {
+          "component": "intake-reconciler",
+          "instances": 1
+        },
+        {
+          "component": "fair-queue",
+          "instances": 1
+        },
+        {
+          "component": "deep-ci-slot",
+          "instances": 2
+        },
+        {
+          "component": "verification-fabric-projector",
+          "instances": 1
+        },
+        {
+          "component": "merge-authorizer",
+          "instances": 1
+        },
+        {
+          "component": "lkg-promoter-readback",
+          "instances": 1
+        },
+        {
+          "component": "isolated-cache-namespace-per-attempt",
+          "instances": "bounded by active slot count"
+        }
+      ],
+      "contributors": 5,
+      "maximumEvents": 10000,
+      "maximumAttemptsPerCurrentHead": 2,
+      "unboundedWorkers": false,
+      "dynamicCapacityDiscovery": false
+    },
+    "fairnessPolicy": {
+      "algorithm": "DETERMINISTIC_PER_CONTRIBUTOR_ROUND_ROBIN",
+      "contributorRing": "Lexicographically sorted fixture contributorId values, fixed at profile validation.",
+      "withinContributorOrder": "Oldest eligible head by enqueuedTick, then semanticSequence, then candidateId.",
+      "grantRule": "At most one slot per contributor per round while another contributor has an eligible head; resume from the persisted cursor and fill the two fixed slots.",
+      "starvationBound": "An continuously eligible contributor is selected within at most activeEligibleContributorCount successful contributor grants.",
+      "supersessionRule": "Superseded heads are removed before ring selection and do not advance the fairness cursor.",
+      "observableFields": [
+        "queueEnqueuedTick",
+        "slotGrantedTick",
+        "queueAgeTicks",
+        "grantsSinceContributorLastServed",
+        "activeEligibleContributorCount",
+        "fairnessBound",
+        "fairnessStatus"
+      ]
+    },
+    "queueCostUnits": {
+      "kind": "DIMENSIONLESS_LOCAL_SYNTHETIC_COUNTERS",
+      "units": {
+        "intakeEventUnit": "One per source event inspected.",
+        "semanticEffectUnit": "One per unique admitted semantic effect.",
+        "queueEnqueueUnit": "One per final current head enqueued.",
+        "queueGrantUnit": "One per lease granted.",
+        "deepCiSlotUnit": "One per fixture verification attempt started for a still-current lease.",
+        "checkUnit": "One per required synthetic Verification Fabric check outcome consumed.",
+        "cacheReadUnit": "One per isolated cache read.",
+        "cacheWriteUnit": "One per isolated cache write.",
+        "mergeApiAttemptUnit": "One per simulated merge API intent processed.",
+        "recoveryUnit": "One per deterministic recovery transition."
+      },
+      "budgets": {
+        "deepCiAttemptsPerCurrentHeadMaximum": 2,
+        "semanticMergeEffectsPerMergeTupleMaximum": 1,
+        "supersededHeadDeepCiSlotUnits": 0,
+        "duplicateSemanticEffectUnits": 0
+      },
+      "moneyOrProviderBillingClaim": false
+    },
+    "runnerAndCacheIsolation": {
+      "runnerLeaseKeyFields": [
+        "slotId",
+        "leaseGeneration",
+        "candidateId",
+        "headDigest",
+        "semanticIdentityDigest",
+        "versionTupleDigest",
+        "verificationPlanDigest"
+      ],
+      "cacheNamespaceKeyFields": [
+        "simulatorContractVersion",
+        "versionTupleDigest",
+        "candidateHeadDigest",
+        "verificationPlanDigest",
+        "checkId",
+        "runnerIdentityId",
+        "attempt"
+      ],
+      "rules": [
+        "A cache hit is usable only after key equality and canonical content-digest readback.",
+        "Cross-candidate, cross-head, cross-version, cross-plan, cross-runner or cross-attempt reuse denies as cache isolation failure.",
+        "A failed or cancelled attempt discards its cache namespace and releases its lease before retry.",
+        "Runners consume only fixture check outcomes; they execute no command, binary, script, package, candidate source or network request.",
+        "Queue, runner and cache identities have no merge or promotion capability."
+      ]
+    }
+  },
+  "verificationAndAuthorityModel": {
+    "roleIdentities": {
+      "candidateProducer": {
+        "identityId": "producer:synthetic-candidate-v1",
+        "allowedAction": "submit closed local-synthetic candidate data"
+      },
+      "verifier": {
+        "identityId": "verifier:synthetic-verification-fabric-v1",
+        "evidenceProducerId": "producer:synthetic-verifier-evidence-v1",
+        "allowedAction": "project and verify closed fixture evidence"
+      },
+      "mergeAuthorizer": {
+        "identityId": "authorizer:synthetic-merge-v1",
+        "allowedAction": "emit an authority-free simulated authorization decision for one exact merge tuple"
+      },
+      "promotionIdentity": {
+        "identityId": "promoter:synthetic-lkg-v1",
+        "allowedAction": "advance the simulated LKG generation only after exact post-merge readback"
+      },
+      "runner": {
+        "identityId": "runner:synthetic-deep-ci-v1",
+        "allowedAction": "consume fixture outcomes under a lease"
+      },
+      "queue": {
+        "identityId": "queue:synthetic-fair-v1",
+        "allowedAction": "order eligible current heads"
+      },
+      "cache": {
+        "identityId": "cache:synthetic-attempt-v1",
+        "allowedAction": "hold digest-bound fixture data in an isolated simulated namespace"
+      }
+    },
+    "mutualExclusion": {
+      "pairwiseDistinctRequired": [
+        "candidateProducer.identityId",
+        "verifier.identityId",
+        "verifier.evidenceProducerId",
+        "mergeAuthorizer.identityId",
+        "promotionIdentity.identityId",
+        "runner.identityId",
+        "queue.identityId",
+        "cache.identityId"
+      ],
+      "normalizedAliasCollisionDenied": true,
+      "candidateCannotSelfVerify": true,
+      "candidateCannotSelfAuthorizeMerge": true,
+      "verifierCannotAuthorizeMerge": true,
+      "mergeAuthorizerCannotProduceVerificationEvidence": true,
+      "mergeAuthorizerCannotPromoteLkg": true,
+      "promotionIdentityCannotVerifyOrAuthorizeMerge": true,
+      "runnerQueueCacheCannotAuthorizeMergeOrPromotion": true
+    },
+    "ambientAuthorityFence": {
+      "ambientSecretsAllowed": false,
+      "ambientCredentialsAllowed": false,
+      "ambientNetworkAllowed": false,
+      "environmentVariableReadsAllowed": false,
+      "credentialFileReadsAllowed": false,
+      "providerCallsAllowed": false,
+      "realGitMutationAllowed": false,
+      "capabilitiesAreExplicitData": true,
+      "onAttempt": "Deny, quarantine the candidate or fault scenario, emit no merge effect, preserve or restore the exact LKG tuple, and leave zero owned residue."
+    },
+    "verificationFabricBinding": {
+      "requiredV1Interface": "VerificationFabricBundleV1",
+      "requiredVerifier": "verifyVerificationFabricBundleV1",
+      "requiredCheckIds": [
+        "ccp:canonical-replay",
+        "ccp:fail-closed-boundary",
+        "ccp:synthetic-deep-ci"
+      ],
+      "subjectBinding": "plan.subjectDigest equals the current candidate semantic identity digest bound to its exact versionTupleDigest and ledgerDigest.",
+      "independenceBinding": "plan.subjectProducerId is the candidate producer; selfTestIdentity.verifierId is the verifier; evidence producer differs from the subject producer; all role identities remain pairwise distinct.",
+      "evidenceBinding": "Every required check appears exactly once, every check run binds the plan and subject, all outcomes are PASS, evidence is unexpired in logical time, and every digest is recomputed.",
+      "verdictBinding": "Only status VERIFIED with reason VERIFICATION_COMPLETE is merge-eligible.",
+      "lkgBinding": "Verification Fabric pointer/readback must be MATCHED and digest-valid; MISSING or MISMATCH denies.",
+      "v2Binding": "If an impact plan or attestation is emitted, validate it with the existing v2 DAG/attestation interfaces and exact verification/verification-dag-v2.json digest. A fallback, denial or shadow result cannot authorize merge.",
+      "syntheticOutcomeFence": "Check outcomes are bounded fixture data, not results of executing candidate code or actual CI."
+    }
+  },
+  "mergeAndRecoveryContract": {
+    "mergeTuple": {
+      "schemaVersion": "cm.conveyor-merge-tuple/v1",
+      "closedFieldsInCanonicalProjection": [
+        "schemaVersion",
+        "repositoryId",
+        "targetRef",
+        "expectedMainHeadDigest",
+        "expectedMainTreeDigest",
+        "candidateId",
+        "candidateHeadDigest",
+        "candidateTreeDigest",
+        "semanticIdentityDigest",
+        "intakeLedgerDigest",
+        "versionTupleDigest",
+        "verificationPlanDigest",
+        "verificationEvidenceBundleDigest",
+        "verificationVerdictDigest",
+        "verifierIdentityDigest",
+        "authorityProfileDigest",
+        "mergeAuthorizerId",
+        "promotionIdentityId",
+        "logicalSequence",
+        "mergeTupleDigest"
+      ],
+      "targetRef": "refs/heads/main",
+      "preconditions": [
+        "The expected main head and tree equal the independently supplied current main readback.",
+        "The candidate is still the verified current head and has never been quarantined, stale, superseded or denied.",
+        "The exact version tuple, plan, evidence, verdict, verifier identity and authority profile digests all recompute and cross-bind.",
+        "Verification Fabric v1 returns VERIFIED and its LKG pointer/readback is MATCHED.",
+        "The merge authorizer and promotion identity match the independently trusted context and are mutually exclusive from every producer, verifier, runner, queue and cache identity."
+      ],
+      "idempotencyKey": "mergeTupleDigest",
+      "authorizationMeaning": "A successful decision permits only one simulated semantic merge state transition. It grants no GitHub, Git, CI, provider or release authority."
+    },
+    "lkgTuple": {
+      "schemaVersion": "cm.conveyor-main-lkg/v1",
+      "closedFieldsInCanonicalProjection": [
+        "schemaVersion",
+        "lkgId",
+        "generation",
+        "repositoryId",
+        "targetRef",
+        "mainHeadDigest",
+        "mainTreeDigest",
+        "versionTupleDigest",
+        "verificationPlanDigest",
+        "verificationEvidenceBundleDigest",
+        "verificationVerdictDigest",
+        "verificationPointerDigest",
+        "authorityProfileDigest",
+        "promotionIdentityId",
+        "tupleDigest"
+      ],
+      "exactness": "All fields participate in canonical tupleDigest except tupleDigest itself. Restoration means canonical byte equality of the complete prior tuple, not merely the same head digest."
+    },
+    "lkgReadbackOracle": {
+      "matchedWhen": [
+        "The independently observed main head, tree and every locked digest exactly equal the expected LKG or candidate tuple.",
+        "The recomputed complete tupleDigest equals the expected tupleDigest.",
+        "The VerificationLkgPointerV1 and VerificationLkgReadbackV1 digests recompute, IDs and generation agree, observed verdict/evidence digests agree and status is MATCHED.",
+        "The synthetic main status is GREEN and the owned-residue oracle is empty."
+      ],
+      "failClosedWhen": [
+        "Any field is missing, additional, stale, malformed or mismatched.",
+        "Any digest, generation, identity, authority profile or version component drifts.",
+        "Readback is MISSING or MISMATCH, main is not GREEN, or owned residue is non-empty."
+      ],
+      "result": "MATCHED advances the simulated LKG generation exactly once after an authorized transition. Any other result restores the exact prior LKG tuple or enters safe read-only state without claiming recovery success."
+    },
+    "atomicity": {
+      "success": "Replace the complete immutable simulated main state in one transition, read it back with the oracle, then promote the read-back tuple as the next LKG generation.",
+      "failure": "Discard the tentative state and return canonical bytes equal to the exact pre-transition LKG tuple. Never publish a partially updated tuple.",
+      "ambiguousApiOutcome": "Perform readback before any retry. If candidate tuple matches, record the single idempotent effect; if prior LKG matches, a bounded retry may occur under the same mergeTupleDigest; any third state denies and enters safe read-only.",
+      "mainInvariant": "Terminal main is GREEN with an exactly read-back candidate tuple, or canonical-byte-identical to the exact prior GREEN LKG tuple."
+    },
+    "ownedResidueOracle": {
+      "terminalFieldsRequiredEmpty": [
+        "activeLeaseIds",
+        "reservedSlotIds",
+        "terminalCandidateQueueEntries",
+        "uncommittedCacheNamespaces",
+        "pendingMergeIntentIds",
+        "stagingTupleDigests"
+      ],
+      "meaning": "These are simulated in-memory ownership records only. No real branch, worktree, runner, queue, cache, API object or provider resource is created."
+    },
+    "recoveryPolicies": {
+      "runnerFailure": "Release the lease and cache namespace, preserve queue order and fairness cursor, then retry at most once if the candidate remains current; otherwise deny terminally.",
+      "queueFailure": "Rebuild the queue deterministically from the verified intake ledger and immutable terminal receipts; reject any queue item not derivable from current heads.",
+      "cacheFailure": "Treat as a miss only when no integrity ambiguity exists; a mismatch or isolation violation denies the attempt and destroys the namespace.",
+      "apiFailure": "Use mergeTupleDigest idempotency and exact readback. Never infer success from timeout, transport acknowledgement or fixture response alone.",
+      "verificationFailure": "DENIED, INCONCLUSIVE, missing, stale, self-produced, mismatched or failed evidence releases all owned state and cannot reach merge authorization.",
+      "lkgFailure": "A missing or corrupt prior LKG prevents merge and enters safe read-only; never fabricate or advance an LKG."
+    }
+  },
+  "observabilityAndSyntheticSlos": {
+    "scope": "LOCAL_SYNTHETIC_LOGICAL_SLOS_ONLY",
+    "metrics": {
+      "integrity": [
+        "sourceEventsObserved",
+        "eventReceiptsProduced",
+        "uniqueEventIdentities",
+        "semanticEffectsApplied",
+        "duplicateSemanticEffects",
+        "lostSemanticEffects"
+      ],
+      "supersession": [
+        "supersededHeads",
+        "supersededHeadQueueGrants",
+        "supersededHeadDeepCiSlotUnits",
+        "staleCompletionDenials"
+      ],
+      "fairness": [
+        "activeEligibleContributorCount",
+        "grantsSinceContributorLastServed",
+        "fairnessBound",
+        "fairnessViolations"
+      ],
+      "queueAge": [
+        "queueAgeTicksPerHead",
+        "maximumQueueAgeTicks",
+        "oldestEligibleHeadId"
+      ],
+      "cost": [
+        "intakeEventUnits",
+        "semanticEffectUnits",
+        "queueEnqueueUnits",
+        "queueGrantUnits",
+        "deepCiSlotUnits",
+        "checkUnits",
+        "cacheReadUnits",
+        "cacheWriteUnits",
+        "mergeApiAttemptUnits",
+        "recoveryUnits"
+      ],
+      "recovery": [
+        "faultInjectedTick",
+        "recoveryCompletedTick",
+        "recoveryTicks",
+        "lkgRestoreCount",
+        "unauthorizedMergeEffects",
+        "ownedResidueCount"
+      ]
+    },
+    "slos": {
+      "semanticIntegrity": "duplicateSemanticEffects == 0 and lostSemanticEffects == 0 for every bounded profile.",
+      "supersession": "supersededHeadQueueGrants == 0 and supersededHeadDeepCiSlotUnits == 0.",
+      "fairness": "grantsSinceContributorLastServed <= activeEligibleContributorCount for every continuously eligible contributor.",
+      "queueAge": "Every eligible terminal head has a finite queueAgeTicks observation; heads are granted in the frozen round-robin/within-contributor order with no older-head bypass.",
+      "cost": "All counters equal the replay-derived unit ledger; deep-CI attempts are at most two per current head and semantic merge effects are at most one per mergeTupleDigest.",
+      "recovery": "A recoverable injected failure reaches RESTORED within three logical recovery transitions; an unrecoverable failure reaches FAILED_CLOSED within three transitions. Both require unauthorizedMergeEffects == 0 and ownedResidueCount == 0.",
+      "main": "Terminal main is GREEN at the exact verified candidate tuple or canonical-byte-identical to the exact prior GREEN LKG tuple."
+    },
+    "nonClaims": [
+      "No metric or SLO is a measurement of wall-clock latency, throughput, events/hour capacity, runner capacity, money, provider cost, availability, durability or production performance.",
+      "The profile labels describe counts distributed over a logical fixture window; they are not benchmark or capacity results."
+    ]
+  },
+  "injectedFaultSeams": {
+    "format": "Closed fixture enum plus sourceOrdinal or scheduler tick; functions, exceptions, callbacks, commands and free text are forbidden.",
+    "intake": [
+      "MALFORMED_EVENT",
+      "DELIVERY_ID_REUSE_TAMPER",
+      "EXACT_TRANSPORT_REDELIVERY",
+      "SEMANTIC_DUPLICATE",
+      "STALE_TIMESTAMP",
+      "SUPERSEDED_HEAD_REPLAY",
+      "INVALIDATED_HEAD_REPLAY",
+      "SCOPE_SUBSTITUTION",
+      "AUTHORITY_WIDENING",
+      "AUTHORITY_CHANGE",
+      "UNKNOWN_ANCESTRY_FORCE_PUSH"
+    ],
+    "queue": [
+      "QUEUE_UNAVAILABLE_BEFORE_ENQUEUE",
+      "QUEUE_UNAVAILABLE_AFTER_ENQUEUE",
+      "DUPLICATE_QUEUE_DELIVERY",
+      "LOST_QUEUE_ACK",
+      "STALE_QUEUE_LEASE",
+      "QUEUE_STATE_DIGEST_MISMATCH"
+    ],
+    "runner": [
+      "RUNNER_UNAVAILABLE",
+      "RUNNER_START_FAILURE",
+      "RUNNER_TIMEOUT",
+      "RUNNER_CRASH",
+      "LOST_RUNNER_COMPLETION",
+      "LATE_SUPERSEDED_COMPLETION",
+      "RUNNER_IDENTITY_MISMATCH"
+    ],
+    "cache": [
+      "CACHE_READ_FAILURE",
+      "CACHE_WRITE_FAILURE",
+      "CACHE_DIGEST_MISMATCH",
+      "STALE_CACHE_ENTRY",
+      "CROSS_CANDIDATE_CACHE_KEY",
+      "CROSS_RUNNER_CACHE_KEY",
+      "CROSS_ATTEMPT_CACHE_KEY"
+    ],
+    "verificationFabric": [
+      "MISSING_REQUIRED_CHECK",
+      "STALE_EVIDENCE",
+      "EVIDENCE_DIGEST_MISMATCH",
+      "SELF_PRODUCED_EVIDENCE",
+      "CHECK_FAIL",
+      "CHECK_ERROR",
+      "VERDICT_DENIED",
+      "VERDICT_INCONCLUSIVE",
+      "VERIFIER_IDENTITY_COLLISION",
+      "LKG_POINTER_MISSING",
+      "LKG_POINTER_MISMATCH"
+    ],
+    "mergeApi": [
+      "API_UNAVAILABLE_BEFORE_EFFECT",
+      "API_TIMEOUT_BEFORE_EFFECT",
+      "API_TIMEOUT_AFTER_EFFECT",
+      "API_MALFORMED_RESPONSE",
+      "API_UNAUTHORIZED_RESPONSE",
+      "API_READBACK_MISSING",
+      "API_READBACK_MISMATCH",
+      "MAIN_COMPARE_AND_SWAP_CONFLICT"
+    ],
+    "mainAndRecovery": [
+      "NON_GREEN_POSTCONDITION",
+      "PARTIAL_TUPLE_MUTATION",
+      "LKG_MISSING",
+      "LKG_DIGEST_MISMATCH",
+      "LKG_GENERATION_MISMATCH",
+      "ROLLBACK_INTERRUPTED",
+      "ROLLBACK_READBACK_MISMATCH",
+      "OWNED_RESIDUE_DETECTED"
+    ],
+    "authority": [
+      "ROLE_IDENTITY_COLLISION",
+      "SELF_AUTHORIZATION_ATTEMPT",
+      "AMBIENT_SECRET_ATTEMPT",
+      "AMBIENT_NETWORK_ATTEMPT",
+      "MUTABLE_VERSION_ALIAS",
+      "EXTERNAL_LOCATOR_ATTEMPT",
+      "EXECUTION_CLAIM_ATTEMPT"
+    ],
+    "requiredOutcome": "Every injected seam produces a deterministic receipt. Recoverable seams restore and read back authorized state; all other seams deny or quarantine fail closed. No seam may create an unauthorized merge effect or terminal owned residue."
+  },
+  "acceptanceProofObligations": [
+    {
+      "criterion": "Synthetic 10, 50, 100, 1,000 and 10,000 event/hour profiles are ingested without lost or duplicate semantic effects.",
+      "receiptStatus": "BOUND_NOT_PROVEN",
+      "successorProof": "Replay all five exact logical-window profiles twice and assert source receipt conservation, unique semanticEffectId values, lostSemanticEffects == 0, duplicateSemanticEffects == 0 and byte-identical terminal outputs."
+    },
+    {
+      "criterion": "Superseded heads do not consume deep-CI slots; deterministic replay is byte-identical.",
+      "receiptStatus": "BOUND_NOT_PROVEN",
+      "successorProof": "After the M0 phase barrier, derive the M1 queue only from verified current heads; assert zero grants and deepCiSlotUnits for every non-current head and compare exact canonical bytes across fresh replays and key insertion permutations."
+    },
+    {
+      "criterion": "Malicious, stale and authority-changing candidates quarantine fail closed.",
+      "receiptStatus": "BOUND_NOT_PROVEN",
+      "successorProof": "Exercise every intake and authority fault seam; assert immutable quarantine, no semantic effect, no queue/slot/evidence/authorization/merge effect and exact LKG preservation."
+    },
+    {
+      "criterion": "Fairness, queue-age, cost and recovery SLOs are observable.",
+      "receiptStatus": "BOUND_NOT_PROVEN",
+      "successorProof": "Emit the closed metric fields and evaluate every local-synthetic SLO from the replay-derived unit ledger for each profile and fault scenario."
+    },
+    {
+      "criterion": "Runner/queue/API failures recover without unauthorized merge or owned residue.",
+      "receiptStatus": "BOUND_NOT_PROVEN",
+      "successorProof": "Inject every runner, queue, cache and API seam; assert bounded deterministic recovery or terminal fail-closed status, unauthorizedMergeEffects == 0, ownedResidueCount == 0 and idempotent mergeTupleDigest behavior."
+    },
+    {
+      "criterion": "Main remains green or atomically restores the exact LKG tuple.",
+      "receiptStatus": "BOUND_NOT_PROVEN",
+      "successorProof": "For success and every post-authorization fault, compare the complete canonical main/LKG tuple and Verification Fabric pointer/readback; assert GREEN candidate state or byte-identical prior GREEN LKG, never a partial or fabricated tuple."
+    }
+  ],
+  "prohibitionBoundary": {
+    "mustRejectOrNeverPerform": [
+      "production-rate or production-capacity claims",
+      "wall clock or ambient time",
+      "randomness or implicit seeds",
+      "mutable aliases, latest, ranges or unresolved version locks",
+      "external APIs or network access",
+      "actual GitHub events, webhooks, queues, caches, runners, merge trains or merge APIs",
+      "actual candidate-code, command, script, package, binary, container or runner execution",
+      "credentials, secrets, tokens, ambient environment authority or provider identities",
+      "real branch, tag, release, deployment, service, registry, package, pointer or owner-state mutation",
+      "unbounded input, workers, retries, queues, outputs or free text",
+      "self-verification, self-authorization, self-promotion or role aliasing",
+      "PR, CI, merge, deployment, production, capacity, release or publication delivery claims"
+    ],
+    "allowedLocalActionsForThisReceipt": [
+      "read the selected repository base",
+      "write this single allowlisted JSON receipt",
+      "validate JSON and Git whitespace",
+      "create the user-required local Git commit"
+    ],
+    "trustedCodeClarification": "A later repository test may execute the trusted simulator and contract test harness under the pinned toolchain. It may never execute fixture-supplied or candidate code; fixtures remain inert JSON data.",
+    "externalStateChanged": false,
+    "secretsAccessed": false,
+    "productCodeChanged": false,
+    "prCiMergeReleaseDeliveryClaimed": false
+  },
+  "baseFileIntegrity": {
+    "algorithm": "SHA-256 over repository file bytes at selectedLiveBase.headCommit",
+    "files": {
+      "package.json": "2952706641b738f2d674b3c6575ab483948f04a4a69700a040740318b31b2ecf",
+      "package-lock.json": "0f6a224183d3d2eb68eebc0c61483c60cb785a93e67259cab264dc54aa2790cf",
+      "tsconfig.json": "f86763bdd1a23123a244541d87254c46a512fb5941ac15859ec0923add825838",
+      "packages/contracts/src/index.ts": "308948aadc8b33a549505a4b9975da06f80010784a73870091fb94a112c3c8b8",
+      "packages/contracts/src/canonical-json.ts": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826",
+      "packages/contracts/src/canonical-json.js": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec",
+      "tests/canonical-json-runtime-parity.test.mjs": "929ab3a426ed99e3aaadf00b0a8ffe6866503bdaadebbd348995a871b63f2ed2",
+      "packages/contracts/src/contribution-intake-ledger.ts": "11b9476d04e89153046596c3fec2f1a12a4e77808be852ddf943ddf8d3528774",
+      "schemas/contracts/contribution-intake-ledger-v1.schema.json": "11a04666e84394ab2b29308b7e3d4a2770354421a51fcf5f691b7709fe1cd6cc",
+      "tests/contribution-intake-ledger.test.ts": "597fc50284cbb90bbad35a641fa80ddc06abd3ec6392bc9d8594ebec71d96fb2",
+      "packages/contracts/src/verification-fabric.ts": "b94118b19936a089e42b90a83acb152e303925a7af1549b8a1d0db80b267b814",
+      "packages/contracts/src/verification-fabric-v2.ts": "e673fd892d39fec139af7b6706420dfd23aa8c4f2f5d202a4d9e817259e062d0",
+      "schemas/contracts/verification-fabric-bundle-v1.schema.json": "c5e9e5ff60901523bc6e4014213a9e80728c364204b5a084cc9f5c323db5ab1e",
+      "schemas/contracts/verification-evidence-dag-v2.schema.json": "5286ece3ec3ef1b8619ffa4926a43ebd36b62b9f15169547d9c4a47e3c36f133",
+      "schemas/contracts/verification-attestation-v2.schema.json": "e469e9775f9fdac08a8b223edcfaf07aa05860bbaef6a11bb3c0b5447d4872b2",
+      "tests/verification-fabric.test.ts": "a9a6cac87fc78bd63dcbd4936edabe0d0b3f7695523294911829461676969212",
+      "tests/verification-fabric-v2.test.ts": "8c5a8f291871195c9ec3f7c24e1c6484152ad900d78bbdd69c17c666a8ec3ff1",
+      "verification/verification-dag-v2.json": "07cc50fadf9a86c6930211bf5b1bd9f947ebadb4a0e7fd888cb84b5070822684",
+      "packages/contracts/src/maintenance-contract-freeze.ts": "28098a7eae050aac622e6dc3d8d7fb14173939ddf513e24c2f0ab39b0ff6d1a1",
+      "packages/contracts/src/update-check-plan.ts": "02785fd8ecffe4c4c42c1a360c7a671c93d54cc702e27079705c804d24198c59",
+      "packages/contracts/src/update-apply-tuple-lock.ts": "88c6944e9899f9ce736b8dd3ebd79dd9aab1e4685b7c7a7b6bd84102e7d1eeb8",
+      "packages/contracts/src/update-apply-postcondition.ts": "a9e09a64e32ab887c541a5124cd72392baf89c22be0bbdaa0be4d557d4b5f4a0",
+      "packages/contracts/src/update-continuity-decision.ts": "dcdf41cfdee1f5b809fa100e7fbc3b062eebaf52782d7b5fe97ca12feca42518",
+      "docs/development/ccp-m1-intake-ledger-slice-pdca.md": "2f0cdc8ef5e739df8f60d0afa7da151aa674d05a2523f19ff01e8fab1343358c"
+    }
+  },
+  "receiptIntegrity": {
+    "canonicalization": "canonicalJson of the complete top-level object after removing receiptDigest",
+    "bytes": "UTF-8 with no trailing newline",
+    "algorithm": "SHA-256",
+    "encoding": "lowercase hexadecimal"
+  },
+  "receiptDigest": "d07a585f37c9aa6174146ab38cca0ee6a21648f97df6ea708fd9827e8aad1099"
+}

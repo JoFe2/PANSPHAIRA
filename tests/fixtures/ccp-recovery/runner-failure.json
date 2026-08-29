@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "cm.ccp-fault-recovery-input/v1",
+  "taskId": "QWEN-PSAI52-FAILURE-RECOVERY-09",
+  "faultClass": "RUNNER",
+  "faultCode": "RUNNER_FAILURE",
+  "faultInjected": true,
+  "logicalAtMs": 2300,
+  "cleanup": {
+    "request": {
+      "schemaVersion": "cm.ccp-runner-cleanup-request/v1",
+      "ledgerId": "ledger:ccp-recovery",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-recovery",
+      "leaseId": "lease:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "leaseReceiptDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "termination": "CRASHED",
+      "ownedResourceRefs": ["resource:runner-root", "resource:runner-temp"],
+      "logicalAtMs": 2000
+    },
+    "observation": {
+      "schemaVersion": "cm.ccp-runner-cleanup-observation/v1",
+      "leaseId": "lease:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "cleanupAttempted": true,
+      "remainingResourceRefs": [],
+      "logicalAtMs": 2200
+    }
+  },
+  "sloObservation": {
+    "schemaVersion": "cm.ccp-recovery-slo-observation/v1",
+    "observationId": "observation:runner-failure",
+    "logicalAtMs": 2200,
+    "attempts": 1,
+    "recovered": 1,
+    "failed": 0,
+    "targetRecoveryRateBps": 10000
+  },
+  "lkgReadback": {
+    "schemaVersion": "cm.ccp-lkg-recovery-readback/v1",
+    "beforeState": {
+      "schemaVersion": "cm.ccp-lkg-state/v1",
+      "ledgerId": "ledger:ccp-recovery",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-recovery",
+      "componentId": "component:contracts",
+      "lkgDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "generation": 1,
+      "stateDigest": "6e9cf27aec078976b631b32850fbb1a1c82217e44cb42cf94e6bee96e5e5c747"
+    },
+    "afterState": {
+      "schemaVersion": "cm.ccp-lkg-state/v1",
+      "ledgerId": "ledger:ccp-recovery",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-recovery",
+      "componentId": "component:contracts",
+      "lkgDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "generation": 1,
+      "stateDigest": "6e9cf27aec078976b631b32850fbb1a1c82217e44cb42cf94e6bee96e5e5c747"
+    },
+    "behavior": "UNCHANGED",
+    "expectedAfterLkgDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "transitionDigest": null
+  }
+}

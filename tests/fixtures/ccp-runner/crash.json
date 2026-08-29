@@ -1,0 +1,52 @@
+{
+  "lease": {
+    "request": {
+      "schemaVersion": "cm.ccp-runner-lease-request/v1",
+      "ledgerId": "ledger:ccp-runner",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-runner-crash",
+      "candidateDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "admissionReceiptDigest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "runnerProfileDigest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "logicalAtMs": 2000,
+      "leaseOrdinal": 2,
+      "leaseDurationMs": 200,
+      "isolationMode": "EPHEMERAL_ISOLATED",
+      "networkPolicy": "DENY_ALL",
+      "secretPolicy": "DENY_ALL",
+      "mergeAuthority": "NONE"
+    },
+    "context": {
+      "schemaVersion": "cm.ccp-runner-lease-context/v1",
+      "ledgerId": "ledger:ccp-runner",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-runner-crash",
+      "nextLeaseOrdinal": 2,
+      "lastIssuedLogicalAtMs": 1900,
+      "activeLeaseId": null
+    }
+  },
+  "cleanup": {
+    "request": {
+      "schemaVersion": "cm.ccp-runner-cleanup-request/v1",
+      "ledgerId": "ledger:ccp-runner",
+      "tenantId": "tenant:synthetic",
+      "repositoryId": "repository:pansphaira",
+      "contributionId": "contribution:psai52-runner-crash",
+      "leaseId": "lease:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "leaseReceiptDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "ownedResourceRefs": ["resource:crash-root", "resource:crash-temp"],
+      "logicalAtMs": 2000,
+      "termination": "CRASHED"
+    },
+    "observation": {
+      "schemaVersion": "cm.ccp-runner-cleanup-observation/v1",
+      "leaseId": "lease:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "cleanupAttempted": true,
+      "remainingResourceRefs": [],
+      "logicalAtMs": 2300
+    }
+  }
+}

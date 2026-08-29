@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "cm.ccp-contributor-status-input/v1",
+  "ledgerId": "ledger:contributor-status",
+  "tenantId": "tenant:synthetic",
+  "repositoryId": "repository:pansphaira",
+  "contributionId": "contribution:status-rebase",
+  "admissionState": "ADMITTED",
+  "headState": "CURRENT",
+  "queued": false,
+  "migrationState": "REBASE_REQUIRED",
+  "lkgState": "UNCHANGED",
+  "requiredEvidenceRefs": [
+    "evidence:admission-receipt",
+    "evidence:migration-receipt"
+  ],
+  "presentEvidenceRefs": [
+    "evidence:admission-receipt",
+    "evidence:migration-receipt"
+  ],
+  "admissionReceiptDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "queueReceiptDigest": null,
+  "quarantineReceiptDigest": null,
+  "migrationReceiptDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "lkgRestoreReceiptDigest": null,
+  "privateDetails": "private migration diagnostic: source branch contains restricted metadata"
+}
