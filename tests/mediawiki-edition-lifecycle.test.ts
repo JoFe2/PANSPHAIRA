@@ -129,6 +129,46 @@ test("PSAI107 failed activation and revoke restore the exact prior LKG and leave
   }
 });
 
+test("PSAI107 failure between edition promotion and pointer replacement leaves no activation residue", () => {
+  const initial = importMediaWikiMiniDumpEditionV1(fixtureRoot, profile);
+  const next = changedEdition();
+  for (const activationPath of ["STAGED", "COMBINED"] as const) {
+    const root = temporaryRoot();
+    try {
+      initializeMediaWikiEditionLifecycleV1(root, initial);
+      const priorIndexBytes = readFileSync(path.join(root, "active-index.json"));
+      const failed = activationPath === "STAGED"
+        ? (() => {
+            const staged = stageMediaWikiEditionV1(root, {
+              edition: next,
+              parentEditionDigest: initial.editionDigest,
+            });
+            assert.equal(staged.outcome, "STAGED");
+            return activateMediaWikiEditionStageV1(
+              root,
+              staged.outcome === "STAGED" ? staged.stagedEditionDigest : "",
+              { injectFailureAt: "AFTER_PROMOTE" },
+            );
+          })()
+        : activateMediaWikiEditionV1(root, {
+            edition: next,
+            parentEditionDigest: initial.editionDigest,
+          }, { injectFailureAt: "AFTER_PROMOTE" });
+      assert.equal(failed.outcome, "ROLLED_BACK", activationPath);
+      assert.equal(failed.reason, "INJECTED_FAILURE", activationPath);
+      assert.deepEqual(readFileSync(path.join(root, "active-index.json")), priorIndexBytes, activationPath);
+      assert.equal(existsSync(path.join(root, "editions", next.editionDigest)), false, activationPath);
+      assert.deepEqual(readdirSync(path.join(root, "staging")), [], activationPath);
+      assert.equal(activateMediaWikiEditionV1(root, {
+        edition: next,
+        parentEditionDigest: initial.editionDigest,
+      }).outcome, "ACTIVATED", activationPath);
+    } finally {
+      removeRoot(root);
+    }
+  }
+});
+
 test("PSAI107 lifecycle fails closed for stale, duplicate, incomplete, tampered, interrupted, cross-volume and unowned state", () => {
   const initial = importMediaWikiMiniDumpEditionV1(fixtureRoot, profile);
   const next = changedEdition();

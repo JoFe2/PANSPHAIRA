@@ -527,13 +527,9 @@ export function validateWikimediaPilotEvidenceReportV1(value: unknown): value is
     || typeof value.environmentId !== "string" || value.environmentId.length === 0
     || !validateOfficialSnapshot(value.official) || !Array.isArray(value.receiptSample)
     || !Array.isArray(value.rawEvidence) || !DIGEST.test(String(value.reportDigest))) return false;
-  if (value.mountedSnapshot) {
-    if (!exactKeys(value.claims, ["importElapsedMs", "queryLatencyMs", "storageBytes"])
-      || !Number.isFinite(value.claims.storageBytes) || !Number.isFinite(value.claims.importElapsedMs)
-      || !Number.isFinite(value.claims.queryLatencyMs)) return false;
-  } else if (!Array.isArray(value.claims) || value.claims.length !== 0) return false;
-  const environments = new Set(value.rawEvidence.map((entry) => (entry as Record<string, unknown>).environmentId));
-  if (environments.size !== 1 || environments.has("") || value.rawEvidence.some((entry) => {
+  if (value.receiptSample.length !== 1 || value.receiptSample.some((receipt) =>
+    !validateMediaWikiReadonlyQueryReceiptV1(receipt) || receipt.results.length < 1)) return false;
+  if (value.rawEvidence.length !== 3 || value.rawEvidence.some((entry) => {
     if (!exactKeys(entry, ["bytes", "editionDigest", "elapsedMs", "environmentId", "operation", "queryLatencyMs", "receiptDigest", "receiptResultCount", "sampleId", "schemaVersion", "sourceChecksum"])) return true;
     return typeof entry.sampleId !== "string" || entry.sampleId.length === 0
       || typeof entry.environmentId !== "string" || entry.environmentId.length === 0
@@ -547,20 +543,47 @@ export function validateWikimediaPilotEvidenceReportV1(value: unknown): value is
       || (entry.receiptDigest !== null && (typeof entry.receiptDigest !== "string" || !DIGEST.test(entry.receiptDigest)))
       || typeof entry.receiptResultCount !== "number" || !Number.isSafeInteger(entry.receiptResultCount) || entry.receiptResultCount < 0;
   })) return false;
-  if (!value.receiptSample.every((receipt) => validateMediaWikiReadonlyQueryReceiptV1(receipt))) return false;
   if (!value.immutableEditions || !exactKeys(value.immutableEditions, ["equal", "firstEditionDigest", "reimportEditionDigest"])
     || value.immutableEditions.equal !== true
     || !DIGEST.test(String(value.immutableEditions.firstEditionDigest))
     || value.immutableEditions.firstEditionDigest !== value.immutableEditions.reimportEditionDigest) return false;
-  const operations = new Set(value.rawEvidence.map((entry) => (entry as Record<string, unknown>).operation));
-  if (operations.size !== 3 || !operations.has("IMPORT") || !operations.has("REIMPORT") || !operations.has("QUERY")) return false;
-  const measuredImport = value.rawEvidence.find((entry) => (entry as Record<string, unknown>).operation === "IMPORT") as Record<string, unknown> | undefined;
-  const measuredQuery = value.rawEvidence.find((entry) => (entry as Record<string, unknown>).operation === "QUERY") as Record<string, unknown> | undefined;
-  if (!measuredImport || !measuredQuery) return false;
-  if (value.mountedSnapshot && (!exactKeys(value.claims, ["importElapsedMs", "queryLatencyMs", "storageBytes"])
-    || value.claims.storageBytes !== measuredImport.bytes
-    || value.claims.importElapsedMs !== measuredImport.elapsedMs
-    || value.claims.queryLatencyMs !== measuredQuery.queryLatencyMs)) return false;
+  const raw = value.rawEvidence as unknown as WikimediaPilotRawEvidenceV1[];
+  const receipts = value.receiptSample as unknown as MediaWikiReadonlyQueryReceiptV1[];
+  const official = value.official as WikimediaPilotOfficialSnapshotV1;
+  const firstEditionDigest = value.immutableEditions.firstEditionDigest as string;
+  const reimportEditionDigest = value.immutableEditions.reimportEditionDigest as string;
+  const measuredImports = raw.filter((entry) => entry.operation === "IMPORT");
+  const measuredReimports = raw.filter((entry) => entry.operation === "REIMPORT");
+  const measuredQueries = raw.filter((entry) => entry.operation === "QUERY");
+  if (measuredImports.length !== 1 || measuredReimports.length !== 1 || measuredQueries.length !== 1
+    || new Set(raw.map((entry) => entry.sampleId)).size !== raw.length
+    || raw.some((entry) => entry.environmentId !== value.environmentId)
+    || new Set(raw.map((entry) => entry.sourceChecksum)).size !== 1
+    || new Set(raw.map((entry) => entry.bytes)).size !== 1) return false;
+  const measuredImport = measuredImports[0] as WikimediaPilotRawEvidenceV1;
+  const measuredReimport = measuredReimports[0] as WikimediaPilotRawEvidenceV1;
+  const measuredQuery = measuredQueries[0] as WikimediaPilotRawEvidenceV1;
+  const receipt = receipts[0] as MediaWikiReadonlyQueryReceiptV1;
+  if (measuredImport.editionDigest !== firstEditionDigest
+    || measuredReimport.editionDigest !== reimportEditionDigest
+    || measuredQuery.editionDigest !== firstEditionDigest
+    || measuredImport.queryLatencyMs !== null || measuredReimport.queryLatencyMs !== null
+    || measuredImport.receiptDigest !== null || measuredReimport.receiptDigest !== null
+    || measuredImport.receiptResultCount !== 0 || measuredReimport.receiptResultCount !== 0
+    || measuredQuery.queryLatencyMs === null || measuredQuery.receiptDigest !== receipt.receiptDigest
+    || measuredQuery.receiptResultCount !== receipt.results.length
+    || receipt.activeEditionDigest !== firstEditionDigest || receipt.selectedEditionDigests.length !== 0
+    || receipt.results.some((result) => result.editionDigest !== firstEditionDigest)) return false;
+  if (value.mountedSnapshot) {
+    if (!exactKeys(value.claims, ["importElapsedMs", "queryLatencyMs", "storageBytes"])
+      || value.claims.storageBytes !== measuredImport.bytes
+      || value.claims.importElapsedMs !== measuredImport.elapsedMs
+      || value.claims.queryLatencyMs !== measuredQuery.queryLatencyMs
+      || raw.some((entry) => entry.sourceChecksum !== official.checksum || entry.bytes !== official.byteSize)
+      || receipt.results.some((result) => result.project !== official.project || result.language !== official.language
+        || result.snapshotDate !== official.snapshotDate
+        || canonicalJson(result.license) !== canonicalJson(official.license))) return false;
+  } else if (!Array.isArray(value.claims) || value.claims.length !== 0) return false;
   const unsigned = { ...value };
   delete (unsigned as { reportDigest?: string }).reportDigest;
   return createSha256(canonicalJson(unsigned)) === value.reportDigest;

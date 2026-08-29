@@ -208,7 +208,14 @@ export function queryMediaWikiReadonlyV1(
     || left.revisionId - right.revisionId
     || left.editionDigest.localeCompare(right.editionDigest)
     || left.citation.localeCompare(right.citation));
-  const completed = completeContradictions(rawResults.slice(0, request.maxResults));
+  const rankedResultIds = new Set(rawResults.slice(0, request.maxResults).map((result) => result.resultId));
+  const disclosedResultIds = new Set(rankedResultIds);
+  for (const group of contradictionGroups(rawResults)) {
+    if (group.some((resultId) => rankedResultIds.has(resultId))) {
+      for (const resultId of group) disclosedResultIds.add(resultId);
+    }
+  }
+  const completed = completeContradictions(rawResults.filter((result) => disclosedResultIds.has(result.resultId)));
   const unsigned: Omit<MediaWikiReadonlyQueryReceiptV1, "receiptDigest"> = {
     schemaVersion: "chimpmaera.knowledge/mediawiki-readonly-query-receipt/v1",
     operation: "READ_ONLY_QUERY",

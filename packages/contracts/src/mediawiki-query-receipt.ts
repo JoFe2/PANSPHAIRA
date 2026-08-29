@@ -30,6 +30,7 @@ export interface MediaWikiReadonlyQueryCorpusV1 {
 export interface MediaWikiReadonlyQueryRequestV1 {
   readonly query: string;
   readonly ranking: MediaWikiReadonlyQueryRankingV1;
+  /** Ranked-result cap before complete contradiction groups are disclosed. */
   readonly maxResults: number;
 }
 
@@ -78,6 +79,7 @@ export interface MediaWikiReadonlyQueryReceiptV1 {
   readonly normalizedQuery: string;
   readonly queryTokens: readonly string[];
   readonly ranking: MediaWikiReadonlyQueryRankingV1;
+  /** Ranked-result cap; contradiction disclosure may add disputed results. */
   readonly maxResults: number;
   readonly activeEditionDigest: string;
   readonly selectedEditionDigests: readonly string[];
@@ -202,7 +204,7 @@ export function validateMediaWikiReadonlyQueryReceiptV1(value: unknown): value i
     || !["EXACT_LEXICAL", "LOCAL_HYBRID"].includes(value.ranking as string)
     || !safeInteger(value.maxResults, 1) || value.maxResults > 100 || !digest(value.activeEditionDigest)
     || !Array.isArray(value.selectedEditionDigests) || !value.selectedEditionDigests.every(digest)
-    || !Array.isArray(value.results) || value.results.length > value.maxResults || !value.results.every(validResult)
+    || !Array.isArray(value.results) || !value.results.every(validResult)
     || value.authorityBoundary !== MEDIAWIKI_READONLY_QUERY_BOUNDARY_V1 || !digest(value.receiptDigest)) return false;
   if (!exactKeys(value.authority, ["credentials", "policyApprovals", "capabilities", "toolAccess", "writeTargets", "executionRoutes"])
     || !Object.values(value.authority).every((item) => Array.isArray(item) && item.length === 0)) return false;
@@ -212,6 +214,7 @@ export function validateMediaWikiReadonlyQueryReceiptV1(value: unknown): value i
     && new Set(item.claimIds).size === item.claimIds.length)) return false;
   const allEditionDigests = [value.activeEditionDigest, ...value.selectedEditionDigests];
   if (new Set(allEditionDigests).size !== allEditionDigests.length) return false;
+  if (value.results.length > value.maxResults * allEditionDigests.length) return false;
   if (new Set(value.results.map((item) => item.resultId)).size !== value.results.length) return false;
   const resultIds = new Set(value.results.map((item) => item.resultId));
   if (value.results.some((item) => !allEditionDigests.includes(item.editionDigest)
@@ -235,6 +238,10 @@ export function validateMediaWikiReadonlyQueryReceiptV1(value: unknown): value i
     if (!left || !right || !value.results.find((item) => item.resultId === left)?.conflictsWith.includes(right)
       || !value.results.find((item) => item.resultId === right)?.conflictsWith.includes(left)) return false;
   }
+  const rankedResultIds = new Set(value.results.slice(0, value.maxResults).map((item) => item.resultId));
+  if (value.results.slice(value.maxResults).some((item) =>
+    item.epistemicStatus !== "DISPUTED"
+    || !item.conflictsWith.some((claimId) => rankedResultIds.has(claimId)))) return false;
   return mediaWikiReadonlyQueryReceiptDigestV1(value as unknown as MediaWikiReadonlyQueryReceiptV1) === value.receiptDigest;
 }
 

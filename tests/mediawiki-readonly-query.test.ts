@@ -133,6 +133,23 @@ test("PSAI107 conflicting active and selected editions stay distinct and visibly
   assert.ok(alpha.every((item) => item.conflictsWith.length === 1));
 });
 
+test("PSAI107 result limits cannot hide a contradiction just outside the ranked window", () => {
+  const corpus = corpusWithConflict();
+  const receipt = queryMediaWikiReadonlyV1(corpus, {
+    query: "first synthetic article",
+    ranking: "LOCAL_HYBRID",
+    maxResults: 1,
+  });
+  assert.equal(receipt.maxResults, 1);
+  assert.equal(receipt.results.length, 2);
+  assert.ok(receipt.results.every((item) => item.pageId === 1001));
+  assert.ok(receipt.results.every((item) => item.epistemicStatus === "DISPUTED"));
+  assert.ok(receipt.results.every((item) => item.conflictsWith.length === 1));
+  assert.equal(receipt.contradictions.length, 1);
+  assert.equal(receipt.contradictions[0]?.claimIds.length, 2);
+  assert.equal(validateMediaWikiReadonlyQueryReceiptAgainstCorpusV1(receipt, corpus), true);
+});
+
 test("PSAI107 receipt and source gates fail closed for mutation, collapse, stale state, authority and network paths", () => {
   const corpus = corpusWithConflict();
   const receipt = queryMediaWikiReadonlyV1(corpus, request("EXACT_LEXICAL", "synthetic article"));

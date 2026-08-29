@@ -133,6 +133,7 @@ export type MediaWikiEditionLifecycleResultV1 =
 export type MediaWikiEditionLifecycleInjectFailureV1 =
   | "NONE"
   | "AFTER_STAGE"
+  | "AFTER_PROMOTE"
   | "AFTER_SWITCH"
   | "INTERRUPTED_STAGE";
 
@@ -669,7 +670,7 @@ export function activateMediaWikiEditionStageV1(
   let owned: ReturnType<typeof assertOwnedRoot> | undefined;
   let destination: string | undefined;
   let oldIndexBytes: Buffer | undefined;
-  let switched = false;
+  let promoted = false;
   try {
     owned = assertOwnedRoot(rootInput);
     destination = pointerPath(owned.root, options.activeIndexPath);
@@ -681,8 +682,9 @@ export function activateMediaWikiEditionStageV1(
       path.join(owned.staging, stagedEditionDigest),
       path.join(owned.editions, stagedEditionDigest),
     );
+    promoted = true;
+    if (options.injectFailureAt === "AFTER_PROMOTE") fail("INJECTED_FAILURE");
     writeAtomically(owned.root, destination, verified.index);
-    switched = true;
     if (options.injectFailureAt === "AFTER_SWITCH") fail("INJECTED_FAILURE");
     const postcondition = readMediaWikiEditionLifecycleV1(owned.root);
     if (postcondition.index.activeEditionDigest !== stagedEditionDigest
@@ -696,16 +698,20 @@ export function activateMediaWikiEditionStageV1(
       stagedResidue: [],
     };
   } catch (error) {
-    const reason = error instanceof Error && error.message.startsWith(ERROR_PREFIX)
+    let reason = error instanceof Error && error.message.startsWith(ERROR_PREFIX)
       ? error.message.slice(ERROR_PREFIX.length) as MediaWikiEditionLifecycleFailureReasonV1
       : "SCHEMA_DENIED";
-    if (switched && owned !== undefined && destination !== undefined && oldIndexBytes !== undefined) {
-      try { rollbackAfterSwitch(owned, oldIndexBytes, stagedEditionDigest, destination); } catch { /* fail closed */ }
+    let rollbackFailed = false;
+    if (promoted && owned !== undefined && destination !== undefined && oldIndexBytes !== undefined) {
+      try { rollbackAfterSwitch(owned, oldIndexBytes, stagedEditionDigest, destination); } catch {
+        rollbackFailed = true;
+        reason = "ROLLBACK_FAILED";
+      }
     }
     let activeEditionDigest: string | null = null;
     try { activeEditionDigest = readCurrentWithoutStaging(owned as ReturnType<typeof assertOwnedRoot>).index.activeEditionDigest; } catch { /* fail closed */ }
     return {
-      outcome: switched ? "ROLLED_BACK" : "DENIED",
+      outcome: rollbackFailed || reason === "ROLLBACK_FAILED" ? "DENIED" : promoted ? "ROLLED_BACK" : "DENIED",
       reason,
       activeEditionDigest,
       stagedResidue: (() => {
@@ -739,7 +745,7 @@ export function activateMediaWikiEditionV1(
   let destination: string | undefined;
   let oldIndexBytes: Buffer | undefined;
   let newDigest: string | undefined;
-  let switched = false;
+  let promoted = false;
   try {
     owned = assertOwnedRoot(rootInput);
     destination = pointerPath(owned.root, options.activeIndexPath);
@@ -775,8 +781,9 @@ export function activateMediaWikiEditionV1(
       };
     }
     renameSync(staged.directory, path.join(owned.editions, newDigest));
+    promoted = true;
+    if (options.injectFailureAt === "AFTER_PROMOTE") fail("INJECTED_FAILURE");
     writeAtomically(owned.root, destination, nextIndex);
-    switched = true;
     if (options.injectFailureAt === "AFTER_SWITCH") fail("INJECTED_FAILURE");
     const postcondition = readMediaWikiEditionLifecycleV1(owned.root);
     if (postcondition.index.activeEditionDigest !== newDigest
@@ -790,18 +797,22 @@ export function activateMediaWikiEditionV1(
       stagedResidue: [],
     };
   } catch (error) {
-    const reason = error instanceof Error && error.message.startsWith(ERROR_PREFIX)
+    let reason = error instanceof Error && error.message.startsWith(ERROR_PREFIX)
       ? error.message.slice(ERROR_PREFIX.length) as MediaWikiEditionLifecycleFailureReasonV1
       : "SCHEMA_DENIED";
-    if (switched && owned !== undefined && destination !== undefined && oldIndexBytes !== undefined && newDigest !== undefined) {
-      try { rollbackAfterSwitch(owned, oldIndexBytes, newDigest, destination); } catch { /* report rollback failure below */ }
+    let rollbackFailed = false;
+    if (promoted && owned !== undefined && destination !== undefined && oldIndexBytes !== undefined && newDigest !== undefined) {
+      try { rollbackAfterSwitch(owned, oldIndexBytes, newDigest, destination); } catch {
+        rollbackFailed = true;
+        reason = "ROLLBACK_FAILED";
+      }
     } else if (owned !== undefined && newDigest !== undefined && reason !== "INTERRUPTED_STAGE_DENIED") {
       rmSync(path.join(owned.staging, newDigest), { recursive: true, force: true });
     }
     let activeEditionDigest: string | null = null;
     try { activeEditionDigest = readMediaWikiEditionLifecycleV1(rootInput).index.activeEditionDigest; } catch { /* fail closed */ }
     return {
-      outcome: reason === "ROLLBACK_FAILED" ? "DENIED" : switched ? "ROLLED_BACK" : "DENIED",
+      outcome: rollbackFailed || reason === "ROLLBACK_FAILED" ? "DENIED" : promoted ? "ROLLED_BACK" : "DENIED",
       reason,
       activeEditionDigest,
       stagedResidue: (() => {

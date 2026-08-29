@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { canonicalJson } from "../packages/contracts/src/canonical-json.js";
 import {
   PILOT_CHECKSUM_MISMATCH,
   PILOT_MOUNTED_DUMP_REQUIRED,
@@ -17,6 +19,12 @@ const fixture = JSON.parse(readFileSync("tests/fixtures/wikimedia-pilot/expected
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
+}
+
+function resign(value: Record<string, unknown>): void {
+  const unsigned = { ...value };
+  delete unsigned.reportDigest;
+  value.reportDigest = createHash("sha256").update(canonicalJson(unsigned)).digest("hex");
 }
 
 function assertReceiptFields(report: ReturnType<typeof runSyntheticWikimediaPilotEvidenceV1>): void {
@@ -115,4 +123,48 @@ test("report validator rejects mixed environments and claimed metrics without ra
   claimedWithoutEvidence.claims = { storageBytes: 1, importElapsedMs: 1, queryLatencyMs: 1 };
   claimedWithoutEvidence.rawEvidence = [];
   assert.equal(validateWikimediaPilotEvidenceReportV1(claimedWithoutEvidence), false);
+});
+
+test("report validator rejects relabelled synthetic claims and disconnected mounted evidence", () => {
+  const report = runSyntheticWikimediaPilotEvidenceV1(fixture, (() => {
+    let tick = 0;
+    return () => (tick += 1);
+  })());
+  const relabelled = clone(report) as unknown as Record<string, unknown>;
+  const relabelledRaw = relabelled.rawEvidence as Array<Record<string, unknown>>;
+  const measuredImport = relabelledRaw.find((entry) => entry.operation === "IMPORT");
+  const measuredQuery = relabelledRaw.find((entry) => entry.operation === "QUERY");
+  assert.ok(measuredImport);
+  assert.ok(measuredQuery);
+  relabelled.mountedSnapshot = true;
+  relabelled.claims = {
+    storageBytes: measuredImport.bytes,
+    importElapsedMs: measuredImport.elapsedMs,
+    queryLatencyMs: measuredQuery.queryLatencyMs,
+  };
+  resign(relabelled);
+  assert.equal(validateWikimediaPilotEvidenceReportV1(relabelled), false);
+
+  const cases: Array<(candidate: Record<string, unknown>) => void> = [
+    (candidate) => { candidate.receiptSample = []; },
+    (candidate) => { candidate.environmentId = "disconnected-environment"; },
+    (candidate) => {
+      const raw = candidate.rawEvidence as Array<Record<string, unknown>>;
+      const reimport = raw.find((entry) => entry.operation === "REIMPORT");
+      assert.ok(reimport);
+      reimport.editionDigest = "0".repeat(64);
+    },
+    (candidate) => {
+      const raw = candidate.rawEvidence as Array<Record<string, unknown>>;
+      const query = raw.find((entry) => entry.operation === "QUERY");
+      assert.ok(query);
+      query.receiptDigest = "0".repeat(64);
+    },
+  ];
+  for (const mutate of cases) {
+    const disconnected = clone(report) as unknown as Record<string, unknown>;
+    mutate(disconnected);
+    resign(disconnected);
+    assert.equal(validateWikimediaPilotEvidenceReportV1(disconnected), false);
+  }
 });
