@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "pansphaira.verification/cks-07-authorized-scope-readback/v1",
+  "taskId": "CLOSURE-PSAI287-EVIDENCE-RECOVERY-01",
+  "recordKind": "DETERMINISTIC_LOCAL_READBACK_RECEIPT",
+  "scopeDecision": {
+    "path": "docs/evidence/conveyor/psai287-owner-scope-decision-v1.json",
+    "requiredForClosure": true,
+    "authorizedScope": "FROZEN_OFFLINE_NINE_CASE_EMPTY_KB_FIXTURE_SUITE_ONLY"
+  },
+  "evidenceIdentity": {
+    "classification": "MODEL_DISABLED_FIXTURE_PROOF",
+    "evidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC",
+    "mode": "OFFLINE_DETERMINISTIC_EMPTY_KB",
+    "network": "OFFLINE_PROFILE_ONLY",
+    "model": "DISABLED",
+    "authorizedFrozenModelResult": false,
+    "statement": "This is model-disabled fixture proof, not an authorized frozen-model result. It measures only deterministic behavior over the named synthetic fixture bytes and must not be described as competence-model performance."
+  },
+  "immutableFixtureBindings": {
+    "emptyKbCases": {
+      "path": "tests/fixtures/cks-07/empty-kb-cases-v1.json",
+      "sha256": "6095ef19924a27f340201c81a4fa79c561513de66aab0986f16e36eaf6b6b673",
+      "caseCount": 9
+    },
+    "groundTruth": {
+      "path": "tests/fixtures/cks-07/empty-kb-ground-truth-v1.json",
+      "sha256": "f4c238846994f6e057edbc5eb166baddc26e1f6616872acf211ab619c5c80878",
+      "applicableRequirements": 3,
+      "criticalApplicableRequirements": 2,
+      "notApplicableRequirements": 1
+    },
+    "denominatorDigest": "3329fc11d6c54b44ec7731dd6ef37596d4b8920029e1e6526a645d37fa1b523a",
+    "p12Positive": "22455ad445482eeb890494e100528fcec5ef3f45a344d1f9875dd0447374c3ff",
+    "p12Negative": "de3419eec011380d593497e6512bc3d39ba7f4be8be78b7cb69ed582ab43aef2",
+    "existingDryRunEvidence": "2c978f999f5748f1f0b3d32b6df9566afeeaa906a796b300ed45c140e7dfd4bf"
+  },
+  "replayedProof": {
+    "P11": {
+      "state": "PASS_FOR_AUTHORIZED_FIXTURE_SCOPE",
+      "caseCount": 9,
+      "passCases": 1,
+      "failCases": 8,
+      "blockedCases": 0,
+      "requirementRecallMean": 0.14814814814814814,
+      "requirementPrecisionMean": 0.2222222222222222,
+      "totalCriticalRequirementMisses": 15,
+      "criticalRequirementMissCases": 8
+    },
+    "P12": {
+      "state": "PASS_FOR_AUTHORIZED_FIXTURE_SCOPE",
+      "expectedAlternateRecoveryDenominators": { "E1": 1, "E2": 1, "MD": 1, "ACQ": 3 },
+      "alternateRecoveries": [
+        { "caseId": "case:recover-a1", "attemptOutcomes": ["NO_MATCH", "QUALIFYING_MATCH"], "terminalLevel": "A1" },
+        { "caseId": "case:recover-a2", "attemptOutcomes": ["NO_MATCH", "NO_MATCH", "QUALIFYING_MATCH"], "terminalLevel": "A2" }
+      ],
+      "missingDeclaration": { "caseId": "case:missing-with-candidates", "state": "GAP_MISSING", "requiredLevels": ["A0", "A1", "A2"], "allOutcomes": "NO_MATCH" },
+      "acquisitionSeparation": { "candidateCount": 3, "levels": ["A3", "A4", "A5"], "disposition": "NON_AUTHORITATIVE_CANDIDATE", "acceptedKnowledgeDigest": null, "promotionStatus": "NOT_REQUESTED", "promotionLeakCount": 0 }
+    },
+    "P13": {
+      "state": "PASS_FOR_AUTHORIZED_FIXTURE_SCOPE",
+      "comparatorId": "CKS-07-SIMPLE-SOLVER-V1",
+      "caseCount": 9,
+      "insufficientOracleCases": 8,
+      "sufficientOracleCases": 1,
+      "combinedFalseCompletenessCount": 0,
+      "simpleSolverFalseCompletenessCount": 8,
+      "combinedTrueCompletenessCount": 1,
+      "combinedFalseCompletenessRate": 0,
+      "simpleSolverFalseCompletenessRate": 1,
+      "falseCompletenessAbsoluteReduction": 1,
+      "combinedTrueCompletenessRate": 1,
+      "proofDigest": "dc02f9c340a4f0ceaa342ab1ad36631f7979a80c7a4fd20ad75724c96315b505"
+    }
+  },
+  "finiteFailClosedReadback": {
+    "states": ["GAP_MISSING", "GAP_BAD_SOURCE", "GAP_APPLICABILITY", "GAP_CONFLICTING", "GAP_UNKNOWN_SEMANTIC", "BLOCKED"],
+    "negativeCases": [
+      { "caseId": "case:missing-too-early", "state": "BLOCKED", "reason": "INCOMPLETE_A0_A2_RECOVERY" },
+      { "caseId": "case:bad-source", "state": "GAP_BAD_SOURCE" },
+      { "caseId": "case:applicability-fail-closed", "state": "GAP_APPLICABILITY" },
+      { "caseId": "case:conflict-fail-closed", "state": "GAP_CONFLICTING" },
+      { "caseId": "case:unknown-semantic-fail-closed", "state": "GAP_UNKNOWN_SEMANTIC" },
+      { "caseId": "case:changed-bundle-blocked", "state": "BLOCKED", "reason": "KNOWLEDGE_BUNDLE_CHANGED" }
+    ],
+    "internetAndModelAcceptedAsKnowledge": false,
+    "internetAndModelGrantedAuthority": false,
+    "noAutomaticKnowledgeOrAuthorityTransition": true
+  },
+  "observedCommands": [
+    { "command": "npm run build --silent", "runtime": "node v24.19.0", "exitCode": 133, "signal": "SIGTRAP", "outputDigest": "ace1d531b1314049162d961e7ddd22e3a6c15685518ef9139a90d76e0cc7fcd4", "result": "LOCAL_NODE_V8_MEMORY_PERMISSION_INFRASTRUCTURE_EVIDENCE_NOT_PRODUCT_VERDICT" },
+    { "command": "NODE_OPTIONS=--jitless npm run build --silent", "runtime": "node v24.19.0; NODE_OPTIONS=--jitless", "exitCode": 0, "outputDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "result": "PASS" },
+    { "command": "NODE_OPTIONS=--jitless node --test tests/cks-07-empty-kb-metrics.test.mjs", "runtime": "node v24.19.0; NODE_OPTIONS=--jitless", "exitCode": 0, "outputDigest": "20cfa1c4dd343a1b19d13df17e77fb944ddfd8f468e4a1f902a7121ab9740534", "result": "5_PASS_0_FAIL" },
+    { "command": "NODE_OPTIONS=--jitless node --test dist/tests/cks-gap-acquisition.test.js dist/tests/cks-sufficiency-proof.test.js", "runtime": "node v24.19.0; NODE_OPTIONS=--jitless", "exitCode": 0, "outputDigest": "2a837aa10e6109996821ef8f1a6751e4455caf2a442b5624815dcd4d22f4b8ed", "result": "8_PASS_0_FAIL" },
+    { "command": "NODE_OPTIONS=--jitless node scripts/cks-07-score-empty-kb.mjs --fixture tests/fixtures/cks-07/empty-kb-cases-v1.json --dry-run", "runtime": "node v24.19.0; NODE_OPTIONS=--jitless", "exitCode": 0, "outputDigest": "d8b9ba72306f34a879c4007fc021b9eca4f406536c7b41d476a077d1578e54f3", "result": "P11_AND_P13_REPRODUCED" },
+    { "command": "git diff --check main...HEAD", "runtime": "git version 2.43.0", "exitCode": 0, "outputDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "result": "PASS" }
+  ],
+  "outputDigestEncoding": "lowercase SHA-256 of captured stdout and stderr with terminal trailing line endings stripped",
+  "closureGuard": {
+    "requiredCrossIssueReceipts": [281, 282, 283, 284, 285],
+    "ownerScopeReceiptRequired": true,
+    "rule": "If a required receipt is missing, non-terminal, lacks its immutable path-and-digest binding, or differs from the reviewed head, verdict is NOT_READY. Fixture success never overrides this guard.",
+    "state": "NOT_READY",
+    "reason": "No immutable terminal receipt for issues #281 through #285 was provided to this worker."
+  },
+  "verdict": "NOT_READY_DEPENDENCY_CHAIN_UNRESOLVED_WITH_P11_P12_P13_REPLAYED_ONLY_IN_FROZEN_MODEL_DISABLED_FIXTURE_SCOPE"
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "pansphaira.evidence/terra-psai287-canonical-root-qs-01/v1",
+  "taskId": "CLOSURE-PSAI287-EVIDENCE-RECOVERY-01",
+  "recordKind": "CANONICAL_CLOSURE_RECONCILIATION_RECEIPT",
+  "supersedes": {
+    "path": "docs/evidence/conveyor/terra-psai287-root-qs-01.json",
+    "sha256": "6c93e78893d3253cd22ac6d2cae015a567b8c9d8ad9ad8771bd1b648d7590fae",
+    "treatment": "RETAINED_AS_HISTORICAL_FROZEN_FIXTURE_RECONCILIATION; NOT_SUFFICIENT_FOR_CLOSURE_WITHOUT_THIS_RECEIPT'S_PREREQUISITE_GUARD"
+  },
+  "reviewedBaseline": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-287",
+    "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "candidateHeadBeforeClosureReceipt": "acd220b194d08b319b18573e8f3fb09518da07f7",
+    "rebase": { "command": "git rebase main", "result": "UP_TO_DATE" },
+    "headBinding": "The reviewed content is the local candidate tree containing this receipt; final immutable head binding is the local commit required by the owner-scope receipt."
+  },
+  "preservedProcessContext": {
+    "controllerAttestationSource": "TASK_INSTRUCTION",
+    "operatingModel": { "id": "Operating Model v1.1", "treatment": "PRESERVED_UNCHANGED" },
+    "decisions": [
+      { "id": "D-001", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-002", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-003", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-004", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-005", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-006", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-007", "treatment": "PRESERVED_UNCHANGED" }
+    ],
+    "integrationRule": "This canonical receipt only reconciles existing bounded evidence and gates closure; it creates no alternative process, acquisition, promotion, Authority, release, or empirical-claim path."
+  },
+  "evidenceClassification": {
+    "exactClassification": "MODEL_DISABLED_FIXTURE_PROOF",
+    "evidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC",
+    "network": "OFFLINE_PROFILE_ONLY",
+    "model": "DISABLED",
+    "authorizedFrozenModelResult": false,
+    "prohibitedDescription": "competence-model performance",
+    "scopeLimit": "Nine frozen synthetic cases with the named immutable fixture and denominator bytes only."
+  },
+  "criterionMatrix": [
+    { "criterion": "P11 recall, precision, and critical requirement misses", "state": "PASS_IN_FROZEN_AUTHORIZED_FIXTURE_SCOPE", "evidence": "9 cases; 1 pass; 8 fail; 0 blocked; recall 0.14814814814814814; precision 0.2222222222222222; 15 critical misses across 8 cases" },
+    { "criterion": "P12 alternate retrieval before Knowledge missing and acquisition/promotion separation", "state": "PASS_IN_FROZEN_AUTHORIZED_FIXTURE_SCOPE", "evidence": "A1 and A2 recovery precede GAP_MISSING; A3-A5 are 3 non-authoritative candidates, NOT_REQUESTED, acceptedKnowledgeDigest=null, promotion leaks=0" },
+    { "criterion": "P13 combined Sufficiency reduces false completeness against frozen simple solver", "state": "PASS_IN_FROZEN_AUTHORIZED_FIXTURE_SCOPE", "evidence": "8 insufficient and 1 sufficient oracle cases; combined false completeness=0; simple solver false completeness=8; reduction=1; combined true completeness=1" },
+    { "criterion": "Missing, conflicting, unknown-semantic, bad-source, and applicability fail closed in finite states", "state": "PASS_IN_FROZEN_AUTHORIZED_FIXTURE_SCOPE", "evidence": "GAP_MISSING, GAP_BAD_SOURCE, GAP_APPLICABILITY, GAP_CONFLICTING, GAP_UNKNOWN_SEMANTIC, and BLOCKED are retained; incomplete recovery and changed bundles are BLOCKED" },
+    { "criterion": "No Internet/model output automatically becomes accepted Knowledge or Authority", "state": "PASS_IN_FROZEN_AUTHORIZED_FIXTURE_SCOPE", "evidence": "Only ACTIVE_CURATED_KNOWLEDGE can satisfy; Internet/model acceptance=false and Authority=false" },
+    { "criterion": "#281-#285 terminal prerequisite receipts", "state": "BLOCKED", "evidence": "No immutable terminal path-and-digest receipt was provided to this worker for any required issue" },
+    { "criterion": "Owner scope receipt", "state": "RECORDED_PENDING_LOCAL_COMMIT_BINDING", "evidence": "docs/evidence/conveyor/psai287-owner-scope-decision-v1.json; closure remains denied if it is absent or not immutable" }
+  ],
+  "closurePrerequisites": {
+    "requiredIssues": [281, 282, 283, 284, 285],
+    "requiredReceiptForm": "IMMUTABLE_TERMINAL_RECEIPT_WITH_PATH_AND_SHA256",
+    "ownerScopeReceipt": "docs/evidence/conveyor/psai287-owner-scope-decision-v1.json",
+    "missingIssues": [281, 282, 283, 284, 285],
+    "failClosedRule": "Do not close when a declared cross-issue or owner-scope prerequisite is missing, non-terminal, unbound, or unverified against the reviewed head. Do not substitute Internet/model output, local fixture success, or a narrative for a receipt."
+  },
+  "supportingArtifacts": [
+    { "path": "verification/cks-07-authorized-scope-readback-v1.json", "role": "P11_P12_P13_REPLAY_AND_GATE_READBACK" },
+    { "path": "docs/evidence/conveyor/psai287-owner-scope-decision-v1.json", "role": "OWNER_SCOPE_AND_CROSS_ISSUE_GUARD" },
+    { "path": "verification/cks-07-empty-kb-dry-run-evidence-v1.json", "sha256": "2c978f999f5748f1f0b3d32b6df9566afeeaa906a796b300ed45c140e7dfd4bf", "role": "EXISTING_DETERMINISTIC_DRY_RUN_RECEIPT" }
+  ],
+  "nonClaims": [
+    "The nine frozen synthetic cases are not generalized beyond their fixture bytes.",
+    "MODEL_DISABLED results are not competence-model performance and are not an authorized frozen-model result.",
+    "No Internet/model result is accepted Knowledge or Authority automatically.",
+    "No release, merge, issue close, activation, deployment, promotion, Authority, or broad empirical claim is made."
+  ],
+  "verdict": "NOT_READY_CROSS_ISSUE_TERMINAL_RECEIPTS_MISSING"
+}
