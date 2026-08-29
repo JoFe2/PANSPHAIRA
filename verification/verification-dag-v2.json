@@ -1750,7 +1750,7 @@
         {
           "path": "tests/render-ccp-m1-evidence.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "fabf08c1c6ac98dc83684a82f7cf644c02168955961d6f726bf017f23fa97e29"
+          "sha256": "4e961c9ffb17baba51fced0d76c2ea900b474a77db0c4e74f1473af5aa98bb08"
         }
       ],
       "ownedTests": [

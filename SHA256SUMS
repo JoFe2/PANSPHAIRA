@@ -794,7 +794,7 @@ e1e4304dde40a18146d905885a7d7dc9646a8d22a7702a758ad0da50d1ee00e0  ./tests/poc-sh
 dfe7338a6655c3a70f304f59c3a3e1e748ad62a8b78726eeb125db4e3f16332d  ./tests/protected-audit-timeline.test.ts
 c0525446e530ff39599ded8e413bb093cb77de7f910e727755f88d3c768af9a2  ./tests/public-product-spelling.test.mjs
 e62478578e1fbe986c999f7774f5e160c61eeb1ca83c0ed86b38df96b62e68e1  ./tests/release-governance.test.mjs
-fabf08c1c6ac98dc83684a82f7cf644c02168955961d6f726bf017f23fa97e29  ./tests/render-ccp-m1-evidence.test.mjs
+4e961c9ffb17baba51fced0d76c2ea900b474a77db0c4e74f1473af5aa98bb08  ./tests/render-ccp-m1-evidence.test.mjs
 af0f2117460bf2fc8478d9a45c58b17ad1bc6c839a9a0654a325078354fb4990  ./tests/resource-plane-profiles.test.ts
 599d23f5a6f3616e39100a802505bd39d395cc19a911d82b75f40a88141278f0  ./tests/secure-default-proof.test.mjs
 74d7c28fbe12bfeab992ed4c108a29ea49fdd1b07d5e8552bed550c3b2002783  ./tests/signal-release-intake.test.ts
@@ -869,4 +869,4 @@ da43b8a951fc32757829b486ab9f5dee95570300f3e85e46689bd12e797084d0  ./verification
 52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2  ./verification/cks-06-router-dry-run-evidence-v1.json
 d43b38be4695e0e5c70e3a8e0ebd2a55b527974d7d9721cc43d94ee248245432  ./verification/intake-001-evidence-v1.json
 e2fa73eb5312982af288d29df015b0dc3e010f3fdba6405ce3b464b4ccece660  ./verification/lkc-qual-01-m0-evidence-v1.json
-6c52aeb8f5ac0e8c7877cb76623a5a9e25ca5d099c28758790d3a34da5026376  ./verification/verification-dag-v2.json
+04dc9f7652ebd8659ed4d22a73529a1d0c52bb865c0dc19a0320326d1a29cacb  ./verification/verification-dag-v2.json
