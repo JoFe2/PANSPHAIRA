@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "cm.closure-local-gate-receipt/v1",
+  "receiptId": "CLOSURE-PSAI52-ROOT-DELIVERY-01-FINALIZER-01",
+  "controllerBinding": {
+    "taskId": "CLOSURE-PSAI52-ROOT-DELIVERY-01-FINALIZER-01",
+    "governingReceiptId": "SOL-PSAI52-STATE-RECONCILE-01",
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "authorityGranted": false
+  },
+  "exactIntegrationBinding": {
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "reviewedIntegrationHead": "e3080b0a660ff7fcf2f688a2068965e4c8625405",
+    "reviewedIntegrationTree": "e8b5324b25df8dfaaaf100f19ba3023def70997a",
+    "baseIsAncestor": true,
+    "staleHead": "4db140bcd056434fa278603e39461d429907c160",
+    "staleHeadIsAncestor": false,
+    "staleHeadHasSameTree": false
+  },
+  "canonicalRegistration": {
+    "entrypoint": "npm test",
+    "lifecycleHook": "posttest",
+    "ccpCommand": "npm run ccp:test",
+    "ccpSuite": "node --test dist/tests/ccp-*.test.js tests/render-ccp-m1-evidence.test.mjs",
+    "rendererIncluded": true
+  },
+  "semanticEvidence": {
+    "rendererCheck": "PASS",
+    "packetDigest": "13b6cd9002a6d2b8a45a49d1f3495881515cad1188c6f47bed5dad00080adfa1",
+    "exactHeadCommit": "e3080b0a660ff7fcf2f688a2068965e4c8625405",
+    "profileReceipts": 5,
+    "recoveryReceipts": 4,
+    "criterionReceiptStatus": "BOUND_NOT_PROVEN",
+    "staleHeadRegression": "PASS_FAIL_CLOSED"
+  },
+  "localGates": [
+    {
+      "command": "npm run build --silent",
+      "defaultRuntime": {
+        "outcome": "BLOCKED_INFRASTRUCTURE",
+        "exitCode": 133,
+        "evidence": "SIGTRAP: V8 SetPermissions errno check failed before project code executed"
+      },
+      "mitigatedRuntime": {
+        "command": "NODE_OPTIONS=--jitless npm run build --silent",
+        "outcome": "PASS",
+        "exitCode": 0
+      }
+    },
+    {
+      "command": "npm run lint",
+      "mitigatedRuntime": {
+        "command": "NODE_OPTIONS=--jitless npm run lint",
+        "outcome": "PASS",
+        "exitCode": 0
+      }
+    },
+    {
+      "command": "npm run ccp:test",
+      "mitigatedRuntime": {
+        "command": "NODE_OPTIONS=--jitless npm run ccp:test",
+        "outcome": "PASS",
+        "exitCode": 0,
+        "tests": 108,
+        "failed": 0
+      }
+    },
+    {
+      "command": "npm test",
+      "defaultRuntime": {
+        "outcome": "BLOCKED_INFRASTRUCTURE",
+        "exitCode": 133,
+        "evidence": "SIGTRAP: V8 SetPermissions errno check failed before project code executed"
+      },
+      "mitigatedRuntime": {
+        "command": "NODE_OPTIONS=--jitless npm test",
+        "outcome": "BLOCKED_INFRASTRUCTURE",
+        "exitCode": 1,
+        "evidence": "Existing knowledge-quality loopback test requires WebAssembly; WebAssembly is unavailable under --jitless. This is not a CCP product failure."
+      }
+    },
+    {
+      "command": "git diff --check main...HEAD",
+      "outcome": "PASS",
+      "exitCode": 0
+    }
+  ],
+  "deliveryDisposition": {
+    "release": "DEFERRED",
+    "githubIntegration": "NOT_REQUESTED",
+    "publicReadback": "PREPARED_LOCAL_ONLY",
+    "issueClose": "BLOCKED_PENDING_CONTROLLER_PINNED_NODE_HOST_DOCKER_GATES",
+    "closureAuthorized": false
+  },
+  "nonClaims": [
+    "AUTHORITATIVE_PINNED_NODE_GATE_PASS",
+    "GITHUB_INTEGRATION",
+    "MERGE",
+    "RELEASE",
+    "PUBLICATION",
+    "PRODUCTION_READBACK",
+    "ISSUE_CLOSE"
+  ]
+}

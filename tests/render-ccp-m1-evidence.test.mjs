@@ -6,6 +6,7 @@ import test from "node:test";
 const script = "scripts/render-ccp-m1-evidence.mjs";
 const input = "tests/fixtures/ccp-evidence/complete.json";
 const negativeInput = "tests/fixtures/ccp-evidence/redaction-failure.json";
+const staleHeadInput = "tests/fixtures/ccp-evidence/stale-head.json";
 const docs = "docs/ccp-m1-local-proof.md";
 const runtimeArgs = process.execArgv.includes("--jitless") ? ["--jitless"] : [];
 
@@ -27,7 +28,7 @@ test("CCP-M1 evidence renderer emits deterministic packet and readback input", (
   assert.equal(result.readbackHarnessInput.externalRequestMade, false);
   assert.equal(result.readbackHarnessInput.sourceBoundary, "LOCAL_SYNTHETIC_NON_PRODUCTION");
   assert.equal(result.readbackHarnessInput.expectedReadback.exactBaseCommit, "353017c4f60e30463d0a78fd6fd2509a37d37f76");
-  assert.equal(result.readbackHarnessInput.expectedReadback.exactHeadCommit, "4db140bcd056434fa278603e39461d429907c160");
+  assert.equal(result.readbackHarnessInput.expectedReadback.exactHeadCommit, "e3080b0a660ff7fcf2f688a2068965e4c8625405");
   assert.equal(result.readbackHarnessInput.expectedReadback.profileReceiptDigests.length, 5);
   assert.equal(result.readbackHarnessInput.expectedReadback.recoveryReceiptDigests.length, 4);
   assert.equal(result.readbackHarnessInput.expectedReadback.statusDigests.length, 4);
@@ -73,4 +74,11 @@ test("CCP-M1 evidence renderer fails closed before rendering a redaction failure
   assert.notEqual(result.status, 0);
   assert.match(`${result.stdout}\n${result.stderr}`, /CCP_M1_EVIDENCE_INPUT_SCHEMA_DENIED/);
   assert.equal(readFileSync(docs, "utf8").includes("customer@example.invalid"), false);
+});
+
+test("CCP-M1 evidence renderer fails closed for a stale integration head", () => {
+  const result = run(["--input", staleHeadInput]);
+  assert.notEqual(result.status, 0);
+  assert.match(`${result.stdout}\n${result.stderr}`, /CCP_M1_EVIDENCE_BINDING_DENIED/);
+  assert.equal(readFileSync(docs, "utf8").includes("4db140bcd056434fa278603e39461d429907c160"), false);
 });

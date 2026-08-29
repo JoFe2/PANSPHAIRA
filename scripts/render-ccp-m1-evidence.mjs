@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -38,6 +39,7 @@ const DOCS_PATH = resolve(ROOT, "docs/ccp-m1-local-proof.md");
 const PACKET_SCHEMA = "cm.ccp-m1-local-proof-packet/v1";
 const HARNESS_SCHEMA = "cm.ccp-m1-local-proof-readback-input/v1";
 const TASK_ID = "TERRA-PSAI52-ROOT-QS-01";
+const REVIEWED_INTEGRATION_HEAD = "e3080b0a660ff7fcf2f688a2068965e4c8625405";
 const PROFILE_RATES = [10, 50, 100, 1_000, 10_000];
 const REQUIRED_KEYS = [
   "artifacts", "binding", "criterionMatrix", "evidenceClass", "externalRequestMade", "faultRecovery",
@@ -90,6 +92,11 @@ function requireFalse(value, code) {
   if (value !== false) fail(code);
 }
 
+function gitSucceeds(args) {
+  const result = spawnSync("git", args, { cwd: ROOT, encoding: "utf8" });
+  return result.error === undefined && result.status === 0;
+}
+
 function projectInfrastructure(infrastructure) {
   const keys = [
     "actualWorkspacePath", "declaredWorkspacePath", "declaredWorkspacePathPresent", "dockerEnoentObserved",
@@ -126,6 +133,12 @@ function validateInput(input) {
     || input.binding.mergeBaseCommit !== input.binding.baseCommit
     || !/^[a-f0-9]{40}$/.test(input.binding.headCommit)
     || input.binding.repository !== "JoFe2/PANSPHAIRA") fail("CCP_M1_EVIDENCE_BINDING_DENIED");
+  if (input.binding.headCommit !== REVIEWED_INTEGRATION_HEAD
+    || !gitSucceeds(["merge-base", "--is-ancestor", input.binding.baseCommit, input.binding.headCommit])
+    || !gitSucceeds(["merge-base", "--is-ancestor", input.binding.headCommit, "HEAD"])
+    || !gitSucceeds(["rev-parse", `${input.binding.headCommit}^{tree}`])) {
+    fail("CCP_M1_EVIDENCE_BINDING_DENIED");
+  }
   if (!Array.isArray(input.criterionMatrix) || input.criterionMatrix.length !== 6) fail("CCP_M1_EVIDENCE_CRITERIA_DENIED");
   if (!Array.isArray(input.profiles) || input.profiles.length !== PROFILE_RATES.length) fail("CCP_M1_EVIDENCE_PROFILES_DENIED");
   if (!Array.isArray(input.faultRecovery) || input.faultRecovery.length !== 4) fail("CCP_M1_EVIDENCE_RECOVERY_DENIED");

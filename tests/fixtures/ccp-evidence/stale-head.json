@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "binding": {
+    "baseRef": "origin/main",
+    "diffCheck": "PASS",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "mergeBaseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headCommit": "4db140bcd056434fa278603e39461d429907c160",
+    "repository": "JoFe2/PANSPHAIRA"
+  },
+  "criterionMatrix": [],
+  "evidenceClass": "LOCAL_SYNTHETIC",
+  "externalRequestMade": false,
+  "faultRecovery": [],
+  "governingReceipt": {},
+  "infrastructure": {},
+  "newProcessVariantIntroduced": false,
+  "nonClaims": [],
+  "operatingModel": "Operating Model v1.1",
+  "preparedExternalActions": [],
+  "preservedDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+  "profiles": [],
+  "schemaVersion": "cm.ccp-m1-evidence-input/v1",
+  "statusReasons": [],
+  "taskId": "TERRA-PSAI52-ROOT-QS-01",
+  "tupleAndLkg": {}
+}
