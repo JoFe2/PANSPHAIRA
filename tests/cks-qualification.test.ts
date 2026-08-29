@@ -13,6 +13,7 @@ import {
   cksEscalationReceiptDigestV1,
   cksEscalationTaskVectorDigestV1,
   cksAdvisoryDecisionDigestV1,
+  cksSelectorQualificationEvidenceLineageDigestV1,
   CKS_QUALIFICATION_NONE,
   CKS_QUALIFICATION_NONE_DIGEST_V1,
   cksExactProfileDigestV1,
@@ -384,6 +385,20 @@ test("missing applicability link is independently sufficient for low-coverage es
   assert.equal(validateCksEscalationEvidenceV1(document).outcome, "VALID");
 });
 
+function selectorQualificationEvidence(profile: Json): Json {
+  const unsigned = {
+    exactProfileDigest: profile.profileDigest,
+    qualificationSuiteReceiptDigest: (profile.bindings as Json).qualificationSuite
+      && ((profile.bindings as Json).qualificationSuite as Json).freshCertificationReceiptDigest,
+    issuedAtMs: 0,
+    expiresAtMs: 2_000,
+    cks03: { status: "POSITIVE", receiptDigest: "1".repeat(64) },
+    cks04: { status: "POSITIVE", receiptDigest: "2".repeat(64) },
+    cks05: { status: "POSITIVE", receiptDigest: "3".repeat(64) },
+  };
+  return { ...unsigned, lineageDigest: cksSelectorQualificationEvidenceLineageDigestV1(unsigned) };
+}
+
 function loadSelectorInput(): CksAdvisorySelectorInputV1 {
   const fixture = JSON.parse(readFileSync(SELECTOR_FIXTURE_PATH, "utf8")) as Json;
   const baseProfile = loadFixture();
@@ -403,11 +418,7 @@ function loadSelectorInput(): CksAdvisorySelectorInputV1 {
       profile,
       coverageBox: spec.coverageBox,
       scenarioTags: [...CKS_REQUIRED_SCENARIO_TAGS_V1],
-      qualificationEvidence: {
-        cks03: { status: "POSITIVE", receiptDigest: "1".repeat(64) },
-        cks04: { status: "POSITIVE", receiptDigest: "2".repeat(64) },
-        cks05: { status: "POSITIVE", receiptDigest: "3".repeat(64) },
-      },
+      qualificationEvidence: selectorQualificationEvidence(profile),
       riskImpactPolicy: spec.riskImpactPolicy,
       authorityPolicy: spec.authorityPolicy,
       catalogAvailability: {
@@ -430,6 +441,7 @@ function loadSelectorInput(): CksAdvisorySelectorInputV1 {
   });
   return {
     schemaVersion: fixture.schemaVersion as typeof CKS_ADVISORY_SELECTOR_SCHEMA_V1,
+    evidenceAsOfMs: 1_000,
     taskVector: fixture.taskVector as readonly [number, number, number, number],
     candidates,
   };
@@ -495,6 +507,34 @@ test("selector abstains or returns no profile when qualification evidence or adm
   };
   const admissionDecision = selectSmallestQualifiedProfileV1(noAdmission);
   assert.equal(admissionDecision.outcome, "NO_QUALIFIED_PROFILE");
+
+  const staleEvidence = {
+    ...input,
+    candidates: input.candidates.map((candidate) => {
+      const { lineageDigest: _lineageDigest, ...unsigned } = candidate.qualificationEvidence;
+      const expired = { ...unsigned, expiresAtMs: input.evidenceAsOfMs };
+      return {
+        ...candidate,
+        qualificationEvidence: {
+          ...expired,
+          lineageDigest: cksSelectorQualificationEvidenceLineageDigestV1(expired),
+        },
+      };
+    }),
+  };
+  assert.equal(selectSmallestQualifiedProfileV1(staleEvidence).outcome, "NO_QUALIFIED_PROFILE");
+
+  const forgedLineage = {
+    ...input,
+    candidates: input.candidates.map((candidate) => ({
+      ...candidate,
+      qualificationEvidence: {
+        ...candidate.qualificationEvidence,
+        exactProfileDigest: "0".repeat(64),
+      },
+    })),
+  };
+  assert.equal(selectSmallestQualifiedProfileV1(forgedLineage).outcome, "ABSTAIN");
 
   const malformed = selectSmallestQualifiedProfileV1({ ...input, taskVector: [7, 0, 0, 0] });
   assert.equal(malformed.outcome, "ABSTAIN");

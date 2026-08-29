@@ -16,6 +16,7 @@ import {
   CKS_REQUIRED_SCENARIO_TAGS_V1,
   cksAdvisoryDecisionDigestV1,
   cksExactProfileDigestV1,
+  cksSelectorQualificationEvidenceLineageDigestV1,
   selectSmallestQualifiedProfileV1,
   type CksAdvisorySelectorCandidateV1,
   type CksAdvisorySelectorInputV1,
@@ -57,6 +58,20 @@ function assertBlocked(document: Json, reason: string): void {
   }
   const validation = validateCksShadowEvaluationV1(document);
   assert.equal(validation.outcome, "DENIED");
+}
+
+function selectorQualificationEvidence(profile: Json): Json {
+  const unsigned = {
+    exactProfileDigest: profile.profileDigest,
+    qualificationSuiteReceiptDigest: ((profile.bindings as Json).qualificationSuite as Json)
+      .freshCertificationReceiptDigest,
+    issuedAtMs: 0,
+    expiresAtMs: 2_000,
+    cks03: { status: "POSITIVE", receiptDigest: "1".repeat(64) },
+    cks04: { status: "POSITIVE", receiptDigest: "2".repeat(64) },
+    cks05: { status: "POSITIVE", receiptDigest: "3".repeat(64) },
+  };
+  return { ...unsigned, lineageDigest: cksSelectorQualificationEvidenceLineageDigestV1(unsigned) };
 }
 
 test("golden receipt proves paired quality preservation and measured cost/latency benefit", () => {
@@ -156,11 +171,7 @@ test("router selects the smallest fully qualified available profile, not the che
       profile,
       coverageBox: spec.coverageBox,
       scenarioTags: [...CKS_REQUIRED_SCENARIO_TAGS_V1],
-      qualificationEvidence: {
-        cks03: { status: "POSITIVE", receiptDigest: "1".repeat(64) },
-        cks04: { status: "POSITIVE", receiptDigest: "2".repeat(64) },
-        cks05: { status: "POSITIVE", receiptDigest: "3".repeat(64) },
-      },
+      qualificationEvidence: selectorQualificationEvidence(profile),
       riskImpactPolicy: spec.riskImpactPolicy,
       authorityPolicy: spec.authorityPolicy,
       catalogAvailability: { status: spec.catalogAvailability, exactProfileDigest: digest, catalogReceiptDigest: "4".repeat(64) },
@@ -174,6 +185,7 @@ test("router selects the smallest fully qualified available profile, not the che
   });
   const input = {
     schemaVersion: selectorFixture.schemaVersion as typeof CKS_ADVISORY_SELECTOR_SCHEMA_V1,
+    evidenceAsOfMs: 1_000,
     taskVector: selectorFixture.taskVector as readonly [number, number, number, number],
     candidates,
   } satisfies CksAdvisorySelectorInputV1;

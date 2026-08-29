@@ -8,6 +8,7 @@ import {
   CKS_ADVISORY_SELECTOR_SCHEMA_V1,
   CKS_REQUIRED_SCENARIO_TAGS_V1,
   cksExactProfileDigestV1,
+  cksSelectorQualificationEvidenceLineageDigestV1,
   selectSmallestQualifiedProfileV1,
   validateCksCompetenceQualificationProfileV1,
   validateCksEscalationEvidenceV1,
@@ -118,14 +119,22 @@ function buildCandidates(fixture, evidence) {
     candidateProfile.state = spec.profileState;
     candidateProfile.profileDigest = cksExactProfileDigestV1(candidateProfile.bindings);
     const profileDigest = candidateProfile.profileDigest;
+    const qualificationEvidenceUnsigned = {
+      exactProfileDigest: profileDigest,
+      qualificationSuiteReceiptDigest: candidateProfile.bindings.qualificationSuite.freshCertificationReceiptDigest,
+      issuedAtMs: 0,
+      expiresAtMs: 2_000,
+      cks03: { status: "POSITIVE", receiptDigest: evidenceByGate["CKS-03"] },
+      cks04: { status: "POSITIVE", receiptDigest: evidenceByGate["CKS-04"] },
+      cks05: { status: "POSITIVE", receiptDigest: evidenceByGate["CKS-05"] },
+    };
     return {
       profile: candidateProfile,
       coverageBox: spec.coverageBox,
       scenarioTags: [...CKS_REQUIRED_SCENARIO_TAGS_V1],
       qualificationEvidence: {
-        cks03: { status: "POSITIVE", receiptDigest: evidenceByGate["CKS-03"] },
-        cks04: { status: "POSITIVE", receiptDigest: evidenceByGate["CKS-04"] },
-        cks05: { status: "POSITIVE", receiptDigest: evidenceByGate["CKS-05"] },
+        ...qualificationEvidenceUnsigned,
+        lineageDigest: cksSelectorQualificationEvidenceLineageDigestV1(qualificationEvidenceUnsigned),
       },
       riskImpactPolicy: spec.riskImpactPolicy,
       authorityPolicy: spec.authorityPolicy,
@@ -250,6 +259,7 @@ export function runDryRun(fixture) {
   const candidates = buildCandidates(fixture, evidence);
   const preCapacitySelection = selectSmallestQualifiedProfileV1({
     schemaVersion: CKS_ADVISORY_SELECTOR_SCHEMA_V1,
+    evidenceAsOfMs: fixture.qualificationEvidenceAsOfMs,
     taskVector: fixture.qualificationBinding.taskVector,
     candidates,
   });
@@ -258,6 +268,7 @@ export function runDryRun(fixture) {
   const capacity = runCapacity(fixture, selectedProfileDigest);
   const selection = selectSmallestQualifiedProfileV1({
     schemaVersion: CKS_ADVISORY_SELECTOR_SCHEMA_V1,
+    evidenceAsOfMs: fixture.qualificationEvidenceAsOfMs,
     taskVector: fixture.qualificationBinding.taskVector,
     candidates: candidates.map((candidate) => candidate.profile.profileDigest === selectedProfileDigest
       ? { ...candidate, resourceAdmission: { ...candidate.resourceAdmission, admissionReceiptDigest: capacity.requestDigest } }

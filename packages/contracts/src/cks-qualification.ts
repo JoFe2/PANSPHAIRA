@@ -815,10 +815,25 @@ export type CksRequiredScenarioTagV1 = typeof CKS_REQUIRED_SCENARIO_TAGS_V1[numb
 export type CksSelectorPolicyDecisionV1 = "ALLOW" | "DENY";
 export type CksSelectorEvidenceStatusV1 = "POSITIVE" | "UNKNOWN" | "NOT_RUN" | "FAILED";
 
+export interface CksSelectorEvidenceReceiptV1 {
+  readonly status: CksSelectorEvidenceStatusV1;
+  readonly receiptDigest: string;
+}
+
+/**
+ * The selector never treats a status/digest pair as qualification evidence.
+ * A positive bundle must bind the exact profile and its fresh certification
+ * receipt, and state the interval in which the bundle may be consumed.
+ */
 export interface CksSelectorQualificationEvidenceV1 {
-  readonly cks03: { readonly status: CksSelectorEvidenceStatusV1; readonly receiptDigest: string };
-  readonly cks04: { readonly status: CksSelectorEvidenceStatusV1; readonly receiptDigest: string };
-  readonly cks05: { readonly status: CksSelectorEvidenceStatusV1; readonly receiptDigest: string };
+  readonly exactProfileDigest: string;
+  readonly qualificationSuiteReceiptDigest: string;
+  readonly issuedAtMs: number;
+  readonly expiresAtMs: number;
+  readonly cks03: CksSelectorEvidenceReceiptV1;
+  readonly cks04: CksSelectorEvidenceReceiptV1;
+  readonly cks05: CksSelectorEvidenceReceiptV1;
+  readonly lineageDigest: string;
 }
 
 export interface CksSelectorCatalogAvailabilityV1 {
@@ -854,6 +869,8 @@ export interface CksAdvisorySelectorCandidateV1 {
 
 export interface CksAdvisorySelectorInputV1 {
   readonly schemaVersion: typeof CKS_ADVISORY_SELECTOR_SCHEMA_V1;
+  /** Explicit evaluation instant; freshness is never inferred from wall-clock time. */
+  readonly evidenceAsOfMs: number;
   readonly taskVector: CksRkpuVectorV1;
   readonly candidates: readonly CksAdvisorySelectorCandidateV1[];
 }
@@ -888,6 +905,14 @@ export type CksAdvisoryRouterInputV1 = CksAdvisorySelectorInputV1;
 export type CksAdvisoryRouterDecisionV1 = CksAdvisorySelectorDecisionV1;
 
 const selectorDigest = (value: unknown): string => sha256Hex(canonicalJson(value));
+/** Digest qualification evidence without its self-referential lineageDigest field. */
+export function cksSelectorQualificationEvidenceLineageDigestV1(
+  evidence: Omit<CksSelectorQualificationEvidenceV1, "lineageDigest"> | Record<string, unknown>,
+): string {
+  return selectorDigest(Object.fromEntries(
+    Object.entries(evidence as Record<string, unknown>).filter(([key]) => key !== "lineageDigest"),
+  ));
+}
 const selectorDigestValid = (value: unknown): value is string =>
   typeof value === "string" && ESCALATION_DIGEST_PATTERN.test(value);
 const selectorSafeInteger = (value: unknown): value is number =>
@@ -908,6 +933,7 @@ const selectorBoxCardinality = (box: CksRkpuVectorV1): number =>
 function selectorCandidateIsEligible(
   candidate: CksAdvisorySelectorCandidateV1,
   taskVector: CksRkpuVectorV1,
+  evidenceAsOfMs: number,
 ): boolean {
   const profileValidation = validateCksCompetenceQualificationProfileV1(candidate.profile);
   if (profileValidation.outcome !== "VALID" || candidate.profile.state !== "QUALIFIED") return false;
@@ -918,7 +944,12 @@ function selectorCandidateIsEligible(
   if (candidate.scenarioTags.length !== CKS_REQUIRED_SCENARIO_TAGS_V1.length
     || new Set(candidate.scenarioTags).size !== CKS_REQUIRED_SCENARIO_TAGS_V1.length
     || !CKS_REQUIRED_SCENARIO_TAGS_V1.every((tag) => candidate.scenarioTags.includes(tag))) return false;
-  if (candidate.qualificationEvidence.cks03.status !== "POSITIVE"
+  if (candidate.qualificationEvidence.exactProfileDigest !== candidate.profile.profileDigest
+    || candidate.qualificationEvidence.qualificationSuiteReceiptDigest
+      !== candidate.profile.bindings.qualificationSuite.freshCertificationReceiptDigest
+    || candidate.qualificationEvidence.issuedAtMs > evidenceAsOfMs
+    || candidate.qualificationEvidence.expiresAtMs <= evidenceAsOfMs
+    || candidate.qualificationEvidence.cks03.status !== "POSITIVE"
     || candidate.qualificationEvidence.cks04.status !== "POSITIVE"
     || candidate.qualificationEvidence.cks05.status !== "POSITIVE") return false;
   if (candidate.riskImpactPolicy !== "ALLOW" || candidate.authorityPolicy !== "ALLOW") return false;
@@ -931,8 +962,9 @@ function selectorCandidateIsEligible(
 
 function validateSelectorInput(input: unknown): input is CksAdvisorySelectorInputV1 {
   if (!selectorPlainObject(input)
-    || !selectorExactKeys(input, ["schemaVersion", "taskVector", "candidates"])
+    || !selectorExactKeys(input, ["schemaVersion", "evidenceAsOfMs", "taskVector", "candidates"])
     || input.schemaVersion !== CKS_ADVISORY_SELECTOR_SCHEMA_V1
+    || !selectorSafeInteger(input.evidenceAsOfMs)
     || !selectorVector(input.taskVector)
     || !Array.isArray(input.candidates)
     || input.candidates.length > 64) return false;
@@ -941,7 +973,11 @@ function validateSelectorInput(input: unknown): input is CksAdvisorySelectorInpu
     "catalogAvailability", "resourceAdmission", "qualificationTierOrdinal", "certifiedCoverageBoxCardinality",
     "reservedCostMicros", "qualifiedP95ElapsedMs", "peakResidentBytes",
   ] as const;
-  const evidenceKeys = ["cks03", "cks04", "cks05"] as const;
+  const evidenceKeys = [
+    "exactProfileDigest", "qualificationSuiteReceiptDigest", "issuedAtMs", "expiresAtMs",
+    "cks03", "cks04", "cks05", "lineageDigest",
+  ] as const;
+  const receiptEvidenceKeys = ["cks03", "cks04", "cks05"] as const;
   const receiptKeys = ["status", "receiptDigest"] as const;
   const availabilityKeys = ["status", "exactProfileDigest", "catalogReceiptDigest"] as const;
   const admissionKeys = ["status", "exactProfileDigest", "admissionReceiptDigest"] as const;
@@ -962,6 +998,14 @@ function validateSelectorInput(input: unknown): input is CksAdvisorySelectorInpu
       || !selectorSafeInteger(rawCandidate.reservedCostMicros)
       || !selectorSafeInteger(rawCandidate.qualifiedP95ElapsedMs)
       || !selectorSafeInteger(rawCandidate.peakResidentBytes)
+      || !selectorDigestValid(rawCandidate.qualificationEvidence.exactProfileDigest)
+      || !selectorDigestValid(rawCandidate.qualificationEvidence.qualificationSuiteReceiptDigest)
+      || !selectorSafeInteger(rawCandidate.qualificationEvidence.issuedAtMs)
+      || !selectorSafeInteger(rawCandidate.qualificationEvidence.expiresAtMs)
+      || rawCandidate.qualificationEvidence.expiresAtMs <= rawCandidate.qualificationEvidence.issuedAtMs
+      || !selectorDigestValid(rawCandidate.qualificationEvidence.lineageDigest)
+      || cksSelectorQualificationEvidenceLineageDigestV1(rawCandidate.qualificationEvidence)
+        !== rawCandidate.qualificationEvidence.lineageDigest
       || (rawCandidate.riskImpactPolicy !== "ALLOW" && rawCandidate.riskImpactPolicy !== "DENY")
       || (rawCandidate.authorityPolicy !== "ALLOW" && rawCandidate.authorityPolicy !== "DENY")
       || (rawCandidate.catalogAvailability.status !== "AVAILABLE" && rawCandidate.catalogAvailability.status !== "UNAVAILABLE")
@@ -970,7 +1014,7 @@ function validateSelectorInput(input: unknown): input is CksAdvisorySelectorInpu
       || !selectorDigestValid(rawCandidate.catalogAvailability.catalogReceiptDigest)
       || !selectorDigestValid(rawCandidate.resourceAdmission.exactProfileDigest)
       || !selectorDigestValid(rawCandidate.resourceAdmission.admissionReceiptDigest)) return false;
-    for (const key of evidenceKeys) {
+    for (const key of receiptEvidenceKeys) {
       const evidence = rawCandidate.qualificationEvidence[key];
       if (!selectorPlainObject(evidence) || !selectorExactKeys(evidence, receiptKeys)
         || !["POSITIVE", "UNKNOWN", "NOT_RUN", "FAILED"].includes(evidence.status as string)
@@ -1017,7 +1061,8 @@ export function selectSmallestQualifiedProfileV1(input: unknown): CksAdvisorySel
     } as const;
     return { ...decision, decisionDigest: cksAdvisoryDecisionDigestV1(decision) };
   }
-  const eligible = input.candidates.filter((candidate) => selectorCandidateIsEligible(candidate, input.taskVector));
+  const eligible = input.candidates.filter((candidate) =>
+    selectorCandidateIsEligible(candidate, input.taskVector, input.evidenceAsOfMs));
   const ordered = [...eligible].sort((left, right) => {
     const leftKey = [
       left.qualificationTierOrdinal,

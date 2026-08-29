@@ -54,6 +54,7 @@
     "selectorPath": "tests/fixtures/cks-qualification/smallest-qualified-v1.json",
     "taskVector": [2, 1, 2, 1]
   },
+  "qualificationEvidenceAsOfMs": 1000,
   "typedEscalation": {
     "casesPath": "tests/fixtures/cks-qualification/escalation-causes-v1.json",
     "requiredCauses": [
