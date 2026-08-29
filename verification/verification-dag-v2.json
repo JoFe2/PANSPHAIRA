@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "3fd1ca33ec7776f06b9db8d880840f3ef9b39520eb3e522ae971b5098ad9ead8"
+          "sha256": "dc7b3432f958a9b012b550bc5aa792458c3f33d84fd364e8516b52b10f4e8350"
         }
       ],
       "ownedTests": [

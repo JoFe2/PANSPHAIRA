@@ -220,7 +220,7 @@ dbcd3ac598aa743f8a7e4a95cc8c88eb1c5a27672eadced284b72bea74fd3265  ./docs/VISIBIL
 550fb5e5ab7120450f1a3aa8f94da0249f37421211be39c2a96eecb54c70b4da  ./docs/VOICE-LOCAL-PTT.md
 06077133bcdcaf8388aeb9c5c0477c973ca116e657621077845d9be6cd29dc1e  ./docs/alternatives.md
 ecae9fbb4bce6aabce35d0a7acf6cf2d05c345fc0a3304ac9ee8f46f16b20994  ./docs/capabilities.md
-3ffdfa7c33eaf25c9b5f62a23ef6d5f7e52ba1ae69e710ca01f474edf3544587  ./docs/ccp-m1-local-proof.md
+5b8950af64860ce779a701a4c1bc0e786bbf1197bbeac0db75c97d174fbdb2eb  ./docs/ccp-m1-local-proof.md
 5cb3ec290edf70f3062c16d0445cdc00c949c9d7c06768619f2b7fedc5eede51  ./docs/development/cap-cell-erp-01-pdca.md
 42fd04f297e2b100cabd7e91a64b8d5b21c78c6564f201a6aff3b1cf958430be  ./docs/development/cm-bi-ownership-migration-v2-prepared.md
 9bd84df398223c1563a96a8e7cd4e72fec9c4ceba57397ed06d4272d238dd6f1  ./docs/development/lkc-qual-01-m0-evidence.md
@@ -637,7 +637,7 @@ c7e372d7eb0d701f7cde55147bdeadf73d0c8e7202b2f3be49e83e78172db429  ./tests/fixtur
 2b79a923c98fddcf2333538f446ad52bc5c7b6696706b059b1665a0b43036ca6  ./tests/fixtures/ccp-admission/authority-change.json
 2d4b2085d59e868978138db69b153f2c8d35cc249ddfdddfa6573baf57cd18d9  ./tests/fixtures/ccp-admission/malicious.json
 160819c50be69b8c0ff65c7c1769d0a5787f288dba6ca0c9e0a355e8053b1d7e  ./tests/fixtures/ccp-admission/stale.json
-b248a9f99c1721752669788a213c710fa355446bf5d1c3379ad1858f5387186b  ./tests/fixtures/ccp-evidence/complete.json
+c73f8bc841a806140cefda81fafacd1cfd3ebd4f7107cef3ae377fdcf0018754  ./tests/fixtures/ccp-evidence/complete.json
 c0bbe83a77616eef299b6a75f46a7c9834e9b927119d7abdde1700e6446dfa80  ./tests/fixtures/ccp-evidence/redaction-failure.json
 9495377141987753d7896e033fa0d62021f8bbb36d0adba41b2ff72794842497  ./tests/fixtures/ccp-evidence/stale-head.json
 aed544239ab6f5635eb684a1d040e001d48fa3d2fabfe4afb90b66d62f5d1712  ./tests/fixtures/ccp-intake/malformed-delivery.json
@@ -846,7 +846,7 @@ dc3bf18be5004052d0c4abe40778df6227ee8c20f02408ecac10039cb2873a30  ./tools/video-
 54f9a01d34131ece91fca433122b0dd72afa7ab7fe92a3483d5b460857bd222e  ./tools/video-production-reference/src/strict-json.mjs
 d4b6a9466794306b59f1465aa668464074c1ecefb5fb0b62e9423c14c7bef6ba  ./tools/video-production-reference/src/verify-closure.mjs
 2452223d6db0162e5f80fd68fb9dbfd73b0bdcd8fdfc60944e78c2f81b543b04  ./tools/video-production-reference/tests/closure.test.mjs
-3fd1ca33ec7776f06b9db8d880840f3ef9b39520eb3e522ae971b5098ad9ead8  ./tools/video-production-reference/tests/slice.test.mjs
+dc7b3432f958a9b012b550bc5aa792458c3f33d84fd364e8516b52b10f4e8350  ./tools/video-production-reference/tests/slice.test.mjs
 f86763bdd1a23123a244541d87254c46a512fb5941ac15859ec0923add825838  ./tsconfig.json
 b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification/awi-03-knowledge-envelope-evidence-v1.json
 40b6a9bbe263b9cd67ef034dec0eb87c350aa1587904e385a2acb1072b3e0bc3  ./verification/bi-002-crm-read-connector-evidence-v1.json
@@ -855,4 +855,4 @@ da43b8a951fc32757829b486ab9f5dee95570300f3e85e46689bd12e797084d0  ./verification
 52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2  ./verification/cks-06-router-dry-run-evidence-v1.json
 d43b38be4695e0e5c70e3a8e0ebd2a55b527974d7d9721cc43d94ee248245432  ./verification/intake-001-evidence-v1.json
 e2fa73eb5312982af288d29df015b0dc3e010f3fdba6405ce3b464b4ccece660  ./verification/lkc-qual-01-m0-evidence-v1.json
-2286c195c050884f3b697b1a5ed0fdfa39085e830c29fbdeb4047b15b457fb8f  ./verification/verification-dag-v2.json
+6a8fd3c12de775d7c573691fb395d21b68ed8c717f583dd3648e7dd47ad2160f  ./verification/verification-dag-v2.json
