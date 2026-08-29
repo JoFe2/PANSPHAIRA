@@ -1,7 +1,7 @@
 {
   "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
   "receiptId": "PSAI107-INTEGRATION-ROOT-QS-01",
-  "receiptVersion": 1,
+  "receiptVersion": 2,
   "artifactKind": "ROOT_QUALITY_SYSTEM_INTEGRATION_RECEIPT",
   "governance": {
     "operatingModelVersion": "1.1",
@@ -283,6 +283,177 @@
       "command": "git diff --check origin/main...HEAD",
       "status": "PASS"
     }
+  },
+  "currentMainClosure": {
+    "taskId": "CLOSURE-PSAI107-INTEGRATE-CURRENT-MAIN-01",
+    "replay": {
+      "publicMainRef": "origin/main",
+      "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+      "preClosureHead": "35472d3737825b6bd9fdbf34efe833080d438675",
+      "range": "origin/main...35472d3737825b6bd9fdbf34efe833080d438675",
+      "rangeCommitCount": 26,
+      "branch": "conveyor/pansphaira-107",
+      "mergeBaseEqualsPublicMain": true,
+      "originMainFreshFetch": "PASS"
+    },
+    "acceptedPackageHeads": [
+      {
+        "id": "MEDIAWIKI_MINI_DUMP_AND_DOWNLOAD_POLICY",
+        "commits": [
+          "84120d6626fe2d5dafb68c4f88224d50c60e5935",
+          "143a46f03b475d9cb12654769a80fcb6989a6779",
+          "75c22b10fdf8880492b87a4f8e596da0e9d58d21",
+          "e52dfb3abb300ef86541696937abd776aa966bd7",
+          "873e3e46935191844565d579d328e55227fd40ad",
+          "1996246436d05f225864991e52ee5b2e8f556285",
+          "b41d2ca48ded0796724fdb772ffcaabb07c341c1",
+          "366525e278997ccfbe0fc375e40d3bc41e7f68c4",
+          "1578bc1d632fa4472b320ae4962e56379c0691da"
+        ],
+        "status": "PRESENT_ON_CURRENT_MAIN_DERIVED_HEAD",
+        "evidencePaths": [
+          "packages/contracts/src/mediawiki-mini-dump.ts",
+          "packages/local-knowledge/src/wikimedia-download-policy.ts",
+          "packages/local-knowledge/src/wikimedia-optin-download.ts",
+          "tests/mediawiki-mini-dump.test.ts",
+          "tests/wikimedia-optin-download.test.ts"
+        ]
+      },
+      {
+        "id": "IMMUTABLE_EDITION_LKG_LIFECYCLE",
+        "commit": "7dd5503213f2bc4fffec4fc0689ac6b654367b4a",
+        "status": "PRESENT_ON_CURRENT_MAIN_DERIVED_HEAD",
+        "evidencePaths": [
+          "packages/contracts/src/mediawiki-edition-lifecycle.ts",
+          "tests/mediawiki-edition-lifecycle.test.ts"
+        ]
+      },
+      {
+        "id": "READ_ONLY_QUERY_RECEIPTS",
+        "commit": "562e9c967161dbe6dff8e293a00ac15cb9071757",
+        "status": "PRESENT_ON_CURRENT_MAIN_DERIVED_HEAD",
+        "evidencePaths": [
+          "packages/contracts/src/mediawiki-query-receipt.ts",
+          "packages/local-knowledge/src/mediawiki-readonly-query.ts",
+          "tests/mediawiki-readonly-query.test.ts"
+        ]
+      },
+      {
+        "id": "DEFAULT_OFF_OFFLINE_WIKI_PROFILE",
+        "commits": [
+          "e580c6152950d14b4e335894ae4a3981e63df67e",
+          "be0299e3f06cce7df0c781d4b24ea3acc558d87b"
+        ],
+        "status": "PRESENT_ON_CURRENT_MAIN_DERIVED_HEAD",
+        "evidencePaths": [
+          "docker/local-knowledge-wiki/Dockerfile",
+          "docker/local-knowledge-wiki/docker-compose.wiki.yml",
+          "docker/local-knowledge-wiki/entrypoint.sh",
+          "tests/local-knowledge-wiki-container.test.mjs"
+        ]
+      },
+      {
+        "id": "OFFLINE_PILOT_EVIDENCE_HARNESS",
+        "commit": "0753248460b36115f1dcce4ff6b40c815dc8b8c4",
+        "status": "PRESENT_ON_CURRENT_MAIN_DERIVED_HEAD",
+        "evidencePaths": [
+          "packages/local-knowledge/src/wikimedia-pilot-evidence.ts",
+          "scripts/verify-wikimedia-pilot.mjs",
+          "tests/wikimedia-pilot-evidence.test.ts"
+        ]
+      },
+      {
+        "id": "KIWIX_ZIM_COMPATIBILITY_ASSESSMENT",
+        "commit": "5e7fd75f7945c0366371ee1e65be8d988c7868bb",
+        "status": "PRESENT_ON_CURRENT_MAIN_DERIVED_HEAD",
+        "evidencePaths": [
+          "docs/LOCAL-KNOWLEDGE-KIWIX-ZIM-ASSESSMENT.md",
+          "tests/fixtures/kiwix-zim-assessment/assessment-v1.json",
+          "tests/kiwix-zim-assessment.test.mjs"
+        ]
+      },
+      {
+        "id": "MEDIAWIKI_XML_EXISTING_CONTRACT_ADAPTER",
+        "commit": "35472d3737825b6bd9fdbf34efe833080d438675",
+        "status": "PRESENT_ON_CURRENT_MAIN_DERIVED_HEAD",
+        "evidencePaths": [
+          "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+          "tests/mediawiki-xml-local-adapter.test.ts",
+          "verification/wikimedia-m0-evidence-v1.json"
+        ]
+      }
+    ],
+    "criterionSeam": [
+      {
+        "criterion": "Synthetic import, re-import determinism, immutable editions and bounded mounted-snapshot path are connected without a second lifecycle.",
+        "bindings": [
+          "packages/contracts/src/mediawiki-mini-dump.ts",
+          "packages/contracts/src/mediawiki-edition-lifecycle.ts",
+          "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+          "tests/mediawiki-mini-dump.test.ts",
+          "tests/mediawiki-edition-lifecycle.test.ts",
+          "tests/mediawiki-xml-local-adapter.test.ts"
+        ],
+        "status": "SOURCE_BOUND_RUNTIME_GATE_PENDING"
+      },
+      {
+        "criterion": "Read-only results carry exact passage, source project/page/revision/canonical URL/snapshot/license and content/edition digests.",
+        "bindings": [
+          "packages/contracts/src/mediawiki-query-receipt.ts",
+          "packages/local-knowledge/src/mediawiki-readonly-query.ts",
+          "tests/mediawiki-readonly-query.test.ts"
+        ],
+        "status": "SOURCE_BOUND_RUNTIME_GATE_PENDING"
+      },
+      {
+        "criterion": "Default-off local import, checksum-bound opt-in download, atomic activation, exact LKG restore, contradiction visibility and no automatic truth promotion are all fail-closed boundaries.",
+        "bindings": [
+          "packages/local-knowledge/src/wikimedia-download-policy.ts",
+          "packages/local-knowledge/src/wikimedia-optin-download.ts",
+          "packages/contracts/src/mediawiki-edition-lifecycle.ts",
+          "packages/contracts/src/knowledge-envelope.ts",
+          "tests/wikimedia-optin-download.test.ts",
+          "tests/mediawiki-edition-lifecycle.test.ts"
+        ],
+        "status": "SOURCE_BOUND_RUNTIME_GATE_PENDING"
+      },
+      {
+        "criterion": "The container source excludes bundled corpus, credentials and online fallback; official-pilot storage, import-time and query claims remain gated by mounted raw evidence.",
+        "bindings": [
+          "docker/local-knowledge-wiki/.dockerignore",
+          "docker/local-knowledge-wiki/Dockerfile",
+          "docker/local-knowledge-wiki/entrypoint.sh",
+          "tests/local-knowledge-wiki-container.test.mjs",
+          "packages/local-knowledge/src/wikimedia-pilot-evidence.ts",
+          "tests/wikimedia-pilot-evidence.test.ts"
+        ],
+        "status": "SOURCE_BOUND_AUTHORITATIVE_NODE_AND_HOST_DOCKER_GATES_PENDING"
+      }
+    ],
+    "failClosedIntegrationGuards": {
+      "missingPackageHead": "BLOCK",
+      "stalePackageHead": "BLOCK",
+      "conflictingPackageHead": "BLOCK",
+      "unauthorizedPackageHead": "BLOCK",
+      "untestedPackageHead": "BLOCK",
+      "inspection": {
+        "command": "git fetch --prune origin main; git merge-base origin/main HEAD; git cat-file -e <every accepted package commit>^{commit}; git log -1 HEAD -- <every package path>",
+        "missingHeads": [],
+        "staleHeads": [],
+        "conflictingHeads": [],
+        "unauthorizedHeads": [],
+        "sourceInspectionStatus": "PASS"
+      },
+      "runtimeGate": {
+        "command": "npm run build --silent; npm test",
+        "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+        "evidence": "Node v24.19.0 aborted in V8 OS::SetPermissions before either npm script started.",
+        "productVerdict": "NONE",
+        "requiredDisposition": "AUTHORITATIVE_PINNED_NODE_AND_HOST_DOCKER_RERUN_REQUIRED"
+      }
+    },
+    "decision": "CURRENT_MAIN_SOURCE_INTEGRATED_PENDING_AUTHORITATIVE_RUNTIME_GATES",
+    "claimBoundary": "This closure proves that the accepted package heads and their criterion bindings are together on a freshly fetched current-main-derived head. It does not convert source inspection, prior focused evidence or this environment's SIGTRAP into an official Wikimedia snapshot, Docker image, release, publication, truth or runtime-success claim."
   },
   "decision": {
     "outcome": "REVIEW_CANDIDATE_PREPARED_PENDING_AUTHORITATIVE_RUNTIME_GATES",
