@@ -1745,7 +1745,7 @@
         {
           "path": "scripts/render-ccp-m1-evidence.mjs",
           "role": "TOOLCHAIN",
-          "sha256": "2ec86cb2bae0396dd7bb055d38318cacb6136f7f19f28cd8ac8e1b627e7bbdfb"
+          "sha256": "93fd12c83b5258e678f0aaa0b09b903befa0663ba1123683ddf8313e9eee3641"
         },
         {
           "path": "tests/render-ccp-m1-evidence.test.mjs",
