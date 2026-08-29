@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "pansphaira.evidence/conveyor-canonical-root-qs/v1",
+  "taskId": "CLOSURE-PSAI285-EVIDENCE-RECOVERY-01",
+  "receiptId": "TERRA-PSAI285-CANONICAL-ROOT-QS-01",
+  "recordedAt": "2026-08-29T05:30:56Z",
+  "decision": "NOT_READY_FAIL_CLOSED",
+  "decisionRationale": [
+    "The exact candidate was replayed against current local public main without commit rewriting; main is an ancestor and the rebase was a no-op.",
+    "The design receipt still denies execution authorization, and no immutable owner authorization receipt or real terminal run record exists for any scheduled arm/task/edition/seed.",
+    "The only runnable CKS-05 materials in the candidate are explicitly labelled dry-run/scorer fixtures. They are excluded rather than relabelled as model invocations, benchmark executions, or architecture evidence.",
+    "The local Node build and selected CKS-05 test process both stopped at V8 Isolate initialization with exit 133/SIGTRAP before product execution. That is infrastructure evidence, not a product verdict."
+  ],
+  "governance": {
+    "operatingModelVersion": "Operating Model v1.1",
+    "preservedDecisionIds": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "processVariantIntroduced": false,
+    "authority": "NONE",
+    "actionsNotPerformed": {
+      "modelInvocations": 0,
+      "benchmarkRuns": 0,
+      "release": false,
+      "merge": false,
+      "issueClose": false,
+      "activation": false,
+      "push": false
+    }
+  },
+  "canonicalBinding": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "baseRef": "main",
+    "currentPublicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "reviewedCandidateCommit": "dc8fca3587d9b8d2cabec88c82380bbe5339d74a",
+    "reviewedCandidateBranch": "conveyor/pansphaira-285",
+    "reviewedCandidateCommitsAheadOfMain": 10,
+    "baseIsAncestorOfReviewedCandidate": true,
+    "rebaseReplayReceipt": {
+      "command": "git rebase main",
+      "status": "NOOP_CURRENT_BRANCH_ALREADY_BASED_ON_MAIN",
+      "resultingReviewedHead": "dc8fca3587d9b8d2cabec88c82380bbe5339d74a"
+    },
+    "protocol": {
+      "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+      "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd"
+    }
+  },
+  "boundEvidence": [
+    {
+      "path": "verification/cks-05-authorized-benchmark-results-v1.json",
+      "sha256": "41e1a883e314ad2d81a657e00d19b90edd4a41311df03eea94f43b5a3ac2a616",
+      "role": "real-terminal-receipt reconciliation",
+      "verdict": "NOT_READY_FAIL_CLOSED"
+    },
+    {
+      "path": "docs/evidence/conveyor/psai285-measured-benchmark-report-v1.json",
+      "sha256": "2052cd853c6ce988d716a123cabf1ecb198d86d91ac83bf18d2e99b8fbcfa203",
+      "role": "A/B, statistics, failure, stop, and falsification report",
+      "verdict": "NOT_MEASURED_FAIL_CLOSED"
+    },
+    {
+      "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+      "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a",
+      "role": "protocol and immutable profile design receipt",
+      "executionAuthorization": "NOT_GRANTED_DESIGN_RECEIPT_ONLY"
+    }
+  ],
+  "ownerAndCrossIssuePrerequisites": [
+    {
+      "prerequisite": "Owner authorizes the exact selected model profiles, runtime profile, and fresh-hidden execution",
+      "terminalReceipt": null,
+      "status": "UNRESOLVED_BLOCKING",
+      "failClosedEffect": "No model may be invoked and no synthetic or substitute profile/result may be admitted."
+    },
+    {
+      "prerequisite": "All 960 scheduled arm/task/edition/seed executions produce exactly one immutable terminal receipt",
+      "terminalReceipt": null,
+      "status": "UNRESOLVED_BLOCKING",
+      "failClosedEffect": "No paired identity reconciliation, A/B estimate, confidence interval, architecture conclusion, or substitution eligibility may pass."
+    },
+    {
+      "prerequisite": "Authoritative pinned-Node and host-Docker gates execute on the exact reviewed head",
+      "terminalReceipt": null,
+      "status": "UNRESOLVED_BLOCKING",
+      "failClosedEffect": "Local SIGTRAP/ENOENT evidence cannot be promoted into product pass/fail evidence."
+    }
+  ],
+  "criterionMatrix": {
+    "verdict": "NOT_READY_FAIL_CLOSED",
+    "remainingCriteria": 6,
+    "criteria": [
+      {"id": "C1", "criterion": "Exact immutable owner authorization is terminally receipted", "status": "NOT_READY", "evidence": "No authorization receipt; design receipt explicitly says NOT_GRANTED_DESIGN_RECEIPT_ONLY."},
+      {"id": "C2", "criterion": "Every scheduled run has one real terminal receipt", "status": "NOT_READY", "evidence": "0 real receipts reconciled out of 960 scheduled; 960 missing."},
+      {"id": "C3", "criterion": "Identical fresh-hidden task and Knowledge bindings are reconciled across arms", "status": "NOT_READY", "evidence": "Invariant is declared but cannot be demonstrated without real paired receipts."},
+      {"id": "C4", "criterion": "Structured/raw, facts/guidance, static/updated, and single/multi-hop A/B results preserve counts and 95% CIs", "status": "NOT_READY", "evidence": "All required report families are PARTIAL_NO_CLAIM with zero real paired runs and CI_UNAVAILABLE."},
+      {"id": "C5", "criterion": "Failures and invalidations are preserved and classified", "status": "NOT_READY", "evidence": "No real records to classify; dry-run fixture outcomes were excluded rather than relabelled."},
+      {"id": "C6", "criterion": "Stop/falsification/simplification rules are measured on complete valid evidence", "status": "NOT_READY", "evidence": "STOP-07 and FALSIFY-SUBSTITUTION deny claims; simplification decisions are blocked pending complete valid evidence."},
+      {"id": "C7", "criterion": "Model substitution is ineligible unless both quality and efficiency thresholds pass", "status": "PASS_FAIL_CLOSED", "evidence": "Claim remains false because neither threshold family is evidenced as passing."}
+    ]
+  },
+  "verificationReceipts": [
+    {
+      "command": "npm run build --silent",
+      "runtimeMilliseconds": 59,
+      "exitCode": 133,
+      "outputSha256": "2b731a211c90b7836885a3c8b26ddd97b1bb0e40576dcbc86645213490f6e6a1",
+      "outputByteCount": 1504,
+      "status": "INFRASTRUCTURE_BLOCKED_BEFORE_BUILD",
+      "interpretation": "Node/V8 Isolate initialization failed with Check failed: 12 == (*__errno_location ()). Not a product verdict."
+    },
+    {
+      "command": "git diff --check main...HEAD",
+      "runtimeMilliseconds": 4,
+      "exitCode": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputByteCount": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "node --test tests/cks-05-benchmark-contract.test.mjs tests/cks-05-hidden-runner.test.mjs tests/cks-05-metrics-statistics.test.mjs tests/cks-05-benchmark-executor.test.mjs tests/cks-05-replay-readback.test.mjs",
+      "runtimeMilliseconds": 57,
+      "exitCode": 133,
+      "outputSha256": "34d871cbd4d63e5458f2ccab6c4664d25297f0624d69ad2fac6482e57a1bf24e",
+      "outputByteCount": 1428,
+      "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY",
+      "interpretation": "No test body, model invocation, benchmark execution, scoring, or replay was reached."
+    }
+  ],
+  "claimGuard": {
+    "gateId": "L6-MODEL-SUBSTITUTION",
+    "status": "DENY",
+    "modelSubstitutionClaim": false,
+    "qualityThresholdsPass": false,
+    "efficiencyThresholdsPass": false,
+    "allQualityAndEfficiencyThresholdsPass": false,
+    "reasonCodes": ["OWNER_AUTHORIZATION_MISSING", "MISSING_REAL_TERMINAL_RECEIPTS", "CI_UNAVAILABLE", "LOCAL_NODE_SIGTRAP_EXIT_133"],
+    "permittedConclusion": "Only that the candidate's protocol, fail-closed contracts, recovery reconciliation, and gate receipts are bound. No empirical, model-quality, efficiency, architecture, substitution, release, merge, or activation conclusion follows."
+  }
+}

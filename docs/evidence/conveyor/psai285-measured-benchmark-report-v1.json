@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "pansphaira.evidence/conveyor-measured-benchmark-report/v1",
+  "taskId": "CLOSURE-PSAI285-EVIDENCE-RECOVERY-01",
+  "reportId": "PSAI285-MEASURED-BENCHMARK-REPORT-V1",
+  "recordedAt": "2026-08-29T05:30:56Z",
+  "reportStatus": "NOT_MEASURED_FAIL_CLOSED",
+  "scope": "The exact PSAI285 frozen fresh synthetic domains, task suite, Knowledge editions, profiles, runtime, host manifest, and terminal records admitted by PSAI285-BENCHMARK-PROTOCOL-01 only.",
+  "governance": {
+    "operatingModelVersion": "Operating Model v1.1",
+    "preservedDecisionIds": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "processVariantIntroduced": false,
+    "authority": "NONE",
+    "modelInvocationsClaimed": 0,
+    "benchmarkRunsClaimed": 0,
+    "architectureResultClaimed": false
+  },
+  "sourceReconciliation": {
+    "authorizedBenchmarkResults": {
+      "path": "verification/cks-05-authorized-benchmark-results-v1.json",
+      "sha256": "41e1a883e314ad2d81a657e00d19b90edd4a41311df03eea94f43b5a3ac2a616",
+      "verdict": "NOT_READY_FAIL_CLOSED"
+    },
+    "reviewedCandidate": {
+      "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+      "candidateCommit": "dc8fca3587d9b8d2cabec88c82380bbe5339d74a",
+      "branch": "conveyor/pansphaira-285",
+      "rebaseReplay": "git rebase main completed as a no-op because the candidate was already based on current main"
+    },
+    "protocol": {
+      "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+      "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd",
+      "ownerExecutionAuthorization": "NOT_GRANTED"
+    }
+  },
+  "runAndFailureCounts": {
+    "scheduled": 960,
+    "realTerminalReceipts": 0,
+    "completed": 0,
+    "modelFailures": 0,
+    "infrastructureInvalidations": 0,
+    "scored": 0,
+    "missing": 960,
+    "failurePreservationStatus": "NO_REAL_RECORDS_PRESENT_TO_PRESERVE",
+    "dryRunFixtureFailuresExcluded": true
+  },
+  "crossArmAndKnowledgeBinding": {
+    "requiredArms": ["ARM-LRF-01", "ARM-SRF-02", "ARM-LSF-03", "ARM-SSF-04", "ARM-SSG-05"],
+    "requiredKnowledgeEditions": ["K0_STATIC", "K1_UPDATED"],
+    "requiredSeeds": [104729, 130363, 155921],
+    "requiredTaskIds": 32,
+    "contractBinding": "Every arm must execute every identical hidden taskId against both identical editions and all three generation seeds; task/gold/evidence/edition/pair bytes may not be regenerated or substituted by arm.",
+    "result": "NOT_MEASURED",
+    "reason": "No real terminal receipts are available to reconcile paired identity fields across arms."
+  },
+  "statistics": {
+    "confidenceLevel": 0.95,
+    "method": "DETERMINISTIC_STRATIFIED_PAIRED_PERCENTILE_BOOTSTRAP",
+    "bootstrapResamples": 20000,
+    "seedTreatment": "Generation seeds are repeated observations and are averaged within taskId; they are not independent task units.",
+    "intervalStatus": "CI_UNAVAILABLE_FOR_ALL_CELLS",
+    "reason": "Zero real terminal receipts leaves no permissible resampling unit. No point estimate, interval, ratio, or failure rate has been fabricated."
+  },
+  "abResults": [
+    {"reportId": "AB-MODEL-RAW", "axis": "large-vs-small raw facts", "treatment": "ARM-LRF-01", "control": "ARM-SRF-02", "status": "PARTIAL_NO_CLAIM", "pairedRunCount": 0, "independentUnit": "taskId", "independentUnitCount": 0, "pointEstimate": null, "confidenceInterval95": null, "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-MODEL-STRUCTURED", "axis": "large-vs-small structured facts", "treatment": "ARM-LSF-03", "control": "ARM-SSF-04", "status": "PARTIAL_NO_CLAIM", "pairedRunCount": 0, "independentUnit": "taskId", "independentUnitCount": 0, "pointEstimate": null, "confidenceInterval95": null, "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-STRUCTURED-VS-RAW-LARGE", "axis": "structured-vs-raw", "stratum": "large model, both editions separately", "treatment": "ARM-LSF-03", "control": "ARM-LRF-01", "status": "PARTIAL_NO_CLAIM", "pairedRunCount": 0, "independentUnit": "taskId", "independentUnitCount": 0, "pointEstimate": null, "confidenceInterval95": null, "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-STRUCTURED-VS-RAW-SMALL", "axis": "structured-vs-raw", "stratum": "small model, both editions separately", "treatment": "ARM-SSF-04", "control": "ARM-SRF-02", "status": "PARTIAL_NO_CLAIM", "pairedRunCount": 0, "independentUnit": "taskId", "independentUnitCount": 0, "pointEstimate": null, "confidenceInterval95": null, "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-FACTS-VS-GUIDANCE-SMALL", "axis": "facts-vs-non-answer-guidance", "stratum": "small model, both editions separately", "treatment": "ARM-SSG-05", "control": "ARM-SSF-04", "status": "PARTIAL_NO_CLAIM", "pairedRunCount": 0, "independentUnit": "taskId", "independentUnitCount": 0, "pointEstimate": null, "confidenceInterval95": null, "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-STATIC-VS-UPDATED", "axis": "K0_STATIC-vs-K1_UPDATED", "stratum": "each arm split by update-sensitive task and invariant control", "treatment": "K1_UPDATED", "control": "K0_STATIC", "status": "PARTIAL_NO_CLAIM", "pairedRunCount": 0, "independentUnit": "taskId", "independentUnitCount": 0, "pointEstimate": null, "confidenceInterval95": null, "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-SINGLE-VS-MULTI-HOP", "axis": "single-vs-multi-hop", "stratum": "each arm and edition", "treatment": "MULTI_HOP", "control": "SINGLE_HOP", "status": "PARTIAL_NO_CLAIM", "pairedRunCount": 0, "independentUnit": "scenarioPairId", "independentUnitCount": 0, "pointEstimate": null, "confidenceInterval95": null, "reason": "NO_REAL_TERMINAL_RECEIPTS"}
+  ],
+  "stopAndFalsification": {
+    "triggered": [
+      {"ruleId": "STOP-01-PROFILE-COMPETENCE", "status": "BLOCK_EXECUTION", "reason": "Owner authorization and immutable admission receipt are absent; no profile may be substituted."},
+      {"ruleId": "STOP-07-NO-EARLY-SUCCESS", "status": "BLOCK_CLAIM", "reason": "0 of 960 real terminal records; early success is forbidden."},
+      {"ruleId": "FALSIFY-SUBSTITUTION", "status": "DENY_SUBSTITUTION", "reason": "Quality and efficiency threshold families are unavailable and therefore not both passing."}
+    ],
+    "simplificationRules": [
+      {"ruleId": "SIMPLIFY-STRUCTURE", "status": "BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE"},
+      {"ruleId": "SIMPLIFY-GUIDANCE", "status": "BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE"},
+      {"ruleId": "SIMPLIFY-UPDATES", "status": "BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE"},
+      {"ruleId": "SIMPLIFY-MULTI-HOP", "status": "BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE"}
+    ],
+    "architectureVerdict": "NOT_EVALUABLE",
+    "infrastructureBoundary": "Local Node exit 133/SIGTRAP occurred before build/test discovery. It remains infrastructure evidence and is not converted to a product, model, or architecture verdict."
+  },
+  "modelSubstitutionEligibility": {
+    "eligible": false,
+    "qualityThresholdsPass": false,
+    "efficiencyThresholdsPass": false,
+    "allQualityAndEfficiencyThresholdsPass": false,
+    "reasonCodes": ["NOT_EXECUTED", "MISSING_REAL_TERMINAL_RECEIPTS", "ALL_REQUIRED_CI_UNAVAILABLE", "NO_QUALITY_THRESHOLD_EVIDENCE", "NO_EFFICIENCY_THRESHOLD_EVIDENCE"],
+    "permittedConclusion": "No substitution conclusion is available. The large profile remains retained by the protocol's fail-closed rule."
+  },
+  "prohibitedRelabeling": {
+    "executorDryRunAsModelInvocation": false,
+    "scorerFixtureAsBenchmarkRun": false,
+    "localNodeHarnessCrashAsModelFailure": false,
+    "localNodeHarnessCrashAsArchitectureResult": false
+  }
+}
