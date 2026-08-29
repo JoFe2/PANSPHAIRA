@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "chimpmaera.dev/cks-competence-qualification-profile/v1",
+  "bindings": {
+    "modelArtifact": {
+      "artifactDigest": "aa00bb11cc22dd33aa00bb11cc22dd33aa00bb11cc22dd33aa00bb11cc22dd33",
+      "architectureId": "transformer-decoder-v2",
+      "tokenizerDigest": "bb11cc22dd33ee44bb11cc22dd33ee44bb11cc22dd33ee44bb11cc22dd33ee44",
+      "licenseProfileId": "mit-permissive-1"
+    },
+    "quantization": {
+      "formatId": "bf16",
+      "quantizerVersion": "identity-1",
+      "weightsDigest": "cc22dd33ee44ff55cc22dd33ee44ff55cc22dd33ee44ff55cc22dd33ee44ff55",
+      "parameterizationDigest": "dd33ee44ff550011dd33ee44ff550011dd33ee44ff550011dd33ee44ff550011"
+    },
+    "runtime": {
+      "runtimeId": "pansphaira-runtime",
+      "runtimeVersion": "1.4.2",
+      "buildDigest": "ee44ff5500112233ee44ff5500112233ee44ff5500112233ee44ff5500112233",
+      "backendId": "cuda-12.4",
+      "kernelSetDigest": "ff5500112233aa00ff5500112233aa00ff5500112233aa00ff5500112233aa00",
+      "hardwareClassId": "a100-sxm-80gb",
+      "determinismConfigDigest": "00112233aa00bb1100112233aa00bb1100112233aa00bb1100112233aa00bb11"
+    },
+    "context": {
+      "contextWindowTokens": 131072,
+      "maximumInputTokens": 98304,
+      "maximumOutputTokens": 32768,
+      "chatTemplateDigest": "112233aa00bb11cc112233aa00bb11cc112233aa00bb11cc112233aa00bb11cc",
+      "positionEncodingConfigDigest": "2233aa00bb11cc222233aa00bb11cc222233aa00bb11cc222233aa00bb11cc22",
+      "kvPrecisionId": "bf16-kv",
+      "truncationPolicy": "DENY"
+    },
+    "prompt": {
+      "promptContractVersion": "prompt-contract-1",
+      "systemPromptDigest": "33aa00bb11cc22dd33aa00bb11cc22dd33aa00bb11cc22dd33aa00bb11cc22dd",
+      "instructionTemplateDigest": "44bb11cc22dd33ee44bb11cc22dd33ee44bb11cc22dd33ee44bb11cc22dd33ee",
+      "stopSequenceDigest": "55cc22dd33ee44ff55cc22dd33ee44ff55cc22dd33ee44ff55cc22dd33ee44ff",
+      "samplingConfigDigest": "66dd33ee44ff550066dd33ee44ff550066dd33ee44ff550066dd33ee44ff5500"
+    },
+    "tools": {
+      "closedToolSetDigest": "77ee44ff5500112277ee44ff5500112277ee44ff5500112277ee44ff55001122",
+      "orderedToolIdsAndVersions": [
+        "web-search@1.0.0",
+        "code-interpreter@2.1.0"
+      ],
+      "toolSchemaBundleDigest": "88ff5500112233aa88ff5500112233aa88ff5500112233aa88ff5500112233aa",
+      "toolPolicyDigest": "9900112233aabb119900112233aabb119900112233aabb119900112233aabb11"
+    },
+    "retriever": {
+      "componentIdOrNONE": "bm25-dense-hybrid",
+      "versionOrNONE": "3.2.1",
+      "configDigest": "aabb112233bb44ccaabb112233bb44ccaabb112233bb44ccaabb112233bb44cc",
+      "indexContractDigest": "bbcc223344cc55ddbbcc223344cc55ddbbcc223344cc55ddbbcc223344cc55dd"
+    },
+    "reranker": {
+      "componentIdOrNONE": "NONE",
+      "versionOrNONE": "NONE",
+      "configDigest": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+    },
+    "verifier": {
+      "deterministicVerifierId": "unit-test-verifier",
+      "deterministicVerifierDigest": "ccdd334455dd66eeccdd334455dd66eeccdd334455dd66eeccdd334455dd66ee",
+      "semanticVerifierIdOrNONE": "NONE",
+      "semanticVerifierDigest": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9",
+      "thresholdPolicyDigest": "ddeeff4455ee6677ddeeff4455ee6677ddeeff4455ee6677ddeeff4455ee6677"
+    },
+    "knowledge": {
+      "knowledgeContractVersion": "knowledge-contract-2",
+      "knowledgeEditionOrNONE": "2026-08-01",
+      "knowledgeManifestDigest": "eeff004455ee6677eeff004455ee6677eeff004455ee6677eeff004455ee6677",
+      "applicabilityPolicyDigest": "ff00556677ee8899ff00556677ee8899ff00556677ee8899ff00556677ee8899"
+    },
+    "qualificationSuite": {
+      "suiteVersion": "qualification-suite-1",
+      "suiteManifestDigest": "0011667788ff99aa0011667788ff99aa0011667788ff99aa0011667788ff99aa",
+      "generatorDigest": "112277889900aabb112277889900aabb112277889900aabb112277889900aabb",
+      "splitPolicyDigest": "223388990011bbcc223388990011bbcc223388990011bbcc223388990011bbcc",
+      "scoringPolicyDigest": "334499001122ccdd334499001122ccdd334499001122ccdd334499001122ccdd",
+      "freshCertificationReceiptDigest": "445500112233ddee445500112233ddee445500112233ddee445500112233ddee"
+    }
+  },
+  "state": "UNQUALIFIED",
+  "profileDigest": "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93"
+}

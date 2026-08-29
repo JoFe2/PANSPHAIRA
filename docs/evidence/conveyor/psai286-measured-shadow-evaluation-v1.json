@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/psai286-measured-shadow-evaluation/v1",
+  "receiptId": "PSAI286-MEASURED-SHADOW-EVALUATION-01",
+  "taskId": "CLOSURE-PSAI286-EVIDENCE-RECOVERY-01",
+  "scope": {
+    "issueNumber": 286,
+    "subject": "complete fail-closed criterion matrix for CKS-06 measured shadow evidence recovery",
+    "allowedChangedPaths": [
+      "verification/cks-06-authorized-shadow-window-v1.json",
+      "docs/evidence/conveyor/psai286-measured-shadow-evaluation-v1.json",
+      "docs/evidence/conveyor/terra-psai286-canonical-root-qs-01.json"
+    ],
+    "claimBoundary": "OFFLINE_EVIDENCE_EVALUATION_ONLY_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT_NO_ROUTING_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "repositoryBinding": {
+    "publicMainRef": "main",
+    "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "rebasedCandidateHead": "3fa6ee6c191c59330b716bc14e49621978f414c0",
+    "rebaseCommand": "git rebase main",
+    "rebaseResult": "Current branch conveyor/pansphaira-286 is up to date.",
+    "reviewedRange": "main...3fa6ee6c191c59330b716bc14e49621978f414c0",
+    "reviewedCandidateContainsPublicMain": true
+  },
+  "inputs": {
+    "frozenDecision": {
+      "path": "docs/evidence/conveyor/sol-psai286-router-semantics-decision-01.json",
+      "sha256": "54a0871510624f35560ccdb1ae3b21e542e145a9648f54c637cac011f83ea58b"
+    },
+    "ingestionDisposition": {
+      "path": "verification/cks-06-authorized-shadow-window-v1.json",
+      "sha256": "da43b8a951fc32757829b486ab9f5dee95570300f3e85e46689bd12e797084d0",
+      "decision": "NOT_READY_FAIL_CLOSED"
+    },
+    "fixtureDerivedDryRun": {
+      "path": "verification/cks-06-router-dry-run-evidence-v1.json",
+      "sha256": "52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2",
+      "admissibility": "REJECTED_FIXTURE_DERIVED"
+    }
+  },
+  "criterionMatrix": [
+    {
+      "criterionId": "REBASE-01",
+      "requirement": "Replay the exact candidate onto current public main and bind the reviewed head.",
+      "status": "PASS",
+      "evidence": "main=353017c4f60e30463d0a78fd6fd2509a37d37f76; git rebase main completed with candidate 3fa6ee6c191c59330b716bc14e49621978f414c0 unchanged."
+    },
+    {
+      "criterionId": "PREREQUISITE-CKS-01",
+      "requirement": "Resolve CKS-01 with an immutable positive terminal receipt.",
+      "status": "BLOCKED",
+      "failureCode": "MISSING_IMMUTABLE_CKS-01_TERMINAL_RECEIPT",
+      "evidence": "No repository-relative non-fixture CKS-01 terminal receipt was present in reachable local refs."
+    },
+    {
+      "criterionId": "PREREQUISITE-CKS-03",
+      "requirement": "Resolve CKS-03 with immutable positive evidence rather than a fixture-labelled record.",
+      "status": "BLOCKED",
+      "failureCode": "FIXTURE_LABELLED_CKS-03_EVIDENCE_REJECTED",
+      "evidence": "The declared source tests/fixtures/cks-qualification/profile-binding-v1.json is fixture-labelled."
+    },
+    {
+      "criterionId": "PREREQUISITE-CKS-04",
+      "requirement": "Resolve CKS-04 with immutable positive evidence rather than a fixture-labelled record.",
+      "status": "BLOCKED",
+      "failureCode": "FIXTURE_LABELLED_CKS-04_EVIDENCE_REJECTED",
+      "evidence": "The declared source tests/fixtures/cks-qualification/escalation-causes-v1.json is fixture-labelled."
+    },
+    {
+      "criterionId": "PREREQUISITE-CKS-05",
+      "requirement": "Resolve CKS-05 with immutable positive evidence rather than a fixture-labelled record.",
+      "status": "BLOCKED",
+      "failureCode": "FIXTURE_LABELLED_CKS-05_EVIDENCE_REJECTED",
+      "evidence": "The declared source tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json is fixture-labelled."
+    },
+    {
+      "criterionId": "PREREQUISITE-OWNER-01",
+      "requirement": "Resolve owner authorization with an immutable terminal receipt.",
+      "status": "BLOCKED",
+      "failureCode": "MISSING_OWNER_AUTHORIZATION_TERMINAL_RECEIPT",
+      "evidence": "No repository-relative immutable owner authorization receipt for this ingestion was discovered; this package grants no Authority."
+    },
+    {
+      "criterionId": "MEASURED-WINDOWS-01",
+      "requirement": "Ingest two accepted measured paired shadow windows with complete denominator and failure preservation.",
+      "status": "BLOCKED",
+      "failureCode": "NO_ACCEPTED_MEASURED_SHADOW_WINDOWS",
+      "evidence": "Required=2; candidate fixture windows=2; accepted measured windows=0; rejected candidate windows=2; accepted terminal-outcome denominator=0."
+    },
+    {
+      "criterionId": "QUALITY-01",
+      "requirement": "Prove frozen quality benefit without trading it for cost.",
+      "status": "BLOCKED",
+      "failureCode": "QUALITY_NOT_EVALUABLE_NO_ACCEPTED_MEASURED_DENOMINATOR",
+      "evidence": "No accepted measured denominator exists, so fixture metrics are not admitted as a quality claim."
+    },
+    {
+      "criterionId": "COST-01",
+      "requirement": "Prove frozen cost benefit without trading it for quality.",
+      "status": "BLOCKED",
+      "failureCode": "COST_NOT_EVALUABLE_NO_ACCEPTED_MEASURED_DENOMINATOR",
+      "evidence": "No accepted measured denominator exists, so fixture metrics are not admitted as a cost claim."
+    },
+    {
+      "criterionId": "REPLAY-01",
+      "requirement": "Replay smallest-qualified selection and every typed escalation deterministically with activationMode OFF.",
+      "status": "PASS_CONTRACT_ONLY_NOT_SUFFICIENT_FOR_MEASURED_EVIDENCE",
+      "evidence": "The focused contract replay passed 49 tests, including deterministic selector, typed escalations, and OFF-bound shadow cases; its fixtures remain rejected as measured proof."
+    },
+    {
+      "criterionId": "EFFECT-BOUNDARY-01",
+      "requirement": "Reject activation, provider routing, and Authority grants from this root package.",
+      "status": "PASS",
+      "evidence": "Only evidence JSON is added; the evaluated contract and focused replay preserve activationMode OFF and no provider-call, route-execution, or Authority-grant claim."
+    },
+    {
+      "criterionId": "GATE-BUILD-01",
+      "requirement": "Run npm run build --silent on the exact reviewed candidate head.",
+      "status": "INFRASTRUCTURE_BLOCKED_NOT_PRODUCT_VERDICT",
+      "failureCode": "LOCAL_NODE_EXIT_133_SIGTRAP",
+      "evidence": "Node v24.19.0 failed during V8 initialization before TypeScript execution; see verification records."
+    },
+    {
+      "criterionId": "GATE-DIFF-01",
+      "requirement": "Run git diff --check main...HEAD on the exact reviewed candidate head.",
+      "status": "PASS",
+      "evidence": "Exit 0 with empty output."
+    }
+  ],
+  "verification": {
+    "outputDigestAlgorithm": "sha256 over captured stdout and stderr with command-substitution trailing newlines removed",
+    "checks": [
+      {
+        "command": "npm run build --silent",
+        "reviewedHead": "3fa6ee6c191c59330b716bc14e49621978f414c0",
+        "runtimeMs": 61,
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "outputSha256": "2dc75f5a14079c7671d88c1741c920a7a8bcaa2616092b70b6cf54e0cfa684c4",
+        "classification": "LOCAL_INFRASTRUCTURE_EVIDENCE_NOT_A_PRODUCT_VERDICT"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless node --test dist/tests/cks-qualification.test.js dist/tests/cks-resource-admission.test.js dist/tests/cks-shadow-evaluation.test.js dist/tests/cks-router-dry-run.test.js",
+        "reviewedHead": "3fa6ee6c191c59330b716bc14e49621978f414c0",
+        "runtimeMs": 215,
+        "exitCode": 0,
+        "outputSha256": "d716547b730d4240be7a863a9320599ec167a052826020898af1543d4b0484ac",
+        "passed": 49,
+        "failed": 0,
+        "classification": "CONTRACT_REPLAY_PASS_NOT_MEASURED_EVIDENCE"
+      },
+      {
+        "command": "git diff --check main...HEAD",
+        "reviewedHead": "3fa6ee6c191c59330b716bc14e49621978f414c0",
+        "runtimeMs": 4,
+        "exitCode": 0,
+        "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "remainingCriteria": [
+    "PREREQUISITE-CKS-01",
+    "PREREQUISITE-CKS-03",
+    "PREREQUISITE-CKS-04",
+    "PREREQUISITE-CKS-05",
+    "PREREQUISITE-OWNER-01",
+    "MEASURED-WINDOWS-01",
+    "QUALITY-01",
+    "COST-01"
+  ],
+  "activationMode": "OFF",
+  "outcome": "NOT_READY",
+  "decision": "FAIL_CLOSED_NO_QUALITY_OR_COST_BENEFIT_PROVEN_NO_ROUTING_ACTIVATION"
+}

@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/cks06-authorized-shadow-window-ingestion/v1",
+  "receiptId": "CKS-06-AUTHORIZED-SHADOW-WINDOW-01",
+  "taskId": "CLOSURE-PSAI286-EVIDENCE-RECOVERY-01",
+  "scope": {
+    "issueNumber": 286,
+    "subject": "fail-closed ingestion disposition for purported CKS-06 measured shadow windows",
+    "claimBoundary": "EVIDENCE_INGESTION_AND_DENIAL_ONLY_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT_NO_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "sourceDiscovery": {
+    "repositorySearchScope": "all reachable local refs at reviewed candidate head",
+    "nonFixtureMeasuredWindowReceiptsFound": [],
+    "rejectedFixtureSources": [
+      {
+        "path": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+        "sha256": "d6eec78a04b93e443646cb5459b924b16e0ad05faa66535265728026c90f1ac0",
+        "fixtureLabel": "tests/fixtures path and evaluationId shadow-golden-v1",
+        "purportedWindowCount": 2,
+        "rejectionCode": "FIXTURE_LABELLED_SHADOW_WINDOW_NOT_MEASURED_EVIDENCE"
+      },
+      {
+        "path": "verification/cks-06-router-dry-run-evidence-v1.json",
+        "sha256": "52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2",
+        "fixtureLabel": "fixtureId cks-router-dry-run-positive-v1 and all three referenced paths are under tests/fixtures",
+        "purportedWindowCount": 2,
+        "rejectionCode": "FIXTURE_DERIVED_ROUTER_DRY_RUN_NOT_MEASURED_EVIDENCE"
+      }
+    ]
+  },
+  "immutablePrerequisiteResolution": {
+    "requiredGateIds": [
+      "CKS-01",
+      "CKS-03",
+      "CKS-04",
+      "CKS-05"
+    ],
+    "gateReceipts": [
+      {
+        "gateId": "CKS-01",
+        "status": "MISSING",
+        "terminalReceipt": null,
+        "resolution": "No repository-relative immutable positive terminal receipt was discovered."
+      },
+      {
+        "gateId": "CKS-03",
+        "status": "REJECTED_FIXTURE",
+        "terminalReceipt": null,
+        "rejectedPath": "tests/fixtures/cks-qualification/profile-binding-v1.json",
+        "resolution": "The only declared positive reference is a fixture-labelled input, not immutable measured terminal evidence."
+      },
+      {
+        "gateId": "CKS-04",
+        "status": "REJECTED_FIXTURE",
+        "terminalReceipt": null,
+        "rejectedPath": "tests/fixtures/cks-qualification/escalation-causes-v1.json",
+        "resolution": "The only declared positive reference is a fixture-labelled input, not immutable measured terminal evidence."
+      },
+      {
+        "gateId": "CKS-05",
+        "status": "REJECTED_FIXTURE",
+        "terminalReceipt": null,
+        "rejectedPath": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+        "resolution": "The only declared positive reference is a fixture-labelled input, not immutable measured terminal evidence."
+      }
+    ],
+    "ownerAuthorization": {
+      "status": "MISSING_TERMINAL_RECEIPT",
+      "terminalReceipt": null,
+      "resolution": "No immutable repository-relative owner authorization receipt for measured-window ingestion was discovered; this record grants no Authority."
+    }
+  },
+  "denominatorAndFailurePreservation": {
+    "requiredConsecutiveWindows": 2,
+    "candidateWindowsObserved": 2,
+    "acceptedMeasuredWindows": 0,
+    "rejectedCandidateWindows": 2,
+    "unobservedRequiredWindows": 2,
+    "terminalOutcomeDenominator": 0,
+    "qualityBenefitDenominator": 0,
+    "costBenefitDenominator": 0,
+    "failureRecords": [
+      {
+        "windowOrdinal": 0,
+        "source": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+        "failureCode": "FIXTURE_LABELLED_SHADOW_WINDOW_NOT_MEASURED_EVIDENCE",
+        "qualityAndCostMetricsAccepted": false
+      },
+      {
+        "windowOrdinal": 1,
+        "source": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+        "failureCode": "FIXTURE_LABELLED_SHADOW_WINDOW_NOT_MEASURED_EVIDENCE",
+        "qualityAndCostMetricsAccepted": false
+      }
+    ]
+  },
+  "frozenGateDisposition": {
+    "qualityGate": "NOT_EVALUABLE_NO_ACCEPTED_MEASURED_DENOMINATOR",
+    "costGate": "NOT_EVALUABLE_NO_ACCEPTED_MEASURED_DENOMINATOR",
+    "smallestQualifiedReplay": "NOT_EVIDENCE_COMPLETE",
+    "typedEscalationReplay": "NOT_EVIDENCE_COMPLETE",
+    "activationMode": "OFF",
+    "outcome": "ACTIVATION_BLOCKED",
+    "reasonCodes": [
+      "MISSING_IMMUTABLE_CKS-01_TERMINAL_RECEIPT",
+      "FIXTURE_LABELLED_CKS-03_EVIDENCE_REJECTED",
+      "FIXTURE_LABELLED_CKS-04_EVIDENCE_REJECTED",
+      "FIXTURE_LABELLED_CKS-05_EVIDENCE_REJECTED",
+      "MISSING_OWNER_AUTHORIZATION_TERMINAL_RECEIPT",
+      "NO_ACCEPTED_MEASURED_SHADOW_WINDOWS"
+    ]
+  },
+  "nonClaims": [
+    "NO_QUALITY_BENEFIT_CLAIM",
+    "NO_COST_BENEFIT_CLAIM",
+    "NO_PROVIDER_ROUTING",
+    "NO_ROUTE_EXECUTION",
+    "NO_AUTHORITY_GRANT",
+    "NO_ACTIVATION"
+  ],
+  "decision": "NOT_READY_FAIL_CLOSED"
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "chimpmaera.dev/cks-router-dry-run/rejections/v1",
+  "cases": [
+    {
+      "caseId": "missing-required-cks-evidence-reference",
+      "mutation": "delete requiredPositiveEvidenceReferences[2]",
+      "expectedFailure": "REQUIRED_CKS_EVIDENCE_REFERENCE_COUNT",
+      "safetyProperty": "No positive receipt is emitted when CKS-03/04/05 evidence is incomplete."
+    },
+    {
+      "caseId": "tampered-required-evidence-digest",
+      "mutation": "replace requiredPositiveEvidenceReferences[0].sha256",
+      "expectedFailure": "EVIDENCE_REFERENCE_DIGEST_MISMATCH:CKS-03",
+      "safetyProperty": "A path without a matching SHA-256 is not positive evidence."
+    },
+    {
+      "caseId": "typed-escalation-disposition-mismatch",
+      "mutation": "change a typed cause disposition",
+      "expectedFailure": "DISPOSITION_MISMATCH",
+      "safetyProperty": "Cause and disposition remain bound; escalation is never inferred from prose."
+    },
+    {
+      "caseId": "resource-lease-conflict",
+      "mutation": "overlap WRITE and READ path leases",
+      "expectedFailure": "LEASE_CONFLICT",
+      "safetyProperty": "Dependency/path leases deny conflicting parallel admission atomically."
+    },
+    {
+      "caseId": "shadow-cks-evidence-unknown",
+      "mutation": "set one required shadow CKS evidence status to UNKNOWN",
+      "expectedFailure": "CKS_EVIDENCE_NOT_POSITIVE",
+      "safetyProperty": "Shadow quality or cost benefit cannot compensate for missing CKS evidence."
+    },
+    {
+      "caseId": "shadow-threshold-regression",
+      "mutation": "lower paired cost benefit below the frozen threshold",
+      "expectedFailure": "EFFICIENCY_GATE_FAILED",
+      "safetyProperty": "A shadow result remains OFF unless every frozen window gate passes."
+    }
+  ]
+}

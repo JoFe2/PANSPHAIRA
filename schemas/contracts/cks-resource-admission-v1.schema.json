@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-resource-admission-v1.schema.json",
+  "title": "PANSPHAIRA CKS advisory resource-admission request v1",
+  "description": "Closed input schema for a pure atomic scheduling-capacity decision. A positive validation is advisory data only: it does not measure capacity, acquire a lease, reserve resources, invoke a provider, execute a route, or grant Capability or Authority. The runtime validator recomputes all canonical bindings, requires observedAtMs <= decisionAtMs < expiresAtMs, verifies positive predecessor receipts, applies READ/WRITE conflicts to dependency ids and normalized controller-resolved path prefixes, checks exact-profile context limits, selects the smallest measured KV bucket covering aggregate token and sequence demand, checks measured KV plus resident bytes, and checks the bound work-order budget.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "decisionAtMs",
+    "measurement",
+    "budget",
+    "candidates",
+    "requestDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "chimpmaera.dev/cks-resource-admission/v1"
+    },
+    "decisionAtMs": {
+      "$ref": "#/$defs/nonNegativeInteger"
+    },
+    "measurement": {
+      "$ref": "#/$defs/measurement"
+    },
+    "budget": {
+      "$ref": "#/$defs/budget"
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/candidate" }
+    },
+    "requestDigest": {
+      "$ref": "#/$defs/digest"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "nonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "positiveInteger": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "leaseMode": {
+      "enum": ["READ", "WRITE"]
+    },
+    "repositoryPath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "pattern": "^(?!\\.{1,2}(?:/|$))(?!.*\\/\\.{1,2}(?:/|$))[A-Za-z0-9._@+-]+(?:/[A-Za-z0-9._@+-]+)*$"
+    },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predecessorId", "terminalOutcome", "terminalReceiptDigest"],
+      "properties": {
+        "predecessorId": { "$ref": "#/$defs/identifier" },
+        "terminalOutcome": { "enum": ["POSITIVE", "DENIED", "UNKNOWN"] },
+        "terminalReceiptDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "dependencyLease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dependencyId", "mode"],
+      "properties": {
+        "dependencyId": { "$ref": "#/$defs/identifier" },
+        "mode": { "$ref": "#/$defs/leaseMode" }
+      }
+    },
+    "pathLease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "resolvedPath", "mode", "resolutionDigest"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repositoryPath" },
+        "resolvedPath": { "$ref": "#/$defs/repositoryPath" },
+        "mode": { "$ref": "#/$defs/leaseMode" },
+        "resolutionDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "demand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputTokens",
+        "toolSchemaTokens",
+        "maximumOutputTokens",
+        "safetyReserveTokens",
+        "concurrentSequences"
+      ],
+      "properties": {
+        "inputTokens": { "$ref": "#/$defs/nonNegativeInteger" },
+        "toolSchemaTokens": { "$ref": "#/$defs/nonNegativeInteger" },
+        "maximumOutputTokens": { "$ref": "#/$defs/nonNegativeInteger" },
+        "safetyReserveTokens": { "$ref": "#/$defs/nonNegativeInteger" },
+        "concurrentSequences": { "$ref": "#/$defs/positiveInteger" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "predecessors", "dependencyLeases", "pathLeases", "demand"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/identifier" },
+        "predecessors": {
+          "type": "array",
+          "maxItems": 128,
+          "items": { "$ref": "#/$defs/predecessor" }
+        },
+        "dependencyLeases": {
+          "type": "array",
+          "maxItems": 128,
+          "items": { "$ref": "#/$defs/dependencyLease" }
+        },
+        "pathLeases": {
+          "type": "array",
+          "maxItems": 128,
+          "items": { "$ref": "#/$defs/pathLease" }
+        },
+        "demand": { "$ref": "#/$defs/demand" }
+      }
+    },
+    "capacityBucket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bucketId",
+        "ordinal",
+        "maximumTotalTokens",
+        "maximumConcurrentSequences",
+        "measuredKvPeakBytes",
+        "residentModelAndRuntimePeakBytes",
+        "reservableMeasuredBytes",
+        "bucketDigest"
+      ],
+      "properties": {
+        "bucketId": { "$ref": "#/$defs/identifier" },
+        "ordinal": { "$ref": "#/$defs/nonNegativeInteger" },
+        "maximumTotalTokens": { "$ref": "#/$defs/positiveInteger" },
+        "maximumConcurrentSequences": { "$ref": "#/$defs/positiveInteger" },
+        "measuredKvPeakBytes": { "$ref": "#/$defs/positiveInteger" },
+        "residentModelAndRuntimePeakBytes": { "$ref": "#/$defs/positiveInteger" },
+        "reservableMeasuredBytes": { "$ref": "#/$defs/positiveInteger" },
+        "bucketDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taskDemandDigest",
+        "exactProfileDigest",
+        "runtimeAndHardwareClassDigest",
+        "capacityMeasurementMethodDigest",
+        "capacityBucketDigest",
+        "observedAtMs",
+        "expiresAtMs",
+        "dependencyGraphDigest",
+        "pathLeaseSetDigest",
+        "workOrderBudgetDigest",
+        "catalogDigest",
+        "priceBookDigest",
+        "contextWindowTokens",
+        "maximumInputTokens",
+        "maximumOutputTokens",
+        "capacityBuckets",
+        "measurementDigest"
+      ],
+      "properties": {
+        "taskDemandDigest": { "$ref": "#/$defs/digest" },
+        "exactProfileDigest": { "$ref": "#/$defs/digest" },
+        "runtimeAndHardwareClassDigest": { "$ref": "#/$defs/digest" },
+        "capacityMeasurementMethodDigest": { "$ref": "#/$defs/digest" },
+        "capacityBucketDigest": { "$ref": "#/$defs/digest" },
+        "observedAtMs": { "$ref": "#/$defs/nonNegativeInteger" },
+        "expiresAtMs": { "$ref": "#/$defs/nonNegativeInteger" },
+        "dependencyGraphDigest": { "$ref": "#/$defs/digest" },
+        "pathLeaseSetDigest": { "$ref": "#/$defs/digest" },
+        "workOrderBudgetDigest": { "$ref": "#/$defs/digest" },
+        "catalogDigest": { "$ref": "#/$defs/digest" },
+        "priceBookDigest": { "$ref": "#/$defs/digest" },
+        "contextWindowTokens": { "$ref": "#/$defs/positiveInteger" },
+        "maximumInputTokens": { "$ref": "#/$defs/positiveInteger" },
+        "maximumOutputTokens": { "$ref": "#/$defs/positiveInteger" },
+        "capacityBuckets": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/capacityBucket" }
+        },
+        "measurementDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "remainingCalls",
+        "remainingTokens",
+        "remainingCostMicros",
+        "remainingElapsedMs",
+        "remainingResidentBytes",
+        "reservedCalls",
+        "reservedTokens",
+        "reservedCostMicros",
+        "reservedElapsedMs",
+        "reservedResidentBytes"
+      ],
+      "properties": {
+        "remainingCalls": { "$ref": "#/$defs/positiveInteger" },
+        "remainingTokens": { "$ref": "#/$defs/positiveInteger" },
+        "remainingCostMicros": { "$ref": "#/$defs/nonNegativeInteger" },
+        "remainingElapsedMs": { "$ref": "#/$defs/positiveInteger" },
+        "remainingResidentBytes": { "$ref": "#/$defs/positiveInteger" },
+        "reservedCalls": { "$ref": "#/$defs/positiveInteger" },
+        "reservedTokens": { "$ref": "#/$defs/nonNegativeInteger" },
+        "reservedCostMicros": { "$ref": "#/$defs/nonNegativeInteger" },
+        "reservedElapsedMs": { "$ref": "#/$defs/positiveInteger" },
+        "reservedResidentBytes": { "$ref": "#/$defs/positiveInteger" }
+      }
+    }
+  }
+}

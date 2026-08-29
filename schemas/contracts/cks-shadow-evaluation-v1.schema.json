@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-shadow-evaluation-v1.schema.json",
+  "title": "PANSPHAIRA CKS deterministic shadow-evaluation decision v1",
+  "description": "Closed, digest-bound offline paired evidence for a future activation consideration. The evaluator compares a pinned static fallback with shadow evidence on identical inputs across two consecutive windows. Every quality and efficiency gate is conjunctive; a valid positive result remains OFF and only establishes eligibility for separate authorization. It never invokes a provider, executes a route, reserves resources, grants authority, or activates a router.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "evaluationId",
+    "manifest",
+    "thresholds",
+    "windows",
+    "claimBoundary",
+    "outcome",
+    "reasonCodes",
+    "activationMode",
+    "passedWindowCount",
+    "decisionDigest",
+    "receiptDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.dev/cks-shadow-evaluation/v1" },
+    "evaluationId": { "$ref": "#/$defs/identifier" },
+    "manifest": { "$ref": "#/$defs/manifest" },
+    "thresholds": { "$ref": "#/$defs/thresholds" },
+    "windows": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        { "$ref": "#/$defs/window" },
+        { "$ref": "#/$defs/window" }
+      ],
+      "items": false
+    },
+    "claimBoundary": {
+      "const": "OFFLINE_PAIRED_RECEIPT_EVIDENCE_ONLY_NO_ROUTING_ACTIVATION_NO_PROVIDER_CALL_NO_AUTHORITY_GRANT"
+    },
+    "outcome": {
+      "enum": ["ACTIVATION_ELIGIBLE_FOR_SEPARATE_AUTHORIZATION", "ACTIVATION_BLOCKED"]
+    },
+    "reasonCodes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ALL_FROZEN_GATES_PASS",
+          "MALFORMED_INPUT",
+          "DIGEST_MISMATCH",
+          "PIN_MISMATCH",
+          "WINDOW_SEQUENCE_INVALID",
+          "MINIMUM_EVIDENCE_NOT_MET",
+          "CKS_EVIDENCE_NOT_POSITIVE",
+          "QUALITY_GATE_FAILED",
+          "EFFICIENCY_GATE_FAILED"
+        ]
+      }
+    },
+    "activationMode": { "const": "OFF" },
+    "passedWindowCount": { "$ref": "#/$defs/nonNegativeInteger" },
+    "decisionDigest": { "$ref": "#/$defs/digest" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "nonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "safeInteger": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "receiptDigest"],
+      "properties": {
+        "status": { "enum": ["POSITIVE", "UNKNOWN", "NOT_RUN", "FAILED"] },
+        "receiptDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "requiredEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cks03", "cks04", "cks05"],
+      "properties": {
+        "cks03": { "$ref": "#/$defs/evidence" },
+        "cks04": { "$ref": "#/$defs/evidence" },
+        "cks05": { "$ref": "#/$defs/evidence" }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluationMode",
+        "baselineVersion",
+        "baselineDigest",
+        "baselineCohortDigest",
+        "baselineVersionDigest",
+        "taskCorpusDigest",
+        "knowledgeEditionDigest",
+        "pairedInputDigest",
+        "routerPolicyDigest",
+        "evaluationPolicyDigest",
+        "freshEphemeralCertificationSeedDigests",
+        "manifestDigest"
+      ],
+      "properties": {
+        "evaluationMode": { "const": "OFFLINE_PAIRED_RECEIPT_EVALUATION_ONLY" },
+        "baselineVersion": { "$ref": "#/$defs/identifier" },
+        "baselineDigest": { "$ref": "#/$defs/digest" },
+        "baselineCohortDigest": { "$ref": "#/$defs/digest" },
+        "baselineVersionDigest": { "$ref": "#/$defs/digest" },
+        "taskCorpusDigest": { "$ref": "#/$defs/digest" },
+        "knowledgeEditionDigest": { "$ref": "#/$defs/digest" },
+        "pairedInputDigest": { "$ref": "#/$defs/digest" },
+        "routerPolicyDigest": { "$ref": "#/$defs/digest" },
+        "evaluationPolicyDigest": { "$ref": "#/$defs/digest" },
+        "freshEphemeralCertificationSeedDigests": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/digest" }
+        },
+        "manifestDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consecutiveWindows",
+        "eligiblePairedEpisodesPerWindow",
+        "totalEligiblePairedEpisodes",
+        "freshEphemeralCertificationSeeds",
+        "minimumEpisodesPerRequiredCKS03Family",
+        "exactProfileBindingRatePpm",
+        "terminalOutcomeCoveragePpm",
+        "authorityOrCapabilityViolationCount",
+        "providerCallOrRouteExecutionByRouterCount",
+        "unsupportedMaterialClaimCount",
+        "verifierFalseAcceptanceCount",
+        "seedSplitOrLeakageViolationCount",
+        "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback",
+        "materialClaimCoverageWilsonLowerBoundPpm",
+        "requiredGapConflictAbstentionWilsonLowerBoundPpm",
+        "updateComplianceWilsonLowerBoundPpm",
+        "costPerVerifiedSuccessReductionLowerBoundPpm",
+        "p95ElapsedRatioUpperBoundPpmVersusFallback",
+        "resourceAdmissionDenialCountForRecommendedEpisodes",
+        "pairedBootstrapResamples"
+      ],
+      "properties": {
+        "consecutiveWindows": { "$ref": "#/$defs/nonNegativeInteger" },
+        "eligiblePairedEpisodesPerWindow": { "$ref": "#/$defs/nonNegativeInteger" },
+        "totalEligiblePairedEpisodes": { "$ref": "#/$defs/nonNegativeInteger" },
+        "freshEphemeralCertificationSeeds": { "$ref": "#/$defs/nonNegativeInteger" },
+        "minimumEpisodesPerRequiredCKS03Family": { "$ref": "#/$defs/nonNegativeInteger" },
+        "exactProfileBindingRatePpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "terminalOutcomeCoveragePpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "authorityOrCapabilityViolationCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "providerCallOrRouteExecutionByRouterCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "unsupportedMaterialClaimCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "verifierFalseAcceptanceCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "seedSplitOrLeakageViolationCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback": { "$ref": "#/$defs/safeInteger" },
+        "materialClaimCoverageWilsonLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "requiredGapConflictAbstentionWilsonLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "updateComplianceWilsonLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "costPerVerifiedSuccessReductionLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "p95ElapsedRatioUpperBoundPpmVersusFallback": { "$ref": "#/$defs/nonNegativeInteger" },
+        "resourceAdmissionDenialCountForRecommendedEpisodes": { "$ref": "#/$defs/nonNegativeInteger" },
+        "pairedBootstrapResamples": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "scenarioCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "APPLICABILITY",
+        "CLAIM_EVIDENCE_COVERAGE",
+        "COMPETENCE_LIMIT",
+        "CONFLICT",
+        "DECOMPOSITION",
+        "FRESH_UNKNOWN_DOMAIN",
+        "MISSING_KNOWLEDGE",
+        "PROCEDURE",
+        "SUPERSESSION",
+        "UPDATE_COMPLIANCE",
+        "VERIFIER_REJECTION"
+      ],
+      "properties": {
+        "APPLICABILITY": { "$ref": "#/$defs/nonNegativeInteger" },
+        "CLAIM_EVIDENCE_COVERAGE": { "$ref": "#/$defs/nonNegativeInteger" },
+        "COMPETENCE_LIMIT": { "$ref": "#/$defs/nonNegativeInteger" },
+        "CONFLICT": { "$ref": "#/$defs/nonNegativeInteger" },
+        "DECOMPOSITION": { "$ref": "#/$defs/nonNegativeInteger" },
+        "FRESH_UNKNOWN_DOMAIN": { "$ref": "#/$defs/nonNegativeInteger" },
+        "MISSING_KNOWLEDGE": { "$ref": "#/$defs/nonNegativeInteger" },
+        "PROCEDURE": { "$ref": "#/$defs/nonNegativeInteger" },
+        "SUPERSESSION": { "$ref": "#/$defs/nonNegativeInteger" },
+        "UPDATE_COMPLIANCE": { "$ref": "#/$defs/nonNegativeInteger" },
+        "VERIFIER_REJECTION": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "windowId",
+        "windowOrdinal",
+        "startedAtMs",
+        "endedAtMs",
+        "manifestDigest",
+        "baselineDigest",
+        "pairedInputDigest",
+        "requiredEvidence",
+        "eligiblePairedEpisodes",
+        "terminalOutcomeCoveragePpm",
+        "exactProfileBindingRatePpm",
+        "requiredCks03FamilyEpisodeCounts",
+        "baselineVerifiedSuccesses",
+        "shadowVerifiedSuccesses",
+        "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback",
+        "materialClaimCoverageWilsonLowerBoundPpm",
+        "requiredGapConflictAbstentionWilsonLowerBoundPpm",
+        "updateComplianceWilsonLowerBoundPpm",
+        "authorityOrCapabilityViolationCount",
+        "providerCallOrRouteExecutionByRouterCount",
+        "unsupportedMaterialClaimCount",
+        "verifierFalseAcceptanceCount",
+        "seedSplitOrLeakageViolationCount",
+        "baselineCostPerVerifiedSuccessMicros",
+        "shadowCostPerVerifiedSuccessMicros",
+        "costPerVerifiedSuccessReductionLowerBoundPpm",
+        "baselineP95ElapsedMs",
+        "shadowP95ElapsedMs",
+        "p95ElapsedRatioUpperBoundPpmVersusFallback",
+        "resourceAdmissionDenialCountForRecommendedEpisodes",
+        "windowDigest"
+      ],
+      "properties": {
+        "windowId": { "$ref": "#/$defs/identifier" },
+        "windowOrdinal": { "enum": [0, 1] },
+        "startedAtMs": { "$ref": "#/$defs/nonNegativeInteger" },
+        "endedAtMs": { "$ref": "#/$defs/nonNegativeInteger" },
+        "manifestDigest": { "$ref": "#/$defs/digest" },
+        "baselineDigest": { "$ref": "#/$defs/digest" },
+        "pairedInputDigest": { "$ref": "#/$defs/digest" },
+        "requiredEvidence": { "$ref": "#/$defs/requiredEvidence" },
+        "eligiblePairedEpisodes": { "$ref": "#/$defs/nonNegativeInteger" },
+        "terminalOutcomeCoveragePpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "exactProfileBindingRatePpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "requiredCks03FamilyEpisodeCounts": { "$ref": "#/$defs/scenarioCounts" },
+        "baselineVerifiedSuccesses": { "$ref": "#/$defs/nonNegativeInteger" },
+        "shadowVerifiedSuccesses": { "$ref": "#/$defs/nonNegativeInteger" },
+        "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback": { "$ref": "#/$defs/safeInteger" },
+        "materialClaimCoverageWilsonLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "requiredGapConflictAbstentionWilsonLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "updateComplianceWilsonLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "authorityOrCapabilityViolationCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "providerCallOrRouteExecutionByRouterCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "unsupportedMaterialClaimCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "verifierFalseAcceptanceCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "seedSplitOrLeakageViolationCount": { "$ref": "#/$defs/nonNegativeInteger" },
+        "baselineCostPerVerifiedSuccessMicros": { "$ref": "#/$defs/nonNegativeInteger" },
+        "shadowCostPerVerifiedSuccessMicros": { "$ref": "#/$defs/nonNegativeInteger" },
+        "costPerVerifiedSuccessReductionLowerBoundPpm": { "$ref": "#/$defs/nonNegativeInteger" },
+        "baselineP95ElapsedMs": { "$ref": "#/$defs/nonNegativeInteger" },
+        "shadowP95ElapsedMs": { "$ref": "#/$defs/nonNegativeInteger" },
+        "p95ElapsedRatioUpperBoundPpmVersusFallback": { "$ref": "#/$defs/nonNegativeInteger" },
+        "resourceAdmissionDenialCountForRecommendedEpisodes": { "$ref": "#/$defs/nonNegativeInteger" },
+        "windowDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

@@ -1,0 +1,931 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/cks06-router-semantics-decision-receipt/v1",
+  "receiptId": "SOL-PSAI286-ROUTER-SEMANTICS-DECISION-01",
+  "taskId": "SOL-PSAI286-ROUTER-SEMANTICS-DECISION-01",
+  "scope": {
+    "issueNumber": 286,
+    "issueTitle": "[CKS-06] Qualification profiles and smallest-qualified R/K/P/U router",
+    "issueUrl": "https://github.com/JoFe2/PANSPHAIRA/issues/286",
+    "artifactPurpose": "Freeze advisory-only v1 router semantics and its fail-closed integration gate before any implementation leaf is admitted.",
+    "claimBoundary": "DETERMINISTIC_DECISION_DATA_ONLY_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT_NO_RUNTIME_ACTIVATION",
+    "allowedChangedPaths": [
+      "docs/evidence/conveyor/sol-psai286-router-semantics-decision-01.json"
+    ]
+  },
+  "repositoryBinding": {
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "baseRef": "origin/main",
+    "canonicalJsonImplementation": "packages/contracts/src/canonical-json.ts:canonicalJson",
+    "canonicalJsonImplementationSha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826",
+    "reusedContracts": [
+      "chimpmaera.dev/routing-context/v1",
+      "chimpmaera.dev/routing-decision/v1",
+      "chimpmaera.dev/routing-attempt/v1",
+      "chimpmaera.dev/routing-outcome/v1",
+      "chimpmaera.resource-plane/declarative-plan/v1"
+    ],
+    "reusedClaimBoundary": "LOCAL_SYNTHETIC_NO_ROUTING_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModelVersion": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "decisionReview": {
+    "reviewStatus": "BOUNDED_REQUIREMENTS_REVIEWED",
+    "reviewScope": "Alternatives, chosen semantics, ordering, rejection, compatibility, nonclaims, evidence gates, leaf ownership, and effect boundaries in this artifact only.",
+    "reviewChecks": [
+      {
+        "checkId": "DR-01",
+        "subject": "alternatives_and_choice",
+        "outcome": "SATISFIED"
+      },
+      {
+        "checkId": "DR-02",
+        "subject": "deterministic_tie_breakers_and_reject_conditions",
+        "outcome": "SATISFIED"
+      },
+      {
+        "checkId": "DR-03",
+        "subject": "compatibility_impact_and_nonclaims",
+        "outcome": "SATISFIED"
+      },
+      {
+        "checkId": "DR-04",
+        "subject": "downstream_leaf_ownership_boundaries",
+        "outcome": "SATISFIED"
+      },
+      {
+        "checkId": "DR-05",
+        "subject": "positive_CKS_03_04_05_evidence_is_verified_not_assumed",
+        "outcome": "SATISFIED_BY_CLOSED_UNSATISFIED_GATES"
+      },
+      {
+        "checkId": "DR-06",
+        "subject": "provider_route_authority_and_activation_absence",
+        "outcome": "SATISFIED"
+      }
+    ],
+    "independentReviewClaimed": false,
+    "ownerApprovalClaimed": false,
+    "reviewDisposition": "SEMANTICS_FROZEN_IMPLEMENTATION_ADMISSION_BLOCKED"
+  },
+  "alternativesReviewed": [
+    {
+      "alternativeId": "ALT-PROFILE-EXACT",
+      "subject": "qualification_identity",
+      "semantics": "Treat every behavior-affecting model, quantization, runtime, context, prompt, tool, retrieval, verification, and suite binding as one immutable exact profile.",
+      "disposition": "CHOSEN",
+      "reason": "Qualification evidence remains reproducible and cannot silently transfer across a changed component."
+    },
+    {
+      "alternativeId": "ALT-PROFILE-FUZZY",
+      "subject": "qualification_identity",
+      "semantics": "Inherit qualification through model family names, aliases, semantic-version ranges, provider labels, or nearest-profile similarity.",
+      "disposition": "REJECTED",
+      "reason": "A behavior-affecting mismatch would turn untested compatibility into a competence claim."
+    },
+    {
+      "alternativeId": "ALT-VECTOR-DOMINANCE",
+      "subject": "task_fit",
+      "semantics": "Require componentwise R/K/P/U coverage plus all task-required scenario tags.",
+      "disposition": "CHOSEN",
+      "reason": "No surplus on one coordinate can conceal a deficit on another."
+    },
+    {
+      "alternativeId": "ALT-VECTOR-WEIGHTED",
+      "subject": "task_fit",
+      "semantics": "Collapse R/K/P/U to a weighted scalar complexity score.",
+      "disposition": "REJECTED",
+      "reason": "Weighted compensation can route a task to a profile that is unqualified on a required coordinate."
+    },
+    {
+      "alternativeId": "ALT-ORDER-LEXICOGRAPHIC",
+      "subject": "smallest_qualified_selection",
+      "semantics": "Filter by exact qualification, policy separation, availability, and resource admission, then apply one closed lexicographic key ending in profile digest.",
+      "disposition": "CHOSEN",
+      "reason": "The same complete input produces one recommendation without random, provider, locale, or map-order dependence."
+    },
+    {
+      "alternativeId": "ALT-ORDER-UTILITY",
+      "subject": "smallest_qualified_selection",
+      "semantics": "Choose by a tunable blended quality, cost, latency, and load score.",
+      "disposition": "REJECTED",
+      "reason": "A mutable blended score obscures qualification and permits quality or policy tradeoffs that v1 does not authorize."
+    },
+    {
+      "alternativeId": "ALT-ESCALATION-TYPED",
+      "subject": "escalation",
+      "semantics": "Accept only finite evidence-bound causes with a prescribed reclassification or stop disposition.",
+      "disposition": "CHOSEN",
+      "reason": "A failed estimate cannot become an unbounded retry or an unexplained larger-model call."
+    },
+    {
+      "alternativeId": "ALT-ESCALATION-GENERIC",
+      "subject": "escalation",
+      "semantics": "Retry a stronger profile on any failure or unknown transport outcome.",
+      "disposition": "REJECTED",
+      "reason": "It conflates competence, knowledge, environment, transport, policy, and authority failures."
+    },
+    {
+      "alternativeId": "ALT-RESOURCE-MEASURED",
+      "subject": "resource_admission",
+      "semantics": "Admit only against fresh measured context, KV, resident-memory, budget, dependency, and path-lease capacity with no extrapolation.",
+      "disposition": "CHOSEN",
+      "reason": "An availability flag alone cannot prove safe parallel capacity."
+    },
+    {
+      "alternativeId": "ALT-RESOURCE-OPTIMISTIC",
+      "subject": "resource_admission",
+      "semantics": "Assume declared maximum context and nominal free memory are available and permit best-effort overcommit.",
+      "disposition": "REJECTED",
+      "reason": "Truncation, KV exhaustion, lease collision, or dependency races could change outcomes after selection."
+    },
+    {
+      "alternativeId": "ALT-ACTIVATION-ADVISORY",
+      "subject": "activation_boundary",
+      "semantics": "Remain default-off; permit a separately authorized future transition from shadow evidence consumption to advisory display only.",
+      "disposition": "CHOSEN",
+      "reason": "A recommendation stays data and the existing controller, policy, capability, and authority boundaries remain authoritative."
+    },
+    {
+      "alternativeId": "ALT-ACTIVATION-EXECUTING",
+      "subject": "activation_boundary",
+      "semantics": "Let selection or escalation invoke a provider, execute a route, grant a lease, or perform an external action.",
+      "disposition": "REJECTED",
+      "reason": "Execution and authority are explicit v1 non-goals and require a new decision and authorization."
+    }
+  ],
+  "chosenSemantics": {
+    "exactQualificationProfile": {
+      "identityRule": "The profile digest is SHA-256 over canonical JSON of every required exact binding below. Equality means byte-equal normalized fields and equal digests; aliases, family membership, ranges, defaults, omission, and compatibility inference never establish equality.",
+      "requiredExactBindings": [
+        {
+          "binding": "modelArtifact",
+          "requiredFields": [
+            "artifactDigest",
+            "architectureId",
+            "tokenizerDigest",
+            "licenseProfileId"
+          ]
+        },
+        {
+          "binding": "quantization",
+          "requiredFields": [
+            "formatId",
+            "quantizerVersion",
+            "weightsDigest",
+            "parameterizationDigest"
+          ]
+        },
+        {
+          "binding": "runtime",
+          "requiredFields": [
+            "runtimeId",
+            "runtimeVersion",
+            "buildDigest",
+            "backendId",
+            "kernelSetDigest",
+            "hardwareClassId",
+            "determinismConfigDigest"
+          ]
+        },
+        {
+          "binding": "context",
+          "requiredFields": [
+            "contextWindowTokens",
+            "maximumInputTokens",
+            "maximumOutputTokens",
+            "chatTemplateDigest",
+            "positionEncodingConfigDigest",
+            "kvPrecisionId",
+            "truncationPolicy"
+          ],
+          "requiredValue": {
+            "truncationPolicy": "DENY"
+          }
+        },
+        {
+          "binding": "prompt",
+          "requiredFields": [
+            "promptContractVersion",
+            "systemPromptDigest",
+            "instructionTemplateDigest",
+            "stopSequenceDigest",
+            "samplingConfigDigest"
+          ]
+        },
+        {
+          "binding": "tools",
+          "requiredFields": [
+            "closedToolSetDigest",
+            "orderedToolIdsAndVersions",
+            "toolSchemaBundleDigest",
+            "toolPolicyDigest"
+          ]
+        },
+        {
+          "binding": "retriever",
+          "requiredFields": [
+            "componentIdOrNONE",
+            "versionOrNONE",
+            "configDigest",
+            "indexContractDigest"
+          ]
+        },
+        {
+          "binding": "reranker",
+          "requiredFields": [
+            "componentIdOrNONE",
+            "versionOrNONE",
+            "configDigest"
+          ]
+        },
+        {
+          "binding": "verifier",
+          "requiredFields": [
+            "deterministicVerifierId",
+            "deterministicVerifierDigest",
+            "semanticVerifierIdOrNONE",
+            "semanticVerifierDigest",
+            "thresholdPolicyDigest"
+          ]
+        },
+        {
+          "binding": "knowledge",
+          "requiredFields": [
+            "knowledgeContractVersion",
+            "knowledgeEditionOrNONE",
+            "knowledgeManifestDigest",
+            "applicabilityPolicyDigest"
+          ]
+        },
+        {
+          "binding": "qualificationSuite",
+          "requiredFields": [
+            "suiteVersion",
+            "suiteManifestDigest",
+            "generatorDigest",
+            "splitPolicyDigest",
+            "scoringPolicyDigest",
+            "freshCertificationReceiptDigest"
+          ]
+        }
+      ],
+      "profileChangeRule": "A change to any required binding creates a different, initially UNQUALIFIED profile. Evidence does not inherit across profiles.",
+      "providerRule": "A provider or marketing model name is not profile identity. A runtime that cannot expose the required immutable bindings is unqualifiable in v1.",
+      "qualificationTierRule": "Qn is derived, never declared: n is the largest coordinate in the exact profile's verified downward-closed R/K/P/U coverage box, with n in 0..6. Q alone never proves task fit.",
+      "qualificationStates": [
+        "UNQUALIFIED",
+        "QUALIFIED",
+        "SUSPENDED_DRIFT",
+        "REVOKED_EVIDENCE"
+      ],
+      "fullyQualifiedRule": "A profile is fully qualified for a task only when state is QUALIFIED, every exact binding matches, the task vector is in the explicitly verified coverage box, every required scenario tag is passed, every required CKS-03/04/05 evidence gate is positive, evidence is fresh under its bound policy, and no revocation, drift, policy, availability, or resource gate denies it.",
+      "coverageHoleRule": "Per-axis maxima are summaries only. Missing Cartesian cells, failed interaction families, or absent scenario tags are qualification holes and cannot be filled by dominance inference.",
+      "requiredScenarioTags": [
+        "APPLICABILITY",
+        "CLAIM_EVIDENCE_COVERAGE",
+        "COMPETENCE_LIMIT",
+        "CONFLICT",
+        "DECOMPOSITION",
+        "FRESH_UNKNOWN_DOMAIN",
+        "MISSING_KNOWLEDGE",
+        "PROCEDURE",
+        "SUPERSESSION",
+        "UPDATE_COMPLIANCE",
+        "VERIFIER_REJECTION"
+      ]
+    },
+    "taskVector": {
+      "shape": "A closed four-coordinate tuple [R,K,P,U]; each coordinate is an integer in 0..6 and no null, unknown, fractional, negative, weighted, or inferred default value is permitted.",
+      "coordinateOrder": [
+        "R",
+        "K",
+        "P",
+        "U"
+      ],
+      "coordinates": [
+        {
+          "coordinate": "R",
+          "name": "Reasoning",
+          "meaning": "Required inference structure independent of knowledge maturity, risk, capability, and authority.",
+          "levels": [
+            "R0_NO_INFERENCE: copy, exact lookup, formatting, validation state, or abstention only",
+            "R1_SINGLE_DIRECT_INFERENCE: one explicit applicable fact or rule produces the result",
+            "R2_LINEAR_MULTI_HOP: a bounded non-branching inference chain within one applicability scope",
+            "R3_BRANCH_OR_MULTI_OBJECT_SYNTHESIS: branching or synthesis across multiple objects while applicability is settled",
+            "R4_CONSTRAINT_OR_COUNTERFACTUAL_RECONCILIATION: reconcile exclusions, constraints, or counterfactual rules with complete evidence",
+            "R5_DECOMPOSED_REASONING_DAG: plan and synthesize a bounded dependency graph of reasoning subtasks",
+            "R6_SUITE_BOUNDED_REFERENCE: the explicit highest bounded reasoning stratum in the bound suite; it never means unlimited or generally frontier-capable"
+          ]
+        },
+        {
+          "coordinate": "K",
+          "name": "Knowledge",
+          "meaning": "Shape of external material Knowledge and Evidence needed by the task; it is not L0-L6 knowledge maturity and not a claim of truth.",
+          "levels": [
+            "K0_NO_EXTERNAL_MATERIAL_KNOWLEDGE: the result needs no external material claim",
+            "K1_ONE_EXACT_OBJECT: one exact edition-bound applicable Knowledge Object is sufficient",
+            "K2_CONSISTENT_OBJECT_SET: multiple mutually consistent objects in one scope are required",
+            "K3_MULTI_SOURCE_EVIDENCE_PACK: material claims require joins across a typed multi-source Evidence Pack",
+            "K4_VERSION_AND_APPLICABILITY_SELECTION: edition drift, supersession, preconditions, exclusions, or scope selection is material",
+            "K5_GAP_OR_CONFLICT_HANDLING: required Knowledge is missing or conflicting and the correct result may be abstention or a typed request",
+            "K6_FRESH_CROSS_SCOPE_REFERENCE: the bound suite's highest fresh unknown-domain or cross-scope synthesis stratum; it remains suite-bounded"
+          ]
+        },
+        {
+          "coordinate": "P",
+          "name": "Procedure",
+          "meaning": "Required procedural and typed-tool orchestration independent of permission to execute an effect.",
+          "levels": [
+            "P0_NO_PROCEDURE_OR_TOOL: no procedural sequence or tool interaction is required",
+            "P1_ONE_LINEAR_PROCEDURE: one declared linear procedure with settled preconditions and no tool interaction",
+            "P2_ONE_BOUNDED_TYPED_TOOL_STEP: one read-only typed tool request inside a linear procedure",
+            "P3_SERIAL_MULTI_STEP: multiple ordered procedure or typed-tool steps with explicit preconditions",
+            "P4_BRANCH_CHECKPOINT_OR_ROLLBACK: a bounded branch, checkpoint, compensation, or rollback plan is required",
+            "P5_DEPENDENCY_DAG_AND_LEASES: a bounded dependency DAG, parallel candidates, or path-lease plan is required",
+            "P6_SUITE_BOUNDED_PROCEDURE_COMPOSITION: the bound suite's highest novel composition stratum; qualification grants no tool or effect authority"
+          ]
+        },
+        {
+          "coordinate": "U",
+          "name": "Uncertainty",
+          "meaning": "Epistemic uncertainty that must be detected and handled; it is not risk, impact, confidence prose, transport uncertainty, or authority.",
+          "levels": [
+            "U0_COMPLETE_AND_UNAMBIGUOUS: material evidence is complete, current, applicable, and yields one state",
+            "U1_DETERMINISTIC_APPLICABILITY_CHOICE: bounded alternatives are resolved by explicit applicability data",
+            "U2_NON_MATERIAL_MISSINGNESS: optional evidence is absent while every material claim remains covered",
+            "U3_VERSION_SCOPE_OR_PROVENANCE_UNCERTAINTY: a verifier must resolve material edition, scope, or source uncertainty",
+            "U4_MATERIAL_GAP_OR_CONFLICT: missing or conflicting material evidence requires abstention or typed escalation",
+            "U5_COVERAGE_DRIFT_OR_DECOMPOSITION_WARNING: low coverage, out-of-distribution evidence, drift, or decomposition growth requires reclassification",
+            "U6_EXPLICIT_COMPETENCE_BOUNDARY: the suite expects COMPETENCE_LIMIT or human/static fallback; qualification means correctly refusing rather than solving an unbounded task"
+          ]
+        }
+      ],
+      "classificationRule": "For each coordinate select the highest applicable closed level from a digest-bound deterministic task-classification receipt. Multiple triggers take their maximum. If any coordinate cannot be established from closed inputs, the vector is UNCLASSIFIABLE; U6 must not be used as a bucket for malformed or unknown input.",
+      "dominanceRule": "A certified vector c covers task vector t only if c.R>=t.R, c.K>=t.K, c.P>=t.P, and c.U>=t.U and t is in the profile's verified coverage box with all required scenario tags.",
+      "separationRule": "R/K/P/U, Q0-Q6, L0-L6 Knowledge maturity, risk/impact, Capability, and Authority remain separate fields. No value on one field raises, lowers, grants, or substitutes for another."
+    },
+    "smallestQualifiedOrdering": {
+      "eligibilityChecksInOrder": [
+        "closed_input_and_digest_lineage_valid",
+        "risk_impact_and_authority_policy_evaluated_separately",
+        "exact_profile_identity_and_qualification_state_valid",
+        "componentwise_vector_and_scenario_coverage_valid",
+        "positive_CKS_03_04_05_evidence_valid",
+        "catalog_availability_at_bound_version_valid",
+        "resource_admission_receipt_positive"
+      ],
+      "orderingKey": [
+        {
+          "position": 1,
+          "field": "qualificationTierOrdinal",
+          "direction": "ASCENDING",
+          "meaning": "Q0 through Q6; prefer the least certified strength tier that fully covers the task"
+        },
+        {
+          "position": 2,
+          "field": "certifiedCoverageBoxCardinality",
+          "direction": "ASCENDING",
+          "meaning": "prefer the narrower fully verified R/K/P/U box"
+        },
+        {
+          "position": 3,
+          "field": "reservedCostMicros",
+          "direction": "ASCENDING",
+          "meaning": "prefer the lower conservative task reservation from the bound price book"
+        },
+        {
+          "position": 4,
+          "field": "qualifiedP95ElapsedMs",
+          "direction": "ASCENDING",
+          "meaning": "prefer the faster qualified hidden/fresh measurement"
+        },
+        {
+          "position": 5,
+          "field": "peakResidentBytes",
+          "direction": "ASCENDING",
+          "meaning": "prefer the smaller measured resident footprint"
+        },
+        {
+          "position": 6,
+          "field": "profileDigest",
+          "direction": "ASCENDING_UTF8_CODE_UNIT",
+          "meaning": "final total-order tie breaker over lowercase 64-hex digests"
+        }
+      ],
+      "numericRule": "All ordering numbers are non-negative safe integers in the stated base units. Missing, estimated-from-an-unbound-version, non-finite, fractional, or overflowed values deny the candidate.",
+      "sortRule": "Apply the key lexicographically after all eligibility filters. Locale comparison, insertion order, random choice, provider preference, and load-based score mutation are forbidden.",
+      "resultStates": [
+        "ADVISORY_RECOMMENDATION",
+        "STATIC_FALLBACK",
+        "HUMAN_REVIEW",
+        "NO_QUALIFIED_PROFILE"
+      ],
+      "effectRule": "The result contains recommendation data and reason codes only. It cannot invoke the selected profile or create an attempt, lease, provider request, capability, authority, or external effect."
+    },
+    "typedEscalation": {
+      "causes": [
+        {
+          "code": "KNOWLEDGE_GAP",
+          "evidenceTrigger": "A bound runtime state is NEED_MORE_KNOWLEDGE or a deterministic verifier proves a required material Knowledge Object absent.",
+          "disposition": "ABSTAIN_AND_REQUEST_BOUND_KNOWLEDGE_EVIDENCE",
+          "reclassification": "Raise K to at least K5 and U to at least U4 only in a new classification receipt; a larger model is not presumed to know the missing fact."
+        },
+        {
+          "code": "KNOWLEDGE_CONFLICT",
+          "evidenceTrigger": "A bound runtime state is KNOWLEDGE_CONFLICT or valid applicable sources contain unresolved material contradiction or supersession ambiguity.",
+          "disposition": "ABSTAIN_OR_RESELECT_CONFLICT_QUALIFIED_PROFILE",
+          "reclassification": "Raise K to at least K5 and U to at least U4 and require CONFLICT plus APPLICABILITY scenario coverage."
+        },
+        {
+          "code": "VERIFIER_REJECTION",
+          "evidenceTrigger": "The bound deterministic verifier rejects IDs, versions, digests, scope, Preconditions, claim coverage, or expected state, or the independently identified semantic verifier rejects.",
+          "disposition": "REJECT_CANDIDATE_AND_RESELECT_IF_BUDGETED",
+          "reclassification": "Exclude the failed exact profile for the episode and add the failed verifier scenario tag; rejected output never becomes evidence."
+        },
+        {
+          "code": "DECOMPOSITION_GROWTH",
+          "evidenceTrigger": "A canonical decomposition receipt exceeds the task-bound node, edge, longest-path, context, tool-step, dependency, or path-lease demand used by the current vector.",
+          "disposition": "RECLASSIFY_AND_RESELECT",
+          "reclassification": "Recompute R, P, context, dependency, and lease demand monotonically from the expanded digest-bound DAG before selection."
+        },
+        {
+          "code": "LOW_EVIDENCE_COVERAGE",
+          "evidenceTrigger": "Deterministic material claim-to-evidence coverage is below 1000000 ppm or a required applicability link is absent.",
+          "disposition": "REJECT_OUTPUT_AND_ABSTAIN_OR_RESELECT",
+          "reclassification": "Raise K or U only when a new classifier receipt proves the applicable level; unsupported material claims are never emitted as partial success."
+        },
+        {
+          "code": "COMPETENCE_LIMIT",
+          "evidenceTrigger": "The exact runtime emits the bound COMPETENCE_LIMIT state or qualification evidence proves the task outside the profile coverage box.",
+          "disposition": "EXCLUDE_PROFILE_AND_RESELECT",
+          "reclassification": "Retain or raise the vector, require a different exact profile, and select again from the full eligible set."
+        },
+        {
+          "code": "CONTEXT_CAPACITY_EXCEEDED",
+          "evidenceTrigger": "The complete non-truncated token demand or measured KV demand exceeds the admitted exact profile bucket.",
+          "disposition": "DENY_ADMISSION_AND_RESELECT_OR_FALLBACK",
+          "reclassification": "Do not truncate, summarize silently, or overcommit; use a newly admitted exact context profile or stop."
+        },
+        {
+          "code": "PROFILE_OR_EVIDENCE_DRIFT",
+          "evidenceTrigger": "Any exact binding, catalog, suite, Knowledge edition, verifier, price book, capacity receipt, or evidence digest differs or expires.",
+          "disposition": "SUSPEND_PROFILE_AND_REQUIRE_REQUALIFICATION",
+          "reclassification": "No same-profile retry and no inherited qualification."
+        },
+        {
+          "code": "RESOURCE_ADMISSION_DENIED",
+          "evidenceTrigger": "Fresh measured capacity, budget, dependency, or path-lease admission is not positive.",
+          "disposition": "QUEUE_RESELECT_OR_STATIC_FALLBACK",
+          "reclassification": "Resource pressure is not competence evidence and cannot raise Q, R, K, P, or U."
+        },
+        {
+          "code": "POLICY_OR_AUTHORITY_DENIAL",
+          "evidenceTrigger": "The independent risk, impact, Capability, Authority, or resource-plane policy denies the proposed work.",
+          "disposition": "DENY_OR_HUMAN_REVIEW",
+          "reclassification": "A stronger model cannot override or reinterpret the denial."
+        },
+        {
+          "code": "TRANSPORT_OUTCOME_UNKNOWN",
+          "evidenceTrigger": "The reused routing attempt or outcome contract reports unknown transport.",
+          "disposition": "STATIC_FALLBACK_OR_HUMAN_REVIEW",
+          "reclassification": "Unknown transport is never coerced to model failure, retry permission, or competence evidence."
+        },
+        {
+          "code": "NO_QUALIFIED_PROFILE",
+          "evidenceTrigger": "The eligible and admitted candidate set is empty after deterministic filtering.",
+          "disposition": "ABSTAIN_STATIC_FALLBACK_OR_HUMAN_REVIEW",
+          "reclassification": "No fabricated nearest match, profile substitution, or provider fallback."
+        }
+      ],
+      "sequenceRule": "An escalation recommendation requires a digest-bound cause receipt, excludes any failed exact profile where stated, and either monotonically raises at least one proven requirement or adds a required scenario tag. Repeating the same profile and same requirements is forbidden.",
+      "budgetRule": "Maximum attempts, calls, tokens, elapsed time, and cost are external closed work-order limits. Missing limits deny escalation. Exhaustion yields STATIC_FALLBACK or HUMAN_REVIEW, never an over-budget call.",
+      "downgradeRule": "No automatic downgrade is allowed within an episode after a typed escalation. A new episode and fresh classification are required."
+    },
+    "resourceAdmission": {
+      "claimBoundary": "SCHEDULING_CAPACITY_RECEIPT_ONLY_NOT_RESOURCE_PLANE_AUTHORITY_AND_NOT_EXECUTION",
+      "requiredBindings": [
+        "taskDemandDigest",
+        "exactProfileDigest",
+        "runtimeAndHardwareClassDigest",
+        "capacityMeasurementMethodDigest",
+        "capacityBucketDigest",
+        "observedAtMs",
+        "expiresAtMs",
+        "dependencyGraphDigest",
+        "pathLeaseSetDigest",
+        "workOrderBudgetDigest",
+        "catalogDigest",
+        "priceBookDigest"
+      ],
+      "contextRule": "inputTokens + toolSchemaTokens + maximumOutputTokens + safetyReserveTokens must be less than or equal to the exact profile contextWindowTokens and maximum-input/output sublimits. Every term is a bound non-negative integer; truncation is DENY.",
+      "kvRule": "Use the smallest measured capacity bucket at or above the complete token demand and concurrent-sequence count. The bucket's measured KV peak plus resident model and runtime peak must fit atomically inside reservable measured bytes. Interpolation, extrapolation, nominal device totals, and optimistic reuse deny.",
+      "budgetRule": "Reserved calls, tokens, costMicros, elapsedMs, and resident bytes must each fit the remaining bound work-order budget. Missing or zero-assumed measurements deny.",
+      "freshnessRule": "observedAtMs must be less than or equal to decisionAtMs, decisionAtMs must be strictly less than expiresAtMs, and every digest must match the exact candidate and catalog versions. Clock or expiry ambiguity denies.",
+      "parallelismRule": "A lane is ready only when every declared predecessor has a positive digest-bound terminal receipt. Normalized repository-relative READ leases may overlap READ leases; any normalized prefix overlap where either lease is WRITE denies concurrent admission. Unknown, absolute, escaping, symlink-unresolved, duplicate, or unbound paths deny.",
+      "atomicityRule": "All context, KV, resident-memory, budget, dependency, and lease reservations pass as one atomic decision. Partial admission and best-effort overcommit are forbidden; uncertain capacity reduces concurrency to one or denies when one cannot be proven.",
+      "availabilityRule": "Catalog availability is necessary but insufficient. A profile without a positive unexpired admission receipt is excluded before ranking.",
+      "authoritySeparation": "This capacity receipt neither creates a model/tool invocation right nor changes the existing Host/System ceiling, Owner profile, assignments, current constraints, Capability, or Authority."
+    },
+    "shadowThresholds": {
+      "evaluationMode": "OFFLINE_PAIRED_RECEIPT_EVALUATION_ONLY",
+      "comparator": "The bound existing static fallback is evaluated on the identical hidden/fresh task and Knowledge edition; pairing, exclusions, and missingness are fixed before scoring.",
+      "minimumEvidence": {
+        "consecutiveWindows": 2,
+        "eligiblePairedEpisodesPerWindow": 100,
+        "totalEligiblePairedEpisodes": 200,
+        "freshEphemeralCertificationSeeds": 3,
+        "minimumEpisodesPerRequiredCKS03Family": 20,
+        "exactProfileBindingRatePpm": 1000000,
+        "terminalOutcomeCoveragePpm": 1000000
+      },
+      "qualityHardGates": {
+        "authorityOrCapabilityViolationCount": 0,
+        "providerCallOrRouteExecutionByRouterCount": 0,
+        "unsupportedMaterialClaimCount": 0,
+        "verifierFalseAcceptanceCount": 0,
+        "seedSplitOrLeakageViolationCount": 0,
+        "qualityDeltaPairedBootstrapLowerBoundPpmVersusFallback": -10000,
+        "materialClaimCoverageWilsonLowerBoundPpm": 990000,
+        "requiredGapConflictAbstentionWilsonLowerBoundPpm": 950000,
+        "updateComplianceWilsonLowerBoundPpm": 950000
+      },
+      "efficiencyHardGates": {
+        "costPerVerifiedSuccessReductionLowerBoundPpm": 100000,
+        "p95ElapsedRatioUpperBoundPpmVersusFallback": 1000000,
+        "resourceAdmissionDenialCountForRecommendedEpisodes": 0
+      },
+      "statisticsRule": "Rates use a two-sided Wilson 95 percent interval under a versioned integer-ppm implementation. Paired deltas, cost per verified success, and elapsed ratios use 10000 deterministic paired bootstrap resamples seeded by SHA-256 of the evaluation-manifest digest and router-policy digest; the 2.5 and 97.5 percentiles are reported. No-success or zero/unknown baseline denominators fail the applicable gate.",
+      "denominatorRule": "Denied, failed, aborted, censored, unknown, and insufficient-evidence episodes remain in the declared denominator. No post-hoc exclusions, sequential threshold changes, pooled-window masking, or model self-report are accepted.",
+      "decisionRule": "Every minimum, quality gate, efficiency gate, CKS-03/04/05 prerequisite, falsification stop condition, and each of the two consecutive windows must pass independently. Quality and cost cannot compensate for each other. Any FAIL, UNKNOWN, NOT_RUN, stale binding, or missing datum blocks advisory activation."
+    },
+    "activationBoundary": {
+      "currentMode": "OFF",
+      "v1Modes": [
+        "OFF",
+        "SHADOW_EVIDENCE_ONLY",
+        "ADVISORY_DISPLAY_ONLY"
+      ],
+      "prohibitedMode": "AUTOMATIC_ROUTE_EXECUTION",
+      "offMeaning": "No router implementation is admitted or invoked by this decision artifact.",
+      "shadowMeaning": "A separately authorized evaluator may consume already produced minimized receipts and compare recommendations; its output cannot affect the authoritative route or call a model/provider.",
+      "advisoryMeaning": "After a separate owner-authorized activation change and positive readback, a recommendation may be shown to the existing controller or human. The existing static policy remains authoritative and any later work invocation uses its own pre-existing capability, policy, lease, and authority checks.",
+      "transitionRequirements": [
+        "all_CKS_03_04_05_evidence_gates_positive",
+        "all_downstream_leaf_evidence_positive_and_digest_bound",
+        "both_shadow_windows_pass_every_frozen_threshold",
+        "independent_review_receipt_positive",
+        "owner_authorized_separate_activation_change",
+        "default_off_configuration_and_rollback_switch_digest_bound",
+        "post_change_readback_proves_only_ADVISORY_DISPLAY_ONLY",
+        "no_provider_broker_authority_service_or_runtime_policy_mutation"
+      ],
+      "v1Ceiling": "No v1 transition can invoke a provider, execute a selected route, auto-escalate a call, create authority, mutate broker policy, or perform an external action. Any such proposal requires a new versioned decision and separately authorized work."
+    }
+  },
+  "rejectConditions": [
+    {
+      "code": "REJECT_NON_CLOSED_OR_MALFORMED_INPUT",
+      "trigger": "Unknown fields, duplicate identifiers, malformed canonical values, out-of-range coordinates, invalid digest lineage, or absent required fields.",
+      "effect": "No recommendation and no implementation/advisory success state."
+    },
+    {
+      "code": "REJECT_PROFILE_IDENTITY_MISMATCH",
+      "trigger": "Any exact profile binding differs, is omitted/defaulted, uses a range, or cannot be independently read back.",
+      "effect": "Profile is UNQUALIFIED or SUSPENDED_DRIFT."
+    },
+    {
+      "code": "REJECT_QUALIFICATION_HOLE",
+      "trigger": "The task vector is outside the verified coverage box or a required Cartesian cell, interaction family, or scenario tag is missing/failed.",
+      "effect": "Profile is ineligible."
+    },
+    {
+      "code": "REJECT_SCALAR_COMPENSATION",
+      "trigger": "A weighted score, average, confidence, lower cost, or stronger coordinate is used to compensate for an uncovered R/K/P/U coordinate.",
+      "effect": "Routing decision is invalid."
+    },
+    {
+      "code": "REJECT_PREREQUISITE_EVIDENCE",
+      "trigger": "Any required CKS-03, CKS-04, or CKS-05 evidence is missing, stale, tampered, mismatched, non-authoritative, NOT_RUN, UNKNOWN, or failed.",
+      "effect": "Implementation admission and advisory activation remain blocked."
+    },
+    {
+      "code": "REJECT_ISSUE_OR_MODEL_SELF_REPORT_AS_EVIDENCE",
+      "trigger": "Issue state, checkbox, label, prose, PR state, model output, or unbound benchmark summary is offered instead of replayed digest-bound evidence.",
+      "effect": "Evidence gate remains unsatisfied."
+    },
+    {
+      "code": "REJECT_POLICY_AUTHORITY_CONFLATION",
+      "trigger": "Complexity, qualification, Knowledge, cost, or model strength changes risk/impact, Capability, Authority, or an independent policy denial.",
+      "effect": "No recommendation may override the independent denial."
+    },
+    {
+      "code": "REJECT_RESOURCE_ADMISSION",
+      "trigger": "Measured context/KV/resident capacity, budget, dependency readiness, path leases, freshness, or atomic reservation is absent or non-positive.",
+      "effect": "Candidate is excluded without changing competence classification."
+    },
+    {
+      "code": "REJECT_NONDETERMINISTIC_ORDER",
+      "trigger": "Any ordering field is missing/unbound or selection uses randomization, locale, insertion order, provider preference, a mutable score, or a tie not resolved by profileDigest.",
+      "effect": "No selection is emitted."
+    },
+    {
+      "code": "REJECT_UNTYPED_OR_REPEATED_ESCALATION",
+      "trigger": "Cause evidence is absent/unknown, the same exact profile and requirements are retried, requirements decrease, limits are missing/exhausted, or unknown transport is treated as model failure.",
+      "effect": "STATIC_FALLBACK or HUMAN_REVIEW."
+    },
+    {
+      "code": "REJECT_SHADOW_THRESHOLD_FAILURE",
+      "trigger": "Any minimum, hard gate, frozen statistical rule, consecutive window, falsification condition, or denominator requirement does not pass.",
+      "effect": "Mode remains OFF or SHADOW_EVIDENCE_ONLY."
+    },
+    {
+      "code": "REJECT_V1_EFFECT_OR_ACTIVATION_REQUEST",
+      "trigger": "The artifact or a downstream v1 leaf proposes a provider call, route execution, automatic escalation call, authority/capability grant, external action, broker mutation, or automatic production activation.",
+      "effect": "Reject the leaf or integration; a new owner-authorized versioned decision is required."
+    }
+  ],
+  "upstreamEvidenceGates": {
+    "verificationPrinciple": "Positive evidence is established only from an explicit artifact reference containing repository-relative path, immutable commit, declared schema version, SHA-256, subject/acceptance/suite bindings, verifier identity and digest, replay command identity, and authoritative terminal receipt. The controller reads the bytes at that commit, recomputes every canonical digest, validates exact lineage, reruns the pinned deterministic verifier/replay, and compares the readback. Any mismatch or unavailable verifier is non-positive.",
+    "insufficientEvidenceForms": [
+      "issue_state_or_checkbox",
+      "label_or_comment",
+      "pull_request_state_or_commit_message",
+      "model_or_worker_self_report",
+      "schema_validity_without_semantic_lineage",
+      "benchmark_summary_without_raw_minimized_receipts",
+      "artifact_path_without_commit_and_sha256",
+      "stale_or_unreplayed_output"
+    ],
+    "gates": [
+      {
+        "gateId": "CKS-03",
+        "requiredPositiveEvidence": [
+          "development_visible_validation_hidden_qualification_and_fresh_ephemeral_seed_sets_are_disjoint_and_digest_bound",
+          "generator_manifest_expected_evidence_expected_state_reason_codes_and_scores_replay_deterministically",
+          "closed_book_success_is_counted_as_leakage_signal",
+          "missing_and_conflicting_families_require_the_frozen_epistemic_outcomes",
+          "every_required_family_and_vector_stratum_used_by_the_profile_is_present"
+        ],
+        "verificationMethod": "Validate the CKS-03 schema and commit/digest bindings; recompute seed-set commitments and pairwise disjointness; regenerate from the pinned generator and public commitment inputs; replay expected evidence, answer/state, reason-code, and score checks; verify leakage, missing, conflict, drift, single-rule, procedure, and multi-hop families have no unexpected success or omission.",
+        "receiptEvidenceReferences": [],
+        "status": "UNSATISFIED_NO_EVIDENCE_REFERENCE",
+        "successClaimAllowed": false
+      },
+      {
+        "gateId": "CKS-04",
+        "requiredPositiveEvidence": [
+          "no_fine_tune_runtime_receipt_matches_every_exact_profile_binding",
+          "typed_bounded_retrieval_need_and_supported_unknown_fact_procedure_behavior_are_measured",
+          "applicability_exclusions_parametric_conflicts_gaps_and_conflicts_produce_expected_states",
+          "deterministic_verifier_checks_ID_version_digest_scope_and_Preconditions",
+          "semantic_verifier_is_independently_identified_and_not_the_generation_subject"
+        ],
+        "verificationMethod": "Read the exact runtime/profile and qualification receipts at their bound commits; recompute profile and run digests; prove no model/quantization/prompt/tool/Knowledge binding differs; replay the deterministic verifier against positive and adversarial cases; verify all frozen runtime states and independent semantic-verifier identity; reject any fine-tune, effectful authority, self-verification, or production claim.",
+        "receiptEvidenceReferences": [],
+        "status": "UNSATISFIED_NO_EVIDENCE_REFERENCE",
+        "successClaimAllowed": false
+      },
+      {
+        "gateId": "CKS-05",
+        "requiredPositiveEvidence": [
+          "all_comparator_arms_use_identical_hidden_fresh_tasks_and_Knowledge_versions",
+          "structured_raw_fact_guidance_static_updated_and_single_multi_hop_AB_results_are_complete",
+          "run_counts_confidence_intervals_missingness_failures_latency_tokens_memory_throughput_escalation_and_cost_are_preserved",
+          "all_preregistered_falsification_stop_conditions_are_evaluated",
+          "both_quality_and_efficiency_thresholds_pass_without_compensation"
+        ],
+        "verificationMethod": "Validate the benchmark manifest and exact arm/profile bindings; recompute paired task and Knowledge-edition equality; recompute every metric, denominator, confidence interval, resource total, and falsification result from minimized receipts; verify failed/aborted/unknown episodes remain; require every quality and efficiency gate positive and reject architecture-substitution prose unsupported by the measurements.",
+        "receiptEvidenceReferences": [],
+        "status": "UNSATISFIED_NO_EVIDENCE_REFERENCE",
+        "successClaimAllowed": false
+      }
+    ],
+    "aggregateStatus": "BLOCKED",
+    "implementationAdmission": "DENIED_PENDING_ALL_THREE_POSITIVE_VERIFIED_GATES",
+    "reason": "This receipt contains no CKS-03, CKS-04, or CKS-05 evidence references; their positivity is neither assumed nor claimed."
+  },
+  "downstreamLeafOwnership": [
+    {
+      "leafId": "SOL-PSAI286-QUALIFICATION-CONTRACTS-01",
+      "dependsOn": [
+        "CKS-01 contract surfaces",
+        "this decision receipt"
+      ],
+      "ownsExactly": [
+        "closed additive v1 schemas and TypeScript types for exact profile identity, R/K/P/U vector, qualification evidence reference, resource admission input/output, escalation cause, and advisory recommendation",
+        "finite enums and canonical field ordering rules"
+      ],
+      "mustNotOwn": [
+        "qualification verdicts",
+        "task classification",
+        "profile ranking",
+        "capacity measurement",
+        "shadow scoring",
+        "provider or runtime integration"
+      ],
+      "currentAdmission": "BLOCKED_BY_UPSTREAM_EVIDENCE_AND_SEPARATE_WORK_AUTHORIZATION"
+    },
+    {
+      "leafId": "SOL-PSAI286-QUALIFICATION-VERIFIER-01",
+      "dependsOn": [
+        "SOL-PSAI286-QUALIFICATION-CONTRACTS-01",
+        "positive verified CKS-03",
+        "positive verified CKS-04",
+        "positive verified CKS-05"
+      ],
+      "ownsExactly": [
+        "pure exact-profile digest verification",
+        "CKS evidence reference and lineage verification",
+        "coverage-box, scenario-tag, Q-tier derivation, drift, suspension, and revocation verdicts"
+      ],
+      "mustNotOwn": [
+        "task vector classification",
+        "candidate ranking",
+        "resource reservation",
+        "model invocation",
+        "evidence generation",
+        "authority or activation"
+      ],
+      "currentAdmission": "BLOCKED_BY_UPSTREAM_EVIDENCE_AND_SEPARATE_WORK_AUTHORIZATION"
+    },
+    {
+      "leafId": "SOL-PSAI286-RKPU-CLASSIFIER-01",
+      "dependsOn": [
+        "SOL-PSAI286-QUALIFICATION-CONTRACTS-01",
+        "positive verified CKS-03 task manifests"
+      ],
+      "ownsExactly": [
+        "pure deterministic classification of a closed sanitized task descriptor to one R/K/P/U vector or UNCLASSIFIABLE",
+        "digest-bound classification reason facts and required scenario tags"
+      ],
+      "mustNotOwn": [
+        "risk or impact rating",
+        "Capability or Authority",
+        "profile qualification",
+        "candidate selection",
+        "task execution",
+        "raw issue prompt or response persistence"
+      ],
+      "currentAdmission": "BLOCKED_BY_UPSTREAM_EVIDENCE_AND_SEPARATE_WORK_AUTHORIZATION"
+    },
+    {
+      "leafId": "SOL-PSAI286-RESOURCE-ADMISSION-01",
+      "dependsOn": [
+        "SOL-PSAI286-QUALIFICATION-CONTRACTS-01",
+        "measured capacity receipt contract",
+        "existing dependency and path-lease controller contract"
+      ],
+      "ownsExactly": [
+        "pure validation of context, KV, resident-memory, budget, dependency, and path-lease capacity",
+        "atomic positive or denied scheduling-capacity receipt"
+      ],
+      "mustNotOwn": [
+        "resource-plane rights",
+        "Capability or Authority",
+        "profile qualification or ranking",
+        "process or container start",
+        "reservation side effects",
+        "route execution"
+      ],
+      "currentAdmission": "BLOCKED_BY_UPSTREAM_EVIDENCE_AND_SEPARATE_WORK_AUTHORIZATION"
+    },
+    {
+      "leafId": "SOL-PSAI286-ADVISORY-ROUTER-01",
+      "dependsOn": [
+        "SOL-PSAI286-QUALIFICATION-VERIFIER-01",
+        "SOL-PSAI286-RKPU-CLASSIFIER-01",
+        "SOL-PSAI286-RESOURCE-ADMISSION-01"
+      ],
+      "ownsExactly": [
+        "pure candidate eligibility filtering",
+        "the frozen smallest-qualified lexicographic ordering",
+        "typed escalation recommendation and static fallback result",
+        "canonical advisory decision digest"
+      ],
+      "mustNotOwn": [
+        "profile or task evidence generation",
+        "risk/impact or Authority policy",
+        "capacity measurement",
+        "provider call",
+        "route attempt creation or execution",
+        "automatic retry or external action"
+      ],
+      "currentAdmission": "BLOCKED_BY_UPSTREAM_EVIDENCE_AND_SEPARATE_WORK_AUTHORIZATION"
+    },
+    {
+      "leafId": "SOL-PSAI286-SHADOW-EVALUATION-01",
+      "dependsOn": [
+        "SOL-PSAI286-ADVISORY-ROUTER-01",
+        "positive verified CKS-03",
+        "positive verified CKS-04",
+        "positive verified CKS-05"
+      ],
+      "ownsExactly": [
+        "offline paired aggregation of already produced minimized receipts",
+        "frozen threshold and falsification evaluation",
+        "positive or blocked shadow-gate receipt with reproducible statistics"
+      ],
+      "mustNotOwn": [
+        "task/model execution",
+        "provider call",
+        "post-hoc threshold or denominator changes",
+        "profile promotion",
+        "advisory or production activation"
+      ],
+      "currentAdmission": "BLOCKED_BY_UPSTREAM_EVIDENCE_AND_SEPARATE_WORK_AUTHORIZATION"
+    },
+    {
+      "leafId": "SOL-PSAI286-DEFAULT-OFF-INTEGRATION-01",
+      "dependsOn": [
+        "all prior SOL-PSAI286 leaves",
+        "positive shadow-gate receipt",
+        "independent review receipt"
+      ],
+      "ownsExactly": [
+        "additive default-off exports and integration readback",
+        "compatibility checks against reused LR-001/LR-002 and resource-plane boundaries",
+        "proof that no configuration activates SHADOW_EVIDENCE_ONLY or ADVISORY_DISPLAY_ONLY"
+      ],
+      "mustNotOwn": [
+        "activation",
+        "owner approval",
+        "provider/broker/service mutation",
+        "route execution",
+        "Capability or Authority grant",
+        "merge release deployment or issue closure"
+      ],
+      "currentAdmission": "BLOCKED_BY_UPSTREAM_EVIDENCE_AND_SEPARATE_WORK_AUTHORIZATION"
+    }
+  ],
+  "compatibilityImpact": {
+    "classification": "ADDITIVE_DECISION_ONLY",
+    "currentRuntimeBytesChanged": false,
+    "currentSchemaOrTypeBytesChanged": false,
+    "currentProviderOrBrokerBehaviorChanged": false,
+    "currentRoutingBehaviorChanged": false,
+    "currentAuthorityChanged": false,
+    "currentActivationChanged": false,
+    "rules": [
+      "LR-001 routing records remain authoritative for context, decision, attempt, and outcome lineage; a CM model alias alone is not an exact CKS qualification profile.",
+      "LR-002 terminal outcomes remain authoritative; missing, stale, tampered, unknown, non-authoritative, or unrun evidence never becomes VERIFIED_RESOLVED.",
+      "LR-003 threat and falsification fixtures remain required inputs rather than duplicated router policy.",
+      "Unknown transport remains distinct from model or competence failure and cannot authorize retry.",
+      "The existing resource-plane authority intersection remains separate and cannot be widened by resource admission or model qualification.",
+      "Q0-Q6 does not replace L0-L6 Knowledge maturity, and neither one changes risk, impact, Capability, or Authority.",
+      "Any changed exact binding requires requalification; no migration or compatibility alias is automatic.",
+      "Any future wire-contract conflict with an accepted CKS-01 v1 surface blocks implementation and requires this decision to be superseded explicitly rather than silently adapted."
+    ],
+    "rollback": "Revert this single additive evidence file. No migration, provider state, route, lease, authority, runtime switch, or external state exists."
+  },
+  "integrationReceipt": {
+    "decisionOutcome": "SEMANTICS_FROZEN",
+    "implementationAdmission": "DENIED",
+    "advisoryActivation": "DENIED",
+    "runtimeActivation": false,
+    "providerCallPerformed": false,
+    "routeExecutionPerformed": false,
+    "authorityGranted": false,
+    "externalActionPerformed": false,
+    "positivePrerequisiteEvidenceVerified": [],
+    "unsatisfiedPrerequisiteEvidence": [
+      "CKS-03",
+      "CKS-04",
+      "CKS-05"
+    ],
+    "nextPermittedState": "CONTROLLER_REVIEW_OF_THIS_DECISION_ARTIFACT_ONLY",
+    "successBoundary": "SEMANTICS_FROZEN is not implementation, qualification, integration, shadow-threshold, activation, or product success."
+  },
+  "nonClaims": [
+    "No CKS-03, CKS-04, or CKS-05 evidence is claimed positive.",
+    "No exact model-runtime profile is claimed qualified, available, or resource-admitted.",
+    "No task has been classified or routed.",
+    "No provider, model, retriever, reranker, verifier, tool, process, container, network, device, or external service was invoked by this artifact.",
+    "No route, escalation, retry, lease, reservation, write, or external action was executed.",
+    "No Capability, Authority, risk reduction, approval, merge, release, deployment, production readiness, security assurance, or issue closure is granted.",
+    "No learned router, model substitution, general small-model competence, benchmark benefit, cost saving, latency improvement, or production quality is proven.",
+    "No runtime, broker, provider, service, CI authority, harness source, credential, remote, DSH_HOME, spill configuration, or activation setting is changed.",
+    "No independent or Owner review is claimed; the controller remains responsible for review and any separately authorized next leaf.",
+    "This artifact does not admit downstream implementation while any frozen prerequisite gate is unsatisfied."
+  ],
+  "digestRule": {
+    "algorithm": "SHA-256",
+    "canonicalization": "packages/contracts/src/canonical-json.ts:canonicalJson at repositoryBinding.baseCommit",
+    "excludedTopLevelFields": [
+      "receiptDigest"
+    ],
+    "hexEncoding": "lowercase"
+  },
+  "receiptDigest": "7d665d9a3eef6583c47edc9a2f511b346e08be6894f6d83e370364da13fdf57e"
+}

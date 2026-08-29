@@ -1,0 +1,250 @@
+{
+  "fixtureVersion": "chimpmaera.dev/cks-resource-admission/admission-cases/v1",
+  "cases": [
+    {
+      "name": "parallel-admission-valid",
+      "expectation": {
+        "outcome": "VALID"
+      },
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-resource-admission/v1",
+        "decisionAtMs": 1800000000100,
+        "measurement": {
+          "taskDemandDigest": "c642ea7672fdd2d542260c7ff1a841d1831d5e4b6e6b9e0755c86d06f37ec9e5",
+          "exactProfileDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+          "runtimeAndHardwareClassDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "capacityMeasurementMethodDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+          "capacityBucketDigest": "e12317bedcfd902a4f47cfb3f54dcfb94f0cb9e513be049db0c69ab7cf6def20",
+          "observedAtMs": 1800000000000,
+          "expiresAtMs": 1800000001000,
+          "dependencyGraphDigest": "e69158fe4a75bdd24690b3dea619635750ea0f18dfd682f84f8fac0cfc998a26",
+          "pathLeaseSetDigest": "cf739d0407da6051300197123d24d610e70fef475eded556e0fe6314a796700b",
+          "workOrderBudgetDigest": "99063e7e8e3764309abcadcd43694219f7715c1ca299f02c7ce764b1da9c965b",
+          "catalogDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "priceBookDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+          "contextWindowTokens": 131072,
+          "maximumInputTokens": 98304,
+          "maximumOutputTokens": 32768,
+          "capacityBuckets": [
+            {
+              "bucketId": "single-64k",
+              "ordinal": 0,
+              "maximumTotalTokens": 65536,
+              "maximumConcurrentSequences": 1,
+              "measuredKvPeakBytes": 2000,
+              "residentModelAndRuntimePeakBytes": 4000,
+              "reservableMeasuredBytes": 8000,
+              "bucketDigest": "cd59bf8323a91798579ae9478f86dc016f73474b7063dcb944e14fa15732eb9d"
+            },
+            {
+              "bucketId": "parallel-128k",
+              "ordinal": 1,
+              "maximumTotalTokens": 131072,
+              "maximumConcurrentSequences": 2,
+              "measuredKvPeakBytes": 3000,
+              "residentModelAndRuntimePeakBytes": 4000,
+              "reservableMeasuredBytes": 8000,
+              "bucketDigest": "e12317bedcfd902a4f47cfb3f54dcfb94f0cb9e513be049db0c69ab7cf6def20"
+            },
+            {
+              "bucketId": "parallel-256k",
+              "ordinal": 2,
+              "maximumTotalTokens": 262144,
+              "maximumConcurrentSequences": 4,
+              "measuredKvPeakBytes": 6000,
+              "residentModelAndRuntimePeakBytes": 4000,
+              "reservableMeasuredBytes": 12000,
+              "bucketDigest": "feab10a7758d6ada4eed733a44c983e8153b72870e7e5a2da54283257d017b88"
+            }
+          ],
+          "measurementDigest": "19f8955fc91f8fb14dbb7a2d4ae68b0464b6f1f0418352f536303aa56cc6ccd5"
+        },
+        "budget": {
+          "remainingCalls": 4,
+          "remainingTokens": 300000,
+          "remainingCostMicros": 10000,
+          "remainingElapsedMs": 120000,
+          "remainingResidentBytes": 8000,
+          "reservedCalls": 2,
+          "reservedTokens": 114624,
+          "reservedCostMicros": 1000,
+          "reservedElapsedMs": 60000,
+          "reservedResidentBytes": 7000
+        },
+        "candidates": [
+          {
+            "candidateId": "candidate-a",
+            "predecessors": [
+              {
+                "predecessorId": "prepare-a",
+                "terminalOutcome": "POSITIVE",
+                "terminalReceiptDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              }
+            ],
+            "dependencyLeases": [
+              {
+                "dependencyId": "model-runtime",
+                "mode": "READ"
+              },
+              {
+                "dependencyId": "eval-a",
+                "mode": "WRITE"
+              }
+            ],
+            "pathLeases": [
+              {
+                "path": "workspaces/candidate-a",
+                "resolvedPath": "workspaces/candidate-a",
+                "mode": "WRITE",
+                "resolutionDigest": "8f0c77ec86131f1cd94b1d5b2e98a6b89dcb9bcf8635cc762015d17f0e24e3d4"
+              },
+              {
+                "path": "packages/contracts",
+                "resolvedPath": "packages/contracts",
+                "mode": "READ",
+                "resolutionDigest": "1c6ef9269f81cd7ebf066e90075dec60fd6806cf44d928e7b99a9f1bc4c510bd"
+              }
+            ],
+            "demand": {
+              "inputTokens": 40000,
+              "toolSchemaTokens": 2048,
+              "maximumOutputTokens": 8192,
+              "safetyReserveTokens": 4096,
+              "concurrentSequences": 1
+            }
+          },
+          {
+            "candidateId": "candidate-b",
+            "predecessors": [
+              {
+                "predecessorId": "prepare-b",
+                "terminalOutcome": "POSITIVE",
+                "terminalReceiptDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              }
+            ],
+            "dependencyLeases": [
+              {
+                "dependencyId": "model-runtime",
+                "mode": "READ"
+              },
+              {
+                "dependencyId": "eval-b",
+                "mode": "WRITE"
+              }
+            ],
+            "pathLeases": [
+              {
+                "path": "workspaces/candidate-b",
+                "resolvedPath": "workspaces/candidate-b",
+                "mode": "WRITE",
+                "resolutionDigest": "76938ccc4b94065f248972d56df69691d46c936e793c73b5673d5faa7ffc342d"
+              },
+              {
+                "path": "packages/contracts/src/cks-resource-admission.ts",
+                "resolvedPath": "packages/contracts/src/cks-resource-admission.ts",
+                "mode": "READ",
+                "resolutionDigest": "04f5002273486c02afaacdb3845c0d1950400e912485eaa7fe2f7050eafb2ad7"
+              }
+            ],
+            "demand": {
+              "inputTokens": 48000,
+              "toolSchemaTokens": 2048,
+              "maximumOutputTokens": 8192,
+              "safetyReserveTokens": 2048,
+              "concurrentSequences": 1
+            }
+          }
+        ],
+        "requestDigest": "f6ba02bb5c7cd60ca0250d854f93383ba40be821fa17a4a5831307e1f980a292"
+      }
+    },
+    {
+      "name": "exact-context-and-measured-bucket-fit-valid",
+      "expectation": {
+        "outcome": "VALID"
+      },
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-resource-admission/v1",
+        "decisionAtMs": 1800000000100,
+        "measurement": {
+          "taskDemandDigest": "f14ddb0c8a1680e560f690db00d9ff77d04655d48ec5e1493f8139de9f6b63fd",
+          "exactProfileDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+          "runtimeAndHardwareClassDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "capacityMeasurementMethodDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+          "capacityBucketDigest": "e12317bedcfd902a4f47cfb3f54dcfb94f0cb9e513be049db0c69ab7cf6def20",
+          "observedAtMs": 1800000000000,
+          "expiresAtMs": 1800000001000,
+          "dependencyGraphDigest": "8afdd6bfe7345638ca7d245a70b3b7eacdb12cfc9b41476d01629e55f22209c5",
+          "pathLeaseSetDigest": "2df4633ddf5a8996ab78039bd20db6c1d9d4b8b16f718dfe51403e621e750feb",
+          "workOrderBudgetDigest": "aa35da2e7f1e32efb9777b0c8ac263a2ba28454b3b1f232a1a771cd689248b0f",
+          "catalogDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "priceBookDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+          "contextWindowTokens": 131072,
+          "maximumInputTokens": 98304,
+          "maximumOutputTokens": 32768,
+          "capacityBuckets": [
+            {
+              "bucketId": "single-64k",
+              "ordinal": 0,
+              "maximumTotalTokens": 65536,
+              "maximumConcurrentSequences": 1,
+              "measuredKvPeakBytes": 2000,
+              "residentModelAndRuntimePeakBytes": 4000,
+              "reservableMeasuredBytes": 8000,
+              "bucketDigest": "cd59bf8323a91798579ae9478f86dc016f73474b7063dcb944e14fa15732eb9d"
+            },
+            {
+              "bucketId": "parallel-128k",
+              "ordinal": 1,
+              "maximumTotalTokens": 131072,
+              "maximumConcurrentSequences": 2,
+              "measuredKvPeakBytes": 3000,
+              "residentModelAndRuntimePeakBytes": 4000,
+              "reservableMeasuredBytes": 8000,
+              "bucketDigest": "e12317bedcfd902a4f47cfb3f54dcfb94f0cb9e513be049db0c69ab7cf6def20"
+            },
+            {
+              "bucketId": "parallel-256k",
+              "ordinal": 2,
+              "maximumTotalTokens": 262144,
+              "maximumConcurrentSequences": 4,
+              "measuredKvPeakBytes": 6000,
+              "residentModelAndRuntimePeakBytes": 4000,
+              "reservableMeasuredBytes": 12000,
+              "bucketDigest": "feab10a7758d6ada4eed733a44c983e8153b72870e7e5a2da54283257d017b88"
+            }
+          ],
+          "measurementDigest": "85ba9fcfb1dcd41316a6212cc1fa9d99663ddae06dcf15d3a280e0c0225eebae"
+        },
+        "budget": {
+          "remainingCalls": 4,
+          "remainingTokens": 300000,
+          "remainingCostMicros": 10000,
+          "remainingElapsedMs": 120000,
+          "remainingResidentBytes": 8000,
+          "reservedCalls": 1,
+          "reservedTokens": 131072,
+          "reservedCostMicros": 500,
+          "reservedElapsedMs": 30000,
+          "reservedResidentBytes": 7000
+        },
+        "candidates": [
+          {
+            "candidateId": "candidate-exact",
+            "predecessors": [],
+            "dependencyLeases": [],
+            "pathLeases": [],
+            "demand": {
+              "inputTokens": 98304,
+              "toolSchemaTokens": 0,
+              "maximumOutputTokens": 32768,
+              "safetyReserveTokens": 0,
+              "concurrentSequences": 1
+            }
+          }
+        ],
+        "requestDigest": "70b09f1da2d580ff5e079ba11631e3890185cf060101d2fac43b02c73d0dff32"
+      }
+    }
+  ]
+}

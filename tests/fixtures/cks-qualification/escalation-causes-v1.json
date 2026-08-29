@@ -1,0 +1,149 @@
+{
+  "cases": [
+    {
+      "name": "knowledge-gap",
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-escalation/v1",
+        "episodeDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "exactProfileDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "taskVector": [3, 4, 2, 5],
+        "taskVectorDigest": "3ae36b8012d5657495d8d7c04530062d9b83fad083eb17ad8b27b7ca592d9cb7",
+        "causeCode": "KNOWLEDGE_GAP",
+        "disposition": "ABSTAIN_AND_REQUEST_BOUND_KNOWLEDGE_EVIDENCE",
+        "triggerEvidence": {
+          "kind": "KNOWLEDGE_GAP",
+          "sourceReceiptDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+          "trigger": "NEED_MORE_KNOWLEDGE",
+          "materialKnowledgeObjectDigest": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "evidenceDigest": "57d2b4d76c5078c965b9ddf3afefbfdb2673274ae8d3348423432bcbee91aafe",
+        "claimBoundary": "TYPED_ESCALATION_EVIDENCE_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT",
+        "receiptDigest": "daa09c2fd267468c06c52b0858865782a3b7c805857db04888d15f9071a22e43"
+      }
+    },
+    {
+      "name": "knowledge-conflict",
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-escalation/v1",
+        "episodeDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "exactProfileDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "taskVector": [3, 4, 2, 5],
+        "taskVectorDigest": "3ae36b8012d5657495d8d7c04530062d9b83fad083eb17ad8b27b7ca592d9cb7",
+        "causeCode": "KNOWLEDGE_CONFLICT",
+        "disposition": "ABSTAIN_OR_RESELECT_CONFLICT_QUALIFIED_PROFILE",
+        "triggerEvidence": {
+          "kind": "KNOWLEDGE_CONFLICT",
+          "sourceReceiptDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+          "trigger": "UNRESOLVED_MATERIAL_CONFLICT",
+          "conflictingEvidenceDigests": ["6666666666666666666666666666666666666666666666666666666666666666", "7777777777777777777777777777777777777777777777777777777777777777"],
+          "applicabilityEvidenceDigest": "8888888888888888888888888888888888888888888888888888888888888888"
+        },
+        "evidenceDigest": "26861a2867bca293a8e95357c89f3b28225d8cdd04b601e54a08b3a5c4cf2c6a",
+        "claimBoundary": "TYPED_ESCALATION_EVIDENCE_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT",
+        "receiptDigest": "b3515c161b3ba1163aedb5eba462f7db478f261874cf11a2af2c83221a9eed23"
+      }
+    },
+    {
+      "name": "verifier-rejection",
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-escalation/v1",
+        "episodeDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "exactProfileDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "taskVector": [3, 4, 2, 5],
+        "taskVectorDigest": "3ae36b8012d5657495d8d7c04530062d9b83fad083eb17ad8b27b7ca592d9cb7",
+        "causeCode": "VERIFIER_REJECTION",
+        "disposition": "REJECT_CANDIDATE_AND_RESELECT_IF_BUDGETED",
+        "triggerEvidence": {
+          "kind": "VERIFIER_REJECTION",
+          "sourceReceiptDigest": "9999999999999999999999999999999999999999999999999999999999999999",
+          "verifierReceiptDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "verifier": "DETERMINISTIC",
+          "rejectedCheck": "DIGEST"
+        },
+        "evidenceDigest": "5aecd29019666aaae4e909da0d37749cf9aad3ca259fa243d763c76707fe3cc2",
+        "claimBoundary": "TYPED_ESCALATION_EVIDENCE_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT",
+        "receiptDigest": "7d3217e5b99305f2e57934d2035d3712c5665d9bcf84a87327c9bd79bb2771c0"
+      }
+    },
+    {
+      "name": "decomposition-growth",
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-escalation/v1",
+        "episodeDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "exactProfileDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "taskVector": [3, 4, 2, 5],
+        "taskVectorDigest": "3ae36b8012d5657495d8d7c04530062d9b83fad083eb17ad8b27b7ca592d9cb7",
+        "causeCode": "DECOMPOSITION_GROWTH",
+        "disposition": "RECLASSIFY_AND_RESELECT",
+        "triggerEvidence": {
+          "kind": "DECOMPOSITION_GROWTH",
+          "sourceReceiptDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "previousDecompositionDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "currentDecompositionDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "previousNodeCount": 2,
+          "currentNodeCount": 3,
+          "previousEdgeCount": 1,
+          "currentEdgeCount": 2,
+          "previousLongestPath": 1,
+          "currentLongestPath": 2,
+          "previousContextTokens": 100,
+          "currentContextTokens": 140,
+          "previousToolSteps": 1,
+          "currentToolSteps": 1,
+          "previousDependencyCount": 1,
+          "currentDependencyCount": 2,
+          "previousPathLeaseCount": 1,
+          "currentPathLeaseCount": 1
+        },
+        "evidenceDigest": "99a943aea4b1302e5d0ce8d8345556467ab2b53acbb59266f5a552b8da498e88",
+        "claimBoundary": "TYPED_ESCALATION_EVIDENCE_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT",
+        "receiptDigest": "bb7c1017ac96cbe56e6141a408bd581b991283beae361c473255a2edf1e7b2cd"
+      }
+    },
+    {
+      "name": "low-evidence-coverage",
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-escalation/v1",
+        "episodeDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "exactProfileDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "taskVector": [3, 4, 2, 5],
+        "taskVectorDigest": "3ae36b8012d5657495d8d7c04530062d9b83fad083eb17ad8b27b7ca592d9cb7",
+        "causeCode": "LOW_EVIDENCE_COVERAGE",
+        "disposition": "REJECT_OUTPUT_AND_ABSTAIN_OR_RESELECT",
+        "triggerEvidence": {
+          "kind": "LOW_EVIDENCE_COVERAGE",
+          "sourceReceiptDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "coverageReceiptDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "coveredPpm": 850000,
+          "applicabilityLinkPresent": true,
+          "applicabilityEvidenceDigest": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "evidenceDigest": "8ac189828becc8fa94ca29ba87f44316aa08ddbd366b28e75534546fe7d4400b",
+        "claimBoundary": "TYPED_ESCALATION_EVIDENCE_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT",
+        "receiptDigest": "79b8247cead4ba8dc9d1c910864e85fbafd44e835ab49c3f53f3b21045ad1e1e"
+      }
+    },
+    {
+      "name": "competence-limit",
+      "document": {
+        "schemaVersion": "chimpmaera.dev/cks-escalation/v1",
+        "episodeDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "exactProfileDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "taskVector": [3, 4, 2, 5],
+        "taskVectorDigest": "3ae36b8012d5657495d8d7c04530062d9b83fad083eb17ad8b27b7ca592d9cb7",
+        "causeCode": "COMPETENCE_LIMIT",
+        "disposition": "EXCLUDE_PROFILE_AND_RESELECT",
+        "triggerEvidence": {
+          "kind": "COMPETENCE_LIMIT",
+          "sourceReceiptDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+          "trigger": "OUTSIDE_VERIFIED_COVERAGE_BOX",
+          "coverageBoxDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "taskVectorDigest": "3ae36b8012d5657495d8d7c04530062d9b83fad083eb17ad8b27b7ca592d9cb7"
+        },
+        "evidenceDigest": "df0cbbd885293cf4b132a128eee749d9b8b71019575c0c458d2aced2c48174e0",
+        "claimBoundary": "TYPED_ESCALATION_EVIDENCE_ONLY_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT",
+        "receiptDigest": "1e0666ba962c03652d1772356581447a412e36186752e0d134a0163f1841849e"
+      }
+    }
+  ]
+}

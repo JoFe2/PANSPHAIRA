@@ -412,7 +412,7 @@ dbffdad68f2d02dc88f144c20ef81fb6a7b6d9b412a88e11981b4d038b47a5f0  ./packages/set
 cffdb4aef6035e65b23e9b8d52ef3a9e266bb9850ef1f5695f266c85631b239e  ./packages/usage-insights/src/cli.ts
 820a91361c34ca37962bd037552c7ac02f392936460f5fbd4d57c77ef145bdc5  ./packages/usage-insights/src/index.ts
 9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7  ./release/governance.json
-d97884d16e2edf697cef4010a0b4e9f4354008ffb885b5cc136eb9e3db3aa121  ./release/public-files.manifest
+89245e8aa36dafca9fffcb6c8e8b80687f93486a543d290865cf02fee392fea6  ./release/public-files.manifest
 67fb3c2a0a37bf225e0f5c4f1d27ecfdd625a27d0b148e04e89398f82902ce9b  ./schemas/adaptability-benchmark-result-v1.schema.json
 0068ded0cba101cd568086149c2a40824733e3647b4d96f1b7a24c4f21dbe843  ./schemas/contracts/adaptive-evidence-gate-spec-v1.schema.json
 2e37dd55a819008cf6dcf7d5e4241ca5668ee9a320ca9f82ebf2cf637507f559  ./schemas/contracts/adaptive-evidence-receipt-v1.schema.json
@@ -487,7 +487,7 @@ e83a8152e66ebc161b0175622b9ecfc96f49737a5e167a91f430d82dd13b92d8  ./schemas/secu
 4748bb33f1915872746d5c28195445591e7621f0ef64fe10e2acd09f131fc1bc  ./scripts/adaptive-controller.mjs
 73ac82f4adf709f712329c40580cc94a29213642f5b07877799837d202a01b51  ./scripts/adaptive-delivery-status.mjs
 8346027ba325c587f3853e946e96f8b2b6e21afc58b55a095eb89ba0db961ec7  ./scripts/adaptive-evidence-gates.mjs
-2d1a7333f6276fd099f0f9052908bc3f977864f0b6305925ae67996ca7a1171e  ./scripts/build-public-release.sh
+7cb7eabe0ae2d0a8502828a7f1334fc8dbd9021f3e18eacac144ca13d6611096  ./scripts/build-public-release.sh
 9dfa75c197150b38331eda7293c754275ba58b53121c9665a9267f1260786016  ./scripts/daily-poc.mjs
 1808c1e1cee543d2fc0dd2760bc7265ff46cc2452a75b02b6a45ad8c1e474282  ./scripts/extension-dynamic-process-lifecycle.mjs
 2d23e9862f0b36e72b48347e27010afbb213ee5f05d98e14705c2519f86f6d28  ./scripts/extension-dynamic-synthetic.mjs
@@ -673,7 +673,7 @@ e1e4304dde40a18146d905885a7d7dc9646a8d22a7702a758ad0da50d1ee00e0  ./tests/poc-sh
 4bbdb6acb54291a49e12347f72a9b4b85241e28d639df56fc78c69f050103cc1  ./tests/power-platform-read-connector.test.ts
 dfe7338a6655c3a70f304f59c3a3e1e748ad62a8b78726eeb125db4e3f16332d  ./tests/protected-audit-timeline.test.ts
 c0525446e530ff39599ded8e413bb093cb77de7f910e727755f88d3c768af9a2  ./tests/public-product-spelling.test.mjs
-cf5d8e58aafa89bf392afe2383bb268e98057d9facdbb05cf9dda0e3f95d9da1  ./tests/release-governance.test.mjs
+fa8646137ac5c1301022589377ab331ef2d23b0a3cffef072a0ffd8539ad9917  ./tests/release-governance.test.mjs
 af0f2117460bf2fc8478d9a45c58b17ad1bc6c839a9a0654a325078354fb4990  ./tests/resource-plane-profiles.test.ts
 599d23f5a6f3616e39100a802505bd39d395cc19a911d82b75f40a88141278f0  ./tests/secure-default-proof.test.mjs
 74d7c28fbe12bfeab992ed4c108a29ea49fdd1b07d5e8552bed550c3b2002783  ./tests/signal-release-intake.test.ts
@@ -742,4 +742,4 @@ b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification
 93f42b3e9e78b32cc1e1193e3f7a7ef59ca7ccd2e4116bd184d22d504987d46a  ./verification/bi-003-erp-read-connector-evidence-v1.json
 d43b38be4695e0e5c70e3a8e0ebd2a55b527974d7d9721cc43d94ee248245432  ./verification/intake-001-evidence-v1.json
 e2fa73eb5312982af288d29df015b0dc3e010f3fdba6405ce3b464b4ccece660  ./verification/lkc-qual-01-m0-evidence-v1.json
-07cc50fadf9a86c6930211bf5b1bd9f947ebadb4a0e7fd888cb84b5070822684  ./verification/verification-dag-v2.json
+94e19852d82d88c36974141c321a32c20fcb55d358bbe9541eea9fba21aef5d8  ./verification/verification-dag-v2.json

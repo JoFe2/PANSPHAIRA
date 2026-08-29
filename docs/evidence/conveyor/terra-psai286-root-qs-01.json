@@ -1,0 +1,238 @@
+{
+  "schemaVersion": "pansphaira.dev/conveyor/root-quality-scrutiny-receipt/v1",
+  "receiptId": "TERRA-PSAI286-ROOT-QS-01",
+  "taskId": "TERRA-PSAI286-ROOT-QS-01",
+  "scope": {
+    "issueNumber": 286,
+    "issueTitle": "[CKS-06] Qualification profiles and smallest-qualified R/K/P/U router",
+    "subject": "complete advisory CKS-06 contract surface and evidence chain",
+    "allowedChangedPaths": [
+      "docs/evidence/conveyor/terra-psai286-root-qs-01.json"
+    ],
+    "claimBoundary": "ROOT_SCRUTINY_OF_OFFLINE_ADVISORY_CONTRACTS_ONLY_NO_PROVIDER_CALL_NO_ROUTE_EXECUTION_NO_AUTHORITY_GRANT_NO_AUTOMATIC_ACTIVATION"
+  },
+  "processBinding": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "overrides": [],
+    "newProcessVariantIntroduced": false
+  },
+  "repositoryBinding": {
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "reviewedHeadCommit": "86bc5cadf46b0be033ac39e0258689be92c3d142",
+    "reviewedRange": "origin/main...86bc5cadf46b0be033ac39e0258689be92c3d142",
+    "frozenDecisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai286-router-semantics-decision-01.json",
+      "sha256": "54a0871510624f35560ccdb1ae3b21e542e145a9648f54c637cac011f83ea58b"
+    }
+  },
+  "contractSurface": {
+    "qualificationProfile": {
+      "implementation": {
+        "path": "packages/contracts/src/cks-qualification.ts",
+        "sha256": "8eecb5e4466ef06168aa377c8d398fa32ae69ee3bc1d6f57b8c523be8d3b65f4"
+      },
+      "schema": {
+        "path": "schemas/contracts/cks-competence-qualification-profile-v1.schema.json",
+        "sha256": "8041723edf3e70ff2ed3245e8c00448e7ae6df5253270711951954a1fef4a4d3"
+      },
+      "reviewedProperties": [
+        "closed exact model/runtime/context/prompt/tool/retriever/reranker/verifier/knowledge/suite bindings",
+        "canonical profile digest and exact NONE pairing",
+        "DENY-only truncation and bounded context",
+        "unknown, missing, malformed, invalid-state, and digest-mismatch denial"
+      ]
+    },
+    "typedEscalationAndSelector": {
+      "implementation": "packages/contracts/src/cks-qualification.ts",
+      "schema": {
+        "path": "schemas/contracts/cks-escalation-v1.schema.json",
+        "sha256": "f6f3f545aab5739d3a32b98b9f388cfac58b9f348d6d96b4cf38eed108c12c25"
+      },
+      "reviewedProperties": [
+        "six closed digest-bound cause-to-disposition mappings",
+        "R/K/P/U remains a four-coordinate tuple",
+        "smallest fully qualified and admitted candidate is selected deterministically",
+        "risk/impact and Authority are eligibility filters, not ordering inputs",
+        "incomplete qualification evidence or denied admission produces no qualified profile or abstention"
+      ]
+    },
+    "resourceAdmission": {
+      "implementation": {
+        "path": "packages/contracts/src/cks-resource-admission.ts",
+        "sha256": "ee54ba179537c5e3da21af3ff910fc10a3ff59318e978132fa8cad4eec9b456c"
+      },
+      "schema": {
+        "path": "schemas/contracts/cks-resource-admission-v1.schema.json",
+        "sha256": "ce7b2a26022fede6e4701f977beb406b616262e4d7854cf00f88b3e6a75dac5f"
+      },
+      "reviewedProperties": [
+        "all lineage, path-resolution, measurement, and request digests recompute",
+        "fresh positive predecessors and atomic dependency/path lease conflict checks",
+        "complete context demand, smallest measured fitting KV bucket, and budget reservation checks",
+        "VALID is an advisory capacity receipt only and cannot acquire a lease, execute, or grant Authority"
+      ]
+    },
+    "shadowEvaluation": {
+      "implementation": {
+        "path": "packages/contracts/src/cks-shadow-evaluation.ts",
+        "sha256": "5a89bd4282386295935e8107f0ffdd2b06fa3148a656f3ffd30377ae6edb7067"
+      },
+      "schema": {
+        "path": "schemas/contracts/cks-shadow-evaluation-v1.schema.json",
+        "sha256": "96623bab58166a706e6c3bed99c120839a39eee80b64febb917508c2d828fe48"
+      },
+      "reviewedProperties": [
+        "two ordered paired windows and frozen thresholds",
+        "positive CKS-03/CKS-04/CKS-05 evidence required in every window",
+        "quality cannot be exchanged for cost or latency benefit",
+        "all passing gates retain activationMode OFF and require separate authorization"
+      ]
+    },
+    "integrationHarness": {
+      "script": {
+        "path": "scripts/run-cks-router-dry-run.mjs",
+        "sha256": "e2085aec36925a077c98192a9a92a6ff624818d30823cff3ae6226939730567f"
+      },
+      "positiveFixture": {
+        "path": "tests/fixtures/cks-router-dry-run/positive-evidence-v1.json",
+        "sha256": "267c618a0c557ebe67bd6c827fd17ee3f708d6624371f000a8d5282e4ccd94a5"
+      },
+      "negativeFixture": {
+        "path": "tests/fixtures/cks-router-dry-run/rejections-v1.json",
+        "sha256": "f7f3b9048f5a28fe3bdba8950a95d323fdb9dbb56551b5bccb73f0a912bf7a31"
+      },
+      "generatedEvidence": {
+        "path": "verification/cks-06-router-dry-run-evidence-v1.json",
+        "sha256": "52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2",
+        "outcome": "PASS",
+        "receiptDigest": "41f09853d6249f579b0f7619cb4f794b4c7a9c88d9162df749ef01fa97a8adbe"
+      }
+    }
+  },
+  "requiredPositiveEvidence": [
+    {
+      "gateId": "CKS-03",
+      "path": "tests/fixtures/cks-qualification/profile-binding-v1.json",
+      "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+      "sha256": "f6a713ce02851c61072b5b923ef0b9bcee99233f07b480f93de0a407e02283f6",
+      "status": "POSITIVE"
+    },
+    {
+      "gateId": "CKS-04",
+      "path": "tests/fixtures/cks-qualification/escalation-causes-v1.json",
+      "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+      "sha256": "17fd863f69b84366fffd0265fcd010c0b383773637112a6e7281ec4b1e6c10d7",
+      "status": "POSITIVE"
+    },
+    {
+      "gateId": "CKS-05",
+      "path": "tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json",
+      "commit": "7c69b8a6d969febf4cf3e99ebcece8c72bd5ddda",
+      "sha256": "d6eec78a04b93e443646cb5459b924b16e0ad05faa66535265728026c90f1ac0",
+      "status": "POSITIVE"
+    }
+  ],
+  "positiveDecision": {
+    "outcome": "PASS",
+    "qualification": {
+      "exactProfileValidation": "VALID",
+      "boundFieldCount": 11,
+      "selectedProfileDigest": "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93"
+    },
+    "typedEscalation": {
+      "outcome": "ALL_REQUIRED_CAUSES_TYPED",
+      "causeCodes": [
+        "KNOWLEDGE_GAP",
+        "KNOWLEDGE_CONFLICT",
+        "VERIFIER_REJECTION",
+        "DECOMPOSITION_GROWTH",
+        "LOW_EVIDENCE_COVERAGE",
+        "COMPETENCE_LIMIT"
+      ]
+    },
+    "selection": {
+      "outcome": "ADVISORY_RECOMMENDATION",
+      "orderingKey": [2, 36, 900, 120, 8000000, "43be08f629f01b3768aa0856aee96c38f5666eea83174de36885872b4ac03b93"]
+    },
+    "capacityAdmission": {
+      "outcome": "VALID",
+      "capacityBucketId": "parallel-128k",
+      "totalTokens": 114624,
+      "concurrentSequences": 2
+    },
+    "shadowGating": {
+      "outcome": "ACTIVATION_ELIGIBLE_FOR_SEPARATE_AUTHORIZATION",
+      "activationMode": "OFF",
+      "passedWindowCount": 2,
+      "reasonCode": "ALL_FROZEN_GATES_PASS"
+    },
+    "separationChecks": {
+      "riskImpactAndAuthorityNotInOrderingKey": true,
+      "resourceAdmissionDoesNotGrantAuthority": true,
+      "shadowEligibilityDoesNotActivateRouting": true
+    }
+  },
+  "failClosedEvidence": {
+    "requiredPositiveEvidenceGuard": {
+      "missingReference": "REQUIRED_CKS_EVIDENCE_REFERENCE_COUNT",
+      "tamperedDigest": "EVIDENCE_REFERENCE_DIGEST_MISMATCH:CKS-03"
+    },
+    "typedEscalationGuard": "DISPOSITION_MISMATCH",
+    "resourceAdmissionGuard": "LEASE_CONFLICT",
+    "shadowGuards": [
+      "CKS_EVIDENCE_NOT_POSITIVE",
+      "EFFICIENCY_GATE_FAILED"
+    ],
+    "conclusion": "No positive router receipt is emitted for incomplete or tampered CKS-03/CKS-04/CKS-05 evidence; quality, cost, or a recommendation cannot bypass a failed gate."
+  },
+  "verification": {
+    "runtime": {
+      "nodeVersion": "v24.19.0",
+      "nodeEngineConstraint": ">=24.14.1 <25",
+      "standardNodeReceiptParse": {
+        "command": "node --input-type=module -e \"JSON.parse(await (await import('node:fs/promises')).readFile('docs/evidence/conveyor/terra-psai286-root-qs-01.json', 'utf8')); console.log('receipt-json-valid')\"",
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "classification": "LOCAL_INFRASTRUCTURE_EVIDENCE_NOT_A_PRODUCT_VERDICT"
+      },
+      "focusedTestInvocation": "NODE_OPTIONS=--jitless node --test dist/tests/cks-qualification.test.js dist/tests/cks-resource-admission.test.js dist/tests/cks-shadow-evaluation.test.js dist/tests/cks-router-dry-run.test.js"
+    },
+    "checks": [
+      {
+        "command": "NODE_OPTIONS=--jitless node --test dist/tests/cks-qualification.test.js dist/tests/cks-resource-admission.test.js dist/tests/cks-shadow-evaluation.test.js dist/tests/cks-router-dry-run.test.js",
+        "exitCode": 0,
+        "passed": 49,
+        "failed": 0
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless node scripts/run-cks-router-dry-run.mjs --fixture tests/fixtures/cks-router-dry-run/positive-evidence-v1.json",
+        "exitCode": 0,
+        "outcome": "PASS",
+        "receiptDigest": "41f09853d6249f579b0f7619cb4f794b4c7a9c88d9162df749ef01fa97a8adbe"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "exitCode": 0
+      }
+    ]
+  },
+  "nonClaims": [
+    "NO_PROVIDER_CALL",
+    "NO_ROUTE_EXECUTION",
+    "NO_RESOURCE_RESERVATION_OR_LEASE_ACQUISITION",
+    "NO_AUTHORITY_GRANT",
+    "NO_AUTOMATIC_ACTIVATION",
+    "NO_CLAIM_OF_CONTROLLER_AUTHORITATIVE_PINNED_NODE_OR_HOST_DOCKER_GATE_EXECUTION"
+  ],
+  "decision": "APPROVE_LOCAL_ADVISORY_CKS-06_CONTRACT_AND_EVIDENCE_CHAIN_SCRUTINY"
+}

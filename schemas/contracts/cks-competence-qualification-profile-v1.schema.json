@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-competence-qualification-profile-v1.schema.json",
+  "title": "PANSPHAIRA CKS competence qualification profile v1",
+  "description": "Closed additive v1 schema for the CKS-06 exact qualification profile. profileDigest is SHA-256 over the canonical JSON of every required exact binding; equality means byte-equal normalized fields and equal digests. Aliases, family membership, ranges, defaults, omission, and compatibility inference never establish equality. A change to any required binding is a different, initially UNQUALIFIED profile; evidence does not inherit. Digest lineage, NONE pairing, and context-window bounds are enforced by the runtime validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "bindings",
+    "state",
+    "profileDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "chimpmaera.dev/cks-competence-qualification-profile/v1"
+    },
+    "bindings": {
+      "$ref": "#/$defs/bindings"
+    },
+    "state": {
+      "enum": ["UNQUALIFIED", "QUALIFIED", "SUSPENDED_DRIFT", "REVOKED_EVIDENCE"]
+    },
+    "profileDigest": {
+      "$ref": "#/$defs/digest"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "orNone": {
+      "type": "string",
+      "pattern": "^(NONE|[a-z0-9][a-z0-9._-]*)$"
+    },
+    "positiveInteger": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "toolIdAndVersion": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*@[a-z0-9][a-z0-9._-]*$"
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelArtifact",
+        "quantization",
+        "runtime",
+        "context",
+        "prompt",
+        "tools",
+        "retriever",
+        "reranker",
+        "verifier",
+        "knowledge",
+        "qualificationSuite"
+      ],
+      "properties": {
+        "modelArtifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["artifactDigest", "architectureId", "tokenizerDigest", "licenseProfileId"],
+          "properties": {
+            "artifactDigest": { "$ref": "#/$defs/digest" },
+            "architectureId": { "$ref": "#/$defs/identifier" },
+            "tokenizerDigest": { "$ref": "#/$defs/digest" },
+            "licenseProfileId": { "$ref": "#/$defs/identifier" }
+          }
+        },
+        "quantization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["formatId", "quantizerVersion", "weightsDigest", "parameterizationDigest"],
+          "properties": {
+            "formatId": { "$ref": "#/$defs/identifier" },
+            "quantizerVersion": { "$ref": "#/$defs/identifier" },
+            "weightsDigest": { "$ref": "#/$defs/digest" },
+            "parameterizationDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["runtimeId", "runtimeVersion", "buildDigest", "backendId", "kernelSetDigest", "hardwareClassId", "determinismConfigDigest"],
+          "properties": {
+            "runtimeId": { "$ref": "#/$defs/identifier" },
+            "runtimeVersion": { "$ref": "#/$defs/identifier" },
+            "buildDigest": { "$ref": "#/$defs/digest" },
+            "backendId": { "$ref": "#/$defs/identifier" },
+            "kernelSetDigest": { "$ref": "#/$defs/digest" },
+            "hardwareClassId": { "$ref": "#/$defs/identifier" },
+            "determinismConfigDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["contextWindowTokens", "maximumInputTokens", "maximumOutputTokens", "chatTemplateDigest", "positionEncodingConfigDigest", "kvPrecisionId", "truncationPolicy"],
+          "properties": {
+            "contextWindowTokens": { "$ref": "#/$defs/positiveInteger" },
+            "maximumInputTokens": { "$ref": "#/$defs/positiveInteger" },
+            "maximumOutputTokens": { "$ref": "#/$defs/positiveInteger" },
+            "chatTemplateDigest": { "$ref": "#/$defs/digest" },
+            "positionEncodingConfigDigest": { "$ref": "#/$defs/digest" },
+            "kvPrecisionId": { "$ref": "#/$defs/identifier" },
+            "truncationPolicy": { "const": "DENY" }
+          }
+        },
+        "prompt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["promptContractVersion", "systemPromptDigest", "instructionTemplateDigest", "stopSequenceDigest", "samplingConfigDigest"],
+          "properties": {
+            "promptContractVersion": { "$ref": "#/$defs/identifier" },
+            "systemPromptDigest": { "$ref": "#/$defs/digest" },
+            "instructionTemplateDigest": { "$ref": "#/$defs/digest" },
+            "stopSequenceDigest": { "$ref": "#/$defs/digest" },
+            "samplingConfigDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "tools": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["closedToolSetDigest", "orderedToolIdsAndVersions", "toolSchemaBundleDigest", "toolPolicyDigest"],
+          "properties": {
+            "closedToolSetDigest": { "$ref": "#/$defs/digest" },
+            "orderedToolIdsAndVersions": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/toolIdAndVersion" }
+            },
+            "toolSchemaBundleDigest": { "$ref": "#/$defs/digest" },
+            "toolPolicyDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "retriever": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["componentIdOrNONE", "versionOrNONE", "configDigest", "indexContractDigest"],
+          "properties": {
+            "componentIdOrNONE": { "$ref": "#/$defs/orNone" },
+            "versionOrNONE": { "$ref": "#/$defs/orNone" },
+            "configDigest": { "$ref": "#/$defs/digest" },
+            "indexContractDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "reranker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["componentIdOrNONE", "versionOrNONE", "configDigest"],
+          "properties": {
+            "componentIdOrNONE": { "$ref": "#/$defs/orNone" },
+            "versionOrNONE": { "$ref": "#/$defs/orNone" },
+            "configDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "verifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["deterministicVerifierId", "deterministicVerifierDigest", "semanticVerifierIdOrNONE", "semanticVerifierDigest", "thresholdPolicyDigest"],
+          "properties": {
+            "deterministicVerifierId": { "$ref": "#/$defs/identifier" },
+            "deterministicVerifierDigest": { "$ref": "#/$defs/digest" },
+            "semanticVerifierIdOrNONE": { "$ref": "#/$defs/orNone" },
+            "semanticVerifierDigest": { "$ref": "#/$defs/digest" },
+            "thresholdPolicyDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "knowledge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["knowledgeContractVersion", "knowledgeEditionOrNONE", "knowledgeManifestDigest", "applicabilityPolicyDigest"],
+          "properties": {
+            "knowledgeContractVersion": { "$ref": "#/$defs/identifier" },
+            "knowledgeEditionOrNONE": { "$ref": "#/$defs/orNone" },
+            "knowledgeManifestDigest": { "$ref": "#/$defs/digest" },
+            "applicabilityPolicyDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "qualificationSuite": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["suiteVersion", "suiteManifestDigest", "generatorDigest", "splitPolicyDigest", "scoringPolicyDigest", "freshCertificationReceiptDigest"],
+          "properties": {
+            "suiteVersion": { "$ref": "#/$defs/identifier" },
+            "suiteManifestDigest": { "$ref": "#/$defs/digest" },
+            "generatorDigest": { "$ref": "#/$defs/digest" },
+            "splitPolicyDigest": { "$ref": "#/$defs/digest" },
+            "scoringPolicyDigest": { "$ref": "#/$defs/digest" },
+            "freshCertificationReceiptDigest": { "$ref": "#/$defs/digest" }
+          }
+        }
+      }
+    }
+  }
+}
