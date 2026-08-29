@@ -46,6 +46,7 @@ const EVIDENCE_FINALIZATION_PATHS = Object.freeze([
   "scripts/render-ccp-m1-evidence.mjs",
   "tests/fixtures/ccp-evidence/complete.json",
   "tests/render-ccp-m1-evidence.test.mjs",
+  "SHA256SUMS",
 ]);
 const REQUIRED_KEYS = [
   "artifacts", "binding", "criterionMatrix", "evidenceClass", "externalRequestMade", "faultRecovery",
