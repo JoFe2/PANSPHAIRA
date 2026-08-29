@@ -40,6 +40,13 @@ const PACKET_SCHEMA = "cm.ccp-m1-local-proof-packet/v1";
 const HARNESS_SCHEMA = "cm.ccp-m1-local-proof-readback-input/v1";
 const TASK_ID = "TERRA-PSAI52-ROOT-QS-01";
 const PROFILE_RATES = [10, 50, 100, 1_000, 10_000];
+const EVIDENCE_FINALIZATION_PATHS = Object.freeze([
+  "closure-audits/CLOSURE-PSAI52-ROOT-DELIVERY-01/local-gate-receipt.json",
+  "docs/ccp-m1-local-proof.md",
+  "scripts/render-ccp-m1-evidence.mjs",
+  "tests/fixtures/ccp-evidence/complete.json",
+  "tests/render-ccp-m1-evidence.test.mjs",
+]);
 const REQUIRED_KEYS = [
   "artifacts", "binding", "criterionMatrix", "evidenceClass", "externalRequestMade", "faultRecovery",
   "governingReceipt", "infrastructure", "newProcessVariantIntroduced", "nonClaims", "operatingModel",
@@ -143,6 +150,12 @@ function validateInput(input) {
     || !gitSucceeds(["merge-base", "--is-ancestor", input.binding.baseCommit, input.binding.headCommit])
     || !gitSucceeds(["rev-parse", `${input.binding.headCommit}^{tree}`])) {
     fail("CCP_M1_EVIDENCE_BINDING_DENIED");
+  }
+  if (input.binding.headCommit === evidenceCommitParent) {
+    const changedPaths = gitOutput(["diff", "--name-only", "--no-renames", `${input.binding.headCommit}..HEAD`]);
+    if (changedPaths === null || changedPaths.split("\n").some((path) => !EVIDENCE_FINALIZATION_PATHS.includes(path))) {
+      fail("CCP_M1_EVIDENCE_BINDING_DENIED");
+    }
   }
   if (!Array.isArray(input.criterionMatrix) || input.criterionMatrix.length !== 6) fail("CCP_M1_EVIDENCE_CRITERIA_DENIED");
   if (!Array.isArray(input.profiles) || input.profiles.length !== PROFILE_RATES.length) fail("CCP_M1_EVIDENCE_PROFILES_DENIED");

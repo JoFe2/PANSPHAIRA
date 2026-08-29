@@ -1,17 +1,25 @@
 {
   "schemaVersion": "cm.closure-local-gate-receipt/v1",
-  "receiptId": "CLOSURE-PSAI52-ROOT-DELIVERY-01-FINALIZER-01",
+  "receiptId": "CLOSURE-PSAI52-ROOT-DELIVERY-01-FINALIZER-02",
   "controllerBinding": {
-    "taskId": "CLOSURE-PSAI52-ROOT-DELIVERY-01-FINALIZER-01",
+    "taskId": "CLOSURE-PSAI52-ROOT-DELIVERY-01-FINALIZER-02",
     "governingReceiptId": "SOL-PSAI52-STATE-RECONCILE-01",
     "operatingModel": "Operating Model v1.1",
-    "preservedDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
     "authorityGranted": false
   },
   "exactIntegrationBinding": {
-    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
-    "reviewedIntegrationHead": "7addfda9e947279843e1221ed938ed64d8c5cf61",
-    "reviewedIntegrationTree": "0edfe20587eb7ade39fae07cf9a867aba02e32c3",
+    "baseCommit": "9aa9fec7d0320949c987f0a7a6dc8f1e3e3f4809",
+    "reviewedIntegrationHead": "45367a1e9d4ffa6c7af3674d052302d4ad44d62c",
+    "reviewedIntegrationTree": "d631acf7e017c7f92999b6f17c393ec63e60dbbc",
     "baseIsAncestor": true,
     "staleHead": "4db140bcd056434fa278603e39461d429907c160",
     "staleHeadIsAncestor": false,
@@ -26,8 +34,8 @@
   },
   "semanticEvidence": {
     "rendererCheck": "PASS",
-    "packetDigest": "13b6cd9002a6d2b8a45a49d1f3495881515cad1188c6f47bed5dad00080adfa1",
-    "exactHeadCommit": "7addfda9e947279843e1221ed938ed64d8c5cf61",
+    "packetDigest": "8a0c6b56cdc3d35ec1230f875b6cae2ccce316ab1404deca7f943ab9e2274351",
+    "exactHeadCommit": "45367a1e9d4ffa6c7af3674d052302d4ad44d62c",
     "profileReceipts": 5,
     "recoveryReceipts": 4,
     "criterionReceiptStatus": "BOUND_NOT_PROVEN",
