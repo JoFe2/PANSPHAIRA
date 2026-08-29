@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-fixture/v1",
+  "fixtureKind": "VALID",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "plan": {
+    "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-plan/v1",
+    "planKind": "CANVAS_PACKAGE_RESET_UNINSTALL_EVIDENCE",
+    "milestone": "CM-PP-002-READONLY_CANVAS_WORKBENCH",
+    "status": "LOCAL_SYNTHETIC_EVIDENCE_PLAN",
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "package": {
+      "id": "pansphaira.readonly-canvas-workbench",
+      "version": "1.0.0",
+      "manifestPath": "power-platform/readonly-canvas-workbench/manifest.json",
+      "manifestSha256": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9",
+      "bindingPath": "power-platform/readonly-canvas-workbench/connector-binding.json",
+      "bindingSha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3"
+    },
+    "tuple": {
+      "component": { "id": "power-platform-read-connector", "version": "1.0.0", "digest": "71805da9cf453748dbde0917bcf5477a90fa5aca828fe9d8c30d88de6c758830" },
+      "schema": { "id": "power-platform-read-connector-schema", "version": "1.0.0", "digest": "d555893c9ac16923fb9607c723aaf190c8796bac4a61d5727c7635e5dda1f63f" },
+      "policy": {
+        "id": "policy:synthetic-safe-guided",
+        "version": "1.0.0",
+        "generation": null,
+        "generationReason": "The capability policy v1 export is version-and-digest bound and does not export a numeric policyGeneration.",
+        "digest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89"
+      },
+      "candidateTupleDigest": "fde14e6eb8b3f6e10a1f2e6d6b646d534ed23456c2e404d10946345fb32b4a15",
+      "lkgTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "ownedResourceClasses": ["SYNTHETIC_CANVAS_PACKAGE", "SYNTHETIC_CONNECTOR_BINDING", "SYNTHETIC_READ_FLOW", "SYNTHETIC_POLICY_REFERENCE", "SYNTHETIC_TUPLE_LEDGER"],
+    "resetContract": {
+      "allowedOperationKinds": ["RESET_TO_LKG", "NO_IMPORT_CHECK"],
+      "uninstall": { "applicability": "NOT_APPLICABLE_NO_IMPORT_PERFORMED", "command": null, "tenantContactAllowed": false, "attempted": false, "requiredObservation": "NO_IMPORT_STATE_IDEMPOTENTLY_CLEAN" },
+      "preTupleFields": ["schemaVersion", "environmentClass", "packageId", "packageVersion", "manifestSha256", "bindingSha256", "policyId", "policyVersion", "policyGeneration", "policyDigest", "tupleDigest", "ownedInventoryDigest"],
+      "postTupleFields": ["schemaVersion", "environmentClass", "packageId", "packageVersion", "manifestSha256", "bindingSha256", "policyId", "policyVersion", "policyGeneration", "policyDigest", "tupleDigest", "ownedInventoryDigest"],
+      "readbackFields": ["schemaVersion", "source", "operationId", "requestDigest", "preTupleDigest", "postTupleDigest", "status", "outcome", "ownedResidueCount", "ownedResidueProjectionDigest", "inventoryDigest", "effectCount", "observedAt"],
+      "receiptFields": ["schemaVersion", "issuer", "operationId", "requestDigest", "readbackDigest", "fullTupleDigest", "outcome", "receiptDigest", "issuedAt"],
+      "recoveryRules": { "authorizedModes": ["AUTHORIZED_ROLLBACK", "AUTHORIZED_COMPENSATION"], "cancellationMode": "CANCELLATION", "freshAuthorizationRequired": true, "newOperationRequired": true, "newReadbackRequired": true, "newReceiptRequired": true }
+    },
+    "rollback": { "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT", "targetTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555", "targetVersion": "1.0.0", "independentTrustedContextRequired": true, "partialRollbackAllowed": false, "latestVersionFallbackAllowed": false },
+    "limitations": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_LIVE_TENANT", "NO_CREDENTIAL_USE", "NO_PROVIDER_CALL", "NO_IMPORT_EXECUTION", "NO_RESET_EXECUTION", "NO_UNINSTALL_EXECUTION", "NO_NETWORK_OR_TENANT_CONTACT", "NO_PRODUCTION_CLAIM", "NO_BUSINESS_SUCCESS_CLAIM", "AUTHORITATIVE_READBACK_REQUIRED", "NEW_RECEIPT_REQUIRED_FOR_RECOVERY"],
+    "negativeResults": [
+      { "case": "UNKNOWN_OWNED_OBJECT", "outcome": "DENY", "reasonCode": "UNKNOWN_OWNED_OBJECT_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "LEFTOVER_CONNECTOR_BINDING", "outcome": "DENY", "reasonCode": "LEFTOVER_CONNECTOR_BINDING_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "LEFTOVER_FLOW", "outcome": "DENY", "reasonCode": "LEFTOVER_FLOW_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "LEFTOVER_POLICY_REFERENCE", "outcome": "DENY", "reasonCode": "LEFTOVER_POLICY_REFERENCE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "LEDGER_MUTATION", "outcome": "DENY", "reasonCode": "LEDGER_MUTATION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "TUPLE_MISMATCH", "outcome": "DENY", "reasonCode": "TUPLE_MISMATCH_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "MISSING_READBACK", "outcome": "DENY", "reasonCode": "MISSING_READBACK_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "INFERRED_CANCELLATION", "outcome": "DENY", "reasonCode": "CANCELLATION_INFERRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+      { "case": "MISSING_NEW_RECOVERY_EVIDENCE", "outcome": "DENY", "reasonCode": "NEW_RECEIPT_READBACK_REQUIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" }
+    ],
+    "evidenceRefs": [
+      { "id": "openapi-contract", "ref": "contracts/azure-power-platform/readonly-connector.openapi.yaml", "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287" },
+      { "id": "readback-schema", "ref": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json", "sha256": "20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8" },
+      { "id": "package-manifest", "ref": "power-platform/readonly-canvas-workbench/manifest.json", "sha256": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9" },
+      { "id": "connector-binding", "ref": "power-platform/readonly-canvas-workbench/connector-binding.json", "sha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3" },
+      { "id": "tuple-ledger-test", "ref": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs", "sha256": "30b68a35cb950058a2e13a2c1f1637059ed4902f0b113b1ebde06062ca29edc9" },
+      { "id": "readback-test", "ref": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs", "sha256": "3542b9c5b578d37b4562f8f5f5cb4808aef666e721f5f0358a99e81e1a80dd58" }
+    ],
+    "nonClaims": ["NOT_A_TENANT_RESET", "NOT_A_TENANT_UNINSTALL", "NOT_A_CLOUD_READBACK", "NOT_A_PRODUCTION_READINESS_RESULT", "NOT_A_BUSINESS_SUCCESS_RESULT", "NOT_A_CANCELLATION_RESULT"]
+  },
+  "priorOperationId": null,
+  "priorReadbackDigest": null,
+  "priorReceiptDigest": null,
+  "execution": {
+    "operation": {
+      "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-operation/v1",
+      "operationId": "synthetic-reset-to-lkg-0001",
+      "operationKind": "RESET_TO_LKG",
+      "request": { "packageId": "pansphaira.readonly-canvas-workbench", "targetTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555", "mode": "RESET_TO_LKG" },
+      "requestDigest": "94aff4831fbc8c30521a734ad3b5238395708c455e07b970ed51643eced538e8",
+      "effectCount": 5,
+      "recovery": { "mode": "AUTHORIZED_ROLLBACK", "authorizationStatus": "FRESH_AUTHORIZED", "authorizationDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "requiresNewReceiptReadback": true, "notCancellation": true }
+    },
+    "ownedInventoryBefore": [
+      { "resourceClass": "SYNTHETIC_CANVAS_PACKAGE", "resourceId": "synthetic-canvas-package", "ownerPackageId": "pansphaira.readonly-canvas-workbench", "state": "PRESENT", "tupleDigest": "fde14e6eb8b3f6e10a1f2e6d6b646d534ed23456c2e404d10946345fb32b4a15" },
+      { "resourceClass": "SYNTHETIC_CONNECTOR_BINDING", "resourceId": "synthetic-connector-binding", "ownerPackageId": "pansphaira.readonly-canvas-workbench", "state": "PRESENT", "tupleDigest": "fde14e6eb8b3f6e10a1f2e6d6b646d534ed23456c2e404d10946345fb32b4a15" },
+      { "resourceClass": "SYNTHETIC_READ_FLOW", "resourceId": "synthetic-read-flow", "ownerPackageId": "pansphaira.readonly-canvas-workbench", "state": "PRESENT", "tupleDigest": "fde14e6eb8b3f6e10a1f2e6d6b646d534ed23456c2e404d10946345fb32b4a15" },
+      { "resourceClass": "SYNTHETIC_POLICY_REFERENCE", "resourceId": "synthetic-policy-reference", "ownerPackageId": "pansphaira.readonly-canvas-workbench", "state": "PRESENT", "tupleDigest": "fde14e6eb8b3f6e10a1f2e6d6b646d534ed23456c2e404d10946345fb32b4a15" },
+      { "resourceClass": "SYNTHETIC_TUPLE_LEDGER", "resourceId": "synthetic-tuple-ledger", "ownerPackageId": "pansphaira.readonly-canvas-workbench", "state": "PRESENT", "tupleDigest": "fde14e6eb8b3f6e10a1f2e6d6b646d534ed23456c2e404d10946345fb32b4a15" }
+    ],
+    "ownedInventoryAfter": [],
+    "preTuple": { "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-tuple/v1", "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY", "packageId": "pansphaira.readonly-canvas-workbench", "packageVersion": "1.0.0", "manifestSha256": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9", "bindingSha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3", "policyId": "policy:synthetic-safe-guided", "policyVersion": "1.0.0", "policyGeneration": null, "policyDigest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89", "tupleDigest": "fde14e6eb8b3f6e10a1f2e6d6b646d534ed23456c2e404d10946345fb32b4a15", "ownedInventoryDigest": "20329f0269db9085ef3abfb78160158464440eab2992eeddd1b96b0efcc6c925" },
+    "postTuple": { "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-tuple/v1", "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY", "packageId": "pansphaira.readonly-canvas-workbench", "packageVersion": "1.0.0", "manifestSha256": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9", "bindingSha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3", "policyId": "policy:synthetic-safe-guided", "policyVersion": "1.0.0", "policyGeneration": null, "policyDigest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89", "tupleDigest": "5555555555555555555555555555555555555555555555555555555555555555", "ownedInventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945" },
+    "ownedResidueProjection": { "schemaVersion": "pansphaira.azure-power-platform/owned-residue/v1", "resourceClasses": ["SYNTHETIC_CANVAS_PACKAGE", "SYNTHETIC_CONNECTOR_BINDING", "SYNTHETIC_READ_FLOW", "SYNTHETIC_POLICY_REFERENCE", "SYNTHETIC_TUPLE_LEDGER"], "resources": [], "count": 0, "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945" },
+    "readback": { "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-readback/v1", "source": "LOCAL_SYNTHETIC_AUTHORITATIVE_READBACK", "operationId": "synthetic-reset-to-lkg-0001", "requestDigest": "94aff4831fbc8c30521a734ad3b5238395708c455e07b970ed51643eced538e8", "preTupleDigest": "23abd297d566bc7f33d1707cf46926eeeec17f1f30053c40cedb45a0baa26e2f", "postTupleDigest": "56db83a16d1910f1eefca3000997df95cfb8696fdb45b399baf1a62b6ab1da79", "status": "READ_CONFIRMED", "outcome": "RESET_TO_LKG_AND_EMPTY", "ownedResidueCount": 0, "ownedResidueProjectionDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "effectCount": 5, "observedAt": "2026-08-28T00:00:00Z" },
+    "receipt": { "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-receipt/v1", "issuer": "LOCAL_SYNTHETIC_VERIFICATION_HARNESS", "operationId": "synthetic-reset-to-lkg-0001", "requestDigest": "94aff4831fbc8c30521a734ad3b5238395708c455e07b970ed51643eced538e8", "readbackDigest": "6639912eef8b3bb2b9edde70d1f362950078a88c4fa3dbb12f15e646d50fcf81", "fullTupleDigest": "b5fb8d83c0f6b36eb8327cae5e2947998e4d5e3bb0abcc143853adc2fe7a7ba2", "outcome": "RESET_TO_LKG_AND_EMPTY", "receiptDigest": "68019a40ccbd9dfa49cee33e07354ad6ce238cd6fa1879861f7267222885f38f", "issuedAt": "2026-08-28T00:00:01Z" }
+  }
+}

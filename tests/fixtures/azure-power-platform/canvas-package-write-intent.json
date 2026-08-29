@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "pansphaira.power-platform/canvas-business-workbench-fixture/v1",
+  "fixtureKind": "NEGATIVE",
+  "packagePaths": {
+    "manifest": "power-platform/readonly-canvas-workbench/manifest.json",
+    "connectorBinding": "power-platform/readonly-canvas-workbench/connector-binding.json",
+    "acceptedResult": "tests/fixtures/azure-power-platform/readback-accepted.json"
+  },
+  "caseId": "hidden-writes",
+  "expectedReasonCode": "HIDDEN_WRITE_DENIED",
+  "mutation": {
+    "kind": "write",
+    "method": "POST",
+    "action": "CREATE_RECORD",
+    "target": "manifest.views"
+  }
+}

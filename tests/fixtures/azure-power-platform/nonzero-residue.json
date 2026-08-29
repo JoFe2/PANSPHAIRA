@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/reset-uninstall-fixture/v1",
+  "fixtureKind": "NEGATIVE_CASE",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "baseFixture": "tests/fixtures/azure-power-platform/zero-residue.json",
+  "caseName": "leftover-connector-binding",
+  "expectedReasonCode": "LEFTOVER_CONNECTOR_BINDING_DENIED",
+  "evidenceNote": "The verifier must fail closed when the package-owned connector binding remains in the post-reset inventory; this fixture is not a successful uninstall receipt."
+}

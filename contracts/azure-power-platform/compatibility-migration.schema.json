@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/contracts/azure-power-platform/compatibility-migration.schema.json",
+  "title": "Azure Power Platform offline compatibility and migration gate",
+  "description": "Closed local-only admission record that binds a candidate to the shared full tuple before any sandbox action. It records a no-op compatibility decision only and does not create a lifecycle or authorize a provider operation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "candidateKind", "environmentClass", "sharedLifecycle", "admission", "surface", "tuple", "migration", "compatibility", "rollback", "limitations", "negativeResults", "evidence", "nonClaims"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/compatibility-migration/v1" },
+    "candidateKind": { "const": "SYNTHETIC_COMPATIBILITY_MIGRATION_CANDIDATE" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "sharedLifecycle": { "$ref": "#/$defs/sharedLifecycle" },
+    "admission": { "$ref": "#/$defs/admission" },
+    "surface": { "$ref": "#/$defs/surface" },
+    "tuple": { "$ref": "#/$defs/tuple" },
+    "migration": { "$ref": "#/$defs/migration" },
+    "compatibility": { "$ref": "#/$defs/compatibility" },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "limitations": { "type": "array", "minItems": 8, "uniqueItems": true, "items": { "type": "string" } },
+    "negativeResults": { "type": "array", "minItems": 16, "uniqueItems": true, "items": { "$ref": "#/$defs/negativeResult" } },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "nonClaims": { "type": "array", "minItems": 4, "uniqueItems": true, "items": { "type": "string" } }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "artifact": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "digest"],
+      "properties": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" }, "version": { "$ref": "#/$defs/version" }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "policy": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "generation", "digest"],
+      "properties": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" }, "version": { "$ref": "#/$defs/version" }, "generation": { "type": "integer", "minimum": 1 }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "sharedLifecycle": {
+      "type": "object", "additionalProperties": false, "required": ["versioning", "migration", "revocation", "compatibility", "accepted", "lkg"],
+      "properties": { "versioning": { "const": "SHARED_VERSIONING" }, "migration": { "const": "SHARED_MIGRATION" }, "revocation": { "const": "SHARED_REVOCATION" }, "compatibility": { "const": "SHARED_COMPATIBILITY" }, "accepted": { "const": "ACCEPTED" }, "lkg": { "const": "LKG" } }
+    },
+    "admission": {
+      "type": "object", "additionalProperties": false, "required": ["requestId", "issuedAt", "expiresAt", "replayState", "revocationState", "proposer", "approver", "action"],
+      "properties": { "requestId": { "const": "synthetic-compatibility-admission-001" }, "issuedAt": { "const": "2026-08-28T08:00:00Z" }, "expiresAt": { "type": "string" }, "replayState": { "enum": ["UNCONSUMED", "CONSUMED"] }, "revocationState": { "enum": ["UNREVOKED", "REVOKED"] }, "proposer": { "type": "string", "pattern": "^opaque-authority-[a-z]+-[0-9]{3}$" }, "approver": { "type": "string", "pattern": "^opaque-authority-[a-z]+-[0-9]{3}$" }, "action": { "type": "string" } }
+    },
+    "surface": {
+      "type": "object", "additionalProperties": false, "required": ["requestedAction", "allowedActions", "writeActions", "hiddenWritesAllowed", "externalMutation", "effectCount"],
+      "properties": { "requestedAction": { "type": "string" }, "allowedActions": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }, "writeActions": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }, "hiddenWritesAllowed": { "type": "boolean" }, "externalMutation": { "type": "boolean" }, "effectCount": { "type": "integer", "minimum": 0 } }
+    },
+    "tuple": {
+      "type": "object", "additionalProperties": false, "required": ["component", "schema", "policy", "evidenceDigest", "source", "target", "lkg", "tupleDigest"],
+      "properties": { "component": { "$ref": "#/$defs/artifact" }, "schema": { "$ref": "#/$defs/artifact" }, "policy": { "$ref": "#/$defs/policy" }, "evidenceDigest": { "$ref": "#/$defs/digest" }, "source": { "$ref": "#/$defs/state" }, "target": { "$ref": "#/$defs/state" }, "lkg": { "$ref": "#/$defs/lkg" }, "tupleDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "state": {
+      "type": "object", "additionalProperties": false, "required": ["version", "digest", "status"],
+      "properties": { "version": { "$ref": "#/$defs/version" }, "digest": { "$ref": "#/$defs/digest" }, "status": { "const": "ACCEPTED" } }
+    },
+    "lkg": {
+      "type": "object", "additionalProperties": false, "required": ["version", "digest", "status", "revocationState"],
+      "properties": { "version": { "$ref": "#/$defs/version" }, "digest": { "$ref": "#/$defs/digest" }, "status": { "const": "LKG" }, "revocationState": { "enum": ["UNREVOKED", "REVOKED"] } }
+    },
+    "migration": {
+      "type": "object", "additionalProperties": false, "required": ["edgeId", "fromVersion", "toVersion", "edgeDigest", "transition", "authority", "reversible", "effectCount"],
+      "properties": { "edgeId": { "type": "string", "minLength": 1 }, "fromVersion": { "$ref": "#/$defs/version" }, "toVersion": { "$ref": "#/$defs/version" }, "edgeDigest": { "$ref": "#/$defs/digest" }, "transition": { "type": "string" }, "authority": { "type": "string", "pattern": "^opaque-authority-[a-z]+-[0-9]{3}$" }, "reversible": { "type": "boolean" }, "effectCount": { "type": "integer", "minimum": 0 } }
+    },
+    "compatibility": {
+      "type": "object", "additionalProperties": false, "required": ["result", "componentVersion", "schemaVersion", "policyGeneration", "evidenceDigest"],
+      "properties": { "result": { "type": "string" }, "componentVersion": { "$ref": "#/$defs/version" }, "schemaVersion": { "$ref": "#/$defs/version" }, "policyGeneration": { "type": "integer", "minimum": 1 }, "evidenceDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "rollback": {
+      "type": "object", "additionalProperties": false, "required": ["target", "targetVersion", "targetDigest", "targetStatus", "targetRevocationState", "partialRollbackAllowed", "latestVersionFallbackAllowed", "evidenceRefs"],
+      "properties": { "target": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }, "targetVersion": { "$ref": "#/$defs/version" }, "targetDigest": { "$ref": "#/$defs/digest" }, "targetStatus": { "const": "LKG" }, "targetRevocationState": { "enum": ["UNREVOKED", "REVOKED"] }, "partialRollbackAllowed": { "type": "boolean" }, "latestVersionFallbackAllowed": { "type": "boolean" }, "evidenceRefs": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "pattern": "^evidence-[0-9]{3}$" } } }
+    },
+    "negativeResult": {
+      "type": "object", "additionalProperties": false, "required": ["case", "outcome", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": { "case": { "type": "string" }, "outcome": { "const": "DENY" }, "reasonCode": { "type": "string", "pattern": "^[A-Z_]+_DENIED$" }, "effectCount": { "const": 0 }, "evidenceRef": { "type": "string", "pattern": "^evidence-[0-9]{3}$" } }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["bundleDigest", "refs"],
+      "properties": { "bundleDigest": { "$ref": "#/$defs/digest" }, "refs": { "type": "array", "minItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/evidenceRef" } } }
+    },
+    "evidenceRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "ref", "digest"],
+      "properties": { "id": { "type": "string", "pattern": "^evidence-[0-9]{3}$" }, "ref": { "type": "string", "pattern": "^(contracts|tools|tests)/[A-Za-z0-9._/-]+$" }, "digest": { "$ref": "#/$defs/digest" } }
+    }
+  }
+}

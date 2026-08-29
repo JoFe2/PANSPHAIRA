@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/compatibility-migration-revoked-fixture/v1",
+  "fixtureKind": "REVOKED",
+  "baseFixture": "tests/fixtures/azure-power-platform/compatibility-valid.json",
+  "revocationState": "REVOKED",
+  "expectedReasonCode": "REVOCATION_DENIED"
+}

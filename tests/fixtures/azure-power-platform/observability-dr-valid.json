@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/observability-dr-evidence/v1",
+  "evidenceKind": "LOCAL_SYNTHETIC_OBSERVABILITY_DR_EVIDENCE",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "policy": {"id": "synthetic-observability-dr-policy", "version": "1.0.0", "generation": 14, "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "status": "ACTIVE"},
+  "tuple": {
+    "component": {"id": "synthetic-observability-component", "version": "1.0.0", "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"},
+    "telemetrySchema": {"id": "synthetic-observability-schema", "version": "1.0.0", "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+    "policy": {"id": "synthetic-observability-dr-policy", "version": "1.0.0", "generation": 14, "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "status": "ACTIVE"},
+    "lkg": {"version": "1.0.0", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "status": "LKG", "tupleDigest": "7ba994f2612f8a7a71f2cb10a5374c1cfee9e10d7054b1c94c8faa6e20bcaaf3", "revocationState": "UNREVOKED"},
+    "evidenceDigest": "17851e2ad38cd6dc713f6faf6769803c78154f0fd41579b3e110c3b62ae03ebe",
+    "fullTupleDigest": "0505cbd906fe395f4ad7a7875920a4398bb1d4814f30c759414aaf1991c9f4f4"
+  },
+  "operations": [
+    {
+      "event": {"sequence": 1, "operationId": "synthetic-operation-telemetry-001", "kind": "SYNTHETIC_TELEMETRY_ACCEPT", "outcome": "ACCEPTED", "policyGeneration": 14, "policyDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "fullTupleDigest": "0505cbd906fe395f4ad7a7875920a4398bb1d4814f30c759414aaf1991c9f4f4", "eventDigest": "6f07e2260743e6e83ae2b69f124647b5caea2b4afad942c9634ed8d1ec83813d"},
+      "readback": {"sequence": 2, "source": "LOCAL_SYNTHETIC_AUTHORITATIVE_READBACK", "operationId": "synthetic-operation-telemetry-001", "eventDigest": "6f07e2260743e6e83ae2b69f124647b5caea2b4afad942c9634ed8d1ec83813d", "fullTupleDigest": "0505cbd906fe395f4ad7a7875920a4398bb1d4814f30c759414aaf1991c9f4f4", "status": "READ_CONFIRMED", "ownedResidueCount": 0, "ownedResidueProjectionDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "readbackDigest": "7e472be2c03acaebfe0b3214434f101ee72e8fb8a8e71115aab1b9e164273102"},
+      "receipt": {"sequence": 3, "issuer": "LOCAL_SYNTHETIC_TAMPER_EVIDENT_RECEIPT", "operationId": "synthetic-operation-telemetry-001", "eventDigest": "6f07e2260743e6e83ae2b69f124647b5caea2b4afad942c9634ed8d1ec83813d", "readbackDigest": "7e472be2c03acaebfe0b3214434f101ee72e8fb8a8e71115aab1b9e164273102", "fullTupleDigest": "0505cbd906fe395f4ad7a7875920a4398bb1d4814f30c759414aaf1991c9f4f4", "outcome": "ACCEPTED_READBACK_BOUND", "receiptDigest": "dd4b591e0fa0abca515fbcd153538a90303c8713f8b04ac9e1eca9b254985d1f"}
+    },
+    {
+      "event": {"sequence": 4, "operationId": "synthetic-operation-reset-uninstall-002", "kind": "RESET_UNINSTALL", "outcome": "ACCEPTED", "policyGeneration": 14, "policyDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "fullTupleDigest": "0505cbd906fe395f4ad7a7875920a4398bb1d4814f30c759414aaf1991c9f4f4", "eventDigest": "e5f4104010b9046512109d7e6bd794194a1ee8421f45cd1b5c2b55ddc8a7ffd0"},
+      "readback": {"sequence": 5, "source": "LOCAL_SYNTHETIC_AUTHORITATIVE_READBACK", "operationId": "synthetic-operation-reset-uninstall-002", "eventDigest": "e5f4104010b9046512109d7e6bd794194a1ee8421f45cd1b5c2b55ddc8a7ffd0", "fullTupleDigest": "0505cbd906fe395f4ad7a7875920a4398bb1d4814f30c759414aaf1991c9f4f4", "status": "READ_CONFIRMED", "ownedResidueCount": 0, "ownedResidueProjectionDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "readbackDigest": "3d87094b1002e64ae3f90c55e506d7a2fa8a54bf061ed9bc2ca53ed09065ae39"},
+      "receipt": {"sequence": 6, "issuer": "LOCAL_SYNTHETIC_TAMPER_EVIDENT_RECEIPT", "operationId": "synthetic-operation-reset-uninstall-002", "eventDigest": "e5f4104010b9046512109d7e6bd794194a1ee8421f45cd1b5c2b55ddc8a7ffd0", "readbackDigest": "3d87094b1002e64ae3f90c55e506d7a2fa8a54bf061ed9bc2ca53ed09065ae39", "fullTupleDigest": "0505cbd906fe395f4ad7a7875920a4398bb1d4814f30c759414aaf1991c9f4f4", "outcome": "ACCEPTED_READBACK_BOUND", "receiptDigest": "beec29b4fde9122b6f2d6f4ce04398b30174a416ffccae1b4342deca3acc0431"}
+    }
+  ],
+  "recoveryExercise": {
+    "milestone": "RESET_UNINSTALL",
+    "operationId": "synthetic-operation-reset-uninstall-002",
+    "executionClass": "LOCAL_SYNTHETIC_EXERCISE",
+    "rollbackTarget": {"target": "EXACT_ACCEPTED_LKG_FULL_TUPLE", "version": "1.0.0", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "tupleDigest": "7ba994f2612f8a7a71f2cb10a5374c1cfee9e10d7054b1c94c8faa6e20bcaaf3", "status": "LKG", "revocationState": "UNREVOKED"},
+    "inferredRollback": false,
+    "zeroResidue": {"ownedResidueCount": 0, "ownedResidueProjection": [], "ownedResidueProjectionDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "result": "ZERO_OWNED_RESIDUE_CONFIRMED"}
+  },
+  "limitations": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "OFFLINE_VALIDATOR_ONLY", "NO_TELEMETRY_EXPORTER", "NO_SERVICE_INTEGRATION", "NO_RECOVERY_EXECUTION", "NO_PRODUCTION_DR_CLAIM", "REDACTED_REPORT_ONLY"],
+  "negativeResults": [
+    {"case": "RECEIPT_READBACK_MISMATCH", "reasonCode": "RECEIPT_READBACK_MISMATCH_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "MISSING_EVENT_SEQUENCE", "reasonCode": "MISSING_EVENT_SEQUENCE_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "ALTERED_DIGEST", "reasonCode": "ALTERED_DIGEST_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "STALE_POLICY", "reasonCode": "STALE_POLICY_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "REVOKED_POLICY", "reasonCode": "REVOKED_POLICY_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "INFERRED_ROLLBACK", "reasonCode": "INFERRED_ROLLBACK_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "ZERO_RESIDUE_ABSENT", "reasonCode": "ZERO_RESIDUE_ABSENT_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "MUTABLE_EVIDENCE_REFERENCE", "reasonCode": "MUTABLE_EVIDENCE_REFERENCE_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "SENSITIVE_IDENTIFIER", "reasonCode": "SENSITIVE_IDENTIFIER_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"},
+    {"case": "UNSUPPORTED_PRODUCTION_DR_ASSERTION", "reasonCode": "UNSUPPORTED_PRODUCTION_DR_ASSERTION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003"}
+  ],
+  "evidence": {
+    "bundleDigest": "17851e2ad38cd6dc713f6faf6769803c78154f0fd41579b3e110c3b62ae03ebe",
+    "refs": [
+      {"id": "evidence-001", "reference": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "digest": "2222222222222222222222222222222222222222222222222222222222222222"},
+      {"id": "evidence-002", "reference": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "digest": "3333333333333333333333333333333333333333333333333333333333333333"},
+      {"id": "evidence-003", "reference": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "digest": "4444444444444444444444444444444444444444444444444444444444444444"}
+    ]
+  },
+  "nonClaims": ["NOT_A_TELEMETRY_EXPORTER", "NOT_A_SERVICE_INTEGRATION", "NOT_A_RECOVERY_EXECUTION", "NOT_A_PRODUCTION_DR_CLAIM"]
+}

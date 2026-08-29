@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/limited-production-pilot-decision-packet/v1",
+  "packetKind": "LIMITED_PRODUCTION_PILOT_DECISION_PACKET",
+  "packetStatus": "PRODUCTION_READY",
+  "environmentClass": "MULTI_TENANT_PRODUCTION",
+  "tenantId": "synthetic-tenant",
+  "credential": "synthetic-credential",
+  "autoPromotion": true,
+  "deployment": "EXECUTED",
+  "publicReadback": "https://example.invalid/tenant"
+}

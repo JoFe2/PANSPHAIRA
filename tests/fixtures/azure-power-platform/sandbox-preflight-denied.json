@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/sandbox-preflight-fixture/v1",
+  "fixtureKind": "DENIED",
+  "cases": [
+    {"caseId": "unknown-fields", "expectedReasonCode": "UNKNOWN_FIELD_DENIED"},
+    {"caseId": "unknown-actions", "expectedReasonCode": "UNKNOWN_ACTION_DENIED"},
+    {"caseId": "hidden-writes", "expectedReasonCode": "HIDDEN_WRITE_DENIED"},
+    {"caseId": "self-approval", "expectedReasonCode": "APPROVAL_SAME_ACTOR_DENIED"},
+    {"caseId": "digest-drift", "expectedReasonCode": "DIGEST_DRIFT_DENIED"},
+    {"caseId": "replay", "expectedReasonCode": "REPLAY_CONSUMED_DENIED"},
+    {"caseId": "expiry", "expectedReasonCode": "AUTHORITY_EXPIRED_DENIED"},
+    {"caseId": "revocation", "expectedReasonCode": "AUTHORITY_REVOKED_DENIED"},
+    {"caseId": "stale-policy", "expectedReasonCode": "POLICY_STALE_DENIED"},
+    {"caseId": "missing-authorization", "expectedReasonCode": "MISSING_AUTHORIZATION_DENIED"},
+    {"caseId": "wrong-environment", "expectedReasonCode": "WRONG_ENVIRONMENT_CLASS_DENIED"},
+    {"caseId": "private-identifier", "expectedReasonCode": "PRIVATE_IDENTIFIER_DENIED"},
+    {"caseId": "expired-evidence", "expectedReasonCode": "EVIDENCE_EXPIRED_DENIED"}
+  ]
+}

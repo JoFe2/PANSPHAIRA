@@ -1,0 +1,649 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/azure-power-platform/azpp-m1-tuple-ledger.schema.json",
+  "title": "PanSphaira Azure Power Platform M1 public-safe evidence tuple ledger",
+  "description": "Closed public planning evidence for one exact component, schema, policy and evidence tuple. It contains repository-relative public references only; it never carries environment identifiers, credentials or endpoint/host information. The deterministic bounded integration decision is embedded as the exact const at $defs.contractIntegrationReceipt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "tupleDigest",
+    "component",
+    "schema",
+    "policy",
+    "evidence",
+    "environmentClass",
+    "limitations",
+    "negativeResults",
+    "accepted",
+    "lkg",
+    "rollback",
+    "publicLinks"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/tuple-ledger/v1" },
+    "status": { "const": "ACCEPTED" },
+    "tupleDigest": { "$ref": "#/$defs/digest" },
+    "component": { "$ref": "#/$defs/pinnedArtifact" },
+    "schema": { "$ref": "#/$defs/pinnedArtifact" },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "generation", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/publicIdentifier" },
+        "version": { "$ref": "#/$defs/immutableVersion" },
+        "generation": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundleDigest", "refs"],
+      "properties": {
+        "bundleDigest": { "$ref": "#/$defs/digest" },
+        "refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      }
+    },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "NO_EXTERNAL_ACCOUNT_ACCESS",
+          "NO_SECRET_USE",
+          "NO_EXTERNAL_ENDPOINT_BINDING",
+          "NO_MUTATION_OR_DEPLOYMENT",
+          "NO_PRODUCTION_CLAIM",
+          "NO_BUSINESS_SUCCESS_WITHOUT_READBACK"
+        ]
+      }
+    },
+    "negativeResults": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/negativeResult" }
+    },
+    "accepted": { "$ref": "#/$defs/acceptedRef" },
+    "lkg": { "$ref": "#/$defs/lkgRef" },
+    "rollback": { "$ref": "#/$defs/rollbackRef" },
+    "publicLinks": { "$ref": "#/$defs/publicLinks" }
+  },
+  "$defs": {
+    "contractIntegrationReceipt": {
+      "description": "Exact deterministic receipt for TERRA-PSAI32-CONTRACT-INTEGRATE-01. The const closes the complete receipt shape and rejects any field or value not recorded here.",
+      "const": {
+        "schemaVersion": "pansphaira.azure-power-platform/contract-integration-receipt/v1",
+        "taskId": "TERRA-PSAI32-CONTRACT-INTEGRATE-01",
+        "classification": "LOCAL_VERIFY",
+        "scope": {
+          "repository": "JoFe2/PANSPHAIRA",
+          "branch": "conveyor/pansphaira-32",
+          "baseCommit": "43ead19bb47379708d9bf358aeb888380b74215f",
+          "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+          "authority": "NONE",
+          "externalMutationPerformed": false,
+          "writablePathsUsed": [
+            "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+            "docs/development/azure-power-platform/azpp-m1-tuple-ledger.schema.json",
+            "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs"
+          ]
+        },
+        "decision": {
+          "artifactStatus": "TECHNICALLY_COMPLETE",
+          "contractIntegration": "ACCEPTED_REPOSITORY_ONLY",
+          "closureStatus": "PENDING_AUTHORITATIVE_CONTROLLER_GATES",
+          "businessOrProductionSuccessClaimed": false,
+          "preservedDecisionReceipt": {
+            "taskId": "SOL-PSAI32-STATE-RECONCILE-01",
+            "schemaVersion": "pansphaira.conveyor/state-reconciliation-receipt/v1",
+            "path": "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json",
+            "receiptDigest": "046271c5a703ba2a50759eee54baafff1c26a148aabacba662a3d8b154f99089",
+            "sha256": "732ab2513546111ab496c63aa4b5e7595a87c7f28533e4f0491cd5c101acb6fa"
+          }
+        },
+        "exactPins": {
+          "openApi": {
+            "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
+            "swaggerVersion": "2.0",
+            "contractVersion": "1.0.0",
+            "schemaVersion": "pansphaira.power-platform/readonly-connector-surface/v1",
+            "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287",
+            "declaredDocumentDigest": "67c6e32cd4c9c995c06033b6a4c6a4f0ec621b3c11706ee6af83ba1c794763ee"
+          },
+          "openApiSchema": {
+            "path": "contracts/azure-power-platform/readonly-connector.schema.json",
+            "jsonSchemaVersion": "https://json-schema.org/draft/2020-12/schema",
+            "contractVersion": "1.0.0",
+            "schemaVersion": "pansphaira.power-platform/readonly-connector-surface/v1",
+            "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+          },
+          "denialMatrixSchema": {
+            "path": "contracts/azure-power-platform/readonly-denial-matrix.schema.json",
+            "jsonSchemaVersion": "https://json-schema.org/draft/2020-12/schema",
+            "contractVersion": "1.0.0",
+            "schemaVersion": "pansphaira.power-platform/readonly-denial-matrix/v1",
+            "sha256": "a81676c8777f5244889bd26b7900ce7d120c8d93284dd2d12cf0073d51dfc642"
+          },
+          "authoritativeReadbackReceiptSchema": {
+            "path": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+            "jsonSchemaVersion": "https://json-schema.org/draft/2020-12/schema",
+            "selectedReceiptVersion": "1.0.0",
+            "schemaVersion": "pansphaira.azure-power-platform/authoritative-readback-receipt/v1",
+            "sha256": "20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8"
+          }
+        },
+        "closedSurface": {
+          "allowedOperations": [
+            "LIST_CAPABILITIES",
+            "SUBMIT_GOVERNED_QUERY",
+            "GET_OPERATION_STATUS",
+            "GET_READBACK",
+            "GET_RECEIPT"
+          ],
+          "allowedActions": [
+            "READ_RECORD",
+            "READ_METADATA"
+          ],
+          "governedMutationActions": [],
+          "errorSchemaVersion": "pansphaira.power-platform/error/v1",
+          "errorFields": [
+            "schemaVersion",
+            "code",
+            "correlationDigest",
+            "decisionDigest"
+          ],
+          "publicReasonCodes": [
+            "SCHEMA_DENIED",
+            "UNKNOWN_ACTION_DENIED",
+            "HIDDEN_WRITE_DENIED",
+            "APPROVAL_SAME_ACTOR_DENIED",
+            "AUTHORITY_BINDING_DENIED",
+            "AUTHORITY_EXPIRED_DENIED",
+            "REPLAY_CONSUMED_DENIED",
+            "DIGEST_MISMATCH_DENIED",
+            "REVOCATION_BINDING_DENIED",
+            "POLICY_STALE_DENIED",
+            "INCOMPATIBLE_VERSION_DENIED",
+            "CROSS_TENANT_DENIED",
+            "EVIDENCE_STALE_DENIED",
+            "PROVIDER_READBACK_MISMATCH_DENIED",
+            "EFFECT_STORE_INVALID_DENIED",
+            "INDEPENDENT_CONTEXT_DENIED"
+          ],
+          "admissionReasonCodes": [
+            "UNKNOWN_ACTION_DENIED",
+            "UNKNOWN_FIELD_DENIED",
+            "HIDDEN_WRITE_DENIED",
+            "AUTHORITY_BINDING_DENIED",
+            "APPROVAL_SAME_ACTOR_DENIED",
+            "DIGEST_DRIFT_DENIED",
+            "REPLAY_CONSUMED_DENIED",
+            "AUTHORITY_EXPIRED_DENIED",
+            "AUTHORITY_REVOKED_DENIED",
+            "POLICY_STALE_DENIED"
+          ],
+          "genericEscapeHatches": {
+            "arbitraryServer": false,
+            "arbitraryUrl": false,
+            "arbitraryPath": false,
+            "arbitraryMethod": false,
+            "arbitraryHeaders": false,
+            "arbitraryBody": false,
+            "genericProxy": false,
+            "dynamicSchema": false,
+            "dynamicValues": false,
+            "defaultResponse": false,
+            "unknownFields": false,
+            "unknownActions": false,
+            "freeTextError": false,
+            "capabilityBytesGrantAuthority": false
+          }
+        },
+        "policy": {
+          "selectedSyntheticPolicy": {
+            "schemaVersion": "pansphaira.power-platform/policy-binding/v1",
+            "id": "power-platform-read-policy",
+            "version": "1.0.0",
+            "generation": 7,
+            "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+          },
+          "sharedGatewayPolicy": {
+            "schemaVersion": "chimpmaera.security/capability-policy-binding/v1",
+            "id": "policy:synthetic-safe-guided",
+            "version": "1.0.0",
+            "generation": null,
+            "generationReason": "The capability policy v1 export is version-and-digest bound and does not export a numeric policyGeneration.",
+            "digest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89",
+            "powerPlatformActionCompatibility": "INCOMPATIBLE_NO_POWER_PLATFORM_ACTION",
+            "powerPlatformMayInvokeCurrentActions": false
+          }
+        },
+        "negativeResults": [
+          {
+            "case": "UNKNOWN_FIELDS",
+            "outcome": "DENY",
+            "admissionReasonCode": "UNKNOWN_FIELD_DENIED",
+            "publicReasonCode": "SCHEMA_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "UNKNOWN_ACTIONS",
+            "outcome": "DENY",
+            "admissionReasonCode": "UNKNOWN_ACTION_DENIED",
+            "publicReasonCode": "UNKNOWN_ACTION_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "HIDDEN_WRITES",
+            "outcome": "DENY",
+            "admissionReasonCode": "HIDDEN_WRITE_DENIED",
+            "publicReasonCode": "HIDDEN_WRITE_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "SELF_APPROVAL",
+            "outcome": "DENY",
+            "admissionReasonCode": "APPROVAL_SAME_ACTOR_DENIED",
+            "publicReasonCode": "APPROVAL_SAME_ACTOR_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "DIGEST_DRIFT",
+            "outcome": "DENY",
+            "admissionReasonCode": "DIGEST_DRIFT_DENIED",
+            "publicReasonCode": "DIGEST_MISMATCH_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "REPLAY",
+            "outcome": "DENY",
+            "admissionReasonCode": "REPLAY_CONSUMED_DENIED",
+            "publicReasonCode": "REPLAY_CONSUMED_DENIED",
+            "effectCount": 0,
+            "maximumAdditionalEffectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "EXPIRY",
+            "outcome": "DENY",
+            "admissionReasonCode": "AUTHORITY_EXPIRED_DENIED",
+            "publicReasonCode": "AUTHORITY_EXPIRED_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "REVOCATION",
+            "outcome": "DENY",
+            "admissionReasonCode": "AUTHORITY_REVOKED_DENIED",
+            "publicReasonCode": "REVOCATION_BINDING_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          },
+          {
+            "case": "STALE_POLICY",
+            "outcome": "DENY",
+            "admissionReasonCode": "POLICY_STALE_DENIED",
+            "publicReasonCode": "POLICY_STALE_DENIED",
+            "effectCount": 0,
+            "evidenceRef": "denial-matrix-test"
+          }
+        ],
+        "acceptedOperationClosure": {
+          "acceptanceSemantics": "OPERATION_REFERENCE_ONLY",
+          "transportAcceptanceIsBusinessSuccess": false,
+          "successState": "READBACK_RECEIPTED",
+          "authoritativeReadbackRequiredAfterEveryAcceptedOperation": true,
+          "boundReceiptRequiredAfterEveryAcceptedOperation": true,
+          "publicReadbackSource": "PROVIDER_OR_TENANT_CONTROL_PLANE_READ_AFTER_EFFECT_NOT_REQUEST_ECHO",
+          "syntheticFixtureReadbackSource": "AUTHORITATIVE_POST_ACCEPT_READBACK",
+          "receiptIssuer": "pansphaira.local-readback-verifier",
+          "receiptSchemaVersion": "pansphaira.azure-power-platform/bound-receipt/v1",
+          "receiptVersion": "1.0.0",
+          "requiredBindingFields": [
+            "operationId",
+            "requestDigest",
+            "decisionDigest",
+            "readbackDigest",
+            "policyId",
+            "policyVersion",
+            "policyGeneration",
+            "policyDigest",
+            "evidenceDigest",
+            "lkgTupleDigest",
+            "rollbackTarget"
+          ],
+          "tamperEvidence": {
+            "canonicalization": "CM_CANONICAL_JSON_V1",
+            "digestAlgorithm": "SHA-256",
+            "receiptDigestBindsExactClosedReceiptCore": true,
+            "missingReadbackReasonCode": "MISSING_READBACK_DENIED",
+            "readbackTamperReasonCode": "READBACK_TAMPERED_DENIED",
+            "receiptTamperReasonCode": "RECEIPT_TAMPERED_DENIED",
+            "publicReadbackFailureReasonCode": "PROVIDER_READBACK_MISMATCH_DENIED",
+            "publicReceiptTamperReasonCode": "EFFECT_STORE_INVALID_DENIED"
+          },
+          "syntheticAcceptedEvidence": {
+            "operationId": "synthetic-operation-read-0001",
+            "action": "READ_RECORD",
+            "actionVersion": "1.0.0",
+            "actionDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+            "requestDigest": "2dbcc841765e17e7fb5e0b3229567da2bc329d371809be58d53a44bad42fb817",
+            "decisionDigest": "93e53587e2fa3fd72ad3ee910a31afe6b01085d8b881f72bfb3a2d20cfa7a9e8",
+            "readbackDigest": "4949c3e8d437a44b4ac4fc14a852b7b99f3c71c36dcb0a1941993bb82de261d4",
+            "fullTupleDigest": "23159120351f20809d7caef87010367c825a138dcaa33571ddf07cc884df7abc",
+            "receiptDigest": "7af5d23d5d310b41ff9b84b09570e49412bd424d673958cc0c6bcb6d9420c087"
+          }
+        },
+        "limitations": [
+          "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+          "NO_PROVIDER_OR_TENANT_ACCESS",
+          "NO_EXTERNAL_ACCOUNT_ACCESS",
+          "NO_CREDENTIAL_USE",
+          "NO_BUSINESS_WRITE",
+          "NO_DEPLOYABLE_POWER_PLATFORM_SOLUTION",
+          "NO_IMPORT_OR_RESET_EXECUTION",
+          "NO_PROPOSAL_APPROVAL_OR_EXECUTION_API",
+          "NO_POLICY_OR_ACTIVATION_AUTHORITY",
+          "NO_BUSINESS_SUCCESS_WITHOUT_AUTHORITATIVE_READBACK_AND_BOUND_RECEIPT",
+          "NODE_TEST_GATE_INFRASTRUCTURE_BLOCKED_CONTROLLER_RERUN_REQUIRED"
+        ],
+        "rollback": {
+          "repositoryTarget": "43ead19bb47379708d9bf358aeb888380b74215f",
+          "contractTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+          "targetTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+          "targetStatus": "LKG",
+          "targetRevocationStatus": "UNREVOKED",
+          "authorizationRequired": true,
+          "partialRollbackAllowed": false,
+          "latestVersionFallbackAllowed": false,
+          "revokedLkgAllowed": false,
+          "staleLkgAllowed": false
+        },
+        "evidenceRefs": [
+          {
+            "id": "preserved-decision-receipt",
+            "ref": "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json",
+            "sha256": "732ab2513546111ab496c63aa4b5e7595a87c7f28533e4f0491cd5c101acb6fa"
+          },
+          {
+            "id": "readonly-openapi",
+            "ref": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
+            "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287"
+          },
+          {
+            "id": "readonly-openapi-schema",
+            "ref": "contracts/azure-power-platform/readonly-connector.schema.json",
+            "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+          },
+          {
+            "id": "readonly-openapi-test",
+            "ref": "tests/azure-power-platform/readonly-openapi.test.mjs",
+            "sha256": "cefdeb16e01ccc724d888d7a22e610238fb7545e259f85c42f5c05c6c9a9100a"
+          },
+          {
+            "id": "readonly-openapi-fixture",
+            "ref": "tests/fixtures/azure-power-platform/readonly-openapi-valid.json",
+            "sha256": "d2072dbe786b83d2450f9c90519c4cebf696d72064f27a68dd63cd3f420a8b67"
+          },
+          {
+            "id": "denial-matrix-schema",
+            "ref": "contracts/azure-power-platform/readonly-denial-matrix.schema.json",
+            "sha256": "a81676c8777f5244889bd26b7900ce7d120c8d93284dd2d12cf0073d51dfc642"
+          },
+          {
+            "id": "denial-matrix-test",
+            "ref": "tests/azure-power-platform/readonly-denial-matrix.test.mjs",
+            "sha256": "e8eb5a2d9f59d13fbe4ed477e63023f866da43e59f3dabc7985855f9efe6f0e0"
+          },
+          {
+            "id": "denial-matrix-fixture",
+            "ref": "tests/fixtures/azure-power-platform/denials.json",
+            "sha256": "a1b490032df25822cd0900a29605615a39e5326bdcbf43a1ea2de7ca65652c1a"
+          },
+          {
+            "id": "readback-receipt-schema",
+            "ref": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+            "sha256": "20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8"
+          },
+          {
+            "id": "readback-receipt-test",
+            "ref": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs",
+            "sha256": "3542b9c5b578d37b4562f8f5f5cb4808aef666e721f5f0358a99e81e1a80dd58"
+          },
+          {
+            "id": "readback-receipt-fixture",
+            "ref": "tests/fixtures/azure-power-platform/readback-accepted.json",
+            "sha256": "09f8799b2726d35e2c507bded10adad0fe91767996ddbd3ec9833a22c435cece"
+          }
+        ],
+        "verification": {
+          "focusedCommand": "node --test tests/azure-power-platform/readonly-openapi.test.mjs tests/azure-power-platform/readonly-denial-matrix.test.mjs tests/azure-power-platform/authoritative-readback-receipt.test.mjs tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
+          "focusedResult": "INFRASTRUCTURE_BLOCKED",
+          "nodeVersion": "v24.19.0",
+          "exitCode": 133,
+          "signal": "SIGTRAP",
+          "diagnostic": "V8 SetPermissions fatal check failed with errno 12 before test execution.",
+          "productVerdict": "NONE",
+          "advisoryFocusedCommand": "node --jitless --test tests/azure-power-platform/readonly-openapi.test.mjs tests/azure-power-platform/readonly-denial-matrix.test.mjs tests/azure-power-platform/authoritative-readback-receipt.test.mjs tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
+          "advisoryFocusedResult": "PASS",
+          "advisoryFocusedExitCode": 0,
+          "advisoryFocusedTestCount": 28,
+          "advisoryRepositoryGates": {
+            "lint": {
+              "command": "NODE_OPTIONS=--jitless npm run lint",
+              "result": "PASS",
+              "exitCode": 0
+            },
+            "build": {
+              "command": "NODE_OPTIONS=--jitless npm run build",
+              "result": "PASS",
+              "exitCode": 0
+            },
+            "test": {
+              "command": "NODE_OPTIONS=--jitless npm run test",
+              "result": "INFRASTRUCTURE_BLOCKED",
+              "exitCode": 1,
+              "diagnostic": "The unrelated loopback knowledge-quality API test could not initialize undici because --jitless disables WebAssembly.",
+              "productVerdict": "NONE"
+            }
+          },
+          "deterministicReceiptCheck": "PASS",
+          "requiredRepositoryProfileCommand": "git diff --check origin/main...HEAD",
+          "requiredRepositoryProfileResult": "PASS",
+          "controllerAuthoritativeGatesRequired": true
+        },
+        "receiptBinding": {
+          "path": "docs/development/azure-power-platform/azpp-m1-tuple-ledger.schema.json",
+          "predecessorSchemaSha256": "6db105c03ad1d0fac78e6c53ac9259d5cbad69197b20dd92f5a5188572f13db2",
+          "canonicalization": "CM_CANONICAL_JSON_V1",
+          "digestAlgorithm": "SHA-256",
+          "digestInput": "contractIntegrationReceipt without top-level receiptDigest",
+          "containingGitCommitRequired": true,
+          "authority": "NONE",
+          "tamperResponse": "DENY_AND_REQUIRE_NEW_CONTAINING_COMMIT"
+        },
+        "receiptDigest": "1bd4133702e18ad1d5caaccbe481220bb9266df802d11e32e27669c35647d83e"
+      }
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "publicIdentifier": {
+      "type": "string",
+      "pattern": "^(?!.*\\.\\.)[a-z][a-z0-9.-]{2,80}$",
+      "not": { "$ref": "#/$defs/privatePublicText" }
+    },
+    "immutableVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "publicRef": {
+      "type": "string",
+      "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(docs|tests|release|issues|pull)/[A-Za-z0-9._/-]+$",
+      "not": { "$ref": "#/$defs/privatePublicText" }
+    },
+    "privatePublicText": {
+      "type": "string",
+      "pattern": "(?:[tT][eE][nN][aA][nN][tT]|[sS][uU][bB][sS][cC][rR][iI][pP][tT][iI][oO][nN]|[cC][rR][eE][dD][eE][nN][tT][iI][aA][lL]|[iI][dD][eE][nN][tT][iI][tT][yY]|[hH][oO][sS][tT]|(?:^|/)[tT][mM][pP](?:/|$)|(?:^|/)[hH][oO][mM][eE](?:/|$))"
+    },
+    "evidenceIdentifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{2,60}$",
+      "not": {
+        "pattern": "(?:[tT][eE][nN][aA][nN][tT]|[sS][uU][bB][sS][cC][rR][iI][pP][tT][iI][oO][nN]|[cC][rR][eE][dD][eE][nN][tT][iI][aA][lL]|[iI][dD][eE][nN][tT][iI][tT][yY]|[hH][oO][sS][tT]|(?:^|/)[tT][mM][pP](?:/|$)|(?:^|/)[hH][oO][mM][eE](?:/|$))"
+      }
+    },
+    "pinnedArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/publicIdentifier" },
+        "version": { "$ref": "#/$defs/immutableVersion" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ref", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/evidenceIdentifier" },
+        "ref": { "$ref": "#/$defs/publicRef" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "negativeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "reasonCode", "evidenceRef"],
+      "properties": {
+        "id": { "$ref": "#/$defs/evidenceIdentifier" },
+        "reasonCode": {
+          "enum": [
+            "MISSING_COMPONENT_DIGEST_DENIED",
+            "MUTABLE_VERSION_DENIED",
+            "PRIVATE_IDENTIFIER_DENIED",
+            "UNKNOWN_FIELD_DENIED",
+            "POLICY_GENERATION_MISMATCH_DENIED",
+            "LKG_REVOKED_DENIED",
+            "DIGEST_DRIFT_DENIED"
+          ]
+        },
+        "evidenceRef": { "$ref": "#/$defs/evidenceIdentifier" }
+      }
+    },
+    "acceptedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "tupleDigest"],
+      "properties": {
+        "status": { "const": "ACCEPTED" },
+        "tupleDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "lkgRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "tupleDigest", "revocationStatus", "evidenceRefs"],
+      "properties": {
+        "status": { "const": "LKG" },
+        "tupleDigest": { "$ref": "#/$defs/digest" },
+        "revocationStatus": { "const": "UNREVOKED" },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidenceIdentifier" }
+        }
+      }
+    },
+    "rollbackRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["targetTupleDigest", "targetStatus", "targetRevocationStatus", "evidenceRefs"],
+      "properties": {
+        "targetTupleDigest": { "$ref": "#/$defs/digest" },
+        "targetStatus": { "const": "LKG" },
+        "targetRevocationStatus": { "const": "UNREVOKED" },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidenceIdentifier" }
+        }
+      }
+    },
+    "publicLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "digest"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/publicRef" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "planningArtifactLink": {
+      "allOf": [
+        { "$ref": "#/$defs/publicLink" },
+        { "type": "object", "properties": { "ref": { "type": "string", "pattern": "^(docs|pull)/" } } }
+      ]
+    },
+    "implementationPrLink": {
+      "allOf": [
+        { "$ref": "#/$defs/publicLink" },
+        { "type": "object", "properties": { "ref": { "type": "string", "pattern": "^pull/" } } }
+      ]
+    },
+    "releaseLink": {
+      "allOf": [
+        { "$ref": "#/$defs/publicLink" },
+        { "type": "object", "properties": { "ref": { "type": "string", "pattern": "^release/" } } }
+      ]
+    },
+    "publicReadbackLink": {
+      "allOf": [
+        { "$ref": "#/$defs/publicLink" },
+        { "type": "object", "properties": { "ref": { "type": "string", "pattern": "^docs/" } } }
+      ]
+    },
+    "publicLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planningArtifact", "implementationPrs", "release", "publicReadback"],
+      "properties": {
+        "planningArtifact": { "$ref": "#/$defs/planningArtifactLink" },
+        "implementationPrs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/implementationPrLink" }
+        },
+        "release": {
+          "anyOf": [
+            { "$ref": "#/$defs/releaseLink" },
+            { "type": "null" }
+          ]
+        },
+        "publicReadback": { "$ref": "#/$defs/publicReadbackLink" }
+      }
+    }
+  }
+}

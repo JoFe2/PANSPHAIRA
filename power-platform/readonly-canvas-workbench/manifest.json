@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "pansphaira.power-platform/canvas-business-workbench-manifest/v1",
+  "packageId": "pansphaira.readonly-canvas-workbench",
+  "packageVersion": "1.0.0",
+  "displayName": "Canvas Business Workbench — synthetic read-only slice",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "activationState": "INACTIVE",
+  "activationDefault": "INACTIVE",
+  "importPolicy": {
+    "importAllowed": false,
+    "ownerOnlyImportWaitRequired": true,
+    "waitState": "OWNER_ONLY_EXPLICIT_IMPORT_WAIT",
+    "externalMutationPerformed": false
+  },
+  "connectorBindingPath": "power-platform/readonly-canvas-workbench/connector-binding.json",
+  "views": [
+    {
+      "viewId": "capability-discovery",
+      "operationKey": "LIST_CAPABILITIES",
+      "semantic": "DISCOVERY",
+      "method": "GET",
+      "path": "/v1/capabilities",
+      "sourceOperationId": "ListCapabilities",
+      "exposedFields": ["operationKey", "operationId", "semantic", "delegatedScope", "idempotencyKeyRequired"]
+    },
+    {
+      "viewId": "governed-query",
+      "operationKey": "SUBMIT_GOVERNED_QUERY",
+      "semantic": "QUERY",
+      "method": "POST",
+      "path": "/v1/queries",
+      "sourceOperationId": "SubmitGovernedQuery",
+      "exposedFields": ["schemaVersion", "action", "requestDigest", "correlationDigest", "idempotencyKeyDigest"]
+    },
+    {
+      "viewId": "operation-status",
+      "operationKey": "GET_OPERATION_STATUS",
+      "semantic": "STATUS",
+      "method": "GET",
+      "path": "/v1/operations/{operationId}",
+      "sourceOperationId": "GetOperationStatus",
+      "exposedFields": ["operationId", "status", "reasonCodes", "businessSuccess"]
+    },
+    {
+      "viewId": "authoritative-readback",
+      "operationKey": "GET_READBACK",
+      "semantic": "READBACK",
+      "method": "GET",
+      "path": "/v1/operations/{operationId}/readback",
+      "sourceOperationId": "GetReadback",
+      "exposedFields": ["operationId", "source", "requestDigest", "correlationDigest", "effectCount", "outcome"]
+    },
+    {
+      "viewId": "bound-receipt",
+      "operationKey": "GET_RECEIPT",
+      "semantic": "RECEIPT",
+      "method": "GET",
+      "path": "/v1/operations/{operationId}/receipt",
+      "sourceOperationId": "GetReceipt",
+      "exposedFields": ["operationId", "fullTupleDigest", "effectCount", "outcome", "receiptDigest"]
+    }
+  ],
+  "acceptedOperationProjection": {
+    "transportAcceptanceIsBusinessSuccess": false,
+    "requiredSequence": ["SUBMIT_GOVERNED_QUERY", "GET_OPERATION_STATUS", "GET_READBACK", "GET_RECEIPT"],
+    "successProjection": "AUTHORITATIVE_READBACK_AND_BOUND_RECEIPT",
+    "clientSuccessAssertionAllowed": false
+  },
+  "authorityBoundary": {
+    "genericInvocationAllowed": false,
+    "arbitraryUrlAllowed": false,
+    "arbitraryHttpMethodAllowed": false,
+    "arbitraryCommandAllowed": false,
+    "arbitraryBodySchemaAllowed": false,
+    "callerTenantAllowed": false,
+    "callerCredentialAllowed": false,
+    "unknownOperationsDenied": true,
+    "writeTargets": [],
+    "proposalOperations": [],
+    "approvalOperations": [],
+    "executionOperations": [],
+    "cancellationOperations": []
+  },
+  "credentials": {
+    "storedByPackage": false,
+    "embeddedAllowed": false,
+    "ambientAllowed": false,
+    "dynamicSelectionAllowed": false,
+    "secretReferences": []
+  },
+  "limitations": [
+    "LOCAL_SYNTHETIC_VALIDATION_ONLY",
+    "NO_LIVE_TENANT",
+    "NO_CREDENTIAL_USE",
+    "NO_PROVIDER_CALL",
+    "NO_IMPORT_OR_RESET_EXECUTION",
+    "NO_BUSINESS_SUCCESS_WITHOUT_AUTHORITATIVE_READBACK_AND_BOUND_RECEIPT"
+  ],
+  "negativeResults": [
+    { "case": "unknown-fields", "outcome": "DENY", "reasonCode": "SCHEMA_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "unknown-actions", "outcome": "DENY", "reasonCode": "UNKNOWN_ACTION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "hidden-writes", "outcome": "DENY", "reasonCode": "HIDDEN_WRITE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "self-approval", "outcome": "DENY", "reasonCode": "APPROVAL_SAME_ACTOR_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "digest-drift", "outcome": "DENY", "reasonCode": "DIGEST_MISMATCH_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "replay", "outcome": "DENY", "reasonCode": "REPLAY_CONSUMED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "expiry", "outcome": "DENY", "reasonCode": "AUTHORITY_EXPIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "revocation", "outcome": "DENY", "reasonCode": "REVOCATION_BINDING_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "stale-policy", "outcome": "DENY", "reasonCode": "POLICY_STALE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" }
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false,
+    "authorizationRequired": true
+  },
+  "evidenceRefs": [
+    "contracts/azure-power-platform/readonly-connector.openapi.yaml",
+    "contracts/azure-power-platform/readonly-connector.schema.json",
+    "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+    "tests/azure-power-platform/readonly-openapi.test.mjs",
+    "tests/azure-power-platform/authoritative-readback-receipt.test.mjs"
+  ]
+}

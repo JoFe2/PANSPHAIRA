@@ -1,0 +1,339 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+  "title": "Azure Power Platform authoritative readback receipt",
+  "description": "Closed synthetic post-accept verification record. Transport status is only an observation; an authoritative readback and a digest-bound receipt are required before the operation is considered verified.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "environmentClass",
+    "operation",
+    "request",
+    "requestDigest",
+    "statusObservation",
+    "policy",
+    "evidence",
+    "decision",
+    "decisionDigest",
+    "readback",
+    "readbackDigest",
+    "lkg",
+    "rollback",
+    "limitations",
+    "negativeResults",
+    "receipt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/authoritative-readback-receipt/v1" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "operation": { "$ref": "#/$defs/operation" },
+    "request": { "$ref": "#/$defs/request" },
+    "requestDigest": { "$ref": "#/$defs/digest" },
+    "statusObservation": { "$ref": "#/$defs/statusObservation" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "decision": { "$ref": "#/$defs/decision" },
+    "decisionDigest": { "$ref": "#/$defs/digest" },
+    "readback": { "$ref": "#/$defs/readback" },
+    "readbackDigest": { "$ref": "#/$defs/digest" },
+    "lkg": { "$ref": "#/$defs/lkg" },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "limitations": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": { "enum": [
+        "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+        "NO_EXTERNAL_ACCOUNT_ACCESS",
+        "NO_CREDENTIAL_USE",
+        "NO_BUSINESS_WRITE",
+        "NO_CLIENT_ASSERTED_SUCCESS",
+        "INDEPENDENT_READBACK_REQUIRED"
+      ] }
+    },
+    "negativeResults": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/negativeResult" }
+    },
+    "receipt": { "$ref": "#/$defs/receipt" }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operationKey", "operationId", "action", "actionVersion", "actionDigest"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/operation/v1" },
+        "operationKey": { "const": "SUBMIT_GOVERNED_QUERY" },
+        "operationId": { "type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$" },
+        "action": { "enum": ["READ_RECORD", "READ_METADATA"] },
+        "actionVersion": { "$ref": "#/$defs/version" },
+        "actionDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "environmentClass",
+        "operationKey",
+        "operationId",
+        "action",
+        "actionVersion",
+        "actionDigest",
+        "resource",
+        "queryDigest",
+        "requestedFields",
+        "requestNonce",
+        "requestedAt"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/canonical-read-request/v1" },
+        "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "operationKey": { "const": "SUBMIT_GOVERNED_QUERY" },
+        "operationId": { "type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$" },
+        "action": { "enum": ["READ_RECORD", "READ_METADATA"] },
+        "actionVersion": { "$ref": "#/$defs/version" },
+        "actionDigest": { "$ref": "#/$defs/digest" },
+        "resource": { "const": "synthetic.power-platform.record" },
+        "queryDigest": { "$ref": "#/$defs/digest" },
+        "requestedFields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["id", "displayName", "createdAt"] }
+        },
+        "requestNonce": { "type": "string", "pattern": "^synthetic-request-[a-z0-9-]+$" },
+        "requestedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "statusObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "source", "status", "observedAt", "operationId"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/status-observation/v1" },
+        "source": { "const": "OPERATION_STATUS_STORE" },
+        "status": { "const": "ACCEPTED" },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "operationId": { "type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "version", "generation", "digest"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/policy-binding/v1" },
+        "id": { "const": "power-platform-read-policy" },
+        "version": { "$ref": "#/$defs/version" },
+        "generation": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "bundleDigest", "refs"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/evidence-bundle/v1" },
+        "bundleDigest": { "$ref": "#/$defs/digest" },
+        "refs": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "ref", "digest"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+              "ref": { "type": "string", "pattern": "^(contracts|tests|docs)/[A-Za-z0-9._/-]+$" },
+              "digest": { "$ref": "#/$defs/digest" }
+            }
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "source",
+        "decisionVersion",
+        "outcome",
+        "reasonCode",
+        "effectCount",
+        "operationId",
+        "requestDigest",
+        "action",
+        "actionVersion",
+        "actionDigest",
+        "policyId",
+        "policyVersion",
+        "policyGeneration",
+        "policyDigest",
+        "evidenceDigest",
+        "rollbackTarget"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/independent-decision/v1" },
+        "source": { "const": "INDEPENDENT_POLICY_AUTHORITY" },
+        "decisionVersion": { "$ref": "#/$defs/version" },
+        "outcome": { "const": "ALLOW" },
+        "reasonCode": { "type": "null" },
+        "effectCount": { "const": 0 },
+        "operationId": { "type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$" },
+        "requestDigest": { "$ref": "#/$defs/digest" },
+        "action": { "enum": ["READ_RECORD", "READ_METADATA"] },
+        "actionVersion": { "$ref": "#/$defs/version" },
+        "actionDigest": { "$ref": "#/$defs/digest" },
+        "policyId": { "const": "power-platform-read-policy" },
+        "policyVersion": { "$ref": "#/$defs/version" },
+        "policyGeneration": { "type": "integer", "minimum": 1 },
+        "policyDigest": { "$ref": "#/$defs/digest" },
+        "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "rollbackTarget": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }
+      }
+    },
+    "readback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "source",
+        "status",
+        "operationId",
+        "requestDigest",
+        "action",
+        "actionVersion",
+        "actionDigest",
+        "observedAt",
+        "effectCount",
+        "recordDigest"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/authoritative-readback/v1" },
+        "source": { "const": "AUTHORITATIVE_POST_ACCEPT_READBACK" },
+        "status": { "const": "READ_CONFIRMED" },
+        "operationId": { "type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$" },
+        "requestDigest": { "$ref": "#/$defs/digest" },
+        "action": { "enum": ["READ_RECORD", "READ_METADATA"] },
+        "actionVersion": { "$ref": "#/$defs/version" },
+        "actionDigest": { "$ref": "#/$defs/digest" },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "effectCount": { "const": 0 },
+        "recordDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "lkg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "tupleDigest", "revocationStatus", "evidenceRefs"],
+      "properties": {
+        "status": { "const": "LKG" },
+        "tupleDigest": { "$ref": "#/$defs/digest" },
+        "revocationStatus": { "const": "UNREVOKED" },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" }
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "targetTupleDigest", "targetStatus", "authorizationRequired", "evidenceRefs"],
+      "properties": {
+        "target": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+        "targetTupleDigest": { "$ref": "#/$defs/digest" },
+        "targetStatus": { "const": "LKG" },
+        "authorizationRequired": { "const": true },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" }
+        }
+      }
+    },
+    "negativeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "reasonCode", "outcome", "evidenceRef"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+        "reasonCode": { "enum": [
+          "MISSING_READBACK_DENIED",
+          "DELAYED_READBACK_DENIED",
+          "READBACK_TAMPERED_DENIED",
+          "RECEIPT_TAMPERED_DENIED",
+          "REQUEST_BINDING_MISMATCH_DENIED",
+          "STALE_TUPLE_DENIED",
+          "ISSUER_ALIAS_DENIED",
+          "UNKNOWN_RECEIPT_FIELD_DENIED"
+        ] },
+        "outcome": { "const": "DENY" },
+        "evidenceRef": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "issuer", "version", "issuedAt", "fullTupleDigest", "bindings", "receiptDigest"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/bound-receipt/v1" },
+        "issuer": { "const": "pansphaira.local-readback-verifier" },
+        "version": { "$ref": "#/$defs/version" },
+        "issuedAt": { "type": "string", "format": "date-time" },
+        "fullTupleDigest": { "$ref": "#/$defs/digest" },
+        "bindings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "operationId",
+            "requestDigest",
+            "decisionDigest",
+            "readbackDigest",
+            "policyId",
+            "policyVersion",
+            "policyGeneration",
+            "policyDigest",
+            "evidenceDigest",
+            "lkgTupleDigest",
+            "rollbackTarget"
+          ],
+          "properties": {
+            "operationId": { "type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$" },
+            "requestDigest": { "$ref": "#/$defs/digest" },
+            "decisionDigest": { "$ref": "#/$defs/digest" },
+            "readbackDigest": { "$ref": "#/$defs/digest" },
+            "policyId": { "const": "power-platform-read-policy" },
+            "policyVersion": { "$ref": "#/$defs/version" },
+            "policyGeneration": { "type": "integer", "minimum": 1 },
+            "policyDigest": { "$ref": "#/$defs/digest" },
+            "evidenceDigest": { "$ref": "#/$defs/digest" },
+            "lkgTupleDigest": { "$ref": "#/$defs/digest" },
+            "rollbackTarget": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }
+          }
+        },
+        "receiptDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

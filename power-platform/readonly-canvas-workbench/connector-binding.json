@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "pansphaira.power-platform/canvas-business-workbench-connector-binding/v1",
+  "bindingVersion": "1.0.0",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "connectorContract": {
+    "schemaVersion": "chimpmaera.connector/power-platform-read/v1",
+    "version": "1.0.0",
+    "contractDigest": "71805da9cf453748dbde0917bcf5477a90fa5aca828fe9d8c30d88de6c758830",
+    "sourcePath": "packages/contracts/src/power-platform-read-connector.ts",
+    "sourceSha256": "21821f2957f48356dd71741f4a8540e26b29bba81fd48cac1ff2f19dfa5d9781",
+    "schemaPath": "schemas/contracts/power-platform-read-connector-v1.schema.json",
+    "schemaSha256": "d555893c9ac16923fb9607c723aaf190c8796bac4a61d5727c7635e5dda1f63f"
+  },
+  "openApiBinding": {
+    "documentPath": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
+    "documentSha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287",
+    "documentDigest": "67c6e32cd4c9c995c06033b6a4c6a4f0ec621b3c11706ee6af83ba1c794763ee",
+    "schemaPath": "contracts/azure-power-platform/readonly-connector.schema.json",
+    "schemaSha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+  },
+  "identityBinding": {
+    "schemaVersion": "chimpmaera.identity/azure-profile/v1",
+    "version": "1.0.0",
+    "profileId": "identity:azure-power-apps-read-v1",
+    "profileDigest": "e46d524fc32e550db3c94d848c78737bbcef1ca0ddc1ddfb3cc349ed2bc66fae",
+    "sourceSha256": "d2310f860109f87b799ba4eb4b067255d4237c4bbb71c1780145d14908a608bd",
+    "schemaSha256": "ff383ccc0829599d11542109ac3b4f1380719e8c85ce49eabd7938a98ad4e942",
+    "fixtureSha256": "d3762cb5f19b3583af81aff8dd9aea2ff66f553aff70b286291b523f43dd5885",
+    "delegatedScopes": ["cm.discovery.read"],
+    "applicationRoles": []
+  },
+  "policyBinding": {
+    "schemaVersion": "chimpmaera.security/capability-policy-binding/v1",
+    "policyId": "policy:synthetic-safe-guided",
+    "policyVersion": "1.0.0",
+    "policyGeneration": null,
+    "policyDigest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89",
+    "policyGenerationReason": "The capability policy v1 export is version-and-digest bound and does not export a numeric policyGeneration."
+  },
+  "surface": {
+    "allowedViews": ["DISCOVERY", "QUERY", "STATUS", "READBACK", "RECEIPT"],
+    "allowedOperations": ["LIST_CAPABILITIES", "SUBMIT_GOVERNED_QUERY", "GET_OPERATION_STATUS", "GET_READBACK", "GET_RECEIPT"],
+    "allowedActions": ["READ_RECORD", "READ_METADATA"],
+    "governedMutationActions": [],
+    "exactQueryFields": ["schemaVersion", "action", "requestDigest", "correlationDigest", "idempotencyKeyDigest"],
+    "genericEscapeHatches": {
+      "arbitraryServer": false,
+      "arbitraryUrl": false,
+      "arbitraryPath": false,
+      "arbitraryMethod": false,
+      "arbitraryHeaders": false,
+      "arbitraryBody": false,
+      "genericProxy": false,
+      "dynamicSchema": false,
+      "dynamicValues": false,
+      "unknownFields": false,
+      "unknownActions": false
+    }
+  },
+  "authorityBoundary": {
+    "genericInvocationAllowed": false,
+    "arbitraryUrlAllowed": false,
+    "arbitraryHttpMethodAllowed": false,
+    "arbitraryCommandAllowed": false,
+    "arbitraryBodySchemaAllowed": false,
+    "callerTenantAllowed": false,
+    "callerCredentialAllowed": false,
+    "writeTargets": [],
+    "proposalOperations": [],
+    "approvalOperations": [],
+    "executionOperations": [],
+    "cancellationOperations": []
+  },
+  "credentials": {
+    "storedByPackage": false,
+    "embeddedAllowed": false,
+    "ambientAllowed": false,
+    "dynamicSelectionAllowed": false,
+    "secretReferences": []
+  },
+  "lifecycle": {
+    "acceptanceSemantics": "OPERATION_REFERENCE_ONLY",
+    "businessSuccessRequires": "AUTHORITATIVE_READBACK_AND_BOUND_RECEIPT",
+    "authoritativeReadbackRequiredAfterEveryAcceptedOperation": true,
+    "boundReceiptRequiredAfterEveryAcceptedOperation": true,
+    "readbackSource": "PROVIDER_OR_TENANT_CONTROL_PLANE_READ_AFTER_EFFECT_NOT_REQUEST_ECHO",
+    "readbackFailureState": "AMBIGUOUS_CONSUMED_NO_RETRY_WITHOUT_ROLLBACK_AUTHORITY"
+  },
+  "negativeResults": [
+    { "case": "unknown-fields", "outcome": "DENY", "reasonCode": "SCHEMA_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "unknown-actions", "outcome": "DENY", "reasonCode": "UNKNOWN_ACTION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "hidden-writes", "outcome": "DENY", "reasonCode": "HIDDEN_WRITE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "self-approval", "outcome": "DENY", "reasonCode": "APPROVAL_SAME_ACTOR_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "digest-drift", "outcome": "DENY", "reasonCode": "DIGEST_MISMATCH_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "replay", "outcome": "DENY", "reasonCode": "REPLAY_CONSUMED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "expiry", "outcome": "DENY", "reasonCode": "AUTHORITY_EXPIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "revocation", "outcome": "DENY", "reasonCode": "REVOCATION_BINDING_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "stale-policy", "outcome": "DENY", "reasonCode": "POLICY_STALE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" }
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false,
+    "authorizationRequired": true
+  },
+  "limitations": [
+    "LOCAL_SYNTHETIC_VALIDATION_ONLY",
+    "NO_LIVE_TENANT",
+    "NO_CREDENTIAL_USE",
+    "NO_PROVIDER_CALL",
+    "NO_IMPORT_OR_RESET_EXECUTION",
+    "NO_PROPOSAL_APPROVAL_OR_EXECUTION_API"
+  ],
+  "evidenceRefs": [
+    "contracts/azure-power-platform/readonly-connector.openapi.yaml",
+    "contracts/azure-power-platform/readonly-connector.schema.json",
+    "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+    "tests/azure-power-platform/readonly-openapi.test.mjs",
+    "tests/azure-power-platform/authoritative-readback-receipt.test.mjs"
+  ]
+}

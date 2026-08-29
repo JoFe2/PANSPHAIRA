@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/azure-power-platform/reset-uninstall-plan.schema.json",
+  "title": "PanSphaira local synthetic Canvas package reset and uninstall evidence plan",
+  "description": "Closed, offline evidence plan for the inactive read-only Canvas workbench package. It names only package-owned synthetic resource classes, binds exact package pins and tuple/readback fields, and explicitly proves that no tenant is contacted and no uninstall command is attempted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "planKind",
+    "milestone",
+    "status",
+    "environmentClass",
+    "package",
+    "tuple",
+    "ownedResourceClasses",
+    "resetContract",
+    "rollback",
+    "limitations",
+    "negativeResults",
+    "evidenceRefs",
+    "nonClaims"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/reset-uninstall-plan/v1" },
+    "planKind": { "const": "CANVAS_PACKAGE_RESET_UNINSTALL_EVIDENCE" },
+    "milestone": { "const": "CM-PP-002-READONLY_CANVAS_WORKBENCH" },
+    "status": { "const": "LOCAL_SYNTHETIC_EVIDENCE_PLAN" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "package": { "$ref": "#/$defs/package" },
+    "tuple": { "$ref": "#/$defs/tuple" },
+    "ownedResourceClasses": {
+      "type": "array",
+      "const": [
+        "SYNTHETIC_CANVAS_PACKAGE",
+        "SYNTHETIC_CONNECTOR_BINDING",
+        "SYNTHETIC_READ_FLOW",
+        "SYNTHETIC_POLICY_REFERENCE",
+        "SYNTHETIC_TUPLE_LEDGER"
+      ]
+    },
+    "resetContract": { "$ref": "#/$defs/resetContract" },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "limitations": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 10,
+      "items": {
+        "enum": [
+          "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+          "NO_LIVE_TENANT",
+          "NO_CREDENTIAL_USE",
+          "NO_PROVIDER_CALL",
+          "NO_IMPORT_EXECUTION",
+          "NO_RESET_EXECUTION",
+          "NO_UNINSTALL_EXECUTION",
+          "NO_NETWORK_OR_TENANT_CONTACT",
+          "NO_PRODUCTION_CLAIM",
+          "NO_BUSINESS_SUCCESS_CLAIM",
+          "AUTHORITATIVE_READBACK_REQUIRED",
+          "NEW_RECEIPT_REQUIRED_FOR_RECOVERY"
+        ]
+      }
+    },
+    "negativeResults": {
+      "type": "array",
+      "minItems": 9,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/negativeResult" }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/evidenceRef" }
+    },
+    "nonClaims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "NOT_A_TENANT_RESET",
+          "NOT_A_TENANT_UNINSTALL",
+          "NOT_A_CLOUD_READBACK",
+          "NOT_A_PRODUCTION_READINESS_RESULT",
+          "NOT_A_BUSINESS_SUCCESS_RESULT",
+          "NOT_A_CANCELLATION_RESULT"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "path": { "type": "string", "pattern": "^(contracts|docs|packages|power-platform|schemas|tests|tools)/[A-Za-z0-9._/-]+$" },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "manifestPath", "manifestSha256", "bindingPath", "bindingSha256"],
+      "properties": {
+        "id": { "const": "pansphaira.readonly-canvas-workbench" },
+        "version": { "const": "1.0.0" },
+        "manifestPath": { "const": "power-platform/readonly-canvas-workbench/manifest.json" },
+        "manifestSha256": { "$ref": "#/$defs/digest" },
+        "bindingPath": { "const": "power-platform/readonly-canvas-workbench/connector-binding.json" },
+        "bindingSha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "artifactPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9:.-]+$" },
+        "version": { "$ref": "#/$defs/version" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "policyPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "generation", "generationReason", "digest"],
+      "properties": {
+        "id": { "const": "policy:synthetic-safe-guided" },
+        "version": { "const": "1.0.0" },
+        "generation": { "type": ["integer", "null"] },
+        "generationReason": { "const": "The capability policy v1 export is version-and-digest bound and does not export a numeric policyGeneration." },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "tuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component", "schema", "policy", "candidateTupleDigest", "lkgTupleDigest"],
+      "properties": {
+        "component": { "$ref": "#/$defs/artifactPin" },
+        "schema": { "$ref": "#/$defs/artifactPin" },
+        "policy": { "$ref": "#/$defs/policyPin" },
+        "candidateTupleDigest": { "$ref": "#/$defs/digest" },
+        "lkgTupleDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "resetContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowedOperationKinds", "uninstall", "preTupleFields", "postTupleFields", "readbackFields", "receiptFields", "recoveryRules"],
+      "properties": {
+        "allowedOperationKinds": { "const": ["RESET_TO_LKG", "NO_IMPORT_CHECK"] },
+        "uninstall": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "command", "tenantContactAllowed", "attempted", "requiredObservation"],
+          "properties": {
+            "applicability": { "const": "NOT_APPLICABLE_NO_IMPORT_PERFORMED" },
+            "command": { "type": "null" },
+            "tenantContactAllowed": { "const": false },
+            "attempted": { "const": false },
+            "requiredObservation": { "const": "NO_IMPORT_STATE_IDEMPOTENTLY_CLEAN" }
+          }
+        },
+        "preTupleFields": { "const": ["schemaVersion", "environmentClass", "packageId", "packageVersion", "manifestSha256", "bindingSha256", "policyId", "policyVersion", "policyGeneration", "policyDigest", "tupleDigest", "ownedInventoryDigest"] },
+        "postTupleFields": { "const": ["schemaVersion", "environmentClass", "packageId", "packageVersion", "manifestSha256", "bindingSha256", "policyId", "policyVersion", "policyGeneration", "policyDigest", "tupleDigest", "ownedInventoryDigest"] },
+        "readbackFields": { "const": ["schemaVersion", "source", "operationId", "requestDigest", "preTupleDigest", "postTupleDigest", "status", "outcome", "ownedResidueCount", "ownedResidueProjectionDigest", "inventoryDigest", "effectCount", "observedAt"] },
+        "receiptFields": { "const": ["schemaVersion", "issuer", "operationId", "requestDigest", "readbackDigest", "fullTupleDigest", "outcome", "receiptDigest", "issuedAt"] },
+        "recoveryRules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["authorizedModes", "cancellationMode", "freshAuthorizationRequired", "newOperationRequired", "newReadbackRequired", "newReceiptRequired"],
+          "properties": {
+            "authorizedModes": { "const": ["AUTHORIZED_ROLLBACK", "AUTHORIZED_COMPENSATION"] },
+            "cancellationMode": { "const": "CANCELLATION" },
+            "freshAuthorizationRequired": { "const": true },
+            "newOperationRequired": { "const": true },
+            "newReadbackRequired": { "const": true },
+            "newReceiptRequired": { "const": true }
+          }
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "targetTupleDigest", "targetVersion", "independentTrustedContextRequired", "partialRollbackAllowed", "latestVersionFallbackAllowed"],
+      "properties": {
+        "target": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+        "targetTupleDigest": { "$ref": "#/$defs/digest" },
+        "targetVersion": { "const": "1.0.0" },
+        "independentTrustedContextRequired": { "const": true },
+        "partialRollbackAllowed": { "const": false },
+        "latestVersionFallbackAllowed": { "const": false }
+      }
+    },
+    "negativeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case", "outcome", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": {
+        "case": { "enum": ["UNKNOWN_OWNED_OBJECT", "LEFTOVER_CONNECTOR_BINDING", "LEFTOVER_FLOW", "LEFTOVER_POLICY_REFERENCE", "LEDGER_MUTATION", "TUPLE_MISMATCH", "MISSING_READBACK", "INFERRED_CANCELLATION", "MISSING_NEW_RECOVERY_EVIDENCE"] },
+        "outcome": { "const": "DENY" },
+        "reasonCode": { "enum": ["UNKNOWN_OWNED_OBJECT_DENIED", "LEFTOVER_CONNECTOR_BINDING_DENIED", "LEFTOVER_FLOW_DENIED", "LEFTOVER_POLICY_REFERENCE_DENIED", "LEDGER_MUTATION_DENIED", "TUPLE_MISMATCH_DENIED", "MISSING_READBACK_DENIED", "CANCELLATION_INFERRED_DENIED", "NEW_RECEIPT_READBACK_REQUIRED_DENIED"] },
+        "effectCount": { "const": 0 },
+        "evidenceRef": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ref", "sha256"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "ref": { "$ref": "#/$defs/path" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/enterprise-profile-evidence/v1",
+  "packetKind": "SYNTHETIC_ENTERPRISE_PROFILE_EVIDENCE",
+  "packetStatus": "CANDIDATE_ONLY",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "policy": { "id": "synthetic-enterprise-profile-policy", "version": "1.0.0", "generation": 17, "digest": "1111111111111111111111111111111111111111111111111111111111111111", "status": "ACTIVE" },
+  "components": {
+    "alm": { "id": "synthetic-alm-package", "version": "2.3.0", "digest": "2222222222222222222222222222222222222222222222222222222222222222" },
+    "compatibility": { "id": "synthetic-compatibility-profile", "version": "1.1.0", "digest": "3333333333333333333333333333333333333333333333333333333333333333" },
+    "delegatedIdentitySecurity": { "id": "synthetic-delegated-identity-security", "version": "1.0.0", "digest": "4444444444444444444444444444444444444444444444444444444444444444" },
+    "observabilityDr": { "id": "synthetic-observability-dr", "version": "1.0.0", "digest": "5555555555555555555555555555555555555555555555555555555555555555" },
+    "receipts": { "id": "synthetic-authoritative-receipts", "version": "1.0.0", "digest": "6666666666666666666666666666666666666666666666666666666666666666" }
+  },
+  "fullTuple": {
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "policy": { "id": "synthetic-enterprise-profile-policy", "version": "1.0.0", "generation": 17, "digest": "1111111111111111111111111111111111111111111111111111111111111111", "status": "ACTIVE" },
+    "components": {
+      "alm": { "id": "synthetic-alm-package", "version": "2.3.0", "digest": "2222222222222222222222222222222222222222222222222222222222222222" },
+      "compatibility": { "id": "synthetic-compatibility-profile", "version": "1.1.0", "digest": "3333333333333333333333333333333333333333333333333333333333333333" },
+      "delegatedIdentitySecurity": { "id": "synthetic-delegated-identity-security", "version": "1.0.0", "digest": "4444444444444444444444444444444444444444444444444444444444444444" },
+      "observabilityDr": { "id": "synthetic-observability-dr", "version": "1.0.0", "digest": "5555555555555555555555555555555555555555555555555555555555555555" },
+      "receipts": { "id": "synthetic-authoritative-receipts", "version": "1.0.0", "digest": "6666666666666666666666666666666666666666666666666666666666666666" }
+    },
+    "digest": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3"
+  },
+  "lkg": { "version": "1.0.0", "status": "LKG", "revocationState": "UNREVOKED", "fullTupleDigest": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "evidenceRef": "evidence-008" },
+  "alm": { "status": "VALIDATED_LOCAL_SYNTHETIC", "artifact": { "id": "synthetic-alm-package", "version": "2.3.0", "digest": "2222222222222222222222222222222222222222222222222222222222222222" }, "evidenceRefs": ["evidence-001"] },
+  "compatibility": { "status": "VALIDATED_LOCAL_SYNTHETIC", "artifact": { "id": "synthetic-compatibility-profile", "version": "1.1.0", "digest": "3333333333333333333333333333333333333333333333333333333333333333" }, "evidenceRefs": ["evidence-002"] },
+  "delegatedIdentitySecurity": { "status": "VALIDATED_LOCAL_SYNTHETIC", "artifact": { "id": "synthetic-delegated-identity-security", "version": "1.0.0", "digest": "4444444444444444444444444444444444444444444444444444444444444444" }, "evidenceRefs": ["evidence-003"] },
+  "observabilityDr": { "status": "VALIDATED_LOCAL_SYNTHETIC", "artifact": { "id": "synthetic-observability-dr", "version": "1.0.0", "digest": "5555555555555555555555555555555555555555555555555555555555555555" }, "evidenceRefs": ["evidence-004"] },
+  "receipts": { "status": "VALIDATED_LOCAL_SYNTHETIC", "artifact": { "id": "synthetic-authoritative-receipts", "version": "1.0.0", "digest": "6666666666666666666666666666666666666666666666666666666666666666" }, "evidenceRefs": ["evidence-005", "evidence-006"] },
+  "resetUninstall": {
+    "milestone": "CM-PP-003-ALM_PACKAGE",
+    "applicability": "APPLICABLE_SYNTHETIC_MILESTONE",
+    "reset": { "operation": "RESET_TO_EXACT_LKG", "command": "NO_COMMAND_EXECUTED_OFFLINE", "attempted": false, "targetTupleDigest": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3" },
+    "uninstall": { "operation": "UNINSTALL_SYNTHETIC_OWNED_RESOURCES", "command": "NO_COMMAND_EXECUTED_OFFLINE", "attempted": false, "postcondition": "ZERO_OWNED_RESIDUE", "ownedResidueCount": 0, "ownedResidueProjectionDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945" },
+    "readback": { "source": "LOCAL_SYNTHETIC_AUTHORITATIVE_READBACK", "operationId": "synthetic-operation-reset-uninstall", "status": "READ_CONFIRMED", "effectCount": 0, "targetTupleDigest": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3" },
+    "receipt": { "status": "ACCEPTED_READBACK_BOUND", "operationId": "synthetic-operation-reset-uninstall", "eventDigest": "9999999999999999999999999999999999999999999999999999999999999999", "readbackDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "receiptDigest": "5e0e7b3cc94ce61771a97064e474db540ba663b996d9dbeb99737791c0ee39e4", "evidenceRef": "evidence-005" }
+  },
+  "rollback": { "target": "EXACT_LKG_FULL_TUPLE_FROM_INDEPENDENT_TRUSTED_CONTEXT", "targetVersion": "1.0.0", "targetFullTupleDigest": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "authorization": "OWNER_ONLY_REQUIRED", "partialRollbackAllowed": false, "latestVersionFallbackAllowed": false, "evidenceRef": "evidence-008" },
+  "authorityBoundary": {
+    "authorities": { "proposer": "opaque-authority-proposer-001", "verifier": "opaque-authority-verifier-002", "importOwner": "opaque-authority-import-003", "executionOwner": "opaque-authority-execution-004", "publicationOwner": "opaque-authority-publication-005", "promotionOwner": "opaque-authority-promotion-006", "rollbackOwner": "opaque-authority-rollback-007" },
+    "capabilityBytesGrantAuthority": false, "packageGrantsAuthority": false, "noReleaseDecisionGrantsAuthority": false, "importExecutionAuthorized": false, "publicationAuthorized": false, "promotionAuthorized": false, "rollbackAuthorized": false, "unidentifiedAuthorityAllowed": false
+  },
+  "limitations": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_TENANT_VALIDATION", "NO_RUNTIME_VALIDATION", "NO_PRODUCTION_VALIDATION", "NO_EXTERNAL_CONFIGURATION", "NO_EXTERNAL_MUTATION", "NO_IMPORT_EXECUTION", "NO_PUBLICATION", "NO_PROMOTION", "OWNER_ONLY_NEXT_ACTIONS", "SYNTHETIC_EVIDENCE_ONLY"],
+  "negativeResults": [
+    { "case": "INCOMPLETE_EVIDENCE", "outcome": "DENY", "reasonCode": "INCOMPLETE_EVIDENCE_DENIED", "effectCount": 0, "evidenceRef": "evidence-001" },
+    { "case": "CROSS_TUPLE_MISMATCH", "outcome": "DENY", "reasonCode": "CROSS_TUPLE_MISMATCH_DENIED", "effectCount": 0, "evidenceRef": "evidence-002" },
+    { "case": "PRODUCTION_READINESS_ASSERTION", "outcome": "DENY", "reasonCode": "PRODUCTION_READINESS_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "UNIDENTIFIED_AUTHORITY", "outcome": "DENY", "reasonCode": "AUTHORITY_IDENTITY_DENIED", "effectCount": 0, "evidenceRef": "evidence-004" },
+    { "case": "OMITTED_LIMITATION", "outcome": "DENY", "reasonCode": "LIMITATION_MISSING_DENIED", "effectCount": 0, "evidenceRef": "evidence-005" },
+    { "case": "PUBLIC_UNSAFE_MATERIAL", "outcome": "DENY", "reasonCode": "PUBLIC_UNSAFE_MATERIAL_DENIED", "effectCount": 0, "evidenceRef": "evidence-006" },
+    { "case": "CAPABILITY_AS_AUTHORITY", "outcome": "DENY", "reasonCode": "CAPABILITY_BYTES_AUTHORITY_DENIED", "effectCount": 0, "evidenceRef": "evidence-007" },
+    { "case": "PACKAGE_AS_AUTHORITY", "outcome": "DENY", "reasonCode": "PACKAGE_AUTHORITY_DENIED", "effectCount": 0, "evidenceRef": "evidence-008" },
+    { "case": "NO_RELEASE_AS_AUTHORITY", "outcome": "DENY", "reasonCode": "NO_RELEASE_AUTHORITY_DENIED", "effectCount": 0, "evidenceRef": "evidence-001" },
+    { "case": "MISSING_RESET_RESIDUE_PROOF", "outcome": "DENY", "reasonCode": "ZERO_OWNED_RESIDUE_DENIED", "effectCount": 0, "evidenceRef": "evidence-002" },
+    { "case": "MISSING_POLICY_GENERATION", "outcome": "DENY", "reasonCode": "POLICY_GENERATION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "MISSING_ROLLBACK_TARGET", "outcome": "DENY", "reasonCode": "ROLLBACK_TARGET_DENIED", "effectCount": 0, "evidenceRef": "evidence-004" }
+  ],
+  "evidence": {
+    "bundleDigest": "a80b43e01fd0d2f4eae61678be576a2ea65a259f4341f5ca0de858f109f3dd04",
+    "refs": [
+      { "id": "evidence-001", "reference": "docs/development/azure-power-platform/enterprise-profile-evidence.schema.json", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "immutable": true, "policyGeneration": 17, "limitation": "LOCAL_SYNTHETIC_REPOSITORY_ONLY", "negativeResult": "INCOMPLETE_EVIDENCE_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-import" },
+      { "id": "evidence-002", "reference": "tools/azure-power-platform/validate-enterprise-profile-evidence.mjs", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "immutable": true, "policyGeneration": 17, "limitation": "NO_TENANT_VALIDATION", "negativeResult": "CROSS_TUPLE_MISMATCH_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-execution" },
+      { "id": "evidence-003", "reference": "tests/azure-power-platform/enterprise-profile-evidence.test.mjs", "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "immutable": true, "policyGeneration": 17, "limitation": "NO_RUNTIME_VALIDATION", "negativeResult": "PRODUCTION_READINESS_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-publication" },
+      { "id": "evidence-004", "reference": "tests/fixtures/azure-power-platform/enterprise-profile-valid.json", "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "immutable": true, "policyGeneration": 17, "limitation": "NO_PRODUCTION_VALIDATION", "negativeResult": "AUTHORITY_IDENTITY_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-promotion" },
+      { "id": "evidence-005", "reference": "docs/development/azure-power-platform/azpp-m1-tuple-ledger.schema.json", "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "immutable": true, "policyGeneration": 17, "limitation": "NO_EXTERNAL_CONFIGURATION", "negativeResult": "LIMITATION_MISSING_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-rollback" },
+      { "id": "evidence-006", "reference": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs", "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "immutable": true, "policyGeneration": 17, "limitation": "NO_EXTERNAL_MUTATION", "negativeResult": "PUBLIC_UNSAFE_MATERIAL_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-import" },
+      { "id": "evidence-007", "reference": "tools/azure-power-platform/verify-zero-residue.mjs", "digest": "1212121212121212121212121212121212121212121212121212121212121212", "immutable": true, "policyGeneration": 17, "limitation": "NO_IMPORT_EXECUTION", "negativeResult": "CAPABILITY_BYTES_AUTHORITY_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-execution" },
+      { "id": "evidence-008", "reference": "pull/15", "digest": "1313131313131313131313131313131313131313131313131313131313131313", "immutable": true, "policyGeneration": 17, "limitation": "SYNTHETIC_EVIDENCE_ONLY", "negativeResult": "PACKAGE_AUTHORITY_DENIED", "rollbackTarget": "77b44a04f2ed680d49251aeb796fae7715bbca6fbb655a18d4337cec028104d3", "ownerOnlyNextAction": "next-action-rollback" }
+    ]
+  },
+  "publicClosure": {
+    "planningArtifact": { "status": "LINKED", "reference": "docs/development/azure-power-platform/enterprise-profile-evidence.schema.json", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "planningPr": { "status": "LINKED", "reference": "pull/15", "digest": "1313131313131313131313131313131313131313131313131313131313131313" },
+    "implementationPrs": [
+      { "status": "LINKED", "reference": "pull/15", "digest": "1313131313131313131313131313131313131313131313131313131313131313" }
+    ],
+    "release": { "status": "NOT_RELEASED", "reference": null, "digest": null, "reason": "CANDIDATE_ONLY_NO_RELEASE" },
+    "publicReadback": { "status": "LINKED", "reference": "tests/azure-power-platform/enterprise-profile-evidence.test.mjs", "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" }
+  },
+  "nonValidatedClaims": [
+    { "claim": "TENANT_VALIDATION", "status": "ABSENT" }, { "claim": "RUNTIME_VALIDATION", "status": "ABSENT" }, { "claim": "PRODUCTION_VALIDATION", "status": "ABSENT" }, { "claim": "ENTERPRISE_READINESS", "status": "ABSENT" }, { "claim": "CLOUD_CONFIGURATION", "status": "ABSENT" }
+  ],
+  "nonClaims": ["NOT_TENANT_VALIDATED", "NOT_RUNTIME_VALIDATED", "NOT_PRODUCTION_VALIDATED", "NOT_ENTERPRISE_READY", "NOT_CLOUD_CONFIGURED", "NOT_IMPORT_AUTHORITY", "NOT_EXECUTION_AUTHORITY", "NOT_PUBLICATION_AUTHORITY", "NOT_PROMOTION_AUTHORITY", "NOT_RELEASED"],
+  "nextActions": [
+    { "id": "next-action-import", "action": "IMPORT", "ownerAuthority": "opaque-authority-import-003", "authorizationStatus": "OWNER_ONLY_REQUIRED", "effectCount": 0, "evidenceRef": "evidence-001" },
+    { "id": "next-action-execution", "action": "EXECUTION", "ownerAuthority": "opaque-authority-execution-004", "authorizationStatus": "OWNER_ONLY_REQUIRED", "effectCount": 0, "evidenceRef": "evidence-002" },
+    { "id": "next-action-publication", "action": "PUBLICATION", "ownerAuthority": "opaque-authority-publication-005", "authorizationStatus": "OWNER_ONLY_REQUIRED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "id": "next-action-promotion", "action": "PROMOTION", "ownerAuthority": "opaque-authority-promotion-006", "authorizationStatus": "OWNER_ONLY_REQUIRED", "effectCount": 0, "evidenceRef": "evidence-004" },
+    { "id": "next-action-rollback", "action": "ROLLBACK", "ownerAuthority": "opaque-authority-rollback-007", "authorizationStatus": "OWNER_ONLY_REQUIRED", "effectCount": 0, "evidenceRef": "evidence-005" }
+  ]
+}

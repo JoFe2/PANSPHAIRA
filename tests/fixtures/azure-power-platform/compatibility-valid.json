@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/compatibility-migration/v1",
+  "candidateKind": "SYNTHETIC_COMPATIBILITY_MIGRATION_CANDIDATE",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "sharedLifecycle": { "versioning": "SHARED_VERSIONING", "migration": "SHARED_MIGRATION", "revocation": "SHARED_REVOCATION", "compatibility": "SHARED_COMPATIBILITY", "accepted": "ACCEPTED", "lkg": "LKG" },
+  "admission": { "requestId": "synthetic-compatibility-admission-001", "issuedAt": "2026-08-28T08:00:00Z", "expiresAt": "2026-08-29T08:00:00Z", "replayState": "UNCONSUMED", "revocationState": "UNREVOKED", "proposer": "opaque-authority-proposer-001", "approver": "opaque-authority-approver-002", "action": "VALIDATE_COMPATIBILITY_MIGRATION" },
+  "surface": { "requestedAction": "VALIDATE_COMPATIBILITY_MIGRATION", "allowedActions": ["VALIDATE_COMPATIBILITY_MIGRATION"], "writeActions": [], "hiddenWritesAllowed": false, "externalMutation": false, "effectCount": 0 },
+  "tuple": {
+    "component": { "id": "synthetic-power-platform-component", "version": "1.1.0", "digest": "1111111111111111111111111111111111111111111111111111111111111111" },
+    "schema": { "id": "synthetic-compatibility-schema", "version": "1.0.0", "digest": "2222222222222222222222222222222222222222222222222222222222222222" },
+    "policy": { "id": "synthetic-compatibility-policy", "version": "1.0.0", "generation": 12, "digest": "3333333333333333333333333333333333333333333333333333333333333333" },
+    "evidenceDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+    "source": { "version": "1.0.0", "digest": "5555555555555555555555555555555555555555555555555555555555555555", "status": "ACCEPTED" },
+    "target": { "version": "1.1.0", "digest": "6666666666666666666666666666666666666666666666666666666666666666", "status": "ACCEPTED" },
+    "lkg": { "version": "1.0.0", "digest": "7777777777777777777777777777777777777777777777777777777777777777", "status": "LKG", "revocationState": "UNREVOKED" },
+    "tupleDigest": "da3e8e1b731a5ae80635b960eaae77cc16d755fe44d7303f298a05cf1867631d"
+  },
+  "migration": { "edgeId": "synthetic-power-platform-component-1.0.0-to-1.1.0", "fromVersion": "1.0.0", "toVersion": "1.1.0", "edgeDigest": "8888888888888888888888888888888888888888888888888888888888888888", "transition": "NO_OP_FORWARD_COMPATIBLE", "authority": "opaque-authority-migration-003", "reversible": true, "effectCount": 0 },
+  "compatibility": { "result": "COMPATIBLE", "componentVersion": "1.1.0", "schemaVersion": "1.0.0", "policyGeneration": 12, "evidenceDigest": "4444444444444444444444444444444444444444444444444444444444444444" },
+  "rollback": { "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT", "targetVersion": "1.0.0", "targetDigest": "7777777777777777777777777777777777777777777777777777777777777777", "targetStatus": "LKG", "targetRevocationState": "UNREVOKED", "partialRollbackAllowed": false, "latestVersionFallbackAllowed": false, "evidenceRefs": ["evidence-004", "evidence-005"] },
+  "limitations": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_SANDBOX_ACTION", "NO_EXTERNAL_MUTATION", "NO_HIDDEN_WRITES", "NO_SELF_APPROVAL", "EXACT_IMMUTABLE_VERSIONS_ONLY", "EXACT_LKG_ROLLBACK_ONLY", "SYNTHETIC_EVIDENCE_ONLY"],
+  "negativeResults": [
+    { "case": "UNKNOWN_SCHEMA", "outcome": "DENY", "reasonCode": "SCHEMA_VERSION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "UNKNOWN_FIELDS", "outcome": "DENY", "reasonCode": "UNKNOWN_FIELD_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "UNKNOWN_ACTION", "outcome": "DENY", "reasonCode": "UNKNOWN_ACTION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "HIDDEN_WRITE", "outcome": "DENY", "reasonCode": "HIDDEN_WRITE_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "SELF_APPROVAL", "outcome": "DENY", "reasonCode": "SELF_APPROVAL_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "DIGEST_DRIFT", "outcome": "DENY", "reasonCode": "DIGEST_DRIFT_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "REPLAY", "outcome": "DENY", "reasonCode": "REPLAY_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "EXPIRY", "outcome": "DENY", "reasonCode": "EXPIRY_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "REVOCATION", "outcome": "DENY", "reasonCode": "REVOCATION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "STALE_POLICY", "outcome": "DENY", "reasonCode": "STALE_POLICY_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "MISSING_MIGRATION_EDGE", "outcome": "DENY", "reasonCode": "MIGRATION_EDGE_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "INCOMPATIBLE_VERSION", "outcome": "DENY", "reasonCode": "INCOMPATIBLE_VERSION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "MUTABLE_LATEST_REFERENCE", "outcome": "DENY", "reasonCode": "MUTABLE_VERSION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "AUTHORITY_CHANGE", "outcome": "DENY", "reasonCode": "AUTHORITY_CHANGE_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "IRREVERSIBLE_TRANSITION", "outcome": "DENY", "reasonCode": "IRREVERSIBLE_TRANSITION_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" },
+    { "case": "MISSING_EXACT_ROLLBACK", "outcome": "DENY", "reasonCode": "ROLLBACK_TARGET_DENIED", "effectCount": 0, "evidenceRef": "evidence-003" }
+  ],
+  "evidence": { "bundleDigest": "9999999999999999999999999999999999999999999999999999999999999999", "refs": [
+    { "id": "evidence-001", "ref": "contracts/azure-power-platform/compatibility-migration.schema.json", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    { "id": "evidence-002", "ref": "tools/azure-power-platform/validate-compatibility-migration.mjs", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+    { "id": "evidence-003", "ref": "tests/azure-power-platform/compatibility-migration.test.mjs", "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+    { "id": "evidence-004", "ref": "tests/fixtures/azure-power-platform/compatibility-valid.json", "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" },
+    { "id": "evidence-005", "ref": "tests/fixtures/azure-power-platform/compatibility-revoked.json", "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" }
+  ] },
+  "nonClaims": ["NOT_A_SANDBOX_ACTION", "NOT_A_PROVIDER_AUTHORIZATION", "NOT_A_MIGRATION_EXECUTION", "NOT_A_BUSINESS_SUCCESS_RESULT"]
+}

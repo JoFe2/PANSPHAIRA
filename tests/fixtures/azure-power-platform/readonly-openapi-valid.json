@@ -1,0 +1,143 @@
+{
+  "tupleLedger": {
+    "schemaVersion": "pansphaira.power-platform/readonly-tuple-ledger/v1",
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "openApiSchemaSha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68",
+    "policyGeneration": null,
+    "policyDigest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89",
+    "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "evidenceRefs": [
+      "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json",
+      "packages/contracts/src/capability-catalogue.ts"
+    ]
+  },
+  "requests": {
+    "LIST_CAPABILITIES": {},
+    "SUBMIT_GOVERNED_QUERY": {
+      "schemaVersion": "pansphaira.power-platform/governed-read-reference/v1",
+      "action": "READ_RECORD",
+      "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "correlationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "idempotencyKeyDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "GET_OPERATION_STATUS": {
+      "operationId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "GET_READBACK": {
+      "operationId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "GET_RECEIPT": {
+      "operationId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  },
+  "responses": {
+    "LIST_CAPABILITIES": {
+      "schemaVersion": "pansphaira.power-platform/readonly-connector/v1",
+      "operationKey": "LIST_CAPABILITIES",
+      "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+      "capabilities": [
+        { "operationKey": "LIST_CAPABILITIES", "operationId": "ListCapabilities", "method": "GET", "path": "/v1/capabilities", "semantic": "DISCOVERY", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD", "READ_METADATA"] },
+        { "operationKey": "SUBMIT_GOVERNED_QUERY", "operationId": "SubmitGovernedQuery", "method": "POST", "path": "/v1/queries", "semantic": "LOGICAL_READ", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": true, "callerActions": ["READ_RECORD", "READ_METADATA"] },
+        { "operationKey": "GET_OPERATION_STATUS", "operationId": "GetOperationStatus", "method": "GET", "path": "/v1/operations/{operationId}", "semantic": "STATUS", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] },
+        { "operationKey": "GET_READBACK", "operationId": "GetReadback", "method": "GET", "path": "/v1/operations/{operationId}/readback", "semantic": "AUTHORITATIVE_READBACK", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] },
+        { "operationKey": "GET_RECEIPT", "operationId": "GetReceipt", "method": "GET", "path": "/v1/operations/{operationId}/receipt", "semantic": "BOUND_RECEIPT", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] }
+      ],
+      "callerActionAllowlist": ["READ_RECORD", "READ_METADATA"],
+      "governedMutationActionAllowlist": [],
+      "verificationTuple": {
+        "bundleSchemaVersion": "chimpmaera.verification/fabric-bundle/v1",
+        "subjectDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "planDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "evidenceBundleDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+        "verdictDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+        "readbackDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    },
+    "SUBMIT_GOVERNED_QUERY": {
+      "schemaVersion": "pansphaira.power-platform/readonly-connector/v1",
+      "operationKey": "SUBMIT_GOVERNED_QUERY",
+      "operationId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "status": "ACCEPTED",
+      "correlationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "idempotencyKeyDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "businessSuccess": false,
+      "verificationTuple": {
+        "bundleSchemaVersion": "chimpmaera.verification/fabric-bundle/v1",
+        "subjectDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "planDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "evidenceBundleDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+        "verdictDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+        "readbackDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    },
+    "GET_OPERATION_STATUS": {
+      "schemaVersion": "pansphaira.power-platform/readonly-connector/v1",
+      "operationKey": "GET_OPERATION_STATUS",
+      "operationId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "status": "ACCEPTED",
+      "reasonCodes": [],
+      "businessSuccess": false,
+      "verificationTuple": {
+        "bundleSchemaVersion": "chimpmaera.verification/fabric-bundle/v1",
+        "subjectDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "planDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "evidenceBundleDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+        "verdictDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+        "readbackDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    },
+    "GET_READBACK": {
+      "schemaVersion": "pansphaira.power-platform/readonly-connector/v1",
+      "operationKey": "GET_READBACK",
+      "operationId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "source": "PROVIDER_OR_TENANT_CONTROL_PLANE_READ_AFTER_EFFECT_NOT_REQUEST_ECHO",
+      "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "correlationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "effectCount": 0,
+      "outcome": "SUCCESS",
+      "verificationTuple": {
+        "bundleSchemaVersion": "chimpmaera.verification/fabric-bundle/v1",
+        "subjectDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "planDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "evidenceBundleDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+        "verdictDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+        "readbackDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    },
+    "GET_RECEIPT": {
+      "schemaVersion": "pansphaira.power-platform/readonly-connector/v1",
+      "operationKey": "GET_RECEIPT",
+      "operationId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "correlationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "idempotencyKeyDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "policyGeneration": null,
+      "policyGenerationReason": "The capability policy v1 export is version-and-digest bound and does not export a numeric policyGeneration.",
+      "catalogueSchemaVersion": "chimpmaera.security/capability-catalogue/v1",
+      "catalogueId": "chimpmaera.local/synthetic-actions",
+      "catalogueVersion": "1.0.0",
+      "catalogueDigest": "bb0060a254f450684bd17f6559d267d6f02d225c4c4d37479c3010c60d1b8427",
+      "policySchemaVersion": "chimpmaera.security/capability-policy-binding/v1",
+      "policyId": "policy:synthetic-safe-guided",
+      "policyVersion": "1.0.0",
+      "policyDigest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89",
+      "gatewayDecisionSchemaVersion": "chimpmaera.security/capability-gateway-decision/v1",
+      "brokerReceiptSchemaVersion": "chimpmaera.security/capability-broker-receipt/v1",
+      "brokerReceiptRequiredBindingFields": ["schemaVersion", "environmentClass", "fullTupleDigest", "catalogueVersion", "catalogueDigest", "actionId", "actionVersion", "actionDigest", "requestDigest", "proposalDigest", "decisionDigest", "policyGeneration", "policyDigest", "authorityLeaseDigest", "authorityExpiresAtDigest", "revocationObservationDigest", "replayKeyDigest", "providerObjectReferenceDigest", "readbackDigest", "effectCount", "outcome", "receiptDigest"],
+      "powerPlatformActionCompatibility": "INCOMPATIBLE_NO_POWER_PLATFORM_ACTION",
+      "powerPlatformMayInvokeCurrentActions": false,
+      "fullTupleDigest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "effectCount": 0,
+      "outcome": "BOUND",
+      "receiptDigest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "verificationTuple": {
+        "bundleSchemaVersion": "chimpmaera.verification/fabric-bundle/v1",
+        "subjectDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "planDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "evidenceBundleDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+        "verdictDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+        "readbackDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "pansphaira.power-platform/readonly-denial-matrix/v1",
+  "matrixId": "azure-power-platform-readonly-denials-01",
+  "contract": {
+    "id": "azure-power-platform-readonly-denial-matrix",
+    "version": "1.0.0",
+    "digest": "9999999999999999999999999999999999999999999999999999999999999999"
+  },
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "observedAt": "2026-08-09T10:30:00Z",
+  "selectedPolicy": {
+    "schemaVersion": "pansphaira.power-platform/policy-binding/v1",
+    "id": "power-platform-read-policy",
+    "version": "1.0.0",
+    "generation": 7,
+    "digest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "actionAllowlist": ["READ_RECORD", "READ_METADATA"]
+  },
+  "selectedAuthority": {
+    "schemaVersion": "pansphaira.power-platform/authority-binding/v1",
+    "id": "power-platform-read-authority",
+    "version": "1.0.0",
+    "digest": "4444444444444444444444444444444444444444444444444444444444444444",
+    "requester": "principal:synthetic-reader",
+    "approver": "principal:synthetic-approver",
+    "authorizationSource": "SELECTED_AUTHORITY_RECORD",
+    "capabilityBytesGrantAuthority": false,
+    "selfApprovalAllowed": false,
+    "notBefore": "2026-08-09T10:00:00Z",
+    "expiresAt": "2026-08-09T11:00:00Z",
+    "revocationStatus": "UNREVOKED"
+  },
+  "admissionBoundary": {
+    "schemaVersion": "pansphaira.power-platform/admission-projection/v1",
+    "id": "azure-power-platform-readonly-admission",
+    "version": "1.0.0",
+    "selectedPolicyId": "power-platform-read-policy",
+    "selectedAuthorityId": "power-platform-read-authority",
+    "allowedOperations": ["LIST_CAPABILITIES", "SUBMIT_GOVERNED_QUERY", "GET_OPERATION_STATUS", "GET_READBACK", "GET_RECEIPT"],
+    "allowedActions": ["READ_RECORD", "READ_METADATA"],
+    "requiredBindings": ["environmentClass", "policyGeneration", "policyDigest", "authorityDigest", "actionVersion", "actionDigest", "proposalDigest", "requestDigest", "evidenceDigest", "decisionDigest", "rollbackTarget"],
+    "errorSurface": {
+      "schemaVersion": "pansphaira.power-platform/error/v1",
+      "allowedReasonCodes": ["UNKNOWN_ACTION_DENIED", "UNKNOWN_FIELD_DENIED", "HIDDEN_WRITE_DENIED", "AUTHORITY_BINDING_DENIED", "APPROVAL_SAME_ACTOR_DENIED", "DIGEST_DRIFT_DENIED", "REPLAY_CONSUMED_DENIED", "AUTHORITY_EXPIRED_DENIED", "AUTHORITY_REVOKED_DENIED", "POLICY_STALE_DENIED"],
+      "allowedFields": ["schemaVersion", "code", "correlationDigest", "decisionDigest"]
+    },
+    "genericEscapeHatches": {
+      "genericAction": false,
+      "genericField": false,
+      "genericProxy": false,
+      "freeTextError": false,
+      "capabilityBytes": false
+    },
+    "zeroMutationOnDeny": true
+  },
+  "positive": {
+    "request": {
+      "schemaVersion": "pansphaira.power-platform/admission-request/v1",
+      "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+      "operationKey": "SUBMIT_GOVERNED_QUERY",
+      "action": "READ_RECORD",
+      "actionVersion": "1.0.0",
+      "actionDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "policyGeneration": 7,
+      "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "authorityId": "power-platform-read-authority",
+      "authorityVersion": "1.0.0",
+      "authorityDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "proposalDigest": "fa95b0f080f0ecaf5a47520197f8db53294c44825eff0925c84ca98818b90613",
+      "requestDigest": "ca0bc1106418e3f363ac728cce740e7768265a1b65a18d47cec184daeec45e6d",
+      "replayNonce": "pp-read:synthetic:0001",
+      "issuedAt": "2026-08-09T10:15:00Z",
+      "expiresAt": "2026-08-09T10:45:00Z",
+      "requester": "principal:synthetic-reader",
+      "approver": "principal:synthetic-approver",
+      "revocationStatus": "UNREVOKED",
+      "request": {
+        "resource": "synthetic.power-platform.record",
+        "operation": "READ",
+        "fields": ["id", "displayName"]
+      }
+    },
+    "outcome": "ALLOW",
+    "reasonCode": null,
+    "effectCount": 0,
+    "projection": {
+      "schemaVersion": "pansphaira.power-platform/admission-projection/v1",
+      "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+      "policyId": "power-platform-read-policy",
+      "policyVersion": "1.0.0",
+      "policyGeneration": 7,
+      "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "authorityId": "power-platform-read-authority",
+      "authorityVersion": "1.0.0",
+      "authorityDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "action": "READ_RECORD",
+      "actionVersion": "1.0.0",
+      "actionDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "proposalDigest": "fa95b0f080f0ecaf5a47520197f8db53294c44825eff0925c84ca98818b90613",
+      "requestDigest": "ca0bc1106418e3f363ac728cce740e7768265a1b65a18d47cec184daeec45e6d",
+      "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533",
+      "outcome": "ALLOW",
+      "reasonCode": null,
+      "effectCount": 0,
+      "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT"
+    },
+    "decisionDigest": "c9dbd8796f0ac479ee42714f1f6eab2be7f6c2ed992a5129033aa1dacf115ac0"
+  },
+  "negativeCases": [
+    { "id": "unknown-action", "probe": "UNKNOWN_ACTION", "expectedReason": "UNKNOWN_ACTION_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "unknown-field", "probe": "UNKNOWN_FIELD", "expectedReason": "UNKNOWN_FIELD_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "hidden-write", "probe": "HIDDEN_WRITE", "expectedReason": "HIDDEN_WRITE_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "self-approval", "probe": "SELF_APPROVAL", "expectedReason": "APPROVAL_SAME_ACTOR_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "digest-drift", "probe": "DIGEST_DRIFT", "expectedReason": "DIGEST_DRIFT_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "replay-nonce", "probe": "REPLAY_NONCE", "expectedReason": "REPLAY_CONSUMED_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "expiry", "probe": "EXPIRY", "expectedReason": "AUTHORITY_EXPIRED_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "revocation", "probe": "REVOCATION", "expectedReason": "AUTHORITY_REVOKED_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "stale-policy", "probe": "STALE_POLICY", "expectedReason": "POLICY_STALE_DENIED", "expectedOutcome": "DENY", "expectedEffectCount": 0, "evidenceRef": "negative-probes" }
+  ],
+  "negativeResults": [
+    { "id": "unknown-action", "probe": "UNKNOWN_ACTION", "outcome": "DENY", "reasonCode": "UNKNOWN_ACTION_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "unknown-field", "probe": "UNKNOWN_FIELD", "outcome": "DENY", "reasonCode": "UNKNOWN_FIELD_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "hidden-write", "probe": "HIDDEN_WRITE", "outcome": "DENY", "reasonCode": "HIDDEN_WRITE_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "self-approval", "probe": "SELF_APPROVAL", "outcome": "DENY", "reasonCode": "APPROVAL_SAME_ACTOR_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "digest-drift", "probe": "DIGEST_DRIFT", "outcome": "DENY", "reasonCode": "DIGEST_DRIFT_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "replay-nonce", "probe": "REPLAY_NONCE", "outcome": "DENY", "reasonCode": "REPLAY_CONSUMED_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "expiry", "probe": "EXPIRY", "outcome": "DENY", "reasonCode": "AUTHORITY_EXPIRED_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "revocation", "probe": "REVOCATION", "outcome": "DENY", "reasonCode": "AUTHORITY_REVOKED_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+    { "id": "stale-policy", "probe": "STALE_POLICY", "outcome": "DENY", "reasonCode": "POLICY_STALE_DENIED", "effectCount": 0, "policyGeneration": 7, "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533", "evidenceRef": "negative-probes", "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "targetStatus": "LKG",
+    "authorizationRequired": true,
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false
+  },
+  "limitations": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_PROVIDER_OR_TENANT_ACCESS", "NO_CREDENTIAL_USE", "NO_BUSINESS_WRITE", "NO_AUTHORITY_FROM_CAPABILITY_BYTES", "IN_MEMORY_REPLAY_PROBE_ONLY"],
+  "evidence": {
+    "schemaVersion": "pansphaira.power-platform/denial-evidence/v1",
+    "evidenceDigest": "42c73b328b2451f8044050f508c529e89c94a87a5091587ce5a93f1bb06c7533",
+    "refs": [
+      { "id": "negative-probes", "ref": "tests/azure-power-platform/readonly-denial-matrix.test.mjs", "digest": "e8eb5a2d9f59d13fbe4ed477e63023f866da43e59f3dabc7985855f9efe6f0e0" },
+      { "id": "matrix-schema", "ref": "contracts/azure-power-platform/readonly-denial-matrix.schema.json", "digest": "a81676c8777f5244889bd26b7900ce7d120c8d93284dd2d12cf0073d51dfc642" },
+      { "id": "reconciliation-evidence", "ref": "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json", "digest": "732ab2513546111ab496c63aa4b5e7595a87c7f28533e4f0491cd5c101acb6fa" }
+    ]
+  }
+}

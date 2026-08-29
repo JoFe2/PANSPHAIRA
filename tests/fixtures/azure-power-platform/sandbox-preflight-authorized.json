@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/sandbox-preflight-packet/v1",
+  "packetKind": "SYNTHETIC_SINGLE_TENANT_SANDBOX_PREFLIGHT",
+  "packetStatus": "SYNTHETIC_CANDIDATE",
+  "environmentClass": "SINGLE_TENANT_DISPOSABLE_SANDBOX",
+  "evidenceClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "authorization": {
+    "grantId": "synthetic-sandbox-grant-001",
+    "grantVersion": "1.0.0",
+    "grantDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+    "decision": "SIMULATED_ALLOW",
+    "scope": ["SINGLE_TENANT_DISPOSABLE_SANDBOX"],
+    "delegation": "DELEGATED_LEAST_PRIVILEGE",
+    "requesterRole": "SANDBOX_OPERATOR",
+    "ownerRole": "RESOURCE_OWNER",
+    "requiredOwnerAttestations": ["RESOURCE_OWNER", "POLICY_OWNER"],
+    "ownerAttestationRefs": ["owner-attestation", "policy-attestation"],
+    "requesterMayAttest": false,
+    "independentOwnerAttestationRequired": true,
+    "notAnApproval": true,
+    "source": "SYNTHETIC_FIXTURE_ONLY",
+    "issuedAt": "2026-08-28T08:00:00Z",
+    "expiresAt": "2026-08-29T08:00:00Z",
+    "grantState": "ACTIVE"
+  },
+  "capabilitySurface": {
+    "allowedOperations": ["LIST_CAPABILITIES", "SUBMIT_GOVERNED_QUERY", "GET_OPERATION_STATUS", "GET_READBACK", "GET_RECEIPT"],
+    "allowedActions": ["READ_RECORD", "READ_METADATA"],
+    "governedMutationActions": [],
+    "unknownActionsDenied": true,
+    "hiddenWritesAllowed": false,
+    "genericInvocationAllowed": false,
+    "writeTargets": []
+  },
+  "tuple": {
+    "component": {
+      "id": "synthetic-power-platform-read-capability",
+      "version": "1.0.0",
+      "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "schema": {
+      "id": "synthetic-sandbox-preflight-schema",
+      "version": "1.0.0",
+      "digest": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "policy": {
+      "id": "synthetic-sandbox-preflight-policy",
+      "version": "1.0.0",
+      "generation": 7,
+      "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "tupleDigest": "75c7f3aafc963539a08b45bc292415f5c3306bf1e4f5bbf68a4a05c3aff42839"
+  },
+  "preflight": {
+    "referenceTime": "2026-08-28T12:00:00Z",
+    "authenticationPerformed": false,
+    "cloudDiscoveryPerformed": false,
+    "externalMutationPerformed": false,
+    "consumptionState": "UNCONSUMED",
+    "checks": [
+      {"id": "AUTHORIZATION_PRESENT", "outcome": "PASS", "evidenceRef": "owner-attestation"},
+      {"id": "DELEGATED_LEAST_PRIVILEGE", "outcome": "PASS", "evidenceRef": "owner-attestation"},
+      {"id": "OWNER_ATTESTATIONS_REQUIRED", "outcome": "PASS", "evidenceRef": "policy-attestation"},
+      {"id": "ENVIRONMENT_CLASS_EXPLICIT", "outcome": "PASS", "evidenceRef": "focused-tests"},
+      {"id": "CAPABILITY_SURFACE_CLOSED", "outcome": "PASS", "evidenceRef": "focused-tests"},
+      {"id": "EXACT_TUPLE_PINNED", "outcome": "PASS", "evidenceRef": "focused-tests"},
+      {"id": "EVIDENCE_CURRENT", "outcome": "PASS", "evidenceRef": "focused-tests"},
+      {"id": "ROLLBACK_LKG_BOUND", "outcome": "PASS", "evidenceRef": "lkg-reference"}
+    ]
+  },
+  "limitations": [
+    "NO_TENANT_IDENTIFIERS",
+    "NO_SUBSCRIPTION_IDENTIFIERS",
+    "NO_ENVIRONMENT_IDENTIFIERS",
+    "NO_IDENTITY_IDENTIFIERS",
+    "NO_CREDENTIALS",
+    "NO_AUTHENTICATION",
+    "NO_CLOUD_DISCOVERY",
+    "NO_EXTERNAL_MUTATION",
+    "NO_PRODUCTION_CLAIM",
+    "SYNTHETIC_EVIDENCE_ONLY",
+    "OWNER_AUTHORIZATION_REQUIRED_AT_EXECUTION",
+    "READ_ONLY_CAPABILITY_SURFACE"
+  ],
+  "negativeResults": [
+    {"case": "UNKNOWN_FIELDS", "outcome": "DENY", "reasonCode": "UNKNOWN_FIELD_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "UNKNOWN_ACTIONS", "outcome": "DENY", "reasonCode": "UNKNOWN_ACTION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "HIDDEN_WRITES", "outcome": "DENY", "reasonCode": "HIDDEN_WRITE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "SELF_APPROVAL", "outcome": "DENY", "reasonCode": "APPROVAL_SAME_ACTOR_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "DIGEST_DRIFT", "outcome": "DENY", "reasonCode": "DIGEST_DRIFT_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "REPLAY", "outcome": "DENY", "reasonCode": "REPLAY_CONSUMED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "EXPIRY", "outcome": "DENY", "reasonCode": "AUTHORITY_EXPIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "REVOCATION", "outcome": "DENY", "reasonCode": "AUTHORITY_REVOKED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "STALE_POLICY", "outcome": "DENY", "reasonCode": "POLICY_STALE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "MISSING_AUTHORIZATION", "outcome": "DENY", "reasonCode": "MISSING_AUTHORIZATION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "WRONG_ENVIRONMENT_CLASS", "outcome": "DENY", "reasonCode": "WRONG_ENVIRONMENT_CLASS_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "PRIVATE_IDENTIFIER", "outcome": "DENY", "reasonCode": "PRIVATE_IDENTIFIER_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"},
+    {"case": "EXPIRED_EVIDENCE", "outcome": "DENY", "reasonCode": "EVIDENCE_EXPIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix"}
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_PREFLIGHT_TUPLE",
+    "targetTupleDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "targetVersion": "1.0.0",
+    "lkgReference": "lkg-reference",
+    "authorizationRequired": true,
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false,
+    "evidenceRefs": ["lkg-reference", "rollback-test"]
+  },
+  "evidence": {
+    "bundleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "refs": [
+      {"id": "packet-schema", "ref": "docs/development/azure-power-platform/sandbox-preflight-packet.schema.json", "digest": "6666666666666666666666666666666666666666666666666666666666666666", "validUntil": "2026-08-29T00:00:00Z"},
+      {"id": "offline-validator", "ref": "tools/azure-power-platform/validate-sandbox-preflight.mjs", "digest": "7777777777777777777777777777777777777777777777777777777777777777", "validUntil": "2026-08-29T00:00:00Z"},
+      {"id": "focused-tests", "ref": "tests/azure-power-platform/sandbox-preflight.test.mjs", "digest": "8888888888888888888888888888888888888888888888888888888888888888", "validUntil": "2026-08-29T00:00:00Z"},
+      {"id": "owner-attestation", "ref": "tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json", "digest": "9999999999999999999999999999999999999999999999999999999999999999", "validUntil": "2026-08-29T00:00:00Z"},
+      {"id": "policy-attestation", "ref": "tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json", "digest": "abababababababababababababababababababababababababababababababab", "validUntil": "2026-08-29T00:00:00Z"},
+      {"id": "negative-matrix", "ref": "tests/fixtures/azure-power-platform/sandbox-preflight-denied.json", "digest": "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc", "validUntil": "2026-08-29T00:00:00Z"},
+      {"id": "lkg-reference", "ref": "tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json", "digest": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd", "validUntil": "2026-08-29T00:00:00Z"},
+      {"id": "rollback-test", "ref": "tests/azure-power-platform/sandbox-preflight.test.mjs", "digest": "dededededededededededededededededededededededededededededededede", "validUntil": "2026-08-29T00:00:00Z"}
+    ]
+  },
+  "publicSafeProjection": {
+    "status": "READY",
+    "reasonCode": "SYNTHETIC_PREFLIGHT_READY",
+    "environmentClass": "SINGLE_TENANT_DISPOSABLE_SANDBOX",
+    "authorizationClaim": "NOT_AN_APPROVAL",
+    "authenticationPerformed": false,
+    "cloudDiscoveryPerformed": false,
+    "externalMutationPerformed": false,
+    "identifiersRedacted": true
+  },
+  "nonClaims": [
+    "NOT_AN_APPROVAL",
+    "NOT_A_TENANT_AUTHORIZATION",
+    "NOT_A_CLOUD_PREFLIGHT",
+    "NOT_A_PRODUCTION_READINESS_RESULT",
+    "NOT_A_BUSINESS_SUCCESS_RESULT"
+  ]
+}

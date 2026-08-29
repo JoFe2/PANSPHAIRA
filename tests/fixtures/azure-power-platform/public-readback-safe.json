@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/public-readback/v1",
+  "packetKind": "PUBLIC_SAFE_PLANNING_EVIDENCE",
+  "packetStatus": "CANDIDATE_ONLY",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "component": {
+    "id": "power-platform-read-connector",
+    "version": "1.0.0",
+    "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "schema": {
+    "id": "power-platform-read-connector-schema",
+    "version": "1.0.0",
+    "digest": "6db105c03ad1d0fac78e6c53ac9259d5cbad69197b20dd92f5a5188572f13db2"
+  },
+  "policy": {
+    "id": "power-platform-read-policy",
+    "version": "1.0.0",
+    "generation": 7,
+    "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "evidenceRefs": [
+    { "id": "historical-reconciliation", "reference": "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json", "digest": "732ab2513546111ab496c63aa4b5e7595a87c7f28533e4f0491cd5c101acb6fa" },
+    { "id": "connector-contract", "reference": "docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md", "digest": "bbf9260e76397248e3e97a7cca6417726b1bfc2e024d97066653f4a546388e19" },
+    { "id": "connector-schema", "reference": "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json", "digest": "6db105c03ad1d0fac78e6c53ac9259d5cbad69197b20dd92f5a5188572f13db2" },
+    { "id": "negative-matrix", "reference": "tests/azure-power-platform/readonly-denial-matrix.test.mjs", "digest": "e8eb5a2d9f59d13fbe4ed477e63023f866da43e59f3dabc7985855f9efe6f0e0" },
+    { "id": "rollback-lkg", "reference": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "cec24d8647ef1a9ce0f7ce5e3767524442300c2b7fa549328b3843624f800f19" }
+  ],
+  "limitations": [
+    "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "NO_TENANT_VALIDATION",
+    "NO_RUNTIME_VALIDATION",
+    "NO_PRODUCTION_VALIDATION",
+    "NO_EXTERNAL_CONFIGURATION",
+    "NO_EXTERNAL_MUTATION",
+    "NO_IMPORT_EXECUTION",
+    "NO_PUBLICATION",
+    "NO_PROMOTION",
+    "OWNER_ONLY_NEXT_ACTIONS",
+    "SYNTHETIC_EVIDENCE_ONLY"
+  ],
+  "negativeResults": [
+    { "case": "MISSING_COMPONENT_DIGEST", "outcome": "DENY", "reasonCode": "MISSING_COMPONENT_DIGEST_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "MUTABLE_VERSION", "outcome": "DENY", "reasonCode": "MUTABLE_VERSION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "PRIVATE_IDENTIFIER", "outcome": "DENY", "reasonCode": "PRIVATE_IDENTIFIER_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "UNKNOWN_FIELD", "outcome": "DENY", "reasonCode": "UNKNOWN_FIELD_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "POLICY_GENERATION_MISMATCH", "outcome": "DENY", "reasonCode": "POLICY_GENERATION_MISMATCH_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "REVOKED_LKG", "outcome": "DENY", "reasonCode": "LKG_REVOKED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "DIGEST_DRIFT", "outcome": "DENY", "reasonCode": "DIGEST_DRIFT_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" }
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "targetTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "targetStatus": "LKG",
+    "targetRevocationStatus": "UNREVOKED",
+    "authorization": "OWNER_ONLY_REQUIRED",
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false,
+    "evidenceRef": "rollback-lkg"
+  },
+  "historicalMilestone": {
+    "status": "RECONCILED_REPOSITORY_ONLY",
+    "limitation": "REPOSITORY_ONLY_NO_FUTURE_MILESTONE_CLAIM",
+    "planningReference": "docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md",
+    "pullRequest": { "number": 77, "reference": "pull/77", "state": "CLOSED", "merged": true },
+    "implementationCommit": { "sha": "5c4558bf94695e0766891347fbfa5ff2696f9842", "reference": "pull/77" },
+    "release": { "tag": "v0.2.0-poc.20260803.5", "targetCommit": "5c4558bf94695e0766891347fbfa5ff2696f9842", "reference": "release/v0.2.0-poc.20260803.5", "status": "RECONCILED_REPOSITORY_ONLY" }
+  },
+  "ownerReadbackPlaceholders": [
+    { "name": "planningPr", "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null, "requiredOwnerReadback": true },
+    { "name": "ci", "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null, "requiredOwnerReadback": true },
+    { "name": "merge", "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null, "requiredOwnerReadback": true },
+    { "name": "releaseDecision", "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null, "requiredOwnerReadback": true },
+    { "name": "release", "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null, "requiredOwnerReadback": true },
+    { "name": "publicReadback", "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null, "requiredOwnerReadback": true }
+  ]
+}

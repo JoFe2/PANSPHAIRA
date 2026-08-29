@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/alm-package-plan-negative-fixture/v1",
+  "fixtureKind": "DENIED",
+  "baseFixture": "tests/fixtures/azure-power-platform/alm-package-plan-valid.json",
+  "cases": [
+    { "caseId": "tenant-identifier", "expectedReasonCode": "PUBLIC_SAFE_MATERIAL_DENIED" },
+    { "caseId": "environment-identifier", "expectedReasonCode": "PUBLIC_SAFE_MATERIAL_DENIED" },
+    { "caseId": "credential", "expectedReasonCode": "PUBLIC_SAFE_MATERIAL_DENIED" },
+    { "caseId": "connection-string", "expectedReasonCode": "PUBLIC_SAFE_MATERIAL_DENIED" },
+    { "caseId": "reusable-secret-reference", "expectedReasonCode": "PUBLIC_SAFE_MATERIAL_DENIED" },
+    { "caseId": "production-class", "expectedReasonCode": "PRODUCTION_CLASS_DENIED" },
+    { "caseId": "implicit-import", "expectedReasonCode": "IMPLICIT_IMPORT_DENIED" },
+    { "caseId": "implicit-promotion", "expectedReasonCode": "IMPLICIT_PROMOTION_DENIED" },
+    { "caseId": "digest-drift", "expectedReasonCode": "PACKAGE_DIGEST_DRIFT_DENIED" },
+    { "caseId": "missing-lkg-target", "expectedReasonCode": "PLAN_SCHEMA_DENIED" },
+    { "caseId": "merged-authorities", "expectedReasonCode": "MERGED_AUTHORITIES_DENIED" },
+    { "caseId": "dataverse-as-ledger", "expectedReasonCode": "DATAVERSE_LEDGER_DENIED" },
+    { "caseId": "inferred-rollback-from-cancellation", "expectedReasonCode": "PLAN_SCHEMA_DENIED" },
+    { "caseId": "owned-residue", "expectedReasonCode": "PLAN_SCHEMA_DENIED" },
+    { "caseId": "active-transition", "expectedReasonCode": "PLAN_SCHEMA_DENIED" }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/contracts/azure-power-platform/readonly-denial-matrix.schema.json",
+  "title": "Azure Power Platform read-only denial matrix",
+  "description": "Closed synthetic admission evidence for the selected read-only Policy/Authority boundary.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "matrixId",
+    "contract",
+    "environmentClass",
+    "observedAt",
+    "selectedPolicy",
+    "selectedAuthority",
+    "admissionBoundary",
+    "positive",
+    "negativeCases",
+    "negativeResults",
+    "rollback",
+    "limitations",
+    "evidence"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.power-platform/readonly-denial-matrix/v1" },
+    "matrixId": { "const": "azure-power-platform-readonly-denials-01" },
+    "contract": { "$ref": "#/$defs/pin" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "observedAt": { "type": "string", "pattern": "^2026-08-09T(?:10|11):[0-5][0-9]:[0-5][0-9]Z$" },
+    "selectedPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "version", "generation", "digest", "actionAllowlist"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.power-platform/policy-binding/v1" },
+        "id": { "const": "power-platform-read-policy" },
+        "version": { "const": "1.0.0" },
+        "generation": { "const": 7 },
+        "digest": { "$ref": "#/$defs/digest" },
+        "actionAllowlist": {
+          "type": "array",
+          "items": { "enum": ["READ_RECORD", "READ_METADATA"] },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "selectedAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "version",
+        "digest",
+        "requester",
+        "approver",
+        "authorizationSource",
+        "capabilityBytesGrantAuthority",
+        "selfApprovalAllowed",
+        "notBefore",
+        "expiresAt",
+        "revocationStatus"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.power-platform/authority-binding/v1" },
+        "id": { "const": "power-platform-read-authority" },
+        "version": { "const": "1.0.0" },
+        "digest": { "$ref": "#/$defs/digest" },
+        "requester": { "const": "principal:synthetic-reader" },
+        "approver": { "const": "principal:synthetic-approver" },
+        "authorizationSource": { "const": "SELECTED_AUTHORITY_RECORD" },
+        "capabilityBytesGrantAuthority": { "const": false },
+        "selfApprovalAllowed": { "const": false },
+        "notBefore": { "type": "string", "pattern": "^2026-08-09T10:[0-5][0-9]:[0-5][0-9]Z$" },
+        "expiresAt": { "type": "string", "pattern": "^2026-08-09T11:[0-5][0-9]:[0-5][0-9]Z$" },
+        "revocationStatus": { "enum": ["UNREVOKED", "REVOKED"] }
+      }
+    },
+    "admissionBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "version",
+        "selectedPolicyId",
+        "selectedAuthorityId",
+        "allowedOperations",
+        "allowedActions",
+        "requiredBindings",
+        "errorSurface",
+        "genericEscapeHatches",
+        "zeroMutationOnDeny"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.power-platform/admission-projection/v1" },
+        "id": { "const": "azure-power-platform-readonly-admission" },
+        "version": { "const": "1.0.0" },
+        "selectedPolicyId": { "const": "power-platform-read-policy" },
+        "selectedAuthorityId": { "const": "power-platform-read-authority" },
+        "allowedOperations": {
+          "const": [
+            "LIST_CAPABILITIES",
+            "SUBMIT_GOVERNED_QUERY",
+            "GET_OPERATION_STATUS",
+            "GET_READBACK",
+            "GET_RECEIPT"
+          ]
+        },
+        "allowedActions": {
+          "const": ["READ_RECORD", "READ_METADATA"]
+        },
+        "requiredBindings": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "environmentClass",
+              "policyGeneration",
+              "policyDigest",
+              "authorityDigest",
+              "actionVersion",
+              "actionDigest",
+              "proposalDigest",
+              "requestDigest",
+              "evidenceDigest",
+              "decisionDigest",
+              "rollbackTarget"
+            ]
+          },
+          "minItems": 11,
+          "maxItems": 11,
+          "uniqueItems": true
+        },
+        "errorSurface": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schemaVersion", "allowedReasonCodes", "allowedFields"],
+          "properties": {
+            "schemaVersion": { "const": "pansphaira.power-platform/error/v1" },
+            "allowedReasonCodes": { "const": [
+              "UNKNOWN_ACTION_DENIED",
+              "UNKNOWN_FIELD_DENIED",
+              "HIDDEN_WRITE_DENIED",
+              "AUTHORITY_BINDING_DENIED",
+              "APPROVAL_SAME_ACTOR_DENIED",
+              "DIGEST_DRIFT_DENIED",
+              "REPLAY_CONSUMED_DENIED",
+              "AUTHORITY_EXPIRED_DENIED",
+              "AUTHORITY_REVOKED_DENIED",
+              "POLICY_STALE_DENIED"
+            ] },
+            "allowedFields": { "const": ["schemaVersion", "code", "correlationDigest", "decisionDigest"] }
+          }
+        },
+        "genericEscapeHatches": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["genericAction", "genericField", "genericProxy", "freeTextError", "capabilityBytes"],
+          "properties": {
+            "genericAction": { "const": false },
+            "genericField": { "const": false },
+            "genericProxy": { "const": false },
+            "freeTextError": { "const": false },
+            "capabilityBytes": { "const": false }
+          }
+        },
+        "zeroMutationOnDeny": { "const": true }
+      }
+    },
+    "positive": { "$ref": "#/$defs/requestResult" },
+    "negativeCases": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "probe", "expectedReason", "expectedOutcome", "expectedEffectCount", "evidenceRef"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "probe": {
+            "enum": [
+              "UNKNOWN_ACTION",
+              "UNKNOWN_FIELD",
+              "HIDDEN_WRITE",
+              "SELF_APPROVAL",
+              "DIGEST_DRIFT",
+              "REPLAY_NONCE",
+              "EXPIRY",
+              "REVOCATION",
+              "STALE_POLICY"
+            ]
+          },
+          "expectedReason": { "$ref": "#/$defs/reasonCode" },
+          "expectedOutcome": { "const": "DENY" },
+          "expectedEffectCount": { "const": 0 },
+          "evidenceRef": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+        }
+      }
+    },
+    "negativeResults": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": { "$ref": "#/$defs/negativeResult" }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "targetStatus", "authorizationRequired", "partialRollbackAllowed", "latestVersionFallbackAllowed"],
+      "properties": {
+        "target": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+        "targetStatus": { "const": "LKG" },
+        "authorizationRequired": { "const": true },
+        "partialRollbackAllowed": { "const": false },
+        "latestVersionFallbackAllowed": { "const": false }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "enum": [
+        "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+        "NO_PROVIDER_OR_TENANT_ACCESS",
+        "NO_CREDENTIAL_USE",
+        "NO_BUSINESS_WRITE",
+        "NO_AUTHORITY_FROM_CAPABILITY_BYTES",
+        "IN_MEMORY_REPLAY_PROBE_ONLY"
+      ] },
+      "minItems": 6,
+      "uniqueItems": true
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "evidenceDigest", "refs"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.power-platform/denial-evidence/v1" },
+        "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "refs": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "ref", "digest"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+              "ref": { "type": "string", "pattern": "^(contracts|docs|packages|tests)/[A-Za-z0-9._/-]+$" },
+              "digest": { "$ref": "#/$defs/digest" }
+            }
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "pin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "reasonCode": {
+      "enum": [
+        "UNKNOWN_ACTION_DENIED",
+        "UNKNOWN_FIELD_DENIED",
+        "HIDDEN_WRITE_DENIED",
+        "AUTHORITY_BINDING_DENIED",
+        "APPROVAL_SAME_ACTOR_DENIED",
+        "DIGEST_DRIFT_DENIED",
+        "REPLAY_CONSUMED_DENIED",
+        "AUTHORITY_EXPIRED_DENIED",
+        "AUTHORITY_REVOKED_DENIED",
+        "POLICY_STALE_DENIED"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "environmentClass",
+        "operationKey",
+        "action",
+        "actionVersion",
+        "actionDigest",
+        "policyGeneration",
+        "policyDigest",
+        "authorityId",
+        "authorityVersion",
+        "authorityDigest",
+        "proposalDigest",
+        "requestDigest",
+        "replayNonce",
+        "issuedAt",
+        "expiresAt",
+        "requester",
+        "approver",
+        "revocationStatus",
+        "request"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.power-platform/admission-request/v1" },
+        "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "operationKey": { "const": "SUBMIT_GOVERNED_QUERY" },
+        "action": { "type": "string" },
+        "actionVersion": { "const": "1.0.0" },
+        "actionDigest": { "$ref": "#/$defs/digest" },
+        "policyGeneration": { "type": "integer", "minimum": 0 },
+        "policyDigest": { "$ref": "#/$defs/digest" },
+        "authorityId": { "const": "power-platform-read-authority" },
+        "authorityVersion": { "const": "1.0.0" },
+        "authorityDigest": { "$ref": "#/$defs/digest" },
+        "proposalDigest": { "$ref": "#/$defs/digest" },
+        "requestDigest": { "$ref": "#/$defs/digest" },
+        "replayNonce": { "type": "string", "pattern": "^[a-z0-9:-]+$" },
+        "issuedAt": { "type": "string", "pattern": "^2026-08-09T10:[0-5][0-9]:[0-5][0-9]Z$" },
+        "expiresAt": { "type": "string", "pattern": "^2026-08-09T(?:10|11):[0-5][0-9]:[0-5][0-9]Z$" },
+        "requester": { "type": "string", "pattern": "^principal:[a-z0-9-]+$" },
+        "approver": { "type": "string", "pattern": "^principal:[a-z0-9-]+$" },
+        "revocationStatus": { "enum": ["UNREVOKED", "REVOKED"] },
+        "request": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["resource", "operation", "fields"],
+          "properties": {
+            "resource": { "const": "synthetic.power-platform.record" },
+            "operation": { "type": "string" },
+            "fields": { "type": "array", "items": { "enum": ["id", "displayName", "createdAt"] }, "minItems": 1, "uniqueItems": true }
+          }
+        }
+      }
+    },
+    "requestResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request", "outcome", "reasonCode", "effectCount", "projection", "decisionDigest"],
+      "properties": {
+        "request": { "$ref": "#/$defs/request" },
+        "outcome": { "const": "ALLOW" },
+        "reasonCode": { "const": null },
+        "effectCount": { "const": 0 },
+        "projection": { "$ref": "#/$defs/projection" },
+        "decisionDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "environmentClass",
+        "policyId",
+        "policyVersion",
+        "policyGeneration",
+        "policyDigest",
+        "authorityId",
+        "authorityVersion",
+        "authorityDigest",
+        "action",
+        "actionVersion",
+        "actionDigest",
+        "proposalDigest",
+        "requestDigest",
+        "evidenceDigest",
+        "outcome",
+        "reasonCode",
+        "effectCount",
+        "rollbackTarget"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.power-platform/admission-projection/v1" },
+        "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "policyId": { "const": "power-platform-read-policy" },
+        "policyVersion": { "const": "1.0.0" },
+        "policyGeneration": { "const": 7 },
+        "policyDigest": { "$ref": "#/$defs/digest" },
+        "authorityId": { "const": "power-platform-read-authority" },
+        "authorityVersion": { "const": "1.0.0" },
+        "authorityDigest": { "$ref": "#/$defs/digest" },
+        "action": { "enum": ["READ_RECORD", "READ_METADATA"] },
+        "actionVersion": { "const": "1.0.0" },
+        "actionDigest": { "$ref": "#/$defs/digest" },
+        "proposalDigest": { "$ref": "#/$defs/digest" },
+        "requestDigest": { "$ref": "#/$defs/digest" },
+        "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "outcome": { "enum": ["ALLOW", "DENY"] },
+        "reasonCode": { "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/reasonCode" }] },
+        "effectCount": { "const": 0 },
+        "rollbackTarget": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }
+      }
+    },
+    "negativeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "probe", "outcome", "reasonCode", "effectCount", "policyGeneration", "evidenceDigest", "evidenceRef", "rollbackTarget"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "probe": { "$ref": "#/$defs/probe" },
+        "outcome": { "const": "DENY" },
+        "reasonCode": { "$ref": "#/$defs/reasonCode" },
+        "effectCount": { "const": 0 },
+        "policyGeneration": { "const": 7 },
+        "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "evidenceRef": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "rollbackTarget": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }
+      }
+    },
+    "probe": {
+      "enum": [
+        "UNKNOWN_ACTION",
+        "UNKNOWN_FIELD",
+        "HIDDEN_WRITE",
+        "SELF_APPROVAL",
+        "DIGEST_DRIFT",
+        "REPLAY_NONCE",
+        "EXPIRY",
+        "REVOCATION",
+        "STALE_POLICY"
+      ]
+    }
+  }
+}

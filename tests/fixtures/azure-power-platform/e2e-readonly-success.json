@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/synthetic-e2e-fixture/v1",
+  "fixtureKind": "READONLY_SUCCESS",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "observedAt": "2026-08-28T08:00:00Z",
+  "sources": {
+    "readonlyEvidence": "tests/fixtures/azure-power-platform/readback-accepted.json",
+    "denialMatrix": "tests/fixtures/azure-power-platform/denials.json",
+    "laterLifecycle": "tests/fixtures/azure-power-platform/proposal-approved.json",
+    "resetEvidence": "tests/fixtures/azure-power-platform/zero-residue.json"
+  },
+  "expected": {
+    "outcome": "ALLOW",
+    "readbackStatus": "READ_CONFIRMED",
+    "receiptRequired": true,
+    "laterLifecycleState": "EXECUTION_REQUEST",
+    "providerCallPerformed": false,
+    "effectCount": 0,
+    "ownedResidueCount": 0
+  },
+  "limitations": [
+    "DRY_RUN_PROOF_ONLY",
+    "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "NO_NETWORK",
+    "NO_CREDENTIAL_USE",
+    "NO_TENANT_DISCOVERY",
+    "NO_POWER_PLATFORM_TOOLING",
+    "NO_PROVIDER_CALL",
+    "NO_BUSINESS_WRITE",
+    "NO_PRODUCTION_OR_SANDBOX_EVIDENCE_CLAIM"
+  ],
+  "negativeCases": [
+    "UNKNOWN_ACTION",
+    "UNKNOWN_FIELD",
+    "HIDDEN_WRITE",
+    "SELF_APPROVAL",
+    "DIGEST_DRIFT",
+    "REPLAY_NONCE",
+    "EXPIRY",
+    "REVOCATION",
+    "STALE_POLICY",
+    "MISSING_READBACK",
+    "RECEIPT_TAMPER",
+    "STALE_TUPLE",
+    "GENERIC_ESCAPE",
+    "UNAUTHORIZED_IMPORT_MARKER",
+    "NONZERO_RESIDUE"
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "authorizationRequired": true,
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false
+  },
+  "evidenceRefs": [
+    "contracts/azure-power-platform/readonly-connector.schema.json",
+    "contracts/azure-power-platform/readonly-connector.openapi.yaml",
+    "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+    "contracts/azure-power-platform/proposal-approval-execution.schema.json",
+    "docs/development/azure-power-platform/reset-uninstall-plan.schema.json",
+    "tests/azure-power-platform/readonly-openapi.test.mjs",
+    "tests/azure-power-platform/readonly-denial-matrix.test.mjs",
+    "tests/azure-power-platform/authoritative-readback-receipt.test.mjs",
+    "tests/azure-power-platform/proposal-approval-execution.test.mjs",
+    "tools/azure-power-platform/verify-zero-residue.mjs"
+  ]
+}

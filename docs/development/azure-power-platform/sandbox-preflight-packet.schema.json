@@ -1,0 +1,555 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/azure-power-platform/sandbox-preflight-packet.schema.json",
+  "title": "PanSphaira synthetic single-tenant sandbox preflight packet",
+  "description": "Closed, public-safe, offline evidence for explicit authorization preflight. This packet is synthetic and is not an approval, credential, tenant binding, cloud discovery result, or production readiness claim. The first root example is the bounded TERRA-PSAI32-SANDBOX-INTEGRATE-02 decision/integration receipt; it records repository evidence only and remains pending the authoritative pinned-Node and host-Docker gates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packetKind",
+    "packetStatus",
+    "environmentClass",
+    "evidenceClass",
+    "authorization",
+    "capabilitySurface",
+    "tuple",
+    "preflight",
+    "limitations",
+    "negativeResults",
+    "rollback",
+    "evidence",
+    "publicSafeProjection",
+    "nonClaims"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/sandbox-preflight-packet/v1" },
+    "packetKind": { "const": "SYNTHETIC_SINGLE_TENANT_SANDBOX_PREFLIGHT" },
+    "packetStatus": { "const": "SYNTHETIC_CANDIDATE" },
+    "environmentClass": { "const": "SINGLE_TENANT_DISPOSABLE_SANDBOX" },
+    "evidenceClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "authorization": { "$ref": "#/$defs/authorization" },
+    "capabilitySurface": { "$ref": "#/$defs/capabilitySurface" },
+    "tuple": { "$ref": "#/$defs/tuple" },
+    "preflight": { "$ref": "#/$defs/preflight" },
+    "limitations": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "NO_TENANT_IDENTIFIERS",
+          "NO_SUBSCRIPTION_IDENTIFIERS",
+          "NO_ENVIRONMENT_IDENTIFIERS",
+          "NO_IDENTITY_IDENTIFIERS",
+          "NO_CREDENTIALS",
+          "NO_AUTHENTICATION",
+          "NO_CLOUD_DISCOVERY",
+          "NO_EXTERNAL_MUTATION",
+          "NO_PRODUCTION_CLAIM",
+          "SYNTHETIC_EVIDENCE_ONLY",
+          "OWNER_AUTHORIZATION_REQUIRED_AT_EXECUTION",
+          "READ_ONLY_CAPABILITY_SURFACE"
+        ]
+      }
+    },
+    "negativeResults": {
+      "type": "array",
+      "minItems": 12,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/negativeResult" }
+    },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "publicSafeProjection": { "$ref": "#/$defs/publicSafeProjection" },
+    "nonClaims": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "NOT_AN_APPROVAL",
+          "NOT_A_TENANT_AUTHORIZATION",
+          "NOT_A_CLOUD_PREFLIGHT",
+          "NOT_A_PRODUCTION_READINESS_RESULT",
+          "NOT_A_BUSINESS_SUCCESS_RESULT"
+        ]
+      }
+    }
+  },
+  "examples": [
+    {
+      "schemaVersion": "pansphaira.azure-power-platform/sandbox-preflight-integration-receipt/v1",
+      "taskId": "TERRA-PSAI32-SANDBOX-INTEGRATE-02",
+      "receiptStatus": "EVIDENCE_RECORDED_PENDING_AUTHORITATIVE_HOST_GATE",
+      "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+      "preflightBinding": {
+        "environmentClass": "SINGLE_TENANT_DISPOSABLE_SANDBOX",
+        "component": {
+          "id": "synthetic-power-platform-read-capability",
+          "version": "1.0.0",
+          "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "schema": {
+          "id": "synthetic-sandbox-preflight-schema",
+          "version": "1.0.0",
+          "digest": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "policy": {
+          "id": "synthetic-sandbox-preflight-policy",
+          "version": "1.0.0",
+          "generation": 7,
+          "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "tupleDigest": "75c7f3aafc963539a08b45bc292415f5c3306bf1e4f5bbf68a4a05c3aff42839"
+      },
+      "acceptedOperation": {
+        "requiredSequence": ["SUBMIT_GOVERNED_QUERY", "GET_OPERATION_STATUS", "GET_READBACK", "GET_RECEIPT"],
+        "authoritativeReadbackSchemaVersion": "pansphaira.azure-power-platform/authoritative-readback-receipt/v1",
+        "boundReceiptSchemaVersion": "pansphaira.azure-power-platform/bound-receipt/v1",
+        "boundReceiptDigest": "7af5d23d5d310b41ff9b84b09570e49412bd424d673958cc0c6bcb6d9420c087",
+        "transportAcceptanceIsBusinessSuccess": false
+      },
+      "resetUninstall": {
+        "milestone": "CM-PP-002-READONLY_CANVAS_WORKBENCH",
+        "result": "ZERO_OWNED_RESIDUE_VERIFIED",
+        "package": {
+          "id": "pansphaira.readonly-canvas-workbench",
+          "version": "1.0.0",
+          "manifestSha256": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9",
+          "bindingSha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3"
+        },
+        "policyGeneration": null,
+        "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT"
+      },
+      "limitations": [
+        "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+        "NO_TENANT_IDENTIFIERS",
+        "NO_CREDENTIALS",
+        "NO_AUTHENTICATION",
+        "NO_CLOUD_DISCOVERY",
+        "NO_EXTERNAL_MUTATION",
+        "NO_PROVIDER_CALL",
+        "NO_PRODUCTION_CLAIM",
+        "OWNER_AUTHORIZATION_REQUIRED_AT_EXECUTION",
+        "AUTHORITATIVE_READBACK_REQUIRED"
+      ],
+      "negativeResults": [
+        "UNKNOWN_FIELD_DENIED",
+        "UNKNOWN_ACTION_DENIED",
+        "HIDDEN_WRITE_DENIED",
+        "APPROVAL_SAME_ACTOR_DENIED",
+        "DIGEST_DRIFT_DENIED",
+        "REPLAY_CONSUMED_DENIED",
+        "AUTHORITY_EXPIRED_DENIED",
+        "AUTHORITY_REVOKED_DENIED",
+        "POLICY_STALE_DENIED",
+        "MISSING_AUTHORIZATION_DENIED",
+        "WRONG_ENVIRONMENT_CLASS_DENIED",
+        "PRIVATE_IDENTIFIER_DENIED",
+        "EVIDENCE_EXPIRED_DENIED",
+        "MISSING_READBACK_DENIED",
+        "READBACK_TAMPERED_DENIED",
+        "RECEIPT_TAMPERED_DENIED",
+        "LEFTOVER_CONNECTOR_BINDING_DENIED"
+      ],
+      "evidenceRefs": [
+        {
+          "id": "preflight-authorized-fixture",
+          "ref": "tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json",
+          "sha256": "1eed9cbbdfc74c2d0a799692c874ac1a89262612f4a1be62f03f6d4a4b1c46eb"
+        },
+        {
+          "id": "preflight-negative-fixture",
+          "ref": "tests/fixtures/azure-power-platform/sandbox-preflight-denied.json",
+          "sha256": "26c64d39fd2f9b0aba725f618a9bbcfcd2b761efb0d7dd6989d26720f64e922b"
+        },
+        {
+          "id": "authoritative-readback-schema",
+          "ref": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+          "sha256": "20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8"
+        },
+        {
+          "id": "bound-readback-receipt",
+          "ref": "tests/fixtures/azure-power-platform/readback-accepted.json",
+          "sha256": "09f8799b2726d35e2c507bded10adad0fe91767996ddbd3ec9833a22c435cece"
+        },
+        {
+          "id": "readback-negative-fixture",
+          "ref": "tests/fixtures/azure-power-platform/readback-tampered.json",
+          "sha256": "f23c675501d56481f76b3948f5b2cb5a61ca911a78a37aefbe5012abbc4b3186"
+        },
+        {
+          "id": "reset-plan",
+          "ref": "docs/development/azure-power-platform/reset-uninstall-plan.schema.json",
+          "sha256": "47c764598a305367e677f5608a78dd36b501ce203f27b5699508977015cabf33"
+        },
+        {
+          "id": "zero-residue-fixture",
+          "ref": "tests/fixtures/azure-power-platform/zero-residue.json",
+          "sha256": "d98700ac4c12df278aec79c06863f5c28d111ac4cf6a2f2eb3f8045360ad9ab5"
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "integrationReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "taskId", "receiptStatus", "environmentClass", "preflightBinding", "acceptedOperation", "resetUninstall", "limitations", "negativeResults", "evidenceRefs"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/sandbox-preflight-integration-receipt/v1" },
+        "taskId": { "const": "TERRA-PSAI32-SANDBOX-INTEGRATE-02" },
+        "receiptStatus": { "const": "EVIDENCE_RECORDED_PENDING_AUTHORITATIVE_HOST_GATE" },
+        "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "preflightBinding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["environmentClass", "component", "schema", "policy", "tupleDigest"],
+          "properties": {
+            "environmentClass": { "const": "SINGLE_TENANT_DISPOSABLE_SANDBOX" },
+            "component": { "$ref": "#/$defs/pinnedArtifact" },
+            "schema": { "$ref": "#/$defs/pinnedArtifact" },
+            "policy": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "version", "generation", "digest"],
+              "properties": {
+                "id": { "const": "synthetic-sandbox-preflight-policy" },
+                "version": { "const": "1.0.0" },
+                "generation": { "const": 7 },
+                "digest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" }
+              }
+            },
+            "tupleDigest": { "const": "75c7f3aafc963539a08b45bc292415f5c3306bf1e4f5bbf68a4a05c3aff42839" }
+          }
+        },
+        "acceptedOperation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requiredSequence", "authoritativeReadbackSchemaVersion", "boundReceiptSchemaVersion", "boundReceiptDigest", "transportAcceptanceIsBusinessSuccess"],
+          "properties": {
+            "requiredSequence": { "const": ["SUBMIT_GOVERNED_QUERY", "GET_OPERATION_STATUS", "GET_READBACK", "GET_RECEIPT"] },
+            "authoritativeReadbackSchemaVersion": { "const": "pansphaira.azure-power-platform/authoritative-readback-receipt/v1" },
+            "boundReceiptSchemaVersion": { "const": "pansphaira.azure-power-platform/bound-receipt/v1" },
+            "boundReceiptDigest": { "const": "7af5d23d5d310b41ff9b84b09570e49412bd424d673958cc0c6bcb6d9420c087" },
+            "transportAcceptanceIsBusinessSuccess": { "const": false }
+          }
+        },
+        "resetUninstall": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["milestone", "result", "package", "policyGeneration", "rollbackTarget"],
+          "properties": {
+            "milestone": { "const": "CM-PP-002-READONLY_CANVAS_WORKBENCH" },
+            "result": { "const": "ZERO_OWNED_RESIDUE_VERIFIED" },
+            "package": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "version", "manifestSha256", "bindingSha256"],
+              "properties": {
+                "id": { "const": "pansphaira.readonly-canvas-workbench" },
+                "version": { "const": "1.0.0" },
+                "manifestSha256": { "const": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9" },
+                "bindingSha256": { "const": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3" }
+              }
+            },
+            "policyGeneration": { "const": null },
+            "rollbackTarget": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "const": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_TENANT_IDENTIFIERS", "NO_CREDENTIALS", "NO_AUTHENTICATION", "NO_CLOUD_DISCOVERY", "NO_EXTERNAL_MUTATION", "NO_PROVIDER_CALL", "NO_PRODUCTION_CLAIM", "OWNER_AUTHORIZATION_REQUIRED_AT_EXECUTION", "AUTHORITATIVE_READBACK_REQUIRED"]
+        },
+        "negativeResults": {
+          "type": "array",
+          "const": ["UNKNOWN_FIELD_DENIED", "UNKNOWN_ACTION_DENIED", "HIDDEN_WRITE_DENIED", "APPROVAL_SAME_ACTOR_DENIED", "DIGEST_DRIFT_DENIED", "REPLAY_CONSUMED_DENIED", "AUTHORITY_EXPIRED_DENIED", "AUTHORITY_REVOKED_DENIED", "POLICY_STALE_DENIED", "MISSING_AUTHORIZATION_DENIED", "WRONG_ENVIRONMENT_CLASS_DENIED", "PRIVATE_IDENTIFIER_DENIED", "EVIDENCE_EXPIRED_DENIED", "MISSING_READBACK_DENIED", "READBACK_TAMPERED_DENIED", "RECEIPT_TAMPERED_DENIED", "LEFTOVER_CONNECTOR_BINDING_DENIED"]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 7,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "ref", "sha256"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+              "ref": { "type": "string", "pattern": "^(contracts|docs|tests)/[A-Za-z0-9._/-]+$" },
+              "sha256": { "$ref": "#/$defs/digest" }
+            }
+          }
+        }
+      }
+    },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "immutableVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "syntheticReference": { "type": "string", "pattern": "^(docs|tools|tests)/[A-Za-z0-9._/-]+$" },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grantId",
+        "grantVersion",
+        "grantDigest",
+        "decision",
+        "scope",
+        "delegation",
+        "requesterRole",
+        "ownerRole",
+        "requiredOwnerAttestations",
+        "ownerAttestationRefs",
+        "requesterMayAttest",
+        "independentOwnerAttestationRequired",
+        "notAnApproval",
+        "source",
+        "issuedAt",
+        "expiresAt",
+        "grantState"
+      ],
+      "properties": {
+        "grantId": { "const": "synthetic-sandbox-grant-001" },
+        "grantVersion": { "const": "1.0.0" },
+        "grantDigest": { "$ref": "#/$defs/digest" },
+        "decision": { "const": "SIMULATED_ALLOW" },
+        "scope": { "const": ["SINGLE_TENANT_DISPOSABLE_SANDBOX"] },
+        "delegation": { "const": "DELEGATED_LEAST_PRIVILEGE" },
+        "requesterRole": { "const": "SANDBOX_OPERATOR" },
+        "ownerRole": { "const": "RESOURCE_OWNER" },
+        "requiredOwnerAttestations": {
+          "const": ["RESOURCE_OWNER", "POLICY_OWNER"]
+        },
+        "ownerAttestationRefs": {
+          "const": ["owner-attestation", "policy-attestation"]
+        },
+        "requesterMayAttest": { "const": false },
+        "independentOwnerAttestationRequired": { "const": true },
+        "notAnApproval": { "const": true },
+        "source": { "const": "SYNTHETIC_FIXTURE_ONLY" },
+        "issuedAt": { "const": "2026-08-28T08:00:00Z" },
+        "expiresAt": { "const": "2026-08-29T08:00:00Z" },
+        "grantState": { "const": "ACTIVE" }
+      }
+    },
+    "capabilitySurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedOperations",
+        "allowedActions",
+        "governedMutationActions",
+        "unknownActionsDenied",
+        "hiddenWritesAllowed",
+        "genericInvocationAllowed",
+        "writeTargets"
+      ],
+      "properties": {
+        "allowedOperations": {
+          "const": [
+            "LIST_CAPABILITIES",
+            "SUBMIT_GOVERNED_QUERY",
+            "GET_OPERATION_STATUS",
+            "GET_READBACK",
+            "GET_RECEIPT"
+          ]
+        },
+        "allowedActions": { "const": ["READ_RECORD", "READ_METADATA"] },
+        "governedMutationActions": { "const": [] },
+        "unknownActionsDenied": { "const": true },
+        "hiddenWritesAllowed": { "const": false },
+        "genericInvocationAllowed": { "const": false },
+        "writeTargets": { "const": [] }
+      }
+    },
+    "tuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component", "schema", "policy", "tupleDigest"],
+      "properties": {
+        "component": { "$ref": "#/$defs/pinnedArtifact" },
+        "schema": { "$ref": "#/$defs/pinnedArtifact" },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "version", "generation", "digest"],
+          "properties": {
+            "id": { "const": "synthetic-sandbox-preflight-policy" },
+            "version": { "const": "1.0.0" },
+            "generation": { "const": 7 },
+            "digest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "tupleDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "pinnedArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "version": { "const": "1.0.0" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "referenceTime",
+        "authenticationPerformed",
+        "cloudDiscoveryPerformed",
+        "externalMutationPerformed",
+        "consumptionState",
+        "checks"
+      ],
+      "properties": {
+        "referenceTime": { "const": "2026-08-28T12:00:00Z" },
+        "authenticationPerformed": { "const": false },
+        "cloudDiscoveryPerformed": { "const": false },
+        "externalMutationPerformed": { "const": false },
+        "consumptionState": { "enum": ["UNCONSUMED", "CONSUMED"] },
+        "checks": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/check" }
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "outcome", "evidenceRef"],
+      "properties": {
+        "id": {
+          "enum": [
+            "AUTHORIZATION_PRESENT",
+            "DELEGATED_LEAST_PRIVILEGE",
+            "OWNER_ATTESTATIONS_REQUIRED",
+            "ENVIRONMENT_CLASS_EXPLICIT",
+            "CAPABILITY_SURFACE_CLOSED",
+            "EXACT_TUPLE_PINNED",
+            "EVIDENCE_CURRENT",
+            "ROLLBACK_LKG_BOUND"
+          ]
+        },
+        "outcome": { "const": "PASS" },
+        "evidenceRef": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+      }
+    },
+    "negativeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case", "outcome", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": {
+        "case": {
+          "enum": [
+            "UNKNOWN_FIELDS",
+            "UNKNOWN_ACTIONS",
+            "HIDDEN_WRITES",
+            "SELF_APPROVAL",
+            "DIGEST_DRIFT",
+            "REPLAY",
+            "EXPIRY",
+            "REVOCATION",
+            "STALE_POLICY",
+            "MISSING_AUTHORIZATION",
+            "WRONG_ENVIRONMENT_CLASS",
+            "PRIVATE_IDENTIFIER",
+            "EXPIRED_EVIDENCE"
+          ]
+        },
+        "outcome": { "const": "DENY" },
+        "reasonCode": { "type": "string", "pattern": "^[A-Z_]+$" },
+        "effectCount": { "const": 0 },
+        "evidenceRef": { "const": "negative-matrix" }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "targetTupleDigest",
+        "targetVersion",
+        "lkgReference",
+        "authorizationRequired",
+        "partialRollbackAllowed",
+        "latestVersionFallbackAllowed",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "target": { "const": "EXACT_LKG_FULL_PREFLIGHT_TUPLE" },
+        "targetTupleDigest": { "$ref": "#/$defs/digest" },
+        "targetVersion": { "const": "1.0.0" },
+        "lkgReference": { "const": "lkg-reference" },
+        "authorizationRequired": { "const": true },
+        "partialRollbackAllowed": { "const": false },
+        "latestVersionFallbackAllowed": { "const": false },
+        "evidenceRefs": { "const": ["lkg-reference", "rollback-test"] }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundleDigest", "refs"],
+      "properties": {
+        "bundleDigest": { "$ref": "#/$defs/digest" },
+        "refs": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ref", "digest", "validUntil"],
+      "properties": {
+        "id": {
+          "enum": [
+            "packet-schema",
+            "offline-validator",
+            "focused-tests",
+            "owner-attestation",
+            "policy-attestation",
+            "negative-matrix",
+            "lkg-reference",
+            "rollback-test"
+          ]
+        },
+        "ref": { "$ref": "#/$defs/syntheticReference" },
+        "digest": { "$ref": "#/$defs/digest" },
+        "validUntil": { "const": "2026-08-29T00:00:00Z" }
+      }
+    },
+    "publicSafeProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reasonCode",
+        "environmentClass",
+        "authorizationClaim",
+        "authenticationPerformed",
+        "cloudDiscoveryPerformed",
+        "externalMutationPerformed",
+        "identifiersRedacted"
+      ],
+      "properties": {
+        "status": { "const": "READY" },
+        "reasonCode": { "const": "SYNTHETIC_PREFLIGHT_READY" },
+        "environmentClass": { "const": "SINGLE_TENANT_DISPOSABLE_SANDBOX" },
+        "authorizationClaim": { "const": "NOT_AN_APPROVAL" },
+        "authenticationPerformed": { "const": false },
+        "cloudDiscoveryPerformed": { "const": false },
+        "externalMutationPerformed": { "const": false },
+        "identifiersRedacted": { "const": true }
+      }
+    }
+  }
+}

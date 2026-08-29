@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/azure-power-platform/identity-security-profile.schema.json",
+  "title": "PanSphaira synthetic delegated least-privilege identity security profile",
+  "description": "Closed, offline-only synthetic evidence. It never discovers, authenticates to, or provisions a tenant.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "profileKind", "profileStatus", "environmentClass", "policy", "principals", "delegation", "capabilityDiscovery", "authorizationWaits", "validity", "limitations", "negativeResults", "rollback", "evidence", "publicEvidence", "nonClaims"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/identity-security-profile/v1" },
+    "profileKind": { "const": "SYNTHETIC_DELEGATED_LEAST_PRIVILEGE" },
+    "profileStatus": { "const": "SYNTHETIC_CANDIDATE" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "principals": { "$ref": "#/$defs/principals" },
+    "delegation": { "$ref": "#/$defs/delegation" },
+    "capabilityDiscovery": { "$ref": "#/$defs/capabilityDiscovery" },
+    "authorizationWaits": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "$ref": "#/$defs/authorizationWait" } },
+    "validity": { "$ref": "#/$defs/validity" },
+    "limitations": { "type": "array", "minItems": 8, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z_]+$" } },
+    "negativeResults": { "type": "array", "minItems": 18, "uniqueItems": true, "items": { "$ref": "#/$defs/negativeResult" } },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "publicEvidence": { "$ref": "#/$defs/publicEvidence" },
+    "nonClaims": { "type": "array", "minItems": 5, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z_]+$" } }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "opaquePrincipal": { "type": "string", "pattern": "^opaque-principal-[a-z]+-[0-9]{3}$" },
+    "anonymousReference": { "type": "string", "pattern": "^evidence-[0-9]{3}$" },
+    "policy": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "generation", "digest"],
+      "properties": { "id": { "const": "synthetic-delegated-identity-policy" }, "version": { "const": "1.0.0" }, "generation": { "const": 13 }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "principals": {
+      "type": "object", "additionalProperties": false,
+      "required": ["proposer", "approver", "executor", "verifier", "importer", "publisher", "rollback"],
+      "properties": {
+        "proposer": { "$ref": "#/$defs/opaquePrincipal" }, "approver": { "$ref": "#/$defs/opaquePrincipal" }, "executor": { "$ref": "#/$defs/opaquePrincipal" }, "verifier": { "$ref": "#/$defs/opaquePrincipal" }, "importer": { "$ref": "#/$defs/opaquePrincipal" }, "publisher": { "$ref": "#/$defs/opaquePrincipal" }, "rollback": { "$ref": "#/$defs/opaquePrincipal" }
+      }
+    },
+    "delegation": {
+      "type": "object", "additionalProperties": false, "required": ["model", "role", "scope", "providerCredentialsAllowed", "reusableSecretReferencesAllowed"],
+      "properties": { "model": { "const": "DELEGATED_LEAST_PRIVILEGE" }, "role": { "const": "CAPABILITY_DISCOVERY_READER" }, "scope": { "const": ["READ_ONLY_CAPABILITY_DISCOVERY"] }, "providerCredentialsAllowed": { "const": false }, "reusableSecretReferencesAllowed": { "const": false } }
+    },
+    "capabilityDiscovery": {
+      "type": "object", "additionalProperties": false, "required": ["operations", "actions", "unknownActionsDenied", "hiddenWritesAllowed", "genericInvocationAllowed", "writeActions", "capabilityDigest", "capabilityBytesAsAuthority"],
+      "properties": { "operations": { "const": ["DISCOVER_READONLY_CAPABILITIES"] }, "actions": { "const": ["READ_CAPABILITY_METADATA"] }, "unknownActionsDenied": { "const": true }, "hiddenWritesAllowed": { "const": false }, "genericInvocationAllowed": { "const": false }, "writeActions": { "const": [] }, "capabilityDigest": { "$ref": "#/$defs/digest" }, "capabilityBytesAsAuthority": { "const": false } }
+    },
+    "authorizationWait": {
+      "type": "object", "additionalProperties": false, "required": ["authorizationClass", "sourceState", "disposition", "ownerWaitRef", "laterThan"],
+      "properties": { "authorizationClass": { "enum": ["IDENTITY", "CONSENT", "DLP", "EXECUTION"] }, "sourceState": { "const": "UNAVAILABLE_OFFLINE" }, "disposition": { "const": "OWNER_ONLY_WAIT" }, "ownerWaitRef": { "$ref": "#/$defs/anonymousReference" }, "laterThan": { "const": "2026-08-28T12:00:00Z" } }
+    },
+    "validity": {
+      "type": "object", "additionalProperties": false, "required": ["referenceTime", "issuedAt", "expiresAt", "revocationState", "replayState"],
+      "properties": { "referenceTime": { "const": "2026-08-28T12:00:00Z" }, "issuedAt": { "const": "2026-08-28T08:00:00Z" }, "expiresAt": { "const": "2026-08-29T08:00:00Z" }, "revocationState": { "enum": ["ACTIVE", "REVOKED"] }, "replayState": { "enum": ["UNCONSUMED", "CONSUMED"] } }
+    },
+    "negativeResult": {
+      "type": "object", "additionalProperties": false, "required": ["case", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": { "case": { "type": "string", "pattern": "^[A-Z_]+$" }, "reasonCode": { "type": "string", "pattern": "^[A-Z_]+$" }, "effectCount": { "const": 0 }, "evidenceRef": { "$ref": "#/$defs/anonymousReference" } }
+    },
+    "rollback": {
+      "type": "object", "additionalProperties": false, "required": ["target", "targetVersion", "targetDigest", "disposition", "evidenceRefs"],
+      "properties": { "target": { "const": "EXACT_LKG_IDENTITY_SECURITY_PROFILE" }, "targetVersion": { "const": "1.0.0" }, "targetDigest": { "$ref": "#/$defs/digest" }, "disposition": { "const": "OWNER_ONLY_WAIT" }, "evidenceRefs": { "const": ["evidence-007"] } }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["bundleDigest", "refs"],
+      "properties": { "bundleDigest": { "$ref": "#/$defs/digest" }, "refs": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/evidenceRef" } } }
+    },
+    "evidenceRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "digest", "validUntil"],
+      "properties": { "id": { "$ref": "#/$defs/anonymousReference" }, "digest": { "$ref": "#/$defs/digest" }, "validUntil": { "const": "2026-08-29T00:00:00Z" } }
+    },
+    "publicEvidence": {
+      "type": "object", "additionalProperties": false, "required": ["redactionAllowlist", "record"],
+      "properties": {
+        "redactionAllowlist": { "const": ["environmentClass", "policy.generation", "policy.digest", "evidence.refs", "negativeResults"] },
+        "record": {
+          "type": "object", "additionalProperties": false, "required": ["environmentClass", "policy", "evidenceRefs", "negativeReasonCodes", "redacted"],
+          "properties": { "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" }, "policy": { "type": "object", "additionalProperties": false, "required": ["generation", "digest"], "properties": { "generation": { "const": 13 }, "digest": { "$ref": "#/$defs/digest" } } }, "evidenceRefs": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/anonymousReference" } }, "negativeReasonCodes": { "type": "array", "minItems": 18, "items": { "type": "string", "pattern": "^[A-Z_]+$" } }, "redacted": { "const": true } }
+        }
+      }
+    }
+  }
+}
