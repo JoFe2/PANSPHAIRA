@@ -1,9 +1,9 @@
 {
   "schemaVersion": "conveyor.decision-integration-receipt/v1",
   "receiptId": "terra-psai288-root-qs-01",
-  "taskId": "TERRA-PSAI288-ROOT-QS-01",
-  "recordStatus": "TECHNICALLY_COMPLETE_RUNTIME_UNVERIFIED",
-  "claimBoundary": "LOCAL_SYNTHETIC_DETERMINISTIC_CKS_08_RECONCILIATION_ONLY_NO_TELEMETRY_NO_RAW_CONTENT_NO_LIVE_SYSTEM_NO_PRODUCTION",
+  "taskId": "CLOSURE-PSAI288-INTEGRATE-CURRENT-MAIN-01",
+  "recordStatus": "LOCAL_INTEGRATION_COMPLETE_RUNTIME_UNVERIFIED",
+  "claimBoundary": "LOCAL_SYNTHETIC_DETERMINISTIC_CKS_08_CURRENT_PUBLIC_MAIN_INTEGRATION_RECORD_ONLY_NO_TELEMETRY_NO_RAW_CONTENT_NO_LIVE_SYSTEM_NO_PRODUCTION_NO_PUSH_NO_MERGE_NO_RELEASE",
   "processContext": {
     "operatingModel": "Operating Model v1.1",
     "priorDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
@@ -12,9 +12,45 @@
   },
   "baseline": {
     "repository": "JoFe2/PANSPHAIRA",
-    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
-    "reconciledHead": "6d17a1289245a4d9671c447e92a1ea2fb36b0999",
+    "publicMainRef": "origin/main",
+    "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "localMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "acceptedCandidateHead": "31bbe05cbb70bbf6534ce8e1b4da40f7bbb1616c",
+    "integrationParentHead": "6f760538ca90cd257cbeaed0b6ef6a521fa4cc66",
     "writablePathAllowlist": ["docs/evidence/conveyor/terra-psai288-root-qs-01.json"]
+  },
+  "currentMainIntegration": {
+    "replayCommand": "git rebase main",
+    "replayOutcome": "CURRENT_BRANCH_ALREADY_REBASED_ON_CURRENT_PUBLIC_MAIN",
+    "publicMainReadbackCommand": "git ls-remote origin refs/heads/main",
+    "publicMainReadbackMatchedLocalMain": true,
+    "acceptedCandidateIsAncestorOfIntegrationParent": true,
+    "acceptedPackageCommitCount": 15,
+    "acceptedPackageHeads": [
+      "0e7dc09446a6083009ba6b77a5fc59bf4153f2bc",
+      "a077866205940c2a5ef4c55737acb38ab7ac4e22",
+      "008198186c0665737b7b6153ffa090c028575db1",
+      "b767c90445176c2655c31b539811376f359f1090",
+      "3c8d134e54bbb403e07e64941b905b4c9c121735",
+      "baaaccf8c5a361e6525e490e922bc9d17deb6fd1",
+      "8d93ce3471910d2840faa168801b10b0ad02b35c",
+      "86755227b17e18f08436b5bb6a11dd239d2fdf5c",
+      "096dcbbd930b0556a60088e034e1ac7b013cdc97",
+      "6d17a1289245a4d9671c447e92a1ea2fb36b0999",
+      "b5177d837f6b9d71966e5edeaf374a65e7faec5f",
+      "682bcfa499c422928531710fd265e253d3cbeabb",
+      "09c145fea8a4d483fbc3ed6ac7d428e7b386f3ce",
+      "31bbe05cbb70bbf6534ce8e1b4da40f7bbb1616c",
+      "6f760538ca90cd257cbeaed0b6ef6a521fa4cc66"
+    ],
+    "admissionRules": {
+      "missingHead": "DENY_AUTHORITATIVE_INTEGRATION",
+      "staleBase": "DENY_AUTHORITATIVE_INTEGRATION",
+      "conflictingReplay": "DENY_AUTHORITATIVE_INTEGRATION",
+      "unauthorizedHead": "DENY_AUTHORITATIVE_INTEGRATION",
+      "untestedHead": "DENY_AUTHORITATIVE_INTEGRATION"
+    },
+    "localIntegrationCommitRule": "The commit carrying this receipt must descend from integrationParentHead and retain acceptedCandidateHead as an ancestor; it is not an authoritative merge, release, or success attestation."
   },
   "decisionBinding": {
     "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
@@ -103,33 +139,38 @@
     "nonClaims": ["LIVE_SYSTEM", "TELEMETRY_COLLECTION", "MODEL_OR_PROVIDER", "PRODUCTION", "PUBLICATION", "SECURITY_CERTIFICATION"]
   },
   "verification": {
-    "staticIntegrity": { "status": "PASS", "checks": ["decision receipt canonical digest", "dry-run report digest", "source byte SHA-256 bindings"] },
-    "focusedTest": {
-      "command": "node --test tests/cks-08-lineage-dry-run.test.mjs",
-      "nodeVersion": "v24.19.0",
-      "status": "BLOCKED_INFRASTRUCTURE",
-      "exitCode": 133,
-      "signal": "SIGTRAP",
-      "failure": "V8 OS::SetPermissions errno assertion before test execution"
-    },
-    "dryRun": {
-      "command": "node scripts/run-cks-08-lineage-dry-run.mjs --fixture tests/fixtures/cks-08/e2e-positive-evidence-v1.json --dry-run",
-      "status": "BLOCKED_INFRASTRUCTURE",
-      "exitCode": 133,
-      "signal": "SIGTRAP",
-      "failure": "V8 OS::SetPermissions errno assertion before harness execution"
-    },
-    "requiredDiffCheck": {
-      "command": "git diff --check origin/main...HEAD",
-      "status": "PASS"
-    },
-    "controllerRequiredFollowUp": ["rerun focused test on pinned Node", "rerun dry-run on pinned Node", "run authoritative pinned-Node and host-Docker gates"]
+    "staticIntegrity": { "status": "PASS", "checks": ["decision receipt canonical digest", "dry-run report digest", "source byte SHA-256 bindings", "current public main readback", "accepted candidate ancestry", "conflict-free replay"] },
+    "canonicalRepositoryGates": [
+      {
+        "command": "npm run build --silent",
+        "status": "BLOCKED_INFRASTRUCTURE_BEFORE_PROGRAM_ENTRY",
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "failure": "V8 OS::SetPermissions errno assertion"
+      },
+      {
+        "command": "npm test",
+        "status": "BLOCKED_INFRASTRUCTURE_BEFORE_PROGRAM_ENTRY",
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "failure": "V8 OS::SetPermissions errno assertion"
+      },
+      {
+        "command": "git diff --check main...HEAD",
+        "status": "PASS",
+        "exitCode": 0
+      }
+    ],
+    "authoritativeIntegrationStatus": "BLOCKED_RUNTIME_UNVERIFIED",
+    "controllerRequiredFollowUp": ["rerun npm run build --silent on the authoritative pinned Node runtime", "rerun npm test on the authoritative pinned Node runtime", "run authoritative host-Docker gates before any merge decision"]
   },
   "integration": {
-    "productCodeChanged": false,
+    "productCodeChanged": true,
     "telemetryCollected": false,
     "externalStateMutated": false,
-    "successClaimRule": "Runtime success is not claimed while the required Node commands are blocked before execution; only the recorded static reconciliation and final diff check may be claimed."
+    "localIntegrationArtifactComplete": true,
+    "authoritativeMergeAuthorized": false,
+    "successClaimRule": "All accepted package heads are present on the current-main-descended local integration head, but missing, stale, conflicting, unauthorized, or runtime-untested heads deny authoritative integration. The two Node gates exited 133/SIGTRAP before program entry and are infrastructure evidence, not a product verdict or a passing test result."
   },
-  "receiptDigest": "e4ce2d30a27ddfd5c9507ede48644089f9283ddfdb54ca90894b2dc5992c60d8"
+  "receiptDigest": "fc34ae53fc099aa00dbfe8e48f524df3c30fd345d817a1cf156614e8c34d8038"
 }
