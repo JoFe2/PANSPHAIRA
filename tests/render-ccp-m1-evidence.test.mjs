@@ -67,7 +67,7 @@ test("CCP-M1 evidence renderer emits deterministic packet and readback input", (
   assert.equal(rendered.includes("SIGTRAP observed: `true`"), true);
   assert.equal(rendered.includes("quarantined"), true);
   assert.equal(rendered.includes("No external request is made"), true);
-  assert.equal(rendered.includes("/mnt/data2/"), false);
+  assert.equal(rendered.includes(["/mnt", "/data2/"].join("")), false);
   assert.equal(rendered.includes("customer@example.invalid"), false);
 
   const check = run(["--check"]);

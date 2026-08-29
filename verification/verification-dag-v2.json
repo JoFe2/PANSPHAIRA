@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 16,
+  "graphVersion": 17,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "11da6950cba7e210faba2bfc8529d6831008a13fcfe9325056dc455966a6b15a"
+          "sha256": "a133f204a9b51f11f184d78f2ca3fc29a2a7710c157172596dcba37b5d660064"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -314,7 +314,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "3735227463e097ebd71d140e2b460a48866762187cd3f6cdfa2e182c4e0a605a"
+          "sha256": "dc8bedd7899948726bf24a98ddd29f46ac276dc1d83e7430120b03eebfee495e"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "95908223db9b87b11b4ff5d930743b781c70e71f4c89d578c8937ca93d2a02aa"
+          "sha256": "8b948273d0a9ffa231c275df71b86da61e9257befba62dddea22dd005b528a73"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "f532c7f679ffabd374dd2dafb82ed414890293f99973c1eae8fc5f4fd731dbc1"
+          "sha256": "1398190be9ae3f43a691186899612edc77206a89d03c7f4ad0374f3ff56acdd0"
         },
         {
           "path": "package-lock.json",
@@ -1684,6 +1684,86 @@
         "Canonical zero and safe nonnegative timestamps and counts retain deterministic digest-bound profile behavior."
       ],
       "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ccp-m1-psai52-local-proof-v1",
+      "dependsOn": [
+        "ccp-m1-contribution-intake-ledger-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/ccp-intake-ledger.ts",
+          "role": "CONTRACT",
+          "sha256": "7fa9f9161b6b24b34d55cb2323a47591d6bf3270d62062415e512ab25512a6ee"
+        },
+        {
+          "path": "packages/contracts/src/ccp-fair-queue.ts",
+          "role": "CONTRACT",
+          "sha256": "d4fcc8a5cbd84d4e220bbe1a30475cf3401a9935b8dd090be2162c919a889707"
+        },
+        {
+          "path": "packages/contracts/src/ccp-component-train.ts",
+          "role": "CONTRACT",
+          "sha256": "6d37102ff15054df982ec214eb69b335c93c875fbfd7d0cd02d137e4412992eb"
+        },
+        {
+          "path": "packages/contracts/src/ccp-tuple-lock.ts",
+          "role": "CONTRACT",
+          "sha256": "47ac58cda70d25b67286e8d5f16f31af2e63c9a73d843453cba6b060c30b12e8"
+        },
+        {
+          "path": "packages/contracts/src/ccp-lkg-restore.ts",
+          "role": "CONTRACT",
+          "sha256": "302462282dbd59f2ccff0701e7a3f58c7eba969e952b8af9344101b7abd31cd8"
+        },
+        {
+          "path": "tests/ccp-intake-ledger.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "1df71f0eaf1713b72b87aab020b0de8836262f2b3de1fc58adfe5b5f96bb2431"
+        },
+        {
+          "path": "tests/ccp-fair-queue.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "e9369324fb74db591cfd0ae5546fedd919417b1baf851329532676d6706a492e"
+        },
+        {
+          "path": "tests/ccp-component-train.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "92c3e9f79aa2abfa6678fc85242b32677dff3f713627eb9d55f1fe689257cb13"
+        },
+        {
+          "path": "tests/ccp-tuple-lock.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "2381a1aca3db16447477c281e2a63570ca782418f544bfa768935470d1d0443b"
+        },
+        {
+          "path": "tests/ccp-lkg-restore.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "5616b7a7867eb7b2c6a67641c3e63128d36e4fcf84675b791af0c7cb60a383fb"
+        },
+        {
+          "path": "scripts/render-ccp-m1-evidence.mjs",
+          "role": "EVIDENCE_RENDERER",
+          "sha256": "f36d1a202edd5a535158093cea528ff037e6f4b8df2a3e985f62fc2bb160da6d"
+        },
+        {
+          "path": "tests/render-ccp-m1-evidence.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "fabf08c1c6ac98dc83684a82f7cf644c02168955961d6f726bf017f23fa97e29"
+        }
+      ],
+      "ownedTests": [
+        "npm test",
+        "node --test tests/render-ccp-m1-evidence.test.mjs",
+        "node scripts/render-ccp-m1-evidence.mjs --check"
+      ],
+      "invariants": [
+        "Agents and candidates cannot self-authorize merge or promotion.",
+        "Current heads, fairness, recovery and exact LKG behavior remain evidence-bound.",
+        "Public evidence is synthetic, redacted and bound to an exact reviewed product parent."
+      ],
+      "riskClass": "CRITICAL",
       "globalInvalidation": false
     }
   ]
