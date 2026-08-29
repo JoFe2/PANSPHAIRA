@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 17,
+  "graphVersion": 18,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a133f204a9b51f11f184d78f2ca3fc29a2a7710c157172596dcba37b5d660064"
+          "sha256": "25d8a803421bb87fca6052fc7b86a83e980ed93f9ca23eb13822890526339c86"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -314,7 +314,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "dc8bedd7899948726bf24a98ddd29f46ac276dc1d83e7430120b03eebfee495e"
+          "sha256": "ce8ed8d175088ba2e526970a33993b42b43ba838adc7544f4efacdf87b40eeb3"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "8b948273d0a9ffa231c275df71b86da61e9257befba62dddea22dd005b528a73"
+          "sha256": "cc777d7a8a8bd2da20f78adaadc1971464f90ef6b3c697ad5cc50d51048bbeec"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "1398190be9ae3f43a691186899612edc77206a89d03c7f4ad0374f3ff56acdd0"
+          "sha256": "89f36bb8ab6fd0a78a0ae6891f6dc54e78fb29e38314edbdf7e016e6c0156d02"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "726c9024db8d99a21189a6a78183b0c08ef172c5a39a7bd7d2756ad58f467f47"
+          "sha256": "ef59f539fa3bcaa58e5f8e858c9af3dd130974071cf40971e82ea519e80a706a"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "dc7b3432f958a9b012b550bc5aa792458c3f33d84fd364e8516b52b10f4e8350"
+          "sha256": "254b6bdb3aeafe90cd5d56b83d5f894e4070961ea8857476ce05ba9d499271db"
         }
       ],
       "ownedTests": [
@@ -1745,12 +1745,12 @@
         {
           "path": "scripts/render-ccp-m1-evidence.mjs",
           "role": "TOOLCHAIN",
-          "sha256": "2ec86cb2bae0396dd7bb055d38318cacb6136f7f19f28cd8ac8e1b627e7bbdfb"
+          "sha256": "93fd12c83b5258e678f0aaa0b09b903befa0663ba1123683ddf8313e9eee3641"
         },
         {
           "path": "tests/render-ccp-m1-evidence.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "fabf08c1c6ac98dc83684a82f7cf644c02168955961d6f726bf017f23fa97e29"
+          "sha256": "4e961c9ffb17baba51fced0d76c2ea900b474a77db0c4e74f1473af5aa98bb08"
         }
       ],
       "ownedTests": [
@@ -1762,6 +1762,113 @@
         "Agents and candidates cannot self-authorize merge or promotion.",
         "Current heads, fairness, recovery and exact LKG behavior remain evidence-bound.",
         "Public evidence is synthetic, redacted and bound to an exact reviewed product parent."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-01-foundational-contracts-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/COMPETENCE-KNOWLEDGE-CONTRACTS.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "909a5d8587328e7522cfabf2123f3706ed96fdf3beb1616a6f78ec687c3dd2ac"
+        },
+        {
+          "path": "packages/contracts/src/competence-knowledge-vocabulary.ts",
+          "role": "CONTRACT",
+          "sha256": "8282d87dad6001f8659568a2f41013e77f9d9b42cf2de49eab3c3c602ba8b6ae"
+        },
+        {
+          "path": "packages/contracts/src/cks-knowledge.ts",
+          "role": "CONTRACT",
+          "sha256": "74660ed8006df3f0a02b210863e293550bcba117f2e2b74d238d993d59da9a83"
+        },
+        {
+          "path": "packages/contracts/src/cks-evidence.ts",
+          "role": "CONTRACT",
+          "sha256": "b4696687ecca03a0877fd800718d9c81622ab7965627e02e3b39d51d61d3518b"
+        },
+        {
+          "path": "schemas/contracts/cks-vocabulary-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "19e03075963c06f13660bd16146acd0245cb4cbe3988d19fda28aeb211e87515"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-object-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "269549490a0dc32147472c6247979974ee27a50307497c9fb323e70551a0239a"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-query-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "d9c4b3e1654e867142651e67e6047f57eed184bea6f23b29e1e9989561ef7eff"
+        },
+        {
+          "path": "schemas/contracts/cks-applicability-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "3df6cc2053430e04b3a1e380a8b7276380edb3edc5b900c301cf961669af883d"
+        },
+        {
+          "path": "schemas/contracts/cks-evidence-pack-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "5a02f66e56c47fea70b1a196fc85a1e2cd735042aed96208e1f80a6b7229637a"
+        },
+        {
+          "path": "schemas/contracts/cks-evidence-coverage-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "346b98b23267faeb4489a3f032c4c89e7827663fc2c171447c81e01e2884af46"
+        },
+        {
+          "path": "tests/cks-vocabulary.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "21e844b86c02ef21ebd6e2d18efec7339d57ecdbc87b9c7cb76948a6a00627d6"
+        },
+        {
+          "path": "tests/cks-knowledge.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "3832c3784778b6b9b1d4f12053ee023a216881ef3a29196de2241b9e3dc600d4"
+        },
+        {
+          "path": "tests/cks-evidence.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "c9b2b0ce746275a3583c832de80f6ce967074c15032e48c22718d46f9c3d0d05"
+        },
+        {
+          "path": "tests/cks-integration.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "839bc3efb610dd6c2d7ccc9791ae42fa7e57de061ca516f1ba87d50e6f34ff83"
+        },
+        {
+          "path": "packages/contracts/src/cks-qualification.ts",
+          "role": "CONTRACT",
+          "sha256": "25f2a730199ff4e0f9af20bd13a6eb480d8084f313b5548467e9930f376719ca"
+        },
+        {
+          "path": "tests/cks-qualification.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "23dab3e96c45caa55e003ec24b619b3f62d47c9b284c7978ace71096ffed2429"
+        },
+        {
+          "path": "tests/cks-resource-admission.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "feed1b910837dfffb781193c4a7e5216c217eb0d382a82f6ae4c0f36579a31be"
+        },
+        {
+          "path": "tests/cks-shadow-evaluation.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "d37c2cba6b503e7a9ffc9c8acb3fb0e8c2110d42f3751c5c23d3663879c8daed"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks-contracts:test"
+      ],
+      "invariants": [
+        "Knowledge, maturity, qualification and R/K/P/U vocabularies remain orthogonal and closed.",
+        "Knowledge Object, Query, Applicability, Evidence Pack and Coverage reject drifted or unresolved identities.",
+        "The published CKS-06 exact qualification and escalation contracts are reused rather than duplicated.",
+        "Knowledge and evidence never grant capability, authority, routing or runtime activation."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.dev/schemas/contracts/cks-evidence-pack-v1.schema.json",
+  "title": "ChimpMaera CKS Evidence Pack binding v1",
+  "description": "Closed, authority-free bindings from material claims to exact CKS object, applicability, and Verification Fabric attestation digests. This record makes no truth, trust, execution, release, delivery, or authorization claim. Unknown versions require an explicit migration; v1 has no implicit migration path.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "packId", "object", "applicabilityDigest", "scopeNamespace", "claims", "evidence", "validity", "authority", "packDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.cks/evidence-pack/v1" },
+    "packId": { "$ref": "#/$defs/id" },
+    "object": { "$ref": "#/$defs/objectReference" },
+    "applicabilityDigest": { "$ref": "#/$defs/digest" },
+    "scopeNamespace": { "$ref": "#/$defs/text" },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 512,
+      "items": { "$ref": "#/$defs/evidenceEntry" }
+    },
+    "validity": { "$ref": "#/$defs/validity" },
+    "authority": { "$ref": "#/$defs/authority" },
+    "packDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "text": { "type": "string", "minLength": 1, "maxLength": 96, "pattern": "^[^\\u0000-\\u001f]+$" },
+    "timestamp": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "objectReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectId", "objectDigest"],
+      "properties": {
+        "objectId": { "$ref": "#/$defs/id" },
+        "objectDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claimId"],
+      "properties": { "claimId": { "$ref": "#/$defs/id" } }
+    },
+    "evidenceEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claimId", "attestationDigest", "attestedTest"],
+      "properties": {
+        "claimId": { "$ref": "#/$defs/id" },
+        "attestationDigest": { "$ref": "#/$defs/digest" },
+        "attestedTest": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^[^\\u0000-\\u001f]+$" },
+        "expiresAtMs": {
+          "$ref": "#/$defs/timestamp",
+          "description": "Optional v1 compatibility echo; runtime validation requires equality with the resolved Verification Fabric v2 attestation expiry. Freshness is never derived from this field."
+        }
+      }
+    },
+    "validity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["notBeforeMs", "notAfterMs"],
+      "properties": {
+        "notBeforeMs": { "$ref": "#/$defs/timestamp" },
+        "notAfterMs": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["credentials", "policyApprovals", "capabilities", "toolAccess", "writeTargets", "executionRoutes"],
+      "properties": {
+        "credentials": { "type": "array", "maxItems": 0 },
+        "policyApprovals": { "type": "array", "maxItems": 0 },
+        "capabilities": { "type": "array", "maxItems": 0 },
+        "toolAccess": { "type": "array", "maxItems": 0 },
+        "writeTargets": { "type": "array", "maxItems": 0 },
+        "executionRoutes": { "type": "array", "maxItems": 0 }
+      }
+    }
+  }
+}

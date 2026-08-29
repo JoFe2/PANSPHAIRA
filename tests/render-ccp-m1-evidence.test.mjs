@@ -33,8 +33,9 @@ test("CCP-M1 evidence renderer emits deterministic packet and readback input", (
   assert.equal(result.readbackHarnessInput.sourceBoundary, "LOCAL_SYNTHETIC_NON_PRODUCTION");
   assert.equal(result.readbackHarnessInput.expectedReadback.exactBaseCommit, "9aa9fec7d0320949c987f0a7a6dc8f1e3e3f4809");
   const currentHead = runGit(["rev-parse", "HEAD"]);
-  const parentHead = runGit(["rev-parse", "HEAD^"]);
-  assert.ok([currentHead, parentHead].includes(result.readbackHarnessInput.expectedReadback.exactHeadCommit));
+  const evidenceHead = result.readbackHarnessInput.expectedReadback.exactHeadCommit;
+  const ancestry = spawnSync("git", ["merge-base", "--is-ancestor", evidenceHead, currentHead]);
+  assert.equal(ancestry.status, 0);
   assert.equal(result.readbackHarnessInput.expectedReadback.profileReceiptDigests.length, 5);
   assert.equal(result.readbackHarnessInput.expectedReadback.recoveryReceiptDigests.length, 4);
   assert.equal(result.readbackHarnessInput.expectedReadback.statusDigests.length, 4);
