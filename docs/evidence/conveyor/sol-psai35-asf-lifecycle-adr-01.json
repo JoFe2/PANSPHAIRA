@@ -1,0 +1,1141 @@
+{
+  "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
+  "taskId": "SOL-PSAI35-ASF-LIFECYCLE-ADR-01",
+  "receiptType": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
+  "decisionId": "PSAI35-D-ASF-LIFECYCLE-001",
+  "decisionStatus": "RECORDED_NOT_IMPLEMENTED",
+  "receiptDigestAlgorithm": "SHA-256 over UTF-8 canonical JSON of this object with receiptDigest omitted, using the canonicalization freeze in this receipt",
+  "receiptDigest": "217c38d50533ac6906c8d5ecbc6aeca4365fa7f5aa73fbba3e3efb1cb5e88aec",
+  "base": {
+    "repository": "https://github.com/JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-35",
+    "headSha": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "treeSha": "f7d81474939d1898c305859526b34c0f545dcdf0",
+    "originMainSha": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "mergeBaseSha": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "commitTimestamp": "2026-08-26T12:13:06+02:00",
+    "sourceDateEpoch": 1787739186,
+    "worktreeAtRead": "CLEAN",
+    "freshReadRule": "All local bindings and digests in this receipt were read from this one HEAD; no alternate clone, workspace, remote mutation, fetch, merge, release, or product write was used."
+  },
+  "processContext": {
+    "operatingModel": "v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "provenance": "Controller-supplied mandatory context; this worker does not restate, replace, or reinterpret those decisions.",
+    "newProcessVariantCreated": false,
+    "scope": "Decision and integration receipt only; no product code, runtime configuration, service, credential, provider, CI authority, harness source, DSH_HOME, spill configuration, deployment, publication, or external state change is authorized."
+  },
+  "packageProfile": {
+    "name": "chimpmaera",
+    "version": "0.2.0-poc.20260810.5",
+    "packageJsonSha256": "2952706641b738f2d674b3c6575ab483948f04a4a69700a040740318b31b2ecf",
+    "moduleType": "module",
+    "nodeRange": ">=24.14.1 <25",
+    "npmRange": ">=11.11.0 <12",
+    "packageManager": "npm@11.16.0",
+    "contractBarrel": {
+      "path": "packages/contracts/src/index.ts",
+      "sha256": "308948aadc8b33a549505a4b9975da06f80010784a73870091fb94a112c3c8b8"
+    }
+  },
+  "externalIssueBindings": {
+    "projectionAlgorithm": "SHA-256 over UTF-8 canonical JSON; issue projection keys are body, closed_at, created_at, html_url, number, state, title, updated_at; comment projection is an ordered array with body, created_at, html_url, id, updated_at.",
+    "issues": [
+      {
+        "number": 3,
+        "title": "[AAS-012] Finite inactive capability/action catalogue",
+        "state": "closed",
+        "url": "https://github.com/JoFe2/PANSPHAIRA/issues/3",
+        "createdAt": "2026-08-01T11:10:24Z",
+        "updatedAt": "2026-08-09T10:33:47Z",
+        "closedAt": "2026-08-09T10:33:47Z",
+        "bodySha256": "a349b4d16f9b65247ea979ac3a995a4c13112a59876fd09c3800204dde7663df",
+        "canonicalProjectionSha256": "a9bd6e27f2dd11078541a509999cfa99025d76b070407284732dfde397f78dce",
+        "commentCount": 1,
+        "commentsCanonicalProjectionSha256": "0508d09e55d8e3aec0a3572271426e8eded2b60f1db023d05c151449d3582cca",
+        "binding": "Finite, digest-bound, inactive-by-default capability/action vocabulary; discovery, admission, and inspection grant no executable authority."
+      },
+      {
+        "number": 22,
+        "title": "BLD-001: Builder Agent / Zoo Builder M1",
+        "state": "closed",
+        "url": "https://github.com/JoFe2/PANSPHAIRA/issues/22",
+        "createdAt": "2026-08-02T10:02:10Z",
+        "updatedAt": "2026-08-02T10:29:53Z",
+        "closedAt": "2026-08-02T10:29:53Z",
+        "bodySha256": "70a1ae2ec791a9ce2800deb0f0bce712c53033a3e51f12586b45717499cf4a85",
+        "canonicalProjectionSha256": "7bb988ecfed6b30769687c054b0a1845da6e66ab56a2082e3c5419c1de4ad948",
+        "commentCount": 0,
+        "commentsCanonicalProjectionSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "binding": "Builder may discover, reuse, plan, scaffold, analyze, and emit synthetic quality/contribution evidence; it is not lifecycle authority and cannot self-install, self-activate, self-promote, self-publish, or turn an unresolved intent into executable capability."
+      }
+    ]
+  },
+  "authoritativeLocalBindings": [
+    {
+      "path": "packages/contracts/src/canonical-json.ts",
+      "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826",
+      "exports": ["canonicalJson"],
+      "role": "Canonical JSON source implementation"
+    },
+    {
+      "path": "packages/contracts/src/canonical-json.js",
+      "sha256": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec",
+      "exports": ["canonicalJson"],
+      "role": "Runtime-parity source implementation"
+    },
+    {
+      "path": "packages/contracts/src/capability-catalogue.ts",
+      "sha256": "9d24442a94c2cfcf9c305732a60ceadf286200a2eae26b6dabd157769a223f54",
+      "exports": [
+        "CAPABILITY_CATALOGUE_API_VERSION=chimpmaera.security/capability-catalogue/v1",
+        "CAPABILITY_ACTION_API_VERSION=chimpmaera.security/capability-action/v1",
+        "CAPABILITY_ACTIVATION_API_VERSION=chimpmaera.security/capability-activation/v1",
+        "CAPABILITY_POLICY_BINDING_API_VERSION=chimpmaera.security/capability-policy-binding/v1",
+        "CAPABILITY_EXECUTION_REQUEST_API_VERSION=chimpmaera.security/capability-execution-request/v1",
+        "CAPABILITY_GATEWAY_DECISION_API_VERSION=chimpmaera.security/capability-gateway-decision/v1",
+        "CAPABILITY_BROKER_RECEIPT_API_VERSION=chimpmaera.security/capability-broker-receipt/v1",
+        "SYNTHETIC_CAPABILITY_CATALOGUE_ID=chimpmaera.local/synthetic-actions",
+        "SYNTHETIC_CAPABILITY_CATALOGUE_VERSION=1.0.0",
+        "verifyCapabilityCatalogueV1",
+        "syntheticCapabilityCatalogueV1",
+        "verifyCapabilityPolicyBindingV1",
+        "verifyCapabilityActivationV1",
+        "admitCapabilityExecutionAtGatewayV1",
+        "executeCapabilityAtBrokerV1",
+        "listCapabilityCatalogueV1"
+      ],
+      "role": "Issue #3 current finite inactive catalogue authority"
+    },
+    {
+      "path": "schemas/contracts/capability-catalogue-v1.schema.json",
+      "sha256": "1b3db853ea2be6bfc4726d3def9a6a1cbccf44bc329ca21ffc1ad7428827d050",
+      "role": "Issue #3 public closed schema"
+    },
+    {
+      "path": "packages/contracts/src/skill-bundle.ts",
+      "sha256": "dccc35242f38bd7b98a0cae0d363764e95afb5ca8a4a808a287b7be6a82350a2",
+      "exports": [
+        "SKILL_BUNDLE_MANIFEST_SCHEMA_V1=chimpmaera.skill-bundle/manifest/v1",
+        "SKILL_BUNDLE_LOCK_SCHEMA_V1=chimpmaera.skill-bundle/lock/v1",
+        "SKILL_BUNDLE_EVIDENCE_SCHEMA_V1=chimpmaera.skill-bundle/evidence/v1",
+        "defaultSkillBundleCompatibilityMatrixV1",
+        "canonicalSkillBundleManifestBytesV1",
+        "normalizeSkillBundleManifestV1",
+        "buildSkillBundleLockV1",
+        "verifySkillBundleLockV1",
+        "verifySkillBundleExactFilesV1",
+        "assertSkillBundleCompatibilityV1"
+      ],
+      "role": "Canonical immutable generation and capability-pack lock authority"
+    },
+    {
+      "path": "schemas/contracts/skill-bundle-manifest-v1.schema.json",
+      "sha256": "0eaae258dfa4149a288b3bab6268448cf30e26392d4348c57993a745179c0f35",
+      "role": "Canonical bundle manifest schema"
+    },
+    {
+      "path": "schemas/contracts/skill-bundle-lock-v1.schema.json",
+      "sha256": "9b0cf6610a9f982d6ee7d32c80f4674da7b1b54d5bf9989ff3f72596dc192671",
+      "role": "Canonical bundle lock schema"
+    },
+    {
+      "path": "packages/contracts/src/skill-admission.ts",
+      "sha256": "54b825da8d6a83e44b6d71daece98e1ceabed3da92fdde3751c7a8843d27156f",
+      "exports": [
+        "SKILL_MANIFEST_SCHEMA_V1=chimpmaera.skill/manifest/v1",
+        "SKILL_REPORT_SCHEMA_V1=chimpmaera.skill/risk-report/v1",
+        "SKILL_ADMISSION_SCHEMA_V1=chimpmaera.skill/admission-request/v1",
+        "SKILL_RECEIPT_SCHEMA_V1=chimpmaera.skill/lifecycle-receipt/v1",
+        "decideSkillAdmissionV1",
+        "ManagedSkillStoreV1",
+        "SkillLifecycleBrokerV1"
+      ],
+      "role": "Selected existing managed-skill lifecycle boundary"
+    },
+    {
+      "path": "demo/managed-skill-lifecycle/runtime-contract-v1.json",
+      "sha256": "682a9ed18304221dad602d967ede4e62ecf35a0e8904db1aece6fa89b87a6394",
+      "exports": [
+        "chimpmaera.aas037/runtime-contract/v1",
+        "OpenClaw 2026.7.1",
+        "sha256:6a31d44b2944e7adcd2b582bf6fb463111264ebca97a0201795b799135bd102c",
+        "packageDigest=faf26ff2d3176a0a05e427bfe1fdcead61f9017856c6a335bc13abcd6294b927"
+      ],
+      "role": "AAS-037 synthetic pinned runtime binding"
+    },
+    {
+      "path": "demo/managed-skill-lifecycle/manager.mjs",
+      "sha256": "c1034c9112a4fb8603e0f83126e61ad016a72066915c24fdc4cd9f8d6ec1639b",
+      "role": "AAS-037 fixture request/install/activate/readback/rollback broker"
+    },
+    {
+      "path": "demo/managed-skill-lifecycle/plugin/index.mjs",
+      "sha256": "10fc6029006b322e4c890d7f657a023c4916135d266c491469d11340e737683d",
+      "role": "AAS-037 OpenClaw request/use adapter fixture"
+    },
+    {
+      "path": "packages/contracts/src/builder-authority.ts",
+      "sha256": "a156ea24d1b17bdbf8d6cf0381c714e326e79e746175b965e4acb0151a3a423f",
+      "exports": [
+        "BUILDER_AUTHORITY_INPUT_API_VERSION=chimpmaera.builder/authority-input/v1",
+        "BUILDER_AUTHORITY_RESULT_API_VERSION=chimpmaera.builder/authority-result/v1"
+      ],
+      "role": "Issue #22 decision-matrix input; never executable authority"
+    },
+    {
+      "path": "packages/contracts/src/builder-discovery.ts",
+      "sha256": "cc25d6bf46efe11e0a68d1b8346279e23188dec021357f0d9ef654d341926b46",
+      "role": "Issue #22 synthetic discovery input"
+    },
+    {
+      "path": "packages/contracts/src/builder-capability-resolution.ts",
+      "sha256": "f5232b9e77d879c1c0bf102245f2d87b784e98255c2b966b43c2acc8e6da95c0",
+      "exports": [
+        "BUILDER_CAPABILITY_REGISTRATION_API_VERSION=chimpmaera.builder/capability-registration/v1",
+        "BUILDER_CAPABILITY_RESOLUTION_RESULT_API_VERSION=chimpmaera.builder/capability-resolution/v1"
+      ],
+      "role": "Issue #22 inactive reuse/unresolved-intent planner"
+    },
+    {
+      "path": "packages/contracts/src/builder-integration-plan.ts",
+      "sha256": "0508371ed8bc39811563969f9a58dd7c0a678d0baf5e6dbe9ea01fa1015c00c6",
+      "exports": [
+        "BUILDER_INTEGRATION_PLAN_API_VERSION=chimpmaera.builder/integration-plan/v1",
+        "BUILDER_GENERIC_CONTRACT_API_VERSION=chimpmaera.builder/generic-integration-contract/v1"
+      ],
+      "role": "Issue #22 inactive scaffold and rollback planning"
+    },
+    {
+      "path": "packages/contracts/src/builder-quality-evidence.ts",
+      "sha256": "c9fbd0ad768470a0b4e5a9d6c8df6ede3ecf521a22c64dd2b305c40927312427",
+      "exports": [
+        "BUILDER_QUALITY_EVIDENCE_API_VERSION=chimpmaera.builder/quality-evidence/v1"
+      ],
+      "role": "Issue #22 synthetic local quality evidence only"
+    },
+    {
+      "path": "packages/contracts/src/builder-contribution-bundle.ts",
+      "sha256": "974247dc757b2d27e6762024dec406e84a000ad45c682d49bf740b69c8141aae",
+      "exports": [
+        "BUILDER_CONTRIBUTION_BUNDLE_API_VERSION=chimpmaera.builder/contribution-bundle/v1"
+      ],
+      "role": "Issue #22 public-safe opt-in contribution allowlist; publication authorization absent"
+    },
+    {
+      "path": "examples/builder-agent/contribution-bundle-v1.json",
+      "sha256": "b355b719dba55d0928bb7fac1a825d9c174b74d126ece1b09850006309c84bc6",
+      "role": "Issue #22 checked-in synthetic contribution fixture",
+      "contractBundleDigest": "a1984b533ae6768a7358a610ba56e09ca051810bb59f36acfd9534329b4aa8b3"
+    },
+    {
+      "path": "packages/contracts/src/verification-fabric.ts",
+      "sha256": "b94118b19936a089e42b90a83acb152e303925a7af1549b8a1d0db80b267b814",
+      "exports": [
+        "VERIFICATION_FABRIC_BUNDLE_SCHEMA_V1=chimpmaera.verification/fabric-bundle/v1",
+        "VERIFICATION_PLAN_SCHEMA_V1=chimpmaera.verification/plan/v1",
+        "VERIFICATION_EVIDENCE_BUNDLE_SCHEMA_V1=chimpmaera.verification/evidence-bundle/v1",
+        "VERIFICATION_VERDICT_SCHEMA_V1=chimpmaera.verification/verdict/v1",
+        "VERIFICATION_LKG_POINTER_SCHEMA_V1=chimpmaera.verification/lkg-pointer/v1",
+        "VERIFICATION_LKG_READBACK_SCHEMA_V1=chimpmaera.verification/lkg-readback/v1",
+        "verifyVerificationFabricBundleV1"
+      ],
+      "role": "Authoritative Verification Fabric v1 evidence and LKG verification boundary"
+    },
+    {
+      "path": "schemas/contracts/verification-fabric-bundle-v1.schema.json",
+      "sha256": "c5e9e5ff60901523bc6e4014213a9e80728c364204b5a084cc9f5c323db5ab1e",
+      "role": "Verification Fabric v1 closed schema"
+    },
+    {
+      "path": "packages/contracts/src/verification-fabric-v2.ts",
+      "sha256": "e673fd892d39fec139af7b6706420dfd23aa8c4f2f5d202a4d9e817259e062d0",
+      "role": "Shadow-only Verification Fabric v2; never admission, activation, promotion, or rollback authority"
+    },
+    {
+      "path": "verification/verification-dag-v2.json",
+      "sha256": "07cc50fadf9a86c6930211bf5b1bd9f947ebadb4a0e7fd888cb84b5070822684",
+      "exports": [
+        "schemaVersion=chimpmaera.verification/evidence-dag/v2",
+        "graphId=verification-fabric-shadow",
+        "graphVersion=16",
+        "nodeCount=21"
+      ],
+      "role": "Shadow evidence projection; contains no skill-bundle, skill-admission, AAS-037, BLD-001, or governed-update integration node"
+    },
+    {
+      "path": "packages/contracts/src/update-check-plan.ts",
+      "sha256": "02785fd8ecffe4c4c42c1a360c7a671c93d54cc702e27079705c804d24198c59",
+      "exports": [
+        "UPDATE_AXIS_NAMES_V1=core,packs,adapters,policies,schemas,generations",
+        "UPDATE_CANDIDATE_SCHEMA_V1=chimpmaera.update/candidate/v1",
+        "UPDATE_LKG_SCHEMA_V1=chimpmaera.update/lkg/v1",
+        "UPDATE_COMPATIBILITY_SCHEMA_V1=chimpmaera.update/compatibility-decision/v1",
+        "UPDATE_CHECK_PLAN_SCHEMA_V1=chimpmaera.update/check-plan/v1"
+      ],
+      "role": "Read-only six-axis candidate/LKG compatibility and self-promotion denial"
+    },
+    {
+      "path": "packages/contracts/src/update-staging-envelope.ts",
+      "sha256": "f90aa145b6b80fb4049067f6ef025566befb981b590454c24f53268035f58023",
+      "role": "Synthetic immutable staging envelope"
+    },
+    {
+      "path": "packages/contracts/src/update-apply-tuple-lock.ts",
+      "sha256": "88c6944e9899f9ce736b8dd3ebd79dd9aab1e4685b7c7a7b6bd84102e7d1eeb8",
+      "role": "Source/target tuple and authority-profile lock"
+    },
+    {
+      "path": "packages/contracts/src/update-continuity-decision.ts",
+      "sha256": "dcdf41cfdee1f5b809fa100e7fbc3b062eebaf52782d7b5fe97ca12feca42518",
+      "role": "Worker drain/handoff and terminal continuity decision"
+    },
+    {
+      "path": "packages/contracts/src/update-migration-edge.ts",
+      "sha256": "ca2a9b3f4b17404640b7fc93272fbc2684730116d8791503f0d7a69efcbd17d3",
+      "role": "Bounded migration edge contract"
+    },
+    {
+      "path": "packages/contracts/src/update-migration-checkpoint.ts",
+      "sha256": "01c1d78a17ff98a034307cfa19bb23e0d478478c072158baacb532879e162e55",
+      "role": "Pre-migration checkpoint contract; implemented and tested but not exported from the package barrel at this base"
+    },
+    {
+      "path": "packages/contracts/src/update-apply-postcondition.ts",
+      "sha256": "a9e09a64e32ab887c541a5124cd72392baf89c22be0bbdaa0be4d557d4b5f4a0",
+      "role": "Post-switch readback and rollback trigger contract"
+    },
+    {
+      "path": "packages/contracts/src/update-apply-journal.ts",
+      "sha256": "f3e9264a694fda529aa769a2671293d10910e177421470e190f3420c5a0daf1f",
+      "exports": [
+        "UPDATE_APPLY_JOURNAL_SCHEMA_V1=chimpmaera.update/apply-journal/v1",
+        "APPLY_SUCCESS_EVENT_SEQUENCE_V1=STAGE_COPY,VERIFY_STAGED,SWITCH_POINTER,VERIFY_POSTCONDITION",
+        "APPLY_ROLLBACK_EVENT_SEQUENCE_V1=STAGE_COPY,VERIFY_STAGED,SWITCH_POINTER,VERIFY_POSTCONDITION,ROLLBACK_LKG,CLEANUP",
+        "ApplyTerminalStateV1=VERIFIED|ROLLED_BACK_ZERO_RESIDUE"
+      ],
+      "role": "Hash-chained pure apply/rollback sequence authority"
+    }
+  ],
+  "historicalEvidenceBindings": [
+    {
+      "path": "docs/development/evidence/admin-ai-aas-012-20260801.json",
+      "sha256": "e948292de9b0cb779772e1054994d3311b761bbfa31d1b4110e0de32ad673809",
+      "implementationCommit": "4e3a5952fc6c748b3fe4ac648c82968a18d3f39f",
+      "metric": "4/4",
+      "historicalContractDigests": {
+        "catalogue": "1454c6bc785bc5185d7e1dc657cd62b620c2e2f9b79a80ac38e87573adf5c387",
+        "admissionResult": "29c10a069935ed314cc9088424ddd1e0b045edd60a7317cf69fc68b5ff86ac28",
+        "crmAction": "9105aa36049abb0c528bd515fb591f343f5ffaebc33d84df086ea7cb6057d502",
+        "erpAction": "a0778c059c1d6cb5cc6820ecba07cbd678ba795f741c1fedb6b6e975ffe0a63e"
+      },
+      "authority": "Historical local synthetic evidence only; current source SHA is authoritative for base bytes and no current execution is inferred."
+    },
+    {
+      "path": "docs/development/evidence/admin-ai-aas-037-20260801.json",
+      "sha256": "f0a370810ca1c1887763fb25e13d6fd2424b181b787920acda54d447bce5176f",
+      "implementationCommit": "94cc5f24436b274a252dae3ff9b0326fcf1b2c30",
+      "metric": "6/6",
+      "packageDigest": "faf26ff2d3176a0a05e427bfe1fdcead61f9017856c6a335bc13abcd6294b927",
+      "verdict": "LOCAL_AAS_037_PASS_NOT_ARBITRARY_CODE_LIVE_REGISTRY_PRODUCTION_STORE_UNIVERSAL_AGENT_OR_RELEASE_CLAIM",
+      "authority": "Historical pinned OpenClaw fixture evidence only; not an integrated ASF/ring/production attestation."
+    },
+    {
+      "paths": [
+        {"path": "docs/development/evidence/bld-001-g1-20260801.json", "sha256": "3bde4cbff3d680ccae72faa1971636d5c67089a6b1a239381a55aa1caf4f900d"},
+        {"path": "docs/development/evidence/bld-001-g2-20260802.json", "sha256": "6a14090b15fb8a3e4b0ee433034310af98caf239e1da8e108e4ac02bab8e175f"},
+        {"path": "docs/development/evidence/bld-001-g3-20260802.json", "sha256": "b0f9e7421b04f605fd88f411c2407f3f48cd80c67d2e7096004c7ed22cc27614"},
+        {"path": "docs/development/evidence/bld-001-g4-20260802.json", "sha256": "8b0c62078f5359e9232c41cd454bf5e739f88f1af464441701b57c6c5515b6c8"},
+        {"path": "docs/development/evidence/bld-001-g5-20260802.json", "sha256": "225e132fbea78a0a56936ee4fa19e5eee83156c67d04518f2c8387f7dded7135"},
+        {"path": "docs/development/evidence/bld-001-g6-20260802.json", "sha256": "4442398bd10823d74a226c653bafaeb3e76a4b1d0acdd9ea9e5351362d68631c"},
+        {"path": "docs/development/evidence/bld-001-g7-20260802.json", "sha256": "6d3d3b8dab542394d9ee6ae09a05eecb81d2d7ff98f192856a9ea12f1cfa0af0"},
+        {"path": "docs/development/evidence/bld-001-g8-20260802.json", "sha256": "1e59bebb47db8c5fb04a370e1738f8332d55592b997d450a24bc38b6d81959cf"}
+      ],
+      "metric": "BLD-001 8/8 historical local validation",
+      "releaseStatus": "NOT_RELEASED",
+      "publicationAuthorization": "ABSENT",
+      "authority": "Synthetic planning/evidence only; not lifecycle authority and not current integrated Verification Fabric evidence."
+    }
+  ],
+  "reconciliation": {
+    "issue3": {
+      "decision": "The checked-in current capability catalogue contract is the only admissible vocabulary source. Issue-body capability names are requirements context, not automatically registered IDs.",
+      "currentFiniteFixture": {
+        "catalogueId": "chimpmaera.local/synthetic-actions",
+        "version": "1.0.0",
+        "catalogueDigest": "bb0060a254f450684bd17f6559d267d6f02d225c4c4d37479c3010c60d1b8427",
+        "actionIds": [
+          "crm.contact.create",
+          "erp.order.create"
+        ],
+        "actionDigests": {
+          "crm.contact.create": "8a032b1057fcd5c10497877cbb53ceadbd9f76fba899c630855ed5019045c24a",
+          "erp.order.create": "a20f5c9b60cbb9af1d098ae31c5f3e46e37722c6a9548b9f25b331c0287b98ab"
+        },
+        "state": "INACTIVE",
+        "activationDefault": "INACTIVE"
+      },
+      "issueOnlyNames": [
+        "documents.read",
+        "contacts.list",
+        "contacts.create",
+        "messages.send"
+      ],
+      "resolution": "Any name absent from the exact admitted current catalogue, including every issue-only name above at this base, fails closed as UNKNOWN_ACTION. No aliasing, fuzzy matching, dynamic discovery, registry lookup, or implied activation is allowed.",
+      "activationMeaning": "Activating a content pack makes only its exact bytes available to exact assignments. Catalogue entries and bundle capabilityContracts retain their INACTIVE-by-default declarations and grant no Policy, approval, credential, provider call, effect, or ambient authority. Current action execution additionally requires a separate unexpired tenant/maintainer CapabilityActivationV1, trusted CapabilityActivationPolicyV1, exact Gateway decision, and broker receipt; pack activation is not any of those records."
+    },
+    "issue22": {
+      "decision": "Reuse Builder discovery, capability resolution, integration-plan, quality-evidence, and sanitized contribution contracts only upstream of the selected lifecycle as proposer/analyzer inputs.",
+      "allowed": [
+        "Propose one immutable local bundle generation",
+        "Resolve only exact inactive catalogue registrations",
+        "Emit inactive non-executable scaffolds and rollback plans",
+        "Produce synthetic quality, provenance, risk, and negative-probe evidence for independent Verification Fabric evaluation",
+        "Produce sanitized OPT_IN contribution bundles with publicationAuthorization ABSENT"
+      ],
+      "denied": [
+        "Builder as verifier of its own subject",
+        "Builder installation, activation, ring promotion, rollback authority, publication, or provider effect",
+        "AUTO_EXECUTE for INSTALLATION or ACTIVATION even when another Builder profile would expose that route",
+        "RAMPAGE or FULL_CONTROL_LAB as a bypass of ASF authority separation",
+        "Converting UNRESOLVED_INTENT into an executable or active capability"
+      ]
+    },
+    "bundleAdmissionDuality": {
+      "canonicalGenerationAuthority": "SkillBundleLockV1.lockIdentity",
+      "admissionTransportDigest": "CanonicalSkillManifestV1 packageDigest from AAS-037",
+      "rule": "A future same-boundary adapter must first verify the exact SkillBundleLockV1 and exact files, then derive the AAS-037 admission transport deterministically and bind both lockIdentity and packageDigest in one receipt. packageDigest is never a second generation authority and need not equal lockIdentity.",
+      "missingBindingAtBase": true,
+      "default": "DENY_ADMISSION_AND_ACTIVATION"
+    },
+    "verificationFabric": {
+      "authoritativeVersion": "v1",
+      "required": [
+        "Exact subjectDigest bound to lockIdentity, catalogue digest, compatibility closure, assignments, and update tuple",
+        "Independent verifier/evidence producer identity",
+        "All required check runs PASS and fresh",
+        "VERIFIED verdict with VERIFICATION_COMPLETE only",
+        "Matched VerificationLkgPointerV1 and VerificationLkgReadbackV1",
+        "Revalidation on subject, plan, or evidence change or expiry"
+      ],
+      "v2Status": "SHADOW_ONLY_NON_AUTHORITATIVE",
+      "currentDagReadback": "verification/verification-dag-v2.json is graphVersion 16 with 21 nodes and has no selected-boundary integration nodes; therefore it is not evidence that this ASF lifecycle composition is implemented or verified."
+    },
+    "updatesAndLkg": {
+      "decision": "Reuse UpdateTupleV1, UpdateLkgV1, candidate/compatibility decisions, staging/tuple locks, postconditions, and apply journal as the atomic update closure around the selected AAS-037 boundary.",
+      "currentScope": "Pure synthetic/check-only contracts; no current module performs a live apply, pointer switch, rollback, cleanup, ring promotion, or production update.",
+      "selfPromotion": "DENIED",
+      "authorityWidening": "DENIED",
+      "automaticApply": "DENIED"
+    }
+  },
+  "selectedLifecycleBoundary": {
+    "selectionCount": 1,
+    "boundaryId": "AAS-037_MANAGED_SKILL_LIFECYCLE_V1",
+    "canonicalName": "Existing AAS-037 managed-skill admission/store/broker lifecycle boundary",
+    "sourcePath": "packages/contracts/src/skill-admission.ts",
+    "runtimeFixturePath": "demo/managed-skill-lifecycle",
+    "implementationExports": [
+      "decideSkillAdmissionV1",
+      "ManagedSkillStoreV1",
+      "SkillLifecycleBrokerV1"
+    ],
+    "proposedPathStatus": "extendable",
+    "statusVocabulary": [
+      "reusable",
+      "extendable",
+      "complete",
+      "additive"
+    ],
+    "selectionRationale": "AAS-037 is the only existing boundary that already separates request/admission, inactive installation, activation, receipt/readback, and rollback behavior. SkillBundleV1 supplies immutable generation identity, #3 supplies finite inactive actions, #22 supplies proposals and synthetic analysis, Verification Fabric supplies evidence/LKG verification, and update contracts supply tuple/pointer rollback semantics. Creating a second ASF lifecycle would duplicate and conflict with this boundary.",
+    "capabilityPackDefinition": "No marketplace or second package type is created. A capability pack is exactly one verified SkillBundleLockV1 generation plus its finite sorted capabilityContracts and exact assignment record. Multiple packs are represented by multiple immutable lock identities on the existing UpdateTupleV1 packs/generations axes.",
+    "extensionRule": "All lifecycle state, role, assignment, activation-receipt, ring, and cross-binding additions must extend the selected AAS-037 boundary and its versioned schemas. A parallel asf-lifecycle broker, dynamic marketplace lifecycle, or independent activation path is forbidden.",
+    "activationEligibilityAtBase": "DENIED_PENDING_ADDITIVE_CONTRACTS_AND_EVIDENCE"
+  },
+  "proposedPathStatus": [
+    {
+      "path": "packages/contracts/src/skill-bundle.ts and schemas/contracts/skill-bundle-*-v1.schema.json",
+      "status": "complete",
+      "responsibility": "Canonical immutable local bundle bytes, exact file lock, lock identity, compatibility cells, no-authority declaration, and self-generation rollback identity"
+    },
+    {
+      "path": "packages/contracts/src/capability-catalogue.ts",
+      "status": "reusable",
+      "responsibility": "Finite inactive action admission and exact lookup"
+    },
+    {
+      "path": "packages/contracts/src/builder-*.ts",
+      "status": "reusable",
+      "responsibility": "Proposal, inactive reuse planning, synthetic quality/provenance/risk evidence, and sanitized non-release contribution only"
+    },
+    {
+      "path": "packages/contracts/src/skill-admission.ts",
+      "status": "extendable",
+      "responsibility": "The sole lifecycle boundary; add exact FSM, cross-lock binding, role identities, assignments, activation receipts, ring receipts, and operational LKG pointers here rather than beside it"
+    },
+    {
+      "path": "demo/managed-skill-lifecycle",
+      "status": "extendable",
+      "responsibility": "Non-production OpenClaw fixture adapter/readback; must consume the extended contract before it can evidence the integrated lifecycle"
+    },
+    {
+      "path": "packages/contracts/src/verification-fabric.ts",
+      "status": "reusable",
+      "responsibility": "Independent fresh evidence, verdict, and evidence-LKG pointer/readback"
+    },
+    {
+      "path": "packages/contracts/src/update-*.ts",
+      "status": "reusable",
+      "responsibility": "Six-axis tuple compatibility, immutable staging, source/target locks, postconditions, hash-chained rollback, cleanup, and zero-residue terminal semantics"
+    },
+    {
+      "path": "packages/contracts/src/update-migration-checkpoint.ts barrel export",
+      "status": "additive",
+      "responsibility": "The source/test contract exists but is absent from packages/contracts/src/index.ts; any future public reuse requires an explicit same-version export decision"
+    },
+    {
+      "path": "verification/verification-dag-v2.json selected-boundary nodes",
+      "status": "additive",
+      "responsibility": "Generated readback nodes for bundle, catalogue, AAS-037, Builder, update/LKG, negative probes, and public-safe reproduction are absent at this base"
+    }
+  ],
+  "canonicalizationAndHashFreeze": {
+    "algorithmId": "PANSPHAIRA_CANONICAL_JSON_SHA256_V1",
+    "notClaimed": "RFC 8785/JCS compliance is not claimed.",
+    "inputDomain": [
+      "Closed-schema JSON values only",
+      "Objects must be plain objects with no extra or missing keys",
+      "Numbers must be finite safe integers, must not be negative zero, and must satisfy field bounds",
+      "No undefined, bigint, symbol, function, sparse array, custom prototype, cyclic value, NaN, or infinity",
+      "Strings remain byte-significant after schema validation; canonicalization performs no Unicode normalization"
+    ],
+    "objectOrdering": "Recursively sort object property names using ECMAScript default Array.prototype.sort UTF-16 code-unit order.",
+    "arrayOrdering": {
+      "general": "Preserve array order.",
+      "semanticSetsBeforeCanonicalization": {
+        "manifest.files": "ascending path",
+        "manifest.dependencies": "ascending id",
+        "manifest.capabilityContracts": "ascending capabilityId",
+        "manifest.compatibility.supported": "ascending consumer",
+        "manifest.limitations": "ascending string",
+        "lock.files": "ascending path",
+        "UpdateTupleV1 axes": "fixed core,packs,adapters,policies,schemas,generations; each axis ascending componentId, then version, then digest",
+        "assignments": "ascending tenantId, profileId, adapterId, packId, routeId; capabilityActionIds ascending exact actionId",
+        "receipt evidence and authority lists": "ascending stable identifier"
+      }
+    },
+    "serialization": "JSON.stringify-compatible compact JSON: no insignificant whitespace and no trailing newline.",
+    "encoding": "UTF-8",
+    "hash": "SHA-256",
+    "digestText": "64 lowercase hexadecimal characters without a prefix; fields whose schema explicitly calls for a locator or image digest retain their required prefix.",
+    "fileHash": "SHA-256 over exact raw file bytes; text newline and encoding are material.",
+    "bundleDerivation": {
+      "manifestDigest": "SHA-256(canonical normalized SkillBundleManifestV1 UTF-8 bytes)",
+      "manifestBytesSha256": "Exactly manifestDigest",
+      "fileEntry": [
+        "path",
+        "role",
+        "mediaType",
+        "size",
+        "sha256"
+      ],
+      "fileSetDigest": "SHA-256(canonical JSON of {files: exact sorted lock file entries})",
+      "sourceLocator": "skill-bundle+sha256:<fileSetDigest>",
+      "lockIdentityInputFields": [
+        "bundleId",
+        "bundleVersion",
+        "fileSetDigest",
+        "lockSchemaVersion",
+        "lockVersion",
+        "manifestDigest"
+      ],
+      "lockIdentity": "SHA-256(canonical JSON of lockIdentityInputFields)",
+      "immutability": "A changed manifest byte, declared path, file role, media type, size, file byte, dependency, capability contract, compatibility cell, limitation, or source binding creates a different immutable lock or is denied."
+    },
+    "capabilityPackDerivation": "packId is the verified SkillBundleV1 bundleId; packVersion is bundleVersion; packDigest is lockIdentity. A pack has no mutable latest alias. The installed key is (packId, packVersion, lockIdentity), and every update creates a new lockIdentity.",
+    "receiptDerivation": "SHA-256 over canonical receipt core with its digest field omitted; receipts are immutable and hash-chain prior receipt digests where an operation has multiple phases."
+  },
+  "exactGenerationLockEvidence": {
+    "evidenceClass": "DETERMINISTIC_PYTHON_PROJECTION_OF_FROZEN_ASCII_TEST_FIXTURE_NOT_A_TYPESCRIPT_TEST_RUN",
+    "sourceTest": {
+      "path": "tests/skill-bundle.test.ts",
+      "sha256": "b4cb7c2f3b2570316979405def59070160fb3df38ca0a9fce7a5a5dd7ad2ce28"
+    },
+    "fixture": {
+      "bundleId": "skillbundle:zoo-greeter",
+      "bundleVersion": "1.0.0",
+      "manifestSchemaVersion": "chimpmaera.skill-bundle/manifest/v1",
+      "lockSchemaVersion": "chimpmaera.skill-bundle/lock/v1",
+      "lockVersion": "1.0.0",
+      "canonicalManifestByteLength": 2344,
+      "manifestDigest": "833f5cb6e5e4d4e2381aed6824770029506f1a95b1b4f1df688bf6b856d3643a",
+      "fileSetDigest": "f9e86893aec964b613a3a9252412b067a772cfcef6d58a7a3c65cc634cc144e5",
+      "lockIdentity": "5d83f085babd90fb366bbc13d5541f822c1daa5103f52a577e9db67a535192d1",
+      "sourceLocator": "skill-bundle+sha256:f9e86893aec964b613a3a9252412b067a772cfcef6d58a7a3c65cc634cc144e5",
+      "materialBytes": 129,
+      "files": [
+        {"path": "SKILL.md", "role": "ENTRYPOINT", "mediaType": "text/markdown", "size": 58, "sha256": "902739e862f5b2e4bfc7922d616bcbf3b328a4c6414897086f87438b8b3da3c6"},
+        {"path": "config/settings.json", "role": "CONFIG", "mediaType": "application/json", "size": 16, "sha256": "6c76bdc867d10f198b6c65436faf41a203c93845242629d8da1d44dcb781ef42"},
+        {"path": "docs/usage.md", "role": "DOC", "mediaType": "text/markdown", "size": 36, "sha256": "80f4607d4a3b7c3b7a9a284bdf703ee9d8806727b2d13346668db6026bbc73e7"},
+        {"path": "tests/fixtures/greeting.txt", "role": "TEST_FIXTURE", "mediaType": "text/plain", "size": 19, "sha256": "754a7f29ed2adb345d92c48961665b15aa1b9bfbfcb4897968986c46396ce8d7"}
+      ],
+      "rollback": {
+        "mode": "RESTORE_EXACT_LOCK_OR_DENY",
+        "lkgLockIdentity": "5d83f085babd90fb366bbc13d5541f822c1daa5103f52a577e9db67a535192d1"
+      },
+      "projectedEvidenceId": "ASF-01-E-5d83f085babd90fb",
+      "projectedEvidenceDigest": "4c58dcfef04e29a4f88b37f5e12b8253d3f87975d385253f6be2e13d644d431b"
+    },
+    "sourceContractClaim": "The checked-in test owns 100 reorder variants, exact declared file-set readback, and missing/extra/changed/symlink denials. Those test claims are source-bound here but are not marked executed by this worker because npm failed before test dispatch."
+  },
+  "compatibilityFreeze": {
+    "leafMatrixId": "chimpmaera.skill-bundle/compatibility-matrix/v1",
+    "leafTupleFieldOrder": [
+      "consumer",
+      "runtime",
+      "manifestMajor",
+      "manifestMinor",
+      "lockMajor",
+      "lockMinor",
+      "contract",
+      "status"
+    ],
+    "leafCells": [
+      {"consumer": "ANALYSIS", "runtime": "OPENCLAW", "manifestMajor": 1, "manifestMinor": 0, "lockMajor": 1, "lockMinor": 0, "contract": "chimpmaera.skill-bundle/compatibility/v1", "status": "SUPPORTED"},
+      {"consumer": "GENERATION", "runtime": "OPENCLAW", "manifestMajor": 1, "manifestMinor": 0, "lockMajor": 1, "lockMinor": 0, "contract": "chimpmaera.skill-bundle/compatibility/v1", "status": "SUPPORTED"},
+      {"consumer": "INSTALLATION", "runtime": "OPENCLAW", "manifestMajor": 1, "manifestMinor": 0, "lockMajor": 1, "lockMinor": 0, "contract": "chimpmaera.skill-bundle/compatibility/v1", "status": "SUPPORTED"},
+      {"consumer": "ROLLBACK", "runtime": "OPENCLAW", "manifestMajor": 1, "manifestMinor": 0, "lockMajor": 1, "lockMinor": 0, "contract": "chimpmaera.skill-bundle/compatibility/v1", "status": "SUPPORTED"}
+    ],
+    "leafLkg": {
+      "manifestSchemaVersion": "chimpmaera.skill-bundle/manifest/v1",
+      "lockSchemaVersion": "chimpmaera.skill-bundle/lock/v1",
+      "runtime": "OPENCLAW"
+    },
+    "atomicUpdateTuple": {
+      "axisOrder": [
+        "core",
+        "packs",
+        "adapters",
+        "policies",
+        "schemas",
+        "generations"
+      ],
+      "componentFieldOrder": [
+        "componentId",
+        "version",
+        "digest"
+      ],
+      "requiredBindings": {
+        "core": "Exact managed-skill lifecycle contract version and source digest",
+        "packs": "Each packId, bundleVersion, and lockIdentity",
+        "adapters": "Exact runtime adapter/plugin ID, version, and digest",
+        "policies": "Exact authority-profile, assignment-policy, and use-time Policy digests",
+        "schemas": "Catalogue, bundle manifest/lock, admission, lifecycle receipt, Verification Fabric, update, activation, and ring schema versions/digests",
+        "generations": "Exact active, candidate, and LKG generation/lock identities"
+      },
+      "fence": "Every axis must be complete, sorted, digest-valid, and bound to the same tenant/profile/adapter/pack/route assignment closure. Missing, extra, stale, revoked, unsupported, self-attested, authority-widening, or mismatched components deny."
+    },
+    "supportedRuntimeAtBase": "OPENCLAW only for SkillBundleV1; Hermes, Claude Code, universal, live-provider, and production compatibility are unproven and denied.",
+    "noMutableLatest": true
+  },
+  "authoritySeparation": {
+    "pairwiseDistinctForSameSubjectOperation": true,
+    "boundaries": [
+      {
+        "boundaryId": "ASF_PROPOSER_V1",
+        "role": "proposer",
+        "allowed": "Submit immutable local bundle bytes, exact catalogue references, requested assignments, and Builder planning evidence.",
+        "forbidden": "Analyze its own evidence, install, activate, promote, roll back, publish, or add capabilities after lock creation."
+      },
+      {
+        "boundaryId": "ASF_INDEPENDENT_ANALYZER_VERIFIER_V1",
+        "role": "analyzer/verifier",
+        "allowed": "Evaluate quality, provenance, licence/risk claims, exact bytes, negative probes, compatibility, and produce fresh Verification Fabric evidence/verdict.",
+        "forbidden": "Be the subject producer, proposer, installer, activator, promoter, rollback authority, or evidence producer for the same subject where independence would be violated."
+      },
+      {
+        "boundaryId": "ASF_INACTIVE_INSTALLER_V1",
+        "role": "installer",
+        "allowed": "Materialize the exact verified lock into immutable installed_inactive storage and emit an inactive install receipt.",
+        "forbidden": "Set an active pointer, create assignments, grant actions, promote a ring, or choose a rollback target."
+      },
+      {
+        "boundaryId": "ASF_ASSIGNMENT_ACTIVATOR_V1",
+        "role": "activator",
+        "allowed": "Approve one exact activation_requested operation for exact assignments after all evidence and compatibility fences pass; emit activation receipt.",
+        "forbidden": "Propose, self-verify, install, self-promote, widen assignments, silently activate an update, or authorize an action effect."
+      },
+      {
+        "boundaryId": "ASF_RING_PROMOTER_V1",
+        "role": "ring promoter",
+        "allowed": "Advance exactly one candidate to the next fixed non-production ring after prior ring readback and promotion-receipt verification.",
+        "forbidden": "Create or alter a candidate, skip rings, self-attest, auto-activate, widen authority, promote to production, or replace rollback authority."
+      },
+      {
+        "boundaryId": "ASF_ROLLBACK_AUTHORITY_V1",
+        "role": "rollback authority",
+        "allowed": "Trigger exact LKG restore or disable the smallest affected profile, adapter, pack, or route; emit rollback/readback/zero-residue receipt.",
+        "forbidden": "Select an unaccepted generation, resolve a mutable latest version, preserve partially applied residue, broaden authority, or report success without matched readback."
+      }
+    ],
+    "identityBindingFields": [
+      "boundaryId",
+      "principalId",
+      "principalClass",
+      "tenantId",
+      "operationId",
+      "subjectDigest",
+      "authorityProfileDigest",
+      "decisionDigest"
+    ],
+    "defaultDenial": "If any identity, boundary binding, decision, assignment, digest, freshness proof, or independence fact is missing, malformed, stale, mismatched, or conflated, the affected transition is denied. If two required distinct roles resolve to the same principal for the same subject/operation, deny ROLE_CONFLATION. No profile name, Builder mode, runtime identity, or package presence implies another boundary's authority."
+  },
+  "finiteStateMachine": {
+    "schemaVersion": "pansphaira.asf/managed-skill-state-machine/v1",
+    "scope": "State is per immutable (tenantId, profileId, adapterId, packId, routeId, lockIdentity) candidate. Active and LKG pointers are separate per assignment target, so an active LKG remains effective while a new candidate traverses pre-active states.",
+    "states": [
+      "proposed",
+      "analyzed",
+      "installed_inactive",
+      "activation_requested",
+      "active",
+      "update_candidate",
+      "rolled_back",
+      "disabled"
+    ],
+    "initialState": "proposed",
+    "transitions": [
+      {"from": "proposed", "to": "analyzed", "authority": "ASF_INDEPENDENT_ANALYZER_VERIFIER_V1", "guard": "Exact bundle/catalogue cross-binding, quality/provenance/risk analysis, required negative probes, compatibility closure, and fresh VERIFIED Verification Fabric bundle."},
+      {"from": "proposed", "to": "disabled", "authority": "ASF_INDEPENDENT_ANALYZER_VERIFIER_V1", "guard": "Invalid or denied proposal; no installation."},
+      {"from": "analyzed", "to": "installed_inactive", "authority": "ASF_INACTIVE_INSTALLER_V1", "guard": "Exact lock and files reverified; immutable materialization readback matches; active pointer unchanged; install receipt says active=false and grants no authority."},
+      {"from": "analyzed", "to": "disabled", "authority": "ASF_INACTIVE_INSTALLER_V1", "guard": "Materialization or readback denied."},
+      {"from": "installed_inactive", "to": "activation_requested", "authority": "ASF_PROPOSER_V1", "guard": "A new explicit request binds exact assignments, candidate lock, current pointer generation, ring, and authority identities; request is not approval."},
+      {"from": "installed_inactive", "to": "disabled", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "Explicit disable or corrupt inactive material."},
+      {"from": "activation_requested", "to": "active", "authority": "ASF_ASSIGNMENT_ACTIVATOR_V1", "guard": "Exact assignment activation, pointer CAS, ring-scoped postcondition, Verification LKG readback, and activation receipt all match."},
+      {"from": "activation_requested", "to": "rolled_back", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "A healthy exact prior LKG exists and any post-switch guard fails; restore and zero-residue readback match."},
+      {"from": "activation_requested", "to": "disabled", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "No healthy exact prior LKG exists, rollback CAS/readback fails, or residue remains."},
+      {"from": "active", "to": "update_candidate", "authority": "ASF_PROPOSER_V1", "guard": "New immutable lockIdentity differs from active/LKG; current active/LKG remains unchanged; no automatic transition."},
+      {"from": "active", "to": "rolled_back", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "A provisional active candidate faults and exact prior LKG restore/readback succeeds."},
+      {"from": "active", "to": "disabled", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "Explicit disable or no healthy exact LKG can be proven."},
+      {"from": "update_candidate", "to": "analyzed", "authority": "ASF_INDEPENDENT_ANALYZER_VERIFIER_V1", "guard": "The new lock traverses the complete analysis path; prior active/LKG remains effective."},
+      {"from": "update_candidate", "to": "rolled_back", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "Candidate is rejected or staged residue is cleaned while prior active/LKG remains exact."},
+      {"from": "update_candidate", "to": "disabled", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "Candidate corruption contaminates the affected target or exact prior state cannot be proven."},
+      {"from": "rolled_back", "to": "proposed", "authority": "ASF_PROPOSER_V1", "guard": "New operationId and new immutable lockIdentity only; a rolled-back candidate is never reused or silently reactivated."},
+      {"from": "rolled_back", "to": "disabled", "authority": "ASF_ROLLBACK_AUTHORITY_V1", "guard": "Explicit disable or later readback mismatch."},
+      {"from": "disabled", "to": "proposed", "authority": "ASF_PROPOSER_V1", "guard": "New operationId and complete lifecycle restart; disabled target stays fail-closed until a new activation succeeds."}
+    ],
+    "forbiddenTransitions": [
+      "proposed->installed_inactive",
+      "proposed->active",
+      "analyzed->active",
+      "installed_inactive->active",
+      "update_candidate->active",
+      "rolled_back->active",
+      "disabled->active",
+      "Any transition driven by timer, mutable latest alias, marketplace event, installation completion, analysis completion, or ring completion without a new explicit authority receipt"
+    ]
+  },
+  "controlledRings": {
+    "ringOrder": [
+      {
+        "ringId": "R0_ANALYSIS",
+        "index": 0,
+        "execution": "NONE",
+        "scope": "Static canonical bytes, catalogue, provenance, licence/risk, compatibility, negative probes, and independent Verification Fabric verdict.",
+        "exitReceipt": "analysisReceiptDigest"
+      },
+      {
+        "ringId": "R1_SYNTHETIC_ISOLATED",
+        "index": 1,
+        "execution": "SYNTHETIC_ONLY",
+        "scope": "Explicitly assigned synthetic isolated profile with no credentials, provider/service access, customer data, public effect, or ambient action authority.",
+        "exitReceipt": "syntheticActivationAndReadbackReceiptDigest"
+      },
+      {
+        "ringId": "R2_OWNER_SCOPED_NON_PRODUCTION",
+        "index": 2,
+        "execution": "EXACT_NON_PRODUCTION_ASSIGNMENTS_ONLY",
+        "scope": "Exact owner-designated non-production profile, adapter, pack, and route; no production rollout or broad assignment.",
+        "exitReceipt": "ownerScopedPromotionAndReadbackReceiptDigest"
+      }
+    ],
+    "promotionRules": [
+      "No skip, fan-out, timer, mutable channel, silent update, automatic promotion, or automatic activation.",
+      "Each promotion is a separate operation by ASF_RING_PROMOTER_V1 and binds the exact prior ring receipt, candidate lockIdentity, complete UpdateTupleV1, assignments, authority profile, Verification Fabric verdict/LKG readback, and expected current pointer generation.",
+      "Every ring revalidates compatibility, evidence freshness, assignment bounds, postconditions, and negative probes appropriate to that ring.",
+      "The candidate does not replace LKG until the final allowed ring passes exact readback and a separate acceptance CAS commits it.",
+      "This decision contains no production ring. Any production rollout requires a separate owner decision and evidence; absence is DENY_PRODUCTION_PROMOTION."
+    ]
+  },
+  "atomicPointerAndLkgModel": {
+    "targetKeyFieldOrder": [
+      "tenantId",
+      "profileId",
+      "adapterId",
+      "packId",
+      "routeId"
+    ],
+    "immutableGenerationKeyFieldOrder": [
+      "packId",
+      "bundleVersion",
+      "lockIdentity"
+    ],
+    "pointers": {
+      "stagedPointer": "Optional exact installed_inactive or activation_requested candidate; never routable.",
+      "activePointer": "Exact generation currently routed for one assignment target; may be a provisional ring candidate.",
+      "lkgPointer": "Last independently verified and accepted generation/UpdateTupleV1 for that target; remains unchanged while a candidate is provisional.",
+      "verificationLkgPointer": "Verification Fabric pointer to the exact verdict/evidence bundle that justifies the lifecycle LKG."
+    },
+    "pointerRecordRequiredFields": [
+      "schemaVersion",
+      "targetKey",
+      "generation",
+      "lockIdentity",
+      "bundleVersion",
+      "packageDigest",
+      "updateTupleDigest",
+      "compatibilityMatrixDigest",
+      "assignmentDigest",
+      "authorityProfileDigest",
+      "verificationVerdictDigest",
+      "verificationEvidenceBundleDigest",
+      "activationReceiptDigest",
+      "accepted",
+      "previousPointerDigest",
+      "pointerDigest"
+    ],
+    "atomicity": "Every switch is compare-and-swap on expected targetKey, expected pointerDigest, and expected generation. Immutable generation bytes are written and verified before CAS. A CAS mismatch denies without retrying against a newly observed pointer; a new explicit operation is required.",
+    "acceptance": "A ring candidate may be active only for its exact ring assignments while lkgPointer remains the prior accepted generation. After the final allowed ring's postcondition and readback pass, a separate CAS sets activePointer and lkgPointer to the candidate and binds the matched Verification Fabric LKG pointer/readback.",
+    "noPriorLkg": "Initial activation may proceed only with complete evidence and explicit assignment. If it faults before acceptance and no prior healthy LKG exists, disable the affected target; never select another installed generation by version or recency."
+  },
+  "receiptContractFreeze": {
+    "commonRequiredFields": [
+      "schemaVersion",
+      "receiptId",
+      "receiptType",
+      "taskId",
+      "baseSha",
+      "operationId",
+      "tenantId",
+      "profileId",
+      "adapterId",
+      "packId",
+      "routeId",
+      "stateBefore",
+      "stateAfter",
+      "bundleId",
+      "bundleVersion",
+      "manifestDigest",
+      "fileSetDigest",
+      "lockIdentity",
+      "packageDigest",
+      "catalogueId",
+      "catalogueVersion",
+      "catalogueDigest",
+      "capabilityActionIds",
+      "assignmentDigest",
+      "compatibilityMatrixDigest",
+      "sourceUpdateTupleDigest",
+      "targetUpdateTupleDigest",
+      "lkgDigest",
+      "ringId",
+      "priorRingReceiptDigest",
+      "authorityBindings",
+      "verificationPlanDigest",
+      "verificationEvidenceBundleDigest",
+      "verificationVerdictDigest",
+      "verificationLkgPointerDigest",
+      "verificationLkgReadbackDigest",
+      "expectedPointerDigest",
+      "observedPointerDigest",
+      "faultSeam",
+      "reasonCodes",
+      "result",
+      "previousReceiptDigest",
+      "receiptDigest"
+    ],
+    "assignmentFields": [
+      "tenantId",
+      "profileId",
+      "adapterId",
+      "packId",
+      "routeId",
+      "capabilityActionIds"
+    ],
+    "activationReceiptAdditionalFields": [
+      "activationRequestDigest",
+      "activatorDecisionDigest",
+      "materializedReadbackDigest",
+      "postconditionDigest",
+      "activePointerBeforeDigest",
+      "activePointerAfterDigest",
+      "lkgPointerDigest",
+      "useTimeAuthorityGranted=false"
+    ],
+    "promotionReceiptAdditionalFields": [
+      "fromRingId",
+      "toRingId",
+      "promoterDecisionDigest",
+      "priorRingReadbackDigest",
+      "evidenceFreshnessReadbackDigest",
+      "assignmentDeltaDigest",
+      "authorityDeltaDigest",
+      "promotionResult"
+    ],
+    "rollbackReceiptAdditionalFields": [
+      "failedCandidateLockIdentity",
+      "rollbackTargetLockIdentity",
+      "rollbackTargetUpdateTupleDigest",
+      "preMigrationCheckpointDigest",
+      "postFailurePointerDigest",
+      "restoredPointerDigest",
+      "restoredFilesReadbackDigest",
+      "restoredAssignmentDigest",
+      "restoredAuthorityProfileDigest",
+      "cleanupReceiptDigest",
+      "residueCount",
+      "terminalState"
+    ],
+    "closedSchemaRule": "Unknown, missing, duplicate, malformed, non-canonical, or out-of-order fields deny. Null is permitted only where the schema explicitly represents no prior LKG or no prior ring; omission is not a substitute."
+  },
+  "faultSeams": [
+    {"seam": "PROPOSAL_PARSE", "failure": "Closed schema, immutable source, or base binding fails", "action": "DENY; remain proposed or disabled; no materialization"},
+    {"seam": "CATALOGUE_BIND", "failure": "Unknown catalogue/action, active claim, digest drift, alias, dynamic lookup, or issue-only name", "action": "DENY UNKNOWN_ACTION_OR_CATALOGUE; no descriptor authority"},
+    {"seam": "BUNDLE_CANONICALIZE", "failure": "Invalid canonical domain, unsafe number, non-plain object, duplicate/unsafe path, unsupported runtime, or reordered semantic-set mismatch", "action": "DENY; no lock"},
+    {"seam": "LOCK_VERIFY", "failure": "Manifest, file set, lock identity, exact path/byte, symlink, source locator, compatibility, or no-authority declaration mismatch", "action": "DENY; do not admit or install"},
+    {"seam": "ANALYSIS", "failure": "Quality, provenance, licence, risk, negative probe, or public-claim evidence absent/inconclusive", "action": "DENY analyzed transition"},
+    {"seam": "VERIFICATION_FABRIC", "failure": "Missing/stale/mismatched/self-produced evidence, non-PASS run, non-VERIFIED verdict, corrupt LKG/readback, or role conflation", "action": "DENY; retain current exact LKG"},
+    {"seam": "ADMISSION_CROSS_BIND", "failure": "SkillBundle lockIdentity and AAS-037 packageDigest are not deterministically cross-bound", "action": "DENY admission and activation"},
+    {"seam": "INSTALL_MATERIALIZE", "failure": "Write/readback mismatch, mutable bytes, requested active state, capability grant, or pointer mutation", "action": "Delete owned staging, emit denied receipt, retain active/LKG"},
+    {"seam": "ACTIVATION_REQUEST", "failure": "Missing explicit request, exact assignments, distinct activator, current pointer generation, or fresh evidence", "action": "DENY; remain installed_inactive"},
+    {"seam": "POINTER_CAS", "failure": "Expected pointer/generation mismatch or concurrent operation", "action": "DENY without implicit retry; clean owned staging; retain observed pointer"},
+    {"seam": "RING_PROMOTION", "failure": "Ring skip, prior receipt mismatch, self-promotion, authority/assignment widening, stale evidence, automatic trigger, or production target", "action": "DENY; retain exact current ring active/LKG pointers"},
+    {"seam": "POSTCONDITION_READBACK", "failure": "Materialized bytes, route, assignment, authority, health, or Verification LKG readback mismatch", "action": "Trigger exact rollback sequence"},
+    {"seam": "LKG_RESTORE", "failure": "LKG missing, incomplete, stale, revoked, corrupt, wrong tuple/lock, CAS conflict, or readback mismatch", "action": "Disable smallest affected profile, adapter, pack, or route; deny traffic; do not choose another version"},
+    {"seam": "CLEANUP", "failure": "Any staged/candidate/pointer/config residue remains", "action": "Terminal disabled, not rolled_back success"},
+    {"seam": "PUBLIC_REDACTION", "failure": "Non-allowlisted field, credential/service/security detail, private path, raw payload, customer/tenant data, unsupported claim, or publication authorization", "action": "DENY output/publication with no reflection of sensitive candidate value"}
+  ],
+  "exactRollbackSemantics": {
+    "beforePointerSwitch": [
+      "Do not change activePointer or lkgPointer.",
+      "Remove only owned staged candidate bytes and temporary records.",
+      "Verify zero owned residue and emit rolled_back receipt for the candidate; if cleanup readback fails, disable the affected target."
+    ],
+    "afterPointerSwitchBeforeAcceptance": [
+      "Freeze the failing candidate and deny further traffic for the exact affected target during recovery.",
+      "Verify prior lkgPointer is COMPLETE, not stale/revoked, and exactly binds the prior lockIdentity, packageDigest, UpdateTupleV1, assignments, authority profile, Verification verdict/evidence, and pointer generation.",
+      "Execute the fixed hash-chained sequence STAGE_COPY, VERIFY_STAGED, SWITCH_POINTER, VERIFY_POSTCONDITION, ROLLBACK_LKG, CLEANUP.",
+      "Compare-and-swap activePointer from the failing candidate to that exact prior lkgPointer; never resolve latest, nearest compatible, or any other installed generation.",
+      "Restore exact profile, adapter, pack, route, assignment, policy/authority, schema, and generation tuple from the LKG contract.",
+      "Read back exact pointer, immutable files, tuple, assignments, authority profile, route health, Verification LKG pointer/readback, and cleanup residue.",
+      "Report rolled_back only when all readbacks match and residueCount is zero; terminal journal state is ROLLED_BACK_ZERO_RESIDUE."
+    ],
+    "afterFinalAcceptance": "The accepted candidate becomes the new lkgPointer only after final allowed ring readback and acceptance CAS. A later provisional update rolls back to that accepted pointer. Historical generations may be retained immutably but are not selectable unless they are the exact recorded LKG for the operation.",
+    "unrecoverable": "If no exact healthy prior LKG exists, if any rollback binding/readback fails, or if cleanup leaves residue, disable the smallest affected profile, adapter, pack, or route and deny. Broad fallback, partial success, and best-effort version selection are forbidden.",
+    "currentContractReadback": {
+      "SkillBundleV1": "rollback.lkgLockIdentity equals its own lockIdentity and proves the generation's exact self-identity; it does not identify an operational prior generation.",
+      "AAS037Fixture": "The fixture can deactivate/remove one active directory and has historical rollback evidence; it does not restore a prior content-addressed update tuple.",
+      "UpdateContracts": "Pure contracts model tuple/LKG, postcondition, ROLLBACK_LKG, CLEANUP, and ROLLED_BACK_ZERO_RESIDUE but perform no effects.",
+      "integrationStatus": "Exact cross-module operational rollback is planned additive work inside the selected boundary and is not implemented or evidenced at this base."
+    }
+  },
+  "mandatoryNegativeProbes": [
+    "Unknown, issue-only, aliased, duplicated, or dynamically discovered catalogue/action ID denies.",
+    "Any catalogue, action, bundle capability contract, integration scaffold, or install result claiming active or executable by default denies.",
+    "Missing/extra/changed file, role, media type, byte, digest, path, dependency, capability contract, or symlink material denies exact lock verification.",
+    "Mutable source, mutable latest alias, unsupported schema/runtime, unsafe integer, negative zero, non-canonical JSON, or digest mismatch denies.",
+    "Builder unresolved intent, Builder AUTO_EXECUTE installation/activation, RAMPAGE bypass, self-approval, self-activation, self-publication, or runtime authority denies.",
+    "Missing quality/provenance/licence/risk evidence, unsupported public claim, stale evidence, failed check, or inconclusive/non-VERIFIED verdict denies.",
+    "Subject producer equals evidence producer, required authority roles conflate, identity binding is absent, or decision digest mismatches denies.",
+    "Install that changes active/LKG pointers, grants capability authority, or materializes without exact readback denies and cleans staging.",
+    "Activation without exact assignment, explicit separate activator, receipt, compatibility closure, current pointer CAS, and ring-bound readback denies.",
+    "Silent auto-update, automatic activation/promotion, ring skip, self-promotion, authority widening, assignment widening, production target, or stale/revoked/incomplete LKG denies.",
+    "Pointer race never retries implicitly against a new pointer; operation denies and must be reproposed.",
+    "Postcondition failure restores only exact prior LKG; missing/corrupt LKG, readback mismatch, or nonzero residue disables the affected leaf.",
+    "Credentials, tokens, provider/service access, customer/tenant payloads, private/absolute paths, raw prompts/runtime receipts, security exploit details, unknown fields, or publication authorization deny public output without reflection."
+  ],
+  "publicRedactionAllowlist": {
+    "policyId": "pansphaira.asf/public-reproduction-allowlist/v1",
+    "default": "DENY",
+    "allowedClasses": [
+      "Public repository URL, issue number/title/state/timestamps, and cryptographic digests but not raw issue body/comment text",
+      "Task/decision/schema IDs and exact public repository-relative paths",
+      "Git base commit/tree/merge-base SHAs and public package/schema versions",
+      "Canonicalization/hash rules, state names, transition reason codes, abstract authority boundary IDs, ring IDs, and non-claims",
+      "Synthetic fixture IDs, versions, file-relative paths, byte counts, and SHA-256 digests",
+      "Test command strings and coarse PASS, FAIL, BLOCKED, or NOT_RUN outcomes with exit codes and non-sensitive infrastructure signatures",
+      "Planned-versus-implemented classifications, gaps, and rejection decisions"
+    ],
+    "deniedClasses": [
+      "Credential, token, secret, authorization header, cookie, private key, credential handle, or environment value",
+      "Live provider, registry, service, tenant, customer, production endpoint, payload, account, or infrastructure detail not already public repository fixture metadata",
+      "Absolute/private host path, username, home directory, DSH_HOME/spill location, alternate clone, process dump, core dump, or raw runtime receipt",
+      "Raw prompt, raw issue body/comment, arbitrary source bytes, private provenance material, or non-allowlisted evidence payload",
+      "Security exploit detail, vulnerability reproduction beyond safe denial reason, or claim of containment/certification",
+      "Publication, release, production readiness, live compatibility, licence/provenance, marketplace, or security claim not directly supported by exact allowlisted evidence"
+    ],
+    "publicSafeReproduction": {
+      "classification": "PUBLIC_REPOSITORY_METADATA_AND_SYNTHETIC_FIXTURE_ONLY",
+      "steps": [
+        "Checkout exact base.headSha in a clean workspace.",
+        "Verify SHA-256 for every authoritativeLocalBindings path.",
+        "Using the pinned package profile, regenerate the exact tests/skill-bundle.test.ts fixture and require the manifestDigest, fileSetDigest, lockIdentity, and exact file list in exactGenerationLockEvidence.",
+        "Run the focused and full commands in testCommands; retain only coarse outcomes, digests, and sanitized reason codes.",
+        "Canonicalize this receipt with receiptDigest omitted and verify receiptDigest.",
+        "Apply this allowlist before any public output; unknown fields deny."
+      ],
+      "liveCallsRequired": false,
+      "credentialsRequired": false,
+      "providerAccessRequired": false,
+      "productionDataRequired": false
+    }
+  },
+  "explicitRejections": [
+    "LIVE_MARKETPLACE",
+    "DYNAMIC_CAPABILITY_DISCOVERY_AS_AUTHORITY",
+    "SELF_APPROVAL",
+    "SELF_VERIFICATION",
+    "SELF_ACTIVATION",
+    "SELF_PROMOTION",
+    "SILENT_AUTO_UPDATE",
+    "AUTOMATIC_ACTIVATION",
+    "AUTOMATIC_RING_PROMOTION",
+    "MUTABLE_LATEST_ALIAS",
+    "BROAD_RUNTIME_AUTHORITY",
+    "RAMPAGE_OR_FULL_CONTROL_BYPASS",
+    "PRODUCTION_ROLLOUT",
+    "CREDENTIAL_OR_SERVICE_ACCESS",
+    "PUBLIC_SECURITY_DETAILS",
+    "UNSUPPORTED_PUBLIC_CLAIMS",
+    "PUBLICATION_OR_RELEASE_AUTHORIZATION",
+    "PARALLEL_ASF_LIFECYCLE"
+  ],
+  "testCommands": {
+    "repositoryProfileRequired": [
+      "git diff --check origin/main...HEAD"
+    ],
+    "focusedControllerCommand": "npm run build && node --test dist/tests/capability-catalogue.test.js dist/tests/skill-bundle.test.js dist/tests/skill-admission.test.js dist/tests/builder-authority.test.js dist/tests/builder-capability-resolution.test.js dist/tests/builder-integration-plan.test.js dist/tests/builder-quality-evidence.test.js dist/tests/builder-contribution-bundle.test.js dist/tests/verification-fabric.test.js dist/tests/verification-fabric-negative-zero.test.js dist/tests/update-check-plan.test.js dist/tests/update-staging-envelope.test.js dist/tests/update-apply-tuple-lock.test.js dist/tests/update-migration-checkpoint.test.js dist/tests/update-apply-postcondition.test.js dist/tests/update-apply-journal.test.js tests/canonical-json-runtime-parity.test.mjs tests/managed-skill-lifecycle-runtime.test.mjs tests/builder-reuse-conformance.test.mjs",
+    "fullControllerCommands": [
+      "npm run test",
+      "npm run lint",
+      "npm run build"
+    ],
+    "receiptChecks": [
+      "python3 -m json.tool docs/evidence/conveyor/sol-psai35-asf-lifecycle-adr-01.json",
+      "Recompute receiptDigest using canonicalizationAndHashFreeze with receiptDigest omitted",
+      "Assert selectedLifecycleBoundary.selectionCount == 1",
+      "Assert finiteStateMachine.states equals the required eight-state set in recorded order",
+      "Assert every source path is repository-relative and every bound SHA-256 is 64 lowercase hexadecimal characters"
+    ],
+    "infrastructurePolicy": "A local Node/npm exit 133 SIGTRAP or docker ENOENT is infrastructure evidence, not a product verdict. Do not mark product tests PASS; retain technically complete receipt and delegate authoritative pinned-Node/host-Docker gates to the controller."
+  },
+  "workerExecution": {
+    "nodeVersionPreflight": {
+      "command": "node --version",
+      "exitCode": 0,
+      "stdout": "v24.19.0",
+      "outcome": "PASS_VERSION_IN_RANGE"
+    },
+    "npmVersionPreflight": {
+      "command": "npm --version",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "signature": "V8 SetPermissions: Check failed: 12 == (*__errno_location ())",
+      "outcome": "INFRASTRUCTURE_BLOCKED_NOT_PRODUCT_VERDICT"
+    },
+    "npmFocusedAndFullCommands": {
+      "outcome": "NOT_RUN_INFRASTRUCTURE_BLOCKED",
+      "productVerdict": "UNSET",
+      "controllerAction": "Run exact testCommands under authoritative pinned Node/npm and host Docker where required."
+    },
+    "requiredGitDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "outcome": "RUN_AFTER_FINAL_COMMIT_OUTSIDE_SELF_REFERENTIAL_RECEIPT"
+    }
+  },
+  "plannedVersusImplementedReadback": [
+    {
+      "capability": "Canonical deterministic skill generation and lock",
+      "implementedAtBase": true,
+      "evidence": "SkillBundleV1 source, JSON schemas, source tests, and exact frozen-fixture digest projection",
+      "gap": "Pinned-Node test execution was infrastructure-blocked locally; controller execution remains required."
+    },
+    {
+      "capability": "Immutable capability-pack identity",
+      "implementedAtBase": true,
+      "evidence": "Decision reuses SkillBundleLockV1 directly; packId=bundleId and packDigest=lockIdentity, with finite inactive capabilityContracts.",
+      "gap": "No aggregate marketplace/package registry is authorized or needed. Multi-pack assignment receipt integration is additive."
+    },
+    {
+      "capability": "Proposal and quality/provenance/risk analysis",
+      "implementedAtBase": true,
+      "evidence": "Issue #22 Builder contracts and historical synthetic evidence; issue #3 current inactive catalogue",
+      "gap": "Cross-binding to SkillBundle lock and authoritative Verification Fabric subject is additive; Builder evidence alone cannot advance lifecycle."
+    },
+    {
+      "capability": "Install inactive",
+      "implementedAtBase": true,
+      "evidence": "AAS-037 contract/store/broker and synthetic runtime fixture install with active=false",
+      "gap": "Current AAS-037 packageDigest is not cross-bound to SkillBundleLockV1 and the exact eight-state schema is additive."
+    },
+    {
+      "capability": "Explicit assigned activation with activation receipt",
+      "implementedAtBase": false,
+      "evidence": "AAS-037 has a separate fixture activation request/receipt, but not the frozen distinct activator identity, exact assignment closure, Verification Fabric binding, CAS pointer, or ring receipt.",
+      "gap": "Affected activation leaf is DENIED until all fields and authorities in this receipt are implemented and verified."
+    },
+    {
+      "capability": "Controlled-ring update with compatibility fences",
+      "implementedAtBase": false,
+      "evidence": "Pure update contracts implement six-axis compatibility, self-promotion/authority-widening denials, staging, tuple locks, and journals.",
+      "gap": "No ring state/receipt integration or effectful apply exists; no production ring is authorized."
+    },
+    {
+      "capability": "Exact prior-LKG rollback or disable",
+      "implementedAtBase": false,
+      "evidence": "SkillBundle self-LKG identity, AAS-037 fixture deactivation rollback, Verification Fabric LKG readback, and pure update rollback contracts exist separately.",
+      "gap": "Cross-module prior-LKG CAS restore of exact profile/adapter/pack/route/assignment tuple and zero-residue readback is additive; fail closed to disabled until proven."
+    },
+    {
+      "capability": "Integrated Verification Fabric evidence",
+      "implementedAtBase": false,
+      "evidence": "Verification Fabric v1 contract exists; v2 DAG is shadow graphVersion 16.",
+      "gap": "The checked-in DAG contains no bundle/admission/AAS-037/Builder/update integration node, so no integrated VERIFIED claim is allowed."
+    },
+    {
+      "capability": "Public-safe reproduction",
+      "implementedAtBase": true,
+      "evidence": "Builder contribution allowlist and this receipt's explicit narrower allowlist/reproduction steps",
+      "gap": "Publication remains unauthorized; controller may reproduce locally but must not infer release or public claim authority."
+    }
+  ],
+  "blockingConditions": [
+    "No pairwise-distinct principal bindings currently implement the six frozen authority boundaries.",
+    "No versioned cross-binding currently joins SkillBundleLockV1.lockIdentity to AAS-037 packageDigest, catalogue digest, assignments, Verification Fabric bundle, and UpdateTupleV1.",
+    "No exact eight-state/ring/activation-receipt schema is implemented inside the selected boundary.",
+    "No integrated Verification Fabric DAG node/evidence exists for the selected composition.",
+    "No effectful atomic active/LKG pointer CAS and exact prior-LKG zero-residue restore is implemented.",
+    "Local npm initialization terminated with exit 133/SIGTRAP, so current source tests were not executed by this worker."
+  ],
+  "decisionVerdict": {
+    "decisionReceipt": "COMPLETE",
+    "selectedBoundary": "AAS-037_MANAGED_SKILL_LIFECYCLE_V1",
+    "selectedBoundaryCount": 1,
+    "selectedBoundaryStatus": "extendable",
+    "productImplementation": "NOT_CHANGED",
+    "integratedLifecycleImplementation": "PLANNED_NOT_IMPLEMENTED",
+    "activation": "DENIED_AT_BASE",
+    "production": "DENIED",
+    "release": "NOT_AUTHORIZED",
+    "publicClaim": "Only this deterministic decision, exact source bindings, historical-evidence labels, local infrastructure blocker, and explicit non-claims are supported.",
+    "successBoundary": "This receipt succeeds only as the requested deterministic architecture/integration decision. It does not claim that the composed ASF lifecycle, activation, rings, rollback, production compatibility, or current product tests succeed."
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "after": {
+    "active": [
+      {
+        "generationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "lockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a",
+        "skillId": "skill:synthetic.lifecycle",
+        "state": "ACTIVE",
+        "version": "0.9.0"
+      },
+      {
+        "generationDigest": "757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130",
+        "lockIdentity": "5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5",
+        "skillId": "skill:unrelated",
+        "state": "ACTIVE",
+        "version": "9.0.0"
+      }
+    ],
+    "assignments": [],
+    "installed": [],
+    "rings": []
+  },
+  "before": {
+    "active": [
+      {
+        "generationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "lockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a",
+        "skillId": "skill:synthetic.lifecycle",
+        "state": "ACTIVE",
+        "version": "0.9.0"
+      },
+      {
+        "generationDigest": "757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130",
+        "lockIdentity": "5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5",
+        "skillId": "skill:unrelated",
+        "state": "ACTIVE",
+        "version": "9.0.0"
+      }
+    ],
+    "assignments": [],
+    "installed": [],
+    "rings": []
+  },
+  "effects": {
+    "activationApplied": true,
+    "installationApplied": true,
+    "rollbackApplied": true
+  },
+  "outcome": "ACCEPTED",
+  "reasonCodes": [
+    "ASF_SYNTHETIC_ROLLBACK_ACCEPTED"
+  ],
+  "receipts": {
+    "proposal": {
+      "stage": "proposal",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "lifecycleState": "PROPOSED",
+      "lineage": {
+        "parentGenerationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "parentLockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a"
+      },
+      "skillId": "skill:synthetic.lifecycle",
+      "version": "1.0.0",
+      "receiptDigest": "f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf"
+    },
+    "generation": {
+      "stage": "generation",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "contentDigest": "fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "immutable": true,
+      "lineage": {
+        "parentGenerationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "parentLockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a"
+      },
+      "sourceDigest": "c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa",
+      "version": "1.0.0",
+      "receiptDigest": "ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9"
+    },
+    "qualityEvidence": {
+      "stage": "qualityEvidence",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidenceClass": "SYNTHETIC_VERIFIED",
+      "finding": "QUALITY_CHECKED",
+      "observedAtMs": 1725000000000,
+      "receiptDigest": "c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2"
+    },
+    "provenanceEvidence": {
+      "stage": "provenanceEvidence",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidenceClass": "SYNTHETIC_VERIFIED",
+      "finding": "PROVENANCE_VERIFIED",
+      "observedAtMs": 1725000000000,
+      "receiptDigest": "c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536"
+    },
+    "riskEvidence": {
+      "stage": "riskEvidence",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidenceClass": "SYNTHETIC_VERIFIED",
+      "finding": "RISK_CLEAR",
+      "observedAtMs": 1725000000000,
+      "receiptDigest": "3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653"
+    },
+    "analysis": {
+      "stage": "analysis",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidence": [
+        "qualityEvidence",
+        "provenanceEvidence",
+        "riskEvidence"
+      ],
+      "lifecycleState": "ANALYZED",
+      "provenance": "VERIFIED",
+      "quality": "PASS",
+      "risk": "CLEAR",
+      "receiptDigest": "1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c"
+    },
+    "bundleLock": {
+      "stage": "bundleLock",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "lockIdentity": "0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65",
+      "tamperChecked": true,
+      "receiptDigest": "5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90"
+    },
+    "inactiveInstall": {
+      "stage": "inactiveInstall",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "lockIdentity": "0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65",
+      "state": "installed_inactive",
+      "receiptDigest": "c661d89e6418f0579e83fdac63ca978451b08b5671a75baf417c89e01aef057e"
+    },
+    "compatibility": {
+      "stage": "compatibility",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "matrix": {
+        "matrixId": "asffence:synthetic.lifecycle",
+        "rows": [
+          {
+            "adapterId": "adapter:synthetic.local",
+            "adapterVersion": "1.0.0",
+            "catalogDigest": "ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe",
+            "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+            "lockDigest": "0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65",
+            "packDigest": "ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a",
+            "packId": "pack:synthetic.lifecycle",
+            "profileId": "profile:synthetic.canary",
+            "profileVersion": "1.0.0",
+            "routeId": "route:local",
+            "routeVersion": "1.0.0",
+            "skillId": "skill:synthetic.lifecycle",
+            "version": "1.0.0"
+          }
+        ],
+        "version": "1.0.0"
+      },
+      "matrixDigest": "0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4",
+      "verdict": "COMPATIBLE",
+      "receiptDigest": "0fb4e3e6feed84ef3d59897d94dd2c786713526ab9b559fb857914fde142ba0e"
+    },
+    "compatibilityTuple": {
+      "stage": "compatibilityTuple",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "matrixDigest": "0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4",
+      "tuple": {
+        "adapterId": "adapter:synthetic.local",
+        "adapterVersion": "1.0.0",
+        "catalogDigest": "ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe",
+        "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+        "lockDigest": "0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65",
+        "packDigest": "ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a",
+        "packId": "pack:synthetic.lifecycle",
+        "profileId": "profile:synthetic.canary",
+        "profileVersion": "1.0.0",
+        "routeId": "route:local",
+        "routeVersion": "1.0.0",
+        "skillId": "skill:synthetic.lifecycle",
+        "version": "1.0.0"
+      },
+      "tupleDigest": "ff17e82dcf6c0423bfd97998f1bb7d204440f99aeab80d6f61795e6012fd9149",
+      "verdict": "COMPATIBLE",
+      "receiptDigest": "3551e506bb64500502119bb2d93e5b28c997ba4d863ca47aa434f079926e16d4"
+    },
+    "assignment": {
+      "stage": "assignment",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "profileId": "profile:synthetic.canary",
+      "targetScope": "profile:synthetic.canary",
+      "receiptDigest": "b06c54a06549f77147ae987215217ff0aa40e3c9955adbe7b097c8d08749df7d"
+    },
+    "activation": {
+      "stage": "activation",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "explicitApproval": true,
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "lockIdentity": "0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65",
+      "targetScope": "profile:synthetic.canary",
+      "receiptDigest": "562522256e1b3164c8756e8014785e3eae2cd84bc5b027481ca694760ea0f81f"
+    },
+    "ring-canary": {
+      "stage": "ring-canary",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "previous": "NONE",
+      "ringId": "canary",
+      "status": "PROMOTED",
+      "receiptDigest": "c21caefac38fad6b82e9031c8746be34f678f796bbdf450eadbbb83638b7f26a"
+    },
+    "ring-cohort": {
+      "stage": "ring-cohort",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "previous": "canary",
+      "ringId": "cohort",
+      "status": "PROMOTED",
+      "receiptDigest": "18794b9e4ddb921300f7299c4e3d2d440d95daa322a288c503edb19c69b93c36"
+    },
+    "ring-general": {
+      "stage": "ring-general",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "previous": "cohort",
+      "ringId": "general",
+      "status": "PROMOTED",
+      "receiptDigest": "4184f173d703204b6638a73f6407044a726a778042a9c8e3b451fdaad2e36d59"
+    },
+    "rollback": {
+      "stage": "rollback",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "afterReadbackDigest": "08b34c022e0990f615bbd3b53f72b9647aabb60b85b8882215b47649682ae0bd",
+      "candidateGenerationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "exactLkg": true,
+      "lkgGenerationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+      "lkgLockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a",
+      "mode": "RESTORE_EXACT_LOCK_OR_DENY",
+      "result": "RESTORED",
+      "receiptDigest": "1c33530893853ca2106b6c6a4687659dc4a823c5cf6ad58b46c4d7035ffd0bb9"
+    },
+    "public": {
+      "stage": "public",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "outcome": "ACCEPTED",
+      "reasonCodes": [
+        "ASF_SYNTHETIC_ROLLBACK_ACCEPTED"
+      ],
+      "receipts": {
+        "activation": "562522256e1b3164c8756e8014785e3eae2cd84bc5b027481ca694760ea0f81f",
+        "analysis": "1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c",
+        "assignment": "b06c54a06549f77147ae987215217ff0aa40e3c9955adbe7b097c8d08749df7d",
+        "bundleLock": "5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90",
+        "compatibility": "0fb4e3e6feed84ef3d59897d94dd2c786713526ab9b559fb857914fde142ba0e",
+        "compatibilityTuple": "3551e506bb64500502119bb2d93e5b28c997ba4d863ca47aa434f079926e16d4",
+        "generation": "ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9",
+        "inactiveInstall": "c661d89e6418f0579e83fdac63ca978451b08b5671a75baf417c89e01aef057e",
+        "proposal": "f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf",
+        "provenanceEvidence": "c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536",
+        "qualityEvidence": "c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2",
+        "ring-canary": "c21caefac38fad6b82e9031c8746be34f678f796bbdf450eadbbb83638b7f26a",
+        "ring-cohort": "18794b9e4ddb921300f7299c4e3d2d440d95daa322a288c503edb19c69b93c36",
+        "ring-general": "4184f173d703204b6638a73f6407044a726a778042a9c8e3b451fdaad2e36d59",
+        "riskEvidence": "3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653",
+        "rollback": "1c33530893853ca2106b6c6a4687659dc4a823c5cf6ad58b46c4d7035ffd0bb9"
+      },
+      "state": {
+        "active": [
+          {
+            "generationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+            "lockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a",
+            "skillId": "skill:synthetic.lifecycle",
+            "state": "ACTIVE",
+            "version": "0.9.0"
+          },
+          {
+            "generationDigest": "757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130",
+            "lockIdentity": "5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5",
+            "skillId": "skill:unrelated",
+            "state": "ACTIVE",
+            "version": "9.0.0"
+          }
+        ],
+        "installed": []
+      },
+      "lifecycleReceiptDigest": "434091c9e7d5dcfdf7e4cf5cedba4d72f4bd6641ead019345a9c3df789846f63",
+      "receiptDigest": "78298c5c5cee279eeba6ecf5f46b78fa62c641406384385960dc70ef26fc989d"
+    }
+  },
+  "scenario": "rollback",
+  "canonicalJson": "{\"after\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"before\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"effects\":{\"activationApplied\":true,\"installationApplied\":true,\"rollbackApplied\":true},\"outcome\":\"ACCEPTED\",\"reasonCodes\":[\"ASF_SYNTHETIC_ROLLBACK_ACCEPTED\"],\"receipts\":{\"activation\":{\"explicitApproval\":true,\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"562522256e1b3164c8756e8014785e3eae2cd84bc5b027481ca694760ea0f81f\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"activation\",\"targetScope\":\"profile:synthetic.canary\"},\"analysis\":{\"evidence\":[\"qualityEvidence\",\"provenanceEvidence\",\"riskEvidence\"],\"lifecycleState\":\"ANALYZED\",\"provenance\":\"VERIFIED\",\"quality\":\"PASS\",\"receiptDigest\":\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\",\"risk\":\"CLEAR\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"analysis\"},\"assignment\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"profileId\":\"profile:synthetic.canary\",\"receiptDigest\":\"b06c54a06549f77147ae987215217ff0aa40e3c9955adbe7b097c8d08749df7d\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"assignment\",\"targetScope\":\"profile:synthetic.canary\"},\"bundleLock\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"bundleLock\",\"tamperChecked\":true},\"compatibility\":{\"matrix\":{\"matrixId\":\"asffence:synthetic.lifecycle\",\"rows\":[{\"adapterId\":\"adapter:synthetic.local\",\"adapterVersion\":\"1.0.0\",\"catalogDigest\":\"ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockDigest\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"packDigest\":\"ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a\",\"packId\":\"pack:synthetic.lifecycle\",\"profileId\":\"profile:synthetic.canary\",\"profileVersion\":\"1.0.0\",\"routeId\":\"route:local\",\"routeVersion\":\"1.0.0\",\"skillId\":\"skill:synthetic.lifecycle\",\"version\":\"1.0.0\"}],\"version\":\"1.0.0\"},\"matrixDigest\":\"0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4\",\"receiptDigest\":\"0fb4e3e6feed84ef3d59897d94dd2c786713526ab9b559fb857914fde142ba0e\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"compatibility\",\"verdict\":\"COMPATIBLE\"},\"compatibilityTuple\":{\"matrixDigest\":\"0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4\",\"receiptDigest\":\"3551e506bb64500502119bb2d93e5b28c997ba4d863ca47aa434f079926e16d4\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"compatibilityTuple\",\"tuple\":{\"adapterId\":\"adapter:synthetic.local\",\"adapterVersion\":\"1.0.0\",\"catalogDigest\":\"ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockDigest\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"packDigest\":\"ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a\",\"packId\":\"pack:synthetic.lifecycle\",\"profileId\":\"profile:synthetic.canary\",\"profileVersion\":\"1.0.0\",\"routeId\":\"route:local\",\"routeVersion\":\"1.0.0\",\"skillId\":\"skill:synthetic.lifecycle\",\"version\":\"1.0.0\"},\"tupleDigest\":\"ff17e82dcf6c0423bfd97998f1bb7d204440f99aeab80d6f61795e6012fd9149\",\"verdict\":\"COMPATIBLE\"},\"generation\":{\"contentDigest\":\"fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"immutable\":true,\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"sourceDigest\":\"c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa\",\"stage\":\"generation\",\"version\":\"1.0.0\"},\"inactiveInstall\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"c661d89e6418f0579e83fdac63ca978451b08b5671a75baf417c89e01aef057e\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"inactiveInstall\",\"state\":\"installed_inactive\"},\"proposal\":{\"lifecycleState\":\"PROPOSED\",\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"skillId\":\"skill:synthetic.lifecycle\",\"stage\":\"proposal\",\"version\":\"1.0.0\"},\"provenanceEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"PROVENANCE_VERIFIED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"provenanceEvidence\"},\"qualityEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"QUALITY_CHECKED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"qualityEvidence\"},\"ring-canary\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"previous\":\"NONE\",\"receiptDigest\":\"c21caefac38fad6b82e9031c8746be34f678f796bbdf450eadbbb83638b7f26a\",\"ringId\":\"canary\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"ring-canary\",\"status\":\"PROMOTED\"},\"ring-cohort\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"previous\":\"canary\",\"receiptDigest\":\"18794b9e4ddb921300f7299c4e3d2d440d95daa322a288c503edb19c69b93c36\",\"ringId\":\"cohort\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"ring-cohort\",\"status\":\"PROMOTED\"},\"ring-general\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"previous\":\"cohort\",\"receiptDigest\":\"4184f173d703204b6638a73f6407044a726a778042a9c8e3b451fdaad2e36d59\",\"ringId\":\"general\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"ring-general\",\"status\":\"PROMOTED\"},\"riskEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"RISK_CLEAR\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"riskEvidence\"},\"rollback\":{\"afterReadbackDigest\":\"08b34c022e0990f615bbd3b53f72b9647aabb60b85b8882215b47649682ae0bd\",\"candidateGenerationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"exactLkg\":true,\"lkgGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lkgLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"mode\":\"RESTORE_EXACT_LOCK_OR_DENY\",\"receiptDigest\":\"1c33530893853ca2106b6c6a4687659dc4a823c5cf6ad58b46c4d7035ffd0bb9\",\"result\":\"RESTORED\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"rollback\"}},\"scenario\":\"rollback\"}",
+  "exitCode": 0,
+  "receiptDigest": "434091c9e7d5dcfdf7e4cf5cedba4d72f4bd6641ead019345a9c3df789846f63",
+  "receiptJson": "{\"after\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"before\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"canonicalJson\":\"{\\\"after\\\":{\\\"active\\\":[{\\\"generationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"lockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"0.9.0\\\"},{\\\"generationDigest\\\":\\\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\\\",\\\"lockIdentity\\\":\\\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\\\",\\\"skillId\\\":\\\"skill:unrelated\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"9.0.0\\\"}],\\\"assignments\\\":[],\\\"installed\\\":[],\\\"rings\\\":[]},\\\"before\\\":{\\\"active\\\":[{\\\"generationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"lockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"0.9.0\\\"},{\\\"generationDigest\\\":\\\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\\\",\\\"lockIdentity\\\":\\\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\\\",\\\"skillId\\\":\\\"skill:unrelated\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"9.0.0\\\"}],\\\"assignments\\\":[],\\\"installed\\\":[],\\\"rings\\\":[]},\\\"effects\\\":{\\\"activationApplied\\\":true,\\\"installationApplied\\\":true,\\\"rollbackApplied\\\":true},\\\"outcome\\\":\\\"ACCEPTED\\\",\\\"reasonCodes\\\":[\\\"ASF_SYNTHETIC_ROLLBACK_ACCEPTED\\\"],\\\"receipts\\\":{\\\"activation\\\":{\\\"explicitApproval\\\":true,\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"lockIdentity\\\":\\\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\\\",\\\"receiptDigest\\\":\\\"562522256e1b3164c8756e8014785e3eae2cd84bc5b027481ca694760ea0f81f\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"activation\\\",\\\"targetScope\\\":\\\"profile:synthetic.canary\\\"},\\\"analysis\\\":{\\\"evidence\\\":[\\\"qualityEvidence\\\",\\\"provenanceEvidence\\\",\\\"riskEvidence\\\"],\\\"lifecycleState\\\":\\\"ANALYZED\\\",\\\"provenance\\\":\\\"VERIFIED\\\",\\\"quality\\\":\\\"PASS\\\",\\\"receiptDigest\\\":\\\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\\\",\\\"risk\\\":\\\"CLEAR\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"analysis\\\"},\\\"assignment\\\":{\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"profileId\\\":\\\"profile:synthetic.canary\\\",\\\"receiptDigest\\\":\\\"b06c54a06549f77147ae987215217ff0aa40e3c9955adbe7b097c8d08749df7d\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"assignment\\\",\\\"targetScope\\\":\\\"profile:synthetic.canary\\\"},\\\"bundleLock\\\":{\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"lockIdentity\\\":\\\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\\\",\\\"receiptDigest\\\":\\\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"bundleLock\\\",\\\"tamperChecked\\\":true},\\\"compatibility\\\":{\\\"matrix\\\":{\\\"matrixId\\\":\\\"asffence:synthetic.lifecycle\\\",\\\"rows\\\":[{\\\"adapterId\\\":\\\"adapter:synthetic.local\\\",\\\"adapterVersion\\\":\\\"1.0.0\\\",\\\"catalogDigest\\\":\\\"ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe\\\",\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"lockDigest\\\":\\\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\\\",\\\"packDigest\\\":\\\"ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a\\\",\\\"packId\\\":\\\"pack:synthetic.lifecycle\\\",\\\"profileId\\\":\\\"profile:synthetic.canary\\\",\\\"profileVersion\\\":\\\"1.0.0\\\",\\\"routeId\\\":\\\"route:local\\\",\\\"routeVersion\\\":\\\"1.0.0\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"version\\\":\\\"1.0.0\\\"}],\\\"version\\\":\\\"1.0.0\\\"},\\\"matrixDigest\\\":\\\"0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4\\\",\\\"receiptDigest\\\":\\\"0fb4e3e6feed84ef3d59897d94dd2c786713526ab9b559fb857914fde142ba0e\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"compatibility\\\",\\\"verdict\\\":\\\"COMPATIBLE\\\"},\\\"compatibilityTuple\\\":{\\\"matrixDigest\\\":\\\"0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4\\\",\\\"receiptDigest\\\":\\\"3551e506bb64500502119bb2d93e5b28c997ba4d863ca47aa434f079926e16d4\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"compatibilityTuple\\\",\\\"tuple\\\":{\\\"adapterId\\\":\\\"adapter:synthetic.local\\\",\\\"adapterVersion\\\":\\\"1.0.0\\\",\\\"catalogDigest\\\":\\\"ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe\\\",\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"lockDigest\\\":\\\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\\\",\\\"packDigest\\\":\\\"ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a\\\",\\\"packId\\\":\\\"pack:synthetic.lifecycle\\\",\\\"profileId\\\":\\\"profile:synthetic.canary\\\",\\\"profileVersion\\\":\\\"1.0.0\\\",\\\"routeId\\\":\\\"route:local\\\",\\\"routeVersion\\\":\\\"1.0.0\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"version\\\":\\\"1.0.0\\\"},\\\"tupleDigest\\\":\\\"ff17e82dcf6c0423bfd97998f1bb7d204440f99aeab80d6f61795e6012fd9149\\\",\\\"verdict\\\":\\\"COMPATIBLE\\\"},\\\"generation\\\":{\\\"contentDigest\\\":\\\"fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf\\\",\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"immutable\\\":true,\\\"lineage\\\":{\\\"parentGenerationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"parentLockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\"},\\\"receiptDigest\\\":\\\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"sourceDigest\\\":\\\"c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa\\\",\\\"stage\\\":\\\"generation\\\",\\\"version\\\":\\\"1.0.0\\\"},\\\"inactiveInstall\\\":{\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"lockIdentity\\\":\\\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\\\",\\\"receiptDigest\\\":\\\"c661d89e6418f0579e83fdac63ca978451b08b5671a75baf417c89e01aef057e\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"inactiveInstall\\\",\\\"state\\\":\\\"installed_inactive\\\"},\\\"proposal\\\":{\\\"lifecycleState\\\":\\\"PROPOSED\\\",\\\"lineage\\\":{\\\"parentGenerationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"parentLockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\"},\\\"receiptDigest\\\":\\\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"stage\\\":\\\"proposal\\\",\\\"version\\\":\\\"1.0.0\\\"},\\\"provenanceEvidence\\\":{\\\"evidenceClass\\\":\\\"SYNTHETIC_VERIFIED\\\",\\\"finding\\\":\\\"PROVENANCE_VERIFIED\\\",\\\"observedAtMs\\\":1725000000000,\\\"receiptDigest\\\":\\\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"provenanceEvidence\\\"},\\\"qualityEvidence\\\":{\\\"evidenceClass\\\":\\\"SYNTHETIC_VERIFIED\\\",\\\"finding\\\":\\\"QUALITY_CHECKED\\\",\\\"observedAtMs\\\":1725000000000,\\\"receiptDigest\\\":\\\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"qualityEvidence\\\"},\\\"ring-canary\\\":{\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"previous\\\":\\\"NONE\\\",\\\"receiptDigest\\\":\\\"c21caefac38fad6b82e9031c8746be34f678f796bbdf450eadbbb83638b7f26a\\\",\\\"ringId\\\":\\\"canary\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"ring-canary\\\",\\\"status\\\":\\\"PROMOTED\\\"},\\\"ring-cohort\\\":{\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"previous\\\":\\\"canary\\\",\\\"receiptDigest\\\":\\\"18794b9e4ddb921300f7299c4e3d2d440d95daa322a288c503edb19c69b93c36\\\",\\\"ringId\\\":\\\"cohort\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"ring-cohort\\\",\\\"status\\\":\\\"PROMOTED\\\"},\\\"ring-general\\\":{\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"previous\\\":\\\"cohort\\\",\\\"receiptDigest\\\":\\\"4184f173d703204b6638a73f6407044a726a778042a9c8e3b451fdaad2e36d59\\\",\\\"ringId\\\":\\\"general\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"ring-general\\\",\\\"status\\\":\\\"PROMOTED\\\"},\\\"riskEvidence\\\":{\\\"evidenceClass\\\":\\\"SYNTHETIC_VERIFIED\\\",\\\"finding\\\":\\\"RISK_CLEAR\\\",\\\"observedAtMs\\\":1725000000000,\\\"receiptDigest\\\":\\\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"riskEvidence\\\"},\\\"rollback\\\":{\\\"afterReadbackDigest\\\":\\\"08b34c022e0990f615bbd3b53f72b9647aabb60b85b8882215b47649682ae0bd\\\",\\\"candidateGenerationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"exactLkg\\\":true,\\\"lkgGenerationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"lkgLockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\",\\\"mode\\\":\\\"RESTORE_EXACT_LOCK_OR_DENY\\\",\\\"receiptDigest\\\":\\\"1c33530893853ca2106b6c6a4687659dc4a823c5cf6ad58b46c4d7035ffd0bb9\\\",\\\"result\\\":\\\"RESTORED\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"rollback\\\"}},\\\"scenario\\\":\\\"rollback\\\"}\",\"effects\":{\"activationApplied\":true,\"installationApplied\":true,\"rollbackApplied\":true},\"exitCode\":0,\"outcome\":\"ACCEPTED\",\"reasonCodes\":[\"ASF_SYNTHETIC_ROLLBACK_ACCEPTED\"],\"receiptDigest\":\"434091c9e7d5dcfdf7e4cf5cedba4d72f4bd6641ead019345a9c3df789846f63\",\"receipts\":{\"activation\":{\"explicitApproval\":true,\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"562522256e1b3164c8756e8014785e3eae2cd84bc5b027481ca694760ea0f81f\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"activation\",\"targetScope\":\"profile:synthetic.canary\"},\"analysis\":{\"evidence\":[\"qualityEvidence\",\"provenanceEvidence\",\"riskEvidence\"],\"lifecycleState\":\"ANALYZED\",\"provenance\":\"VERIFIED\",\"quality\":\"PASS\",\"receiptDigest\":\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\",\"risk\":\"CLEAR\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"analysis\"},\"assignment\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"profileId\":\"profile:synthetic.canary\",\"receiptDigest\":\"b06c54a06549f77147ae987215217ff0aa40e3c9955adbe7b097c8d08749df7d\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"assignment\",\"targetScope\":\"profile:synthetic.canary\"},\"bundleLock\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"bundleLock\",\"tamperChecked\":true},\"compatibility\":{\"matrix\":{\"matrixId\":\"asffence:synthetic.lifecycle\",\"rows\":[{\"adapterId\":\"adapter:synthetic.local\",\"adapterVersion\":\"1.0.0\",\"catalogDigest\":\"ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockDigest\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"packDigest\":\"ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a\",\"packId\":\"pack:synthetic.lifecycle\",\"profileId\":\"profile:synthetic.canary\",\"profileVersion\":\"1.0.0\",\"routeId\":\"route:local\",\"routeVersion\":\"1.0.0\",\"skillId\":\"skill:synthetic.lifecycle\",\"version\":\"1.0.0\"}],\"version\":\"1.0.0\"},\"matrixDigest\":\"0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4\",\"receiptDigest\":\"0fb4e3e6feed84ef3d59897d94dd2c786713526ab9b559fb857914fde142ba0e\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"compatibility\",\"verdict\":\"COMPATIBLE\"},\"compatibilityTuple\":{\"matrixDigest\":\"0b084f1635d165ee9634a25a0fd9b47095d1fcdc45b2632c229d59a3f8a049f4\",\"receiptDigest\":\"3551e506bb64500502119bb2d93e5b28c997ba4d863ca47aa434f079926e16d4\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"compatibilityTuple\",\"tuple\":{\"adapterId\":\"adapter:synthetic.local\",\"adapterVersion\":\"1.0.0\",\"catalogDigest\":\"ebc19e54ce6d2caebf3afe4b46dcf75eb4568c1e192ecd5a829cb73da0f31bbe\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockDigest\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"packDigest\":\"ab74ba228d014c1946c38746971a8a83bc3c4cea2db188abd0eaf5e8f0ec254a\",\"packId\":\"pack:synthetic.lifecycle\",\"profileId\":\"profile:synthetic.canary\",\"profileVersion\":\"1.0.0\",\"routeId\":\"route:local\",\"routeVersion\":\"1.0.0\",\"skillId\":\"skill:synthetic.lifecycle\",\"version\":\"1.0.0\"},\"tupleDigest\":\"ff17e82dcf6c0423bfd97998f1bb7d204440f99aeab80d6f61795e6012fd9149\",\"verdict\":\"COMPATIBLE\"},\"generation\":{\"contentDigest\":\"fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"immutable\":true,\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"sourceDigest\":\"c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa\",\"stage\":\"generation\",\"version\":\"1.0.0\"},\"inactiveInstall\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"c661d89e6418f0579e83fdac63ca978451b08b5671a75baf417c89e01aef057e\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"inactiveInstall\",\"state\":\"installed_inactive\"},\"proposal\":{\"lifecycleState\":\"PROPOSED\",\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"skillId\":\"skill:synthetic.lifecycle\",\"stage\":\"proposal\",\"version\":\"1.0.0\"},\"provenanceEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"PROVENANCE_VERIFIED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"provenanceEvidence\"},\"public\":{\"lifecycleReceiptDigest\":\"434091c9e7d5dcfdf7e4cf5cedba4d72f4bd6641ead019345a9c3df789846f63\",\"outcome\":\"ACCEPTED\",\"reasonCodes\":[\"ASF_SYNTHETIC_ROLLBACK_ACCEPTED\"],\"receiptDigest\":\"78298c5c5cee279eeba6ecf5f46b78fa62c641406384385960dc70ef26fc989d\",\"receipts\":{\"activation\":\"562522256e1b3164c8756e8014785e3eae2cd84bc5b027481ca694760ea0f81f\",\"analysis\":\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\",\"assignment\":\"b06c54a06549f77147ae987215217ff0aa40e3c9955adbe7b097c8d08749df7d\",\"bundleLock\":\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\",\"compatibility\":\"0fb4e3e6feed84ef3d59897d94dd2c786713526ab9b559fb857914fde142ba0e\",\"compatibilityTuple\":\"3551e506bb64500502119bb2d93e5b28c997ba4d863ca47aa434f079926e16d4\",\"generation\":\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\",\"inactiveInstall\":\"c661d89e6418f0579e83fdac63ca978451b08b5671a75baf417c89e01aef057e\",\"proposal\":\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\",\"provenanceEvidence\":\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\",\"qualityEvidence\":\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\",\"ring-canary\":\"c21caefac38fad6b82e9031c8746be34f678f796bbdf450eadbbb83638b7f26a\",\"ring-cohort\":\"18794b9e4ddb921300f7299c4e3d2d440d95daa322a288c503edb19c69b93c36\",\"ring-general\":\"4184f173d703204b6638a73f6407044a726a778042a9c8e3b451fdaad2e36d59\",\"riskEvidence\":\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\",\"rollback\":\"1c33530893853ca2106b6c6a4687659dc4a823c5cf6ad58b46c4d7035ffd0bb9\"},\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"public\",\"state\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"installed\":[]}},\"qualityEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"QUALITY_CHECKED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"qualityEvidence\"},\"ring-canary\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"previous\":\"NONE\",\"receiptDigest\":\"c21caefac38fad6b82e9031c8746be34f678f796bbdf450eadbbb83638b7f26a\",\"ringId\":\"canary\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"ring-canary\",\"status\":\"PROMOTED\"},\"ring-cohort\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"previous\":\"canary\",\"receiptDigest\":\"18794b9e4ddb921300f7299c4e3d2d440d95daa322a288c503edb19c69b93c36\",\"ringId\":\"cohort\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"ring-cohort\",\"status\":\"PROMOTED\"},\"ring-general\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"previous\":\"cohort\",\"receiptDigest\":\"4184f173d703204b6638a73f6407044a726a778042a9c8e3b451fdaad2e36d59\",\"ringId\":\"general\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"ring-general\",\"status\":\"PROMOTED\"},\"riskEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"RISK_CLEAR\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"riskEvidence\"},\"rollback\":{\"afterReadbackDigest\":\"08b34c022e0990f615bbd3b53f72b9647aabb60b85b8882215b47649682ae0bd\",\"candidateGenerationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"exactLkg\":true,\"lkgGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lkgLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"mode\":\"RESTORE_EXACT_LOCK_OR_DENY\",\"receiptDigest\":\"1c33530893853ca2106b6c6a4687659dc4a823c5cf6ad58b46c4d7035ffd0bb9\",\"result\":\"RESTORED\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"rollback\"}},\"scenario\":\"rollback\"}"
+}

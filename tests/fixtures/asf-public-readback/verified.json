@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "pansphaira.asf/public-readback-input/v1",
+  "authority": "LOCAL_DETERMINISTIC_HARNESS_ONLY",
+  "fixtureId": "canonical-success",
+  "receipt": {
+    "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+    "authority": "LOCAL_DETERMINISTIC_HARNESS_ONLY",
+    "fixtureId": "success",
+    "scenario": "success",
+    "outcome": "ACCEPTED",
+    "reasonCodes": ["ASF_SYNTHETIC_LIFECYCLE_ACCEPTED"],
+    "lifecycleReceiptDigest": "48ac37da1240df7db9752ea77597112fa5d5383fe1bdd37b4768be446a513f86",
+    "stageReceipts": {
+      "activation": "562522256e1b3164c8756e8014785e3eae2cd84bc5b027481ca694760ea0f81f",
+      "analysis": "1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c",
+      "assignment": "b06c54a06549f77147ae987215217ff0aa40e3c9955adbe7b097c8d08749df7d",
+      "bundleLock": "5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90",
+      "compatibility": "0fb4e3e6feed84ef3d59897d94dd2c786713526ab9b559fb857914fde142ba0e",
+      "compatibilityTuple": "3551e506bb64500502119bb2d93e5b28c997ba4d863ca47aa434f079926e16d4",
+      "generation": "ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9",
+      "inactiveInstall": "c661d89e6418f0579e83fdac63ca978451b08b5671a75baf417c89e01aef057e",
+      "proposal": "f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf",
+      "provenanceEvidence": "c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536",
+      "qualityEvidence": "c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2",
+      "ring-canary": "c21caefac38fad6b82e9031c8746be34f678f796bbdf450eadbbb83638b7f26a",
+      "ring-cohort": "18794b9e4ddb921300f7299c4e3d2d440d95daa322a288c503edb19c69b93c36",
+      "ring-general": "4184f173d703204b6638a73f6407044a726a778042a9c8e3b451fdaad2e36d59",
+      "riskEvidence": "3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653",
+      "rollback": "c58393fae66f363517cd3a9ae967bc53595b03374fd323d5df9de942e42497e8",
+      "public": "1bb4d2203fc8393593140b830557f14fbb8fa09c2e19a2b90f87b0dfd6bbac45"
+    },
+    "state": {
+      "active": [
+        {"generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120", "skillId": "skill:synthetic.lifecycle", "state": "ACTIVE", "version": "1.0.0"},
+        {"generationDigest": "757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130", "skillId": "skill:unrelated", "state": "ACTIVE", "version": "9.0.0"}
+      ],
+      "installed": [
+        {"generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120", "skillId": "skill:synthetic.lifecycle", "state": "installed_inactive", "version": "1.0.0"}
+      ]
+    },
+    "receiptDigest": "455c80dd5732e8a2f5dac40903d154ee00c93e5b291040228dbf51d0242be77a"
+  },
+  "lineage": [
+    {"criterion": "deterministicGeneration", "receipt": "generation", "digest": "ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9"},
+    {"criterion": "provenanceQualityRisk", "receipt": "analysis", "digest": "1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c"},
+    {"criterion": "immutableContentAddressing", "receipt": "bundleLock", "digest": "5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90"},
+    {"criterion": "publicSafeReproduction", "receipt": "public", "digest": "1bb4d2203fc8393593140b830557f14fbb8fa09c2e19a2b90f87b0dfd6bbac45"},
+    {"criterion": "rollbackReadback", "receipt": "rollback", "digest": "c58393fae66f363517cd3a9ae967bc53595b03374fd323d5df9de942e42497e8"}
+  ],
+  "claims": ["VERIFIED_SYNTHETIC_LIFECYCLE_RECEIPTS", "DETERMINISTIC_REDACTION_ONLY"],
+  "nonClaims": ["COMMITTED_EXTERNAL_STATE", "EXTERNAL_ACTION", "EXPLOIT_EXECUTION", "LIVE_PROVIDER_OR_SERVICE", "PRODUCTION_ROLLOUT", "PUBLIC_READBACK", "RELEASE", "SECURITY_DISCLOSURE", "PROTECTED_DELIVERY"],
+  "noRelease": {"statement": "No protected delivery, release, or public readback occurred.", "status": "NOT_CLAIMED", "evidence": "LOCAL_SYNTHETIC_ONLY"}
+}

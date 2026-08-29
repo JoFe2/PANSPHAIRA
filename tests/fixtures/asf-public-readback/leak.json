@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "pansphaira.asf/public-readback-input/v1",
+  "authority": "LOCAL_DETERMINISTIC_HARNESS_ONLY",
+  "fixtureId": "negative-leak-probe",
+  "rawToken": "Bearer synthetic-token-must-never-render",
+  "privatePath": "/private/provider/path",
+  "host": "provider.example.invalid",
+  "session": "session-raw",
+  "job": "job-raw",
+  "unverifiedLink": "https://example.invalid/unverified",
+  "securityFinding": "SECURITY_FINDING_PRESENT",
+  "exploitPayload": "<synthetic exploit payload>",
+  "unsupportedClaim": "PRODUCTION_READY",
+  "externalAction": {"enabled": true}
+}

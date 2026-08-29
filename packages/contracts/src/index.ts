@@ -1,4 +1,10 @@
 export { canonicalJson } from "./canonical-json.js";
+export * from "./asf-activation.js";
+export * from "./asf-assignment.js";
+export * from "./asf-compatibility-fence.js";
+export * from "./asf-rollback.js";
+export * from "./asf-update-rings.js";
+export * from "./asf-bundle-lock.js";
 export * from "./poc-showcase.js";
 export * from "./poc-showcase-e2e.js";
 export * from "./poc-guided-demo-bootstrap.js";
