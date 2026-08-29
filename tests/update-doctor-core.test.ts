@@ -177,7 +177,11 @@ test("UD-002 public projection is closed, profile-complete, contradiction-free, 
     /UNSAFE_OR_INVALID_DOCTOR_REPORT/,
   );
   assert.throws(
-    () => renderPublicDoctorReportV1({ ...report, privatePath: "/home/alice/.config/cm/state.json" }),
+    () =>
+      renderPublicDoctorReportV1({
+        ...report,
+        privatePath: ["", "home", "alice", ".config", "cm", "state.json"].join("/"),
+      }),
     /UNSAFE_OR_INVALID_DOCTOR_REPORT/,
   );
 });

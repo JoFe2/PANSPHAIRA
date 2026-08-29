@@ -11,6 +11,7 @@ import {
   UPDATE_SYNTHETIC_APPLY_HARNESS_TARGET_TUPLE_DIGEST_V1,
   UPDATE_SYNTHETIC_APPLY_HARNESS_TARGET_TUPLE_V1,
   runUpdateSyntheticApplyHarnessV1,
+  updateSyntheticApplyHarnessReceiptDigestV1,
   verifyUpdateSyntheticApplyHarnessReceiptV1,
 } from "../dist/packages/contracts/src/update-synthetic-apply-harness.js";
 import { canonicalJson } from "../dist/packages/contracts/src/canonical-json.js";
@@ -39,6 +40,11 @@ function packetDigest(packet) {
   const { packetDigest: ignored, ...unsigned } = packet;
   void ignored;
   return createHash("sha256").update(canonicalJson(unsigned)).digest("hex");
+}
+
+function recomputeReceipt(receipt, changes) {
+  const changed = { ...receipt, ...changes };
+  return { ...changed, receiptDigest: updateSyntheticApplyHarnessReceiptDigestV1(changed) };
 }
 
 function cli(args = []) {
@@ -107,11 +113,31 @@ test("all required positive and fail-closed negative scenario outcomes are prese
   assert.equal(outage?.outcome, "PRESERVE_ACCEPTED");
   assert.deepEqual(outage?.initialPointer, outage?.finalPointer);
   assert.equal(outage?.contractChecks.continuity, "PRESERVE_ACCEPTED");
+  assert.deepEqual(outage?.contractChecks, {
+    promotionGate: "NOT_PERFORMED",
+    migrationEdge: "NOT_PERFORMED",
+    checkpoint: "NOT_PERFORMED",
+    applyJournal: "NOT_PERFORMED",
+    postcondition: "NOT_PERFORMED",
+    continuity: "PRESERVE_ACCEPTED",
+    rollbackReadback: "NOT_APPLICABLE",
+  });
   const invalid = byScenario.get("INVALID_LKG");
   assert.equal(invalid?.outcome, "SAFE_READ_ONLY");
   assert.equal(invalid?.readOnly, true);
   assert.equal(invalid?.lkgState, "INCOMPLETE");
   assert.equal(invalid?.contractChecks.continuity, "ENTER_SAFE_READ_ONLY");
+  assert.deepEqual(invalid?.initialPointer, invalid?.finalPointer);
+  assert.deepEqual(invalid?.stateTrace, ["CHECK_CONTINUITY", "INVALID_LKG", "ENTER_SAFE_READ_ONLY", "READBACK"]);
+  assert.deepEqual(invalid?.contractChecks, {
+    promotionGate: "NOT_PERFORMED",
+    migrationEdge: "NOT_PERFORMED",
+    checkpoint: "NOT_PERFORMED",
+    applyJournal: "NOT_PERFORMED",
+    postcondition: "NOT_PERFORMED",
+    continuity: "ENTER_SAFE_READ_ONLY",
+    rollbackReadback: "NOT_APPLICABLE",
+  });
 });
 
 test("retry is deterministic, promotion is independently bound, and tampering cannot become a claim", () => {
@@ -127,6 +153,25 @@ test("retry is deterministic, promotion is independently bound, and tampering ca
     exitCode: 71,
   });
   assert.equal(first.schemaVersion, UPDATE_SYNTHETIC_APPLY_HARNESS_RECEIPT_SCHEMA_V1);
+});
+
+test("renderer receipt verification rejects recomputed-digest semantic substitutions", () => {
+  const receipt = runUpdateSyntheticApplyHarnessV1({ failure: "FAILED_POSTCONDITION" });
+  for (const forged of [
+    recomputeReceipt(receipt, { outcome: "APPLIED" }),
+    recomputeReceipt(receipt, { scenario: "SUCCESS" }),
+    recomputeReceipt(receipt, { readOnly: true }),
+    recomputeReceipt(receipt, { stateTrace: ["CHECK_CONTINUITY", "CONTINUITY_ACCEPTED", "READBACK"] }),
+    recomputeReceipt(receipt, {
+      contractChecks: { ...receipt.contractChecks, postcondition: "ACCEPT_SWITCH", rollbackReadback: "NOT_APPLICABLE" },
+    }),
+  ]) {
+    assert.deepEqual(verifyUpdateSyntheticApplyHarnessReceiptV1(forged), {
+      outcome: "DENIED",
+      reasonCodes: ["SEMANTIC_MISMATCH_DENIED"],
+      exitCode: 74,
+    });
+  }
 });
 
 test("CLI dry-run/readback emits the same redacted packet and writes nothing", () => {
@@ -157,4 +202,25 @@ test("renderer source has no filesystem, process, network, or credential export 
   const source = readFileSync(SCRIPT, "utf8");
   assert.doesNotMatch(source, /writeFile|mkdir|rename|unlink|rmSync|fetch\(|spawnSync|execFileSync|process\.env/);
   assert.doesNotMatch(source, /-----BEGIN|gh[pousr]-|\/home\//i);
+});
+
+test("checkpoint rollback, promotion, synthetic apply, and packet tests are canonically registered", () => {
+  const packageJson = JSON.parse(readFileSync(resolve(ROOT, "package.json"), "utf8"));
+  const canonicalLifecycle = `${packageJson.scripts.test} ${packageJson.scripts.posttest}`;
+  const focusedCommand = packageJson.scripts["update-controller-synthetic:test"];
+  for (const target of [
+    "dist/tests/update-migration-checkpoint.test.js",
+    "dist/tests/update-checkpoint-rollback-readback.test.js",
+    "dist/tests/update-promotion-gate.test.js",
+    "dist/tests/update-synthetic-apply-harness.test.js",
+    "tests/update-controller-synthetic-evidence.test.mjs",
+  ]) {
+    assert.match(canonicalLifecycle, new RegExp(target.replaceAll(".", "\\.")));
+    assert.match(focusedCommand, new RegExp(target.replaceAll(".", "\\.")));
+  }
+
+  const dag = JSON.parse(readFileSync(resolve(ROOT, "verification/verification-dag-v2.json"), "utf8"));
+  const nodes = dag.nodes.filter(({ id }) => id === "ud-psai53-update-controller-synthetic-v1");
+  assert.equal(nodes.length, 1);
+  assert.deepEqual(nodes[0].ownedTests, ["npm run update-controller-synthetic:test"]);
 });

@@ -135,6 +135,15 @@ function receiptProjection(receipt) {
   };
 }
 
+function noApplyWorkWasPerformed(receipt) {
+  return receipt.contractChecks.promotionGate === "NOT_PERFORMED"
+    && receipt.contractChecks.migrationEdge === "NOT_PERFORMED"
+    && receipt.contractChecks.checkpoint === "NOT_PERFORMED"
+    && receipt.contractChecks.applyJournal === "NOT_PERFORMED"
+    && receipt.contractChecks.postcondition === "NOT_PERFORMED"
+    && receipt.contractChecks.rollbackReadback === "NOT_APPLICABLE";
+}
+
 function assertScenarioReceipt(receipt) {
   if (receipt.scenario === "PARTIAL_MIGRATION" || receipt.scenario === "FAILED_POSTCONDITION") {
     if (receipt.outcome !== "ROLLED_BACK_ZERO_RESIDUE"
@@ -148,13 +157,18 @@ function assertScenarioReceipt(receipt) {
   if (receipt.scenario === "REGISTRY_OUTAGE"
     && (receipt.outcome !== "PRESERVE_ACCEPTED"
       || canonicalJson(receipt.initialPointer) !== canonicalJson(receipt.finalPointer)
-      || receipt.contractChecks.continuity !== "PRESERVE_ACCEPTED")) {
+      || receipt.contractChecks.continuity !== "PRESERVE_ACCEPTED"
+      || canonicalJson(receipt.stateTrace) !== canonicalJson(["CHECK_CONTINUITY", "REGISTRY_UNAVAILABLE", "PRESERVE_ACCEPTED", "READBACK"])
+      || !noApplyWorkWasPerformed(receipt))) {
     throw new Error("SYNTHETIC_RECEIPT_REGISTRY_OUTAGE_DENIED");
   }
   if (receipt.scenario === "INVALID_LKG"
     && (receipt.outcome !== "SAFE_READ_ONLY" || receipt.readOnly !== true
       || receipt.lkgState !== "INCOMPLETE"
-      || receipt.contractChecks.continuity !== "ENTER_SAFE_READ_ONLY")) {
+      || canonicalJson(receipt.initialPointer) !== canonicalJson(receipt.finalPointer)
+      || receipt.contractChecks.continuity !== "ENTER_SAFE_READ_ONLY"
+      || canonicalJson(receipt.stateTrace) !== canonicalJson(["CHECK_CONTINUITY", "INVALID_LKG", "ENTER_SAFE_READ_ONLY", "READBACK"])
+      || !noApplyWorkWasPerformed(receipt))) {
     throw new Error("SYNTHETIC_RECEIPT_INVALID_LKG_DENIED");
   }
 }
@@ -172,7 +186,7 @@ export function buildUpdateControllerSyntheticEvidenceV1() {
     evidenceClass: "LOCAL_SYNTHETIC_REDACTED",
     mode: "DRY_RUN_READBACK",
     scope: {
-      workItem: "QWEN-PSAI53-DELIVERY-PACKET-09",
+      workItem: "CLOSURE-PSAI53-ROOT-DELIVERY-01-FINALIZER-01",
       operation: "isolated synthetic update-controller proof",
       ownerOperatedNext: true,
     },

@@ -1,7 +1,7 @@
 # Update-controller synthetic delivery packet
 
 Status: local, redacted, deterministic synthetic evidence for
-`QWEN-PSAI53-DELIVERY-PACKET-09`. This packet is a pre-owner-operated handoff
+`CLOSURE-PSAI53-ROOT-DELIVERY-01-FINALIZER-01`. This packet is a pre-owner-operated handoff
 for PR/CI/release review. It is not a release, promotion, deployment, or
 runtime controller.
 
@@ -74,25 +74,30 @@ host addresses, or raw fixture observations are exported.
 
 ## Scenario receipts and readback
 
-Every listed receipt is independently verified as
+Every listed receipt is shape-, digest-, readback-, tuple-, and semantically verified as
 `VERIFIED / SYNTHETIC_APPLY_RECEIPT_VERIFIED` before it is included. The
 receipt's digest, target tuple digest, source tuple digest, final pointer,
 owner-state digest, residue count, state trace, contract checks, and final
-readback are bound together.
+readback are bound together. Verification deterministically replays the declared
+scenario and retry ordinal and requires byte-identical canonical receipt
+semantics. Recomputing the public SHA-256 digest after substituting an outcome,
+scenario, read-only state, LKG state, trace, contract result, owner state, or
+readback therefore yields `SEMANTIC_MISMATCH_DENIED`, not `VERIFIED`.
 
 | Scenario | Public outcome | Read-only | Required readback |
 | --- | --- | ---: | --- |
 | `SUCCESS` | `APPLIED` | false | Candidate pointer at target tuple, revision 2, residue 0; postcondition `ACCEPT_SWITCH`. |
 | `PARTIAL_MIGRATION` | `ROLLED_BACK_ZERO_RESIDUE` | false | Exact `lkg:synthetic-001` pointer and source tuple, revision 3, original owner-state digest, complete unrevoked LKG, residue 0. |
 | `FAILED_POSTCONDITION` | `ROLLED_BACK_ZERO_RESIDUE` | false | Same exact LKG, pointer, owner-state, and zero-residue conditions as partial migration. |
-| `REGISTRY_OUTAGE` | `PRESERVE_ACCEPTED` | false | Initial and final pointers are byte-identical at the locally Accepted candidate; no registry fallback is claimed. |
-| `INVALID_LKG` | `SAFE_READ_ONLY` | true | Pointer is unchanged, LKG state is `INCOMPLETE`, and no apply or rollback is reported. |
+| `REGISTRY_OUTAGE` | `PRESERVE_ACCEPTED` | false | Initial and final pointers are byte-identical at the locally Accepted candidate; promotion, migration, checkpoint, journal, staging, pointer, postcondition, and rollback work are `NOT_PERFORMED`. |
+| `INVALID_LKG` | `SAFE_READ_ONLY` | true | Continuity is evaluated first; the pointer is unchanged, LKG state is `INCOMPLETE`, and promotion, migration, checkpoint, journal, staging, pointer, install, repair, postcondition, and rollback work are `NOT_PERFORMED`. |
 
 The rollback scenarios include `POSTCONDITION_FAILED`, `ROLLBACK_LKG`,
 `CLEANUP`, `ZERO_RESIDUE`, and `RETRY_READBACK` in their state trace. Retry
 ordinal is fixed at `2`; repeating the same scenario produces byte-identical
 receipts and retry receipt digests. Changing residue or any other bound field
-causes `DIGEST_MISMATCH_DENIED` rather than a success claim.
+without recomputing the receipt digest causes `DIGEST_MISMATCH_DENIED`.
+Recomputed-digest semantic substitutions cause `SEMANTIC_MISMATCH_DENIED`.
 
 ## Authority and fail-closed boundary
 
@@ -137,24 +142,22 @@ node scripts/render-update-controller-synthetic-evidence.mjs --dry-run
 node scripts/render-update-controller-synthetic-evidence.mjs --readback
 ```
 
-The focused delivery-packet test covers tuple and receipt binding, Doctor
-zero-write readback and redaction, all five scenario outcomes, receipt tamper
-denial, deterministic rollback retry, identical dry-run and readback output,
+The focused delivery-packet test covers tuple and semantic receipt binding,
+Doctor zero-write readback and redaction, all five scenario outcomes,
+recomputed-digest substitution denial, invalid-LKG fail-before-work behavior,
+deterministic rollback retry, identical dry-run and readback output,
 unsupported CLI mode rejection, and the renderer's absence of
 filesystem/process/network/credential export paths. The underlying
 synthetic-apply and promotion-gate suites supply the stale/forged CAS,
 self-attestation, self-promotion, and role-collision fail-closed checks.
 
-Verification record for this workspace: the required command was attempted
-exactly as written and the local Node process exited `133` before the build
-completed with the V8 `OS::SetPermissions` assertion (`Check failed: 12 ==
-(*__errno_location ())`). This is infrastructure evidence, not a product
-verdict. Re-running the same build and focused test with
-`NODE_OPTIONS=--jitless` passed the build and all 7 focused tests. The direct
-promotion-gate and synthetic-apply suites also passed all 14 tests under that
-workaround. The broader `npm run test` was not used as an acceptance claim:
-under the workaround it stopped at an unrelated loopback test because
-`WebAssembly` is unavailable in jitless mode (`fetch failed`).
+The exact finalizer gate attempts, canonical registration proof, integration
+base and tree bindings, release/defer disposition, local public-stage readback,
+and issue-close disposition are recorded under
+`closure-audits/CLOSURE-PSAI53-ROOT-DELIVERY-01/`. An exit `133` from the local
+Node/V8 permission assertion is retained there as infrastructure evidence and
+never upgraded to a product verdict; successful workaround receipts remain
+separate from the mandatory controller rerun requirement.
 
 This slice proves only local synthetic contract composition and redacted
 readback. It does not prove installation, migration execution, package

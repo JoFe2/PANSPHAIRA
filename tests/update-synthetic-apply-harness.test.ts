@@ -33,6 +33,17 @@ function verifyFixture(name: string): UpdateSyntheticApplyHarnessReceiptV1 {
   return value;
 }
 
+function recomputeReceipt(
+  receipt: UpdateSyntheticApplyHarnessReceiptV1,
+  changes: Partial<UpdateSyntheticApplyHarnessReceiptV1>,
+): UpdateSyntheticApplyHarnessReceiptV1 {
+  const changed = { ...receipt, ...changes } as UpdateSyntheticApplyHarnessReceiptV1;
+  return {
+    ...changed,
+    receiptDigest: updateSyntheticApplyHarnessReceiptDigestV1(changed),
+  };
+}
+
 test("pins and verifies the exact Core/Pack/Adapter/Policy/Schema/Generation tuple", () => {
   assert.deepEqual(Object.keys(UPDATE_SYNTHETIC_APPLY_HARNESS_TARGET_TUPLE_V1), [
     "core", "packs", "adapters", "policies", "schemas", "generations",
@@ -88,9 +99,19 @@ test("registry outage preserves the local Accepted operation without changing it
   assert.deepEqual(receipt.finalPointer, receipt.initialPointer);
   assert.equal(receipt.finalOwnerStateDigest, receipt.initialOwnerStateDigest);
   assert.equal(receipt.contractChecks.continuity, "PRESERVE_ACCEPTED");
+  assert.deepEqual(receipt.stateTrace, ["CHECK_CONTINUITY", "REGISTRY_UNAVAILABLE", "PRESERVE_ACCEPTED", "READBACK"]);
+  assert.deepEqual(receipt.contractChecks, {
+    promotionGate: "NOT_PERFORMED",
+    migrationEdge: "NOT_PERFORMED",
+    checkpoint: "NOT_PERFORMED",
+    applyJournal: "NOT_PERFORMED",
+    postcondition: "NOT_PERFORMED",
+    continuity: "PRESERVE_ACCEPTED",
+    rollbackReadback: "NOT_APPLICABLE",
+  });
 });
 
-test("invalid LKG fails closed into safe read-only mode", () => {
+test("invalid LKG enters safe read-only mode before stage, migration, pointer, install, repair, or promotion work", () => {
   const receipt = verifyFixture("invalid-lkg");
   assert.equal(receipt.outcome, "SAFE_READ_ONLY");
   assert.equal(receipt.readOnly, true);
@@ -100,6 +121,18 @@ test("invalid LKG fails closed into safe read-only mode", () => {
   assert.equal(receipt.residueCount, 0);
   assert.equal(receipt.lkgState, "INCOMPLETE");
   assert.equal(receipt.lkgRevoked, false);
+  assert.deepEqual(receipt.initialPointer, receipt.finalPointer);
+  assert.deepEqual(receipt.stateTrace, ["CHECK_CONTINUITY", "INVALID_LKG", "ENTER_SAFE_READ_ONLY", "READBACK"]);
+  assert.deepEqual(receipt.contractChecks, {
+    promotionGate: "NOT_PERFORMED",
+    migrationEdge: "NOT_PERFORMED",
+    checkpoint: "NOT_PERFORMED",
+    applyJournal: "NOT_PERFORMED",
+    postcondition: "NOT_PERFORMED",
+    continuity: "ENTER_SAFE_READ_ONLY",
+    rollbackReadback: "NOT_APPLICABLE",
+  });
+  assert.equal(receipt.stateTrace.some((entry) => /STAGE|MIGRATION|POINTER|INSTALL|REPAIR|PROMOTION|CHECKPOINT|JOURNAL/.test(entry)), false);
 });
 
 test("CAS rejects a stale or forged pointer and never self-promotes a candidate", () => {
@@ -133,5 +166,46 @@ test("rollback retry is deterministic and fully receipted", () => {
     outcome: "DENIED",
     reasonCodes: ["DIGEST_MISMATCH_DENIED"],
     exitCode: 71,
+  });
+});
+
+test("receipt verification binds scenario semantics after an attacker recomputes the public digest", () => {
+  const rollback = runUpdateSyntheticApplyHarnessV1({ failure: "FAILED_POSTCONDITION" });
+  const success = runUpdateSyntheticApplyHarnessV1();
+  const semanticForgeries = [
+    recomputeReceipt(rollback, { outcome: "APPLIED" }),
+    recomputeReceipt(rollback, { scenario: "SUCCESS" }),
+    recomputeReceipt(rollback, { readOnly: true }),
+    recomputeReceipt(rollback, { stateTrace: success.stateTrace }),
+    recomputeReceipt(rollback, { lkgState: "INCOMPLETE" }),
+    recomputeReceipt(rollback, {
+      contractChecks: { ...rollback.contractChecks, postcondition: "ACCEPT_SWITCH", rollbackReadback: "NOT_APPLICABLE" },
+    }),
+    recomputeReceipt(rollback, {
+      finalOwnerStateDigest: "0".repeat(64),
+      readback: { ...rollback.readback, ownerStateDigest: "0".repeat(64) },
+    }),
+  ];
+  for (const forged of semanticForgeries) {
+    assert.deepEqual(verifyUpdateSyntheticApplyHarnessReceiptV1(forged), {
+      outcome: "DENIED",
+      reasonCodes: ["SEMANTIC_MISMATCH_DENIED"],
+      exitCode: 74,
+    });
+  }
+
+  assert.deepEqual(verifyUpdateSyntheticApplyHarnessReceiptV1(recomputeReceipt(rollback, {
+    outcome: "attacker-selected" as UpdateSyntheticApplyHarnessReceiptV1["outcome"],
+  })), {
+    outcome: "DENIED",
+    reasonCodes: ["SCHEMA_DENIED"],
+    exitCode: 70,
+  });
+  assert.deepEqual(verifyUpdateSyntheticApplyHarnessReceiptV1(recomputeReceipt(rollback, {
+    contractChecks: { attackerSelected: true } as unknown as UpdateSyntheticApplyHarnessReceiptV1["contractChecks"],
+  })), {
+    outcome: "DENIED",
+    reasonCodes: ["SCHEMA_DENIED"],
+    exitCode: 70,
   });
 });

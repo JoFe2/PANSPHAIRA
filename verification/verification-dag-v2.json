@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "597fc50284cbb90bbad35a641fa80ddc06abd3ec6392bc9d8594ebec71d96fb2"
+          "sha256": "11da6950cba7e210faba2bfc8529d6831008a13fcfe9325056dc455966a6b15a"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -314,7 +314,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "308948aadc8b33a549505a4b9975da06f80010784a73870091fb94a112c3c8b8"
+          "sha256": "3735227463e097ebd71d140e2b460a48866762187cd3f6cdfa2e182c4e0a605a"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -494,7 +494,8 @@
         "integration-profile-v1",
         "external-bi-service-v2",
         "learning-routing-foundation",
-        "etl-01-extension-assurance-profile-v1"
+        "etl-01-extension-assurance-profile-v1",
+        "ud-psai53-update-controller-synthetic-v1"
       ],
       "inputs": [
         {
@@ -505,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "7cb7eabe0ae2d0a8502828a7f1334fc8dbd9021f3e18eacac144ca13d6611096"
+          "sha256": "95908223db9b87b11b4ff5d930743b781c70e71f4c89d578c8937ca93d2a02aa"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -916,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "2952706641b738f2d674b3c6575ab483948f04a4a69700a040740318b31b2ecf"
+          "sha256": "f532c7f679ffabd374dd2dafb82ed414890293f99973c1eae8fc5f4fd731dbc1"
         },
         {
           "path": "package-lock.json",
@@ -1434,6 +1435,200 @@
         "Only registered argv commands execute with shell disabled; unknown profiles, risks, paths, arguments, dependencies, receipts and transitions fail closed.",
         "Local, delivery and product-evidence states remain separate; nonterminal public prefixes, stale work and external waits never become success.",
         "The feature remains Shadow-only and npm test remains authoritative until separately governed activation evidence exists."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ud-psai53-update-controller-synthetic-v1",
+      "dependsOn": [
+        "toolchain-central"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/update-apply-journal.ts",
+          "role": "CONTRACT",
+          "sha256": "f3e9264a694fda529aa769a2671293d10910e177421470e190f3420c5a0daf1f"
+        },
+        {
+          "path": "packages/contracts/src/update-apply-postcondition.ts",
+          "role": "CONTRACT",
+          "sha256": "a9e09a64e32ab887c541a5124cd72392baf89c22be0bbdaa0be4d557d4b5f4a0"
+        },
+        {
+          "path": "packages/contracts/src/update-apply-tuple-lock.ts",
+          "role": "CONTRACT",
+          "sha256": "88c6944e9899f9ce736b8dd3ebd79dd9aab1e4685b7c7a7b6bd84102e7d1eeb8"
+        },
+        {
+          "path": "packages/contracts/src/update-check-plan.ts",
+          "role": "CONTRACT",
+          "sha256": "76650497170b5f586b611719a0155c80a0ebce8c8d688c49248f0bdbb1276e24"
+        },
+        {
+          "path": "packages/contracts/src/update-checkpoint-rollback-readback.ts",
+          "role": "SECURITY",
+          "sha256": "0bd9cf253378dca928d771092ae6362239f19f8ef3813199bd6de5f3bab47664"
+        },
+        {
+          "path": "packages/contracts/src/update-continuity-decision.ts",
+          "role": "SECURITY",
+          "sha256": "1d3636bab1ad7d0457cfa450298b41988b9f33adc86d1d8343c680100e14cdbb"
+        },
+        {
+          "path": "packages/contracts/src/update-doctor.ts",
+          "role": "SECURITY",
+          "sha256": "53b5b60cae5eb223dd7eb1e960956aadf11fcea03774474a1067d742787b1e99"
+        },
+        {
+          "path": "packages/contracts/src/update-migration-checkpoint.ts",
+          "role": "CONTRACT",
+          "sha256": "01c1d78a17ff98a034307cfa19bb23e0d478478c072158baacb532879e162e55"
+        },
+        {
+          "path": "packages/contracts/src/update-migration-edge.ts",
+          "role": "CONTRACT",
+          "sha256": "bdf3e9af0c6d55b9d107c2dfd8c12662b2ad26fca2bf5fe67f46535994721dc4"
+        },
+        {
+          "path": "packages/contracts/src/update-promotion-gate.ts",
+          "role": "SECURITY",
+          "sha256": "8d9e19ce5d111dedd48e37a95043f5a4d570a0d696dbb061c850e48eef778372"
+        },
+        {
+          "path": "packages/contracts/src/update-staging-envelope.ts",
+          "role": "CONTRACT",
+          "sha256": "f90aa145b6b80fb4049067f6ef025566befb981b590454c24f53268035f58023"
+        },
+        {
+          "path": "packages/contracts/src/update-synthetic-apply-harness.ts",
+          "role": "SECURITY",
+          "sha256": "7849c6bde8e6525b3d9ae8de63b2d406766d40567830e40b9a823c5a7a14bff5"
+        },
+        {
+          "path": "scripts/render-update-controller-synthetic-evidence.mjs",
+          "role": "VALIDATOR",
+          "sha256": "cc7e73f4516ab492443e7a663e5acba1304e407a99e6e10fee54267f2caaf3cf"
+        },
+        {
+          "path": "tests/fixtures/update-promotion-gate/self-attested-candidate.json",
+          "role": "FIXTURE",
+          "sha256": "5ec9ce1e5fcd006934a220a3bae90363b87a172ec953bad947020b5a2984ad0b"
+        },
+        {
+          "path": "tests/fixtures/update-promotion-gate/verified-candidate.json",
+          "role": "FIXTURE",
+          "sha256": "c0302ca68f39693649a2709ada26a007f4e5916818ea61860aa7f8722e2e36fe"
+        },
+        {
+          "path": "tests/fixtures/update-synthetic-apply/failed-postcondition.json",
+          "role": "FIXTURE",
+          "sha256": "e2c5e0d4c690194ffdaf5ab0f4d3eb89d71b3400274408d8a019fa0a7eba78a0"
+        },
+        {
+          "path": "tests/fixtures/update-synthetic-apply/invalid-lkg.json",
+          "role": "FIXTURE",
+          "sha256": "a87f1aecf2859472dde017172a363f8be2b72059dc30be1207a9bf014cff5a8c"
+        },
+        {
+          "path": "tests/fixtures/update-synthetic-apply/registry-outage.json",
+          "role": "FIXTURE",
+          "sha256": "44a682dcc9c4fdcceff7014beaf278d19deb6a6a394b50447df74f7b7dfdcbf1"
+        },
+        {
+          "path": "tests/fixtures/update-synthetic-apply/success.json",
+          "role": "FIXTURE",
+          "sha256": "42ce77a35041355f932ecbf21e18e2e2c353046316ca22170a062a4b13150133"
+        },
+        {
+          "path": "tests/update-apply-journal.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "b3f43cff22245094bd576a572a88b0709808dcee53b256066b33002a0e853da6"
+        },
+        {
+          "path": "tests/update-apply-postcondition.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "b60165c6b39347c3e1a9888ad550214436c522726323001f4b285e1a263f5560"
+        },
+        {
+          "path": "tests/update-apply-tuple-lock.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "77271e3aa0b97f6e1c73f3fc02c9a55e660de87bea8285c901888f61e064aa9e"
+        },
+        {
+          "path": "tests/update-check-plan.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "9d81cf6a520349fa9532b67a725627eb6ddf5c52c09d469b5104d8a950d3cff4"
+        },
+        {
+          "path": "tests/update-checkpoint-rollback-readback.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "967d408b81fb37d5f7696b66786b26db566ab93d2bb62d8211a3b15411467078"
+        },
+        {
+          "path": "tests/update-continuity-decision.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "d69880467bedd5fcb49887351326681512edde1e00982efe4c3d4a7783ef21d5"
+        },
+        {
+          "path": "tests/update-controller-synthetic-evidence.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "80e0cf083efbd9bc088054a0ea4464dd8cdd76d8fcb2a8c7bfec54a425a0e62c"
+        },
+        {
+          "path": "tests/update-doctor-compose-adapter.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "df2f665f8181167ca3f34627a2b22094b9bb8d999769829cc8c1faccb8b9fe8f"
+        },
+        {
+          "path": "tests/update-doctor-core.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "0fc655c645b1f392f5fadc9500b2a5c9ecf66d1b6bb43075325d3d7e48152923"
+        },
+        {
+          "path": "tests/update-doctor.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "911255ea325e6dbc02bad39566be2714693d7f3a9a6d3d82b0ca1563491e009d"
+        },
+        {
+          "path": "tests/update-migration-checkpoint.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "6ee01ce71a4e46e0f763730b693a01b803dfb44d9f875013dcd67fde2b672442"
+        },
+        {
+          "path": "tests/update-migration-edge.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "5f60ffc42a04aea4c3c4441d0370de5fcd9aa4da5d3587b75a221d7e2440a07a"
+        },
+        {
+          "path": "tests/update-promotion-gate.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "7f725b6620ebf5e8200b2f232b4137a65244c022c5ead9c13f2e22a112b209a6"
+        },
+        {
+          "path": "tests/update-staging-envelope.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "b58152c6586badc7f136db22858fdc8a65adae6510a47228ab6a0669d1b8e63c"
+        },
+        {
+          "path": "tests/update-synthetic-apply-harness.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "ec599c42e47d8da903242e428d1a414af3c4ea06557bd3fbd0c099cca26edbc0"
+        },
+        {
+          "path": "docs/update-controller-synthetic-proof.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bccc2610a45e95cbb7f7caa15146a6f43ff80074bdcb51b21dd0f2620382993e"
+        }
+      ],
+      "ownedTests": [
+        "npm run update-controller-synthetic:test"
+      ],
+      "invariants": [
+        "Every receipt is closed-shape, digest-bound and semantically replayed against its exact scenario, retry, tuple, LKG, trace, contract results, pointer, owner state and readback.",
+        "Invalid LKG and registry-outage continuity decisions occur before promotion, migration, checkpoint, journal, stage, pointer, install or repair work.",
+        "Partial migration and denied postconditions restore the exact complete unrevoked LKG with zero residue and deterministic hash-chain retry readback.",
+        "Candidate and updater identities cannot attest, verify or promote their own candidate."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

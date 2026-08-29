@@ -153,11 +153,11 @@ export interface UpdateSyntheticApplyHarnessReadbackV1 {
 }
 
 export interface UpdateSyntheticApplyHarnessContractChecksV1 {
-  readonly promotionGate: "VERIFIED";
-  readonly migrationEdge: "CHECKED";
-  readonly checkpoint: "RECORDED";
-  readonly applyJournal: "ACCEPTED";
-  readonly postcondition: "ACCEPT_SWITCH" | "ROLLBACK_REQUIRED";
+  readonly promotionGate: "VERIFIED" | "NOT_PERFORMED";
+  readonly migrationEdge: "CHECKED" | "NOT_PERFORMED";
+  readonly checkpoint: "RECORDED" | "NOT_PERFORMED";
+  readonly applyJournal: "ACCEPTED" | "NOT_PERFORMED";
+  readonly postcondition: "ACCEPT_SWITCH" | "ROLLBACK_REQUIRED" | "NOT_PERFORMED";
   readonly continuity: "PRESERVE_ACCEPTED" | "ENTER_SAFE_READ_ONLY";
   readonly rollbackReadback: "VERIFIED" | "NOT_APPLICABLE";
 }
@@ -189,7 +189,7 @@ export interface UpdateSyntheticApplyHarnessReceiptV1 {
 
 export type UpdateSyntheticApplyHarnessVerificationResultV1 =
   | { readonly outcome: "VERIFIED"; readonly reasonCodes: readonly ["SYNTHETIC_APPLY_RECEIPT_VERIFIED"]; readonly exitCode: 0 }
-  | { readonly outcome: "DENIED"; readonly reasonCodes: readonly ["SCHEMA_DENIED" | "DIGEST_MISMATCH_DENIED" | "TUPLE_MISMATCH_DENIED" | "READBACK_MISMATCH_DENIED"]; readonly exitCode: number };
+  | { readonly outcome: "DENIED"; readonly reasonCodes: readonly ["SCHEMA_DENIED" | "DIGEST_MISMATCH_DENIED" | "TUPLE_MISMATCH_DENIED" | "READBACK_MISMATCH_DENIED" | "SEMANTIC_MISMATCH_DENIED"]; readonly exitCode: number };
 
 function deepFreeze<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
@@ -545,64 +545,78 @@ export function runUpdateSyntheticApplyHarnessV1(
   const initialPointer = pointer(initialSnapshot.snapshotId, initialSnapshot.tupleDigest, 1);
   let finalPointer = initialPointer;
   let finalSnapshot = initialSnapshot;
-  const trace: string[] = ["CHECK_CONTRACTS", "CHECKPOINT_RECORDED"];
-
-  const promotion = buildPromotionGate();
-  assertOutcome(promotion.result, "VERIFIED", "PROMOTION_GATE");
-  const edge = buildMigrationEdge();
-  assertOutcome(edge.result, "CHECKED", "MIGRATION_EDGE");
-  const journalEvents = scenario === "SUCCESS" || scenario === "REGISTRY_OUTAGE" || scenario === "INVALID_LKG"
-    ? [
-        { outcome: "STAGE_COPIED" as const, timestampMs: OBSERVED_AT_MS },
-        { outcome: "STAGE_VERIFIED" as const, timestampMs: OBSERVED_AT_MS + 1 },
-        { outcome: "POINTER_SWITCHED" as const, timestampMs: OBSERVED_AT_MS + 2 },
-        { outcome: "POSTCONDITION_VERIFIED" as const, timestampMs: OBSERVED_AT_MS + 3 },
-      ]
-    : [
-        { outcome: "STAGE_COPIED" as const, timestampMs: OBSERVED_AT_MS },
-        { outcome: "STAGE_VERIFIED" as const, timestampMs: OBSERVED_AT_MS + 1 },
-        { outcome: "POINTER_SWITCHED" as const, timestampMs: OBSERVED_AT_MS + 2 },
-        { outcome: "POSTCONDITION_FAILED" as const, timestampMs: OBSERVED_AT_MS + 3 },
-        { outcome: "LKG_RESTORED" as const, timestampMs: OBSERVED_AT_MS + 4 },
-        { outcome: "ZERO_RESIDUE" as const, timestampMs: OBSERVED_AT_MS + 5 },
-      ];
-  const journal = buildUpdateApplyJournalV1({
-    operationDigest: OPERATION_DIGEST,
-    sourceLockDigest: source.tupleDigest,
-    targetLockDigest: target.tupleDigest,
-    revision: 1,
-    events: journalEvents,
-  });
-  const journalResult = verifyUpdateApplyJournalV1(journal, {
-    expectedOperationDigest: OPERATION_DIGEST,
-    expectedSourceLockDigest: source.tupleDigest,
-    expectedTargetLockDigest: target.tupleDigest,
-    expectedRevision: 1,
-  });
-  assertOutcome(journalResult, "ACCEPTED", "APPLY_JOURNAL");
-  const checkpoint = buildCheckpoint(source, edge.edge.edgeDigest, journal);
-  assertOutcome(checkpoint.result, "RECORDED", "CHECKPOINT");
-
+  const trace: string[] = ["CHECK_CONTINUITY"];
   const continuity = buildContinuity(scenario, target, lkg);
-  if (scenario === "REGISTRY_OUTAGE") assertOutcome(continuity.result, "PRESERVE_ACCEPTED", "CONTINUITY");
-  if (scenario === "INVALID_LKG") assertOutcome(continuity.result, "ENTER_SAFE_READ_ONLY", "CONTINUITY");
-
-  let postconditionStatus: "ACCEPT_SWITCH" | "ROLLBACK_REQUIRED" = "ACCEPT_SWITCH";
+  let promotionStatus: UpdateSyntheticApplyHarnessContractChecksV1["promotionGate"] = "NOT_PERFORMED";
+  let migrationEdgeStatus: UpdateSyntheticApplyHarnessContractChecksV1["migrationEdge"] = "NOT_PERFORMED";
+  let checkpointStatus: UpdateSyntheticApplyHarnessContractChecksV1["checkpoint"] = "NOT_PERFORMED";
+  let applyJournalStatus: UpdateSyntheticApplyHarnessContractChecksV1["applyJournal"] = "NOT_PERFORMED";
+  let postconditionStatus: UpdateSyntheticApplyHarnessContractChecksV1["postcondition"] = "NOT_PERFORMED";
+  let continuityStatus: UpdateSyntheticApplyHarnessContractChecksV1["continuity"] = "PRESERVE_ACCEPTED";
   let rollbackStatus: "VERIFIED" | "NOT_APPLICABLE" = "NOT_APPLICABLE";
   let retryReceiptDigest = createHash("sha256").update("chimpmaera.update/synthetic-apply/retry/not-applicable/v1").digest("hex");
   let outcome: UpdateSyntheticApplyHarnessReceiptV1["outcome"] = "APPLIED";
   let readOnly = false;
 
-  if (scenario === "REGISTRY_OUTAGE") {
-    trace.push("REGISTRY_UNAVAILABLE", "PRESERVE_ACCEPTED", "READBACK");
-    outcome = "PRESERVE_ACCEPTED";
-  } else if (scenario === "INVALID_LKG") {
+  if (scenario === "INVALID_LKG") {
+    assertOutcome(continuity.result, "ENTER_SAFE_READ_ONLY", "CONTINUITY");
     trace.push("INVALID_LKG", "ENTER_SAFE_READ_ONLY", "READBACK");
-    finalSnapshot = source;
-    finalPointer = initialPointer;
+    continuityStatus = "ENTER_SAFE_READ_ONLY";
     outcome = "SAFE_READ_ONLY";
     readOnly = true;
+  } else if (scenario === "REGISTRY_OUTAGE") {
+    assertOutcome(continuity.result, "PRESERVE_ACCEPTED", "CONTINUITY");
+    trace.push("REGISTRY_UNAVAILABLE", "PRESERVE_ACCEPTED", "READBACK");
+    outcome = "PRESERVE_ACCEPTED";
   } else {
+    assertOutcome(continuity.result, "PRESERVE_ACCEPTED", "CONTINUITY");
+    trace.push("CONTINUITY_ACCEPTED", "VERIFY_PROMOTION_GATE");
+    const promotion = buildPromotionGate();
+    assertOutcome(promotion.result, "VERIFIED", "PROMOTION_GATE");
+    promotionStatus = "VERIFIED";
+
+    trace.push("VERIFY_MIGRATION_EDGE");
+    const edge = buildMigrationEdge();
+    assertOutcome(edge.result, "CHECKED", "MIGRATION_EDGE");
+    migrationEdgeStatus = "CHECKED";
+
+    trace.push("BUILD_APPLY_JOURNAL");
+    const journalEvents = scenario === "SUCCESS"
+      ? [
+          { outcome: "STAGE_COPIED" as const, timestampMs: OBSERVED_AT_MS },
+          { outcome: "STAGE_VERIFIED" as const, timestampMs: OBSERVED_AT_MS + 1 },
+          { outcome: "POINTER_SWITCHED" as const, timestampMs: OBSERVED_AT_MS + 2 },
+          { outcome: "POSTCONDITION_VERIFIED" as const, timestampMs: OBSERVED_AT_MS + 3 },
+        ]
+      : [
+          { outcome: "STAGE_COPIED" as const, timestampMs: OBSERVED_AT_MS },
+          { outcome: "STAGE_VERIFIED" as const, timestampMs: OBSERVED_AT_MS + 1 },
+          { outcome: "POINTER_SWITCHED" as const, timestampMs: OBSERVED_AT_MS + 2 },
+          { outcome: "POSTCONDITION_FAILED" as const, timestampMs: OBSERVED_AT_MS + 3 },
+          { outcome: "LKG_RESTORED" as const, timestampMs: OBSERVED_AT_MS + 4 },
+          { outcome: "ZERO_RESIDUE" as const, timestampMs: OBSERVED_AT_MS + 5 },
+        ];
+    const journal = buildUpdateApplyJournalV1({
+      operationDigest: OPERATION_DIGEST,
+      sourceLockDigest: source.tupleDigest,
+      targetLockDigest: target.tupleDigest,
+      revision: 1,
+      events: journalEvents,
+    });
+    const journalResult = verifyUpdateApplyJournalV1(journal, {
+      expectedOperationDigest: OPERATION_DIGEST,
+      expectedSourceLockDigest: source.tupleDigest,
+      expectedTargetLockDigest: target.tupleDigest,
+      expectedRevision: 1,
+    });
+    assertOutcome(journalResult, "ACCEPTED", "APPLY_JOURNAL");
+    applyJournalStatus = "ACCEPTED";
+
+    const checkpoint = buildCheckpoint(source, edge.edge.edgeDigest, journal);
+    assertOutcome(checkpoint.result, "RECORDED", "CHECKPOINT");
+    checkpointStatus = "RECORDED";
+    trace.push("CHECKPOINT_RECORDED");
+
     trace.push("STAGE_COPY", "VERIFY_STAGED");
     const switched = compareAndSwapUpdateSyntheticApplyPointerV1(initialPointer, initialPointer, { activeSnapshotId: target.snapshotId, activeTupleDigest: target.tupleDigest });
     if (!switched.swapped) throw new Error("SYNTHETIC_HARNESS_SWITCH_CAS_DENIED");
@@ -631,12 +645,12 @@ export function runUpdateSyntheticApplyHarnessV1(
   }
 
   const contractChecks: UpdateSyntheticApplyHarnessContractChecksV1 = {
-    promotionGate: "VERIFIED",
-    migrationEdge: "CHECKED",
-    checkpoint: "RECORDED",
-    applyJournal: "ACCEPTED",
+    promotionGate: promotionStatus,
+    migrationEdge: migrationEdgeStatus,
+    checkpoint: checkpointStatus,
+    applyJournal: applyJournalStatus,
     postcondition: postconditionStatus,
-    continuity: scenario === "INVALID_LKG" ? "ENTER_SAFE_READ_ONLY" : "PRESERVE_ACCEPTED",
+    continuity: continuityStatus,
     rollbackReadback: rollbackStatus,
   };
   const readback = {
@@ -680,67 +694,109 @@ export function updateSyntheticApplyHarnessReceiptDigestV1(value: object): strin
   return digestWithout(record, "receiptDigest");
 }
 
-function validReceiptShape(value: unknown): value is UpdateSyntheticApplyHarnessReceiptV1 {
+const RECEIPT_KEYS = Object.freeze([
+  "schemaVersion", "harnessVersion", "scenario", "outcome", "readOnly", "tuple", "tupleDigest", "sourceTupleDigest", "lkgDigest", "lkgState", "lkgRevoked",
+  "initialPointer", "finalPointer", "initialOwnerStateDigest", "finalOwnerStateDigest", "residueCount", "stateTrace", "contractChecks",
+  "retryOrdinal", "retryReceiptDigest", "readback", "receiptDigest",
+]);
+const POINTER_KEYS = Object.freeze(["activeSnapshotId", "activeTupleDigest", "pointerDigest", "revision"]);
+const READBACK_KEYS = Object.freeze(["activeSnapshotId", "activeTupleDigest", "ownerStateDigest", "pointerRevision", "residueCount"]);
+const CONTRACT_CHECK_KEYS = Object.freeze([
+  "promotionGate", "migrationEdge", "checkpoint", "applyJournal", "postcondition", "continuity", "rollbackReadback",
+]);
+const RECEIPT_OUTCOMES = Object.freeze(["APPLIED", "ROLLED_BACK_ZERO_RESIDUE", "PRESERVE_ACCEPTED", "SAFE_READ_ONLY"]);
+
+function isPlainDataRecord(value: unknown): value is Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) return false;
+  return Reflect.ownKeys(value).every((key) => {
+    if (typeof key !== "string" || key === "__proto__" || key === "prototype" || key === "constructor") return false;
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    return descriptor !== undefined && "value" in descriptor && descriptor.enumerable === true;
+  });
+}
+
+function hasExactKeys(value: Record<string, unknown>, expected: readonly string[]): boolean {
+  const actual = Object.keys(value).sort();
+  const sortedExpected = [...expected].sort();
+  return actual.length === sortedExpected.length && actual.every((key, index) => key === sortedExpected[index]);
+}
+
+function validDenseStringArray(value: unknown): value is string[] {
+  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) return false;
+  const ownKeys = Reflect.ownKeys(value);
+  const expectedKeys = [...Array.from({ length: value.length }, (_, index) => String(index)), "length"];
+  return ownKeys.length === expectedKeys.length
+    && expectedKeys.every((key) => ownKeys.includes(key))
+    && value.every((entry) => typeof entry === "string");
+}
+
+function validContractChecks(value: unknown): value is UpdateSyntheticApplyHarnessContractChecksV1 {
+  if (!isPlainDataRecord(value) || !hasExactKeys(value, CONTRACT_CHECK_KEYS)) return false;
+  return (value.promotionGate === "VERIFIED" || value.promotionGate === "NOT_PERFORMED")
+    && (value.migrationEdge === "CHECKED" || value.migrationEdge === "NOT_PERFORMED")
+    && (value.checkpoint === "RECORDED" || value.checkpoint === "NOT_PERFORMED")
+    && (value.applyJournal === "ACCEPTED" || value.applyJournal === "NOT_PERFORMED")
+    && (value.postcondition === "ACCEPT_SWITCH" || value.postcondition === "ROLLBACK_REQUIRED" || value.postcondition === "NOT_PERFORMED")
+    && (value.continuity === "PRESERVE_ACCEPTED" || value.continuity === "ENTER_SAFE_READ_ONLY")
+    && (value.rollbackReadback === "VERIFIED" || value.rollbackReadback === "NOT_APPLICABLE");
+}
+
+function validReceiptShape(value: unknown): value is UpdateSyntheticApplyHarnessReceiptV1 {
+  if (!isPlainDataRecord(value) || !hasExactKeys(value, RECEIPT_KEYS)) return false;
   const record = value as Record<string, unknown>;
-  const expectedKeys = [
-    "schemaVersion", "harnessVersion", "scenario", "outcome", "readOnly", "tuple", "tupleDigest", "sourceTupleDigest", "lkgDigest", "lkgState", "lkgRevoked",
-    "initialPointer", "finalPointer", "initialOwnerStateDigest", "finalOwnerStateDigest", "residueCount", "stateTrace", "contractChecks",
-    "retryOrdinal", "retryReceiptDigest", "readback", "receiptDigest",
-  ];
-  const actualKeys = Object.keys(record).sort();
-  if (actualKeys.length !== expectedKeys.length || actualKeys.some((key, index) => key !== [...expectedKeys].sort()[index])) return false;
   return record.schemaVersion === UPDATE_SYNTHETIC_APPLY_HARNESS_RECEIPT_SCHEMA_V1
     && record.harnessVersion === UPDATE_SYNTHETIC_APPLY_HARNESS_VERSION_V1
     && typeof record.scenario === "string"
     && (UPDATE_SYNTHETIC_APPLY_HARNESS_FAILURES_V1 as readonly string[]).includes(record.scenario)
     && typeof record.outcome === "string"
+    && RECEIPT_OUTCOMES.includes(record.outcome)
     && typeof record.readOnly === "boolean"
-    && DIGEST.test(record.tupleDigest as string)
-    && DIGEST.test(record.sourceTupleDigest as string)
-    && DIGEST.test(record.lkgDigest as string)
+    && isPlainDataRecord(record.tuple)
+    && typeof record.tupleDigest === "string" && DIGEST.test(record.tupleDigest)
+    && typeof record.sourceTupleDigest === "string" && DIGEST.test(record.sourceTupleDigest)
+    && typeof record.lkgDigest === "string" && DIGEST.test(record.lkgDigest)
     && (record.lkgState === "COMPLETE" || record.lkgState === "INCOMPLETE")
     && record.lkgRevoked === false
-    && DIGEST.test(record.initialOwnerStateDigest as string)
-    && DIGEST.test(record.finalOwnerStateDigest as string)
+    && typeof record.initialOwnerStateDigest === "string" && DIGEST.test(record.initialOwnerStateDigest)
+    && typeof record.finalOwnerStateDigest === "string" && DIGEST.test(record.finalOwnerStateDigest)
     && Number.isSafeInteger(record.residueCount) && (record.residueCount as number) >= 0
-    && Array.isArray(record.stateTrace) && record.stateTrace.every((entry) => typeof entry === "string")
+    && validDenseStringArray(record.stateTrace)
     && Number.isSafeInteger(record.retryOrdinal) && (record.retryOrdinal as number) >= 1
-    && DIGEST.test(record.retryReceiptDigest as string)
+    && typeof record.retryReceiptDigest === "string" && DIGEST.test(record.retryReceiptDigest)
     && validPointer(record.initialPointer)
     && validPointer(record.finalPointer)
     && validReadback(record.readback)
-    && record.contractChecks !== null && typeof record.contractChecks === "object"
-    && DIGEST.test(record.receiptDigest as string);
+    && validContractChecks(record.contractChecks)
+    && typeof record.receiptDigest === "string" && DIGEST.test(record.receiptDigest);
 }
 
 function validPointer(value: unknown): value is UpdateSyntheticApplyPointerV1 {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
-  const record = value as Record<string, unknown>;
-  if (Object.keys(record).sort().join(",") !== ["activeSnapshotId", "activeTupleDigest", "pointerDigest", "revision"].sort().join(",")) return false;
-  if (typeof record.activeSnapshotId !== "string" || !DIGEST.test(record.activeTupleDigest as string)
-    || !Number.isSafeInteger(record.revision) || (record.revision as number) < 1 || !DIGEST.test(record.pointerDigest as string)) return false;
+  if (!isPlainDataRecord(value) || !hasExactKeys(value, POINTER_KEYS)) return false;
+  const record = value;
+  if (typeof record.activeSnapshotId !== "string" || typeof record.activeTupleDigest !== "string" || !DIGEST.test(record.activeTupleDigest)
+    || !Number.isSafeInteger(record.revision) || (record.revision as number) < 1 || typeof record.pointerDigest !== "string" || !DIGEST.test(record.pointerDigest)) return false;
   return record.pointerDigest === pointerDigest({
     activeSnapshotId: record.activeSnapshotId,
-    activeTupleDigest: record.activeTupleDigest as string,
+    activeTupleDigest: record.activeTupleDigest,
     revision: record.revision as number,
   });
 }
 
 function validReadback(value: unknown): value is UpdateSyntheticApplyHarnessReadbackV1 {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
-  const record = value as Record<string, unknown>;
-  if (Object.keys(record).sort().join(",") !== ["activeSnapshotId", "activeTupleDigest", "ownerStateDigest", "pointerRevision", "residueCount"].sort().join(",")) return false;
+  if (!isPlainDataRecord(value) || !hasExactKeys(value, READBACK_KEYS)) return false;
+  const record = value;
   return typeof record.activeSnapshotId === "string"
-    && DIGEST.test(record.activeTupleDigest as string)
-    && DIGEST.test(record.ownerStateDigest as string)
+    && typeof record.activeTupleDigest === "string" && DIGEST.test(record.activeTupleDigest)
+    && typeof record.ownerStateDigest === "string" && DIGEST.test(record.ownerStateDigest)
     && Number.isSafeInteger(record.pointerRevision) && (record.pointerRevision as number) >= 1
     && Number.isSafeInteger(record.residueCount) && (record.residueCount as number) >= 0;
 }
 
 export function verifyUpdateSyntheticApplyHarnessReceiptV1(value: unknown): UpdateSyntheticApplyHarnessVerificationResultV1 {
-  if (!validReceiptShape(value)) return immutable({ outcome: "DENIED", reasonCodes: ["SCHEMA_DENIED"], exitCode: 70 });
   try {
+    if (!validReceiptShape(value)) return immutable({ outcome: "DENIED", reasonCodes: ["SCHEMA_DENIED"], exitCode: 70 });
     const receipt = value;
     if (updateSyntheticApplyHarnessReceiptDigestV1(receipt) !== receipt.receiptDigest) return immutable({ outcome: "DENIED", reasonCodes: ["DIGEST_MISMATCH_DENIED"], exitCode: 71 });
     if (receipt.tupleDigest !== UPDATE_SYNTHETIC_APPLY_HARNESS_TARGET_TUPLE_DIGEST_V1
@@ -750,6 +806,8 @@ export function verifyUpdateSyntheticApplyHarnessReceiptV1(value: unknown): Upda
       || receipt.readback.ownerStateDigest !== receipt.finalOwnerStateDigest
       || receipt.readback.pointerRevision !== receipt.finalPointer.revision
       || receipt.readback.residueCount !== receipt.residueCount) return immutable({ outcome: "DENIED", reasonCodes: ["READBACK_MISMATCH_DENIED"], exitCode: 73 });
+    const expected = runUpdateSyntheticApplyHarnessV1({ failure: receipt.scenario, retryOrdinal: receipt.retryOrdinal });
+    if (canonicalJson(receipt) !== canonicalJson(expected)) return immutable({ outcome: "DENIED", reasonCodes: ["SEMANTIC_MISMATCH_DENIED"], exitCode: 74 });
     return immutable({ outcome: "VERIFIED", reasonCodes: ["SYNTHETIC_APPLY_RECEIPT_VERIFIED"], exitCode: 0 });
   } catch {
     return immutable({ outcome: "DENIED", reasonCodes: ["SCHEMA_DENIED"], exitCode: 70 });
