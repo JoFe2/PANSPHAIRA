@@ -72,15 +72,16 @@ test("P13 proves combined Sufficiency reduces false completeness against the exp
     insufficientOracleCases: 8,
     sufficientOracleCases: 1,
     combinedFalseCompletenessCount: 0,
-    simpleSolverFalseCompletenessCount: 8,
+    simpleSolverFalseCompletenessCount: 6,
     combinedTrueCompletenessCount: 1,
     combinedFalseCompletenessRate: 0,
-    simpleSolverFalseCompletenessRate: 1,
-    falseCompletenessAbsoluteReduction: 1,
+    simpleSolverFalseCompletenessRate: 0.75,
+    falseCompletenessAbsoluteReduction: 0.75,
     combinedTrueCompletenessRate: 1,
   });
   for (const item of report.cases) {
-    assert.equal(item.simpleSolverOutcome, "COMPLETE", item.caseId);
+    const expectedSimpleOutcome = ["case:empty-kb", "case:missing-gap"].includes(item.caseId) ? "INCOMPLETE" : "COMPLETE";
+    assert.equal(item.simpleSolverOutcome, expectedSimpleOutcome, item.caseId);
     assert.deepEqual(item.acceptedKnowledgeSourceClasses, ["ACTIVE_CURATED_KNOWLEDGE"]);
   }
 });

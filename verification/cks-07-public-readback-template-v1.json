@@ -16,7 +16,8 @@
   },
   "requiredEvidence": [
     "LOCAL_RELEASE_GOVERNANCE_PREFLIGHT",
-    "READBACK_ENTRYPOINT_BINDING"
+    "READBACK_ENTRYPOINT_BINDING",
+    "ROOT_DELIVERY_CLOSURE_GUARD"
   ],
   "expectedReceipt": {
     "schemaVersion": "pansphaira.verification/cks-07-public-readback-receipt/v1",
@@ -32,6 +33,18 @@
         "--public-readback"
       ],
       "authentication": "ANONYMOUS_GH_TOKEN_UNSET"
+    },
+    "closureGate": {
+      "taskId": "CLOSURE-PSAI287-ROOT-DELIVERY-01",
+      "releaseRequired": true,
+      "releaseDisposition": "RELEASE_REQUIRED_PENDING_AUTHORIZED_EXECUTION",
+      "publicReadbackRequired": true,
+      "issueCloseRequired": true,
+      "declaredArtifactPathBoundary": "closure-audits/CLOSURE-PSAI287-ROOT-DELIVERY-01/**",
+      "changedPathCount": 47,
+      "insideBoundaryCount": 0,
+      "outsideBoundaryCount": 47,
+      "status": "BLOCKED"
     },
     "evidence": [
       {
@@ -53,6 +66,13 @@
           "--public-readback"
         ],
         "authentication": "ANONYMOUS_GH_TOKEN_UNSET"
+      },
+      {
+        "evidenceId": "ROOT_DELIVERY_CLOSURE_GUARD",
+        "status": "BLOCKED",
+        "releaseReceipt": "docs/evidence/conveyor/sol-psai287-release-or-no-release-01.json",
+        "integrationReceipt": "docs/evidence/conveyor/int-psai287-pr-ci-package-01.json",
+        "reason": "REQUIRED_LATER_GATES_AND_DECLARED_ARTIFACT_PATH_BOUNDARY_UNSATISFIED"
       }
     ],
     "failClosed": {
@@ -60,7 +80,10 @@
       "publicReadbackSuccessClaimed": false,
       "networkUsed": false,
       "credentialUse": false,
-      "activationBeforePublicStateEvidenceDenied": true
+      "activationBeforePublicStateEvidenceDenied": true,
+      "noReleaseDispositionDenied": true,
+      "artifactPathBoundaryViolationDenied": true,
+      "issueCloseBeforeRequiredGatesDenied": true
     },
     "nonClaims": [
       "public state exists",
@@ -69,7 +92,8 @@
       "merge",
       "release",
       "deployment",
-      "production activation"
+      "production activation",
+      "issue close"
     ]
   }
 }

@@ -2,13 +2,13 @@
   "schemaVersion": "pansphaira.evidence/terra-psai287-root-qs-01/v1",
   "taskId": "TERRA-PSAI287-ROOT-QS-01",
   "recordKind": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
-  "decisionStatus": "RECONCILED_PASS_BOUNDED_TO_FROZEN_OFFLINE_FIXTURES",
+  "decisionStatus": "RECONCILED_PASS_CORRECTED_P11_P12_P13_BOUNDED_TO_FROZEN_OFFLINE_FIXTURES",
   "scope": {
     "capability": "CKS-07",
     "repository": "JoFe2/PANSPHAIRA",
     "repositoryState": {
-      "commit": "8972e0bb573575adde026992718d2fe29a8dd405",
-      "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+      "preFinalizerHeadCommit": "42c1f86002ab45aaa490bf4d53647c53fa04b7ec",
+      "mainCommit": "b5139807b6e425ab90008330587911dc070b33ee",
       "branch": "conveyor/pansphaira-287"
     },
     "evidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC",
@@ -57,15 +57,15 @@
     },
     "p12Positive": {
       "path": "tests/fixtures/cks-07/gap-acquisition-positive-v1.json",
-      "sha256": "22455ad445482eeb890494e100528fcec5ef3f45a344d1f9875dd0447374c3ff"
+      "sha256": "6d6c91dd13c63168eeae47b07e60c8196c6df4610df5765535f25a2f927695c0"
     },
     "p12Negative": {
       "path": "tests/fixtures/cks-07/gap-acquisition-negative-v1.json",
-      "sha256": "de3419eec011380d593497e6512bc3d39ba7f4be8be78b7cb69ed582ab43aef2"
+      "sha256": "e6a59265d3c83d1640c0e06cf7add3abd1ec4f6fe16950ddf8496b73769243fc"
     },
     "publicSafeDryRunReceipt": {
       "path": "verification/cks-07-empty-kb-dry-run-evidence-v1.json",
-      "sha256": "2c978f999f5748f1f0b3d32b6df9566afeeaa906a796b300ed45c140e7dfd4bf",
+      "sha256": "8d9157726919a5038b6fe4e32f904fea427127aba46d40b30356821e17b619cf",
       "evidenceId": "evidence:cks-07-empty-kb-e2e-v1",
       "receiptReplay": "DETERMINISTIC_BYTE_IDENTICAL"
     }
@@ -154,18 +154,18 @@
     "frozenComparator": {
       "solverId": "CKS-07-SIMPLE-SOLVER-V1",
       "proofOutcome": "PASS",
-      "proofDigest": "dc02f9c340a4f0ceaa342ab1ad36631f7979a80c7a4fd20ad75724c96315b505",
-      "fixtureDigest": "5df2f67e3c5d3c0e0651386a14009f4b3c8c05089961f36612a067ebb3c75d9e",
+      "proofDigest": "f3b290ec13e47bde1935c4c5b3ce38a43b735b3ec6a1319a78259b18b4e9af35",
+      "fixtureDigest": "e336db239110b929f1d7e75aadb9f0632518638d68f9d0f90a23af6901cd05a4",
       "denominatorDigest": "3329fc11d6c54b44ec7731dd6ef37596d4b8920029e1e6526a645d37fa1b523a",
       "metrics": {
         "insufficientOracleCases": 8,
         "sufficientOracleCases": 1,
         "combinedFalseCompletenessCount": 0,
-        "simpleSolverFalseCompletenessCount": 8,
+        "simpleSolverFalseCompletenessCount": 6,
         "combinedTrueCompletenessCount": 1,
         "combinedFalseCompletenessRate": 0,
-        "simpleSolverFalseCompletenessRate": 1,
-        "falseCompletenessAbsoluteReduction": 1,
+        "simpleSolverFalseCompletenessRate": 0.75,
+        "falseCompletenessAbsoluteReduction": 0.75,
         "combinedTrueCompletenessRate": 1
       }
     },
@@ -187,7 +187,7 @@
       {
         "command": "NODE_OPTIONS=--jitless node --test dist/tests/cks-gap-acquisition.test.js dist/tests/cks-sufficiency-proof.test.js",
         "observedExitCode": 0,
-        "summary": { "tests": 8, "pass": 8, "fail": 0 }
+        "summary": { "tests": 11, "pass": 11, "fail": 0 }
       },
       {
         "command": "NODE_OPTIONS=--jitless node scripts/cks-07-score-empty-kb.mjs --fixture tests/fixtures/cks-07/empty-kb-cases-v1.json --dry-run",
@@ -195,7 +195,7 @@
         "result": "P11_AND_P13_VALUES_RECONCILED_WITH_BOUND_FIXTURES"
       },
       {
-        "command": "git diff --check origin/main...HEAD",
+        "command": "git diff --check main...HEAD",
         "observedExitCode": 0
       }
     ],
@@ -206,7 +206,7 @@
       "classification": "LOCAL_NODE_V8_MEMORY_PERMISSION_INFRASTRUCTURE_EVIDENCE_NOT_PRODUCT_VERDICT",
       "productImpact": "NONE; focused Node checks above completed with exit code 0 under --jitless."
     },
-    "allowlistBoundary": "The dry-run renderer was not rerun because it writes verification/cks-07-empty-kb-dry-run-evidence-v1.json, outside this task's only writable artifact. Its committed public-safe receipt was read and hash-bound above; the no-write scorer and contract tests were independently executed."
+    "allowlistBoundary": "The dry-run renderer was rerun inside the finalizer writable allowlist and its deterministic public-safe receipt is hash-bound above."
   },
   "publicSafeNonClaims": [
     "No Internet retrieval, content acquisition, model invocation, qualification, promotion, activation, or Authority was performed.",

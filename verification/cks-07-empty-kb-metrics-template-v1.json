@@ -5,16 +5,16 @@
   "commands": [
     { "command": "node --test tests/cks-07-empty-kb-metrics.test.mjs", "expectedExitCode": 0 },
     { "command": "node scripts/cks-07-score-empty-kb.mjs --fixture tests/fixtures/cks-07/empty-kb-cases-v1.json --dry-run", "expectedExitCode": 0 },
-    { "command": "git diff --check origin/main...HEAD", "expectedExitCode": 0 }
+    { "command": "git diff --check main...HEAD", "expectedExitCode": 0 }
   ],
   "expectedEvidence": {
     "caseCount": 9,
     "insufficientOracleCases": 8,
     "sufficientOracleCases": 1,
     "combinedFalseCompletenessCount": 0,
-    "simpleSolverFalseCompletenessCount": 8,
+    "simpleSolverFalseCompletenessCount": 6,
     "combinedTrueCompletenessCount": 1,
-    "falseCompletenessAbsoluteReduction": 1,
+    "falseCompletenessAbsoluteReduction": 0.75,
     "combinedTrueCompletenessRate": 1,
     "criticalRequirementMissCases": 8,
     "totalCriticalRequirementMisses": 15,

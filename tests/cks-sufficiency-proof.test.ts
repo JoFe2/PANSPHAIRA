@@ -12,6 +12,7 @@ import {
 import {
   GAP_FINDER_RESULT_SCHEMA_V1,
   KNOWLEDGE_SUFFICIENCY_PROOF_INPUT_SCHEMA_V1,
+  P13_A0_RETRIEVAL_RECEIPT_SCHEMA_V1,
   P13_FALSE_COMPLETENESS_PROOF_INPUT_SCHEMA_V1,
   SUFFICIENCY_AUTHORITY_BOUNDARY_V1,
   backwardClaimDigestV1,
@@ -19,7 +20,10 @@ import {
   boundaryProbeDigestV1,
   gapFinderItemDigestV1,
   gapFinderResultDigestV1,
+  p13A0RetrievalReceiptDigestV1,
+  p13A0RetrievalReceiptSetDigestV1,
   p13FixtureDigestV1,
+  p13RequirementKeyV1,
   proveKnowledgeSufficiencyV1,
   proveP13FalseCompletenessV1,
   requirementBindingsDigestV1,
@@ -31,6 +35,7 @@ import {
   validateP13FalseCompletenessProofV1,
   validateSeparateGapFinderResultV1,
   type KnowledgeSufficiencyProofInputV1,
+  type P13A0RetrievalReceiptV1,
   type P13FalseCompletenessCaseV1,
   type SufficiencyBoundaryProbeV1,
   type SufficiencyGapClassV1,
@@ -52,7 +57,7 @@ type FixtureCase = {
   kind: "SUFFICIENT" | SufficiencyGapClassV1;
   probeOutcome: "INSUFFICIENT" | "BLOCKED";
   backwardStatus: "PASS" | "FAIL";
-  simpleA0Covered: "ALL" | "NONE";
+  a0CandidateBytes: "PRESENT_FOR_ALL" | "ABSENT_FOR_ALL";
 };
 type Fixture = { suiteId: string; denominatorDigest: string; cases: FixtureCase[] };
 
@@ -60,7 +65,10 @@ const hash = (value: unknown): string => createHash("sha256").update(canonicalJs
 const digestWithout = (value: Record<string, unknown>, key: string): string =>
   hash(Object.fromEntries(Object.entries(value).filter(([name]) => name !== key)));
 
-function makeForward(item: FixtureCase): ReturnType<typeof analyzeForwardRequirementsV1> {
+function makeForward(item: FixtureCase): {
+  analysis: ReturnType<typeof analyzeForwardRequirementsV1>;
+  requirementCandidates: ForwardRequirementAnalysisInputV1["candidates"];
+} {
   const input = structuredClone(golden.input) as any;
   input.analysisId = `analysis:${item.caseId.slice("case:".length)}`;
   input.caseId = item.caseId;
@@ -84,11 +92,38 @@ function makeForward(item: FixtureCase): ReturnType<typeof analyzeForwardRequire
     }
   }
   input.fixtureDigest = forwardRequirementFixtureDigestV1(input);
-  return analyzeForwardRequirementsV1(input);
+  return { analysis: analyzeForwardRequirementsV1(input), requirementCandidates: input.candidates };
+}
+
+function makeA0Receipts(
+  item: FixtureCase,
+  forward: ReturnType<typeof analyzeForwardRequirementsV1>,
+  knowledgeBundleDigest: string,
+): P13A0RetrievalReceiptV1[] {
+  return forward.requirements.filter((requirement) => requirement.applicability === "APPLICABLE").map((requirement) => {
+    const candidateEnvelopeDigests = item.a0CandidateBytes === "PRESENT_FOR_ALL"
+      ? [hash({ caseId: item.caseId, requirementId: requirement.requirementId, a0Candidate: true })]
+      : [];
+    const draft = {
+      schemaVersion: P13_A0_RETRIEVAL_RECEIPT_SCHEMA_V1,
+      caseId: item.caseId,
+      requirementKey: p13RequirementKeyV1(item.caseId, forward.requirementSetDigest, requirement.requirementId),
+      attemptOrdinal: 0 as const,
+      level: "A0" as const,
+      strategyId: "strategy:primary",
+      queryDigest: hash({ caseId: item.caseId, requirementId: requirement.requirementId, query: "primary" }),
+      knowledgeBundleDigest,
+      outcome: candidateEnvelopeDigests.length > 0 ? "BAD_SOURCE" as const : "NO_MATCH" as const,
+      candidateEnvelopeDigests,
+      selectedEnvelopeDigests: [],
+      reasonCodes: candidateEnvelopeDigests.length > 0 ? ["COMPARATOR_IGNORES_QUALIFICATION"] : ["NO_CANDIDATE_BYTES"],
+    };
+    return { ...draft, receiptDigest: p13A0RetrievalReceiptDigestV1(draft) };
+  });
 }
 
 function makeProofInput(item: FixtureCase): KnowledgeSufficiencyProofInputV1 {
-  const forward = makeForward(item);
+  const { analysis: forward, requirementCandidates } = makeForward(item);
   const bindings = forward.requirements.map((requirement) => ({
     requirementId: requirement.requirementId,
     needDigest: hash({ caseId: item.caseId, requirementId: requirement.requirementId }),
@@ -112,6 +147,7 @@ function makeProofInput(item: FixtureCase): KnowledgeSufficiencyProofInputV1 {
     return { ...draft, resultDigest: gapFinderItemDigestV1(draft) };
   });
   const knowledgeBundleDigest = hash({ knowledgeBundle: "cks-07", caseId: item.caseId });
+  const a0RetrievalReceipts = makeA0Receipts(item, forward, knowledgeBundleDigest);
   const gapDraft = {
     schemaVersion: GAP_FINDER_RESULT_SCHEMA_V1,
     caseId: item.caseId,
@@ -155,6 +191,9 @@ function makeProofInput(item: FixtureCase): KnowledgeSufficiencyProofInputV1 {
     requirementSetDigest: forward.requirementSetDigest,
     knowledgeBundleDigest,
     forwardRequirementAnalysis: forward,
+    requirementCandidates,
+    a0RetrievalReceipts,
+    a0RetrievalReceiptSetDigest: p13A0RetrievalReceiptSetDigestV1(a0RetrievalReceipts),
     requirementBindings: bindings,
     requirementBindingsDigest: requirementBindingsDigestV1(bindings),
     gapFinderResult,
@@ -172,15 +211,10 @@ function makeP13Input(fixture: Fixture): {
   const cases = fixture.cases.map((item) => {
     const proofInput = makeProofInput(item);
     const caseInputDigest = proofInput.fixtureDigest;
-    const requirementIds = proofInput.forwardRequirementAnalysis.requirements
-      .filter((requirement) => requirement.applicability === "APPLICABLE")
-      .map((requirement) => requirement.requirementId);
     const simpleSolver = {
       solverId: "CKS-07-SIMPLE-SOLVER-V1" as const,
       inputDigest: caseInputDigest,
       denominatorDigest: fixture.denominatorDigest,
-      requirementIds,
-      a0CoveredRequirementIds: item.simpleA0Covered === "ALL" ? requirementIds : [],
     };
     return { caseId: item.caseId, oracleOutcome: item.oracleOutcome, denominatorDigest: fixture.denominatorDigest, caseInputDigest, proofInput, simpleSolver };
   });
@@ -248,6 +282,38 @@ test("P13 proves reduction against the frozen simple solver on identical bytes",
   assert.equal(result.metrics?.falseCompletenessAbsoluteReduction, 1);
   assert.equal(validateP13FalseCompletenessProofV1(result), true);
   assert.equal(schemaValidator(result), true);
+});
+
+test("P13 blocks fabricated comparator requirements and A0 input drift", () => {
+  const positive = makeP13Input(positiveFixture);
+  const negative = makeP13Input(negativeFixture);
+  const suite = {
+    schemaVersion: P13_FALSE_COMPLETENESS_PROOF_INPUT_SCHEMA_V1,
+    suiteId: "suite:cks-07-p13-parity",
+    fixtureDigest: hash(null),
+    denominatorDigest: positive.input.denominatorDigest,
+    cases: [...positive.cases, ...negative.cases],
+  };
+  const input = { ...suite, fixtureDigest: p13FixtureDigestV1(suite) };
+
+  const fabricatedRequirements = structuredClone(input) as any;
+  fabricatedRequirements.cases[0].simpleSolver.requirementIds = ["req:fabricated"];
+  fabricatedRequirements.cases[0].simpleSolver.a0CoveredRequirementIds = ["req:fabricated"];
+  fabricatedRequirements.fixtureDigest = p13FixtureDigestV1(fabricatedRequirements);
+  assert.equal(validateP13FalseCompletenessProofInputV1(fabricatedRequirements), false);
+  assert.equal(proveP13FalseCompletenessV1(fabricatedRequirements).proofOutcome, "BLOCKED");
+
+  const a0Drift = structuredClone(input) as any;
+  const proofInput = a0Drift.cases[0].proofInput;
+  proofInput.a0RetrievalReceipts[0].candidateEnvelopeDigests = [];
+  proofInput.a0RetrievalReceipts[0].receiptDigest = p13A0RetrievalReceiptDigestV1(proofInput.a0RetrievalReceipts[0]);
+  proofInput.a0RetrievalReceiptSetDigest = p13A0RetrievalReceiptSetDigestV1(proofInput.a0RetrievalReceipts);
+  proofInput.fixtureDigest = sufficiencyProofFixtureDigestV1(proofInput);
+  a0Drift.cases[0].caseInputDigest = proofInput.fixtureDigest;
+  a0Drift.fixtureDigest = p13FixtureDigestV1(a0Drift);
+  assert.notEqual(a0Drift.cases[0].simpleSolver.inputDigest, proofInput.fixtureDigest);
+  assert.equal(validateP13FalseCompletenessProofInputV1(a0Drift), false);
+  assert.equal(proveP13FalseCompletenessV1(a0Drift).proofOutcome, "BLOCKED");
 });
 
 test("missing dependencies and authority leaks block rather than fabricate completeness", () => {

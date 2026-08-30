@@ -2,12 +2,12 @@
   "schemaVersion": "pansphaira.evidence/int-psai287-pr-ci-package-01/v1",
   "taskId": "INT-PSAI287-PR-CI-PACKAGE-01",
   "recordKind": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
-  "decisionStatus": "PREPARED_LOCALLY_VALIDATED_PENDING_FIRST_GITHUB_MUTATION_BOUNDARY",
+  "decisionStatus": "CORRECTED_LOCAL_PACKET_CLOSURE_BLOCKED",
   "scope": {
     "repository": "JoFe2/PANSPHAIRA",
     "branch": "conveyor/pansphaira-287",
-    "comparisonBase": "origin/main",
-    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "comparisonBase": "main",
+    "mainCommitAtCorrection": "b5139807b6e425ab90008330587911dc070b33ee",
     "preReceiptHeadCommit": "0aff345c15dc03c2c1b3d047f7a9c4b8b0258d8b",
     "capability": "CKS-07",
     "evidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC",
@@ -36,7 +36,7 @@
     "title": "CKS-07 deterministic empty-KB proof package",
     "result": "Adds the bounded CKS-07 deterministic empty-KB proof contracts, fixtures, scorer, dry-run evidence, and reconciliation receipt already present on this branch.",
     "relevantEvidence": [
-      "git diff --check origin/main...HEAD",
+      "git diff --check main...HEAD",
       "NODE_OPTIONS=--jitless npm run release-governance:verify",
       "Existing bounded proof receipt: docs/evidence/conveyor/terra-psai287-root-qs-01.json"
     ],
@@ -74,6 +74,15 @@
     "permissions": "contents: read",
     "localConclusion": "CI_NOT_RUN; the authoritative CI run requires a created pull request and its pinned GitHub runner toolchain."
   },
+  "artifactPathBoundary": {
+    "declared": "closure-audits/CLOSURE-PSAI287-ROOT-DELIVERY-01/**",
+    "comparison": "main...HEAD",
+    "changedPathCount": 47,
+    "insideBoundaryCount": 0,
+    "outsideBoundaryCount": 47,
+    "status": "BLOCKED",
+    "reason": "Every changed path is outside the declared boundary and no changed file is present under the allowlisted closure-audit path."
+  },
   "mergePacket": {
     "requiredInputs": [
       "Created pull request targeting main",
@@ -95,8 +104,9 @@
       "prerelease": false,
       "mustBeLatest": true
     },
-    "decision": "NO_RELEASE_REQUESTED",
-    "reason": "This task prepares a pre-GitHub-mutation evidence packet only; it does not request or authorize a tag, release, asset publication, deployment, or change to existing release governance.",
+    "requiredByRootDeliveryContract": true,
+    "decision": "RELEASE_REQUIRED_PENDING_AUTHORIZED_LATER_GATE",
+    "reason": "Release is mandatory for root-delivery closure but is neither authorized nor executed in this local scope; NO_RELEASE cannot satisfy the later ClosureConsumer gate.",
     "remoteStateMutated": false
   },
   "publicReadbackPacket": {
@@ -104,6 +114,8 @@
     "command": "env -u GH_TOKEN npm run release-governance:public-readback",
     "credentialMode": "ANONYMOUS_GH_TOKEN_UNSET",
     "status": "BLOCKED_LOCAL_INFRASTRUCTURE",
+    "requiredForClosure": true,
+    "closureGateSatisfied": false,
     "observedExitCode": 133,
     "signal": "SIGTRAP",
     "observedFailure": "V8 fatal SetPermissions check failed before public readback could run.",
@@ -122,7 +134,7 @@
     },
     "commands": [
       {
-        "command": "git diff --check origin/main...HEAD",
+        "command": "git diff --check main...HEAD",
         "observedExitCode": 0,
         "result": "PASS"
       },
@@ -138,7 +150,8 @@
     "No GitHub push, pull request creation, review, CI dispatch, merge, tag, release, asset upload, deployment, or publication was performed.",
     "No successful remote CI, merge, release, deployment, production activation, or anonymous public readback is claimed.",
     "No credential, personal data, private prompt, local path, or non-public artifact is included.",
-    "This receipt is bounded to the named local branch, comparison base, static workflow and template inspection, governance validation, and observed command outcomes."
+    "This receipt is bounded to the named local branch, comparison base, static workflow and template inspection, governance validation, and observed command outcomes.",
+    "Root-delivery closure and issue close remain blocked by the declared path-boundary violation and absent authoritative release, CI, public-readback, and exact-head receipts."
   ],
-  "verdict": "LOCAL_PR_CI_MERGE_RELEASE_PACKET_COMPLETE_WITH_PUBLIC_READBACK_FAIL_CLOSED_PENDING_AUTHORITATIVE_GATE"
+  "verdict": "CLOSURE_BLOCKED_PATH_BOUNDARY_RELEASE_CI_PUBLIC_READBACK_AND_ISSUE_CLOSE_PENDING"
 }

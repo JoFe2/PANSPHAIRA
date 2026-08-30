@@ -1,8 +1,11 @@
 import { createHash } from "node:crypto";
 import { canonicalJson } from "./canonical-json.js";
 import {
+  candidateSetDigestV1,
   validateForwardRequirementAnalysisV1,
+  validateRequirementCandidateSetV1,
   type ForwardRequirementAnalysisV1,
+  type RequirementCandidateV1,
 } from "./cks-requirement-analysis.js";
 
 export const KNOWLEDGE_SUFFICIENCY_PROOF_INPUT_SCHEMA_V1 =
@@ -15,6 +18,8 @@ export const P13_FALSE_COMPLETENESS_PROOF_INPUT_SCHEMA_V1 =
   "pansphaira.cks/p13-false-completeness-proof-input/v1" as const;
 export const P13_FALSE_COMPLETENESS_PROOF_SCHEMA_V1 =
   "pansphaira.cks/p13-false-completeness-proof/v1" as const;
+export const P13_A0_RETRIEVAL_RECEIPT_SCHEMA_V1 =
+  "pansphaira.cks/retrieval-attempt-receipt/v1" as const;
 export const SUFFICIENCY_AUTHORITY_BOUNDARY_V1 =
   "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY" as const;
 
@@ -43,6 +48,25 @@ export const P13_ORACLE_OUTCOMES_V1 = ["SUFFICIENT", "INSUFFICIENT"] as const;
 export type P13OracleOutcomeV1 = typeof P13_ORACLE_OUTCOMES_V1[number];
 export const SIMPLE_SOLVER_OUTCOMES_V1 = ["COMPLETE", "INCOMPLETE", "BLOCKED"] as const;
 export type SimpleSolverOutcomeV1 = typeof SIMPLE_SOLVER_OUTCOMES_V1[number];
+const P13_A0_RETRIEVAL_OUTCOMES_V1 = [
+  "QUALIFYING_MATCH", "NO_MATCH", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC", "BLOCKED",
+] as const;
+
+export type P13A0RetrievalReceiptV1 = Readonly<{
+  schemaVersion: typeof P13_A0_RETRIEVAL_RECEIPT_SCHEMA_V1;
+  caseId: string;
+  requirementKey: string;
+  attemptOrdinal: 0;
+  level: "A0";
+  strategyId: string;
+  queryDigest: string;
+  knowledgeBundleDigest: string;
+  outcome: typeof P13_A0_RETRIEVAL_OUTCOMES_V1[number];
+  candidateEnvelopeDigests: readonly string[];
+  selectedEnvelopeDigests: readonly string[];
+  reasonCodes: readonly string[];
+  receiptDigest: string;
+}>;
 
 export type SufficiencyRequirementBindingV1 = Readonly<{
   requirementId: string;
@@ -101,6 +125,9 @@ export type KnowledgeSufficiencyProofInputV1 = Readonly<{
   requirementSetDigest: string;
   knowledgeBundleDigest: string;
   forwardRequirementAnalysis: ForwardRequirementAnalysisV1;
+  requirementCandidates: readonly RequirementCandidateV1[];
+  a0RetrievalReceipts: readonly P13A0RetrievalReceiptV1[];
+  a0RetrievalReceiptSetDigest: string;
   requirementBindings: readonly SufficiencyRequirementBindingV1[];
   requirementBindingsDigest: string;
   gapFinderResult: SeparateGapFinderResultV1;
@@ -131,8 +158,6 @@ export type SimpleSolverCaseV1 = Readonly<{
   solverId: "CKS-07-SIMPLE-SOLVER-V1";
   inputDigest: string;
   denominatorDigest: string;
-  requirementIds: readonly string[];
-  a0CoveredRequirementIds: readonly string[];
 }>;
 
 export type P13FalseCompletenessCaseV1 = Readonly<{
@@ -197,6 +222,12 @@ const unique = <T>(value: unknown, max: number, predicate: (item: unknown) => it
 const digestWithout = (value: Record<string, unknown>, key: string): string => sha256(without(value, key));
 
 export const requirementBindingsDigestV1 = (value: readonly SufficiencyRequirementBindingV1[]): string => sha256(value);
+export const p13RequirementKeyV1 = (caseId: string, requirementSetDigest: string, requirementId: string): string =>
+  sha256({ caseId, requirementSetDigest, requirementId });
+export const p13A0RetrievalReceiptDigestV1 = (
+  value: Omit<P13A0RetrievalReceiptV1, "receiptDigest"> | Record<string, unknown>,
+): string => digestWithout(value as Record<string, unknown>, "receiptDigest");
+export const p13A0RetrievalReceiptSetDigestV1 = (value: readonly P13A0RetrievalReceiptV1[]): string => sha256(value);
 export const gapFinderItemDigestV1 = (value: Omit<SeparateGapFinderItemV1, "resultDigest"> | Record<string, unknown>): string =>
   digestWithout(value as Record<string, unknown>, "resultDigest");
 export const gapFinderResultDigestV1 = (value: Omit<SeparateGapFinderResultV1, "finderDigest"> | Record<string, unknown>): string =>
@@ -283,10 +314,45 @@ function validateBackwardClaimProof(value: unknown): value is BackwardClaimProof
     && (value.proofStatus === "PASS" ? value.claims.every((claim) => claim.proofState === "PROVEN") : true);
 }
 
+function validateP13A0RetrievalReceipt(value: unknown): value is P13A0RetrievalReceiptV1 {
+  if (!exactKeys(value, [
+    "schemaVersion", "caseId", "requirementKey", "attemptOrdinal", "level", "strategyId", "queryDigest",
+    "knowledgeBundleDigest", "outcome", "candidateEnvelopeDigests", "selectedEnvelopeDigests", "reasonCodes", "receiptDigest",
+  ])) return false;
+  return value.schemaVersion === P13_A0_RETRIEVAL_RECEIPT_SCHEMA_V1 && isId(value.caseId) && isDigest(value.requirementKey)
+    && value.attemptOrdinal === 0 && value.level === "A0" && isText(value.strategyId, 128) && isDigest(value.queryDigest)
+    && isDigest(value.knowledgeBundleDigest) && oneOf(value.outcome, P13_A0_RETRIEVAL_OUTCOMES_V1)
+    && validDigestList(value.candidateEnvelopeDigests, 20) && validDigestList(value.selectedEnvelopeDigests, 20)
+    && (value.selectedEnvelopeDigests as readonly string[])
+      .every((digest) => (value.candidateEnvelopeDigests as readonly string[]).includes(digest))
+    && unique(value.reasonCodes, 20, (reason): reason is string => isText(reason, 128))
+    && isDigest(value.receiptDigest) && p13A0RetrievalReceiptDigestV1(value) === value.receiptDigest;
+}
+
+function p13ComparatorInputsValid(
+  value: Record<string, unknown>,
+  forward: ForwardRequirementAnalysisV1,
+): boolean {
+  if (!validateRequirementCandidateSetV1(value.requirementCandidates)
+    || candidateSetDigestV1(value.requirementCandidates) !== forward.candidateSetDigest
+    || !Array.isArray(value.a0RetrievalReceipts) || value.a0RetrievalReceipts.length > 1024
+    || !value.a0RetrievalReceipts.every(validateP13A0RetrievalReceipt)
+    || !isDigest(value.a0RetrievalReceiptSetDigest)
+    || p13A0RetrievalReceiptSetDigestV1(value.a0RetrievalReceipts) !== value.a0RetrievalReceiptSetDigest) return false;
+  const receipts = value.a0RetrievalReceipts as readonly P13A0RetrievalReceiptV1[];
+  const expectedRequirementKeys = forward.requirements
+    .filter((requirement) => requirement.applicability === "APPLICABLE")
+    .map((requirement) => p13RequirementKeyV1(forward.caseId, forward.requirementSetDigest, requirement.requirementId));
+  return expectedRequirementKeys.length > 0
+    && canonicalJson(receipts.map((receipt) => receipt.requirementKey)) === canonicalJson(expectedRequirementKeys)
+    && receipts.every((receipt) => receipt.caseId === forward.caseId);
+}
+
 function inputShapeValid(value: unknown): value is KnowledgeSufficiencyProofInputV1 {
   if (!exactKeys(value, [
     "schemaVersion", "proofId", "caseId", "fixtureDigest", "requirementSetDigest", "knowledgeBundleDigest",
-    "forwardRequirementAnalysis", "requirementBindings", "requirementBindingsDigest", "gapFinderResult",
+    "forwardRequirementAnalysis", "requirementCandidates", "a0RetrievalReceipts", "a0RetrievalReceiptSetDigest",
+    "requirementBindings", "requirementBindingsDigest", "gapFinderResult",
     "boundaryProbes", "backwardClaimProof", "authorityBoundary",
   ])) return false;
   const forward = value.forwardRequirementAnalysis as ForwardRequirementAnalysisV1;
@@ -294,6 +360,9 @@ function inputShapeValid(value: unknown): value is KnowledgeSufficiencyProofInpu
   return value.schemaVersion === KNOWLEDGE_SUFFICIENCY_PROOF_INPUT_SCHEMA_V1 && isId(value.proofId) && isId(value.caseId)
     && isDigest(value.fixtureDigest) && isDigest(value.requirementSetDigest) && isDigest(value.knowledgeBundleDigest)
     && validateForwardRequirementAnalysisV1(value.forwardRequirementAnalysis)
+    && p13ComparatorInputsValid(value, forward)
+    && (value.a0RetrievalReceipts as readonly P13A0RetrievalReceiptV1[])
+      .every((receipt) => receipt.knowledgeBundleDigest === value.knowledgeBundleDigest)
     && Array.isArray(value.requirementBindings) && value.requirementBindings.length > 0 && value.requirementBindings.length <= 1024
     && value.requirementBindings.every(validateBinding)
     && new Set(value.requirementBindings.map((binding) => binding.requirementId)).size === value.requirementBindings.length
@@ -420,12 +489,9 @@ export function validateKnowledgeSufficiencyProofV1(value: unknown): value is Kn
 }
 
 function validateSimpleSolver(value: unknown): value is SimpleSolverCaseV1 {
-  if (!exactKeys(value, ["solverId", "inputDigest", "denominatorDigest", "requirementIds", "a0CoveredRequirementIds"])) return false;
+  if (!exactKeys(value, ["solverId", "inputDigest", "denominatorDigest"])) return false;
   const solver = value as unknown as SimpleSolverCaseV1;
-  return solver.solverId === "CKS-07-SIMPLE-SOLVER-V1" && isDigest(solver.inputDigest) && isDigest(solver.denominatorDigest)
-    && unique(solver.requirementIds, 1024, isId) && solver.requirementIds.length > 0
-    && unique(solver.a0CoveredRequirementIds, 1024, isId)
-    && solver.a0CoveredRequirementIds.every((id) => solver.requirementIds.includes(id));
+  return solver.solverId === "CKS-07-SIMPLE-SOLVER-V1" && isDigest(solver.inputDigest) && isDigest(solver.denominatorDigest);
 }
 
 function validateP13Case(value: unknown): value is P13FalseCompletenessCaseV1 {
@@ -445,8 +511,13 @@ export function validateP13FalseCompletenessProofInputV1(value: unknown): value 
     && p13FixtureDigestV1(value) === value.fixtureDigest;
 }
 
-function simpleSolverOutcome(value: SimpleSolverCaseV1): SimpleSolverOutcomeV1 {
-  return value.requirementIds.length > 0 && value.requirementIds.every((id) => value.a0CoveredRequirementIds.includes(id)) ? "COMPLETE" : "INCOMPLETE";
+function simpleSolverOutcome(value: KnowledgeSufficiencyProofInputV1): SimpleSolverOutcomeV1 {
+  const applicable = value.forwardRequirementAnalysis.requirements.filter((requirement) => requirement.applicability === "APPLICABLE");
+  const receiptByKey = new Map(value.a0RetrievalReceipts.map((receipt) => [receipt.requirementKey, receipt]));
+  return value.requirementCandidates.length > 0 && applicable.length > 0 && applicable.every((requirement) => {
+    const key = p13RequirementKeyV1(value.caseId, value.requirementSetDigest, requirement.requirementId);
+    return (receiptByKey.get(key)?.candidateEnvelopeDigests.length ?? 0) > 0;
+  }) ? "COMPLETE" : "INCOMPLETE";
 }
 
 function blockedP13(value: unknown, reasons: readonly string[]): P13FalseCompletenessProofV1 {
@@ -469,7 +540,7 @@ export function proveP13FalseCompletenessV1(input: unknown): P13FalseCompletenes
   const decisions = typed.cases.map((item) => ({
     oracle: item.oracleOutcome,
     combined: proveKnowledgeSufficiencyV1(item.proofInput),
-    simple: simpleSolverOutcome(item.simpleSolver),
+    simple: simpleSolverOutcome(item.proofInput),
   }));
   if (decisions.some((decision) => decision.combined.outcome === "BLOCKED" || decision.simple === "BLOCKED")
     || !decisions.some((decision) => decision.oracle === "INSUFFICIENT")

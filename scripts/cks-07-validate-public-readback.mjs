@@ -8,7 +8,21 @@ const DEFAULT_TEMPLATE = resolve(ROOT, "verification/cks-07-public-readback-temp
 const ENTRYPOINT = "scripts/verify-release-governance.mjs";
 const READBACK_COMMAND = ["node", ENTRYPOINT, "--public-readback"];
 const PREFLIGHT_COMMAND = ["node", ENTRYPOINT];
-const REQUIRED_EVIDENCE = ["LOCAL_RELEASE_GOVERNANCE_PREFLIGHT", "READBACK_ENTRYPOINT_BINDING"];
+const RELEASE_RECEIPT = "docs/evidence/conveyor/sol-psai287-release-or-no-release-01.json";
+const INTEGRATION_RECEIPT = "docs/evidence/conveyor/int-psai287-pr-ci-package-01.json";
+const REQUIRED_EVIDENCE = ["LOCAL_RELEASE_GOVERNANCE_PREFLIGHT", "READBACK_ENTRYPOINT_BINDING", "ROOT_DELIVERY_CLOSURE_GUARD"];
+const CLOSURE_GATE = {
+  taskId: "CLOSURE-PSAI287-ROOT-DELIVERY-01",
+  releaseRequired: true,
+  releaseDisposition: "RELEASE_REQUIRED_PENDING_AUTHORIZED_EXECUTION",
+  publicReadbackRequired: true,
+  issueCloseRequired: true,
+  declaredArtifactPathBoundary: "closure-audits/CLOSURE-PSAI287-ROOT-DELIVERY-01/**",
+  changedPathCount: 47,
+  insideBoundaryCount: 0,
+  outsideBoundaryCount: 47,
+  status: "BLOCKED",
+};
 const EXPECTED_RECEIPT = {
   schemaVersion: "pansphaira.verification/cks-07-public-readback-receipt/v1",
   receiptId: "receipt:cks-07-public-readback-preparation/v1",
@@ -20,6 +34,7 @@ const EXPECTED_RECEIPT = {
     command: READBACK_COMMAND,
     authentication: "ANONYMOUS_GH_TOKEN_UNSET",
   },
+  closureGate: CLOSURE_GATE,
   evidence: [
     {
       evidenceId: "LOCAL_RELEASE_GOVERNANCE_PREFLIGHT",
@@ -34,6 +49,13 @@ const EXPECTED_RECEIPT = {
       command: READBACK_COMMAND,
       authentication: "ANONYMOUS_GH_TOKEN_UNSET",
     },
+    {
+      evidenceId: "ROOT_DELIVERY_CLOSURE_GUARD",
+      status: "BLOCKED",
+      releaseReceipt: RELEASE_RECEIPT,
+      integrationReceipt: INTEGRATION_RECEIPT,
+      reason: "REQUIRED_LATER_GATES_AND_DECLARED_ARTIFACT_PATH_BOUNDARY_UNSATISFIED",
+    },
   ],
   failClosed: {
     successRequiresAllRequiredEvidence: true,
@@ -41,6 +63,9 @@ const EXPECTED_RECEIPT = {
     networkUsed: false,
     credentialUse: false,
     activationBeforePublicStateEvidenceDenied: true,
+    noReleaseDispositionDenied: true,
+    artifactPathBoundaryViolationDenied: true,
+    issueCloseBeforeRequiredGatesDenied: true,
   },
   nonClaims: [
     "public state exists",
@@ -50,6 +75,7 @@ const EXPECTED_RECEIPT = {
     "release",
     "deployment",
     "production activation",
+    "issue close",
   ],
 };
 
@@ -99,11 +125,28 @@ function verifyLocalPreflight() {
   assert(output === "RELEASE_GOVERNANCE_PASS", "LOCAL_PREFLIGHT_FAILED");
 }
 
+export function validateClosureGateEvidence(release, integration) {
+  assert(release?.localDisposition?.value === CLOSURE_GATE.releaseDisposition, "RELEASE_DISPOSITION_MISMATCH");
+  assert(release?.localDisposition?.releaseRequired === true && release?.localDisposition?.noReleaseSatisfiesRequiredGate === false, "RELEASE_REQUIREMENT_INVALID");
+  assert(release?.deliveryContract?.release?.required === true && release?.deliveryContract?.publicReadback?.required === true
+    && release?.deliveryContract?.issueClose?.required === true && release?.deliveryContract?.closureStatus === "BLOCKED", "REQUIRED_CLOSURE_GATES_INVALID");
+  assert(sameJson(release?.deliveryContract?.artifactPathBoundary, {
+    declared: CLOSURE_GATE.declaredArtifactPathBoundary, comparison: "main...HEAD", changedPathCount: 47,
+    insideBoundaryCount: 0, outsideBoundaryCount: 47, status: "BLOCKED",
+  }), "RELEASE_PATH_BOUNDARY_INVALID");
+  assert(integration?.artifactPathBoundary?.declared === CLOSURE_GATE.declaredArtifactPathBoundary
+    && integration?.artifactPathBoundary?.changedPathCount === 47 && integration?.artifactPathBoundary?.insideBoundaryCount === 0
+    && integration?.artifactPathBoundary?.outsideBoundaryCount === 47 && integration?.artifactPathBoundary?.status === "BLOCKED", "INTEGRATION_PATH_BOUNDARY_INVALID");
+  assert(integration?.releasePacket?.requiredByRootDeliveryContract === true
+    && integration?.releasePacket?.decision === "RELEASE_REQUIRED_PENDING_AUTHORIZED_LATER_GATE", "INTEGRATION_RELEASE_DISPOSITION_INVALID");
+}
+
 export function dryRun(templatePath = DEFAULT_TEMPLATE) {
   const template = readJson(templatePath);
   validateTemplate(template);
   verifyEntrypointBinding();
   verifyLocalPreflight();
+  validateClosureGateEvidence(readJson(resolve(ROOT, RELEASE_RECEIPT)), readJson(resolve(ROOT, INTEGRATION_RECEIPT)));
   return EXPECTED_RECEIPT;
 }
 

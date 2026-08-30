@@ -28,7 +28,7 @@
     },
     "p13": {
       "combinedFalseCompletenessCount": 0,
-      "simpleSolverFalseCompletenessCount": 8,
+      "simpleSolverFalseCompletenessCount": 6,
       "combinedTrueCompletenessCount": 1
     }
   }

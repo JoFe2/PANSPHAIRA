@@ -44,8 +44,22 @@ test("P12 recovers at the earliest alternate retrieval level", () => {
   validReceipt(second.receipt, "A2 recovery");
   assert.deepEqual(first.receipt.attempts.map((attempt) => attempt.outcome), ["NO_MATCH", "QUALIFYING_MATCH"]);
   assert.deepEqual(second.receipt.attempts.map((attempt) => attempt.outcome), ["NO_MATCH", "NO_MATCH", "QUALIFYING_MATCH"]);
+  assert.equal(first.receipt.attempts[0]?.retrieverId, first.receipt.attempts[1]?.retrieverId);
+  assert.notEqual(first.receipt.attempts[0]?.strategyId, first.receipt.attempts[1]?.strategyId);
+  assert.notEqual(second.receipt.attempts[1]?.retrieverId, second.receipt.attempts[2]?.retrieverId);
   assert.deepEqual(first, findGapAndRouteAcquisitionV1(a1.input));
   assert.deepEqual(second, findGapAndRouteAcquisitionV1(a2.input));
+});
+
+test("P12 requires A1 to use an alternate query with the same primary retriever", () => {
+  const item = positive.cases.find((candidate) => candidate.caseId === "case:recover-a1");
+  assert.ok(item);
+  const drifted = structuredClone(item.input) as any;
+  drifted.attempts[1].retrieverId = "retriever:invented-primary-alt";
+  const decision = findGapAndRouteAcquisitionV1(drifted);
+  assert.equal(decision.state, "BLOCKED");
+  assert.equal(decision.reason, "NON_DETERMINISTIC_RETRIEVAL_STRATEGY");
+  assert.equal(decision.receipt, null);
 });
 
 test("P12 declares missing only after complete A0-A2 recovery and keeps A3-A5 non-authoritative", () => {

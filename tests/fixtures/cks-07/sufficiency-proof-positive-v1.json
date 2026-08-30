@@ -8,7 +8,7 @@
       "kind": "SUFFICIENT",
       "probeOutcome": "INSUFFICIENT",
       "backwardStatus": "PASS",
-      "simpleA0Covered": "ALL"
+      "a0CandidateBytes": "PRESENT_FOR_ALL"
     }
   ]
 }

@@ -9,7 +9,7 @@
     "applicability": "APPLICABLE",
     "attempts": [
       { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
-      { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary-alt", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+      { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
       { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] }
     ],
     "acquisitionCandidates": [
@@ -28,7 +28,7 @@
         "applicability": "APPLICABLE",
         "attempts": [
           { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
-          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary-alt", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:recovered-a1", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "APPLICABLE", "conflictState": "NONE" }] }
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:recovered-a1", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "APPLICABLE", "conflictState": "NONE" }] }
         ],
         "acquisitionCandidates": []
       },
@@ -43,7 +43,7 @@
         "applicability": "APPLICABLE",
         "attempts": [
           { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
-          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary-alt", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
           { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:recovered-a2", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "APPLICABLE", "conflictState": "NONE" }] }
         ],
         "acquisitionCandidates": []
@@ -59,7 +59,7 @@
         "applicability": "APPLICABLE",
         "attempts": [
           { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
-          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary-alt", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
           { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] }
         ],
         "acquisitionCandidates": [

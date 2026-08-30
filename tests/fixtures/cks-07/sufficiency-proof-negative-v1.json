@@ -8,7 +8,7 @@
       "kind": "MISSING",
       "probeOutcome": "INSUFFICIENT",
       "backwardStatus": "FAIL",
-      "simpleA0Covered": "ALL"
+      "a0CandidateBytes": "PRESENT_FOR_ALL"
     },
     {
       "caseId": "case:cks-bad-source-trap",
@@ -16,7 +16,7 @@
       "kind": "BAD_SOURCE",
       "probeOutcome": "INSUFFICIENT",
       "backwardStatus": "FAIL",
-      "simpleA0Covered": "ALL"
+      "a0CandidateBytes": "PRESENT_FOR_ALL"
     },
     {
       "caseId": "case:cks-applicability-trap",
@@ -24,7 +24,7 @@
       "kind": "APPLICABILITY",
       "probeOutcome": "INSUFFICIENT",
       "backwardStatus": "FAIL",
-      "simpleA0Covered": "ALL"
+      "a0CandidateBytes": "PRESENT_FOR_ALL"
     },
     {
       "caseId": "case:cks-conflicting-trap",
@@ -32,7 +32,7 @@
       "kind": "CONFLICTING",
       "probeOutcome": "INSUFFICIENT",
       "backwardStatus": "FAIL",
-      "simpleA0Covered": "ALL"
+      "a0CandidateBytes": "PRESENT_FOR_ALL"
     },
     {
       "caseId": "case:cks-unknown-semantic-trap",
@@ -40,7 +40,7 @@
       "kind": "UNKNOWN_SEMANTIC",
       "probeOutcome": "INSUFFICIENT",
       "backwardStatus": "FAIL",
-      "simpleA0Covered": "ALL"
+      "a0CandidateBytes": "PRESENT_FOR_ALL"
     }
   ]
 }

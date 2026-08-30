@@ -62,7 +62,7 @@ test("P13 evidence proves false-completeness reduction against the simple solver
   const p13 = run().acceptanceCriteria.P13;
   assert.equal(p13.status, "PASS");
   assert.equal(p13.metrics.combinedFalseCompletenessCount, 0);
-  assert.equal(p13.metrics.simpleSolverFalseCompletenessCount, 8);
+  assert.equal(p13.metrics.simpleSolverFalseCompletenessCount, 6);
   assert.equal(p13.metrics.combinedTrueCompletenessCount, 1);
   assert.equal(p13.falseCompletenessReduced, true);
 });

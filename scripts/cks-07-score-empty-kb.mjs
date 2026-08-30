@@ -11,6 +11,7 @@ import {
 import {
   GAP_FINDER_RESULT_SCHEMA_V1,
   KNOWLEDGE_SUFFICIENCY_PROOF_INPUT_SCHEMA_V1,
+  P13_A0_RETRIEVAL_RECEIPT_SCHEMA_V1,
   P13_FALSE_COMPLETENESS_PROOF_INPUT_SCHEMA_V1,
   SUFFICIENCY_AUTHORITY_BOUNDARY_V1,
   backwardClaimDigestV1,
@@ -18,7 +19,10 @@ import {
   boundaryProbeDigestV1,
   gapFinderItemDigestV1,
   gapFinderResultDigestV1,
+  p13A0RetrievalReceiptDigestV1,
+  p13A0RetrievalReceiptSetDigestV1,
   p13FixtureDigestV1,
+  p13RequirementKeyV1,
   proveKnowledgeSufficiencyV1,
   proveP13FalseCompletenessV1,
   requirementBindingsDigestV1,
@@ -111,6 +115,30 @@ function makeProofInput(item, forward, denominatorDigest) {
     return { ...draft, resultDigest: gapFinderItemDigestV1(draft) };
   });
   const knowledgeBundleDigest = hash({ knowledgeBundle: "cks-07-empty-kb", caseId: item.caseId });
+  const a0RetrievalReceipts = item.simpleSolver.requirementIds.map((requirementId) => {
+    const requirement = forward.requirements.find((candidate) => candidate.requirementId === requirementId);
+    if (requirement === undefined || requirement.applicability !== "APPLICABLE") fail(`${item.caseId}_A0_REQUIREMENT_INVALID`);
+    const candidateEnvelopeDigests = item.simpleSolver.a0CoveredRequirementIds.includes(requirementId)
+      ? [hash({ caseId: item.caseId, requirementId, simpleA0Candidate: true })]
+      : [];
+    const qualified = requirement.state === "SATISFIED";
+    const draft = {
+      schemaVersion: P13_A0_RETRIEVAL_RECEIPT_SCHEMA_V1,
+      caseId: item.caseId,
+      requirementKey: p13RequirementKeyV1(item.caseId, forward.requirementSetDigest, requirement.requirementId),
+      attemptOrdinal: 0,
+      level: "A0",
+      strategyId: "strategy:primary",
+      queryDigest: hash({ caseId: item.caseId, requirementId: requirement.requirementId, query: "primary" }),
+      knowledgeBundleDigest,
+      outcome: candidateEnvelopeDigests.length === 0 ? "NO_MATCH" : qualified ? "QUALIFYING_MATCH" : "BAD_SOURCE",
+      candidateEnvelopeDigests,
+      selectedEnvelopeDigests: qualified ? candidateEnvelopeDigests : [],
+      reasonCodes: candidateEnvelopeDigests.length === 0 ? ["NO_CANDIDATE_BYTES"]
+        : qualified ? ["QUALIFYING_ACTIVE_KNOWLEDGE"] : ["COMPARATOR_IGNORES_QUALIFICATION"],
+    };
+    return { ...draft, receiptDigest: p13A0RetrievalReceiptDigestV1(draft) };
+  });
   const gapDraft = {
     schemaVersion: GAP_FINDER_RESULT_SCHEMA_V1,
     caseId: item.caseId,
@@ -155,6 +183,9 @@ function makeProofInput(item, forward, denominatorDigest) {
     requirementSetDigest: forward.requirementSetDigest,
     knowledgeBundleDigest,
     forwardRequirementAnalysis: forward,
+    requirementCandidates: item.candidates,
+    a0RetrievalReceipts,
+    a0RetrievalReceiptSetDigest: p13A0RetrievalReceiptSetDigestV1(a0RetrievalReceipts),
     requirementBindings: bindings,
     requirementBindingsDigest: requirementBindingsDigestV1(bindings),
     gapFinderResult,
@@ -175,8 +206,8 @@ function scoreCase(item, groundTruth, denominatorDigest) {
   if (!equalJson(actualStates, item.expectedStates)) fail(`${item.caseId}_STATE_GROUND_TRUTH_MISMATCH`);
   const proofInput = makeProofInput(item, forward, denominatorDigest);
   const combined = proveKnowledgeSufficiencyV1(proofInput);
-  const solverRequirementIds = item.simpleSolver.requirementIds;
-  const simpleOutcome = solverRequirementIds.length > 0 && solverRequirementIds.every((id) => item.simpleSolver.a0CoveredRequirementIds.includes(id)) ? "COMPLETE" : "INCOMPLETE";
+  const simpleOutcome = proofInput.requirementCandidates.length > 0 && proofInput.a0RetrievalReceipts.length > 0
+    && proofInput.a0RetrievalReceipts.every((receipt) => receipt.candidateEnvelopeDigests.length > 0) ? "COMPLETE" : "INCOMPLETE";
   return {
     caseId: item.caseId,
     kbClass: item.kbClass,
@@ -200,14 +231,11 @@ function scoreCase(item, groundTruth, denominatorDigest) {
 }
 
 function buildP13Input(scoredCases, fixture) {
-  const cases = scoredCases.map((scored, index) => {
-    const source = fixture.cases[index];
+  const cases = scoredCases.map((scored) => {
     const simpleSolver = {
       solverId: "CKS-07-SIMPLE-SOLVER-V1",
       inputDigest: scored.proofInput.fixtureDigest,
       denominatorDigest: fixture.denominatorDigest,
-      requirementIds: source.simpleSolver.requirementIds,
-      a0CoveredRequirementIds: source.simpleSolver.a0CoveredRequirementIds,
     };
     return {
       caseId: scored.caseId,

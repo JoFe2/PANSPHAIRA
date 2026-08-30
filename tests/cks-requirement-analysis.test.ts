@@ -53,7 +53,8 @@ function mutateCase(base: ForwardRequirementAnalysisInputV1, item: Record<string
     input.candidates = [...input.candidates, candidateFrom(input, "cand:duplicate")];
     input.mappings = [...input.mappings, { candidateId: "cand:duplicate", requirementId, outcome: "MATCH", ruleId: "rule:semantic-exact-v1" }];
   } else if (operation === "setCandidateCriticality") {
-    input.candidates = input.candidates.map((candidate: RequirementCandidateV1) => candidate.candidateId === candidateId ? { ...candidate, criticality: "UNKNOWN" } : candidate);
+    input.candidates = input.candidates.map((candidate: RequirementCandidateV1) => candidate.candidateId === candidateId
+      ? { ...candidate, criticality: item.criticality ?? "UNKNOWN" } : candidate);
   } else if (operation === "setMappingOutcome") {
     input.mappings = input.mappings.map((mapping: SemanticAdjudicationV1) => mapping.candidateId === candidateId ? { ...mapping, requirementId: null, outcome: item.outcome } : mapping);
   } else if (operation === "setCandidateSource") {
@@ -117,6 +118,23 @@ test("negative requirement-analysis fixtures remain finite and fail closed", () 
       assert.equal(result.p11.status, "BLOCKED", item.caseId);
       assert.ok(result.blockedReasons.includes(item.blockedReason as never), item.caseId);
     }
+  }
+});
+
+test("P11 counts a critical miss when the counted candidate is not labelled CRITICAL", () => {
+  for (const criticality of ["UNKNOWN", "NON_CRITICAL"] as const) {
+    const input = mutateCase(golden.input, {
+      operation: "setCandidateCriticality",
+      candidateId: "cand:access",
+      criticality,
+    });
+    const result = analyzeForwardRequirementsV1(input);
+    assert.equal(result.p11.status, "FAIL", criticality);
+    assert.equal(result.p11.CM, 1, criticality);
+    assert.equal(result.p11.criticalRequirementMisses, 1, criticality);
+    assert.equal(result.p11.CX, 1, criticality);
+    assert.equal(result.p11.requirementRecall, 1, criticality);
+    assert.equal(result.p11.requirementPrecision, 1, criticality);
   }
 });
 

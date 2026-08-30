@@ -46,7 +46,7 @@
         "receiptId": "receipt:changed-bundle", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
         "attempts": [
           { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
-          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary-alt", "knowledgeBundleDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "candidates": [] }
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "candidates": [] }
         ], "acquisitionCandidates": []
       },
       "expectedState": "BLOCKED"
@@ -57,7 +57,7 @@
         "receiptId": "receipt:internet-candidate", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
         "attempts": [
           { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
-          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary-alt", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
           { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] }
         ],
         "acquisitionCandidates": [{ "level": "A4", "candidateId": "cand:external", "sourceClass": "INTERNET_RESULT", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "provenance": "pinned external bytes", "licence": "CC-BY-4.0" }]

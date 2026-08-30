@@ -212,6 +212,11 @@ function validateCandidate(value: unknown): value is RequirementCandidateV1 {
     && isUniqueStrings(value.citations, MAX_CITATIONS, isDigest);
 }
 
+export function validateRequirementCandidateSetV1(value: unknown): value is RequirementCandidateV1[] {
+  return Array.isArray(value) && value.length <= MAX_CANDIDATES && value.every(validateCandidate)
+    && new Set(value.map((candidate) => candidate.candidateId)).size === value.length;
+}
+
 function validateMapping(value: unknown): value is SemanticAdjudicationV1 {
   if (!exactKeys(value, ["candidateId", "requirementId", "outcome", "ruleId"])) return false;
   const outcome = value.outcome;
@@ -326,7 +331,7 @@ function analyzeValidInput(input: ForwardRequirementAnalysisInputV1): ForwardReq
       const criticalityMismatch = candidate.criticality !== requirement.criticality;
       CX += criticalityMismatch ? 1 : 0;
       const state: CksRequirementStateV1 = criticalityMismatch ? "CRITICALITY_MISMATCH" : "SATISFIED";
-      if (requirement.criticality === "CRITICAL" && state !== "SATISFIED" && !criticalityMismatch) CM += 1;
+      if (requirement.criticality === "CRITICAL" && candidate.criticality !== "CRITICAL") CM += 1;
       results.push({ requirementId: requirement.requirementId, criticality: requirement.criticality, applicability: requirement.applicability, state, matchedCandidateId: candidate.candidateId });
       continue;
     }

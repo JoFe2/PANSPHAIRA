@@ -181,6 +181,21 @@ function validAttempt(value: unknown): value is RetrievalAttemptV1 {
     && isDigest(value.attemptDigest) && gapAcquisitionAttemptDigestV1(value) === value.attemptDigest;
 }
 
+function validRetrievalStrategySequence(
+  attempts: readonly Pick<RetrievalAttemptInputV1, "level" | "strategyId" | "retrieverId">[],
+): boolean {
+  const a0 = attempts[0];
+  const a1 = attempts[1];
+  const a2 = attempts[2];
+  if (a0 !== undefined && a0.level !== "A0") return false;
+  if (a1 !== undefined && (a0 === undefined || a1.level !== "A1"
+    || a1.retrieverId !== a0.retrieverId || a1.strategyId === a0.strategyId)) return false;
+  if (a2 !== undefined && (a0 === undefined || a1 === undefined || a2.level !== "A2"
+    || a2.retrieverId === a0.retrieverId || a2.retrieverId === a1.retrieverId
+    || a2.strategyId === a0.strategyId || a2.strategyId === a1.strategyId)) return false;
+  return true;
+}
+
 function validAcquisitionCandidate(value: unknown): value is NonAuthoritativeCandidateV1 {
   return exactKeys(value, ["level", "candidateId", "sourceClass", "contentDigest", "evidenceDigest", "provenance", "licence", "acceptanceStatus", "promotionStatus", "disposition", "authorityBoundary", "candidateDigest"])
     && oneOf(value.level, ["A3", "A4", "A5"] as const) && isId(value.candidateId)
@@ -216,6 +231,7 @@ export function validateGapAcquisitionReceiptV1(value: unknown): value is GapAcq
     || !isDigest(value.receiptDigest) || gapAcquisitionReceiptDigestV1(value) !== value.receiptDigest) return false;
   const attempts = value.attempts as readonly RetrievalAttemptV1[];
   if (attempts.some((attempt, index) => attempt.level !== (["A0", "A1", "A2"] as const)[index])) return false;
+  if (!validRetrievalStrategySequence(attempts)) return false;
   if (attempts.some((attempt) => attempt.knowledgeBundleDigest !== value.knowledgeBundleDigest)) return false;
   if (value.state !== "BLOCKED" && value.blockedReason !== null) return false;
   if (!validStateCombination(value as GapAcquisitionReceiptV1)) return false;
@@ -316,7 +332,7 @@ export function findGapAndRouteAcquisitionV1(input: unknown): GapAcquisitionDeci
     const attempt = input.attempts[index];
     if (attempt === undefined) break;
     if (attempt.level !== level || attempt.knowledgeBundleDigest !== input.knowledgeBundleDigest) return blocked("KNOWLEDGE_BUNDLE_CHANGED");
-    if (attempts.some((previous) => previous.strategyId === attempt.strategyId || previous.retrieverId === attempt.retrieverId)) return blocked("NON_DETERMINISTIC_RETRIEVAL_STRATEGY");
+    if (!validRetrievalStrategySequence([...attempts, attempt])) return blocked("NON_DETERMINISTIC_RETRIEVAL_STRATEGY");
     const outcome = classifyCandidates(attempt.candidates);
     attempts.push(outputAttempt(attempt, attempt.knowledgeBundleDigest, outcome));
     terminal = outcome;
