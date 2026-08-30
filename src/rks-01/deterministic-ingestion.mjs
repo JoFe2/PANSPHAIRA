@@ -21,6 +21,25 @@ export const canonicalJson = (value) => JSON.stringify(canonicalize(value));
 const digestObject = (value) => safeDigest(Buffer.from(canonicalJson(value)));
 const fail = (code) => { throw new Error(code); };
 const same = (a, b) => canonicalJson(a) === canonicalJson(b);
+const BASE64_LINE_LENGTH = 76;
+
+export function encodeCanonicalBase64(rawBytes) {
+  const base64 = Buffer.from(rawBytes).toString("base64");
+  const lines = [];
+  for (let index = 0; index < base64.length; index += BASE64_LINE_LENGTH) lines.push(base64.slice(index, index + BASE64_LINE_LENGTH));
+  return Buffer.from(`${lines.join("\n")}\n`, "ascii");
+}
+
+function decodeCanonicalBase64(encodedBytes) {
+  if (encodedBytes.byteLength === 0 || encodedBytes[encodedBytes.byteLength - 1] !== 0x0a) fail("SOURCE_STORAGE_ENCODING_INVALID");
+  const text = encodedBytes.toString("ascii");
+  if (!encodedBytes.equals(Buffer.from(text, "ascii"))) fail("SOURCE_STORAGE_ENCODING_INVALID");
+  const lines = text.slice(0, -1).split("\n");
+  if (lines.some((line, index) => !/^[A-Za-z0-9+/]+={0,2}$/.test(line) || line.length > BASE64_LINE_LENGTH || (index < lines.length - 1 && line.length !== BASE64_LINE_LENGTH))) fail("SOURCE_STORAGE_ENCODING_INVALID");
+  const rawBytes = Buffer.from(lines.join(""), "base64");
+  if (!encodedBytes.equals(encodeCanonicalBase64(rawBytes))) fail("SOURCE_STORAGE_ENCODING_INVALID");
+  return rawBytes;
+}
 
 function expectedKey(source) { return `${source.role}:${source.selector}`; }
 function expectedSources() {
@@ -43,6 +62,8 @@ function validateIdentity(source, expected) {
   }
   if (!same(source.parser, expected.parser)) fail("PARSER_DRIFT");
   if (!same(source.canonicalizer, CANONICALIZER)) fail("CANONICALIZER_DRIFT");
+  if (source.storageEncoding !== "BASE64" || !source.encodedArtifactPath?.endsWith(".b64")) fail("SOURCE_STORAGE_ENCODING_INVALID");
+  if (!Number.isSafeInteger(source.rawByteLength) || source.rawByteLength < 0 || !/^[0-9a-f]{64}$/.test(source.rawSha256 ?? "")) fail("SOURCE_BYTES_METADATA_INVALID");
   if (source.transformationClass !== expected.transformationClass) fail("TRANSFORMATION_CLASS_MISMATCH");
   if (!source.license?.id || !source.license.notice || !Array.isArray(source.license.obligations) || source.license.obligations.length === 0) fail("MISSING_LICENSE_OBLIGATIONS");
 }
@@ -73,7 +94,7 @@ function sectionRecords(text, syntax) {
 }
 
 function parseCanonical(source, bytes) {
-  const base = { sourceKey: expectedKey(source), sourceClass: source.sourceClass, sourceSha256: source.sha256, selector: source.selector, revision: source.immutableIdentity.revision };
+  const base = { sourceKey: expectedKey(source), sourceClass: source.sourceClass, sourceSha256: source.rawSha256, selector: source.selector, revision: source.immutableIdentity.revision };
   if (source.role === "WIKIDATA_ENTITY") {
     const parsed = JSON.parse(bytes.toString("utf8"));
     const sourceEntity = parsed.entities?.[source.selector];
@@ -86,7 +107,7 @@ function parseCanonical(source, bytes) {
     }
     return { ...base, entity };
   }
-  if (source.transformationClass === "UNMODIFIED_ONLY") return { ...base, identityBytesSha256: source.sha256, byteLength: source.byteLength };
+  if (source.transformationClass === "UNMODIFIED_ONLY") return { ...base, identityBytesSha256: source.rawSha256, byteLength: source.rawByteLength };
   return { ...base, ...sectionRecords(bytes.toString("utf8"), source.role === "OPENAPI_SPEC" ? "markdown" : "rst") };
 }
 
@@ -97,6 +118,7 @@ export async function loadAndVerifyCapture({ repoRoot, manifestPath, manifest, a
   const expected = expectedSources();
   if (value.sources.length !== expected.size) fail("EXTRA_OR_DUPLICATE_SOURCE");
   const seen = new Set();
+  const seenArtifactPaths = new Set();
   let totalBytes = 0;
   const sources = [];
   const canonicalRecords = [];
@@ -104,11 +126,14 @@ export async function loadAndVerifyCapture({ repoRoot, manifestPath, manifest, a
     const key = expectedKey(source);
     if (seen.has(key) || !expected.has(key)) fail("EXTRA_OR_DUPLICATE_SOURCE");
     seen.add(key); validateIdentity(source, expected.get(key));
-    totalBytes += source.byteLength;
+    if (seenArtifactPaths.has(source.encodedArtifactPath)) fail("DUPLICATE_SOURCE_ARTIFACT_PATH");
+    seenArtifactPaths.add(source.encodedArtifactPath);
+    totalBytes += source.rawByteLength;
     if (totalBytes > CAPTURE_LIMIT_BYTES) fail("CAPTURE_SIZE_LIMIT_EXCEEDED");
-    const bytes = await safeRead(repoRoot, source.relativePath);
+    const encodedBytes = await safeRead(repoRoot, source.encodedArtifactPath);
+    const bytes = decodeCanonicalBase64(encodedBytes);
     const actualSha256 = safeDigest(bytes);
-    if (bytes.byteLength !== source.byteLength || actualSha256 !== source.sha256) fail("SOURCE_BYTES_MISMATCH");
+    if (bytes.byteLength !== source.rawByteLength || actualSha256 !== source.rawSha256) fail("SOURCE_BYTES_MISMATCH");
     sources.push({ ...structuredClone(source), actualSha256, actualByteLength: bytes.byteLength });
     canonicalRecords.push(parseCanonical(source, bytes));
   }
@@ -116,7 +141,7 @@ export async function loadAndVerifyCapture({ repoRoot, manifestPath, manifest, a
   const unsigned = structuredClone(value); delete unsigned.captureDigest;
   const captureDigest = digestObject(unsigned);
   if (!allowManifestDigestMismatch && value.captureDigest !== captureDigest) fail("CAPTURE_MANIFEST_DIGEST_INVALID");
-  const sourceSetDigest = digestObject(value.sources.map(({ role, selector, sha256 }) => ({ role, selector, sha256 })));
+  const sourceSetDigest = digestObject(value.sources.map(({ role, selector, rawSha256 }) => ({ role, selector, sha256: rawSha256 })));
   const canonicalRecordsDigest = digestObject(canonicalRecords);
   const counts = { wikidata: sources.filter((s) => s.role === "WIKIDATA_ENTITY").length, cpythonDocuments: sources.filter((s) => s.role === "CPYTHON_DOCUMENT").length, openapiDocuments: sources.filter((s) => s.role === "OPENAPI_SPEC").length, rfcControls: sources.filter((s) => s.role === "RFC9987_CONTROL").length, obligations: sources.filter((s) => s.role.endsWith("OBLIGATION")).length, total: sources.length };
   const receipt = { schemaVersion: "pansphaira.rks01/source-capture-receipt/v1", mode: "OFFLINE_VERIFICATION", outcome: "VERIFIED", captureDigest, sourceSetDigest, canonicalRecordsDigest, counts, totalBytes, networkRequests: 0, nonClaims: ["NO_MODEL_EXECUTION","NO_FINAL_RAW_OR_TYPED_CORPUS","NO_TRUTH_CAPABILITY_OR_AUTHORITY_GRANT"] };

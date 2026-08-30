@@ -21,7 +21,6 @@
         "version": "Q1",
         "revision": "2534934769"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1-revision-2534934769.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -40,8 +39,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:53.929Z",
       "mediaType": "application/json",
-      "byteLength": 214830,
-      "sha256": "4d5a124db59eac067186556f6228317a02a9a5b728a9b86274766cb86f55fa9c",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1-revision-2534934769.json.b64",
+      "rawByteLength": 214830,
+      "rawSha256": "4d5a124db59eac067186556f6228317a02a9a5b728a9b86274766cb86f55fa9c",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -59,7 +60,6 @@
         "version": "Q2",
         "revision": "2536974575"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2-revision-2536974575.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -78,8 +78,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:54.520Z",
       "mediaType": "application/json",
-      "byteLength": 534141,
-      "sha256": "b874a8bc94c741cdebe7946dd2ab98f96c7c2d88842ca83c62562d2344c1ba1e",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2-revision-2536974575.json.b64",
+      "rawByteLength": 534141,
+      "rawSha256": "b874a8bc94c741cdebe7946dd2ab98f96c7c2d88842ca83c62562d2344c1ba1e",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -97,7 +99,6 @@
         "version": "Q405",
         "revision": "2532464451"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q405-revision-2532464451.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -116,8 +117,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:54.727Z",
       "mediaType": "application/json",
-      "byteLength": 207186,
-      "sha256": "575097fd088948d406cd895c8097085a6331c6aeda927189c09bd1a5698a26e9",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q405-revision-2532464451.json.b64",
+      "rawByteLength": 207186,
+      "rawSha256": "575097fd088948d406cd895c8097085a6331c6aeda927189c09bd1a5698a26e9",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -135,7 +138,6 @@
         "version": "Q525",
         "revision": "2534268648"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q525-revision-2534268648.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -154,8 +156,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:54.905Z",
       "mediaType": "application/json",
-      "byteLength": 527475,
-      "sha256": "19e4e01da4b99f92c59ad19a82f7d2587630a96019c739cdd17f450de8368c34",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q525-revision-2534268648.json.b64",
+      "rawByteLength": 527475,
+      "rawSha256": "19e4e01da4b99f92c59ad19a82f7d2587630a96019c739cdd17f450de8368c34",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -173,7 +177,6 @@
         "version": "Q283",
         "revision": "2532884891"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q283-revision-2532884891.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -192,8 +195,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:55.179Z",
       "mediaType": "application/json",
-      "byteLength": 424388,
-      "sha256": "04d002cd48ca86ea5c3aaec9cb6be7a09ee0f74a172e8164aee4523ec5802323",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q283-revision-2532884891.json.b64",
+      "rawByteLength": 424388,
+      "rawSha256": "04d002cd48ca86ea5c3aaec9cb6be7a09ee0f74a172e8164aee4523ec5802323",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -211,7 +216,6 @@
         "version": "Q629",
         "revision": "2538096346"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q629-revision-2538096346.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -230,8 +234,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:55.340Z",
       "mediaType": "application/json",
-      "byteLength": 163806,
-      "sha256": "1c8e5d1f1fbbb6563b9246b3c0b590711435d5fc2ab1f6fbd12bf8fa13eb182b",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q629-revision-2538096346.json.b64",
+      "rawByteLength": 163806,
+      "rawSha256": "1c8e5d1f1fbbb6563b9246b3c0b590711435d5fc2ab1f6fbd12bf8fa13eb182b",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -249,7 +255,6 @@
         "version": "Q556",
         "revision": "2538096517"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q556-revision-2538096517.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -268,8 +273,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:55.552Z",
       "mediaType": "application/json",
-      "byteLength": 159703,
-      "sha256": "9b2f34dd1c9e184849b3759a590e9d53c53d7c5c6068bad41aa7557aa687925a",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q556-revision-2538096517.json.b64",
+      "rawByteLength": 159703,
+      "rawSha256": "9b2f34dd1c9e184849b3759a590e9d53c53d7c5c6068bad41aa7557aa687925a",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -287,7 +294,6 @@
         "version": "Q623",
         "revision": "2538096574"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q623-revision-2538096574.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -306,8 +312,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:55.765Z",
       "mediaType": "application/json",
-      "byteLength": 187894,
-      "sha256": "1628d4222d5050e40d3b47eddaac0587b51e6099382dec6b24321d9eca556e53",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q623-revision-2538096574.json.b64",
+      "rawByteLength": 187894,
+      "rawSha256": "1628d4222d5050e40d3b47eddaac0587b51e6099382dec6b24321d9eca556e53",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -325,7 +333,6 @@
         "version": "Q7430",
         "revision": "2533806379"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7430-revision-2533806379.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -344,8 +351,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:55.958Z",
       "mediaType": "application/json",
-      "byteLength": 141315,
-      "sha256": "0334190d3be65f9814300c04ffc7ac39f078d12c0af26cbc79c12bf06cc76397",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7430-revision-2533806379.json.b64",
+      "rawByteLength": 141315,
+      "rawSha256": "0334190d3be65f9814300c04ffc7ac39f078d12c0af26cbc79c12bf06cc76397",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -363,7 +372,6 @@
         "version": "Q7868",
         "revision": "2535923716"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7868-revision-2535923716.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -382,8 +390,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:56.151Z",
       "mediaType": "application/json",
-      "byteLength": 108577,
-      "sha256": "1865d74887ecba40bf44b92bdb8c25b2c78129d89bbc8bf6a247fceae536c99c",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7868-revision-2535923716.json.b64",
+      "rawByteLength": 108577,
+      "rawSha256": "1865d74887ecba40bf44b92bdb8c25b2c78129d89bbc8bf6a247fceae536c99c",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -401,7 +411,6 @@
         "version": "Q11412",
         "revision": "2535667337"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q11412-revision-2535667337.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -420,8 +429,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:56.364Z",
       "mediaType": "application/json",
-      "byteLength": 142011,
-      "sha256": "5a66bfce538160008443e3ad8e2520bea6cf7929adab4f0074615421ed27cfcd",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q11412-revision-2535667337.json.b64",
+      "rawByteLength": 142011,
+      "rawSha256": "5a66bfce538160008443e3ad8e2520bea6cf7929adab4f0074615421ed27cfcd",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -439,7 +450,6 @@
         "version": "Q2111",
         "revision": "2538039371"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2111-revision-2538039371.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -458,8 +468,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:56.570Z",
       "mediaType": "application/json",
-      "byteLength": 94877,
-      "sha256": "07c4d904fa3c89da8d27361aca4d74fc2deb48c1a989b75d7ca62036896dd9e9",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2111-revision-2538039371.json.b64",
+      "rawByteLength": 94877,
+      "rawSha256": "07c4d904fa3c89da8d27361aca4d74fc2deb48c1a989b75d7ca62036896dd9e9",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -477,7 +489,6 @@
         "version": "Q142",
         "revision": "2537405156"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q142-revision-2537405156.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -496,8 +507,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:57.139Z",
       "mediaType": "application/json",
-      "byteLength": 1227908,
-      "sha256": "d061805a75e380c7b420951adb8aa8b9b5c5106f3c3bfbefc2cbd12ac4cb6994",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q142-revision-2537405156.json.b64",
+      "rawByteLength": 1227908,
+      "rawSha256": "d061805a75e380c7b420951adb8aa8b9b5c5106f3c3bfbefc2cbd12ac4cb6994",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -515,7 +528,6 @@
         "version": "Q183",
         "revision": "2537264871"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q183-revision-2537264871.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -534,8 +546,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:58.129Z",
       "mediaType": "application/json",
-      "byteLength": 2661204,
-      "sha256": "7512681229f955e6780ad21fa2db282f6aa1c67563ddb34408a14964e06942ae",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q183-revision-2537264871.json.b64",
+      "rawByteLength": 2661204,
+      "rawSha256": "7512681229f955e6780ad21fa2db282f6aa1c67563ddb34408a14964e06942ae",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -553,7 +567,6 @@
         "version": "Q17",
         "revision": "2537263927"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q17-revision-2537263927.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -572,8 +585,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:58.850Z",
       "mediaType": "application/json",
-      "byteLength": 835570,
-      "sha256": "8eb450f0251f413eaadc3f3f1a2a11a2e7aaff3cc0ea7d9d31b209de03da3472",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q17-revision-2537263927.json.b64",
+      "rawByteLength": 835570,
+      "rawSha256": "8eb450f0251f413eaadc3f3f1a2a11a2e7aaff3cc0ea7d9d31b209de03da3472",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -591,7 +606,6 @@
         "version": "Q90",
         "revision": "2537264071"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q90-revision-2537264071.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -610,8 +624,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:59.205Z",
       "mediaType": "application/json",
-      "byteLength": 495616,
-      "sha256": "ed11ef02903ef0aadcf1d611e3fa0db69c3c423129cdfffb06af11e01154a813",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q90-revision-2537264071.json.b64",
+      "rawByteLength": 495616,
+      "rawSha256": "ed11ef02903ef0aadcf1d611e3fa0db69c3c423129cdfffb06af11e01154a813",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -629,7 +645,6 @@
         "version": "Q64",
         "revision": "2532491231"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q64-revision-2532491231.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -648,8 +663,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:35:59.790Z",
       "mediaType": "application/json",
-      "byteLength": 467957,
-      "sha256": "ab4ca464cf48683d40febb8d5d753d84e5c6a749ef1b305ed290048eecdc0cf8",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q64-revision-2532491231.json.b64",
+      "rawByteLength": 467957,
+      "rawSha256": "ab4ca464cf48683d40febb8d5d753d84e5c6a749ef1b305ed290048eecdc0cf8",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -667,7 +684,6 @@
         "version": "Q1490",
         "revision": "2537899880"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1490-revision-2537899880.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -686,8 +702,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:36:00.043Z",
       "mediaType": "application/json",
-      "byteLength": 353578,
-      "sha256": "cecdb0cff41ba1f631083bf0f20e8594662bd7f75fe672ad3833d56233e9997a",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1490-revision-2537899880.json.b64",
+      "rawByteLength": 353578,
+      "rawSha256": "cecdb0cff41ba1f631083bf0f20e8594662bd7f75fe672ad3833d56233e9997a",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -705,7 +723,6 @@
         "version": "Q12418",
         "revision": "2530846747"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q12418-revision-2530846747.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -724,8 +741,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:36:00.323Z",
       "mediaType": "application/json",
-      "byteLength": 142177,
-      "sha256": "c04578bea2b6da7a5f14ab0b2400816916ee8da90fad54e4a1f3f76e7171cec6",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q12418-revision-2530846747.json.b64",
+      "rawByteLength": 142177,
+      "rawSha256": "c04578bea2b6da7a5f14ab0b2400816916ee8da90fad54e4a1f3f76e7171cec6",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -743,7 +762,6 @@
         "version": "Q41567",
         "revision": "2525357029"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q41567-revision-2525357029.json",
       "parser": {
         "id": "wikidata-entity-json-complete",
         "version": "1.0.0"
@@ -762,8 +780,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "retrievedAt": "2026-08-30T20:36:00.517Z",
       "mediaType": "application/json",
-      "byteLength": 201586,
-      "sha256": "6bef9f518ae70b169225e43bd907f1181693b157462e49b03dcf528412c6ea8f",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q41567-revision-2525357029.json.b64",
+      "rawByteLength": 201586,
+      "rawSha256": "6bef9f518ae70b169225e43bd907f1181693b157462e49b03dcf528412c6ea8f",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -781,7 +801,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/introduction.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -801,8 +820,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.551Z",
-      "byteLength": 18965,
-      "sha256": "44868375a1505a1d23d2915527fa8941632ccaaf8e6e090d7a3009df73b90d9e",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/introduction.rst.b64",
+      "rawByteLength": 18965,
+      "rawSha256": "44868375a1505a1d23d2915527fa8941632ccaaf8e6e090d7a3009df73b90d9e",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -820,7 +841,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/controlflow.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -840,8 +860,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.565Z",
-      "byteLength": 40720,
-      "sha256": "8960b2290f8d44bfe6b2244100b7b24e77f89eb8aa72735666cd17ca409a67a3",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/controlflow.rst.b64",
+      "rawByteLength": 40720,
+      "rawSha256": "8960b2290f8d44bfe6b2244100b7b24e77f89eb8aa72735666cd17ca409a67a3",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -859,7 +881,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/datastructures.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -879,8 +900,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.579Z",
-      "byteLength": 25448,
-      "sha256": "f4ad72009ad81a1995e2e3912bee60d4ab64d89090bb782a94d13f486155b15c",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/datastructures.rst.b64",
+      "rawByteLength": 25448,
+      "rawSha256": "f4ad72009ad81a1995e2e3912bee60d4ab64d89090bb782a94d13f486155b15c",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -898,7 +921,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/modules.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -918,8 +940,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.591Z",
-      "byteLength": 25559,
-      "sha256": "919ed939a797cfdfbc2be6f18ff8f860692a8b7ac7bbd37b012307954d19e39c",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/modules.rst.b64",
+      "rawByteLength": 25559,
+      "rawSha256": "919ed939a797cfdfbc2be6f18ff8f860692a8b7ac7bbd37b012307954d19e39c",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -937,7 +961,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/inputoutput.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -957,8 +980,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.603Z",
-      "byteLength": 20900,
-      "sha256": "0aa8b4dc7bd711fd80fbbe7b287a392f6dc77d754bed9aa51ae380ac8312fb57",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/inputoutput.rst.b64",
+      "rawByteLength": 20900,
+      "rawSha256": "0aa8b4dc7bd711fd80fbbe7b287a392f6dc77d754bed9aa51ae380ac8312fb57",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -976,7 +1001,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/errors.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -996,8 +1020,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.614Z",
-      "byteLength": 24533,
-      "sha256": "e242c7faaae139dfde0735535dfb7cb377a8160bc8cfb1dbbe0c803e12fde64c",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/errors.rst.b64",
+      "rawByteLength": 24533,
+      "rawSha256": "e242c7faaae139dfde0735535dfb7cb377a8160bc8cfb1dbbe0c803e12fde64c",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1015,7 +1041,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/classes.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1035,8 +1060,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.626Z",
-      "byteLength": 37035,
-      "sha256": "5537160e231fa1b68e02afc14d2082e4e0a9aa738c70fbb33376eb19c7fbe00c",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/classes.rst.b64",
+      "rawByteLength": 37035,
+      "rawSha256": "5537160e231fa1b68e02afc14d2082e4e0a9aa738c70fbb33376eb19c7fbe00c",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1054,7 +1081,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1074,8 +1100,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.674Z",
-      "byteLength": 11411,
-      "sha256": "e39df36e3e2ef122bb776c15933c0de7bec5109f61abd8e56e8d6608f67a1db1",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib.rst.b64",
+      "rawByteLength": 11411,
+      "rawSha256": "e39df36e3e2ef122bb776c15933c0de7bec5109f61abd8e56e8d6608f67a1db1",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1093,7 +1121,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib2.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1113,8 +1140,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.686Z",
-      "byteLength": 15174,
-      "sha256": "df63e5893c2d39eb7ef66a3fa6fc3f7ed393904ae1dbe0dd93bfbe7b868aaeef",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib2.rst.b64",
+      "rawByteLength": 15174,
+      "rawSha256": "df63e5893c2d39eb7ef66a3fa6fc3f7ed393904ae1dbe0dd93bfbe7b868aaeef",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1132,7 +1161,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/venv.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1152,8 +1180,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.698Z",
-      "byteLength": 7796,
-      "sha256": "9e5d8ff6d6328111c5949a4276df7ed4152d164a3c977932898580db332f8b82",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/venv.rst.b64",
+      "rawByteLength": 7796,
+      "rawSha256": "9e5d8ff6d6328111c5949a4276df7ed4152d164a3c977932898580db332f8b82",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1171,7 +1201,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/lexical_analysis.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1191,8 +1220,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.711Z",
-      "byteLength": 50868,
-      "sha256": "fcec0275b9935e412b5f79e34e0cc7b4ca1fdd60e7d4828c416441e5994be723",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/lexical_analysis.rst.b64",
+      "rawByteLength": 50868,
+      "rawSha256": "fcec0275b9935e412b5f79e34e0cc7b4ca1fdd60e7d4828c416441e5994be723",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1210,7 +1241,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/expressions.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1230,8 +1260,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.726Z",
-      "byteLength": 92034,
-      "sha256": "e19de4fead912abcb323f3a6ab42b20595bf6b8ae302e04f257b844b3ce7582a",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/expressions.rst.b64",
+      "rawByteLength": 92034,
+      "rawSha256": "e19de4fead912abcb323f3a6ab42b20595bf6b8ae302e04f257b844b3ce7582a",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1249,7 +1281,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/simple_stmts.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1269,8 +1300,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.740Z",
-      "byteLength": 41375,
-      "sha256": "d43206423b327dcf05009b5aa26d1175a516a597367cc4739851d3b299ae29dc",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/simple_stmts.rst.b64",
+      "rawByteLength": 41375,
+      "rawSha256": "d43206423b327dcf05009b5aa26d1175a516a597367cc4739851d3b299ae29dc",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1288,7 +1321,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/compound_stmts.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1308,8 +1340,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.755Z",
-      "byteLength": 70048,
-      "sha256": "67bc5a27e2f1ca3de3c3fc99b8e66e44c64832b706ef4a77005f08b8cc695eb7",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/compound_stmts.rst.b64",
+      "rawByteLength": 70048,
+      "rawSha256": "67bc5a27e2f1ca3de3c3fc99b8e66e44c64832b706ef4a77005f08b8cc695eb7",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1327,7 +1361,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/datamodel.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1347,8 +1380,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.777Z",
-      "byteLength": 156837,
-      "sha256": "9671159102ac80d2e965009bc1a130d6ed859d191dcba091476c5c908870f021",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/datamodel.rst.b64",
+      "rawByteLength": 156837,
+      "rawSha256": "9671159102ac80d2e965009bc1a130d6ed859d191dcba091476c5c908870f021",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1366,7 +1401,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/functions.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1386,8 +1420,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.795Z",
-      "byteLength": 96565,
-      "sha256": "aac2fe48aa3960595e817009e011103b23128e882c2e7c917f0f351857468f4c",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/functions.rst.b64",
+      "rawByteLength": 96565,
+      "rawSha256": "aac2fe48aa3960595e817009e011103b23128e882c2e7c917f0f351857468f4c",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1405,7 +1441,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/stdtypes.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1425,8 +1460,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.810Z",
-      "byteLength": 247751,
-      "sha256": "94bc42e2b957c821bafa5445e8fd48ff6a64e0ed4a16cbb8d4fe34f6b7ac9a38",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/stdtypes.rst.b64",
+      "rawByteLength": 247751,
+      "rawSha256": "94bc42e2b957c821bafa5445e8fd48ff6a64e0ed4a16cbb8d4fe34f6b7ac9a38",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1444,7 +1481,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/pathlib.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1464,8 +1500,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.821Z",
-      "byteLength": 68694,
-      "sha256": "bdd9af802be5c3de71f2a692a508f767a0c74556d4bff4455a39ee2bef62959f",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/pathlib.rst.b64",
+      "rawByteLength": 68694,
+      "rawSha256": "bdd9af802be5c3de71f2a692a508f767a0c74556d4bff4455a39ee2bef62959f",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1483,7 +1521,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/json.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1503,8 +1540,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.834Z",
-      "byteLength": 31028,
-      "sha256": "cb79cc1a3ee732f47df0162ed70a6bf34751904759db11133f8152a228044d11",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/json.rst.b64",
+      "rawByteLength": 31028,
+      "rawSha256": "cb79cc1a3ee732f47df0162ed70a6bf34751904759db11133f8152a228044d11",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1522,7 +1561,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/sqlite3.rst",
       "parser": {
         "id": "rst-section-preserving",
         "version": "1.0.0"
@@ -1542,8 +1580,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.846Z",
-      "byteLength": 94071,
-      "sha256": "1e8648afcec920fbb1b8935a15fa2850db98b56301ca892f3ed0a527df9835ac",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/sqlite3.rst.b64",
+      "rawByteLength": 94071,
+      "rawSha256": "1e8648afcec920fbb1b8935a15fa2850db98b56301ca892f3ed0a527df9835ac",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1561,7 +1601,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/LICENSE",
       "parser": {
         "id": "identity-bytes",
         "version": "1.0.0"
@@ -1581,8 +1620,10 @@
       "transformationClass": "UNMODIFIED_ONLY",
       "mediaType": "text/plain",
       "retrievedAt": "2026-08-30T20:36:00.857Z",
-      "byteLength": 13804,
-      "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/LICENSE.b64",
+      "rawByteLength": 13804,
+      "rawSha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1600,7 +1641,6 @@
         "version": "v3.14.7",
         "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/license.rst",
       "parser": {
         "id": "identity-bytes",
         "version": "1.0.0"
@@ -1620,8 +1660,10 @@
       "transformationClass": "UNMODIFIED_ONLY",
       "mediaType": "text/x-rst",
       "retrievedAt": "2026-08-30T20:36:00.869Z",
-      "byteLength": 60039,
-      "sha256": "cd6f471c0bfdb099efefc25ddff9b3df8bf62e10428987f1f05e6f2f9e35d563",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/license.rst.b64",
+      "rawByteLength": 60039,
+      "rawSha256": "cd6f471c0bfdb099efefc25ddff9b3df8bf62e10428987f1f05e6f2f9e35d563",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1639,7 +1681,6 @@
         "version": "3.2.0",
         "revision": "99710bcb26cbe4be646565eebeb04348f02374b5"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/openapi/versions/3.2.0.md",
       "parser": {
         "id": "commonmark-bounded",
         "version": "1.0.0"
@@ -1659,8 +1700,10 @@
       "transformationClass": "TRANSFORM_ALLOWED",
       "mediaType": "text/markdown",
       "retrievedAt": "2026-08-30T20:36:00.890Z",
-      "byteLength": 296274,
-      "sha256": "936c11e5f37fd0cf7cbb3c3a8bf5ef4b2ee5c03fbec0eb900ae546fc0a696503",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/openapi/versions/3.2.0.md.b64",
+      "rawByteLength": 296274,
+      "rawSha256": "936c11e5f37fd0cf7cbb3c3a8bf5ef4b2ee5c03fbec0eb900ae546fc0a696503",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1678,7 +1721,6 @@
         "version": "3.2.0",
         "revision": "99710bcb26cbe4be646565eebeb04348f02374b5"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/openapi/LICENSE",
       "parser": {
         "id": "identity-bytes",
         "version": "1.0.0"
@@ -1698,8 +1740,10 @@
       "transformationClass": "UNMODIFIED_ONLY",
       "mediaType": "text/plain",
       "retrievedAt": "2026-08-30T20:36:00.904Z",
-      "byteLength": 11345,
-      "sha256": "4948367c65e1ce06690e2cadc6e86fce1a6a6db55ef874ce4b78c0f472ce5f13",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/openapi/LICENSE.b64",
+      "rawByteLength": 11345,
+      "rawSha256": "4948367c65e1ce06690e2cadc6e86fce1a6a6db55ef874ce4b78c0f472ce5f13",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1717,7 +1761,6 @@
         "version": "RFC9987",
         "revision": "RFC9987"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/rfc9987/rfc9987.xml",
       "parser": {
         "id": "identity-bytes",
         "version": "1.0.0"
@@ -1738,8 +1781,10 @@
       "transformationClass": "UNMODIFIED_ONLY",
       "mediaType": "application/rfc+xml",
       "retrievedAt": "2026-08-30T20:36:01.108Z",
-      "byteLength": 126409,
-      "sha256": "ac4025f614be0e683839ec80689744757c779ab624a44a5169b2ded1e016b668",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/rfc9987/rfc9987.xml.b64",
+      "rawByteLength": 126409,
+      "rawSha256": "ac4025f614be0e683839ec80689744757c779ab624a44a5169b2ded1e016b668",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1757,7 +1802,6 @@
         "version": "RFC9987",
         "revision": "RFC9987"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/rfc9987/metadata.html",
       "parser": {
         "id": "identity-bytes",
         "version": "1.0.0"
@@ -1778,8 +1822,10 @@
       "transformationClass": "UNMODIFIED_ONLY",
       "mediaType": "text/html",
       "retrievedAt": "2026-08-30T20:36:01.175Z",
-      "byteLength": 597966,
-      "sha256": "3ef877b72c5f49aaea1191ddff8b3d185362e6afd75b835faeb2afe05a4f73a6",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/rfc9987/metadata.html.b64",
+      "rawByteLength": 597966,
+      "rawSha256": "3ef877b72c5f49aaea1191ddff8b3d185362e6afd75b835faeb2afe05a4f73a6",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
@@ -1797,7 +1843,6 @@
         "version": "RFC9987",
         "revision": "RFC9987"
       },
-      "relativePath": "tests/fixtures/rks-01/source-snapshots/rfc9987/errata.html",
       "parser": {
         "id": "identity-bytes",
         "version": "1.0.0"
@@ -1818,13 +1863,15 @@
       "transformationClass": "UNMODIFIED_ONLY",
       "mediaType": "text/html",
       "retrievedAt": "2026-08-30T20:36:01.943Z",
-      "byteLength": 7061,
-      "sha256": "c468b79ddae573763c53bbe5591143d8ce52d093aa38e67fff25fcdebfee6f3a",
+      "storageEncoding": "BASE64",
+      "encodedArtifactPath": "tests/fixtures/rks-01/source-snapshots/rfc9987/errata.html.b64",
+      "rawByteLength": 7061,
+      "rawSha256": "c468b79ddae573763c53bbe5591143d8ce52d093aa38e67fff25fcdebfee6f3a",
       "canonicalizer": {
         "id": "rks01-canonical-json",
         "version": "1.0.0"
       }
     }
   ],
-  "captureDigest": "aedfa6acc2f68fee0d1b6bff4dfb07d3039a52929f34aff1fd4afc1ef96a7cf6"
+  "captureDigest": "904b9465f7d31c28982033926008126c4c715220a25ef77a0741362dbfcd863d"
 }

@@ -13,7 +13,7 @@ The immutable capture contains 47 files (11,581,509 bytes, below the 20 MiB limi
 
 The pinned OpenAPI repository has no `NOTICE` file (the official pinned raw URL returns 404). No NOTICE bytes are invented. The manifest instead records Apache-2.0's `RETAIN_NOTICE_IF_PRESENT` obligation alongside `RETAIN_LICENSE` and `MARK_CHANGES`.
 
-Each manifest entry binds the canonical URL, pinned request URL, immutable revision/tag/commit, retrieval timestamp, media type, byte length, SHA-256, safe relative path, license/notice/obligations, transformation class, parser version, and canonicalizer version. The top-level digest seals the manifest. The exact snapshots are the authority; no moving URL alone is an identity.
+Each manifest entry binds the canonical URL, pinned request URL, immutable revision/tag/commit, retrieval timestamp, media type, raw byte length, raw SHA-256, safe encoded artifact path, license/notice/obligations, transformation class, parser version, and canonicalizer version. Exact payloads are stored as deterministic RFC 4648 base64 (`storageEncoding: BASE64`) with 76-character LF-terminated lines. This transport prevents legitimate source conflict markers and trailing whitespace from becoming Git patch hazards; it does not normalize or change any admitted raw byte. The top-level digest seals the manifest. The decoded exact snapshots are the authority; no moving URL alone is an identity.
 
 ## Commands and network policy
 
@@ -33,7 +33,7 @@ node scripts/capture-rks-01-sources.mjs
 node scripts/capture-rks-01-sources.mjs --verify-offline
 ```
 
-Offline verification reads exact local bytes, rejects unsafe paths and symlinks, checks length and SHA-256, enforces the frozen selector set and immutable identities, parses deterministically, and writes `verification/rks-01-source-capture-receipt-v1.json`. The receipt itself declares `networkRequests: 0`.
+Offline verification reads each canonical `.b64` artifact, rejects unsafe paths, symlinks, duplicate artifact paths, and noncanonical base64, decodes before checking the exact raw length and SHA-256, enforces the frozen selector set and immutable identities, then parses the decoded raw bytes deterministically and writes `verification/rks-01-source-capture-receipt-v1.json`. The 20 MiB limit applies to decoded raw bytes, and the receipt itself declares `networkRequests: 0`.
 
 Focused verification:
 

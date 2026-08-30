@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { mkdtemp, readFile, readdir, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -31,26 +32,56 @@ function mutateEntry(manifest, patch) {
   return manifest;
 }
 
+test("base64 snapshot transport is delivery-safe and decodes to every exact admitted raw byte", async () => {
+  const manifest = await copiedManifest();
+  const snapshotRoot = resolve(repoRoot, "tests/fixtures/rks-01/source-snapshots");
+  const artifacts = (await readdir(snapshotRoot, { recursive: true, withFileTypes: true }))
+    .filter((entry) => entry.isFile())
+    .map((entry) => resolve(entry.parentPath, entry.name));
+  assert.equal(artifacts.length, manifest.sources.length);
+  assert.ok(artifacts.every((path) => path.endsWith(".b64")), "raw source payload path remains");
+
+  let decodedDeliveryHazards = 0;
+  for (const source of manifest.sources) {
+    assert.equal(source.storageEncoding, "BASE64");
+    assert.match(source.encodedArtifactPath, /^tests\/fixtures\/rks-01\/source-snapshots\/.+\.b64$/);
+    const encoded = await readFile(resolve(repoRoot, source.encodedArtifactPath));
+    assert.equal(encoded.toString("ascii").endsWith("\n"), true);
+    const lines = encoded.toString("ascii").slice(0, -1).split("\n");
+    assert.ok(lines.every((line, index) => line.length <= 76 && (index === lines.length - 1 || line.length === 76)));
+    const raw = Buffer.from(lines.join(""), "base64");
+    const canonicalLines = raw.toString("base64").match(/.{1,76}/g);
+    assert.equal(encoded.equals(Buffer.from(`${canonicalLines.join("\n")}\n`, "ascii")), true, "base64 is not canonical");
+    assert.equal(raw.byteLength, source.rawByteLength);
+    assert.equal(createHash("sha256").update(raw).digest("hex"), source.rawSha256);
+    assert.doesNotMatch(encoded.toString("ascii"), /^(?:<<<<<<< |=======|>>>>>>> )|[ \t]+$/m);
+    if (/^(?:<<<<<<< |=======|>>>>>>> )|[ \t]+$/m.test(raw.toString("utf8"))) decodedDeliveryHazards += 1;
+  }
+  assert.ok(decodedDeliveryHazards > 0, "regression fixture must retain official conflict-marker/trailing-whitespace bytes");
+});
+
 test("offline capture admits the exact frozen official selector set and required obligations", async () => {
   const capture = await verified();
   assert.equal(capture.outcome, "VERIFIED");
   assert.deepEqual(capture.counts, { wikidata: 20, cpythonDocuments: 20, openapiDocuments: 1, rfcControls: 3, obligations: 3, total: 47 });
   assert.ok(capture.totalBytes > 0 && capture.totalBytes <= CAPTURE_LIMIT_BYTES);
   assert.equal(capture.networkRequests, 0);
+  assert.equal(capture.digests.sourceSetDigest, "6b13a1e1a23c0a94b1a259c44ceb9a0cf8713766f5632a1a0381e7134799601d");
+  assert.equal(capture.digests.canonicalRecordsDigest, "c258b3f41e716469ea54e6bc18c239c96e890b9cce2d975c85e45282518cd911");
   assert.deepEqual(capture.nonClaims, ["NO_MODEL_EXECUTION", "NO_FINAL_RAW_OR_TYPED_CORPUS", "NO_TRUTH_CAPABILITY_OR_AUTHORITY_GRANT"]);
 });
 
 test("every source is pinned, exact-byte bound, safely stored, and legally classified", async () => {
   const capture = await verified();
   for (const source of capture.sources) {
-    assert.match(source.sha256, /^[0-9a-f]{64}$/);
-    assert.equal(source.actualSha256, source.sha256);
-    assert.equal(source.actualByteLength, source.byteLength);
+    assert.match(source.rawSha256, /^[0-9a-f]{64}$/);
+    assert.equal(source.actualSha256, source.rawSha256);
+    assert.equal(source.actualByteLength, source.rawByteLength);
     assert.match(source.retrievedAt, /^2026-/);
     assert.ok(source.canonicalUrl.startsWith("https://"));
     assert.ok(source.pinnedRequestUrl.startsWith("https://"));
     assert.ok(!/(?:\/|=)(?:main|master|latest)(?:\/|$|&)/i.test(source.pinnedRequestUrl));
-    assert.ok(!source.relativePath.startsWith("/") && !source.relativePath.includes(".."));
+    assert.ok(!source.encodedArtifactPath.startsWith("/") && !source.encodedArtifactPath.includes(".."));
     assert.ok(["TRANSFORM_ALLOWED", "UNMODIFIED_ONLY"].includes(source.transformationClass));
     assert.ok(source.license.id && source.license.notice && source.license.obligations.length > 0);
     assert.ok(source.parser.id && source.parser.version && source.canonicalizer.id && source.canonicalizer.version);
@@ -105,7 +136,7 @@ test("changed bytes, revision, parser, or license create a new immutable capture
 test("moving identity, source mismatch, obligation loss, extra sources, parser drift, and re-digested substitution fail closed", async () => {
   const cases = [
     [mutateEntry(await copiedManifest(), { pinnedRequestUrl: "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/versions/3.2.0.md", immutableIdentity: { kind: "MOVING_ALIAS", revision: "main" } }), "MOVING_ONLY_IDENTITY"],
-    [mutateEntry(await copiedManifest(), { canonicalUrl: "https://attacker.invalid/spec", sha256: "0".repeat(64) }), "SOURCE_IDENTITY_MISMATCH"],
+    [mutateEntry(await copiedManifest(), { canonicalUrl: "https://attacker.invalid/spec", rawSha256: "0".repeat(64) }), "SOURCE_IDENTITY_MISMATCH"],
     [mutateEntry(await copiedManifest(), { license: { id: "Apache-2.0", notice: "", obligations: [] } }), "MISSING_LICENSE_OBLIGATIONS"],
     [{ ...(await copiedManifest()), sources: [...(await copiedManifest()).sources, structuredClone((await copiedManifest()).sources[0])] }, "EXTRA_OR_DUPLICATE_SOURCE"],
     [mutateEntry(await copiedManifest(), { parser: { id: "commonmark-bounded", version: "9.9.9" } }), "PARSER_DRIFT"],
@@ -115,29 +146,29 @@ test("moving identity, source mismatch, obligation loss, extra sources, parser d
   }
 
   const substituted = mutateEntry(await copiedManifest(), { canonicalUrl: "https://attacker.invalid/spec", pinnedRequestUrl: "https://attacker.invalid/spec" });
-  substituted.sources.find((source) => source.role === "OPENAPI_SPEC").sha256 = "f".repeat(64);
+  substituted.sources.find((source) => source.role === "OPENAPI_SPEC").rawSha256 = "f".repeat(64);
   await assert.rejects(() => verified({ manifest: substituted, allowManifestDigestMismatch: true }), /SOURCE_IDENTITY_MISMATCH/);
 });
 
 test("unsafe paths, symlinks, total bytes over 20 MiB, and source history mutation deny", async () => {
-  const unsafe = mutateEntry(await copiedManifest(), { relativePath: "../escape" });
+  const unsafe = mutateEntry(await copiedManifest(), { encodedArtifactPath: "../escape.b64" });
   await assert.rejects(() => verified({ manifest: unsafe }), /UNSAFE_SOURCE_PATH/);
 
   const oversized = await copiedManifest();
-  oversized.sources[0].byteLength = CAPTURE_LIMIT_BYTES + 1;
+  oversized.sources[0].rawByteLength = CAPTURE_LIMIT_BYTES + 1;
   await assert.rejects(() => verified({ manifest: oversized }), /CAPTURE_SIZE_LIMIT_EXCEEDED/);
 
   const tempRoot = await mkdtemp(resolve(tmpdir(), "rks01-symlink-"));
   const manifest = await copiedManifest();
-  const target = resolve(repoRoot, manifest.sources[0].relativePath);
-  const link = resolve(tempRoot, "linked-source");
+  const target = resolve(repoRoot, manifest.sources[0].encodedArtifactPath);
+  const link = resolve(tempRoot, "linked-source.b64");
   await symlink(target, link);
-  manifest.sources[0].relativePath = "linked-source";
+  manifest.sources[0].encodedArtifactPath = "linked-source.b64";
   await assert.rejects(() => loadAndVerifyCapture({ repoRoot: tempRoot, manifest }), /SOURCE_SYMLINK_FORBIDDEN/);
 
   const capture = await verified();
   const mutatedHistory = structuredClone(capture);
-  mutatedHistory.sources[0].sha256 = "a".repeat(64);
+  mutatedHistory.sources[0].rawSha256 = "a".repeat(64);
   assert.throws(() => evaluateDrift(mutatedHistory, driftCases.changes[0]), /SOURCE_HISTORY_MUTATION/);
 });
 

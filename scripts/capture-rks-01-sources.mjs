@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { access, mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { CANONICALIZER, CAPTURE_LIMIT_BYTES, PARSERS, canonicalJson, loadAndVerifyCapture } from "../src/rks-01/deterministic-ingestion.mjs";
+import { CANONICALIZER, CAPTURE_LIMIT_BYTES, PARSERS, canonicalJson, encodeCanonicalBase64, loadAndVerifyCapture } from "../src/rks-01/deterministic-ingestion.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = resolve(repoRoot, "tests/fixtures/rks-01/source-capture-manifest-v1.json");
@@ -50,10 +50,12 @@ async function captureNetwork() {
   async function add(spec) {
     const fetched = await fetchBounded(spec.pinnedRequestUrl, CAPTURE_LIMIT_BYTES - total);
     total += fetched.bytes.byteLength;
-    const full = resolve(repoRoot, spec.relativePath);
+    const { relativePath: rawRelativePath, ...sourceSpec } = spec;
+    const encodedArtifactPath = `${rawRelativePath}.b64`;
+    const full = resolve(repoRoot, encodedArtifactPath);
     await mkdir(dirname(full), { recursive: true });
-    await writeFile(full, fetched.bytes, { flag: "wx" });
-    sources.push({ ...spec, retrievedAt: new Date().toISOString(), mediaType: spec.mediaType ?? fetched.mediaType, byteLength: fetched.bytes.byteLength, sha256: sha256(fetched.bytes), canonicalizer: CANONICALIZER });
+    await writeFile(full, encodeCanonicalBase64(fetched.bytes), { flag: "wx" });
+    sources.push({ ...sourceSpec, retrievedAt: new Date().toISOString(), mediaType: spec.mediaType ?? fetched.mediaType, storageEncoding: "BASE64", encodedArtifactPath, rawByteLength: fetched.bytes.byteLength, rawSha256: sha256(fetched.bytes), canonicalizer: CANONICALIZER });
     process.stderr.write(`captured ${spec.role}:${spec.selector} ${fetched.bytes.byteLength}\n`);
   }
 
