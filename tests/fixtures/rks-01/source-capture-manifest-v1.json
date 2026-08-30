@@ -1,0 +1,1830 @@
+{
+  "schemaVersion": "pansphaira.rks01/source-capture-manifest/v1",
+  "captureId": "rks01-2026-08-30T20:36:01.944Z",
+  "capturePolicy": {
+    "explicitNetworkMode": true,
+    "sequentialRequests": true,
+    "retries": 4,
+    "maxTotalBytes": 20971520,
+    "userAgent": "PANSPHAIRA-RKS01-source-capture/1.0 (+https://github.com/JoFe2/PANSPHAIRA/issues/311; bounded research capture)"
+  },
+  "sources": [
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q1",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q1",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q1.json?revision=2534934769",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q1",
+        "revision": "2534934769"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1-revision-2534934769.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:53.929Z",
+      "mediaType": "application/json",
+      "byteLength": 214830,
+      "sha256": "4d5a124db59eac067186556f6228317a02a9a5b728a9b86274766cb86f55fa9c",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q2",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q2",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q2.json?revision=2536974575",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q2",
+        "revision": "2536974575"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2-revision-2536974575.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:54.520Z",
+      "mediaType": "application/json",
+      "byteLength": 534141,
+      "sha256": "b874a8bc94c741cdebe7946dd2ab98f96c7c2d88842ca83c62562d2344c1ba1e",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q405",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q405",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q405.json?revision=2532464451",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q405",
+        "revision": "2532464451"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q405-revision-2532464451.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:54.727Z",
+      "mediaType": "application/json",
+      "byteLength": 207186,
+      "sha256": "575097fd088948d406cd895c8097085a6331c6aeda927189c09bd1a5698a26e9",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q525",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q525",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q525.json?revision=2534268648",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q525",
+        "revision": "2534268648"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q525-revision-2534268648.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:54.905Z",
+      "mediaType": "application/json",
+      "byteLength": 527475,
+      "sha256": "19e4e01da4b99f92c59ad19a82f7d2587630a96019c739cdd17f450de8368c34",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q283",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q283",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q283.json?revision=2532884891",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q283",
+        "revision": "2532884891"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q283-revision-2532884891.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:55.179Z",
+      "mediaType": "application/json",
+      "byteLength": 424388,
+      "sha256": "04d002cd48ca86ea5c3aaec9cb6be7a09ee0f74a172e8164aee4523ec5802323",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q629",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q629",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q629.json?revision=2538096346",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q629",
+        "revision": "2538096346"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q629-revision-2538096346.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:55.340Z",
+      "mediaType": "application/json",
+      "byteLength": 163806,
+      "sha256": "1c8e5d1f1fbbb6563b9246b3c0b590711435d5fc2ab1f6fbd12bf8fa13eb182b",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q556",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q556",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q556.json?revision=2538096517",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q556",
+        "revision": "2538096517"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q556-revision-2538096517.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:55.552Z",
+      "mediaType": "application/json",
+      "byteLength": 159703,
+      "sha256": "9b2f34dd1c9e184849b3759a590e9d53c53d7c5c6068bad41aa7557aa687925a",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q623",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q623",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q623.json?revision=2538096574",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q623",
+        "revision": "2538096574"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q623-revision-2538096574.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:55.765Z",
+      "mediaType": "application/json",
+      "byteLength": 187894,
+      "sha256": "1628d4222d5050e40d3b47eddaac0587b51e6099382dec6b24321d9eca556e53",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q7430",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q7430",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q7430.json?revision=2533806379",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q7430",
+        "revision": "2533806379"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7430-revision-2533806379.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:55.958Z",
+      "mediaType": "application/json",
+      "byteLength": 141315,
+      "sha256": "0334190d3be65f9814300c04ffc7ac39f078d12c0af26cbc79c12bf06cc76397",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q7868",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q7868",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q7868.json?revision=2535923716",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q7868",
+        "revision": "2535923716"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7868-revision-2535923716.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:56.151Z",
+      "mediaType": "application/json",
+      "byteLength": 108577,
+      "sha256": "1865d74887ecba40bf44b92bdb8c25b2c78129d89bbc8bf6a247fceae536c99c",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q11412",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q11412",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q11412.json?revision=2535667337",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q11412",
+        "revision": "2535667337"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q11412-revision-2535667337.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:56.364Z",
+      "mediaType": "application/json",
+      "byteLength": 142011,
+      "sha256": "5a66bfce538160008443e3ad8e2520bea6cf7929adab4f0074615421ed27cfcd",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q2111",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q2111",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q2111.json?revision=2538039371",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q2111",
+        "revision": "2538039371"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2111-revision-2538039371.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:56.570Z",
+      "mediaType": "application/json",
+      "byteLength": 94877,
+      "sha256": "07c4d904fa3c89da8d27361aca4d74fc2deb48c1a989b75d7ca62036896dd9e9",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q142",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q142",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q142.json?revision=2537405156",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q142",
+        "revision": "2537405156"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q142-revision-2537405156.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:57.139Z",
+      "mediaType": "application/json",
+      "byteLength": 1227908,
+      "sha256": "d061805a75e380c7b420951adb8aa8b9b5c5106f3c3bfbefc2cbd12ac4cb6994",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q183",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q183",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q183.json?revision=2537264871",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q183",
+        "revision": "2537264871"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q183-revision-2537264871.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:58.129Z",
+      "mediaType": "application/json",
+      "byteLength": 2661204,
+      "sha256": "7512681229f955e6780ad21fa2db282f6aa1c67563ddb34408a14964e06942ae",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q17",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q17",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q17.json?revision=2537263927",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q17",
+        "revision": "2537263927"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q17-revision-2537263927.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:58.850Z",
+      "mediaType": "application/json",
+      "byteLength": 835570,
+      "sha256": "8eb450f0251f413eaadc3f3f1a2a11a2e7aaff3cc0ea7d9d31b209de03da3472",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q90",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q90",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q90.json?revision=2537264071",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q90",
+        "revision": "2537264071"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q90-revision-2537264071.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:59.205Z",
+      "mediaType": "application/json",
+      "byteLength": 495616,
+      "sha256": "ed11ef02903ef0aadcf1d611e3fa0db69c3c423129cdfffb06af11e01154a813",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q64",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q64",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q64.json?revision=2532491231",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q64",
+        "revision": "2532491231"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q64-revision-2532491231.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:35:59.790Z",
+      "mediaType": "application/json",
+      "byteLength": 467957,
+      "sha256": "ab4ca464cf48683d40febb8d5d753d84e5c6a749ef1b305ed290048eecdc0cf8",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q1490",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q1490",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q1490.json?revision=2537899880",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q1490",
+        "revision": "2537899880"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1490-revision-2537899880.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:36:00.043Z",
+      "mediaType": "application/json",
+      "byteLength": 353578,
+      "sha256": "cecdb0cff41ba1f631083bf0f20e8594662bd7f75fe672ad3833d56233e9997a",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q12418",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q12418",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q12418.json?revision=2530846747",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q12418",
+        "revision": "2530846747"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q12418-revision-2530846747.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:36:00.323Z",
+      "mediaType": "application/json",
+      "byteLength": 142177,
+      "sha256": "c04578bea2b6da7a5f14ab0b2400816916ee8da90fad54e4a1f3f76e7171cec6",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "WIKIDATA_ENTITY",
+      "selector": "Q41567",
+      "sourceProfile": "wikidata-20-item-revision-set-v1",
+      "sourceClass": "WIKIDATA_STRUCTURED",
+      "canonicalUrl": "https://www.wikidata.org/entity/Q41567",
+      "pinnedRequestUrl": "https://www.wikidata.org/wiki/Special:EntityData/Q41567.json?revision=2525357029",
+      "immutableIdentity": {
+        "kind": "ENTITY_REVISION",
+        "version": "Q41567",
+        "revision": "2525357029"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/wikidata/Q41567-revision-2525357029.json",
+      "parser": {
+        "id": "wikidata-entity-json-complete",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "notice": "STRUCTURED_MAIN_NAMESPACE_DATA_ONLY",
+        "attribution": [
+          "Wikidata contributors"
+        ],
+        "obligations": [
+          "RETAIN_SOURCE_PROVENANCE",
+          "RETAIN_REVISION_BINDING"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "retrievedAt": "2026-08-30T20:36:00.517Z",
+      "mediaType": "application/json",
+      "byteLength": 201586,
+      "sha256": "6bef9f518ae70b169225e43bd907f1181693b157462e49b03dcf528412c6ea8f",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/introduction.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/introduction.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/introduction.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/introduction.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.551Z",
+      "byteLength": 18965,
+      "sha256": "44868375a1505a1d23d2915527fa8941632ccaaf8e6e090d7a3009df73b90d9e",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/controlflow.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/controlflow.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/controlflow.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/controlflow.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.565Z",
+      "byteLength": 40720,
+      "sha256": "8960b2290f8d44bfe6b2244100b7b24e77f89eb8aa72735666cd17ca409a67a3",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/datastructures.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/datastructures.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/datastructures.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/datastructures.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.579Z",
+      "byteLength": 25448,
+      "sha256": "f4ad72009ad81a1995e2e3912bee60d4ab64d89090bb782a94d13f486155b15c",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/modules.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/modules.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/modules.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/modules.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.591Z",
+      "byteLength": 25559,
+      "sha256": "919ed939a797cfdfbc2be6f18ff8f860692a8b7ac7bbd37b012307954d19e39c",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/inputoutput.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/inputoutput.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/inputoutput.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/inputoutput.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.603Z",
+      "byteLength": 20900,
+      "sha256": "0aa8b4dc7bd711fd80fbbe7b287a392f6dc77d754bed9aa51ae380ac8312fb57",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/errors.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/errors.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/errors.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/errors.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.614Z",
+      "byteLength": 24533,
+      "sha256": "e242c7faaae139dfde0735535dfb7cb377a8160bc8cfb1dbbe0c803e12fde64c",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/classes.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/classes.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/classes.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/classes.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.626Z",
+      "byteLength": 37035,
+      "sha256": "5537160e231fa1b68e02afc14d2082e4e0a9aa738c70fbb33376eb19c7fbe00c",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/stdlib.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/stdlib.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/stdlib.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.674Z",
+      "byteLength": 11411,
+      "sha256": "e39df36e3e2ef122bb776c15933c0de7bec5109f61abd8e56e8d6608f67a1db1",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/stdlib2.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/stdlib2.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/stdlib2.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib2.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.686Z",
+      "byteLength": 15174,
+      "sha256": "df63e5893c2d39eb7ef66a3fa6fc3f7ed393904ae1dbe0dd93bfbe7b868aaeef",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/tutorial/venv.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/tutorial/venv.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/tutorial/venv.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/venv.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.698Z",
+      "byteLength": 7796,
+      "sha256": "9e5d8ff6d6328111c5949a4276df7ed4152d164a3c977932898580db332f8b82",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/reference/lexical_analysis.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/reference/lexical_analysis.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/reference/lexical_analysis.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/lexical_analysis.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.711Z",
+      "byteLength": 50868,
+      "sha256": "fcec0275b9935e412b5f79e34e0cc7b4ca1fdd60e7d4828c416441e5994be723",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/reference/expressions.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/reference/expressions.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/reference/expressions.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/expressions.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.726Z",
+      "byteLength": 92034,
+      "sha256": "e19de4fead912abcb323f3a6ab42b20595bf6b8ae302e04f257b844b3ce7582a",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/reference/simple_stmts.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/reference/simple_stmts.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/reference/simple_stmts.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/simple_stmts.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.740Z",
+      "byteLength": 41375,
+      "sha256": "d43206423b327dcf05009b5aa26d1175a516a597367cc4739851d3b299ae29dc",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/reference/compound_stmts.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/reference/compound_stmts.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/reference/compound_stmts.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/compound_stmts.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.755Z",
+      "byteLength": 70048,
+      "sha256": "67bc5a27e2f1ca3de3c3fc99b8e66e44c64832b706ef4a77005f08b8cc695eb7",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/reference/datamodel.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/reference/datamodel.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/reference/datamodel.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/datamodel.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.777Z",
+      "byteLength": 156837,
+      "sha256": "9671159102ac80d2e965009bc1a130d6ed859d191dcba091476c5c908870f021",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/library/functions.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/library/functions.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/library/functions.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/functions.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.795Z",
+      "byteLength": 96565,
+      "sha256": "aac2fe48aa3960595e817009e011103b23128e882c2e7c917f0f351857468f4c",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/library/stdtypes.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/library/stdtypes.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/library/stdtypes.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/stdtypes.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.810Z",
+      "byteLength": 247751,
+      "sha256": "94bc42e2b957c821bafa5445e8fd48ff6a64e0ed4a16cbb8d4fe34f6b7ac9a38",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/library/pathlib.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/library/pathlib.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/library/pathlib.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/pathlib.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.821Z",
+      "byteLength": 68694,
+      "sha256": "bdd9af802be5c3de71f2a692a508f767a0c74556d4bff4455a39ee2bef62959f",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/library/json.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/library/json.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/library/json.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/json.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.834Z",
+      "byteLength": 31028,
+      "sha256": "cb79cc1a3ee732f47df0162ed70a6bf34751904759db11133f8152a228044d11",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_DOCUMENT",
+      "selector": "Doc/library/sqlite3.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "CPYTHON_VERSIONED_DOCS",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/library/sqlite3.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/library/sqlite3.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/sqlite3.rst",
+      "parser": {
+        "id": "rst-section-preserving",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.846Z",
+      "byteLength": 94071,
+      "sha256": "1e8648afcec920fbb1b8935a15fa2850db98b56301ca892f3ed0a527df9835ac",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_OBLIGATION",
+      "selector": "LICENSE",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "LICENSE_OBLIGATION",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/LICENSE",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/LICENSE",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/LICENSE",
+      "parser": {
+        "id": "identity-bytes",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "UNMODIFIED_ONLY",
+      "mediaType": "text/plain",
+      "retrievedAt": "2026-08-30T20:36:00.857Z",
+      "byteLength": 13804,
+      "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "CPYTHON_OBLIGATION",
+      "selector": "Doc/license.rst",
+      "sourceProfile": "cpython-doc-v3.14.7-v1",
+      "sourceClass": "LICENSE_OBLIGATION",
+      "canonicalUrl": "https://github.com/python/cpython/blob/v3.14.7/Doc/license.rst",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/python/cpython/823f0323ee6ec1402088b73bce1a38473cac36dc/Doc/license.rst",
+      "immutableIdentity": {
+        "kind": "TAG_AND_COMMIT",
+        "version": "v3.14.7",
+        "revision": "823f0323ee6ec1402088b73bce1a38473cac36dc"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/license.rst",
+      "parser": {
+        "id": "identity-bytes",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "PSF-2.0",
+        "notice": "PSF_LICENSE_AND_DOCUMENTATION_NOTICE_RETAINED",
+        "attribution": [
+          "Python Software Foundation"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_DERIVATIVE_CHANGES"
+        ]
+      },
+      "transformationClass": "UNMODIFIED_ONLY",
+      "mediaType": "text/x-rst",
+      "retrievedAt": "2026-08-30T20:36:00.869Z",
+      "byteLength": 60039,
+      "sha256": "cd6f471c0bfdb099efefc25ddff9b3df8bf62e10428987f1f05e6f2f9e35d563",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "OPENAPI_SPEC",
+      "selector": "versions/3.2.0.md",
+      "sourceProfile": "openapi-spec-v3.2.0-v1",
+      "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+      "canonicalUrl": "https://spec.openapis.org/oas/v3.2.0.html",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/99710bcb26cbe4be646565eebeb04348f02374b5/versions/3.2.0.md",
+      "immutableIdentity": {
+        "kind": "VERSION_AND_COMMIT",
+        "version": "3.2.0",
+        "revision": "99710bcb26cbe4be646565eebeb04348f02374b5"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/openapi/versions/3.2.0.md",
+      "parser": {
+        "id": "commonmark-bounded",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "Apache-2.0",
+        "notice": "LICENSE_AND_NOTICE_RETAINED",
+        "attribution": [
+          "OpenAPI Initiative"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE",
+          "MARK_CHANGES"
+        ]
+      },
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "mediaType": "text/markdown",
+      "retrievedAt": "2026-08-30T20:36:00.890Z",
+      "byteLength": 296274,
+      "sha256": "936c11e5f37fd0cf7cbb3c3a8bf5ef4b2ee5c03fbec0eb900ae546fc0a696503",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "OPENAPI_OBLIGATION",
+      "selector": "LICENSE",
+      "sourceProfile": "openapi-spec-v3.2.0-v1",
+      "sourceClass": "LICENSE_OBLIGATION",
+      "canonicalUrl": "https://github.com/OAI/OpenAPI-Specification/blob/3.2.0/LICENSE",
+      "pinnedRequestUrl": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/99710bcb26cbe4be646565eebeb04348f02374b5/LICENSE",
+      "immutableIdentity": {
+        "kind": "VERSION_AND_COMMIT",
+        "version": "3.2.0",
+        "revision": "99710bcb26cbe4be646565eebeb04348f02374b5"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/openapi/LICENSE",
+      "parser": {
+        "id": "identity-bytes",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "Apache-2.0",
+        "notice": "LICENSE_AND_NOTICE_RETAINED",
+        "attribution": [
+          "OpenAPI Initiative"
+        ],
+        "obligations": [
+          "RETAIN_LICENSE",
+          "RETAIN_NOTICE_IF_PRESENT",
+          "MARK_CHANGES"
+        ]
+      },
+      "transformationClass": "UNMODIFIED_ONLY",
+      "mediaType": "text/plain",
+      "retrievedAt": "2026-08-30T20:36:00.904Z",
+      "byteLength": 11345,
+      "sha256": "4948367c65e1ce06690e2cadc6e86fce1a6a6db55ef874ce4b78c0f472ce5f13",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "RFC9987_CONTROL",
+      "selector": "rfc9987.xml",
+      "sourceProfile": "ietf-rfc9987-archival-control-v1",
+      "sourceClass": "RFC9987_UNMODIFIED_CONTROL",
+      "canonicalUrl": "https://www.rfc-editor.org/rfc/rfc9987.xml",
+      "pinnedRequestUrl": "https://www.rfc-editor.org/rfc/rfc9987.xml",
+      "immutableIdentity": {
+        "kind": "RFC_NUMBER_AND_CAPTURE_DIGEST",
+        "version": "RFC9987",
+        "revision": "RFC9987"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/rfc9987/rfc9987.xml",
+      "parser": {
+        "id": "identity-bytes",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "IETF-TRUST-DOCUMENT-SPECIFIC",
+        "notice": "DOCUMENT_LEGAL_NOTICES_RETAINED",
+        "attribution": [
+          "RFC Editor",
+          "IETF Trust"
+        ],
+        "obligations": [
+          "RETAIN_LEGAL_NOTICES",
+          "VERBATIM_ONLY",
+          "NO_SILENT_ERRATA_INCORPORATION"
+        ]
+      },
+      "transformationClass": "UNMODIFIED_ONLY",
+      "mediaType": "application/rfc+xml",
+      "retrievedAt": "2026-08-30T20:36:01.108Z",
+      "byteLength": 126409,
+      "sha256": "ac4025f614be0e683839ec80689744757c779ab624a44a5169b2ded1e016b668",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "RFC9987_CONTROL",
+      "selector": "metadata",
+      "sourceProfile": "ietf-rfc9987-archival-control-v1",
+      "sourceClass": "RFC9987_UNMODIFIED_CONTROL",
+      "canonicalUrl": "https://www.rfc-editor.org/info/rfc9987",
+      "pinnedRequestUrl": "https://www.rfc-editor.org/info/rfc9987",
+      "immutableIdentity": {
+        "kind": "RFC_NUMBER_AND_CAPTURE_DIGEST",
+        "version": "RFC9987",
+        "revision": "RFC9987"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/rfc9987/metadata.html",
+      "parser": {
+        "id": "identity-bytes",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "IETF-TRUST-DOCUMENT-SPECIFIC",
+        "notice": "DOCUMENT_LEGAL_NOTICES_RETAINED",
+        "attribution": [
+          "RFC Editor",
+          "IETF Trust"
+        ],
+        "obligations": [
+          "RETAIN_LEGAL_NOTICES",
+          "VERBATIM_ONLY",
+          "NO_SILENT_ERRATA_INCORPORATION"
+        ]
+      },
+      "transformationClass": "UNMODIFIED_ONLY",
+      "mediaType": "text/html",
+      "retrievedAt": "2026-08-30T20:36:01.175Z",
+      "byteLength": 597966,
+      "sha256": "3ef877b72c5f49aaea1191ddff8b3d185362e6afd75b835faeb2afe05a4f73a6",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "role": "RFC9987_CONTROL",
+      "selector": "errata",
+      "sourceProfile": "ietf-rfc9987-archival-control-v1",
+      "sourceClass": "RFC9987_UNMODIFIED_CONTROL",
+      "canonicalUrl": "https://errata.rfc-editor.org/rfc9987",
+      "pinnedRequestUrl": "https://errata.rfc-editor.org/rfc9987",
+      "immutableIdentity": {
+        "kind": "RFC_NUMBER_AND_CAPTURE_DIGEST",
+        "version": "RFC9987",
+        "revision": "RFC9987"
+      },
+      "relativePath": "tests/fixtures/rks-01/source-snapshots/rfc9987/errata.html",
+      "parser": {
+        "id": "identity-bytes",
+        "version": "1.0.0"
+      },
+      "license": {
+        "id": "IETF-TRUST-DOCUMENT-SPECIFIC",
+        "notice": "DOCUMENT_LEGAL_NOTICES_RETAINED",
+        "attribution": [
+          "RFC Editor",
+          "IETF Trust"
+        ],
+        "obligations": [
+          "RETAIN_LEGAL_NOTICES",
+          "VERBATIM_ONLY",
+          "NO_SILENT_ERRATA_INCORPORATION"
+        ]
+      },
+      "transformationClass": "UNMODIFIED_ONLY",
+      "mediaType": "text/html",
+      "retrievedAt": "2026-08-30T20:36:01.943Z",
+      "byteLength": 7061,
+      "sha256": "c468b79ddae573763c53bbe5591143d8ce52d093aa38e67fff25fcdebfee6f3a",
+      "canonicalizer": {
+        "id": "rks01-canonical-json",
+        "version": "1.0.0"
+      }
+    }
+  ],
+  "captureDigest": "aedfa6acc2f68fee0d1b6bff4dfb07d3039a52929f34aff1fd4afc1ef96a7cf6"
+}
