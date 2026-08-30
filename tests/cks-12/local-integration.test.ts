@@ -1,0 +1,4 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+test("local integration readback has the complete synthetic-only seam", async () => { const { runLocalIntegration } = await import(`${process.cwd()}/scripts/run-cks-12-local-integration.mjs`); const manifest = JSON.parse(readFileSync("tests/fixtures/cks-12/local-integration-manifest-v1.json", "utf8")); const e2e = JSON.parse(readFileSync("verification/cks-12/e2e-proof-readback-receipt-v1.json", "utf8")); const delivery = JSON.parse(readFileSync("verification/cks-12/delivery-readback-template-v1.json", "utf8")); const result = runLocalIntegration(manifest, e2e, delivery); assert.equal(result.status, "PASS_SYNTHETIC_ONLY"); if (result.status === "PASS_SYNTHETIC_ONLY") assert.equal(result.storyStepCount, 23); });

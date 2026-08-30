@@ -1,0 +1,33 @@
+import { createHash } from "node:crypto";
+
+export const SCHEMA_VERSION = "chimpmaera.cks/pattern-shadow-workflow/v1";
+export const COMPONENT_VERSIONS = Object.freeze({ workflowContract: "v1", functionContract: "v1", costModel: "cks-12-cost-model@v2", proofVerifier: "cks-12-proof-verifier@v1" });
+export const DENIAL_CODES = Object.freeze(["MISSING_INPUT", "VERSION_LOCK_MISMATCH", "PARITY_MISMATCH", "COST_NON_REDUCTION", "PROOF_OBLIGATION_MISMATCH", "STOP_CONDITION_MET"] as const);
+type DenialCode = typeof DENIAL_CODES[number]; type RecordValue = Record<string, unknown>;
+export type ShadowSuccess = { status: "SHADOW_PARITY_RECORDED"; workflowParity: 1; deterministicFunction: true; proofParity: true; cost: { reasoningReducedBy: number; retrievalReducedBy: number }; falsificationReport: { quality: number; requirementRecall: number; falseCompleteness: number; attribution: string; cost: { workflowReasoning: number; workflowRetrieval: number; functionReasoning: number; functionRetrieval: number }; stopConditions: readonly string[] }; authority: "NONE"; capabilityDelta: "NONE"; effect: "NONE" };
+export type Denied = { status: "DENIED"; reasonCodes: readonly DenialCode[]; details: readonly string[] };
+export function canonicalJson(value: unknown): string { if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value); if (typeof value === "number") { if (!Number.isFinite(value)) throw new TypeError("non-finite"); return JSON.stringify(value); } if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`; if (typeof value !== "object" || Object.getPrototypeOf(value) !== Object.prototype) throw new TypeError("plain JSON required"); const object = value as RecordValue; return `{${Object.keys(object).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(object[key])}`).join(",")}}`; }
+export const digest = (value: unknown): string => createHash("sha256").update(canonicalJson(value)).digest("hex");
+const record = (value: unknown): value is RecordValue => value !== null && typeof value === "object" && !Array.isArray(value) && Object.getPrototypeOf(value) === Object.prototype;
+const hasNumericFields = (value: unknown, fields: readonly string[]): value is RecordValue => record(value) && fields.every((field) => typeof value[field] === "number");
+const deny = (reasonCodes: DenialCode[], details: string[]): Denied => ({ status: "DENIED", reasonCodes: [...new Set(reasonCodes)].sort(), details });
+
+export function measureShadowWorkflowParity(input: unknown): ShadowSuccess | Denied {
+  if (!record(input)) return deny(["MISSING_INPUT"], ["shadow input must be an object"]);
+  const reasons: DenialCode[] = []; const details: string[] = []; const add = (code: DenialCode, detail: string) => { reasons.push(code); details.push(detail); };
+  if (!record(input.componentVersions) || canonicalJson(input.componentVersions) !== canonicalJson(COMPONENT_VERSIONS)) add("VERSION_LOCK_MISMATCH", "component lock mismatch");
+  const holdouts = input.holdouts;
+  if (!Array.isArray(holdouts) || holdouts.length < 3 || holdouts.some((holdout) => !record(holdout) || holdout.applicable !== true || holdout.workflowOutput !== holdout.baselineOutput || holdout.workflowProofDigest !== holdout.baselineProofDigest || canonicalJson(holdout.workflowProofObligations) !== canonicalJson(holdout.baselineProofObligations) || holdout.workflowDenial !== holdout.baselineDenial || typeof holdout.dependencyLockSha256 !== "string" || !/^[0-9a-f]{64}$/.test(holdout.dependencyLockSha256))) add("PARITY_MISMATCH", "at least three applicable exact-lock holdouts must preserve output, proof obligations, and denial parity");
+  const functionRun = input.functionRun;
+  if (!record(functionRun) || functionRun.outputA !== functionRun.outputB || functionRun.outputA !== input.expectedOutput) add("PARITY_MISMATCH", "Function output must be byte-deterministic and match the expected output");
+  if (!record(functionRun) || functionRun.proofDigest !== input.workflowProofDigest) add("PROOF_OBLIGATION_MISMATCH", "Function must preserve the workflow proof");
+  const workflowCost = input.workflowCost; const functionCost = functionRun && (functionRun as RecordValue).cost;
+  if (!record(workflowCost) || !record(functionCost) || typeof workflowCost.reasoning !== "number" || typeof workflowCost.retrieval !== "number" || typeof functionCost.reasoning !== "number" || typeof functionCost.retrieval !== "number" || functionCost.reasoning >= workflowCost.reasoning || functionCost.retrieval >= workflowCost.retrieval) add("COST_NON_REDUCTION", "Function must reduce both measured reasoning and retrieval cost");
+  const report = input.falsificationReport;
+  if (!record(report) || typeof report.quality !== "number" || typeof report.requirementRecall !== "number" || typeof report.falseCompleteness !== "number" || typeof report.attribution !== "string" || !hasNumericFields(report.cost, ["workflowReasoning", "workflowRetrieval", "functionReasoning", "functionRetrieval"]) || !Array.isArray(report.stopConditions) || report.stopConditions.length === 0) add("STOP_CONDITION_MET", "falsification report must include quality, recall, false completeness, attribution, cost and stop conditions");
+  if (reasons.length) return deny(reasons, details);
+  const w = workflowCost as RecordValue; const f = functionCost as RecordValue; const r = report as RecordValue;
+  const reportCost = r.cost as RecordValue;
+  return { status: "SHADOW_PARITY_RECORDED", workflowParity: 1, deterministicFunction: true, proofParity: true, cost: { reasoningReducedBy: (w.reasoning as number) - (f.reasoning as number), retrievalReducedBy: (w.retrieval as number) - (f.retrieval as number) }, falsificationReport: { quality: r.quality as number, requirementRecall: r.requirementRecall as number, falseCompleteness: r.falseCompleteness as number, attribution: r.attribution as string, cost: { workflowReasoning: reportCost.workflowReasoning as number, workflowRetrieval: reportCost.workflowRetrieval as number, functionReasoning: reportCost.functionReasoning as number, functionRetrieval: reportCost.functionRetrieval as number }, stopConditions: r.stopConditions as string[] }, authority: "NONE", capabilityDelta: "NONE", effect: "NONE" };
+}
+export function createReceipt(fixtureSha256: string, result: ShadowSuccess): RecordValue { const body = { schemaVersion: "chimpmaera.cks/pattern-shadow-parity-receipt/v1", receiptId: "CKS-12-PATTERN-SHADOW-PARITY-RECEIPT-V1", fixtureSha256, componentVersions: COMPONENT_VERSIONS, result, status: "RECORDED" }; return { ...body, receiptSha256: digest(body) }; }

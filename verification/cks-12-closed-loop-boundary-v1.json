@@ -1,0 +1,919 @@
+{
+  "schemaVersion": "chimpmaera.architecture/cks-12-closed-loop-boundary-receipt/v1",
+  "receiptId": "CKS-12-CLOSED-LOOP-BOUNDARY-V1",
+  "taskId": "PLAN-PSAI292-CLOSED-LOOP-BOUNDARY-01",
+  "issue": "#292",
+  "parentIssue": "#280",
+  "repository": "JoFe2/PANSPHAIRA",
+  "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+  "receiptStatus": "BOUNDARY_FROZEN",
+  "integratedProofState": "EVIDENCE_INCOMPLETE",
+  "integratedProofVerdict": "NOT_RUN",
+  "successClaimed": false,
+  "claim": "The CKS-12 v1 synthetic-only vocabulary and fail-closed evidence boundary are frozen; the CKS-12 learning-loop outcome is not proven.",
+  "controllingProcess": {
+    "operatingModel": "Operating Model v1.1",
+    "decisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "disposition": "PRESERVED_NO_PROCESS_VARIANT"
+  },
+  "sourceIssues": [
+    "#280",
+    "#287",
+    "#288",
+    "#289",
+    "#290",
+    "#291",
+    "#292"
+  ],
+  "artifactBindings": [
+    {
+      "path": "docs/architecture/cks-12-closed-loop-boundary-v1.md",
+      "digestAlgorithm": "SHA-256",
+      "sha256": "117093e6a57eb4803f764a8307d923c1bcbd933a015084aa442d46cbcdedd5c7"
+    }
+  ],
+  "storyStepVocabularySha256": "d178bb61b1e773e8ecc2641a439392a5b882d4b40d494feb66042a770906b869",
+  "orderedStoryStepIds": [
+    "CKS-12-P2-SS-01",
+    "CKS-12-P2-SS-02",
+    "CKS-12-P2-SS-03",
+    "CKS-12-P2-SS-04",
+    "CKS-12-P2-SS-05",
+    "CKS-12-P2-SS-06",
+    "CKS-12-P2-SS-07",
+    "CKS-12-P2-SS-08",
+    "CKS-12-P2-SS-09",
+    "CKS-12-P2-SS-10",
+    "CKS-12-P2-SS-11",
+    "CKS-12-P2-SS-12",
+    "CKS-12-P2-SS-13",
+    "CKS-12-P2-SS-14",
+    "CKS-12-P2-SS-15",
+    "CKS-12-P2-SS-16",
+    "CKS-12-P2-SS-17",
+    "CKS-12-P2-SS-18",
+    "CKS-12-P2-SS-19",
+    "CKS-12-P2-SS-20",
+    "CKS-12-P2-SS-21",
+    "CKS-12-P2-SS-22",
+    "CKS-12-P2-SS-23"
+  ],
+  "storySteps": [
+    {
+      "ordinal": 1,
+      "id": "CKS-12-P2-SS-01",
+      "event": "EMPTY_KNOWLEDGE_BASELINE",
+      "ownerIssue": "#287",
+      "requiredResult": "Exact empty or minimal Knowledge edition and ground-truth requirements locked before solving"
+    },
+    {
+      "ordinal": 2,
+      "id": "CKS-12-P2-SS-02",
+      "event": "KNOWLEDGE_NEED_DECLARED",
+      "ownerIssue": "#287",
+      "requiredResult": "Typed Need binds decision, Knowledge classes, scope, and unresolved material claims"
+    },
+    {
+      "ordinal": 3,
+      "id": "CKS-12-P2-SS-03",
+      "event": "FORWARD_REQUIREMENTS_ENUMERATED",
+      "ownerIssue": "#287",
+      "requiredResult": "Forward requirements recorded independently of solver output"
+    },
+    {
+      "ordinal": 4,
+      "id": "CKS-12-P2-SS-04",
+      "event": "ALTERNATE_RETRIEVAL_EXHAUSTED",
+      "ownerIssue": "#287",
+      "requiredResult": "Primary and frozen alternate retrieval attempts separately receipted"
+    },
+    {
+      "ordinal": 5,
+      "id": "CKS-12-P2-SS-05",
+      "event": "KNOWLEDGE_GAP_CONFIRMED",
+      "ownerIssue": "#287",
+      "requiredResult": "Finite gap class distinguishes retrieval failure, missing Knowledge, and unknown semantics"
+    },
+    {
+      "ordinal": 6,
+      "id": "CKS-12-P2-SS-06",
+      "event": "OFFLINE_ACQUISITION_PLANNED",
+      "ownerIssue": "#287",
+      "requiredResult": "Bounded plan selects only a prepackaged public-synthetic source fixture"
+    },
+    {
+      "ordinal": 7,
+      "id": "CKS-12-P2-SS-07",
+      "event": "SOURCE_EVIDENCE_ACQUIRED",
+      "ownerIssue": "#287",
+      "requiredResult": "Immutable ACQUIRED_UNTRUSTED source evidence with no validation, promotion, Capability, or Authority"
+    },
+    {
+      "ordinal": 8,
+      "id": "CKS-12-P2-SS-08",
+      "event": "KNOWLEDGE_CANDIDATE_CREATED",
+      "ownerIssue": "#287",
+      "requiredResult": "New immutable Knowledge asset in CANDIDATE"
+    },
+    {
+      "ordinal": 9,
+      "id": "CKS-12-P2-SS-09",
+      "event": "CANDIDATE_VALIDATED",
+      "ownerIssue": "#287",
+      "requiredResult": "Independent validation binds source, contradiction, Applicability, freshness, and sufficiency"
+    },
+    {
+      "ordinal": 10,
+      "id": "CKS-12-P2-SS-10",
+      "event": "GOVERNED_SYNTHETIC_PROMOTION",
+      "ownerIssue": "#287",
+      "requiredResult": "Separate governed receipt creates PROMOTED_SYNTHETIC_ONLY without live activation"
+    },
+    {
+      "ordinal": 11,
+      "id": "CKS-12-P2-SS-11",
+      "event": "KNOWLEDGE_SUFFICIENCY_PROVED",
+      "ownerIssue": "#287",
+      "requiredResult": "Forward, gap-finder, boundary, and backward proof bind the promoted exact version"
+    },
+    {
+      "ordinal": 12,
+      "id": "CKS-12-P2-SS-12",
+      "event": "GROUNDED_SOLUTION_RECORDED",
+      "ownerIssue": "#288",
+      "requiredResult": "Every material solution claim binds used Knowledge and Evidence or abstains"
+    },
+    {
+      "ordinal": 13,
+      "id": "CKS-12-P2-SS-13",
+      "event": "USAGE_OUTCOME_LINEAGE_RECORDED",
+      "ownerIssue": "#288",
+      "requiredResult": "Minimized Task to Search to Knowledge to Decision to Outcome lineage complete"
+    },
+    {
+      "ordinal": 14,
+      "id": "CKS-12-P2-SS-14",
+      "event": "OPERATIONAL_REPETITION_RECORDED",
+      "ownerIssue": "#288",
+      "requiredResult": "Same-context repeats increment only +O"
+    },
+    {
+      "ordinal": 15,
+      "id": "CKS-12-P2-SS-15",
+      "event": "CROSS_CONTEXT_GENERALIZATION_RECORDED",
+      "ownerIssue": "#288",
+      "requiredResult": "Distinct predeclared holdout strata contribute at most one +G unit per stratum"
+    },
+    {
+      "ordinal": 16,
+      "id": "CKS-12-P2-SS-16",
+      "event": "FAILURE_ATTRIBUTED",
+      "ownerIssue": "#288",
+      "requiredResult": "Planted negative outcome receives finite causal class and explicit uncertainty or multi-cause set"
+    },
+    {
+      "ordinal": 17,
+      "id": "CKS-12-P2-SS-17",
+      "event": "APPLICABILITY_NARROWED",
+      "ownerIssue": "#288",
+      "requiredResult": "Narrower immutable candidate separately validates and receives governed synthetic-only promotion"
+    },
+    {
+      "ordinal": 18,
+      "id": "CKS-12-P2-SS-18",
+      "event": "REVERSE_EXPERIENCE_PATTERN_VALIDATED",
+      "ownerIssue": "#289",
+      "requiredResult": "Fingerprint retrieval emits a counterevidence-preserving Pattern candidate separately validated"
+    },
+    {
+      "ordinal": 19,
+      "id": "CKS-12-P2-SS-19",
+      "event": "KALEIDOSPHERE_READ_ONLY_CANDIDATE",
+      "ownerIssue": "#290",
+      "requiredResult": "Minimized read-only projection returns authority-free CANDIDATE with zero invented edges"
+    },
+    {
+      "ordinal": 20,
+      "id": "CKS-12-P2-SS-20",
+      "event": "SHADOW_WORKFLOW_PARITY_MEASURED",
+      "ownerIssue": "#291",
+      "requiredResult": "Version-bound shadow Workflow reaches the parity gate on applicable holdouts"
+    },
+    {
+      "ordinal": 21,
+      "id": "CKS-12-P2-SS-21",
+      "event": "DETERMINISTIC_FUNCTION_COST_PARITY_MEASURED",
+      "ownerIssue": "#291",
+      "requiredResult": "Closed shadow Function has byte-deterministic output, proof parity, and lower reasoning and retrieval cost"
+    },
+    {
+      "ordinal": 22,
+      "id": "CKS-12-P2-SS-22",
+      "event": "KNOWLEDGE_DRIFT_REVALIDATED",
+      "ownerIssue": "#292",
+      "requiredResult": "Supersession causes REVALIDATION_REQUIRED and new validation before reuse"
+    },
+    {
+      "ordinal": 23,
+      "id": "CKS-12-P2-SS-23",
+      "event": "UNKNOWN_VARIANT_FAST_PATH_ABORTED",
+      "ownerIssue": "#292",
+      "requiredResult": "Unknown variant ends FAST_PATH_DENIED with ABORTED_UNKNOWN_VARIANT and zero effects"
+    }
+  ],
+  "immutableEvidenceContract": {
+    "hashAlgorithm": "SHA-256",
+    "digestEncoding": "64_LOWERCASE_HEXADECIMAL_NO_PREFIX",
+    "rawByteDigestSubjects": [
+      "fixtures",
+      "models",
+      "tokenizers",
+      "runtimes",
+      "source artifacts",
+      "component artifacts"
+    ],
+    "structuredCanonicalization": "REPOSITORY_CANONICAL_JSON_UTF8_SORTED_OBJECT_KEYS_PRESERVED_ARRAY_ORDER_NO_WHITESPACE_FINITE_NUMBERS_PLAIN_JSON_ONLY",
+    "receiptDigestRule": "SHA256_CANONICAL_JSON_OMIT_ONLY_TOP_LEVEL_receiptSha256",
+    "genesisPreviousReceiptSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fixtureIdentityTuple": [
+      "fixtureId",
+      "fixtureVersion",
+      "fixtureSha256"
+    ],
+    "mutationRule": "BYTE_CHANGE_REQUIRES_NEW_VERSION_AND_DIGEST",
+    "receiptRule": "APPEND_ONLY_HASH_CHAINED_NO_IN_PLACE_REPAIR",
+    "sha256NonClaim": "INTEGRITY_BINDING_NOT_AUTHENTICATION_AUTHORITY_PERMISSION_OR_TRUSTED_TIME"
+  },
+  "stepReceiptSchemaVersion": "chimpmaera.cks/closed-loop-step-receipt/v1",
+  "exactStepReceiptFields": [
+    "schemaVersion",
+    "receiptId",
+    "runId",
+    "stepId",
+    "stepOrdinal",
+    "receiptSequence",
+    "actorClass",
+    "actorIdSha256",
+    "syntheticClockTick",
+    "observedAtMs",
+    "expiresAtMs",
+    "scopeSha256",
+    "fixtureId",
+    "fixtureVersion",
+    "fixtureSha256",
+    "inputReceiptSha256s",
+    "previousReceiptSha256",
+    "componentVersionLock",
+    "artifactBindings",
+    "knowledgeBindings",
+    "applicabilitySha256",
+    "evidenceSha256s",
+    "stateBefore",
+    "stateAfter",
+    "status",
+    "reasonCode",
+    "abortStatus",
+    "metricObservationIds",
+    "authority",
+    "capabilityDelta",
+    "effect",
+    "receiptSha256"
+  ],
+  "stepReceiptStatuses": [
+    "RECORDED",
+    "DENIED",
+    "ABORTED",
+    "FALSIFIED"
+  ],
+  "actorClasses": [
+    "ACQUISITION",
+    "VALIDATOR",
+    "GOVERNED_PROMOTER",
+    "SOLVER",
+    "LINEAGE_RECORDER",
+    "ANALYTICS_ADAPTER",
+    "SHADOW_WORKFLOW",
+    "SHADOW_FUNCTION",
+    "REVALIDATOR",
+    "FALSIFICATION_HARNESS"
+  ],
+  "exactArtifactBindingFields": [
+    "role",
+    "artifactId",
+    "artifactVersion",
+    "artifactSha256"
+  ],
+  "exactKnowledgeBindingFields": [
+    "knowledgeId",
+    "knowledgeVersion",
+    "knowledgeSha256",
+    "applicabilitySha256",
+    "state"
+  ],
+  "stepReceiptFixedNonAuthority": {
+    "authority": "NONE",
+    "capabilityDelta": "NONE",
+    "effect": "NONE"
+  },
+  "reasonCodes": [
+    "STEP_RECORDED",
+    "VALIDATION_PASSED",
+    "GOVERNED_PROMOTION_APPROVED",
+    "REVALIDATION_PASSED",
+    "FIXTURE_INTEGRITY_FAILED",
+    "RECEIPT_INTEGRITY_FAILED",
+    "VERSION_LOCK_MISMATCH",
+    "DEPENDENCY_EVIDENCE_MISSING",
+    "EXTERNAL_FETCH_DENIED",
+    "PROMOTION_PATH_DENIED",
+    "RAW_PROJECTION_DENIED",
+    "KALEIDOSPHERE_MUTATION_DENIED",
+    "AUTHORITY_EXPANSION_DENIED",
+    "CAPABILITY_EXPANSION_DENIED",
+    "PRODUCTION_ACTION_DENIED",
+    "DEPLOYMENT_DENIED",
+    "ACTIVATION_DENIED",
+    "UNKNOWN_VARIANT",
+    "KNOWLEDGE_DRIFT",
+    "STALE_KNOWLEDGE",
+    "AMBIGUOUS_MATCH",
+    "MISSING_INPUT",
+    "PROOF_OBLIGATION_MISMATCH",
+    "PARITY_MISMATCH",
+    "COST_NON_REDUCTION",
+    "STOP_CONDITION_MET"
+  ],
+  "componentVersionLockSchemaVersion": "chimpmaera.cks/component-version-lock/v1",
+  "exactComponentVersionLockFields": [
+    "boundaryContractVersion",
+    "panSphairaCommit",
+    "panSphairaRelease",
+    "canonicalJsonVersion",
+    "hashAlgorithm",
+    "nodeVersion",
+    "npmVersion",
+    "harnessId",
+    "harnessVersion",
+    "harnessSha256",
+    "competenceModelId",
+    "competenceModelVersion",
+    "competenceModelSha256",
+    "tokenizerId",
+    "tokenizerVersion",
+    "tokenizerSha256",
+    "inferenceRuntimeId",
+    "inferenceRuntimeVersion",
+    "inferenceRuntimeSha256",
+    "knowledgeContractVersion",
+    "knowledgeEditionId",
+    "knowledgeEditionVersion",
+    "knowledgeEditionSha256",
+    "retrievalProfileId",
+    "retrievalProfileVersion",
+    "retrievalProfileSha256",
+    "verifierId",
+    "verifierVersion",
+    "verifierSha256",
+    "fixturePackId",
+    "fixturePackVersion",
+    "fixtureManifestSha256",
+    "receiptSchemaVersion",
+    "projectionSchemaVersion",
+    "candidateSchemaVersion",
+    "kaleidoSphereProductVersion",
+    "kaleidoSphereContractVersion",
+    "kaleidoSphereArtifactSha256",
+    "workflowContractVersion",
+    "functionContractVersion",
+    "costModelVersion",
+    "costModelSha256",
+    "syntheticClockVersion",
+    "syntheticClockSha256"
+  ],
+  "versionLockDenials": [
+    "EMPTY_VALUE",
+    "VERSION_RANGE",
+    "LATEST_OR_MUTABLE_ALIAS",
+    "TAG_WITHOUT_COMMIT_OR_ARTIFACT_DIGEST",
+    "INFERRED_DEFAULT",
+    "UNRESOLVED_ALIAS",
+    "MIXED_LOCKS_WITHIN_RUN"
+  ],
+  "knownRepositoryPins": {
+    "panSphairaBaseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "panSphairaCurrentRelease": "v0.2.0-poc.20260825.1",
+    "packageManager": "npm@11.16.0",
+    "packageJsonSha256": "2952706641b738f2d674b3c6575ab483948f04a4a69700a040740318b31b2ecf",
+    "canonicalJsonSourceSha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826",
+    "externalBiClientSourceSha256": "cca0c82b42faccb0767bd40e11dbc24157b21e2988bebbe978409044976d275b",
+    "externalBiBoundaryDocSha256": "e3c8149ba3da5f381de1062a6418bc9e26add4bc65b0c7e65daf83e3c5336984",
+    "kaleidoSphereCompatibilityProductVersion": "v0.8.0",
+    "kaleidoSphereCompatibilityContractVersion": "2.0.0",
+    "cksProjectionRunEvidence": "NOT_PRESENT"
+  },
+  "stateMachines": {
+    "acquiredSource": {
+      "states": [
+        "PLANNED",
+        "ACQUIRED_UNTRUSTED",
+        "QUARANTINED"
+      ],
+      "allowedTransitions": [
+        "PLANNED->ACQUIRED_UNTRUSTED",
+        "PLANNED->QUARANTINED",
+        "ACQUIRED_UNTRUSTED->QUARANTINED"
+      ],
+      "prohibitedTransitions": [
+        "ACQUIRED_UNTRUSTED->VALIDATED",
+        "ACQUIRED_UNTRUSTED->PROMOTED_SYNTHETIC_ONLY"
+      ]
+    },
+    "assetLifecycle": {
+      "appliesTo": [
+        "KNOWLEDGE",
+        "SOLUTION_PATTERN",
+        "WORKFLOW",
+        "FUNCTION"
+      ],
+      "states": [
+        "CANDIDATE",
+        "VALIDATED",
+        "PROMOTED_SYNTHETIC_ONLY",
+        "REVALIDATION_REQUIRED",
+        "REJECTED"
+      ],
+      "allowedTransitions": [
+        "CANDIDATE->VALIDATED",
+        "CANDIDATE->REJECTED",
+        "VALIDATED->PROMOTED_SYNTHETIC_ONLY",
+        "VALIDATED->REJECTED",
+        "PROMOTED_SYNTHETIC_ONLY->REVALIDATION_REQUIRED",
+        "REVALIDATION_REQUIRED->VALIDATED",
+        "REVALIDATION_REQUIRED->REJECTED"
+      ],
+      "prohibitedTransitions": [
+        "CANDIDATE->PROMOTED_SYNTHETIC_ONLY",
+        "REVALIDATION_REQUIRED->PROMOTED_SYNTHETIC_ONLY",
+        "REJECTED->ANY",
+        "ANY->PRODUCTION",
+        "ANY->DEPLOYED",
+        "ANY->ACTIVE",
+        "ANY->AUTHORITY",
+        "ANY->CAPABILITY"
+      ]
+    },
+    "fastPath": {
+      "states": [
+        "SHADOW_ONLY",
+        "ELIGIBILITY_CHECK",
+        "ELIGIBLE_SYNTHETIC_ONLY",
+        "COMPLETED_SYNTHETIC_ONLY",
+        "FAST_PATH_DENIED"
+      ],
+      "allowedTransitions": [
+        "SHADOW_ONLY->ELIGIBILITY_CHECK",
+        "ELIGIBILITY_CHECK->ELIGIBLE_SYNTHETIC_ONLY",
+        "ELIGIBILITY_CHECK->FAST_PATH_DENIED",
+        "ELIGIBLE_SYNTHETIC_ONLY->COMPLETED_SYNTHETIC_ONLY",
+        "ELIGIBLE_SYNTHETIC_ONLY->FAST_PATH_DENIED"
+      ],
+      "prohibitedTransitions": [
+        "FAST_PATH_DENIED->COMPLETED_SYNTHETIC_ONLY",
+        "FAST_PATH_DENIED->FALLBACK_EXECUTION_SAME_ATTEMPT",
+        "FAST_PATH_DENIED->EFFECT",
+        "SHADOW_ONLY->ACTIVE",
+        "ELIGIBLE_SYNTHETIC_ONLY->PRODUCTION"
+      ],
+      "abortStatuses": [
+        "ABORTED_UNKNOWN_VARIANT",
+        "ABORTED_KNOWLEDGE_DRIFT",
+        "ABORTED_STALE_KNOWLEDGE",
+        "ABORTED_AMBIGUOUS_MATCH",
+        "ABORTED_MISSING_INPUT",
+        "ABORTED_PROOF_MISMATCH",
+        "ABORTED_INTEGRITY_FAILURE",
+        "ABORTED_STOP_CONDITION"
+      ],
+      "completedAbortStatus": "NOT_ABORTED"
+    },
+    "integratedProof": {
+      "states": [
+        "EVIDENCE_INCOMPLETE",
+        "READY",
+        "RUNNING",
+        "PASS_SYNTHETIC_ONLY",
+        "FALSIFIED",
+        "ABORTED"
+      ],
+      "allowedTransitions": [
+        "EVIDENCE_INCOMPLETE->READY",
+        "READY->RUNNING",
+        "RUNNING->PASS_SYNTHETIC_ONLY",
+        "RUNNING->FALSIFIED",
+        "RUNNING->ABORTED"
+      ],
+      "prohibitedTransitions": [
+        "EVIDENCE_INCOMPLETE->PASS_SYNTHETIC_ONLY",
+        "READY->PASS_SYNTHETIC_ONLY",
+        "ABORTED->PASS_SYNTHETIC_ONLY",
+        "FALSIFIED->PASS_SYNTHETIC_ONLY"
+      ]
+    }
+  },
+  "separationRules": {
+    "acquisitionVsPromotion": {
+      "acquisitionOutput": "ACQUIRED_UNTRUSTED",
+      "validationTransition": "CANDIDATE->VALIDATED",
+      "promotionTransition": "VALIDATED->PROMOTED_SYNTHETIC_ONLY",
+      "requiredSeparation": [
+        "DISTINCT_RECEIPT_ID",
+        "DISTINCT_RECEIPT_SEQUENCE",
+        "DISTINCT_ACTOR_CLASS",
+        "VALIDATION_RECEIPT_INPUT_TO_PROMOTION",
+        "NO_SELF_APPROVAL",
+        "NO_AUTONOMOUS_PROMOTION"
+      ]
+    },
+    "repetitionVsGeneralization": {
+      "operationalDimension": "+O",
+      "operationalUnit": "SUCCESS_WITH_SAME_CONTEXT_EQUIVALENCE_SHA256",
+      "generalizationDimension": "+G",
+      "generalizationUnit": "SUCCESS_IN_ONE_PREDECLARED_MATERIALLY_DISTINCT_HOLDOUT_STRATUM",
+      "duplicateContextContributionToGeneralization": 0,
+      "semanticSimilarityAloneSufficient": false
+    },
+    "failureAttributionClasses": [
+      "KNOWLEDGE_CONTENT",
+      "RETRIEVAL",
+      "APPLICABILITY",
+      "REASONING",
+      "WORKFLOW",
+      "FUNCTION",
+      "EXECUTION",
+      "VERIFICATION",
+      "INPUT",
+      "DRIFT",
+      "MULTI_CAUSE",
+      "UNRESOLVED"
+    ],
+    "applicabilityNarrowing": "ATTRIBUTED_APPLICABILITY_FAILURE_CREATES_NEW_CANDIDATE_THEN_SEPARATE_VALIDATION_AND_GOVERNED_SYNTHETIC_PROMOTION"
+  },
+  "kaleidoSphereBoundary": {
+    "projectionSchemaVersion": "chimpmaera.cks/kaleidosphere-projection/v1",
+    "exactProjectionFields": [
+      "schemaVersion",
+      "projectionId",
+      "projectionVersion",
+      "scopeSha256",
+      "sourceReceiptSha256s",
+      "taskFingerprintSha256",
+      "contextClassSha256s",
+      "knowledgeBindings",
+      "searchClass",
+      "retrievedKnowledgeIds",
+      "usedKnowledgeIds",
+      "rejectedKnowledgeIds",
+      "decisionClass",
+      "decisionBindingSha256",
+      "outcomeClass",
+      "failureAttributionClasses",
+      "counterevidenceSha256s",
+      "operationalContextSha256",
+      "generalizationStrataSha256s",
+      "retentionClass",
+      "observedAtMs",
+      "expiresAtMs",
+      "projectionSha256"
+    ],
+    "forbiddenProjectionClasses": [
+      "RAW_PROMPT",
+      "RAW_REASONING",
+      "SOURCE_TEXT",
+      "CUSTOMER_OR_TENANT_PAYLOAD",
+      "CREDENTIAL",
+      "SECRET",
+      "TOKEN",
+      "PERSONAL_DATA",
+      "RAW_ROW",
+      "SQL",
+      "URL",
+      "MUTABLE_POLICY_STATE",
+      "FREE_FORM_ACTION_PAYLOAD",
+      "APPROVAL",
+      "CAPABILITY",
+      "AUTHORITY",
+      "DEPLOYMENT",
+      "ACTIVATION",
+      "PUBLICATION",
+      "APPLY",
+      "MUTATION"
+    ],
+    "candidateSchemaVersion": "chimpmaera.cks/kaleidosphere-candidate/v1",
+    "exactCandidateFields": [
+      "schemaVersion",
+      "candidateId",
+      "candidateVersion",
+      "projectionSha256",
+      "analysisKind",
+      "referencedNodeIds",
+      "supportEdgeSha256s",
+      "counterevidenceSha256s",
+      "blindSpots",
+      "status",
+      "authority",
+      "capabilityDelta",
+      "effect",
+      "promotion",
+      "candidateSha256"
+    ],
+    "analysisKinds": [
+      "GAP",
+      "CO_USAGE",
+      "NEGATIVE_EVIDENCE",
+      "SOLUTION_PATTERN",
+      "WORKFLOW",
+      "DRIFT"
+    ],
+    "fixedCandidateValues": {
+      "status": "CANDIDATE",
+      "authority": "NONE",
+      "capabilityDelta": "NONE",
+      "effect": "NONE",
+      "promotion": "NOT_AUTHORIZED"
+    },
+    "canonicalSourceMutationCountRequired": 0,
+    "inventedEdgeCountRequired": 0,
+    "mode": "READ_ONLY_MINIMIZED_PROJECTION_AUTHORITY_FREE_CANDIDATE",
+    "externalFetchAuthorized": false,
+    "liveNetworkAuthorized": false,
+    "writeBackAuthorized": false
+  },
+  "shadowAndFunctionBoundary": {
+    "workflowMode": "SHADOW_ONLY",
+    "functionMode": "SHADOW_ONLY",
+    "parityDimensions": [
+      "MATERIAL_CLAIM_CORRECTNESS",
+      "ABSTENTION",
+      "REQUIREMENT_COVERAGE",
+      "FALSE_COMPLETENESS",
+      "OUTPUT_CLASS",
+      "VERIFIER_VERDICT",
+      "PROOF_OBLIGATION_DIGEST_SET",
+      "EVIDENCE_DIGEST_SET",
+      "DENIAL_AND_ABORT_SEMANTICS",
+      "NO_AUTHORITY_CAPABILITY_OR_EFFECT"
+    ],
+    "functionExtractionPrecondition": "WORKFLOW_SHADOW_PARITY_PASSED",
+    "functionContractRequirements": [
+      "CLOSED_INPUT",
+      "CLOSED_OUTPUT",
+      "DETERMINISTIC_LOGIC",
+      "FINITE_ERRORS",
+      "EXACT_VERSION_BINDINGS",
+      "BYTE_IDENTICAL_REPLAY",
+      "PROOF_PARITY"
+    ],
+    "costIntegerFields": [
+      "modelCalls",
+      "reasoningInputTokens",
+      "reasoningOutputTokens",
+      "retrievalCalls",
+      "retrievedBytes",
+      "verifierChecks"
+    ],
+    "costGate": "FUNCTION_TOTAL_REASONING_TOKENS_LT_WORKFLOW_AND_FUNCTION_RETRIEVAL_CALLS_LT_WORKFLOW_WITH_VERIFIER_CHECKS_AND_PROOF_OBLIGATIONS_NOT_REDUCED",
+    "wallClockGateEligible": false,
+    "activationAuthorized": false,
+    "deploymentAuthorized": false
+  },
+  "minimumMetrics": [
+    {
+      "id": "STORY_COVERAGE_AND_REPLAY",
+      "minimumEvidence": "23_EXACT_ORDERED_STEPS_AND_3_CLEAN_COMPLETE_REPLAYS",
+      "gate": "ALL_FIXTURE_RECEIPT_CHAIN_STATE_VERDICT_AND_METRIC_DIGESTS_IDENTICAL"
+    },
+    {
+      "id": "QUALITY",
+      "minimumEvidence": "3_APPLICABLE_HOLDOUT_CONTEXT_STRATA",
+      "gate": "CORRECT_MATERIAL_ASSERTIONS_OVER_EXPECTED_EQUALS_1_AND_ZERO_UNSUPPORTED_AND_NOT_LOWER_THAN_BASELINE"
+    },
+    {
+      "id": "REQUIREMENT_RECALL_AND_PRECISION",
+      "minimumEvidence": "GROUND_TRUTH_FROZEN_BEFORE_SOLVING",
+      "gate": "CRITICAL_RECALL_EQUALS_1_TOTAL_RECALL_EQUALS_1_PRECISION_REPORTED_AND_NOT_LOWER_THAN_BASELINE"
+    },
+    {
+      "id": "FALSE_COMPLETENESS",
+      "minimumEvidence": "3_KNOWN_INCOMPLETE_PROBES_AND_SIMPLE_SOLVER_FALSE_COMPLETE_NUMERATOR_AT_LEAST_1",
+      "gate": "INCORRECT_SUFFICIENT_OVER_KNOWN_INCOMPLETE_EQUALS_0_AND_STRICTLY_LOWER_THAN_BASELINE"
+    },
+    {
+      "id": "REPETITION_AND_GENERALIZATION",
+      "minimumEvidence": "3_SAME_CONTEXT_SUCCESSES_3_DISTINCT_CONTEXT_STRATA_AND_1_UNTOUCHED_HOLDOUT",
+      "gate": "SAME_CONTEXT_COUNTS_ONLY_PLUS_O_AND_DUPLICATE_CONTEXT_ADDS_ZERO_PLUS_G"
+    },
+    {
+      "id": "FAILURE_ATTRIBUTION",
+      "minimumEvidence": "3_PLANTED_FAILURES_INCLUDING_APPLICABILITY_DRIFT_AND_MULTI_CAUSE_OR_UNRESOLVED",
+      "gate": "EXACT_SINGLE_CAUSE_OR_SET_ATTRIBUTION_EQUALS_1_ZERO_UNSUPPORTED_CERTAINTY_AND_1_GOVERNED_NARROWING"
+    },
+    {
+      "id": "KALEIDOSPHERE_BOUNDARY",
+      "minimumEvidence": "1_PROJECTION_CANDIDATE_ROUND_TRIP",
+      "gate": "ZERO_FORBIDDEN_FIELDS_INVENTED_EDGES_SOURCE_MUTATIONS_AUTHORITY_CAPABILITY_AND_EFFECTS_WITH_EQUAL_BEFORE_AFTER_DIGESTS"
+    },
+    {
+      "id": "SHADOW_PARITY",
+      "minimumEvidence": "3_APPLICABLE_HOLDOUTS",
+      "gate": "QUALITY_PROOF_AND_DENIAL_PARITY_EQUALS_1_ZERO_UNEXPECTED_MISMATCHES_AND_EXACT_DEPENDENCY_BINDINGS"
+    },
+    {
+      "id": "FUNCTION_PARITY_AND_DETERMINISM",
+      "minimumEvidence": "3_BYTE_IDENTICAL_FUNCTION_REPLAYS_PER_APPLICABLE_HOLDOUT",
+      "gate": "OUTPUT_AND_PROOF_PARITY_EQUALS_1_AND_ZERO_MISSING_PROOF_OBLIGATIONS"
+    },
+    {
+      "id": "COST",
+      "minimumEvidence": "IDENTICAL_INPUTS_COMPONENT_LOCKS_AND_EXACT_COST_MODEL_DIGEST",
+      "gate": "FUNCTION_REASONING_TOKENS_LT_WORKFLOW_AND_FUNCTION_RETRIEVAL_CALLS_LT_WORKFLOW_WITH_VERIFIER_CHECKS_AND_PROOF_NOT_REDUCED"
+    },
+    {
+      "id": "REVALIDATION_AND_ABORT",
+      "minimumEvidence": "1_KNOWLEDGE_SUPERSESSION_AND_1_UNKNOWN_VARIANT",
+      "gate": "ZERO_OLD_VERSION_FAST_PATH_SUCCESSES_EXACT_DRIFT_AND_UNKNOWN_ABORTS_ZERO_EFFECTS_AND_NEW_VALIDATION_PLUS_PROMOTION_BEFORE_REUSE"
+    },
+    {
+      "id": "BOUNDARY_DENIALS",
+      "minimumEvidence": "1_NAMED_NEGATIVE_PROBE_PER_EXPLICIT_DENIED_OPERATION",
+      "gate": "ZERO_UNEXPECTED_SUCCESSES"
+    }
+  ],
+  "metricRepresentation": {
+    "rates": "EXACT_INTEGER_NUMERATOR_DENOMINATOR_PAIRS",
+    "roundedFloatGateEligible": false,
+    "requiredBindings": [
+      "fixtureIds",
+      "runReceiptSha256s",
+      "componentVersionLockSha256",
+      "baselineArm",
+      "candidateArm",
+      "rawIntegerCounts"
+    ],
+    "requiredReportAdditions": [
+      "confusionCounts",
+      "abstentions",
+      "unresolvedCases",
+      "missingReceiptCounts",
+      "invalidReceiptCounts",
+      "runExclusionsWithReasons",
+      "baselineRawCounts",
+      "candidateRawCounts",
+      "encounteredStopConditions"
+    ]
+  },
+  "stopConditions": [
+    {
+      "id": "STOP-01",
+      "trigger": "MISSING_DUPLICATE_STALE_MIXED_OR_MISMATCHED_FIXTURE_RECEIPT_CHAIN_SCOPE_APPLICABILITY_OR_VERSION_BINDING",
+      "outcome": "ABORTED_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-02",
+      "trigger": "MISSING_DUPLICATE_REORDERED_OR_UNKNOWN_STORY_STEP_OR_MISSING_POSITIVE_CKS_07_THROUGH_CKS_11_DEPENDENCY_RECEIPT",
+      "outcome": "EVIDENCE_INCOMPLETE_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-03",
+      "trigger": "EXTERNAL_FETCH_DIRECT_ACQUISITION_PROMOTION_SELF_APPROVAL_OR_AUTONOMOUS_PROMOTION",
+      "outcome": "ABORTED_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-04",
+      "trigger": "REPETITION_COUNTED_AS_GENERALIZATION_FREQUENCY_OR_CORRELATION_TREATED_AS_TRUTH_OR_UNGOVERNED_APPLICABILITY_NARROWING",
+      "outcome": "FALSIFIED_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-05",
+      "trigger": "FORBIDDEN_KALEIDOSPHERE_FIELD_INVENTED_NODE_OR_EDGE_SOURCE_MUTATION_PROMOTION_CAPABILITY_AUTHORITY_OR_EFFECT",
+      "outcome": "ABORTED_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-06",
+      "trigger": "PARITY_MISMATCH_REMOVED_PROOF_OBLIGATION_NONDETERMINISM_OR_NO_STRICT_REASONING_AND_RETRIEVAL_COST_REDUCTION",
+      "outcome": "FALSIFIED_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-07",
+      "trigger": "STALE_DRIFTED_UNKNOWN_AMBIGUOUS_OR_MISSING_INPUT_COMPLETES_FAST_PATH_OR_DENIED_PATH_PRODUCES_EFFECT",
+      "outcome": "FALSIFIED_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-08",
+      "trigger": "CRITICAL_RECALL_BELOW_1_FALSE_COMPLETENESS_NONZERO_ATTRIBUTION_ERROR_MINIMUM_DENOMINATOR_UNMET_OR_REPLAY_DIVERGENCE",
+      "outcome": "FALSIFIED_NO_SUCCESS_RECEIPT"
+    },
+    {
+      "id": "STOP-09",
+      "trigger": "EXTERNAL_FETCH_PRODUCTION_ACTION_LIVE_DATA_AUTHORITY_OR_CAPABILITY_EXPANSION_DEPLOYMENT_ACTIVATION_INSTALLATION_PUBLICATION_OR_RELEASE",
+      "outcome": "ABORTED_NO_SUCCESS_RECEIPT"
+    }
+  ],
+  "retryRule": "RETAIN_STOPPED_RUN_APPEND_ONLY_AND_REQUIRE_NEW_RUN_ID_AND_NEW_CHAINED_RECEIPTS",
+  "explicitlyDenied": [
+    "EXTERNAL_FETCH",
+    "AUTOMATIC_INTERNET_TO_KNOWLEDGE",
+    "AUTONOMOUS_VALIDATION",
+    "AUTONOMOUS_PROMOTION",
+    "AUTONOMOUS_REPRIORITIZATION",
+    "SELF_APPROVAL",
+    "PRODUCTION_ACTION",
+    "LIVE_TENANT_ACTION",
+    "LIVE_OR_CUSTOMER_DATA",
+    "AUTHORITY_EXPANSION",
+    "APPROVAL_AUTHORITY",
+    "CREDENTIAL_ACCESS",
+    "POLICY_CHANGE",
+    "CAPABILITY_EXPANSION",
+    "TOOL_EXPANSION",
+    "ACTION_EXPANSION",
+    "EXECUTION_RIGHTS",
+    "EFFECTFUL_FALLBACK",
+    "WORKFLOW_INSTALLATION",
+    "WORKFLOW_DEPLOYMENT",
+    "WORKFLOW_ACTIVATION",
+    "FUNCTION_INSTALLATION",
+    "FUNCTION_DEPLOYMENT",
+    "FUNCTION_ACTIVATION",
+    "SCHEDULING",
+    "LEARNED_PRODUCTION_ROUTING",
+    "KALEIDOSPHERE_WRITE_BACK",
+    "KALEIDOSPHERE_PROMOTION",
+    "KALEIDOSPHERE_APPLY",
+    "CANONICAL_EVIDENCE_MUTATION",
+    "MERGE",
+    "RELEASE",
+    "PUBLICATION"
+  ],
+  "nonClaims": [
+    "CKS_07_THROUGH_CKS_11_DEPENDENCY_PROOFS_PASSED",
+    "CKS_12_SYNTHETIC_LOOP_PASSED",
+    "MODEL_OR_RUNTIME_EXECUTED",
+    "KALEIDOSPHERE_CKS_ADAPTER_EXISTS_OR_RAN",
+    "WORKFLOW_OR_FUNCTION_ACTIVATED",
+    "GENERALIZATION_BEYOND_FROZEN_SYNTHETIC_FIXTURES",
+    "PRODUCTION_READINESS",
+    "SECURITY_CERTIFICATION",
+    "AVAILABILITY_OR_PERFORMANCE",
+    "MERGED_OR_RELEASED"
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-01",
+      "boundaryStatus": "SPECIFIED_NOT_EXECUTED",
+      "evidence": "23 exact ordered IDs, immutable fixture/receipt rules, hash algorithm, and exact version-lock fields"
+    },
+    {
+      "id": "AC-02",
+      "boundaryStatus": "SPECIFIED_NOT_EXECUTED",
+      "evidence": "Acquisition, validation, and governed synthetic-only promotion are distinct receipts and transitions"
+    },
+    {
+      "id": "AC-03",
+      "boundaryStatus": "SPECIFIED_NOT_EXECUTED",
+      "evidence": "+O and +G remain separate and Applicability narrowing traverses a new governed lifecycle"
+    },
+    {
+      "id": "AC-04",
+      "boundaryStatus": "SPECIFIED_NOT_EXECUTED",
+      "evidence": "Closed minimized read-only projection and authority-free candidate fields with zero mutation or invented edges"
+    },
+    {
+      "id": "AC-05",
+      "boundaryStatus": "SPECIFIED_NOT_EXECUTED",
+      "evidence": "Shadow Workflow and deterministic Function parity plus locked integer cost gates"
+    },
+    {
+      "id": "AC-06",
+      "boundaryStatus": "SPECIFIED_NOT_EXECUTED",
+      "evidence": "REVALIDATION_REQUIRED, FAST_PATH_DENIED, finite abort statuses, and prohibited transitions"
+    },
+    {
+      "id": "AC-07",
+      "boundaryStatus": "SPECIFIED_NOT_EXECUTED",
+      "evidence": "Minimum falsification metrics, stop conditions, explicit denied operations, and no-success-without-evidence rule"
+    }
+  ],
+  "requiredVerification": {
+    "command": "git diff --check origin/main...HEAD",
+    "resultEmbedding": "RUN_AFTER_COMMIT_AND_REPORT_EXTERNALLY_NOT_PRECLAIMED_IN_THIS_RECEIPT"
+  },
+  "receiptSha256": "d643f720a996c9ac2d167296c1edfd228760a3ca19196c09f9c0dfd6615d1328"
+}

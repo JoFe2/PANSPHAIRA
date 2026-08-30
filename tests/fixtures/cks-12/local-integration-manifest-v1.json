@@ -1,0 +1,1 @@
+{"componentVersions":{"integrationHarness":"cks-12-local-integration@v1"},"deliveryTemplate":"tests/fixtures/cks-12/delivery-readback-template-v1.json","e2eManifest":"tests/fixtures/cks-12/e2e-proof-manifest-v1.json","requiredPackageHeadCount":8}

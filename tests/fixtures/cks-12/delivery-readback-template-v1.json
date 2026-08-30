@@ -1,0 +1,1 @@
+{"componentVersions":{"deliveryHarness":"cks-12-delivery-readback@v1"},"e2eReceipt":"verification/cks-12/e2e-proof-readback-receipt-v1.json","expectedDeliveryState":"RELEASE_REQUIRED_PENDING_DELIVERY","expectedStatus":"PASS_SYNTHETIC_ONLY","requiredPackageHeadCount":8,"reportReceipt":"verification/cks-12/falsification-report-receipt-v1.json"}

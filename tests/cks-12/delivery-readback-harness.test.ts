@@ -1,0 +1,4 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+test("delivery readback requires the e2e and report verdicts", async () => { const { validateDeliveryReadback } = await import(`${process.cwd()}/scripts/validate-cks-12-delivery-readback.mjs`); const template = JSON.parse(readFileSync("tests/fixtures/cks-12/delivery-readback-template-v1.json", "utf8")); const e2e = JSON.parse(readFileSync("verification/cks-12/e2e-proof-readback-receipt-v1.json", "utf8")); const report = JSON.parse(readFileSync("verification/cks-12/falsification-report-receipt-v1.json", "utf8")); assert.equal(validateDeliveryReadback(template, e2e, report).status, "RECORDED"); e2e.result.packageHeadIds.pop(); assert.equal(validateDeliveryReadback(template, e2e, report).status, "DENIED"); });
