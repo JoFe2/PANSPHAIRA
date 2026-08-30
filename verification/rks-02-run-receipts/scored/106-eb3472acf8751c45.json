@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "eb3472acf8751c4582b85f29",
+  "runOrder": 106,
+  "orderHash": "eb3472acf8751c4582b85f29fa314e9680fe624a53d1f91f44d59b45d7ef1b10",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "CPYTHON-DRIFT-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "0aecda22b60ab51c04ec40dcdb0f32dae1608f0d7b76778cc45298dc6d25110c",
+  "contextHash": "9d4823da1b9b787342c3bafc42144caff43014ddb91bd07cc9ed5475eb8dfa91",
+  "promptHash": "7121ba165ea7a1bfc6d83102128cbd93797cce04fc86e8c50a3be2e5f3264d84",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:29.630Z",
+  "finishedAt": "2026-08-30T22:42:30.357Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"ABSTAIN\\\",\\\"materialClaims\\\":[],\\\"evidenceRefs\\\":[],\\\"applicability\\\":\\\"UNKNOWN\\\",\\\"denials\\\":[],\\\"reasoningSummary\\\":\\\"The evidence does not address whether a newer CPython documentation commit renders a v3.14.7 object obsolete without a new immutable capture and revalidation.\\\"}\"}}],\"created\":1788129750,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":74,\"prompt_tokens\":3891,\"total_tokens\":3965,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-TxnS5t1BuLgHuRlpfP5933VRGjRAf1wG\",\"timings\":{\"cache_n\":0,\"prompt_n\":3891,\"prompt_ms\":244.077,\"prompt_per_token_ms\":0.06272860447185813,\"prompt_per_second\":15941.690532086186,\"predicted_n\":74,\"predicted_ms\":441.582,\"predicted_per_token_ms\":5.967324324324324,\"predicted_per_second\":167.57929444587867}}",
+  "rawResponseHash": "36e1bc7dfdb76ad86dd4816ecc2337fa5e647d7c19a203eb85693bc301784c0d",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The evidence does not address whether a newer CPython documentation commit renders a v3.14.7 object obsolete without a new immutable capture and revalidation."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The evidence does not address whether a newer CPython documentation commit renders a v3.14.7 object obsolete without a new immutable capture and revalidation."
+  },
+  "usage": {
+    "prompt_tokens": 3891,
+    "completion_tokens": 74,
+    "total_tokens": 3965
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 3891,
+    "prompt_ms": 244.077,
+    "prompt_per_token_ms": 0.06272860447185813,
+    "prompt_per_second": 15941.690532086186,
+    "predicted_n": 74,
+    "predicted_ms": 441.582,
+    "predicted_per_token_ms": 5.967324324324324,
+    "predicted_per_second": 167.57929444587867
+  },
+  "timings": {
+    "wallMs": 726.9470819999988,
+    "promptEvalMs": 244.077,
+    "generationMs": 441.582
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 1,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "pansphaira/rks-02-schema-probe/v1",
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "unscored": true,
+  "attempt": 1,
+  "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\": \\\"ANSWER\\\", \\\"materialClaims\\\": [], \\\"evidenceRefs\\\": [],\\n \\\"applicability\\\": \\\"APPLICABLE\\\", \\\"denials\\\": [], \\\"reasoningSummary\\\": \\\"This is a synthetic probe with no real-world claims or evidence. It is designed to test the system's response to a non-task JSON schema request.\\\"}\"}}],\"created\":1788129658,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":79,\"prompt_tokens\":125,\"total_tokens\":204,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-MPXi1fKyZNtdIbGWhjPr9l4FySuJ5zm5\",\"timings\":{\"cache_n\":0,\"prompt_n\":125,\"prompt_ms\":16.943,\"prompt_per_token_ms\":0.135544,\"prompt_per_second\":7377.678097149264,\"predicted_n\":79,\"predicted_ms\":434.58,\"predicted_per_token_ms\":5.501012658227848,\"predicted_per_second\":181.78471167564086}}",
+  "rawResponseHash": "6460c23fd1c75ca89cec2bac11207b8ed2e66b44576c1ffc2ca91d3055938ef9",
+  "parsedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "This is a synthetic probe with no real-world claims or evidence. It is designed to test the system's response to a non-task JSON schema request."
+  },
+  "parseError": null,
+  "usage": {
+    "completion_tokens": 79,
+    "prompt_tokens": 125,
+    "total_tokens": 204,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 125,
+    "prompt_ms": 16.943,
+    "prompt_per_token_ms": 0.135544,
+    "prompt_per_second": 7377.678097149264,
+    "predicted_n": 79,
+    "predicted_ms": 434.58,
+    "predicted_per_token_ms": 5.501012658227848,
+    "predicted_per_second": 181.78471167564086
+  },
+  "wallMs": 459.53013999999985,
+  "passed": true
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "dad4f41acea320a6fc56ce26",
+  "runOrder": 65,
+  "orderHash": "dad4f41acea320a6fc56ce26578ffa5f51f55ff5bb10f36c4fd2a087392ce6d1",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_TYPED_KNOWLEDGE",
+  "taskId": "WIKIDATA-APPLICABILITY-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "c8241cfe42314b6a49be8e742b5e379138801d3e1645f619fc1a6afea3c70732",
+  "contextHash": "6980c78e28bc70e2d8f121e89d73ee74f5bdf1a3187a3b24e5a79eb16d135aca",
+  "promptHash": "a6627ad7dab85a625da266ae4a9624085f8ebf1f92b249a1c0fcb76179ab94b7",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:54.293Z",
+  "finishedAt": "2026-08-30T22:41:55.098Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ANSWER\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [\\\"knowledge:51ab30bd97f9b71cf4410914\\\"],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The Q1 evidence from revision 2534934769 cannot be applied to support a request for revision 999 because the evidence is from a later revision (2534934769) and is marked as display only, and there is no applicable evidence for revision 999.\\\"\\n}\"}}],\"created\":1788129715,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":163,\"prompt_tokens\":679,\"total_tokens\":842,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-03uX7xx0gVWadJax9uMo4XaJxdPsBEUA\",\"timings\":{\"cache_n\":0,\"prompt_n\":679,\"prompt_ms\":47.622,\"prompt_per_token_ms\":0.07013549337260677,\"prompt_per_second\":14258.115996808197,\"predicted_n\":163,\"predicted_ms\":714.042,\"predicted_per_token_ms\":4.380625766871166,\"predicted_per_second\":228.27788841552737}}",
+  "rawResponseHash": "3c8168d438ca631f942824bd43e9766d143aa3d7d78c4dbb99fed629bdbfc53f",
+  "parsedClosedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [
+      "knowledge:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The Q1 evidence from revision 2534934769 cannot be applied to support a request for revision 999 because the evidence is from a later revision (2534934769) and is marked as display only, and there is no applicable evidence for revision 999."
+  },
+  "answer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [
+      "knowledge:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The Q1 evidence from revision 2534934769 cannot be applied to support a request for revision 999 because the evidence is from a later revision (2534934769) and is marked as display only, and there is no applicable evidence for revision 999."
+  },
+  "usage": {
+    "prompt_tokens": 679,
+    "completion_tokens": 163,
+    "total_tokens": 842
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 679,
+    "prompt_ms": 47.622,
+    "prompt_per_token_ms": 0.07013549337260677,
+    "prompt_per_second": 14258.115996808197,
+    "predicted_n": 163,
+    "predicted_ms": 714.042,
+    "predicted_per_token_ms": 4.380625766871166,
+    "predicted_per_second": 228.27788841552737
+  },
+  "timings": {
+    "wallMs": 804.5670210000026,
+    "promptEvalMs": 47.622,
+    "generationMs": 714.042
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

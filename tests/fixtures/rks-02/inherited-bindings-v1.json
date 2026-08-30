@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "pansphaira/rks-02-inherited-bindings/v1",
+  "releasedBase": {
+    "commit": "ca9eca75f3ecc6b2e3389349666f632cc051c499",
+    "release": "2026_08_30_v15"
+  },
+  "protocol": {
+    "inherited": "RKS-01_PROTOCOL_V1",
+    "serverArguments": ["--model", "{EXACT_MODEL_PATH}", "--host", "127.0.0.1", "--port", "{EPHEMERAL_LOOPBACK_PORT}", "--parallel", "1", "--ctx-size", "4096", "--batch-size", "512", "--ubatch-size", "256", "--threads", "8", "--threads-batch", "8", "--gpu-layers", "all", "--flash-attn", "on", "--cache-type-k", "f16", "--cache-type-v", "f16", "--no-cache-prompt", "--cache-reuse", "0", "--jinja", "--perf", "--metrics", "--slots"],
+    "reasoningFlags": [],
+    "request": {"temperature": 0, "seed": 104729, "max_tokens": 192, "cache_prompt": false, "stream": false, "strictClosedJson": true}
+  },
+  "digests": {
+    "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+    "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+    "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542"
+  },
+  "inheritedArtifacts": [
+    {"path":"tests/fixtures/rks-01/frozen-task-suite-v1.json","sha256":"346196c32281c5ef1b6088e23b1cdfb67eefb35241429167002d11d1896dd5a3"},
+    {"path":"tests/fixtures/rks-01/raw-rag-corpus-v1.json","sha256":"4cc015ebf48fb6d7d6be16fc30a36ab41be369b7eaca1ae9e17d6bc1a1545d23"},
+    {"path":"tests/fixtures/rks-01/typed-knowledge-corpus-v1.json","sha256":"dffb9e5fbcc1a761ba1081b7d69dc9fbbe245eaff2d882b4c9288a18b5192d4a"},
+    {"path":"tests/fixtures/rks-01/application-guides-v1.json","sha256":"bca72976ff27dd2d324be51fd28fcea59bb0c90d67989a8d0d97bccfc2342606"},
+    {"path":"src/rks-01/comparator.mjs","sha256":"99b58dd61d8ba5bae9674194db8ad46d4a4d6049314e3976f429046d1b006e14"}
+  ],
+  "armContexts": {
+    "SMALL_CLOSED_BOOK": "NO_EVIDENCE",
+    "SMALL_RAW_RAG": "EXACT_RELEVANT_RAW_CHUNKS",
+    "SMALL_TYPED_KNOWLEDGE": "CORRESPONDING_TYPED_OBJECTS",
+    "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES": "TYPED_OBJECTS_PLUS_BOUND_APPLICATION_GUIDES"
+  },
+  "preservedFalsifications": [
+    "verification/rks-01-run-receipts/protocol-v1/rks-01-falsification-report-v1.json",
+    "verification/rks-01-run-receipts/protocol-v2/falsification-report-v2.json"
+  ],
+  "largeReference": {"status":"DIAGNOSTIC_PRIOR_ONLY","loaded":false,"probed":false,"assigned":false,"gatesVerdict":false}
+}

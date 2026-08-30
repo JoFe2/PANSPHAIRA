@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "22673dc6f37ac4d2a749c062",
+  "runOrder": 9,
+  "orderHash": "22673dc6f37ac4d2a749c062e5398cfad71b88e661bfd210d8b9422abf351706",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "WIKIDATA-CONFLICT-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "8a093b4015844dfeac11d0a64f2b40104fe0a5292fee172bdfa61ea625ffc58c",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "87a3a51d3d66ddb7f9e199877f5c2e4de8abd4ba3de6c40129eee245eee06a5c",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:18.552Z",
+  "finishedAt": "2026-08-30T22:41:19.039Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence provided; evidence missing, unknown, or non-applicable. The contract indicates no evidence items are requested. Therefore, the answer cannot be determined based on provided data.\\\"\\n}\"}}],\"created\":1788129679,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":94,\"prompt_tokens\":209,\"total_tokens\":303,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-N5ViPhCLJdXPJZilfssosgwjrdAd15W9\",\"timings\":{\"cache_n\":0,\"prompt_n\":209,\"prompt_ms\":23.368,\"prompt_per_token_ms\":0.11180861244019139,\"prompt_per_second\":8943.854844231428,\"predicted_n\":94,\"predicted_ms\":426.405,\"predicted_per_token_ms\":4.536223404255319,\"predicted_per_second\":220.44769643883166}}",
+  "rawResponseHash": "115c1c206ab87d1dc3b87e8af6e3d7e8b53f0a9eaceb9e0f4f401cdde57bdaef",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided; evidence missing, unknown, or non-applicable. The contract indicates no evidence items are requested. Therefore, the answer cannot be determined based on provided data."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided; evidence missing, unknown, or non-applicable. The contract indicates no evidence items are requested. Therefore, the answer cannot be determined based on provided data."
+  },
+  "usage": {
+    "prompt_tokens": 209,
+    "completion_tokens": 94,
+    "total_tokens": 303
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 209,
+    "prompt_ms": 23.368,
+    "prompt_per_token_ms": 0.11180861244019139,
+    "prompt_per_second": 8943.854844231428,
+    "predicted_n": 94,
+    "predicted_ms": 426.405,
+    "predicted_per_token_ms": 4.536223404255319,
+    "predicted_per_second": 220.44769643883166
+  },
+  "timings": {
+    "wallMs": 487.6062270000002,
+    "promptEvalMs": 23.368,
+    "generationMs": 426.405
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

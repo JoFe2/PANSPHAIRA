@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "40231f73ff08973abbc53135",
+  "runOrder": 17,
+  "orderHash": "40231f73ff08973abbc531356a46a3da5dd1e7b631719af95e13d9e4164e1ad1",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_TYPED_KNOWLEDGE",
+  "taskId": "WIKIDATA-CONFLICT-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "8a093b4015844dfeac11d0a64f2b40104fe0a5292fee172bdfa61ea625ffc58c",
+  "contextHash": "6980c78e28bc70e2d8f121e89d73ee74f5bdf1a3187a3b24e5a79eb16d135aca",
+  "promptHash": "15ebac550d0aa45440ac656f16fa3df8a97fd16ef640fa92c1f513375b25c842",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:22.616Z",
+  "finishedAt": "2026-08-30T22:41:23.365Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [\\\"knowledge:51ab33bd97f9b71cf4410914\\\"],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The provided evidence refers to a positive statement about property P31 in Q1, but the source is marked as 'deprecatedPositiveEvidence' and the evidence is considered non-applicable due to the 'deprecatedPositiveEvidence' tag. Additionally, the source is a counterexample rather than direct evidence. Therefore, the bound statement does not support the claim.\\\"\\n}\"}}],\"created\":1788129683,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":158,\"prompt_tokens\":666,\"total_tokens\":824,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-5DGDAAx6x7gxjVmCuRjjrmMgSv4HIujg\",\"timings\":{\"cache_n\":0,\"prompt_n\":666,\"prompt_ms\":46.713,\"prompt_per_token_ms\":0.07013963963963964,\"prompt_per_second\":14257.27313595787,\"predicted_n\":158,\"predicted_ms\":688.813,\"predicted_per_token_ms\":4.3595759493670885,\"predicted_per_second\":229.38010751829597}}",
+  "rawResponseHash": "b34625317f04d9c5ade589f347f5c41079e043e3f2dcb9a93f294e9af2bb26a4",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [
+      "knowledge:51ab33bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The provided evidence refers to a positive statement about property P31 in Q1, but the source is marked as 'deprecatedPositiveEvidence' and the evidence is considered non-applicable due to the 'deprecatedPositiveEvidence' tag. Additionally, the source is a counterexample rather than direct evidence. Therefore, the bound statement does not support the claim."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [
+      "knowledge:51ab33bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The provided evidence refers to a positive statement about property P31 in Q1, but the source is marked as 'deprecatedPositiveEvidence' and the evidence is considered non-applicable due to the 'deprecatedPositiveEvidence' tag. Additionally, the source is a counterexample rather than direct evidence. Therefore, the bound statement does not support the claim."
+  },
+  "usage": {
+    "prompt_tokens": 666,
+    "completion_tokens": 158,
+    "total_tokens": 824
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 666,
+    "prompt_ms": 46.713,
+    "prompt_per_token_ms": 0.07013963963963964,
+    "prompt_per_second": 14257.27313595787,
+    "predicted_n": 158,
+    "predicted_ms": 688.813,
+    "predicted_per_token_ms": 4.3595759493670885,
+    "predicted_per_second": 229.38010751829597
+  },
+  "timings": {
+    "wallMs": 749.1298380000007,
+    "promptEvalMs": 46.713,
+    "generationMs": 688.813
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

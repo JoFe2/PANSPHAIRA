@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "6e9442439115dbbadf015bad",
+  "runOrder": 33,
+  "orderHash": "6e9442439115dbbadf015bad24ce024d3e28860f55aca184163f72c613832491",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+  "taskId": "WIKIDATA-CONFLICT-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "8a093b4015844dfeac11d0a64f2b40104fe0a5292fee172bdfa61ea625ffc58c",
+  "contextHash": "91c3f541b331a435db60e6a4ef821797a9933821c10245ae84a0a08b1f3ddd2c",
+  "promptHash": "3a1c0c3ffa020c090bf4e58a94165dbc83bcfcb91d52c8d581ca64d0c2a3edf8",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:32.559Z",
+  "finishedAt": "2026-08-30T22:41:33.330Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [\\\"evidence:51ab30bd97f9b71cf4410914\\\"],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The provided evidence pack includes a bound statement for property P31 on entity Q1, which directly supports the claim that Q1 property P31 has a value Q5. However, the source key and revision match the entity Q1, indicating the evidence is current and applicable. The bound statement confirms the existence of Q5 as the value for P31, thus the claim is supported.\\\"\\n}\"}}],\"created\":1788129693,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":170,\"prompt_tokens\":973,\"total_tokens\":1143,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-Yt5ic8ibyfJ4uGKY83nM6uq4JTxY52T0\",\"timings\":{\"cache_n\":0,\"prompt_n\":973,\"prompt_ms\":61.344,\"prompt_per_token_ms\":0.06304624871531346,\"prompt_per_second\":15861.371935315598,\"predicted_n\":170,\"predicted_ms\":701.604,\"predicted_per_token_ms\":4.127082352941176,\"predicted_per_second\":242.30192530259234}}",
+  "rawResponseHash": "d3487ba8ab120c0ce35de90b5c41b774cf63f8f6f298cae3fc64346580edb357",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [
+      "evidence:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The provided evidence pack includes a bound statement for property P31 on entity Q1, which directly supports the claim that Q1 property P31 has a value Q5. However, the source key and revision match the entity Q1, indicating the evidence is current and applicable. The bound statement confirms the existence of Q5 as the value for P31, thus the claim is supported."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [
+      "evidence:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The provided evidence pack includes a bound statement for property P31 on entity Q1, which directly supports the claim that Q1 property P31 has a value Q5. However, the source key and revision match the entity Q1, indicating the evidence is current and applicable. The bound statement confirms the existence of Q5 as the value for P31, thus the claim is supported."
+  },
+  "usage": {
+    "prompt_tokens": 973,
+    "completion_tokens": 170,
+    "total_tokens": 1143
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 973,
+    "prompt_ms": 61.344,
+    "prompt_per_token_ms": 0.06304624871531346,
+    "prompt_per_second": 15861.371935315598,
+    "predicted_n": 170,
+    "predicted_ms": 701.604,
+    "predicted_per_token_ms": 4.127082352941176,
+    "predicted_per_second": 242.30192530259234
+  },
+  "timings": {
+    "wallMs": 771.1121849999981,
+    "promptEvalMs": 61.344,
+    "generationMs": 701.604
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "507e3c6c8b28ac4b5c89277b",
+  "runOrder": 22,
+  "orderHash": "507e3c6c8b28ac4b5c89277bc8cc8946dbdf20432402ee1277cabf087ff7c8d0",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+  "taskId": "WIKIDATA-APPLICABILITY-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "c8241cfe42314b6a49be8e742b5e379138801d3e1645f619fc1a6afea3c70732",
+  "contextHash": "91c3f541b331a435db60e6a4ef821797a9933821c10245ae84a0a08b1f3ddd2c",
+  "promptHash": "14479a5e48689a3b212c3396d68551ce4b86b33c1a08cce5e09ab602696fb90c",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:26.202Z",
+  "finishedAt": "2026-08-30T22:41:26.751Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The request is for revision 999, but the evidence package only contains revision 2534934769 which is different. Therefore it is not applicable.\\\"\\n}\"}}],\"created\":1788129686,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":101,\"prompt_tokens\":986,\"total_tokens\":1087,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-kgYh4R251g0EJzOhUPmvebaPoZXNxACI\",\"timings\":{\"cache_n\":0,\"prompt_n\":986,\"prompt_ms\":60.814,\"prompt_per_token_ms\":0.061677484787018254,\"prompt_per_second\":16213.371920939258,\"predicted_n\":101,\"predicted_ms\":478.763,\"predicted_per_token_ms\":4.740227722772277,\"predicted_per_second\":210.96032901456462}}",
+  "rawResponseHash": "f2e01d7d8efcae0db38f3dcd91c885665e9a7b2eb848c7b1e1232f5472be88e2",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The request is for revision 999, but the evidence package only contains revision 2534934769 which is different. Therefore it is not applicable."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The request is for revision 999, but the evidence package only contains revision 2534934769 which is different. Therefore it is not applicable."
+  },
+  "usage": {
+    "prompt_tokens": 986,
+    "completion_tokens": 101,
+    "total_tokens": 1087
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 986,
+    "prompt_ms": 60.814,
+    "prompt_per_token_ms": 0.061677484787018254,
+    "prompt_per_second": 16213.371920939258,
+    "predicted_n": 101,
+    "predicted_ms": 478.763,
+    "predicted_per_token_ms": 4.740227722772277,
+    "predicted_per_second": 210.96032901456462
+  },
+  "timings": {
+    "wallMs": 549.3621430000021,
+    "promptEvalMs": 60.814,
+    "generationMs": 478.763
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

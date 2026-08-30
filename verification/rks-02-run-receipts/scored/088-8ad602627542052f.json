@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "8ad602627542052feb946ee9",
+  "runOrder": 88,
+  "orderHash": "8ad602627542052feb946ee9d98c36060c9b047b0d8c771e50373b5f6efc1b86",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "OPENAPI-CONFLICT-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "52ad7e6e79e8a803d7d1aaffadbfb6a3caaf445402383cfbcf44f35a2574c88e",
+  "contextHash": "5a2286280a48fccc262c08f80def499e744ef1496535dd11c711fdf65c0e8cf0",
+  "promptHash": "ad051d5062dafb953cfc561b1955ba5b2f1c2f3a31db5dc21820c67d13448435",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:13.290Z",
+  "finishedAt": "2026-08-30T22:42:14.166Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"ANSWER\\\",\\\"materialClaims\\\":[{\\\"claim\\\":\\\"A Path Item is empty due to ACL constraints, not because no operations exist\\\",\\\"evidenceRefs\\\":[\\\"evidence:90a3b48adf1bdc600a0bcc7d\\\"]}], \\\"evidenceRefs\\\":[\\\"evidence:90a3b48adf1bdc600a0bcc7d\\\"], \\\"applicability\\\":\\\"APPLICABLE\\\", \\\"denials\\\":[],\\\"reasoningSummary\\\":\\\"The specification explicitly states that a Path Item MAY be empty due to ACL constraints, meaning an empty Path Item does not prove no operations exist — it only means those operations are hidden by security filtering.\\\"}\"}}],\"created\":1788129734,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":151,\"prompt_tokens\":1700,\"total_tokens\":1851,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-IQCsIYbay0Yk4XCB6bVcbbIXxljr20pP\",\"timings\":{\"cache_n\":0,\"prompt_n\":1700,\"prompt_ms\":103.023,\"prompt_per_token_ms\":0.06060176470588235,\"prompt_per_second\":16501.169641730485,\"predicted_n\":151,\"predicted_ms\":733.532,\"predicted_per_token_ms\":4.857827814569537,\"predicted_per_second\":205.85332337239547}}",
+  "rawResponseHash": "e953110378e48dd669fed6d9650264396481a1a6ba1e728cfa638c7bc254184b",
+  "parsedClosedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [
+      {
+        "claim": "A Path Item is empty due to ACL constraints, not because no operations exist",
+        "evidenceRefs": [
+          "evidence:90a3b48adf1bdc600a0bcc7d"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:90a3b48adf1bdc600a0bcc7d"
+    ],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The specification explicitly states that a Path Item MAY be empty due to ACL constraints, meaning an empty Path Item does not prove no operations exist — it only means those operations are hidden by security filtering."
+  },
+  "answer": {
+    "answerState": "ANSWER",
+    "materialClaims": [
+      {
+        "claim": "A Path Item is empty due to ACL constraints, not because no operations exist",
+        "evidenceRefs": [
+          "evidence:90a3b48adf1bdc600a0bcc7d"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:90a3b48adf1bdc600a0bcc7d"
+    ],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The specification explicitly states that a Path Item MAY be empty due to ACL constraints, meaning an empty Path Item does not prove no operations exist — it only means those operations are hidden by security filtering."
+  },
+  "usage": {
+    "prompt_tokens": 1700,
+    "completion_tokens": 151,
+    "total_tokens": 1851
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 1700,
+    "prompt_ms": 103.023,
+    "prompt_per_token_ms": 0.06060176470588235,
+    "prompt_per_second": 16501.169641730485,
+    "predicted_n": 151,
+    "predicted_ms": 733.532,
+    "predicted_per_token_ms": 4.857827814569537,
+    "predicted_per_second": 205.85332337239547
+  },
+  "timings": {
+    "wallMs": 876.3504249999969,
+    "promptEvalMs": 103.023,
+    "generationMs": 733.532
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 1,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 1,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

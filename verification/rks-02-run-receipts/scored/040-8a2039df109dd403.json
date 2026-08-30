@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "8a2039df109dd403d086175d",
+  "runOrder": 40,
+  "orderHash": "8a2039df109dd403d086175d92984f04dc6b6a57048206f33e2fb90597e50d8c",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "CPYTHON-INSUFFICIENT-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "a0b2a02658db1454cc6c936a726893b276f1e369f4c68b3f034f7afe5252362b",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "30945f9469f702ba5aef1ae8a0f0780afd23203b26bebbbd31e88b34581a05d7",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:36.630Z",
+  "finishedAt": "2026-08-30T22:41:37.153Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"NOT_APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"Insufficient evidence provided in the EVIDENCE_PACK to determine the exact behavior of the GIL in free-threaded builds using only the supplied tuple-assignment excerpt.\\\"\\n}\"}}],\"created\":1788129697,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":98,\"prompt_tokens\":216,\"total_tokens\":314,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-rw1TgiEEIRr42R6gRiA1bo5u25xC8B1K\",\"timings\":{\"cache_n\":0,\"prompt_n\":216,\"prompt_ms\":23.823,\"prompt_per_token_ms\":0.11029166666666666,\"prompt_per_second\":9066.868152625613,\"predicted_n\":98,\"predicted_ms\":480.398,\"predicted_per_token_ms\":4.902020408163265,\"predicted_per_second\":203.99751872405795}}",
+  "rawResponseHash": "9763c3a2b2007ffc3cddcf74285c85a46fa4672684c7b2cc22e49a6c649586b5",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "Insufficient evidence provided in the EVIDENCE_PACK to determine the exact behavior of the GIL in free-threaded builds using only the supplied tuple-assignment excerpt."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "Insufficient evidence provided in the EVIDENCE_PACK to determine the exact behavior of the GIL in free-threaded builds using only the supplied tuple-assignment excerpt."
+  },
+  "usage": {
+    "prompt_tokens": 216,
+    "completion_tokens": 98,
+    "total_tokens": 314
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 216,
+    "prompt_ms": 23.823,
+    "prompt_per_token_ms": 0.11029166666666666,
+    "prompt_per_second": 9066.868152625613,
+    "predicted_n": 98,
+    "predicted_ms": 480.398,
+    "predicted_per_token_ms": 4.902020408163265,
+    "predicted_per_second": 203.99751872405795
+  },
+  "timings": {
+    "wallMs": 522.0715999999993,
+    "promptEvalMs": 23.823,
+    "generationMs": 480.398
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

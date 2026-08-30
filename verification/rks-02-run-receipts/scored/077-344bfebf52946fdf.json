@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "344bfebf52946fdfe87adee9",
+  "runOrder": 77,
+  "orderHash": "344bfebf52946fdfe87adee9565f20f68be5f63c534c59fbdecd034f78c65b6f",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "CPYTHON-AUTHORITY-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "a698dd8ba2d5a4f13291883bb9d3d84399ff6c0507c91c302702dc76e7dbbcc7",
+  "contextHash": "9d4823da1b9b787342c3bafc42144caff43014ddb91bd07cc9ed5475eb8dfa91",
+  "promptHash": "5e5dc54c8647a1bd29ef39600cb7effe3d4ef09a75c2edee5afa6af7de3af574",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:04.393Z",
+  "finishedAt": "2026-08-30T22:42:05.704Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"ANSWER\\\",\\\"materialClaims\\\":[{\\\"claim\\\":\\\"The tuple example in the documentation shows a `TypeError` when trying to assign to a tuple item, and demonstrates tuple packing/unpacking with a tuple containing mutable objects like lists.\\\", \\\"evidenceRefs\\\":[\\\"evidence:e0423f035930f80da3ba73a7\\\", \\\"evidence:e0423f035930f80da3ba73a7\\\"]}], \\\"evidenceRefs\\\":[\\\"evidence:e0423f035930f80da3ba73a7\\\"], \\\"applicability\\\":\\\"APPLICABLE\\\", \\\"denials\\\":[],\\\"reasoningSummary\\\":\\\"The documentation clearly shows the tuple example with the `TypeError` and demonstrates tuple packing/unpacking, including the use of a tuple containing mutable objects like lists.\\\"}\"}}],\"created\":1788129725,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":192,\"prompt_tokens\":3883,\"total_tokens\":4075,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-0qSSK1Xh5JABPD2fTse6GYV5mRrg0QvJ\",\"timings\":{\"cache_n\":0,\"prompt_n\":3883,\"prompt_ms\":242.754,\"prompt_per_token_ms\":0.06251712593355653,\"prompt_per_second\":15995.616962027403,\"predicted_n\":192,\"predicted_ms\":937.12,\"predicted_per_token_ms\":4.880833333333333,\"predicted_per_second\":204.88304592794947}}",
+  "rawResponseHash": "64d013d2989254361d0ee6ae7b0c6dd4867fd76503f70bec5fd685a08f17d38b",
+  "parsedClosedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [
+      {
+        "claim": "The tuple example in the documentation shows a `TypeError` when trying to assign to a tuple item, and demonstrates tuple packing/unpacking with a tuple containing mutable objects like lists.",
+        "evidenceRefs": [
+          "evidence:e0423f035930f80da3ba73a7",
+          "evidence:e0423f035930f80da3ba73a7"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:e0423f035930f80da3ba73a7"
+    ],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The documentation clearly shows the tuple example with the `TypeError` and demonstrates tuple packing/unpacking, including the use of a tuple containing mutable objects like lists."
+  },
+  "answer": {
+    "answerState": "ANSWER",
+    "materialClaims": [
+      {
+        "claim": "The tuple example in the documentation shows a `TypeError` when trying to assign to a tuple item, and demonstrates tuple packing/unpacking with a tuple containing mutable objects like lists.",
+        "evidenceRefs": [
+          "evidence:e0423f035930f80da3ba73a7",
+          "evidence:e0423f035930f80da3ba73a7"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:e0423f035930f80da3ba73a7"
+    ],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The documentation clearly shows the tuple example with the `TypeError` and demonstrates tuple packing/unpacking, including the use of a tuple containing mutable objects like lists."
+  },
+  "usage": {
+    "prompt_tokens": 3883,
+    "completion_tokens": 192,
+    "total_tokens": 4075
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 3883,
+    "prompt_ms": 242.754,
+    "prompt_per_token_ms": 0.06251712593355653,
+    "prompt_per_second": 15995.616962027403,
+    "predicted_n": 192,
+    "predicted_ms": 937.12,
+    "predicted_per_token_ms": 4.880833333333333,
+    "predicted_per_second": 204.88304592794947
+  },
+  "timings": {
+    "wallMs": 1310.6856210000042,
+    "promptEvalMs": 242.754,
+    "generationMs": 937.12
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 1,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 1,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 1
+  }
+}

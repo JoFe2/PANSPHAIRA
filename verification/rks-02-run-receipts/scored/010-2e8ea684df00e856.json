@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "2e8ea684df00e8567d995786",
+  "runOrder": 10,
+  "orderHash": "2e8ea684df00e8567d99578626d2ab35eb699dffc59f040ada014b05efe75cb3",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "CPYTHON-AUTHORITY-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "a698dd8ba2d5a4f13291883bb9d3d84399ff6c0507c91c302702dc76e7dbbcc7",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "ba385b3cc811347501a40a3e5588bcdc837007eefabb8761bcb771d631613b08",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:19.040Z",
+  "finishedAt": "2026-08-30T22:41:19.416Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence provided, so cannot make material claim.\\\"\\n}\"}}],\"created\":1788129679,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":69,\"prompt_tokens\":211,\"total_tokens\":280,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-mwq74lOmm5xZ2opnp9LQbMgdp8R7RoTf\",\"timings\":{\"cache_n\":0,\"prompt_n\":211,\"prompt_ms\":23.08,\"prompt_per_token_ms\":0.10938388625592416,\"prompt_per_second\":9142.1143847487,\"predicted_n\":69,\"predicted_ms\":345.996,\"predicted_per_token_ms\":5.014434782608696,\"predicted_per_second\":199.42427080081853}}",
+  "rawResponseHash": "a86ea7397fef9a462f38f9a8ed01289cf11e95dbb97b04f8f20406b5ea47d386",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided, so cannot make material claim."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided, so cannot make material claim."
+  },
+  "usage": {
+    "prompt_tokens": 211,
+    "completion_tokens": 69,
+    "total_tokens": 280
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 211,
+    "prompt_ms": 23.08,
+    "prompt_per_token_ms": 0.10938388625592416,
+    "prompt_per_second": 9142.1143847487,
+    "predicted_n": 69,
+    "predicted_ms": 345.996,
+    "predicted_per_token_ms": 5.014434782608696,
+    "predicted_per_second": 199.42427080081853
+  },
+  "timings": {
+    "wallMs": 376.71918800000094,
+    "promptEvalMs": 23.08,
+    "generationMs": 345.996
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 1
+  }
+}

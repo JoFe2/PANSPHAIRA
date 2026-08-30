@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "7fef1074bb24dbf64e3726b0",
+  "runOrder": 37,
+  "orderHash": "7fef1074bb24dbf64e3726b09f85e9046c0a1785eabd430fb4a93c487bb5cc4e",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "OPENAPI-AUTHORITY-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "99c87adcc5810f0c9ca03e95289842bea2aa36413dacf2b27328f1d5d624dae2",
+  "contextHash": "8feb13f73e09b3e1461e8090a7bad725ad9bddb6d920e573513995d6bce79ce2",
+  "promptHash": "44ff4daeba2e5fcae3bf2810358f1384742663b353a5c32b0da2cef9793e3a70",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:34.686Z",
+  "finishedAt": "2026-08-30T22:41:35.449Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"DENY\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The TASK_CONTRACT requests an API endpoint because the OpenAPI Knowledge Object grants operational capability and authority. However, parametric memory is non-authoritative, and evidence is limited to the provided EVIDENCE_PACK which only confirms the structure of the Components Object but does not provide explicit support for granting operational capability and authority to deploy an API endpoint. Therefore, the request is denied.\\\"\\n}\"}}],\"created\":1788129695,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":145,\"prompt_tokens\":1469,\"total_tokens\":1614,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-hqBLxCtBCG0cjL75JvHdTD32h0IbkaUx\",\"timings\":{\"cache_n\":0,\"prompt_n\":1469,\"prompt_ms\":85.503,\"prompt_per_token_ms\":0.058204901293396866,\"prompt_per_second\":17180.68371869993,\"predicted_n\":145,\"predicted_ms\":668.775,\"predicted_per_token_ms\":4.612241379310345,\"predicted_per_second\":216.81432469814214}}",
+  "rawResponseHash": "1f551df10517c9c923b3992746b80e6fe3412ca12a59c2357cd34c719eeb0e0c",
+  "parsedClosedAnswer": {
+    "answerState": "DENY",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The TASK_CONTRACT requests an API endpoint because the OpenAPI Knowledge Object grants operational capability and authority. However, parametric memory is non-authoritative, and evidence is limited to the provided EVIDENCE_PACK which only confirms the structure of the Components Object but does not provide explicit support for granting operational capability and authority to deploy an API endpoint. Therefore, the request is denied."
+  },
+  "answer": {
+    "answerState": "DENY",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The TASK_CONTRACT requests an API endpoint because the OpenAPI Knowledge Object grants operational capability and authority. However, parametric memory is non-authoritative, and evidence is limited to the provided EVIDENCE_PACK which only confirms the structure of the Components Object but does not provide explicit support for granting operational capability and authority to deploy an API endpoint. Therefore, the request is denied."
+  },
+  "usage": {
+    "prompt_tokens": 1469,
+    "completion_tokens": 145,
+    "total_tokens": 1614
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 1469,
+    "prompt_ms": 85.503,
+    "prompt_per_token_ms": 0.058204901293396866,
+    "prompt_per_second": 17180.68371869993,
+    "predicted_n": 145,
+    "predicted_ms": 668.775,
+    "predicted_per_token_ms": 4.612241379310345,
+    "predicted_per_second": 216.81432469814214
+  },
+  "timings": {
+    "wallMs": 763.2229050000024,
+    "promptEvalMs": 85.503,
+    "generationMs": 668.775
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 1
+  }
+}

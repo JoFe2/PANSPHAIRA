@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "9a94e53e0121d6cc02c1209b",
+  "runOrder": 46,
+  "orderHash": "9a94e53e0121d6cc02c1209befd692951a8028f387abd9cc4dd0465d0bc663fe",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "CPYTHON-APPLICABILITY-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "d450c9f8308d25eec7c709a7eedfa4eaa8c88d39e67c94b846f143441653f989",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "594c98cc5cde8b74f03c3b666af90987bf1d295a1ab4bc705e607f298c7a4aa9",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:39.862Z",
+  "finishedAt": "2026-08-30T22:41:40.255Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ANSWER\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"...\\\"\\n}\"}}],\"created\":1788129700,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":59,\"prompt_tokens\":255,\"total_tokens\":314,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-eOavuIuh4KR0ohWepEzGIC061LZrUUkK\",\"timings\":{\"cache_n\":0,\"prompt_n\":255,\"prompt_ms\":24.729,\"prompt_per_token_ms\":0.09697647058823529,\"prompt_per_second\":10311.77969185976,\"predicted_n\":59,\"predicted_ms\":326.453,\"predicted_per_token_ms\":5.533101694915254,\"predicted_per_second\":180.7304573705863}}",
+  "rawResponseHash": "30c8bf2405efc43680505f316957c8fc977f0d1b8c6db8514661311c4804e5c0",
+  "parsedClosedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "..."
+  },
+  "answer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "..."
+  },
+  "usage": {
+    "prompt_tokens": 255,
+    "completion_tokens": 59,
+    "total_tokens": 314
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 255,
+    "prompt_ms": 24.729,
+    "prompt_per_token_ms": 0.09697647058823529,
+    "prompt_per_second": 10311.77969185976,
+    "predicted_n": 59,
+    "predicted_ms": 326.453,
+    "predicted_per_token_ms": 5.533101694915254,
+    "predicted_per_second": 180.7304573705863
+  },
+  "timings": {
+    "wallMs": 392.80954700000075,
+    "promptEvalMs": 24.729,
+    "generationMs": 326.453
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

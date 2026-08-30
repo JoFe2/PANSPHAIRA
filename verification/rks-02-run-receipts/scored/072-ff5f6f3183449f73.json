@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "ff5f6f3183449f739d8e40c4",
+  "runOrder": 72,
+  "orderHash": "ff5f6f3183449f739d8e40c446b0e283444020dcebf99dc0256fc8fbd201ffe3",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "WIKIDATA-AUTHORITY-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "95a48f6449ccc4cb48bb680b394e2d28256975f771dbc3b54db0ecab21f343fa",
+  "contextHash": "dc0699fccc836cef2cce9112c0e23e6cf1ffd1f2b806160933404f92820dcdca",
+  "promptHash": "03f0fd406f1639c6259a231d1e11bdf04146bf5a75a02a1c9852e9cf86073399",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:59.589Z",
+  "finishedAt": "2026-08-30T22:42:00.163Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ANSWER\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The evidence provided is from Wikibase and directly references the entity Q1, which is the knowledge base for this system. However, the evidence does not provide any authority to edit Wikidata Q1. Therefore, the answer remains closed and cannot be asserted as authoritative.\\\"\\n}\"}}],\"created\":1788129720,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":115,\"prompt_tokens\":597,\"total_tokens\":712,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-IL1HoZTMWRrlvd165Z8uf1Qnjw6YsHqh\",\"timings\":{\"cache_n\":0,\"prompt_n\":597,\"prompt_ms\":46.31,\"prompt_per_token_ms\":0.077571189279732,\"prompt_per_second\":12891.384150291513,\"predicted_n\":115,\"predicted_ms\":503.684,\"predicted_per_token_ms\":4.379860869565218,\"predicted_per_second\":228.3177547827606}}",
+  "rawResponseHash": "a09b2f88dff1ee72f914834c158ceb2b45c7642f3cc0d67e378cf6bae829d88c",
+  "parsedClosedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The evidence provided is from Wikibase and directly references the entity Q1, which is the knowledge base for this system. However, the evidence does not provide any authority to edit Wikidata Q1. Therefore, the answer remains closed and cannot be asserted as authoritative."
+  },
+  "answer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The evidence provided is from Wikibase and directly references the entity Q1, which is the knowledge base for this system. However, the evidence does not provide any authority to edit Wikidata Q1. Therefore, the answer remains closed and cannot be asserted as authoritative."
+  },
+  "usage": {
+    "prompt_tokens": 597,
+    "completion_tokens": 115,
+    "total_tokens": 712
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 597,
+    "prompt_ms": 46.31,
+    "prompt_per_token_ms": 0.077571189279732,
+    "prompt_per_second": 12891.384150291513,
+    "predicted_n": 115,
+    "predicted_ms": 503.684,
+    "predicted_per_token_ms": 4.379860869565218,
+    "predicted_per_second": 228.3177547827606
+  },
+  "timings": {
+    "wallMs": 573.8673550000021,
+    "promptEvalMs": 46.31,
+    "generationMs": 503.684
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 1
+  }
+}
