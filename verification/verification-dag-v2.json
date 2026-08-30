@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 30,
+  "graphVersion": 31,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "949baf5684198ed3d522205d8554994cffa113d42cb9ea22bec156dd925dc436"
+          "sha256": "e6031aa0fbb9025824d7db139dc1e104463fd039bcbfe2238d6ec6a1a2fd9f1b"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "170562b40f0e9d810f66111f896bd4fdf1bbdca396646a431fa21e6fdf6efc93"
+          "sha256": "87f13591c93f58146ebc22a6fc882d1c72f1aae1ec19b790c9bb5ff8c0da81c0"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "8aa07970d5349b4ececbe6d2278683c239576b1e4814f3b372f681f22164f6fc"
+          "sha256": "e09e1c6627ec17e60d9163f8e58e003b74040b30895a280dd3f43d7063376d59"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "5f2db3d33253b9ab4fd084d571640e5800cd227acf5c4d4d7703b973a7390832"
+          "sha256": "5908dbf1d09fce9cec1be5b2d620209de1f55c1d8c6ead427a0522b55f1d8602"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "90af616c325003d1de141453c3081d130e27ad9476c910995222b2ec14ba3b13"
+          "sha256": "843b5afc133c35dd230343c550f1e8ca9b11462688b2e041df1d9a7eb5b5f197"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "47909bbf521bcaa1c5dd8f5ec2ed57e0db6ab5df37795c70972b2394b1cda264"
+          "sha256": "487fd29466295b76d6442994cfcb573f7e4fcbecd01bfdc96ac508767a8acac8"
         }
       ],
       "ownedTests": [
@@ -4468,6 +4468,40 @@
         "KaleidoSphere receives only minimized read-only projections and returns authority-free candidates.",
         "Drift and unknown variants invalidate or safely abort fast paths.",
         "Falsification reports bind raw counts, denominators, exclusions and stop conditions."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-m1-parent-closure-v1",
+      "dependsOn": [
+        "cks-12-closed-learning-loop-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/cks-m1/criterion-traceability-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4226d79e10ec53b14d8405518961ddddaa09bf527de0836775b56e094450a888"
+        },
+        {
+          "path": "docs/architecture/cks-m1/closure-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8359bf9bba216727bf61e417995f628b2a0614de66ed7e4e7cdba0eb1c595ffc"
+        },
+        {
+          "path": "tests/cks-m1-parent/criterion-traceability.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5eed5e870a7b9cab8e0e70d1a80de066853363214d6c366a7114ac5666dc78f5"
+        }
+      ],
+      "ownedTests": [
+        "npm run cksm1:test"
+      ],
+      "invariants": [
+        "All CKS-01 through CKS-12 children bind exact public delivery receipts.",
+        "Falsified child outcomes remain negative evidence.",
+        "Real-source utility remains separately gated by issue 311.",
+        "Knowledge never grants Capability or Authority."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

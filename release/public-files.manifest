@@ -234,6 +234,8 @@ docs/architecture/cks-11-function-extraction-v1.md	docs/architecture/cks-11-func
 docs/architecture/cks-11-governance-decision-v1.md	docs/architecture/cks-11-governance-decision-v1.md	0644
 docs/architecture/cks-11-governed-assets-v1.md	docs/architecture/cks-11-governed-assets-v1.md	0644
 docs/architecture/cks-12-closed-loop-boundary-v1.md	docs/architecture/cks-12-closed-loop-boundary-v1.md	0644
+docs/architecture/cks-m1/closure-v1.md	docs/architecture/cks-m1/closure-v1.md	0644
+docs/architecture/cks-m1/criterion-traceability-v1.json	docs/architecture/cks-m1/criterion-traceability-v1.json	0644
 docs/asf-lifecycle-recovery-guide.md	docs/asf-lifecycle-recovery-guide.md	0644
 docs/asf-lifecycle-synthetic-proof.md	docs/asf-lifecycle-synthetic-proof.md	0644
 docs/benchmarks/cks-05-falsification-report-template-v1.md	docs/benchmarks/cks-05-falsification-report-template-v1.md	0644
@@ -744,6 +746,7 @@ tests/cks-knowledge-lineage-contracts.test.ts	tests/cks-knowledge-lineage-contra
 tests/cks-knowledge-sufficiency.test.ts	tests/cks-knowledge-sufficiency.test.ts	0644
 tests/cks-knowledge.test.ts	tests/cks-knowledge.test.ts	0644
 tests/cks-lineage-reconstructor.test.ts	tests/cks-lineage-reconstructor.test.ts	0644
+tests/cks-m1-parent/criterion-traceability.test.mjs	tests/cks-m1-parent/criterion-traceability.test.mjs	0644
 tests/cks-oss-model-adapter.test.ts	tests/cks-oss-model-adapter.test.ts	0644
 tests/cks-qualification.test.ts	tests/cks-qualification.test.ts	0644
 tests/cks-requirement-analysis.test.ts	tests/cks-requirement-analysis.test.ts	0644

@@ -114,7 +114,7 @@ proof.verifier.sha256 = digest(proof.verifier.path);
 writeJson(proofPath, proof);
 writeJson("security/secure-default-proof-evidence-v1.json", buildSecureDefaultEvidence(proof));
 
-dag.graphVersion = 30;
+dag.graphVersion = 31;
 const verificationFabricNode = dag.nodes.find(({ id }) => id === "vf-contract-v1");
 if (verificationFabricNode === undefined) throw new Error("VF_CONTRACT_V1_DAG_NODE_MISSING");
 const verificationFabricInputs = [
