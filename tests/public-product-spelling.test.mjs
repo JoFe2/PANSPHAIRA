@@ -13,6 +13,9 @@ function read(path) {
 }
 
 function classify(path, line) {
+  if (path.startsWith("closure-audits/")) return "closure-audit-provenance";
+  if (path.startsWith("docs/evidence/conveyor/")) return "internal-conveyor-evidence";
+  if (line.includes("PANSPHAIRA_CANONICAL_JSON_SHA256_V1")) return "stable-algorithm-identifier";
   if (
     path.startsWith("archive/")
     || path.startsWith("docs/development/")
@@ -42,6 +45,7 @@ function classify(path, line) {
 }
 
 function classifyFormerOwner(path, line) {
+  if (path.startsWith("closure-audits/")) return "closure-audit-provenance";
   if (path === ".github/FUNDING.yml") return "keep-sponsorship-handle";
   if (path === "README.md" && line.includes("buymeacoffee.com")) return "keep-sponsorship-handle";
   if (
