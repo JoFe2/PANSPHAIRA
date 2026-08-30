@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI284-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JimPansky/PANSPHAIRA",
+    "number": 284,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/284"
+  },
+  "baseCommit": "6d6d823ac70c28772d5a4b1c2922f5a0ad6a44da",
+  "testedHead": "5176969fc6a32a8e47acf7fab248f5def4469a4f",
+  "testedTree": "0f9f5e85311fe4825371e95e43439cd6e1c2b7cd",
+  "acceptance": {
+    "typedBoundedRetrieval": true,
+    "unknownFactsAndProcedures": "SUPPORTED_ONLY_WITH_COMPLETE_EXACT_EVIDENCE",
+    "applicabilityAndParametricConflicts": "ABSTAIN",
+    "missingOrConflictingKnowledge": "ABSTAIN_OR_ESCALATE",
+    "deterministicVerifier": "EXACT_IDS_VERSIONS_DIGESTS_SCOPE_PRECONDITIONS",
+    "semanticVerifier": "INDEPENDENTLY_IDENTIFIED_UNTRUSTED",
+    "exactRuntimeBindings": ["model", "quantization", "runtime", "prompt", "tool", "knowledge", "verifier", "cks03Suite", "cks03Task"],
+    "effectfulAuthority": "NONE"
+  },
+  "nonClaims": ["NO_FINE_TUNING", "NO_MODEL_QUALIFICATION_VERDICT", "NO_PRODUCTION_CLAIM", "NO_EFFECTFUL_AUTHORITY"],
+  "gates": [
+    {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
+    {"command": "npm run cks04:test", "outcome": "PASS", "tests": 24, "passed": 24},
+    {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1249},
+    {"command": "npm run release-governance:verify", "outcome": "PASS"},
+    {"command": "npm run lint", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "delivery": {"readyForPr": true, "releaseRequired": true, "publicReadbackRequired": true, "issueCloseRequired": true}
+}

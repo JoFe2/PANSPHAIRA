@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "pansphaira.cks/baseline-manifest-template/v1",
+  "templateId": "template:cks-04-p2-p3-baseline",
+  "templateVersion": "1",
+  "qualificationStatus": "NOT_QUALIFIED",
+  "execution": {
+    "mode": "LOCAL_NO_FINE_TUNE",
+    "networkPolicy": "DENY_ALL",
+    "weightModification": "FORBIDDEN",
+    "actionAuthority": "NONE"
+  },
+  "bindings": {
+    "model": {
+      "id": "model:qwen2.5-1.5b-instruct",
+      "version": "artifact-revision-91cad511",
+      "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "quantization": {
+      "id": "quantization:q4_k_m",
+      "version": "1",
+      "digest": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "runtime": {
+      "id": "runtime:llama.cpp",
+      "version": "b10661",
+      "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "prompt": {
+      "id": "prompt:psai284-cks04",
+      "version": "1",
+      "digest": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "tool": {
+      "id": "tool:pansphaira.cks-knowledge-query",
+      "version": "1",
+      "digest": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "knowledge": {
+      "editionId": "edition:cks-04-synthetic",
+      "version": "1",
+      "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "contractVersion": "pansphaira.cks/knowledge-object/v1"
+    },
+    "deterministicVerifier": {
+      "id": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+      "version": "1",
+      "digest": "7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    "semanticVerifier": {
+      "id": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+      "version": "1",
+      "rubricId": "PSAI284-SEMANTIC-CLAIM-APPLICATION-RUBRIC-V1",
+      "trusted": false,
+      "mayOverrideDeterministicFailure": false
+    }
+  },
+  "requiredPerCaseBindings": ["taskDigest", "scopeDigest", "knowledgeEditionDigest"],
+  "preconditions": {
+    "required": true,
+    "mustBeExplicitlyChecked": true,
+    "unknownResult": "ABSTAIN",
+    "unsatisfiedResult": "ABSTAIN"
+  },
+  "scope": {
+    "mustMatchTaskScopeDigest": true,
+    "mustMatchApplicability": true,
+    "mustRespectActiveExclusions": true,
+    "mustRejectUnreturnedEvidence": true
+  },
+  "receipt": {
+    "required": true,
+    "deterministicVerifierReceiptRequired": true,
+    "semanticVerifierIndependentlyIdentified": true,
+    "semanticVerifierCanOverrideDeterministicFailure": false
+  }
+}

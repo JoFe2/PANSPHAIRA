@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "pansphaira.cks/epistemic-verification-fixtures/v1",
+  "fixtureId": "fixture:cks-04-verification-cases",
+  "fixtureVersion": "1",
+  "cases": [
+    {
+      "schemaVersion": "pansphaira.cks/epistemic-verification/v1",
+      "caseId": "case:unknown-fact-and-procedure",
+      "caseVersion": "1",
+      "caseDigest": "1ce1104e8095284bf6ff1d00bb0c3065a640fe75f60cce748f6f97e461e07122",
+      "bindings": {
+        "model": { "id": "model:qwen2.5-1.5b-instruct", "version": "artifact-revision-91cad511", "digest": "1111111111111111111111111111111111111111111111111111111111111111" },
+        "quantization": { "id": "quantization:q4_k_m", "version": "1", "digest": "2222222222222222222222222222222222222222222222222222222222222222" },
+        "runtime": { "id": "runtime:llama.cpp", "version": "b10661", "digest": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "prompt": { "id": "prompt:psai284-cks04", "version": "1", "digest": "4444444444444444444444444444444444444444444444444444444444444444" },
+        "tool": { "id": "tool:pansphaira.cks-knowledge-query", "version": "1", "digest": "5555555555555555555555555555555555555555555555555555555555555555" },
+        "knowledge": { "editionId": "edition:cks-04-synthetic", "version": "1", "digest": "6666666666666666666666666666666666666666666666666666666666666666", "contractVersion": "pansphaira.cks/knowledge-object/v1" }
+      },
+      "task": {
+        "taskId": "task:cks-04-unknown-fact-procedure",
+        "taskDigest": "7777777777777777777777777777777777777777777777777777777777777777",
+        "scopeDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+        "applicability": {
+          "domain": { "state": "VALUE", "values": ["synthetic-warehouse"], "provenance": "DECLARED" },
+          "knowledge_type": { "state": "VALUE", "values": ["fact-and-procedure"], "provenance": "DECLARED" },
+          "role_responsibility": { "state": "NOT_PROVIDED", "values": [], "provenance": null },
+          "industry": { "state": "NOT_PROVIDED", "values": [], "provenance": null },
+          "organization_context": { "state": "VALUE", "values": ["synthetic-acme"], "provenance": "DECLARED" },
+          "geography_jurisdiction_policy": { "state": "NOT_APPLICABLE", "values": [], "provenance": "DECLARED" },
+          "process_stage": { "state": "VALUE", "values": ["receiving"], "provenance": "DECLARED" },
+          "system_config": { "state": "VALUE", "values": ["synthetic-wms-v1"], "provenance": "DECLARED" },
+          "prerequisites_constraints_exceptions": { "state": "VALUE", "values": ["requires-temperature"], "provenance": "DECLARED" },
+          "task_audience_outcome": { "state": "VALUE", "values": ["operator-instruction"], "provenance": "DECLARED" },
+          "valid_time_freshness": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+          "epistemic_status": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+          "evidence_strength": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+          "sensitivity": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+          "license": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" }
+        },
+        "requiredPreconditions": ["requires-temperature"],
+        "activeExclusions": []
+      },
+      "expected": {
+        "state": "ANSWER_SUPPORTED",
+        "claims": [
+          { "claimId": "claim:synthetic-temperature", "kind": "FACT", "version": "7", "digest": "9999999999999999999999999999999999999999999999999999999999999999" },
+          { "claimId": "claim:synthetic-receiving-procedure", "kind": "PROCEDURE", "version": "3", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }
+        ],
+        "procedureSteps": [
+          { "stepId": "step:set-temperature", "order": 1, "claimId": "claim:synthetic-receiving-procedure" }
+        ]
+      },
+      "requests": [
+        {
+          "schemaVersion": "pansphaira.cks/knowledge-query/v1",
+          "requestId": "KQ-01",
+          "taskId": "task:cks-04-unknown-fact-procedure",
+          "knowledgeEditionId": "edition:cks-04-synthetic",
+          "knowledgeEditionVersion": "1",
+          "knowledgeEditionDigest": "6666666666666666666666666666666666666666666666666666666666666666",
+          "needKinds": ["FACT", "PROCEDURE"],
+          "queryText": "Which exact synthetic fact and procedure apply?",
+          "applicability": {
+            "domain": { "state": "VALUE", "values": ["synthetic-warehouse"], "provenance": "DECLARED" },
+            "knowledge_type": { "state": "VALUE", "values": ["fact-and-procedure"], "provenance": "DECLARED" },
+            "role_responsibility": { "state": "NOT_PROVIDED", "values": [], "provenance": null },
+            "industry": { "state": "NOT_PROVIDED", "values": [], "provenance": null },
+            "organization_context": { "state": "VALUE", "values": ["synthetic-acme"], "provenance": "DECLARED" },
+            "geography_jurisdiction_policy": { "state": "NOT_APPLICABLE", "values": [], "provenance": "DECLARED" },
+            "process_stage": { "state": "VALUE", "values": ["receiving"], "provenance": "DECLARED" },
+            "system_config": { "state": "VALUE", "values": ["synthetic-wms-v1"], "provenance": "DECLARED" },
+            "prerequisites_constraints_exceptions": { "state": "VALUE", "values": ["requires-temperature"], "provenance": "DECLARED" },
+            "task_audience_outcome": { "state": "VALUE", "values": ["operator-instruction"], "provenance": "DECLARED" },
+            "valid_time_freshness": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+            "epistemic_status": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+            "evidence_strength": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+            "sensitivity": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+            "license": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" }
+          },
+          "requiredPreconditions": ["requires-temperature"],
+          "maxResults": 6,
+          "maxEvidenceBytes": 12288,
+          "reasonCode": "MATERIAL_FACT_MISSING",
+          "requestDigest": "4050a14001403b89f3942e21c8258355ac5ca577a24ce585c5b953e8d74bf76c"
+        }
+      ],
+      "evidencePacks": [
+        {
+          "schemaVersion": "pansphaira.cks/evidence-pack/v1",
+          "packId": "pack:synthetic-fact-procedure",
+          "status": "MATCH",
+          "request": { "requestId": "KQ-01", "requestDigest": "4050a14001403b89f3942e21c8258355ac5ca577a24ce585c5b953e8d74bf76c" },
+          "task": { "taskId": "task:cks-04-unknown-fact-procedure", "scopeDigest": "8888888888888888888888888888888888888888888888888888888888888888" },
+          "knowledgeEdition": { "editionId": "edition:cks-04-synthetic", "version": "1", "digest": "6666666666666666666666666666666666666666666666666666666666666666" },
+          "retrievalConfiguration": { "configurationId": "retrieval:cks-04", "version": "1", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+          "claims": [
+            { "claimId": "claim:synthetic-temperature", "knowledgeObjectId": "object:synthetic-temperature", "version": "7", "digest": "9999999999999999999999999999999999999999999999999999999999999999", "sourcePassageIds": ["passage:temperature"] },
+            { "claimId": "claim:synthetic-receiving-procedure", "knowledgeObjectId": "object:synthetic-receiving-procedure", "version": "3", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sourcePassageIds": ["passage:procedure"] }
+          ],
+          "applicability": {
+            "applicability": {
+              "domain": { "state": "VALUE", "values": ["synthetic-warehouse"], "provenance": "DECLARED" },
+              "knowledge_type": { "state": "VALUE", "values": ["fact-and-procedure"], "provenance": "DECLARED" },
+              "role_responsibility": { "state": "NOT_PROVIDED", "values": [], "provenance": null },
+              "industry": { "state": "NOT_PROVIDED", "values": [], "provenance": null },
+              "organization_context": { "state": "VALUE", "values": ["synthetic-acme"], "provenance": "DECLARED" },
+              "geography_jurisdiction_policy": { "state": "NOT_APPLICABLE", "values": [], "provenance": "DECLARED" },
+              "process_stage": { "state": "VALUE", "values": ["receiving"], "provenance": "DECLARED" },
+              "system_config": { "state": "VALUE", "values": ["synthetic-wms-v1"], "provenance": "DECLARED" },
+              "prerequisites_constraints_exceptions": { "state": "VALUE", "values": ["requires-temperature"], "provenance": "DECLARED" },
+              "task_audience_outcome": { "state": "VALUE", "values": ["operator-instruction"], "provenance": "DECLARED" },
+              "valid_time_freshness": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+              "epistemic_status": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+              "evidence_strength": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+              "sensitivity": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" },
+              "license": { "state": "EXPLICITLY_UNRESTRICTED", "values": [], "provenance": "DECLARED" }
+            },
+            "preconditions": ["requires-temperature"],
+            "exclusions": [],
+            "validity": { "state": "VALID", "validFromMs": 0, "validUntilMs": null },
+            "supersession": { "state": "CURRENT", "supersededBy": null }
+          },
+          "evidence": {
+            "positive": [
+              { "id": "evidence:temperature", "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+              { "id": "evidence:procedure", "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" }
+            ],
+            "negative": []
+          },
+          "conflicts": [],
+          "missingKnowledge": [],
+          "instructionEligibility": "DATA_ONLY_NEVER_INSTRUCTIONS_CAPABILITY_OR_AUTHORITY",
+          "evidenceBytes": 2048,
+          "packDigest": "b35a90d315fbfd27de283713bfa3c0ec594670a673dccd258f2f94d84b7e3069"
+        }
+      ],
+      "response": {
+        "schemaVersion": "pansphaira.cks/competence-response/v1",
+        "state": "ANSWER_SUPPORTED",
+        "taskId": "task:cks-04-unknown-fact-procedure",
+        "answer": "The synthetic fact and procedure are applied.",
+        "materialClaims": [
+          { "claimId": "claim:synthetic-temperature", "text": "The synthetic temperature fact.", "evidenceIds": ["evidence:temperature"] },
+          { "claimId": "claim:synthetic-receiving-procedure", "text": "The synthetic procedure.", "evidenceIds": ["evidence:procedure"] }
+        ],
+        "procedureSteps": [
+          { "stepId": "step:set-temperature", "text": "Set the synthetic temperature.", "order": 1, "evidenceIds": ["evidence:procedure"] }
+        ],
+        "preconditionChecks": [ { "preconditionId": "requires-temperature", "result": "SATISFIED" } ],
+        "exclusionChecks": [],
+        "conflicts": [],
+        "missingKnowledge": [],
+        "escalation": null,
+        "actionAuthority": "NONE",
+        "responseDigest": "1cb6cf9af1c9ac1596265f56d639e10ce01415d664beac5d7cfb3412197a0d19"
+      }
+    }
+  ]
+}

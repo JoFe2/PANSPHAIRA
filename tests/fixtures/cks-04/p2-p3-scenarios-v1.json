@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "pansphaira.cks/p2-p3-scenarios/v1",
+  "fixtureId": "fixture:cks-04-p2-p3-scenarios",
+  "fixtureVersion": "1",
+  "sourceCaseFixture": "tests/fixtures/cks-04/verification-cases-v1.json",
+  "qualification": {
+    "mode": "LOCAL_NO_FINE_TUNE",
+    "networkPolicy": "DENY_ALL",
+    "knowledgePolicy": "MISSING_OR_CONFLICTING_ABSTAIN_OR_ESCALATE",
+    "scoringRule": "VERIFIED_RECEIPT_ONLY",
+    "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER"
+  },
+  "scenarios": [
+    {
+      "scenarioId": "scenario:unknown-fact-procedure",
+      "category": "UNKNOWN_FACT_AND_PROCEDURE",
+      "description": "A synthetic fact and procedure are retrieved and applied with complete claim and procedure coverage.",
+      "mutation": "BASE_MATCH",
+      "expectedOutcome": "PASS",
+      "expectedReasonCodes": []
+    },
+    {
+      "scenarioId": "scenario:applicability-mismatch",
+      "category": "APPLICABILITY",
+      "description": "Evidence from a different domain is not accepted for the task scope.",
+      "mutation": "APPLICABILITY_MISMATCH",
+      "expectedOutcome": "ABSTAIN",
+      "expectedReasonCodes": ["APPLICABILITY_MISMATCH"]
+    },
+    {
+      "scenarioId": "scenario:exclusion-matched",
+      "category": "EXCLUSION",
+      "description": "An active exclusion is explicitly checked and prevents a supported answer.",
+      "mutation": "EXCLUSION_MATCHED",
+      "expectedOutcome": "ABSTAIN",
+      "expectedReasonCodes": ["EXCLUSION_MATCHED"]
+    },
+    {
+      "scenarioId": "scenario:parametric-conflict",
+      "category": "PARAMETRIC_CONFLICT",
+      "description": "Conflicting parametric Knowledge is not resolved from model memory and remains an abstention.",
+      "mutation": "PARAMETRIC_CONFLICT",
+      "expectedOutcome": "ABSTAIN",
+      "expectedReasonCodes": ["KNOWLEDGE_CONFLICT"]
+    },
+    {
+      "scenarioId": "scenario:missing-knowledge",
+      "category": "MISSING_KNOWLEDGE",
+      "description": "A material fact is unavailable, so the model requests Knowledge and abstains.",
+      "mutation": "MISSING_KNOWLEDGE",
+      "expectedOutcome": "ABSTAIN",
+      "expectedReasonCodes": ["MISSING_KNOWLEDGE"]
+    },
+    {
+      "scenarioId": "scenario:conflicting-knowledge",
+      "category": "CONFLICTING_KNOWLEDGE",
+      "description": "Two applicable Knowledge claims conflict and the response preserves the conflict.",
+      "mutation": "CONFLICTING_KNOWLEDGE",
+      "expectedOutcome": "ABSTAIN",
+      "expectedReasonCodes": ["KNOWLEDGE_CONFLICT"]
+    }
+  ]
+}

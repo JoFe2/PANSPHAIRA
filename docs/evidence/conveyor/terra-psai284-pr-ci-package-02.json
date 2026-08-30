@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "pansphaira.conveyor/pr-ci-readback-receipt/v1",
+  "taskId": "TERRA-PSAI284-PR-CI-PACKAGE-02",
+  "issue": {
+    "id": "CKS-04",
+    "number": 284,
+    "title": "No-fine-tune competence runtime and epistemic verifier baseline"
+  },
+  "receiptStatus": "PR_CI_READBACK_PACKET_PREPARED_LOCAL_RUNTIME_GATES_BLOCKED",
+  "decision": "DO_NOT_PUBLISH_OR_CLAIM_PRODUCT_SUCCESS_UNTIL_THE_AUTHORITATIVE_PINNED_NODE_AND_HOST_DOCKER_GATES_PASS",
+  "operatingModelBinding": {
+    "version": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "treatment": "PRESERVED_WITHOUT_REINTERPRETATION_OR_PROCESS_VARIANT",
+    "contextAuthority": "CONTROLLER_REVIEW_ATTESTED_BY_TASK"
+  },
+  "repositoryBinding": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "workingDirectory": "/mnt/data2/ai/development-conveyor/docker-workspaces/lane-1/materialized-pansphaira-284",
+    "branch": "conveyor/pansphaira-284",
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "mergeBase": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headBeforeReceiptCommit": "fecd60d05c46b29e83ee52a30bd554bd6d5daa38",
+    "allowedChangePaths": [
+      "docs/evidence/conveyor/terra-psai284-pr-ci-package-02.json"
+    ],
+    "scopeStatus": "ONLY_THE_ALLOWED_RECEIPT_PATH_IS_CREATED_BY_THIS_TASK"
+  },
+  "reconciledInputs": [
+    {
+      "commit": "fecd60d05c46b29e83ee52a30bd554bd6d5daa38",
+      "receipt": "docs/evidence/conveyor/terra-psai284-integration-root-qs-01.json",
+      "status": "BOUND",
+      "conclusion": "Static CKS-04 reconciliation is complete, but runtime success and qualification remain blocked pending authoritative gates."
+    },
+    {
+      "commit": "3ba4140857f070f3062c5ab111980d59a546b9f0",
+      "receipt": "docs/evidence/conveyor/sol-psai284-model-profile-decision-01.json",
+      "status": "BOUND",
+      "conclusion": "The selected profile is not qualified; no substitution, acquisition, execution, or publication is authorized by this packet."
+    },
+    {
+      "commit": "f08b05441a00707d78236fdaae1c0424740f4c63",
+      "evidence": "scripts/verify-cks-04-baseline-evidence.mjs; scripts/render-cks-04-public-readback.mjs; verification/cks-04-no-finetune-baseline-evidence-v1.json",
+      "status": "BOUND",
+      "conclusion": "Replay verification and local-only readback are the applicable evidence boundary."
+    }
+  ],
+  "prPacket": {
+    "targetBranch": "main",
+    "title": "CKS-04: no-fine-tune competence runtime and epistemic verifier baseline",
+    "result": "Static reconciliation and this bounded publication packet are present; required runtime evidence was not produced locally because npm cannot start.",
+    "relevantEvidence": [
+      "docs/evidence/conveyor/sol-psai284-model-profile-decision-01.json",
+      "docs/evidence/conveyor/terra-psai284-integration-root-qs-01.json",
+      "docs/evidence/conveyor/terra-psai284-pr-ci-package-02.json",
+      "verification/cks-04-no-finetune-baseline-evidence-v1.json"
+    ],
+    "securityRelevance": "None. This task adds a bounded evidence receipt only; it changes no authority, effects, network access, credentials, data handling, schemas, cleanup, or recovery behavior.",
+    "publicationBoundary": {
+      "githubPullRequestCreated": false,
+      "branchPushed": false,
+      "merged": false,
+      "released": false,
+      "status": "NOT_ATTEMPTED_OUT_OF_SCOPE"
+    }
+  },
+  "ciPacket": {
+    "workflow": ".github/workflows/ci.yml",
+    "authoritativeEnvironment": {
+      "node": "24.14.1",
+      "npm": "11.16.0",
+      "dockerCompose": "2.40.3 with SHA-256 dba9d98e1ba5bfe11d88c99b9bd32fc4a0624a30fafe68eea34d61a3e42fd372"
+    },
+    "requiredChecks": [
+      "sha256sum --check SHA256SUMS",
+      "npm run release-governance:verify",
+      "npm run release-governance:test",
+      "npm ci --ignore-scripts --no-audit --no-fund",
+      "npm run lint",
+      "npm run supply-chain:verify",
+      "npm run proof:secure-default",
+      "npm test",
+      "npm run external-video-service:test",
+      "git diff --exit-code"
+    ],
+    "localReadback": {
+      "nodeVersion": "v24.19.0",
+      "npmVersion": "NOT_AVAILABLE",
+      "npmPrerequisite": {
+        "command": "npm --version",
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "failure": "V8 Check failed: 12 == (*__errno_location ()).",
+        "classification": "INFRASTRUCTURE_BLOCKER_NOT_A_PRODUCT_VERDICT"
+      },
+      "hostDockerCompose": {
+        "command": "docker compose version",
+        "exitCode": 0,
+        "readback": "Docker Compose version 2.40.3+ds1-0ubuntu1~24.04.1",
+        "classification": "LOCAL_HOST_READBACK_ONLY_NOT_THE_CI_PINNED_BINARY"
+      },
+      "releaseTreeChecksums": {
+        "command": "sha256sum --check SHA256SUMS",
+        "exitCode": 0,
+        "status": "PASSED"
+      },
+      "npmDependentChecks": {
+        "status": "NOT_RUN_FAIL_CLOSED",
+        "blockedBy": "npm --version exit 133 before any npm script or dependency-install command could be started",
+        "productVerdict": "NOT_DETERMINED"
+      }
+    }
+  },
+  "readbackPacket": {
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASSED_ON_PRE_RECEIPT_HEAD",
+      "head": "fecd60d05c46b29e83ee52a30bd554bd6d5daa38",
+      "exitCode": 0
+    },
+    "workingTreeCheck": {
+      "command": "git diff --check HEAD",
+      "status": "PASSED_BEFORE_RECEIPT_CREATION",
+      "exitCode": 0
+    },
+    "finalReadbackRequired": [
+      "python3 -m json.tool docs/evidence/conveyor/terra-psai284-pr-ci-package-02.json",
+      "git diff --check origin/main...HEAD",
+      "git status --porcelain=v1"
+    ]
+  },
+  "failClosedConclusion": {
+    "requiredRuntimeSuccessEvidencePresent": false,
+    "runtimeSuccessClaim": false,
+    "qualificationClaim": false,
+    "ciSuccessClaim": false,
+    "prPublicationAuthorized": false,
+    "allowedConclusion": "The deterministic PR/CI/readback packet is complete and locally recorded. The local npm SIGTRAP is infrastructure evidence, not a product verdict; the controller must run the authoritative pinned-Node and host-Docker gates before any publication or success decision."
+  }
+}

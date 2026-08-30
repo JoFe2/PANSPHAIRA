@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "pansphaira.conveyor/release-or-no-release-determination-receipt/v1",
+  "taskId": "SOL-PSAI284-NO-RELEASE-DETERMINATION-03",
+  "issue": {
+    "id": "CKS-04",
+    "number": 284,
+    "title": "No-fine-tune competence runtime and epistemic verifier baseline",
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/284"
+  },
+  "receiptStatus": "NO_RELEASE_DETERMINATION_RECORDED",
+  "outcome": "NO_RELEASE",
+  "decision": "NO_RELEASE",
+  "operatingModelBinding": {
+    "version": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "treatment": "PRESERVED_WITHOUT_REINTERPRETATION_OR_PROCESS_VARIANT",
+    "contextAuthority": "CONTROLLER_REVIEW_ATTESTED_BY_TASK"
+  },
+  "repositoryBinding": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "workingDirectory": "/mnt/data2/ai/development-conveyor/docker-workspaces/lane-1/materialized-pansphaira-284",
+    "branch": "conveyor/pansphaira-284",
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "mergeBase": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headBeforeReceiptCommit": "75715e391f9d655310df2d51745427372b081e17",
+    "allowedChangePaths": [
+      "docs/evidence/conveyor/sol-psai284-no-release-determination-03.json"
+    ],
+    "scopeStatus": "ONLY_THE_ALLOWED_RECEIPT_PATH_IS_CREATED_BY_THIS_TASK"
+  },
+  "determination": {
+    "scope": "ISSUE_284_ONLY",
+    "releaseOutcome": "NO_RELEASE",
+    "productionClaimsIncluded": false,
+    "deliveredArtifactClass": "RESEARCH_BASELINE_CONTRACTS_AND_EVIDENCE_ONLY",
+    "rationale": [
+      "Issue #284 explicitly excludes production claims.",
+      "Issue #284 delivers research-baseline contracts and evidence only.",
+      "The selected model profile remains SELECTED_NOT_QUALIFIED.",
+      "The checked-in baseline remains NOT_QUALIFIED, LOCAL_READBACK_ONLY, and actionAuthority NONE.",
+      "The integration and PR/CI receipts do not establish runtime success, qualification, production readiness, release approval, or release authority."
+    ],
+    "releaseAuthorized": false,
+    "productionReadinessClaim": false,
+    "qualificationClaim": false,
+    "runtimeSuccessClaim": false,
+    "capabilityActivated": false,
+    "authorityActivated": false
+  },
+  "evidenceReadback": {
+    "requiredEvidencePresentForThisDetermination": true,
+    "inputs": [
+      {
+        "path": "docs/evidence/conveyor/sol-psai284-model-profile-decision-01.json",
+        "commit": "3ba4140857f070f3062c5ab111980d59a546b9f0",
+        "sha256": "033e40f70b12a4058297c2e48ce58109d66105524504611c3cc4aab1c586a70c",
+        "status": "BOUND",
+        "readback": "The exact profile is selected but not qualified; production, release, deployment, and issue-closure claims are excluded."
+      },
+      {
+        "path": "verification/cks-04-no-finetune-baseline-evidence-v1.json",
+        "commit": "f08b05441a00707d78236fdaae1c0424740f4c63",
+        "sha256": "5e83eb24a343b7d29c0c0e99f54c26855b645b99f63df03acfd598d75222928c",
+        "status": "BOUND",
+        "readback": "qualificationStatus is NOT_QUALIFIED, publication scope is LOCAL_READBACK_ONLY, external publication is unauthorized, and action authority is NONE."
+      },
+      {
+        "path": "docs/CKS-04-NO-FINETUNE-BASELINE.md",
+        "commit": "f08b05441a00707d78236fdaae1c0424740f4c63",
+        "sha256": "16962123958ed6ac6e045e0e405e0a834fa176cda25a0b852565533f3b50c174",
+        "status": "BOUND",
+        "readback": "The baseline is a local deterministic review artifact, not a qualification result or release approval."
+      },
+      {
+        "path": "docs/evidence/conveyor/terra-psai284-integration-root-qs-01.json",
+        "commit": "fecd60d05c46b29e83ee52a30bd554bd6d5daa38",
+        "sha256": "713576e7996ba3f81b1f2f7d52c70e9547d310ca80ded386fec6d80b20e7499e",
+        "status": "BOUND",
+        "readback": "Static reconciliation is recorded, while runtime success and qualification claims remain false and authoritative runtime gates remain required."
+      },
+      {
+        "path": "docs/evidence/conveyor/terra-psai284-pr-ci-package-02.json",
+        "commit": "75715e391f9d655310df2d51745427372b081e17",
+        "sha256": "26b76df8af53ac8dab7b4c792ac65f63605dfa1bfe21d29c6a822539f22bfc5f",
+        "status": "BOUND",
+        "readback": "No pull request, push, merge, or release was performed; CI success, qualification, publication, and product success were not claimed."
+      }
+    ],
+    "runtimeInfrastructureReadback": {
+      "status": "INHERITED_FROM_BOUND_RECEIPTS_NOT_RERUN_BY_THIS_TASK",
+      "evidence": "The bound integration and PR/CI receipts record local npm exit 133/SIGTRAP as an infrastructure blocker, not a product verdict.",
+      "effectOnDecision": "NO_RELEASE_IS_NOT_UPGRADED"
+    }
+  },
+  "mergeBoundary": {
+    "mergePerformed": false,
+    "mergeAuthorizedByThisReceipt": false,
+    "mergeIfLaterAuthorizedIsRelease": false,
+    "mergeIfLaterAuthorizedActivatesCapability": false,
+    "mergeIfLaterAuthorizedActivatesAuthority": false,
+    "wording": "Merge, if later authorized, is not a release and does not activate capability or authority."
+  },
+  "externalStateReadback": {
+    "tagCreated": false,
+    "packagePublished": false,
+    "deploymentPerformed": false,
+    "githubMutationPerformed": false,
+    "branchPushed": false,
+    "pullRequestCreatedOrUpdated": false,
+    "mergePerformed": false,
+    "releasePerformed": false,
+    "credentialsRemotesProvidersServicesOrCiAuthorityChanged": false,
+    "externalStateChanged": false,
+    "status": "NO_EXTERNAL_MUTATION_PERFORMED"
+  },
+  "acceptanceCriteria": [
+    {
+      "id": "AC-01",
+      "requirement": "Produce the required bounded deterministic decision/integration receipt.",
+      "status": "SATISFIED_BY_THIS_ARTIFACT"
+    },
+    {
+      "id": "AC-02",
+      "requirement": "Record the issue-scoped release-or-no-release outcome as NO_RELEASE with evidence-backed rationale.",
+      "status": "SATISFIED"
+    },
+    {
+      "id": "AC-03",
+      "requirement": "State that merge, if later authorized, is not a release and does not activate capability or authority.",
+      "status": "SATISFIED"
+    },
+    {
+      "id": "AC-04",
+      "requirement": "Do not claim success without the required evidence.",
+      "status": "SATISFIED_FAIL_CLOSED"
+    },
+    {
+      "id": "AC-05",
+      "requirement": "Do not create a tag, package publication, deployment, GitHub mutation, or external state change.",
+      "status": "SATISFIED_NO_EXTERNAL_MUTATION"
+    }
+  ],
+  "verification": {
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASSED_ON_PRE_RECEIPT_HEAD",
+      "head": "75715e391f9d655310df2d51745427372b081e17",
+      "exitCode": 0
+    },
+    "receiptValidation": {
+      "command": "python3 -m json.tool docs/evidence/conveyor/sol-psai284-no-release-determination-03.json",
+      "status": "PASSED_BEFORE_COMMIT",
+      "exitCode": 0
+    },
+    "finalReadbackRequired": [
+      "git diff --check origin/main...HEAD",
+      "git status --porcelain=v1"
+    ]
+  },
+  "readback": {
+    "outcome": "NO_RELEASE",
+    "wording": "Issue #284 release determination: NO_RELEASE. Issue #284 explicitly excludes production claims and delivers research-baseline contracts and evidence only. Merge, if later authorized, is not a release and does not activate capability or authority. No tag, package publication, deployment, GitHub mutation, or external state change was performed."
+  },
+  "failClosedConclusion": {
+    "requiredEvidencePresentForNoReleaseDetermination": true,
+    "productSuccessClaim": false,
+    "runtimeSuccessClaim": false,
+    "qualificationClaim": false,
+    "productionClaim": false,
+    "releaseAuthorized": false,
+    "allowedConclusion": "The issue-scoped outcome is NO_RELEASE. This receipt records only the local determination and readback; it grants no Capability or Authority and performs no release or external mutation."
+  }
+}

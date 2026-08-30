@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "pansphaira.cks/baseline-evidence/v1",
+  "evidenceId": "evidence:cks-04-no-finetune-baseline-v1",
+  "evidenceVersion": "1",
+  "qualificationStatus": "NOT_QUALIFIED",
+  "source": {
+    "scenarioFixture": "tests/fixtures/cks-04/p2-p3-scenarios-v1.json",
+    "sourceCaseFixture": "tests/fixtures/cks-04/verification-cases-v1.json",
+    "manifestTemplate": "verification/cks-04-baseline-manifest-template-v1.json",
+    "sourceScenarioFixtureDigest": "d1d865b5e5df83cd9e00cadf010eea00d9adadcafa28518371129ad76cebb501"
+  },
+  "execution": {
+    "mode": "LOCAL_NO_FINE_TUNE",
+    "networkPolicy": "DENY_ALL",
+    "weightModification": "FORBIDDEN",
+    "actionAuthority": "NONE",
+    "scoringRule": "VERIFIED_RECEIPT_ONLY",
+    "bindingTemplateId": "template:cks-04-p2-p3-baseline",
+    "bindingTemplateVersion": "1"
+  },
+  "bindings": {
+    "model": {
+      "id": "model:qwen2.5-1.5b-instruct",
+      "version": "artifact-revision-91cad511",
+      "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "quantization": {
+      "id": "quantization:q4_k_m",
+      "version": "1",
+      "digest": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "runtime": {
+      "id": "runtime:llama.cpp",
+      "version": "b10661",
+      "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "prompt": {
+      "id": "prompt:psai284-cks04",
+      "version": "1",
+      "digest": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "tool": {
+      "id": "tool:pansphaira.cks-knowledge-query",
+      "version": "1",
+      "digest": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "knowledge": {
+      "editionId": "edition:cks-04-synthetic",
+      "version": "1",
+      "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "contractVersion": "pansphaira.cks/knowledge-object/v1"
+    },
+    "deterministicVerifier": {
+      "id": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+      "version": "1",
+      "digest": "7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    "semanticVerifier": {
+      "id": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+      "version": "1",
+      "rubricId": "PSAI284-SEMANTIC-CLAIM-APPLICATION-RUBRIC-V1",
+      "trusted": false,
+      "mayOverrideDeterministicFailure": false
+    }
+  },
+  "verifierSeparation": {
+    "deterministic": {
+      "verifierId": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+      "protocolId": "pansphaira.cks/deterministic-epistemic-verifier/v1",
+      "version": "1",
+      "trusted": true,
+      "semanticInterpretation": false
+    },
+    "semantic": {
+      "verifierId": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+      "rubricId": "PSAI284-SEMANTIC-CLAIM-APPLICATION-RUBRIC-V1",
+      "version": "1",
+      "status": "NOT_IMPLEMENTED_NOT_TRUSTED",
+      "trusted": false,
+      "mayOverrideDeterministicFailure": false
+    }
+  },
+  "preconditions": {
+    "required": true,
+    "explicitChecksRequired": true,
+    "unknownOrUnsatisfiedCannotPass": true
+  },
+  "replay": {
+    "mode": "DETERMINISTIC_REPLAY",
+    "results": [
+      {
+        "scenarioId": "scenario:unknown-fact-procedure",
+        "category": "UNKNOWN_FACT_AND_PROCEDURE",
+        "mutation": "BASE_MATCH",
+        "expectedOutcome": "PASS",
+        "actualOutcome": "PASS",
+        "expectedReasonCodes": [],
+        "actualReasonCodes": [],
+        "typedBoundedRequests": true,
+        "informationNeedDetected": true,
+        "claimCoverageVerified": true,
+        "procedureCoverageVerified": true,
+        "receiptVerified": true,
+        "verifiedForScoring": true,
+        "expectedMatch": true,
+        "receiptDigest": "a681a2b37f7025f0173a0447eb1942af63e90ddeed17723c3aeeb9c9c5925a5a",
+        "deterministicVerifier": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+        "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+        "semanticVerifierTrusted": false
+      },
+      {
+        "scenarioId": "scenario:applicability-mismatch",
+        "category": "APPLICABILITY",
+        "mutation": "APPLICABILITY_MISMATCH",
+        "expectedOutcome": "ABSTAIN",
+        "actualOutcome": "ABSTAIN",
+        "expectedReasonCodes": ["APPLICABILITY_MISMATCH"],
+        "actualReasonCodes": ["APPLICABILITY_MISMATCH"],
+        "typedBoundedRequests": true,
+        "informationNeedDetected": true,
+        "claimCoverageVerified": true,
+        "procedureCoverageVerified": true,
+        "receiptVerified": true,
+        "verifiedForScoring": true,
+        "expectedMatch": true,
+        "receiptDigest": "5e305dd650d15f28a11990c1fb404df0586312e1e07fbc4e3dc9552357880dcd",
+        "deterministicVerifier": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+        "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+        "semanticVerifierTrusted": false
+      },
+      {
+        "scenarioId": "scenario:exclusion-matched",
+        "category": "EXCLUSION",
+        "mutation": "EXCLUSION_MATCHED",
+        "expectedOutcome": "ABSTAIN",
+        "actualOutcome": "ABSTAIN",
+        "expectedReasonCodes": ["EXCLUSION_MATCHED"],
+        "actualReasonCodes": ["EXCLUSION_MATCHED"],
+        "typedBoundedRequests": true,
+        "informationNeedDetected": true,
+        "claimCoverageVerified": true,
+        "procedureCoverageVerified": true,
+        "receiptVerified": true,
+        "verifiedForScoring": true,
+        "expectedMatch": true,
+        "receiptDigest": "949e0af5e79d79eb6417b4461f61b9e2ebbdb81a4eb174f27a07161e8b432a41",
+        "deterministicVerifier": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+        "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+        "semanticVerifierTrusted": false
+      },
+      {
+        "scenarioId": "scenario:parametric-conflict",
+        "category": "PARAMETRIC_CONFLICT",
+        "mutation": "PARAMETRIC_CONFLICT",
+        "expectedOutcome": "ABSTAIN",
+        "actualOutcome": "ABSTAIN",
+        "expectedReasonCodes": ["KNOWLEDGE_CONFLICT"],
+        "actualReasonCodes": ["KNOWLEDGE_CONFLICT"],
+        "typedBoundedRequests": true,
+        "informationNeedDetected": true,
+        "claimCoverageVerified": true,
+        "procedureCoverageVerified": true,
+        "receiptVerified": true,
+        "verifiedForScoring": true,
+        "expectedMatch": true,
+        "receiptDigest": "3ea27ee1389705d55a8b7fff14bca354ecea7ce4eb743236e1783014dab9f643",
+        "deterministicVerifier": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+        "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+        "semanticVerifierTrusted": false
+      },
+      {
+        "scenarioId": "scenario:missing-knowledge",
+        "category": "MISSING_KNOWLEDGE",
+        "mutation": "MISSING_KNOWLEDGE",
+        "expectedOutcome": "ABSTAIN",
+        "actualOutcome": "ABSTAIN",
+        "expectedReasonCodes": ["MISSING_KNOWLEDGE"],
+        "actualReasonCodes": ["MISSING_KNOWLEDGE"],
+        "typedBoundedRequests": true,
+        "informationNeedDetected": true,
+        "claimCoverageVerified": true,
+        "procedureCoverageVerified": true,
+        "receiptVerified": true,
+        "verifiedForScoring": true,
+        "expectedMatch": true,
+        "receiptDigest": "dac6ba3667a8715f997eb80428206c099edaba8fd20683b734d38c57039c0167",
+        "deterministicVerifier": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+        "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+        "semanticVerifierTrusted": false
+      },
+      {
+        "scenarioId": "scenario:conflicting-knowledge",
+        "category": "CONFLICTING_KNOWLEDGE",
+        "mutation": "CONFLICTING_KNOWLEDGE",
+        "expectedOutcome": "ABSTAIN",
+        "actualOutcome": "ABSTAIN",
+        "expectedReasonCodes": ["KNOWLEDGE_CONFLICT"],
+        "actualReasonCodes": ["KNOWLEDGE_CONFLICT"],
+        "typedBoundedRequests": true,
+        "informationNeedDetected": true,
+        "claimCoverageVerified": true,
+        "procedureCoverageVerified": true,
+        "receiptVerified": true,
+        "verifiedForScoring": true,
+        "expectedMatch": true,
+        "receiptDigest": "5523b62c26d6a29a319694210179ff076be3063eae5656f383f0230fac26bb5f",
+        "deterministicVerifier": "PSAI284-DETERMINISTIC-EPISTEMIC-VERIFIER",
+        "semanticVerifier": "PSAI284-INDEPENDENT-BLINDED-HUMAN-SEMANTIC-VERIFIER",
+        "semanticVerifierTrusted": false
+      }
+    ]
+  },
+  "counts": {
+    "totalCases": 6,
+    "p2": { "totalCases": 1, "passes": 1, "abstentions": 0, "failures": 0 },
+    "p3": { "totalCases": 5, "passes": 0, "abstentions": 5, "failures": 0 },
+    "receiptVerifiedCases": 6,
+    "expectedMatches": 6,
+    "verifiedExpectedMatches": 6,
+    "verifiedPasses": 1,
+    "failClosedAbstentions": 5
+  },
+  "failureSummary": { "count": 0, "cases": [] },
+  "abstentionSummary": {
+    "count": 5,
+    "cases": [
+      { "scenarioId": "scenario:applicability-mismatch", "category": "APPLICABILITY", "reasonCodes": ["APPLICABILITY_MISMATCH"] },
+      { "scenarioId": "scenario:exclusion-matched", "category": "EXCLUSION", "reasonCodes": ["EXCLUSION_MATCHED"] },
+      { "scenarioId": "scenario:parametric-conflict", "category": "PARAMETRIC_CONFLICT", "reasonCodes": ["KNOWLEDGE_CONFLICT"] },
+      { "scenarioId": "scenario:missing-knowledge", "category": "MISSING_KNOWLEDGE", "reasonCodes": ["MISSING_KNOWLEDGE"] },
+      { "scenarioId": "scenario:conflicting-knowledge", "category": "CONFLICTING_KNOWLEDGE", "reasonCodes": ["KNOWLEDGE_CONFLICT"] }
+    ]
+  },
+  "nonclaims": [
+    "This is not model qualification or a claim of competence.",
+    "This is not a fine-tuning, weight-modification, or training result.",
+    "This is not a semantic-verifier result; semantic review is separate and untrusted here.",
+    "This is not an action authorization or capability grant.",
+    "This is not an external publication or release approval."
+  ],
+  "publication": { "scope": "LOCAL_READBACK_ONLY", "externalPublicationAuthorized": false },
+  "baselineDigest": "1cb92d7fefda004fdde25a48f2a7f5ec818c166efb043dfa94c7662728125fd1"
+}

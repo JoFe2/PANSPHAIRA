@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "pansphaira.cks/competence-runtime/v1",
+  "contractId": "cks-competence-runtime-contract:psai284-v1",
+  "receiptSource": {
+    "receiptPath": "docs/evidence/conveyor/sol-psai284-model-profile-decision-01.json",
+    "receiptDigest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "profileCoreDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "decisionId": "PSAI284-PROFILE-DECISION-01"
+  },
+  "profile": {
+    "profileSchemaVersion": "pansphaira.cks/oss-model-profile/v1",
+    "profileId": "PSAI284-QWEN2.5-1.5B-INSTRUCT-Q4_K_M-LLAMACPP-B10661-V1",
+    "profileRevision": 1,
+    "intendedUse": "NON_PRODUCTION_NO_FINE_TUNE_FRESH_SYNTHETIC_KNOWLEDGE_BASELINE",
+    "selectionStatus": "SELECTED_NOT_QUALIFIED"
+  },
+  "model": {
+    "publisher": "Qwen",
+    "name": "Qwen2.5-1.5B-Instruct",
+    "baseModelId": "Qwen/Qwen2.5-1.5B-Instruct",
+    "artifactRepository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "artifactRevision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "artifactFile": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "artifactFormat": "GGUF",
+    "artifactArchitecture": "qwen2",
+    "artifactSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "artifactSizeBytes": 1117320736,
+    "artifactSourceUrl": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "mutableAliasesForbidden": ["main", "latest"],
+    "localArtifactVerificationRequired": true,
+    "artifactAcquiredByThisDecision": false
+  },
+  "quantization": {
+    "scheme": "Q4_K_M",
+    "source": "PUBLISHER_HOSTED_GGUF_ARTIFACT",
+    "conversionOrRequantizationAllowed": false,
+    "quantizationEquivalenceClaimed": false,
+    "reproducibleConversionClaimed": false
+  },
+  "runtime": {
+    "implementation": "llama.cpp",
+    "releaseTag": "b10661",
+    "sourceCommit": "32176338a6c809095621fd8a9e1db7168d6f1d81",
+    "executable": "llama-cli",
+    "distributionAsset": "llama-b10661-bin-ubuntu-x64.tar.gz",
+    "distributionAssetUrl": "https://github.com/ggml-org/llama.cpp/releases/download/b10661/llama-b10661-bin-ubuntu-x64.tar.gz",
+    "distributionAssetSha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "distributionAssetSizeBytes": 16373262,
+    "backend": "CPU",
+    "gpuLayers": 0,
+    "parallelSequences": 1,
+    "threads": 4,
+    "batchSize": 256,
+    "microBatchSize": 256,
+    "memoryMap": true,
+    "memoryLock": false,
+    "embeddedChatTemplateRequired": true,
+    "chatTemplateOverrideAllowed": false,
+    "runtimeArchiveAcquiredByThisDecision": false,
+    "runManifestMustBindExtractedExecutableSha256": true,
+    "runManifestMustCaptureVersionReadback": true
+  },
+  "context": {
+    "runtimeContextTokens": 8192,
+    "modelMetadataContextTokensObserved": 8192,
+    "maximumGeneratedTokens": 1024,
+    "tokenBudget": {
+      "systemPromptMaximum": 1024,
+      "toolDefinitionsMaximum": 1024,
+      "taskAndConversationMaximum": 1024,
+      "aggregateEvidencePackMaximum": 3072,
+      "generatedOutputMaximum": 1024,
+      "safetyReserve": 1024,
+      "sum": 8192
+    },
+    "truncationPolicy": "FORBIDDEN_FOR_CONTRACT_AND_EVIDENCE",
+    "onBudgetExceeded": "ABORT_CASE_CONTEXT_BUDGET_EXCEEDED"
+  },
+  "decoding": {
+    "mode": "GREEDY",
+    "temperature": 0,
+    "topK": 1,
+    "topP": 1,
+    "minP": 0,
+    "typicalP": 1,
+    "repeatPenalty": 1,
+    "repeatLastN": 0,
+    "presencePenalty": 0,
+    "frequencyPenalty": 0,
+    "mirostat": 0,
+    "seed": 28401,
+    "maximumGeneratedTokens": 1024,
+    "stopSequences": ["<|im_end|>", "<|endoftext|>"],
+    "grammarConstraint": "NONE_BASELINE",
+    "sameHardwareByteRepeatCount": 2,
+    "byteIdenticalRepeatRequired": true
+  },
+  "prompt": {
+    "promptId": "PSAI284-CKS04-SYSTEM-PROMPT",
+    "promptVersion": "1",
+    "encoding": "UTF-8",
+    "normalization": "NONE",
+    "trailingLineFeed": false,
+    "assemblyVersion": "pansphaira.cks/qwen2.5-tool-chat-assembly/v1",
+    "chatTemplateSource": "EXACT_SELECTED_GGUF_EMBEDDED_TEMPLATE",
+    "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "toolProtocols": {
+    "catalogueMode": "CLOSED_EXACTLY_ONE_MODEL_CALLABLE_TOOL",
+    "unknownToolsOrFields": "DENY",
+    "wireFormat": "QWEN_EMBEDDED_TOOL_TEMPLATE_JSON_IN_TOOL_CALL_TAGS",
+    "queryTool": {
+      "toolName": "cks_knowledge_query",
+      "protocolId": "pansphaira.cks/knowledge-query/v1",
+      "protocolVersion": "1",
+      "contractStatus": "EXACT_ID_SELECTED",
+      "requiredArguments": {
+        "schemaVersion": "protocol identifier",
+        "requestId": "monotonic request identifier",
+        "taskId": "exact task identifier",
+        "knowledgeEditionId": "exact edition identifier",
+        "knowledgeEditionVersion": "exact edition version",
+        "knowledgeEditionDigest": "sha256 digest",
+        "needKinds": "bounded Knowledge kind identifiers",
+        "queryText": "bounded UTF-8 query",
+        "applicability": "closed applicability object",
+        "requiredPreconditions": "bounded precondition identifiers",
+        "maxResults": "bounded result count",
+        "maxEvidenceBytes": "bounded byte count",
+        "reasonCode": "closed reason code"
+      },
+      "reasonCodes": ["MATERIAL_FACT_MISSING", "MATERIAL_RULE_MISSING", "MATERIAL_PROCEDURE_MISSING", "APPLICABILITY_UNRESOLVED", "PRECONDITION_UNRESOLVED", "EVIDENCE_COVERAGE_INCOMPLETE", "CONFLICT_DIFFERENTIATION_REQUIRED"],
+      "limits": {
+        "maximumCallsPerTask": 3,
+        "maximumResultsPerCall": 6,
+        "maximumQueryBytes": 512,
+        "maximumEvidenceBytesPerCall": 12288,
+        "maximumAggregateEvidenceBytes": 24576,
+        "networkLocatorFieldsAllowed": false,
+        "effectFieldsAllowed": false
+      }
+    },
+    "evidencePackResult": {
+      "protocolId": "pansphaira.cks/evidence-pack/v1",
+      "protocolVersion": "1",
+      "contractStatus": "EXACT_ID_SELECTED",
+      "requiredBindings": ["request digest", "task scope digest", "Knowledge edition digest", "pack digest", "claim digests", "applicability and validity", "evidence IDs", "conflicts and missing Knowledge"],
+      "statuses": ["MATCH", "NEEDS_CONTEXT", "CONFLICT", "NO_MATCH", "DENIED"],
+      "instructionEligibility": "DATA_ONLY_NEVER_INSTRUCTIONS_CAPABILITY_OR_AUTHORITY"
+    },
+    "finalResponse": {
+      "protocolId": "pansphaira.cks/competence-response/v1",
+      "protocolVersion": "1",
+      "contractStatus": "EXACT_ID_SELECTED",
+      "requiredFields": ["schemaVersion", "state", "taskId", "answer", "materialClaims", "procedureSteps", "preconditionChecks", "exclusionChecks", "conflicts", "missingKnowledge", "escalation", "actionAuthority"],
+      "states": ["ANSWER_SUPPORTED", "NEED_MORE_KNOWLEDGE", "KNOWLEDGE_CONFLICT", "INSUFFICIENT_EVIDENCE", "COMPETENCE_LIMIT", "GOVERNED_ACTION_PROPOSAL"],
+      "actionAuthorityConstant": "NONE",
+      "unknownFields": "DENY"
+    }
+  },
+  "knowledgeBindings": {
+    "contractVersions": {
+      "knowledgeObject": "pansphaira.cks/knowledge-object/v1",
+      "knowledgeQuery": "pansphaira.cks/knowledge-query/v1",
+      "applicability": "pansphaira.cks/applicability/v1",
+      "evidencePack": "pansphaira.cks/evidence-pack/v1",
+      "evidenceCoverage": "pansphaira.cks/evidence-coverage/v1",
+      "competenceQualificationProfile": "pansphaira.cks/competence-qualification-profile/v1",
+      "taskComplexity": "pansphaira.cks/task-complexity-rkpu/v1",
+      "escalation": "pansphaira.cks/escalation/v1",
+      "existingKnowledgeEnvelope": "chimpmaera.knowledge/envelope/v1",
+      "existingKnowledgeEdition": "chimpmaera.knowledge/edition/v1",
+      "existingApplicabilityVocabulary": "chimpmaera.knowledge/applicability-vocabulary/v1"
+    },
+    "contractArtifactPolicy": "Every schema artifact ID, version and SHA-256 is bound in the run manifest.",
+    "editionPolicy": "Each case binds one exact immutable accepted and unrevoked edition.",
+    "requiredPerCaseBindings": ["task digest", "scope digest", "Knowledge edition digest", "retrieval configuration digest", "evidence coverage digest"],
+    "allowedVisibilityClasses": ["DEVELOPMENT", "VISIBLE_VALIDATION", "HIDDEN_QUALIFICATION", "FRESH_EPHEMERAL_CERTIFICATION"],
+    "onlineFallback": "FORBIDDEN",
+    "mixedGeneration": "FORBIDDEN",
+    "missingOrConflictingMaterialKnowledge": "ABSTAIN_OR_ESCALATE_NEVER_FILL_FROM_PARAMETRIC_MEMORY",
+    "knowledgeGrantsCapabilityOrAuthority": false
+  },
+  "interactionPolicy": {
+    "informationNeedDetectionRequired": true,
+    "applicabilityBeforeRanking": true,
+    "preconditionsMustBeExplicitlyChecked": true,
+    "exclusionsMustBeExplicitlyChecked": true,
+    "parametricKnowledgePrecedence": "GENERIC_REASONING_ONLY",
+    "conflictResolution": "NO_DEFAULT_BY_SPECIFICITY_FAMILIARITY_OR_MODEL_CONFIDENCE",
+    "claimCoverageRule": "Every material answer claim must reference valid returned evidence.",
+    "procedureCoverageRule": "Every applied procedure step must reference valid returned evidence.",
+    "missingKnowledgeRule": "Abstain or escalate when material Knowledge is missing.",
+    "conflictRule": "Abstain with KNOWLEDGE_CONFLICT when applicable claims conflict.",
+    "competenceRule": "Use COMPETENCE_LIMIT after bounded retrieval cannot support the task.",
+    "toolOutputsInstructionEligible": false,
+    "modelOutputAuthority": "UNTRUSTED_PROPOSAL_ONLY"
+  },
+  "resourceLimits": {
+    "maximumWallSecondsPerModelTurn": 300,
+    "maximumWallSecondsPerCase": 900,
+    "maximumWallSecondsPerQualificationRun": 14400,
+    "maximumRetrievalCallsPerTask": 3,
+    "maximumAggregateEvidenceBytesPerTask": 24576,
+    "maximumGeneratedTokensPerTurn": 1024,
+    "maximumMaterialClaimsPerResponse": 16,
+    "maximumProcedureStepsPerResponse": 16,
+    "maximumResidentBytes": 6442450944,
+    "performanceClaim": "NONE; safety and reproducibility ceilings only"
+  },
+  "states": ["ANSWER_SUPPORTED", "NEED_MORE_KNOWLEDGE", "KNOWLEDGE_CONFLICT", "INSUFFICIENT_EVIDENCE", "COMPETENCE_LIMIT", "GOVERNED_ACTION_PROPOSAL"],
+  "contractDigest": "e8a29e89ff0ffef6507d1d728c9bf5a8c1d1e323cfb6d980c4914f6d93bce110"
+}
