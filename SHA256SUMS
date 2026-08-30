@@ -215,7 +215,7 @@ a509d9db5668cfe5e3bcd32b6a0f8140f248ccbc403dc465cc12751b70329d51  ./demo/runtime
 ab8f4c2f2bfa6219ca833427ca788baa6f1317b0c4c253c8c8076eeac97ccd69  ./demo/tsconfig.runtime.json
 0510fbba72b16a336167c3a727ddeb3b6876cadca14439a03b201eb7d5cd40a5  ./demo/uninstall.sh
 dfb73fed5127d54ba5eb835ef75536152e34598dab69e221c8cf0512813a3d3c  ./docker/local-knowledge-wiki/.dockerignore
-77eb2ff3702606954c08c83c0b46ed482a8834fcff20c5fe2c290b22abf714a0  ./docker/local-knowledge-wiki/Dockerfile
+abe4af0162112825db412f2ecebee7d71293b8c509287bc84ec9218fc4372a61  ./docker/local-knowledge-wiki/Dockerfile
 f0796c0224731b5f27b9533e2abad7e6191b57290e9b296ef94ee5f4b58ed7c5  ./docker/local-knowledge-wiki/README.md
 7ae1d05c8f01d8f61b789002f516b9cc9cc4e61079c5127baf593adf2794684f  ./docker/local-knowledge-wiki/docker-compose.wiki.yml
 78be97a69d02f498402cd0f4dd6b70c3673f8658dc7201c7ef0ca598a9e24fb9  ./docker/local-knowledge-wiki/entrypoint.sh
@@ -1210,5 +1210,5 @@ da43b8a951fc32757829b486ab9f5dee95570300f3e85e46689bd12e797084d0  ./verification
 52dd76ba9b3a268d0b4d74f322d2dde9f67b6f27d21db0112131da7635b78ca2  ./verification/cks-06-router-dry-run-evidence-v1.json
 d43b38be4695e0e5c70e3a8e0ebd2a55b527974d7d9721cc43d94ee248245432  ./verification/intake-001-evidence-v1.json
 e2fa73eb5312982af288d29df015b0dc3e010f3fdba6405ce3b464b4ccece660  ./verification/lkc-qual-01-m0-evidence-v1.json
-cfd90a25145d4252e15ca16ab1ea36d8618d3f06b9695d226aea2b9a3204b585  ./verification/verification-dag-v2.json
+8c08b5eedb9582f32ed8ec6c97f692a70150b806671c09d6bf0cac3d627d1523  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

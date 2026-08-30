@@ -2291,7 +2291,7 @@
         {
           "path": "docker/local-knowledge-wiki/Dockerfile",
           "role": "VALIDATOR",
-          "sha256": "77eb2ff3702606954c08c83c0b46ed482a8834fcff20c5fe2c290b22abf714a0"
+          "sha256": "abe4af0162112825db412f2ecebee7d71293b8c509287bc84ec9218fc4372a61"
         },
         {
           "path": "docker/local-knowledge-wiki/README.md",

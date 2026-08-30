@@ -11,7 +11,7 @@ FROM node:24.14.1-bookworm-slim
 
 ARG BUILD_IMAGE_DIGEST=sha256:0000000000000000000000000000000000000000000000000000000000000000
 ENV WIKI_BUILD_IMAGE_DIGEST=${BUILD_IMAGE_DIGEST}
-LABEL org.opencontainers.image.title="PANSPHAIRA local knowledge wiki" \
+LABEL org.opencontainers.image.title="PanSphaira local knowledge wiki" \
       org.opencontainers.image.description="Default-off offline MediaWiki mini-dump importer and read-only query service" \
       org.opencontainers.image.source="https://github.com/JoFe2/PANSPHAIRA"
 
