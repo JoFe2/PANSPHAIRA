@@ -1,0 +1,216 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/proposal-approval-execution/v1",
+  "fixtureKind": "APPROVED",
+  "contractId": "azure-power-platform-proposal-approval-execution",
+  "contractVersion": "1.0.0",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "observedAt": "2026-08-28T08:00:00Z",
+  "lifecycle": {
+    "schemaVersion": "pansphaira.azure-power-platform/lifecycle/v1",
+    "states": ["PROPOSAL", "APPROVAL", "EXECUTION_REQUEST", "ACTUAL_EXECUTION", "READBACK", "RECEIPT", "ROLLBACK", "PUBLICATION"],
+    "transitions": [
+      "PROPOSAL_TO_APPROVAL_ONLY_WITH_INDEPENDENT_APPROVAL",
+      "APPROVAL_TO_EXECUTION_REQUEST_ONLY_WITH_EXACT_BINDINGS",
+      "EXECUTION_REQUEST_TO_ACTUAL_EXECUTION_OUTSIDE_THIS_CONTRACT",
+      "ACTUAL_EXECUTION_TO_READBACK_REQUIRED",
+      "READBACK_TO_RECEIPT_REQUIRED",
+      "ROLLBACK_REQUIRES_EXPLICIT_AUTHORITY",
+      "PUBLICATION_REQUIRES_EXPLICIT_AUTHORITY"
+    ],
+    "initialState": "PROPOSAL",
+    "terminalState": "RECEIPT"
+  },
+  "permissions": {
+    "proposal": "PROPOSAL_ONLY_NO_EXECUTION",
+    "approval": "INDEPENDENT_APPROVAL_ONLY",
+    "executionRequest": "REQUEST_ONLY_NO_DIRECT_EXECUTION",
+    "actualExecution": "NO_EXECUTION_IN_THIS_CONTRACT",
+    "readback": "AUTHORITATIVE_READ_ONLY",
+    "receipt": "BOUND_RECEIPT_ONLY",
+    "rollback": "EXPLICIT_AUTHORIZATION_REQUIRED_NO_INFERENCE",
+    "publication": "EXPLICIT_PUBLIC_AUTHORIZATION_REQUIRED"
+  },
+  "policy": {
+    "id": "power-platform-proposal-execution-policy",
+    "version": "1.0.0",
+    "generation": 7,
+    "digest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "actionAllowlist": ["UPDATE_SYNTHETIC_RECORD"]
+  },
+  "tuple": {
+    "componentId": "synthetic-power-platform-proposal-execution",
+    "componentVersion": "1.0.0",
+    "componentDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "schemaId": "synthetic-power-platform-proposal-execution-schema",
+    "schemaVersion": "1.0.0",
+    "schemaDigest": "bc1021b9fb6a2d4e8bb60ae377c89e41d2f7036133a7b8d1525634c71089b000",
+    "policyId": "power-platform-proposal-execution-policy",
+    "policyVersion": "1.0.0",
+    "policyGeneration": 7,
+    "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "action": "UPDATE_SYNTHETIC_RECORD",
+    "actionVersion": "1.0.0",
+    "actionDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "evidenceDigest": "8167b660a5834c49d4cfda4967909c807df5b87bdd014025c224f50b4db14de2",
+    "lkgTupleDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "tupleDigest": "7651b9eca36321bc29d2ad1584fcc2269051492e87842ba92e43e8064095351b"
+  },
+  "proposal": {
+    "proposalId": "synthetic-proposal-0001",
+    "state": "PROPOSED",
+    "proposer": "principal:synthetic-proposer",
+    "operationKey": "SUBMIT_SYNTHETIC_POWER_PLATFORM_OPERATION",
+    "action": "UPDATE_SYNTHETIC_RECORD",
+    "actionVersion": "1.0.0",
+    "actionDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "tupleDigest": "7651b9eca36321bc29d2ad1584fcc2269051492e87842ba92e43e8064095351b",
+    "policyGeneration": 7,
+    "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "request": {
+      "resource": "synthetic.power-platform.record",
+      "operation": "UPDATE_SYNTHETIC_RECORD",
+      "fields": ["displayName"],
+      "changeDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "proposalNonce": "proposal-nonce-synthetic-0001",
+    "issuedAt": "2026-08-28T07:50:00Z",
+    "expiresAt": "2026-08-28T08:30:00Z",
+    "proposalDigest": "1f77fc0d94d8492380ddbbbc668b074914e002847aa8b258cf9ee8149f54a6c5",
+    "evidenceRefs": ["proposal-evidence"]
+  },
+  "approval": {
+    "approvalId": "synthetic-approval-0001",
+    "state": "APPROVED",
+    "approver": "principal:synthetic-approver",
+    "authorizationSource": "INDEPENDENT_APPROVAL_RECORD",
+    "independent": true,
+    "selfApprovalAllowed": false,
+    "proposalDigest": "1f77fc0d94d8492380ddbbbc668b074914e002847aa8b258cf9ee8149f54a6c5",
+    "tupleDigest": "7651b9eca36321bc29d2ad1584fcc2269051492e87842ba92e43e8064095351b",
+    "policyGeneration": 7,
+    "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "approvalNonce": "approval-nonce-synthetic-0001",
+    "issuedAt": "2026-08-28T07:55:00Z",
+    "expiresAt": "2026-08-28T08:30:00Z",
+    "revocationStatus": "UNREVOKED",
+    "approvalDigest": "181d275f4f991af8f913fa9386474c35e2ed6f158ccaf31149817758f3cf888b",
+    "evidenceRefs": ["approval-evidence"]
+  },
+  "executionRequest": {
+    "requestId": "synthetic-execution-request-0001",
+    "state": "REQUESTED",
+    "executor": "principal:synthetic-executor",
+    "operationKey": "EXECUTE_APPROVED_SYNTHETIC_OPERATION",
+    "action": "UPDATE_SYNTHETIC_RECORD",
+    "actionVersion": "1.0.0",
+    "actionDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "proposalDigest": "1f77fc0d94d8492380ddbbbc668b074914e002847aa8b258cf9ee8149f54a6c5",
+    "approvalDigest": "181d275f4f991af8f913fa9386474c35e2ed6f158ccaf31149817758f3cf888b",
+    "tupleDigest": "7651b9eca36321bc29d2ad1584fcc2269051492e87842ba92e43e8064095351b",
+    "policyGeneration": 7,
+    "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "replayNonce": "execution-replay-nonce-synthetic-0001",
+    "replayState": "AVAILABLE",
+    "issuedAt": "2026-08-28T07:56:00Z",
+    "expiresAt": "2026-08-28T08:20:00Z",
+    "permission": {
+      "mode": "REQUEST_ONLY_NO_DIRECT_EXECUTION",
+      "directExecutionAllowed": false,
+      "providerCallAllowed": false,
+      "capability": "NONE",
+      "requiredFollowUp": ["AUTHORITATIVE_READBACK", "BOUND_RECEIPT"]
+    },
+    "executionRequestDigest": "22450ea22e709aca464cbb6ad3e27c7759191ddf5a20ef56893448f0efe75b6b",
+    "evidenceRefs": ["execution-request-evidence"]
+  },
+  "actualExecution": {
+    "state": "NOT_EXECUTED_BY_CONTRACT",
+    "operationKey": "ACTUAL_EXECUTION_RECORDED_OUTSIDE_CONTRACT",
+    "requestId": "synthetic-execution-request-0001",
+    "effectCount": 0,
+    "providerCallPerformed": false,
+    "executionCapability": "NONE",
+    "outcome": "NOT_EXECUTED",
+    "executionDigest": "15925d6be76257eea1547f7b9893170e15a68bb98f76df3a2dd7e7dffbaaadc0"
+  },
+  "readback": {
+    "source": "AUTHORITATIVE_SYNTHETIC_CONTROL_PLANE_READBACK",
+    "state": "NOT_EXECUTED_CONFIRMED",
+    "requestId": "synthetic-execution-request-0001",
+    "executionRequestDigest": "22450ea22e709aca464cbb6ad3e27c7759191ddf5a20ef56893448f0efe75b6b",
+    "actualExecutionDigest": "15925d6be76257eea1547f7b9893170e15a68bb98f76df3a2dd7e7dffbaaadc0",
+    "observedAt": "2026-08-28T08:00:10Z",
+    "effectCount": 0,
+    "authoritative": true,
+    "readbackDigest": "1d6d854c1c4d82faa377eb5746177330dd18926180b71964a33bbdd583406e6a",
+    "evidenceRefs": ["readback-evidence"]
+  },
+  "receipt": {
+    "issuer": "pansphaira.synthetic-readback-verifier",
+    "schemaVersion": "pansphaira.azure-power-platform/bound-receipt/v1",
+    "issuedAt": "2026-08-28T08:00:11Z",
+    "fullTupleDigest": "788150cd88f50503bb547f2d1da1c34f539b44e899a236d758f50440f2a22b7f",
+    "bindings": {
+      "tupleDigest": "7651b9eca36321bc29d2ad1584fcc2269051492e87842ba92e43e8064095351b",
+      "proposalDigest": "1f77fc0d94d8492380ddbbbc668b074914e002847aa8b258cf9ee8149f54a6c5",
+      "approvalDigest": "181d275f4f991af8f913fa9386474c35e2ed6f158ccaf31149817758f3cf888b",
+      "executionRequestDigest": "22450ea22e709aca464cbb6ad3e27c7759191ddf5a20ef56893448f0efe75b6b",
+      "actualExecutionDigest": "15925d6be76257eea1547f7b9893170e15a68bb98f76df3a2dd7e7dffbaaadc0",
+      "readbackDigest": "1d6d854c1c4d82faa377eb5746177330dd18926180b71964a33bbdd583406e6a",
+      "policyGeneration": 7,
+      "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "evidenceDigest": "8167b660a5834c49d4cfda4967909c807df5b87bdd014025c224f50b4db14de2",
+      "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT"
+    },
+    "receiptDigest": "d70d7a41ef74bca0e83819d7707f90df67ed111530ea863859095988aa8169d3",
+    "tamperEvidence": {
+      "algorithm": "SHA-256",
+      "digestScope": "CANONICAL_JSON_RECEIPT_WITHOUT_RECEIPT_DIGEST",
+      "independentReadbackRequired": true
+    }
+  },
+  "rollback": {
+    "permission": "EXPLICIT_AUTHORIZATION_REQUIRED_NO_INFERENCE",
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "targetTupleDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "targetStatus": "LKG",
+    "authorizationRequired": true,
+    "explicitAuthorizationPresent": false,
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false,
+    "cancellationIsRollback": false
+  },
+  "publication": {
+    "permission": "EXPLICIT_PUBLIC_AUTHORIZATION_REQUIRED",
+    "state": "NOT_PUBLISHED",
+    "authorized": false,
+    "successClaimAllowed": false
+  },
+  "limitations": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_CREDENTIAL_USE", "NO_PROVIDER_CALL", "NO_BUSINESS_WRITE", "NO_DIRECT_EXECUTION_CAPABILITY", "NO_IMPLICIT_APPROVAL", "NO_INFERRED_ROLLBACK", "NO_PUBLICATION_AUTHORITY"],
+  "negativeResults": [
+    { "id": "unknown-field", "probe": "UNKNOWN_FIELD", "outcome": "DENY", "reasonCode": "UNKNOWN_FIELD_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "unknown-action", "probe": "UNKNOWN_ACTION", "outcome": "DENY", "reasonCode": "UNKNOWN_ACTION_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "hidden-write", "probe": "HIDDEN_WRITE", "outcome": "DENY", "reasonCode": "HIDDEN_WRITE_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "self-approval", "probe": "SELF_APPROVAL", "outcome": "DENY", "reasonCode": "SELF_APPROVAL_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "same-principal-alias", "probe": "SAME_PRINCIPAL_ALIAS", "outcome": "DENY", "reasonCode": "SAME_PRINCIPAL_ALIAS_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "missing-authorization", "probe": "MISSING_AUTHORIZATION", "outcome": "DENY", "reasonCode": "MISSING_AUTHORIZATION_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "replay", "probe": "REPLAY", "outcome": "DENY", "reasonCode": "REPLAY_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "expiry", "probe": "EXPIRY", "outcome": "DENY", "reasonCode": "EXPIRY_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "revocation", "probe": "REVOCATION", "outcome": "DENY", "reasonCode": "REVOCATION_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "stale-policy", "probe": "STALE_POLICY", "outcome": "DENY", "reasonCode": "STALE_POLICY_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "digest-drift", "probe": "DIGEST_DRIFT", "outcome": "DENY", "reasonCode": "DIGEST_DRIFT_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "tuple-drift", "probe": "TUPLE_DRIFT", "outcome": "DENY", "reasonCode": "TUPLE_DRIFT_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "generic-command", "probe": "GENERIC_COMMAND", "outcome": "DENY", "reasonCode": "GENERIC_COMMAND_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" },
+    { "id": "cancellation-as-rollback", "probe": "CANCELLATION_AS_ROLLBACK", "outcome": "DENY", "reasonCode": "CANCELLATION_AS_ROLLBACK_DENIED", "effectCount": 0, "evidenceRef": "negative-probes" }
+  ],
+  "evidence": {
+    "evidenceDigest": "8167b660a5834c49d4cfda4967909c807df5b87bdd014025c224f50b4db14de2",
+    "refs": [
+      { "id": "proposal-evidence", "ref": "contracts/azure-power-platform/proposal-approval-execution.schema.json", "digest": "bc1021b9fb6a2d4e8bb60ae377c89e41d2f7036133a7b8d1525634c71089b000" },
+      { "id": "approval-evidence", "ref": "tests/azure-power-platform/proposal-approval-execution.test.mjs", "digest": "cec6301cd422218845f0a42c1445051c1dced8df43c51ed1dacf9f1bdb91810b" },
+      { "id": "decision-evidence", "ref": "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json", "digest": "732ab2513546111ab496c63aa4b5e7595a87c7f28533e4f0491cd5c101acb6fa" }
+    ]
+  }
+}

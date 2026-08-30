@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/docs/development/azure-power-platform/limited-production-pilot-decision-packet.schema.json",
+  "title": "Azure Power Platform limited-production-pilot decision packet",
+  "description": "Closed offline decision evidence for a separately authorized owner decision. This packet is decision-ready but inactive: it records no approval, deployment, production data, release, publication, or promotion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packetKind",
+    "packetStatus",
+    "environmentClass",
+    "decisionGate",
+    "exactPins",
+    "sandboxEvidence",
+    "authorityBoundary",
+    "riskRegister",
+    "limitations",
+    "negativeResults",
+    "rollback",
+    "evidence",
+    "readbackPlan",
+    "executionGate",
+    "promotionGate",
+    "publicRedaction",
+    "nonClaims"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/limited-production-pilot-decision-packet/v1" },
+    "packetKind": { "const": "LIMITED_PRODUCTION_PILOT_DECISION_PACKET" },
+    "packetStatus": { "const": "DECISION_READY_INACTIVE" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "decisionGate": { "$ref": "#/$defs/decisionGate" },
+    "exactPins": { "$ref": "#/$defs/exactPins" },
+    "sandboxEvidence": { "$ref": "#/$defs/sandboxEvidence" },
+    "authorityBoundary": { "$ref": "#/$defs/authorityBoundary" },
+    "riskRegister": { "type": "array", "minItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/risk" } },
+    "limitations": {
+      "const": [
+        "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+        "NO_TENANT_VALIDATION",
+        "NO_SANDBOX_DEPLOYMENT",
+        "NO_PRODUCTION_DATA",
+        "NO_CREDENTIAL_USE",
+        "NO_EXTERNAL_MUTATION",
+        "NO_APPROVAL_CLAIM",
+        "NO_RELEASE",
+        "NO_PUBLIC_READBACK",
+        "NO_AUTO_PROMOTION",
+        "SEPARATE_OWNER_AUTHORIZATION_REQUIRED",
+        "EXACT_LKG_ROLLBACK_ONLY",
+        "SYNTHETIC_EVIDENCE_ONLY"
+      ]
+    },
+    "negativeResults": { "type": "array", "minItems": 14, "maxItems": 14, "uniqueItems": true, "items": { "$ref": "#/$defs/negativeResult" } },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "readbackPlan": { "$ref": "#/$defs/readbackPlan" },
+    "executionGate": { "$ref": "#/$defs/actionGate" },
+    "promotionGate": { "$ref": "#/$defs/actionGate" },
+    "publicRedaction": { "$ref": "#/$defs/publicRedaction" },
+    "nonClaims": {
+      "const": [
+        "NOT_APPROVED",
+        "NOT_DEPLOYED",
+        "NOT_RELEASED",
+        "NOT_PUBLISHED",
+        "NOT_PROMOTED",
+        "NOT_PRODUCTION_READY",
+        "NOT_TENANT_VALIDATED",
+        "NOT_A_PUBLIC_READBACK",
+        "NOT_AN_EXECUTION_AUTHORIZATION"
+      ]
+    }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "evidenceId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+    "authority": { "type": "string", "pattern": "^opaque-authority-[a-z]+-[0-9]{3}$" },
+    "repositoryReference": { "type": "string", "pattern": "^(docs|tests|tools|contracts)/[A-Za-z0-9._/-]+$" },
+    "decisionGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "state", "options", "selectedOption", "ownerDecision", "nextOwnerOnlyDecision"],
+      "properties": {
+        "question": { "const": "AUTHORIZE_LIMITED_PRODUCTION_PILOT" },
+        "state": { "const": "UNDECIDED" },
+        "options": { "const": ["AUTHORIZE_PILOT_EXECUTION", "DECLINE_PILOT", "REQUEST_MORE_EVIDENCE"] },
+        "selectedOption": { "type": "null" },
+        "ownerDecision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "externalAuthorizationRequired", "authorizationReference", "authorizationDigest", "readback"],
+          "properties": {
+            "status": { "const": "PENDING_SEPARATELY_AUTHORIZED_OWNER_DECISION" },
+            "externalAuthorizationRequired": { "const": true },
+            "authorizationReference": { "type": "null" },
+            "authorizationDigest": { "type": "null" },
+            "readback": { "$ref": "#/$defs/pendingReadback" }
+          }
+        },
+        "nextOwnerOnlyDecision": { "const": "AUTHORIZE_OR_DECLINE_LIMITED_PRODUCTION_PILOT" }
+      }
+    },
+    "pendingReadback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reference", "digest", "required"],
+      "properties": {
+        "status": { "const": "PENDING_OWNER_READBACK" },
+        "reference": { "type": "null" },
+        "digest": { "type": "null" },
+        "required": { "const": true }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,80}$" },
+        "version": { "$ref": "#/$defs/version" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "generation", "digest"],
+      "properties": {
+        "id": { "const": "synthetic-limited-production-pilot-policy" },
+        "version": { "const": "1.0.0" },
+        "generation": { "const": 17 },
+        "digest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" }
+      }
+    },
+    "exactPins": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component", "schema", "policy", "tupleDigest"],
+      "properties": {
+        "component": {
+          "allOf": [
+            { "$ref": "#/$defs/artifact" },
+            { "type": "object", "properties": { "id": { "const": "synthetic-limited-production-pilot" }, "version": { "const": "1.0.0" }, "digest": { "const": "1111111111111111111111111111111111111111111111111111111111111111" } } }
+          ]
+        },
+        "schema": {
+          "allOf": [
+            { "$ref": "#/$defs/artifact" },
+            { "type": "object", "properties": { "id": { "const": "synthetic-limited-production-pilot-decision-packet" }, "version": { "const": "1.0.0" }, "digest": { "const": "2222222222222222222222222222222222222222222222222222222222222222" } } }
+          ]
+        },
+        "policy": { "$ref": "#/$defs/policy" },
+        "tupleDigest": { "const": "e087cdf965529b6874d5e3de7ff9782f986da4fc01a15cacec4813beb32f4032" }
+      }
+    },
+    "sandboxEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidenceClass", "environmentClass", "checks", "deploymentPerformed", "productionDataObserved", "externalContact", "evidenceRefs"],
+      "properties": {
+        "status": { "const": "VALIDATED_OFFLINE" },
+        "evidenceClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "checks": { "const": ["CONTRACT_SHAPE", "EXACT_PINS", "NEGATIVE_MATRIX", "ROLLBACK_TARGET", "PUBLIC_REDACTION"] },
+        "deploymentPerformed": { "const": false },
+        "productionDataObserved": { "const": false },
+        "externalContact": { "const": false },
+        "evidenceRefs": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/evidenceId" } }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorities", "authoritiesAreDistinct", "approverMayExecute", "executorMayPromote", "automaticPromotion", "externalAuthorizationPresent", "executionAuthorized", "publicationAuthorized", "promotionAuthorized"],
+      "properties": {
+        "authorities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["decisionOwner", "pilotExecutionOwner", "promotionOwner", "rollbackOwner", "publicReadbackOwner"],
+          "properties": {
+            "decisionOwner": { "$ref": "#/$defs/authority" },
+            "pilotExecutionOwner": { "$ref": "#/$defs/authority" },
+            "promotionOwner": { "$ref": "#/$defs/authority" },
+            "rollbackOwner": { "$ref": "#/$defs/authority" },
+            "publicReadbackOwner": { "$ref": "#/$defs/authority" }
+          }
+        },
+        "authoritiesAreDistinct": { "const": true },
+        "approverMayExecute": { "const": false },
+        "executorMayPromote": { "const": false },
+        "automaticPromotion": { "const": false },
+        "externalAuthorizationPresent": { "const": false },
+        "executionAuthorized": { "const": false },
+        "publicationAuthorized": { "const": false },
+        "promotionAuthorized": { "const": false }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "category", "status", "limitation", "mitigation", "ownerOnlyAction"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^risk-[a-z0-9-]+$" },
+        "category": { "enum": ["EVIDENCE", "AUTHORITY", "DATA", "OPERATIONS", "ROLLBACK"] },
+        "status": { "const": "OPEN" },
+        "limitation": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+        "mitigation": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+        "ownerOnlyAction": { "type": "string", "pattern": "^[A-Z0-9_]+$" }
+      }
+    },
+    "negativeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case", "outcome", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": {
+        "case": { "enum": ["MISSING_SANDBOX_EVIDENCE", "INCOMPLETE_NEGATIVE_RESULTS", "PRODUCTION_READINESS_ASSERTION", "PRODUCTION_DATA", "TENANT_IDENTIFIER", "CREDENTIAL_MATERIAL", "AUTO_PROMOTION", "CONFLATED_APPROVER_EXECUTOR", "MISSING_ROLLBACK_PLAN", "MISSING_READBACK_PLAN", "APPROVED_WITHOUT_EXTERNAL_AUTHORIZATION", "EXECUTE_WITHOUT_READBACK", "PUBLISH_WITHOUT_READBACK", "PROMOTE_WITHOUT_READBACK"] },
+        "outcome": { "const": "DENY" },
+        "reasonCode": { "enum": ["SANDBOX_EVIDENCE_DENIED", "NEGATIVE_EVIDENCE_DENIED", "PRODUCTION_READINESS_DENIED", "PRODUCTION_DATA_DENIED", "TENANT_IDENTIFIER_DENIED", "CREDENTIAL_MATERIAL_DENIED", "AUTO_PROMOTION_DENIED", "AUTHORITY_SEPARATION_DENIED", "ROLLBACK_TARGET_DENIED", "READBACK_PLAN_DENIED", "EXTERNAL_AUTHORIZATION_DENIED", "READBACK_REQUIRED_DENIED"] },
+        "effectCount": { "const": 0 },
+        "evidenceRef": { "$ref": "#/$defs/evidenceId" }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "targetVersion", "targetTupleDigest", "targetStatus", "targetRevocationStatus", "authorization", "partialRollbackAllowed", "latestVersionFallbackAllowed", "executionStatus", "evidenceRef"],
+      "properties": {
+        "target": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+        "targetVersion": { "const": "1.0.0" },
+        "targetTupleDigest": { "const": "e087cdf965529b6874d5e3de7ff9782f986da4fc01a15cacec4813beb32f4032" },
+        "targetStatus": { "const": "LKG" },
+        "targetRevocationStatus": { "const": "UNREVOKED" },
+        "authorization": { "const": "OWNER_ONLY_REQUIRED" },
+        "partialRollbackAllowed": { "const": false },
+        "latestVersionFallbackAllowed": { "const": false },
+        "executionStatus": { "const": "RECORDED_NOT_EXECUTED" },
+        "evidenceRef": { "$ref": "#/$defs/evidenceId" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundleDigest", "refs"],
+      "properties": {
+        "bundleDigest": { "const": "e6c74814c95e43f1467f15f7d600eb9f63ddd581b704ee85a3547f0dba90c5f6" },
+        "refs": { "type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": { "$ref": "#/$defs/evidenceRef" } }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "reference", "digest", "immutable", "purpose"],
+      "properties": {
+        "id": { "$ref": "#/$defs/evidenceId" },
+        "reference": { "$ref": "#/$defs/repositoryReference" },
+        "digest": { "$ref": "#/$defs/digest" },
+        "immutable": { "const": true },
+        "purpose": { "enum": ["PACKET_SCHEMA", "OFFLINE_VALIDATOR", "FOCUSED_TEST", "SANDBOX_EVIDENCE", "NEGATIVE_MATRIX", "ROLLBACK_REFERENCE", "READBACK_PLAN", "PUBLIC_REDACTION"] }
+      }
+    },
+    "readbackPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "source", "status", "mustBind", "ownerOnlyDecision", "reference", "digest"],
+      "properties": {
+        "required": { "const": true },
+        "source": { "const": "AUTHORITATIVE_EXTERNAL_OWNER_READBACK" },
+        "status": { "const": "PENDING_OWNER_READBACK" },
+        "mustBind": { "const": ["EXTERNAL_AUTHORIZATION", "EXACT_PINS", "EFFECT_COUNT", "ROLLBACK_TARGET", "PUBLIC_REDACTION"] },
+        "ownerOnlyDecision": { "const": "AUTHORIZE_OR_DECLINE_LIMITED_PRODUCTION_PILOT" },
+        "reference": { "type": "null" },
+        "digest": { "type": "null" }
+      }
+    },
+    "actionGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "externalAuthorizationRequired", "authorizationPresent", "readbackRequired", "readbackPresent", "automatic", "effectCount"],
+      "properties": {
+        "status": { "const": "BLOCKED_OWNER_DECISION" },
+        "externalAuthorizationRequired": { "const": true },
+        "authorizationPresent": { "const": false },
+        "readbackRequired": { "const": true },
+        "readbackPresent": { "const": false },
+        "automatic": { "const": false },
+        "effectCount": { "const": 0 }
+      }
+    },
+    "publicRedaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "candidateReadback", "deployment", "approval", "release", "publication", "promotion", "nextOwnerOnlyDecision", "redacted", "digest"],
+      "properties": {
+        "status": { "const": "REDACTED_NO_DEPLOYMENT_CANDIDATE_READBACK" },
+        "candidateReadback": { "const": "NO_DEPLOYMENT_CANDIDATE_READBACK" },
+        "deployment": { "const": "NOT_DEPLOYED" },
+        "approval": { "const": "NOT_CLAIMED" },
+        "release": { "const": "NOT_RELEASED" },
+        "publication": { "const": "NOT_PERFORMED" },
+        "promotion": { "const": "NOT_PERFORMED" },
+        "nextOwnerOnlyDecision": { "const": "AUTHORIZE_OR_DECLINE_LIMITED_PRODUCTION_PILOT" },
+        "redacted": { "const": true },
+        "digest": { "const": "e8a4502232947636abec7d4391ba0161c55458213251dda8201bcc12c1fa005a" }
+      }
+    }
+  }
+}

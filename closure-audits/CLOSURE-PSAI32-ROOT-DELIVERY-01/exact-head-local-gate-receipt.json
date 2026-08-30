@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI32-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JimPansky/PANSPHAIRA",
+    "number": 32,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/32"
+  },
+  "authorizedScope": "REPOSITORY_ONLY_INACTIVE_SYNTHETIC_POWER_APPS_M1",
+  "baseCommit": "cd02e5b6ba8b4d26f49c0ac674c94d5c649fd630",
+  "testedHead": "695a5bcd9abbc8186191c092e07edd1ab356b71b",
+  "testedTree": "d79f6fbf979d7d2c2e340d5db0703bf4724b13e3",
+  "scopeDisposition": {
+    "repositoryContract": "PASS",
+    "inactiveCanvasPackage": "PASS",
+    "syntheticReadOnlyHarness": "PASS",
+    "authoritativeReadbackAndReceiptContracts": "PASS",
+    "proposalApprovalExecutionContracts": "PASS_DEFAULT_OFF",
+    "resetAndZeroResidueSyntheticProof": "PASS",
+    "tenantImport": "NOT_EXECUTED_NO_CREDENTIALS_OR_TENANT_CONTEXT",
+    "entraConsentDlpDataverse": "NOT_EXECUTED_NO_CREDENTIALS_OR_TENANT_CONTEXT",
+    "productionPilot": "NOT_AUTHORIZED_AND_NOT_CLAIMED"
+  },
+  "nonClaims": [
+    "NO_TENANT_OR_CLOUD_MUTATION",
+    "NO_LOGIN_CONSENT_DLP_OR_DATAVERSE_VALIDATION",
+    "NO_LIVE_TOKEN_OR_CUSTOMER_DATA",
+    "NO_PRODUCTION_OR_PUBLIC_CONNECTOR_CERTIFICATION"
+  ],
+  "gates": [
+    {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
+    {"command": "npm run azpp:test", "outcome": "PASS", "tests": 91, "passed": 91},
+    {"command": "node --test tools/video-production-reference/tests/closure.test.mjs tools/video-production-reference/tests/slice.test.mjs dist/tests/verification-fabric-v2.test.js", "outcome": "PASS", "tests": 139, "passed": 139},
+    {"command": "node --test tests/azure-power-platform/public-readback.test.mjs tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 60, "passed": 60},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1167},
+    {"command": "npm run release-governance:verify", "outcome": "PASS"},
+    {"command": "npm run lint", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "delivery": {
+    "readyForPr": true,
+    "sourceOnlyDailyReleaseRequired": true,
+    "publicReadbackRequired": true,
+    "issueCloseRequired": true,
+    "externalTenantFollowupRequiredForCloudClaims": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "cases": [
+    { "name": "undeclared POST endpoint", "method": "POST", "path": "/records", "reasonCode": "UNKNOWN_ACTION_DENIED" },
+    { "name": "undeclared PUT endpoint", "method": "PUT", "path": "/queries", "reasonCode": "UNKNOWN_ACTION_DENIED" },
+    { "name": "undeclared PATCH endpoint", "method": "PATCH", "path": "/queries", "reasonCode": "UNKNOWN_ACTION_DENIED" },
+    { "name": "undeclared DELETE endpoint", "method": "DELETE", "path": "/queries", "reasonCode": "UNKNOWN_ACTION_DENIED" },
+    { "name": "generic proxy field", "body": { "proxy": { "url": "https://provider.invalid", "method": "GET" } }, "reasonCode": "SCHEMA_DENIED" },
+    { "name": "arbitrary path field", "body": { "path": "/providers/anything" }, "reasonCode": "SCHEMA_DENIED" },
+    { "name": "arbitrary URL field", "body": { "url": "https://provider.invalid" }, "reasonCode": "SCHEMA_DENIED" },
+    { "name": "arbitrary body field", "body": { "body": { "write": true } }, "reasonCode": "SCHEMA_DENIED" },
+    { "name": "undeclared operation", "body": { "action": "DELETE_RECORD" }, "reasonCode": "UNKNOWN_ACTION_DENIED" },
+    { "name": "mismatched capability tuple", "capabilityPatch": { "operationId": "SubmitGovernedQuery" }, "reasonCode": "SCHEMA_DENIED" },
+    { "name": "extra field", "body": { "schemaVersion": "pansphaira.power-platform/governed-read-reference/v1", "action": "READ_RECORD", "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "correlationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "idempotencyKeyDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "extra": true }, "reasonCode": "SCHEMA_DENIED" },
+    { "name": "command verb", "body": { "command": "rm -rf /" }, "reasonCode": "SCHEMA_DENIED" },
+    { "name": "credential field", "body": { "credential": "provider-secret", "accessToken": "token" }, "reasonCode": "AUTHORITY_BINDING_DENIED" },
+    { "name": "mutable authority field", "body": { "authority": { "tenant": "caller-selected", "policyGeneration": 8 } }, "reasonCode": "AUTHORITY_BINDING_DENIED" },
+    { "name": "write-shaped response", "response": { "effectCount": 1, "outcome": "COMMITTED", "writeTarget": "provider-object" }, "reasonCode": "HIDDEN_WRITE_DENIED" }
+  ]
+}

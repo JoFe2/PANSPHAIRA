@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/identity-security-profile-escalating-fixture/v1",
+  "fixtureKind": "DENIED",
+  "baseFixture": "tests/fixtures/azure-power-platform/identity-profile-valid.json",
+  "cases": [
+    { "caseId": "unknown-field", "expectedReasonCode": "UNKNOWN_FIELD_DENIED" },
+    { "caseId": "unknown-action", "expectedReasonCode": "UNKNOWN_ACTION_DENIED" },
+    { "caseId": "hidden-write", "expectedReasonCode": "HIDDEN_WRITE_DENIED" },
+    { "caseId": "self-approval", "expectedReasonCode": "SELF_APPROVAL_DENIED" },
+    { "caseId": "combined-approver-executor", "expectedReasonCode": "DUTY_SEPARATION_DENIED" },
+    { "caseId": "combined-importer-publisher", "expectedReasonCode": "DUTY_SEPARATION_DENIED" },
+    { "caseId": "provider-credential", "expectedReasonCode": "PROVIDER_CREDENTIAL_DENIED" },
+    { "caseId": "reusable-secret-reference", "expectedReasonCode": "REUSABLE_SECRET_REFERENCE_DENIED" },
+    { "caseId": "broad-role", "expectedReasonCode": "BROAD_ROLE_DENIED" },
+    { "caseId": "missing-expiry", "expectedReasonCode": "EXPIRY_STATE_MISSING_DENIED" },
+    { "caseId": "missing-revocation", "expectedReasonCode": "REVOCATION_STATE_MISSING_DENIED" },
+    { "caseId": "capability-bytes-authority", "expectedReasonCode": "CAPABILITY_BYTES_AUTHORITY_DENIED" },
+    { "caseId": "digest-drift", "expectedReasonCode": "DIGEST_DRIFT_DENIED" },
+    { "caseId": "replay", "expectedReasonCode": "REPLAY_DENIED" },
+    { "caseId": "expiry", "expectedReasonCode": "EXPIRY_DENIED" },
+    { "caseId": "revocation", "expectedReasonCode": "REVOCATION_DENIED" },
+    { "caseId": "stale-policy", "expectedReasonCode": "STALE_POLICY_DENIED" }
+  ]
+}

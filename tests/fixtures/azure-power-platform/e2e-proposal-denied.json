@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/synthetic-e2e-fixture/v1",
+  "fixtureKind": "PROPOSAL_DENIED",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "observedAt": "2026-08-28T08:00:00Z",
+  "source": "tests/fixtures/azure-power-platform/proposal-approved.json",
+  "mutation": {
+    "path": "approval.approver",
+    "value": "principal:synthetic-proposer"
+  },
+  "expected": {
+    "outcome": "DENY",
+    "reasonCode": "SELF_APPROVAL_DENIED",
+    "effectCount": 0,
+    "mutationCount": 0,
+    "executionRequestCreated": false
+  },
+  "negativeCases": [
+    "UNKNOWN_FIELD",
+    "UNKNOWN_ACTION",
+    "HIDDEN_WRITE",
+    "SELF_APPROVAL",
+    "SAME_PRINCIPAL_ALIAS",
+    "MISSING_AUTHORIZATION",
+    "REPLAY",
+    "EXPIRY",
+    "REVOCATION",
+    "STALE_POLICY",
+    "DIGEST_DRIFT",
+    "TUPLE_DRIFT",
+    "GENERIC_COMMAND",
+    "CANCELLATION_AS_ROLLBACK",
+    "UNAUTHORIZED_IMPORT_MARKER"
+  ],
+  "limitations": [
+    "DRY_RUN_PROOF_ONLY",
+    "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "NO_NETWORK",
+    "NO_CREDENTIAL_USE",
+    "NO_TENANT_DISCOVERY",
+    "NO_POWER_PLATFORM_TOOLING",
+    "NO_PROVIDER_CALL",
+    "NO_BUSINESS_WRITE"
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "authorizationRequired": true,
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false
+  },
+  "evidenceRefs": [
+    "contracts/azure-power-platform/proposal-approval-execution.schema.json",
+    "tests/azure-power-platform/proposal-approval-execution.test.mjs",
+    "tests/fixtures/azure-power-platform/proposal-self-approved.json",
+    "tests/fixtures/azure-power-platform/proposal-replay.json"
+  ]
+}

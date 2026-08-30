@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/limited-production-pilot-decision-packet/v1",
+  "packetKind": "LIMITED_PRODUCTION_PILOT_DECISION_PACKET",
+  "packetStatus": "DECISION_READY_INACTIVE",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "decisionGate": {
+    "question": "AUTHORIZE_LIMITED_PRODUCTION_PILOT",
+    "state": "UNDECIDED",
+    "options": ["AUTHORIZE_PILOT_EXECUTION", "DECLINE_PILOT", "REQUEST_MORE_EVIDENCE"],
+    "selectedOption": null,
+    "ownerDecision": {
+      "status": "PENDING_SEPARATELY_AUTHORIZED_OWNER_DECISION",
+      "externalAuthorizationRequired": true,
+      "authorizationReference": null,
+      "authorizationDigest": null,
+      "readback": { "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null, "required": true }
+    },
+    "nextOwnerOnlyDecision": "AUTHORIZE_OR_DECLINE_LIMITED_PRODUCTION_PILOT"
+  },
+  "exactPins": {
+    "component": { "id": "synthetic-limited-production-pilot", "version": "1.0.0", "digest": "1111111111111111111111111111111111111111111111111111111111111111" },
+    "schema": { "id": "synthetic-limited-production-pilot-decision-packet", "version": "1.0.0", "digest": "2222222222222222222222222222222222222222222222222222222222222222" },
+    "policy": { "id": "synthetic-limited-production-pilot-policy", "version": "1.0.0", "generation": 17, "digest": "3333333333333333333333333333333333333333333333333333333333333333" },
+    "tupleDigest": "e087cdf965529b6874d5e3de7ff9782f986da4fc01a15cacec4813beb32f4032"
+  },
+  "sandboxEvidence": {
+    "status": "VALIDATED_OFFLINE",
+    "evidenceClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "checks": ["CONTRACT_SHAPE", "EXACT_PINS", "NEGATIVE_MATRIX", "ROLLBACK_TARGET", "PUBLIC_REDACTION"],
+    "deploymentPerformed": false,
+    "productionDataObserved": false,
+    "externalContact": false,
+    "evidenceRefs": ["sandbox-evidence", "focused-test"]
+  },
+  "authorityBoundary": {
+    "authorities": {
+      "decisionOwner": "opaque-authority-decision-001",
+      "pilotExecutionOwner": "opaque-authority-execution-002",
+      "promotionOwner": "opaque-authority-promotion-003",
+      "rollbackOwner": "opaque-authority-rollback-004",
+      "publicReadbackOwner": "opaque-authority-readback-005"
+    },
+    "authoritiesAreDistinct": true,
+    "approverMayExecute": false,
+    "executorMayPromote": false,
+    "automaticPromotion": false,
+    "externalAuthorizationPresent": false,
+    "executionAuthorized": false,
+    "publicationAuthorized": false,
+    "promotionAuthorized": false
+  },
+  "riskRegister": [
+    { "id": "risk-evidence", "category": "EVIDENCE", "status": "OPEN", "limitation": "SYNTHETIC_EVIDENCE_ONLY", "mitigation": "OWNER_READBACK_REQUIRED", "ownerOnlyAction": "REQUEST_MORE_EVIDENCE" },
+    { "id": "risk-authority", "category": "AUTHORITY", "status": "OPEN", "limitation": "SEPARATE_OWNER_AUTHORIZATION_REQUIRED", "mitigation": "DISTINCT_AUTHORITIES_REQUIRED", "ownerOnlyAction": "AUTHORIZE_OR_DECLINE_LIMITED_PRODUCTION_PILOT" },
+    { "id": "risk-data", "category": "DATA", "status": "OPEN", "limitation": "NO_PRODUCTION_DATA", "mitigation": "REDACT_AND_REJECT", "ownerOnlyAction": "CONFIRM_DATA_BOUNDARY" },
+    { "id": "risk-rollback", "category": "ROLLBACK", "status": "OPEN", "limitation": "EXACT_LKG_ROLLBACK_ONLY", "mitigation": "EXACT_TUPLE_PIN_REQUIRED", "ownerOnlyAction": "AUTHORIZE_ROLLBACK_IF_NEEDED" }
+  ],
+  "limitations": [
+    "LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_TENANT_VALIDATION", "NO_SANDBOX_DEPLOYMENT", "NO_PRODUCTION_DATA",
+    "NO_CREDENTIAL_USE", "NO_EXTERNAL_MUTATION", "NO_APPROVAL_CLAIM", "NO_RELEASE", "NO_PUBLIC_READBACK",
+    "NO_AUTO_PROMOTION", "SEPARATE_OWNER_AUTHORIZATION_REQUIRED", "EXACT_LKG_ROLLBACK_ONLY", "SYNTHETIC_EVIDENCE_ONLY"
+  ],
+  "negativeResults": [
+    { "case": "MISSING_SANDBOX_EVIDENCE", "outcome": "DENY", "reasonCode": "SANDBOX_EVIDENCE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "INCOMPLETE_NEGATIVE_RESULTS", "outcome": "DENY", "reasonCode": "NEGATIVE_EVIDENCE_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "PRODUCTION_READINESS_ASSERTION", "outcome": "DENY", "reasonCode": "PRODUCTION_READINESS_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "PRODUCTION_DATA", "outcome": "DENY", "reasonCode": "PRODUCTION_DATA_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "TENANT_IDENTIFIER", "outcome": "DENY", "reasonCode": "TENANT_IDENTIFIER_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "CREDENTIAL_MATERIAL", "outcome": "DENY", "reasonCode": "CREDENTIAL_MATERIAL_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "AUTO_PROMOTION", "outcome": "DENY", "reasonCode": "AUTO_PROMOTION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "CONFLATED_APPROVER_EXECUTOR", "outcome": "DENY", "reasonCode": "AUTHORITY_SEPARATION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "MISSING_ROLLBACK_PLAN", "outcome": "DENY", "reasonCode": "ROLLBACK_TARGET_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "MISSING_READBACK_PLAN", "outcome": "DENY", "reasonCode": "READBACK_PLAN_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "APPROVED_WITHOUT_EXTERNAL_AUTHORIZATION", "outcome": "DENY", "reasonCode": "EXTERNAL_AUTHORIZATION_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "EXECUTE_WITHOUT_READBACK", "outcome": "DENY", "reasonCode": "READBACK_REQUIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "PUBLISH_WITHOUT_READBACK", "outcome": "DENY", "reasonCode": "READBACK_REQUIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" },
+    { "case": "PROMOTE_WITHOUT_READBACK", "outcome": "DENY", "reasonCode": "READBACK_REQUIRED_DENIED", "effectCount": 0, "evidenceRef": "negative-matrix" }
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "targetVersion": "1.0.0",
+    "targetTupleDigest": "e087cdf965529b6874d5e3de7ff9782f986da4fc01a15cacec4813beb32f4032",
+    "targetStatus": "LKG",
+    "targetRevocationStatus": "UNREVOKED",
+    "authorization": "OWNER_ONLY_REQUIRED",
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false,
+    "executionStatus": "RECORDED_NOT_EXECUTED",
+    "evidenceRef": "rollback-reference"
+  },
+  "evidence": {
+    "bundleDigest": "e6c74814c95e43f1467f15f7d600eb9f63ddd581b704ee85a3547f0dba90c5f6",
+    "refs": [
+      { "id": "packet-schema", "reference": "docs/development/azure-power-platform/limited-production-pilot-decision-packet.schema.json", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "immutable": true, "purpose": "PACKET_SCHEMA" },
+      { "id": "offline-validator", "reference": "tools/azure-power-platform/validate-limited-production-pilot-decision-packet.mjs", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "immutable": true, "purpose": "OFFLINE_VALIDATOR" },
+      { "id": "focused-test", "reference": "tests/azure-power-platform/limited-production-pilot-decision-packet.test.mjs", "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "immutable": true, "purpose": "FOCUSED_TEST" },
+      { "id": "sandbox-evidence", "reference": "tests/azure-power-platform/sandbox-preflight.test.mjs", "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "immutable": true, "purpose": "SANDBOX_EVIDENCE" },
+      { "id": "negative-matrix", "reference": "tests/azure-power-platform/readonly-denial-matrix.test.mjs", "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "immutable": true, "purpose": "NEGATIVE_MATRIX" },
+      { "id": "rollback-reference", "reference": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "immutable": true, "purpose": "ROLLBACK_REFERENCE" },
+      { "id": "readback-plan", "reference": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs", "digest": "1111111111111111111111111111111111111111111111111111111111111111", "immutable": true, "purpose": "READBACK_PLAN" },
+      { "id": "public-redaction", "reference": "tests/azure-power-platform/public-readback.test.mjs", "digest": "2222222222222222222222222222222222222222222222222222222222222222", "immutable": true, "purpose": "PUBLIC_REDACTION" }
+    ]
+  },
+  "readbackPlan": {
+    "required": true,
+    "source": "AUTHORITATIVE_EXTERNAL_OWNER_READBACK",
+    "status": "PENDING_OWNER_READBACK",
+    "mustBind": ["EXTERNAL_AUTHORIZATION", "EXACT_PINS", "EFFECT_COUNT", "ROLLBACK_TARGET", "PUBLIC_REDACTION"],
+    "ownerOnlyDecision": "AUTHORIZE_OR_DECLINE_LIMITED_PRODUCTION_PILOT",
+    "reference": null,
+    "digest": null
+  },
+  "executionGate": { "status": "BLOCKED_OWNER_DECISION", "externalAuthorizationRequired": true, "authorizationPresent": false, "readbackRequired": true, "readbackPresent": false, "automatic": false, "effectCount": 0 },
+  "promotionGate": { "status": "BLOCKED_OWNER_DECISION", "externalAuthorizationRequired": true, "authorizationPresent": false, "readbackRequired": true, "readbackPresent": false, "automatic": false, "effectCount": 0 },
+  "publicRedaction": {
+    "status": "REDACTED_NO_DEPLOYMENT_CANDIDATE_READBACK",
+    "candidateReadback": "NO_DEPLOYMENT_CANDIDATE_READBACK",
+    "deployment": "NOT_DEPLOYED",
+    "approval": "NOT_CLAIMED",
+    "release": "NOT_RELEASED",
+    "publication": "NOT_PERFORMED",
+    "promotion": "NOT_PERFORMED",
+    "nextOwnerOnlyDecision": "AUTHORIZE_OR_DECLINE_LIMITED_PRODUCTION_PILOT",
+    "redacted": true,
+    "digest": "e8a4502232947636abec7d4391ba0161c55458213251dda8201bcc12c1fa005a"
+  },
+  "nonClaims": ["NOT_APPROVED", "NOT_DEPLOYED", "NOT_RELEASED", "NOT_PUBLISHED", "NOT_PROMOTED", "NOT_PRODUCTION_READY", "NOT_TENANT_VALIDATED", "NOT_A_PUBLIC_READBACK", "NOT_AN_EXECUTION_AUTHORIZATION"]
+}

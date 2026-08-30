@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/tuple-ledger/v1",
+  "status": "ACCEPTED",
+  "tupleDigest": "a8ccd08cd15fca01561806c85800850fc65920d264b67e48122f9b915506be79",
+  "component": {
+    "id": "power-platform-read-connector",
+    "version": "1.0.0",
+    "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "schema": {
+    "id": "power-platform-read-connector-schema",
+    "version": "1.0.0",
+    "digest": "6db105c03ad1d0fac78e6c53ac9259d5cbad69197b20dd92f5a5188572f13db2"
+  },
+  "policy": {
+    "id": "power-platform-read-policy",
+    "version": "1.0.0",
+    "generation": 7,
+    "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "evidence": {
+    "bundleDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+    "refs": [
+      { "id": "positive-canonicalization", "ref": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+      { "id": "lkg-readback", "ref": "docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+      { "id": "missing-component-digest", "ref": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+      { "id": "mutable-version", "ref": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" },
+      { "id": "private-identifier", "ref": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
+      { "id": "unknown-field", "ref": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" },
+      { "id": "policy-generation-mismatch", "ref": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "1212121212121212121212121212121212121212121212121212121212121212" },
+      { "id": "revoked-lkg", "ref": "tests/fixtures/azure-power-platform/tuple-valid.json", "digest": "1313131313131313131313131313131313131313131313131313131313131313" },
+      { "id": "digest-drift", "ref": "tests/fixtures/azure-power-platform/tuple-digest-drift.json", "digest": "1414141414141414141414141414141414141414141414141414141414141414" }
+    ]
+  },
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "limitations": [
+    "NO_EXTERNAL_ACCOUNT_ACCESS",
+    "NO_SECRET_USE",
+    "NO_EXTERNAL_ENDPOINT_BINDING",
+    "NO_MUTATION_OR_DEPLOYMENT",
+    "NO_PRODUCTION_CLAIM",
+    "NO_BUSINESS_SUCCESS_WITHOUT_READBACK"
+  ],
+  "negativeResults": [
+    { "id": "missing-component-digest", "reasonCode": "MISSING_COMPONENT_DIGEST_DENIED", "evidenceRef": "missing-component-digest" },
+    { "id": "mutable-version", "reasonCode": "MUTABLE_VERSION_DENIED", "evidenceRef": "mutable-version" },
+    { "id": "private-identifier", "reasonCode": "PRIVATE_IDENTIFIER_DENIED", "evidenceRef": "private-identifier" },
+    { "id": "unknown-field", "reasonCode": "UNKNOWN_FIELD_DENIED", "evidenceRef": "unknown-field" },
+    { "id": "policy-generation-mismatch", "reasonCode": "POLICY_GENERATION_MISMATCH_DENIED", "evidenceRef": "policy-generation-mismatch" },
+    { "id": "revoked-lkg", "reasonCode": "LKG_REVOKED_DENIED", "evidenceRef": "revoked-lkg" },
+    { "id": "digest-drift", "reasonCode": "DIGEST_DRIFT_DENIED", "evidenceRef": "digest-drift" }
+  ],
+  "accepted": {
+    "status": "ACCEPTED",
+    "tupleDigest": "a8ccd08cd15fca01561806c85800850fc65920d264b67e48122f9b915506be79"
+  },
+  "lkg": {
+    "status": "LKG",
+    "tupleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "revocationStatus": "UNREVOKED",
+    "evidenceRefs": ["lkg-readback"]
+  },
+  "rollback": {
+    "targetTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "targetStatus": "LKG",
+    "targetRevocationStatus": "UNREVOKED",
+    "evidenceRefs": ["lkg-readback"]
+  },
+  "publicLinks": {
+    "planningArtifact": {
+      "ref": "docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md",
+      "digest": "bbf9260e76397248e3e97a7cca6417726b1bfc2e024d97066653f4a546388e19"
+    },
+    "implementationPrs": [
+      { "ref": "pull/32", "digest": "2222222222222222222222222222222222222222222222222222222222222222" }
+    ],
+    "release": {
+      "ref": "release/governance.json",
+      "digest": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7"
+    },
+    "publicReadback": {
+      "ref": "docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md",
+      "digest": "bbf9260e76397248e3e97a7cca6417726b1bfc2e024d97066653f4a546388e19"
+    }
+  }
+}

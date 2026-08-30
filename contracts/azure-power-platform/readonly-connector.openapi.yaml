@@ -1,0 +1,1156 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "PanSphaira Power Platform read-only connector (closed surface v1)",
+    "version": "1.0.0",
+    "description": "Closed read-only Power Platform connector surface for capability discovery, governed queries, operation status, authoritative readback and bound receipts. Local synthetic repository-only evidence; no provider call, credential use or tenant access."
+  },
+  "host": "pansphaira-power-platform-read-only.synthetic.invalid",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/v1",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/capabilities": {
+      "get": {
+        "operationId": "ListCapabilities",
+        "description": "List the exact five declared read-only operations and their pinned scope and idempotency requirements.",
+        "tags": [
+          "read-only"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "powerPlatformReadOnlyOAuth2": [
+              "cm.discovery.read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The five declared read-only capabilities and their pinned scope and idempotency requirements.",
+            "schema": {
+              "$ref": "#/definitions/ListCapabilitiesResponse"
+            }
+          },
+          "400": {
+            "description": "Request shape, governance or digest denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "403": {
+            "description": "Caller authority, tenant, expiry, revocation, policy or binding denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          }
+        }
+      }
+    },
+    "/queries": {
+      "post": {
+        "operationId": "SubmitGovernedQuery",
+        "description": "Submit a previously stored immutable Gateway read request referenced by digest only. Acceptance is an operation reference, never business success.",
+        "tags": [
+          "read-only"
+        ],
+        "parameters": [
+          {
+            "name": "governedQuery",
+            "in": "body",
+            "required": true,
+            "description": "A previously stored immutable Gateway read request referenced by digest only.",
+            "schema": {
+              "$ref": "#/definitions/SubmitGovernedQueryRequest"
+            }
+          }
+        ],
+        "security": [
+          {
+            "powerPlatformReadOnlyOAuth2": [
+              "cm.discovery.read"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Governed read reference accepted as an operation reference only; not business success.",
+            "schema": {
+              "$ref": "#/definitions/QueryAccepted"
+            }
+          },
+          "400": {
+            "description": "Request shape, governance or digest denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "403": {
+            "description": "Caller authority, tenant, expiry, revocation, policy or binding denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          }
+        }
+      }
+    },
+    "/operations/{operationId}": {
+      "get": {
+        "operationId": "GetOperationStatus",
+        "description": "Read the status of the referenced accepted operation.",
+        "tags": [
+          "read-only"
+        ],
+        "parameters": [
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "description": "The digest of the accepted operation reference.",
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        ],
+        "security": [
+          {
+            "powerPlatformReadOnlyOAuth2": [
+              "cm.discovery.read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The current status of the referenced accepted operation; acceptance is not business success.",
+            "schema": {
+              "$ref": "#/definitions/OperationStatusResponse"
+            }
+          },
+          "400": {
+            "description": "Request shape, governance or digest denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "403": {
+            "description": "Caller authority, tenant, expiry, revocation, policy or binding denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "404": {
+            "description": "Unknown operation reference. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          }
+        }
+      }
+    },
+    "/operations/{operationId}/readback": {
+      "get": {
+        "operationId": "GetReadback",
+        "description": "Read the authoritative post-effect readback for the referenced accepted operation.",
+        "tags": [
+          "read-only"
+        ],
+        "parameters": [
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "description": "The digest of the accepted operation reference.",
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        ],
+        "security": [
+          {
+            "powerPlatformReadOnlyOAuth2": [
+              "cm.discovery.read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The authoritative post-effect readback for the referenced accepted operation.",
+            "schema": {
+              "$ref": "#/definitions/AuthoritativeReadbackResponse"
+            }
+          },
+          "400": {
+            "description": "Request shape, governance or digest denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "403": {
+            "description": "Caller authority, tenant, expiry, revocation, policy or binding denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "404": {
+            "description": "Unknown operation reference. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "503": {
+            "description": "Authoritative readback or bound receipt unavailable. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          }
+        }
+      }
+    },
+    "/operations/{operationId}/receipt": {
+      "get": {
+        "operationId": "GetReceipt",
+        "description": "Read the bound receipt for the referenced accepted operation.",
+        "tags": [
+          "read-only"
+        ],
+        "parameters": [
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "description": "The digest of the accepted operation reference.",
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        ],
+        "security": [
+          {
+            "powerPlatformReadOnlyOAuth2": [
+              "cm.discovery.read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The bound receipt for the referenced accepted operation.",
+            "schema": {
+              "$ref": "#/definitions/BoundReceiptResponse"
+            }
+          },
+          "400": {
+            "description": "Request shape, governance or digest denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "403": {
+            "description": "Caller authority, tenant, expiry, revocation, policy or binding denial. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "404": {
+            "description": "Unknown operation reference. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          },
+          "503": {
+            "description": "Authoritative readback or bound receipt unavailable. The error body carries a fixed public reason code and no free-text internals.",
+            "schema": {
+              "$ref": "#/definitions/ConnectorError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "VerificationTuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundleSchemaVersion",
+        "subjectDigest",
+        "planDigest",
+        "evidenceBundleDigest",
+        "verdictDigest",
+        "readbackDigest"
+      ],
+      "properties": {
+        "bundleSchemaVersion": {
+          "const": "chimpmaera.verification/fabric-bundle/v1"
+        },
+        "subjectDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "planDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evidenceBundleDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "verdictDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "readbackDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "ReasonCode": {
+      "type": "string",
+      "enum": [
+        "SCHEMA_DENIED",
+        "UNKNOWN_ACTION_DENIED",
+        "HIDDEN_WRITE_DENIED",
+        "APPROVAL_SAME_ACTOR_DENIED",
+        "AUTHORITY_BINDING_DENIED",
+        "AUTHORITY_EXPIRED_DENIED",
+        "REPLAY_CONSUMED_DENIED",
+        "DIGEST_MISMATCH_DENIED",
+        "REVOCATION_BINDING_DENIED",
+        "POLICY_STALE_DENIED",
+        "INCOMPATIBLE_VERSION_DENIED",
+        "CROSS_TENANT_DENIED",
+        "EVIDENCE_STALE_DENIED",
+        "PROVIDER_READBACK_MISMATCH_DENIED",
+        "EFFECT_STORE_INVALID_DENIED",
+        "INDEPENDENT_CONTEXT_DENIED"
+      ]
+    },
+    "SubmitGovernedQueryRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "action",
+        "requestDigest",
+        "correlationDigest",
+        "idempotencyKeyDigest"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.power-platform/governed-read-reference/v1"
+        },
+        "action": {
+          "enum": [
+            "READ_RECORD",
+            "READ_METADATA"
+          ]
+        },
+        "requestDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "correlationDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "idempotencyKeyDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "QueryAccepted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "operationKey",
+        "operationId",
+        "status",
+        "correlationDigest",
+        "idempotencyKeyDigest",
+        "businessSuccess",
+        "verificationTuple"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.power-platform/readonly-connector/v1"
+        },
+        "operationKey": {
+          "const": "SUBMIT_GOVERNED_QUERY"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "status": {
+          "const": "ACCEPTED"
+        },
+        "correlationDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "idempotencyKeyDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "businessSuccess": {
+          "const": false
+        },
+        "verificationTuple": {
+          "$ref": "#/definitions/VerificationTuple"
+        }
+      }
+    },
+    "Capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationKey",
+        "operationId",
+        "method",
+        "path",
+        "semantic",
+        "delegatedScope",
+        "idempotencyKeyRequired",
+        "callerActions"
+      ],
+      "properties": {
+        "operationKey": { "type": "string" },
+        "operationId": { "type": "string" },
+        "method": { "type": "string" },
+        "path": { "type": "string" },
+        "semantic": { "type": "string" },
+        "delegatedScope": { "type": "string" },
+        "idempotencyKeyRequired": { "type": "boolean" },
+        "callerActions": { "type": "array", "items": { "type": "string" } }
+      },
+      "enum": [
+        { "operationKey": "LIST_CAPABILITIES", "operationId": "ListCapabilities", "method": "GET", "path": "/v1/capabilities", "semantic": "DISCOVERY", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD", "READ_METADATA"] },
+        { "operationKey": "SUBMIT_GOVERNED_QUERY", "operationId": "SubmitGovernedQuery", "method": "POST", "path": "/v1/queries", "semantic": "LOGICAL_READ", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": true, "callerActions": ["READ_RECORD", "READ_METADATA"] },
+        { "operationKey": "GET_OPERATION_STATUS", "operationId": "GetOperationStatus", "method": "GET", "path": "/v1/operations/{operationId}", "semantic": "STATUS", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] },
+        { "operationKey": "GET_READBACK", "operationId": "GetReadback", "method": "GET", "path": "/v1/operations/{operationId}/readback", "semantic": "AUTHORITATIVE_READBACK", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] },
+        { "operationKey": "GET_RECEIPT", "operationId": "GetReceipt", "method": "GET", "path": "/v1/operations/{operationId}/receipt", "semantic": "BOUND_RECEIPT", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] }
+      ]
+    },
+    "ListCapabilitiesResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "operationKey",
+        "environmentClass",
+        "capabilities",
+        "callerActionAllowlist",
+        "governedMutationActionAllowlist",
+        "verificationTuple"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.power-platform/readonly-connector/v1"
+        },
+        "operationKey": {
+          "const": "LIST_CAPABILITIES"
+        },
+        "environmentClass": {
+          "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY"
+        },
+        "capabilities": {
+          "const": [
+            { "operationKey": "LIST_CAPABILITIES", "operationId": "ListCapabilities", "method": "GET", "path": "/v1/capabilities", "semantic": "DISCOVERY", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD", "READ_METADATA"] },
+            { "operationKey": "SUBMIT_GOVERNED_QUERY", "operationId": "SubmitGovernedQuery", "method": "POST", "path": "/v1/queries", "semantic": "LOGICAL_READ", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": true, "callerActions": ["READ_RECORD", "READ_METADATA"] },
+            { "operationKey": "GET_OPERATION_STATUS", "operationId": "GetOperationStatus", "method": "GET", "path": "/v1/operations/{operationId}", "semantic": "STATUS", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] },
+            { "operationKey": "GET_READBACK", "operationId": "GetReadback", "method": "GET", "path": "/v1/operations/{operationId}/readback", "semantic": "AUTHORITATIVE_READBACK", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] },
+            { "operationKey": "GET_RECEIPT", "operationId": "GetReceipt", "method": "GET", "path": "/v1/operations/{operationId}/receipt", "semantic": "BOUND_RECEIPT", "delegatedScope": "cm.discovery.read", "idempotencyKeyRequired": false, "callerActions": ["READ_RECORD"] }
+          ]
+        },
+        "callerActionAllowlist": {
+          "const": [
+            "READ_RECORD",
+            "READ_METADATA"
+          ]
+        },
+        "governedMutationActionAllowlist": {
+          "const": []
+        },
+        "verificationTuple": {
+          "$ref": "#/definitions/VerificationTuple"
+        }
+      }
+    },
+    "OperationStatusResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "operationKey",
+        "operationId",
+        "status",
+        "reasonCodes",
+        "businessSuccess",
+        "verificationTuple"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.power-platform/readonly-connector/v1"
+        },
+        "operationKey": {
+          "const": "GET_OPERATION_STATUS"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "status": {
+          "enum": [
+            "ACCEPTED",
+            "REJECTED",
+            "REPLAY_CONSUMED",
+            "AMBIGUOUS_CONSUMED",
+            "RECEIPTED"
+          ]
+        },
+        "reasonCodes": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/ReasonCode"
+          }
+        },
+        "businessSuccess": {
+          "type": "boolean"
+        },
+        "verificationTuple": {
+          "$ref": "#/definitions/VerificationTuple"
+        }
+      }
+    },
+    "AuthoritativeReadbackResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "operationKey",
+        "operationId",
+        "source",
+        "requestDigest",
+        "correlationDigest",
+        "effectCount",
+        "outcome",
+        "verificationTuple"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.power-platform/readonly-connector/v1"
+        },
+        "operationKey": {
+          "const": "GET_READBACK"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source": {
+          "const": "PROVIDER_OR_TENANT_CONTROL_PLANE_READ_AFTER_EFFECT_NOT_REQUEST_ECHO"
+        },
+        "requestDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "correlationDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "effectCount": {
+          "const": 0
+        },
+        "outcome": {
+          "const": "SUCCESS"
+        },
+        "verificationTuple": {
+          "$ref": "#/definitions/VerificationTuple"
+        }
+      }
+    },
+    "BoundReceiptResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "operationKey",
+        "operationId",
+        "requestDigest",
+        "correlationDigest",
+        "idempotencyKeyDigest",
+        "policyGeneration",
+        "policyGenerationReason",
+        "catalogueSchemaVersion",
+        "catalogueId",
+        "catalogueVersion",
+        "catalogueDigest",
+        "policySchemaVersion",
+        "policyId",
+        "policyVersion",
+        "policyDigest",
+        "gatewayDecisionSchemaVersion",
+        "brokerReceiptSchemaVersion",
+        "brokerReceiptRequiredBindingFields",
+        "powerPlatformActionCompatibility",
+        "powerPlatformMayInvokeCurrentActions",
+        "fullTupleDigest",
+        "effectCount",
+        "outcome",
+        "receiptDigest",
+        "verificationTuple"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.power-platform/readonly-connector/v1"
+        },
+        "operationKey": {
+          "const": "GET_RECEIPT"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "requestDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "correlationDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "idempotencyKeyDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "policyGeneration": {
+          "type": "null"
+        },
+        "policyGenerationReason": {
+          "const": "The capability policy v1 export is version-and-digest bound and does not export a numeric policyGeneration."
+        },
+        "catalogueSchemaVersion": {
+          "const": "chimpmaera.security/capability-catalogue/v1"
+        },
+        "catalogueId": {
+          "const": "chimpmaera.local/synthetic-actions"
+        },
+        "catalogueVersion": {
+          "const": "1.0.0"
+        },
+        "catalogueDigest": {
+          "const": "bb0060a254f450684bd17f6559d267d6f02d225c4c4d37479c3010c60d1b8427"
+        },
+        "policySchemaVersion": {
+          "const": "chimpmaera.security/capability-policy-binding/v1"
+        },
+        "policyId": {
+          "const": "policy:synthetic-safe-guided"
+        },
+        "policyVersion": {
+          "const": "1.0.0"
+        },
+        "policyDigest": {
+          "const": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89"
+        },
+        "gatewayDecisionSchemaVersion": {
+          "const": "chimpmaera.security/capability-gateway-decision/v1"
+        },
+        "brokerReceiptSchemaVersion": {
+          "const": "chimpmaera.security/capability-broker-receipt/v1"
+        },
+        "brokerReceiptRequiredBindingFields": {
+          "const": [
+            "schemaVersion",
+            "environmentClass",
+            "fullTupleDigest",
+            "catalogueVersion",
+            "catalogueDigest",
+            "actionId",
+            "actionVersion",
+            "actionDigest",
+            "requestDigest",
+            "proposalDigest",
+            "decisionDigest",
+            "policyGeneration",
+            "policyDigest",
+            "authorityLeaseDigest",
+            "authorityExpiresAtDigest",
+            "revocationObservationDigest",
+            "replayKeyDigest",
+            "providerObjectReferenceDigest",
+            "readbackDigest",
+            "effectCount",
+            "outcome",
+            "receiptDigest"
+          ]
+        },
+        "powerPlatformActionCompatibility": {
+          "const": "INCOMPATIBLE_NO_POWER_PLATFORM_ACTION"
+        },
+        "powerPlatformMayInvokeCurrentActions": {
+          "const": false
+        },
+        "fullTupleDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "effectCount": {
+          "const": 0
+        },
+        "outcome": {
+          "const": "BOUND"
+        },
+        "receiptDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "verificationTuple": {
+          "$ref": "#/definitions/VerificationTuple"
+        }
+      }
+    },
+    "ConnectorError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "code",
+        "correlationDigest",
+        "decisionDigest"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.power-platform/error/v1"
+        },
+        "code": {
+          "$ref": "#/definitions/ReasonCode"
+        },
+        "correlationDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "decisionDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "powerPlatformReadOnlyOAuth2": {
+      "description": "Delegated read-only OAuth against the pinned synthetic host. Authentication grants no authority beyond the pinned scope.",
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://pansphaira-power-platform-read-only.synthetic.invalid/v1/auth/authorize",
+      "scopes": {
+        "cm.discovery.read": "Capability discovery and governed read-only queries."
+      }
+    }
+  },
+  "x-pansphaira-connector": {
+    "schemaVersion": "pansphaira.power-platform/readonly-connector-surface/v1",
+    "contractVersion": "1.0.0",
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "evidenceClass": "LOCAL_SYNTHETIC",
+    "status": "FROZEN_FOR_FUTURE_REPOSITORY_IMPLEMENTATION",
+    "decisionBinding": {
+      "taskId": "SOL-PSAI32-STATE-RECONCILE-01",
+      "outcome": "RECONCILED_REPOSITORY_ONLY",
+      "currentState": "repository-contract-complete",
+      "realEnvironmentProgression": "DENIED_UNTIL_EXPLICIT_AUTHORIZATION_AND_COMPLETE_SHARED_INPUTS",
+      "authority": "NONE",
+      "receiptDigest": "046271c5a703ba2a50759eee54baafff1c26a148aabacba662a3d8b154f99089"
+    },
+    "openApiSchemaBinding": {
+      "sourcePath": "contracts/azure-power-platform/readonly-connector.schema.json",
+      "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+    },
+    "documentDigest": "67c6e32cd4c9c995c06033b6a4c6a4f0ec621b3c11706ee6af83ba1c794763ee",
+    "connectorContractBinding": {
+      "schemaVersion": "chimpmaera.connector/power-platform-read/v1",
+      "contractVersion": "1.0.0",
+      "contractDigest": "71805da9cf453748dbde0917bcf5477a90fa5aca828fe9d8c30d88de6c758830",
+      "sourcePath": "packages/contracts/src/power-platform-read-connector.ts",
+      "sourceSha256": "21821f2957f48356dd71741f4a8540e26b29bba81fd48cac1ff2f19dfa5d9781",
+      "schemaPath": "schemas/contracts/power-platform-read-connector-v1.schema.json",
+      "schemaSha256": "d555893c9ac16923fb9607c723aaf190c8796bac4a61d5727c7635e5dda1f63f"
+    },
+    "identityBinding": {
+      "schemaVersion": "chimpmaera.identity/azure-profile/v1",
+      "contractVersion": "1.0.0",
+      "profileId": "identity:azure-power-apps-read-v1",
+      "profileDigest": "e46d524fc32e550db3c94d848c78737bbcef1ca0ddc1ddfb3cc349ed2bc66fae",
+      "sourceSha256": "d2310f860109f87b799ba4eb4b067255d4237c4bbb71c1780145d14908a608bd",
+      "schemaSha256": "ff383ccc0829599d11542109ac3b4f1380719e8c85ce49eabd7938a98ad4e942",
+      "fixtureSha256": "d3762cb5f19b3583af81aff8dd9aea2ff66f553aff70b286291b523f43dd5885",
+      "delegatedScopes": [
+        "cm.discovery.read"
+      ],
+      "applicationRoles": []
+    },
+    "verificationBinding": {
+      "bundleSchemaVersion": "chimpmaera.verification/fabric-bundle/v1",
+      "requiredTuple": [
+        "subjectDigest",
+        "planDigest",
+        "evidenceBundleDigest",
+        "verdictDigest",
+        "readbackDigest"
+      ]
+    },
+    "gatewayBinding": {
+      "source": "packages/contracts/src/capability-catalogue.ts",
+      "sourceSha256": "9d24442a94c2cfcf9c305732a60ceadf286200a2eae26b6dabd157769a223f54",
+      "catalogueSchemaVersion": "chimpmaera.security/capability-catalogue/v1",
+      "catalogueId": "chimpmaera.local/synthetic-actions",
+      "catalogueVersion": "1.0.0",
+      "catalogueDigest": "bb0060a254f450684bd17f6559d267d6f02d225c4c4d37479c3010c60d1b8427",
+      "activationSchemaVersion": "chimpmaera.security/capability-activation/v1",
+      "policySchemaVersion": "chimpmaera.security/capability-policy-binding/v1",
+      "policyId": "policy:synthetic-safe-guided",
+      "policyVersion": "1.0.0",
+      "policyDigest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89",
+      "policyGeneration": null,
+      "policyGenerationReason": "The capability policy v1 export is version-and-digest bound and does not export a numeric policyGeneration.",
+      "gatewayDecisionSchemaVersion": "chimpmaera.security/capability-gateway-decision/v1",
+      "brokerReceiptSchemaVersion": "chimpmaera.security/capability-broker-receipt/v1",
+      "actionAllowlist": [
+        {
+          "actionId": "crm.contact.create",
+          "version": "1.0.0",
+          "digest": "8a032b1057fcd5c10497877cbb53ceadbd9f76fba899c630855ed5019045c24a"
+        },
+        {
+          "actionId": "erp.order.create",
+          "version": "1.0.0",
+          "digest": "a20f5c9b60cbb9af1d098ae31c5f3e46e37722c6a9548b9f25b331c0287b98ab"
+        }
+      ],
+      "activationDefault": "INACTIVE",
+      "evidenceSinkAllowlist": [
+        "SYNTHETIC_MEMORY"
+      ],
+      "powerPlatformActionCompatibility": "INCOMPATIBLE_NO_POWER_PLATFORM_ACTION",
+      "powerPlatformMayInvokeCurrentActions": false,
+      "limitations": [
+        "LOCAL_SYNTHETIC_VALIDATION_ONLY",
+        "NO_LIVE_PROVIDER_OR_CREDENTIAL_USE",
+        "IN_MEMORY_REPLAY_RESERVATION_IN_CANONICAL_CONTRACT",
+        "CATALOGUE_ADMISSION_DOES_NOT_ESTABLISH_SAFETY",
+        "CONTENT_DIGESTS_DO_NOT_GRANT_AUTHORITY"
+      ]
+    },
+    "submitRequestBinding": {
+      "schemaVersion": "pansphaira.power-platform/governed-read-reference/v1",
+      "exactFields": [
+        "schemaVersion",
+        "action",
+        "requestDigest",
+        "correlationDigest",
+        "idempotencyKeyDigest"
+      ],
+      "semantics": "The body refers to a previously stored immutable Gateway request by digest. It cannot carry a URL, HTTP method, tenant, identity, credential, query text, field selector, provider body or authority. The Gateway must load and independently authorize the referenced request."
+    },
+    "callerActionAllowlist": [
+      "READ_RECORD",
+      "READ_METADATA"
+    ],
+    "governedMutationActionAllowlist": [],
+    "administrativeImportAndResetAreConnectorActions": false,
+    "operations": [
+      {
+        "operationKey": "LIST_CAPABILITIES",
+        "operationId": "ListCapabilities",
+        "method": "GET",
+        "path": "/v1/capabilities",
+        "semantic": "DISCOVERY",
+        "delegatedScope": "cm.discovery.read",
+        "idempotencyKeyRequired": false
+      },
+      {
+        "operationKey": "SUBMIT_GOVERNED_QUERY",
+        "operationId": "SubmitGovernedQuery",
+        "method": "POST",
+        "path": "/v1/queries",
+        "semantic": "LOGICAL_READ",
+        "delegatedScope": "cm.discovery.read",
+        "idempotencyKeyRequired": true
+      },
+      {
+        "operationKey": "GET_OPERATION_STATUS",
+        "operationId": "GetOperationStatus",
+        "method": "GET",
+        "path": "/v1/operations/{operationId}",
+        "semantic": "STATUS",
+        "delegatedScope": "cm.discovery.read",
+        "idempotencyKeyRequired": false
+      },
+      {
+        "operationKey": "GET_READBACK",
+        "operationId": "GetReadback",
+        "method": "GET",
+        "path": "/v1/operations/{operationId}/readback",
+        "semantic": "AUTHORITATIVE_READBACK",
+        "delegatedScope": "cm.discovery.read",
+        "idempotencyKeyRequired": false
+      },
+      {
+        "operationKey": "GET_RECEIPT",
+        "operationId": "GetReceipt",
+        "method": "GET",
+        "path": "/v1/operations/{operationId}/receipt",
+        "semantic": "BOUND_RECEIPT",
+        "delegatedScope": "cm.discovery.read",
+        "idempotencyKeyRequired": false
+      }
+    ],
+    "authorityBoundary": {
+      "genericInvocationAllowed": false,
+      "arbitraryUrlAllowed": false,
+      "arbitraryHttpMethodAllowed": false,
+      "arbitraryCommandAllowed": false,
+      "arbitraryBodySchemaAllowed": false,
+      "callerTenantAllowed": false,
+      "callerCredentialAllowed": false,
+      "unknownOperationsDenied": true,
+      "requestedRights": [],
+      "writeTargets": [],
+      "proposalOperations": [],
+      "approvalOperations": [],
+      "executionOperations": [],
+      "cancellationOperations": []
+    },
+    "lifecycle": {
+      "acceptanceSemantics": "OPERATION_REFERENCE_ONLY",
+      "businessSuccessRequires": "AUTHORITATIVE_READBACK_AND_BOUND_RECEIPT",
+      "terminalCommittedIsBusinessSuccess": false,
+      "authoritativeReadbackRequired": true,
+      "boundReceiptRequired": true
+    },
+    "credentials": {
+      "storedByConnector": false,
+      "embeddedAllowed": false,
+      "ambientAllowed": false,
+      "dynamicSelectionAllowed": false,
+      "secretReferences": []
+    },
+    "genericEscapeHatches": {
+      "arbitraryServer": false,
+      "arbitraryUrl": false,
+      "arbitraryPath": false,
+      "arbitraryMethod": false,
+      "arbitraryHeaders": false,
+      "arbitraryBody": false,
+      "genericProxy": false,
+      "dynamicSchema": false,
+      "dynamicValues": false,
+      "defaultResponse": false,
+      "unknownFields": false,
+      "unknownActions": false
+    },
+    "publicErrorVocabulary": {
+      "schemaVersion": "pansphaira.power-platform/error/v1",
+      "exactFields": [
+        "schemaVersion",
+        "code",
+        "correlationDigest",
+        "decisionDigest"
+      ],
+      "unavailableDigestMarker": "0000000000000000000000000000000000000000000000000000000000000000",
+      "codes": [
+        "SCHEMA_DENIED",
+        "UNKNOWN_ACTION_DENIED",
+        "HIDDEN_WRITE_DENIED",
+        "APPROVAL_SAME_ACTOR_DENIED",
+        "AUTHORITY_BINDING_DENIED",
+        "AUTHORITY_EXPIRED_DENIED",
+        "REPLAY_CONSUMED_DENIED",
+        "DIGEST_MISMATCH_DENIED",
+        "REVOCATION_BINDING_DENIED",
+        "POLICY_STALE_DENIED",
+        "INCOMPATIBLE_VERSION_DENIED",
+        "CROSS_TENANT_DENIED",
+        "EVIDENCE_STALE_DENIED",
+        "PROVIDER_READBACK_MISMATCH_DENIED",
+        "EFFECT_STORE_INVALID_DENIED",
+        "INDEPENDENT_CONTEXT_DENIED"
+      ],
+      "caseBindings": {
+        "unknownField": "SCHEMA_DENIED",
+        "unknownAction": "UNKNOWN_ACTION_DENIED",
+        "hiddenWrite": "HIDDEN_WRITE_DENIED",
+        "selfApprovalOrRoleConflation": "APPROVAL_SAME_ACTOR_DENIED",
+        "digestDrift": "DIGEST_MISMATCH_DENIED",
+        "replay": "REPLAY_CONSUMED_DENIED",
+        "expiry": "AUTHORITY_EXPIRED_DENIED",
+        "revocation": "REVOCATION_BINDING_DENIED",
+        "stalePolicy": "POLICY_STALE_DENIED",
+        "readbackMismatchOrUnavailableAfterEffect": "PROVIDER_READBACK_MISMATCH_DENIED",
+        "receiptTamper": "EFFECT_STORE_INVALID_DENIED",
+        "missingSharedInput": "INDEPENDENT_CONTEXT_DENIED"
+      },
+      "freeFormMessageAllowed": false,
+      "freeFormDetailsAllowed": false,
+      "unknownCodeAllowed": false
+    },
+    "failClosedCaseBindings": [
+      {
+        "case": "unknown fields",
+        "result": "DENY",
+        "code": "SCHEMA_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "unknown actions",
+        "result": "DENY",
+        "code": "UNKNOWN_ACTION_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "hidden writes",
+        "result": "DENY",
+        "code": "HIDDEN_WRITE_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "self approval or principal conflation",
+        "result": "DENY",
+        "code": "APPROVAL_SAME_ACTOR_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "digest drift",
+        "result": "DENY",
+        "code": "DIGEST_MISMATCH_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "replay or in-flight ambiguity",
+        "result": "DENY_OR_AMBIGUOUS_CONSUMED_NO_SECOND_EFFECT",
+        "code": "REPLAY_CONSUMED_DENIED",
+        "maximumAdditionalEffectCount": 0
+      },
+      {
+        "case": "expired authority",
+        "result": "DENY",
+        "code": "AUTHORITY_EXPIRED_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "revoked authority or tuple",
+        "result": "DENY",
+        "code": "REVOCATION_BINDING_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "stale policy generation or digest",
+        "result": "DENY",
+        "code": "POLICY_STALE_DENIED",
+        "effectCount": 0
+      },
+      {
+        "case": "accepted response without authoritative readback and receipt",
+        "result": "NOT_BUSINESS_SUCCESS",
+        "code": "PROVIDER_READBACK_MISMATCH_DENIED"
+      }
+    ],
+    "receiptAndReadbackBinding": {
+      "successState": "readback-receipted",
+      "acceptedTransportResponseIsBusinessSuccess": false,
+      "authoritativeReadbackRequiredAfterEveryAcceptedOperation": true,
+      "boundReceiptRequiredAfterEveryAcceptedOperation": true,
+      "requiredBindingFields": [
+        "schemaVersion",
+        "environmentClass",
+        "fullTupleDigest",
+        "catalogueVersion",
+        "catalogueDigest",
+        "actionId",
+        "actionVersion",
+        "actionDigest",
+        "requestDigest",
+        "proposalDigest",
+        "decisionDigest",
+        "policyGeneration",
+        "policyDigest",
+        "authorityLeaseDigest",
+        "authorityExpiresAtDigest",
+        "revocationObservationDigest",
+        "replayKeyDigest",
+        "providerObjectReferenceDigest",
+        "readbackDigest",
+        "effectCount",
+        "outcome",
+        "receiptDigest"
+      ],
+      "tamperEvidence": "receiptDigest binds the exact closed receipt core; the Verification Fabric evidence bundle and Accepted/LKG records bind receipt and readback digests from an independent trusted context.",
+      "authoritativeReadbackSource": "PROVIDER_OR_TENANT_CONTROL_PLANE_READ_AFTER_EFFECT_NOT_REQUEST_ECHO",
+      "readbackFailureState": "AMBIGUOUS_CONSUMED_NO_RETRY_WITHOUT_ROLLBACK_AUTHORITY",
+      "capabilityBytesGrantAuthority": false
+    },
+    "authorityDenialCodeBindings": {
+      "callerTenantAllowed": "CROSS_TENANT_DENIED",
+      "callerCredentialAllowed": "AUTHORITY_BINDING_DENIED",
+      "unknownOperationsDenied": "UNKNOWN_ACTION_DENIED"
+    },
+    "limitations": [
+      "NO_LIVE_TENANT",
+      "NO_CREDENTIAL_USE",
+      "NO_PROVIDER_CALL",
+      "NO_DEPLOYABLE_POWER_PLATFORM_SOLUTION",
+      "NO_IMPORT_OR_RESET_EXECUTION",
+      "NO_PROPOSAL_APPROVAL_OR_EXECUTION_API",
+      "NO_POLICY_OR_ACTIVATION_AUTHORITY",
+      "NO_OPENAPI_DOCUMENT_BEYOND_CLOSED_CONTRACT_METADATA",
+      "NO_BUSINESS_SUCCESS_WITHOUT_AUTHORITATIVE_READBACK_AND_BOUND_RECEIPT"
+    ],
+    "rollbackBinding": {
+      "candidatePromotionRequires": [
+        "complete six-axis tuple",
+        "exact component versions and digests",
+        "compatible authority profile",
+        "fresh evaluation-time-bound revocation state",
+        "independent verification verdict",
+        "authoritative readback digest",
+        "bound receipt digest"
+      ],
+      "acceptedAdvance": "Only the exact readback-receipted tuple becomes Accepted; transport acceptance, import acceptance or execution return alone cannot advance it.",
+      "lkgAdvance": "The previously verified Accepted full tuple remains LKG until the new Accepted tuple has independently verified health and public-safe evidence. No partial-axis fallback is allowed.",
+      "availabilityDecisions": {
+        "freshUnrevokedAccepted": "PRESERVE_ACCEPTED",
+        "acceptedUnavailableAndFreshUnrevokedCompatibleLkg": "ROLLBACK_TO_LKG",
+        "neitherUsable": "ENTER_SAFE_READ_ONLY"
+      },
+      "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+      "rollbackAuthorization": "A rollback decision never executes rollback. A fresh explicit rollback-authority record bound to environment, operation, LKG tuple digest, policy generation, expiry, revocation observation and single-use replay key is required at use time.",
+      "partialRollbackAllowed": false,
+      "latestVersionFallbackAllowed": false,
+      "revokedLkgAllowed": false,
+      "staleLkgAllowed": false,
+      "currentSelectedExtensionAccepted": null,
+      "currentSelectedExtensionLkg": null,
+      "currentSelectedExtensionRollback": "BLOCKED_NO_ACCEPTED_OR_LKG_RECORD"
+    },
+    "evidenceRefs": [
+      "docs/evidence/conveyor/sol-psai32-state-reconcile-01.json",
+      "docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md",
+      "schemas/contracts/power-platform-read-connector-v1.schema.json",
+      "tests/fixtures/azure-identity/positive-profile-v1.json",
+      "packages/contracts/src/power-platform-read-connector.ts",
+      "packages/contracts/src/canonical-json.ts",
+      "https://github.com/JoFe2/PANSPHAIRA/issues/33",
+      "https://github.com/JoFe2/PANSPHAIRA/commit/5c4558bf94695e0766891347fbfa5ff2696f9842",
+      "https://github.com/JoFe2/PANSPHAIRA/pull/77",
+      "https://api.github.com/repos/JoFe2/PANSPHAIRA/releases/tags/v0.2.0-poc.20260803.5"
+    ]
+  }
+}

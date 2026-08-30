@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/schemas/azure-power-platform/enterprise-profile-evidence/v1",
+  "title": "PanSphaira synthetic enterprise-profile evidence packet",
+  "description": "Closed offline aggregate evidence. It cross-references candidate ALM, compatibility, delegated identity/security, observability/DR, tuple and receipt evidence without creating enterprise configuration or granting production eligibility.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "packetKind", "packetStatus", "environmentClass", "policy", "components", "fullTuple", "lkg",
+    "alm", "compatibility", "delegatedIdentitySecurity", "observabilityDr", "receipts", "resetUninstall", "rollback",
+    "authorityBoundary", "limitations", "negativeResults", "evidence", "publicClosure", "nonValidatedClaims", "nonClaims", "nextActions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/enterprise-profile-evidence/v1" },
+    "packetKind": { "const": "SYNTHETIC_ENTERPRISE_PROFILE_EVIDENCE" },
+    "packetStatus": { "const": "CANDIDATE_ONLY" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "components": { "$ref": "#/$defs/components" },
+    "fullTuple": { "$ref": "#/$defs/fullTuple" },
+    "lkg": { "$ref": "#/$defs/lkg" },
+    "alm": { "$ref": "#/$defs/domainEvidence" },
+    "compatibility": { "$ref": "#/$defs/domainEvidence" },
+    "delegatedIdentitySecurity": { "$ref": "#/$defs/domainEvidence" },
+    "observabilityDr": { "$ref": "#/$defs/domainEvidence" },
+    "receipts": { "$ref": "#/$defs/domainEvidence" },
+    "resetUninstall": { "$ref": "#/$defs/resetUninstall" },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "authorityBoundary": { "$ref": "#/$defs/authorityBoundary" },
+    "limitations": { "type": "array", "minItems": 8, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z0-9_]+$" } },
+    "negativeResults": { "type": "array", "minItems": 12, "maxItems": 12, "uniqueItems": true, "items": { "$ref": "#/$defs/negativeResult" } },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "publicClosure": { "$ref": "#/$defs/publicClosure" },
+    "nonValidatedClaims": { "type": "array", "minItems": 5, "uniqueItems": true, "items": { "$ref": "#/$defs/nonValidatedClaim" } },
+    "nonClaims": { "type": "array", "minItems": 8, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z0-9_]+$" } },
+    "nextActions": { "type": "array", "minItems": 5, "uniqueItems": true, "items": { "$ref": "#/$defs/nextAction" } }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "opaqueAuthority": { "type": "string", "pattern": "^opaque-authority-[a-z]+-[0-9]{3}$" },
+    "evidenceId": { "type": "string", "pattern": "^evidence-[0-9]{3}$" },
+    "operationId": { "type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$" },
+    "policy": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "generation", "digest", "status"],
+      "properties": {
+        "id": { "const": "synthetic-enterprise-profile-policy" }, "version": { "const": "1.0.0" }, "generation": { "const": 17 },
+        "digest": { "$ref": "#/$defs/digest" }, "status": { "const": "ACTIVE" }
+      }
+    },
+    "artifact": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "digest"],
+      "properties": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9:-]+$" }, "version": { "$ref": "#/$defs/version" }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "components": {
+      "type": "object", "additionalProperties": false, "required": ["alm", "compatibility", "delegatedIdentitySecurity", "observabilityDr", "receipts"],
+      "properties": {
+        "alm": { "$ref": "#/$defs/artifact" }, "compatibility": { "$ref": "#/$defs/artifact" },
+        "delegatedIdentitySecurity": { "$ref": "#/$defs/artifact" }, "observabilityDr": { "$ref": "#/$defs/artifact" }, "receipts": { "$ref": "#/$defs/artifact" }
+      }
+    },
+    "fullTuple": {
+      "type": "object", "additionalProperties": false, "required": ["environmentClass", "policy", "components", "digest"],
+      "properties": { "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" }, "policy": { "$ref": "#/$defs/policy" }, "components": { "$ref": "#/$defs/components" }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "lkg": {
+      "type": "object", "additionalProperties": false, "required": ["version", "status", "revocationState", "fullTupleDigest", "evidenceRef"],
+      "properties": { "version": { "const": "1.0.0" }, "status": { "const": "LKG" }, "revocationState": { "const": "UNREVOKED" }, "fullTupleDigest": { "$ref": "#/$defs/digest" }, "evidenceRef": { "$ref": "#/$defs/evidenceId" } }
+    },
+    "domainEvidence": {
+      "type": "object", "additionalProperties": false, "required": ["status", "artifact", "evidenceRefs"],
+      "properties": { "status": { "const": "VALIDATED_LOCAL_SYNTHETIC" }, "artifact": { "$ref": "#/$defs/artifact" }, "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/evidenceId" } } }
+    },
+    "resetUninstall": {
+      "type": "object", "additionalProperties": false,
+      "required": ["milestone", "applicability", "reset", "uninstall", "readback", "receipt"],
+      "properties": {
+        "milestone": { "const": "CM-PP-003-ALM_PACKAGE" }, "applicability": { "const": "APPLICABLE_SYNTHETIC_MILESTONE" },
+        "reset": {
+          "type": "object", "additionalProperties": false, "required": ["operation", "command", "attempted", "targetTupleDigest"],
+          "properties": { "operation": { "const": "RESET_TO_EXACT_LKG" }, "command": { "const": "NO_COMMAND_EXECUTED_OFFLINE" }, "attempted": { "const": false }, "targetTupleDigest": { "$ref": "#/$defs/digest" } }
+        },
+        "uninstall": {
+          "type": "object", "additionalProperties": false, "required": ["operation", "command", "attempted", "postcondition", "ownedResidueCount", "ownedResidueProjectionDigest"],
+          "properties": { "operation": { "const": "UNINSTALL_SYNTHETIC_OWNED_RESOURCES" }, "command": { "const": "NO_COMMAND_EXECUTED_OFFLINE" }, "attempted": { "const": false }, "postcondition": { "const": "ZERO_OWNED_RESIDUE" }, "ownedResidueCount": { "const": 0 }, "ownedResidueProjectionDigest": { "$ref": "#/$defs/digest" } }
+        },
+        "readback": {
+          "type": "object", "additionalProperties": false, "required": ["source", "operationId", "status", "effectCount", "targetTupleDigest"],
+          "properties": { "source": { "const": "LOCAL_SYNTHETIC_AUTHORITATIVE_READBACK" }, "operationId": { "$ref": "#/$defs/operationId" }, "status": { "const": "READ_CONFIRMED" }, "effectCount": { "const": 0 }, "targetTupleDigest": { "$ref": "#/$defs/digest" } }
+        },
+        "receipt": {
+          "type": "object", "additionalProperties": false, "required": ["status", "operationId", "eventDigest", "readbackDigest", "receiptDigest", "evidenceRef"],
+          "properties": { "status": { "const": "ACCEPTED_READBACK_BOUND" }, "operationId": { "$ref": "#/$defs/operationId" }, "eventDigest": { "$ref": "#/$defs/digest" }, "readbackDigest": { "$ref": "#/$defs/digest" }, "receiptDigest": { "$ref": "#/$defs/digest" }, "evidenceRef": { "$ref": "#/$defs/evidenceId" } }
+        }
+      }
+    },
+    "rollback": {
+      "type": "object", "additionalProperties": false, "required": ["target", "targetVersion", "targetFullTupleDigest", "authorization", "partialRollbackAllowed", "latestVersionFallbackAllowed", "evidenceRef"],
+      "properties": {
+        "target": { "const": "EXACT_LKG_FULL_TUPLE_FROM_INDEPENDENT_TRUSTED_CONTEXT" }, "targetVersion": { "const": "1.0.0" }, "targetFullTupleDigest": { "$ref": "#/$defs/digest" },
+        "authorization": { "const": "OWNER_ONLY_REQUIRED" }, "partialRollbackAllowed": { "const": false }, "latestVersionFallbackAllowed": { "const": false }, "evidenceRef": { "$ref": "#/$defs/evidenceId" }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object", "additionalProperties": false, "required": ["authorities", "capabilityBytesGrantAuthority", "packageGrantsAuthority", "noReleaseDecisionGrantsAuthority", "importExecutionAuthorized", "publicationAuthorized", "promotionAuthorized", "rollbackAuthorized", "unidentifiedAuthorityAllowed"],
+      "properties": {
+        "authorities": { "type": "object", "additionalProperties": false, "required": ["proposer", "verifier", "importOwner", "executionOwner", "publicationOwner", "promotionOwner", "rollbackOwner"], "properties": {
+          "proposer": { "$ref": "#/$defs/opaqueAuthority" }, "verifier": { "$ref": "#/$defs/opaqueAuthority" }, "importOwner": { "$ref": "#/$defs/opaqueAuthority" }, "executionOwner": { "$ref": "#/$defs/opaqueAuthority" }, "publicationOwner": { "$ref": "#/$defs/opaqueAuthority" }, "promotionOwner": { "$ref": "#/$defs/opaqueAuthority" }, "rollbackOwner": { "$ref": "#/$defs/opaqueAuthority" }
+        } },
+        "capabilityBytesGrantAuthority": { "const": false }, "packageGrantsAuthority": { "const": false }, "noReleaseDecisionGrantsAuthority": { "const": false }, "importExecutionAuthorized": { "const": false }, "publicationAuthorized": { "const": false }, "promotionAuthorized": { "const": false }, "rollbackAuthorized": { "const": false }, "unidentifiedAuthorityAllowed": { "const": false }
+      }
+    },
+    "negativeResult": {
+      "type": "object", "additionalProperties": false, "required": ["case", "outcome", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": { "case": { "enum": ["INCOMPLETE_EVIDENCE", "CROSS_TUPLE_MISMATCH", "PRODUCTION_READINESS_ASSERTION", "UNIDENTIFIED_AUTHORITY", "OMITTED_LIMITATION", "PUBLIC_UNSAFE_MATERIAL", "CAPABILITY_AS_AUTHORITY", "PACKAGE_AS_AUTHORITY", "NO_RELEASE_AS_AUTHORITY", "MISSING_RESET_RESIDUE_PROOF", "MISSING_POLICY_GENERATION", "MISSING_ROLLBACK_TARGET"] }, "outcome": { "const": "DENY" }, "reasonCode": { "type": "string", "pattern": "^[A-Z0-9_]+_DENIED$" }, "effectCount": { "const": 0 }, "evidenceRef": { "$ref": "#/$defs/evidenceId" } }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["bundleDigest", "refs"],
+      "properties": { "bundleDigest": { "$ref": "#/$defs/digest" }, "refs": { "type": "array", "minItems": 8, "uniqueItems": true, "items": { "$ref": "#/$defs/evidenceRef" } } }
+    },
+    "evidenceRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "reference", "digest", "immutable", "policyGeneration", "limitation", "negativeResult", "rollbackTarget", "ownerOnlyNextAction"],
+      "properties": {
+        "id": { "$ref": "#/$defs/evidenceId" }, "reference": { "type": "string", "pattern": "^(contracts|docs|tests|tools|pull|release)/[A-Za-z0-9._/-]+$" }, "digest": { "$ref": "#/$defs/digest" }, "immutable": { "const": true }, "policyGeneration": { "const": 17 },
+        "limitation": { "type": "string", "pattern": "^[A-Z0-9_]+$" }, "negativeResult": { "type": "string", "pattern": "^[A-Z0-9_]+$" }, "rollbackTarget": { "$ref": "#/$defs/digest" }, "ownerOnlyNextAction": { "type": "string", "pattern": "^next-action-[a-z0-9-]+$" }
+      }
+    },
+    "publicLink": {
+      "type": "object", "additionalProperties": false, "required": ["status", "reference", "digest"],
+      "properties": { "status": { "const": "LINKED" }, "reference": { "type": "string", "pattern": "^(docs|tests|pull)/[A-Za-z0-9._/-]+$" }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "publicClosure": {
+      "type": "object", "additionalProperties": false, "required": ["planningArtifact", "planningPr", "implementationPrs", "release", "publicReadback"],
+      "properties": {
+        "planningArtifact": { "$ref": "#/$defs/publicLink" }, "planningPr": { "$ref": "#/$defs/publicLink" }, "implementationPrs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/publicLink" } },
+        "release": { "type": "object", "additionalProperties": false, "required": ["status", "reference", "digest", "reason"], "properties": { "status": { "const": "NOT_RELEASED" }, "reference": { "type": "null" }, "digest": { "type": "null" }, "reason": { "const": "CANDIDATE_ONLY_NO_RELEASE" } } },
+        "publicReadback": { "$ref": "#/$defs/publicLink" }
+      }
+    },
+    "nonValidatedClaim": { "type": "object", "additionalProperties": false, "required": ["claim", "status"], "properties": { "claim": { "enum": ["TENANT_VALIDATION", "RUNTIME_VALIDATION", "PRODUCTION_VALIDATION", "ENTERPRISE_READINESS", "CLOUD_CONFIGURATION"] }, "status": { "const": "ABSENT" } } },
+    "nextAction": {
+      "type": "object", "additionalProperties": false, "required": ["id", "action", "ownerAuthority", "authorizationStatus", "effectCount", "evidenceRef"],
+      "properties": { "id": { "type": "string", "pattern": "^next-action-[a-z0-9-]+$" }, "action": { "enum": ["IMPORT", "EXECUTION", "PUBLICATION", "PROMOTION", "ROLLBACK"] }, "ownerAuthority": { "$ref": "#/$defs/opaqueAuthority" }, "authorizationStatus": { "const": "OWNER_ONLY_REQUIRED" }, "effectCount": { "const": 0 }, "evidenceRef": { "$ref": "#/$defs/evidenceId" } }
+    }
+  }
+}

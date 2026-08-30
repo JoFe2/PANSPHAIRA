@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/proposal-approval-execution/v1",
+  "fixtureKind": "SELF_APPROVED",
+  "baseFixture": "tests/fixtures/azure-power-platform/proposal-approved.json",
+  "expectedReasonCode": "SELF_APPROVAL_DENIED",
+  "mutation": {
+    "path": "approval.approver",
+    "value": "principal:synthetic-proposer"
+  }
+}

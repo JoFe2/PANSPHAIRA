@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/public-readback/v1",
+  "packetKind": "PUBLIC_SAFE_PLANNING_EVIDENCE",
+  "packetStatus": "CANDIDATE_ONLY",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "tenantId": "REDACTED_TEST_ID",
+  "subscriptionId": "REDACTED_TEST_ID",
+  "environmentId": "REDACTED_TEST_ID",
+  "ownerEmail": "redacted@example.invalid",
+  "credential": "REDACTED_TEST_MARKER",
+  "privatePath": "REDACTED_TEST_MARKER",
+  "internalHost": "redacted.example.invalid",
+  "secretReference": "REDACTED_TEST_MARKER",
+  "productionClaim": "PRODUCTION_VALIDATED",
+  "securityPayload": { "authorization": "REDACTED_TEST_MARKER" }
+}

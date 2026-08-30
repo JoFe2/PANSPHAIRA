@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/schemas/azure-power-platform/observability-dr-evidence/v1",
+  "title": "Offline observability and DR evidence",
+  "description": "Closed, local-synthetic evidence only. It neither exports telemetry nor executes recovery.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "evidenceKind", "environmentClass", "policy", "tuple", "operations", "recoveryExercise", "limitations", "negativeResults", "evidence", "nonClaims"],
+  "properties": {
+    "schemaVersion": {"const": "pansphaira.azure-power-platform/observability-dr-evidence/v1"},
+    "evidenceKind": {"const": "LOCAL_SYNTHETIC_OBSERVABILITY_DR_EVIDENCE"},
+    "environmentClass": {"const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY"},
+    "policy": {"$ref": "#/$defs/policy"},
+    "tuple": {"$ref": "#/$defs/tuple"},
+    "operations": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/operation"}},
+    "recoveryExercise": {"$ref": "#/$defs/recoveryExercise"},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[A-Z0-9_]+$"}},
+    "negativeResults": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/negativeResult"}},
+    "evidence": {"$ref": "#/$defs/evidence"},
+    "nonClaims": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[A-Z0-9_]+$"}}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {"id": {"type": "string", "pattern": "^synthetic-[a-z0-9-]+$"}, "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}, "digest": {"$ref": "#/$defs/digest"}}
+    },
+    "policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "generation", "digest", "status"],
+      "properties": {"id": {"type": "string", "pattern": "^synthetic-[a-z0-9-]+$"}, "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}, "generation": {"type": "integer", "minimum": 1}, "digest": {"$ref": "#/$defs/digest"}, "status": {"enum": ["ACTIVE", "REVOKED"]}}
+    },
+    "tuple": {
+      "type": "object", "additionalProperties": false,
+      "required": ["component", "telemetrySchema", "policy", "lkg", "evidenceDigest", "fullTupleDigest"],
+      "properties": {
+        "component": {"$ref": "#/$defs/artifact"}, "telemetrySchema": {"$ref": "#/$defs/artifact"}, "policy": {"$ref": "#/$defs/policy"},
+        "lkg": {"$ref": "#/$defs/lkg"}, "evidenceDigest": {"$ref": "#/$defs/digest"}, "fullTupleDigest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "lkg": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "digest", "status", "tupleDigest", "revocationState"],
+      "properties": {"version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}, "digest": {"$ref": "#/$defs/digest"}, "status": {"const": "LKG"}, "tupleDigest": {"$ref": "#/$defs/digest"}, "revocationState": {"enum": ["UNREVOKED", "REVOKED"]}}
+    },
+    "event": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sequence", "operationId", "kind", "outcome", "policyGeneration", "policyDigest", "fullTupleDigest", "eventDigest"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1}, "operationId": {"type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$"},
+        "kind": {"enum": ["SYNTHETIC_TELEMETRY_ACCEPT", "RESET_UNINSTALL"]}, "outcome": {"const": "ACCEPTED"},
+        "policyGeneration": {"type": "integer", "minimum": 1}, "policyDigest": {"$ref": "#/$defs/digest"}, "fullTupleDigest": {"$ref": "#/$defs/digest"}, "eventDigest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "readback": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sequence", "source", "operationId", "eventDigest", "fullTupleDigest", "status", "ownedResidueCount", "ownedResidueProjectionDigest", "readbackDigest"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1}, "source": {"const": "LOCAL_SYNTHETIC_AUTHORITATIVE_READBACK"}, "operationId": {"type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$"},
+        "eventDigest": {"$ref": "#/$defs/digest"}, "fullTupleDigest": {"$ref": "#/$defs/digest"}, "status": {"const": "READ_CONFIRMED"},
+        "ownedResidueCount": {"type": "integer", "minimum": 0}, "ownedResidueProjectionDigest": {"$ref": "#/$defs/digest"}, "readbackDigest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sequence", "issuer", "operationId", "eventDigest", "readbackDigest", "fullTupleDigest", "outcome", "receiptDigest"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1}, "issuer": {"const": "LOCAL_SYNTHETIC_TAMPER_EVIDENT_RECEIPT"}, "operationId": {"type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$"},
+        "eventDigest": {"$ref": "#/$defs/digest"}, "readbackDigest": {"$ref": "#/$defs/digest"}, "fullTupleDigest": {"$ref": "#/$defs/digest"}, "outcome": {"const": "ACCEPTED_READBACK_BOUND"}, "receiptDigest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "operation": {
+      "type": "object", "additionalProperties": false, "required": ["event", "readback", "receipt"],
+      "properties": {"event": {"$ref": "#/$defs/event"}, "readback": {"$ref": "#/$defs/readback"}, "receipt": {"$ref": "#/$defs/receipt"}}
+    },
+    "recoveryExercise": {
+      "type": "object", "additionalProperties": false,
+      "required": ["milestone", "operationId", "executionClass", "rollbackTarget", "inferredRollback", "zeroResidue"],
+      "properties": {
+        "milestone": {"const": "RESET_UNINSTALL"}, "operationId": {"type": "string", "pattern": "^synthetic-operation-[a-z0-9-]+$"}, "executionClass": {"const": "LOCAL_SYNTHETIC_EXERCISE"},
+        "rollbackTarget": {"$ref": "#/$defs/rollbackTarget"}, "inferredRollback": {"const": false}, "zeroResidue": {"$ref": "#/$defs/zeroResidue"}
+      }
+    },
+    "rollbackTarget": {
+      "type": "object", "additionalProperties": false, "required": ["target", "version", "digest", "tupleDigest", "status", "revocationState"],
+      "properties": {"target": {"const": "EXACT_ACCEPTED_LKG_FULL_TUPLE"}, "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}, "digest": {"$ref": "#/$defs/digest"}, "tupleDigest": {"$ref": "#/$defs/digest"}, "status": {"const": "LKG"}, "revocationState": {"const": "UNREVOKED"}}
+    },
+    "zeroResidue": {
+      "type": "object", "additionalProperties": false, "required": ["ownedResidueCount", "ownedResidueProjection", "ownedResidueProjectionDigest", "result"],
+      "properties": {"ownedResidueCount": {"const": 0}, "ownedResidueProjection": {"type": "array", "maxItems": 0}, "ownedResidueProjectionDigest": {"$ref": "#/$defs/digest"}, "result": {"const": "ZERO_OWNED_RESIDUE_CONFIRMED"}}
+    },
+    "negativeResult": {
+      "type": "object", "additionalProperties": false, "required": ["case", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": {"case": {"type": "string", "pattern": "^[A-Z0-9_]+$"}, "reasonCode": {"type": "string", "pattern": "^[A-Z0-9_]+_DENIED$"}, "effectCount": {"const": 0}, "evidenceRef": {"type": "string", "pattern": "^evidence-[0-9]{3}$"}}
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["bundleDigest", "refs"],
+      "properties": {"bundleDigest": {"$ref": "#/$defs/digest"}, "refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidenceRef"}}}
+    },
+    "evidenceRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "reference", "digest"],
+      "properties": {"id": {"type": "string", "pattern": "^evidence-[0-9]{3}$"}, "reference": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}, "digest": {"$ref": "#/$defs/digest"}}
+    }
+  }
+}

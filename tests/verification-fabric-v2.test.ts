@@ -82,7 +82,7 @@ test("contract and cross-contract changes invalidate downstream dependants", () 
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW");
-    assert.deepEqual(result.selectedNodes, ["awi-plugin-01-knowledge-harvest-v1", "cap-cell-erp-01", "etl-01-extension-assurance-profile-v1", "etl-02-external-plugin-preflight-v1", "external-bi-service-v2", "intake-001-issue-candidate-v1", "integration-profile-v1", "know-media-m1-audience-learning-v1", "learning-routing-foundation", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "secure-default-proof", "vf-contract-v1", "vf-m2-adaptive-evidence-gates-v1", "vf-shadow-v2"]);
+    assert.deepEqual(result.selectedNodes, ["awi-plugin-01-knowledge-harvest-v1", "azpp-m1-repository-synthetic-v1", "cap-cell-erp-01", "etl-01-extension-assurance-profile-v1", "etl-02-external-plugin-preflight-v1", "external-bi-service-v2", "intake-001-issue-candidate-v1", "integration-profile-v1", "know-media-m1-audience-learning-v1", "learning-routing-foundation", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "secure-default-proof", "vf-contract-v1", "vf-m2-adaptive-evidence-gates-v1", "vf-shadow-v2"]);
   }
 });
 

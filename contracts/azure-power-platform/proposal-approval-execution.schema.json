@@ -1,0 +1,562 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/contracts/azure-power-platform/proposal-approval-execution.schema.json",
+  "title": "Azure Power Platform synthetic proposal approval execution contract",
+  "description": "Closed, repository-only contract for a later authorized milestone. It records proposal, independent approval, execution request, actual execution, authoritative readback, receipt, rollback and publication permissions without executing an operation or inferring authority.",
+  "oneOf": [
+    { "$ref": "#/$defs/approvedRecord" },
+    { "$ref": "#/$defs/denialFixture" }
+  ],
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "principal": { "type": "string", "pattern": "^principal:synthetic-[a-z0-9-]+$" },
+    "dateTime": { "type": "string", "format": "date-time" },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ref", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+        "ref": { "type": "string", "pattern": "^(contracts|tests|docs)/[A-Za-z0-9._/-]+$" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "generation", "digest", "actionAllowlist"],
+      "properties": {
+        "id": { "const": "power-platform-proposal-execution-policy" },
+        "version": { "const": "1.0.0" },
+        "generation": { "const": 7 },
+        "digest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "actionAllowlist": { "const": ["UPDATE_SYNTHETIC_RECORD"] }
+      }
+    },
+    "tuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "componentId", "componentVersion", "componentDigest", "schemaId", "schemaVersion", "schemaDigest",
+        "policyId", "policyVersion", "policyGeneration", "policyDigest", "action", "actionVersion", "actionDigest",
+        "environmentClass", "evidenceDigest", "lkgTupleDigest", "rollbackTarget", "tupleDigest"
+      ],
+      "properties": {
+        "componentId": { "const": "synthetic-power-platform-proposal-execution" },
+        "componentVersion": { "const": "1.0.0" },
+        "componentDigest": { "const": "1111111111111111111111111111111111111111111111111111111111111111" },
+        "schemaId": { "const": "synthetic-power-platform-proposal-execution-schema" },
+        "schemaVersion": { "const": "1.0.0" },
+        "schemaDigest": { "$ref": "#/$defs/digest" },
+        "policyId": { "const": "power-platform-proposal-execution-policy" },
+        "policyVersion": { "const": "1.0.0" },
+        "policyGeneration": { "const": 7 },
+        "policyDigest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "action": { "const": "UPDATE_SYNTHETIC_RECORD" },
+        "actionVersion": { "const": "1.0.0" },
+        "actionDigest": { "const": "2222222222222222222222222222222222222222222222222222222222222222" },
+        "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "lkgTupleDigest": { "$ref": "#/$defs/digest" },
+        "rollbackTarget": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+        "tupleDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "states", "transitions", "initialState", "terminalState"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/lifecycle/v1" },
+        "states": { "const": ["PROPOSAL", "APPROVAL", "EXECUTION_REQUEST", "ACTUAL_EXECUTION", "READBACK", "RECEIPT", "ROLLBACK", "PUBLICATION"] },
+        "transitions": {
+          "const": [
+            "PROPOSAL_TO_APPROVAL_ONLY_WITH_INDEPENDENT_APPROVAL",
+            "APPROVAL_TO_EXECUTION_REQUEST_ONLY_WITH_EXACT_BINDINGS",
+            "EXECUTION_REQUEST_TO_ACTUAL_EXECUTION_OUTSIDE_THIS_CONTRACT",
+            "ACTUAL_EXECUTION_TO_READBACK_REQUIRED",
+            "READBACK_TO_RECEIPT_REQUIRED",
+            "ROLLBACK_REQUIRES_EXPLICIT_AUTHORITY",
+            "PUBLICATION_REQUIRES_EXPLICIT_AUTHORITY"
+          ]
+        },
+        "initialState": { "const": "PROPOSAL" },
+        "terminalState": { "const": "RECEIPT" }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal", "approval", "executionRequest", "actualExecution", "readback", "receipt", "rollback", "publication"],
+      "properties": {
+        "proposal": { "const": "PROPOSAL_ONLY_NO_EXECUTION" },
+        "approval": { "const": "INDEPENDENT_APPROVAL_ONLY" },
+        "executionRequest": { "const": "REQUEST_ONLY_NO_DIRECT_EXECUTION" },
+        "actualExecution": { "const": "NO_EXECUTION_IN_THIS_CONTRACT" },
+        "readback": { "const": "AUTHORITATIVE_READ_ONLY" },
+        "receipt": { "const": "BOUND_RECEIPT_ONLY" },
+        "rollback": { "const": "EXPLICIT_AUTHORIZATION_REQUIRED_NO_INFERENCE" },
+        "publication": { "const": "EXPLICIT_PUBLIC_AUTHORIZATION_REQUIRED" }
+      }
+    },
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposalId", "state", "proposer", "operationKey", "action", "actionVersion", "actionDigest", "tupleDigest", "policyGeneration", "policyDigest", "request", "proposalNonce", "issuedAt", "expiresAt", "proposalDigest", "evidenceRefs"],
+      "properties": {
+        "proposalId": { "const": "synthetic-proposal-0001" },
+        "state": { "const": "PROPOSED" },
+        "proposer": { "const": "principal:synthetic-proposer" },
+        "operationKey": { "const": "SUBMIT_SYNTHETIC_POWER_PLATFORM_OPERATION" },
+        "action": { "const": "UPDATE_SYNTHETIC_RECORD" },
+        "actionVersion": { "const": "1.0.0" },
+        "actionDigest": { "const": "2222222222222222222222222222222222222222222222222222222222222222" },
+        "tupleDigest": { "$ref": "#/$defs/digest" },
+        "policyGeneration": { "const": 7 },
+        "policyDigest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "request": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["resource", "operation", "fields", "changeDigest"],
+          "properties": {
+            "resource": { "const": "synthetic.power-platform.record" },
+            "operation": { "const": "UPDATE_SYNTHETIC_RECORD" },
+            "fields": { "const": ["displayName"] },
+            "changeDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "proposalNonce": { "const": "proposal-nonce-synthetic-0001" },
+        "issuedAt": { "$ref": "#/$defs/dateTime" },
+        "expiresAt": { "$ref": "#/$defs/dateTime" },
+        "proposalDigest": { "$ref": "#/$defs/digest" },
+        "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" } }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approvalId", "state", "approver", "authorizationSource", "independent", "selfApprovalAllowed", "proposalDigest", "tupleDigest", "policyGeneration", "policyDigest", "approvalNonce", "issuedAt", "expiresAt", "revocationStatus", "approvalDigest", "evidenceRefs"],
+      "properties": {
+        "approvalId": { "const": "synthetic-approval-0001" },
+        "state": { "enum": ["APPROVED", "NOT_APPROVED"] },
+        "approver": { "$ref": "#/$defs/principal" },
+        "authorizationSource": { "const": "INDEPENDENT_APPROVAL_RECORD" },
+        "independent": { "const": true },
+        "selfApprovalAllowed": { "const": false },
+        "proposalDigest": { "$ref": "#/$defs/digest" },
+        "tupleDigest": { "$ref": "#/$defs/digest" },
+        "policyGeneration": { "const": 7 },
+        "policyDigest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "approvalNonce": { "const": "approval-nonce-synthetic-0001" },
+        "issuedAt": { "$ref": "#/$defs/dateTime" },
+        "expiresAt": { "$ref": "#/$defs/dateTime" },
+        "revocationStatus": { "enum": ["UNREVOKED", "REVOKED"] },
+        "approvalDigest": { "$ref": "#/$defs/digest" },
+        "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" } }
+      }
+    },
+    "executionRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestId", "state", "executor", "operationKey", "action", "actionVersion", "actionDigest", "proposalDigest", "approvalDigest", "tupleDigest", "policyGeneration", "policyDigest", "replayNonce", "replayState", "issuedAt", "expiresAt", "permission", "executionRequestDigest", "evidenceRefs"],
+      "properties": {
+        "requestId": { "const": "synthetic-execution-request-0001" },
+        "state": { "const": "REQUESTED" },
+        "executor": { "const": "principal:synthetic-executor" },
+        "operationKey": { "const": "EXECUTE_APPROVED_SYNTHETIC_OPERATION" },
+        "action": { "const": "UPDATE_SYNTHETIC_RECORD" },
+        "actionVersion": { "const": "1.0.0" },
+        "actionDigest": { "const": "2222222222222222222222222222222222222222222222222222222222222222" },
+        "proposalDigest": { "$ref": "#/$defs/digest" },
+        "approvalDigest": { "$ref": "#/$defs/digest" },
+        "tupleDigest": { "$ref": "#/$defs/digest" },
+        "policyGeneration": { "const": 7 },
+        "policyDigest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "replayNonce": { "const": "execution-replay-nonce-synthetic-0001" },
+        "replayState": { "enum": ["AVAILABLE", "CONSUMED"] },
+        "issuedAt": { "$ref": "#/$defs/dateTime" },
+        "expiresAt": { "$ref": "#/$defs/dateTime" },
+        "permission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "directExecutionAllowed", "providerCallAllowed", "capability", "requiredFollowUp"],
+          "properties": {
+            "mode": { "const": "REQUEST_ONLY_NO_DIRECT_EXECUTION" },
+            "directExecutionAllowed": { "const": false },
+            "providerCallAllowed": { "const": false },
+            "capability": { "const": "NONE" },
+            "requiredFollowUp": { "const": ["AUTHORITATIVE_READBACK", "BOUND_RECEIPT"] }
+          }
+        },
+        "executionRequestDigest": { "$ref": "#/$defs/digest" },
+        "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" } }
+      }
+    },
+    "actualExecution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "operationKey", "requestId", "effectCount", "providerCallPerformed", "executionCapability", "outcome", "executionDigest"],
+      "properties": {
+        "state": { "const": "NOT_EXECUTED_BY_CONTRACT" },
+        "operationKey": { "const": "ACTUAL_EXECUTION_RECORDED_OUTSIDE_CONTRACT" },
+        "requestId": { "const": "synthetic-execution-request-0001" },
+        "effectCount": { "const": 0 },
+        "providerCallPerformed": { "const": false },
+        "executionCapability": { "const": "NONE" },
+        "outcome": { "const": "NOT_EXECUTED" },
+        "executionDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "readback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "state", "requestId", "executionRequestDigest", "actualExecutionDigest", "observedAt", "effectCount", "authoritative", "readbackDigest", "evidenceRefs"],
+      "properties": {
+        "source": { "const": "AUTHORITATIVE_SYNTHETIC_CONTROL_PLANE_READBACK" },
+        "state": { "const": "NOT_EXECUTED_CONFIRMED" },
+        "requestId": { "const": "synthetic-execution-request-0001" },
+        "executionRequestDigest": { "$ref": "#/$defs/digest" },
+        "actualExecutionDigest": { "$ref": "#/$defs/digest" },
+        "observedAt": { "$ref": "#/$defs/dateTime" },
+        "effectCount": { "const": 0 },
+        "authoritative": { "const": true },
+        "readbackDigest": { "$ref": "#/$defs/digest" },
+        "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" } }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issuer", "schemaVersion", "issuedAt", "fullTupleDigest", "bindings", "receiptDigest", "tamperEvidence"],
+      "properties": {
+        "issuer": { "const": "pansphaira.synthetic-readback-verifier" },
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/bound-receipt/v1" },
+        "issuedAt": { "$ref": "#/$defs/dateTime" },
+        "fullTupleDigest": { "$ref": "#/$defs/digest" },
+        "bindings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tupleDigest", "proposalDigest", "approvalDigest", "executionRequestDigest", "actualExecutionDigest", "readbackDigest", "policyGeneration", "policyDigest", "evidenceDigest", "rollbackTarget"],
+          "properties": {
+            "tupleDigest": { "$ref": "#/$defs/digest" },
+            "proposalDigest": { "$ref": "#/$defs/digest" },
+            "approvalDigest": { "$ref": "#/$defs/digest" },
+            "executionRequestDigest": { "$ref": "#/$defs/digest" },
+            "actualExecutionDigest": { "$ref": "#/$defs/digest" },
+            "readbackDigest": { "$ref": "#/$defs/digest" },
+            "policyGeneration": { "const": 7 },
+            "policyDigest": { "const": "3333333333333333333333333333333333333333333333333333333333333333" },
+            "evidenceDigest": { "$ref": "#/$defs/digest" },
+            "rollbackTarget": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" }
+          }
+        },
+        "receiptDigest": { "$ref": "#/$defs/digest" },
+        "tamperEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "digestScope", "independentReadbackRequired"],
+          "properties": {
+            "algorithm": { "const": "SHA-256" },
+            "digestScope": { "const": "CANONICAL_JSON_RECEIPT_WITHOUT_RECEIPT_DIGEST" },
+            "independentReadbackRequired": { "const": true }
+          }
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["permission", "target", "targetTupleDigest", "targetStatus", "authorizationRequired", "explicitAuthorizationPresent", "partialRollbackAllowed", "latestVersionFallbackAllowed", "cancellationIsRollback"],
+      "properties": {
+        "permission": { "const": "EXPLICIT_AUTHORIZATION_REQUIRED_NO_INFERENCE" },
+        "target": { "const": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT" },
+        "targetTupleDigest": { "$ref": "#/$defs/digest" },
+        "targetStatus": { "const": "LKG" },
+        "authorizationRequired": { "const": true },
+        "explicitAuthorizationPresent": { "const": false },
+        "partialRollbackAllowed": { "const": false },
+        "latestVersionFallbackAllowed": { "const": false },
+        "cancellationIsRollback": { "const": false }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["permission", "state", "authorized", "successClaimAllowed"],
+      "properties": {
+        "permission": { "const": "EXPLICIT_PUBLIC_AUTHORIZATION_REQUIRED" },
+        "state": { "const": "NOT_PUBLISHED" },
+        "authorized": { "const": false },
+        "successClaimAllowed": { "const": false }
+      }
+    },
+    "negativeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "probe", "outcome", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+        "probe": { "$ref": "#/$defs/probe" },
+        "outcome": { "const": "DENY" },
+        "reasonCode": { "$ref": "#/$defs/reasonCode" },
+        "effectCount": { "const": 0 },
+        "evidenceRef": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" }
+      }
+    },
+    "probe": {
+      "enum": ["UNKNOWN_FIELD", "UNKNOWN_ACTION", "HIDDEN_WRITE", "SELF_APPROVAL", "SAME_PRINCIPAL_ALIAS", "MISSING_AUTHORIZATION", "REPLAY", "EXPIRY", "REVOCATION", "STALE_POLICY", "DIGEST_DRIFT", "TUPLE_DRIFT", "GENERIC_COMMAND", "CANCELLATION_AS_ROLLBACK"]
+    },
+    "reasonCode": {
+      "enum": ["UNKNOWN_FIELD_DENIED", "UNKNOWN_ACTION_DENIED", "HIDDEN_WRITE_DENIED", "SELF_APPROVAL_DENIED", "SAME_PRINCIPAL_ALIAS_DENIED", "MISSING_AUTHORIZATION_DENIED", "REPLAY_DENIED", "EXPIRY_DENIED", "REVOCATION_DENIED", "STALE_POLICY_DENIED", "DIGEST_DRIFT_DENIED", "TUPLE_DRIFT_DENIED", "GENERIC_COMMAND_DENIED", "CANCELLATION_AS_ROLLBACK_DENIED"]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceDigest", "refs"],
+      "properties": {
+        "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "refs": { "type": "array", "minItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/evidenceRef" } }
+      }
+    },
+    "contractIntegrationReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "const": {
+        "receiptSchemaVersion": "pansphaira.azure-power-platform/contract-integration-receipt/v1",
+        "receiptKind": "DETERMINISTIC_DECISION_AND_INTEGRATION_RECEIPT",
+        "taskId": "TERRA-PSAI32-ROOT-QS-01",
+        "contract": {
+          "path": "contracts/azure-power-platform/proposal-approval-execution.schema.json",
+          "id": "azure-power-platform-proposal-approval-execution",
+          "version": "1.0.0",
+          "predecessorSha256": "bc1021b9fb6a2d4e8bb60ae377c89e41d2f7036133a7b8d1525634c71089b000",
+          "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+          "policy": {
+            "id": "power-platform-proposal-execution-policy",
+            "version": "1.0.0",
+            "generation": 7,
+            "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        },
+        "decision": {
+          "outcome": "REPOSITORY_CONTRACT_RECEIPT_ACCEPTED",
+          "authority": "NONE",
+          "externalMutationAuthorized": false,
+          "externalMutationPerformed": false,
+          "externalClosureAllowed": false,
+          "closureReason": "PUBLIC_RELEASE_MANIFEST_AND_OWNER_READBACK_NOT_YET_BOUND"
+        },
+        "closedSurface": {
+          "allowedOperations": ["SUBMIT_SYNTHETIC_POWER_PLATFORM_OPERATION", "EXECUTE_APPROVED_SYNTHETIC_OPERATION"],
+          "allowedAction": "UPDATE_SYNTHETIC_RECORD",
+          "allowedActionVersion": "1.0.0",
+          "allowedActionDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "genericCommandAllowed": false,
+          "genericActionAllowed": false,
+          "unknownFieldAllowed": false,
+          "unknownActionAllowed": false,
+          "hiddenWriteAllowed": false,
+          "authorityWideningAllowed": false,
+          "nonTypedInputAllowed": false
+        },
+        "acceptedOperationClosure": {
+          "acceptanceSemantics": "OPERATION_REFERENCE_ONLY",
+          "directExecutionAllowed": false,
+          "providerCallAllowed": false,
+          "authoritativeReadbackRequiredAfterEveryAcceptedOperation": true,
+          "boundTamperEvidentReceiptRequiredAfterEveryAcceptedOperation": true,
+          "canonicalization": "CANONICAL_JSON_RECEIPT_WITHOUT_RECEIPT_DIGEST",
+          "digestAlgorithm": "SHA-256",
+          "requiredBindings": ["operationId", "requestDigest", "decisionDigest", "readbackDigest", "policyGeneration", "policyDigest", "evidenceDigest", "lkgTupleDigest", "rollbackTarget"]
+        },
+        "denyWithoutSideEffects": {
+          "effectCount": 0,
+          "networkCalls": 0,
+          "providerCalls": 0,
+          "sealOrExecution": "DENY_BEFORE_SEAL_OR_EXECUTION",
+          "reasonCodes": [
+            "MISSING_AUTHORIZATION_DENIED",
+            "SELF_APPROVAL_DENIED",
+            "SAME_PRINCIPAL_ALIAS_DENIED",
+            "AUTHORITY_WIDENING_DENIED",
+            "STALE_IDENTITY_BINDING_DENIED",
+            "REPLAY_DENIED",
+            "DIGEST_DRIFT_DENIED",
+            "RECEIPT_TAMPERED_DENIED",
+            "EVIDENCE_BINDING_MISMATCH_DENIED",
+            "UNKNOWN_FIELD_DENIED",
+            "UNKNOWN_ACTION_DENIED",
+            "HIDDEN_WRITE_DENIED",
+            "GENERIC_COMMAND_DENIED",
+            "MALFORMED_NON_TYPED_INPUT_DENIED",
+            "EXPIRY_DENIED",
+            "REVOCATION_DENIED",
+            "STALE_POLICY_DENIED",
+            "STALE_STATE_DENIED",
+            "INVALID_LKG_ROLLBACK_DENIED",
+            "BUDGET_DRIFT_DENIED",
+            "NONZERO_OWNED_RESIDUE_DENIED",
+            "UNSAFE_RECEIPT_DENIED",
+            "UNSAFE_EVIDENCE_DENIED",
+            "UNSAFE_PUBLIC_READBACK_DENIED"
+          ]
+        },
+        "resetUninstall": {
+          "applicability": "LOCAL_SYNTHETIC_MILESTONE",
+          "resetTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+          "uninstallExecutionAuthorized": false,
+          "uninstallAttempted": false,
+          "uninstallCommand": null,
+          "syntheticProof": "RESET_TO_LKG_AND_EMPTY",
+          "authoritativeReadbackRequired": true,
+          "ownedResidueCount": 0,
+          "postInventoryCount": 0,
+          "nonzeroResidueDisposition": "NONZERO_OWNED_RESIDUE_DENIED"
+        },
+        "limitations": [
+          "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+          "NO_CREDENTIAL_USE",
+          "NO_PROVIDER_OR_TENANT_ACCESS",
+          "NO_PROVIDER_CALL",
+          "NO_BUSINESS_WRITE",
+          "NO_DIRECT_EXECUTION_CAPABILITY",
+          "NO_IMPLICIT_APPROVAL",
+          "NO_INFERRED_ROLLBACK",
+          "NO_PUBLICATION_AUTHORITY",
+          "LOCAL_NODE_SIGTRAP_IS_INFRASTRUCTURE_EVIDENCE_NOT_PRODUCT_VERDICT"
+        ],
+        "rollback": {
+          "repositoryTarget": "cf512c5",
+          "productRollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+          "partialRollbackAllowed": false,
+          "latestVersionFallbackAllowed": false,
+          "revokedLkgAllowed": false,
+          "staleLkgAllowed": false,
+          "method": "REVERT_CONTAINING_COMMIT_THROUGH_NORMAL_REPOSITORY_REVIEW"
+        },
+        "evidenceRefs": [
+          { "id": "readonly-openapi", "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml", "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287" },
+          { "id": "readonly-openapi-schema", "path": "contracts/azure-power-platform/readonly-connector.schema.json", "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68" },
+          { "id": "bound-readback-receipt", "path": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json", "sha256": "20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8" },
+          { "id": "reset-uninstall-plan", "path": "docs/development/azure-power-platform/reset-uninstall-plan.schema.json", "sha256": "47c764598a305367e677f5608a78dd36b501ce203f27b5699508977015cabf33" },
+          { "id": "proposal-approval-test", "path": "tests/azure-power-platform/proposal-approval-execution.test.mjs", "sha256": "cec6301cd422218845f0a42c1445051c1dced8df43c51ed1dacf9f1bdb91810b" },
+          { "id": "readonly-openapi-test", "path": "tests/azure-power-platform/readonly-openapi.test.mjs", "sha256": "cefdeb16e01ccc724d888d7a22e610238fb7545e259f85c42f5c05c6c9a9100a" },
+          { "id": "tuple-ledger-test", "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs", "sha256": "30b68a35cb950058a2e13a2c1f1637059ed4902f0b113b1ebde06062ca29edc9" },
+          { "id": "synthetic-harness", "path": "tools/azure-power-platform/run-synthetic-governance-harness.mjs", "sha256": "3ef2a624a64ed0392f308233cb88af21f974cf63a425f044eb6f396c2189bd5c" },
+          { "id": "synthetic-harness-test", "path": "tests/azure-power-platform/synthetic-governance-harness.test.mjs", "sha256": "0b09f487920ba4eafe084de4509b4ec54af233bddede146456901e20adf40257" },
+          { "id": "public-readback-renderer", "path": "tools/azure-power-platform/render-public-readback.mjs", "sha256": "be18daa6310edb12d5c67179bf51ed8a028dfb8f07a701cc4b079997b31c2690" },
+          { "id": "public-readback-test", "path": "tests/azure-power-platform/public-readback.test.mjs", "sha256": "1ef0aa02cdec70225458c14adc8ad46d463a3ae3cec9e78045ea5e04899971ab" }
+        ],
+        "publicClosure": {
+          "planningArtifactOrPr": { "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null },
+          "implementationPrs": { "status": "PENDING_OWNER_READBACK", "references": [], "digests": [] },
+          "release": { "status": "NOT_RELEASED", "reference": null, "digest": null },
+          "publicReadback": { "status": "PENDING_OWNER_READBACK", "reference": null, "digest": null },
+          "releaseManifest": {
+            "path": "release/public-files.manifest",
+            "sha256": "24cfeea9f4fd178b6173ef5d2ddea05895d737748c592b2ea92d2cb582ceb533",
+            "coverage": "DENY_CLOSURE_MISSING_COMMITTED_32_CONTRACT_AND_TEST_SURFACE",
+            "requiredPaths": ["contracts/azure-power-platform/proposal-approval-execution.schema.json", "tests/azure-power-platform/proposal-approval-execution.test.mjs", "tests/azure-power-platform/synthetic-governance-harness.test.mjs", "tests/azure-power-platform/public-readback.test.mjs"]
+          },
+          "closureRule": "PUBLIC_PLANNING_ARTIFACT_OR_PR_IMPLEMENTATION_PRS_RELEASE_IF_ANY_AND_PUBLIC_READBACK_MUST_BE_NON_NULL_PUBLICLY_READABLE_AND_DIGEST_BOUND_BEFORE_EXTERNAL_CLOSURE"
+        },
+        "verification": {
+          "nodeVersion": "v24.19.0",
+          "requiredBareNode": {
+            "result": "INFRASTRUCTURE_BLOCKED",
+            "exitCode": 133,
+            "signal": "SIGTRAP",
+            "diagnostic": "V8 SetPermissions fatal check failed with errno 12 before test or dry-run execution.",
+            "productVerdict": "NONE",
+            "commands": [
+              "node --test tests/azure-power-platform/readonly-openapi.test.mjs tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
+              "node tools/azure-power-platform/validate-sandbox-preflight.mjs --dry-run --fixture tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json",
+              "node tools/azure-power-platform/run-synthetic-governance-harness.mjs --dry-run --fixture tests/fixtures/azure-power-platform/e2e-readonly-success.json",
+              "node tools/azure-power-platform/render-public-readback.mjs --dry-run --fixture tests/fixtures/azure-power-platform/public-readback-safe.json"
+            ]
+          },
+          "advisoryJitlessSemanticValidation": {
+            "result": "PASS",
+            "exitCode": 0,
+            "selectedInheritedSemanticValidatorTestCount": 15,
+            "commands": [
+              "node --jitless --test tests/azure-power-platform/readonly-openapi.test.mjs tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
+              "node --jitless tools/azure-power-platform/validate-sandbox-preflight.mjs --dry-run --fixture tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json",
+              "node --jitless tools/azure-power-platform/run-synthetic-governance-harness.mjs --dry-run --fixture tests/fixtures/azure-power-platform/e2e-readonly-success.json",
+              "node --jitless tools/azure-power-platform/render-public-readback.mjs --dry-run --fixture tests/fixtures/azure-power-platform/public-readback-safe.json"
+            ],
+            "assertions": ["ALL_SELECTED_INHERITED_SEMANTIC_VALIDATORS_PASS", "RESET_TO_EXACT_LKG_AND_ZERO_OWNED_RESIDUE", "PUBLIC_READBACK_REDACTED_AND_OWNER_BOUND", "ALL_DECLARED_NEGATIVE_CASES_DENY_WITH_ZERO_EFFECTS"]
+          },
+          "requiredCommands": [
+            "node --test tests/azure-power-platform/readonly-openapi.test.mjs tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
+            "node tools/azure-power-platform/validate-sandbox-preflight.mjs --dry-run --fixture tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json",
+            "node tools/azure-power-platform/run-synthetic-governance-harness.mjs --dry-run --fixture tests/fixtures/azure-power-platform/e2e-readonly-success.json",
+            "node tools/azure-power-platform/render-public-readback.mjs --dry-run --fixture tests/fixtures/azure-power-platform/public-readback-safe.json"
+          ],
+          "diffCheck": { "command": "git diff --check origin/main...HEAD", "result": "PASS", "exitCode": 0 },
+          "controllerAuthoritativePinnedNodeAndHostDockerGatesRequired": true
+        },
+        "receiptBinding": {
+          "canonicalization": "CM_CANONICAL_JSON_V1",
+          "digestAlgorithm": "SHA-256",
+          "digestInput": "contractIntegrationReceipt.const without receiptDigest",
+          "containingGitCommitRequired": true,
+          "tamperResponse": "DENY_AND_REQUIRE_NEW_CONTAINING_COMMIT"
+        },
+        "receiptDigest": "531bd06e1a69ea10377850e673a6665496cf7ad46eeaa2a7b20dd8d4715de980"
+      }
+    },
+    "approvedRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "fixtureKind", "contractId", "contractVersion", "environmentClass", "observedAt", "lifecycle", "permissions", "policy", "tuple", "proposal", "approval", "executionRequest", "actualExecution", "readback", "receipt", "rollback", "publication", "limitations", "negativeResults", "evidence"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/proposal-approval-execution/v1" },
+        "fixtureKind": { "const": "APPROVED" },
+        "contractId": { "const": "azure-power-platform-proposal-approval-execution" },
+        "contractVersion": { "const": "1.0.0" },
+        "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+        "observedAt": { "$ref": "#/$defs/dateTime" },
+        "lifecycle": { "$ref": "#/$defs/lifecycle" },
+        "permissions": { "$ref": "#/$defs/permissions" },
+        "policy": { "$ref": "#/$defs/policy" },
+        "tuple": { "$ref": "#/$defs/tuple" },
+        "proposal": { "$ref": "#/$defs/proposal" },
+        "approval": { "$ref": "#/$defs/approval" },
+        "executionRequest": { "$ref": "#/$defs/executionRequest" },
+        "actualExecution": { "$ref": "#/$defs/actualExecution" },
+        "readback": { "$ref": "#/$defs/readback" },
+        "receipt": { "$ref": "#/$defs/receipt" },
+        "rollback": { "$ref": "#/$defs/rollback" },
+        "publication": { "$ref": "#/$defs/publication" },
+        "limitations": {
+          "type": "array",
+          "const": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_CREDENTIAL_USE", "NO_PROVIDER_CALL", "NO_BUSINESS_WRITE", "NO_DIRECT_EXECUTION_CAPABILITY", "NO_IMPLICIT_APPROVAL", "NO_INFERRED_ROLLBACK", "NO_PUBLICATION_AUTHORITY"]
+        },
+        "negativeResults": { "type": "array", "minItems": 14, "maxItems": 14, "uniqueItems": true, "items": { "$ref": "#/$defs/negativeResult" } },
+        "evidence": { "$ref": "#/$defs/evidence" }
+      }
+    },
+    "denialFixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "fixtureKind", "baseFixture", "expectedReasonCode", "mutation"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.azure-power-platform/proposal-approval-execution/v1" },
+        "fixtureKind": { "enum": ["SELF_APPROVED", "REPLAY"] },
+        "baseFixture": { "const": "tests/fixtures/azure-power-platform/proposal-approved.json" },
+        "expectedReasonCode": { "enum": ["SELF_APPROVAL_DENIED", "SAME_PRINCIPAL_ALIAS_DENIED", "REPLAY_DENIED"] },
+        "mutation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "value"],
+          "properties": {
+            "path": { "enum": ["approval.approver", "executionRequest.replayState"] },
+            "value": { "type": "string", "pattern": "^principal:synthetic-[a-z0-9-]+$|^CONSUMED$" }
+          }
+        }
+      }
+    }
+  }
+}

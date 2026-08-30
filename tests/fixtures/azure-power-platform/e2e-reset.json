@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/synthetic-e2e-fixture/v1",
+  "fixtureKind": "RESET_ZERO_RESIDUE",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "observedAt": "2026-08-28T08:00:00Z",
+  "sources": {
+    "resetEvidence": "tests/fixtures/azure-power-platform/zero-residue.json",
+    "laterLifecycle": "tests/fixtures/azure-power-platform/proposal-approved.json"
+  },
+  "expected": {
+    "outcome": "RESET_TO_LKG_AND_EMPTY",
+    "ownedResidueCount": 0,
+    "postInventoryCount": 0,
+    "laterLifecycleState": "EXECUTION_REQUEST",
+    "providerCallPerformed": false,
+    "effectCount": 0
+  },
+  "limitations": [
+    "DRY_RUN_PROOF_ONLY",
+    "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "NO_NETWORK",
+    "NO_CREDENTIAL_USE",
+    "NO_TENANT_DISCOVERY",
+    "NO_POWER_PLATFORM_TOOLING",
+    "NO_PROVIDER_CALL",
+    "NO_BUSINESS_WRITE",
+    "NO_IMPORT_EXECUTION",
+    "NO_UNINSTALL_EXECUTION",
+    "NO_PRODUCTION_OR_SANDBOX_EVIDENCE_CLAIM"
+  ],
+  "negativeCases": [
+    "MISSING_READBACK",
+    "NONZERO_RESIDUE",
+    "UNAUTHORIZED_IMPORT_MARKER",
+    "CANCELLATION_AS_ROLLBACK",
+    "STALE_TUPLE"
+  ],
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "authorizationRequired": true,
+    "partialRollbackAllowed": false,
+    "latestVersionFallbackAllowed": false
+  },
+  "evidenceRefs": [
+    "docs/development/azure-power-platform/reset-uninstall-plan.schema.json",
+    "tools/azure-power-platform/verify-zero-residue.mjs",
+    "tests/azure-power-platform/reset-uninstall.test.mjs",
+    "tests/fixtures/azure-power-platform/zero-residue.json",
+    "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+    "contracts/azure-power-platform/proposal-approval-execution.schema.json"
+  ]
+}

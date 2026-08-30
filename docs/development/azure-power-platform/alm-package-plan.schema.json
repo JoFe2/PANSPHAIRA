@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/azure-power-platform/alm-package-plan.schema.json",
+  "title": "PanSphaira synthetic no-op ALM package plan",
+  "description": "Closed, immutable, public-safe offline evidence for separately gated import, export, upgrade, rollback, publication, and promotion transitions. This plan is synthetic only, never authenticates, never discovers a tenant, never calls a provider, and never performs a Power Platform action.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "planKind", "status", "environmentClass", "policy", "package", "tuple", "versioning", "authorities", "transitions", "resetUninstall", "rollback", "execution", "limitations", "negativeResults", "evidence", "publicSafeProjection", "nonClaims"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.azure-power-platform/alm-package-plan/v1" },
+    "planKind": { "const": "SYNTHETIC_ALM_PACKAGE_NOOP_PLAN" },
+    "status": { "const": "INACTIVE_NOOP" },
+    "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "package": { "$ref": "#/$defs/package" },
+    "tuple": { "$ref": "#/$defs/tuple" },
+    "versioning": { "$ref": "#/$defs/versioning" },
+    "authorities": { "$ref": "#/$defs/authorities" },
+    "transitions": { "type": "array", "minItems": 6, "maxItems": 6, "items": { "$ref": "#/$defs/transition" } },
+    "resetUninstall": { "$ref": "#/$defs/resetUninstall" },
+    "rollback": { "$ref": "#/$defs/rollback" },
+    "execution": { "$ref": "#/$defs/execution" },
+    "limitations": { "type": "array", "const": ["LOCAL_SYNTHETIC_REPOSITORY_ONLY", "NO_TENANT_IDENTIFIERS", "NO_ENVIRONMENT_IDENTIFIERS", "NO_CREDENTIALS", "NO_CONNECTION_STRINGS", "NO_REUSABLE_SECRET_REFERENCES", "NO_PROVIDER_CALL", "NO_NETWORK_OR_TENANT_CONTACT", "NO_IMPORT_EXECUTION", "NO_EXPORT_EXECUTION", "NO_UPGRADE_EXECUTION", "NO_ROLLBACK_EXECUTION", "NO_PUBLICATION_EXECUTION", "NO_PROMOTION_EXECUTION", "NO_PRODUCTION_CLASS", "NO_EXTERNAL_MUTATION", "SYNTHETIC_EVIDENCE_ONLY", "OWNER_AUTHORIZATION_REQUIRED", "ZERO_OWNED_RESIDUE_PROOF_REQUIRED"] },
+    "negativeResults": { "type": "array", "minItems": 14, "uniqueItems": true, "items": { "$ref": "#/$defs/negativeResult" } },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "publicSafeProjection": { "$ref": "#/$defs/publicSafeProjection" },
+    "nonClaims": { "type": "array", "const": ["NOT_A_TENANT_PLAN", "NOT_A_PROVIDER_ACTION", "NOT_AN_IMPORT", "NOT_AN_EXPORT", "NOT_AN_UPGRADE", "NOT_A_ROLLBACK", "NOT_A_PUBLICATION", "NOT_A_PROMOTION", "NOT_A_PRODUCTION_READINESS_RESULT", "NOT_A_BUSINESS_SUCCESS_RESULT", "NOT_A_DATAVERSE_LEDGER"] }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "opaqueAuthority": { "type": "string", "pattern": "^opaque-authority-[a-z]+-[0-9]{3}$" },
+    "evidenceId": { "type": "string", "pattern": "^evidence-[0-9]{3}$" },
+    "policy": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "generation", "digest"],
+      "properties": { "id": { "const": "synthetic-alm-policy" }, "version": { "const": "1.0.0" }, "generation": { "const": 17 }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "package": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "immutable", "digest", "manifestDigest", "exportDigest"],
+      "properties": { "id": { "const": "pansphaira.synthetic-alm-package" }, "version": { "const": "2.3.0" }, "immutable": { "const": true }, "digest": { "$ref": "#/$defs/digest" }, "manifestDigest": { "$ref": "#/$defs/digest" }, "exportDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "artifact": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "digest"],
+      "properties": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" }, "version": { "$ref": "#/$defs/version" }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "tuple": {
+      "type": "object", "additionalProperties": false, "required": ["component", "schema", "policy", "packageDigest", "candidateTupleDigest", "lkgTupleDigest"],
+      "properties": {
+        "component": { "$ref": "#/$defs/artifact" },
+        "schema": { "$ref": "#/$defs/artifact" },
+        "policy": { "$ref": "#/$defs/policy" },
+        "packageDigest": { "$ref": "#/$defs/digest" },
+        "candidateTupleDigest": { "$ref": "#/$defs/digest" },
+        "lkgTupleDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "versioning": {
+      "type": "object", "additionalProperties": false, "required": ["currentVersion", "lkgVersion", "migrationRequired", "migrationInput", "compatibilityInput"],
+      "properties": {
+        "currentVersion": { "const": "2.3.0" },
+        "lkgVersion": { "const": "2.2.0" },
+        "migrationRequired": { "const": true },
+        "migrationInput": { "type": "object", "additionalProperties": false, "required": ["id", "version", "digest", "mode"], "properties": { "id": { "const": "synthetic-alm-migration" }, "version": { "const": "1.1.0" }, "digest": { "$ref": "#/$defs/digest" }, "mode": { "const": "EXPLICIT_REVIEW_REQUIRED" } } },
+        "compatibilityInput": { "type": "object", "additionalProperties": false, "required": ["minimumSchemaVersion", "supportedUpgradeFrom", "downgradeSupported", "breakingChangePolicy"], "properties": { "minimumSchemaVersion": { "const": "1.4.0" }, "supportedUpgradeFrom": { "const": ["2.2.0"] }, "downgradeSupported": { "const": false }, "breakingChangePolicy": { "const": "DENY_UNDECLARED" } } }
+      }
+    },
+    "authorities": {
+      "type": "object", "additionalProperties": false, "required": ["proposer", "exportOwner", "importOwner", "upgradeOwner", "rollbackOwner", "publicationOwner", "promotionOwner", "verifier"],
+      "properties": { "proposer": { "$ref": "#/$defs/opaqueAuthority" }, "exportOwner": { "$ref": "#/$defs/opaqueAuthority" }, "importOwner": { "$ref": "#/$defs/opaqueAuthority" }, "upgradeOwner": { "$ref": "#/$defs/opaqueAuthority" }, "rollbackOwner": { "$ref": "#/$defs/opaqueAuthority" }, "publicationOwner": { "$ref": "#/$defs/opaqueAuthority" }, "promotionOwner": { "$ref": "#/$defs/opaqueAuthority" }, "verifier": { "$ref": "#/$defs/opaqueAuthority" } }
+    },
+    "transition": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "state", "operation", "authorization", "effectCount", "command", "inputRefs"],
+      "properties": {
+        "kind": { "enum": ["EXPORT", "IMPORT", "UPGRADE", "ROLLBACK", "PUBLICATION", "PROMOTION"] },
+        "state": { "const": "INACTIVE" },
+        "operation": { "const": "NO_OP_PLAN_ONLY" },
+        "authorization": { "type": "object", "additionalProperties": false, "required": ["required", "ownerAuthority", "independent", "granted", "evidenceRef"], "properties": { "required": { "const": true }, "ownerAuthority": { "$ref": "#/$defs/opaqueAuthority" }, "independent": { "const": true }, "granted": { "const": false }, "evidenceRef": { "$ref": "#/$defs/evidenceId" } } },
+        "effectCount": { "const": 0 },
+        "command": { "type": "null" },
+        "inputRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/evidenceId" } }
+      }
+    },
+    "resetUninstall": {
+      "type": "object", "additionalProperties": false, "required": ["milestone", "applicability", "status", "reset", "uninstall", "ownedResourceClasses", "zeroResidueEvidenceRef"],
+      "properties": {
+        "milestone": { "const": "CM-PP-003-ALM_PACKAGE" },
+        "applicability": { "const": "APPLICABLE_SYNTHETIC_MILESTONE" },
+        "status": { "const": "ZERO_OWNED_RESIDUE_VERIFIED" },
+        "reset": { "type": "object", "additionalProperties": false, "required": ["target", "packageDigest", "targetTupleDigest", "state", "attempted", "command"], "properties": { "target": { "const": "EXACT_LKG_FULL_TUPLE" }, "packageDigest": { "$ref": "#/$defs/digest" }, "targetTupleDigest": { "$ref": "#/$defs/digest" }, "state": { "const": "INACTIVE" }, "attempted": { "const": false }, "command": { "type": "null" } } },
+        "uninstall": { "type": "object", "additionalProperties": false, "required": ["target", "packageDigest", "state", "attempted", "command", "postcondition", "ownedResidueCount", "ownedResidueDigest"], "properties": { "target": { "const": "EXACT_SYNTHETIC_PACKAGE_AND_OWNED_RESOURCES" }, "packageDigest": { "$ref": "#/$defs/digest" }, "state": { "const": "INACTIVE" }, "attempted": { "const": false }, "command": { "type": "null" }, "postcondition": { "const": "ZERO_OWNED_RESIDUE" }, "ownedResidueCount": { "const": 0 }, "ownedResidueDigest": { "const": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945" } } },
+        "ownedResourceClasses": { "const": ["SYNTHETIC_ALM_PACKAGE", "SYNTHETIC_CONNECTOR_BINDING", "SYNTHETIC_MIGRATION_STATE", "SYNTHETIC_POLICY_REFERENCE", "SYNTHETIC_TUPLE_LEDGER"] },
+        "zeroResidueEvidenceRef": { "$ref": "#/$defs/evidenceId" }
+      }
+    },
+    "rollback": {
+      "type": "object", "additionalProperties": false, "required": ["target", "targetTupleDigest", "targetVersion", "authorizationRequired", "independentOwnerRequired", "inferredFromCancellation", "cancellationDisposition", "partialRollbackAllowed", "latestVersionFallbackAllowed", "evidenceRefs"],
+      "properties": { "target": { "const": "EXACT_LKG_FULL_TUPLE_FROM_INDEPENDENT_TRUSTED_CONTEXT" }, "targetTupleDigest": { "$ref": "#/$defs/digest" }, "targetVersion": { "const": "2.2.0" }, "authorizationRequired": { "const": true }, "independentOwnerRequired": { "const": true }, "inferredFromCancellation": { "const": false }, "cancellationDisposition": { "const": "CANCELLATION_IS_NOT_ROLLBACK" }, "partialRollbackAllowed": { "const": false }, "latestVersionFallbackAllowed": { "const": false }, "evidenceRefs": { "const": ["evidence-006", "evidence-007"] } }
+    },
+    "execution": {
+      "type": "object", "additionalProperties": false, "required": ["mode", "providerCalls", "externalMutation", "networkContact", "commands", "implicitImportAllowed", "implicitPromotionAllowed"],
+      "properties": { "mode": { "const": "NO_OP_PLAN_ONLY" }, "providerCalls": { "const": 0 }, "externalMutation": { "const": false }, "networkContact": { "const": false }, "commands": { "const": [] }, "implicitImportAllowed": { "const": false }, "implicitPromotionAllowed": { "const": false } }
+    },
+    "negativeResult": {
+      "type": "object", "additionalProperties": false, "required": ["case", "outcome", "reasonCode", "effectCount", "evidenceRef"],
+      "properties": { "case": { "enum": ["TENANT_IDENTIFIER", "ENVIRONMENT_IDENTIFIER", "CREDENTIAL", "CONNECTION_STRING", "REUSABLE_SECRET_REFERENCE", "PRODUCTION_CLASS", "IMPLICIT_IMPORT", "IMPLICIT_PROMOTION", "DIGEST_DRIFT", "MISSING_LKG_TARGET", "MERGED_AUTHORITIES", "DATAVERSE_AS_LEDGER", "INFERRED_ROLLBACK_FROM_CANCELLATION", "OWNED_RESIDUE" ] }, "outcome": { "const": "DENY" }, "reasonCode": { "type": "string", "pattern": "^[A-Z_]+$" }, "effectCount": { "const": 0 }, "evidenceRef": { "$ref": "#/$defs/evidenceId" } }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["bundleDigest", "refs"],
+      "properties": { "bundleDigest": { "$ref": "#/$defs/digest" }, "refs": { "type": "array", "const": [
+        { "id": "evidence-001", "kind": "tuple", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "redacted": true },
+        { "id": "evidence-002", "kind": "versioning", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "redacted": true },
+        { "id": "evidence-003", "kind": "authority-separation", "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "redacted": true },
+        { "id": "evidence-004", "kind": "transition-gates", "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "redacted": true },
+        { "id": "evidence-005", "kind": "reset-uninstall", "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "redacted": true },
+        { "id": "evidence-006", "kind": "rollback-lkg", "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "redacted": true },
+        { "id": "evidence-007", "kind": "negative-matrix", "digest": "1111111111111111111111111111111111111111111111111111111111111111", "redacted": true },
+        { "id": "evidence-008", "kind": "public-projection", "digest": "2222222222222222222222222222222222222222222222222222222222222222", "redacted": true }
+      ] } }
+    },
+    "publicSafeProjection": {
+      "type": "object", "additionalProperties": false, "required": ["status", "redacted", "environmentClass", "packageVersion", "packageDigest", "policyGeneration", "transitionKinds", "negativeReasonCodes", "evidenceRefs"],
+      "properties": { "status": { "const": "READY" }, "redacted": { "const": true }, "environmentClass": { "const": "LOCAL_SYNTHETIC_REPOSITORY_ONLY" }, "packageVersion": { "const": "2.3.0" }, "packageDigest": { "$ref": "#/$defs/digest" }, "policyGeneration": { "const": 17 }, "transitionKinds": { "const": ["EXPORT", "IMPORT", "UPGRADE", "ROLLBACK", "PUBLICATION", "PROMOTION"] }, "negativeReasonCodes": { "type": "array", "minItems": 14, "items": { "type": "string", "pattern": "^[A-Z_]+$" } }, "evidenceRefs": { "const": ["evidence-001", "evidence-002", "evidence-003", "evidence-004", "evidence-005", "evidence-006", "evidence-007", "evidence-008"] } }
+    }
+  }
+}

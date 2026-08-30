@@ -1,0 +1,221 @@
+{
+  "schemaVersion": "pansphaira.azure-power-platform/authoritative-readback-receipt/v1",
+  "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+  "operation": {
+    "schemaVersion": "pansphaira.azure-power-platform/operation/v1",
+    "operationKey": "SUBMIT_GOVERNED_QUERY",
+    "operationId": "synthetic-operation-read-0001",
+    "action": "READ_RECORD",
+    "actionVersion": "1.0.0",
+    "actionDigest": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "request": {
+    "schemaVersion": "pansphaira.azure-power-platform/canonical-read-request/v1",
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "operationKey": "SUBMIT_GOVERNED_QUERY",
+    "operationId": "synthetic-operation-read-0001",
+    "action": "READ_RECORD",
+    "actionVersion": "1.0.0",
+    "actionDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "resource": "synthetic.power-platform.record",
+    "queryDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "requestedFields": [
+      "id",
+      "displayName",
+      "createdAt"
+    ],
+    "requestNonce": "synthetic-request-read-0001",
+    "requestedAt": "2026-08-28T08:00:00Z"
+  },
+  "requestDigest": "2dbcc841765e17e7fb5e0b3229567da2bc329d371809be58d53a44bad42fb817",
+  "statusObservation": {
+    "schemaVersion": "pansphaira.azure-power-platform/status-observation/v1",
+    "source": "OPERATION_STATUS_STORE",
+    "status": "ACCEPTED",
+    "observedAt": "2026-08-28T08:00:01Z",
+    "operationId": "synthetic-operation-read-0001"
+  },
+  "policy": {
+    "schemaVersion": "pansphaira.azure-power-platform/policy-binding/v1",
+    "id": "power-platform-read-policy",
+    "version": "1.0.0",
+    "generation": 7,
+    "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "evidence": {
+    "schemaVersion": "pansphaira.azure-power-platform/evidence-bundle/v1",
+    "bundleDigest": "b59fe37edc655c65e20059901f7730f6b635ae830fe8232a46a01ac754316875",
+    "refs": [
+      {
+        "id": "canonical-request",
+        "ref": "tests/fixtures/azure-power-platform/readback-accepted.json",
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "id": "independent-decision",
+        "ref": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+        "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      {
+        "id": "authoritative-readback",
+        "ref": "tests/fixtures/azure-power-platform/readback-accepted.json",
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      {
+        "id": "missing-readback",
+        "ref": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs",
+        "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      {
+        "id": "delayed-readback",
+        "ref": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs",
+        "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      {
+        "id": "tamper-probes",
+        "ref": "tests/fixtures/azure-power-platform/readback-tampered.json",
+        "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      {
+        "id": "rollback-lkg",
+        "ref": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+        "digest": "1212121212121212121212121212121212121212121212121212121212121212"
+      },
+      {
+        "id": "negative-matrix",
+        "ref": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs",
+        "digest": "1313131313131313131313131313131313131313131313131313131313131313"
+      }
+    ]
+  },
+  "decision": {
+    "schemaVersion": "pansphaira.azure-power-platform/independent-decision/v1",
+    "source": "INDEPENDENT_POLICY_AUTHORITY",
+    "decisionVersion": "1.0.0",
+    "outcome": "ALLOW",
+    "reasonCode": null,
+    "effectCount": 0,
+    "operationId": "synthetic-operation-read-0001",
+    "requestDigest": "2dbcc841765e17e7fb5e0b3229567da2bc329d371809be58d53a44bad42fb817",
+    "action": "READ_RECORD",
+    "actionVersion": "1.0.0",
+    "actionDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "policyId": "power-platform-read-policy",
+    "policyVersion": "1.0.0",
+    "policyGeneration": 7,
+    "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "evidenceDigest": "b59fe37edc655c65e20059901f7730f6b635ae830fe8232a46a01ac754316875",
+    "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT"
+  },
+  "decisionDigest": "93e53587e2fa3fd72ad3ee910a31afe6b01085d8b881f72bfb3a2d20cfa7a9e8",
+  "readback": {
+    "schemaVersion": "pansphaira.azure-power-platform/authoritative-readback/v1",
+    "source": "AUTHORITATIVE_POST_ACCEPT_READBACK",
+    "status": "READ_CONFIRMED",
+    "operationId": "synthetic-operation-read-0001",
+    "requestDigest": "2dbcc841765e17e7fb5e0b3229567da2bc329d371809be58d53a44bad42fb817",
+    "action": "READ_RECORD",
+    "actionVersion": "1.0.0",
+    "actionDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "observedAt": "2026-08-28T08:00:03Z",
+    "effectCount": 0,
+    "recordDigest": "9999999999999999999999999999999999999999999999999999999999999999"
+  },
+  "readbackDigest": "4949c3e8d437a44b4ac4fc14a852b7b99f3c71c36dcb0a1941993bb82de261d4",
+  "lkg": {
+    "status": "LKG",
+    "tupleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "revocationStatus": "UNREVOKED",
+    "evidenceRefs": [
+      "rollback-lkg"
+    ]
+  },
+  "rollback": {
+    "target": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",
+    "targetTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "targetStatus": "LKG",
+    "authorizationRequired": true,
+    "evidenceRefs": [
+      "rollback-lkg"
+    ]
+  },
+  "limitations": [
+    "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "NO_EXTERNAL_ACCOUNT_ACCESS",
+    "NO_CREDENTIAL_USE",
+    "NO_BUSINESS_WRITE",
+    "NO_CLIENT_ASSERTED_SUCCESS",
+    "INDEPENDENT_READBACK_REQUIRED"
+  ],
+  "negativeResults": [
+    {
+      "id": "missing-readback-result",
+      "reasonCode": "MISSING_READBACK_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "missing-readback"
+    },
+    {
+      "id": "delayed-readback-result",
+      "reasonCode": "DELAYED_READBACK_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "delayed-readback"
+    },
+    {
+      "id": "readback-tampered-result",
+      "reasonCode": "READBACK_TAMPERED_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "tamper-probes"
+    },
+    {
+      "id": "receipt-tampered-result",
+      "reasonCode": "RECEIPT_TAMPERED_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "tamper-probes"
+    },
+    {
+      "id": "request-binding-result",
+      "reasonCode": "REQUEST_BINDING_MISMATCH_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "canonical-request"
+    },
+    {
+      "id": "stale-tuple-result",
+      "reasonCode": "STALE_TUPLE_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "independent-decision"
+    },
+    {
+      "id": "issuer-alias-result",
+      "reasonCode": "ISSUER_ALIAS_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "receipt-tampered-result"
+    },
+    {
+      "id": "unknown-field-result",
+      "reasonCode": "UNKNOWN_RECEIPT_FIELD_DENIED",
+      "outcome": "DENY",
+      "evidenceRef": "receipt-tampered-result"
+    }
+  ],
+  "receipt": {
+    "schemaVersion": "pansphaira.azure-power-platform/bound-receipt/v1",
+    "issuer": "pansphaira.local-readback-verifier",
+    "version": "1.0.0",
+    "issuedAt": "2026-08-28T08:00:04Z",
+    "fullTupleDigest": "23159120351f20809d7caef87010367c825a138dcaa33571ddf07cc884df7abc",
+    "bindings": {
+      "operationId": "synthetic-operation-read-0001",
+      "requestDigest": "2dbcc841765e17e7fb5e0b3229567da2bc329d371809be58d53a44bad42fb817",
+      "decisionDigest": "93e53587e2fa3fd72ad3ee910a31afe6b01085d8b881f72bfb3a2d20cfa7a9e8",
+      "readbackDigest": "4949c3e8d437a44b4ac4fc14a852b7b99f3c71c36dcb0a1941993bb82de261d4",
+      "policyId": "power-platform-read-policy",
+      "policyVersion": "1.0.0",
+      "policyGeneration": 7,
+      "policyDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "evidenceDigest": "b59fe37edc655c65e20059901f7730f6b635ae830fe8232a46a01ac754316875",
+      "lkgTupleDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT"
+    },
+    "receiptDigest": "7af5d23d5d310b41ff9b84b09570e49412bd424d673958cc0c6bcb6d9420c087"
+  }
+}

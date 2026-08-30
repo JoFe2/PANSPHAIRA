@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "pansphaira.power-platform/canvas-business-workbench-fixture/v1",
+  "fixtureKind": "VALID",
+  "packagePaths": {
+    "manifest": "power-platform/readonly-canvas-workbench/manifest.json",
+    "connectorBinding": "power-platform/readonly-canvas-workbench/connector-binding.json",
+    "acceptedResult": "tests/fixtures/azure-power-platform/readback-accepted.json"
+  },
+  "expected": {
+    "status": "PASS",
+    "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
+    "activationState": "INACTIVE",
+    "projection": "AUTHORITATIVE_READBACK_AND_BOUND_RECEIPT",
+    "importAllowed": false
+  }
+}
