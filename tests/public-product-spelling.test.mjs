@@ -29,6 +29,7 @@ function classify(path, line) {
     || path.startsWith("verification/cks-10-")
   ) return "stable-cks10-authority-identifier";
   if (path.startsWith("tests/cks-12/")) return "stable-cks12-technical-identifier";
+  if (path.startsWith("docs/architecture/rks-01")) return "stable-rks01-technical-identifier";
   if (path === "demo/manifests/network/local-egress-policy-v1.json") return "technical-fixture-identifier";
   if (path.startsWith("schemas/")) return "stable-schema";
   if (path === "release/governance.json") {
