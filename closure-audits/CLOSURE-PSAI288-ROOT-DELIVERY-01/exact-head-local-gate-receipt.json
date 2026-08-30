@@ -1,0 +1,19 @@
+{
+  "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId":"CLOSURE-PSAI288-ROOT-DELIVERY-01",
+  "sourceIssue":{"repository":"JimPansky/PANSPHAIRA","number":288,"url":"https://github.com/JoFe2/PANSPHAIRA/issues/288"},
+  "baseCommit":"27060c6a9c1fa51424b350046420cb041db3969c",
+  "testedHead":"ad46399d5a65b3a45356cdb314b1f8dd444da433",
+  "testedTree":"2d6e88c06baf9ca8845e42d3335581b20ce6a876",
+  "acceptance":{"p14UsageSets":"PASS","p15RepetitionVsGeneralization":"PASS","p16DirectCausalAttribution":"PASS","unknownOutcomesRetainedOutsideOperationalEligibility":"PASS","uncertaintyAndMultiCause":"PASS","privacyMinimization":"PASS","tamperReplayCrossScopeDenial":"PASS"},
+  "gates":[
+    {"command":"npm test","outcome":"PASS","mainTests":642,"mainPassed":642},
+    {"command":"npm run cks08:test","outcome":"PASS","tests":35,"passed":35},
+    {"command":"node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs","outcome":"PASS","tests":78,"passed":78},
+    {"command":"sha256sum --check SHA256SUMS","outcome":"PASS","entries":1379},
+    {"command":"npm run release-governance:verify","outcome":"PASS"},
+    {"command":"npm run lint","outcome":"PASS"},
+    {"command":"git diff --check","outcome":"PASS"}
+  ],
+  "delivery":{"readyForPr":true,"releaseRequired":true,"publicReadbackRequired":true,"issueCloseRequired":true}
+}
