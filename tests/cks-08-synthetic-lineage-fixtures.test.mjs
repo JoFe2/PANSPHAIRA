@@ -8,6 +8,10 @@ import {
 } from "../scripts/cks-08-score-synthetic-lineage.mjs";
 import { computeCksLineageFeatureReportV1 } from "../dist/packages/contracts/src/cks-evidence-profile-features.js";
 import { evaluateCksSeededFailureAttributionV1 } from "../dist/packages/contracts/src/cks-failure-attribution-evaluator.js";
+import {
+  CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1,
+  validateDirectFailureReceiptV1,
+} from "../dist/packages/contracts/src/cks-knowledge-lineage.js";
 import { reconstructCksLineageUsageV1 } from "../dist/packages/contracts/src/cks-lineage-reconstructor.js";
 
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
@@ -103,6 +107,27 @@ test("P16 attributes every seeded causal class and retains independent profile d
     assert.deepEqual(first.causes.map(({ class: causeClass, subtype, certainty }) => ({ class: causeClass, subtype, certainty })), item.causes, item.name);
     assert.deepEqual(Object.keys(first.evidenceProfiles[0].dimensions).sort(), ["applicability", "contradiction", "freshness", "generalization", "operational", "source"], `${item.name}: dimensions remain separate`);
   }
+});
+
+test("P16 synthetic direct-cause witnesses reference class- and subtype-bound receipt events", () => {
+  const fixture = cases();
+  const model = buildSyntheticFixtureModel(fixture);
+  const observedClasses = new Set();
+  for (const task of fixture.tasks) {
+    const built = model.built.get(task.name);
+    for (const cause of built.attributionInput.evidence.map((item) => item.cause)) {
+      if (!Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, cause.class)) continue;
+      observedClasses.add(cause.class);
+      assert.equal(cause.causeEventRefs.length, 1, `${task.name}: one direct receipt ref`);
+      const event = built.events.find((candidate) => candidate.eventId === cause.causeEventRefs[0].eventId);
+      assert.equal(event?.eventType, CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[cause.class], `${task.name}: class-specific receipt event`);
+      assert.equal(event?.eventDigest, cause.causeEventRefs[0].eventDigest, `${task.name}: exact event digest binding`);
+      assert.equal(validateDirectFailureReceiptV1(event?.fact.receipt), true, `${task.name}: receipt digest`);
+      assert.equal(event?.fact.receipt.failureSubtype, cause.subtype, `${task.name}: subtype predicate`);
+      assert.ok(!["KNOWLEDGE_DISPOSITIONED", "DECISION_RECORDED"].includes(event?.eventType), `${task.name}: unrelated lineage labels are not causal receipts`);
+    }
+  }
+  assert.deepEqual([...observedClasses].sort(), ["EXECUTION", "EXTERNAL", "GOVERNANCE", "TASK_INPUT"]);
 });
 
 test("P14/P16 fail closed for missing, late, replayed, cross-scope and tampered lineage plus attribution ambiguity", () => {

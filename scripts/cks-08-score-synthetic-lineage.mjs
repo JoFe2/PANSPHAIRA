@@ -7,12 +7,15 @@ import Ajv2020 from "ajv/dist/2020.js";
 
 import {
   CKS_DECISION_KNOWLEDGE_BINDING_SCHEMA_V1,
+  CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1,
+  CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
   CKS_FAILURE_ATTRIBUTION_SCHEMA_V1,
   CKS_KNOWLEDGE_EVIDENCE_PROFILE_SCHEMA_V1,
   CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
   CKS_KNOWLEDGE_USAGE_EVENT_SCHEMA_V1,
   CKS_TASK_OUTCOME_EVIDENCE_SCHEMA_V1,
   decisionKnowledgeBindingDigestV1,
+  directFailureReceiptDigestV1,
   failureAttributionDigestV1,
   knowledgeEvidenceProfileDigestV1,
   knowledgeUsageEventDigestV1,
@@ -177,10 +180,28 @@ function buildLineage(task, ordinal, fixture) {
     }));
   }
   const decisionEvent = append(events.length, "DECISION_RECORDED", { decision: decisionValue });
+  const directReceiptEvents = new Map();
+  for (const cause of [...task.causes].sort((a, b) => causeKey(a).localeCompare(causeKey(b)))) {
+    if (!Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, cause.class)) continue;
+    const receipt = {
+      schemaVersion: CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
+      semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
+      scopeRef: fixture.scopeRef,
+      taskRef,
+      decisionRef: { decisionId: decisionValue.decisionId, decisionDigest: decisionValue.decisionDigest },
+      failureClass: cause.class,
+      failureSubtype: cause.subtype,
+      evidenceDigest: digest(`direct-evidence:${task.name}:${causeKey(cause)}`),
+      receiptDigest: "",
+    };
+    receipt.receiptDigest = directFailureReceiptDigestV1(receipt);
+    directReceiptEvents.set(causeKey(cause), append(events.length, CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[cause.class], { receipt }));
+  }
   const eventForCause = (cause) => {
     if (cause.class === "UNKNOWN") return opened;
     if (cause.class === "DECISION") return decisionEvent;
     if (cause.class === "SEARCH") return searched;
+    if (Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, cause.class)) return directReceiptEvents.get(causeKey(cause));
     const affected = cause.affectedKnowledge?.[0];
     return dispositionEvents.get(affected) ?? dispositionEvents.get(task.used[0]) ?? decisionEvent;
   };

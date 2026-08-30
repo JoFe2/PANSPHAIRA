@@ -10,11 +10,14 @@ import {
 } from "../packages/contracts/src/cks-evidence-profile-features.js";
 import {
   CKS_DECISION_KNOWLEDGE_BINDING_SCHEMA_V1,
+  CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1,
+  CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
   CKS_FAILURE_ATTRIBUTION_SCHEMA_V1,
   CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
   CKS_KNOWLEDGE_USAGE_EVENT_SCHEMA_V1,
   CKS_TASK_OUTCOME_EVIDENCE_SCHEMA_V1,
   decisionKnowledgeBindingDigestV1,
+  directFailureReceiptDigestV1,
   failureAttributionDigestV1,
   knowledgeUsageEventDigestV1,
   knowledgeUsageFactDigestV1,
@@ -72,7 +75,7 @@ function makeLineage(index: number, taskSemanticDigest: string, contextFingerpri
   } as Record<string, unknown>;
   decision.decisionDigest = decisionKnowledgeBindingDigestV1(decision);
   const failure = outcomeClass === "UNKNOWN"
-    ? { schemaVersion: CKS_FAILURE_ATTRIBUTION_SCHEMA_V1, semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1, causalMode: "UNKNOWN", causes: [{ class: "UNKNOWN", subtype: "INSUFFICIENT_CAUSAL_EVIDENCE", causeEventRefs: [], affectedKnowledgeRefs: [] }] }
+    ? { schemaVersion: CKS_FAILURE_ATTRIBUTION_SCHEMA_V1, semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1, causalMode: "UNKNOWN", causes: [{ class: "UNKNOWN", subtype: "INSUFFICIENT_CAUSAL_EVIDENCE", certainty: "UNKNOWN", causeEventRefs: [], affectedKnowledgeRefs: [] }] }
     : outcomeClass === "FAILED"
       ? { schemaVersion: CKS_FAILURE_ATTRIBUTION_SCHEMA_V1, semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1, causalMode: "SINGLE", causes: [{ class: "EXECUTION", subtype: "ACTION_FAILED", certainty: "SUPPORTED", causeEventRefs: [], affectedKnowledgeRefs: [] }] }
       : { schemaVersion: CKS_FAILURE_ATTRIBUTION_SCHEMA_V1, semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1, causalMode: "NOT_APPLICABLE", causes: [] };
@@ -116,14 +119,28 @@ function makeLineage(index: number, taskSemanticDigest: string, contextFingerpri
     event(3, "KNOWLEDGE_DISPOSITIONED", { scopeRef: base.scopeRef, taskRef, knowledgeRef, disposition: "USED", reasonCode: "SELECTED_FOR_TASK" }),
     event(4, "DECISION_RECORDED", { decision }),
   ];
-  if (outcomeClass !== "SUCCEEDED") {
+  if (outcomeClass === "FAILED") {
+    const receipt = {
+      schemaVersion: CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
+      semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
+      scopeRef: base.scopeRef,
+      taskRef,
+      decisionRef: { decisionId: decision.decisionId, decisionDigest: decision.decisionDigest },
+      failureClass: "EXECUTION",
+      failureSubtype: "ACTION_FAILED",
+      evidenceDigest: knowledgeUsageFactDigestV1({ taskRef, failureClass: "EXECUTION", failureSubtype: "ACTION_FAILED" }),
+      receiptDigest: "",
+    } as Record<string, unknown>;
+    receipt.receiptDigest = directFailureReceiptDigestV1(receipt);
+    const receiptEvent = event(events.length, CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1.EXECUTION, { receipt });
+    events.push(receiptEvent);
     const cause = (failure as Record<string, any>).causes[0];
-    cause.causeEventRefs = [{ eventId: events[3]!.eventId, eventDigest: events[3]!.eventDigest }];
+    cause.causeEventRefs = [{ eventId: receiptEvent.eventId, eventDigest: receiptEvent.eventDigest }];
     (failure as Record<string, unknown>).failureAttributionDigest = failureAttributionDigestV1(failure);
     outcome.failureAttribution = failure;
     outcome.outcomeDigest = taskOutcomeEvidenceDigestV1(outcome);
   }
-  events.push(event(5, "OUTCOME_RECORDED", { outcome }));
+  events.push(event(events.length, "OUTCOME_RECORDED", { outcome }));
   return events;
 }
 
@@ -171,6 +188,19 @@ test("source, applicability, freshness, contradiction, generalization and operat
   assert.equal(result.dimensions.operational.failureCauseObservations.length, 1);
   assert.equal(result.dimensions.operational.failureCauseObservations[0]!.class, "EXECUTION");
   assert.equal(result.rawFeatures.operational.operationalUnitDigests.length, 3);
+});
+
+test("UNKNOWN operational observations are retained outside +O eligibility", () => {
+  const result = computeCksLineageFeatureReportV1(inputFor([makeLineage(1, hex("3"), hex("4"), "UNKNOWN")]));
+  assert.equal(result.status, "REPORTED", JSON.stringify(result));
+  if (result.status !== "REPORTED") return;
+  assert.equal(result.dimensions.operational.eligibleOutcomeOccurrenceCount, 0);
+  assert.equal(result.dimensions.operational.uncertainOutcomeOccurrenceCount, 1);
+  assert.equal(result.dimensions.operational.distinctOperationalUnitCount, 0);
+  assert.deepEqual(result.dimensions.operational.distinctOutcomeUnitsByClass, { SUCCEEDED: 0, FAILED: 0, PARTIAL: 0, DENIED: 0 });
+  assert.equal(result.dimensions.operational.marker, null);
+  assert.deepEqual(result.rawFeatures.operational, { operationalUnitDigests: [], outcomeClassObservations: [] });
+  assert.equal(validateCksLineageFeatureReportV1(result), true);
 });
 
 test("feature computation is fail-closed for incomplete and cross-scope evidence", () => {

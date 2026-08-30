@@ -7,14 +7,17 @@
  * contribution alone. Unknown and unresolved alternatives remain explicit.
  */
 import {
+  CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1,
   CKS_FAILURE_ATTRIBUTION_SCHEMA_V1,
   CKS_FAILURE_SUBTYPES_V1,
   CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
   cksDigestV1,
   failureAttributionDigestV1,
+  validateDirectFailureReceiptV1,
   validateFailureAttributionV1,
   validateKnowledgeEvidenceProfileV1,
   type CksReasonCodeV1,
+  type DirectFailureClassV1,
   type FailureAttributionV1,
   type FailureCauseV1,
   type FailureClassV1,
@@ -236,17 +239,29 @@ function witnessSupportsCause(
       && decisionRef.decisionId.length > 0
       && decisionClass.length > 0;
   }
-  const expectedWitness: Record<Exclude<FailureClassV1, "KNOWLEDGE" | "SEARCH" | "DECISION" | "UNKNOWN">, CksFailureWitnessKindV1> = {
+  const directClass = cause.class as DirectFailureClassV1;
+  const expectedWitness: Record<DirectFailureClassV1, CksFailureWitnessKindV1> = {
     EXECUTION: "EXECUTION_RECEIPT",
     TASK_INPUT: "TASK_INPUT_RECEIPT",
     EXTERNAL: "EXTERNAL_RECEIPT",
     GOVERNANCE: "GOVERNANCE_RECEIPT",
   };
-  return witness.kind === expectedWitness[cause.class as Exclude<FailureClassV1, "KNOWLEDGE" | "SEARCH" | "DECISION" | "UNKNOWN">]
+  return witness.kind === expectedWitness[directClass]
     && cause.affectedKnowledgeRefs.length === 0
     && decisionClass === "SELECTED"
     && decisionRef.decisionId.length > 0
-    && cause.causeEventRefs.length > 0;
+    && cause.causeEventRefs.length > 0
+    && cause.causeEventRefs.every((reference) => {
+      const event = eventsById.get(reference.eventId);
+      const fact = event?.fact;
+      const receipt = isRecord(fact) ? fact.receipt : null;
+      return event?.eventType === CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[directClass]
+        && validateDirectFailureReceiptV1(receipt)
+        && receipt.failureClass === directClass
+        && receipt.failureSubtype === cause.subtype
+        && receipt.decisionRef.decisionId === decisionRef.decisionId
+        && receipt.decisionRef.decisionDigest === decisionRef.decisionDigest;
+    });
 }
 
 function causesMatch(actual: readonly FailureCauseV1[], evidence: readonly CksFailureCauseEvidenceV1[]): boolean {

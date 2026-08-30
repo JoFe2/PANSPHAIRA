@@ -34,12 +34,14 @@
     "identicalRepetitionCount equals validTaskOccurrenceCount minus distinctJointUsageUnitCount",
     "+G requires at least two distinct task semantic digests and two distinct context fingerprint digests",
     "+O is computed from distinct operational units, independently of the +G marker",
+    "UNKNOWN outcomes increment uncertainOutcomeOccurrenceCount while remaining outside eligibleOutcomeOccurrenceCount, raw operational units and +O eligibility",
     "raw digest arrays are sorted and unique",
     "all lineages must be complete and in the requested scope"
   ],
   "requiredPositiveCases": [
     "identical-repetition-does-not-become-generalization",
-    "independent-novelty-and-context-diversity"
+    "independent-novelty-and-context-diversity",
+    "unknown-operational-observation-retained-outside-plus-o"
   ],
   "requiredNegativeCases": [
     "missing-lineage",

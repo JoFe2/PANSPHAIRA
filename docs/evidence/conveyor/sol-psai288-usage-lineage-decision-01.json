@@ -127,6 +127,7 @@
     "taskSchema": "chimpmaera.knowledge/usage-lineage-task/v1",
     "searchSchema": "chimpmaera.knowledge/usage-lineage-search/v1",
     "decisionSchema": "chimpmaera.knowledge/usage-lineage-decision/v1",
+    "directFailureReceiptSchema": "chimpmaera.knowledge/direct-failure-receipt/v1",
     "outcomeSchema": "chimpmaera.knowledge/usage-lineage-outcome/v1",
     "eventSchema": "chimpmaera.knowledge/usage-lineage-event/v1",
     "reconstructionSchema": "chimpmaera.knowledge/usage-lineage-reconstruction/v1",
@@ -328,6 +329,27 @@
       "decisionClasses": ["SELECTED", "REJECTED", "DEFERRED", "DENIED"],
       "bindingRule": "supportingKnowledgeRefs is a unique lexicographically sorted subset of explicitly USED Knowledge in the same task."
     },
+    "DirectFailureReceipt": {
+      "identifier": null,
+      "digest": "receiptDigest",
+      "canonicalFieldsExcludingDigest": [
+        "schemaVersion",
+        "semanticRuleId",
+        "scopeRef",
+        "taskRef",
+        "decisionRef",
+        "failureClass",
+        "failureSubtype",
+        "evidenceDigest"
+      ],
+      "failureSubtypesByClass": {
+        "EXECUTION": ["ACTION_FAILED", "READBACK_FAILED"],
+        "TASK_INPUT": ["MISSING_CONTEXT", "INVALID_INPUT"],
+        "EXTERNAL": ["DEPENDENCY_UNAVAILABLE", "ENVIRONMENT_DRIFT"],
+        "GOVERNANCE": ["POLICY_DENIED", "AUTHORITY_DENIED"]
+      },
+      "bindingRule": "The receipt binds one exact direct-evidence digest to the accepted scope, task and Decision plus one class/subtype predicate. It is accepted only in the matching class-specific receipt event; labels or unrelated lineage events never satisfy direct evidence."
+    },
     "Outcome": {
       "identifier": "outcomeId",
       "digest": "outcomeDigest",
@@ -353,6 +375,10 @@
       "KNOWLEDGE_INSPECTED",
       "KNOWLEDGE_DISPOSITIONED",
       "DECISION_RECORDED",
+      "EXECUTION_RECEIPT_RECORDED",
+      "TASK_INPUT_RECEIPT_RECORDED",
+      "EXTERNAL_RECEIPT_RECORDED",
+      "GOVERNANCE_RECEIPT_RECORDED",
       "OUTCOME_RECORDED"
     ],
     "eventShapeExcludingDigest": [
@@ -404,6 +430,22 @@
         "exactFields": ["decision"],
         "rule": "decision is the complete Decision entity and freezes the task's searched, inspected, used and rejected sets."
       },
+      "EXECUTION_RECEIPT_RECORDED": {
+        "exactFields": ["receipt"],
+        "rule": "receipt is a valid DirectFailureReceipt for EXECUTION, binds the accepted Decision, and carries the exact execution subtype plus independently bound direct-evidence digest."
+      },
+      "TASK_INPUT_RECEIPT_RECORDED": {
+        "exactFields": ["receipt"],
+        "rule": "receipt is a valid DirectFailureReceipt for TASK_INPUT, binds the accepted Decision, and carries the exact task-input subtype plus independently bound direct-evidence digest."
+      },
+      "EXTERNAL_RECEIPT_RECORDED": {
+        "exactFields": ["receipt"],
+        "rule": "receipt is a valid DirectFailureReceipt for EXTERNAL, binds the accepted Decision, and carries the exact external subtype plus independently bound direct-evidence digest."
+      },
+      "GOVERNANCE_RECEIPT_RECORDED": {
+        "exactFields": ["receipt"],
+        "rule": "receipt is a valid DirectFailureReceipt for GOVERNANCE, binds the accepted Decision, and carries the exact governance subtype plus independently bound direct-evidence digest."
+      },
       "OUTCOME_RECORDED": {
         "exactFields": ["outcome"],
         "rule": "outcome is the complete Outcome entity, binds the one accepted Decision and seals the task."
@@ -417,13 +459,14 @@
       "SEARCH_RECORDED precedes inspection through an exact searchRef.",
       "KNOWLEDGE_INSPECTED precedes that Knowledge's one disposition.",
       "USED precedes inclusion in supportingKnowledgeRefs.",
-      "DECISION_RECORDED precedes OUTCOME_RECORDED.",
+      "DECISION_RECORDED precedes every direct-failure receipt event and OUTCOME_RECORDED.",
+      "Every direct-failure causeEventRef resolves to the class-specific receipt event whose receipt binds the same Decision and exact failure subtype.",
       "Every cause or entity parent has lower scopeSequence and occurredAtMs less than or equal to its child."
     ],
     "receivedTimeRule": "receivedAtMs is a non-negative safe integer, is nondecreasing with scopeSequence, and is greater than or equal to occurredAtMs.",
     "lateWindowRule": "Before accepting a candidate, watermarkMs is the maximum occurredAtMs among accepted events in that scope. The candidate is accepted as late only when watermarkMs minus occurredAtMs is less than or equal to lateWindowMs, receivedAtMs minus occurredAtMs is less than or equal to lateWindowMs, every parent is already accepted, and the Decision has not frozen the task. A negative difference is not late.",
     "lateBoundary": "Exactly lateWindowMs is accepted; any greater lateness is LATE_EVENT_DENIED. There is no pending queue, retroactive repair or fixture-assisted gap fill.",
-    "freezeAndSeal": "DECISION_RECORDED rejects later Search, inspection or disposition events for that task. OUTCOME_RECORDED rejects every later non-replay event for that task. Replays remain DENIED rather than becoming successful readback.",
+    "freezeAndSeal": "DECISION_RECORDED rejects later Search, inspection or disposition events for that task while allowing only Decision-bound direct-failure receipt events before Outcome. OUTCOME_RECORDED rejects every later non-replay event for that task. Replays remain DENIED rather than becoming successful readback.",
     "replayRule": "A previously seen eventId, eventDigest, factDigest for the same semantic edge, or locally minted entity ID is REPLAY_DENIED even when bytes are identical. Same ID with different digest is TAMPERED_LINEAGE_DENIED. No replay earns usage, +G or +O credit.",
     "repetitionDistinction": "A new valid Task with new entity and event IDs may intentionally repeat an earlier taskSemanticDigest and contextFingerprintDigest. It reconstructs independently but collapses to the same generalization usage unit, so repetition is not transport replay and cannot inflate +G.",
     "canonicalReconstructionOrder": "After validation, task outputs and all set-valued references are sorted lexicographically by identifier then digest. Arrival order, object key order and fixture prose never break ties."
@@ -645,10 +688,10 @@
       "KNOWLEDGE": "Requires one or more affectedKnowledgeRefs and direct bound evidence for the named source, applicability, freshness, contradiction, missing-content or unsupported-generalization fact. Except MISSING, an affected Knowledge must be outcome-contributing. Mere contribution to a failed Outcome is insufficient.",
       "SEARCH": "Requires a bound Search or inspection/disposition event plus synthetic oracle evidence for the missed relevant Knowledge. It never fabricates USED or outcome-contributing lineage.",
       "DECISION": "Requires the exact Decision ref and a bound decision-check event showing unsupported selection or an ignored supported option. Knowledge presence alone is insufficient.",
-      "EXECUTION": "Requires an accepted Decision and a bound action or readback failure event. It does not assign fault to contributing Knowledge without separate KNOWLEDGE cause evidence.",
-      "TASK_INPUT": "Requires a bound task-input or context validation denial. It may have no affectedKnowledgeRefs.",
-      "EXTERNAL": "Requires a bound dependency or environment receipt. Sequence timing alone is insufficient.",
-      "GOVERNANCE": "Requires a bound policy or authority denial event. An Outcome class of DENIED alone is insufficient.",
+      "EXECUTION": "Requires an accepted Decision plus an EXECUTION_RECEIPT_RECORDED event containing a digest-valid DirectFailureReceipt whose class and subtype exactly match the cause. It does not assign fault to contributing Knowledge without separate KNOWLEDGE cause evidence.",
+      "TASK_INPUT": "Requires a TASK_INPUT_RECEIPT_RECORDED event containing a Decision-bound digest-valid DirectFailureReceipt whose class and subtype exactly match the cause. It may have no affectedKnowledgeRefs.",
+      "EXTERNAL": "Requires an EXTERNAL_RECEIPT_RECORDED event containing a Decision-bound digest-valid DirectFailureReceipt whose class and subtype exactly match the cause. Sequence timing alone is insufficient.",
+      "GOVERNANCE": "Requires a GOVERNANCE_RECEIPT_RECORDED event containing a Decision-bound digest-valid DirectFailureReceipt whose class and subtype exactly match the cause. An Outcome class of DENIED alone is insufficient.",
       "UNKNOWN": "Used exactly when available bound events cannot support or distinguish a known class. It carries no affectedKnowledgeRefs and no profile-dimension fault."
     },
     "outcomeRules": [
@@ -845,5 +888,5 @@
     "requiredVerification": "git diff --check origin/main...HEAD",
     "successClaimRule": "Run the required verification against the final local commit and require exit code 0 before reporting this decision slice complete. This byte record does not preclaim that post-commit command result."
   },
-  "receiptDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6"
+  "receiptDigest": "62fa6380375475d60bfc23525b9bd6685a11410d718d4c5db0cec9aa6585d5b7"
 }

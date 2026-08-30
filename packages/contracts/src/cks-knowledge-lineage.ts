@@ -23,9 +23,18 @@ export const TASK_OUTCOME_EVIDENCE_SCHEMA_V1 = CKS_TASK_OUTCOME_EVIDENCE_SCHEMA_
 export const FAILURE_ATTRIBUTION_SCHEMA_V1 = CKS_FAILURE_ATTRIBUTION_SCHEMA_V1;
 export const KNOWLEDGE_EVIDENCE_PROFILE_SCHEMA_V1 = CKS_KNOWLEDGE_EVIDENCE_PROFILE_SCHEMA_V1;
 
+export const CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1 = "chimpmaera.knowledge/direct-failure-receipt/v1" as const;
+export const CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1 = {
+  EXECUTION: "EXECUTION_RECEIPT_RECORDED",
+  TASK_INPUT: "TASK_INPUT_RECEIPT_RECORDED",
+  EXTERNAL: "EXTERNAL_RECEIPT_RECORDED",
+  GOVERNANCE: "GOVERNANCE_RECEIPT_RECORDED",
+} as const;
+export type DirectFailureClassV1 = keyof typeof CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1;
+export type DirectFailureReceiptEventTypeV1 = typeof CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[DirectFailureClassV1];
 export const CKS_EVENT_TYPES_V1 = [
   "TASK_OPENED", "SEARCH_RECORDED", "KNOWLEDGE_INSPECTED", "KNOWLEDGE_DISPOSITIONED",
-  "DECISION_RECORDED", "OUTCOME_RECORDED",
+  "DECISION_RECORDED", ...Object.values(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1), "OUTCOME_RECORDED",
 ] as const;
 export type KnowledgeUsageEventTypeV1 = typeof CKS_EVENT_TYPES_V1[number];
 export type TaskKindV1 = "RETRIEVE" | "DECIDE" | "ACT" | "VERIFY";
@@ -80,6 +89,18 @@ export interface DecisionKnowledgeBindingV1 {
   readonly supportingKnowledgeRefs: readonly KnowledgeRefV1[];
   readonly decisionDigest: string;
 }
+export interface DirectFailureReceiptV1 {
+  readonly schemaVersion: typeof CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1;
+  readonly semanticRuleId: typeof CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1;
+  readonly scopeRef: ScopeRefV1;
+  readonly taskRef: TaskRefV1;
+  readonly decisionRef: DecisionRefV1;
+  readonly failureClass: DirectFailureClassV1;
+  readonly failureSubtype: string;
+  /** Digest of the bounded action/readback, task-input, dependency, policy, or authority observation. */
+  readonly evidenceDigest: string;
+  readonly receiptDigest: string;
+}
 export interface FailureCauseV1 {
   readonly class: FailureClassV1;
   readonly subtype: string;
@@ -113,6 +134,7 @@ export type KnowledgeUsageFactV1 =
   | { readonly scopeRef: ScopeRefV1; readonly taskRef: TaskRefV1; readonly searchRef: SearchRefV1; readonly knowledgeRef: KnowledgeRefV1 }
   | { readonly scopeRef: ScopeRefV1; readonly taskRef: TaskRefV1; readonly knowledgeRef: KnowledgeRefV1; readonly disposition: KnowledgeDispositionV1; readonly reasonCode: "SELECTED_FOR_TASK" | "NOT_APPLICABLE" | "STALE" | "CONTRADICTED" | "INSUFFICIENT_SOURCE_SUPPORT" | "NOT_NEEDED" | "POLICY_DENIED" }
   | { readonly decision: DecisionKnowledgeBindingV1 }
+  | { readonly receipt: DirectFailureReceiptV1 }
   | { readonly outcome: TaskOutcomeEvidenceV1 };
 export interface KnowledgeUsageEventV1 {
   readonly schemaVersion: typeof CKS_KNOWLEDGE_USAGE_EVENT_SCHEMA_V1;
@@ -235,6 +257,7 @@ export const knowledgeUsageEventDigestV1 = (value: Record<string, unknown>): str
 export const usageLineageTaskDigestV1 = (value: Record<string, unknown>): string => cksDigestV1(value, "taskDigest");
 export const usageLineageSearchDigestV1 = (value: Record<string, unknown>): string => cksDigestV1(value, "searchDigest");
 export const decisionKnowledgeBindingDigestV1 = (value: Record<string, unknown>): string => cksDigestV1(value, "decisionDigest");
+export const directFailureReceiptDigestV1 = (value: Record<string, unknown>): string => cksDigestV1(value, "receiptDigest");
 export const taskOutcomeEvidenceDigestV1 = (value: Record<string, unknown>): string => cksDigestV1(value, "outcomeDigest");
 export const failureAttributionDigestV1 = (value: Record<string, unknown>): string => cksDigestV1(value, "failureAttributionDigest");
 export const knowledgeEvidenceProfileDigestV1 = (value: Record<string, unknown>): string => cksDigestV1(value, "profileDigest");
@@ -275,6 +298,21 @@ export function validateDecisionKnowledgeBindingV1(value: unknown): value is Dec
     && ["SELECTED", "REJECTED", "DEFERRED", "DENIED"].includes(value.decisionClass as string) && sortedUnique(value.supportingKnowledgeRefs, knowledgeRef) && digest(value.decisionDigest)
     && decisionKnowledgeBindingDigestV1(value) === value.decisionDigest;
 }
+export function validateDirectFailureReceiptV1(value: unknown): value is DirectFailureReceiptV1 {
+  if (!safeStructure(value) || !exact(value, ["schemaVersion", "semanticRuleId", "scopeRef", "taskRef", "decisionRef", "failureClass", "failureSubtype", "evidenceDigest", "receiptDigest"])) return false;
+  const failureClass = value.failureClass as DirectFailureClassV1;
+  return value.schemaVersion === CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1
+    && value.semanticRuleId === CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1
+    && Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, failureClass)
+    && scopeRef(value.scopeRef)
+    && taskRef(value.taskRef)
+    && decisionRef(value.decisionRef)
+    && typeof value.failureSubtype === "string"
+    && CKS_FAILURE_SUBTYPES_V1[failureClass].includes(value.failureSubtype)
+    && digest(value.evidenceDigest)
+    && digest(value.receiptDigest)
+    && directFailureReceiptDigestV1(value) === value.receiptDigest;
+}
 export function validateTaskOutcomeEvidenceV1(value: unknown): value is TaskOutcomeEvidenceV1 {
   return safeStructure(value) && exact(value, ["schemaVersion", "semanticRuleId", "scopeRef", "taskRef", "decisionRef", "outcomeId", "outcomeClass", "contributingKnowledgeRefs", "failureAttribution", "outcomeDigest"])
     && value.schemaVersion === CKS_TASK_OUTCOME_EVIDENCE_SCHEMA_V1 && value.semanticRuleId === CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1 && scopeRef(value.scopeRef) && taskRef(value.taskRef) && decisionRef(value.decisionRef) && outcomeId(value.outcomeId)
@@ -299,8 +337,23 @@ function validFact(type: KnowledgeUsageEventTypeV1, fact: unknown, event: Record
     const decision = fact.decision as DecisionKnowledgeBindingV1;
     return exact(fact, ["decision"]) && validateDecisionKnowledgeBindingV1(decision) && decision.scopeRef.scopeId === eventScope.scopeId && decision.scopeRef.scopeDigest === eventScope.scopeDigest && decision.taskRef.taskId === eventTask.taskId && decision.taskRef.taskDigest === eventTask.taskDigest;
   }
-  const outcome = fact.outcome as TaskOutcomeEvidenceV1;
-  return exact(fact, ["outcome"]) && validateTaskOutcomeEvidenceV1(outcome) && outcome.scopeRef.scopeId === eventScope.scopeId && outcome.scopeRef.scopeDigest === eventScope.scopeDigest && outcome.taskRef.taskId === eventTask.taskId && outcome.taskRef.taskDigest === eventTask.taskDigest;
+  const directFailureClass = (Object.keys(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1) as DirectFailureClassV1[])
+    .find((failureClass) => CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[failureClass] === type);
+  if (directFailureClass) {
+    const receipt = fact.receipt as DirectFailureReceiptV1;
+    return exact(fact, ["receipt"])
+      && validateDirectFailureReceiptV1(receipt)
+      && receipt.failureClass === directFailureClass
+      && receipt.scopeRef.scopeId === eventScope.scopeId
+      && receipt.scopeRef.scopeDigest === eventScope.scopeDigest
+      && receipt.taskRef.taskId === eventTask.taskId
+      && receipt.taskRef.taskDigest === eventTask.taskDigest;
+  }
+  if (type === "OUTCOME_RECORDED") {
+    const outcome = fact.outcome as TaskOutcomeEvidenceV1;
+    return exact(fact, ["outcome"]) && validateTaskOutcomeEvidenceV1(outcome) && outcome.scopeRef.scopeId === eventScope.scopeId && outcome.scopeRef.scopeDigest === eventScope.scopeDigest && outcome.taskRef.taskId === eventTask.taskId && outcome.taskRef.taskDigest === eventTask.taskDigest;
+  }
+  return false;
 }
 function sameScopeTask(fact: Record<string, unknown>, event: Record<string, unknown>): boolean {
   const s = fact.scopeRef as ScopeRefV1, t = fact.taskRef as TaskRefV1, es = event.scopeRef as ScopeRefV1, et = event.taskRef as TaskRefV1;
@@ -333,7 +386,7 @@ function validOperational(value: unknown): boolean {
   const byClass = value.distinctOutcomeUnitsByClass as Record<string, unknown>;
   if (!["eligibleOutcomeOccurrenceCount", "distinctOperationalUnitCount", "uncertainOutcomeOccurrenceCount"].every((name) => Number.isSafeInteger(value[name]) && (value[name] as number) >= 0) || !exact(byClass, ["SUCCEEDED", "FAILED", "PARTIAL", "DENIED"]) || !["SUCCEEDED", "FAILED", "PARTIAL", "DENIED"].every((name) => Number.isSafeInteger(byClass[name]) && (byClass[name] as number) >= 0)) return false;
   const outcomeClassTotal = ["SUCCEEDED", "FAILED", "PARTIAL", "DENIED"].reduce((total, name) => total + (byClass[name] as number), 0);
-  return (value.distinctOperationalUnitCount as number) <= (value.eligibleOutcomeOccurrenceCount as number) && outcomeClassTotal === (value.distinctOperationalUnitCount as number) && (value.uncertainOutcomeOccurrenceCount as number) <= (value.eligibleOutcomeOccurrenceCount as number) && Array.isArray(value.failureCauseObservations) && value.failureCauseObservations.length <= 96 && value.failureCauseObservations.every((item) => exact(item, ["class", "subtype", "certainty"]) && FAILURE_CLASSES.includes(item.class as FailureClassV1) && CKS_FAILURE_SUBTYPES_V1[item.class as FailureClassV1].includes(item.subtype as string) && FAILURE_CERTAINTIES.includes(item.certainty as FailureCertaintyV1)) && (value.marker === null || value.marker === "+O") && ((value.marker === "+O") === ((value.distinctOperationalUnitCount as number) >= 1));
+  return (value.distinctOperationalUnitCount as number) <= (value.eligibleOutcomeOccurrenceCount as number) && outcomeClassTotal === (value.distinctOperationalUnitCount as number) && Array.isArray(value.failureCauseObservations) && value.failureCauseObservations.length <= 96 && value.failureCauseObservations.every((item) => exact(item, ["class", "subtype", "certainty"]) && FAILURE_CLASSES.includes(item.class as FailureClassV1) && CKS_FAILURE_SUBTYPES_V1[item.class as FailureClassV1].includes(item.subtype as string) && FAILURE_CERTAINTIES.includes(item.certainty as FailureCertaintyV1)) && (value.marker === null || value.marker === "+O") && ((value.marker === "+O") === ((value.distinctOperationalUnitCount as number) >= 1));
 }
 export function validateKnowledgeEvidenceProfileV1(value: unknown): value is KnowledgeEvidenceProfileV1 {
   if (!safeStructure(value) || !exact(value, ["schemaVersion", "semanticRuleId", "scopeRef", "knowledgeRef", "dimensions", "profileDigest"])) return false;
@@ -407,6 +460,10 @@ export function reconstructKnowledgeUsageV1(input: readonly unknown[]): Knowledg
       if (decision || outcome) return denied(["TRANSITION_DENIED"]);
       decision = (event.fact as { decision: DecisionKnowledgeBindingV1 }).decision; decisionSequence = index;
       if (!decision.supportingKnowledgeRefs.every((ref) => dispositions.get(refSignature(ref))?.disposition === "USED")) return denied(["TRANSITION_DENIED"]);
+    } else if ((Object.values(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1) as readonly string[]).includes(event.eventType)) {
+      if (!decision || outcome) return denied([outcome ? "TASK_SEALED_DENIED" : "PARENT_MISSING_DENIED"]);
+      const receipt = (event.fact as { receipt: DirectFailureReceiptV1 }).receipt;
+      if (receipt.decisionRef.decisionId !== decision.decisionId || receipt.decisionRef.decisionDigest !== decision.decisionDigest) return denied(["UPSTREAM_BINDING_DENIED"]);
     } else if (event.eventType === "OUTCOME_RECORDED") {
       if (!decision || outcome) return denied([decision ? "TRANSITION_DENIED" : "PARENT_MISSING_DENIED"]);
       outcome = (event.fact as { outcome: TaskOutcomeEvidenceV1 }).outcome; outcomeSequence = index;
@@ -419,12 +476,23 @@ export function reconstructKnowledgeUsageV1(input: readonly unknown[]): Knowledg
   const eventByRef = new Map(events.map((event) => [event.eventId, event]));
   for (const cause of outcome.failureAttribution.causes) {
     if (cause.class === "KNOWLEDGE" && cause.subtype !== "MISSING" && cause.affectedKnowledgeRefs.length === 0) return denied(["FAILURE_ATTRIBUTION_DENIED"]);
+    if (Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, cause.class) && cause.affectedKnowledgeRefs.length !== 0) return denied(["FAILURE_ATTRIBUTION_DENIED"]);
     for (const causeRef of cause.causeEventRefs) {
       const causeEvent = eventByRef.get(causeRef.eventId);
       if (!causeEvent || causeEvent.eventDigest !== causeRef.eventDigest || causeEvent.scopeRef.scopeId !== first.scopeRef.scopeId || causeEvent.taskRef.taskId !== first.taskRef.taskId || causeEvent.scopeSequence >= outcomeSequence) return denied(["FAILURE_ATTRIBUTION_DENIED"]);
       if (cause.class === "DECISION" && causeEvent.eventType !== "DECISION_RECORDED") return denied(["FAILURE_ATTRIBUTION_DENIED"]);
       if (cause.class === "SEARCH" && !["SEARCH_RECORDED", "KNOWLEDGE_INSPECTED", "KNOWLEDGE_DISPOSITIONED"].includes(causeEvent.eventType)) return denied(["FAILURE_ATTRIBUTION_DENIED"]);
       if (cause.class === "KNOWLEDGE" && cause.subtype !== "MISSING" && causeEvent.eventType !== "KNOWLEDGE_DISPOSITIONED") return denied(["FAILURE_ATTRIBUTION_DENIED"]);
+      if (Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, cause.class)) {
+        const directClass = cause.class as DirectFailureClassV1;
+        const receipt = (causeEvent.fact as { receipt?: DirectFailureReceiptV1 }).receipt;
+        if (causeEvent.eventType !== CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[directClass]
+          || !receipt
+          || receipt.failureClass !== directClass
+          || receipt.failureSubtype !== cause.subtype
+          || receipt.decisionRef.decisionId !== decision.decisionId
+          || receipt.decisionRef.decisionDigest !== decision.decisionDigest) return denied(["FAILURE_ATTRIBUTION_DENIED"]);
+      }
     }
   }
   const searched = [...new Map([...searches.values()].flatMap((search) => search.resultKnowledgeRefs.map((ref) => [refSignature(ref), ref] as const))).values()].sort(refSort);

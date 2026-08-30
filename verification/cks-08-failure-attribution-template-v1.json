@@ -37,6 +37,8 @@
     "The input lineage is reconstructed before any attribution is accepted.",
     "Missing, late, replayed, cross-scope and tampered lineage denies without partial state.",
     "Every declared cause has one explicit bounded witness and exact bound event references.",
+    "EXECUTION, TASK_INPUT, EXTERNAL and GOVERNANCE references resolve only to the matching receipt-event type whose digest-valid receipt binds the same scope, task, Decision, class and subtype.",
+    "A matching witness label plus KNOWLEDGE_DISPOSITIONED, DECISION_RECORDED or any other unrelated pre-outcome event is insufficient direct evidence.",
     "Knowledge causality requires direct matching profile evidence; outcome contribution alone is insufficient.",
     "SINGLE requires one CONFIRMED or SUPPORTED cause.",
     "MULTI_CONTRIBUTING and MULTI_JOINT retain two or three supported causes without a primary.",
@@ -49,6 +51,9 @@
     "decision-unsupported-selection",
     "decision-supported-option-ignored",
     "execution-action-failed",
+    "external-dependency-unavailable",
+    "task-input-missing-context",
+    "governance-policy-denied",
     "multi-contributing-execution-external",
     "alternatives-unresolved",
     "unknown-outcome"
@@ -60,6 +65,7 @@
     "cross-scope-lineage",
     "tampered-lineage",
     "missing-causal-witness",
+    "direct-cause-label-on-unrelated-lineage-event",
     "knowledge-causality-from-contribution-only",
     "possible-cause-labelled-single",
     "fourth-cause"

@@ -11,12 +11,15 @@ import {
 } from "../packages/contracts/src/cks-failure-attribution-evaluator.js";
 import {
   CKS_DECISION_KNOWLEDGE_BINDING_SCHEMA_V1,
+  CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1,
+  CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
   CKS_FAILURE_ATTRIBUTION_SCHEMA_V1,
   CKS_KNOWLEDGE_EVIDENCE_PROFILE_SCHEMA_V1,
   CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
   CKS_KNOWLEDGE_USAGE_EVENT_SCHEMA_V1,
   CKS_TASK_OUTCOME_EVIDENCE_SCHEMA_V1,
   decisionKnowledgeBindingDigestV1,
+  directFailureReceiptDigestV1,
   failureAttributionDigestV1,
   knowledgeEvidenceProfileDigestV1,
   knowledgeUsageEventDigestV1,
@@ -124,14 +127,39 @@ function makeLineage(item: FixtureCase): { events: unknown[]; input: CksFailureA
   const dispositioned = event(3, "KNOWLEDGE_DISPOSITIONED", { scopeRef, taskRef, knowledgeRef, disposition: "USED", reasonCode: "SELECTED_FOR_TASK" });
   const decisionEvent = event(4, "DECISION_RECORDED", { decision });
   const eventRef = (value: Record<string, unknown>) => ({ eventId: value.eventId as string, eventDigest: value.eventDigest as string });
+  const directReceiptEvents = new Map<string, Record<string, unknown>>();
+  for (const spec of [...selectedCauseSpecs].sort((a, b) => `${a.class}|${a.subtype}`.localeCompare(`${b.class}|${b.subtype}`))) {
+    if (!Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, spec.class)) continue;
+    const directClass = spec.class as keyof typeof CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1;
+    const receipt = {
+      schemaVersion: CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
+      semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
+      scopeRef,
+      taskRef,
+      decisionRef: { decisionId: decision.decisionId as string, decisionDigest: decision.decisionDigest as string },
+      failureClass: directClass,
+      failureSubtype: spec.subtype,
+      evidenceDigest: knowledgeUsageFactDigestV1({ scopeRef, taskRef, failureClass: directClass, failureSubtype: spec.subtype }),
+      receiptDigest: "",
+    } as Record<string, unknown>;
+    receipt.receiptDigest = directFailureReceiptDigestV1(receipt);
+    directReceiptEvents.set(`${spec.class}|${spec.subtype}`, event(events.length, CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[directClass], { receipt }));
+  }
   const causes = selectedCauseSpecs.map((spec) => ({
     class: spec.class,
     subtype: spec.subtype,
     certainty: spec.certainty,
-    causeEventRefs: [eventRef(spec.class === "DECISION" ? decisionEvent : spec.class === "SEARCH" ? searched : spec.class === "UNKNOWN" ? opened : dispositioned)],
+    causeEventRefs: spec.class === "UNKNOWN" ? [] : [eventRef(
+      spec.class === "DECISION"
+        ? decisionEvent
+        : spec.class === "SEARCH"
+          ? searched
+          : Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, spec.class)
+            ? directReceiptEvents.get(`${spec.class}|${spec.subtype}`)!
+            : dispositioned,
+    )],
     affectedKnowledgeRefs: spec.class === "KNOWLEDGE" ? [knowledgeRef] : spec.class === "SEARCH" ? [missingKnowledgeRef] : [],
   })).sort((a, b) => `${a.class}|${a.subtype}`.localeCompare(`${b.class}|${b.subtype}`));
-  if (item.name === "unknown-outcome") causes[0]!.causeEventRefs = [];
   const failureAttribution = {
     schemaVersion: CKS_FAILURE_ATTRIBUTION_SCHEMA_V1,
     semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
@@ -152,7 +180,7 @@ function makeLineage(item: FixtureCase): { events: unknown[]; input: CksFailureA
     failureAttribution,
   } as Record<string, unknown>;
   outcome.outcomeDigest = taskOutcomeEvidenceDigestV1(outcome);
-  event(5, "OUTCOME_RECORDED", { outcome });
+  event(events.length, "OUTCOME_RECORDED", { outcome });
   const profiles = item.name === "knowledge-stale" ? [makeProfile(true)] : [makeProfile(false)];
   const evidence: CksFailureCauseEvidenceV1[] = selectedCauseSpecs.map((spec, index) => ({ cause: causes[index]!, witness: spec.witness }));
   if (item.name === "unknown-outcome") evidence[0] = { cause: causes[0]!, witness: { kind: "UNKNOWN", dimension: "NONE" } };
@@ -174,6 +202,24 @@ function caseInput(name: string): CksFailureAttributionEvaluatorInputV1 {
   const item = fixture().cases.find((candidate) => candidate.name === name);
   assert.ok(item, `fixture case ${name}`);
   return makeLineage(item).input;
+}
+
+function replaceDirectReceiptWithLegacyLineageEvent(name: string): CksFailureAttributionEvaluatorInputV1 {
+  const input = structuredClone(caseInput(name)) as unknown as { events: Array<Record<string, any>>; evidence: Array<Record<string, any>> };
+  const outcomeEvent = input.events.find((event) => event.eventType === "OUTCOME_RECORDED");
+  const directCause = outcomeEvent?.fact.outcome.failureAttribution.causes.find((cause: Record<string, unknown>) => Object.hasOwn(CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1, cause.class as string));
+  const legacyEventType = directCause?.class === "TASK_INPUT" || directCause?.class === "GOVERNANCE" ? "DECISION_RECORDED" : "KNOWLEDGE_DISPOSITIONED";
+  const legacyEvent = input.events.find((event) => event.eventType === legacyEventType);
+  assert.ok(outcomeEvent && directCause && legacyEvent, `${name}: mutation prerequisites`);
+  directCause.causeEventRefs = [{ eventId: legacyEvent.eventId, eventDigest: legacyEvent.eventDigest }];
+  outcomeEvent.fact.outcome.failureAttribution.failureAttributionDigest = failureAttributionDigestV1(outcomeEvent.fact.outcome.failureAttribution);
+  outcomeEvent.fact.outcome.outcomeDigest = taskOutcomeEvidenceDigestV1(outcomeEvent.fact.outcome);
+  outcomeEvent.factDigest = knowledgeUsageFactDigestV1(outcomeEvent.fact);
+  outcomeEvent.eventDigest = knowledgeUsageEventDigestV1(outcomeEvent);
+  const evidence = input.evidence.find((item) => item.cause.class === directCause.class && item.cause.subtype === directCause.subtype);
+  assert.ok(evidence, `${name}: evidence cause`);
+  evidence.cause = structuredClone(directCause);
+  return input as unknown as CksFailureAttributionEvaluatorInputV1;
 }
 
 test("P16 attributes each seeded failure to its declared causal class", () => {
@@ -201,6 +247,25 @@ test("P16 retains all six profile dimensions and does not turn contribution into
   const stale = structuredClone(caseInput("knowledge-stale")) as CksFailureAttributionEvaluatorInputV1 & { evidence: CksFailureCauseEvidenceV1[] };
   stale.evidence = [{ ...stale.evidence[0]!, cause: { ...stale.evidence[0]!.cause, subtype: "SOURCE_DEFECT", affectedKnowledgeRefs: [knowledgeRef] }, witness: { kind: "KNOWLEDGE_PROFILE", dimension: "SOURCE" } }] as CksFailureCauseEvidenceV1[];
   assert.equal(evaluateCksSeededFailureAttributionV1(stale).status, "DENIED", "a failed outcome and contribution do not prove source defect");
+});
+
+test("P16 requires subtype-bound direct receipts instead of witness labels on unrelated lineage events", () => {
+  const directCases = [
+    "execution-action-failed",
+    "external-dependency-unavailable",
+    "task-input-missing-context",
+    "governance-policy-denied",
+  ];
+  for (const name of directCases) {
+    const valid = caseInput(name) as unknown as { events: Array<Record<string, any>>; evidence: CksFailureCauseEvidenceV1[] };
+    const cause = valid.evidence[0]!.cause;
+    const directEvent = valid.events.find((event) => event.eventId === cause.causeEventRefs[0]?.eventId);
+    const directClass = cause.class as keyof typeof CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1;
+    assert.equal(directEvent?.eventType, CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1[directClass], `${name}: class-specific event`);
+    assert.equal(directEvent?.fact.receipt.failureSubtype, cause.subtype, `${name}: subtype-bound receipt`);
+    assert.match(directEvent?.fact.receipt.evidenceDigest, /^[a-f0-9]{64}$/, `${name}: bounded evidence digest`);
+    assert.equal(evaluateCksSeededFailureAttributionV1(replaceDirectReceiptWithLegacyLineageEvent(name)).status, "DENIED", `${name}: a matching witness label cannot promote an unrelated pre-outcome event`);
+  }
 });
 
 test("P16 denies missing, late, replayed, cross-scope and tampered lineage", () => {

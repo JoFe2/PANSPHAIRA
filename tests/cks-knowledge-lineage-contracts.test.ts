@@ -7,9 +7,12 @@ import {
   CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
   CKS_KNOWLEDGE_USAGE_EVENT_SCHEMA_V1,
   CKS_DECISION_KNOWLEDGE_BINDING_SCHEMA_V1,
+  CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1,
+  CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
   CKS_FAILURE_ATTRIBUTION_SCHEMA_V1,
   CKS_TASK_OUTCOME_EVIDENCE_SCHEMA_V1,
   decisionKnowledgeBindingDigestV1,
+  directFailureReceiptDigestV1,
   failureAttributionDigestV1,
   knowledgeEvidenceProfileDigestV1,
   knowledgeUsageEventDigestV1,
@@ -142,6 +145,34 @@ const invalidFixture = (): Record<string, any> => JSON.parse(readFileSync("tests
   assert.equal(validateFailureAttributionV1(f.failureAttribution), true);
   assert.equal(validateTaskOutcomeEvidenceV1(f.taskOutcomeEvidence), true);
   assert.equal(validateKnowledgeEvidenceProfileV1(f.knowledgeEvidenceProfile), true);
+  const receipt = {
+    schemaVersion: CKS_DIRECT_FAILURE_RECEIPT_SCHEMA_V1,
+    semanticRuleId: CKS_KNOWLEDGE_LINEAGE_SEMANTIC_RULE_V1,
+    scopeRef: f.decisionKnowledgeBinding.scopeRef,
+    taskRef: f.decisionKnowledgeBinding.taskRef,
+    decisionRef: { decisionId: f.decisionKnowledgeBinding.decisionId, decisionDigest: f.decisionKnowledgeBinding.decisionDigest },
+    failureClass: "EXECUTION",
+    failureSubtype: "ACTION_FAILED",
+    evidenceDigest: hex("7"),
+    receiptDigest: "",
+  };
+  receipt.receiptDigest = directFailureReceiptDigestV1(receipt);
+  const directEvent = {
+    ...f.knowledgeUsageEvent,
+    eventType: CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1.EXECUTION,
+    fact: { receipt },
+    factDigest: "",
+    eventDigest: "",
+  };
+  directEvent.factDigest = knowledgeUsageFactDigestV1(directEvent.fact);
+  directEvent.eventDigest = knowledgeUsageEventDigestV1(directEvent);
+  const validateEventSchema = new Ajv2020({ allErrors: true, strict: true }).compile(JSON.parse(readFileSync("schemas/contracts/cks-knowledge-usage-event-v1.schema.json", "utf8")));
+  assert.equal(validateEventSchema(directEvent), true, `direct receipt event: ${JSON.stringify(validateEventSchema.errors)}`);
+  assert.equal(validateKnowledgeUsageEventV1(directEvent), true);
+  const mismatchedDirectEvent = { ...directEvent, eventType: CKS_DIRECT_FAILURE_EVENT_TYPE_BY_CLASS_V1.EXTERNAL, eventDigest: "" };
+  mismatchedDirectEvent.eventDigest = knowledgeUsageEventDigestV1(mismatchedDirectEvent);
+  assert.equal(validateEventSchema(mismatchedDirectEvent), false, "receipt class must match its event type");
+  assert.equal(validateKnowledgeUsageEventV1(mismatchedDirectEvent), false);
   assert.equal(validateKnowledgeUsageEventV1(invalidFixture().missingMandatoryDigest), false);
   assert.equal(validateFailureAttributionV1(invalidFixture().prohibitedRawContent), false);
   assert.equal(validateFailureAttributionV1(invalidFixture().unknownFailureSubtype), false);

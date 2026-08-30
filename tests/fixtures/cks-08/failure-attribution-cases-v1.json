@@ -40,6 +40,24 @@
       "cause": { "class": "EXECUTION", "subtype": "ACTION_FAILED", "certainty": "CONFIRMED", "witness": { "kind": "EXECUTION_RECEIPT", "dimension": "NONE" } }
     },
     {
+      "name": "external-dependency-unavailable",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "EXTERNAL", "subtype": "DEPENDENCY_UNAVAILABLE", "certainty": "CONFIRMED", "witness": { "kind": "EXTERNAL_RECEIPT", "dimension": "NONE" } }
+    },
+    {
+      "name": "task-input-missing-context",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "TASK_INPUT", "subtype": "MISSING_CONTEXT", "certainty": "CONFIRMED", "witness": { "kind": "TASK_INPUT_RECEIPT", "dimension": "NONE" } }
+    },
+    {
+      "name": "governance-policy-denied",
+      "outcomeClass": "FAILED",
+      "causalMode": "SINGLE",
+      "cause": { "class": "GOVERNANCE", "subtype": "POLICY_DENIED", "certainty": "CONFIRMED", "witness": { "kind": "GOVERNANCE_RECEIPT", "dimension": "NONE" } }
+    },
+    {
       "name": "multi-contributing-execution-external",
       "outcomeClass": "PARTIAL",
       "causalMode": "MULTI_CONTRIBUTING",
