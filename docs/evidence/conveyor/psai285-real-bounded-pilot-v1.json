@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "pansphaira.cks05/bounded-real-pilot-evidence/v1",
+  "issue": 285,
+  "recordedAt": "2026-08-30",
+  "status": "PARTIAL_NO_CLAIM",
+  "finding": "The inherited dry-run five-arm matrix did not contain the issue-required SMALL_CLOSED_BOOK or LARGE_CLOSED_BOOK controls. A separate exact five-arm issue-outcome pilot matrix and real local runner were added. This does not relabel the inherited 960-run dry-run matrix or close the issue.",
+  "bindings": {
+    "runtime": {"build":10661,"commit":"32176338a","archiveSha256":"915a3ad0b4de517ea6e50d82edaf4a0a6f1b3a3beeddbdb85317fb1ab2363b0b"},
+    "smallModelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+    "largeModelSha256": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177",
+    "deviceMode": "CPU_ONLY",
+    "contextTokens": 2048,
+    "generationSeed": 104729,
+    "temperature": 0,
+    "maxGeneratedTokens": 48
+  },
+  "correctedPilotArms": [
+    {"armId":"ARM-SCB-01","modelRole":"SMALL","knowledgeMode":"CLOSED_BOOK"},
+    {"armId":"ARM-SNR-02","modelRole":"SMALL","knowledgeMode":"NAIVE_RAG"},
+    {"armId":"ARM-SKF-03","modelRole":"SMALL","knowledgeMode":"STRUCTURED_FABRIC"},
+    {"armId":"ARM-LCB-04","modelRole":"LARGE","knowledgeMode":"CLOSED_BOOK"},
+    {"armId":"ARM-LKF-05","modelRole":"LARGE","knowledgeMode":"STRUCTURED_FABRIC"}
+  ],
+  "realPilotAttempts": [
+    {
+      "pilotId": "PSAI285-REAL-PILOT-20260830-01",
+      "status": "INVALIDATED_INSTRUMENTATION_AND_RESOURCE_STOP",
+      "facts": ["Three small-profile invocations completed and produced immutable local receipt digests.", "The combined process was killed while entering the large-profile phase because the context size was not bounded.", "Prompt echo contaminated the first scorer implementation, so no quality result is admitted."],
+      "smallArmReceiptSha256": ["0da56aa7e9f9b7cd0f31fe3fe91687c1d5ae1030a6454b84ddfc27123a8bc721", "8d4febbd567da9666d20c0bdaa15e379aecb487bd5a186106633cd786759f9dc", "5d0618967941a77d15244f309397b6678faa30bf509828d9cecf9cc4ac9061b9"]
+    },
+    {
+      "pilotId": "PSAI285-REAL-PILOT-20260830-02",
+      "status": "INVALIDATED_SCORER_PROMPT_ECHO",
+      "runCounts": {"scheduled":5,"terminalCompleted":5,"admittedQualityScores":0},
+      "receiptSha256ByArm": {
+        "ARM-SCB-01":"e47213eb11a4c5e8d45485386373f75a3e35c8d2edc2285b73620ecd7b25aa4b",
+        "ARM-SNR-02":"480873d334129638ac9e9c2fd995506460b1753a7b377d4dfd968bd14a73be8c",
+        "ARM-SKF-03":"22023916f87724fee9897de3fbfe01c0835d8b63414c4807e480ab97fd8e8606",
+        "ARM-LCB-04":"2e5fc89c6258ef017bf0e3ab5c46181cafbd09eed72f228fb3ce181254245762",
+        "ARM-LKF-05":"efaed8cbed03613a8263fab61c4ae129e91cb2616138baa89acef9b4e42c3da2"
+      }
+    },
+    {
+      "pilotId": "PSAI285-REAL-PILOT-20260830-03",
+      "status": "INVALIDATED_FINAL_ANSWER_SCORER",
+      "runCounts": {"scheduled":5,"terminalCompleted":5,"admittedQualityScores":0},
+      "observedLatencyMsByArm": {"ARM-SCB-01":3816.218,"ARM-SNR-02":3954.1,"ARM-SKF-03":4401.714,"ARM-LCB-04":166429.277,"ARM-LKF-05":178603.567},
+      "receiptSha256ByArm": {
+        "ARM-SCB-01":"88ec407cc6f664bcb8b297992eb35625e72cde94711e7b271995c595b5725964",
+        "ARM-SNR-02":"b71e10964d1a7f8e07f39100aaed91e8c0b74a3836917c506358f142855bd682",
+        "ARM-SKF-03":"5d24459a94f03007d5de7e9aa6c287d7ba2126b3facdd46122d9586ef7a84384",
+        "ARM-LCB-04":"424cd9cd1633b7ea7c0bca1a12863cb32d4d559b1196482348eb9a9ee58ba8b5",
+        "ARM-LKF-05":"69a249807f1f480c5b30e29db740b2d045742d358bacaa3cc38fb9f432ed9f98"
+      },
+      "invalidationReason": "The model reasoning stream could contain both instruction tokens and candidate answers; substring scoring was not a valid final-answer scorer. Raw transcript bytes were intentionally not published, only their digests, so the attempt cannot be rescored. The runner now requires a closed reasoning block and an exact final answer."
+    }
+  ],
+  "tddEvidence": {
+    "newTests": ["closed-book prompts receive no Knowledge bytes", "exact five-arm outcome matrix", "prompt echo excluded", "unfinished reasoning rejected", "model/runtime/arm drift rejected"],
+    "sabotage": "Temporarily leaking raw Knowledge into closed-book prompts made the closed-book isolation test fail; the fix was restored and the test passed."
+  },
+  "acceptanceStatus": [
+    {"criterion":"Identical hidden/fresh tasks and Knowledge versions across arms","status":"PARTIAL","evidence":"The real pilot binds one fresh synthetic task identically across five arms; the full hidden multi-domain schedule is not executed."},
+    {"criterion":"Structured-vs-raw, facts-vs-guidance, static-vs-updated, single-vs-multi-hop A/B results","status":"NOT_MET","evidence":"The bounded issue-outcome pilot covers closed-book, naive RAG and Fabric only; inherited dry-run A/B fixtures are not measurements."},
+    {"criterion":"Confidence intervals/run counts/failures preserved","status":"PARTIAL","evidence":"Attempt and terminal counts plus receipt digests are preserved; n=1/arm has no valid CI and scorer-invalidated outputs have no admitted quality scores."},
+    {"criterion":"Stop conditions can falsify or simplify architecture","status":"PASS_FAIL_CLOSED","evidence":"Resource and instrumentation stops invalidated pilots without product verdict; STOP-07 and FALSIFY-SUBSTITUTION remain active."},
+    {"criterion":"No substitution claim unless quality and efficiency pass","status":"PASS_FAIL_CLOSED","evidence":"No quality or efficiency threshold passed; model substitution remains denied."}
+  ],
+  "exactExecutableBlocker": "Issue #285 remains open. Before closure, execute a new fresh protocol edition with the corrected exact-final scorer over enough independent tasks, both Knowledge editions, required structured/raw, facts/guidance, update and hop contrasts, resource/token/memory/throughput/cost collection, and confidence intervals. Preserve each terminal record before the next run. The existing 960-run dry-run fixtures and all three pilot attempts are excluded from a closure claim.",
+  "claims": {"benchmarkComplete":false,"modelSubstitution":false,"issueReadyToClose":false,"releaseReady":false}
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "pansphaira.cks05/real-bounded-pilot/v1",
+  "pilotId": "PSAI285-REAL-PILOT-20260830-03",
+  "authority": "USER_AUTHORIZED_BOUNDED_LOCAL_PILOT_2026-08-30",
+  "runtime": {"profileId":"LLAMA_CPP_B10661_32176338A_CTX2048_CPU","build":10661,"commit":"32176338a","archiveSha256":"915a3ad0b4de517ea6e50d82edaf4a0a6f1b3a3beeddbdb85317fb1ab2363b0b"},
+  "models": {
+    "SMALL": {"profileId":"VIBETHINKER_3B_Q8_0","sha256":"ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f"},
+    "LARGE": {"profileId":"QWEN3_8_27B_Q5_K_M","sha256":"07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177"}
+  },
+  "generation": {"seed":104729,"temperature":0,"maxGeneratedTokens":48,"timeoutSeconds":300},
+  "task": {
+    "taskId": "SYN-QUARTZ-HARBOR-20260830-03",
+    "freshness": "GENERATED_AFTER_SCORER_FIX_NOT_USED_FOR_TRAINING_OR_TUNING",
+    "question": "In the fictional Quartz Harbor domain, what berth token must an indigo skiff show at Pier Lark?",
+    "goldAnswer": "CINDER-6",
+    "abstentionToken": "ABSTAIN",
+    "knowledge": {
+      "answerFact": "An indigo skiff docking at Pier Lark must show berth token CINDER-6.",
+      "raw": "Quartz Harbor bulletin: An indigo skiff docking at Pier Lark must show berth token CINDER-6. Ochre barges use FERN-3.",
+      "structured": "{\"edition\":\"K1_UPDATED\",\"facts\":[{\"evidenceId\":\"QHZ-001\",\"subject\":\"indigo skiff at Pier Lark\",\"predicate\":\"must show berth token\",\"object\":\"CINDER-6\"},{\"evidenceId\":\"QHZ-002\",\"subject\":\"ochre barge\",\"predicate\":\"uses token\",\"object\":\"FERN-3\"}]}"
+    }
+  },
+  "arms": [
+    {"armId":"ARM-SCB-01","name":"SMALL_CLOSED_BOOK","modelRole":"SMALL","knowledgeMode":"CLOSED_BOOK"},
+    {"armId":"ARM-SNR-02","name":"SMALL_NAIVE_RAG","modelRole":"SMALL","knowledgeMode":"NAIVE_RAG"},
+    {"armId":"ARM-SKF-03","name":"SMALL_STRUCTURED_KNOWLEDGE_FABRIC","modelRole":"SMALL","knowledgeMode":"STRUCTURED_FABRIC"},
+    {"armId":"ARM-LCB-04","name":"LARGE_CLOSED_BOOK","modelRole":"LARGE","knowledgeMode":"CLOSED_BOOK"},
+    {"armId":"ARM-LKF-05","name":"LARGE_STRUCTURED_KNOWLEDGE_FABRIC","modelRole":"LARGE","knowledgeMode":"STRUCTURED_FABRIC"}
+  ]
+}
