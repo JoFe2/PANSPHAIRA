@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "pansphaira.cks/metrics-template/v1",
+  "taskId": "PSAI289-QWEN-05-SYNTHETIC-HOLDOUT-TRAP-FIXTURES",
+  "scope": "ADMITTED_SYNTHETIC_SEALED_HOLDOUT_ONLY",
+  "claims": {
+    "P17": "Historical experience improves quality and/or cost over Knowledge-only retrieval only when every paired holdout passes the frozen evaluator.",
+    "P18": "Only the planted stable candidate is identified; frequency-only, narrow-context, and correlation traps are denied."
+  },
+  "requiredMetrics": [
+    "qualityKnowledgeOnly",
+    "qualityKnowledgePlusExperience",
+    "costKnowledgeOnly",
+    "costKnowledgePlusExperience",
+    "efficiencyKnowledgeOnly",
+    "efficiencyKnowledgePlusExperience",
+    "qualityDelta",
+    "costReduction",
+    "efficiencyDelta"
+  ],
+  "requiredBoundaries": [
+    "MISSING_288_DIGEST",
+    "UNSEALED_HOLDOUT",
+    "LIVE_REPLAY_FORBIDDEN",
+    "HOLDOUT_LEAKAGE",
+    "PROSE_ONLY_INPUT",
+    "MISSING_EVIDENCE",
+    "PRECONDITION_FALSE",
+    "AMBIGUOUS_APPLICABILITY",
+    "VERSION_INCOMPATIBLE",
+    "INVALID_DIVERSITY_PROOF"
+  ],
+  "nonClaims": [
+    "No production quality, cost, efficiency, or generalization claim.",
+    "No live model, provider, service, tool, storage, or external-state interaction.",
+    "No procedure content, execution authority, promotion, or evidence repair."
+  ]
+}

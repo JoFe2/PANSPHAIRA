@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "pansphaira.cks/synthetic-ground-truth/v1",
+  "taskId": "PSAI289-QWEN-05-SYNTHETIC-HOLDOUT-TRAP-FIXTURES",
+  "fixtureIds": ["cks-09-holdout", "cks-09-pattern-traps"],
+  "p17": {
+    "expectedVerdict": "PASS",
+    "requiredImprovement": ["qualityDelta > 0", "costReduction > 0", "efficiencyDelta > 0"],
+    "pairedArmInvariant": ["identical holdout variant", "identical task", "identical candidates", "identical context", "identical knowledge bundle"],
+    "costModel": {
+      "retrievalInvocation": 1,
+      "candidateReport": 1,
+      "selectedCandidate": 1,
+      "incorrectOutcome": 4
+    },
+    "cases": [
+      {"caseId":"holdout-batch-a","holdoutVariantId":"holdout:batch-a","expectedSelectedPatternIds":["pattern:normalize-document"]},
+      {"caseId":"holdout-batch-b","holdoutVariantId":"holdout:batch-b","expectedSelectedPatternIds":["pattern:normalize-document"]}
+    ]
+  },
+  "p18": {
+    "expectedVerdict": "PASS",
+    "acceptedCaseIds": ["planted-stable"],
+    "deniedCaseIds": ["correlation-trap", "frequency-only-trap", "narrow-context-trap"],
+    "denialReason": "INVALID_DIVERSITY_PROOF"
+  },
+  "reuseBoundaries": [
+    {"caseId":"similar-looking-inapplicable","expectedOutcome":"DENIED","expectedReason":"PRECONDITION_FALSE"},
+    {"caseId":"exact-shape-version-drift","expectedOutcome":"DENIED","expectedReason":"VERSION_INCOMPATIBLE"},
+    {"caseId":"unknown-applicability-context","expectedOutcome":"DENIED","expectedReason":"AMBIGUOUS_APPLICABILITY"},
+    {"caseId":"absent-success-evidence","expectedOutcome":"DENIED","expectedReason":"MISSING_EVIDENCE"}
+  ],
+  "failureClosedBoundaries": [
+    {"caseId":"missing-admitted-evidence","expectedVerdict":"INCONCLUSIVE","expectedReason":"MISSING_288_DIGEST"},
+    {"caseId":"unsealed-holdout","expectedVerdict":"INCONCLUSIVE","expectedReason":"UNSEALED_HOLDOUT"},
+    {"caseId":"live-replay","expectedVerdict":"DENIED","expectedReason":"LIVE_REPLAY_FORBIDDEN"},
+    {"caseId":"holdout-leakage","expectedVerdict":"INCONCLUSIVE","expectedReason":"HOLDOUT_LEAKAGE"},
+    {"caseId":"prose-input","expectedVerdict":"DENIED","expectedReason":"PROSE_ONLY_INPUT"}
+  ],
+  "preservation": {
+    "dependencies": ["dependency:parser"],
+    "knownFailures": ["failure:known-001"],
+    "counterexamples": ["counterexample:similar-001"],
+    "provenance": ["provenance:fixture-a", "provenance:fixture-b", "provenance:fixture-c"],
+    "counterevidenceCoverage": "COMPLETE"
+  },
+  "nonClaims": [
+    "This is an admitted synthetic shadow replay only.",
+    "It is not a production quality, cost, efficiency, or generalization claim.",
+    "It grants no execution authority and contains no procedure content.",
+    "It calls no model, provider, service, tool, storage, or external state."
+  ]
+}

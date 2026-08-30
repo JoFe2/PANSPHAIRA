@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "pansphaira.cks/shadow-replay-denials/v1",
+  "cases": [
+    {"caseId":"case:missing-evidence","mutation":"requiredEvidencePresent=false","expectedReason":"MISSING_288_DIGEST"},
+    {"caseId":"case:unsealed-holdout","mutation":"holdoutSealed=false","expectedReason":"UNSEALED_HOLDOUT"},
+    {"caseId":"case:live-replay","mutation":"replayMode=LIVE","expectedReason":"LIVE_REPLAY_FORBIDDEN"},
+    {"caseId":"case:external-write","mutation":"externalStateChanged=true","expectedReason":"LIVE_REPLAY_FORBIDDEN"},
+    {"caseId":"case:bundle-mismatch","mutation":"knowledgeBundleDigest differs between baseline and candidate","expectedReason":"INVALID_KNOWLEDGE_BUNDLE"},
+    {"caseId":"case:holdout-leakage","mutation":"paired run uses a different holdout id","expectedReason":"HOLDOUT_LEAKAGE"}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "pansphaira.cks/synthetic-case/v1",
+  "fixtureKind": "P17_HOLDOUT",
+  "fixtureId": "cks-09-holdout",
+  "taskId": "PSAI289-QWEN-05-SYNTHETIC-HOLDOUT-TRAP-FIXTURES",
+  "evidenceAdmission": "ADMITTED",
+  "requiredEvidencePresent": true,
+  "holdoutSealed": true,
+  "replayMode": "SHADOW",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "cases": [
+    {
+      "caseId": "holdout-batch-a",
+      "holdoutVariantId": "holdout:batch-a",
+      "profile": "stable"
+    },
+    {
+      "caseId": "holdout-batch-b",
+      "holdoutVariantId": "holdout:batch-b",
+      "profile": "stable"
+    }
+  ]
+}

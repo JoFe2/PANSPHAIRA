@@ -1,0 +1,822 @@
+{
+  "schemaVersion": "pansphaira.cks/offline-proof-receipt/v1",
+  "taskId": "PSAI289-QWEN-06-OFFLINE-PROOF-READBACK",
+  "mode": "SIMULATION_OR_SHADOW_ONLY",
+  "scope": "ADMITTED_SYNTHETIC_SEALED_HOLDOUT_ONLY",
+  "verdict": "PASS",
+  "reasons": [],
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "admission": {
+    "evidenceAdmission": "ADMITTED",
+    "holdoutSealed": true,
+    "replayMode": "SHADOW"
+  },
+  "envelope": {
+    "fixtureId": "cks-09-e2e-positive-evidence",
+    "fixturePath": "tests/fixtures/cks-09/e2e-positive-evidence-v1.json",
+    "sha256": "sha256:de313163a745a864aa3217aec8d58184cc1bfc8ce42b3a28c3048bfe27663d8d"
+  },
+  "evidence": [
+    {
+      "evidenceId": "evidence:holdout-cases",
+      "fixtureId": "cks-09-holdout",
+      "fixturePath": "tests/fixtures/cks-09/holdout-cases-v1.json",
+      "sha256": "sha256:f05302d756136e9a3ed6a4aeb06a8137b847728718b7d11af0e01f8d8dade97f"
+    },
+    {
+      "evidenceId": "evidence:pattern-traps",
+      "fixtureId": "cks-09-pattern-traps",
+      "fixturePath": "tests/fixtures/cks-09/pattern-trap-cases-v1.json",
+      "sha256": "sha256:cf554a44cf78db8a3fff397c079db9bf411529eb6bfd8cb8106f8bbf524b49b4"
+    },
+    {
+      "evidenceId": "evidence:ground-truth",
+      "fixtureId": "cks-09-holdout-ground-truth",
+      "fixturePath": "tests/fixtures/cks-09/holdout-ground-truth-v1.json",
+      "sha256": "sha256:3913fda6843468b87e4b8f03fac0e590dc78f4f9ab0d93f350738ba8d401a153"
+    }
+  ],
+  "criteria": [
+    {
+      "criterionId": "P17_EXPERIENCE_IMPROVES_QUALITY_COST",
+      "claim": "Historical experience improves quality and/or cost over Knowledge-only retrieval on sealed holdout variants, proven only by the frozen paired ablation evaluator.",
+      "evidenceRefs": [
+        "evidence:ground-truth",
+        "evidence:holdout-cases"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "criterionId": "P18_PLANTED_STABLE_IDENTIFIED_TRAPS_DENIED",
+      "claim": "Only the planted stable pattern candidate is identified; frequency-only, narrow-context, and correlation traps are denied with INVALID_DIVERSITY_PROOF.",
+      "evidenceRefs": [
+        "evidence:ground-truth",
+        "evidence:pattern-traps"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "criterionId": "INAPPLICABLE_VERSION_DRIFT_REUSE_DENIED",
+      "claim": "Similar-looking but inapplicable tasks and version-drift cases deny pattern reuse; similarity cannot override applicability, version, context, or evidence gates.",
+      "evidenceRefs": [
+        "evidence:ground-truth",
+        "evidence:pattern-traps"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "criterionId": "SHADOW_ONLY_SIMULATION_BOUNDARY",
+      "claim": "Ablation and replay remain simulation/shadow-only and evidence-bound: no live state change, no model or service call, no procedure content, and every fail-closed boundary is exercised.",
+      "evidenceRefs": [
+        "evidence:ground-truth",
+        "evidence:holdout-cases"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "criterionId": "CANDIDATE_PRESERVATION",
+      "claim": "Pattern candidates preserve dependencies, known failures, counterexamples, and provenance with complete counterevidence coverage.",
+      "evidenceRefs": [
+        "evidence:ground-truth",
+        "evidence:pattern-traps"
+      ],
+      "verdict": "PASS"
+    }
+  ],
+  "proof": {
+    "schemaVersion": "pansphaira.cks/synthetic-proof-receipt/v1",
+    "taskId": "PSAI289-QWEN-05-SYNTHETIC-HOLDOUT-TRAP-FIXTURES",
+    "scope": "ADMITTED_SYNTHETIC_SEALED_HOLDOUT_ONLY",
+    "verdict": "PASS",
+    "p17": {
+      "schemaVersion": "pansphaira.cks/shadow-experience-ablation/v1",
+      "mode": "SIMULATION_OR_SHADOW_ONLY",
+      "externalStateChanged": false,
+      "modelsOrServicesCalled": false,
+      "procedureContentReturned": false,
+      "verdict": "PASS",
+      "reasons": [],
+      "caseResults": [
+        {
+          "caseId": "holdout-batch-a",
+          "holdoutVariantId": "holdout:batch-a",
+          "comparison": {
+            "knowledgeOnly": {
+              "schemaVersion": "pansphaira.cks/applicability-aware-retrieval/v1",
+              "outcome": "NO_MATCH",
+              "arm": "KNOWLEDGE_ONLY",
+              "replayMode": "SHADOW",
+              "selected": [],
+              "reports": [],
+              "denialReasons": []
+            },
+            "knowledgePlusExperience": {
+              "schemaVersion": "pansphaira.cks/applicability-aware-retrieval/v1",
+              "outcome": "SELECTED",
+              "arm": "KNOWLEDGE_PLUS_EXPERIENCE",
+              "replayMode": "SHADOW",
+              "selected": [
+                {
+                  "patternId": "pattern:normalize-document",
+                  "similarityScore": 1,
+                  "similarityFacts": [
+                    "constraintIds=[\"constraint:safety\"]",
+                    "contextShapeId=\"context:batch\"",
+                    "dependencyIds=[\"dependency:parser\"]",
+                    "effectClass=\"READ_ONLY\"",
+                    "inputShapeId=\"shape:document\"",
+                    "objectiveShapeId=\"shape:normalize\"",
+                    "outputShapeId=\"shape:normalized\"",
+                    "taskFamilyId=\"family:document-transform\"",
+                    "versionVector=[{\"componentId\":\"runtime:node\",\"exactValue\":\"node-24.14.1\",\"versionScheme\":\"OPAQUE_EXACT\"}]"
+                  ],
+                  "unresolvedDifferences": [],
+                  "counterevidence": {
+                    "assessmentId": "assessment:search-001",
+                    "coverageStatus": "COMPLETE",
+                    "searchEvidenceRefs": [
+                      "evidence:obs-002"
+                    ],
+                    "negativeControlRefs": [
+                      "evidence:contrast-001"
+                    ],
+                    "knownFailures": [
+                      {
+                        "failureId": "failure:known-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:bdf0d359da539504eb1ccde3ffee8df3d9c1eb7f02186b74e08b5e1bb42b3806",
+                        "expectedOutcomeDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                        "observedOutcomeDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                        "evidenceRef": "evidence:failure-001",
+                        "provenanceRef": "provenance:fixture-a",
+                        "resolution": "BOUNDED_BY_PRECONDITION"
+                      }
+                    ],
+                    "counterexamples": [
+                      {
+                        "counterexampleId": "counterexample:similar-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:f2c40e8bebfadc77f911f65003c669c94599f3bfefd988ded5edc89f284a6ded",
+                        "matchedSimilarityFacts": [
+                          "objectiveShapeId=shape:normalize"
+                        ],
+                        "blockingStructuralDimension": "inputShapeId",
+                        "expectedDenialReason": "MATCHED_COUNTEREXAMPLE",
+                        "evidenceRef": "evidence:counterexample-001",
+                        "provenanceRef": "provenance:fixture-b"
+                      }
+                    ]
+                  },
+                  "dependencyRefs": [
+                    "dependency:parser"
+                  ],
+                  "provenanceRefs": [
+                    "provenance:fixture-a",
+                    "provenance:fixture-b",
+                    "provenance:fixture-c"
+                  ],
+                  "knownFailureRefs": [
+                    "failure:known-001"
+                  ],
+                  "counterexampleRefs": [
+                    "counterexample:similar-001"
+                  ],
+                  "knowledgeBundleId": "bundle:baseline-001",
+                  "result": "APPLICABLE_SHADOW_ONLY"
+                }
+              ],
+              "reports": [
+                {
+                  "patternId": "pattern:normalize-document",
+                  "similarityScore": 1,
+                  "similarityFacts": [
+                    "constraintIds=[\"constraint:safety\"]",
+                    "contextShapeId=\"context:batch\"",
+                    "dependencyIds=[\"dependency:parser\"]",
+                    "effectClass=\"READ_ONLY\"",
+                    "inputShapeId=\"shape:document\"",
+                    "objectiveShapeId=\"shape:normalize\"",
+                    "outputShapeId=\"shape:normalized\"",
+                    "taskFamilyId=\"family:document-transform\"",
+                    "versionVector=[{\"componentId\":\"runtime:node\",\"exactValue\":\"node-24.14.1\",\"versionScheme\":\"OPAQUE_EXACT\"}]"
+                  ],
+                  "unresolvedDifferences": [],
+                  "counterevidence": {
+                    "assessmentId": "assessment:search-001",
+                    "coverageStatus": "COMPLETE",
+                    "searchEvidenceRefs": [
+                      "evidence:obs-002"
+                    ],
+                    "negativeControlRefs": [
+                      "evidence:contrast-001"
+                    ],
+                    "knownFailures": [
+                      {
+                        "failureId": "failure:known-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:bdf0d359da539504eb1ccde3ffee8df3d9c1eb7f02186b74e08b5e1bb42b3806",
+                        "expectedOutcomeDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                        "observedOutcomeDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                        "evidenceRef": "evidence:failure-001",
+                        "provenanceRef": "provenance:fixture-a",
+                        "resolution": "BOUNDED_BY_PRECONDITION"
+                      }
+                    ],
+                    "counterexamples": [
+                      {
+                        "counterexampleId": "counterexample:similar-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:f2c40e8bebfadc77f911f65003c669c94599f3bfefd988ded5edc89f284a6ded",
+                        "matchedSimilarityFacts": [
+                          "objectiveShapeId=shape:normalize"
+                        ],
+                        "blockingStructuralDimension": "inputShapeId",
+                        "expectedDenialReason": "MATCHED_COUNTEREXAMPLE",
+                        "evidenceRef": "evidence:counterexample-001",
+                        "provenanceRef": "provenance:fixture-b"
+                      }
+                    ]
+                  },
+                  "dependencyRefs": [
+                    "dependency:parser"
+                  ],
+                  "provenanceRefs": [
+                    "provenance:fixture-a",
+                    "provenance:fixture-b",
+                    "provenance:fixture-c"
+                  ],
+                  "knownFailureRefs": [
+                    "failure:known-001"
+                  ],
+                  "counterexampleRefs": [
+                    "counterexample:similar-001"
+                  ],
+                  "knowledgeBundleId": "bundle:baseline-001",
+                  "result": "APPLICABLE_SHADOW_ONLY"
+                }
+              ],
+              "denialReasons": []
+            }
+          },
+          "metric": {
+            "holdoutVariantId": "holdout:batch-a",
+            "qualityKnowledgeOnly": 0,
+            "qualityKnowledgePlusExperience": 1,
+            "costKnowledgeOnly": 5,
+            "costKnowledgePlusExperience": 3,
+            "efficiencyKnowledgeOnly": 0,
+            "efficiencyKnowledgePlusExperience": 0.3333333333333333,
+            "qualityDelta": 1,
+            "costReduction": 2,
+            "efficiencyDelta": 0.3333333333333333
+          },
+          "experienceSelected": true
+        },
+        {
+          "caseId": "holdout-batch-b",
+          "holdoutVariantId": "holdout:batch-b",
+          "comparison": {
+            "knowledgeOnly": {
+              "schemaVersion": "pansphaira.cks/applicability-aware-retrieval/v1",
+              "outcome": "NO_MATCH",
+              "arm": "KNOWLEDGE_ONLY",
+              "replayMode": "SHADOW",
+              "selected": [],
+              "reports": [],
+              "denialReasons": []
+            },
+            "knowledgePlusExperience": {
+              "schemaVersion": "pansphaira.cks/applicability-aware-retrieval/v1",
+              "outcome": "SELECTED",
+              "arm": "KNOWLEDGE_PLUS_EXPERIENCE",
+              "replayMode": "SHADOW",
+              "selected": [
+                {
+                  "patternId": "pattern:normalize-document",
+                  "similarityScore": 1,
+                  "similarityFacts": [
+                    "constraintIds=[\"constraint:safety\"]",
+                    "contextShapeId=\"context:batch\"",
+                    "dependencyIds=[\"dependency:parser\"]",
+                    "effectClass=\"READ_ONLY\"",
+                    "inputShapeId=\"shape:document\"",
+                    "objectiveShapeId=\"shape:normalize\"",
+                    "outputShapeId=\"shape:normalized\"",
+                    "taskFamilyId=\"family:document-transform\"",
+                    "versionVector=[{\"componentId\":\"runtime:node\",\"exactValue\":\"node-24.14.1\",\"versionScheme\":\"OPAQUE_EXACT\"}]"
+                  ],
+                  "unresolvedDifferences": [],
+                  "counterevidence": {
+                    "assessmentId": "assessment:search-001",
+                    "coverageStatus": "COMPLETE",
+                    "searchEvidenceRefs": [
+                      "evidence:obs-002"
+                    ],
+                    "negativeControlRefs": [
+                      "evidence:contrast-001"
+                    ],
+                    "knownFailures": [
+                      {
+                        "failureId": "failure:known-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:bdf0d359da539504eb1ccde3ffee8df3d9c1eb7f02186b74e08b5e1bb42b3806",
+                        "expectedOutcomeDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                        "observedOutcomeDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                        "evidenceRef": "evidence:failure-001",
+                        "provenanceRef": "provenance:fixture-a",
+                        "resolution": "BOUNDED_BY_PRECONDITION"
+                      }
+                    ],
+                    "counterexamples": [
+                      {
+                        "counterexampleId": "counterexample:similar-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:f2c40e8bebfadc77f911f65003c669c94599f3bfefd988ded5edc89f284a6ded",
+                        "matchedSimilarityFacts": [
+                          "objectiveShapeId=shape:normalize"
+                        ],
+                        "blockingStructuralDimension": "inputShapeId",
+                        "expectedDenialReason": "MATCHED_COUNTEREXAMPLE",
+                        "evidenceRef": "evidence:counterexample-001",
+                        "provenanceRef": "provenance:fixture-b"
+                      }
+                    ]
+                  },
+                  "dependencyRefs": [
+                    "dependency:parser"
+                  ],
+                  "provenanceRefs": [
+                    "provenance:fixture-a",
+                    "provenance:fixture-b",
+                    "provenance:fixture-c"
+                  ],
+                  "knownFailureRefs": [
+                    "failure:known-001"
+                  ],
+                  "counterexampleRefs": [
+                    "counterexample:similar-001"
+                  ],
+                  "knowledgeBundleId": "bundle:baseline-001",
+                  "result": "APPLICABLE_SHADOW_ONLY"
+                }
+              ],
+              "reports": [
+                {
+                  "patternId": "pattern:normalize-document",
+                  "similarityScore": 1,
+                  "similarityFacts": [
+                    "constraintIds=[\"constraint:safety\"]",
+                    "contextShapeId=\"context:batch\"",
+                    "dependencyIds=[\"dependency:parser\"]",
+                    "effectClass=\"READ_ONLY\"",
+                    "inputShapeId=\"shape:document\"",
+                    "objectiveShapeId=\"shape:normalize\"",
+                    "outputShapeId=\"shape:normalized\"",
+                    "taskFamilyId=\"family:document-transform\"",
+                    "versionVector=[{\"componentId\":\"runtime:node\",\"exactValue\":\"node-24.14.1\",\"versionScheme\":\"OPAQUE_EXACT\"}]"
+                  ],
+                  "unresolvedDifferences": [],
+                  "counterevidence": {
+                    "assessmentId": "assessment:search-001",
+                    "coverageStatus": "COMPLETE",
+                    "searchEvidenceRefs": [
+                      "evidence:obs-002"
+                    ],
+                    "negativeControlRefs": [
+                      "evidence:contrast-001"
+                    ],
+                    "knownFailures": [
+                      {
+                        "failureId": "failure:known-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:bdf0d359da539504eb1ccde3ffee8df3d9c1eb7f02186b74e08b5e1bb42b3806",
+                        "expectedOutcomeDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                        "observedOutcomeDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                        "evidenceRef": "evidence:failure-001",
+                        "provenanceRef": "provenance:fixture-a",
+                        "resolution": "BOUNDED_BY_PRECONDITION"
+                      }
+                    ],
+                    "counterexamples": [
+                      {
+                        "counterexampleId": "counterexample:similar-001",
+                        "patternId": "pattern:normalize-document",
+                        "taskFingerprintDigest": "sha256:f2c40e8bebfadc77f911f65003c669c94599f3bfefd988ded5edc89f284a6ded",
+                        "matchedSimilarityFacts": [
+                          "objectiveShapeId=shape:normalize"
+                        ],
+                        "blockingStructuralDimension": "inputShapeId",
+                        "expectedDenialReason": "MATCHED_COUNTEREXAMPLE",
+                        "evidenceRef": "evidence:counterexample-001",
+                        "provenanceRef": "provenance:fixture-b"
+                      }
+                    ]
+                  },
+                  "dependencyRefs": [
+                    "dependency:parser"
+                  ],
+                  "provenanceRefs": [
+                    "provenance:fixture-a",
+                    "provenance:fixture-b",
+                    "provenance:fixture-c"
+                  ],
+                  "knownFailureRefs": [
+                    "failure:known-001"
+                  ],
+                  "counterexampleRefs": [
+                    "counterexample:similar-001"
+                  ],
+                  "knowledgeBundleId": "bundle:baseline-001",
+                  "result": "APPLICABLE_SHADOW_ONLY"
+                }
+              ],
+              "denialReasons": []
+            }
+          },
+          "metric": {
+            "holdoutVariantId": "holdout:batch-b",
+            "qualityKnowledgeOnly": 0,
+            "qualityKnowledgePlusExperience": 1,
+            "costKnowledgeOnly": 5,
+            "costKnowledgePlusExperience": 3,
+            "efficiencyKnowledgeOnly": 0,
+            "efficiencyKnowledgePlusExperience": 0.3333333333333333,
+            "qualityDelta": 1,
+            "costReduction": 2,
+            "efficiencyDelta": 0.3333333333333333
+          },
+          "experienceSelected": true
+        }
+      ],
+      "p17": {
+        "schemaVersion": "pansphaira.cks/p17-retrieval-comparison/v1",
+        "verdict": "PASS",
+        "reasons": [],
+        "variantMetrics": [
+          {
+            "holdoutVariantId": "holdout:batch-a",
+            "qualityKnowledgeOnly": 0,
+            "qualityKnowledgePlusExperience": 1,
+            "costKnowledgeOnly": 5,
+            "costKnowledgePlusExperience": 3,
+            "efficiencyKnowledgeOnly": 0,
+            "efficiencyKnowledgePlusExperience": 0.3333333333333333,
+            "qualityDelta": 1,
+            "costReduction": 2,
+            "efficiencyDelta": 0.3333333333333333
+          },
+          {
+            "holdoutVariantId": "holdout:batch-b",
+            "qualityKnowledgeOnly": 0,
+            "qualityKnowledgePlusExperience": 1,
+            "costKnowledgeOnly": 5,
+            "costKnowledgePlusExperience": 3,
+            "efficiencyKnowledgeOnly": 0,
+            "efficiencyKnowledgePlusExperience": 0.3333333333333333,
+            "qualityDelta": 1,
+            "costReduction": 2,
+            "efficiencyDelta": 0.3333333333333333
+          }
+        ],
+        "aggregate": {
+          "qualityKnowledgeOnly": 0,
+          "qualityKnowledgePlusExperience": 1,
+          "costKnowledgeOnly": 10,
+          "costKnowledgePlusExperience": 6,
+          "efficiencyKnowledgeOnly": 0,
+          "efficiencyKnowledgePlusExperience": 0.3333333333333333,
+          "qualityDelta": 1,
+          "costReduction": 4,
+          "efficiencyDelta": 0.3333333333333333
+        }
+      },
+      "aggregate": {
+        "qualityKnowledgeOnly": 0,
+        "qualityKnowledgePlusExperience": 1,
+        "costKnowledgeOnly": 10,
+        "costKnowledgePlusExperience": 6,
+        "efficiencyKnowledgeOnly": 0,
+        "efficiencyKnowledgePlusExperience": 0.3333333333333333,
+        "qualityDelta": 1,
+        "costReduction": 4,
+        "efficiencyDelta": 0.3333333333333333
+      }
+    },
+    "p18": {
+      "schemaVersion": "pansphaira.cks/p18-pattern-candidate-evaluator/v1",
+      "verdict": "PASS",
+      "caseResults": [
+        {
+          "caseId": "correlation-trap",
+          "fixtureClass": "CORRELATION_TRAP",
+          "evaluation": {
+            "schemaVersion": "pansphaira.cks/p18-pattern-candidate-evaluator/v1",
+            "patternId": "pattern:normalize-document",
+            "verdict": "DENIED",
+            "reason": "INVALID_DIVERSITY_PROOF",
+            "candidateOnly": true,
+            "references": {
+              "dependencyRefs": [
+                "dependency:parser"
+              ],
+              "evidenceRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "provenanceRefs": [
+                "provenance:fixture-a",
+                "provenance:fixture-b",
+                "provenance:fixture-c"
+              ],
+              "knownFailureRefs": [
+                "failure:known-001"
+              ],
+              "counterexampleRefs": [
+                "counterexample:similar-001"
+              ],
+              "versionConstraintRefs": [
+                "constraint:node-exact"
+              ]
+            },
+            "proof": {
+              "proofId": "proof:stable-001",
+              "independentEpisodeRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "independentEpisodeCount": 3,
+              "distinctEpisodeDigestCount": 3,
+              "distinctContextShapeCount": 2,
+              "coveredVariantAxes": [
+                "contextShapeId",
+                "inputShapeId"
+              ]
+            },
+            "reuse": {
+              "taskFingerprintDigest": "sha256:60557c7b07117a68575f2434ab227d77e792c714996c2b8a1a11c3bd558232f9",
+              "result": "DENIED",
+              "reason": "INVALID_DIVERSITY_PROOF"
+            }
+          }
+        },
+        {
+          "caseId": "frequency-only-trap",
+          "fixtureClass": "FREQUENCY_ONLY_TRAP",
+          "evaluation": {
+            "schemaVersion": "pansphaira.cks/p18-pattern-candidate-evaluator/v1",
+            "patternId": "pattern:normalize-document",
+            "verdict": "DENIED",
+            "reason": "INVALID_DIVERSITY_PROOF",
+            "candidateOnly": true,
+            "references": {
+              "dependencyRefs": [
+                "dependency:parser"
+              ],
+              "evidenceRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "provenanceRefs": [
+                "provenance:fixture-a",
+                "provenance:fixture-b",
+                "provenance:fixture-c"
+              ],
+              "knownFailureRefs": [
+                "failure:known-001"
+              ],
+              "counterexampleRefs": [
+                "counterexample:similar-001"
+              ],
+              "versionConstraintRefs": [
+                "constraint:node-exact"
+              ]
+            },
+            "proof": {
+              "proofId": "proof:stable-001",
+              "independentEpisodeRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "independentEpisodeCount": 3,
+              "distinctEpisodeDigestCount": 2,
+              "distinctContextShapeCount": 2,
+              "coveredVariantAxes": [
+                "contextShapeId",
+                "inputShapeId"
+              ]
+            },
+            "reuse": {
+              "taskFingerprintDigest": "sha256:60557c7b07117a68575f2434ab227d77e792c714996c2b8a1a11c3bd558232f9",
+              "result": "DENIED",
+              "reason": "INVALID_DIVERSITY_PROOF"
+            }
+          }
+        },
+        {
+          "caseId": "narrow-context-trap",
+          "fixtureClass": "NARROW_CONTEXT_TRAP",
+          "evaluation": {
+            "schemaVersion": "pansphaira.cks/p18-pattern-candidate-evaluator/v1",
+            "patternId": "pattern:normalize-document",
+            "verdict": "DENIED",
+            "reason": "INVALID_DIVERSITY_PROOF",
+            "candidateOnly": true,
+            "references": {
+              "dependencyRefs": [
+                "dependency:parser"
+              ],
+              "evidenceRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "provenanceRefs": [
+                "provenance:fixture-a",
+                "provenance:fixture-b",
+                "provenance:fixture-c"
+              ],
+              "knownFailureRefs": [
+                "failure:known-001"
+              ],
+              "counterexampleRefs": [
+                "counterexample:similar-001"
+              ],
+              "versionConstraintRefs": [
+                "constraint:node-exact"
+              ]
+            },
+            "proof": {
+              "proofId": "proof:stable-001",
+              "independentEpisodeRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "independentEpisodeCount": 3,
+              "distinctEpisodeDigestCount": 3,
+              "distinctContextShapeCount": 1,
+              "coveredVariantAxes": [
+                "contextShapeId",
+                "inputShapeId"
+              ]
+            },
+            "reuse": {
+              "taskFingerprintDigest": "sha256:60557c7b07117a68575f2434ab227d77e792c714996c2b8a1a11c3bd558232f9",
+              "result": "DENIED",
+              "reason": "INVALID_DIVERSITY_PROOF"
+            }
+          }
+        },
+        {
+          "caseId": "planted-stable",
+          "fixtureClass": "PLANTED_STABLE",
+          "evaluation": {
+            "schemaVersion": "pansphaira.cks/p18-pattern-candidate-evaluator/v1",
+            "patternId": "pattern:normalize-document",
+            "verdict": "ACCEPTED",
+            "candidateOnly": true,
+            "references": {
+              "dependencyRefs": [
+                "dependency:parser"
+              ],
+              "evidenceRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "provenanceRefs": [
+                "provenance:fixture-a",
+                "provenance:fixture-b",
+                "provenance:fixture-c"
+              ],
+              "knownFailureRefs": [
+                "failure:known-001"
+              ],
+              "counterexampleRefs": [
+                "counterexample:similar-001"
+              ],
+              "versionConstraintRefs": [
+                "constraint:node-exact"
+              ]
+            },
+            "proof": {
+              "proofId": "proof:stable-001",
+              "independentEpisodeRefs": [
+                "evidence:obs-001",
+                "evidence:obs-002",
+                "evidence:obs-003"
+              ],
+              "independentEpisodeCount": 3,
+              "distinctEpisodeDigestCount": 3,
+              "distinctContextShapeCount": 2,
+              "coveredVariantAxes": [
+                "contextShapeId",
+                "inputShapeId"
+              ]
+            },
+            "reuse": {
+              "taskFingerprintDigest": "sha256:60557c7b07117a68575f2434ab227d77e792c714996c2b8a1a11c3bd558232f9",
+              "result": "APPLICABLE_SHADOW_ONLY"
+            }
+          }
+        }
+      ],
+      "acceptedPatternIds": [
+        "pattern:normalize-document"
+      ],
+      "deniedCaseIds": [
+        "correlation-trap",
+        "frequency-only-trap",
+        "narrow-context-trap"
+      ],
+      "reasons": [
+        "INVALID_DIVERSITY_PROOF"
+      ]
+    },
+    "reuseBoundaries": [
+      {
+        "caseId": "similar-looking-inapplicable",
+        "outcome": "DENIED",
+        "reason": "PRECONDITION_FALSE"
+      },
+      {
+        "caseId": "exact-shape-version-drift",
+        "outcome": "DENIED",
+        "reason": "VERSION_INCOMPATIBLE"
+      },
+      {
+        "caseId": "unknown-applicability-context",
+        "outcome": "DENIED",
+        "reason": "AMBIGUOUS_APPLICABILITY"
+      },
+      {
+        "caseId": "absent-success-evidence",
+        "outcome": "DENIED",
+        "reason": "MISSING_EVIDENCE"
+      }
+    ],
+    "failureClosedChecks": [
+      {
+        "caseId": "missing-admitted-evidence",
+        "verdict": "INCONCLUSIVE",
+        "reason": "MISSING_288_DIGEST"
+      },
+      {
+        "caseId": "unsealed-holdout",
+        "verdict": "INCONCLUSIVE",
+        "reason": "UNSEALED_HOLDOUT"
+      },
+      {
+        "caseId": "live-replay",
+        "verdict": "DENIED",
+        "reason": "LIVE_REPLAY_FORBIDDEN"
+      },
+      {
+        "caseId": "holdout-leakage",
+        "verdict": "INCONCLUSIVE",
+        "reason": "HOLDOUT_LEAKAGE"
+      },
+      {
+        "caseId": "prose-input",
+        "verdict": "DENIED",
+        "reason": "PROSE_ONLY_INPUT"
+      }
+    ],
+    "preservation": {
+      "dependencyRefs": [
+        "dependency:parser"
+      ],
+      "knownFailureRefs": [
+        "failure:known-001"
+      ],
+      "counterexampleRefs": [
+        "counterexample:similar-001"
+      ],
+      "provenanceRefs": [
+        "provenance:fixture-a",
+        "provenance:fixture-b",
+        "provenance:fixture-c"
+      ],
+      "counterevidenceCoverage": "COMPLETE"
+    },
+    "nonClaims": [
+      "This is an admitted synthetic shadow replay only.",
+      "It is not a production quality, cost, efficiency, or generalization claim.",
+      "It grants no execution authority and contains no procedure content.",
+      "It calls no model, provider, service, tool, storage, or external state."
+    ]
+  },
+  "nonClaims": [
+    "This is an admitted synthetic shadow replay only.",
+    "It is not a production quality, cost, efficiency, or generalization claim.",
+    "It grants no execution authority and contains no procedure content.",
+    "It calls no model, provider, service, tool, storage, or external state."
+  ],
+  "canonicalDigest": "sha256:b70a3107d3a3fa0ad7de2ac6f1073d2b9be2d1def1abd1fff1269936da5d13c4"
+}

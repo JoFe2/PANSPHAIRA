@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "pansphaira.cks/p18-pattern-candidate-denials/v1",
+  "cases": [
+    {
+      "caseId": "case:similar-looking",
+      "description": "A task with a false effect precondition must not reuse the candidate.",
+      "expectedReason": "PRECONDITION_FALSE"
+    },
+    {
+      "caseId": "case:version-drift",
+      "description": "An exact-shape task with an unadmitted runtime version must not reuse the candidate.",
+      "expectedReason": "VERSION_INCOMPATIBLE"
+    },
+    {
+      "caseId": "case:missing-evidence",
+      "description": "A candidate with an absent success episode is denied rather than repaired by similarity.",
+      "expectedReason": "MISSING_EVIDENCE"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/schemas/contracts/cks-09-synthetic-case-v1.schema.json",
+  "title": "CKS-09 deterministic synthetic proof fixture",
+  "description": "Declarative, non-production inputs for the P17 holdout and P18 pattern-trap proof. The scorer hydrates only typed records and never returns procedure content.",
+  "type": "object",
+  "required": ["schemaVersion", "fixtureKind", "fixtureId", "cases"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks/synthetic-case/v1" },
+    "fixtureKind": { "enum": ["P17_HOLDOUT", "P18_PATTERN_TRAPS"] },
+    "fixtureId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+    "taskId": { "type": "string", "minLength": 1 },
+    "evidenceAdmission": { "const": "ADMITTED" },
+    "requiredEvidencePresent": { "const": true },
+    "holdoutSealed": { "const": true },
+    "replayMode": { "enum": ["SIMULATION", "SHADOW"] },
+    "externalStateChanged": { "const": false },
+    "modelsOrServicesCalled": { "const": false },
+    "procedureContentReturned": { "const": false },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["caseId", "profile"],
+        "properties": {
+          "caseId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+          "holdoutVariantId": { "type": "string", "pattern": "^holdout:[a-z0-9-]+$" },
+          "profile": { "enum": ["stable", "frequency-only", "narrow-context", "correlation"] },
+          "fixtureClass": { "enum": ["PLANTED_STABLE", "FREQUENCY_ONLY_TRAP", "NARROW_CONTEXT_TRAP", "CORRELATION_TRAP"] },
+          "expectedVerdict": { "enum": ["ACCEPTED", "DENIED"] },
+          "expectedReason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reuseBoundaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["caseId", "profile", "expectedReason"],
+        "properties": {
+          "caseId": { "type": "string", "minLength": 1 },
+          "profile": { "enum": ["similar-looking", "version-drift", "missing-context", "missing-evidence"] },
+          "expectedReason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "fixtureKind": { "const": "P17_HOLDOUT" } } },
+      "then": {
+        "required": ["taskId", "evidenceAdmission", "requiredEvidencePresent", "holdoutSealed", "replayMode", "externalStateChanged", "modelsOrServicesCalled", "procedureContentReturned"],
+        "properties": { "cases": { "items": { "required": ["holdoutVariantId"] } } }
+      }
+    },
+    {
+      "if": { "properties": { "fixtureKind": { "const": "P18_PATTERN_TRAPS" } } },
+      "then": {
+        "properties": { "cases": { "items": { "required": ["fixtureClass", "expectedVerdict"] } } }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

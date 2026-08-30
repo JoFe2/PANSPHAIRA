@@ -1,0 +1,145 @@
+{
+  "schema": "pansphaira.conveyor.pr-ci-merge-readback-package-receipt.v1",
+  "recordKind": "DETERMINISTIC_DECISION_AND_INTEGRATION_RECEIPT",
+  "taskId": "INT-PSAI289-PR-CI-PACKAGE-01",
+  "decision": "LOCAL_EVIDENCE_PACKAGE_READY_BEFORE_FIRST_EXTERNAL_MUTATION",
+  "process": {
+    "operatingModel": "v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "rule": "This receipt records only the required local pre-mutation package and does not replace, reinterpret, or extend the preserved process decisions."
+  },
+  "scope": {
+    "included": [
+      "local repository identity and ancestry",
+      "bounded branch diff evidence",
+      "required PR, CI, merge, and readback evidence slots",
+      "fail-closed external-mutation boundary",
+      "local receipt syntax and whitespace validation"
+    ],
+    "excluded": [
+      "pull request creation or update",
+      "CI dispatch or status assertion",
+      "merge execution",
+      "remote readback",
+      "push, release, provider, credential, service, or CI-authority mutation"
+    ]
+  },
+  "localRepositoryBinding": {
+    "workspace": "/mnt/data2/ai/development-conveyor/docker-workspaces/lane-3/materialized-pansphaira-289",
+    "branch": "conveyor/pansphaira-289",
+    "sourceHead": "5ab7c34c273ba95bc00e1cfab540ac37a3d3f746",
+    "originMain": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "originMainIsAncestorOfSourceHead": true,
+    "baselineRelation": "origin/main...HEAD",
+    "preexistingChangeSet": "CKS-09 synthetic shadow evidence only; no external action is claimed by this receipt."
+  },
+  "evidencePackage": {
+    "orderedExternalEvidenceSlots": [
+      {
+        "stage": "PR",
+        "requiredEvidence": [
+          "remote pull-request identifier",
+          "head and base commit identifiers",
+          "remote pull-request readback"
+        ],
+        "localStatus": "NOT_EXECUTED"
+      },
+      {
+        "stage": "CI",
+        "requiredEvidence": [
+          "authoritative CI run identifier",
+          "pinned-environment check results",
+          "CI readback bound to the PR head commit"
+        ],
+        "localStatus": "NOT_EXECUTED"
+      },
+      {
+        "stage": "MERGE",
+        "requiredEvidence": [
+          "approved merge commit identifier",
+          "merge result readback",
+          "merged base branch identifier"
+        ],
+        "localStatus": "NOT_EXECUTED"
+      },
+      {
+        "stage": "READBACK",
+        "requiredEvidence": [
+          "post-merge repository readback",
+          "merged commit equality check",
+          "final CI status readback"
+        ],
+        "localStatus": "NOT_EXECUTED"
+      }
+    ],
+    "externalEvidencePresent": false,
+    "successClaimed": false,
+    "reason": "No external mutation has occurred; required external evidence must be obtained and read back at each later authorized boundary."
+  },
+  "localValidation": {
+    "requiredRepositoryProfileCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "executionTarget": "local workspace",
+      "result": "PASS",
+      "observedExitCode": 0,
+      "binding": "Executed against origin/main 353017c4f60e30463d0a78fd6fd2509a37d37f76 and source head 5ab7c34c273ba95bc00e1cfab540ac37a3d3f746 before this additive receipt commit."
+    },
+    "receiptSyntaxCheck": {
+      "command": "python3 -m json.tool docs/evidence/conveyor/int-psai289-pr-ci-package-01.json",
+      "executionTarget": "local workspace",
+      "result": "PASS",
+      "observedExitCode": 0,
+      "binding": "The receipt parsed as JSON and its standalone diff check reported no whitespace errors before commit."
+    },
+    "nodeRuntimeObservation": {
+      "command": "npm --version",
+      "runtime": "Node v24.19.0",
+      "result": "INFRASTRUCTURE_BLOCKED",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "detail": "V8 failed before npm initialization at OS::SetPermissions errno check failure.",
+      "productVerdict": "NOT_A_PRODUCT_VERDICT",
+      "authoritativeFollowUp": "Controller reruns pinned-Node and host-Docker gates."
+    }
+  },
+  "failClosedBoundary": {
+    "firstExternalMutation": "DENIED_PENDING_AUTHORIZED_EXTERNAL_STAGE_AND_READBACK_EVIDENCE",
+    "missingRequiredExternalEvidence": "DENIED",
+    "unreadableOrMismatchedExternalReadback": "DENIED",
+    "localReceiptDoesNotSubstituteFor": [
+      "PR evidence",
+      "CI evidence",
+      "merge evidence",
+      "post-merge readback"
+    ],
+    "externalStateChanged": false,
+    "remoteMutated": false,
+    "credentialsChanged": false,
+    "remotesChanged": false,
+    "servicesOrProvidersCalled": false,
+    "ciAuthorityChanged": false
+  },
+  "integration": {
+    "filesChanged": [
+      "docs/evidence/conveyor/int-psai289-pr-ci-package-01.json"
+    ],
+    "productCodeChanged": false,
+    "commitRequired": true,
+    "publicationMergeOrRelease": false,
+    "authorityGranted": false
+  },
+  "nonClaims": [
+    "This receipt does not claim that a pull request exists, that CI passed, that a merge occurred, or that remote readback succeeded.",
+    "This receipt does not authorize a push, pull request mutation, CI mutation, merge, release, credential change, remote change, provider call, or service call.",
+    "A missing required external evidence item is not repaired by this local receipt and remains fail-closed."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "pansphaira.cks/shadow-experience-ablation/v1",
+  "taskId": "PSAI289-QWEN-04-SHADOW-ABLATION-REPLAY",
+  "artifact": "packages/cks/src/shadow-experience-ablation.ts",
+  "mode": "SIMULATION_OR_SHADOW_ONLY",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "ablation": {
+    "knowledgeOnly": "The identical admitted KnowledgeBundle baseline is available; historical SolutionPattern candidates are not exposed.",
+    "knowledgePlusExperience": "The identical baseline is paired with evidence-bound historical candidates and applicability-first shadow retrieval.",
+    "similarityOrder": "EXPLANATION_ONLY",
+    "applicabilityOrder": "GATE_BEFORE_SELECTION",
+    "selectedCandidates": "APPLICABLE_SHADOW_ONLY only"
+  },
+  "p17": {
+    "verdict": "INCONCLUSIVE",
+    "reason": "MISSING_288_DIGEST",
+    "nonClaim": "This template does not claim historical experience improves quality or cost without admitted predecessor evidence, a sealed holdout, paired run keys, identical baseline knowledge, and complete replay evidence."
+  },
+  "requiredEvidence": [
+    "admitted predecessor #288 root digest",
+    "sealed holdout split",
+    "identical canonical KnowledgeBundle digest in both arms",
+    "paired run keys and expected checks",
+    "complete denial and safety outcomes",
+    "evidence-bound successful historical episodes",
+    "complete counterevidence, dependency, version, and provenance records"
+  ],
+  "nonClaims": [
+    "No live authority or execution permission",
+    "No production storage, retrieval, enrichment, model, provider, telemetry, or external state change",
+    "No production safety, quality, cost, efficiency, or generalization claim",
+    "No automatic promotion, evidence repair, prose coercion, version proximity, or similarity override",
+    "A PASS is limited to the admitted synthetic shadow replay and its sealed holdout variants"
+  ]
+}

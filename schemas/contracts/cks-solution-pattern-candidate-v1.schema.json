@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pansphaira.cks/solution-pattern-candidate/v1",
+  "title": "CKS-09 candidate-only SolutionPattern v1",
+  "description": "A digest-referenced candidate. This schema grants no live authority or execution permission.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["patternId", "maturity", "taskFamilyIds", "applicabilityClauses", "preconditions", "procedureDigest", "expectedOutcomeDigest", "dependencyRefs", "evidenceRefs", "provenanceRefs", "knownFailureRefs", "counterexampleRefs", "counterevidenceAssessmentRef", "versionConstraintRefs", "canonicalDigest"],
+  "properties": {
+    "patternId": {"$ref": "#/$defs/id"},
+    "maturity": {"enum": ["S2", "S3", "S4", "S5", "S6"]},
+    "taskFamilyIds": {"type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "applicabilityClauses": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/clause"}},
+    "preconditions": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/clause"}},
+    "procedureDigest": {"$ref": "#/$defs/digest"},
+    "expectedOutcomeDigest": {"$ref": "#/$defs/digest"},
+    "dependencyRefs": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "evidenceRefs": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "provenanceRefs": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "knownFailureRefs": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "counterexampleRefs": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "counterevidenceAssessmentRef": {"$ref": "#/$defs/id"},
+    "versionConstraintRefs": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "canonicalDigest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "scalar": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}, {"type": "null"}]},
+    "operand": {"oneOf": [{"$ref": "#/$defs/scalar"}, {"type": "array", "maxItems": 32, "items": {"$ref": "#/$defs/scalar"}}]},
+    "clause": {
+      "type": "object", "additionalProperties": false,
+      "required": ["factPath", "operator", "operand"],
+      "properties": {
+        "factPath": {"type": "string", "pattern": "^(|(?:/(?:[^~/]|~[01])*))+$"},
+        "operator": {"enum": ["EQ", "IN", "SET_CONTAINS_ALL", "SET_DISJOINT", "EXISTS"]},
+        "operand": {"$ref": "#/$defs/operand"}
+      }
+    }
+  }
+}

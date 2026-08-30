@@ -1,0 +1,50 @@
+{
+  "taskFingerprint": {
+    "fingerprintId": "task:fp-001",
+    "taskFamilyId": "family:document-transform",
+    "objectiveShapeId": "shape:normalize",
+    "inputShapeId": "shape:document",
+    "outputShapeId": "shape:normalized",
+    "contextShapeId": "context:batch",
+    "constraintIds": ["constraint:safety"],
+    "effectClass": "READ_ONLY",
+    "dependencyIds": ["dependency:parser"],
+    "versionVector": [{"componentId":"runtime:node","versionScheme":"OPAQUE_EXACT","exactValue":"node-24.14.1"}],
+    "canonicalDigest": "sha256:60557c7b07117a68575f2434ab227d77e792c714996c2b8a1a11c3bd558232f9"
+  },
+  "taskFamily": {
+    "familyId": "family:document-transform",
+    "membershipClauses": [{"factPath":"/objectiveShapeId","operator":"EQ","operand":"shape:normalize"}],
+    "invariantIds": ["invariant:normalized-output"],
+    "variantAxes": ["contextShapeId", "inputShapeId"],
+    "exclusionClauses": [{"factPath":"/effectClass","operator":"EQ","operand":"EXTERNAL_OR_IRREVERSIBLE"}],
+    "evidenceRefs": ["evidence:family-001"],
+    "provenanceRefs": ["provenance:fixture-a"],
+    "canonicalDigest": "sha256:ab6e01b88168d32ded7445ebf363b7312b468891fc620e8e91f7b85f4f20dae6"
+  },
+  "knowledgeBundle": {
+    "bundleId": "bundle:baseline-001",
+    "contentRefs": [{"contentId":"content:normalizer","contentDigest":"sha256:1111111111111111111111111111111111111111111111111111111111111111","provenanceRef":"provenance:fixture-a"}],
+    "scopeIds": ["scope:synthetic"],
+    "versionVector": [{"componentId":"runtime:node","versionScheme":"OPAQUE_EXACT","exactValue":"node-24.14.1"}],
+    "provenanceRefs": ["provenance:fixture-a"],
+    "canonicalDigest": "sha256:2f2515449c6808f939870ba519fcb1ade65f97952784a2b7663963d0f392002a"
+  },
+  "solutionPatternCandidate": {
+    "patternId": "pattern:normalize-document",
+    "maturity": "S4",
+    "taskFamilyIds": ["family:document-transform"],
+    "applicabilityClauses": [{"factPath":"/objectiveShapeId","operator":"EQ","operand":"shape:normalize"}],
+    "preconditions": [{"factPath":"/effectClass","operator":"EQ","operand":"READ_ONLY"}],
+    "procedureDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "expectedOutcomeDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "dependencyRefs": ["dependency:parser"],
+    "evidenceRefs": ["evidence:obs-001"],
+    "provenanceRefs": ["provenance:fixture-a"],
+    "knownFailureRefs": [],
+    "counterexampleRefs": [],
+    "counterevidenceAssessmentRef": "assessment:search-001",
+    "versionConstraintRefs": ["constraint:node-exact"],
+    "canonicalDigest": "sha256:6b7741ab445c972e41634bb5ba88a632bc96bf163e2a27e1ec75e0b15a6b497e"
+  }
+}

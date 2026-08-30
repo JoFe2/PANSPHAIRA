@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "pansphaira.cks/e2e-proof-rejections/v1",
+  "fixtureKind": "E2E_PROOF_REJECTIONS",
+  "fixtureId": "cks-09-e2e-rejections",
+  "taskId": "PSAI289-QWEN-06-OFFLINE-PROOF-READBACK",
+  "baseEnvelopeFixtureId": "cks-09-e2e-positive-evidence",
+  "baseEnvelopePath": "tests/fixtures/cks-09/e2e-positive-evidence-v1.json",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "cases": [
+    {
+      "caseId": "non-admitted-evidence",
+      "mutation": {
+        "path": "evidenceAdmission",
+        "value": "PENDING"
+      },
+      "expectedVerdict": "INCONCLUSIVE",
+      "expectedReason": "MISSING_288_DIGEST"
+    },
+    {
+      "caseId": "unsealed-holdout",
+      "mutation": {
+        "path": "holdoutSealed",
+        "value": false
+      },
+      "expectedVerdict": "INCONCLUSIVE",
+      "expectedReason": "UNSEALED_HOLDOUT"
+    },
+    {
+      "caseId": "live-replay-mode",
+      "mutation": {
+        "path": "replayMode",
+        "value": "LIVE"
+      },
+      "expectedVerdict": "INCONCLUSIVE",
+      "expectedReason": "LIVE_REPLAY_FORBIDDEN"
+    },
+    {
+      "caseId": "external-state-changed",
+      "mutation": {
+        "path": "externalStateChanged",
+        "value": true
+      },
+      "expectedVerdict": "DENIED",
+      "expectedReason": "LIVE_REPLAY_FORBIDDEN"
+    },
+    {
+      "caseId": "model-service-called",
+      "mutation": {
+        "path": "modelsOrServicesCalled",
+        "value": true
+      },
+      "expectedVerdict": "DENIED",
+      "expectedReason": "LIVE_REPLAY_FORBIDDEN"
+    },
+    {
+      "caseId": "procedure-content-returned",
+      "mutation": {
+        "path": "procedureContentReturned",
+        "value": true
+      },
+      "expectedVerdict": "DENIED",
+      "expectedReason": "LIVE_REPLAY_FORBIDDEN"
+    },
+    {
+      "caseId": "tampered-evidence-digest",
+      "mutation": {
+        "path": "evidenceRefs[0].sha256",
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expectedVerdict": "INCONCLUSIVE",
+      "expectedReason": "MISSING_288_DIGEST"
+    },
+    {
+      "caseId": "missing-evidence-fixture",
+      "mutation": {
+        "path": "evidenceRefs[0].fixturePath",
+        "value": "tests/fixtures/cks-09/absent-evidence-v1.json"
+      },
+      "expectedVerdict": "INCONCLUSIVE",
+      "expectedReason": "MISSING_EVIDENCE"
+    }
+  ],
+  "nonClaims": [
+    "Rejected envelopes are fail-closed fixtures only.",
+    "They are not production, live, or execution evidence.",
+    "They grant no authority and contain no procedure content."
+  ]
+}

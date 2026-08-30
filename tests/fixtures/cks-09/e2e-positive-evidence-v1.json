@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "pansphaira.cks/e2e-proof-evidence/v1",
+  "fixtureKind": "E2E_PROOF_EVIDENCE",
+  "fixtureId": "cks-09-e2e-positive-evidence",
+  "taskId": "PSAI289-QWEN-06-OFFLINE-PROOF-READBACK",
+  "evidenceAdmission": "ADMITTED",
+  "requiredEvidencePresent": true,
+  "holdoutSealed": true,
+  "replayMode": "SHADOW",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "evidenceRefs": [
+    {
+      "evidenceId": "evidence:holdout-cases",
+      "fixtureId": "cks-09-holdout",
+      "fixturePath": "tests/fixtures/cks-09/holdout-cases-v1.json",
+      "sha256": "sha256:f05302d756136e9a3ed6a4aeb06a8137b847728718b7d11af0e01f8d8dade97f"
+    },
+    {
+      "evidenceId": "evidence:pattern-traps",
+      "fixtureId": "cks-09-pattern-traps",
+      "fixturePath": "tests/fixtures/cks-09/pattern-trap-cases-v1.json",
+      "sha256": "sha256:cf554a44cf78db8a3fff397c079db9bf411529eb6bfd8cb8106f8bbf524b49b4"
+    },
+    {
+      "evidenceId": "evidence:ground-truth",
+      "fixtureId": "cks-09-holdout-ground-truth",
+      "fixturePath": "tests/fixtures/cks-09/holdout-ground-truth-v1.json",
+      "sha256": "sha256:3913fda6843468b87e4b8f03fac0e590dc78f4f9ab0d93f350738ba8d401a153"
+    }
+  ],
+  "criteria": [
+    {
+      "criterionId": "P17_EXPERIENCE_IMPROVES_QUALITY_COST",
+      "claim": "Historical experience improves quality and/or cost over Knowledge-only retrieval on sealed holdout variants, proven only by the frozen paired ablation evaluator.",
+      "evidenceRefs": ["evidence:holdout-cases", "evidence:ground-truth"],
+      "expectedVerdict": "PASS"
+    },
+    {
+      "criterionId": "P18_PLANTED_STABLE_IDENTIFIED_TRAPS_DENIED",
+      "claim": "Only the planted stable pattern candidate is identified; frequency-only, narrow-context, and correlation traps are denied with INVALID_DIVERSITY_PROOF.",
+      "evidenceRefs": ["evidence:pattern-traps", "evidence:ground-truth"],
+      "expectedVerdict": "PASS"
+    },
+    {
+      "criterionId": "INAPPLICABLE_VERSION_DRIFT_REUSE_DENIED",
+      "claim": "Similar-looking but inapplicable tasks and version-drift cases deny pattern reuse; similarity cannot override applicability, version, context, or evidence gates.",
+      "evidenceRefs": ["evidence:pattern-traps", "evidence:ground-truth"],
+      "expectedVerdict": "PASS"
+    },
+    {
+      "criterionId": "SHADOW_ONLY_SIMULATION_BOUNDARY",
+      "claim": "Ablation and replay remain simulation/shadow-only and evidence-bound: no live state change, no model or service call, no procedure content, and every fail-closed boundary is exercised.",
+      "evidenceRefs": ["evidence:holdout-cases", "evidence:ground-truth"],
+      "expectedVerdict": "PASS"
+    },
+    {
+      "criterionId": "CANDIDATE_PRESERVATION",
+      "claim": "Pattern candidates preserve dependencies, known failures, counterexamples, and provenance with complete counterevidence coverage.",
+      "evidenceRefs": ["evidence:pattern-traps", "evidence:ground-truth"],
+      "expectedVerdict": "PASS"
+    }
+  ],
+  "nonClaims": [
+    "This is an admitted synthetic shadow replay only.",
+    "It is not a production quality, cost, efficiency, or generalization claim.",
+    "It grants no execution authority and contains no procedure content.",
+    "It calls no model, provider, service, tool, storage, or external state."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "pansphaira.cks/retrieval-receipt/v1",
+  "taskId": "PSAI289-QWEN-02-APPLICABILITY-RETRIEVAL",
+  "artifact": "applicability-aware-retrieval.ts",
+  "mode": "SIMULATION_OR_SHADOW_ONLY",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "p17": {
+    "verdict": "INCONCLUSIVE",
+    "reason": "MISSING_288_DIGEST",
+    "nonClaim": "This template does not claim a bound empirical P17 result without the admitted predecessor digest and transitive holdout evidence."
+  },
+  "retrieval": {
+    "similarityOrder": "EXPLANATION_ONLY",
+    "applicabilityOrder": "GATE_BEFORE_SELECTION",
+    "selectedCandidates": "APPLICABLE_SHADOW_ONLY only",
+    "reports": ["counterevidence", "unresolvedDifferences", "dependencies", "knownFailures", "counterexamples", "provenance"]
+  },
+  "requiredEvidence": [
+    "admitted predecessor #288 root digest",
+    "sealed holdout split",
+    "complete counterevidence assessment",
+    "admitted dependency and exact-version evidence",
+    "provenance-independent successful episodes"
+  ],
+  "nonClaims": [
+    "No live authority or execution permission",
+    "No production safety, quality, cost, or generalization claim",
+    "No evidence repair, prose coercion, version proximity, or similarity override"
+  ]
+}
