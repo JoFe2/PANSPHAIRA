@@ -1266,7 +1266,7 @@ e9c6a95d47fbc5d3b061b17e1bc1fbd76d4a99e6f0cb908d156b7ae5c4ae750a  ./tests/poc-se
 e1e4304dde40a18146d905885a7d7dc9646a8d22a7702a758ad0da50d1ee00e0  ./tests/poc-showcase.test.ts
 4bbdb6acb54291a49e12347f72a9b4b85241e28d639df56fc78c69f050103cc1  ./tests/power-platform-read-connector.test.ts
 dfe7338a6655c3a70f304f59c3a3e1e748ad62a8b78726eeb125db4e3f16332d  ./tests/protected-audit-timeline.test.ts
-9c205867284bc899f2f1b817a9cec6a70cfa010941a49b6c7215fb0b32dc1b12  ./tests/public-product-spelling.test.mjs
+ce6b591dcf808ca62dcb8740c530d689f20ca7b2100731e91cd46facd1c01205  ./tests/public-product-spelling.test.mjs
 13e011224b83278959328d883e2c4f96fbe394ef251c0b4956b32ae5ab317452  ./tests/release-governance.test.mjs
 4e961c9ffb17baba51fced0d76c2ea900b474a77db0c4e74f1473af5aa98bb08  ./tests/render-ccp-m1-evidence.test.mjs
 af0f2117460bf2fc8478d9a45c58b17ad1bc6c839a9a0654a325078354fb4990  ./tests/resource-plane-profiles.test.ts
@@ -1382,6 +1382,7 @@ bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification
 9476dbb3e5d34635f949bfde9c0d9275729a41aa9429e8c025516295bbd1b7a0  scripts/build-public-release.sh
 bc62d9a17366ef84ff2075a1f190df33dd19fe5dc4d44ba0ed45ec3910bc7fb6  scripts/refresh-integrity-data.mjs
 285e662edfff629e9d98e551c233a0d47cdc4e7044d91863788e8e9af091c176  tests/contribution-intake-ledger.test.ts
+ce6b591dcf808ca62dcb8740c530d689f20ca7b2100731e91cd46facd1c01205  tests/public-product-spelling.test.mjs
 13e011224b83278959328d883e2c4f96fbe394ef251c0b4956b32ae5ab317452  tests/release-governance.test.mjs
 2a64684b93bc70e8eb89484e4ec75a856aa019aeb371def8122f1cd9221db3cd  tests/verification-fabric-v2.test.ts
 ca41191893202a9f7a50f001d89a381efc87388436b4bd90f1269723f14a716f  tools/video-production-reference/SHA256SUMS
