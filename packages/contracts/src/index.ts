@@ -110,6 +110,7 @@ export * from "./competence-knowledge-vocabulary.js";
 export * from "./cks-knowledge.js";
 export * from "./cks-evidence.js";
 export * from "./cks-qualification.js";
+export * from "./cks-synthetic-qualification.js";
 export * from "./ccp-event-envelope.js";
 export * from "./ccp-intake-ledger.js";
 export * from "./ccp-risk-routing.js";

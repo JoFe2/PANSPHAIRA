@@ -302,6 +302,7 @@ packages/contracts/src/cks-knowledge.ts	packages/contracts/src/cks-knowledge.ts	
 packages/contracts/src/cks-qualification.ts	packages/contracts/src/cks-qualification.ts	0644
 packages/contracts/src/cks-resource-admission.ts	packages/contracts/src/cks-resource-admission.ts	0644
 packages/contracts/src/cks-shadow-evaluation.ts	packages/contracts/src/cks-shadow-evaluation.ts	0644
+packages/contracts/src/cks-synthetic-qualification.ts	packages/contracts/src/cks-synthetic-qualification.ts	0644
 packages/contracts/src/competence-knowledge-vocabulary.ts	packages/contracts/src/competence-knowledge-vocabulary.ts	0644
 packages/contracts/src/contribution-intake-ledger.ts	packages/contracts/src/contribution-intake-ledger.ts	0644
 packages/contracts/src/crm-read-connector.ts	packages/contracts/src/crm-read-connector.ts	0644
@@ -580,6 +581,7 @@ tests/cks-qualification.test.ts	tests/cks-qualification.test.ts	0644
 tests/cks-resource-admission.test.ts	tests/cks-resource-admission.test.ts	0644
 tests/cks-router-dry-run.test.ts	tests/cks-router-dry-run.test.ts	0644
 tests/cks-shadow-evaluation.test.ts	tests/cks-shadow-evaluation.test.ts	0644
+tests/cks-synthetic-qualification.test.ts	tests/cks-synthetic-qualification.test.ts	0644
 tests/cks-vocabulary.test.ts	tests/cks-vocabulary.test.ts	0644
 tests/company-data-graph.test.mjs	tests/company-data-graph.test.mjs	0644
 tests/company-data-pack.test.mjs	tests/company-data-pack.test.mjs	0644
@@ -933,6 +935,7 @@ tsconfig.json	tsconfig.json	0644
 verification/awi-03-knowledge-envelope-evidence-v1.json	verification/awi-03-knowledge-envelope-evidence-v1.json	0644
 verification/bi-002-crm-read-connector-evidence-v1.json	verification/bi-002-crm-read-connector-evidence-v1.json	0644
 verification/bi-003-erp-read-connector-evidence-v1.json	verification/bi-003-erp-read-connector-evidence-v1.json	0644
+verification/cks-03-public-manifests-v1.json	verification/cks-03-public-manifests-v1.json	0644
 verification/cks-06-authorized-shadow-window-v1.json	verification/cks-06-authorized-shadow-window-v1.json	0644
 verification/cks-06-router-dry-run-evidence-v1.json	verification/cks-06-router-dry-run-evidence-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644

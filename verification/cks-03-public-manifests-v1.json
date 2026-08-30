@@ -1,0 +1,287 @@
+{
+  "schemaVersion": "pansphaira.cks/synthetic-qualification-public-manifests/v1",
+  "issue": 283,
+  "committedLanes": [
+    "DEVELOPMENT",
+    "VISIBLE_VALIDATION"
+  ],
+  "runtimeOnlyLanes": [
+    "HIDDEN_QUALIFICATION",
+    "FRESH_EPHEMERAL_CERTIFICATION"
+  ],
+  "rawSeedsPresent": false,
+  "suites": [
+    {
+      "schemaVersion": "pansphaira.cks/synthetic-qualification-suite/v1",
+      "lane": "DEVELOPMENT",
+      "seedDigest": "b4a6d6c8fa2d6462a2694e7299b5be07dbfd00f398f8d24810c94b872cb3871f",
+      "generatedAtMs": 1000,
+      "tasks": [
+        {
+          "taskId": "cks03:task:6fdd12cb67a36673b680a77b",
+          "family": "RANDOM_IDENTIFIERS",
+          "domainId": "domain:6fdd12cb67a36673",
+          "prompt": "Resolve the post-training identifier in domain:6fdd12cb67a36673.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-b680a77b2ce56b9b",
+            "evidenceIds": [
+              "evidence:6ff30a5028b9ded2"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "2a3c07ab5999409ad17939f836eb793b31cc93bed427996c58b0739a6aa3e871"
+        },
+        {
+          "taskId": "cks03:task:17ca5fbc5c785e6b8d7ed735",
+          "family": "COUNTERFACTUAL_RULE",
+          "domainId": "domain:17ca5fbc5c785e6b",
+          "prompt": "Apply the domain-local rule in domain:17ca5fbc5c785e6b, even when it conflicts with common prior knowledge.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-8d7ed735c3db2b9e",
+            "evidenceIds": [
+              "evidence:b95c81e20718cafa"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "f9a05cc1e3d5e4e07689489901989640e839cef5732ca95d86f52c03e2809f35"
+        },
+        {
+          "taskId": "cks03:task:c9d31859df8c7c30a34ee833",
+          "family": "VERSION_DRIFT",
+          "domainId": "domain:c9d31859df8c7c30",
+          "prompt": "Use only the version-2 rule for domain:c9d31859df8c7c30; version 1 is superseded.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-a34ee833ad0d5efb",
+            "evidenceIds": [
+              "evidence:a35829e7d829099b"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "8a97ae5281c4ebcc45f93200cd9d35e6ce21ca232de43048f41cf5e9f3457178"
+        },
+        {
+          "taskId": "cks03:task:7e11b20329de9101bc3269ad",
+          "family": "MISSING_KNOWLEDGE",
+          "domainId": "domain:7e11b20329de9101",
+          "prompt": "Answer the intentionally absent fact for domain:7e11b20329de9101.",
+          "expected": {
+            "state": "NEED_MORE_KNOWLEDGE",
+            "answer": null,
+            "evidenceIds": [],
+            "reasonCode": "KNOWLEDGE_MISSING_ABSTAIN"
+          },
+          "taskDigest": "68c45fbeddb01672fa99a977fdb2fbfa73b69239866a28e807c04b01adb8f20c"
+        },
+        {
+          "taskId": "cks03:task:5b31da25e8ccdc35ef8cf1b1",
+          "family": "CONFLICTING_SOURCES",
+          "domainId": "domain:5b31da25e8ccdc35",
+          "prompt": "Resolve the two materially conflicting sources for domain:5b31da25e8ccdc35.",
+          "expected": {
+            "state": "KNOWLEDGE_CONFLICT",
+            "answer": null,
+            "evidenceIds": [
+              "evidence:3e868888c9a00344",
+              "evidence:906cfd0665bd44ac"
+            ],
+            "reasonCode": "KNOWLEDGE_CONFLICT_ABSTAIN"
+          },
+          "taskDigest": "532eef65ecbb8bed98daa4203e4139780f8e32f5d92e7699ad3ab1019fa736e5"
+        },
+        {
+          "taskId": "cks03:task:e426c24fcf31519d279f20e2",
+          "family": "SINGLE_RULE",
+          "domainId": "domain:e426c24fcf31519d",
+          "prompt": "Apply the single evidence-bound rule for domain:e426c24fcf31519d.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-279f20e2adb0f40e",
+            "evidenceIds": [
+              "evidence:49fe676d6cdda183"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "1f3bb0f12ac8fe4967e9bd709f16c161b38d93c9e5ae6b3ad24788b36ed20e11"
+        },
+        {
+          "taskId": "cks03:task:7b7bf7d851421024db46c3fc",
+          "family": "PROCEDURE",
+          "domainId": "domain:7b7bf7d851421024",
+          "prompt": "Execute the ordered synthetic procedure for domain:7b7bf7d851421024 without effectful authority.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-db46c3fc7534849e",
+            "evidenceIds": [
+              "evidence:7926f0b0fcd9148a"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "6701622706e04b2330ae303277e600785845e710b06c56e2ce5157f1ce93c9c0"
+        },
+        {
+          "taskId": "cks03:task:e10e2734f15d9aa09d9dd1ce",
+          "family": "MULTI_HOP",
+          "domainId": "domain:e10e2734f15d9aa0",
+          "prompt": "Derive the final synthetic state across the evidence chain for domain:e10e2734f15d9aa0.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-9d9dd1ce583271ca",
+            "evidenceIds": [
+              "evidence:28cc5b5e09890fe1"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "52ee262bde3df5c2ce7c4cff6093f3d4cb3874e305af53ebc3e11b43d4cffe6b"
+        }
+      ],
+      "authority": {
+        "credentials": [],
+        "policyApprovals": [],
+        "capabilities": [],
+        "toolAccess": [],
+        "writeTargets": [],
+        "executionRoutes": []
+      },
+      "suiteDigest": "ecc5eecb7e9e432eaab0ee0bde267683a32c5625a658e74abcc2a2f0f961d2cb"
+    },
+    {
+      "schemaVersion": "pansphaira.cks/synthetic-qualification-suite/v1",
+      "lane": "VISIBLE_VALIDATION",
+      "seedDigest": "f64287e6e58a4636dc2bb47ba3f213061fd5f7ac0d125208fa7e02f432cea1e6",
+      "generatedAtMs": 1000,
+      "tasks": [
+        {
+          "taskId": "cks03:task:05f9b09f0988b95715074331",
+          "family": "RANDOM_IDENTIFIERS",
+          "domainId": "domain:05f9b09f0988b957",
+          "prompt": "Resolve the post-training identifier in domain:05f9b09f0988b957.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-1507433106ce25e6",
+            "evidenceIds": [
+              "evidence:c5afbe1a08f6c2a7"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "3ce4e903182004276bc04393f39a14d5c7826e36d56d44befb9fe59aab6d6c8c"
+        },
+        {
+          "taskId": "cks03:task:c4b93c32aea6d3d17258ae5b",
+          "family": "COUNTERFACTUAL_RULE",
+          "domainId": "domain:c4b93c32aea6d3d1",
+          "prompt": "Apply the domain-local rule in domain:c4b93c32aea6d3d1, even when it conflicts with common prior knowledge.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-7258ae5bc2cfaec4",
+            "evidenceIds": [
+              "evidence:3c3e22d4c5e04bef"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "d887df4a752a3a9a6e720076f9ebfbf5eed86b41ac365837ca93b965d0b32f12"
+        },
+        {
+          "taskId": "cks03:task:944a7b8ee701bb542c5a3735",
+          "family": "VERSION_DRIFT",
+          "domainId": "domain:944a7b8ee701bb54",
+          "prompt": "Use only the version-2 rule for domain:944a7b8ee701bb54; version 1 is superseded.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-2c5a373502ed5003",
+            "evidenceIds": [
+              "evidence:eb8f3c6d78edb4c5"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "612c82283f0a24d5c8868d3f397432844b26d7aadeda177b038a79ac8685ccff"
+        },
+        {
+          "taskId": "cks03:task:24385d8f22299c53861a7420",
+          "family": "MISSING_KNOWLEDGE",
+          "domainId": "domain:24385d8f22299c53",
+          "prompt": "Answer the intentionally absent fact for domain:24385d8f22299c53.",
+          "expected": {
+            "state": "NEED_MORE_KNOWLEDGE",
+            "answer": null,
+            "evidenceIds": [],
+            "reasonCode": "KNOWLEDGE_MISSING_ABSTAIN"
+          },
+          "taskDigest": "37581c7cbef40dc044329b936d5a21c6727000543d6c271df25e8f7835845d08"
+        },
+        {
+          "taskId": "cks03:task:6e90ceec697c43fa49bc7f8b",
+          "family": "CONFLICTING_SOURCES",
+          "domainId": "domain:6e90ceec697c43fa",
+          "prompt": "Resolve the two materially conflicting sources for domain:6e90ceec697c43fa.",
+          "expected": {
+            "state": "KNOWLEDGE_CONFLICT",
+            "answer": null,
+            "evidenceIds": [
+              "evidence:dba5f09b0a14bbd5",
+              "evidence:f3266943aac13e0d"
+            ],
+            "reasonCode": "KNOWLEDGE_CONFLICT_ABSTAIN"
+          },
+          "taskDigest": "8f8b776bd41e79ac1f69ca7e777b4ccf6b1f7a37dff1ebe86c8ca37e15db664c"
+        },
+        {
+          "taskId": "cks03:task:26d9b39403060bd770f2e6ab",
+          "family": "SINGLE_RULE",
+          "domainId": "domain:26d9b39403060bd7",
+          "prompt": "Apply the single evidence-bound rule for domain:26d9b39403060bd7.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-70f2e6ab39049e54",
+            "evidenceIds": [
+              "evidence:bf22026814f0f294"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "818cac1a25aa6eb224faaedb22dffa2f1c1e5e6721421eb10d04a9a8d42fb5a3"
+        },
+        {
+          "taskId": "cks03:task:1bafae19b3e2710347cb575e",
+          "family": "PROCEDURE",
+          "domainId": "domain:1bafae19b3e27103",
+          "prompt": "Execute the ordered synthetic procedure for domain:1bafae19b3e27103 without effectful authority.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-47cb575eddaa983d",
+            "evidenceIds": [
+              "evidence:149f7a11868f3a75"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "c0fec15d474dfea275c770da3ab5ccce4d8331f0ee91d525ac0b0e2e8b3b260f"
+        },
+        {
+          "taskId": "cks03:task:bbbec5f55fc739109da8aed2",
+          "family": "MULTI_HOP",
+          "domainId": "domain:bbbec5f55fc73910",
+          "prompt": "Derive the final synthetic state across the evidence chain for domain:bbbec5f55fc73910.",
+          "expected": {
+            "state": "ANSWER_SUPPORTED",
+            "answer": "answer-9da8aed262696b2b",
+            "evidenceIds": [
+              "evidence:ad9b10cd5d8ff356"
+            ],
+            "reasonCode": "SUPPORTED_BY_EXACT_EVIDENCE"
+          },
+          "taskDigest": "a4bd3a3024fa62075c1872bde503f507e3a859e36b6b5a6ad921f5ec646eff72"
+        }
+      ],
+      "authority": {
+        "credentials": [],
+        "policyApprovals": [],
+        "capabilities": [],
+        "toolAccess": [],
+        "writeTargets": [],
+        "executionRoutes": []
+      },
+      "suiteDigest": "1e925ddcf79d57a744387dd20a343b8f295ccb6632e84f0cbbd41597158f935a"
+    }
+  ]
+}
