@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "pansphaira/rks-01-model-runtime-manifest/v1",
+  "runtime": {
+    "profileId": "LLAMA_CPP_B10167_EE3D1B54_CUDA_SM120",
+    "serverPath": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/llama-server",
+    "serverSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+    "version": 10167,
+    "commit": "ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27",
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "driver": "580.173.02",
+    "computeCapability": "12.0",
+    "bundledLibraries": [
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama-cli-impl.so",
+        "sha256": "08e3dc0c883525b0c8891ef8b1987fe65ae916e318f351d9c9cb9161f0610109"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama-server-impl.so",
+        "sha256": "e7c6d9d4539280c5b76e52deb92bd6e2698b49673a16dd24dc1d5254de76c013"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama-common.so.0.0.10167",
+        "sha256": "97dfefee3c2038d103916740ded83580376bea8a085b67a070b8a87318f98115"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama.so.0.0.10167",
+        "sha256": "9cd7649f760c6544458de8f366953a14f1b8cfcb1426e69beaf3e7cf4460eedb"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml-base.so.0.17.0",
+        "sha256": "68d7b76c51815269cd569c4e0a35e5bc8de7b0e14556a21c434aa985f7e116c6"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libmtmd.so.0.0.10167",
+        "sha256": "7ff26d4daf074c4d05877f373482eb69e965244342d350136d5692605cd72536"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml.so.0.17.0",
+        "sha256": "9b3d9c13aa8fa9bce0f2a1b012db50c3d44fc3671b887c01560aa526be7ea8ed"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml-cpu.so.0.17.0",
+        "sha256": "2e1607597a73bcf3a0f69650d108e08ef3fff94035ab0ae02643d101005059e9"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml-cuda.so.0.17.0",
+        "sha256": "6787c0a01422f20b5fea9fe235d1fed5b5b407adcabec84bca89ff73e3b48d18"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/cuda-runtime-libs-12.9.1/libcudart.so.12",
+        "sha256": "256e6409e4f06f618e1fb53d4844a6b81cdded1013afa8ade40c22f99eb133b7"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/cuda-runtime-libs-12.9.1/libcublas.so.12",
+        "sha256": "d63456d94f1b8e2408a8a9538c8740eb474c9eba48a84f420b15e2e10fbcd048"
+      },
+      {
+        "path": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/cuda-runtime-libs-12.9.1/libcublasLt.so.12",
+        "sha256": "96ddf4891ca4f4ed1475966783a9185df2abd64a81c3cc713b96d036696fc541"
+      }
+    ],
+    "libraryPathRoots": [
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin",
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/cuda-runtime-libs-12.9.1"
+    ]
+  },
+  "models": [
+    {
+      "role": "SMALL_PRIMARY",
+      "profileId": "VIBETHINKER_3B_Q8_0",
+      "path": "/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf",
+      "sha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+      "byteSize": 3285476032
+    },
+    {
+      "role": "SMALL_REPLICATION_CANDIDATE",
+      "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+      "path": "/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf",
+      "sha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+      "byteSize": 4280403808
+    },
+    {
+      "role": "LARGE_REFERENCE",
+      "profileId": "QWEN3_8_27B_Q5_K_M",
+      "path": "/mnt/data2/ai/gguf-models/qwen3.8-27b-q5-application-pilot/Qwen3.8-27B-Q5_K_M.gguf",
+      "sha256": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177",
+      "byteSize": 19834055648
+    }
+  ],
+  "inference": {
+    "temperature": 0,
+    "seed": 104729,
+    "maxTokens": 192,
+    "ctxSize": 4096,
+    "batchSize": 512,
+    "ubatchSize": 256,
+    "threads": 8,
+    "gpuLayers": "all",
+    "flashAttention": "on",
+    "cacheTypeK": "f16",
+    "cacheTypeV": "f16",
+    "cachePrompt": false,
+    "cacheReuse": 0
+  }
+}
