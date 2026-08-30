@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "conveyor.decision-integration-receipt/v1",
+  "receiptId": "sol-psai288-release-or-no-release-01",
+  "taskId": "SOL-PSAI288-RELEASE-OR-NO-RELEASE-01",
+  "subject": "ISSUE_288_RELEASE_OR_NO_RELEASE",
+  "recordStatus": "COMPLETE",
+  "integrationStatus": "NO_RELEASE",
+  "claimBoundary": "LOCAL_ISSUE_SCOPED_RELEASE_DISPOSITION_ONLY_NO_TAG_NO_PACKAGE_PUBLICATION_NO_DEPLOYMENT_NO_GITHUB_OR_EXTERNAL_MUTATION_NO_TELEMETRY_NO_COLLECTION_NO_KNOWLEDGE_ACCEPTANCE_NO_SCORE_NO_PROMOTION_NO_PRODUCTION_AUTHORIZATION_NO_AUTHORITY",
+  "processContext": {
+    "operatingModel": {
+      "id": "Operating Model v1.1",
+      "disposition": "PRESERVED_NO_OVERRIDE"
+    },
+    "priorDecisions": [
+      { "id": "D-001", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-002", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-003", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-004", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-005", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-006", "disposition": "PRESERVED_NO_OVERRIDE" },
+      { "id": "D-007", "disposition": "PRESERVED_NO_OVERRIDE" }
+    ],
+    "processVariantCreated": false,
+    "rule": "This issue-scoped disposition preserves Operating Model v1.1 and D-001 through D-007 without override, reinterpretation or a new process variant."
+  },
+  "baseline": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "issueNumber": 288,
+    "branch": "conveyor/pansphaira-288",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headBeforeReceipt": "682bcfa499c422928531710fd265e253d3cbeabb",
+    "artifact": "docs/evidence/conveyor/sol-psai288-release-or-no-release-01.json",
+    "writablePathAllowlist": [
+      "docs/evidence/conveyor/sol-psai288-release-or-no-release-01.json"
+    ]
+  },
+  "sourceBindings": {
+    "usageLineageDecision": {
+      "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
+      "fileSha256": "0dfe67637d007f48f8779874e569e16097bae374641b8c4f296156a8d46465a8",
+      "declaredReceiptDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6",
+      "canonicalDigestVerified": true
+    },
+    "lineageReconciliation": {
+      "path": "docs/evidence/conveyor/terra-psai288-root-qs-01.json",
+      "fileSha256": "518ca8654eb8cc90d29fc0f315efb21bb5d1b7905ebea90bd3c960fba8f3d716",
+      "declaredReceiptDigest": "e4ce2d30a27ddfd5c9507ede48644089f9283ddfdb54ca90894b2dc5992c60d8",
+      "canonicalDigestVerified": true
+    },
+    "prCiPackage": {
+      "path": "docs/evidence/conveyor/int-psai288-pr-ci-package-01.json",
+      "fileSha256": "5c003f33458bc8a375a172893240a497db91617b05185e57b0fdb203fd1c7ea7",
+      "declaredReceiptDigest": "53a1f749dc73977912ee97b7de317ba51778654bc13ea24d65b9ba70fa3dfdac",
+      "canonicalDigestVerified": true
+    }
+  },
+  "localDisposition": {
+    "scope": "ISSUE_288_ONLY",
+    "disposition": "NO_RELEASE",
+    "rationale": "Issue #288 is a bounded synthetic Part-II proof package. It supplies deterministic local proof evidence only; it includes no deployment, telemetry, collection, promotion or production authorization, so it provides no release basis.",
+    "releaseAuthorized": false,
+    "productionAuthorized": false,
+    "laterMergeRule": "Any later merge is repository integration only; it is not a release and does not activate deployment, telemetry, collection, Knowledge acceptance, score, promotion, production use or Authority."
+  },
+  "publicReadback": {
+    "state": "WORDING_RECORDED_NOT_PUBLISHED",
+    "wording": "Issue #288 release disposition: NO_RELEASE. #288 is a bounded synthetic Part-II proof package only, with no deployment, telemetry, collection, promotion or production authorization. Any later merge is repository integration only; it is not a release and does not activate deployment, telemetry, collection, Knowledge acceptance, score, promotion, production use or Authority.",
+    "rationale": "A synthetic proof package without deployment or production authorization is evidence for bounded review, not a releasable or release-authorizing product change.",
+    "publicationAttempted": false,
+    "readbackExecuted": false,
+    "readbackSuccessClaimed": false
+  },
+  "nonActivation": {
+    "appliesToReceiptAndAnyLaterMerge": true,
+    "deployment": false,
+    "telemetry": false,
+    "collection": false,
+    "knowledgeAcceptance": false,
+    "score": false,
+    "promotion": false,
+    "productionUse": false,
+    "authority": false
+  },
+  "mutationBoundary": {
+    "tagCreated": false,
+    "packagePublished": false,
+    "deploymentPerformed": false,
+    "githubMutated": false,
+    "externalStateMutated": false,
+    "releaseGovernanceMutated": false,
+    "remoteMutationAttempted": false
+  },
+  "verification": {
+    "requiredDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "canonicalDigestRule": "SHA-256 over recursively key-sorted compact JSON after removing only the top-level receiptDigest field, with no trailing newline.",
+    "requiredEvidencePresent": true
+  },
+  "failClosed": {
+    "releaseOnMissingUnknownOrMismatchedEvidence": "NO_RELEASE",
+    "successClaimedWithoutRequiredEvidence": false,
+    "releaseAuthorized": false,
+    "successClaimRule": "Completion may be claimed only when this receipt exists as valid JSON, its canonical digest verifies and the required diff check passes; missing, unknown or mismatched evidence remains fail-closed."
+  },
+  "receiptDigest": "609154da1e06d5440218996ea1d986de7406a9b129e0d9732d9f267d44ee4c1a"
+}

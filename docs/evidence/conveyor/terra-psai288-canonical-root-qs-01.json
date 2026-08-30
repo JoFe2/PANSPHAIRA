@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "conveyor.canonical-root-receipt/v1",
+  "receiptId": "terra-psai288-canonical-root-qs-01",
+  "taskId": "CLOSURE-PSAI288-EVIDENCE-RECOVERY-01",
+  "recordStatus": "NOT_READY_FAIL_CLOSED",
+  "claimBoundary": "LOCAL_SYNTHETIC_OFFLINE_FIXTURE_RECONCILIATION_AND_LOCAL_RUNTIME_ATTEMPT_ONLY_NO_CI_NO_LIVE_TELEMETRY_NO_PRODUCTION_LINEAGE_NO_MODEL_BEHAVIOR_NO_PUBLIC_READBACK_NO_RELEASE_NO_MERGE_NO_ISSUE_CLOSE_NO_ACTIVATION_NO_AUTHORITY",
+  "processContext": {
+    "operatingModel": "Operating Model v1.1",
+    "priorDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "disposition": "PRESERVED_NO_OVERRIDE",
+    "processVariantCreated": false
+  },
+  "reviewBinding": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "publicMainRef": "origin/main",
+    "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "reviewedCandidateHead": "31bbe05cbb70bbf6534ce8e1b4da40f7bbb1616c",
+    "rebaseCommand": "git rebase origin/main",
+    "rebaseOutcome": "CURRENT_BRANCH_ALREADY_REBASED_ON_CURRENT_PUBLIC_MAIN",
+    "receiptCommitExcludedFromReviewedCandidate": true,
+    "reason": "This receipt is a post-review evidence artifact; its own commit cannot be part of the already-executed reviewed candidate without changing that candidate identifier."
+  },
+  "immutableReceiptBindings": [
+    {
+      "role": "PINNED_RUNTIME_ATTEMPT",
+      "path": "verification/cks-08-pinned-node-runtime-readback-v1.json",
+      "fileSha256": "b80f6d03b136d667a63ee5b6cb97135e56a07a0848bc31e5c3b3947f2b17c673",
+      "declaredDigest": "8b6eb4ecbbbeabba5c99b0491d95a6273282b81b794f341b4b19664bb2796890",
+      "canonicalDigestVerified": true
+    },
+    {
+      "role": "PART_II_USAGE_LINEAGE_DECISION",
+      "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
+      "fileSha256": "0dfe67637d007f48f8779874e569e16097bae374641b8c4f296156a8d46465a8",
+      "declaredDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6",
+      "canonicalDigestVerified": true
+    },
+    {
+      "role": "PR_CI_PACKAGE",
+      "path": "docs/evidence/conveyor/int-psai288-pr-ci-package-01.json",
+      "fileSha256": "5c003f33458bc8a375a172893240a497db91617b05185e57b0fdb203fd1c7ea7",
+      "declaredDigest": "53a1f749dc73977912ee97b7de317ba51778654bc13ea24d65b9ba70fa3dfdac",
+      "canonicalDigestVerified": true
+    },
+    {
+      "role": "NO_RELEASE_DISPOSITION",
+      "path": "docs/evidence/conveyor/sol-psai288-release-or-no-release-01.json",
+      "fileSha256": "a681a75d902e8f7f2a5b9804e60005a39ebf55e4dcfe14f2fcb3a2bce96a6be6",
+      "declaredDigest": "609154da1e06d5440218996ea1d986de7406a9b129e0d9732d9f267d44ee4c1a",
+      "canonicalDigestVerified": true
+    }
+  ],
+  "criterionMatrix": [
+    {
+      "criterion": "reviewed candidate is rebased onto current public main",
+      "evidenceKind": "EXECUTED_GIT_OPERATION",
+      "state": "PASS",
+      "binding": "353017c4f60e30463d0a78fd6fd2509a37d37f76..31bbe05cbb70bbf6534ce8e1b4da40f7bbb1616c"
+    },
+    {
+      "criterion": "cross-issue and stable Part-I identifier prerequisites have immutable terminal receipts",
+      "evidenceKind": "DEPENDENCY_RECEIPT",
+      "state": "NOT_READY",
+      "reasonCodes": ["MISSING_IMMUTABLE_CROSS_ISSUE_RECEIPT", "MISSING_IMMUTABLE_PART_I_ID_RECEIPT"]
+    },
+    {
+      "criterion": "P14 reconstructs all six Knowledge usage sets for each synthetic task",
+      "evidenceKind": "STATIC_FIXTURE_RECONCILIATION",
+      "state": "RECONCILED_NOT_EXECUTED_RUNTIME_PROOF",
+      "details": {"syntheticTaskCount": 2, "usageSets": ["searched", "inspected", "used", "rejected", "decisionSupporting", "outcomeContributing"], "partialUsageSetAccepted": false}
+    },
+    {
+      "criterion": "P15 prevents identical repetitions from inflating generalization evidence",
+      "evidenceKind": "STATIC_FIXTURE_RECONCILIATION",
+      "state": "RECONCILED_NOT_EXECUTED_RUNTIME_PROOF",
+      "details": {"occurrences": 8, "distinctTaskSemantics": 1, "distinctContexts": 1, "identicalRepetitions": 7, "generalizationMarker": null, "repetitionInflationPrevented": true}
+    },
+    {
+      "criterion": "P16 uses causal classes with explicit uncertainty and multi-cause handling",
+      "evidenceKind": "STATIC_FIXTURE_RECONCILIATION",
+      "state": "RECONCILED_NOT_EXECUTED_RUNTIME_PROOF",
+      "details": {"seededCaseCount": 17, "causalModes": ["ALTERNATIVES_UNRESOLVED", "MULTI_CONTRIBUTING", "SINGLE", "UNKNOWN"], "uncertaintyClasses": ["CONFIRMED", "POSSIBLE", "SUPPORTED", "UNKNOWN"]}
+    },
+    {
+      "criterion": "missing, late, replayed, cross-scope and tampered lineage deny without partial sets",
+      "evidenceKind": "STATIC_FIXTURE_RECONCILIATION",
+      "state": "RECONCILED_NOT_EXECUTED_RUNTIME_PROOF",
+      "details": {"denialModes": ["missing", "late", "replayed", "cross-scope", "tampered"], "allFivePresent": true, "partialUsageSetsEmitted": false}
+    },
+    {
+      "criterion": "six evidence-profile dimensions remain separate without scalar compensation",
+      "evidenceKind": "STATIC_FIXTURE_RECONCILIATION",
+      "state": "RECONCILED_NOT_EXECUTED_RUNTIME_PROOF",
+      "details": {"dimensions": ["source", "applicability", "freshness", "contradiction", "generalization", "operational"], "scalarCompensationCreated": false, "crossDimensionCompensationCreated": false}
+    },
+    {
+      "criterion": "required build executes on the pinned authoritative Node runtime",
+      "evidenceKind": "EXECUTED_RUNTIME_ATTEMPT",
+      "state": "NOT_READY",
+      "reasonCodes": ["RUNTIME_EXIT_133_SIGTRAP", "V8_OS_SET_PERMISSIONS_ERRNO_ASSERTION"]
+    },
+    {
+      "criterion": "full lineage contract and focused harness suite executes on the reviewed head",
+      "evidenceKind": "EXECUTED_RUNTIME_ATTEMPT",
+      "state": "NOT_READY",
+      "reasonCodes": ["RUNTIME_EXIT_133_SIGTRAP", "NO_TEST_PROGRAM_ENTRY"]
+    },
+    {
+      "criterion": "lineage dry-run completes with an exact-head runtime receipt",
+      "evidenceKind": "EXECUTED_RUNTIME_ATTEMPT",
+      "state": "NOT_READY",
+      "reasonCodes": ["RUNTIME_EXIT_133_SIGTRAP", "NO_HARNESS_PROGRAM_ENTRY"]
+    },
+    {
+      "criterion": "public readback is not claimed from a local dry-run",
+      "evidenceKind": "EXECUTED_RUNTIME_ATTEMPT",
+      "state": "NOT_READY_FAIL_CLOSED",
+      "reasonCodes": ["RUNTIME_EXIT_133_SIGTRAP", "PUBLIC_READBACK_NOT_EXECUTED"]
+    },
+    {
+      "criterion": "required whitespace diff check on reviewed head",
+      "evidenceKind": "EXECUTED_GIT_OPERATION",
+      "state": "PASS",
+      "details": {"command": "git diff --check main...HEAD", "exitCode": 0, "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    }
+  ],
+  "evidenceSeparation": {
+    "staticFixtureReconciliation": "The prior local synthetic evidence JSON, its generator-style digest, immutable source bytes, and fixture assertions reconcile the contract shape only.",
+    "executedRuntimeProof": "No Node build, test, dry-run, or validator program entered; all four attempts exited 133/SIGTRAP in V8 initialization. No runtime success is inferred from static reconciliation.",
+    "infrastructureClassification": "The local exit 133/SIGTRAP is recorded as infrastructure evidence, not a product verdict."
+  },
+  "failClosed": {
+    "verdict": "NOT_READY",
+    "zeroRemainingCriteria": false,
+    "remainingCriteria": [
+      "immutable #287 terminal receipt",
+      "immutable stable Part-I ID receipt",
+      "authoritative pinned-Node build",
+      "authoritative pinned-Node lineage contract and harness execution",
+      "authoritative pinned-Node lineage and prepublication dry-runs"
+    ],
+    "remainingCriterionCount": 5,
+    "releaseAuthorized": false,
+    "mergeAuthorized": false,
+    "issueCloseAuthorized": false,
+    "activationAuthorized": false,
+    "authorityGranted": false
+  },
+  "nonClaims": ["CI_SUCCESS", "LIVE_TELEMETRY", "PRODUCTION_LINEAGE", "MODEL_BEHAVIOR", "PUBLIC_READBACK", "RELEASE", "MERGE", "ISSUE_CLOSE", "ACTIVATION", "AUTHORITY", "BROAD_EMPIRICAL_GENERALIZATION"],
+  "receiptDigest": "a65c5946e65fc3c48729d642a24e8d802b464cf74237994413adf4ba5a153dcd"
+}

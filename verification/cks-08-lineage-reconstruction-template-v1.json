@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "cks-08-lineage-reconstruction-template/v1",
+  "contract": {
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "reconstructionSchema": "chimpmaera.knowledge/usage-lineage-reconstruction/v1",
+    "scopeClass": "LOCAL_SYNTHETIC_FIXTURE",
+    "entryPoint": "reconstructCksLineageUsageV1"
+  },
+  "fixtures": {
+    "positive": "tests/fixtures/cks-08/lineage-positive-v1.json",
+    "rejections": "tests/fixtures/cks-08/lineage-rejections-v1.json"
+  },
+  "acceptedOutput": {
+    "status": "RECONSTRUCTED",
+    "exactFields": [
+      "schemaVersion",
+      "status",
+      "scopeRef",
+      "taskRef",
+      "searched",
+      "inspected",
+      "used",
+      "rejected",
+      "decisionSupporting",
+      "outcomeContributing",
+      "decisionRef",
+      "outcomeRef",
+      "reconstructionDigest"
+    ],
+    "setInvariants": [
+      "inspected is a subset of searched",
+      "used and rejected are disjoint subsets of inspected",
+      "decisionSupporting is a subset of used",
+      "outcomeContributing is a subset of decisionSupporting"
+    ]
+  },
+  "deniedOutput": {
+    "status": "DENIED",
+    "exactFields": ["schemaVersion", "status", "reasonCodes"],
+    "reasonCodesUniqueSortedCappedAt": 8,
+    "noPartialUsageSets": true
+  },
+  "requiredNegativeCases": [
+    "missing",
+    "late",
+    "replayed",
+    "cross-scope",
+    "tampered"
+  ],
+  "verificationCommands": [
+    "npm run build --silent",
+    "node --test dist/tests/cks-lineage-reconstructor.test.js",
+    "git diff --check origin/main...HEAD"
+  ],
+  "noSubstitutionRule": "A fixture or template cannot supply a missing identifier, digest, parent, semantic rule, causal evidence or profile dimension."
+}

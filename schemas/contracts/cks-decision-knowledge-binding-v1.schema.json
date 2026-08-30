@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.dev/schemas/contracts/cks-decision-knowledge-binding-v1.schema.json",
+  "title": "CKS-08 decision knowledge binding v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "semanticRuleId", "scopeRef", "taskRef", "decisionId", "decisionClass", "supportingKnowledgeRefs", "decisionDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.knowledge/usage-lineage-decision/v1" },
+    "semanticRuleId": { "const": "chimpmaera.knowledge/usage-lineage-semantics/v1" },
+    "scopeRef": { "$ref": "#/$defs/scopeRef" },
+    "taskRef": { "$ref": "#/$defs/taskRef" },
+    "decisionId": { "type": "string", "pattern": "^decision:v1:[a-f0-9]{64}$" },
+    "decisionClass": { "enum": ["SELECTED", "REJECTED", "DEFERRED", "DENIED"] },
+    "supportingKnowledgeRefs": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "#/$defs/knowledgeRef" } },
+    "decisionDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "scopeRef": { "type": "object", "additionalProperties": false, "required": ["scopeId", "scopeDigest"], "properties": { "scopeId": { "type": "string", "pattern": "^scope:v1:[a-f0-9]{64}$" }, "scopeDigest": { "$ref": "#/$defs/digest" } } },
+    "taskRef": { "type": "object", "additionalProperties": false, "required": ["taskId", "taskDigest"], "properties": { "taskId": { "type": "string", "pattern": "^task:v1:[a-f0-9]{64}$" }, "taskDigest": { "$ref": "#/$defs/digest" } } },
+    "knowledgeRef": { "type": "object", "additionalProperties": false, "required": ["knowledgeId", "knowledgeDigest"], "properties": { "knowledgeId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" }, "knowledgeDigest": { "$ref": "#/$defs/digest" } } }
+  }
+}

@@ -1,0 +1,1714 @@
+{
+  "schemaVersion": "cks-08-lineage-rejections-v1",
+  "cases": [
+    {
+      "name": "missing",
+      "mutation": "removed inspected Knowledge parent and rechained",
+      "expectedReasonCodes": [
+        "PARENT_MISSING_DENIED"
+      ],
+      "events": [
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000010",
+          "eventType": "TASK_OPENED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1000,
+          "receivedAtMs": 1000,
+          "scopeSequence": 0,
+          "previousEventDigest": null,
+          "fact": {
+            "task": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-task/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskKind": "ACT",
+              "objectiveDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "applicabilityContextDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskSemanticDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            }
+          },
+          "factDigest": "ddce775f536cf124e25521ed96f82e1e4390c959ec132620c1b3234e3ca51c7f",
+          "eventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000011",
+          "eventType": "SEARCH_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1010,
+          "receivedAtMs": 1010,
+          "scopeSequence": 1,
+          "previousEventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65",
+          "fact": {
+            "search": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-search/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchIntentDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+              "resultKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                },
+                {
+                  "knowledgeId": "fixture:beta",
+                  "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                {
+                  "knowledgeId": "fixture:gamma",
+                  "knowledgeDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                }
+              ],
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            }
+          },
+          "factDigest": "c4eaff05443f1baa33c1b793e5f53bbb9055a093abf7b2292dab3d3201a49876",
+          "eventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000012",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1020,
+          "receivedAtMs": 1020,
+          "scopeSequence": 2,
+          "previousEventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            }
+          },
+          "factDigest": "8f4298ba02bbbb0a851578d371249354c99f5e4a725d683c12074db96d074d1a",
+          "eventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000015",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1050,
+          "receivedAtMs": 1050,
+          "scopeSequence": 3,
+          "previousEventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "disposition": "USED",
+            "reasonCode": "SELECTED_FOR_TASK"
+          },
+          "factDigest": "1801edf40e1ee69c2cfbe52090df2d0e807c63fe5377935eb1479b40c9178306",
+          "eventDigest": "7d3ea8dea7d541a13efcd0c2b75fb7323dad5d3c0a541f4d5144568d7643f7f2"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000016",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1060,
+          "receivedAtMs": 1060,
+          "scopeSequence": 4,
+          "previousEventDigest": "7d3ea8dea7d541a13efcd0c2b75fb7323dad5d3c0a541f4d5144568d7643f7f2",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "disposition": "REJECTED",
+            "reasonCode": "STALE"
+          },
+          "factDigest": "cf64d54b2d089a10935b7ab4f9ed2593ac6e83d2078d2332dae4f70c1dddd1e3",
+          "eventDigest": "e80106ac278364dcd3493d1ccadde24ebe7cf0732974bd10e2c186dc2aa04517"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000017",
+          "eventType": "DECISION_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1080,
+          "receivedAtMs": 1080,
+          "scopeSequence": 5,
+          "previousEventDigest": "e80106ac278364dcd3493d1ccadde24ebe7cf0732974bd10e2c186dc2aa04517",
+          "fact": {
+            "decision": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-decision/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "decisionClass": "SELECTED",
+              "supportingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+            }
+          },
+          "factDigest": "192eee5b4e88bf4684bdfe7e293425ce0a0f5848eeb8995b6c8730eba1ae6dcc",
+          "eventDigest": "55a3c53431a30701f0cf64dbdbb1b5c7137c43d58aaea3b2798c1e146c252c2c"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000018",
+          "eventType": "OUTCOME_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1090,
+          "receivedAtMs": 1090,
+          "scopeSequence": 6,
+          "previousEventDigest": "55a3c53431a30701f0cf64dbdbb1b5c7137c43d58aaea3b2798c1e146c252c2c",
+          "fact": {
+            "outcome": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-outcome/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionRef": {
+                "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+              },
+              "outcomeId": "outcome:v1:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "outcomeClass": "SUCCEEDED",
+              "contributingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "failureAttribution": {
+                "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+                "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+                "causalMode": "NOT_APPLICABLE",
+                "causes": [],
+                "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6"
+              },
+              "outcomeDigest": "b98a8e8aa4b31b41520003bf15a22750aff489ee0ae0c200a2652aa5e8f9692f"
+            }
+          },
+          "factDigest": "e09abb2c79662dae9c94f5efd9598a0ea57cab87bdd61dedbcbf8577162b0e3c",
+          "eventDigest": "148f04654b4f88976917b21349a01417dc0daad0ac669eb8f11bfa5ed01300f6"
+        }
+      ]
+    },
+    {
+      "name": "late",
+      "mutation": "received event exceeds inclusive late window",
+      "expectedReasonCodes": [
+        "LATE_EVENT_DENIED"
+      ],
+      "events": [
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000010",
+          "eventType": "TASK_OPENED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1000,
+          "receivedAtMs": 1000,
+          "scopeSequence": 0,
+          "previousEventDigest": null,
+          "fact": {
+            "task": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-task/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskKind": "ACT",
+              "objectiveDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "applicabilityContextDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskSemanticDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            }
+          },
+          "factDigest": "ddce775f536cf124e25521ed96f82e1e4390c959ec132620c1b3234e3ca51c7f",
+          "eventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000011",
+          "eventType": "SEARCH_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1010,
+          "receivedAtMs": 301011,
+          "scopeSequence": 1,
+          "previousEventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65",
+          "fact": {
+            "search": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-search/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchIntentDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+              "resultKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                },
+                {
+                  "knowledgeId": "fixture:beta",
+                  "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                {
+                  "knowledgeId": "fixture:gamma",
+                  "knowledgeDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                }
+              ],
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            }
+          },
+          "factDigest": "c4eaff05443f1baa33c1b793e5f53bbb9055a093abf7b2292dab3d3201a49876",
+          "eventDigest": "ab57bb5dbac95f970ea539176f33fc9465fee2edd1faa30a6f1006c22bdc7a62"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000012",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1020,
+          "receivedAtMs": 1020,
+          "scopeSequence": 2,
+          "previousEventDigest": "ab57bb5dbac95f970ea539176f33fc9465fee2edd1faa30a6f1006c22bdc7a62",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            }
+          },
+          "factDigest": "8f4298ba02bbbb0a851578d371249354c99f5e4a725d683c12074db96d074d1a",
+          "eventDigest": "3cb559d5b8bb08d473922e8e2f154f185bc904d4a97c50692daa2069ba84355c"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000013",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1030,
+          "receivedAtMs": 1030,
+          "scopeSequence": 3,
+          "previousEventDigest": "3cb559d5b8bb08d473922e8e2f154f185bc904d4a97c50692daa2069ba84355c",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          },
+          "factDigest": "f5e551bed7e0ccf99b92c17dd06bd81e03a7e24be68289ef2799eeacc7a61e74",
+          "eventDigest": "64a820c826866e8debf42c540618dcfd3b64439c7732d0fb785cd8e684d6d2a8"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000015",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1050,
+          "receivedAtMs": 1050,
+          "scopeSequence": 4,
+          "previousEventDigest": "64a820c826866e8debf42c540618dcfd3b64439c7732d0fb785cd8e684d6d2a8",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "disposition": "USED",
+            "reasonCode": "SELECTED_FOR_TASK"
+          },
+          "factDigest": "1801edf40e1ee69c2cfbe52090df2d0e807c63fe5377935eb1479b40c9178306",
+          "eventDigest": "d97db9dcfef5cf872d54882faa7012e6eb1a0ded1c3f66877ca33fcd12137530"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000016",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1060,
+          "receivedAtMs": 1060,
+          "scopeSequence": 5,
+          "previousEventDigest": "d97db9dcfef5cf872d54882faa7012e6eb1a0ded1c3f66877ca33fcd12137530",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "disposition": "REJECTED",
+            "reasonCode": "STALE"
+          },
+          "factDigest": "cf64d54b2d089a10935b7ab4f9ed2593ac6e83d2078d2332dae4f70c1dddd1e3",
+          "eventDigest": "86c438caef71bace914d89236639bfaf8be165a3e45d7ddfce84f5472de78b29"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000017",
+          "eventType": "DECISION_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1080,
+          "receivedAtMs": 1080,
+          "scopeSequence": 6,
+          "previousEventDigest": "86c438caef71bace914d89236639bfaf8be165a3e45d7ddfce84f5472de78b29",
+          "fact": {
+            "decision": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-decision/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "decisionClass": "SELECTED",
+              "supportingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+            }
+          },
+          "factDigest": "192eee5b4e88bf4684bdfe7e293425ce0a0f5848eeb8995b6c8730eba1ae6dcc",
+          "eventDigest": "50ee281950ccef5b24929b172d4dffeefac0743a78093c5be133a13a0fd9f5a0"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000018",
+          "eventType": "OUTCOME_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1090,
+          "receivedAtMs": 1090,
+          "scopeSequence": 7,
+          "previousEventDigest": "50ee281950ccef5b24929b172d4dffeefac0743a78093c5be133a13a0fd9f5a0",
+          "fact": {
+            "outcome": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-outcome/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionRef": {
+                "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+              },
+              "outcomeId": "outcome:v1:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "outcomeClass": "SUCCEEDED",
+              "contributingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "failureAttribution": {
+                "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+                "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+                "causalMode": "NOT_APPLICABLE",
+                "causes": [],
+                "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6"
+              },
+              "outcomeDigest": "b98a8e8aa4b31b41520003bf15a22750aff489ee0ae0c200a2652aa5e8f9692f"
+            }
+          },
+          "factDigest": "e09abb2c79662dae9c94f5efd9598a0ea57cab87bdd61dedbcbf8577162b0e3c",
+          "eventDigest": "af866b6f35b4b05267ac58f98a965efd5198cb7306dd3f4d71efe40ed025b63c"
+        }
+      ]
+    },
+    {
+      "name": "replayed",
+      "mutation": "repeated an accepted event",
+      "expectedReasonCodes": [
+        "REPLAY_DENIED"
+      ],
+      "events": [
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000010",
+          "eventType": "TASK_OPENED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1000,
+          "receivedAtMs": 1000,
+          "scopeSequence": 0,
+          "previousEventDigest": null,
+          "fact": {
+            "task": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-task/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskKind": "ACT",
+              "objectiveDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "applicabilityContextDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskSemanticDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            }
+          },
+          "factDigest": "ddce775f536cf124e25521ed96f82e1e4390c959ec132620c1b3234e3ca51c7f",
+          "eventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000011",
+          "eventType": "SEARCH_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1010,
+          "receivedAtMs": 1010,
+          "scopeSequence": 1,
+          "previousEventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65",
+          "fact": {
+            "search": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-search/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchIntentDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+              "resultKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                },
+                {
+                  "knowledgeId": "fixture:beta",
+                  "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                {
+                  "knowledgeId": "fixture:gamma",
+                  "knowledgeDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                }
+              ],
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            }
+          },
+          "factDigest": "c4eaff05443f1baa33c1b793e5f53bbb9055a093abf7b2292dab3d3201a49876",
+          "eventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000012",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1020,
+          "receivedAtMs": 1020,
+          "scopeSequence": 2,
+          "previousEventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            }
+          },
+          "factDigest": "8f4298ba02bbbb0a851578d371249354c99f5e4a725d683c12074db96d074d1a",
+          "eventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000013",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1030,
+          "receivedAtMs": 1030,
+          "scopeSequence": 3,
+          "previousEventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          },
+          "factDigest": "f5e551bed7e0ccf99b92c17dd06bd81e03a7e24be68289ef2799eeacc7a61e74",
+          "eventDigest": "3dbcaed9a33d0b8ea5a192f1e314fc9a93caadbc967612253d72259df14f76a9"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000015",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1050,
+          "receivedAtMs": 1050,
+          "scopeSequence": 4,
+          "previousEventDigest": "3dbcaed9a33d0b8ea5a192f1e314fc9a93caadbc967612253d72259df14f76a9",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "disposition": "USED",
+            "reasonCode": "SELECTED_FOR_TASK"
+          },
+          "factDigest": "1801edf40e1ee69c2cfbe52090df2d0e807c63fe5377935eb1479b40c9178306",
+          "eventDigest": "8e80616c6043882877bba54beab50c713d175362af226c792a4c65b10c155e03"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000016",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1060,
+          "receivedAtMs": 1060,
+          "scopeSequence": 5,
+          "previousEventDigest": "8e80616c6043882877bba54beab50c713d175362af226c792a4c65b10c155e03",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "disposition": "REJECTED",
+            "reasonCode": "STALE"
+          },
+          "factDigest": "cf64d54b2d089a10935b7ab4f9ed2593ac6e83d2078d2332dae4f70c1dddd1e3",
+          "eventDigest": "5049af8166676f6ed5715bf4f972c0afafd8973af95f281432774ecc026debdb"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000017",
+          "eventType": "DECISION_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1080,
+          "receivedAtMs": 1080,
+          "scopeSequence": 6,
+          "previousEventDigest": "5049af8166676f6ed5715bf4f972c0afafd8973af95f281432774ecc026debdb",
+          "fact": {
+            "decision": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-decision/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "decisionClass": "SELECTED",
+              "supportingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+            }
+          },
+          "factDigest": "192eee5b4e88bf4684bdfe7e293425ce0a0f5848eeb8995b6c8730eba1ae6dcc",
+          "eventDigest": "2494525ee0261fb94bb7a46f9bd50c930db9862effa75aa4a2f816e42df56e4e"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000018",
+          "eventType": "OUTCOME_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1090,
+          "receivedAtMs": 1090,
+          "scopeSequence": 7,
+          "previousEventDigest": "2494525ee0261fb94bb7a46f9bd50c930db9862effa75aa4a2f816e42df56e4e",
+          "fact": {
+            "outcome": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-outcome/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionRef": {
+                "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+              },
+              "outcomeId": "outcome:v1:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "outcomeClass": "SUCCEEDED",
+              "contributingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "failureAttribution": {
+                "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+                "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+                "causalMode": "NOT_APPLICABLE",
+                "causes": [],
+                "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6"
+              },
+              "outcomeDigest": "b98a8e8aa4b31b41520003bf15a22750aff489ee0ae0c200a2652aa5e8f9692f"
+            }
+          },
+          "factDigest": "e09abb2c79662dae9c94f5efd9598a0ea57cab87bdd61dedbcbf8577162b0e3c",
+          "eventDigest": "d5bd721a412373bc9be78c7db9188a2b6315825f83c76dbef0f00a05b1e24f7a"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000010",
+          "eventType": "TASK_OPENED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1000,
+          "receivedAtMs": 1000,
+          "scopeSequence": 8,
+          "previousEventDigest": "d5bd721a412373bc9be78c7db9188a2b6315825f83c76dbef0f00a05b1e24f7a",
+          "fact": {
+            "task": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-task/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskKind": "ACT",
+              "objectiveDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "applicabilityContextDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskSemanticDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            }
+          },
+          "factDigest": "ddce775f536cf124e25521ed96f82e1e4390c959ec132620c1b3234e3ca51c7f",
+          "eventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65"
+        }
+      ]
+    },
+    {
+      "name": "cross-scope",
+      "mutation": "changed terminal Outcome scope binding",
+      "expectedReasonCodes": [
+        "SCOPE_MISMATCH_DENIED"
+      ],
+      "events": [
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000010",
+          "eventType": "TASK_OPENED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1000,
+          "receivedAtMs": 1000,
+          "scopeSequence": 0,
+          "previousEventDigest": null,
+          "fact": {
+            "task": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-task/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskKind": "ACT",
+              "objectiveDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "applicabilityContextDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskSemanticDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            }
+          },
+          "factDigest": "ddce775f536cf124e25521ed96f82e1e4390c959ec132620c1b3234e3ca51c7f",
+          "eventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000011",
+          "eventType": "SEARCH_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1010,
+          "receivedAtMs": 1010,
+          "scopeSequence": 1,
+          "previousEventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65",
+          "fact": {
+            "search": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-search/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchIntentDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+              "resultKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                },
+                {
+                  "knowledgeId": "fixture:beta",
+                  "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                {
+                  "knowledgeId": "fixture:gamma",
+                  "knowledgeDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                }
+              ],
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            }
+          },
+          "factDigest": "c4eaff05443f1baa33c1b793e5f53bbb9055a093abf7b2292dab3d3201a49876",
+          "eventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000012",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1020,
+          "receivedAtMs": 1020,
+          "scopeSequence": 2,
+          "previousEventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            }
+          },
+          "factDigest": "8f4298ba02bbbb0a851578d371249354c99f5e4a725d683c12074db96d074d1a",
+          "eventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000013",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1030,
+          "receivedAtMs": 1030,
+          "scopeSequence": 3,
+          "previousEventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          },
+          "factDigest": "f5e551bed7e0ccf99b92c17dd06bd81e03a7e24be68289ef2799eeacc7a61e74",
+          "eventDigest": "3dbcaed9a33d0b8ea5a192f1e314fc9a93caadbc967612253d72259df14f76a9"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000015",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1050,
+          "receivedAtMs": 1050,
+          "scopeSequence": 4,
+          "previousEventDigest": "3dbcaed9a33d0b8ea5a192f1e314fc9a93caadbc967612253d72259df14f76a9",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "disposition": "USED",
+            "reasonCode": "SELECTED_FOR_TASK"
+          },
+          "factDigest": "1801edf40e1ee69c2cfbe52090df2d0e807c63fe5377935eb1479b40c9178306",
+          "eventDigest": "8e80616c6043882877bba54beab50c713d175362af226c792a4c65b10c155e03"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000016",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1060,
+          "receivedAtMs": 1060,
+          "scopeSequence": 5,
+          "previousEventDigest": "8e80616c6043882877bba54beab50c713d175362af226c792a4c65b10c155e03",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "disposition": "REJECTED",
+            "reasonCode": "STALE"
+          },
+          "factDigest": "cf64d54b2d089a10935b7ab4f9ed2593ac6e83d2078d2332dae4f70c1dddd1e3",
+          "eventDigest": "5049af8166676f6ed5715bf4f972c0afafd8973af95f281432774ecc026debdb"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000017",
+          "eventType": "DECISION_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1080,
+          "receivedAtMs": 1080,
+          "scopeSequence": 6,
+          "previousEventDigest": "5049af8166676f6ed5715bf4f972c0afafd8973af95f281432774ecc026debdb",
+          "fact": {
+            "decision": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-decision/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "decisionClass": "SELECTED",
+              "supportingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+            }
+          },
+          "factDigest": "192eee5b4e88bf4684bdfe7e293425ce0a0f5848eeb8995b6c8730eba1ae6dcc",
+          "eventDigest": "2494525ee0261fb94bb7a46f9bd50c930db9862effa75aa4a2f816e42df56e4e"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000018",
+          "eventType": "OUTCOME_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "scopeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1090,
+          "receivedAtMs": 1090,
+          "scopeSequence": 7,
+          "previousEventDigest": "2494525ee0261fb94bb7a46f9bd50c930db9862effa75aa4a2f816e42df56e4e",
+          "fact": {
+            "outcome": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-outcome/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "scopeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionRef": {
+                "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+              },
+              "outcomeId": "outcome:v1:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "outcomeClass": "SUCCEEDED",
+              "contributingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "failureAttribution": {
+                "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+                "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+                "causalMode": "NOT_APPLICABLE",
+                "causes": [],
+                "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6"
+              },
+              "outcomeDigest": "3ae214228129bc6e12b8168f737ae4feea95555eaf44c0595d0ea55700efb464"
+            }
+          },
+          "factDigest": "c4d4c01f96938ea972703b7aff9fdc4b5a34cf437bd2cf840ead4b3bee254ea0",
+          "eventDigest": "d62f5f40597477d43d5a7d710a30ad56fb1ccf4483a7757e66fe7172087f0e69"
+        }
+      ]
+    },
+    {
+      "name": "tampered",
+      "mutation": "changed Knowledge bytes and rebound only the local event",
+      "expectedReasonCodes": [
+        "PREVIOUS_DIGEST_MISMATCH_DENIED"
+      ],
+      "events": [
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000010",
+          "eventType": "TASK_OPENED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1000,
+          "receivedAtMs": 1000,
+          "scopeSequence": 0,
+          "previousEventDigest": null,
+          "fact": {
+            "task": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-task/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskKind": "ACT",
+              "objectiveDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "applicabilityContextDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskSemanticDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            }
+          },
+          "factDigest": "ddce775f536cf124e25521ed96f82e1e4390c959ec132620c1b3234e3ca51c7f",
+          "eventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000011",
+          "eventType": "SEARCH_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1010,
+          "receivedAtMs": 1010,
+          "scopeSequence": 1,
+          "previousEventDigest": "4a0485018b1319cff8ac895834f7b9200a980830d2c21cd710167f7e3bf3be65",
+          "fact": {
+            "search": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-search/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchIntentDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+              "resultKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                },
+                {
+                  "knowledgeId": "fixture:beta",
+                  "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                {
+                  "knowledgeId": "fixture:gamma",
+                  "knowledgeDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                }
+              ],
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            }
+          },
+          "factDigest": "c4eaff05443f1baa33c1b793e5f53bbb9055a093abf7b2292dab3d3201a49876",
+          "eventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000012",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1020,
+          "receivedAtMs": 1020,
+          "scopeSequence": 2,
+          "previousEventDigest": "9ee18e2d4316fe2c7bab96344b29e6e99e684fc7cbf7e92d24f15f7c40426f8a",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            }
+          },
+          "factDigest": "8f4298ba02bbbb0a851578d371249354c99f5e4a725d683c12074db96d074d1a",
+          "eventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000013",
+          "eventType": "KNOWLEDGE_INSPECTED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1030,
+          "receivedAtMs": 1030,
+          "scopeSequence": 3,
+          "previousEventDigest": "96d46ab966cdd986738515edb8e354060009a78fbdb153322606733970a1a799",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "searchRef": {
+              "searchId": "search:v1:9999999999999999999999999999999999999999999999999999999999999999",
+              "searchDigest": "df8a57f856f6ad7a402c0010086766def7bc1f5f2662099fdcb660459e16d9e0"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+            }
+          },
+          "factDigest": "d1c1c576063d292c09d608cae1fa1e6643f0b88748bd7b5c645a0a739cf9a7df",
+          "eventDigest": "5f5cec31f17b6df9e2a22ea4dfb33b75ee8ff6551363f06123c1b5b2ab3c09b0"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000015",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1050,
+          "receivedAtMs": 1050,
+          "scopeSequence": 4,
+          "previousEventDigest": "3dbcaed9a33d0b8ea5a192f1e314fc9a93caadbc967612253d72259df14f76a9",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:alpha",
+              "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "disposition": "USED",
+            "reasonCode": "SELECTED_FOR_TASK"
+          },
+          "factDigest": "1801edf40e1ee69c2cfbe52090df2d0e807c63fe5377935eb1479b40c9178306",
+          "eventDigest": "8e80616c6043882877bba54beab50c713d175362af226c792a4c65b10c155e03"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000016",
+          "eventType": "KNOWLEDGE_DISPOSITIONED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1060,
+          "receivedAtMs": 1060,
+          "scopeSequence": 5,
+          "previousEventDigest": "8e80616c6043882877bba54beab50c713d175362af226c792a4c65b10c155e03",
+          "fact": {
+            "scopeRef": {
+              "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "taskRef": {
+              "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+            },
+            "knowledgeRef": {
+              "knowledgeId": "fixture:beta",
+              "knowledgeDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "disposition": "REJECTED",
+            "reasonCode": "STALE"
+          },
+          "factDigest": "cf64d54b2d089a10935b7ab4f9ed2593ac6e83d2078d2332dae4f70c1dddd1e3",
+          "eventDigest": "5049af8166676f6ed5715bf4f972c0afafd8973af95f281432774ecc026debdb"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000017",
+          "eventType": "DECISION_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1080,
+          "receivedAtMs": 1080,
+          "scopeSequence": 6,
+          "previousEventDigest": "5049af8166676f6ed5715bf4f972c0afafd8973af95f281432774ecc026debdb",
+          "fact": {
+            "decision": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-decision/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "decisionClass": "SELECTED",
+              "supportingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+            }
+          },
+          "factDigest": "192eee5b4e88bf4684bdfe7e293425ce0a0f5848eeb8995b6c8730eba1ae6dcc",
+          "eventDigest": "2494525ee0261fb94bb7a46f9bd50c930db9862effa75aa4a2f816e42df56e4e"
+        },
+        {
+          "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+          "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+          "eventId": "lineage-event:v1:0000000000000000000000000000000000000000000000000000000000000018",
+          "eventType": "OUTCOME_RECORDED",
+          "scopeRef": {
+            "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "taskRef": {
+            "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+          },
+          "occurredAtMs": 1090,
+          "receivedAtMs": 1090,
+          "scopeSequence": 7,
+          "previousEventDigest": "2494525ee0261fb94bb7a46f9bd50c930db9862effa75aa4a2f816e42df56e4e",
+          "fact": {
+            "outcome": {
+              "schemaVersion": "chimpmaera.knowledge/usage-lineage-outcome/v1",
+              "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+              "scopeRef": {
+                "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "taskRef": {
+                "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "taskDigest": "761ab1ac63dfa4f905b8eceb9c01a38a7fe634509f748fb33a1e4702e1e673fb"
+              },
+              "decisionRef": {
+                "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "decisionDigest": "37eebc4969cdc1875d818ecceaf2d4707eae2a946ef37b3ea5e663e8f750211c"
+              },
+              "outcomeId": "outcome:v1:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "outcomeClass": "SUCCEEDED",
+              "contributingKnowledgeRefs": [
+                {
+                  "knowledgeId": "fixture:alpha",
+                  "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                }
+              ],
+              "failureAttribution": {
+                "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1",
+                "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+                "causalMode": "NOT_APPLICABLE",
+                "causes": [],
+                "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6"
+              },
+              "outcomeDigest": "b98a8e8aa4b31b41520003bf15a22750aff489ee0ae0c200a2652aa5e8f9692f"
+            }
+          },
+          "factDigest": "e09abb2c79662dae9c94f5efd9598a0ea57cab87bdd61dedbcbf8577162b0e3c",
+          "eventDigest": "d5bd721a412373bc9be78c7db9188a2b6315825f83c76dbef0f00a05b1e24f7a"
+        }
+      ]
+    }
+  ]
+}

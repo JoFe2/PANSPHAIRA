@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 25,
+  "graphVersion": 26,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "7ce8cfe1e6085542ed2f1a7573f6c459566b61ef4ea80fb68c13a91891b84105"
+          "sha256": "377612bc1f46bdc3bf9609a194bf30dcd7c211e3269988ccfc365a8a5134ce59"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "802d5cbe8aa5531d1e27c746af806ee041452a9480c9811ad6c4052d1d8e8682"
+          "sha256": "3f378bb4b4c40f163bd8f35dbdec35d25c34bdb1f48c581a1c723b2003686b9e"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "b29350ef7e3e478c19fe6261dffe6acb9d3806e1113b3781fc0a0c766a637290"
+          "sha256": "01790c309d1d533f41ffa954e6aaa2032b2379339b038f8ba49ab736224b7141"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "16e3f42ac02b9602fab0951e8fbd00d43f4e215ad7df8fbfbc28bbc79857f924"
+          "sha256": "5cd1b3f5a99c1a5dae7b6c1d2d910606f09d201b9ad2932eec4a5044b32d0bc4"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "2bdd4c2e79f7e9f26bcac2714c3f73807d0548def7a22610557d436745b36686"
+          "sha256": "309bf7ff54afcf8707ef87fce30179ba8bca40e05d0ea5cbd83777c62808aff5"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "ab9b2414ea7c693519555df84d1fe9d07686741397ba81242e9940bc0d603f51"
+          "sha256": "976529d7ec747a0d76348b807efa7416bfdbf72c2deaa4449d8b1fb5a7a17354"
         }
       ],
       "ownedTests": [
@@ -3207,6 +3207,250 @@
         "P12 exhausts A0 primary, A1 alternate query on the same retriever and A2 alternate retriever before declaring a Knowledge gap; acquisition never promotes candidates.",
         "P13 compares the combined sufficiency process and simple solver on identical requirement, candidate and A0 receipt bytes.",
         "No model, Internet source or candidate grants accepted Knowledge, capability or authority automatically."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-08-usage-lineage-attribution-v1",
+      "dependsOn": [
+        "cks-07-empty-kb-sufficiency-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/development/cks-08-lineage-proof.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "258280c314de4889ad8e4442382804f750b827d3aa2982d7b957be21baf9fe38"
+        },
+        {
+          "path": "docs/development/cks-08-public-readback.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "5f56787f95ac99c9d5a50d73dbb099cbf88d3c38bffc4ce5c66a29759ee70196"
+        },
+        {
+          "path": "docs/evidence/conveyor/int-psai288-pr-ci-package-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "5c003f33458bc8a375a172893240a497db91617b05185e57b0fdb203fd1c7ea7"
+        },
+        {
+          "path": "docs/evidence/conveyor/sol-psai288-release-or-no-release-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a681a75d902e8f7f2a5b9804e60005a39ebf55e4dcfe14f2fcb3a2bce96a6be6"
+        },
+        {
+          "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "401b142ecaeb32b5a1ce39bc36f527354bde9cc6b8f458a53047612cf030e638"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai288-canonical-root-qs-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "903a4d4c0b55ffb34e21d0094c8faaaff77f12b337b014d069b927067749eebf"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai288-root-qs-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "faec57077cf73d425520b7585a5d0393422f05dca2119f89770ab09fefa319ee"
+        },
+        {
+          "path": "packages/contracts/src/cks-evidence-profile-features.ts",
+          "role": "CONTRACT",
+          "sha256": "89c1298d59cc7a379d3ecea941013f1466234299e651a1aa8ffccbc1a9e14f7f"
+        },
+        {
+          "path": "packages/contracts/src/cks-failure-attribution-evaluator.ts",
+          "role": "CONTRACT",
+          "sha256": "dfbfc8037b6698b807487c5b6294fde8fd18318ee2655aa76c25b17a05b2c541"
+        },
+        {
+          "path": "packages/contracts/src/cks-knowledge-lineage.ts",
+          "role": "CONTRACT",
+          "sha256": "e61ba53e361e4dca77cdb3266f91d498492e31f911ffcf50dfd9f8dd9a96b6a6"
+        },
+        {
+          "path": "packages/contracts/src/cks-lineage-reconstructor.ts",
+          "role": "CONTRACT",
+          "sha256": "e6888f7e1d126855f8ab28debb133b24937b18e7aadc88847522de5bd222ca67"
+        },
+        {
+          "path": "schemas/contracts/cks-decision-knowledge-binding-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "d9b0359ac3582bceb56abc803376aa70df3e61b59a6f75eeeae466fb4b87a18e"
+        },
+        {
+          "path": "schemas/contracts/cks-failure-attribution-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "944297bb7b35bd40773027c6f9618a0c6ac9f6929bd5901949a0e96221851795"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-evidence-profile-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "7371adcefc9550bc4af031ba33dd74aa0f8e5d1ea367218fc8afc5f0be1ebbe3"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-usage-event-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "8629a599928404c2fb1d9a4a34884043358d038fdc0bb6d97070014b8385cdd1"
+        },
+        {
+          "path": "schemas/contracts/cks-lineage-feature-report-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "ec7462c1c91b875a75dd911246b910aafd27ed96607e5c6f634389b49707aa76"
+        },
+        {
+          "path": "schemas/contracts/cks-synthetic-lineage-case-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "42cbee605787c91dd3f9315d04aae8cf03836ea56b513027e651e5585f08556d"
+        },
+        {
+          "path": "schemas/contracts/cks-task-outcome-evidence-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "d0c80f9038b4418454bcadd07f100bc28f96f31c0187c607beac1f3474a9a15b"
+        },
+        {
+          "path": "scripts/cks-08-score-synthetic-lineage.mjs",
+          "role": "VALIDATOR",
+          "sha256": "e153ffaae6853781b2bd244f3158613ffc6c71d4716b6a8077de0f8559c1c273"
+        },
+        {
+          "path": "scripts/cks-08-validate-public-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "a6a6fd01f19bbf5cc45ec6aaa55dd1b4967c6b26617008dce60490fe8e5f815a"
+        },
+        {
+          "path": "scripts/run-cks-08-lineage-dry-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1df1c3d520fc0b4067f9cbb228e40e935544366da2cec3268fc3814c945c8559"
+        },
+        {
+          "path": "tests/cks-08-lineage-dry-run.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "b4e9b4a1dac95b30c54df385a22f73dda319fbb6ca8d8bd4debed235b08de6b0"
+        },
+        {
+          "path": "tests/cks-08-public-readback.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6a8f049cce939927dd6936d47c7322ec5fd97afdd8380da062aee921c3e767a7"
+        },
+        {
+          "path": "tests/cks-08-synthetic-lineage-fixtures.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "15c51bdf7a54ad88ded39dbfab98c578022bd6061ef7c479d4e2ab1a1410866c"
+        },
+        {
+          "path": "tests/cks-evidence-profile-features.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "b962b1f2440060f29d550fe174d020512bfa1abf7bc19e2e394ad13c0943d7f3"
+        },
+        {
+          "path": "tests/cks-failure-attribution-evaluator.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "37581a49fea65a6555167c1580f76eeba63bd1423620e860ae3b17d001f0a204"
+        },
+        {
+          "path": "tests/cks-knowledge-lineage-contracts.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "b05d13c51caf72fabbc0ae3f9a12fe37cc035d0e0b69a504417dd8f0445355c9"
+        },
+        {
+          "path": "tests/cks-lineage-reconstructor.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "7f1592f154c73edbb033aec56862b0208ac561e04acaee868325bd8448eac1f5"
+        },
+        {
+          "path": "tests/fixtures/cks-08/contracts-invalid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "0c340fbfccdde14a50e15692afcd4957a9cd5018d75c916be61e5a8db2041d0d"
+        },
+        {
+          "path": "tests/fixtures/cks-08/contracts-valid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "80dcc5d994ca1830ec1bdd3dc15567c4ab0d3ad88a753c5e6448d8006d2a890f"
+        },
+        {
+          "path": "tests/fixtures/cks-08/e2e-positive-evidence-v1.json",
+          "role": "FIXTURE",
+          "sha256": "4d59e1d02f75779259d6a88955be2d475c0823a54c72523c381c46a941509b69"
+        },
+        {
+          "path": "tests/fixtures/cks-08/e2e-rejections-v1.json",
+          "role": "FIXTURE",
+          "sha256": "4009cb606163dbf76103de3d253b52e01d8d83684e03cfb738ed9c1bed7758dc"
+        },
+        {
+          "path": "tests/fixtures/cks-08/failure-attribution-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "82ce56f97dd2683cd2a19b190dc84308892bde8b9dd2481f56c4d61daee58d6c"
+        },
+        {
+          "path": "tests/fixtures/cks-08/lineage-positive-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9e1b5a321a4c737f1c95bbab8231db3ba45839e47164e7853f1c71e8a5f258d8"
+        },
+        {
+          "path": "tests/fixtures/cks-08/lineage-rejections-v1.json",
+          "role": "FIXTURE",
+          "sha256": "314ed5a5602e3350dcec91ec71cf3b94768a4b6c5b317dc0e4d1247da710d2a4"
+        },
+        {
+          "path": "tests/fixtures/cks-08/profile-diversity-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "fe5e2e70ec2d520740c853e321d78b9b67c7f870f890223540760dc4e78277e6"
+        },
+        {
+          "path": "tests/fixtures/cks-08/synthetic-lineage-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "85d530d677dabbc748f007c3ccdcd1c11ba9cd414131442a85195db263ac5b50"
+        },
+        {
+          "path": "tests/fixtures/cks-08/synthetic-lineage-ground-truth-v1.json",
+          "role": "FIXTURE",
+          "sha256": "fa4c13ea7e298fc6ee0c3b1bf5450b31effa7de739821e6302a7a2ccb8c11557"
+        },
+        {
+          "path": "verification/cks-08-failure-attribution-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "518c4416ce4de6a4ec952c6f0d9dcbf904e5b868be99efae7e55a923bd75fdf2"
+        },
+        {
+          "path": "verification/cks-08-lineage-dry-run-evidence-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "95dcdde468edc672ef5dfb7fb36a1762d2368d77e024f25095754138a0f26b1c"
+        },
+        {
+          "path": "verification/cks-08-lineage-reconstruction-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a5a66000d3d4a0414b78a8bb10cb94cb3c62c09c543620076e5610cfa20821dd"
+        },
+        {
+          "path": "verification/cks-08-pinned-node-runtime-readback-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b80f6d03b136d667a63ee5b6cb97135e56a07a0848bc31e5c3b3947f2b17c673"
+        },
+        {
+          "path": "verification/cks-08-profile-diversity-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3f94e0071bfc6017fad1973c227be8055ab47d91d081609b38db66190de9da8c"
+        },
+        {
+          "path": "verification/cks-08-public-readback-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b955d1afd282b8db34ec317b18b90d573b75d8e32d01d31e1ff3e3f36a4a87a9"
+        },
+        {
+          "path": "verification/cks-08-synthetic-lineage-metrics-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f9caa67e643d1ebfe1011b9c62295dcd4b1260e13e8d19ab814f49e3bdd3b8d5"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks08:test"
+      ],
+      "invariants": [
+        "P14 reconstructs searched, inspected, used, rejected, decision-supporting and outcome-contributing Knowledge without inference.",
+        "P15 keeps operational repetition and cross-context generalization separate and retains UNKNOWN outcomes outside operational eligibility.",
+        "P16 requires class- and subtype-bound direct receipts for causal attribution while preserving uncertainty and multi-cause outcomes.",
+        "Lineage stores minimized IDs, digests and classes only; no raw reasoning, customer payload or authority is introduced."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

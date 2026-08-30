@@ -1,0 +1,50 @@
+{
+  "knowledgeUsageEvent": {
+    "schemaVersion": "chimpmaera.knowledge/usage-lineage-event/v1",
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "eventId": "lineage-event:v1:000000000000000000000000000000000000000000000000000000000000000a",
+    "eventType": "TASK_OPENED",
+    "scopeRef": { "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "taskRef": { "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "taskDigest": "7a8aa10026b5c92fef7e4b934800c6cbbce5cd399b84e9da15e49661ddd84162" },
+    "occurredAtMs": 1000, "receivedAtMs": 1000, "scopeSequence": 0, "previousEventDigest": null,
+    "fact": { "task": {
+      "schemaVersion": "chimpmaera.knowledge/usage-lineage-task/v1", "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+      "scopeRef": { "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+      "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "taskKind": "ACT",
+      "objectiveDigest": "1111111111111111111111111111111111111111111111111111111111111111", "applicabilityContextDigest": "2222222222222222222222222222222222222222222222222222222222222222", "taskSemanticDigest": "3333333333333333333333333333333333333333333333333333333333333333", "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444", "taskDigest": "7a8aa10026b5c92fef7e4b934800c6cbbce5cd399b84e9da15e49661ddd84162"
+    } },
+    "factDigest": "937b20b6de54cd9c43b76d246991d18b0acf8af59b316f3eafdaaa28a8e8874f", "eventDigest": "2077426a593b00eeae48a18753225fd47173d96f7069153f7a07a5c892bfd614"
+  },
+  "decisionKnowledgeBinding": {
+    "schemaVersion": "chimpmaera.knowledge/usage-lineage-decision/v1", "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "scopeRef": { "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "taskRef": { "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "taskDigest": "7a8aa10026b5c92fef7e4b934800c6cbbce5cd399b84e9da15e49661ddd84162" },
+    "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "decisionClass": "SELECTED", "supportingKnowledgeRefs": [], "decisionDigest": "a6f924ab235745d4044ec01af29eca26fcca0d4c4e2b50ef22d03c6ab6f1eedc"
+  },
+  "taskOutcomeEvidence": {
+    "schemaVersion": "chimpmaera.knowledge/usage-lineage-outcome/v1", "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "scopeRef": { "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "taskRef": { "taskId": "task:v1:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "taskDigest": "7a8aa10026b5c92fef7e4b934800c6cbbce5cd399b84e9da15e49661ddd84162" },
+    "decisionRef": { "decisionId": "decision:v1:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "decisionDigest": "a6f924ab235745d4044ec01af29eca26fcca0d4c4e2b50ef22d03c6ab6f1eedc" },
+    "outcomeId": "outcome:v1:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "outcomeClass": "SUCCEEDED", "contributingKnowledgeRefs": [],
+    "failureAttribution": { "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1", "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1", "causalMode": "NOT_APPLICABLE", "causes": [], "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6" },
+    "outcomeDigest": "2cf0c1d95155ca133630a32caef097f3b591c2896d947154814f65bd300a52f4"
+  },
+  "failureAttribution": {
+    "schemaVersion": "chimpmaera.knowledge/failure-attribution/v1", "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1", "causalMode": "NOT_APPLICABLE", "causes": [], "failureAttributionDigest": "3f82a77a68905eac42cc4a66af85dba51c2c32b4797bc84c0957c0d538766fc6"
+  },
+  "knowledgeEvidenceProfile": {
+    "schemaVersion": "chimpmaera.knowledge/evidence-profile/v1", "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+    "scopeRef": { "scopeId": "scope:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "knowledgeRef": { "knowledgeId": "fixture:alpha", "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" },
+    "dimensions": {
+      "source": { "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "attributionSetDigest": "6666666666666666666666666666666666666666666666666666666666666666", "epistemicStatus": "SUPPORTED", "trust": "MEDIUM" },
+      "applicability": { "applicabilityScopeDigest": "7777777777777777777777777777777777777777777777777777777777777777", "contextFingerprintDigest": "4444444444444444444444444444444444444444444444444444444444444444", "matchState": "MATCH" },
+      "freshness": { "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "evaluatedAtMs": 1010, "freshnessState": "FRESH" },
+      "contradiction": { "knowledgeDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "conflictSetDigest": "8888888888888888888888888888888888888888888888888888888888888888", "contradictionState": "NONE_DECLARED" },
+      "generalization": { "validTaskOccurrenceCount": 0, "distinctTaskSemanticCount": 0, "distinctContextCount": 0, "distinctJointUsageUnitCount": 0, "identicalRepetitionCount": 0, "marker": null },
+      "operational": { "eligibleOutcomeOccurrenceCount": 0, "distinctOperationalUnitCount": 0, "distinctOutcomeUnitsByClass": { "SUCCEEDED": 0, "FAILED": 0, "PARTIAL": 0, "DENIED": 0 }, "uncertainOutcomeOccurrenceCount": 0, "failureCauseObservations": [], "marker": null }
+    },
+    "profileDigest": "5bec8a6ae974a3ff560654aaf8f0f4587e7cfaafe6869ffb15f21a50c2445e23"
+  }
+}

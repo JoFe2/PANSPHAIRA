@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "conveyor.cks-08-pinned-node-runtime-readback/v1",
+  "receiptId": "cks-08-pinned-node-runtime-readback-v1",
+  "taskId": "CLOSURE-PSAI288-EVIDENCE-RECOVERY-01",
+  "recordStatus": "NOT_READY_RUNTIME_PROOF_UNAVAILABLE",
+  "claimBoundary": "LOCAL_SYNTHETIC_OFFLINE_FIXTURE_RECONCILIATION_AND_LOCAL_RUNTIME_ATTEMPT_ONLY_NO_CI_NO_LIVE_TELEMETRY_NO_PRODUCTION_LINEAGE_NO_MODEL_BEHAVIOR_NO_PUBLIC_READBACK_NO_RELEASE_NO_MERGE_NO_AUTHORITY",
+  "processContext": {
+    "operatingModel": "Operating Model v1.1",
+    "priorDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "disposition": "PRESERVED_NO_OVERRIDE",
+    "processVariantCreated": false
+  },
+  "reviewBinding": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "reviewedHead": "31bbe05cbb70bbf6534ce8e1b4da40f7bbb1616c",
+    "rebaseCommand": "git rebase origin/main",
+    "rebaseOutcome": "CURRENT_BRANCH_ALREADY_REBASED_ON_CURRENT_PUBLIC_MAIN",
+    "reviewedHeadEqualsCandidateBeforeReceipt": true
+  },
+  "prerequisiteResolution": {
+    "policy": "A missing dependency receipt, immutable stable Part-I identifier receipt, or terminal cross-issue owner receipt is DENIED; static fixture evidence cannot substitute for it.",
+    "repositoryTerminalReceipts": [
+      {
+        "receiptId": "sol-psai288-usage-lineage-decision-01",
+        "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
+        "fileSha256": "0dfe67637d007f48f8779874e569e16097bae374641b8c4f296156a8d46465a8",
+        "declaredDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6",
+        "canonicalDigestVerified": true
+      },
+      {
+        "receiptId": "sol-psai288-release-or-no-release-01",
+        "path": "docs/evidence/conveyor/sol-psai288-release-or-no-release-01.json",
+        "fileSha256": "a681a75d902e8f7f2a5b9804e60005a39ebf55e4dcfe14f2fcb3a2bce96a6be6",
+        "declaredDigest": "609154da1e06d5440218996ea1d986de7406a9b129e0d9732d9f267d44ee4c1a",
+        "canonicalDigestVerified": true
+      }
+    ],
+    "unresolvedRequiredExternalReceipts": [
+      {
+        "requirement": "#287 terminal receipt",
+        "state": "MISSING_IMMUTABLE_RECEIPT_IN_THIS_REPOSITORY",
+        "effect": "NOT_READY"
+      },
+      {
+        "requirement": "stable Part-I ID receipt",
+        "state": "MISSING_IMMUTABLE_RECEIPT_IN_THIS_REPOSITORY",
+        "effect": "NOT_READY"
+      }
+    ]
+  },
+  "staticFixtureReconciliation": {
+    "state": "RECONCILED_STATIC_FIXTURES_ONLY",
+    "notRuntimeProof": true,
+    "sourceEvidence": {
+      "path": "verification/cks-08-lineage-dry-run-evidence-v1.json",
+      "fileSha256": "95dcdde468edc672ef5dfb7fb36a1762d2368d77e024f25095754138a0f26b1c",
+      "declaredReportDigest": "c68942b8a0b4cb4810d94de61599ecd5626c77521d0951260d8289e27e9cb3c5",
+      "generatorDigestVerified": true,
+      "evidenceClass": "LOCAL_SYNTHETIC"
+    },
+    "P14": {
+      "state": "RECONCILED_STATIC_FIXTURE",
+      "syntheticTaskCount": 2,
+      "usageSets": ["searched", "inspected", "used", "rejected", "decisionSupporting", "outcomeContributing"],
+      "partialUsageSetAccepted": false
+    },
+    "P15": {
+      "state": "RECONCILED_STATIC_FIXTURE",
+      "identicalRepetition": {
+        "validTaskOccurrenceCount": 8,
+        "distinctTaskSemanticCount": 1,
+        "distinctContextCount": 1,
+        "distinctJointUsageUnitCount": 1,
+        "identicalRepetitionCount": 7,
+        "generalizationMarker": null
+      },
+      "diverseReuseGeneralizationMarker": "+G",
+      "repetitionInflationPrevented": true
+    },
+    "P16": {
+      "state": "RECONCILED_STATIC_FIXTURE",
+      "seededCaseCount": 17,
+      "causalModes": ["ALTERNATIVES_UNRESOLVED", "MULTI_CONTRIBUTING", "SINGLE", "UNKNOWN"],
+      "uncertaintyClasses": ["CONFIRMED", "POSSIBLE", "SUPPORTED", "UNKNOWN"],
+      "multiCauseAndUncertaintyRetained": true,
+      "contributionAloneAssignsKnowledgeCausality": false
+    },
+    "lineageDenials": {
+      "state": "RECONCILED_STATIC_FIXTURE",
+      "requiredModes": [
+        {"name": "missing", "reasonCode": "PARENT_MISSING_DENIED"},
+        {"name": "late", "reasonCode": "LATE_EVENT_DENIED"},
+        {"name": "replayed", "reasonCode": "REPLAY_DENIED"},
+        {"name": "cross-scope", "reasonCode": "SCOPE_MISMATCH_DENIED"},
+        {"name": "tampered", "reasonCode": "PREVIOUS_DIGEST_MISMATCH_DENIED"}
+      ],
+      "allFiveRequiredModesPresent": true,
+      "partialUsageSetsEmitted": false
+    },
+    "evidenceProfiles": {
+      "state": "RECONCILED_STATIC_FIXTURE",
+      "dimensions": ["source", "applicability", "freshness", "contradiction", "generalization", "operational"],
+      "allSixIndependent": true,
+      "scalarCompensationCreated": false,
+      "crossDimensionCompensationCreated": false
+    }
+  },
+  "executionReceipts": [
+    {
+      "gate": "build",
+      "command": "npm run build --silent",
+      "runtime": "node v24.19.0; npm runtime initialization",
+      "status": "BLOCKED_INFRASTRUCTURE_BEFORE_PROGRAM_ENTRY",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "failureClass": "V8_OS_SET_PERMISSIONS_ERRNO_ASSERTION",
+      "outputSha256": "31074d70e8b9a8a951f68ac293c3ef3bbeecc45fbb0c605d3d9cb67ed1c16935"
+    },
+    {
+      "gate": "full-lineage-contract-and-harness-focused-tests",
+      "command": "node --test dist/tests/cks-knowledge-lineage-contracts.test.js dist/tests/cks-lineage-reconstructor.test.js dist/tests/cks-evidence-profile-features.test.js dist/tests/cks-failure-attribution-evaluator.test.js tests/cks-08-synthetic-lineage-fixtures.test.mjs tests/cks-08-lineage-dry-run.test.mjs tests/cks-08-public-readback.test.mjs",
+      "runtime": "node v24.19.0",
+      "status": "BLOCKED_INFRASTRUCTURE_BEFORE_TEST_EXECUTION",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "failureClass": "V8_OS_SET_PERMISSIONS_ERRNO_ASSERTION",
+      "outputSha256": "d6c1f6dec2edf5c9ec1d2dd3f7fce0652d80c90614bd0e9911bdd8fe2622097f"
+    },
+    {
+      "gate": "lineage-dry-run",
+      "command": "node scripts/run-cks-08-lineage-dry-run.mjs --fixture tests/fixtures/cks-08/e2e-positive-evidence-v1.json --dry-run",
+      "runtime": "node v24.19.0",
+      "status": "BLOCKED_INFRASTRUCTURE_BEFORE_HARNESS_EXECUTION",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "failureClass": "V8_OS_SET_PERMISSIONS_ERRNO_ASSERTION",
+      "outputSha256": "335e4acf3ac7e644bd56a412911843c8df53c61f7844fec6852b1403f0c23821"
+    },
+    {
+      "gate": "prepublication-public-readback-dry-run",
+      "command": "node scripts/cks-08-validate-public-readback.mjs --template verification/cks-08-public-readback-template-v1.json --dry-run",
+      "runtime": "node v24.19.0",
+      "status": "BLOCKED_INFRASTRUCTURE_BEFORE_VALIDATOR_EXECUTION",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "failureClass": "V8_OS_SET_PERMISSIONS_ERRNO_ASSERTION",
+      "outputSha256": "2836420f9e4e3d8d1c5c2f883283dc961e1ad0c74d4931e4dfea736c785c0c84",
+      "publicReadbackSuccessClaimed": false
+    },
+    {
+      "gate": "required-diff-check",
+      "command": "git diff --check main...HEAD",
+      "runtime": "git local repository",
+      "status": "PASS_EXECUTED",
+      "exitCode": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "runtimeProof": {
+    "state": "NOT_EXECUTED",
+    "reason": "The local Node process exited 133/SIGTRAP during V8 initialization before build, test, or harness program entry. This is infrastructure evidence, not a product verdict.",
+    "authoritativePinnedNodeProofClaimed": false,
+    "ciSuccessClaimed": false,
+    "liveTelemetryClaimed": false,
+    "productionLineageClaimed": false,
+    "modelBehaviorClaimed": false,
+    "publicReadbackClaimed": false
+  },
+  "privacyAndAuthorityNonClaims": {
+    "syntheticOfflineScopeOnly": true,
+    "rawReceiptsEmitted": false,
+    "rawContentEmitted": false,
+    "credentialsOrPersonalDataEmitted": false,
+    "releaseAuthorized": false,
+    "mergeAuthorized": false,
+    "issueCloseAuthorized": false,
+    "activationAuthorized": false,
+    "authorityGranted": false
+  },
+  "verdict": {
+    "status": "NOT_READY",
+    "reasonCodes": ["RUNTIME_EXIT_133_SIGTRAP", "MISSING_IMMUTABLE_CROSS_ISSUE_RECEIPT", "MISSING_IMMUTABLE_PART_I_ID_RECEIPT"],
+    "staticFixtureReconciliationComplete": true,
+    "executedRuntimeProofComplete": false,
+    "requiredControllerFollowUp": ["supply immutable terminal #287 and stable Part-I ID receipts", "rerun all blocked commands on the authoritative pinned Node runtime", "run host-Docker gates outside this worker before any integration decision"]
+  },
+  "receiptDigest": "8b6eb4ecbbbeabba5c99b0491d95a6273282b81b794f341b4b19664bb2796890"
+}

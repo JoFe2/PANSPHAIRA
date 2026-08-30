@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.dev/schemas/contracts/cks-failure-attribution-v1.schema.json",
+  "title": "CKS-08 failure attribution v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "semanticRuleId", "causalMode", "causes", "failureAttributionDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.knowledge/failure-attribution/v1" },
+    "semanticRuleId": { "const": "chimpmaera.knowledge/usage-lineage-semantics/v1" },
+    "causalMode": { "enum": ["NOT_APPLICABLE", "SINGLE", "MULTI_CONTRIBUTING", "MULTI_JOINT", "ALTERNATIVES_UNRESOLVED", "UNKNOWN"] },
+    "causes": { "type": "array", "maxItems": 3, "items": { "$ref": "#/$defs/cause" } },
+    "failureAttributionDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "knowledgeRef": { "type": "object", "additionalProperties": false, "required": ["knowledgeId", "knowledgeDigest"], "properties": { "knowledgeId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" }, "knowledgeDigest": { "$ref": "#/$defs/digest" } } },
+    "eventRef": { "type": "object", "additionalProperties": false, "required": ["eventId", "eventDigest"], "properties": { "eventId": { "type": "string", "pattern": "^lineage-event:v1:[a-f0-9]{64}$" }, "eventDigest": { "$ref": "#/$defs/digest" } } },
+    "cause": { "type": "object", "additionalProperties": false, "required": ["class", "subtype", "certainty", "causeEventRefs", "affectedKnowledgeRefs"], "properties": { "class": { "enum": ["KNOWLEDGE", "SEARCH", "DECISION", "EXECUTION", "TASK_INPUT", "EXTERNAL", "GOVERNANCE", "UNKNOWN"] }, "subtype": { "type": "string", "enum": ["SOURCE_DEFECT", "APPLICABILITY_MISMATCH", "STALE", "CONTRADICTED", "MISSING", "UNSUPPORTED_GENERALIZATION", "RELEVANT_NOT_RETURNED", "RELEVANT_NOT_INSPECTED", "RELEVANT_REJECTED", "UNSUPPORTED_SELECTION", "SUPPORTED_OPTION_IGNORED", "ACTION_FAILED", "READBACK_FAILED", "MISSING_CONTEXT", "INVALID_INPUT", "DEPENDENCY_UNAVAILABLE", "ENVIRONMENT_DRIFT", "POLICY_DENIED", "AUTHORITY_DENIED", "INSUFFICIENT_CAUSAL_EVIDENCE"] }, "certainty": { "enum": ["CONFIRMED", "SUPPORTED", "POSSIBLE", "UNKNOWN"] }, "causeEventRefs": { "type": "array", "maxItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/eventRef" } }, "affectedKnowledgeRefs": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "#/$defs/knowledgeRef" } } } }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "cks-08-e2e-rejections/v1",
+  "fixtureClass": "LOCAL_SYNTHETIC_REPLAYABLE",
+  "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1",
+  "sourceFixture": "tests/fixtures/cks-08/lineage-rejections-v1.json",
+  "cases": [
+    { "name": "missing", "expectedStatus": "DENIED", "expectedReasonCodes": ["PARENT_MISSING_DENIED"] },
+    { "name": "late", "expectedStatus": "DENIED", "expectedReasonCodes": ["LATE_EVENT_DENIED"] },
+    { "name": "replayed", "expectedStatus": "DENIED", "expectedReasonCodes": ["REPLAY_DENIED"] },
+    { "name": "cross-scope", "expectedStatus": "DENIED", "expectedReasonCodes": ["SCOPE_MISMATCH_DENIED"] },
+    { "name": "tampered", "expectedStatus": "DENIED", "expectedReasonCodes": ["PREVIOUS_DIGEST_MISMATCH_DENIED"] }
+  ]
+}

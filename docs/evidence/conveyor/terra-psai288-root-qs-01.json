@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "conveyor.decision-integration-receipt/v1",
+  "receiptId": "terra-psai288-root-qs-01",
+  "taskId": "CLOSURE-PSAI288-INTEGRATE-CURRENT-MAIN-01",
+  "recordStatus": "LOCAL_INTEGRATION_COMPLETE_RUNTIME_UNVERIFIED",
+  "claimBoundary": "LOCAL_SYNTHETIC_DETERMINISTIC_CKS_08_CURRENT_PUBLIC_MAIN_INTEGRATION_RECORD_ONLY_NO_TELEMETRY_NO_RAW_CONTENT_NO_LIVE_SYSTEM_NO_PRODUCTION_NO_PUSH_NO_MERGE_NO_RELEASE",
+  "processContext": {
+    "operatingModel": "Operating Model v1.1",
+    "priorDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "disposition": "PRESERVED_NO_OVERRIDE",
+    "processVariantCreated": false
+  },
+  "baseline": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "publicMainRef": "origin/main",
+    "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "localMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "acceptedCandidateHead": "31bbe05cbb70bbf6534ce8e1b4da40f7bbb1616c",
+    "integrationParentHead": "6f760538ca90cd257cbeaed0b6ef6a521fa4cc66",
+    "writablePathAllowlist": ["docs/evidence/conveyor/terra-psai288-root-qs-01.json"]
+  },
+  "currentMainIntegration": {
+    "replayCommand": "git rebase main",
+    "replayOutcome": "CURRENT_BRANCH_ALREADY_REBASED_ON_CURRENT_PUBLIC_MAIN",
+    "publicMainReadbackCommand": "git ls-remote origin refs/heads/main",
+    "publicMainReadbackMatchedLocalMain": true,
+    "acceptedCandidateIsAncestorOfIntegrationParent": true,
+    "acceptedPackageCommitCount": 15,
+    "acceptedPackageHeads": [
+      "0e7dc09446a6083009ba6b77a5fc59bf4153f2bc",
+      "a077866205940c2a5ef4c55737acb38ab7ac4e22",
+      "008198186c0665737b7b6153ffa090c028575db1",
+      "b767c90445176c2655c31b539811376f359f1090",
+      "3c8d134e54bbb403e07e64941b905b4c9c121735",
+      "baaaccf8c5a361e6525e490e922bc9d17deb6fd1",
+      "8d93ce3471910d2840faa168801b10b0ad02b35c",
+      "86755227b17e18f08436b5bb6a11dd239d2fdf5c",
+      "096dcbbd930b0556a60088e034e1ac7b013cdc97",
+      "6d17a1289245a4d9671c447e92a1ea2fb36b0999",
+      "b5177d837f6b9d71966e5edeaf374a65e7faec5f",
+      "682bcfa499c422928531710fd265e253d3cbeabb",
+      "09c145fea8a4d483fbc3ed6ac7d428e7b386f3ce",
+      "31bbe05cbb70bbf6534ce8e1b4da40f7bbb1616c",
+      "6f760538ca90cd257cbeaed0b6ef6a521fa4cc66"
+    ],
+    "admissionRules": {
+      "missingHead": "DENY_AUTHORITATIVE_INTEGRATION",
+      "staleBase": "DENY_AUTHORITATIVE_INTEGRATION",
+      "conflictingReplay": "DENY_AUTHORITATIVE_INTEGRATION",
+      "unauthorizedHead": "DENY_AUTHORITATIVE_INTEGRATION",
+      "untestedHead": "DENY_AUTHORITATIVE_INTEGRATION"
+    },
+    "localIntegrationCommitRule": "The commit carrying this receipt must descend from integrationParentHead and retain acceptedCandidateHead as an ancestor; it is not an authoritative merge, release, or success attestation."
+  },
+  "decisionBinding": {
+    "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
+    "fileSha256": "0dfe67637d007f48f8779874e569e16097bae374641b8c4f296156a8d46465a8",
+    "declaredReceiptDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6",
+    "canonicalDigestVerified": true,
+    "semanticRuleId": "chimpmaera.knowledge/usage-lineage-semantics/v1"
+  },
+  "reconciliation": {
+    "lineage": {
+      "stableBindings": ["Task", "Search", "Knowledge", "Decision", "Outcome"],
+      "referenceRule": "Each lineage reference binds the stable identifier and current SHA-256 digest; bare identifiers and bare digests are denied.",
+      "positiveEvidence": {
+        "source": "verification/cks-08-lineage-dry-run-evidence-v1.json",
+        "sourceSha256": "95dcdde468edc672ef5dfb7fb36a1762d2368d77e024f25095754138a0f26b1c",
+        "reportDigest": "c68942b8a0b4cb4810d94de61599ecd5626c77521d0951260d8289e27e9cb3c5",
+        "reportDigestVerified": true,
+        "boundedEventReceiptCount": 56,
+        "reconstructedTaskCount": 2,
+        "reconstructionFields": ["searched", "inspected", "used", "rejected", "decisionSupporting", "outcomeContributing"]
+      }
+    },
+    "profiles": {
+      "exactIndependentDimensions": ["source", "applicability", "freshness", "contradiction", "generalization", "operational"],
+      "compositeScoreCreated": false,
+      "crossDimensionCompensationCreated": false
+    },
+    "repetitionResistance": {
+      "identicalRepetition": {
+        "validTaskOccurrenceCount": 8,
+        "distinctTaskSemanticCount": 1,
+        "distinctContextCount": 1,
+        "distinctJointUsageUnitCount": 1,
+        "identicalRepetitionCount": 7,
+        "generalizationMarker": null
+      },
+      "diverseReuse": {
+        "validTaskOccurrenceCount": 4,
+        "distinctTaskSemanticCount": 2,
+        "distinctContextCount": 2,
+        "distinctJointUsageUnitCount": 4,
+        "identicalRepetitionCount": 0,
+        "generalizationMarker": "+G"
+      },
+      "repetitionInflationPrevented": true
+    },
+    "seededFailureAttribution": {
+      "seededCaseCount": 17,
+      "causalModes": ["ALTERNATIVES_UNRESOLVED", "MULTI_CONTRIBUTING", "SINGLE", "UNKNOWN"],
+      "certaintyClasses": ["CONFIRMED", "POSSIBLE", "SUPPORTED", "UNKNOWN"],
+      "attributionDenials": [
+        { "name": "missing-causal-witness", "reasonCode": "FAILURE_ATTRIBUTION_DENIED" },
+        { "name": "knowledge-causality-from-contribution-only", "reasonCode": "FAILURE_ATTRIBUTION_DENIED" },
+        { "name": "possible-cause-labelled-single", "reasonCode": "FAILURE_ATTRIBUTION_DENIED" },
+        { "name": "fourth-cause", "reasonCode": "SCHEMA_DENIED" }
+      ],
+      "contributionAloneAssignsKnowledgeCausality": false
+    },
+    "lineageDenials": [
+      { "name": "missing", "reasonCode": "PARENT_MISSING_DENIED" },
+      { "name": "late", "reasonCode": "LATE_EVENT_DENIED" },
+      { "name": "replayed", "reasonCode": "REPLAY_DENIED" },
+      { "name": "cross-scope", "reasonCode": "SCOPE_MISMATCH_DENIED" },
+      { "name": "tampered", "reasonCode": "PREVIOUS_DIGEST_MISMATCH_DENIED" }
+    ],
+    "failClosed": {
+      "deniedLineageCaseCount": 5,
+      "deniedAttributionCaseCount": 4,
+      "partialUsageSetsEmitted": false
+    }
+  },
+  "sourceBindings": [
+    { "path": "packages/contracts/src/cks-lineage-reconstructor.ts", "sha256": "ae544956bf0383c86affe84eee2e84a18297799fde7cc61f77721e267bdd72cb" },
+    { "path": "packages/contracts/src/cks-evidence-profile-features.ts", "sha256": "89c1298d59cc7a379d3ecea941013f1466234299e651a1aa8ffccbc1a9e14f7f" },
+    { "path": "packages/contracts/src/cks-failure-attribution-evaluator.ts", "sha256": "7f5a87937935b35a1f29fc7aa22f9a4bb133f61d75064d8eecbf7c8698997e58" },
+    { "path": "scripts/run-cks-08-lineage-dry-run.mjs", "sha256": "1df1c3d520fc0b4067f9cbb228e40e935544366da2cec3268fc3814c945c8559" },
+    { "path": "tests/cks-08-lineage-dry-run.test.mjs", "sha256": "b4e9b4a1dac95b30c54df385a22f73dda319fbb6ca8d8bd4debed235b08de6b0" },
+    { "path": "tests/fixtures/cks-08/e2e-positive-evidence-v1.json", "sha256": "4d59e1d02f75779259d6a88955be2d475c0823a54c72523c381c46a941509b69" },
+    { "path": "tests/fixtures/cks-08/e2e-rejections-v1.json", "sha256": "4009cb606163dbf76103de3d253b52e01d8d83684e03cfb738ed9c1bed7758dc" }
+  ],
+  "privacy": {
+    "evidenceClass": "LOCAL_SYNTHETIC",
+    "rawReceiptsEmitted": false,
+    "rawContentEmitted": false,
+    "credentialsOrPersonalDataEmitted": false,
+    "nonClaims": ["LIVE_SYSTEM", "TELEMETRY_COLLECTION", "MODEL_OR_PROVIDER", "PRODUCTION", "PUBLICATION", "SECURITY_CERTIFICATION"]
+  },
+  "verification": {
+    "staticIntegrity": { "status": "PASS", "checks": ["decision receipt canonical digest", "dry-run report digest", "source byte SHA-256 bindings", "current public main readback", "accepted candidate ancestry", "conflict-free replay"] },
+    "canonicalRepositoryGates": [
+      {
+        "command": "npm run build --silent",
+        "status": "BLOCKED_INFRASTRUCTURE_BEFORE_PROGRAM_ENTRY",
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "failure": "V8 OS::SetPermissions errno assertion"
+      },
+      {
+        "command": "npm test",
+        "status": "BLOCKED_INFRASTRUCTURE_BEFORE_PROGRAM_ENTRY",
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "failure": "V8 OS::SetPermissions errno assertion"
+      },
+      {
+        "command": "git diff --check main...HEAD",
+        "status": "PASS",
+        "exitCode": 0
+      }
+    ],
+    "authoritativeIntegrationStatus": "BLOCKED_RUNTIME_UNVERIFIED",
+    "controllerRequiredFollowUp": ["rerun npm run build --silent on the authoritative pinned Node runtime", "rerun npm test on the authoritative pinned Node runtime", "run authoritative host-Docker gates before any merge decision"]
+  },
+  "integration": {
+    "productCodeChanged": true,
+    "telemetryCollected": false,
+    "externalStateMutated": false,
+    "localIntegrationArtifactComplete": true,
+    "authoritativeMergeAuthorized": false,
+    "successClaimRule": "All accepted package heads are present on the current-main-descended local integration head, but missing, stale, conflicting, unauthorized, or runtime-untested heads deny authoritative integration. The two Node gates exited 133/SIGTRAP before program entry and are infrastructure evidence, not a product verdict or a passing test result."
+  },
+  "receiptDigest": "fc34ae53fc099aa00dbfe8e48f524df3c30fd345d817a1cf156614e8c34d8038"
+}

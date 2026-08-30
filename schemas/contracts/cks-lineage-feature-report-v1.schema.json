@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.dev/schemas/contracts/cks-lineage-feature-report-v1.schema.json",
+  "title": "CKS-08 lineage evidence-profile feature report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "semanticRuleId", "status", "scopeRef", "knowledgeRef", "dimensions", "rawFeatures", "reportDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.knowledge/lineage-feature-report/v1" },
+    "semanticRuleId": { "const": "chimpmaera.knowledge/usage-lineage-semantics/v1" },
+    "status": { "const": "REPORTED" },
+    "scopeRef": { "$ref": "#/$defs/scopeRef" },
+    "knowledgeRef": { "$ref": "#/$defs/knowledgeRef" },
+    "dimensions": { "$ref": "#/$defs/dimensions" },
+    "rawFeatures": {
+      "type": "object", "additionalProperties": false,
+      "required": ["generalization", "operational"],
+      "properties": {
+        "generalization": {
+          "type": "object", "additionalProperties": false,
+          "required": ["taskSemanticDigests", "contextFingerprintDigests", "generalizationUsageUnitDigests"],
+          "properties": {
+            "taskSemanticDigests": { "type": "array", "items": { "$ref": "#/$defs/digest" }, "uniqueItems": true },
+            "contextFingerprintDigests": { "type": "array", "items": { "$ref": "#/$defs/digest" }, "uniqueItems": true },
+            "generalizationUsageUnitDigests": { "type": "array", "items": { "$ref": "#/$defs/digest" }, "uniqueItems": true }
+          }
+        },
+        "operational": {
+          "type": "object", "additionalProperties": false,
+          "required": ["operationalUnitDigests", "outcomeClassObservations"],
+          "properties": {
+            "operationalUnitDigests": { "type": "array", "items": { "$ref": "#/$defs/digest" }, "uniqueItems": true },
+            "outcomeClassObservations": {
+              "type": "array", "uniqueItems": true,
+              "items": {
+                "type": "object", "additionalProperties": false,
+                "required": ["operationalUnitDigest", "outcomeClass"],
+                "properties": {
+                  "operationalUnitDigest": { "$ref": "#/$defs/digest" },
+                  "outcomeClass": { "enum": ["SUCCEEDED", "FAILED", "PARTIAL", "DENIED"] }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "reportDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "dimensions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "applicability", "freshness", "contradiction", "generalization", "operational"],
+      "properties": {
+        "source": {
+          "type": "object", "additionalProperties": false,
+          "required": ["knowledgeDigest", "attributionSetDigest", "epistemicStatus", "trust"],
+          "properties": { "knowledgeDigest": { "$ref": "#/$defs/digest" }, "attributionSetDigest": { "$ref": "#/$defs/digest" }, "epistemicStatus": { "enum": ["VERIFIED", "SUPPORTED", "UNVERIFIED", "DISPUTED", "UNRESOLVED"] }, "trust": { "enum": ["LOW", "MEDIUM", "HIGH"] } }
+        },
+        "applicability": {
+          "type": "object", "additionalProperties": false,
+          "required": ["applicabilityScopeDigest", "contextFingerprintDigest", "matchState"],
+          "properties": { "applicabilityScopeDigest": { "$ref": "#/$defs/digest" }, "contextFingerprintDigest": { "$ref": "#/$defs/digest" }, "matchState": { "enum": ["MATCH", "NO_MATCH", "NEEDS_CONTEXT", "CONFLICT"] } }
+        },
+        "freshness": {
+          "type": "object", "additionalProperties": false,
+          "required": ["knowledgeDigest", "evaluatedAtMs", "freshnessState"],
+          "properties": { "knowledgeDigest": { "$ref": "#/$defs/digest" }, "evaluatedAtMs": { "type": "integer", "minimum": 0 }, "freshnessState": { "enum": ["FRESH", "STALE", "UNKNOWN"] } }
+        },
+        "contradiction": {
+          "type": "object", "additionalProperties": false,
+          "required": ["knowledgeDigest", "conflictSetDigest", "contradictionState"],
+          "properties": { "knowledgeDigest": { "$ref": "#/$defs/digest" }, "conflictSetDigest": { "$ref": "#/$defs/digest" }, "contradictionState": { "enum": ["NONE_DECLARED", "DECLARED_UNRESOLVED", "UNKNOWN"] } }
+        },
+        "generalization": {
+          "type": "object", "additionalProperties": false,
+          "required": ["validTaskOccurrenceCount", "distinctTaskSemanticCount", "distinctContextCount", "distinctJointUsageUnitCount", "identicalRepetitionCount", "marker"],
+          "properties": { "validTaskOccurrenceCount": { "type": "integer", "minimum": 0 }, "distinctTaskSemanticCount": { "type": "integer", "minimum": 0 }, "distinctContextCount": { "type": "integer", "minimum": 0 }, "distinctJointUsageUnitCount": { "type": "integer", "minimum": 0 }, "identicalRepetitionCount": { "type": "integer", "minimum": 0 }, "marker": { "enum": ["+G", null] } }
+        },
+        "operational": {
+          "type": "object", "additionalProperties": false,
+          "required": ["eligibleOutcomeOccurrenceCount", "distinctOperationalUnitCount", "distinctOutcomeUnitsByClass", "uncertainOutcomeOccurrenceCount", "failureCauseObservations", "marker"],
+          "properties": {
+            "eligibleOutcomeOccurrenceCount": { "type": "integer", "minimum": 0 },
+            "distinctOperationalUnitCount": { "type": "integer", "minimum": 0 },
+            "distinctOutcomeUnitsByClass": {
+              "type": "object", "additionalProperties": false,
+              "required": ["SUCCEEDED", "FAILED", "PARTIAL", "DENIED"],
+              "properties": { "SUCCEEDED": { "type": "integer", "minimum": 0 }, "FAILED": { "type": "integer", "minimum": 0 }, "PARTIAL": { "type": "integer", "minimum": 0 }, "DENIED": { "type": "integer", "minimum": 0 } }
+            },
+            "uncertainOutcomeOccurrenceCount": { "type": "integer", "minimum": 0 },
+            "failureCauseObservations": {
+              "type": "array", "maxItems": 96,
+              "items": { "type": "object", "additionalProperties": false, "required": ["class", "subtype", "certainty"], "properties": { "class": { "enum": ["KNOWLEDGE", "SEARCH", "DECISION", "EXECUTION", "TASK_INPUT", "EXTERNAL", "GOVERNANCE", "UNKNOWN"] }, "subtype": { "type": "string" }, "certainty": { "enum": ["CONFIRMED", "SUPPORTED", "POSSIBLE", "UNKNOWN"] } } }
+            },
+            "marker": { "enum": ["+O", null] }
+          }
+        }
+      }
+    },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "scopeRef": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scopeId", "scopeDigest"],
+      "properties": {
+        "scopeId": { "type": "string", "pattern": "^scope:v1:[a-f0-9]{64}$" },
+        "scopeDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "knowledgeRef": {
+      "type": "object", "additionalProperties": false,
+      "required": ["knowledgeId", "knowledgeDigest"],
+      "properties": {
+        "knowledgeId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+        "knowledgeDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

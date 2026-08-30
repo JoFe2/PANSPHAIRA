@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "conveyor.decision-integration-receipt/v1",
+  "receiptId": "int-psai288-pr-ci-package-01",
+  "taskId": "INT-PSAI288-PR-CI-PACKAGE-01",
+  "recordStatus": "TECHNICALLY_COMPLETE_RUNTIME_UNVERIFIED",
+  "claimBoundary": "LOCAL_PRE_GITHUB_MUTATION_PR_CI_MERGE_RELEASE_AND_PUBLIC_READBACK_PACKET_ONLY_NO_GITHUB_MUTATION_NO_PUSH_NO_MERGE_NO_RELEASE_NO_CREDENTIAL_OR_PROVIDER_CHANGE",
+  "processContext": {
+    "operatingModel": "Operating Model v1.1",
+    "priorDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "disposition": "PRESERVED_NO_OVERRIDE",
+    "processVariantCreated": false
+  },
+  "baseline": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-288",
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "preparedHead": "b5177d837f6b9d71966e5edeaf374a65e7faec5f",
+    "commitCountFromOriginMain": 11,
+    "changedPathCountBeforeReceipt": 37,
+    "writablePathAllowlist": ["docs/evidence/conveyor/int-psai288-pr-ci-package-01.json"]
+  },
+  "sourceBindings": {
+    "decisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai288-usage-lineage-decision-01.json",
+      "sha256": "0dfe67637d007f48f8779874e569e16097bae374641b8c4f296156a8d46465a8",
+      "declaredReceiptDigest": "137a96207cd15452977fb2720e4c1dd20b7a79590eab3a3c93bc3baa0fd168d6",
+      "canonicalDigestVerified": true
+    },
+    "lineageReceipt": {
+      "path": "docs/evidence/conveyor/terra-psai288-root-qs-01.json",
+      "sha256": "518ca8654eb8cc90d29fc0f315efb21bb5d1b7905ebea90bd3c960fba8f3d716",
+      "declaredReceiptDigest": "e4ce2d30a27ddfd5c9507ede48644089f9283ddfdb54ca90894b2dc5992c60d8",
+      "canonicalDigestVerified": true
+    },
+    "dryRunEvidence": {
+      "path": "verification/cks-08-lineage-dry-run-evidence-v1.json",
+      "sha256": "95dcdde468edc672ef5dfb7fb36a1762d2368d77e024f25095754138a0f26b1c",
+      "declaredReportDigest": "c68942b8a0b4cb4810d94de61599ecd5626c77521d0951260d8289e27e9cb3c5",
+      "generatorDigestVerified": true,
+      "generatorDigestRule": "SHA-256 over JSON.stringify(reportWithoutDigest) followed by newline, as bound by scripts/run-cks-08-lineage-dry-run.mjs."
+    },
+    "releaseGovernance": {
+      "path": "release/governance.json",
+      "sha256": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7",
+      "declaredCurrentRegularRelease": {
+        "tag": "v0.2.0-poc.20260825.1",
+        "releaseId": 376149037,
+        "draft": false,
+        "prerelease": false,
+        "mustBeLatest": true
+      }
+    }
+  },
+  "integrationPacket": {
+    "githubMutationBoundary": {
+      "state": "NOT_CROSSED",
+      "externalStateMutated": false,
+      "prohibitedActionsNotPerformed": ["PUSH", "PULL_REQUEST_CREATE", "MERGE", "RELEASE_CREATE_OR_EDIT", "TAG_CREATE_OR_MOVE", "ISSUE_OR_PROVIDER_MUTATION"]
+    },
+    "pullRequest": {
+      "state": "PREPARED_NOT_CREATED",
+      "headBranch": "conveyor/pansphaira-288",
+      "baseBranch": "origin/main",
+      "comparison": "origin/main...b5177d837f6b9d71966e5edeaf374a65e7faec5f",
+      "commitCount": 11,
+      "changedPathCountBeforeReceipt": 37,
+      "scope": "CKS-08 local synthetic lineage contracts, fixtures, deterministic harness, proof evidence and decision receipt",
+      "creationDecision": "DENIED_PENDING_AUTHORITATIVE_CI"
+    },
+    "ci": {
+      "state": "BLOCKED_INFRASTRUCTURE",
+      "runtime": { "nodeVersion": "v24.19.0", "failureClass": "V8_OS_SET_PERMISSIONS_ERRNO_ASSERTION", "exitCode": 133, "signal": "SIGTRAP", "executedBeforeProgramEntry": true },
+      "checks": [
+        { "command": "node --test tests/cks-08-lineage-dry-run.test.mjs", "status": "BLOCKED_INFRASTRUCTURE", "exitCode": 133, "signal": "SIGTRAP" },
+        { "command": "node scripts/run-cks-08-lineage-dry-run.mjs --fixture tests/fixtures/cks-08/e2e-positive-evidence-v1.json --dry-run", "status": "BLOCKED_INFRASTRUCTURE", "exitCode": 133, "signal": "SIGTRAP" },
+        { "command": "npm run release-governance:verify", "status": "BLOCKED_INFRASTRUCTURE", "exitCode": 133, "signal": "SIGTRAP" },
+        { "command": "env -u GH_TOKEN npm run release-governance:public-readback", "status": "BLOCKED_INFRASTRUCTURE_BEFORE_NETWORK", "exitCode": 133, "signal": "SIGTRAP" },
+        { "command": "git diff --check origin/main...HEAD", "status": "PASS" }
+      ],
+      "successClaimRule": "No runtime, CI, release-governance or anonymous-public-readback success is claimed when the required Node runtime exits 133/SIGTRAP before program entry."
+    },
+    "merge": {
+      "state": "DENIED_PENDING_AUTHORITATIVE_CI_AND_REVIEW",
+      "mutationAttempted": false,
+      "requiredEvidence": ["authoritative pinned-Node CI pass", "required repository checks pass", "review and merge authority outside this worker"]
+    },
+    "release": {
+      "decision": "NO_RELEASE",
+      "mutationAttempted": false,
+      "reason": "This task prepares an evidence receipt and does not authorize a release, tag, publication or change to release governance."
+    },
+    "publicReadback": {
+      "state": "BLOCKED_INFRASTRUCTURE_BEFORE_NETWORK",
+      "command": "env -u GH_TOKEN npm run release-governance:public-readback",
+      "anonymousCredentialRule": "GH_TOKEN was explicitly unset for the attempted command.",
+      "readbackSuccessClaimed": false,
+      "requiredAfterAnyFuturePublication": "Run the anonymous verifier against the released tag and public main surfaces; any missing, unknown or mismatched evidence remains fail-closed."
+    }
+  },
+  "localStaticEvidence": {
+    "decisionReceiptCanonicalDigest": "PASS",
+    "lineageReceiptCanonicalDigest": "PASS",
+    "dryRunEvidenceGeneratorDigest": "PASS",
+    "requiredDiffCheckBeforeReceiptCommit": "PASS",
+    "workingTreeBeforeReceiptWrite": "CLEAN"
+  },
+  "failClosed": {
+    "runtimeEvidenceSufficientForSuccess": false,
+    "prCreationAuthorized": false,
+    "mergeAuthorized": false,
+    "releaseAuthorized": false,
+    "publicReadbackAuthorized": false,
+    "controllerRequiredFollowUp": ["rerun focused CKS-08 test on pinned Node", "rerun CKS-08 dry-run on pinned Node", "rerun release-governance verification on pinned Node", "run anonymous public-readback only after a separately authorized publication", "run authoritative pinned-Node and host-Docker gates before any GitHub mutation"]
+  },
+  "privacy": {
+    "evidenceClass": "LOCAL_SYNTHETIC_AND_REPOSITORY_METADATA",
+    "rawContentEmitted": false,
+    "credentialsOrPersonalDataEmitted": false,
+    "nonClaims": ["GITHUB_MUTATION", "CI_SUCCESS", "MERGE", "RELEASE", "PUBLICATION", "ANONYMOUS_PUBLIC_READBACK_SUCCESS", "LIVE_SYSTEM", "TELEMETRY_COLLECTION", "PRODUCTION", "SECURITY_CERTIFICATION"]
+  },
+  "receiptDigest": "53a1f749dc73977912ee97b7de317ba51778654bc13ea24d65b9ba70fa3dfdac"
+}
