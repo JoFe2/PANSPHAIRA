@@ -1,0 +1,240 @@
+{
+  "schemaVersion": "pansphaira.cks10/p21-expected-candidates/v1",
+  "projectionBinding": {
+    "contractId": "cks-10/minimized-projection/v1",
+    "contractVersion": "1.0.0",
+    "projectionId": "cks10-p21-proj-290-0001",
+    "projectionVersion": "1.0.0",
+    "projectionDigest": "47a76ae86b84d41c70eca971627e21aefc23efb14c19b585c04b6a21672232ca",
+    "replayId": "cks10-p21-replay-290-0001",
+    "opaqueTenantScopeId": "tscope-290-synthetic-lane1",
+    "scopeId": "scope.cks10.analytics-exploration",
+    "scopeVersion": "1.0.0",
+    "purposeClass": "CKS10_ANALYTICS_EXPLORATION"
+  },
+  "globalBlindSpots": [
+    "NO_LIVE_POLICY_OR_INVALIDATION_READBACK",
+    "NO_CAUSAL_INFERENCE",
+    "NO_CROSS_SCOPE_OR_CROSS_TENANT_JOIN",
+    "NO_RAW_EVIDENCE_OR_EXECUTABLE_MATERIAL",
+    "NO_DRIFT_ROOT_CAUSE_OR_REPAIR"
+  ],
+  "allowedEvidenceEdges": [
+    {
+      "edgeId": "edge-p21-negative-gap-290-0001",
+      "edgeVersion": "1.0.0",
+      "edgeDigest": "ddd2bc8f10f4c1e0835973911f1b2b0060fceb1861ec35872f68c2e6ec3143ea",
+      "sourceEvidenceId": "ev-p21-negative-evidence-290-0001",
+      "targetEvidenceId": "ev-p21-gap-290-0001",
+      "relationClass": "CONTRASTS",
+      "declaredByEvidenceId": "ev-p21-negative-evidence-290-0001",
+      "explicit": true
+    },
+    {
+      "edgeId": "edge-p21-gap-cluster-290-0001",
+      "edgeVersion": "1.0.0",
+      "edgeDigest": "640726bd55e4458353c4427728dd7cc5a1cd2ed0f1c1949449a8370e3e53fdda",
+      "sourceEvidenceId": "ev-p21-gap-290-0001",
+      "targetEvidenceId": "ev-p21-cluster-290-0001",
+      "relationClass": "RELATED_SIGNAL",
+      "declaredByEvidenceId": "ev-p21-gap-290-0001",
+      "explicit": true
+    },
+    {
+      "edgeId": "edge-p21-cluster-cousage-290-0001",
+      "edgeVersion": "1.0.0",
+      "edgeDigest": "03a14529f302981f60bd1fd332f3ac9fe9a481910de07dd69fd5776195bf2a93",
+      "sourceEvidenceId": "ev-p21-cluster-290-0001",
+      "targetEvidenceId": "ev-p21-co-usage-290-0001",
+      "relationClass": "SHARED_SCOPE_SIGNAL",
+      "declaredByEvidenceId": "ev-p21-cluster-290-0001",
+      "explicit": true
+    },
+    {
+      "edgeId": "edge-p21-drift-pattern-290-0001",
+      "edgeVersion": "1.0.0",
+      "edgeDigest": "2ccbf1a0ee1405840c592c6b3076ee77c91aeddb441e8d27947a076b4a349d6b",
+      "sourceEvidenceId": "ev-p21-drift-290-0001",
+      "targetEvidenceId": "ev-p21-pattern-290-0001",
+      "relationClass": "DRIFT_CONTEXT",
+      "declaredByEvidenceId": "ev-p21-drift-290-0001",
+      "explicit": true
+    },
+    {
+      "edgeId": "edge-p21-pattern-workflow-290-0001",
+      "edgeVersion": "1.0.0",
+      "edgeDigest": "1978a0237e733a7df418629708b90b0c22f490ff541231798f97bef4d3227436",
+      "sourceEvidenceId": "ev-p21-pattern-290-0001",
+      "targetEvidenceId": "ev-p21-workflow-290-0001",
+      "relationClass": "SUGGESTS_REVIEW",
+      "declaredByEvidenceId": "ev-p21-pattern-290-0001",
+      "explicit": true
+    }
+  ],
+  "evidence": [
+    {
+      "evidenceId": "ev-p21-gap-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "91daf13ed76b4264abc139698cac99b4229a6a9918e5ee5ff9a34613fece0bc9",
+      "evidenceClass": "PLANTED_PROJECTION_SIGNAL",
+      "signalCode": "UNRESOLVED_TASK_OUTCOME_TRANSITION",
+      "sourceRecordId": "rec-p21-task-290-0001",
+      "sourceFieldId": "task.transition",
+      "observation": { "fieldClass": "SCALAR_FACT", "value": "UNRESOLVED_TASK_OUTCOME_TRANSITION" },
+      "declaredEdgeIds": ["edge-p21-gap-cluster-290-0001"]
+    },
+    {
+      "evidenceId": "ev-p21-cluster-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "8454cd713da0ca23067d98a554102a535c89be3cecf46a44e226c5999b2be3a7",
+      "evidenceClass": "PLANTED_PROJECTION_SIGNAL",
+      "signalCode": "RELATED_EVIDENCE_CLUSTER",
+      "sourceRecordId": "rec-p21-knowledge-290-0001",
+      "sourceFieldId": "knowledge.cluster",
+      "observation": {
+        "fieldClass": "AGGREGATE_MEASURE",
+        "value": { "measureClass": "RELATED_EVIDENCE_CLUSTER", "statistic": "COUNT", "value": 2, "sampleCount": 2 }
+      },
+      "declaredEdgeIds": ["edge-p21-cluster-cousage-290-0001"]
+    },
+    {
+      "evidenceId": "ev-p21-co-usage-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "22fff789ae710e6f14f89389fe0a7bf7a45adc28676d617a2e2eb56e495dcc77",
+      "evidenceClass": "PLANTED_PROJECTION_SIGNAL",
+      "signalCode": "SHARED_SCOPE_USAGE",
+      "sourceRecordId": "rec-p21-decision-290-0001",
+      "sourceFieldId": "decision.cousage",
+      "observation": { "fieldClass": "SCALAR_FACT", "value": "SHARED_SCOPE_USAGE" },
+      "declaredEdgeIds": []
+    },
+    {
+      "evidenceId": "ev-p21-negative-evidence-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "6ac72ffa04c8ec92df7e22d1c503c9198f04bcc214c04f6ce982d61ec5d57b8f",
+      "evidenceClass": "PLANTED_PROJECTION_SIGNAL",
+      "signalCode": "ABSENT_EXPECTED_LINK",
+      "sourceRecordId": "rec-p21-outcome-290-0001",
+      "sourceFieldId": "outcome.negative",
+      "observation": {
+        "fieldClass": "AGGREGATE_MEASURE",
+        "value": { "measureClass": "ABSENT_EXPECTED_LINK", "statistic": "COUNT", "value": 0, "sampleCount": 1 }
+      },
+      "declaredEdgeIds": ["edge-p21-negative-gap-290-0001"]
+    },
+    {
+      "evidenceId": "ev-p21-pattern-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "146d6f16c8a9d3c3eeea8e0a5bd7323b1087cbe51f0b44f7b86c17bb84d5dbee",
+      "evidenceClass": "PLANTED_PROJECTION_SIGNAL",
+      "signalCode": "REPEATED_ORDER_PATTERN",
+      "sourceRecordId": "rec-p21-knowledge-290-0001",
+      "sourceFieldId": "knowledge.pattern",
+      "observation": { "fieldClass": "SCALAR_FACT", "value": "REPEATED_ORDER_PATTERN" },
+      "declaredEdgeIds": ["edge-p21-pattern-workflow-290-0001"]
+    },
+    {
+      "evidenceId": "ev-p21-workflow-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "459efbb0a623b5ef6ed96f51a08084b8b9f6a0d53e70020103aa8cb32d5bd5a9",
+      "evidenceClass": "PLANTED_PROJECTION_SIGNAL",
+      "signalCode": "DECLARATIVE_WORKFLOW_GAP",
+      "sourceRecordId": "rec-p21-task-290-0001",
+      "sourceFieldId": "task.workflow",
+      "observation": { "fieldClass": "SCALAR_FACT", "value": "DECLARATIVE_WORKFLOW_GAP" },
+      "declaredEdgeIds": []
+    },
+    {
+      "evidenceId": "ev-p21-drift-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "019530b49d4cf41d3c41c44e07e27f576964c80e3ddae0c13e7388e0015b25ce",
+      "evidenceClass": "PLANTED_PROJECTION_SIGNAL",
+      "signalCode": "SOURCE_DIGEST_DRIFT_SIGNAL",
+      "sourceRecordId": "rec-p21-decision-290-0001",
+      "sourceFieldId": "decision.drift",
+      "observation": { "fieldClass": "SCALAR_FACT", "value": "SOURCE_DIGEST_DRIFT_SIGNAL" },
+      "declaredEdgeIds": ["edge-p21-drift-pattern-290-0001"]
+    }
+  ],
+  "candidates": [
+    {
+      "candidateId": "p21-gap-290-0001",
+      "candidateVersion": "1.0.0",
+      "candidateDigest": "9c23715f4e8940ed2d89e1668c144f9f627ce3e7160741d9767c1334dac05b0e",
+      "candidateClass": "GAP",
+      "signalCode": "UNRESOLVED_TASK_OUTCOME_TRANSITION",
+      "evidenceIds": ["ev-p21-negative-evidence-290-0001", "ev-p21-gap-290-0001", "ev-p21-cluster-290-0001"],
+      "edgeIds": ["edge-p21-negative-gap-290-0001", "edge-p21-gap-cluster-290-0001"],
+      "blindSpots": ["NO_CAUSAL_EXPLANATION", "NO_LIVE_STATE_RECHECK"],
+      "reproduction": "PLANTED_PROJECTION_SIGNAL"
+    },
+    {
+      "candidateId": "p21-cluster-290-0001",
+      "candidateVersion": "1.0.0",
+      "candidateDigest": "150c47c5db87eb8e488649020038b212272835ccc8082dbdb7118ab06c53ae6d",
+      "candidateClass": "CLUSTER",
+      "signalCode": "RELATED_EVIDENCE_CLUSTER",
+      "evidenceIds": ["ev-p21-gap-290-0001", "ev-p21-cluster-290-0001", "ev-p21-co-usage-290-0001"],
+      "edgeIds": ["edge-p21-gap-cluster-290-0001", "edge-p21-cluster-cousage-290-0001"],
+      "blindSpots": ["NO_CLUSTER_CAUSALITY", "NO_GENERALIZATION_BEYOND_PLANTED_SET"],
+      "reproduction": "PLANTED_PROJECTION_SIGNAL"
+    },
+    {
+      "candidateId": "p21-co-usage-290-0001",
+      "candidateVersion": "1.0.0",
+      "candidateDigest": "4be737de04e81682b8e9d1d9e6fa250c13c7412d117c392f61206979b8fc8055",
+      "candidateClass": "CO_USAGE",
+      "signalCode": "SHARED_SCOPE_USAGE",
+      "evidenceIds": ["ev-p21-cluster-290-0001", "ev-p21-co-usage-290-0001"],
+      "edgeIds": ["edge-p21-cluster-cousage-290-0001"],
+      "blindSpots": ["NO_USAGE_INTENT", "NO_CROSS_SCOPE_REUSE"],
+      "reproduction": "PLANTED_PROJECTION_SIGNAL"
+    },
+    {
+      "candidateId": "p21-negative-evidence-290-0001",
+      "candidateVersion": "1.0.0",
+      "candidateDigest": "bfdcb9ca58d90c99a651d5e5f5b4cba8e535979f2e0956516341c4459bdacd92",
+      "candidateClass": "NEGATIVE_EVIDENCE",
+      "signalCode": "ABSENT_EXPECTED_LINK",
+      "evidenceIds": ["ev-p21-negative-evidence-290-0001", "ev-p21-gap-290-0001"],
+      "edgeIds": ["edge-p21-negative-gap-290-0001"],
+      "blindSpots": ["ABSENCE_IS_NOT_PROOF", "NO_NEGATIVE_CONTROL_COVERAGE_OUTSIDE_SCOPE"],
+      "reproduction": "PLANTED_PROJECTION_SIGNAL"
+    },
+    {
+      "candidateId": "p21-pattern-290-0001",
+      "candidateVersion": "1.0.0",
+      "candidateDigest": "f0fd5f0f8b9e288598b14985fdd6f3aa1c92df5b35140e88704353ae247db471",
+      "candidateClass": "PATTERN",
+      "signalCode": "REPEATED_ORDER_PATTERN",
+      "evidenceIds": ["ev-p21-drift-290-0001", "ev-p21-pattern-290-0001", "ev-p21-workflow-290-0001"],
+      "edgeIds": ["edge-p21-drift-pattern-290-0001", "edge-p21-pattern-workflow-290-0001"],
+      "blindSpots": ["NO_PREDICTIVE_CLAIM", "NO_PATTERN_SEARCH_OUTSIDE_PLANTED_SET"],
+      "reproduction": "PLANTED_PROJECTION_SIGNAL"
+    },
+    {
+      "candidateId": "p21-workflow-290-0001",
+      "candidateVersion": "1.0.0",
+      "candidateDigest": "4c4a2f01aea3acbf3eb356e2c58c5f03c4b40381c2caccba938210ef7500245f",
+      "candidateClass": "WORKFLOW",
+      "signalCode": "DECLARATIVE_WORKFLOW_GAP",
+      "evidenceIds": ["ev-p21-pattern-290-0001", "ev-p21-workflow-290-0001"],
+      "edgeIds": ["edge-p21-pattern-workflow-290-0001"],
+      "blindSpots": ["NO_WORKFLOW_DEFINITION", "NO_EXECUTION_OR_APPROVAL_BINDING"],
+      "reproduction": "PLANTED_PROJECTION_SIGNAL"
+    },
+    {
+      "candidateId": "p21-drift-290-0001",
+      "candidateVersion": "1.0.0",
+      "candidateDigest": "64da6f6e76f9c387edb1e349bb80c52b08800b5fd432e147495197ecf189af8c",
+      "candidateClass": "DRIFT",
+      "signalCode": "SOURCE_DIGEST_DRIFT_SIGNAL",
+      "evidenceIds": ["ev-p21-drift-290-0001", "ev-p21-pattern-290-0001"],
+      "edgeIds": ["edge-p21-drift-pattern-290-0001"],
+      "blindSpots": ["NO_DRIFT_ROOT_CAUSE", "NO_REPAIR_OR_INVALIDATION_DECISION"],
+      "reproduction": "PLANTED_PROJECTION_SIGNAL"
+    }
+  ],
+  "inventedEdges": 0,
+  "fixtureDigest": "bd5b6a5b6a066213db93341d8737f60adf2f00350d8ab5812f736d4244687fae"
+}

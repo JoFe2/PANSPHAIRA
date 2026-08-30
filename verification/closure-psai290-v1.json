@@ -1,0 +1,253 @@
+{
+  "schemaVersion": "pansphaira.closure/evidence-recovery/v1",
+  "verificationId": "closure-psai290-evidence-recovery-v1-290-0001",
+  "taskId": "CLOSURE-PSAI290-EVIDENCE-RECOVERY-01",
+  "disposition": "KEEP_OPEN",
+  "releaseDisposition": "RELEASE_REQUIRED_PENDING_DELIVERY",
+  "scope": {
+    "evidenceClass": "LOCAL_SYNTHETIC_AND_DRY_RUN_ONLY",
+    "authority": "NONE",
+    "promotion": "DENIED",
+    "canonicalEvidenceMutation": 0,
+    "externalStateMutation": 0,
+    "credentialsOrRawPayloadIncluded": false
+  },
+  "repositoryBinding": {
+    "mainCommit": "c57d2cf2e06fd930a163241e28cd0f9d9952fec5",
+    "mainTree": "0aa7c1787e226381c50d80930454f7312346d1df",
+    "candidateContentCommit": "BOUND_BY_FINAL_TASK_RECEIPT",
+    "candidateContentTree": "BOUND_BY_FINAL_TASK_RECEIPT",
+    "mergeBase": "c57d2cf2e06fd930a163241e28cd0f9d9952fec5",
+    "candidateRange": "c57d2cf2e06fd930a163241e28cd0f9d9952fec5...BOUND_BY_FINAL_TASK_RECEIPT",
+    "currentMainReplay": {
+      "command": "git cat-file -e main:scripts/run-cks-10-local-integration.mjs",
+      "exitCode": 128,
+      "result": "BLOCKED_CANDIDATE_ARTIFACT_NOT_PRESENT_ON_CURRENT_MAIN",
+      "promotionEffect": "NONE"
+    },
+    "exactHeadCi": "PENDING_PROTECTED_PR_HEAD_AFTER_AUTHORITATIVE_REPLAY",
+    "protectedMerge": "PENDING",
+    "publicMainReadback": "PENDING_NO_280_UPDATE"
+  },
+  "issueBindings": {
+    "declaredScope": "SYNTHETIC_MINIMIZED_LOCAL_PREREQUISITE_METADATA",
+    "fixture": {
+      "path": "tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+      "canonicalDigest": "8e02b0666ddd3e968b12c501fea58e9ba92f2019888e5a27b08d0f317d6cfa2e",
+      "exactBytesSha256": "33a065d3df95f29276da72aa645fb6a742b828380c942b97fb2d00f79582adc3"
+    },
+    "issues": [
+      {
+        "issueId": "#288",
+        "issueVersion": "1.0.0",
+        "issueDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead",
+        "candidateClasses": [
+          "GAP",
+          "CO_USAGE",
+          "NEGATIVE_EVIDENCE"
+        ]
+      },
+      {
+        "issueId": "#289",
+        "issueVersion": "1.0.0",
+        "issueDigest": "4e4d69f8e7662d7aa94bdffccd8fa1d0800b62225a7de6fc91fff96f23673f31",
+        "candidateClasses": [
+          "CLUSTER",
+          "PATTERN"
+        ]
+      }
+    ],
+    "localReadback": {
+      "command": "node --jitless scripts/verify-cks-10-prerequisites.mjs tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+      "exitCode": 0,
+      "evidence": 5,
+      "candidates": 5,
+      "inventedEdges": 0,
+      "terminalDisposition": "BOUND_LOCAL_ONLY_NOT_ISSUE_CLOSURE"
+    },
+    "issueClosure": "PENDING_AUTHORITATIVE_REPLAY_EXACT_HEAD_CI_PROTECTED_MERGE_AND_PUBLIC_MAIN_READBACK"
+  },
+  "criterionEvidence": [
+    {
+      "criterionId": "AC-1-MINIMIZED-PROJECTION",
+      "boundReceipts": [
+        {
+          "path": "verification/cks-10-projection-contract-v1.json",
+          "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a846068d4c21a"
+        },
+        {
+          "path": "verification/cks-10-publisher-receipt-v1.json",
+          "sha256": "61d385744b637e7f1762c612d01ec770e1fb876cf8a4a628bed2f3c3b3dd728e"
+        }
+      ],
+      "terminalEvidence": "Stable identifiers, versions, SHA-256 digests and TASK, KNOWLEDGE, DECISION and OUTCOME classes are projected; secrets, raw prompts, credentials, unnecessary payloads and mutable policy state are excluded."
+    },
+    {
+      "criterionId": "AC-2-FAIL-CLOSED-ENVELOPE",
+      "boundReceipts": [
+        {
+          "path": "verification/cks-10-envelope-guards-v1.json",
+          "sha256": "2f8b5e221004f1b96c216654328e2bc1eb5a9e7d5b246282751b3b0ac5a58399"
+        },
+        {
+          "path": "verification/cks-10-prerequisite-readback-v1.json",
+          "sha256": "eb5c6079d614ad6436057f106c600c8fa84823b01eb926d96fe4bccb026bfbc6"
+        }
+      ],
+      "terminalEvidence": "Tenant/scope substitution, retention expiry, freshness staleness, provenance mismatch, replay mutation and scope substitution are denied."
+    },
+    {
+      "criterionId": "AC-3-P21-REPLAY",
+      "boundReceipts": [
+        {
+          "path": "verification/cks-10-p21-replay-v1.json",
+          "sha256": "1b6251b4ef7e30d26fae1a213a85206c15dd2ec79fd6634434bdb3bb4f6c8999"
+        },
+        {
+          "path": "verification/cks-10-local-integration-v1.json",
+          "sha256": "c102f6f86a1f4a279102a9143b2f19e73efcbf895a70bb7e3e8e04affcae7ac6"
+        }
+      ],
+      "terminalEvidence": "Seven planted candidates reproduce GAP, CLUSTER, CO_USAGE, NEGATIVE_EVIDENCE, PATTERN, WORKFLOW and DRIFT; evidence=7, allowedEdges=5, inventedEdges=0 and blindSpots=19."
+    },
+    {
+      "criterionId": "AC-4-CANDIDATE-AUTHORITY-BOUNDARY",
+      "boundReceipts": [
+        {
+          "path": "verification/cks-10-candidate-return-v1.json",
+          "sha256": "d0d3995f3f1ceed5ee6729cc3d124ef27193190114628f3366e41e2c68e470f1"
+        },
+        {
+          "path": "verification/cks-10-p21-replay-v1.json",
+          "sha256": "1b6251b4ef7e30d26fae1a213a85206c15dd2ec79fd6634434bdb3bb4f6c8999"
+        }
+      ],
+      "terminalEvidence": "Candidate return lifecycle is UNTRUSTED_CANDIDATE with Authority, Effect and promotion all NONE; Knowledge, Workflow and Function promotion is denied."
+    },
+    {
+      "criterionId": "AC-5-ROLLBACK-READBACK",
+      "boundReceipts": [
+        {
+          "path": "verification/cks-10-rollback-readback-v1.json",
+          "sha256": "5e6e2f3cc7de30eae4d539476a6e2d873df7f0d4804f62450b47325dc4c80f31"
+        },
+        {
+          "path": "verification/cks-10-local-integration-v1.json",
+          "sha256": "c102f6f86a1f4a279102a9143b2f19e73efcbf895a70bb7e3e8e04affcae7ac6"
+        }
+      ],
+      "terminalEvidence": "Dry-run plans two generated-projection removals and leaves canonical evidence byte-identical: sha256=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a, bytes=4606."
+    }
+  ],
+  "integratedCandidate": {
+    "command": "node --jitless scripts/run-cks-10-local-integration.mjs",
+    "exitCode": 0,
+    "result": "VERIFIED_OFFLINE_SYNTHETIC_LOCAL_DRY_RUN",
+    "manifest": {
+      "path": "tests/fixtures/cks-10/local-integration-manifest-v1.json",
+      "sha256": "ac1162a37ae8503774beb1bc4ca290d4d64c8af30c07c2f88d0329529199d7d4"
+    },
+    "failClosedCoverage": [
+      "missing_dependency_receipt",
+      "duplicate_id",
+      "invalid_manifest_schema",
+      "unresolved_dependency",
+      "dependency_cycle",
+      "tenant_scope_mismatch",
+      "retention_expired",
+      "freshness_stale",
+      "provenance_mismatch",
+      "candidate_authority_field",
+      "invented_evidence_edge",
+      "blind_spot_omission",
+      "replayed_candidate",
+      "replay_mutation"
+    ],
+    "declaredScopeCeiling": "DRY_RUN_SYNTHETIC_OR_STALE_EVIDENCE_CANNOT_PROMOTE_BEYOND_DECLARED_SCOPE"
+  },
+  "focusedVerification": {
+    "commands": [
+      {
+        "command": "node --jitless scripts/verify-cks-10-prerequisites.mjs --self-test",
+        "exitCode": 0,
+        "result": "PASS cases=42 failures=0"
+      },
+      {
+        "command": "node --jitless scripts/verify-cks-10-delivery-readback.mjs --self-test",
+        "exitCode": 0,
+        "result": "PASS cases=6 failures=0"
+      },
+      {
+        "command": "node --jitless scripts/verify-cks-10-p21-replay.mjs",
+        "exitCode": 0,
+        "result": "PASS candidates=7 evidence=7 allowedEdges=5 inventedEdges=0 blindSpots=19 authority=NONE promotion=NONE"
+      },
+      {
+        "command": "node --jitless scripts/verify-cks-10-projection-rollback.mjs --dry-run",
+        "exitCode": 0,
+        "result": "PASS plannedRemovals=2 canonical evidence unchanged"
+      },
+      {
+        "command": "node --jitless scripts/validate-cks-10-candidate-return.mjs --self-test",
+        "exitCode": 0,
+        "result": "PASS cases=29 failures=0"
+      },
+      {
+        "command": "node --jitless scripts/validate-cks-10-projection-contract.mjs --self-test",
+        "exitCode": 0,
+        "result": "PASS cases=40 failures=0"
+      }
+    ],
+    "deliveryManifest": {
+      "path": "tests/fixtures/cks-10/delivery-readback-manifest-v1.json",
+      "exactBytesSha256": "bc9f5fb34836064461a9ef372e33d4aef6fd44c477bfc804fea76883db8ae66e",
+      "verifiedArtifacts": 26
+    }
+  },
+  "authoritativeGateStatus": {
+    "requiredBuild": {
+      "command": "PATH=/usr/bin:/bin /usr/bin/npm run build --silent",
+      "exitCode": 0,
+      "status": "PASS_CURRENT_MAIN_RECONCILED_WORKTREE",
+      "evidence": "/usr/bin/node v24.19.0 completed TypeScript compilation after npm ci --ignore-scripts."
+    },
+    "requiredDiffCheck": {
+      "command": "git diff --check main...HEAD",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    "currentMainFocusedReplay": {
+      "command": "/usr/bin/node --test tests/cks-10/*.test.mjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "productVerdict": "LOCAL_SYNTHETIC_READ_ONLY_BRIDGE_VALIDATED"
+    },
+    "controllerRequired": [
+      "issue-scoped PR and exact-head CI",
+      "protected merge",
+      "governed release after delivery plus public-main readback before #280 update"
+    ],
+    "successClaim": "LOCAL_VALIDATION_COMPLETE_DELIVERY_AND_RELEASE_STILL_PENDING"
+  },
+  "precedence": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantAdded": false
+  },
+  "nonclaims": [
+    "NO_ISSUE_CLOSE_OR_EXTERNAL_STATE_CLAIM",
+    "NO_CURRENT_MAIN_REPLAY_OR_EXACT_HEAD_CI_SUCCESS_CLAIM",
+    "NO_PROTECTED_MERGE_OR_PUBLIC_MAIN_READBACK",
+    "NO_PUSH_MERGE_RELEASE_DEPLOYMENT_OR_CREDENTIAL_CHANGE",
+    "NO_CANDIDATE_PROMOTION_OR_CANONICAL_EVIDENCE_MUTATION",
+    "NO_PR_CI_PROTECTED_MERGE_PUBLIC_MAIN_DELIVERY_OR_RELEASE_CLAIM"
+  ]
+}

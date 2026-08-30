@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 27,
+  "graphVersion": 28,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "9c59e3bbcf7e57137596205c6ca9977f68a29c788692f75732720b50df463090"
+          "sha256": "285e662edfff629e9d98e551c233a0d47cdc4e7044d91863788e8e9af091c176"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5d466fd0ec3fde1d93836a0a67a867a1974fd990e935526cadc2347686add8d0"
+          "sha256": "2a64684b93bc70e8eb89484e4ec75a856aa019aeb371def8122f1cd9221db3cd"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "f9cfdc80be3b75f1755f859e264de68271569a1059a78ebbeb48a68cdd875a2b"
+          "sha256": "9476dbb3e5d34635f949bfde9c0d9275729a41aa9429e8c025516295bbd1b7a0"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "308cc14be9e5f5f6fba9720c24c0f3adb0129011bcd9116e8982384368391dfd"
+          "sha256": "99534bc792128af24788f8dc7e5d1737833719933527b93a74ec623a82d94a06"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "451387978388497172afb421488ed6ec8f1576a27e598e54253c1d0458a352a6"
+          "sha256": "ca41191893202a9f7a50f001d89a381efc87388436b4bd90f1269723f14a716f"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "226edd06b93a94a05797fad53373bb6200dae488a3d0a357c9b1a9ce5cfe22d5"
+          "sha256": "89aa564b0fa1b642f7c8b40d8c35414c97007434606f3a2883762553dfc4d733"
         }
       ],
       "ownedTests": [
@@ -3675,6 +3675,225 @@
         "P18 rejects frequency-only, narrow-context, correlation, inapplicability and exact-version drift traps.",
         "Shadow replay remains simulation-only and candidates preserve dependencies, failures, counterexamples and provenance.",
         "A successful terminal proof requires governed release delivery."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-10-readonly-analytics-bridge-v1",
+      "dependsOn": [
+        "cks-09-task-pattern-proof-v1"
+      ],
+      "inputs": [
+        {
+          "path": "contracts/cks-10/analytic-candidate-return-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "92842623eaa616423018602fe42ca3283aeb4f0f0b0d63716abc1cd54a83da8f"
+        },
+        {
+          "path": "contracts/cks-10/knowledge-projection-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "5f7f38d9350863993c58d6cb0dddb25f17906298471f3b40b620255b0789f86e"
+        },
+        {
+          "path": "docs/architecture/cks-10-analytics-bridge-decision-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "65629f8e98d827eb40782090b741661a271f30e83c3d400ad339b6141a85177c"
+        },
+        {
+          "path": "scripts/run-cks-10-local-integration.mjs",
+          "role": "VALIDATOR",
+          "sha256": "ea576559bbae6ce12ad19fd997d304426bc1fd90e624751791c5f7d9f171bb34"
+        },
+        {
+          "path": "scripts/run-cks-10-p21-analysis.mjs",
+          "role": "VALIDATOR",
+          "sha256": "f6b60078b2fac2d462ec5f13da02f30bf8aa66e607b226e27b497d62e6d485ed"
+        },
+        {
+          "path": "scripts/validate-cks-10-candidate-return.mjs",
+          "role": "VALIDATOR",
+          "sha256": "555cee3bc4b41f015f5a1d08831debc0aa31b0fd43b61e18a1690fd0e04e5f52"
+        },
+        {
+          "path": "scripts/validate-cks-10-projection-contract.mjs",
+          "role": "VALIDATOR",
+          "sha256": "8398f859c5bc99bf7d9cd4c075cdf4b73de78ab674194b5a7bbd435e6fb9dcdb"
+        },
+        {
+          "path": "scripts/verify-cks-10-delivery-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "da3691bbd0d080217f915fe886f5c6e2b59efac4b1c35837eaea0fe77643fa43"
+        },
+        {
+          "path": "scripts/verify-cks-10-p21-replay.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6377f02ddc83b9a53c3b85cd0aa74ac6684db5cecaf7c4202caf14ea58edbe62"
+        },
+        {
+          "path": "scripts/verify-cks-10-prerequisites.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5684314b72069ec0d55cf4a9c6f02313a0582008f7e4a665548139d5746c728e"
+        },
+        {
+          "path": "scripts/verify-cks-10-projection-rollback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "70569041c25622ff0a54fc4542797a3d2b1302dbba13119d1a93bf5faa9e251b"
+        },
+        {
+          "path": "src/cks-10/projection-envelope-guards.mjs",
+          "role": "VALIDATOR",
+          "sha256": "31a23830db55875a0a98f93c4f40b518acf243e7384cc8c7b7e2533af66838b2"
+        },
+        {
+          "path": "src/cks-10/read-only-projection-publisher.mjs",
+          "role": "VALIDATOR",
+          "sha256": "aeb383222801cf976a69f0eab00465c6323a9000ba1d1c72dea1a39b7c9ab7fc"
+        },
+        {
+          "path": "tests/cks-10/p21-replay-validator.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1428a9ed90e49fd7313726787bb4de4182070593a0e8c6908bee9c0aec6e54b1"
+        },
+        {
+          "path": "tests/cks-10/projection-envelope-guards.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "aa592c490604ec07b8bdf16c98056c22147a8f99e47316cd11561f661bb3ef83"
+        },
+        {
+          "path": "tests/cks-10/projection-rollback.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5922cf31f50a5af5ba83c6fe251d3eb33a548aaa5cd778b0e6414cf3d2e86ef1"
+        },
+        {
+          "path": "tests/cks-10/read-only-projection-publisher.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "e081fa7ca4e361ada449edbc246fd9781a36b9e71c29516f51657f818ed77914"
+        },
+        {
+          "path": "tests/fixtures/cks-10/candidate-return-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "61e56842e466c4e337ca8fbfab1f148ed569f966d733c091c98c7c51e429dcc8"
+        },
+        {
+          "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a"
+        },
+        {
+          "path": "tests/fixtures/cks-10/delivery-readback-manifest-v1.json",
+          "role": "FIXTURE",
+          "sha256": "47e5c08c85e1e71b4c0b6c849acdb265ef9632b760856e774ca34d089f7ca7e8"
+        },
+        {
+          "path": "tests/fixtures/cks-10/envelope-guard-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f961869f8199c2b572bdac2ff4416013ab74bd72cd73c40a98a6ceafedd98db8"
+        },
+        {
+          "path": "tests/fixtures/cks-10/local-integration-manifest-v1.json",
+          "role": "FIXTURE",
+          "sha256": "1296d7a81813c46fb2fdbf6990342ca90bf62e1f4c71feaaaae165ef71dbb542"
+        },
+        {
+          "path": "tests/fixtures/cks-10/p21-expected-candidates-v1.json",
+          "role": "FIXTURE",
+          "sha256": "47d5943c461675eea0f353ecc106e5c7983b4fe06966d683417cb011369d8caf"
+        },
+        {
+          "path": "tests/fixtures/cks-10/p21-planted-projection-v1.json",
+          "role": "FIXTURE",
+          "sha256": "e5c1bdccee5e3efc9e68e6ed557c00393ba4e62fb9f3ad0d44bd539e37e098e1"
+        },
+        {
+          "path": "tests/fixtures/cks-10/p21-replay-negative-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "be28a8b0d69fbf58e9d6a2087a351e822b6e856734d3ede8b8c9350591cf8959"
+        },
+        {
+          "path": "tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+          "role": "FIXTURE",
+          "sha256": "33a065d3df95f29276da72aa645fb6a742b828380c942b97fb2d00f79582adc3"
+        },
+        {
+          "path": "tests/fixtures/cks-10/projection-contract-v1.json",
+          "role": "FIXTURE",
+          "sha256": "3d73c3f7d483f0c06692be5ee744413c3bbdada79d385ddb2a6f6404beb58c82"
+        },
+        {
+          "path": "tests/fixtures/cks-10/publisher-input-v1.json",
+          "role": "FIXTURE",
+          "sha256": "2b968b18375b989ac16aeec988dbe4dcdf695167a6280f09b639ed2f5408ed8a"
+        },
+        {
+          "path": "verification/cks-10-boundary-decision-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "496481eac88cde110fec73c7727c7a4cae8f8bf098ac84ce0b36575914dc4bd8"
+        },
+        {
+          "path": "verification/cks-10-candidate-return-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d0d3995f3f1ceed5ee6729cc3d124ef27193190114628f3366e41e2c68e470f1"
+        },
+        {
+          "path": "verification/cks-10-delivery-readback-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bc3d58bd1e8f9492683140049faaf1b0dfc09d91c7345e56000553fcd508c232"
+        },
+        {
+          "path": "verification/cks-10-envelope-guards-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2f8b5e221004f1b96c216654328e2bc1eb5a9e7d5b246282751b3b0ac5a58399"
+        },
+        {
+          "path": "verification/cks-10-local-integration-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "618e6c4678ca7739edba27ef87fb0d4007729a2ec77c1ba3adc7a988344baa04"
+        },
+        {
+          "path": "verification/cks-10-p21-fixture-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "565037ba27bd6667d6c07460fba7b9229bf487ce80982b971f7ccc1b8963920d"
+        },
+        {
+          "path": "verification/cks-10-p21-replay-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "1b6251b4ef7e30d26fae1a213a85206c15dd2ec79fd6634434bdb3bb4f6c8999"
+        },
+        {
+          "path": "verification/cks-10-prerequisite-readback-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "76a5f239fbcfb19eb7126da27a65f68a18efb146c74f0a20d04b0bb580750a90"
+        },
+        {
+          "path": "verification/cks-10-projection-contract-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a845978d4c21a"
+        },
+        {
+          "path": "verification/cks-10-publisher-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0a41a3cdb220ecf91aab143a35c6b0636d782ddbdbdc2fac8fadcf85511c0174"
+        },
+        {
+          "path": "verification/cks-10-rollback-readback-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "efac20e779b8072560556861e6eb76d9e91aa24099371ea72db42d29966fdb37"
+        },
+        {
+          "path": "verification/closure-psai290-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a2e699af35357a4ca838742a77a0f62a53315843edf92e8203ee32bbae02a7a4"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks10:test"
+      ],
+      "invariants": [
+        "Projection is minimized, read-only and authority-free.",
+        "P21 emits only witnessed in-scope candidate edges with explicit blind spots.",
+        "Rollback leaves canonical PanSphAIra evidence byte-identical.",
+        "Successful proof requires governed release delivery."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "pansphaira.cks10/knowledge-projection/v1",
+  "contract": {
+    "contractId": "cks-10/minimized-projection/v1",
+    "contractVersion": "1.0.0",
+    "contractSchemaDigest": "5f7f38d9350863993c58d6cb0dddb25f17906298471f3b40b620255b0789f86e"
+  },
+  "exchange": {
+    "exchangeId": "cks10-exch-290-0001",
+    "projectionId": "cks10-proj-290-0001",
+    "projectionVersion": "1.0.0",
+    "replayId": "cks10-replay-290-0001",
+    "projectionDigest": "2b3c55610fd9225d8254ccaf400d42328c9e9fd25a5885bf1b7dc762361b31a0"
+  },
+  "producer": {
+    "producerId": "pansphaira.cks10.projection-producer",
+    "producerVersion": "1.0.0",
+    "producerDigest": "25db9eb8f9639e1bf44d05291b5690f3c0c3e6c41aaffe24c7dd0f4ba640b6c2"
+  },
+  "intendedConsumer": {
+    "consumerId": "kaleidosphere.cks10.analytics-consumer",
+    "consumerVersion": "1.0.0",
+    "consumerDigest": "2c2bbd69766bbacc8082e0f902a5a0fb787446cdfded0c1602b1b6f96a319666"
+  },
+  "tenantScope": {
+    "opaqueTenantScopeId": "tscope-290-synthetic-lane1",
+    "scope": {
+      "scopeId": "scope.cks10.analytics-exploration",
+      "scopeVersion": "1.0.0",
+      "scopeDigest": "8d6780bd038787cb77ed2c74eedbdbe8e25a830994df7ab2636a7b0f9b88c3e5"
+    },
+    "scopeDecision": {
+      "decisionId": "CKS-10-BOUNDARY-DECISION-V1",
+      "decisionVersion": "1.0.0",
+      "decisionDigest": "65629f8e98d827eb40782090b741661a271f30e83c3d400ad339b6141a85177c"
+    }
+  },
+  "purpose": {
+    "purposeClass": "CKS10_ANALYTICS_EXPLORATION",
+    "purposeRegistry": {
+      "registryId": "registry.pansphaira.purpose-class",
+      "registryVersion": "1.0.0",
+      "registryDigest": "a29bc192b67cd73043cd8b07fe1de0b0ec09d14ad6bcf2f2d5bf61f6ddec2dfe"
+    }
+  },
+  "records": [
+    {
+      "recordId": "rec-task-290-0001",
+      "recordClass": "TASK",
+      "assetId": "task.psa290.qwen-02.projection-contract",
+      "assetVersion": "1.0.0",
+      "assetDigest": "8833b8c35f7371e4bcacdc99f999aa663abb3bf2932235530bcc6924d1c60a75",
+      "assetClass": "WORK_TASK",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-task-290-0001",
+          "assetId": "task.psa290.qwen-02.projection-contract",
+          "assetVersion": "1.0.0",
+          "assetDigest": "8833b8c35f7371e4bcacdc99f999aa663abb3bf2932235530bcc6924d1c60a75",
+          "assetClass": "WORK_TASK",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "68c993ee5e3b90d950d458b0cd6f3dafbd9a053c21dd25809b63332b8ce22ef3"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "task.state",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "IN_PROGRESS",
+          "sourceRefId": "src-task-290-0001"
+        },
+        {
+          "fieldId": "task.contract",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "cks-10/minimized-projection/v1",
+          "sourceRefId": "src-task-290-0001"
+        }
+      ]
+    },
+    {
+      "recordId": "rec-knowledge-290-0001",
+      "recordClass": "KNOWLEDGE",
+      "assetId": "knowledge.cks10.analytics-boundary-v1",
+      "assetVersion": "1.0.0",
+      "assetDigest": "33f23356cd9968491f9ecc1c23a4a4151a0fd605770cb2e25e80d8e93a2b3938",
+      "assetClass": "KNOWLEDGE_RECORD",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-knowledge-290-0001",
+          "assetId": "knowledge.cks10.analytics-boundary-v1",
+          "assetVersion": "1.0.0",
+          "assetDigest": "33f23356cd9968491f9ecc1c23a4a4151a0fd605770cb2e25e80d8e93a2b3938",
+          "assetClass": "KNOWLEDGE_RECORD",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "2d1605bb59ee035e94f63e93ef1e3ac713bf49c9307455f7692b8c89c6b11b57"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "knowledge.decision.count",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "AGGREGATE_MEASURE",
+          "value": {
+            "measureClass": "BOUNDARY_DECISION",
+            "statistic": "COUNT",
+            "value": 1,
+            "sampleCount": 1
+          },
+          "sourceRefId": "src-knowledge-290-0001"
+        }
+      ]
+    },
+    {
+      "recordId": "rec-decision-290-0001",
+      "recordClass": "DECISION",
+      "assetId": "decision.cks10.boundary-decision-v1",
+      "assetVersion": "1.0.0",
+      "assetDigest": "1559ffd39fa05ac1f56a1883227917a6e87cbb4f2129fa38126eceba3e88d8d7",
+      "assetClass": "ARCHITECTURE_DECISION",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-decision-290-0001",
+          "assetId": "decision.cks10.boundary-decision-v1",
+          "assetVersion": "1.0.0",
+          "assetDigest": "1559ffd39fa05ac1f56a1883227917a6e87cbb4f2129fa38126eceba3e88d8d7",
+          "assetClass": "ARCHITECTURE_DECISION",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "8d884cb7c4b47b78d38ee4cf27e47f3985c8b36bc50f793168eaa5c09b12eda6"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "decision.selected.alternative",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "VERSIONED_MINIMIZED_PROJECTION_AUTHORITY_FREE_CANDIDATE_RETURN",
+          "sourceRefId": "src-decision-290-0001"
+        },
+        {
+          "fieldId": "decision.consumer.boundary",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "NONE",
+          "sourceRefId": "src-decision-290-0001"
+        }
+      ]
+    },
+    {
+      "recordId": "rec-outcome-290-0001",
+      "recordClass": "OUTCOME",
+      "assetId": "outcome.cks10.boundary-decision-v1",
+      "assetVersion": "1.0.0",
+      "assetDigest": "83e5458d714fbd726cc5222a4fca101b3d7a6346d4830904d94c842e30316478",
+      "assetClass": "OUTCOME_RECEIPT",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-outcome-290-0001",
+          "assetId": "outcome.cks10.boundary-decision-v1",
+          "assetVersion": "1.0.0",
+          "assetDigest": "83e5458d714fbd726cc5222a4fca101b3d7a6346d4830904d94c842e30316478",
+          "assetClass": "OUTCOME_RECEIPT",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "8dd627c3a56d49c18a25e7d2913c6288d6c14624f93ee7cdae9b7c69ea5fec9b"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "outcome.integration.verdict",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "NOT_IMPLEMENTED_NOT_INTEGRATED_NOT_DELIVERED",
+          "sourceRefId": "src-outcome-290-0001"
+        },
+        {
+          "fieldId": "outcome.related.decision",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "RELATIONSHIP_EDGE",
+          "value": {
+            "relationClass": "SUPPORTS",
+            "target": {
+              "assetId": "decision.cks10.boundary-decision-v1",
+              "assetVersion": "1.0.0",
+              "assetDigest": "1559ffd39fa05ac1f56a1883227917a6e87cbb4f2129fa38126eceba3e88d8d7"
+            }
+          },
+          "sourceRefId": "src-outcome-290-0001"
+        }
+      ]
+    }
+  ],
+  "time": {
+    "issuedAt": "2026-08-28T04:12:00Z",
+    "freshUntil": "2026-08-28T05:12:00Z",
+    "retainUntil": "2026-08-28T05:12:00Z"
+  },
+  "boundary": {
+    "readOnly": true,
+    "authorityClass": "NONE",
+    "effectClass": "NONE",
+    "promotionClaim": "NONE",
+    "writeInstructionAllowed": false
+  },
+  "excludedFields": [
+    "SECRETS",
+    "CREDENTIALS",
+    "TOKENS_KEYS_COOKIES_OR_SIGNING_MATERIAL",
+    "RAW_PROMPTS_COMPLETIONS_MESSAGES_OR_CHAIN_OF_THOUGHT",
+    "RAW_MODEL_OR_TOOL_TRACES",
+    "RAW_ROWS_SQL_FILES_OR_BINARY_BLOBS",
+    "FULL_GOVERNED_ASSET_BODIES",
+    "UNNECESSARY_PAYLOADS",
+    "DIRECT_TENANT_CUSTOMER_USER_ACTOR_SESSION_HOST_PATH_URL_NETWORK_OR_PROVIDER_IDENTIFIERS_WHEN_OPAQUE_SCOPE_IDS_SUFFICE",
+    "MUTABLE_POLICY_STATE",
+    "MUTABLE_APPROVAL_AUTHORITY_LEASE_WORKFLOW_RUN_OR_INVALIDATION_STATE",
+    "EXECUTABLE_CODE_COMMANDS_FUNCTION_BODIES_WORKFLOW_DEFINITIONS_OR_EFFECT_PAYLOADS",
+    "CALLBACKS_ARBITRARY_ROUTES_HOSTS_OR_PATHS"
+  ]
+}

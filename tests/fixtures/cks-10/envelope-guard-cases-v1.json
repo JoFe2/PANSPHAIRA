@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "pansphaira.cks10/projection-envelope-guards-cases/v1",
+  "envelopePath": "tests/fixtures/cks-10/projection-contract-v1.json",
+  "trustedNowMs": 1787891400000,
+  "positiveCases": [
+    "verified-minimized-projection",
+    "exact-replay-is-duplicate-noop",
+    "key-order-independent-digest"
+  ],
+  "negativeCases": [
+    { "caseId": "missing-trusted-clock", "options": { "omitNowMs": true }, "reason": "TRUSTED_CLOCK_REQUIRED" },
+    { "caseId": "missing-trusted-bindings", "options": { "omitExpectedEnvelope": true }, "reason": "TRUSTED_BINDINGS_REQUIRED" },
+    { "caseId": "tenant-scope-substitution", "path": "tenantScope.opaqueTenantScopeId", "value": "tscope-290-other", "reason": "TENANT_SCOPE_MISMATCH" },
+    { "caseId": "scope-digest-substitution", "path": "tenantScope.scope.scopeDigest", "value": "0000000000000000000000000000000000000000000000000000000000000000", "reason": "TENANT_SCOPE_MISMATCH" },
+    { "caseId": "retention-expired", "options": { "nowMs": 1787893920000 }, "reason": "RETENTION_EXPIRED" },
+    { "caseId": "freshness-stale", "options": { "nowMs": 1787893920000 }, "reason": "FRESHNESS_STALE" },
+    { "caseId": "future-issued", "options": { "nowMs": 1787890200000 }, "reason": "FUTURE_ISSUED_ENVELOPE" },
+    { "caseId": "provenance-substitution", "path": "records.0.sources.0.provenanceDigest", "value": "0000000000000000000000000000000000000000000000000000000000000000", "reason": "PROVENANCE_BINDING_MISMATCH" },
+    { "caseId": "projection-digest-forgery", "path": "exchange.projectionDigest", "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "reason": "PROJECTION_DIGEST_SELF_MISMATCH" },
+    { "caseId": "unknown-field", "path": "unexpected", "value": true, "reason": "UNKNOWN_FIELD" },
+    { "caseId": "paired-substitution-redigestion", "path": "records.0.fields.0.value", "value": "CHANGED", "redigest": true, "reason": "AUTHORITY_PROJECTION_DIGEST_MISMATCH" },
+    { "caseId": "replay-state-unavailable", "options": { "omitReplayState": true }, "reason": "REPLAY_STATE_REQUIRED" }
+  ]
+}

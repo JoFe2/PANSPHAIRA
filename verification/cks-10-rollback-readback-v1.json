@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "pansphaira.cks10/projection-rollback-readback-verification/v1",
+  "verificationId": "cks-10-projection-rollback-readback-v1-290-0001",
+  "taskId": "PSAI290-QWEN-08-ROLLBACK-READBACK",
+  "status": "PASS_LOCAL_VALIDATION",
+  "implementation": {
+    "artifact": "scripts/verify-cks-10-projection-rollback.mjs",
+    "api": "runProjectionRollbackReadback({ sandboxRoot, canonicalEvidencePath, manifest, dryRun })",
+    "behavior": "DRY_RUN_REMOVAL_ROLLBACK_PLANNING_REMOVAL_OF_GENERATED_PROJECTION_ARTIFACTS_ONLY_THEN_CANONICAL_EVIDENCE_READBACK",
+    "reusedPublisher": {
+      "path": "src/cks-10/read-only-projection-publisher.mjs",
+      "importedFunctions": [
+        "buildReadOnlyProjection",
+        "canonicalize",
+        "sha256"
+      ],
+      "unmodified": true
+    },
+    "sandbox": {
+      "location": "node:os tmpdir via mkdtempSync, removed on exit",
+      "canonicalEvidenceMutation": 0,
+      "repositoryFileMutation": 0,
+      "deletionZone": "GENERATED_PROJECTION_ARTIFACTS_ONLY"
+    },
+    "canonicalEvidence": {
+      "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
+      "byteLength": 4606,
+      "recordCount": 4,
+      "recordClasses": [
+        "TASK",
+        "KNOWLEDGE",
+        "DECISION",
+        "OUTCOME"
+      ],
+      "snapshotDigest": "dbe0d4e185c497b368be2dc2af79dc93b254a5b39cfc1e704ef3dc4d624591df",
+      "exactBytesSha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a",
+      "crossCheck": "RECORDS_BYTE_EQUAL_TO_PUBLISHER_INPUT_CANONICAL_SNAPSHOTS"
+    },
+    "generatedArtifactsRemoved": {
+      "removedArtifactCount": 2,
+      "removalManifest": "CKS10_PROJECTION_REMOVAL_MANIFEST_V1",
+      "projectionEnvelopeSelfDigest": "49a89d1c2334ef529be0c7612e3bcc21dac3426db36abf8cbbbb002a1bead25c",
+      "projectionEnvelopeSelfDigestSource": "RECONSTRUCTED_VIA_BUILD_READONLY_PROJECTION_FROM_PUBLISHER_INPUT_V1"
+    }
+  },
+  "artifacts": {
+    "harness": {
+      "path": "scripts/verify-cks-10-projection-rollback.mjs",
+      "sha256": "70569041c25622ff0a54fc4542797a3d2b1302dbba13119d1a93bf5faa9e251b"
+    },
+    "test": {
+      "path": "tests/cks-10/projection-rollback.test.mjs",
+      "sha256": "5922cf31f50a5af5ba83c6fe251d3eb33a548aaa5cd778b0e6414cf3d2e86ef1"
+    },
+    "fixture": {
+      "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
+      "sha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a"
+    },
+    "receipt": {
+      "path": "verification/cks-10-rollback-readback-v1.json",
+      "note": "THIS_RECEIPT"
+    }
+  },
+  "focusedGate": {
+    "standardNode": {
+      "observedNodeVersion": "v24.19.0",
+      "signal": "NONE",
+      "infrastructureNote": "PLAIN_NODE_RAN_TO_COMPLETION_LOCALLY_IN_THIS_CONTAINER_NO_SIGTRAP_OBSERVED"
+    },
+    "testCommand": {
+      "command": "node --test tests/cks-10/projection-rollback.test.mjs",
+      "requiredExitCode": 0,
+      "observedExitCode": 0,
+      "result": "PASS",
+      "tests": 8,
+      "failures": 0
+    },
+    "harnessCommand": {
+      "command": "node scripts/verify-cks-10-projection-rollback.mjs",
+      "requiredExitCode": 0,
+      "observedExitCode": 0,
+      "result": "PASS",
+      "observedLine": "cks-10-projection-rollback: PASS mode=full removed=2 canonicalDigest=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a canonicalBytes=4606 boundary=AUTHORITY_NONE_EFFECT_NONE_PROMOTION_NONE deletionZone=GENERATED_PROJECTION_ARTIFACTS_ONLY",
+      "dryRun": {
+        "command": "node scripts/verify-cks-10-projection-rollback.mjs --dry-run",
+        "observedExitCode": 0,
+        "result": "PASS",
+        "observedLine": "cks-10-projection-rollback: PASS mode=dry-run plannedRemovals=2 canonicalDigest=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a canonicalBytes=4606 boundary=AUTHORITY_NONE_EFFECT_NONE_PROMOTION_NONE deletionZone=GENERATED_PROJECTION_ARTIFACTS_ONLY"
+      },
+      "usageError": {
+        "command": "node scripts/verify-cks-10-projection-rollback.mjs <three-positional-args>",
+        "requiredExitCode": 2,
+        "observedExitCode": 2,
+        "result": "PASS"
+      }
+    }
+  },
+  "coverage": {
+    "positive": [
+      "FULL_REMOVAL_LEAVES_CANONICAL_EVIDENCE_RAW_BYTES_CANONICAL_CONTENT_AND_SHA256_BYTE_EQUAL",
+      "POST_REMOVAL_TREE_EXACTLY_PRE_REMOVAL_TREE_MINUS_REMOVED_PROJECTION_ARTIFACTS",
+      "DRY_RUN_PLANS_REMOVALS_DELETES_NOTHING_AND_PROVES_SAME_CANONICAL_DIGEST",
+      "DETERMINISTIC_REPEAT_RUN_IDENTICAL_RESULTS",
+      "RECONSTRUCTED_PROJECTION_ENVELOPE_SELF_DIGEST_MATCHES_MEASURED_PUBLISHER_PROJECTION_DIGEST",
+      "CANONICAL_SNAPSHOT_CROSS_CHECKED_BYTE_EQUAL_TO_PUBLISHER_INPUT_CANONICAL_SNAPSHOTS"
+    ],
+    "negativeFailClosed": [
+      "MANIFEST_LISTING_CANONICAL_EVIDENCE_PATH_DENIED_NO_DELETIONS",
+      "MANIFEST_ARTIFACT_PATH_OUTSIDE_PROJECTION_ZONE_DENIED_NO_DELETIONS",
+      "MANIFEST_ARTIFACT_DIGEST_MISMATCH_DENIED_NO_DELETIONS",
+      "MANIFEST_ARTIFACT_MISSING_DENIED_NO_DELETIONS",
+      "ARTIFACT_DRIFT_BETWEEN_PLAN_AND_REMOVAL_DENIED_ZERO_DELETIONS_CANONICAL_EVIDENCE_INTACT",
+      "TAMPERED_CANONICAL_SNAPSHOT_DIGEST_DENIED_AT_PLANNING",
+      "CANONICAL_EVIDENCE_MUTATION_AFTER_PLANNING_DENIED_BEFORE_ANY_DELETION",
+      "CANONICAL_EVIDENCE_BYTE_DRIFT_DENIED_AT_READBACK_DIGEST_AND_CONTENT_MISMATCH",
+      "READBACK_WITHOUT_REREAD_EVIDENCE_IMPOSSIBLE_MISSING_FILE_MISSING_EXPECTED_STATE_AND_MISSING_PLAN_ALL_DENIED"
+    ]
+  },
+  "additionalChecks": {
+    "requiredDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "resultBeforeCommit": "PASS_EXIT_0"
+    },
+    "determinism": {
+      "digestAlgorithm": "SHA-256",
+      "canonicalization": "PUBLISHER_CANONICALIZE_SORTED_OBJECT_KEYS_PRESERVED_ARRAY_ORDER",
+      "wallClockAccess": "NONE",
+      "networkAccess": "NONE",
+      "deletionScope": "DISPOSABLE_OS_TMPDIR_SANDBOX_ONLY_REMOVED_ON_EXIT"
+    }
+  },
+  "boundary": {
+    "readOnly": true,
+    "authorityClass": "NONE",
+    "effectClass": "NONE",
+    "promotionClaim": "NONE",
+    "writeInstructionAllowed": false,
+    "deletionZone": "GENERATED_PROJECTION_ARTIFACTS_ONLY",
+    "bridgeRuntime": "NOT_IMPLEMENTED_NOT_INTEGRATED_NOT_DELIVERED"
+  },
+  "nonclaims": [
+    "NO_CANONICAL_EVIDENCE_MUTATION_OR_EXTERNAL_STATE_MUTATION",
+    "NO_REMOVAL_OF_CANONICAL_EVIDENCE_OR_ANY_PATH_OUTSIDE_GENERATED_PROJECTION_ARTIFACTS",
+    "NO_SECRETS_CREDENTIALS_RAW_PROMPTS_RAW_TRACES_RAW_ROWS_OR_EXECUTABLE_MATERIAL_IN_GENERATED_ARTIFACTS",
+    "NO_POLICY_APPROVAL_AUTHORITY_PROMOTION_INVALIDATION_WORKFLOW_FUNCTION_OR_EFFECT_TRANSFER",
+    "NO_ENDPOINT_CONNECTOR_QUEUE_RUNTIME_OR_ACTIVATION",
+    "NO_PUSH_MERGE_OR_RELEASE",
+    "NO_PINNED_NODE_OR_HOST_DOCKER_AUTHORITATIVE_GATE_SUCCESS_CLAIM",
+    "NO_CHANGE_TO_OPERATING_MODEL_V1_1_OR_DECISIONS_D_001_THROUGH_D_007"
+  ],
+  "precedence": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantAdded": false
+  },
+  "verificationGates": [
+    {
+      "command": "node --test tests/cks-10/projection-rollback.test.mjs",
+      "requiredExitCode": 0,
+      "successClaimBeforePass": "PROHIBITED"
+    },
+    {
+      "command": "node scripts/verify-cks-10-projection-rollback.mjs",
+      "requiredExitCode": 0,
+      "successClaimBeforePass": "PROHIBITED"
+    },
+    {
+      "command": "git diff --check origin/main...HEAD",
+      "requiredExitCode": 0,
+      "successClaimBeforePass": "PROHIBITED"
+    }
+  ]
+}

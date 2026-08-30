@@ -1,0 +1,231 @@
+{
+  "schemaVersion": "pansphaira.cks10/prerequisite-evidence/v1",
+  "contract": {
+    "contractId": "cks-10/prerequisite-readback/v1",
+    "contractVersion": "1.0.0",
+    "contractDigest": "a1afaed26d959d4a6d9261161df823cd04114972a610622691d75d742ea7de4a"
+  },
+  "fixtureDigest": "8e02b0666ddd3e968b12c501fea58e9ba92f2019888e5a27b08d0f317d6cfa2e",
+  "tenantScope": {
+    "tenantScopeId": "tscope-290-synthetic-lane1",
+    "scopeId": "scope.cks10.analytics-exploration",
+    "scopeVersion": "1.0.0",
+    "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8",
+    "decisionId": "CKS-10-BOUNDARY-DECISION-V1",
+    "decisionVersion": "1.0.0",
+    "decisionDigest": "2a0cfa0be3452f98518f2be2eeb6b2d54fb0a9a84efbaa18609c9e9c39b0db15",
+    "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668"
+  },
+  "retention": {
+    "retentionVersion": "1.0.0",
+    "retainUntil": "2026-08-28T05:12:00Z",
+    "finite": true,
+    "derivedStatePolicy": "EARLIEST_SOURCE_EXPIRY",
+    "expiryDisposition": "DENY_USE_RETURN_AND_RETAIN",
+    "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee"
+  },
+  "freshness": {
+    "freshnessVersion": "1.0.0",
+    "issuedAt": "2026-08-28T04:12:00Z",
+    "freshUntil": "2026-08-28T05:12:00Z",
+    "trustedClockRequired": true,
+    "invalidationCheck": "REQUIRED_BEFORE_USE_AND_RETURN",
+    "staleDisposition": "DENY",
+    "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730"
+  },
+  "replay": {
+    "replayVersion": "1.0.0",
+    "replayId": "cks10-prereq-replay-290-0001",
+    "duplicateDisposition": "DUPLICATE_NOOP",
+    "mutationDisposition": "DENY_REPLAY",
+    "crossScopeDisposition": "DENY",
+    "tuple": {
+      "contractId": "cks-10/prerequisite-readback/v1",
+      "contractVersion": "1.0.0",
+      "replayId": "cks10-prereq-replay-290-0001",
+      "tenantScopeId": "tscope-290-synthetic-lane1",
+      "scopeId": "scope.cks10.analytics-exploration",
+      "scopeVersion": "1.0.0",
+      "candidateIds": [
+        "p21-gap-290-0001",
+        "p21-cluster-290-0001",
+        "p21-co-usage-290-0001",
+        "p21-negative-evidence-290-0001",
+        "p21-pattern-290-0001"
+      ],
+      "evidenceIds": [
+        "ev-288-gap-290-0001",
+        "ev-289-cluster-290-0001",
+        "ev-288-co-usage-290-0001",
+        "ev-288-negative-evidence-290-0001",
+        "ev-289-pattern-290-0001"
+      ],
+      "edgeIds": [
+        "edge-288-gap-co-usage-290-0001",
+        "edge-289-cluster-pattern-290-0001",
+        "edge-288-negative-gap-290-0001",
+        "edge-288-co-usage-289-cluster-290-0001"
+      ]
+    },
+    "tupleDigest": "cf7fc22f250ff9eff3a8b9d2d388e17ebb0862763781d7fbf1f4ede972a961dc",
+    "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843"
+  },
+  "minimization": {
+    "mode": "ALLOWLIST_ONLY",
+    "rawPayloadIncluded": false,
+    "excludedClasses": [
+      "RAW_PROMPTS_COMPLETIONS_MESSAGES_OR_CHAIN_OF_THOUGHT",
+      "RAW_MODEL_OR_TOOL_TRACES",
+      "RAW_ROWS_SQL_FILES_OR_BINARY_BLOBS",
+      "SECRETS_CREDENTIALS_TOKENS_KEYS_COOKIES",
+      "DIRECT_TENANT_CUSTOMER_USER_ACTOR_SESSION_IDENTIFIERS",
+      "MUTABLE_POLICY_APPROVAL_INVALIDATION_OR_AUTHORITY_STATE",
+      "EXECUTABLE_CODE_COMMANDS_CALLBACKS_OR_EFFECT_PAYLOADS"
+    ],
+    "allowedFields": [
+      "candidateClass",
+      "evidenceIds",
+      "edgeIds",
+      "blindSpots",
+      "signalCode",
+      "observation.metricCode",
+      "observation.bucketCode",
+      "observation.count"
+    ],
+    "minimizedEvidenceOnly": true
+  },
+  "evidence": [
+    {
+      "evidenceId": "ev-288-gap-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "f81fcfc231d40461723dc77afd7108bdaa866bf00c64a79bff26c0d095b6ae5c",
+      "issue": {
+        "issueId": "#288",
+        "issueVersion": "1.0.0",
+        "issueDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead"
+      },
+      "evidenceKind": "GAP_SIGNAL",
+      "sourceKind": "ISSUE_THREAD_SUMMARY",
+      "signalCode": "UNRESOLVED_TASK_OUTCOME_TRANSITION",
+      "observation": {
+        "metricCode": "MISSING_TRANSITION_COUNT",
+        "bucketCode": "SINGLE_BOUNDARY_GAP",
+        "count": 1
+      },
+      "binding": {
+        "tenantScopeId": "tscope-290-synthetic-lane1",
+        "scopeId": "scope.cks10.analytics-exploration",
+        "scopeVersion": "1.0.0",
+        "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8",
+        "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668",
+        "retainUntil": "2026-08-28T05:12:00Z",
+        "retentionVersion": "1.0.0",
+        "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee",
+        "issuedAt": "2026-08-28T04:12:00Z",
+        "freshUntil": "2026-08-28T05:12:00Z",
+        "freshnessVersion": "1.0.0",
+        "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730",
+        "replayId": "cks10-prereq-replay-290-0001",
+        "replayVersion": "1.0.0",
+        "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843",
+        "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"
+      },
+      "provenance": {
+        "sourceId": "issue-288",
+        "sourceVersion": "1.0.0",
+        "sourceDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead",
+        "chain": [{"nodeId": "#288", "nodeVersion": "1.0.0", "nodeDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead"}],
+        "provenanceDigest": "a404ed573f5d088de349dea2b713b0a96e5794d40571b5ec5e1a3cce2164ad83"
+      },
+      "declaredEdgeIds": ["edge-288-gap-co-usage-290-0001"],
+      "minimizedFields": ["edgeIds", "signalCode", "observation.metricCode", "observation.bucketCode", "observation.count"]
+    },
+    {
+      "evidenceId": "ev-289-cluster-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "fae2a9de78d9c861928021e18099487ed9bb0fb2ad33d069c9d54cf90d3c3c48",
+      "issue": {"issueId": "#289", "issueVersion": "1.0.0", "issueDigest": "4e4d69f8e7662d7aa94bdffccd8fa1d0800b62225a7de6fc91fff96f23673f31"},
+      "evidenceKind": "CLUSTER_SIGNAL",
+      "sourceKind": "REPEATED_BOUNDARY_SUMMARY",
+      "signalCode": "RELATED_EVIDENCE_CLUSTER",
+      "observation": {"metricCode": "RELATED_SIGNAL_COUNT", "bucketCode": "TWO_MEMBER_CLUSTER", "count": 2},
+      "binding": {
+        "tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668",
+        "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"
+      },
+      "provenance": {"sourceId": "issue-289", "sourceVersion": "1.0.0", "sourceDigest": "4e4d69f8e7662d7aa94bdffccd8fa1d0800b62225a7de6fc91fff96f23673f31", "chain": [{"nodeId": "#289", "nodeVersion": "1.0.0", "nodeDigest": "4e4d69f8e7662d7aa94bdffccd8fa1d0800b62225a7de6fc91fff96f23673f31"}], "provenanceDigest": "1345af2a754a7f9758c1aa84433bdc64948376ed265d6a9f350be3efab868f38"},
+      "declaredEdgeIds": ["edge-289-cluster-pattern-290-0001"],
+      "minimizedFields": ["edgeIds", "signalCode", "observation.metricCode", "observation.bucketCode", "observation.count"]
+    },
+    {
+      "evidenceId": "ev-288-co-usage-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "091c229af7604687f6913ca308ee7f75808184aa6b149d19ba294ee353c943ac",
+      "issue": {"issueId": "#288", "issueVersion": "1.0.0", "issueDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead"},
+      "evidenceKind": "CO_USAGE_SIGNAL",
+      "sourceKind": "CO_USAGE_SUMMARY",
+      "signalCode": "SHARED_SCOPE_USAGE",
+      "observation": {"metricCode": "CO_USAGE_COUNT", "bucketCode": "TWO_SIGNAL_PAIR", "count": 2},
+      "binding": {
+        "tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668",
+        "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"
+      },
+      "provenance": {"sourceId": "issue-288", "sourceVersion": "1.0.0", "sourceDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead", "chain": [{"nodeId": "#288", "nodeVersion": "1.0.0", "nodeDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead"}], "provenanceDigest": "a404ed573f5d088de349dea2b713b0a96e5794d40571b5ec5e1a3cce2164ad83"},
+      "declaredEdgeIds": ["edge-288-co-usage-289-cluster-290-0001"],
+      "minimizedFields": ["edgeIds", "signalCode", "observation.metricCode", "observation.bucketCode", "observation.count"]
+    },
+    {
+      "evidenceId": "ev-288-negative-evidence-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "6eff5a680b639cbc5a84f6880d4d978d0fbe7d0fe6db538fb7e7255c690c190b",
+      "issue": {"issueId": "#288", "issueVersion": "1.0.0", "issueDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead"},
+      "evidenceKind": "NEGATIVE_EVIDENCE_SIGNAL",
+      "sourceKind": "NEGATIVE_CONTROL_SUMMARY",
+      "signalCode": "ABSENT_EXPECTED_LINK",
+      "observation": {"metricCode": "EXPECTED_LINK_COUNT", "bucketCode": "ZERO_OBSERVED", "count": 0},
+      "binding": {
+        "tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668",
+        "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"
+      },
+      "provenance": {"sourceId": "issue-288", "sourceVersion": "1.0.0", "sourceDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead", "chain": [{"nodeId": "#288", "nodeVersion": "1.0.0", "nodeDigest": "4148075ef45959e9687683cab331d35923046e79bcb36e3bb0300473c6378ead"}], "provenanceDigest": "a404ed573f5d088de349dea2b713b0a96e5794d40571b5ec5e1a3cce2164ad83"},
+      "declaredEdgeIds": ["edge-288-negative-gap-290-0001"],
+      "minimizedFields": ["edgeIds", "signalCode", "observation.metricCode", "observation.bucketCode", "observation.count"]
+    },
+    {
+      "evidenceId": "ev-289-pattern-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "3517cc7e88be6da98318f8afc507de469476cf81c6839f008907d83548d51fc6",
+      "issue": {"issueId": "#289", "issueVersion": "1.0.0", "issueDigest": "4e4d69f8e7662d7aa94bdffccd8fa1d0800b62225a7de6fc91fff96f23673f31"},
+      "evidenceKind": "PATTERN_SIGNAL",
+      "sourceKind": "SEQUENCE_PATTERN_SUMMARY",
+      "signalCode": "REPEATED_ORDER_PATTERN",
+      "observation": {"metricCode": "ORDER_PATTERN_COUNT", "bucketCode": "TWO_REPETITIONS", "count": 2},
+      "binding": {
+        "tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668",
+        "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"
+      },
+      "provenance": {"sourceId": "issue-289", "sourceVersion": "1.0.0", "sourceDigest": "4e4d69f8e7662d7aa94bdffccd8fa1d0800b62225a7de6fc91fff96f23673f31", "chain": [{"nodeId": "#289", "nodeVersion": "1.0.0", "nodeDigest": "4e4d69f8e7662d7aa94bdffccd8fa1d0800b62225a7de6fc91fff96f23673f31"}], "provenanceDigest": "1345af2a754a7f9758c1aa84433bdc64948376ed265d6a9f350be3efab868f38"},
+      "declaredEdgeIds": ["edge-289-cluster-pattern-290-0001"],
+      "minimizedFields": ["edgeIds", "signalCode", "observation.metricCode", "observation.bucketCode", "observation.count"]
+    }
+  ],
+  "declaredEdges": [
+    {"edgeId": "edge-288-gap-co-usage-290-0001", "edgeVersion": "1.0.0", "edgeDigest": "d1a23a286cfb883d7e8595c1ee886615a2115a04d9129b26e8750f9cdd943a9d", "sourceEvidenceId": "ev-288-gap-290-0001", "targetEvidenceId": "ev-288-co-usage-290-0001", "relationClass": "CO_OCCURS_WITH", "declaredByEvidenceId": "ev-288-gap-290-0001", "explicit": true},
+    {"edgeId": "edge-289-cluster-pattern-290-0001", "edgeVersion": "1.0.0", "edgeDigest": "4eb5ad50003a2ca1bc6b9d641801b82e8304e9f80a5acf98b3256ea221f881d2", "sourceEvidenceId": "ev-289-cluster-290-0001", "targetEvidenceId": "ev-289-pattern-290-0001", "relationClass": "CLUSTER_MEMBER", "declaredByEvidenceId": "ev-289-cluster-290-0001", "explicit": true},
+    {"edgeId": "edge-288-negative-gap-290-0001", "edgeVersion": "1.0.0", "edgeDigest": "318d2d158febec9ebc92a2d5d9c875021ad1034daf3b96ca1f07cc36519f70c0", "sourceEvidenceId": "ev-288-negative-evidence-290-0001", "targetEvidenceId": "ev-288-gap-290-0001", "relationClass": "CONTRASTS", "declaredByEvidenceId": "ev-288-negative-evidence-290-0001", "explicit": true},
+    {"edgeId": "edge-288-co-usage-289-cluster-290-0001", "edgeVersion": "1.0.0", "edgeDigest": "558cbc31342d838748b7c53e54728075aff806979864927278a26f5552c513e7", "sourceEvidenceId": "ev-288-co-usage-290-0001", "targetEvidenceId": "ev-289-cluster-290-0001", "relationClass": "SHARED_SCOPE_SIGNAL", "declaredByEvidenceId": "ev-288-co-usage-290-0001", "explicit": true}
+  ],
+  "p21": {
+    "method": {"methodId": "p21.local.readback", "methodVersion": "1.0.0", "methodDigest": "9ce3d22ae50f6cb914188b9f475b56a4c0c8f5d8cd47a2b3e8caa244c46318a7"},
+    "candidateClasses": ["GAP", "CLUSTER", "CO_USAGE", "NEGATIVE_EVIDENCE", "PATTERN"],
+    "candidates": [
+      {"candidateId": "p21-gap-290-0001", "candidateVersion": "1.0.0", "candidateDigest": "833428dfa5fb88377052e224b91b18c90549aea98e6cddd7ddd16f3b69422c8f", "candidateClass": "GAP", "signalCode": "UNRESOLVED_TASK_OUTCOME_TRANSITION", "evidenceIds": ["ev-288-gap-290-0001"], "edgeIds": [], "binding": {"tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668", "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"}, "replayTupleDigest": "cf7fc22f250ff9eff3a8b9d2d388e17ebb0862763781d7fbf1f4ede972a961dc", "blindSpots": ["NO_CAUSAL_EXPLANATION", "NO_LIVE_STATE_RECHECK"], "reproduction": "PLANTED_EVIDENCE_REPRODUCTION", "minimizedFields": ["candidateClass", "evidenceIds", "edgeIds", "blindSpots", "signalCode"]},
+      {"candidateId": "p21-cluster-290-0001", "candidateVersion": "1.0.0", "candidateDigest": "a13b1416a46d4db0c5ad2d67865b1c9abe7b46315b22a61cd597407155395fe4", "candidateClass": "CLUSTER", "signalCode": "RELATED_EVIDENCE_CLUSTER", "evidenceIds": ["ev-289-cluster-290-0001", "ev-289-pattern-290-0001"], "edgeIds": ["edge-289-cluster-pattern-290-0001"], "binding": {"tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668", "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"}, "replayTupleDigest": "cf7fc22f250ff9eff3a8b9d2d388e17ebb0862763781d7fbf1f4ede972a961dc", "blindSpots": ["NO_CLUSTER_CAUSALITY", "NO_GENERALIZATION_BEYOND_PLANTED_SET"], "reproduction": "PLANTED_EVIDENCE_REPRODUCTION", "minimizedFields": ["candidateClass", "evidenceIds", "edgeIds", "blindSpots", "signalCode"]},
+      {"candidateId": "p21-co-usage-290-0001", "candidateVersion": "1.0.0", "candidateDigest": "c5339d3222d427fa8664256e4b722082d071471cbcd6ffdc467cbf9f06b9cdea", "candidateClass": "CO_USAGE", "signalCode": "SHARED_SCOPE_USAGE", "evidenceIds": ["ev-288-co-usage-290-0001", "ev-289-cluster-290-0001"], "edgeIds": ["edge-288-co-usage-289-cluster-290-0001"], "binding": {"tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668", "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"}, "replayTupleDigest": "cf7fc22f250ff9eff3a8b9d2d388e17ebb0862763781d7fbf1f4ede972a961dc", "blindSpots": ["NO_USAGE_INTENT", "NO_CROSS_SCOPE_REUSE"], "reproduction": "PLANTED_EVIDENCE_REPRODUCTION", "minimizedFields": ["candidateClass", "evidenceIds", "edgeIds", "blindSpots", "signalCode"]},
+      {"candidateId": "p21-negative-evidence-290-0001", "candidateVersion": "1.0.0", "candidateDigest": "53b61d0b000b35c0427e44348d39017a64b447dd68c9397de73c5c0f485ccf82", "candidateClass": "NEGATIVE_EVIDENCE", "signalCode": "ABSENT_EXPECTED_LINK", "evidenceIds": ["ev-288-negative-evidence-290-0001", "ev-288-gap-290-0001"], "edgeIds": ["edge-288-negative-gap-290-0001"], "binding": {"tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668", "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"}, "replayTupleDigest": "cf7fc22f250ff9eff3a8b9d2d388e17ebb0862763781d7fbf1f4ede972a961dc", "blindSpots": ["ABSENCE_IS_NOT_PROOF", "NO_NEGATIVE_CONTROL_COVERAGE_OUTSIDE_SCOPE"], "reproduction": "PLANTED_EVIDENCE_REPRODUCTION", "minimizedFields": ["candidateClass", "evidenceIds", "edgeIds", "blindSpots", "signalCode"]},
+      {"candidateId": "p21-pattern-290-0001", "candidateVersion": "1.0.0", "candidateDigest": "845a3908f482790b27a4102329d497e6d90b424aed2040ae673ac7b4b280ba9a", "candidateClass": "PATTERN", "signalCode": "REPEATED_ORDER_PATTERN", "evidenceIds": ["ev-289-pattern-290-0001"], "edgeIds": [], "binding": {"tenantScopeId": "tscope-290-synthetic-lane1", "scopeId": "scope.cks10.analytics-exploration", "scopeVersion": "1.0.0", "scopeDigest": "9ce99e13d145ac481dcf8fbe2f18d122f2f1773370d3726da2c5f421ad7e0da8", "tenantScopeDigest": "5fe36265b865edd8fe23c1a98a9c52040da3a5f6d31e32a49447731c095f4668", "retainUntil": "2026-08-28T05:12:00Z", "retentionVersion": "1.0.0", "retentionDigest": "2aff18fd3130d04265def93843bf9244a5c0a98b43ab4e052f54b39a426c82ee", "issuedAt": "2026-08-28T04:12:00Z", "freshUntil": "2026-08-28T05:12:00Z", "freshnessVersion": "1.0.0", "freshnessDigest": "e40a5e157830adf9931e4cd307371b4e7466b2522a3e66786f1cc7ba7d2ad730", "replayId": "cks10-prereq-replay-290-0001", "replayVersion": "1.0.0", "replayDigest": "d7ca6499a9eaddcf478958ba3f224a0dde60c054167291b25affb3fa1033c843", "bindingDigest": "d11decceba92d386f72d577c68176be3d063c3dac56137f12a2d244f4a48f61f"}, "replayTupleDigest": "cf7fc22f250ff9eff3a8b9d2d388e17ebb0862763781d7fbf1f4ede972a961dc", "blindSpots": ["NO_PREDICTIVE_CLAIM", "NO_PATTERN_SEARCH_OUTSIDE_PLANTED_SET"], "reproduction": "PLANTED_EVIDENCE_REPRODUCTION", "minimizedFields": ["candidateClass", "evidenceIds", "edgeIds", "blindSpots", "signalCode"]}
+    ],
+    "blindSpots": ["NO_LIVE_POLICY_OR_INVALIDATION_READBACK", "NO_CAUSAL_INFERENCE", "NO_CROSS_TENANT_OR_CROSS_SCOPE_JOIN", "NO_RAW_EVIDENCE_OR_EXECUTABLE_MATERIAL"],
+    "inventedEdges": 0
+  }
+}

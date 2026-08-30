@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "pansphaira.cks10/local-integration-verification/v1",
+  "verificationId": "cks-10-local-integration-v1-290-0001",
+  "taskId": "INT-PSAI290-LOCAL-INTEGRATION-01",
+  "status": "PASS_OFFLINE_SYNTHETIC_DRY_RUN_WITH_STANDARD_NODE_INFRASTRUCTURE_NOTE",
+  "result": "TECHNICALLY_COMPLETE",
+  "execution": {
+    "mode": "OFFLINE_SYNTHETIC_LOCAL_DRY_RUN",
+    "networkAccess": "NONE",
+    "externalServices": "NONE",
+    "canonicalEvidenceMutation": 0,
+    "repositoryFileMutationByDryRun": 0,
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ]
+  },
+  "artifacts": {
+    "runner": {
+      "path": "scripts/run-cks-10-local-integration.mjs",
+      "sha256": "5d571bc6e06bf3124c71b84d96ada7fc07e958c72ba1377cd7e469ad5fcf8c79"
+    },
+    "manifest": {
+      "path": "tests/fixtures/cks-10/local-integration-manifest-v1.json",
+      "sha256": "ac1162a37ae8503774beb1bc4ca290d4d64c8af30c07c2f88d0329529199d7d4"
+    },
+    "receipt": {
+      "path": "verification/cks-10-local-integration-v1.json",
+      "note": "THIS_RECEIPT"
+    }
+  },
+  "dependencyReceipts": [
+    "verification/cks-10-projection-contract-v1.json",
+    "verification/cks-10-publisher-receipt-v1.json",
+    "verification/cks-10-envelope-guards-v1.json",
+    "verification/cks-10-candidate-return-v1.json",
+    "verification/cks-10-p21-replay-v1.json",
+    "verification/cks-10-rollback-readback-v1.json"
+  ],
+  "issueCriteriaEvidence": [
+    {
+      "criterion": "AC-1-MINIMIZED-PROJECTION",
+      "producerReceipt": "projection-publisher",
+      "consumerReceipt": "projection-contract",
+      "observed": "Publisher projection digest 49a89d1c2334ef529be0c7612e3bcc21dac3426db36abf8cbbbb002a1bead25c; TASK, KNOWLEDGE, DECISION and OUTCOME classes; exclusion scan passed."
+    },
+    {
+      "criterion": "AC-2-FAIL-CLOSED-ENVELOPE",
+      "producerReceipt": "projection-contract",
+      "consumerReceipt": "envelope-guards",
+      "observed": "Verified baseline; tenant/scope mismatch, retention expiry, freshness staleness, provenance mismatch, exact replay and replay mutation denied."
+    },
+    {
+      "criterion": "AC-3-P21-REPLAY",
+      "producerReceipt": "p21-replay",
+      "consumerReceipt": "candidate-return-contract",
+      "observed": "Seven planted candidates include GAP, CLUSTER, CO_USAGE, NEGATIVE_EVIDENCE and PATTERN; 7 evidence items, 5 explicit allowed edges, 0 invented edges and 19 total blind spots."
+    },
+    {
+      "criterion": "AC-4-CANDIDATE-AUTHORITY-BOUNDARY",
+      "producerReceipt": "candidate-return-contract",
+      "consumerReceipt": "p21-replay",
+      "observed": "Candidate fixture passed; 28-case self-test passed including authority, promotion, workflow and function fields denied; P21 authority-bearing candidate denied."
+    },
+    {
+      "criterion": "AC-5-ROLLBACK-READBACK",
+      "producerReceipt": "projection-publisher",
+      "consumerReceipt": "rollback-readback",
+      "observed": "Dry-run planned 2 generated-artifact removals and re-read canonical evidence unchanged: bytes SHA-256 b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a, 4606 bytes."
+    }
+  ],
+  "positiveVerification": {
+    "command": "node --jitless scripts/run-cks-10-local-integration.mjs",
+    "exitCode": 0,
+    "result": "VERIFIED",
+    "receipt": {
+      "projectionDigest": "49a89d1c2334ef529be0c7612e3bcc21dac3426db36abf8cbbbb002a1bead25c",
+      "p21Candidates": 7,
+      "p21Evidence": 7,
+      "p21AllowedEdges": 5,
+      "p21InventedEdges": 0,
+      "p21BlindSpots": 19,
+      "rollbackMode": "dry-run",
+      "rollbackPlannedRemovals": 2
+    }
+  },
+  "failClosedVerification": {
+    "manifest": [
+      "missing_dependency_receipt",
+      "duplicate_id",
+      "invalid_manifest_schema",
+      "unresolved_dependency",
+      "dependency_cycle"
+    ],
+    "envelope": [
+      "tenant_scope_mismatch",
+      "retention_expired",
+      "freshness_stale",
+      "provenance_mismatch"
+    ],
+    "candidateContract": [
+      "authority_field",
+      "promotion_field",
+      "workflow_field",
+      "function_field"
+    ],
+    "p21": [
+      "candidate_authority_field",
+      "invented_evidence_edge",
+      "blind_spot_omission",
+      "replayed_candidate",
+      "replay_mutation"
+    ]
+  },
+  "focusedChecks": [
+    {
+      "command": "node --jitless --check scripts/run-cks-10-local-integration.mjs",
+      "result": "PASS",
+      "exitCode": 0
+    },
+    {
+      "command": "node --jitless scripts/validate-cks-10-projection-contract.mjs tests/fixtures/cks-10/projection-contract-v1.json && node --jitless scripts/validate-cks-10-projection-contract.mjs --self-test",
+      "result": "PASS",
+      "exitCode": 0,
+      "observed": "fixture issues=0; self-test cases=40 failures=0"
+    },
+    {
+      "command": "node --jitless scripts/verify-cks-10-p21-replay.mjs",
+      "result": "PASS",
+      "exitCode": 0,
+      "observed": "candidates=7 evidence=7 allowedEdges=5 inventedEdges=0 blindSpots=19 authority=NONE promotion=NONE"
+    },
+    {
+      "command": "node --jitless scripts/verify-cks-10-projection-rollback.mjs --dry-run",
+      "result": "PASS",
+      "exitCode": 0,
+      "observed": "plannedRemovals=2 canonicalDigest=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a canonicalBytes=4606"
+    }
+  ],
+  "standardNodeInfrastructure": {
+    "observedNodeVersion": "v24.19.0",
+    "integrationCommand": "node scripts/run-cks-10-local-integration.mjs",
+    "integrationExitCode": 133,
+    "npmLintExitCode": 133,
+    "npmBuildExitCode": 133,
+    "npmTestExitCode": 133,
+    "evidence": "V8 OS::SetPermissions initialization check failed with SIGTRAP before product execution. This is infrastructure evidence, not a product verdict.",
+    "workaround": "--jitless local execution passed; it is non-authoritative and does not replace controller pinned-Node/host-Docker gates."
+  },
+  "requiredDiffCheck": {
+    "command": "git diff --check origin/main...HEAD",
+    "result": "PASS_EXIT_0"
+  },
+  "nonclaims": [
+    "NO_ENDPOINT_CONNECTOR_QUEUE_OR_EXTERNAL_RUNTIME",
+    "NO_CANDIDATE_PROMOTION_OR_CANONICAL_ASSET_MUTATION",
+    "NO_AUTHORITY_POLICY_APPROVAL_WORKFLOW_FUNCTION_OR_EFFECT_TRANSFER",
+    "NO_CHANGE_TO_OPERATING_MODEL_V1_1_OR_DECISIONS_D_001_THROUGH_D_007",
+    "NO_AUTHORITATIVE_PINNED_NODE_OR_HOST_DOCKER_GATE_SUCCESS_CLAIM",
+    "NO_PUSH_MERGE_OR_RELEASE"
+  ]
+}

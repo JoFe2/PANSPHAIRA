@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "pansphaira.verification/receipt/v1",
+  "taskId": "PSAI290-QWEN-06-P21-ANALYTIC-FIXTURES",
+  "status": "PASS_LOCAL_VALIDATION_WITH_NODE_INFRASTRUCTURE_NOTE",
+  "result": "TECHNICALLY_COMPLETE",
+  "artifacts": {
+    "projection": {
+      "path": "tests/fixtures/cks-10/p21-planted-projection-v1.json",
+      "sha256": "e5c1bdccee5e3efc9e68e6ed557c00393ba4e62fb9f3ad0d44bd539e37e098e1"
+    },
+    "expectedCandidates": {
+      "path": "tests/fixtures/cks-10/p21-expected-candidates-v1.json",
+      "sha256": "47d5943c461675eea0f353ecc106e5c7983b4fe06966d683417cb011369d8caf"
+    },
+    "analysis": {
+      "path": "scripts/run-cks-10-p21-analysis.mjs",
+      "sha256": "f6b60078b2fac2d462ec5f13da02f30bf8aa66e607b226e27b497d62e6d485ed"
+    }
+  },
+  "fixtureContract": {
+    "projectionSchemaVersion": "pansphaira.cks10/knowledge-projection/v1",
+    "expectedSchemaVersion": "pansphaira.cks10/p21-expected-candidates/v1",
+    "records": 4,
+    "recordClasses": [
+      "TASK",
+      "KNOWLEDGE",
+      "DECISION",
+      "OUTCOME"
+    ],
+    "candidates": 7,
+    "candidateClasses": [
+      "GAP",
+      "CLUSTER",
+      "CO_USAGE",
+      "NEGATIVE_EVIDENCE",
+      "PATTERN",
+      "WORKFLOW",
+      "DRIFT"
+    ],
+    "evidence": 7,
+    "allowedEvidenceEdges": 5,
+    "inventedEdges": 0,
+    "globalBlindSpots": 5,
+    "candidateBlindSpots": "Declared per candidate in the expected-output fixture",
+    "boundary": "READ_ONLY_NONE_AUTHORITY_NONE_EFFECT_NO_PROMOTION",
+    "evidenceScope": "SYNTHETIC_SINGLE_TENANT_SCOPE_NO_RAW_OR_EXECUTABLE_MATERIAL"
+  },
+  "focusedVerification": {
+    "requiredCommand": "node scripts/run-cks-10-p21-analysis.mjs tests/fixtures/cks-10/p21-planted-projection-v1.json",
+    "requiredCommandStatus": "INFRASTRUCTURE_ABORT",
+    "requiredCommandExitCode": 133,
+    "requiredCommandEvidence": "Local Node aborts during V8 initialization in OS::SetPermissions with SIGTRAP before analysis execution.",
+    "workaroundCommand": "node --jitless scripts/run-cks-10-p21-analysis.mjs tests/fixtures/cks-10/p21-planted-projection-v1.json",
+    "workaroundStatus": "PASS",
+    "workaroundOutput": "cks-10-p21-analysis: PASS candidates=7 evidence=7 allowedEdges=5 inventedEdges=0 issues=0",
+    "syntaxAndJsonCommand": "node --jitless --check scripts/run-cks-10-p21-analysis.mjs && node --jitless -e \"parse both P21 JSON fixtures\"",
+    "syntaxAndJsonStatus": "PASS"
+  },
+  "repositoryGates": {
+    "diffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS",
+      "verificationPoint": "After local commit"
+    },
+    "npmLint": {
+      "command": "npm run lint",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Same local Node V8 OS::SetPermissions SIGTRAP during initialization."
+    },
+    "npmBuild": {
+      "command": "npm run build",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Same local Node V8 OS::SetPermissions SIGTRAP during initialization."
+    },
+    "npmTest": {
+      "command": "npm run test",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Same local Node V8 OS::SetPermissions SIGTRAP during initialization."
+    }
+  },
+  "failClosedClaims": [
+    "No candidate is asserted without a matching planted projection field and evidence record.",
+    "Only the five explicitly declared evidence edges are accepted; inventedEdges is zero.",
+    "Blind spots are explicit globally and per candidate; no causal, cross-scope, raw-evidence, execution, repair, or promotion claim is made."
+  ],
+  "scope": "Only the four task-allowlisted artifacts are changed. No credentials, remotes, providers, services, CI authority, DSH_HOME, spill configuration, push, merge, or release action was performed."
+}

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "pansphaira.architecture/cks-10-candidate-return-verification/v1",
+  "verificationId": "cks-10-candidate-return-v1-290-0001",
+  "taskId": "PSAI290-QWEN-05-CANDIDATE-RETURN-CONTRACT",
+  "status": "PASS_LOCAL_VALIDATION_WITH_NODE_INFRASTRUCTURE_NOTE",
+  "contract": {
+    "contractId": "cks-10/candidate-return/v1",
+    "contractVersion": "1.0.0",
+    "producer": "KALEIDOSPHERE",
+    "consumer": "PANSPHAIRA",
+    "compatibility": "EXACT_PROJECTION_1.0.0_RETURN_1.0.0_ONLY",
+    "implementationState": "CONTRACT_SCHEMA_VALIDATOR_AND_SYNTHETIC_FIXTURE_ONLY"
+  },
+  "artifacts": {
+    "schema": {
+      "path": "contracts/cks-10/analytic-candidate-return-v1.schema.json",
+      "sha256": "92842623eaa616423018602fe42ca3283aeb4f0f0b0d63716abc1cd54a83da8f"
+    },
+    "validator": {
+      "path": "scripts/validate-cks-10-candidate-return.mjs",
+      "sha256": "555cee3bc4b41f015f5a1d08831debc0aa31b0fd43b61e18a1690fd0e04e5f52"
+    },
+    "fixture": {
+      "path": "tests/fixtures/cks-10/candidate-return-cases-v1.json",
+      "sha256": "61e56842e466c4e337ca8fbfab1f148ed569f966d733c091c98c7c51e429dcc8"
+    }
+  },
+  "payloadContract": {
+    "carries": [
+      "EVIDENCE_REFERENCES_ID_VERSION_DIGEST_AND_SOURCE_ASSET_BINDINGS",
+      "BOUNDED_ZERO_TO_ONE_CONFIDENCE_WITH_CLOSED_BASIS_CODE",
+      "EXPLICIT_BOUNDED_BLIND_SPOT_CODES",
+      "VERSIONED_PROPOSED_KIND",
+      "EXACT_AUTHORITY_DERIVED_PROJECTION_SCOPE_PURPOSE_PEER_AND_SOURCE_BINDINGS"
+    ],
+    "fixedBoundary": {
+      "lifecycleClass": "UNTRUSTED_CANDIDATE",
+      "authorityClass": "NONE",
+      "effectClass": "NONE",
+      "requestedDisposition": "REVIEW_ONLY",
+      "promotionClaim": "NONE"
+    },
+    "forbiddenFieldClasses": [
+      "AUTHORITY_OR_APPROVAL",
+      "PROMOTION_OR_PUBLICATION",
+      "WORKFLOW_OR_FUNCTION_DEFINITION",
+      "CAPABILITY_OR_EXECUTION_BINDING",
+      "ACTION_OR_EFFECT_PAYLOAD"
+    ],
+    "cannot": [
+      "GRANT_AUTHORITY",
+      "PROMOTE_KNOWLEDGE",
+      "PROMOTE_OR_ACTIVATE_WORKFLOW",
+      "PROMOTE_OR_ACTIVATE_FUNCTION",
+      "CREATE_OR_MUTATE_CANONICAL_GOVERNED_ASSET",
+      "AUTHORIZE_OR_EXECUTE_EFFECT"
+    ],
+    "unknownFields": "DENIED",
+    "executableMaterial": "PROHIBITED"
+  },
+  "focusedGate": {
+    "command": "node scripts/validate-cks-10-candidate-return.mjs tests/fixtures/cks-10/candidate-return-cases-v1.json",
+    "portableRuntimeResult": "exit 133/SIGTRAP during Node initialization; infrastructure evidence, not a product verdict",
+    "validatedRuntimeCommand": "node --jitless scripts/validate-cks-10-candidate-return.mjs tests/fixtures/cks-10/candidate-return-cases-v1.json",
+    "validatedRuntimeResult": "PASS candidates=1 evidence=2 issues=0"
+  },
+  "failClosedSelfTest": {
+    "command": "node --jitless scripts/validate-cks-10-candidate-return.mjs --self-test",
+    "result": "SELF_TEST PASS cases=29 failures=0",
+    "negativeCases": [
+      "unknown-top-level-field",
+      "missing-evidence-references",
+      "malformed-evidence-digest",
+      "candidate-digest-corruption",
+      "envelope-digest-corruption",
+      "schema-digest-corruption",
+      "authority-field",
+      "promotion-field",
+      "workflow-field",
+      "function-field",
+      "capability-field",
+      "action-field",
+      "camel-case-authority-field",
+      "camel-case-action-field",
+      "boundary-escalation",
+      "promotion-marker-escalation",
+      "missing-proposed-kind",
+      "unknown-proposed-kind",
+      "missing-blind-spots",
+      "missing-confidence",
+      "confidence-out-of-range",
+      "time-order",
+      "retain-not-after-generated",
+      "impossible-calendar-time",
+      "duplicate-evidence-reference",
+      "duplicate-source-reference",
+      "excluded-fields-tamper",
+      "paired-scope-substitution-redigested"
+    ]
+  },
+  "diffGate": {
+    "command": "git diff --check origin/main...HEAD",
+    "result": "PASS exit 0",
+    "scope": "FOUR_ALLOWLISTED_ARTIFACTS"
+  },
+  "nonclaims": [
+    "NO_ENDPOINT_CONNECTOR_QUEUE_RUNTIME_OR_EXTERNAL_STATE_MUTATION",
+    "NO_CANDIDATE_PROMOTION_INVALIDATION_POLICY_CHANGE_APPROVAL_SATISFACTION_OR_EFFECT_AUTHORIZATION",
+    "NO_KNOWLEDGE_WORKFLOW_FUNCTION_CAPABILITY_OR_ACTION_EXECUTION",
+    "NO_CHANGE_TO_OPERATING_MODEL_V1_1_OR_DECISIONS_D_001_THROUGH_D_007",
+    "NO_PINNED_NODE_OR_HOST_DOCKER_AUTHORITATIVE_GATE_CLAIM"
+  ]
+}

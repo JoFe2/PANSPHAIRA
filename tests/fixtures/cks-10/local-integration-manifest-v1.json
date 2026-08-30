@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "pansphaira.cks10/local-integration-manifest/v1",
+  "manifestId": "cks10-local-integration-manifest-290-0001",
+  "taskId": "INT-PSAI290-LOCAL-INTEGRATION-01",
+  "mode": "OFFLINE_SYNTHETIC_LOCAL_DRY_RUN",
+  "projection": {
+    "contractId": "cks-10/minimized-projection/v1",
+    "contractVersion": "1.0.0",
+    "projectionDigest": "49a89d1c2334ef529be0c7612e3bcc21dac3426db36abf8cbbbb002a1bead25c",
+    "recordClasses": [
+      "TASK",
+      "KNOWLEDGE",
+      "DECISION",
+      "OUTCOME"
+    ]
+  },
+  "inputArtifacts": [
+    {
+      "path": "tests/fixtures/cks-10/publisher-input-v1.json",
+      "sha256": "2b968b18375b989ac16aeec988dbe4dcdf695167a6280f09b639ed2f5408ed8a"
+    },
+    {
+      "path": "tests/fixtures/cks-10/p21-planted-projection-v1.json",
+      "sha256": "e5c1bdccee5e3efc9e68e6ed557c00393ba4e62fb9f3ad0d44bd539e37e098e1"
+    },
+    {
+      "path": "tests/fixtures/cks-10/p21-expected-candidates-v1.json",
+      "sha256": "47d5943c461675eea0f353ecc106e5c7983b4fe06966d683417cb011369d8caf"
+    },
+    {
+      "path": "tests/fixtures/cks-10/candidate-return-cases-v1.json",
+      "sha256": "61e56842e466c4e337ca8fbfab1f148ed569f966d733c091c98c7c51e429dcc8"
+    },
+    {
+      "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
+      "sha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a"
+    }
+  ],
+  "dependencyReceipts": [
+    {
+      "receiptId": "projection-contract",
+      "path": "verification/cks-10-projection-contract-v1.json",
+      "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a846068d4c21a",
+      "dependsOn": []
+    },
+    {
+      "receiptId": "projection-publisher",
+      "path": "verification/cks-10-publisher-receipt-v1.json",
+      "sha256": "61d385744b637e7f1762c612d01ec770e1fb876cf8a4a628bed2f3c3b3dd728e",
+      "dependsOn": [
+        "projection-contract"
+      ]
+    },
+    {
+      "receiptId": "envelope-guards",
+      "path": "verification/cks-10-envelope-guards-v1.json",
+      "sha256": "2f8b5e221004f1b96c216654328e2bc1eb5a9e7d5b246282751b3b0ac5a58399",
+      "dependsOn": [
+        "projection-contract",
+        "projection-publisher"
+      ]
+    },
+    {
+      "receiptId": "candidate-return-contract",
+      "path": "verification/cks-10-candidate-return-v1.json",
+      "sha256": "d0d3995f3f1ceed5ee6729cc3d124ef27193190114628f3366e41e2c68e470f1",
+      "dependsOn": [
+        "projection-contract"
+      ]
+    },
+    {
+      "receiptId": "p21-replay",
+      "path": "verification/cks-10-p21-replay-v1.json",
+      "sha256": "1b6251b4ef7e30d26fae1a213a85206c15dd2ec79fd6634434bdb3bb4f6c8999",
+      "dependsOn": [
+        "envelope-guards",
+        "candidate-return-contract"
+      ]
+    },
+    {
+      "receiptId": "rollback-readback",
+      "path": "verification/cks-10-rollback-readback-v1.json",
+      "sha256": "5e6e2f3cc7de30eae4d539476a6e2d873df7f0d4804f62450b47325dc4c80f31",
+      "dependsOn": [
+        "projection-publisher"
+      ]
+    }
+  ],
+  "issueCriteria": [
+    {
+      "criterionId": "AC-1-MINIMIZED-PROJECTION",
+      "requirement": "Stable IDs, versions, digests and classes only; secrets, raw prompts, credentials, unnecessary payloads and mutable policy state excluded.",
+      "producerReceipt": "projection-publisher",
+      "consumerReceipt": "projection-contract",
+      "expectedReceipts": [
+        "publisher_projection_digest",
+        "projection_contract_validation",
+        "projection_exclusion_scan"
+      ]
+    },
+    {
+      "criterionId": "AC-2-FAIL-CLOSED-ENVELOPE",
+      "requirement": "Tenant/scope, retention, freshness, provenance and replay rules fail closed.",
+      "producerReceipt": "projection-contract",
+      "consumerReceipt": "envelope-guards",
+      "expectedReceipts": [
+        "envelope_verified",
+        "tenant_scope_denied",
+        "retention_denied",
+        "freshness_denied",
+        "provenance_denied",
+        "replay_denied"
+      ]
+    },
+    {
+      "criterionId": "AC-3-P21-REPLAY",
+      "requirement": "P21 reproduces planted GAP, CLUSTER, CO_USAGE, NEGATIVE_EVIDENCE and PATTERN candidates with blind spots and zero invented edges.",
+      "producerReceipt": "p21-replay",
+      "consumerReceipt": "candidate-return-contract",
+      "expectedReceipts": [
+        "p21_replay_verified",
+        "p21_candidate_classes",
+        "p21_blind_spots",
+        "p21_invented_edges_zero"
+      ]
+    },
+    {
+      "criterionId": "AC-4-CANDIDATE-AUTHORITY-BOUNDARY",
+      "requirement": "Candidate return grants no Authority and cannot promote Knowledge, Workflow or Function.",
+      "producerReceipt": "candidate-return-contract",
+      "consumerReceipt": "p21-replay",
+      "expectedReceipts": [
+        "candidate_contract_valid",
+        "candidate_authority_denied",
+        "candidate_promotion_denied",
+        "candidate_workflow_denied",
+        "candidate_function_denied"
+      ]
+    },
+    {
+      "criterionId": "AC-5-ROLLBACK-READBACK",
+      "requirement": "Projection removal/rollback leaves canonical PanSphAIra evidence unchanged.",
+      "producerReceipt": "projection-publisher",
+      "consumerReceipt": "rollback-readback",
+      "expectedReceipts": [
+        "rollback_dry_run_verified",
+        "canonical_evidence_readback",
+        "canonical_digest_unchanged"
+      ]
+    }
+  ],
+  "expectedFailClosed": [
+    "missing_dependency_receipt",
+    "duplicate_id",
+    "invalid_manifest_schema",
+    "unresolved_dependency",
+    "dependency_cycle",
+    "tenant_scope_mismatch",
+    "retention_expired",
+    "freshness_stale",
+    "provenance_mismatch",
+    "replayed_candidate",
+    "candidate_authority_field",
+    "candidate_promotion_field",
+    "candidate_workflow_field",
+    "candidate_function_field",
+    "invented_evidence_edge",
+    "blind_spot_omission"
+  ],
+  "canonicalEvidenceReadback": {
+    "fixture": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
+    "exactBytesSha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a",
+    "snapshotDigest": "dbe0d4e185c497b368be2dc2af79dc93b254a5b39cfc1e704ef3dc4d624591df",
+    "expectedDryRun": "VERIFIED"
+  },
+  "preservedDecisions": [
+    "D-001",
+    "D-002",
+    "D-003",
+    "D-004",
+    "D-005",
+    "D-006",
+    "D-007"
+  ]
+}

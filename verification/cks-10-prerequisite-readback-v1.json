@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "pansphaira.cks10/prerequisite-readback-verification/v1",
+  "verificationId": "cks-10-prerequisite-readback-290-0001",
+  "taskId": "PSAI290-QWEN-01-PREREQUISITE-READBACK",
+  "status": "TECHNICALLY_COMPLETE_REQUIRED_STANDARD_NODE_GATE_BLOCKED",
+  "integrationVerdict": "UNPROVEN_BRIDGE_DISABLED",
+  "artifacts": {
+    "fixture": {
+      "path": "tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+      "canonicalDigest": "8e02b0666ddd3e968b12c501fea58e9ba92f2019888e5a27b08d0f317d6cfa2e",
+      "exactBytesSha256": "33a065d3df95f29276da72aa645fb6a742b828380c942b97fb2d00f79582adc3"
+    },
+    "validator": {
+      "path": "scripts/verify-cks-10-prerequisites.mjs",
+      "sha256": "5684314b72069ec0d55cf4a9c6f02313a0582008f7e4a665548139d5746c728e"
+    }
+  },
+  "focusedGate": {
+    "command": "node scripts/verify-cks-10-prerequisites.mjs tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+    "requiredExitCode": 0,
+    "successClaimBeforeRequiredPass": "PROHIBITED",
+    "localStandardNode": {
+      "observedNodeVersion": "v24.19.0",
+      "observedExitCode": 133,
+      "observedSignal": "SIGTRAP",
+      "failureClass": "NODE_V8_INFRASTRUCTURE",
+      "detail": "V8_CHECK_FAILED_12_EQ_ERRNO",
+      "productVerdict": "NONE"
+    },
+    "localJitlessEvidence": {
+      "authority": "NON_AUTHORITATIVE_WORKAROUND_NOT_A_SUBSTITUTE_FOR_REQUIRED_COMMAND",
+      "command": "node --jitless scripts/verify-cks-10-prerequisites.mjs tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+      "observedExitCode": 0,
+      "result": "cks-10-prerequisites: PASS fixture=tests/fixtures/cks-10/prerequisite-evidence-v1.json evidence=5 candidates=5 inventedEdges=0 issues=0"
+    }
+  },
+  "selfTest": {
+    "requiredCommand": "node scripts/verify-cks-10-prerequisites.mjs --self-test",
+    "requiredCommandLocalResult": "BLOCKED_NODE_V8_SIGTRAP_EXIT_133_INFRASTRUCTURE",
+    "localJitlessCommand": "node --jitless scripts/verify-cks-10-prerequisites.mjs --self-test",
+    "localJitlessResult": "cks-10-prerequisites: SELF_TEST PASS cases=42 failures=0",
+    "localJitlessAuthority": "NON_AUTHORITATIVE_PRODUCT_EVIDENCE_ONLY",
+    "caseCount": 42,
+    "cases": [
+      "baseline-positive",
+      "missing-issue-evidence",
+      "extra-evidence",
+      "issue-evidence-mapping",
+      "planted-observation-drift",
+      "evidence-version-unsupported",
+      "evidence-minimization-widened",
+      "malformed-evidence-list",
+      "tenant-scope-mismatch",
+      "tenant-scope-root-substitution",
+      "retention-infinite",
+      "retention-exceeds-freshness",
+      "retention-unsupported-version",
+      "freshness-invalid-order",
+      "freshness-invalid-calendar",
+      "freshness-invalidation-bypass",
+      "provenance-digest-drift",
+      "provenance-source-substitution",
+      "provenance-chain-incomplete",
+      "replay-mutation",
+      "replay-scope-substitution",
+      "replay-list-duplicate",
+      "replay-version-unsupported",
+      "candidate-version-unsupported",
+      "candidate-version-unversioned",
+      "invented-edge",
+      "unwitnessed-declared-edge",
+      "declared-edge-relation-drift",
+      "candidate-class-evidence-mismatch",
+      "candidate-planted-edge-omitted",
+      "candidate-evidence-list-malformed",
+      "blind-spot-omitted",
+      "blind-spot-substitution",
+      "p21-blind-spot-invalid",
+      "p21-invented-edge-count",
+      "unknown-field",
+      "raw-material",
+      "raw-material-marker",
+      "nested-digest-corruption",
+      "fixture-digest-corruption",
+      "self-consistent-fixture-substitution",
+      "fixture-byte-drift"
+    ]
+  },
+  "readbackChecks": {
+    "evidenceNature": "SYNTHETIC_MINIMIZED_LOCAL_PREREQUISITE_METADATA",
+    "requiredIssues": [
+      "#288",
+      "#289"
+    ],
+    "issueEvidenceMapping": {
+      "#288": [
+        "GAP_SIGNAL",
+        "CO_USAGE_SIGNAL",
+        "NEGATIVE_EVIDENCE_SIGNAL"
+      ],
+      "#289": [
+        "CLUSTER_SIGNAL",
+        "PATTERN_SIGNAL"
+      ]
+    },
+    "evidenceCount": 5,
+    "candidateClasses": [
+      "GAP",
+      "CLUSTER",
+      "CO_USAGE",
+      "NEGATIVE_EVIDENCE",
+      "PATTERN"
+    ],
+    "declaredEdgeCount": 4,
+    "inventedEdges": 0,
+    "tenantScopeRetentionFreshnessProvenanceReplay": "PASS_NON_AUTHORITATIVE_LOCAL_JITLESS",
+    "minimizedVersionedCanonicalDigestBound": "PASS_NON_AUTHORITATIVE_LOCAL_JITLESS",
+    "exactFixtureBytesPinned": "PASS_NON_AUTHORITATIVE_LOCAL_JITLESS",
+    "explicitBlindSpots": "PASS_NON_AUTHORITATIVE_LOCAL_JITLESS",
+    "plantedCandidatesReproduced": "PASS_NON_AUTHORITATIVE_LOCAL_JITLESS",
+    "zeroInventedEdges": "PASS_NON_AUTHORITATIVE_LOCAL_JITLESS"
+  },
+  "failClosedRules": {
+    "unknownFields": "DENIED",
+    "versions": "EXACT_1_0_0_ONLY_NO_RANGES_LATEST_OR_DOWNGRADE",
+    "fixtureBinding": "CANONICAL_SHA256_AND_EXACT_UTF8_BYTES_SHA256_BOTH_PINNED_IN_VALIDATOR",
+    "tenantAndScope": "EXACT_FROZEN_ROOT_BINDING_AND_EXACT_EVIDENCE_CANDIDATE_REPLAY_READBACK",
+    "retention": "FINITE_EARLIEST_SOURCE_EXPIRY_ISSUED_BEFORE_RETAINED_AND_RETAINED_NO_LATER_THAN_FRESH",
+    "freshness": "VALID_UTC_CALENDAR_ORDER_TRUSTED_CLOCK_AND_INVALIDATION_CHECK_REQUIRED_STALE_DENIED",
+    "provenance": "PINNED_ISSUE_ID_VERSION_DIGEST_SOURCE_AND_SINGLE_NODE_CHAIN",
+    "replay": "EXACT_CONTRACT_TENANT_SCOPE_ID_LIST_TUPLE_DIGEST_AND_DUPLICATE_NOOP_MUTATION_DENY",
+    "minimization": "EXACT_ALLOWLIST_AND_EXACT_PURPOSE_SPECIFIC_FIELD_SETS",
+    "p21": "EXACT_PLANTED_EVIDENCE_EDGE_CANDIDATE_AND_BLIND_SPOT_MAPPINGS_WITH_INVENTED_EDGES_ZERO",
+    "missingRequiredEvidence": "DENY_WITHOUT_SUCCESS_CLAIM"
+  },
+  "determinism": {
+    "digestAlgorithm": "SHA-256",
+    "canonicalization": "OBJECT_KEYS_SORTED_RECURSIVELY_ARRAY_ORDER_PRESERVED_NO_INSIGNIFICANT_WHITESPACE",
+    "wallClockAccess": "PROHIBITED",
+    "networkOrIssueLookup": "PROHIBITED",
+    "mutableExternalState": "OMITTED",
+    "rawPayload": "EXCLUDED",
+    "operationalFallback": "BRIDGE_DISABLED"
+  },
+  "verificationGates": [
+    {
+      "command": "node scripts/verify-cks-10-prerequisites.mjs tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+      "requiredExitCode": 0,
+      "authority": "CONTROLLER_PINNED_NODE",
+      "successClaimBeforePass": "PROHIBITED"
+    },
+    {
+      "command": "git diff --check origin/main...HEAD",
+      "requiredExitCode": 0,
+      "authority": "REPOSITORY_GATE",
+      "successClaimBeforePass": "PROHIBITED"
+    }
+  ],
+  "precedence": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantAdded": false,
+    "conflictDisposition": "EXISTING_OPERATING_MODEL_AND_DECISIONS_PREVAIL_BRIDGE_DISABLED"
+  },
+  "nonclaims": [
+    "NO_STANDARD_NODE_GATE_SUCCESS_CLAIM_WHILE_LOCAL_COMMAND_EXITS_133_SIGTRAP",
+    "NO_ISSUE_288_OR_ISSUE_289_DELIVERY_COMPLETION_OR_EXTERNAL_STATE_CLAIM",
+    "NO_LIVE_CLOCK_POLICY_INVALIDATION_RETENTION_DELETION_OR_REPLAY_STORE_PROOF",
+    "NO_PROJECTION_EXPORT_CANDIDATE_RETURN_PROMOTION_INVALIDATION_AUTHORITY_OR_EFFECT",
+    "NO_ENDPOINT_CONNECTOR_QUEUE_DATABASE_RUNTIME_DEPLOYMENT_OR_INTEGRATION_DELIVERY",
+    "NO_PRIVACY_SECURITY_ISOLATION_PERFORMANCE_COST_TENANT_OR_PRODUCTION_PROOF",
+    "NO_PUSH_MERGE_RELEASE_EXTERNAL_MUTATION_OR_CREDENTIAL_CHANGE",
+    "NO_CHANGE_TO_OPERATING_MODEL_V1_1_OR_DECISIONS_D_001_THROUGH_D_007"
+  ]
+}
