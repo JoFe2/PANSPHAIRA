@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 28,
+  "graphVersion": 29,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "285e662edfff629e9d98e551c233a0d47cdc4e7044d91863788e8e9af091c176"
+          "sha256": "722d4ebf338de0d0a662787018baea5aeef03d5c57e84dadc741bc7568fe7f88"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "2a64684b93bc70e8eb89484e4ec75a856aa019aeb371def8122f1cd9221db3cd"
+          "sha256": "13fe151620ee6994753230539aec50bdc05aaaf60e94b1d560249069dbf62072"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "9476dbb3e5d34635f949bfde9c0d9275729a41aa9429e8c025516295bbd1b7a0"
+          "sha256": "047501d3e44aaeb002a36255a48674a8bddb4d4af6c5a3afd97e337187600126"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "99534bc792128af24788f8dc7e5d1737833719933527b93a74ec623a82d94a06"
+          "sha256": "27aa3d74a01fe70244507ed486140f4dc03b9d127dd118e70571e395c9d2171c"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "ca41191893202a9f7a50f001d89a381efc87388436b4bd90f1269723f14a716f"
+          "sha256": "df13a2d8b5eb71a4a13de6db45ad9eef974cf85d7cfbe00c4c9002b0fe19744e"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "89aa564b0fa1b642f7c8b40d8c35414c97007434606f3a2883762553dfc4d733"
+          "sha256": "0904c6e85d882b388304c6aa0a7d4643c91730f7f26eb4d7dfc81e1eb540a27f"
         }
       ],
       "ownedTests": [
@@ -3893,6 +3893,270 @@
         "Projection is minimized, read-only and authority-free.",
         "P21 emits only witnessed in-scope candidate edges with explicit blind spots.",
         "Rollback leaves canonical PanSphAIra evidence byte-identical.",
+        "Successful proof requires governed release delivery."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-11-governed-workflow-function-v1",
+      "dependsOn": [
+        "cks-10-readonly-analytics-bridge-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/cks-11-function-extraction-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "88471960fcb36fa6432a049fec23f10ee4252379351f1c5f7102ac207a6aad3f"
+        },
+        {
+          "path": "docs/architecture/cks-11-governance-decision-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "6f96c5b26a2b982aee479ba093f3c8c0afaecf3619df55fdf0a4c18ae633cc4b"
+        },
+        {
+          "path": "docs/architecture/cks-11-governed-assets-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "419ca5a25e3b2adb78065e4230b0a95baf6cd4a6eaed57329be285d267498c99"
+        },
+        {
+          "path": "scripts/run-cks-11-proof-dry-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "ac0f7dd73ea26c9985eb917a94f3a10bfa62eec9b1587c209cc873b672701043"
+        },
+        {
+          "path": "scripts/validate-cks-11-delivery-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "70370cb53e735d370e5f522556f147d62e4be3412f28be4b246d5d63dea36c55"
+        },
+        {
+          "path": "scripts/verify-cks-11-p20.mjs",
+          "role": "VALIDATOR",
+          "sha256": "4056aeeb60aaf2a8935f601767188d91f37d43043e3fe414ee813d126c8510d6"
+        },
+        {
+          "path": "scripts/verify-cks-11-receipt-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "74a4bafc93bc8042ff7cc023092def2f0bf869046417fdd81ae0f062236dc301"
+        },
+        {
+          "path": "src/cks/deterministic-function-parity-v1.ts",
+          "role": "VALIDATOR",
+          "sha256": "e7927b33a173c5dc0917e152581e74321fc6838da9a4dd9415ed02bc3ad58206"
+        },
+        {
+          "path": "src/cks/function-extraction-v1.ts",
+          "role": "VALIDATOR",
+          "sha256": "b81e95e8889df339286849221b6db4157ad5ac2544699457187240b5c97c7ffb"
+        },
+        {
+          "path": "src/cks/governed-assets-v1.ts",
+          "role": "VALIDATOR",
+          "sha256": "673e81beb22deeacdfe915732d76064a9b31e9a07bfbdeb58f16acdb47f142ce"
+        },
+        {
+          "path": "src/cks/governed-receipt-ledger-v1.ts",
+          "role": "VALIDATOR",
+          "sha256": "32e6ff3366c861af2074805af1b17284859a0b4ef29e4933a95d2b0e751c8831"
+        },
+        {
+          "path": "src/cks/knowledge-revalidation-v1.ts",
+          "role": "VALIDATOR",
+          "sha256": "117d57002d69c381bc0a555cacd9eb0d016f79ad45363a5468cfe1cfa6ca69ce"
+        },
+        {
+          "path": "src/cks/shadow-workflow-replay-v1.ts",
+          "role": "VALIDATOR",
+          "sha256": "a2f07ba85435070d1cfc06c4c8dd133aa09069010b430630676ff5044ecb3ffb"
+        },
+        {
+          "path": "src/cks/workflow-applicability-v1.ts",
+          "role": "VALIDATOR",
+          "sha256": "3958cd987226f5840b586a393b2c0a9c32bacec878c0f225862d84f48779fce4"
+        },
+        {
+          "path": "tests/cks-11/delivery-readback-harness.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "163731b27af4b8752b65a131a92a451675e3913a0a955c317738b9e5a000b206"
+        },
+        {
+          "path": "tests/cks-11/deterministic-function-parity.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "7b30d67b434643401e433b3404c2359b2dc1725dfc16b26124523cb9eeab50a1"
+        },
+        {
+          "path": "tests/cks-11/function-extraction-contract.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "90e6e0750bf5054088a7801bba369c9e5fa9042798cc4bd495480407b9a70a29"
+        },
+        {
+          "path": "tests/cks-11/governed-assets-contracts.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "f41ed5cca37abdd080d6ea5e2ae7f7c73c1b07faea9fc1fb9cb601a47a378e15"
+        },
+        {
+          "path": "tests/cks-11/governed-receipt-ledger.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "f9943e0b49e9b00ce2aee2363758482d05b7ac0d262655cc046185c9b3baceff"
+        },
+        {
+          "path": "tests/cks-11/governed-receipt-rollback.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "1d962740416b9a59440156f07c4bd711cfc8d915b5be978dd072e500e2664bea"
+        },
+        {
+          "path": "tests/cks-11/holdout-fixtures.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "f3dce0b88078a212619639a5c3381a38c173493442de411a914c553e07b02327"
+        },
+        {
+          "path": "tests/cks-11/knowledge-revalidation.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "a6b94cf4e185147c1a49473d4523ce47ab9bd70897ebc1f9d124fa776c6e65e8"
+        },
+        {
+          "path": "tests/cks-11/offline-proof-readback.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "43be72cb20856840616e0e57bf2a588122b0ad9bdccbe6e301ff22b0e5ca0a99"
+        },
+        {
+          "path": "tests/cks-11/p19-holdout-fixtures.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "c9c5be7644906d1fcb14bec6999426d06ba2aaa1a50999c93c9f0abd207b3a97"
+        },
+        {
+          "path": "tests/cks-11/p20-function-parity-fixtures.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "c8bb9c427399586ba5df04601e2a4dda4ee52e71ec696eef715c171b91cc6239"
+        },
+        {
+          "path": "tests/cks-11/shadow-workflow-replay.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "e616f0947db21090f34cb01b6b5fb4f4f08b7612de59d5b79e07152755328a98"
+        },
+        {
+          "path": "tests/cks-11/workflow-applicability.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "8e3fb4869415e43a256e0b506409f0de745230bd86dc4ffa9458b72ee8b6a8b6"
+        },
+        {
+          "path": "tests/fixtures/cks-11/applicability-boundary-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "db7bb62175c91f531b736e286aafa714e6851948c4b755fb442f89798e4c0ddf"
+        },
+        {
+          "path": "tests/fixtures/cks-11/function-candidate-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b87b10ca64af83ac3b58d810d921ae74e7d1ba2fc2fc6b24f65bafe3e361ba40"
+        },
+        {
+          "path": "tests/fixtures/cks-11/governed-assets-invalid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a41cffd0119819bfb96eb74d9b5a445ac8e6b45db0405abdd807057d2c2dc28c"
+        },
+        {
+          "path": "tests/fixtures/cks-11/governed-assets-valid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b914515f1f59ccf98c7ecf14490a5ea0a2d3725b4d7b18f782c26eb085dc44a6"
+        },
+        {
+          "path": "tests/fixtures/cks-11/knowledge-dependency-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "d1ead2d009f7dea72993beb59960b1dde7cf418aa4e67816a63e795edb51c92e"
+        },
+        {
+          "path": "tests/fixtures/cks-11/offline-proof-manifest-v1.json",
+          "role": "FIXTURE",
+          "sha256": "d3fbcb01b1270a62840f830f4aebad0549b5687055e6754f053267b727a5a15f"
+        },
+        {
+          "path": "tests/fixtures/cks-11/p19-p20-holdouts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "2cd50ca408257ac594dd8ed64a226ffdc232e91dcecd7f3107986a8a600335c7"
+        },
+        {
+          "path": "tests/fixtures/cks-11/p19-p20-rejections-v1.json",
+          "role": "FIXTURE",
+          "sha256": "c15042c49e0215a9ffae59a309eefc806de23cf0d106441911962ca9927d5760"
+        },
+        {
+          "path": "tests/fixtures/cks-11/p19-workflow-holdouts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b9f0eaff65cb0a96d73ddffcd98278dd5a82c23611190b72cd7d39164b597bee"
+        },
+        {
+          "path": "tests/fixtures/cks-11/p19-workflow-rejections-v1.json",
+          "role": "FIXTURE",
+          "sha256": "3e5e8e974ff810f5b153f60466eb77f32fef98b1f0247fad8e31b15114b832db"
+        },
+        {
+          "path": "tests/fixtures/cks-11/p20-function-parity-holdouts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "4a0c07a546a8cf22c3a15f892b38683cee19ea89a682987b1082c020ba06304f"
+        },
+        {
+          "path": "tests/fixtures/cks-11/p20-function-parity-rejections-v1.json",
+          "role": "FIXTURE",
+          "sha256": "e9f51866dd54dc1edfdae119fe3441cd379ee3c04ed947411d10b87991779acb"
+        },
+        {
+          "path": "tests/fixtures/cks-11/receipt-ledger-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "aa87413dec119a488979fcb16974daeabc13042018cfd06786f28e6240aebac1"
+        },
+        {
+          "path": "tests/fixtures/cks-11/receipt-rollback-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "2e7d26ceaab0fafba543e03849e1e876d8a7363d0603e9900b26c3151930a440"
+        },
+        {
+          "path": "tests/fixtures/cks-11/shadow-replay-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "dc5d7511e5e656551ab0a306ab491177d65bcd18b1471575069b68151411bf0a"
+        },
+        {
+          "path": "verification/cks-11-fastpath-guard-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bc3af2a3e3b9b2fec8105ebaa9810df05eead64cfa0d16a0d49406e807603554"
+        },
+        {
+          "path": "verification/cks-11-governance-decision-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2185e7f859fd873d9452e4444e9a802833f362321f663305a5c3a5ff313bcb94"
+        },
+        {
+          "path": "verification/cks-11-offline-proof-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e80853e0129a2d1203d0c7b021b3ac5be30c85b919b13148de8297412192c948"
+        },
+        {
+          "path": "verification/cks-11-p20-parity-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "456adb6c0f3db787b412fc78af998ea6553fdd0c1aee222d5449419ff5515f37"
+        },
+        {
+          "path": "verification/cks-11-receipt-rollback-readback-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b93356df3ee65eec7d143a546e64b39affe4b2525071f316239179e4c9cd7a15"
+        },
+        {
+          "path": "verification/cks-11-revalidation-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d85d406ad9872de78cc0c95009345cb990c8170934b4ab1762a59da33164a875"
+        },
+        {
+          "path": "verification/cks-11-shadow-replay-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "41f7a826fd5c3042cd3cf38eb53f46ad4898f93be5976ea7a6f7ada6131a8015"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks11:test"
+      ],
+      "invariants": [
+        "P19 proves shadow parity with safe abort and no authority widening.",
+        "P20 proves deterministic typed Function parity with exact rollback.",
+        "Knowledge dependencies and historical receipts remain immutable.",
         "Successful proof requires governed release delivery."
       ],
       "riskClass": "HIGH",
