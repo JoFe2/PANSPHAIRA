@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "pansphaira/rks-01-schema-probe/v2",
+  "protocolVersion": 2,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "unscored": true,
+  "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\": \\\"ANSWER\\\", \\\"materialClaims\\\": [], \\\"evidenceRefs\\\": [],\\n \\\"applicability\\\": \\\"APPLICABLE\\\", \\\"denials\\\": [], \\\"reasoningSummary\\\": \\\"This is a synthetic probe with no real-world claims or evidence. It is designed to test the system's response to a non-task JSON schema request.\\\"}\"}}],\"created\":1788125418,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":79,\"prompt_tokens\":125,\"total_tokens\":204,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-c7LOl1rcgdCxlTjaYZtxwVkmvLdZMvWo\",\"timings\":{\"cache_n\":0,\"prompt_n\":125,\"prompt_ms\":17.13,\"prompt_per_token_ms\":0.13704,\"prompt_per_second\":7297.1395213076485,\"predicted_n\":79,\"predicted_ms\":435.525,\"predicted_per_token_ms\":5.512974683544304,\"predicted_per_second\":181.3902761035532}}",
+  "rawResponseHash": "899b8793d47592f321a76ba1f587fd6041e441ca6ef38f9edd190c66449338a4",
+  "parsedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "This is a synthetic probe with no real-world claims or evidence. It is designed to test the system's response to a non-task JSON schema request."
+  },
+  "parseError": null,
+  "usage": {
+    "completion_tokens": 79,
+    "prompt_tokens": 125,
+    "total_tokens": 204,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 125,
+    "prompt_ms": 17.13,
+    "prompt_per_token_ms": 0.13704,
+    "prompt_per_second": 7297.1395213076485,
+    "predicted_n": 79,
+    "predicted_ms": 435.525,
+    "predicted_per_token_ms": 5.512974683544304,
+    "predicted_per_second": 181.3902761035532
+  },
+  "wallMs": 459.2787779999999,
+  "passed": true
+}

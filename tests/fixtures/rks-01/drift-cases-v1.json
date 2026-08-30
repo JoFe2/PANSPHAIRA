@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "pansphaira.rks01/drift-cases/v1",
+  "changes": [
+    { "kind": "BYTES", "sourceRole": "OPENAPI_SPEC", "observedSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "reasonCode": "SOURCE_BYTES_CHANGED" },
+    { "kind": "REVISION", "sourceRole": "OPENAPI_SPEC", "observedRevision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "reasonCode": "SOURCE_REVISION_CHANGED" },
+    { "kind": "PARSER", "sourceRole": "OPENAPI_SPEC", "observedParser": { "id": "commonmark-bounded", "version": "2.0.0" }, "reasonCode": "PARSER_VERSION_CHANGED" },
+    { "kind": "LICENSE", "sourceRole": "OPENAPI_SPEC", "observedLicense": { "id": "UNKNOWN", "notice": "", "obligations": [] }, "reasonCode": "LICENSE_DECISION_CHANGED" }
+  ]
+}

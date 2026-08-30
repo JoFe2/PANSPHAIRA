@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/rks-01/source-admission-decision-v1.schema.json",
+  "title": "RKS-01 engineering source admission decision v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "decisionId", "profileId", "profileDigest", "snapshotId", "snapshotDigest", "decision", "decidedAt", "validUntil", "licenseDecision", "licenseId", "transformationClass", "notice", "attribution", "obligations", "boundary", "admissionDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.rks01/source-admission-decision/v1" }, "decisionId": { "$ref": "#/$defs/id" },
+    "profileId": { "$ref": "#/$defs/id" }, "profileDigest": { "$ref": "#/$defs/digest" }, "snapshotId": { "$ref": "#/$defs/id" }, "snapshotDigest": { "$ref": "#/$defs/digest" },
+    "decision": { "enum": ["CONDITIONAL_ADMIT", "NARROW_ADMIT_UNMODIFIED_ONLY"] }, "decidedAt": { "$ref": "#/$defs/instant" }, "validUntil": { "$ref": "#/$defs/instant" },
+    "licenseDecision": { "const": "KNOWN" }, "licenseId": { "type": "string", "pattern": "^[A-Za-z0-9.-]{3,128}$" }, "transformationClass": { "enum": ["TRANSFORM_ALLOWED", "UNMODIFIED_ONLY"] },
+    "notice": { "type": "string", "minLength": 1, "maxLength": 512 }, "attribution": { "$ref": "#/$defs/list" }, "obligations": { "$ref": "#/$defs/list" },
+    "boundary": { "const": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "legalAdvice": false } }, "admissionDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" }, "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "instant": { "type": "string", "format": "date-time", "pattern": "Z$" }, "list": { "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 256 } } }
+}

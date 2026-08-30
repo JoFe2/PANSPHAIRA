@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/rks-01/source-drift-event-v1.schema.json",
+  "title": "RKS-01 append-only source drift and revalidation event v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "eventId", "observedAt", "profileDigest", "snapshotDigest", "observedSourceBytesSha256", "classification", "action", "previousEventDigest", "affectedPromotionReceiptIds", "boundary", "eventDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.rks01/source-drift-event/v1" }, "eventId": { "$ref": "#/$defs/id" }, "observedAt": { "$ref": "#/$defs/instant" }, "profileDigest": { "$ref": "#/$defs/digest" }, "snapshotDigest": { "$ref": "#/$defs/digest" }, "observedSourceBytesSha256": { "$ref": "#/$defs/digest" },
+    "classification": { "enum": ["NO_DRIFT", "DRIFT_DETECTED"] }, "action": { "enum": ["VALIDATED", "REVALIDATION_REQUIRED"] }, "previousEventDigest": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/digest" }] },
+    "affectedPromotionReceiptIds": { "type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "boundary": { "const": { "historyRewrite": false, "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE" } }, "eventDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    { "if": { "properties": { "classification": { "const": "NO_DRIFT" } } }, "then": { "properties": { "action": { "const": "VALIDATED" } } } },
+    { "if": { "properties": { "classification": { "const": "DRIFT_DETECTED" } } }, "then": { "properties": { "action": { "const": "REVALIDATION_REQUIRED" } } } }
+  ],
+  "$defs": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" }, "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "instant": { "type": "string", "format": "date-time", "pattern": "Z$" } }
+}

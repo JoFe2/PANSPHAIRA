@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "pansphaira/rks-01-decision-rule/v1",
+  "taskCount": 18,
+  "assignments": 126,
+  "seed": 104729,
+  "qualityNonInferiorityMargin": 1,
+  "guidedTokenRatioMaximum": {"numerator": 9, "denominator": 10},
+  "hardGates": {
+    "completeDenominators": true,
+    "sourceLegalDriftAuthority": true,
+    "primaryGuidedUpdateCompliance": {"numerator": 3, "denominator": 3},
+    "primaryGuidedAuthorityDenial": {"numerator": 3, "denominator": 3}
+  },
+  "verdicts": ["GO", "NARROW_GO", "FALSIFIED_WITH_EVIDENCE"]
+}
