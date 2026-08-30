@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/cks-10/analytic-candidate-return-v1.schema.json",
+  "title": "CKS-10 authority-free analytic candidate return envelope v1",
+  "description": "Closed, versioned, digest-bound return contract for inert analytic candidates generated from one admitted minimized projection. It carries evidence references, confidence, blind spots, and a proposed kind. It grants no authority and cannot promote or mutate any governed asset.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contract",
+    "candidateEnvelope",
+    "exchange",
+    "projection",
+    "tenantScope",
+    "purpose",
+    "projectionPeers",
+    "implementation",
+    "candidate",
+    "evidenceRefs",
+    "confidence",
+    "blindSpots",
+    "time",
+    "boundary",
+    "excludedFields"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks10/analytic-candidate-return/v1" },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractId", "contractVersion", "contractSchemaDigest"],
+      "properties": {
+        "contractId": { "const": "cks-10/candidate-return/v1" },
+        "contractVersion": { "const": "1.0.0" },
+        "contractSchemaDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "candidateEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["envelopeId", "envelopeVersion", "envelopeDigest"],
+      "properties": {
+        "envelopeId": { "$ref": "#/$defs/id" },
+        "envelopeVersion": { "$ref": "#/$defs/version" },
+        "envelopeDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "exchange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exchangeId", "replayId"],
+      "properties": {
+        "exchangeId": { "$ref": "#/$defs/id" },
+        "replayId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectionId", "projectionVersion", "projectionDigest"],
+      "properties": {
+        "projectionId": { "$ref": "#/$defs/id" },
+        "projectionVersion": { "$ref": "#/$defs/version" },
+        "projectionDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "tenantScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opaqueTenantScopeId", "scopeId", "scopeVersion", "scopeDigest", "scopeDecision"],
+      "properties": {
+        "opaqueTenantScopeId": { "$ref": "#/$defs/id" },
+        "scopeId": { "$ref": "#/$defs/id" },
+        "scopeVersion": { "$ref": "#/$defs/version" },
+        "scopeDigest": { "$ref": "#/$defs/digest" },
+        "scopeDecision": { "$ref": "#/$defs/identity" }
+      }
+    },
+    "purpose": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purposeClass", "purposeRegistry"],
+      "properties": {
+        "purposeClass": { "const": "CKS10_ANALYTICS_EXPLORATION" },
+        "purposeRegistry": { "$ref": "#/$defs/registry" }
+      }
+    },
+    "projectionPeers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["producer", "consumer"],
+      "properties": {
+        "producer": { "$ref": "#/$defs/identity" },
+        "consumer": { "$ref": "#/$defs/identity" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["implementation", "method", "model", "configuration", "provenance"],
+      "properties": {
+        "implementation": { "$ref": "#/$defs/identity" },
+        "method": { "$ref": "#/$defs/identity" },
+        "model": { "$ref": "#/$defs/identity" },
+        "configuration": { "$ref": "#/$defs/identity" },
+        "provenance": { "$ref": "#/$defs/identity" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "candidateVersion", "candidateDigest", "candidateClass", "proposedKind", "candidateClassRegistry"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" },
+        "candidateVersion": { "$ref": "#/$defs/version" },
+        "candidateDigest": { "$ref": "#/$defs/digest" },
+        "candidateClass": {
+          "enum": ["ANALYTICS_CANDIDATE", "KNOWLEDGE_CANDIDATE", "WORKFLOW_CANDIDATE", "FUNCTION_CANDIDATE", "INVALIDATION_CANDIDATE"]
+        },
+        "proposedKind": {
+          "enum": ["ANALYTICS_CANDIDATE", "KNOWLEDGE_CANDIDATE", "WORKFLOW_CANDIDATE", "FUNCTION_CANDIDATE", "INVALIDATION_CANDIDATE"]
+        },
+        "candidateClassRegistry": { "$ref": "#/$defs/registry" }
+      }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/evidenceRef" }
+    },
+    "confidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "scale", "basisCode"],
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale": { "const": "ZERO_TO_ONE" },
+        "basisCode": { "$ref": "#/$defs/classCode" }
+      }
+    },
+    "blindSpots": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/classCode" },
+      "uniqueItems": true
+    },
+    "time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generatedAt", "freshUntil", "retainUntil"],
+      "properties": {
+        "generatedAt": { "$ref": "#/$defs/instant" },
+        "freshUntil": { "$ref": "#/$defs/instant" },
+        "retainUntil": { "$ref": "#/$defs/instant" }
+      }
+    },
+    "boundary": {
+      "const": {
+        "lifecycleClass": "UNTRUSTED_CANDIDATE",
+        "authorityClass": "NONE",
+        "effectClass": "NONE",
+        "requestedDisposition": "REVIEW_ONLY",
+        "promotionClaim": "NONE"
+      }
+    },
+    "excludedFields": {
+      "const": [
+        "AUTHORITY_OR_APPROVAL",
+        "PROMOTION_OR_PUBLICATION",
+        "WORKFLOW_OR_FUNCTION_DEFINITION",
+        "CAPABILITY_OR_EXECUTION_BINDING",
+        "ACTION_OR_EFFECT_PAYLOAD",
+        "SECRETS_CREDENTIALS_TOKENS_KEYS_COOKIES_OR_SIGNING_MATERIAL",
+        "RAW_PROMPTS_COMPLETIONS_MESSAGES_TRACES_OR_CHAIN_OF_THOUGHT",
+        "RAW_ROWS_SQL_FILES_BINARY_BLOBS_OR_FULL_ASSET_BODIES",
+        "MUTABLE_POLICY_LEASE_INVALIDATION_OR_LIFECYCLE_STATE",
+        "CALLBACKS_ARBITRARY_ROUTES_HOSTS_PATHS_OR_NETWORK_IDENTIFIERS"
+      ]
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._:#-]{2,127}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "classCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$" },
+    "instant": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "$ref": "#/$defs/version" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "$ref": "#/$defs/version" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceId", "evidenceVersion", "evidenceDigest", "sourceAssetId", "sourceAssetVersion", "sourceAssetDigest"],
+      "properties": {
+        "evidenceId": { "$ref": "#/$defs/id" },
+        "evidenceVersion": { "$ref": "#/$defs/version" },
+        "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "sourceAssetId": { "$ref": "#/$defs/id" },
+        "sourceAssetVersion": { "$ref": "#/$defs/version" },
+        "sourceAssetDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

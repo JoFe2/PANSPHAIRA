@@ -1,0 +1,237 @@
+{
+  "schemaVersion": "pansphaira.cks10/knowledge-projection/v1",
+  "contract": {
+    "contractId": "cks-10/minimized-projection/v1",
+    "contractVersion": "1.0.0",
+    "contractSchemaDigest": "5f7f38d9350863993c58d6cb0dddb25f17906298471f3b40b620255b0789f86e"
+  },
+  "exchange": {
+    "exchangeId": "cks10-p21-exch-290-0001",
+    "projectionId": "cks10-p21-proj-290-0001",
+    "projectionVersion": "1.0.0",
+    "projectionDigest": "47a76ae86b84d41c70eca971627e21aefc23efb14c19b585c04b6a21672232ca",
+    "replayId": "cks10-p21-replay-290-0001"
+  },
+  "producer": {
+    "producerId": "pansphaira.cks10.projection-producer",
+    "producerVersion": "1.0.0",
+    "producerDigest": "25db9eb8f9639e1bf44d05291b5690f3c0c3e6c41aaffe24c7dd0f4ba640b6c2"
+  },
+  "intendedConsumer": {
+    "consumerId": "kaleidosphere.cks10.analytics-consumer",
+    "consumerVersion": "1.0.0",
+    "consumerDigest": "2c2bbd69766bbacc8082e0f902a5a0fb787446cdfded0c1602b1b6f96a319666"
+  },
+  "tenantScope": {
+    "opaqueTenantScopeId": "tscope-290-synthetic-lane1",
+    "scope": {
+      "scopeId": "scope.cks10.analytics-exploration",
+      "scopeVersion": "1.0.0",
+      "scopeDigest": "8d6780bd038787cb77ed2c74eedbdbe8e25a830994df7ab2636a7b0f9b88c3e5"
+    },
+    "scopeDecision": {
+      "decisionId": "CKS-10-BOUNDARY-DECISION-V1",
+      "decisionVersion": "1.0.0",
+      "decisionDigest": "65629f8e98d827eb40782090b741661a271f30e83c3d400ad339b6141a85177c"
+    }
+  },
+  "purpose": {
+    "purposeClass": "CKS10_ANALYTICS_EXPLORATION",
+    "purposeRegistry": {
+      "registryId": "registry.pansphaira.purpose-class",
+      "registryVersion": "1.0.0",
+      "registryDigest": "a29bc192b67cd73043cd8b07fe1de0b0ec09d14ad6bcf2f2d5bf61f6ddec2dfe"
+    }
+  },
+  "records": [
+    {
+      "recordId": "rec-p21-task-290-0001",
+      "recordClass": "TASK",
+      "assetId": "task.p21.analytics-fixture",
+      "assetVersion": "1.0.0",
+      "assetDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "assetClass": "WORK_TASK",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-p21-task-290-0001",
+          "assetId": "task.p21.analytics-fixture",
+          "assetVersion": "1.0.0",
+          "assetDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+          "assetClass": "WORK_TASK",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "task.state",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "IN_PROGRESS",
+          "sourceRefId": "src-p21-task-290-0001"
+        },
+        {
+          "fieldId": "task.transition",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "UNRESOLVED_TASK_OUTCOME_TRANSITION",
+          "sourceRefId": "src-p21-task-290-0001"
+        },
+        {
+          "fieldId": "task.workflow",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "DECLARATIVE_WORKFLOW_GAP",
+          "sourceRefId": "src-p21-task-290-0001"
+        }
+      ]
+    },
+    {
+      "recordId": "rec-p21-knowledge-290-0001",
+      "recordClass": "KNOWLEDGE",
+      "assetId": "knowledge.p21.analytics-fixture",
+      "assetVersion": "1.0.0",
+      "assetDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "assetClass": "KNOWLEDGE_RECORD",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-p21-knowledge-290-0001",
+          "assetId": "knowledge.p21.analytics-fixture",
+          "assetVersion": "1.0.0",
+          "assetDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "assetClass": "KNOWLEDGE_RECORD",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "knowledge.cluster",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "AGGREGATE_MEASURE",
+          "value": {
+            "measureClass": "RELATED_EVIDENCE_CLUSTER",
+            "statistic": "COUNT",
+            "value": 2,
+            "sampleCount": 2
+          },
+          "sourceRefId": "src-p21-knowledge-290-0001"
+        },
+        {
+          "fieldId": "knowledge.pattern",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "REPEATED_ORDER_PATTERN",
+          "sourceRefId": "src-p21-knowledge-290-0001"
+        }
+      ]
+    },
+    {
+      "recordId": "rec-p21-decision-290-0001",
+      "recordClass": "DECISION",
+      "assetId": "decision.p21.analytics-fixture",
+      "assetVersion": "1.0.0",
+      "assetDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "assetClass": "ARCHITECTURE_DECISION",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-p21-decision-290-0001",
+          "assetId": "decision.p21.analytics-fixture",
+          "assetVersion": "1.0.0",
+          "assetDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+          "assetClass": "ARCHITECTURE_DECISION",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "decision.cousage",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "SHARED_SCOPE_USAGE",
+          "sourceRefId": "src-p21-decision-290-0001"
+        },
+        {
+          "fieldId": "decision.drift",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "SOURCE_DIGEST_DRIFT_SIGNAL",
+          "sourceRefId": "src-p21-decision-290-0001"
+        }
+      ]
+    },
+    {
+      "recordId": "rec-p21-outcome-290-0001",
+      "recordClass": "OUTCOME",
+      "assetId": "outcome.p21.analytics-fixture",
+      "assetVersion": "1.0.0",
+      "assetDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "assetClass": "OUTCOME_RECEIPT",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "SYNTHETIC",
+      "sources": [
+        {
+          "sourceRefId": "src-p21-outcome-290-0001",
+          "assetId": "outcome.p21.analytics-fixture",
+          "assetVersion": "1.0.0",
+          "assetDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "assetClass": "OUTCOME_RECEIPT",
+          "dataClassification": "INTERNAL",
+          "evidenceClass": "SYNTHETIC",
+          "provenanceDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        }
+      ],
+      "fields": [
+        {
+          "fieldId": "outcome.negative",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "AGGREGATE_MEASURE",
+          "value": {
+            "measureClass": "ABSENT_EXPECTED_LINK",
+            "statistic": "COUNT",
+            "value": 0,
+            "sampleCount": 1
+          },
+          "sourceRefId": "src-p21-outcome-290-0001"
+        }
+      ]
+    }
+  ],
+  "time": {
+    "issuedAt": "2026-08-28T06:00:00Z",
+    "freshUntil": "2026-08-28T07:00:00Z",
+    "retainUntil": "2026-08-28T07:00:00Z"
+  },
+  "boundary": {
+    "readOnly": true,
+    "authorityClass": "NONE",
+    "effectClass": "NONE",
+    "promotionClaim": "NONE",
+    "writeInstructionAllowed": false
+  },
+  "excludedFields": [
+    "SECRETS",
+    "CREDENTIALS",
+    "TOKENS_KEYS_COOKIES_OR_SIGNING_MATERIAL",
+    "RAW_PROMPTS_COMPLETIONS_MESSAGES_OR_CHAIN_OF_THOUGHT",
+    "RAW_MODEL_OR_TOOL_TRACES",
+    "RAW_ROWS_SQL_FILES_OR_BINARY_BLOBS",
+    "FULL_GOVERNED_ASSET_BODIES",
+    "UNNECESSARY_PAYLOADS",
+    "DIRECT_TENANT_CUSTOMER_USER_ACTOR_SESSION_HOST_PATH_URL_NETWORK_OR_PROVIDER_IDENTIFIERS_WHEN_OPAQUE_SCOPE_IDS_SUFFICE",
+    "MUTABLE_POLICY_STATE",
+    "MUTABLE_APPROVAL_AUTHORITY_LEASE_WORKFLOW_RUN_OR_INVALIDATION_STATE",
+    "EXECUTABLE_CODE_COMMANDS_FUNCTION_BODIES_WORKFLOW_DEFINITIONS_OR_EFFECT_PAYLOADS",
+    "CALLBACKS_ARBITRARY_ROUTES_HOSTS_OR_PATHS"
+  ]
+}

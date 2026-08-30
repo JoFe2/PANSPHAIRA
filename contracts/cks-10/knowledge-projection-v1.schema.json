@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/cks-10/knowledge-projection-v1.schema.json",
+  "title": "CKS-10 minimized read-only Task-Knowledge-Decision-Outcome projection envelope v1",
+  "description": "Closed wire contract for cks-10/minimized-projection/v1@1.0.0. PanSphAIra produces this versioned, minimized, digest-bound, read-only projection for KaleidoSphere exploration under purpose CKS10_ANALYTICS_EXPLORATION. All identifiers are stable opaque IDs, every value is bounded and typed, unknown fields and free-form extension maps are denied, and secrets, raw prompts, credentials, unnecessary payloads, and mutable policy state are excluded by class. This schema freezes the contract only; it adds no runtime, endpoint, or activation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contract",
+    "exchange",
+    "producer",
+    "intendedConsumer",
+    "tenantScope",
+    "purpose",
+    "records",
+    "time",
+    "boundary",
+    "excludedFields"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks10/knowledge-projection/v1" },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractId", "contractVersion", "contractSchemaDigest"],
+      "properties": {
+        "contractId": { "const": "cks-10/minimized-projection/v1" },
+        "contractVersion": { "const": "1.0.0" },
+        "contractSchemaDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "exchange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exchangeId", "projectionId", "projectionVersion", "projectionDigest", "replayId"],
+      "properties": {
+        "exchangeId": { "$ref": "#/$defs/id" },
+        "projectionId": { "$ref": "#/$defs/id" },
+        "projectionVersion": { "$ref": "#/$defs/version" },
+        "projectionDigest": { "$ref": "#/$defs/digest" },
+        "replayId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["producerId", "producerVersion", "producerDigest"],
+      "properties": {
+        "producerId": { "$ref": "#/$defs/id" },
+        "producerVersion": { "$ref": "#/$defs/version" },
+        "producerDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "intendedConsumer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumerId", "consumerVersion", "consumerDigest"],
+      "properties": {
+        "consumerId": { "$ref": "#/$defs/id" },
+        "consumerVersion": { "$ref": "#/$defs/version" },
+        "consumerDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "tenantScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opaqueTenantScopeId", "scope", "scopeDecision"],
+      "properties": {
+        "opaqueTenantScopeId": { "$ref": "#/$defs/id" },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scopeId", "scopeVersion", "scopeDigest"],
+          "properties": {
+            "scopeId": { "$ref": "#/$defs/id" },
+            "scopeVersion": { "$ref": "#/$defs/version" },
+            "scopeDigest": { "$ref": "#/$defs/digest" }
+          }
+        },
+        "scopeDecision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["decisionId", "decisionVersion", "decisionDigest"],
+          "properties": {
+            "decisionId": { "$ref": "#/$defs/id" },
+            "decisionVersion": { "$ref": "#/$defs/version" },
+            "decisionDigest": { "$ref": "#/$defs/digest" }
+          }
+        }
+      }
+    },
+    "purpose": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purposeClass", "purposeRegistry"],
+      "properties": {
+        "purposeClass": { "const": "CKS10_ANALYTICS_EXPLORATION" },
+        "purposeRegistry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["registryId", "registryVersion", "registryDigest"],
+          "properties": {
+            "registryId": { "$ref": "#/$defs/id" },
+            "registryVersion": { "$ref": "#/$defs/version" },
+            "registryDigest": { "$ref": "#/$defs/digest" }
+          }
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/record" },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["recordClass"],
+            "properties": { "recordClass": { "const": "TASK" } }
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["recordClass"],
+            "properties": { "recordClass": { "const": "KNOWLEDGE" } }
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["recordClass"],
+            "properties": { "recordClass": { "const": "DECISION" } }
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["recordClass"],
+            "properties": { "recordClass": { "const": "OUTCOME" } }
+          }
+        }
+      ]
+    },
+    "time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issuedAt", "freshUntil", "retainUntil"],
+      "properties": {
+        "issuedAt": { "$ref": "#/$defs/instant" },
+        "freshUntil": { "$ref": "#/$defs/instant" },
+        "retainUntil": { "$ref": "#/$defs/instant" }
+      }
+    },
+    "boundary": {
+      "const": {
+        "readOnly": true,
+        "authorityClass": "NONE",
+        "effectClass": "NONE",
+        "promotionClaim": "NONE",
+        "writeInstructionAllowed": false
+      }
+    },
+    "excludedFields": {
+      "const": [
+        "SECRETS",
+        "CREDENTIALS",
+        "TOKENS_KEYS_COOKIES_OR_SIGNING_MATERIAL",
+        "RAW_PROMPTS_COMPLETIONS_MESSAGES_OR_CHAIN_OF_THOUGHT",
+        "RAW_MODEL_OR_TOOL_TRACES",
+        "RAW_ROWS_SQL_FILES_OR_BINARY_BLOBS",
+        "FULL_GOVERNED_ASSET_BODIES",
+        "UNNECESSARY_PAYLOADS",
+        "DIRECT_TENANT_CUSTOMER_USER_ACTOR_SESSION_HOST_PATH_URL_NETWORK_OR_PROVIDER_IDENTIFIERS_WHEN_OPAQUE_SCOPE_IDS_SUFFICE",
+        "MUTABLE_POLICY_STATE",
+        "MUTABLE_APPROVAL_AUTHORITY_LEASE_WORKFLOW_RUN_OR_INVALIDATION_STATE",
+        "EXECUTABLE_CODE_COMMANDS_FUNCTION_BODIES_WORKFLOW_DEFINITIONS_OR_EFFECT_PAYLOADS",
+        "CALLBACKS_ARBITRARY_ROUTES_HOSTS_OR_PATHS"
+      ]
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._:-]{3,127}$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "classCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$" },
+    "fieldId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*){1,4}$" },
+    "instant": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "boundedString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\x00-\\x1F\\x7F]*$"
+    },
+    "boundedScalar": {
+      "anyOf": [
+        { "$ref": "#/$defs/boundedString" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" }
+      ]
+    },
+    "aggregateMeasure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measureClass", "statistic", "value", "sampleCount"],
+      "properties": {
+        "measureClass": { "$ref": "#/$defs/classCode" },
+        "statistic": {
+          "enum": ["COUNT", "DISTINCT_COUNT", "SUM", "MEAN", "MIN", "MAX", "RATIO"]
+        },
+        "value": { "type": "number" },
+        "sampleCount": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "unit": { "$ref": "#/$defs/boundedString" }
+      }
+    },
+    "relationshipEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationClass", "target"],
+      "properties": {
+        "relationClass": { "$ref": "#/$defs/classCode" },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["assetId", "assetVersion", "assetDigest"],
+          "properties": {
+            "assetId": { "$ref": "#/$defs/id" },
+            "assetVersion": { "$ref": "#/$defs/version" },
+            "assetDigest": { "$ref": "#/$defs/digest" }
+          }
+        }
+      }
+    },
+    "field": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fieldId", "fieldVersion", "fieldClass", "value", "sourceRefId"],
+          "properties": {
+            "fieldId": { "$ref": "#/$defs/fieldId" },
+            "fieldVersion": { "$ref": "#/$defs/version" },
+            "fieldClass": { "const": "SCALAR_FACT" },
+            "value": { "$ref": "#/$defs/boundedScalar" },
+            "sourceRefId": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fieldId", "fieldVersion", "fieldClass", "value", "sourceRefId"],
+          "properties": {
+            "fieldId": { "$ref": "#/$defs/fieldId" },
+            "fieldVersion": { "$ref": "#/$defs/version" },
+            "fieldClass": { "const": "AGGREGATE_MEASURE" },
+            "value": { "$ref": "#/$defs/aggregateMeasure" },
+            "sourceRefId": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fieldId", "fieldVersion", "fieldClass", "value", "sourceRefId"],
+          "properties": {
+            "fieldId": { "$ref": "#/$defs/fieldId" },
+            "fieldVersion": { "$ref": "#/$defs/version" },
+            "fieldClass": { "const": "RELATIONSHIP_EDGE" },
+            "value": { "$ref": "#/$defs/relationshipEdge" },
+            "sourceRefId": { "$ref": "#/$defs/id" }
+          }
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceRefId",
+        "assetId",
+        "assetVersion",
+        "assetDigest",
+        "assetClass",
+        "dataClassification",
+        "evidenceClass",
+        "provenanceDigest"
+      ],
+      "properties": {
+        "sourceRefId": { "$ref": "#/$defs/id" },
+        "assetId": { "$ref": "#/$defs/id" },
+        "assetVersion": { "$ref": "#/$defs/version" },
+        "assetDigest": { "$ref": "#/$defs/digest" },
+        "assetClass": { "$ref": "#/$defs/classCode" },
+        "dataClassification": {
+          "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+        },
+        "evidenceClass": {
+          "enum": ["CANONICAL_DERIVATIVE", "AGGREGATE_DERIVATIVE", "SYNTHETIC"]
+        },
+        "provenanceDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordId",
+        "recordClass",
+        "assetId",
+        "assetVersion",
+        "assetDigest",
+        "assetClass",
+        "dataClassification",
+        "evidenceClass",
+        "sources",
+        "fields"
+      ],
+      "properties": {
+        "recordId": { "$ref": "#/$defs/id" },
+        "recordClass": { "enum": ["TASK", "KNOWLEDGE", "DECISION", "OUTCOME"] },
+        "assetId": { "$ref": "#/$defs/id" },
+        "assetVersion": { "$ref": "#/$defs/version" },
+        "assetDigest": { "$ref": "#/$defs/digest" },
+        "assetClass": { "$ref": "#/$defs/classCode" },
+        "dataClassification": {
+          "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+        },
+        "evidenceClass": {
+          "enum": ["CANONICAL_DERIVATIVE", "AGGREGATE_DERIVATIVE", "SYNTHETIC"]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/source" }
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/field" }
+        }
+      }
+    }
+  }
+}

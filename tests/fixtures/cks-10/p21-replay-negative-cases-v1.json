@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "pansphaira.cks10/p21-replay-negative-cases/v1",
+  "trustedNowMs": 1787898600000,
+  "positiveCases": [
+    "planted-replay",
+    "canonical-key-order-replay",
+    "all-five-edges-explicit-and-allowed",
+    "all-global-and-candidate-blind-spots-present"
+  ],
+  "negativeCases": [
+    { "caseId": "missing-trusted-clock", "reason": "TRUSTED_CLOCK_REQUIRED" },
+    { "caseId": "missing-replay-state", "reason": "REPLAY_STATE_REQUIRED" },
+    { "caseId": "tenant-scope-substitution", "target": "projection", "path": "tenantScope.opaqueTenantScopeId", "value": "tscope-290-other", "reason": "TENANT_SCOPE_MISMATCH" },
+    { "caseId": "retention-expired", "nowMs": 1787901120000, "reason": "RETENTION_EXPIRED" },
+    { "caseId": "freshness-stale", "nowMs": 1787900400000, "reason": "FRESHNESS_STALE" },
+    { "caseId": "provenance-substitution", "target": "projection", "path": "records.0.sources.0.provenanceDigest", "value": "0000000000000000000000000000000000000000000000000000000000000000", "reason": "PROVENANCE_BINDING_MISMATCH" },
+    { "caseId": "projection-digest-forgery", "target": "projection", "path": "exchange.projectionDigest", "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "reason": "PROJECTION_DIGEST_SELF_MISMATCH" },
+    { "caseId": "authority-bearing-candidate", "target": "emitted", "path": "candidates.0.authorityClass", "value": "FULL", "reason": "AUTHORITY_BEARING_FIELD" },
+    { "caseId": "invented-evidence-edge", "target": "emitted", "path": "allowedEvidenceEdges", "reason": "INVENTED_EDGE" },
+    { "caseId": "blind-spot-omission", "target": "emitted", "path": "candidates.0.blindSpots", "reason": "BLIND_SPOTS_MISMATCH" },
+    { "caseId": "cross-scope-candidate", "target": "emitted", "path": "projectionBinding.scopeId", "value": "scope.other", "reason": "CANDIDATE_SCOPE_MISMATCH" },
+    { "caseId": "replayed-candidate", "reason": "REPLAYED_CANDIDATE" },
+    { "caseId": "replay-mutation", "reason": "DENIED_REPLAY_MUTATION" },
+    { "caseId": "edge-witness-substitution", "target": "emitted", "path": "evidence.0.declaredEdgeIds", "value": [], "reason": "EDGE_NOT_WITNESSED" }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "contract": {
+    "contractId": "cks-10/minimized-projection/v1",
+    "contractVersion": "1.0.0",
+    "contractSchemaDigest": "5f7f38d9350863993c58d6cb0dddb25f17906298471f3b40b620255b0789f86e"
+  },
+  "exchange": {
+    "exchangeId": "cks10-exch-290-0002",
+    "projectionId": "cks10-proj-290-0002",
+    "projectionVersion": "1.0.0",
+    "replayId": "cks10-replay-290-0002"
+  },
+  "producer": {
+    "producerId": "pansphaira.cks10.projection-producer",
+    "producerVersion": "1.0.0",
+    "producerDigest": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "intendedConsumer": {
+    "consumerId": "kaleidosphere.cks10.analytics-consumer",
+    "consumerVersion": "1.0.0",
+    "consumerDigest": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "tenantScope": {
+    "opaqueTenantScopeId": "tscope-290-synthetic-lane1",
+    "scope": {
+      "scopeId": "scope.cks10.analytics-exploration",
+      "scopeVersion": "1.0.0",
+      "scopeDigest": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "scopeDecision": {
+      "decisionId": "CKS-10-BOUNDARY-DECISION-V1",
+      "decisionVersion": "1.0.0",
+      "decisionDigest": "4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  },
+  "purpose": {
+    "purposeClass": "CKS10_ANALYTICS_EXPLORATION",
+    "purposeRegistry": {
+      "registryId": "registry.pansphaira.purpose-class",
+      "registryVersion": "1.0.0",
+      "registryDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  },
+  "time": {
+    "issuedAt": "2026-08-28T04:12:00Z",
+    "freshUntil": "2026-08-28T05:12:00Z",
+    "retainUntil": "2026-08-28T05:12:00Z"
+  },
+  "canonicalSnapshots": [
+    {
+      "recordId": "rec-task-290-0002",
+      "recordClass": "TASK",
+      "assetId": "asset.task.290.0002",
+      "assetVersion": "1.0.0",
+      "assetDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "assetClass": "WORK_TASK",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "CANONICAL_DERIVATIVE",
+      "sourceRefId": "src-task-290-0002",
+      "provenanceDigest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "fields": [
+        {
+          "fieldId": "task.state",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "OBSERVED",
+          "sourceRefId": "src-task-290-0002"
+        }
+      ],
+      "canonicalEvidence": {
+        "rawPrompt": "do not export this prompt",
+        "credential": "do-not-export",
+        "mutablePolicy": "do-not-export"
+      }
+    },
+    {
+      "recordId": "rec-knowledge-290-0002",
+      "recordClass": "KNOWLEDGE",
+      "assetId": "asset.knowledge.290.0002",
+      "assetVersion": "1.0.0",
+      "assetDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "assetClass": "KNOWLEDGE_RECORD",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "AGGREGATE_DERIVATIVE",
+      "sourceRefId": "src-knowledge-290-0002",
+      "provenanceDigest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "fields": [
+        {
+          "fieldId": "knowledge.signal.count",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "AGGREGATE_MEASURE",
+          "value": {
+            "measureClass": "BOUNDARY_SIGNAL",
+            "statistic": "COUNT",
+            "value": 2,
+            "sampleCount": 2,
+            "unit": "signals"
+          },
+          "sourceRefId": "src-knowledge-290-0002"
+        }
+      ],
+      "canonicalEvidence": {
+        "rawRows": [{"secret": "do-not-export"}],
+        "sql": "SELECT secret FROM private_table"
+      }
+    },
+    {
+      "recordId": "rec-decision-290-0002",
+      "recordClass": "DECISION",
+      "assetId": "asset.decision.290.0002",
+      "assetVersion": "1.0.0",
+      "assetDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "assetClass": "ARCHITECTURE_DECISION",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "CANONICAL_DERIVATIVE",
+      "sourceRefId": "src-decision-290-0002",
+      "provenanceDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "fields": [
+        {
+          "fieldId": "decision.boundary.class",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "NONE",
+          "sourceRefId": "src-decision-290-0002"
+        }
+      ],
+      "canonicalEvidence": {
+        "approvalToken": "do-not-export",
+        "workflowDefinition": "do-not-export"
+      }
+    },
+    {
+      "recordId": "rec-outcome-290-0002",
+      "recordClass": "OUTCOME",
+      "assetId": "asset.outcome.290.0002",
+      "assetVersion": "1.0.0",
+      "assetDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "assetClass": "OUTCOME_RECEIPT",
+      "dataClassification": "INTERNAL",
+      "evidenceClass": "AGGREGATE_DERIVATIVE",
+      "sourceRefId": "src-outcome-290-0002",
+      "provenanceDigest": "9999999999999999999999999999999999999999999999999999999999999999",
+      "fields": [
+        {
+          "fieldId": "outcome.result.class",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "SCALAR_FACT",
+          "value": "VALIDATED_LOCALLY",
+          "sourceRefId": "src-outcome-290-0002"
+        },
+        {
+          "fieldId": "outcome.related.decision",
+          "fieldVersion": "1.0.0",
+          "fieldClass": "RELATIONSHIP_EDGE",
+          "value": {
+            "relationClass": "SUPPORTS",
+            "target": {
+              "assetId": "asset.decision.290.0002",
+              "assetVersion": "1.0.0",
+              "assetDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          },
+          "sourceRefId": "src-outcome-290-0002"
+        }
+      ],
+      "canonicalEvidence": {
+        "effectPayload": "do-not-export",
+        "callback": "https://user:password@example.invalid/private"
+      }
+    }
+  ]
+}

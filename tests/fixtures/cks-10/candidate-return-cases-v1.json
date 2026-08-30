@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "pansphaira.cks10/analytic-candidate-return/v1",
+  "contract": {
+    "contractId": "cks-10/candidate-return/v1",
+    "contractVersion": "1.0.0",
+    "contractSchemaDigest": "92842623eaa616423018602fe42ca3283aeb4f0f0b0d63716abc1cd54a83da8f"
+  },
+  "candidateEnvelope": {
+    "envelopeId": "cks10-candidate-envelope-290-0001",
+    "envelopeVersion": "1.0.0",
+    "envelopeDigest": "7159850757a45567b04745dac18e1d657723165909a9e0927ca28fadfccebb59"
+  },
+  "exchange": {
+    "exchangeId": "cks10-exch-290-0001",
+    "replayId": "cks10-replay-290-0001"
+  },
+  "projection": {
+    "projectionId": "cks10-proj-290-0001",
+    "projectionVersion": "1.0.0",
+    "projectionDigest": "2b3c55610fd9225d8254ccaf400d42328c9e9fd25a5885bf1b7dc762361b31a0"
+  },
+  "tenantScope": {
+    "opaqueTenantScopeId": "tscope-290-synthetic-lane1",
+    "scopeId": "scope.cks10.analytics-exploration",
+    "scopeVersion": "1.0.0",
+    "scopeDigest": "8d6780bd038787cb77ed2c74eedbdbe8e25a830994df7ab2636a7b0f9b88c3e5",
+    "scopeDecision": {
+      "id": "CKS-10-BOUNDARY-DECISION-V1",
+      "version": "1.0.0",
+      "digest": "65629f8e98d827eb40782090b741661a271f30e83c3d400ad339b6141a85177c"
+    }
+  },
+  "purpose": {
+    "purposeClass": "CKS10_ANALYTICS_EXPLORATION",
+    "purposeRegistry": {
+      "id": "registry.pansphaira.purpose-class",
+      "version": "1.0.0",
+      "digest": "a29bc192b67cd73043cd8b07fe1de0b0ec09d14ad6bcf2f2d5bf61f6ddec2dfe"
+    }
+  },
+  "projectionPeers": {
+    "producer": {
+      "id": "pansphaira.cks10.projection-producer",
+      "version": "1.0.0",
+      "digest": "25db9eb8f9639e1bf44d05291b5690f3c0c3e6c41aaffe24c7dd0f4ba640b6c2"
+    },
+    "consumer": {
+      "id": "kaleidosphere.cks10.analytics-consumer",
+      "version": "1.0.0",
+      "digest": "2c2bbd69766bbacc8082e0f902a5a0fb787446cdfded0c1602b1b6f96a319666"
+    }
+  },
+  "implementation": {
+    "implementation": {
+      "id": "kaleidosphere.cks10.analytic-engine",
+      "version": "1.0.0",
+      "digest": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "method": {
+      "id": "method.evidence-cluster-analysis",
+      "version": "1.0.0",
+      "digest": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "model": {
+      "id": "model.synthetic-analytic-v1",
+      "version": "1.0.0",
+      "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "configuration": {
+      "id": "config.cks10.minimized-evidence-v1",
+      "version": "1.0.0",
+      "digest": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "provenance": {
+      "id": "provenance.cks10.local-analysis-v1",
+      "version": "1.0.0",
+      "digest": "5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  },
+  "candidate": {
+    "candidateId": "cks10-analytic-candidate-290-0001",
+    "candidateVersion": "1.0.0",
+    "candidateDigest": "e90de792edf38a83a7a80e808f481c60ace922ed9cc7301cc1e8ad87414566b9",
+    "candidateClass": "ANALYTICS_CANDIDATE",
+    "proposedKind": "KNOWLEDGE_CANDIDATE",
+    "candidateClassRegistry": {
+      "id": "registry.pansphaira.cks10.candidate-class",
+      "version": "1.0.0",
+      "digest": "7777777777777777777777777777777777777777777777777777777777777777"
+    }
+  },
+  "evidenceRefs": [
+    {
+      "evidenceId": "ev-288-gap-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "707366dc8f6f41c5ad09c42d1957a683d147fdd5bb132ca82f0dd9125add9d87",
+      "sourceAssetId": "task.psa290.qwen-02.projection-contract",
+      "sourceAssetVersion": "1.0.0",
+      "sourceAssetDigest": "8833b8c35f7371e4bcacdc99f999aa663abb3bf2932235530bcc6924d1c60a75"
+    },
+    {
+      "evidenceId": "ev-289-cluster-290-0001",
+      "evidenceVersion": "1.0.0",
+      "evidenceDigest": "07773fc679525ca4486912b8f1c7a8d95fb69dc06735e88513f97376b1ac6d07",
+      "sourceAssetId": "knowledge.cks10.analytics-boundary-v1",
+      "sourceAssetVersion": "1.0.0",
+      "sourceAssetDigest": "33f23356cd9968491f9ecc1c23a4a4151a0fd605770cb2e25e80d8e93a2b3938"
+    }
+  ],
+  "confidence": {
+    "score": 0.78,
+    "scale": "ZERO_TO_ONE",
+    "basisCode": "EVIDENCE_BOUND_ANALYTIC_SIGNAL"
+  },
+  "blindSpots": [
+    "NO_LIVE_POLICY_OR_INVALIDATION_READBACK",
+    "NO_CAUSAL_INFERENCE",
+    "NO_CROSS_SCOPE_GENERALIZATION",
+    "NO_EXECUTABLE_OR_RAW_MATERIAL"
+  ],
+  "time": {
+    "generatedAt": "2026-08-28T04:30:00Z",
+    "freshUntil": "2026-08-28T05:12:00Z",
+    "retainUntil": "2026-08-28T05:00:00Z"
+  },
+  "boundary": {
+    "lifecycleClass": "UNTRUSTED_CANDIDATE",
+    "authorityClass": "NONE",
+    "effectClass": "NONE",
+    "requestedDisposition": "REVIEW_ONLY",
+    "promotionClaim": "NONE"
+  },
+  "excludedFields": [
+    "AUTHORITY_OR_APPROVAL",
+    "PROMOTION_OR_PUBLICATION",
+    "WORKFLOW_OR_FUNCTION_DEFINITION",
+    "CAPABILITY_OR_EXECUTION_BINDING",
+    "ACTION_OR_EFFECT_PAYLOAD",
+    "SECRETS_CREDENTIALS_TOKENS_KEYS_COOKIES_OR_SIGNING_MATERIAL",
+    "RAW_PROMPTS_COMPLETIONS_MESSAGES_TRACES_OR_CHAIN_OF_THOUGHT",
+    "RAW_ROWS_SQL_FILES_BINARY_BLOBS_OR_FULL_ASSET_BODIES",
+    "MUTABLE_POLICY_LEASE_INVALIDATION_OR_LIFECYCLE_STATE",
+    "CALLBACKS_ARBITRARY_ROUTES_HOSTS_PATHS_OR_NETWORK_IDENTIFIERS"
+  ]
+}

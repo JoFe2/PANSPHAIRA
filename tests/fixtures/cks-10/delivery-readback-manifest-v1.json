@@ -1,0 +1,420 @@
+{
+  "schemaVersion": "pansphaira.cks10/delivery-readback-manifest/v1",
+  "manifestId": "cks10-delivery-readback-manifest-290-0001",
+  "manifestVersion": "1.0.0",
+  "taskId": "INT-PSAI290-DELIVERY-READBACK-02",
+  "preservedDecisions": [
+    "D-001",
+    "D-002",
+    "D-003",
+    "D-004",
+    "D-005",
+    "D-006",
+    "D-007"
+  ],
+  "deliveryState": {
+    "decision": "RELEASE_REQUIRED_PENDING_DELIVERY",
+    "releaseRequired": true,
+    "releasePerformed": false,
+    "implementationAuthorization": false,
+    "pullRequestAuthorization": false,
+    "ciAuthorization": false,
+    "mergeAuthorization": false,
+    "releaseAuthorization": false,
+    "issueCloseAuthorization": false,
+    "externalWaitState": "NONE",
+    "externalClaimState": "NONE"
+  },
+  "artifacts": [
+    {
+      "artifactId": "boundary-decision",
+      "artifactClass": "DECISION",
+      "path": "docs/architecture/cks-10-analytics-bridge-decision-v1.md",
+      "sha256": "65629f8e98d827eb40782090b741661a271f30e83c3d400ad339b6141a85177c",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "CKS-10-BOUNDARY-DECISION-V1",
+        "Operating Model v1.1"
+      ]
+    },
+    {
+      "artifactId": "projection-schema",
+      "artifactClass": "CONTRACT",
+      "path": "contracts/cks-10/knowledge-projection-v1.schema.json",
+      "sha256": "5f7f38d9350863993c58d6cb0dddb25f17906298471f3b40b620255b0789f86e",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10/minimized-projection/v1",
+        "additionalProperties"
+      ]
+    },
+    {
+      "artifactId": "candidate-return-schema",
+      "artifactClass": "CONTRACT",
+      "path": "contracts/cks-10/analytic-candidate-return-v1.schema.json",
+      "sha256": "92842623eaa616423018602fe42ca3283aeb4f0f0b0d63716abc1cd54a83da8f",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10/candidate-return/v1",
+        "authorityClass"
+      ]
+    },
+    {
+      "artifactId": "prerequisite-fixture",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/prerequisite-evidence-v1.json",
+      "sha256": "33a065d3df95f29276da72aa645fb6a742b828380c942b97fb2d00f79582adc3",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "p21-gap-290-0001",
+        "NO_CAUSAL_EXPLANATION"
+      ]
+    },
+    {
+      "artifactId": "projection-fixture",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/projection-contract-v1.json",
+      "sha256": "3d73c3f7d483f0c06692be5ee744413c3bbdada79d385ddb2a6f6404beb58c82",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10/minimized-projection/v1",
+        "MUTABLE_POLICY_STATE"
+      ]
+    },
+    {
+      "artifactId": "candidate-return-fixture",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/candidate-return-cases-v1.json",
+      "sha256": "61e56842e466c4e337ca8fbfab1f148ed569f966d733c091c98c7c51e429dcc8",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10/candidate-return/v1",
+        "UNTRUSTED_CANDIDATE"
+      ]
+    },
+    {
+      "artifactId": "p21-projection-fixture",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/p21-planted-projection-v1.json",
+      "sha256": "e5c1bdccee5e3efc9e68e6ed557c00393ba4e62fb9f3ad0d44bd539e37e098e1",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks10-p21-proj-290-0001",
+        "task.transition"
+      ]
+    },
+    {
+      "artifactId": "p21-expected-fixture",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/p21-expected-candidates-v1.json",
+      "sha256": "47d5943c461675eea0f353ecc106e5c7983b4fe06966d683417cb011369d8caf",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "NEGATIVE_EVIDENCE",
+        "inventedEdges"
+      ]
+    },
+    {
+      "artifactId": "p21-negative-fixture",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/p21-replay-negative-cases-v1.json",
+      "sha256": "be28a8b0d69fbf58e9d6a2087a351e822b6e856734d3ede8b8c9350591cf8959",
+      "minimumBytes": 512,
+      "requiredMarkers": [
+        "all-five-edges-explicit-and-allowed",
+        "invented-evidence-edge"
+      ]
+    },
+    {
+      "artifactId": "canonical-evidence-fixture",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
+      "sha256": "32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks10-canonical-snapshot-290-0001",
+        "canonicalEvidence"
+      ]
+    },
+    {
+      "artifactId": "local-integration-manifest",
+      "artifactClass": "FIXTURE",
+      "path": "tests/fixtures/cks-10/local-integration-manifest-v1.json",
+      "sha256": "ac1162a37ae8503774beb1bc4ca290d4d64c8af30c07c2f88d0329529199d7d4",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "AC-5-ROLLBACK-READBACK",
+        "rollback-readback"
+      ]
+    },
+    {
+      "artifactId": "prerequisite-validator",
+      "artifactClass": "VALIDATOR",
+      "path": "scripts/verify-cks-10-prerequisites.mjs",
+      "sha256": "5684314b72069ec0d55cf4a9c6f02313a0582008f7e4a665548139d5746c728e",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "SELF_TEST",
+        "inventedEdges"
+      ]
+    },
+    {
+      "artifactId": "projection-validator",
+      "artifactClass": "VALIDATOR",
+      "path": "scripts/validate-cks-10-projection-contract.mjs",
+      "sha256": "28aef55aab59b1b812d4310ff4cbb6643880656425ad80cb12b624ad78db58d2",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "SELF_TEST",
+        "EXCLUDED_FIELD_PRESENT"
+      ]
+    },
+    {
+      "artifactId": "candidate-return-validator",
+      "artifactClass": "VALIDATOR",
+      "path": "scripts/validate-cks-10-candidate-return.mjs",
+      "sha256": "555cee3bc4b41f015f5a1d08831debc0aa31b0fd43b61e18a1690fd0e04e5f52",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "SELF_TEST",
+        "FORBIDDEN_FIELD"
+      ]
+    },
+    {
+      "artifactId": "p21-validator",
+      "artifactClass": "VALIDATOR",
+      "path": "scripts/verify-cks-10-p21-replay.mjs",
+      "sha256": "6377f02ddc83b9a53c3b85cd0aa74ac6684db5cecaf7c4202caf14ea58edbe62",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "P21_REPLAY_VERIFIED",
+        "INVENTED_EDGE"
+      ]
+    },
+    {
+      "artifactId": "rollback-harness",
+      "artifactClass": "VALIDATOR",
+      "path": "scripts/verify-cks-10-projection-rollback.mjs",
+      "sha256": "70569041c25622ff0a54fc4542797a3d2b1302dbba13119d1a93bf5faa9e251b",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "runProjectionRollbackReadback",
+        "READBACK_CANONICAL"
+      ]
+    },
+    {
+      "artifactId": "local-integration-runner",
+      "artifactClass": "VALIDATOR",
+      "path": "scripts/run-cks-10-local-integration.mjs",
+      "sha256": "5d571bc6e06bf3124c71b84d96ada7fc07e958c72ba1377cd7e469ad5fcf8c79",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "local-integration-manifest-v1.json",
+        "FAIL_CLOSED_CASE_FAILED"
+      ]
+    },
+    {
+      "artifactId": "boundary-decision-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-boundary-decision-v1.json",
+      "sha256": "496481eac88cde110fec73c7727c7a4cae8f8bf098ac84ce0b36575914dc4bd8",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "CKS-10-BOUNDARY-DECISION-V1",
+        "NOT_IMPLEMENTED_NOT_INTEGRATED_NOT_DELIVERED"
+      ]
+    },
+    {
+      "artifactId": "prerequisite-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-prerequisite-readback-v1.json",
+      "sha256": "eb5c6079d614ad6436057f106c600c8fa84823b01eb926d96fe4bccb026bfbc6",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10-prerequisite-readback-290-0001",
+        "inventedEdges"
+      ]
+    },
+    {
+      "artifactId": "projection-contract-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-projection-contract-v1.json",
+      "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a845978d4c21a",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "CKS-10-PROJECTION-CONTRACT-V1",
+        "MUTABLE_POLICY_STATE"
+      ]
+    },
+    {
+      "artifactId": "publisher-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-publisher-receipt-v1.json",
+      "sha256": "61d385744b637e7f1762c612d01ec770e1fb876cf8a4a628bed2f3c3b3dd728e",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10-read-only-projection-publisher-v1-290-0001",
+        "49a89d1c2"
+      ]
+    },
+    {
+      "artifactId": "envelope-guards-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-envelope-guards-v1.json",
+      "sha256": "2f8b5e221004f1b96c216654328e2bc1eb5a9e7d5b246282751b3b0ac5a58399",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "tenant_scope",
+        "projection-envelope-guards"
+      ]
+    },
+    {
+      "artifactId": "candidate-return-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-candidate-return-v1.json",
+      "sha256": "d0d3995f3f1ceed5ee6729cc3d124ef27193190114628f3366e41e2c68e470f1",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10-candidate-return-v1-290-0001",
+        "PROMOTE_OR_ACTIVATE_FUNCTION"
+      ]
+    },
+    {
+      "artifactId": "p21-replay-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-p21-replay-v1.json",
+      "sha256": "1b6251b4ef7e30d26fae1a213a85206c15dd2ec79fd6634434bdb3bb4f6c8999",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "PSAI290-QWEN-07-P21-REPLAY-VALIDATOR",
+        "inventedEdges"
+      ]
+    },
+    {
+      "artifactId": "rollback-readback-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-rollback-readback-v1.json",
+      "sha256": "5e6e2f3cc7de30eae4d539476a6e2d873df7f0d4804f62450b47325dc4c80f31",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10-projection-rollback-readback-v1-290-0001",
+        "CANONICAL_EVIDENCE_BYTE_DRIFT"
+      ]
+    },
+    {
+      "artifactId": "local-integration-receipt",
+      "artifactClass": "RECEIPT",
+      "path": "verification/cks-10-local-integration-v1.json",
+      "sha256": "c102f6f86a1f4a279102a9143b2f19e73efcbf895a70bb7e3e8e04affcae7ac6",
+      "minimumBytes": 1024,
+      "requiredMarkers": [
+        "cks-10-local-integration-v1-290-0001",
+        "p21InventedEdges"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "artifactId": "projection-validator",
+      "dependsOn": [
+        "projection-schema",
+        "projection-fixture",
+        "projection-contract-receipt"
+      ]
+    },
+    {
+      "artifactId": "candidate-return-validator",
+      "dependsOn": [
+        "candidate-return-schema",
+        "candidate-return-fixture",
+        "candidate-return-receipt"
+      ]
+    },
+    {
+      "artifactId": "p21-validator",
+      "dependsOn": [
+        "p21-projection-fixture",
+        "p21-expected-fixture",
+        "p21-negative-fixture",
+        "p21-replay-receipt"
+      ]
+    },
+    {
+      "artifactId": "rollback-harness",
+      "dependsOn": [
+        "canonical-evidence-fixture",
+        "rollback-readback-receipt",
+        "publisher-receipt"
+      ]
+    },
+    {
+      "artifactId": "local-integration-runner",
+      "dependsOn": [
+        "local-integration-manifest",
+        "local-integration-receipt",
+        "envelope-guards-receipt"
+      ]
+    },
+    {
+      "artifactId": "prerequisite-validator",
+      "dependsOn": [
+        "prerequisite-fixture",
+        "prerequisite-receipt",
+        "boundary-decision-receipt"
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "criterionId": "AC-1-MINIMIZED-PROJECTION",
+      "evidenceArtifactIds": [
+        "boundary-decision-receipt",
+        "projection-schema",
+        "projection-fixture",
+        "projection-validator",
+        "projection-contract-receipt",
+        "publisher-receipt"
+      ]
+    },
+    {
+      "criterionId": "AC-2-FAIL-CLOSED-ENVELOPE",
+      "evidenceArtifactIds": [
+        "boundary-decision-receipt",
+        "projection-contract-receipt",
+        "envelope-guards-receipt",
+        "local-integration-runner",
+        "local-integration-receipt"
+      ]
+    },
+    {
+      "criterionId": "AC-3-P21-REPLAY",
+      "evidenceArtifactIds": [
+        "p21-projection-fixture",
+        "p21-expected-fixture",
+        "p21-negative-fixture",
+        "p21-validator",
+        "p21-replay-receipt",
+        "local-integration-receipt"
+      ]
+    },
+    {
+      "criterionId": "AC-4-CANDIDATE-AUTHORITY-BOUNDARY",
+      "evidenceArtifactIds": [
+        "candidate-return-schema",
+        "candidate-return-fixture",
+        "candidate-return-validator",
+        "candidate-return-receipt",
+        "p21-replay-receipt"
+      ]
+    },
+    {
+      "criterionId": "AC-5-ROLLBACK-READBACK",
+      "evidenceArtifactIds": [
+        "canonical-evidence-fixture",
+        "rollback-harness",
+        "rollback-readback-receipt",
+        "local-integration-receipt"
+      ]
+    }
+  ]
+}

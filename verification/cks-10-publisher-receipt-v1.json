@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "pansphaira.architecture/cks-10-read-only-projection-publisher-verification/v1",
+  "verificationId": "cks-10-read-only-projection-publisher-v1-290-0001",
+  "taskId": "PSAI290-QWEN-03-READONLY-PUBLISHER",
+  "status": "TECHNICALLY_COMPLETE_STANDARD_NODE_GATE_BLOCKED_BY_LOCAL_INFRASTRUCTURE",
+  "implementation": {
+    "artifact": "src/cks-10/read-only-projection-publisher.mjs",
+    "api": "buildReadOnlyProjection(input)",
+    "behavior": "PURE_ALLOWLISTED_PROJECTION_FROM_SUPPLIED_CANONICAL_SNAPSHOTS",
+    "canonicalEvidenceMutation": 0,
+    "wallClockFilesystemNetworkPolicyLifecycleAccess": "NONE",
+    "projectionRecordCount": 4,
+    "projectionRecordClasses": [
+      "TASK",
+      "KNOWLEDGE",
+      "DECISION",
+      "OUTCOME"
+    ],
+    "projectionDigest": "49a89d1c2334ef529be0c7612e3bcc21dac3426db36abf8cbbbb002a1bead25c",
+    "sourceDigestRecording": "ASSET_AND_PROVENANCE_DIGESTS_CARRIED_PER_SOURCE_REFERENCE"
+  },
+  "artifacts": {
+    "publisher": {
+      "path": "src/cks-10/read-only-projection-publisher.mjs",
+      "sha256": "aeb383222801cf976a69f0eab00465c6323a9000ba1d1c72dea1a39b7c9ab7fc"
+    },
+    "test": {
+      "path": "tests/cks-10/read-only-projection-publisher.test.mjs",
+      "sha256": "a1a4de6233930f53209a54ebca1fcbea5bfbf009f90761c1d5a0cd904b69163b"
+    },
+    "fixture": {
+      "path": "tests/fixtures/cks-10/publisher-input-v1.json",
+      "sha256": "1db1ab30a475832c9f38b80c01c64a339da0a9179c652b94c4f42fb8d9842839"
+    },
+    "frozenProjectionSchema": {
+      "path": "contracts/cks-10/knowledge-projection-v1.schema.json",
+      "sha256": "5f7f38d9350863993c58d6cb0dddb25f17906298471f3b40b620255b0789f86e"
+    }
+  },
+  "focusedGate": {
+    "requiredCommand": "node --test tests/cks-10/read-only-projection-publisher.test.mjs",
+    "standardNode": {
+      "result": "BLOCKED_INFRASTRUCTURE",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "detail": "V8_CHECK_FAILED_12_EQ_ERRNO_DURING_NODE_INITIALIZATION",
+      "productVerdict": "NONE"
+    },
+    "nonAuthoritativeJitless": {
+      "command": "node --jitless --test tests/cks-10/read-only-projection-publisher.test.mjs",
+      "result": "PASS",
+      "tests": 5,
+      "failures": 0,
+      "exitCode": 0,
+      "authority": "NON_AUTHORITATIVE_WORKAROUND_ONLY"
+    }
+  },
+  "coverage": {
+    "positive": [
+      "DETERMINISTIC_REPEAT_BUILD",
+      "EXACT_SOURCE_ASSET_AND_PROVENANCE_DIGEST_RECORDING",
+      "TASK_KNOWLEDGE_DECISION_OUTCOME_COVERAGE",
+      "RICH_CANONICAL_EVIDENCE_BODY_OMISSION",
+      "PROJECTION_SELF_DIGEST"
+    ],
+    "negativeFailClosed": [
+      "UNKNOWN_PROJECTED_FIELD_CLASS",
+      "EXCLUDED_RAW_PROMPT_FIELD_ID",
+      "SOURCE_REFERENCE_MISMATCH",
+      "OUT_OF_SCOPE_RELATIONSHIP_TARGET",
+      "MISSING_PROVENANCE_DIGEST",
+      "MALFORMED_ASSET_DIGEST",
+      "MUTABLE_POLICY_PURPOSE"
+    ],
+    "rollbackOrRemoval": "MUTATING_OR_REMOVING_RETURNED_PROJECTION_LEFT_CANONICAL_SNAPSHOTS_BYTE_EQUAL"
+  },
+  "additionalChecks": {
+    "requiredDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "resultBeforeCommit": "PASS_EXIT_0"
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "BLOCKED_INFRASTRUCTURE_NODE_SIGTRAP_EXIT_133"
+    },
+    "buildJitlessRetry": {
+      "command": "NODE_OPTIONS=--jitless npm run build",
+      "result": "BLOCKED_MISSING_LOCAL_DEPENDENCY_TSC_EXIT_127"
+    },
+    "lint": {
+      "command": "NODE_OPTIONS=--jitless npm run lint",
+      "result": "BLOCKED_MISSING_LOCAL_DEPENDENCY_TSC_EXIT_127"
+    }
+  },
+  "boundary": {
+    "readOnly": true,
+    "authorityClass": "NONE",
+    "effectClass": "NONE",
+    "promotionClaim": "NONE",
+    "writeInstructionAllowed": false,
+    "bridgeRuntime": "NOT_IMPLEMENTED_NOT_INTEGRATED_NOT_DELIVERED"
+  },
+  "nonclaims": [
+    "NO_CANONICAL_EVIDENCE_MUTATION_OR_EXTERNAL_STATE_MUTATION",
+    "NO_SECRETS_CREDENTIALS_RAW_PROMPTS_RAW_TRACES_RAW_ROWS_OR_EXECUTABLE_MATERIAL_IN_PROJECTION",
+    "NO_POLICY_APPROVAL_AUTHORITY_PROMOTION_INVALIDATION_WORKFLOW_FUNCTION_OR_EFFECT_TRANSFER",
+    "NO_ENDPOINT_CONNECTOR_QUEUE_RUNTIME_OR_ACTIVATION",
+    "NO_PINNED_NODE_OR_HOST_DOCKER_AUTHORITATIVE_GATE_SUCCESS_CLAIM",
+    "NO_CHANGE_TO_OPERATING_MODEL_V1_1_OR_DECISIONS_D_001_THROUGH_D_007"
+  ],
+  "verificationGates": [
+    {
+      "command": "node --test tests/cks-10/read-only-projection-publisher.test.mjs",
+      "requiredExitCode": 0,
+      "successClaimBeforePass": "PROHIBITED_UNDER_STANDARD_NODE_GATE"
+    },
+    {
+      "command": "git diff --check origin/main...HEAD",
+      "requiredExitCode": 0,
+      "successClaimBeforePass": "PROHIBITED"
+    }
+  ]
+}

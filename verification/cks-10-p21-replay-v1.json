@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "pansphaira.verification/receipt/v1",
+  "taskId": "PSAI290-QWEN-07-P21-REPLAY-VALIDATOR",
+  "status": "PASS_LOCAL_VALIDATION_WITH_NODE_INFRASTRUCTURE_NOTE",
+  "result": "TECHNICALLY_COMPLETE",
+  "artifacts": {
+    "validator": {
+      "path": "scripts/verify-cks-10-p21-replay.mjs",
+      "sha256": "6377f02ddc83b9a53c3b85cd0aa74ac6684db5cecaf7c4202caf14ea58edbe62"
+    },
+    "tests": {
+      "path": "tests/cks-10/p21-replay-validator.test.mjs",
+      "sha256": "1428a9ed90e49fd7313726787bb4de4182070593a0e8c6908bee9c0aec6e54b1"
+    },
+    "negativeCases": {
+      "path": "tests/fixtures/cks-10/p21-replay-negative-cases-v1.json",
+      "sha256": "be28a8b0d69fbf58e9d6a2087a351e822b6e856734d3ede8b8c9350591cf8959"
+    },
+    "receipt": "verification/cks-10-p21-replay-v1.json"
+  },
+  "replayContract": {
+    "input": "One trusted, minimized CKS-10 projection with exact self/provenance/source digests",
+    "reproduction": "Seven planted candidates: GAP, CLUSTER, CO_USAGE, NEGATIVE_EVIDENCE, PATTERN, WORKFLOW, DRIFT",
+    "evidence": 7,
+    "allowedEvidenceEdges": 5,
+    "inventedEdges": 0,
+    "globalBlindSpots": 5,
+    "candidateBlindSpots": 14,
+    "returnBoundary": {
+      "lifecycleClass": "UNTRUSTED_CANDIDATE",
+      "authorityClass": "NONE",
+      "effectClass": "NONE",
+      "requestedDisposition": "REVIEW_ONLY",
+      "promotionClaim": "NONE"
+    },
+    "cannot": [
+      "GRANT_AUTHORITY",
+      "PROMOTE_KNOWLEDGE",
+      "PROMOTE_OR_ACTIVATE_WORKFLOW",
+      "PROMOTE_OR_ACTIVATE_FUNCTION",
+      "AUTHORIZE_OR_EXECUTE_EFFECT"
+    ]
+  },
+  "focusedVerification": {
+    "requiredTest": {
+      "command": "node --test tests/cks-10/p21-replay-validator.test.mjs",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Local Node aborts during V8 OS::SetPermissions initialization with SIGTRAP before test execution."
+    },
+    "requiredValidator": {
+      "command": "node scripts/verify-cks-10-p21-replay.mjs",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Same local Node V8 OS::SetPermissions SIGTRAP before validator execution."
+    },
+    "workaroundTest": {
+      "command": "node --jitless --test tests/cks-10/p21-replay-validator.test.mjs",
+      "status": "PASS",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0
+    },
+    "workaroundValidator": {
+      "command": "node --jitless scripts/verify-cks-10-p21-replay.mjs",
+      "status": "PASS",
+      "output": "cks-10-p21-replay: PASS candidates=7 evidence=7 allowedEdges=5 inventedEdges=0 blindSpots=19 authority=NONE promotion=NONE"
+    },
+    "separateEmittedSet": {
+      "command": "node --jitless scripts/verify-cks-10-p21-replay.mjs tests/fixtures/cks-10/p21-planted-projection-v1.json tests/fixtures/cks-10/p21-expected-candidates-v1.json tests/fixtures/cks-10/p21-expected-candidates-v1.json",
+      "status": "PASS"
+    }
+  },
+  "negativeVerification": {
+    "status": "PASS",
+    "cases": 14,
+    "covered": [
+      "missing trusted clock",
+      "missing replay state",
+      "tenant/scope substitution",
+      "retention expiry",
+      "freshness staleness",
+      "provenance substitution",
+      "projection digest forgery",
+      "authority-bearing candidate",
+      "invented edge",
+      "blind-spot omission",
+      "cross-scope candidate",
+      "exact replay",
+      "replay mutation",
+      "edge witness substitution"
+    ]
+  },
+  "repositoryGates": {
+    "gitDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PENDING_LOCAL_COMMIT"
+    },
+    "npmLint": {
+      "command": "npm run lint",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Local Node V8 OS::SetPermissions SIGTRAP during initialization."
+    },
+    "npmBuild": {
+      "command": "npm run build",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Local Node V8 OS::SetPermissions SIGTRAP during initialization."
+    },
+    "npmTest": {
+      "command": "npm run test",
+      "status": "INFRASTRUCTURE_ABORT",
+      "exitCode": 133,
+      "evidence": "Local Node V8 OS::SetPermissions SIGTRAP during initialization."
+    }
+  },
+  "scope": "Only the four task-allowlisted artifacts are changed. No credentials, remotes, providers, services, CI authority, DSH_HOME, spill configuration, push, merge, or release action was performed.",
+  "nonclaims": [
+    "NO_LIVE_POLICY_OR_INVALIDATION_READBACK",
+    "NO_EXTERNAL_ENDPOINT_CONNECTOR_OR_RUNTIME",
+    "NO_CANDIDATE_PROMOTION_OR_CANONICAL_ASSET_MUTATION",
+    "NO_CHANGE_TO_OPERATING_MODEL_V1_1_OR_DECISIONS_D_001_THROUGH_D_007",
+    "NO_PINNED_NODE_OR_HOST_DOCKER_AUTHORITATIVE_GATE_CLAIM"
+  ]
+}

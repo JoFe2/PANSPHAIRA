@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "pansphaira.verification/receipt/v1",
+  "taskId": "PSAI290-QWEN-04-ENVELOPE-GUARDS",
+  "artifact": {
+    "implementation": "src/cks-10/projection-envelope-guards.mjs",
+    "tests": "tests/cks-10/projection-envelope-guards.test.mjs",
+    "fixtures": "tests/fixtures/cks-10/envelope-guard-cases-v1.json"
+  },
+  "result": "TECHNICALLY_COMPLETE",
+  "guards": [
+    "tenant_scope",
+    "retention",
+    "freshness",
+    "provenance",
+    "projection_digest",
+    "replay"
+  ],
+  "focusedVerification": {
+    "command": "node --test tests/cks-10/projection-envelope-guards.test.mjs",
+    "status": "INFRASTRUCTURE_ABORT",
+    "exitCode": 133,
+    "evidence": "Local Node v24.19.0 aborts in V8 OS::SetPermissions with SIGTRAP before test execution.",
+    "workaroundCommand": "node --jitless --test tests/cks-10/projection-envelope-guards.test.mjs",
+    "workaroundStatus": "PASS",
+    "tests": 6,
+    "passed": 6,
+    "failed": 0
+  },
+  "additionalVerification": {
+    "syntax": {
+      "command": "node --jitless --check src/cks-10/projection-envelope-guards.mjs && node --jitless --check tests/cks-10/projection-envelope-guards.test.mjs",
+      "status": "PASS"
+    },
+    "npmTest": {
+      "command": "npm test",
+      "status": "BLOCKED",
+      "exitCode": 127,
+      "evidence": "tsc: not found; checkout has no installed node_modules/.bin/tsc"
+    },
+    "lint": {
+      "command": "npm run lint",
+      "status": "BLOCKED",
+      "exitCode": 127,
+      "evidence": "tsc: not found; checkout has no installed node_modules/.bin/tsc"
+    },
+    "build": {
+      "command": "npm run build",
+      "status": "BLOCKED",
+      "exitCode": 127,
+      "evidence": "tsc: not found; checkout has no installed node_modules/.bin/tsc"
+    },
+    "diffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    }
+  },
+  "scope": "No files outside the task writable-path allowlist were changed. No remotes, credentials, services, CI authority, DSH_HOME, or spill configuration were modified."
+}

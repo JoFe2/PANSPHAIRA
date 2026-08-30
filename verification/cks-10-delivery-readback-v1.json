@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "pansphaira.cks10/delivery-readback-verification/v1",
+  "verificationId": "cks-10-delivery-readback-v1-290-0001",
+  "taskId": "INT-PSAI290-DELIVERY-READBACK-02",
+  "result": "VERIFIED_LOCAL_READBACK_ONLY",
+  "decision": "RELEASE_REQUIRED_PENDING_DELIVERY",
+  "artifacts": {
+    "harness": {
+      "path": "scripts/verify-cks-10-delivery-readback.mjs",
+      "sha256": "1b9245dc5cdc084ced9700fc3738eb1bad2fcfbacaaf1fe95dd17342326f3344"
+    },
+    "manifest": {
+      "path": "tests/fixtures/cks-10/delivery-readback-manifest-v1.json",
+      "exactBytesSha256": "bc9f5fb34836064461a9ef372e33d4aef6fd44c477bfc804fea76883db8ae66e"
+    },
+    "receipt": {
+      "path": "verification/cks-10-delivery-readback-v1.json",
+      "note": "THIS_RECEIPT"
+    }
+  },
+  "deterministicReadback": {
+    "command": "node --jitless scripts/verify-cks-10-delivery-readback.mjs",
+    "exitCode": 0,
+    "receiptId": "cks-10-delivery-readback-v1-290-0001",
+    "verifiedArtifactCount": 26,
+    "artifactClasses": [
+      "DECISION",
+      "CONTRACT",
+      "FIXTURE",
+      "VALIDATOR",
+      "RECEIPT"
+    ],
+    "criteria": [
+      "AC-1-MINIMIZED-PROJECTION",
+      "AC-2-FAIL-CLOSED-ENVELOPE",
+      "AC-3-P21-REPLAY",
+      "AC-4-CANDIDATE-AUTHORITY-BOUNDARY",
+      "AC-5-ROLLBACK-READBACK"
+    ],
+    "networkAccess": "NONE",
+    "wallClockAccess": "NONE",
+    "externalActionsPerformed": false
+  },
+  "criterionReadback": {
+    "AC-1-MINIMIZED-PROJECTION": "EXACT_PROJECTION_CONTRACT_FIXTURE_VALIDATOR_AND_PUBLISHER_RECEIPT_DIGESTS_PRESENT; projected stable identifiers, versions, digests and classes are bound while secrets, raw prompts, credentials, unnecessary payloads and mutable policy state remain excluded.",
+    "AC-2-FAIL-CLOSED-ENVELOPE": "EXACT_PROJECTION_CONTRACT_ENVELOPE_GUARDS_AND_LOCAL_INTEGRATION_RECEIPT_DIGESTS_PRESENT; tenant/scope, retention, freshness, provenance and replay denials are required evidence.",
+    "AC-3-P21-REPLAY": "EXACT_P21_PLANTED_PROJECTION_EXPECTED_NEGATIVE_FIXTURES_VALIDATOR_AND_RECEIPT_DIGESTS_PRESENT; GAP, CLUSTER, CO_USAGE, NEGATIVE_EVIDENCE and PATTERN evidence requires explicit blind spots and zero invented edges.",
+    "AC-4-CANDIDATE-AUTHORITY-BOUNDARY": "EXACT_CANDIDATE_RETURN_SCHEMA_FIXTURE_VALIDATOR_AND_P21_RECEIPT_DIGESTS_PRESENT; Authority is NONE and Knowledge, Workflow and Function promotion remains prohibited.",
+    "AC-5-ROLLBACK-READBACK": "EXACT_CANONICAL_EVIDENCE_FIXTURE_ROLLBACK_HARNESS_AND_READBACK_RECEIPT_DIGESTS_PRESENT; only generated projection artifacts are removable and canonical PanSphAIra evidence is proved unchanged."
+  },
+  "failClosedVerification": {
+    "command": "node --jitless scripts/verify-cks-10-delivery-readback.mjs --self-test",
+    "exitCode": 0,
+    "result": "SELF_TEST_PASS_CASES_6_FAILURES_0",
+    "covered": [
+      "missing_materialized_leaf",
+      "unresolved_dependency",
+      "dependency_cycle",
+      "skeleton_only_leaf",
+      "premature_external_wait_or_claim"
+    ]
+  },
+  "standardNodeInfrastructure": {
+    "observedNodeVersion": "v24.19.0",
+    "deliveryReadbackCommand": "node scripts/verify-cks-10-delivery-readback.mjs",
+    "deliveryReadbackExitCode": 133,
+    "npmLintExitCode": 133,
+    "npmBuildExitCode": 133,
+    "npmTestExitCode": 133,
+    "evidence": "V8 OS::SetPermissions initialization check failed with SIGTRAP before product execution; this is infrastructure evidence, not a product verdict.",
+    "nonAuthoritativeWorkaround": "node --jitless ran the delivery-readback baseline and self-test successfully; it does not replace controller pinned-Node or host-Docker gates."
+  },
+  "releaseChecklist": {
+    "decision": "RELEASE_REQUIRED_PENDING_DELIVERY",
+    "releaseRequired": true,
+    "releasePerformed": false,
+    "implementationAuthorization": false,
+    "pullRequestAuthorization": false,
+    "ciAuthorization": false,
+    "mergeAuthorization": false,
+    "releaseAuthorization": false,
+    "issueCloseAuthorization": false,
+    "externalWaitState": "NONE",
+    "externalClaimState": "NONE"
+  },
+  "precedence": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantAdded": false
+  },
+  "nonclaims": [
+    "NO_IMPLEMENTATION_PR_CI_MERGE_RELEASE_OR_ISSUE_CLOSE_AUTHORIZATION",
+    "NO_PUSH_MERGE_RELEASE_DEPLOYMENT_OR_EXTERNAL_STATE_MUTATION",
+    "NO_CANDIDATE_PROMOTION_OR_CANONICAL_EVIDENCE_MUTATION",
+    "NO_CHANGE_TO_OPERATING_MODEL_V1_1_OR_DECISIONS_D_001_THROUGH_D_007",
+    "NO_AUTHORITATIVE_PINNED_NODE_OR_HOST_DOCKER_GATE_SUCCESS_CLAIM"
+  ]
+}
