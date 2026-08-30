@@ -1,0 +1,17 @@
+{
+  "baseFixture": "tests/fixtures/cks-07/requirement-analysis-golden-v1.json",
+  "cases": [
+    { "caseId": "case:omitted-critical", "operation": "removeCandidateAndMapping", "candidateId": "cand:audit", "expectedOutcome": "FAIL", "expectedState": ["req:audit", "MISSING"] },
+    { "caseId": "case:spurious-candidate", "operation": "addSpuriousCandidate", "expectedOutcome": "FAIL", "expectedP11": { "R": 3, "P": 4, "M": 3, "CM": 0, "CX": 0 } },
+    { "caseId": "case:duplicate-semantic-prediction", "operation": "addDuplicateCandidate", "requirementId": "req:access", "expectedOutcome": "FAIL", "expectedP11": { "R": 3, "P": 4, "M": 3, "CM": 0, "CX": 0 } },
+    { "caseId": "case:unknown-candidate-criticality", "operation": "setCandidateCriticality", "candidateId": "cand:access", "criticality": "UNKNOWN", "expectedOutcome": "FAIL", "expectedState": ["req:access", "CRITICALITY_MISMATCH"], "expectedP11": { "R": 3, "P": 3, "M": 3, "CM": 1, "CX": 1 } },
+    { "caseId": "case:non-critical-candidate-for-critical-requirement", "operation": "setCandidateCriticality", "candidateId": "cand:access", "criticality": "NON_CRITICAL", "expectedOutcome": "FAIL", "expectedState": ["req:access", "CRITICALITY_MISMATCH"], "expectedP11": { "R": 3, "P": 3, "M": 3, "CM": 1, "CX": 1 } },
+    { "caseId": "case:unknown-semantic", "operation": "setMappingOutcome", "candidateId": "cand:access", "outcome": "UNKNOWN_SEMANTIC", "expectedOutcome": "FAIL", "expectedState": ["req:access", "UNKNOWN_SEMANTIC"], "expectedP11": { "R": 3, "P": 3, "M": 2, "CM": 1, "CX": 0 } },
+    { "caseId": "case:bad-source", "operation": "setCandidateSource", "candidateId": "cand:access", "sourceClass": "INTERNET_RESULT", "expectedOutcome": "FAIL", "expectedState": ["req:access", "BAD_SOURCE"], "expectedP11": { "R": 3, "P": 3, "M": 2, "CM": 1, "CX": 0 } },
+    { "caseId": "case:applicability", "operation": "setCandidateApplicability", "candidateId": "cand:access", "applicability": "UNKNOWN", "expectedOutcome": "FAIL", "expectedState": ["req:access", "APPLICABILITY"], "expectedP11": { "R": 3, "P": 3, "M": 2, "CM": 1, "CX": 0 } },
+    { "caseId": "case:conflicting", "operation": "setCandidateConflict", "candidateId": "cand:access", "conflictState": "CONFLICTING", "expectedOutcome": "FAIL", "expectedState": ["req:access", "CONFLICTING"], "expectedP11": { "R": 3, "P": 3, "M": 2, "CM": 1, "CX": 0 } },
+    { "caseId": "case:semantic-receipt-absent", "operation": "removeAllMappings", "expectedOutcome": "BLOCKED", "blockedReason": "REQUIRED_SEMANTIC_RULE_ABSENT" },
+    { "caseId": "case:applicability-rule-absent", "operation": "setOracleApplicabilityUnknown", "requirementId": "req:access", "expectedOutcome": "BLOCKED", "blockedReason": "REQUIRED_APPLICABILITY_RULE_ABSENT" },
+    { "caseId": "case:digest-mismatch", "operation": "changeCandidateCriticalityWithoutFixtureRefresh", "candidateId": "cand:access", "expectedOutcome": "BLOCKED", "blockedReason": "DEPENDENCY_DIGEST_MISMATCH" }
+  ]
+}

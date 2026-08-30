@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "pansphaira.cks/empty-kb-ground-truth/v1",
+  "groundTruthId": "truth:cks-07-empty-kb",
+  "suiteId": "suite:cks-07-empty-kb",
+  "semanticRuleSetDigest": "9a0ead3f5ce2b79214ce803f5436aec8d48e9b8956937e115c2a3682c7d15d9c",
+  "denominatorDigest": "3329fc11d6c54b44ec7731dd6ef37596d4b8920029e1e6526a645d37fa1b523a",
+  "requirements": [
+    { "requirementId": "req:access", "statement": "The operator can read the synthetic account record.", "statementDigest": "9b16031f44c73596ea9c6052dcd4fb28b544c1755f0d4d8be641f204c1252d95", "criticality": "CRITICAL", "applicability": "APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" },
+    { "requirementId": "req:audit", "statement": "The system records an immutable audit event.", "statementDigest": "ffdbe1e4b965b9704e8a1e283c77c785fd32c70a8398df95d957eb312bdf60be", "criticality": "CRITICAL", "applicability": "APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" },
+    { "requirementId": "req:retention", "statement": "The report retains records for thirty days.", "statementDigest": "b6cbe54fbbb02371e7d0d82bb45541408a10b3f0a565d7fedc77283277703cde", "criticality": "NON_CRITICAL", "applicability": "APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" },
+    { "requirementId": "req:optional", "statement": "The optional export is available.", "statementDigest": "b7913ba296b9b4f1eed67d2b7eb7c4ea83dfb6560992becab8a66c250b4c78cb", "criticality": "NON_CRITICAL", "applicability": "NOT_APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" }
+  ]
+}

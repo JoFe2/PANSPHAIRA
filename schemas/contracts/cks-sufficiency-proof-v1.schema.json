@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-sufficiency-proof-v1.schema.json",
+  "title": "PANSPHAIRA combined KnowledgeSufficiency and P13 proof v1",
+  "oneOf": [
+    { "$ref": "#/$defs/sufficiencyInput" },
+    { "$ref": "#/$defs/sufficiencyProof" },
+    { "$ref": "#/$defs/gapFinder" },
+    { "$ref": "#/$defs/p13Input" },
+    { "$ref": "#/$defs/p13Proof" }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "boundary": { "const": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY" },
+    "source": { "enum": ["ACTIVE_CURATED_KNOWLEDGE", "PINNED_OWNER_EVIDENCE", "PINNED_PRIMARY_EVIDENCE", "PINNED_SECONDARY_EVIDENCE", "INTERNET_RESULT", "MODEL_RESULT", "UNKNOWN_SOURCE"] },
+    "gap": { "enum": ["NONE", "MISSING", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC"] },
+    "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE", "GAP_MISSING", "GAP_BAD_SOURCE", "GAP_APPLICABILITY", "GAP_CONFLICTING", "GAP_UNKNOWN_SEMANTIC"] },
+    "componentOutcome": { "enum": ["PASS", "FAIL", "BLOCKED"] },
+    "stringList": { "type": "array", "uniqueItems": true, "maxItems": 1024, "items": { "type": "string", "minLength": 1, "maxLength": 128 } },
+    "digestList": { "type": "array", "uniqueItems": true, "maxItems": 64, "items": { "$ref": "#/$defs/digest" } },
+    "binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["requirementId", "needDigest"],
+      "properties": { "requirementId": { "$ref": "#/$defs/id" }, "needDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "requirementCandidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidateId", "statement", "statementDigest", "criticality", "sourceClass", "applicability", "conflictState", "citations"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" }, "statement": { "type": "string", "minLength": 1, "maxLength": 2048 }, "statementDigest": { "$ref": "#/$defs/digest" },
+        "criticality": { "enum": ["CRITICAL", "NON_CRITICAL", "UNKNOWN"] }, "sourceClass": { "$ref": "#/$defs/source" },
+        "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE", "UNKNOWN"] }, "conflictState": { "enum": ["NONE", "CONFLICTING"] },
+        "citations": { "$ref": "#/$defs/digestList" }
+      }
+    },
+    "a0Receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "caseId", "requirementKey", "attemptOrdinal", "level", "strategyId", "queryDigest", "knowledgeBundleDigest", "outcome", "candidateEnvelopeDigests", "selectedEnvelopeDigests", "reasonCodes", "receiptDigest"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/retrieval-attempt-receipt/v1" }, "caseId": { "$ref": "#/$defs/id" }, "requirementKey": { "$ref": "#/$defs/digest" },
+        "attemptOrdinal": { "const": 0 }, "level": { "const": "A0" }, "strategyId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "queryDigest": { "$ref": "#/$defs/digest" }, "knowledgeBundleDigest": { "$ref": "#/$defs/digest" },
+        "outcome": { "enum": ["QUALIFYING_MATCH", "NO_MATCH", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC", "BLOCKED"] },
+        "candidateEnvelopeDigests": { "type": "array", "uniqueItems": true, "maxItems": 20, "items": { "$ref": "#/$defs/digest" } },
+        "selectedEnvelopeDigests": { "type": "array", "uniqueItems": true, "maxItems": 20, "items": { "$ref": "#/$defs/digest" } },
+        "reasonCodes": { "type": "array", "uniqueItems": true, "maxItems": 20, "items": { "type": "string", "minLength": 1, "maxLength": 128 } },
+        "receiptDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "gapItem": {
+      "type": "object", "additionalProperties": false,
+      "required": ["needDigest", "gapClass", "requirementOutcome", "sourceClasses", "evidenceDigests", "resultDigest"],
+      "properties": {
+        "needDigest": { "$ref": "#/$defs/digest" }, "gapClass": { "$ref": "#/$defs/gap" }, "requirementOutcome": { "$ref": "#/$defs/requirementOutcome" },
+        "sourceClasses": { "type": "array", "uniqueItems": true, "maxItems": 7, "items": { "$ref": "#/$defs/source" } },
+        "evidenceDigests": { "$ref": "#/$defs/digestList" }, "resultDigest": { "$ref": "#/$defs/digest" }
+      },
+      "allOf": [
+        { "if": { "properties": { "gapClass": { "const": "NONE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE"] } } } },
+        { "if": { "properties": { "requirementOutcome": { "const": "SATISFIED" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "minItems": 1, "items": { "const": "ACTIVE_CURATED_KNOWLEDGE" } } } } },
+        { "if": { "properties": { "requirementOutcome": { "const": "NOT_APPLICABLE" } }, "required": ["requirementOutcome"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "sourceClasses": { "type": "array", "maxItems": 0 } } } },
+        { "if": { "properties": { "gapClass": { "const": "MISSING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_MISSING" } } } },
+        { "if": { "properties": { "gapClass": { "const": "BAD_SOURCE" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_BAD_SOURCE" } } } },
+        { "if": { "properties": { "gapClass": { "const": "APPLICABILITY" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_APPLICABILITY" } } } },
+        { "if": { "properties": { "gapClass": { "const": "CONFLICTING" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_CONFLICTING" } } } },
+        { "if": { "properties": { "gapClass": { "const": "UNKNOWN_SEMANTIC" } }, "required": ["gapClass"] }, "then": { "properties": { "requirementOutcome": { "const": "GAP_UNKNOWN_SEMANTIC" } } } }
+      ]
+    },
+    "gapFinder": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "caseId", "requirementSetDigest", "knowledgeBundleDigest", "results", "finderDigest"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/separate-gap-finder-result/v1" }, "caseId": { "$ref": "#/$defs/id" },
+        "requirementSetDigest": { "$ref": "#/$defs/digest" }, "knowledgeBundleDigest": { "$ref": "#/$defs/digest" },
+        "results": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/gapItem" } }, "finderDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "probe": {
+      "type": "object", "additionalProperties": false,
+      "required": ["probeId", "probeClass", "needDigest", "expectedOutcome", "observedOutcome", "sourceClasses", "evidenceDigests", "probeDigest"],
+      "properties": {
+        "probeId": { "$ref": "#/$defs/id" }, "probeClass": { "enum": ["MISSING", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC"] },
+        "needDigest": { "$ref": "#/$defs/digest" }, "expectedOutcome": { "enum": ["INSUFFICIENT", "BLOCKED"] }, "observedOutcome": { "enum": ["INSUFFICIENT", "BLOCKED"] },
+        "sourceClasses": { "type": "array", "uniqueItems": true, "maxItems": 7, "items": { "$ref": "#/$defs/source" } },
+        "evidenceDigests": { "$ref": "#/$defs/digestList" }, "probeDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "claim": {
+      "type": "object", "additionalProperties": false,
+      "required": ["needDigest", "claimOutcome", "proofState", "sourceClasses", "evidenceDigests", "claimDigest"],
+      "properties": {
+        "needDigest": { "$ref": "#/$defs/digest" }, "claimOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE"] }, "proofState": { "enum": ["PROVEN", "UNPROVEN"] },
+        "sourceClasses": { "type": "array", "uniqueItems": true, "maxItems": 7, "items": { "$ref": "#/$defs/source" } },
+        "evidenceDigests": { "$ref": "#/$defs/digestList" }, "claimDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "backward": {
+      "type": "object", "additionalProperties": false, "required": ["claims", "proofStatus", "proofDigest"],
+      "properties": {
+        "claims": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/claim" } }, "proofStatus": { "enum": ["PASS", "FAIL"] }, "proofDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "forward": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "analysisId", "caseId", "fixtureDigest", "semanticRuleSetDigest", "requirementSetDigest", "candidateSetDigest", "requirements", "p11", "outcome", "blockedReasons", "analysisDigest"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/forward-requirement-analysis/v1" },
+        "analysisId": { "$ref": "#/$defs/id" }, "caseId": { "$ref": "#/$defs/id" },
+        "fixtureDigest": { "$ref": "#/$defs/digest" }, "semanticRuleSetDigest": { "$ref": "#/$defs/digest" },
+        "requirementSetDigest": { "$ref": "#/$defs/digest" }, "candidateSetDigest": { "$ref": "#/$defs/digest" },
+        "requirements": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/result" } },
+        "p11": { "$ref": "#/$defs/p11" }, "outcome": { "enum": ["PASS", "FAIL", "BLOCKED"] },
+        "blockedReasons": { "type": "array", "uniqueItems": true, "maxItems": 7, "items": { "$ref": "#/$defs/blockedReason" } },
+        "analysisDigest": { "$ref": "#/$defs/digest" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "outcome": { "const": "BLOCKED" } }, "required": ["outcome"] },
+          "then": {
+            "properties": {
+              "blockedReasons": { "type": "array", "minItems": 1 }, "requirements": { "type": "array", "maxItems": 0 }, "p11": { "$ref": "#/$defs/p11Blocked" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "outcome": { "enum": ["PASS", "FAIL"] } }, "required": ["outcome"] },
+          "then": {
+            "properties": {
+              "blockedReasons": { "type": "array", "maxItems": 0 }, "requirements": { "type": "array", "minItems": 1 }, "p11": { "$ref": "#/$defs/p11Measured" }
+            }
+          }
+        }
+      ]
+    },
+    "sufficiencyInput": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "proofId", "caseId", "fixtureDigest", "requirementSetDigest", "knowledgeBundleDigest", "forwardRequirementAnalysis", "requirementCandidates", "a0RetrievalReceipts", "a0RetrievalReceiptSetDigest", "requirementBindings", "requirementBindingsDigest", "gapFinderResult", "boundaryProbes", "backwardClaimProof", "authorityBoundary"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/knowledge-sufficiency-proof-input/v1" }, "proofId": { "$ref": "#/$defs/id" }, "caseId": { "$ref": "#/$defs/id" },
+        "fixtureDigest": { "$ref": "#/$defs/digest" }, "requirementSetDigest": { "$ref": "#/$defs/digest" }, "knowledgeBundleDigest": { "$ref": "#/$defs/digest" },
+        "forwardRequirementAnalysis": { "$ref": "#/$defs/forward" },
+        "requirementCandidates": { "type": "array", "maxItems": 4096, "items": { "$ref": "#/$defs/requirementCandidate" } },
+        "a0RetrievalReceipts": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/a0Receipt" } }, "a0RetrievalReceiptSetDigest": { "$ref": "#/$defs/digest" },
+        "requirementBindings": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/binding" } }, "requirementBindingsDigest": { "$ref": "#/$defs/digest" },
+        "gapFinderResult": { "$ref": "#/$defs/gapFinder" }, "boundaryProbes": { "type": "array", "maxItems": 16, "items": { "$ref": "#/$defs/probe" } }, "backwardClaimProof": { "$ref": "#/$defs/backward" }, "authorityBoundary": { "$ref": "#/$defs/boundary" }
+      }
+    },
+    "sufficiencyProof": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "proofId", "caseId", "fixtureDigest", "requirementSetDigest", "knowledgeBundleDigest", "forwardOutcome", "gapFinderOutcome", "boundaryOutcome", "backwardOutcome", "blockedReasons", "outcome", "materialCompleteness", "authorityBoundary", "proofDigest"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/knowledge-sufficiency-proof/v1" }, "proofId": { "$ref": "#/$defs/id" }, "caseId": { "$ref": "#/$defs/id" }, "fixtureDigest": { "$ref": "#/$defs/digest" }, "requirementSetDigest": { "$ref": "#/$defs/digest" }, "knowledgeBundleDigest": { "$ref": "#/$defs/digest" },
+        "forwardOutcome": { "$ref": "#/$defs/componentOutcome" }, "gapFinderOutcome": { "$ref": "#/$defs/componentOutcome" }, "boundaryOutcome": { "$ref": "#/$defs/componentOutcome" }, "backwardOutcome": { "$ref": "#/$defs/componentOutcome" },
+        "blockedReasons": { "type": "array", "uniqueItems": true, "maxItems": 8, "items": { "type": "string", "minLength": 1, "maxLength": 128 } }, "outcome": { "enum": ["SUFFICIENT", "INSUFFICIENT", "BLOCKED"] }, "materialCompleteness": { "enum": ["MATERIAL_COMPLETE", "NOT_MATERIAL_COMPLETE"] }, "authorityBoundary": { "$ref": "#/$defs/boundary" }, "proofDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "simple": {
+      "type": "object", "additionalProperties": false, "required": ["solverId", "inputDigest", "denominatorDigest"],
+      "properties": { "solverId": { "const": "CKS-07-SIMPLE-SOLVER-V1" }, "inputDigest": { "$ref": "#/$defs/digest" }, "denominatorDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "p13Case": {
+      "type": "object", "additionalProperties": false, "required": ["caseId", "oracleOutcome", "denominatorDigest", "caseInputDigest", "proofInput", "simpleSolver"],
+      "properties": { "caseId": { "$ref": "#/$defs/id" }, "oracleOutcome": { "enum": ["SUFFICIENT", "INSUFFICIENT"] }, "denominatorDigest": { "$ref": "#/$defs/digest" }, "caseInputDigest": { "$ref": "#/$defs/digest" }, "proofInput": { "$ref": "#/$defs/sufficiencyInput" }, "simpleSolver": { "$ref": "#/$defs/simple" } }
+    },
+    "p13Input": {
+      "type": "object", "additionalProperties": false, "required": ["schemaVersion", "suiteId", "fixtureDigest", "denominatorDigest", "cases"],
+      "properties": { "schemaVersion": { "const": "pansphaira.cks/p13-false-completeness-proof-input/v1" }, "suiteId": { "$ref": "#/$defs/id" }, "fixtureDigest": { "$ref": "#/$defs/digest" }, "denominatorDigest": { "$ref": "#/$defs/digest" }, "cases": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/p13Case" } } }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["insufficientOracleCases", "sufficientOracleCases", "combinedFalseCompletenessCount", "simpleSolverFalseCompletenessCount", "combinedTrueCompletenessCount", "combinedFalseCompletenessRate", "simpleSolverFalseCompletenessRate", "falseCompletenessAbsoluteReduction", "combinedTrueCompletenessRate"],
+      "properties": {
+        "insufficientOracleCases": { "type": "integer", "minimum": 1 }, "sufficientOracleCases": { "type": "integer", "minimum": 1 }, "combinedFalseCompletenessCount": { "type": "integer", "minimum": 0 }, "simpleSolverFalseCompletenessCount": { "type": "integer", "minimum": 0 }, "combinedTrueCompletenessCount": { "type": "integer", "minimum": 0 },
+        "combinedFalseCompletenessRate": { "type": "number", "minimum": 0 }, "simpleSolverFalseCompletenessRate": { "type": "number", "minimum": 0 }, "falseCompletenessAbsoluteReduction": { "type": "number", "minimum": 0 }, "combinedTrueCompletenessRate": { "type": "number", "minimum": 0 }
+      }
+    },
+    "p13Proof": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "suiteId", "fixtureDigest", "denominatorDigest", "caseCount", "proofOutcome", "metrics", "blockedReasons", "authorityBoundary", "proofDigest"],
+      "properties": { "schemaVersion": { "const": "pansphaira.cks/p13-false-completeness-proof/v1" }, "suiteId": { "$ref": "#/$defs/id" }, "fixtureDigest": { "$ref": "#/$defs/digest" }, "denominatorDigest": { "$ref": "#/$defs/digest" }, "caseCount": { "type": "integer", "minimum": 0 }, "proofOutcome": { "$ref": "#/$defs/componentOutcome" }, "metrics": { "anyOf": [{ "$ref": "#/$defs/metrics" }, { "type": "null" }] }, "blockedReasons": { "type": "array", "uniqueItems": true, "maxItems": 8, "items": { "type": "string", "minLength": 1, "maxLength": 128 } }, "authorityBoundary": { "$ref": "#/$defs/boundary" }, "proofDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "blockedReason": {
+      "enum": ["DEPENDENCY_EVIDENCE_ABSENT", "DEPENDENCY_SCHEMA_INVALID", "DEPENDENCY_DIGEST_MISMATCH", "REQUIRED_SEMANTIC_RULE_ABSENT", "UNKNOWN_VOCABULARY_VALUE", "REQUIRED_APPLICABILITY_RULE_ABSENT", "DENOMINATOR_EVIDENCE_ABSENT"]
+    },
+    "result": {
+      "type": "object", "additionalProperties": false,
+      "required": ["requirementId", "criticality", "applicability", "state", "matchedCandidateId"],
+      "properties": {
+        "requirementId": { "$ref": "#/$defs/id" }, "criticality": { "enum": ["CRITICAL", "NON_CRITICAL"] },
+        "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE"] },
+        "state": { "enum": ["SATISFIED", "NOT_APPLICABLE", "MISSING", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC", "CRITICALITY_MISMATCH"] },
+        "matchedCandidateId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/id" }] }
+      }
+    },
+    "p11Blocked": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "status", "blockedReasons"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/p11-requirement-measurement/v1" }, "status": { "const": "BLOCKED" },
+        "blockedReasons": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/blockedReason" } }
+      }
+    },
+    "p11Measured": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "status", "R", "P", "M", "C", "CM", "CX", "requirementRecall", "requirementPrecision", "criticalRequirementMissRate", "criticalRequirementMisses", "criticalityMismatches"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/p11-requirement-measurement/v1" }, "status": { "enum": ["PASS", "FAIL"] },
+        "R": { "type": "integer", "minimum": 1 }, "P": { "type": "integer", "minimum": 0 }, "M": { "type": "integer", "minimum": 0 },
+        "C": { "type": "integer", "minimum": 1 }, "CM": { "type": "integer", "minimum": 0 }, "CX": { "type": "integer", "minimum": 0 },
+        "requirementRecall": { "type": "number", "minimum": 0, "maximum": 1 }, "requirementPrecision": { "type": "number", "minimum": 0, "maximum": 1 },
+        "criticalRequirementMissRate": { "type": "number", "minimum": 0, "maximum": 1 }, "criticalRequirementMisses": { "type": "integer", "minimum": 0 },
+        "criticalityMismatches": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "p11": { "oneOf": [{ "$ref": "#/$defs/p11Blocked" }, { "$ref": "#/$defs/p11Measured" }] }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-empty-kb-case-v1.schema.json",
+  "title": "PANSPHAIRA deterministic empty and minimal knowledge-base fixture v1",
+  "oneOf": [
+    { "$ref": "#/$defs/groundTruth" },
+    { "$ref": "#/$defs/caseSuite" }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "criticality": { "enum": ["CRITICAL", "NON_CRITICAL"] },
+    "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE"] },
+    "sourceClass": { "enum": ["ACTIVE_CURATED_KNOWLEDGE", "PINNED_OWNER_EVIDENCE", "PINNED_PRIMARY_EVIDENCE", "PINNED_SECONDARY_EVIDENCE", "INTERNET_RESULT", "MODEL_RESULT", "UNKNOWN_SOURCE"] },
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidateId", "statement", "statementDigest", "criticality", "sourceClass", "applicability", "conflictState", "citations"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" }, "statement": { "type": "string", "minLength": 1, "maxLength": 2048 }, "statementDigest": { "$ref": "#/$defs/digest" },
+        "criticality": { "enum": ["CRITICAL", "NON_CRITICAL", "UNKNOWN"] }, "sourceClass": { "$ref": "#/$defs/sourceClass" },
+        "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE", "UNKNOWN"] }, "conflictState": { "enum": ["NONE", "CONFLICTING"] },
+        "citations": { "type": "array", "uniqueItems": true, "maxItems": 64, "items": { "$ref": "#/$defs/digest" } }
+      }
+    },
+    "mapping": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidateId", "requirementId", "outcome", "ruleId"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" }, "requirementId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/id" }] },
+        "outcome": { "enum": ["MATCH", "NO_MATCH", "UNKNOWN_SEMANTIC", "CONFLICTING", "BAD_SOURCE", "APPLICABILITY"] }, "ruleId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "expectedRequirement": {
+      "type": "object", "additionalProperties": false, "required": ["requirementId", "state"],
+      "properties": { "requirementId": { "$ref": "#/$defs/id" }, "state": { "enum": ["SATISFIED", "NOT_APPLICABLE", "MISSING", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC", "CRITICALITY_MISMATCH"] } }
+    },
+    "p11": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "R", "P", "M", "C", "CM", "CX", "requirementRecall", "requirementPrecision", "criticalRequirementMissRate", "criticalRequirementMisses", "criticalityMismatches"],
+      "properties": {
+        "status": { "enum": ["PASS", "FAIL"] }, "R": { "type": "integer", "minimum": 1 }, "P": { "type": "integer", "minimum": 0 }, "M": { "type": "integer", "minimum": 0 }, "C": { "type": "integer", "minimum": 1 }, "CM": { "type": "integer", "minimum": 0 }, "CX": { "type": "integer", "minimum": 0 },
+        "requirementRecall": { "type": "number", "minimum": 0, "maximum": 1 }, "requirementPrecision": { "type": "number", "minimum": 0, "maximum": 1 }, "criticalRequirementMissRate": { "type": "number", "minimum": 0, "maximum": 1 }, "criticalRequirementMisses": { "type": "integer", "minimum": 0 }, "criticalityMismatches": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "solver": {
+      "type": "object", "additionalProperties": false, "required": ["solverId", "requirementIds", "a0CoveredRequirementIds"],
+      "properties": { "solverId": { "const": "CKS-07-SIMPLE-SOLVER-V1" }, "requirementIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } }, "a0CoveredRequirementIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } } }
+    },
+    "groundTruth": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "groundTruthId", "suiteId", "semanticRuleSetDigest", "denominatorDigest", "requirements"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/empty-kb-ground-truth/v1" }, "groundTruthId": { "$ref": "#/$defs/id" }, "suiteId": { "$ref": "#/$defs/id" }, "semanticRuleSetDigest": { "$ref": "#/$defs/digest" }, "denominatorDigest": { "$ref": "#/$defs/digest" },
+        "requirements": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "type": "object", "additionalProperties": false, "required": ["requirementId", "statement", "statementDigest", "criticality", "applicability", "applicabilityRuleId"], "properties": { "requirementId": { "$ref": "#/$defs/id" }, "statement": { "type": "string", "minLength": 1, "maxLength": 2048 }, "statementDigest": { "$ref": "#/$defs/digest" }, "criticality": { "$ref": "#/$defs/criticality" }, "applicability": { "$ref": "#/$defs/applicability" }, "applicabilityRuleId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/id" }] } } } }
+      }
+    },
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["caseId", "kbClass", "oracleOutcome", "candidates", "mappings", "expectedStates", "expectedP11", "simpleSolver", "backwardProofStatus", "boundaryProbeOutcome", "authorityBoundary"],
+      "properties": {
+        "caseId": { "$ref": "#/$defs/id" }, "kbClass": { "enum": ["EMPTY", "MINIMAL"] }, "oracleOutcome": { "enum": ["SUFFICIENT", "INSUFFICIENT"] }, "candidates": { "type": "array", "maxItems": 4096, "items": { "$ref": "#/$defs/candidate" } }, "mappings": { "type": "array", "maxItems": 4096, "items": { "$ref": "#/$defs/mapping" } },
+        "expectedStates": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/expectedRequirement" } }, "expectedP11": { "$ref": "#/$defs/p11" }, "simpleSolver": { "$ref": "#/$defs/solver" }, "backwardProofStatus": { "enum": ["PASS", "FAIL"] }, "boundaryProbeOutcome": { "enum": ["INSUFFICIENT", "BLOCKED"] }, "authorityBoundary": { "const": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY" }
+      }
+    },
+    "caseSuite": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "suiteId", "groundTruthId", "denominatorDigest", "simpleSolverDefinition", "cases"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.cks/empty-kb-cases/v1" }, "suiteId": { "$ref": "#/$defs/id" }, "groundTruthId": { "$ref": "#/$defs/id" }, "denominatorDigest": { "$ref": "#/$defs/digest" }, "simpleSolverDefinition": { "const": "COMPLETE iff every denominator requirement is listed in a0CoveredRequirementIds; no source, semantic, conflict, applicability, or authority check is performed." }, "cases": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/case" } }
+      }
+    }
+  }
+}

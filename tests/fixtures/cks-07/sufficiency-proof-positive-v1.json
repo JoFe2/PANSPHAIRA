@@ -1,0 +1,14 @@
+{
+  "suiteId": "suite:cks-07-p13",
+  "denominatorDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "cases": [
+    {
+      "caseId": "case:cks-sufficient",
+      "oracleOutcome": "SUFFICIENT",
+      "kind": "SUFFICIENT",
+      "probeOutcome": "INSUFFICIENT",
+      "backwardStatus": "PASS",
+      "a0CandidateBytes": "PRESENT_FOR_ALL"
+    }
+  ]
+}

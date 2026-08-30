@@ -1,0 +1,74 @@
+{
+  "digestA": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "digestB": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "digestC": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "base": {
+    "receiptId": "receipt:gap-v1",
+    "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "applicability": "APPLICABLE",
+    "attempts": [
+      { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+      { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+      { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] }
+    ],
+    "acquisitionCandidates": [
+      { "level": "A3", "candidateId": "cand:owner-local", "sourceClass": "PINNED_OWNER_EVIDENCE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "provenance": "owner supplied local evidence", "licence": "OWNER_AUTHORIZED" },
+      { "level": "A4", "candidateId": "cand:internet-pin", "sourceClass": "INTERNET_RESULT", "contentDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "evidenceDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "provenance": "separately pinned external bytes", "licence": "CC-BY-4.0" },
+      { "level": "A5", "candidateId": "cand:model-proposal", "sourceClass": "MODEL_RESULT", "contentDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "evidenceDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "provenance": "model proposal bound to supplied inputs", "licence": "UNKNOWN" }
+    ]
+  },
+  "cases": [
+    {
+      "caseId": "case:recover-a1",
+      "input": {
+        "receiptId": "receipt:recover-a1",
+        "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "applicability": "APPLICABLE",
+        "attempts": [
+          { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:recovered-a1", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "APPLICABLE", "conflictState": "NONE" }] }
+        ],
+        "acquisitionCandidates": []
+      },
+      "expectedState": "RECOVERED"
+    },
+    {
+      "caseId": "case:recover-a2",
+      "input": {
+        "receiptId": "receipt:recover-a2",
+        "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "applicability": "APPLICABLE",
+        "attempts": [
+          { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:recovered-a2", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "APPLICABLE", "conflictState": "NONE" }] }
+        ],
+        "acquisitionCandidates": []
+      },
+      "expectedState": "RECOVERED"
+    },
+    {
+      "caseId": "case:missing-with-candidates",
+      "input": {
+        "receiptId": "receipt:missing-acq",
+        "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "applicability": "APPLICABLE",
+        "attempts": [
+          { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] }
+        ],
+        "acquisitionCandidates": [
+          { "level": "A3", "candidateId": "cand:owner-local", "sourceClass": "PINNED_OWNER_EVIDENCE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "provenance": "owner supplied local evidence", "licence": "OWNER_AUTHORIZED" },
+          { "level": "A4", "candidateId": "cand:internet-pin", "sourceClass": "INTERNET_RESULT", "contentDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "evidenceDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "provenance": "separately pinned external bytes", "licence": "CC-BY-4.0" },
+          { "level": "A5", "candidateId": "cand:model-proposal", "sourceClass": "MODEL_RESULT", "contentDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "evidenceDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "provenance": "model proposal bound to supplied inputs", "licence": "UNKNOWN" }
+        ]
+      },
+      "expectedState": "GAP_MISSING"
+    }
+  ]
+}

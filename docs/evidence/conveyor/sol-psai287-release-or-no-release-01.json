@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "pansphaira.evidence/sol-psai287-release-or-no-release-01/v1",
+  "taskId": "SOL-PSAI287-RELEASE-OR-NO-RELEASE-01",
+  "recordKind": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
+  "decisionId": "PSAI287-ISSUE-SCOPED-RELEASE-DISPOSITION-V1",
+  "decisionStatus": "SUPERSEDED_NO_RELEASE_CLOSURE_BLOCKED_PENDING_REQUIRED_RELEASE",
+  "scope": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "issue": 287,
+    "branch": "conveyor/pansphaira-287",
+    "comparisonBase": "main",
+    "mainCommitAtCorrection": "b5139807b6e425ab90008330587911dc070b33ee",
+    "preReceiptHeadCommit": "8525f96838a0b813b8fed6a9bf7a6a81fb71ea96",
+    "capability": "CKS-07",
+    "packageKind": "BOUNDED_PART_II_PROOF_PACKAGE",
+    "productionResearch": "EXPLICITLY_OUT_OF_SCOPE",
+    "promotionAuthorization": "ABSENT",
+    "deploymentAuthorization": "ABSENT",
+    "receiptPath": "docs/evidence/conveyor/sol-psai287-release-or-no-release-01.json",
+    "remoteStateMutated": false
+  },
+  "preservedProcessContext": {
+    "controllerAttestationSource": "TASK_INSTRUCTION",
+    "operatingModel": {
+      "id": "Operating Model v1.1",
+      "treatment": "PRESERVED_UNCHANGED",
+      "restatedOrReinterpretedHere": false
+    },
+    "decisions": [
+      { "id": "D-001", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-002", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-003", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-004", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-005", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-006", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-007", "treatment": "PRESERVED_UNCHANGED" }
+    ],
+    "integrationRule": "This receipt records only the issue-scoped release-or-no-release disposition and its public-readback wording. It creates no process variant, workflow, acquisition path, promotion path, Knowledge acceptance path, Authority path, release authority, deployment authority, or GitHub mutation."
+  },
+  "supportingEvidence": {
+    "controllerDirection": {
+      "source": "TASK_INSTRUCTION",
+      "claim": "Issue #287 remains a bounded Part-II proof package with no local promotion or deployment authority, while the root-delivery contract requires a later governed release, public readback, and issue-close gate."
+    },
+    "repositoryReceipts": [
+      {
+        "path": "docs/evidence/conveyor/sol-psai287-knowledge-sufficiency-decision-01.json",
+        "sha256": "d7517fa8600d6d454e7ca1da9127ebb96a9b0cdf250eb44449d522426d1ce13c",
+        "supports": "The frozen decision separates acquisition, qualification, promotion, accepted Knowledge, and Authority and explicitly performs none of them."
+      },
+      {
+        "path": "docs/evidence/conveyor/terra-psai287-root-qs-01.json",
+        "sha256": "a9b6fef0369d5cc844640d4c1a7ddadb1123a06bb21ee3cc1752fcccfa7605d0",
+        "supports": "The reconciled proof is bounded to frozen offline synthetic fixtures and records no acquisition, promotion, remote mutation, production activation, or release claim."
+      },
+      {
+        "path": "docs/evidence/conveyor/int-psai287-pr-ci-package-01.json",
+        "sha256": "46b45978a8468d5a101e9a9d0607f3d5eecc225f63e18211f9003d6aeeed7020",
+        "supports": "The corrected local integration packet records that release is required but pending governed execution and authorizes no local tag, publication, deployment, or GitHub mutation."
+      }
+    ],
+    "rationale": [
+      "The deliverable is evidence for a bounded Part-II proof package, not a production-research increment.",
+      "No instruction authorizes this local worker to perform promotion, deployment, publication, or production activation.",
+      "The controller delivery contract nevertheless marks release, public readback, and issue close as mandatory later ClosureConsumer gates.",
+      "The proof package preserves separation among acquisition candidates, promotion, accepted Knowledge, and Authority.",
+      "FINAL_LOCAL_NO_RELEASE cannot satisfy a required later release gate and is superseded; closure remains blocked pending governed execution and readback."
+    ]
+  },
+  "localDisposition": {
+    "value": "RELEASE_REQUIRED_PENDING_AUTHORIZED_EXECUTION",
+    "status": "CLOSURE_BLOCKED",
+    "releaseAuthorized": false,
+    "releaseRequired": true,
+    "noReleaseSatisfiesRequiredGate": false,
+    "wording": "Issue #287 disposition: release is required by the root-delivery contract but remains pending governed authorization and execution; closure is blocked until release, anonymous public readback, and issue-close evidence all bind the exact integration head.",
+    "failClosedRule": "Pending release is not release success. Any NO_RELEASE disposition, missing public readback, missing issue-close evidence, stale head, or path-boundary violation blocks closure."
+  },
+  "deliveryContract": {
+    "release": { "required": true, "status": "PENDING_AUTHORIZED_EXECUTION" },
+    "publicReadback": { "required": true, "status": "NOT_EXECUTED" },
+    "issueClose": { "required": true, "status": "NOT_EXECUTED" },
+    "artifactPathBoundary": {
+      "declared": "closure-audits/CLOSURE-PSAI287-ROOT-DELIVERY-01/**",
+      "comparison": "main...HEAD",
+      "changedPathCount": 47,
+      "insideBoundaryCount": 0,
+      "outsideBoundaryCount": 47,
+      "status": "BLOCKED"
+    },
+    "closureStatus": "BLOCKED"
+  },
+  "integrationBoundary": {
+    "mergeAuthorizedByThisReceipt": false,
+    "laterMergeClassification": "INTEGRATION_ONLY_NOT_RELEASE",
+    "statement": "Any later merge is not a release and does not activate acquisition, promotion, Knowledge acceptance, or Authority.",
+    "doesNotActivate": {
+      "acquisition": true,
+      "promotion": true,
+      "knowledgeAcceptance": true,
+      "authority": true,
+      "productionResearch": true,
+      "deployment": true
+    },
+    "separateGovernedAuthorizationRequired": true
+  },
+  "publicReadback": {
+    "status": "REQUIRED_NOT_EXECUTED",
+    "wording": "Issue #287 closure remains blocked. Release is required but not executed; anonymous public readback and issue-close evidence are absent; and the immutable main...HEAD artifact violates its declared closure-audit path boundary.",
+    "publicationPerformed": false,
+    "anonymousReleaseReadbackClaimed": false,
+    "githubMutationPerformed": false
+  },
+  "releaseAndMutationReceipt": {
+    "tagCreated": false,
+    "packagePublished": false,
+    "releaseCreatedOrModified": false,
+    "assetUploaded": false,
+    "deploymentPerformed": false,
+    "githubStateMutated": false,
+    "externalStateChanged": false
+  },
+  "evidenceBoundary": {
+    "requiredReceipt": "docs/evidence/conveyor/sol-psai287-release-or-no-release-01.json",
+    "requiredEvidencePresent": true,
+    "successWithoutRequiredEvidencePermitted": false,
+    "claimBoundary": "This corrected receipt records a fail-closed pending disposition only. It does not claim release, merge, deployment, production activation, public readback, issue close, or root-delivery closure."
+  },
+  "verification": {
+    "jsonSyntax": {
+      "method": "strict JSON parse",
+      "expected": "PASS",
+      "observed": "PASS"
+    },
+    "requiredRepositoryCheck": {
+      "command": "git diff --check main...HEAD",
+      "expectedExitCode": 0,
+      "observedExitCode": 0,
+      "result": "PASS"
+    },
+    "productTests": "FOCUSED_RELEASE_AND_PATH_BOUNDARY_REGRESSIONS_REQUIRED_BY_CLOSURE_FINALIZER",
+    "verificationBoundary": "Syntax and repository diff hygiene verify this bounded receipt; they do not authorize or establish a release, promotion, deployment, production-research result, Knowledge acceptance, or Authority."
+  },
+  "publicSafeNonClaims": [
+    "No tag, package publication, release, asset upload, deployment, GitHub mutation, or external state change was performed.",
+    "No acquisition, qualification, promotion, Knowledge acceptance, production activation, or Authority was performed or authorized.",
+    "No production-research fitness, production readiness, corpus completeness, or generalization is claimed.",
+    "No later merge is represented as a release.",
+    "No root-delivery closure or issue close is claimed while any required later gate or the declared artifact path boundary remains unsatisfied."
+  ],
+  "verdict": "CLOSURE_BLOCKED_RELEASE_PUBLIC_READBACK_ISSUE_CLOSE_AND_PATH_BOUNDARY_UNSATISFIED"
+}

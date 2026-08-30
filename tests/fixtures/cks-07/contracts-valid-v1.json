@@ -1,0 +1,100 @@
+{
+  "knowledgeNeed": {
+    "schemaVersion": "pansphaira.cks/knowledge-need/v1",
+    "needId": "need:approval-1",
+    "caseId": "case:cks-07-golden",
+    "requirementId": "requirement:approval-1",
+    "statement": "Purchase requests require approval.",
+    "statementDigest": "4e5cb37ae65b863b44d331227352379da3b1a1a082ff2c80c7d5e4a2814bb4ac",
+    "criticality": "CRITICAL",
+    "applicability": "APPLICABLE",
+    "applicabilityRuleId": "rule:approval-applicability",
+    "requirementSetDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "needDigest": "45534422e1b145dd9f7d7923c931f4fe92b1dc0a2fb4c8a5f73689be838df38f"
+  },
+  "knowledgeGap": {
+    "schemaVersion": "pansphaira.cks/knowledge-gap/v1",
+    "gapId": "gap:approval-satisfied",
+    "needDigest": "45534422e1b145dd9f7d7923c931f4fe92b1dc0a2fb4c8a5f73689be838df38f",
+    "gapClass": "NONE",
+    "requirementOutcome": "SATISFIED",
+    "sourceClasses": ["ACTIVE_CURATED_KNOWLEDGE"],
+    "evidenceDigests": ["2222222222222222222222222222222222222222222222222222222222222222"],
+    "recoveryAttempts": [],
+    "gapDigest": "57fde01d2c9fb00c30eba8b667259197347d743639865424af604439f31637ca"
+  },
+  "knowledgeGapMissing": {
+    "schemaVersion": "pansphaira.cks/knowledge-gap/v1",
+    "gapId": "gap:approval-missing",
+    "needDigest": "45534422e1b145dd9f7d7923c931f4fe92b1dc0a2fb4c8a5f73689be838df38f",
+    "gapClass": "MISSING",
+    "requirementOutcome": "GAP_MISSING",
+    "sourceClasses": [],
+    "evidenceDigests": [],
+    "recoveryAttempts": [
+      {"level":"A0","outcome":"NO_MATCH","knowledgeBundleDigest":"3333333333333333333333333333333333333333333333333333333333333333","receiptDigest":"4444444444444444444444444444444444444444444444444444444444444444"},
+      {"level":"A1","outcome":"NO_MATCH","knowledgeBundleDigest":"3333333333333333333333333333333333333333333333333333333333333333","receiptDigest":"5555555555555555555555555555555555555555555555555555555555555555"},
+      {"level":"A2","outcome":"NO_MATCH","knowledgeBundleDigest":"3333333333333333333333333333333333333333333333333333333333333333","receiptDigest":"6666666666666666666666666666666666666666666666666666666666666666"}
+    ],
+    "gapDigest": "b32b5b7bd6d118a676afdc0d5a4e91b3b00e2a1c713dd325a096a325585e75da"
+  },
+  "acquisitionPlan": {
+    "schemaVersion": "pansphaira.cks/acquisition-plan/v1",
+    "planId": "plan:approval-recovery",
+    "needDigest": "45534422e1b145dd9f7d7923c931f4fe92b1dc0a2fb4c8a5f73689be838df38f",
+    "orderedLevels": ["A0", "A1", "A2", "A3", "A4", "A5"],
+    "maximumTotalAttempts": 3,
+    "maximumAlternateAttempts": 2,
+    "allowedSourceClasses": ["ACTIVE_CURATED_KNOWLEDGE", "PINNED_OWNER_EVIDENCE", "PINNED_PRIMARY_EVIDENCE", "PINNED_SECONDARY_EVIDENCE", "INTERNET_RESULT", "MODEL_RESULT", "UNKNOWN_SOURCE"],
+    "promotionStatus": "NOT_REQUESTED",
+    "acceptedKnowledgeDigest": null,
+    "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+    "planDigest": "6b6d34c2202ba8c0dce6c20bf2ab4360fddd2cba88823fee9bce0db955eb2d64"
+  },
+  "sourceEvidence": [
+    {
+      "schemaVersion": "pansphaira.cks/source-evidence/v1",
+      "evidenceId": "evidence:internet-result",
+      "sourceClass": "INTERNET_RESULT",
+      "locator": "https://example.invalid/approval",
+      "contentDigest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "observedAtMs": 1720000000000,
+      "expiresAtMs": null,
+      "licence": "UNKNOWN",
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+      "evidenceDigest": "9a3fa555efdbc3bcb63302035f1ef7bf24d135d40dc0190f9f82a97703c78d4a"
+    },
+    {
+      "schemaVersion": "pansphaira.cks/source-evidence/v1",
+      "evidenceId": "evidence:model-result",
+      "sourceClass": "MODEL_RESULT",
+      "locator": "model:proposal-1",
+      "contentDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "observedAtMs": 1720000000000,
+      "expiresAtMs": null,
+      "licence": "UNKNOWN",
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+      "evidenceDigest": "3ed61c8835386dbc7b8e8d0744f33732c52e786fb9f9edb59fd01741e31e875c"
+    }
+  ],
+  "knowledgeSufficiency": {
+    "schemaVersion": "pansphaira.cks/knowledge-sufficiency/v1",
+    "sufficiencyId": "sufficiency:cks-07-golden",
+    "caseId": "case:cks-07-golden",
+    "requirementSetDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "knowledgeBundleDigest": "9999999999999999999999999999999999999999999999999999999999999999",
+    "requirements": [{
+      "needDigest": "45534422e1b145dd9f7d7923c931f4fe92b1dc0a2fb4c8a5f73689be838df38f",
+      "gapClass": "NONE",
+      "requirementOutcome": "SATISFIED",
+      "sourceClasses": ["ACTIVE_CURATED_KNOWLEDGE"],
+      "evidenceDigests": ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+    }],
+    "blockedReasons": [],
+    "overallOutcome": "SUFFICIENT",
+    "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+    "sufficiencyDigest": "454c04a3efb6524910bc48b2058ed97133c0a820457fe4416d0b9a89b7753ff8"
+  }
+}

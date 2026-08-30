@@ -1,0 +1,30 @@
+{
+  "input": {
+    "schemaVersion": "pansphaira.cks/forward-requirement-analysis-input/v1",
+    "analysisId": "analysis:golden-v1",
+    "caseId": "case:golden-v1",
+    "fixtureDigest": "3786811f9737e0ac7d98fc30ead61f9edb23bc3e1f80daf8d95bbecfd06a33e5",
+    "semanticRuleSetDigest": "9a0ead3f5ce2b79214ce803f5436aec8d48e9b8956937e115c2a3682c7d15d9c",
+    "requirements": [
+      { "requirementId": "req:access", "statement": "The operator can read the synthetic account record.", "statementDigest": "9b16031f44c73596ea9c6052dcd4fb28b544c1755f0d4d8be641f204c1252d95", "criticality": "CRITICAL", "applicability": "APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" },
+      { "requirementId": "req:audit", "statement": "The system records an immutable audit event.", "statementDigest": "ffdbe1e4b965b9704e8a1e283c77c785fd32c70a8398df95d957eb312bdf60be", "criticality": "CRITICAL", "applicability": "APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" },
+      { "requirementId": "req:retention", "statement": "The report retains records for thirty days.", "statementDigest": "b6cbe54fbbb02371e7d0d82bb45541408a10b3f0a565d7fedc77283277703cde", "criticality": "NON_CRITICAL", "applicability": "APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" },
+      { "requirementId": "req:optional", "statement": "The optional export is available.", "statementDigest": "b7913ba296b9b4f1eed67d2b7eb7c4ea83dfb6560992becab8a66c250b4c78cb", "criticality": "NON_CRITICAL", "applicability": "NOT_APPLICABLE", "applicabilityRuleId": "rule:applicability-v1" }
+    ],
+    "candidates": [
+      { "candidateId": "cand:access", "statement": "The operator can read the synthetic account record.", "statementDigest": "9b16031f44c73596ea9c6052dcd4fb28b544c1755f0d4d8be641f204c1252d95", "criticality": "CRITICAL", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "applicability": "APPLICABLE", "conflictState": "NONE", "citations": ["9b16031f44c73596ea9c6052dcd4fb28b544c1755f0d4d8be641f204c1252d95"] },
+      { "candidateId": "cand:audit", "statement": "The system records an immutable audit event.", "statementDigest": "ffdbe1e4b965b9704e8a1e283c77c785fd32c70a8398df95d957eb312bdf60be", "criticality": "CRITICAL", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "applicability": "APPLICABLE", "conflictState": "NONE", "citations": ["ffdbe1e4b965b9704e8a1e283c77c785fd32c70a8398df95d957eb312bdf60be"] },
+      { "candidateId": "cand:retention", "statement": "The report retains records for thirty days.", "statementDigest": "b6cbe54fbbb02371e7d0d82bb45541408a10b3f0a565d7fedc77283277703cde", "criticality": "NON_CRITICAL", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "applicability": "APPLICABLE", "conflictState": "NONE", "citations": ["b6cbe54fbbb02371e7d0d82bb45541408a10b3f0a565d7fedc77283277703cde"] }
+    ],
+    "mappings": [
+      { "candidateId": "cand:access", "requirementId": "req:access", "outcome": "MATCH", "ruleId": "rule:semantic-exact-v1" },
+      { "candidateId": "cand:audit", "requirementId": "req:audit", "outcome": "MATCH", "ruleId": "rule:semantic-exact-v1" },
+      { "candidateId": "cand:retention", "requirementId": "req:retention", "outcome": "MATCH", "ruleId": "rule:semantic-exact-v1" }
+    ]
+  },
+  "expected": {
+    "outcome": "PASS",
+    "p11": { "status": "PASS", "R": 3, "P": 3, "M": 3, "C": 2, "CM": 0, "CX": 0, "requirementRecall": 1, "requirementPrecision": 1, "criticalRequirementMissRate": 0, "criticalRequirementMisses": 0, "criticalityMismatches": 0 },
+    "states": { "req:access": "SATISFIED", "req:audit": "SATISFIED", "req:retention": "SATISFIED", "req:optional": "NOT_APPLICABLE" }
+  }
+}

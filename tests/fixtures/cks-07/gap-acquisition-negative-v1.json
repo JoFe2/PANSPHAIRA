@@ -1,0 +1,69 @@
+{
+  "cases": [
+    {
+      "caseId": "case:missing-too-early",
+      "input": {
+        "receiptId": "receipt:early-gap", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
+        "attempts": [{ "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] }], "acquisitionCandidates": []
+      },
+      "expectedState": "BLOCKED"
+    },
+    {
+      "caseId": "case:bad-source",
+      "input": {
+        "receiptId": "receipt:bad-source", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
+        "attempts": [{ "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:internet", "sourceClass": "INTERNET_RESULT", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "APPLICABLE", "conflictState": "NONE" }] }], "acquisitionCandidates": []
+      },
+      "expectedState": "GAP_BAD_SOURCE"
+    },
+    {
+      "caseId": "case:applicability-fail-closed",
+      "input": {
+        "receiptId": "receipt:applicability", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
+        "attempts": [{ "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:not-applicable", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "NOT_APPLICABLE", "conflictState": "NONE" }] }], "acquisitionCandidates": []
+      },
+      "expectedState": "GAP_APPLICABILITY"
+    },
+    {
+      "caseId": "case:conflict-fail-closed",
+      "input": {
+        "receiptId": "receipt:conflict", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
+        "attempts": [{ "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:conflict", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "MATCH", "applicability": "APPLICABLE", "conflictState": "CONFLICTING" }] }], "acquisitionCandidates": []
+      },
+      "expectedState": "GAP_CONFLICTING"
+    },
+    {
+      "caseId": "case:unknown-semantic-fail-closed",
+      "input": {
+        "receiptId": "receipt:unknown-semantic", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
+        "attempts": [{ "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [{ "candidateId": "cand:unknown", "sourceClass": "ACTIVE_CURATED_KNOWLEDGE", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "semanticStatus": "UNKNOWN", "applicability": "APPLICABLE", "conflictState": "NONE" }] }], "acquisitionCandidates": []
+      },
+      "expectedState": "GAP_UNKNOWN_SEMANTIC"
+    },
+    {
+      "caseId": "case:changed-bundle-blocked",
+      "input": {
+        "receiptId": "receipt:changed-bundle", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
+        "attempts": [
+          { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "candidates": [] }
+        ], "acquisitionCandidates": []
+      },
+      "expectedState": "BLOCKED"
+    },
+    {
+      "caseId": "case:internet-not-authority",
+      "input": {
+        "receiptId": "receipt:internet-candidate", "needDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "applicability": "APPLICABLE",
+        "attempts": [
+          { "level": "A0", "strategyId": "strategy:primary", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A1", "strategyId": "strategy:alternate-query", "retrieverId": "retriever:primary", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] },
+          { "level": "A2", "strategyId": "strategy:alternate-index", "retrieverId": "retriever:alternate", "knowledgeBundleDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "candidates": [] }
+        ],
+        "acquisitionCandidates": [{ "level": "A4", "candidateId": "cand:external", "sourceClass": "INTERNET_RESULT", "contentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidenceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "provenance": "pinned external bytes", "licence": "CC-BY-4.0" }]
+      },
+      "expectedState": "GAP_MISSING",
+      "assertions": ["NON_AUTHORITATIVE_CANDIDATE", "NOT_ACCEPTED", "NOT_REQUESTED"]
+    }
+  ]
+}

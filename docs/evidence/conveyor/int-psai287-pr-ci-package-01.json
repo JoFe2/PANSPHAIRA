@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "pansphaira.evidence/int-psai287-pr-ci-package-01/v1",
+  "taskId": "INT-PSAI287-PR-CI-PACKAGE-01",
+  "recordKind": "DETERMINISTIC_DECISION_INTEGRATION_RECEIPT",
+  "decisionStatus": "CORRECTED_LOCAL_PACKET_CLOSURE_BLOCKED",
+  "scope": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-287",
+    "comparisonBase": "main",
+    "mainCommitAtCorrection": "b5139807b6e425ab90008330587911dc070b33ee",
+    "preReceiptHeadCommit": "0aff345c15dc03c2c1b3d047f7a9c4b8b0258d8b",
+    "capability": "CKS-07",
+    "evidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC",
+    "mutationBoundary": "NO_GITHUB_MUTATION_PERFORMED"
+  },
+  "preservedProcessContext": {
+    "controllerAttestationSource": "TASK_INSTRUCTION",
+    "operatingModel": {
+      "id": "Operating Model v1.1",
+      "treatment": "PRESERVED_UNCHANGED"
+    },
+    "decisions": [
+      { "id": "D-001", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-002", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-003", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-004", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-005", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-006", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-007", "treatment": "PRESERVED_UNCHANGED" }
+    ],
+    "integrationRule": "This receipt prepares only the bounded PR, CI, merge, release/no-release, and public-readback packet. It creates no workflow, authority path, promotion path, release decision variant, or GitHub mutation."
+  },
+  "pullRequestPacket": {
+    "template": ".github/PULL_REQUEST_TEMPLATE.md",
+    "targetBranch": "main",
+    "title": "CKS-07 deterministic empty-KB proof package",
+    "result": "Adds the bounded CKS-07 deterministic empty-KB proof contracts, fixtures, scorer, dry-run evidence, and reconciliation receipt already present on this branch.",
+    "relevantEvidence": [
+      "git diff --check main...HEAD",
+      "NODE_OPTIONS=--jitless npm run release-governance:verify",
+      "Existing bounded proof receipt: docs/evidence/conveyor/terra-psai287-root-qs-01.json"
+    ],
+    "securityRelevance": "None. This packet changes no authority, effects, network access, credentials, data handling, schemas, cleanup, or recovery behavior beyond the already bounded CKS-07 branch contents.",
+    "checklist": {
+      "focused": true,
+      "resultStatedHonestly": true,
+      "noCredentialsPersonalDataPrivatePromptsOrNonPublicArtifacts": true,
+      "forkRequiresNoProductionCredentials": true,
+      "failClosedAuthorityAndEvidenceBoundariesPreserved": true
+    },
+    "githubState": "NOT_CREATED"
+  },
+  "ciPacket": {
+    "workflow": ".github/workflows/ci.yml",
+    "trigger": "pull_request targeting main",
+    "runner": "ubuntu-latest",
+    "pinnedToolchain": {
+      "node": "24.14.1",
+      "npm": "11.16.0",
+      "dockerCompose": "2.40.3"
+    },
+    "declaredRequiredGates": [
+      "sha256sum --check SHA256SUMS",
+      "npm run release-governance:verify",
+      "npm run release-governance:test",
+      "npm ci --ignore-scripts --no-audit --no-fund",
+      "npm run lint",
+      "npm run supply-chain:verify",
+      "npm run proof:secure-default",
+      "npm test",
+      "npm run external-video-service:test",
+      "git diff --exit-code"
+    ],
+    "permissions": "contents: read",
+    "localConclusion": "CI_NOT_RUN; the authoritative CI run requires a created pull request and its pinned GitHub runner toolchain."
+  },
+  "artifactPathBoundary": {
+    "declared": "closure-audits/CLOSURE-PSAI287-ROOT-DELIVERY-01/**",
+    "comparison": "main...HEAD",
+    "changedPathCount": 47,
+    "insideBoundaryCount": 0,
+    "outsideBoundaryCount": 47,
+    "status": "BLOCKED",
+    "reason": "Every changed path is outside the declared boundary and no changed file is present under the allowlisted closure-audit path."
+  },
+  "mergePacket": {
+    "requiredInputs": [
+      "Created pull request targeting main",
+      "Authoritative CI completion",
+      "Repository review and protection checks",
+      "Explicit merge authority"
+    ],
+    "decision": "PENDING",
+    "reason": "No pull request, CI run, review, protection evaluation, or merge authority exists in this local pre-mutation scope.",
+    "remoteStateMutated": false
+  },
+  "releasePacket": {
+    "governanceSource": "release/governance.json",
+    "currentPublishedRelease": {
+      "tag": "v0.2.0-poc.20260825.1",
+      "title": "PanSphaira v0.2.0-poc.20260825.1 — canonical-number hardening",
+      "targetCommitish": "33d19f3e96ccc512038dbf06063f19489e067390",
+      "draft": false,
+      "prerelease": false,
+      "mustBeLatest": true
+    },
+    "requiredByRootDeliveryContract": true,
+    "decision": "RELEASE_REQUIRED_PENDING_AUTHORIZED_LATER_GATE",
+    "reason": "Release is mandatory for root-delivery closure but is neither authorized nor executed in this local scope; NO_RELEASE cannot satisfy the later ClosureConsumer gate.",
+    "remoteStateMutated": false
+  },
+  "publicReadbackPacket": {
+    "requiredByGovernance": true,
+    "command": "env -u GH_TOKEN npm run release-governance:public-readback",
+    "credentialMode": "ANONYMOUS_GH_TOKEN_UNSET",
+    "status": "BLOCKED_LOCAL_INFRASTRUCTURE",
+    "requiredForClosure": true,
+    "closureGateSatisfied": false,
+    "observedExitCode": 133,
+    "signal": "SIGTRAP",
+    "observedFailure": "V8 fatal SetPermissions check failed before public readback could run.",
+    "jitlessAlternative": {
+      "command": "env -u GH_TOKEN NODE_OPTIONS=--jitless npm run release-governance:public-readback",
+      "observedExitCode": 2,
+      "observedFailure": "fetch failed; cause: WebAssembly is not defined"
+    },
+    "claimBoundary": "No anonymous public-readback success is claimed. The controller must run this gate on the authoritative pinned-Node environment before any release-related decision."
+  },
+  "localVerification": {
+    "runtime": {
+      "command": "NODE_OPTIONS=--jitless node --version",
+      "observedOutput": "v24.19.0",
+      "comparisonToCiPinnedNode": "LOCAL_RUNTIME_DIFFERS_FROM_CI_PINNED_NODE_24.14.1"
+    },
+    "commands": [
+      {
+        "command": "git diff --check main...HEAD",
+        "observedExitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless npm run release-governance:verify",
+        "observedExitCode": 0,
+        "result": "RELEASE_GOVERNANCE_PASS"
+      }
+    ],
+    "infrastructureEvidence": "The local default Node runtime exits 133/SIGTRAP before public-readback. The --jitless workaround permits local release-governance validation but disables WebAssembly, so it cannot establish public-readback success. Neither outcome is a product verdict."
+  },
+  "publicSafeNonClaims": [
+    "No GitHub push, pull request creation, review, CI dispatch, merge, tag, release, asset upload, deployment, or publication was performed.",
+    "No successful remote CI, merge, release, deployment, production activation, or anonymous public readback is claimed.",
+    "No credential, personal data, private prompt, local path, or non-public artifact is included.",
+    "This receipt is bounded to the named local branch, comparison base, static workflow and template inspection, governance validation, and observed command outcomes.",
+    "Root-delivery closure and issue close remain blocked by the declared path-boundary violation and absent authoritative release, CI, public-readback, and exact-head receipts."
+  ],
+  "verdict": "CLOSURE_BLOCKED_PATH_BOUNDARY_RELEASE_CI_PUBLIC_READBACK_AND_ISSUE_CLOSE_PENDING"
+}

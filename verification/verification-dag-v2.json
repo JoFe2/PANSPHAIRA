@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 24,
+  "graphVersion": 25,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "56579613053387603bd66d7532c9233cbf5d8f2d4fbf41a3bccc1d07bd1b6dc0"
+          "sha256": "7ce8cfe1e6085542ed2f1a7573f6c459566b61ef4ea80fb68c13a91891b84105"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "87f0012d53ee7d379b028c4170e04e23a0f07d36e1cbf414bdf2d5956d2ff6b2"
+          "sha256": "802d5cbe8aa5531d1e27c746af806ee041452a9480c9811ad6c4052d1d8e8682"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "3955d71a229d149168e5f6d808f9060b4c0a54e28baf136e14ffc819688ae068"
+          "sha256": "b29350ef7e3e478c19fe6261dffe6acb9d3806e1113b3781fc0a0c766a637290"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "f9380b5a5e7ebc52eddbec8e8ef049d31b4e107bb60eb437082e6320915d0634"
+          "sha256": "16e3f42ac02b9602fab0951e8fbd00d43f4e215ad7df8fbfbc28bbc79857f924"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "aabffcebc58c0165ec324abae378e48ef873f077815196714ab4eb6ca905f327"
+          "sha256": "2bdd4c2e79f7e9f26bcac2714c3f73807d0548def7a22610557d436745b36686"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "a2a8c2c566fe048a308669f9ad78f56db2c9382d0d28caebb5d294e1026f6df0"
+          "sha256": "ab9b2414ea7c693519555df84d1fe9d07686741397ba81242e9940bc0d603f51"
         }
       ],
       "ownedTests": [
@@ -2952,6 +2952,261 @@
         "All comparative arms bind identical fresh task and Knowledge identities; closed-book arms receive no Knowledge bytes.",
         "Terminal failures, invalidated instrumentation, unavailable confidence intervals and stop conditions are preserved without replacement.",
         "No model-substitution or architecture-promotion claim is emitted unless quality and efficiency gates both pass."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-07-empty-kb-sufficiency-v1",
+      "dependsOn": [
+        "cks-02-local-knowledge-fabric-closure-v1",
+        "cks-05-comparative-falsification-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/development/cks-07-empty-kb-proof.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4fd735d7aa798853869bb481d33ca31e0af2330ec2d6e475f3150a34aba4471e"
+        },
+        {
+          "path": "docs/development/cks-07-public-readback.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "7fc9290f7944afadcc17b6b300b3571474555cec63687a6b38aaa006aa0d08fc"
+        },
+        {
+          "path": "docs/evidence/conveyor/int-psai287-pr-ci-package-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "46b45978a8468d5a101e9a9d0607f3d5eecc225f63e18211f9003d6aeeed7020"
+        },
+        {
+          "path": "docs/evidence/conveyor/psai287-owner-scope-decision-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9419d4ed0b0b83d8f7dc460458ead4a00b9509c3e569c893c39522709ba2d726"
+        },
+        {
+          "path": "docs/evidence/conveyor/sol-psai287-knowledge-sufficiency-decision-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d7517fa8600d6d454e7ca1da9127ebb96a9b0cdf250eb44449d522426d1ce13c"
+        },
+        {
+          "path": "docs/evidence/conveyor/sol-psai287-release-or-no-release-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "1fe25ad228a96d999e39db6da1fc1b27cc903210bae75ae1a29747e8c6043829"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai287-canonical-root-qs-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f5a9537a3d77b6b989d0bd377a3a245a7ba485bac4c4ce6078b6221b7cf6c423"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai287-root-qs-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a9b6fef0369d5cc844640d4c1a7ddadb1123a06bb21ee3cc1752fcccfa7605d0"
+        },
+        {
+          "path": "packages/contracts/src/cks-gap-acquisition.ts",
+          "role": "CONTRACT",
+          "sha256": "39851988e2476ba9de197ccee84206cfa79738a7d707a83e7047a3ba233a68c6"
+        },
+        {
+          "path": "packages/contracts/src/cks-knowledge-sufficiency.ts",
+          "role": "CONTRACT",
+          "sha256": "a369f16027379d05e1449ae11178de5df4effd12278f856f4c020c20773e800a"
+        },
+        {
+          "path": "packages/contracts/src/cks-requirement-analysis.ts",
+          "role": "CONTRACT",
+          "sha256": "1d61655dd6a212097372be47d791ced08ad6943d41c9bfcdeb235c38807a7703"
+        },
+        {
+          "path": "packages/contracts/src/cks-sufficiency-proof.ts",
+          "role": "CONTRACT",
+          "sha256": "af0f4111782427d26efd510f3ebfb9c8e18d413c4db5909f0aeb24fb48127f58"
+        },
+        {
+          "path": "schemas/contracts/cks-acquisition-plan-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "0aed764945e421970e0004e8c2366d3caea838b52c46cc263ea9da805e71c78e"
+        },
+        {
+          "path": "schemas/contracts/cks-empty-kb-case-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "b690aee38fcdfbaf4f7c014459ee629df21f1ea24fd64e9f4a711de0bfd3adbb"
+        },
+        {
+          "path": "schemas/contracts/cks-gap-acquisition-receipt-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "84219d0d8140c125e0b6bc98473b6db4f3c76372f79a1ba27d5716da54d3227c"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-gap-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "775df143d6dca29390571440ccddd4a6dbbeeefd09c339920995cd3705f5d2c9"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-need-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "a110686016b967691ec36a179d85700e041d657f43e1bea9d8df8f715025133e"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-sufficiency-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "b9896b1f18d3e0e29939b231a8eaba5f80708fa68af334231b83c01df63e8b4b"
+        },
+        {
+          "path": "schemas/contracts/cks-requirement-analysis-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "13daff285a9a764c33d730c84ad5db5d001abbeebb6fd46ffc45509cee8ec7b0"
+        },
+        {
+          "path": "schemas/contracts/cks-source-evidence-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "2577d2497f1747b4dd60992a003af365cf85bf70d2f81d1d3b8aa7847d150ed2"
+        },
+        {
+          "path": "schemas/contracts/cks-sufficiency-proof-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "9f352a505dfcd7f2e1d412f2f72e9de056fa50268c5ad8d393c437676f3a1810"
+        },
+        {
+          "path": "scripts/cks-07-score-empty-kb.mjs",
+          "role": "VALIDATOR",
+          "sha256": "bfa851a9cd482ba2a3d187596f0349b00537bc1919352fbd024daed1c3eb1d69"
+        },
+        {
+          "path": "scripts/cks-07-validate-public-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "b8f61e74da6b60d0f2daf7debc87e36d6b55a87e0834d1f2507bf9150e2c6fb4"
+        },
+        {
+          "path": "scripts/run-cks-07-empty-kb-dry-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "2eb45dbd45cee8f3437ee82c18156491c68bc1b89bda553e2de9ac20c167eafa"
+        },
+        {
+          "path": "tests/cks-07-empty-kb-dry-run.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9168b0ad9f980b7ec53492533cf4454aa2e56e5986b4beb2d11ac1ba3b43fff2"
+        },
+        {
+          "path": "tests/cks-07-empty-kb-metrics.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "7937029685345d74b463f7d83e04828e0dd6fe77c9539bd15fd4ee67d266fabb"
+        },
+        {
+          "path": "tests/cks-07-public-readback.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "2883cfc6f0c3e109f6c9997e8f3f0cd3506d10af7d8f361e37f301578b0d210c"
+        },
+        {
+          "path": "tests/cks-gap-acquisition.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "c843b8d407e97901f0fcb713eea23fc164b393c1ac0b444e6532e2790f14a2c8"
+        },
+        {
+          "path": "tests/cks-knowledge-sufficiency.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "e669fca6f7c7f0dfeaa80d2b8c4e0df0601ece9c4bb437841fabe3621cd9fcfd"
+        },
+        {
+          "path": "tests/cks-requirement-analysis.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "0b1bb0913f4e256f7d72a0b2934346588d9b1f8fff01da0d6afb8e07445cd6f3"
+        },
+        {
+          "path": "tests/cks-sufficiency-proof.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "9518d875d2a3d7a552212db86a6b0af9aeaec3d2a48a05045c04914399b482a9"
+        },
+        {
+          "path": "tests/fixtures/cks-07/contracts-invalid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "7e65dacd179726a32e00fe12c8509b531ef717da224b8a5ad6bcb156e8a79d57"
+        },
+        {
+          "path": "tests/fixtures/cks-07/contracts-valid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "1b0962871d76f84ab6bc1e260c0b41b474d2e6d87291d6b00c0540bf624f4b12"
+        },
+        {
+          "path": "tests/fixtures/cks-07/e2e-positive-evidence-v1.json",
+          "role": "FIXTURE",
+          "sha256": "27fe4e8b0e191108cb9d762f9029008e0de70871885f01f0d4767117588a01fa"
+        },
+        {
+          "path": "tests/fixtures/cks-07/e2e-rejections-v1.json",
+          "role": "FIXTURE",
+          "sha256": "23a656b8d7efae35c7c661ad9cba6339f4b0c350a544a7baaaae9ac309e6dacb"
+        },
+        {
+          "path": "tests/fixtures/cks-07/empty-kb-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "6095ef19924a27f340201c81a4fa79c561513de66aab0986f16e36eaf6b6b673"
+        },
+        {
+          "path": "tests/fixtures/cks-07/empty-kb-ground-truth-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f4c238846994f6e057edbc5eb166baddc26e1f6616872acf211ab619c5c80878"
+        },
+        {
+          "path": "tests/fixtures/cks-07/gap-acquisition-negative-v1.json",
+          "role": "FIXTURE",
+          "sha256": "e6a59265d3c83d1640c0e06cf7add3abd1ec4f6fe16950ddf8496b73769243fc"
+        },
+        {
+          "path": "tests/fixtures/cks-07/gap-acquisition-positive-v1.json",
+          "role": "FIXTURE",
+          "sha256": "6d6c91dd13c63168eeae47b07e60c8196c6df4610df5765535f25a2f927695c0"
+        },
+        {
+          "path": "tests/fixtures/cks-07/requirement-analysis-golden-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a1697b1b7d648d3d56b511aab0356090041e0942dce46185d6eff4a43a392eba"
+        },
+        {
+          "path": "tests/fixtures/cks-07/requirement-analysis-negative-v1.json",
+          "role": "FIXTURE",
+          "sha256": "eaa79dd16f6047d558ca98d33b220ce32ac4dc78b8add8ab92a9a77e2581c042"
+        },
+        {
+          "path": "tests/fixtures/cks-07/sufficiency-proof-negative-v1.json",
+          "role": "FIXTURE",
+          "sha256": "26f56a7fda9ad1e6babda985b59054b5a496e2f6ebd83664126b9781f7d8724c"
+        },
+        {
+          "path": "tests/fixtures/cks-07/sufficiency-proof-positive-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b8b0801a46ed7d111b22669d9d87a5831562308ac03ddf80dda9aceeac5e6fc3"
+        },
+        {
+          "path": "verification/cks-07-authorized-scope-readback-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "71c18673bc57bb2b34e148a7197dd5343b55a5f9ff2ef3c273475a5ac2c997c2"
+        },
+        {
+          "path": "verification/cks-07-empty-kb-dry-run-evidence-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8d9157726919a5038b6fe4e32f904fea427127aba46d40b30356821e17b619cf"
+        },
+        {
+          "path": "verification/cks-07-empty-kb-metrics-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ed475fe05d1cb9bde2307b31d6e450237d81664ec10a9a72302c00698d342f33"
+        },
+        {
+          "path": "verification/cks-07-public-readback-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "280c3f8ae255a881215e791f5c89d967114d814dcdf4c8317d49cf8034a9f715"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks07:test"
+      ],
+      "invariants": [
+        "P11 binds requirement recall, precision and critical misses to complete ground-truth requirements.",
+        "P12 exhausts A0 primary, A1 alternate query on the same retriever and A2 alternate retriever before declaring a Knowledge gap; acquisition never promotes candidates.",
+        "P13 compares the combined sufficiency process and simple solver on identical requirement, candidate and A0 receipt bytes.",
+        "No model, Internet source or candidate grants accepted Knowledge, capability or authority automatically."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI287-ROOT-DELIVERY-01",
+  "sourceIssue": {"repository":"JimPansky/PANSPHAIRA","number":287,"url":"https://github.com/JoFe2/PANSPHAIRA/issues/287"},
+  "baseCommit": "a7845839e0aaffd6b2f9a6f5867f5af1d6a51c4f",
+  "testedHead": "119b5563cd8a91ea8a11b53eb1031e72707a7ab3",
+  "testedTree": "cf450612097b21aa41a414364b59f7db4735f5d5",
+  "acceptance": {
+    "p11RequirementRecallPrecisionCriticalMisses": "PASS",
+    "p12AlternateQuerySameRetrieverThenAlternateRetriever": "PASS",
+    "acquisitionSeparateFromPromotion": "PASS",
+    "p13ComparatorExactInputParity": "PASS",
+    "falseCompletenessReduction": "PASS",
+    "finiteFailClosedStates": "PASS",
+    "internetOrModelAutomaticPromotion": "DENIED",
+    "effectfulAuthority": "NONE"
+  },
+  "gates": [
+    {"command":"npm test","outcome":"PASS","mainTests":642,"mainPassed":642},
+    {"command":"npm run cks07:test","outcome":"PASS","tests":36,"passed":36},
+    {"command":"node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs","outcome":"PASS","tests":78,"passed":78},
+    {"command":"sha256sum --check SHA256SUMS","outcome":"PASS","entries":1334},
+    {"command":"npm run release-governance:verify","outcome":"PASS"},
+    {"command":"npm run lint","outcome":"PASS"},
+    {"command":"git diff --check","outcome":"PASS"}
+  ],
+  "delivery": {"readyForPr":true,"releaseRequired":true,"publicReadbackRequired":true,"issueCloseRequired":true}
+}

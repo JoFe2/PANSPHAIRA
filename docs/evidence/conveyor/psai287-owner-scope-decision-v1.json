@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "pansphaira.evidence/psai287-owner-scope-decision/v1",
+  "taskId": "CLOSURE-PSAI287-EVIDENCE-RECOVERY-01",
+  "recordKind": "OWNER_SCOPE_DECISION_RECEIPT",
+  "decisionStatus": "RECORDED_FAIL_CLOSED_PENDING_CROSS_ISSUE_TERMINAL_RECEIPTS",
+  "scope": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "capability": "CKS-07",
+    "authorizedProofs": ["P11", "P12", "P13"],
+    "authorizedEvidenceClass": "PUBLIC_SAFE_LOCAL_SYNTHETIC_MODEL_DISABLED_FIXTURE_PROOF",
+    "authorizedExecution": {
+      "network": "OFFLINE_PROFILE_ONLY",
+      "model": "DISABLED",
+      "knowledgeMutation": "PROHIBITED",
+      "authorityGrant": "PROHIBITED",
+      "releaseMergeIssueCloseActivation": "PROHIBITED"
+    },
+    "outOfScope": [
+      "Internet retrieval or acquisition",
+      "model invocation or frozen-model evaluation",
+      "Knowledge acceptance, promotion, activation, or Authority",
+      "release, merge, issue close, deployment, or broad empirical claim"
+    ]
+  },
+  "preservedProcessContext": {
+    "controllerAttestationSource": "TASK_INSTRUCTION",
+    "operatingModel": { "id": "Operating Model v1.1", "treatment": "PRESERVED_UNCHANGED" },
+    "decisions": [
+      { "id": "D-001", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-002", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-003", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-004", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-005", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-006", "treatment": "PRESERVED_UNCHANGED" },
+      { "id": "D-007", "treatment": "PRESERVED_UNCHANGED" }
+    ],
+    "integrationRule": "This receipt preserves the existing process and decides only this bounded worker scope; it creates no process variant, acquisition exception, promotion path, Authority, or model authorization."
+  },
+  "reviewedBaseline": {
+    "publicMainRef": "refs/heads/main",
+    "publicMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "publicMainVerification": "git ls-remote --exit-code origin refs/heads/main",
+    "candidateBranch": "conveyor/pansphaira-287",
+    "candidateHeadBeforeThisReceipt": "acd220b194d08b319b18573e8f3fb09518da07f7",
+    "rebaseCommand": "git rebase main",
+    "rebaseResult": "UP_TO_DATE; main is an ancestor of the candidate head",
+    "comparisonCommand": "git diff --check main...HEAD"
+  },
+  "crossIssuePrerequisiteGuard": {
+    "requiredTerminalReceipts": [
+      { "issue": 281, "required": "IMMUTABLE_TERMINAL_RECEIPT_WITH_PATH_AND_SHA256", "providedToThisWorker": false, "state": "MISSING" },
+      { "issue": 282, "required": "IMMUTABLE_TERMINAL_RECEIPT_WITH_PATH_AND_SHA256", "providedToThisWorker": false, "state": "MISSING" },
+      { "issue": 283, "required": "IMMUTABLE_TERMINAL_RECEIPT_WITH_PATH_AND_SHA256", "providedToThisWorker": false, "state": "MISSING" },
+      { "issue": 284, "required": "IMMUTABLE_TERMINAL_RECEIPT_WITH_PATH_AND_SHA256", "providedToThisWorker": false, "state": "MISSING" },
+      { "issue": 285, "required": "IMMUTABLE_TERMINAL_RECEIPT_WITH_PATH_AND_SHA256", "providedToThisWorker": false, "state": "MISSING" }
+    ],
+    "ownerScopeReceipt": {
+      "path": "docs/evidence/conveyor/psai287-owner-scope-decision-v1.json",
+      "state": "RECORDED_IN_THIS_LOCAL_CANDIDATE",
+      "immutableTerminalBinding": "REQUIRES_THE_LOCAL_COMMIT_CONTAINING_THIS_FILE"
+    },
+    "failClosedRule": "Closure is NOT_READY if any issue #281 through #285 terminal receipt or this owner-scope receipt is absent, lacks an immutable path-and-digest binding, or is not terminal. No missing receipt may be inferred from a branch, narrative, Internet result, model result, or a successful local fixture run.",
+    "closureState": "NOT_READY",
+    "blockingPrerequisiteCount": 5
+  },
+  "evidenceClassification": {
+    "classification": "MODEL_DISABLED_FIXTURE_PROOF",
+    "isAuthorizedFrozenModelResult": false,
+    "reason": "The authorized scope fixes model=DISABLED. The nine synthetic cases are deterministic fixture inputs, not model outputs or competence-model performance observations.",
+    "generalizationProhibited": true
+  },
+  "nonClaims": [
+    "No cross-issue terminal receipt is fabricated or treated as resolved.",
+    "No Internet or model output is accepted Knowledge or Authority.",
+    "No release, merge, issue close, activation, deployment, or external mutation is performed or authorized.",
+    "No model competence, production fitness, corpus completeness, or broad empirical result is claimed."
+  ],
+  "verdict": "NOT_READY_CROSS_ISSUE_TERMINAL_RECEIPTS_MISSING"
+}

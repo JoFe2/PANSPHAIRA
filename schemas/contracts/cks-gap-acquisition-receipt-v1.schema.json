@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JoFe2/PANSPHAIRA/schemas/contracts/cks-gap-acquisition-receipt-v1.schema.json",
+  "title": "PANSPHAIRA CKS deterministic gap acquisition receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "receiptId", "needDigest", "knowledgeBundleDigest", "state", "gapClass", "requirementOutcome", "attempts", "acquisitionCandidates", "promotionStatus", "acceptedKnowledgeDigest", "authorityBoundary", "blockedReason", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cks/gap-acquisition-receipt/v1" },
+    "receiptId": { "$ref": "#/$defs/id" },
+    "needDigest": { "$ref": "#/$defs/digest" },
+    "knowledgeBundleDigest": { "$ref": "#/$defs/digest" },
+    "state": { "enum": ["RECOVERED", "NOT_APPLICABLE", "GAP_MISSING", "GAP_BAD_SOURCE", "GAP_APPLICABILITY", "GAP_CONFLICTING", "GAP_UNKNOWN_SEMANTIC", "BLOCKED"] },
+    "gapClass": { "enum": ["NONE", "MISSING", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC"] },
+    "requirementOutcome": { "enum": ["SATISFIED", "NOT_APPLICABLE", "GAP_MISSING", "GAP_BAD_SOURCE", "GAP_APPLICABILITY", "GAP_CONFLICTING", "GAP_UNKNOWN_SEMANTIC"] },
+    "attempts": { "type": "array", "maxItems": 3, "items": { "$ref": "#/$defs/attempt" } },
+    "acquisitionCandidates": { "type": "array", "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/acquisitionCandidate" } },
+    "promotionStatus": { "const": "NOT_REQUESTED" },
+    "acceptedKnowledgeDigest": { "const": null },
+    "authorityBoundary": { "const": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY" },
+    "blockedReason": { "type": ["string", "null"], "maxLength": 256 },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    { "if": { "properties": { "state": { "const": "RECOVERED" } }, "required": ["state"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "requirementOutcome": { "const": "SATISFIED" }, "blockedReason": { "const": null }, "acquisitionCandidates": { "type": "array", "maxItems": 0 } } } },
+    { "if": { "properties": { "state": { "const": "NOT_APPLICABLE" } }, "required": ["state"] }, "then": { "properties": { "gapClass": { "const": "NONE" }, "requirementOutcome": { "const": "NOT_APPLICABLE" }, "blockedReason": { "const": null }, "attempts": { "type": "array", "maxItems": 0 }, "acquisitionCandidates": { "type": "array", "maxItems": 0 } } } },
+    { "if": { "properties": { "state": { "const": "GAP_MISSING" } }, "required": ["state"] }, "then": { "properties": { "gapClass": { "const": "MISSING" }, "requirementOutcome": { "const": "GAP_MISSING" }, "blockedReason": { "const": null }, "attempts": { "type": "array", "minItems": 3, "maxItems": 3 } } } },
+    { "if": { "properties": { "state": { "const": "GAP_BAD_SOURCE" } }, "required": ["state"] }, "then": { "properties": { "gapClass": { "const": "BAD_SOURCE" }, "requirementOutcome": { "const": "GAP_BAD_SOURCE" }, "blockedReason": { "const": null } } } },
+    { "if": { "properties": { "state": { "const": "GAP_APPLICABILITY" } }, "required": ["state"] }, "then": { "properties": { "gapClass": { "const": "APPLICABILITY" }, "requirementOutcome": { "const": "GAP_APPLICABILITY" }, "blockedReason": { "const": null } } } },
+    { "if": { "properties": { "state": { "const": "GAP_CONFLICTING" } }, "required": ["state"] }, "then": { "properties": { "gapClass": { "const": "CONFLICTING" }, "requirementOutcome": { "const": "GAP_CONFLICTING" }, "blockedReason": { "const": null } } } },
+    { "if": { "properties": { "state": { "const": "GAP_UNKNOWN_SEMANTIC" } }, "required": ["state"] }, "then": { "properties": { "gapClass": { "const": "UNKNOWN_SEMANTIC" }, "requirementOutcome": { "const": "GAP_UNKNOWN_SEMANTIC" }, "blockedReason": { "const": null } } } },
+    { "if": { "properties": { "state": { "const": "BLOCKED" } }, "required": ["state"] }, "then": { "properties": { "blockedReason": { "type": "string", "minLength": 1 } } } }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "sourceClass": { "enum": ["ACTIVE_CURATED_KNOWLEDGE", "PINNED_OWNER_EVIDENCE", "PINNED_PRIMARY_EVIDENCE", "PINNED_SECONDARY_EVIDENCE", "INTERNET_RESULT", "MODEL_RESULT", "UNKNOWN_SOURCE"] },
+    "outcome": { "enum": ["QUALIFYING_MATCH", "NO_MATCH", "BAD_SOURCE", "APPLICABILITY", "CONFLICTING", "UNKNOWN_SEMANTIC", "BLOCKED"] },
+    "retrievalCandidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidateId", "sourceClass", "contentDigest", "evidenceDigest", "semanticStatus", "applicability", "conflictState", "disposition"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" }, "sourceClass": { "$ref": "#/$defs/sourceClass" }, "contentDigest": { "$ref": "#/$defs/digest" }, "evidenceDigest": { "$ref": "#/$defs/digest" },
+        "semanticStatus": { "enum": ["MATCH", "NO_MATCH", "UNKNOWN"] }, "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE", "UNKNOWN"] },
+        "conflictState": { "enum": ["NONE", "CONFLICTING"] }, "disposition": { "const": "RETRIEVAL_RESULT" }
+      }
+    },
+    "attempt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["level", "strategyId", "retrieverId", "outcome", "knowledgeBundleDigest", "candidates", "attemptDigest"],
+      "properties": {
+        "level": { "enum": ["A0", "A1", "A2"] }, "strategyId": { "type": "string", "minLength": 1, "maxLength": 128 }, "retrieverId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "outcome": { "$ref": "#/$defs/outcome" }, "knowledgeBundleDigest": { "$ref": "#/$defs/digest" }, "candidates": { "type": "array", "maxItems": 20, "items": { "$ref": "#/$defs/retrievalCandidate" } }, "attemptDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "acquisitionCandidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["level", "candidateId", "sourceClass", "contentDigest", "evidenceDigest", "provenance", "licence", "acceptanceStatus", "promotionStatus", "disposition", "authorityBoundary", "candidateDigest"],
+      "properties": {
+        "level": { "enum": ["A3", "A4", "A5"] }, "candidateId": { "$ref": "#/$defs/id" }, "sourceClass": { "enum": ["PINNED_OWNER_EVIDENCE", "PINNED_PRIMARY_EVIDENCE", "PINNED_SECONDARY_EVIDENCE", "INTERNET_RESULT", "MODEL_RESULT"] },
+        "contentDigest": { "$ref": "#/$defs/digest" }, "evidenceDigest": { "$ref": "#/$defs/digest" }, "provenance": { "type": "string", "minLength": 1, "maxLength": 2048 }, "licence": { "enum": ["CC0-1.0", "CC-BY-4.0", "APACHE-2.0", "MIT", "OWNER_AUTHORIZED", "UNKNOWN"] },
+        "acceptanceStatus": { "const": "NOT_ACCEPTED" }, "promotionStatus": { "const": "NOT_REQUESTED" }, "disposition": { "const": "NON_AUTHORITATIVE_CANDIDATE" },
+        "authorityBoundary": { "const": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY" }, "candidateDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}
