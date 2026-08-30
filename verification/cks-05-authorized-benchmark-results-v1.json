@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "pansphaira.cks05/authorized-benchmark-results/v1",
+  "taskId": "CLOSURE-PSAI285-EVIDENCE-RECOVERY-01",
+  "resultId": "CKS-05-AUTHORIZED-BENCHMARK-RESULTS-V1",
+  "recordedAt": "2026-08-29T05:30:56Z",
+  "verdict": "NOT_READY_FAIL_CLOSED",
+  "verdictRationale": "No owner execution authorization or real immutable terminal run receipt is present on the reviewed candidate. The repository's dry-run fixtures and deterministic scorer are excluded from this result and are not model invocations, benchmark runs, or architecture results.",
+  "governance": {
+    "operatingModelVersion": "Operating Model v1.1",
+    "preservedDecisionIds": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "processVariantIntroduced": false,
+    "authority": "NONE",
+    "releaseOrMergePerformed": false,
+    "broadEmpiricalClaimMade": false
+  },
+  "reviewedCandidate": {
+    "baseRef": "main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "candidateCommit": "dc8fca3587d9b8d2cabec88c82380bbe5339d74a",
+    "candidateBranch": "conveyor/pansphaira-285",
+    "rebaseReplay": {
+      "command": "git rebase main",
+      "status": "NOOP_CURRENT_BRANCH_ALREADY_BASED_ON_MAIN",
+      "mainIsAncestor": true,
+      "candidateCommitsAheadOfMain": 10
+    }
+  },
+  "protocolBinding": {
+    "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+    "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd",
+    "decisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+      "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a",
+      "executionAuthorization": "NOT_GRANTED_DESIGN_RECEIPT_ONLY"
+    },
+    "hiddenRunManifest": {
+      "path": "verification/cks-05-hidden-run-manifest-template-v1.json",
+      "sha256": "c9ae963f2cdff2a2c37dbb3f662b0148e6dcd366344ced3846c2a74ab913ca59",
+      "freshnessStatus": "FRESH_SYNTHETIC_HIDDEN",
+      "executionAuthorized": false,
+      "modelInvocation": false,
+      "writeRunArtifacts": false
+    },
+    "runRecordContract": {
+      "path": "verification/cks-05-run-record-template-v1.json",
+      "sha256": "d927d8fe15e4a838425ea82ed8e01d2a9a594980551066d85edaf7f9cef0ac32",
+      "terminalRecordsRequired": true,
+      "preservation": "APPEND_ONLY_NO_REPLACEMENT_RUNS"
+    }
+  },
+  "immutableProfiles": {
+    "smallModelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+    "largeModelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+    "runtimeProfileId": "RUNTIME-LLAMA_CPP-B10167-EE3D1B54-LINUX-X86_64-CPU-90097614",
+    "ownerAuthorizedForExecution": false,
+    "authorizationReceiptPresent": false,
+    "profileCompatibilityOrInvocationClaim": "NOT_MADE"
+  },
+  "scheduleReconciliation": {
+    "scheduledRunRecords": 960,
+    "scheduleAxes": {
+      "arms": ["ARM-LRF-01", "ARM-SRF-02", "ARM-LSF-03", "ARM-SSF-04", "ARM-SSG-05"],
+      "taskIds": 32,
+      "knowledgeEditions": ["K0_STATIC", "K1_UPDATED"],
+      "generationSeeds": [104729, 130363, 155921]
+    },
+    "terminalReceiptInventory": {
+      "realTerminalReceiptsFound": 0,
+      "syntheticOrDryRunReceiptsAdmitted": 0,
+      "duplicateReceipts": 0,
+      "driftedReceipts": 0,
+      "partiallyScheduledOutcomes": 0,
+      "missingTerminalReceipts": 960,
+      "inventoryStatus": "MISSING_ALL_REQUIRED_REAL_TERMINAL_RECEIPTS"
+    },
+    "byArm": {
+      "ARM-LRF-01": {"scheduled": 192, "terminalReceipts": 0, "completed": 0, "failed": 0, "invalidated": 0, "missing": 192},
+      "ARM-SRF-02": {"scheduled": 192, "terminalReceipts": 0, "completed": 0, "failed": 0, "invalidated": 0, "missing": 192},
+      "ARM-LSF-03": {"scheduled": 192, "terminalReceipts": 0, "completed": 0, "failed": 0, "invalidated": 0, "missing": 192},
+      "ARM-SSF-04": {"scheduled": 192, "terminalReceipts": 0, "completed": 0, "failed": 0, "invalidated": 0, "missing": 192},
+      "ARM-SSG-05": {"scheduled": 192, "terminalReceipts": 0, "completed": 0, "failed": 0, "invalidated": 0, "missing": 192}
+    },
+    "crossArmIdentity": {
+      "required": true,
+      "measured": false,
+      "status": "NOT_VERIFIABLE_WITHOUT_REAL_TERMINAL_RECEIPTS",
+      "requiredIdentityFields": ["taskId", "taskPromptCoreSha256", "goldRecordSha256", "evidenceGraphSha256", "editionId", "editionSha256", "canonicalFactInventorySha256", "generationSeed", "scenarioPairId", "domainId", "hopClass", "updateSensitivity"],
+      "contractDeclaredSameHiddenTasksAndKnowledgeEditions": true
+    }
+  },
+  "excludedNonExecutionEvidence": [
+    {
+      "path": "tests/fixtures/cks-05/executor-golden-v1.json",
+      "kind": "DETERMINISTIC_DRY_RUN_FIXTURE",
+      "scheduledFixtureRecords": 120,
+      "exclusionReason": "The executor source explicitly states that --dry-run replays supplied outcomes and does not acquire models or start services. It is not an authorized model invocation or benchmark result."
+    },
+    {
+      "path": "tests/fixtures/cks-05/scoring-golden-v1.json",
+      "kind": "DETERMINISTIC_SCORER_FIXTURE",
+      "scheduledFixtureRecords": 12,
+      "exclusionReason": "It is a closed scorer fixture, not a fresh-hidden scheduled run set and not a terminal execution receipt."
+    }
+  ],
+  "failureReconciliation": {
+    "realModelFailures": [],
+    "realInfrastructureInvalidations": [],
+    "failureCounts": {"modelFailures": 0, "infrastructureInvalidations": 0, "unclassified": 0},
+    "status": "NO_REAL_RUN_RECORDS_TO_CLASSIFY",
+    "localHarnessEvidence": {
+      "classification": "INFRASTRUCTURE_EVIDENCE_NOT_PRODUCT_VERDICT",
+      "code": "HARNESS_SIGTRAP_EXIT_133",
+      "appliesTo": "local Node process before test discovery only",
+      "doesNotMean": ["model invocation", "benchmark run", "model failure", "architecture result"]
+    }
+  },
+  "requiredABReports": [
+    {"reportId": "AB-MODEL-RAW", "family": "large-vs-small raw facts", "status": "PARTIAL_NO_CLAIM", "runCount": 0, "confidenceInterval": "CI_UNAVAILABLE", "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-MODEL-STRUCTURED", "family": "large-vs-small structured facts", "status": "PARTIAL_NO_CLAIM", "runCount": 0, "confidenceInterval": "CI_UNAVAILABLE", "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-STRUCTURED-VS-RAW-LARGE", "family": "structured-vs-raw large", "status": "PARTIAL_NO_CLAIM", "runCount": 0, "confidenceInterval": "CI_UNAVAILABLE", "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-STRUCTURED-VS-RAW-SMALL", "family": "structured-vs-raw small", "status": "PARTIAL_NO_CLAIM", "runCount": 0, "confidenceInterval": "CI_UNAVAILABLE", "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-FACTS-VS-GUIDANCE-SMALL", "family": "facts-vs-non-answer guidance small", "status": "PARTIAL_NO_CLAIM", "runCount": 0, "confidenceInterval": "CI_UNAVAILABLE", "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-STATIC-VS-UPDATED", "family": "K0_STATIC-vs-K1_UPDATED all arms", "status": "PARTIAL_NO_CLAIM", "runCount": 0, "confidenceInterval": "CI_UNAVAILABLE", "reason": "NO_REAL_TERMINAL_RECEIPTS"},
+    {"reportId": "AB-SINGLE-VS-MULTI-HOP", "family": "single-vs-multi-hop all arms and editions", "status": "PARTIAL_NO_CLAIM", "runCount": 0, "confidenceInterval": "CI_UNAVAILABLE", "reason": "NO_REAL_TERMINAL_RECEIPTS"}
+  ],
+  "criterionMatrix": [
+    {"criterion": "Owner authorization binds exact immutable profiles and fresh-hidden execution", "status": "NOT_READY", "evidence": "Design receipt executionAuthorization=NOT_GRANTED_DESIGN_RECEIPT_ONLY; no authorization receipt exists."},
+    {"criterion": "Every scheduled arm/task/edition/seed has one real terminal receipt", "status": "NOT_READY", "evidence": "0 of 960 real terminal receipts found; 960 missing."},
+    {"criterion": "Identical hidden/fresh tasks and Knowledge versions are demonstrated across arms", "status": "NOT_READY", "evidence": "The contract declares the invariant, but no real paired receipts exist to reconcile it."},
+    {"criterion": "Required A/B families are measured with run counts and confidence intervals", "status": "NOT_READY", "evidence": "All seven required reports are emitted as PARTIAL_NO_CLAIM with runCount=0 and CI_UNAVAILABLE."},
+    {"criterion": "Failures and invalidations are preserved without synthetic replacement", "status": "NOT_READY", "evidence": "No real run records exist; dry-run fixture outcomes are explicitly excluded."},
+    {"criterion": "Stop conditions can falsify or simplify architecture", "status": "NOT_READY", "evidence": "STOP-07 and FALSIFY-SUBSTITUTION deny claims; simplification decisions remain blocked until complete valid evidence."},
+    {"criterion": "Model substitution remains ineligible unless quality and efficiency pass", "status": "PASS_FAIL_CLOSED", "evidence": "qualityGate=false, efficiencyGate=false, allQualityAndEfficiencyThresholdsPass=false, modelSubstitutionClaim=false."}
+  ],
+  "stopAndSimplificationApplication": {
+    "triggeredRuleIds": ["STOP-01-PROFILE-COMPETENCE", "STOP-07-NO-EARLY-SUCCESS", "FALSIFY-SUBSTITUTION"],
+    "reasonCodes": ["EXECUTION_AUTHORIZATION_NOT_GRANTED", "MISSING_REAL_TERMINAL_RECEIPTS", "CI_UNAVAILABLE", "QUALITY_AND_EFFICIENCY_NOT_PROVEN"],
+    "simplificationDecisions": [
+      "SIMPLIFY-STRUCTURE=BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE",
+      "SIMPLIFY-GUIDANCE=BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE",
+      "SIMPLIFY-UPDATES=BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE",
+      "SIMPLIFY-MULTI-HOP=BLOCKED_UNTIL_COMPLETE_VALID_EVIDENCE"
+    ],
+    "architectureQualityVerdict": "NOT_EVALUABLE",
+    "substitutionClaimVerdict": "DENY"
+  },
+  "claimGate": {
+    "gateId": "L6-MODEL-SUBSTITUTION",
+    "status": "DENY",
+    "modelSubstitutionClaim": false,
+    "qualityThresholdsPass": false,
+    "efficiencyThresholdsPass": false,
+    "allQualityAndEfficiencyThresholdsPass": false,
+    "reasonCodes": ["NOT_EXECUTED", "EXECUTION_AUTHORIZATION_NOT_GRANTED", "MISSING_REAL_TERMINAL_RECEIPTS", "CI_UNAVAILABLE", "LOCAL_NODE_SIGTRAP_EXIT_133"],
+    "passingWording": null
+  },
+  "terminalVerificationReceipts": [
+    {"command": "npm run build --silent", "runtimeMilliseconds": 59, "exitCode": 133, "outputSha256": "2b731a211c90b7836885a3c8b26ddd97b1bb0e40576dcbc86645213490f6e6a1", "outputByteCount": 1504, "status": "INFRASTRUCTURE_BLOCKED_BEFORE_BUILD", "productVerdict": "NOT_AVAILABLE"},
+    {"command": "git diff --check main...HEAD", "runtimeMilliseconds": 4, "exitCode": 0, "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "outputByteCount": 0, "status": "PASS"},
+    {"command": "node --test tests/cks-05-benchmark-contract.test.mjs tests/cks-05-hidden-runner.test.mjs tests/cks-05-metrics-statistics.test.mjs tests/cks-05-benchmark-executor.test.mjs tests/cks-05-replay-readback.test.mjs", "runtimeMilliseconds": 57, "exitCode": 133, "outputSha256": "34d871cbd4d63e5458f2ccab6c4664d25297f0624d69ad2fac6482e57a1bf24e", "outputByteCount": 1428, "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY", "productVerdict": "NOT_AVAILABLE"},
+    {"command": "git ls-files | grep -E \"(^verification/cks-05|psai285.*(result|report)|terminal|run-record)\"; git log --all --name-only --format= | grep -E \"cks-05-authorized-benchmark-results|psai285-measured-benchmark-report|terra-psai285-canonical-root-qs\" | sort -u", "runtimeMilliseconds": 16, "exitCode": 0, "outputSha256": "374de240c08d346ea6ecad950043881f9be8a56beb9e90c2e6eabe775b8817f1", "outputByteCount": 158, "status": "PASS_NO_PRIOR_RESULT_ARTIFACT_OR_REAL_TERMINAL_RECEIPTS_FOUND"}
+  ]
+}

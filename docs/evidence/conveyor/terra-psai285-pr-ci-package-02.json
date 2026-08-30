@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "pansphaira.evidence/conveyor-pr-ci-merge-readback-package/v1",
+  "taskId": "TERRA-PSAI285-PR-CI-PACKAGE-02",
+  "receiptId": "TERRA-PSAI285-PR-CI-PACKAGE-02",
+  "recordedAt": "2026-08-28T21:19:22Z",
+  "decision": "PACKAGE_COMPLETE_LOCAL_GATE_HELD",
+  "decisionRationale": [
+    "The pull-request, CI, merge, and post-merge readback steps are fully bounded before any GitHub mutation, and the package preserves Operating Model v1.1 decisions D-001 through D-007 without adding authority or a process variant.",
+    "The repository-relative range is clean under git diff --check origin/main...HEAD and origin/main is an ancestor of the prepared head.",
+    "The local Node 24.19.0 test process failed before test discovery with exit 133/SIGTRAP during V8 Isolate initialization. Consequently, no local product-test success, CI success, merge success, or GitHub readback is claimed. The authoritative pinned-Node and host-Docker CI gates remain required."
+  ],
+  "governance": {
+    "operatingModelVersion": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "authority": "NONE",
+    "executionAuthorization": "NOT_GRANTED",
+    "githubMutationAuthorization": "NOT_GRANTED",
+    "githubMutationsPerformed": {
+      "push": false,
+      "pullRequestCreate": false,
+      "pullRequestUpdate": false,
+      "merge": false,
+      "release": false,
+      "remoteReadback": false
+    }
+  },
+  "binding": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "baseRef": "origin/main",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headRef": "conveyor/pansphaira-285",
+    "preparedHeadCommit": "78bb0471111379d629ffb32e4e90d70f433847cb",
+    "preparedCommitCountAheadOfBase": 9,
+    "baseIsAncestorOfPreparedHead": true,
+    "sourceIntegrationReceipt": {
+      "path": "docs/evidence/conveyor/terra-psai285-integration-root-qs-01.json",
+      "sha256": "ba8660d75e886dd70ea775b8bc925763bac64aedb24eca77882177e8d3103f6d",
+      "decision": "INTEGRATION_HOLD_PINNED_NODE_REQUIRED"
+    }
+  },
+  "pullRequestPackage": {
+    "status": "PREPARED_NOT_CREATED",
+    "base": "main",
+    "head": "conveyor/pansphaira-285",
+    "proposedTitle": "docs: add PSAI285 PR/CI package receipt",
+    "templateBinding": {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "sha256": "deec68918022452012f00abeb2d6b5578a3763a02320139ce074bf124b61c608"
+    },
+    "requiredBodyFacts": {
+      "result": "Bounded PR/CI/merge/readback package prepared; local product-test result is infrastructure-blocked and no product success is claimed.",
+      "relevantEvidence": [
+        "git diff --check origin/main...HEAD: PASS",
+        "origin/main is an ancestor of prepared HEAD: PASS",
+        "five selected CKS-05 tests: NOT_EXECUTED; local Node exited 133/SIGTRAP before test discovery"
+      ],
+      "securityRelevance": "None. This receipt changes no authority, effects, network access, credentials, data handling, schemas, cleanup, or recovery behavior.",
+      "scope": "The comparison range is origin/main...preparedHeadCommit; this receipt is the only change authored by this task."
+    },
+    "creationPreconditions": [
+      "The locally committed receipt is the exact branch head selected for the PR.",
+      "The PR base is main and the PR head is conveyor/pansphaira-285.",
+      "The PR description contains the requiredBodyFacts without claiming blocked checks as passing.",
+      "A GitHub-authorized actor performs the mutation; this receipt grants no credential or mutation authority."
+    ]
+  },
+  "ciPackage": {
+    "status": "CONFIGURATION_BOUND_AWAITING_AUTHORITATIVE_RUN",
+    "workflowBindings": [
+      {
+        "path": ".github/workflows/ci.yml",
+        "sha256": "1e65bb9ebb3c5ced4b871a0523d830a6de724743c27872a7538b8f13c448d92e",
+        "pullRequestTarget": "main",
+        "job": "validate",
+        "jobName": "Build, test and verify",
+        "pinnedNodeVersion": "24.14.1",
+        "pinnedNpmVersion": "11.16.0",
+        "authoritativeCommands": [
+          "sha256sum --check SHA256SUMS",
+          "npm run release-governance:verify",
+          "npm run release-governance:test",
+          "npm ci --ignore-scripts --no-audit --no-fund",
+          "npm run lint",
+          "npm run supply-chain:verify",
+          "npm run proof:secure-default",
+          "npm test",
+          "npm run external-video-service:test",
+          "git diff --exit-code"
+        ],
+        "hostDockerRequirement": "The workflow downloads and checksum-verifies Docker Compose v2.40.3 before invoking docker compose version."
+      },
+      {
+        "path": ".github/workflows/docs-pages.yml",
+        "sha256": "9d4ce3ce2b2ceeb992b6f31ebfd9e7e0fbcd8ff5b4e9b40c1888c11c71be55cf",
+        "pullRequestTarget": "main",
+        "job": "build",
+        "jobName": "Build and verify curated site",
+        "pinnedNodeVersion": "24.14.1",
+        "pinnedNpmVersion": "11.16.0",
+        "authoritativeCommands": [
+          "npm ci --ignore-scripts --no-audit --no-fund",
+          "npm run docs:test"
+        ],
+        "expectedPullRequestEffect": "The docs path triggers the build job; deployment remains excluded because deploy is restricted to main non-pull-request events."
+      }
+    ],
+    "requiredSuccessEvidence": [
+      "The authoritative CI validate job completes successfully for the exact PR head.",
+      "The authoritative Documentation Pages build job completes successfully for the exact PR head.",
+      "CI confirms tests did not modify tracked files.",
+      "Any failed, cancelled, missing, stale, or head-mismatched check is not success evidence and blocks merge authorization."
+    ]
+  },
+  "mergeAndReadbackPackage": {
+    "mergeStatus": "NOT_AUTHORIZED_NOT_EXECUTED",
+    "mergePreconditions": [
+      "An authorized GitHub actor confirms the pull request is bound to base main and the exact reviewed head.",
+      "Every requiredSuccessEvidence item is present for that exact head.",
+      "Any repository protection, review, or policy requirement reported by GitHub is satisfied by its designated authority.",
+      "The source integration hold is resolved only by the authoritative pinned-Node and host-Docker evidence; local SIGTRAP is neither a product pass nor a product failure."
+    ],
+    "postMergeReadback": {
+      "status": "NOT_EXECUTED",
+      "requiredAuthoritativeFields": [
+        "pull request identifier and terminal state MERGED",
+        "base ref main",
+        "reviewed head commit and resulting merge commit",
+        "authoritative CI workflow/job conclusions bound to the reviewed head",
+        "main branch tip resolves to the resulting merge commit or the repository's recorded equivalent merge result"
+      ],
+      "failClosedRule": "Absent, ambiguous, stale, cancelled, failed, or mismatched GitHub readback leaves the package unmerged and does not permit a merge, release, or success claim."
+    }
+  },
+  "localValidation": {
+    "gitDiffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS",
+      "output": ""
+    },
+    "ancestryCheck": {
+      "command": "git merge-base --is-ancestor origin/main HEAD",
+      "status": "PASS"
+    },
+    "nodeExecution": {
+      "nodeVersionCommand": "node --version",
+      "nodeVersionOutput": "v24.19.0",
+      "selectedTestsCommand": "node --test tests/cks-05-benchmark-contract.test.mjs tests/cks-05-hidden-runner.test.mjs tests/cks-05-metrics-statistics.test.mjs tests/cks-05-benchmark-executor.test.mjs tests/cks-05-replay-readback.test.mjs",
+      "status": "INFRASTRUCTURE_BLOCKED_BEFORE_TEST_DISCOVERY",
+      "exitCode": 133,
+      "evidence": "V8 Isolate initialization failed with Check failed: 12 == (*__errno_location ()); the shell reported Trace/Breakpoint trap. No test body was reached.",
+      "productVerdict": "NOT_AVAILABLE"
+    },
+    "localPackageVerdict": "STATIC_PACKAGE_VALIDATED_PRODUCT_GATES_HELD"
+  },
+  "claimGuard": {
+    "status": "DENY_SUCCESS_CLAIM",
+    "reasonCodes": [
+      "LOCAL_NODE_SIGTRAP_EXIT_133",
+      "AUTHORITATIVE_CI_NOT_RUN",
+      "PULL_REQUEST_NOT_CREATED",
+      "MERGE_NOT_AUTHORIZED",
+      "GITHUB_READBACK_NOT_EXECUTED"
+    ],
+    "permittedConclusion": "Only that this bounded PR/CI/merge/readback package and its static local checks were prepared. No product-test pass, CI pass, PR creation, merge, release, model quality, model substitution, or GitHub readback conclusion follows."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "fabricId": "CKS05-RAW-FABRIC-PARITY-V1",
+  "fabricVersion": "v1",
+  "taskId": "PSAI285-L3-ABLATION-ARM-BUILDER",
+  "protocol": {
+    "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+    "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd",
+    "decisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+      "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a"
+    }
+  },
+  "l1Manifest": {
+    "path": "tests/fixtures/cks-05/benchmark-manifest-valid-v1.json",
+    "manifestId": "CKS-05-BENCHMARK-MANIFEST-V1-PSAI285-L1-20260828"
+  },
+  "parityRule": "SAME_CANONICAL_ATOMIC_FACT_INVENTORY_DIGEST_AND_EVIDENCE_IDS_FOR_RAW_AND_STRUCTURED_RENDERINGS_PER_EDITION",
+  "evidenceIdSetDerivation": "evidenceIdSetSha256 = sha256('CKS05-EVIDENCE-IDS-V1|<protocolDigestSha256>|<editionId>|<canonicalFactInventorySha256>')",
+  "editions": [
+    {
+      "editionId": "K0_STATIC",
+      "role": "FROZEN_PRE_UPDATE",
+      "editionSha256": "e009caeac47f1e2c09516fc30ad2a8c973653a97ebc628428c4da965274ee81e",
+      "canonicalFactInventorySha256": "e750887f25ce12f3dbb33f917213b6e1223d00464f523508a26240651bf4b3a2",
+      "evidenceIdSetSha256": "d5cb929482784f614fea6e1a3bc17df1f3c8b680f628183ee0b22de76b5c94b2",
+      "rawRenderingSha256": "c40b7a486bd7dcc048a3e56fe18faecba652f52894bfc3cd9bd2195ca02b35ed",
+      "structuredRenderingSha256": "32d9e8367f38e94f08d3f15e61848a6674faac2630319255120e8a6555602413",
+      "factParityReceiptSha256": "ddf3fc81c33aab02f599262d0277074f3e8d0f63a2156e428c032f38211dd741",
+      "sameAtomicFactInventoryDigest": true,
+      "sameEvidenceIds": true,
+      "rawAndStructuredDifferOnlyInRepresentation": true
+    },
+    {
+      "editionId": "K1_UPDATED",
+      "role": "FROZEN_POST_UPDATE",
+      "editionSha256": "d5d1cdaf61c8d5fcd9fbd3d64c8a05fb06cb04dbed80a177eaf2884c2e97d19a",
+      "canonicalFactInventorySha256": "1772fb71a803f1bf49b50dbbdc4aad25e265db48aa84cac15524a13056b8aa7f",
+      "evidenceIdSetSha256": "cc7a4c1bd3e1cb85980c2c73d33e6efa488778c2d0937286588fd38db923cdb0",
+      "rawRenderingSha256": "def3022318fc11c8d39b5bd2ca1ee2d4861be08775d55a6a4e098a0d5c307ee3",
+      "structuredRenderingSha256": "918447abb6f9e63c13424938e9446a2212b732b31e366eccc94cf0cff559b647",
+      "factParityReceiptSha256": "572bf0b1d8f2a066fcc8ab52bbdfd18c6ed8b129d68d0e88eecbb432e197008f",
+      "sameAtomicFactInventoryDigest": true,
+      "sameEvidenceIds": true,
+      "rawAndStructuredDifferOnlyInRepresentation": true
+    }
+  ],
+  "guidance": {
+    "artifactSha256": "7cf7b287c35db26fcaca63a620067950a90c0ef533fccf8c5b8174e005efd567",
+    "leakageAuditSha256": "ff28a2c58fc82d25330837814f8da052a493c591a349cf842a41ff3940761446",
+    "nonAnswerOnly": true,
+    "answerContentLeakage": false,
+    "appliedToArms": [
+      "ARM-SSG-05"
+    ]
+  },
+  "publicSafe": {
+    "rawKnowledgeBytesPublished": false,
+    "rawRenderingBytesPublished": false,
+    "sealedDigestsOnly": true
+  },
+  "fabricDigestSha256": "8423dee1fbfa9c79a105edfec09aad588b0958a707a819375439f2d3360508c2"
+}

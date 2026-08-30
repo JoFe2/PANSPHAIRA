@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "chimpmaera.cks05/executor-fixture/v1",
+  "fixtureId": "CKS05-EXECUTOR-GOLDEN-V1",
+  "protocol": {
+    "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+    "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd"
+  },
+  "freshDomain": {
+    "freshnessStatus": "FRESH_SYNTHETIC_HIDDEN",
+    "partitionId": "CKS05-EXECUTOR-FRESH-PARTITION-V1",
+    "sameTaskPartitionAcrossArms": true,
+    "sameKnowledgeEditionsAcrossArms": true,
+    "knowledgeEditions": [
+      { "editionId": "K0_STATIC", "editionSha256": "e009caeac47f1e2c09516fc30ad2a8c973653a97ebc628428c4da965274ee81e", "canonicalFactInventorySha256": "e750887f25ce12f3dbb33f917213b6e1223d00464f523508a26240651bf4b3a2" },
+      { "editionId": "K1_UPDATED", "editionSha256": "d5d1cdaf61c8d5fcd9fbd3d64c8a05fb06cb04dbed80a177eaf2884c2e97d19a", "canonicalFactInventorySha256": "1772fb71a803f1bf49b50dbbdc4aad25e265db48aa84cac15524a13056b8aa7f" }
+    ]
+  },
+  "generation": { "seeds": [104729, 130363, 155921] },
+  "schedule": {
+    "expectedRunCount": 120,
+    "blockingUnit": "armId x taskId x editionId x generationSeed",
+    "pairingUnit": "taskId x editionId x generationSeed",
+    "seedsAreRepeatedObservations": true,
+    "noReplacementRuns": true
+  },
+  "arms": [
+    { "armId": "ARM-LRF-01", "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA", "knowledgeRepresentation": "RAW", "knowledgePayload": "FACTS_ONLY", "editions": ["K0_STATIC", "K1_UPDATED"] },
+    { "armId": "ARM-SRF-02", "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A", "knowledgeRepresentation": "RAW", "knowledgePayload": "FACTS_ONLY", "editions": ["K0_STATIC", "K1_UPDATED"] },
+    { "armId": "ARM-LSF-03", "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA", "knowledgeRepresentation": "STRUCTURED", "knowledgePayload": "FACTS_ONLY", "editions": ["K0_STATIC", "K1_UPDATED"] },
+    { "armId": "ARM-SSF-04", "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A", "knowledgeRepresentation": "STRUCTURED", "knowledgePayload": "FACTS_ONLY", "editions": ["K0_STATIC", "K1_UPDATED"] },
+    { "armId": "ARM-SSG-05", "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A", "knowledgeRepresentation": "STRUCTURED", "knowledgePayload": "FACTS_AND_NON_ANSWER_GUIDANCE", "editions": ["K0_STATIC", "K1_UPDATED"] }
+  ],
+  "tasks": [
+    {
+      "taskId": "TASK-AST-01-01", "scenarioPairId": "PAIR-AST-01", "domainId": "SYN-ASTER-LOGISTICS", "hopClass": "SINGLE_HOP", "updateSensitivity": "UPDATE_SENSITIVE", "taskPromptCoreSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "editions": {
+        "K0_STATIC": { "goldRecordSha256": "2111111111111111111111111111111111111111111111111111111111111111", "evidenceGraphSha256": "3111111111111111111111111111111111111111111111111111111111111111", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } },
+        "K1_UPDATED": { "goldRecordSha256": "4111111111111111111111111111111111111111111111111111111111111111", "evidenceGraphSha256": "5111111111111111111111111111111111111111111111111111111111111111", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } }
+      }
+    },
+    {
+      "taskId": "TASK-AST-02-01", "scenarioPairId": "PAIR-AST-01", "domainId": "SYN-ASTER-LOGISTICS", "hopClass": "MULTI_HOP", "updateSensitivity": "UPDATE_SENSITIVE", "taskPromptCoreSha256": "1222222222222222222222222222222222222222222222222222222222222222",
+      "editions": {
+        "K0_STATIC": { "goldRecordSha256": "2222222222222222222222222222222222222222222222222222222222222222", "evidenceGraphSha256": "3222222222222222222222222222222222222222222222222222222222222222", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } },
+        "K1_UPDATED": { "goldRecordSha256": "4222222222222222222222222222222222222222222222222222222222222222", "evidenceGraphSha256": "5222222222222222222222222222222222222222222222222222222222222222", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } }
+      }
+    },
+    {
+      "taskId": "TASK-BOR-01-01", "scenarioPairId": "PAIR-BOR-01", "domainId": "SYN-BOREALIS-MAINTENANCE", "hopClass": "SINGLE_HOP", "updateSensitivity": "UPDATE_SENSITIVE", "taskPromptCoreSha256": "1333333333333333333333333333333333333333333333333333333333333333",
+      "editions": {
+        "K0_STATIC": { "goldRecordSha256": "2333333333333333333333333333333333333333333333333333333333333333", "evidenceGraphSha256": "3333333333333333333333333333333333333333333333333333333333333333", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } },
+        "K1_UPDATED": { "goldRecordSha256": "4333333333333333333333333333333333333333333333333333333333333333", "evidenceGraphSha256": "5333333333333333333333333333333333333333333333333333333333333333", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } }
+      }
+    },
+    {
+      "taskId": "TASK-BOR-02-01", "scenarioPairId": "PAIR-BOR-01", "domainId": "SYN-BOREALIS-MAINTENANCE", "hopClass": "MULTI_HOP", "updateSensitivity": "UPDATE_SENSITIVE", "taskPromptCoreSha256": "1444444444444444444444444444444444444444444444444444444444444444",
+      "editions": {
+        "K0_STATIC": { "goldRecordSha256": "2444444444444444444444444444444444444444444444444444444444444444", "evidenceGraphSha256": "3444444444444444444444444444444444444444444444444444444444444444", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } },
+        "K1_UPDATED": { "goldRecordSha256": "4444444444444444444444444444444444444444444444444444444444444444", "evidenceGraphSha256": "5444444444444444444444444444444444444444444444444444444444444444", "gold": { "atomicFactIds": ["F-1", "F-2"], "evidenceIds": ["E-1", "E-2"], "applicabilityByFact": { "F-1": true, "F-2": true }, "expectedAbstain": false, "conflictIds": ["C-1"], "staleFactIds": [], "updateRequiredFactIds": ["F-2"], "guidanceConstraintIds": ["G-1"], "escalationRequired": false } }
+      }
+    }
+  ],
+  "response": {
+    "answerClaims": [
+      { "factId": "F-1", "material": true, "evidenceIds": ["E-1"], "applicable": true },
+      { "factId": "F-2", "material": true, "evidenceIds": ["E-2"], "applicable": true }
+    ],
+    "evidenceIds": ["E-1", "E-2"],
+    "finalAnswer": "The approved facts apply.",
+    "abstained": false,
+    "guidanceConstraintsPassed": ["G-1"],
+    "conflictIds": ["C-1"],
+    "multiHopPathCorrect": true,
+    "criticalViolationCodes": [],
+    "metrics": { "retrievalLatencyMs": 3, "modelLatencyMs": 81, "timeToFirstTokenMs": 10, "timeToFinalMs": 111, "promptTokens": 100, "generatedTokens": 20, "decodeTokensPerSecond": 220, "memoryBytes": 1000, "peakResidentBytes": 1100, "throughputTokensPerSecond": 180, "resourceSampleCoverage": 1 },
+    "escalation": { "escalated": false, "quality": 1, "cost": 0 }
+  },
+  "outcomes": [
+    { "armId": "ARM-LRF-01", "taskId": "TASK-AST-01-01", "editionId": "K0_STATIC", "generationSeed": 104729, "terminalStatus": "FAILED", "failureCodeOrNull": "TIMEOUT" },
+    { "armId": "ARM-LRF-01", "taskId": "TASK-AST-01-01", "editionId": "K0_STATIC", "generationSeed": 130363, "terminalStatus": "FAILED", "failureCodeOrNull": "TIMEOUT" },
+    { "armId": "ARM-LRF-01", "taskId": "TASK-AST-01-01", "editionId": "K0_STATIC", "generationSeed": 155921, "terminalStatus": "FAILED", "failureCodeOrNull": "TIMEOUT" },
+    { "armId": "ARM-LSF-03", "taskId": "TASK-AST-02-01", "editionId": "K0_STATIC", "generationSeed": 104729, "terminalStatus": "INVALIDATED", "failureCodeOrNull": "DOCKER_ENOENT" },
+    { "armId": "ARM-LSF-03", "taskId": "TASK-AST-02-01", "editionId": "K0_STATIC", "generationSeed": 130363, "terminalStatus": "INVALIDATED", "failureCodeOrNull": "DOCKER_ENOENT" },
+    { "armId": "ARM-LSF-03", "taskId": "TASK-AST-02-01", "editionId": "K0_STATIC", "generationSeed": 155921, "terminalStatus": "INVALIDATED", "failureCodeOrNull": "DOCKER_ENOENT" },
+    { "armId": "ARM-LRF-01", "taskId": "TASK-BOR-01-01", "editionId": "K0_STATIC", "generationSeed": 104729, "terminalStatus": "FAILED", "failureCodeOrNull": "TIMEOUT" },
+    { "armId": "ARM-LRF-01", "taskId": "TASK-BOR-01-01", "editionId": "K0_STATIC", "generationSeed": 130363, "terminalStatus": "FAILED", "failureCodeOrNull": "TIMEOUT" },
+    { "armId": "ARM-LRF-01", "taskId": "TASK-BOR-01-01", "editionId": "K0_STATIC", "generationSeed": 155921, "terminalStatus": "FAILED", "failureCodeOrNull": "TIMEOUT" }
+  ],
+  "decisionRules": ["SIMPLIFY-STRUCTURE", "SIMPLIFY-GUIDANCE", "SIMPLIFY-UPDATES", "SIMPLIFY-MULTI-HOP"]
+}

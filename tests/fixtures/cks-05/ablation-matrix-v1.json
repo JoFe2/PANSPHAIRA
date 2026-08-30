@@ -1,0 +1,479 @@
+{
+  "matrixId": "CKS05-ABLATION-MATRIX-V1",
+  "matrixVersion": "v1",
+  "taskId": "PSAI285-L3-ABLATION-ARM-BUILDER",
+  "operatingModel": {
+    "version": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false
+  },
+  "protocol": {
+    "protocolId": "PSAI285-BENCHMARK-PROTOCOL-01",
+    "protocolDigestSha256": "6cb74f218a60ab8309aae5a0250196981778f412a6ab8b534162aa68d0e12ecd",
+    "decisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+      "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a"
+    }
+  },
+  "l1Manifest": {
+    "path": "tests/fixtures/cks-05/benchmark-manifest-valid-v1.json",
+    "manifestId": "CKS-05-BENCHMARK-MANIFEST-V1-PSAI285-L1-20260828"
+  },
+  "l2Template": {
+    "path": "verification/cks-05-hidden-run-manifest-template-v1.json",
+    "templateId": "CKS-05-HIDDEN-RUN-MANIFEST-TEMPLATE-V1",
+    "partitionDigestSha256": "42aceffe4fad4a4267f457fac0df24220814e78b8196f4e0eaa2cd9e0554c77b"
+  },
+  "parityFabric": {
+    "path": "tests/fixtures/cks-05/raw-fabric-parity-v1.json",
+    "fabricId": "CKS05-RAW-FABRIC-PARITY-V1"
+  },
+  "executionMode": {
+    "mode": "EPHEMERAL_IN_MEMORY",
+    "persistedArmInputs": false,
+    "modelInvocation": false,
+    "executionAuthorized": false,
+    "writeRunArtifacts": false
+  },
+  "taskBinding": {
+    "partitionId": "CKS05-FRESH-HIDDEN-PARTITION-V1",
+    "freshnessStatus": "FRESH_SYNTHETIC_HIDDEN",
+    "sealedDigestsOnly": true,
+    "taskCount": 32,
+    "taskIdsSha256": "db24072d1863c8bfdf1002be807eef0ac8d5decb69a53f53bbc3b3493a7de58c",
+    "scenarioPairCount": 16,
+    "hopStrata": {
+      "SINGLE_HOP": 16,
+      "MULTI_HOP": 16
+    },
+    "updateSensitivity": {
+      "UPDATE_SENSITIVE": 16,
+      "EDITION_INVARIANT_CONTROL": 16
+    }
+  },
+  "ablationAxes": [
+    {
+      "axisId": "MODEL_SIZE",
+      "levels": [
+        "LARGE",
+        "SMALL"
+      ],
+      "isolationRule": "IDENTICAL_TASK_EDITION_AND_KNOWLEDGE_INPUTS_ONLY_MODEL_PROFILE_DIFFERS"
+    },
+    {
+      "axisId": "KNOWLEDGE_REPRESENTATION",
+      "levels": [
+        "RAW",
+        "STRUCTURED"
+      ],
+      "isolationRule": "IDENTICAL_TASK_AND_EDITION_IDENTITY_ONLY_RENDERING_REPRESENTATION_DIFFERS"
+    },
+    {
+      "axisId": "KNOWLEDGE_CONDITION",
+      "levels": [
+        "FACTS_ONLY",
+        "FACTS_AND_NON_ANSWER_GUIDANCE"
+      ],
+      "isolationRule": "IDENTICAL_TASK_AND_EDITION_IDENTITY_ONLY_NON_ANSWER_GUIDANCE_PRESENCE_DIFFERS"
+    },
+    {
+      "axisId": "EDITION_FRESHNESS",
+      "levels": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ],
+      "isolationRule": "IDENTICAL_TASK_AND_ARM_ONLY_EDITION_BINDING_DIFFERS"
+    },
+    {
+      "axisId": "HOP_CLASS",
+      "levels": [
+        "SINGLE_HOP",
+        "MULTI_HOP"
+      ],
+      "isolationRule": "IDENTICAL_ARM_AND_EDITION_ONLY_TASK_HOP_STRATUM_DIFFERS"
+    }
+  ],
+  "arms": [
+    {
+      "armId": "ARM-LRF-01",
+      "name": "LARGE_RAW_FACTS",
+      "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+      "knowledgeRepresentation": "RAW",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-SRF-02",
+      "name": "SMALL_RAW_FACTS",
+      "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+      "knowledgeRepresentation": "RAW",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-LSF-03",
+      "name": "LARGE_STRUCTURED_FACTS",
+      "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+      "knowledgeRepresentation": "STRUCTURED",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-SSF-04",
+      "name": "SMALL_STRUCTURED_FACTS",
+      "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+      "knowledgeRepresentation": "STRUCTURED",
+      "knowledgePayload": "FACTS_ONLY",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    },
+    {
+      "armId": "ARM-SSG-05",
+      "name": "SMALL_STRUCTURED_FACTS_AND_GUIDANCE",
+      "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+      "knowledgeRepresentation": "STRUCTURED",
+      "knowledgePayload": "FACTS_AND_NON_ANSWER_GUIDANCE",
+      "editions": [
+        "K0_STATIC",
+        "K1_UPDATED"
+      ]
+    }
+  ],
+  "renderingBindings": {
+    "RAW": {
+      "K0_STATIC": "c40b7a486bd7dcc048a3e56fe18faecba652f52894bfc3cd9bd2195ca02b35ed",
+      "K1_UPDATED": "def3022318fc11c8d39b5bd2ca1ee2d4861be08775d55a6a4e098a0d5c307ee3"
+    },
+    "STRUCTURED": {
+      "K0_STATIC": "32d9e8367f38e94f08d3f15e61848a6674faac2630319255120e8a6555602413",
+      "K1_UPDATED": "918447abb6f9e63c13424938e9446a2212b732b31e366eccc94cf0cff559b647"
+    }
+  },
+  "guidanceBinding": {
+    "armId": "ARM-SSG-05",
+    "guidanceArtifactSha256": "7cf7b287c35db26fcaca63a620067950a90c0ef533fccf8c5b8174e005efd567",
+    "guidanceLeakageAuditSha256": "ff28a2c58fc82d25330837814f8da052a493c591a349cf842a41ff3940761446",
+    "nonAnswerOnly": true,
+    "answerContentLeakage": false,
+    "allOtherArms": null
+  },
+  "inputDerivation": {
+    "inputId": "input:<sha256(protocolDigestSha256|armId|taskId|editionId)>",
+    "identityKey": "identity:<sha256(protocolDigestSha256|taskId|editionId)>",
+    "inputDigestSha256": "sha256(canonical(inputRecord with inputDigestSha256 nulled))"
+  },
+  "generation": {
+    "seeds": [
+      104729,
+      130363,
+      155921
+    ],
+    "seedListSha256": "350d921b7a2ed747911d1c32f9c1cb5c390d36c6b9ab769be7b0d1a79b105f84"
+  },
+  "inferenceContract": {
+    "confidenceLevel": 0.95,
+    "confidenceMethod": "DETERMINISTIC_STRATIFIED_PAIRED_PERCENTILE_BOOTSTRAP",
+    "bootstrapResamples": 20000,
+    "resamplingUnits": {
+      "armAndEditionContrasts": "taskId",
+      "singleMultiHopContrasts": "scenarioPairId"
+    },
+    "seedsAreRepeatedObservations": true,
+    "noPseudoReplication": true,
+    "ciUnavailabilityRule": "CI_UNAVAILABLE_DENIES_ASSOCIATED_CLAIM"
+  },
+  "failureContract": {
+    "preExecutionPlannedStatus": "NOT_RUN",
+    "terminalStatuses": [
+      "COMPLETED",
+      "FAILED",
+      "INVALIDATED"
+    ],
+    "failureCodeNullOnlyWhenCompleted": true,
+    "modelFailureCodes": [
+      "TIMEOUT",
+      "OOM_WITHIN_ADMITTED_ENVELOPE",
+      "NONZERO_RUNTIME_EXIT",
+      "MALFORMED_STREAM",
+      "OUTPUT_LIMIT_WITHOUT_VALID_FINAL",
+      "INVALID_JSON",
+      "REFUSAL_NO_VALID_ANSWER",
+      "RUNTIME_ERROR"
+    ],
+    "infrastructureInvalidationCodes": [
+      "HOST_DRIFT",
+      "CLOCK_INVALID",
+      "RESOURCE_SAMPLER_GAP",
+      "THERMAL_INVALID",
+      "UNRELATED_PROCESS_INTERFERENCE",
+      "HARNESS_SIGTRAP_EXIT_133",
+      "DOCKER_ENOENT"
+    ],
+    "preservationRule": "APPEND_ONLY_NO_REPLACEMENT_RUNS"
+  },
+  "abContrastPlan": {
+    "reports": [
+      {
+        "reportId": "AB-MODEL-RAW",
+        "ablationAxis": "MODEL_SIZE",
+        "treatmentArmId": "ARM-LRF-01",
+        "controlArmId": "ARM-SRF-02",
+        "fixedDimensions": {
+          "knowledgeRepresentation": "RAW",
+          "knowledgePayload": "FACTS_ONLY",
+          "editionScope": "PER_EDITION"
+        },
+        "resamplingUnit": "taskId",
+        "pairedExecutionsPerEdition": 96,
+        "independentTaskUnitsPerEdition": 32,
+        "preExecutionStatus": "NOT_EXECUTED",
+        "resultStatus": "PARTIAL_NO_CLAIM",
+        "measured": {
+          "deltaPointEstimate": null,
+          "confidenceInterval": null,
+          "significanceVerdict": null
+        }
+      },
+      {
+        "reportId": "AB-MODEL-STRUCTURED",
+        "ablationAxis": "MODEL_SIZE",
+        "treatmentArmId": "ARM-LSF-03",
+        "controlArmId": "ARM-SSF-04",
+        "fixedDimensions": {
+          "knowledgeRepresentation": "STRUCTURED",
+          "knowledgePayload": "FACTS_ONLY",
+          "editionScope": "PER_EDITION"
+        },
+        "resamplingUnit": "taskId",
+        "pairedExecutionsPerEdition": 96,
+        "independentTaskUnitsPerEdition": 32,
+        "preExecutionStatus": "NOT_EXECUTED",
+        "resultStatus": "PARTIAL_NO_CLAIM",
+        "measured": {
+          "deltaPointEstimate": null,
+          "confidenceInterval": null,
+          "significanceVerdict": null
+        }
+      },
+      {
+        "reportId": "AB-STRUCTURED-VS-RAW-LARGE",
+        "ablationAxis": "KNOWLEDGE_REPRESENTATION",
+        "treatmentArmId": "ARM-LSF-03",
+        "controlArmId": "ARM-LRF-01",
+        "fixedDimensions": {
+          "modelProfileRole": "LARGE",
+          "knowledgePayload": "FACTS_ONLY",
+          "editionScope": "PER_EDITION"
+        },
+        "resamplingUnit": "taskId",
+        "pairedExecutionsPerEdition": 96,
+        "independentTaskUnitsPerEdition": 32,
+        "preExecutionStatus": "NOT_EXECUTED",
+        "resultStatus": "PARTIAL_NO_CLAIM",
+        "measured": {
+          "deltaPointEstimate": null,
+          "confidenceInterval": null,
+          "significanceVerdict": null
+        }
+      },
+      {
+        "reportId": "AB-STRUCTURED-VS-RAW-SMALL",
+        "ablationAxis": "KNOWLEDGE_REPRESENTATION",
+        "treatmentArmId": "ARM-SSF-04",
+        "controlArmId": "ARM-SRF-02",
+        "fixedDimensions": {
+          "modelProfileRole": "SMALL",
+          "knowledgePayload": "FACTS_ONLY",
+          "editionScope": "PER_EDITION"
+        },
+        "resamplingUnit": "taskId",
+        "pairedExecutionsPerEdition": 96,
+        "independentTaskUnitsPerEdition": 32,
+        "preExecutionStatus": "NOT_EXECUTED",
+        "resultStatus": "PARTIAL_NO_CLAIM",
+        "measured": {
+          "deltaPointEstimate": null,
+          "confidenceInterval": null,
+          "significanceVerdict": null
+        }
+      },
+      {
+        "reportId": "AB-FACTS-VS-GUIDANCE-SMALL",
+        "ablationAxis": "KNOWLEDGE_CONDITION",
+        "treatmentArmId": "ARM-SSG-05",
+        "controlArmId": "ARM-SSF-04",
+        "fixedDimensions": {
+          "modelProfileRole": "SMALL",
+          "knowledgeRepresentation": "STRUCTURED",
+          "editionScope": "PER_EDITION"
+        },
+        "resamplingUnit": "taskId",
+        "pairedExecutionsPerEdition": 96,
+        "independentTaskUnitsPerEdition": 32,
+        "preExecutionStatus": "NOT_EXECUTED",
+        "resultStatus": "PARTIAL_NO_CLAIM",
+        "measured": {
+          "deltaPointEstimate": null,
+          "confidenceInterval": null,
+          "significanceVerdict": null
+        }
+      },
+      {
+        "reportId": "AB-STATIC-VS-UPDATED",
+        "ablationAxis": "EDITION_FRESHNESS",
+        "treatmentEditionId": "K1_UPDATED",
+        "controlEditionId": "K0_STATIC",
+        "scopes": [
+          {
+            "armId": "ARM-LRF-01"
+          },
+          {
+            "armId": "ARM-SRF-02"
+          },
+          {
+            "armId": "ARM-LSF-03"
+          },
+          {
+            "armId": "ARM-SSF-04"
+          },
+          {
+            "armId": "ARM-SSG-05"
+          }
+        ],
+        "resamplingUnit": "taskId",
+        "pairedExecutionsPerArm": 96,
+        "independentTaskUnitsPerArm": 32,
+        "preExecutionStatus": "NOT_EXECUTED",
+        "resultStatus": "PARTIAL_NO_CLAIM",
+        "measured": {
+          "deltaPointEstimate": null,
+          "confidenceInterval": null,
+          "significanceVerdict": null
+        }
+      },
+      {
+        "reportId": "AB-SINGLE-VS-MULTI-HOP",
+        "ablationAxis": "HOP_CLASS",
+        "treatmentHopClass": "MULTI_HOP",
+        "controlHopClass": "SINGLE_HOP",
+        "scopes": [
+          {
+            "armId": "ARM-LRF-01",
+            "editionId": "K0_STATIC"
+          },
+          {
+            "armId": "ARM-LRF-01",
+            "editionId": "K1_UPDATED"
+          },
+          {
+            "armId": "ARM-SRF-02",
+            "editionId": "K0_STATIC"
+          },
+          {
+            "armId": "ARM-SRF-02",
+            "editionId": "K1_UPDATED"
+          },
+          {
+            "armId": "ARM-LSF-03",
+            "editionId": "K0_STATIC"
+          },
+          {
+            "armId": "ARM-LSF-03",
+            "editionId": "K1_UPDATED"
+          },
+          {
+            "armId": "ARM-SSF-04",
+            "editionId": "K0_STATIC"
+          },
+          {
+            "armId": "ARM-SSF-04",
+            "editionId": "K1_UPDATED"
+          },
+          {
+            "armId": "ARM-SSG-05",
+            "editionId": "K0_STATIC"
+          },
+          {
+            "armId": "ARM-SSG-05",
+            "editionId": "K1_UPDATED"
+          }
+        ],
+        "resamplingUnit": "scenarioPairId",
+        "pairedExecutionsPerArmEdition": 48,
+        "independentScenarioPairUnitsPerArmEdition": 16,
+        "preExecutionStatus": "NOT_EXECUTED",
+        "resultStatus": "PARTIAL_NO_CLAIM",
+        "measured": {
+          "deltaPointEstimate": null,
+          "confidenceInterval": null,
+          "significanceVerdict": null
+        }
+      }
+    ],
+    "missingResultStatus": "PARTIAL_NO_CLAIM",
+    "preExecutionClaimStatus": "DENY_NOT_EXECUTED",
+    "measuredValuesBeforeExecution": null
+  },
+  "claimGate": {
+    "gateId": "L6-MODEL-SUBSTITUTION",
+    "preExecutionStatus": "DENY_NOT_EXECUTED",
+    "modelSubstitutionClaimBeforeExecution": false,
+    "noEarlySuccess": true
+  },
+  "publicSafeEvidence": {
+    "rawTaskBytesPublished": false,
+    "rawKnowledgeSeedBytesPublished": false,
+    "rawRenderingBytesPublished": false,
+    "sealedDigestsOnly": true,
+    "exposureRule": "SEALED_DIGESTS_ONLY_RAW_TASK_AND_KNOWLEDGE_SEED_BYTES_REMAIN_HIDDEN"
+  },
+  "receipt": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "branch": "conveyor/pansphaira-285",
+    "baseCommit": "5a579abf1c4b0d271cc9f9968fa8ce3d906bd7b5",
+    "taskId": "PSAI285-L3-ABLATION-ARM-BUILDER",
+    "changedPaths": [
+      "scripts/cks-05-build-arm-inputs.mjs",
+      "tests/cks-05-ablation-arm-builder.test.mjs",
+      "tests/fixtures/cks-05/ablation-matrix-v1.json",
+      "tests/fixtures/cks-05/raw-fabric-parity-v1.json"
+    ],
+    "allowlistCompliant": true,
+    "requiredVerificationCommands": [
+      "node --test tests/cks-05-ablation-arm-builder.test.mjs",
+      "node scripts/cks-05-build-arm-inputs.mjs --fixture tests/fixtures/cks-05/ablation-matrix-v1.json --dry-run",
+      "git diff --check origin/main...HEAD"
+    ],
+    "actionsNotPerformed": {
+      "modelInvocations": 0,
+      "servicesStartedOrCalled": 0,
+      "credentialsUsed": false,
+      "benchmarkRuns": 0,
+      "harnessSourceModified": false,
+      "push": false,
+      "merge": false,
+      "release": false
+    },
+    "currentEvidenceVerdict": "MANIFEST_DEFINED_EXECUTION_NOT_AUTHORIZED_NO_BENCHMARK_RESULT_NO_MODEL_SUBSTITUTION_CLAIM"
+  },
+  "matrixDigestSha256": "100f49d4ec5be2f896ee5f3e0dbdce812382b1aa144afa081ab891d897c35948"
+}

@@ -1,0 +1,976 @@
+{
+  "schemaVersion": "pansphaira.evidence/conveyor-benchmark-design-decision/v1",
+  "taskId": "SOL-PSAI285-BENCHMARK-DESIGN-DECISION-01",
+  "decisionId": "PSAI285-BENCHMARK-PROTOCOL-01",
+  "recordedAt": "2026-08-28T14:22:40Z",
+  "decision": "APPROVE_BOUNDED_PROTOCOL",
+  "executionAuthorization": "NOT_GRANTED_DESIGN_RECEIPT_ONLY",
+  "benchmarkOutcome": "NOT_RUN",
+  "modelSubstitutionClaim": "DENIED_NO_MEASUREMENTS",
+  "decisionRationale": [
+    "Two distinct local model artifacts and one local runtime bundle were found and bound by SHA-256, so profile absence does not require design rejection.",
+    "The protocol is paired, finite, fail-closed, and able to falsify or remove each architecture component under test.",
+    "Approval of the protocol is not approval to execute it and is not evidence that either model is competent, that any arm is better, or that a small model can substitute for a large model."
+  ],
+  "governance": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "authorityBoundary": "This receipt selects and constrains a research design only. It grants no model acquisition, service, credential, repository-effect, publication, merge, release, or issue authority.",
+    "unknownFieldPolicy": "REJECT",
+    "digestAlgorithm": "SHA-256",
+    "canonicalization": "RFC 8785 JSON Canonicalization Scheme for JSON objects; byte digests for opaque artifacts",
+    "claimBoundary": "Any eventual conclusion is limited to the exact frozen fresh synthetic domains, tasks, Knowledge editions, arms, model bytes, runtime bytes, host manifest, and run records admitted by this protocol."
+  },
+  "profileSelection": {
+    "status": "SELECTED_LOCAL_IMMUTABLE_ARTIFACTS",
+    "selectionEvidenceBoundary": "File presence, byte size, SHA-256, and a no-model runtime version probe were observed. No model was loaded or invoked and no qualification measurement was made.",
+    "smallModel": {
+      "profileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+      "role": "SMALL",
+      "artifactName": "vibethinker-3b-q8_0.gguf",
+      "observedLocalPath": "/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf",
+      "format": "GGUF",
+      "modelFamilyLabel": "VibeThinker-3B",
+      "baseArchitectureLabel": "Qwen2ForCausalLM",
+      "parameterClass": "3B",
+      "quantizationLabel": "Q8_0",
+      "byteSize": 3285476032,
+      "sha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+      "capabilityCeiling": [
+        "Local text generation only",
+        "No vision or audio input",
+        "No tools, functions, shell, filesystem, repository, network, service, credential, memory, or effect access",
+        "No claim of open-domain knowledge coverage or autonomous-agent competence",
+        "A maximum of 12000 input tokens and 256 generated tokens per scored run",
+        "One response for each predeclared generation seed; no repair conversation or hidden retry"
+      ]
+    },
+    "largeModel": {
+      "profileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+      "role": "LARGE",
+      "artifactName": "Qwen3.8-27B-Q5_K_M.gguf",
+      "observedLocalPath": "/mnt/data2/ai/gguf-models/qwen3.8-27b-q5-application-pilot/Qwen3.8-27B-Q5_K_M.gguf",
+      "format": "GGUF",
+      "modelFamilyLabel": "Qwen3.8-27B",
+      "baseArchitectureLabel": "Qwen3_5ForConditionalGeneration",
+      "parameterClass": "27B",
+      "quantizationLabel": "Q5_K_M",
+      "byteSize": 19834055648,
+      "sha256": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177",
+      "capabilityCeiling": [
+        "Local text generation only; the multimodal projector is excluded",
+        "No vision, audio, tools, functions, shell, filesystem, repository, network, service, credential, memory, or effect access",
+        "No claim of production, open-domain, or autonomous-agent competence",
+        "A maximum of 12000 input tokens and 256 generated tokens per scored run",
+        "One response for each predeclared generation seed; no repair conversation or hidden retry"
+      ]
+    },
+    "runtime": {
+      "profileId": "RUNTIME-LLAMA_CPP-B10167-EE3D1B54-LINUX-X86_64-CPU-90097614",
+      "runtime": "llama.cpp llama-server",
+      "revision": "10167",
+      "sourceCommit": "ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27",
+      "buildCompiler": "GNU 13.3.0",
+      "target": "Linux x86_64",
+      "executionDeviceMode": "CPU_ONLY",
+      "serverExecutablePath": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/llama-server",
+      "runtimeBundleSha256": "90097614d81dc8bfe758852b5af6002b6354fe2768b079820ed142201c516351",
+      "runtimeBundleDigestConstruction": "SHA-256 of UTF-8 lines '<component sha256><two spaces><component name><LF>' sorted by component name, including the final LF",
+      "components": [
+        {
+          "name": "cuda/libcublas.so.12",
+          "sha256": "d63456d94f1b8e2408a8a9538c8740eb474c9eba48a84f420b15e2e10fbcd048"
+        },
+        {
+          "name": "cuda/libcublasLt.so.12",
+          "sha256": "96ddf4891ca4f4ed1475966783a9185df2abd64a81c3cc713b96d036696fc541"
+        },
+        {
+          "name": "cuda/libcudart.so.12",
+          "sha256": "256e6409e4f06f618e1fb53d4844a6b81cdded1013afa8ade40c22f99eb133b7"
+        },
+        {
+          "name": "runtime/libggml-base.so.0.17.0",
+          "sha256": "68d7b76c51815269cd569c4e0a35e5bc8de7b0e14556a21c434aa985f7e116c6"
+        },
+        {
+          "name": "runtime/libggml-cpu.so.0.17.0",
+          "sha256": "2e1607597a73bcf3a0f69650d108e08ef3fff94035ab0ae02643d101005059e9"
+        },
+        {
+          "name": "runtime/libggml-cuda.so.0.17.0",
+          "sha256": "6787c0a01422f20b5fea9fe235d1fed5b5b407adcabec84bca89ff73e3b48d18"
+        },
+        {
+          "name": "runtime/libggml.so.0.17.0",
+          "sha256": "9b3d9c13aa8fa9bce0f2a1b012db50c3d44fc3671b887c01560aa526be7ea8ed"
+        },
+        {
+          "name": "runtime/libllama-common.so.0.0.10167",
+          "sha256": "97dfefee3c2038d103916740ded83580376bea8a085b67a070b8a87318f98115"
+        },
+        {
+          "name": "runtime/libllama-server-impl.so",
+          "sha256": "e7c6d9d4539280c5b76e52deb92bd6e2698b49673a16dd24dc1d5254de76c013"
+        },
+        {
+          "name": "runtime/libllama.so.0.0.10167",
+          "sha256": "9cd7649f760c6544458de8f366953a14f1b8cfcb1426e69beaf3e7cf4460eedb"
+        },
+        {
+          "name": "runtime/libmtmd.so.0.0.10167",
+          "sha256": "7ff26d4daf074c4d05877f373482eb69e965244342d350136d5692605cd72536"
+        },
+        {
+          "name": "runtime/llama-server",
+          "sha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c"
+        }
+      ],
+      "versionProbe": {
+        "status": "PASS_WITH_CPU_FALLBACK",
+        "reportedVersion": "version: 10167 (ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27)",
+        "modelLoaded": false,
+        "serviceStarted": false,
+        "qualificationRun": false
+      },
+      "launchInvariants": {
+        "networkNamespace": "Isolated with loopback only and no egress route",
+        "smallLoopbackPort": 19081,
+        "largeLoopbackPort": 19082,
+        "concurrentRequests": 1,
+        "cpuThreads": 8,
+        "batchThreads": 8,
+        "contextTokens": 16384,
+        "maxGeneratedTokens": 256,
+        "batchSize": 512,
+        "microBatchSize": 128,
+        "device": "none",
+        "gpuLayers": 0,
+        "flashAttention": "off",
+        "loadMode": "mmap",
+        "kvCacheKeyType": "f16",
+        "kvCacheValueType": "f16",
+        "promptCache": false,
+        "continuousBatching": false,
+        "parallelSlots": 1,
+        "multimodalProjector": false,
+        "tools": false,
+        "agentMode": false,
+        "webUi": false,
+        "apiCredentials": false,
+        "reasoningMode": "off",
+        "reasoningBudgetTokens": 0,
+        "speculativeDecoding": "none",
+        "adaptiveFit": false,
+        "tensorIntegrityCheck": true,
+        "serverWarmup": false,
+        "explicitHarnessWarmup": true,
+        "requestTimeoutSeconds": 300
+      },
+      "requiredHostClosureAtAdmission": [
+        "kernel release and boot ID",
+        "CPU vendor, model, stepping, microcode, online CPU set, governor, and NUMA layout",
+        "total RAM, swap policy, page size, and cgroup-v2 limits",
+        "resolved dynamic-library path, byte size, and SHA-256 for every ldd dependency including libc, libstdc++, libgomp, and libcuda",
+        "thermal and competing-process admission readings",
+        "runtime argv and environment allow-list digest"
+      ]
+    },
+    "absenceOrIncompatibilityRule": {
+      "code": "COMPETENCE_LIMIT",
+      "action": "REJECT_EXECUTION_WITHOUT_MEASUREMENT",
+      "conditions": [
+        "Either exact model byte artifact is absent or its SHA-256 or byte size differs",
+        "The exact runtime bundle is absent, differs, or does not report revision 10167 and source commit ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27",
+        "Either model cannot load under the frozen CPU-only runtime profile and resource envelope",
+        "Either model cannot complete the single fixed non-scored format probe within the frozen context and timeout limits",
+        "A required local dependency or host-manifest field cannot be immutably bound"
+      ],
+      "nonSubstitution": "No other model, quantization, runtime build, device mode, remote endpoint, or synthetic result may replace a missing or incompatible selected profile."
+    }
+  },
+  "researchProtocol": {
+    "protocolStatus": "APPROVED_NOT_EXECUTED",
+    "researchQuestion": "Within four frozen fresh synthetic domains, can bounded structured Knowledge, optional non-answer guidance, and a compact local model match the quality of a larger local raw-facts profile while passing predeclared efficiency gates?",
+    "freshSyntheticDomainLimit": {
+      "domainIds": [
+        "SYN-ASTER-LOGISTICS",
+        "SYN-BOREALIS-MAINTENANCE",
+        "SYN-CALDERA-ALLOCATIONS",
+        "SYN-DIONE-COMPLIANCE"
+      ],
+      "freshnessDefinition": "Domain rules, entities, facts, updates, task bytes, gold labels, and evidence graphs are generated after profile lock, are entirely synthetic, are not copied from the repository or a real organization, are never used for training or tuning, and remain hidden from model operators and models until each scored request.",
+      "conclusionLimit": "No result generalizes beyond these exact four frozen synthetic domain editions. It does not establish real-world, open-domain, production, safety, agentic, or universal model-substitution performance."
+    },
+    "taskAndKnowledgeDesign": {
+      "domainCount": 4,
+      "scenarioPairsPerDomain": 4,
+      "tasksPerScenarioPair": 2,
+      "taskIdsPerEdition": 32,
+      "hopStrata": {
+        "SINGLE_HOP": 16,
+        "MULTI_HOP": 16
+      },
+      "scenarioPairCount": 16,
+      "updateSensitivity": {
+        "UPDATE_SENSITIVE_TASKS": 16,
+        "EDITION_INVARIANT_CONTROL_TASKS": 16
+      },
+      "knowledgeEditions": [
+        {
+          "editionId": "K0_STATIC",
+          "role": "Frozen pre-update edition"
+        },
+        {
+          "editionId": "K1_UPDATED",
+          "role": "Frozen post-update edition"
+        }
+      ],
+      "crossArmIdentityInvariant": "Every arm executes every identical hidden taskId against both identical K0_STATIC and K1_UPDATED editions with all three identical generation seeds. Task question bytes, gold-label bytes, evidence-graph bytes, edition bytes, and pair keys are never regenerated, reworded, sampled, or substituted per arm.",
+      "crossEditionInvariant": "Each task question is byte-identical between K0_STATIC and K1_UPDATED. Gold values change only for predeclared UPDATE_SENSITIVE_TASKS. Guidance bytes remain identical across editions so the update contrast changes Knowledge facts only.",
+      "representationParityInvariant": "For each edition, raw and structured renderings must have the same canonical atomic-fact inventory digest and evidence IDs. Structure may change serialization only; omission, addition, answer marking, ordering hints, or unequal truncation rejects the edition.",
+      "guidanceLeakageInvariant": "Guidance is authored and frozen before tasks, is generic to the synthetic domain process, contains no task ID, gold value, answer-specific branch, or fact absent from the parity-bound fact inventory, and has an independent leakage-audit digest.",
+      "contextLimitInvariant": "Every admitted raw or structured fact rendering plus the common prompt fits within 12000 runtime-tokenizer tokens without truncation. Guidance arms must also fit. Any truncation, overflow, or arm-dependent evidence omission rejects the affected edition before scoring."
+    },
+    "generation": {
+      "generationSeeds": [
+        104729,
+        130363,
+        155921
+      ],
+      "generationSeedListSha256": "350d921b7a2ed747911d1c32f9c1cb5c390d36c6b9ab769be7b0d1a79b105f84",
+      "temperature": 0.7,
+      "topK": 20,
+      "topP": 0.8,
+      "minP": 0,
+      "repeatPenalty": 1,
+      "presencePenalty": 0,
+      "frequencyPenalty": 0,
+      "maxGeneratedTokens": 256,
+      "stream": true,
+      "responseCount": 1,
+      "responseContract": "One JSON object containing answerClaims, evidenceIds, and finalAnswer; no grammar-constrained decoding and no model judge",
+      "retryPolicy": "NO_RETRY. Each scheduled seed creates exactly one terminal run record. A correction requires a new protocol edition and preserves the original run."
+    },
+    "arms": [
+      {
+        "armId": "ARM-LRF-01",
+        "name": "LARGE_RAW_FACTS",
+        "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+        "knowledgeRepresentation": "RAW",
+        "knowledgePayload": "FACTS_ONLY",
+        "editions": [
+          "K0_STATIC",
+          "K1_UPDATED"
+        ],
+        "limits": [
+          "Receives source-like raw synthetic passages and evidence IDs only",
+          "Receives no structured records and no guidance"
+        ]
+      },
+      {
+        "armId": "ARM-SRF-02",
+        "name": "SMALL_RAW_FACTS",
+        "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+        "knowledgeRepresentation": "RAW",
+        "knowledgePayload": "FACTS_ONLY",
+        "editions": [
+          "K0_STATIC",
+          "K1_UPDATED"
+        ],
+        "limits": [
+          "Receives the exact parity-bound raw fact passages used by ARM-LRF-01",
+          "Receives no structured records and no guidance"
+        ]
+      },
+      {
+        "armId": "ARM-LSF-03",
+        "name": "LARGE_STRUCTURED_FACTS",
+        "modelProfileId": "MODEL-LARGE-QWEN3_8-27B-Q5_K_M-07DEB7FA",
+        "knowledgeRepresentation": "STRUCTURED",
+        "knowledgePayload": "FACTS_ONLY",
+        "editions": [
+          "K0_STATIC",
+          "K1_UPDATED"
+        ],
+        "limits": [
+          "Receives canonical structured records with the same atomic facts and evidence IDs as ARM-LRF-01",
+          "Receives no guidance"
+        ]
+      },
+      {
+        "armId": "ARM-SSF-04",
+        "name": "SMALL_STRUCTURED_FACTS",
+        "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+        "knowledgeRepresentation": "STRUCTURED",
+        "knowledgePayload": "FACTS_ONLY",
+        "editions": [
+          "K0_STATIC",
+          "K1_UPDATED"
+        ],
+        "limits": [
+          "Receives the exact parity-bound structured records used by ARM-LSF-03",
+          "Receives no guidance"
+        ]
+      },
+      {
+        "armId": "ARM-SSG-05",
+        "name": "SMALL_STRUCTURED_FACTS_AND_GUIDANCE",
+        "modelProfileId": "MODEL-SMALL-VIBETHINKER-3B-Q8_0-ED81A97A",
+        "knowledgeRepresentation": "STRUCTURED",
+        "knowledgePayload": "FACTS_AND_NON_ANSWER_GUIDANCE",
+        "editions": [
+          "K0_STATIC",
+          "K1_UPDATED"
+        ],
+        "limits": [
+          "Receives the exact structured facts used by ARM-SSF-04 plus parity-independent pre-task generic guidance",
+          "Guidance cannot add facts, gold values, task-specific branches, tools, authority, or effects"
+        ]
+      }
+    ],
+    "runCount": {
+      "arms": 5,
+      "taskIdsPerEdition": 32,
+      "knowledgeEditions": 2,
+      "generationSeeds": 3,
+      "totalScheduledRunRecords": 960,
+      "pairedExecutionsPerArmContrastPerEdition": 96,
+      "independentTaskUnitsPerArmContrastPerEdition": 32,
+      "pairedExecutionsPerStaticUpdatedContrastPerArm": 96,
+      "independentTaskUnitsPerStaticUpdatedContrastPerArm": 32,
+      "pairedExecutionsPerSingleMultiContrastPerArmEdition": 48,
+      "independentScenarioPairUnitsPerSingleMultiContrastPerArmEdition": 16,
+      "independenceRule": "Generation seeds are repeated observations, not independent task units. Seeds are averaged within taskId before arm or edition inference; hop inference averages within scenarioPairId."
+    },
+    "schedule": {
+      "scheduleSeedLabel": "SOL-PSAI285-BENCHMARK-DESIGN-DECISION-01|schedule|v1",
+      "scheduleSeedSha256": "2a47bf24635eb9392deb291a4db99dc9630cbc8196c4089b1f67c80878622514",
+      "blocking": "taskId x editionId x generationSeed",
+      "armOrder": "A digest-derived balanced cyclic order is frozen before execution. Exactly one request runs at a time; no operator reordering is allowed after outputs are visible.",
+      "modelResidency": "One isolated small-profile server and one isolated large-profile server are preloaded for each generation-seed session. A fixed non-scored warmup is run once per server session and excluded from scored metrics.",
+      "coldStartReporting": "Model load time, warmup time, and peak resident memory are reported separately for each of the three profile sessions and are never silently folded into or removed from evidence.",
+      "steadyStateTiming": "Primary request efficiency starts immediately before request-byte write and ends after the final streamed response byte; server-internal prompt and generation timings are retained as secondary fields."
+    },
+    "resourceEnvelope": {
+      "deviceMode": "CPU_ONLY",
+      "requestTimeoutSeconds": 300,
+      "protocolWallClockBudgetHours": 72,
+      "maxInputTokens": 12000,
+      "maxGeneratedTokens": 256,
+      "maxConcurrentScoredRequests": 1,
+      "resourceSamplingIntervalMs": 100,
+      "minimumValidSampleCoverage": 0.99,
+      "primaryTimingClock": "Linux CLOCK_MONOTONIC_RAW nanoseconds",
+      "auditClock": "UTC RFC 3339 with nanoseconds; audit only, never used for latency",
+      "cpuAccounting": "Delta of /proc/<pid>/stat user and system ticks converted with the frozen _SC_CLK_TCK value, cross-checked against cgroup-v2 cpu.stat",
+      "memoryAccounting": "100 ms samples from cgroup-v2 memory.current and /proc/<pid>/smaps_rollup plus cgroup memory.peak when available",
+      "ioAccounting": "cgroup-v2 io.stat deltas for each request block",
+      "gpuAccounting": "NOT_APPLICABLE_CPU_ONLY; any nonzero GPU offload or GPU sample rejects the run",
+      "energyAccounting": "Report package energy from a digest-bound RAPL counter only if continuously available for every arm; otherwise report NOT_AVAILABLE and never use energy for a claim gate",
+      "validityConditions": [
+        "Identical host-manifest digest and cgroup limits for every arm",
+        "No overlapping scored request, model acquisition, update, backup, build, or unrelated benchmark",
+        "No swap-in or major-fault anomaly beyond the predeclared host threshold",
+        "No thermal throttling or CPU-set drift",
+        "At least 99 percent resource-sample coverage"
+      ]
+    }
+  },
+  "metricContract": {
+    "scoringAuthority": "Deterministic hidden gold records and exact validators only; no model, human preference, or post-hoc rubric judge",
+    "normalization": "Unicode NFC, schema-declared case sensitivity, exact typed scalar comparison, and sorted unique evidence IDs. No semantic similarity or fuzzy matching.",
+    "qualityMetrics": [
+      {
+        "metricId": "task_success",
+        "unit": "run",
+        "definition": "1 only when output JSON is valid, every required atomic answer is exact, no incorrect, unsupported, stale, or forbidden claim is present, every required evidence ID is valid, and every deterministic task constraint passes; otherwise 0"
+      },
+      {
+        "metricId": "atomic_fact_f1",
+        "unit": "run",
+        "definition": "Harmonic mean of precision and recall over canonical typed (subject, predicate, value, validEdition) answer tuples; any execution or parse failure scores 0"
+      },
+      {
+        "metricId": "evidence_attribution_f1",
+        "unit": "run",
+        "definition": "F1 over required (answerTuple, evidenceId) links after exact evidence-ID validation; invented or wrong-edition evidence is a false positive"
+      },
+      {
+        "metricId": "unsupported_claim_rate",
+        "unit": "claim",
+        "definition": "Unsupported predicted atomic claims divided by max(1, all predicted atomic claims); failures with no parseable claims also retain task_success=0"
+      },
+      {
+        "metricId": "stale_claim_rate",
+        "unit": "claim",
+        "definition": "Predicted atomic claims contradicted or superseded in the scored edition divided by max(1, all predicted atomic claims)"
+      },
+      {
+        "metricId": "guidance_adherence",
+        "unit": "run",
+        "definition": "Fraction of predeclared deterministic process constraints satisfied; computed for every arm even when guidance is not supplied"
+      },
+      {
+        "metricId": "multi_hop_path_accuracy",
+        "unit": "multi-hop run",
+        "definition": "1 only when the required ordered evidence-edge path and final value are exact; otherwise 0"
+      },
+      {
+        "metricId": "critical_violation_rate",
+        "unit": "run",
+        "definition": "Runs emitting a forbidden request or assertion involving credentials, external effects, tools, authority, real entities, or hidden-label disclosure divided by scheduled runs"
+      },
+      {
+        "metricId": "model_failure_rate",
+        "unit": "scheduled run",
+        "definition": "TIMEOUT, OOM, nonzero runtime exit, malformed stream, output cap without valid final object, invalid JSON, refusal without valid answer, or runtime error divided by all scheduled runs"
+      }
+    ],
+    "efficiencyMetrics": [
+      {
+        "metricId": "time_to_first_token_ms",
+        "definition": "CLOCK_MONOTONIC_RAW delta from completion of request-byte write to first non-control generated token event"
+      },
+      {
+        "metricId": "time_to_final_ms",
+        "definition": "CLOCK_MONOTONIC_RAW delta from immediately before request-byte write to receipt of the final streamed response byte"
+      },
+      {
+        "metricId": "prompt_tokens",
+        "definition": "Runtime-reported prompt-token count, retained per run and summed per arm"
+      },
+      {
+        "metricId": "generated_tokens",
+        "definition": "Runtime-reported generated-token count, retained per run and summed per arm"
+      },
+      {
+        "metricId": "decode_tokens_per_second",
+        "definition": "Runtime-reported generated tokens divided by generation seconds; failures remain in failure counts and are not assigned synthetic throughput"
+      },
+      {
+        "metricId": "cpu_seconds",
+        "definition": "Frozen-clock-tick process CPU delta for the isolated server during the request"
+      },
+      {
+        "metricId": "peak_resident_bytes",
+        "definition": "Maximum admitted process/cgroup resident-memory observation for each profile session, with all three session values retained"
+      },
+      {
+        "metricId": "cold_load_ms",
+        "definition": "CLOCK_MONOTONIC_RAW delta from server process spawn to successful health readback before warmup; reported separately and not used as steady-state latency"
+      },
+      {
+        "metricId": "energy_joules_optional",
+        "definition": "Counter-wrap-corrected package energy delta when the all-arm RAPL availability rule passes; otherwise NOT_AVAILABLE"
+      }
+    ],
+    "aggregation": {
+      "quality": "Report numerator, denominator, mean, median where meaningful, and confidence bounds by arm, edition, domain, hop class, and update sensitivity.",
+      "efficiency": "Report per-run values, arm medians, paired ratios, all cold-session values, and resource-sample coverage. Never drop failed or timed-out runs from denominators.",
+      "failurePreservation": "Every scheduled runId has exactly one terminal record. Integrity/infrastructure invalidations are reported separately from model failures; neither class is deleted, overwritten, imputed, or silently rerun."
+    }
+  },
+  "inferenceContract": {
+    "confidenceLevel": 0.95,
+    "primaryMethod": "Deterministic stratified paired percentile bootstrap",
+    "bootstrapResamples": 20000,
+    "bootstrapSeedLabel": "SOL-PSAI285-BENCHMARK-DESIGN-DECISION-01|bootstrap|v1",
+    "bootstrapSeedSha256": "6c027cd8e30f340cce31b58e32ac36f7fb5c3d5c70e773992e40977610eb3802",
+    "resamplingUnit": {
+      "armAndEditionContrasts": "taskId after averaging the three generation-seed observations",
+      "singleMultiHopContrasts": "scenarioPairId after averaging seeds within each task",
+      "sessionMemory": "No task bootstrap; preserve and report all three session ratios"
+    },
+    "stratification": {
+      "armContrastWithinEdition": [
+        "domainId",
+        "hopClass",
+        "updateSensitivity"
+      ],
+      "staticUpdatedWithinArm": [
+        "domainId",
+        "hopClass",
+        "updateSensitivity"
+      ],
+      "singleMultiWithinArmEdition": [
+        "domainId",
+        "updateSensitivity"
+      ]
+    },
+    "interval": "Two-sided 95 percent percentile interval using bootstrap quantiles 0.025 and 0.975; all 20000 resamples and the fixed digest-derived index stream are required.",
+    "ratios": "Bootstrap the paired mean log ratio and exponentiate. Zero or negative timing/resource values reject the affected block rather than receiving an offset.",
+    "absoluteFailureIntervals": "Two-sided exact 95 percent Clopper-Pearson intervals from preserved failure and scheduled-run counts.",
+    "degenerateRule": "If a required interval is undefined, has fewer than the declared independent units, or cannot be reproduced byte-for-byte, mark CI_UNAVAILABLE and deny the associated architecture or substitution claim.",
+    "noPseudoReplication": "The three seeds and two editions are never represented as independent fresh tasks. Pooled edition reports cluster all repeated observations by taskId.",
+    "noEarlySuccess": "Interim evidence may stop for integrity, harm, competence, or futility, but can never pass a quality, efficiency, architecture, or substitution gate before the complete scheduled design is present."
+  },
+  "mandatoryReports": {
+    "allReportsPreserve": [
+      "scheduled, completed, failed, invalidated, and missing counts",
+      "all run IDs and pair keys",
+      "point estimates and confidence bounds",
+      "raw numerators and denominators",
+      "domain, edition, hop, update-sensitivity, arm, and model-profile identifiers",
+      "timing-clock and resource-sampler validity",
+      "failure code counts without replacement runs"
+    ],
+    "abContrasts": [
+      {
+        "reportId": "AB-MODEL-RAW",
+        "left": "ARM-LRF-01",
+        "right": "ARM-SRF-02",
+        "editions": "BOTH_SEPARATELY",
+        "purpose": "Large-versus-small raw-facts capability boundary"
+      },
+      {
+        "reportId": "AB-MODEL-STRUCTURED",
+        "left": "ARM-LSF-03",
+        "right": "ARM-SSF-04",
+        "editions": "BOTH_SEPARATELY",
+        "purpose": "Large-versus-small structured-facts capability boundary"
+      },
+      {
+        "reportId": "AB-STRUCTURED-VS-RAW-LARGE",
+        "left": "ARM-LRF-01",
+        "right": "ARM-LSF-03",
+        "editions": "BOTH_SEPARATELY",
+        "purpose": "Structured-versus-raw result for the large model"
+      },
+      {
+        "reportId": "AB-STRUCTURED-VS-RAW-SMALL",
+        "left": "ARM-SRF-02",
+        "right": "ARM-SSF-04",
+        "editions": "BOTH_SEPARATELY",
+        "purpose": "Structured-versus-raw result for the small model"
+      },
+      {
+        "reportId": "AB-FACTS-VS-GUIDANCE-SMALL",
+        "left": "ARM-SSF-04",
+        "right": "ARM-SSG-05",
+        "editions": "BOTH_SEPARATELY",
+        "purpose": "Facts-only-versus-facts-plus-guidance result"
+      },
+      {
+        "reportId": "AB-STATIC-VS-UPDATED",
+        "left": "K0_STATIC",
+        "right": "K1_UPDATED",
+        "arms": "ALL_FIVE_SEPARATELY",
+        "purpose": "Static-versus-updated result, split into update-sensitive tasks and invariant controls"
+      },
+      {
+        "reportId": "AB-SINGLE-VS-MULTI-HOP",
+        "left": "SINGLE_HOP",
+        "right": "MULTI_HOP",
+        "arms": "ALL_FIVE_SEPARATELY",
+        "editions": "BOTH_SEPARATELY",
+        "purpose": "Matched scenario-pair single-versus-multi-hop result"
+      }
+    ],
+    "missingResultRule": "A stopped or invalid experiment must still emit every reportId with status PARTIAL_NO_CLAIM or INVALID_NO_CLAIM, the exact blocker, available counts, and preserved failures. It must not fabricate an estimate or omit an unfavorable contrast."
+  },
+  "thresholdsAndClaimGate": {
+    "architectureThresholds": {
+      "structuredRepresentation": {
+        "comparisons": [
+          "ARM-LSF-03 minus ARM-LRF-01 at K1_UPDATED",
+          "ARM-SSF-04 minus ARM-SRF-02 at K1_UPDATED"
+        ],
+        "retainOnlyIf": "For at least one model size, task_success lower confidence bound is at least 0.00 and either atomic_fact_f1 lower confidence bound is at least +0.03 or time_to_final upper ratio bound is at most 0.90; neither model-size contrast may have task_success lower confidence bound below -0.02.",
+        "otherwise": "SIMPLIFY_TO_RAW_FACTS and remove structured serialization from the candidate architecture"
+      },
+      "guidance": {
+        "comparison": "ARM-SSG-05 minus ARM-SSF-04 at K1_UPDATED",
+        "retainOnlyIf": "task_success lower confidence bound is at least 0.00 and guidance_adherence lower confidence bound is at least +0.05, with no increase in critical violations",
+        "otherwise": "SIMPLIFY_TO_FACTS_ONLY and remove the guidance layer"
+      },
+      "knowledgeUpdates": {
+        "comparison": "K1_UPDATED minus K0_STATIC within ARM-SSG-05",
+        "retainOnlyIf": "On update-sensitive tasks task_success lower confidence bound is at least +0.10 and stale_claim_rate decreases by at least 0.10 at the point estimate, while invariant-control task_success lower confidence bound is at least -0.02",
+        "otherwise": "FREEZE_K0_STATIC, reject update promotion, and remove the update path from the candidate architecture"
+      },
+      "multiHop": {
+        "comparison": "MULTI_HOP versus SINGLE_HOP within ARM-SSG-05 at K1_UPDATED",
+        "retainOnlyIf": "The absolute multi-hop task_success lower confidence bound is at least 0.75 and the paired multi-minus-single task_success lower confidence bound is at least -0.10",
+        "otherwise": "LIMIT_TO_SINGLE_HOP, deny multi-hop support and substitution claims, and route multi-hop work outside the simplified candidate"
+      },
+      "smallModel": {
+        "comparison": "ARM-SSG-05 versus ARM-LRF-01 at K1_UPDATED",
+        "retainAsSubstitutionCandidateOnlyIf": "Every mandatory quality and efficiency threshold below passes",
+        "otherwise": "RETAIN_LARGE_PROFILE and deny small-model substitution"
+      }
+    },
+    "modelSubstitutionQualityThresholds": [
+      "Paired overall task_success delta lower 95 percent confidence bound is at least -0.03",
+      "Paired overall atomic_fact_f1 delta lower 95 percent confidence bound is at least -0.02",
+      "Paired multi-hop task_success delta lower 95 percent confidence bound is at least -0.05",
+      "Paired unsupported_claim_rate delta upper 95 percent confidence bound is at most +0.01",
+      "Paired stale_claim_rate delta upper 95 percent confidence bound is at most +0.01",
+      "ARM-SSG-05 absolute overall task_success lower 95 percent confidence bound is at least 0.80",
+      "ARM-SSG-05 absolute multi-hop task_success lower 95 percent confidence bound is at least 0.75",
+      "ARM-SSG-05 has zero critical violations and its exact model_failure_rate upper 95 percent confidence bound is at most 0.05"
+    ],
+    "modelSubstitutionEfficiencyThresholds": [
+      "ARM-SSG-05 versus ARM-LRF-01 paired time_to_final point ratio is at most 0.70 and upper 95 percent confidence bound is at most 0.80",
+      "ARM-SSG-05 versus ARM-LRF-01 paired cpu_seconds upper 95 percent ratio bound is at most 0.80",
+      "The median of the three small-to-large peak_resident_bytes session ratios is at most 0.65 and every session ratio is at most 0.75",
+      "Resource-sample coverage is at least 0.99 for both profiles and no efficiency validity condition failed"
+    ],
+    "reportClaimGate": {
+      "gateId": "L6-MODEL-SUBSTITUTION",
+      "logic": "PASS only if all integrity, completion, confidence-interval, quality, efficiency, and scope gates pass simultaneously; otherwise DENY",
+      "allowedPassingWording": "On the exact frozen fresh synthetic domains and profiles in this protocol, ARM-SSG-05 met the predeclared quality non-inferiority and efficiency thresholds relative to ARM-LRF-01.",
+      "forbiddenWording": [
+        "The small model replaces the large model",
+        "The selected model is generally better, production-ready, safer, or universally more efficient",
+        "PanSphaira proves model substitution outside the tested frozen synthetic domains"
+      ],
+      "currentStatus": "DENY_NOT_EXECUTED"
+    }
+  },
+  "stopAndSimplificationRules": [
+    {
+      "ruleId": "STOP-01-PROFILE-COMPETENCE",
+      "trigger": "Any selected model/runtime artifact is absent, digest-mismatched, unloadable, incompatible, or unable to pass the fixed non-scored format probe",
+      "action": "Stop before scored runs, emit blocking COMPETENCE_LIMIT, and reject execution without synthetic measurement or profile substitution"
+    },
+    {
+      "ruleId": "STOP-02-INTEGRITY",
+      "trigger": "Any task, seed, edition, parity, guidance, prompt, scorer, harness, arm, schedule, host, clock, or sampler digest/invariant mismatch",
+      "action": "Stop the affected block, mark it INVALID_NO_CLAIM, preserve records, and require a new protocol edition rather than a repair rerun"
+    },
+    {
+      "ruleId": "STOP-03-LEAKAGE",
+      "trigger": "Any task/gold leakage, guidance answer leakage, model/operator unblinding, cross-run memory, or arm-specific task/version substitution",
+      "action": "Invalidate the complete experiment edition and publish no quality, efficiency, architecture, or substitution claim"
+    },
+    {
+      "ruleId": "STOP-04-CRITICAL-VIOLATION",
+      "trigger": "The first critical violation involving credentials, tools, authority, effects, real entities, or hidden-label disclosure",
+      "action": "Stop that profile, falsify its candidate use, preserve the run, and deny substitution"
+    },
+    {
+      "ruleId": "STOP-05-FAILURE-RATE",
+      "trigger": "After at least 16 scheduled runs for an arm/edition, its preserved model_failure_rate exceeds 0.125",
+      "action": "Stop that arm as a COMPETENCE_LIMIT, emit partial reports, score no replacement runs, and deny affected architecture and substitution claims"
+    },
+    {
+      "ruleId": "STOP-06-RESOURCE-OR-TIME",
+      "trigger": "The 72-hour wall-clock budget, 300-second request timeout, resource envelope, thermal validity, CPU-only device invariant, or 0.99 sample-coverage floor is exceeded",
+      "action": "Stop, preserve infrastructure and model-failure classification, emit PARTIAL_NO_CLAIM, and do not convert infrastructure evidence into a product verdict"
+    },
+    {
+      "ruleId": "STOP-07-NO-EARLY-SUCCESS",
+      "trigger": "An interim result appears to pass a gate before all 960 scheduled run records and required intervals are present",
+      "action": "Continue; early success is forbidden. Interim review may stop only for harm, integrity, competence, resource exhaustion, or predeclared futility and can never create a passing claim"
+    },
+    {
+      "ruleId": "SIMPLIFY-STRUCTURE",
+      "trigger": "The structuredRepresentation retainOnlyIf rule fails",
+      "action": "Remove structured serialization and continue future design with parity-bound raw facts"
+    },
+    {
+      "ruleId": "SIMPLIFY-GUIDANCE",
+      "trigger": "The guidance retainOnlyIf rule fails",
+      "action": "Remove guidance and retain facts only"
+    },
+    {
+      "ruleId": "SIMPLIFY-UPDATES",
+      "trigger": "The knowledgeUpdates retainOnlyIf rule fails",
+      "action": "Freeze K0_STATIC and reject the update path"
+    },
+    {
+      "ruleId": "SIMPLIFY-MULTI-HOP",
+      "trigger": "The multiHop retainOnlyIf rule fails",
+      "action": "Restrict the architecture and claims to single-hop tasks"
+    },
+    {
+      "ruleId": "FALSIFY-SUBSTITUTION",
+      "trigger": "Any mandatory model-substitution quality or efficiency threshold fails or is unavailable",
+      "action": "Retain the large profile, deny substitution, and report the exact failed gates without post-hoc threshold changes"
+    }
+  ],
+  "immutableManifestContract": {
+    "runIdDerivation": "run:<sha256(protocolDigestSha256|armId|taskId|editionId|generationSeed)>",
+    "pairKeyDerivation": "pair:<sha256(protocolDigestSha256|taskId|editionId|generationSeed)>",
+    "requiredLayers": [
+      {
+        "layerId": "L1",
+        "name": "ADMISSION_AND_IMMUTABILITY",
+        "requiredFields": [
+          "schemaVersion",
+          "protocolId",
+          "protocolDigestSha256",
+          "decisionReceiptSha256",
+          "operatingModelVersion",
+          "preservedDecisionIds",
+          "harnessCommitSha1",
+          "harnessTreeSha256",
+          "scorerArtifactSha256",
+          "outputSchemaSha256",
+          "promptTemplateSha256",
+          "taskGeneratorArtifactSha256",
+          "taskSeedDigestSha256",
+          "taskSuiteEditionId",
+          "taskSuiteEditionSha256",
+          "knowledgeSeedDigestSha256",
+          "knowledgeK0EditionSha256",
+          "knowledgeK1EditionSha256",
+          "knowledgeK0CanonicalFactInventorySha256",
+          "knowledgeK1CanonicalFactInventorySha256",
+          "rawK0RenderingSha256",
+          "rawK1RenderingSha256",
+          "structuredK0RenderingSha256",
+          "structuredK1RenderingSha256",
+          "factParityReceiptK0Sha256",
+          "factParityReceiptK1Sha256",
+          "guidanceArtifactSha256",
+          "guidanceLeakageAuditSha256",
+          "generationSeedListSha256",
+          "bootstrapSeedSha256",
+          "scheduleSeedSha256",
+          "armManifestSha256",
+          "smallModelSha256",
+          "largeModelSha256",
+          "runtimeBundleSha256",
+          "runtimeArgvSha256",
+          "runtimeEnvironmentAllowListSha256",
+          "hostManifestSha256",
+          "resourceSamplerArtifactSha256",
+          "timingClockId"
+        ],
+        "rejectConditions": [
+          "Missing, null, malformed, duplicate, mutable, unknown, or digest-mismatched field",
+          "Raw task or Knowledge seed exposed instead of a sealed digest",
+          "Unpinned model, runtime, harness, scorer, prompt, host, clock, resource sampler, or edition",
+          "Profile absence or failed fixed compatibility probe",
+          "Any service route, credential, provider, download, fallback model, or unlisted environment variable"
+        ],
+        "rejectCode": "COMPETENCE_LIMIT_OR_INTEGRITY_MISMATCH"
+      },
+      {
+        "layerId": "L2",
+        "name": "PAIRING_AND_INPUT_BINDING",
+        "requiredFields": [
+          "armId",
+          "runId",
+          "pairKey",
+          "taskId",
+          "scenarioPairId",
+          "domainId",
+          "hopClass",
+          "updateSensitivity",
+          "editionId",
+          "editionSha256",
+          "taskPromptCoreSha256",
+          "goldRecordSha256",
+          "evidenceGraphSha256",
+          "canonicalFactInventorySha256",
+          "contextRenderingSha256",
+          "guidanceSha256OrNull",
+          "modelProfileId",
+          "runtimeProfileId",
+          "generationSeed",
+          "requestSha256"
+        ],
+        "rejectConditions": [
+          "Run ID or pair key does not reproduce from the declared derivation",
+          "Duplicate or missing arm in a pair block",
+          "Task, gold, evidence graph, edition, generation seed, or prompt core differs across arms",
+          "Raw/structured fact parity fails, guidance leaks an answer, or context truncates",
+          "Arm receives a capability or payload not declared in its arm manifest"
+        ],
+        "rejectCode": "PAIRING_OR_INPUT_MISMATCH"
+      },
+      {
+        "layerId": "L3",
+        "name": "BOUNDED_EXECUTION",
+        "requiredFields": [
+          "runId",
+          "attemptOrdinal",
+          "scheduleOrdinal",
+          "serverSessionId",
+          "serverProcessId",
+          "serverStartAuditUtc",
+          "requestStartMonotonicRawNs",
+          "firstTokenMonotonicRawNsOrNull",
+          "finalByteMonotonicRawNs",
+          "clockResolutionNs",
+          "resourceSampleIntervalMs",
+          "resourceSampleCount",
+          "resourceSampleCoverage",
+          "cpuTicksPerSecond",
+          "exitCodeOrNull",
+          "terminalStatus",
+          "failureCodeOrNull",
+          "stdoutSha256",
+          "stderrSha256",
+          "responseSha256OrNull",
+          "promptTokensOrNull",
+          "generatedTokensOrNull",
+          "runtimeTimingRecordSha256OrNull"
+        ],
+        "rejectConditions": [
+          "attemptOrdinal is not 1",
+          "Hidden retry, concurrent scored request, schedule drift, cross-run state, tool, effect, egress, credential, repository access, or model fallback",
+          "Wall-clock timing used as latency, non-monotonic timestamps, sampler gap, device-mode drift, or timeout mutation",
+          "Terminal run record missing or overwritten"
+        ],
+        "rejectCode": "EXECUTION_INVALID"
+      },
+      {
+        "layerId": "L4",
+        "name": "DETERMINISTIC_SCORING",
+        "requiredFields": [
+          "runId",
+          "terminalStatus",
+          "failureCodeOrNull",
+          "scorerArtifactSha256",
+          "goldRecordSha256",
+          "parsedResponseSha256OrNull",
+          "taskSuccess",
+          "atomicFactTruePositiveCount",
+          "atomicFactFalsePositiveCount",
+          "atomicFactFalseNegativeCount",
+          "evidenceTruePositiveCount",
+          "evidenceFalsePositiveCount",
+          "evidenceFalseNegativeCount",
+          "unsupportedClaimCount",
+          "staleClaimCount",
+          "predictedClaimCount",
+          "guidanceConstraintsPassed",
+          "guidanceConstraintsTotal",
+          "multiHopPathCorrectOrNull",
+          "criticalViolationCodes",
+          "scoreRecordSha256"
+        ],
+        "rejectConditions": [
+          "Model or human judge used, fuzzy/semantic matching introduced, scorer or gold changed after output, failure omitted, denominator changed, or score digest does not reproduce",
+          "A failed run is dropped or imputed rather than receiving the declared zero-valued quality outcomes"
+        ],
+        "rejectCode": "SCORING_INVALID"
+      },
+      {
+        "layerId": "L5",
+        "name": "PAIRED_STATISTICS",
+        "requiredFields": [
+          "reportId",
+          "armIdsOrWithinArmFactor",
+          "scheduledCount",
+          "completedCount",
+          "modelFailureCount",
+          "invalidatedCount",
+          "independentUnitCount",
+          "pointEstimate",
+          "confidenceLevel",
+          "confidenceMethod",
+          "bootstrapResamples",
+          "bootstrapSeedSha256",
+          "lowerBoundOrNull",
+          "upperBoundOrNull",
+          "failureBreakdown",
+          "statisticsRecordSha256"
+        ],
+        "rejectConditions": [
+          "Unpaired comparison, arm/edition/task omission, seed treated as independent, undeclared exclusion, fewer than declared units, non-reproducible resample stream, missing failure counts, unavailable required interval, or post-hoc metric/threshold change"
+        ],
+        "rejectCode": "STATISTICS_INVALID_OR_CI_UNAVAILABLE"
+      },
+      {
+        "layerId": "L6",
+        "name": "REPORT_AND_CLAIM_GATE",
+        "requiredFields": [
+          "protocolDigestSha256",
+          "completeRunManifestSha256",
+          "allMandatoryReportIds",
+          "qualityGateResults",
+          "efficiencyGateResults",
+          "architectureActions",
+          "stopRuleResults",
+          "scopeStatement",
+          "nonClaims",
+          "modelSubstitutionGateStatus",
+          "reportSha256"
+        ],
+        "rejectConditions": [
+          "Any L1-L5 rejection, missing mandatory A/B report, incomplete run count without PARTIAL_NO_CLAIM, omitted failure, absent confidence interval, quality gate failure, efficiency gate failure, widened domain claim, or forbidden substitution wording"
+        ],
+        "rejectCode": "CLAIM_GATE_DENIED"
+      }
+    ]
+  },
+  "failureTaxonomy": {
+    "preMeasurementBlocking": [
+      "COMPETENCE_LIMIT",
+      "INTEGRITY_MISMATCH",
+      "PAIRING_OR_INPUT_MISMATCH",
+      "LEAKAGE_DETECTED"
+    ],
+    "modelFailuresScoredZero": [
+      "TIMEOUT",
+      "OOM_WITHIN_ADMITTED_ENVELOPE",
+      "NONZERO_RUNTIME_EXIT",
+      "MALFORMED_STREAM",
+      "OUTPUT_LIMIT_WITHOUT_VALID_FINAL",
+      "INVALID_JSON",
+      "REFUSAL_NO_VALID_ANSWER",
+      "RUNTIME_ERROR"
+    ],
+    "infrastructureInvalidations": [
+      "HOST_DRIFT",
+      "CLOCK_INVALID",
+      "RESOURCE_SAMPLER_GAP",
+      "THERMAL_INVALID",
+      "UNRELATED_PROCESS_INTERFERENCE",
+      "HARNESS_SIGTRAP_EXIT_133",
+      "DOCKER_ENOENT"
+    ],
+    "classificationRule": "Infrastructure evidence is never a product verdict. A model failure is scored only when L1-L3 remained valid and the failure occurred inside the admitted model/runtime envelope.",
+    "preservationRule": "Original request, response if any, bounded stdout/stderr, exit status, timing, resource samples, failure code, and all digests remain append-only. Corrections use a new protocol edition and new run IDs."
+  },
+  "integrationReceipt": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "branch": "conveyor/pansphaira-285",
+    "artifactPath": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+    "changedPaths": [
+      "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json"
+    ],
+    "allowlistCompliant": true,
+    "requiredVerification": {
+      "command": "git diff --check origin/main...HEAD",
+      "expectedExitCode": 0,
+      "status": "PASS"
+    },
+    "actionsPerformed": [
+      "Read repository evidence conventions",
+      "Inspected local model and runtime artifact presence",
+      "Computed SHA-256 digests without loading a model",
+      "Ran a no-model runtime version/help probe",
+      "Authored this bounded protocol decision receipt"
+    ],
+    "actionsNotPerformed": {
+      "modelsAcquired": false,
+      "modelInvocations": 0,
+      "servicesStartedOrCalled": 0,
+      "credentialsUsed": false,
+      "qualificationBenchmarkRuns": 0,
+      "harnessSourceModified": false,
+      "publication": false,
+      "push": false,
+      "merge": false,
+      "release": false,
+      "issueClosed": false
+    },
+    "currentEvidenceVerdict": "PROTOCOL_APPROVED_EXECUTION_NOT_AUTHORIZED_NO_BENCHMARK_RESULT_NO_MODEL_SUBSTITUTION_CLAIM"
+  }
+}
