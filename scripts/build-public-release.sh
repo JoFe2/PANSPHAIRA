@@ -189,7 +189,7 @@ for line_number, raw in enumerate(manifest.read_text("utf-8").splitlines(), 1):
         raise SystemExit(f"PRIVILEGED_SOURCE_MODE:{line_number}")
     total_bytes += metadata.st_size
 
-if count != 1343:
+if count != 1351:
     raise SystemExit("MANIFEST_FILE_COUNT")
 if total_bytes > 100 * 1024 * 1024:
     raise SystemExit("MANIFEST_BYTE_LIMIT")
@@ -204,6 +204,8 @@ repository_only_files = {
     "tests/fixtures/rks-01/typed-knowledge-corpus-v1.json",
     "tests/fixtures/rks-01/model-runtime-manifest-v1.json",
     "verification/rks-01-comparator-receipt-v1.json",
+    "tests/fixtures/rks-02/model-runtime-manifest-v1.json",
+    "verification/rks-02-comparator-receipt-v1.json",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",
@@ -221,6 +223,7 @@ repository_only_prefixes = (
     "tests/daily-poc.",
     "tests/fixtures/daily-poc/",
     "verification/rks-01-run-receipts/",
+    "verification/rks-02-run-receipts/",
 )
 for candidate in root.rglob("*"):
     relative = candidate.relative_to(root).as_posix()
