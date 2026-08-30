@@ -166,6 +166,11 @@ demo/runtime/server.mjs	demo/runtime/server.mjs	0644
 demo/seed-and-flow.sh	demo/seed-and-flow.sh	0755
 demo/tsconfig.runtime.json	demo/tsconfig.runtime.json	0644
 demo/uninstall.sh	demo/uninstall.sh	0755
+docker/local-knowledge-wiki/.dockerignore	docker/local-knowledge-wiki/.dockerignore	0644
+docker/local-knowledge-wiki/Dockerfile	docker/local-knowledge-wiki/Dockerfile	0644
+docker/local-knowledge-wiki/README.md	docker/local-knowledge-wiki/README.md	0644
+docker/local-knowledge-wiki/docker-compose.wiki.yml	docker/local-knowledge-wiki/docker-compose.wiki.yml	0644
+docker/local-knowledge-wiki/entrypoint.sh	docker/local-knowledge-wiki/entrypoint.sh	0644
 docs/.vitepress/config.mts	docs/.vitepress/config.mts	0644
 docs/ADAPTIVE-EVIDENCE-CONTROLLER.md	docs/ADAPTIVE-EVIDENCE-CONTROLLER.md	0644
 docs/ADAPTIVE-EVIDENCE-GATES.md	docs/ADAPTIVE-EVIDENCE-GATES.md	0644
@@ -199,6 +204,8 @@ docs/KNOWLEDGE-QUALITY-SERVICE.md	docs/KNOWLEDGE-QUALITY-SERVICE.md	0644
 docs/KNOWN-LIMITATIONS.md	docs/KNOWN-LIMITATIONS.md	0644
 docs/LEARNING-ROUTING-CONTRACTS.md	docs/LEARNING-ROUTING-CONTRACTS.md	0644
 docs/LOCAL-FILE-KNOWLEDGE-CORPUS.md	docs/LOCAL-FILE-KNOWLEDGE-CORPUS.md	0644
+docs/LOCAL-KNOWLEDGE-KIWIX-ZIM-ASSESSMENT.md	docs/LOCAL-KNOWLEDGE-KIWIX-ZIM-ASSESSMENT.md	0644
+docs/LOCAL-KNOWLEDGE-WIKIMEDIA-PILOT.md	docs/LOCAL-KNOWLEDGE-WIKIMEDIA-PILOT.md	0644
 docs/OPENCLAW-BOUNDED-STATE-OPERATOR-GUIDE.md	docs/OPENCLAW-BOUNDED-STATE-OPERATOR-GUIDE.md	0644
 docs/OPERATING-FIELD-GUIDE.md	docs/OPERATING-FIELD-GUIDE.md	0644
 docs/OPERATION-EVENT-QUALITY-CONTRACT.md	docs/OPERATION-EVENT-QUALITY-CONTRACT.md	0644
@@ -331,6 +338,10 @@ packages/contracts/src/learning-routing-threats.ts	packages/contracts/src/learni
 packages/contracts/src/learning-routing.ts	packages/contracts/src/learning-routing.ts	0644
 packages/contracts/src/local-file-knowledge-corpus.ts	packages/contracts/src/local-file-knowledge-corpus.ts	0644
 packages/contracts/src/maintenance-contract-freeze.ts	packages/contracts/src/maintenance-contract-freeze.ts	0644
+packages/contracts/src/mediawiki-edition-lifecycle.ts	packages/contracts/src/mediawiki-edition-lifecycle.ts	0644
+packages/contracts/src/mediawiki-mini-dump.ts	packages/contracts/src/mediawiki-mini-dump.ts	0644
+packages/contracts/src/mediawiki-query-receipt.ts	packages/contracts/src/mediawiki-query-receipt.ts	0644
+packages/contracts/src/mediawiki-xml-local-adapter.ts	packages/contracts/src/mediawiki-xml-local-adapter.ts	0644
 packages/contracts/src/model-access-broker.ts	packages/contracts/src/model-access-broker.ts	0644
 packages/contracts/src/operation-event-quality.ts	packages/contracts/src/operation-event-quality.ts	0644
 packages/contracts/src/paperless-zoo-adapter.ts	packages/contracts/src/paperless-zoo-adapter.ts	0644
@@ -371,6 +382,10 @@ packages/hmi-adapters/src/codex.ts	packages/hmi-adapters/src/codex.ts	0644
 packages/hmi-adapters/src/index.ts	packages/hmi-adapters/src/index.ts	0644
 packages/hmi-adapters/src/openclaw.ts	packages/hmi-adapters/src/openclaw.ts	0644
 packages/hmi-adapters/src/shared.ts	packages/hmi-adapters/src/shared.ts	0644
+packages/local-knowledge/src/mediawiki-readonly-query.ts	packages/local-knowledge/src/mediawiki-readonly-query.ts	0644
+packages/local-knowledge/src/wikimedia-download-policy.ts	packages/local-knowledge/src/wikimedia-download-policy.ts	0644
+packages/local-knowledge/src/wikimedia-optin-download.ts	packages/local-knowledge/src/wikimedia-optin-download.ts	0644
+packages/local-knowledge/src/wikimedia-pilot-evidence.ts	packages/local-knowledge/src/wikimedia-pilot-evidence.ts	0644
 packages/setup-coordinator/src/index.ts	packages/setup-coordinator/src/index.ts	0644
 packages/usage-insights/src/cli.ts	packages/usage-insights/src/cli.ts	0755
 packages/usage-insights/src/index.ts	packages/usage-insights/src/index.ts	0644
@@ -422,6 +437,8 @@ schemas/contracts/maintenance-compatibility-profile-v1.schema.json	schemas/contr
 schemas/contracts/maintenance-doctor-report-v1.schema.json	schemas/contracts/maintenance-doctor-report-v1.schema.json	0644
 schemas/contracts/maintenance-installation-lock-v1.schema.json	schemas/contracts/maintenance-installation-lock-v1.schema.json	0644
 schemas/contracts/maintenance-operation-contract-v1.schema.json	schemas/contracts/maintenance-operation-contract-v1.schema.json	0644
+schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json	schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json	0644
+schemas/contracts/mediawiki-xml-local-profile-v1.schema.json	schemas/contracts/mediawiki-xml-local-profile-v1.schema.json	0644
 schemas/contracts/operation-event-quality-v1.schema.json	schemas/contracts/operation-event-quality-v1.schema.json	0644
 schemas/contracts/poc-admin-authority-profile-v1.schema.json	schemas/contracts/poc-admin-authority-profile-v1.schema.json	0644
 schemas/contracts/power-platform-read-connector-v1.schema.json	schemas/contracts/power-platform-read-connector-v1.schema.json	0644
@@ -480,6 +497,7 @@ scripts/verify-openclaw-m1.5-evidence.mjs	scripts/verify-openclaw-m1.5-evidence.
 scripts/verify-release-governance.mjs	scripts/verify-release-governance.mjs	0755
 scripts/verify-secure-default-proof.mjs	scripts/verify-secure-default-proof.mjs	0755
 scripts/verify-supply-chain.mjs	scripts/verify-supply-chain.mjs	0755
+scripts/verify-wikimedia-pilot.mjs	scripts/verify-wikimedia-pilot.mjs	0644
 security/openclaw-m1.1-evidence-v1.json	security/openclaw-m1.1-evidence-v1.json	0644
 security/openclaw-m1.2-evidence-v2.json	security/openclaw-m1.2-evidence-v2.json	0644
 security/openclaw-m1.3-evidence-v1.json	security/openclaw-m1.3-evidence-v1.json	0644
@@ -725,6 +743,7 @@ tests/fixtures/integration-profile/negative-probes-v1.json	tests/fixtures/integr
 tests/fixtures/integration-profile/positive-variants-v1.json	tests/fixtures/integration-profile/positive-variants-v1.json	0644
 tests/fixtures/issue-candidate/positive-v1.json	tests/fixtures/issue-candidate/positive-v1.json	0644
 tests/fixtures/issue-candidate/quarantine-v1.json	tests/fixtures/issue-candidate/quarantine-v1.json	0644
+tests/fixtures/kiwix-zim-assessment/assessment-v1.json	tests/fixtures/kiwix-zim-assessment/assessment-v1.json	0644
 tests/fixtures/knowledge-envelope/adversarial-matrix-v1.json	tests/fixtures/knowledge-envelope/adversarial-matrix-v1.json	0644
 tests/fixtures/knowledge-envelope/apple-claims-v1.json	tests/fixtures/knowledge-envelope/apple-claims-v1.json	0644
 tests/fixtures/knowledge-envelope/taxonomy-generations-v1.json	tests/fixtures/knowledge-envelope/taxonomy-generations-v1.json	0644
@@ -736,6 +755,17 @@ tests/fixtures/local-file-corpus/edition-1/operations.md	tests/fixtures/local-fi
 tests/fixtures/local-file-corpus/edition-1/policy.txt	tests/fixtures/local-file-corpus/edition-1/policy.txt	0644
 tests/fixtures/local-file-corpus/edition-2/operations.md	tests/fixtures/local-file-corpus/edition-2/operations.md	0644
 tests/fixtures/local-file-corpus/edition-2/policy.txt	tests/fixtures/local-file-corpus/edition-2/policy.txt	0644
+tests/fixtures/local-knowledge-wiki-container/corpus-file.txt	tests/fixtures/local-knowledge-wiki-container/corpus-file.txt	0644
+tests/fixtures/local-knowledge-wiki-container/source/manifest.json	tests/fixtures/local-knowledge-wiki-container/source/manifest.json	0644
+tests/fixtures/local-knowledge-wiki-container/source/positive-mini.xml	tests/fixtures/local-knowledge-wiki-container/source/positive-mini.xml	0644
+tests/fixtures/local-knowledge-wiki-container/source/reordered-mini.xml	tests/fixtures/local-knowledge-wiki-container/source/reordered-mini.xml	0644
+tests/fixtures/mediawiki-mini-dump/manifest.json	tests/fixtures/mediawiki-mini-dump/manifest.json	0644
+tests/fixtures/mediawiki-mini-dump/negative-matrix.json	tests/fixtures/mediawiki-mini-dump/negative-matrix.json	0644
+tests/fixtures/mediawiki-mini-dump/positive-mini.xml	tests/fixtures/mediawiki-mini-dump/positive-mini.xml	0644
+tests/fixtures/mediawiki-mini-dump/reordered-mini.xml	tests/fixtures/mediawiki-mini-dump/reordered-mini.xml	0644
+tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json	tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json	0644
+tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml	tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml	0644
+tests/fixtures/mediawiki-xml/negative-matrix-v1.json	tests/fixtures/mediawiki-xml/negative-matrix-v1.json	0644
 tests/fixtures/openclaw-m1.5/adversarial-matrix-v1.json	tests/fixtures/openclaw-m1.5/adversarial-matrix-v1.json	0644
 tests/fixtures/openclaw-state/gateway-state-v1.json	tests/fixtures/openclaw-state/gateway-state-v1.json	0644
 tests/fixtures/openclaw-state/lifecycle-v1.json	tests/fixtures/openclaw-state/lifecycle-v1.json	0644
@@ -765,6 +795,8 @@ tests/fixtures/usage-insights/negative-matrix-v1.json	tests/fixtures/usage-insig
 tests/fixtures/usage-insights/positive-opted-in-event-v1.json	tests/fixtures/usage-insights/positive-opted-in-event-v1.json	0644
 tests/fixtures/verification-fabric/negative-matrix-v1.json	tests/fixtures/verification-fabric/negative-matrix-v1.json	0644
 tests/fixtures/verification-fabric/positive-bundle-v1.json	tests/fixtures/verification-fabric/positive-bundle-v1.json	0644
+tests/fixtures/wikimedia-download/official-checksum.txt	tests/fixtures/wikimedia-download/official-checksum.txt	0644
+tests/fixtures/wikimedia-pilot/expected-measurement-schema.json	tests/fixtures/wikimedia-pilot/expected-measurement-schema.json	0644
 tests/helpers/openclaw-m1-4-harness.mjs	tests/helpers/openclaw-m1-4-harness.mjs	0644
 tests/hmi-conformant-entrypoints.test.ts	tests/hmi-conformant-entrypoints.test.ts	0644
 tests/hmi-contribute-preflight.test.ts	tests/hmi-contribute-preflight.test.ts	0644
@@ -778,6 +810,7 @@ tests/hmi-post-explain-consistency.test.ts	tests/hmi-post-explain-consistency.te
 tests/injection-trust-boundary.test.ts	tests/injection-trust-boundary.test.ts	0644
 tests/integration-profile.test.ts	tests/integration-profile.test.ts	0644
 tests/issue-candidate.test.ts	tests/issue-candidate.test.ts	0644
+tests/kiwix-zim-assessment.test.mjs	tests/kiwix-zim-assessment.test.mjs	0644
 tests/knowledge-envelope.test.ts	tests/knowledge-envelope.test.ts	0644
 tests/knowledge-quality-api.test.mjs	tests/knowledge-quality-api.test.mjs	0644
 tests/knowledge-quality.test.ts	tests/knowledge-quality.test.ts	0644
@@ -787,9 +820,14 @@ tests/learning-routing-recommender.test.ts	tests/learning-routing-recommender.te
 tests/learning-routing-threats.test.ts	tests/learning-routing-threats.test.ts	0644
 tests/learning-routing.test.ts	tests/learning-routing.test.ts	0644
 tests/local-file-knowledge-corpus.test.ts	tests/local-file-knowledge-corpus.test.ts	0644
+tests/local-knowledge-wiki-container.test.mjs	tests/local-knowledge-wiki-container.test.mjs	0644
 tests/maintenance-contract-freeze.test.ts	tests/maintenance-contract-freeze.test.ts	0644
 tests/managed-skill-lifecycle-runtime.test.mjs	tests/managed-skill-lifecycle-runtime.test.mjs	0644
 tests/mapping-registry.test.mjs	tests/mapping-registry.test.mjs	0644
+tests/mediawiki-edition-lifecycle.test.ts	tests/mediawiki-edition-lifecycle.test.ts	0644
+tests/mediawiki-mini-dump.test.ts	tests/mediawiki-mini-dump.test.ts	0644
+tests/mediawiki-readonly-query.test.ts	tests/mediawiki-readonly-query.test.ts	0644
+tests/mediawiki-xml-local-adapter.test.ts	tests/mediawiki-xml-local-adapter.test.ts	0644
 tests/model-access-broker-runtime.test.mjs	tests/model-access-broker-runtime.test.mjs	0644
 tests/model-access-broker.test.ts	tests/model-access-broker.test.ts	0644
 tests/openclaw-agent-runtime-lock.test.mjs	tests/openclaw-agent-runtime-lock.test.mjs	0644
@@ -838,6 +876,8 @@ tests/verification-fabric-negative-zero.test.ts	tests/verification-fabric-negati
 tests/verification-fabric-v2.test.ts	tests/verification-fabric-v2.test.ts	0644
 tests/verification-fabric.test.ts	tests/verification-fabric.test.ts	0644
 tests/voice-local-ptt.test.ts	tests/voice-local-ptt.test.ts	0644
+tests/wikimedia-optin-download.test.ts	tests/wikimedia-optin-download.test.ts	0644
+tests/wikimedia-pilot-evidence.test.ts	tests/wikimedia-pilot-evidence.test.ts	0644
 tools/azure-power-platform/render-public-readback.mjs	tools/azure-power-platform/render-public-readback.mjs	0644
 tools/azure-power-platform/run-synthetic-governance-harness.mjs	tools/azure-power-platform/run-synthetic-governance-harness.mjs	0644
 tools/azure-power-platform/validate-alm-package-plan.mjs	tools/azure-power-platform/validate-alm-package-plan.mjs	0644
@@ -897,3 +937,4 @@ verification/cks-06-router-dry-run-evidence-v1.json	verification/cks-06-router-d
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644
 verification/verification-dag-v2.json	verification/verification-dag-v2.json	0644
+verification/wikimedia-m0-evidence-v1.json	verification/wikimedia-m0-evidence-v1.json	0644

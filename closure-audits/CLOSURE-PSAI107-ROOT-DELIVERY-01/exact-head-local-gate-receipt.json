@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI107-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JimPansky/PANSPHAIRA",
+    "number": 107,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/107"
+  },
+  "authorizedScope": "LOCAL_OFFLINE_MOUNTED_MEDIAWIKI_M0",
+  "baseCommit": "bf0c89b1092313c3fe7737874f928b2961d386a9",
+  "testedHead": "31cd5728438fc78f63a292bffb7130b668ac0ca4",
+  "testedTree": "2228c29adcbe7abc2a4aeff2f432441f57ae250e",
+  "reviewFindingsClosed": [
+    "Measured claims require non-empty receipt samples and matching environment, source, edition and raw-evidence bindings.",
+    "Edition promotion cleanup removes the staged edition when pointer replacement fails and leaves zero activation residue.",
+    "Contradictions are computed before result limiting and remain visible when a conflicting result falls outside maxResults.",
+    "Every MediaWiki/Wikimedia product, Docker, documentation, schema, test and evidence path is canonically registered and release-integrated."
+  ],
+  "nonClaims": [
+    "NO_BUNDLED_WIKIPEDIA_CORPUS",
+    "NO_DEFAULT_OR_SILENT_DOWNLOAD",
+    "NO_FULL_HISTORY_COMMONS_OR_WIKIDATA",
+    "NO_AUTOMATIC_TRUTH_OR_EXECUTION_AUTHORITY",
+    "NO_PUBLIC_CORPUS_REDISTRIBUTION_OR_PRODUCTION_PERFORMANCE_CLAIM"
+  ],
+  "gates": [
+    {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
+    {"command": "npm run wiki:test", "outcome": "PASS", "tests": 68, "passed": 68},
+    {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1214},
+    {"command": "npm run release-governance:verify", "outcome": "PASS"},
+    {"command": "npm run release-governance:test", "outcome": "PASS", "tests": 54, "passed": 54},
+    {"command": "npm run lint", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "delivery": {
+    "readyForPr": true,
+    "sourceOnlyDailyReleaseRequired": true,
+    "publicReadbackRequired": true,
+    "issueCloseRequired": true
+  }
+}

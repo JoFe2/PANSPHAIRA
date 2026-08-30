@@ -1,0 +1,4 @@
+# host dumps.wikimedia.org
+# maximumSourceBytes 8388608
+sha256 ecb91923bc3e05a3699611dc04eadd83d3ae4c26f1d9f46c6b35eb5edfb06cbb 768 enwiki-20260801-pages-articles.xml.gz
+sha256 18526851e9591c50b73fa928d70e6402718aef0a3b76d6826b133b1e883c589c 172 enwiki-20260801-site-stats.gz

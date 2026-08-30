@@ -1,0 +1,257 @@
+{
+  "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
+  "receiptId": "PSAI107-INTEGRATION-RELEASE-NO-RELEASE-01",
+  "receiptVersion": 2,
+  "artifactKind": "RELEASE_OR_NO_RELEASE_DECISION_INTEGRATION_RECEIPT",
+  "governance": {
+    "operatingModelVersion": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "statement": "This receipt applies the controller-reviewed operating model and decisions without restating, amending, superseding or replacing them."
+  },
+  "inspection": {
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headBeforeReceipt": "ddd643cffaa8f1915fee1fd84e0caa311609b9da",
+    "integratedCommitsSinceOriginMainBeforeReceipt": [
+      {
+        "commit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
+        "subject": "docs: approve bounded MediaWiki XML M0 lifecycle"
+      },
+      {
+        "commit": "602807eb2a61c6a91c94b6d4ca2d89547eb04f7b",
+        "subject": "docs: record PSAI107 pilot rejection"
+      },
+      {
+        "commit": "8849fc70a3a6e9be0c80446a7280f09495a7c2ba",
+        "subject": "docs: record PSAI107 no-release decision"
+      },
+      {
+        "commit": "84120d6626fe2d5dafb68c4f88224d50c60e5935",
+        "subject": "feat: add offline MediaWiki mini dump editions"
+      },
+      {
+        "commit": "1e016d7b55c52f9454ddb6f17213edcec53b2a53",
+        "subject": "docs: reject unsupported PSAI107 pilot"
+      },
+      {
+        "commit": "ddd643cffaa8f1915fee1fd84e0caa311609b9da",
+        "subject": "docs: record PSAI107 workspace blocker"
+      }
+    ],
+    "changedPathsSinceOriginMain": [
+      "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json",
+      "docs/evidence/conveyor/psai107-integration-release-no-release-01.json",
+      "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json",
+      "packages/contracts/src/mediawiki-mini-dump.ts",
+      "schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json",
+      "tests/fixtures/mediawiki-mini-dump/manifest.json",
+      "tests/fixtures/mediawiki-mini-dump/negative-matrix.json",
+      "tests/fixtures/mediawiki-mini-dump/positive-mini.xml",
+      "tests/fixtures/mediawiki-mini-dump/reordered-mini.xml",
+      "tests/mediawiki-mini-dump.test.ts"
+    ],
+    "finding": "The integrated range contains a bounded architecture decision, a synthetic-only mini-dump implementation, an earlier no-release receipt and a latest official-pilot rejection receipt with bounded synthetic verifier/readback evidence. It contains no exact candidate tag, release-asset inventory or manifest, candidate licence evidence, candidate CI-green record, or candidate anonymous public-readback record."
+  },
+  "releasePolicy": {
+    "sources": [
+      "docs/RELEASE-GOVERNANCE.md",
+      "release/governance.json"
+    ],
+    "currentRecordedRegularRelease": {
+      "tag": "v0.2.0-poc.20260825.1",
+      "targetCommit": "33d19f3e96ccc512038dbf06063f19489e067390",
+      "draft": false,
+      "prerelease": false,
+      "mustBeLatest": true
+    },
+    "requiredForANewRegularRelease": [
+      "A functional evidence-backed increment and exact expected tag",
+      "Claim-to-evidence mappings and explicit non-claims",
+      "A complete release-asset inventory, manifest and SHA-256 digests",
+      "Focused positive and negative validation plus green repository, lint, checksum and supply-chain gates",
+      "Post-publication anonymous public readback matching release metadata, Latest state, public surfaces and every asset byte"
+    ],
+    "candidate": {
+      "tag": null,
+      "functionalIncrement": null,
+      "authorization": "NOT_AUTHORIZED",
+      "reason": "The integrated synthetic-only mini-dump change is not declared by repository policy as a versioned release candidate and supplies no exact expected tag or policy-required candidate evidence. Existing release metadata describes the already published current release; it does not authorize a new versioned release."
+    }
+  },
+  "mergedEvidence": {
+    "pilotAcceptanceReceipt": {
+      "path": "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json",
+      "latestReceiptCommit": "ddd643cffaa8f1915fee1fd84e0caa311609b9da",
+      "decisionCommit": "1e016d7b55c52f9454ddb6f17213edcec53b2a53",
+      "receiptVersion": 2,
+      "outcome": "REJECTED",
+      "reasonCode": "OFFICIAL_PILOT_EVIDENCE_MISSING_APPROVED_LIFECYCLE_UNBOUND",
+      "syntheticVerifierAndReadback": {
+        "focusedVerifierStatus": "PASS_SYNTHETIC_SCOPE_ONLY",
+        "tests": {
+          "passed": 6,
+          "failed": 0
+        },
+        "importStatus": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+        "reimportStatus": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+        "readbackStatus": "PASS_SYNTHETIC_QUERY_ONLY_NOT_ACCEPTED_LKG_READBACK",
+        "officialPilotStatus": "NOT_EXECUTABLE_REQUIRED_OFFICIAL_SOURCE_AND_VERIFIER_BOUND_RECEIPT_ABSENT",
+        "scope": "Repository-authored synthetic fixture only; no official-pilot, accepted/LKG, licence-determination or release credit."
+      },
+      "finding": "The merged receipt verifies bounded synthetic behavior and determinism but rejects official-pilot acceptance because the official source/evidence and approved Accepted/LKG lifecycle binding are absent."
+    },
+    "boundedDecisionReceipt": {
+      "path": "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json",
+      "commit": "b4fc2a519a736d03a730723c06fcb3f05cbc2cb1",
+      "status": "APPROVED_BOUNDED_M0",
+      "implementationAuthorization": "RESERVED_FOR_SEPARATE_SYNTHETIC_OFFLINE_IMPLEMENTATION",
+      "releaseBoundary": "The decision does not authorize packaging, release, deployment, public redistribution or any unleased implementation leaf."
+    },
+    "operatorCandidate": {
+      "commit": "84120d6626fe2d5dafb68c4f88224d50c60e5935",
+      "subject": "feat: add offline MediaWiki mini dump editions",
+      "declaredBoundary": "OFFLINE_SYNTHETIC_MEDIAWIKI_XML_NO_NETWORK_DOWNLOAD_WRITE_EXECUTION_OR_TRUTH_AUTHORITY",
+      "releaseAuthorization": "NONE"
+    },
+    "existingReleaseReadback": {
+      "source": "release/governance.json",
+      "recordCommit": "e9dd4ec9d64e5eeb19a24f4bed8c998057e83b6d",
+      "tag": "v0.2.0-poc.20260825.1",
+      "releaseId": 376149037,
+      "status": "RECORDED_FOR_EXISTING_RELEASE_ONLY",
+      "integratedRangeChangesReleasePolicyBytes": false,
+      "effect": "The existing release record supplies no authorization or public-readback credit for a new candidate."
+    },
+    "candidateReproducibilityAndLicenseEvidence": {
+      "status": "INSUFFICIENT_FOR_NEW_VERSIONED_CANDIDATE",
+      "boundedSyntheticEvidence": {
+        "fileHashBindingsAtHead": "MATCH_MERGED_PILOT_RECEIPT",
+        "reimportDeterminism": "PASS_SYNTHETIC_ONLY_NO_OFFICIAL_CREDIT",
+        "licenceDeclaration": "CC0-1.0_SYNTHETIC_FIXTURE_DECLARATION_ONLY",
+        "contentBoundary": "MANIFEST_DECLARES_NO_WIKIMEDIA_CONTENT",
+        "releaseCredit": "NONE"
+      },
+      "missing": [
+        "Candidate release-asset inventory",
+        "Candidate asset manifest",
+        "Candidate SHA-256 asset digests",
+        "Candidate claim-to-evidence mapping",
+        "Candidate licence evidence for every included release byte",
+        "Candidate CI-green record",
+        "Candidate anonymous public asset readback"
+      ],
+      "effect": "Valid bounded synthetic hashes and deterministic re-import do not establish release-candidate reproducibility or licence validity. The policy condition is not established for any new candidate."
+    },
+    "requiredPilotLeavesAtHeadBeforeReceipt": {
+      "status": "ALL_ABSENT",
+      "paths": [
+        "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+        "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
+        "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
+        "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
+        "tests/fixtures/mediawiki-xml/negative-matrix-v1.json",
+        "tests/mediawiki-xml-local-adapter.test.ts",
+        "verification/wikimedia-m0-evidence-v1.json"
+      ]
+    }
+  },
+  "commandExecution": {
+    "releaseGovernanceVerify": {
+      "command": "env -u GH_TOKEN npm run release-governance:verify",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed the verifier.",
+      "productVerdict": "NONE"
+    },
+    "releaseGovernancePublicReadback": {
+      "command": "env -u GH_TOKEN npm run release-governance:public-readback",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed the anonymous public-readback verifier.",
+      "productVerdict": "NONE"
+    },
+    "releaseGovernanceFocusedTest": {
+      "command": "npm run release-governance:test",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed the focused test suite.",
+      "productVerdict": "NONE"
+    },
+    "releasePolicyDiffInspection": {
+      "command": "git diff --exit-code origin/main...HEAD -- docs/RELEASE-GOVERNANCE.md release/governance.json",
+      "status": "PASS_NO_INTEGRATED_POLICY_BYTE_CHANGES"
+    },
+    "mergedPilotReceiptAssertions": {
+      "command": "python3 bounded JSON assertions over the merged pilot receipt",
+      "status": "PASS"
+    },
+    "syntheticHashReadback": {
+      "command": "sha256sum packages/contracts/src/mediawiki-mini-dump.ts tests/fixtures/mediawiki-mini-dump/manifest.json tests/fixtures/mediawiki-mini-dump/positive-mini.xml tests/fixtures/mediawiki-mini-dump/reordered-mini.xml tests/mediawiki-mini-dump.test.ts",
+      "status": "PASS_MATCHES_MERGED_PILOT_RECEIPT",
+      "scope": "Synthetic implementation and fixtures only; no candidate-release or official-pilot credit."
+    },
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "pilotLeafInspection": {
+      "command": "git cat-file -e HEAD:<required path> for each required pilot leaf",
+      "status": "PASS_ALL_ABSENT",
+      "effect": "Confirms the existing rejection evidence remains applicable and supplies no release credit."
+    }
+  },
+  "decision": {
+    "outcome": "NO_RELEASE",
+    "reasonCode": "VERSIONED_RELEASE_NOT_AUTHORIZED_REQUIRED_EVIDENCE_MISSING",
+    "reason": "The repository policy permits a new regular release only for a declared functional candidate with an exact tag, complete candidate evidence, green gates and successful anonymous public readback. The integrated range includes a bounded synthetic mini-dump implementation and a merged rejection receipt: six focused tests, synthetic import/re-import/query behavior and matching file hashes retain synthetic-only scope and establish neither an official pilot nor candidate licence/release evidence. No candidate tag, asset inventory/manifest, candidate CI-green record or candidate anonymous public readback exists, and local release-policy commands exited 133 before their verifiers started. Existing release metadata/readback belongs only to v0.2.0-poc.20260825.1. Therefore no new versioned release is authorized or claimed.",
+    "versionedRelease": null,
+    "publicationAction": "NONE",
+    "claimsNotPromoted": [
+      "A new PanSphaira versioned release",
+      "A new tag, draft, prerelease or regular Latest release",
+      "Candidate reproducibility or licence validity",
+      "Candidate CI success",
+      "Candidate anonymous public-readback success",
+      "MediaWiki XML adapter implementation or official-pilot success",
+      "Import, re-import, accepted edition, readback, compatibility, publication or redistribution success"
+    ],
+    "failClosedRule": "Missing, unexecuted or infrastructure-blocked evidence never becomes release success; the default outcome is NO_RELEASE."
+  },
+  "verification": {
+    "receiptJsonParse": {
+      "command": "python3 JSON parse and bounded semantic assertions",
+      "status": "PASS"
+    },
+    "requiredRepositoryCheckAfterReceipt": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "allowlistedArtifactAfterLocalCommit": {
+      "command": "git status --short -- docs/evidence/conveyor/psai107-integration-release-no-release-01.json",
+      "status": "PASS_CLEAN"
+    },
+    "cleanWorktreeAfterLocalCommit": {
+      "command": "git status --short --untracked-files=all",
+      "status": "BLOCKED_BY_CONCURRENT_OUTSIDE_ALLOWLIST_WRITES",
+      "evidence": [
+        "packages/local-knowledge/src/wikimedia-download-policy.ts",
+        "packages/local-knowledge/src/wikimedia-optin-download.ts",
+        "tests/fixtures/wikimedia-download/official-checksum.txt",
+        "tests/wikimedia-optin-download.test.ts"
+      ],
+      "effect": "No cleanup, staging or commit of these paths is authorized to this worker."
+    }
+  },
+  "determinism": {
+    "volatileTimestampIncluded": false,
+    "externalContentEmbedded": false,
+    "ordering": "Object keys and arrays are authored in stable semantic order; paths and commits are listed deterministically.",
+    "sourceBinding": "This decision is bound to origin/main 353017c4f60e30463d0a78fd6fd2509a37d37f76 and the pre-receipt HEAD ddd643cffaa8f1915fee1fd84e0caa311609b9da."
+  },
+  "claimBoundary": "NO_RELEASE_RECEIPT_ONLY: this artifact records bounded merged synthetic verifier/readback evidence, missing or infrastructure-blocked candidate evidence and the resulting fail-closed decision. It does not establish a new release, publication, tag, release asset, candidate CI result, candidate public readback, official-pilot success, real Wikimedia compatibility, licence determination, external-system result or authority."
+}

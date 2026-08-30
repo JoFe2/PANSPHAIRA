@@ -105,6 +105,34 @@ export interface LocalFileCorpusRegistryV1 {
   readonly lastKnownGood: LocalFileCorpusEditionV1;
 }
 
+/**
+ * The persistent read index is a projection, not a second source of truth.
+ * Its accepted and LKG bindings are written with the active edition and are
+ * recomputed from the immutable manifest before they can be used.
+ */
+export const LOCAL_FILE_CORPUS_INDEX_SCHEMA_V1 =
+  "chimpmaera.knowledge/local-file-corpus-active-index/v1" as const;
+
+export interface LocalFileCorpusIndexV1 {
+  readonly schemaVersion: typeof LOCAL_FILE_CORPUS_INDEX_SCHEMA_V1;
+  readonly corpusId: string;
+  readonly activeEditionId: string;
+  readonly acceptedEditionId: string;
+  readonly lastKnownGoodEditionId: string;
+  readonly manifestDigest: string;
+  readonly entries: readonly {
+    readonly editionId: string;
+    readonly citationId: string;
+    readonly citation: string;
+    readonly path: string;
+    readonly startLine: number;
+    readonly endLine: number;
+    readonly text: string;
+    readonly chunkDigest: string;
+  }[];
+  readonly indexDigest: string;
+}
+
 const DIGEST = /^[a-f0-9]{64}$/;
 const ID = /^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$/;
 const RELATIVE_FILE = /^(?:[A-Za-z0-9._-]+\/)*[A-Za-z0-9._-]+\.(?:md|txt)$/;
@@ -198,6 +226,72 @@ export function localFileCorpusReceiptDigestV1(
   value: Omit<LocalFileCorpusQueryReceiptV1, "receiptDigest"> | Record<string, unknown>,
 ): string {
   return sha256Canonical(Object.fromEntries(Object.entries(value).filter(([key]) => key !== "receiptDigest")));
+}
+
+function localFileCorpusIndexUnsignedV1(
+  accepted: LocalFileCorpusEditionV1,
+  lastKnownGood: LocalFileCorpusEditionV1,
+): Omit<LocalFileCorpusIndexV1, "indexDigest"> {
+  return {
+    schemaVersion: LOCAL_FILE_CORPUS_INDEX_SCHEMA_V1,
+    corpusId: accepted.corpusId,
+    activeEditionId: accepted.editionId,
+    acceptedEditionId: accepted.editionId,
+    lastKnownGoodEditionId: lastKnownGood.editionId,
+    manifestDigest: accepted.manifestDigest,
+    entries: accepted.files.flatMap((file) => file.chunks.map((chunk) => ({
+      editionId: accepted.editionId,
+      citationId: chunk.citationId,
+      citation: chunk.citation,
+      path: file.path,
+      startLine: chunk.startLine,
+      endLine: chunk.endLine,
+      text: chunk.text,
+      chunkDigest: chunk.chunkDigest,
+    }))),
+  };
+}
+
+export function localFileCorpusIndexDigestV1(
+  value: Omit<LocalFileCorpusIndexV1, "indexDigest"> | LocalFileCorpusIndexV1,
+): string {
+  return sha256Canonical(Object.fromEntries(Object.entries(value).filter(([key]) => key !== "indexDigest")));
+}
+
+export function buildLocalFileCorpusIndexV1(
+  accepted: LocalFileCorpusEditionV1,
+  lastKnownGood: LocalFileCorpusEditionV1,
+): LocalFileCorpusIndexV1 {
+  if (!validateLocalFileCorpusEditionV1(accepted) || !validateLocalFileCorpusEditionV1(lastKnownGood)
+    || accepted.corpusId !== lastKnownGood.corpusId) {
+    throw new Error("LOCAL_FILE_CORPUS_INDEX_DENIED");
+  }
+  const unsigned = localFileCorpusIndexUnsignedV1(accepted, lastKnownGood);
+  return { ...unsigned, indexDigest: localFileCorpusIndexDigestV1(unsigned) };
+}
+
+export function validateLocalFileCorpusIndexV1(value: unknown): value is LocalFileCorpusIndexV1 {
+  if (!dataRecord(value) || !exactKeys(value, [
+    "schemaVersion", "corpusId", "activeEditionId", "acceptedEditionId", "lastKnownGoodEditionId",
+    "manifestDigest", "entries", "indexDigest",
+  ]) || value.schemaVersion !== LOCAL_FILE_CORPUS_INDEX_SCHEMA_V1
+    || !ID.test(String(value.corpusId)) || !ID.test(String(value.activeEditionId))
+    || value.acceptedEditionId !== value.activeEditionId || !ID.test(String(value.lastKnownGoodEditionId))
+    || !DIGEST.test(String(value.manifestDigest)) || !Array.isArray(value.entries)
+    || value.entries.length < 1 || !DIGEST.test(String(value.indexDigest))) return false;
+  const citations = new Set<string>();
+  for (const entry of value.entries) {
+    if (!dataRecord(entry) || !exactKeys(entry, [
+      "editionId", "citationId", "citation", "path", "startLine", "endLine", "text", "chunkDigest",
+    ]) || entry.editionId !== value.activeEditionId || !safeRelativeFile(entry.path)
+      || typeof entry.citationId !== "string" || !/^citation:[a-f0-9]{24}$/.test(entry.citationId)
+      || typeof entry.citation !== "string" || entry.citation !== `${entry.path}#L${String(entry.startLine)}`
+      || !safeInteger(entry.startLine, 1) || entry.endLine !== entry.startLine
+      || typeof entry.text !== "string" || entry.text.length === 0 || !DIGEST.test(String(entry.chunkDigest))
+      || citations.has(entry.citationId)) return false;
+    citations.add(entry.citationId);
+  }
+  return localFileCorpusIndexDigestV1(value as unknown as LocalFileCorpusIndexV1) === value.indexDigest;
 }
 
 export function readLocalFileCorpusEditionV1(

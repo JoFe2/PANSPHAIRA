@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "chimpmaera.knowledge/wikimedia-pilot-evidence/v1",
+  "pilotId": "PSAI107-QWEN-06-PILOT-EVIDENCE-HARNESS",
+  "network": "DISABLED",
+  "boundary": "OFFLINE_OPERATOR_MOUNTED_IMMUTABLE_SNAPSHOT_ONLY_NO_NETWORK_NO_UNMOUNTED_CLAIMS",
+  "synthetic": {
+    "root": "tests/fixtures/local-knowledge-wiki-container/source",
+    "profile": {
+      "schemaVersion": "chimpmaera.knowledge/mediawiki-mini-dump-profile/v1",
+      "enabled": true,
+      "project": "wikipedia:synthetic",
+      "language": "en",
+      "site": {
+        "name": "Synthetic Wikipedia",
+        "base": "https://synthetic.example.invalid/wiki"
+      },
+      "source": {
+        "path": "positive-mini.xml",
+        "expectedSourceDigest": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c",
+        "byteSize": 2270
+      },
+      "xmlFiles": ["positive-mini.xml", "reordered-mini.xml"],
+      "dump": {
+        "kind": "CURRENT_PAGES_MINI_DUMP",
+        "sourceUrl": "https://dumps.wikimedia.org/other/20260827/synthetic-mini.xml",
+        "snapshotDate": "2026-08-27"
+      },
+      "license": {
+        "licence": "CC0-1.0",
+        "attributionTemplate": "Synthetic fixture authored for PSAI107; no Wikimedia content."
+      },
+      "parserVersion": "mediawiki-mini-dump-parser/v1",
+      "canonicalizerVersion": "mediawiki-mini-dump-canonicalizer/v1"
+    },
+    "expectedContentDigest": "83555e2c995aea05d52cdc482dc85e51e145db768159a756aea82fdc62abe3ff",
+    "expectedEditionDigest": "53cf9a6e0b610f549b2268b61b51c0c6221d384e73e6635e40c154cd8ceb6e72",
+    "receiptSampleSize": 1
+  },
+  "official": {
+    "project": "wikipedia:en",
+    "language": "en",
+    "url": "https://dumps.wikimedia.org/wikipedia/en/20260827/enwiki-20260827-pages-articles.xml",
+    "checksum": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c",
+    "byteSize": 2270,
+    "snapshotDate": "2026-08-27",
+    "license": {
+      "licence": "CC-BY-4.0",
+      "attributionTemplate": "Wikimedia Foundation and contributors; attribution supplied with the mounted snapshot."
+    },
+    "attribution": "Wikimedia Foundation and contributors; attribution supplied with the mounted snapshot.",
+    "sourcePath": "enwiki-20260827-pages-articles.xml"
+  },
+  "measurementSchema": {
+    "schemaVersion": "chimpmaera.knowledge/wikimedia-pilot-measurement/v1",
+    "requiredRawFields": ["elapsedMs", "bytes", "queryLatencyMs"],
+    "requiredReceiptFields": ["exactPassage", "project", "pageId", "revisionId", "canonicalUrl", "snapshotDate", "license", "contentDigest", "editionDigest"]
+  }
+}

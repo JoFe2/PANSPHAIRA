@@ -112,7 +112,7 @@ secret_patterns = {
 }
 private_path_patterns = {
     "home_absolute_path": re.compile(r"/home/[A-Za-z0-9._-]+(?:/|\b)"),
-    "mnt_absolute_path": re.compile(r"/mnt/[A-Za-z0-9._-]+(?:/|\b)"),
+    "mnt_absolute_path": re.compile(r"/mnt/(?!source(?:/|\b))[A-Za-z0-9._-]+(?:/|\b)"),
     "agent_session_identifier": re.compile(r"\bagent:[A-Za-z0-9._-]+:[A-Za-z0-9._:-]+\b"),
 }
 content_quality_patterns = {
@@ -189,7 +189,7 @@ for line_number, raw in enumerate(manifest.read_text("utf-8").splitlines(), 1):
         raise SystemExit(f"PRIVILEGED_SOURCE_MODE:{line_number}")
     total_bytes += metadata.st_size
 
-if count != 896:
+if count != 937:
     raise SystemExit("MANIFEST_FILE_COUNT")
 if total_bytes > 100 * 1024 * 1024:
     raise SystemExit("MANIFEST_BYTE_LIMIT")
@@ -199,6 +199,7 @@ repository_only_files = {
     ".github/FUNDING.yml",
     ".github/workflows/daily-poc-candidate.yml",
     "SHA256SUMS",
+    "tests/fixtures/local-knowledge-wiki-container/credential-like.env",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",
@@ -223,6 +224,7 @@ for candidate in root.rglob("*"):
         or relative.startswith(".git/")
         or relative.startswith("node_modules/")
         or relative.startswith("dist/")
+        or relative.startswith(".verify-probes/")
         or "/__pycache__/" in f"/{relative}"
         or relative.endswith(".pyc")
     ):

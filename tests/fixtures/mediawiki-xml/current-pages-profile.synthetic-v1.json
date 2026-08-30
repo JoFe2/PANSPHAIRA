@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "chimpmaera.knowledge/mediawiki-xml-local-profile/v1",
+  "enabled": true,
+  "syntheticOnly": true,
+  "networkAllowed": false,
+  "pilot": {
+    "kind": "BOUNDED_OFFICIAL_PILOT_SYNTHETIC_TEST_DOUBLE",
+    "sourceUrl": "https://dumps.wikimedia.org/wikipedia/en/20260827/enwiki-20260827-pages-articles.xml",
+    "snapshotDate": "2026-08-27",
+    "project": "wikipedia:synthetic",
+    "language": "en"
+  },
+  "manifestPath": "current-pages-profile.synthetic-v1.json",
+  "negativeMatrixPath": "negative-matrix-v1.json",
+  "source": {
+    "path": "current-pages.synthetic-v1.xml",
+    "expectedSourceDigest": "203f6a0d7696f41815272f4aab7605c90dbf7af5e4307cc648871a0d030e76ff",
+    "byteSize": 942
+  },
+  "site": {
+    "name": "Synthetic Wikimedia Pilot",
+    "base": "https://synthetic.example.invalid/wiki"
+  },
+  "license": {
+    "licence": "CC0-1.0",
+    "attributionTemplate": "Synthetic fixture authored for PSAI107; no Wikimedia content."
+  },
+  "corpus": {
+    "corpusId": "mediawiki-xml:pilot-corpus-v1",
+    "editionId": "mediawiki-xml:pilot-edition-v1",
+    "priorEditionId": null,
+    "observedAtMs": 1787788800000
+  },
+  "knowledge": {
+    "scopeNamespace": "mediawiki-xml.synthetic.pilot",
+    "staleAfterMs": 1790380800000,
+    "taxonomyId": "cm-taxonomy:universal",
+    "taxonomyGeneration": 2,
+    "taxonomyDigest": "b517aedc9b41c2c56b903f4a8bbcb092cb48254602f54900515db1417945405c"
+  },
+  "parserVersion": "mediawiki-mini-dump-parser/v1",
+  "canonicalizerVersion": "mediawiki-mini-dump-canonicalizer/v1",
+  "authorityBoundary": "READ_ONLY_EXPLICIT_LOCAL_MEDIAWIKI_XML_SYNTHETIC_SOURCE_NO_NETWORK_DOWNLOAD_WRITE_EXECUTION_OR_TRUTH_AUTHORITY"
+}

@@ -1,0 +1,2 @@
+This file is a negative test fixture only. It is deliberately not a Wikipedia corpus.
+CORPUS_SHOULD_NOT_BE_IN_IMAGE_LAYER=true

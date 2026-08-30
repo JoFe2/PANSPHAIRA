@@ -1,0 +1,560 @@
+{
+  "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
+  "receiptId": "SOL-PSAI107-WIKIMEDIA-M0-ADR-01",
+  "receiptVersion": 1,
+  "artifactKind": "VERSIONED_ADR_AND_INTEGRATION_RECEIPT",
+  "governance": {
+    "operatingModelVersion": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "statement": "This receipt references the controller-reviewed operating model and decisions without restating, amending, superseding or replacing them."
+  },
+  "originMainInspection": {
+    "freshInspectionCommand": "git fetch --no-tags origin main",
+    "freshInspectionResult": "PASS",
+    "ref": "origin/main",
+    "commit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "worktreeHeadAtInspection": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "inspectedContracts": [
+      {
+        "path": "packages/contracts/src/canonical-json.ts",
+        "gitBlob": "387766452a515a940ab019f64e193d2cf287d62b",
+        "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826"
+      },
+      {
+        "path": "packages/contracts/src/knowledge-envelope.ts",
+        "gitBlob": "c3bf520dfec71d99a42bcca9187fbfebfc923fd6",
+        "sha256": "e2ddaf15fae3636911a68247888883de5d80937e8cce98d9f42f80f7760db1aa"
+      },
+      {
+        "path": "packages/contracts/src/local-file-knowledge-corpus.ts",
+        "gitBlob": "bc2d6c05fad86e6fc192b817723b25e57805c149",
+        "sha256": "3bdcae61a26c3468359fca0b8dcd0e64725dbd054257bb5445e5cb7298494c97"
+      },
+      {
+        "path": "schemas/contracts/knowledge-envelope-v1.schema.json",
+        "gitBlob": "6f5e34db4846387b65832bee0a774cccda8a4c54",
+        "sha256": "914a02fa0016ec9b47be075fb3d53126955d4255956932b7a49c33589867cb31"
+      },
+      {
+        "path": "schemas/contracts/knowledge-taxonomy-v1.schema.json",
+        "gitBlob": "33e87ca54da3100ae76fd96c1bed5fdb6ab43d01",
+        "sha256": "55a20170e7269124abd86117a06dba3f7f28dd229e3f5c5b8437b7582e4e3b28"
+      },
+      {
+        "path": "schemas/contracts/local-file-corpus-profile-v1.schema.json",
+        "gitBlob": "d49db5f238346ecb13440963329d9208d0706914",
+        "sha256": "287ec272a403ebec4cdc29d36c83a52ccbca39f044864df0ef181a1d7e1b7fea"
+      }
+    ],
+    "inspectionFinding": "origin/main already owns one default-off local-file knowledge lifecycle and one authority-free Knowledge Envelope contract. The local-file v1 profile deliberately admits only .md and .txt, so XML must remain an additive source adapter and must not weaken that profile."
+  },
+  "adr": {
+    "id": "ADR-PSAI107-WIKIMEDIA-M0-01",
+    "version": "1.0.0",
+    "status": "APPROVED_BOUNDED_M0",
+    "title": "Explicit local MediaWiki XML current-snapshot adapter into the existing Knowledge Envelope and Accepted/LKG lifecycle",
+    "approvedLifecycleCount": 1,
+    "selectedLifecycle": {
+      "id": "chimpmaera.knowledge/mediawiki-xml-local-snapshot-lifecycle/v1",
+      "name": "EXPLICIT_LOCAL_MEDIAWIKI_XML_CURRENT_SNAPSHOT_TO_EXISTING_ENVELOPE_ACCEPTED_LKG_V1",
+      "contractStatus": "RESERVED_FOR_SEPARATE_SYNTHETIC_OFFLINE_IMPLEMENTATION",
+      "decision": "Approve one default-off, read-only, explicitly supplied local MediaWiki XML current-revision snapshot adapter. It projects in memory into exact existing LocalFileCorpusEditionV1 and KnowledgeEnvelopeV1 values, validates those values with existing validators, and delegates the only acceptance or rollback transition to the existing LocalFileCorpusRegistryV1 Accepted/LKG contract.",
+      "stateOwner": "LocalFileCorpusRegistryV1.accepted and LocalFileCorpusRegistryV1.lastKnownGood",
+      "parallelStateForbidden": [
+        "mediawikiAccepted",
+        "mediawikiLastKnownGood",
+        "mediawikiRegistry",
+        "mediawikiRollbackState"
+      ],
+      "flow": [
+        {
+          "step": 1,
+          "name": "EXPLICIT_LOCAL_SOURCE",
+          "rule": "Remain disabled unless a caller explicitly enables one repository-authored synthetic .xml fixture and supplies its relative path and exact SHA-256 digest. A missing local source denies."
+        },
+        {
+          "step": 2,
+          "name": "READ_ONLY_PREFLIGHT",
+          "rule": "Read exactly one regular, non-symlink UTF-8 XML file inside the declared local root. Validate its closed manifest, digest, XML safety rules and M0 bounds before parsing any page."
+        },
+        {
+          "step": 3,
+          "name": "DETERMINISTIC_IN_MEMORY_PROJECTION",
+          "rule": "Sort unique namespace-zero current pages deterministically and project their current wikitext into virtual .txt entries and conservative authority-free Knowledge Envelopes without writing projected files."
+        },
+        {
+          "step": 4,
+          "name": "EXISTING_CONTRACT_VALIDATION",
+          "rule": "Require exact Knowledge Taxonomy, Knowledge Envelope and LocalFileCorpusEditionV1 validation, including canonical digests, source attribution, permitted use, empty authority and the existing read-only boundary."
+        },
+        {
+          "step": 5,
+          "name": "EXISTING_ACCEPTED_LKG_TRANSITION",
+          "rule": "Invoke the existing activateLocalFileCorpusEditionV1 transition only after projection validation. Candidate denial or injected failure returns the exact prior registry and zero staged residue."
+        },
+        {
+          "step": 6,
+          "name": "READ_ONLY_RETRIEVAL",
+          "rule": "Expose only the existing deterministic lexical query receipt and explicit exploratory Knowledge Envelope selection over the Accepted edition. No model, embedding, semantic ranker or online source is required or called."
+        }
+      ],
+      "m0Bounds": {
+        "implementationInputClass": "REPOSITORY_AUTHORED_SYNTHETIC_MEDIAWIKI_XML_ONLY",
+        "sourceFileCount": 1,
+        "sourceExtension": ".xml",
+        "sourceEncoding": "UTF-8",
+        "maximumSourceBytes": 8388608,
+        "maximumPages": 64,
+        "allowedNamespaceIds": [
+          0
+        ],
+        "allowedContentModels": [
+          "wikitext"
+        ],
+        "revisionsPerPage": 1,
+        "maximumDecodedRevisionBytesPerPage": 262144,
+        "maximumProjectedNonEmptyLines": 4096,
+        "maximumEnvelopeStatementCodeUnits": 2048,
+        "allowDtd": false,
+        "allowExternalEntities": false,
+        "allowNetwork": false,
+        "allowWrites": false,
+        "allowExecution": false
+      },
+      "conservativeEnvelopeProjection": {
+        "kind": "UNRESOLVED",
+        "epistemicStatus": "UNVERIFIED",
+        "trust": "LOW",
+        "permittedUses": [
+          "EXPLORATORY_READ"
+        ],
+        "generationCandidate": "NOT_CANDIDATE",
+        "authorityBoundary": "READ_ONLY_KNOWLEDGE_NO_CREDENTIAL_POLICY_CAPABILITY_TOOL_WRITE_OR_EXECUTION_AUTHORITY",
+        "meaning": "An Accepted corpus edition is not accepted truth and does not promote any projected envelope to curated knowledge."
+      },
+      "rollback": "Discard the candidate projection and candidate envelopes, retain the exact prior LocalFileCorpusRegistryV1 Accepted/LKG pair, return zero staged residue, and perform no online fallback or replacement synthesis."
+    },
+    "decisionRationale": [
+      "The existing local-file adapter already proves deterministic local reads, immutable editions, exact citations, lexical receipts and fail-closed Accepted/LKG rollback.",
+      "The existing Knowledge Envelope already separates attribution, epistemic status, trust, freshness, sensitivity, permitted use, conflicts, taxonomy and authority.",
+      "MediaWiki XML is therefore a bounded input-format concern, not a reason to create a second knowledge registry, selection system, rollback mechanism or truth model.",
+      "A synthetic current-snapshot adapter can prove format integration offline while real Wikimedia licensing, scale, privacy and redistribution remain outside M0."
+    ],
+    "alternativesRejected": [
+      {
+        "alternative": "Independent MediaWiki Accepted/LKG store or state machine",
+        "reason": "It would create the prohibited second knowledge lifecycle."
+      },
+      {
+        "alternative": "Live MediaWiki API, HTML scraper or dump downloader",
+        "reason": "It would violate the explicit-local, no-network and no-implicit-download boundary."
+      },
+      {
+        "alternative": "Bundled Wikimedia dump or derived public corpus",
+        "reason": "It would violate the no-bundled-corpus and no-public-redistribution boundary."
+      },
+      {
+        "alternative": "Full-history, media or Wikidata ingestion",
+        "reason": "Those formats add materially different scale, privacy, binary and entity-model lifecycles outside M0."
+      },
+      {
+        "alternative": "Model, embedding or semantic-retrieval dependency",
+        "reason": "The existing deterministic lexical and Knowledge Envelope selection contracts are sufficient for M0 and fail offline."
+      }
+    ],
+    "assumption": "A tiny repository-authored XML fixture can exercise a closed MediaWiki current-page subset without carrying Wikimedia content or establishing real-source compatibility.",
+    "risk": "XML format variation, unsupported licences, wikitext semantics or provenance could be mistaken for production Wikimedia support or accepted truth.",
+    "fallback": "Keep the reserved adapter absent or default-off and retain the exact existing Markdown/Text Accepted/LKG lifecycle as the only active local knowledge path.",
+    "reviewMarkers": [
+      "Any non-synthetic or externally obtained corpus input",
+      "Any licence outside the existing exact enum, including CC-BY-SA or GFDL",
+      "Any live API, scraper, downloader, decompressor with fetch behavior or online fallback",
+      "Any full history, deleted or suppressed revision, non-zero namespace, media or Wikidata entity",
+      "Any durable storage, concurrent activation, crash-recovery, model, embedding or semantic-ranking behavior",
+      "Any packaging, release, deployment, public redistribution or shared integration-path change"
+    ]
+  },
+  "contractIntegration": {
+    "exactReuse": [
+      {
+        "contract": "Canonical JSON",
+        "path": "packages/contracts/src/canonical-json.ts",
+        "symbols": [
+          "canonicalJson"
+        ],
+        "disposition": "EXACT_REUSE_NO_CHANGE",
+        "purpose": "Stable object ordering and digest input."
+      },
+      {
+        "contract": "Knowledge Envelope and Taxonomy v1",
+        "path": "packages/contracts/src/knowledge-envelope.ts",
+        "schemaPaths": [
+          "schemas/contracts/knowledge-envelope-v1.schema.json",
+          "schemas/contracts/knowledge-taxonomy-v1.schema.json"
+        ],
+        "schemaIdentities": [
+          "chimpmaera.knowledge/envelope/v1",
+          "chimpmaera.knowledge/taxonomy/v1",
+          "chimpmaera.knowledge/selection/v1",
+          "chimpmaera.hmi/knowledge-explanation/v1"
+        ],
+        "symbols": [
+          "KnowledgeEnvelopeV1",
+          "KnowledgeTaxonomyV1",
+          "knowledgeEnvelopeDigestV1",
+          "validateKnowledgeEnvelopeV1",
+          "validateKnowledgeTaxonomyV1",
+          "selectKnowledgeV1",
+          "explainKnowledgeSelectionV1"
+        ],
+        "disposition": "EXACT_REUSE_NO_CHANGE",
+        "purpose": "Attribution, conservative epistemic classification, taxonomy binding, deterministic selection and empty authority."
+      },
+      {
+        "contract": "Local-file Edition, Query Receipt and Accepted/LKG registry v1",
+        "path": "packages/contracts/src/local-file-knowledge-corpus.ts",
+        "schemaIdentities": [
+          "chimpmaera.knowledge/local-file-corpus-edition/v1",
+          "chimpmaera.knowledge/local-file-corpus-query-receipt/v1"
+        ],
+        "symbols": [
+          "LocalFileCorpusEditionV1",
+          "LocalFileCorpusQueryReceiptV1",
+          "LocalFileCorpusRegistryV1",
+          "localFileCorpusManifestDigestV1",
+          "localFileCorpusReceiptDigestV1",
+          "validateLocalFileCorpusEditionV1",
+          "queryLocalFileCorpusV1",
+          "activateLocalFileCorpusEditionV1"
+        ],
+        "disposition": "EXACT_REUSE_AFTER_PURE_ADAPTER_PROJECTION",
+        "purpose": "One immutable candidate shape, one deterministic lexical receipt and the only Accepted/LKG transition and rollback behavior."
+      }
+    ],
+    "compatibilityFences": [
+      {
+        "contract": "Local file corpus profile v1",
+        "path": "schemas/contracts/local-file-corpus-profile-v1.schema.json",
+        "schemaIdentity": "chimpmaera.knowledge/local-file-corpus-profile/v1",
+        "disposition": "DO_NOT_WIDEN_OR_REINTERPRET",
+        "reason": "Its closed path pattern intentionally permits only .md and .txt. XML sent to that profile remains denied."
+      },
+      {
+        "contract": "readLocalFileCorpusEditionV1",
+        "path": "packages/contracts/src/local-file-knowledge-corpus.ts",
+        "disposition": "NOT_USED_FOR_XML_INPUT",
+        "reason": "It is the exact Markdown/Text directory reader. The MediaWiki leaf may only project into its downstream edition contract."
+      },
+      {
+        "contract": "Existing licence enum",
+        "path": "packages/contracts/src/knowledge-envelope.ts",
+        "disposition": "EXACT_MATCH_OR_REJECT",
+        "reason": "M0 synthetic fixtures use CC0-1.0. CC-BY-SA, GFDL or any other unmapped real-source licence is rejected rather than relabelled as CC-BY-4.0 or OWNER_AUTHORIZED."
+      },
+      {
+        "contract": "Accepted versus knowledge acceptance",
+        "path": "packages/contracts/src/local-file-knowledge-corpus.ts",
+        "disposition": "KEEP_SEPARATE",
+        "reason": "Registry accepted means the current immutable corpus edition only; it never changes KnowledgeEnvelopeV1.generationCandidate, epistemic status, trust or truth."
+      }
+    ],
+    "noSecondLifecycleInvariant": "No MediaWiki-specific registry, Accepted pointer, LKG pointer, rollback state, selector, taxonomy authority or truth state may be added. The adapter either yields exact existing contract values and delegates to activateLocalFileCorpusEditionV1, or it denies."
+  },
+  "pathLeases": {
+    "currentTask": {
+      "path": "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json",
+      "originMainState": "ABSENT",
+      "authority": "WRITE_AND_LOCAL_COMMIT_THIS_RECEIPT_ONLY"
+    },
+    "separateFutureM0SyntheticOfflineLeaves": [
+      {
+        "path": "docs/MEDIAWIKI-XML-LOCAL-ADAPTER.md",
+        "originMainState": "ABSENT",
+        "purpose": "Bounded operator and non-claim guide"
+      },
+      {
+        "path": "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+        "originMainState": "ABSENT",
+        "purpose": "Pure local XML preflight and projection adapter; no lifecycle state"
+      },
+      {
+        "path": "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
+        "originMainState": "ABSENT",
+        "purpose": "Closed default-off local synthetic source profile"
+      },
+      {
+        "path": "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
+        "originMainState": "ABSENT",
+        "purpose": "Synthetic profile with exact fixture digest"
+      },
+      {
+        "path": "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
+        "originMainState": "ABSENT",
+        "purpose": "Tiny repository-authored current-page XML fixture containing no Wikimedia corpus bytes"
+      },
+      {
+        "path": "tests/fixtures/mediawiki-xml/negative-matrix-v1.json",
+        "originMainState": "ABSENT",
+        "purpose": "Named fail-closed synthetic mutations"
+      },
+      {
+        "path": "tests/mediawiki-xml-local-adapter.test.ts",
+        "originMainState": "ABSENT",
+        "purpose": "Focused deterministic reuse, denial and rollback tests"
+      },
+      {
+        "path": "verification/wikimedia-m0-evidence-v1.json",
+        "originMainState": "ABSENT",
+        "purpose": "Digest-only synthetic/offline verification receipt"
+      }
+    ],
+    "sharedOrPublicPathsLeased": [],
+    "allUnlistedPaths": "NOT_LEASED",
+    "leaseCondition": "These future leaves require a separate authorized implementation task. This ADR does not itself authorize writes to them, dependencies, package scripts, indexes, release manifests, checksums, Verification DAG, Docker, deployment or GitHub."
+  },
+  "rejectConditions": [
+    {
+      "id": "MWXML-M0-R001",
+      "name": "LIVE_SCRAPING_REJECTED",
+      "condition": "Any MediaWiki API, HTML page, Special:Export, recent-changes feed, HTTP(S) request or other live scrape is requested or observed.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R002",
+      "name": "FULL_HISTORIES_REJECTED",
+      "condition": "The source is a pages-meta-history/full-history dump, any page contains more than one revision, or history reconstruction is requested.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R003",
+      "name": "MEDIA_REJECTED",
+      "condition": "The source contains or requests File/Media namespace pages, upload records, binary payloads, thumbnails, image fetches or other media handling.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R004",
+      "name": "WIKIDATA_REJECTED",
+      "condition": "The source is Wikidata, contains wikibase entity content models, or requests entity, statement, sitelink or property ingestion.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R005",
+      "name": "BUNDLED_CORPUS_REJECTED",
+      "condition": "Any Wikimedia dump, article set, derived corpus or non-synthetic corpus payload would be checked into, packaged with or shipped from this repository. A tiny repository-authored synthetic contract fixture is not a corpus and is the only M0 fixture class.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R006",
+      "name": "IMPLICIT_DOWNLOAD_REJECTED",
+      "condition": "A missing source, URL, dump name, archive reference or decompression path would trigger a download, package fetch, remote resolution or source acquisition.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R007",
+      "name": "HIDDEN_ONLINE_FALLBACK_REJECTED",
+      "condition": "Local miss, parse failure, empty result, stale input, digest drift or query miss would cause any undeclared online lookup or enrichment.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R008",
+      "name": "MODEL_REQUIRED_RETRIEVAL_REJECTED",
+      "condition": "Retrieval, parsing, ranking, acceptance or fallback requires an LLM, embedding model, reranker, vector service or model provider.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R009",
+      "name": "PUBLIC_REDISTRIBUTION_REJECTED",
+      "condition": "Any source corpus or derived corpus would be published, released, uploaded, served, attached, mirrored or otherwise redistributed publicly.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R010",
+      "name": "LOCAL_SOURCE_BOUNDARY_REJECTED",
+      "condition": "The source is absent, disabled, absolute, outside the declared root, not exactly one .xml file, symlinked, non-regular, compressed, archived, extra, unpinned or digest-drifted.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R011",
+      "name": "UNSAFE_XML_REJECTED",
+      "condition": "XML is malformed, non-UTF-8, contains a DTD, entity declaration, external entity, XInclude, processing instruction or unsupported root/schema structure.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R012",
+      "name": "M0_BOUND_EXCEEDED_REJECTED",
+      "condition": "Source bytes, page count, revision count, decoded page bytes, projected non-empty lines or Knowledge Envelope statement length exceeds an exact M0 bound.",
+      "outcome": "DENY_WITH_NO_PARTIAL_EDITION"
+    },
+    {
+      "id": "MWXML-M0-R013",
+      "name": "UNSUPPORTED_PAGE_REJECTED",
+      "condition": "A page is outside namespace zero, uses a non-wikitext content model, lacks a unique positive page/revision identity, duplicates an identity, or cannot be deterministically ordered.",
+      "outcome": "DENY_WITH_NO_PARTIAL_EDITION"
+    },
+    {
+      "id": "MWXML-M0-R014",
+      "name": "DELETED_OR_SENSITIVE_REVISION_REJECTED",
+      "condition": "A revision or text is deleted, suppressed, restricted or otherwise unavailable, or projection would retain contributor name, IP, edit comment, log or other non-content personal metadata.",
+      "outcome": "DENY_WITH_NO_PARTIAL_EDITION"
+    },
+    {
+      "id": "MWXML-M0-R015",
+      "name": "LICENCE_OR_USE_REJECTED",
+      "condition": "Licence or permitted use is missing, ambiguous or outside the exact existing enum. In particular, CC-BY-SA and GFDL are unsupported in M0 and must not be relabelled.",
+      "outcome": "DENY_WITH_NO_PARTIAL_EDITION"
+    },
+    {
+      "id": "MWXML-M0-R016",
+      "name": "EXISTING_PROFILE_WIDENING_REJECTED",
+      "condition": "Implementation attempts to admit .xml through chimpmaera.knowledge/local-file-corpus-profile/v1 or changes its .md/.txt semantics.",
+      "outcome": "DENY_INTEGRATION"
+    },
+    {
+      "id": "MWXML-M0-R017",
+      "name": "PROJECTION_BINDING_REJECTED",
+      "condition": "Projected virtual path, text, citation, page/revision identity, source digest, chunk digest, manifest digest or envelope digest is missing, ambiguous, non-canonical or mismatched.",
+      "outcome": "DENY_WITH_NO_PARTIAL_EDITION"
+    },
+    {
+      "id": "MWXML-M0-R018",
+      "name": "KNOWLEDGE_CONTRACT_REJECTED",
+      "condition": "Taxonomy or envelope validation fails, conservative epistemic fields are widened, curated use is claimed, generationCandidate is promoted, or any credential, policy, capability, tool, write or execution authority is non-empty.",
+      "outcome": "DENY_WITH_NO_PARTIAL_EDITION"
+    },
+    {
+      "id": "MWXML-M0-R019",
+      "name": "ACCEPTED_LKG_CHAIN_REJECTED",
+      "condition": "Current Accepted/LKG editions are invalid or mismatched, corpus identity changes, candidate priorEditionId does not name the exact current Accepted edition, edition identity is reused, or the candidate edition fails existing validation.",
+      "outcome": "RETURN_EXACT_PRIOR_ACCEPTED_LKG_ZERO_RESIDUE"
+    },
+    {
+      "id": "MWXML-M0-R020",
+      "name": "ACTIVATION_FAILURE_REJECTED",
+      "condition": "Any failure occurs after validation or staging, including an injected failure.",
+      "outcome": "RETURN_EXACT_PRIOR_ACCEPTED_LKG_ZERO_RESIDUE"
+    },
+    {
+      "id": "MWXML-M0-R021",
+      "name": "SECOND_LIFECYCLE_REJECTED",
+      "condition": "Implementation adds a MediaWiki-specific Accepted pointer, LKG pointer, registry, rollback state, selector, taxonomy authority or truth state.",
+      "outcome": "DENY_INTEGRATION"
+    },
+    {
+      "id": "MWXML-M0-R022",
+      "name": "SIDE_EFFECT_AUTHORITY_REJECTED",
+      "condition": "The adapter requests network, download, write, execution, credential, policy, capability, publication or deployment authority.",
+      "outcome": "DENY_WITH_NO_FALLBACK"
+    },
+    {
+      "id": "MWXML-M0-R023",
+      "name": "NON_SYNTHETIC_M0_EVIDENCE_REJECTED",
+      "condition": "M0 implementation or tests consume real Wikimedia content, customer data, externally downloaded XML or any non-synthetic corpus.",
+      "outcome": "DENY_EVIDENCE_CREDIT"
+    },
+    {
+      "id": "MWXML-M0-R024",
+      "name": "REQUIRED_EVIDENCE_MISSING_REJECTED",
+      "condition": "The required receipt, origin/main binding, exact reusable-contract map, path leases, reject matrix, local commit, clean worktree or git diff --check origin/main...HEAD evidence is missing or failing.",
+      "outcome": "DO_NOT_CLAIM_SUCCESS"
+    }
+  ],
+  "authorization": {
+    "thisTaskAuthorized": [
+      "Fresh read-only origin/main inspection",
+      "Creation of this bounded receipt at its allowlisted path",
+      "JSON and diff verification",
+      "One local Git commit"
+    ],
+    "thisTaskProhibited": [
+      "PRODUCT_CODE_CHANGE",
+      "CORPUS_DOWNLOAD",
+      "DOCKER_RUN",
+      "DEPLOYMENT",
+      "GITHUB_CHANGE",
+      "PUSH",
+      "MERGE",
+      "RELEASE",
+      "CORPUS_REDISTRIBUTION",
+      "CREDENTIAL_REMOTE_PROVIDER_SERVICE_CI_OR_HARNESS_CHANGE"
+    ],
+    "futureImplementationCeiling": "Only the exact separately leased synthetic/offline leaves may be considered by a separately authorized worker. No real corpus, network, download, Docker, deployment, GitHub, release or public redistribution action is authorized by this ADR.",
+    "effectsObservedInThisTask": {
+      "productCodeChanged": false,
+      "corpusDownloaded": false,
+      "dockerRun": false,
+      "deploymentPerformed": false,
+      "githubChanged": false,
+      "corpusRedistributed": false
+    }
+  },
+  "acceptance": {
+    "mandatoryPositiveCase": {
+      "id": "APPROVE_ONE_M0_MEDIAWIKI_XML_LIFECYCLE",
+      "status": "SATISFIED_BY_ADR",
+      "evidence": "Exactly one selected lifecycle is approved, projects into exact existing Knowledge Envelope and LocalFileCorpusEdition contracts, and delegates exclusively to the existing Accepted/LKG transition."
+    },
+    "mandatoryNegativeCase": {
+      "id": "NO_SUCCESS_WITHOUT_REQUIRED_EVIDENCE",
+      "status": "SATISFIED_BY_FAIL_CLOSED_RULE",
+      "evidence": "MWXML-M0-R024 prohibits a success claim when this receipt or the required Git verification is absent or failing."
+    },
+    "sliceDefinitionOfDone": {
+      "versionedAdr": true,
+      "selectedLifecycleNamed": true,
+      "allMandatoryExclusionsExplicit": true,
+      "exactReusableContractsEnumerated": true,
+      "freshOriginMainBound": true,
+      "exactPathLeasesEnumerated": true,
+      "secondKnowledgeLifecycleCreated": false,
+      "implementationAuthorizedOnlyForSyntheticOfflineLeaves": true
+    }
+  },
+  "verification": {
+    "checks": [
+      {
+        "command": "git fetch --no-tags origin main",
+        "status": "PASS",
+        "evidence": "origin/main resolved to 353017c4f60e30463d0a78fd6fd2509a37d37f76"
+      },
+      {
+        "command": "python3 -c json.load(receipt) plus bounded semantic assertions",
+        "status": "PASS"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "status": "PASS"
+      },
+      {
+        "command": "git status --short",
+        "status": "PASS_CLEAN_AFTER_LOCAL_COMMIT"
+      }
+    ],
+    "productTestSuites": "NOT_RUN_NOT_APPLICABLE_DECISION_ONLY_JSON",
+    "docker": "NOT_RUN_PROHIBITED",
+    "infrastructureEvidence": [
+      {
+        "commandClass": "Local Node JSON semantic assertion",
+        "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+        "evidence": "V8 initialization failed at OS::SetPermissions before repository code executed; the same JSON parse and semantic assertions passed under Python.",
+        "productVerdict": "NONE"
+      }
+    ],
+    "evidenceRule": "Any non-PASS required check changes the receipt verdict to INCOMPLETE and triggers MWXML-M0-R024."
+  },
+  "determinism": {
+    "volatileTimestampIncluded": false,
+    "originBinding": "Exact commit, Git blob IDs and SHA-256 digests",
+    "ordering": "Object keys and arrays are authored in stable semantic order; path inspection and lease lists are path-stable.",
+    "externalContentEmbedded": false
+  },
+  "claimBoundary": "APPROVED_ARCHITECTURE_DECISION_FOR_ONE_LOCAL_SYNTHETIC_OFFLINE_M0_ADAPTER_ONLY; NOT_IMPLEMENTATION, REAL_WIKIMEDIA_COMPATIBILITY, TRUTH, LICENCE_DETERMINATION, CORPUS, DOWNLOAD, LIVE_RETRIEVAL, MODEL, DOCKER, DEPLOYMENT, GITHUB, RELEASE, PUBLICATION_OR_REDISTRIBUTION_EVIDENCE"
+}

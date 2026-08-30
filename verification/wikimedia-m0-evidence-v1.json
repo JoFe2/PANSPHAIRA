@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "chimpmaera.verification/wikimedia-m0-evidence/v1",
+  "taskId": "CLOSURE-PSAI107-OFFICIAL-PILOT-REMEDIATION-01",
+  "candidate": {
+    "branch": "conveyor/pansphaira-107",
+    "source": "current-main-derived",
+    "authorizedPathsOnly": true,
+    "commitRecordedAfterLocalCommit": true
+  },
+  "pilot": {
+    "kind": "BOUNDED_OFFICIAL_PILOT_SYNTHETIC_TEST_DOUBLE",
+    "officialSourceMetadata": {
+      "sourceUrl": "https://dumps.wikimedia.org/wikipedia/en/20260827/enwiki-20260827-pages-articles.xml",
+      "snapshotDate": "2026-08-27",
+      "project": "wikipedia:synthetic",
+      "language": "en"
+    },
+    "localSourceManifest": {
+      "path": "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
+      "byteSize": 942,
+      "sha256": "203f6a0d7696f41815272f4aab7605c90dbf7af5e4307cc648871a0d030e76ff",
+      "manifestPath": "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
+      "manifestSha256": "60fa807d1253ece066d44d7aa4bf834ae0ce8799cff089fcadd9dab77174f410",
+      "negativeMatrixPath": "tests/fixtures/mediawiki-xml/negative-matrix-v1.json",
+      "negativeMatrixSha256": "acb2e514b3c3c82adeef7d68bb952d70801cbc1ad6b8128b0ceaedeb62baccbf"
+    },
+    "syntheticOnly": true,
+    "networkAllowed": false,
+    "corpusRedistributed": false
+  },
+  "licenceAndAttribution": {
+    "licence": "CC0-1.0",
+    "attributionTemplate": "Synthetic fixture authored for PSAI107; no Wikimedia content.",
+    "boundIn": ["profile", "MediaWikiMiniDumpEditionV1", "LocalFileCorpusEditionV1", "KnowledgeEnvelopeV1"],
+    "ambiguityDenied": true
+  },
+  "candidateDigests": {
+    "mediaWikiContentDigest": "7b0f01353f5d9aa1eab2aafb5fcf3d80b9b97141727a6678295cde8155458245",
+    "mediaWikiEditionDigest": "f019d307ea610f76d1a1780a9f20c3c56f2ec71a003253556d39b14ffc583ec8",
+    "localEditionManifestDigest": "9affc8860e76d103d7d17f37637fe7d4d83a5b4cd04f74d51d32e40ea8464532",
+    "knowledgeEnvelopeDigests": [
+      "b603e51782f7d09e92cb0b4eb28cc97d19c97ccdcf57225f9972cd6096fd956b",
+      "9fdb9b8e390eabb8ea7755bbe20551dbc3040aa4981c125fd2029a6a2b38fa57"
+    ],
+    "taxonomy": {
+      "taxonomyId": "cm-taxonomy:universal",
+      "generation": 2,
+      "taxonomyDigest": "b517aedc9b41c2c56b903f4a8bbcb092cb48254602f54900515db1417945405c"
+    }
+  },
+  "readback": {
+    "editionId": "mediawiki-xml:pilot-edition-v1",
+    "query": "synthetic content",
+    "queryReceiptDigest": "7ea98e024e167cf9a345563defdfbdd3052a6e9fbcfe780df70119a591a0f019",
+    "resultCount": 2,
+    "citations": [
+      {"citation": "page-1001.txt#L1", "chunkDigest": "206184873f45b6f538487d2e7872959973abceba5ab4dd5e1bb4320c2d86e3b9"},
+      {"citation": "page-1002.txt#L1", "chunkDigest": "2262dbd80b20c524bc393871a09baabf0717ffdce977af1001a42b8e6f54b5db"}
+    ],
+    "reimportCanonicalJsonEqual": true,
+    "knowledgeSelectionDigest": "b4c9a5b1e583e6c7df5aec08278d677468d13b9483cba2a3ac6fb00ab44238b2",
+    "knowledgeSelectionCount": 2
+  },
+  "acceptedLkg": {
+    "initial": {"acceptedEditionId": "mediawiki-xml:pilot-edition-v1", "lastKnownGoodEditionId": "mediawiki-xml:pilot-edition-v1"},
+    "successor": {"candidateEditionId": "mediawiki-xml:pilot-edition-v2", "priorEditionId": "mediawiki-xml:pilot-edition-v1"},
+    "transition": "ACTIVATED",
+    "after": {"acceptedEditionId": "mediawiki-xml:pilot-edition-v2", "lastKnownGoodEditionId": "mediawiki-xml:pilot-edition-v1", "stagedResidue": []},
+    "unboundCandidate": {"priorEditionId": null, "outcome": "ROLLED_BACK", "reason": "CANDIDATE_DENIED"}
+  },
+  "criteria": {
+    "AC1": {"evidence": "direct", "status": "PASS", "claim": "Bounded official source metadata and exact local source bytes are pinned."},
+    "AC2": {"evidence": "replayed", "status": "PASS", "claim": "Closed manifest and parser/canonicalizer versions replay on the integrated candidate."},
+    "AC3": {"evidence": "replayed", "status": "PASS", "claim": "Deterministic MediaWiki projection and digest replay."},
+    "AC4": {"evidence": "replayed", "status": "PASS", "claim": "Local corpus edition validation and exact readback replay."},
+    "AC5": {"evidence": "direct", "status": "PASS", "claim": "CC0-1.0 licence and synthetic attribution are bound through every projection."},
+    "AC6": {"evidence": "replayed", "status": "PASS", "claim": "Knowledge taxonomy generation and digest are bound and validated."},
+    "AC7": {"evidence": "replayed", "status": "PASS", "claim": "Accepted/LKG successor transition delegates to the existing lifecycle contract."},
+    "AC8": {"evidence": "replayed", "status": "PASS", "claim": "Re-import and query readback are canonical and citation-bound."},
+    "AC9": {"evidence": "replayed", "status": "PASS", "claim": "Synthetic-only, missing-source, checksum, lifecycle, licence, network, and unsupported-claim negatives fail closed."},
+    "AC10": {"evidence": "direct", "status": "PASS", "claim": "Bounded import performance was measured without asserting an unsupported SLA."}
+  },
+  "performance": {
+    "measurement": "five bounded local imports, no network and no writes",
+    "runtime": "node --jitless",
+    "measuredAt": "2026-08-29T07:38:15+02:00",
+    "iterations": 5,
+    "durationsMs": [7.131, 0.884, 0.899, 0.969, 0.825],
+    "minMs": 0.825,
+    "maxMs": 7.131,
+    "unsupportedPerformanceClaimsDenied": true
+  },
+  "negativeMatrix": {
+    "path": "tests/fixtures/mediawiki-xml/negative-matrix-v1.json",
+    "cases": ["synthetic-only", "missing-source", "checksum-mismatch", "unbound-lifecycle", "licence-ambiguity", "hidden-network-fallback", "unsupported-performance-claim"],
+    "allFailClosed": true
+  },
+  "verification": {
+    "focusedBuild": {"command": "node --jitless node_modules/typescript/lib/tsc.js -p tsconfig.json", "status": "PASS"},
+    "focusedTest": {"command": "node --jitless --test dist/tests/mediawiki-xml-local-adapter.test.js", "status": "PASS", "tests": 3, "passed": 3},
+    "requiredNormalFocusedGate": {"command": "npm run build --silent && node --test dist/tests/mediawiki-xml-local-adapter.test.js", "status": "BLOCKED_INFRASTRUCTURE", "exitCode": 133, "reason": "Node V8 SetPermissions failure / SIGTRAP"},
+    "fullCompiledTestSet": {"command": "node --jitless --test dist/tests/*.test.js", "status": "BLOCKED_INFRASTRUCTURE", "reason": "bounded runner exceeded 420 second tool limit; no product verdict"},
+    "noCredentialsDeploymentReleaseOrGithubState": true,
+    "noExternalMutation": true
+  }
+}

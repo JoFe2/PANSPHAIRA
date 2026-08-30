@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "chimpmaera.knowledge/mediawiki-mini-dump-fixture-manifest/v1",
+  "syntheticOnly": true,
+  "networkAllowed": false,
+  "pilot": {
+    "kind": "BOUNDED_OFFICIAL_PILOT_SNAPSHOT_METADATA_ONLY",
+    "sourceUrl": "https://dumps.wikimedia.org/other/20260827/synthetic-mini.xml",
+    "snapshotDate": "2026-08-27",
+    "license": "CC0-1.0",
+    "attributionTemplate": "Synthetic fixture authored for PSAI107; no Wikimedia content.",
+    "pages": 6,
+    "canonicalContentDigest": "83555e2c995aea05d52cdc482dc85e51e145db768159a756aea82fdc62abe3ff",
+    "canonicalEditionDigest": "53cf9a6e0b610f549b2268b61b51c0c6221d384e73e6635e40c154cd8ceb6e72"
+  },
+  "profiles": {
+    "positive": {
+      "schemaVersion": "chimpmaera.knowledge/mediawiki-mini-dump-profile/v1",
+      "enabled": true,
+      "project": "wikipedia:synthetic",
+      "language": "en",
+      "site": {
+        "name": "Synthetic Wikipedia",
+        "base": "https://synthetic.example.invalid/wiki"
+      },
+      "source": {
+        "path": "positive-mini.xml",
+        "expectedSourceDigest": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c",
+        "byteSize": 2270
+      },
+      "xmlFiles": ["positive-mini.xml", "reordered-mini.xml"],
+      "dump": {
+        "kind": "CURRENT_PAGES_MINI_DUMP",
+        "sourceUrl": "https://dumps.wikimedia.org/other/20260827/synthetic-mini.xml",
+        "snapshotDate": "2026-08-27"
+      },
+      "license": {
+        "licence": "CC0-1.0",
+        "attributionTemplate": "Synthetic fixture authored for PSAI107; no Wikimedia content."
+      },
+      "parserVersion": "mediawiki-mini-dump-parser/v1",
+      "canonicalizerVersion": "mediawiki-mini-dump-canonicalizer/v1"
+    }
+  },
+  "files": [
+    {
+      "path": "positive-mini.xml",
+      "sha256": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c",
+      "byteSize": 2270
+    },
+    {
+      "path": "reordered-mini.xml",
+      "sha256": "179966917d3501fb29bed1244da1c30becc8cc5002a19c361779b8883d3b8486",
+      "byteSize": 2270
+    }
+  ]
+}

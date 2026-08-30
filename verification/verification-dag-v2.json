@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 19,
+  "graphVersion": 20,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "74489ef9e16ba5bdfcb4b936fe52fa95001e496ff94c004f70741b347af9ef34"
+          "sha256": "c5d63468d7e0ef0be5a770f63214be2d90fdbdfdd368c3d4c31e356740ccdc47"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "61b01cdcf17e87756631cb58a9f0cf6e1decf4c4819d07995e5f326087e0467b"
+          "sha256": "596aa263b77ad4e06718668e903279f72ce0dcf4cfe076357f7331be6f820d57"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "ddd183b9b6e4b9992656d6ed4e0adc0a28b534e576cd3b95536c71c7eab828c9"
+          "sha256": "c96c84f566684b5b259e1524660bcd3cfb654a8ab27c5467896c0f10ced4b4b2"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -812,7 +812,7 @@
         {
           "path": "packages/contracts/src/local-file-knowledge-corpus.ts",
           "role": "SECURITY",
-          "sha256": "3bdcae61a26c3468359fca0b8dcd0e64725dbd054257bb5445e5cb7298494c97"
+          "sha256": "4fbf0b859b4c0fd1feb1328026509c23e95047fa77f1fe6511e33491ec568882"
         },
         {
           "path": "schemas/contracts/local-file-corpus-profile-v1.schema.json",
@@ -822,7 +822,7 @@
         {
           "path": "tests/local-file-knowledge-corpus.test.ts",
           "role": "VALIDATOR",
-          "sha256": "2c3c66ae3d85082cc7b058f893ac3d72a2a19caaea18967927e1d0c448e9e8eb"
+          "sha256": "64801245d115e834f7e86fa4edfbcfa98ef89c364ade77da2dc52bd4a4042c66"
         },
         {
           "path": "tests/fixtures/local-file-corpus/edition-1/operations.md",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "23333bf36a956584bc1fd1706d4f5c3eeaaf2cd94f68988fc35f57d07bb68a37"
+          "sha256": "794c98bcd8b67f0f9e1f80c793de1b4d987a8693596cb906789ae7c3a2987b9b"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "8e8bdceef1079925cde5db8534fb17ca060d2e91f282ce673c590d30286ba24a"
+          "sha256": "dcbafcafacc2d47183adeecbcf92b14c6a8fabbf30048d8620baef2643e8db04"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "994c17b7b05ca866a9f4d4308ebc0b81568a3eaae87c51e36f418a06afd5ddfb"
+          "sha256": "354f3ad5b2f2722cc0f2787fa6bdf11f160ead8afd49da2c24b8bcdd4a5929fe"
         }
       ],
       "ownedTests": [
@@ -2272,6 +2272,245 @@
         "The repository-only connector and Canvas package remain inactive, read-only, synthetic and authority-free.",
         "Proposal, approval, execution, rollback and publication stay separately authorized and every accepted synthetic operation requires authoritative readback plus a bound receipt.",
         "No tenant, cloud, identity, consent, credential, production or public certification claim is inferred from repository evidence."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "lkc-wiki-01-governed-local-edition-v1",
+      "dependsOn": [
+        "lkc-files-01-local-file-corpus",
+        "vf-contract-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docker/local-knowledge-wiki/.dockerignore",
+          "role": "VALIDATOR",
+          "sha256": "dfb73fed5127d54ba5eb835ef75536152e34598dab69e221c8cf0512813a3d3c"
+        },
+        {
+          "path": "docker/local-knowledge-wiki/Dockerfile",
+          "role": "VALIDATOR",
+          "sha256": "abe4af0162112825db412f2ecebee7d71293b8c509287bc84ec9218fc4372a61"
+        },
+        {
+          "path": "docker/local-knowledge-wiki/README.md",
+          "role": "VALIDATOR",
+          "sha256": "f0796c0224731b5f27b9533e2abad7e6191b57290e9b296ef94ee5f4b58ed7c5"
+        },
+        {
+          "path": "docker/local-knowledge-wiki/docker-compose.wiki.yml",
+          "role": "VALIDATOR",
+          "sha256": "7ae1d05c8f01d8f61b789002f516b9cc9cc4e61079c5127baf593adf2794684f"
+        },
+        {
+          "path": "docker/local-knowledge-wiki/entrypoint.sh",
+          "role": "VALIDATOR",
+          "sha256": "78be97a69d02f498402cd0f4dd6b70c3673f8658dc7201c7ef0ca598a9e24fb9"
+        },
+        {
+          "path": "docs/LOCAL-KNOWLEDGE-KIWIX-ZIM-ASSESSMENT.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3bddcfbb41f8129af0c08379b88d468fa632dd71f9824dc0769002802b95cb8d"
+        },
+        {
+          "path": "docs/LOCAL-KNOWLEDGE-WIKIMEDIA-PILOT.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d6a904ab5a9fd664bc275df68169ea960a0887bb556172aebd3bd265487724f0"
+        },
+        {
+          "path": "packages/contracts/src/local-file-knowledge-corpus.ts",
+          "role": "CONTRACT",
+          "sha256": "4fbf0b859b4c0fd1feb1328026509c23e95047fa77f1fe6511e33491ec568882"
+        },
+        {
+          "path": "packages/contracts/src/mediawiki-edition-lifecycle.ts",
+          "role": "CONTRACT",
+          "sha256": "1815ec4f4944bb26bc3efe60139c3e98a7b7701a3678cf8e0f316e7329983ea1"
+        },
+        {
+          "path": "packages/contracts/src/mediawiki-mini-dump.ts",
+          "role": "CONTRACT",
+          "sha256": "02a77d5e9e386f38f03aa6a1d65c8f4a83dc3fd28434639779a8265b5126bfdf"
+        },
+        {
+          "path": "packages/contracts/src/mediawiki-query-receipt.ts",
+          "role": "CONTRACT",
+          "sha256": "7f9f28b8dc22ab82ccb9e0ea7887b6398f37b458270f0f96ea31f6c5ddcb358d"
+        },
+        {
+          "path": "packages/contracts/src/mediawiki-xml-local-adapter.ts",
+          "role": "CONTRACT",
+          "sha256": "c9487f382236e509357d00111a9046963a808987695b60e247d7aebdde22ae52"
+        },
+        {
+          "path": "packages/local-knowledge/src/mediawiki-readonly-query.ts",
+          "role": "CONTRACT",
+          "sha256": "26f8f39f6687b8d8ace8ef7a5eeb5e6dc1915f67fe679c66b1aacc95e4340fc7"
+        },
+        {
+          "path": "packages/local-knowledge/src/wikimedia-download-policy.ts",
+          "role": "CONTRACT",
+          "sha256": "59d5359742855596c090566061fb9ad79c36ea05d4920da7f9215163458184f8"
+        },
+        {
+          "path": "packages/local-knowledge/src/wikimedia-optin-download.ts",
+          "role": "CONTRACT",
+          "sha256": "9d5820976e7b4e6f17de12e0358bba16068889993ddb474c491897008b5382c8"
+        },
+        {
+          "path": "packages/local-knowledge/src/wikimedia-pilot-evidence.ts",
+          "role": "CONTRACT",
+          "sha256": "564527899752dc5e744773d8397d2ce1cae6ee49b355b48351ea994fb0707c57"
+        },
+        {
+          "path": "schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "8557e628022d7d52934edfbce21719c953ebb535f6b28119dbfa127df0e25c7a"
+        },
+        {
+          "path": "schemas/contracts/mediawiki-xml-local-profile-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "5524a4400dc72273cb74027d00e7f3aedf65d3f07730df9a215cc19320ff5b73"
+        },
+        {
+          "path": "scripts/verify-wikimedia-pilot.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0c5f9689b0c41557a78ee911e107c9cd4683c8e0188436b1052fe4e0c7e4a72e"
+        },
+        {
+          "path": "tests/fixtures/kiwix-zim-assessment/assessment-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f3c17674b5c73d31ef6bd39df4b28915e1fefb1abb458eb89fc0041626b63304"
+        },
+        {
+          "path": "tests/fixtures/local-knowledge-wiki-container/corpus-file.txt",
+          "role": "FIXTURE",
+          "sha256": "277e7bca1ed880b3e4bef69d3063a65cc70c33dea4066ba237e5116df1f3df2c"
+        },
+        {
+          "path": "tests/fixtures/local-knowledge-wiki-container/credential-like.env",
+          "role": "FIXTURE",
+          "sha256": "ebd2afcae0dea2805723267101775aa0a76adbb2c66e6cf2592526456f3e406c"
+        },
+        {
+          "path": "tests/fixtures/local-knowledge-wiki-container/source/manifest.json",
+          "role": "FIXTURE",
+          "sha256": "b5ad76592deebd4b28dffa7e00c3328c9416d50e3414ed6a81da439e400079e5"
+        },
+        {
+          "path": "tests/fixtures/local-knowledge-wiki-container/source/positive-mini.xml",
+          "role": "FIXTURE",
+          "sha256": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c"
+        },
+        {
+          "path": "tests/fixtures/local-knowledge-wiki-container/source/reordered-mini.xml",
+          "role": "FIXTURE",
+          "sha256": "179966917d3501fb29bed1244da1c30becc8cc5002a19c361779b8883d3b8486"
+        },
+        {
+          "path": "tests/fixtures/mediawiki-mini-dump/manifest.json",
+          "role": "FIXTURE",
+          "sha256": "3f8e575e43c355dd05cfd84c73ed5b3039151f7312e8bf9eeaffde11bfe1ff62"
+        },
+        {
+          "path": "tests/fixtures/mediawiki-mini-dump/negative-matrix.json",
+          "role": "FIXTURE",
+          "sha256": "aa0cf82772643da89b1b9fcb0a7cd0b318e6f064fabaec61d3b66ee88fb82481"
+        },
+        {
+          "path": "tests/fixtures/mediawiki-mini-dump/positive-mini.xml",
+          "role": "FIXTURE",
+          "sha256": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c"
+        },
+        {
+          "path": "tests/fixtures/mediawiki-mini-dump/reordered-mini.xml",
+          "role": "FIXTURE",
+          "sha256": "179966917d3501fb29bed1244da1c30becc8cc5002a19c361779b8883d3b8486"
+        },
+        {
+          "path": "tests/fixtures/mediawiki-xml/current-pages-profile.synthetic-v1.json",
+          "role": "FIXTURE",
+          "sha256": "60fa807d1253ece066d44d7aa4bf834ae0ce8799cff089fcadd9dab77174f410"
+        },
+        {
+          "path": "tests/fixtures/mediawiki-xml/current-pages.synthetic-v1.xml",
+          "role": "FIXTURE",
+          "sha256": "203f6a0d7696f41815272f4aab7605c90dbf7af5e4307cc648871a0d030e76ff"
+        },
+        {
+          "path": "tests/fixtures/mediawiki-xml/negative-matrix-v1.json",
+          "role": "FIXTURE",
+          "sha256": "acb2e514b3c3c82adeef7d68bb952d70801cbc1ad6b8128b0ceaedeb62baccbf"
+        },
+        {
+          "path": "tests/fixtures/wikimedia-download/official-checksum.txt",
+          "role": "FIXTURE",
+          "sha256": "630090d952343650846d72fd56f34d896efd32183ab20d21c2c2a051ddc617e4"
+        },
+        {
+          "path": "tests/fixtures/wikimedia-pilot/expected-measurement-schema.json",
+          "role": "FIXTURE",
+          "sha256": "eb3e5baec5786c0aaf6c8f617baecf6efded8a43f33a87f738708d732121c2e1"
+        },
+        {
+          "path": "tests/kiwix-zim-assessment.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "f02bd6191dbf002a428290cb383a1b487ca84f49a92754cef60693e91484a724"
+        },
+        {
+          "path": "tests/local-file-knowledge-corpus.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "64801245d115e834f7e86fa4edfbcfa98ef89c364ade77da2dc52bd4a4042c66"
+        },
+        {
+          "path": "tests/local-knowledge-wiki-container.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "62218589d437845e76707dd4063527b8985941ce9da6934ee8262ef199c7f1dc"
+        },
+        {
+          "path": "tests/mediawiki-edition-lifecycle.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "6c0d3018e02946f42b5bb671744b2c4ff5669342f2cfde1214b052a5181bbdf9"
+        },
+        {
+          "path": "tests/mediawiki-mini-dump.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "e2c0fa21234a8712c27ab9da883e44b14532b7d58046d470f161e04216ce9ae4"
+        },
+        {
+          "path": "tests/mediawiki-readonly-query.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "92cbc6864a5c33915a18959ea526a557755fd548ac6e71ad766271cfc9f2d5a3"
+        },
+        {
+          "path": "tests/mediawiki-xml-local-adapter.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "5ed6fb2caddb5f9fd3fed007acf661050adf3d457f03c0b73fe3461ab61b960b"
+        },
+        {
+          "path": "tests/wikimedia-optin-download.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "d37eb1cbbad2fbf72f213c4ca5dc8d4ef7b26d5e8d8561381dbda87761b63f72"
+        },
+        {
+          "path": "tests/wikimedia-pilot-evidence.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "68468318414126f9bd1711a1f60aa237ecbc388a88151449bc9dea2f8014ed59"
+        },
+        {
+          "path": "verification/wikimedia-m0-evidence-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3"
+        }
+      ],
+      "ownedTests": [
+        "npm run wiki:test"
+      ],
+      "invariants": [
+        "Official or synthetic source bytes remain immutable, offline by default, attribution-bound and separate from accepted authority.",
+        "Every query result preserves exact passage, project, page/revision identity, snapshot/licence and edition/content digests while contradictions remain visible beyond result limits.",
+        "Updates switch only after verification; failures restore the exact LKG and leave zero activation residue."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

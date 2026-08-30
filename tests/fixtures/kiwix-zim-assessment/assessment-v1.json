@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "pansphaira.knowledge/kiwix-zim-adapter-assessment/v1",
+  "assessmentId": "PSAI107-QWEN-07-KIWIX-ADAPTER-ASSESSMENT",
+  "governance": {
+    "operatingModelVersion": "1.1",
+    "preservedDecisionIds": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "processVariantIntroduced": false
+  },
+  "boundary": {
+    "verdicts": ["ACCEPT", "REJECT", "DEFER"],
+    "adapterRole": "INPUT_ONLY",
+    "implementsZimImporter": false,
+    "implementsSecondLifecycle": false,
+    "automaticTruthPromotion": false,
+    "network": "DISABLED"
+  },
+  "canonicalTarget": {
+    "editionSchema": "chimpmaera.knowledge/mediawiki-mini-dump-edition/v1",
+    "queryReceiptSchema": "chimpmaera.knowledge/mediawiki-readonly-query-receipt/v1",
+    "lifecycle": "EXISTING_MEDIAWIKI_EDITION_LIFECYCLE_V1",
+    "requiredSharedChecks": [
+      "canonical_edition_validator",
+      "immutable_edition_digest_replay",
+      "shared_active_lifecycle_readback",
+      "shared_query_receipt_validator",
+      "shared_query_receipt_corpus_readback",
+      "complete_result_provenance",
+      "visible_cross_source_contradictions",
+      "no_automatic_truth_promotion"
+    ]
+  },
+  "requirements": {
+    "provenance": [
+      "Pinned source URL and source SHA-256 are required.",
+      "Reader, parser and decompressor versions must be recorded.",
+      "The source path and byte size must bind to the imported snapshot."
+    ],
+    "identity": [
+      "Project and language must be explicit.",
+      "Every page must retain page ID and revision ID or a demonstrably equivalent history identity.",
+      "Every page must retain its canonical URL and stable title identity."
+    ],
+    "license": [
+      "The source license must be verifiable before acceptance.",
+      "The license must be compatible with the existing canonical license enum and permitted use."
+    ],
+    "attribution": [
+      "Attribution must be supplied by the source and retained in the edition.",
+      "Attribution must remain available on every query receipt result."
+    ],
+    "immutableSnapshot": [
+      "Snapshot date must be explicit and tied to an immutable source pin.",
+      "Decompression must be deterministic and replay to the same content and edition digests.",
+      "An accepted edition must be immutable and addressed by its digest."
+    ]
+  },
+  "mapping": {
+    "direction": "ZIM_READER_NORMALIZED_OUTPUT_TO_EXISTING_CANONICAL_EDITION_ONLY",
+    "futureReaderOutput": "NORMALIZED_PAGE_RECORDS_NOT_A_SECOND_IMPORTER",
+    "inputOnly": true,
+    "mustReuseEditionSchema": true,
+    "mustReuseLifecycle": true,
+    "mustReuseQueryReceipt": true,
+    "separateActivePointer": false,
+    "separateQueryReceipt": false,
+    "automaticTruthClaim": false,
+    "requiredResultFields": [
+      "exactPassage",
+      "project",
+      "pageId",
+      "revisionId",
+      "canonicalUrl",
+      "snapshotDate",
+      "license",
+      "contentDigest",
+      "editionDigest"
+    ]
+  },
+  "fixtures": {
+    "syntheticMiniDump": {
+      "kind": "SYNTHETIC_MINI_DUMP",
+      "manifestPath": "tests/fixtures/mediawiki-mini-dump/manifest.json",
+      "root": "tests/fixtures/mediawiki-mini-dump",
+      "sourcePath": "positive-mini.xml",
+      "project": "wikipedia:synthetic",
+      "snapshotDate": "2026-08-27",
+      "expectedContentDigest": "83555e2c995aea05d52cdc482dc85e51e145db768159a756aea82fdc62abe3ff",
+      "expectedEditionDigest": "53cf9a6e0b610f549b2268b61b51c0c6221d384e73e6635e40c154cd8ceb6e72"
+    },
+    "boundedOfficialPilot": {
+      "kind": "BOUNDED_OFFICIAL_PILOT_SNAPSHOT_TEST_DOUBLE",
+      "pilotManifestPath": "tests/fixtures/wikimedia-pilot/expected-measurement-schema.json",
+      "sourceBytesRef": "tests/fixtures/mediawiki-mini-dump/positive-mini.xml",
+      "sourcePath": "enwiki-20260827-pages-articles.xml",
+      "sourceUrl": "https://dumps.wikimedia.org/wikipedia/en/20260827/enwiki-20260827-pages-articles.xml",
+      "checksum": "eb10db7e646aa29a19d364f46f283784789fe1881978cf1f951f44036e647c4c",
+      "byteSize": 2270,
+      "project": "wikipedia:eng",
+      "sourceProject": "wikipedia:en",
+      "language": "en",
+      "snapshotDate": "2026-08-27",
+      "license": {
+        "licence": "CC-BY-4.0",
+        "attributionTemplate": "Wikimedia Foundation and contributors; attribution supplied with the mounted snapshot."
+      },
+      "attribution": "Wikimedia Foundation and contributors; attribution supplied with the mounted snapshot.",
+      "contentDigest": "b6075ff3d6d74e6f90ae4a7e0222c51afeaf57d8a1bc8ea52d3dde79e910d727",
+      "testDoubleBoundary": "The repository contains no official Wikimedia bytes; this bounded pilot uses the existing synthetic bytes only to exercise the official metadata and canonical import shape, and receives no official-content credit."
+    }
+  },
+  "negativeCases": [
+    {
+      "caseId": "absent-revision-history-equivalent-attribution",
+      "mutation": "identity.revisionHistoryEquivalentAttribution=false",
+      "expectedVerdict": "DEFER",
+      "reasonCode": "REVISION_HISTORY_ATTRIBUTION_MISSING"
+    },
+    {
+      "caseId": "unverifiable-source-or-license",
+      "mutation": "provenance.sourcePinVerifiable=false and license.verifiable=false",
+      "expectedVerdict": "DEFER",
+      "reasonCode": "SOURCE_OR_LICENSE_UNVERIFIABLE"
+    },
+    {
+      "caseId": "media-ambiguity",
+      "mutation": "media.ambiguity=true",
+      "expectedVerdict": "REJECT",
+      "reasonCode": "MEDIA_AMBIGUITY"
+    },
+    {
+      "caseId": "non-deterministic-decompression",
+      "mutation": "decompression.deterministic=false",
+      "expectedVerdict": "REJECT",
+      "reasonCode": "NON_DETERMINISTIC_DECOMPRESSION"
+    },
+    {
+      "caseId": "separate-active-pointer",
+      "mutation": "lifecycle.activePointer=SEPARATE",
+      "expectedVerdict": "REJECT",
+      "reasonCode": "SEPARATE_ACTIVE_POINTER"
+    },
+    {
+      "caseId": "separate-query-receipt",
+      "mutation": "lifecycle.queryReceipt=SEPARATE",
+      "expectedVerdict": "REJECT",
+      "reasonCode": "SEPARATE_QUERY_RECEIPT"
+    },
+    {
+      "caseId": "zim-automatically-accepted",
+      "mutation": "automaticTruthClaim=true",
+      "expectedVerdict": "REJECT",
+      "reasonCode": "AUTOMATIC_TRUTH_NOT_ALLOWED"
+    }
+  ]
+}

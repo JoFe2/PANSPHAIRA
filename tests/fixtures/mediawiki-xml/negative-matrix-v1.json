@@ -1,0 +1,9 @@
+[
+  {"caseId":"checksum-mismatch","expected":"MEDIAWIKI_XML_LOCAL_DIGEST_DRIFT_DENIED"},
+  {"caseId":"hidden-network-fallback","expected":"MEDIAWIKI_XML_LOCAL_SOURCE_DENIED"},
+  {"caseId":"licence-ambiguity","expected":"MEDIAWIKI_XML_LOCAL_PROFILE_DENIED"},
+  {"caseId":"missing-source","expected":"MEDIAWIKI_XML_LOCAL_SOURCE_DENIED"},
+  {"caseId":"synthetic-only","expected":"MEDIAWIKI_XML_LOCAL_PROFILE_DENIED"},
+  {"caseId":"unbound-lifecycle","expected":"CANDIDATE_DENIED"},
+  {"caseId":"unsupported-performance-claim","expected":"MEASUREMENT_UNSUPPORTED"}
+]

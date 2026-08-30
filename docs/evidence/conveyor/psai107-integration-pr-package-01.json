@@ -1,0 +1,403 @@
+{
+  "schemaVersion": "pansphaira.conveyor/decision-integration-receipt/v1",
+  "receiptId": "PSAI107-INTEGRATION-PR-PACKAGE-01",
+  "receiptVersion": 1,
+  "artifactKind": "BOUNDED_PR_CI_PACKAGE_PREPARATION_RECEIPT",
+  "governance": {
+    "operatingModelVersion": "1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "statement": "This receipt prepares a local PR/CI review package using the controller-reviewed operating model and decisions. It does not restate, amend, supersede, replace or introduce a variant of them."
+  },
+  "scope": {
+    "packageDisposition": "PREPARED_LOCAL_PR_CANDIDATE_NOT_SUBMITTED",
+    "permittedArtifact": "docs/evidence/conveyor/psai107-integration-pr-package-01.json",
+    "excludedActions": [
+      "push",
+      "pull-request submission",
+      "merge",
+      "release",
+      "publication",
+      "credential change",
+      "remote/provider/service/CI authority change",
+      "Docker image build or publication",
+      "external corpus download or redistribution"
+    ],
+    "failClosedRule": "Missing, blocked, unexecuted or scope-limited evidence is recorded as such and is never represented as a passing product, image, official-content, licence, release or CI result."
+  },
+  "sourceBinding": {
+    "originMainCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "headBeforeReceipt": "6f14c6fad2cc5c6fa68b06c77be27ffd37d65c4a",
+    "reviewedRangeBeforeReceipt": "origin/main...6f14c6fad2cc5c6fa68b06c77be27ffd37d65c4a",
+    "commitCount": 24,
+    "rangeSubjectsNewestFirst": [
+      "docs: integrate PSAI107 root quality receipt",
+      "test: assess kiwix zim adapter compatibility",
+      "feat: add offline Wikimedia pilot evidence harness",
+      "test: verify offline wiki volume isolation",
+      "feat: add default-off offline local wiki profile",
+      "feat: add offline MediaWiki query receipts",
+      "feat: add immutable edition LKG index lifecycle",
+      "fix: exclude .verify-probes runtime probes from public release scan",
+      "fix: reconcile Wikimedia public release manifest",
+      "fix: snapshot fake download responses",
+      "fix: reject malformed MediaWiki XML attributes",
+      "fix: fail closed on untrusted download input",
+      "fix: fail closed on malformed opt-in input",
+      "fix: close MediaWiki edition validation boundaries",
+      "fix: harden opt-in download policy boundaries",
+      "fix: bind Wikimedia checksums to dump URL",
+      "feat: add opt-in Wikimedia download policy harness",
+      "docs: finalize PSAI107 no-release decision",
+      "docs: record PSAI107 workspace blocker",
+      "docs: reject unsupported PSAI107 pilot",
+      "feat: add offline MediaWiki mini dump editions",
+      "docs: record PSAI107 no-release decision",
+      "docs: record PSAI107 pilot rejection",
+      "docs: approve bounded MediaWiki XML M0 lifecycle"
+    ]
+  },
+  "boundedDiffInventory": {
+    "command": "git diff --name-status origin/main...6f14c6fad2cc5c6fa68b06c77be27ffd37d65c4a",
+    "status": "PASS",
+    "pathCount": 44,
+    "statusCounts": {
+      "added": 39,
+      "modified": 5,
+      "deleted": 0,
+      "renamed": 0
+    },
+    "pathsInStablePathOrder": [
+      { "status": "M", "path": "SHA256SUMS" },
+      { "status": "A", "path": "docker/local-knowledge-wiki/.dockerignore" },
+      { "status": "A", "path": "docker/local-knowledge-wiki/Dockerfile" },
+      { "status": "A", "path": "docker/local-knowledge-wiki/README.md" },
+      { "status": "A", "path": "docker/local-knowledge-wiki/docker-compose.wiki.yml" },
+      { "status": "A", "path": "docker/local-knowledge-wiki/entrypoint.sh" },
+      { "status": "A", "path": "docs/LOCAL-KNOWLEDGE-KIWIX-ZIM-ASSESSMENT.md" },
+      { "status": "A", "path": "docs/LOCAL-KNOWLEDGE-WIKIMEDIA-PILOT.md" },
+      { "status": "A", "path": "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json" },
+      { "status": "A", "path": "docs/evidence/conveyor/psai107-integration-release-no-release-01.json" },
+      { "status": "A", "path": "docs/evidence/conveyor/psai107-integration-root-qs-01.json" },
+      { "status": "A", "path": "docs/evidence/conveyor/sol-psai107-wikimedia-m0-adr-01.json" },
+      { "status": "M", "path": "packages/contracts/src/local-file-knowledge-corpus.ts" },
+      { "status": "A", "path": "packages/contracts/src/mediawiki-edition-lifecycle.ts" },
+      { "status": "A", "path": "packages/contracts/src/mediawiki-mini-dump.ts" },
+      { "status": "A", "path": "packages/contracts/src/mediawiki-query-receipt.ts" },
+      { "status": "A", "path": "packages/local-knowledge/src/mediawiki-readonly-query.ts" },
+      { "status": "A", "path": "packages/local-knowledge/src/wikimedia-download-policy.ts" },
+      { "status": "A", "path": "packages/local-knowledge/src/wikimedia-optin-download.ts" },
+      { "status": "A", "path": "packages/local-knowledge/src/wikimedia-pilot-evidence.ts" },
+      { "status": "M", "path": "release/public-files.manifest" },
+      { "status": "A", "path": "schemas/contracts/mediawiki-mini-dump-edition-v1.schema.json" },
+      { "status": "M", "path": "scripts/build-public-release.sh" },
+      { "status": "A", "path": "scripts/verify-wikimedia-pilot.mjs" },
+      { "status": "A", "path": "tests/fixtures/kiwix-zim-assessment/assessment-v1.json" },
+      { "status": "A", "path": "tests/fixtures/local-knowledge-wiki-container/corpus-file.txt" },
+      { "status": "A", "path": "tests/fixtures/local-knowledge-wiki-container/credential-like.env" },
+      { "status": "A", "path": "tests/fixtures/local-knowledge-wiki-container/source/manifest.json" },
+      { "status": "A", "path": "tests/fixtures/local-knowledge-wiki-container/source/positive-mini.xml" },
+      { "status": "A", "path": "tests/fixtures/local-knowledge-wiki-container/source/reordered-mini.xml" },
+      { "status": "A", "path": "tests/fixtures/mediawiki-mini-dump/manifest.json" },
+      { "status": "A", "path": "tests/fixtures/mediawiki-mini-dump/negative-matrix.json" },
+      { "status": "A", "path": "tests/fixtures/mediawiki-mini-dump/positive-mini.xml" },
+      { "status": "A", "path": "tests/fixtures/mediawiki-mini-dump/reordered-mini.xml" },
+      { "status": "A", "path": "tests/fixtures/wikimedia-download/official-checksum.txt" },
+      { "status": "A", "path": "tests/fixtures/wikimedia-pilot/expected-measurement-schema.json" },
+      { "status": "A", "path": "tests/kiwix-zim-assessment.test.mjs" },
+      { "status": "M", "path": "tests/local-file-knowledge-corpus.test.ts" },
+      { "status": "A", "path": "tests/local-knowledge-wiki-container.test.mjs" },
+      { "status": "A", "path": "tests/mediawiki-edition-lifecycle.test.ts" },
+      { "status": "A", "path": "tests/mediawiki-mini-dump.test.ts" },
+      { "status": "A", "path": "tests/mediawiki-readonly-query.test.ts" },
+      { "status": "A", "path": "tests/wikimedia-optin-download.test.ts" },
+      { "status": "A", "path": "tests/wikimedia-pilot-evidence.test.ts" }
+    ],
+    "boundary": "The inventory is a review aid for the source range only. The receipt itself is the sole additional allowlisted documentation artifact and does not authorize any unlisted path or external effect."
+  },
+  "criterionToEvidenceMatrix": [
+    {
+      "criterionId": "PRCI-01",
+      "criterion": "Bounded diff inventory is complete and whitespace-clean.",
+      "evidence": [
+        "boundedDiffInventory",
+        "git diff --check origin/main...HEAD"
+      ],
+      "status": "PASS_STATIC"
+    },
+    {
+      "criterionId": "PRCI-02",
+      "criterion": "The accepted default-off local Wiki profile and its integration boundaries remain reviewable without promoting runtime success.",
+      "evidence": [
+        "docs/evidence/conveyor/psai107-integration-root-qs-01.json",
+        "docker/local-knowledge-wiki/README.md",
+        "docker/local-knowledge-wiki/docker-compose.wiki.yml",
+        "tests/local-knowledge-wiki-container.test.mjs"
+      ],
+      "status": "PRESENT_PENDING_AUTHORITATIVE_HOST_DOCKER_GATE"
+    },
+    {
+      "criterionId": "PRCI-03",
+      "criterion": "Synthetic-only Wikimedia fixture provenance, license label and attribution boundary are explicit.",
+      "evidence": [
+        "tests/fixtures/mediawiki-mini-dump/manifest.json",
+        "tests/fixtures/wikimedia-pilot/expected-measurement-schema.json",
+        "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json"
+      ],
+      "status": "PASS_DECLARATION_ONLY_NO_OFFICIAL_CONTENT_CREDIT"
+    },
+    {
+      "criterionId": "PRCI-04",
+      "criterion": "No-data image boundary is declared without claiming a built-image inspection.",
+      "evidence": [
+        "docker/local-knowledge-wiki/.dockerignore",
+        "docker/local-knowledge-wiki/Dockerfile",
+        "docker/local-knowledge-wiki/README.md"
+      ],
+      "status": "PASS_SOURCE_ATTESTATION_ONLY_PENDING_IMAGE_BUILD_AND_INSPECTION"
+    },
+    {
+      "criterionId": "PRCI-05",
+      "criterion": "CI commands are repeatable against the repository profile and blocked local executions are not promoted.",
+      "evidence": [
+        "package.json",
+        "repeatableCiCommandManifest",
+        "localExecution"
+      ],
+      "status": "PARTIAL_STATIC_ONLY_LOCAL_NODE_BLOCKED"
+    },
+    {
+      "criterionId": "PRCI-06",
+      "criterion": "Prior pilot rejection and no-release boundaries remain preserved.",
+      "evidence": [
+        "docs/evidence/conveyor/psai107-integration-pilot-acceptance-01.json",
+        "docs/evidence/conveyor/psai107-integration-release-no-release-01.json",
+        "docs/evidence/conveyor/psai107-integration-root-qs-01.json"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "licenseAndAttributionNotice": {
+    "repositoryLicense": {
+      "identifier": "Apache-2.0",
+      "evidence": [
+        "package.json: license",
+        "LICENSE: Apache License Version 2.0"
+      ],
+      "scope": "Repository source and documentation licensing declaration; this receipt makes no new release or redistribution determination."
+    },
+    "syntheticFixture": {
+      "evidencePath": "tests/fixtures/mediawiki-mini-dump/manifest.json",
+      "syntheticOnly": true,
+      "declaredLicense": "CC0-1.0",
+      "attribution": "Synthetic fixture authored for PSAI107; no Wikimedia content.",
+      "effect": "The checked-in XML fixture is declared synthetic and does not establish a Wikimedia-content, source-license or redistribution result."
+    },
+    "officialPilotMetadataOnly": {
+      "evidencePath": "tests/fixtures/wikimedia-pilot/expected-measurement-schema.json",
+      "declaredLicense": "CC-BY-4.0",
+      "attribution": "Wikimedia Foundation and contributors; attribution supplied with the mounted snapshot.",
+      "effect": "This is an expected operator-mounted evidence shape only. No official source bytes, licence verification, attribution readback or redistribution permission is claimed."
+    },
+    "containerBase": {
+      "evidencePath": "docker/local-knowledge-wiki/Dockerfile",
+      "declaredReference": "node:24.14.1-bookworm-slim",
+      "effect": "The base-image reference is source-inspected only; no image build, SBOM, digest verification or third-party licence conclusion is claimed by this receipt."
+    }
+  },
+  "noDataImageAttestation": {
+    "attestation": "NO_BUILT_IMAGE_OR_IMAGE_ARCHIVE_ATTESTED_BY_THIS_RECEIPT",
+    "diffInspection": {
+      "command": "git diff --numstat origin/main...6f14c6fad2cc5c6fa68b06c77be27ffd37d65c4a and extension scan of its name-status paths",
+      "binaryNumstatRows": 0,
+      "imageExtensionPaths": [],
+      "status": "PASS_NO_IMAGE_ARTIFACT_PATHS_IN_REVIEWED_RANGE"
+    },
+    "sourceBoundary": {
+      "evidencePath": "docker/local-knowledge-wiki/.dockerignore",
+      "excludedBuildContextPatterns": [
+        "tests/**",
+        "**/*.xml",
+        "**/*.gz",
+        "**/*.bz2",
+        "**/*.7z",
+        "**/*.zim",
+        "**/*corpus*",
+        "**/*credential*",
+        "**/*secret*",
+        "**/.env*"
+      ],
+      "status": "PASS_SOURCE_CONFIGURATION_ONLY"
+    },
+    "nonClaims": [
+      "No Docker image was built, run, exported, scanned or published by this worker.",
+      "No runtime proof establishes that an eventual image contains no corpus or sensitive data.",
+      "No official Wikimedia data image, data layer, corpus redistribution or container security result is claimed."
+    ],
+    "requiredReviewerGate": "Build and inspect the declared image with the pinned runtime and run tests/local-knowledge-wiki-container.test.mjs on a host-Docker authority before promoting the source attestation."
+  },
+  "repeatableCiCommandManifest": {
+    "workingDirectory": "/mnt/data2/ai/development-conveyor/docker-workspaces/lane-3/materialized-pansphaira-107",
+    "prerequisites": {
+      "packageManager": "npm@11.16.0",
+      "node": ">=24.14.1 <25",
+      "hostDocker": "required only for the container suite"
+    },
+    "commandsInRequiredOrder": [
+      {
+        "id": "CI-01",
+        "command": "npm ci",
+        "purpose": "Install the lockfile-resolved dependencies."
+      },
+      {
+        "id": "CI-02",
+        "command": "npm run lint",
+        "purpose": "Run the repository TypeScript no-emit gate."
+      },
+      {
+        "id": "CI-03",
+        "command": "npm run build",
+        "purpose": "Compile the repository TypeScript output."
+      },
+      {
+        "id": "CI-04",
+        "command": "npm run test",
+        "purpose": "Run the repository test profile."
+      },
+      {
+        "id": "CI-05",
+        "command": "node --test tests/kiwix-zim-assessment.test.mjs",
+        "purpose": "Run the focused offline Kiwix/ZIM compatibility assessment."
+      },
+      {
+        "id": "CI-06",
+        "command": "node --test tests/local-knowledge-wiki-container.test.mjs",
+        "purpose": "Run the focused host-Docker offline Wiki profile suite."
+      },
+      {
+        "id": "CI-07",
+        "command": "git diff --check origin/main...HEAD",
+        "purpose": "Run the repository-required whitespace check against the PR range."
+      }
+    ],
+    "executionRule": "Execute in order on a pinned Node host; stop product-success promotion when a prerequisite is blocked and record the exact infrastructure evidence. CI-06 requires a functioning host Docker daemon."
+  },
+  "localExecution": {
+    "npmRunLint": {
+      "command": "npm run lint",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed TypeScript.",
+      "productVerdict": "NONE"
+    },
+    "npmRunBuild": {
+      "command": "npm run build",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before npm executed TypeScript.",
+      "productVerdict": "NONE"
+    },
+    "focusedKiwixAssessment": {
+      "command": "node --test tests/kiwix-zim-assessment.test.mjs",
+      "status": "INFRASTRUCTURE_BLOCKED_EXIT_133_SIGTRAP",
+      "evidence": "Node aborted during V8 initialization at OS::SetPermissions before the focused suite started.",
+      "productVerdict": "NONE"
+    },
+    "dockerDaemonAvailability": {
+      "command": "docker version --format '{{.Server.Version}}'",
+      "status": "PASS_AVAILABILITY_ONLY",
+      "observedServerVersion": "29.1.3",
+      "effect": "Daemon availability is not a container build, container test or image-inspection result."
+    },
+    "requiredRepositoryCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    }
+  },
+  "reviewerChecklist": [
+    {
+      "id": "RC-01",
+      "item": "Confirm this receipt is the only PR-package artifact added after the bound pre-receipt HEAD and that the submitted diff remains within intended scope.",
+      "required": true
+    },
+    {
+      "id": "RC-02",
+      "item": "Review every path in boundedDiffInventory, with particular attention to the contracts, downloader-policy harness, release manifest and Docker profile changes.",
+      "required": true
+    },
+    {
+      "id": "RC-03",
+      "item": "Confirm Operating Model 1.1 and D-001 through D-007 remain preserved and that the prior pilot rejection and no-release decisions are not promoted or replaced.",
+      "required": true
+    },
+    {
+      "id": "RC-04",
+      "item": "Confirm synthetic fixture attribution is retained and no official Wikimedia content, licence, compatibility, pilot or redistribution claim is inferred from metadata-only fixtures.",
+      "required": true
+    },
+    {
+      "id": "RC-05",
+      "item": "Run CI-01 through CI-07 on the authoritative pinned-Node host and attach exact outputs; do not treat this worker's exit 133 as a product failure or success.",
+      "required": true
+    },
+    {
+      "id": "RC-06",
+      "item": "For the Docker profile, build and inspect the image and run CI-06 before accepting the no-data-image source attestation as runtime evidence.",
+      "required": true
+    },
+    {
+      "id": "RC-07",
+      "item": "Confirm no push, PR submission, merge, release, publication, credential, remote, provider, service or CI-authority action is requested by this package.",
+      "required": true
+    }
+  ],
+  "decision": {
+    "outcome": "LOCAL_PR_CI_PACKAGE_PREPARED_PENDING_AUTHORITATIVE_GATES",
+    "reason": "The bounded source inventory, criterion matrix, licence and attribution boundaries, no-data image source attestation, reviewer checklist and repeatable command manifest are present. The required diff check passed. Local Node aborted with exit 133 before lint, build and the focused test could begin; Docker daemon availability alone does not establish a Docker test result. The package is prepared for review, not submitted, and no runtime, image, official-content, licence, pilot, release or CI success is claimed.",
+    "requiredBeforeApproval": [
+      "Pinned-Node CI-01 through CI-05 outputs",
+      "Host-Docker CI-06 output plus image inspection",
+      "A final CI-07 result against the review head",
+      "Reviewer completion of RC-01 through RC-07"
+    ],
+    "claimsNotPromoted": [
+      "lint, build, repository test or focused-test success",
+      "Docker profile execution, image construction, image inspection or no-data image runtime verification",
+      "official Wikimedia source, pilot, licence, attribution, compatibility, import, re-import or readback success",
+      "ZIM implementation or acceptance",
+      "release, publication, redistribution, push, PR submission or merge",
+      "truth, authority, credentials, network access or online-fallback permission"
+    ]
+  },
+  "verification": {
+    "receiptJsonParseAndSemanticAssertions": {
+      "command": "python3 JSON parse and bounded semantic assertions over this receipt",
+      "status": "PASS"
+    },
+    "requiredRepositoryCheckAfterReceipt": {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    },
+    "precommitScope": {
+      "command": "git status --short --untracked-files=all",
+      "expected": "Only docs/evidence/conveyor/psai107-integration-pr-package-01.json is untracked or modified before staging."
+    },
+    "postCommitCleanWorktree": {
+      "command": "git status --short --untracked-files=all",
+      "expected": "No output after the local receipt commit."
+    }
+  },
+  "determinism": {
+    "volatileTimestampIncluded": false,
+    "externalContentEmbedded": false,
+    "ordering": "Object keys and arrays are authored in stable semantic order; source paths are lexical and commit subjects are newest-first to match git log.",
+    "sourceBinding": "Bound to origin/main 353017c4f60e30463d0a78fd6fd2509a37d37f76 and pre-receipt HEAD 6f14c6fad2cc5c6fa68b06c77be27ffd37d65c4a."
+  },
+  "claimBoundary": "PR_CI_PACKAGE_PREPARATION_RECEIPT_ONLY: this artifact supplies a deterministic, local review package. It does not submit a PR or substitute static inspection, source declarations, a Docker availability probe or blocked local Node commands for authoritative CI, image, official-pilot, licence, release or external-effect evidence."
+}
