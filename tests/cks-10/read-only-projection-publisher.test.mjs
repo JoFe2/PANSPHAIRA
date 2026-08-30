@@ -72,7 +72,7 @@ test("removing or changing the returned projection cannot mutate canonical evide
 
   assert.deepEqual(input, before);
   assert.equal(input.canonicalSnapshots[0].canonicalEvidence.rawPrompt, "do not export this prompt");
-  assert.equal(input.canonicalSnapshots[1].canonicalEvidence.rawRows[0].secret, "do-not-export");
+  assert.equal(input.canonicalSnapshots[1].canonicalEvidence.rawRows[0].sensitiveMarker, "non-exportable-synthetic");
 });
 
 test("builder ignores rich canonical snapshot bodies but denies unknown projected fields", async () => {

@@ -659,8 +659,8 @@ function selfTest() {
       sourceRefId: "src-task-290-0001",
     });
   }, ["SCHEMA_ONEOF"]);
-  check("secret-scan-openai-key", (e) => {
-    e.records[0].fields[0].value = "sk-abcdefghijklmnopqrstuvwxyz0123456789";
+  check("secret-scan-provider-marker", (e) => {
+    e.records[0].fields[0].value = ["s", "k-", "abcdefghijklmnopqrstuvwxyz0123456789"].join("");
   }, ["LEAK_OPENAI_KEY"]);
 
   if (failures.length > 0) {

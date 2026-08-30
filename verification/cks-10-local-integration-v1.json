@@ -71,7 +71,7 @@
       "criterion": "AC-5-ROLLBACK-READBACK",
       "producerReceipt": "projection-publisher",
       "consumerReceipt": "rollback-readback",
-      "observed": "Dry-run planned 2 generated-artifact removals and re-read canonical evidence unchanged: bytes SHA-256 32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674, 4596 bytes."
+      "observed": "Dry-run planned 2 generated-artifact removals and re-read canonical evidence unchanged: bytes SHA-256 b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a, 4606 bytes."
     }
   ],
   "positiveVerification": {
@@ -139,7 +139,7 @@
       "command": "node --jitless scripts/verify-cks-10-projection-rollback.mjs --dry-run",
       "result": "PASS",
       "exitCode": 0,
-      "observed": "plannedRemovals=2 canonicalDigest=32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674 canonicalBytes=4596"
+      "observed": "plannedRemovals=2 canonicalDigest=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a canonicalBytes=4606"
     }
   ],
   "standardNodeInfrastructure": {

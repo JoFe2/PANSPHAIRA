@@ -17,7 +17,7 @@
   "inputArtifacts": [
     {
       "path": "tests/fixtures/cks-10/publisher-input-v1.json",
-      "sha256": "1db1ab30a475832c9f38b80c01c64a339da0a9179c652b94c4f42fb8d9842839"
+      "sha256": "2b968b18375b989ac16aeec988dbe4dcdf695167a6280f09b639ed2f5408ed8a"
     },
     {
       "path": "tests/fixtures/cks-10/p21-planted-projection-v1.json",
@@ -33,14 +33,14 @@
     },
     {
       "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
-      "sha256": "32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674"
+      "sha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a"
     }
   ],
   "dependencyReceipts": [
     {
       "receiptId": "projection-contract",
       "path": "verification/cks-10-projection-contract-v1.json",
-      "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a845978d4c21a",
+      "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a846068d4c21a",
       "dependsOn": []
     },
     {
@@ -169,8 +169,8 @@
   ],
   "canonicalEvidenceReadback": {
     "fixture": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
-    "exactBytesSha256": "32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674",
-    "snapshotDigest": "edf662bff8bcdd60e4821ee3c899406c6719b68bfea900ce0527bf5288f12e6b",
+    "exactBytesSha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a",
+    "snapshotDigest": "dbe0d4e185c497b368be2dc2af79dc93b254a5b39cfc1e704ef3dc4d624591df",
     "expectedDryRun": "VERIFIED"
   },
   "preservedDecisions": [

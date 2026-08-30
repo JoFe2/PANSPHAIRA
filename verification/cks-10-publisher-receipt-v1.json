@@ -30,7 +30,7 @@
     },
     "fixture": {
       "path": "tests/fixtures/cks-10/publisher-input-v1.json",
-      "sha256": "1db1ab30a475832c9f38b80c01c64a339da0a9179c652b94c4f42fb8d9842839"
+      "sha256": "2b968b18375b989ac16aeec988dbe4dcdf695167a6280f09b639ed2f5408ed8a"
     },
     "frozenProjectionSchema": {
       "path": "contracts/cks-10/knowledge-projection-v1.schema.json",

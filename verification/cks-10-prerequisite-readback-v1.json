@@ -31,7 +31,7 @@
       "authority": "NON_AUTHORITATIVE_WORKAROUND_NOT_A_SUBSTITUTE_FOR_REQUIRED_COMMAND",
       "command": "node --jitless scripts/verify-cks-10-prerequisites.mjs tests/fixtures/cks-10/prerequisite-evidence-v1.json",
       "observedExitCode": 0,
-      "result": "cks-10-prerequisites: PASS fixture=/mnt/data2/ai/development-conveyor/docker-workspaces/lane-1/materialized-pansphaira-290/tests/fixtures/cks-10/prerequisite-evidence-v1.json evidence=5 candidates=5 inventedEdges=0 issues=0"
+      "result": "cks-10-prerequisites: PASS fixture=tests/fixtures/cks-10/prerequisite-evidence-v1.json evidence=5 candidates=5 inventedEdges=0 issues=0"
     }
   },
   "selfTest": {

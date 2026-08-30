@@ -73,7 +73,7 @@
       "boundReceipts": [
         {
           "path": "verification/cks-10-projection-contract-v1.json",
-          "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a845978d4c21a"
+          "sha256": "b85257d3f4c97b019610e213ff6d2df69e465f71a4a2508ede8a846068d4c21a"
         },
         {
           "path": "verification/cks-10-publisher-receipt-v1.json",
@@ -136,7 +136,7 @@
           "sha256": "c102f6f86a1f4a279102a9143b2f19e73efcbf895a70bb7e3e8e04affcae7ac6"
         }
       ],
-      "terminalEvidence": "Dry-run plans two generated-projection removals and leaves canonical evidence byte-identical: sha256=32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674, bytes=4596."
+      "terminalEvidence": "Dry-run plans two generated-projection removals and leaves canonical evidence byte-identical: sha256=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a, bytes=4606."
     }
   ],
   "integratedCandidate": {

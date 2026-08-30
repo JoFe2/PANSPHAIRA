@@ -100,8 +100,8 @@
         }
       ],
       "canonicalEvidence": {
-        "rawRows": [{"secret": "do-not-export"}],
-        "sql": "SELECT secret FROM private_table"
+        "rawRows": [{"sensitiveMarker": "non-exportable-synthetic"}],
+        "queryMarker": "non-exportable-synthetic"
       }
     },
     {
@@ -165,7 +165,7 @@
       ],
       "canonicalEvidence": {
         "effectPayload": "do-not-export",
-        "callback": "https://user:password@example.invalid/private"
+        "callbackReference": "opaque-synthetic-reference"
       }
     }
   ]

@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_PATH = "tests/fixtures/cks-10/delivery-readback-manifest-v1.json";
-const EXPECTED_MANIFEST_SHA256 = "bc9f5fb34836064461a9ef372e33d4aef6fd44c477bfc804fea76883db8ae66e";
+const EXPECTED_MANIFEST_SHA256 = "47e5c08c85e1e71b4c0b6c849acdb265ef9632b760856e774ca34d089f7ca7e8";
 const DIGEST_RE = /^[a-f0-9]{64}$/u;
 const VERSION = "1.0.0";
 const PRESERVED_DECISIONS = ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"];

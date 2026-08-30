@@ -24,7 +24,7 @@
     },
     "canonicalEvidence": {
       "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
-      "byteLength": 4596,
+      "byteLength": 4606,
       "recordCount": 4,
       "recordClasses": [
         "TASK",
@@ -32,8 +32,8 @@
         "DECISION",
         "OUTCOME"
       ],
-      "snapshotDigest": "edf662bff8bcdd60e4821ee3c899406c6719b68bfea900ce0527bf5288f12e6b",
-      "exactBytesSha256": "32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674",
+      "snapshotDigest": "dbe0d4e185c497b368be2dc2af79dc93b254a5b39cfc1e704ef3dc4d624591df",
+      "exactBytesSha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a",
       "crossCheck": "RECORDS_BYTE_EQUAL_TO_PUBLISHER_INPUT_CANONICAL_SNAPSHOTS"
     },
     "generatedArtifactsRemoved": {
@@ -54,7 +54,7 @@
     },
     "fixture": {
       "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
-      "sha256": "32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674"
+      "sha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a"
     },
     "receipt": {
       "path": "verification/cks-10-rollback-readback-v1.json",
@@ -80,12 +80,12 @@
       "requiredExitCode": 0,
       "observedExitCode": 0,
       "result": "PASS",
-      "observedLine": "cks-10-projection-rollback: PASS mode=full removed=2 canonicalDigest=32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674 canonicalBytes=4596 boundary=AUTHORITY_NONE_EFFECT_NONE_PROMOTION_NONE deletionZone=GENERATED_PROJECTION_ARTIFACTS_ONLY",
+      "observedLine": "cks-10-projection-rollback: PASS mode=full removed=2 canonicalDigest=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a canonicalBytes=4606 boundary=AUTHORITY_NONE_EFFECT_NONE_PROMOTION_NONE deletionZone=GENERATED_PROJECTION_ARTIFACTS_ONLY",
       "dryRun": {
         "command": "node scripts/verify-cks-10-projection-rollback.mjs --dry-run",
         "observedExitCode": 0,
         "result": "PASS",
-        "observedLine": "cks-10-projection-rollback: PASS mode=dry-run plannedRemovals=2 canonicalDigest=32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674 canonicalBytes=4596 boundary=AUTHORITY_NONE_EFFECT_NONE_PROMOTION_NONE deletionZone=GENERATED_PROJECTION_ARTIFACTS_ONLY"
+        "observedLine": "cks-10-projection-rollback: PASS mode=dry-run plannedRemovals=2 canonicalDigest=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a canonicalBytes=4606 boundary=AUTHORITY_NONE_EFFECT_NONE_PROMOTION_NONE deletionZone=GENERATED_PROJECTION_ARTIFACTS_ONLY"
       },
       "usageError": {
         "command": "node scripts/verify-cks-10-projection-rollback.mjs <three-positional-args>",

@@ -58,10 +58,10 @@
       "canonicalEvidence": {
         "rawRows": [
           {
-            "secret": "do-not-export"
+            "sensitiveMarker": "non-exportable-synthetic"
           }
         ],
-        "sql": "SELECT secret FROM private_table"
+        "queryMarker": "non-exportable-synthetic"
       }
     },
     {
@@ -125,9 +125,9 @@
       ],
       "canonicalEvidence": {
         "effectPayload": "do-not-export",
-        "callback": "https://user:password@example.invalid/private"
+        "callbackReference": "opaque-synthetic-reference"
       }
     }
   ],
-  "snapshotDigest": "edf662bff8bcdd60e4821ee3c899406c6719b68bfea900ce0527bf5288f12e6b"
+  "snapshotDigest": "dbe0d4e185c497b368be2dc2af79dc93b254a5b39cfc1e704ef3dc4d624591df"
 }

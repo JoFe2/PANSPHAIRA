@@ -129,7 +129,7 @@
       "artifactId": "canonical-evidence-fixture",
       "artifactClass": "FIXTURE",
       "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
-      "sha256": "32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674",
+      "sha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "cks10-canonical-snapshot-290-0001",
@@ -140,7 +140,7 @@
       "artifactId": "local-integration-manifest",
       "artifactClass": "FIXTURE",
       "path": "tests/fixtures/cks-10/local-integration-manifest-v1.json",
-      "sha256": "ac1162a37ae8503774beb1bc4ca290d4d64c8af30c07c2f88d0329529199d7d4",
+      "sha256": "1296d7a81813c46fb2fdbf6990342ca90bf62e1f4c71feaaaae165ef71dbb542",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "AC-5-ROLLBACK-READBACK",
@@ -162,7 +162,7 @@
       "artifactId": "projection-validator",
       "artifactClass": "VALIDATOR",
       "path": "scripts/validate-cks-10-projection-contract.mjs",
-      "sha256": "28aef55aab59b1b812d4310ff4cbb6643880656425ad80cb12b624ad78db58d2",
+      "sha256": "8398f859c5bc99bf7d9cd4c075cdf4b73de78ab674194b5a7bbd435e6fb9dcdb",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "SELF_TEST",
@@ -206,7 +206,7 @@
       "artifactId": "local-integration-runner",
       "artifactClass": "VALIDATOR",
       "path": "scripts/run-cks-10-local-integration.mjs",
-      "sha256": "5d571bc6e06bf3124c71b84d96ada7fc07e958c72ba1377cd7e469ad5fcf8c79",
+      "sha256": "ea576559bbae6ce12ad19fd997d304426bc1fd90e624751791c5f7d9f171bb34",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "local-integration-manifest-v1.json",
@@ -228,7 +228,7 @@
       "artifactId": "prerequisite-receipt",
       "artifactClass": "RECEIPT",
       "path": "verification/cks-10-prerequisite-readback-v1.json",
-      "sha256": "eb5c6079d614ad6436057f106c600c8fa84823b01eb926d96fe4bccb026bfbc6",
+      "sha256": "76a5f239fbcfb19eb7126da27a65f68a18efb146c74f0a20d04b0bb580750a90",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "cks-10-prerequisite-readback-290-0001",
@@ -250,7 +250,7 @@
       "artifactId": "publisher-receipt",
       "artifactClass": "RECEIPT",
       "path": "verification/cks-10-publisher-receipt-v1.json",
-      "sha256": "61d385744b637e7f1762c612d01ec770e1fb876cf8a4a628bed2f3c3b3dd728e",
+      "sha256": "0a41a3cdb220ecf91aab143a35c6b0636d782ddbdbdc2fac8fadcf85511c0174",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "cks-10-read-only-projection-publisher-v1-290-0001",
@@ -294,7 +294,7 @@
       "artifactId": "rollback-readback-receipt",
       "artifactClass": "RECEIPT",
       "path": "verification/cks-10-rollback-readback-v1.json",
-      "sha256": "5e6e2f3cc7de30eae4d539476a6e2d873df7f0d4804f62450b47325dc4c80f31",
+      "sha256": "efac20e779b8072560556861e6eb76d9e91aa24099371ea72db42d29966fdb37",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "cks-10-projection-rollback-readback-v1-290-0001",
@@ -305,7 +305,7 @@
       "artifactId": "local-integration-receipt",
       "artifactClass": "RECEIPT",
       "path": "verification/cks-10-local-integration-v1.json",
-      "sha256": "c102f6f86a1f4a279102a9143b2f19e73efcbf895a70bb7e3e8e04affcae7ac6",
+      "sha256": "618e6c4678ca7739edba27ef87fb0d4007729a2ec77c1ba3adc7a988344baa04",
       "minimumBytes": 1024,
       "requiredMarkers": [
         "cks-10-local-integration-v1-290-0001",

@@ -257,7 +257,7 @@ function main() {
     }, "DENIED_REPLAY_MUTATION"),
   ];
 
-  const rollbackDryRun = runChild("rollback_readback_dry_run", ["scripts/verify-cks-10-projection-rollback.mjs", "--dry-run"], "cks-10-projection-rollback: PASS mode=dry-run plannedRemovals=2 canonicalDigest=32bc11fa39e14484e5c7b3f3243f79092b87464e5eccf325e12e1a6e9a456674");
+  const rollbackDryRun = runChild("rollback_readback_dry_run", ["scripts/verify-cks-10-projection-rollback.mjs", "--dry-run"], "cks-10-projection-rollback: PASS mode=dry-run plannedRemovals=2 canonicalDigest=b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a");
   const canonical = readJson(manifest.canonicalEvidenceReadback.fixture);
   assert(canonical.snapshotDigest === manifest.canonicalEvidenceReadback.snapshotDigest, "CANONICAL_SNAPSHOT_DIGEST_MISMATCH");
   assert(sha256Bytes(readBytes(manifest.canonicalEvidenceReadback.fixture)) === manifest.canonicalEvidenceReadback.exactBytesSha256, "CANONICAL_BYTES_CHANGED");
