@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "pansphaira.cks/local-knowledge-fabric-closure/v1",
+  "issue": 282,
+  "currentMainBase": "272ae2abb348c5dd27a36fda5a541f01d5dc098e",
+  "disposition": "REUSE_CKS_CONTRACTS_AND_MEDIAWIKI_EDITION_LIFECYCLE",
+  "contracts": {
+    "typedKnowledge": "packages/contracts/src/cks-knowledge.ts",
+    "typedEvidence": "packages/contracts/src/cks-evidence.ts",
+    "immutableEdition": "packages/contracts/src/mediawiki-mini-dump.ts",
+    "editionLifecycle": "packages/contracts/src/mediawiki-edition-lifecycle.ts",
+    "readOnlyRetrieval": "packages/local-knowledge/src/mediawiki-readonly-query.ts",
+    "queryReceipt": "packages/contracts/src/mediawiki-query-receipt.ts"
+  },
+  "baseline": {
+    "ranking": "LOCAL_HYBRID",
+    "queryOperationCount": 3,
+    "top1Recall": 1,
+    "top1Precision": 1,
+    "latencyMetric": "PER_QUERY_BOUNDED_WALL_CLOCK_ONLY",
+    "cases": [
+      {"caseId": "alpha-top1", "query": "first synthetic article", "expectedTopPageId": 1001, "latencyBudgetMs": 1000},
+      {"caseId": "beta-top1", "query": "second synthetic article", "expectedTopPageId": 1002, "latencyBudgetMs": 1000},
+      {"caseId": "missing-knowledge", "query": "quasar nebula", "expectedTopPageId": null, "latencyBudgetMs": 1000}
+    ]
+  },
+  "visibility": {
+    "contradictions": "EXPLICIT_DISPUTED_RESULTS",
+    "supersession": "ACTIVE_OR_SUPERSEDED_TYPED_OBJECTS",
+    "missingKnowledge": "ZERO_RESULT_RECEIPT"
+  },
+  "requiredGates": [
+    "npm run cks-contracts:test",
+    "npm run wiki:test",
+    "node --test tests/cks-02-local-knowledge-fabric-closure.test.mjs"
+  ],
+  "nonClaims": [
+    "NO_GRAPH_INFRASTRUCTURE",
+    "NO_VECTOR_RETRIEVAL_CLAIM",
+    "NO_NETWORK_OR_MODEL_DEPENDENCY",
+    "NO_KNOWLEDGE_PROMOTION_OR_AUTHORITY"
+  ]
+}

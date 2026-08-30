@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI282-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JimPansky/PANSPHAIRA",
+    "number": 282,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/282"
+  },
+  "authorizedScope": "REUSE_CKS_CONTRACTS_AND_MEDIAWIKI_EDITION_LIFECYCLE",
+  "baseCommit": "272ae2abb348c5dd27a36fda5a541f01d5dc098e",
+  "testedHead": "6019f6d8f71544db71434a145c7330349c805e0a",
+  "testedTree": "7a2ff9d263fa19d908b2e44dc33e6f6788e6207c",
+  "acceptance": {
+    "immutableEditions": "PASS_REUSED_WIKI_LIFECYCLE",
+    "typedKnowledgeEvidence": "PASS_REUSED_CKS_CONTRACTS",
+    "applicabilityScopeSource": "PASS",
+    "contradictionsSupersessionMissing": "PASS_VISIBLE",
+    "baseline": {"queries": 3, "top1Recall": 1, "top1Precision": 1, "latencyBudgetMsPerQuery": 1000},
+    "networkModelAuthority": "DISABLED_EMPTY"
+  },
+  "nonClaims": [
+    "NO_GRAPH_INFRASTRUCTURE",
+    "NO_VECTOR_RETRIEVAL_CLAIM",
+    "NO_NETWORK_OR_MODEL_DEPENDENCY",
+    "NO_KNOWLEDGE_PROMOTION_OR_AUTHORITY"
+  ],
+  "gates": [
+    {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
+    {"command": "npm run cks02:test", "outcome": "PASS", "tests": 3, "passed": 3},
+    {"command": "npm run wiki:test", "outcome": "PASS", "tests": 68, "passed": 68},
+    {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1216},
+    {"command": "npm run release-governance:verify", "outcome": "PASS"},
+    {"command": "npm run lint", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "delivery": {"readyForPr": true, "releaseRequired": true, "publicReadbackRequired": true, "issueCloseRequired": true}
+}
