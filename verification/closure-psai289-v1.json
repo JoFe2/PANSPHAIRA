@@ -19,7 +19,7 @@
     "rule": "This receipt binds existing evidence and records local verification only; it does not replace, reinterpret, or extend the preserved decisions."
   },
   "repositoryBinding": {
-    "workspace": "/mnt/data2/ai/development-conveyor/docker-workspaces/lane-3/materialized-pansphaira-289",
+    "workspace": ".",
     "branch": "conveyor/pansphaira-289",
     "main": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
     "replayHead": "39de88e04f61ee835ef9638e61a53a46816e64d0",
