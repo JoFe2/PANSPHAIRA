@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/rks-01/knowledge-promotion-receipt-v1.schema.json",
+  "title": "RKS-01 governed knowledge promotion receipt v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "receiptId", "decision", "promotedAt", "revalidateBy", "candidateId", "candidateDigest", "admissionDigest", "snapshotDigest", "governor", "boundary", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.rks01/knowledge-promotion-receipt/v1" }, "receiptId": { "$ref": "#/$defs/id" }, "decision": { "const": "GOVERNED_PROMOTION" }, "promotedAt": { "$ref": "#/$defs/instant" }, "revalidateBy": { "$ref": "#/$defs/instant" },
+    "candidateId": { "$ref": "#/$defs/id" }, "candidateDigest": { "$ref": "#/$defs/digest" }, "admissionDigest": { "$ref": "#/$defs/digest" }, "snapshotDigest": { "$ref": "#/$defs/digest" },
+    "governor": { "type": "object", "additionalProperties": false, "required": ["policyId", "policyVersion"], "properties": { "policyId": { "$ref": "#/$defs/id" }, "policyVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" } } },
+    "boundary": { "const": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "actionAuthority": false } }, "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" }, "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "instant": { "type": "string", "format": "date-time", "pattern": "Z$" } }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/rks-01/knowledge-ingestion-candidate-v1.schema.json",
+  "title": "RKS-01 untrusted knowledge ingestion candidate v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "candidateId", "createdAt", "status", "profileDigest", "snapshotDigest", "admissionDigest", "sourceBytesSha256", "candidateBytesSha256", "licenseDecision", "licenseId", "transformationClass", "notice", "attribution", "obligations", "boundary", "candidateDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.rks01/knowledge-ingestion-candidate/v1" }, "candidateId": { "$ref": "#/$defs/id" }, "createdAt": { "$ref": "#/$defs/instant" }, "status": { "const": "UNTRUSTED_CANDIDATE" },
+    "profileDigest": { "$ref": "#/$defs/digest" }, "snapshotDigest": { "$ref": "#/$defs/digest" }, "admissionDigest": { "$ref": "#/$defs/digest" }, "sourceBytesSha256": { "$ref": "#/$defs/digest" }, "candidateBytesSha256": { "$ref": "#/$defs/digest" },
+    "licenseDecision": { "const": "KNOWN" }, "licenseId": { "type": "string", "pattern": "^[A-Za-z0-9.-]{3,128}$" }, "transformationClass": { "enum": ["TRANSFORM_ALLOWED", "UNMODIFIED_ONLY"] }, "notice": { "type": "string", "minLength": 1, "maxLength": 512 }, "attribution": { "$ref": "#/$defs/list" }, "obligations": { "$ref": "#/$defs/list" },
+    "boundary": { "const": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "executable": false } }, "candidateDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" }, "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "instant": { "type": "string", "format": "date-time", "pattern": "Z$" }, "list": { "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 256 } } }
+}

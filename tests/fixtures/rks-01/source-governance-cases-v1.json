@@ -1,0 +1,98 @@
+{
+  "trustedNow": "2026-08-30T10:00:00Z",
+  "sourceBytesHex": "00010203040506070809",
+  "candidateBytesHex": "7b7d0a",
+  "profile": {
+    "schemaVersion": "pansphaira.rks01/source-profile/v1",
+    "profileId": "source-profile-openapi-3.2.0",
+    "sourceClass": "NORMATIVE_OPEN_SPECIFICATION",
+    "canonicalUrl": "https://spec.openapis.org/oas/v3.2.0.html",
+    "immutableIdentity": { "kind": "VERSION_AND_COMMIT", "version": "3.2.0", "revision": "99710bcb26cbe4be646565eebeb04348f02374b5" },
+    "mediaType": "text/markdown",
+    "parser": { "id": "commonmark-bounded", "version": "1.0.0" },
+    "canonicalizer": { "id": "rks01-canonical-json", "version": "1.0.0" },
+    "legal": {
+      "licenseDecision": "KNOWN",
+      "licenseId": "Apache-2.0",
+      "transformationClass": "TRANSFORM_ALLOWED",
+      "notice": "NOTICE_AND_LICENSE_MUST_BE_RETAINED",
+      "attribution": ["OpenAPI Initiative"],
+      "obligations": ["RETAIN_LICENSE", "RETAIN_NOTICE", "MARK_CHANGES"]
+    },
+    "boundary": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "legalAdvice": false }
+  },
+  "snapshot": {
+    "schemaVersion": "pansphaira.rks01/source-snapshot/v1",
+    "snapshotId": "source-snapshot-openapi-3.2.0-fixture",
+    "profileId": "source-profile-openapi-3.2.0",
+    "canonicalUrl": "https://spec.openapis.org/oas/v3.2.0.html",
+    "immutableIdentity": { "kind": "VERSION_AND_COMMIT", "version": "3.2.0", "revision": "99710bcb26cbe4be646565eebeb04348f02374b5" },
+    "retrievedAt": "2026-08-30T09:00:00Z",
+    "mediaType": "text/markdown",
+    "parser": { "id": "commonmark-bounded", "version": "1.0.0" },
+    "canonicalizer": { "id": "rks01-canonical-json", "version": "1.0.0" }
+  },
+  "admission": {
+    "schemaVersion": "pansphaira.rks01/source-admission-decision/v1",
+    "decisionId": "source-admission-openapi-3.2.0-fixture",
+    "decision": "CONDITIONAL_ADMIT",
+    "decidedAt": "2026-08-30T09:10:00Z",
+    "validUntil": "2026-09-30T09:10:00Z",
+    "licenseDecision": "KNOWN",
+    "licenseId": "Apache-2.0",
+    "transformationClass": "TRANSFORM_ALLOWED",
+    "notice": "NOTICE_AND_LICENSE_MUST_BE_RETAINED",
+    "attribution": ["OpenAPI Initiative"],
+    "obligations": ["RETAIN_LICENSE", "RETAIN_NOTICE", "MARK_CHANGES"],
+    "boundary": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "legalAdvice": false }
+  },
+  "candidate": {
+    "schemaVersion": "pansphaira.rks01/knowledge-ingestion-candidate/v1",
+    "candidateId": "knowledge-candidate-openapi-3.2.0-fixture",
+    "createdAt": "2026-08-30T09:20:00Z",
+    "status": "UNTRUSTED_CANDIDATE",
+    "transformationClass": "TRANSFORM_ALLOWED",
+    "notice": "NOTICE_AND_LICENSE_MUST_BE_RETAINED",
+    "attribution": ["OpenAPI Initiative"],
+    "obligations": ["RETAIN_LICENSE", "RETAIN_NOTICE", "MARK_CHANGES"],
+    "boundary": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "executable": false }
+  },
+  "promotion": {
+    "schemaVersion": "pansphaira.rks01/knowledge-promotion-receipt/v1",
+    "receiptId": "knowledge-promotion-openapi-3.2.0-fixture",
+    "decision": "GOVERNED_PROMOTION",
+    "promotedAt": "2026-08-30T09:30:00Z",
+    "revalidateBy": "2026-09-30T09:10:00Z",
+    "governor": { "policyId": "rks01-source-governance", "policyVersion": "1.0.0" },
+    "boundary": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "actionAuthority": false }
+  },
+  "drift": {
+    "schemaVersion": "pansphaira.rks01/source-drift-event/v1",
+    "eventId": "source-drift-openapi-3.2.0-fixture",
+    "observedAt": "2026-08-30T09:40:00Z",
+    "classification": "NO_DRIFT",
+    "action": "VALIDATED",
+    "previousEventDigest": null,
+    "affectedPromotionReceiptIds": ["knowledge-promotion-openapi-3.2.0-fixture"],
+    "boundary": { "historyRewrite": false, "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE" }
+  },
+  "rfcNarrowProfile": {
+    "schemaVersion": "pansphaira.rks01/source-profile/v1",
+    "profileId": "source-profile-rfc9987-control",
+    "sourceClass": "NORMATIVE_ARCHIVAL_CONTROL",
+    "canonicalUrl": "https://www.rfc-editor.org/rfc/rfc9987.xml",
+    "immutableIdentity": { "kind": "VERSION", "version": "RFC9987", "revision": "RFC9987" },
+    "mediaType": "application/rfc+xml",
+    "parser": { "id": "identity-bytes", "version": "1.0.0" },
+    "canonicalizer": { "id": "identity-bytes", "version": "1.0.0" },
+    "legal": {
+      "licenseDecision": "KNOWN",
+      "licenseId": "IETF-TRUST-DOCUMENT-SPECIFIC",
+      "transformationClass": "UNMODIFIED_ONLY",
+      "notice": "DOCUMENT_LEGAL_NOTICES_MUST_BE_RETAINED",
+      "attribution": ["RFC Editor", "IETF Trust"],
+      "obligations": ["RETAIN_LEGAL_NOTICES", "VERBATIM_ONLY"]
+    },
+    "boundary": { "truthGrant": "NONE", "capabilityGrant": "NONE", "authorityGrant": "NONE", "legalAdvice": false }
+  }
+}

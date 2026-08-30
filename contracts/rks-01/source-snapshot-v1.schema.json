@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/rks-01/source-snapshot-v1.schema.json",
+  "title": "RKS-01 immutable source snapshot metadata v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "snapshotId", "profileId", "profileDigest", "canonicalUrl", "immutableIdentity", "retrievedAt", "sourceBytesSha256", "byteLength", "mediaType", "parser", "canonicalizer", "snapshotDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.rks01/source-snapshot/v1" },
+    "snapshotId": { "$ref": "#/$defs/id" }, "profileId": { "$ref": "#/$defs/id" }, "profileDigest": { "$ref": "#/$defs/digest" },
+    "canonicalUrl": { "type": "string", "format": "uri", "pattern": "^https://", "maxLength": 512 },
+    "immutableIdentity": { "$ref": "#/$defs/identity" }, "retrievedAt": { "$ref": "#/$defs/instant" },
+    "sourceBytesSha256": { "$ref": "#/$defs/digest" }, "byteLength": { "type": "integer", "minimum": 1, "maximum": 1000000000 },
+    "mediaType": { "type": "string", "pattern": "^[a-z0-9.+-]+/[a-z0-9.+-]+$" }, "parser": { "$ref": "#/$defs/tool" }, "canonicalizer": { "$ref": "#/$defs/tool" },
+    "snapshotDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" }, "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "instant": { "type": "string", "format": "date-time", "pattern": "Z$" },
+    "tool": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "$ref": "#/$defs/id" }, "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" } } },
+    "identity": { "type": "object", "additionalProperties": false, "required": ["kind", "version", "revision"], "properties": { "kind": { "enum": ["REVISION", "COMMIT", "VERSION", "VERSION_AND_COMMIT"] }, "version": { "type": "string", "minLength": 1, "maxLength": 128 }, "revision": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{4,128}$" } } }
+  }
+}
