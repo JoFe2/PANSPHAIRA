@@ -59,9 +59,18 @@
         }
       }
     },
+    "qualificationSuite": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lane", "suiteDigest", "taskDigest"],
+      "properties": {
+        "lane": { "enum": ["DEVELOPMENT", "VISIBLE_VALIDATION", "HIDDEN_QUALIFICATION", "FRESH_EPHEMERAL_CERTIFICATION"] },
+        "suiteDigest": { "$ref": "#/$defs/digest" },
+        "taskDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
     "bindings": {
       "type": "object", "additionalProperties": false,
-      "required": ["model", "quantization", "runtime", "prompt", "tool", "knowledge", "verifier"],
+      "required": ["model", "quantization", "runtime", "prompt", "tool", "knowledge", "verifier", "qualificationSuite"],
       "properties": {
         "model": { "$ref": "#/$defs/binding" },
         "quantization": { "$ref": "#/$defs/binding" },
@@ -69,7 +78,8 @@
         "prompt": { "$ref": "#/$defs/binding" },
         "tool": { "$ref": "#/$defs/binding" },
         "knowledge": { "$ref": "#/$defs/knowledge" },
-        "verifier": { "$ref": "#/$defs/binding" }
+        "verifier": { "$ref": "#/$defs/binding" },
+        "qualificationSuite": { "$ref": "#/$defs/qualificationSuite" }
       }
     },
     "execution": {

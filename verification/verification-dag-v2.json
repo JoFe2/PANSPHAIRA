@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 22,
+  "graphVersion": 23,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "9acf60dc24390c37dda05988dc0ad7226ab18aaf0e9efcd69503d00b8a41f0d4"
+          "sha256": "579e842b6ac5735d7302082fe3679f580e68548c630a71ae822b93701bd83106"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "6c96afae2432dd8a9260e02a6b3bf49c0d04e1bab7ce3dff900f434ed78086f4"
+          "sha256": "a8726cb957ef4af1268e47ba7d62169b702f3c63fd8b1dcb2edfaae5c6770a35"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "7791d9a285df063039e4a8065ad78ed42c3257d1cae658818000f9f63a031cc2"
+          "sha256": "2832b1231bffbd90d339eab58830b1251639a5cd0db9af298b9e497e12918ad1"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "0eb39b632be93962e8810e8a3b33416d9ad1584ad8aae93b484462cdf1b6d9c5"
+          "sha256": "5c2eeba3ab6ed1a6a978b8dabb876ac9b77bc503935094c4492d3a34b3dff8c2"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "5e5f75111be579d706542b1239a4d5e125e2a8ee7c21fe441e0a37e272f8c8dc"
+          "sha256": "2177f668e8cd4dd3191b35369d02b0d619e546239b021b1015cc05b9843f58fb"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "eaf0bf6bc75ff0aa1cbb6576cf2cbaf8870518980478dc4457ca2247e7a5f238"
+          "sha256": "e049c0d324413038db890b7e70828410983dc5779d691da3401d3deeaa365fe5"
         }
       ],
       "ownedTests": [
@@ -2574,6 +2574,175 @@
         "Development, visible validation, hidden qualification and fresh ephemeral certification use distinct non-exported raw seeds.",
         "Every generated task binds deterministic expected evidence, epistemic state, answer and reason code across all required synthetic families.",
         "Closed-book success is reported only as potential leakage; no suite grants authority or qualification by declaration."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-04-no-finetune-runtime-baseline-v1",
+      "dependsOn": [
+        "cks-02-local-knowledge-fabric-closure-v1",
+        "cks-03-fresh-synthetic-qualification-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/CKS-04-NO-FINETUNE-BASELINE.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "16962123958ed6ac6e045e0e405e0a834fa176cda25a0b852565533f3b50c174"
+        },
+        {
+          "path": "docs/development/cks-04-baseline-evidence.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d142e08f419afc5fd24da05945b824137e680c85e4ece32be7605285793b733b"
+        },
+        {
+          "path": "docs/evidence/conveyor/sol-psai284-model-profile-decision-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "033e40f70b12a4058297c2e48ce58109d66105524504611c3cc4aab1c586a70c"
+        },
+        {
+          "path": "docs/evidence/conveyor/sol-psai284-no-release-determination-03.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bbda7f517e13918daaab0b340af76fe22ca4b3e96f1a2c2ea377f2141c0a9085"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai284-integration-root-qs-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "713576e7996ba3f81b1f2f7d52c70e9547d310ca80ded386fec6d80b20e7499e"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai284-pr-ci-package-02.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "26b76df8af53ac8dab7b4c792ac65f63605dfa1bfe21d29c6a822539f22bfc5f"
+        },
+        {
+          "path": "packages/competence-runtime/src/cks-no-finetune-runner.ts",
+          "role": "CONTRACT",
+          "sha256": "2a24ebe671914eedee7591bebba251569683d474d903a15b8f34b33d3087e663"
+        },
+        {
+          "path": "packages/competence-runtime/src/cks-oss-model-adapter.ts",
+          "role": "CONTRACT",
+          "sha256": "9c73a61dcda13bf1a6541ba59b1bf4f5b6ea36935b3e12b1238b3a9036cf780d"
+        },
+        {
+          "path": "packages/contracts/src/cks-competence-runtime.ts",
+          "role": "CONTRACT",
+          "sha256": "4e24b7bc23ce0fefae0f3de266848b03e231bbb62a02ea77e26fb4b6e91ed79b"
+        },
+        {
+          "path": "packages/contracts/src/cks-epistemic-verifier.ts",
+          "role": "CONTRACT",
+          "sha256": "0bd0d32c17781a2aa4d8e4ca07b8e30e6726983c5b07da01df0886f00041f6cb"
+        },
+        {
+          "path": "schemas/contracts/cks-competence-runtime-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "8d4ed4df19b2e8466a724af0520831ee492e041a7337634bff5a5da4558cebdb"
+        },
+        {
+          "path": "schemas/contracts/cks-model-tool-call-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "f3c58252af7d53be5a2b4f5ce6d7e9101a25f5345cc703a962d0c03a603c4613"
+        },
+        {
+          "path": "schemas/contracts/cks-run-manifest-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "539e6e863921c265fd0c15375edaa0637fb23c8c330eec0e4964ed8fa0204dc7"
+        },
+        {
+          "path": "schemas/contracts/cks-verification-receipt-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "72a22e4c3d3f31e0bf3112ee6d8a1863a7ea3094e456c53d3d9f9b48795deafb"
+        },
+        {
+          "path": "scripts/render-cks-04-public-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "987c1a054345d3cff92e38d656988af98e654e517f3e24cdeb7832a0c87e9b9e"
+        },
+        {
+          "path": "scripts/run-cks-04-baseline.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0286b59138b6b64c850507d9654c1ed65f81acff718c2c6df553c75ed0072fcd"
+        },
+        {
+          "path": "scripts/verify-cks-04-baseline-evidence.mjs",
+          "role": "VALIDATOR",
+          "sha256": "356449c9b864ea5a420b9d6adbc810399bdbb09555774c2cc88c92da6750b47f"
+        },
+        {
+          "path": "tests/cks-04-baseline-evidence.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "4eb1ab8a51749662d798df71bbe5676053130a9f0e4a66b293a9d99a2fdb7426"
+        },
+        {
+          "path": "tests/cks-04-baseline-harness.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "d7464cac5df2847c2d786c193084159d04821b615052aa400721ebbcb7eea1e2"
+        },
+        {
+          "path": "tests/cks-competence-runtime.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "ce079acc70238d37f5e27c645565709638e516cae6d5d1f3636659db00575a82"
+        },
+        {
+          "path": "tests/cks-epistemic-verifier.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "8fd2488292054319cb03b487a8154da65cee0798c8b616a2aa1684b73a1d581a"
+        },
+        {
+          "path": "tests/cks-oss-model-adapter.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "8850e466f2d020a29f704e914c741654d7fcfbb18b0767c2448c3fe8114a2d74"
+        },
+        {
+          "path": "tests/fixtures/cks-04/adapter-transcript-v1.json",
+          "role": "FIXTURE",
+          "sha256": "dbbdfc87719ccd6901bea670ef6091e68d09754f9e0d8064429cc490b4486466"
+        },
+        {
+          "path": "tests/fixtures/cks-04/baseline-golden-v1.json",
+          "role": "FIXTURE",
+          "sha256": "7d970bea160ac1297cc571dcbc667482e17f7a4091cf29da53a15ddcdcafe817"
+        },
+        {
+          "path": "tests/fixtures/cks-04/model-profile-template-v1.json",
+          "role": "FIXTURE",
+          "sha256": "638e2d43d0637e33d133ea151a66f625234f2539736253dc7efe26a1ba26d7c4"
+        },
+        {
+          "path": "tests/fixtures/cks-04/p2-p3-scenarios-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b77e2dc8b1937b53b2e4b01e3e2e84c47fb1aa3e268b9e47e54b354be0e034d2"
+        },
+        {
+          "path": "tests/fixtures/cks-04/runtime-contract-v1.json",
+          "role": "FIXTURE",
+          "sha256": "4ac93dba19fc2fd0abcd6ec9fb28838df8038b26579bccda4fb51f493be0cae3"
+        },
+        {
+          "path": "tests/fixtures/cks-04/verification-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "bac13c785ca73871ec727965a7455947b099a17480b9e7106463c803e45551d3"
+        },
+        {
+          "path": "verification/cks-04-baseline-manifest-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "81ab161fc2f4cd38ca0cc0f40d8c289f5d37b036fd4aef7a31e16ef47bf72e05"
+        },
+        {
+          "path": "verification/cks-04-no-finetune-baseline-evidence-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "5e83eb24a343b7d29c0c0e99f54c26855b645b99f63df03acfd598d75222928c"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks04:test"
+      ],
+      "invariants": [
+        "Every run binds exact model, quantization, runtime, prompt, tool, Knowledge, verifier and fresh CKS-03 suite/task identities.",
+        "Missing, conflicting, inapplicable or insufficient Knowledge produces abstention or escalation, never supported success.",
+        "The local no-fine-tune baseline grants no effectful authority and makes no qualification or production claim."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

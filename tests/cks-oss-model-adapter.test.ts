@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
@@ -22,13 +23,26 @@ import {
   evidencePackDigestV1,
   type EvidencePackResultV1,
 } from "../packages/contracts/src/cks-competence-runtime.js";
+import {
+  generateCksSyntheticQualificationSuiteV1,
+} from "../packages/contracts/src/cks-synthetic-qualification.js";
 
 const profile = JSON.parse(readFileSync("tests/fixtures/cks-04/model-profile-template-v1.json", "utf8")) as CksOssModelProfileTemplateV1;
 const transcriptFixture = JSON.parse(readFileSync("tests/fixtures/cks-04/adapter-transcript-v1.json", "utf8")) as Record<string, any>;
 const queryArguments = structuredClone(transcriptFixture.modelToolCall.arguments) as any;
+const qualificationSuite = generateCksSyntheticQualificationSuiteV1({
+  lane: "FRESH_EPHEMERAL_CERTIFICATION", seed: randomBytes(32).toString("hex"), generatedAtMs: 1_000,
+});
+const qualificationTask = qualificationSuite.tasks.find((candidate) => candidate.family === "RANDOM_IDENTIFIERS")!;
+queryArguments.taskId = qualificationTask.taskId;
+const qualification = {
+  lane: qualificationSuite.lane,
+  suiteDigest: qualificationSuite.suiteDigest,
+  taskDigest: qualificationTask.taskDigest,
+};
 const task: CksNoFineTuneTaskV1 = {
-  taskId: queryArguments.taskId,
-  taskDigest: "7777777777777777777777777777777777777777777777777777777777777777",
+  taskId: qualificationTask.taskId,
+  taskDigest: qualificationTask.taskDigest,
   scopeDigest: "8888888888888888888888888888888888888888888888888888888888888888",
   applicability: queryArguments.applicability,
   requiredPreconditions: queryArguments.requiredPreconditions,
@@ -105,7 +119,7 @@ test("CKS-04 adapter accepts the selected local profile and emits one typed boun
 
 test("CKS-04 runner produces a canonical manifest and PASS only for exact returned Knowledge", async () => {
   const result = await runCksNoFineTuneV1({
-    adapter: adapter([queryOutput(), responseOutput()]), task, knowledge, input: transcriptFixture.input.content,
+    adapter: adapter([queryOutput(), responseOutput()]), task, qualification, knowledge, input: transcriptFixture.input.content,
     retrieve: request => {
       assert.equal(request.requestId, "KQ-01");
       const value = pack("MATCH") as any;
@@ -125,6 +139,9 @@ test("CKS-04 runner produces a canonical manifest and PASS only for exact return
   assert.equal(result.manifest.bindings.tool.version, "1");
   assert.equal(result.manifest.bindings.knowledge.version, "1");
   assert.equal(result.manifest.bindings.verifier.version, "1");
+  assert.equal(result.manifest.bindings.qualificationSuite.lane, qualification.lane);
+  assert.equal(result.manifest.bindings.qualificationSuite.suiteDigest, qualification.suiteDigest);
+  assert.equal(result.manifest.bindings.qualificationSuite.taskDigest, task.taskDigest);
   assert.equal(result.manifest.transcriptDigests.input, cksTranscriptDigestV1(result.inputTranscript));
   assert.equal(result.manifest.transcriptDigests.output, cksTranscriptDigestV1(result.outputTranscript));
 
@@ -137,7 +154,7 @@ test("CKS-04 runner produces a canonical manifest and PASS only for exact return
 test("CKS-04 missing or conflicting Knowledge is fail-closed abstention", async () => {
   for (const [status, responseState, reason] of [["NEEDS_CONTEXT", "NEED_MORE_KNOWLEDGE", "MISSING_KNOWLEDGE"], ["CONFLICT", "KNOWLEDGE_CONFLICT", "KNOWLEDGE_CONFLICT"]] as const) {
     const result = await runCksNoFineTuneV1({
-      adapter: adapter([queryOutput(), responseOutput(responseState)]), task, knowledge, input: transcriptFixture.input.content,
+      adapter: adapter([queryOutput(), responseOutput(responseState)]), task, qualification, knowledge, input: transcriptFixture.input.content,
       retrieve: request => {
         const value = pack(status) as any;
         value.request.requestDigest = request.requestDigest;
@@ -153,8 +170,9 @@ test("CKS-04 missing or conflicting Knowledge is fail-closed abstention", async 
 });
 
 test("CKS-04 manifest factory rejects unbound Knowledge and tampering", () => {
-  const manifest = createCksRunManifestV1({ manifestId: "run:factory", profile, task, knowledge, inputTranscript: ["input"], outputTranscript: ["output"] });
+  const manifest = createCksRunManifestV1({ manifestId: "run:factory", profile, task, qualification, knowledge, inputTranscript: ["input"], outputTranscript: ["output"] });
   assert.equal(validateCksRunManifestV1(manifest), true);
   assert.equal(validateCksRunManifestV1({ ...manifest, bindings: { ...manifest.bindings, knowledge: { ...manifest.bindings.knowledge, version: "2" } } }), false);
-  assert.throws(() => createCksRunManifestV1({ manifestId: "run:bad", profile, task, knowledge: { ...knowledge, digest: "not-a-digest" }, inputTranscript: ["input"], outputTranscript: ["output"] }), /RUN_MANIFEST_KNOWLEDGE_DENIED/);
+  assert.equal(validateCksRunManifestV1({ ...manifest, bindings: { ...manifest.bindings, qualificationSuite: { ...manifest.bindings.qualificationSuite, suiteDigest: "0".repeat(64) } } }), false);
+  assert.throws(() => createCksRunManifestV1({ manifestId: "run:bad", profile, task, qualification, knowledge: { ...knowledge, digest: "not-a-digest" }, inputTranscript: ["input"], outputTranscript: ["output"] }), /RUN_MANIFEST_KNOWLEDGE_DENIED/);
 });

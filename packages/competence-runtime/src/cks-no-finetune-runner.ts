@@ -17,6 +17,10 @@ import {
   CKS_DETERMINISTIC_VERIFIER_VERSION_V1,
 } from "../../contracts/src/cks-epistemic-verifier.js";
 import {
+  CKS_SYNTHETIC_QUALIFICATION_LANES_V1,
+  type CksSyntheticQualificationLaneV1,
+} from "../../contracts/src/cks-synthetic-qualification.js";
+import {
   CKS_NETWORK_POLICY_V1,
   CKS_NO_FINE_TUNE_MODE_V1,
   CksLocalOssModelAdapterV1,
@@ -45,6 +49,12 @@ export interface CksRunKnowledgeBindingV1 {
   readonly contractVersions: Readonly<Record<string, string>>;
 }
 
+export interface CksRunQualificationBindingV1 {
+  readonly lane: CksSyntheticQualificationLaneV1;
+  readonly suiteDigest: string;
+  readonly taskDigest: string;
+}
+
 export interface CksRunManifestV1 {
   readonly schemaVersion: typeof CKS_RUN_MANIFEST_SCHEMA_V1;
   readonly manifestId: string;
@@ -68,6 +78,7 @@ export interface CksRunManifestV1 {
     readonly tool: CksManifestBindingPartV1;
     readonly knowledge: CksRunKnowledgeBindingV1;
     readonly verifier: CksManifestBindingPartV1;
+    readonly qualificationSuite: CksRunQualificationBindingV1;
   };
   readonly transcriptDigests: {
     readonly input: string;
@@ -88,6 +99,7 @@ export interface CksRunManifestOptionsV1 {
   readonly manifestId: string;
   readonly profile: CksOssModelProfileTemplateV1;
   readonly task: { readonly taskId: string; readonly taskDigest: string; readonly scopeDigest: string };
+  readonly qualification: CksRunQualificationBindingV1;
   readonly knowledge: {
     readonly editionId: string;
     readonly version: string;
@@ -152,6 +164,7 @@ function manifestUnsigned(options: CksRunManifestOptionsV1): Omit<CksRunManifest
         CKS_DETERMINISTIC_VERIFIER_VERSION_V1,
         digestObject({ verifierId: CKS_DETERMINISTIC_VERIFIER_ID_V1, protocolId: CKS_DETERMINISTIC_VERIFIER_PROTOCOL_V1, version: CKS_DETERMINISTIC_VERIFIER_VERSION_V1 }),
       ),
+      qualificationSuite: options.qualification,
     },
     transcriptDigests: {
       input: cksTranscriptDigestV1(options.inputTranscript),
@@ -179,6 +192,11 @@ export function createCksRunManifestV1(options: CksRunManifestOptionsV1): CksRun
   if (!isText(options.knowledge.editionId) || !isText(options.knowledge.version, 64) || !isDigest(options.knowledge.digest)) {
     throw new Error("RUN_MANIFEST_KNOWLEDGE_DENIED");
   }
+  if (!CKS_SYNTHETIC_QUALIFICATION_LANES_V1.includes(options.qualification.lane)
+    || !isDigest(options.qualification.suiteDigest) || !isDigest(options.qualification.taskDigest)
+    || options.qualification.taskDigest !== options.task.taskDigest) {
+    throw new Error("RUN_MANIFEST_QUALIFICATION_DENIED");
+  }
   const unsigned = manifestUnsigned(options);
   return { ...unsigned, manifestDigest: runManifestDigestV1(unsigned) };
 }
@@ -193,8 +211,12 @@ export function validateCksRunManifestV1(value: unknown): value is CksRunManifes
   if (value.schemaVersion !== CKS_RUN_MANIFEST_SCHEMA_V1 || value.manifestVersion !== CKS_RUN_MANIFEST_VERSION_V1 || !isText(value.manifestId) || !isDigest(value.manifestDigest)) return false;
   if (!exactKeys(value.profile, ["profileId", "profileRevision", "profileDigest", "selectionStatus"]) || !isText(value.profile.profileId) || !Number.isSafeInteger(value.profile.profileRevision) || (value.profile.profileRevision as number) < 1 || !isDigest(value.profile.profileDigest) || value.profile.selectionStatus !== "SELECTED_NOT_QUALIFIED") return false;
   if (!exactKeys(value.task, ["taskId", "taskDigest", "scopeDigest"]) || !isText(value.task.taskId) || !isDigest(value.task.taskDigest) || !isDigest(value.task.scopeDigest)) return false;
-  if (!exactKeys(value.bindings, ["model", "quantization", "runtime", "prompt", "tool", "knowledge", "verifier"]) || ![value.bindings.model, value.bindings.quantization, value.bindings.runtime, value.bindings.prompt, value.bindings.tool, value.bindings.verifier].every(validPart)) return false;
+  if (!exactKeys(value.bindings, ["model", "quantization", "runtime", "prompt", "tool", "knowledge", "verifier", "qualificationSuite"]) || ![value.bindings.model, value.bindings.quantization, value.bindings.runtime, value.bindings.prompt, value.bindings.tool, value.bindings.verifier].every(validPart)) return false;
   if (!exactKeys(value.bindings.knowledge, ["editionId", "version", "digest", "contractVersion", "contractVersions"]) || !isText(value.bindings.knowledge.editionId) || !isText(value.bindings.knowledge.version, 64) || !isDigest(value.bindings.knowledge.digest) || !isText(value.bindings.knowledge.contractVersion) || !isRecord(value.bindings.knowledge.contractVersions) || Object.keys(value.bindings.knowledge.contractVersions).length === 0 || !Object.values(value.bindings.knowledge.contractVersions).every((item) => isText(item, 192))) return false;
+  if (!exactKeys(value.bindings.qualificationSuite, ["lane", "suiteDigest", "taskDigest"])
+    || !CKS_SYNTHETIC_QUALIFICATION_LANES_V1.includes(value.bindings.qualificationSuite.lane as CksSyntheticQualificationLaneV1)
+    || !isDigest(value.bindings.qualificationSuite.suiteDigest) || !isDigest(value.bindings.qualificationSuite.taskDigest)
+    || value.bindings.qualificationSuite.taskDigest !== value.task.taskDigest) return false;
   if (!exactKeys(value.transcriptDigests, ["input", "output"]) || !isDigest(value.transcriptDigests.input) || !isDigest(value.transcriptDigests.output)) return false;
   if (!exactKeys(value.execution, ["adapterSchemaVersion", "adapterVersion", "mode", "networkPolicy", "weightModification", "actionAuthority"]) || value.execution.adapterSchemaVersion !== "pansphaira.cks/oss-model-adapter/v1" || value.execution.adapterVersion !== CKS_RUN_MANIFEST_VERSION_V1 || value.execution.mode !== CKS_NO_FINE_TUNE_MODE_V1 || value.execution.networkPolicy !== CKS_NETWORK_POLICY_V1 || value.execution.weightModification !== "FORBIDDEN" || value.execution.actionAuthority !== CKS_RUN_MANIFEST_AUTHORITY_V1) return false;
   return runManifestDigestV1(value) === value.manifestDigest;
@@ -212,6 +234,7 @@ export interface CksNoFineTuneTaskV1 {
 export interface CksNoFineTuneRunnerOptionsV1 {
   readonly adapter: CksLocalOssModelAdapterV1;
   readonly task: CksNoFineTuneTaskV1;
+  readonly qualification: CksRunQualificationBindingV1;
   readonly knowledge: { readonly editionId: string; readonly version: string; readonly digest: string; readonly contractVersion?: string };
   readonly input: string;
   readonly retrieve: (request: KnowledgeQueryRequestV1) => EvidencePackResultV1 | Promise<EvidencePackResultV1>;
@@ -351,6 +374,7 @@ export async function runCksNoFineTuneV1(options: CksNoFineTuneRunnerOptionsV1):
     manifestId: options.manifestId,
     profile: options.adapter.profile,
     task: { taskId: options.task.taskId, taskDigest: options.task.taskDigest, scopeDigest: options.task.scopeDigest },
+    qualification: options.qualification,
     knowledge: options.knowledge,
     inputTranscript: inputForManifest,
     outputTranscript: outputForManifest,
