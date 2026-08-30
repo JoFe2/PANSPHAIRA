@@ -1,8 +1,8 @@
 {
   "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
   "issue":{"repository":"JoFe2/PANSPHAIRA","number":311},
-  "testedProductHead":"7065d9f91ff4dac03d52faab77ab1038cb5b1b60","testedProductTree":"dcd6e5b07079f87c64fa8c6e1ada80ac59d197fe","baseSha":"a5e3dfe69279db049d240e6a93ccbb48abe9159b",
-  "runCommits":["bd160893dd40b72d1b93e2f409bffe466216f881","8ef6d7652a6b9b6ea55eddb82e2af4ef599aec08","9b60eec5db32f98a35acd4730a87639ec01e9c94","ffea51336c7d0d4ee76ac2e2e56a7c400ad6f9ac","baf8c21a4e27b271682b9662089d3187f015f6d5","9f0b0d2b3718d2208f0d363215418f1b8d22ea42","7065d9f91ff4dac03d52faab77ab1038cb5b1b60"],
+  "testedProductHead":"16c7b00d0d64ca827907290db71d99500171175f","testedProductTree":"f8122dbb1abc9d704415c765cd74bec7af8b44ad","baseSha":"a5e3dfe69279db049d240e6a93ccbb48abe9159b",
+  "runCommits":["bd160893dd40b72d1b93e2f409bffe466216f881","8ef6d7652a6b9b6ea55eddb82e2af4ef599aec08","9b60eec5db32f98a35acd4730a87639ec01e9c94","ffea51336c7d0d4ee76ac2e2e56a7c400ad6f9ac","baf8c21a4e27b271682b9662089d3187f015f6d5","9f0b0d2b3718d2208f0d363215418f1b8d22ea42","7065d9f91ff4dac03d52faab77ab1038cb5b1b60","16c7b00d0d64ca827907290db71d99500171175f"],
   "acceptance":{"SOURCE_GOVERNANCE":"PASS","DETERMINISTIC_INGESTION_DRIFT":"PASS","THREE_SOURCE_PILOT":"PASS","COMPARATIVE_UTILITY_VERDICT":"FALSIFIED_PRE_SCORE_PROTOCOL_V1_AND_V2"},
   "terminalDecision":"FALSIFIED_WITH_EVIDENCE_PROTOCOL_INCOMPATIBILITY_CORE_SMALL_VS_RAW_HYPOTHESIS_UNMEASURED",
   "releaseDisposition":"RELEASE_REQUIRED_PENDING_DELIVERY",
