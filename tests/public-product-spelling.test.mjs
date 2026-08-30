@@ -28,6 +28,7 @@ function classify(path, line) {
     path === "docs/architecture/cks-10-analytics-bridge-decision-v1.md"
     || path.startsWith("verification/cks-10-")
   ) return "stable-cks10-authority-identifier";
+  if (path.startsWith("tests/cks-12/")) return "stable-cks12-technical-identifier";
   if (path === "demo/manifests/network/local-egress-policy-v1.json") return "technical-fixture-identifier";
   if (path.startsWith("schemas/")) return "stable-schema";
   if (path === "release/governance.json") {
