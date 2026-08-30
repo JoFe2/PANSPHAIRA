@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pansphaira.cks/task-fingerprint/v1",
+  "title": "CKS-09 TaskFingerprint v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["fingerprintId", "taskFamilyId", "objectiveShapeId", "inputShapeId", "outputShapeId", "contextShapeId", "constraintIds", "effectClass", "dependencyIds", "versionVector", "canonicalDigest"],
+  "properties": {
+    "fingerprintId": {"$ref": "#/$defs/id"},
+    "taskFamilyId": {"$ref": "#/$defs/id"},
+    "objectiveShapeId": {"$ref": "#/$defs/id"},
+    "inputShapeId": {"$ref": "#/$defs/id"},
+    "outputShapeId": {"$ref": "#/$defs/id"},
+    "contextShapeId": {"$ref": "#/$defs/id"},
+    "constraintIds": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "effectClass": {"enum": ["READ_ONLY", "REVERSIBLE_LOCAL", "EXTERNAL_OR_IRREVERSIBLE"]},
+    "dependencyIds": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "versionVector": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/version"}},
+    "canonicalDigest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "version": {
+      "type": "object", "additionalProperties": false,
+      "required": ["componentId", "versionScheme", "exactValue"],
+      "properties": {
+        "componentId": {"$ref": "#/$defs/id"},
+        "versionScheme": {"enum": ["SEMVER_EXACT", "OPAQUE_EXACT", "SHA256_EXACT"]},
+        "exactValue": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"}
+      }
+    }
+  }
+}

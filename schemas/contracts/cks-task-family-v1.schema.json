@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pansphaira.cks/task-family/v1",
+  "title": "CKS-09 TaskFamily v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["familyId", "membershipClauses", "invariantIds", "variantAxes", "exclusionClauses", "evidenceRefs", "provenanceRefs", "canonicalDigest"],
+  "properties": {
+    "familyId": {"$ref": "#/$defs/id"},
+    "membershipClauses": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/clause"}},
+    "invariantIds": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "variantAxes": {"type": "array", "maxItems": 9, "uniqueItems": true, "items": {"enum": ["taskFamilyId", "objectiveShapeId", "inputShapeId", "outputShapeId", "contextShapeId", "constraintIds", "effectClass", "dependencyIds", "versionVector"]}},
+    "exclusionClauses": {"type": "array", "maxItems": 16, "items": {"$ref": "#/$defs/clause"}},
+    "evidenceRefs": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "provenanceRefs": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "canonicalDigest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}:[a-z0-9][a-z0-9._-]{2,95}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "scalar": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}, {"type": "null"}]},
+    "operand": {"oneOf": [{"$ref": "#/$defs/scalar"}, {"type": "array", "maxItems": 32, "items": {"$ref": "#/$defs/scalar"}}]},
+    "clause": {
+      "type": "object", "additionalProperties": false,
+      "required": ["factPath", "operator", "operand"],
+      "properties": {
+        "factPath": {"type": "string", "pattern": "^(|(?:/(?:[^~/]|~[01])*))+$"},
+        "operator": {"enum": ["EQ", "IN", "SET_CONTAINS_ALL", "SET_DISJOINT", "EXISTS"]},
+        "operand": {"$ref": "#/$defs/operand"}
+      }
+    }
+  }
+}

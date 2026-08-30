@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
+  "issue":{"repository":"JoFe2/PANSPHAIRA","number":289},
+  "testedProductHead":"884bc4fda464cf619451d9e19c6044e59918adf3","testedProductTree":"46783f9dae8eb520b65a98ee0d7009a80c72df82","baseSha":"f19facc96129c9d19ff0de63a08c00d35ce8b8af",
+  "runCommits":["c60e1564cfe9d02b076b2580b00ab8f5989942b4","884bc4fda464cf619451d9e19c6044e59918adf3"],
+  "acceptance":{"P17":"PASS","P18":"PASS","REUSE_DENIALS":"PASS","SHADOW_BOUNDARY":"PASS","PROVENANCE_PRESERVATION":"PASS"},
+  "releaseDisposition":"RELEASE_REQUIRED_PENDING_DELIVERY",
+  "checks":[{"command":"npm run cks09:test","status":"PASS","tests":43},{"command":"npm test","status":"PASS","tests":642},{"command":"npm run lint","status":"PASS"},{"command":"sha256sum --check SHA256SUMS","status":"PASS"},{"command":"npm run release-governance:verify","status":"PASS"},{"command":"git diff --check","status":"PASS"}],
+  "integrity":{"publicManifestEntries":1114,"verificationDagVersion":27,"verificationDagNodes":33},
+  "nonClaims":["NO_LEARNED_PRODUCTION_ROUTER","NO_AUTOMATIC_CLUSTER_TRUTH","NO_WORKFLOW_ACTIVATION","NO_FUNCTION_GENERATION","NO_RELEASE_OR_PUBLIC_READBACK_CLAIM_BEFORE_DELIVERY"],
+  "delivery":{"readyForPr":true,"prHeadCiRequired":true,"shaBoundMergeRequired":true,"mainHeadCiRequired":true,"dailyReleaseRequired":true,"anonymousReadbackRequired":true,"issueCloseRequired":true}
+}

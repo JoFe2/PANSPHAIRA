@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "pansphaira.cks/p18-pattern-maturity/v1",
+  "taskId": "PSAI289-QWEN-03-PATTERN-CANDIDATE-EVALUATOR",
+  "artifact": "packages/cks/src/solution-pattern-candidate-evaluator.ts",
+  "mode": "CANDIDATE_ONLY",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "p18": {
+    "verdict": "INCONCLUSIVE",
+    "reason": "MISSING_EVIDENCE",
+    "nonClaim": "This template does not claim stable pattern maturity without planted episodes, diversity proof, counterevidence, dependency verification, exact-version evidence and sealed provenance."
+  },
+  "candidateGate": {
+    "stablePattern": "ACCEPTED",
+    "frequencyOnly": "DENIED",
+    "narrowContext": "DENIED",
+    "correlationTrap": "DENIED",
+    "similarLookingReuse": "DENIED",
+    "versionDriftReuse": "DENIED"
+  },
+  "preservedReferences": [
+    "dependencyRefs",
+    "evidenceRefs",
+    "provenanceRefs",
+    "knownFailureRefs",
+    "counterexampleRefs",
+    "versionConstraintRefs"
+  ],
+  "nonClaims": [
+    "No live authority or execution permission",
+    "No procedure content",
+    "No production safety, quality, cost, or generalization claim",
+    "No evidence repair, prose coercion, version proximity, or similarity override"
+  ]
+}

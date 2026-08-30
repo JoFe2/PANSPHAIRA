@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "pansphaira.cks/public-readback-evidence-template/v1",
+  "recordKind": "PUBLIC_READBACK_EVIDENCE_TEMPLATE",
+  "taskId": "INT-PSAI289-PUBLIC-READBACK-HARNESS-01",
+  "captureState": "NOT_CAPTURED",
+  "process": {
+    "operatingModel": "v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false
+  },
+  "requiredEvidence": [
+    "anonymousCapture",
+    "authorizationHeaderAbsent",
+    "credentialMaterialAbsent",
+    "rawPayloadNotRetained",
+    "procedureContentAbsent",
+    "expectedPublicRecordBinding",
+    "observedPublicRecordBinding",
+    "responseDigest"
+  ],
+  "privacyBoundary": {
+    "networkPerformedByValidator": false,
+    "externalStateChanged": false,
+    "retainedFields": [
+      "publicRecordId",
+      "publicRecordDigest",
+      "responseDigest",
+      "statusCode"
+    ],
+    "prohibitedFields": [
+      "authorizationHeader",
+      "credential",
+      "rawPayload",
+      "procedureContent",
+      "privatePath",
+      "sessionIdentifier"
+    ]
+  },
+  "nonClaims": [
+    "This template is not evidence that public state exists or that an anonymous public readback occurred.",
+    "This template grants no publication, release, merge, implementation, routing, workflow, function, telemetry, Knowledge, or pattern-promotion authority.",
+    "A PASS public-readback verdict requires a separately captured, complete, anonymous, privacy-safe evidence record."
+  ]
+}

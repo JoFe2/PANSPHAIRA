@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "pansphaira.cks/shadow-replay/v1",
+  "evidenceAdmission": "ADMITTED",
+  "requiredEvidencePresent": true,
+  "holdoutSealed": true,
+  "replayMode": "SHADOW",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "cases": [
+    {
+      "caseId": "case:holdout-a",
+      "holdoutVariantId": "holdout:batch-a",
+      "knowledgeBundleDigest": "sha256:2f2515449c6808f939870ba519fcb1ade65f97952784a2b7663963d0f392002a",
+      "pairedRun": {
+        "holdoutVariantId": "holdout:batch-a",
+        "knowledgeOnly": {
+          "holdoutVariantId": "holdout:batch-a",
+          "pairedRunKey": ["holdout:batch-a", "state:1", "bundle:1", "harness:1", "budget:1"],
+          "expectedCheckIds": ["check:quality", "check:safety"],
+          "checks": [{"checkId":"check:quality","passed":false},{"checkId":"check:safety","passed":true}],
+          "costEvents": [{"eventId":"event:ko-a-1","kind":"RETRIEVAL_ITEM"},{"eventId":"event:ko-a-2","kind":"CANDIDATE_STEP"},{"eventId":"event:ko-a-3","kind":"CHECK_RUN"},{"eventId":"event:ko-a-4","kind":"TOOL_CALL"}],
+          "denialOutcomes": [{"caseId":"case:version-drift","reason":"VERSION_INCOMPATIBLE"}],
+          "safetyPassed": true
+        },
+        "knowledgePlusExperience": {
+          "holdoutVariantId": "holdout:batch-a",
+          "pairedRunKey": ["holdout:batch-a", "state:1", "bundle:1", "harness:1", "budget:1"],
+          "expectedCheckIds": ["check:quality", "check:safety"],
+          "checks": [{"checkId":"check:quality","passed":true},{"checkId":"check:safety","passed":true}],
+          "costEvents": [{"eventId":"event:xp-a-1","kind":"RETRIEVAL_ITEM"},{"eventId":"event:xp-a-2","kind":"CHECK_RUN"},{"eventId":"event:xp-a-3","kind":"TOOL_CALL"}],
+          "denialOutcomes": [{"caseId":"case:version-drift","reason":"VERSION_INCOMPATIBLE"}],
+          "safetyPassed": true
+        }
+      }
+    },
+    {
+      "caseId": "case:holdout-b",
+      "holdoutVariantId": "holdout:batch-b",
+      "knowledgeBundleDigest": "sha256:2f2515449c6808f939870ba519fcb1ade65f97952784a2b7663963d0f392002a",
+      "pairedRun": {
+        "holdoutVariantId": "holdout:batch-b",
+        "knowledgeOnly": {
+          "holdoutVariantId": "holdout:batch-b",
+          "pairedRunKey": ["holdout:batch-b", "state:1", "bundle:1", "harness:1", "budget:1"],
+          "expectedCheckIds": ["check:quality", "check:safety"],
+          "checks": [{"checkId":"check:quality","passed":true},{"checkId":"check:safety","passed":true}],
+          "costEvents": [{"eventId":"event:ko-b-1","kind":"RETRIEVAL_ITEM"},{"eventId":"event:ko-b-2","kind":"CANDIDATE_STEP"},{"eventId":"event:ko-b-3","kind":"CHECK_RUN"}],
+          "denialOutcomes": [{"caseId":"case:inapplicable","reason":"PRECONDITION_FALSE"}],
+          "safetyPassed": true
+        },
+        "knowledgePlusExperience": {
+          "holdoutVariantId": "holdout:batch-b",
+          "pairedRunKey": ["holdout:batch-b", "state:1", "bundle:1", "harness:1", "budget:1"],
+          "expectedCheckIds": ["check:quality", "check:safety"],
+          "checks": [{"checkId":"check:quality","passed":true},{"checkId":"check:safety","passed":true}],
+          "costEvents": [{"eventId":"event:xp-b-1","kind":"RETRIEVAL_ITEM"},{"eventId":"event:xp-b-2","kind":"CHECK_RUN"}],
+          "denialOutcomes": [{"caseId":"case:inapplicable","reason":"PRECONDITION_FALSE"}],
+          "safetyPassed": true
+        }
+      }
+    }
+  ]
+}

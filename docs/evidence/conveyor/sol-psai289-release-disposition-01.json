@@ -1,0 +1,202 @@
+{
+  "schema": "pansphaira.conveyor.cks-09-issue-release-disposition-receipt.v1",
+  "recordKind": "DETERMINISTIC_DECISION_AND_INTEGRATION_RECEIPT",
+  "taskId": "SOL-PSAI289-RELEASE-DISPOSITION-01",
+  "controlId": "CKS-09",
+  "decision": "RELEASE_REQUIRED_PENDING_DELIVERY",
+  "process": {
+    "operatingModel": "v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "rule": "This receipt records the issue-scoped disposition only; it does not replace, reinterpret, or extend the preserved process decisions."
+  },
+  "repositoryBinding": {
+    "workspace": "/mnt/data2/ai/development-conveyor/docker-workspaces/lane-3/materialized-pansphaira-289",
+    "branch": "conveyor/pansphaira-289",
+    "originMain": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "preDispositionHead": "9b985e0935fd4abd8e31cd9066f3f971f63b00cc",
+    "originMainIsAncestorOfPreDispositionHead": true,
+    "baselineRelation": "origin/main...HEAD"
+  },
+  "disposition": {
+    "scope": "ISSUE_SCOPED",
+    "recordStatus": "RELEASE_REQUIRED_PENDING_DELIVERY",
+    "releaseDisposition": "RELEASE_REQUIRED_PENDING_DELIVERY",
+    "releaseRequired": true,
+    "releasePerformed": false,
+    "reasonCodes": [
+      "BOUNDED_SYNTHETIC_SHADOW_PROOF_ONLY",
+      "NO_PRODUCTION_ROUTER_AUTHORIZATION",
+      "NO_WORKFLOW_ACTIVATION_AUTHORIZATION",
+      "NO_IMPLEMENTATION_AUTHORIZATION",
+      "TERMINAL_ISSUE_PROOF_REQUIRES_GOVERNED_RELEASE"
+    ],
+    "basis": "CKS-09 remains a bounded synthetic/shadow proof with no production-router, workflow-activation, or implementation authorization. Successful terminal issue delivery nevertheless requires a governed release, exact-head public readback, and issue closure; none is claimed by this local receipt.",
+    "releaseAuthorityGranted": false,
+    "implementationAuthorityGranted": false
+  },
+  "evidenceReferences": [
+    {
+      "id": "EVIDENCE-CKS09-RECONCILIATION",
+      "path": "docs/evidence/conveyor/terra-psai289-root-qs-01.json",
+      "sha256": "sha256:6b6efd650cda61bbe64ece0ea2c5172da5b4cc21e5906b5cf71d36c3d2125956",
+      "commit": "5ab7c34c273ba95bc00e1cfab540ac37a3d3f746",
+      "bindings": [
+        "/decision",
+        "/shadowOnlyBoundary",
+        "/integration",
+        "/nonClaims"
+      ]
+    },
+    {
+      "id": "EVIDENCE-CKS09-OFFLINE-PROOF",
+      "path": "verification/cks-09-offline-proof-receipt-v1.json",
+      "sha256": "sha256:f1ca8b9cd220428c101ef3eebf45e86eccd5c8f707ca0e35ea2d5a35060ec429",
+      "canonicalDigest": "sha256:b70a3107d3a3fa0ad7de2ac6f1073d2b9be2d1def1abd1fff1269936da5d13c4",
+      "commit": "ecfe48ce9454be568107e917314e9a92b8283bc8",
+      "bindings": [
+        "/mode",
+        "/scope",
+        "/verdict",
+        "/externalStateChanged",
+        "/modelsOrServicesCalled",
+        "/procedureContentReturned"
+      ]
+    },
+    {
+      "id": "EVIDENCE-CKS09-FROZEN-VOCABULARY",
+      "path": "docs/evidence/conveyor/sol-psai289-fingerprint-retrieval-decision-01.json",
+      "sha256": "sha256:3022352adb5c1f05a404d12e81afb4106acb56653df796e31f94fa321e8c9964",
+      "commit": "8802d9077f4820b59da7e42f054be0b674080d42",
+      "bindings": [
+        "/scope/excluded",
+        "/SolutionPattern/statusRule",
+        "/shadowOnlySemantics/effectRule",
+        "/explicitNonclaims"
+      ]
+    },
+    {
+      "id": "EVIDENCE-LOCAL-PREMUTATION-BOUNDARY",
+      "path": "docs/evidence/conveyor/int-psai289-pr-ci-package-01.json",
+      "sha256": "sha256:093142a143f3882fd64023e772c121b1422532cd54bc5f0e63099ffd8aa830b4",
+      "commit": "9b985e0935fd4abd8e31cd9066f3f971f63b00cc",
+      "bindings": [
+        "/evidencePackage",
+        "/failClosedBoundary",
+        "/integration",
+        "/nonClaims"
+      ]
+    },
+    {
+      "id": "EVIDENCE-DELIVERY-STATE-POLICY",
+      "path": "docs/ADAPTIVE-EVIDENCE-GATES.md",
+      "sha256": "sha256:0f814d89f5c5f0b46b3cc9e893fcfe02ea3f0df194082d7969ef028b5f9edee5",
+      "commit": "77d948cad0a3d9abd6ac7584112569b2f878f1ce",
+      "binding": "Merge and release remain distinct delivery states; this issue requires a later governed release and cannot infer release from merge."
+    },
+    {
+      "id": "EVIDENCE-RELEASE-GOVERNANCE",
+      "path": "docs/RELEASE-GOVERNANCE.md",
+      "sha256": "sha256:e14a447977a3233ce1f3adeee9c1968bfdc0fcb07f6067c00d40977a8b99f237",
+      "commit": "e9dd4ec9d64e5eeb19a24f4bed8c998057e83b6d",
+      "binding": "Repository state, CI, merge, or a tag is insufficient to establish a public release; publication requires its own evidence and anonymous public readback."
+    }
+  ],
+  "requiredEvidencePolicy": {
+    "requiredReferenceIds": [
+      "EVIDENCE-CKS09-RECONCILIATION",
+      "EVIDENCE-CKS09-OFFLINE-PROOF",
+      "EVIDENCE-CKS09-FROZEN-VOCABULARY",
+      "EVIDENCE-LOCAL-PREMUTATION-BOUNDARY",
+      "EVIDENCE-DELIVERY-STATE-POLICY",
+      "EVIDENCE-RELEASE-GOVERNANCE"
+    ],
+    "allRequiredEvidencePresent": true,
+    "allRecordedFileDigestsVerified": true,
+    "successRule": "The local disposition is recorded successfully only when every required reference is present and its recorded digest matches the referenced bytes.",
+    "missingUnreadableOrDigestMismatchedEvidence": {
+      "receiptSuccess": "DENIED",
+      "releaseDisposition": "RELEASE_REQUIRED_PENDING_DELIVERY",
+      "releaseAuthority": "DENIED",
+      "implementationAuthority": "DENIED"
+    },
+    "successClaimedWithoutRequiredEvidence": false
+  },
+  "wording": {
+    "localDisposition": "Issue-scoped disposition for CKS-09: RELEASE_REQUIRED_PENDING_DELIVERY. The admitted result is a bounded synthetic/shadow proof only and grants no production-router, workflow-activation, implementation, publication, deployment, or release authority. A governed release remains mandatory for successful terminal issue delivery and has not occurred.",
+    "publicReadback": "CKS-09 release remains required and pending governed delivery. A merge is not a release, no release is claimed by this receipt, and the bounded proof authorizes no production routing, workflow activation, implementation, deployment, Knowledge acceptance, or pattern promotion.",
+    "publicReadbackStatus": "LOCAL_WORDING_ONLY_NOT_PUBLISHED",
+    "remoteReadbackPerformed": false
+  },
+  "laterMergeBoundary": {
+    "statement": "A later merge is not a release and does not activate routing, workflows, functions, telemetry, Knowledge acceptance, or pattern promotion.",
+    "mergePerformedByThisTask": false,
+    "releaseInferredFromMerge": false,
+    "activationInferredFromMerge": false
+  },
+  "authorizationBoundary": {
+    "productionRouter": "NOT_AUTHORIZED",
+    "workflowActivation": "NOT_AUTHORIZED",
+    "functionActivation": "NOT_AUTHORIZED",
+    "implementation": "NOT_AUTHORIZED",
+    "telemetry": "NOT_AUTHORIZED",
+    "knowledgeAcceptance": "NOT_AUTHORIZED",
+    "patternPromotion": "NOT_AUTHORIZED",
+    "release": "NOT_AUTHORIZED"
+  },
+  "executionBoundary": {
+    "tagCreated": false,
+    "artifactPublished": false,
+    "deploymentPerformed": false,
+    "githubMutated": false,
+    "providerCalled": false,
+    "serviceCalled": false,
+    "productionRouterActivated": false,
+    "workflowActivated": false,
+    "functionActivated": false,
+    "telemetryCollected": false,
+    "knowledgeAccepted": false,
+    "patternPromoted": false,
+    "waitStateCreated": false,
+    "externalStateChanged": false
+  },
+  "verification": {
+    "requiredRepositoryProfileCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "expectedExitCode": 0,
+      "result": "PASS",
+      "binding": "Run before the additive receipt commit and rerun after commit so the final HEAD includes this receipt."
+    },
+    "receiptSyntaxCheck": {
+      "command": "python3 -m json.tool docs/evidence/conveyor/sol-psai289-release-disposition-01.json",
+      "expectedExitCode": 0,
+      "result": "PASS"
+    },
+    "authoritativeProductGates": "NOT_REQUIRED_FOR_THIS_RECEIPT_ONLY_SLICE"
+  },
+  "integration": {
+    "targetPath": "docs/evidence/conveyor/sol-psai289-release-disposition-01.json",
+    "filesChanged": [
+      "docs/evidence/conveyor/sol-psai289-release-disposition-01.json"
+    ],
+    "productCodeChanged": false,
+    "localCommitRequired": true,
+    "externalIntegrationPerformed": false,
+    "publicationMergeOrReleasePerformed": false,
+    "authorityGranted": false
+  },
+  "nonClaims": [
+    "This receipt does not widen the admitted CKS-09 evidence beyond its exact synthetic/shadow boundary.",
+    "This receipt does not claim production quality, safety, compatibility, readiness, routing, workflow, function, telemetry, Knowledge, or pattern behavior.",
+    "This receipt does not claim that a push, pull request mutation, CI mutation, merge, tag, publication, deployment, provider call, service call, or public readback occurred.",
+    "This receipt itself grants no implementation, activation, promotion, deployment, publication, or release authority."
+  ]
+}

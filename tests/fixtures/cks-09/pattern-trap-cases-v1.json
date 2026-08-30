@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "pansphaira.cks/synthetic-case/v1",
+  "fixtureKind": "P18_PATTERN_TRAPS",
+  "fixtureId": "cks-09-pattern-traps",
+  "taskId": "PSAI289-QWEN-05-SYNTHETIC-HOLDOUT-TRAP-FIXTURES",
+  "evidenceAdmission": "ADMITTED",
+  "requiredEvidencePresent": true,
+  "holdoutSealed": true,
+  "replayMode": "SHADOW",
+  "externalStateChanged": false,
+  "modelsOrServicesCalled": false,
+  "procedureContentReturned": false,
+  "cases": [
+    {"caseId":"planted-stable","profile":"stable","fixtureClass":"PLANTED_STABLE","expectedVerdict":"ACCEPTED"},
+    {"caseId":"frequency-only-trap","profile":"frequency-only","fixtureClass":"FREQUENCY_ONLY_TRAP","expectedVerdict":"DENIED","expectedReason":"INVALID_DIVERSITY_PROOF"},
+    {"caseId":"narrow-context-trap","profile":"narrow-context","fixtureClass":"NARROW_CONTEXT_TRAP","expectedVerdict":"DENIED","expectedReason":"INVALID_DIVERSITY_PROOF"},
+    {"caseId":"correlation-trap","profile":"correlation","fixtureClass":"CORRELATION_TRAP","expectedVerdict":"DENIED","expectedReason":"INVALID_DIVERSITY_PROOF"}
+  ],
+  "reuseBoundaries": [
+    {"caseId":"similar-looking-inapplicable","profile":"similar-looking","expectedReason":"PRECONDITION_FALSE"},
+    {"caseId":"exact-shape-version-drift","profile":"version-drift","expectedReason":"VERSION_INCOMPATIBLE"},
+    {"caseId":"unknown-applicability-context","profile":"missing-context","expectedReason":"AMBIGUOUS_APPLICABILITY"},
+    {"caseId":"absent-success-evidence","profile":"missing-evidence","expectedReason":"MISSING_EVIDENCE"}
+  ]
+}

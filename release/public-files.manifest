@@ -1,6 +1,5 @@
-# PanSphaira functional product-increment public-file manifest
 # Format: source<TAB>destination<TAB>mode
-
+# PanSphaira functional product-increment public-file manifest
 .gitignore	.gitignore	0644
 CITATION.cff	CITATION.cff	0644
 CODE_OF_CONDUCT.md	CODE_OF_CONDUCT.md	0644
@@ -254,6 +253,9 @@ examples/poc-release/showcase-v1.json	examples/poc-release/showcase-v1.json	0644
 examples/poc-setup-planner/catalog-v1.json	examples/poc-setup-planner/catalog-v1.json	0644
 package-lock.json	package-lock.json	0644
 package.json	package.json	0644
+packages/cks/src/applicability-aware-retrieval.ts	packages/cks/src/applicability-aware-retrieval.ts	0644
+packages/cks/src/shadow-experience-ablation.ts	packages/cks/src/shadow-experience-ablation.ts	0644
+packages/cks/src/solution-pattern-candidate-evaluator.ts	packages/cks/src/solution-pattern-candidate-evaluator.ts	0644
 packages/competence-runtime/src/cks-no-finetune-runner.ts	packages/competence-runtime/src/cks-no-finetune-runner.ts	0644
 packages/competence-runtime/src/cks-oss-model-adapter.ts	packages/competence-runtime/src/cks-oss-model-adapter.ts	0644
 packages/contracts/src/adaptive-evidence-gates.ts	packages/contracts/src/adaptive-evidence-gates.ts	0644
@@ -319,6 +321,7 @@ packages/contracts/src/cks-resource-admission.ts	packages/contracts/src/cks-reso
 packages/contracts/src/cks-shadow-evaluation.ts	packages/contracts/src/cks-shadow-evaluation.ts	0644
 packages/contracts/src/cks-sufficiency-proof.ts	packages/contracts/src/cks-sufficiency-proof.ts	0644
 packages/contracts/src/cks-synthetic-qualification.ts	packages/contracts/src/cks-synthetic-qualification.ts	0644
+packages/contracts/src/cks-task-fingerprint.ts	packages/contracts/src/cks-task-fingerprint.ts	0644
 packages/contracts/src/competence-knowledge-vocabulary.ts	packages/contracts/src/competence-knowledge-vocabulary.ts	0644
 packages/contracts/src/contribution-intake-ledger.ts	packages/contracts/src/contribution-intake-ledger.ts	0644
 packages/contracts/src/crm-read-connector.ts	packages/contracts/src/crm-read-connector.ts	0644
@@ -425,6 +428,7 @@ schemas/contracts/builder-integration-plan-v1.schema.json	schemas/contracts/buil
 schemas/contracts/builder-quality-evidence-v1.schema.json	schemas/contracts/builder-quality-evidence-v1.schema.json	0644
 schemas/contracts/capability-catalogue-v1.schema.json	schemas/contracts/capability-catalogue-v1.schema.json	0644
 schemas/contracts/chimpmaera-analytics-v1.schema.json	schemas/contracts/chimpmaera-analytics-v1.schema.json	0644
+schemas/contracts/cks-09-synthetic-case-v1.schema.json	schemas/contracts/cks-09-synthetic-case-v1.schema.json	0644
 schemas/contracts/cks-acquisition-plan-v1.schema.json	schemas/contracts/cks-acquisition-plan-v1.schema.json	0644
 schemas/contracts/cks-applicability-v1.schema.json	schemas/contracts/cks-applicability-v1.schema.json	0644
 schemas/contracts/cks-competence-qualification-profile-v1.schema.json	schemas/contracts/cks-competence-qualification-profile-v1.schema.json	0644
@@ -436,6 +440,7 @@ schemas/contracts/cks-evidence-coverage-v1.schema.json	schemas/contracts/cks-evi
 schemas/contracts/cks-evidence-pack-v1.schema.json	schemas/contracts/cks-evidence-pack-v1.schema.json	0644
 schemas/contracts/cks-failure-attribution-v1.schema.json	schemas/contracts/cks-failure-attribution-v1.schema.json	0644
 schemas/contracts/cks-gap-acquisition-receipt-v1.schema.json	schemas/contracts/cks-gap-acquisition-receipt-v1.schema.json	0644
+schemas/contracts/cks-knowledge-bundle-v1.schema.json	schemas/contracts/cks-knowledge-bundle-v1.schema.json	0644
 schemas/contracts/cks-knowledge-evidence-profile-v1.schema.json	schemas/contracts/cks-knowledge-evidence-profile-v1.schema.json	0644
 schemas/contracts/cks-knowledge-gap-v1.schema.json	schemas/contracts/cks-knowledge-gap-v1.schema.json	0644
 schemas/contracts/cks-knowledge-need-v1.schema.json	schemas/contracts/cks-knowledge-need-v1.schema.json	0644
@@ -449,9 +454,12 @@ schemas/contracts/cks-requirement-analysis-v1.schema.json	schemas/contracts/cks-
 schemas/contracts/cks-resource-admission-v1.schema.json	schemas/contracts/cks-resource-admission-v1.schema.json	0644
 schemas/contracts/cks-run-manifest-v1.schema.json	schemas/contracts/cks-run-manifest-v1.schema.json	0644
 schemas/contracts/cks-shadow-evaluation-v1.schema.json	schemas/contracts/cks-shadow-evaluation-v1.schema.json	0644
+schemas/contracts/cks-solution-pattern-candidate-v1.schema.json	schemas/contracts/cks-solution-pattern-candidate-v1.schema.json	0644
 schemas/contracts/cks-source-evidence-v1.schema.json	schemas/contracts/cks-source-evidence-v1.schema.json	0644
 schemas/contracts/cks-sufficiency-proof-v1.schema.json	schemas/contracts/cks-sufficiency-proof-v1.schema.json	0644
 schemas/contracts/cks-synthetic-lineage-case-v1.schema.json	schemas/contracts/cks-synthetic-lineage-case-v1.schema.json	0644
+schemas/contracts/cks-task-family-v1.schema.json	schemas/contracts/cks-task-family-v1.schema.json	0644
+schemas/contracts/cks-task-fingerprint-v1.schema.json	schemas/contracts/cks-task-fingerprint-v1.schema.json	0644
 schemas/contracts/cks-task-outcome-evidence-v1.schema.json	schemas/contracts/cks-task-outcome-evidence-v1.schema.json	0644
 schemas/contracts/cks-verification-receipt-v1.schema.json	schemas/contracts/cks-verification-receipt-v1.schema.json	0644
 schemas/contracts/cks-vocabulary-v1.schema.json	schemas/contracts/cks-vocabulary-v1.schema.json	0644
@@ -526,6 +534,8 @@ scripts/cks-07-score-empty-kb.mjs	scripts/cks-07-score-empty-kb.mjs	0644
 scripts/cks-07-validate-public-readback.mjs	scripts/cks-07-validate-public-readback.mjs	0644
 scripts/cks-08-score-synthetic-lineage.mjs	scripts/cks-08-score-synthetic-lineage.mjs	0644
 scripts/cks-08-validate-public-readback.mjs	scripts/cks-08-validate-public-readback.mjs	0644
+scripts/cks-09-score-synthetic-proof.mjs	scripts/cks-09-score-synthetic-proof.mjs	0644
+scripts/cks-09-validate-public-readback.mjs	scripts/cks-09-validate-public-readback.mjs	0644
 scripts/extension-dynamic-process-lifecycle.mjs	scripts/extension-dynamic-process-lifecycle.mjs	0644
 scripts/extension-dynamic-synthetic.mjs	scripts/extension-dynamic-synthetic.mjs	0644
 scripts/learning-routing-baseline.mjs	scripts/learning-routing-baseline.mjs	0644
@@ -540,6 +550,7 @@ scripts/run-cks-05-benchmark.mjs	scripts/run-cks-05-benchmark.mjs	0644
 scripts/run-cks-05-real-pilot.mjs	scripts/run-cks-05-real-pilot.mjs	0644
 scripts/run-cks-07-empty-kb-dry-run.mjs	scripts/run-cks-07-empty-kb-dry-run.mjs	0644
 scripts/run-cks-08-lineage-dry-run.mjs	scripts/run-cks-08-lineage-dry-run.mjs	0644
+scripts/run-cks-09-proof-dry-run.mjs	scripts/run-cks-09-proof-dry-run.mjs	0644
 scripts/run-cks-router-dry-run.mjs	scripts/run-cks-router-dry-run.mjs	0755
 scripts/run-openclaw-m1.5-probes.mjs	scripts/run-openclaw-m1.5-probes.mjs	0755
 scripts/verification-plan.mjs	scripts/verification-plan.mjs	0755
@@ -643,6 +654,10 @@ tests/cks-07-public-readback.test.mjs	tests/cks-07-public-readback.test.mjs	0644
 tests/cks-08-lineage-dry-run.test.mjs	tests/cks-08-lineage-dry-run.test.mjs	0644
 tests/cks-08-public-readback.test.mjs	tests/cks-08-public-readback.test.mjs	0644
 tests/cks-08-synthetic-lineage-fixtures.test.mjs	tests/cks-08-synthetic-lineage-fixtures.test.mjs	0644
+tests/cks-09-proof-dry-run.test.mjs	tests/cks-09-proof-dry-run.test.mjs	0644
+tests/cks-09-public-readback.test.mjs	tests/cks-09-public-readback.test.mjs	0644
+tests/cks-09-synthetic-proof-fixtures.test.mjs	tests/cks-09-synthetic-proof-fixtures.test.mjs	0644
+tests/cks-applicability-aware-retrieval.test.ts	tests/cks-applicability-aware-retrieval.test.ts	0644
 tests/cks-competence-runtime.test.ts	tests/cks-competence-runtime.test.ts	0644
 tests/cks-epistemic-verifier.test.ts	tests/cks-epistemic-verifier.test.ts	0644
 tests/cks-evidence-profile-features.test.ts	tests/cks-evidence-profile-features.test.ts	0644
@@ -660,8 +675,11 @@ tests/cks-requirement-analysis.test.ts	tests/cks-requirement-analysis.test.ts	06
 tests/cks-resource-admission.test.ts	tests/cks-resource-admission.test.ts	0644
 tests/cks-router-dry-run.test.ts	tests/cks-router-dry-run.test.ts	0644
 tests/cks-shadow-evaluation.test.ts	tests/cks-shadow-evaluation.test.ts	0644
+tests/cks-shadow-experience-ablation.test.ts	tests/cks-shadow-experience-ablation.test.ts	0644
+tests/cks-solution-pattern-candidate-evaluator.test.ts	tests/cks-solution-pattern-candidate-evaluator.test.ts	0644
 tests/cks-sufficiency-proof.test.ts	tests/cks-sufficiency-proof.test.ts	0644
 tests/cks-synthetic-qualification.test.ts	tests/cks-synthetic-qualification.test.ts	0644
+tests/cks-task-fingerprint-pattern-contracts.test.ts	tests/cks-task-fingerprint-pattern-contracts.test.ts	0644
 tests/cks-vocabulary.test.ts	tests/cks-vocabulary.test.ts	0644
 tests/company-data-graph.test.mjs	tests/company-data-graph.test.mjs	0644
 tests/company-data-pack.test.mjs	tests/company-data-pack.test.mjs	0644
@@ -831,6 +849,19 @@ tests/fixtures/cks-08/lineage-rejections-v1.json	tests/fixtures/cks-08/lineage-r
 tests/fixtures/cks-08/profile-diversity-cases-v1.json	tests/fixtures/cks-08/profile-diversity-cases-v1.json	0644
 tests/fixtures/cks-08/synthetic-lineage-cases-v1.json	tests/fixtures/cks-08/synthetic-lineage-cases-v1.json	0644
 tests/fixtures/cks-08/synthetic-lineage-ground-truth-v1.json	tests/fixtures/cks-08/synthetic-lineage-ground-truth-v1.json	0644
+tests/fixtures/cks-09/contracts-invalid-v1.json	tests/fixtures/cks-09/contracts-invalid-v1.json	0644
+tests/fixtures/cks-09/contracts-valid-v1.json	tests/fixtures/cks-09/contracts-valid-v1.json	0644
+tests/fixtures/cks-09/e2e-positive-evidence-v1.json	tests/fixtures/cks-09/e2e-positive-evidence-v1.json	0644
+tests/fixtures/cks-09/e2e-rejections-v1.json	tests/fixtures/cks-09/e2e-rejections-v1.json	0644
+tests/fixtures/cks-09/holdout-cases-v1.json	tests/fixtures/cks-09/holdout-cases-v1.json	0644
+tests/fixtures/cks-09/holdout-ground-truth-v1.json	tests/fixtures/cks-09/holdout-ground-truth-v1.json	0644
+tests/fixtures/cks-09/pattern-candidate-cases-v1.json	tests/fixtures/cks-09/pattern-candidate-cases-v1.json	0644
+tests/fixtures/cks-09/pattern-candidate-denials-v1.json	tests/fixtures/cks-09/pattern-candidate-denials-v1.json	0644
+tests/fixtures/cks-09/pattern-trap-cases-v1.json	tests/fixtures/cks-09/pattern-trap-cases-v1.json	0644
+tests/fixtures/cks-09/retrieval-denials-v1.json	tests/fixtures/cks-09/retrieval-denials-v1.json	0644
+tests/fixtures/cks-09/retrieval-trajectories-v1.json	tests/fixtures/cks-09/retrieval-trajectories-v1.json	0644
+tests/fixtures/cks-09/shadow-replay-cases-v1.json	tests/fixtures/cks-09/shadow-replay-cases-v1.json	0644
+tests/fixtures/cks-09/shadow-replay-denials-v1.json	tests/fixtures/cks-09/shadow-replay-denials-v1.json	0644
 tests/fixtures/cks-qualification/escalation-causes-v1.json	tests/fixtures/cks-qualification/escalation-causes-v1.json	0644
 tests/fixtures/cks-qualification/profile-binding-v1.json	tests/fixtures/cks-qualification/profile-binding-v1.json	0644
 tests/fixtures/cks-qualification/smallest-qualified-v1.json	tests/fixtures/cks-qualification/smallest-qualified-v1.json	0644
@@ -1072,6 +1103,13 @@ verification/cks-08-pinned-node-runtime-readback-v1.json	verification/cks-08-pin
 verification/cks-08-profile-diversity-template-v1.json	verification/cks-08-profile-diversity-template-v1.json	0644
 verification/cks-08-public-readback-template-v1.json	verification/cks-08-public-readback-template-v1.json	0644
 verification/cks-08-synthetic-lineage-metrics-template-v1.json	verification/cks-08-synthetic-lineage-metrics-template-v1.json	0644
+verification/cks-09-metrics-template-v1.json	verification/cks-09-metrics-template-v1.json	0644
+verification/cks-09-offline-proof-receipt-v1.json	verification/cks-09-offline-proof-receipt-v1.json	0644
+verification/cks-09-pattern-maturity-template-v1.json	verification/cks-09-pattern-maturity-template-v1.json	0644
+verification/cks-09-public-readback-template-v1.json	verification/cks-09-public-readback-template-v1.json	0644
+verification/cks-09-retrieval-receipt-template-v1.json	verification/cks-09-retrieval-receipt-template-v1.json	0644
+verification/cks-09-shadow-ablation-template-v1.json	verification/cks-09-shadow-ablation-template-v1.json	0644
+verification/closure-psai289-v1.json	verification/closure-psai289-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644
 verification/verification-dag-v2.json	verification/verification-dag-v2.json	0644

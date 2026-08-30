@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "pansphaira.cks/retrieval-denials/v1",
+  "cases": [
+    {"caseId":"case:similar-precondition","description":"Similar shape with a false effect precondition","expectedReason":"PRECONDITION_FALSE"},
+    {"caseId":"case:version-drift","description":"Exact task shape with an unadmitted runtime version","expectedReason":"VERSION_INCOMPATIBLE"},
+    {"caseId":"case:counterexample","description":"Task at a recorded counterexample boundary","expectedReason":"MATCHED_COUNTEREXAMPLE"},
+    {"caseId":"case:missing-context","description":"Unknown required applicability fact","expectedReason":"AMBIGUOUS_APPLICABILITY"},
+    {"caseId":"case:missing-evidence","description":"Candidate with no admissible success evidence","expectedReason":"MISSING_EVIDENCE"}
+  ]
+}

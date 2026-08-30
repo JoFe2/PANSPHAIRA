@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "pansphaira.cks/p18-pattern-candidate-cases/v1",
+  "cases": [
+    {
+      "caseId": "case:planted-stable",
+      "fixtureClass": "PLANTED_STABLE",
+      "expectedVerdict": "ACCEPTED"
+    },
+    {
+      "caseId": "case:frequency-only",
+      "fixtureClass": "FREQUENCY_ONLY_TRAP",
+      "expectedVerdict": "DENIED",
+      "expectedReason": "INVALID_DIVERSITY_PROOF"
+    },
+    {
+      "caseId": "case:narrow-context",
+      "fixtureClass": "NARROW_CONTEXT_TRAP",
+      "expectedVerdict": "DENIED",
+      "expectedReason": "INVALID_DIVERSITY_PROOF"
+    },
+    {
+      "caseId": "case:correlation",
+      "fixtureClass": "CORRELATION_TRAP",
+      "expectedVerdict": "DENIED",
+      "expectedReason": "INVALID_DIVERSITY_PROOF"
+    }
+  ]
+}

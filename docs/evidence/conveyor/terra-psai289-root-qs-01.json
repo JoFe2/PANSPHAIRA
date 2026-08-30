@@ -1,0 +1,315 @@
+{
+  "schema": "pansphaira.conveyor.cks-09-decision-and-integration-receipt.v1",
+  "recordKind": "DETERMINISTIC_DECISION_AND_INTEGRATION_RECEIPT",
+  "taskId": "TERRA-PSAI289-ROOT-QS-01",
+  "controlId": "CKS-09",
+  "decision": "ACCEPTED_SYNTHETIC_SHADOW_EVIDENCE_ONLY",
+  "process": {
+    "operatingModel": "v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false
+  },
+  "exactDependencyHeads": {
+    "originMain": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "integrationHead": "340721bf04c055c6bc837c104a3405e9d874e0ca",
+    "offlineProofReceiptCommit": "ecfe48ce9454be568107e917314e9a92b8283bc8",
+    "syntheticFixtureCommit": "06222595e6b9abbdbc66067cd9d4f04ed7ae6b65",
+    "shadowAblationCommit": "8d9718d735a4e4f83411285cac27bba5c7c4c0d3"
+  },
+  "evidenceBindings": {
+    "envelope": {
+      "path": "tests/fixtures/cks-09/e2e-positive-evidence-v1.json",
+      "sha256": "sha256:2d18591b24d5f7744ebfc60a74718663972735744612a31cddc7ec81c4938ea2"
+    },
+    "holdoutCases": {
+      "path": "tests/fixtures/cks-09/holdout-cases-v1.json",
+      "sha256": "sha256:f05302d756136e9a3ed6a4aeb06a8137b847728718b7d11af0e01f8d8dade97f"
+    },
+    "patternTraps": {
+      "path": "tests/fixtures/cks-09/pattern-trap-cases-v1.json",
+      "sha256": "sha256:cf554a44cf78db8a3fff397c079db9bf411529eb6bfd8cb8106f8bbf524b49b4"
+    },
+    "groundTruth": {
+      "path": "tests/fixtures/cks-09/holdout-ground-truth-v1.json",
+      "sha256": "sha256:3913fda6843468b87e4b8f03fac0e590dc78f4f9ab0d93f350738ba8d401a153"
+    },
+    "admittedSyntheticProof": {
+      "path": "verification/cks-09-offline-proof-receipt-v1.json",
+      "fileSha256": "sha256:f1ca8b9cd220428c101ef3eebf45e86eccd5c8f707ca0e35ea2d5a35060ec429",
+      "canonicalDigest": "sha256:b70a3107d3a3fa0ad7de2ac6f1073d2b9be2d1def1abd1fff1269936da5d13c4"
+    }
+  },
+  "contractReconciliation": {
+    "taskFingerprint": {
+      "decision": "STRUCTURAL_IDENTITY_REQUIRED",
+      "requiredDimensions": [
+        "taskFamilyId",
+        "objectiveShapeId",
+        "inputShapeId",
+        "outputShapeId",
+        "contextShapeId",
+        "constraintIds",
+        "effectClass",
+        "dependencyIds",
+        "versionVector"
+      ],
+      "binding": "Canonical fingerprints and exact digests are required before reuse; similarity or prose cannot repair a missing, stale, replayed, or mismatched identity or digest."
+    },
+    "applicabilityAwareHistory": {
+      "decision": "GATE_BEFORE_EXPOSURE",
+      "allowResult": "APPLICABLE_SHADOW_ONLY",
+      "requiredGates": [
+        "unambiguous TaskFamily",
+        "typed applicability and preconditions",
+        "resolved dependencies",
+        "exact version constraints",
+        "complete counterevidence assessment",
+        "sufficient candidate maturity",
+        "admitted sealed evidence"
+      ],
+      "knowledgeOnlyBoundary": "KNOWLEDGE_ONLY returns no SolutionPattern candidate."
+    },
+    "candidateMaturityAndRetention": {
+      "decision": "CANDIDATE_ONLY",
+      "acceptedCandidate": "pattern:normalize-document",
+      "acceptedMaturity": "S4",
+      "retainedReferences": {
+        "dependencyRefs": [
+          "dependency:parser"
+        ],
+        "knownFailureRefs": [
+          "failure:known-001"
+        ],
+        "counterexampleRefs": [
+          "counterexample:similar-001"
+        ],
+        "provenanceRefs": [
+          "provenance:fixture-a",
+          "provenance:fixture-b",
+          "provenance:fixture-c"
+        ],
+        "counterevidenceCoverage": "COMPLETE"
+      },
+      "authority": "No S0-S6 candidate, including this S4 synthetic candidate, receives live, production, promotion, execution, approval, or release authority."
+    }
+  },
+  "syntheticProofResults": {
+    "scope": "ADMITTED_SYNTHETIC_SEALED_HOLDOUT_ONLY",
+    "p17": {
+      "verdict": "PASS",
+      "claimBoundary": "Historical experience improves quality and cost over Knowledge-only retrieval only for the bound synthetic holdout fixtures and shadow evaluator.",
+      "perVariant": [
+        {
+          "holdoutVariantId": "holdout:batch-a",
+          "qualityDelta": 0.5,
+          "costReduction": 1,
+          "efficiencyDelta": 0.20833333333333331
+        },
+        {
+          "holdoutVariantId": "holdout:batch-b",
+          "qualityDelta": 0,
+          "costReduction": 1,
+          "efficiencyDelta": 0.16666666666666669
+        }
+      ],
+      "aggregate": {
+        "qualityKnowledgeOnly": 0.75,
+        "qualityKnowledgePlusExperience": 1,
+        "costKnowledgeOnly": 7,
+        "costKnowledgePlusExperience": 5,
+        "qualityDelta": 0.25,
+        "costReduction": 2,
+        "efficiencyDelta": 0.09285714285714287
+      }
+    },
+    "p18": {
+      "verdict": "PASS",
+      "identifiedPlantedStable": [
+        "pattern:normalize-document"
+      ],
+      "rejectedTraps": [
+        {
+          "fixtureClass": "FREQUENCY_ONLY_TRAP",
+          "verdict": "DENIED",
+          "reason": "INVALID_DIVERSITY_PROOF"
+        },
+        {
+          "fixtureClass": "NARROW_CONTEXT_TRAP",
+          "verdict": "DENIED",
+          "reason": "INVALID_DIVERSITY_PROOF"
+        },
+        {
+          "fixtureClass": "CORRELATION_TRAP",
+          "verdict": "DENIED",
+          "reason": "INVALID_DIVERSITY_PROOF"
+        }
+      ]
+    },
+    "reuseBoundaries": [
+      {
+        "caseId": "similar-looking-inapplicable",
+        "verdict": "DENIED",
+        "reason": "PRECONDITION_FALSE"
+      },
+      {
+        "caseId": "exact-shape-version-drift",
+        "verdict": "DENIED",
+        "reason": "VERSION_INCOMPATIBLE"
+      },
+      {
+        "caseId": "unknown-applicability-context",
+        "verdict": "DENIED",
+        "reason": "AMBIGUOUS_APPLICABILITY"
+      },
+      {
+        "caseId": "absent-success-evidence",
+        "verdict": "DENIED",
+        "reason": "MISSING_EVIDENCE"
+      }
+    ]
+  },
+  "failClosedDecisions": {
+    "authority": [
+      {
+        "case": "missing-authority",
+        "verdict": "DENIED",
+        "sideEffects": "ABSENT"
+      },
+      {
+        "case": "self-approval",
+        "verdict": "DENIED",
+        "sideEffects": "ABSENT"
+      },
+      {
+        "case": "authority-widening",
+        "verdict": "DENIED",
+        "sideEffects": "ABSENT"
+      }
+    ],
+    "bindingFailures": [
+      {
+        "case": "stale-replayed-or-mismatched-identity-digest-receipt-or-evidence-binding",
+        "verdict": "DENIED",
+        "reuse": "ABSENT"
+      },
+      {
+        "case": "missing-admitted-evidence",
+        "verdict": "INCONCLUSIVE",
+        "reason": "MISSING_288_DIGEST"
+      },
+      {
+        "case": "unsealed-holdout",
+        "verdict": "INCONCLUSIVE",
+        "reason": "UNSEALED_HOLDOUT"
+      },
+      {
+        "case": "holdout-leakage",
+        "verdict": "INCONCLUSIVE",
+        "reason": "HOLDOUT_LEAKAGE"
+      },
+      {
+        "case": "live-replay-or-external-write",
+        "verdict": "DENIED",
+        "reason": "LIVE_REPLAY_FORBIDDEN"
+      },
+      {
+        "case": "prose-or-unsafe-input",
+        "verdict": "DENIED",
+        "reason": "PROSE_ONLY_INPUT"
+      }
+    ],
+    "publicReadback": {
+      "unsafeReceiptEvidenceOrPayload": "ABSENT_OR_REDACTED",
+      "procedureContentReturned": false,
+      "secretsOrCredentialsIncluded": false
+    }
+  },
+  "shadowOnlyBoundary": {
+    "allowedModes": [
+      "SIMULATION",
+      "SHADOW"
+    ],
+    "externalStateChanged": false,
+    "modelsOrServicesCalled": false,
+    "procedureContentReturned": false,
+    "effectfulOrLiveMode": "DENIED",
+    "evidenceScope": "Exact bound synthetic fixtures, exact dependency heads, and the named canonical digest only."
+  },
+  "verification": {
+    "inheritedSemanticValidators": [
+      {
+        "command": "node --test dist/tests/cks-task-fingerprint-pattern-contracts.test.js",
+        "coverage": "closed schemas, canonical digests, P18 diversity traps, applicability, exact version drift, and append-preserving candidate references",
+        "expectedSemanticVerdict": "PASS",
+        "localExecution": {
+          "status": "INFRASTRUCTURE_BLOCKED",
+          "exitCode": 133,
+          "signal": "SIGTRAP",
+          "detail": "Node v24.19.0 failed before test initialization with V8 OS::SetPermissions errno check failure."
+        }
+      },
+      {
+        "command": "node --test dist/tests/cks-applicability-aware-retrieval.test.js",
+        "coverage": "P17 paired quality/cost result, applicability-first retrieval, inapplicable/version/counterexample denials, evidence preservation, and Knowledge-only suppression",
+        "expectedSemanticVerdict": "PASS",
+        "localExecution": {
+          "status": "INFRASTRUCTURE_BLOCKED",
+          "exitCode": 133,
+          "signal": "SIGTRAP",
+          "detail": "Node v24.19.0 failed before test initialization with V8 OS::SetPermissions errno check failure."
+        }
+      },
+      {
+        "command": "node --test dist/tests/cks-shadow-experience-ablation.test.js",
+        "coverage": "paired shadow ablation, no procedure output, no side effects, and denial fixtures for missing evidence, unsealed/leaking holdout, live replay, external write, and bundle mismatch",
+        "expectedSemanticVerdict": "PASS",
+        "localExecution": {
+          "status": "INFRASTRUCTURE_BLOCKED",
+          "exitCode": 133,
+          "signal": "SIGTRAP",
+          "detail": "Node v24.19.0 failed before test initialization with V8 OS::SetPermissions errno check failure."
+        }
+      },
+      {
+        "command": "node --test tests/cks-09-proof-dry-run.test.mjs",
+        "coverage": "envelope digest/path/id binding, deterministic self-digested receipt, tamper fail-closed behavior, redacted procedure boundary, and byte-identical dry-run readback",
+        "expectedSemanticVerdict": "PASS",
+        "localExecution": {
+          "status": "INFRASTRUCTURE_BLOCKED",
+          "exitCode": 133,
+          "signal": "SIGTRAP",
+          "detail": "Node v24.19.0 failed before test initialization with V8 OS::SetPermissions errno check failure."
+        }
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "expectedExitCode": 0,
+        "status": "PASS"
+      }
+    ],
+    "authoritativeGate": "The listed Node checks require rerun on the controller's pinned Node host after this receipt commit; exit 133 is recorded as infrastructure evidence, not a product verdict."
+  },
+  "integration": {
+    "filesChanged": [
+      "docs/evidence/conveyor/terra-psai289-root-qs-01.json"
+    ],
+    "productCodeChanged": false,
+    "externalStateChanged": false,
+    "publicationMergeOrRelease": false,
+    "authorityGranted": false
+  },
+  "nonClaims": [
+    "This receipt does not claim a production quality, cost, efficiency, causal, or generalization result.",
+    "This receipt does not authorize pattern reuse outside the exact admitted synthetic shadow boundary.",
+    "This receipt does not authorize live replay, external effects, model or service calls, approval, publication, merge, or release.",
+    "This receipt does not expose procedure content, unsafe evidence, credentials, or public-readback payloads."
+  ]
+}

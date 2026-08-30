@@ -1,0 +1,278 @@
+{
+  "schemaVersion": "pansphaira.conveyor/closure-psai289-evidence-recovery/v1",
+  "recordKind": "KEEP_OPEN_EVIDENCE_RECOVERY_RECEIPT",
+  "taskId": "CLOSURE-PSAI289-EVIDENCE-RECOVERY-01",
+  "controlId": "CKS-09",
+  "decision": "KEEP_OPEN",
+  "process": {
+    "operatingModel": "v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "rule": "This receipt binds existing evidence and records local verification only; it does not replace, reinterpret, or extend the preserved decisions."
+  },
+  "repositoryBinding": {
+    "workspace": ".",
+    "branch": "conveyor/pansphaira-289",
+    "main": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+    "replayHead": "39de88e04f61ee835ef9638e61a53a46816e64d0",
+    "mainIsAncestorOfReplayHead": true,
+    "baselineRelation": "main...HEAD",
+    "evidenceReceiptCommit": "ecfe48ce9454be568107e917314e9a92b8283bc8",
+    "evidenceReceiptIsAncestorOfReplayHead": true
+  },
+  "issueState": {
+    "issue288": {
+      "requiredTerminalPrecondition": "BOUND_POSITIVE_DIVERSE_TRAJECTORY_EVIDENCE",
+      "boundByThisReceipt": true,
+      "issueMutationPerformed": false,
+      "closureClaimed": false
+    },
+    "issue289": {
+      "evidenceBound": true,
+      "deliveryState": "KEEP_OPEN_PENDING_AUTHORITATIVE_PINNED_NODE_REPLAY",
+      "pullRequestCreated": false,
+      "ciMutated": false,
+      "mergePerformed": false,
+      "releaseDisposition": "RELEASE_REQUIRED_PENDING_DELIVERY",
+      "publicMainReadbackPerformed": false
+    }
+  },
+  "terminalEvidence": {
+    "source": {
+      "path": "verification/cks-09-offline-proof-receipt-v1.json",
+      "commit": "ecfe48ce9454be568107e917314e9a92b8283bc8",
+      "fileSha256": "sha256:f1ca8b9cd220428c101ef3eebf45e86eccd5c8f707ca0e35ea2d5a35060ec429",
+      "canonicalDigest": "sha256:b70a3107d3a3fa0ad7de2ac6f1073d2b9be2d1def1abd1fff1269936da5d13c4",
+      "verdict": "PASS",
+      "mode": "SIMULATION_OR_SHADOW_ONLY",
+      "scope": "ADMITTED_SYNTHETIC_SEALED_HOLDOUT_ONLY",
+      "externalStateChanged": false,
+      "modelsOrServicesCalled": false,
+      "procedureContentReturned": false
+    },
+    "admittedInputs": [
+      {
+        "evidenceId": "evidence:holdout-cases",
+        "path": "tests/fixtures/cks-09/holdout-cases-v1.json",
+        "sha256": "sha256:f05302d756136e9a3ed6a4aeb06a8137b847728718b7d11af0e01f8d8dade97f"
+      },
+      {
+        "evidenceId": "evidence:pattern-traps",
+        "path": "tests/fixtures/cks-09/pattern-trap-cases-v1.json",
+        "sha256": "sha256:cf554a44cf78db8a3fff397c079db9bf411529eb6bfd8cb8106f8bbf524b49b4"
+      },
+      {
+        "evidenceId": "evidence:ground-truth",
+        "path": "tests/fixtures/cks-09/holdout-ground-truth-v1.json",
+        "sha256": "sha256:3913fda6843468b87e4b8f03fac0e590dc78f4f9ab0d93f350738ba8d401a153"
+      },
+      {
+        "evidenceId": "evidence:envelope",
+        "path": "tests/fixtures/cks-09/e2e-positive-evidence-v1.json",
+        "sha256": "sha256:de313163a745a864aa3217aec8d58184cc1bfc8ce42b3a28c3048bfe27663d8d"
+      }
+    ],
+    "criteria": [
+      {
+        "criterionId": "P17_EXPERIENCE_IMPROVES_QUALITY_COST",
+        "verdict": "PASS",
+        "evidenceRefs": [
+          "evidence:holdout-cases",
+          "evidence:ground-truth"
+        ],
+        "diversePairedHoldoutTrajectories": [
+          {
+            "holdoutVariantId": "holdout:batch-a",
+            "qualityKnowledgeOnly": 0,
+            "qualityKnowledgePlusExperience": 1,
+            "qualityDelta": 1,
+            "costKnowledgeOnly": 5,
+            "costKnowledgePlusExperience": 3,
+            "costReduction": 2,
+            "efficiencyDelta": 0.3333333333333333
+          },
+          {
+            "holdoutVariantId": "holdout:batch-b",
+            "qualityKnowledgeOnly": 0,
+            "qualityKnowledgePlusExperience": 1,
+            "qualityDelta": 1,
+            "costKnowledgeOnly": 5,
+            "costKnowledgePlusExperience": 3,
+            "costReduction": 2,
+            "efficiencyDelta": 0.3333333333333333
+          }
+        ],
+        "aggregate": {
+          "qualityDelta": 1,
+          "costReduction": 4,
+          "efficiencyDelta": 0.3333333333333333
+        }
+      },
+      {
+        "criterionId": "P18_PLANTED_STABLE_IDENTIFIED_TRAPS_DENIED",
+        "verdict": "PASS",
+        "evidenceRefs": [
+          "evidence:pattern-traps",
+          "evidence:ground-truth"
+        ],
+        "acceptedPatternIds": [
+          "pattern:normalize-document"
+        ],
+        "deniedTraps": [
+          {
+            "fixtureClass": "FREQUENCY_ONLY_TRAP",
+            "reason": "INVALID_DIVERSITY_PROOF"
+          },
+          {
+            "fixtureClass": "NARROW_CONTEXT_TRAP",
+            "reason": "INVALID_DIVERSITY_PROOF"
+          },
+          {
+            "fixtureClass": "CORRELATION_TRAP",
+            "reason": "INVALID_DIVERSITY_PROOF"
+          }
+        ]
+      },
+      {
+        "criterionId": "INAPPLICABLE_VERSION_DRIFT_REUSE_DENIED",
+        "verdict": "PASS",
+        "evidenceRefs": [
+          "evidence:pattern-traps",
+          "evidence:ground-truth"
+        ],
+        "denials": [
+          {
+            "caseId": "similar-looking-inapplicable",
+            "reason": "PRECONDITION_FALSE"
+          },
+          {
+            "caseId": "exact-shape-version-drift",
+            "reason": "VERSION_INCOMPATIBLE"
+          },
+          {
+            "caseId": "unknown-applicability-context",
+            "reason": "AMBIGUOUS_APPLICABILITY"
+          },
+          {
+            "caseId": "absent-success-evidence",
+            "reason": "MISSING_EVIDENCE"
+          }
+        ]
+      },
+      {
+        "criterionId": "SHADOW_ONLY_SIMULATION_BOUNDARY",
+        "verdict": "PASS",
+        "evidenceRefs": [
+          "evidence:holdout-cases",
+          "evidence:ground-truth"
+        ],
+        "requiredBoundary": {
+          "mode": "SIMULATION_OR_SHADOW_ONLY",
+          "externalStateChanged": false,
+          "modelsOrServicesCalled": false,
+          "procedureContentReturned": false
+        },
+        "failClosedCases": [
+          "missing-admitted-evidence:MISSING_288_DIGEST",
+          "unsealed-holdout:UNSEALED_HOLDOUT",
+          "live-replay:LIVE_REPLAY_FORBIDDEN",
+          "holdout-leakage:HOLDOUT_LEAKAGE",
+          "prose-input:PROSE_ONLY_INPUT"
+        ]
+      },
+      {
+        "criterionId": "CANDIDATE_PRESERVATION",
+        "verdict": "PASS",
+        "evidenceRefs": [
+          "evidence:pattern-traps",
+          "evidence:ground-truth"
+        ],
+        "preservedReferences": {
+          "dependencyRefs": [
+            "dependency:parser"
+          ],
+          "knownFailureRefs": [
+            "failure:known-001"
+          ],
+          "counterexampleRefs": [
+            "counterexample:similar-001"
+          ],
+          "provenanceRefs": [
+            "provenance:fixture-a",
+            "provenance:fixture-b",
+            "provenance:fixture-c"
+          ],
+          "counterevidenceCoverage": "COMPLETE"
+        }
+      }
+    ]
+  },
+  "promotionBoundary": {
+    "syntheticEvidenceMayBePromoted": false,
+    "dryRunEvidenceMayBePromoted": false,
+    "staleOrDigestMismatchedEvidenceMayBePromoted": false,
+    "evidenceOutsideDeclaredScopeMayBePromoted": false,
+    "patternReuseAuthorityGranted": false,
+    "productionAuthorityGranted": false,
+    "releaseAuthorityGranted": false,
+    "failClosedRule": "A dry-run, synthetic, stale, unreadable, or digest-mismatched record is denied beyond its declared evidence scope; it cannot establish production behavior, pattern promotion, issue closure, PR CI, merge, publication, or release."
+  },
+  "localVerification": {
+    "environmentRecovery": {
+      "historicalFailure": "The previously pinned Node v24.19.0 invocation exited 133/SIGTRAP before initialization.",
+      "recovery": "Retried with explicit /usr/bin/node and /usr/bin/npm from Node v24.19.0; build, replay, and every focused CKS-09 test completed normally.",
+      "runtime": "/usr/bin/node v24.19.0"
+    },
+    "currentMainReplay": {
+      "command": "/usr/bin/node scripts/run-cks-09-proof-dry-run.mjs --fixture tests/fixtures/cks-09/e2e-positive-evidence-v1.json --dry-run",
+      "status": "PASS",
+      "exitCode": 0,
+      "canonicalDigest": "sha256:b70a3107d3a3fa0ad7de2ac6f1073d2b9be2d1def1abd1fff1269936da5d13c4"
+    },
+    "requiredBuild": {
+      "command": "/usr/bin/npm run build --silent",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    "focusedGates": {
+      "command": "/usr/bin/node --test dist/tests/cks-task-fingerprint-pattern-contracts.test.js dist/tests/cks-applicability-aware-retrieval.test.js dist/tests/cks-shadow-experience-ablation.test.js dist/tests/cks-solution-pattern-candidate-evaluator.test.js tests/cks-09-synthetic-proof-fixtures.test.mjs tests/cks-09-proof-dry-run.test.mjs tests/cks-09-public-readback.test.mjs",
+      "coverage": [
+        "P18 diversity and preservation contracts",
+        "P17 execution-derived applicability-aware paired retrieval",
+        "shadow ablation boundary and caller-summary substitution negatives",
+        "exact final-criterion identities, reasons, verdicts, and preservation equality",
+        "deterministic evidence receipt, release-required disposition, and tamper fail-closed behavior"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "testsPassed": 43,
+      "testsFailed": 0
+    },
+    "authoritativeFollowUp": "The final delivery owner remains responsible for package, manifest, verification DAG, integrity, exact-head PR/CI, merge, governed release, anonymous readback, issue closure, and queue reconciliation."
+  },
+  "executionBoundary": {
+    "externalStateChanged": false,
+    "githubMutated": false,
+    "providerCalled": false,
+    "serviceCalled": false,
+    "pullRequestCreated": false,
+    "ciMutated": false,
+    "mergePerformed": false,
+    "releasePerformed": false,
+    "publicReadbackPerformed": false
+  },
+  "nonClaims": [
+    "This receipt records no issue closure, pull request, exact-head CI result, protected merge, publication, release, public-main readback, or #280 update.",
+    "The bound PASS criteria are terminal only within the exact admitted synthetic sealed-holdout shadow scope.",
+    "The historical Node SIGTRAP was an infrastructure event; explicit /usr/bin Node 24 recovery produced the recorded local PASS results without changing delivery authority.",
+    "This receipt grants no live replay, execution, pattern promotion, implementation, approval, deployment, publication, or release authority."
+  ]
+}

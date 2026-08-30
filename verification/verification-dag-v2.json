@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 26,
+  "graphVersion": 27,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "377612bc1f46bdc3bf9609a194bf30dcd7c211e3269988ccfc365a8a5134ce59"
+          "sha256": "9c59e3bbcf7e57137596205c6ca9977f68a29c788692f75732720b50df463090"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "3f378bb4b4c40f163bd8f35dbdec35d25c34bdb1f48c581a1c723b2003686b9e"
+          "sha256": "5d466fd0ec3fde1d93836a0a67a867a1974fd990e935526cadc2347686add8d0"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "01790c309d1d533f41ffa954e6aaa2032b2379339b038f8ba49ab736224b7141"
+          "sha256": "f9cfdc80be3b75f1755f859e264de68271569a1059a78ebbeb48a68cdd875a2b"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "5cd1b3f5a99c1a5dae7b6c1d2d910606f09d201b9ad2932eec4a5044b32d0bc4"
+          "sha256": "308cc14be9e5f5f6fba9720c24c0f3adb0129011bcd9116e8982384368391dfd"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "309bf7ff54afcf8707ef87fce30179ba8bca40e05d0ea5cbd83777c62808aff5"
+          "sha256": "451387978388497172afb421488ed6ec8f1576a27e598e54253c1d0458a352a6"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "976529d7ec747a0d76348b807efa7416bfdbf72c2deaa4449d8b1fb5a7a17354"
+          "sha256": "226edd06b93a94a05797fad53373bb6200dae488a3d0a357c9b1a9ce5cfe22d5"
         }
       ],
       "ownedTests": [
@@ -3453,6 +3453,230 @@
         "Lineage stores minimized IDs, digests and classes only; no raw reasoning, customer payload or authority is introduced."
       ],
       "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-09-task-pattern-proof-v1",
+      "dependsOn": [
+        "cks-08-usage-lineage-attribution-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/development/cks-09-proof.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "53ac83acb061369bf0c5b38f360490a3a0a5e34218d33814b8d5e0ff9fa1416f"
+        },
+        {
+          "path": "docs/development/cks-09-public-readback.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3f2d320d757bf2615733aa1105768d9482e3d8f22d550159b1cc7d1d9750c017"
+        },
+        {
+          "path": "packages/cks/src/applicability-aware-retrieval.ts",
+          "role": "CONTRACT",
+          "sha256": "187c4a5f5f5c78afe92d737e84aa08061b1cad64ecfb6e14ee84ac6db4398c78"
+        },
+        {
+          "path": "packages/cks/src/shadow-experience-ablation.ts",
+          "role": "CONTRACT",
+          "sha256": "b2da58dde3e00766d6c54d52b877b4c32e812382f378d76058993a799563e5f2"
+        },
+        {
+          "path": "packages/cks/src/solution-pattern-candidate-evaluator.ts",
+          "role": "CONTRACT",
+          "sha256": "94ab37d40c66c926cc899942a13e47acb43e1e0e207d36e28e7dc2f8e4c3c102"
+        },
+        {
+          "path": "packages/contracts/src/cks-task-fingerprint.ts",
+          "role": "CONTRACT",
+          "sha256": "0ec23aa5a82b46f2cdea99b04ff94a921a50abbb7dd60689ebb260f01d89cc1f"
+        },
+        {
+          "path": "schemas/contracts/cks-09-synthetic-case-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "79adc386e573ac3eaa1205634b31294118060bb0120669c2b9309310e47a5ccc"
+        },
+        {
+          "path": "schemas/contracts/cks-knowledge-bundle-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "e5393e2746811d8d86a32d670ed4e1e578c2c0bfb46c2d63f80fc421b2d036b0"
+        },
+        {
+          "path": "schemas/contracts/cks-solution-pattern-candidate-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "2f8961ac91a273c9155542f2f7d6981f85842010ee8c4f7e1b17d2aac5e3dd1d"
+        },
+        {
+          "path": "schemas/contracts/cks-task-family-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "f8c9df427055c0c47c093db63295089c51e7b3ad3d5feb0f09a848db9c196a1d"
+        },
+        {
+          "path": "schemas/contracts/cks-task-fingerprint-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "ed1fb5892decbb8c07dde73734e390cd709cad40fed29238cb49eae1807453ca"
+        },
+        {
+          "path": "scripts/cks-09-score-synthetic-proof.mjs",
+          "role": "VALIDATOR",
+          "sha256": "be2458f3ac8e9cbf4f00f5ee3f6db83cef53c143f1c491f7c1412770ba643777"
+        },
+        {
+          "path": "scripts/cks-09-validate-public-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "8108ab7941f12f603c556a2830883c556386eea296f5eb77d2f2c29eafa1185a"
+        },
+        {
+          "path": "scripts/run-cks-09-proof-dry-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "295fd6941e5d2b4dbf646511cae43015a7df596ba9a4edcaed4a0e41d1735033"
+        },
+        {
+          "path": "tests/cks-09-proof-dry-run.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "2384cb976e5ee891d60dc416a9db262b5f84511f9ec514e9137c301fcd586346"
+        },
+        {
+          "path": "tests/cks-09-public-readback.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1b490feefc6dc75df168b4c05f9b2f9a0ae135407b387f89d102adc96019f1f9"
+        },
+        {
+          "path": "tests/cks-09-synthetic-proof-fixtures.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "507e78b6479dbfad2cc25e6c86f84f83e366dd18876cd9011fe63ce86ff873f0"
+        },
+        {
+          "path": "tests/cks-applicability-aware-retrieval.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "8e67ec312db302d9dc9e12639804fade0103b1faa64f97bb750e3e1957a20941"
+        },
+        {
+          "path": "tests/cks-shadow-experience-ablation.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "c440a37a5d5345163de6437266ccccf5f033f8e0d248d804b23151e8be5bebc5"
+        },
+        {
+          "path": "tests/cks-solution-pattern-candidate-evaluator.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "b9f0490779c7d345f196bea5a42a94d3ee0b34d32825ce9d9f12728f32c623a3"
+        },
+        {
+          "path": "tests/cks-task-fingerprint-pattern-contracts.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "b6efdc79b365497f1670ba1ebac45e646c81ba1447a8f597439408d7528011a6"
+        },
+        {
+          "path": "tests/fixtures/cks-09/contracts-invalid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "1fd6034b347b9b4af8e9b579ad25a9452284f368ccd56c74e1a8f07f20437549"
+        },
+        {
+          "path": "tests/fixtures/cks-09/contracts-valid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "bf0bcf6787e4500d9ea5d0c25b8b5167c26fd048f405cf3946c1a26b5c254998"
+        },
+        {
+          "path": "tests/fixtures/cks-09/e2e-positive-evidence-v1.json",
+          "role": "FIXTURE",
+          "sha256": "de313163a745a864aa3217aec8d58184cc1bfc8ce42b3a28c3048bfe27663d8d"
+        },
+        {
+          "path": "tests/fixtures/cks-09/e2e-rejections-v1.json",
+          "role": "FIXTURE",
+          "sha256": "7724a075a1e803b957d5e6a37222984129fa5b378f35fe3c45275c129cf8aacc"
+        },
+        {
+          "path": "tests/fixtures/cks-09/holdout-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f05302d756136e9a3ed6a4aeb06a8137b847728718b7d11af0e01f8d8dade97f"
+        },
+        {
+          "path": "tests/fixtures/cks-09/holdout-ground-truth-v1.json",
+          "role": "FIXTURE",
+          "sha256": "3913fda6843468b87e4b8f03fac0e590dc78f4f9ab0d93f350738ba8d401a153"
+        },
+        {
+          "path": "tests/fixtures/cks-09/pattern-candidate-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "6d6acfa2579afdfecb29beb21cb27108906516d9163499c728e5fbe0a1547a26"
+        },
+        {
+          "path": "tests/fixtures/cks-09/pattern-candidate-denials-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a93799bb3f43499e501541ac88025ca546cb901a1e223f86d4eec88a4f94963a"
+        },
+        {
+          "path": "tests/fixtures/cks-09/pattern-trap-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "cf554a44cf78db8a3fff397c079db9bf411529eb6bfd8cb8106f8bbf524b49b4"
+        },
+        {
+          "path": "tests/fixtures/cks-09/retrieval-denials-v1.json",
+          "role": "FIXTURE",
+          "sha256": "6355b761898a0c4be0d49707c315a70eb2c7ac265741937fd3963fa5fada6c2e"
+        },
+        {
+          "path": "tests/fixtures/cks-09/retrieval-trajectories-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9789daccc784713bfded447463a3506497b04b7af61ba2b169aaabcf68c4d117"
+        },
+        {
+          "path": "tests/fixtures/cks-09/shadow-replay-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9b1851278ca0c6f3b71a2992f6b2ef0f314e1a9d4ac7f92658e380e81e8f1e9c"
+        },
+        {
+          "path": "tests/fixtures/cks-09/shadow-replay-denials-v1.json",
+          "role": "FIXTURE",
+          "sha256": "5a9e1a6e818e681bf62225efc2cf7b063fa1a78b3db6ad6fcea9dd8d8fb768b6"
+        },
+        {
+          "path": "verification/cks-09-metrics-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0693004e63b4a5279343eede535de6de761e62ac5af3821417875676090b7fc5"
+        },
+        {
+          "path": "verification/cks-09-offline-proof-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f1ca8b9cd220428c101ef3eebf45e86eccd5c8f707ca0e35ea2d5a35060ec429"
+        },
+        {
+          "path": "verification/cks-09-pattern-maturity-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f14d92f44044507ac5d03ed55d5f0b4ba68db0eedfb61ffee2488b47781cd465"
+        },
+        {
+          "path": "verification/cks-09-public-readback-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8601a97cb7bb0d13dc63219eb474bdad98cf362bf469db176744d9f06509bd0f"
+        },
+        {
+          "path": "verification/cks-09-retrieval-receipt-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bcc793babb44c38700adffb828e1a2d0ecb2253fb62e0b9b9b351a2f0bd89e56"
+        },
+        {
+          "path": "verification/cks-09-shadow-ablation-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "364c1460b2c7e372eb292bba55ad3d28fea8fe5ab8615130811d8f89075aa0cc"
+        },
+        {
+          "path": "verification/closure-psai289-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ba0817b00b7ccb20c0fb376084d0f4005302587534c79627d251314579b6814b"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks09:test"
+      ],
+      "invariants": [
+        "P17 quality and cost derive from bound retrieval execution and authoritative holdout ground truth.",
+        "P18 rejects frequency-only, narrow-context, correlation, inapplicability and exact-version drift traps.",
+        "Shadow replay remains simulation-only and candidates preserve dependencies, failures, counterexamples and provenance.",
+        "A successful terminal proof requires governed release delivery."
+      ],
+      "riskClass": "HIGH",
       "globalInvalidation": false
     }
   ]

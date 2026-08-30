@@ -1,0 +1,840 @@
+{
+  "schema": "pansphaira.conveyor.cks-09-fingerprint-retrieval-decision-receipt.v1",
+  "taskId": "SOL-PSAI289-FINGERPRINT-RETRIEVAL-DECISION-01",
+  "controlId": "CKS-09",
+  "recordKind": "DETERMINISTIC_DECISION_AND_INTEGRATION_RECEIPT",
+  "baselineCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+  "process": {
+    "operatingModel": "v1.1",
+    "preservedDecisionIds": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "rule": "This receipt narrows proof vocabulary only; it does not replace, reinterpret, or extend the preserved process decisions."
+  },
+  "scope": {
+    "decision": "Freeze the smallest closed, applicability-first vocabulary for evidence-bound TaskFingerprint retrieval and candidate SolutionPattern evaluation.",
+    "included": [
+      "TaskFingerprint structural dimensions",
+      "TaskFamily",
+      "KnowledgeBundle",
+      "SolutionPattern maturity S0-S6",
+      "typed preconditions and applicability",
+      "evidence and provenance",
+      "dependencies",
+      "known failures and counterexamples",
+      "exact version compatibility",
+      "paired holdout metrics for P17 and P18",
+      "simulation and shadow-only replay"
+    ],
+    "excluded": [
+      "product implementation",
+      "model or service calls",
+      "live pattern application",
+      "online experiments",
+      "telemetry collection",
+      "GitHub mutation",
+      "publication, merge, or release"
+    ]
+  },
+  "receiptDecision": {
+    "vocabulary": "FROZEN",
+    "artifactIntegration": "ACCEPTED_LOCAL_RECORD",
+    "evidenceAdmission": "DENIED",
+    "patternReuse": "DENIED",
+    "p17Verdict": "INCONCLUSIVE",
+    "p18Verdict": "INCONCLUSIVE",
+    "reasonCodes": [
+      "MISSING_288_DIGEST"
+    ],
+    "successClaimed": false,
+    "basis": "The vocabulary is complete, but no digest-bound #288 evidence input is present at the baseline commit. A vocabulary decision is not empirical proof."
+  },
+  "closedVocabulary": {
+    "closedWorldRule": "Only constants listed in this object are valid. Unknown values, omitted required values, type errors, and prose substitutions fail closed.",
+    "proofVerdicts": [
+      "PASS",
+      "DENIED",
+      "INCONCLUSIVE"
+    ],
+    "truthValues": [
+      "TRUE",
+      "FALSE",
+      "UNKNOWN"
+    ],
+    "applicabilityResults": [
+      "APPLICABLE_SHADOW_ONLY",
+      "DENIED"
+    ],
+    "retrievalArms": [
+      "KNOWLEDGE_ONLY",
+      "KNOWLEDGE_PLUS_EXPERIENCE"
+    ],
+    "replayModes": [
+      "SIMULATION",
+      "SHADOW"
+    ],
+    "maturityLevels": [
+      "S0",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6"
+    ],
+    "effectClasses": [
+      "READ_ONLY",
+      "REVERSIBLE_LOCAL",
+      "EXTERNAL_OR_IRREVERSIBLE"
+    ],
+    "versionSchemes": [
+      "SEMVER_EXACT",
+      "OPAQUE_EXACT",
+      "SHA256_EXACT"
+    ],
+    "versionRelations": [
+      "COMPATIBLE",
+      "INCOMPATIBLE",
+      "UNKNOWN"
+    ],
+    "predicateOperators": [
+      "EQ",
+      "IN",
+      "SET_CONTAINS_ALL",
+      "SET_DISJOINT",
+      "EXISTS"
+    ],
+    "dependencyKinds": [
+      "KNOWLEDGE",
+      "SCHEMA",
+      "TOOL",
+      "RUNTIME",
+      "PATTERN"
+    ],
+    "evidenceKinds": [
+      "OBSERVATION",
+      "REPETITION",
+      "DIVERSITY_PROOF",
+      "CONTRAST_PAIR",
+      "HOLDOUT_RUN",
+      "NEGATIVE_CONTROL",
+      "COUNTEREVIDENCE_SEARCH",
+      "KNOWN_FAILURE",
+      "COUNTEREXAMPLE",
+      "SHADOW_REPLAY"
+    ],
+    "patternFixtureClasses": [
+      "PLANTED_STABLE",
+      "FREQUENCY_ONLY_TRAP",
+      "NARROW_CONTEXT_TRAP",
+      "CORRELATION_TRAP"
+    ],
+    "chargedCostEvents": [
+      "RETRIEVAL_ITEM",
+      "CANDIDATE_STEP",
+      "TOOL_CALL",
+      "CHECK_RUN"
+    ],
+    "denialReasons": [
+      "MISSING_288_DIGEST",
+      "INVALID_288_DIGEST",
+      "INVALID_PROVENANCE",
+      "MISSING_EVIDENCE",
+      "INVALID_KNOWLEDGE_BUNDLE",
+      "UNSEALED_HOLDOUT",
+      "HOLDOUT_LEAKAGE",
+      "INVALID_DIVERSITY_PROOF",
+      "AMBIGUOUS_TASK_FAMILY",
+      "FAMILY_MISMATCH",
+      "AMBIGUOUS_APPLICABILITY",
+      "PRECONDITION_FALSE",
+      "PRECONDITION_UNKNOWN",
+      "DEPENDENCY_MISSING",
+      "DEPENDENCY_UNVERIFIED",
+      "VERSION_INCOMPATIBLE",
+      "VERSION_UNKNOWN",
+      "MATCHED_KNOWN_FAILURE",
+      "MATCHED_COUNTEREXAMPLE",
+      "ABSENT_COUNTEREVIDENCE",
+      "UNRESOLVED_FAILURE",
+      "INSUFFICIENT_MATURITY",
+      "PROSE_ONLY_INPUT",
+      "LIVE_REPLAY_FORBIDDEN"
+    ]
+  },
+  "canonicalEncoding": {
+    "mediaType": "application/json",
+    "textEncoding": "UTF-8",
+    "canonicalization": "RFC8785_JSON_CANONICALIZATION_SCHEME",
+    "digestAlgorithm": "SHA-256",
+    "digestTextForm": "sha256:<64 lowercase hexadecimal characters>",
+    "identifierRule": "Identifiers are case-sensitive and are not trimmed, repaired, inferred, or synonym-expanded.",
+    "setRule": "Fields declared as sets are encoded as duplicate-free arrays sorted by Unicode code point.",
+    "proseRule": "Descriptions and rationales are non-authoritative. They cannot supply or repair a missing, malformed, unknown, or incompatible typed value."
+  },
+  "predicateClause": {
+    "requiredFields": [
+      "factPath",
+      "operator",
+      "operand"
+    ],
+    "factPathFormat": "RFC6901 JSON Pointer into the canonical TaskFingerprint or a resolved dependency record",
+    "operatorSource": "closedVocabulary.predicateOperators",
+    "evaluation": {
+      "wellTypedSatisfied": "TRUE",
+      "wellTypedUnsatisfied": "FALSE",
+      "missingOrIllTyped": "UNKNOWN",
+      "combination": "All clauses are conjunctive. Any FALSE denies; otherwise any UNKNOWN denies; only all TRUE can be applicable.",
+      "disjunctionRule": "Represent alternatives as separate, independently evidenced SolutionPattern candidates; free-form OR expressions are invalid."
+    }
+  },
+  "TaskFingerprint": {
+    "purpose": "A canonical structural identity used to decide applicability before any experience is retrieved.",
+    "orderedStructuralDimensions": [
+      "taskFamilyId",
+      "objectiveShapeId",
+      "inputShapeId",
+      "outputShapeId",
+      "contextShapeId",
+      "constraintIds",
+      "effectClass",
+      "dependencyIds",
+      "versionVector"
+    ],
+    "requiredFields": [
+      "fingerprintId",
+      "taskFamilyId",
+      "objectiveShapeId",
+      "inputShapeId",
+      "outputShapeId",
+      "contextShapeId",
+      "constraintIds",
+      "effectClass",
+      "dependencyIds",
+      "versionVector",
+      "canonicalDigest"
+    ],
+    "fieldRules": {
+      "fingerprintId": "Opaque case-sensitive identifier.",
+      "taskFamilyId": "Exactly one deterministically admitted TaskFamily identifier.",
+      "objectiveShapeId": "Identifier for the required outcome shape, not topical wording.",
+      "inputShapeId": "Identifier for the typed input structure.",
+      "outputShapeId": "Identifier for the typed acceptance/output structure.",
+      "contextShapeId": "Identifier for the structural operating context; cosmetic wording is excluded.",
+      "constraintIds": "Sorted set of typed safety, authority, and task invariants.",
+      "effectClass": "One closedVocabulary.effectClasses value.",
+      "dependencyIds": "Sorted set of dependency identifiers required by the task.",
+      "versionVector": "Sorted array of componentId, versionScheme, and exact value records.",
+      "canonicalDigest": "Digest of the canonical ordered structural dimensions only."
+    },
+    "identityRule": "Topical or embedding similarity is not a structural dimension and cannot change family membership or applicability.",
+    "invalidityRule": "A missing, ambiguous, prose-only, or non-canonical structural dimension makes the fingerprint invalid and pattern reuse DENIED."
+  },
+  "TaskFamily": {
+    "purpose": "A closed set of structurally substitutable task variants sharing acceptance invariants.",
+    "requiredFields": [
+      "familyId",
+      "membershipClauses",
+      "invariantIds",
+      "variantAxes",
+      "exclusionClauses",
+      "evidenceRefs",
+      "provenanceRefs",
+      "canonicalDigest"
+    ],
+    "membershipRule": "Every membership clause must be TRUE, no exclusion clause may be TRUE, and exactly one registered family may match.",
+    "zeroMatches": {
+      "result": "DENIED",
+      "reason": "AMBIGUOUS_TASK_FAMILY"
+    },
+    "multipleMatches": {
+      "result": "DENIED",
+      "reason": "AMBIGUOUS_TASK_FAMILY"
+    },
+    "variantAxesRule": "Each axis names one TaskFingerprint structural dimension allowed to vary while all invariantIds remain satisfied.",
+    "familyLabelRule": "A shared label, vocabulary, repository path, or visual similarity is not family membership evidence."
+  },
+  "KnowledgeBundle": {
+    "purpose": "The immutable knowledge baseline available to both comparison arms.",
+    "requiredFields": [
+      "bundleId",
+      "contentRefs",
+      "scopeIds",
+      "versionVector",
+      "provenanceRefs",
+      "canonicalDigest"
+    ],
+    "contentRefRequiredFields": [
+      "contentId",
+      "contentDigest",
+      "provenanceRef"
+    ],
+    "admissionRules": [
+      "Every content and provenance digest validates.",
+      "Scope and exact versions cover the TaskFingerprint.",
+      "The bundle contains no SolutionPattern, episode outcome, planted label, holdout answer, or holdout-derived edit.",
+      "The identical canonicalDigest is supplied to both retrieval arms."
+    ],
+    "invalidResult": {
+      "evidenceAdmission": "DENIED",
+      "reason": "INVALID_KNOWLEDGE_BUNDLE"
+    }
+  },
+  "evidenceAndProvenance": {
+    "EvidenceRecord": {
+      "requiredFields": [
+        "evidenceId",
+        "kind",
+        "sourceDigest",
+        "taskFingerprintDigest",
+        "outcomeDigest",
+        "provenanceRef"
+      ],
+      "kindSource": "closedVocabulary.evidenceKinds",
+      "immutabilityRule": "Evidence is referenced by canonical digest; edits create a new evidenceId and digest.",
+      "outcomeRule": "Outcome facts are typed machine fields bound by outcomeDigest; narrative summaries have no proof weight."
+    },
+    "ProvenanceRecord": {
+      "requiredFields": [
+        "provenanceId",
+        "sourceKind",
+        "sourceLocator",
+        "rootDigest",
+        "parentDigests",
+        "producerId",
+        "toolchainVersionVector",
+        "sealed"
+      ],
+      "sealedRule": "sealed must be true for proof evidence.",
+      "independenceRule": "Two records are independent only when rootDigest differs, neither root is in the other's transitive parentDigests, and they are not duplicate observations of the same episode.",
+      "invalidResult": {
+        "evidenceAdmission": "DENIED",
+        "reason": "INVALID_PROVENANCE"
+      }
+    },
+    "retentionRule": "Promotion never deletes or overwrites evidence, provenance, dependencies, known failures, counterexamples, or prior maturity decisions."
+  },
+  "DependencyRecord": {
+    "requiredFields": [
+      "dependencyId",
+      "kind",
+      "requiredStateDigest",
+      "versionConstraintRef",
+      "verificationEvidenceRef"
+    ],
+    "kindSource": "closedVocabulary.dependencyKinds",
+    "resolutionRule": "Every referenced dependency must resolve to the required state, have admitted verification evidence, and be version-compatible before applicability can be TRUE.",
+    "missingResult": {
+      "result": "DENIED",
+      "reason": "DEPENDENCY_MISSING"
+    },
+    "unverifiedResult": {
+      "result": "DENIED",
+      "reason": "DEPENDENCY_UNVERIFIED"
+    }
+  },
+  "counterevidence": {
+    "KnownFailureRecord": {
+      "requiredFields": [
+        "failureId",
+        "patternId",
+        "taskFingerprintDigest",
+        "expectedOutcomeDigest",
+        "observedOutcomeDigest",
+        "evidenceRef",
+        "provenanceRef",
+        "resolution"
+      ],
+      "resolutionValues": [
+        "OPEN",
+        "BOUNDED_BY_PRECONDITION",
+        "INVALIDATES_PATTERN"
+      ]
+    },
+    "CounterexampleRecord": {
+      "requiredFields": [
+        "counterexampleId",
+        "patternId",
+        "taskFingerprintDigest",
+        "matchedSimilarityFacts",
+        "blockingStructuralDimension",
+        "expectedDenialReason",
+        "evidenceRef",
+        "provenanceRef"
+      ],
+      "rule": "The blockingStructuralDimension must name a TaskFingerprint structural dimension; similarity facts never override it."
+    },
+    "CounterevidenceAssessment": {
+      "requiredFields": [
+        "assessmentId",
+        "searchEvidenceRefs",
+        "knownFailureRefs",
+        "counterexampleRefs",
+        "negativeControlRefs",
+        "coverageStatus",
+        "canonicalDigest"
+      ],
+      "coverageStatusValues": [
+        "COMPLETE",
+        "INCOMPLETE"
+      ],
+      "minimums": {
+        "searchEvidenceRefs": 1,
+        "negativeControlRefs": 1
+      },
+      "absenceRule": "Missing assessment, INCOMPLETE coverage, no search evidence, or no negative control is ABSENT_COUNTEREVIDENCE. Empty knownFailureRefs or counterexampleRefs is valid only when the COMPLETE digest-bound search explicitly reports zero findings.",
+      "absentResult": {
+        "promotion": "DENIED",
+        "patternReuse": "DENIED",
+        "p18Verdict": "INCONCLUSIVE",
+        "reason": "ABSENT_COUNTEREVIDENCE"
+      }
+    }
+  },
+  "versionCompatibility": {
+    "VersionConstraint": {
+      "requiredFields": [
+        "constraintId",
+        "componentId",
+        "versionScheme",
+        "allowedExactValues",
+        "evidenceRefs",
+        "canonicalDigest"
+      ],
+      "rule": "allowedExactValues is a non-empty sorted set. Wildcards, implicit ranges, coercion, nearest-version matching, and prose compatibility claims are invalid."
+    },
+    "compatibleIff": "For every SolutionPattern version constraint, the TaskFingerprint versionVector contains the same componentId and versionScheme and its exact value is in allowedExactValues; every cited compatibility evidence record is admitted.",
+    "incompatible": {
+      "patternReuse": "DENIED",
+      "reason": "VERSION_INCOMPATIBLE"
+    },
+    "missingAmbiguousOrUnverified": {
+      "patternReuse": "DENIED",
+      "reason": "VERSION_UNKNOWN"
+    },
+    "driftRule": "A new component value is incompatible until separately admitted evidence adds that exact value to a new version-constraint digest. Prior evidence is retained."
+  },
+  "SolutionPattern": {
+    "statusRule": "Every S0-S6 record remains a candidate and supplies no live authority.",
+    "requiredFieldsAtS2AndAbove": [
+      "patternId",
+      "maturity",
+      "taskFamilyIds",
+      "applicabilityClauses",
+      "preconditions",
+      "procedureDigest",
+      "expectedOutcomeDigest",
+      "dependencyRefs",
+      "evidenceRefs",
+      "provenanceRefs",
+      "knownFailureRefs",
+      "counterexampleRefs",
+      "counterevidenceAssessmentRef",
+      "versionConstraintRefs",
+      "canonicalDigest"
+    ],
+    "preservationRule": "dependencyRefs, evidenceRefs, provenanceRefs, knownFailureRefs, counterexampleRefs, and versionConstraintRefs are append-preserving across maturity transitions; superseding records retain the prior canonicalDigest.",
+    "preconditionRule": "preconditions is a non-empty conjunction of predicateClause records. A false, unknown, missing, or prose-only precondition denies reuse.",
+    "applicabilityFirstRule": "The complete applicability gate runs before procedure content is returned to the KNOWLEDGE_PLUS_EXPERIENCE arm.",
+    "deterministicEligibleOrdering": [
+      "maturity descending",
+      "patternId ascending"
+    ]
+  },
+  "maturityModel": {
+    "promotionRule": "Promotion is one level at a time, requires every prior level, and is computed only from admitted digest-bound evidence. Frequency never substitutes for a requirement.",
+    "levels": [
+      {
+        "id": "S0",
+        "name": "OBSERVED",
+        "minimumIndependentEpisodes": 1,
+        "requirements": [
+          "One admitted OBSERVATION with provenance."
+        ],
+        "shadowRetrieval": "DENIED"
+      },
+      {
+        "id": "S1",
+        "name": "REPEATED",
+        "minimumIndependentEpisodes": 2,
+        "requirements": [
+          "At least two provenance-independent observations with the same procedure and expected-outcome digests."
+        ],
+        "shadowRetrieval": "DENIED"
+      },
+      {
+        "id": "S2",
+        "name": "STRUCTURED_CANDIDATE",
+        "minimumIndependentEpisodes": 3,
+        "requirements": [
+          "All requiredFieldsAtS2AndAbove are present and valid.",
+          "At least three provenance-independent observations support the candidate.",
+          "Dependencies, preconditions, exact version bounds, failures, counterexamples, and provenance are preserved."
+        ],
+        "shadowRetrieval": "DENIED"
+      },
+      {
+        "id": "S3",
+        "name": "APPLICABILITY_BOUNDED",
+        "minimumIndependentEpisodes": 3,
+        "requirements": [
+          "The diversity proof is valid.",
+          "The counterevidence assessment is COMPLETE.",
+          "At least one admitted contrast pair supports the declared boundary.",
+          "No known OPEN or INVALIDATES_PATTERN failure remains."
+        ],
+        "shadowRetrieval": "APPLICABLE_TASKS_ONLY"
+      },
+      {
+        "id": "S4",
+        "name": "HOLDOUT_IDENTIFIED",
+        "minimumIndependentEpisodes": 3,
+        "requirements": [
+          "P18 is PASS on a sealed, non-leaking holdout suite.",
+          "All similar-looking inapplicable and version-drift controls are DENIED for the expected typed reason."
+        ],
+        "shadowRetrieval": "APPLICABLE_TASKS_ONLY"
+      },
+      {
+        "id": "S5",
+        "name": "SHADOW_BENEFICIAL",
+        "minimumIndependentEpisodes": 3,
+        "requirements": [
+          "P17 is PASS in paired shadow replay.",
+          "P18 remains PASS on the same sealed evidence boundary.",
+          "No applicability or safety denial regresses against KNOWLEDGE_ONLY."
+        ],
+        "shadowRetrieval": "APPLICABLE_TASKS_ONLY"
+      },
+      {
+        "id": "S6",
+        "name": "STABLE_SHADOW_CANDIDATE",
+        "minimumIndependentEpisodes": 3,
+        "requirements": [
+          "S5 is replicated on at least two disjoint sealed holdout batches bound by admitted provenance.",
+          "P17 and P18 are PASS independently on each batch.",
+          "No unresolved failure, provenance conflict, applicability ambiguity, or unsupported version is present."
+        ],
+        "shadowRetrieval": "APPLICABLE_TASKS_ONLY"
+      }
+    ],
+    "demotionRules": [
+      "An INVALIDATES_PATTERN failure denies all retrieval and resets the next admissible record to no higher than S2.",
+      "A new unbounded OPEN failure denies retrieval until a digest-bound precondition or invalidation decision resolves it.",
+      "Invalid provenance, holdout leakage, or an invalid diversity proof removes the affected evidence and recomputes maturity from admitted evidence only.",
+      "Version drift denies the drifted task without rewriting historical maturity evidence."
+    ]
+  },
+  "diversityProof": {
+    "requiredFields": [
+      "proofId",
+      "patternId",
+      "independentEpisodeRefs",
+      "taskVariantIds",
+      "contextShapeIds",
+      "coveredVariantAxes",
+      "contrastPairRefs",
+      "provenanceRefs",
+      "canonicalDigest"
+    ],
+    "finiteMinimums": {
+      "independentEpisodes": 3,
+      "distinctTaskVariants": 3,
+      "distinctContextShapes": 2,
+      "coveredVariantAxes": 2,
+      "distinctValuesPerCoveredAxis": 2,
+      "contrastPairs": 1
+    },
+    "validIff": [
+      "All referenced evidence and provenance are admitted and provenance-independent.",
+      "All finiteMinimums are met after canonical-digest deduplication.",
+      "Every variant belongs unambiguously to a declared TaskFamily.",
+      "The contrast pair changes the candidate procedure or declared applicability fact while holding the registered comparison facts constant.",
+      "No training episode or derivative appears in the sealed holdout set."
+    ],
+    "invalidResult": {
+      "evidenceAdmission": "DENIED",
+      "promotion": "DENIED",
+      "p18Verdict": "INCONCLUSIVE",
+      "reason": "INVALID_DIVERSITY_PROOF"
+    }
+  },
+  "applicabilityGate": {
+    "evaluationOrder": [
+      "Validate canonical encodings, digests, schemas, evidence, and provenance.",
+      "Resolve exactly one TaskFamily from the TaskFingerprint.",
+      "Require the candidate TaskFamily set to contain that exact familyId.",
+      "Evaluate every applicability clause and precondition using three-valued predicate evaluation.",
+      "Resolve and verify every dependency.",
+      "Evaluate every exact version constraint.",
+      "Deny any TaskFingerprint matching an unresolved known failure or counterexample boundary.",
+      "Require a COMPLETE counterevidence assessment and sufficient maturity.",
+      "Only then return procedure content to a simulation or shadow arm."
+    ],
+    "allowIff": "Every ordered gate is satisfied and the candidate is S3 or higher; the result is APPLICABLE_SHADOW_ONLY.",
+    "ambiguityRule": "Any contradictory match, missing fact, UNKNOWN predicate, or inability to distinguish applicable from inapplicable is AMBIGUOUS_APPLICABILITY and DENIED.",
+    "similarityRule": "Similarity can neither skip nor alter a gate. A similar-looking task with a family mismatch, false or unknown precondition, dependency mismatch, matched boundary, or incompatible version is DENIED.",
+    "outOfVocabularyRule": "An operator, status, effect class, evidence kind, version scheme, or replay mode outside closedVocabulary is PROSE_ONLY_INPUT and DENIED."
+  },
+  "holdoutProtocol": {
+    "sourceBinding": "The admitted #288 root digest must transitively bind the corpus manifest, family registry, KnowledgeBundle, training/holdout split, planted labels, dependency and version fixtures, replay inputs, expected checks, and event ledger.",
+    "pairedRunKey": [
+      "holdoutVariantId",
+      "initialStateDigest",
+      "knowledgeBundleDigest",
+      "harnessVersionDigest",
+      "budgetDigest"
+    ],
+    "pairingRule": "For each holdoutVariantId, both arms use the identical pairedRunKey and expected-check set. KNOWLEDGE_PLUS_EXPERIENCE adds only candidates that passed the applicability gate; KNOWLEDGE_ONLY receives no SolutionPattern content.",
+    "separationRule": "The holdout split and planted labels are sealed before candidate mining. Any direct or transitive overlap, post-hoc relabeling, or holdout-derived candidate edit is HOLDOUT_LEAKAGE.",
+    "costLedger": {
+      "unitCost": 1,
+      "eventKinds": "closedVocabulary.chargedCostEvents",
+      "rule": "Each emitted retrieval item, candidate step, tool call, and check run contributes exactly one cost unit. Repeated events count again; untyped or missing events invalidate the paired run."
+    },
+    "zeroDenominatorRule": "A required metric with a zero denominator is INCONCLUSIVE; it is never treated as zero, one, or vacuous PASS."
+  },
+  "P17": {
+    "claim": "Applicable historical experience improves holdout quality per cost over Knowledge-only retrieval without an applicability or safety regression.",
+    "perVariantMetrics": {
+      "quality_arm_i": "passedRequiredChecks_arm_i / totalRequiredChecks_i",
+      "cost_arm_i": "sum(unitCost for every charged cost event in arm i)",
+      "efficiency_arm_i": "quality_arm_i / max(1, cost_arm_i)",
+      "qualityDelta_i": "quality_KNOWLEDGE_PLUS_EXPERIENCE_i - quality_KNOWLEDGE_ONLY_i",
+      "costReduction_i": "cost_KNOWLEDGE_ONLY_i - cost_KNOWLEDGE_PLUS_EXPERIENCE_i",
+      "efficiencyDelta_i": "efficiency_KNOWLEDGE_PLUS_EXPERIENCE_i - efficiency_KNOWLEDGE_ONLY_i"
+    },
+    "aggregateMetrics": {
+      "quality_arm": "sum(passedRequiredChecks_arm_i) / sum(totalRequiredChecks_i)",
+      "cost_arm": "sum(cost_arm_i)",
+      "efficiency_arm": "quality_arm / max(1, cost_arm)",
+      "qualityDelta": "quality_KNOWLEDGE_PLUS_EXPERIENCE - quality_KNOWLEDGE_ONLY",
+      "costReduction": "cost_KNOWLEDGE_ONLY - cost_KNOWLEDGE_PLUS_EXPERIENCE",
+      "efficiencyDelta": "efficiency_KNOWLEDGE_PLUS_EXPERIENCE - efficiency_KNOWLEDGE_ONLY"
+    },
+    "passIff": [
+      "The #288 digest and every transitive input are admitted.",
+      "The diversity proof, KnowledgeBundle, pairing, provenance, and holdout separation are valid.",
+      "For every holdout variant, qualityDelta_i is at least 0 and costReduction_i is at least 0.",
+      "Aggregate qualityDelta is at least 0 and aggregate costReduction is at least 0.",
+      "At least one of aggregate qualityDelta or aggregate costReduction is strictly greater than 0.",
+      "Aggregate efficiencyDelta is strictly greater than 0.",
+      "Every expected applicability, dependency, counterexample, and version denial matches its typed reason in both arms.",
+      "No required check, safety check, or expected denial regresses in KNOWLEDGE_PLUS_EXPERIENCE."
+    ],
+    "failureSemantics": {
+      "validEvidenceButPassConditionFalse": "DENIED",
+      "missingInvalidAmbiguousOrLeakingEvidence": "INCONCLUSIVE"
+    },
+    "currentVerdict": "INCONCLUSIVE",
+    "currentReason": "MISSING_288_DIGEST"
+  },
+  "P18": {
+    "claim": "The protocol identifies planted stable patterns and rejects frequency-only, narrow-context, and correlation traps.",
+    "requiredFixturePopulation": {
+      "minimumPlantedStable": 1,
+      "minimumFrequencyOnlyTraps": 1,
+      "minimumNarrowContextTraps": 1,
+      "minimumCorrelationTraps": 1
+    },
+    "classificationRule": "A planted stable candidate is identified only at S4 or higher. Every trap must remain below S4 with a typed denial tied to its missing requirement; raw occurrence count has no independent weight.",
+    "metrics": {
+      "stableRecall": "identifiedPlantedStable / totalPlantedStable",
+      "stablePrecision": "identifiedPlantedStable / (identifiedPlantedStable + trapsIncorrectlyIdentified)",
+      "frequencyTrapRejection": "frequencyOnlyTrapsRejected / totalFrequencyOnlyTraps",
+      "narrowContextTrapRejection": "narrowContextTrapsRejected / totalNarrowContextTraps",
+      "correlationTrapRejection": "correlationTrapsRejected / totalCorrelationTraps"
+    },
+    "passIff": [
+      "The #288 digest and every transitive input are admitted and all required fixture populations are non-zero.",
+      "The holdout is sealed, provenance-independent, non-leaking, and has a valid diversity proof.",
+      "stableRecall equals 1 and stablePrecision equals 1.",
+      "frequencyTrapRejection equals 1.",
+      "narrowContextTrapRejection equals 1.",
+      "correlationTrapRejection equals 1.",
+      "Every similar-looking inapplicable task, ambiguous applicability fixture, incompatible-version fixture, and unknown-version fixture is DENIED for the expected typed reason.",
+      "Every promoted candidate has a COMPLETE counterevidence assessment and preserves dependencies, failures, counterexamples, and provenance."
+    ],
+    "trapDenials": {
+      "FREQUENCY_ONLY_TRAP": "DENIED when repetitions are duplicate, provenance-dependent, not diverse, lack contrast evidence, or fail holdout support.",
+      "NARROW_CONTEXT_TRAP": "DENIED with INVALID_DIVERSITY_PROOF when context or variant-axis minimums are not met.",
+      "CORRELATION_TRAP": "DENIED when no admitted contrast pair isolates the claimed pattern boundary."
+    },
+    "failureSemantics": {
+      "validEvidenceButAnyTrapOrStableClassificationWrong": "DENIED",
+      "missingInvalidAmbiguousOrLeakingEvidence": "INCONCLUSIVE"
+    },
+    "currentVerdict": "INCONCLUSIVE",
+    "currentReason": "MISSING_288_DIGEST"
+  },
+  "requiredNegativeCases": [
+    {
+      "case": "MISSING_288_DIGEST",
+      "evidenceAdmission": "DENIED",
+      "patternReuse": "DENIED",
+      "p17": "INCONCLUSIVE",
+      "p18": "INCONCLUSIVE"
+    },
+    {
+      "case": "INVALID_DIVERSITY_PROOF",
+      "promotion": "DENIED",
+      "patternReuse": "DENIED",
+      "p18": "INCONCLUSIVE"
+    },
+    {
+      "case": "SIMILAR_LOOKING_FAMILY_OR_PRECONDITION_MISMATCH",
+      "patternReuse": "DENIED",
+      "reason": "FAMILY_MISMATCH or PRECONDITION_FALSE"
+    },
+    {
+      "case": "AMBIGUOUS_APPLICABILITY",
+      "patternReuse": "DENIED",
+      "reason": "AMBIGUOUS_APPLICABILITY"
+    },
+    {
+      "case": "INCOMPATIBLE_VERSION_DRIFT",
+      "patternReuse": "DENIED",
+      "reason": "VERSION_INCOMPATIBLE"
+    },
+    {
+      "case": "MISSING_OR_UNVERIFIED_VERSION",
+      "patternReuse": "DENIED",
+      "reason": "VERSION_UNKNOWN"
+    },
+    {
+      "case": "ABSENT_COUNTEREVIDENCE",
+      "promotion": "DENIED",
+      "patternReuse": "DENIED",
+      "p18": "INCONCLUSIVE",
+      "reason": "ABSENT_COUNTEREVIDENCE"
+    },
+    {
+      "case": "PROSE_ATTEMPTS_TO_REPAIR_TYPED_INPUT",
+      "evidenceAdmission": "DENIED",
+      "patternReuse": "DENIED",
+      "reason": "PROSE_ONLY_INPUT"
+    },
+    {
+      "case": "LIVE_OR_EFFECTFUL_REPLAY_REQUEST",
+      "replay": "DENIED",
+      "reason": "LIVE_REPLAY_FORBIDDEN"
+    }
+  ],
+  "shadowOnlySemantics": {
+    "allowedModes": [
+      "SIMULATION",
+      "SHADOW"
+    ],
+    "inputRule": "Replay reads only immutable, admitted, digest-bound evidence and pinned local fixtures.",
+    "ablationRule": "KNOWLEDGE_ONLY suppresses SolutionPattern retrieval without deleting or rewriting history; KNOWLEDGE_PLUS_EXPERIENCE exposes only applicability-approved candidates.",
+    "outputRule": "Outputs are comparison records and candidate maturity decisions only.",
+    "effectRule": "No replay may invoke an external effect, modify product state, grant authority, update a live memory, promote a candidate into live use, collect live telemetry, or contact a model or service.",
+    "evidenceBoundaryRule": "A replay result applies only to the exact evidence, family, dependency, and version digests it names.",
+    "forbiddenModeRule": "Any mode other than SIMULATION or SHADOW is DENIED with LIVE_REPLAY_FORBIDDEN."
+  },
+  "requiredEvidence": {
+    "predecessor288": {
+      "required": true,
+      "digestField": "sha256 root digest over the canonical #288 evidence manifest",
+      "mustBind": [
+        "corpus manifest",
+        "TaskFamily registry",
+        "KnowledgeBundle",
+        "training and holdout split",
+        "planted stable and trap labels",
+        "dependency and exact-version fixtures",
+        "required checks",
+        "paired replay inputs",
+        "cost-event ledger",
+        "evidence and provenance graph"
+      ],
+      "observedDigest": null,
+      "observedAtBaseline": "MISSING",
+      "admission": "DENIED",
+      "reason": "MISSING_288_DIGEST"
+    },
+    "minimumProofSet": [
+      "admitted predecessor288 root digest",
+      "canonical TaskFingerprint for every episode and holdout variant",
+      "unambiguous TaskFamily membership evidence",
+      "identical admitted KnowledgeBundle in both arms",
+      "complete candidate SolutionPattern records",
+      "valid diversity proof",
+      "complete counterevidence assessment",
+      "exact dependency and version evidence",
+      "sealed paired holdout runs",
+      "typed required-check outcomes and charged cost events",
+      "P17 and P18 metric record"
+    ],
+    "noEvidenceNoSuccessRule": "No PASS, promotion, stable label, applicability approval, or reuse claim is valid when any required evidence is missing, malformed, unsealed, ambiguous, incompatible, prose-only, or not transitively bound by the admitted root digest."
+  },
+  "alternatives": [
+    {
+      "id": "ALT-01",
+      "alternative": "Similarity-first or embedding-first experience retrieval",
+      "decision": "REJECTED",
+      "reason": "It can expose an inapplicable procedure before family, precondition, dependency, counterexample, and version checks."
+    },
+    {
+      "id": "ALT-02",
+      "alternative": "Promote by frequency threshold alone",
+      "decision": "REJECTED",
+      "reason": "Duplicates and correlated or narrow-context repetitions do not prove diversity, applicability, or holdout benefit."
+    },
+    {
+      "id": "ALT-03",
+      "alternative": "Infer missing typed facts from prose or reviewer rationale",
+      "decision": "REJECTED",
+      "reason": "It is non-deterministic and violates fail-closed evidence admission."
+    },
+    {
+      "id": "ALT-04",
+      "alternative": "Treat semver proximity or unlisted versions as compatible",
+      "decision": "REJECTED",
+      "reason": "Compatibility is evidence-bound to exact admitted values; drift remains denied until separately proved."
+    },
+    {
+      "id": "ALT-05",
+      "alternative": "Online ablation, live replay, automatic application, or telemetry-backed promotion",
+      "decision": "REJECTED",
+      "reason": "This slice is simulation and shadow-only and grants no effect or release authority."
+    },
+    {
+      "id": "ALT-06",
+      "alternative": "Claim P17 or P18 from the vocabulary or unbound examples",
+      "decision": "REJECTED",
+      "reason": "Only admitted #288-bound holdout evidence can support those claims."
+    }
+  ],
+  "explicitNonclaims": [
+    "This receipt does not claim that P17 passes.",
+    "This receipt does not claim that P18 passes.",
+    "This receipt does not claim any historical-experience quality, cost, efficiency, causal, or generalization improvement.",
+    "This receipt does not claim that any SolutionPattern is S4, S5, S6, stable, production-ready, or live-applicable.",
+    "This receipt does not synthesize, guess, or repair the missing #288 digest or any transitive evidence.",
+    "This receipt does not authorize product code, model or service calls, live effects, telemetry, publication, merge, or release.",
+    "Shadow evidence does not establish production safety, production compatibility, or authority outside its exact digest boundary."
+  ],
+  "integration": {
+    "targetPath": "docs/evidence/conveyor/sol-psai289-fingerprint-retrieval-decision-01.json",
+    "filesChanged": 1,
+    "productCodeChanged": false,
+    "externalStateChanged": false,
+    "modelsOrServicesCalled": false,
+    "telemetryCollected": false,
+    "publicationOrReleasePerformed": false,
+    "empiricalProofIntegrated": false,
+    "requiredVerification": {
+      "command": "git diff --check origin/main...HEAD",
+      "expectedExitCode": 0,
+      "result": "PASS"
+    }
+  }
+}
