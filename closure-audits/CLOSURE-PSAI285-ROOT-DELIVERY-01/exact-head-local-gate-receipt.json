@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI285-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JimPansky/PANSPHAIRA",
+    "number": 285,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/285"
+  },
+  "baseCommit": "f08d20ff3078e384183909d9d46378f3e32acc59",
+  "testedHead": "b59113ad49017f26adb2ebded52572c76a229d14",
+  "testedTree": "c06ab2ae61e2655033a08c27b211435441bf87ae",
+  "disposition": "TERMINAL_FALSIFICATION_NO_SUBSTITUTION",
+  "realPilot": {
+    "runtime": "llama.cpp b10661 / 32176338a",
+    "smallModelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+    "largeModelSha256": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177",
+    "scheduled": 5,
+    "completed": 5,
+    "failed": 0,
+    "taskSuccesses": 0,
+    "validFinalChannels": 1,
+    "closedBookAbstentions": 1,
+    "unsupportedClosedBookGoldAnswers": 0,
+    "receiptSha256": "d54178845e2e8702ebeb95a53d51f3c1c16a3e147da7c1687ef8dd56477854de"
+  },
+  "claimGate": {
+    "qualityThresholdsPass": false,
+    "efficiencyThresholdsPass": false,
+    "modelSubstitutionClaim": false,
+    "architecturePromotion": false
+  },
+  "gates": [
+    {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
+    {"command": "npm run cks05:test", "outcome": "PASS", "tests": 65, "passed": 65},
+    {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1287},
+    {"command": "npm run release-governance:verify", "outcome": "PASS"},
+    {"command": "npm run lint", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "delivery": {"readyForPr": true, "releaseRequired": true, "publicReadbackRequired": true, "issueCloseRequired": true}
+}
