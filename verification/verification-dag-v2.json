@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 21,
+  "graphVersion": 22,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "dd82a015f9bb72926607677fbb3d3f6e755382f8378aa2e103286d846caac9f9"
+          "sha256": "9acf60dc24390c37dda05988dc0ad7226ab18aaf0e9efcd69503d00b8a41f0d4"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8385547ceead90379400e4669ded5f872f9e1ac54b95896eb43d9ba24fb330ef"
+          "sha256": "6c96afae2432dd8a9260e02a6b3bf49c0d04e1bab7ce3dff900f434ed78086f4"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -314,7 +314,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "f94f853dee98569ed188197f56d0ae7d0cd970768aaa4229719a48da7e679c96"
+          "sha256": "df7652f08edf0efdd878df0798b407d05382f88d1b88a35a1f63c2a56b117fab"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "db06718d38b75597534a8f0da9f15830b4afce2ff47d9a36893d21eff50d98dc"
+          "sha256": "7791d9a285df063039e4a8065ad78ed42c3257d1cae658818000f9f63a031cc2"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "1528095f22133cbc3c6a3954cc4bc554f4f0008699b3765c4027b4b4292ad510"
+          "sha256": "0eb39b632be93962e8810e8a3b33416d9ad1584ad8aae93b484462cdf1b6d9c5"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "fb1cfee6650c26c1addb774535c62b9585b2546b995bff5d37a9001d39a777a7"
+          "sha256": "5e5f75111be579d706542b1239a4d5e125e2a8ee7c21fe441e0a37e272f8c8dc"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "645827a24cc6da457c0e0e42f7a15079c349e835af18a6c999e61aa472f0c6cb"
+          "sha256": "eaf0bf6bc75ff0aa1cbb6576cf2cbaf8870518980478dc4457ca2247e7a5f238"
         }
       ],
       "ownedTests": [
@@ -2540,6 +2540,40 @@
         "The minimal Knowledge Fabric reuses the published typed CKS contracts and immutable local edition lifecycle.",
         "Retrieval is deterministic, offline, model-disabled, citation-bound and authority-free; missing Knowledge and contradictions remain explicit.",
         "No graph or vector infrastructure is claimed without measured evidence."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-03-fresh-synthetic-qualification-v1",
+      "dependsOn": [
+        "cks-01-foundational-contracts-v1",
+        "cks-02-local-knowledge-fabric-closure-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/cks-synthetic-qualification.ts",
+          "role": "CONTRACT",
+          "sha256": "71c5d7fe13bb0587e5d38719ff80b3ab774ccdb99e10314bea7c53849fdbf868"
+        },
+        {
+          "path": "tests/cks-synthetic-qualification.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "4409a8b019508c7c5ffc01f159b87ae6af7eee8b25dd6043c5e688f031736330"
+        },
+        {
+          "path": "verification/cks-03-public-manifests-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "1e25b300491c6eeabe7f4a88c3358b59651dbd0e474ff1e8ce4a11fa18c52da3"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks03:test"
+      ],
+      "invariants": [
+        "Development, visible validation, hidden qualification and fresh ephemeral certification use distinct non-exported raw seeds.",
+        "Every generated task binds deterministic expected evidence, epistemic state, answer and reason code across all required synthetic families.",
+        "Closed-book success is reported only as potential leakage; no suite grants authority or qualification by declaration."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false
