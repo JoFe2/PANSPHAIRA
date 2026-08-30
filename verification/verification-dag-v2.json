@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 20,
+  "graphVersion": 21,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "c5d63468d7e0ef0be5a770f63214be2d90fdbdfdd368c3d4c31e356740ccdc47"
+          "sha256": "dd82a015f9bb72926607677fbb3d3f6e755382f8378aa2e103286d846caac9f9"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "596aa263b77ad4e06718668e903279f72ce0dcf4cfe076357f7331be6f820d57"
+          "sha256": "8385547ceead90379400e4669ded5f872f9e1ac54b95896eb43d9ba24fb330ef"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "c96c84f566684b5b259e1524660bcd3cfb654a8ab27c5467896c0f10ced4b4b2"
+          "sha256": "db06718d38b75597534a8f0da9f15830b4afce2ff47d9a36893d21eff50d98dc"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "794c98bcd8b67f0f9e1f80c793de1b4d987a8693596cb906789ae7c3a2987b9b"
+          "sha256": "1528095f22133cbc3c6a3954cc4bc554f4f0008699b3765c4027b4b4292ad510"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "dcbafcafacc2d47183adeecbcf92b14c6a8fabbf30048d8620baef2643e8db04"
+          "sha256": "fb1cfee6650c26c1addb774535c62b9585b2546b995bff5d37a9001d39a777a7"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "354f3ad5b2f2722cc0f2787fa6bdf11f160ead8afd49da2c24b8bcdd4a5929fe"
+          "sha256": "645827a24cc6da457c0e0e42f7a15079c349e835af18a6c999e61aa472f0c6cb"
         }
       ],
       "ownedTests": [
@@ -2511,6 +2511,35 @@
         "Official or synthetic source bytes remain immutable, offline by default, attribution-bound and separate from accepted authority.",
         "Every query result preserves exact passage, project, page/revision identity, snapshot/licence and edition/content digests while contradictions remain visible beyond result limits.",
         "Updates switch only after verification; failures restore the exact LKG and leave zero activation residue."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-02-local-knowledge-fabric-closure-v1",
+      "dependsOn": [
+        "cks-01-foundational-contracts-v1",
+        "lkc-wiki-01-governed-local-edition-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/evidence/conveyor/psai282-local-knowledge-fabric-closure-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "92a5bcbe506cff20f9245b775dac809f99bc1e6f7cbb125ba05c135ca09c0148"
+        },
+        {
+          "path": "tests/cks-02-local-knowledge-fabric-closure.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "da425205ce320e34061b9cb7ea089bbe400a4bf9885f109be08c7d3f2270f516"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks02:test"
+      ],
+      "invariants": [
+        "The minimal Knowledge Fabric reuses the published typed CKS contracts and immutable local edition lifecycle.",
+        "Retrieval is deterministic, offline, model-disabled, citation-bound and authority-free; missing Knowledge and contradictions remain explicit.",
+        "No graph or vector infrastructure is claimed without measured evidence."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

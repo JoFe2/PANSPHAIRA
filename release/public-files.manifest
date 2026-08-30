@@ -572,6 +572,7 @@ tests/ccp-semantic-dedup.test.ts	tests/ccp-semantic-dedup.test.ts	0644
 tests/ccp-slo-observability.test.ts	tests/ccp-slo-observability.test.ts	0644
 tests/ccp-test-cache.test.ts	tests/ccp-test-cache.test.ts	0644
 tests/ccp-tuple-lock.test.ts	tests/ccp-tuple-lock.test.ts	0644
+tests/cks-02-local-knowledge-fabric-closure.test.mjs	tests/cks-02-local-knowledge-fabric-closure.test.mjs	0644
 tests/cks-evidence.test.ts	tests/cks-evidence.test.ts	0644
 tests/cks-integration.test.ts	tests/cks-integration.test.ts	0644
 tests/cks-knowledge.test.ts	tests/cks-knowledge.test.ts	0644
