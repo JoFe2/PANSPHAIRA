@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "pansphaira.cks/parent-criterion-traceability/v1",
+  "parentIssue": 280,
+  "terminalDecision": "CORE_SYNTHETIC_PROOF_CLOSED_REAL_SOURCE_PROOF_SEPARATELY_GATED",
+  "children": [
+    {"issue":281,"pr":297,"mergeSha":"232895603e00b353e9584266e0da00e4329a3574","release":"2026_08_29_v4","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":282,"pr":301,"mergeSha":"83dd285cf4ba29c9ece7ad272870af2222f1a883","release":"2026_08_30_v4","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":283,"pr":302,"mergeSha":"6d6d823ac70c28772d5a4b1c2922f5a0ad6a44da","release":"2026_08_30_v5","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":284,"pr":303,"mergeSha":"f08d20ff3078e384183909d9d46378f3e32acc59","release":"2026_08_30_v6","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":285,"pr":304,"mergeSha":"a7845839e0aaffd6b2f9a6f5867f5af1d6a51c4f","release":"2026_08_30_v7","outcome":"FALSIFIED_EARLY_STOP","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":286,"pr":294,"mergeSha":"787393667a8b0b194a517cfad88119868e1f73b0","release":"2026_08_29_v1","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":287,"pr":305,"mergeSha":"27060c6a9c1fa51424b350046420cb041db3969c","release":"2026_08_30_v8","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":288,"pr":306,"mergeSha":"f19facc96129c9d19ff0de63a08c00d35ce8b8af","release":"2026_08_30_v9","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":289,"pr":307,"mergeSha":"c57d2cf2e06fd930a163241e28cd0f9d9952fec5","release":"2026_08_30_v10","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":290,"pr":308,"mergeSha":"5afea09dd5186592278b952626b2cdf5c3c0df85","release":"2026_08_30_v11","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":291,"pr":309,"mergeSha":"46a65171c2bfb8e252e6455080eacc818afa1061","release":"2026_08_30_v12","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"},
+    {"issue":292,"pr":310,"mergeSha":"e836f36cf90099fea9f74b0a17a2f2a9bedee635","release":"2026_08_30_v13","outcome":"PROVED","issueState":"CLOSED","prCi":"PASS","mainCi":"PASS","anonymousReadback":"PASS"}
+  ],
+  "nonClaims": [
+    "NO_GENERAL_SMALL_MODEL_REPLACEMENT",
+    "NO_PRODUCTION_MODEL_ACTIVATION",
+    "NO_FINE_TUNING_CLAIM",
+    "NO_AUTONOMOUS_KNOWLEDGE_PROMOTION",
+    "NO_CAPABILITY_OR_AUTHORITY_FROM_KNOWLEDGE",
+    "NO_REAL_SOURCE_UTILITY_CLAIM_FROM_SYNTHETIC_PROOF"
+  ],
+  "realSourceFollowOn": {
+    "issue": 311,
+    "admissionState": "BLOCKED_UNTIL_PARENT_RELEASE_READBACK",
+    "requiredTerminalVerdict": "GO_OR_NARROW_GO_OR_FALSIFIED_WITH_EVIDENCE"
+  }
+}
