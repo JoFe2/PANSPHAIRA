@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI283-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JimPansky/PANSPHAIRA",
+    "number": 283,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/283"
+  },
+  "baseCommit": "83dd285cf4ba29c9ece7ad272870af2222f1a883",
+  "testedHead": "90eb8038ea6df8489eca3b3e685826a3ff9ab402",
+  "testedTree": "dc5d172d7f6ff9213ae28cc2a40bcac1be39d5c3",
+  "acceptance": {
+    "seedLanes": ["DEVELOPMENT", "VISIBLE_VALIDATION", "HIDDEN_QUALIFICATION", "FRESH_EPHEMERAL_CERTIFICATION"],
+    "requiredFamilies": 8,
+    "expectedEvidenceAnswerStateReasonBound": true,
+    "missingAndConflictAbstention": true,
+    "closedBookSuccessClassification": "POTENTIAL_LEAKAGE_ONLY",
+    "deterministicReplay": true,
+    "rawHiddenOrFreshSeedsCommitted": false,
+    "effectfulAuthority": "NONE"
+  },
+  "gates": [
+    {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
+    {"command": "npm run cks03:test", "outcome": "PASS", "tests": 5, "passed": 5},
+    {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1219},
+    {"command": "npm run release-governance:verify", "outcome": "PASS"},
+    {"command": "npm run lint", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"},
+    {"command": "seed-reuse sabotage", "outcome": "EXPECTED_FAIL_THEN_RESTORED_GREEN"}
+  ],
+  "delivery": {"readyForPr": true, "releaseRequired": true, "publicReadbackRequired": true, "issueCloseRequired": true}
+}
