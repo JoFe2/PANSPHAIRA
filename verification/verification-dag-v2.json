@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 18,
+  "graphVersion": 19,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "25d8a803421bb87fca6052fc7b86a83e980ed93f9ca23eb13822890526339c86"
+          "sha256": "74489ef9e16ba5bdfcb4b936fe52fa95001e496ff94c004f70741b347af9ef34"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8c5a8f291871195c9ec3f7c24e1c6484152ad900d78bbdd69c17c666a8ec3ff1"
+          "sha256": "61b01cdcf17e87756631cb58a9f0cf6e1decf4c4819d07995e5f326087e0467b"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "99b72a301080d7ae5dcf61bb8aebfaafd100706fe35f631a777911fa1db80f85"
+          "sha256": "ddd183b9b6e4b9992656d6ed4e0adc0a28b534e576cd3b95536c71c7eab828c9"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "86c49462beaba7afe30594bec7f785aa0b983e1cf9ee75686675f8fc440bbb38"
+          "sha256": "23333bf36a956584bc1fd1706d4f5c3eeaaf2cd94f68988fc35f57d07bb68a37"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "ef59f539fa3bcaa58e5f8e858c9af3dd130974071cf40971e82ea519e80a706a"
+          "sha256": "8e8bdceef1079925cde5db8534fb17ca060d2e91f282ce673c590d30286ba24a"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "254b6bdb3aeafe90cd5d56b83d5f894e4070961ea8857476ce05ba9d499271db"
+          "sha256": "994c17b7b05ca866a9f4d4308ebc0b81568a3eaae87c51e36f418a06afd5ddfb"
         }
       ],
       "ownedTests": [
@@ -1869,6 +1869,409 @@
         "Knowledge Object, Query, Applicability, Evidence Pack and Coverage reject drifted or unresolved identities.",
         "The published CKS-06 exact qualification and escalation contracts are reused rather than duplicated.",
         "Knowledge and evidence never grant capability, authority, routing or runtime activation."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "azpp-m1-repository-synthetic-v1",
+      "dependsOn": [
+        "vf-contract-v1"
+      ],
+      "inputs": [
+        {
+          "path": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json",
+          "role": "SCHEMA",
+          "sha256": "20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8"
+        },
+        {
+          "path": "contracts/azure-power-platform/compatibility-migration.schema.json",
+          "role": "SCHEMA",
+          "sha256": "1b16e39a1941368fa6b9ad8595c2c0b4b8684ab8f1f3fd3e9c6cc83a32d02809"
+        },
+        {
+          "path": "contracts/azure-power-platform/proposal-approval-execution.schema.json",
+          "role": "SCHEMA",
+          "sha256": "9974ad7d376bacc9ca973bb80e3dd050823b492492a8418727461a3d5b73e3cb"
+        },
+        {
+          "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
+          "role": "SCHEMA",
+          "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287"
+        },
+        {
+          "path": "contracts/azure-power-platform/readonly-connector.schema.json",
+          "role": "SCHEMA",
+          "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+        },
+        {
+          "path": "contracts/azure-power-platform/readonly-denial-matrix.schema.json",
+          "role": "SCHEMA",
+          "sha256": "a81676c8777f5244889bd26b7900ce7d120c8d93284dd2d12cf0073d51dfc642"
+        },
+        {
+          "path": "docs/development/azure-power-platform/alm-package-plan.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e0a3a865efea88a8760707905fd37123b6a5656d9d9f950d2f664907ca4834cb"
+        },
+        {
+          "path": "docs/development/azure-power-platform/azpp-m1-public-evidence.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "21c5dac45e9eabed03d66f61d769cb167f8fa64cbe5d9891b3590be88fac15fa"
+        },
+        {
+          "path": "docs/development/azure-power-platform/azpp-m1-tuple-ledger.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ecc734ebd41750cb9cabdfa64b3120114e69b9754797839b076522d71425c7ef"
+        },
+        {
+          "path": "docs/development/azure-power-platform/enterprise-profile-evidence.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9002e37e9a9ce8a0d2ba91df0f8d1faeb37124fb1d071f75a4355a132171b36c"
+        },
+        {
+          "path": "docs/development/azure-power-platform/identity-security-profile.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9c6052d781d14dced4e52137a9468ffedb4a050d33b4d24c4bdea305bfab6a3f"
+        },
+        {
+          "path": "docs/development/azure-power-platform/limited-production-pilot-decision-packet.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "985f02cb7e2399e81b77fe9a30245df38242997de81f1448b2f877650bc8c3d4"
+        },
+        {
+          "path": "docs/development/azure-power-platform/observability-dr-evidence.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "fb194d24c475d3a85a20e25a598965021289f6a673bcd7af24331d09962edff9"
+        },
+        {
+          "path": "docs/development/azure-power-platform/reset-uninstall-plan.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "47c764598a305367e677f5608a78dd36b501ce203f27b5699508977015cabf33"
+        },
+        {
+          "path": "docs/development/azure-power-platform/sandbox-preflight-packet.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "caa14fe2190ff191977941da666bd17d5d190333498443ab89d99d2f4bbcac17"
+        },
+        {
+          "path": "power-platform/readonly-canvas-workbench/connector-binding.json",
+          "role": "CONTRACT",
+          "sha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3"
+        },
+        {
+          "path": "power-platform/readonly-canvas-workbench/manifest.json",
+          "role": "CONTRACT",
+          "sha256": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9"
+        },
+        {
+          "path": "tests/azure-power-platform/alm-package-plan.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "21d2ae0645a6b88ec79f0f84faf8ffdfb5a41d686ed4147229f64c439f3bdc8e"
+        },
+        {
+          "path": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "3542b9c5b578d37b4562f8f5f5cb4808aef666e721f5f0358a99e81e1a80dd58"
+        },
+        {
+          "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "30b68a35cb950058a2e13a2c1f1637059ed4902f0b113b1ebde06062ca29edc9"
+        },
+        {
+          "path": "tests/azure-power-platform/canvas-package.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "8562b1a1165742b6daaca0ba594a50df509f386cbe61265b8d13f5884738cfbb"
+        },
+        {
+          "path": "tests/azure-power-platform/compatibility-migration.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "82cea45e216b1ef8f4554be2983b3fc5050b054e7364b30035fde484e6ae590e"
+        },
+        {
+          "path": "tests/azure-power-platform/enterprise-profile-evidence.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "cb90103fdeb8a3570cb88844d552c2c5bd9995634a9fd7f916fe170955372b2f"
+        },
+        {
+          "path": "tests/azure-power-platform/identity-security-profile.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "93dac88dae954792bae058345a5e5a86fdb707bdbfe301edb95394b797b7b9ef"
+        },
+        {
+          "path": "tests/azure-power-platform/limited-production-pilot-decision-packet.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c987c1a7b57f5df012a58282cde96d2974b36f9be8d9be6c63efdbf73dfff186"
+        },
+        {
+          "path": "tests/azure-power-platform/observability-dr-evidence.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "ba15bdb074fca4579a6134aa29e7a62436761ec3a263930ff6fa494525e2d814"
+        },
+        {
+          "path": "tests/azure-power-platform/proposal-approval-execution.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "cec6301cd422218845f0a42c1445051c1dced8df43c51ed1dacf9f1bdb91810b"
+        },
+        {
+          "path": "tests/azure-power-platform/public-readback.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1ef0aa02cdec70225458c14adc8ad46d463a3ae3cec9e78045ea5e04899971ab"
+        },
+        {
+          "path": "tests/azure-power-platform/readonly-denial-matrix.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "e8eb5a2d9f59d13fbe4ed477e63023f866da43e59f3dabc7985855f9efe6f0e0"
+        },
+        {
+          "path": "tests/azure-power-platform/readonly-openapi.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "cefdeb16e01ccc724d888d7a22e610238fb7545e259f85c42f5c05c6c9a9100a"
+        },
+        {
+          "path": "tests/azure-power-platform/reset-uninstall.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "4cf0ae163ea5fb3f9788301e6a570396fc5ec64cf9ba80f9706383e5d20c823c"
+        },
+        {
+          "path": "tests/azure-power-platform/sandbox-preflight.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "77ffc7661115c8212ba9bd25fcf42d87a6181eaf6625ef44924918ede17dd038"
+        },
+        {
+          "path": "tests/azure-power-platform/synthetic-governance-harness.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0b09f487920ba4eafe084de4509b4ec54af233bddede146456901e20adf40257"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/alm-package-plan-unsafe.json",
+          "role": "FIXTURE",
+          "sha256": "c2c9af5e382d050da89f7ff3e27ec854f48c98e50790e3b056f739275a51c16c"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/alm-package-plan-valid.json",
+          "role": "FIXTURE",
+          "sha256": "ee50fe7ce399104591c84bb8f09f08c03ae5fa4158fd43b4a4478d4ef90fd21b"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/canvas-package-valid.json",
+          "role": "FIXTURE",
+          "sha256": "24184caaea29c42743a9fb9abf5e16298054c7e18f3d07345c1ddb35d9aacab0"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/canvas-package-write-intent.json",
+          "role": "FIXTURE",
+          "sha256": "8b8c570c31636a08c2211544055ce222e5c031f7ab29696d7aad323142fe0262"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/compatibility-revoked.json",
+          "role": "FIXTURE",
+          "sha256": "cbeccdaaf62a0110d2f713295563d9050554156d480f91272389fe6c8cd0c573"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/compatibility-valid.json",
+          "role": "FIXTURE",
+          "sha256": "a5e2e63e47990072e9c97de208c2aefcba61636c2d56bc0331d979ac0b8a67cf"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/denials.json",
+          "role": "FIXTURE",
+          "sha256": "a1b490032df25822cd0900a29605615a39e5326bdcbf43a1ea2de7ca65652c1a"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/e2e-proposal-denied.json",
+          "role": "FIXTURE",
+          "sha256": "1cbc7741754fa56a1ebfcce1454d77788ce892f21f4be55ee656608bfc7f646e"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/e2e-readonly-success.json",
+          "role": "FIXTURE",
+          "sha256": "72dc976334f29e5f03b68466df3000c720a9e50dcde4a9c5916280e9c066f99e"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/e2e-reset.json",
+          "role": "FIXTURE",
+          "sha256": "759d36316cbaef610450250c1a3d10364a36733fd03d6d5fde23bf482410a1da"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/enterprise-profile-incomplete.json",
+          "role": "FIXTURE",
+          "sha256": "c8a988f64e816e66ded04caabc103f0f87cba2489dcaab1f2013ee21c5639200"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/enterprise-profile-valid.json",
+          "role": "FIXTURE",
+          "sha256": "34b56fa3229c7002cc511201e06bb21e3747d36c6f728f7cb528185ab7b57f8f"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/identity-profile-escalating.json",
+          "role": "FIXTURE",
+          "sha256": "7e2dc5cb938a0f3f686f98e0b55eac5238fa696d7740e7cfcf352f1f882850a0"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/identity-profile-valid.json",
+          "role": "FIXTURE",
+          "sha256": "bf2c52fead0d31e317cba29c742bcb1e23473bf2058a6c3945f962a3c467b328"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/nonzero-residue.json",
+          "role": "FIXTURE",
+          "sha256": "2313a6a42b4e57699183cd7638c7d03a5e944222a174d796bc9ec1b9af310b4e"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/observability-dr-unsafe.json",
+          "role": "FIXTURE",
+          "sha256": "f0200d9205d94baabdbf8837f3de62fe17b500e29253f716dde0eba41414da54"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/observability-dr-valid.json",
+          "role": "FIXTURE",
+          "sha256": "91d67aa35cd1eba6354e2bf148f01470f947263d8831ba9cf7d0c38b4e3352c3"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/pilot-decision-ready.json",
+          "role": "FIXTURE",
+          "sha256": "df58c578f0d93ccf0305a39486a1373cdfb3a0c008d1bfcdb6365d6f283db1ad"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/pilot-decision-unsafe.json",
+          "role": "FIXTURE",
+          "sha256": "e27d458c190f46fdff9116ca3f70d446b5a74fc6cf26b3ff06cc74d59520596d"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/proposal-approved.json",
+          "role": "FIXTURE",
+          "sha256": "75a382cf8cef7353a854f903483c23d8c36ba9ef5c5cec13fa893d355b9361e5"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/proposal-replay.json",
+          "role": "FIXTURE",
+          "sha256": "5b15f21571ca511d95a6817533f8f0b916d17f437dba4c9f53c67473f79d4077"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/proposal-self-approved.json",
+          "role": "FIXTURE",
+          "sha256": "295ff0d9a18e6fddc2a622dda7fb155b1a6f7c5074234957986764267e8b18fc"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/public-readback-safe.json",
+          "role": "FIXTURE",
+          "sha256": "9bc687652f741861ca5d5f70c7eb2308b756c11901509fb85baf15eb2b1b9b70"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/public-readback-unsafe.json",
+          "role": "FIXTURE",
+          "sha256": "18d90d52f3ffd78f1d92ee710540f13b42d3673f3054473926db431f52a010a1"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/readback-accepted.json",
+          "role": "FIXTURE",
+          "sha256": "09f8799b2726d35e2c507bded10adad0fe91767996ddbd3ec9833a22c435cece"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/readback-tampered.json",
+          "role": "FIXTURE",
+          "sha256": "f23c675501d56481f76b3948f5b2cb5a61ca911a78a37aefbe5012abbc4b3186"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/readonly-openapi-generic-escape.json",
+          "role": "FIXTURE",
+          "sha256": "a2ba778032ecadbe18dba2c00a6b0a91608a38bb515e315f52ac4813703a900e"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/readonly-openapi-valid.json",
+          "role": "FIXTURE",
+          "sha256": "d2072dbe786b83d2450f9c90519c4cebf696d72064f27a68dd63cd3f420a8b67"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json",
+          "role": "FIXTURE",
+          "sha256": "1eed9cbbdfc74c2d0a799692c874ac1a89262612f4a1be62f03f6d4a4b1c46eb"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/sandbox-preflight-denied.json",
+          "role": "FIXTURE",
+          "sha256": "26c64d39fd2f9b0aba725f618a9bbcfcd2b761efb0d7dd6989d26720f64e922b"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/tuple-digest-drift.json",
+          "role": "FIXTURE",
+          "sha256": "372a1e9a1e457640cd6f248490773a7f6964ce976e00a57a310cbc0e15648d1b"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/tuple-valid.json",
+          "role": "FIXTURE",
+          "sha256": "cec24d8647ef1a9ce0f7ce5e3767524442300c2b7fa549328b3843624f800f19"
+        },
+        {
+          "path": "tests/fixtures/azure-power-platform/zero-residue.json",
+          "role": "FIXTURE",
+          "sha256": "d98700ac4c12df278aec79c06863f5c28d111ac4cf6a2f2eb3f8045360ad9ab5"
+        },
+        {
+          "path": "tools/azure-power-platform/render-public-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "be18daa6310edb12d5c67179bf51ed8a028dfb8f07a701cc4b079997b31c2690"
+        },
+        {
+          "path": "tools/azure-power-platform/run-synthetic-governance-harness.mjs",
+          "role": "VALIDATOR",
+          "sha256": "3ef2a624a64ed0392f308233cb88af21f974cf63a425f044eb6f396c2189bd5c"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-alm-package-plan.mjs",
+          "role": "VALIDATOR",
+          "sha256": "78ef7b3691a6ec36882782b09eb20f89fb9da0904ccb07f2b446eba3d031e5c8"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-canvas-package.mjs",
+          "role": "VALIDATOR",
+          "sha256": "3dce9e255f52d7712861701a3f027314044c7dae3329f10499e156ea9e37c965"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-compatibility-migration.mjs",
+          "role": "VALIDATOR",
+          "sha256": "f3c397d916fa52769b70edebc0309340c238036ca243e9ec0bf615e09f0a9bb5"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-enterprise-profile-evidence.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c2c6432ab6180de861537328a7b86f9ef29c550303d20ea55b0df5151f571c91"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-identity-security-profile.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5fa892ba774a43aa3f9eba3cf9f0b44c287a6bc79b0f52a225e548672def0ba5"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-limited-production-pilot-decision-packet.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1da70604fc2f28629ecade407e6a72f386f80e3ecb503284e3e23d45e2a16c87"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-observability-dr-evidence.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0478665ef882b9b1836a4188c4677d065b26662b587a22333e46f00bc05295fd"
+        },
+        {
+          "path": "tools/azure-power-platform/validate-sandbox-preflight.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9072ea08743e1f2b0b68278fe3ee81210d6337d5f85d6c9aeb0693fff5ff3383"
+        },
+        {
+          "path": "tools/azure-power-platform/verify-zero-residue.mjs",
+          "role": "VALIDATOR",
+          "sha256": "46917542d249126496dfb29cac709dbbe9e14313b8899f69631eee5058ba7606"
+        }
+      ],
+      "ownedTests": [
+        "npm run azpp:test"
+      ],
+      "invariants": [
+        "The repository-only connector and Canvas package remain inactive, read-only, synthetic and authority-free.",
+        "Proposal, approval, execution, rollback and publication stay separately authorized and every accepted synthetic operation requires authoritative readback plus a bound receipt.",
+        "No tenant, cloud, identity, consent, credential, production or public certification claim is inferred from repository evidence."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false

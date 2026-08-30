@@ -3,14 +3,14 @@
   "packetKind": "PUBLIC_SAFE_PLANNING_EVIDENCE",
   "packetStatus": "CANDIDATE_ONLY",
   "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
-  "tenantId": "tenant-synthetic-001",
-  "subscriptionId": "subscription-synthetic-001",
-  "environmentId": "environment-synthetic-001",
-  "ownerEmail": "operator@example.invalid",
-  "credential": "synthetic-credential-material",
-  "privatePath": "/home/operator/private/readback.json",
-  "internalHost": "internal.power-platform.example",
-  "secretReference": "secret://synthetic/public-readback",
+  "tenantId": "REDACTED_TEST_ID",
+  "subscriptionId": "REDACTED_TEST_ID",
+  "environmentId": "REDACTED_TEST_ID",
+  "ownerEmail": "redacted@example.invalid",
+  "credential": "REDACTED_TEST_MARKER",
+  "privatePath": "REDACTED_TEST_MARKER",
+  "internalHost": "redacted.example.invalid",
+  "secretReference": "REDACTED_TEST_MARKER",
   "productionClaim": "PRODUCTION_VALIDATED",
-  "securityPayload": { "authorization": "Bearer synthetic-token" }
+  "securityPayload": { "authorization": "REDACTED_TEST_MARKER" }
 }
