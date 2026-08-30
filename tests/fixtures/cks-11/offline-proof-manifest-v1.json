@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "pansphaira.cks-11/offline-proof-manifest/v1",
+  "taskId": "RECOVERY-PSAI291-BLOCKED-FRONTIER-01",
+  "evidenceScope": "LOCAL_SYNTHETIC_DRY_RUN_ONLY",
+  "inputs": [
+    "tests/fixtures/cks-11/p19-p20-holdouts-v1.json",
+    "verification/cks-11-p20-parity-receipt-v1.json",
+    "verification/cks-11-receipt-rollback-readback-v1.json"
+  ],
+  "prohibitedOutcomes": ["PROMOTION", "ACTIVATION", "MERGE", "RELEASE", "PUBLIC_MAIN_ASSERTION"],
+  "requiredTerminalChecks": ["p19-p20-holdout-coverage", "p20-typed-parity", "receipt-rollback-readback", "delivery-readback"],
+  "promotionState": "DENIED"
+}

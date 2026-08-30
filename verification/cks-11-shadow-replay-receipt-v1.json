@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "chimpmaera.verification/local-synthetic-report/v1",
+  "evidenceId": "evidence:psai291-qwen-04-shadow-workflow-replay-v1",
+  "taskId": "PSAI291-QWEN-04-SHADOW-WORKFLOW-REPLAY",
+  "issue": "JoFe2/PANSPHAIRA#291",
+  "evidenceClass": "LOCAL_SYNTHETIC",
+  "commitBinding": "CONTAINING_LOCAL_COMMIT",
+  "futureCommitClaimed": false,
+  "processContext": {
+    "operatingModel": "v1.1",
+    "preservedDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "newProcessVariant": false
+  },
+  "claims": [
+    "DETERMINISTIC_SHADOW_ONLY_COMPARISON_OF_SUPPLIED_PROJECTIONS",
+    "GOVERNED_OUTPUT_VERIFICATION_ROLLBACK_DEPENDENCY_AND_METRIC_PARITY_REQUIRED",
+    "P19_APPLICABLE_HOLDOUT_HAS_EQUAL_OR_BETTER_QUALITY_AT_LOWER_REASONING_COST",
+    "CAPABILITY_AND_AUTHORITY_ENVELOPES_CANNOT_WIDEN",
+    "MISSING_AMBIGUOUS_STALE_DRIFT_AND_BOUNDARY_INPUTS_FAIL_CLOSED",
+    "WORKFLOW_FUNCTION_DEPENDENCIES_AND_HISTORICAL_RECEIPTS_ARE_EXACT"
+  ],
+  "positiveEvidence": [
+    "two applicable holdouts preserve governed output, verification outcome, rollback plan, exact dependency closure and historical receipt bytes",
+    "governed quality is 0.90 equal to baseline and reasoning cost is 80 versus baseline 100",
+    "deterministic receipt and decision digests are asserted",
+    "four focused shadow replay tests pass under jitless Node",
+    "replay accepts supplied projections only and exposes no workflow, Function, provider, fallback or rollback executor"
+  ],
+  "negativeEvidenceStates": [
+    "missing_inputs_fail_closed",
+    "ambiguous_match_fails_closed",
+    "unknown_workflow_fails_closed",
+    "knowledge_version_drift_fails_closed",
+    "boundary_unavailable_fails_closed",
+    "capability_or_authority_widening_fails_closed",
+    "output_verification_rollback_dependency_and_metric_mismatch_aborts",
+    "forged_dependency_digest_and_historical_receipt_are_rejected"
+  ],
+  "sanitization": {
+    "rawSecrets": false,
+    "personalData": false,
+    "privatePaths": false,
+    "privateInfrastructure": false,
+    "exploitDetails": false
+  },
+  "artifacts": {
+    "src/cks/shadow-workflow-replay-v1.ts": {
+      "sha256": "a2f07ba85435070d1cfc06c4c8dd133aa09069010b430630676ff5044ecb3ffb"
+    },
+    "tests/cks-11/shadow-workflow-replay.test.ts": {
+      "sha256": "e616f0947db21090f34cb01b6b5fb4f4f08b7612de59d5b79e07152755328a98"
+    },
+    "tests/fixtures/cks-11/shadow-replay-cases-v1.json": {
+      "sha256": "dc5d7511e5e656551ab0a306ab491177d65bcd18b1471575069b68151411bf0a"
+    }
+  },
+  "verification": {
+    "requiredFocusedCommand": "npm test -- --runInBand tests/cks-11/shadow-workflow-replay.test.ts",
+    "requiredFocusedOutcome": "INFRASTRUCTURE_BLOCKED_NODE_SIGTRAP_EXIT_133_DURING_PRETEST",
+    "alternateFocusedCommand": "NODE_OPTIONS=--jitless node --test dist/tests/cks-11/shadow-workflow-replay.test.js",
+    "alternateFocusedOutcome": "PASS_4_TESTS",
+    "buildCommand": "NODE_OPTIONS=--jitless npm run build",
+    "buildOutcome": "PASS",
+    "lintCommand": "NODE_OPTIONS=--jitless npm run lint",
+    "lintOutcome": "PASS",
+    "diffCheckCommand": "git diff --check main...HEAD",
+    "diffCheckOutcome": "PASS"
+  },
+  "nonClaims": [
+    "LIVE_WORKFLOW_EXECUTION",
+    "LIVE_FUNCTION_OR_PROVIDER_EXECUTION",
+    "FALLBACK_OR_ROLLBACK_EXECUTION",
+    "PRODUCTION_PROMOTION",
+    "DEPLOYMENT",
+    "ACTIVATION",
+    "MERGE",
+    "RELEASE",
+    "REMOTE_PUSH"
+  ],
+  "releaseDisposition": "RELEASE_REQUIRED_PENDING_DELIVERY",
+  "releasePerformed": false,
+  "rollback": "Use a protected revert of the containing local commit; retain immutable historical receipt bytes and do not retarget prior dependencies."
+}

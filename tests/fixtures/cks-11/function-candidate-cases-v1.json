@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "pansphaira.cks-11/function-extraction/v1",
+  "positive": {
+    "name": "stable-substep-with-p20-parity",
+    "expected": "ELIGIBLE",
+    "requirements": [
+      "W5/W6 source workflow",
+      "stable substep evidence",
+      "closed typed input and output contracts",
+      "PURE deterministic logic",
+      "finite exhaustive typed errors",
+      "exact dependency and historical receipt links",
+      "Verification and exact source-step rollback",
+      "P20 parity with zero mismatches",
+      "no Capability or Authority widening"
+    ]
+  },
+  "negative": [
+    { "name": "missing-stability-evidence", "reason": "STABLE_SUBSTEP_REQUIRED" },
+    { "name": "unknown-input-contract-field", "reason": "TYPED_INPUT_CONTRACT_INVALID" },
+    { "name": "logic-uses-clock", "reason": "LOGIC_CONTRACT_INVALID" },
+    { "name": "dependency-closure-drift", "reason": "DEPENDENCY_LINK_MISMATCH" },
+    { "name": "missing-p20-parity-evidence", "reason": "PARITY_EVIDENCE_INCOMPLETE" },
+    { "name": "capability-widening", "reason": "CAPABILITY_WIDENING" },
+    { "name": "authority-widening", "reason": "AUTHORITY_WIDENING" },
+    { "name": "missing-rollback-readback", "reason": "ROLLBACK_BOUNDARY_INVALID" },
+    { "name": "tampered-historical-receipt", "reason": "HISTORICAL_RECEIPT_MISMATCH" }
+  ]
+}

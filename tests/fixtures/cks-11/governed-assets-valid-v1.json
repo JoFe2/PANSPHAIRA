@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+  "maturityAxes": {
+    "workflowCandidate": "W0..W6",
+    "governedWorkflow": "W0..W6",
+    "functionCandidate": "F0..F6"
+  },
+  "records": [
+    "WorkflowCandidate",
+    "GovernedWorkflow",
+    "FunctionCandidate"
+  ],
+  "boundaryAssertions": {
+    "knowledge": "exact edition, content digest, applicability digest, evidence digest, and supersession lineage",
+    "verification": "verification plan, evidence, holdout, counterexample, readback, and parity receipts",
+    "rollback": "rollback contract and last-known-good reference",
+    "capability": "capability ceiling is immutable and fast paths are a subset",
+    "authority": "authority requirement is explicit and fast paths cannot widen it",
+    "dependencies": "knowledge, workflow, function, and transitive dependency digests are exact"
+  }
+}

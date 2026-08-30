@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "pansphaira.cks-11/knowledge-revalidation-fixture/v1",
+  "asOfMs": 100,
+  "binding": {
+    "knowledgeId": "knowledge/orders",
+    "version": "2026.08.28",
+    "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "freshness": {
+      "validFromMs": 0,
+      "validUntilMs": 1000
+    },
+    "scope": "tenant:synthetic/orders"
+  },
+  "currentRecord": {
+    "knowledgeId": "knowledge/orders",
+    "version": "2026.08.28",
+    "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "freshness": {
+      "validFromMs": 0,
+      "validUntilMs": 1000
+    },
+    "scope": "tenant:synthetic/orders",
+    "state": "CURRENT",
+    "supersededBy": null
+  },
+  "workflowInputs": [
+    {
+      "knowledgeId": "knowledge/orders",
+      "version": "2026.08.28",
+      "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "freshness": {
+        "validFromMs": 0,
+        "validUntilMs": 1000
+      },
+      "scope": "tenant:synthetic/orders"
+    }
+  ],
+  "functionInputs": [
+    {
+      "knowledgeId": "knowledge/orders",
+      "version": "2026.08.28",
+      "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "freshness": {
+        "validFromMs": 0,
+        "validUntilMs": 1000
+      },
+      "scope": "tenant:synthetic/orders"
+    }
+  ],
+  "historicalReceipts": []
+}

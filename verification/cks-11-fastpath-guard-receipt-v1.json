@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "chimpmaera.verification/local-synthetic-report/v1",
+  "evidenceId": "evidence:psai291-qwen-03-applicability-fastpath-guard-v1",
+  "taskId": "PSAI291-QWEN-03-APPLICABILITY-FASTPATH-GUARD",
+  "issue": "JoFe2/PANSPHAIRA#291",
+  "evidenceClass": "LOCAL_SYNTHETIC",
+  "commitBinding": "CONTAINING_LOCAL_COMMIT",
+  "futureCommitClaimed": false,
+  "processContext": {
+    "operatingModel": "v1.1",
+    "preservedDecisions": ["D-001", "D-002", "D-003", "D-004", "D-005", "D-006", "D-007"],
+    "newProcessVariant": false
+  },
+  "claims": [
+    "FAIL_CLOSED_UNIQUE_COMPATIBLE_GOVERNED_WORKFLOW_MATCH",
+    "COMPLETE_TYPED_INPUTS_REQUIRED_BEFORE_SHADOW_REPLAY",
+    "CURRENT_KNOWLEDGE_REQUIRED_AT_USE_TIME",
+    "CAPABILITY_AND_AUTHORITY_ENVELOPES_MUST_REMAIN_UNCHANGED",
+    "CAPABILITY_AND_AUTHORITY_WIDENING_ABORTS",
+    "SHADOW_REPLAY_GATE_IS_DECISION_ONLY_WITH_NO_EXECUTION_OR_ACTIVATION_AUTHORITY"
+  ],
+  "positiveEvidence": [
+    "one exact compatible match allowed",
+    "deterministic decision digest",
+    "six focused tests pass under jitless Node"
+  ],
+  "negativeEvidenceStates": [
+    "no_match_not_applicable",
+    "multi_match_ambiguous_aborted",
+    "missing_input_aborted",
+    "extra_or_wrong_typed_input_aborted",
+    "malformed_input_aborted",
+    "stale_knowledge_revalidation_required",
+    "missing_knowledge_revalidation_required",
+    "knowledge_version_drift_revalidation_required",
+    "capability_envelope_drift_aborted",
+    "capability_widening_aborted",
+    "authority_envelope_drift_aborted",
+    "active_stop_state_aborted",
+    "evidence_incomplete_revalidation_required",
+    "boundary_unavailable_revalidation_required"
+  ],
+  "sanitization": {
+    "rawSecrets": false,
+    "personalData": false,
+    "privatePaths": false,
+    "privateInfrastructure": false,
+    "exploitDetails": false
+  },
+  "artifacts": {
+    "src/cks/workflow-applicability-v1.ts": {
+      "sha256": "3958cd987226f5840b586a393b2c0a9c32bacec878c0f225862d84f48779fce4"
+    },
+    "tests/cks-11/workflow-applicability.test.ts": {
+      "sha256": "8e3fb4869415e43a256e0b506409f0de745230bd86dc4ffa9458b72ee8b6a8b6"
+    },
+    "tests/fixtures/cks-11/applicability-boundary-cases-v1.json": {
+      "sha256": "db7bb62175c91f531b736e286aafa714e6851948c4b755fb442f89798e4c0ddf"
+    }
+  },
+  "verification": {
+    "requiredFocusedCommand": "npm test -- --runInBand tests/cks-11/workflow-applicability.test.ts",
+    "requiredFocusedOutcome": "INFRASTRUCTURE_BLOCKED_NODE_SIGTRAP_EXIT_133_DURING_PRETEST",
+    "alternateFocusedCommand": "NODE_OPTIONS=--jitless node --test dist/tests/cks-11/workflow-applicability.test.js",
+    "alternateFocusedOutcome": "PASS_6_TESTS",
+    "buildCommand": "NODE_OPTIONS=--jitless npm run build",
+    "buildOutcome": "PASS",
+    "lintCommand": "NODE_OPTIONS=--jitless npm run lint",
+    "lintOutcome": "PASS",
+    "diffCheckCommand": "git diff --check main...HEAD",
+    "diffCheckOutcome": "PASS"
+  },
+  "nonClaims": [
+    "P19_EXECUTION_OR_SHADOW_PARITY_PROOF",
+    "EQUAL_OR_BETTER_QUALITY_PROOF",
+    "LOWER_REASONING_COST_PROOF",
+    "WORKFLOW_REPLAY_EXECUTION",
+    "PROMOTION",
+    "DEPLOYMENT",
+    "ACTIVATION",
+    "PRODUCTION_READINESS",
+    "MERGE",
+    "RELEASE",
+    "REMOTE_PUSH"
+  ],
+  "rollback": "Use a protected revert of the containing local commit; retain immutable historical receipt bytes and do not retarget prior dependencies."
+}

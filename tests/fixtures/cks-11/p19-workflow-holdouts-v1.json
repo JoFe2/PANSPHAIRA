@@ -1,0 +1,780 @@
+{
+  "schemaVersion": "pansphaira.cks-11/shadow-workflow-replay/v1",
+  "verifierVersion": "cks-11-shadow-replay-verifier/v1",
+  "requiredAbortReasons": [
+    "INVALID_INPUT",
+    "VERSION_DRIFT",
+    "BOUNDARY_UNAVAILABLE",
+    "AUTHORITY_WIDENING"
+  ],
+  "holdouts": [
+    {
+      "holdoutId": "p19-applicable-order-1",
+      "applicabilityInput": {
+        "schemaVersion": "pansphaira.cks-11/workflow-applicability/v1",
+        "useTimeMs": 100,
+        "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applicabilityContract": {
+          "schemaVersion": "pansphaira.cks-11/applicability-contract/v1",
+          "contractVersion": "1.0.0",
+          "contextDimensions": [
+            "tenant",
+            "provider",
+            "configuration"
+          ],
+          "includedScopes": [
+            "tenant:synthetic/orders"
+          ],
+          "excludedScopes": [
+            "tenant:synthetic/admin"
+          ],
+          "preconditions": [
+            "order is present",
+            "provider is reachable"
+          ],
+          "supportedConfigurations": [
+            "fixture-v1"
+          ],
+          "validFromMs": 0,
+          "validUntilMs": 1000,
+          "knownCounterexampleDigests": [
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ],
+          "contractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+        },
+        "inputSchema": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "providedInputs": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "value": "order-1"
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "value": true
+          }
+        ],
+        "workflowMatches": [
+          {
+            "workflowRef": {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "applicabilityContractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+          }
+        ],
+        "knowledgeInput": {
+          "asOfMs": 100,
+          "workflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "functionInputs": [],
+          "knowledgeRecords": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders",
+              "state": "CURRENT",
+              "supersededBy": null
+            }
+          ],
+          "historicalReceipts": []
+        },
+        "evidenceStatus": "COMPLETE",
+        "boundaryStatus": "AVAILABLE",
+        "capabilityEnvelope": {
+          "baselineCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "baselineEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "requestedCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ]
+        },
+        "authorityEnvelope": {
+          "baselineRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "currentRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "baselineGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "currentGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "stopState": "NONE"
+        }
+      },
+      "expected": "APPLICABLE",
+      "expectedReasonCodes": [
+        "NONE"
+      ],
+      "baseline": {
+        "output": {
+          "status": "ok",
+          "orderId": "order-1"
+        },
+        "verificationOutcome": {
+          "status": "VERIFIED",
+          "decisionDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "evidenceDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "rollbackPlan": {
+          "trigger": "verification-failure",
+          "scope": "order-1",
+          "lastKnownGoodRef": {
+            "kind": "LAST_KNOWN_GOOD",
+            "id": "orders-lkg",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "9999999999999999999999999999999999999999999999999999999999999999"
+          },
+          "restoreAction": "restore-source-step",
+          "reconciliationRule": "authoritative-readback",
+          "readbackRequired": true,
+          "verifierDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+          "planDigest": "f8dc24f156a5c3d196d39f9ab267b70bb1c2c6b60e244008edcf95cb7d750690"
+        },
+        "dependencies": {
+          "knowledgeWorkflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "knowledgeFunctionInputs": [],
+          "workflowDependencies": [
+            {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          ],
+          "functionDependencies": [],
+          "historicalReceipts": [],
+          "knowledgeDependencySetDigest": "474d443e4e823885142ca043711789f540e794ea820c5b4a0888d7bcbf39ef4a",
+          "workflowDependencySetDigest": "541740a923d8cdfde5b4d2403adeda161bbca417d2b1e2e591f04d9abd56807a",
+          "functionDependencySetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "historicalReceiptSetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "transitiveClosureDigest": "1b7555b4bc8b8d42dd17cd4b629470a992a90205a1da02eb45d8629aacb98726"
+        },
+        "qualityMetric": {
+          "metricId": "holdout-quality",
+          "metricVersion": "1.0.0",
+          "direction": "HIGHER_IS_BETTER",
+          "value": 0.9
+        },
+        "reasoningCostMetric": {
+          "metricId": "generative-reasoning-tokens",
+          "metricVersion": "1.0.0",
+          "direction": "LOWER_IS_BETTER",
+          "value": 100
+        }
+      },
+      "governed": {
+        "output": {
+          "status": "ok",
+          "orderId": "order-1"
+        },
+        "verificationOutcome": {
+          "status": "VERIFIED",
+          "decisionDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "evidenceDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "rollbackPlan": {
+          "trigger": "verification-failure",
+          "scope": "order-1",
+          "lastKnownGoodRef": {
+            "kind": "LAST_KNOWN_GOOD",
+            "id": "orders-lkg",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "9999999999999999999999999999999999999999999999999999999999999999"
+          },
+          "restoreAction": "restore-source-step",
+          "reconciliationRule": "authoritative-readback",
+          "readbackRequired": true,
+          "verifierDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+          "planDigest": "f8dc24f156a5c3d196d39f9ab267b70bb1c2c6b60e244008edcf95cb7d750690"
+        },
+        "dependencies": {
+          "knowledgeWorkflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "knowledgeFunctionInputs": [],
+          "workflowDependencies": [
+            {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          ],
+          "functionDependencies": [],
+          "historicalReceipts": [],
+          "knowledgeDependencySetDigest": "474d443e4e823885142ca043711789f540e794ea820c5b4a0888d7bcbf39ef4a",
+          "workflowDependencySetDigest": "541740a923d8cdfde5b4d2403adeda161bbca417d2b1e2e591f04d9abd56807a",
+          "functionDependencySetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "historicalReceiptSetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "transitiveClosureDigest": "1b7555b4bc8b8d42dd17cd4b629470a992a90205a1da02eb45d8629aacb98726"
+        },
+        "qualityMetric": {
+          "metricId": "holdout-quality",
+          "metricVersion": "1.0.0",
+          "direction": "HIGHER_IS_BETTER",
+          "value": 0.9
+        },
+        "reasoningCostMetric": {
+          "metricId": "generative-reasoning-tokens",
+          "metricVersion": "1.0.0",
+          "direction": "LOWER_IS_BETTER",
+          "value": 80
+        }
+      }
+    },
+    {
+      "holdoutId": "p19-applicable-order-2",
+      "applicabilityInput": {
+        "schemaVersion": "pansphaira.cks-11/workflow-applicability/v1",
+        "useTimeMs": 100,
+        "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applicabilityContract": {
+          "schemaVersion": "pansphaira.cks-11/applicability-contract/v1",
+          "contractVersion": "1.0.0",
+          "contextDimensions": [
+            "tenant",
+            "provider",
+            "configuration"
+          ],
+          "includedScopes": [
+            "tenant:synthetic/orders"
+          ],
+          "excludedScopes": [
+            "tenant:synthetic/admin"
+          ],
+          "preconditions": [
+            "order is present",
+            "provider is reachable"
+          ],
+          "supportedConfigurations": [
+            "fixture-v1"
+          ],
+          "validFromMs": 0,
+          "validUntilMs": 1000,
+          "knownCounterexampleDigests": [
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ],
+          "contractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+        },
+        "inputSchema": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "providedInputs": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "value": "order-2"
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "value": true
+          }
+        ],
+        "workflowMatches": [
+          {
+            "workflowRef": {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "applicabilityContractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+          }
+        ],
+        "knowledgeInput": {
+          "asOfMs": 100,
+          "workflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "functionInputs": [],
+          "knowledgeRecords": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders",
+              "state": "CURRENT",
+              "supersededBy": null
+            }
+          ],
+          "historicalReceipts": []
+        },
+        "evidenceStatus": "COMPLETE",
+        "boundaryStatus": "AVAILABLE",
+        "capabilityEnvelope": {
+          "baselineCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "baselineEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "requestedCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ]
+        },
+        "authorityEnvelope": {
+          "baselineRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "currentRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "baselineGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "currentGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "stopState": "NONE"
+        }
+      },
+      "expected": "APPLICABLE",
+      "expectedReasonCodes": [
+        "NONE"
+      ],
+      "baseline": {
+        "output": {
+          "status": "ok",
+          "orderId": "order-2"
+        },
+        "verificationOutcome": {
+          "status": "VERIFIED",
+          "decisionDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "evidenceDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "rollbackPlan": {
+          "trigger": "verification-failure",
+          "scope": "order-2",
+          "lastKnownGoodRef": {
+            "kind": "LAST_KNOWN_GOOD",
+            "id": "orders-lkg",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "9999999999999999999999999999999999999999999999999999999999999999"
+          },
+          "restoreAction": "restore-source-step",
+          "reconciliationRule": "authoritative-readback",
+          "readbackRequired": true,
+          "verifierDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+          "planDigest": "fb118d48a755b0d8ecb8f9ecef987d53093742f46cb1b33797f6c74d4cf1d1db"
+        },
+        "dependencies": {
+          "knowledgeWorkflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "knowledgeFunctionInputs": [],
+          "workflowDependencies": [
+            {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          ],
+          "functionDependencies": [],
+          "historicalReceipts": [],
+          "knowledgeDependencySetDigest": "474d443e4e823885142ca043711789f540e794ea820c5b4a0888d7bcbf39ef4a",
+          "workflowDependencySetDigest": "541740a923d8cdfde5b4d2403adeda161bbca417d2b1e2e591f04d9abd56807a",
+          "functionDependencySetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "historicalReceiptSetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "transitiveClosureDigest": "1b7555b4bc8b8d42dd17cd4b629470a992a90205a1da02eb45d8629aacb98726"
+        },
+        "qualityMetric": {
+          "metricId": "holdout-quality",
+          "metricVersion": "1.0.0",
+          "direction": "HIGHER_IS_BETTER",
+          "value": 0.82
+        },
+        "reasoningCostMetric": {
+          "metricId": "generative-reasoning-tokens",
+          "metricVersion": "1.0.0",
+          "direction": "LOWER_IS_BETTER",
+          "value": 150
+        }
+      },
+      "governed": {
+        "output": {
+          "status": "ok",
+          "orderId": "order-2"
+        },
+        "verificationOutcome": {
+          "status": "VERIFIED",
+          "decisionDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "evidenceDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "rollbackPlan": {
+          "trigger": "verification-failure",
+          "scope": "order-2",
+          "lastKnownGoodRef": {
+            "kind": "LAST_KNOWN_GOOD",
+            "id": "orders-lkg",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "9999999999999999999999999999999999999999999999999999999999999999"
+          },
+          "restoreAction": "restore-source-step",
+          "reconciliationRule": "authoritative-readback",
+          "readbackRequired": true,
+          "verifierDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+          "planDigest": "fb118d48a755b0d8ecb8f9ecef987d53093742f46cb1b33797f6c74d4cf1d1db"
+        },
+        "dependencies": {
+          "knowledgeWorkflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "knowledgeFunctionInputs": [],
+          "workflowDependencies": [
+            {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          ],
+          "functionDependencies": [],
+          "historicalReceipts": [],
+          "knowledgeDependencySetDigest": "474d443e4e823885142ca043711789f540e794ea820c5b4a0888d7bcbf39ef4a",
+          "workflowDependencySetDigest": "541740a923d8cdfde5b4d2403adeda161bbca417d2b1e2e591f04d9abd56807a",
+          "functionDependencySetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "historicalReceiptSetDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "transitiveClosureDigest": "1b7555b4bc8b8d42dd17cd4b629470a992a90205a1da02eb45d8629aacb98726"
+        },
+        "qualityMetric": {
+          "metricId": "holdout-quality",
+          "metricVersion": "1.0.0",
+          "direction": "HIGHER_IS_BETTER",
+          "value": 0.85
+        },
+        "reasoningCostMetric": {
+          "metricId": "generative-reasoning-tokens",
+          "metricVersion": "1.0.0",
+          "direction": "LOWER_IS_BETTER",
+          "value": 110
+        }
+      }
+    }
+  ]
+}

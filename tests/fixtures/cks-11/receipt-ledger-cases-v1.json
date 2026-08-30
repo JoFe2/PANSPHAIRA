@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "pansphaira.cks-11/receipt-ledger-fixture/v1",
+  "workflowSubject": {
+    "subjectKind": "WORKFLOW",
+    "subjectRef": {
+      "kind": "GOVERNED_WORKFLOW",
+      "id": "workflow/orders",
+      "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+      "version": "1.0.0",
+      "digestAlgorithm": "SHA-256",
+      "digest": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+    },
+    "workflowDependencies": [
+      {
+        "kind": "WORKFLOW_CANDIDATE",
+        "id": "workflow/orders-step-1",
+        "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+        "version": "1.0.0",
+        "digestAlgorithm": "SHA-256",
+        "digest": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3"
+      },
+      {
+        "kind": "GOVERNED_WORKFLOW",
+        "id": "workflow/orders-base",
+        "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+        "version": "2.1.0",
+        "digestAlgorithm": "SHA-256",
+        "digest": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4"
+      }
+    ],
+    "functionDependencies": []
+  },
+  "functionSubject": {
+    "subjectKind": "FUNCTION",
+    "subjectRef": {
+      "kind": "FUNCTION_CANDIDATE",
+      "id": "function/orders-score",
+      "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+      "version": "1.0.0",
+      "digestAlgorithm": "SHA-256",
+      "digest": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2"
+    },
+    "workflowDependencies": [],
+    "functionDependencies": [
+      {
+        "kind": "FUNCTION_CANDIDATE",
+        "id": "function/orders-score-input",
+        "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+        "version": "1.0.0",
+        "digestAlgorithm": "SHA-256",
+        "digest": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5"
+      }
+    ]
+  },
+  "receiptTemplate": {
+    "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+    "receiptKind": "VERIFICATION",
+    "receiptId": "receipt:placeholder",
+    "subjectRef": {
+      "kind": "GOVERNED_WORKFLOW",
+      "id": "workflow/orders",
+      "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+      "version": "1.0.0",
+      "digestAlgorithm": "SHA-256",
+      "digest": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+    },
+    "priorMaturity": null,
+    "resultingMaturity": null,
+    "priorAssuranceStatus": null,
+    "resultingAssuranceStatus": null,
+    "decisionStatus": "APPROVED",
+    "reasonCodes": ["NONE"],
+    "requestDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "contextDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "applicabilityResultDigest": null,
+    "knowledgeDependencySetDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "workflowDependencySetDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+    "functionDependencySetDigest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "transitiveClosureDigest": "6666666666666666666666666666666666666666666666666666666666666666",
+    "capabilityCeilingDigest": "7777777777777777777777777777777777777777777777777777777777777777",
+    "capabilityUsedSetDigest": null,
+    "authorityRequirementDigest": "8888888888888888888888888888888888888888888888888888888888888888",
+    "effectiveAuthorityEnvelopeDigest": null,
+    "verificationPlanRef": null,
+    "evidenceRefs": [],
+    "verifierRef": null,
+    "rollbackContractRef": null,
+    "lastKnownGoodRef": null,
+    "approvalRef": null,
+    "activationApprovalRef": null,
+    "environmentRefs": [],
+    "previousReceiptDigest": null,
+    "recordedTimeMs": 10,
+    "decisionDigest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "receiptDigest": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

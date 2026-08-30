@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "pansphaira.cks-11/p19-p20-rejections/v1",
+  "evidenceScope": "LOCAL_SYNTHETIC_NEGATIVE_ONLY",
+  "rejections": ["UNKNOWN_INPUT", "VERSION_DRIFT", "BOUNDARY_UNAVAILABLE", "AUTHORITY_WIDENING", "RESULT_MISMATCH", "UNBOUND_ROLLBACK", "DRY_RUN_PROMOTION"],
+  "promotionState": "DENIED"
+}

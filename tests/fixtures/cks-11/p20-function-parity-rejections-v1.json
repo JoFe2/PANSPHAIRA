@@ -1,0 +1,490 @@
+{
+  "schemaVersion": "pansphaira.cks-11/deterministic-function-parity/v1",
+  "verifierVersion": "cks-11-deterministic-function-parity-verifier/v1",
+  "stableSubstep": "step:normalize-order",
+  "holdouts": [
+    {
+      "holdoutId": "p20-reject-missing-evidence",
+      "caseClass": "MISSING",
+      "input": {
+        "schemaVersion": "pansphaira.cks-11/deterministic-function-parity/v1",
+        "verifierVersion": "cks-11-deterministic-function-parity-verifier/v1",
+        "functionRef": {
+          "kind": "FUNCTION_CANDIDATE",
+          "id": "function:stable-order-normalizer",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "9ab6ffbb8f53540d252c7328d074d3bc0fcfb21cd31ede917fcf984bd0696db0"
+        },
+        "sourceStepRef": {
+          "kind": "WORKFLOW_CANDIDATE",
+          "id": "step:normalize-order",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "185a46dd58fd347ace56e196d10ff01ff46a4640b92302281c8875248faae827"
+        },
+        "typedInput": {
+          "orderId": "fixture-order-1",
+          "retryCount": 0
+        },
+        "originalResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "candidateResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "evidenceRefs": [],
+        "rollback": {
+          "originalStepFallbackRef": {
+            "kind": "FALLBACK_PATH",
+            "id": "fallback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "85b49f4bd080b4e424c6dd255a6f86fcab41b4afc3fec59d29f877deef06ef93"
+          },
+          "readbackRef": {
+            "kind": "READBACK",
+            "id": "readback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "a4053f5fb299c33a5d21d2c861b55e543a26dbbbc5666be71ad27a82f2a1fa58"
+          },
+          "rollbackReceiptRef": {
+            "kind": "RECEIPT",
+            "id": "receipt:normalize-order-rollback",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "3dcb3f94a909fe01ea39b4ee9f298a24cd84b8b68121b18e35effc0bc0a36468"
+          }
+        }
+      },
+      "expected": "PARITY_REJECTED",
+      "expectedReasonCodes": [
+        "INVALID_INPUT"
+      ],
+      "expectedDecisionDigest": "9261846dbb23ba507a373ef19b6811d868e0368b8c2a70efa730dfb2242f3f06"
+    },
+    {
+      "holdoutId": "p20-reject-ambiguous-shape",
+      "caseClass": "AMBIGUOUS",
+      "input": {
+        "schemaVersion": "pansphaira.cks-11/deterministic-function-parity/v1",
+        "verifierVersion": "cks-11-deterministic-function-parity-verifier/v1",
+        "functionRef": {
+          "kind": "FUNCTION_CANDIDATE",
+          "id": "function:stable-order-normalizer",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "9ab6ffbb8f53540d252c7328d074d3bc0fcfb21cd31ede917fcf984bd0696db0"
+        },
+        "sourceStepRef": {
+          "kind": "WORKFLOW_CANDIDATE",
+          "id": "step:normalize-order",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "185a46dd58fd347ace56e196d10ff01ff46a4640b92302281c8875248faae827"
+        },
+        "typedInput": {
+          "orderId": "fixture-order-1",
+          "retryCount": 0
+        },
+        "originalResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "candidateResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "evidenceRefs": [
+          {
+            "kind": "EVIDENCE",
+            "id": "evidence:p20-order-1-output",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "f4edb64f0327b59cb5ecdfebcf07f4f8faf8779ea6b761e7ad5a6182131c220b"
+          }
+        ],
+        "rollback": {
+          "originalStepFallbackRef": {
+            "kind": "FALLBACK_PATH",
+            "id": "fallback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "85b49f4bd080b4e424c6dd255a6f86fcab41b4afc3fec59d29f877deef06ef93"
+          },
+          "readbackRef": {
+            "kind": "READBACK",
+            "id": "readback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "a4053f5fb299c33a5d21d2c861b55e543a26dbbbc5666be71ad27a82f2a1fa58"
+          },
+          "rollbackReceiptRef": {
+            "kind": "RECEIPT",
+            "id": "receipt:normalize-order-rollback",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "3dcb3f94a909fe01ea39b4ee9f298a24cd84b8b68121b18e35effc0bc0a36468"
+          }
+        },
+        "synthetic": true
+      },
+      "expected": "PARITY_REJECTED",
+      "expectedReasonCodes": [
+        "INVALID_INPUT"
+      ],
+      "expectedDecisionDigest": "9261846dbb23ba507a373ef19b6811d868e0368b8c2a70efa730dfb2242f3f06"
+    },
+    {
+      "holdoutId": "p20-reject-stale-baseline",
+      "caseClass": "STALE",
+      "input": {
+        "schemaVersion": "pansphaira.cks-11/deterministic-function-parity/v1",
+        "verifierVersion": "cks-11-deterministic-function-parity-verifier/v1",
+        "functionRef": {
+          "kind": "FUNCTION_CANDIDATE",
+          "id": "function:stable-order-normalizer",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "9ab6ffbb8f53540d252c7328d074d3bc0fcfb21cd31ede917fcf984bd0696db0"
+        },
+        "sourceStepRef": {
+          "kind": "WORKFLOW_CANDIDATE",
+          "id": "step:normalize-order",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "185a46dd58fd347ace56e196d10ff01ff46a4640b92302281c8875248faae827"
+        },
+        "typedInput": {
+          "orderId": "fixture-order-1",
+          "retryCount": 0
+        },
+        "originalResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": false,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "candidateResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "evidenceRefs": [
+          {
+            "kind": "EVIDENCE",
+            "id": "evidence:p20-order-1-output",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "f4edb64f0327b59cb5ecdfebcf07f4f8faf8779ea6b761e7ad5a6182131c220b"
+          }
+        ],
+        "rollback": {
+          "originalStepFallbackRef": {
+            "kind": "FALLBACK_PATH",
+            "id": "fallback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "85b49f4bd080b4e424c6dd255a6f86fcab41b4afc3fec59d29f877deef06ef93"
+          },
+          "readbackRef": {
+            "kind": "READBACK",
+            "id": "readback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "a4053f5fb299c33a5d21d2c861b55e543a26dbbbc5666be71ad27a82f2a1fa58"
+          },
+          "rollbackReceiptRef": {
+            "kind": "RECEIPT",
+            "id": "receipt:normalize-order-rollback",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "3dcb3f94a909fe01ea39b4ee9f298a24cd84b8b68121b18e35effc0bc0a36468"
+          }
+        }
+      },
+      "expected": "PARITY_REJECTED",
+      "expectedReasonCodes": [
+        "RESULT_MISMATCH"
+      ],
+      "expectedDecisionDigest": "e8a063a63decc8cdfadf29842165fedc937e193b5e63effb8f7d39d15286498b"
+    },
+    {
+      "holdoutId": "p20-reject-candidate-drift",
+      "caseClass": "DRIFTED",
+      "input": {
+        "schemaVersion": "pansphaira.cks-11/deterministic-function-parity/v1",
+        "verifierVersion": "cks-11-deterministic-function-parity-verifier/v1",
+        "functionRef": {
+          "kind": "FUNCTION_CANDIDATE",
+          "id": "function:stable-order-normalizer",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "9ab6ffbb8f53540d252c7328d074d3bc0fcfb21cd31ede917fcf984bd0696db0"
+        },
+        "sourceStepRef": {
+          "kind": "WORKFLOW_CANDIDATE",
+          "id": "step:normalize-order",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "185a46dd58fd347ace56e196d10ff01ff46a4640b92302281c8875248faae827"
+        },
+        "typedInput": {
+          "orderId": "fixture-order-1",
+          "retryCount": 0
+        },
+        "originalResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "candidateResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": false,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "evidenceRefs": [
+          {
+            "kind": "EVIDENCE",
+            "id": "evidence:p20-order-1-output",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "f4edb64f0327b59cb5ecdfebcf07f4f8faf8779ea6b761e7ad5a6182131c220b"
+          }
+        ],
+        "rollback": {
+          "originalStepFallbackRef": {
+            "kind": "FALLBACK_PATH",
+            "id": "fallback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "85b49f4bd080b4e424c6dd255a6f86fcab41b4afc3fec59d29f877deef06ef93"
+          },
+          "readbackRef": {
+            "kind": "READBACK",
+            "id": "readback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "a4053f5fb299c33a5d21d2c861b55e543a26dbbbc5666be71ad27a82f2a1fa58"
+          },
+          "rollbackReceiptRef": {
+            "kind": "RECEIPT",
+            "id": "receipt:normalize-order-rollback",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "3dcb3f94a909fe01ea39b4ee9f298a24cd84b8b68121b18e35effc0bc0a36468"
+          }
+        }
+      },
+      "expected": "PARITY_REJECTED",
+      "expectedReasonCodes": [
+        "RESULT_MISMATCH"
+      ],
+      "expectedDecisionDigest": "b1d93a212f83c49f5db056566b2144dd522d89127393febe98215d0e2275f05d"
+    },
+    {
+      "holdoutId": "p20-reject-noncanonical-ref",
+      "caseClass": "NONCANONICAL",
+      "input": {
+        "schemaVersion": "pansphaira.cks-11/deterministic-function-parity/v1",
+        "verifierVersion": "cks-11-deterministic-function-parity-verifier/v1",
+        "functionRef": {
+          "kind": "FUNCTION_CANDIDATE",
+          "id": "function:stable-order-normalizer",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "9ab6ffbb8f53540d252c7328d074d3bc0fcfb21cd31ede917fcf984bd0696db0"
+        },
+        "sourceStepRef": {
+          "kind": "WORKFLOW_CANDIDATE",
+          "id": "step:normalize-order",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "185a46dd58fd347ace56e196d10ff01ff46a4640b92302281c8875248faae827"
+        },
+        "typedInput": {
+          "orderId": "fixture-order-1",
+          "retryCount": 0
+        },
+        "originalResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "candidateResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "evidenceRefs": [
+          {
+            "kind": "EVIDENCE",
+            "id": "evidence:p20-order-1-output",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+          }
+        ],
+        "rollback": {
+          "originalStepFallbackRef": {
+            "kind": "FALLBACK_PATH",
+            "id": "fallback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "85b49f4bd080b4e424c6dd255a6f86fcab41b4afc3fec59d29f877deef06ef93"
+          },
+          "readbackRef": {
+            "kind": "READBACK",
+            "id": "readback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "a4053f5fb299c33a5d21d2c861b55e543a26dbbbc5666be71ad27a82f2a1fa58"
+          },
+          "rollbackReceiptRef": {
+            "kind": "RECEIPT",
+            "id": "receipt:normalize-order-rollback",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "3dcb3f94a909fe01ea39b4ee9f298a24cd84b8b68121b18e35effc0bc0a36468"
+          }
+        }
+      },
+      "expected": "PARITY_REJECTED",
+      "expectedReasonCodes": [
+        "INVALID_INPUT"
+      ],
+      "expectedDecisionDigest": "9261846dbb23ba507a373ef19b6811d868e0368b8c2a70efa730dfb2242f3f06"
+    },
+    {
+      "holdoutId": "p20-reject-unbound-rollback",
+      "caseClass": "UNBOUND_ROLLBACK",
+      "input": {
+        "schemaVersion": "pansphaira.cks-11/deterministic-function-parity/v1",
+        "verifierVersion": "cks-11-deterministic-function-parity-verifier/v1",
+        "functionRef": {
+          "kind": "FUNCTION_CANDIDATE",
+          "id": "function:stable-order-normalizer",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "9ab6ffbb8f53540d252c7328d074d3bc0fcfb21cd31ede917fcf984bd0696db0"
+        },
+        "sourceStepRef": {
+          "kind": "WORKFLOW_CANDIDATE",
+          "id": "step:normalize-order",
+          "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+          "version": "1.0.0",
+          "digestAlgorithm": "SHA-256",
+          "digest": "185a46dd58fd347ace56e196d10ff01ff46a4640b92302281c8875248faae827"
+        },
+        "typedInput": {
+          "orderId": "fixture-order-1",
+          "retryCount": 0
+        },
+        "originalResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "candidateResult": {
+          "kind": "OUTPUT",
+          "value": {
+            "normalized": true,
+            "orderId": "fixture-order-1"
+          }
+        },
+        "evidenceRefs": [
+          {
+            "kind": "EVIDENCE",
+            "id": "evidence:p20-order-1-output",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "f4edb64f0327b59cb5ecdfebcf07f4f8faf8779ea6b761e7ad5a6182131c220b"
+          }
+        ],
+        "rollback": {
+          "originalStepFallbackRef": {
+            "kind": "FALLBACK_PATH",
+            "id": "fallback:normalize-order",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "85b49f4bd080b4e424c6dd255a6f86fcab41b4afc3fec59d29f877deef06ef93"
+          },
+          "readbackRef": null,
+          "rollbackReceiptRef": {
+            "kind": "RECEIPT",
+            "id": "receipt:normalize-order-rollback",
+            "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+            "version": "1.0.0",
+            "digestAlgorithm": "SHA-256",
+            "digest": "3dcb3f94a909fe01ea39b4ee9f298a24cd84b8b68121b18e35effc0bc0a36468"
+          }
+        }
+      },
+      "expected": "PARITY_REJECTED",
+      "expectedReasonCodes": [
+        "ROLLBACK_UNBOUND"
+      ],
+      "expectedDecisionDigest": "c4f2b369cc5f40959d0f4c7b79796044f3ca199d44cedeb0f26dcf7f258cd8f4"
+    }
+  ]
+}
