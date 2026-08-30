@@ -8,8 +8,8 @@
   },
   "authorizedScope": "LOCAL_OFFLINE_MOUNTED_MEDIAWIKI_M0",
   "baseCommit": "bf0c89b1092313c3fe7737874f928b2961d386a9",
-  "testedHead": "e7a2ef0a79cb94615b4bfa2ced75ba08b7120614",
-  "testedTree": "d7059d6da4d885d080c1b63185b8ffcc64517c3d",
+  "testedHead": "31cd5728438fc78f63a292bffb7130b668ac0ca4",
+  "testedTree": "2228c29adcbe7abc2a4aeff2f432441f57ae250e",
   "reviewFindingsClosed": [
     "Measured claims require non-empty receipt samples and matching environment, source, edition and raw-evidence bindings.",
     "Edition promotion cleanup removes the staged edition when pointer replacement fails and leaves zero activation residue.",
@@ -29,6 +29,7 @@
     {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
     {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1214},
     {"command": "npm run release-governance:verify", "outcome": "PASS"},
+    {"command": "npm run release-governance:test", "outcome": "PASS", "tests": 54, "passed": 54},
     {"command": "npm run lint", "outcome": "PASS"},
     {"command": "git diff --check", "outcome": "PASS"}
   ],
