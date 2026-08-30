@@ -1,56 +1,74 @@
-# RKS-01 real-source utility result v1
+# RKS-01 real-source utility result — protocols v1 and v2
 
 ## Terminal verdict
 
 **FALSIFIED_WITH_EVIDENCE**
 
-The mandatory pre-score JSON-schema gate failed for the exact large-reference profile. Under the frozen no-substitution/no-envelope-change rule, no scored task was permitted to run. This is a runtime/model-envelope incompatibility result, not a measured comparative-quality result.
+The standing comparative-utility hypothesis remains unmeasured. Both authorized protocols terminated at their mandatory pre-score gates, so no scored assignment was issued and the complete frozen denominator remains `0 / 126` receipts, `126 / 126` not executed, `0` scored failures, and `0` exclusions.
 
-## Frozen boundary
+## Protocol v1 — preserved terminal result
 
-- Base head: `ffea51336c7d0d4ee76ac2e2e56a7c400ad6f9ac`
-- Task-suite digest: `803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2`
-- Context-contract digest: `0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273`
-- Comparison-source-set digest: `9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542`
-- Tasks frozen before model output: 18: six each for Wikidata, CPython v3.14.7, and OpenAPI 3.2.0; one of every required stratum per source.
-- Intended scored denominator: 126 assignments (primary 72, replication 36, large reference 18), temperature 0, seed 104729, maximum 192 generated tokens.
+- Status: `FALSIFIED_PRE_SCORE`
+- Verdict: `FALSIFIED_WITH_EVIDENCE`
+- Cause: `QWEN3_8_27B_Q5_K_M` consumed all 192 completion tokens in `reasoning_content`, returned empty `content`, and could not satisfy the strict closed-answer schema.
+- Scored receipts: `0 / 126`; not executed: `126 / 126`.
+- Exact predecessor: `baf8c21a4e27b271682b9662089d3187f015f6d5`.
+- Byte-preserved evidence: `verification/rks-01-run-receipts/protocol-v1/`.
+- Preserved comparator SHA-256: `f8b321248bbc062d6bef6ac766228e5120a8c80970a554b787ba385c308a7a6c`.
+- Preserved report SHA-256: `25412262e143d719b85beb2be70ca9883eba68a75029c7f80ae88cb0986f950d`.
 
-## Exact pre-score evidence
+The v1 verdict was not erased, relabeled as a measured comparison, or replaced by v2.
 
-All model bytes, the b10167 `llama-server`, and 12 bundled libraries rehashed successfully (16 exact byte artifacts total). Hardware revalidation reported `NVIDIA GeForce RTX 5090, 580.173.02, compute capability 12.0`. Driver `580.173.02` matched the frozen manifest. Each server was loopback-only, one-slot, context 4096, batch 512/ubatch 256, 8 threads, all GPU layers, flash attention on, f16 KV, prompt cache disabled/reuse 0, Jinja, perf and metrics enabled.
+## Protocol v2 — one authorized compatibility delta
 
-| Exact profile | SHA-256 | Probe | HTTP | finish | prompt | completion | total | prompt ms | generation ms | wall ms |
-|---|---|---:|---:|---|---:|---:|---:|---:|---:|---:|
-| VibeThinker 3B Q8_0 | `ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f` | PASS | 200 | `stop` | 125 | 75 | 200 | 33.861 | 406.241 | 449.1592019999989 |
-| FastContext 4B Q8_0 | `d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90` | PASS | 200 | `stop` | 125 | 79 | 204 | 19.785 | 435.855 | 463.6105669999997 |
-| Qwen3.8-27B Q5_K_M | `07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177` | **FAIL** | 200 | `length` | 165 | 192 | 357 | 225.894 | 2704.691 | 2946.039112000002 |
+The pre-frozen envelope SHA-256 is `cd5bc607072fdc4c5eee0eb7d87662230d1f8413159e50d84e273b37f4ff4da9`. Relative to v1, its only server-argument additions were:
 
-Runtime SHA-256: `d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c`.
+```text
+--reasoning off
+--reasoning-format none
+--reasoning-budget 0
+```
 
-The Qwen response consumed the complete frozen 192-token allowance in `reasoning_content` (821 characters), returned an empty `content` string, and therefore could not parse as the required closed answer object. No retry occurred. Increasing `max_tokens`, disabling reasoning, changing template/runtime, or substituting a model would mutate the frozen envelope and was not authorized.
+Tasks, corpora, source/task/context digests, model paths and hashes, runtime and bundled-library hashes, temperature `0`, seed `104729`, maximum completion tokens `192`, strict answer schema, assignment order, thresholds, arm assignments, and scoring rules remained unchanged.
 
-## Exact comparative evidence and denominators
+### Revalidation
 
-| Evidence class | Raw count / denominator | Result |
-|---|---:|---|
-| Scored assignments | 0 / 126 | `NOT_EXECUTED_PRE_SCORE_GATE_FAILED` |
-| Failed scored assignments | 0 / 126 | None were attempted |
-| Excluded scored assignments | 0 / 126 | No exclusions |
-| Not-executed assignments | 126 / 126 | Mandatory schema probe failed |
-| Task quality | 0 measured / 18 tasks per arm | `NOT_MEASURED_PRE_SCORE_GATE_FAILED` |
-| Material-claim evidence coverage | 0 measured claims / 0 measured claims | `NOT_MEASURED_PRE_SCORE_GATE_FAILED` |
-| Unsupported material claims | 0 measured | `NOT_MEASURED_PRE_SCORE_GATE_FAILED` |
-| Applicability accuracy | 0 measured / 0 measured | `NOT_MEASURED_PRE_SCORE_GATE_FAILED` |
-| Update compliance | 0 measured / 0 measured | `NOT_MEASURED_PRE_SCORE_GATE_FAILED` |
-| Safe denial / authority denial | 0 measured / 0 measured | `NOT_MEASURED_PRE_SCORE_GATE_FAILED` |
-| Scored prompt+completion cost | 0 measured tokens / 0 scored runs | `NOT_MEASURED_PRE_SCORE_GATE_FAILED` |
+- Task-suite digest: `803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2`.
+- Context-contract digest: `0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273`.
+- Comparison-source-set digest: `9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542`.
+- Hardware: `NVIDIA GeForce RTX 5090`, driver `580.173.02`, compute capability `12.0`.
+- Exact `llama-server`, 12 bundled libraries, and all three model files rehashed to their frozen values.
+- All 126 assignments re-derived in the frozen lowercase-SHA-256 order before probing.
 
-The probe-token table is startup qualification evidence only and is excluded from scored arm cost. No quality, grounding, applicability, drift-safety, denial-safety, Raw-vs-Guided token ratio, or Guided-vs-Large comparison can honestly be calculated. Null metrics are retained as null rather than presented as zero performance or rounded percentages.
+### Fresh strict-JSON probes
 
-## Decision derivation
+| Exact profile | Probe | HTTP | completion tokens | prompt ms | generation ms | wall ms | Raw response SHA-256 |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `VIBETHINKER_3B_Q8_0` | PASS | 200 | 75 | 31.993 | 407.425 | 446.73143699999855 | `2bafbc3bcb608ab5c4812f994d45beeb047efcd87e5719b8545dd03569bc1700` |
+| `FASTCONTEXT_4B_Q8_0_D24F7B8B` | PASS | 200 | 79 | 17.13 | 435.525 | 459.2787779999999 | `899b8793d47592f321a76ba1f587fd6041e441ca6ef38f9edd190c66449338a4` |
+| `QWEN3_8_27B_Q5_K_M` | **FAIL** | 400 | not returned | not returned | not returned | 26.046008999997866 | `4e317b744f23ef1323fa291b67cbf6f11b86beba77fe95db907304cac9f8cf9f` |
 
-The frozen inference envelope requires every exact model to pass a synthetic JSON-schema probe before the first scored request. Qwen3.8-27B Q5_K_M failed that hard gate. The frozen decision rule makes any hard-gate failure sufficient for `FALSIFIED_WITH_EVIDENCE`. The verifier independently parses the raw Qwen response and checks profile, HTTP 200, `finish_reason: length`, empty content, and exactly 192 completion tokens before accepting the verdict.
+The exact Qwen response was:
+
+```json
+{"error":{"code":400,"message":"Failed to initialize samplers: std::exception","type":"invalid_request_error"}}
+```
+
+This was the one fresh protocol-v2 schema probe for that exact model. The protocol required terminal falsification if any v2 probe failed and authorized no further compatibility correction, probe retry, scored fallback, or substitution. Therefore no scored server was started and no scored request was sent.
+
+## Protocol v2 decision derivation
+
+- Final v2 verdict: `FALSIFIED_WITH_EVIDENCE`.
+- Hard gate `allModelSchemaProbes`: `false`.
+- Hard gate `completeAssignments`: `false` because scoring was correctly prohibited.
+- Scored receipts: `0 / 126`.
+- Scored failures: `0 / 126` (no scored request was attempted).
+- Exclusions: `0 / 126`.
+- Not executed: `126 / 126`.
+- Quality, grounding, applicability, update compliance, denial safety, arm token costs, and Raw-vs-Guided / Guided-vs-Large comparisons: `NOT_MEASURED_PRE_SCORE_GATE_FAILED`.
+
+Null comparative metrics remain null; they are not converted into zero scores or inferred from model labels.
 
 ## Limitation and nonclaims
 
-The intended pilot was only `n=18`, already too small for a general model claim. The realized scored sample is `n=0` because fail-closed pre-score validation worked. This result does not claim comparative inferiority of typed Knowledge, general small-model replacement, legal advice, production readiness, autonomous promotion, or action authority.
+This is terminal evidence about the two exact frozen inference protocols, not comparative evidence that typed Knowledge helps or hurts, not a general small-model claim, not legal advice, not production readiness, not autonomous-promotion authority, and not action authority. The standing comparative hypothesis remains unmeasured because no scored task was legally reachable under either authorized protocol.

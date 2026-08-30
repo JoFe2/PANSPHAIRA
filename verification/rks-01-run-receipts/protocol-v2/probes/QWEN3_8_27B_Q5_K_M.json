@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "pansphaira/rks-01-schema-probe/v2",
+  "protocolVersion": 2,
+  "profileId": "QWEN3_8_27B_Q5_K_M",
+  "unscored": true,
+  "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+  "responseStatus": 400,
+  "rawResponse": "{\"error\":{\"code\":400,\"message\":\"Failed to initialize samplers: std::exception\",\"type\":\"invalid_request_error\"}}",
+  "rawResponseHash": "4e317b744f23ef1323fa291b67cbf6f11b86beba77fe95db907304cac9f8cf9f",
+  "parsedAnswer": null,
+  "parseError": "SyntaxError: \"undefined\" is not valid JSON",
+  "usage": null,
+  "llamaTimings": null,
+  "wallMs": 26.046008999997866,
+  "passed": false
+}

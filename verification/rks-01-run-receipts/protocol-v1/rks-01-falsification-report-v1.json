@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "pansphaira/rks-01-falsification-report/v1",
+  "verdict": "FALSIFIED_WITH_EVIDENCE",
+  "counts": {
+    "expected": 126,
+    "receipts": 0,
+    "failed": 0,
+    "excluded": 0,
+    "notExecuted": 126
+  },
+  "reasons": [
+    "PRE_SCORE_SCHEMA_PROBE_FAILED:QWEN3_8_27B_Q5_K_M"
+  ],
+  "hardGates": {
+    "completeAssignments": false,
+    "allModelSchemaProbes": false,
+    "sourceLegalDriftAuthority": true,
+    "passes": false
+  },
+  "comparisons": null,
+  "metrics": null,
+  "failedRuns": [],
+  "excludedRuns": [],
+  "notExecutedRuns": 126,
+  "preScoreFailures": [
+    {
+      "profileId": "VIBETHINKER_3B_Q8_0",
+      "passed": true,
+      "responseStatus": 200,
+      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+      "wallMs": 449.1592019999989,
+      "rawResponseHash": "b0a821560a35776f613b9bb259ccd9960ff320ec466cd8da2bc0d49dfc9fc19c"
+    },
+    {
+      "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+      "passed": true,
+      "responseStatus": 200,
+      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+      "wallMs": 463.6105669999997,
+      "rawResponseHash": "3713b4e721ba4149aea7e44d1e81adf737b19081661adb14b8400f23c2446145"
+    },
+    {
+      "profileId": "QWEN3_8_27B_Q5_K_M",
+      "passed": false,
+      "responseStatus": 200,
+      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+      "wallMs": 2946.039112000002,
+      "rawResponseHash": "0f27c410d866d95b90e8b5e89b857121d6f87e3ef64e441081893df3417b8870"
+    }
+  ],
+  "qualityEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
+  "groundingEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
+  "driftSafetyEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
+  "costEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
+  "limitation": "n=18 tasks were frozen, but n=0 tasks were scored because the QWEN3_8_27B_Q5_K_M mandatory JSON-schema probe exhausted all 192 generated tokens in reasoning_content and returned empty content (finish_reason length).",
+  "nonClaims": [
+    "NO_SCORED_MODEL_COMPARISON",
+    "NO_GENERAL_SMALL_MODEL_REPLACEMENT",
+    "NO_LEGAL_ADVICE",
+    "NO_PRODUCTION_READINESS",
+    "NO_AUTONOMOUS_PROMOTION",
+    "NO_ACTION_AUTHORITY"
+  ]
+}

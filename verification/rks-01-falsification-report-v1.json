@@ -1,64 +1,79 @@
 {
-  "schemaVersion": "pansphaira/rks-01-falsification-report/v1",
+  "schemaVersion": "pansphaira/rks-01-dual-protocol-falsification-report/v2",
+  "goalId": "PSAI-REAL-SOURCE-KNOWLEDGE-UTILITY-01",
+  "protocolV1": {
+    "status": "FALSIFIED_PRE_SCORE",
+    "verdict": "FALSIFIED_WITH_EVIDENCE",
+    "scoredRuns": 0,
+    "notExecutedRuns": 126,
+    "reason": [
+      "PRE_SCORE_SCHEMA_PROBE_FAILED:QWEN3_8_27B_Q5_K_M"
+    ],
+    "predecessorCommit": "baf8c21a4e27b271682b9662089d3187f015f6d5",
+    "archivePath": "verification/rks-01-run-receipts/protocol-v1",
+    "comparatorSha256": "f8b321248bbc062d6bef6ac766228e5120a8c80970a554b787ba385c308a7a6c",
+    "reportSha256": "25412262e143d719b85beb2be70ca9883eba68a75029c7f80ae88cb0986f950d",
+    "qualityEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED"
+  },
+  "protocolV2": {
+    "schemaVersion": "pansphaira/rks-01-falsification-report/v2",
+    "protocolVersion": 2,
+    "verdict": "FALSIFIED_WITH_EVIDENCE",
+    "counts": {
+      "expected": 126,
+      "receipts": 0,
+      "failed": 0,
+      "excluded": 0,
+      "notExecuted": 126
+    },
+    "reasons": [
+      "PRE_SCORE_SCHEMA_PROBE_FAILED:QWEN3_8_27B_Q5_K_M"
+    ],
+    "hardGates": {
+      "completeAssignments": false,
+      "allModelSchemaProbes": false,
+      "sourceLegalDriftAuthority": true,
+      "passes": false
+    },
+    "comparisons": null,
+    "metrics": null,
+    "failedRuns": [],
+    "excludedRuns": [],
+    "notExecutedRuns": 126,
+    "preScoreFailures": [
+      {
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "passed": true,
+        "responseStatus": 200,
+        "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+        "wallMs": 446.73143699999855,
+        "rawResponseHash": "2bafbc3bcb608ab5c4812f994d45beeb047efcd87e5719b8545dd03569bc1700"
+      },
+      {
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "passed": true,
+        "responseStatus": 200,
+        "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+        "wallMs": 459.2787779999999,
+        "rawResponseHash": "899b8793d47592f321a76ba1f587fd6041e441ca6ef38f9edd190c66449338a4"
+      },
+      {
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "passed": false,
+        "responseStatus": 400,
+        "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+        "wallMs": 26.046008999997866,
+        "rawResponseHash": "4e317b744f23ef1323fa291b67cbf6f11b86beba77fe95db907304cac9f8cf9f"
+      }
+    ],
+    "limitation": "Protocol v2 measurement stopped before scoring because an authorized one-shot schema probe failed."
+  },
   "verdict": "FALSIFIED_WITH_EVIDENCE",
-  "counts": {
-    "expected": 126,
-    "receipts": 0,
-    "failed": 0,
-    "excluded": 0,
-    "notExecuted": 126
-  },
-  "reasons": [
-    "PRE_SCORE_SCHEMA_PROBE_FAILED:QWEN3_8_27B_Q5_K_M"
-  ],
-  "hardGates": {
-    "completeAssignments": false,
-    "allModelSchemaProbes": false,
-    "sourceLegalDriftAuthority": true,
-    "passes": false
-  },
-  "comparisons": null,
-  "metrics": null,
-  "failedRuns": [],
-  "excludedRuns": [],
-  "notExecutedRuns": 126,
-  "preScoreFailures": [
-    {
-      "profileId": "VIBETHINKER_3B_Q8_0",
-      "passed": true,
-      "responseStatus": 200,
-      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
-      "wallMs": 449.1592019999989,
-      "rawResponseHash": "b0a821560a35776f613b9bb259ccd9960ff320ec466cd8da2bc0d49dfc9fc19c"
-    },
-    {
-      "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
-      "passed": true,
-      "responseStatus": 200,
-      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
-      "wallMs": 463.6105669999997,
-      "rawResponseHash": "3713b4e721ba4149aea7e44d1e81adf737b19081661adb14b8400f23c2446145"
-    },
-    {
-      "profileId": "QWEN3_8_27B_Q5_K_M",
-      "passed": false,
-      "responseStatus": 200,
-      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
-      "wallMs": 2946.039112000002,
-      "rawResponseHash": "0f27c410d866d95b90e8b5e89b857121d6f87e3ef64e441081893df3417b8870"
-    }
-  ],
-  "qualityEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
-  "groundingEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
-  "driftSafetyEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
-  "costEvidence": "NOT_MEASURED_PRE_SCORE_GATE_FAILED",
-  "limitation": "n=18 tasks were frozen, but n=0 tasks were scored because the QWEN3_8_27B_Q5_K_M mandatory JSON-schema probe exhausted all 192 generated tokens in reasoning_content and returned empty content (finish_reason length).",
   "nonClaims": [
-    "NO_SCORED_MODEL_COMPARISON",
+    "V1_REMAINS_FALSIFIED",
+    "NO_TASK_CORPUS_MODEL_THRESHOLD_OR_COST_RULE_CHANGE",
     "NO_GENERAL_SMALL_MODEL_REPLACEMENT",
-    "NO_LEGAL_ADVICE",
     "NO_PRODUCTION_READINESS",
-    "NO_AUTONOMOUS_PROMOTION",
     "NO_ACTION_AUTHORITY"
   ]
 }

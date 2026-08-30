@@ -1,0 +1,58 @@
+0.00.017.265 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.099.442 W srv  llama_server: -----------------
+0.00.099.444 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.099.444 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.099.444 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.099.444 W srv  llama_server: -----------------
+0.00.100.639 I srv    load_model: loading model '/mnt/data2/ai/gguf-models/qwen3.8-27b-q5-application-pilot/Qwen3.8-27B-Q5_K_M.gguf'
+0.03.479.005 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 4096, kv_unified = 'false'
+0.03.490.359 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.03.490.389 I srv  llama_server: model loaded
+0.03.490.393 I srv  llama_server: listening on http://127.0.0.1:43291
+0.03.909.292 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.03.920.539 E common_sampler_init: error initializing grammar sampler for grammar:
+char ::= [^"\\\x7F\x00-\x1F] | [\\] (["\\bfnrt] | "u" [0-9a-fA-F]{4})
+json-array ::= "[" space ("]" | json-value (space "," space json-value)* space "]")
+json-bool ::= "true" | "false"
+json-null ::= "null"
+json-number ::= "-"? ("0" | [1-9] [0-9]*) ("." [0-9]+)? (("e" | "E") [+-]? [0-9]+)?
+json-object ::= "{" space ("}" | json-string space ":" space json-value (space "," space json-string space ":" space json-value)* space "}")
+json-string ::= "\"" ( [^"\\] | "\\" ( ["\\/ bfnrt] | "u" [0-9a-fA-F]{4} ) )* "\""
+json-value ::= json-object | json-array | json-string | json-number | json-bool | json-null
+response-format ::= response-format-schema
+response-format-schema ::= "{" space response-format-schema-answerState-kv "," space response-format-schema-materialClaims-kv "," space response-format-schema-evidenceRefs-kv "," space response-format-schema-applicability-kv "," space response-format-schema-denials-kv "," space response-format-schema-reasoningSummary-kv space "}"
+response-format-schema-answerState ::= ("\"ANSWER\"" | "\"ABSTAIN\"" | "\"DENY\"")
+response-format-schema-answerState-kv ::= "\"answerState\"" space ":" space response-format-schema-answerState
+response-format-schema-applicability ::= ("\"APPLICABLE\"" | "\"NOT_APPLICABLE\"" | "\"UNKNOWN\"")
+response-format-schema-applicability-kv ::= "\"applicability\"" space ":" space response-format-schema-applicability
+response-format-schema-denials ::= "[" space (response-format-schema-denials-item ("," space response-format-schema-denials-item){0,15})? space "]"
+response-format-schema-denials-item ::= "\"" char{0,160} "\""
+response-format-schema-denials-kv ::= "\"denials\"" space ":" space response-format-schema-denials
+response-format-schema-evidenceRefs ::= "[" space (response-format-schema-evidenceRefs-item ("," space response-format-schema-evidenceRefs-item){0,31})? space "]"
+response-format-schema-evidenceRefs-item ::= "\"" char{0,160} "\""
+response-format-schema-evidenceRefs-kv ::= "\"evidenceRefs\"" space ":" space response-format-schema-evidenceRefs
+response-format-schema-materialClaims ::= "[" space (response-format-schema-materialClaims-item ("," space response-format-schema-materialClaims-item){0,15})? space "]"
+response-format-schema-materialClaims-item ::= "{" space response-format-schema-materialClaims-item-claim-kv "," space response-format-schema-materialClaims-item-evidenceRefs-kv space "}"
+response-format-schema-materialClaims-item-claim ::= "\"" char{0,1000} "\""
+response-format-schema-materialClaims-item-claim-kv ::= "\"claim\"" space ":" space response-format-schema-materialClaims-item-claim
+response-format-schema-materialClaims-item-evidenceRefs ::= "[" space (response-format-schema-materialClaims-item-evidenceRefs-item ("," space response-format-schema-materialClaims-item-evidenceRefs-item){0,15})? space "]"
+response-format-schema-materialClaims-item-evidenceRefs-item ::= "\"" char{0,160} "\""
+response-format-schema-materialClaims-item-evidenceRefs-kv ::= "\"evidenceRefs\"" space ":" space response-format-schema-materialClaims-item-evidenceRefs
+response-format-schema-materialClaims-kv ::= "\"materialClaims\"" space ":" space response-format-schema-materialClaims
+response-format-schema-reasoningSummary ::= "\"" char{0,1200} "\""
+response-format-schema-reasoningSummary-kv ::= "\"reasoningSummary\"" space ":" space response-format-schema-reasoningSummary
+root ::= "<|im_start|>assistant\n" space space ("```json" space response-format space "```" | space response-format space)
+space ::= | " " | "\n"{1,2} [ \t]{0,20}
+
+
+Generation prompt:
+'<|im_start|>assistant
+<think>
+
+</think>
+
+'
+0.03.920.879 E srv    send_error: task id = 0, error: Failed to initialize samplers: std::exception
+0.03.920.888 E srv  process_sing: failed to launch slot with task, id_task = 0
+0.03.920.921 W srv          stop: cancel task, id_task = 0
+0.03.921.949 I srv    operator(): operator(): cleaning up before exit...

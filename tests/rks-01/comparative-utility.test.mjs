@@ -8,6 +8,9 @@ import {
   scoreClosedAnswer,
   compareReceipts,
   derivePreScoreBlockedVerdict,
+  validateProtocolV2Envelope,
+  validateBytePreservedArchive,
+  validateDualProtocolVerdicts,
 } from '../../src/rks-01/comparator.mjs';
 
 const fixture = name => JSON.parse(fs.readFileSync(new URL(`../fixtures/rks-01/${name}`, import.meta.url)));
@@ -107,4 +110,38 @@ test('invented aggregate counts and rounded-only metrics are rejected by verifie
   assert.ok(result.metrics.SMALL_PRIMARY.SMALL_RAW_RAG.taskSuccess.denominator);
   assert.equal('callerCounts' in result,false);
   assert.equal(result.metrics.SMALL_PRIMARY.SMALL_RAW_RAG.tokenCost.total,1800);
+});
+
+const v1ServerArgs=['--model','{EXACT_MODEL_PATH}','--host','127.0.0.1','--port','{EPHEMERAL_LOOPBACK_PORT}','--parallel','1','--ctx-size','4096','--batch-size','512','--ubatch-size','256','--threads','8','--threads-batch','8','--gpu-layers','all','--flash-attn','on','--cache-type-k','f16','--cache-type-v','f16','--no-cache-prompt','--cache-reuse','0','--jinja','--perf','--metrics','--slots'];
+function validV2Envelope(){return {protocolVersion:2,predecessor:{version:1,verdict:'FALSIFIED_WITH_EVIDENCE',commit:'baf8c21a4e27b271682b9662089d3187f015f6d5'},server:{binary:manifest.runtime.serverPath,sha256:manifest.runtime.serverSha256,arguments:[...v1ServerArgs,'--reasoning','off','--reasoning-format','none','--reasoning-budget','0']},request:{temperature:0,seed:104729,max_tokens:192},frozenUnchangedBindings:{taskSuiteDigest:suite.taskSuiteDigest,contextContractDigest:suite.contextContractDigest,comparisonSourceSetDigest:suite.comparisonSourceSetDigest,decisionRule:'tests/fixtures/rks-01/decision-rule-v1.json',models:'UNCHANGED',temperature:0,seed:104729,maxTokens:192,assignments:126},v2DeltaOnly:['server --reasoning off','server --reasoning-format none','server --reasoning-budget 0']};}
+
+test('protocol v2 accepts exactly the pre-frozen reasoning-off delta',()=>{
+  assert.doesNotThrow(()=>validateProtocolV2Envelope({envelope:validV2Envelope(),suite,manifest,rule,v1ServerArgs}));
+});
+
+for(const [name,mutate,pattern] of [
+  ['extra protocol flag',e=>e.server.arguments.push('--cont-batching'),/delta|arguments/],
+  ['changed reasoning mode',e=>e.server.arguments[e.server.arguments.indexOf('off')]='on',/delta|arguments/],
+  ['task digest change',e=>e.frozenUnchangedBindings.taskSuiteDigest='0'.repeat(64),/task suite/],
+  ['corpus digest change',e=>e.frozenUnchangedBindings.comparisonSourceSetDigest='0'.repeat(64),/source set/],
+  ['model change',e=>e.server.sha256='0'.repeat(64),/runtime|binary/],
+  ['seed change',e=>e.request.seed=7,/seed/],
+  ['token change',e=>e.request.max_tokens=193,/max tokens/],
+  ['assignment change',e=>e.frozenUnchangedBindings.assignments=125,/assignments/],
+]) test(`protocol v2 negative: ${name} denies`,()=>{const e=validV2Envelope();mutate(e);assert.throws(()=>validateProtocolV2Envelope({envelope:e,suite,manifest,rule,v1ServerArgs}),pattern)});
+
+test('protocol v1 archive requires every original byte unchanged',()=>{
+  const originals=new Map([['comparator.json',Buffer.from('v1 comparator')],['logs/model.log',Buffer.from([0,1,2,255])]]);
+  assert.doesNotThrow(()=>validateBytePreservedArchive(originals,new Map([...originals].map(([k,v])=>[k,Buffer.from(v)]))));
+  assert.throws(()=>validateBytePreservedArchive(originals,new Map([['comparator.json',Buffer.from('mutated')],['logs/model.log',Buffer.from([0,1,2,255])]])),/mutation/);
+  assert.throws(()=>validateBytePreservedArchive(originals,new Map([['comparator.json',Buffer.from('v1 comparator')]])),/omission/);
+});
+
+test('dual-protocol verdict labels must equal the independently derived v2 verdict',()=>{
+  const derived={verdict:'FALSIFIED_WITH_EVIDENCE'};
+  const topComparator={verdict:derived.verdict,protocolV1:{status:'FALSIFIED_PRE_SCORE',verdict:'FALSIFIED_WITH_EVIDENCE'},protocolV2:{verdict:derived.verdict}};
+  const topReport={verdict:derived.verdict,protocolV1:{status:'FALSIFIED_PRE_SCORE',verdict:'FALSIFIED_WITH_EVIDENCE'},protocolV2:{verdict:derived.verdict}};
+  const reportV2={verdict:derived.verdict};
+  assert.doesNotThrow(()=>validateDualProtocolVerdicts({derived,topComparator,topReport,reportV2}));
+  assert.throws(()=>validateDualProtocolVerdicts({derived,topComparator:{...topComparator,verdict:'GO'},topReport,reportV2}),/verdict/);
 });

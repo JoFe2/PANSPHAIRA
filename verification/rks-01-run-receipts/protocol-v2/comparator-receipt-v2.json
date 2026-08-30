@@ -1,0 +1,1046 @@
+{
+  "schemaVersion": "pansphaira/rks-01-comparator-receipt/v2",
+  "verdict": "FALSIFIED_WITH_EVIDENCE",
+  "counts": {
+    "expected": 126,
+    "receipts": 0,
+    "failed": 0,
+    "excluded": 0,
+    "notExecuted": 126
+  },
+  "hardGates": {
+    "completeAssignments": false,
+    "allModelSchemaProbes": false,
+    "sourceLegalDriftAuthority": true,
+    "passes": false
+  },
+  "comparisons": null,
+  "metrics": null,
+  "reasons": [
+    "PRE_SCORE_SCHEMA_PROBE_FAILED:QWEN3_8_27B_Q5_K_M"
+  ],
+  "nLimit": "18 tasks frozen; no scored task was executed because a mandatory pre-score gate failed",
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "protocolVersion": 2,
+  "inferenceEnvelopeSha256": "cd5bc607072fdc4c5eee0eb7d87662230d1f8413159e50d84e273b37f4ff4da9",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "hardwareRuntime": {
+    "schemaVersion": "pansphaira/rks-01-preflight/v2",
+    "protocolVersion": 2,
+    "validatedAt": "2026-08-30T21:29:59.228Z",
+    "head": "baf8c21a4e27b271682b9662089d3187f015f6d5",
+    "predecessorCommit": "baf8c21a4e27b271682b9662089d3187f015f6d5",
+    "gpu": "NVIDIA GeForce RTX 5090, 580.173.02, 12.0",
+    "hashes": {
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/llama-server": {
+        "expected": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+        "actual": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+        "byteSize": 17920
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama-cli-impl.so": {
+        "expected": "08e3dc0c883525b0c8891ef8b1987fe65ae916e318f351d9c9cb9161f0610109",
+        "actual": "08e3dc0c883525b0c8891ef8b1987fe65ae916e318f351d9c9cb9161f0610109",
+        "byteSize": 452808
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama-server-impl.so": {
+        "expected": "e7c6d9d4539280c5b76e52deb92bd6e2698b49673a16dd24dc1d5254de76c013",
+        "actual": "e7c6d9d4539280c5b76e52deb92bd6e2698b49673a16dd24dc1d5254de76c013",
+        "byteSize": 7395272
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama-common.so.0.0.10167": {
+        "expected": "97dfefee3c2038d103916740ded83580376bea8a085b67a070b8a87318f98115",
+        "actual": "97dfefee3c2038d103916740ded83580376bea8a085b67a070b8a87318f98115",
+        "byteSize": 5956472
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libllama.so.0.0.10167": {
+        "expected": "9cd7649f760c6544458de8f366953a14f1b8cfcb1426e69beaf3e7cf4460eedb",
+        "actual": "9cd7649f760c6544458de8f366953a14f1b8cfcb1426e69beaf3e7cf4460eedb",
+        "byteSize": 4198664
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml-base.so.0.17.0": {
+        "expected": "68d7b76c51815269cd569c4e0a35e5bc8de7b0e14556a21c434aa985f7e116c6",
+        "actual": "68d7b76c51815269cd569c4e0a35e5bc8de7b0e14556a21c434aa985f7e116c6",
+        "byteSize": 918352
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libmtmd.so.0.0.10167": {
+        "expected": "7ff26d4daf074c4d05877f373482eb69e965244342d350136d5692605cd72536",
+        "actual": "7ff26d4daf074c4d05877f373482eb69e965244342d350136d5692605cd72536",
+        "byteSize": 1481448
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml.so.0.17.0": {
+        "expected": "9b3d9c13aa8fa9bce0f2a1b012db50c3d44fc3671b887c01560aa526be7ea8ed",
+        "actual": "9b3d9c13aa8fa9bce0f2a1b012db50c3d44fc3671b887c01560aa526be7ea8ed",
+        "byteSize": 56016
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml-cpu.so.0.17.0": {
+        "expected": "2e1607597a73bcf3a0f69650d108e08ef3fff94035ab0ae02643d101005059e9",
+        "actual": "2e1607597a73bcf3a0f69650d108e08ef3fff94035ab0ae02643d101005059e9",
+        "byteSize": 1139776
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/libggml-cuda.so.0.17.0": {
+        "expected": "6787c0a01422f20b5fea9fe235d1fed5b5b407adcabec84bca89ff73e3b48d18",
+        "actual": "6787c0a01422f20b5fea9fe235d1fed5b5b407adcabec84bca89ff73e3b48d18",
+        "byteSize": 59301000
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/cuda-runtime-libs-12.9.1/libcudart.so.12": {
+        "expected": "256e6409e4f06f618e1fb53d4844a6b81cdded1013afa8ade40c22f99eb133b7",
+        "actual": "256e6409e4f06f618e1fb53d4844a6b81cdded1013afa8ade40c22f99eb133b7",
+        "byteSize": 741088
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/cuda-runtime-libs-12.9.1/libcublas.so.12": {
+        "expected": "d63456d94f1b8e2408a8a9538c8740eb474c9eba48a84f420b15e2e10fbcd048",
+        "actual": "d63456d94f1b8e2408a8a9538c8740eb474c9eba48a84f420b15e2e10fbcd048",
+        "byteSize": 105140976
+      },
+      "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/cuda-runtime-libs-12.9.1/libcublasLt.so.12": {
+        "expected": "96ddf4891ca4f4ed1475966783a9185df2abd64a81c3cc713b96d036696fc541",
+        "actual": "96ddf4891ca4f4ed1475966783a9185df2abd64a81c3cc713b96d036696fc541",
+        "byteSize": 749205904
+      },
+      "/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf": {
+        "expected": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+        "actual": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+        "byteSize": 3285476032
+      },
+      "/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf": {
+        "expected": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+        "actual": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+        "byteSize": 4280403808
+      },
+      "/mnt/data2/ai/gguf-models/qwen3.8-27b-q5-application-pilot/Qwen3.8-27B-Q5_K_M.gguf": {
+        "expected": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177",
+        "actual": "07deb7fa91bf751d3000774fe5bb8afae5ffb41255fd19980147468052e07177",
+        "byteSize": 19834055648
+      }
+    },
+    "frozenArtifactHashes": {
+      "tests/fixtures/rks-01/frozen-task-suite-v1.json": "346196c32281c5ef1b6088e23b1cdfb67eefb35241429167002d11d1896dd5a3",
+      "tests/fixtures/rks-01/decision-rule-v1.json": "106f7e0c1027c03ccc1a934b77b3329ca66f6e3ff4ccc3b8a47ea6482f0a0103",
+      "tests/fixtures/rks-01/model-runtime-manifest-v1.json": "20d033030f7303577cf432a4a8b0e737b0b0e246e640c404b01150275525640b",
+      "tests/fixtures/rks-01/raw-rag-corpus-v1.json": "4cc015ebf48fb6d7d6be16fc30a36ab41be369b7eaca1ae9e17d6bc1a1545d23",
+      "tests/fixtures/rks-01/typed-knowledge-corpus-v1.json": "dffb9e5fbcc1a761ba1081b7d69dc9fbbe245eaff2d882b4c9288a18b5192d4a",
+      "tests/fixtures/rks-01/application-guides-v1.json": "bca72976ff27dd2d324be51fd28fcea59bb0c90d67989a8d0d97bccfc2342606"
+    },
+    "inferenceEnvelopeSha256": "cd5bc607072fdc4c5eee0eb7d87662230d1f8413159e50d84e273b37f4ff4da9",
+    "bindings": {
+      "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+      "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+      "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+      "temperature": 0,
+      "seed": 104729,
+      "maxTokens": 192,
+      "assignments": 126
+    },
+    "assignmentOrder": [
+      {
+        "runOrder": 1,
+        "orderHash": "03d49db738149c69ade2efa434fa0f5133a1fa40f3cc1037fcaca8c95411f720",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "OPENAPI-DIRECT-01"
+      },
+      {
+        "runOrder": 2,
+        "orderHash": "0aed50e846c1e99b8237e2cd6e8d6c8f41879d52adb10177892f60d891ee4bb9",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "WIKIDATA-CONFLICT-01"
+      },
+      {
+        "runOrder": 3,
+        "orderHash": "0fbd9cf6653d0b75098c67d416be1910d186c447544c00dbb30b60c05b891e71",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "CPYTHON-DIRECT-01"
+      },
+      {
+        "runOrder": 4,
+        "orderHash": "230cf65110998054fc9a755f7c03713f610acd17bb41fde6d61156a2b4e10da0",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "OPENAPI-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 5,
+        "orderHash": "3243425eacb30bd34e4c236216ed78453df9866d4462d6af5569401b06a3cab6",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "OPENAPI-CONFLICT-01"
+      },
+      {
+        "runOrder": 6,
+        "orderHash": "4889fda99992e53ecda1fa0e22f0a7a5cdb282ee55db1627aa839b6d9d032d99",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "WIKIDATA-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 7,
+        "orderHash": "6161050ce43cd0de5e24b70250384e28e2f8da1e38e5b3b78d3cf204ded1e40d",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "OPENAPI-AUTHORITY-01"
+      },
+      {
+        "runOrder": 8,
+        "orderHash": "63f9841c6659ec73ff52774595681a6a1c4d01bd5c5877056fa581e323196787",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "WIKIDATA-AUTHORITY-01"
+      },
+      {
+        "runOrder": 9,
+        "orderHash": "6745c682d31254f99a16ef558643bbd8e5f4b918c37eaff7290d71035d123049",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "OPENAPI-DRIFT-01"
+      },
+      {
+        "runOrder": 10,
+        "orderHash": "87360070f754a4a22083d395ad1c22e275e8b9313e98b18de72dacb1579850f5",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "WIKIDATA-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 11,
+        "orderHash": "97e8e1e53da4d3442e473c904b04c78c8d2c33d26892c6eccf61c57f4130b9f5",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "CPYTHON-AUTHORITY-01"
+      },
+      {
+        "runOrder": 12,
+        "orderHash": "9b201f28531ee58cc1c1a92ea09ebbdf54a43d6b4c591e21a20a5dcb3bd5f5b4",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "WIKIDATA-DRIFT-01"
+      },
+      {
+        "runOrder": 13,
+        "orderHash": "a5f361685906ee853d5f0c9242b629e164e435706b084320125e45b0caff5849",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "CPYTHON-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 14,
+        "orderHash": "bbcf645640c64d6dfe15db94b2e3478a075bda3dd0b25c7bf2e5f3e9dcf512ec",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "CPYTHON-CONFLICT-01"
+      },
+      {
+        "runOrder": 15,
+        "orderHash": "d2fbae288f7ec8f607e313ededecdf7668b7607376aa074371ebe567504ee0ea",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "CPYTHON-DRIFT-01"
+      },
+      {
+        "runOrder": 16,
+        "orderHash": "e8b8a5f975470b7762595dc17c13617b7e7616ce104cfb219568f6e3dd9be211",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "WIKIDATA-DIRECT-01"
+      },
+      {
+        "runOrder": 17,
+        "orderHash": "efad7d7d6106406e6fac6cad0ab5e445f2b8227b3bd8c6bcee36cadc065cf9a4",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "OPENAPI-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 18,
+        "orderHash": "f84a0501540848625aacba18b84dcfdb75e57501db68eac09f0d03c87fc3ae57",
+        "profileId": "QWEN3_8_27B_Q5_K_M",
+        "armId": "LARGE_REFERENCE",
+        "taskId": "CPYTHON-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 19,
+        "orderHash": "07c4ee023b643a9925a11a10fb93b35a821582d43b2048533a64f11f6505d617",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "OPENAPI-CONFLICT-01"
+      },
+      {
+        "runOrder": 20,
+        "orderHash": "0a70feb56be7b8e63c7c53ca8e5601097a1d52ac24be85d4b1a14c1b1bbfa21f",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 21,
+        "orderHash": "0c922d389a49ff659387ea9bbed6af5577e8d47258eef519b9408fff381ddd1b",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 22,
+        "orderHash": "0e3f66074f997063de14f43536c35f03f17eab2cd7545f7e4605443dd967d0f2",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-DRIFT-01"
+      },
+      {
+        "runOrder": 23,
+        "orderHash": "10c73a3523db3f455fadc34c4e1272a2c35677928dcfa11cb1594cd5e6187919",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "OPENAPI-DIRECT-01"
+      },
+      {
+        "runOrder": 24,
+        "orderHash": "15534e159f1a8dd2e9aecb92305633ca8d1ca173ec267f1d919cc34480dcac75",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "WIKIDATA-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 25,
+        "orderHash": "1b877659a3b5d15f5802aa4c16a8813468477ae1f2b2cd2960143b80cb5cb8bb",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-AUTHORITY-01"
+      },
+      {
+        "runOrder": 26,
+        "orderHash": "1e564c079f496e5262ca8702b6932d5b8c46e25c2bf1895fd943233f2cde392b",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-DRIFT-01"
+      },
+      {
+        "runOrder": 27,
+        "orderHash": "22673dc6f37ac4d2a749c062e5398cfad71b88e661bfd210d8b9422abf351706",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "WIKIDATA-CONFLICT-01"
+      },
+      {
+        "runOrder": 28,
+        "orderHash": "2e8ea684df00e8567d99578626d2ab35eb699dffc59f040ada014b05efe75cb3",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "CPYTHON-AUTHORITY-01"
+      },
+      {
+        "runOrder": 29,
+        "orderHash": "2f54919baf5badf72a127ae73e53b276172ac3c330bd782b0e9bc7518c5441ec",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "OPENAPI-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 30,
+        "orderHash": "31cbf5a5f2965dbbd4e9c348b49a7c78cbd4475f22985ae8ad3d1f5d0ddc18de",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-DIRECT-01"
+      },
+      {
+        "runOrder": 31,
+        "orderHash": "32f406ece70c7da15e63611a725be1b85f0420e8e9034a84da958e57dd2017cf",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "WIKIDATA-AUTHORITY-01"
+      },
+      {
+        "runOrder": 32,
+        "orderHash": "39daf8ab76d041d585bffd862356eb8166eb1a4cff308483f600467d90315044",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-AUTHORITY-01"
+      },
+      {
+        "runOrder": 33,
+        "orderHash": "3b96b0499bbcfd3b5a27d1783ffeb72c39ada9d72e90c8870da70b27ea1a5dc2",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "WIKIDATA-DRIFT-01"
+      },
+      {
+        "runOrder": 34,
+        "orderHash": "3e944d2d82f78192cbec16cfa7b8e6e4a6b1bc9cff4ba8fd481bf6df3dc153ba",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-DIRECT-01"
+      },
+      {
+        "runOrder": 35,
+        "orderHash": "40231f73ff08973abbc531356a46a3da5dd1e7b631719af95e13d9e4164e1ad1",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "WIKIDATA-CONFLICT-01"
+      },
+      {
+        "runOrder": 36,
+        "orderHash": "407da6eef0ba5625f50b4374fa0db07103aba8b7908f128b32c2576d5c60c319",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "OPENAPI-DRIFT-01"
+      },
+      {
+        "runOrder": 37,
+        "orderHash": "46d8109fd8e83db482c871fd0bc46ac6a0364e27fcbe576f3fcff15bc42be52d",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 38,
+        "orderHash": "4d011205de4abf6a2a072f5e97d13cecb3ca0e2ca9d096fc11d61aff85561379",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "CPYTHON-AUTHORITY-01"
+      },
+      {
+        "runOrder": 39,
+        "orderHash": "4d2afbc56adbf79ae30c7be74ed4f6c29860bb6c5b70ace41d34f09437d492b0",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 40,
+        "orderHash": "507e3c6c8b28ac4b5c89277bc8cc8946dbdf20432402ee1277cabf087ff7c8d0",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 41,
+        "orderHash": "5094508ebed99bc02221c88f7294df3f38fa365f6a0fcfd929008d699dfbe8d3",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "OPENAPI-DRIFT-01"
+      },
+      {
+        "runOrder": 42,
+        "orderHash": "523e8b4579431a633e78d57efff3350b9a17900e4d112fdcf9380bbd46ea492c",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 43,
+        "orderHash": "54c5ed71bef74fb3b82acbc7c2eeb53bceac326656a69cdc27f306af00590c70",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "WIKIDATA-AUTHORITY-01"
+      },
+      {
+        "runOrder": 44,
+        "orderHash": "5827d2c21ac2376ad48deaa18fb9e9e99dc3c335ae7f53ac38917b5e17cb0092",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 45,
+        "orderHash": "58a5bfdbfc99e643288e5bdf3c85207b2bc0c331cb9f8e50f88e699b1a602888",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-DIRECT-01"
+      },
+      {
+        "runOrder": 46,
+        "orderHash": "62b08c71c34de76ec1d30226ba69aab953d9e6c752b7f58496bd9a00275f4f0e",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 47,
+        "orderHash": "6c2b5504e1005740c3f84a461841f8a98a42292e8db74d5f6a138e8bae67dcf4",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "WIKIDATA-DIRECT-01"
+      },
+      {
+        "runOrder": 48,
+        "orderHash": "6dbd5e318acd358e3de9554f4448447649ac5948667fe73f8da07cadd6434bd0",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-CONFLICT-01"
+      },
+      {
+        "runOrder": 49,
+        "orderHash": "6dde069dc2a67fac907707a38293903e695b8d1f0b7845569efd586b6856a390",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "OPENAPI-CONFLICT-01"
+      },
+      {
+        "runOrder": 50,
+        "orderHash": "6e1b76924d391d790ef6128fb21d777004c7e5c170f7fe1aa622e0e679d97ab1",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "OPENAPI-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 51,
+        "orderHash": "6e9442439115dbbadf015bad24ce024d3e28860f55aca184163f72c613832491",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-CONFLICT-01"
+      },
+      {
+        "runOrder": 52,
+        "orderHash": "736f4f5ae65c1451a7264071e6eb803a5a6742bba438c145f5cfed1cc8589c51",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "CPYTHON-DIRECT-01"
+      },
+      {
+        "runOrder": 53,
+        "orderHash": "7454ae070629d415fae34a5a54d53831dc581b9534f54670f175937a08efcb9f",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "CPYTHON-CONFLICT-01"
+      },
+      {
+        "runOrder": 54,
+        "orderHash": "7e3c950f75f4053eb73ea885f3091863e18a6d3e707b3f8553c991b65b9e73de",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "WIKIDATA-DRIFT-01"
+      },
+      {
+        "runOrder": 55,
+        "orderHash": "7fef1074bb24dbf64e3726b09f85e9046c0a1785eabd430fb4a93c487bb5cc4e",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-AUTHORITY-01"
+      },
+      {
+        "runOrder": 56,
+        "orderHash": "80f11fd621dddd64dba08fc070f2e61fe35540ed063593c0fd7990dad1f9920b",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "CPYTHON-DRIFT-01"
+      },
+      {
+        "runOrder": 57,
+        "orderHash": "892983819022c4e7fad9d2028e7b514e3ff27660eb109300b86fea7496269304",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-DIRECT-01"
+      },
+      {
+        "runOrder": 58,
+        "orderHash": "8a2039df109dd403d086175d92984f04dc6b6a57048206f33e2fb90597e50d8c",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "CPYTHON-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 59,
+        "orderHash": "8d2dd75e0599457bd03016046db775dbf05bfdf8e51f7dd3fa686f79a1cd86e5",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-CONFLICT-01"
+      },
+      {
+        "runOrder": 60,
+        "orderHash": "8d68a4dd0ee3275d20e05a507e023ff7e5b3b4fcae0eca1c9afe03a66e851ff9",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "OPENAPI-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 61,
+        "orderHash": "8e68f90a325ee8db237245a70c0d7558ff8bf74e3853afd9176eb22741732264",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 62,
+        "orderHash": "9068daf0c0075fd42438826ee6001a3c6cfc2677d4ff93717d6dd217ed02b56e",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-CONFLICT-01"
+      },
+      {
+        "runOrder": 63,
+        "orderHash": "9a388089baa08acb7dbca646fba2c83652b496c33c1a1898aad4bf2ede6db32c",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-CONFLICT-01"
+      },
+      {
+        "runOrder": 64,
+        "orderHash": "9a94e53e0121d6cc02c1209befd692951a8028f387abd9cc4dd0465d0bc663fe",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "CPYTHON-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 65,
+        "orderHash": "9b9571149cb4e9b35a710c0444c0a877d98ada5818078a48206109f7f5b9851d",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-DRIFT-01"
+      },
+      {
+        "runOrder": 66,
+        "orderHash": "a035d1782bb1752c34c26aee9e883ebb86646132dabd3312e46ebac6f45ade37",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "WIKIDATA-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 67,
+        "orderHash": "a4f51124f5a4d517f06eeca45996f48f5332bb915b573a9937602b820a397734",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "CPYTHON-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 68,
+        "orderHash": "a58be93d93148c83d67cf6aa806f048485f4314b09725895cf8f2e39182ed576",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-DIRECT-01"
+      },
+      {
+        "runOrder": 69,
+        "orderHash": "a85588fef7628b8462ebd41e91d9937292092a4ade1593ac10a94f5d2cb9ba7d",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "CPYTHON-DIRECT-01"
+      },
+      {
+        "runOrder": 70,
+        "orderHash": "ab70973469ddc54e7565a892fc8d556b99fd6e97ee6660867de31066450ab1d6",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-CONFLICT-01"
+      },
+      {
+        "runOrder": 71,
+        "orderHash": "b38ecbfd4f8c1dbd1cb3775361a757cdca056ad75ed4ea761ee25a1ab1f8f980",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "OPENAPI-AUTHORITY-01"
+      },
+      {
+        "runOrder": 72,
+        "orderHash": "b491e5bea4e7e2cb60070f0150d6996c7512c579c2844a810fecd98543f4e029",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 73,
+        "orderHash": "bf6a5348f06cca1750b519182d8caae49c10390f2924025f517e760884ec4ee6",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "CPYTHON-DRIFT-01"
+      },
+      {
+        "runOrder": 74,
+        "orderHash": "bfd244799efb0cc219488bb347cac3a94f1f2ac2d5cedd088b95330770f12c00",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 75,
+        "orderHash": "c0a90b508928b514c89a43227da53a89e2f5bfaeec8f20e780af3dbadd319394",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "OPENAPI-AUTHORITY-01"
+      },
+      {
+        "runOrder": 76,
+        "orderHash": "c22c3b1475602f948efb9fbde07aa81ebd23ae872b42b50cc605ab84975ef21f",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-AUTHORITY-01"
+      },
+      {
+        "runOrder": 77,
+        "orderHash": "cb5f742e7c07eec60471a2c4c1dfab4e919a2dbdd0b3875dc941b3d3ed4800a0",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-DIRECT-01"
+      },
+      {
+        "runOrder": 78,
+        "orderHash": "cb98cd6021c238d6c84ff4c89819fda98b1807e903f925bbea8fd7f3445f926d",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-DRIFT-01"
+      },
+      {
+        "runOrder": 79,
+        "orderHash": "d0e28cc16fab8bd3f21c779babd47cb6c6144a10c49a81e3cfbe444512c6146a",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-DRIFT-01"
+      },
+      {
+        "runOrder": 80,
+        "orderHash": "d2bdba33a51bd0d5af63451a21d0f0453ac230d831499fa319acd240b80c3e64",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-AUTHORITY-01"
+      },
+      {
+        "runOrder": 81,
+        "orderHash": "d4488c8ceab02dafdabbbe04fc448d69911e6ae537d0fe3e65c39f2e9dbb7ee2",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 82,
+        "orderHash": "d80cafff3a59dfe4f987a810b41dc3ede5413aae4859e88bd8f4b7149e2866ca",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "CPYTHON-CONFLICT-01"
+      },
+      {
+        "runOrder": 83,
+        "orderHash": "dad4f41acea320a6fc56ce26578ffa5f51f55ff5bb10f36c4fd2a087392ce6d1",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "WIKIDATA-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 84,
+        "orderHash": "dd9bec720ca275a665a40c33ff4596d83890271fe4658924f22b3cf4bb08fb5a",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-DRIFT-01"
+      },
+      {
+        "runOrder": 85,
+        "orderHash": "e0041e61fdb68e70f2664cb67a9457e47b07b056347c1a3960f8a47b8ad55fd4",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "WIKIDATA-DIRECT-01"
+      },
+      {
+        "runOrder": 86,
+        "orderHash": "e609ad1a86201477bae2bee2df6c022b46a68dd1fb3731be99cdc8ef9706ac1a",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "OPENAPI-DIRECT-01"
+      },
+      {
+        "runOrder": 87,
+        "orderHash": "e8f226f708f77c38b59e5f11c5f2b55e3d3ce86a87f0cacfdc545b2d1a64e0ae",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_CLOSED_BOOK",
+        "taskId": "WIKIDATA-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 88,
+        "orderHash": "e95d4620f51526a7e1cd653f850f09c1fd5871874f96a0d7ac81a972accb84e6",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "CPYTHON-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 89,
+        "orderHash": "f50646b7960dd89b93966a73c12039b65b2e724f86008e2d48ae09b2cf307d82",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_TYPED_KNOWLEDGE",
+        "taskId": "OPENAPI-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 90,
+        "orderHash": "ff5f6f3183449f739d8e40c446b0e283444020dcebf99dc0256fc8fbd201ffe3",
+        "profileId": "VIBETHINKER_3B_Q8_0",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-AUTHORITY-01"
+      },
+      {
+        "runOrder": 91,
+        "orderHash": "1bf2a2ad39322fab2f5ffd734cf0416304da60bd22013a0eb1b00851818f66d9",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-CONFLICT-01"
+      },
+      {
+        "runOrder": 92,
+        "orderHash": "1c03e56e42498404ca7ccd2fe4f78ef2d5f39f74df086d9c1bb22db33142cd12",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-DRIFT-01"
+      },
+      {
+        "runOrder": 93,
+        "orderHash": "1e20cae540f63ab35c524d737132e884f8cbd162027d7e2af2f62965865cb164",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-DIRECT-01"
+      },
+      {
+        "runOrder": 94,
+        "orderHash": "2c01771fe3dfe3c631effa1a8037be8e4715f15007af0800cdc3d7921286bc14",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-DRIFT-01"
+      },
+      {
+        "runOrder": 95,
+        "orderHash": "344bfebf52946fdfe87adee9565f20f68be5f63c534c59fbdecd034f78c65b6f",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-AUTHORITY-01"
+      },
+      {
+        "runOrder": 96,
+        "orderHash": "48d647523e2a128cc6d5610b815c1b19c641bcf821fefe987caf79551975029b",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-AUTHORITY-01"
+      },
+      {
+        "runOrder": 97,
+        "orderHash": "50c9261c5f35bbd6501028570007d7a90e54f4b204528745708970e281a5dde9",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-CONFLICT-01"
+      },
+      {
+        "runOrder": 98,
+        "orderHash": "546dc9e618e9553d2d44de3078a6983bf6821942f100e70d7cfbee27a2fc0ca9",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 99,
+        "orderHash": "63df80b9da71ed2e882f8469b66261b929bdce8206790dfcb5f49a8f95c8bee6",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-DIRECT-01"
+      },
+      {
+        "runOrder": 100,
+        "orderHash": "6466ddf51fa651711a653db8931ebd2c4db701119fec19ef31ebe11d439d54a9",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-DIRECT-01"
+      },
+      {
+        "runOrder": 101,
+        "orderHash": "6cf19bfdfdc1b028dd3017d4f827f6e860ad4571047be4b9c9ea6fcbf9391b7d",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-AUTHORITY-01"
+      },
+      {
+        "runOrder": 102,
+        "orderHash": "71a3ccf8f49f5fa773abe9965da197e821e4815c51e0e63c45bd2b5fe114000b",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 103,
+        "orderHash": "7da7a6833840d3114b294af1d2ccffd342637c5e842130a7029c6158396d6482",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 104,
+        "orderHash": "8375508d799f2b8242b95e9e61973a4e0886792256c5bd96af4ffdc231f901e6",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-DRIFT-01"
+      },
+      {
+        "runOrder": 105,
+        "orderHash": "89997516e338718dbd8f161767e91ce6e3ba1a7f577f29054d93484662614a3e",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 106,
+        "orderHash": "8ad602627542052feb946ee9d98c36060c9b047b0d8c771e50373b5f6efc1b86",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-CONFLICT-01"
+      },
+      {
+        "runOrder": 107,
+        "orderHash": "9ab4f12f0045de59bf32327bac2d3d6e22e48dab81e1b79e56d2b455be0ac9fa",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 108,
+        "orderHash": "a91de06cb1b2e9dddf696f11c5a5a15c221b23b0d9385b9179f3b12c16ade819",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-AUTHORITY-01"
+      },
+      {
+        "runOrder": 109,
+        "orderHash": "abaea3d1766a83c473bc75dae8c8e21bde618ec86586c5987e173e09c2f9e748",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-DIRECT-01"
+      },
+      {
+        "runOrder": 110,
+        "orderHash": "ae2ba22bb7268afd76e55ea6a2ba022e7e675a4188fd1a65f7feebec52c7358c",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-CONFLICT-01"
+      },
+      {
+        "runOrder": 111,
+        "orderHash": "b9602300065f24610dddadf96cf56bf963173c1fefc3cfaf3f86b1e64f145d1b",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-CONFLICT-01"
+      },
+      {
+        "runOrder": 112,
+        "orderHash": "bf3993962fef192f90cc1eea432b7d94fd588eb0a1fafc43fa008f13b1ddb77a",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-DIRECT-01"
+      },
+      {
+        "runOrder": 113,
+        "orderHash": "c01936f19683ae04c4abf1eb8dd4738fd46ec8a0b4bbe86b9779a4d8449fd4a7",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 114,
+        "orderHash": "c7d7aed03200cd8f5050c32f200d0bc911fb4270637909c6f834a458e1e93bba",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-DIRECT-01"
+      },
+      {
+        "runOrder": 115,
+        "orderHash": "c8c394f5f66017cc125416c9629eadede4e056aaa315dbcf9746d750a072fe93",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 116,
+        "orderHash": "d438a524583c7b8df2a8f5bd52f11adb35d26175551d09752f9b5a8d6eb9e241",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-DRIFT-01"
+      },
+      {
+        "runOrder": 117,
+        "orderHash": "d56531895bc09b756c5b62091100b5e6c8a225c47f327a3c89ea316ddbaf7a28",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 118,
+        "orderHash": "d6bf14e0eb76be7d2c81c889a3fa8127eb3090e67ecf778efd6b67cd47032302",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 119,
+        "orderHash": "d7c454aff2727ba7603b6dd10fccca12b19a046cf944cbcbe381ff613ec991c9",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 120,
+        "orderHash": "deb56846fa09885756c26e56440de81da9368d9c7378b142eab993d21f2ebc86",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "CPYTHON-APPLICABILITY-01"
+      },
+      {
+        "runOrder": 121,
+        "orderHash": "e0ad0d2436c9564137dad7db9f87584c00fa4f4c3c6a88126bd5a914a40c1913",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "WIKIDATA-CONFLICT-01"
+      },
+      {
+        "runOrder": 122,
+        "orderHash": "e167844f6918614afefb40a8840658df8916cf096991cbdb5883aa862aa771ba",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-AUTHORITY-01"
+      },
+      {
+        "runOrder": 123,
+        "orderHash": "e37d34919f9a3c88f99c4eb4da9fa83869d96b8a37c833b3a97f5ab8a65af99a",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "WIKIDATA-DRIFT-01"
+      },
+      {
+        "runOrder": 124,
+        "orderHash": "eb3472acf8751c4582b85f29fa314e9680fe624a53d1f91f44d59b45d7ef1b10",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "CPYTHON-DRIFT-01"
+      },
+      {
+        "runOrder": 125,
+        "orderHash": "eee0a0875e62da279e4ead50b27e7e482478249fd68697e4de67ec4c4a7b6b5f",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+        "taskId": "OPENAPI-INSUFFICIENT-01"
+      },
+      {
+        "runOrder": 126,
+        "orderHash": "f6a4a0153823bd3b51f4e1ad9e244f7ffd9f0ad04c5212a1d4d003623f9a7c74",
+        "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+        "armId": "SMALL_RAW_RAG",
+        "taskId": "OPENAPI-AUTHORITY-01"
+      }
+    ]
+  },
+  "probeEvidence": [
+    {
+      "profileId": "VIBETHINKER_3B_Q8_0",
+      "passed": true,
+      "responseStatus": 200,
+      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+      "wallMs": 446.73143699999855,
+      "rawResponseHash": "2bafbc3bcb608ab5c4812f994d45beeb047efcd87e5719b8545dd03569bc1700"
+    },
+    {
+      "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+      "passed": true,
+      "responseStatus": 200,
+      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+      "wallMs": 459.2787779999999,
+      "rawResponseHash": "899b8793d47592f321a76ba1f587fd6041e441ca6ef38f9edd190c66449338a4"
+    },
+    {
+      "profileId": "QWEN3_8_27B_Q5_K_M",
+      "passed": false,
+      "responseStatus": 400,
+      "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+      "wallMs": 26.046008999997866,
+      "rawResponseHash": "4e317b744f23ef1323fa291b67cbf6f11b86beba77fe95db907304cac9f8cf9f"
+    }
+  ]
+}

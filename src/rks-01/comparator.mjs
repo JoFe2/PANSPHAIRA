@@ -20,6 +20,45 @@ const insist=(condition,message)=>{if(!condition) throw new Error(message)};
 const fraction=(numerator,denominator)=>({numerator,denominator,decimal:denominator ? numerator/denominator : null});
 const includesFold=(text,fragment)=>text.toLocaleLowerCase('en-US').includes(fragment.toLocaleLowerCase('en-US'));
 
+export function validateBytePreservedArchive(originals,archive) {
+  insist(originals instanceof Map && archive instanceof Map,'byte archive maps required');
+  for (const [name,bytes] of originals) {
+    insist(archive.has(name),`protocol v1 archive omission: ${name}`);
+    insist(Buffer.isBuffer(bytes)&&Buffer.isBuffer(archive.get(name))&&bytes.equals(archive.get(name)),`protocol v1 archive mutation: ${name}`);
+  }
+  insist(archive.size===originals.size,'protocol v1 archive contains unbound entries');
+  return true;
+}
+
+export function validateDualProtocolVerdicts({derived,topComparator,topReport,reportV2}) {
+  const verdict=derived?.verdict;
+  insist(['GO','NARROW_GO','FALSIFIED_WITH_EVIDENCE'].includes(verdict),'derived verdict invalid');
+  insist(topComparator?.protocolV1?.status==='FALSIFIED_PRE_SCORE'&&topComparator.protocolV1.verdict==='FALSIFIED_WITH_EVIDENCE','protocol v1 verdict relabel');
+  insist(topReport?.protocolV1?.status==='FALSIFIED_PRE_SCORE'&&topReport.protocolV1.verdict==='FALSIFIED_WITH_EVIDENCE','protocol v1 report relabel');
+  insist(topComparator.verdict===verdict&&topComparator.protocolV2?.verdict===verdict&&topReport.verdict===verdict&&topReport.protocolV2?.verdict===verdict&&reportV2?.verdict===verdict,'protocol v2 verdict label tamper');
+  return true;
+}
+
+export function validateProtocolV2Envelope({envelope,suite,manifest,rule,v1ServerArgs}) {
+  insist(envelope?.protocolVersion===2,'protocol version');
+  insist(envelope.predecessor?.version===1&&envelope.predecessor?.verdict==='FALSIFIED_WITH_EVIDENCE'&&envelope.predecessor?.commit==='baf8c21a4e27b271682b9662089d3187f015f6d5','protocol v1 predecessor');
+  insist(envelope.server?.binary===manifest.runtime.serverPath&&envelope.server?.sha256===manifest.runtime.serverSha256,'runtime binary substitution');
+  const delta=['--reasoning','off','--reasoning-format','none','--reasoning-budget','0'];
+  insist(canonicalJson(envelope.server?.arguments)===canonicalJson([...v1ServerArgs,...delta]),'protocol delta or server arguments changed');
+  insist(canonicalJson(envelope.v2DeltaOnly)===canonicalJson(['server --reasoning off','server --reasoning-format none','server --reasoning-budget 0']),'protocol delta declaration changed');
+  insist(envelope.request?.temperature===0,'temperature substitution');
+  insist(envelope.request?.seed===104729&&envelope.frozenUnchangedBindings?.seed===104729,'seed substitution');
+  insist(envelope.request?.max_tokens===192&&envelope.frozenUnchangedBindings?.maxTokens===192,'max tokens substitution');
+  insist(envelope.frozenUnchangedBindings?.taskSuiteDigest===suite.taskSuiteDigest,'task suite substitution');
+  insist(envelope.frozenUnchangedBindings?.contextContractDigest===suite.contextContractDigest,'context contract substitution');
+  insist(envelope.frozenUnchangedBindings?.comparisonSourceSetDigest===suite.comparisonSourceSetDigest,'source set substitution');
+  insist(envelope.frozenUnchangedBindings?.decisionRule==='tests/fixtures/rks-01/decision-rule-v1.json'&&rule.assignments===126,'decision rule substitution');
+  insist(envelope.frozenUnchangedBindings?.models==='UNCHANGED','models substitution');
+  insist(envelope.frozenUnchangedBindings?.temperature===0,'temperature binding substitution');
+  insist(envelope.frozenUnchangedBindings?.assignments===126,'assignments substitution');
+  return true;
+}
+
 export function validateFrozenInputs({suite,manifest,rule,raw,typed,guides}) {
   insist(suite?.schemaVersion==='pansphaira/rks-01-frozen-task-suite/v1','task suite schema');
   const unsigned={...suite}; delete unsigned.taskSuiteDigest;

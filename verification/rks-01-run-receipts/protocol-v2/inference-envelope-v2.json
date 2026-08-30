@@ -1,0 +1,219 @@
+{
+  "schemaVersion": "development-conveyor/rks01-inference-envelope/v2",
+  "goalId": "PSAI-REAL-SOURCE-KNOWLEDGE-UTILITY-01",
+  "runtimeProfile": "LLAMA_CPP_B10167_EE3D1B54_CUDA_SM120",
+  "server": {
+    "binary": "/mnt/data2/ai/llama.cpp/llama-b10167-cuda-eval-20260728/build-cuda-sm120-release/bin/llama-server",
+    "sha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+    "version": 10167,
+    "commit": "ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27",
+    "onePersistentServerPerModelProfile": true,
+    "arguments": [
+      "--model",
+      "{EXACT_MODEL_PATH}",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "{EPHEMERAL_LOOPBACK_PORT}",
+      "--parallel",
+      "1",
+      "--ctx-size",
+      "4096",
+      "--batch-size",
+      "512",
+      "--ubatch-size",
+      "256",
+      "--threads",
+      "8",
+      "--threads-batch",
+      "8",
+      "--gpu-layers",
+      "all",
+      "--flash-attn",
+      "on",
+      "--cache-type-k",
+      "f16",
+      "--cache-type-v",
+      "f16",
+      "--no-cache-prompt",
+      "--cache-reuse",
+      "0",
+      "--jinja",
+      "--perf",
+      "--metrics",
+      "--slots",
+      "--reasoning",
+      "off",
+      "--reasoning-format",
+      "none",
+      "--reasoning-budget",
+      "0"
+    ],
+    "readiness": "GET /health must report ready before any scored request",
+    "isolation": [
+      "loopback only",
+      "one slot",
+      "prompt cache disabled",
+      "no cross-arm KV reuse",
+      "one exact model per server process",
+      "server log and startup profile receipted"
+    ]
+  },
+  "endpoint": "/v1/chat/completions",
+  "request": {
+    "stream": false,
+    "temperature": 0,
+    "seed": 104729,
+    "max_tokens": 192,
+    "cache_prompt": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are running a closed evidence evaluation. Treat parametric memory as non-authoritative. Use only the supplied EVIDENCE_PACK and TASK_CONTRACT for material claims. Preserve applicability, version, exceptions, conflicts and unknowns. If evidence is missing, conflicting, stale or non-applicable, abstain or deny as required. Knowledge grants no Capability or Authority. Return only JSON matching the required schema."
+      },
+      {
+        "role": "user",
+        "contentTemplate": "TASK_CONTRACT:\n{FROZEN_TASK_JSON}\n\nEVIDENCE_PACK:\n{ARM_SPECIFIC_CONTEXT}\n\nReturn the closed answer object."
+      }
+    ],
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "rks01_closed_answer",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "answerState",
+            "materialClaims",
+            "evidenceRefs",
+            "applicability",
+            "denials",
+            "reasoningSummary"
+          ],
+          "properties": {
+            "answerState": {
+              "enum": [
+                "ANSWER",
+                "ABSTAIN",
+                "DENY"
+              ]
+            },
+            "materialClaims": {
+              "type": "array",
+              "maxItems": 16,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "claim",
+                  "evidenceRefs"
+                ],
+                "properties": {
+                  "claim": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "evidenceRefs": {
+                    "type": "array",
+                    "maxItems": 16,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "maxLength": 160
+                    }
+                  }
+                }
+              }
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "maxItems": 32,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              }
+            },
+            "applicability": {
+              "enum": [
+                "APPLICABLE",
+                "NOT_APPLICABLE",
+                "UNKNOWN"
+              ]
+            },
+            "denials": {
+              "type": "array",
+              "maxItems": 16,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              }
+            },
+            "reasoningSummary": {
+              "type": "string",
+              "maxLength": 1200
+            }
+          }
+        }
+      }
+    }
+  },
+  "scoringOrder": {
+    "algorithm": "Sort required profile/arm/task assignments by lowercase SHA-256 of '104729|profileId|armId|taskId'.",
+    "purpose": "Deterministically interleave arms and tasks without result-dependent ordering."
+  },
+  "measurement": {
+    "primaryCost": "Sum response usage.prompt_tokens + usage.completion_tokens across the same 18 tasks.",
+    "requiredPerResponse": [
+      "prompt_tokens",
+      "completion_tokens",
+      "total_tokens",
+      "prompt evaluation milliseconds",
+      "generation milliseconds",
+      "wall milliseconds"
+    ],
+    "serverStartupAndInternalWarmup": "reported separately and excluded from per-arm primary token cost",
+    "failures": "A scored transport/schema/timeout failure is retained as a failed run; no scored retry."
+  },
+  "preScoreGates": [
+    "binary and bundled library hashes revalidated",
+    "model path/size/SHA-256 revalidated",
+    "host GPU/driver profile revalidated",
+    "model-native chat template available",
+    "JSON schema probe passes on a synthetic non-task request",
+    "all 18 frozen tasks and arm contexts validate before the first scored request"
+  ],
+  "nonClaims": [
+    "V1_REMAINS_FALSIFIED",
+    "NO_TASK_CORPUS_MODEL_THRESHOLD_OR_COST_RULE_CHANGE",
+    "NO_V2_SUCCESS_BEFORE_NEW_PROBES_AND_126_RUNS",
+    "NO_FURTHER_PROTOCOL_RETRY_AUTHORITY"
+  ],
+  "protocolVersion": 2,
+  "predecessor": {
+    "version": 1,
+    "verdict": "FALSIFIED_WITH_EVIDENCE",
+    "reason": "QWEN3_8_27B_Q5_K_M exhausted the 192-token pre-score allowance in reasoning_content and returned empty content; zero scored tasks executed.",
+    "commit": "baf8c21a4e27b271682b9662089d3187f015f6d5"
+  },
+  "frozenUnchangedBindings": {
+    "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+    "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+    "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+    "decisionRule": "tests/fixtures/rks-01/decision-rule-v1.json",
+    "models": "UNCHANGED",
+    "temperature": 0,
+    "seed": 104729,
+    "maxTokens": 192,
+    "assignments": 126
+  },
+  "v2DeltaOnly": [
+    "server --reasoning off",
+    "server --reasoning-format none",
+    "server --reasoning-budget 0"
+  ],
+  "rerunAuthority": "ONE_VERSIONED_PRE_SCORE_COMPATIBILITY_CORRECTION_BEFORE_ANY_SCORED_V1_TASK_OUTPUT"
+}

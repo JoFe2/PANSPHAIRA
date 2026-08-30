@@ -1,0 +1,19 @@
+0.00.037.865 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.128.442 W srv  llama_server: -----------------
+0.00.128.443 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.128.443 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.128.444 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.128.444 W srv  llama_server: -----------------
+0.00.129.632 I srv    load_model: loading model '/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf'
+0.00.351.654 W load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.00.786.667 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 4096, kv_unified = 'false'
+0.00.790.902 I srv  llama_server: model loaded
+0.00.790.906 I srv  llama_server: listening on http://127.0.0.1:38903
+0.01.005.213 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.01.006.736 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.01.446.860 I slot print_timing: id  0 | task 0 | prompt eval time =      33.86 ms /   125 tokens (    0.27 ms per token,  3691.56 tokens per second)
+0.01.446.864 I slot print_timing: id  0 | task 0 |        eval time =     406.24 ms /    75 tokens (    5.42 ms per token,   184.62 tokens per second)
+0.01.446.864 I slot print_timing: id  0 | task 0 |       total time =     440.10 ms /   200 tokens
+0.01.446.870 I slot print_timing: id  0 | task 0 |    graphs reused =         74
+0.01.446.916 I slot      release: id  0 | task 0 | stop processing: n_tokens = 199, truncated = 0
+0.01.448.672 I srv    operator(): operator(): cleaning up before exit...

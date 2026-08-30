@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "pansphaira/rks-01-schema-probe/v2",
+  "protocolVersion": 2,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "unscored": true,
+  "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"NOT_APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence available to support a claim.\\\"\\n}\"}}],\"created\":1788125416,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":75,\"prompt_tokens\":125,\"total_tokens\":200,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-WqQJf9hXMhPSZ5d4qdO0Ra1zNQuqfBd9\",\"timings\":{\"cache_n\":0,\"prompt_n\":125,\"prompt_ms\":31.993,\"prompt_per_token_ms\":0.255944,\"prompt_per_second\":3907.104679148564,\"predicted_n\":75,\"predicted_ms\":407.425,\"predicted_per_token_ms\":5.432333333333333,\"predicted_per_second\":184.08296005399765}}",
+  "rawResponseHash": "2bafbc3bcb608ab5c4812f994d45beeb047efcd87e5719b8545dd03569bc1700",
+  "parsedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "No evidence available to support a claim."
+  },
+  "parseError": null,
+  "usage": {
+    "completion_tokens": 75,
+    "prompt_tokens": 125,
+    "total_tokens": 200,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 125,
+    "prompt_ms": 31.993,
+    "prompt_per_token_ms": 0.255944,
+    "prompt_per_second": 3907.104679148564,
+    "predicted_n": 75,
+    "predicted_ms": 407.425,
+    "predicted_per_token_ms": 5.432333333333333,
+    "predicted_per_second": 184.08296005399765
+  },
+  "wallMs": 446.73143699999855,
+  "passed": true
+}
