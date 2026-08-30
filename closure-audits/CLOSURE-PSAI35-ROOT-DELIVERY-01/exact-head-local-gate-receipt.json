@@ -14,8 +14,8 @@
     "NO_CAPABILITY_OR_AUTHORITY_EXPANSION"
   ],
   "baseCommit": "232895603e00b353e9584266e0da00e4329a3574",
-  "testedHead": "39efe735df6955b81005e0610aaa9b0f9c937e91",
-  "testedTree": "eb57d317222121b3c11904051c80b793918b24ec",
+  "testedHead": "2adee5a75fd7bc2239b2eba99172ae064aa66734",
+  "testedTree": "e07c246708909cffce4d126e5dea72da5dcaa29b",
   "reviewFindingsClosed": [
     "Complete public projection is bound to a checked-in immutable receipt digest.",
     "LKG locator is cryptographically bound to the exact lock identity.",
@@ -28,7 +28,9 @@
     {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
     {"command": "npm run asf:test", "outcome": "PASS", "tests": 66, "passed": 66},
     {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
-    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1091},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1089},
+    {"command": "npm run release-governance:verify && npm run release-governance:test", "outcome": "PASS", "tests": 54, "passed": 54},
+    {"command": "npm run lint", "outcome": "PASS"},
     {"command": "git diff --check", "outcome": "PASS"}
   ],
   "delivery": {
