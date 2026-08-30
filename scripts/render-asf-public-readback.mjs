@@ -14,6 +14,9 @@ const TRUSTED_LIFECYCLE_DIGESTS = Object.freeze({
   rollback: "434091c9e7d5dcfdf7e4cf5cedba4d72f4bd6641ead019345a9c3df789846f63",
   success: "48ac37da1240df7db9752ea77597112fa5d5383fe1bdd37b4768be446a513f86",
 });
+const TRUSTED_COMPLETE_RECEIPT_DIGESTS = Object.freeze({
+  success: "455c80dd5732e8a2f5dac40903d154ee00c93e5b291040228dbf51d0242be77a",
+});
 const ALLOWED_CLAIMS = new Set(["VERIFIED_SYNTHETIC_LIFECYCLE_RECEIPTS", "DETERMINISTIC_REDACTION_ONLY"]);
 const REQUIRED_NON_CLAIMS = new Set([
   "COMMITTED_EXTERNAL_STATE",
@@ -103,6 +106,7 @@ function validateReceipt(receipt) {
   requireDigest(receipt.receiptDigest, "receipt.receiptDigest");
   const { receiptDigest, ...unsigned } = receipt;
   if (sha256Canonical(unsigned) !== receiptDigest) reject("TAMPERED_RECEIPT", "receipt digest mismatch");
+  if (TRUSTED_COMPLETE_RECEIPT_DIGESTS[receipt.scenario] !== receiptDigest) reject("UNVERIFIED_RECEIPT", "complete receipt is not the checked-in immutable projection");
 }
 
 export function validatePublicReadbackInput(input) {

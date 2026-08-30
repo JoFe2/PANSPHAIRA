@@ -203,6 +203,7 @@ test("mismatched, revoked, or mutable LKG evidence fails closed", () => {
   denied(inputFor({ lkg: [mismatchedLkgFixture.lkg] }), "LKG_MISMATCH_DENIED");
   denied(inputFor({ lkg: [{ ...lkg, status: "REVOKED" }] }), "LKG_REVOKED_DENIED");
   denied(inputFor({ lkg: [{ ...lkg, locator: "asf-bundle+sha256:latest" }] }), "LKG_MUTABLE_DENIED");
+  denied(inputFor({ lkg: [{ ...lkg, locator: `asf-bundle+sha256:${"0".repeat(64)}` }] }), "LKG_MISMATCH_DENIED");
   denied(
     inputFor({
       lkg: [

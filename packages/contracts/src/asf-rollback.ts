@@ -534,6 +534,7 @@ function verifyCore(value: unknown): {
     if (record === undefined) return fail("SCHEMA_DENIED");
     if (record.status === "REVOKED") return fail("LKG_REVOKED_DENIED");
     if (isMutableClaim(record.locator)) return fail("LKG_MUTABLE_DENIED");
+    if (record.locator !== `asf-bundle+sha256:${record.lockIdentity}`) return fail("LKG_MISMATCH_DENIED");
     if (record.skillId !== candidate.skillId || !lkgMatchesTarget(request.targetScope, record)) {
       return fail("LKG_MISMATCH_DENIED");
     }

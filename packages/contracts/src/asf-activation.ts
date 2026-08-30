@@ -439,7 +439,8 @@ function validTarget(value: unknown): value is AsfActivationTargetScopeV1 {
   return exactKeys(value, TARGET_KEYS)
     && isId(value.adapterId) && isId(value.packId) && isId(value.profileId) && isId(value.routeId)
     && Array.isArray(value.capabilityIds) && value.capabilityIds.length > 0
-    && value.capabilityIds.every(isId);
+    && value.capabilityIds.every(isId)
+    && new Set(value.capabilityIds).size === value.capabilityIds.length;
 }
 
 function validAssignment(value: unknown): value is AssignmentRecord {

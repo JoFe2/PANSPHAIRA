@@ -356,6 +356,6 @@ test("lifecycle integration fails closed when required evidence or exact scope b
     capabilityId,
   ];
   refreshApproval(nonExactActivationScope.activation);
-  assert.equal(activateAsfGenerationExplicitV1(nonExactActivationScope.activation).outcome, "ACCEPTED");
-  lifecycleDenied(nonExactActivationScope, "INTEGRATION_BINDING_DENIED");
+  denied(nonExactActivationScope.activation, "SCHEMA_DENIED");
+  lifecycleDenied(nonExactActivationScope, "ACTIVATION_EVIDENCE_DENIED");
 });

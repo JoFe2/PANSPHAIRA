@@ -5,6 +5,7 @@ import { test } from "node:test";
 import {
   NO_RELEASE_STATEMENT,
   renderPublicReadback,
+  sha256Canonical,
   validatePublicReadbackInput,
 } from "../scripts/render-asf-public-readback.mjs";
 
@@ -48,6 +49,21 @@ test("missing and tampered receipts fail closed", () => {
   const tampered = readFixture("verified.json");
   tampered.receipt.stageReceipts.public = "0".repeat(64);
   rejectsWith("TAMPERED_RECEIPT", tampered);
+});
+
+test("a fully re-digested caller projection cannot reuse a trusted lifecycle digest", () => {
+  for (const mutate of [
+    (receipt) => { receipt.outcome = "DENIED"; },
+    (receipt) => { receipt.reasonCodes = ["CALLER_REPLACED"]; },
+    (receipt) => { receipt.stageReceipts.public = "0".repeat(64); },
+    (receipt) => { receipt.state.active = []; },
+  ]) {
+    const candidate = readFixture("verified.json");
+    mutate(candidate.receipt);
+    const { receiptDigest: _old, ...unsigned } = candidate.receipt;
+    candidate.receipt.receiptDigest = sha256Canonical(unsigned);
+    rejectsWith("UNVERIFIED_RECEIPT", candidate);
+  }
 });
 
 test("raw identity, token, path, host, session, job, URL, finding, exploit, and external action material is rejected", () => {
