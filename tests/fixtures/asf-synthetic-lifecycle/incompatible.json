@@ -1,0 +1,189 @@
+{
+  "after": {
+    "active": [
+      {
+        "generationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "lockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a",
+        "skillId": "skill:synthetic.lifecycle",
+        "state": "ACTIVE",
+        "version": "0.9.0"
+      },
+      {
+        "generationDigest": "757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130",
+        "lockIdentity": "5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5",
+        "skillId": "skill:unrelated",
+        "state": "ACTIVE",
+        "version": "9.0.0"
+      }
+    ],
+    "assignments": [],
+    "installed": [],
+    "rings": []
+  },
+  "before": {
+    "active": [
+      {
+        "generationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "lockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a",
+        "skillId": "skill:synthetic.lifecycle",
+        "state": "ACTIVE",
+        "version": "0.9.0"
+      },
+      {
+        "generationDigest": "757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130",
+        "lockIdentity": "5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5",
+        "skillId": "skill:unrelated",
+        "state": "ACTIVE",
+        "version": "9.0.0"
+      }
+    ],
+    "assignments": [],
+    "installed": [],
+    "rings": []
+  },
+  "effects": {
+    "activationApplied": false,
+    "installationApplied": false,
+    "rollbackApplied": false
+  },
+  "outcome": "DENIED",
+  "reasonCodes": [
+    "INCOMPATIBLE_TUPLE_DENIED"
+  ],
+  "receipts": {
+    "proposal": {
+      "stage": "proposal",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "lifecycleState": "PROPOSED",
+      "lineage": {
+        "parentGenerationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "parentLockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a"
+      },
+      "skillId": "skill:synthetic.lifecycle",
+      "version": "1.0.0",
+      "receiptDigest": "f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf"
+    },
+    "generation": {
+      "stage": "generation",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "contentDigest": "fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "immutable": true,
+      "lineage": {
+        "parentGenerationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+        "parentLockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a"
+      },
+      "sourceDigest": "c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa",
+      "version": "1.0.0",
+      "receiptDigest": "ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9"
+    },
+    "qualityEvidence": {
+      "stage": "qualityEvidence",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidenceClass": "SYNTHETIC_VERIFIED",
+      "finding": "QUALITY_CHECKED",
+      "observedAtMs": 1725000000000,
+      "receiptDigest": "c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2"
+    },
+    "provenanceEvidence": {
+      "stage": "provenanceEvidence",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidenceClass": "SYNTHETIC_VERIFIED",
+      "finding": "PROVENANCE_VERIFIED",
+      "observedAtMs": 1725000000000,
+      "receiptDigest": "c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536"
+    },
+    "riskEvidence": {
+      "stage": "riskEvidence",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidenceClass": "SYNTHETIC_VERIFIED",
+      "finding": "RISK_CLEAR",
+      "observedAtMs": 1725000000000,
+      "receiptDigest": "3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653"
+    },
+    "analysis": {
+      "stage": "analysis",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "evidence": [
+        "qualityEvidence",
+        "provenanceEvidence",
+        "riskEvidence"
+      ],
+      "lifecycleState": "ANALYZED",
+      "provenance": "VERIFIED",
+      "quality": "PASS",
+      "risk": "CLEAR",
+      "receiptDigest": "1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c"
+    },
+    "bundleLock": {
+      "stage": "bundleLock",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "generationDigest": "575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120",
+      "lockIdentity": "0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65",
+      "tamperChecked": true,
+      "receiptDigest": "5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90"
+    },
+    "gate": {
+      "stage": "gate",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "fault": "incompatible-tuple",
+      "gate": "compatibilityTuple",
+      "verdict": "DENIED",
+      "receiptDigest": "50aca4c413b0e5bbfd52e1f1088c2e22f328efe44ae29026447c19e380941e83"
+    },
+    "negativeProbe": {
+      "stage": "negativeProbe",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "fault": "incompatible-tuple",
+      "noSideEffect": true,
+      "reasonCode": "INCOMPATIBLE_TUPLE_DENIED",
+      "receiptDigest": "255886cb35316277ec8ed470f1cc1d10ba00adba191112ae06cd261e2d54b886"
+    },
+    "public": {
+      "stage": "public",
+      "schemaVersion": "pansphaira.asf/synthetic-lifecycle/v1",
+      "outcome": "DENIED",
+      "reasonCodes": [
+        "INCOMPATIBLE_TUPLE_DENIED"
+      ],
+      "receipts": {
+        "analysis": "1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c",
+        "bundleLock": "5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90",
+        "gate": "50aca4c413b0e5bbfd52e1f1088c2e22f328efe44ae29026447c19e380941e83",
+        "generation": "ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9",
+        "negativeProbe": "255886cb35316277ec8ed470f1cc1d10ba00adba191112ae06cd261e2d54b886",
+        "proposal": "f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf",
+        "provenanceEvidence": "c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536",
+        "qualityEvidence": "c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2",
+        "riskEvidence": "3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653"
+      },
+      "state": {
+        "active": [
+          {
+            "generationDigest": "749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9",
+            "lockIdentity": "e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a",
+            "skillId": "skill:synthetic.lifecycle",
+            "state": "ACTIVE",
+            "version": "0.9.0"
+          },
+          {
+            "generationDigest": "757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130",
+            "lockIdentity": "5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5",
+            "skillId": "skill:unrelated",
+            "state": "ACTIVE",
+            "version": "9.0.0"
+          }
+        ],
+        "installed": []
+      },
+      "lifecycleReceiptDigest": "702768b821d59675e88cb9ab456ee644a16a3b37e97c8397ddece8e6fa7d8051",
+      "receiptDigest": "e249776b5dd2ffa88bddb672c9495b20b145b3ed849e4bf65aa31fc103134745"
+    }
+  },
+  "scenario": "success",
+  "canonicalJson": "{\"after\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"before\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"effects\":{\"activationApplied\":false,\"installationApplied\":false,\"rollbackApplied\":false},\"outcome\":\"DENIED\",\"reasonCodes\":[\"INCOMPATIBLE_TUPLE_DENIED\"],\"receipts\":{\"analysis\":{\"evidence\":[\"qualityEvidence\",\"provenanceEvidence\",\"riskEvidence\"],\"lifecycleState\":\"ANALYZED\",\"provenance\":\"VERIFIED\",\"quality\":\"PASS\",\"receiptDigest\":\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\",\"risk\":\"CLEAR\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"analysis\"},\"bundleLock\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"bundleLock\",\"tamperChecked\":true},\"gate\":{\"fault\":\"incompatible-tuple\",\"gate\":\"compatibilityTuple\",\"receiptDigest\":\"50aca4c413b0e5bbfd52e1f1088c2e22f328efe44ae29026447c19e380941e83\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"gate\",\"verdict\":\"DENIED\"},\"generation\":{\"contentDigest\":\"fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"immutable\":true,\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"sourceDigest\":\"c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa\",\"stage\":\"generation\",\"version\":\"1.0.0\"},\"negativeProbe\":{\"fault\":\"incompatible-tuple\",\"noSideEffect\":true,\"reasonCode\":\"INCOMPATIBLE_TUPLE_DENIED\",\"receiptDigest\":\"255886cb35316277ec8ed470f1cc1d10ba00adba191112ae06cd261e2d54b886\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"negativeProbe\"},\"proposal\":{\"lifecycleState\":\"PROPOSED\",\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"skillId\":\"skill:synthetic.lifecycle\",\"stage\":\"proposal\",\"version\":\"1.0.0\"},\"provenanceEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"PROVENANCE_VERIFIED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"provenanceEvidence\"},\"qualityEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"QUALITY_CHECKED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"qualityEvidence\"},\"riskEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"RISK_CLEAR\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"riskEvidence\"}},\"scenario\":\"success\"}",
+  "exitCode": 1,
+  "fault": "incompatible-tuple",
+  "receiptDigest": "702768b821d59675e88cb9ab456ee644a16a3b37e97c8397ddece8e6fa7d8051",
+  "receiptJson": "{\"after\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"before\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"assignments\":[],\"installed\":[],\"rings\":[]},\"canonicalJson\":\"{\\\"after\\\":{\\\"active\\\":[{\\\"generationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"lockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"0.9.0\\\"},{\\\"generationDigest\\\":\\\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\\\",\\\"lockIdentity\\\":\\\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\\\",\\\"skillId\\\":\\\"skill:unrelated\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"9.0.0\\\"}],\\\"assignments\\\":[],\\\"installed\\\":[],\\\"rings\\\":[]},\\\"before\\\":{\\\"active\\\":[{\\\"generationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"lockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"0.9.0\\\"},{\\\"generationDigest\\\":\\\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\\\",\\\"lockIdentity\\\":\\\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\\\",\\\"skillId\\\":\\\"skill:unrelated\\\",\\\"state\\\":\\\"ACTIVE\\\",\\\"version\\\":\\\"9.0.0\\\"}],\\\"assignments\\\":[],\\\"installed\\\":[],\\\"rings\\\":[]},\\\"effects\\\":{\\\"activationApplied\\\":false,\\\"installationApplied\\\":false,\\\"rollbackApplied\\\":false},\\\"outcome\\\":\\\"DENIED\\\",\\\"reasonCodes\\\":[\\\"INCOMPATIBLE_TUPLE_DENIED\\\"],\\\"receipts\\\":{\\\"analysis\\\":{\\\"evidence\\\":[\\\"qualityEvidence\\\",\\\"provenanceEvidence\\\",\\\"riskEvidence\\\"],\\\"lifecycleState\\\":\\\"ANALYZED\\\",\\\"provenance\\\":\\\"VERIFIED\\\",\\\"quality\\\":\\\"PASS\\\",\\\"receiptDigest\\\":\\\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\\\",\\\"risk\\\":\\\"CLEAR\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"analysis\\\"},\\\"bundleLock\\\":{\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"lockIdentity\\\":\\\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\\\",\\\"receiptDigest\\\":\\\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"bundleLock\\\",\\\"tamperChecked\\\":true},\\\"gate\\\":{\\\"fault\\\":\\\"incompatible-tuple\\\",\\\"gate\\\":\\\"compatibilityTuple\\\",\\\"receiptDigest\\\":\\\"50aca4c413b0e5bbfd52e1f1088c2e22f328efe44ae29026447c19e380941e83\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"gate\\\",\\\"verdict\\\":\\\"DENIED\\\"},\\\"generation\\\":{\\\"contentDigest\\\":\\\"fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf\\\",\\\"generationDigest\\\":\\\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\\\",\\\"immutable\\\":true,\\\"lineage\\\":{\\\"parentGenerationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"parentLockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\"},\\\"receiptDigest\\\":\\\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"sourceDigest\\\":\\\"c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa\\\",\\\"stage\\\":\\\"generation\\\",\\\"version\\\":\\\"1.0.0\\\"},\\\"negativeProbe\\\":{\\\"fault\\\":\\\"incompatible-tuple\\\",\\\"noSideEffect\\\":true,\\\"reasonCode\\\":\\\"INCOMPATIBLE_TUPLE_DENIED\\\",\\\"receiptDigest\\\":\\\"255886cb35316277ec8ed470f1cc1d10ba00adba191112ae06cd261e2d54b886\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"negativeProbe\\\"},\\\"proposal\\\":{\\\"lifecycleState\\\":\\\"PROPOSED\\\",\\\"lineage\\\":{\\\"parentGenerationDigest\\\":\\\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\\\",\\\"parentLockIdentity\\\":\\\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\\\"},\\\"receiptDigest\\\":\\\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"skillId\\\":\\\"skill:synthetic.lifecycle\\\",\\\"stage\\\":\\\"proposal\\\",\\\"version\\\":\\\"1.0.0\\\"},\\\"provenanceEvidence\\\":{\\\"evidenceClass\\\":\\\"SYNTHETIC_VERIFIED\\\",\\\"finding\\\":\\\"PROVENANCE_VERIFIED\\\",\\\"observedAtMs\\\":1725000000000,\\\"receiptDigest\\\":\\\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"provenanceEvidence\\\"},\\\"qualityEvidence\\\":{\\\"evidenceClass\\\":\\\"SYNTHETIC_VERIFIED\\\",\\\"finding\\\":\\\"QUALITY_CHECKED\\\",\\\"observedAtMs\\\":1725000000000,\\\"receiptDigest\\\":\\\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"qualityEvidence\\\"},\\\"riskEvidence\\\":{\\\"evidenceClass\\\":\\\"SYNTHETIC_VERIFIED\\\",\\\"finding\\\":\\\"RISK_CLEAR\\\",\\\"observedAtMs\\\":1725000000000,\\\"receiptDigest\\\":\\\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\\\",\\\"schemaVersion\\\":\\\"pansphaira.asf/synthetic-lifecycle/v1\\\",\\\"stage\\\":\\\"riskEvidence\\\"}},\\\"scenario\\\":\\\"success\\\"}\",\"effects\":{\"activationApplied\":false,\"installationApplied\":false,\"rollbackApplied\":false},\"exitCode\":1,\"fault\":\"incompatible-tuple\",\"outcome\":\"DENIED\",\"reasonCodes\":[\"INCOMPATIBLE_TUPLE_DENIED\"],\"receiptDigest\":\"702768b821d59675e88cb9ab456ee644a16a3b37e97c8397ddece8e6fa7d8051\",\"receipts\":{\"analysis\":{\"evidence\":[\"qualityEvidence\",\"provenanceEvidence\",\"riskEvidence\"],\"lifecycleState\":\"ANALYZED\",\"provenance\":\"VERIFIED\",\"quality\":\"PASS\",\"receiptDigest\":\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\",\"risk\":\"CLEAR\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"analysis\"},\"bundleLock\":{\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"lockIdentity\":\"0ad7980ea87809872f632fad2fc8365591f8b7744f3229341f8236741dbb1a65\",\"receiptDigest\":\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"bundleLock\",\"tamperChecked\":true},\"gate\":{\"fault\":\"incompatible-tuple\",\"gate\":\"compatibilityTuple\",\"receiptDigest\":\"50aca4c413b0e5bbfd52e1f1088c2e22f328efe44ae29026447c19e380941e83\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"gate\",\"verdict\":\"DENIED\"},\"generation\":{\"contentDigest\":\"fae95d6d162d6e0b03e8afe19f2e98fb8261baf3c825dbcf603b11b7c36cfbbf\",\"generationDigest\":\"575133a03cac8d72cc44eeea4f92844f62b9d0bd0f2efdae2d223fe51b3d2120\",\"immutable\":true,\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"sourceDigest\":\"c4bc8f7273c129b8cc3078359c1d0d9993607c728b7bc977e81de05d845200aa\",\"stage\":\"generation\",\"version\":\"1.0.0\"},\"negativeProbe\":{\"fault\":\"incompatible-tuple\",\"noSideEffect\":true,\"reasonCode\":\"INCOMPATIBLE_TUPLE_DENIED\",\"receiptDigest\":\"255886cb35316277ec8ed470f1cc1d10ba00adba191112ae06cd261e2d54b886\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"negativeProbe\"},\"proposal\":{\"lifecycleState\":\"PROPOSED\",\"lineage\":{\"parentGenerationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"parentLockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\"},\"receiptDigest\":\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"skillId\":\"skill:synthetic.lifecycle\",\"stage\":\"proposal\",\"version\":\"1.0.0\"},\"provenanceEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"PROVENANCE_VERIFIED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"provenanceEvidence\"},\"public\":{\"lifecycleReceiptDigest\":\"702768b821d59675e88cb9ab456ee644a16a3b37e97c8397ddece8e6fa7d8051\",\"outcome\":\"DENIED\",\"reasonCodes\":[\"INCOMPATIBLE_TUPLE_DENIED\"],\"receiptDigest\":\"e249776b5dd2ffa88bddb672c9495b20b145b3ed849e4bf65aa31fc103134745\",\"receipts\":{\"analysis\":\"1a1d0d009f92a8469b2743886a318558666d930446776aaef19c18e2c99a768c\",\"bundleLock\":\"5d1acd3cfbf88d1bb5b1aa1076278663d0fc10b2890fac0be7697e605e5fcf90\",\"gate\":\"50aca4c413b0e5bbfd52e1f1088c2e22f328efe44ae29026447c19e380941e83\",\"generation\":\"ae64117ef4f59674d75086d45e06e031414e2898c2d5c91d76407247a57bb0a9\",\"negativeProbe\":\"255886cb35316277ec8ed470f1cc1d10ba00adba191112ae06cd261e2d54b886\",\"proposal\":\"f245df7a2e9b9fdf64af44f2591954b62fc9e3d8889078a6e7ab7b3f0ce28cdf\",\"provenanceEvidence\":\"c9355d78530dabe900fe107fcc570799e556da2b9c8192eb1974aa7891dc4536\",\"qualityEvidence\":\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\",\"riskEvidence\":\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\"},\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"public\",\"state\":{\"active\":[{\"generationDigest\":\"749958e8e473f884aae5587daa37d4b2f8ac8ace9c8412f858d3d4e5c530b8a9\",\"lockIdentity\":\"e9134ef1a8d295db775d6bd326d57aa6491f8a2e35fa0a39b719d0ae7a10ed7a\",\"skillId\":\"skill:synthetic.lifecycle\",\"state\":\"ACTIVE\",\"version\":\"0.9.0\"},{\"generationDigest\":\"757ab9ff32bfbc4fa531aa3010c8105de9eb3f1322ae1760081fce13ec855130\",\"lockIdentity\":\"5344f01fd2e6e423a9c389bda38ec99e8776427af34eae418c16c94c56c0b3e5\",\"skillId\":\"skill:unrelated\",\"state\":\"ACTIVE\",\"version\":\"9.0.0\"}],\"installed\":[]}},\"qualityEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"QUALITY_CHECKED\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"c1dcd316c7c9e6d61eed8982dbabfa5969088306c0fca1876f7964f7bbc376d2\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"qualityEvidence\"},\"riskEvidence\":{\"evidenceClass\":\"SYNTHETIC_VERIFIED\",\"finding\":\"RISK_CLEAR\",\"observedAtMs\":1725000000000,\"receiptDigest\":\"3b5f5d4dd90994f4835ee7d7fd625c5dc20e9b1082cb2cbaf841dd4a69bd4653\",\"schemaVersion\":\"pansphaira.asf/synthetic-lifecycle/v1\",\"stage\":\"riskEvidence\"}},\"scenario\":\"success\"}"
+}

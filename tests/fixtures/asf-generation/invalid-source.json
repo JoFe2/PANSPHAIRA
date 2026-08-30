@@ -1,0 +1,111 @@
+{
+  "authority": {
+    "activation": "NO_AUTHORITY",
+    "grantedCapabilities": [],
+    "installation": "NO_AUTHORITY"
+  },
+  "capabilityCatalogue": {
+    "catalogDigest": "787806f521425339ded8010d83bd382055bc89fef20d4b27f11164870ae739ef",
+    "catalogId": "catalog:psai35-baseline",
+    "entries": [
+      {
+        "capabilityId": "capability:filesystem.read",
+        "digest": "8ca001ba54e2ff8fa6cad48b3718ed053d9b72bf156bf6e5c7d0c848bbb9f2b5",
+        "version": "1.0.0"
+      },
+      {
+        "capabilityId": "capability:network.fetch",
+        "digest": "12672044bf3fd3d0a86821cc33814c7b1ee256f920c566a7fc46c71bf1491153",
+        "version": "1.0.0"
+      }
+    ]
+  },
+  "capabilityPack": {
+    "packDigest": "d9c953bfe98255ac007023b00d8f36709c4f3372301134e0ae2eedc0c7859704",
+    "packId": "pack:zoo-greeter-pack",
+    "references": [
+      {
+        "catalogueBinding": {
+          "catalogDigest": "787806f521425339ded8010d83bd382055bc89fef20d4b27f11164870ae739ef",
+          "catalogId": "catalog:psai35-baseline"
+        },
+        "capabilityId": "capability:filesystem.read",
+        "digest": "8ca001ba54e2ff8fa6cad48b3718ed053d9b72bf156bf6e5c7d0c848bbb9f2b5",
+        "version": "1.0.0"
+      },
+      {
+        "catalogueBinding": {
+          "catalogDigest": "787806f521425339ded8010d83bd382055bc89fef20d4b27f11164870ae739ef",
+          "catalogId": "catalog:psai35-baseline"
+        },
+        "capabilityId": "capability:network.fetch",
+        "digest": "12672044bf3fd3d0a86821cc33814c7b1ee256f920c566a7fc46c71bf1491153",
+        "version": "1.0.0"
+      }
+    ]
+  },
+  "generation": {
+    "content": {
+      "files": [
+        {
+          "mediaType": "text/markdown",
+          "path": "SKILL.md",
+          "role": "ENTRYPOINT",
+          "size": 49,
+          "sha256": "cb61ec9c2e70bd07d7b3d66ecedbc810f6f2d353fbbb6fd5ad31b0708a1193d9"
+        },
+        {
+          "mediaType": "application/json",
+          "path": "config/settings.json",
+          "role": "CONFIG",
+          "size": 47,
+          "sha256": "1a6f22a878cbaa1d8af28b731f2e5ae3f3af95f87b59b498d350bacc14c2ec3e"
+        },
+        {
+          "mediaType": "text/markdown",
+          "path": "docs/usage.md",
+          "role": "DOC",
+          "size": 55,
+          "sha256": "e6ce3d3cfe1029175bed903eae0e87abb610b0d5eea45c50e8d1c85ed108bfef"
+        },
+        {
+          "mediaType": "text/plain",
+          "path": "tests/fixtures/greeting.txt",
+          "role": "TEST_FIXTURE",
+          "size": 10,
+          "sha256": "20ae502ad8a46a9188a8e280334a3d28ef571e45be625004c2b46f6810034205"
+        }
+      ]
+    },
+    "contentDigest": "f36dd0a2bf2447d44d759c9ab3c9108f45d56ece91206962b1808263af4998b9",
+    "entrypoint": "MAIN.md",
+    "format": "OPENCLAW_SKILL",
+    "skillId": "skill:zoo-greeter",
+    "source": {
+      "kind": "LOCAL_CONTENT",
+      "locator": "local+sha256:f36dd0a2bf2447d44d759c9ab3c9108f45d56ece91206962b1808263af4998b9",
+      "mutable": false
+    },
+    "version": "1.0.0"
+  },
+  "lifecycle": {
+    "state": "PROPOSED"
+  },
+  "limitations": [
+    "CONTENT_ADDRESSED_GENERATION_ONLY",
+    "DISCOVERY_OR_PRESENCE_IS_NOT_AUTHORITY",
+    "FINITE_CAPABILITY_PACK_ONLY",
+    "LOCAL_DETERMINISTIC_CONTRACT_ONLY",
+    "NO_INSTALLATION_OR_ACTIVATION_AUTHORITY",
+    "NO_LIVE_REGISTRY_OR_SIGNATURE_PROOF"
+  ],
+  "metadata": {
+    "build": "build:psai35-source-a",
+    "sequence": 7
+  },
+  "parentLock": {
+    "lockIdentity": "5d83f085babd90fb366bbc13d5541f822c1daa5103f52a577e9db67a535192d1",
+    "schemaVersion": "chimpmaera.asf/bundle-lock/v1"
+  },
+  "schemaVersion": "chimpmaera.asf/generation-source/v1"
+}

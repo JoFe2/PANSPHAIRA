@@ -1,0 +1,18 @@
+{
+  "lkg": {
+    "adapterId": "adapter:qwen.synthetic",
+    "capabilityIds": [
+      "capability:documents.read",
+      "capability:messages.send"
+    ],
+    "generationDigest": "54e277adfbcd8eb0c0e4ccb35b5a11acf62ed43912fae237eea53c7e3556b2a6",
+    "lockIdentity": "be3deae39d0ed9bac3e81a9ab265a3acbf8902627c7fe9489dd5d9234e8e5e49",
+    "locator": "asf-bundle+sha256:be3deae39d0ed9bac3e81a9ab265a3acbf8902627c7fe9489dd5d9234e8e5e49",
+    "packId": "pack:qwen.synthetic",
+    "profileId": "profile:qwen.safe",
+    "routeId": "route:remote",
+    "skillId": "skill:qwen.synthetic",
+    "status": "ACCEPTED",
+    "version": "0.9.0"
+  }
+}

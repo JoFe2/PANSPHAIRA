@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CLOSURE-PSAI35-ROOT-DELIVERY-01",
+  "sourceIssue": {
+    "repository": "JimPansky/PANSPHAIRA",
+    "number": 35,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/35"
+  },
+  "authorizedScope": "LOCAL_SYNTHETIC_ASF_M1",
+  "nonClaims": [
+    "NO_LIVE_MARKETPLACE",
+    "NO_PRODUCTION_ACTIVATION",
+    "NO_AUTOMATIC_UPDATE_OR_ACTIVATION",
+    "NO_CAPABILITY_OR_AUTHORITY_EXPANSION"
+  ],
+  "baseCommit": "232895603e00b353e9584266e0da00e4329a3574",
+  "testedHead": "2adee5a75fd7bc2239b2eba99172ae064aa66734",
+  "testedTree": "e07c246708909cffce4d126e5dea72da5dcaa29b",
+  "reviewFindingsClosed": [
+    "Complete public projection is bound to a checked-in immutable receipt digest.",
+    "LKG locator is cryptographically bound to the exact lock identity.",
+    "Activation target capability identifiers are unique before authorization.",
+    "All standalone ASF modules are exported without barrel-name collisions.",
+    "All ASF suites are mandatory in canonical npm test posttest execution.",
+    "Verification DAG, public manifest, exact manifest count and repository checksums bind current bytes."
+  ],
+  "gates": [
+    {"command": "npm test", "outcome": "PASS", "mainTests": 642, "mainPassed": 642},
+    {"command": "npm run asf:test", "outcome": "PASS", "tests": 66, "passed": 66},
+    {"command": "node --test dist/tests/verification-fabric-v2.test.js tests/supply-chain-verifier.test.mjs tests/release-governance.test.mjs", "outcome": "PASS", "tests": 78, "passed": 78},
+    {"command": "sha256sum --check SHA256SUMS", "outcome": "PASS", "entries": 1089},
+    {"command": "npm run release-governance:verify && npm run release-governance:test", "outcome": "PASS", "tests": 54, "passed": 54},
+    {"command": "npm run lint", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "delivery": {
+    "readyForPr": true,
+    "releaseRequired": true,
+    "publicReadbackRequired": true,
+    "issueCloseRequired": true
+  }
+}

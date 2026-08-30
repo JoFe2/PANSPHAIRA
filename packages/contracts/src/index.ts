@@ -1,4 +1,35 @@
 export { canonicalJson } from "./canonical-json.js";
+export * from "./asf-activation.js";
+export * from "./asf-analysis.js";
+export * from "./asf-assignment.js";
+export * from "./asf-compatibility-fence.js";
+export * from "./asf-rollback.js";
+export * from "./asf-update-rings.js";
+export * from "./asf-bundle-lock.js";
+export {
+  ASF_GENERATION_EXIT_CODES_V1,
+  ASF_GENERATION_LIMITATIONS_V1,
+  ASF_GENERATION_PROPOSED_STATE_V1,
+  ASF_GENERATION_RECEIPT_SCHEMA_V1,
+  ASF_GENERATION_SOURCE_SCHEMA_V1,
+  canonicalizeAsfGenerationV1,
+  parseAsfGenerationV1,
+  verifyAsfGenerationFromLockV1,
+  verifyAsfGenerationV1,
+} from "./asf-generation.js";
+export type {
+  AsfGenerationContentV1,
+  AsfGenerationLifecycleV1,
+  AsfGenerationMetadataV1,
+  AsfGenerationProjectionV1,
+  AsfGenerationReasonCodeV1,
+  AsfGenerationReceiptV1,
+  AsfGenerationResultV1,
+  AsfParentLockV1,
+  AsfProposedSourceV1,
+} from "./asf-generation.js";
+export * from "./asf-inactive-install.js";
+export * from "./asf-synthetic-lifecycle-harness.js";
 export * from "./poc-showcase.js";
 export * from "./poc-showcase-e2e.js";
 export * from "./poc-guided-demo-bootstrap.js";

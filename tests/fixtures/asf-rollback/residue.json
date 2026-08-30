@@ -1,0 +1,19 @@
+{
+  "digest": "5a69d69495036b65c1c63079a32f24f18b4c8c73a6f1637d39adcb5ddc462caa",
+  "records": [
+    {
+      "generationDigest": "c4e4d0cd00912ddcde3563be45c3ae00b83e5f4b3ba93ac2c3ad086feb7ad59d",
+      "lockIdentity": "d52c4f5aab897f7e5a0535643ed4c6db11293b39aeb69b4ec358407206207d87",
+      "skillId": "skill:qwen.synthetic",
+      "state": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "generationDigest": "9999999999999999999999999999999999999999999999999999999999999999",
+      "lockIdentity": "8888888888888888888888888888888888888888888888888888888888888888",
+      "skillId": "skill:unrelated",
+      "state": "installed_inactive",
+      "version": "2.0.0"
+    }
+  ]
+}
