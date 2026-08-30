@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+const modulePath = import.meta.url.endsWith(".ts") ? "../../src/cks-12/pattern-shadow-workflow.ts" : "../../src/cks-12/pattern-shadow-workflow.js";
+const shadow: typeof import("../../src/cks-12/pattern-shadow-workflow.js") = await import(modulePath);
+const bytes = readFileSync("tests/fixtures/cks-12/pattern-shadow-parity-v1.json"); const fixture = JSON.parse(bytes.toString("utf8")); const receipt = JSON.parse(readFileSync("verification/cks-12/pattern-shadow-parity-receipt-v1.json", "utf8"));
+const hash = (value: Uint8Array) => createHash("sha256").update(value).digest("hex");
+test("CKS-12 SS-20/21 shadow workflow parity and deterministic Function reduce measured cost without weakening proof", () => { const result = shadow.measureShadowWorkflowParity(fixture); assert.deepEqual(result, receipt.result); assert.equal(result.status, "SHADOW_PARITY_RECORDED"); if (result.status !== "SHADOW_PARITY_RECORDED") return; assert.equal(result.cost.reasoningReducedBy, 5); assert.equal(result.cost.retrievalReducedBy, 3); assert.equal(result.proofParity, true); });
+test("parity, proof, and cost regressions fail closed", () => { for (const mutate of [(value: any) => { value.holdouts[0].workflowOutput = "DIFFERENT"; }, (value: any) => { value.holdouts[0].workflowProofObligations.pop(); }, (value: any) => { value.functionRun.proofDigest = "e".repeat(64); }, (value: any) => { value.functionRun.cost.reasoning = 8; }]) { const value = structuredClone(fixture); mutate(value); assert.equal(shadow.measureShadowWorkflowParity(value).status, "DENIED"); } });
+test("falsification report and receipt bind quality, recall, false completeness, attribution, cost, and stops", () => { assert.equal(bytes.toString("utf8"), shadow.canonicalJson(fixture)); assert.equal(receipt.fixtureSha256, hash(bytes)); const { receiptSha256, ...body } = receipt; assert.equal(receiptSha256, shadow.digest(body)); const result = shadow.measureShadowWorkflowParity(fixture); if (result.status === "SHADOW_PARITY_RECORDED") assert.deepEqual(shadow.createReceipt(receipt.fixtureSha256, result), receipt); });

@@ -1,0 +1,11 @@
+{
+  "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
+  "issue":{"repository":"JoFe2/PANSPHAIRA","number":292},
+  "testedProductHead":"5101af617ed9741d53ecaa0f913173ce43dbf34b","testedProductTree":"922578c7791ebe925bacb970b8142002918df1c4","baseSha":"46a65171c2bfb8e252e6455080eacc818afa1061",
+  "runCommits":["b4e5f1b5f0c17d83f36547f125c9f44600b586cd","f91ea40accde001d9d7febeefa4d2c0f8fb6c55a","5101af617ed9741d53ecaa0f913173ce43dbf34b"],
+  "acceptance":{"STORY_23_STEPS":"PASS","ACQUISITION_PROMOTION":"PASS","EXPERIENCE_ATTRIBUTION":"PASS","READONLY_BRIDGE":"PASS","PATTERN_WORKFLOW_FUNCTION":"PASS","DRIFT_FAST_ABORT":"PASS","FALSIFICATION_REPORT":"PASS"},
+  "releaseDisposition":"RELEASE_REQUIRED_PENDING_DELIVERY",
+  "checks":[{"command":"npm run cks12:test","status":"PASS","tests":60},{"command":"seven CKS-12 validation scripts","status":"PASS","scripts":7},{"command":"npm test","status":"PASS"},{"command":"npm run lint","status":"PASS"},{"command":"sha256sum --check SHA256SUMS","status":"PASS"},{"command":"npm run release-governance:verify","status":"PASS"},{"command":"git diff --check","status":"PASS"}],
+  "integrity":{"publicManifestEntries":1261,"verificationDagVersion":30,"verificationDagNodes":36},
+  "nonClaims":["NO_PRODUCTION_CLAIM","NO_LIVE_TENANT_DATA","NO_AUTOMATIC_INTERNET_TO_KNOWLEDGE","NO_AUTONOMOUS_PROMOTION_DEPLOYMENT_OR_ACTION_AUTHORITY","NO_RELEASE_CLAIM_BEFORE_DELIVERY"]
+}

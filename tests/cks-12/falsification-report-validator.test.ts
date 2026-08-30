@@ -1,0 +1,9 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+import * as validator from "../../src/cks-12/falsification-report-validator.js";
+const bytes = readFileSync("tests/fixtures/cks-12/falsification-report-v1.json"); const fixture = JSON.parse(bytes.toString("utf8")); const receipt = JSON.parse(readFileSync("verification/cks-12/falsification-report-receipt-v1.json", "utf8"));
+test("CKS-12 final report binds quality, recall, false completeness, attribution, cost, and stop conditions", () => { const result = validator.validateFalsificationReport(fixture); assert.equal(result.status, "PASS_SYNTHETIC_ONLY"); assert.deepEqual(result, receipt.result); });
+test("missing package heads, incomplete steps, failed metrics, and stop conditions falsify", () => { for (const mutate of [(value: any) => { value.packageHeads.pop(); }, (value: any) => { value.orderedStoryStepIds.pop(); }, (value: any) => { value.metrics.cost.functionRetrievalCalls = 4; }, (value: any) => { delete value.metrics.confusion; }, (value: any) => { value.metrics.storyReplay.cleanReplays = 2; }, (value: any) => { value.encounteredStopConditions = ["COST_NON_REDUCTION"]; }]) { const value = structuredClone(fixture); mutate(value); assert.equal(validator.validateFalsificationReport(value).status, "FALSIFIED"); } });
+test("report fixture and receipt are canonical and self-digested", () => { assert.equal(bytes.toString("utf8"), validator.canonicalJson(fixture)); const { receiptSha256, ...body } = receipt; assert.equal(receipt.fixtureSha256, createHash("sha256").update(bytes).digest("hex")); assert.equal(receiptSha256, validator.digest(body)); assert.deepEqual(validator.createReceipt(receipt.fixtureSha256, validator.validateFalsificationReport(fixture)), receipt); });

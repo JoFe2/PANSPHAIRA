@@ -1,0 +1,37 @@
+import { createHash } from "node:crypto";
+
+export const SCHEMA_VERSION = "chimpmaera.cks/experience-diversity-attribution/v1";
+export const COMPONENT_VERSIONS = Object.freeze({ lineageRecorder: "cks-12-lineage-recorder@v1", attributionModel: "cks-12-finite-attribution@v1", applicabilityContract: "v1" });
+export const DENIAL_CODES = Object.freeze(["MISSING_INPUT", "VERSION_LOCK_MISMATCH", "LINEAGE_INCOMPLETE", "REPETITION_GENERALIZATION_CONFLATED", "ATTRIBUTION_INCOMPLETE", "STALE_EVIDENCE"] as const);
+type DenialCode = typeof DENIAL_CODES[number];
+type RecordValue = Record<string, unknown>;
+type Denied = { status: "DENIED"; reasonCodes: readonly DenialCode[]; details: readonly string[] };
+export type ExperienceEvidence = { status: "EXPERIENCE_VALIDATED"; operationalRepetitions: number; generalizationUnits: number; attributedFailureCount: number; attribution: { causalClass: string; uncertainty: string; outcomeId: string }; narrowedApplicability: { prior: string; narrowed: string; state: "PROMOTED_SYNTHETIC_ONLY"; lifecycleReceiptIds: readonly string[] }; authority: "NONE"; capabilityDelta: "NONE"; effect: "NONE" };
+export function canonicalJson(value: unknown): string { if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value); if (typeof value === "number") { if (!Number.isFinite(value)) throw new TypeError("non-finite"); return JSON.stringify(value); } if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`; if (typeof value !== "object" || Object.getPrototypeOf(value) !== Object.prototype) throw new TypeError("plain JSON required"); const record = value as RecordValue; return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(",")}}`; }
+export const digest = (value: unknown): string => createHash("sha256").update(canonicalJson(value)).digest("hex");
+const record = (value: unknown): value is RecordValue => value !== null && typeof value === "object" && !Array.isArray(value) && Object.getPrototypeOf(value) === Object.prototype;
+const deny = (reasonCodes: DenialCode[], details: string[]): Denied => ({ status: "DENIED", reasonCodes: [...new Set(reasonCodes)].sort(), details });
+
+export function validateExperienceDiversity(input: unknown): ExperienceEvidence | Denied {
+  if (!record(input)) return deny(["MISSING_INPUT"], ["experience input must be a plain JSON object"]);
+  const reasons: DenialCode[] = []; const details: string[] = []; const add = (code: DenialCode, detail: string) => { reasons.push(code); details.push(detail); };
+  if (!record(input.componentVersions) || canonicalJson(input.componentVersions) !== canonicalJson(COMPONENT_VERSIONS)) add("VERSION_LOCK_MISMATCH", "component versions must exactly match");
+  if (!Array.isArray(input.lineage) || input.lineage.length === 0 || input.lineage.some((entry) => !record(entry) || typeof entry.taskId !== "string" || typeof entry.searchId !== "string" || typeof entry.knowledgeId !== "string" || typeof entry.decisionId !== "string" || typeof entry.outcomeId !== "string")) add("LINEAGE_INCOMPLETE", "every experience must bind Task, Search, Knowledge, Decision and Outcome");
+  const repeats = Array.isArray(input.repetitions) ? input.repetitions : [];
+  if (repeats.length < 3 || repeats.some((entry) => !record(entry) || entry.context !== "DECLARED_CONTEXT" || entry.outcome !== "SUCCESS")) add("REPETITION_GENERALIZATION_CONFLATED", "at least three operational repetitions must be same-context successful records");
+  const holdouts = Array.isArray(input.generalizations) ? input.generalizations : [];
+  const strata = holdouts.map((entry) => record(entry) ? entry.stratum : undefined);
+  if (holdouts.length < 3 || strata.some((stratum) => typeof stratum !== "string") || new Set(strata).size !== strata.length || holdouts.some((entry) => !record(entry) || entry.predeclared !== true || entry.outcome !== "SUCCESS") || !holdouts.some((entry) => record(entry) && entry.untouched === true)) add("REPETITION_GENERALIZATION_CONFLATED", "generalization requires at least three distinct predeclared strata including one untouched holdout");
+  const failures = Array.isArray(input.failures) ? input.failures : [];
+  const finiteClasses = new Set(["KNOWLEDGE_CONTENT", "RETRIEVAL", "APPLICABILITY", "REASONING", "WORKFLOW", "FUNCTION", "EXECUTION", "VERIFICATION", "INPUT", "DRIFT", "MULTI_CAUSE", "UNRESOLVED"]);
+  if (failures.length < 3 || failures.some((failure) => !record(failure) || typeof failure.outcomeId !== "string" || !finiteClasses.has(String(failure.causalClass)) || typeof failure.uncertainty !== "string" || failure.uncertainty.length === 0) || !["APPLICABILITY", "DRIFT"].every((kind) => failures.some((failure) => record(failure) && failure.causalClass === kind)) || !failures.some((failure) => record(failure) && ["MULTI_CAUSE", "UNRESOLVED"].includes(String(failure.causalClass)))) add("ATTRIBUTION_INCOMPLETE", "at least three finite attributed failures must include Applicability, drift, and multi-cause or unresolved evidence");
+  const applicabilityFailure = failures.find((failure) => record(failure) && failure.causalClass === "APPLICABILITY") as RecordValue | undefined;
+  const applicability = input.applicability;
+  const lifecycle = record(applicability) && Array.isArray(applicability.lifecycle) ? applicability.lifecycle : [];
+  const expectedStates = ["CANDIDATE", "VALIDATED", "PROMOTED_SYNTHETIC_ONLY"];
+  const lifecycleIds = lifecycle.map((entry) => record(entry) ? entry.receiptId : undefined);
+  if (!record(applicability) || typeof applicability.prior !== "string" || typeof applicability.narrowed !== "string" || applicability.narrowed === applicability.prior || applicability.stale === true || applicability.failureOutcomeId !== applicabilityFailure?.outcomeId || lifecycle.length !== 3 || lifecycle.some((entry, index) => !record(entry) || entry.state !== expectedStates[index] || typeof entry.receiptId !== "string" || typeof entry.receiptSha256 !== "string" || !/^[0-9a-f]{64}$/.test(entry.receiptSha256)) || new Set(lifecycleIds).size !== 3) add(applicability && (applicability as RecordValue).stale === true ? "STALE_EVIDENCE" : "ATTRIBUTION_INCOMPLETE", "Applicability-attributed failure must traverse separate candidate, validation, and governed promotion receipts");
+  if (reasons.length) return deny(reasons, details);
+  return { status: "EXPERIENCE_VALIDATED", operationalRepetitions: repeats.length, generalizationUnits: holdouts.length, attributedFailureCount: failures.length, attribution: { causalClass: applicabilityFailure!.causalClass as string, uncertainty: applicabilityFailure!.uncertainty as string, outcomeId: applicabilityFailure!.outcomeId as string }, narrowedApplicability: { prior: (applicability as RecordValue).prior as string, narrowed: (applicability as RecordValue).narrowed as string, state: "PROMOTED_SYNTHETIC_ONLY", lifecycleReceiptIds: lifecycleIds as string[] }, authority: "NONE", capabilityDelta: "NONE", effect: "NONE" };
+}
+export function createReceipt(fixtureSha256: string, evidence: ExperienceEvidence): RecordValue { const body = { schemaVersion: "chimpmaera.cks/experience-diversity-receipt/v1", receiptId: "CKS-12-EXPERIENCE-DIVERSITY-RECEIPT-V1", fixtureSha256, componentVersions: COMPONENT_VERSIONS, evidence, status: "RECORDED", authority: "NONE", capabilityDelta: "NONE", effect: "NONE" }; return { ...body, receiptSha256: digest(body) }; }

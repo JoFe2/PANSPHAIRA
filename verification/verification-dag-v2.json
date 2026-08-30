@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 29,
+  "graphVersion": 30,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "722d4ebf338de0d0a662787018baea5aeef03d5c57e84dadc741bc7568fe7f88"
+          "sha256": "949baf5684198ed3d522205d8554994cffa113d42cb9ea22bec156dd925dc436"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "13fe151620ee6994753230539aec50bdc05aaaf60e94b1d560249069dbf62072"
+          "sha256": "170562b40f0e9d810f66111f896bd4fdf1bbdca396646a431fa21e6fdf6efc93"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "047501d3e44aaeb002a36255a48674a8bddb4d4af6c5a3afd97e337187600126"
+          "sha256": "8aa07970d5349b4ececbe6d2278683c239576b1e4814f3b372f681f22164f6fc"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "27aa3d74a01fe70244507ed486140f4dc03b9d127dd118e70571e395c9d2171c"
+          "sha256": "5f2db3d33253b9ab4fd084d571640e5800cd227acf5c4d4d7703b973a7390832"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "df13a2d8b5eb71a4a13de6db45ad9eef974cf85d7cfbe00c4c9002b0fe19744e"
+          "sha256": "90af616c325003d1de141453c3081d130e27ad9476c910995222b2ec14ba3b13"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "0904c6e85d882b388304c6aa0a7d4643c91730f7f26eb4d7dfc81e1eb540a27f"
+          "sha256": "47909bbf521bcaa1c5dd8f5ec2ed57e0db6ab5df37795c70972b2394b1cda264"
         }
       ],
       "ownedTests": [
@@ -4158,6 +4158,316 @@
         "P20 proves deterministic typed Function parity with exact rollback.",
         "Knowledge dependencies and historical receipts remain immutable.",
         "Successful proof requires governed release delivery."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-12-closed-learning-loop-v1",
+      "dependsOn": [
+        "cks-11-governed-workflow-function-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/cks-12-closed-loop-boundary-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "117093e6a57eb4803f764a8307d923c1bcbd933a015084aa442d46cbcdedd5c7"
+        },
+        {
+          "path": "scripts/run-cks-12-e2e-proof-dry-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "85b02dc20d39de43010be2bc5231c04c9f9ca8f826e89ef31ed55008ffae9fce"
+        },
+        {
+          "path": "scripts/run-cks-12-falsification-report.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5538409c8245441af1aca76f8fd51b01d69f36c99e46fe627dabf26ad417c363"
+        },
+        {
+          "path": "scripts/run-cks-12-local-integration.mjs",
+          "role": "VALIDATOR",
+          "sha256": "e847f8573bc9ac3d26a1254af9187c6fa17118ccb6f4eccfa3af9b5eb970e1ce"
+        },
+        {
+          "path": "scripts/run-cks-12-promotion-dry-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "61e84756a791e33309163e8c3004597e3a10e2f94674efa7d448867862ae4bc0"
+        },
+        {
+          "path": "scripts/run-cks-12-readonly-bridge-dry-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "a59c5c9b32f59befbf2a72c298cf3965b1dd09e3e080b01cb3a3b72d8aaf5110"
+        },
+        {
+          "path": "scripts/run-cks-12-story-step-check.mjs",
+          "role": "VALIDATOR",
+          "sha256": "2773dec237b08ee3bd092227c7bdabdb374f40a5389fd9e210cf8c0169495060"
+        },
+        {
+          "path": "scripts/validate-cks-12-delivery-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "bbbc46d983f94c3b97f0486063003388bb483e923a5f6b234cd0ae736ded62dc"
+        },
+        {
+          "path": "src/cks-12/deterministic-function-cost-parity.ts",
+          "role": "VALIDATOR",
+          "sha256": "cf0fe8b89f2c519fc96c2c1709d5e49df3b239945ac26c79bd7ddc4386c174c6"
+        },
+        {
+          "path": "src/cks-12/drift-revalidation-fastpath.ts",
+          "role": "VALIDATOR",
+          "sha256": "7baf6b0ee6a3c9a6361aac5cdb8b694ff371678ccf51bad5d6561e75326a550f"
+        },
+        {
+          "path": "src/cks-12/empty-kb-acquisition-gate.ts",
+          "role": "VALIDATOR",
+          "sha256": "5975859397db6f0c7079a3b0e76f5b8b3d6456c74d34875c9e6caab77b4525ff"
+        },
+        {
+          "path": "src/cks-12/experience-diversity-attribution.ts",
+          "role": "VALIDATOR",
+          "sha256": "0e232994be6ba280850abec84e7f3460d197c0b510a1dba0f6540d53036e132a"
+        },
+        {
+          "path": "src/cks-12/falsification-report-validator.ts",
+          "role": "VALIDATOR",
+          "sha256": "dcf63073aa497aa7180fc987851db65d2f76ed73ad15fb9a909fc2db455f00d5"
+        },
+        {
+          "path": "src/cks-12/governed-promotion-lineage.ts",
+          "role": "VALIDATOR",
+          "sha256": "bbb8a068933045008b3ac603ffe3006d44a0a628ebe92b28add5ee7919f8fc99"
+        },
+        {
+          "path": "src/cks-12/pattern-shadow-workflow.ts",
+          "role": "VALIDATOR",
+          "sha256": "4cc7ad94239716bc3b1556d9b8f3de68bb0fd621d9137cf6aecb0c233fc628ff"
+        },
+        {
+          "path": "src/cks-12/prerequisite-receipt-binder.ts",
+          "role": "VALIDATOR",
+          "sha256": "0fff95cba1d661318ced1b42466d5215e0b453391cecf92c50676db8c8998199"
+        },
+        {
+          "path": "src/cks-12/readonly-kaleidosphere-bridge.ts",
+          "role": "VALIDATOR",
+          "sha256": "dc4f6f18844d18bb58fef52ac90cac77820a01b1ff92f33b909885a4a7521332"
+        },
+        {
+          "path": "src/cks-12/story-step-manifest.ts",
+          "role": "VALIDATOR",
+          "sha256": "6a4ea91886db764c931482f9dfc6d926459849033c9a801e745bbaa56f7295e6"
+        },
+        {
+          "path": "tests/cks-12/delivery-readback-harness.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "291ad39a893f3307704e4573f278ec9baee99b8092971a12cf9d9cf867156548"
+        },
+        {
+          "path": "tests/cks-12/deterministic-function-cost-parity.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "c1b31df213fe08705538b0a5cce81448a54a367a038c8fd74fa1013569bea3f7"
+        },
+        {
+          "path": "tests/cks-12/drift-revalidation-fastpath.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "25d26c2a8f26ad6f8de72bf84214b8be722f172d97b071a56eef7e26a50700ea"
+        },
+        {
+          "path": "tests/cks-12/e2e-proof-readback.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "5e611cb689da452397ee7718ce4806c65c6e34f9d933bae3e2dea3dd6450f137"
+        },
+        {
+          "path": "tests/cks-12/empty-kb-acquisition-gate.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "916e395e83cb58a252a2b994fb472318aebcc330d80b448778c451dfa906c924"
+        },
+        {
+          "path": "tests/cks-12/experience-diversity-attribution.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "91fafbd837d5ff7211eaeea0aa1847094759989fcb586b9e8532fcdc5f18b4d9"
+        },
+        {
+          "path": "tests/cks-12/falsification-report-validator.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "cff5f1bdd6ccd959600e33a38e655e8c38c40dbb1e9723867c54efe9a73cb513"
+        },
+        {
+          "path": "tests/cks-12/governed-promotion-lineage.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "4c5bed64eadca67165e1909db985f0d6de501b76de9c7131da28ff47b59a4001"
+        },
+        {
+          "path": "tests/cks-12/local-integration.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "029e9f0adc3320c8316e8909edb5f65972bb045636d6e3da6e83f1466bcd5043"
+        },
+        {
+          "path": "tests/cks-12/pattern-shadow-workflow.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "0707ff66feec5a8f72625880ee9b71013e4a00606112a4f368967cc86d48bdec"
+        },
+        {
+          "path": "tests/cks-12/prerequisite-receipt-binder.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "00c8d959e64ec109759e305a5d23e6a7b3788f6935caddbebc5ff2e755667d5b"
+        },
+        {
+          "path": "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "f4f1a7b2f1fd1a8ce35b69eb05392a1b5e8145d870114ed44f6be180d913d9ca"
+        },
+        {
+          "path": "tests/cks-12/story-step-manifest.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "f56631fb0123774e7dafec991aa6e7358019af387bc6230b6222cc929d742fbf"
+        },
+        {
+          "path": "tests/fixtures/cks-12/delivery-readback-template-v1.json",
+          "role": "FIXTURE",
+          "sha256": "5001c3fc9a918c47166a0325d79b05738566cc6be6a56f4118e8eebfe3fdd527"
+        },
+        {
+          "path": "tests/fixtures/cks-12/drift-unknown-variants-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9d57e3bf28f506d110ac2632d631c8d66d70a723158f9f53be95722964435b8d"
+        },
+        {
+          "path": "tests/fixtures/cks-12/e2e-proof-manifest-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a6787bb9d277794838a081e0779f5bf21cc9b84b1877a1a9c6426e461c4ab02e"
+        },
+        {
+          "path": "tests/fixtures/cks-12/empty-kb-acquisition-v1.json",
+          "role": "FIXTURE",
+          "sha256": "e81d743f1749476f797cbfa9b1d71f176df6d3d2533ed92118a64cb61d064fa9"
+        },
+        {
+          "path": "tests/fixtures/cks-12/experience-diversity-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9163ebd234b6c47177d70f242fd893e3d3001331689778503fb4b3e1fc2782b8"
+        },
+        {
+          "path": "tests/fixtures/cks-12/falsification-report-v1.json",
+          "role": "FIXTURE",
+          "sha256": "d98105dbef0fc3090960c6e2c43f27eee55e9a236f80b2923f48f7267023e259"
+        },
+        {
+          "path": "tests/fixtures/cks-12/function-cost-parity-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a943f3e3579da1ea1928fffc31ade9206b7529d7e4493be211ff92f606aae605"
+        },
+        {
+          "path": "tests/fixtures/cks-12/governed-promotion-v1.json",
+          "role": "FIXTURE",
+          "sha256": "617bf784d92e9b3a8268462b3c61d0b66bba9f4b4d25b40e6f55cfb4f16b6f64"
+        },
+        {
+          "path": "tests/fixtures/cks-12/local-integration-manifest-v1.json",
+          "role": "FIXTURE",
+          "sha256": "aaf2d80a0614406e7a741f768d1c73aa44f745dea06d87c68a937e723a7b407b"
+        },
+        {
+          "path": "tests/fixtures/cks-12/minimized-projection-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b60c7850324882f05331439ea93895a502fefcca64194945a4ac5b2773565ffb"
+        },
+        {
+          "path": "tests/fixtures/cks-12/part-ii-23-step-fixture-v1.json",
+          "role": "FIXTURE",
+          "sha256": "aa75328c23692f014ff49d0f20664eb7910ccd05d1e52cb227aef527f84a40f3"
+        },
+        {
+          "path": "tests/fixtures/cks-12/pattern-shadow-parity-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9ce57a8eb4b9c4001b08ec0bb35299e195581fe40d43d6c785c5dbbc465b44ce"
+        },
+        {
+          "path": "tests/fixtures/cks-12/prerequisite-receipts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9821418a25afadeb8afa990426b628a5d01fd248e38f1024dfc7a23c9bf46860"
+        },
+        {
+          "path": "verification/cks-12-closed-loop-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "916b5784af0a36c1895bfd0ff292407a14624ce7345b944897833706798c02ba"
+        },
+        {
+          "path": "verification/cks-12-local-integration-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "41cca16716388ba06596ef997d942f339870f5729f82219ffa74a1164735fdd6"
+        },
+        {
+          "path": "verification/cks-12/delivery-readback-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "fede2817d30ffcd61fa604ff735d16478119a0a3dc5e8fa1014939000a878d25"
+        },
+        {
+          "path": "verification/cks-12/drift-fastpath-abort-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "02f8617737f3aa1c8d38600421b1869975b6fe33d65816ee9f83e3b17fc5b885"
+        },
+        {
+          "path": "verification/cks-12/e2e-proof-readback-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4faa7f4b8adab567b077e1d55332fa4f6c02319e6885d15c1945cb55e3cfb23a"
+        },
+        {
+          "path": "verification/cks-12/empty-kb-acquisition-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ab5357ba99549ccba5bfd208e831a1887a764c153cf275ad4cfb48df99f1f074"
+        },
+        {
+          "path": "verification/cks-12/experience-diversity-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "1e04da1487931571a092633ace89defbe69e2d22bb4843fbc0dd8dfc2bf756a7"
+        },
+        {
+          "path": "verification/cks-12/falsification-report-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3ebf4820ab2b5b2a333d1ddf09a8e25f1ec1b1cb2b814d88b372699193b79dc5"
+        },
+        {
+          "path": "verification/cks-12/function-cost-parity-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "76458a9147798e5af02338345a1f650d90efa198a7fbf2e661fad194e8bd5450"
+        },
+        {
+          "path": "verification/cks-12/governed-promotion-lineage-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f84c403db4e8758dc0e92856d866b97e1c3e50655b521095f77a1c68c59dab40"
+        },
+        {
+          "path": "verification/cks-12/pattern-shadow-parity-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "374f5bc59e3d2a945591e03c55e662148edbfbfc56ea42d3f9dc7765e225e8fa"
+        },
+        {
+          "path": "verification/cks-12/prerequisite-bind-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "eb04858a9561c4336bab97909ffd9c2495f086242875ac88d4b9421823a1605e"
+        },
+        {
+          "path": "verification/cks-12/readonly-candidate-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a7edb6241af4897d991a8440379c0136f974d812118921093ba217ccd10798fc"
+        },
+        {
+          "path": "verification/cks-12/story-step-version-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8effa07a725ea6d662e0d1916b687e5a996de14bd916e25db69342529145589b"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks12:test"
+      ],
+      "invariants": [
+        "All 23 Part-II story steps bind immutable fixtures and exact component versions.",
+        "Acquisition, validation and promotion remain separate governed states.",
+        "KaleidoSphere receives only minimized read-only projections and returns authority-free candidates.",
+        "Drift and unknown variants invalidate or safely abort fast paths.",
+        "Falsification reports bind raw counts, denominators, exclusions and stop conditions."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
