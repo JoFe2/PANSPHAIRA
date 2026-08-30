@@ -1,0 +1,981 @@
+{
+  "schemaVersion": "pansphaira.cks-11/shadow-workflow-replay/v1",
+  "verifierVersion": "cks-11-shadow-replay-verifier/v1",
+  "requiredAbortReasons": [
+    "INVALID_INPUT",
+    "VERSION_DRIFT",
+    "BOUNDARY_UNAVAILABLE",
+    "AUTHORITY_WIDENING"
+  ],
+  "holdouts": [
+    {
+      "holdoutId": "p19-unknown-input",
+      "applicabilityInput": {
+        "schemaVersion": "pansphaira.cks-11/workflow-applicability/v1",
+        "useTimeMs": 100,
+        "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applicabilityContract": {
+          "schemaVersion": "pansphaira.cks-11/applicability-contract/v1",
+          "contractVersion": "1.0.0",
+          "contextDimensions": [
+            "tenant",
+            "provider",
+            "configuration"
+          ],
+          "includedScopes": [
+            "tenant:synthetic/orders"
+          ],
+          "excludedScopes": [
+            "tenant:synthetic/admin"
+          ],
+          "preconditions": [
+            "order is present",
+            "provider is reachable"
+          ],
+          "supportedConfigurations": [
+            "fixture-v1"
+          ],
+          "validFromMs": 0,
+          "validUntilMs": 1000,
+          "knownCounterexampleDigests": [
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ],
+          "contractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+        },
+        "inputSchema": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "providedInputs": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "value": "order-1"
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "value": true
+          }
+        ],
+        "workflowMatches": [
+          {
+            "workflowRef": {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "applicabilityContractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+          }
+        ],
+        "knowledgeInput": {
+          "asOfMs": 100,
+          "workflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "functionInputs": [],
+          "knowledgeRecords": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders",
+              "state": "CURRENT",
+              "supersededBy": null
+            }
+          ],
+          "historicalReceipts": []
+        },
+        "evidenceStatus": "COMPLETE",
+        "boundaryStatus": "AVAILABLE",
+        "capabilityEnvelope": {
+          "baselineCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "baselineEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "requestedCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ]
+        },
+        "authorityEnvelope": {
+          "baselineRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "currentRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "baselineGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "currentGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "stopState": "NONE"
+        },
+        "extra": true
+      },
+      "expected": "SAFE_ABORT",
+      "expectedReasonCodes": [
+        "INVALID_INPUT"
+      ],
+      "baseline": null,
+      "governed": null
+    },
+    {
+      "holdoutId": "p19-version-drift",
+      "applicabilityInput": {
+        "schemaVersion": "pansphaira.cks-11/workflow-applicability/v1",
+        "useTimeMs": 100,
+        "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applicabilityContract": {
+          "schemaVersion": "pansphaira.cks-11/applicability-contract/v1",
+          "contractVersion": "1.0.0",
+          "contextDimensions": [
+            "tenant",
+            "provider",
+            "configuration"
+          ],
+          "includedScopes": [
+            "tenant:synthetic/orders"
+          ],
+          "excludedScopes": [
+            "tenant:synthetic/admin"
+          ],
+          "preconditions": [
+            "order is present",
+            "provider is reachable"
+          ],
+          "supportedConfigurations": [
+            "fixture-v1"
+          ],
+          "validFromMs": 0,
+          "validUntilMs": 1000,
+          "knownCounterexampleDigests": [
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ],
+          "contractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+        },
+        "inputSchema": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "providedInputs": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "value": "order-1"
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "value": true
+          }
+        ],
+        "workflowMatches": [
+          {
+            "workflowRef": {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "applicabilityContractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+          }
+        ],
+        "knowledgeInput": {
+          "asOfMs": 100,
+          "workflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "functionInputs": [],
+          "knowledgeRecords": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.29",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders",
+              "state": "CURRENT",
+              "supersededBy": null
+            }
+          ],
+          "historicalReceipts": []
+        },
+        "evidenceStatus": "COMPLETE",
+        "boundaryStatus": "AVAILABLE",
+        "capabilityEnvelope": {
+          "baselineCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "baselineEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "requestedCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ]
+        },
+        "authorityEnvelope": {
+          "baselineRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "currentRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "baselineGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "currentGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "stopState": "NONE"
+        }
+      },
+      "expected": "SAFE_ABORT",
+      "expectedReasonCodes": [
+        "VERSION_DRIFT"
+      ],
+      "baseline": null,
+      "governed": null
+    },
+    {
+      "holdoutId": "p19-boundary-unavailable",
+      "applicabilityInput": {
+        "schemaVersion": "pansphaira.cks-11/workflow-applicability/v1",
+        "useTimeMs": 100,
+        "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applicabilityContract": {
+          "schemaVersion": "pansphaira.cks-11/applicability-contract/v1",
+          "contractVersion": "1.0.0",
+          "contextDimensions": [
+            "tenant",
+            "provider",
+            "configuration"
+          ],
+          "includedScopes": [
+            "tenant:synthetic/orders"
+          ],
+          "excludedScopes": [
+            "tenant:synthetic/admin"
+          ],
+          "preconditions": [
+            "order is present",
+            "provider is reachable"
+          ],
+          "supportedConfigurations": [
+            "fixture-v1"
+          ],
+          "validFromMs": 0,
+          "validUntilMs": 1000,
+          "knownCounterexampleDigests": [
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ],
+          "contractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+        },
+        "inputSchema": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "providedInputs": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "value": "order-1"
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "value": true
+          }
+        ],
+        "workflowMatches": [
+          {
+            "workflowRef": {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "applicabilityContractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+          }
+        ],
+        "knowledgeInput": {
+          "asOfMs": 100,
+          "workflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "functionInputs": [],
+          "knowledgeRecords": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders",
+              "state": "CURRENT",
+              "supersededBy": null
+            }
+          ],
+          "historicalReceipts": []
+        },
+        "evidenceStatus": "COMPLETE",
+        "boundaryStatus": "UNAVAILABLE",
+        "capabilityEnvelope": {
+          "baselineCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "baselineEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "requestedCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ]
+        },
+        "authorityEnvelope": {
+          "baselineRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "currentRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "baselineGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "currentGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "stopState": "NONE"
+        }
+      },
+      "expected": "SAFE_ABORT",
+      "expectedReasonCodes": [
+        "BOUNDARY_UNAVAILABLE"
+      ],
+      "baseline": null,
+      "governed": null
+    },
+    {
+      "holdoutId": "p19-authority-widening",
+      "applicabilityInput": {
+        "schemaVersion": "pansphaira.cks-11/workflow-applicability/v1",
+        "useTimeMs": 100,
+        "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applicabilityContract": {
+          "schemaVersion": "pansphaira.cks-11/applicability-contract/v1",
+          "contractVersion": "1.0.0",
+          "contextDimensions": [
+            "tenant",
+            "provider",
+            "configuration"
+          ],
+          "includedScopes": [
+            "tenant:synthetic/orders"
+          ],
+          "excludedScopes": [
+            "tenant:synthetic/admin"
+          ],
+          "preconditions": [
+            "order is present",
+            "provider is reachable"
+          ],
+          "supportedConfigurations": [
+            "fixture-v1"
+          ],
+          "validFromMs": 0,
+          "validUntilMs": 1000,
+          "knownCounterexampleDigests": [
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ],
+          "contractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+        },
+        "inputSchema": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "required": true
+          }
+        ],
+        "providedInputs": [
+          {
+            "name": "orderId",
+            "type": "string",
+            "value": "order-1"
+          },
+          {
+            "name": "retryCount",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "dryRun",
+            "type": "boolean",
+            "value": true
+          }
+        ],
+        "workflowMatches": [
+          {
+            "workflowRef": {
+              "kind": "GOVERNED_WORKFLOW",
+              "id": "workflow-orders-1",
+              "schemaVersion": "pansphaira.cks-11/governed-assets/v1",
+              "version": "1.0.0",
+              "digestAlgorithm": "SHA-256",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "contextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "applicabilityContractDigest": "706b3355b07db2bb6470e4f61a698081df6ac4e93fcd375988b077fbf3bbd747"
+          }
+        ],
+        "knowledgeInput": {
+          "asOfMs": 100,
+          "workflowInputs": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders"
+            }
+          ],
+          "functionInputs": [],
+          "knowledgeRecords": [
+            {
+              "knowledgeId": "knowledge/orders",
+              "version": "2026.08.28",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "freshness": {
+                "validFromMs": 0,
+                "validUntilMs": 1000
+              },
+              "scope": "tenant:synthetic/orders",
+              "state": "CURRENT",
+              "supersededBy": null
+            }
+          ],
+          "historicalReceipts": []
+        },
+        "evidenceStatus": "COMPLETE",
+        "boundaryStatus": "AVAILABLE",
+        "capabilityEnvelope": {
+          "baselineCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentCeiling": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "baselineEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "currentEnabledCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ],
+          "requestedCapabilities": [
+            {
+              "action": "read",
+              "dataClass": "business",
+              "credentialUse": null,
+              "effectClass": "read-only",
+              "field": null,
+              "networkRoute": null,
+              "purpose": "verification",
+              "resource": "fixture",
+              "target": "fixture",
+              "tenant": "tenant-1"
+            }
+          ]
+        },
+        "authorityEnvelope": {
+          "baselineRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "currentRequirements": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "write",
+              "target": "fixture",
+              "scope": null
+            }
+          ],
+          "baselineGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "currentGrants": [
+            {
+              "actor": "worker-1",
+              "tenant": "tenant-1",
+              "action": "read",
+              "target": "fixture",
+              "scope": null,
+              "approvalDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "validFromMs": 0,
+              "validUntilMs": 200,
+              "budgetLimitCents": null
+            }
+          ],
+          "stopState": "NONE"
+        }
+      },
+      "expected": "SAFE_ABORT",
+      "expectedReasonCodes": [
+        "AUTHORITY_WIDENING"
+      ],
+      "baseline": null,
+      "governed": null
+    }
+  ]
+}

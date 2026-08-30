@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "chimpmaera.verification/local-synthetic-report/v1",
+  "evidenceId": "evidence:psai291-qwen-02-knowledge-revalidation-guard-v1",
+  "taskId": "PSAI291-QWEN-02-KNOWLEDGE-REVALIDATION-GUARD",
+  "issue": "JoFe2/PANSPHAIRA#291",
+  "evidenceClass": "LOCAL_SYNTHETIC",
+  "commitBinding": "CONTAINING_LOCAL_COMMIT",
+  "futureCommitClaimed": false,
+  "claims": [
+    "DETERMINISTIC_EXACT_KNOWLEDGE_ID_VERSION_DIGEST_FRESHNESS_SCOPE_RESOLUTION",
+    "WORKFLOW_AND_FUNCTION_DEPENDENCIES_FAIL_CLOSED_ON_DRIFT",
+    "SUPERSESSION_REQUIRES_REVALIDATION",
+    "IMMUTABLE_HISTORICAL_RECEIPT_PRESERVATION",
+    "NO_EXECUTION_PROMOTION_DEPLOYMENT_OR_ACTIVATION_AUTHORITY"
+  ],
+  "negativeEvidenceStates": [
+    "missing_input_aborted",
+    "ambiguous_match_aborted",
+    "missing_knowledge_revalidation_required",
+    "stale_knowledge_revalidation_required",
+    "version_drift_revalidation_required",
+    "digest_drift_revalidation_required",
+    "scope_drift_revalidation_required",
+    "malformed_input_aborted"
+  ],
+  "sanitization": {
+    "rawSecrets": false,
+    "personalData": false,
+    "privatePaths": false,
+    "privateInfrastructure": false,
+    "exploitDetails": false
+  },
+  "artifacts": {
+    "src/cks/knowledge-revalidation-v1.ts": {
+      "sha256": "117d57002d69c381bc0a555cacd9eb0d016f79ad45363a5468cfe1cfa6ca69ce"
+    },
+    "tests/cks-11/knowledge-revalidation.test.ts": {
+      "sha256": "a6b94cf4e185147c1a49473d4523ce47ab9bd70897ebc1f9d124fa776c6e65e8"
+    },
+    "tests/fixtures/cks-11/knowledge-dependency-cases-v1.json": {
+      "sha256": "d1ead2d009f7dea72993beb59960b1dde7cf418aa4e67816a63e795edb51c92e"
+    }
+  },
+  "verification": {
+    "requiredFocusedCommand": "npm test -- --runInBand tests/cks-11/knowledge-revalidation.test.ts",
+    "requiredFocusedOutcome": "INFRASTRUCTURE_BLOCKED_NODE_SIGTRAP_AND_WEBASSEMBLY_UNAVAILABLE_IN_PRETEST",
+    "alternateFocusedCommand": "NODE_OPTIONS=--jitless node --test dist/tests/cks-11/knowledge-revalidation.test.js",
+    "alternateFocusedOutcome": "PASS_5_TESTS",
+    "buildCommand": "NODE_OPTIONS=--jitless npm run build",
+    "buildOutcome": "PASS",
+    "lintCommand": "NODE_OPTIONS=--jitless npm run lint",
+    "lintOutcome": "PASS",
+    "diffCheckCommand": "git diff --check main...HEAD",
+    "diffCheckOutcome": "PASS"
+  },
+  "nonClaims": [
+    "P19_OR_P20_EXECUTION_PROOF",
+    "PROMOTION",
+    "DEPLOYMENT",
+    "ACTIVATION",
+    "PRODUCTION_READINESS",
+    "MERGE",
+    "RELEASE",
+    "REMOTE_PUSH"
+  ],
+  "rollback": "Use a protected revert of the containing local commit; retain immutable historical receipt bytes and do not retarget prior dependencies."
+}

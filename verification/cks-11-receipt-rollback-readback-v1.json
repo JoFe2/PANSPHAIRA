@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "pansphaira.cks-11/delivery-readback-receipt/v1",
+  "taskId": "RECOVERY-PSAI291-BLOCKED-FRONTIER-01",
+  "deliveredEvidence": { "reference": "JoFe2/PANSPHAIRA#289", "scope": "DELIVERED_EVIDENCE_REFERENCE_ONLY", "bound": true },
+  "localEvidence": ["P19_EQUAL_OR_BETTER_QUALITY_AT_LOWER_REASONING_COST_WITH_SAFE_ABORT_BOUND", "P20_DETERMINISTIC_TYPED_PARITY_WITH_EXACT_ROLLBACK_BOUND", "IMMUTABLE_RECEIPT_READBACK_BOUND"],
+  "externalReadback": { "state": "UNVERIFIED", "required": ["PR", "CI", "MERGE", "NO_PRODUCTION_ACTIVATION", "PUBLIC_MAIN", "RELEASE"] },
+  "closureState": "EXTERNAL_READBACK_REQUIRED",
+  "releaseDisposition": "RELEASE_REQUIRED_PENDING_DELIVERY",
+  "releasePerformed": false,
+  "promotionState": "DENIED"
+}

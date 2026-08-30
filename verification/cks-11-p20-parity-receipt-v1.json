@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "pansphaira.cks-11/p20-parity-receipt/v1",
+  "taskId": "RECOVERY-PSAI291-BLOCKED-FRONTIER-01",
+  "evidenceScope": "LOCAL_SYNTHETIC_TYPED_PARITY_ONLY",
+  "terminalEvidence": ["P20_STABLE_SUBSTEP_TYPED_OUTPUT_OR_DECLARED_ERROR_PARITY", "P20_EXACT_ORIGINAL_STEP_ROLLBACK_READBACK_BOUND", "PAIRED_SUBSTITUTION_AND_REDIGESTION_DENIED"],
+  "verifier": "cks-11-deterministic-function-parity-verifier/v1",
+  "promotionState": "DENIED",
+  "releaseDisposition": "RELEASE_REQUIRED_PENDING_DELIVERY",
+  "releasePerformed": false,
+  "nonClaims": ["FUNCTION_PROMOTION", "WORKFLOW_REPLACEMENT", "ACTIVATION", "PRODUCTION_EXECUTION"]
+}

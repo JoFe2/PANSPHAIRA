@@ -1,0 +1,26 @@
+{
+  "unknownField": {
+    "field": "unexpected",
+    "expected": "closed record is rejected"
+  },
+  "closureDrift": {
+    "field": "sourceSubstepClosureDigest",
+    "expected": "must equal the exact dependency closure digest"
+  },
+  "maturitySkip": {
+    "axis": "W",
+    "level": "W6 PROMOTION_ELIGIBLE",
+    "transitionReceiptRefs": 0,
+    "expected": "all prior transition receipts are required"
+  },
+  "capabilityWidening": {
+    "requestedAction": "write",
+    "ceilingAction": "read",
+    "expected": "fast path rejects capability widening"
+  },
+  "authorityWidening": {
+    "requestedScope": "tenant-2",
+    "ceilingScope": "tenant-1",
+    "expected": "fast path rejects authority widening"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "pansphaira.cks-11/receipt-rollback-cases/v1",
+  "scope": "LOCAL_SYNTHETIC_ROLLBACK_READBACK_ONLY",
+  "subject": "workflow:fixture-order-normalizer",
+  "required": ["immutable-history", "successor-rollback-receipt", "exact-dependency-set", "readback-binding"],
+  "nonPromotion": ["dry-run", "synthetic", "stale", "unverified-external"]
+}

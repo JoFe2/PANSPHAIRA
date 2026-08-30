@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "pansphaira.cks-11/p19-p20-holdouts/v1",
+  "evidenceScope": "LOCAL_SYNTHETIC_HOLDOUT_ONLY",
+  "p19": { "applicableHoldouts": 2, "safeAbortCases": ["INVALID_INPUT", "VERSION_DRIFT", "BOUNDARY_UNAVAILABLE", "AUTHORITY_WIDENING"], "claim": "EQUAL_OR_BETTER_QUALITY_AT_LOWER_REASONING_COST" },
+  "p20": { "stableSubstep": "step:normalize-order", "typedResultKinds": ["OUTPUT", "DECLARED_ERROR"], "rollback": "ORIGINAL_STEP_FALLBACK_READBACK_REQUIRED" },
+  "promotionState": "DENIED"
+}

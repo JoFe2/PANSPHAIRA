@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "pansphaira.verification/cks-11-governance-decision/v1",
+  "taskId": "PLAN-PSAI291-GOVERNANCE-DECISION-01",
+  "issue": "JoFe2/PANSPHAIRA#291",
+  "baseCommit": "353017c4f60e30463d0a78fd6fd2509a37d37f76",
+  "evidenceClass": "DOCUMENTATION_DECISION_AND_DIFF_HYGIENE_ONLY",
+  "decisionArtifact": {
+    "path": "docs/architecture/cks-11-governance-decision-v1.md",
+    "sha256": "6f96c5b26a2b982aee479ba093f3c8c0afaecf3619df55fdf0a4c18ae633cc4b"
+  },
+  "repositoryBindings": [
+    {
+      "path": "packages/contracts/src/canonical-json.ts",
+      "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826"
+    },
+    {
+      "path": "docs/CANON.md",
+      "sha256": "d1c0fb65fc0353a32b9006d8de1fb65945800cfe6c889efb7734a3f9f83e487e"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "248af8644747c40f7724db412bc227cc2d9372dc5b267be964c49a36fc22c490"
+    },
+    {
+      "path": "docs/KNOWLEDGE-HARVEST.md",
+      "sha256": "face3c89efe6ce34360ff644f5e472cb3c711a14df186638ca5008aaf1246ce9"
+    },
+    {
+      "path": "docs/RELEASE-GOVERNANCE.md",
+      "sha256": "e14a447977a3233ce1f3adeee9c1968bfdc0fcb07f6067c00d40977a8b99f237"
+    }
+  ],
+  "processContext": {
+    "operatingModel": "v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "newProcessVariant": false
+  },
+  "decisionBindings": {
+    "vocabulary": [
+      "WorkflowCandidate",
+      "GovernedWorkflow",
+      "FunctionCandidate"
+    ],
+    "maturityAxes": {
+      "S": [
+        "S0 OBSERVED",
+        "S1 REPEATED",
+        "S2 STRUCTURED_CANDIDATE",
+        "S3 APPLICABILITY_BOUNDED",
+        "S4 COUNTEREXAMPLE_TESTED",
+        "S5 HOLDOUT_VALIDATED",
+        "S6 VALIDATED_PATTERN"
+      ],
+      "W": [
+        "W0 COMPILED_CANDIDATE",
+        "W1 CONTRACT_BOUND",
+        "W2 REPLAY_VERIFIED",
+        "W3 COUNTEREXAMPLE_SAFE",
+        "W4 APPLICABLE_HOLDOUT_VERIFIED",
+        "W5 SHADOW_PARITY_VERIFIED",
+        "W6 PROMOTION_ELIGIBLE"
+      ],
+      "F": [
+        "F0 SUBSTEP_IDENTIFIED",
+        "F1 DEPENDENCY_BOUND",
+        "F2 CONTRACT_CLOSED",
+        "F3 DETERMINISTIC_REPLAY_VERIFIED",
+        "F4 COUNTEREXAMPLE_SAFE",
+        "F5 SHADOW_PARITY_VERIFIED",
+        "F6 PROMOTION_ELIGIBLE"
+      ]
+    },
+    "fastPathStatuses": [
+      "FAST_PATH_ALLOWED",
+      "FAST_PATH_ABORTED",
+      "REVALIDATION_REQUIRED"
+    ],
+    "requiredFailClosedReasons": [
+      "MISSING_INPUT",
+      "INVALID_INPUT",
+      "NOT_APPLICABLE",
+      "AMBIGUOUS_MATCH",
+      "KNOWLEDGE_MISSING",
+      "STALE_KNOWLEDGE",
+      "KNOWLEDGE_SUPERSEDED",
+      "VERSION_DRIFT",
+      "DIGEST_MISMATCH",
+      "EVIDENCE_INCOMPLETE",
+      "BOUNDARY_UNAVAILABLE",
+      "CAPABILITY_WIDENING",
+      "AUTHORITY_WIDENING",
+      "INVALID_CONTRACT"
+    ],
+    "automaticDriftStatus": "REVALIDATION_REQUIRED",
+    "applicabilityBeforeFastPath": true,
+    "capabilityMayWiden": false,
+    "authorityMayWiden": false,
+    "historicalReceiptsMutable": false,
+    "promotionRequiresSeparateApproval": true,
+    "activationRequiresSeparateApproval": true,
+    "activationAuthorized": false
+  },
+  "acceptanceEvidence": [
+    {
+      "criterion": "Finite S/W/F meanings, legal transitions and required evidence fields are frozen.",
+      "documentSection": "2. Independent S/W/F maturity axes"
+    },
+    {
+      "criterion": "WorkflowCandidate, GovernedWorkflow and FunctionCandidate preserve exact dependencies and boundaries.",
+      "documentSection": "3. Exact references and common contract fields"
+    },
+    {
+      "criterion": "Knowledge supersession and drift automatically fail closed.",
+      "documentSection": "4. Exact dependencies and automatic invalidation"
+    },
+    {
+      "criterion": "Missing, ambiguous, stale and drifted inputs have exact fail-closed statuses.",
+      "documentSection": "5. Applicability before every fast path"
+    },
+    {
+      "criterion": "Capability, Authority, Verification and rollback cannot be widened or omitted.",
+      "documentSection": "6. Capability, Authority, Verification and rollback preservation"
+    },
+    {
+      "criterion": "Receipts and historical dependency references remain exact and immutable.",
+      "documentSection": "7. Immutable deterministic receipts"
+    },
+    {
+      "criterion": "Success-rate-only promotion, widening, autonomous deployment and production activation are rejected.",
+      "documentSection": "8. Separate promotion, deployment and activation decisions"
+    }
+  ],
+  "verification": {
+    "command": "git diff --check origin/main...HEAD",
+    "outcome": "PASS",
+    "exitCode": 0
+  },
+  "authority": "NONE",
+  "nonClaims": [
+    "CKS-11 implementation",
+    "P19 execution proof",
+    "P20 execution proof",
+    "workflow promotion",
+    "function promotion",
+    "deployment",
+    "activation",
+    "production readiness",
+    "release",
+    "merge"
+  ]
+}
