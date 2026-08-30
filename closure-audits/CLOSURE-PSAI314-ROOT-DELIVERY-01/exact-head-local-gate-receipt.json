@@ -1,0 +1,16 @@
+{
+  "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
+  "issue":{"repository":"JoFe2/PANSPHAIRA","number":314},
+  "testedProductHead":"0e64511a81a1d9559850ba097ced0493775fd8ec","testedProductTree":"6ff8fa9390b026b7543f872eb7dc3ce27eb89f9b","baseSha":"ca9eca75f3ecc6b2e3389349666f632cc051c499",
+  "runCommits":["c6827543188b4a019dfd8bbede844ae4565209c2","0e64511a81a1d9559850ba097ced0493775fd8ec"],
+  "acceptance":{"CORE_SMALL_VS_RAW_VERDICT":"FALSIFIED_WITH_EVIDENCE"},
+  "terminalDecision":"FALSIFIED_WITH_EVIDENCE_BOUNDED_REAL_SOURCE_SMALL_GUIDED_VS_RAW",
+  "releaseDisposition":"RELEASE_REQUIRED_PENDING_DELIVERY",
+  "counts":{"expected":108,"receipts":108,"success":48,"schemaFailures":48,"httpFailures":12,"failed":60,"excluded":0,"retries":0},
+  "primary":{"rawQuality":"0/18","guidedQuality":"0/18","rawTokens":37988,"guidedTokens":27250,"tokenRatio":0.7173317889859956,"guidedApplicability":"1/18","guidedUpdate":"0/3","guidedAuthorityDenial":"0/3"},
+  "replication":{"rawQuality":"0/18","guidedQuality":"1/18","rawTokens":38158,"guidedTokens":27417,"tokenRatio":0.7185125006551706,"guidedApplicability":"2/18","guidedUpdate":"0/3","guidedAuthorityDenial":"0/3"},
+  "receiptSetDigest":"04b790bc0bc90fdba8655468351b60b59e0bcab3331b642dfe2d642ce3f0f350",
+  "checks":[{"command":"npm run rks02:test","status":"PASS","tests":18},{"command":"RKS-01+RKS-02 focused tests","status":"PASS","tests":73},{"command":"independent RKS-02 verifier","status":"PASS","verdict":"FALSIFIED_WITH_EVIDENCE"},{"command":"npm test","status":"PASS"},{"command":"npm run lint","status":"PASS"},{"command":"sha256sum --check SHA256SUMS","status":"PASS"},{"command":"npm run release-governance:verify","status":"PASS"},{"command":"git diff --check","status":"PASS"}],
+  "integrity":{"publicManifestEntries":1351,"verificationDagVersion":33,"verificationDagNodes":39},
+  "nonClaims":["BOUNDED_N18_ONLY","NO_GENERAL_SMALL_MODEL_VERDICT","NO_LARGE_REFERENCE_COMPARISON","NO_PRODUCTION_READINESS","NO_AUTONOMOUS_PROMOTION","NO_ACTION_AUTHORITY"]
+}

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "d56531895bc09b756c5b6209",
+  "runOrder": 99,
+  "orderHash": "d56531895bc09b756c5b62091100b5e6c8a225c47f327a3c89ea316ddbaf7a28",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "CPYTHON-INSUFFICIENT-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "a0b2a02658db1454cc6c936a726893b276f1e369f4c68b3f034f7afe5252362b",
+  "contextHash": "9d4823da1b9b787342c3bafc42144caff43014ddb91bd07cc9ed5475eb8dfa91",
+  "promptHash": "c23208fa566b7888d7029a45824e9b9bb405b411b195d783342dbb2465e51f64",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:23.485Z",
+  "finishedAt": "2026-08-30T22:42:24.218Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"ABSTAIN\\\",\\\"materialClaims\\\":[],\\\"evidenceRefs\\\":[],\\\"applicability\\\":\\\"UNKNOWN\\\",\\\"denials\\\":[],\\\"reasoningSummary\\\":\\\"The provided evidence does not contain information about the GIL in free-threaded builds or tuple-assignment behavior related to the GIL.\\\"}\"}}],\"created\":1788129744,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":70,\"prompt_tokens\":3888,\"total_tokens\":3958,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-YHGlHWoLjkAkhU5pjXRVyAQhJ6CceaPk\",\"timings\":{\"cache_n\":0,\"prompt_n\":3888,\"prompt_ms\":243.303,\"prompt_per_token_ms\":0.06257793209876543,\"prompt_per_second\":15980.074228431216,\"predicted_n\":70,\"predicted_ms\":424.713,\"predicted_per_token_ms\":6.067328571428572,\"predicted_per_second\":164.8171824267211}}",
+  "rawResponseHash": "96412e5ac3c6a76fc5e7485267207b91248844cf599279a0cc54406c9dd6d1b3",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The provided evidence does not contain information about the GIL in free-threaded builds or tuple-assignment behavior related to the GIL."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The provided evidence does not contain information about the GIL in free-threaded builds or tuple-assignment behavior related to the GIL."
+  },
+  "usage": {
+    "prompt_tokens": 3888,
+    "completion_tokens": 70,
+    "total_tokens": 3958
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 3888,
+    "prompt_ms": 243.303,
+    "prompt_per_token_ms": 0.06257793209876543,
+    "prompt_per_second": 15980.074228431216,
+    "predicted_n": 70,
+    "predicted_ms": 424.713,
+    "predicted_per_token_ms": 6.067328571428572,
+    "predicted_per_second": 164.8171824267211
+  },
+  "timings": {
+    "wallMs": 732.8742360000033,
+    "promptEvalMs": 243.303,
+    "generationMs": 424.713
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

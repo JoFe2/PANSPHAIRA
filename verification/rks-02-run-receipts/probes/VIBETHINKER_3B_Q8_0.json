@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "pansphaira/rks-02-schema-probe/v1",
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "unscored": true,
+  "attempt": 1,
+  "requestHash": "75ba2024d342a991cb723f9738b87b05971b2989623b3e0ef5da5f7725884aaa",
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"NOT_APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence available to support a claim.\\\"\\n}\"}}],\"created\":1788129656,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":75,\"prompt_tokens\":125,\"total_tokens\":200,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-SO1louIkboRPVZxl0hixYN7GPb5aTNVi\",\"timings\":{\"cache_n\":0,\"prompt_n\":125,\"prompt_ms\":31.734,\"prompt_per_token_ms\":0.253872,\"prompt_per_second\":3938.992878300876,\"predicted_n\":75,\"predicted_ms\":405.98,\"predicted_per_token_ms\":5.4130666666666665,\"predicted_per_second\":184.7381644415981}}",
+  "rawResponseHash": "b6be27fe261ab9ece292e327e220c55799b36c2f4ca312471ef729948a56a91e",
+  "parsedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "No evidence available to support a claim."
+  },
+  "parseError": null,
+  "usage": {
+    "completion_tokens": 75,
+    "prompt_tokens": 125,
+    "total_tokens": 200,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 125,
+    "prompt_ms": 31.734,
+    "prompt_per_token_ms": 0.253872,
+    "prompt_per_second": 3938.992878300876,
+    "predicted_n": 75,
+    "predicted_ms": 405.98,
+    "predicted_per_token_ms": 5.4130666666666665,
+    "predicted_per_second": 184.7381644415981
+  },
+  "wallMs": 444.91654000000017,
+  "passed": true
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "b9602300065f24610dddadf9",
+  "runOrder": 93,
+  "orderHash": "b9602300065f24610dddadf96cf56bf963173c1fefc3cfaf3f86b1e64f145d1b",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "WIKIDATA-CONFLICT-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "8a093b4015844dfeac11d0a64f2b40104fe0a5292fee172bdfa61ea625ffc58c",
+  "contextHash": "dc0699fccc836cef2cce9112c0e23e6cf1ffd1f2b806160933404f92820dcdca",
+  "promptHash": "8d772d1853c9232c7b1c7a70d47511cdf26b8442dd1d8da8560f2deb02cab898",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:17.550Z",
+  "finishedAt": "2026-08-30T22:42:18.414Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"ABSTAIN\\\",\\\"materialClaims\\\":[{\\\"claim\\\":\\\"Q1 property P31 has value Q5\\\",\\\"evidenceRefs\\\":[\\\"evidence:51ab30bd97f9b71cf4410914\\\"]}],\\\"evidenceRefs\\\":[\\\"evidence:51ab30bd97f9b71cf4410914\\\"],\\\"applicability\\\":\\\"UNKNOWN\\\",\\\"denials\\\":[],\\\"reasoningSummary\\\":\\\"The evidence shows Q1's P31 claim is bound to Q36906466, not Q5. The value Q5 is not present in the bound statement.\\\"}\"}}],\"created\":1788129738,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":145,\"prompt_tokens\":593,\"total_tokens\":738,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-Kr0A0qYrKGSoNiWXnPMbIYNVtDfQK4UM\",\"timings\":{\"cache_n\":0,\"prompt_n\":593,\"prompt_ms\":39.843,\"prompt_per_token_ms\":0.06718887015177066,\"prompt_per_second\":14883.417413347386,\"predicted_n\":145,\"predicted_ms\":694.533,\"predicted_per_token_ms\":4.789882758620689,\"predicted_per_second\":208.77337721893704}}",
+  "rawResponseHash": "5ee61428a718926715cb1f34eef019ae58f9a3710bcc8f21073bf3722535578b",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [
+      {
+        "claim": "Q1 property P31 has value Q5",
+        "evidenceRefs": [
+          "evidence:51ab30bd97f9b71cf4410914"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The evidence shows Q1's P31 claim is bound to Q36906466, not Q5. The value Q5 is not present in the bound statement."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [
+      {
+        "claim": "Q1 property P31 has value Q5",
+        "evidenceRefs": [
+          "evidence:51ab30bd97f9b71cf4410914"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The evidence shows Q1's P31 claim is bound to Q36906466, not Q5. The value Q5 is not present in the bound statement."
+  },
+  "usage": {
+    "prompt_tokens": 593,
+    "completion_tokens": 145,
+    "total_tokens": 738
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 593,
+    "prompt_ms": 39.843,
+    "prompt_per_token_ms": 0.06718887015177066,
+    "prompt_per_second": 14883.417413347386,
+    "predicted_n": 145,
+    "predicted_ms": 694.533,
+    "predicted_per_token_ms": 4.789882758620689,
+    "predicted_per_second": 208.77337721893704
+  },
+  "timings": {
+    "wallMs": 863.8307300000015,
+    "promptEvalMs": 39.843,
+    "generationMs": 694.533
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 1,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 1,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

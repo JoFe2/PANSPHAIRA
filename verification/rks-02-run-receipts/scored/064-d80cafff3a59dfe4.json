@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "d80cafff3a59dfe4f987a810",
+  "runOrder": 64,
+  "orderHash": "d80cafff3a59dfe4f987a810b41dc3ede5413aae4859e88bd8f4b7149e2866ca",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_TYPED_KNOWLEDGE",
+  "taskId": "CPYTHON-CONFLICT-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/controlflow.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "6ec75fe55f4b3fff764554d8c5fdc0b2d955fa40e2c216f79b6f1e1acfdedd18",
+  "contextHash": "e67ac7cfa826f992af13b945d8be152d374a1cab504c4d8bef17b3b552984675",
+  "promptHash": "a6cf7532484493a7d31af1023e8df0d75d8e92852cee6dba8e5762fd0817ad13",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:53.420Z",
+  "finishedAt": "2026-08-30T22:41:54.293Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"NOT_APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The EVIDENCE_pack does not contain any applicable evidence about positional arguments following keyword arguments. The documentation only explains that keyword arguments must follow positional arguments, which is the opposite of the claim. Therefore, the bound excerpt does not support the claim. No conflicts or unknowns remain.\\\"\\n}\"}}],\"created\":1788129714,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":126,\"prompt_tokens\":3747,\"total_tokens\":3873,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-bk4ZUw9wDWAibtbUid4kYjC1CvbuiJhk\",\"timings\":{\"cache_n\":0,\"prompt_n\":3747,\"prompt_ms\":204.409,\"prompt_per_token_ms\":0.05455270883373365,\"prompt_per_second\":18330.895410671743,\"predicted_n\":126,\"predicted_ms\":647.62,\"predicted_per_token_ms\":5.13984126984127,\"predicted_per_second\":194.55853741391556}}",
+  "rawResponseHash": "94e79593db4af54f8e6dd4817f7c036aee49a1bd4e496aa8d5c5a3e36e0f1702",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The EVIDENCE_pack does not contain any applicable evidence about positional arguments following keyword arguments. The documentation only explains that keyword arguments must follow positional arguments, which is the opposite of the claim. Therefore, the bound excerpt does not support the claim. No conflicts or unknowns remain."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The EVIDENCE_pack does not contain any applicable evidence about positional arguments following keyword arguments. The documentation only explains that keyword arguments must follow positional arguments, which is the opposite of the claim. Therefore, the bound excerpt does not support the claim. No conflicts or unknowns remain."
+  },
+  "usage": {
+    "prompt_tokens": 3747,
+    "completion_tokens": 126,
+    "total_tokens": 3873
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 3747,
+    "prompt_ms": 204.409,
+    "prompt_per_token_ms": 0.05455270883373365,
+    "prompt_per_second": 18330.895410671743,
+    "predicted_n": 126,
+    "predicted_ms": 647.62,
+    "predicted_per_token_ms": 5.13984126984127,
+    "predicted_per_second": 194.55853741391556
+  },
+  "timings": {
+    "wallMs": 873.2142820000008,
+    "promptEvalMs": 204.409,
+    "generationMs": 647.62
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

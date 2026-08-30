@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "0a70feb56be7b8e63c7c53ca",
+  "runOrder": 2,
+  "orderHash": "0a70feb56be7b8e63c7c53ca8e5601097a1d52ac24be85d4b1a14c1b1bbfa21f",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+  "taskId": "OPENAPI-INSUFFICIENT-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "050dfd87c28d11eaf42d55d74630db4fcd87671588d132152af4d6c03e67ae9e",
+  "contextHash": "e86515f399ded9d7d595c0db720f2df149fb70384098d1392ab44b4feb4a5b5b",
+  "promptHash": "1399785defd22fc230522dead0b235d95ffe8096401fa2337654f9a53762d0d1",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:14.148Z",
+  "finishedAt": "2026-08-30T22:41:14.864Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"NOT_APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The TASK_CONTRACT requests a answer about the maximum permitted HTTP request body size, but the EVIDENCE_pack does not contain any evidence regarding that specific topic. Since the evidence is missing, the appropriate response is to abstain.\\\"\\n}\"}}],\"created\":1788129674,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":110,\"prompt_tokens\":2723,\"total_tokens\":2833,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-u9RnH2PjeWVSwrm4mF02iOn0gf5tTnWl\",\"timings\":{\"cache_n\":0,\"prompt_n\":2723,\"prompt_ms\":152.023,\"prompt_per_token_ms\":0.055829232464193905,\"prompt_per_second\":17911.763351598114,\"predicted_n\":110,\"predicted_ms\":551.662,\"predicted_per_token_ms\":5.015109090909092,\"predicted_per_second\":199.3974571386102}}",
+  "rawResponseHash": "571be91a848364d5c759673458cf27d7bb1e4b7e2191d945e7885fa41e05ff4e",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The TASK_CONTRACT requests a answer about the maximum permitted HTTP request body size, but the EVIDENCE_pack does not contain any evidence regarding that specific topic. Since the evidence is missing, the appropriate response is to abstain."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The TASK_CONTRACT requests a answer about the maximum permitted HTTP request body size, but the EVIDENCE_pack does not contain any evidence regarding that specific topic. Since the evidence is missing, the appropriate response is to abstain."
+  },
+  "usage": {
+    "prompt_tokens": 2723,
+    "completion_tokens": 110,
+    "total_tokens": 2833
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 2723,
+    "prompt_ms": 152.023,
+    "prompt_per_token_ms": 0.055829232464193905,
+    "prompt_per_second": 17911.763351598114,
+    "predicted_n": 110,
+    "predicted_ms": 551.662,
+    "predicted_per_token_ms": 5.015109090909092,
+    "predicted_per_second": 199.3974571386102
+  },
+  "timings": {
+    "wallMs": 716.4635629999993,
+    "promptEvalMs": 152.023,
+    "generationMs": 551.662
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

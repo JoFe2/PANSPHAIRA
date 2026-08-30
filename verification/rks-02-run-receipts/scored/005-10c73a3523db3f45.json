@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "10c73a3523db3f455fadc34c",
+  "runOrder": 5,
+  "orderHash": "10c73a3523db3f455fadc34c4e1272a2c35677928dcfa11cb1594cd5e6187919",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "OPENAPI-DIRECT-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "f7a6d8cbff244dae8e3271edf5da96226cfd460baf12961ea5e251b2183716ee",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "b1ee0d5784558b83f1b4b994f5aee25e676611ce4fc9924dbc1aaa15a2d87f81",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:15.879Z",
+  "finishedAt": "2026-08-30T22:41:16.261Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence provided for this claim, so abstain.\\\"\\n}\"}}],\"created\":1788129676,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":69,\"prompt_tokens\":214,\"total_tokens\":283,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-D4qIkT4mNKZKtpuhzynMFa34P6x9Ur5X\",\"timings\":{\"cache_n\":0,\"prompt_n\":214,\"prompt_ms\":25.668,\"prompt_per_token_ms\":0.11994392523364486,\"prompt_per_second\":8337.229234844943,\"predicted_n\":69,\"predicted_ms\":348.927,\"predicted_per_token_ms\":5.056913043478261,\"predicted_per_second\":197.74909938181912}}",
+  "rawResponseHash": "119cf9a991d1e5c36f04c91e6488b2f0548def59fec3490c458d9aacc9f87a6c",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided for this claim, so abstain."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided for this claim, so abstain."
+  },
+  "usage": {
+    "prompt_tokens": 214,
+    "completion_tokens": 69,
+    "total_tokens": 283
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 214,
+    "prompt_ms": 25.668,
+    "prompt_per_token_ms": 0.11994392523364486,
+    "prompt_per_second": 8337.229234844943,
+    "predicted_n": 69,
+    "predicted_ms": 348.927,
+    "predicted_per_token_ms": 5.056913043478261,
+    "predicted_per_second": 197.74909938181912
+  },
+  "timings": {
+    "wallMs": 381.63013299999966,
+    "promptEvalMs": 25.668,
+    "generationMs": 348.927
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 2,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

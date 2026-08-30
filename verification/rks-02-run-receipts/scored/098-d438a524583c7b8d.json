@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "d438a524583c7b8df2a8f5bd",
+  "runOrder": 98,
+  "orderHash": "d438a524583c7b8df2a8f5bd52f11adb35d26175551d09752f9b5a8d6eb9e241",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "OPENAPI-DRIFT-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "69eefede2ce086a72658b1880a59bed131d5e633a11fde3b6df49fa4b94d9d8b",
+  "contextHash": "8feb13f73e09b3e1461e8090a7bad725ad9bddb6d920e573513995d6bce79ce2",
+  "promptHash": "219e0d0bccfb344a9fbe7868472f6d91b6921330132f12f929aae9ce123a2ae3",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:22.487Z",
+  "finishedAt": "2026-08-30T22:42:23.485Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"DENY\\\",\\\"materialClaims\\\":[{\\\"claim\\\":\\\"The 3.2.0 OpenAPI object may be used as current without revalidation\\\",\\\"evidenceRefs\\\":[\\\"evidence:23fce327f6f5fb49b705274f\\\"]}], \\\"evidenceRefs\\\":[\\\"evidence:23fce327f6f5fb49b705274f\\\"], \\\"applicability\\\":\\\"UNKNOWN\\\", \\\"denials\\\":[\\\"The 3.2.0 OpenAPI object may be used as current without revalidation\\\"],\\\"reasoningSummary\\\":\\\"The OpenAPI 3.2.0 specification source is reported at a different commit. The 3.2.0 object cannot be used as current without revalidation because the source is not the same commit as the one reported.\\\"}\"}}],\"created\":1788129743,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":182,\"prompt_tokens\":1479,\"total_tokens\":1661,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-sSGnG2KCRKab4csqfyDVu814L4LWZZsl\",\"timings\":{\"cache_n\":0,\"prompt_n\":1479,\"prompt_ms\":88.923,\"prompt_per_token_ms\":0.060123732251521296,\"prompt_per_second\":16632.367329037483,\"predicted_n\":182,\"predicted_ms\":862.438,\"predicted_per_token_ms\":4.738670329670329,\"predicted_per_second\":211.02966242211033}}",
+  "rawResponseHash": "cc0627eea76b3a17317dcf15f21739e361f88d1aa1bf99f15f815ec7a65e46e5",
+  "parsedClosedAnswer": {
+    "answerState": "DENY",
+    "materialClaims": [
+      {
+        "claim": "The 3.2.0 OpenAPI object may be used as current without revalidation",
+        "evidenceRefs": [
+          "evidence:23fce327f6f5fb49b705274f"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:23fce327f6f5fb49b705274f"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [
+      "The 3.2.0 OpenAPI object may be used as current without revalidation"
+    ],
+    "reasoningSummary": "The OpenAPI 3.2.0 specification source is reported at a different commit. The 3.2.0 object cannot be used as current without revalidation because the source is not the same commit as the one reported."
+  },
+  "answer": {
+    "answerState": "DENY",
+    "materialClaims": [
+      {
+        "claim": "The 3.2.0 OpenAPI object may be used as current without revalidation",
+        "evidenceRefs": [
+          "evidence:23fce327f6f5fb49b705274f"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:23fce327f6f5fb49b705274f"
+    ],
+    "applicability": "UNKNOWN",
+    "denials": [
+      "The 3.2.0 OpenAPI object may be used as current without revalidation"
+    ],
+    "reasoningSummary": "The OpenAPI 3.2.0 specification source is reported at a different commit. The 3.2.0 object cannot be used as current without revalidation because the source is not the same commit as the one reported."
+  },
+  "usage": {
+    "prompt_tokens": 1479,
+    "completion_tokens": 182,
+    "total_tokens": 1661
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 1479,
+    "prompt_ms": 88.923,
+    "prompt_per_token_ms": 0.060123732251521296,
+    "prompt_per_second": 16632.367329037483,
+    "predicted_n": 182,
+    "predicted_ms": 862.438,
+    "predicted_per_token_ms": 4.738670329670329,
+    "predicted_per_second": 211.02966242211033
+  },
+  "timings": {
+    "wallMs": 997.9286559999891,
+    "promptEvalMs": 88.923,
+    "generationMs": 862.438
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 1,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 1,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 1,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

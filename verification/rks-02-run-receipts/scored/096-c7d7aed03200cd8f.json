@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "c7d7aed03200cd8f5050c32f",
+  "runOrder": 96,
+  "orderHash": "c7d7aed03200cd8f5050c32f200d0bc911fb4270637909c6f834a458e1e93bba",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_TYPED_KNOWLEDGE_WITH_APPLICATION_GUIDES",
+  "taskId": "WIKIDATA-DIRECT-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "73315ee2a885c8e52051af7a7e3feba7c3377d25ff07bc1baa368117ab34f72d",
+  "contextHash": "91c3f541b331a435db60e6a4ef821797a9933821c10245ae84a0a08b1f3ddd2c",
+  "promptHash": "9c0ab7c8764fdbbfa45389dbbe87373808d19f5db71c0205dd303ec668e0f897",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:20.662Z",
+  "finishedAt": "2026-08-30T22:42:21.550Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"ANSWER\\\",\\\"materialClaims\\\":[{\\\"claim\\\":\\\"At entity revision 2534934769, the value of Q1 property P31 is Q36906466\\\",\\\"evidenceRefs\\\":[\\\"evidence:51ab30bd97f9b71cf4410914\\\"]}],\\\"evidenceRefs\\\":[\\\"evidence:51ab30bd97f9b71cf4410914\\\"],\\\"applicability\\\":\\\"APPLICABLE\\\",\\\"denials\\\":[],\\\"reasoningSummary\\\":\\\"The entity Q1 at revision 2534934769 has a P31 claim with value Q36906466.\\\"}\"}}],\"created\":1788129741,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":165,\"prompt_tokens\":980,\"total_tokens\":1145,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-vjHzVhTE4R8ERHQ64YIIY6rC0E2sffyV\",\"timings\":{\"cache_n\":0,\"prompt_n\":980,\"prompt_ms\":58.289,\"prompt_per_token_ms\":0.05947857142857143,\"prompt_per_second\":16812.777711060407,\"predicted_n\":165,\"predicted_ms\":783.961,\"predicted_per_token_ms\":4.751278787878788,\"predicted_per_second\":210.4696534649045}}",
+  "rawResponseHash": "5ad1e86d62826cebd98012e4c6a6d278886d487be2f84ffd73cadfbe7a6545c4",
+  "parsedClosedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [
+      {
+        "claim": "At entity revision 2534934769, the value of Q1 property P31 is Q36906466",
+        "evidenceRefs": [
+          "evidence:51ab30bd97f9b71cf4410914"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The entity Q1 at revision 2534934769 has a P31 claim with value Q36906466."
+  },
+  "answer": {
+    "answerState": "ANSWER",
+    "materialClaims": [
+      {
+        "claim": "At entity revision 2534934769, the value of Q1 property P31 is Q36906466",
+        "evidenceRefs": [
+          "evidence:51ab30bd97f9b71cf4410914"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:51ab30bd97f9b71cf4410914"
+    ],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The entity Q1 at revision 2534934769 has a P31 claim with value Q36906466."
+  },
+  "usage": {
+    "prompt_tokens": 980,
+    "completion_tokens": 165,
+    "total_tokens": 1145
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 980,
+    "prompt_ms": 58.289,
+    "prompt_per_token_ms": 0.05947857142857143,
+    "prompt_per_second": 16812.777711060407,
+    "predicted_n": 165,
+    "predicted_ms": 783.961,
+    "predicted_per_token_ms": 4.751278787878788,
+    "predicted_per_second": 210.4696534649045
+  },
+  "timings": {
+    "wallMs": 887.8388230000128,
+    "promptEvalMs": 58.289,
+    "generationMs": 783.961
+  },
+  "score": {
+    "taskSuccess": 1,
+    "materialClaims": 1,
+    "coveredMaterialClaims": 1,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

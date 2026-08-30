@@ -244,6 +244,7 @@ docs/architecture/cks-m1/closure-v1.md	docs/architecture/cks-m1/closure-v1.md	06
 docs/architecture/cks-m1/criterion-traceability-v1.json	docs/architecture/cks-m1/criterion-traceability-v1.json	0644
 docs/architecture/rks-01-real-source-utility-result-v1.md	docs/architecture/rks-01-real-source-utility-result-v1.md	0644
 docs/architecture/rks-01-source-governance-v1.md	docs/architecture/rks-01-source-governance-v1.md	0644
+docs/architecture/rks-02-core-small-vs-raw-result-v1.md	docs/architecture/rks-02-core-small-vs-raw-result-v1.md	0644
 docs/asf-lifecycle-recovery-guide.md	docs/asf-lifecycle-recovery-guide.md	0644
 docs/asf-lifecycle-synthetic-proof.md	docs/asf-lifecycle-synthetic-proof.md	0644
 docs/benchmarks/cks-05-falsification-report-template-v1.md	docs/benchmarks/cks-05-falsification-report-template-v1.md	0644
@@ -582,6 +583,7 @@ scripts/run-cks-12-story-step-check.mjs	scripts/run-cks-12-story-step-check.mjs	
 scripts/run-cks-router-dry-run.mjs	scripts/run-cks-router-dry-run.mjs	0755
 scripts/run-openclaw-m1.5-probes.mjs	scripts/run-openclaw-m1.5-probes.mjs	0755
 scripts/run-rks-01-comparative-pilot.mjs	scripts/run-rks-01-comparative-pilot.mjs	0644
+scripts/run-rks-02-core-pilot.mjs	scripts/run-rks-02-core-pilot.mjs	0644
 scripts/validate-cks-10-candidate-return.mjs	scripts/validate-cks-10-candidate-return.mjs	0644
 scripts/validate-cks-10-projection-contract.mjs	scripts/validate-cks-10-projection-contract.mjs	0644
 scripts/validate-cks-11-delivery-readback.mjs	scripts/validate-cks-11-delivery-readback.mjs	0644
@@ -600,6 +602,7 @@ scripts/verify-openclaw-agent-runtime-lock.mjs	scripts/verify-openclaw-agent-run
 scripts/verify-openclaw-m1.5-evidence.mjs	scripts/verify-openclaw-m1.5-evidence.mjs	0755
 scripts/verify-release-governance.mjs	scripts/verify-release-governance.mjs	0755
 scripts/verify-rks-01-comparative-results.mjs	scripts/verify-rks-01-comparative-results.mjs	0644
+scripts/verify-rks-02-results.mjs	scripts/verify-rks-02-results.mjs	0644
 scripts/verify-secure-default-proof.mjs	scripts/verify-secure-default-proof.mjs	0755
 scripts/verify-supply-chain.mjs	scripts/verify-supply-chain.mjs	0755
 scripts/verify-wikimedia-pilot.mjs	scripts/verify-wikimedia-pilot.mjs	0644
@@ -635,6 +638,7 @@ src/rks-01/corpus-builder.mjs	src/rks-01/corpus-builder.mjs	0644
 src/rks-01/deterministic-ingestion.mjs	src/rks-01/deterministic-ingestion.mjs	0644
 src/rks-01/knowledge-object-projector.mjs	src/rks-01/knowledge-object-projector.mjs	0644
 src/rks-01/source-governance.mjs	src/rks-01/source-governance.mjs	0644
+src/rks-02/comparator.mjs	src/rks-02/comparator.mjs	0644
 tests/adaptability-benchmark-m0.test.mjs	tests/adaptability-benchmark-m0.test.mjs	0644
 tests/adaptive-controller.test.mjs	tests/adaptive-controller.test.mjs	0644
 tests/adaptive-evidence-gates.test.ts	tests/adaptive-evidence-gates.test.ts	0644
@@ -1118,6 +1122,8 @@ tests/fixtures/rks-01/source-snapshots/wikidata/Q64-revision-2532491231.json.b64
 tests/fixtures/rks-01/source-snapshots/wikidata/Q7430-revision-2533806379.json.b64	tests/fixtures/rks-01/source-snapshots/wikidata/Q7430-revision-2533806379.json.b64	0644
 tests/fixtures/rks-01/source-snapshots/wikidata/Q7868-revision-2535923716.json.b64	tests/fixtures/rks-01/source-snapshots/wikidata/Q7868-revision-2535923716.json.b64	0644
 tests/fixtures/rks-01/source-snapshots/wikidata/Q90-revision-2537264071.json.b64	tests/fixtures/rks-01/source-snapshots/wikidata/Q90-revision-2537264071.json.b64	0644
+tests/fixtures/rks-02/decision-rule-v1.json	tests/fixtures/rks-02/decision-rule-v1.json	0644
+tests/fixtures/rks-02/inherited-bindings-v1.json	tests/fixtures/rks-02/inherited-bindings-v1.json	0644
 tests/fixtures/signal-release-intake/positive-v1.json	tests/fixtures/signal-release-intake/positive-v1.json	0644
 tests/fixtures/signal-release-intake/rejections-v1.json	tests/fixtures/signal-release-intake/rejections-v1.json	0644
 tests/fixtures/update-doctor/maintenance-contract-freeze-negative-matrix-v1-v2.json	tests/fixtures/update-doctor/maintenance-contract-freeze-negative-matrix-v1-v2.json	0644
@@ -1193,6 +1199,7 @@ tests/rks-01/comparative-utility.test.mjs	tests/rks-01/comparative-utility.test.
 tests/rks-01/deterministic-ingestion.test.mjs	tests/rks-01/deterministic-ingestion.test.mjs	0644
 tests/rks-01/source-governance.test.mjs	tests/rks-01/source-governance.test.mjs	0644
 tests/rks-01/three-source-pilot.test.mjs	tests/rks-01/three-source-pilot.test.mjs	0644
+tests/rks-02/core-small-vs-raw.test.mjs	tests/rks-02/core-small-vs-raw.test.mjs	0644
 tests/secure-default-proof.test.mjs	tests/secure-default-proof.test.mjs	0644
 tests/signal-release-intake.test.ts	tests/signal-release-intake.test.ts	0644
 tests/skill-admission.test.ts	tests/skill-admission.test.ts	0644
@@ -1341,5 +1348,6 @@ verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidenc
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644
 verification/rks-01-falsification-report-v1.json	verification/rks-01-falsification-report-v1.json	0644
 verification/rks-01-source-capture-receipt-v1.json	verification/rks-01-source-capture-receipt-v1.json	0644
+verification/rks-02-falsification-report-v1.json	verification/rks-02-falsification-report-v1.json	0644
 verification/verification-dag-v2.json	verification/verification-dag-v2.json	0644
 verification/wikimedia-m0-evidence-v1.json	verification/wikimedia-m0-evidence-v1.json	0644

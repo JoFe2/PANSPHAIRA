@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "7454ae070629d415fae34a5a",
+  "runOrder": 35,
+  "orderHash": "7454ae070629d415fae34a5a54d53831dc581b9534f54670f175937a08efcb9f",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "CPYTHON-CONFLICT-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/controlflow.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "6ec75fe55f4b3fff764554d8c5fdc0b2d955fa40e2c216f79b6f1e1acfdedd18",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "a9f8b2b2db4501cf03a665668061115099d40cfc8df19251dd3013cf511c2d81",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:33.853Z",
+  "finishedAt": "2026-08-30T22:41:34.317Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence provided in the supplied EVIDENCE_PACK, thus cannot assess applicability or identify conflicts.\\\"\\n}\"}}],\"created\":1788129694,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":82,\"prompt_tokens\":209,\"total_tokens\":291,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-v7RHV2y9kZM6OnqDW1IMCqzjWZfXxfWp\",\"timings\":{\"cache_n\":0,\"prompt_n\":209,\"prompt_ms\":23.847,\"prompt_per_token_ms\":0.11410047846889952,\"prompt_per_second\":8764.205141107896,\"predicted_n\":82,\"predicted_ms\":397.852,\"predicted_per_token_ms\":4.8518536585365855,\"predicted_per_second\":206.10679348099293}}",
+  "rawResponseHash": "954ede21403729f9d41ab97581c8106560ad69aeae163bb0a0d3f8a8bb91fe0d",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided in the supplied EVIDENCE_PACK, thus cannot assess applicability or identify conflicts."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided in the supplied EVIDENCE_PACK, thus cannot assess applicability or identify conflicts."
+  },
+  "usage": {
+    "prompt_tokens": 209,
+    "completion_tokens": 82,
+    "total_tokens": 291
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 209,
+    "prompt_ms": 23.847,
+    "prompt_per_token_ms": 0.11410047846889952,
+    "prompt_per_second": 8764.205141107896,
+    "predicted_n": 82,
+    "predicted_ms": 397.852,
+    "predicted_per_token_ms": 4.8518536585365855,
+    "predicted_per_second": 206.10679348099293
+  },
+  "timings": {
+    "wallMs": 463.5904179999998,
+    "promptEvalMs": 23.847,
+    "generationMs": 397.852
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

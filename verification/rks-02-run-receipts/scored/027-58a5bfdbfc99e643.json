@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "58a5bfdbfc99e643288e5bdf",
+  "runOrder": 27,
+  "orderHash": "58a5bfdbfc99e643288e5bdf3c85207b2bc0c331cb9f8e50f88e699b1a602888",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "OPENAPI-DIRECT-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "f7a6d8cbff244dae8e3271edf5da96226cfd460baf12961ea5e251b2183716ee",
+  "contextHash": "8feb13f73e09b3e1461e8090a7bad725ad9bddb6d920e573513995d6bce79ce2",
+  "promptHash": "5486112a96c796ae6a424485e6be296a31d4f0fca577c5bc090854e314f88860",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:28.163Z",
+  "finishedAt": "2026-08-30T22:41:28.814Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The evidence indicates that objects placed in Components do not affect the API unless explicitly referenced outside Components. This matches the question's requirement.\\\"\\n}\"}}],\"created\":1788129688,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":96,\"prompt_tokens\":1477,\"total_tokens\":1573,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-RvGd9bzm7n81Uv79Z2mSizHqXUSmAhWe\",\"timings\":{\"cache_n\":0,\"prompt_n\":1477,\"prompt_ms\":86.688,\"prompt_per_token_ms\":0.05869194312796209,\"prompt_per_second\":17038.113695090437,\"predicted_n\":96,\"predicted_ms\":548.788,\"predicted_per_token_ms\":5.716541666666667,\"predicted_per_second\":174.93093872314992}}",
+  "rawResponseHash": "af910c861fc4219d051142e9f7f2b576e5b57e1115934bb1312650c7a4e9fea8",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The evidence indicates that objects placed in Components do not affect the API unless explicitly referenced outside Components. This matches the question's requirement."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The evidence indicates that objects placed in Components do not affect the API unless explicitly referenced outside Components. This matches the question's requirement."
+  },
+  "usage": {
+    "prompt_tokens": 1477,
+    "completion_tokens": 96,
+    "total_tokens": 1573
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 1477,
+    "prompt_ms": 86.688,
+    "prompt_per_token_ms": 0.05869194312796209,
+    "prompt_per_second": 17038.113695090437,
+    "predicted_n": 96,
+    "predicted_ms": 548.788,
+    "predicted_per_token_ms": 5.716541666666667,
+    "predicted_per_second": 174.93093872314992
+  },
+  "timings": {
+    "wallMs": 651.1854440000025,
+    "promptEvalMs": 86.688,
+    "generationMs": 548.788
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 2,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

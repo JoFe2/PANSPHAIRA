@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "15534e159f1a8dd2e9aecb92",
+  "runOrder": 6,
+  "orderHash": "15534e159f1a8dd2e9aecb92305633ca8d1ca173ec267f1d919cc34480dcac75",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "WIKIDATA-APPLICABILITY-01",
+  "sourceClass": "WIKIDATA_STRUCTURED",
+  "sourceKey": "WIKIDATA_ENTITY:Q1",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "c8241cfe42314b6a49be8e742b5e379138801d3e1645f619fc1a6afea3c70732",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "ce88f8b63dd854e3e754430f365ee27c51faa67498adec71ffd16d9d06321475",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:16.261Z",
+  "finishedAt": "2026-08-30T22:41:16.665Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ANSWER\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence provided for revision 2534934769, so cannot apply.\\\"\\n}\"}}],\"created\":1788129676,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":79,\"prompt_tokens\":222,\"total_tokens\":301,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-aavtyYFxw0AJxGLvFvxhkTkLEjGCrsK9\",\"timings\":{\"cache_n\":0,\"prompt_n\":222,\"prompt_ms\":23.313,\"prompt_per_token_ms\":0.10501351351351351,\"prompt_per_second\":9522.583966027538,\"predicted_n\":79,\"predicted_ms\":372.296,\"predicted_per_token_ms\":4.712607594936709,\"predicted_per_second\":212.19674667468897}}",
+  "rawResponseHash": "bbbee7ed2e7b2e4f4eb018f1c63a45c5339e097a1e571ea3dc9e06f6adcef5c8",
+  "parsedClosedAnswer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "No evidence provided for revision 2534934769, so cannot apply."
+  },
+  "answer": {
+    "answerState": "ANSWER",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "No evidence provided for revision 2534934769, so cannot apply."
+  },
+  "usage": {
+    "prompt_tokens": 222,
+    "completion_tokens": 79,
+    "total_tokens": 301
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 222,
+    "prompt_ms": 23.313,
+    "prompt_per_token_ms": 0.10501351351351351,
+    "prompt_per_second": 9522.583966027538,
+    "predicted_n": 79,
+    "predicted_ms": 372.296,
+    "predicted_per_token_ms": 4.712607594936709,
+    "predicted_per_second": 212.19674667468897
+  },
+  "timings": {
+    "wallMs": 403.7107560000004,
+    "promptEvalMs": 23.313,
+    "generationMs": 372.296
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

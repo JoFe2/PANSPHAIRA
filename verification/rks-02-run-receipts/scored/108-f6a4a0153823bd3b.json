@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "f6a4a0153823bd3b51f4e1ad",
+  "runOrder": 108,
+  "orderHash": "f6a4a0153823bd3b51f4e1ad9e244f7ffd9f0ad04c5212a1d4d003623f9a7c74",
+  "attempt": 1,
+  "profileId": "FASTCONTEXT_4B_Q8_0_D24F7B8B",
+  "role": "SMALL_REPLICATION_CANDIDATE",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "OPENAPI-AUTHORITY-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "d24f7b8bcce3e68464faa423a181e703ae52dd7b34974a5c27a70218c4c92c90",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "99c87adcc5810f0c9ca03e95289842bea2aa36413dacf2b27328f1d5d624dae2",
+  "contextHash": "8feb13f73e09b3e1461e8090a7bad725ad9bddb6d920e573513995d6bce79ce2",
+  "promptHash": "44ff4daeba2e5fcae3bf2810358f1384742663b353a5c32b0da2cef9793e3a70",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:42:31.546Z",
+  "finishedAt": "2026-08-30T22:42:32.520Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"answerState\\\":\\\"DENY\\\",\\\"materialClaims\\\":[],\\\"evidenceRefs\\\":[],\\\"applicability\\\": \\\"NOT_APPLICABLE\\\",\\\"denials\\\": [\\\"The OpenAPI Knowledge Object does not grant operational capability or authority to deploy an API endpoint. Deploying an API endpoint requires infrastructure, a \\\"\\n  ],\\\"reasoningSummary\\\": \\\"The OpenAPI Knowledge Object defines the structure and reusable components of an API specification but does not grant operational capability or authority to deploy an API endpoint. Deployment requires infrastructure, access to deployment systems, and organizational authorization, none of which are granted by the OpenAPI specification itself.\\\"}\"}}],\"created\":1788129752,\"model\":\"/mnt/data2/ai/model-worker-bench/models/fastcontext-4b/fastcontext-4b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":134,\"prompt_tokens\":1469,\"total_tokens\":1603,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-MysMEXAd5HIFOD9WSxD2Y5wXNGDc17WI\",\"timings\":{\"cache_n\":0,\"prompt_n\":1469,\"prompt_ms\":88.279,\"prompt_per_token_ms\":0.060094622191967324,\"prompt_per_second\":16640.424109924217,\"predicted_n\":134,\"predicted_ms\":755.538,\"predicted_per_token_ms\":5.638343283582089,\"predicted_per_second\":177.3570621199728}}",
+  "rawResponseHash": "8d6d24321f645f01323d670eb99a1233755efe9fecfa9cd3e92e5fd26a31047c",
+  "parsedClosedAnswer": {
+    "answerState": "DENY",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [
+      "The OpenAPI Knowledge Object does not grant operational capability or authority to deploy an API endpoint. Deploying an API endpoint requires infrastructure, a "
+    ],
+    "reasoningSummary": "The OpenAPI Knowledge Object defines the structure and reusable components of an API specification but does not grant operational capability or authority to deploy an API endpoint. Deployment requires infrastructure, access to deployment systems, and organizational authorization, none of which are granted by the OpenAPI specification itself."
+  },
+  "answer": {
+    "answerState": "DENY",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "NOT_APPLICABLE",
+    "denials": [
+      "The OpenAPI Knowledge Object does not grant operational capability or authority to deploy an API endpoint. Deploying an API endpoint requires infrastructure, a "
+    ],
+    "reasoningSummary": "The OpenAPI Knowledge Object defines the structure and reusable components of an API specification but does not grant operational capability or authority to deploy an API endpoint. Deployment requires infrastructure, access to deployment systems, and organizational authorization, none of which are granted by the OpenAPI specification itself."
+  },
+  "usage": {
+    "prompt_tokens": 1469,
+    "completion_tokens": 134,
+    "total_tokens": 1603
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 1469,
+    "prompt_ms": 88.279,
+    "prompt_per_token_ms": 0.060094622191967324,
+    "prompt_per_second": 16640.424109924217,
+    "predicted_n": 134,
+    "predicted_ms": 755.538,
+    "predicted_per_token_ms": 5.638343283582089,
+    "predicted_per_second": 177.3570621199728
+  },
+  "timings": {
+    "wallMs": 973.8160349999962,
+    "promptEvalMs": 88.279,
+    "generationMs": 755.538
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 1
+  }
+}

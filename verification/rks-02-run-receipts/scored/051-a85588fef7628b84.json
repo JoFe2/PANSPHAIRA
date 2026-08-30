@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "a85588fef7628b8462ebd41e",
+  "runOrder": 51,
+  "orderHash": "a85588fef7628b8462ebd41e91d9937292092a4ade1593ac10a94f5d2cb9ba7d",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "CPYTHON-DIRECT-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "92493740268855823bb18b35ce0167d8f94247e1a3f6ec1a642297547b97803d",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "8e5cd45f4398fbbbc236678242f9494125f6b270e4fd136a62e91fc72b18d6e8",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:43.645Z",
+  "finishedAt": "2026-08-30T22:41:44.103Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"No evidence provided in the supplied EVIDENCE_PACK to support the claim, so the answer must be abstained.\\\"\\n}\"}}],\"created\":1788129704,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":82,\"prompt_tokens\":218,\"total_tokens\":300,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-4K9inTbuoNPb0jGRPnAgoldxjs8V4kEH\",\"timings\":{\"cache_n\":0,\"prompt_n\":218,\"prompt_ms\":23.958,\"prompt_per_token_ms\":0.10989908256880733,\"prompt_per_second\":9099.257033141332,\"predicted_n\":82,\"predicted_ms\":393.429,\"predicted_per_token_ms\":4.797914634146341,\"predicted_per_second\":208.42388334362747}}",
+  "rawResponseHash": "975d75a2fb326317498acbca56058990f03b698152fe0a1a8cab883fe61d0af6",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided in the supplied EVIDENCE_PACK to support the claim, so the answer must be abstained."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "No evidence provided in the supplied EVIDENCE_PACK to support the claim, so the answer must be abstained."
+  },
+  "usage": {
+    "prompt_tokens": 218,
+    "completion_tokens": 82,
+    "total_tokens": 300
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 218,
+    "prompt_ms": 23.958,
+    "prompt_per_token_ms": 0.10989908256880733,
+    "prompt_per_second": 9099.257033141332,
+    "predicted_n": 82,
+    "predicted_ms": 393.429,
+    "predicted_per_token_ms": 4.797914634146341,
+    "predicted_per_second": 208.42388334362747
+  },
+  "timings": {
+    "wallMs": 458.1355659999972,
+    "promptEvalMs": 23.958,
+    "generationMs": 393.429
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 2,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

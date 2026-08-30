@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "07c4ee023b643a9925a11a10",
+  "runOrder": 1,
+  "orderHash": "07c4ee023b643a9925a11a10fb93b35a821582d43b2048533a64f11f6505d617",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_CLOSED_BOOK",
+  "taskId": "OPENAPI-CONFLICT-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "52ad7e6e79e8a803d7d1aaffadbfb6a3caaf445402383cfbcf44f35a2574c88e",
+  "contextHash": "a2afd888bb17b7879f4c3432340045845161f52579f2691f206c0b5a8729ee6b",
+  "promptHash": "5fbdc8544c53aa927803d9e1cc131990e64669836bd0351b7470fc29337ec474",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:13.750Z",
+  "finishedAt": "2026-08-30T22:41:14.147Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"EVIDENCE absent\\\"\\n}\"}}],\"created\":1788129674,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":64,\"prompt_tokens\":212,\"total_tokens\":276,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-4hkQwix8vl3qkkV7ejcVkT1idHXlENdK\",\"timings\":{\"cache_n\":0,\"prompt_n\":212,\"prompt_ms\":33.13,\"prompt_per_token_ms\":0.1562735849056604,\"prompt_per_second\":6399.034108059161,\"predicted_n\":64,\"predicted_ms\":355.315,\"predicted_per_token_ms\":5.551796875,\"predicted_per_second\":180.12186369840845}}",
+  "rawResponseHash": "1b3f19e982ed53674d6aba6f8cc0092ebfc8d3f217f597952d340f89aee8ec93",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "EVIDENCE absent"
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "EVIDENCE absent"
+  },
+  "usage": {
+    "prompt_tokens": 212,
+    "completion_tokens": 64,
+    "total_tokens": 276
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 212,
+    "prompt_ms": 33.13,
+    "prompt_per_token_ms": 0.1562735849056604,
+    "prompt_per_second": 6399.034108059161,
+    "predicted_n": 64,
+    "predicted_ms": 355.315,
+    "predicted_per_token_ms": 5.551796875,
+    "predicted_per_second": 180.12186369840845
+  },
+  "timings": {
+    "wallMs": 396.4095160000006,
+    "promptEvalMs": 33.13,
+    "generationMs": 355.315
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 1,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 1,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

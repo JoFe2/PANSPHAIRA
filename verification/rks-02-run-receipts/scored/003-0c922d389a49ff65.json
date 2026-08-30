@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "0c922d389a49ff659387ea9b",
+  "runOrder": 3,
+  "orderHash": "0c922d389a49ff659387ea9bbed6af5577e8d47258eef519b9408fff381ddd1b",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "CPYTHON-APPLICABILITY-01",
+  "sourceClass": "CPYTHON_VERSIONED_DOCS",
+  "sourceKey": "CPYTHON_DOCUMENT:Doc/tutorial/datastructures.rst",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "d450c9f8308d25eec7c709a7eedfa4eaa8c88d39e67c94b846f143441653f989",
+  "contextHash": "9d4823da1b9b787342c3bafc42144caff43014ddb91bd07cc9ed5475eb8dfa91",
+  "promptHash": "7ad7615a799dbdddd7baadaec79e6914800444436e4838e8769da3a9f957f7e0",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:14.865Z",
+  "finishedAt": "2026-08-30T22:41:15.827Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"APPLICABLE\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The question asks whether a specific Python documentation excerpt can be treated as exact documentation for Python 3.13, specifically regarding the CPYTHON_VERSIONED_DOCS source. The evidence pack provided contains a code snippet about tuples and sequences, which does not provide exact documentation for the source class CPYTHON versioned docs. Since the evidence is not relevant, does not support the claim, or is stale, the answer must be abstained, resulting in ABSTAIN.\\\"\\n}\"}}],\"created\":1788129675,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":160,\"prompt_tokens\":3927,\"total_tokens\":4087,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-xgBdLuwGLBJxJzefBEBbf3tT5GJpeCU0\",\"timings\":{\"cache_n\":0,\"prompt_n\":3927,\"prompt_ms\":216.543,\"prompt_per_token_ms\":0.05514209320091673,\"prompt_per_second\":18134.96626536069,\"predicted_n\":160,\"predicted_ms\":705.891,\"predicted_per_token_ms\":4.41181875,\"predicted_per_second\":226.66389003401378}}",
+  "rawResponseHash": "7a85c416fdc6c1a14d7b0220f7e15636c1eaef9e6f93bbd022255288b11a5071",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The question asks whether a specific Python documentation excerpt can be treated as exact documentation for Python 3.13, specifically regarding the CPYTHON_VERSIONED_DOCS source. The evidence pack provided contains a code snippet about tuples and sequences, which does not provide exact documentation for the source class CPYTHON versioned docs. Since the evidence is not relevant, does not support the claim, or is stale, the answer must be abstained, resulting in ABSTAIN."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "APPLICABLE",
+    "denials": [],
+    "reasoningSummary": "The question asks whether a specific Python documentation excerpt can be treated as exact documentation for Python 3.13, specifically regarding the CPYTHON_VERSIONED_DOCS source. The evidence pack provided contains a code snippet about tuples and sequences, which does not provide exact documentation for the source class CPYTHON versioned docs. Since the evidence is not relevant, does not support the claim, or is stale, the answer must be abstained, resulting in ABSTAIN."
+  },
+  "usage": {
+    "prompt_tokens": 3927,
+    "completion_tokens": 160,
+    "total_tokens": 4087
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 3927,
+    "prompt_ms": 216.543,
+    "prompt_per_token_ms": 0.05514209320091673,
+    "prompt_per_second": 18134.96626536069,
+    "predicted_n": 160,
+    "predicted_ms": 705.891,
+    "predicted_per_token_ms": 4.41181875,
+    "predicted_per_second": 226.66389003401378
+  },
+  "timings": {
+    "wallMs": 961.839637,
+    "promptEvalMs": 216.543,
+    "generationMs": 705.891
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

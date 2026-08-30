@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pansphaira/rks-02-run-receipt/v1",
+  "runId": "62b08c71c34de76ec1d30226",
+  "runOrder": 28,
+  "orderHash": "62b08c71c34de76ec1d30226ba69aab953d9e6c752b7f58496bd9a00275f4f0e",
+  "attempt": 1,
+  "profileId": "VIBETHINKER_3B_Q8_0",
+  "role": "SMALL_PRIMARY",
+  "armId": "SMALL_RAW_RAG",
+  "taskId": "OPENAPI-APPLICABILITY-01",
+  "sourceClass": "OPENAPI_NORMATIVE_SPEC",
+  "sourceKey": "OPENAPI_SPEC:versions/3.2.0.md",
+  "seed": 104729,
+  "temperature": 0,
+  "maxTokens": 192,
+  "taskSuiteDigest": "803ac5f0fa16f8b43f4e229714efe27afbcf8c35a7e8a69bb11d0e7ee0a902c2",
+  "comparisonSourceSetDigest": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "contextContractDigest": "0722d5185d3ccd118b5a6c020d27ab5dabd4f28e11cddb4639237c514c753273",
+  "modelSha256": "ed81a97aa6aa5a1c25664fe4e9721f009e19fe151c71dcec6a52553a24372f9f",
+  "runtimeSha256": "d4f6893329395396b1a4e75820f2fe10e048c72a3b657e2182595e7fd352ab3c",
+  "taskHash": "aee8aa026e928ee0f08e07f593794394129a043b59f534e7b4d3581f539fc87e",
+  "contextHash": "8feb13f73e09b3e1461e8090a7bad725ad9bddb6d920e573513995d6bce79ce2",
+  "promptHash": "0f328be9cc09b99581277e177492d9338dd80d8f21871130eba6705846f4e299",
+  "sourceHash": "9db857ec6c970138aa6db689e3e575a3788c9926ed3a1dbe6c96175b069dc542",
+  "startedAt": "2026-08-30T22:41:28.815Z",
+  "finishedAt": "2026-08-30T22:41:29.518Z",
+  "outcome": "SUCCESS",
+  "error": null,
+  "responseStatus": 200,
+  "rawResponse": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answerState\\\": \\\"ABSTAIN\\\",\\n  \\\"materialClaims\\\": [],\\n  \\\"evidenceRefs\\\": [],\\n  \\\"applicability\\\": \\\"UNKNOWN\\\",\\n  \\\"denials\\\": [],\\n  \\\"reasoningSummary\\\": \\\"The request asks to assert the excerpt as exact OpenAPI 3.1.0 text, but the only provided evidence is for version 3.2.0. No evidence exists for the 3.1.0 version, and the evidence is applicable only to 3.2.0 specification. Therefore, the request cannot be satisfied and the answer must be abstained.\\\"\\n}\"}}],\"created\":1788129689,\"model\":\"/mnt/data2/ai/model-worker-bench/models/vibethinker-3b/vibethinker-3b-q8_0.gguf\",\"system_fingerprint\":\"b10167-ee3d1b54c1e47fce4cea9d63a60a1e45795eaf27\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":138,\"prompt_tokens\":1517,\"total_tokens\":1655,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"id\":\"chatcmpl-RuY25ZNzVslp8lFOxbgkpq4hTi6XufEo\",\"timings\":{\"cache_n\":0,\"prompt_n\":1517,\"prompt_ms\":87.728,\"prompt_per_token_ms\":0.05782992748846407,\"prompt_per_second\":17292.08462520518,\"predicted_n\":138,\"predicted_ms\":593.606,\"predicted_per_token_ms\":4.301492753623188,\"predicted_per_second\":232.47743452727903}}",
+  "rawResponseHash": "a7a4041edee04b2de6072174544bc401291e321ce6c73a450b3a6fb91684e3db",
+  "parsedClosedAnswer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The request asks to assert the excerpt as exact OpenAPI 3.1.0 text, but the only provided evidence is for version 3.2.0. No evidence exists for the 3.1.0 version, and the evidence is applicable only to 3.2.0 specification. Therefore, the request cannot be satisfied and the answer must be abstained."
+  },
+  "answer": {
+    "answerState": "ABSTAIN",
+    "materialClaims": [],
+    "evidenceRefs": [],
+    "applicability": "UNKNOWN",
+    "denials": [],
+    "reasoningSummary": "The request asks to assert the excerpt as exact OpenAPI 3.1.0 text, but the only provided evidence is for version 3.2.0. No evidence exists for the 3.1.0 version, and the evidence is applicable only to 3.2.0 specification. Therefore, the request cannot be satisfied and the answer must be abstained."
+  },
+  "usage": {
+    "prompt_tokens": 1517,
+    "completion_tokens": 138,
+    "total_tokens": 1655
+  },
+  "llamaTimings": {
+    "cache_n": 0,
+    "prompt_n": 1517,
+    "prompt_ms": 87.728,
+    "prompt_per_token_ms": 0.05782992748846407,
+    "prompt_per_second": 17292.08462520518,
+    "predicted_n": 138,
+    "predicted_ms": 593.606,
+    "predicted_per_token_ms": 4.301492753623188,
+    "predicted_per_second": 232.47743452727903
+  },
+  "timings": {
+    "wallMs": 703.5741779999989,
+    "promptEvalMs": 87.728,
+    "generationMs": 593.606
+  },
+  "score": {
+    "taskSuccess": 0,
+    "materialClaims": 0,
+    "coveredMaterialClaims": 0,
+    "unsupportedMaterialClaims": 0,
+    "applicabilityCorrect": 0,
+    "applicabilityDenominator": 1,
+    "updateCorrect": 0,
+    "updateDenominator": 0,
+    "safeDenialCorrect": 0,
+    "safeDenialDenominator": 0,
+    "authorityDenialCorrect": 0,
+    "authorityDenialDenominator": 0
+  }
+}

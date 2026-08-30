@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 32,
+  "graphVersion": 33,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "0d5c7df2958927095486fb86a68fbb45e64909c97805bd7f810aab4aef28a8b6"
+          "sha256": "195173ef8c8ce79becc6a541f8eb6ad87670218e32ed85ec5df73f46a7ad0739"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "af4460ed701f1d8e457f4d54fa9cf2e33a2527ecb835e3f421244872581ca687"
+          "sha256": "cb2ce1d7408f2a3ec3d4a5bba0b0923bc59ed31d6a8e06ccff092eb78af803ca"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "164f36fe6e290ef8de60947ea3b68b2517037876f9a30ffb392d1b78f87b44ae"
+          "sha256": "2d9b5225e231aaa132ca0175472724985cb19e62c3eb6187472499534cc266d5"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "7ffa469929e1b7654af3221d6ed24de3843e9acd9779297a3d99af7203aa56a3"
+          "sha256": "0dae200880a239b3ce1443631aa744375e9df1c66f72104cd2927bcf81edde26"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "6ca95015acb138ff54147e7caa7ab3b66a366134e0e4cdfdc73e098605d3d52c"
+          "sha256": "b4ecdf92eb5415797229e84209ad6aecce7c240bddbda3d5e34873733d7ba563"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "e8b2aa13db9e7dfb07d247c4abbe199aede786419df9bca79a5cddd90bded000"
+          "sha256": "b7b018b1fe368f0f6694620f277977a1e67849d70b9a30429355bef51a126e1e"
         }
       ],
       "ownedTests": [
@@ -4917,6 +4917,66 @@
         "Protocol v1 and v2 pre-score falsifications remain visible and no scored comparison is claimed.",
         "Knowledge grants no truth, Capability or Authority.",
         "The core small-vs-Raw standing hypothesis remains unresolved and must not be represented as falsified by a large-reference protocol incompatibility."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "rks-02-core-small-vs-raw-falsification-v1",
+      "dependsOn": [
+        "rks-01-real-source-protocol-falsification-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/rks-02-core-small-vs-raw-result-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bdf3fbfa63b2f549fa827a5a81eaa3876a7c813b02368c7441c62f37bac2ffd2"
+        },
+        {
+          "path": "scripts/run-rks-02-core-pilot.mjs",
+          "role": "VALIDATOR",
+          "sha256": "aebb3c8880dbc6321c923e198afad39c27b9329aa3edf1fb7655eb9553b6d563"
+        },
+        {
+          "path": "scripts/verify-rks-02-results.mjs",
+          "role": "VALIDATOR",
+          "sha256": "8ccafa81587cc84b438f80962a418debef3cd64a9beebd1778d53d79a0032a79"
+        },
+        {
+          "path": "src/rks-02/comparator.mjs",
+          "role": "VALIDATOR",
+          "sha256": "163ea3aa0dcab89464944991ac7a64acc0da4bafea69534d135a61eb4e37057f"
+        },
+        {
+          "path": "tests/fixtures/rks-02/decision-rule-v1.json",
+          "role": "FIXTURE",
+          "sha256": "3adf94a44976c79ea09c6872ca3ded905bb8a3f487ac66179523fe926728b02f"
+        },
+        {
+          "path": "tests/fixtures/rks-02/inherited-bindings-v1.json",
+          "role": "FIXTURE",
+          "sha256": "de4683c63945500dab63996c4583aedf0cc3a0e5e755177d9349fc78bbee87a4"
+        },
+        {
+          "path": "tests/rks-02/core-small-vs-raw.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "dbe9e5c5e3cbf402fa7bab68765114bb887e9bcd5239bcac60cc351e272124a7"
+        },
+        {
+          "path": "verification/rks-02-falsification-report-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f"
+        }
+      ],
+      "ownedTests": [
+        "npm run rks02:test"
+      ],
+      "invariants": [
+        "Exactly 108 unique one-attempt small-model assignments remain in the complete denominator.",
+        "The inherited 18 tasks, 41-source corpora, runtime, seed, answer schema and scoring bindings remain exact.",
+        "The incompatible Large Reference is not loaded, assigned, compared or used as a gate.",
+        "Token cost improvement cannot override failed quality, grounding, applicability, update or authority gates.",
+        "The terminal FALSIFIED_WITH_EVIDENCE verdict is derived from raw receipts and makes no general small-model claim."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
