@@ -46,7 +46,7 @@ export function validatePilotConfig(config) {
 }
 
 export function buildPrompt(config, arm) {
-  const instruction = `Answer the fictional-domain question. If the supplied material does not establish the answer, reply exactly ${config.task.abstentionToken}. Otherwise answer with only the clearance code.`;
+  const instruction = `Answer the fictional-domain question. If the supplied material does not establish the answer, emit exactly <final>${config.task.abstentionToken}</final>. Otherwise emit exactly one final channel as <final>CLEARANCE-CODE</final>. Reasoning may precede it but must never appear inside the final channel.`;
   let material = "No domain material is supplied (closed book).";
   if (arm.knowledgeMode === "NAIVE_RAG") material = `Raw retrieved text:\n${config.task.knowledge.raw}`;
   if (arm.knowledgeMode === "STRUCTURED_FABRIC") material = `Structured Knowledge Fabric:\n${config.task.knowledge.structured}`;
@@ -63,14 +63,14 @@ export function extractGeneratedOutput(stdout, prompt) {
 }
 
 export function extractFinalAnswer(generatedOutput) {
-  let value = String(generatedOutput ?? "").trim();
-  if (value.includes("<think>")) {
-    const closing = value.lastIndexOf("</think>");
-    if (closing < 0) return null;
-    value = value.slice(closing + "</think>".length).trim();
-  }
-  value = value.replace(/<\|(?:im_end|endoftext)\|>/g, "").trim();
-  return value || null;
+  const value = String(generatedOutput ?? "").replace(/<\|(?:im_end|endoftext)\|>/g, "").trim();
+  const openingCount = (value.match(/<final>/g) ?? []).length;
+  const closingCount = (value.match(/<\/final>/g) ?? []).length;
+  if (openingCount !== 1 || closingCount !== 1) return null;
+  const match = value.match(/<final>\s*([^<>\r\n]{1,128}?)\s*<\/final>/);
+  if (!match) return null;
+  const answer = match[1].trim();
+  return answer.length > 0 ? answer : null;
 }
 
 function digestFile(path) {

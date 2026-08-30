@@ -172,8 +172,6 @@ docker/local-knowledge-wiki/README.md	docker/local-knowledge-wiki/README.md	0644
 docker/local-knowledge-wiki/docker-compose.wiki.yml	docker/local-knowledge-wiki/docker-compose.wiki.yml	0644
 docker/local-knowledge-wiki/entrypoint.sh	docker/local-knowledge-wiki/entrypoint.sh	0644
 docs/.vitepress/config.mts	docs/.vitepress/config.mts	0644
-docs/benchmarks/cks-05-falsification-report-template-v1.md	docs/benchmarks/cks-05-falsification-report-template-v1.md	0644
-docs/benchmarks/cks-05-protocol-v1.md	docs/benchmarks/cks-05-protocol-v1.md	0644
 docs/ADAPTIVE-EVIDENCE-CONTROLLER.md	docs/ADAPTIVE-EVIDENCE-CONTROLLER.md	0644
 docs/ADAPTIVE-EVIDENCE-GATES.md	docs/ADAPTIVE-EVIDENCE-GATES.md	0644
 docs/AGENT-RUNTIME-ISOLATION-CONTRACT.md	docs/AGENT-RUNTIME-ISOLATION-CONTRACT.md	0644
@@ -232,6 +230,9 @@ docs/VOICE-LOCAL-PTT.md	docs/VOICE-LOCAL-PTT.md	0644
 docs/alternatives.md	docs/alternatives.md	0644
 docs/asf-lifecycle-recovery-guide.md	docs/asf-lifecycle-recovery-guide.md	0644
 docs/asf-lifecycle-synthetic-proof.md	docs/asf-lifecycle-synthetic-proof.md	0644
+docs/benchmarks/cks-05-falsification-report-template-v1.md	docs/benchmarks/cks-05-falsification-report-template-v1.md	0644
+docs/benchmarks/cks-05-falsification-report-v1.md	docs/benchmarks/cks-05-falsification-report-v1.md	0644
+docs/benchmarks/cks-05-protocol-v1.md	docs/benchmarks/cks-05-protocol-v1.md	0644
 docs/capabilities.md	docs/capabilities.md	0644
 docs/ccp-m1-local-proof.md	docs/ccp-m1-local-proof.md	0644
 docs/examples.md	docs/examples.md	0644
@@ -402,6 +403,8 @@ power-platform/readonly-canvas-workbench/manifest.json	power-platform/readonly-c
 release/governance.json	release/governance.json	0644
 release/public-files.manifest	release/public-files.manifest	0644
 schemas/adaptability-benchmark-result-v1.schema.json	schemas/adaptability-benchmark-result-v1.schema.json	0644
+schemas/cks-05-benchmark-manifest-v1.schema.json	schemas/cks-05-benchmark-manifest-v1.schema.json	0644
+schemas/cks-05-benchmark-result-v1.schema.json	schemas/cks-05-benchmark-result-v1.schema.json	0644
 schemas/contracts/adaptive-evidence-gate-spec-v1.schema.json	schemas/contracts/adaptive-evidence-gate-spec-v1.schema.json	0644
 schemas/contracts/adaptive-evidence-receipt-v1.schema.json	schemas/contracts/adaptive-evidence-receipt-v1.schema.json	0644
 schemas/contracts/agent-work-event-record-v1.schema.json	schemas/contracts/agent-work-event-record-v1.schema.json	0644
@@ -428,8 +431,6 @@ schemas/contracts/cks-run-manifest-v1.schema.json	schemas/contracts/cks-run-mani
 schemas/contracts/cks-shadow-evaluation-v1.schema.json	schemas/contracts/cks-shadow-evaluation-v1.schema.json	0644
 schemas/contracts/cks-verification-receipt-v1.schema.json	schemas/contracts/cks-verification-receipt-v1.schema.json	0644
 schemas/contracts/cks-vocabulary-v1.schema.json	schemas/contracts/cks-vocabulary-v1.schema.json	0644
-schemas/cks-05-benchmark-manifest-v1.schema.json	schemas/cks-05-benchmark-manifest-v1.schema.json	0644
-schemas/cks-05-benchmark-result-v1.schema.json	schemas/cks-05-benchmark-result-v1.schema.json	0644
 schemas/contracts/contribution-intake-ledger-v1.schema.json	schemas/contracts/contribution-intake-ledger-v1.schema.json	0644
 schemas/contracts/crm-read-connector-v1.schema.json	schemas/contracts/crm-read-connector-v1.schema.json	0644
 schemas/contracts/doctor-report-v1.schema.json	schemas/contracts/doctor-report-v1.schema.json	0644
@@ -493,6 +494,10 @@ scripts/adaptive-controller.mjs	scripts/adaptive-controller.mjs	0755
 scripts/adaptive-delivery-status.mjs	scripts/adaptive-delivery-status.mjs	0755
 scripts/adaptive-evidence-gates.mjs	scripts/adaptive-evidence-gates.mjs	0755
 scripts/build-public-release.sh	scripts/build-public-release.sh	0755
+scripts/cks-05-build-arm-inputs.mjs	scripts/cks-05-build-arm-inputs.mjs	0644
+scripts/cks-05-materialize-hidden-run.mjs	scripts/cks-05-materialize-hidden-run.mjs	0644
+scripts/cks-05-replay-readback.mjs	scripts/cks-05-replay-readback.mjs	0644
+scripts/cks-05-score-run.mjs	scripts/cks-05-score-run.mjs	0644
 scripts/extension-dynamic-process-lifecycle.mjs	scripts/extension-dynamic-process-lifecycle.mjs	0644
 scripts/extension-dynamic-synthetic.mjs	scripts/extension-dynamic-synthetic.mjs	0644
 scripts/learning-routing-baseline.mjs	scripts/learning-routing-baseline.mjs	0644
@@ -503,6 +508,8 @@ scripts/render-cks-04-public-readback.mjs	scripts/render-cks-04-public-readback.
 scripts/render-issue-candidate-evidence.mjs	scripts/render-issue-candidate-evidence.mjs	0755
 scripts/render-update-controller-synthetic-evidence.mjs	scripts/render-update-controller-synthetic-evidence.mjs	0644
 scripts/run-cks-04-baseline.mjs	scripts/run-cks-04-baseline.mjs	0644
+scripts/run-cks-05-benchmark.mjs	scripts/run-cks-05-benchmark.mjs	0644
+scripts/run-cks-05-real-pilot.mjs	scripts/run-cks-05-real-pilot.mjs	0644
 scripts/run-cks-router-dry-run.mjs	scripts/run-cks-router-dry-run.mjs	0755
 scripts/run-openclaw-m1.5-probes.mjs	scripts/run-openclaw-m1.5-probes.mjs	0755
 scripts/verification-plan.mjs	scripts/verification-plan.mjs	0755
@@ -515,12 +522,6 @@ scripts/verify-release-governance.mjs	scripts/verify-release-governance.mjs	0755
 scripts/verify-secure-default-proof.mjs	scripts/verify-secure-default-proof.mjs	0755
 scripts/verify-supply-chain.mjs	scripts/verify-supply-chain.mjs	0755
 scripts/verify-wikimedia-pilot.mjs	scripts/verify-wikimedia-pilot.mjs	0644
-scripts/cks-05-build-arm-inputs.mjs	scripts/cks-05-build-arm-inputs.mjs	0755
-scripts/cks-05-materialize-hidden-run.mjs	scripts/cks-05-materialize-hidden-run.mjs	0755
-scripts/cks-05-replay-readback.mjs	scripts/cks-05-replay-readback.mjs	0755
-scripts/cks-05-score-run.mjs	scripts/cks-05-score-run.mjs	0755
-scripts/run-cks-05-benchmark.mjs	scripts/run-cks-05-benchmark.mjs	0755
-scripts/run-cks-05-real-pilot.mjs	scripts/run-cks-05-real-pilot.mjs	0755
 security/openclaw-m1.1-evidence-v1.json	security/openclaw-m1.1-evidence-v1.json	0644
 security/openclaw-m1.2-evidence-v2.json	security/openclaw-m1.2-evidence-v2.json	0644
 security/openclaw-m1.3-evidence-v1.json	security/openclaw-m1.3-evidence-v1.json	0644
@@ -605,6 +606,7 @@ tests/cks-05-hidden-runner.test.mjs	tests/cks-05-hidden-runner.test.mjs	0644
 tests/cks-05-metrics-statistics.test.mjs	tests/cks-05-metrics-statistics.test.mjs	0644
 tests/cks-05-real-pilot.test.mjs	tests/cks-05-real-pilot.test.mjs	0644
 tests/cks-05-replay-readback.test.mjs	tests/cks-05-replay-readback.test.mjs	0644
+tests/cks-05-terminal-falsification.test.mjs	tests/cks-05-terminal-falsification.test.mjs	0644
 tests/cks-competence-runtime.test.ts	tests/cks-competence-runtime.test.ts	0644
 tests/cks-epistemic-verifier.test.ts	tests/cks-epistemic-verifier.test.ts	0644
 tests/cks-evidence.test.ts	tests/cks-evidence.test.ts	0644
@@ -755,6 +757,14 @@ tests/fixtures/cks-04/model-profile-template-v1.json	tests/fixtures/cks-04/model
 tests/fixtures/cks-04/p2-p3-scenarios-v1.json	tests/fixtures/cks-04/p2-p3-scenarios-v1.json	0644
 tests/fixtures/cks-04/runtime-contract-v1.json	tests/fixtures/cks-04/runtime-contract-v1.json	0644
 tests/fixtures/cks-04/verification-cases-v1.json	tests/fixtures/cks-04/verification-cases-v1.json	0644
+tests/fixtures/cks-05/ablation-matrix-v1.json	tests/fixtures/cks-05/ablation-matrix-v1.json	0644
+tests/fixtures/cks-05/benchmark-manifest-valid-v1.json	tests/fixtures/cks-05/benchmark-manifest-valid-v1.json	0644
+tests/fixtures/cks-05/executor-golden-v1.json	tests/fixtures/cks-05/executor-golden-v1.json	0644
+tests/fixtures/cks-05/public-task-catalog-v1.json	tests/fixtures/cks-05/public-task-catalog-v1.json	0644
+tests/fixtures/cks-05/raw-fabric-parity-v1.json	tests/fixtures/cks-05/raw-fabric-parity-v1.json	0644
+tests/fixtures/cks-05/real-pilot-v3.json	tests/fixtures/cks-05/real-pilot-v3.json	0644
+tests/fixtures/cks-05/real-pilot-v4.json	tests/fixtures/cks-05/real-pilot-v4.json	0644
+tests/fixtures/cks-05/scoring-golden-v1.json	tests/fixtures/cks-05/scoring-golden-v1.json	0644
 tests/fixtures/cks-qualification/escalation-causes-v1.json	tests/fixtures/cks-qualification/escalation-causes-v1.json	0644
 tests/fixtures/cks-qualification/profile-binding-v1.json	tests/fixtures/cks-qualification/profile-binding-v1.json	0644
 tests/fixtures/cks-qualification/smallest-qualified-v1.json	tests/fixtures/cks-qualification/smallest-qualified-v1.json	0644
@@ -795,13 +805,6 @@ tests/fixtures/learning-routing/baseline-golden-v1.json	tests/fixtures/learning-
 tests/fixtures/learning-routing/historical-episodes-august-v1.json	tests/fixtures/learning-routing/historical-episodes-august-v1.json	0644
 tests/fixtures/learning-routing/threat-replay-manifest-v1.json	tests/fixtures/learning-routing/threat-replay-manifest-v1.json	0644
 tests/fixtures/local-file-corpus/edition-1/operations.md	tests/fixtures/local-file-corpus/edition-1/operations.md	0644
-tests/fixtures/cks-05/ablation-matrix-v1.json	tests/fixtures/cks-05/ablation-matrix-v1.json	0644
-tests/fixtures/cks-05/benchmark-manifest-valid-v1.json	tests/fixtures/cks-05/benchmark-manifest-valid-v1.json	0644
-tests/fixtures/cks-05/executor-golden-v1.json	tests/fixtures/cks-05/executor-golden-v1.json	0644
-tests/fixtures/cks-05/public-task-catalog-v1.json	tests/fixtures/cks-05/public-task-catalog-v1.json	0644
-tests/fixtures/cks-05/raw-fabric-parity-v1.json	tests/fixtures/cks-05/raw-fabric-parity-v1.json	0644
-tests/fixtures/cks-05/real-pilot-v3.json	tests/fixtures/cks-05/real-pilot-v3.json	0644
-tests/fixtures/cks-05/scoring-golden-v1.json	tests/fixtures/cks-05/scoring-golden-v1.json	0644
 tests/fixtures/local-file-corpus/edition-1/policy.txt	tests/fixtures/local-file-corpus/edition-1/policy.txt	0644
 tests/fixtures/local-file-corpus/edition-2/operations.md	tests/fixtures/local-file-corpus/edition-2/operations.md	0644
 tests/fixtures/local-file-corpus/edition-2/policy.txt	tests/fixtures/local-file-corpus/edition-2/policy.txt	0644
@@ -988,6 +991,7 @@ verification/cks-04-no-finetune-baseline-evidence-v1.json	verification/cks-04-no
 verification/cks-05-authorized-benchmark-results-v1.json	verification/cks-05-authorized-benchmark-results-v1.json	0644
 verification/cks-05-hidden-run-manifest-template-v1.json	verification/cks-05-hidden-run-manifest-template-v1.json	0644
 verification/cks-05-public-readback-template-v1.json	verification/cks-05-public-readback-template-v1.json	0644
+verification/cks-05-real-pilot-v4-receipt.json	verification/cks-05-real-pilot-v4-receipt.json	0644
 verification/cks-05-run-record-template-v1.json	verification/cks-05-run-record-template-v1.json	0644
 verification/cks-06-authorized-shadow-window-v1.json	verification/cks-06-authorized-shadow-window-v1.json	0644
 verification/cks-06-router-dry-run-evidence-v1.json	verification/cks-06-router-dry-run-evidence-v1.json	0644

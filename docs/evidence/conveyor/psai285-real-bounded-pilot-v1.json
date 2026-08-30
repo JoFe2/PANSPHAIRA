@@ -52,7 +52,16 @@
         "ARM-LCB-04":"424cd9cd1633b7ea7c0bca1a12863cb32d4d559b1196482348eb9a9ee58ba8b5",
         "ARM-LKF-05":"69a249807f1f480c5b30e29db740b2d045742d358bacaa3cc38fb9f432ed9f98"
       },
-      "invalidationReason": "The model reasoning stream could contain both instruction tokens and candidate answers; substring scoring was not a valid final-answer scorer. Raw transcript bytes were intentionally not published, only their digests, so the attempt cannot be rescored. The runner now requires a closed reasoning block and an exact final answer."
+      "invalidationReason": "The model reasoning stream could contain both instruction tokens and candidate answers; substring scoring was not a valid final-answer scorer. Raw transcript bytes were intentionally not published, only their digests, so the attempt cannot be rescored."
+    },
+    {
+      "pilotId": "PSAI285-REAL-PILOT-20260830-04",
+      "status": "VALID_BOUNDED_FALSIFICATION_PILOT_NO_DOD_CLAIM",
+      "runCounts": {"scheduled":5,"terminalCompleted":5,"validFinalAnswers":1,"taskSuccesses":0},
+      "receiptPath": "verification/cks-05-real-pilot-v4-receipt.json",
+      "receiptSha256": "d54178845e2e8702ebeb95a53d51f3c1c16a3e147da7c1687ef8dd56477854de",
+      "observedLatencyMsByArm": {"ARM-SCB-01":4461.675,"ARM-SNR-02":4618.677,"ARM-SKF-03":5231.191,"ARM-LCB-04":32914.466,"ARM-LKF-05":37302.938},
+      "result": "The small closed-book arm correctly abstained. The other four arms did not emit exactly one valid final channel within the 48-token bound, including both Fabric arms. This bounded n=1 pilot falsifies an early-success claim but cannot estimate quality or efficiency thresholds."
     }
   ],
   "tddEvidence": {
@@ -62,10 +71,10 @@
   "acceptanceStatus": [
     {"criterion":"Identical hidden/fresh tasks and Knowledge versions across arms","status":"PARTIAL","evidence":"The real pilot binds one fresh synthetic task identically across five arms; the full hidden multi-domain schedule is not executed."},
     {"criterion":"Structured-vs-raw, facts-vs-guidance, static-vs-updated, single-vs-multi-hop A/B results","status":"NOT_MET","evidence":"The bounded issue-outcome pilot covers closed-book, naive RAG and Fabric only; inherited dry-run A/B fixtures are not measurements."},
-    {"criterion":"Confidence intervals/run counts/failures preserved","status":"PARTIAL","evidence":"Attempt and terminal counts plus receipt digests are preserved; n=1/arm has no valid CI and scorer-invalidated outputs have no admitted quality scores."},
+    {"criterion":"Confidence intervals/run counts/failures preserved","status":"PARTIAL","evidence":"Pilot v4 preserves 5/5 terminal records and exact scorer outcomes; n=1/arm has no valid confidence interval."},
     {"criterion":"Stop conditions can falsify or simplify architecture","status":"PASS_FAIL_CLOSED","evidence":"Resource and instrumentation stops invalidated pilots without product verdict; STOP-07 and FALSIFY-SUBSTITUTION remain active."},
     {"criterion":"No substitution claim unless quality and efficiency pass","status":"PASS_FAIL_CLOSED","evidence":"No quality or efficiency threshold passed; model substitution remains denied."}
   ],
-  "exactExecutableBlocker": "Issue #285 remains open. Before closure, execute a new fresh protocol edition with the corrected exact-final scorer over enough independent tasks, both Knowledge editions, required structured/raw, facts/guidance, update and hop contrasts, resource/token/memory/throughput/cost collection, and confidence intervals. Preserve each terminal record before the next run. The existing 960-run dry-run fixtures and all three pilot attempts are excluded from a closure claim.",
+  "exactExecutableBlocker": "Issue #285 remains open. Before closure, execute a fresh protocol edition with the corrected exact-final scorer over enough independent tasks, both Knowledge editions, required structured/raw, facts/guidance, update and hop contrasts, resource/token/memory/throughput/cost collection, and confidence intervals. Preserve each terminal record before the next run. The inherited 960-run dry-run fixtures and invalidated pilots 01-03 are excluded; pilot 04 is valid bounded falsification evidence but insufficient for the DoD.",
   "claims": {"benchmarkComplete":false,"modelSubstitution":false,"issueReadyToClose":false,"releaseReady":false}
 }

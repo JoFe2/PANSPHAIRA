@@ -46,7 +46,7 @@ test("bounded pilot invokes every pinned arm once and preserves terminal receipt
       terminalStatus: "COMPLETED",
       exitCode: 0,
       elapsedMs: arm.knowledgeMode === "CLOSED_BOOK" ? 10 : 20,
-      stdout: arm.knowledgeMode === "CLOSED_BOOK" ? "ABSTAIN" : config.task.goldAnswer,
+      stdout: arm.knowledgeMode === "CLOSED_BOOK" ? "<final>ABSTAIN</final>" : `<final>${config.task.goldAnswer}</final>`,
       stderr: "pinned-runtime",
     };
   };
@@ -82,10 +82,12 @@ test("scoring excludes echoed prompt bytes from generated output", () => {
   assert.equal(receipt.results[0].abstained, false, "abstention instruction present only in the echoed prompt must not score");
 });
 
-test("scoring requires an exact final answer and rejects unfinished reasoning", () => {
+test("scoring requires exactly one closed final-answer channel and rejects free text or unfinished reasoning", () => {
   assert.equal(extractFinalAnswer("<think>consider EMBER-4 and ABSTAIN"), null);
-  assert.equal(extractFinalAnswer("<think>reasoning</think>\nCINDER-6"), "CINDER-6");
-  assert.equal(extractFinalAnswer("ABSTAIN"), "ABSTAIN");
+  assert.equal(extractFinalAnswer("<think>reasoning</think>\n<final>CINDER-6</final>"), "CINDER-6");
+  assert.equal(extractFinalAnswer("ABSTAIN"), null);
+  assert.equal(extractFinalAnswer("<final>ABSTAIN</final>"), "ABSTAIN");
+  assert.equal(extractFinalAnswer("<final>CINDER-6</final><final>ABSTAIN</final>"), null);
 });
 
 test("pilot rejects model/runtime digest drift and an incomplete arm matrix", () => {

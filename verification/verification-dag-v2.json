@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 23,
+  "graphVersion": 24,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "579e842b6ac5735d7302082fe3679f580e68548c630a71ae822b93701bd83106"
+          "sha256": "56579613053387603bd66d7532c9233cbf5d8f2d4fbf41a3bccc1d07bd1b6dc0"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a8726cb957ef4af1268e47ba7d62169b702f3c63fd8b1dcb2edfaae5c6770a35"
+          "sha256": "87f0012d53ee7d379b028c4170e04e23a0f07d36e1cbf414bdf2d5956d2ff6b2"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "b631c32bfcb9aa2a6582e87f473a9b25bb3e15ca5d2b575dd806b8793f0f0810"
+          "sha256": "3955d71a229d149168e5f6d808f9060b4c0a54e28baf136e14ffc819688ae068"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "5c2eeba3ab6ed1a6a978b8dabb876ac9b77bc503935094c4492d3a34b3dff8c2"
+          "sha256": "f9380b5a5e7ebc52eddbec8e8ef049d31b4e107bb60eb437082e6320915d0634"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "2177f668e8cd4dd3191b35369d02b0d619e546239b021b1015cc05b9843f58fb"
+          "sha256": "aabffcebc58c0165ec324abae378e48ef873f077815196714ab4eb6ca905f327"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "e049c0d324413038db890b7e70828410983dc5779d691da3401d3deeaa365fe5"
+          "sha256": "a2a8c2c566fe048a308669f9ad78f56db2c9382d0d28caebb5d294e1026f6df0"
         }
       ],
       "ownedTests": [
@@ -2743,6 +2743,215 @@
         "Every run binds exact model, quantization, runtime, prompt, tool, Knowledge, verifier and fresh CKS-03 suite/task identities.",
         "Missing, conflicting, inapplicable or insufficient Knowledge produces abstention or escalation, never supported success.",
         "The local no-fine-tune baseline grants no effectful authority and makes no qualification or production claim."
+      ],
+      "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cks-05-comparative-falsification-v1",
+      "dependsOn": [
+        "cks-03-fresh-synthetic-qualification-v1",
+        "cks-04-no-finetune-runtime-baseline-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/benchmarks/cks-05-falsification-report-template-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a652a843a0e6c83661cab3883ac25db52eb6037cb90f3f78f02a1fd54ca0b7e1"
+        },
+        {
+          "path": "docs/benchmarks/cks-05-falsification-report-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4edbaf1125942f24795e4d6ca32453b7699d8dc5d6e85b25b087317fa34f2e8d"
+        },
+        {
+          "path": "docs/benchmarks/cks-05-protocol-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "06aa71ee34fb57898985e885728e339ce00b91b59e2e353dfd73d3e12156c7cc"
+        },
+        {
+          "path": "docs/evidence/conveyor/psai285-measured-benchmark-report-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2052cd853c6ce988d716a123cabf1ecb198d86d91ac83bf18d2e99b8fbcfa203"
+        },
+        {
+          "path": "docs/evidence/conveyor/psai285-real-bounded-pilot-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ae2699a27bae3e9c5120da549cfc199c870c626c6fb8b817b66bacecb4f4c81f"
+        },
+        {
+          "path": "docs/evidence/conveyor/sol-psai285-benchmark-design-decision-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d2ef97d082197f2bd2ebbe22c09ef8ca512980d399a83679d1b05c34f5e2514a"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai285-canonical-root-qs-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0d0b3c54c3a711aba2eeda4017ba7e9885ec9b7588ceeeebad03bcb3d4638378"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai285-integration-root-qs-01.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ba8660d75e886dd70ea775b8bc925763bac64aedb24eca77882177e8d3103f6d"
+        },
+        {
+          "path": "docs/evidence/conveyor/terra-psai285-pr-ci-package-02.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "6ef2b91897eb7ad97971c73712bbd83f68a7ead2f4f10b06eac22d3350ab7500"
+        },
+        {
+          "path": "schemas/cks-05-benchmark-manifest-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "53004e6a1defd47cd77ae90c58540a361f435970d8f66d8727f12f16c87dc07d"
+        },
+        {
+          "path": "schemas/cks-05-benchmark-result-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "6852ac73d0563ac7f8217b22ad212f0d07da33b21728701f63f9f1a9428742a2"
+        },
+        {
+          "path": "scripts/cks-05-build-arm-inputs.mjs",
+          "role": "VALIDATOR",
+          "sha256": "68820f1db226623d3f25b8922d29ecc3fcf6766bdee8a140d6be926c0dc051da"
+        },
+        {
+          "path": "scripts/cks-05-materialize-hidden-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "53816fb5bbb206b3dfe0a204ab3473d3bddf8ad41b4156ef59de86fba2f9ddf1"
+        },
+        {
+          "path": "scripts/cks-05-replay-readback.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c7b5dd91c9f5af6bbe036c9a54bbb375a41c8c106c1bc7e85abd90385b71283d"
+        },
+        {
+          "path": "scripts/cks-05-score-run.mjs",
+          "role": "VALIDATOR",
+          "sha256": "e652e7e853008c069bb118840829f0d2412e56ced1d69ab6e9552d1482d8dcb9"
+        },
+        {
+          "path": "scripts/run-cks-05-benchmark.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6652481f0e14ffd1a6db2aa7f5eea11584c704edb42fb176aa62a0cee2d6276c"
+        },
+        {
+          "path": "scripts/run-cks-05-real-pilot.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6b5e609c1d6061d04d1e0bb4dd09cfea23f21f6e5119e8a0069643807f8b98b2"
+        },
+        {
+          "path": "tests/cks-05-ablation-arm-builder.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "75f9cc9eea0ac762db7d547d7641b72681fa9202ee655a8f1fee5c54f7549775"
+        },
+        {
+          "path": "tests/cks-05-benchmark-contract.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "8f03fea918bce0480a93bf864b5c607d3c43f77bebae3fcad488cb48d7193e31"
+        },
+        {
+          "path": "tests/cks-05-benchmark-executor.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "3ae00fcfe7d3859e44c82aa9c09d416204ff2874a172d135835b4f5a5223b758"
+        },
+        {
+          "path": "tests/cks-05-hidden-runner.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0a4b69f3e79c8e8af99d2b41ab2f42c2456e4a12347c647a14e6f45b00983797"
+        },
+        {
+          "path": "tests/cks-05-metrics-statistics.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "95e87e225398be7833ce16b6b4c6bf094d88a2c12f1076b31a472d55177e57f9"
+        },
+        {
+          "path": "tests/cks-05-real-pilot.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "f81446ae911121725208ba43be1c4535b8c4ecae38534c68178e36fc3cd0debc"
+        },
+        {
+          "path": "tests/cks-05-replay-readback.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "7268bc477d2baff20624c3ba89e10608d81955cda8d4f23794c03b37006a1a42"
+        },
+        {
+          "path": "tests/cks-05-terminal-falsification.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "62ffe186cbf8dbc363bfcecc57bbfe8538fbc093f3f19b04acdbebe1913cb8df"
+        },
+        {
+          "path": "tests/fixtures/cks-05/ablation-matrix-v1.json",
+          "role": "FIXTURE",
+          "sha256": "42fbfa6780f99376dcdf31bd696bb01552da13b6a2fc1a26203ad027f50a2972"
+        },
+        {
+          "path": "tests/fixtures/cks-05/benchmark-manifest-valid-v1.json",
+          "role": "FIXTURE",
+          "sha256": "13bbc6a38f03286977a243e35ead7e4198e3743597919894a24ee71a37ea725e"
+        },
+        {
+          "path": "tests/fixtures/cks-05/executor-golden-v1.json",
+          "role": "FIXTURE",
+          "sha256": "214b3abc8bbd4ff06c69bff34043e32fe040741d85c9c7d60e625c7c9e79e066"
+        },
+        {
+          "path": "tests/fixtures/cks-05/public-task-catalog-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f4caa71b788703205ac64540b776f84a432262592a4d22a6ef8160751ee64563"
+        },
+        {
+          "path": "tests/fixtures/cks-05/raw-fabric-parity-v1.json",
+          "role": "FIXTURE",
+          "sha256": "e6caccb36334207a0bfc5e23e0222f246de439ec48945e1f2d00673296cada1e"
+        },
+        {
+          "path": "tests/fixtures/cks-05/real-pilot-v3.json",
+          "role": "FIXTURE",
+          "sha256": "b7dc668044662a01ccca512cc75f8b3eece0f1ba10b159cd7e2ca0d7cd8b6a9e"
+        },
+        {
+          "path": "tests/fixtures/cks-05/real-pilot-v4.json",
+          "role": "FIXTURE",
+          "sha256": "dfdfc9f203dfca0db26d4ea714e5a5bbcde1ed2d1f96b986df0cb6899455b393"
+        },
+        {
+          "path": "tests/fixtures/cks-05/scoring-golden-v1.json",
+          "role": "FIXTURE",
+          "sha256": "020e7489218dbd0528da11026f29eb946c28de06c4f03dc0aadfde91211c781e"
+        },
+        {
+          "path": "verification/cks-05-authorized-benchmark-results-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "41e1a883e314ad2d81a657e00d19b90edd4a41311df03eea94f43b5a3ac2a616"
+        },
+        {
+          "path": "verification/cks-05-hidden-run-manifest-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "c9ae963f2cdff2a2c37dbb3f662b0148e6dcd366344ced3846c2a74ab913ca59"
+        },
+        {
+          "path": "verification/cks-05-public-readback-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "cda8f75e407b87fe98fde470f722d6fc7de060ba8687726689ec8dd5751f841e"
+        },
+        {
+          "path": "verification/cks-05-real-pilot-v4-receipt.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e64ac456016aaf9e4f88a5026d6fec0c605e12b20ca68db9e2adf275f96178ad"
+        },
+        {
+          "path": "verification/cks-05-run-record-template-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d927d8fe15e4a838425ea82ed8e01d2a9a594980551066d85edaf7f9cef0ac32"
+        }
+      ],
+      "ownedTests": [
+        "npm run cks05:test"
+      ],
+      "invariants": [
+        "All comparative arms bind identical fresh task and Knowledge identities; closed-book arms receive no Knowledge bytes.",
+        "Terminal failures, invalidated instrumentation, unavailable confidence intervals and stop conditions are preserved without replacement.",
+        "No model-substitution or architecture-promotion claim is emitted unless quality and efficiency gates both pass."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false
