@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 31,
+  "graphVersion": 32,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "e6031aa0fbb9025824d7db139dc1e104463fd039bcbfe2238d6ec6a1a2fd9f1b"
+          "sha256": "0d5c7df2958927095486fb86a68fbb45e64909c97805bd7f810aab4aef28a8b6"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "87f13591c93f58146ebc22a6fc882d1c72f1aae1ec19b790c9bb5ff8c0da81c0"
+          "sha256": "af4460ed701f1d8e457f4d54fa9cf2e33a2527ecb835e3f421244872581ca687"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "e09e1c6627ec17e60d9163f8e58e003b74040b30895a280dd3f43d7063376d59"
+          "sha256": "164f36fe6e290ef8de60947ea3b68b2517037876f9a30ffb392d1b78f87b44ae"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "5908dbf1d09fce9cec1be5b2d620209de1f55c1d8c6ead427a0522b55f1d8602"
+          "sha256": "7ffa469929e1b7654af3221d6ed24de3843e9acd9779297a3d99af7203aa56a3"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "843b5afc133c35dd230343c550f1e8ca9b11462688b2e041df1d9a7eb5b5f197"
+          "sha256": "6ca95015acb138ff54147e7caa7ab3b66a366134e0e4cdfdc73e098605d3d52c"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "487fd29466295b76d6442994cfcb573f7e4fcbecd01bfdc96ac508767a8acac8"
+          "sha256": "e8b2aa13db9e7dfb07d247c4abbe199aede786419df9bca79a5cddd90bded000"
         }
       ],
       "ownedTests": [
@@ -4502,6 +4502,421 @@
         "Falsified child outcomes remain negative evidence.",
         "Real-source utility remains separately gated by issue 311.",
         "Knowledge never grants Capability or Authority."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "rks-01-real-source-protocol-falsification-v1",
+      "dependsOn": [
+        "cks-m1-parent-closure-v1"
+      ],
+      "inputs": [
+        {
+          "path": "contracts/rks-01/knowledge-ingestion-candidate-v1.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3148678602b1bfc2e84441780dfdeb023e41994cd51073ed193b35901ed4a522"
+        },
+        {
+          "path": "contracts/rks-01/knowledge-promotion-receipt-v1.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "6cd7f5cf4cd8e8c6be8c025819f3f0cd7211623a783ed2031d3d4b9698ff6786"
+        },
+        {
+          "path": "contracts/rks-01/source-admission-decision-v1.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ea32f3099511f68646db1f38c30577aea0bf432d0fc2bb245ea2e0caf147449b"
+        },
+        {
+          "path": "contracts/rks-01/source-drift-event-v1.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e04c2789f51d4d0980096ecf0e4797e694ebdac41ed1d983ab6e237e92783f68"
+        },
+        {
+          "path": "contracts/rks-01/source-profile-v1.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "107cda46cf67d514dab91802ac22e147db757193d3eb22c9e0030b5e406e7f60"
+        },
+        {
+          "path": "contracts/rks-01/source-snapshot-v1.schema.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0acd928101331ab60068f87d5badf80b0d9a1bacd5b272ad205dc7e6dcdf2fba"
+        },
+        {
+          "path": "docs/architecture/rks-01-real-source-utility-result-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "cbf1ed6a03e936dd74b4cd66d9328a2318999212eb63c589934202a652b815c0"
+        },
+        {
+          "path": "docs/architecture/rks-01-source-governance-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8c5df07f13c5fb706d45ebac88e616244d2122548099b7c7fd107df8117924a8"
+        },
+        {
+          "path": "scripts/build-rks-01-pilot-corpora.mjs",
+          "role": "VALIDATOR",
+          "sha256": "292ca7497e40869234c196eec327317cad01104e9c246f72ea9389e62931a51a"
+        },
+        {
+          "path": "scripts/capture-rks-01-sources.mjs",
+          "role": "VALIDATOR",
+          "sha256": "e861dae3f7159536cc8c6bc389b4c93dc5b9c9d456f0cc876ec8b8831bf9c992"
+        },
+        {
+          "path": "scripts/run-rks-01-comparative-pilot.mjs",
+          "role": "VALIDATOR",
+          "sha256": "86c450d1456f91f87a715212c59bd8d46a178d89caa909a84134bb85d3199014"
+        },
+        {
+          "path": "scripts/verify-rks-01-comparative-results.mjs",
+          "role": "VALIDATOR",
+          "sha256": "23be0636b84ce283db547c7a4af0c4dc9c9921d7a51bb5721c22f6f848f7cb63"
+        },
+        {
+          "path": "src/rks-01/application-guide-projector.mjs",
+          "role": "VALIDATOR",
+          "sha256": "49f7bdad8961ea972ed4fe24b4b00237f0a89a710e60d4089f10119d4d40b346"
+        },
+        {
+          "path": "src/rks-01/comparator.mjs",
+          "role": "VALIDATOR",
+          "sha256": "99b58dd61d8ba5bae9674194db8ad46d4a4d6049314e3976f429046d1b006e14"
+        },
+        {
+          "path": "src/rks-01/corpus-builder.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c9752fb26d5f6354f8a1398f03e5e7c945af066e71fd1603663b1f2dc0b8304c"
+        },
+        {
+          "path": "src/rks-01/deterministic-ingestion.mjs",
+          "role": "VALIDATOR",
+          "sha256": "080ca0287dd92c6dc365a5b650fcbbc45580448e4c0343bc45acb37ae6ec3a67"
+        },
+        {
+          "path": "src/rks-01/knowledge-object-projector.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6c1fe51c84f7809ca68ff9cb41af1257f80b72e15c4efdc8d08582bfff0806d6"
+        },
+        {
+          "path": "src/rks-01/source-governance.mjs",
+          "role": "VALIDATOR",
+          "sha256": "ef60dc8435efde73a11abd0dbe279bf627c46d79e18e667165ae7e131f08d353"
+        },
+        {
+          "path": "tests/fixtures/rks-01/application-guides-v1.json",
+          "role": "FIXTURE",
+          "sha256": "bca72976ff27dd2d324be51fd28fcea59bb0c90d67989a8d0d97bccfc2342606"
+        },
+        {
+          "path": "tests/fixtures/rks-01/decision-rule-v1.json",
+          "role": "FIXTURE",
+          "sha256": "106f7e0c1027c03ccc1a934b77b3329ca66f6e3ff4ccc3b8a47ea6482f0a0103"
+        },
+        {
+          "path": "tests/fixtures/rks-01/drift-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "8d52fcd384407fa922795e415782312c7da8ac3a86a334ed1bcc3613eeebbf09"
+        },
+        {
+          "path": "tests/fixtures/rks-01/frozen-task-suite-v1.json",
+          "role": "FIXTURE",
+          "sha256": "346196c32281c5ef1b6088e23b1cdfb67eefb35241429167002d11d1896dd5a3"
+        },
+        {
+          "path": "tests/fixtures/rks-01/rfc9987-narrowing-control-v1.json",
+          "role": "FIXTURE",
+          "sha256": "8d54e2a1b82132790e9d8b0e1dae132e1bcf7e6cee04c76cb6c3718fe9b21229"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-capture-manifest-v1.json",
+          "role": "FIXTURE",
+          "sha256": "77cfe80d5d5c9c49f11e5de38f9ab75dd2d78a20cbbc11a0796b0c175c0cd314"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-governance-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "2f40da9bf0e6946adaf621905fd4b21df6fd659f7ba8a162c7122ea3a5b9cfa2"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/functions.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "318c915f4261a2d719932cade64e3304daabea71f90928291df74aa32db4968d"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/json.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "eb675da451e05ac98270e29eb75b34929ed0de85aae1f4be886723930bcdcacc"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/pathlib.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "1aba0cc40214aa685eba3f2c83fc40ef42971db2a1a36e2ec267115723267dae"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/sqlite3.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "77112a81247a6a328ea42d3f09100e79d62151d6413ade26de669bd31e16025d"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/library/stdtypes.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "9b5a0798a316ec6909f40f37442b5b3e775fa7349009113c4c3936f86b6d0c3e"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/license.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "ba374c12ea78a3161d8d1133a0a42fa79edbfe104d820d231e60caba9f323faa"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/compound_stmts.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "d4177b72dada942430ac1ef1aafb9f1b004affc1a8dac51304c37b2e79904617"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/datamodel.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "77cc941bb569bc1037a18867dbe35fcbb1a16b6da7f2032dad7cb648d5a2cdcd"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/expressions.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "5732489803ea1a4aed43d08b162a6bbaabbd9e53024843908683837998ad2a2b"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/lexical_analysis.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "40e42120d4869d4a6fe96a62c636c8359d3db736a9ebb79c3d8e66a34cc0ff09"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/reference/simple_stmts.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "ddf9d61a96036f952cb6a84b2bcf346b68a254d2d0ab15f76fd6ac262772da83"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/classes.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "94e856c7edbd65c055d47c1cf72707ff5b2d530380df271f51391e8b29d66c57"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/controlflow.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "5346f539c8f2f58d81cfecb257629d30f5c3b22dcb18669f53a1420bf91d2b7e"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/datastructures.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "58f415b5771a1aa2811da089b8d00109b8a86d8586ce7ebbc5f8fc0576b03ce0"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/errors.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "3d67261681f32475abbb5735e8d6b774a24b2f5a3e7617d6b20cd3e9b3e85685"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/inputoutput.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "cf25986eaa97619d3df57aa42b524269b0d533f01bf6216ee2121bc9dc43d839"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/introduction.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "141f534ab034bbe0d9f4c846b7d253b08c4de60d92c8d9861620efcdc4543057"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/modules.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "46b501bfde0590f20eff2f9846b193bb4488da9fdbec5701cf534149cd4e9622"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "677aa0cc65528ff15fb9911126ced147f1ba1311fcb088f55f96a261c16fd054"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/stdlib2.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "c35e8c36cc1e18edbf49ee54d316b924025690ae7725cee2e834dde0561535a7"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/Doc/tutorial/venv.rst.b64",
+          "role": "FIXTURE",
+          "sha256": "9ab3edff781a3e6c948a194bff508c137adad0d18db3a2870bafe88f30617e79"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/cpython/LICENSE.b64",
+          "role": "FIXTURE",
+          "sha256": "8e35482672b5bed1724725f797d88aa15e9d75b1d68eb4977b78c5b2779d6b9f"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/openapi/LICENSE.b64",
+          "role": "FIXTURE",
+          "sha256": "ffad1b09029a51c6c2d8a7d0c7df511a0778a17583d6fb3853c36b6c69d78111"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/openapi/versions/3.2.0.md.b64",
+          "role": "FIXTURE",
+          "sha256": "f88683359681613ae0a5eb3c6e380682173e009b986593c0a5a1283e3abc5847"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/rfc9987/errata.html.b64",
+          "role": "FIXTURE",
+          "sha256": "23c8a6d1e8d8764a4093fb254f0fada1d765ad3e9a164b2f5fdb6b60dac1c84b"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/rfc9987/metadata.html.b64",
+          "role": "FIXTURE",
+          "sha256": "6a86a4ea04c2946dee1e3e1bf09ab4fe0846c78ee9edc39697c2e524ae34bca5"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/rfc9987/rfc9987.xml.b64",
+          "role": "FIXTURE",
+          "sha256": "52d3b46318b46bc5e8d3bef6683de2d2e184d899ec8bda4f4a012e71efc6cebe"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1-revision-2534934769.json.b64",
+          "role": "FIXTURE",
+          "sha256": "a54c8bae6af28469433ef5450e1763b7186690192f77cb480a399b4f0684b979"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q11412-revision-2535667337.json.b64",
+          "role": "FIXTURE",
+          "sha256": "08b6d92facf01759ec843764af176e187c35bc7fd5d4442cb338f5abdb33c527"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q12418-revision-2530846747.json.b64",
+          "role": "FIXTURE",
+          "sha256": "5c1dc7b28ce21879d1a816e6188e194c13e1d6233f70fb15a0f41bbd7a126d09"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q142-revision-2537405156.json.b64",
+          "role": "FIXTURE",
+          "sha256": "526965401fa1bf9b1961701025d655c2133008268267003cc3405c8182ae60c4"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q1490-revision-2537899880.json.b64",
+          "role": "FIXTURE",
+          "sha256": "3e7cc811a243ad44e5098c6206d72e082e733609a4f96c017ff6e7a3f3aabae1"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q17-revision-2537263927.json.b64",
+          "role": "FIXTURE",
+          "sha256": "dc7f055627dc0acf382887dc03c5ec49583738eb58fa43665cb1b9ae74a6429e"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q183-revision-2537264871.json.b64",
+          "role": "FIXTURE",
+          "sha256": "68050ca3d3c43baf15ccd02d21fdfbb1f21b0bbbb4b93a39beedd038aba0708a"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2-revision-2536974575.json.b64",
+          "role": "FIXTURE",
+          "sha256": "fa92ba330bedd30513d70b85a3a4d5aeb513f1d963950cc74a5a6c844ad51ae6"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q2111-revision-2538039371.json.b64",
+          "role": "FIXTURE",
+          "sha256": "bba80024aa8270b90d9f9b84d70a28e1b4b42256ff689d791ddf77bec9603188"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q283-revision-2532884891.json.b64",
+          "role": "FIXTURE",
+          "sha256": "ea1f09736c65cef19712c21856b0dba2829cb3dbe63b4aa88dd216e903e03b9a"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q405-revision-2532464451.json.b64",
+          "role": "FIXTURE",
+          "sha256": "88b161883d2aecb8fa13defc789f6e7ec7915dbf250791066667b9b6bd227f1f"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q41567-revision-2525357029.json.b64",
+          "role": "FIXTURE",
+          "sha256": "4cdb4f49524791b993bcc0369ecc47b0ada5a109156db0c90d04f1256622b72f"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q525-revision-2534268648.json.b64",
+          "role": "FIXTURE",
+          "sha256": "f8131b99afc92250343fce5b251ddbc1192e8015a97689791f158e41a5e1b159"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q556-revision-2538096517.json.b64",
+          "role": "FIXTURE",
+          "sha256": "a91d8e32b2524635ffe83c29245dc8d7c65502ddf7cec6851da55c5a916b24d6"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q623-revision-2538096574.json.b64",
+          "role": "FIXTURE",
+          "sha256": "6b0eda843803f2c8eee53325317b4d1adfa0a4ccb73b8a14526b62f3c4993127"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q629-revision-2538096346.json.b64",
+          "role": "FIXTURE",
+          "sha256": "88a793c188503f552560e97312c8fb1e0789ada774b238bf38ff520870f94d49"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q64-revision-2532491231.json.b64",
+          "role": "FIXTURE",
+          "sha256": "275776c1814a36019355aba92d37cf034ed94caf5fca74ed3f1be689c6a9d52e"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7430-revision-2533806379.json.b64",
+          "role": "FIXTURE",
+          "sha256": "c96bcedb1d774f0739d1910f42b9211e2610705b9994a305e8cb09e5180a8d37"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q7868-revision-2535923716.json.b64",
+          "role": "FIXTURE",
+          "sha256": "6146131a4fd7308293d99d6c2375aa1430e5e9b470c81ffd94dee5bde2f40126"
+        },
+        {
+          "path": "tests/fixtures/rks-01/source-snapshots/wikidata/Q90-revision-2537264071.json.b64",
+          "role": "FIXTURE",
+          "sha256": "3363fbea73ccf0e0fd96a90eae376bbf3e1d429ebdd70c05000e94d3f1ff41df"
+        },
+        {
+          "path": "tests/rks-01/comparative-utility.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1ba5a47a97c81c3d51a91cf4e00938c4708bf0cdc766082bf614e976dccbfd18"
+        },
+        {
+          "path": "tests/rks-01/deterministic-ingestion.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1d320fd61b191022da983d525660832048c965352a5cb2a3a79d6e55ec74baa7"
+        },
+        {
+          "path": "tests/rks-01/source-governance.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "ddb19d5bf87548212af37876a7020a2d09847454ec31313bb98a9ae3cd4bb3bf"
+        },
+        {
+          "path": "tests/rks-01/three-source-pilot.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9b7354b0de605cdd32e0c871ac0885dd99c1c97393c992b9efd93830e7a46810"
+        },
+        {
+          "path": "verification/rks-01-corpus-equivalence-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ad55a9fcceb49689da31a8ea1c8a5c9871ce99596152326c09cde2b3afe2fbfa"
+        },
+        {
+          "path": "verification/rks-01-falsification-report-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301"
+        },
+        {
+          "path": "verification/rks-01-source-capture-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf"
+        }
+      ],
+      "ownedTests": [
+        "npm run rks01:test"
+      ],
+      "invariants": [
+        "Every admitted source binds canonical URL, immutable identity, exact decoded bytes, license obligations and drift handling.",
+        "Raw, typed and guide corpora share the exact comparison source set and RFC 9987 remains excluded.",
+        "Protocol v1 and v2 pre-score falsifications remain visible and no scored comparison is claimed.",
+        "Knowledge grants no truth, Capability or Authority.",
+        "The core small-vs-Raw standing hypothesis remains unresolved and must not be represented as falsified by a large-reference protocol incompatibility."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
