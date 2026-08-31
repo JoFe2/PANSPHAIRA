@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "pansphaira.cscl03/source-capture-manifest/v1",
+  "identity": {
+    "systemId": "erpnext",
+    "version": "v16.33.0",
+    "selector": "refs/tags/v16.33.0",
+    "commit": "b24c9eba551905e256e336ff170a91a92d197a2f",
+    "officialRepository": "https://github.com/frappe/erpnext.git"
+  },
+  "legal": {
+    "licenseId": "GPL-3.0-only",
+    "licensePath": "license.txt",
+    "licenseBytes": 35149,
+    "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "projectMetadataPath": "README.md",
+    "projectMetadataBytes": 6791,
+    "projectMetadataSha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+  },
+  "parser": {
+    "id": "cscl03-source-native-extractor",
+    "version": "1.0.0"
+  },
+  "canonicalizer": {
+    "id": "cscl01-sorted-key-json",
+    "version": "1.0.0"
+  },
+  "transport": "BASE64_OF_EXACT_RAW_BYTES",
+  "networkPolicy": "EXPLICIT_CAPTURE_ONLY_OFFLINE_BUILD_DEFAULT",
+  "decodedByteCap": 20971520,
+  "totalDecodedBytes": 306404,
+  "sources": [
+    {
+      "path": "license.txt",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/license.txt",
+      "snapshot": "source-snapshots/license.txt.b64",
+      "byteLength": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+      "snapshot": "source-snapshots/README.md.b64",
+      "byteLength": 6791,
+      "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+    },
+    {
+      "path": "erpnext/selling/doctype/customer/customer.json",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json",
+      "snapshot": "source-snapshots/erpnext/selling/doctype/customer/customer.json.b64",
+      "byteLength": 18713,
+      "sha256": "2de5db0cf6d287b1f2cc70645a944cad2a3f846c0c3923511e7e5eb5219ea53d"
+    },
+    {
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "snapshot": "source-snapshots/erpnext/selling/doctype/customer/customer.py.b64",
+      "byteLength": 31962,
+      "sha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    {
+      "path": "erpnext/stock/doctype/item/item.json",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json",
+      "snapshot": "source-snapshots/erpnext/stock/doctype/item/item.json.b64",
+      "byteLength": 31470,
+      "sha256": "73dbe4ceaabf3c65475d6e93b2deeb422218a119f654d391511142f70cccaf39"
+    },
+    {
+      "path": "erpnext/stock/doctype/item/item.py",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "snapshot": "source-snapshots/erpnext/stock/doctype/item/item.py.b64",
+      "byteLength": 50415,
+      "sha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    {
+      "path": "erpnext/selling/doctype/sales_order/sales_order.json",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json",
+      "snapshot": "source-snapshots/erpnext/selling/doctype/sales_order/sales_order.json.b64",
+      "byteLength": 41035,
+      "sha256": "d0b24245a376b396eda87a82a50dcc877ac091d7d572f38bbc33be408dfd3d85"
+    },
+    {
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "snapshot": "source-snapshots/erpnext/selling/doctype/sales_order/sales_order.py.b64",
+      "byteLength": 67547,
+      "sha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    {
+      "path": "erpnext/selling/doctype/sales_order_item/sales_order_item.json",
+      "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order_item/sales_order_item.json",
+      "snapshot": "source-snapshots/erpnext/selling/doctype/sales_order_item/sales_order_item.json.b64",
+      "byteLength": 23322,
+      "sha256": "2e0e39985310db76b89b474a89e4ef7b0d8ce3d82099fda67ff9c240b657f662"
+    }
+  ]
+}

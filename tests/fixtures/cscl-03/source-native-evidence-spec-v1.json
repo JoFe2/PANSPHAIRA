@@ -1,0 +1,403 @@
+{
+  "schemaVersion": "pansphaira.cscl03/source-native-evidence-spec/v1",
+  "families": [
+    "PARTY_CUSTOMER_MANAGEMENT",
+    "PRODUCT_ITEM_MANAGEMENT",
+    "SALES_ORDER_MANAGEMENT"
+  ],
+  "cells": [
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "claim": "The Customer DocType is described as a Buyer of Goods and Services and declares Customer Type values Company, Individual, and Partnership.",
+      "path": "erpnext/selling/doctype/customer/customer.json",
+      "start": "\"description\": \"Buyer of Goods and Services.\"",
+      "end": "\"options\": \"Company\\nIndividual\\nPartnership\",\n   \"reqd\": 1",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "claim": "Customer links to Customer Group and Territory and separately links Customer Primary Contact to Contact and Customer Primary Address to Address.",
+      "path": "erpnext/selling/doctype/customer/customer.json",
+      "start": "\"fieldname\": \"customer_group\",\n   \"fieldtype\": \"Link\"",
+      "end": "\"fieldname\": \"customer_primary_address\",\n   \"fieldtype\": \"Link\",\n   \"label\": \"Customer Primary Address\",\n   \"no_copy\": 1,\n   \"options\": \"Address\"",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "claim": "Customer implements autoname, validate, on_update, on_trash, before_rename, and after_rename operations in its Document controller.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\tdef autoname(self):",
+      "end": "\tdef after_rename(self, olddn, newdn, merge=False):\n\t\tif frappe.defaults.get_global_default(\"cust_master_name\") == \"Customer Name\":\n\t\t\tself.db_set(\"customer_name\", newdn)",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "claim": "get_customer_name strips Customer Name and returns it as the Customer document name, adding a numbered suffix when that name already exists.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\tdef get_customer_name(self):\n\t\tself.customer_name = self.customer_name.strip()",
+      "end": "\t\treturn self.customer_name",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "AMBIGUOUS",
+      "claim": "Customer exposes Disabled, which blocks use on new transactions, and Is Frozen, which blocks further accounting entries; the captured Customer metadata does not present these as one named workflow status field.",
+      "path": "erpnext/selling/doctype/customer/customer.json",
+      "start": "\"description\": \"Blocks this customer from being used on any new transaction.\"",
+      "end": "\"fieldname\": \"is_frozen\",\n   \"fieldtype\": \"Check\",\n   \"label\": \"Is Frozen\",\n   \"show_description_on_click\": 1",
+      "counterexamples": [
+        "Disabled and Is Frozen are separate Check fields with different stated effects; no unified Customer status transition is asserted."
+      ]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "claim": "Customer lifecycle event handlers include onload, after_insert, validate, on_update, and on_trash.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\tdef onload(self):",
+      "end": "\tdef on_trash(self):\n\t\tif self.customer_primary_contact:",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "claim": "Customer validation rejects a Customer Group whose is_group value is true and requires selection of a non-group Customer Group.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\tdef validate_customer_group(self):",
+      "end": "\t\t\t\ttitle=_(\"Invalid Customer Group\"),\n\t\t\t)",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "claim": "When Customer has a Sales Team, the total allocated contribution percentage must equal 100.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\t\tif self.sales_team:\n\t\t\ttotal = sum(flt(member.allocated_percentage) for member in self.sales_team)",
+      "end": "frappe.throw(_(\"Total contribution percentage should be equal to 100\"))",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "claim": "Customer validation throws Invalid Customer Group for a group-type Customer Group and throws when an Internal Customer for the represented Company already exists.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\tdef validate_internal_customer(self):",
+      "end": "\t\t\t\ttitle=_(\"Invalid Customer Group\"),\n\t\t\t)",
+      "uniqueStart": false,
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "claim": "Customer onload exposes dashboard_info through set_onload, while primary Contact creation persists customer_primary_contact, mobile_no, and email_id through db_set.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\tdef onload(self):",
+      "end": "\t\t\t\tself.db_set(\"email_id\", self.email_id)",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "SUPPORTED",
+      "claim": "Customer exposes get_customer_group_details and make_quotation through frappe.whitelist; make_quotation returns a mapped Quotation Document.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "\t@frappe.whitelist()\n\tdef get_customer_group_details(self):",
+      "end": "\treturn target_doc",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "AMBIGUOUS",
+      "claim": "The captured controller is class Customer and imports party-account validation from erpnext.accounts.party; these bytes do not establish a separate generic Party DocType for this family.",
+      "path": "erpnext/selling/doctype/customer/customer.py",
+      "start": "from erpnext.accounts.party import (",
+      "end": "class Customer(TransactionBase):",
+      "counterexamples": [
+        "Party occurs in validate_party_accounts and PartyAccount terminology, but the captured family controller and metadata are Customer-native."
+      ]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "claim": "The Item DocType is described as a Product or a Service that is bought, sold or kept in stock and is identified by required unique Item Code.",
+      "path": "erpnext/stock/doctype/item/item.json",
+      "start": "\"description\": \"A Product or a Service that is bought, sold or kept in stock.\"",
+      "end": "\"fieldname\": \"item_code\",\n   \"fieldtype\": \"Data\",\n   \"in_global_search\": 1,\n   \"label\": \"Item Code\",\n   \"oldfieldname\": \"item_code\",\n   \"oldfieldtype\": \"Data\",\n   \"reqd\": 1,\n   \"unique\": 1",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "claim": "Item links Variant Of to another Item with has_variants enabled, links Item Group to a non-group Item Group, and links Default Unit of Measure to UOM.",
+      "path": "erpnext/stock/doctype/item/item.json",
+      "start": "\"fieldname\": \"variant_of\",\n   \"fieldtype\": \"Link\"",
+      "end": "\"fieldname\": \"stock_uom\",\n   \"fieldtype\": \"Link\",\n   \"ignore_user_permissions\": 1,\n   \"in_list_view\": 1,\n   \"label\": \"Default Unit of Measure\",\n   \"oldfieldname\": \"stock_uom\",\n   \"oldfieldtype\": \"Link\",\n   \"options\": \"UOM\",\n   \"reqd\": 1",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "claim": "Item implements autoname, after_insert, validate, on_update, on_trash, before_rename, and after_rename operations.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "\tdef autoname(self):",
+      "end": "\tdef after_rename(self, old_name, new_name, merge):",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "claim": "Item autoname strips Item Code and assigns it to both item_code and the document name; naming-series mode can first derive that Item Code.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "\tdef autoname(self):",
+      "end": "\t\tself.name = self.item_code",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "AMBIGUOUS",
+      "claim": "Item exposes Disabled and End of Life controls: disabled Items cannot be selected in transactions, and End of Life defines the date after which the Item can no longer be used; no named Item workflow transition list is evidenced here.",
+      "path": "erpnext/stock/doctype/item/item.json",
+      "start": "\"description\": \"Disabled items cannot be selected in any transaction.\"",
+      "end": "\"fieldname\": \"end_of_life\",\n   \"fieldtype\": \"Date\",\n   \"label\": \"End of Life\"",
+      "counterexamples": [
+        "Disabled and End of Life are independent controls, not evidence of a single Item workflow state machine."
+      ]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "claim": "Item lifecycle handlers onload, after_insert, validate, and on_update load stock and asset readbacks, create opening stock or Item Price, validate, and update variants and Item Price.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "\tdef onload(self):",
+      "end": "\tdef on_update(self):\n\t\tself.update_variants()\n\t\tself.update_item_price()",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "claim": "Opening Stock processing returns for a non-stock, serialized, or batched Item and otherwise requires Valuation Rate unless the Item is Customer Provided.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "\tdef set_opening_stock(self):",
+      "end": "frappe.throw(_(\"Valuation Rate is mandatory if Opening Stock entered\"))",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "claim": "Item UOM conversion rows must not repeat a Unit of Measure, and the conversion factor for the Default Unit of Measure must equal 1.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "\tdef validate_conversion_factor(self):",
+      "end": "frappe.throw(\n\t\t\t\t\t_(\"Conversion factor for default Unit of Measure must be 1 in row {0}\").format(d.idx)\n\t\t\t\t)",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "claim": "Item validation throws when Customer Provided Item is also a Purchase Item or has Valuation Rate, and when Fixed Asset Item is a stock item or lacks Asset Category.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "\tdef validate_customer_provided_part(self):",
+      "end": "frappe.throw(_(\"Asset Category is mandatory for Fixed Asset item\"))",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "claim": "Item onload exposes stock_exists, asset_naming_series, current_valuation_method, and asset_exists through set_onload.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "\tdef onload(self):",
+      "end": "\t\tself.set_onload(\"asset_exists\", self.has_submitted_assets())",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "SUPPORTED",
+      "claim": "Item exposes get_item_details and get_uom_conv_factor through frappe.whitelist; get_uom_conv_factor documents conversion from uom to stock_uom.",
+      "path": "erpnext/stock/doctype/item/item.py",
+      "start": "@frappe.whitelist()\ndef get_item_details(item_code, company=None):",
+      "end": "\t\"\"\"Get UOM conversion factor from uom to stock_uom",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "AMBIGUOUS",
+      "claim": "The source description calls Item a Product or a Service, while the actual DocType and controller are named Item; these bytes do not justify replacing Item with a normalized Product term.",
+      "path": "erpnext/stock/doctype/item/item.json",
+      "start": "\"description\": \"A Product or a Service that is bought, sold or kept in stock.\"",
+      "end": "\"doctype\": \"DocType\"",
+      "counterexamples": [
+        "Product and Service occur in the Item description, but the source-native object identity remains Item."
+      ]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "claim": "Sales Order requires a Customer and a child Items table whose options are Sales Order Item; Order Type values are Sales, Maintenance, and Shopping Cart.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.json",
+      "start": "\"fieldname\": \"customer\",\n   \"fieldtype\": \"Link\"",
+      "end": "\"fieldname\": \"items\",\n   \"fieldtype\": \"Table\",\n   \"hide_days\": 1,\n   \"hide_seconds\": 1,\n   \"label\": \"Items\",\n   \"oldfieldname\": \"sales_order_details\",\n   \"oldfieldtype\": \"Table\",\n   \"options\": \"Sales Order Item\",\n   \"reqd\": 1",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "claim": "Sales Order links Customer to Customer, Items to Sales Order Item, Amended From to Sales Order, and Customer Address and Contact Person to Address and Contact.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.json",
+      "start": "\"fieldname\": \"customer\",\n   \"fieldtype\": \"Link\"",
+      "end": "\"fieldname\": \"items\",\n   \"fieldtype\": \"Table\",\n   \"hide_days\": 1,\n   \"hide_seconds\": 1,\n   \"label\": \"Items\",\n   \"oldfieldname\": \"sales_order_details\",\n   \"oldfieldtype\": \"Table\",\n   \"options\": \"Sales Order Item\",\n   \"reqd\": 1",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "claim": "Sales Order validates, submits, cancels, updates status, creates Delivery Note, and creates Sales Invoice through named controller methods.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "\tdef validate(self):",
+      "end": "def make_sales_invoice(\n\tsource_name: str,",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "claim": "make_delivery_note maps Sales Order data toward Delivery Note, and the whitelisted make_sales_invoice operation accepts source_name and a target Sales Invoice document input.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "@frappe.whitelist()\ndef make_delivery_note(source_name, target_doc=None, kwargs=None):",
+      "end": "def make_sales_invoice(\n\tsource_name: str,",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "SUPPORTED",
+      "claim": "Sales Order Status values are Draft, On Hold, To Pay, To Deliver and Bill, To Bill, To Deliver, Completed, Cancelled, and Closed; close_or_unclose_sales_orders closes eligible submitted orders and reopens Closed orders by update_status Draft.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "\t\tstatus: DF.Literal[",
+      "end": "\t\t\t\t\tso.update_status(\"Draft\")",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "claim": "Sales Order handles before_validate, validate, on_submit, on_cancel, on_update_after_submit, and before_update_after_submit lifecycle events.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "\tdef before_validate(self):",
+      "end": "\tdef before_update_after_submit(self):",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "claim": "Closing or reopening Sales Orders requires Sales Order write permission; closing applies only to submitted orders not already Cancelled or Closed and not both fully delivered and fully billed.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "def close_or_unclose_sales_orders(names, status):",
+      "end": "\t\t\tso.update_blanket_order()",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "claim": "Sales Order cancellation refuses a Closed order and refuses cancellation while linked draft Sales Invoices exist.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "\tdef on_cancel(self):",
+      "end": "\t\t\t\t_(\"Sales Invoice {0} must be deleted before cancelling this Sales Order\").format(\n\t\t\t\t\t\", \".join(linked_invoices)\n\t\t\t\t)\n\t\t\t)",
+      "uniqueStart": false,
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "claim": "Sales Order throws WarehouseRequired when a stock Item needs a source Warehouse, throws when a Closed order is cancelled, and throws PermissionError when close_or_unclose lacks write permission.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "class WarehouseRequired(frappe.ValidationError):",
+      "end": "frappe.throw(_(\"Not permitted\"), frappe.PermissionError)",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "claim": "Sales Order onload exposes can_update_items and reserved-stock flags; cancellation persists status Cancelled through db_set, while update_status calls notify_update and clears DocType notifications.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "\tdef onload(self) -> None:",
+      "end": "\t\tclear_doctype_notifications(self)",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "SUPPORTED",
+      "claim": "Sales Order exposes close_or_unclose_sales_orders, make_delivery_note, make_sales_invoice, get_events, and make_purchase_order through frappe.whitelist.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.py",
+      "start": "@frappe.whitelist()\ndef close_or_unclose_sales_orders(names, status):",
+      "end": "@frappe.whitelist()\ndef make_purchase_order(source_name, selected_items=None, target_doc=None):",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "AMBIGUOUS",
+      "claim": "Sales Order has separate Status, Delivery Status, Billing Status, and Advance Payment Status fields; their distinct native value sets are retained without deriving one normalized order state model.",
+      "path": "erpnext/selling/doctype/sales_order/sales_order.json",
+      "start": "\"fieldname\": \"status\",\n   \"fieldtype\": \"Select\"",
+      "end": "\"fieldname\": \"advance_payment_status\",\n   \"fieldtype\": \"Select\"",
+      "counterexamples": [
+        "Delivery Status, Billing Status, and Advance Payment Status overlap with but are not identical to Status."
+      ]
+    }
+  ],
+  "terminology": [
+    { "term": "Customer", "meaning": "DocType described as Buyer of Goods and Services.", "sourceFactKey": "PARTY_CUSTOMER_MANAGEMENT:objects-roles" },
+    { "term": "Customer Type", "meaning": "Customer field with Company, Individual, and Partnership values.", "sourceFactKey": "PARTY_CUSTOMER_MANAGEMENT:objects-roles" },
+    { "term": "Customer Group", "meaning": "Linked non-group classification used by Customer.", "sourceFactKey": "PARTY_CUSTOMER_MANAGEMENT:preconditions" },
+    { "term": "Customer Primary Contact", "meaning": "Customer link to Contact with persisted mobile and email readbacks.", "sourceFactKey": "PARTY_CUSTOMER_MANAGEMENT:readbacks" },
+    { "term": "Disabled", "meaning": "Customer Check that blocks use on new transactions.", "sourceFactKey": "PARTY_CUSTOMER_MANAGEMENT:states-transitions" },
+    { "term": "Is Frozen", "meaning": "Customer Check that blocks further accounting entries.", "sourceFactKey": "PARTY_CUSTOMER_MANAGEMENT:states-transitions" },
+    { "term": "Item", "meaning": "DocType described as Product or Service bought, sold, or kept in stock.", "sourceFactKey": "PRODUCT_ITEM_MANAGEMENT:objects-roles" },
+    { "term": "Item Code", "meaning": "Required unique Item identity and document name input.", "sourceFactKey": "PRODUCT_ITEM_MANAGEMENT:inputs-outputs" },
+    { "term": "Variant Of", "meaning": "Item link from a variant to an Item template.", "sourceFactKey": "PRODUCT_ITEM_MANAGEMENT:relations" },
+    { "term": "Default Unit of Measure", "meaning": "Required Item link to UOM, represented by stock_uom in the controller.", "sourceFactKey": "PRODUCT_ITEM_MANAGEMENT:relations" },
+    { "term": "Opening Stock", "meaning": "Item operation constrained by stock, serial, batch, and valuation settings.", "sourceFactKey": "PRODUCT_ITEM_MANAGEMENT:preconditions" },
+    { "term": "Item Price", "meaning": "Document created from Item Standard Selling Rate after insert.", "sourceFactKey": "PRODUCT_ITEM_MANAGEMENT:events" },
+    { "term": "Sales Order", "meaning": "Document linking Customer and required Sales Order Item rows.", "sourceFactKey": "SALES_ORDER_MANAGEMENT:objects-roles" },
+    { "term": "Sales Order Item", "meaning": "Child table option used by Sales Order Items.", "sourceFactKey": "SALES_ORDER_MANAGEMENT:relations" },
+    { "term": "Status", "meaning": "Sales Order field with Draft through Closed native values.", "sourceFactKey": "SALES_ORDER_MANAGEMENT:states-transitions" },
+    { "term": "Delivery Status", "meaning": "Sales Order status dimension separate from Status.", "sourceFactKey": "SALES_ORDER_MANAGEMENT:absence-ambiguity-conflict" },
+    { "term": "Billing Status", "meaning": "Sales Order status dimension separate from Status.", "sourceFactKey": "SALES_ORDER_MANAGEMENT:absence-ambiguity-conflict" },
+    { "term": "Closed", "meaning": "Sales Order Status entered by close_or_unclose_sales_orders and reversed through update_status Draft.", "sourceFactKey": "SALES_ORDER_MANAGEMENT:preconditions" }
+  ],
+  "boundary": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" }
+}

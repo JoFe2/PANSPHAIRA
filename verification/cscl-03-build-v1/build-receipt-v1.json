@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "pansphaira.cscl03/build-receipt/v1",
+  "systemId": "erpnext",
+  "version": "v16.33.0",
+  "commit": "b24c9eba551905e256e336ff170a91a92d197a2f",
+  "counts": {
+    "capturedSources": 9,
+    "decodedSourceBytes": 306404,
+    "capabilityFamilies": 3,
+    "questionsPerFamily": 12,
+    "sourceFacts": 36,
+    "evidenceCells": 36,
+    "sourceNativeTerms": 18
+  },
+  "protocolBindings": {
+    "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+    "questionInventoryDigest": "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28",
+    "freezeDigest": "68a547ff211ee9bf373e355de03966975bb414dabd18600218362e5fa55d95e4"
+  },
+  "captureManifestDigest": "ab87428a937d4f44d4e709dd3ae291a247547db8ae8df0c8566d24f36d8f6ff5",
+  "bundleDigest": "b1918c4c442091b8d2531684dcf6bb6b8873ba66eedd83751d44b3bb19491b42",
+  "artifactDigests": {
+    "source-facts-v1.json": "c8a47aaf1f2fc01a78713e6ac9db3a92520f3632f2d6d493239d7d2d4c0c3810",
+    "evidence-cells-v1.json": "628ea4bb14ae81fbc7c0e025cc04f077ca7580815f6dd0a46f958b3cb83dd825",
+    "system-profile-v1.json": "a30367e71427164c0b0e70f72d0ab4454a5d7f284c3b26f7ad4cf06d2c69af53"
+  },
+  "verification": {
+    "outcome": "VERIFIED",
+    "reasonCodes": [
+      "ERPNext_V16_33_0_SOURCE_NATIVE_PROFILE_VERIFIED"
+    ],
+    "bundleDigest": "b1918c4c442091b8d2531684dcf6bb6b8873ba66eedd83751d44b3bb19491b42"
+  },
+  "nonClaims": [
+    "NO_CROSS_SYSTEM_CONCEPT_DERIVATION",
+    "NO_COMMON_CORE_OR_CANDIDATE_CLASSIFICATION",
+    "NO_HOLDOUT_SEMANTICS_INSPECTED",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "NO_COMPLETE_ERPNext_PRODUCT_COVERAGE_CLAIM"
+  ],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  }
+}
