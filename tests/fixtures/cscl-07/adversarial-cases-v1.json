@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "pansphaira.cscl07/adversarial-cases/v1",
+  "cases": [
+    {
+      "id": "missing-profile",
+      "expected": "DENIED"
+    },
+    {
+      "id": "duplicate-profile",
+      "expected": "DENIED"
+    },
+    {
+      "id": "missing-cell",
+      "expected": "DENIED"
+    },
+    {
+      "id": "duplicate-cell",
+      "expected": "DENIED"
+    },
+    {
+      "id": "missing-row",
+      "expected": "DENIED"
+    },
+    {
+      "id": "duplicate-row",
+      "expected": "DENIED"
+    },
+    {
+      "id": "changed-profile-digest",
+      "expected": "DENIED"
+    },
+    {
+      "id": "source-cell-substitution",
+      "expected": "DENIED"
+    },
+    {
+      "id": "source-fact-substitution",
+      "expected": "DENIED"
+    },
+    {
+      "id": "paired-substitution-redigestion",
+      "expected": "DENIED"
+    },
+    {
+      "id": "omitted-ABSENT",
+      "expected": "DENIED"
+    },
+    {
+      "id": "omitted-AMBIGUOUS",
+      "expected": "DENIED"
+    },
+    {
+      "id": "omitted-CONFLICTING",
+      "expected": "DENIED"
+    },
+    {
+      "id": "omitted-VARIANT",
+      "expected": "DENIED"
+    },
+    {
+      "id": "omitted-counterexample",
+      "expected": "DENIED"
+    },
+    {
+      "id": "lexical-synonym",
+      "expected": "DENIED"
+    },
+    {
+      "id": "lexical-homonym",
+      "expected": "DENIED"
+    },
+    {
+      "id": "identical-field-shape",
+      "expected": "DENIED"
+    },
+    {
+      "id": "four-of-five-frequency",
+      "expected": "DENIED"
+    },
+    {
+      "id": "caller-relation-label",
+      "expected": "DENIED"
+    },
+    {
+      "id": "caller-verdict",
+      "expected": "DENIED"
+    },
+    {
+      "id": "caller-digest",
+      "expected": "DENIED"
+    },
+    {
+      "id": "caller-count",
+      "expected": "DENIED"
+    },
+    {
+      "id": "invented-evidence-edge",
+      "expected": "DENIED"
+    },
+    {
+      "id": "order-dependence",
+      "expected": "DENIED"
+    },
+    {
+      "id": "extra-field",
+      "expected": "DENIED"
+    },
+    {
+      "id": "holdout-path",
+      "expected": "DENIED"
+    },
+    {
+      "id": "idempiere-path",
+      "expected": "DENIED"
+    },
+    {
+      "id": "idempiere-id",
+      "expected": "DENIED"
+    },
+    {
+      "id": "Capability-field",
+      "expected": "DENIED"
+    },
+    {
+      "id": "ProcessPattern-field",
+      "expected": "DENIED"
+    },
+    {
+      "id": "commonCore-field",
+      "expected": "DENIED"
+    },
+    {
+      "id": "promotion-field",
+      "expected": "DENIED"
+    },
+    {
+      "id": "execution-field",
+      "expected": "DENIED"
+    },
+    {
+      "id": "Authority-field",
+      "expected": "DENIED"
+    },
+    {
+      "id": "shared-attacker-candidateMeaningSha256",
+      "expected": "DENIED"
+    }
+  ]
+}

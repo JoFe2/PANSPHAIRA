@@ -1,0 +1,219 @@
+{
+  "schemaVersion": "pansphaira.cscl07/released-input-set-manifest/v1",
+  "manifestId": "cscl-07-released-input-set-2026_08_31_v3",
+  "releasedMain": "8dae13e416ca42709bf04f01faba5b3b4708deeb",
+  "releaseTag": "2026_08_31_v3",
+  "systemOrder": [
+    "odoo-community",
+    "erpnext",
+    "dolibarr",
+    "tryton",
+    "apache-ofbiz"
+  ],
+  "familyOrder": [
+    "PARTY_CUSTOMER_MANAGEMENT",
+    "PRODUCT_ITEM_MANAGEMENT",
+    "SALES_ORDER_MANAGEMENT"
+  ],
+  "questionOrder": [
+    "objects-roles",
+    "relations",
+    "operations",
+    "inputs-outputs",
+    "states-transitions",
+    "events",
+    "preconditions",
+    "invariants",
+    "exceptions-errors",
+    "readbacks",
+    "api-service-exposure",
+    "absence-ambiguity-conflict"
+  ],
+  "profiles": [
+    {
+      "systemId": "odoo-community",
+      "receiptPath": "verification/cscl-02-odoo-community-profile-receipt-v1.json",
+      "profilePath": "verification/cscl-02-odoo-community-profile-v1.json",
+      "factsPath": null,
+      "cellsPath": null,
+      "artifacts": [
+        {
+          "path": "verification/cscl-02-odoo-community-profile-receipt-v1.json",
+          "byteLength": 3303,
+          "sha256": "2777ffadbc3ff461f9af0c263c74fd3434d2b86db4f24411a347d8e71d3d1da4"
+        },
+        {
+          "path": "verification/cscl-02-odoo-community-profile-v1.json",
+          "byteLength": 133639,
+          "sha256": "23d58e71c999c4b1151899ba53610b21ee21c90da3d986f0872a01a352f18be3"
+        }
+      ],
+      "receiptDigest": "da588d796314c6ba981f285e198705cf6604ad6a5f1b5be2fba8c63fa0372dba",
+      "profileDigest": "8f044b00d83e881d27883aa1fb519879403d2acd11b00c0739540f4ef7dd6e0d",
+      "factsDigest": "3210301129e57139617ccc59d7a652605a5bc5655d5e6ab1757cc5e49bd0eae1",
+      "cellsDigest": "bdf296abab77cd830422160cffb11142eb98e7374aec41dafa6a0a84cc541e37",
+      "sourceProfileDigest": "343ebbc539302d9ff1611572142177b517172e2f1cdd1df60aa428b4b5be01e6",
+      "counts": {
+        "profiles": 1,
+        "facts": 36,
+        "cells": 36
+      }
+    },
+    {
+      "systemId": "erpnext",
+      "receiptPath": "verification/cscl-03-build-v1/build-receipt-v1.json",
+      "profilePath": "verification/cscl-03-build-v1/system-profile-v1.json",
+      "factsPath": "verification/cscl-03-build-v1/source-facts-v1.json",
+      "cellsPath": "verification/cscl-03-build-v1/evidence-cells-v1.json",
+      "artifacts": [
+        {
+          "path": "verification/cscl-03-build-v1/build-receipt-v1.json",
+          "byteLength": 1771,
+          "sha256": "daa628ee7942a0aa13a3d3e7c05d6be432bd209150ee90d79ce68572e9d00019"
+        },
+        {
+          "path": "verification/cscl-03-build-v1/system-profile-v1.json",
+          "byteLength": 14181,
+          "sha256": "a30367e71427164c0b0e70f72d0ab4454a5d7f284c3b26f7ad4cf06d2c69af53"
+        },
+        {
+          "path": "verification/cscl-03-build-v1/source-facts-v1.json",
+          "byteLength": 82681,
+          "sha256": "c8a47aaf1f2fc01a78713e6ac9db3a92520f3632f2d6d493239d7d2d4c0c3810"
+        },
+        {
+          "path": "verification/cscl-03-build-v1/evidence-cells-v1.json",
+          "byteLength": 33655,
+          "sha256": "628ea4bb14ae81fbc7c0e025cc04f077ca7580815f6dd0a46f958b3cb83dd825"
+        }
+      ],
+      "receiptDigest": "e2b39b24732b72039b3e93e2512d3c81b4b9c20086c93e60c41a3e567e411674",
+      "profileDigest": "a756cbe92c02e007b93d4bf43979a07d7b1cc265b5d78852d926a958b3a43451",
+      "factsDigest": "bdb89483842ec582dca7e9794abb7f815f50ef0357aa6e4077cc1d33f147d8fd",
+      "cellsDigest": "36dbda38961aa450771bfd2706bc96eeea3bc9ab45fad7606d984620ed04d004",
+      "sourceProfileDigest": "735fbd813315c3287d76e872d16e154dbae4919ffcf54a1cea2dec5c20a48590",
+      "counts": {
+        "profiles": 1,
+        "facts": 36,
+        "cells": 36
+      }
+    },
+    {
+      "systemId": "dolibarr",
+      "receiptPath": "verification/cscl-04-dolibarr-profile-v1.json",
+      "profilePath": "tests/fixtures/cscl-04/system-profile-v1.json",
+      "factsPath": "tests/fixtures/cscl-04/source-facts-v1.json",
+      "cellsPath": "tests/fixtures/cscl-04/evidence-cells-v1.json",
+      "artifacts": [
+        {
+          "path": "verification/cscl-04-dolibarr-profile-v1.json",
+          "byteLength": 3807,
+          "sha256": "df09195c074cbb2589f0ebfc5ab6c680db2f78fd0809eb0683623dc656e4d946"
+        },
+        {
+          "path": "tests/fixtures/cscl-04/system-profile-v1.json",
+          "byteLength": 10619,
+          "sha256": "08eb4c093e6444d97082b397a11df39dbb9e87f54b51cb5c8d36c3216cc5f73e"
+        },
+        {
+          "path": "tests/fixtures/cscl-04/source-facts-v1.json",
+          "byteLength": 64813,
+          "sha256": "03e1c21e75cad681552eda42484aeca7fe44de1422f2d1c44b41e3fd3d217755"
+        },
+        {
+          "path": "tests/fixtures/cscl-04/evidence-cells-v1.json",
+          "byteLength": 31809,
+          "sha256": "a32eab096ed5680073a9f6ede3573665fdb84c3546e6b4475e38dc1b8ae995e7"
+        }
+      ],
+      "receiptDigest": "6a5fb70e89f09354c60902b4724456f79665618bc263446469883b0e83996eb5",
+      "profileDigest": "452d8ad99ce6575e336616750ac20f21996a60a80eb2289c94ee383443ca5903",
+      "factsDigest": "aa16a87b279678f49619ea5d644fa8e531b816e217952d3573e7a12232f036df",
+      "cellsDigest": "9180bea6c5c95b35b7ac1ce9773026fba9140939bb1ea67cbf39e1dbe9ed4a1e",
+      "sourceProfileDigest": "b27939f66c98ac5c1ca1752fdbad7efe95c85c98b278556d5fbfba56b75e0507",
+      "counts": {
+        "profiles": 1,
+        "facts": 36,
+        "cells": 36
+      }
+    },
+    {
+      "systemId": "tryton",
+      "receiptPath": "verification/cscl-05-tryton-source-native-profile-v1.json",
+      "profilePath": "tests/fixtures/cscl-05/expected/profile-v1.json",
+      "factsPath": "tests/fixtures/cscl-05/expected/facts-v1.json",
+      "cellsPath": "tests/fixtures/cscl-05/expected/cells-v1.json",
+      "artifacts": [
+        {
+          "path": "verification/cscl-05-tryton-source-native-profile-v1.json",
+          "byteLength": 4264,
+          "sha256": "1c8e361eca1b3003a82bf4e4a2a6b854bcd17e1b57258a89338d52a08e76bce6"
+        },
+        {
+          "path": "tests/fixtures/cscl-05/expected/profile-v1.json",
+          "byteLength": 13151,
+          "sha256": "89d425bd8d259fb9819255b3e9063f9b861d8db742ffcc8906a0750477fac7f0"
+        },
+        {
+          "path": "tests/fixtures/cscl-05/expected/facts-v1.json",
+          "byteLength": 75663,
+          "sha256": "a02029e7f50f174d662e3e5ebab274c885951ebf4181b4d68e1dd7b79dfb24d3"
+        },
+        {
+          "path": "tests/fixtures/cscl-05/expected/cells-v1.json",
+          "byteLength": 32193,
+          "sha256": "0370522443b26c63518df9f6f1c433847df628523103e683f96837a432c19392"
+        }
+      ],
+      "receiptDigest": "a296305053af7b6d33e44314e57514306878a961dab3be6cc7546020a8ca3348",
+      "profileDigest": "990b3306a43e80ac781e075a53dcfc9d1fb3dfec54d1dbda37524b4c13f929c7",
+      "factsDigest": "6e4fa7f7860df62b327f19993319ea0f2b83352d6299fb2e8c08a266cf522f8d",
+      "cellsDigest": "c52c91570aad76a2fc187d12f9918b1d88ad6269304f99ce437dbf4a5d76f7c1",
+      "sourceProfileDigest": "bca464a95bdaddb5c349fbe83b66c2015b473bce2114c9c9a5653896d7440fdb",
+      "counts": {
+        "profiles": 1,
+        "facts": 36,
+        "cells": 36
+      }
+    },
+    {
+      "systemId": "apache-ofbiz",
+      "receiptPath": "verification/cscl-06-apache-ofbiz-profile-receipt-v1.json",
+      "profilePath": "tests/fixtures/cscl-06/expected-build-v1.json",
+      "factsPath": null,
+      "cellsPath": null,
+      "artifacts": [
+        {
+          "path": "verification/cscl-06-apache-ofbiz-profile-receipt-v1.json",
+          "byteLength": 4512,
+          "sha256": "96f016fa667ecfa8282cbbd26d09790e841601bb98a22b9a835e22ca8753830e"
+        },
+        {
+          "path": "tests/fixtures/cscl-06/expected-build-v1.json",
+          "byteLength": 166221,
+          "sha256": "bb2d3e7de578ca101511afdeb947718403c70c13ca5f6e30561e706ed3b5598e"
+        }
+      ],
+      "receiptDigest": "b4bf5a8a30ce6b6530d748a62c5016911f03c5160a35cc9a21dd63147e2ef74d",
+      "profileDigest": "13c663e5d5fb94df746ecb1ccde348e4fc0b2aada7ed21f40ed7c41a0544ab7f",
+      "factsDigest": "274e71809715ae8fa620ff43fc34a4f16e2a74aa2ebed63122a92da5e2e7ba04",
+      "cellsDigest": "ceb41a15a2b34dc5df8a42debd2676e4833f957f4de4a11f56d90ff23fefb343",
+      "sourceProfileDigest": "6029f44bf19fcdfa56bdd338885c51224a27010e8d7e7588724198634d48e7f8",
+      "counts": {
+        "profiles": 1,
+        "facts": 37,
+        "cells": 36
+      }
+    }
+  ],
+  "denominator": {
+    "profiles": 5,
+    "families": 3,
+    "questionsPerFamily": 12,
+    "rows": 36,
+    "cells": 180
+  },
+  "holdoutAccesses": 0,
+  "boundary": "RELEASED_TRAINING_PROFILE_ARTIFACTS_ONLY",
+  "manifestDigest": "c6d106edb71bf3b004d8d83e76e8c90d834524dc4c2f273b519804e04d7a9342"
+}

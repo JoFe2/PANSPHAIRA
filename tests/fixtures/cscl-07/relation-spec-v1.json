@@ -1,0 +1,422 @@
+{
+  "schemaVersion": "pansphaira.cscl07/relation-spec/v1",
+  "specId": "cscl-07-adversarial-relation-spec-v1",
+  "states": [
+    "POTENTIAL_EQUIVALENCE",
+    "VARIANT_RELATION",
+    "DISTINCT",
+    "UNRESOLVED",
+    "DENIED"
+  ],
+  "allowedSemanticDimensions": [
+    "purpose",
+    "inputsOutputs",
+    "preconditions",
+    "invariants",
+    "statesTransitions",
+    "effects",
+    "readbacks"
+  ],
+  "untrustedSourceFields": [
+    "equivalenceProof",
+    "nativeMeaningSha256",
+    "candidateMeaningSha256"
+  ],
+  "forbiddenBases": [
+    "frequency",
+    "name",
+    "lexicalSimilarity",
+    "fieldShape",
+    "questionId",
+    "state",
+    "normalizedTerm",
+    "callerLabel",
+    "callerVerdict",
+    "callerDigest",
+    "callerCount"
+  ],
+  "evidenceEdges": [
+    {
+      "relationId": "relation:PRODUCT_ITEM_MANAGEMENT:states-transitions",
+      "state": "VARIANT_RELATION",
+      "systems": [
+        "odoo-community",
+        "erpnext",
+        "dolibarr",
+        "tryton",
+        "apache-ofbiz"
+      ],
+      "matchingDimensions": [
+        {
+          "dimension": "purpose",
+          "assertion": "Each cited source-native object claim identifies the system record used for a product, item, good or service offering; native names and object boundaries remain different.",
+          "evidence": [
+            {
+              "systemId": "odoo-community",
+              "sourceCellDigest": "f4ec73beba6af255b680f20c29284f462f0d0c94ab71e0a1c12ffce08ed6d763",
+              "sourceFactReferences": [
+                {
+                  "factId": "odoo.product-item-management.objects-roles",
+                  "factDigest": "ec6cbd2498ef2ce67f72c64c77cad075d83c6de7e6e92f7cb0e588b8c2dab86a",
+                  "excerptSha256": "710b47592c016bd77732fe4950b4f3defd2b7fdb5a33596aad05ef1b9ff82307",
+                  "exactLocator": "https://raw.githubusercontent.com/odoo/odoo/1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc/addons/product/models/product_product.py#bytes=421-579"
+                }
+              ]
+            },
+            {
+              "systemId": "erpnext",
+              "sourceCellDigest": "c3aedf2c23f74c0900b1600c7ee670f1a7e9cca0f2c2eb04ad12b8181bac456b",
+              "sourceFactReferences": [
+                {
+                  "factId": "erpnext.product-item-management.objects-roles",
+                  "factDigest": "4288ca189da6e0cd26a19afe569d4114dd4a22e298764ea911cb46932c544060",
+                  "excerptSha256": "8e9f2fa82efd9b9fbd3678e1578fe4ab47f447ee1b65f7846a4df2ecfa9ecefc",
+                  "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=134-3651"
+                }
+              ]
+            },
+            {
+              "systemId": "dolibarr",
+              "sourceCellDigest": "c704f95690f7692a2dae809954db24464a3b404db34ab797a04d8bd44347d6a5",
+              "sourceFactReferences": [
+                {
+                  "factId": "dolibarr.product-item-management.objects-roles",
+                  "factDigest": "bd47b00a613ecb76ba64eceecb2dd3d4c8f9c30887c7d1581fe7c217d9339aea",
+                  "excerptSha256": "cb704ed62d2dc8f3d44df850221d4ebc0a293799a9a9d6024f67757f2e98baa8",
+                  "exactLocator": "git:769c7db907099643558e77d7002c109cfda919e5;path=htdocs/install/mysql/tables/llx_product.sql;lines=25-65;bytes=1339-4619"
+                }
+              ]
+            },
+            {
+              "systemId": "tryton",
+              "sourceCellDigest": "743b1234e305a6a34a72de1fe00f8c1038d63df481b090b5636274ff2c760fbe",
+              "sourceFactReferences": [
+                {
+                  "factId": "tryton.product-item-management.objects-roles",
+                  "factDigest": "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7",
+                  "excerptSha256": "14838fa9f061f4be94c136faf70659065d1128964bd10eca6623d26f6b294a84",
+                  "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4775-4809"
+                }
+              ]
+            },
+            {
+              "systemId": "apache-ofbiz",
+              "sourceCellDigest": "974e51626d36919d613476671652b958c5945821f0a3bf3bff4c194975363093",
+              "sourceFactReferences": [
+                {
+                  "factId": "ofbiz.product-item-management.objects-roles.1",
+                  "factDigest": "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789",
+                  "excerptSha256": "127035ae8421016d0ada65c5405884d23489a675123fe9baadec71c0713bc3d0",
+                  "exactLocator": "applications/product/src/docs/asciidoc/product.adoc#bytes=774-1189"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "differingDimensions": [
+        {
+          "dimension": "statesTransitions",
+          "assertion": "The cited controls materially differ: archive flags, Disabled/End of Life controls, sell/buy/type flags, DeactivableMixin, and lifecycle dates are preserved as distinct source-native variants.",
+          "evidence": [
+            {
+              "systemId": "odoo-community",
+              "sourceCellDigest": "9856eec7775b68f6a53a26018c15ab908a78bdc460c6c0bbc1fe43e25b9bc4f3",
+              "sourceFactReferences": [
+                {
+                  "factId": "odoo.product-item-management.states-transitions",
+                  "factDigest": "5bd1832dad27df889e2e560c2f8f3aed309e676015d45651fbc3d1aa35276a3f",
+                  "excerptSha256": "c9f93e164e03393c4c4575f7699bcedbcb1ed1c1c6e49d3567e3d19cf2d4ddca",
+                  "exactLocator": "https://raw.githubusercontent.com/odoo/odoo/1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc/addons/product/models/product_template.py#bytes=5462-5590"
+                }
+              ]
+            },
+            {
+              "systemId": "erpnext",
+              "sourceCellDigest": "d3d43e8353bd44e554f849bcd0652f9c0273ede0a4284595fd26719709b36da5",
+              "sourceFactReferences": [
+                {
+                  "factId": "erpnext.product-item-management.states-transitions",
+                  "factDigest": "f7c84c78cbb6ebff5e3b76cc362cf586736bd0125378bffeb3d1b2575fb92780",
+                  "excerptSha256": "19775d8baadfefeedbe6d35ff91872946252f7e3fc7703ec60e47fda1e5a11c9",
+                  "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=5073-9379"
+                }
+              ]
+            },
+            {
+              "systemId": "dolibarr",
+              "sourceCellDigest": "7674313f33599b328345703467de4320c758b8f6049c5491b70f7abc4e985023",
+              "sourceFactReferences": [
+                {
+                  "factId": "dolibarr.product-item-management.states-transitions",
+                  "factDigest": "6f5de85905647c26719ea4360b078ae809811bd82622d7e7441c6dde493578ca",
+                  "excerptSha256": "d66cf87b8ee1560dcde84baa4c635121bd8cbd462ea4318595de5ac0046e4d39",
+                  "exactLocator": "git:769c7db907099643558e77d7002c109cfda919e5;path=htdocs/install/mysql/tables/llx_product.sql;lines=58-66;bytes=3700-4663"
+                }
+              ]
+            },
+            {
+              "systemId": "tryton",
+              "sourceCellDigest": "de4c4371da54b21f39707d88fa84b3fb2d5589f5f85ec02c663848bc278c3f89",
+              "sourceFactReferences": [
+                {
+                  "factId": "tryton.product-item-management.states-transitions",
+                  "factDigest": "c76f0e32013fb5f6e558b03cfba66db9ffb0b7f1f83ccc3ebc7cc1f639e2137e",
+                  "excerptSha256": "216e9f2d589f046e4184ed762ee9b949c874d7a74408c0b9ed16a187eebb17fc",
+                  "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4703-4775"
+                }
+              ]
+            },
+            {
+              "systemId": "apache-ofbiz",
+              "sourceCellDigest": "992a5206b9ac75f4941fcf63c5294f048ed120c85d28f38c5b65a57b334da1bd",
+              "sourceFactReferences": [
+                {
+                  "factId": "ofbiz.product-item-management.states-transitions.1",
+                  "factDigest": "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62",
+                  "excerptSha256": "9942d5e91965e6deb7810b46a18b5daf2235d6c4b7ff9b9c4639b2a9d7213fa5",
+                  "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=147009-147734"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "relationId": "relation:SALES_ORDER_MANAGEMENT:states-transitions",
+      "state": "VARIANT_RELATION",
+      "systems": [
+        "odoo-community",
+        "erpnext",
+        "dolibarr",
+        "tryton",
+        "apache-ofbiz"
+      ],
+      "matchingDimensions": [
+        {
+          "dimension": "purpose",
+          "assertion": "Each cited source-native claim identifies the system record used to represent a customer sale or sales order with order lines or ordered products/services; native terms remain different.",
+          "evidence": [
+            {
+              "systemId": "odoo-community",
+              "sourceCellDigest": "6d8c4340168045fabb44492589622a0ab39729bb1789ee1443bc85f35fcd0d53",
+              "sourceFactReferences": [
+                {
+                  "factId": "odoo.sales-order-management.objects-roles",
+                  "factDigest": "aa15b2c527a540d2199d566911552cefcaeb00baf12efe38fd82185dd4b99ac9",
+                  "excerptSha256": "ac6819ebef0b89c5da86a087ca5c938bff092f9ca18815d686a281d0a8d83cba",
+                  "exactLocator": "https://raw.githubusercontent.com/odoo/odoo/1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc/addons/sale/models/sale_order.py#bytes=925-980"
+                }
+              ]
+            },
+            {
+              "systemId": "erpnext",
+              "sourceCellDigest": "634217cfbc560e39aed5d54915b99e4db08bc0a915c347aa8bec640b53fd538a",
+              "sourceFactReferences": [
+                {
+                  "factId": "erpnext.sales-order-management.objects-roles",
+                  "factDigest": "603dfbb802bb23ab353d2409884fd12ffcdacca42974b29ae8a1646adee072db",
+                  "excerptSha256": "627856c402e93c8a700181301ce57882e1d20b90b80b9af127cd32c4eb40791e",
+                  "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json#bytes=4527-13257"
+                }
+              ]
+            },
+            {
+              "systemId": "dolibarr",
+              "sourceCellDigest": "66b56d97d8a42e74804256ad2cd0b8b5f29de2a984d8100f61341c23d56ce026",
+              "sourceFactReferences": [
+                {
+                  "factId": "dolibarr.sales-order-management.objects-roles",
+                  "factDigest": "2ddfa8bedb1cc25e7a4722cba98f527152ea8ced952adf6298279fede5fec37d",
+                  "excerptSha256": "9348d6825f6c9f586da033775ec26c731efefb22f4860924ec1b135ad487522f",
+                  "exactLocator": "git:769c7db907099643558e77d7002c109cfda919e5;path=htdocs/install/mysql/tables/llx_commande.sql;lines=22-44;bytes=1090-2281"
+                }
+              ]
+            },
+            {
+              "systemId": "tryton",
+              "sourceCellDigest": "6d9e8354ff17f00b82be7e5ffdc617fd8bd7d1a36c6b3a87c28a6ce5cd8dd3ee",
+              "sourceFactReferences": [
+                {
+                  "factId": "tryton.sales-order-management.objects-roles",
+                  "factDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f",
+                  "excerptSha256": "b77ba0655ed94581852c0efad8a8b2e7088c27a18c65eeb03ddc11125941a5ed",
+                  "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=2468-2616"
+                }
+              ]
+            },
+            {
+              "systemId": "apache-ofbiz",
+              "sourceCellDigest": "bc4c30bbb7a3fd88cc10ec8eab83c41b0d23cb5dfa605d03c3d64c66ab70a0d8",
+              "sourceFactReferences": [
+                {
+                  "factId": "ofbiz.sales-order-management.objects-roles.1",
+                  "factDigest": "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e",
+                  "excerptSha256": "558b15c7b45b37ee9236b7958ec85607dfdf51419ab5a169f80c4a7b03cf640c",
+                  "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=994-1711"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "differingDimensions": [
+        {
+          "dimension": "statesTransitions",
+          "assertion": "The cited lifecycle sets and transitions materially differ across draft/quotation/sent/sale/cancel, hold/pay/deliver/bill/close, numeric command statuses, Tryton Sale states, and OFBiz ORDER_STATUS transitions.",
+          "evidence": [
+            {
+              "systemId": "odoo-community",
+              "sourceCellDigest": "f1c84a648e004b366774d5b640e7417bd193c9608a62a664e325749178ee479b",
+              "sourceFactReferences": [
+                {
+                  "factId": "odoo.sales-order-management.states-transitions",
+                  "factDigest": "a1948ed8c5f551d1ae9e5636ef7f9073fb76bd12636504b34c5965d66d88aabb",
+                  "excerptSha256": "e730a398c72f2e11fca27de4d864f1963cdfef0c732eda8d2d61f9614ba81c5a",
+                  "exactLocator": "https://raw.githubusercontent.com/odoo/odoo/1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc/addons/sale/models/sale_order.py#bytes=782-922"
+                }
+              ]
+            },
+            {
+              "systemId": "erpnext",
+              "sourceCellDigest": "5ae2ce1a1cac472bcf59e2dedd3b9f19a9a32539231bc414fbcfabe1525110df",
+              "sourceFactReferences": [
+                {
+                  "factId": "erpnext.sales-order-management.states-transitions",
+                  "factDigest": "30afd635129102b39bf8b39e5c6af48875b9805e15eff458a660917c20548489",
+                  "excerptSha256": "7bcc8213c0e8da04969a6610ad3f7ce543a2757831f42a694209236e20cda7b8",
+                  "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=6034-32577"
+                }
+              ]
+            },
+            {
+              "systemId": "dolibarr",
+              "sourceCellDigest": "4a72b9d63a980f100dcfb656cfcd6d12fd6e2e8b1b165ba35ad49b71922db67f",
+              "sourceFactReferences": [
+                {
+                  "factId": "dolibarr.sales-order-management.states-transitions",
+                  "factDigest": "67f9d14c8f466918207f4ed793cf318f06ddfd8b385f63d04fa8c7f427a89647",
+                  "excerptSha256": "98362243c74c2032d34300d289d3e4adeef7f8aa1a1e7814e671b5e386fd59b4",
+                  "exactLocator": "git:769c7db907099643558e77d7002c109cfda919e5;path=htdocs/commande/class/commande.class.php;lines=388-415;bytes=18381-18875"
+                }
+              ]
+            },
+            {
+              "systemId": "tryton",
+              "sourceCellDigest": "b8bf932f4ac6296df508447d59206640b432c6f83d1ba6f408adeaabd093a8fc",
+              "sourceFactReferences": [
+                {
+                  "factId": "tryton.sales-order-management.states-transitions",
+                  "factDigest": "2ee8154b5f7d72fad6178f09427b27e5f088ee7ee14ae6d11a9ea879a94e98fe",
+                  "excerptSha256": "838c0a3da4ebbb7ea6e3db7ef1b89e1295f3abdd33cf9d5e83ea5d2e6e51a115",
+                  "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=12412-12667"
+                }
+              ]
+            },
+            {
+              "systemId": "apache-ofbiz",
+              "sourceCellDigest": "e10bd0bec1c9f92cb6824f96a0be285f7cd69a62b950c4ba90aa61d694d97b87",
+              "sourceFactReferences": [
+                {
+                  "factId": "ofbiz.sales-order-management.states-transitions.1",
+                  "factDigest": "448cf5f1e0f8350f446b13c7a13de7db4eabb3bc8919388a0b2291c45a2796df",
+                  "excerptSha256": "b9b3e272af92809eeffb4a8ada5f8953020a25efdd83a1c2bebd96a922ee9162",
+                  "exactLocator": "applications/datamodel/data/seed/OrderSeedData.xml#bytes=9494-13637"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "decisionRules": [
+    {
+      "id": "explicit-negative-or-conflict",
+      "whenSourceStateAny": [
+        "ABSENT",
+        "CONFLICTING"
+      ],
+      "emit": "DENIED",
+      "reason": "EXPLICIT_NEGATIVE_OR_CONFLICT_PRESERVED"
+    },
+    {
+      "id": "no-frozen-cross-profile-proof",
+      "whenNoEvidenceEdge": true,
+      "emit": "UNRESOLVED",
+      "reason": "NO_EXACT_CROSS_PROFILE_SEMANTIC_DIMENSION_PROOF"
+    }
+  ],
+  "default": "UNRESOLVED",
+  "nonclaims": [
+    "NO_CAPABILITY_CLAIM",
+    "NO_PROCESS_PATTERN_CLAIM",
+    "NO_COMMON_CORE_CLAIM",
+    "NO_PROMOTION_CLAIM",
+    "NO_EXECUTION_CLAIM",
+    "NO_AUTHORITY_CLAIM"
+  ],
+  "minimumProofRules": {
+    "POTENTIAL_EQUIVALENCE": {
+      "minimumDistinctTrainingSystems": 2,
+      "requiredMatchingDimensions": [
+        "purpose"
+      ],
+      "requiredAdditionalMatchingDimensionsAnyOf": [
+        "inputsOutputs",
+        "preconditions",
+        "invariants",
+        "statesTransitions",
+        "effects",
+        "readbacks"
+      ],
+      "requireExactCellReferences": true,
+      "requireExactFactReferences": true,
+      "forbidInvolvedStates": [
+        "ABSENT",
+        "CONFLICTING"
+      ],
+      "requireZeroUnresolvedCounterexamples": true
+    },
+    "VARIANT_RELATION": {
+      "minimumDistinctTrainingSystems": 2,
+      "requiredMatchingDimensions": [
+        "purpose"
+      ],
+      "requiredDifferingDimensionsAnyOf": [
+        "inputsOutputs",
+        "preconditions",
+        "invariants",
+        "statesTransitions",
+        "effects",
+        "readbacks"
+      ],
+      "requireExactCellReferences": true,
+      "requireExactFactReferences": true
+    },
+    "DISTINCT": {
+      "requiresPositiveMaterialDifferenceAnyOf": [
+        "purpose",
+        "effects",
+        "contract"
+      ],
+      "absenceOfProofInsufficient": true,
+      "requireExactCellReferences": true,
+      "requireExactFactReferences": true
+    },
+    "DENIED": {
+      "triggers": [
+        "ABSENT",
+        "CONFLICTING",
+        "FORBIDDEN_SHORTCUT",
+        "INVENTED_EVIDENCE"
+      ]
+    },
+    "UNRESOLVED": {
+      "trigger": "INSUFFICIENT_EXACT_EVIDENCE_FOR_OTHER_STATE"
+    }
+  },
+  "evidenceReviewRequired": true,
+  "specDigest": "a47e78346dbe3453b86f2545dfa437e966253490a9f2f993cdbca064e74d3599"
+}
