@@ -1,8 +1,27 @@
 {
   "title": "Canonical JSON / digest profile inventory v1 (FND-PS-04)",
-  "taskId": "CAMPAIGN-V1-FND-PS-04-IMPLEMENT-01",
+  "taskId": "CAMPAIGN-V1-FND-PS-04-INTEGRATE-01",
+  "acceptedArtifactCommit": "cfda3f1601b2a0d4430059933a2ca2e2a5107606",
   "baseCommit": "dac921d459cbcfc16e4912dff558c8786e6438de",
+  "baseRef": "origin/main",
   "generatedFrom": "fresh mechanical scan on admitted Main (see tests/canonical-json-profile-inventory.test.ts)",
+  "integrationOwnership": {
+    "ownerNode": "repository-integrity",
+    "artifactInputs": [
+      {
+        "path": "docs/architecture/canonical-json-profile-inventory.md",
+        "role": "DERIVED_EVIDENCE"
+      },
+      {
+        "path": "verification/canonical-json-profile-inventory-v1.json",
+        "role": "CONTRACT"
+      },
+      {
+        "path": "tests/canonical-json-profile-inventory.test.ts",
+        "role": "VALIDATOR"
+      }
+    ]
+  },
   "scanScope": {
     "roots": [
       "src",

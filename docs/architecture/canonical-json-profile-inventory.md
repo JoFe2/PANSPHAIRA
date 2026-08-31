@@ -1,10 +1,12 @@
 # Canonical JSON / Digest Profile Inventory v1 (FND-PS-04)
 
-- **Task ID:** CAMPAIGN-V1-FND-PS-04-IMPLEMENT-01
-- **Base commit (admitted Main):** `dac921d459cbcfc16e4912dff558c8786e6438de`
+- **Task ID:** CAMPAIGN-V1-FND-PS-04-INTEGRATE-01
+- **Accepted census artifact:** `cfda3f1601b2a0d4430059933a2ca2e2a5107606` (#338)
+- **Base commit (exact current public Main, `origin/main`):**
+  `dac921d459cbcfc16e4912dff558c8786e6438de`
 - **Companion artifacts:**
   - `verification/canonical-json-profile-inventory-v1.json` — machine-testable inventory
-  - `tests/canonical-json-profile-inventory.test.ts` — deterministic scanner + fail-closed validator (28 tests)
+  - `tests/canonical-json-profile-inventory.test.ts` — deterministic scanner + fail-closed validator (31 tests)
 - **Process context preserved (not re-litigated):** Operating Model v1.1 and decisions D-001 through D-007. No new process variant is introduced by this slice.
 
 ## Purpose and decision
@@ -63,6 +65,23 @@ silently.
   `tools/`; otherwise the top-level segment. Note `cks` legitimately spans
   `src/cks/` and `packages/cks/` (3 import files).
 - **Ledger:** `SHA256SUMS`, one digest per line, leading `./` stripped.
+
+## Integration ownership (current Main)
+
+The accepted census is replayed without changing the historical byte set. Its
+three decision/validator artifacts are digest-bound inputs of the existing
+`repository-integrity` Verification Fabric node:
+
+- `docs/architecture/canonical-json-profile-inventory.md` — `DERIVED_EVIDENCE`;
+- `verification/canonical-json-profile-inventory-v1.json` — `CONTRACT`;
+- `tests/canonical-json-profile-inventory.test.ts` — `VALIDATOR`.
+
+The validator rejects a stale `origin/main` base commit, an omitted or
+mis-owned integration artifact, and any current-byte digest that differs from
+the node declaration. `verification/verification-dag-v2.json` remains the
+authoritative ownership declaration; its own change is graph-change
+fail-closed, while `package.json` remains covered by central toolchain
+invalidation. This adds no new process variant or runtime utility.
 
 ## Fresh census vs historical hints
 
@@ -178,7 +197,9 @@ fails validation.
 
 ## Scope guard
 
-This slice changes exactly the three issue-authorized paths (this document,
-the inventory JSON, the census test). No utility consolidation, no
-product-runtime change, no credential/remote/provider/service/CI/harness/
-DSH_HOME/spill changes, no push/merge/release.
+This integration changes only the six authorized paths: this document, the
+inventory JSON, the census test, `package.json`,
+`verification/verification-dag-v2.json`, and `SHA256SUMS`. No historical
+digest-bound bytes are regenerated, no utility consolidation or product-runtime
+change is made, and no credential/remote/provider/service/CI/harness/DSH_HOME/
+spill change, push, merge, or release occurs.

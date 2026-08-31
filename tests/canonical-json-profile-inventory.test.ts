@@ -31,6 +31,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
@@ -41,6 +42,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..", "..");
 const INVENTORY_PATH = path.join(ROOT, "verification", "canonical-json-profile-inventory-v1.json");
 const LEDGER_PATH = path.join(ROOT, "SHA256SUMS");
+const DAG_PATH = path.join(ROOT, "verification", "verification-dag-v2.json");
 
 const SCAN_ROOTS = ["src", "packages", "scripts", "demo", "tools", "tests", "benchmarks", "docs"] as const;
 const SKIP_DIRS = new Set(["node_modules", "dist", ".git"]);
@@ -59,6 +61,12 @@ const CANONICAL_NAME_RE = /canonical/i;
 const PARITY_TEST_FILE = "tests/canonical-json-runtime-parity.test.mjs";
 const PARITY_FIXTURE_FILE = "tests/fixtures/asf-bundle-lock/noncanonical.json";
 const SELF_TEST_FILE = "tests/canonical-json-profile-inventory.test.ts";
+const INTEGRATION_OWNER_NODE = "repository-integrity";
+const INTEGRATION_ARTIFACT_INPUTS = [
+  { path: "docs/architecture/canonical-json-profile-inventory.md", role: "DERIVED_EVIDENCE" },
+  { path: "verification/canonical-json-profile-inventory-v1.json", role: "CONTRACT" },
+  { path: SELF_TEST_FILE, role: "VALIDATOR" },
+] as const;
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
 const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
@@ -281,6 +289,97 @@ function sha256OfFile(repoPath: string): string | null {
   }
 }
 
+function currentPublicMainCommit(): string | null {
+  try {
+    return execFileSync("git", ["rev-parse", "--verify", "origin/main^{commit}"], {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The accepted census has one deterministic integration owner. The inventory
+ * records the expected owner and the DAG binds the current bytes, so neither a
+ * stale Main base nor derived-integrity drift can silently enter the candidate.
+ */
+function validateIntegrationOwnership(doc: Record<string, unknown>, errors: string[]): void {
+  const baseRef = typeof doc.baseRef === "string" ? doc.baseRef : "";
+  const baseCommit = typeof doc.baseCommit === "string" ? doc.baseCommit : "";
+  const currentMain = currentPublicMainCommit();
+  if (baseRef !== "origin/main" || currentMain === null || baseCommit !== currentMain) {
+    errors.push(`stale-base:${baseRef || "missing"}`);
+  }
+
+  const ownershipRaw = doc.integrationOwnership;
+  if (typeof ownershipRaw !== "object" || ownershipRaw === null || Array.isArray(ownershipRaw)) {
+    errors.push("unowned-derived-integrity:ownership-missing");
+    return;
+  }
+  const ownership = ownershipRaw as Record<string, unknown>;
+  if (ownership.ownerNode !== INTEGRATION_OWNER_NODE) {
+    errors.push("unowned-derived-integrity:owner");
+    return;
+  }
+  if (!Array.isArray(ownership.artifactInputs)) {
+    errors.push("unowned-derived-integrity:artifact-inputs");
+    return;
+  }
+
+  const declared = new Map<string, string>();
+  for (const entryRaw of ownership.artifactInputs) {
+    if (typeof entryRaw !== "object" || entryRaw === null || Array.isArray(entryRaw)) {
+      errors.push("unowned-derived-integrity:artifact-inputs");
+      continue;
+    }
+    const entry = entryRaw as Record<string, unknown>;
+    const inputPath = typeof entry.path === "string" ? entry.path : "";
+    const role = typeof entry.role === "string" ? entry.role : "";
+    if (inputPath === "" || declared.has(inputPath)) {
+      errors.push("unowned-derived-integrity:artifact-inputs");
+      continue;
+    }
+    declared.set(inputPath, role);
+  }
+  for (const expected of INTEGRATION_ARTIFACT_INPUTS) {
+    if (declared.get(expected.path) !== expected.role) {
+      errors.push(`unowned-derived-integrity:${expected.path}`);
+    }
+  }
+  if (declared.size !== INTEGRATION_ARTIFACT_INPUTS.length) {
+    errors.push("unowned-derived-integrity:artifact-inputs");
+  }
+
+  let dag: Record<string, unknown>;
+  try {
+    dag = JSON.parse(readFileSync(DAG_PATH, "utf8")) as Record<string, unknown>;
+  } catch {
+    errors.push("unowned-derived-integrity:dag-invalid");
+    return;
+  }
+  const nodes = Array.isArray(dag.nodes) ? dag.nodes as Array<Record<string, unknown>> : [];
+  const owner = nodes.find((node) => node.id === INTEGRATION_OWNER_NODE);
+  if (owner === undefined || !Array.isArray(owner.inputs)) {
+    errors.push("unowned-derived-integrity:dag-owner");
+    return;
+  }
+  const inputs = new Map<string, Record<string, unknown>>();
+  for (const inputRaw of owner.inputs) {
+    if (typeof inputRaw !== "object" || inputRaw === null || Array.isArray(inputRaw)) continue;
+    const input = inputRaw as Record<string, unknown>;
+    if (typeof input.path === "string") inputs.set(input.path, input);
+  }
+  for (const expected of INTEGRATION_ARTIFACT_INPUTS) {
+    const input = inputs.get(expected.path);
+    if (input === undefined || input.role !== expected.role || input.sha256 !== sha256OfFile(expected.path)) {
+      errors.push(`unowned-derived-integrity:${expected.path}`);
+    }
+  }
+}
+
 /**
  * Expected byte obligations, derived mechanically:
  * 1. every pinned canonicalJson profile implementation (basis: profile-implementation)
@@ -322,6 +421,9 @@ function validateInventory(inv: unknown, scan: ScanResult, ledger: LedgerResult)
     return ["structure-invalid"];
   }
   const doc = inv as Record<string, unknown>;
+
+  // --- current-Main integration ownership ---------------------------------------------
+  validateIntegrationOwnership(doc, errors);
 
   // --- profiles -------------------------------------------------------------
   const profilesRaw = doc.profiles;
@@ -643,6 +745,13 @@ test("inventory validates clean against the fresh scan (positive)", () => {
   assert.deepEqual(validateCurrent(), []);
 });
 
+test("accepted census binds exact public Main and all derived artifacts to repository integrity", () => {
+  const inv = loadInventory() as Record<string, unknown>;
+  assert.equal(inv.baseRef, "origin/main");
+  assert.equal(inv.baseCommit, currentPublicMainCommit());
+  assert.deepEqual(validateCurrent(), []);
+});
+
 test("every historical digest-bound byte is unchanged on disk", () => {
   const scan = getScan();
   const ledger = getLedger();
@@ -708,6 +817,18 @@ test("negative: omitted profile entry fails validation", () => {
   assertFails((inv) => {
     inv.profiles.splice(0, 1);
   }, "omitted-profile-entry:");
+});
+
+test("negative: stale public-Main base fails closed", () => {
+  assertFails((inv) => {
+    inv.baseCommit = "0".repeat(40);
+  }, "stale-base:");
+});
+
+test("negative: unowned derived-integrity artifact fails closed", () => {
+  assertFails((inv) => {
+    inv.integrationOwnership.ownerNode = "unowned-node";
+  }, "unowned-derived-integrity:");
 });
 
 test("negative: duplicate profile entry fails validation", () => {

@@ -517,11 +517,27 @@
           "path": "scripts/verify-supply-chain.mjs",
           "role": "SECURITY",
           "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641"
+        },
+        {
+          "path": "docs/architecture/canonical-json-profile-inventory.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d3643dbb14f23a02db6844a769a5ea0313b6a192eeb19de665d1dd2390d56c95"
+        },
+        {
+          "path": "verification/canonical-json-profile-inventory-v1.json",
+          "role": "CONTRACT",
+          "sha256": "4e80c1a63df243223b5d8262dfb58b32ea502e0789c7e9d8b77e7554ad4b2bcd"
+        },
+        {
+          "path": "tests/canonical-json-profile-inventory.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "bd40eb44ff657ddfe36db1753073b0516e0c594b3062097872a03392af0ef72a"
         }
       ],
       "ownedTests": [
         "npm run release-governance:test",
-        "node --test tests/supply-chain-verifier.test.mjs"
+        "node --test tests/supply-chain-verifier.test.mjs",
+        "node --test dist/tests/canonical-json-profile-inventory.test.js"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
