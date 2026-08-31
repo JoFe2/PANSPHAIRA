@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/cscl-01/source-fact-v1.schema.json",
+  "title": "CSCL-01 exact source-bound fact v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "factId", "systemId", "systemRole", "capabilityFamily", "questionId", "claim", "sourceIdentity", "exactEvidence", "legal", "parser", "canonicalizer", "boundary", "factDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cscl01/source-fact/v1" },
+    "factId": { "$ref": "#/$defs/id" },
+    "systemId": { "$ref": "#/$defs/systemId" },
+    "systemRole": { "enum": ["TRAINING", "HOLDOUT"] },
+    "capabilityFamily": { "$ref": "#/$defs/family" },
+    "questionId": { "$ref": "#/$defs/id" },
+    "claim": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "sourceIdentity": { "$ref": "#/$defs/sourceIdentity" },
+    "exactEvidence": { "$ref": "#/$defs/evidence" },
+    "legal": { "$ref": "#/$defs/legal" },
+    "parser": { "$ref": "#/$defs/tool" },
+    "canonicalizer": { "$ref": "#/$defs/tool" },
+    "boundary": { "$ref": "#/$defs/boundary" },
+    "factDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "systemId": { "enum": ["odoo-community", "erpnext", "dolibarr", "tryton", "apache-ofbiz", "idempiere"] },
+    "family": { "enum": ["PARTY_CUSTOMER_MANAGEMENT", "PRODUCT_ITEM_MANAGEMENT", "SALES_ORDER_MANAGEMENT"] },
+    "sourceIdentity": { "type": "object", "additionalProperties": false, "required": ["selectorSetDigest", "immutableSelector", "sourceBytesSha256"], "properties": { "selectorSetDigest": { "$ref": "#/$defs/digest" }, "immutableSelector": { "type": "string", "minLength": 4, "maxLength": 512 }, "sourceBytesSha256": { "$ref": "#/$defs/digest" } } },
+    "evidence": { "type": "object", "additionalProperties": false, "required": ["exactLocator", "excerptSha256", "byteStart", "byteEnd"], "properties": { "exactLocator": { "type": "string", "minLength": 1, "maxLength": 1024 }, "excerptSha256": { "$ref": "#/$defs/digest" }, "byteStart": { "type": "integer", "minimum": 0 }, "byteEnd": { "type": "integer", "minimum": 1 } } },
+    "legal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["licenseId", "licenseSha256", "obligations", "noticeStatus", "attribution"],
+      "properties": {
+        "licenseId": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "licenseSha256": { "$ref": "#/$defs/digest" },
+        "obligations": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 128 } },
+        "noticeStatus": { "enum": ["PRESENT", "ABSENT_AT_PIN"] },
+        "noticeUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "noticeBytes": { "type": "integer", "minimum": 1 },
+        "noticeSha256": { "$ref": "#/$defs/digest" },
+        "attribution": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["kind", "url", "byteLength", "sha256"], "properties": { "kind": { "enum": ["PROJECT_METADATA", "FILE_LEVEL_NOTICE"] }, "url": { "type": "string", "format": "uri", "pattern": "^https://" }, "byteLength": { "type": "integer", "minimum": 1 }, "sha256": { "$ref": "#/$defs/digest" } } } }
+      },
+      "allOf": [
+        { "if": { "properties": { "noticeStatus": { "const": "PRESENT" } }, "required": ["noticeStatus"] }, "then": { "properties": { "noticeUrl": { "type": "string" }, "noticeBytes": { "type": "integer" }, "noticeSha256": { "$ref": "#/$defs/digest" } }, "required": ["noticeUrl", "noticeBytes", "noticeSha256"] } },
+        { "if": { "properties": { "noticeStatus": { "const": "ABSENT_AT_PIN" } }, "required": ["noticeStatus"] }, "then": { "not": { "anyOf": [{ "required": ["noticeUrl"] }, { "required": ["noticeBytes"] }, { "required": ["noticeSha256"] }] } } }
+      ]
+    },
+    "tool": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "$ref": "#/$defs/id" }, "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" } } },
+    "boundary": { "const": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" } }
+  }
+}

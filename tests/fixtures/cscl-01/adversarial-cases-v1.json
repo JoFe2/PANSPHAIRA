@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "pansphaira.cscl01/adversarial-cases/v1",
+  "cases": [
+    { "id": "extra-fields", "expected": "DENIED" },
+    { "id": "lexical-homonym-synonym-collision", "expected": "DENIED" },
+    { "id": "frequency-majority", "expected": "DENIED" },
+    { "id": "omitted-fifth-system-cell", "expected": "DENIED" },
+    { "id": "omitted-absence-counterexample", "expected": "DENIED" },
+    { "id": "caller-digest-verdict", "expected": "IGNORED_AND_TRUSTED_FIXTURES_REDERIVED" },
+    { "id": "paired-substitution-redigestion", "expected": "DENIED" },
+    { "id": "source-version-license-drift", "expected": "DENIED" },
+    { "id": "moving-only-identity", "expected": "DENIED" },
+    { "id": "history-rewrite", "expected": "DENIED" },
+    { "id": "holdout-semantic-leakage", "expected": "DENIED" },
+    { "id": "candidate-mutation-after-freeze", "expected": "DENIED" },
+    { "id": "hidden-authority-promotion-execution-fields", "expected": "DENIED" }
+  ]
+}

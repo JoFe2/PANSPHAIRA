@@ -1,0 +1,17 @@
+{
+  "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
+  "issue":{"repository":"JimPansky/PANSPHAIRA","number":318},
+  "parentIssue":317,
+  "testedProductHead":"cc3d4eea9e0195983e97b8f5b116dcaab7ac7a5e",
+  "testedProductTree":"734234f1bf72d882d8711ee61ee518087e2f6011",
+  "baseSha":"a9b08da0cd9cb469f5ff9a6a2ad8000167286f94",
+  "runCommits":["657e756ab73c5f46c1031c5583d566ad5bb1fd67","cc3d4eea9e0195983e97b8f5b116dcaab7ac7a5e"],
+  "acceptance":{"PROTOCOL_FREEZE":"PASS","SOURCE_LEGAL_IDENTITY":"PASS","HOLDOUT_ISOLATION":"PASS","DETERMINISTIC_REPLAY":"PASS","ADVERSARIAL_DENIALS":"PASS"},
+  "terminalDecision":"PROTOCOL_FROZEN_READY_FOR_PUBLIC_DELIVERY",
+  "releaseDisposition":"RELEASE_REQUIRED_PENDING_DELIVERY",
+  "freezeDigest":"68a547ff211ee9bf373e355de03966975bb414dabd18600218362e5fa55d95e4",
+  "canonicalByteLength":14177,
+  "checks":[{"command":"npm run cscl01:test","status":"PASS","tests":16},{"command":"integration gates","status":"PASS","tests":78},{"command":"npm test","status":"PASS"},{"command":"npm run lint","status":"PASS"},{"command":"sha256sum --check SHA256SUMS","status":"PASS"},{"command":"npm run release-governance:verify","status":"PASS"},{"command":"git diff --check","status":"PASS"}],
+  "integrity":{"publicManifestEntries":1367,"verificationDagVersion":34,"verificationDagNodes":40},
+  "nonClaims":["NO_ERP_BUSINESS_SEMANTICS_INSPECTED_OR_EXTRACTED","NO_HOLDOUT_SEMANTICS_INSPECTED","NO_COMMON_CORE_OR_CANDIDATE_ADMITTED","NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT","NO_FULL_ERP_PRODUCTION_PROCUREMENT_COMPATIBILITY_OR_CUSTOMER_FIT_CLAIM"]
+}

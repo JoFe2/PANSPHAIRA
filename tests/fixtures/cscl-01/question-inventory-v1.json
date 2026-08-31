@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "pansphaira.cscl01/question-inventory/v1",
+  "inventoryId": "cscl-01-source-native-question-inventory-v1",
+  "capabilityFamilies": [
+    "PARTY_CUSTOMER_MANAGEMENT",
+    "PRODUCT_ITEM_MANAGEMENT",
+    "SALES_ORDER_MANAGEMENT"
+  ],
+  "questions": [
+    { "id": "objects-roles", "kind": "OBJECTS_ROLES", "prompt": "What source-native objects and participant roles are evidenced, preserving exact system terminology?" },
+    { "id": "relations", "kind": "RELATIONS", "prompt": "What source-native relations connect the evidenced objects or roles?" },
+    { "id": "operations", "kind": "OPERATIONS", "prompt": "What source-native operations are evidenced?" },
+    { "id": "inputs-outputs", "kind": "INPUTS_OUTPUTS", "prompt": "What source-native inputs and outputs are evidenced for each operation?" },
+    { "id": "states-transitions", "kind": "STATES_TRANSITIONS", "prompt": "What states and transitions are evidenced?" },
+    { "id": "events", "kind": "EVENTS", "prompt": "What events initiate, observe or result from behavior?" },
+    { "id": "preconditions", "kind": "PRECONDITIONS", "prompt": "What preconditions are evidenced?" },
+    { "id": "invariants", "kind": "INVARIANTS", "prompt": "What invariants are evidenced?" },
+    { "id": "exceptions-errors", "kind": "EXCEPTIONS_ERRORS", "prompt": "What exceptions and errors are evidenced?" },
+    { "id": "readbacks", "kind": "READBACKS", "prompt": "What readback or observable outcome proves the behavior?" },
+    { "id": "api-service-exposure", "kind": "API_SERVICE_EXPOSURE", "prompt": "Is the behavior exposed through a documented API or service boundary?" },
+    { "id": "absence-ambiguity-conflict", "kind": "ABSENCE_AMBIGUITY_CONFLICT", "prompt": "What explicit absence, ambiguity, conflict or counterexample is evidenced?" }
+  ],
+  "freezeRule": "This inventory is system-neutral and immutable before any system-profile output or holdout semantics exists.",
+  "boundary": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" }
+}

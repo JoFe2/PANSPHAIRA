@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "pansphaira.cscl01/protocol-freeze-receipt/v1",
+  "receiptId": "cscl-01-protocol-freeze-receipt-v1",
+  "sourceIssue": "https://github.com/JoFe2/PANSPHAIRA/issues/318",
+  "parentIssue": "https://github.com/JoFe2/PANSPHAIRA/issues/317",
+  "releasedBase": {
+    "tag": "2026_08_31_v1",
+    "commit": "a9b08da0cd9cb469f5ff9a6a2ad8000167286f94"
+  },
+  "retrievedAt": "2026-08-31T05:04:57Z",
+  "networkBoundary": "OFFICIAL_REPOSITORY_DOCUMENTATION_RELEASE_LICENSE_IDENTITY_ONLY_NO_BUSINESS_SEMANTICS",
+  "sourceResolution": [
+    { "systemId": "odoo-community", "selector": "refs/heads/19.0", "resolvedCommit": "1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc", "result": "RESOLVED" },
+    { "systemId": "erpnext", "selector": "refs/tags/v16.33.0", "resolvedCommit": "b24c9eba551905e256e336ff170a91a92d197a2f", "result": "RESOLVED" },
+    { "systemId": "dolibarr", "selector": "refs/tags/24.0.0", "tagObject": "5dd1b29feb8014839b54bb0f48d988eeac3c61dd", "resolvedCommit": "769c7db907099643558e77d7002c109cfda919e5", "result": "RESOLVED" },
+    { "systemId": "tryton", "selector": "https://downloads.tryton.org/8.0/SHA256", "checksumIndexSha256": "686857b5436022af2f240cd3c7e936544f2b57636f5b6c9259fa83af4bac43ae", "artifactAndSignaturePairs": 4, "result": "OFFICIAL_BYTES_AND_INDEX_MATCH" },
+    { "systemId": "apache-ofbiz", "selector": "refs/tags/release24.09.07", "tagObject": "12b6d40382ac38d3252df78781f9877d46f5f9f7", "resolvedCommit": "42819e5ae1d5339d3a204ac06b43e69d46a9c0ae", "result": "RESOLVED" },
+    { "systemId": "idempiere", "selector": "refs/heads/release-13", "resolvedCommit": "731515dcdd5278b843db33b9d3109d155b881951", "result": "IDENTITY_ONLY_RESOLVED_HOLDOUT_SEMANTICS_NOT_INSPECTED" }
+  ],
+  "legalResolution": [
+    { "systemId": "odoo-community", "licenseId": "LGPL-3.0-only", "licenseSha256": "abc09dad5f84a76e1b0279237053cae16c03228ab27d8d467677054c2bd17eeb", "noticeSha256": "86e49232d2162708d05405ed5ff6dc5594b73ef4b0f25d2749cfae13493b620c" },
+    { "systemId": "erpnext", "licenseId": "GPL-3.0-only", "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986", "projectMetadataSha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a" },
+    { "systemId": "dolibarr", "licenseId": "GPL-3.0-or-later", "licenseSha256": "e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b", "noticeSha256": "fd7af4265dc91aafd0f4dd87549c45b2a21da7761211aca1af500a1ec6c76b6e" },
+    { "systemId": "tryton", "licenseId": "GPL-3.0-or-later", "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903", "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112", "legalMembersReadOnly": true },
+    { "systemId": "apache-ofbiz", "licenseId": "Apache-2.0", "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021", "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34" },
+    { "systemId": "idempiere", "licenseId": "GPL-2.0-or-later", "licenseSha256": "ff71df08df5d013473e420dfe5a0208f4dfdadbade1805204afc6f586a6f7624", "noticeStatus": "ABSENT_AT_PIN_RETAIN_FILE_LEVEL_NOTICES_IF_PRESENT", "projectMetadataSha256": "83de5b14fceeb3dafff7bd938aab5422471672e839d8415cf7cfe57a1ceb6742" }
+  ],
+  "trytonPreflight": {
+    "officialCodeApiAnonymousReplay": "LOGIN_REDIRECT_NOT_ADMITTED",
+    "admittedIdentity": "OFFICIAL_VERSIONED_SIGNED_TARBALLS_ONLY",
+    "githubMirror": "FORBIDDEN"
+  },
+  "fixtureDigests": {
+    "selectors": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+    "questions": "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28",
+    "rules": "d1025d519d6cfd7b525e6ce02da4a4402c580dadaafbf4898c2194904caf158c",
+    "adversarial": "0e716adaa3f01eccb972b8b648f98b99703170bf7991599fec1af453148a243d"
+  },
+  "freezeDigest": "68a547ff211ee9bf373e355de03966975bb414dabd18600218362e5fa55d95e4",
+  "canonicalByteLength": 14177,
+  "verification": {
+    "initialRedCommand": "node --test tests/cscl-01/protocol.test.mjs",
+    "initialRedReason": "ERR_MODULE_NOT_FOUND src/cscl-01/protocol.mjs",
+    "lateRed": "14/16 passed; strict schema compilation and duplicate-family recomputation failed before minimal fixes",
+    "greenCommand": "node --test tests/cscl-01/protocol.test.mjs",
+    "greenTests": 16,
+    "schemaCount": 8,
+    "schemasCompile": true,
+    "replayRuns": 2,
+    "replayByteIdentical": true
+  },
+  "nonClaims": [
+    "NO_ERP_BUSINESS_SEMANTICS_INSPECTED_OR_EXTRACTED",
+    "NO_HOLDOUT_SEMANTICS_INSPECTED",
+    "NO_COMMON_CORE_OR_CANDIDATE_ADMITTED",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "NO_FULL_ERP_PRODUCTION_PROCUREMENT_COMPATIBILITY_OR_CUSTOMER_FIT_CLAIM"
+  ],
+  "boundary": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" }
+}

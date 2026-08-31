@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "pansphaira.cscl01/source-selector-set/v1",
+  "selectorSetId": "cscl-01-six-system-source-selector-set-v1",
+  "systems": [
+    {
+      "id": "odoo-community",
+      "name": "Odoo Community",
+      "role": "TRAINING",
+      "source": {
+        "kind": "GIT_COMMIT_ON_PROTECTED_RELEASE_BRANCH",
+        "officialRepository": "https://github.com/odoo/odoo.git",
+        "version": "19.0",
+        "selector": "refs/heads/19.0",
+        "commit": "1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc",
+        "pinnedUrl": "https://github.com/odoo/odoo/tree/1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc",
+        "documentationUrl": "https://www.odoo.com/documentation/19.0/"
+      },
+      "legal": {
+        "licenseId": "LGPL-3.0-only",
+        "licenseUrl": "https://raw.githubusercontent.com/odoo/odoo/1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc/LICENSE",
+        "licenseBytes": 43529,
+        "licenseSha256": "abc09dad5f84a76e1b0279237053cae16c03228ab27d8d467677054c2bd17eeb",
+        "noticeUrl": "https://raw.githubusercontent.com/odoo/odoo/1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc/COPYRIGHT",
+        "noticeBytes": 433,
+        "noticeSha256": "86e49232d2162708d05405ed5ff6dc5594b73ef4b0f25d2749cfae13493b620c",
+        "obligations": ["PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES", "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING_COVERED_CODE", "MARK_MODIFICATIONS", "RETAIN_THIRD_PARTY_LICENSES"]
+      }
+    },
+    {
+      "id": "erpnext",
+      "name": "ERPNext",
+      "role": "TRAINING",
+      "source": {
+        "kind": "GIT_TAG_AND_COMMIT",
+        "officialRepository": "https://github.com/frappe/erpnext.git",
+        "version": "v16.33.0",
+        "selector": "refs/tags/v16.33.0",
+        "commit": "b24c9eba551905e256e336ff170a91a92d197a2f",
+        "pinnedUrl": "https://github.com/frappe/erpnext/tree/b24c9eba551905e256e336ff170a91a92d197a2f",
+        "documentationUrl": "https://docs.frappe.io/erpnext/user/manual/en"
+      },
+      "legal": {
+        "licenseId": "GPL-3.0-only",
+        "licenseUrl": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/license.txt",
+        "licenseBytes": 35149,
+        "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "noticeUrl": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+        "noticeBytes": 6791,
+        "noticeSha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a",
+        "obligations": ["PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES", "LICENSE_COVERED_DERIVATIVES_UNDER_GPL", "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING", "MARK_MODIFICATIONS"]
+      }
+    },
+    {
+      "id": "dolibarr",
+      "name": "Dolibarr",
+      "role": "TRAINING",
+      "source": {
+        "kind": "ANNOTATED_GIT_TAG_AND_PEELED_COMMIT",
+        "officialRepository": "https://github.com/Dolibarr/dolibarr.git",
+        "version": "24.0.0",
+        "selector": "refs/tags/24.0.0",
+        "tagObject": "5dd1b29feb8014839b54bb0f48d988eeac3c61dd",
+        "commit": "769c7db907099643558e77d7002c109cfda919e5",
+        "pinnedUrl": "https://github.com/Dolibarr/dolibarr/tree/769c7db907099643558e77d7002c109cfda919e5",
+        "documentationUrl": "https://wiki.dolibarr.org/"
+      },
+      "legal": {
+        "licenseId": "GPL-3.0-or-later",
+        "licenseUrl": "https://raw.githubusercontent.com/Dolibarr/dolibarr/769c7db907099643558e77d7002c109cfda919e5/COPYING",
+        "licenseBytes": 35151,
+        "licenseSha256": "e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b",
+        "noticeUrl": "https://raw.githubusercontent.com/Dolibarr/dolibarr/769c7db907099643558e77d7002c109cfda919e5/COPYRIGHT",
+        "noticeBytes": 6876,
+        "noticeSha256": "fd7af4265dc91aafd0f4dd87549c45b2a21da7761211aca1af500a1ec6c76b6e",
+        "obligations": ["PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES", "LICENSE_COVERED_DERIVATIVES_UNDER_GPL", "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING", "RETAIN_COMPONENT_SPECIFIC_LICENSES"]
+      }
+    },
+    {
+      "id": "tryton",
+      "name": "Tryton",
+      "role": "TRAINING",
+      "source": {
+        "kind": "SIGNED_OFFICIAL_ARTIFACT_SET",
+        "officialRepository": "https://downloads.tryton.org/8.0/",
+        "version": "8.0",
+        "selector": "versioned-signed-artifacts",
+        "pinnedUrl": "https://downloads.tryton.org/8.0/",
+        "documentationUrl": "https://docs.tryton.org/8.0/",
+        "checksumIndexUrl": "https://downloads.tryton.org/8.0/SHA256",
+        "checksumIndexSha256": "686857b5436022af2f240cd3c7e936544f2b57636f5b6c9259fa83af4bac43ae",
+        "artifacts": [
+          { "name": "trytond-8.0.9.tar.gz", "url": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz", "byteLength": 958720, "sha256": "0fab66fb5457ae833880418424ccb18476218dc215ecb4c6db0f714722703aa7", "signatureUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz.sig", "signatureByteLength": 140, "signatureSha256": "45a26429b4935483a4a92e80603bf68503bc50384819ca191491d963ead4f9ce" },
+          { "name": "trytond_party-8.0.3.tar.gz", "url": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz", "byteLength": 206536, "sha256": "2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0", "signatureUrl": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz.sig", "signatureByteLength": 140, "signatureSha256": "0905053692537223823c32168eb85b331bc453dfa7c2505a6ab394175837e8a7" },
+          { "name": "trytond_product-8.0.1.tar.gz", "url": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz", "byteLength": 86832, "sha256": "1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53", "signatureUrl": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz.sig", "signatureByteLength": 140, "signatureSha256": "dcde9dba0ccffe8a2218c71ab0ba78eea28d8a0aa999da56325bbb53c080accf" },
+          { "name": "trytond_sale-8.0.3.tar.gz", "url": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz", "byteLength": 212290, "sha256": "224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070", "signatureUrl": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz.sig", "signatureByteLength": 140, "signatureSha256": "f21a8d07e2e8d873512c9b4b2d1f449b8fe7af0ff645e06388129cf5d4613f12" }
+        ]
+      },
+      "legal": {
+        "licenseId": "GPL-3.0-or-later",
+        "licenseUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/LICENSE",
+        "licenseBytes": 35147,
+        "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+        "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+        "noticeBytes": 1034,
+        "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+        "obligations": ["PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES", "LICENSE_COVERED_DERIVATIVES_UNDER_GPL", "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING", "MARK_MODIFICATIONS"]
+      }
+    },
+    {
+      "id": "apache-ofbiz",
+      "name": "Apache OFBiz",
+      "role": "TRAINING",
+      "source": {
+        "kind": "ANNOTATED_GIT_TAG_AND_PEELED_COMMIT",
+        "officialRepository": "https://github.com/apache/ofbiz-framework.git",
+        "version": "release24.09.07",
+        "selector": "refs/tags/release24.09.07",
+        "tagObject": "12b6d40382ac38d3252df78781f9877d46f5f9f7",
+        "commit": "42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "pinnedUrl": "https://github.com/apache/ofbiz-framework/tree/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "documentationUrl": "https://ofbiz.apache.org/documentation.html"
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/LICENSE",
+        "licenseBytes": 12097,
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "obligations": ["PRESERVE_LICENSE", "PRESERVE_NOTICE_AND_ATTRIBUTION", "MARK_MODIFIED_FILES", "STATE_CHANGES"]
+      }
+    },
+    {
+      "id": "idempiere",
+      "name": "iDempiere",
+      "role": "HOLDOUT",
+      "source": {
+        "kind": "GIT_COMMIT_ON_PROTECTED_RELEASE_BRANCH",
+        "officialRepository": "https://github.com/idempiere/idempiere.git",
+        "version": "13 Orion LTS",
+        "selector": "refs/heads/release-13",
+        "commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "pinnedUrl": "https://github.com/idempiere/idempiere/tree/731515dcdd5278b843db33b9d3109d155b881951",
+        "documentationUrl": "https://wiki.idempiere.org/en/Download_the_Code"
+      },
+      "legal": {
+        "licenseId": "GPL-2.0-or-later",
+        "licenseUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/LICENSE.md",
+        "licenseBytes": 15057,
+        "licenseSha256": "ff71df08df5d013473e420dfe5a0208f4dfdadbade1805204afc6f586a6f7624",
+        "noticeUrl": null,
+        "noticeBytes": null,
+        "noticeSha256": null,
+        "noticeStatus": "NO_REPOSITORY_NOTICE_FILE_IDENTIFIED_RETAIN_FILE_LEVEL_NOTICES_IF_PRESENT",
+        "projectMetadataUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/README.md",
+        "projectMetadataBytes": 3486,
+        "projectMetadataSha256": "83de5b14fceeb3dafff7bd938aab5422471672e839d8415cf7cfe57a1ceb6742",
+        "obligations": ["PRESERVE_LICENSE_AND_FILE_LEVEL_COPYRIGHT_NOTICES", "LICENSE_COVERED_DERIVATIVES_UNDER_GPL", "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING"]
+      }
+    }
+  ],
+  "captureRule": {
+    "exactBytesRequired": true,
+    "immutableVersionRequired": true,
+    "parserAndCanonicalizerVersionRequired": true,
+    "licenseAndNoticeBytesRequired": true,
+    "movingAliasesForbidden": true,
+    "semanticCapturePermittedAtAdmission": false,
+    "holdoutSemanticCapturePermittedBeforeCandidateFreeze": false
+  },
+  "boundary": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" }
+}

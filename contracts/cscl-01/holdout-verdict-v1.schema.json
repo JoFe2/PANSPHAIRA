@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/cscl-01/holdout-verdict-v1.schema.json",
+  "title": "CSCL-01 holdout family or overall verdict v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "verdictId", "scope", "familyVerdicts", "governanceGates", "verdict", "reasonCodes", "nonClaims", "boundary", "verdictDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cscl01/holdout-verdict/v1" },
+    "verdictId": { "$ref": "#/$defs/id" },
+    "scope": { "enum": ["FAMILY", "OVERALL"] },
+    "familyVerdicts": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "type": "object", "additionalProperties": false, "required": ["capabilityFamily", "mappingReceiptDigest", "mappedRatio", "unmappedRatio", "corePreservationRatio", "coreContradictions", "verdict"], "properties": { "capabilityFamily": { "$ref": "#/$defs/family" }, "mappingReceiptDigest": { "$ref": "#/$defs/digest" }, "mappedRatio": { "type": "number", "minimum": 0, "maximum": 1 }, "unmappedRatio": { "type": "number", "minimum": 0, "maximum": 1 }, "corePreservationRatio": { "type": "number", "minimum": 0, "maximum": 1 }, "coreContradictions": { "type": "integer", "minimum": 0 }, "verdict": { "enum": ["GO", "FALSIFIED_WITH_EVIDENCE"] } } } },
+    "governanceGates": { "$ref": "#/$defs/gates" },
+    "verdict": { "enum": ["GO", "NARROW_GO", "FALSIFIED_WITH_EVIDENCE"] },
+    "reasonCodes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" } },
+    "nonClaims": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 256 } },
+    "boundary": { "$ref": "#/$defs/boundary" },
+    "verdictDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    { "if": { "properties": { "scope": { "const": "FAMILY" } }, "required": ["scope"] }, "then": { "properties": { "familyVerdicts": { "type": "array", "minItems": 1, "maxItems": 1 } } } },
+    { "if": { "properties": { "scope": { "const": "OVERALL" } }, "required": ["scope"] }, "then": { "properties": { "familyVerdicts": { "type": "array", "minItems": 3, "maxItems": 3, "allOf": [
+      { "contains": { "type": "object", "properties": { "capabilityFamily": { "const": "PARTY_CUSTOMER_MANAGEMENT" } }, "required": ["capabilityFamily"] }, "minContains": 1, "maxContains": 1 },
+      { "contains": { "type": "object", "properties": { "capabilityFamily": { "const": "PRODUCT_ITEM_MANAGEMENT" } }, "required": ["capabilityFamily"] }, "minContains": 1, "maxContains": 1 },
+      { "contains": { "type": "object", "properties": { "capabilityFamily": { "const": "SALES_ORDER_MANAGEMENT" } }, "required": ["capabilityFamily"] }, "minContains": 1, "maxContains": 1 }
+    ] } } } }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "family": { "enum": ["PARTY_CUSTOMER_MANAGEMENT", "PRODUCT_ITEM_MANAGEMENT", "SALES_ORDER_MANAGEMENT"] },
+    "gates": { "type": "object", "additionalProperties": false, "required": ["source", "legal", "history", "integrity", "denominator", "isolation"], "properties": { "source": { "type": "boolean" }, "legal": { "type": "boolean" }, "history": { "type": "boolean" }, "integrity": { "type": "boolean" }, "denominator": { "type": "boolean" }, "isolation": { "type": "boolean" } } },
+    "boundary": { "const": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" } }
+  }
+}

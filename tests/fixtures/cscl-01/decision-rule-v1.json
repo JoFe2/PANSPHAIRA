@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "pansphaira.cscl01/decision-rule/v1",
+  "ruleId": "cscl-01-conservative-decision-rule-v1",
+  "trainingDenominator": 5,
+  "minimumEquivalentTrainingSystems": 4,
+  "evidenceStates": ["SUPPORTED", "VARIANT", "ABSENT", "AMBIGUOUS", "CONFLICTING", "UNMAPPED"],
+  "commonCore": {
+    "completeCellsRequired": 5,
+    "exactEvidenceRequired": true,
+    "unresolvedConflictingCounterexamplesAllowed": 0,
+    "frequencyNameOrShapeAloneQualifies": false,
+    "variantsPreserveAllNonCoreBehavior": true
+  },
+  "candidateFreeze": {
+    "canonicalization": "UTF8_RFC8785_STYLE_SORTED_KEYS_NO_WHITESPACE",
+    "digest": "SHA-256",
+    "mustPrecedeHoldoutSemantics": true,
+    "holdoutMayEditCandidateBytes": false
+  },
+  "holdoutFamilyGo": {
+    "coreIdentityMeaningPreservationRatio": 1,
+    "maximumCoreContradictions": 0,
+    "minimumApplicableMappedRatio": 0.8,
+    "maximumUnmappedRatio": 0.2,
+    "completeDenominatorsRequired": true,
+    "hardGates": ["source", "legal", "history", "integrity", "denominator", "isolation"]
+  },
+  "noFundamentalRewrite": {
+    "maximumCoreDeletions": 0,
+    "maximumCoreRenames": 0,
+    "maximumCoreSemanticMutations": 0,
+    "holdoutAdditionsClassification": "HOLDOUT_EXTENSION_ONLY"
+  },
+  "overall": {
+    "allThreePass": "GO",
+    "oneOrTwoPassWithGreenGates": "NARROW_GO",
+    "otherwise": "FALSIFIED_WITH_EVIDENCE",
+    "hardGateFailure": "FALSIFIED_WITH_EVIDENCE"
+  },
+  "workerLeases": {
+    "systemProfiles": [
+      { "issue": "CSCL-02", "systemId": "odoo-community", "ownedPath": "evidence/cscl-02/odoo-community/" },
+      { "issue": "CSCL-03", "systemId": "erpnext", "ownedPath": "evidence/cscl-03/erpnext/" },
+      { "issue": "CSCL-04", "systemId": "dolibarr", "ownedPath": "evidence/cscl-04/dolibarr/" },
+      { "issue": "CSCL-05", "systemId": "tryton", "ownedPath": "evidence/cscl-05/tryton/" },
+      { "issue": "CSCL-06", "systemId": "apache-ofbiz", "ownedPath": "evidence/cscl-06/apache-ofbiz/" }
+    ],
+    "capabilityFamilies": [
+      { "issue": "CSCL-08", "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT", "ownedPath": "evidence/cscl-08/party-customer-management/" },
+      { "issue": "CSCL-09", "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT", "ownedPath": "evidence/cscl-09/product-item-management/" },
+      { "issue": "CSCL-10", "capabilityFamily": "SALES_ORDER_MANAGEMENT", "ownedPath": "evidence/cscl-10/sales-order-management/" }
+    ],
+    "oneWriterPerOwnedPath": true,
+    "crossLeaseWritesForbidden": true
+  },
+  "boundary": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" }
+}

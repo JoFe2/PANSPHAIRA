@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/cscl-01/evidence-cell-v1.schema.json",
+  "title": "CSCL-01 closed evidence cell v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "systemId", "questionId", "state", "equivalenceProof", "evidence", "counterexamples", "boundary"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cscl01/evidence-cell/v1" },
+    "systemId": { "enum": ["odoo-community", "erpnext", "dolibarr", "tryton", "apache-ofbiz", "idempiere"] },
+    "questionId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+    "state": { "enum": ["SUPPORTED", "VARIANT", "ABSENT", "AMBIGUOUS", "CONFLICTING", "UNMAPPED"] },
+    "equivalenceProof": { "type": "object", "additionalProperties": false, "required": ["nativeMeaningSha256", "candidateMeaningSha256"], "properties": { "nativeMeaningSha256": { "$ref": "#/$defs/digest" }, "candidateMeaningSha256": { "$ref": "#/$defs/digest" } } },
+    "evidence": { "type": "array", "minItems": 1, "maxItems": 64, "items": { "$ref": "#/$defs/reference" } },
+    "counterexamples": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 2048 } },
+    "boundary": { "$ref": "#/$defs/boundary" }
+  },
+  "allOf": [
+    { "if": { "properties": { "state": { "enum": ["ABSENT", "CONFLICTING"] } }, "required": ["state"] }, "then": { "properties": { "counterexamples": { "type": "array", "minItems": 1 } } } }
+  ],
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "reference": { "type": "object", "additionalProperties": false, "required": ["sourceFactId", "exactLocator", "excerptSha256"], "properties": { "sourceFactId": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" }, "exactLocator": { "type": "string", "minLength": 1, "maxLength": 1024 }, "excerptSha256": { "$ref": "#/$defs/digest" } } },
+    "boundary": { "const": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" } }
+  }
+}

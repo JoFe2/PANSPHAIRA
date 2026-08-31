@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/cscl-01/process-pattern-candidate-v1.schema.json",
+  "title": "CSCL-01 frozen process pattern candidate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "candidateId", "capabilityFamily", "status", "questionInventoryDigest", "decisionRuleDigest", "trainingProfileDigests", "steps", "states", "transitions", "events", "preconditions", "invariants", "exceptions", "readbacks", "variants", "absences", "ambiguities", "counterexamples", "candidateBytesSha256", "boundary", "candidateDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cscl01/process-pattern-candidate/v1" },
+    "candidateId": { "$ref": "#/$defs/id" },
+    "capabilityFamily": { "$ref": "#/$defs/family" },
+    "status": { "const": "FROZEN_NON_AUTHORITATIVE_CANDIDATE" },
+    "questionInventoryDigest": { "$ref": "#/$defs/digest" },
+    "decisionRuleDigest": { "$ref": "#/$defs/digest" },
+    "trainingProfileDigests": { "$ref": "#/$defs/fiveDigests" },
+    "steps": { "$ref": "#/$defs/elements" },
+    "states": { "$ref": "#/$defs/elements" },
+    "transitions": { "$ref": "#/$defs/elements" },
+    "events": { "$ref": "#/$defs/elements" },
+    "preconditions": { "$ref": "#/$defs/elements" },
+    "invariants": { "$ref": "#/$defs/elements" },
+    "exceptions": { "$ref": "#/$defs/elements" },
+    "readbacks": { "$ref": "#/$defs/elements" },
+    "variants": { "$ref": "#/$defs/elements" },
+    "absences": { "$ref": "#/$defs/elements" },
+    "ambiguities": { "$ref": "#/$defs/elements" },
+    "counterexamples": { "$ref": "#/$defs/elements" },
+    "candidateBytesSha256": { "$ref": "#/$defs/digest" },
+    "boundary": { "$ref": "#/$defs/boundary" },
+    "candidateDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "family": { "enum": ["PARTY_CUSTOMER_MANAGEMENT", "PRODUCT_ITEM_MANAGEMENT", "SALES_ORDER_MANAGEMENT"] },
+    "fiveDigests": { "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true, "items": { "$ref": "#/$defs/digest" } },
+    "element": { "type": "object", "additionalProperties": false, "required": ["id", "meaning", "conceptDigest", "evidenceCellDigests"], "properties": { "id": { "$ref": "#/$defs/id" }, "meaning": { "type": "string", "minLength": 1, "maxLength": 4096 }, "conceptDigest": { "$ref": "#/$defs/digest" }, "evidenceCellDigests": { "$ref": "#/$defs/fiveDigests" } } },
+    "elements": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/element" } },
+    "boundary": { "const": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" } }
+  }
+}
