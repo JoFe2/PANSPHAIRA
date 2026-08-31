@@ -1,0 +1,3684 @@
+{
+  "schemaVersion": "pansphaira.cscl06/apache-ofbiz-profile-build/v1",
+  "source": {
+    "commit": "42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+    "kind": "ANNOTATED_GIT_TAG_AND_PEELED_COMMIT",
+    "officialRepository": "https://github.com/apache/ofbiz-framework.git",
+    "selector": "refs/tags/release24.09.07",
+    "tagObject": "12b6d40382ac38d3252df78781f9877d46f5f9f7",
+    "version": "release24.09.07"
+  },
+  "corpus": {
+    "members": [
+      {
+        "path": "LICENSE",
+        "byteLength": 12097,
+        "sha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021"
+      },
+      {
+        "path": "NOTICE",
+        "byteLength": 166,
+        "sha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34"
+      },
+      {
+        "path": "applications/datamodel/entitydef/party-entitymodel.xml",
+        "byteLength": 154245,
+        "sha256": "faa79dfd90fb1403b0b3012002881f94101bb2d138e801e532c63e0ce3d6ccb5"
+      },
+      {
+        "path": "applications/datamodel/entitydef/product-entitymodel.xml",
+        "byteLength": 273984,
+        "sha256": "9821c27fd5b00f6f7fc7f6be99a475d6a07a94fc8c42fb1cdb2454f0e0449341"
+      },
+      {
+        "path": "applications/datamodel/entitydef/order-entitymodel.xml",
+        "byteLength": 158309,
+        "sha256": "f2ab886b766185ceeaae52c0124d90c3bf2caa2cab45afbba3c8ece5f7d4a976"
+      },
+      {
+        "path": "applications/datamodel/data/seed/PartySeedData.xml",
+        "byteLength": 50115,
+        "sha256": "7858558668cc3d10a310061c96c506c1babae6c432e8a6ce7162e07017f8a227"
+      },
+      {
+        "path": "applications/datamodel/data/seed/ProductSeedData.xml",
+        "byteLength": 83134,
+        "sha256": "ddb97b5d8a0ea68e9b037712bfd78a6e9b8a8c33be424323ba503c06d2d4b076"
+      },
+      {
+        "path": "applications/datamodel/data/seed/OrderSeedData.xml",
+        "byteLength": 42033,
+        "sha256": "ad6be0c9c7f6d58dac59aa189972096b3ae06155b99f2dbc514bc3527d603c79"
+      },
+      {
+        "path": "applications/party/servicedef/services.xml",
+        "byteLength": 112366,
+        "sha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      {
+        "path": "applications/party/servicedef/services_party.xml",
+        "byteLength": 8954,
+        "sha256": "5c2f21cafb83678fa64acf98c7cde8fdc6ffb5466fd9c54669a4e3b4a51a4845"
+      },
+      {
+        "path": "applications/party/src/docs/asciidoc/party.adoc",
+        "byteLength": 3339,
+        "sha256": "7117a71f31d280f89ac6c8b1acaa424fc55961510117d47e797d73eb78c22c3b"
+      },
+      {
+        "path": "applications/product/servicedef/services.xml",
+        "byteLength": 128825,
+        "sha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      {
+        "path": "applications/product/src/docs/asciidoc/product.adoc",
+        "byteLength": 3340,
+        "sha256": "f22e9bd488594839ed2ed89976826db9c651772d808673e58517063cb7a708ac"
+      },
+      {
+        "path": "applications/order/servicedef/services.xml",
+        "byteLength": 112722,
+        "sha256": "ea50e28f8256c8fdd4f71ef1cd20d16c4b56cec9c5e4edf2930bf7887f844151"
+      },
+      {
+        "path": "applications/order/servicedef/services_order.xml",
+        "byteLength": 20379,
+        "sha256": "028bb94c5b0727b3e524d09eac96c05b2b90b068fd45223ab2440afc1363235e"
+      },
+      {
+        "path": "applications/order/src/docs/asciidoc/order.adoc",
+        "byteLength": 8681,
+        "sha256": "bde85a9bad40fdf9ed103cfb4288a6b95022eaa2a5044c9ee0efc49b40e432f5"
+      },
+      {
+        "path": "applications/order/src/docs/asciidoc/_include/order-status-diagrams.adoc",
+        "byteLength": 1865,
+        "sha256": "1cbcb6936543dfc72da17d996264dc4fd1749585749d395333f7f163d35729a9"
+      },
+      {
+        "path": "applications/order/src/docs/asciidoc/_include/order-create-order-diagrams.adoc",
+        "byteLength": 2908,
+        "sha256": "517d8990f255d2eb1460c24870f45309e1b924bcaf79607555a6ee134073d83e"
+      }
+    ],
+    "totalRawBytes": 1177462,
+    "capBytes": 20971520
+  },
+  "facts": [
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.objects-roles.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--objects-roles",
+      "claim": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "7117a71f31d280f89ac6c8b1acaa424fc55961510117d47e797d73eb78c22c3b"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=772-1040",
+        "excerptSha256": "b35900c33277b3d0e67177fed28b4967b143c3bd506d893b3f7ede9dda0d3b01",
+        "byteStart": 772,
+        "byteEnd": 1040
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.relations.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--relations",
+      "claim": "PartyRelationship relates From and To Party and PartyRole values using partyIdFrom, partyIdTo, roleTypeIdFrom, and roleTypeIdTo.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "faa79dfd90fb1403b0b3012002881f94101bb2d138e801e532c63e0ce3d6ccb5"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/entitydef/party-entitymodel.xml#bytes=113485-116537",
+        "excerptSha256": "34a6239198848f29310b67771006b6e11a60ea31addd71bd933bf90ac202244f",
+        "byteStart": 113485,
+        "byteEnd": 116537
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "19aad719f2de4cdebe5e424dcfb1fdad18fd302ae9670b31307c20cebc36c453"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.operations.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--operations",
+      "claim": "The service boundary defines createPerson as an OFBiz operation for Person.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/servicedef/services.xml#bytes=4044-5185",
+        "excerptSha256": "e1b3552e0c02668526f0eef5c40f930c917c9031cef09b240f876352b0fc86b5",
+        "byteStart": 4044,
+        "byteEnd": 5185
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "9fc730d92a2ef262a1125e8dff8a1c84d05460fb1c53df5eb28fef5c2f1c2067"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.inputs-outputs.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--inputs-outputs",
+      "claim": "createPerson accepts Person attributes and returns the Person primary key as output.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/servicedef/services.xml#bytes=4044-5185",
+        "excerptSha256": "e1b3552e0c02668526f0eef5c40f930c917c9031cef09b240f876352b0fc86b5",
+        "byteStart": 4044,
+        "byteEnd": 5185
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "e2334fc0eddaa29953ce179e139f372bbba147d4e6b0dedd31ad6a0308a94551"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.states-transitions.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--states-transitions",
+      "claim": "setPartyStatus takes partyId and statusId and requires the statusId change to be defined in StatusValidChange.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+        "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02",
+        "byteStart": 3136,
+        "byteEnd": 4042
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "e4dd64adf1762c3feb70c0a81d972a38f8ac993e9e5534c0eb2725b16247f9b5"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.events.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--events",
+      "claim": "setPartyStatus returns the original statusId as oldStatusId so ECA conditions can check whether party status actually changed.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+        "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02",
+        "byteStart": 3136,
+        "byteEnd": 4042
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "2539a288587f65b6f053a2faf3501ea06f12c2de0e863290c403ea73680bddad"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.preconditions.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--preconditions",
+      "claim": "setPartyStatus requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission and a StatusValidChange.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+        "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02",
+        "byteStart": 3136,
+        "byteEnd": 4042
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "b8ac2b7fff389de6f42af22e16214922777a4123351fda8d1ab79160d9da1f78"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.invariants.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--invariants",
+      "claim": "Party ID is the system string that uniquely identifies the Party.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "7117a71f31d280f89ac6c8b1acaa424fc55961510117d47e797d73eb78c22c3b"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=1608-1711",
+        "excerptSha256": "632bdb5883abb4a47122148eb008a18b58d680fa71fdc415a96c5df4f7cc3146",
+        "byteStart": 1608,
+        "byteEnd": 1711
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "01ca30bf4c4c2b58481e86bbdadaa063c9b3be64c127acc84517a7c1d9c2afb1"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.exceptions-errors.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--exceptions-errors",
+      "claim": "setPartyStatus fails when the statusId change is not defined in StatusValidChange.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+        "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02",
+        "byteStart": 3136,
+        "byteEnd": 4042
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "d9c89b1ba4ad4f72f9a9db7c4aa54a963672dcd89380564d96672019699dca43"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.readbacks.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--readbacks",
+      "claim": "Find Party presents a result list and Party details expose the complete list of user logins.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "7117a71f31d280f89ac6c8b1acaa424fc55961510117d47e797d73eb78c22c3b"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=1228-2021",
+        "excerptSha256": "bde4c1523858aa0a790e70e95024a8ab379345ea0642bc34520aaf99d6eed655",
+        "byteStart": 1228,
+        "byteEnd": 2021
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "6c1625c0b2ac53e845e12e0be5f6f30a9929034df6c9c10f41aa1b329554b18d"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.api-service-exposure.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--api-service-exposure",
+      "claim": "createPerson is exposed as an OFBiz java service using PartyServices.createPerson with auth set to false.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "4014d63d9e8ea2a94e271a6ace4c18ae1aedce0bfca50e2709bb71808c516d12"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/servicedef/services.xml#bytes=4044-5185",
+        "excerptSha256": "e1b3552e0c02668526f0eef5c40f930c917c9031cef09b240f876352b0fc86b5",
+        "byteStart": 4044,
+        "byteEnd": 5185
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "38f602499dd3a56e39a3943d17935e4e5f7dc642d3d9039264cfbdf0cf095db3"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.party-customer-management.absence-ambiguity-conflict.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "party-customer-management--absence-ambiguity-conflict",
+      "claim": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "7117a71f31d280f89ac6c8b1acaa424fc55961510117d47e797d73eb78c22c3b"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=898-1040",
+        "excerptSha256": "99962d3da5d14e6a45bbac7b3c13eef63599c11dad470801c2f5b50acf9a4a94",
+        "byteStart": 898,
+        "byteEnd": 1040
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.objects-roles.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--objects-roles",
+      "claim": "Catalog Manager manages Product, Catalog, and Category information; Product can be physical or digital.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "f22e9bd488594839ed2ed89976826db9c651772d808673e58517063cb7a708ac"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/src/docs/asciidoc/product.adoc#bytes=774-1189",
+        "excerptSha256": "127035ae8421016d0ada65c5405884d23489a675123fe9baadec71c0713bc3d0",
+        "byteStart": 774,
+        "byteEnd": 1189
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.relations.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--relations",
+      "claim": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "9821c27fd5b00f6f7fc7f6be99a475d6a07a94fc8c42fb1cdb2454f0e0449341"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=156281-158365",
+        "excerptSha256": "7a3e7c15110b650a17ed1aba3753f0a799e079c4e517db96eb5231c5cd0646f0",
+        "byteStart": 156281,
+        "byteEnd": 158365
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.operations.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--operations",
+      "claim": "The product service boundary defines createProduct and updateProduct operations.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+        "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367",
+        "byteStart": 1754,
+        "byteEnd": 2302
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "2123a43465668aa7bbb0bdc85dc1ed85b09cb3f250a77776ae87737cfb7949ae"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.inputs-outputs.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--inputs-outputs",
+      "claim": "createProduct takes productTypeId and internalName as required inputs and productId as optional INOUT primary key.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+        "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367",
+        "byteStart": 1754,
+        "byteEnd": 2302
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "73be4c72b74fd7ecca5b82a0c6e1f854c9eed46b5e57997bc8ed3125184b74bf"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.states-transitions.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--states-transitions",
+      "claim": "Product records introductionDate, releaseDate, supportDiscontinuationDate, and salesDiscontinuationDate lifecycle dates.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "9821c27fd5b00f6f7fc7f6be99a475d6a07a94fc8c42fb1cdb2454f0e0449341"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=147009-147734",
+        "excerptSha256": "9942d5e91965e6deb7810b46a18b5daf2235d6c4b7ff9b9c4639b2a9d7213fa5",
+        "byteStart": 147009,
+        "byteEnd": 147734
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.events.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--events",
+      "claim": "discontinueProductSales is a groovy service that discontinues Product sales for a required productId.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/servicedef/services.xml#bytes=11708-12102",
+        "excerptSha256": "8f8b2a1cfb66ba4ff06230ce91ac0db17d7b5563c6a76aab8a3a9689edb95aba",
+        "byteStart": 11708,
+        "byteEnd": 12102
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "0356809d9c0dabb80199e862c2c8bbcb41e4a286cfa6fc07b6f14c6f1bbe3bfe"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.preconditions.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--preconditions",
+      "claim": "createProduct is authenticated and requires productTypeId and internalName.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+        "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367",
+        "byteStart": 1754,
+        "byteEnd": 2302
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "da25b8d5fda8f0cac1c6910abc183d8dfa63e7c287f91398d904d860bb9f9314"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.invariants.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--invariants",
+      "claim": "Product has productId as its primary key and relates to ProductType.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "9821c27fd5b00f6f7fc7f6be99a475d6a07a94fc8c42fb1cdb2454f0e0449341"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=147009-152778",
+        "excerptSha256": "08976ff1a7ac6a9dfbb984c887acfa0815759f23a16475f9a30a9b34906aa79b",
+        "byteStart": 147009,
+        "byteEnd": 152778
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "f61327a3a4c3c9fae3c41cf6d96024b70f62cf8929c4e8b123af05cbe98a4c78"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.exceptions-errors.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--exceptions-errors",
+      "claim": "The createProduct contract marks productTypeId and internalName non-optional but names no fail-property in that service block.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+        "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367",
+        "byteStart": 1754,
+        "byteEnd": 2302
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "d0acdff2a1764206cf5033d5aca03539592561cf6bff9c6fe1b30fa4fae6c97c"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.readbacks.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--readbacks",
+      "claim": "createProduct exposes the Product primary key as INOUT, providing the created Product identifier as observable output.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+        "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367",
+        "byteStart": 1754,
+        "byteEnd": 2302
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "d52fef948bbcd6914ffc62d06d264b93fbaf5d05b65bc9b187ae5384ce1c9212"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.api-service-exposure.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--api-service-exposure",
+      "claim": "createProduct is exposed through an authenticated groovy OFBiz service invoking ProductServicesScript.groovy.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "69f806fd192cf9a66b651dc5295c29fde1eebea2fac439ed3c691caad55393d6"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+        "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367",
+        "byteStart": 1754,
+        "byteEnd": 2302
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "0ed17af4051916e611b251791aff3555e0e05dd1cc33784c89134824c0dafc0b"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.product-item-management.absence-ambiguity-conflict.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "product-item-management--absence-ambiguity-conflict",
+      "claim": "The Product entity has lifecycle date fields but no statusId field; this capture does not normalize those dates into a Product status workflow.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "9821c27fd5b00f6f7fc7f6be99a475d6a07a94fc8c42fb1cdb2454f0e0449341"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=147009-156280",
+        "excerptSha256": "c094e06a751c4ea51040c8b12b08531b5b202a0f95e0adfddc318c205e628c32",
+        "byteStart": 147009,
+        "byteEnd": 156280
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "b84daaee303af688270f9e914ea8275fb8de5960f26345202b806fc181844ac5"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.objects-roles.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--objects-roles",
+      "claim": "A sales order concerns a customer, ordered products or services, payment term and method, billing and shipping addresses, and delivery instructions.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "bde85a9bad40fdf9ed103cfb4288a6b95022eaa2a5044c9ee0efc49b40e432f5"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=994-1711",
+        "excerptSha256": "558b15c7b45b37ee9236b7958ec85607dfdf51419ab5a169f80c4a7b03cf640c",
+        "byteStart": 994,
+        "byteEnd": 1711
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.relations.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--relations",
+      "claim": "OrderRole relates OrderHeader, Party, PartyRole, RoleType, and OrderItem using orderId, partyId, and roleTypeId.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "f2ab886b766185ceeaae52c0124d90c3bf2caa2cab45afbba3c8ece5f7d4a976"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/entitydef/order-entitymodel.xml#bytes=61134-62250",
+        "excerptSha256": "a66a2ca4bf8adebaf4aa1fd912597ca6f06e64dfb248bc0017ff92ee8ed9bb6d",
+        "byteStart": 61134,
+        "byteEnd": 62250
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "37aafb4c527aac3d8a257d9a7b7983fad6877112dc89eb0ec171b805e34e6819"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.operations.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--operations",
+      "claim": "Order entry captures Product Store and Customer Details, adds items to cart, sets shipping and payment terms, and creates the Order.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "517d8990f255d2eb1460c24870f45309e1b924bcaf79607555a6ee134073d83e"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/src/docs/asciidoc/_include/order-create-order-diagrams.adoc#bytes=1495-1680",
+        "excerptSha256": "9f32d6d3f72a6e73a6c22ca36724be66400ce4bcbb5b45da4cf7a95aef43e6eb",
+        "byteStart": 1495,
+        "byteEnd": 1680
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "637b14fca4ea59576708be76b722d8851b7590e59a0e048ac3d3d1d0b48fa126"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.inputs-outputs.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--inputs-outputs",
+      "claim": "createOrderFromShoppingCart takes shoppingCart as INOUT and returns orderId as OUT.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "ea50e28f8256c8fdd4f71ef1cd20d16c4b56cec9c5e4edf2930bf7887f844151"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/servicedef/services.xml#bytes=12801-13199",
+        "excerptSha256": "50349af9c8e07bf8747c462c72ffcbef8d445aa4170243b724f08eef86500428",
+        "byteStart": 12801,
+        "byteEnd": 13199
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "69fdfd9f8efbc6561c5913cf832c3d9a58e15f81492e0cd83172b2fa9572be6b"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.states-transitions.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--states-transitions",
+      "claim": "ORDER_STATUS defines Created, Processing, Approved, Sent, Held, Completed, Rejected, and Cancelled with explicit StatusValidChange rows.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "ad6be0c9c7f6d58dac59aa189972096b3ae06155b99f2dbc514bc3527d603c79"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/data/seed/OrderSeedData.xml#bytes=9494-13637",
+        "excerptSha256": "b9b3e272af92809eeffb4a8ada5f8953020a25efdd83a1c2bebd96a922ee9162",
+        "byteStart": 9494,
+        "byteEnd": 13637
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "448cf5f1e0f8350f446b13c7a13de7db4eabb3bc8919388a0b2291c45a2796df"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.events.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--events",
+      "claim": "StatusValidChange transition names include Process Order, Approve Order, Hold Order, Reject Order, Cancel Order, Send Order, and Complete Order.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "ad6be0c9c7f6d58dac59aa189972096b3ae06155b99f2dbc514bc3527d603c79"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/data/seed/OrderSeedData.xml#bytes=11470-13417",
+        "excerptSha256": "99210944364056fe237e6d82a83fec83b6d33a673bfadbc23c3b55ee7e21a595",
+        "byteStart": 11470,
+        "byteEnd": 13417
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "8018b6935ab74c3d8ea7213effd7f688698a94aa4a54fadc41aa790445edf7ef"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.preconditions.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--preconditions",
+      "claim": "Approved Order guidance requires checking shipping information, billing details, and requested shipping dates before Approve Order.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "1cbcb6936543dfc72da17d996264dc4fd1749585749d395333f7f163d35729a9"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/src/docs/asciidoc/_include/order-status-diagrams.adoc#bytes=1507-1864",
+        "excerptSha256": "1b1a444649b57c5be199d12263e4da9be56bdafd4c0f0dda27636be31ac7797a",
+        "byteStart": 1507,
+        "byteEnd": 1864
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "d95daf028c41318740d5e3d78adec8cf33442fd2e3197d1c293721dc9223c1e7"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.invariants.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--invariants",
+      "claim": "Sales Order document is created with a unique reference number used for customer service and issue reporting.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "bde85a9bad40fdf9ed103cfb4288a6b95022eaa2a5044c9ee0efc49b40e432f5"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=1713-2185",
+        "excerptSha256": "42d71f5aabe682ccefe4b0f6bddb92dec3e9dfc9b1d240573862e2b5fff4b8d6",
+        "byteStart": 1713,
+        "byteEnd": 2185
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "9ab51666420f93df90bd3b8d4d84977a2ed0be8b8dc8d51b5bc17a734e181d1f"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.exceptions-errors.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--exceptions-errors",
+      "claim": "callProcessOrderPayments requires shoppingCart and binds a missing value to OrderRequiredFieldMissingShoppingCart.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "ea50e28f8256c8fdd4f71ef1cd20d16c4b56cec9c5e4edf2930bf7887f844151"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/servicedef/services.xml#bytes=12220-12800",
+        "excerptSha256": "346cbddfa07b34b650ce4038b6776d364d461f26bb28fc2d52db33fefb542d72",
+        "byteStart": 12220,
+        "byteEnd": 12800
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "1d1d22a9a5bf5f25efafa60b13ebefc915f48f9cbd5cf219698bdf04703ee7df"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.readbacks.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--readbacks",
+      "claim": "Current order status tells the state at a given time; Find Orders lists existing Orders for completion or modification.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "bde85a9bad40fdf9ed103cfb4288a6b95022eaa2a5044c9ee0efc49b40e432f5"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=2187-5608",
+        "excerptSha256": "19f00eff14d3962f77203a793e1086f2f06dadfe79019a09a5128ea44345032a",
+        "byteStart": 2187,
+        "byteEnd": 5608
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "fbc3da4a35ff9a374b0b78d66cbcac75339385d2286c6139f370807931ecd84f"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.api-service-exposure.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--api-service-exposure",
+      "claim": "changeOrderStatus is an authenticated java OFBiz service invoking setOrderStatus and returning oldStatusId and orderStatusId.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "ea50e28f8256c8fdd4f71ef1cd20d16c4b56cec9c5e4edf2930bf7887f844151"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/servicedef/services.xml#bytes=21772-22909",
+        "excerptSha256": "b8a074f30b9f1627743f768a73677282698f54819d0fb65f11a71dd1d52c9307",
+        "byteStart": 21772,
+        "byteEnd": 22909
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "7f4988cadb8f3dd9e68078231dde79c86c6e1da5648bd87192964539daca2e0a"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.absence-ambiguity-conflict.1",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--absence-ambiguity-conflict",
+      "claim": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "bde85a9bad40fdf9ed103cfb4288a6b95022eaa2a5044c9ee0efc49b40e432f5"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=7759-7841",
+        "excerptSha256": "31a2239bdaeee36b8907f8e7cc725ea31bc27d0b887bb3e2ffb60bdf323b15ad",
+        "byteStart": 7759,
+        "byteEnd": 7841
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "57c4480025ee315c3c627e7b9294bf641aa5c8448e09cbcac04f4ba1ebdef447"
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+      "factId": "ofbiz.sales-order-management.absence-ambiguity-conflict.2",
+      "systemId": "apache-ofbiz",
+      "systemRole": "TRAINING",
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "sales-order-management--absence-ambiguity-conflict",
+      "claim": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+      "sourceIdentity": {
+        "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+        "immutableSelector": "tag:12b6d40382ac38d3252df78781f9877d46f5f9f7;commit:42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+        "sourceBytesSha256": "ad6be0c9c7f6d58dac59aa189972096b3ae06155b99f2dbc514bc3527d603c79"
+      },
+      "exactEvidence": {
+        "exactLocator": "applications/datamodel/data/seed/OrderSeedData.xml#bytes=12776-13526",
+        "excerptSha256": "975ee5e691def505867d35d2085d29b0c5d12000662514cf125e15c847a2ed24",
+        "byteStart": 12776,
+        "byteEnd": 13526
+      },
+      "legal": {
+        "licenseId": "Apache-2.0",
+        "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+        "obligations": [
+          "PRESERVE_LICENSE",
+          "PRESERVE_NOTICE_AND_ATTRIBUTION",
+          "MARK_MODIFIED_FILES",
+          "STATE_CHANGES"
+        ],
+        "noticeStatus": "PRESENT",
+        "noticeUrl": "https://raw.githubusercontent.com/apache/ofbiz-framework/42819e5ae1d5339d3a204ac06b43e69d46a9c0ae/NOTICE",
+        "noticeBytes": 166,
+        "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+        "attribution": []
+      },
+      "parser": {
+        "id": "cscl06-exact-byte-parser",
+        "version": "1.0.0"
+      },
+      "canonicalizer": {
+        "id": "cscl06-canonical-json",
+        "version": "1.0.0"
+      },
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      },
+      "factDigest": "89844bc6b1e3783027dbd52a3c0b738f27506877862c35b97230c4d33fd314be"
+    }
+  ],
+  "cells": [
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--objects-roles",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "9431af6ef1694f1f487fd23285ac9dd4919a38bc11a904a4b422a24a6f20b130",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.objects-roles.1",
+          "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=772-1040",
+          "excerptSha256": "b35900c33277b3d0e67177fed28b4967b143c3bd506d893b3f7ede9dda0d3b01"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--relations",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "ad2cce1ce3d2106c4d007ebd62aae1833fd93381affa2b12d873ce2949b774c8",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.relations.1",
+          "exactLocator": "applications/datamodel/entitydef/party-entitymodel.xml#bytes=113485-116537",
+          "excerptSha256": "34a6239198848f29310b67771006b6e11a60ea31addd71bd933bf90ac202244f"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--operations",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "6b87ba623767f836f74ed2f2accf6cbf8040cf1e582e03c31eb779bb578ebe90",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.operations.1",
+          "exactLocator": "applications/party/servicedef/services.xml#bytes=4044-5185",
+          "excerptSha256": "e1b3552e0c02668526f0eef5c40f930c917c9031cef09b240f876352b0fc86b5"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--inputs-outputs",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "07342a1912957bd05385993c19a1108c6843a0f934a50adabe4fd71c043419a2",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.inputs-outputs.1",
+          "exactLocator": "applications/party/servicedef/services.xml#bytes=4044-5185",
+          "excerptSha256": "e1b3552e0c02668526f0eef5c40f930c917c9031cef09b240f876352b0fc86b5"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--states-transitions",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "4e059bb9deeb4995cfce6a310051aa31180038e6d824775bbcf9545fd0f32378",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.states-transitions.1",
+          "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+          "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--events",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "791e28379958c191dbdfe7cb72110bfe94c172ca33aea4fb1c6a2dc6eb88eef6",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.events.1",
+          "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+          "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--preconditions",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "346514471b81f3b44d98cec32f6c22cd3f9eaa73ca66176a91f7a74599f00f05",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.preconditions.1",
+          "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+          "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--invariants",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "feea9acd5b2df9f250cb9ede8e16b5a05346ea104f15a9cb12322f1a9d0997b0",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.invariants.1",
+          "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=1608-1711",
+          "excerptSha256": "632bdb5883abb4a47122148eb008a18b58d680fa71fdc415a96c5df4f7cc3146"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--exceptions-errors",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "20fb999ad339028b5487ee55e0ffd89e76c52e255ea663958ffc64dda1b5466a",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.exceptions-errors.1",
+          "exactLocator": "applications/party/servicedef/services.xml#bytes=3136-4042",
+          "excerptSha256": "359857a88ef45aec613d00f296fb2fc2b5477ad4e64192756926020ceb570c02"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--readbacks",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "528a9094738f27f2ba9dd05dbb5f6eaceabf93abf2a7705a7be8b759d06063bb",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.readbacks.1",
+          "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=1228-2021",
+          "excerptSha256": "bde4c1523858aa0a790e70e95024a8ab379345ea0642bc34520aaf99d6eed655"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--api-service-exposure",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "1a7f83380fa91448b8956271ba0d14c38cafe529ad0b9986057300b656cc37db",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.api-service-exposure.1",
+          "exactLocator": "applications/party/servicedef/services.xml#bytes=4044-5185",
+          "excerptSha256": "e1b3552e0c02668526f0eef5c40f930c917c9031cef09b240f876352b0fc86b5"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "party-customer-management--absence-ambiguity-conflict",
+      "state": "AMBIGUOUS",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "1956ef250b00d0717dc76ea3ebbcc34e0a0419947b17c92cd5a490f387442168",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.party-customer-management.absence-ambiguity-conflict.1",
+          "exactLocator": "applications/party/src/docs/asciidoc/party.adoc#bytes=898-1040",
+          "excerptSha256": "99962d3da5d14e6a45bbac7b3c13eef63599c11dad470801c2f5b50acf9a4a94"
+        }
+      ],
+      "counterexamples": [
+        "Customer is documented as managed terminology, not as an exclusive Person or PartyGroup entity type in this captured evidence."
+      ],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--objects-roles",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "7e61d4c82a955e66024f9c203c5a1d4504c6c44b58f9b4165680a79e06bfe4ab",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.objects-roles.1",
+          "exactLocator": "applications/product/src/docs/asciidoc/product.adoc#bytes=774-1189",
+          "excerptSha256": "127035ae8421016d0ada65c5405884d23489a675123fe9baadec71c0713bc3d0"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--relations",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "34cfccacdbbb5aa3fb6655356b033494cb9b72cfbe98aaa9be1a1a31ecc40c28",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.relations.1",
+          "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=156281-158365",
+          "excerptSha256": "7a3e7c15110b650a17ed1aba3753f0a799e079c4e517db96eb5231c5cd0646f0"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--operations",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "dae9a246208ece25b368c4fb84915f2dab6f960c80c22fbc5960d0c5727e2c7f",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.operations.1",
+          "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+          "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--inputs-outputs",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "7b5672e6a172db0de47873aa4e4dbd1f9770dacb8bcb63f3df64dae491714bb5",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.inputs-outputs.1",
+          "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+          "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--states-transitions",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "23a514cbd544233b7d2400e953f9b41c93d22b5fe532971a80f23178d661bc3f",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.states-transitions.1",
+          "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=147009-147734",
+          "excerptSha256": "9942d5e91965e6deb7810b46a18b5daf2235d6c4b7ff9b9c4639b2a9d7213fa5"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--events",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "5157e0460e840a9fbaa90f8d6dad38da9722348272d5efd3dd3458c26a38cde6",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.events.1",
+          "exactLocator": "applications/product/servicedef/services.xml#bytes=11708-12102",
+          "excerptSha256": "8f8b2a1cfb66ba4ff06230ce91ac0db17d7b5563c6a76aab8a3a9689edb95aba"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--preconditions",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "7d17fe3e1bde5c9d2e7ef968ebe0bb5f19b1f519bafd1151ec28000ab0e23434",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.preconditions.1",
+          "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+          "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--invariants",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "9e7c4e07cbb79dac0bac928971611117b19f1ddf1a8f3c3aa951b081feeff80e",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.invariants.1",
+          "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=147009-152778",
+          "excerptSha256": "08976ff1a7ac6a9dfbb984c887acfa0815759f23a16475f9a30a9b34906aa79b"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--exceptions-errors",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "606dbd4296e214d61e537362d5e9ca6365c0a60662b6584d35ffeeab0eccd6e2",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.exceptions-errors.1",
+          "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+          "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--readbacks",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "9c9f77dfc242433779c1ca3df702b7d71be4435d418bf6d2516239727a279a9d",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.readbacks.1",
+          "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+          "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--api-service-exposure",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "db4f5d96da8a62e1aa22b74b4eaee10c389cb42b8069bcedefdde4007aaa22ff",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.api-service-exposure.1",
+          "exactLocator": "applications/product/servicedef/services.xml#bytes=1754-2302",
+          "excerptSha256": "345b4159d121c7069376d5c13b86db405c2b049beb192d879c70bd09e4d1c367"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "product-item-management--absence-ambiguity-conflict",
+      "state": "ABSENT",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "c5a6362bf0d92922519c13428816491968d792d138ddbb8e319814a97c14f03b",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.product-item-management.absence-ambiguity-conflict.1",
+          "exactLocator": "applications/datamodel/entitydef/product-entitymodel.xml#bytes=147009-156280",
+          "excerptSha256": "c094e06a751c4ea51040c8b12b08531b5b202a0f95e0adfddc318c205e628c32"
+        }
+      ],
+      "counterexamples": [
+        "The complete captured Product entity block contains no field named statusId."
+      ],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--objects-roles",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "3ecf57b3d5484893b0c57c4b97d5728a2791de78eabcaa3b3bc9a2eabf248487",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.objects-roles.1",
+          "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=994-1711",
+          "excerptSha256": "558b15c7b45b37ee9236b7958ec85607dfdf51419ab5a169f80c4a7b03cf640c"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--relations",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "72acdc03aba83f9a1cef21bb541ad925ede570c7b93612c1437816aa711b758a",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.relations.1",
+          "exactLocator": "applications/datamodel/entitydef/order-entitymodel.xml#bytes=61134-62250",
+          "excerptSha256": "a66a2ca4bf8adebaf4aa1fd912597ca6f06e64dfb248bc0017ff92ee8ed9bb6d"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--operations",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "d0f3c37a599a8872a5fe7027aa9497f4b892fef5011de4048620afecf1296240",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.operations.1",
+          "exactLocator": "applications/order/src/docs/asciidoc/_include/order-create-order-diagrams.adoc#bytes=1495-1680",
+          "excerptSha256": "9f32d6d3f72a6e73a6c22ca36724be66400ce4bcbb5b45da4cf7a95aef43e6eb"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--inputs-outputs",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "ef5b932288e24e7d9648308690ab0bc818dab7e73f547d75c4ba4df70996d6bb",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.inputs-outputs.1",
+          "exactLocator": "applications/order/servicedef/services.xml#bytes=12801-13199",
+          "excerptSha256": "50349af9c8e07bf8747c462c72ffcbef8d445aa4170243b724f08eef86500428"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--states-transitions",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "3fd99c8b881ad9ecee38adc5251c1e384931848237e484ca07af5929739a2eba",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.states-transitions.1",
+          "exactLocator": "applications/datamodel/data/seed/OrderSeedData.xml#bytes=9494-13637",
+          "excerptSha256": "b9b3e272af92809eeffb4a8ada5f8953020a25efdd83a1c2bebd96a922ee9162"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--events",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "b989e3531bd8db3b347bf7cb345934a7a96adec5c102de70bf5718588a5e8197",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.events.1",
+          "exactLocator": "applications/datamodel/data/seed/OrderSeedData.xml#bytes=11470-13417",
+          "excerptSha256": "99210944364056fe237e6d82a83fec83b6d33a673bfadbc23c3b55ee7e21a595"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--preconditions",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "e698c932119d34f4b7bf88bf024ea637f1b7004ba9557ff3582d88b6401a8d5d",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.preconditions.1",
+          "exactLocator": "applications/order/src/docs/asciidoc/_include/order-status-diagrams.adoc#bytes=1507-1864",
+          "excerptSha256": "1b1a444649b57c5be199d12263e4da9be56bdafd4c0f0dda27636be31ac7797a"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--invariants",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "c03204f15934cd86f25c4d22de0fdc600332ed5d4bc93ecf9318e2c5eac93c93",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.invariants.1",
+          "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=1713-2185",
+          "excerptSha256": "42d71f5aabe682ccefe4b0f6bddb92dec3e9dfc9b1d240573862e2b5fff4b8d6"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--exceptions-errors",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "056d38ba990b066a3d3da9ef7994c0c2b37e9fcc18a94460e1dbd8b0bcd81953",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.exceptions-errors.1",
+          "exactLocator": "applications/order/servicedef/services.xml#bytes=12220-12800",
+          "excerptSha256": "346cbddfa07b34b650ce4038b6776d364d461f26bb28fc2d52db33fefb542d72"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--readbacks",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "9481aaa965c307e43a6baf6165213a51bee02dd6c38882af837c37894a36b9ce",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.readbacks.1",
+          "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=2187-5608",
+          "excerptSha256": "19f00eff14d3962f77203a793e1086f2f06dadfe79019a09a5128ea44345032a"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--api-service-exposure",
+      "state": "SUPPORTED",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "553018d766f457f42e0d9fb1a00785230a02450ec471e58056f1f9362ab1d7f0",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.api-service-exposure.1",
+          "exactLocator": "applications/order/servicedef/services.xml#bytes=21772-22909",
+          "excerptSha256": "b8a074f30b9f1627743f768a73677282698f54819d0fb65f11a71dd1d52c9307"
+        }
+      ],
+      "counterexamples": [],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    },
+    {
+      "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+      "systemId": "apache-ofbiz",
+      "questionId": "sales-order-management--absence-ambiguity-conflict",
+      "state": "CONFLICTING",
+      "equivalenceProof": {
+        "nativeMeaningSha256": "4fefb32e82d23f2502446b304277c05a73ee72f244a87f0b97e8029155beb338",
+        "candidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96"
+      },
+      "evidence": [
+        {
+          "sourceFactId": "ofbiz.sales-order-management.absence-ambiguity-conflict.1",
+          "exactLocator": "applications/order/src/docs/asciidoc/order.adoc#bytes=7759-7841",
+          "excerptSha256": "31a2239bdaeee36b8907f8e7cc725ea31bc27d0b887bb3e2ffb60bdf323b15ad"
+        },
+        {
+          "sourceFactId": "ofbiz.sales-order-management.absence-ambiguity-conflict.2",
+          "exactLocator": "applications/datamodel/data/seed/OrderSeedData.xml#bytes=12776-13526",
+          "excerptSha256": "975ee5e691def505867d35d2085d29b0c5d12000662514cf125e15c847a2ed24"
+        }
+      ],
+      "counterexamples": [
+        "Documentation states a cancellation cutoff at final confirmation; captured StatusValidChange data permits cancellation from ORDER_APPROVED and ORDER_SENT."
+      ],
+      "boundary": {
+        "authorityGrant": "NONE",
+        "promotionGrant": "NONE",
+        "executionGrant": "NONE"
+      }
+    }
+  ],
+  "profile": {
+    "schemaVersion": "pansphaira.cscl01/system-profile/v1",
+    "profileId": "apache-ofbiz-release24.09.07-source-native-profile-v1",
+    "systemId": "apache-ofbiz",
+    "systemRole": "TRAINING",
+    "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+    "questionInventoryDigest": "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28",
+    "sourceFactDigests": [
+      "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3",
+      "19aad719f2de4cdebe5e424dcfb1fdad18fd302ae9670b31307c20cebc36c453",
+      "9fc730d92a2ef262a1125e8dff8a1c84d05460fb1c53df5eb28fef5c2f1c2067",
+      "e2334fc0eddaa29953ce179e139f372bbba147d4e6b0dedd31ad6a0308a94551",
+      "e4dd64adf1762c3feb70c0a81d972a38f8ac993e9e5534c0eb2725b16247f9b5",
+      "2539a288587f65b6f053a2faf3501ea06f12c2de0e863290c403ea73680bddad",
+      "b8ac2b7fff389de6f42af22e16214922777a4123351fda8d1ab79160d9da1f78",
+      "01ca30bf4c4c2b58481e86bbdadaa063c9b3be64c127acc84517a7c1d9c2afb1",
+      "d9c89b1ba4ad4f72f9a9db7c4aa54a963672dcd89380564d96672019699dca43",
+      "6c1625c0b2ac53e845e12e0be5f6f30a9929034df6c9c10f41aa1b329554b18d",
+      "38f602499dd3a56e39a3943d17935e4e5f7dc642d3d9039264cfbdf0cf095db3",
+      "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48",
+      "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789",
+      "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319",
+      "2123a43465668aa7bbb0bdc85dc1ed85b09cb3f250a77776ae87737cfb7949ae",
+      "73be4c72b74fd7ecca5b82a0c6e1f854c9eed46b5e57997bc8ed3125184b74bf",
+      "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62",
+      "0356809d9c0dabb80199e862c2c8bbcb41e4a286cfa6fc07b6f14c6f1bbe3bfe",
+      "da25b8d5fda8f0cac1c6910abc183d8dfa63e7c287f91398d904d860bb9f9314",
+      "f61327a3a4c3c9fae3c41cf6d96024b70f62cf8929c4e8b123af05cbe98a4c78",
+      "d0acdff2a1764206cf5033d5aca03539592561cf6bff9c6fe1b30fa4fae6c97c",
+      "d52fef948bbcd6914ffc62d06d264b93fbaf5d05b65bc9b187ae5384ce1c9212",
+      "0ed17af4051916e611b251791aff3555e0e05dd1cc33784c89134824c0dafc0b",
+      "b84daaee303af688270f9e914ea8275fb8de5960f26345202b806fc181844ac5",
+      "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e",
+      "37aafb4c527aac3d8a257d9a7b7983fad6877112dc89eb0ec171b805e34e6819",
+      "637b14fca4ea59576708be76b722d8851b7590e59a0e048ac3d3d1d0b48fa126",
+      "69fdfd9f8efbc6561c5913cf832c3d9a58e15f81492e0cd83172b2fa9572be6b",
+      "448cf5f1e0f8350f446b13c7a13de7db4eabb3bc8919388a0b2291c45a2796df",
+      "8018b6935ab74c3d8ea7213effd7f688698a94aa4a54fadc41aa790445edf7ef",
+      "d95daf028c41318740d5e3d78adec8cf33442fd2e3197d1c293721dc9223c1e7",
+      "9ab51666420f93df90bd3b8d4d84977a2ed0be8b8dc8d51b5bc17a734e181d1f",
+      "1d1d22a9a5bf5f25efafa60b13ebefc915f48f9cbd5cf219698bdf04703ee7df",
+      "fbc3da4a35ff9a374b0b78d66cbcac75339385d2286c6139f370807931ecd84f",
+      "7f4988cadb8f3dd9e68078231dde79c86c6e1da5648bd87192964539daca2e0a",
+      "57c4480025ee315c3c627e7b9294bf641aa5c8448e09cbcac04f4ba1ebdef447",
+      "89844bc6b1e3783027dbd52a3c0b738f27506877862c35b97230c4d33fd314be"
+    ],
+    "sourceNativeTerminology": [
+      {
+        "term": "Party",
+        "meaning": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+        "sourceFactDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+      },
+      {
+        "term": "person",
+        "meaning": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+        "sourceFactDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+      },
+      {
+        "term": "company",
+        "meaning": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+        "sourceFactDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+      },
+      {
+        "term": "group of parties",
+        "meaning": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+        "sourceFactDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+      },
+      {
+        "term": "customer",
+        "meaning": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+        "sourceFactDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+      },
+      {
+        "term": "supplier",
+        "meaning": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+        "sourceFactDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+      },
+      {
+        "term": "employee",
+        "meaning": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+        "sourceFactDigest": "120fd53594594e43dd874f7240c682554716378fb13b5494b792a71f1e659aa3"
+      },
+      {
+        "term": "PartyRelationship",
+        "meaning": "PartyRelationship relates From and To Party and PartyRole values using partyIdFrom, partyIdTo, roleTypeIdFrom, and roleTypeIdTo.",
+        "sourceFactDigest": "19aad719f2de4cdebe5e424dcfb1fdad18fd302ae9670b31307c20cebc36c453"
+      },
+      {
+        "term": "partyIdFrom",
+        "meaning": "PartyRelationship relates From and To Party and PartyRole values using partyIdFrom, partyIdTo, roleTypeIdFrom, and roleTypeIdTo.",
+        "sourceFactDigest": "19aad719f2de4cdebe5e424dcfb1fdad18fd302ae9670b31307c20cebc36c453"
+      },
+      {
+        "term": "partyIdTo",
+        "meaning": "PartyRelationship relates From and To Party and PartyRole values using partyIdFrom, partyIdTo, roleTypeIdFrom, and roleTypeIdTo.",
+        "sourceFactDigest": "19aad719f2de4cdebe5e424dcfb1fdad18fd302ae9670b31307c20cebc36c453"
+      },
+      {
+        "term": "PartyRole",
+        "meaning": "PartyRelationship relates From and To Party and PartyRole values using partyIdFrom, partyIdTo, roleTypeIdFrom, and roleTypeIdTo.",
+        "sourceFactDigest": "19aad719f2de4cdebe5e424dcfb1fdad18fd302ae9670b31307c20cebc36c453"
+      },
+      {
+        "term": "createPerson",
+        "meaning": "The service boundary defines createPerson as an OFBiz operation for Person.",
+        "sourceFactDigest": "9fc730d92a2ef262a1125e8dff8a1c84d05460fb1c53df5eb28fef5c2f1c2067"
+      },
+      {
+        "term": "Person",
+        "meaning": "The service boundary defines createPerson as an OFBiz operation for Person.",
+        "sourceFactDigest": "9fc730d92a2ef262a1125e8dff8a1c84d05460fb1c53df5eb28fef5c2f1c2067"
+      },
+      {
+        "term": "createPerson",
+        "meaning": "createPerson accepts Person attributes and returns the Person primary key as output.",
+        "sourceFactDigest": "e2334fc0eddaa29953ce179e139f372bbba147d4e6b0dedd31ad6a0308a94551"
+      },
+      {
+        "term": "auto-attributes",
+        "meaning": "createPerson accepts Person attributes and returns the Person primary key as output.",
+        "sourceFactDigest": "e2334fc0eddaa29953ce179e139f372bbba147d4e6b0dedd31ad6a0308a94551"
+      },
+      {
+        "term": "mode=\"OUT\"",
+        "meaning": "createPerson accepts Person attributes and returns the Person primary key as output.",
+        "sourceFactDigest": "e2334fc0eddaa29953ce179e139f372bbba147d4e6b0dedd31ad6a0308a94551"
+      },
+      {
+        "term": "setPartyStatus",
+        "meaning": "setPartyStatus takes partyId and statusId and requires the statusId change to be defined in StatusValidChange.",
+        "sourceFactDigest": "e4dd64adf1762c3feb70c0a81d972a38f8ac993e9e5534c0eb2725b16247f9b5"
+      },
+      {
+        "term": "statusId",
+        "meaning": "setPartyStatus takes partyId and statusId and requires the statusId change to be defined in StatusValidChange.",
+        "sourceFactDigest": "e4dd64adf1762c3feb70c0a81d972a38f8ac993e9e5534c0eb2725b16247f9b5"
+      },
+      {
+        "term": "StatusValidChange",
+        "meaning": "setPartyStatus takes partyId and statusId and requires the statusId change to be defined in StatusValidChange.",
+        "sourceFactDigest": "e4dd64adf1762c3feb70c0a81d972a38f8ac993e9e5534c0eb2725b16247f9b5"
+      },
+      {
+        "term": "setPartyStatus",
+        "meaning": "setPartyStatus returns the original statusId as oldStatusId so ECA conditions can check whether party status actually changed.",
+        "sourceFactDigest": "2539a288587f65b6f053a2faf3501ea06f12c2de0e863290c403ea73680bddad"
+      },
+      {
+        "term": "ECA conditions",
+        "meaning": "setPartyStatus returns the original statusId as oldStatusId so ECA conditions can check whether party status actually changed.",
+        "sourceFactDigest": "2539a288587f65b6f053a2faf3501ea06f12c2de0e863290c403ea73680bddad"
+      },
+      {
+        "term": "oldStatusId",
+        "meaning": "setPartyStatus returns the original statusId as oldStatusId so ECA conditions can check whether party status actually changed.",
+        "sourceFactDigest": "2539a288587f65b6f053a2faf3501ea06f12c2de0e863290c403ea73680bddad"
+      },
+      {
+        "term": "PARTYMGR_UPDATE",
+        "meaning": "setPartyStatus requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission and a StatusValidChange.",
+        "sourceFactDigest": "b8ac2b7fff389de6f42af22e16214922777a4123351fda8d1ab79160d9da1f78"
+      },
+      {
+        "term": "PARTYMGR_STS_UPDATE",
+        "meaning": "setPartyStatus requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission and a StatusValidChange.",
+        "sourceFactDigest": "b8ac2b7fff389de6f42af22e16214922777a4123351fda8d1ab79160d9da1f78"
+      },
+      {
+        "term": "StatusValidChange",
+        "meaning": "setPartyStatus requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission and a StatusValidChange.",
+        "sourceFactDigest": "b8ac2b7fff389de6f42af22e16214922777a4123351fda8d1ab79160d9da1f78"
+      },
+      {
+        "term": "Party ID",
+        "meaning": "Party ID is the system string that uniquely identifies the Party.",
+        "sourceFactDigest": "01ca30bf4c4c2b58481e86bbdadaa063c9b3be64c127acc84517a7c1d9c2afb1"
+      },
+      {
+        "term": "uniquely identifies the Party",
+        "meaning": "Party ID is the system string that uniquely identifies the Party.",
+        "sourceFactDigest": "01ca30bf4c4c2b58481e86bbdadaa063c9b3be64c127acc84517a7c1d9c2afb1"
+      },
+      {
+        "term": "this service will fail",
+        "meaning": "setPartyStatus fails when the statusId change is not defined in StatusValidChange.",
+        "sourceFactDigest": "d9c89b1ba4ad4f72f9a9db7c4aa54a963672dcd89380564d96672019699dca43"
+      },
+      {
+        "term": "StatusValidChange",
+        "meaning": "setPartyStatus fails when the statusId change is not defined in StatusValidChange.",
+        "sourceFactDigest": "d9c89b1ba4ad4f72f9a9db7c4aa54a963672dcd89380564d96672019699dca43"
+      },
+      {
+        "term": "Find Party",
+        "meaning": "Find Party presents a result list and Party details expose the complete list of user logins.",
+        "sourceFactDigest": "6c1625c0b2ac53e845e12e0be5f6f30a9929034df6c9c10f41aa1b329554b18d"
+      },
+      {
+        "term": "list is presented",
+        "meaning": "Find Party presents a result list and Party details expose the complete list of user logins.",
+        "sourceFactDigest": "6c1625c0b2ac53e845e12e0be5f6f30a9929034df6c9c10f41aa1b329554b18d"
+      },
+      {
+        "term": "Party details",
+        "meaning": "Find Party presents a result list and Party details expose the complete list of user logins.",
+        "sourceFactDigest": "6c1625c0b2ac53e845e12e0be5f6f30a9929034df6c9c10f41aa1b329554b18d"
+      },
+      {
+        "term": "service name=\"createPerson\"",
+        "meaning": "createPerson is exposed as an OFBiz java service using PartyServices.createPerson with auth set to false.",
+        "sourceFactDigest": "38f602499dd3a56e39a3943d17935e4e5f7dc642d3d9039264cfbdf0cf095db3"
+      },
+      {
+        "term": "engine=\"java\"",
+        "meaning": "createPerson is exposed as an OFBiz java service using PartyServices.createPerson with auth set to false.",
+        "sourceFactDigest": "38f602499dd3a56e39a3943d17935e4e5f7dc642d3d9039264cfbdf0cf095db3"
+      },
+      {
+        "term": "PartyServices",
+        "meaning": "createPerson is exposed as an OFBiz java service using PartyServices.createPerson with auth set to false.",
+        "sourceFactDigest": "38f602499dd3a56e39a3943d17935e4e5f7dc642d3d9039264cfbdf0cf095db3"
+      },
+      {
+        "term": "auth=\"false\"",
+        "meaning": "createPerson is exposed as an OFBiz java service using PartyServices.createPerson with auth set to false.",
+        "sourceFactDigest": "38f602499dd3a56e39a3943d17935e4e5f7dc642d3d9039264cfbdf0cf095db3"
+      },
+      {
+        "term": "person",
+        "meaning": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+        "sourceFactDigest": "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48"
+      },
+      {
+        "term": "company",
+        "meaning": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+        "sourceFactDigest": "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48"
+      },
+      {
+        "term": "group of parties",
+        "meaning": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+        "sourceFactDigest": "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48"
+      },
+      {
+        "term": "customer",
+        "meaning": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+        "sourceFactDigest": "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48"
+      },
+      {
+        "term": "supplier",
+        "meaning": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+        "sourceFactDigest": "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48"
+      },
+      {
+        "term": "employee",
+        "meaning": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+        "sourceFactDigest": "df1f2de35a16001db16ecf725f3cc18086042ac8722e361d930f7eb27b08ee48"
+      },
+      {
+        "term": "Products",
+        "meaning": "Catalog Manager manages Product, Catalog, and Category information; Product can be physical or digital.",
+        "sourceFactDigest": "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789"
+      },
+      {
+        "term": "Catalogs",
+        "meaning": "Catalog Manager manages Product, Catalog, and Category information; Product can be physical or digital.",
+        "sourceFactDigest": "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789"
+      },
+      {
+        "term": "Categories",
+        "meaning": "Catalog Manager manages Product, Catalog, and Category information; Product can be physical or digital.",
+        "sourceFactDigest": "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789"
+      },
+      {
+        "term": "physical",
+        "meaning": "Catalog Manager manages Product, Catalog, and Category information; Product can be physical or digital.",
+        "sourceFactDigest": "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789"
+      },
+      {
+        "term": "digital",
+        "meaning": "Catalog Manager manages Product, Catalog, and Category information; Product can be physical or digital.",
+        "sourceFactDigest": "3319bb196d57753d9313bcaf89a7d593281a4f26438d84a2053a286e1d06b789"
+      },
+      {
+        "term": "ProductAssoc",
+        "meaning": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+        "sourceFactDigest": "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319"
+      },
+      {
+        "term": "Main",
+        "meaning": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+        "sourceFactDigest": "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319"
+      },
+      {
+        "term": "Assoc",
+        "meaning": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+        "sourceFactDigest": "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319"
+      },
+      {
+        "term": "productAssocTypeId",
+        "meaning": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+        "sourceFactDigest": "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319"
+      },
+      {
+        "term": "fromDate",
+        "meaning": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+        "sourceFactDigest": "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319"
+      },
+      {
+        "term": "thruDate",
+        "meaning": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+        "sourceFactDigest": "991d4f75a0fbb7c315c6edde5202249c8216fc0f3a69ae39b7395fe15f7c7319"
+      },
+      {
+        "term": "createProduct",
+        "meaning": "The product service boundary defines createProduct and updateProduct operations.",
+        "sourceFactDigest": "2123a43465668aa7bbb0bdc85dc1ed85b09cb3f250a77776ae87737cfb7949ae"
+      },
+      {
+        "term": "Create a Product",
+        "meaning": "The product service boundary defines createProduct and updateProduct operations.",
+        "sourceFactDigest": "2123a43465668aa7bbb0bdc85dc1ed85b09cb3f250a77776ae87737cfb7949ae"
+      },
+      {
+        "term": "productTypeId",
+        "meaning": "createProduct takes productTypeId and internalName as required inputs and productId as optional INOUT primary key.",
+        "sourceFactDigest": "73be4c72b74fd7ecca5b82a0c6e1f854c9eed46b5e57997bc8ed3125184b74bf"
+      },
+      {
+        "term": "internalName",
+        "meaning": "createProduct takes productTypeId and internalName as required inputs and productId as optional INOUT primary key.",
+        "sourceFactDigest": "73be4c72b74fd7ecca5b82a0c6e1f854c9eed46b5e57997bc8ed3125184b74bf"
+      },
+      {
+        "term": "INOUT",
+        "meaning": "createProduct takes productTypeId and internalName as required inputs and productId as optional INOUT primary key.",
+        "sourceFactDigest": "73be4c72b74fd7ecca5b82a0c6e1f854c9eed46b5e57997bc8ed3125184b74bf"
+      },
+      {
+        "term": "Product",
+        "meaning": "Product records introductionDate, releaseDate, supportDiscontinuationDate, and salesDiscontinuationDate lifecycle dates.",
+        "sourceFactDigest": "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62"
+      },
+      {
+        "term": "introductionDate",
+        "meaning": "Product records introductionDate, releaseDate, supportDiscontinuationDate, and salesDiscontinuationDate lifecycle dates.",
+        "sourceFactDigest": "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62"
+      },
+      {
+        "term": "releaseDate",
+        "meaning": "Product records introductionDate, releaseDate, supportDiscontinuationDate, and salesDiscontinuationDate lifecycle dates.",
+        "sourceFactDigest": "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62"
+      },
+      {
+        "term": "supportDiscontinuationDate",
+        "meaning": "Product records introductionDate, releaseDate, supportDiscontinuationDate, and salesDiscontinuationDate lifecycle dates.",
+        "sourceFactDigest": "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62"
+      },
+      {
+        "term": "salesDiscontinuationDate",
+        "meaning": "Product records introductionDate, releaseDate, supportDiscontinuationDate, and salesDiscontinuationDate lifecycle dates.",
+        "sourceFactDigest": "549551b73c8b256a7ea1a491bec1ecc88e6002803e2c279c579159e9922dce62"
+      },
+      {
+        "term": "discontinueProductSales",
+        "meaning": "discontinueProductSales is a groovy service that discontinues Product sales for a required productId.",
+        "sourceFactDigest": "0356809d9c0dabb80199e862c2c8bbcb41e4a286cfa6fc07b6f14c6f1bbe3bfe"
+      },
+      {
+        "term": "Discontinue Product Sales",
+        "meaning": "discontinueProductSales is a groovy service that discontinues Product sales for a required productId.",
+        "sourceFactDigest": "0356809d9c0dabb80199e862c2c8bbcb41e4a286cfa6fc07b6f14c6f1bbe3bfe"
+      },
+      {
+        "term": "productId",
+        "meaning": "discontinueProductSales is a groovy service that discontinues Product sales for a required productId.",
+        "sourceFactDigest": "0356809d9c0dabb80199e862c2c8bbcb41e4a286cfa6fc07b6f14c6f1bbe3bfe"
+      },
+      {
+        "term": "auth=\"true\"",
+        "meaning": "createProduct is authenticated and requires productTypeId and internalName.",
+        "sourceFactDigest": "da25b8d5fda8f0cac1c6910abc183d8dfa63e7c287f91398d904d860bb9f9314"
+      },
+      {
+        "term": "productTypeId",
+        "meaning": "createProduct is authenticated and requires productTypeId and internalName.",
+        "sourceFactDigest": "da25b8d5fda8f0cac1c6910abc183d8dfa63e7c287f91398d904d860bb9f9314"
+      },
+      {
+        "term": "internalName",
+        "meaning": "createProduct is authenticated and requires productTypeId and internalName.",
+        "sourceFactDigest": "da25b8d5fda8f0cac1c6910abc183d8dfa63e7c287f91398d904d860bb9f9314"
+      },
+      {
+        "term": "optional=\"false\"",
+        "meaning": "createProduct is authenticated and requires productTypeId and internalName.",
+        "sourceFactDigest": "da25b8d5fda8f0cac1c6910abc183d8dfa63e7c287f91398d904d860bb9f9314"
+      },
+      {
+        "term": "productId",
+        "meaning": "Product has productId as its primary key and relates to ProductType.",
+        "sourceFactDigest": "f61327a3a4c3c9fae3c41cf6d96024b70f62cf8929c4e8b123af05cbe98a4c78"
+      },
+      {
+        "term": "prim-key",
+        "meaning": "Product has productId as its primary key and relates to ProductType.",
+        "sourceFactDigest": "f61327a3a4c3c9fae3c41cf6d96024b70f62cf8929c4e8b123af05cbe98a4c78"
+      },
+      {
+        "term": "ProductType",
+        "meaning": "Product has productId as its primary key and relates to ProductType.",
+        "sourceFactDigest": "f61327a3a4c3c9fae3c41cf6d96024b70f62cf8929c4e8b123af05cbe98a4c78"
+      },
+      {
+        "term": "productTypeId",
+        "meaning": "The createProduct contract marks productTypeId and internalName non-optional but names no fail-property in that service block.",
+        "sourceFactDigest": "d0acdff2a1764206cf5033d5aca03539592561cf6bff9c6fe1b30fa4fae6c97c"
+      },
+      {
+        "term": "internalName",
+        "meaning": "The createProduct contract marks productTypeId and internalName non-optional but names no fail-property in that service block.",
+        "sourceFactDigest": "d0acdff2a1764206cf5033d5aca03539592561cf6bff9c6fe1b30fa4fae6c97c"
+      },
+      {
+        "term": "optional=\"false\"",
+        "meaning": "The createProduct contract marks productTypeId and internalName non-optional but names no fail-property in that service block.",
+        "sourceFactDigest": "d0acdff2a1764206cf5033d5aca03539592561cf6bff9c6fe1b30fa4fae6c97c"
+      },
+      {
+        "term": "auto-attributes",
+        "meaning": "createProduct exposes the Product primary key as INOUT, providing the created Product identifier as observable output.",
+        "sourceFactDigest": "d52fef948bbcd6914ffc62d06d264b93fbaf5d05b65bc9b187ae5384ce1c9212"
+      },
+      {
+        "term": "include=\"pk\"",
+        "meaning": "createProduct exposes the Product primary key as INOUT, providing the created Product identifier as observable output.",
+        "sourceFactDigest": "d52fef948bbcd6914ffc62d06d264b93fbaf5d05b65bc9b187ae5384ce1c9212"
+      },
+      {
+        "term": "INOUT",
+        "meaning": "createProduct exposes the Product primary key as INOUT, providing the created Product identifier as observable output.",
+        "sourceFactDigest": "d52fef948bbcd6914ffc62d06d264b93fbaf5d05b65bc9b187ae5384ce1c9212"
+      },
+      {
+        "term": "engine=\"groovy\"",
+        "meaning": "createProduct is exposed through an authenticated groovy OFBiz service invoking ProductServicesScript.groovy.",
+        "sourceFactDigest": "0ed17af4051916e611b251791aff3555e0e05dd1cc33784c89134824c0dafc0b"
+      },
+      {
+        "term": "ProductServicesScript.groovy",
+        "meaning": "createProduct is exposed through an authenticated groovy OFBiz service invoking ProductServicesScript.groovy.",
+        "sourceFactDigest": "0ed17af4051916e611b251791aff3555e0e05dd1cc33784c89134824c0dafc0b"
+      },
+      {
+        "term": "auth=\"true\"",
+        "meaning": "createProduct is exposed through an authenticated groovy OFBiz service invoking ProductServicesScript.groovy.",
+        "sourceFactDigest": "0ed17af4051916e611b251791aff3555e0e05dd1cc33784c89134824c0dafc0b"
+      },
+      {
+        "term": "Product",
+        "meaning": "The Product entity has lifecycle date fields but no statusId field; this capture does not normalize those dates into a Product status workflow.",
+        "sourceFactDigest": "b84daaee303af688270f9e914ea8275fb8de5960f26345202b806fc181844ac5"
+      },
+      {
+        "term": "introductionDate",
+        "meaning": "The Product entity has lifecycle date fields but no statusId field; this capture does not normalize those dates into a Product status workflow.",
+        "sourceFactDigest": "b84daaee303af688270f9e914ea8275fb8de5960f26345202b806fc181844ac5"
+      },
+      {
+        "term": "salesDiscontinuationDate",
+        "meaning": "The Product entity has lifecycle date fields but no statusId field; this capture does not normalize those dates into a Product status workflow.",
+        "sourceFactDigest": "b84daaee303af688270f9e914ea8275fb8de5960f26345202b806fc181844ac5"
+      },
+      {
+        "term": "sales order",
+        "meaning": "A sales order concerns a customer, ordered products or services, payment term and method, billing and shipping addresses, and delivery instructions.",
+        "sourceFactDigest": "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e"
+      },
+      {
+        "term": "customer",
+        "meaning": "A sales order concerns a customer, ordered products or services, payment term and method, billing and shipping addresses, and delivery instructions.",
+        "sourceFactDigest": "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e"
+      },
+      {
+        "term": "products or services",
+        "meaning": "A sales order concerns a customer, ordered products or services, payment term and method, billing and shipping addresses, and delivery instructions.",
+        "sourceFactDigest": "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e"
+      },
+      {
+        "term": "payment term and method",
+        "meaning": "A sales order concerns a customer, ordered products or services, payment term and method, billing and shipping addresses, and delivery instructions.",
+        "sourceFactDigest": "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e"
+      },
+      {
+        "term": "billing and shipping addresses",
+        "meaning": "A sales order concerns a customer, ordered products or services, payment term and method, billing and shipping addresses, and delivery instructions.",
+        "sourceFactDigest": "845a2593a43a7fb3992ff5b8c84b1fe245a316cf40b18a35856dd85a19131e9e"
+      },
+      {
+        "term": "OrderRole",
+        "meaning": "OrderRole relates OrderHeader, Party, PartyRole, RoleType, and OrderItem using orderId, partyId, and roleTypeId.",
+        "sourceFactDigest": "37aafb4c527aac3d8a257d9a7b7983fad6877112dc89eb0ec171b805e34e6819"
+      },
+      {
+        "term": "OrderHeader",
+        "meaning": "OrderRole relates OrderHeader, Party, PartyRole, RoleType, and OrderItem using orderId, partyId, and roleTypeId.",
+        "sourceFactDigest": "37aafb4c527aac3d8a257d9a7b7983fad6877112dc89eb0ec171b805e34e6819"
+      },
+      {
+        "term": "PartyRole",
+        "meaning": "OrderRole relates OrderHeader, Party, PartyRole, RoleType, and OrderItem using orderId, partyId, and roleTypeId.",
+        "sourceFactDigest": "37aafb4c527aac3d8a257d9a7b7983fad6877112dc89eb0ec171b805e34e6819"
+      },
+      {
+        "term": "OrderItem",
+        "meaning": "OrderRole relates OrderHeader, Party, PartyRole, RoleType, and OrderItem using orderId, partyId, and roleTypeId.",
+        "sourceFactDigest": "37aafb4c527aac3d8a257d9a7b7983fad6877112dc89eb0ec171b805e34e6819"
+      },
+      {
+        "term": "Product Store and Customer Details",
+        "meaning": "Order entry captures Product Store and Customer Details, adds items to cart, sets shipping and payment terms, and creates the Order.",
+        "sourceFactDigest": "637b14fca4ea59576708be76b722d8851b7590e59a0e048ac3d3d1d0b48fa126"
+      },
+      {
+        "term": "Add Item(s) to cart",
+        "meaning": "Order entry captures Product Store and Customer Details, adds items to cart, sets shipping and payment terms, and creates the Order.",
+        "sourceFactDigest": "637b14fca4ea59576708be76b722d8851b7590e59a0e048ac3d3d1d0b48fa126"
+      },
+      {
+        "term": "Create Order",
+        "meaning": "Order entry captures Product Store and Customer Details, adds items to cart, sets shipping and payment terms, and creates the Order.",
+        "sourceFactDigest": "637b14fca4ea59576708be76b722d8851b7590e59a0e048ac3d3d1d0b48fa126"
+      },
+      {
+        "term": "shoppingCart",
+        "meaning": "createOrderFromShoppingCart takes shoppingCart as INOUT and returns orderId as OUT.",
+        "sourceFactDigest": "69fdfd9f8efbc6561c5913cf832c3d9a58e15f81492e0cd83172b2fa9572be6b"
+      },
+      {
+        "term": "INOUT",
+        "meaning": "createOrderFromShoppingCart takes shoppingCart as INOUT and returns orderId as OUT.",
+        "sourceFactDigest": "69fdfd9f8efbc6561c5913cf832c3d9a58e15f81492e0cd83172b2fa9572be6b"
+      },
+      {
+        "term": "orderId",
+        "meaning": "createOrderFromShoppingCart takes shoppingCart as INOUT and returns orderId as OUT.",
+        "sourceFactDigest": "69fdfd9f8efbc6561c5913cf832c3d9a58e15f81492e0cd83172b2fa9572be6b"
+      },
+      {
+        "term": "OUT",
+        "meaning": "createOrderFromShoppingCart takes shoppingCart as INOUT and returns orderId as OUT.",
+        "sourceFactDigest": "69fdfd9f8efbc6561c5913cf832c3d9a58e15f81492e0cd83172b2fa9572be6b"
+      },
+      {
+        "term": "ORDER_CREATED",
+        "meaning": "ORDER_STATUS defines Created, Processing, Approved, Sent, Held, Completed, Rejected, and Cancelled with explicit StatusValidChange rows.",
+        "sourceFactDigest": "448cf5f1e0f8350f446b13c7a13de7db4eabb3bc8919388a0b2291c45a2796df"
+      },
+      {
+        "term": "ORDER_APPROVED",
+        "meaning": "ORDER_STATUS defines Created, Processing, Approved, Sent, Held, Completed, Rejected, and Cancelled with explicit StatusValidChange rows.",
+        "sourceFactDigest": "448cf5f1e0f8350f446b13c7a13de7db4eabb3bc8919388a0b2291c45a2796df"
+      },
+      {
+        "term": "ORDER_COMPLETED",
+        "meaning": "ORDER_STATUS defines Created, Processing, Approved, Sent, Held, Completed, Rejected, and Cancelled with explicit StatusValidChange rows.",
+        "sourceFactDigest": "448cf5f1e0f8350f446b13c7a13de7db4eabb3bc8919388a0b2291c45a2796df"
+      },
+      {
+        "term": "StatusValidChange",
+        "meaning": "ORDER_STATUS defines Created, Processing, Approved, Sent, Held, Completed, Rejected, and Cancelled with explicit StatusValidChange rows.",
+        "sourceFactDigest": "448cf5f1e0f8350f446b13c7a13de7db4eabb3bc8919388a0b2291c45a2796df"
+      },
+      {
+        "term": "Process Order",
+        "meaning": "StatusValidChange transition names include Process Order, Approve Order, Hold Order, Reject Order, Cancel Order, Send Order, and Complete Order.",
+        "sourceFactDigest": "8018b6935ab74c3d8ea7213effd7f688698a94aa4a54fadc41aa790445edf7ef"
+      },
+      {
+        "term": "Approve Order",
+        "meaning": "StatusValidChange transition names include Process Order, Approve Order, Hold Order, Reject Order, Cancel Order, Send Order, and Complete Order.",
+        "sourceFactDigest": "8018b6935ab74c3d8ea7213effd7f688698a94aa4a54fadc41aa790445edf7ef"
+      },
+      {
+        "term": "Cancel Order",
+        "meaning": "StatusValidChange transition names include Process Order, Approve Order, Hold Order, Reject Order, Cancel Order, Send Order, and Complete Order.",
+        "sourceFactDigest": "8018b6935ab74c3d8ea7213effd7f688698a94aa4a54fadc41aa790445edf7ef"
+      },
+      {
+        "term": "Order Completed",
+        "meaning": "StatusValidChange transition names include Process Order, Approve Order, Hold Order, Reject Order, Cancel Order, Send Order, and Complete Order.",
+        "sourceFactDigest": "8018b6935ab74c3d8ea7213effd7f688698a94aa4a54fadc41aa790445edf7ef"
+      },
+      {
+        "term": "shipping information",
+        "meaning": "Approved Order guidance requires checking shipping information, billing details, and requested shipping dates before Approve Order.",
+        "sourceFactDigest": "d95daf028c41318740d5e3d78adec8cf33442fd2e3197d1c293721dc9223c1e7"
+      },
+      {
+        "term": "billing details",
+        "meaning": "Approved Order guidance requires checking shipping information, billing details, and requested shipping dates before Approve Order.",
+        "sourceFactDigest": "d95daf028c41318740d5e3d78adec8cf33442fd2e3197d1c293721dc9223c1e7"
+      },
+      {
+        "term": "shipping dates",
+        "meaning": "Approved Order guidance requires checking shipping information, billing details, and requested shipping dates before Approve Order.",
+        "sourceFactDigest": "d95daf028c41318740d5e3d78adec8cf33442fd2e3197d1c293721dc9223c1e7"
+      },
+      {
+        "term": "Approve Order",
+        "meaning": "Approved Order guidance requires checking shipping information, billing details, and requested shipping dates before Approve Order.",
+        "sourceFactDigest": "d95daf028c41318740d5e3d78adec8cf33442fd2e3197d1c293721dc9223c1e7"
+      },
+      {
+        "term": "unique reference number",
+        "meaning": "Sales Order document is created with a unique reference number used for customer service and issue reporting.",
+        "sourceFactDigest": "9ab51666420f93df90bd3b8d4d84977a2ed0be8b8dc8d51b5bc17a734e181d1f"
+      },
+      {
+        "term": "customer service",
+        "meaning": "Sales Order document is created with a unique reference number used for customer service and issue reporting.",
+        "sourceFactDigest": "9ab51666420f93df90bd3b8d4d84977a2ed0be8b8dc8d51b5bc17a734e181d1f"
+      },
+      {
+        "term": "reference number",
+        "meaning": "Sales Order document is created with a unique reference number used for customer service and issue reporting.",
+        "sourceFactDigest": "9ab51666420f93df90bd3b8d4d84977a2ed0be8b8dc8d51b5bc17a734e181d1f"
+      },
+      {
+        "term": "shoppingCart",
+        "meaning": "callProcessOrderPayments requires shoppingCart and binds a missing value to OrderRequiredFieldMissingShoppingCart.",
+        "sourceFactDigest": "1d1d22a9a5bf5f25efafa60b13ebefc915f48f9cbd5cf219698bdf04703ee7df"
+      },
+      {
+        "term": "OrderRequiredFieldMissingShoppingCart",
+        "meaning": "callProcessOrderPayments requires shoppingCart and binds a missing value to OrderRequiredFieldMissingShoppingCart.",
+        "sourceFactDigest": "1d1d22a9a5bf5f25efafa60b13ebefc915f48f9cbd5cf219698bdf04703ee7df"
+      },
+      {
+        "term": "Current order status",
+        "meaning": "Current order status tells the state at a given time; Find Orders lists existing Orders for completion or modification.",
+        "sourceFactDigest": "fbc3da4a35ff9a374b0b78d66cbcac75339385d2286c6139f370807931ecd84f"
+      },
+      {
+        "term": "Find Orders",
+        "meaning": "Current order status tells the state at a given time; Find Orders lists existing Orders for completion or modification.",
+        "sourceFactDigest": "fbc3da4a35ff9a374b0b78d66cbcac75339385d2286c6139f370807931ecd84f"
+      },
+      {
+        "term": "Existing Orders are listed",
+        "meaning": "Current order status tells the state at a given time; Find Orders lists existing Orders for completion or modification.",
+        "sourceFactDigest": "fbc3da4a35ff9a374b0b78d66cbcac75339385d2286c6139f370807931ecd84f"
+      },
+      {
+        "term": "changeOrderStatus",
+        "meaning": "changeOrderStatus is an authenticated java OFBiz service invoking setOrderStatus and returning oldStatusId and orderStatusId.",
+        "sourceFactDigest": "7f4988cadb8f3dd9e68078231dde79c86c6e1da5648bd87192964539daca2e0a"
+      },
+      {
+        "term": "auth=\"true\"",
+        "meaning": "changeOrderStatus is an authenticated java OFBiz service invoking setOrderStatus and returning oldStatusId and orderStatusId.",
+        "sourceFactDigest": "7f4988cadb8f3dd9e68078231dde79c86c6e1da5648bd87192964539daca2e0a"
+      },
+      {
+        "term": "setOrderStatus",
+        "meaning": "changeOrderStatus is an authenticated java OFBiz service invoking setOrderStatus and returning oldStatusId and orderStatusId.",
+        "sourceFactDigest": "7f4988cadb8f3dd9e68078231dde79c86c6e1da5648bd87192964539daca2e0a"
+      },
+      {
+        "term": "oldStatusId",
+        "meaning": "changeOrderStatus is an authenticated java OFBiz service invoking setOrderStatus and returning oldStatusId and orderStatusId.",
+        "sourceFactDigest": "7f4988cadb8f3dd9e68078231dde79c86c6e1da5648bd87192964539daca2e0a"
+      },
+      {
+        "term": "orderStatusId",
+        "meaning": "changeOrderStatus is an authenticated java OFBiz service invoking setOrderStatus and returning oldStatusId and orderStatusId.",
+        "sourceFactDigest": "7f4988cadb8f3dd9e68078231dde79c86c6e1da5648bd87192964539daca2e0a"
+      },
+      {
+        "term": "canceled",
+        "meaning": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+        "sourceFactDigest": "57c4480025ee315c3c627e7b9294bf641aa5c8448e09cbcac04f4ba1ebdef447"
+      },
+      {
+        "term": "final confirmation point",
+        "meaning": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+        "sourceFactDigest": "57c4480025ee315c3c627e7b9294bf641aa5c8448e09cbcac04f4ba1ebdef447"
+      },
+      {
+        "term": "ORDER_APPROVED",
+        "meaning": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+        "sourceFactDigest": "89844bc6b1e3783027dbd52a3c0b738f27506877862c35b97230c4d33fd314be"
+      },
+      {
+        "term": "ORDER_SENT",
+        "meaning": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+        "sourceFactDigest": "89844bc6b1e3783027dbd52a3c0b738f27506877862c35b97230c4d33fd314be"
+      },
+      {
+        "term": "ORDER_CANCELLED",
+        "meaning": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+        "sourceFactDigest": "89844bc6b1e3783027dbd52a3c0b738f27506877862c35b97230c4d33fd314be"
+      }
+    ],
+    "capabilityFamilies": [
+      "PARTY_CUSTOMER_MANAGEMENT",
+      "PRODUCT_ITEM_MANAGEMENT",
+      "SALES_ORDER_MANAGEMENT"
+    ],
+    "evidenceCells": [
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--objects-roles",
+        "cellDigest": "ec5d4834e1237b82d8f1d14f28a0b42b01517d57eab37b740eff15ca64ebd5dd"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--relations",
+        "cellDigest": "59bca7fac05fa195109bd261f221268311d1c171776f8af898d7101542db6edc"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--operations",
+        "cellDigest": "40b6d113467a075921aa33aac0cbcd90eb711cc3b714741c38169cfc9da4b988"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--inputs-outputs",
+        "cellDigest": "4637505d0ac799abbd04f6ef663465e4cb6a7f68d7f920b499aa0a30eec27949"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--states-transitions",
+        "cellDigest": "bcb412b2d465ece1840353fee5db79593aa9eef630cf7cb7cf736094b11be79d"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--events",
+        "cellDigest": "fddc64dbc635ed0ea0d974628223ff819ee93c07f000a69b3da066c0febbb5c8"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--preconditions",
+        "cellDigest": "c017122ffd8a7ef9af35d34b24ce8a6aa564cf9d613bdcfc9a9383c96e3466bf"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--invariants",
+        "cellDigest": "7d046f11fea11221e41b63c63ca8ea82dd10a3ef042d310281a64f1437c9f643"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--exceptions-errors",
+        "cellDigest": "9df6b1efa02df4d6eb70ca371b764e86ae5345d905b4801c46fdd3c18133ccdb"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--readbacks",
+        "cellDigest": "8a20e3afd826ba5b07aa4ef175279d204459c4dcf7a6172d0fcb40957e9ceee9"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--api-service-exposure",
+        "cellDigest": "3ed8161714a45b3d966194cb7b83df14fd980192cd50d4fed4536d7abcbb0db1"
+      },
+      {
+        "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+        "questionId": "party-customer-management--absence-ambiguity-conflict",
+        "cellDigest": "1bfa7d58ba8ac33f227bf0ee885d0191af58ef88719ba4175a10f9af245c0b50"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--objects-roles",
+        "cellDigest": "974e51626d36919d613476671652b958c5945821f0a3bf3bff4c194975363093"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--relations",
+        "cellDigest": "6113e7e335e5c04d437b493c176784c85926883f825170c843fc7d88eaee8c4e"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--operations",
+        "cellDigest": "1e47a7c35a6260bf19ac42607cf1a206dc50c6a816a1e5ffcd7c396cd46d3df1"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--inputs-outputs",
+        "cellDigest": "60afb81889f95ba837031c2c90e2ddb514ebb0b5a9c4bfb185e003e8699d25e8"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--states-transitions",
+        "cellDigest": "992a5206b9ac75f4941fcf63c5294f048ed120c85d28f38c5b65a57b334da1bd"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--events",
+        "cellDigest": "82bb450cbe3f16e6309aff4cf23e01d997f42d38fe1f3a77fe6454f180363da2"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--preconditions",
+        "cellDigest": "f62ebc9e4c352fb7e40f7ba2814d24d30625bf89c9dc337c024055e429566916"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--invariants",
+        "cellDigest": "940afeb42d0eb52bca7371b7debb12bc1b747b142e21494e5aff89c53b6c42ec"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--exceptions-errors",
+        "cellDigest": "0a9589b828dfac16d0eb73120714f678dc004abc3f4fc84bbfaa5ab46feed4fd"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--readbacks",
+        "cellDigest": "0a315765439c4df58c1dabba7f0f9cf7212933abbbfe86b0ad1b56e67a78349c"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--api-service-exposure",
+        "cellDigest": "66a4240a21b87e109ca92cd158631bc7b1215e92295d4f2c77e20028ab0ee912"
+      },
+      {
+        "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+        "questionId": "product-item-management--absence-ambiguity-conflict",
+        "cellDigest": "1b8b4e05c9238094c19ff89b032c37f0d1b676ca07e4ea52b8b2369d7e553943"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--objects-roles",
+        "cellDigest": "bc4c30bbb7a3fd88cc10ec8eab83c41b0d23cb5dfa605d03c3d64c66ab70a0d8"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--relations",
+        "cellDigest": "c4077c4c39957fd9fe0205d35ccb838c33546afe0900eeec4d1d8005d8967a71"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--operations",
+        "cellDigest": "2dc36489450be42c12abe0c6d184f7f6cdf24c1c5b4854ce96772a82f5a0f6a9"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--inputs-outputs",
+        "cellDigest": "69f00782ee8238a5d75f62716fc320e8d360c27c0221222bab70642f2b3f8aa9"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--states-transitions",
+        "cellDigest": "e10bd0bec1c9f92cb6824f96a0be285f7cd69a62b950c4ba90aa61d694d97b87"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--events",
+        "cellDigest": "c0b664d6394432f106c8b1213114a501a25d851329bff3a13410c4f57798223c"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--preconditions",
+        "cellDigest": "fa4d5934927af8f39910f4ccb7bf547fcdf8ac2ce526763db3b11f7ee22d8bff"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--invariants",
+        "cellDigest": "278f17c8565812f415dabe06acc8300d9b628de827a2af5d5146f4249388f8e6"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--exceptions-errors",
+        "cellDigest": "cd7ff430d5423e27a5eb272adca79f56ab40c733473e5f3c5629056c6a7d9929"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--readbacks",
+        "cellDigest": "33c22d21c65c69fa2e113f4aa61fd12e9e540f636dd238a85cf794ca75c935e5"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--api-service-exposure",
+        "cellDigest": "6841614d4e031888aec6518dc0e150bf0e95aafb6dbb10fb34858979d5e262b2"
+      },
+      {
+        "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+        "questionId": "sales-order-management--absence-ambiguity-conflict",
+        "cellDigest": "9ed0fdd04eecfe28b34257299a605c0805832620b3bbfa631f27fa217309ec1d"
+      }
+    ],
+    "holdoutIsolation": "TRAINING_PROFILE",
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "profileDigest": "6029f44bf19fcdfa56bdd338885c51224a27010e8d7e7588724198634d48e7f8"
+  },
+  "noCandidateMeaningSha256": "de6bf795c365787ff727fe7bb7599f285c9cecade733b85ce96511c896e2fd96",
+  "counts": {
+    "families": 3,
+    "questions": 12,
+    "facts": 37,
+    "cells": 36,
+    "supported": 33,
+    "absent": 1,
+    "ambiguous": 1,
+    "conflicting": 1,
+    "corpusMembers": 18
+  },
+  "nonclaims": [
+    "NO_CROSS_SYSTEM_CONCEPT_DERIVED",
+    "NO_CANDIDATE_MEANING_DERIVED",
+    "NO_HOLDOUT_INSPECTED",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT"
+  ],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  }
+}

@@ -1,0 +1,701 @@
+{
+  "boundary": {
+    "authorityGrant": "NONE",
+    "executionGrant": "NONE",
+    "promotionGrant": "NONE"
+  },
+  "canonicalizer": {
+    "id": "cscl06-canonical-json",
+    "version": "1.0.0"
+  },
+  "cells": [
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "Party Manager manages Party; a Party can be a person, company, or group, and the application lists customer, supplier, and employee.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "The Party Manager application is used to manage the parties, i.e any legal entity your company has to deal with.\n\n== Overview\nA party can be a person or a company (or a group of parties).\n\nParty application can be use to manage:\n\n* customer\n* supplier\n* employee\n* ...",
+          "nativeTerms": [
+            "Party",
+            "person",
+            "company",
+            "group of parties",
+            "customer",
+            "supplier",
+            "employee"
+          ],
+          "path": "applications/party/src/docs/asciidoc/party.adoc"
+        }
+      ],
+      "questionId": "objects-roles",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "PartyRelationship relates From and To Party and PartyRole values using partyIdFrom, partyIdTo, roleTypeIdFrom, and roleTypeIdTo.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <entity entity-name=\"PartyRelationship\"\n            package-name=\"org.apache.ofbiz.party.party\"\n            title=\"Party Relationship\">\n      <field name=\"partyIdFrom\" type=\"id\"></field>\n      <field name=\"partyIdTo\" type=\"id\"></field>\n      <field name=\"roleTypeIdFrom\" type=\"id\"></field>\n      <field name=\"roleTypeIdTo\" type=\"id\"></field>\n      <field name=\"fromDate\" type=\"date-time\"></field>\n      <field name=\"thruDate\" type=\"date-time\"></field>\n      <field name=\"statusId\" type=\"id\"></field>\n      <field name=\"relationshipName\" type=\"name\">\n          <description>Official name of relationship, such as title in a company</description>\n      </field>\n      <field name=\"securityGroupId\" type=\"id\"></field>\n      <field name=\"priorityTypeId\" type=\"id\"></field>\n      <field name=\"partyRelationshipTypeId\" type=\"id\"></field>\n      <field name=\"permissionsEnumId\" type=\"id\"></field>\n      <field name=\"positionTitle\" type=\"name\"><description>The exact word used within the company</description></field>\n      <field name=\"comments\" type=\"comment\"></field>\n      <prim-key field=\"partyIdFrom\"/>\n      <prim-key field=\"partyIdTo\"/>\n      <prim-key field=\"roleTypeIdFrom\"/>\n      <prim-key field=\"roleTypeIdTo\"/>\n      <prim-key field=\"fromDate\"/>\n      <relation type=\"one-nofk\" title=\"From\" rel-entity-name=\"Party\">\n        <key-map field-name=\"partyIdFrom\" rel-field-name=\"partyId\"/>\n      </relation>\n      <relation type=\"one-nofk\" title=\"To\" rel-entity-name=\"Party\">\n        <key-map field-name=\"partyIdTo\" rel-field-name=\"partyId\"/>\n      </relation>\n      <relation type=\"one-nofk\" title=\"From\" rel-entity-name=\"RoleType\">\n        <key-map field-name=\"roleTypeIdFrom\" rel-field-name=\"roleTypeId\"/>\n      </relation>\n      <relation type=\"one-nofk\" title=\"To\" rel-entity-name=\"RoleType\">\n        <key-map field-name=\"roleTypeIdTo\" rel-field-name=\"roleTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PARTY_REL_FPROLE\" title=\"From\" rel-entity-name=\"PartyRole\">\n        <key-map field-name=\"partyIdFrom\" rel-field-name=\"partyId\"/>\n        <key-map field-name=\"roleTypeIdFrom\" rel-field-name=\"roleTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PARTY_REL_TPROLE\" title=\"To\" rel-entity-name=\"PartyRole\">\n        <key-map field-name=\"partyIdTo\" rel-field-name=\"partyId\"/>\n        <key-map field-name=\"roleTypeIdTo\" rel-field-name=\"roleTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PARTY_REL_STTS\" rel-entity-name=\"StatusItem\">\n        <key-map field-name=\"statusId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PARTY_REL_PRTYP\" rel-entity-name=\"PriorityType\">\n        <key-map field-name=\"priorityTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PARTY_REL_TYPE\" rel-entity-name=\"PartyRelationshipType\">\n        <key-map field-name=\"partyRelationshipTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PARTY_REL_SECGRP\" rel-entity-name=\"SecurityGroup\">\n        <key-map field-name=\"securityGroupId\" rel-field-name=\"groupId\"/>\n      </relation>\n    </entity>",
+          "nativeTerms": [
+            "PartyRelationship",
+            "partyIdFrom",
+            "partyIdTo",
+            "PartyRole"
+          ],
+          "path": "applications/datamodel/entitydef/party-entitymodel.xml"
+        }
+      ],
+      "questionId": "relations",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "The service boundary defines createPerson as an OFBiz operation for Person.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createPerson\" engine=\"java\" default-entity-name=\"Person\"\n            location=\"org.apache.ofbiz.party.party.PartyServices\" invoke=\"createPerson\" auth=\"false\">\n        <description>Create a Person</description>\n        <auto-attributes mode=\"IN\" include=\"pk\" optional=\"true\"/>\n        <auto-attributes mode=\"OUT\" include=\"pk\" optional=\"false\"/>\n        <auto-attributes mode=\"IN\" include=\"nonpk\" optional=\"true\"/>\n        <attribute name=\"preferredCurrencyUomId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"description\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"externalId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <!-- First and Last names are here optional. This allows to implement simple create user login screen where user is able create account\n            in system with username and password and then later populate rest of the account information. -->\n<!--        <override name=\"firstName\" optional=\"false\"/>\n        <override name=\"lastName\" optional=\"false\"/>\n-->    </service>",
+          "nativeTerms": [
+            "createPerson",
+            "Person"
+          ],
+          "path": "applications/party/servicedef/services.xml"
+        }
+      ],
+      "questionId": "operations",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "createPerson accepts Person attributes and returns the Person primary key as output.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createPerson\" engine=\"java\" default-entity-name=\"Person\"\n            location=\"org.apache.ofbiz.party.party.PartyServices\" invoke=\"createPerson\" auth=\"false\">\n        <description>Create a Person</description>\n        <auto-attributes mode=\"IN\" include=\"pk\" optional=\"true\"/>\n        <auto-attributes mode=\"OUT\" include=\"pk\" optional=\"false\"/>\n        <auto-attributes mode=\"IN\" include=\"nonpk\" optional=\"true\"/>\n        <attribute name=\"preferredCurrencyUomId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"description\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"externalId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <!-- First and Last names are here optional. This allows to implement simple create user login screen where user is able create account\n            in system with username and password and then later populate rest of the account information. -->\n<!--        <override name=\"firstName\" optional=\"false\"/>\n        <override name=\"lastName\" optional=\"false\"/>\n-->    </service>",
+          "nativeTerms": [
+            "createPerson",
+            "auto-attributes",
+            "mode=\"OUT\""
+          ],
+          "path": "applications/party/servicedef/services.xml"
+        }
+      ],
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "setPartyStatus takes partyId and statusId and requires the statusId change to be defined in StatusValidChange.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"setPartyStatus\" engine=\"java\"\n            location=\"org.apache.ofbiz.party.party.PartyServices\" invoke=\"setPartyStatus\" auth=\"true\">\n        <description>Set the party status. Requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission. The change to statusId must be defined in StatusValidChange, otherwise\n            this service will fail. The result is the original statusId, so that ECA conditions can check if a status has actually changed.</description>\n        <permission-service service-name=\"partyStatusPermissionCheck\" main-action=\"UPDATE\"/>\n        <attribute name=\"partyId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusDate\" type=\"Timestamp\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"oldStatusId\" type=\"String\" mode=\"OUT\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "setPartyStatus",
+            "statusId",
+            "StatusValidChange"
+          ],
+          "path": "applications/party/servicedef/services.xml"
+        }
+      ],
+      "questionId": "states-transitions",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "setPartyStatus returns the original statusId as oldStatusId so ECA conditions can check whether party status actually changed.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"setPartyStatus\" engine=\"java\"\n            location=\"org.apache.ofbiz.party.party.PartyServices\" invoke=\"setPartyStatus\" auth=\"true\">\n        <description>Set the party status. Requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission. The change to statusId must be defined in StatusValidChange, otherwise\n            this service will fail. The result is the original statusId, so that ECA conditions can check if a status has actually changed.</description>\n        <permission-service service-name=\"partyStatusPermissionCheck\" main-action=\"UPDATE\"/>\n        <attribute name=\"partyId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusDate\" type=\"Timestamp\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"oldStatusId\" type=\"String\" mode=\"OUT\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "setPartyStatus",
+            "ECA conditions",
+            "oldStatusId"
+          ],
+          "path": "applications/party/servicedef/services.xml"
+        }
+      ],
+      "questionId": "events",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "setPartyStatus requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission and a StatusValidChange.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"setPartyStatus\" engine=\"java\"\n            location=\"org.apache.ofbiz.party.party.PartyServices\" invoke=\"setPartyStatus\" auth=\"true\">\n        <description>Set the party status. Requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission. The change to statusId must be defined in StatusValidChange, otherwise\n            this service will fail. The result is the original statusId, so that ECA conditions can check if a status has actually changed.</description>\n        <permission-service service-name=\"partyStatusPermissionCheck\" main-action=\"UPDATE\"/>\n        <attribute name=\"partyId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusDate\" type=\"Timestamp\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"oldStatusId\" type=\"String\" mode=\"OUT\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "PARTYMGR_UPDATE",
+            "PARTYMGR_STS_UPDATE",
+            "StatusValidChange"
+          ],
+          "path": "applications/party/servicedef/services.xml"
+        }
+      ],
+      "questionId": "preconditions",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "Party ID is the system string that uniquely identifies the Party.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "The first column shows the Party ID.\nThis is a string that uniquely identifies the Party in the system.",
+          "nativeTerms": [
+            "Party ID",
+            "uniquely identifies the Party"
+          ],
+          "path": "applications/party/src/docs/asciidoc/party.adoc"
+        }
+      ],
+      "questionId": "invariants",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "setPartyStatus fails when the statusId change is not defined in StatusValidChange.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"setPartyStatus\" engine=\"java\"\n            location=\"org.apache.ofbiz.party.party.PartyServices\" invoke=\"setPartyStatus\" auth=\"true\">\n        <description>Set the party status. Requires PARTYMGR_UPDATE or PARTYMGR_STS_UPDATE permission. The change to statusId must be defined in StatusValidChange, otherwise\n            this service will fail. The result is the original statusId, so that ECA conditions can check if a status has actually changed.</description>\n        <permission-service service-name=\"partyStatusPermissionCheck\" main-action=\"UPDATE\"/>\n        <attribute name=\"partyId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n        <attribute name=\"statusDate\" type=\"Timestamp\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"oldStatusId\" type=\"String\" mode=\"OUT\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "this service will fail",
+            "StatusValidChange"
+          ],
+          "path": "applications/party/servicedef/services.xml"
+        }
+      ],
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "Find Party presents a result list and Party details expose the complete list of user logins.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "The 'Find Party' is the default screen for the Party Manager application. +\nIt is used to locate existing parties. +\nVarious search criteria can be used, either based on the general party data like name role and type\nbut also on the postal address, telephone (Telecom) and other like email address.\n\nIf the find button is pressed, a list is presented containing several columns.\n\nThe first column shows the Party ID.\nThis is a string that uniquely identifies the Party in the system.\n\nThe second column shows the Party logins. +\nThis is the string the user enters when logging into the system. +\nA single Party can have more than one login.\nIn this case the \"(many)\" string is showed in place of the login string.\nThe complete list of user logins can still be seen in the Party details screen.",
+          "nativeTerms": [
+            "Find Party",
+            "list is presented",
+            "Party details"
+          ],
+          "path": "applications/party/src/docs/asciidoc/party.adoc"
+        }
+      ],
+      "questionId": "readbacks",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "createPerson is exposed as an OFBiz java service using PartyServices.createPerson with auth set to false.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createPerson\" engine=\"java\" default-entity-name=\"Person\"\n            location=\"org.apache.ofbiz.party.party.PartyServices\" invoke=\"createPerson\" auth=\"false\">\n        <description>Create a Person</description>\n        <auto-attributes mode=\"IN\" include=\"pk\" optional=\"true\"/>\n        <auto-attributes mode=\"OUT\" include=\"pk\" optional=\"false\"/>\n        <auto-attributes mode=\"IN\" include=\"nonpk\" optional=\"true\"/>\n        <attribute name=\"preferredCurrencyUomId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"description\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"externalId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <!-- First and Last names are here optional. This allows to implement simple create user login screen where user is able create account\n            in system with username and password and then later populate rest of the account information. -->\n<!--        <override name=\"firstName\" optional=\"false\"/>\n        <override name=\"lastName\" optional=\"false\"/>\n-->    </service>",
+          "nativeTerms": [
+            "service name=\"createPerson\"",
+            "engine=\"java\"",
+            "PartyServices",
+            "auth=\"false\""
+          ],
+          "path": "applications/party/servicedef/services.xml"
+        }
+      ],
+      "questionId": "api-service-exposure",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "claim": "The Party documentation says a Party can be a person, company, or group and lists customer beside supplier and employee; it does not establish customer as one exclusive Party entity type.",
+      "counterexamples": [
+        "Customer is documented as managed terminology, not as an exclusive Person or PartyGroup entity type in this captured evidence."
+      ],
+      "evidence": [
+        {
+          "excerpt": "A party can be a person or a company (or a group of parties).\n\nParty application can be use to manage:\n\n* customer\n* supplier\n* employee\n* ...",
+          "nativeTerms": [
+            "person",
+            "company",
+            "group of parties",
+            "customer",
+            "supplier",
+            "employee"
+          ],
+          "path": "applications/party/src/docs/asciidoc/party.adoc"
+        }
+      ],
+      "questionId": "absence-ambiguity-conflict",
+      "state": "AMBIGUOUS"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "Catalog Manager manages Product, Catalog, and Category information; Product can be physical or digital.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "The Catalog Manager creates or provides access to a variety of information.\nWhether Products, Catalogs, or Categories, this screen offers search tools and links to get you to the type of information\nyou need or are working with quickly and accurately.\n\nThe Catalog Manager application is used to manage the products, all what is purchase, sale, build, used, ... by the company.\nA product can be physical or digital.",
+          "nativeTerms": [
+            "Products",
+            "Catalogs",
+            "Categories",
+            "physical",
+            "digital"
+          ],
+          "path": "applications/product/src/docs/asciidoc/product.adoc"
+        }
+      ],
+      "questionId": "objects-roles",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "ProductAssoc relates a Main Product and an Assoc Product with a productAssocTypeId and effective fromDate/thruDate.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <entity entity-name=\"ProductAssoc\"\n            package-name=\"org.apache.ofbiz.product.product\"\n            title=\"Product Association\">\n      <field name=\"productId\" type=\"id\"></field>\n      <field name=\"productIdTo\" type=\"id\"></field>\n      <field name=\"productAssocTypeId\" type=\"id\"></field>\n      <field name=\"fromDate\" type=\"date-time\"></field>\n      <field name=\"thruDate\" type=\"date-time\"></field>\n      <field name=\"sequenceNum\" type=\"numeric\"></field>\n      <field name=\"reason\" type=\"long-varchar\"></field>\n      <field name=\"quantity\" type=\"fixed-point\"></field>\n      <field name=\"scrapFactor\" type=\"fixed-point\"></field>\n      <field name=\"instruction\" type=\"long-varchar\"></field>\n      <field name=\"routingWorkEffortId\" type=\"id\"></field>\n      <field name=\"estimateCalcMethod\" type=\"id\"></field>\n      <field name=\"recurrenceInfoId\" type=\"id\"></field>\n      <prim-key field=\"productId\"/>\n      <prim-key field=\"productIdTo\"/>\n      <prim-key field=\"productAssocTypeId\"/>\n      <prim-key field=\"fromDate\"/>\n      <relation type=\"one\" fk-name=\"PROD_ASSOC_TYPE\" rel-entity-name=\"ProductAssocType\">\n        <key-map field-name=\"productAssocTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_ASSOC_MPROD\" title=\"Main\" rel-entity-name=\"Product\">\n        <key-map field-name=\"productId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_ASSOC_APROD\" title=\"Assoc\" rel-entity-name=\"Product\">\n        <key-map field-name=\"productIdTo\" rel-field-name=\"productId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_ASSOC_RTWE\" title=\"Routing\" rel-entity-name=\"WorkEffort\">\n        <key-map field-name=\"routingWorkEffortId\" rel-field-name=\"workEffortId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_ASSOC_CUSM\" rel-entity-name=\"CustomMethod\">\n        <key-map field-name=\"estimateCalcMethod\" rel-field-name=\"customMethodId\"/>\n      </relation>\n        <relation type=\"one\" fk-name=\"PROD_ASSOC_RECINFO\" rel-entity-name=\"RecurrenceInfo\">\n            <key-map field-name=\"recurrenceInfoId\"/>\n        </relation>\n    </entity>",
+          "nativeTerms": [
+            "ProductAssoc",
+            "Main",
+            "Assoc",
+            "productAssocTypeId",
+            "fromDate",
+            "thruDate"
+          ],
+          "path": "applications/datamodel/entitydef/product-entitymodel.xml"
+        }
+      ],
+      "questionId": "relations",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "The product service boundary defines createProduct and updateProduct operations.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createProduct\" default-entity-name=\"Product\" engine=\"groovy\"\n                location=\"component://product/src/main/groovy/org/apache/ofbiz/product/product/product/ProductServicesScript.groovy\" invoke=\"createProduct\" auth=\"true\">\n        <description>Create a Product</description>\n        <implements service=\"interfaceProduct\"/>\n        <auto-attributes include=\"pk\" mode=\"INOUT\" optional=\"true\"/>\n        <override name=\"productTypeId\" optional=\"false\"/>\n        <override name=\"internalName\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "createProduct",
+            "Create a Product"
+          ],
+          "path": "applications/product/servicedef/services.xml"
+        }
+      ],
+      "questionId": "operations",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "createProduct takes productTypeId and internalName as required inputs and productId as optional INOUT primary key.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createProduct\" default-entity-name=\"Product\" engine=\"groovy\"\n                location=\"component://product/src/main/groovy/org/apache/ofbiz/product/product/product/ProductServicesScript.groovy\" invoke=\"createProduct\" auth=\"true\">\n        <description>Create a Product</description>\n        <implements service=\"interfaceProduct\"/>\n        <auto-attributes include=\"pk\" mode=\"INOUT\" optional=\"true\"/>\n        <override name=\"productTypeId\" optional=\"false\"/>\n        <override name=\"internalName\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "productTypeId",
+            "internalName",
+            "INOUT"
+          ],
+          "path": "applications/product/servicedef/services.xml"
+        }
+      ],
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "Product records introductionDate, releaseDate, supportDiscontinuationDate, and salesDiscontinuationDate lifecycle dates.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <entity entity-name=\"Product\"\n            package-name=\"org.apache.ofbiz.product.product\"\n            title=\"Product\">\n      <field name=\"productId\" type=\"id\"></field>\n      <field name=\"productTypeId\" type=\"id\"></field>\n      <field name=\"primaryProductCategoryId\" type=\"id\"><description>The primary category ; it should be one of the productCategoryId already setup in ProductCategoryMember</description></field>\n      <field name=\"facilityId\" type=\"id\"></field>\n      <field name=\"introductionDate\" type=\"date-time\"></field>\n      <field name=\"releaseDate\" type=\"date-time\"></field>\n      <field name=\"supportDiscontinuationDate\" type=\"date-time\"></field>\n      <field name=\"salesDiscontinuationDate\" type=\"date-time\">",
+          "nativeTerms": [
+            "Product",
+            "introductionDate",
+            "releaseDate",
+            "supportDiscontinuationDate",
+            "salesDiscontinuationDate"
+          ],
+          "path": "applications/datamodel/entitydef/product-entitymodel.xml"
+        }
+      ],
+      "questionId": "states-transitions",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "discontinueProductSales is a groovy service that discontinues Product sales for a required productId.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"discontinueProductSales\" engine=\"groovy\"\n                location=\"component://product/src/main/groovy/org/apache/ofbiz/product/product/product/ProductServicesScript.groovy\" invoke=\"discontinueProductSales\" auth=\"false\">\n        <description>Discontinue Product Sales</description>\n        <attribute name=\"productId\" type=\"String\" mode=\"IN\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "discontinueProductSales",
+            "Discontinue Product Sales",
+            "productId"
+          ],
+          "path": "applications/product/servicedef/services.xml"
+        }
+      ],
+      "questionId": "events",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "createProduct is authenticated and requires productTypeId and internalName.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createProduct\" default-entity-name=\"Product\" engine=\"groovy\"\n                location=\"component://product/src/main/groovy/org/apache/ofbiz/product/product/product/ProductServicesScript.groovy\" invoke=\"createProduct\" auth=\"true\">\n        <description>Create a Product</description>\n        <implements service=\"interfaceProduct\"/>\n        <auto-attributes include=\"pk\" mode=\"INOUT\" optional=\"true\"/>\n        <override name=\"productTypeId\" optional=\"false\"/>\n        <override name=\"internalName\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "auth=\"true\"",
+            "productTypeId",
+            "internalName",
+            "optional=\"false\""
+          ],
+          "path": "applications/product/servicedef/services.xml"
+        }
+      ],
+      "questionId": "preconditions",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "Product has productId as its primary key and relates to ProductType.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <entity entity-name=\"Product\"\n            package-name=\"org.apache.ofbiz.product.product\"\n            title=\"Product\">\n      <field name=\"productId\" type=\"id\"></field>\n      <field name=\"productTypeId\" type=\"id\"></field>\n      <field name=\"primaryProductCategoryId\" type=\"id\"><description>The primary category ; it should be one of the productCategoryId already setup in ProductCategoryMember</description></field>\n      <field name=\"facilityId\" type=\"id\"></field>\n      <field name=\"introductionDate\" type=\"date-time\"></field>\n      <field name=\"releaseDate\" type=\"date-time\"></field>\n      <field name=\"supportDiscontinuationDate\" type=\"date-time\"></field>\n      <field name=\"salesDiscontinuationDate\" type=\"date-time\"></field>\n      <field name=\"salesDiscWhenNotAvail\" type=\"indicator\"></field>\n      <field name=\"internalName\" type=\"description\"></field>\n      <field name=\"brandName\" type=\"name\"></field>\n      <field name=\"comments\" type=\"comment\"></field>\n      <field name=\"productName\" type=\"name\"></field>\n      <field name=\"description\" type=\"description\"></field>\n      <field name=\"longDescription\" type=\"very-long\"></field>\n      <field name=\"priceDetailText\" type=\"description\"></field>\n      <field name=\"smallImageUrl\" type=\"url\"></field>\n      <field name=\"mediumImageUrl\" type=\"url\"></field>\n      <field name=\"largeImageUrl\" type=\"url\"></field>\n      <field name=\"detailImageUrl\" type=\"url\"></field>\n      <field name=\"originalImageUrl\" type=\"url\"></field>\n      <field name=\"detailScreen\" type=\"long-varchar\"></field>\n      <field name=\"inventoryMessage\" type=\"description\"></field>\n      <field name=\"inventoryItemTypeId\" type=\"id\"></field>\n      <field name=\"requireInventory\" type=\"indicator\"></field>\n      <field name=\"quantityUomId\" type=\"id\"></field>\n      <field name=\"quantityIncluded\" type=\"fixed-point\"><description>If you have a six-pack of 12oz soda cans you would have quantityIncluded=12, quantityUomId=oz, piecesIncluded=6.</description></field> \n      <field name=\"piecesIncluded\" type=\"numeric\"></field>\n      <field name=\"requireAmount\" type=\"indicator\"></field>\n      <field name=\"fixedAmount\" type=\"currency-amount\"><description>Use this for products which are sold in fixed denominations, such as gift certificates or calling cards.</description></field>\n      <field name=\"amountUomTypeId\" type=\"id\"></field>\n      <field name=\"weightUomId\" type=\"id\"></field>\n      <field name=\"shippingWeight\" type=\"fixed-point\"><description>The shipping weight of the product.</description></field>\n      <field name=\"productWeight\" type=\"fixed-point\"></field>\n      <field name=\"heightUomId\" type=\"id\"></field>\n      <field name=\"productHeight\" type=\"fixed-point\"></field>\n      <field name=\"shippingHeight\" type=\"fixed-point\"></field>\n      <field name=\"widthUomId\" type=\"id\"></field>\n      <field name=\"productWidth\" type=\"fixed-point\"></field>\n      <field name=\"shippingWidth\" type=\"fixed-point\"></field>\n      <field name=\"depthUomId\" type=\"id\"></field>\n      <field name=\"productDepth\" type=\"fixed-point\"></field>\n      <field name=\"shippingDepth\" type=\"fixed-point\"></field>\n      <field name=\"diameterUomId\" type=\"id\"></field>\n      <field name=\"productDiameter\" type=\"fixed-point\"></field>\n      <field name=\"productRating\" type=\"fixed-point\"></field>\n      <field name=\"ratingTypeEnum\" type=\"id\"></field>\n      <field name=\"returnable\" type=\"indicator\"></field>\n      <field name=\"taxable\" type=\"indicator\"></field>\n      <field name=\"chargeShipping\" type=\"indicator\"></field>\n      <field name=\"autoCreateKeywords\" type=\"indicator\"></field>\n      <field name=\"includeInPromotions\" type=\"indicator\"></field>\n      <field name=\"isVirtual\" type=\"indicator\"></field>\n      <field name=\"isVariant\" type=\"indicator\"></field>\n      <field name=\"virtualVariantMethodEnum\" type=\"id\"><description>This field defines the method of selecting a variant from the selectable features on the virtual product. Either as a variant explosion which will work to about 200 variants or as feature explosion which almost has no limits</description></field>\n      <field name=\"originGeoId\" type=\"id\"></field>\n      <field name=\"requirementMethodEnumId\" type=\"id\"></field>\n      <field name=\"billOfMaterialLevel\" type=\"numeric\"></field>\n      <field name=\"reservMaxPersons\" type=\"fixed-point\"><description>maximum number of persons who can rent this asset at the same time</description></field>\n      <field name=\"reserv2ndPPPerc\" type=\"fixed-point\"><description>percentage of the end price for the 2nd person renting this asset connected to this product</description></field>\n      <field name=\"reservNthPPPerc\" type=\"fixed-point\"><description>percentage of the end price for the Nth person renting this asset connected to this product</description></field>\n      <field name=\"configId\" type=\"id\"><description>Used to safe the persisted configuration Id for AGGREGATED products.</description></field>\n      <field name=\"createdDate\" type=\"date-time\"></field>\n      <field name=\"createdByUserLogin\" type=\"id-vlong\"></field>\n      <field name=\"lastModifiedDate\" type=\"date-time\"></field>\n      <field name=\"lastModifiedByUserLogin\" type=\"id-vlong\"></field>\n      <field name=\"inShippingBox\" type=\"indicator\"></field>\n      <field name=\"defaultShipmentBoxTypeId\" type=\"id\"></field>\n      <field name=\"lotIdFilledIn\" type=\"long-varchar\"><description>Indicate if the lotId must be informed</description></field>\n      <field name=\"orderDecimalQuantity\" type=\"indicator\"><description>use to indicate if decimal quantity can be ordered for this product. Default value is Y</description></field>\n      <prim-key field=\"productId\"/>\n      <relation type=\"one\" fk-name=\"PROD_TYPE\" rel-entity-name=\"ProductType\">\n        <key-map field-name=\"productTypeId\"/>",
+          "nativeTerms": [
+            "productId",
+            "prim-key",
+            "ProductType"
+          ],
+          "path": "applications/datamodel/entitydef/product-entitymodel.xml"
+        }
+      ],
+      "questionId": "invariants",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "The createProduct contract marks productTypeId and internalName non-optional but names no fail-property in that service block.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createProduct\" default-entity-name=\"Product\" engine=\"groovy\"\n                location=\"component://product/src/main/groovy/org/apache/ofbiz/product/product/product/ProductServicesScript.groovy\" invoke=\"createProduct\" auth=\"true\">\n        <description>Create a Product</description>\n        <implements service=\"interfaceProduct\"/>\n        <auto-attributes include=\"pk\" mode=\"INOUT\" optional=\"true\"/>\n        <override name=\"productTypeId\" optional=\"false\"/>\n        <override name=\"internalName\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "productTypeId",
+            "internalName",
+            "optional=\"false\""
+          ],
+          "path": "applications/product/servicedef/services.xml"
+        }
+      ],
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "createProduct exposes the Product primary key as INOUT, providing the created Product identifier as observable output.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createProduct\" default-entity-name=\"Product\" engine=\"groovy\"\n                location=\"component://product/src/main/groovy/org/apache/ofbiz/product/product/product/ProductServicesScript.groovy\" invoke=\"createProduct\" auth=\"true\">\n        <description>Create a Product</description>\n        <implements service=\"interfaceProduct\"/>\n        <auto-attributes include=\"pk\" mode=\"INOUT\" optional=\"true\"/>\n        <override name=\"productTypeId\" optional=\"false\"/>\n        <override name=\"internalName\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "auto-attributes",
+            "include=\"pk\"",
+            "INOUT"
+          ],
+          "path": "applications/product/servicedef/services.xml"
+        }
+      ],
+      "questionId": "readbacks",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "createProduct is exposed through an authenticated groovy OFBiz service invoking ProductServicesScript.groovy.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createProduct\" default-entity-name=\"Product\" engine=\"groovy\"\n                location=\"component://product/src/main/groovy/org/apache/ofbiz/product/product/product/ProductServicesScript.groovy\" invoke=\"createProduct\" auth=\"true\">\n        <description>Create a Product</description>\n        <implements service=\"interfaceProduct\"/>\n        <auto-attributes include=\"pk\" mode=\"INOUT\" optional=\"true\"/>\n        <override name=\"productTypeId\" optional=\"false\"/>\n        <override name=\"internalName\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "engine=\"groovy\"",
+            "ProductServicesScript.groovy",
+            "auth=\"true\""
+          ],
+          "path": "applications/product/servicedef/services.xml"
+        }
+      ],
+      "questionId": "api-service-exposure",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "claim": "The Product entity has lifecycle date fields but no statusId field; this capture does not normalize those dates into a Product status workflow.",
+      "counterexamples": [
+        "The complete captured Product entity block contains no field named statusId."
+      ],
+      "evidence": [
+        {
+          "excerpt": "    <entity entity-name=\"Product\"\n            package-name=\"org.apache.ofbiz.product.product\"\n            title=\"Product\">\n      <field name=\"productId\" type=\"id\"></field>\n      <field name=\"productTypeId\" type=\"id\"></field>\n      <field name=\"primaryProductCategoryId\" type=\"id\"><description>The primary category ; it should be one of the productCategoryId already setup in ProductCategoryMember</description></field>\n      <field name=\"facilityId\" type=\"id\"></field>\n      <field name=\"introductionDate\" type=\"date-time\"></field>\n      <field name=\"releaseDate\" type=\"date-time\"></field>\n      <field name=\"supportDiscontinuationDate\" type=\"date-time\"></field>\n      <field name=\"salesDiscontinuationDate\" type=\"date-time\"></field>\n      <field name=\"salesDiscWhenNotAvail\" type=\"indicator\"></field>\n      <field name=\"internalName\" type=\"description\"></field>\n      <field name=\"brandName\" type=\"name\"></field>\n      <field name=\"comments\" type=\"comment\"></field>\n      <field name=\"productName\" type=\"name\"></field>\n      <field name=\"description\" type=\"description\"></field>\n      <field name=\"longDescription\" type=\"very-long\"></field>\n      <field name=\"priceDetailText\" type=\"description\"></field>\n      <field name=\"smallImageUrl\" type=\"url\"></field>\n      <field name=\"mediumImageUrl\" type=\"url\"></field>\n      <field name=\"largeImageUrl\" type=\"url\"></field>\n      <field name=\"detailImageUrl\" type=\"url\"></field>\n      <field name=\"originalImageUrl\" type=\"url\"></field>\n      <field name=\"detailScreen\" type=\"long-varchar\"></field>\n      <field name=\"inventoryMessage\" type=\"description\"></field>\n      <field name=\"inventoryItemTypeId\" type=\"id\"></field>\n      <field name=\"requireInventory\" type=\"indicator\"></field>\n      <field name=\"quantityUomId\" type=\"id\"></field>\n      <field name=\"quantityIncluded\" type=\"fixed-point\"><description>If you have a six-pack of 12oz soda cans you would have quantityIncluded=12, quantityUomId=oz, piecesIncluded=6.</description></field> \n      <field name=\"piecesIncluded\" type=\"numeric\"></field>\n      <field name=\"requireAmount\" type=\"indicator\"></field>\n      <field name=\"fixedAmount\" type=\"currency-amount\"><description>Use this for products which are sold in fixed denominations, such as gift certificates or calling cards.</description></field>\n      <field name=\"amountUomTypeId\" type=\"id\"></field>\n      <field name=\"weightUomId\" type=\"id\"></field>\n      <field name=\"shippingWeight\" type=\"fixed-point\"><description>The shipping weight of the product.</description></field>\n      <field name=\"productWeight\" type=\"fixed-point\"></field>\n      <field name=\"heightUomId\" type=\"id\"></field>\n      <field name=\"productHeight\" type=\"fixed-point\"></field>\n      <field name=\"shippingHeight\" type=\"fixed-point\"></field>\n      <field name=\"widthUomId\" type=\"id\"></field>\n      <field name=\"productWidth\" type=\"fixed-point\"></field>\n      <field name=\"shippingWidth\" type=\"fixed-point\"></field>\n      <field name=\"depthUomId\" type=\"id\"></field>\n      <field name=\"productDepth\" type=\"fixed-point\"></field>\n      <field name=\"shippingDepth\" type=\"fixed-point\"></field>\n      <field name=\"diameterUomId\" type=\"id\"></field>\n      <field name=\"productDiameter\" type=\"fixed-point\"></field>\n      <field name=\"productRating\" type=\"fixed-point\"></field>\n      <field name=\"ratingTypeEnum\" type=\"id\"></field>\n      <field name=\"returnable\" type=\"indicator\"></field>\n      <field name=\"taxable\" type=\"indicator\"></field>\n      <field name=\"chargeShipping\" type=\"indicator\"></field>\n      <field name=\"autoCreateKeywords\" type=\"indicator\"></field>\n      <field name=\"includeInPromotions\" type=\"indicator\"></field>\n      <field name=\"isVirtual\" type=\"indicator\"></field>\n      <field name=\"isVariant\" type=\"indicator\"></field>\n      <field name=\"virtualVariantMethodEnum\" type=\"id\"><description>This field defines the method of selecting a variant from the selectable features on the virtual product. Either as a variant explosion which will work to about 200 variants or as feature explosion which almost has no limits</description></field>\n      <field name=\"originGeoId\" type=\"id\"></field>\n      <field name=\"requirementMethodEnumId\" type=\"id\"></field>\n      <field name=\"billOfMaterialLevel\" type=\"numeric\"></field>\n      <field name=\"reservMaxPersons\" type=\"fixed-point\"><description>maximum number of persons who can rent this asset at the same time</description></field>\n      <field name=\"reserv2ndPPPerc\" type=\"fixed-point\"><description>percentage of the end price for the 2nd person renting this asset connected to this product</description></field>\n      <field name=\"reservNthPPPerc\" type=\"fixed-point\"><description>percentage of the end price for the Nth person renting this asset connected to this product</description></field>\n      <field name=\"configId\" type=\"id\"><description>Used to safe the persisted configuration Id for AGGREGATED products.</description></field>\n      <field name=\"createdDate\" type=\"date-time\"></field>\n      <field name=\"createdByUserLogin\" type=\"id-vlong\"></field>\n      <field name=\"lastModifiedDate\" type=\"date-time\"></field>\n      <field name=\"lastModifiedByUserLogin\" type=\"id-vlong\"></field>\n      <field name=\"inShippingBox\" type=\"indicator\"></field>\n      <field name=\"defaultShipmentBoxTypeId\" type=\"id\"></field>\n      <field name=\"lotIdFilledIn\" type=\"long-varchar\"><description>Indicate if the lotId must be informed</description></field>\n      <field name=\"orderDecimalQuantity\" type=\"indicator\"><description>use to indicate if decimal quantity can be ordered for this product. Default value is Y</description></field>\n      <prim-key field=\"productId\"/>\n      <relation type=\"one\" fk-name=\"PROD_TYPE\" rel-entity-name=\"ProductType\">\n        <key-map field-name=\"productTypeId\"/>\n      </relation>\n      <relation type=\"many\" rel-entity-name=\"ProductTypeAttr\">\n        <key-map field-name=\"productTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_PRIMARY_CAT\" title=\"Primary\" rel-entity-name=\"ProductCategory\">\n        <key-map field-name=\"primaryProductCategoryId\" rel-field-name=\"productCategoryId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_FACILITY\" rel-entity-name=\"Facility\">\n        <key-map field-name=\"facilityId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_QUANT_UOM\" title=\"Quantity\" rel-entity-name=\"Uom\">\n        <key-map field-name=\"quantityUomId\" rel-field-name=\"uomId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_AMOUNT_UOMT\" title=\"Amount\" rel-entity-name=\"UomType\">\n        <key-map field-name=\"amountUomTypeId\" rel-field-name=\"uomTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_WEIGHT_UOM\" title=\"Weight\" rel-entity-name=\"Uom\">\n        <key-map field-name=\"weightUomId\" rel-field-name=\"uomId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_HEIGHT_UOM\" title=\"Height\" rel-entity-name=\"Uom\">\n        <key-map field-name=\"heightUomId\" rel-field-name=\"uomId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_WIDTH_UOM\" title=\"Width\" rel-entity-name=\"Uom\">\n        <key-map field-name=\"widthUomId\" rel-field-name=\"uomId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_DEPTH_UOM\" title=\"Depth\" rel-entity-name=\"Uom\">\n        <key-map field-name=\"depthUomId\" rel-field-name=\"uomId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_DIAMTR_UOM\" title=\"Diameter\" rel-entity-name=\"Uom\">\n        <key-map field-name=\"diameterUomId\" rel-field-name=\"uomId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_VVMETHOD_ENUM\" title=\"VirtualVariantMethod\" rel-entity-name=\"Enumeration\">\n        <key-map field-name=\"virtualVariantMethodEnum\" rel-field-name=\"enumId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_RATE_ENUM\" title=\"Rating\" rel-entity-name=\"Enumeration\">\n        <key-map field-name=\"ratingTypeEnum\" rel-field-name=\"enumId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_RQMT_ENUM\" title=\"RequirementMethod\" rel-entity-name=\"Enumeration\">\n        <key-map field-name=\"requirementMethodEnumId\" rel-field-name=\"enumId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_ORG_GEO\" title=\"Origin\" rel-entity-name=\"Geo\">\n          <key-map field-name=\"originGeoId\" rel-field-name=\"geoId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_CB_USERLOGIN\" title=\"CreatedBy\" rel-entity-name=\"UserLogin\">\n        <key-map field-name=\"createdByUserLogin\" rel-field-name=\"userLoginId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_LMB_USERLOGIN\" title=\"LastModifiedBy\" rel-entity-name=\"UserLogin\">\n        <key-map field-name=\"lastModifiedByUserLogin\" rel-field-name=\"userLoginId\"/>\n      </relation>\n      <relation type=\"many\" rel-entity-name=\"ProductFeatureAndAppl\">\n        <key-map field-name=\"productId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_SHBX_TYPE\" title=\"Default\" rel-entity-name=\"ShipmentBoxType\">\n          <key-map field-name=\"defaultShipmentBoxTypeId\" rel-field-name=\"shipmentBoxTypeId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"PROD_INV_ITEM_TYPE\" rel-entity-name=\"InventoryItemType\">\n          <key-map field-name=\"inventoryItemTypeId\" rel-field-name=\"inventoryItemTypeId\"/>\n      </relation>\n\n    </entity>",
+          "nativeTerms": [
+            "Product",
+            "introductionDate",
+            "salesDiscontinuationDate"
+          ],
+          "path": "applications/datamodel/entitydef/product-entitymodel.xml"
+        }
+      ],
+      "questionId": "absence-ambiguity-conflict",
+      "state": "ABSENT"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "A sales order concerns a customer, ordered products or services, payment term and method, billing and shipping addresses, and delivery instructions.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "A sales order is an agreement between a business association and a customer concerning the delivery of\nproducts or provision of services. This process involves order capturing, order status management,\npayment terms and method setup etc.\n\nA customer can place an order from the storefront or a customer service representative (CSR) can place\nthe order on behalf of a customer from the back end.\n\n=== Business Purpose\n\nA Sales Order from the customer notifies the business of customer wants. It tells the business who is\nthe customer, what are the products or services ordered, what is the payment term and method, what are\nthe billing and shipping addresses, any special instructions for delivery, order priority etc.",
+          "nativeTerms": [
+            "sales order",
+            "customer",
+            "products or services",
+            "payment term and method",
+            "billing and shipping addresses"
+          ],
+          "path": "applications/order/src/docs/asciidoc/order.adoc"
+        }
+      ],
+      "questionId": "objects-roles",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "OrderRole relates OrderHeader, Party, PartyRole, RoleType, and OrderItem using orderId, partyId, and roleTypeId.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <entity entity-name=\"OrderRole\"\n            package-name=\"org.apache.ofbiz.order.order\"\n            never-cache=\"true\"\n            title=\"Order Role\">\n      <field name=\"orderId\" type=\"id\"></field>\n      <field name=\"partyId\" type=\"id\"></field>\n      <field name=\"roleTypeId\" type=\"id\"></field>\n      <prim-key field=\"orderId\"/>\n      <prim-key field=\"partyId\"/>\n      <prim-key field=\"roleTypeId\"/>\n      <relation type=\"one\" fk-name=\"ORDER_ROLE_OHDR\" rel-entity-name=\"OrderHeader\">\n        <key-map field-name=\"orderId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"ORDER_ROLE_PARTY\" rel-entity-name=\"Party\">\n        <key-map field-name=\"partyId\"/>\n      </relation>\n      <relation type=\"one\" fk-name=\"ORDER_ROLE_PROLE\" rel-entity-name=\"PartyRole\">\n        <key-map field-name=\"partyId\"/>\n        <key-map field-name=\"roleTypeId\"/>\n      </relation>\n      <relation type=\"one-nofk\" rel-entity-name=\"RoleType\">\n        <key-map field-name=\"roleTypeId\"/>\n      </relation>\n      <relation type=\"many\" rel-entity-name=\"OrderItem\">\n        <key-map field-name=\"orderId\"/>\n      </relation>\n    </entity>",
+          "nativeTerms": [
+            "OrderRole",
+            "OrderHeader",
+            "PartyRole",
+            "OrderItem"
+          ],
+          "path": "applications/datamodel/entitydef/order-entitymodel.xml"
+        }
+      ],
+      "questionId": "relations",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "Order entry captures Product Store and Customer Details, adds items to cart, sets shipping and payment terms, and creates the Order.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": ". <<Order Entry Init,Product Store and Customer Details>>\n. <<Add Item(s) to cart>>\n. <<Quick Finalize Order,Set Shipping Method and Payment Term>>\n. <<Order confirmation,Create Order>>",
+          "nativeTerms": [
+            "Product Store and Customer Details",
+            "Add Item(s) to cart",
+            "Create Order"
+          ],
+          "path": "applications/order/src/docs/asciidoc/_include/order-create-order-diagrams.adoc"
+        }
+      ],
+      "questionId": "operations",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "createOrderFromShoppingCart takes shoppingCart as INOUT and returns orderId as OUT.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"createOrderFromShoppingCart\" engine=\"java\"\n            location=\"org.apache.ofbiz.order.order.OrderServices\" invoke=\"createOrderFromShoppingCart\" auth=\"false\">\n        <attribute name=\"shoppingCart\" type=\"org.apache.ofbiz.order.shoppingcart.ShoppingCart\" mode=\"INOUT\" optional=\"false\"/>\n        <attribute name=\"orderId\" type=\"String\" mode=\"OUT\" optional=\"false\"/>\n    </service>",
+          "nativeTerms": [
+            "shoppingCart",
+            "INOUT",
+            "orderId",
+            "OUT"
+          ],
+          "path": "applications/order/servicedef/services.xml"
+        }
+      ],
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "ORDER_STATUS defines Created, Processing, Approved, Sent, Held, Completed, Rejected, and Cancelled with explicit StatusValidChange rows.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <!-- order and order item status -->\n    <StatusType description=\"Order\" hasTable=\"N\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Created\" sequenceId=\"01\" statusCode=\"CREATED\" statusId=\"ORDER_CREATED\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Processing\" sequenceId=\"04\" statusCode=\"PROCESSING\" statusId=\"ORDER_PROCESSING\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Approved\" sequenceId=\"05\" statusCode=\"APPROVED\" statusId=\"ORDER_APPROVED\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Sent\" sequenceId=\"03\" statusCode=\"SENT\" statusId=\"ORDER_SENT\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Held\" sequenceId=\"06\" statusCode=\"HELD\" statusId=\"ORDER_HOLD\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Completed\" sequenceId=\"10\" statusCode=\"COMPLETED\" statusId=\"ORDER_COMPLETED\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Rejected\" sequenceId=\"98\" statusCode=\"REJECTED\" statusId=\"ORDER_REJECTED\" statusTypeId=\"ORDER_STATUS\"/>\n    <StatusItem description=\"Cancelled\" sequenceId=\"99\" statusCode=\"CANCELLED\" statusId=\"ORDER_CANCELLED\" statusTypeId=\"ORDER_STATUS\"/>\n\n    <StatusType description=\"Order Item\" hasTable=\"N\" parentTypeId=\"ORDER_STATUS\" statusTypeId=\"ORDER_ITEM_STATUS\"/>\n    <StatusItem description=\"Created\" sequenceId=\"01\" statusCode=\"CREATED\" statusId=\"ITEM_CREATED\" statusTypeId=\"ORDER_ITEM_STATUS\"/>\n    <StatusItem description=\"Approved\" sequenceId=\"05\" statusCode=\"APPROVED\" statusId=\"ITEM_APPROVED\" statusTypeId=\"ORDER_ITEM_STATUS\"/>\n    <StatusItem description=\"Completed\" sequenceId=\"10\" statusCode=\"COMPLETED\" statusId=\"ITEM_COMPLETED\" statusTypeId=\"ORDER_ITEM_STATUS\"/>\n    <StatusItem description=\"Rejected\" sequenceId=\"98\" statusCode=\"REJECTED\" statusId=\"ITEM_REJECTED\" statusTypeId=\"ORDER_ITEM_STATUS\"/>\n    <StatusItem description=\"Cancelled\" sequenceId=\"99\" statusCode=\"CANCELLED\" statusId=\"ITEM_CANCELLED\" statusTypeId=\"ORDER_ITEM_STATUS\"/>\n\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_PROCESSING\" transitionName=\"Process Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_HOLD\" transitionName=\"Hold Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_REJECTED\" transitionName=\"Reject Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_HOLD\" transitionName=\"Hold Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_REJECTED\" transitionName=\"Reject Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_SENT\" transitionName=\"Send Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_PROCESSING\" transitionName=\"Process Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_COMPLETED\" transitionName=\"Complete Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_HOLD\" transitionName=\"Hold Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_PROCESSING\" transitionName=\"Process Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_SENT\" statusIdTo=\"ORDER_COMPLETED\" transitionName=\"Order Completed\"/>\n    <StatusValidChange statusId=\"ORDER_SENT\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Order Cancelled\"/>\n    <StatusValidChange statusId=\"ORDER_COMPLETED\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>",
+          "nativeTerms": [
+            "ORDER_CREATED",
+            "ORDER_APPROVED",
+            "ORDER_COMPLETED",
+            "StatusValidChange"
+          ],
+          "path": "applications/datamodel/data/seed/OrderSeedData.xml"
+        }
+      ],
+      "questionId": "states-transitions",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "StatusValidChange transition names include Process Order, Approve Order, Hold Order, Reject Order, Cancel Order, Send Order, and Complete Order.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_PROCESSING\" transitionName=\"Process Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_HOLD\" transitionName=\"Hold Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_REJECTED\" transitionName=\"Reject Order\"/>\n    <StatusValidChange statusId=\"ORDER_CREATED\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_HOLD\" transitionName=\"Hold Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_REJECTED\" transitionName=\"Reject Order\"/>\n    <StatusValidChange statusId=\"ORDER_PROCESSING\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_SENT\" transitionName=\"Send Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_PROCESSING\" transitionName=\"Process Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_COMPLETED\" transitionName=\"Complete Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_HOLD\" transitionName=\"Hold Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_PROCESSING\" transitionName=\"Process Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_SENT\" statusIdTo=\"ORDER_COMPLETED\" transitionName=\"Order Completed\"/>",
+          "nativeTerms": [
+            "Process Order",
+            "Approve Order",
+            "Cancel Order",
+            "Order Completed"
+          ],
+          "path": "applications/datamodel/data/seed/OrderSeedData.xml"
+        }
+      ],
+      "questionId": "events",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "Approved Order guidance requires checking shipping information, billing details, and requested shipping dates before Approve Order.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "== Approved Order\nf you have an approval process, you will want to check over the details to confirm that the shipping information is complete\nand accurate, that the billing details are acceptable and that the requested shipping dates (if specified) are within\nyour company's capabilities.\n\nWhen all is ok click on the [Approve Order] link in <<Order View>>",
+          "nativeTerms": [
+            "shipping information",
+            "billing details",
+            "shipping dates",
+            "Approve Order"
+          ],
+          "path": "applications/order/src/docs/asciidoc/_include/order-status-diagrams.adoc"
+        }
+      ],
+      "questionId": "preconditions",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "Sales Order document is created with a unique reference number used for customer service and issue reporting.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "Sales Order document is created in the system with a unique reference number that comes in handy for\nbetter customer service afterward. It enables a business to offer the customer to have a choice\nto change ordered items. The customer also gets the details of the order which can be accessed through\nhis profile on the storefront (eCommerce front) at any time if registered or else can use the order\nreference number while contacting the business for reporting any issues.",
+          "nativeTerms": [
+            "unique reference number",
+            "customer service",
+            "reference number"
+          ],
+          "path": "applications/order/src/docs/asciidoc/order.adoc"
+        }
+      ],
+      "questionId": "invariants",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "callProcessOrderPayments requires shoppingCart and binds a missing value to OrderRequiredFieldMissingShoppingCart.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"callProcessOrderPayments\" engine=\"java\"\n            location=\"org.apache.ofbiz.order.order.OrderServices\" invoke=\"callProcessOrderPayments\" auth=\"false\">\n        <attribute name=\"shoppingCart\" type=\"org.apache.ofbiz.order.shoppingcart.ShoppingCart\" mode=\"IN\" optional=\"false\">\n            <type-validate>\n                <fail-property resource=\"OrderErrorUiLabels\" property=\"OrderRequiredFieldMissingShoppingCart\"/>\n            </type-validate>\n        </attribute>\n        <attribute name=\"manualHold\" type=\"Boolean\" mode=\"IN\" optional=\"true\"/>\n    </service>",
+          "nativeTerms": [
+            "shoppingCart",
+            "OrderRequiredFieldMissingShoppingCart"
+          ],
+          "path": "applications/order/servicedef/services.xml"
+        }
+      ],
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "Current order status tells the state at a given time; Find Orders lists existing Orders for completion or modification.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "Order status transitions help business to filter orders based on status (Created, Approved, Rejected,\nCompleted etc.) Current order status tells the state of order in the system at any given time\nwhich is used effectively by CSRs while communicating with customers over the phone.\n\nOrder payment terms and method tells the business how the order payment is going to be processed.\nIt helps in timely fulfillment of orders, which is key to success for any business.\nSame is with billing and shipping information on the order, it tells the business which address\nto be used for invoicing and which one for shipping. Having an effective order capturing process helps\nto engage your customers.\n\nThe Accounting manager keeps track of financial charges, credit card processes, and receipts of payment.\nThe link from the Order Manager to the Accounting Manager is the Invoice Number\n\nA customer always provide shipping method details to let the business know about his shipping preference\nto ship the order and in other ends, CSR always captures shipping method along with special instructions\nfor delivery.\n\ninclude::_include/order-create-order-diagrams.adoc[leveloffset=+2]\n\ninclude::_include/order-status-diagrams.adoc[leveloffset=+2]\n\ninclude::_include/order-update-order-diagrams.adoc[leveloffset=+2]\n\ninclude::_include/order-payment-diagrams.adoc[leveloffset=+2]\n\n\n== Orders management in UI\nSales and Purchase management are done on the same screen, so depending on what you want, don't forget to select\nthe correct Order Type.\n\n=== Orders of the day\nUpon opening the Order Manager, your first screen will be a short sale \"dashboard of the day\" with:\n* the new sales orders (enter today)\n* the top 5 of the product sales today\n\nThis screen is a portal page, so in some case it's possible to choose which portlet to put.\n\nOn the first part, only order with status and type selected in the <Order List> screen appears.\nFor example, if you work on purchase department, on Order List screen, if you select purchase type and only\nApproved status, on the main screen you will will see only purchase order created today and already in approved status.\n\nEven if this screen is useful, it's also a example a developer can personalize to give orders to follow in your business situation.\n\n=== List Orders\nThe focus of this screen is order status +\nretrieve all orders for one type and a selection of status.\n\nIt lists all the current orders in need of processing. You should spot the one prepared above in the list;\nclick on the Order Number to proceeed. If too many orders are listed in the first screen (List Orders),\nunclick the 'Approved' checkbox and click on [Submit].\nIf still too many, unclick either the 'Created' or the 'Processing' status checkbox and try again.\n\nUsing the check boxes and the [Submit] link, you will bring up a list of all orders in any category selected.\n\nOrder list give you main information on parties associated  to the order and a link to the order details.\n\nTo narrow your search, use the Find Orders tab.\nThis brings up a complete search screen which will take any possible parameters to find the one you want to work with.\n\n=== Find Orders\nThis screen brings up a complete search screen which will take any possible parameters.\n\nEnter information about the order and click on [Find]. +\nExisting Orders are listed and you can complete it or modify it, if that is what the customer is calling for.",
+          "nativeTerms": [
+            "Current order status",
+            "Find Orders",
+            "Existing Orders are listed"
+          ],
+          "path": "applications/order/src/docs/asciidoc/order.adoc"
+        }
+      ],
+      "questionId": "readbacks",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "changeOrderStatus is an authenticated java OFBiz service invoking setOrderStatus and returning oldStatusId and orderStatusId.",
+      "counterexamples": [],
+      "evidence": [
+        {
+          "excerpt": "    <service name=\"changeOrderStatus\" engine=\"java\" auth=\"true\"\n            location=\"org.apache.ofbiz.order.order.OrderServices\" invoke=\"setOrderStatus\">\n        <description>Change the status of an existing order</description>\n        <attribute name=\"orderId\" type=\"String\" mode=\"IN\"/>\n        <attribute name=\"statusId\" type=\"String\" mode=\"IN\"/>\n        <attribute name=\"setItemStatus\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n        <attribute name=\"oldStatusId\" type=\"String\" mode=\"OUT\" optional=\"false\">\n            <type-validate>\n                <fail-property resource=\"OrderErrorUiLabels\" property=\"OrderRequiredFieldMissingOldStatusId\"/>\n            </type-validate>\n        </attribute>\n        <attribute name=\"orderStatusId\" type=\"String\" mode=\"OUT\" optional=\"true\"/>\n        <attribute name=\"orderTypeId\" type=\"String\" mode=\"OUT\" optional=\"true\"/>\n        <attribute name=\"needsInventoryIssuance\" type=\"String\" mode=\"OUT\" optional=\"true\"/>\n        <attribute name=\"grandTotal\" type=\"BigDecimal\" mode=\"OUT\" optional=\"true\"/>\n        <attribute name=\"changeReason\" type=\"String\" mode=\"IN\" optional=\"true\"/>\n    </service>",
+          "nativeTerms": [
+            "changeOrderStatus",
+            "auth=\"true\"",
+            "setOrderStatus",
+            "oldStatusId",
+            "orderStatusId"
+          ],
+          "path": "applications/order/servicedef/services.xml"
+        }
+      ],
+      "questionId": "api-service-exposure",
+      "state": "SUPPORTED"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "claim": "The documentation says an order can be canceled only up to the final confirmation point, while seed transitions permit ORDER_APPROVED and ORDER_SENT to change to ORDER_CANCELLED.",
+      "counterexamples": [
+        "Documentation states a cancellation cutoff at final confirmation; captured StatusValidChange data permits cancellation from ORDER_APPROVED and ORDER_SENT."
+      ],
+      "evidence": [
+        {
+          "excerpt": "Remember that an order can be canceled anytime up to the final confirmation point!",
+          "nativeTerms": [
+            "canceled",
+            "final confirmation point"
+          ],
+          "path": "applications/order/src/docs/asciidoc/order.adoc"
+        },
+        {
+          "excerpt": "    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_APPROVED\" statusIdTo=\"ORDER_HOLD\" transitionName=\"Hold Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_PROCESSING\" transitionName=\"Process Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_APPROVED\" transitionName=\"Approve Order\"/>\n    <StatusValidChange statusId=\"ORDER_HOLD\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Cancel Order\"/>\n    <StatusValidChange statusId=\"ORDER_SENT\" statusIdTo=\"ORDER_COMPLETED\" transitionName=\"Order Completed\"/>\n    <StatusValidChange statusId=\"ORDER_SENT\" statusIdTo=\"ORDER_CANCELLED\" transitionName=\"Order Cancelled\"/>",
+          "nativeTerms": [
+            "ORDER_APPROVED",
+            "ORDER_SENT",
+            "ORDER_CANCELLED"
+          ],
+          "path": "applications/datamodel/data/seed/OrderSeedData.xml"
+        }
+      ],
+      "questionId": "absence-ambiguity-conflict",
+      "state": "CONFLICTING"
+    }
+  ],
+  "parser": {
+    "id": "cscl06-exact-byte-parser",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "pansphaira.cscl06/source-native-assertions/v1"
+}
