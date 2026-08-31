@@ -4251,7 +4251,7 @@
         {
           "path": "src/cks-12/readonly-kaleidosphere-bridge.ts",
           "role": "VALIDATOR",
-          "sha256": "dc4f6f18844d18bb58fef52ac90cac77820a01b1ff92f33b909885a4a7521332"
+          "sha256": "3cd4b9830681020f07afcac8017e755eba97ad50ac3b1d6359e50babe228c5be"
         },
         {
           "path": "src/cks-12/story-step-manifest.ts",
@@ -4316,7 +4316,7 @@
         {
           "path": "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f4f1a7b2f1fd1a8ce35b69eb05392a1b5e8145d870114ed44f6be180d913d9ca"
+          "sha256": "f83ba1cf1dbbab41e55c12db66d05caae3f1249999847f1cbad838c25192276b"
         },
         {
           "path": "tests/cks-12/story-step-manifest.test.ts",

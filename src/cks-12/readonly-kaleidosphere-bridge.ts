@@ -18,11 +18,18 @@ export function runReadOnlyMinimizedProjection(input: unknown): Candidate | Deni
   if (input.dryRun !== true) add("DRY_RUN_REQUIRED", "only dry-run invocation is permitted");
   if (input.operation !== "READ_ONLY_MINIMIZED_PROJECTION") add("KALEIDOSPHERE_MUTATION_DENIED", "only the read-only minimized operation is permitted");
   const projection = input.projection;
-  if (!record(projection) || projection.schemaVersion !== "chimpmaera.cks/kaleidosphere-projection/v1" || typeof projection.projectionId !== "string" || !Array.isArray(projection.nodes) || !Array.isArray(projection.edges) || Object.keys(projection).some((key) => !["schemaVersion", "nodes", "edges", "projectionId"].includes(key))) add("RAW_PROJECTION_DENIED", "projection must contain only minimized schema fields");
-  if (record(projection) && (projection.nodes as unknown[]).some((node) => !record(node) || typeof node.id !== "string" || typeof node.kind !== "string" || Object.keys(node).some((key) => key !== "id" && key !== "kind"))) add("RAW_PROJECTION_DENIED", "projection nodes may contain only identifiers and kinds");
-  if (record(projection) && Array.isArray(projection.nodes) && Array.isArray(projection.edges)) {
-    const nodeIds = new Set((projection.nodes as RecordValue[]).filter(record).map((node) => node.id));
-    if ((projection.edges as unknown[]).some((edge) => !record(edge) || Object.keys(edge).some((key) => key !== "from" && key !== "to") || typeof edge.from !== "string" || typeof edge.to !== "string" || !nodeIds.has(edge.from) || !nodeIds.has(edge.to))) add("INVENTED_EDGE_DENIED", "every minimized edge endpoint must be reconstructible from projected nodes");
+  const projectionShapeValid = record(projection) && projection.schemaVersion === "chimpmaera.cks/kaleidosphere-projection/v1" && typeof projection.projectionId === "string" && Array.isArray(projection.nodes) && Array.isArray(projection.edges) && !Object.keys(projection).some((key) => !["schemaVersion", "nodes", "edges", "projectionId"].includes(key));
+  if (!projectionShapeValid) add("RAW_PROJECTION_DENIED", "projection must contain only minimized schema fields");
+  if (projectionShapeValid) {
+    const nodes = projection.nodes as unknown[];
+    const nodesShapeValid = !nodes.some((node) => !record(node) || typeof node.id !== "string" || typeof node.kind !== "string" || Object.keys(node).some((key) => key !== "id" && key !== "kind"));
+    if (!nodesShapeValid) add("RAW_PROJECTION_DENIED", "projection nodes may contain only identifiers and kinds");
+    if (nodesShapeValid) {
+      const nodeIds = new Set(nodes.map((node) => (node as RecordValue).id));
+      const nodeIdsUnique = nodeIds.size === nodes.length;
+      if (!nodeIdsUnique) add("RAW_PROJECTION_DENIED", "projection node identifiers must be unique");
+      if (nodeIdsUnique && (projection.edges as unknown[]).some((edge) => !record(edge) || Object.keys(edge).some((key) => key !== "from" && key !== "to") || typeof edge.from !== "string" || typeof edge.to !== "string" || !nodeIds.has(edge.from) || !nodeIds.has(edge.to))) add("INVENTED_EDGE_DENIED", "every minimized edge endpoint must be reconstructible from projected nodes");
+    }
   }
   if (typeof input.canonicalEvidenceBeforeSha256 !== "string" || !/^[0-9a-f]{64}$/.test(input.canonicalEvidenceBeforeSha256) || input.canonicalEvidenceAfterSha256 !== input.canonicalEvidenceBeforeSha256) add("KALEIDOSPHERE_MUTATION_DENIED", "canonical PanSphaira evidence must be digest-identical before and after analysis");
   if (input.authorityRequested === true || input.capabilityRequested === true || input.promotionRequested === true) add("AUTHORITY_EXPANSION_DENIED", "candidate delivery cannot expand authority, capability, or promotion");
