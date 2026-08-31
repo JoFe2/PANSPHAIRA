@@ -1,0 +1,854 @@
+/**
+ * FND-PS-04 — repository-wide canonical JSON/digest census (inventory v1).
+ *
+ * Strict-TDD vertical slice: this test embeds the deterministic mechanical
+ * scanner AND the fail-closed validator that define the census. The
+ * inventory artifact (verification/canonical-json-profile-inventory-v1.json)
+ * must match a fresh re-scan of admitted Main exactly.
+ *
+ * Scope rules (documented in docs/architecture/canonical-json-profile-inventory.md):
+ * - declaration site = a line declaring `canonicalJson` via function/const/let/var.
+ * - import site = a line importing `canonicalJson` from a module.
+ * - re-export site = an `export { ... canonicalJson ... }` line.
+ * - similar-shape site = a declaration of a helper named
+ *   canonicalize/encodeCanonical/canonicalDigest. These are inventoried with
+ *   equivalence "not-claimed" and NEVER produce an equivalence claim.
+ * - the census test file itself is counted in filesScanned but excluded from
+ *   every census dimension (self-exclusion), so its own documentation
+ *   language can never skew the counts it defines.
+ * - byte obligation = a SHA256SUMS-pinned file bound to canonicalization:
+ *   every pinned canonicalJson profile implementation, the runtime-parity
+ *   evidence test and fixture, and every ledger entry whose path contains
+ *   "canonical" (case-insensitive).
+ * - equivalence requires shared valid/invalid/unicode/number evidence. Only
+ *   valid+invalid is proven today (runtime parity test), so the inventory
+ *   makes zero equivalence claims and stance is NOT-PROVEN.
+ *
+ * The scanner is the single source of truth for the counts: it walks the
+ * roots/extensions recorded in the inventory's scanScope, skips
+ * node_modules/dist/.git at any depth, and reads files in sorted order.
+ */
+
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import * as path from "node:path";
+import * as crypto from "node:crypto";
+import { fileURLToPath } from "node:url";
+
+// Compiled location: dist/tests/canonical-json-profile-inventory.test.js
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(HERE, "..", "..");
+const INVENTORY_PATH = path.join(ROOT, "verification", "canonical-json-profile-inventory-v1.json");
+const LEDGER_PATH = path.join(ROOT, "SHA256SUMS");
+
+const SCAN_ROOTS = ["src", "packages", "scripts", "demo", "tools", "tests", "benchmarks", "docs"] as const;
+const SKIP_DIRS = new Set(["node_modules", "dist", ".git"]);
+const SCAN_EXTENSIONS = new Set([".ts", ".mts", ".cts", ".js", ".mjs", ".cjs"]);
+
+const DECLARATION_RE = /\b(?:function|const|let|var)\s+canonicalJson\b/;
+const IMPORT_RE = /\bimport\b.*\bcanonicalJson\b.*\bfrom\b/;
+const REEXPORT_RE = /\bexport\s*\{[^}]*\bcanonicalJson\b[^}]*\}/;
+const SIMILAR_SHAPE_RE = /\b(?:function|const|let|var)\s+(canonicalize|encodeCanonical|canonicalDigest)\b/;
+const ALIAS_RE = /\bcanonicalJson\s*=\s*(?:encodeCanonical|canonicalize)\b/;
+const WRAPPER_RE = /\bcanonicalJson\s*=\s*\([^)]*\)\s*=>/;
+const HELPER_REF_RE = /\b(?:canonicalize|encodeCanonical|canonicalDigest)\b/;
+const LEDGER_LINE_RE = /^([0-9a-f]{64})\s+(\S+)$/;
+const CANONICAL_NAME_RE = /canonical/i;
+
+const PARITY_TEST_FILE = "tests/canonical-json-runtime-parity.test.mjs";
+const PARITY_FIXTURE_FILE = "tests/fixtures/asf-bundle-lock/noncanonical.json";
+const SELF_TEST_FILE = "tests/canonical-json-profile-inventory.test.ts";
+
+const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
+const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
+
+/**
+ * Regression anchors on admitted Main (dac921d459cbcfc16e4912dff558c8786e6438de).
+ * filesScanned includes this census test file itself (it lives under tests/,
+ * a scan root). Historical lexical hints (81/80 declarations; 172/171 import
+ * sites) are historical hints only — the fresh mechanical scan supersedes them.
+ */
+const EXPECTED_COUNTS = {
+  filesScanned: 591,
+  declarationSites: 33,
+  declarationFiles: 33,
+  importSites: 194,
+  importFiles: 193,
+  reexportSites: 4,
+  similarShapeSites: 30,
+  byteObligations: 21,
+  pinnedProfileFiles: 13,
+} as const;
+const EXPECTED_LEDGER = { entries: 1391, uniquePaths: 1380, duplicatePaths: 11 } as const;
+
+type Classification = "implementation" | "alias" | "wrapper";
+
+interface Declaration {
+  file: string;
+  line: number;
+  classification: Classification;
+  owner: string;
+}
+
+interface Reexport {
+  file: string;
+  line: number;
+  owner: string;
+}
+
+interface SimilarSite {
+  name: string;
+  file: string;
+  line: number;
+  owner: string;
+}
+
+interface ScanResult {
+  filesScanned: number;
+  files: string[];
+  declarations: Declaration[];
+  importSites: number;
+  importFiles: number;
+  importFileList: string[];
+  importFilesByOwner: Map<string, { sites: number; files: number }>;
+  reexports: Reexport[];
+  similar: SimilarSite[];
+}
+
+interface LedgerResult {
+  entries: Map<string, string>;
+  lineCount: number;
+  uniquePaths: number;
+  duplicatePathCount: number;
+  conflictingPaths: string[];
+}
+
+interface ByteObligation {
+  path: string;
+  sha256: string;
+  basis: string;
+}
+
+function compareStrings(a: string, b: string): number {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+}
+
+function isDirectory(candidate: string): boolean {
+  try {
+    return statSync(candidate).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+/** Owner family: second segment under src/, packages/, tools/; else top segment. */
+function ownerOf(file: string): string {
+  const parts = file.split("/");
+  const top = parts[0] ?? "";
+  if (parts.length > 2 && (top === "src" || top === "packages" || top === "tools")) {
+    return parts[1] ?? top;
+  }
+  return top;
+}
+
+/**
+ * Classify a canonicalJson declaration line (line-local, form-based,
+ * reproducible):
+ * - alias:      direct rebind of a canonicalize-family helper
+ *               (`export const canonicalJson = canonicalize;`)
+ * - wrapper:    arrow-form declaration delegating on the same line to a
+ *               canonicalize-family helper
+ * - implementation: every other declaration (named function or arrow with
+ *               its own serialization body)
+ */
+function classifyDeclaration(line: string): Classification {
+  if (ALIAS_RE.test(line)) return "alias";
+  if (WRAPPER_RE.test(line) && HELPER_REF_RE.test(line)) return "wrapper";
+  return "implementation";
+}
+
+function listSourceFiles(rootDir: string): string[] {
+  const out: string[] = [];
+  const walk = (dir: string, rel: string): void => {
+    const names = readdirSync(dir, { withFileTypes: true }).map((e) => e.name).sort(compareStrings);
+    for (const name of names) {
+      const abs = path.join(dir, name);
+      const relPath = rel === "" ? name : `${rel}/${name}`;
+      if (isDirectory(abs)) {
+        if (!SKIP_DIRS.has(name)) walk(abs, relPath);
+      } else if (SCAN_EXTENSIONS.has(path.extname(name))) {
+        out.push(relPath);
+      }
+    }
+  };
+  for (const sourceRoot of SCAN_ROOTS) {
+    if (isDirectory(path.join(rootDir, sourceRoot))) walk(path.join(rootDir, sourceRoot), sourceRoot);
+  }
+  return out.sort(compareStrings);
+}
+
+function scanRepository(): ScanResult {
+  const files = listSourceFiles(ROOT);
+  const declarations: Declaration[] = [];
+  const reexports: Reexport[] = [];
+  const similar: SimilarSite[] = [];
+  const importFilesByOwner = new Map<string, { sites: number; files: number }>();
+  const importFileList: string[] = [];
+  let importSites = 0;
+  let importFiles = 0;
+
+  for (const file of files) {
+    // Self-exclusion: the census tool's own documentation lines must never
+    // count as census entries for the repository it scans.
+    const census = file !== SELF_TEST_FILE;
+    const lines = readFileSync(path.join(ROOT, file), "utf8").split("\n");
+    let fileImportSites = 0;
+    for (let i = 0; i < lines.length; i += 1) {
+      const line = lines[i] ?? "";
+      const lineNo = i + 1;
+      if (!census) continue;
+      if (DECLARATION_RE.test(line)) {
+        declarations.push({ file, line: lineNo, classification: classifyDeclaration(line), owner: ownerOf(file) });
+      }
+      if (REEXPORT_RE.test(line)) {
+        reexports.push({ file, line: lineNo, owner: ownerOf(file) });
+      }
+      if (IMPORT_RE.test(line)) {
+        fileImportSites += 1;
+      }
+      const sim = line.match(SIMILAR_SHAPE_RE);
+      if (sim) {
+        similar.push({ name: sim[1] ?? "unknown", file, line: lineNo, owner: ownerOf(file) });
+      }
+    }
+    if (fileImportSites > 0) {
+      importSites += fileImportSites;
+      importFiles += 1;
+      importFileList.push(file);
+      const owner = ownerOf(file);
+      const agg = importFilesByOwner.get(owner) ?? { sites: 0, files: 0 };
+      agg.sites += fileImportSites;
+      agg.files += 1;
+      importFilesByOwner.set(owner, agg);
+    }
+  }
+
+  importFileList.sort(compareStrings);
+  return { filesScanned: files.length, files, declarations, importSites, importFiles, importFileList, importFilesByOwner, reexports, similar };
+}
+
+/**
+ * Parse SHA256SUMS. The ledger mixes `hash ./path` and `hash path` forms;
+ * both parse to the same bare-path key. Duplicate lines for one path are
+ * legal only when the digests agree (otherwise the byte obligation is
+ * ambiguous and validation fails closed).
+ */
+function parseLedger(): LedgerResult {
+  const entries = new Map<string, string>();
+  const pathLineCounts = new Map<string, number>();
+  const conflictingPaths: string[] = [];
+  let lineCount = 0;
+  const text = readFileSync(LEDGER_PATH, "utf8");
+  for (const rawLine of text.split("\n")) {
+    const m = rawLine.match(LEDGER_LINE_RE);
+    if (!m) continue;
+    lineCount += 1;
+    let filePath = m[2] ?? "";
+    if (filePath === "./") continue;
+    if (filePath.startsWith("./")) filePath = filePath.slice(2);
+    if (filePath === "") continue;
+    const digest = m[1] ?? "";
+    const existing = entries.get(filePath);
+    if (existing !== undefined && existing !== digest) conflictingPaths.push(filePath);
+    entries.set(filePath, digest);
+    pathLineCounts.set(filePath, (pathLineCounts.get(filePath) ?? 0) + 1);
+  }
+  let duplicatePathCount = 0;
+  for (const n of pathLineCounts.values()) {
+    if (n > 1) duplicatePathCount += 1;
+  }
+  return { entries, lineCount, uniquePaths: entries.size, duplicatePathCount, conflictingPaths };
+}
+
+function sha256OfFile(repoPath: string): string | null {
+  try {
+    return crypto.createHash("sha256").update(readFileSync(path.join(ROOT, repoPath))).digest("hex");
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Expected byte obligations, derived mechanically:
+ * 1. every pinned canonicalJson profile implementation (basis: profile-implementation)
+ * 2. the runtime-parity evidence test (basis: parity-evidence) and fixture
+ *    (basis: parity-fixture)
+ * 3. every remaining ledger entry whose path matches /canonical/i
+ *    (basis: ledger-name-match)
+ */
+function expectedByteObligations(scan: ScanResult, ledger: LedgerResult): ByteObligation[] {
+  const out: ByteObligation[] = [];
+  const seen = new Set<string>();
+  const add = (filePath: string, basis: string): void => {
+    if (seen.has(filePath)) return;
+    const digest = ledger.entries.get(filePath);
+    if (digest === undefined) return;
+    out.push({ path: filePath, sha256: digest, basis });
+    seen.add(filePath);
+  };
+  for (const decl of scan.declarations) add(decl.file, "profile-implementation");
+  add(PARITY_TEST_FILE, "parity-evidence");
+  add(PARITY_FIXTURE_FILE, "parity-fixture");
+  const sortedEntries = [...ledger.entries.entries()].sort((a, b) => compareStrings(a[0], b[0]));
+  for (const [filePath, digest] of sortedEntries) {
+    if (seen.has(filePath) || !CANONICAL_NAME_RE.test(filePath)) continue;
+    out.push({ path: filePath, sha256: digest, basis: "ledger-name-match" });
+    seen.add(filePath);
+  }
+  return out.sort((a, b) => compareStrings(a.path, b.path));
+}
+
+/**
+ * Fail-closed validator. Returns a list of coded error strings; an empty
+ * list means the inventory matches the fresh scan of admitted Main exactly.
+ * Every error code is asserted by a focused negative test below.
+ */
+function validateInventory(inv: unknown, scan: ScanResult, ledger: LedgerResult): string[] {
+  const errors: string[] = [];
+  if (typeof inv !== "object" || inv === null || Array.isArray(inv)) {
+    return ["structure-invalid"];
+  }
+  const doc = inv as Record<string, unknown>;
+
+  // --- profiles -------------------------------------------------------------
+  const profilesRaw = doc.profiles;
+  if (!Array.isArray(profilesRaw)) {
+    errors.push("structure-invalid:profiles");
+  } else {
+    const scanDeclarations = new Map<string, Declaration>();
+    for (const decl of scan.declarations) scanDeclarations.set(decl.file, decl);
+    const seenFiles = new Set<string>();
+    const knownFiles = new Set<string>();
+
+    (profilesRaw as Array<Record<string, unknown>>).forEach((entry, index) => {
+      if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
+        errors.push(`structure-invalid:profiles[${index}]`);
+        return;
+      }
+      const file = typeof entry.file === "string" ? entry.file : "";
+      const line = typeof entry.line === "number" && Number.isInteger(entry.line) ? entry.line : NaN;
+      const owner = typeof entry.owner === "string" ? entry.owner : "";
+      const classification = typeof entry.classification === "string" ? entry.classification : "";
+      const pinned = typeof entry.pinned === "boolean" ? entry.pinned : null;
+      const sha256 = typeof entry.sha256 === "string" || entry.sha256 === null ? entry.sha256 : "invalid";
+
+      if (file === "") {
+        errors.push(`structure-invalid:profiles[${index}].file`);
+        return;
+      }
+      if (Number.isNaN(line) || line < 1) errors.push(`structure-invalid:profiles[${index}].line`);
+      if (!CLASSIFICATIONS.has(classification)) errors.push(`unclassified:${file}`);
+      if (seenFiles.has(file)) errors.push(`duplicate-profile-entry:${file}`);
+      seenFiles.add(file);
+      knownFiles.add(file);
+
+      const decl = scanDeclarations.get(file);
+      if (decl === undefined) {
+        errors.push(`unknown-profile-file:${file}`);
+      } else {
+        if (line !== decl.line) errors.push(`stale-line:${file}`);
+        if (owner !== ownerOf(file)) errors.push(`owner-mismatch:${file}`);
+        if (CLASSIFICATIONS.has(classification) && classification !== decl.classification) {
+          errors.push(`classification-mismatch:${file}`);
+        }
+      }
+
+      const inLedger = ledger.entries.has(file);
+      const expectedDigest = ledger.entries.get(file);
+      if (pinned === null) {
+        errors.push(`structure-invalid:profiles[${index}].pinned`);
+      } else {
+        if (pinned !== inLedger) errors.push(`pin-state-mismatch:${file}`);
+        if (inLedger) {
+          if (sha256 !== expectedDigest) errors.push(`byte-obligation-mismatch:${file}#recorded`);
+          const onDisk = sha256OfFile(file);
+          if (onDisk === null || onDisk !== expectedDigest) errors.push(`byte-obligation-mismatch:${file}#on-disk`);
+        } else if (sha256 !== null) {
+          errors.push(`byte-obligation-mismatch:${file}#recorded`);
+        }
+      }
+    });
+
+    for (const decl of scan.declarations) {
+      if (!knownFiles.has(decl.file)) errors.push(`omitted-profile-entry:${decl.file}`);
+    }
+  }
+
+  // --- fresh counts -----------------------------------------------------------
+  const countsRaw = doc.freshCounts;
+  if (typeof countsRaw !== "object" || countsRaw === null || Array.isArray(countsRaw)) {
+    errors.push("count-mismatch:freshCounts-missing");
+  } else {
+    const counts = countsRaw as Record<string, unknown>;
+    const declarationFiles = new Set<string>();
+    for (const decl of scan.declarations) declarationFiles.add(decl.file);
+    const expected: Record<string, number> = {
+      filesScanned: scan.filesScanned,
+      declarationSites: scan.declarations.length,
+      declarationFiles: declarationFiles.size,
+      importSites: scan.importSites,
+      importFiles: scan.importFiles,
+      reexportSites: scan.reexports.length,
+      similarShapeSites: scan.similar.length,
+      ledgerEntries: ledger.lineCount,
+      ledgerUniquePaths: ledger.uniquePaths,
+    };
+    for (const [field, value] of Object.entries(expected)) {
+      const actual = counts[field];
+      if (typeof actual !== "number" || actual !== value) errors.push(`count-mismatch:${field}`);
+    }
+  }
+
+  // --- re-exports ---------------------------------------------------------------
+  const reexportsRaw = doc.reexports;
+  if (!Array.isArray(reexportsRaw)) {
+    errors.push("reexport-mismatch:missing");
+  } else {
+    const declared = new Map<string, Reexport>();
+    for (const re of scan.reexports) declared.set(`${re.file}:${re.line}`, re);
+    const listed = new Set<string>();
+    for (const entry of reexportsRaw as Array<Record<string, unknown>>) {
+      const file = typeof entry.file === "string" ? entry.file : "";
+      const line = typeof entry.line === "number" ? entry.line : NaN;
+      const key = `${file}:${line}`;
+      if (listed.has(key)) errors.push(`reexport-mismatch:duplicate:${key}`);
+      listed.add(key);
+      const decl = declared.get(key);
+      if (decl === undefined) {
+        errors.push(`reexport-mismatch:unknown:${key}`);
+      } else if (typeof entry.owner === "string" && entry.owner !== ownerOf(file)) {
+        errors.push(`owner-mismatch:${file}#reexport`);
+      }
+    }
+    for (const key of declared.keys()) {
+      if (!listed.has(key)) errors.push(`reexport-mismatch:omitted:${key}`);
+    }
+  }
+
+  // --- consumer families ----------------------------------------------------------
+  const familiesRaw = doc.consumerFamilies;
+  if (!Array.isArray(familiesRaw)) {
+    errors.push("consumer-mismatch:missing");
+  } else {
+    const expected = new Map<string, { sites: number; files: number }>(scan.importFilesByOwner);
+    const seenOwners = new Set<string>();
+    for (const entry of familiesRaw as Array<Record<string, unknown>>) {
+      const owner = typeof entry.owner === "string" ? entry.owner : "";
+      if (owner === "") {
+        errors.push("consumer-mismatch:owner-invalid");
+        continue;
+      }
+      if (seenOwners.has(owner)) errors.push(`consumer-mismatch:duplicate:${owner}`);
+      seenOwners.add(owner);
+      const agg = expected.get(owner);
+      if (agg === undefined) {
+        errors.push(`consumer-mismatch:unknown:${owner}`);
+        continue;
+      }
+      const sites = typeof entry.importSites === "number" ? entry.importSites : NaN;
+      const files = typeof entry.importFiles === "number" ? entry.importFiles : NaN;
+      if (sites !== agg.sites || files !== agg.files) errors.push(`consumer-mismatch:${owner}`);
+    }
+    for (const owner of expected.keys()) {
+      if (!seenOwners.has(owner)) errors.push(`consumer-mismatch:omitted:${owner}`);
+    }
+  }
+
+  // --- similar-shape sites ---------------------------------------------------------
+  const similarRaw = doc.similarShape;
+  if (!Array.isArray(similarRaw)) {
+    errors.push("similar-shape-mismatch:missing");
+  } else {
+    const expectedKeys = new Set<string>();
+    for (const site of scan.similar) expectedKeys.add(`${site.name}@${site.file}:${site.line}`);
+    const listed = new Set<string>();
+    for (const entry of similarRaw as Array<Record<string, unknown>>) {
+      const name = typeof entry.name === "string" ? entry.name : "";
+      const file = typeof entry.file === "string" ? entry.file : "";
+      const line = typeof entry.line === "number" ? entry.line : NaN;
+      const key = `${name}@${file}:${line}`;
+      if (listed.has(key)) errors.push(`similar-shape-mismatch:duplicate:${key}`);
+      listed.add(key);
+      if (!expectedKeys.has(key)) errors.push(`similar-shape-mismatch:unknown:${key}`);
+      if (typeof entry.equivalence === "string" && entry.equivalence !== "not-claimed") {
+        errors.push(`similarity-equivalence-claim:${file}:${line}`);
+      }
+      if (typeof entry.owner === "string" && entry.owner !== ownerOf(file)) {
+        errors.push(`owner-mismatch:${file}#similar`);
+      }
+    }
+    for (const key of expectedKeys) {
+      if (!listed.has(key)) errors.push(`similar-shape-mismatch:omitted:${key}`);
+    }
+  }
+
+  // --- byte obligations --------------------------------------------------------------
+  const obligationsRaw = doc.byteObligations;
+  if (!Array.isArray(obligationsRaw)) {
+    errors.push("byte-obligation-structure");
+  } else {
+    const expected = expectedByteObligations(scan, ledger);
+    const expectedByPath = new Map<string, ByteObligation>();
+    for (const ob of expected) expectedByPath.set(ob.path, ob);
+    const listed = new Map<string, Record<string, unknown>>();
+    for (const entry of obligationsRaw as Array<Record<string, unknown>>) {
+      const filePath = typeof entry.path === "string" ? entry.path : "";
+      if (filePath === "") {
+        errors.push("byte-obligation-structure");
+        continue;
+      }
+      if (listed.has(filePath)) errors.push(`byte-obligation-duplicate:${filePath}`);
+      listed.set(filePath, entry);
+      const exp = expectedByPath.get(filePath);
+      if (exp === undefined) {
+        errors.push(`byte-obligation-unknown:${filePath}`);
+        continue;
+      }
+      if (typeof entry.sha256 === "string" && entry.sha256 !== exp.sha256) {
+        errors.push(`byte-obligation-mismatch:${filePath}#recorded`);
+      }
+      if (typeof entry.basis === "string" && entry.basis !== exp.basis) {
+        errors.push(`byte-obligation-basis:${filePath}`);
+      }
+      const onDisk = sha256OfFile(filePath);
+      if (onDisk === null || onDisk !== exp.sha256) {
+        errors.push(`byte-obligation-mismatch:${filePath}#on-disk`);
+      }
+    }
+    for (const exp of expected) {
+      if (!listed.has(exp.path)) errors.push(`byte-obligation-omitted:${exp.path}`);
+    }
+  }
+
+  // --- equivalence stance --------------------------------------------------------------
+  const eqRaw = doc.equivalence;
+  if (typeof eqRaw !== "object" || eqRaw === null || Array.isArray(eqRaw)) {
+    errors.push("structure-invalid:equivalence");
+  } else {
+    const eq = eqRaw as Record<string, unknown>;
+    const required = Array.isArray(eq.requiredDimensions)
+      ? (eq.requiredDimensions as unknown[]).filter((d): d is string => typeof d === "string")
+      : [];
+    if (
+      required.length !== REQUIRED_DIMENSIONS.length ||
+      REQUIRED_DIMENSIONS.some((d) => !required.includes(d))
+    ) {
+      errors.push("equivalence-policy-weakened");
+    }
+    const claims = Array.isArray(eq.claims) ? (eq.claims as unknown[]) : null;
+    if (claims === null) {
+      errors.push("structure-invalid:equivalence.claims");
+    } else {
+      let hasUnproven = false;
+      for (const claim of claims) {
+        const c = typeof claim === "object" && claim !== null ? (claim as Record<string, unknown>) : {};
+        const proven = Array.isArray(c.provenDimensions)
+          ? (c.provenDimensions as unknown[]).filter((d): d is string => typeof d === "string")
+          : [];
+        const missing = REQUIRED_DIMENSIONS.filter((d) => !proven.includes(d));
+        if (missing.length > 0) {
+          hasUnproven = true;
+          errors.push(
+            `equivalence-claim-unproven:${String(c.fileA ?? "?")}~${String(c.fileB ?? "?")}:missing=${missing.join(",")}`
+          );
+        }
+      }
+      const stance = typeof eq.stance === "string" ? eq.stance : "";
+      if (hasUnproven || claims.length === 0) {
+        if (stance !== "NOT-PROVEN") errors.push("equivalence-stance-inconsistent");
+      } else if (stance !== "PROVEN") {
+        errors.push("equivalence-stance-inconsistent");
+      }
+    }
+  }
+
+  // --- ledger integrity ------------------------------------------------------------------
+  if (ledger.conflictingPaths.length > 0) {
+    errors.push(`ledger-conflict:${ledger.conflictingPaths.join(",")}`);
+  }
+
+  return errors;
+}
+
+// ---------------------------------------------------------------------------
+// Shared, lazily computed state
+// ---------------------------------------------------------------------------
+let SCAN: ScanResult | null = null;
+let LEDGER: LedgerResult | null = null;
+
+function getScan(): ScanResult {
+  if (SCAN === null) SCAN = scanRepository();
+  return SCAN;
+}
+
+function getLedger(): LedgerResult {
+  if (LEDGER === null) LEDGER = parseLedger();
+  return LEDGER;
+}
+
+function loadInventory(): unknown {
+  return JSON.parse(readFileSync(INVENTORY_PATH, "utf8"));
+}
+
+function validateCurrent(): string[] {
+  return validateInventory(loadInventory(), getScan(), getLedger());
+}
+
+// ---------------------------------------------------------------------------
+// Positive cases: the fresh scan reproduces the census and the inventory
+// validates clean against it.
+// ---------------------------------------------------------------------------
+test("fresh mechanical scan reproduces the census counts on admitted Main", () => {
+  const scan = getScan();
+  const ledger = getLedger();
+  assert.equal(scan.filesScanned, EXPECTED_COUNTS.filesScanned);
+  assert.equal(scan.declarations.length, EXPECTED_COUNTS.declarationSites);
+  const declarationFiles = new Set(scan.declarations.map((d) => d.file));
+  assert.equal(declarationFiles.size, EXPECTED_COUNTS.declarationFiles);
+  assert.equal(scan.importSites, EXPECTED_COUNTS.importSites);
+  assert.equal(scan.importFiles, EXPECTED_COUNTS.importFiles);
+  assert.equal(scan.reexports.length, EXPECTED_COUNTS.reexportSites);
+  assert.equal(scan.similar.length, EXPECTED_COUNTS.similarShapeSites);
+  assert.equal(ledger.lineCount, EXPECTED_LEDGER.entries);
+  assert.equal(ledger.uniquePaths, EXPECTED_LEDGER.uniquePaths);
+  assert.equal(ledger.duplicatePathCount, EXPECTED_LEDGER.duplicatePaths);
+  assert.deepEqual(ledger.conflictingPaths, []);
+});
+
+test("every discovered declaration and consumer family has an owner", () => {
+  const scan = getScan();
+  for (const decl of scan.declarations) {
+    assert.equal(decl.owner, ownerOf(decl.file), `owner for ${decl.file}`);
+    assert.ok(CLASSIFICATIONS.has(decl.classification), `classification for ${decl.file}`);
+  }
+  for (const [owner] of scan.importFilesByOwner) {
+    assert.ok(owner.length > 0, "non-empty owner family");
+  }
+});
+
+test("inventory validates clean against the fresh scan (positive)", () => {
+  assert.deepEqual(validateCurrent(), []);
+});
+
+test("every historical digest-bound byte is unchanged on disk", () => {
+  const scan = getScan();
+  const ledger = getLedger();
+  const obligations = expectedByteObligations(scan, ledger);
+  assert.equal(obligations.length, EXPECTED_COUNTS.byteObligations);
+  for (const ob of obligations) {
+    const onDisk = sha256OfFile(ob.path);
+    assert.equal(onDisk, ob.sha256, `digest drift for ${ob.path} (basis ${ob.basis})`);
+  }
+});
+
+test("all pinned canonicalization profiles keep their ledger digests", () => {
+  const scan = getScan();
+  const ledger = getLedger();
+  const pinned = scan.declarations.filter((d) => ledger.entries.has(d.file));
+  assert.equal(pinned.length, EXPECTED_COUNTS.pinnedProfileFiles);
+  for (const decl of pinned) {
+    const expected = ledger.entries.get(decl.file);
+    assert.equal(sha256OfFile(decl.file), expected, `digest drift for ${decl.file}`);
+  }
+});
+
+test("no equivalence claim is made: stance NOT-PROVEN, unicode+number evidence missing", () => {
+  const inv = loadInventory() as Record<string, any>;
+  const eq = inv.equivalence;
+  assert.equal(eq.stance, "NOT-PROVEN");
+  assert.deepEqual(eq.claims, []);
+  assert.deepEqual(eq.requiredDimensions, [...REQUIRED_DIMENSIONS]);
+  assert.deepEqual(eq.missingDimensions, ["unicode", "number"]);
+  assert.equal(typeof eq.provenScope, "string");
+  assert.ok(eq.provenScope.length > 0);
+  for (const site of inv.similarShape) {
+    assert.equal(site.equivalence, "not-claimed", `similar-shape site ${site.file}:${site.line}`);
+  }
+});
+
+test("the census test file itself contributes no census entries (self-consistency)", () => {
+  const scan = getScan();
+  assert.ok(scan.files.includes(SELF_TEST_FILE), "census test file is inside the scan scope");
+  assert.equal(scan.importFileList.length, scan.importFiles, "import file list is consistent with importFiles count");
+  assert.ok(!scan.declarations.some((d) => d.file === SELF_TEST_FILE));
+  assert.ok(!scan.reexports.some((r) => r.file === SELF_TEST_FILE));
+  assert.ok(!scan.similar.some((s) => s.file === SELF_TEST_FILE));
+  assert.ok(!scan.importFileList.includes(SELF_TEST_FILE), "self-exclusion: no import sites from the census test file");
+});
+
+// ---------------------------------------------------------------------------
+// Negative / fail-closed cases: each mutation of the inventory must produce
+// the corresponding coded validation error. Mutations are in-memory only —
+// no temporary files are written into the repository.
+// ---------------------------------------------------------------------------
+function assertFails(mutate: (inv: any) => void, code: string): void {
+  const inv = structuredClone(loadInventory());
+  mutate(inv);
+  const errors = validateInventory(inv, getScan(), getLedger());
+  assert.ok(
+    errors.some((e) => e.startsWith(code)),
+    `expected validation error starting with "${code}"; got: ${JSON.stringify(errors)}`
+  );
+}
+
+test("negative: omitted profile entry fails validation", () => {
+  assertFails((inv) => {
+    inv.profiles.splice(0, 1);
+  }, "omitted-profile-entry:");
+});
+
+test("negative: duplicate profile entry fails validation", () => {
+  assertFails((inv) => {
+    inv.profiles.push(structuredClone(inv.profiles[0]));
+  }, "duplicate-profile-entry:");
+});
+
+test("negative: unknown owner fails validation", () => {
+  assertFails((inv) => {
+    inv.profiles[0].owner = "mystery-owner";
+  }, "owner-mismatch:");
+});
+
+test("negative: unclassified profile entry fails validation", () => {
+  assertFails((inv) => {
+    inv.profiles[0].classification = "";
+  }, "unclassified:");
+});
+
+test("negative: wrong classification fails validation", () => {
+  const scan = getScan();
+  const impl = scan.declarations.find((d) => d.classification === "implementation");
+  if (impl === undefined) assert.fail("no implementation declaration found in scan");
+  assertFails((inv) => {
+    const entry = inv.profiles.find((p: any) => p.file === impl.file);
+    entry.classification = "wrapper";
+  }, "classification-mismatch:");
+});
+
+test("negative: stale declaration line fails validation", () => {
+  assertFails((inv) => {
+    inv.profiles[0].line += 1;
+  }, "stale-line:");
+});
+
+test("negative: unknown profile file fails validation", () => {
+  assertFails((inv) => {
+    inv.profiles.push({
+      file: "src/mystery/canonical-profile.mjs",
+      line: 1,
+      owner: "mystery",
+      classification: "implementation",
+      pinned: false,
+      sha256: null,
+    });
+  }, "unknown-profile-file:");
+});
+
+test("negative: tampered profile digest fails validation", () => {
+  assertFails((inv) => {
+    const pinned = inv.profiles.find((p: any) => p.pinned === true);
+    pinned.sha256 = "0".repeat(64);
+  }, "byte-obligation-mismatch:");
+});
+
+test("negative: wrong pin state fails validation", () => {
+  assertFails((inv) => {
+    const pinned = inv.profiles.find((p: any) => p.pinned === true);
+    pinned.pinned = false;
+    pinned.sha256 = null;
+  }, "pin-state-mismatch:");
+});
+
+test("negative: omitted byte obligation fails validation", () => {
+  assertFails((inv) => {
+    inv.byteObligations.splice(-1, 1);
+  }, "byte-obligation-omitted:");
+});
+
+test("negative: duplicate byte obligation fails validation", () => {
+  assertFails((inv) => {
+    inv.byteObligations.push(structuredClone(inv.byteObligations[0]));
+  }, "byte-obligation-duplicate:");
+});
+
+test("negative: unknown byte obligation fails validation", () => {
+  assertFails((inv) => {
+    inv.byteObligations.push({
+      path: "docs/evidence/conveyor/canonical-synthetic-unknown.json",
+      sha256: "1".repeat(64),
+      basis: "ledger-name-match",
+    });
+  }, "byte-obligation-unknown:");
+});
+
+test("negative: tampered byte obligation digest fails validation", () => {
+  assertFails((inv) => {
+    inv.byteObligations[0].sha256 = "f".repeat(64);
+  }, "byte-obligation-mismatch:");
+});
+
+test("negative: similar-shape site never yields an equivalence claim", () => {
+  assertFails((inv) => {
+    inv.similarShape[0].equivalence = "equivalent";
+  }, "similarity-equivalence-claim:");
+});
+
+test("negative: omitted similar-shape site fails validation", () => {
+  assertFails((inv) => {
+    inv.similarShape.splice(0, 1);
+  }, "similar-shape-mismatch:omitted:");
+});
+
+test("negative: equivalence claim lacking full evidence fails validation", () => {
+  assertFails((inv) => {
+    inv.equivalence.claims.push({
+      fileA: "src/rks-01/comparator.mjs",
+      fileB: "packages/contracts/src/canonical-json.js",
+      provenDimensions: ["valid", "invalid"],
+      evidence: ["tests/canonical-json-runtime-parity.test.mjs"],
+    });
+  }, "equivalence-claim-unproven:");
+});
+
+test("negative: weakening the required evidence dimensions fails validation", () => {
+  assertFails((inv) => {
+    inv.equivalence.requiredDimensions = ["valid"];
+  }, "equivalence-policy-weakened");
+});
+
+test("negative: PROVEN stance without complete claims fails validation", () => {
+  assertFails((inv) => {
+    inv.equivalence.stance = "PROVEN";
+  }, "equivalence-stance-inconsistent");
+});
+
+test("negative: drifted fresh counts fail validation", () => {
+  assertFails((inv) => {
+    inv.freshCounts.declarationSites += 1;
+  }, "count-mismatch:");
+});
+
+test("negative: drifted consumer family counts fail validation", () => {
+  assertFails((inv) => {
+    inv.consumerFamilies[0].importSites += 1;
+  }, "consumer-mismatch:");
+});
+
+test("negative: omitted re-export site fails validation", () => {
+  assertFails((inv) => {
+    inv.reexports.splice(0, 1);
+  }, "reexport-mismatch:omitted:");
+});
