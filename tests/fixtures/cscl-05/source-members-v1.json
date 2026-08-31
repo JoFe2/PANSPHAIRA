@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "pansphaira.cscl05/source-members/v1",
+  "officialBaseUrl": "https://downloads.tryton.org/8.0/",
+  "checksumIndex": {
+    "url": "https://downloads.tryton.org/8.0/SHA256",
+    "byteLength": 72517,
+    "sha256": "686857b5436022af2f240cd3c7e936544f2b57636f5b6c9259fa83af4bac43ae",
+    "fixture": "artifacts/SHA256"
+  },
+  "signifyKey": {
+    "url": "https://downloads.tryton.org/signify/8.0.pub",
+    "byteLength": 95,
+    "sha256": "962bf36ec9f0849f2e91ad7bf19a5a188a88e73ab95eaecd4434a2ca1caf907d",
+    "keyId": "b41d7494a2c4d9ca",
+    "fixture": "artifacts/8.0.pub"
+  },
+  "artifacts": [
+    {
+      "name": "trytond-8.0.9.tar.gz",
+      "url": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz",
+      "byteLength": 958720,
+      "sha256": "0fab66fb5457ae833880418424ccb18476218dc215ecb4c6db0f714722703aa7",
+      "fixture": "artifacts/trytond-8.0.9.tar.gz",
+      "signature": {
+        "url": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz.sig",
+        "byteLength": 140,
+        "sha256": "45a26429b4935483a4a92e80603bf68503bc50384819ca191491d963ead4f9ce",
+        "fixture": "artifacts/trytond-8.0.9.tar.gz.sig"
+      }
+    },
+    {
+      "name": "trytond_party-8.0.3.tar.gz",
+      "url": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz",
+      "byteLength": 206536,
+      "sha256": "2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0",
+      "fixture": "artifacts/trytond_party-8.0.3.tar.gz",
+      "signature": {
+        "url": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz.sig",
+        "byteLength": 140,
+        "sha256": "0905053692537223823c32168eb85b331bc453dfa7c2505a6ab394175837e8a7",
+        "fixture": "artifacts/trytond_party-8.0.3.tar.gz.sig"
+      }
+    },
+    {
+      "name": "trytond_product-8.0.1.tar.gz",
+      "url": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz",
+      "byteLength": 86832,
+      "sha256": "1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53",
+      "fixture": "artifacts/trytond_product-8.0.1.tar.gz",
+      "signature": {
+        "url": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz.sig",
+        "byteLength": 140,
+        "sha256": "dcde9dba0ccffe8a2218c71ab0ba78eea28d8a0aa999da56325bbb53c080accf",
+        "fixture": "artifacts/trytond_product-8.0.1.tar.gz.sig"
+      }
+    },
+    {
+      "name": "trytond_sale-8.0.3.tar.gz",
+      "url": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz",
+      "byteLength": 212290,
+      "sha256": "224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070",
+      "fixture": "artifacts/trytond_sale-8.0.3.tar.gz",
+      "signature": {
+        "url": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz.sig",
+        "byteLength": 140,
+        "sha256": "f21a8d07e2e8d873512c9b4b2d1f449b8fe7af0ff645e06388129cf5d4613f12",
+        "fixture": "artifacts/trytond_sale-8.0.3.tar.gz.sig"
+      }
+    }
+  ],
+  "members": [
+    {
+      "archive": "trytond-8.0.9.tar.gz",
+      "member": "trytond-8.0.9/trytond/model/workflow.py",
+      "storedAs": "sources/core-workflow.py",
+      "rawLength": 2221,
+      "rawSha256": "92f8dc6e734b83bde49b4e912a57972476eb9c07a7fae0939e39c3961b597840",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond-8.0.9.tar.gz",
+      "member": "trytond-8.0.9/trytond/protocols/dispatcher.py",
+      "storedAs": "sources/core-dispatcher.py",
+      "rawLength": 10236,
+      "rawSha256": "d7c9ee07bcd8a65993c000740b2482a71906c0a9cbcacb536ded15f967de27ee",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_party-8.0.3.tar.gz",
+      "member": "trytond_party-8.0.3/party.py",
+      "storedAs": "sources/party-party.py",
+      "rawLength": 48089,
+      "rawSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_party-8.0.3.tar.gz",
+      "member": "trytond_party-8.0.3/address.py",
+      "storedAs": "sources/party-address.py",
+      "rawLength": 24951,
+      "rawSha256": "71b7a054238e55f393d7299a42c6ddbaa9dce470d12352d3845b01cd10ad49e7",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_party-8.0.3.tar.gz",
+      "member": "trytond_party-8.0.3/contact_mechanism.py",
+      "storedAs": "sources/party-contact-mechanism.py",
+      "rawLength": 13955,
+      "rawSha256": "8941d34f1d72cbb0b8793de387d56ebbcc7207a040b5ba634a98fb9a08bda05f",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_party-8.0.3.tar.gz",
+      "member": "trytond_party-8.0.3/exceptions.py",
+      "storedAs": "sources/party-exceptions.py",
+      "rawLength": 599,
+      "rawSha256": "c4250e0081bc766beef9854477683e126eae1b2807aa88a3d10c1c14389d31bf",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_product-8.0.1.tar.gz",
+      "member": "trytond_product-8.0.1/product.py",
+      "storedAs": "sources/product-product.py",
+      "rawLength": 40429,
+      "rawSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_product-8.0.1.tar.gz",
+      "member": "trytond_product-8.0.1/uom.py",
+      "storedAs": "sources/product-uom.py",
+      "rawLength": 11388,
+      "rawSha256": "8b7040417767322e730e7fda7b6f5d923e190279fa27dc5f49fc52e39f4ca5f0",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_product-8.0.1.tar.gz",
+      "member": "trytond_product-8.0.1/exceptions.py",
+      "storedAs": "sources/product-exceptions.py",
+      "rawLength": 493,
+      "rawSha256": "8c0371c41ac908fcf639cb24fdbe8b89fc8096166e8ed677799ef54346bfdd1d",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_sale-8.0.3.tar.gz",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "storedAs": "sources/sale-sale.py",
+      "rawLength": 98619,
+      "rawSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd",
+      "kind": "REGULAR_FILE"
+    },
+    {
+      "archive": "trytond_sale-8.0.3.tar.gz",
+      "member": "trytond_sale-8.0.3/exceptions.py",
+      "storedAs": "sources/sale-exceptions.py",
+      "rawLength": 503,
+      "rawSha256": "be9c5d27c86b228be30e7e3361c88554de17f80607a5ac207537a17d869edb2f",
+      "kind": "REGULAR_FILE"
+    }
+  ],
+  "captureCapBytes": 20971520,
+  "mirrorPolicy": "DENY_EVEN_BYTE_EQUIVALENT"
+}

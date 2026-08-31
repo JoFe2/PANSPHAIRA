@@ -1,0 +1,322 @@
+{
+  "schemaVersion": "pansphaira.cscl01/system-profile/v1",
+  "profileId": "tryton.8.0.source-native-profile",
+  "systemId": "tryton",
+  "systemRole": "TRAINING",
+  "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+  "questionInventoryDigest": "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28",
+  "sourceFactDigests": [
+    "04cb3a726e1ab4bda37c13c8a9d4610f469fac048a1dc0a61752e87232d1fa4e",
+    "0559285146c74a5d85196af091731c3f34b3aa9f8c1bae22ee64f9058b7ff243",
+    "0a8396d42a0a64fc7f94b8da0eb1a96592c0984209e7ed77635f3d16ee3e6bbe",
+    "11249f640beb29acd64575ceb79242e981f2fb8d9ef6e66a3812edaa43c722e6",
+    "1b1f425f99bdb4fbadd7e22483ae64729e07c2acbf493a721a72efda786a654f",
+    "1df4cd082fdaf25f0752cd788484acbef9c031ac64a415aa5d63aaf51ee7b6b4",
+    "29025c4559ee16c27b6750ae466b0884694ea15b4306f345a741a185f1809849",
+    "2d4116dc384732d62ce40042c5095b1f959f1003a0e8f694c0b41030ba44a881",
+    "2ee8154b5f7d72fad6178f09427b27e5f088ee7ee14ae6d11a9ea879a94e98fe",
+    "3518045c33c180953567797f1807c00233bf624ea6be6a05280f0cb1a1034c35",
+    "35d71358af8d686767a005c5a30a53f1e45042eeac0af5715922103142a6beed",
+    "36f7ac07c1298c96dab720a509f4ba72dc882fad8041ff68b83d30685c239fcf",
+    "3e28b87b35c32a95dc8634b0ea1866abc5bd1e2127d3a8e9d056f2240b455bdf",
+    "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7",
+    "442714b5c8f66c41a3ebfbec3f74537fbcb58dff22a274c6d532a4a5f7848aa7",
+    "45a7a7f2dffae4b8df983cbe57a4a3df0bea3984035df7b3f876eefd459dcf5f",
+    "491384e9251e2e706f98715dbb3f75eecd5bf12cff99d13fa6e4a1846bac5691",
+    "528a2f77c6b3655624380cf35018a280f89759aca1787229ee484f0af74d42e7",
+    "683a6712bdb8e3e774f6645fc9f2ad87baa05465217976313645b2819ff76544",
+    "6cb9c50688c7241e6f3e54b0e60c9679051aa6ea5a7ace6832a7091c0897c766",
+    "719976b96395e1938ca0ee3f05eeaa318b2e156b68b3ed2de9a4b211b600d6d3",
+    "77b9619c3d27f88028f90f017fe603b1def29fab7e8cf54232c269eb042ff5ed",
+    "8a4e5d05ac65c5a5aed8535f315d0d8ede33e902fb659d62ffa940fe4a5ad595",
+    "a8d47ab967ee1e5128f0efb799cf5bc3f8cfc424a9e5daf4c7950aec05ec3bf8",
+    "ab6d95b2b6fa55c56be990bd129c9a1e1f56096f50d7f2a88dcfd515c03d67af",
+    "b27f52a0abe07b525551c8d7926d6104bc395ab04de9931b4dbe9510b5c4227c",
+    "b6d9a3393a9b01f0426341b9bd4805dfdb34c7b2263b1d22c011f0f0c882fec0",
+    "c76f0e32013fb5f6e558b03cfba66db9ffb0b7f1f83ccc3ebc7cc1f639e2137e",
+    "c958b4aaf34ba5c06402119defd41da88b7ba8aafa0a9a8576814ca4828d76cc",
+    "caa43201affca96e2dedff0a02354d2b8d5ab125f379ae7db7fd644bba1f61f6",
+    "cfa1b147bf400cd142d89c1f2afbccb94570b325295e6d154569809014656b83",
+    "d0381fbfd1f86fbaf414bbe9668c20c888c9f015bd31afa40805274a8c8de59e",
+    "e19bfc218f8cd386ccfcd80d42db0d69a7379b3d00eb4e713108b1a270f86b9a",
+    "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f",
+    "e2fe319958ea93d78bf8064dcf5ca394fce376c0bc97c5793614cbae70e0fdfa",
+    "f9ec2158b90f86e561f8708aaa95728ecde57b9cfc2d121fb3963adf33c59ede"
+  ],
+  "sourceNativeTerminology": [
+    {
+      "term": "party.party",
+      "meaning": "Party model",
+      "sourceFactDigest": "3e28b87b35c32a95dc8634b0ea1866abc5bd1e2127d3a8e9d056f2240b455bdf"
+    },
+    {
+      "term": "party.address",
+      "meaning": "Address related to Party",
+      "sourceFactDigest": "3e28b87b35c32a95dc8634b0ea1866abc5bd1e2127d3a8e9d056f2240b455bdf"
+    },
+    {
+      "term": "party.contact_mechanism",
+      "meaning": "Contact Mechanism related to Party",
+      "sourceFactDigest": "3e28b87b35c32a95dc8634b0ea1866abc5bd1e2127d3a8e9d056f2240b455bdf"
+    },
+    {
+      "term": "Product Template",
+      "meaning": "Common properties for product variants",
+      "sourceFactDigest": "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7"
+    },
+    {
+      "term": "product.template",
+      "meaning": "Product Template model",
+      "sourceFactDigest": "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7"
+    },
+    {
+      "term": "product.product",
+      "meaning": "Product variant model",
+      "sourceFactDigest": "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7"
+    },
+    {
+      "term": "Variant",
+      "meaning": "product.product related through Template Variants",
+      "sourceFactDigest": "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7"
+    },
+    {
+      "term": "Default UoM",
+      "meaning": "Required standard Unit of Measure",
+      "sourceFactDigest": "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7"
+    },
+    {
+      "term": "sale.sale",
+      "meaning": "Sale model",
+      "sourceFactDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+    },
+    {
+      "term": "sale.line",
+      "meaning": "Sale Line model",
+      "sourceFactDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+    },
+    {
+      "term": "Party",
+      "meaning": "Required participant on Sale",
+      "sourceFactDigest": "3e28b87b35c32a95dc8634b0ea1866abc5bd1e2127d3a8e9d056f2240b455bdf"
+    },
+    {
+      "term": "Quotation",
+      "meaning": "Sale workflow state",
+      "sourceFactDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+    },
+    {
+      "term": "Confirmed",
+      "meaning": "Sale workflow state",
+      "sourceFactDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+    },
+    {
+      "term": "Processing",
+      "meaning": "Sale workflow state",
+      "sourceFactDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+    },
+    {
+      "term": "Done",
+      "meaning": "Sale workflow state",
+      "sourceFactDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+    },
+    {
+      "term": "Cancelled",
+      "meaning": "Sale workflow state",
+      "sourceFactDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+    }
+  ],
+  "capabilityFamilies": [
+    "PARTY_CUSTOMER_MANAGEMENT",
+    "PRODUCT_ITEM_MANAGEMENT",
+    "SALES_ORDER_MANAGEMENT"
+  ],
+  "evidenceCells": [
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "cellDigest": "d15ce7822118a5f29438e4675f08e22c42597ca2521ba46a64875f02a2f12941"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "relations",
+      "cellDigest": "462be66dfc04f1d389671a88007137587f90e7e0cf5cbe9822ba5521d3dab494"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "operations",
+      "cellDigest": "05a26ff2c7202eff12a3f0127e0f5b0e7dd820ed5b3511159a37e1b211797f7b"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "cellDigest": "5ac99be7a1d073c94510a054c30ef1901ad984380e3b39e6a5ae5c5996a1311d"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "cellDigest": "6ac3ba14147805ce89a32da4ba3f5de523d3c6596f330ebec285bee025744a00"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "events",
+      "cellDigest": "cbbbb69e701e4590d6dd6242d859fca8180c1e364e8779014edc48bd1d9ef7f0"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "preconditions",
+      "cellDigest": "ae9dd3476e8525316529bf543b1d1685ad82fb962eb76d196b9a5a1760d2e065"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "invariants",
+      "cellDigest": "403b9494f2f120427de2eb19eb1dc0e7ad66a32dfaae2194ecf8809fcb8812be"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "cellDigest": "2fe5e504f9b9562edbfb9efdbe1a47ee1cfd576d155facb46868f5b85912ac66"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "readbacks",
+      "cellDigest": "f126273f4afab870a463b37d90ff38ad8b4aa28192806677d6c903460467ec13"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "cellDigest": "fe40fd3954231d8edc4a9f8421e04103e1ad30f5b6d744f55f1b328cd9434810"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "cellDigest": "a502b84190cebd6c72c97c765dfafe688c5fec3d45bfbb1a65d33a2505a6a657"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "objects-roles",
+      "cellDigest": "743b1234e305a6a34a72de1fe00f8c1038d63df481b090b5636274ff2c760fbe"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "relations",
+      "cellDigest": "6c7c96b970f338bb0bca143cccb12a7dc84ca0a2fe327fc514718777d170c136"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "operations",
+      "cellDigest": "0f3a760b93db418efa2abb3c8be03b3fd34eec7fa1e75b21294df4835e2e1c55"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "cellDigest": "32ba78659c2a22840cbd4e81d0d7aa81854731c7c54c3657d4a99c39fb4caf44"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "states-transitions",
+      "cellDigest": "de4c4371da54b21f39707d88fa84b3fb2d5589f5f85ec02c663848bc278c3f89"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "events",
+      "cellDigest": "6cb518c6d24b7227823aab56319d872bfa9581b7c6eb12a12aecfcf221665c66"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "preconditions",
+      "cellDigest": "f2e85b6a086d6d16c633021bb987ca47e214d6559c42ac8b92b583715ddbacd9"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "invariants",
+      "cellDigest": "479650e53ec3f993ce4c585182cf37a708f87c39e7a5267b86e34aea99dd358e"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "cellDigest": "0a42a93e85c197acae22cca37676a3ae8059c668c82f7c39f4d947f9e9d97569"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "readbacks",
+      "cellDigest": "6b952e7f487d3d0950f34afdacd67a2a0f38ad5e1366946e40b6be20609a1a52"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "cellDigest": "49ec89fe269d93b0f9c845aa9b6ea0a2c38ce4a97e9a30d97a43940290e77bf9"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "cellDigest": "edcf909d0d8da5e1f26cda61b688a055cedbb48c8113dbda181f4042c572fc04"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "cellDigest": "6d9e8354ff17f00b82be7e5ffdc617fd8bd7d1a36c6b3a87c28a6ce5cd8dd3ee"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "relations",
+      "cellDigest": "8f0ddeec8e2771b00692817cff4bee70d1c9fc43466ecbb254c1c18b839b8a37"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "operations",
+      "cellDigest": "baa7077d2fce3200f52c1fbdbc7a5ee79b9b3affeabff4be200253efc8ca1fcb"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "cellDigest": "789a04d1030d3664103693e840136a8075ab871975d53a973b60ed23a20bee68"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "cellDigest": "b8bf932f4ac6296df508447d59206640b432c6f83d1ba6f408adeaabd093a8fc"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "events",
+      "cellDigest": "6c90fa3a0e4fdde664cff62e020b97241a4265800dbe56ad75f6fd7005a3d1ce"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "preconditions",
+      "cellDigest": "2abe542673aa8c8805bf053f9b344f9c813ecfb88d187da8453143c8a5f7d68f"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "invariants",
+      "cellDigest": "5797cc176a7e13a83bb655ffc1dc71aa6e64d47ab367363eaeb91eb3f12040da"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "cellDigest": "3ee5002580edfea8d6e3c20a00d404574408eb1bdff77af875a139e6fce7e501"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "readbacks",
+      "cellDigest": "4e4cb9674d31760da302c06957da6fd93fb93ef115ee6f3379885763792160a4"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "cellDigest": "c23cee28ebecb84e507dfbe84dee274b475c207bfc5efbd88e1b76c1f8a2ba0d"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "cellDigest": "a8c5c3aded1b8815077817c8bdd824db6dd504891bf400b6b25adb8d06c3c4f5"
+    }
+  ],
+  "holdoutIsolation": "TRAINING_PROFILE",
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "profileDigest": "bca464a95bdaddb5c349fbe83b66c2015b473bce2114c9c9a5653896d7440fdb"
+}
