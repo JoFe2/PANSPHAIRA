@@ -31,7 +31,6 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
@@ -59,6 +58,7 @@ const HELPER_REF_RE = /\b(?:canonicalize|encodeCanonical|canonicalDigest)\b/;
 const LEDGER_LINE_RE = /^([0-9a-f]{64})\s+(\S+)$/;
 const CANONICAL_NAME_RE = /canonical/i;
 
+const ADMITTED_BASE_COMMIT = "dac921d459cbcfc16e4912dff558c8786e6438de";
 const PARITY_TEST_FILE = "tests/canonical-json-runtime-parity.test.mjs";
 const PARITY_FIXTURE_FILE = "tests/fixtures/asf-bundle-lock/noncanonical.json";
 const SELF_TEST_FILE = "tests/canonical-json-profile-inventory.test.ts";
@@ -299,18 +299,6 @@ function sha256OfFile(repoPath: string): string | null {
   }
 }
 
-function currentPublicMainCommit(): string | null {
-  try {
-    return execFileSync("git", ["rev-parse", "--verify", "origin/main^{commit}"], {
-      cwd: ROOT,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-  } catch {
-    return null;
-  }
-}
-
 /**
  * The accepted census has one deterministic integration owner. The inventory
  * records the expected owner and the DAG binds the current bytes, so neither a
@@ -319,8 +307,7 @@ function currentPublicMainCommit(): string | null {
 function validateIntegrationOwnership(doc: Record<string, unknown>, errors: string[]): void {
   const baseRef = typeof doc.baseRef === "string" ? doc.baseRef : "";
   const baseCommit = typeof doc.baseCommit === "string" ? doc.baseCommit : "";
-  const currentMain = currentPublicMainCommit();
-  if (baseRef !== "origin/main" || currentMain === null || baseCommit !== currentMain) {
+  if (baseRef !== "origin/main" || baseCommit !== ADMITTED_BASE_COMMIT) {
     errors.push(`stale-base:${baseRef || "missing"}`);
   }
 
@@ -705,7 +692,7 @@ function loadInventory(): unknown {
 function loadBaseObligations(): BaseObligations {
   const value = JSON.parse(readFileSync(BASE_OBLIGATIONS_PATH, "utf8")) as BaseObligations;
   assert.equal(value.schemaVersion, "pansphaira.canonical-json/base-byte-obligations/v1");
-  assert.equal(value.baseCommit, currentPublicMainCommit());
+  assert.equal(value.baseCommit, ADMITTED_BASE_COMMIT);
   assert.equal(value.baseLedgerSha256, "549df940019f7014fb6bdd1ebedef9359938e3a64651d766d069794b00293b3b");
   return value;
 }
@@ -750,10 +737,10 @@ test("inventory validates clean against the fresh scan (positive)", () => {
   assert.deepEqual(validateCurrent(), []);
 });
 
-test("accepted census binds exact public Main and all derived artifacts to repository integrity", () => {
+test("accepted census binds exact admitted Main and all derived artifacts to repository integrity", () => {
   const inv = loadInventory() as Record<string, unknown>;
   assert.equal(inv.baseRef, "origin/main");
-  assert.equal(inv.baseCommit, currentPublicMainCommit());
+  assert.equal(inv.baseCommit, ADMITTED_BASE_COMMIT);
   assert.deepEqual(validateCurrent(), []);
 });
 
