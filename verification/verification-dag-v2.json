@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 34,
+  "graphVersion": 35,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "ccab99378e54afc05d037a53d422c179fc0a5fc27e7e4f017381c0a578779bac"
+          "sha256": "8a11fc0e19fe62f62ac5789cca5070fbf66549da77098e14915c7750e06c753b"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f40ebc69073458bfb354a2bca8475c63460c3d6683adb165523f1bf9fb6b4197"
+          "sha256": "928c31d005f32d55789f2aa5468d8d6360e982481b775ac200ff005755ab0c6a"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "91584d65b692da38a4cb4d11fe56b795414f83e5d4c4a7421d953f24b83c36d0"
+          "sha256": "cb909afed67cf18b8635966d7e0fd8a26cf32460c80b57d232c4c52994ba29ff"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "314b0389adb8896934397a5e24e98277028848ef4c1a8ba4e2fedeb57f3a039c"
+          "sha256": "89c37ce1c1b1a1d8bd54be43d9c2e4b5a88c64cff62a3c79a41f280d82aa4126"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "ee1dba77c6ae78c0f602da7fd3393ea654e4c417adfb94285c215ad14bbf7a0a"
+          "sha256": "e0609c6989b66930b96c5a73912fca19e22edd6b064b7aa40767fe7db004b491"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "e498823c84f00a1a17fb9ab68f6b3a6c3aff1c9ceeaf41aedd1088f341e72155"
+          "sha256": "30247848c9b4771d8b6c5526562b21b1729a755de130415fc504444e68cda820"
         }
       ],
       "ownedTests": [
@@ -5077,6 +5077,261 @@
         "Common core requires complete five-system cells, at least four evidence-backed equivalences and zero unresolved conflict.",
         "Candidate bytes freeze before iDempiere semantics and cannot be edited by holdout evidence.",
         "Frequency, lexical similarity, caller digests and model claims grant no equivalence or Authority."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-02-odoo-source-native-profile-v1",
+      "dependsOn": [
+        "cscl-01-cross-system-protocol-freeze-v1"
+      ],
+      "inputs": [
+        {
+          "path": "src/cscl-02/odoo-profile.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c37d2611007ecda73c4863719a394a2de0cb507eca91f5165e3d331f21ee58ee"
+        },
+        {
+          "path": "tests/cscl-02/odoo-profile.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "dc958a6c75e217a91e2ad2a2197f886d8fe20a55f876320657f1529ededa524b"
+        },
+        {
+          "path": "tests/fixtures/cscl-02/odoo-community-cell-specs-v1.json",
+          "role": "FIXTURE",
+          "sha256": "5d2d17b582d20c1426422d7639a4e4db2a75355021d1af711b1bc82edb97ebac"
+        },
+        {
+          "path": "verification/cscl-02-odoo-community-profile-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2777ffadbc3ff461f9af0c263c74fd3434d2b86db4f24411a347d8e71d3d1da4"
+        },
+        {
+          "path": "verification/cscl-02-odoo-community-profile-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "23d58e71c999c4b1151899ba53610b21ee21c90da3d986f0872a01a352f18be3"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl02:test"
+      ],
+      "invariants": [
+        "Exactly three frozen capability families and twelve source-native questions yield a complete 36-cell denominator.",
+        "Every fact and cell binds immutable official source bytes, exact locators, parser/legal identities and explicit negative evidence.",
+        "Offline replay is deterministic and cannot perform network access.",
+        "No cross-system concept, holdout semantic, Capability candidate, promotion, execution or Authority claim is admitted."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-03-erpnext-source-native-profile-v1",
+      "dependsOn": [
+        "cscl-01-cross-system-protocol-freeze-v1"
+      ],
+      "inputs": [
+        {
+          "path": "src/cscl-03/profile-builder.mjs",
+          "role": "VALIDATOR",
+          "sha256": "15854cb3b05156adb6fa8ca250b03fc29c47735c8dcc27ffe01b08b26ef0f0c9"
+        },
+        {
+          "path": "src/cscl-03/profile-cli.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0e0465a0a776deb2b0b74bcadbad93989128192626394a838b1988840fe1c813"
+        },
+        {
+          "path": "tests/cscl-03/profile.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0af53d8bed527319eb244984809dd896d5f86a37adef6fa2c7e06f5dd32df8e7"
+        },
+        {
+          "path": "tests/fixtures/cscl-03/source-native-evidence-spec-v1.json",
+          "role": "FIXTURE",
+          "sha256": "35c6ffef930cd4406b01497ba9d4f47a510f5945ed8111cf3c46502628d85616"
+        },
+        {
+          "path": "verification/cscl-03-build-v1/build-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "daa628ee7942a0aa13a3d3e7c05d6be432bd209150ee90d79ce68572e9d00019"
+        },
+        {
+          "path": "verification/cscl-03-build-v1/evidence-cells-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "628ea4bb14ae81fbc7c0e025cc04f077ca7580815f6dd0a46f958b3cb83dd825"
+        },
+        {
+          "path": "verification/cscl-03-build-v1/source-facts-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "c8a47aaf1f2fc01a78713e6ac9db3a92520f3632f2d6d493239d7d2d4c0c3810"
+        },
+        {
+          "path": "verification/cscl-03-build-v1/system-profile-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a30367e71427164c0b0e70f72d0ab4454a5d7f284c3b26f7ad4cf06d2c69af53"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl03:test"
+      ],
+      "invariants": [
+        "Exactly three frozen capability families and twelve source-native questions yield a complete 36-cell denominator.",
+        "Every fact and cell binds immutable official source bytes, exact locators, parser/legal identities and explicit negative evidence.",
+        "Offline replay is deterministic and cannot perform network access.",
+        "No cross-system concept, holdout semantic, Capability candidate, promotion, execution or Authority claim is admitted."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-04-dolibarr-source-native-profile-v1",
+      "dependsOn": [
+        "cscl-01-cross-system-protocol-freeze-v1"
+      ],
+      "inputs": [
+        {
+          "path": "src/cscl-04/profile-builder.mjs",
+          "role": "VALIDATOR",
+          "sha256": "72b39fcba5014f6837231663876cea98e981e4ed55777aaca3fc0b243e8cd185"
+        },
+        {
+          "path": "src/cscl-04/render-profile.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9e0eb58f7debe8e06ad0dd560c93775fb29c71a793d69b8086f0afb3579b3264"
+        },
+        {
+          "path": "tests/cscl-04/profile.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "bc24ec45e6cefd66e580986213ecf457e80b6f8de8808dadc338aa908f0be3ee"
+        },
+        {
+          "path": "tests/fixtures/cscl-04/evidence-cells-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a32eab096ed5680073a9f6ede3573665fdb84c3546e6b4475e38dc1b8ae995e7"
+        },
+        {
+          "path": "tests/fixtures/cscl-04/source-facts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "03e1c21e75cad681552eda42484aeca7fe44de1422f2d1c44b41e3fd3d217755"
+        },
+        {
+          "path": "tests/fixtures/cscl-04/system-profile-v1.json",
+          "role": "FIXTURE",
+          "sha256": "08eb4c093e6444d97082b397a11df39dbb9e87f54b51cb5c8d36c3216cc5f73e"
+        },
+        {
+          "path": "verification/cscl-04-dolibarr-profile-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "df09195c074cbb2589f0ebfc5ab6c680db2f78fd0809eb0683623dc656e4d946"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl04:test"
+      ],
+      "invariants": [
+        "Exactly three frozen capability families and twelve source-native questions yield a complete 36-cell denominator.",
+        "Every fact and cell binds immutable official source bytes, exact locators, parser/legal identities and explicit negative evidence.",
+        "Offline replay is deterministic and cannot perform network access.",
+        "No cross-system concept, holdout semantic, Capability candidate, promotion, execution or Authority claim is admitted."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-05-tryton-source-native-profile-v1",
+      "dependsOn": [
+        "cscl-01-cross-system-protocol-freeze-v1"
+      ],
+      "inputs": [
+        {
+          "path": "src/cscl-05/tryton-profile.mjs",
+          "role": "VALIDATOR",
+          "sha256": "e4bbbf943dfb31f98b3a8fc781add5c6bdaafbb0050095412647e44e1434ca29"
+        },
+        {
+          "path": "tests/cscl-05/tryton-profile.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "479e312e4b581aa65b691ea1eb4c1e8494bfbc41f5e92937c128de91bf38ff17"
+        },
+        {
+          "path": "tests/fixtures/cscl-05/expected/cells-v1.json",
+          "role": "FIXTURE",
+          "sha256": "0370522443b26c63518df9f6f1c433847df628523103e683f96837a432c19392"
+        },
+        {
+          "path": "tests/fixtures/cscl-05/expected/facts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a02029e7f50f174d662e3e5ebab274c885951ebf4181b4d68e1dd7b79dfb24d3"
+        },
+        {
+          "path": "tests/fixtures/cscl-05/expected/profile-v1.json",
+          "role": "FIXTURE",
+          "sha256": "89d425bd8d259fb9819255b3e9063f9b861d8db742ffcc8906a0750477fac7f0"
+        },
+        {
+          "path": "tests/fixtures/cscl-05/profile-blueprint-v1.json",
+          "role": "FIXTURE",
+          "sha256": "02e87dc222e043f8c1a1ad3e99051b96819d45dc29f7ee76525fadec7be86964"
+        },
+        {
+          "path": "verification/cscl-05-tryton-source-native-profile-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "1c8e361eca1b3003a82bf4e4a2a6b854bcd17e1b57258a89338d52a08e76bce6"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl05:test"
+      ],
+      "invariants": [
+        "Exactly three frozen capability families and twelve source-native questions yield a complete 36-cell denominator.",
+        "Every fact and cell binds immutable official source bytes, exact locators, parser/legal identities and explicit negative evidence.",
+        "Offline replay is deterministic and cannot perform network access.",
+        "No cross-system concept, holdout semantic, Capability candidate, promotion, execution or Authority claim is admitted."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-06-ofbiz-source-native-profile-v1",
+      "dependsOn": [
+        "cscl-01-cross-system-protocol-freeze-v1"
+      ],
+      "inputs": [
+        {
+          "path": "src/cscl-06/profile.mjs",
+          "role": "VALIDATOR",
+          "sha256": "83e3df181543374a6ba020f6ab519e41243c26ea9c2b288e3804c00c28542fe6"
+        },
+        {
+          "path": "tests/cscl-06/apache-ofbiz-profile.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "fbc806eff28ce4064599e327f0bb2655c798c4478ac957ee0b3ba20e5a44f0e6"
+        },
+        {
+          "path": "tests/fixtures/cscl-06/expected-build-v1.json",
+          "role": "FIXTURE",
+          "sha256": "bb2d3e7de578ca101511afdeb947718403c70c13ca5f6e30561e706ed3b5598e"
+        },
+        {
+          "path": "tests/fixtures/cscl-06/source-native-assertions-v1.json",
+          "role": "FIXTURE",
+          "sha256": "46164992b050d67eb8e05c1346f9b4645eab0a38d7063b52c6c193e6c6d45844"
+        },
+        {
+          "path": "verification/cscl-06-apache-ofbiz-profile-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "96f016fa667ecfa8282cbbd26d09790e841601bb98a22b9a835e22ca8753830e"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl06:test"
+      ],
+      "invariants": [
+        "Exactly three frozen capability families and twelve source-native questions yield a complete 36-cell denominator.",
+        "Every fact and cell binds immutable official source bytes, exact locators, parser/legal identities and explicit negative evidence.",
+        "Offline replay is deterministic and cannot perform network access.",
+        "No cross-system concept, holdout semantic, Capability candidate, promotion, execution or Authority claim is admitted."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

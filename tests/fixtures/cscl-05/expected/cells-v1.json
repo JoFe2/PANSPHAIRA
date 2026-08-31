@@ -1,0 +1,846 @@
+[
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "objects-roles",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "36e494fc13400006b2518e91e4ab8011df4a492b343e49c27cc3842c81d248d3",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.objects-roles",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=1269-1298",
+        "excerptSha256": "68e26c5decf123845ec6cd32d5e08015331d8849157333e81ada9874f3f635a5"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "relations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "b8ef59e513fe96436aa8ef9c28a94e9ada3c70304dc8777bf9f6b6b1049e7523",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.relations",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=2530-2709",
+        "excerptSha256": "e31ebd2db5d79b16a9ffaad482d359480176c19bb79fb29a6341ef841dfad25a"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "operations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "29ce8cadb5cbcd514904f9af25a06b7294680646451f2c001ea78a2a20ec0930",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.operations",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=11632-11674",
+        "excerptSha256": "cd3f1adccd1dab11de0ce5c35f7d39f5206055ec5198e50009d77b39e53c67a9"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "inputs-outputs",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e6dcbcdb82e0ad7b6a7b27760a7deab3a5142b6d6911425854a36bec6292f5f5",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.inputs-outputs",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=1488-1543",
+        "excerptSha256": "101c0b98dd7ceea4971e3e5d12d3cfe3177b5fd7b3afaccdf6d8d64139ebdbdc"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "states-transitions",
+    "state": "ABSENT",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "291042ef2cf2d3b923d724f8e02db89132501b66f2dd4797ea12c6542842cd94",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.states-transitions",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=1172-1269",
+        "excerptSha256": "dfa8eb072725748b1b13eebe6479e6e7c969e9f98efbf354016bd6d4367cd407"
+      }
+    ],
+    "counterexamples": [
+      "Do not normalize DeactivableMixin active/inactive behavior into a sales-style workflow."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "events",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "96d2b9d90227ce60cc698b10fac6ffe23a6fc64eb1566cb89f36781fbca014a3",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.events",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/contact_mechanism.py:bytes=5169-5271",
+        "excerptSha256": "1e140d5e3f46c8c90977ca0f422d6ef7d576d62d79fab978f5e64608fb27567b"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "preconditions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "3fce7ab0041baae45516e2c40062285f07d39495e129e0b477cec5fb9438ba4f",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.preconditions",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/contact_mechanism.py:bytes=2578-2674",
+        "excerptSha256": "6593ef4166b63d1a58998a43e14bf84ea4790530caa3aa0ea3b850b10059a30a"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "invariants",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "3f5001a50c15a8b30e5b39615f0318425538dd16e385cacca78512f7cd15b653",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.invariants",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=4225-4301",
+        "excerptSha256": "65f5448cbe78d2419188c06ad4bc503c90d0db78c66b31d9ca3e348b5629db13"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "exceptions-errors",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "0eca37cccfa2d2aee559a16d03953acbddcfbab95b8eed19445fee8a73b1a355",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.exceptions-errors",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=7638-7746",
+        "excerptSha256": "5ac0bd82ebf949f31b9461a9eb9adb65a7a5e77cc64001a2a6c830f8ed559f43"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "readbacks",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e0b9569e601aaa97881c7ced57dca93a97a9b6a414c45acc58a81e6902ab7a4b",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.readbacks",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=12076-12202",
+        "excerptSha256": "9d66fb71864130addf8df9d9b5c704084c13aebd134bbf9b2e7aee275a815d68"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "api-service-exposure",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "f45dd8447b9bb5082ff23bd84dfea4ae0f81360e251e3df753813716522961cd",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.api-service-exposure",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/trytond/protocols/dispatcher.py:bytes=896-990",
+        "excerptSha256": "228cd03b942d0ecb286fac1bbc26d4978809a44b66585e864dfd17ff9079ee93"
+      }
+    ],
+    "counterexamples": [
+      "Generic trytond RPC exposure is not evidence of a Party-specific documented API."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "absence-ambiguity-conflict",
+    "state": "ABSENT",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "bbec9caa74a6d6a4d676ca8ea94b3dcbfc9ddb95ea894d0edb992c72218580c4",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.party-customer-management.absence-ambiguity-conflict",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=4896-4972",
+        "excerptSha256": "1430bd9464933f46fa9fde09be663308188a38528f40e0c0ff0e68d528fa95ba"
+      }
+    ],
+    "counterexamples": [
+      "The role played in a sale must remain Party and must not be rewritten as a separate Customer object."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "objects-roles",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "7727e9da26a8eb05e77b2fecd540876b236043e3e3d983d8c260ae059f641e34",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.objects-roles",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4775-4809",
+        "excerptSha256": "14838fa9f061f4be94c136faf70659065d1128964bd10eca6623d26f6b294a84"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "relations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "f44dbf9acc260e3b9badb4250f88f682e48828a42a7e7a3cf85f97a87c858609",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.relations",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=7381-7464",
+        "excerptSha256": "f73b658699b6ada8ded39b18afd8eec17cf425f831274e3d22f10f5ba7953c45"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "operations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "1b8c5d0c82875a5404ad05d1ebf94923e74b410af082cf5df02cc72343efb9b2",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.operations",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/uom.py:bytes=6619-6679",
+        "excerptSha256": "6151005c455ce992719fd8986d29bf776b58748a63cee356399e33fef1d76460"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "inputs-outputs",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "1747b43e6f55750427dbd565c2963332b6219f5bc0e87da7383d2abc17660f07",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.inputs-outputs",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4809-4891",
+        "excerptSha256": "0bf243ed0389ba7d92198fcee74f7abafec7c3baa1983045ea563ae7b3a8f7ae"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "states-transitions",
+    "state": "VARIANT",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "4172d6d9d5bc70547fe748ed1d61ae6b28b639aeec2acb25a9925e4dd9b60a9a",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.states-transitions",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4703-4775",
+        "excerptSha256": "216e9f2d589f046e4184ed762ee9b949c874d7a74408c0b9ed16a187eebb17fc"
+      }
+    ],
+    "counterexamples": [
+      "Active/inactive product behavior is a source-native deactivation variant, not a sales workflow."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "events",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "10d80a11fa46f141e0ab8d5cb4c00ce7943222af8b496b7efea1a761c1c22b12",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.events",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=11617-11727",
+        "excerptSha256": "773b4c5dd604ef218b78eb9ae8b918216df8e6295e59f971d064e2a849d60c11"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "preconditions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "ba0b66d69d1d009e92bcc884f2529e8efbc108ab18f08d67bf4ed1db4606c399",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.preconditions",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=6464-6552",
+        "excerptSha256": "951903778238c9750fcbc5032ec6b4251d35de76ac4c328a14e878ab8efef269"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "invariants",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "db9c90be891cc9deb2e47d402981b52aaaefd43e9b1e954c7dced0321274aff5",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.invariants",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/uom.py:bytes=2658-2738",
+        "excerptSha256": "998ec3333fe920992a0f6acdb4da0797c9a734a28036489f6890d71dfe9d4268"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "exceptions-errors",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "5268d238000412dadf2b9d72f626e04cd36ca5508437c7d306415a46afbe4585",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.exceptions-errors",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/exceptions.py:bytes=338-390",
+        "excerptSha256": "30131c0a763c5fbce1a052c547d947b21d015c74b7426278218d5ff333687e86"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "readbacks",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e080f8ed0b9bf7b69ef13b2db89866cbd8085a7e357c4a32fe97fa705c6775fd",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.readbacks",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=9562-9795",
+        "excerptSha256": "8dcb51236ebbbacec9fad02b6fd314d956a87f1272af15f7ff22c9e97c7fdfe0"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "api-service-exposure",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "5ba3967ee066240e782c78492cf7603786a8433e5b72c79dd41620f10e4bf1c7",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.api-service-exposure",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/trytond/protocols/dispatcher.py:bytes=1296-1404",
+        "excerptSha256": "daf99df779e9e96dedcd0f1168cc9f89bbecc4d1a0163ca19a72fcbcdacc41f4"
+      }
+    ],
+    "counterexamples": [
+      "Dynamic model dispatch is not a documented Product-specific service boundary."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "absence-ambiguity-conflict",
+    "state": "ABSENT",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e74a924c013967b943f021101048bbc68b201a68665fdbf4bd6e5429b42c5bca",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.product-item-management.absence-ambiguity-conflict",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=17009-17042",
+        "excerptSha256": "62c4f6d8d2f02632a3d14df454676ce06a7b2f6355b943aed10bdd708d3bec8b"
+      }
+    ],
+    "counterexamples": [
+      "Do not replace the source-native Product or Variant model names with a caller-normalized model name."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "objects-roles",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "4fc028803eefd16aa8fa0642bec342f925090086ae3c6b7767bbc6c95f121a86",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.objects-roles",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=2468-2616",
+        "excerptSha256": "b77ba0655ed94581852c0efad8a8b2e7088c27a18c65eeb03ddc11125941a5ed"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "relations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "dd230b3b9d47717e3bc4b9b8a1d3c611b79396bbeba4d5a9643a1fb9c69a01e3",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.relations",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=7836-7903",
+        "excerptSha256": "adaaabb67e1661153cefd9f2bc0f3859c4497fe3db58055464a3efacffa22806"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "operations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e57d0ffc7e6a21c83833b1a5099accc0e14eaa30d1a30f48f6ccc6ed3f6dc457",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.operations",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=44922-45004",
+        "excerptSha256": "7e7f1f21262afbacbd50576a0a8f1fdc5ff704033ceef4ac16a347bb5f809cb5"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "inputs-outputs",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "6268adb501f210f627a178389b077ace510013db8a5ab8afdaf4e50d29586ede",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.inputs-outputs",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=4896-4972",
+        "excerptSha256": "1430bd9464933f46fa9fde09be663308188a38528f40e0c0ff0e68d528fa95ba"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "states-transitions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "6294321cea0f83609377e9c695211d30a9cc3e1ae39fc46efa5101953233b46d",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.states-transitions",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=12412-12667",
+        "excerptSha256": "838c0a3da4ebbb7ea6e3db7ef1b89e1295f3abdd33cf9d5e83ea5d2e6e51a115"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "events",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "440a8ca24142af2cb052a1d0831d50ae677dfc13387d73f1db177f0bfd3e88be",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.events",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=44352-44401",
+        "excerptSha256": "7cb478ec373c10d8ed040c9240e09ca30ba058d7d95cb77a67c12a95c172e62d"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "preconditions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "9fcf81d35ea88174a85d704119d555f468ec724c45bfc8a27ba7b5a9c88e64ad",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.preconditions",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=43425-43468",
+        "excerptSha256": "55f021498663189b3327e4ac49912deb06668859a10eb86b29edc77ff1e4aebd"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "invariants",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "5a3239e132a3a77c250c464a0430c420c47bcc2a9710527940c01877d2a88647",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.invariants",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=42344-42452",
+        "excerptSha256": "e442916feb50b6bd1fa6b41b0f662df7c8de0ba23dac1466bde642a92d8c0b00"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "exceptions-errors",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "a3106b5c0c4938620517dc929b8390bdcecd7c87fb00f4f53c4a688cb3c7afd3",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.exceptions-errors",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/exceptions.py:bytes=309-398",
+        "excerptSha256": "594efefb48af0edc14321249851668ed0bc65d08f13ea2ee92b202c2e8999c0c"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "readbacks",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "727dc62c05935e871007499ecdb69068039053c9efd91a26d0f8095ab3fbb32d",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.readbacks",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=8713-8834",
+        "excerptSha256": "22e3d927ec4b6df798077a1d1d7540cabf90feb2e206050db69aaff8c6d7f9a5"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "api-service-exposure",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "ef00aa5b63b2ae2b46aeda235ed6f71f3b25e6b5b1b657c2d6271a9a6a4bc50f",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.api-service-exposure",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/trytond/protocols/dispatcher.py:bytes=1128-1171",
+        "excerptSha256": "20576bc55fd35f6606745028fdba7b514a3010bdc97bc828f12996213bd94cdb"
+      }
+    ],
+    "counterexamples": [
+      "A generic method-listing endpoint is not a Sale-specific API contract."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "tryton",
+    "questionId": "absence-ambiguity-conflict",
+    "state": "ABSENT",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "4dc15a844cd9cb9352ba7643bab83ce5a23594f3fccf67ebf04be432520ecdce",
+      "candidateMeaningSha256": "e80adc12b2ef470c4192c8d4e4f503eb53d0d89152b85dc4c2bf7a8c9f5b8d39"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "tryton.sales-order-management.absence-ambiguity-conflict",
+        "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=12597-12667",
+        "excerptSha256": "62ea41f17f0f4ae6282745834f848b8d1c16010d3b16cb4a7fae99b681a67599"
+      }
+    ],
+    "counterexamples": [
+      "Do not normalize Done to Closed or infer that Done is irreversible; ('done', 'processing') is declared."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  }
+]

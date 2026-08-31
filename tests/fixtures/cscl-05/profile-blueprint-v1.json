@@ -1,0 +1,351 @@
+{
+  "schemaVersion": "pansphaira.cscl05/profile-blueprint/v1",
+  "parserVersion": "1.0.0",
+  "canonicalizerVersion": "1.0.0",
+  "cells": [
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "    __name__ = 'party.party'\n",
+      "claim": "Tryton's source-native object is party.party (Party); the party module does not name this model Customer.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "    addresses = fields.One2Many('party.address', 'party', \"Addresses\")\n    contact_mechanisms = fields.One2Many(\n        'party.contact_mechanism', 'party', \"Contact Mechanisms\")\n",
+      "claim": "party.party relates to party.address through Addresses and to party.contact_mechanism through Contact Mechanisms.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "    def copy(cls, parties, default=None):\n",
+      "claim": "Party.copy copies parties and resets the copied code through its default mapping.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "    code = fields.Char(\n        \"Code\", required=True,\n",
+      "claim": "Party Code is a required input; Full Name and contact-mechanism Function fields are observable derived outputs.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "ABSENT",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "        DeactivableMixin, _ContactMechanismMixin, ModelSQL, ModelView,\n        MultiValueMixin):\n",
+      "claim": "party.party is DeactivableMixin-based; this complete selected model declaration does not define a Workflow state selection or transitions.",
+      "counterexamples": ["Do not normalize DeactivableMixin active/inactive behavior into a sales-style workflow."]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/contact_mechanism.py",
+      "needle": "    def on_change_address(self):\n        if self.address:\n            self.party = self.address.party\n",
+      "claim": "ContactMechanism.on_change_address assigns the Address party when Address changes.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/contact_mechanism.py",
+      "needle": "    party = fields.Many2One(\n        'party.party', \"Party\", required=True, ondelete='CASCADE')\n",
+      "claim": "party.contact_mechanism requires Party; deleting Party cascades to the contact mechanism.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "            ('code_uniq', Unique(t, t.code), 'party.msg_party_code_unique')\n",
+      "claim": "party.party enforces the code_uniq SQL constraint on Code.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "                raise AccessError(gettext(\n                        'party.msg_party_set_contact_mechanism',\n",
+      "claim": "Setting an already exposed Party contact mechanism raises AccessError with party.msg_party_set_contact_mechanism.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "member": "trytond_party-8.0.3/party.py",
+      "needle": "    def get_rec_name(self, name):\n        if not self.name:\n            return '[' + self.code + ']'\n        return self.name\n",
+      "claim": "Party readback uses Name as rec_name, or the bracketed Code when Name is empty.",
+      "counterexamples": []
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "AMBIGUOUS",
+      "member": "trytond-8.0.9/trytond/protocols/dispatcher.py",
+      "needle": "@app.route('/<string:database_name>/rpc/', methods=['POST'])\ndef rpc(request, database_name):\n",
+      "claim": "trytond exposes an RPC route and dynamic dispatch, but this source does not document a Party-specific service contract.",
+      "counterexamples": ["Generic trytond RPC exposure is not evidence of a Party-specific documented API."]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "ABSENT",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "    party = fields.Many2One(\n        'party.party', \"Party\", required=True,\n",
+      "claim": "sale.sale requires party.party as Party; no distinct Customer model is evidenced in the complete selected Party and Sale semantic members.",
+      "counterexamples": ["The role played in a sale must remain Party and must not be rewritten as a separate Customer object."]
+    },
+
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "    __name__ = \"product.template\"\n",
+      "claim": "Tryton defines product.template and product.product; the latter is a Variant of the Product Template.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "    products = fields.One2Many(\n        'product.product', 'template', \"Variants\",\n",
+      "claim": "product.template relates to product.product through Variants; product.product relates back through Product Template.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/uom.py",
+      "needle": "    def compute_qty(cls, from_uom, qty, to_uom, round=True,\n",
+      "claim": "product.uom.compute_qty converts a quantity from one UoM to another.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "    name = fields.Char(\n        \"Name\", size=None, required=True, translate=True)\n",
+      "claim": "Product Template inputs include required Name, Type and Default UoM; Product rec_name is derived from Code and Name.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "VARIANT",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "        DeactivableMixin, ModelSQL, ModelView, CompanyMultiValueMixin):\n",
+      "claim": "product.template uses DeactivableMixin rather than a Workflow state selection and transition graph.",
+      "counterexamples": ["Active/inactive product behavior is a source-native deactivation variant, not a sales workflow."]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "    def on_change_type(self):\n        if self.type == 'service':\n            self.cost_price_method = 'fixed'\n",
+      "claim": "Template.on_change_type sets Cost Price Method to fixed when Type becomes service.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "    default_uom = fields.Many2One(\n        'product.uom', \"Default UoM\", required=True,\n",
+      "claim": "product.template requires Default UoM, and product.product requires Product Template with cascade deletion.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/uom.py",
+      "needle": "            ('non_zero_rate_factor', Check(t, (t.rate != 0) | (t.factor != 0)),\n",
+      "claim": "product.uom enforces non_zero_rate_factor: Rate and Factor cannot both be zero.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/exceptions.py",
+      "needle": "class UOMValidationError(ValidationError):\n    pass\n",
+      "claim": "Product source defines UOMValidationError and UOMAccessError as source-native failures.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "    def order_rec_name(cls, tables):\n        table, _ = tables[None]\n        return cls.order_code(tables) + [table.name]\n\n    def get_rec_name(self, name):\n        if self.code:\n            return '[' + self.code + '] ' + self.name\n",
+      "claim": "Product Template readback prefixes Name with bracketed Code when Code exists.",
+      "counterexamples": []
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "AMBIGUOUS",
+      "member": "trytond-8.0.9/trytond/protocols/dispatcher.py",
+      "needle": "    return methods.get(request.rpc_method, _dispatch)(\n        request, database_name, *request.rpc_params)\n",
+      "claim": "trytond dynamically dispatches RPC methods, but this source does not document a Product-specific service contract.",
+      "counterexamples": ["Dynamic model dispatch is not a documented Product-specific service boundary."]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "ABSENT",
+      "member": "trytond_product-8.0.1/product.py",
+      "needle": "    __name__ = \"product.product\"\n",
+      "claim": "The complete selected Product semantic member defines product.template and product.product, not a source-native Item model.",
+      "counterexamples": ["Do not replace the source-native Product or Variant model names with a caller-normalized model name."]
+    },
+
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "class Sale(\n        Workflow, ModelSQL, ModelView, TaxableMixin,\n        AttachmentCopyMixin, NoteCopyMixin, ChatMixin):\n    __name__ = 'sale.sale'\n",
+      "claim": "Tryton's source-native sales object is sale.sale (Sale), with sale.line records and Party participation.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "    lines = fields.One2Many(\n        'sale.line', 'sale', \"Lines\",\n",
+      "claim": "sale.sale relates to sale.line through Lines and exposes Invoices, Shipments, Shipment Returns and Stock Moves.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "    def process(cls, sales):\n        states = {'confirmed', 'processing', 'done'}\n",
+      "claim": "Sale operations include quote, confirm, cancel, draft and process; process handles invoice, fulfillment and state updates.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "    party = fields.Many2One(\n        'party.party', \"Party\", required=True,\n",
+      "claim": "Sale inputs include required Company, Party and Currency plus Lines; outputs include Number, amounts, invoices, shipments and states.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "    state = fields.Selection([\n            ('draft', \"Draft\"),\n            ('quotation', \"Quotation\"),\n            ('confirmed', \"Confirmed\"),\n            ('processing', \"Processing\"),\n            ('done', \"Done\"),\n            ('cancelled', \"Cancelled\"),\n",
+      "claim": "Sale State is exactly Draft, Quotation, Confirmed, Processing, Done or Cancelled, with the source transition set declared by Sale.__setup__.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "                cls.__queue__.process(sub_sales)\n",
+      "claim": "Confirm schedules Sale.process through cls.__queue__ using sale_process_after and queue context.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "                sale.check_for_quotation()\n",
+      "claim": "Quote calls check_for_quotation before setting Quotation Date and Number; process filters to Confirmed, Processing or Done.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "                if sale.state not in {'cancelled', 'draft'}:\n                    raise AccessError(gettext(\n",
+      "claim": "Sale deletion is permitted only while State is Cancelled or Draft.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/exceptions.py",
+      "needle": "class SaleQuotationError(ValidationError):\n    pass\n\n\nclass SaleConfirmError(UserError):\n",
+      "claim": "Sale source defines SaleValidationError, SaleQuotationError, SaleConfirmError, SaleMoveQuantity and PartyLocationError.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "    total_amount = fields.Function(Monetary(\n            \"Total\", digits='currency', currency='currency'), 'get_amount')\n",
+      "claim": "Sale readbacks include Untaxed, Tax and Total amounts, Invoice State, Shipment State, To Invoice and To Ship.",
+      "counterexamples": []
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "AMBIGUOUS",
+      "member": "trytond-8.0.9/trytond/protocols/dispatcher.py",
+      "needle": "        'system.listMethods': list_method,\n",
+      "claim": "trytond RPC can list methods, but this source does not document a Sale-specific service contract.",
+      "counterexamples": ["A generic method-listing endpoint is not a Sale-specific API contract."]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "ABSENT",
+      "member": "trytond_sale-8.0.3/sale.py",
+      "needle": "            ('done', \"Done\"),\n            ('cancelled', \"Cancelled\"),\n",
+      "claim": "Sale State has no source-native Open or Closed value; the terminal-looking native labels are Done and Cancelled and transitions permit Done back to Processing.",
+      "counterexamples": ["Do not normalize Done to Closed or infer that Done is irreversible; ('done', 'processing') is declared."]
+    }
+  ],
+  "terminology": [
+    ["party.party", "Party model"],
+    ["party.address", "Address related to Party"],
+    ["party.contact_mechanism", "Contact Mechanism related to Party"],
+    ["Product Template", "Common properties for product variants"],
+    ["product.template", "Product Template model"],
+    ["product.product", "Product variant model"],
+    ["Variant", "product.product related through Template Variants"],
+    ["Default UoM", "Required standard Unit of Measure"],
+    ["sale.sale", "Sale model"],
+    ["sale.line", "Sale Line model"],
+    ["Party", "Required participant on Sale"],
+    ["Quotation", "Sale workflow state"],
+    ["Confirmed", "Sale workflow state"],
+    ["Processing", "Sale workflow state"],
+    ["Done", "Sale workflow state"],
+    ["Cancelled", "Sale workflow state"]
+  ]
+}

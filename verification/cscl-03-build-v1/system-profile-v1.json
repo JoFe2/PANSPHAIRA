@@ -1,0 +1,332 @@
+{
+  "schemaVersion": "pansphaira.cscl01/system-profile/v1",
+  "profileId": "erpnext.v16.33.0.source-native-profile",
+  "systemId": "erpnext",
+  "systemRole": "TRAINING",
+  "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+  "questionInventoryDigest": "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28",
+  "sourceFactDigests": [
+    "7d1f2a44da95ebad41d5218bff1937307392df968195c9da3c8765cf27db23f5",
+    "759fc70f2c79f39a8712956f9e2b888f11f4364e6eee6657d013302ac3fe49ab",
+    "472cefd988d6f7dc1893bf4125b4a15fd27d7521771dd726dbdc67051780cd9b",
+    "c4e828e8b718dea5de5d0409f7c39e6d0684be19bba156ea84bb729203190c01",
+    "44028fd7de3756d9f9e20988d214f3297f240df32bc238e535acf62e2695596c",
+    "aa920770cf449d37bee0efc53f9047e5c1f59282fc0ae70851ae210ca8fbf5c6",
+    "64af16ed5a534b45aef18d3016b68ac9331ba3ae1dd8182e1fb76174c99b4667",
+    "ad357f55413cb4fa3d0649227f4e2efd4b0d70d4638811a9f285fe9958f0413e",
+    "7b6531bc391cf5f17a1a34e3325b1c9859beccbf040ec25fa05012b059d8faee",
+    "feb4006d049e93399c9571bf11560ec9b2fa6acace35bbdc7593e0e8a595947b",
+    "b35e25218819a8511f2576ccf735641124b6c8f0d1771491c7c7a55d8f11b888",
+    "ebf06b05c9b620e7c0a8ecc2f5808ff58baa0c2ff512888610e8c0fe5772a92f",
+    "4288ca189da6e0cd26a19afe569d4114dd4a22e298764ea911cb46932c544060",
+    "240975f4550a08c946ca964fffdf11e40846b3776a10c19bac3f8737ae16989b",
+    "cdc83ecdfaa60a7a1563b219723dc37ffe1be1ee0ba3d9ebb7fe1bba300205c5",
+    "870707c2dbac3b50922a73d81ea0fac67baa3eb1f9839dcea15a480f61c2fb91",
+    "f7c84c78cbb6ebff5e3b76cc362cf586736bd0125378bffeb3d1b2575fb92780",
+    "1c2a39d810bc8f573599b906adec09f771bb28f0f4523776694b2c6d3196c271",
+    "9c12a964ea98a32b4a419040f096b78f840414d64530a9c3276cca9f60972aea",
+    "02c35210e85315b292935fd14829bed057d12aeca1f8865cedc1fe93f373ba43",
+    "38e46b2f530e5cb8a461bf736f72332fb8201363dbf8713fca6dfdb3718a297c",
+    "60e2daf2e256dddbd30fa4fc19d0d960d87d872e0f5145229839af8ee4d6233c",
+    "455c9710c65a7289e917b3f3f75aad06ecefab716e140a7331ff3e4df2385f57",
+    "98cf32dbd3f51ac938bf32470709989041c89c2a58bdf6576fe9329feb09ed9f",
+    "603dfbb802bb23ab353d2409884fd12ffcdacca42974b29ae8a1646adee072db",
+    "51ea29dd114b97bc8e890ffef183a7660d980f024adf8a1ee3486cc8e4486d7c",
+    "7eea2202d15c847542c38e370468fdb1b6240d03549ade26ce505e3a57763e73",
+    "ea7b2f71c79f63fe3086e8fab400a76c1353229733ac179e7c9b7bbdacbee968",
+    "30afd635129102b39bf8b39e5c6af48875b9805e15eff458a660917c20548489",
+    "0b772b40d682afb72f106b3878c6bc3afb41a298475824815c6caabec5e90e6a",
+    "65109fcf8f37d759876ea6f57c5cc9a1d7bc375779d708da54b2ecb52b890d42",
+    "bdb31b92caa2809314406342582b10cc4d124317c4db263f3a91f3bfefa83a46",
+    "06947cf362572ae347c208d7953aca5e98a3c1929c2f45057e8b28ffc0397354",
+    "374b7a3766b2989b01bba4c2c24f21ddb1eaedfe492ccf74c540fe2d100a8e1e",
+    "b2b2b246f5edac79731eca41d3d14f8ed40c21c5780b49b0fbf377c818e68aa0",
+    "649a0970ec773c0cb7dde59f839b534561838e427a9be0deac0f90ee670bb1d2"
+  ],
+  "sourceNativeTerminology": [
+    {
+      "term": "Customer",
+      "meaning": "DocType described as Buyer of Goods and Services.",
+      "sourceFactDigest": "7d1f2a44da95ebad41d5218bff1937307392df968195c9da3c8765cf27db23f5"
+    },
+    {
+      "term": "Customer Type",
+      "meaning": "Customer field with Company, Individual, and Partnership values.",
+      "sourceFactDigest": "7d1f2a44da95ebad41d5218bff1937307392df968195c9da3c8765cf27db23f5"
+    },
+    {
+      "term": "Customer Group",
+      "meaning": "Linked non-group classification used by Customer.",
+      "sourceFactDigest": "64af16ed5a534b45aef18d3016b68ac9331ba3ae1dd8182e1fb76174c99b4667"
+    },
+    {
+      "term": "Customer Primary Contact",
+      "meaning": "Customer link to Contact with persisted mobile and email readbacks.",
+      "sourceFactDigest": "feb4006d049e93399c9571bf11560ec9b2fa6acace35bbdc7593e0e8a595947b"
+    },
+    {
+      "term": "Disabled",
+      "meaning": "Customer Check that blocks use on new transactions.",
+      "sourceFactDigest": "44028fd7de3756d9f9e20988d214f3297f240df32bc238e535acf62e2695596c"
+    },
+    {
+      "term": "Is Frozen",
+      "meaning": "Customer Check that blocks further accounting entries.",
+      "sourceFactDigest": "44028fd7de3756d9f9e20988d214f3297f240df32bc238e535acf62e2695596c"
+    },
+    {
+      "term": "Item",
+      "meaning": "DocType described as Product or Service bought, sold, or kept in stock.",
+      "sourceFactDigest": "4288ca189da6e0cd26a19afe569d4114dd4a22e298764ea911cb46932c544060"
+    },
+    {
+      "term": "Item Code",
+      "meaning": "Required unique Item identity and document name input.",
+      "sourceFactDigest": "870707c2dbac3b50922a73d81ea0fac67baa3eb1f9839dcea15a480f61c2fb91"
+    },
+    {
+      "term": "Variant Of",
+      "meaning": "Item link from a variant to an Item template.",
+      "sourceFactDigest": "240975f4550a08c946ca964fffdf11e40846b3776a10c19bac3f8737ae16989b"
+    },
+    {
+      "term": "Default Unit of Measure",
+      "meaning": "Required Item link to UOM, represented by stock_uom in the controller.",
+      "sourceFactDigest": "240975f4550a08c946ca964fffdf11e40846b3776a10c19bac3f8737ae16989b"
+    },
+    {
+      "term": "Opening Stock",
+      "meaning": "Item operation constrained by stock, serial, batch, and valuation settings.",
+      "sourceFactDigest": "9c12a964ea98a32b4a419040f096b78f840414d64530a9c3276cca9f60972aea"
+    },
+    {
+      "term": "Item Price",
+      "meaning": "Document created from Item Standard Selling Rate after insert.",
+      "sourceFactDigest": "1c2a39d810bc8f573599b906adec09f771bb28f0f4523776694b2c6d3196c271"
+    },
+    {
+      "term": "Sales Order",
+      "meaning": "Document linking Customer and required Sales Order Item rows.",
+      "sourceFactDigest": "603dfbb802bb23ab353d2409884fd12ffcdacca42974b29ae8a1646adee072db"
+    },
+    {
+      "term": "Sales Order Item",
+      "meaning": "Child table option used by Sales Order Items.",
+      "sourceFactDigest": "51ea29dd114b97bc8e890ffef183a7660d980f024adf8a1ee3486cc8e4486d7c"
+    },
+    {
+      "term": "Status",
+      "meaning": "Sales Order field with Draft through Closed native values.",
+      "sourceFactDigest": "30afd635129102b39bf8b39e5c6af48875b9805e15eff458a660917c20548489"
+    },
+    {
+      "term": "Delivery Status",
+      "meaning": "Sales Order status dimension separate from Status.",
+      "sourceFactDigest": "649a0970ec773c0cb7dde59f839b534561838e427a9be0deac0f90ee670bb1d2"
+    },
+    {
+      "term": "Billing Status",
+      "meaning": "Sales Order status dimension separate from Status.",
+      "sourceFactDigest": "649a0970ec773c0cb7dde59f839b534561838e427a9be0deac0f90ee670bb1d2"
+    },
+    {
+      "term": "Closed",
+      "meaning": "Sales Order Status entered by close_or_unclose_sales_orders and reversed through update_status Draft.",
+      "sourceFactDigest": "65109fcf8f37d759876ea6f57c5cc9a1d7bc375779d708da54b2ecb52b890d42"
+    }
+  ],
+  "capabilityFamilies": [
+    "PARTY_CUSTOMER_MANAGEMENT",
+    "PRODUCT_ITEM_MANAGEMENT",
+    "SALES_ORDER_MANAGEMENT"
+  ],
+  "evidenceCells": [
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "cellDigest": "43a1121ab9a31467a54c5c714493abb68644f9ee67369acf84c010d57d27e830"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "relations",
+      "cellDigest": "57b1f2861bf710a74c63f2e9d52c1d076a0e284ad61e299f0fd2c0cf5eb87b01"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "operations",
+      "cellDigest": "12fc8de64428f776cfe34c19a337d4114aaf349a99933870f4ac88c94643e396"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "cellDigest": "7aa4b10f8d9633969d808b6b1fe33db4c03fa0f014b8c717410f0c65420a86ce"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "cellDigest": "1a17f0c2a0353a124e59cf4c7765d9391c49b32edd8e6e6036e229597bde9f50"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "events",
+      "cellDigest": "f60672204e46b71f2daecc9d102078bb06cbf75c2eb04a3e07deb7121ef58d44"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "preconditions",
+      "cellDigest": "fe39c3fb16ddab94e9c4d886d4a124f9dd0d62ed1a874bc428bdddec9f1b06d0"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "invariants",
+      "cellDigest": "d3ed0ca76eb4a46c1edb57a6d7ceefd8420a90479c193005809337adebff5904"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "cellDigest": "cab674e1cc07963f082db85570e4d7592712a5efc898b1c62b4c4733baef4eee"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "readbacks",
+      "cellDigest": "ab958de16d8764b794817cb25065af0c700271ba78508750166e0820ffbc2211"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "cellDigest": "32f0ec3001a1af84dbb6156892a3f71e13a61fb4854029cb0fcd5e4963c7260f"
+    },
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "cellDigest": "9611c6b89259ab5e96ccfc64ed00fe1f03476bd83d055a051f3bde91a6365d5d"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "objects-roles",
+      "cellDigest": "c3aedf2c23f74c0900b1600c7ee670f1a7e9cca0f2c2eb04ad12b8181bac456b"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "relations",
+      "cellDigest": "566de457ab2b1511ae0a544f9082b6a5377ab8aad8b558b39d65b950f42db0c9"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "operations",
+      "cellDigest": "20ced5b303305b3cf03e733e098dee817e42252b97db0d92576c7ca4755b6a68"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "cellDigest": "39a3db5f4d23fd7ea2e24becba06cd78ac2fcf7b76a7131418b91e252b53dbbd"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "states-transitions",
+      "cellDigest": "d3d43e8353bd44e554f849bcd0652f9c0273ede0a4284595fd26719709b36da5"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "events",
+      "cellDigest": "64280e97f2b39cdcc967d41e369d6b77b560599590afd01eb02b96b1205cd939"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "preconditions",
+      "cellDigest": "1a953199ef29ca0659978f62a53e7e6fe713e5d550e64fb846da454b70802a68"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "invariants",
+      "cellDigest": "64c39d278c3593214e78fab655c1be9876d85d929910d0e3ac04356c73a1b921"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "cellDigest": "1af3c2027dd446c97442995ef95f0fdf2e94ec5732b41b6d545a01a5e4555dff"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "readbacks",
+      "cellDigest": "9824134e38433c416d14d52e94453dde63588ee7cd1f266db2f0a05ae3218d53"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "cellDigest": "dbbaebec453747ed9b379b9ce4b634a623df505d3d5d494301d7a09eaa4222aa"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "cellDigest": "0cf275c6f3e3d341a4212562c304ae779c76584da7d36c6e75edaf2e8784dc66"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "cellDigest": "634217cfbc560e39aed5d54915b99e4db08bc0a915c347aa8bec640b53fd538a"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "relations",
+      "cellDigest": "f88ecefc88e148528216730f210029f4a489bcfaa715e9a0729c2b74d574719a"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "operations",
+      "cellDigest": "34c48f203d62b15dfb9b2522569b3a22dbeacaa9c352299568ab085e500933ba"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "cellDigest": "c973792e7ee3ea6ae75908948fcd1de15fc6702519fffa4d6ee289c0c1283b3d"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "cellDigest": "5ae2ce1a1cac472bcf59e2dedd3b9f19a9a32539231bc414fbcfabe1525110df"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "events",
+      "cellDigest": "9dd5fff98fb14502febfdfca25b57e6acc3dfa3f7960deb335e36de9a4ed12f8"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "preconditions",
+      "cellDigest": "d6552cc70c36a7a44e1703db71f95d0177b10a459745b40f764e7c8f9dd3e790"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "invariants",
+      "cellDigest": "ba30e5bce7b0e2091128814639041ece10acb43778519bca2fc211b996c663d4"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "cellDigest": "a4b6f06ee79914a1aac2b63a4316a8962f60d3c303a54c3ea527bee3c55c12dc"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "readbacks",
+      "cellDigest": "f6eea0097d4313bd8d5099ec188c07263e72671be2c87dac131e831c284497ec"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "cellDigest": "9f18aa4ca4c8395b485c04ff64d802bc4b1a1fd4e8c613f21ccc061bc12bc44f"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "cellDigest": "afeabd049265ee6689efb11723b5f3b59f5303579c8879d976b8950c5a59b64e"
+    }
+  ],
+  "holdoutIsolation": "TRAINING_PROFILE",
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "profileDigest": "735fbd813315c3287d76e872d16e154dbae4919ffcf54a1cea2dec5c20a48590"
+}

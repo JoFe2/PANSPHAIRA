@@ -1,0 +1,17 @@
+{
+  "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
+  "issues":[319,320,321,322,323],
+  "parentIssue":317,
+  "testedProductHead":"d2baa424e001a6edd531c2955ef0c9f39b5e87c9",
+  "testedProductTree":"506d66b2cc787095902d014a8c056159171d8d99",
+  "baseSha":"201baa3ed96b71e9577189b208435bdbb589fcba",
+  "workerCommits":{"319":"80b3de0493bdd50fe18fb7764a0cdf7639792e67","320":"f07065fdeb6fad89a58b859d48195316288efbf0","321":"f36228ac51e898ce3e760ef55f15bf60179940d0","322":"48227fe63db099234959693a1c43c51ece357484","323":"903b4c773a5e5ff69f069f8477e3526f47c65ccc"},
+  "waveCommits":["ff744966a4d39e1fbe33465e106468d7aefe6e24","25adac8d2c8162ca248540643b6527c6da296856","ed689482b61c2b30211b8140e1bd5839062c98d0","b8a020f7647c1a15949441dd02f8a66a701895dc","1fefbb4671a5ee29af4976d63c62c6e80f1b2b58","d2baa424e001a6edd531c2955ef0c9f39b5e87c9"],
+  "acceptance":{"ODOO_PROFILE":"PASS","ERPNEXT_PROFILE":"PASS","DOLIBARR_PROFILE":"PASS","TRYTON_PROFILE":"PASS","OFBIZ_PROFILE":"PASS","COMPLETE_PROFILE_WAVE":"PASS"},
+  "counts":{"systems":5,"decodedSourceBytes":4335056,"sourceFacts":181,"evidenceCells":180,"capabilityFamiliesAcrossProfiles":15,"questionsPerFamily":12,"holdoutAccesses":0,"crossSystemCandidates":0},
+  "profileTests":{"odoo":"6/6 PASS","erpnext":"4/4 PASS","dolibarr":"5/5 PASS","tryton":"9/9 PASS","ofbiz":"10/10 PASS"},
+  "checks":[{"command":"five focused profile suites","status":"PASS","tests":34},{"command":"integration gates","status":"PASS","tests":78},{"command":"npm test","status":"PASS"},{"command":"npm run lint","status":"PASS"},{"command":"sha256sum --check SHA256SUMS","status":"PASS"},{"command":"npm run release-governance:verify","status":"PASS"},{"command":"git diff --check","status":"PASS"}],
+  "publicBoundary":{"manifestEntries":1399,"publicWaveArtifacts":32,"repositoryOnlyWaveArtifacts":40,"verificationDagVersion":35,"verificationDagNodes":45},
+  "releaseDisposition":"RELEASE_REQUIRED_PENDING_DELIVERY",
+  "nonClaims":["NO_CROSS_SYSTEM_EQUIVALENCE_OR_COMMON_CORE","NO_HOLDOUT_OR_IDEMPIERE_SEMANTICS_INSPECTED","NO_CAPABILITY_OR_PROCESS_PATTERN_CANDIDATE","NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT","NO_PRODUCTION_FITNESS_COMPATIBILITY_PROCUREMENT_OR_CUSTOMER_FIT_CLAIM"]
+}

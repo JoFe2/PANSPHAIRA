@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "pansphaira.cscl04/verification-receipt/v1",
+  "receiptId": "cscl-04-dolibarr-24.0.0-profile-v1",
+  "sourceIssue": "https://github.com/JoFe2/PANSPHAIRA/issues/321",
+  "releasedBase": "201baa3ed96b71e9577189b208435bdbb589fcba",
+  "sourceIdentity": {
+    "officialRepository": "https://github.com/Dolibarr/dolibarr.git",
+    "selector": "refs/tags/24.0.0",
+    "tagObject": "5dd1b29feb8014839b54bb0f48d988eeac3c61dd",
+    "peeledCommit": "769c7db907099643558e77d7002c109cfda919e5",
+    "licenseId": "GPL-3.0-or-later"
+  },
+  "protocolDigests": {
+    "selectorSet": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+    "questionInventory": "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28"
+  },
+  "capture": {
+    "manifestDigest": "07ba842a00c7c14af4e76e462366f651f0fa57a8b2714481b72485ab5a530c1e",
+    "fileSha256": "362da22f1a25c5385cbac40c5f991174645add3a13cd66319a0c063a58ecb0ea",
+    "decodedBytes": 974795,
+    "capBytes": 20971520,
+    "encoding": "base64",
+    "networkPolicy": "OFFLINE_REPLAY_ONLY",
+    "capturedEntries": 14
+  },
+  "outputs": {
+    "sourceFacts": { "count": 36, "sha256": "03e1c21e75cad681552eda42484aeca7fe44de1422f2d1c44b41e3fd3d217755" },
+    "evidenceCells": { "count": 36, "sha256": "a32eab096ed5680073a9f6ede3573665fdb84c3546e6b4475e38dc1b8ae995e7" },
+    "systemProfile": { "count": 1, "sha256": "08eb4c093e6444d97082b397a11df39dbb9e87f54b51cb5c8d36c3216cc5f73e" },
+    "families": 3,
+    "questionsPerFamily": 12,
+    "states": { "SUPPORTED": 33, "CONFLICTING": 2, "AMBIGUOUS": 1, "ABSENT": 0, "VARIANT": 0, "UNMAPPED": 0 }
+  },
+  "verification": {
+    "red": [
+      "node --test tests/cscl-04/profile.test.mjs failed with ERR_MODULE_NOT_FOUND for src/cscl-04/profile-builder.mjs",
+      "renderer test failed because renderProfileArtifacts was not exported before its implementation",
+      "expanded Git-object capture failed with CAPTURE_PATH_SET_MISMATCH, SOURCE_BYTES_DIGEST_MISMATCH and CAPTURE_MANIFEST_DIGEST_MISMATCH before trusted constants were updated"
+    ],
+    "deterministicBuildRuns": 2,
+    "deterministicOutputsByteIdentical": true,
+    "focusedAndProtocolCommand": "node --test tests/cscl-04/profile.test.mjs tests/cscl-01/protocol.test.mjs",
+    "focusedAndProtocolTests": 21,
+    "focusedAndProtocolPassed": 21,
+    "syntaxChecks": [
+      "node --check src/cscl-04/profile-builder.mjs",
+      "node --check src/cscl-04/render-profile.mjs",
+      "node --check tests/cscl-04/profile.test.mjs"
+    ],
+    "gitDiffCheck": "PASS",
+    "sourceTagPayloadHashObject": "5dd1b29feb8014839b54bb0f48d988eeac3c61dd",
+    "sourceCommitPayloadHashObject": "769c7db907099643558e77d7002c109cfda919e5"
+  },
+  "denials": [
+    "ANNOTATED_TAG_OBJECT_MISMATCH",
+    "PEELED_COMMIT_MISMATCH",
+    "OFFICIAL_REPOSITORY_MISMATCH",
+    "LICENSE_ID_MISMATCH",
+    "PARSER_VERSION_MISMATCH",
+    "CANONICALIZER_VERSION_MISMATCH",
+    "OFFLINE_NETWORK_POLICY_MISMATCH",
+    "CAPTURE_PATH_SET_MISMATCH",
+    "SOURCE_BYTES_DIGEST_MISMATCH",
+    "CAPTURE_MANIFEST_DIGEST_MISMATCH",
+    "CAPTURE_BYTE_CAP_EXCEEDED",
+    "SOURCE_FACT_DIGEST_MISMATCH",
+    "CELL_DIGEST_MISMATCH",
+    "MISSING_CELL",
+    "PROFILE_CELL_REFERENCE_MISMATCH",
+    "NEGATIVE_COUNTEREVIDENCE_OMITTED",
+    "EXTRA_FIELD_FORBIDDEN",
+    "SOURCE_FACT_SET_MISMATCH",
+    "INVENTED_SOURCE_FACT_REFERENCE"
+  ],
+  "nonClaims": [
+    "NO_CROSS_SYSTEM_CONCEPT_DERIVATION_OR_NORMALIZATION",
+    "NO_COMMON_CORE_OR_CAPABILITY_CANDIDATE_CLAIM",
+    "NO_HOLDOUT_SEMANTICS_INSPECTED",
+    "NO_EXHAUSTIVE_DOLIBARR_DOCUMENTATION_CLAIM",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "NO_PRODUCTION_FITNESS_PROCUREMENT_COMPATIBILITY_OR_CUSTOMER_FIT_CLAIM"
+  ],
+  "boundary": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" }
+}

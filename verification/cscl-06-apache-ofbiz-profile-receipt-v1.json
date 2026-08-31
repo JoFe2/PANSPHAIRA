@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "pansphaira.cscl06/apache-ofbiz-profile-receipt/v1",
+  "receiptId": "cscl-06-apache-ofbiz-release24.09.07-profile-receipt-v1",
+  "sourceIssue": "https://github.com/JoFe2/PANSPHAIRA/issues/323",
+  "releasedBase": "201baa3ed96b71e9577189b208435bdbb589fcba",
+  "verifiedAt": "2026-08-31T06:28:25Z",
+  "sourceIdentity": {
+    "officialRepository": "https://github.com/apache/ofbiz-framework.git",
+    "selector": "refs/tags/release24.09.07",
+    "tagObject": "12b6d40382ac38d3252df78781f9877d46f5f9f7",
+    "tagObjectType": "tag",
+    "tagPayloadSha256": "66e506ac2a7536a934d3321ae8c22caa8584eb6a56d7122e71f3c99c413eef78",
+    "peeledCommit": "42819e5ae1d5339d3a204ac06b43e69d46a9c0ae",
+    "annotatedTagAndPeeledCommitIndependentlyVerified": true
+  },
+  "legal": {
+    "licenseId": "Apache-2.0",
+    "licenseBytes": 12097,
+    "licenseSha256": "98ea9a04fd3da336cbc8b09bd8362a177fe3296d4f15bedcb908ae1017a94021",
+    "noticeBytes": 166,
+    "noticeSha256": "940993239ad83e55d0bb49dab870d548249b91c690d63e180c3eee0305060e34",
+    "obligations": [
+      "PRESERVE_LICENSE",
+      "PRESERVE_NOTICE_AND_ATTRIBUTION",
+      "MARK_MODIFIED_FILES",
+      "STATE_CHANGES"
+    ]
+  },
+  "protocolDigests": {
+    "selectorCanonicalSha256": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+    "selectorRawSha256": "f3bc8dab9cc3de5f8e17b28a461a59f2ae3366f77ba2a2ef68077ebb5c6edf1f",
+    "questionCanonicalSha256": "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28",
+    "questionRawSha256": "caf52e0bfb5dcbf506705bfbe98d9eee8cbc8fc1d28cf10ad41ea76fa33315ca"
+  },
+  "capture": {
+    "encoding": "BASE64_RAW_MEMBER_BYTES",
+    "memberCount": 18,
+    "decodedRawBytes": 1177462,
+    "capBytes": 20971520,
+    "allMembersMatchedOfficialGitObjectsAtPeeledCommit": true,
+    "corpusFileSha256": "0e169ddd7de5271d764329f364631e824b08e00ef3edf07a585b658d1123113b",
+    "assertionsFileSha256": "46164992b050d67eb8e05c1346f9b4645eab0a38d7063b52c6c193e6c6d45844",
+    "assertionsCanonicalSha256": "98340060dc2cc17af874dd4f8152976a9d5f7fd229fd409c6bfd38c3a7dea78f"
+  },
+  "output": {
+    "families": 3,
+    "questionsPerFamily": 12,
+    "facts": 37,
+    "cells": 36,
+    "states": {
+      "SUPPORTED": 33,
+      "ABSENT": 1,
+      "AMBIGUOUS": 1,
+      "CONFLICTING": 1
+    },
+    "profileDigest": "6029f44bf19fcdfa56bdd338885c51224a27010e8d7e7588724198634d48e7f8",
+    "expectedBuildFileSha256": "bb2d3e7de578ca101511afdeb947718403c70c13ca5f6e30561e706ed3b5598e"
+  },
+  "explicitNegativeResults": [
+    "PARTY_CUSTOMER_MANAGEMENT_AMBIGUOUS_CUSTOMER_NOT_ESTABLISHED_AS_ONE_EXCLUSIVE_PARTY_ENTITY_TYPE",
+    "PRODUCT_ITEM_MANAGEMENT_ABSENT_PRODUCT_STATUS_ID_IN_COMPLETE_CAPTURED_PRODUCT_ENTITY",
+    "SALES_ORDER_MANAGEMENT_CONFLICT_DOCUMENTED_FINAL_CONFIRMATION_CUTOFF_VS_APPROVED_AND_SENT_TO_CANCELLED_SEED_TRANSITIONS"
+  ],
+  "verification": {
+    "initialRedCommand": "node --test tests/cscl-06/apache-ofbiz-profile.test.mjs",
+    "initialRedReason": "ERR_MODULE_NOT_FOUND src/cscl-06/profile.mjs",
+    "focusedAndCscl01Command": "node --test tests/cscl-06/apache-ofbiz-profile.test.mjs tests/cscl-01/protocol.test.mjs",
+    "focusedAndCscl01Tests": 26,
+    "focusedAndCscl01Passed": 26,
+    "schemaValidatedFacts": 37,
+    "schemaValidatedCells": 36,
+    "schemaValidatedProfiles": 1,
+    "deterministicBuildRuns": 2,
+    "deterministicBuildByteIdentical": true,
+    "offlineReplay": true,
+    "offlineNetworkFunction": "THROWS_IF_CALLED",
+    "syntaxCommands": [
+      "node --check src/cscl-06/profile.mjs",
+      "node --check tests/cscl-06/apache-ofbiz-profile.test.mjs"
+    ],
+    "syntaxPassed": true,
+    "gitDiffCheckPassed": true
+  },
+  "denialsCovered": [
+    "ANNOTATED_TAG_PEELED_COMMIT_SUBSTITUTION",
+    "SOURCE_IDENTITY_DRIFT",
+    "LEGAL_DRIFT",
+    "PARSER_CANONICALIZER_DRIFT",
+    "PATH_OR_MIRROR_DRIFT",
+    "BASE64_OR_RAW_MEMBER_DRIFT",
+    "INVENTED_OR_NORMALIZED_FACT",
+    "MISSING_CELL_OR_COUNTEREVIDENCE",
+    "EXTRA_FIELD_OR_AUTHORITY",
+    "PAIRED_SUBSTITUTION_REDIGESTION",
+    "OFFLINE_NETWORK_DEPENDENCY",
+    "CAP_DRIFT_OR_EXCEEDANCE"
+  ],
+  "nonClaims": [
+    "NO_CROSS_SYSTEM_CONCEPT_DERIVED",
+    "NO_CANDIDATE_MEANING_OR_EQUIVALENCE_DERIVED",
+    "NO_OTHER_ERP_OR_HOLDOUT_BUSINESS_SEMANTICS_INSPECTED",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "NO_PRODUCTION_FITNESS_COMPATIBILITY_PROCUREMENT_OR_CUSTOMER_FIT_CLAIM"
+  ],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  }
+}

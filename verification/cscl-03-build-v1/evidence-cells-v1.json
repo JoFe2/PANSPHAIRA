@@ -1,0 +1,840 @@
+[
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "objects-roles",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "ebe3ae9539938c1f3513e111f2d1eeed93ca952fdd1afdbfc0aef646620f1ad9",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.objects-roles",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json#bytes=158-3245",
+        "excerptSha256": "8361a55ecfc4bada866422404c7ea1d14c6ab351b5d5f98a3568151143837d7d"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "relations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e32bd2fe29bfa36fa37315ca8a9129ac456cd483ad2b2105f80310ebf70051ce",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.relations",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json#bytes=4102-8489",
+        "excerptSha256": "966bd0c803f8763d8e91e411bac8a9dfb7270e1dfb518b77ea79acc9b8f333a4"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "operations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "04ef93e829234b399fcea2deea2a2404c6f5d8aad9c0cddb1e842e107c134a6e",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.operations",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=3863-14218",
+        "excerptSha256": "e8f5f90c364a2660db8a3525c058aacf1dfb43a799543c3796ad1d38d7b68930"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "inputs-outputs",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "015d35b520fac10169525845e489ef06acdf79bbd6f36db81eafaa2aed95339c",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.inputs-outputs",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=4208-5556",
+        "excerptSha256": "8ba5f1c01106d8f62bff00d4f9be26148e4ee7a80b9511060eb7236e8e857776"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "states-transitions",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "8833890f97f8e7b9badadf8397b54d6a5b9daff103aca371330a701c6cee828b",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.states-transitions",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json#bytes=5012-10334",
+        "excerptSha256": "6846289e94bf8a37f60ac8a41bff7c5ed904e6004f2e6e454e53f4a913a97c1c"
+      }
+    ],
+    "counterexamples": [
+      "Disabled and Is Frozen are separate Check fields with different stated effects; no unified Customer status transition is asserted."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "events",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "f4315f9ce77361221d4297363fed52a72315c9021a44d517a134c931023ab641",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.events",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=3583-13613",
+        "excerptSha256": "f649b9833f52d5ed314cd5f12263baac0a0f7efb9144190746ea4cf6884eea4d"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "preconditions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "5c0308b47a6b5c7f5d8ea47678e506ff64060915ba2cdf992340af41fec653c1",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.preconditions",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=12054-12384",
+        "excerptSha256": "387e359383492727a5e3f566a2c46d8bcf34975a95feb2a8c1686040effebe5d"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "invariants",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "bf8261f36c9ca8ec8f8df6fe70f9850e8b93d3d3cfd0b59530a27356a6434ba0",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.invariants",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=6396-6650",
+        "excerptSha256": "131f53544e197c7f472a7d3a732efc88de716c90c9d2839eac8d8eb2eb33b6fe"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "exceptions-errors",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "fa387f00b6bfd5bfa7b232cbfe79f0374079fa3a0511e6628b70613271861664",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.exceptions-errors",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=8037-12384",
+        "excerptSha256": "bd3023fa91cdde26cf6e6f619d75681f56750c1f7586ee781ff3567078e4fa5b"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "readbacks",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "c701b7da4e1ff8ead11e576f82cfb29722016863f314d04771caee616ab09fc0",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.readbacks",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=3583-9637",
+        "excerptSha256": "4bbaaed7bcc37bc404c9373ec0d3f3739203b615e73ea1a50eca56e07a1939b1"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "api-service-exposure",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "dc393095d07312f5c3fe888a50cfca5e86beac8f7d9856d2b5d40cadf64b44a5",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.api-service-exposure",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=6653-15426",
+        "excerptSha256": "5383178ee597ca0bee02c329773ab6a5a886b10701482322a30a9a542cd0bff7"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "absence-ambiguity-conflict",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "30039545cc3fcf2a6615da058c95f5628b55982d44571c819986f125993841a1",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.party-customer-management.absence-ambiguity-conflict",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=755-1098",
+        "excerptSha256": "a267ee214ecfb5ebec8ea485ae682617fbfe263e8c17784dbe92806aa6a05bc9"
+      }
+    ],
+    "counterexamples": [
+      "Party occurs in validate_party_accounts and PartyAccount terminology, but the captured family controller and metadata are Customer-native."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "objects-roles",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "38c7055a8fd9cbfa7834a4827389d4e318d88f8ea1fef56badd4ec4ac08b03a4",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.objects-roles",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=134-3651",
+        "excerptSha256": "8e9f2fa82efd9b9fbd3678e1578fe4ab47f447ee1b65f7846a4df2ecfa9ecefc"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "relations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "6253e8062152448d15f04e8ebe8f5a386565e04d9ca71336dac2291869996fd9",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.relations",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=3856-4967",
+        "excerptSha256": "b6913c18537ac498c2ab981f931af7e5fba11aed7a9c4636a37c4036f0eab77f"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "operations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e0a883a6d187cb4d1abcfc01abf0e4259758b2f54a3021ace81a209790a5b9b2",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.operations",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=5130-20476",
+        "excerptSha256": "7eca41efac34d0bdd0c8295fa6d6ab0ac0e907dce004abd9703bebe5f28ed365"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "inputs-outputs",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "f575647e2516d9f6c975793396df61b1281c8a5d10b4891df4d5b82567c081dd",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.inputs-outputs",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=5130-5629",
+        "excerptSha256": "e4e3bad4107db23a6988927b3bcbaee6e639252398a2ba6f4d23d7ba920f71e0"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "states-transitions",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "383da53f59fc9ee338b090addf930278195c4495b98f12bf6763745f27d1602d",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.states-transitions",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=5073-9379",
+        "excerptSha256": "19775d8baadfefeedbe6d35ff91872946252f7e3fc7703ec60e47fda1e5a11c9"
+      }
+    ],
+    "counterexamples": [
+      "Disabled and End of Life are independent controls, not evidence of a single Item workflow state machine."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "events",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "bab8cdf606dd511e12ede6386fc3cc60b6f5b354a6bc8ef1b5c3530b2f5069c8",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.events",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=4837-7381",
+        "excerptSha256": "3325b12d3976d18536df8557e52e847556529d5d599fefd1efeef6830508bff8"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "preconditions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "790cf50d7eccb71799b70c1334b9a9de5a230e9825a4d770fa5f531dbfb3a6b5",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.preconditions",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=9039-9324",
+        "excerptSha256": "2d440d0000131ef60bec4c6c48e8f80caa6ce5cb700076bc3f5802761bf67c55"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "invariants",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "c8c32e93df404a9d746dc84afafaa6b0623695e7f121e9cf54e473da9289e6ab",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.invariants",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=13447-13951",
+        "excerptSha256": "e805b5f2a314dd1a497204631fc2fd784f96dbf5d9e1caa06f4cb975ea602859"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "exceptions-errors",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "cdbdac1dfad7980fdf11b933c7696fedb903f9d34b66d8570c27a872d4cbf285",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.exceptions-errors",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=8127-11251",
+        "excerptSha256": "39ce52050d963fa596f9d3fd700f5a14b9d334d8d2e25017f5672885cb5a58f5"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "readbacks",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "d1202717fcd41ceecbd3877b5d5f28dbaf7967e928f5e5681f9c92225842b42d",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.readbacks",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=4837-5127",
+        "excerptSha256": "f46938b5e43989c0c268567b053bdec9cf489c0bd1d2a294487295ad08e862c4"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "api-service-exposure",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "f3d877c4d24200fd1dab75982f60ef315a0e0de38705be9306d1b261677f6df8",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.api-service-exposure",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=45974-46366",
+        "excerptSha256": "a935c3dc6346e9b15cb99463b5d6e367d7a5936de8432247d4cd13e9bed29128"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "absence-ambiguity-conflict",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "b5862489a55f3b98e294608842400e4acea9f9686db0aba2ff97d1d049598ad5",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.product-item-management.absence-ambiguity-conflict",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=134-234",
+        "excerptSha256": "82402a198f78211cb00521d803115f11ce34c56af166cdc1617323f276d807d8"
+      }
+    ],
+    "counterexamples": [
+      "Product and Service occur in the Item description, but the source-native object identity remains Item."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "objects-roles",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "8c50374f7f3d3d844d963924be6ba5866d4d560d98392e91a7321fb75ac3cf1a",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.objects-roles",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json#bytes=4527-13257",
+        "excerptSha256": "627856c402e93c8a700181301ce57882e1d20b90b80b9af127cd32c4eb40791e"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "relations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "3f551a2762dfdc85b4ee77b8c7f96639bdc2b9091cd3e3fce9d931e140a24446",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.relations",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json#bytes=4527-13257",
+        "excerptSha256": "627856c402e93c8a700181301ce57882e1d20b90b80b9af127cd32c4eb40791e"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "operations",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "1fc65d9ddd025771a9dbaa711cab5ab30f048c1bc6d72d9161df7fad200aa590",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.operations",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=7911-42641",
+        "excerptSha256": "d98fa082f1659109c9abbff16a50ca07a5c8031864f8c1f21873a0d929d1b563"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "inputs-outputs",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "9b4b0b3bf9f2a84196a24c99420c61882d361bbf857de56e991ab9ce6cc3b5b0",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.inputs-outputs",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=36648-42641",
+        "excerptSha256": "0260b2844e108469a8bb0022df85bedeb40d37aa390940ca760b5fee91fa2ed6"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "states-transitions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "0bc9535db9d92ea6c3f52aa9d7918839ad5e5fe5499590f184e55bf8c18406ff",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.states-transitions",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=6034-32577",
+        "excerptSha256": "7bcc8213c0e8da04969a6610ad3f7ce543a2757831f42a694209236e20cda7b8"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "events",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "0962412b648d268fdf60db1f2b72909bc28a976324093725fe1a523539fdc8c5",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.events",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=7792-22072",
+        "excerptSha256": "eadc97194dca87c6ff84a12fd288615173029ab92a5fd71fe0c12849d9f70c43"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "preconditions",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "091b6edd18445ff3b3a3527f691e6ef0757b252fbccdf825569b41be154b7dd7",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.preconditions",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=32057-32606",
+        "excerptSha256": "dd789df310e5571863765483434cd8a50e986878d6365c51b12e41745af9a617"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "invariants",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "b645991c65b915a203f3ffd6bdd72c30c2ddeea78db630479a491d9a400d16da",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.invariants",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=17587-19723",
+        "excerptSha256": "e1c8ab570a16108e7d37fbd4ce444627e8eae9cc8617eec4fc70619ffded69f8"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "exceptions-errors",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "db983f2ba37517b3e2db9bd9654a368d21441bb10bab18779d08fa8db298c8b2",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.exceptions-errors",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=1829-32219",
+        "excerptSha256": "30fd86c1f0b2fbc9683b59da21395beb2438155803bc64ef25ef50a7d68bda69"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "readbacks",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "1a3b6d421547e99237cac485efedf956f58a72254afc1d7874a2fd06ecd1ff74",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.readbacks",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=7157-20485",
+        "excerptSha256": "e653e825eaf5f932c6538309aafab71fe7378e111b3ee5a3fa53dbdf6c37f5b0"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "api-service-exposure",
+    "state": "SUPPORTED",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "105953d6f790346a3687a294bb78878afc5867301ecb50a7cac632b1a296e7fc",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.api-service-exposure",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=32037-51234",
+        "excerptSha256": "94408327d59af466ea2bdce647afb0f4e78b6659bff7e247e561a98a0212adf9"
+      }
+    ],
+    "counterexamples": [],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/evidence-cell/v1",
+    "systemId": "erpnext",
+    "questionId": "absence-ambiguity-conflict",
+    "state": "AMBIGUOUS",
+    "equivalenceProof": {
+      "nativeMeaningSha256": "e4133b0f6fd5a205e931b14a69c1b44a2aae662fb28a2c169a81d6f8165d48b9",
+      "candidateMeaningSha256": "c1ef126fbb1cf4020a80530bf53462fb25377c78cbdb4a4f3d5ab00748cb6ef7"
+    },
+    "evidence": [
+      {
+        "sourceFactId": "erpnext.sales-order-management.absence-ambiguity-conflict",
+        "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json#bytes=27372-35889",
+        "excerptSha256": "f8361f2038a9ba53d085da6ac0839c0d5f25fe90381370c35c666560de1b5fee"
+      }
+    ],
+    "counterexamples": [
+      "Delivery Status, Billing Status, and Advance Payment Status overlap with but are not identical to Status."
+    ],
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    }
+  }
+]

@@ -1,0 +1,1766 @@
+[
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.objects-roles",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "objects-roles",
+    "claim": "Tryton's source-native object is party.party (Party); the party module does not name this model Customer.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=1269-1298",
+      "excerptSha256": "68e26c5decf123845ec6cd32d5e08015331d8849157333e81ada9874f3f635a5",
+      "byteStart": 1269,
+      "byteEnd": 1298
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "3e28b87b35c32a95dc8634b0ea1866abc5bd1e2127d3a8e9d056f2240b455bdf"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.relations",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "relations",
+    "claim": "party.party relates to party.address through Addresses and to party.contact_mechanism through Contact Mechanisms.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=2530-2709",
+      "excerptSha256": "e31ebd2db5d79b16a9ffaad482d359480176c19bb79fb29a6341ef841dfad25a",
+      "byteStart": 2530,
+      "byteEnd": 2709
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "0559285146c74a5d85196af091731c3f34b3aa9f8c1bae22ee64f9058b7ff243"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.operations",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "operations",
+    "claim": "Party.copy copies parties and resets the copied code through its default mapping.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=11632-11674",
+      "excerptSha256": "cd3f1adccd1dab11de0ce5c35f7d39f5206055ec5198e50009d77b39e53c67a9",
+      "byteStart": 11632,
+      "byteEnd": 11674
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "1b1f425f99bdb4fbadd7e22483ae64729e07c2acbf493a721a72efda786a654f"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.inputs-outputs",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "inputs-outputs",
+    "claim": "Party Code is a required input; Full Name and contact-mechanism Function fields are observable derived outputs.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=1488-1543",
+      "excerptSha256": "101c0b98dd7ceea4971e3e5d12d3cfe3177b5fd7b3afaccdf6d8d64139ebdbdc",
+      "byteStart": 1488,
+      "byteEnd": 1543
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "caa43201affca96e2dedff0a02354d2b8d5ab125f379ae7db7fd644bba1f61f6"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.states-transitions",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "states-transitions",
+    "claim": "party.party is DeactivableMixin-based; this complete selected model declaration does not define a Workflow state selection or transitions.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=1172-1269",
+      "excerptSha256": "dfa8eb072725748b1b13eebe6479e6e7c969e9f98efbf354016bd6d4367cd407",
+      "byteStart": 1172,
+      "byteEnd": 1269
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "36f7ac07c1298c96dab720a509f4ba72dc882fad8041ff68b83d30685c239fcf"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.events",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "events",
+    "claim": "ContactMechanism.on_change_address assigns the Address party when Address changes.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/contact_mechanism.py",
+      "sourceBytesSha256": "8941d34f1d72cbb0b8793de387d56ebbcc7207a040b5ba634a98fb9a08bda05f"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/contact_mechanism.py:bytes=5169-5271",
+      "excerptSha256": "1e140d5e3f46c8c90977ca0f422d6ef7d576d62d79fab978f5e64608fb27567b",
+      "byteStart": 5169,
+      "byteEnd": 5271
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "0a8396d42a0a64fc7f94b8da0eb1a96592c0984209e7ed77635f3d16ee3e6bbe"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.preconditions",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "preconditions",
+    "claim": "party.contact_mechanism requires Party; deleting Party cascades to the contact mechanism.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/contact_mechanism.py",
+      "sourceBytesSha256": "8941d34f1d72cbb0b8793de387d56ebbcc7207a040b5ba634a98fb9a08bda05f"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/contact_mechanism.py:bytes=2578-2674",
+      "excerptSha256": "6593ef4166b63d1a58998a43e14bf84ea4790530caa3aa0ea3b850b10059a30a",
+      "byteStart": 2578,
+      "byteEnd": 2674
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "e2fe319958ea93d78bf8064dcf5ca394fce376c0bc97c5793614cbae70e0fdfa"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.invariants",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "invariants",
+    "claim": "party.party enforces the code_uniq SQL constraint on Code.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=4225-4301",
+      "excerptSha256": "65f5448cbe78d2419188c06ad4bc503c90d0db78c66b31d9ca3e348b5629db13",
+      "byteStart": 4225,
+      "byteEnd": 4301
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "b27f52a0abe07b525551c8d7926d6104bc395ab04de9931b4dbe9510b5c4227c"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.exceptions-errors",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "exceptions-errors",
+    "claim": "Setting an already exposed Party contact mechanism raises AccessError with party.msg_party_set_contact_mechanism.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=7638-7746",
+      "excerptSha256": "5ac0bd82ebf949f31b9461a9eb9adb65a7a5e77cc64001a2a6c830f8ed559f43",
+      "byteStart": 7638,
+      "byteEnd": 7746
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "3518045c33c180953567797f1807c00233bf624ea6be6a05280f0cb1a1034c35"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.readbacks",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "readbacks",
+    "claim": "Party readback uses Name as rec_name, or the bracketed Code when Name is empty.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_party-8.0.3.tar.gz@sha256:2afd8d4d4d3faa4e14b7818b54a480f32ae7fbf89cd1d08f90ae6580386844e0#trytond_party-8.0.3/party.py",
+      "sourceBytesSha256": "ab680f446c2964176b08317fd724947396f925d362d84ea3dcffa1088b3d0fe0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_party-8.0.3.tar.gz#trytond_party-8.0.3/party.py:bytes=12076-12202",
+      "excerptSha256": "9d66fb71864130addf8df9d9b5c704084c13aebd134bbf9b2e7aee275a815d68",
+      "byteStart": 12076,
+      "byteEnd": 12202
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "cfa1b147bf400cd142d89c1f2afbccb94570b325295e6d154569809014656b83"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.api-service-exposure",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "api-service-exposure",
+    "claim": "trytond exposes an RPC route and dynamic dispatch, but this source does not document a Party-specific service contract.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond-8.0.9.tar.gz@sha256:0fab66fb5457ae833880418424ccb18476218dc215ecb4c6db0f714722703aa7#trytond-8.0.9/trytond/protocols/dispatcher.py",
+      "sourceBytesSha256": "d7c9ee07bcd8a65993c000740b2482a71906c0a9cbcacb536ded15f967de27ee"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/trytond/protocols/dispatcher.py:bytes=896-990",
+      "excerptSha256": "228cd03b942d0ecb286fac1bbc26d4978809a44b66585e864dfd17ff9079ee93",
+      "byteStart": 896,
+      "byteEnd": 990
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "719976b96395e1938ca0ee3f05eeaa318b2e156b68b3ed2de9a4b211b600d6d3"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.party-customer-management.absence-ambiguity-conflict",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "absence-ambiguity-conflict",
+    "claim": "sale.sale requires party.party as Party; no distinct Customer model is evidenced in the complete selected Party and Sale semantic members.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=4896-4972",
+      "excerptSha256": "1430bd9464933f46fa9fde09be663308188a38528f40e0c0ff0e68d528fa95ba",
+      "byteStart": 4896,
+      "byteEnd": 4972
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "04cb3a726e1ab4bda37c13c8a9d4610f469fac048a1dc0a61752e87232d1fa4e"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.objects-roles",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "objects-roles",
+    "claim": "Tryton defines product.template and product.product; the latter is a Variant of the Product Template.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4775-4809",
+      "excerptSha256": "14838fa9f061f4be94c136faf70659065d1128964bd10eca6623d26f6b294a84",
+      "byteStart": 4775,
+      "byteEnd": 4809
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "4366aabe23e467f6701d6c7339ec4380030cbd308016c76aae55c495cc6ec9d7"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.relations",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "relations",
+    "claim": "product.template relates to product.product through Variants; product.product relates back through Product Template.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=7381-7464",
+      "excerptSha256": "f73b658699b6ada8ded39b18afd8eec17cf425f831274e3d22f10f5ba7953c45",
+      "byteStart": 7381,
+      "byteEnd": 7464
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "35d71358af8d686767a005c5a30a53f1e45042eeac0af5715922103142a6beed"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.operations",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "operations",
+    "claim": "product.uom.compute_qty converts a quantity from one UoM to another.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/uom.py",
+      "sourceBytesSha256": "8b7040417767322e730e7fda7b6f5d923e190279fa27dc5f49fc52e39f4ca5f0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/uom.py:bytes=6619-6679",
+      "excerptSha256": "6151005c455ce992719fd8986d29bf776b58748a63cee356399e33fef1d76460",
+      "byteStart": 6619,
+      "byteEnd": 6679
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "442714b5c8f66c41a3ebfbec3f74537fbcb58dff22a274c6d532a4a5f7848aa7"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.inputs-outputs",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "inputs-outputs",
+    "claim": "Product Template inputs include required Name, Type and Default UoM; Product rec_name is derived from Code and Name.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4809-4891",
+      "excerptSha256": "0bf243ed0389ba7d92198fcee74f7abafec7c3baa1983045ea563ae7b3a8f7ae",
+      "byteStart": 4809,
+      "byteEnd": 4891
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "1df4cd082fdaf25f0752cd788484acbef9c031ac64a415aa5d63aaf51ee7b6b4"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.states-transitions",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "states-transitions",
+    "claim": "product.template uses DeactivableMixin rather than a Workflow state selection and transition graph.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=4703-4775",
+      "excerptSha256": "216e9f2d589f046e4184ed762ee9b949c874d7a74408c0b9ed16a187eebb17fc",
+      "byteStart": 4703,
+      "byteEnd": 4775
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "c76f0e32013fb5f6e558b03cfba66db9ffb0b7f1f83ccc3ebc7cc1f639e2137e"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.events",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "events",
+    "claim": "Template.on_change_type sets Cost Price Method to fixed when Type becomes service.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=11617-11727",
+      "excerptSha256": "773b4c5dd604ef218b78eb9ae8b918216df8e6295e59f971d064e2a849d60c11",
+      "byteStart": 11617,
+      "byteEnd": 11727
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "8a4e5d05ac65c5a5aed8535f315d0d8ede33e902fb659d62ffa940fe4a5ad595"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.preconditions",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "preconditions",
+    "claim": "product.template requires Default UoM, and product.product requires Product Template with cascade deletion.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=6464-6552",
+      "excerptSha256": "951903778238c9750fcbc5032ec6b4251d35de76ac4c328a14e878ab8efef269",
+      "byteStart": 6464,
+      "byteEnd": 6552
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "6cb9c50688c7241e6f3e54b0e60c9679051aa6ea5a7ace6832a7091c0897c766"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.invariants",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "invariants",
+    "claim": "product.uom enforces non_zero_rate_factor: Rate and Factor cannot both be zero.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/uom.py",
+      "sourceBytesSha256": "8b7040417767322e730e7fda7b6f5d923e190279fa27dc5f49fc52e39f4ca5f0"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/uom.py:bytes=2658-2738",
+      "excerptSha256": "998ec3333fe920992a0f6acdb4da0797c9a734a28036489f6890d71dfe9d4268",
+      "byteStart": 2658,
+      "byteEnd": 2738
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "f9ec2158b90f86e561f8708aaa95728ecde57b9cfc2d121fb3963adf33c59ede"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.exceptions-errors",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "exceptions-errors",
+    "claim": "Product source defines UOMValidationError and UOMAccessError as source-native failures.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/exceptions.py",
+      "sourceBytesSha256": "8c0371c41ac908fcf639cb24fdbe8b89fc8096166e8ed677799ef54346bfdd1d"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/exceptions.py:bytes=338-390",
+      "excerptSha256": "30131c0a763c5fbce1a052c547d947b21d015c74b7426278218d5ff333687e86",
+      "byteStart": 338,
+      "byteEnd": 390
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "683a6712bdb8e3e774f6645fc9f2ad87baa05465217976313645b2819ff76544"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.readbacks",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "readbacks",
+    "claim": "Product Template readback prefixes Name with bracketed Code when Code exists.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=9562-9795",
+      "excerptSha256": "8dcb51236ebbbacec9fad02b6fd314d956a87f1272af15f7ff22c9e97c7fdfe0",
+      "byteStart": 9562,
+      "byteEnd": 9795
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "11249f640beb29acd64575ceb79242e981f2fb8d9ef6e66a3812edaa43c722e6"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.api-service-exposure",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "api-service-exposure",
+    "claim": "trytond dynamically dispatches RPC methods, but this source does not document a Product-specific service contract.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond-8.0.9.tar.gz@sha256:0fab66fb5457ae833880418424ccb18476218dc215ecb4c6db0f714722703aa7#trytond-8.0.9/trytond/protocols/dispatcher.py",
+      "sourceBytesSha256": "d7c9ee07bcd8a65993c000740b2482a71906c0a9cbcacb536ded15f967de27ee"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/trytond/protocols/dispatcher.py:bytes=1296-1404",
+      "excerptSha256": "daf99df779e9e96dedcd0f1168cc9f89bbecc4d1a0163ca19a72fcbcdacc41f4",
+      "byteStart": 1296,
+      "byteEnd": 1404
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "d0381fbfd1f86fbaf414bbe9668c20c888c9f015bd31afa40805274a8c8de59e"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.product-item-management.absence-ambiguity-conflict",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "absence-ambiguity-conflict",
+    "claim": "The complete selected Product semantic member defines product.template and product.product, not a source-native Item model.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_product-8.0.1.tar.gz@sha256:1490738e19c2fb9349eaa856899c4ab0e161b9746a04dbde574065054e50af53#trytond_product-8.0.1/product.py",
+      "sourceBytesSha256": "57b8df8f7a206dcfca3c1ba2229e98da95f7e87b48ffda448cc60bc7feea2f96"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_product-8.0.1.tar.gz#trytond_product-8.0.1/product.py:bytes=17009-17042",
+      "excerptSha256": "62c4f6d8d2f02632a3d14df454676ce06a7b2f6355b943aed10bdd708d3bec8b",
+      "byteStart": 17009,
+      "byteEnd": 17042
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "2d4116dc384732d62ce40042c5095b1f959f1003a0e8f694c0b41030ba44a881"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.objects-roles",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "objects-roles",
+    "claim": "Tryton's source-native sales object is sale.sale (Sale), with sale.line records and Party participation.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=2468-2616",
+      "excerptSha256": "b77ba0655ed94581852c0efad8a8b2e7088c27a18c65eeb03ddc11125941a5ed",
+      "byteStart": 2468,
+      "byteEnd": 2616
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "e26151072a5e18eee2e50df8eecd691daecb3f4c3558fd881c969f83c78a909f"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.relations",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "relations",
+    "claim": "sale.sale relates to sale.line through Lines and exposes Invoices, Shipments, Shipment Returns and Stock Moves.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=7836-7903",
+      "excerptSha256": "adaaabb67e1661153cefd9f2bc0f3859c4497fe3db58055464a3efacffa22806",
+      "byteStart": 7836,
+      "byteEnd": 7903
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "e19bfc218f8cd386ccfcd80d42db0d69a7379b3d00eb4e713108b1a270f86b9a"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.operations",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "operations",
+    "claim": "Sale operations include quote, confirm, cancel, draft and process; process handles invoice, fulfillment and state updates.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=44922-45004",
+      "excerptSha256": "7e7f1f21262afbacbd50576a0a8f1fdc5ff704033ceef4ac16a347bb5f809cb5",
+      "byteStart": 44922,
+      "byteEnd": 45004
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "b6d9a3393a9b01f0426341b9bd4805dfdb34c7b2263b1d22c011f0f0c882fec0"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.inputs-outputs",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "inputs-outputs",
+    "claim": "Sale inputs include required Company, Party and Currency plus Lines; outputs include Number, amounts, invoices, shipments and states.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=4896-4972",
+      "excerptSha256": "1430bd9464933f46fa9fde09be663308188a38528f40e0c0ff0e68d528fa95ba",
+      "byteStart": 4896,
+      "byteEnd": 4972
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "a8d47ab967ee1e5128f0efb799cf5bc3f8cfc424a9e5daf4c7950aec05ec3bf8"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.states-transitions",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "states-transitions",
+    "claim": "Sale State is exactly Draft, Quotation, Confirmed, Processing, Done or Cancelled, with the source transition set declared by Sale.__setup__.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=12412-12667",
+      "excerptSha256": "838c0a3da4ebbb7ea6e3db7ef1b89e1295f3abdd33cf9d5e83ea5d2e6e51a115",
+      "byteStart": 12412,
+      "byteEnd": 12667
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "2ee8154b5f7d72fad6178f09427b27e5f088ee7ee14ae6d11a9ea879a94e98fe"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.events",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "events",
+    "claim": "Confirm schedules Sale.process through cls.__queue__ using sale_process_after and queue context.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=44352-44401",
+      "excerptSha256": "7cb478ec373c10d8ed040c9240e09ca30ba058d7d95cb77a67c12a95c172e62d",
+      "byteStart": 44352,
+      "byteEnd": 44401
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "ab6d95b2b6fa55c56be990bd129c9a1e1f56096f50d7f2a88dcfd515c03d67af"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.preconditions",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "preconditions",
+    "claim": "Quote calls check_for_quotation before setting Quotation Date and Number; process filters to Confirmed, Processing or Done.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=43425-43468",
+      "excerptSha256": "55f021498663189b3327e4ac49912deb06668859a10eb86b29edc77ff1e4aebd",
+      "byteStart": 43425,
+      "byteEnd": 43468
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "29025c4559ee16c27b6750ae466b0884694ea15b4306f345a741a185f1809849"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.invariants",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "invariants",
+    "claim": "Sale deletion is permitted only while State is Cancelled or Draft.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=42344-42452",
+      "excerptSha256": "e442916feb50b6bd1fa6b41b0f662df7c8de0ba23dac1466bde642a92d8c0b00",
+      "byteStart": 42344,
+      "byteEnd": 42452
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "77b9619c3d27f88028f90f017fe603b1def29fab7e8cf54232c269eb042ff5ed"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.exceptions-errors",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "exceptions-errors",
+    "claim": "Sale source defines SaleValidationError, SaleQuotationError, SaleConfirmError, SaleMoveQuantity and PartyLocationError.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/exceptions.py",
+      "sourceBytesSha256": "be9c5d27c86b228be30e7e3361c88554de17f80607a5ac207537a17d869edb2f"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/exceptions.py:bytes=309-398",
+      "excerptSha256": "594efefb48af0edc14321249851668ed0bc65d08f13ea2ee92b202c2e8999c0c",
+      "byteStart": 309,
+      "byteEnd": 398
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "528a2f77c6b3655624380cf35018a280f89759aca1787229ee484f0af74d42e7"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.readbacks",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "readbacks",
+    "claim": "Sale readbacks include Untaxed, Tax and Total amounts, Invoice State, Shipment State, To Invoice and To Ship.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=8713-8834",
+      "excerptSha256": "22e3d927ec4b6df798077a1d1d7540cabf90feb2e206050db69aaff8c6d7f9a5",
+      "byteStart": 8713,
+      "byteEnd": 8834
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "45a7a7f2dffae4b8df983cbe57a4a3df0bea3984035df7b3f876eefd459dcf5f"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.api-service-exposure",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "api-service-exposure",
+    "claim": "trytond RPC can list methods, but this source does not document a Sale-specific service contract.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond-8.0.9.tar.gz@sha256:0fab66fb5457ae833880418424ccb18476218dc215ecb4c6db0f714722703aa7#trytond-8.0.9/trytond/protocols/dispatcher.py",
+      "sourceBytesSha256": "d7c9ee07bcd8a65993c000740b2482a71906c0a9cbcacb536ded15f967de27ee"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/trytond/protocols/dispatcher.py:bytes=1128-1171",
+      "excerptSha256": "20576bc55fd35f6606745028fdba7b514a3010bdc97bc828f12996213bd94cdb",
+      "byteStart": 1128,
+      "byteEnd": 1171
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "c958b4aaf34ba5c06402119defd41da88b7ba8aafa0a9a8576814ca4828d76cc"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "tryton.sales-order-management.absence-ambiguity-conflict",
+    "systemId": "tryton",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "absence-ambiguity-conflict",
+    "claim": "Sale State has no source-native Open or Closed value; the terminal-looking native labels are Done and Cancelled and transitions permit Done back to Processing.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "trytond_sale-8.0.3.tar.gz@sha256:224d5a13c51df7f33f2c2042a54eb2f17b9742ea87a9a2019912a639dffa2070#trytond_sale-8.0.3/sale.py",
+      "sourceBytesSha256": "30961961c544ceb078c87dd244c6016e458496ff6e767b2293d321a52f0d47bd"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://downloads.tryton.org/8.0/trytond_sale-8.0.3.tar.gz#trytond_sale-8.0.3/sale.py:bytes=12597-12667",
+      "excerptSha256": "62ea41f17f0f4ae6282745834f848b8d1c16010d3b16cb4a7fae99b681a67599",
+      "byteStart": 12597,
+      "byteEnd": 12667
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-or-later",
+      "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "PRESENT",
+      "noticeUrl": "https://downloads.tryton.org/8.0/trytond-8.0.9.tar.gz#trytond-8.0.9/COPYRIGHT",
+      "noticeBytes": 1034,
+      "noticeSha256": "9dba3cb9bcf2bdec5ef1deeef176cfc0cb47f027a8e710cfb31ba4c14458a112",
+      "attribution": []
+    },
+    "parser": {
+      "id": "cscl05-exact-byte-parser",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl05-canonical-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "491384e9251e2e706f98715dbb3f75eecd5bf12cff99d13fa6e4a1846bac5691"
+  }
+]

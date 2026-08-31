@@ -1,0 +1,1910 @@
+[
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.objects-roles",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "objects-roles",
+    "claim": "The Customer DocType is described as a Buyer of Goods and Services and declares Customer Type values Company, Individual, and Partnership.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json",
+      "sourceBytesSha256": "2de5db0cf6d287b1f2cc70645a944cad2a3f846c0c3923511e7e5eb5219ea53d"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json#bytes=158-3245",
+      "excerptSha256": "8361a55ecfc4bada866422404c7ea1d14c6ab351b5d5f98a3568151143837d7d",
+      "byteStart": 158,
+      "byteEnd": 3246
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "7d1f2a44da95ebad41d5218bff1937307392df968195c9da3c8765cf27db23f5"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.relations",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "relations",
+    "claim": "Customer links to Customer Group and Territory and separately links Customer Primary Contact to Contact and Customer Primary Address to Address.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json",
+      "sourceBytesSha256": "2de5db0cf6d287b1f2cc70645a944cad2a3f846c0c3923511e7e5eb5219ea53d"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json#bytes=4102-8489",
+      "excerptSha256": "966bd0c803f8763d8e91e411bac8a9dfb7270e1dfb518b77ea79acc9b8f333a4",
+      "byteStart": 4102,
+      "byteEnd": 8490
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "759fc70f2c79f39a8712956f9e2b888f11f4364e6eee6657d013302ac3fe49ab"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.operations",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "operations",
+    "claim": "Customer implements autoname, validate, on_update, on_trash, before_rename, and after_rename operations in its Document controller.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=3863-14218",
+      "excerptSha256": "e8f5f90c364a2660db8a3525c058aacf1dfb43a799543c3796ad1d38d7b68930",
+      "byteStart": 3863,
+      "byteEnd": 14219
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "472cefd988d6f7dc1893bf4125b4a15fd27d7521771dd726dbdc67051780cd9b"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.inputs-outputs",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "inputs-outputs",
+    "claim": "get_customer_name strips Customer Name and returns it as the Customer document name, adding a numbered suffix when that name already exists.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=4208-5556",
+      "excerptSha256": "8ba5f1c01106d8f62bff00d4f9be26148e4ee7a80b9511060eb7236e8e857776",
+      "byteStart": 4208,
+      "byteEnd": 5557
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "c4e828e8b718dea5de5d0409f7c39e6d0684be19bba156ea84bb729203190c01"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.states-transitions",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "states-transitions",
+    "claim": "Customer exposes Disabled, which blocks use on new transactions, and Is Frozen, which blocks further accounting entries; the captured Customer metadata does not present these as one named workflow status field.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json",
+      "sourceBytesSha256": "2de5db0cf6d287b1f2cc70645a944cad2a3f846c0c3923511e7e5eb5219ea53d"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.json#bytes=5012-10334",
+      "excerptSha256": "6846289e94bf8a37f60ac8a41bff7c5ed904e6004f2e6e454e53f4a913a97c1c",
+      "byteStart": 5012,
+      "byteEnd": 10335
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "44028fd7de3756d9f9e20988d214f3297f240df32bc238e535acf62e2695596c"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.events",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "events",
+    "claim": "Customer lifecycle event handlers include onload, after_insert, validate, on_update, and on_trash.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=3583-13613",
+      "excerptSha256": "f649b9833f52d5ed314cd5f12263baac0a0f7efb9144190746ea4cf6884eea4d",
+      "byteStart": 3583,
+      "byteEnd": 13614
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "aa920770cf449d37bee0efc53f9047e5c1f59282fc0ae70851ae210ca8fbf5c6"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.preconditions",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "preconditions",
+    "claim": "Customer validation rejects a Customer Group whose is_group value is true and requires selection of a non-group Customer Group.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=12054-12384",
+      "excerptSha256": "387e359383492727a5e3f566a2c46d8bcf34975a95feb2a8c1686040effebe5d",
+      "byteStart": 12054,
+      "byteEnd": 12385
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "64af16ed5a534b45aef18d3016b68ac9331ba3ae1dd8182e1fb76174c99b4667"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.invariants",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "invariants",
+    "claim": "When Customer has a Sales Team, the total allocated contribution percentage must equal 100.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=6396-6650",
+      "excerptSha256": "131f53544e197c7f472a7d3a732efc88de716c90c9d2839eac8d8eb2eb33b6fe",
+      "byteStart": 6396,
+      "byteEnd": 6651
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "ad357f55413cb4fa3d0649227f4e2efd4b0d70d4638811a9f285fe9958f0413e"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.exceptions-errors",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "exceptions-errors",
+    "claim": "Customer validation throws Invalid Customer Group for a group-type Customer Group and throws when an Internal Customer for the represented Company already exists.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=8037-12384",
+      "excerptSha256": "bd3023fa91cdde26cf6e6f619d75681f56750c1f7586ee781ff3567078e4fa5b",
+      "byteStart": 8037,
+      "byteEnd": 12385
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "7b6531bc391cf5f17a1a34e3325b1c9859beccbf040ec25fa05012b059d8faee"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.readbacks",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "readbacks",
+    "claim": "Customer onload exposes dashboard_info through set_onload, while primary Contact creation persists customer_primary_contact, mobile_no, and email_id through db_set.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=3583-9637",
+      "excerptSha256": "4bbaaed7bcc37bc404c9373ec0d3f3739203b615e73ea1a50eca56e07a1939b1",
+      "byteStart": 3583,
+      "byteEnd": 9638
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "feb4006d049e93399c9571bf11560ec9b2fa6acace35bbdc7593e0e8a595947b"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.api-service-exposure",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "api-service-exposure",
+    "claim": "Customer exposes get_customer_group_details and make_quotation through frappe.whitelist; make_quotation returns a mapped Quotation Document.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=6653-15426",
+      "excerptSha256": "5383178ee597ca0bee02c329773ab6a5a886b10701482322a30a9a542cd0bff7",
+      "byteStart": 6653,
+      "byteEnd": 15427
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "b35e25218819a8511f2576ccf735641124b6c8f0d1771491c7c7a55d8f11b888"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.party-customer-management.absence-ambiguity-conflict",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+    "questionId": "absence-ambiguity-conflict",
+    "claim": "The captured controller is class Customer and imports party-account validation from erpnext.accounts.party; these bytes do not establish a separate generic Party DocType for this family.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py",
+      "sourceBytesSha256": "bf262912f43772ad3831b96a4730fd47b33da686aab3cbd9a9ff1dd94f54799c"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/customer/customer.py#bytes=755-1098",
+      "excerptSha256": "a267ee214ecfb5ebec8ea485ae682617fbfe263e8c17784dbe92806aa6a05bc9",
+      "byteStart": 755,
+      "byteEnd": 1099
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "ebf06b05c9b620e7c0a8ecc2f5808ff58baa0c2ff512888610e8c0fe5772a92f"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.objects-roles",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "objects-roles",
+    "claim": "The Item DocType is described as a Product or a Service that is bought, sold or kept in stock and is identified by required unique Item Code.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json",
+      "sourceBytesSha256": "73dbe4ceaabf3c65475d6e93b2deeb422218a119f654d391511142f70cccaf39"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=134-3651",
+      "excerptSha256": "8e9f2fa82efd9b9fbd3678e1578fe4ab47f447ee1b65f7846a4df2ecfa9ecefc",
+      "byteStart": 134,
+      "byteEnd": 3652
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "4288ca189da6e0cd26a19afe569d4114dd4a22e298764ea911cb46932c544060"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.relations",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "relations",
+    "claim": "Item links Variant Of to another Item with has_variants enabled, links Item Group to a non-group Item Group, and links Default Unit of Measure to UOM.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json",
+      "sourceBytesSha256": "73dbe4ceaabf3c65475d6e93b2deeb422218a119f654d391511142f70cccaf39"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=3856-4967",
+      "excerptSha256": "b6913c18537ac498c2ab981f931af7e5fba11aed7a9c4636a37c4036f0eab77f",
+      "byteStart": 3856,
+      "byteEnd": 4968
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "240975f4550a08c946ca964fffdf11e40846b3776a10c19bac3f8737ae16989b"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.operations",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "operations",
+    "claim": "Item implements autoname, after_insert, validate, on_update, on_trash, before_rename, and after_rename operations.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=5130-20476",
+      "excerptSha256": "7eca41efac34d0bdd0c8295fa6d6ab0ac0e907dce004abd9703bebe5f28ed365",
+      "byteStart": 5130,
+      "byteEnd": 20477
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "cdc83ecdfaa60a7a1563b219723dc37ffe1be1ee0ba3d9ebb7fe1bba300205c5"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.inputs-outputs",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "inputs-outputs",
+    "claim": "Item autoname strips Item Code and assigns it to both item_code and the document name; naming-series mode can first derive that Item Code.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=5130-5629",
+      "excerptSha256": "e4e3bad4107db23a6988927b3bcbaee6e639252398a2ba6f4d23d7ba920f71e0",
+      "byteStart": 5130,
+      "byteEnd": 5630
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "870707c2dbac3b50922a73d81ea0fac67baa3eb1f9839dcea15a480f61c2fb91"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.states-transitions",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "states-transitions",
+    "claim": "Item exposes Disabled and End of Life controls: disabled Items cannot be selected in transactions, and End of Life defines the date after which the Item can no longer be used; no named Item workflow transition list is evidenced here.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json",
+      "sourceBytesSha256": "73dbe4ceaabf3c65475d6e93b2deeb422218a119f654d391511142f70cccaf39"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=5073-9379",
+      "excerptSha256": "19775d8baadfefeedbe6d35ff91872946252f7e3fc7703ec60e47fda1e5a11c9",
+      "byteStart": 5073,
+      "byteEnd": 9380
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "f7c84c78cbb6ebff5e3b76cc362cf586736bd0125378bffeb3d1b2575fb92780"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.events",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "events",
+    "claim": "Item lifecycle handlers onload, after_insert, validate, and on_update load stock and asset readbacks, create opening stock or Item Price, validate, and update variants and Item Price.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=4837-7381",
+      "excerptSha256": "3325b12d3976d18536df8557e52e847556529d5d599fefd1efeef6830508bff8",
+      "byteStart": 4837,
+      "byteEnd": 7382
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "1c2a39d810bc8f573599b906adec09f771bb28f0f4523776694b2c6d3196c271"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.preconditions",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "preconditions",
+    "claim": "Opening Stock processing returns for a non-stock, serialized, or batched Item and otherwise requires Valuation Rate unless the Item is Customer Provided.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=9039-9324",
+      "excerptSha256": "2d440d0000131ef60bec4c6c48e8f80caa6ce5cb700076bc3f5802761bf67c55",
+      "byteStart": 9039,
+      "byteEnd": 9325
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "9c12a964ea98a32b4a419040f096b78f840414d64530a9c3276cca9f60972aea"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.invariants",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "invariants",
+    "claim": "Item UOM conversion rows must not repeat a Unit of Measure, and the conversion factor for the Default Unit of Measure must equal 1.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=13447-13951",
+      "excerptSha256": "e805b5f2a314dd1a497204631fc2fd784f96dbf5d9e1caa06f4cb975ea602859",
+      "byteStart": 13447,
+      "byteEnd": 13952
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "02c35210e85315b292935fd14829bed057d12aeca1f8865cedc1fe93f373ba43"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.exceptions-errors",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "exceptions-errors",
+    "claim": "Item validation throws when Customer Provided Item is also a Purchase Item or has Valuation Rate, and when Fixed Asset Item is a stock item or lacks Asset Category.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=8127-11251",
+      "excerptSha256": "39ce52050d963fa596f9d3fd700f5a14b9d334d8d2e25017f5672885cb5a58f5",
+      "byteStart": 8127,
+      "byteEnd": 11252
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "38e46b2f530e5cb8a461bf736f72332fb8201363dbf8713fca6dfdb3718a297c"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.readbacks",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "readbacks",
+    "claim": "Item onload exposes stock_exists, asset_naming_series, current_valuation_method, and asset_exists through set_onload.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=4837-5127",
+      "excerptSha256": "f46938b5e43989c0c268567b053bdec9cf489c0bd1d2a294487295ad08e862c4",
+      "byteStart": 4837,
+      "byteEnd": 5128
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "60e2daf2e256dddbd30fa4fc19d0d960d87d872e0f5145229839af8ee4d6233c"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.api-service-exposure",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "api-service-exposure",
+    "claim": "Item exposes get_item_details and get_uom_conv_factor through frappe.whitelist; get_uom_conv_factor documents conversion from uom to stock_uom.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py",
+      "sourceBytesSha256": "769dd296b8ce11b1d71b38403e48ec21dcd3dd01c51d908b498fd90a921c7ba3"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.py#bytes=45974-46366",
+      "excerptSha256": "a935c3dc6346e9b15cb99463b5d6e367d7a5936de8432247d4cd13e9bed29128",
+      "byteStart": 45974,
+      "byteEnd": 46367
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "455c9710c65a7289e917b3f3f75aad06ecefab716e140a7331ff3e4df2385f57"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.product-item-management.absence-ambiguity-conflict",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+    "questionId": "absence-ambiguity-conflict",
+    "claim": "The source description calls Item a Product or a Service, while the actual DocType and controller are named Item; these bytes do not justify replacing Item with a normalized Product term.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json",
+      "sourceBytesSha256": "73dbe4ceaabf3c65475d6e93b2deeb422218a119f654d391511142f70cccaf39"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/stock/doctype/item/item.json#bytes=134-234",
+      "excerptSha256": "82402a198f78211cb00521d803115f11ce34c56af166cdc1617323f276d807d8",
+      "byteStart": 134,
+      "byteEnd": 235
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "98cf32dbd3f51ac938bf32470709989041c89c2a58bdf6576fe9329feb09ed9f"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.objects-roles",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "objects-roles",
+    "claim": "Sales Order requires a Customer and a child Items table whose options are Sales Order Item; Order Type values are Sales, Maintenance, and Shopping Cart.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json",
+      "sourceBytesSha256": "d0b24245a376b396eda87a82a50dcc877ac091d7d572f38bbc33be408dfd3d85"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json#bytes=4527-13257",
+      "excerptSha256": "627856c402e93c8a700181301ce57882e1d20b90b80b9af127cd32c4eb40791e",
+      "byteStart": 4527,
+      "byteEnd": 13258
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "603dfbb802bb23ab353d2409884fd12ffcdacca42974b29ae8a1646adee072db"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.relations",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "relations",
+    "claim": "Sales Order links Customer to Customer, Items to Sales Order Item, Amended From to Sales Order, and Customer Address and Contact Person to Address and Contact.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json",
+      "sourceBytesSha256": "d0b24245a376b396eda87a82a50dcc877ac091d7d572f38bbc33be408dfd3d85"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json#bytes=4527-13257",
+      "excerptSha256": "627856c402e93c8a700181301ce57882e1d20b90b80b9af127cd32c4eb40791e",
+      "byteStart": 4527,
+      "byteEnd": 13258
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "51ea29dd114b97bc8e890ffef183a7660d980f024adf8a1ee3486cc8e4486d7c"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.operations",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "operations",
+    "claim": "Sales Order validates, submits, cancels, updates status, creates Delivery Note, and creates Sales Invoice through named controller methods.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=7911-42641",
+      "excerptSha256": "d98fa082f1659109c9abbff16a50ca07a5c8031864f8c1f21873a0d929d1b563",
+      "byteStart": 7911,
+      "byteEnd": 42642
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "7eea2202d15c847542c38e370468fdb1b6240d03549ade26ce505e3a57763e73"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.inputs-outputs",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "inputs-outputs",
+    "claim": "make_delivery_note maps Sales Order data toward Delivery Note, and the whitelisted make_sales_invoice operation accepts source_name and a target Sales Invoice document input.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=36648-42641",
+      "excerptSha256": "0260b2844e108469a8bb0022df85bedeb40d37aa390940ca760b5fee91fa2ed6",
+      "byteStart": 36648,
+      "byteEnd": 42642
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "ea7b2f71c79f63fe3086e8fab400a76c1353229733ac179e7c9b7bbdacbee968"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.states-transitions",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "states-transitions",
+    "claim": "Sales Order Status values are Draft, On Hold, To Pay, To Deliver and Bill, To Bill, To Deliver, Completed, Cancelled, and Closed; close_or_unclose_sales_orders closes eligible submitted orders and reopens Closed orders by update_status Draft.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=6034-32577",
+      "excerptSha256": "7bcc8213c0e8da04969a6610ad3f7ce543a2757831f42a694209236e20cda7b8",
+      "byteStart": 6034,
+      "byteEnd": 32578
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "30afd635129102b39bf8b39e5c6af48875b9805e15eff458a660917c20548489"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.events",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "events",
+    "claim": "Sales Order handles before_validate, validate, on_submit, on_cancel, on_update_after_submit, and before_update_after_submit lifecycle events.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=7792-22072",
+      "excerptSha256": "eadc97194dca87c6ff84a12fd288615173029ab92a5fd71fe0c12849d9f70c43",
+      "byteStart": 7792,
+      "byteEnd": 22073
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "0b772b40d682afb72f106b3878c6bc3afb41a298475824815c6caabec5e90e6a"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.preconditions",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "preconditions",
+    "claim": "Closing or reopening Sales Orders requires Sales Order write permission; closing applies only to submitted orders not already Cancelled or Closed and not both fully delivered and fully billed.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=32057-32606",
+      "excerptSha256": "dd789df310e5571863765483434cd8a50e986878d6365c51b12e41745af9a617",
+      "byteStart": 32057,
+      "byteEnd": 32607
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "65109fcf8f37d759876ea6f57c5cc9a1d7bc375779d708da54b2ecb52b890d42"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.invariants",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "invariants",
+    "claim": "Sales Order cancellation refuses a Closed order and refuses cancellation while linked draft Sales Invoices exist.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=17587-19723",
+      "excerptSha256": "e1c8ab570a16108e7d37fbd4ce444627e8eae9cc8617eec4fc70619ffded69f8",
+      "byteStart": 17587,
+      "byteEnd": 19724
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "bdb31b92caa2809314406342582b10cc4d124317c4db263f3a91f3bfefa83a46"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.exceptions-errors",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "exceptions-errors",
+    "claim": "Sales Order throws WarehouseRequired when a stock Item needs a source Warehouse, throws when a Closed order is cancelled, and throws PermissionError when close_or_unclose lacks write permission.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=1829-32219",
+      "excerptSha256": "30fd86c1f0b2fbc9683b59da21395beb2438155803bc64ef25ef50a7d68bda69",
+      "byteStart": 1829,
+      "byteEnd": 32220
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "06947cf362572ae347c208d7953aca5e98a3c1929c2f45057e8b28ffc0397354"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.readbacks",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "readbacks",
+    "claim": "Sales Order onload exposes can_update_items and reserved-stock flags; cancellation persists status Cancelled through db_set, while update_status calls notify_update and clears DocType notifications.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=7157-20485",
+      "excerptSha256": "e653e825eaf5f932c6538309aafab71fe7378e111b3ee5a3fa53dbdf6c37f5b0",
+      "byteStart": 7157,
+      "byteEnd": 20486
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "374b7a3766b2989b01bba4c2c24f21ddb1eaedfe492ccf74c540fe2d100a8e1e"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.api-service-exposure",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "api-service-exposure",
+    "claim": "Sales Order exposes close_or_unclose_sales_orders, make_delivery_note, make_sales_invoice, get_events, and make_purchase_order through frappe.whitelist.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py",
+      "sourceBytesSha256": "d2975827071e92da645f01d3dca9fb106a8dd82c37892d8167652f7aa464fd42"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.py#bytes=32037-51234",
+      "excerptSha256": "94408327d59af466ea2bdce647afb0f4e78b6659bff7e247e561a98a0212adf9",
+      "byteStart": 32037,
+      "byteEnd": 51235
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "b2b2b246f5edac79731eca41d3d14f8ed40c21c5780b49b0fbf377c818e68aa0"
+  },
+  {
+    "schemaVersion": "pansphaira.cscl01/source-fact/v1",
+    "factId": "erpnext.sales-order-management.absence-ambiguity-conflict",
+    "systemId": "erpnext",
+    "systemRole": "TRAINING",
+    "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+    "questionId": "absence-ambiguity-conflict",
+    "claim": "Sales Order has separate Status, Delivery Status, Billing Status, and Advance Payment Status fields; their distinct native value sets are retained without deriving one normalized order state model.",
+    "sourceIdentity": {
+      "selectorSetDigest": "ea6029f3691b5e4ac635945541a2680b9c81eaefb712c3c936dc33fbbe724afc",
+      "immutableSelector": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json",
+      "sourceBytesSha256": "d0b24245a376b396eda87a82a50dcc877ac091d7d572f38bbc33be408dfd3d85"
+    },
+    "exactEvidence": {
+      "exactLocator": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/erpnext/selling/doctype/sales_order/sales_order.json#bytes=27372-35889",
+      "excerptSha256": "f8361f2038a9ba53d085da6ac0839c0d5f25fe90381370c35c666560de1b5fee",
+      "byteStart": 27372,
+      "byteEnd": 35890
+    },
+    "legal": {
+      "licenseId": "GPL-3.0-only",
+      "licenseSha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "obligations": [
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "LICENSE_COVERED_DERIVATIVES_UNDER_GPL",
+        "PROVIDE_CORRESPONDING_SOURCE_WHEN_CONVEYING",
+        "MARK_MODIFICATIONS"
+      ],
+      "noticeStatus": "ABSENT_AT_PIN",
+      "attribution": [
+        {
+          "kind": "PROJECT_METADATA",
+          "url": "https://raw.githubusercontent.com/frappe/erpnext/b24c9eba551905e256e336ff170a91a92d197a2f/README.md",
+          "byteLength": 6791,
+          "sha256": "709f84a1d8ef170c362070a80a717cb4a779b66b7202738820d9f836deb42c9a"
+        }
+      ]
+    },
+    "parser": {
+      "id": "cscl03-source-native-extractor",
+      "version": "1.0.0"
+    },
+    "canonicalizer": {
+      "id": "cscl01-sorted-key-json",
+      "version": "1.0.0"
+    },
+    "boundary": {
+      "authorityGrant": "NONE",
+      "promotionGrant": "NONE",
+      "executionGrant": "NONE"
+    },
+    "factDigest": "649a0970ec773c0cb7dde59f839b534561838e427a9be0deac0f90ee670bb1d2"
+  }
+]
