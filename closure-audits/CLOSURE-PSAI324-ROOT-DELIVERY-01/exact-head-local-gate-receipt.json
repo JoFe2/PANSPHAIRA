@@ -1,0 +1,17 @@
+{
+  "schemaVersion":"development-conveyor/exact-head-local-gate-receipt/v1",
+  "issue":{"repository":"JimPansky/PANSPHAIRA","number":324},
+  "parentIssue":317,
+  "testedProductHead":"d74b46269920e49492e6c166397374827fb53b18",
+  "testedProductTree":"924225af3e104e384c150018cedac15978ce355b",
+  "baseSha":"8dae13e416ca42709bf04f01faba5b3b4708deeb",
+  "runCommits":["160b8d5bcdd72239f3250e59d426f71723cf14c4","d74b46269920e49492e6c166397374827fb53b18"],
+  "acceptance":{"COMPLETE_180_CELL_MATRIX":"PASS","SOURCE_NATIVE_PRESERVATION":"PASS","EVIDENCE_REVIEW_36_OF_36":"PASS","ADVERSARIAL_DENIALS":"PASS","HOLDOUT_ISOLATION":"PASS","NO_PREMATURE_CAPABILITY_CLAIM":"PASS"},
+  "terminalDecision":"MATRIX_VALIDATED_WITH_EXPLICIT_UNRESOLVED_DENIED_AND_VARIANT_RELATIONS",
+  "counts":{"profiles":5,"rows":36,"inputCells":180,"evidenceReviews":36,"omittedCells":0,"duplicatedCells":0,"holdoutAccesses":0,"variantRelations":2,"unresolved":28,"denied":6,"potentialEquivalence":0,"distinct":0},
+  "digests":{"releasedInputSetManifest":"c6d106edb71bf3b004d8d83e76e8c90d834524dc4c2f273b519804e04d7a9342","relationSpec":"a47e78346dbe3453b86f2545dfa437e966253490a9f2f993cdbca064e74d3599","evidenceReview":"779d304ff4ddc92f1bf1f1fc8471ff079ab9e89044331f098ddf0523375ccfc0","matrix":"d68dff995ab03e426302f593a5f73e10ffa886040217b7355e310878aa957d8d"},
+  "checks":[{"command":"npm run cscl07:test","status":"PASS","tests":8},{"command":"CSCL01-07 focused","status":"PASS","tests":58},{"command":"integration gates","status":"PASS","tests":78},{"command":"npm test","status":"PASS"},{"command":"npm run lint","status":"PASS"},{"command":"sha256sum --check SHA256SUMS","status":"PASS"},{"command":"npm run release-governance:verify","status":"PASS"},{"command":"git diff --check","status":"PASS"}],
+  "integrity":{"publicManifestEntries":1408,"verificationDagVersion":36,"verificationDagNodes":46},
+  "releaseDisposition":"RELEASE_REQUIRED_PENDING_DELIVERY",
+  "nonClaims":["NO_CAPABILITY_CLAIM","NO_PROCESS_PATTERN_CLAIM","NO_COMMON_CORE_CLAIM","NO_PROMOTION_CLAIM","NO_EXECUTION_CLAIM","NO_AUTHORITY_CLAIM","NO_HOLDOUT_SEMANTICS_ACCESSED"]
+}
