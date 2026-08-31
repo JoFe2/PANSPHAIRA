@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "pansphaira.foundation/exact-head-local-gate-receipt/v1",
+  "issue": {
+    "id": "FND-PS-01",
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 334,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/334"
+  },
+  "recordedAt": "2026-08-31T16:51:59Z",
+  "baseCommit": "27488888a35fc59caa51bff12fb4ba8c0f28c31d",
+  "productHead": "0ce85deea558c0a0934dbac3dc396b8b8b2971c3",
+  "productTree": "ebfdc433985fe6db40df5c9dab76518a7455a9ed",
+  "changedPathDigests": {
+    "src/cks-12/readonly-kaleidosphere-bridge.ts": "fa46d987c3dcd03ec2583ecca153566ffba7f2caf1aa3fa81472f56151e009a0",
+    "tests/cks-12/readonly-kaleidosphere-bridge.test.ts": "6a3fa21b5e119a815c364cd1361f694ea529bf198c21f07607c61952882d1d55",
+    "verification/verification-dag-v2.json": "29a42dead5bbe28eff826f01ecae5ab40c707a62f2d8ffb26449dab22fae8c26",
+    "SHA256SUMS": "549df940019f7014fb6bdd1ebedef9359938e3a64651d766d069794b00293b3b"
+  },
+  "acceptance": {
+    "FND-PS-01-AC01": "PASS",
+    "FND-PS-01-AC02": "PASS",
+    "FND-PS-01-AC03": "PASS",
+    "FND-PS-01-AC04": "PASS",
+    "FND-PS-01-AC05": "PENDING_PUBLIC_DELIVERY"
+  },
+  "reviewFindings": {
+    "FND-PS-01-R01": "CLOSED_FOR_PROJECTION_NODE_EDGE_SCOPE",
+    "FND-PS-01-R02": "CLOSED",
+    "newTopLevelEnvelopeClass": {
+      "disposition": "ACCEPT_WITH_FOLLOWUP",
+      "followup": "https://github.com/JoFe2/PANSPHAIRA/issues/339",
+      "authorization": "FOLLOWUP_NOT_AUTHORIZED"
+    }
+  },
+  "tdd": {
+    "originalRed": "5 pass / 3 fail including TypeError",
+    "originalGreen": "8/8 PASS",
+    "originalSabotage": "0/1 PASS, expected failure",
+    "correctionRed": "4/4 expected failures",
+    "correctedFocused": "12/12 PASS",
+    "cks12": "69/69 PASS"
+  },
+  "gates": {
+    "fullNpmTest": "PASS exit 0",
+    "lint": "PASS",
+    "supplyChain": "PASS",
+    "releaseGovernance": "PASS",
+    "sha256sums": "PASS",
+    "verificationPlan": "FULL_FALLBACK GRAPH_CHANGED, comparator npm test",
+    "publicReleaseStaging": "PASS"
+  },
+  "scope": {
+    "risk": "C",
+    "edgeEvidenceAuthority": "NOT_IMPLEMENTED_FND_PS_02_REMAINS_WAITING",
+    "fixtureBytesChanged": false,
+    "receiptBytesChanged": false
+  },
+  "nonclaims": [
+    "No production or customer-data validation.",
+    "No universal compatibility or security certification.",
+    "No FND-PS-02 edge-evidence authority.",
+    "No claim that top-level exotic in-process inputs are fully hardened; follow-up #339 retains that scope."
+  ],
+  "requiredPublicGates": [
+    "PR exact-head readback",
+    "PR-head CI PASS",
+    "SHA-bound merge",
+    "Main-head CI PASS",
+    "serial release or evidence-bound no-release decision",
+    "anonymous public readback",
+    "issue CLOSED/completed",
+    "queue reconciliation"
+  ]
+}
