@@ -189,7 +189,7 @@ for line_number, raw in enumerate(manifest.read_text("utf-8").splitlines(), 1):
         raise SystemExit(f"PRIVILEGED_SOURCE_MODE:{line_number}")
     total_bytes += metadata.st_size
 
-if count != 1399:
+if count != 1408:
     raise SystemExit("MANIFEST_FILE_COUNT")
 if total_bytes > 100 * 1024 * 1024:
     raise SystemExit("MANIFEST_BYTE_LIMIT")
@@ -216,6 +216,7 @@ repository_only_files = {
     "docs/development/cscl-04-dolibarr-24.0.0-profile.md",
     "docs/development/cscl-05-tryton-source-native-profile-v1.md",
     "docs/development/cscl-06-apache-ofbiz-profile-v1.md",
+    "tests/fixtures/cscl-07/expected-matrix-v1.json",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",

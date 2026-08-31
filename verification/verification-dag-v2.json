@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 35,
+  "graphVersion": 36,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8a11fc0e19fe62f62ac5789cca5070fbf66549da77098e14915c7750e06c753b"
+          "sha256": "4a6c60587878a653744037e26698c5f8e315fbb056e5703aefa7be538f5a9ca5"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "928c31d005f32d55789f2aa5468d8d6360e982481b775ac200ff005755ab0c6a"
+          "sha256": "90d39dd8102edc5de2e6a1b6518590c51bdf2db3e2827d6dbca3db0c3eed87ce"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "cb909afed67cf18b8635966d7e0fd8a26cf32460c80b57d232c4c52994ba29ff"
+          "sha256": "5c57996db9a97ed6406eeca857408f777004d725e5707b6ccc60041ee0ebf8d7"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "89c37ce1c1b1a1d8bd54be43d9c2e4b5a88c64cff62a3c79a41f280d82aa4126"
+          "sha256": "8f6241a0250eb3d2fc2b82a3337e0c9a8361d8b27f17b1e4a3a1949becf1be77"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "e0609c6989b66930b96c5a73912fca19e22edd6b064b7aa40767fe7db004b491"
+          "sha256": "3d243b52e0351450ec9c377a8b1490b287c51c9924388e9bedf9dbd1de82ac6c"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "30247848c9b4771d8b6c5526562b21b1729a755de130415fc504444e68cda820"
+          "sha256": "15bdb8222594c3475554a78c2da9b94869e48ad8a6a1bac4db6c18e318c78bac"
         }
       ],
       "ownedTests": [
@@ -5332,6 +5332,74 @@
         "Every fact and cell binds immutable official source bytes, exact locators, parser/legal identities and explicit negative evidence.",
         "Offline replay is deterministic and cannot perform network access.",
         "No cross-system concept, holdout semantic, Capability candidate, promotion, execution or Authority claim is admitted."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-07-cross-system-semantic-matrix-v1",
+      "dependsOn": [
+        "cscl-02-odoo-source-native-profile-v1",
+        "cscl-03-erpnext-source-native-profile-v1",
+        "cscl-04-dolibarr-source-native-profile-v1",
+        "cscl-05-tryton-source-native-profile-v1",
+        "cscl-06-ofbiz-source-native-profile-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/cscl-07-semantic-evidence-matrix-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "71b322b28e4b420afc451e7a0642deb0b9781fd0247ca4983d37ab80577ecfc4"
+        },
+        {
+          "path": "src/cscl-07/matrix.mjs",
+          "role": "VALIDATOR",
+          "sha256": "33ad961c61a3dee2c10cf215055d26bd8449cf08248ebeaf36ac19ae2556eb2f"
+        },
+        {
+          "path": "tests/cscl-07/matrix.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "7f357e1d2e4c89665f2fe569adf4d32016440394fd113d59e14ecae422b9e9d5"
+        },
+        {
+          "path": "tests/fixtures/cscl-07/adversarial-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "0bf59ebd74e5ed165fa5d1f075846a4d978dc4513c13871b83b8e50db9b5c633"
+        },
+        {
+          "path": "tests/fixtures/cscl-07/evidence-review-v1.json",
+          "role": "FIXTURE",
+          "sha256": "323a4714acf271dee7b6d9e6860cc7f8a476b4acab04c1f4485b33a9a6fd9a31"
+        },
+        {
+          "path": "tests/fixtures/cscl-07/relation-spec-v1.json",
+          "role": "FIXTURE",
+          "sha256": "6007e8729ff8a63b5dc94bf200008a34ac1d586edcb1b6a1bc8b71b39bea51d2"
+        },
+        {
+          "path": "tests/fixtures/cscl-07/released-input-set-manifest-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a38b20ab914bc1911231f1d2fa2fd4d8fe31ba4d578b00aecee1310c2fd9f6bf"
+        },
+        {
+          "path": "verification/cscl-07-semantic-evidence-matrix-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "1daae0de3ec56e365a46f658141b3b0623fba2cc22fe4751107c02dd312dcd9b"
+        },
+        {
+          "path": "verification/cscl-07-semantic-evidence-matrix-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "02ffb40584d857b2f7a8fdf2ba193c78a2561721969d511348fff726a95a9797"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl07:test"
+      ],
+      "invariants": [
+        "Exactly five released profiles, 36 rows and 180 cells are present without omission or duplication.",
+        "Every relation is derived from a complete source-bound 36-review ledger; profile equivalence fields, names, frequency and shape are untrusted.",
+        "All source-native meanings, variants, absences, ambiguities, conflicts and counterexamples remain intact.",
+        "No holdout, Capability, Process Pattern, common-core, promotion, execution or Authority claim is admitted."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
