@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/cscl-01/semantic-concept-v1.schema.json",
+  "title": "CSCL-01 semantic concept with explicit variants and negatives v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "conceptId", "capabilityFamily", "definition", "evidenceCellDigests", "coreClassification", "variants", "absences", "ambiguities", "counterexamples", "boundary", "conceptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cscl01/semantic-concept/v1" },
+    "conceptId": { "$ref": "#/$defs/id" },
+    "capabilityFamily": { "$ref": "#/$defs/family" },
+    "definition": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "evidenceCellDigests": { "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true, "items": { "$ref": "#/$defs/digest" } },
+    "coreClassification": { "enum": ["COMMON_CORE", "VARIANT_ONLY", "DENIED"] },
+    "variants": { "$ref": "#/$defs/records" },
+    "absences": { "$ref": "#/$defs/records" },
+    "ambiguities": { "$ref": "#/$defs/records" },
+    "counterexamples": { "$ref": "#/$defs/records" },
+    "boundary": { "$ref": "#/$defs/boundary" },
+    "conceptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "family": { "enum": ["PARTY_CUSTOMER_MANAGEMENT", "PRODUCT_ITEM_MANAGEMENT", "SALES_ORDER_MANAGEMENT"] },
+    "record": { "type": "object", "additionalProperties": false, "required": ["systemId", "statement", "sourceFactDigests"], "properties": { "systemId": { "enum": ["odoo-community", "erpnext", "dolibarr", "tryton", "apache-ofbiz"] }, "statement": { "type": "string", "minLength": 1, "maxLength": 4096 }, "sourceFactDigests": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/digest" } } } },
+    "records": { "type": "array", "maxItems": 64, "items": { "$ref": "#/$defs/record" } },
+    "boundary": { "const": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" } }
+  }
+}

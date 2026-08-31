@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.invalid/contracts/cscl-01/mapping-receipt-v1.schema.json",
+  "title": "CSCL-01 holdout mapping receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "receiptId", "holdoutSystemId", "capabilityFamily", "frozenCandidateDigest", "frozenCandidateBytesSha256", "holdoutProfileDigest", "mappings", "denominators", "extensions", "boundary", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cscl01/mapping-receipt/v1" },
+    "receiptId": { "$ref": "#/$defs/id" },
+    "holdoutSystemId": { "const": "idempiere" },
+    "capabilityFamily": { "$ref": "#/$defs/family" },
+    "frozenCandidateDigest": { "$ref": "#/$defs/digest" },
+    "frozenCandidateBytesSha256": { "$ref": "#/$defs/digest" },
+    "holdoutProfileDigest": { "$ref": "#/$defs/digest" },
+    "mappings": { "type": "array", "items": { "$ref": "#/$defs/mapping" } },
+    "denominators": { "$ref": "#/$defs/denominators" },
+    "extensions": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["holdoutConceptId", "meaning", "sourceFactDigests", "classification"], "properties": { "holdoutConceptId": { "$ref": "#/$defs/id" }, "meaning": { "type": "string", "minLength": 1, "maxLength": 4096 }, "sourceFactDigests": { "$ref": "#/$defs/digests" }, "classification": { "const": "HOLDOUT_EXTENSION_ONLY" } } } },
+    "boundary": { "$ref": "#/$defs/boundary" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]{3,127}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "digests": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/digest" } },
+    "family": { "enum": ["PARTY_CUSTOMER_MANAGEMENT", "PRODUCT_ITEM_MANAGEMENT", "SALES_ORDER_MANAGEMENT"] },
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["holdoutConceptId", "classification", "candidateElementId", "meaningPreserved", "sourceFactDigests"],
+      "properties": {
+        "holdoutConceptId": { "$ref": "#/$defs/id" },
+        "classification": { "enum": ["CORE", "VARIANT", "UNMAPPED"] },
+        "candidateElementId": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9.-]{3,127}$" },
+        "meaningPreserved": { "type": "boolean" },
+        "sourceFactDigests": { "$ref": "#/$defs/digests" }
+      },
+      "allOf": [
+        { "if": { "properties": { "classification": { "enum": ["CORE", "VARIANT"] } }, "required": ["classification"] }, "then": { "properties": { "candidateElementId": { "$ref": "#/$defs/id" }, "meaningPreserved": { "const": true } } } },
+        { "if": { "properties": { "classification": { "const": "UNMAPPED" } }, "required": ["classification"] }, "then": { "properties": { "candidateElementId": { "const": null }, "meaningPreserved": { "const": false } } } }
+      ]
+    },
+    "denominators": { "type": "object", "additionalProperties": false, "required": ["applicable", "mappedToCore", "mappedToVariant", "unmapped", "coreTotal", "coreIdentityPreserved", "coreContradictions"], "properties": { "applicable": { "type": "integer", "minimum": 1 }, "mappedToCore": { "type": "integer", "minimum": 0 }, "mappedToVariant": { "type": "integer", "minimum": 0 }, "unmapped": { "type": "integer", "minimum": 0 }, "coreTotal": { "type": "integer", "minimum": 1 }, "coreIdentityPreserved": { "type": "integer", "minimum": 0 }, "coreContradictions": { "type": "integer", "minimum": 0 } } },
+    "boundary": { "const": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" } }
+  }
+}
