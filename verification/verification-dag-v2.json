@@ -536,7 +536,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "29e2907e6a02aaa9c58e8cef3242c06d70fcf0d908448e3205daf393173183c1"
+          "sha256": "3db3c92aa0ba6e87190e3385508a0539469ce55850ed3c7cc6d75d34b6bf6168"
         }
       ],
       "ownedTests": [
