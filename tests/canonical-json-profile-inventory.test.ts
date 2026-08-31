@@ -85,10 +85,10 @@ const EXPECTED_COUNTS = {
   importFiles: 193,
   reexportSites: 4,
   similarShapeSites: 30,
-  byteObligations: 21,
-  pinnedProfileFiles: 13,
+  byteObligations: 42,
+  pinnedProfileFiles: 33,
 } as const;
-const EXPECTED_LEDGER = { entries: 1391, uniquePaths: 1380, duplicatePaths: 11 } as const;
+const EXPECTED_LEDGER = { entries: 1715, uniquePaths: 1715, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -402,8 +402,11 @@ function expectedByteObligations(scan: ScanResult, ledger: LedgerResult): ByteOb
   add(PARITY_TEST_FILE, "parity-evidence");
   add(PARITY_FIXTURE_FILE, "parity-fixture");
   const sortedEntries = [...ledger.entries.entries()].sort((a, b) => compareStrings(a[0], b[0]));
+  const integrationArtifacts = new Set<string>(INTEGRATION_ARTIFACT_INPUTS.map((input) => input.path));
   for (const [filePath, digest] of sortedEntries) {
-    if (seen.has(filePath) || !CANONICAL_NAME_RE.test(filePath)) continue;
+    // These three files are derived together and bind through repository-integrity.
+    // Including their own digests here would create an impossible hash cycle.
+    if (integrationArtifacts.has(filePath) || seen.has(filePath) || !CANONICAL_NAME_RE.test(filePath)) continue;
     out.push({ path: filePath, sha256: digest, basis: "ledger-name-match" });
     seen.add(filePath);
   }

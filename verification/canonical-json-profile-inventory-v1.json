@@ -57,8 +57,9 @@
   },
   "uncertainty": [
     "Ad-hoc grep methods disagree on declaration/import counts; the scanner embedded in tests/canonical-json-profile-inventory.test.ts is the single source of truth.",
-    "SHA256SUMS has 12 bare-prefix lines and 11 paths that appear twice (mixed './path' and 'path' spellings, identical digests); no digest conflicts exist.",
-    "Owner families derive mechanically from the second path segment under src/, packages/, tools/ (e.g. 'cks' spans src/cks and packages/cks)."
+    "SHA256SUMS is normalized to 1715 unique ./-prefixed paths with no duplicate or conflicting path digests.",
+    "Owner families derive mechanically from the second path segment under src/, packages/, tools/ (e.g. 'cks' spans src/cks and packages/cks).",
+    "The three derived census artifacts are excluded from their own historical byte-obligation set to avoid an impossible hash cycle; repository-integrity binds them independently."
   ],
   "freshCounts": {
     "filesScanned": 591,
@@ -68,271 +69,271 @@
     "importFiles": 193,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1391,
-    "ledgerUniquePaths": 1380
+    "ledgerEntries": 1715,
+    "ledgerUniquePaths": 1715
   },
   "profiles": [
     {
       "file": "demo/runtime/enforcement-gate.mjs",
       "line": 21,
-      "owner": "demo",
       "classification": "implementation",
+      "owner": "demo",
       "pinned": true,
       "sha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5"
     },
     {
       "file": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
       "line": 262,
-      "owner": "contracts",
       "classification": "alias",
+      "owner": "contracts",
       "pinned": true,
       "sha256": "efff63cc5f1d9293a56b892172fed9e6257b186209c693087ebad0fe2b8a1846"
     },
     {
       "file": "packages/contracts/src/canonical-json.js",
       "line": 1,
-      "owner": "contracts",
       "classification": "implementation",
+      "owner": "contracts",
       "pinned": true,
       "sha256": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec"
     },
     {
       "file": "packages/contracts/src/canonical-json.ts",
       "line": 1,
-      "owner": "contracts",
       "classification": "implementation",
+      "owner": "contracts",
       "pinned": true,
       "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826"
     },
     {
       "file": "scripts/cks-07-score-empty-kb.mjs",
       "line": 39,
-      "owner": "scripts",
       "classification": "implementation",
+      "owner": "scripts",
       "pinned": true,
       "sha256": "bfa851a9cd482ba2a3d187596f0349b00537bc1919352fbd024daed1c3eb1d69"
     },
     {
       "file": "scripts/cks-08-validate-public-readback.mjs",
       "line": 19,
-      "owner": "scripts",
       "classification": "implementation",
+      "owner": "scripts",
       "pinned": true,
       "sha256": "a6a6fd01f19bbf5cc45ec6aaa55dd1b4967c6b26617008dce60490fe8e5f815a"
     },
     {
       "file": "scripts/cks-09-validate-public-readback.mjs",
       "line": 35,
-      "owner": "scripts",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "8108ab7941f12f603c556a2830883c556386eea296f5eb77d2f2c29eafa1185a"
     },
     {
       "file": "scripts/daily-poc.mjs",
       "line": 58,
-      "owner": "scripts",
       "classification": "implementation",
+      "owner": "scripts",
       "pinned": true,
       "sha256": "9dfa75c197150b38331eda7293c754275ba58b53121c9665a9267f1260786016"
     },
     {
       "file": "scripts/refresh-integrity-data.mjs",
       "line": 9,
-      "owner": "scripts",
       "classification": "implementation",
+      "owner": "scripts",
       "pinned": true,
       "sha256": "6bffef78ac4be77ec5ab8c6a043e653d292b1b97d451dcf2db5bfad0979154a8"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
       "line": 35,
-      "owner": "scripts",
       "classification": "implementation",
+      "owner": "scripts",
       "pinned": true,
       "sha256": "8cef62545a40571ea167393b82695292e1d0c94dd21a4bd1d6759ae3a18017e8"
     },
     {
       "file": "scripts/run-cks-12-story-step-check.mjs",
       "line": 41,
-      "owner": "scripts",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "2773dec237b08ee3bd092227c7bdabdb374f40a5389fd9e210cf8c0169495060"
     },
     {
       "file": "scripts/verify-secure-default-proof.mjs",
       "line": 28,
-      "owner": "scripts",
       "classification": "implementation",
+      "owner": "scripts",
       "pinned": true,
       "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1"
     },
     {
       "file": "scripts/verify-supply-chain.mjs",
       "line": 10,
-      "owner": "scripts",
       "classification": "implementation",
+      "owner": "scripts",
       "pinned": true,
       "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641"
     },
     {
       "file": "src/cks-12/deterministic-function-cost-parity.ts",
       "line": 20,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "cf0fe8b89f2c519fc96c2c1709d5e49df3b239945ac26c79bd7ddc4386c174c6"
     },
     {
       "file": "src/cks-12/drift-revalidation-fastpath.ts",
       "line": 11,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "7baf6b0ee6a3c9a6361aac5cdb8b694ff371678ccf51bad5d6561e75326a550f"
     },
     {
       "file": "src/cks-12/empty-kb-acquisition-gate.ts",
       "line": 220,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "5975859397db6f0c7079a3b0e76f5b8b3d6456c74d34875c9e6caab77b4525ff"
     },
     {
       "file": "src/cks-12/experience-diversity-attribution.ts",
       "line": 10,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "0e232994be6ba280850abec84e7f3460d197c0b510a1dba0f6540d53036e132a"
     },
     {
       "file": "src/cks-12/falsification-report-validator.ts",
       "line": 9,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "dcf63073aa497aa7180fc987851db65d2f76ed73ad15fb9a909fc2db455f00d5"
     },
     {
       "file": "src/cks-12/governed-promotion-lineage.ts",
       "line": 116,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "bbb8a068933045008b3ac603ffe3006d44a0a628ebe92b28add5ee7919f8fc99"
     },
     {
       "file": "src/cks-12/pattern-shadow-workflow.ts",
       "line": 9,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "4cc7ad94239716bc3b1556d9b8f3de68bb0fd621d9137cf6aecb0c233fc628ff"
     },
     {
       "file": "src/cks-12/prerequisite-receipt-binder.ts",
       "line": 39,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "0fff95cba1d661318ced1b42466d5215e0b453391cecf92c50676db8c8998199"
     },
     {
       "file": "src/cks-12/readonly-kaleidosphere-bridge.ts",
       "line": 9,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "fa46d987c3dcd03ec2583ecca153566ffba7f2caf1aa3fa81472f56151e009a0"
     },
     {
       "file": "src/cks-12/story-step-manifest.ts",
       "line": 11,
-      "owner": "cks-12",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cks-12",
+      "pinned": true,
+      "sha256": "6a4ea91886db764c931482f9dfc6d926459849033c9a801e745bbaa56f7295e6"
     },
     {
       "file": "src/cscl-01/protocol.mjs",
       "line": 58,
-      "owner": "cscl-01",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cscl-01",
+      "pinned": true,
+      "sha256": "c49962d26af791ed0c3e1c723462419bf9687e63d3f22c2e648d82295d61b3fc"
     },
     {
       "file": "src/cscl-04/profile-builder.mjs",
       "line": 96,
-      "owner": "cscl-04",
       "classification": "alias",
-      "pinned": false,
-      "sha256": null
+      "owner": "cscl-04",
+      "pinned": true,
+      "sha256": "72b39fcba5014f6837231663876cea98e981e4ed55777aaca3fc0b243e8cd185"
     },
     {
       "file": "src/cscl-05/tryton-profile.mjs",
       "line": 40,
-      "owner": "cscl-05",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cscl-05",
+      "pinned": true,
+      "sha256": "e4bbbf943dfb31f98b3a8fc781add5c6bdaafbb0050095412647e44e1434ca29"
     },
     {
       "file": "src/cscl-06/profile.mjs",
       "line": 76,
-      "owner": "cscl-06",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cscl-06",
+      "pinned": true,
+      "sha256": "83e3df181543374a6ba020f6ab519e41243c26ea9c2b288e3804c00c28542fe6"
     },
     {
       "file": "src/cscl-07/matrix.mjs",
       "line": 6,
-      "owner": "cscl-07",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "cscl-07",
+      "pinned": true,
+      "sha256": "33ad961c61a3dee2c10cf215055d26bd8449cf08248ebeaf36ac19ae2556eb2f"
     },
     {
       "file": "src/rks-01/comparator.mjs",
       "line": 3,
-      "owner": "rks-01",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "rks-01",
+      "pinned": true,
+      "sha256": "99b58dd61d8ba5bae9674194db8ad46d4a4d6049314e3976f429046d1b006e14"
     },
     {
       "file": "src/rks-01/deterministic-ingestion.mjs",
       "line": 20,
-      "owner": "rks-01",
       "classification": "wrapper",
-      "pinned": false,
-      "sha256": null
+      "owner": "rks-01",
+      "pinned": true,
+      "sha256": "080ca0287dd92c6dc365a5b650fcbbc45580448e4c0343bc45acb37ae6ec3a67"
     },
     {
       "file": "src/rks-01/source-governance.mjs",
       "line": 38,
-      "owner": "rks-01",
       "classification": "implementation",
-      "pinned": false,
-      "sha256": null
+      "owner": "rks-01",
+      "pinned": true,
+      "sha256": "ef60dc8435efde73a11abd0dbe279bf627c46d79e18e667165ae7e131f08d353"
     },
     {
       "file": "tests/daily-poc.test.mjs",
       "line": 30,
-      "owner": "tests",
       "classification": "implementation",
+      "owner": "tests",
       "pinned": true,
       "sha256": "516194226603e1b484d3a6bb9201ea9245499750f0e39c84646be75c32649e09"
     },
     {
       "file": "tools/video-production-reference/src/job-validator.mjs",
       "line": 51,
-      "owner": "video-production-reference",
       "classification": "implementation",
+      "owner": "video-production-reference",
       "pinned": true,
       "sha256": "a1abaca9ff5e319e082de36dd7d42c02889d223aec8c5132139599d34a7d6977"
     }
@@ -705,6 +706,11 @@
       "basis": "profile-implementation"
     },
     {
+      "path": "scripts/cks-09-validate-public-readback.mjs",
+      "sha256": "8108ab7941f12f603c556a2830883c556386eea296f5eb77d2f2c29eafa1185a",
+      "basis": "profile-implementation"
+    },
+    {
       "path": "scripts/daily-poc.mjs",
       "sha256": "9dfa75c197150b38331eda7293c754275ba58b53121c9665a9267f1260786016",
       "basis": "profile-implementation"
@@ -720,6 +726,11 @@
       "basis": "profile-implementation"
     },
     {
+      "path": "scripts/run-cks-12-story-step-check.mjs",
+      "sha256": "2773dec237b08ee3bd092227c7bdabdb374f40a5389fd9e210cf8c0169495060",
+      "basis": "profile-implementation"
+    },
+    {
       "path": "scripts/verify-secure-default-proof.mjs",
       "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
       "basis": "profile-implementation"
@@ -727,6 +738,96 @@
     {
       "path": "scripts/verify-supply-chain.mjs",
       "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/deterministic-function-cost-parity.ts",
+      "sha256": "cf0fe8b89f2c519fc96c2c1709d5e49df3b239945ac26c79bd7ddc4386c174c6",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/drift-revalidation-fastpath.ts",
+      "sha256": "7baf6b0ee6a3c9a6361aac5cdb8b694ff371678ccf51bad5d6561e75326a550f",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/empty-kb-acquisition-gate.ts",
+      "sha256": "5975859397db6f0c7079a3b0e76f5b8b3d6456c74d34875c9e6caab77b4525ff",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/experience-diversity-attribution.ts",
+      "sha256": "0e232994be6ba280850abec84e7f3460d197c0b510a1dba0f6540d53036e132a",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/falsification-report-validator.ts",
+      "sha256": "dcf63073aa497aa7180fc987851db65d2f76ed73ad15fb9a909fc2db455f00d5",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/governed-promotion-lineage.ts",
+      "sha256": "bbb8a068933045008b3ac603ffe3006d44a0a628ebe92b28add5ee7919f8fc99",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/pattern-shadow-workflow.ts",
+      "sha256": "4cc7ad94239716bc3b1556d9b8f3de68bb0fd621d9137cf6aecb0c233fc628ff",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/prerequisite-receipt-binder.ts",
+      "sha256": "0fff95cba1d661318ced1b42466d5215e0b453391cecf92c50676db8c8998199",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/readonly-kaleidosphere-bridge.ts",
+      "sha256": "fa46d987c3dcd03ec2583ecca153566ffba7f2caf1aa3fa81472f56151e009a0",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cks-12/story-step-manifest.ts",
+      "sha256": "6a4ea91886db764c931482f9dfc6d926459849033c9a801e745bbaa56f7295e6",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cscl-01/protocol.mjs",
+      "sha256": "c49962d26af791ed0c3e1c723462419bf9687e63d3f22c2e648d82295d61b3fc",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cscl-04/profile-builder.mjs",
+      "sha256": "72b39fcba5014f6837231663876cea98e981e4ed55777aaca3fc0b243e8cd185",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cscl-05/tryton-profile.mjs",
+      "sha256": "e4bbbf943dfb31f98b3a8fc781add5c6bdaafbb0050095412647e44e1434ca29",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cscl-06/profile.mjs",
+      "sha256": "83e3df181543374a6ba020f6ab519e41243c26ea9c2b288e3804c00c28542fe6",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/cscl-07/matrix.mjs",
+      "sha256": "33ad961c61a3dee2c10cf215055d26bd8449cf08248ebeaf36ac19ae2556eb2f",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/rks-01/comparator.mjs",
+      "sha256": "99b58dd61d8ba5bae9674194db8ad46d4a4d6049314e3976f429046d1b006e14",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/rks-01/deterministic-ingestion.mjs",
+      "sha256": "080ca0287dd92c6dc365a5b650fcbbc45580448e4c0343bc45acb37ae6ec3a67",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "src/rks-01/source-governance.mjs",
+      "sha256": "ef60dc8435efde73a11abd0dbe279bf627c46d79e18e667165ae7e131f08d353",
       "basis": "profile-implementation"
     },
     {
@@ -743,6 +844,11 @@
       "path": "tests/fixtures/asf-bundle-lock/noncanonical.json",
       "sha256": "76b850174440a13247ba98a3217cb9429dc9390c920b23ed030bc7bd25f97974",
       "basis": "parity-fixture"
+    },
+    {
+      "path": "tests/fixtures/cks-10/canonical-evidence-snapshot-v1.json",
+      "sha256": "b2c686476302c4869a5e28362676f144aca8dc7f23837762e3581d5d9eda461a",
+      "basis": "ledger-name-match"
     },
     {
       "path": "tools/video-production-reference/src/job-validator.mjs",

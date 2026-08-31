@@ -28,10 +28,11 @@ testable inventory**, not a utility consolidation:
    `canonicalJson` implementations remain where they are; consolidating them
    would require the shared valid/invalid/Unicode/number proof that does not
    yet exist.
-3. **Historical digest-bound bytes are not regenerated.** All 21 byte
-   obligations (13 pinned profile implementations, 1 parity-evidence test,
-   1 parity fixture, 6 ledger-name-match files) are verified unchanged on
-   disk against `SHA256SUMS` by the inventory test.
+3. **Historical digest-bound bytes are not regenerated.** All 42 non-self-referential byte
+   obligations (33 pinned profile implementations, 1 parity-evidence test,
+   1 parity fixture, 7 ledger-name-match files) are verified unchanged on
+   disk against `SHA256SUMS` by the inventory test. The three derived census
+   artifacts bind separately through `repository-integrity` to avoid a hash cycle.
 
 ## Scan methodology (single source of truth)
 
@@ -98,8 +99,8 @@ scan supersedes them:
 | Import files | 193 | 171 |
 | Re-export sites | 4 | — |
 | Similar-shape sites | 30 | — |
-| Byte obligations | 21 | — |
-| Pinned profile files | 13 | — |
+| Byte obligations | 42 | — |
+| Pinned profile files | 33 | — |
 
 The large gap between the historical hint (81) and the fresh count (33) is
 expected: the hint was produced by ad-hoc grep methods that disagree with each
@@ -149,20 +150,18 @@ are reproducible on admitted Main by running the census test.
   `canonicalDigest` 2) across contracts, scripts, tools, tests, and src
   families. Every entry carries `equivalence: "not-claimed"`.
 
-## Byte obligations (21) and ledger state
+## Byte obligations (42) and ledger state
 
-Basis categories: `profile-implementation` (13 pinned profile files),
-`parity-evidence` (1), `parity-fixture` (1), `ledger-name-match` (6 —
-`/canonical/i` ledger paths not covered by the other bases: the four
-`docs/evidence/conveyor/terra-psai28{5,6,7,8}-canonical-root-qs-01.json`
-files and the two `examples/company-data/erp-crm-canonical-company-data-pack.*.json`
-files).
+Basis categories: `profile-implementation` (33 pinned profile files),
+`parity-evidence` (1), `parity-fixture` (1), `ledger-name-match` (7).
+The three derived census artifacts are excluded from this set because including
+an artifact's own digest in that artifact would create an impossible hash cycle;
+all three are independently bound by the `repository-integrity` DAG node.
 
-**Ledger quirks (documented, not "fixed"):**
-- 1391 parseable digest lines; 1380 unique paths.
-- 11 paths appear twice (mixed `hash ./path` and `hash path` spellings,
-  identical digests) — no digest conflicts.
-- 12 lines lack the leading `./` prefix and are accepted by the parser.
+**Canonical ledger state:**
+- 1715 parseable digest lines and 1715 unique `./`-prefixed paths;
+- zero duplicate paths and zero digest conflicts;
+- the previously mixed-prefix duplicate tail was normalized mechanically.
 
 The validator requires the obligation set to match exactly (no omitted,
 duplicate, unknown, or tampered entries), each basis to match, and both the
