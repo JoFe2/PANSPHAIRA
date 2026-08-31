@@ -941,6 +941,7 @@ tests/fixtures/ccp-status/quarantined.json	tests/fixtures/ccp-status/quarantined
 tests/fixtures/ccp-status/rebase-required.json	tests/fixtures/ccp-status/rebase-required.json	0644
 tests/fixtures/ccp-supersession/force-push.json	tests/fixtures/ccp-supersession/force-push.json	0644
 tests/fixtures/ccp-supersession/reordered-deliveries.json	tests/fixtures/ccp-supersession/reordered-deliveries.json	0644
+tests/fixtures/canonical-json-profile-base-obligations-v1.json	tests/fixtures/canonical-json-profile-base-obligations-v1.json	0644
 tests/fixtures/cks-04/adapter-transcript-v1.json	tests/fixtures/cks-04/adapter-transcript-v1.json	0644
 tests/fixtures/cks-04/baseline-golden-v1.json	tests/fixtures/cks-04/baseline-golden-v1.json	0644
 tests/fixtures/cks-04/model-profile-template-v1.json	tests/fixtures/cks-04/model-profile-template-v1.json	0644

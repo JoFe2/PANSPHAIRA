@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "pansphaira.canonical-json/base-byte-obligations/v1",
+  "baseCommit": "dac921d459cbcfc16e4912dff558c8786e6438de",
+  "baseLedgerSha256": "549df940019f7014fb6bdd1ebedef9359938e3a64651d766d069794b00293b3b",
+  "pinnedProfiles": [
+    {
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "sha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5"
+    },
+    {
+      "path": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
+      "sha256": "efff63cc5f1d9293a56b892172fed9e6257b186209c693087ebad0fe2b8a1846"
+    },
+    {
+      "path": "packages/contracts/src/canonical-json.js",
+      "sha256": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec"
+    },
+    {
+      "path": "packages/contracts/src/canonical-json.ts",
+      "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826"
+    },
+    {
+      "path": "scripts/cks-07-score-empty-kb.mjs",
+      "sha256": "bfa851a9cd482ba2a3d187596f0349b00537bc1919352fbd024daed1c3eb1d69"
+    },
+    {
+      "path": "scripts/cks-08-validate-public-readback.mjs",
+      "sha256": "a6a6fd01f19bbf5cc45ec6aaa55dd1b4967c6b26617008dce60490fe8e5f815a"
+    },
+    {
+      "path": "scripts/daily-poc.mjs",
+      "sha256": "9dfa75c197150b38331eda7293c754275ba58b53121c9665a9267f1260786016"
+    },
+    {
+      "path": "scripts/refresh-integrity-data.mjs",
+      "sha256": "6bffef78ac4be77ec5ab8c6a043e653d292b1b97d451dcf2db5bfad0979154a8"
+    },
+    {
+      "path": "scripts/render-asf-public-readback.mjs",
+      "sha256": "8cef62545a40571ea167393b82695292e1d0c94dd21a4bd1d6759ae3a18017e8"
+    },
+    {
+      "path": "scripts/verify-secure-default-proof.mjs",
+      "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1"
+    },
+    {
+      "path": "scripts/verify-supply-chain.mjs",
+      "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641"
+    },
+    {
+      "path": "tests/daily-poc.test.mjs",
+      "sha256": "516194226603e1b484d3a6bb9201ea9245499750f0e39c84646be75c32649e09"
+    },
+    {
+      "path": "tools/video-production-reference/src/job-validator.mjs",
+      "sha256": "a1abaca9ff5e319e082de36dd7d42c02889d223aec8c5132139599d34a7d6977"
+    }
+  ],
+  "byteObligations": [
+    {
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "sha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai285-canonical-root-qs-01.json",
+      "sha256": "0d0b3c54c3a711aba2eeda4017ba7e9885ec9b7588ceeeebad03bcb3d4638378",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai286-canonical-root-qs-01.json",
+      "sha256": "ad2b0db60b89fb6df019ae3b04421ee193f8adb3ec3f62e9503ed14998a7e5e7",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai287-canonical-root-qs-01.json",
+      "sha256": "f5a9537a3d77b6b989d0bd377a3a245a7ba485bac4c4ce6078b6221b7cf6c423",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai288-canonical-root-qs-01.json",
+      "sha256": "903a4d4c0b55ffb34e21d0094c8faaaff77f12b337b014d069b927067749eebf",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "examples/company-data/erp-crm-canonical-company-data-pack.example.json",
+      "sha256": "cc0b1b1942365307c08a6396602dd0ac03732b92cdc5cc8931051ecffbe52658",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "examples/company-data/erp-crm-canonical-company-data-pack.schema.json",
+      "sha256": "9ff3d2f0c17837c1cf60d36600fb3853f13012695c68c81a5d8bc19a582739ac",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
+      "sha256": "efff63cc5f1d9293a56b892172fed9e6257b186209c693087ebad0fe2b8a1846",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "packages/contracts/src/canonical-json.js",
+      "sha256": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "packages/contracts/src/canonical-json.ts",
+      "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/cks-07-score-empty-kb.mjs",
+      "sha256": "bfa851a9cd482ba2a3d187596f0349b00537bc1919352fbd024daed1c3eb1d69",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/cks-08-validate-public-readback.mjs",
+      "sha256": "a6a6fd01f19bbf5cc45ec6aaa55dd1b4967c6b26617008dce60490fe8e5f815a",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/daily-poc.mjs",
+      "sha256": "9dfa75c197150b38331eda7293c754275ba58b53121c9665a9267f1260786016",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/refresh-integrity-data.mjs",
+      "sha256": "6bffef78ac4be77ec5ab8c6a043e653d292b1b97d451dcf2db5bfad0979154a8",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/render-asf-public-readback.mjs",
+      "sha256": "8cef62545a40571ea167393b82695292e1d0c94dd21a4bd1d6759ae3a18017e8",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/verify-secure-default-proof.mjs",
+      "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/verify-supply-chain.mjs",
+      "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "tests/canonical-json-runtime-parity.test.mjs",
+      "sha256": "929ab3a426ed99e3aaadf00b0a8ffe6866503bdaadebbd348995a871b63f2ed2",
+      "basis": "parity-evidence"
+    },
+    {
+      "path": "tests/daily-poc.test.mjs",
+      "sha256": "516194226603e1b484d3a6bb9201ea9245499750f0e39c84646be75c32649e09",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "tests/fixtures/asf-bundle-lock/noncanonical.json",
+      "sha256": "76b850174440a13247ba98a3217cb9429dc9390c920b23ed030bc7bd25f97974",
+      "basis": "parity-fixture"
+    },
+    {
+      "path": "tools/video-production-reference/src/job-validator.mjs",
+      "sha256": "a1abaca9ff5e319e082de36dd7d42c02889d223aec8c5132139599d34a7d6977",
+      "basis": "profile-implementation"
+    }
+  ],
+  "nonclaims": [
+    "This fixture does not prove canonicalizer equivalence.",
+    "This fixture binds only historical bytes present in the admitted base."
+  ]
+}

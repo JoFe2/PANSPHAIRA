@@ -41,6 +41,7 @@ import { fileURLToPath } from "node:url";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..", "..");
 const INVENTORY_PATH = path.join(ROOT, "verification", "canonical-json-profile-inventory-v1.json");
+const BASE_OBLIGATIONS_PATH = path.join(ROOT, "tests", "fixtures", "canonical-json-profile-base-obligations-v1.json");
 const LEDGER_PATH = path.join(ROOT, "SHA256SUMS");
 const DAG_PATH = path.join(ROOT, "verification", "verification-dag-v2.json");
 
@@ -64,6 +65,7 @@ const SELF_TEST_FILE = "tests/canonical-json-profile-inventory.test.ts";
 const INTEGRATION_OWNER_NODE = "repository-integrity";
 const INTEGRATION_ARTIFACT_INPUTS = [
   { path: "docs/architecture/canonical-json-profile-inventory.md", role: "DERIVED_EVIDENCE" },
+  { path: "tests/fixtures/canonical-json-profile-base-obligations-v1.json", role: "FIXTURE" },
   { path: "verification/canonical-json-profile-inventory-v1.json", role: "CONTRACT" },
   { path: SELF_TEST_FILE, role: "VALIDATOR" },
 ] as const;
@@ -85,10 +87,10 @@ const EXPECTED_COUNTS = {
   importFiles: 193,
   reexportSites: 4,
   similarShapeSites: 30,
-  byteObligations: 42,
-  pinnedProfileFiles: 33,
+  byteObligations: 21,
+  pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1715, uniquePaths: 1715, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1716, uniquePaths: 1716, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -136,6 +138,14 @@ interface ByteObligation {
   path: string;
   sha256: string;
   basis: string;
+}
+
+interface BaseObligations {
+  schemaVersion: string;
+  baseCommit: string;
+  baseLedgerSha256: string;
+  pinnedProfiles: Array<{ path: string; sha256: string }>;
+  byteObligations: ByteObligation[];
 }
 
 function compareStrings(a: string, b: string): number {
@@ -389,28 +399,11 @@ function validateIntegrationOwnership(doc: Record<string, unknown>, errors: stri
  *    (basis: ledger-name-match)
  */
 function expectedByteObligations(scan: ScanResult, ledger: LedgerResult): ByteObligation[] {
-  const out: ByteObligation[] = [];
-  const seen = new Set<string>();
-  const add = (filePath: string, basis: string): void => {
-    if (seen.has(filePath)) return;
-    const digest = ledger.entries.get(filePath);
-    if (digest === undefined) return;
-    out.push({ path: filePath, sha256: digest, basis });
-    seen.add(filePath);
-  };
-  for (const decl of scan.declarations) add(decl.file, "profile-implementation");
-  add(PARITY_TEST_FILE, "parity-evidence");
-  add(PARITY_FIXTURE_FILE, "parity-fixture");
-  const sortedEntries = [...ledger.entries.entries()].sort((a, b) => compareStrings(a[0], b[0]));
-  const integrationArtifacts = new Set<string>(INTEGRATION_ARTIFACT_INPUTS.map((input) => input.path));
-  for (const [filePath, digest] of sortedEntries) {
-    // These three files are derived together and bind through repository-integrity.
-    // Including their own digests here would create an impossible hash cycle.
-    if (integrationArtifacts.has(filePath) || seen.has(filePath) || !CANONICAL_NAME_RE.test(filePath)) continue;
-    out.push({ path: filePath, sha256: digest, basis: "ledger-name-match" });
-    seen.add(filePath);
-  }
-  return out.sort((a, b) => compareStrings(a.path, b.path));
+  void scan;
+  void ledger;
+  return loadBaseObligations().byteObligations
+    .map((obligation) => ({ ...obligation }))
+    .sort((a, b) => compareStrings(a.path, b.path));
 }
 
 /**
@@ -435,6 +428,7 @@ function validateInventory(inv: unknown, scan: ScanResult, ledger: LedgerResult)
   } else {
     const scanDeclarations = new Map<string, Declaration>();
     for (const decl of scan.declarations) scanDeclarations.set(decl.file, decl);
+    const basePinnedProfiles = new Map(loadBaseObligations().pinnedProfiles.map((item) => [item.path, item.sha256]));
     const seenFiles = new Set<string>();
     const knownFiles = new Set<string>();
 
@@ -471,13 +465,13 @@ function validateInventory(inv: unknown, scan: ScanResult, ledger: LedgerResult)
         }
       }
 
-      const inLedger = ledger.entries.has(file);
-      const expectedDigest = ledger.entries.get(file);
+      const expectedDigest = basePinnedProfiles.get(file);
+      const pinnedInBase = expectedDigest !== undefined;
       if (pinned === null) {
         errors.push(`structure-invalid:profiles[${index}].pinned`);
       } else {
-        if (pinned !== inLedger) errors.push(`pin-state-mismatch:${file}`);
-        if (inLedger) {
+        if (pinned !== pinnedInBase) errors.push(`pin-state-mismatch:${file}`);
+        if (pinnedInBase) {
           if (sha256 !== expectedDigest) errors.push(`byte-obligation-mismatch:${file}#recorded`);
           const onDisk = sha256OfFile(file);
           if (onDisk === null || onDisk !== expectedDigest) errors.push(`byte-obligation-mismatch:${file}#on-disk`);
@@ -708,6 +702,14 @@ function loadInventory(): unknown {
   return JSON.parse(readFileSync(INVENTORY_PATH, "utf8"));
 }
 
+function loadBaseObligations(): BaseObligations {
+  const value = JSON.parse(readFileSync(BASE_OBLIGATIONS_PATH, "utf8")) as BaseObligations;
+  assert.equal(value.schemaVersion, "pansphaira.canonical-json/base-byte-obligations/v1");
+  assert.equal(value.baseCommit, currentPublicMainCommit());
+  assert.equal(value.baseLedgerSha256, "549df940019f7014fb6bdd1ebedef9359938e3a64651d766d069794b00293b3b");
+  return value;
+}
+
 function validateCurrent(): string[] {
   return validateInventory(loadInventory(), getScan(), getLedger());
 }
@@ -766,14 +768,14 @@ test("every historical digest-bound byte is unchanged on disk", () => {
   }
 });
 
-test("all pinned canonicalization profiles keep their ledger digests", () => {
+test("all base-pinned canonicalization profiles keep their immutable digests", () => {
   const scan = getScan();
-  const ledger = getLedger();
-  const pinned = scan.declarations.filter((d) => ledger.entries.has(d.file));
+  const basePinned = new Map(loadBaseObligations().pinnedProfiles.map((item) => [item.path, item.sha256]));
+  const pinned = scan.declarations.filter((d) => basePinned.has(d.file));
   assert.equal(pinned.length, EXPECTED_COUNTS.pinnedProfileFiles);
   for (const decl of pinned) {
-    const expected = ledger.entries.get(decl.file);
-    assert.equal(sha256OfFile(decl.file), expected, `digest drift for ${decl.file}`);
+    const expected = basePinned.get(decl.file);
+    assert.equal(sha256OfFile(decl.file), expected, `base digest drift for ${decl.file}`);
   }
 });
 
@@ -922,6 +924,22 @@ test("negative: tampered byte obligation digest fails validation", () => {
   assertFails((inv) => {
     inv.byteObligations[0].sha256 = "f".repeat(64);
   }, "byte-obligation-mismatch:");
+});
+
+test("candidate ledger regeneration cannot redefine immutable base obligations", () => {
+  const ledger = getLedger();
+  const mutated: LedgerResult = {
+    ...ledger,
+    entries: new Map(ledger.entries),
+  };
+  const pinned = loadBaseObligations().pinnedProfiles[0];
+  const firstObligation = loadBaseObligations().byteObligations[0];
+  assert.ok(pinned);
+  assert.ok(firstObligation);
+  mutated.entries.set(pinned.path, "f".repeat(64));
+  assert.deepEqual(validateInventory(loadInventory(), getScan(), mutated), []);
+  assert.equal(expectedByteObligations(getScan(), mutated)[0]?.sha256,
+    firstObligation.sha256);
 });
 
 test("negative: similar-shape site never yields an equivalence claim", () => {

@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "42398f2e1936db391d0045c081d3ae30ab14a069415b38afda0720b8321dc652"
+          "sha256": "6729045e87681564692a37a92d77dc67d18f837623828e7cdb81c161e9a0095e"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -521,17 +521,22 @@
         {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "aa8517eaf274cfaec0d8fafcf0a7fbb3b03e76cf7b36501f00e783cd6e77c2b1"
+          "sha256": "98f53741b543fb6037233a9184125a7d77ae04abd2bfb5461e00a03f89d1dd69"
+        },
+        {
+          "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
+          "role": "FIXTURE",
+          "sha256": "082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3"
         },
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "55c30a95acc6ebd8883bec2de278171a19b5ca02bdf89fc70eed139963fecffc"
+          "sha256": "90a001a2ebe52c25de677e2c1046877beca9ccae921390fe93d52c5c8e965225"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "9153744e0550bafa5584f4dbcba992656013f172390e70c0625ffd38ac90af71"
+          "sha256": "29e2907e6a02aaa9c58e8cef3242c06d70fcf0d908448e3205daf393173183c1"
         }
       ],
       "ownedTests": [
