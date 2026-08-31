@@ -39,6 +39,14 @@ contracts/azure-power-platform/readonly-connector.schema.json	contracts/azure-po
 contracts/azure-power-platform/readonly-denial-matrix.schema.json	contracts/azure-power-platform/readonly-denial-matrix.schema.json	0644
 contracts/cks-10/analytic-candidate-return-v1.schema.json	contracts/cks-10/analytic-candidate-return-v1.schema.json	0644
 contracts/cks-10/knowledge-projection-v1.schema.json	contracts/cks-10/knowledge-projection-v1.schema.json	0644
+contracts/cscl-01/capability-candidate-v1.schema.json	contracts/cscl-01/capability-candidate-v1.schema.json	0644
+contracts/cscl-01/evidence-cell-v1.schema.json	contracts/cscl-01/evidence-cell-v1.schema.json	0644
+contracts/cscl-01/holdout-verdict-v1.schema.json	contracts/cscl-01/holdout-verdict-v1.schema.json	0644
+contracts/cscl-01/mapping-receipt-v1.schema.json	contracts/cscl-01/mapping-receipt-v1.schema.json	0644
+contracts/cscl-01/process-pattern-candidate-v1.schema.json	contracts/cscl-01/process-pattern-candidate-v1.schema.json	0644
+contracts/cscl-01/semantic-concept-v1.schema.json	contracts/cscl-01/semantic-concept-v1.schema.json	0644
+contracts/cscl-01/source-fact-v1.schema.json	contracts/cscl-01/source-fact-v1.schema.json	0644
+contracts/cscl-01/system-profile-v1.schema.json	contracts/cscl-01/system-profile-v1.schema.json	0644
 contracts/rks-01/knowledge-ingestion-candidate-v1.schema.json	contracts/rks-01/knowledge-ingestion-candidate-v1.schema.json	0644
 contracts/rks-01/knowledge-promotion-receipt-v1.schema.json	contracts/rks-01/knowledge-promotion-receipt-v1.schema.json	0644
 contracts/rks-01/source-admission-decision-v1.schema.json	contracts/rks-01/source-admission-decision-v1.schema.json	0644
@@ -242,6 +250,7 @@ docs/architecture/cks-11-governed-assets-v1.md	docs/architecture/cks-11-governed
 docs/architecture/cks-12-closed-loop-boundary-v1.md	docs/architecture/cks-12-closed-loop-boundary-v1.md	0644
 docs/architecture/cks-m1/closure-v1.md	docs/architecture/cks-m1/closure-v1.md	0644
 docs/architecture/cks-m1/criterion-traceability-v1.json	docs/architecture/cks-m1/criterion-traceability-v1.json	0644
+docs/architecture/cscl-01-protocol-v1.md	docs/architecture/cscl-01-protocol-v1.md	0644
 docs/architecture/rks-01-real-source-utility-result-v1.md	docs/architecture/rks-01-real-source-utility-result-v1.md	0644
 docs/architecture/rks-01-source-governance-v1.md	docs/architecture/rks-01-source-governance-v1.md	0644
 docs/architecture/rks-02-core-small-vs-raw-result-v1.md	docs/architecture/rks-02-core-small-vs-raw-result-v1.md	0644
@@ -632,6 +641,7 @@ src/cks/governed-receipt-ledger-v1.ts	src/cks/governed-receipt-ledger-v1.ts	0644
 src/cks/knowledge-revalidation-v1.ts	src/cks/knowledge-revalidation-v1.ts	0644
 src/cks/shadow-workflow-replay-v1.ts	src/cks/shadow-workflow-replay-v1.ts	0644
 src/cks/workflow-applicability-v1.ts	src/cks/workflow-applicability-v1.ts	0644
+src/cscl-01/protocol.mjs	src/cscl-01/protocol.mjs	0644
 src/rks-01/application-guide-projector.mjs	src/rks-01/application-guide-projector.mjs	0644
 src/rks-01/comparator.mjs	src/rks-01/comparator.mjs	0644
 src/rks-01/corpus-builder.mjs	src/rks-01/corpus-builder.mjs	0644
@@ -785,6 +795,7 @@ tests/company-data-graph.test.mjs	tests/company-data-graph.test.mjs	0644
 tests/company-data-pack.test.mjs	tests/company-data-pack.test.mjs	0644
 tests/contribution-intake-ledger.test.ts	tests/contribution-intake-ledger.test.ts	0644
 tests/crm-read-connector.test.ts	tests/crm-read-connector.test.ts	0644
+tests/cscl-01/protocol.test.mjs	tests/cscl-01/protocol.test.mjs	0644
 tests/demo-admin-ai-poc.test.mjs	tests/demo-admin-ai-poc.test.mjs	0644
 tests/demo-approval-workbench.test.mjs	tests/demo-approval-workbench.test.mjs	0644
 tests/demo-enforcement-gate.test.mjs	tests/demo-enforcement-gate.test.mjs	0644
@@ -1010,6 +1021,10 @@ tests/fixtures/cks-router-dry-run/rejections-v1.json	tests/fixtures/cks-router-d
 tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json	tests/fixtures/cks-shadow-evaluation/shadow-golden-v1.json	0644
 tests/fixtures/crm-read/contract-v1.json	tests/fixtures/crm-read/contract-v1.json	0644
 tests/fixtures/crm-read/supported-export-v1.json	tests/fixtures/crm-read/supported-export-v1.json	0644
+tests/fixtures/cscl-01/adversarial-cases-v1.json	tests/fixtures/cscl-01/adversarial-cases-v1.json	0644
+tests/fixtures/cscl-01/decision-rule-v1.json	tests/fixtures/cscl-01/decision-rule-v1.json	0644
+tests/fixtures/cscl-01/question-inventory-v1.json	tests/fixtures/cscl-01/question-inventory-v1.json	0644
+tests/fixtures/cscl-01/source-selector-set-v1.json	tests/fixtures/cscl-01/source-selector-set-v1.json	0644
 tests/fixtures/erp-read/contract-v1.json	tests/fixtures/erp-read/contract-v1.json	0644
 tests/fixtures/erp-read/supported-export-v1.json	tests/fixtures/erp-read/supported-export-v1.json	0644
 tests/fixtures/extension-assurance/negative-matrix-v1.json	tests/fixtures/extension-assurance/negative-matrix-v1.json	0644
@@ -1343,6 +1358,7 @@ verification/cks-12/readonly-candidate-receipt-v1.json	verification/cks-12/reado
 verification/cks-12/story-step-version-receipt-v1.json	verification/cks-12/story-step-version-receipt-v1.json	0644
 verification/closure-psai289-v1.json	verification/closure-psai289-v1.json	0644
 verification/closure-psai290-v1.json	verification/closure-psai290-v1.json	0644
+verification/cscl-01-protocol-freeze-receipt-v1.json	verification/cscl-01-protocol-freeze-receipt-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644

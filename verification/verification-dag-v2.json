@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 33,
+  "graphVersion": 34,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "195173ef8c8ce79becc6a541f8eb6ad87670218e32ed85ec5df73f46a7ad0739"
+          "sha256": "ccab99378e54afc05d037a53d422c179fc0a5fc27e7e4f017381c0a578779bac"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "cb2ce1d7408f2a3ec3d4a5bba0b0923bc59ed31d6a8e06ccff092eb78af803ca"
+          "sha256": "f40ebc69073458bfb354a2bca8475c63460c3d6683adb165523f1bf9fb6b4197"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -506,7 +506,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "2d9b5225e231aaa132ca0175472724985cb19e62c3eb6187472499534cc266d5"
+          "sha256": "91584d65b692da38a4cb4d11fe56b795414f83e5d4c4a7421d953f24b83c36d0"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -917,7 +917,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "0dae200880a239b3ce1443631aa744375e9df1c66f72104cd2927bcf81edde26"
+          "sha256": "314b0389adb8896934397a5e24e98277028848ef4c1a8ba4e2fedeb57f3a039c"
         },
         {
           "path": "package-lock.json",
@@ -984,7 +984,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "b4ecdf92eb5415797229e84209ad6aecce7c240bddbda3d5e34873733d7ba563"
+          "sha256": "ee1dba77c6ae78c0f602da7fd3393ea654e4c417adfb94285c215ad14bbf7a0a"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1159,7 +1159,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "b7b018b1fe368f0f6694620f277977a1e67849d70b9a30429355bef51a126e1e"
+          "sha256": "e498823c84f00a1a17fb9ab68f6b3a6c3aff1c9ceeaf41aedd1088f341e72155"
         }
       ],
       "ownedTests": [
@@ -4977,6 +4977,106 @@
         "The incompatible Large Reference is not loaded, assigned, compared or used as a gate.",
         "Token cost improvement cannot override failed quality, grounding, applicability, update or authority gates.",
         "The terminal FALSIFIED_WITH_EVIDENCE verdict is derived from raw receipts and makes no general small-model claim."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-01-cross-system-protocol-freeze-v1",
+      "dependsOn": [
+        "rks-02-core-small-vs-raw-falsification-v1"
+      ],
+      "inputs": [
+        {
+          "path": "contracts/cscl-01/capability-candidate-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "46560ff6be61302c9acdd5bda362e49807e1aae97e29fb150bb7bf20cfa9f767"
+        },
+        {
+          "path": "contracts/cscl-01/evidence-cell-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "6776f9f53a6b98d2a3d4bfc4dd5232a54503577a91fe28bf9bac92046a97e5e3"
+        },
+        {
+          "path": "contracts/cscl-01/holdout-verdict-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "74b32b470a65c1393f6ffc30f6a1fa704e7ee3e767bd901ffc81ed089c6d788d"
+        },
+        {
+          "path": "contracts/cscl-01/mapping-receipt-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "485b0374c45f9dca616638e6c73040b4b3d606fa21f7e9da55df4576efbf9d1b"
+        },
+        {
+          "path": "contracts/cscl-01/process-pattern-candidate-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "1f9c5baf35f76d1bc8b9ff2449581ef14f439337e7d901a5d20f4b525549d191"
+        },
+        {
+          "path": "contracts/cscl-01/semantic-concept-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "1ecf78c4646c422f6a1f9cd7996e0d16092d708cef5608e1f1ff2b9bb6476456"
+        },
+        {
+          "path": "contracts/cscl-01/source-fact-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "970b382dfc688bca9d651a34e14b2bb76dfa4d980b9a1cfbd11a1262745b29fc"
+        },
+        {
+          "path": "contracts/cscl-01/system-profile-v1.schema.json",
+          "role": "CONTRACT",
+          "sha256": "ffa082f7c63871edc70fe2545313b18c74c5ab189350c1f1b595c65455a4845a"
+        },
+        {
+          "path": "docs/architecture/cscl-01-protocol-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "817a889e5f6b0232e02b54f899254f5975d8a644c0c732b149811b25bd78ef60"
+        },
+        {
+          "path": "src/cscl-01/protocol.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c49962d26af791ed0c3e1c723462419bf9687e63d3f22c2e648d82295d61b3fc"
+        },
+        {
+          "path": "tests/cscl-01/protocol.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "4187f4ff006d3dc87dd81b0d138a32dc010117e72554920a5535be7d7ce31aaa"
+        },
+        {
+          "path": "tests/fixtures/cscl-01/adversarial-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "941fbb0c652afab0b5d25b2a5d7f8699db6fc751297432bc7f74f5fc2d2f150f"
+        },
+        {
+          "path": "tests/fixtures/cscl-01/decision-rule-v1.json",
+          "role": "FIXTURE",
+          "sha256": "60a00792c5966c19cf12e6a78dc2db2a43774e2cc29d2913792c4473c0a29873"
+        },
+        {
+          "path": "tests/fixtures/cscl-01/question-inventory-v1.json",
+          "role": "FIXTURE",
+          "sha256": "caf52e0bfb5dcbf506705bfbe98d9eee8cbc8fc1d28cf10ad41ea76fa33315ca"
+        },
+        {
+          "path": "tests/fixtures/cscl-01/source-selector-set-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f3bc8dab9cc3de5f8e17b28a461a59f2ae3366f77ba2a2ef68077ebb5c6edf1f"
+        },
+        {
+          "path": "verification/cscl-01-protocol-freeze-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "92840cae8be43a32b1dc4330465f232b2fa87cb519ffc7d48f6519a5daf6457d"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl01:test"
+      ],
+      "invariants": [
+        "Six system identities and legal bytes freeze before business-semantic capture.",
+        "Training profiles preserve source-native terminology; cross-system abstraction begins only after five released profiles.",
+        "Common core requires complete five-system cells, at least four evidence-backed equivalences and zero unresolved conflict.",
+        "Candidate bytes freeze before iDempiere semantics and cannot be edited by holdout evidence.",
+        "Frequency, lexical similarity, caller digests and model claims grant no equivalence or Authority."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
