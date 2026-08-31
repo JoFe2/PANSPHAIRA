@@ -243,6 +243,7 @@ docs/VERIFICATION-FABRIC-SHADOW.md	docs/VERIFICATION-FABRIC-SHADOW.md	0644
 docs/VISIBILITY-CHANNEL-MATRIX.md	docs/VISIBILITY-CHANNEL-MATRIX.md	0644
 docs/VOICE-LOCAL-PTT.md	docs/VOICE-LOCAL-PTT.md	0644
 docs/alternatives.md	docs/alternatives.md	0644
+docs/architecture/canonical-json-profile-inventory.md	docs/architecture/canonical-json-profile-inventory.md	0644
 docs/architecture/cks-10-analytics-bridge-decision-v1.md	docs/architecture/cks-10-analytics-bridge-decision-v1.md	0644
 docs/architecture/cks-11-function-extraction-v1.md	docs/architecture/cks-11-function-extraction-v1.md	0644
 docs/architecture/cks-11-governance-decision-v1.md	docs/architecture/cks-11-governance-decision-v1.md	0644
@@ -701,6 +702,7 @@ tests/builder-discovery.test.ts	tests/builder-discovery.test.ts	0644
 tests/builder-integration-plan.test.ts	tests/builder-integration-plan.test.ts	0644
 tests/builder-quality-evidence.test.ts	tests/builder-quality-evidence.test.ts	0644
 tests/builder-reuse-conformance.test.mjs	tests/builder-reuse-conformance.test.mjs	0644
+tests/canonical-json-profile-inventory.test.ts	tests/canonical-json-profile-inventory.test.ts	0644
 tests/canonical-json-runtime-parity.test.mjs	tests/canonical-json-runtime-parity.test.mjs	0644
 tests/capability-catalogue.test.ts	tests/capability-catalogue.test.ts	0644
 tests/ccp-admission-gate.test.ts	tests/ccp-admission-gate.test.ts	0644
@@ -939,6 +941,7 @@ tests/fixtures/ccp-status/quarantined.json	tests/fixtures/ccp-status/quarantined
 tests/fixtures/ccp-status/rebase-required.json	tests/fixtures/ccp-status/rebase-required.json	0644
 tests/fixtures/ccp-supersession/force-push.json	tests/fixtures/ccp-supersession/force-push.json	0644
 tests/fixtures/ccp-supersession/reordered-deliveries.json	tests/fixtures/ccp-supersession/reordered-deliveries.json	0644
+tests/fixtures/canonical-json-profile-base-obligations-v1.json	tests/fixtures/canonical-json-profile-base-obligations-v1.json	0644
 tests/fixtures/cks-04/adapter-transcript-v1.json	tests/fixtures/cks-04/adapter-transcript-v1.json	0644
 tests/fixtures/cks-04/baseline-golden-v1.json	tests/fixtures/cks-04/baseline-golden-v1.json	0644
 tests/fixtures/cks-04/model-profile-template-v1.json	tests/fixtures/cks-04/model-profile-template-v1.json	0644
@@ -1327,6 +1330,7 @@ tsconfig.json	tsconfig.json	0644
 verification/awi-03-knowledge-envelope-evidence-v1.json	verification/awi-03-knowledge-envelope-evidence-v1.json	0644
 verification/bi-002-crm-read-connector-evidence-v1.json	verification/bi-002-crm-read-connector-evidence-v1.json	0644
 verification/bi-003-erp-read-connector-evidence-v1.json	verification/bi-003-erp-read-connector-evidence-v1.json	0644
+verification/canonical-json-profile-inventory-v1.json	verification/canonical-json-profile-inventory-v1.json	0644
 verification/cks-03-public-manifests-v1.json	verification/cks-03-public-manifests-v1.json	0644
 verification/cks-04-baseline-manifest-template-v1.json	verification/cks-04-baseline-manifest-template-v1.json	0644
 verification/cks-04-no-finetune-baseline-evidence-v1.json	verification/cks-04-no-finetune-baseline-evidence-v1.json	0644

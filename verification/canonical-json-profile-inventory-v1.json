@@ -1,0 +1,773 @@
+{
+  "title": "Canonical JSON / digest profile inventory v1 (FND-PS-04)",
+  "taskId": "CAMPAIGN-V1-FND-PS-04-INTEGRATE-01",
+  "acceptedArtifactCommit": "cfda3f1601b2a0d4430059933a2ca2e2a5107606",
+  "baseCommit": "dac921d459cbcfc16e4912dff558c8786e6438de",
+  "baseRef": "origin/main",
+  "generatedFrom": "fresh mechanical scan on admitted Main (see tests/canonical-json-profile-inventory.test.ts)",
+  "integrationOwnership": {
+    "ownerNode": "repository-integrity",
+    "artifactInputs": [
+      {
+        "path": "docs/architecture/canonical-json-profile-inventory.md",
+        "role": "DERIVED_EVIDENCE"
+      },
+      {
+        "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
+        "role": "FIXTURE"
+      },
+      {
+        "path": "verification/canonical-json-profile-inventory-v1.json",
+        "role": "CONTRACT"
+      },
+      {
+        "path": "tests/canonical-json-profile-inventory.test.ts",
+        "role": "VALIDATOR"
+      }
+    ]
+  },
+  "scanScope": {
+    "roots": [
+      "src",
+      "packages",
+      "scripts",
+      "demo",
+      "tools",
+      "tests",
+      "benchmarks",
+      "docs"
+    ],
+    "skipDirs": [
+      "node_modules",
+      "dist",
+      ".git"
+    ],
+    "extensions": [
+      ".ts",
+      ".mts",
+      ".cts",
+      ".js",
+      ".mjs",
+      ".cjs"
+    ],
+    "selfExclusion": "tests/canonical-json-profile-inventory.test.ts is counted in filesScanned but excluded from every census dimension"
+  },
+  "historicalHints": {
+    "declarationSites": 81,
+    "declarationFiles": 80,
+    "importSites": 172,
+    "importFiles": 171,
+    "note": "Historical lexical counts are hints only; the fresh mechanical scan supersedes them (33/33 declaration sites/files; 194/193 import sites/files)."
+  },
+  "uncertainty": [
+    "Ad-hoc grep methods disagree on declaration/import counts; the scanner embedded in tests/canonical-json-profile-inventory.test.ts is the single source of truth.",
+    "Current SHA256SUMS is normalized to 1716 unique ./-prefixed paths with no duplicate or conflicting path digests.",
+    "Owner families derive mechanically from the second path segment under src/, packages/, tools/ (e.g. 'cks' spans src/cks and packages/cks).",
+    "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
+  ],
+  "freshCounts": {
+    "filesScanned": 591,
+    "declarationSites": 33,
+    "declarationFiles": 33,
+    "importSites": 194,
+    "importFiles": 193,
+    "reexportSites": 4,
+    "similarShapeSites": 30,
+    "ledgerEntries": 1716,
+    "ledgerUniquePaths": 1716
+  },
+  "profiles": [
+    {
+      "file": "demo/runtime/enforcement-gate.mjs",
+      "line": 21,
+      "classification": "implementation",
+      "owner": "demo",
+      "pinned": true,
+      "sha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5"
+    },
+    {
+      "file": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
+      "line": 262,
+      "classification": "alias",
+      "owner": "contracts",
+      "pinned": true,
+      "sha256": "efff63cc5f1d9293a56b892172fed9e6257b186209c693087ebad0fe2b8a1846"
+    },
+    {
+      "file": "packages/contracts/src/canonical-json.js",
+      "line": 1,
+      "classification": "implementation",
+      "owner": "contracts",
+      "pinned": true,
+      "sha256": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec"
+    },
+    {
+      "file": "packages/contracts/src/canonical-json.ts",
+      "line": 1,
+      "classification": "implementation",
+      "owner": "contracts",
+      "pinned": true,
+      "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826"
+    },
+    {
+      "file": "scripts/cks-07-score-empty-kb.mjs",
+      "line": 39,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "bfa851a9cd482ba2a3d187596f0349b00537bc1919352fbd024daed1c3eb1d69"
+    },
+    {
+      "file": "scripts/cks-08-validate-public-readback.mjs",
+      "line": 19,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "a6a6fd01f19bbf5cc45ec6aaa55dd1b4967c6b26617008dce60490fe8e5f815a"
+    },
+    {
+      "file": "scripts/cks-09-validate-public-readback.mjs",
+      "line": 35,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "scripts/daily-poc.mjs",
+      "line": 58,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "9dfa75c197150b38331eda7293c754275ba58b53121c9665a9267f1260786016"
+    },
+    {
+      "file": "scripts/refresh-integrity-data.mjs",
+      "line": 9,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "6bffef78ac4be77ec5ab8c6a043e653d292b1b97d451dcf2db5bfad0979154a8"
+    },
+    {
+      "file": "scripts/render-asf-public-readback.mjs",
+      "line": 35,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "8cef62545a40571ea167393b82695292e1d0c94dd21a4bd1d6759ae3a18017e8"
+    },
+    {
+      "file": "scripts/run-cks-12-story-step-check.mjs",
+      "line": 41,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "scripts/verify-secure-default-proof.mjs",
+      "line": 28,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1"
+    },
+    {
+      "file": "scripts/verify-supply-chain.mjs",
+      "line": 10,
+      "classification": "implementation",
+      "owner": "scripts",
+      "pinned": true,
+      "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641"
+    },
+    {
+      "file": "src/cks-12/deterministic-function-cost-parity.ts",
+      "line": 20,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/drift-revalidation-fastpath.ts",
+      "line": 11,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/empty-kb-acquisition-gate.ts",
+      "line": 220,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/experience-diversity-attribution.ts",
+      "line": 10,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/falsification-report-validator.ts",
+      "line": 9,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/governed-promotion-lineage.ts",
+      "line": 116,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/pattern-shadow-workflow.ts",
+      "line": 9,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/prerequisite-receipt-binder.ts",
+      "line": 39,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/readonly-kaleidosphere-bridge.ts",
+      "line": 9,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cks-12/story-step-manifest.ts",
+      "line": 11,
+      "classification": "implementation",
+      "owner": "cks-12",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cscl-01/protocol.mjs",
+      "line": 58,
+      "classification": "implementation",
+      "owner": "cscl-01",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cscl-04/profile-builder.mjs",
+      "line": 96,
+      "classification": "alias",
+      "owner": "cscl-04",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cscl-05/tryton-profile.mjs",
+      "line": 40,
+      "classification": "implementation",
+      "owner": "cscl-05",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cscl-06/profile.mjs",
+      "line": 76,
+      "classification": "implementation",
+      "owner": "cscl-06",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/cscl-07/matrix.mjs",
+      "line": 6,
+      "classification": "implementation",
+      "owner": "cscl-07",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/rks-01/comparator.mjs",
+      "line": 3,
+      "classification": "implementation",
+      "owner": "rks-01",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/rks-01/deterministic-ingestion.mjs",
+      "line": 20,
+      "classification": "wrapper",
+      "owner": "rks-01",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "src/rks-01/source-governance.mjs",
+      "line": 38,
+      "classification": "implementation",
+      "owner": "rks-01",
+      "pinned": false,
+      "sha256": null
+    },
+    {
+      "file": "tests/daily-poc.test.mjs",
+      "line": 30,
+      "classification": "implementation",
+      "owner": "tests",
+      "pinned": true,
+      "sha256": "516194226603e1b484d3a6bb9201ea9245499750f0e39c84646be75c32649e09"
+    },
+    {
+      "file": "tools/video-production-reference/src/job-validator.mjs",
+      "line": 51,
+      "classification": "implementation",
+      "owner": "video-production-reference",
+      "pinned": true,
+      "sha256": "a1abaca9ff5e319e082de36dd7d42c02889d223aec8c5132139599d34a7d6977"
+    }
+  ],
+  "reexports": [
+    {
+      "file": "demo/openclaw-agent/capability-m1-4-adapter.mjs",
+      "line": 23,
+      "owner": "demo"
+    },
+    {
+      "file": "packages/contracts/src/index.ts",
+      "line": 1,
+      "owner": "contracts"
+    },
+    {
+      "file": "src/cscl-03/profile-builder.mjs",
+      "line": 8,
+      "owner": "cscl-03"
+    },
+    {
+      "file": "src/rks-02/comparator.mjs",
+      "line": 6,
+      "owner": "rks-02"
+    }
+  ],
+  "consumerFamilies": [
+    {
+      "owner": "cks",
+      "importSites": 3,
+      "importFiles": 3
+    },
+    {
+      "owner": "competence-runtime",
+      "importSites": 2,
+      "importFiles": 2
+    },
+    {
+      "owner": "contracts",
+      "importSites": 124,
+      "importFiles": 124
+    },
+    {
+      "owner": "cscl-03",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
+      "owner": "demo",
+      "importSites": 9,
+      "importFiles": 9
+    },
+    {
+      "owner": "dev-worker",
+      "importSites": 2,
+      "importFiles": 2
+    },
+    {
+      "owner": "hmi-adapters",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
+      "owner": "local-knowledge",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
+      "owner": "rks-01",
+      "importSites": 2,
+      "importFiles": 2
+    },
+    {
+      "owner": "rks-02",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
+      "owner": "scripts",
+      "importSites": 8,
+      "importFiles": 8
+    },
+    {
+      "owner": "tests",
+      "importSites": 36,
+      "importFiles": 35
+    },
+    {
+      "owner": "usage-insights",
+      "importSites": 2,
+      "importFiles": 2
+    },
+    {
+      "owner": "video-production-reference",
+      "importSites": 2,
+      "importFiles": 2
+    }
+  ],
+  "similarShape": [
+    {
+      "name": "canonicalize",
+      "file": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
+      "line": 255,
+      "owner": "contracts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalDigest",
+      "file": "scripts/cks-08-validate-public-readback.mjs",
+      "line": 27,
+      "owner": "scripts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "scripts/daily-poc.mjs",
+      "line": 46,
+      "owner": "scripts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "scripts/run-cks-10-p21-analysis.mjs",
+      "line": 199,
+      "owner": "scripts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "scripts/validate-cks-10-candidate-return.mjs",
+      "line": 42,
+      "owner": "scripts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "scripts/validate-cks-10-projection-contract.mjs",
+      "line": 42,
+      "owner": "scripts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "scripts/verify-cks-10-p21-replay.mjs",
+      "line": 166,
+      "owner": "scripts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "scripts/verify-cks-10-prerequisites.mjs",
+      "line": 223,
+      "owner": "scripts",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "src/cks-10/read-only-projection-publisher.mjs",
+      "line": 58,
+      "owner": "cks-10",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "encodeCanonical",
+      "file": "src/cscl-01/protocol.mjs",
+      "line": 44,
+      "owner": "cscl-01",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "encodeCanonical",
+      "file": "src/cscl-04/profile-builder.mjs",
+      "line": 88,
+      "owner": "cscl-04",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "encodeCanonical",
+      "file": "src/cscl-05/tryton-profile.mjs",
+      "line": 26,
+      "owner": "cscl-05",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalDigest",
+      "file": "src/rks-01/comparator.mjs",
+      "line": 8,
+      "owner": "rks-01",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "src/rks-01/deterministic-ingestion.mjs",
+      "line": 19,
+      "owner": "rks-01",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "src/rks-01/source-governance.mjs",
+      "line": 30,
+      "owner": "rks-01",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tests/azure-power-platform/authoritative-readback-receipt.test.mjs",
+      "line": 33,
+      "owner": "tests",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
+      "line": 95,
+      "owner": "tests",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tests/azure-power-platform/proposal-approval-execution.test.mjs",
+      "line": 37,
+      "owner": "tests",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tests/azure-power-platform/readonly-denial-matrix.test.mjs",
+      "line": 20,
+      "owner": "tests",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tests/azure-power-platform/readonly-openapi.test.mjs",
+      "line": 60,
+      "owner": "tests",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tests/daily-poc.test.mjs",
+      "line": 22,
+      "owner": "tests",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/run-synthetic-governance-harness.mjs",
+      "line": 57,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/validate-canvas-package.mjs",
+      "line": 32,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/validate-compatibility-migration.mjs",
+      "line": 70,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/validate-enterprise-profile-evidence.mjs",
+      "line": 36,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/validate-limited-production-pilot-decision-packet.mjs",
+      "line": 60,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/validate-observability-dr-evidence.mjs",
+      "line": 40,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/validate-sandbox-preflight.mjs",
+      "line": 81,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/azure-power-platform/verify-zero-residue.mjs",
+      "line": 52,
+      "owner": "azure-power-platform",
+      "equivalence": "not-claimed"
+    },
+    {
+      "name": "canonicalize",
+      "file": "tools/video-production-reference/src/job-validator.mjs",
+      "line": 43,
+      "owner": "video-production-reference",
+      "equivalence": "not-claimed"
+    }
+  ],
+  "byteObligations": [
+    {
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "sha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai285-canonical-root-qs-01.json",
+      "sha256": "0d0b3c54c3a711aba2eeda4017ba7e9885ec9b7588ceeeebad03bcb3d4638378",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai286-canonical-root-qs-01.json",
+      "sha256": "ad2b0db60b89fb6df019ae3b04421ee193f8adb3ec3f62e9503ed14998a7e5e7",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai287-canonical-root-qs-01.json",
+      "sha256": "f5a9537a3d77b6b989d0bd377a3a245a7ba485bac4c4ce6078b6221b7cf6c423",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "docs/evidence/conveyor/terra-psai288-canonical-root-qs-01.json",
+      "sha256": "903a4d4c0b55ffb34e21d0094c8faaaff77f12b337b014d069b927067749eebf",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "examples/company-data/erp-crm-canonical-company-data-pack.example.json",
+      "sha256": "cc0b1b1942365307c08a6396602dd0ac03732b92cdc5cc8931051ecffbe52658",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "examples/company-data/erp-crm-canonical-company-data-pack.schema.json",
+      "sha256": "9ff3d2f0c17837c1cf60d36600fb3853f13012695c68c81a5d8bc19a582739ac",
+      "basis": "ledger-name-match"
+    },
+    {
+      "path": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
+      "sha256": "efff63cc5f1d9293a56b892172fed9e6257b186209c693087ebad0fe2b8a1846",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "packages/contracts/src/canonical-json.js",
+      "sha256": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "packages/contracts/src/canonical-json.ts",
+      "sha256": "666513ba9a89c0eae0daa0e0159a262eb4e0aa105971a151a19bac1a9b6c4826",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/cks-07-score-empty-kb.mjs",
+      "sha256": "bfa851a9cd482ba2a3d187596f0349b00537bc1919352fbd024daed1c3eb1d69",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/cks-08-validate-public-readback.mjs",
+      "sha256": "a6a6fd01f19bbf5cc45ec6aaa55dd1b4967c6b26617008dce60490fe8e5f815a",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/daily-poc.mjs",
+      "sha256": "9dfa75c197150b38331eda7293c754275ba58b53121c9665a9267f1260786016",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/refresh-integrity-data.mjs",
+      "sha256": "6bffef78ac4be77ec5ab8c6a043e653d292b1b97d451dcf2db5bfad0979154a8",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/render-asf-public-readback.mjs",
+      "sha256": "8cef62545a40571ea167393b82695292e1d0c94dd21a4bd1d6759ae3a18017e8",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/verify-secure-default-proof.mjs",
+      "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "scripts/verify-supply-chain.mjs",
+      "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "tests/canonical-json-runtime-parity.test.mjs",
+      "sha256": "929ab3a426ed99e3aaadf00b0a8ffe6866503bdaadebbd348995a871b63f2ed2",
+      "basis": "parity-evidence"
+    },
+    {
+      "path": "tests/daily-poc.test.mjs",
+      "sha256": "516194226603e1b484d3a6bb9201ea9245499750f0e39c84646be75c32649e09",
+      "basis": "profile-implementation"
+    },
+    {
+      "path": "tests/fixtures/asf-bundle-lock/noncanonical.json",
+      "sha256": "76b850174440a13247ba98a3217cb9429dc9390c920b23ed030bc7bd25f97974",
+      "basis": "parity-fixture"
+    },
+    {
+      "path": "tools/video-production-reference/src/job-validator.mjs",
+      "sha256": "a1abaca9ff5e319e082de36dd7d42c02889d223aec8c5132139599d34a7d6977",
+      "basis": "profile-implementation"
+    }
+  ],
+  "equivalence": {
+    "stance": "NOT-PROVEN",
+    "claims": [],
+    "requiredDimensions": [
+      "valid",
+      "invalid",
+      "unicode",
+      "number"
+    ],
+    "missingDimensions": [
+      "unicode",
+      "number"
+    ],
+    "provenScope": "valid and invalid inputs are covered by tests/canonical-json-runtime-parity.test.mjs (digest-pinned); unicode and number equivalence remain unproven, so no profile is declared equivalent to any other"
+  }
+}
