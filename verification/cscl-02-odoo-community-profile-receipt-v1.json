@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "pansphaira.cscl02/profile-verification-receipt/v1",
+  "receiptId": "cscl-02-odoo-community-profile-receipt-v1",
+  "sourceIssue": "https://github.com/JoFe2/PANSPHAIRA/issues/319",
+  "parentIssue": "https://github.com/JoFe2/PANSPHAIRA/issues/317",
+  "releasedBase": {
+    "tag": "2026_08_31_v2",
+    "commit": "201baa3ed96b71e9577189b208435bdbb589fcba"
+  },
+  "capturedAt": "2026-08-31T06:21:46Z",
+  "systemIdentity": {
+    "systemId": "odoo-community",
+    "role": "TRAINING",
+    "repository": "https://github.com/odoo/odoo.git",
+    "version": "19.0",
+    "selector": "refs/heads/19.0",
+    "commit": "1eb4fcdf08ddbc1341bdc8cb8129906722f54bdc",
+    "licenseId": "LGPL-3.0-only"
+  },
+  "capture": {
+    "mode": "EXPLICIT_NETWORK",
+    "offlineReplayDefault": true,
+    "fileCount": 6,
+    "decodedBytes": 338845,
+    "decodedLimitBytes": 20971520,
+    "sourceBundleSha256": "3be1892bf254a8c284b28bc83d45e1c2826658f2ccbb7b534ebb61c29ba31500",
+    "cellSpecsSha256": "5d2d17b582d20c1426422d7639a4e4db2a75355021d1af711b1bc82edb97ebac",
+    "sourceDigests": {
+      "LICENSE": "abc09dad5f84a76e1b0279237053cae16c03228ab27d8d467677054c2bd17eeb",
+      "COPYRIGHT": "86e49232d2162708d05405ed5ff6dc5594b73ef4b0f25d2749cfae13493b620c",
+      "odoo/addons/base/models/res_partner.py": "222b47cea098f83ff4f84dd27f1e9ec7ce4caeb63e24a67e0b9bc59f099e7bb4",
+      "addons/product/models/product_template.py": "a6a814f94a7f7d19b32fc8b4b6e2f52769c3b1d40602346126e55398f75768d4",
+      "addons/product/models/product_product.py": "8c881754357e3a11a594b0d798a1bd9dd3e7b0321575a1624c743719ecd7fc69",
+      "addons/sale/models/sale_order.py": "14ccc1baa548ba20332ef7ed17c517fd92bf67e897fbe00556b417c2aa47bc0e"
+    }
+  },
+  "output": {
+    "sourceFacts": 36,
+    "evidenceCells": 36,
+    "familyQuestionPairs": 36,
+    "sourceNativeTerms": 90,
+    "states": {
+      "SUPPORTED": 27,
+      "ABSENT": 3,
+      "AMBIGUOUS": 6,
+      "VARIANT": 0,
+      "CONFLICTING": 0,
+      "UNMAPPED": 0
+    },
+    "canonicalBytes": 133639,
+    "canonicalSha256": "23d58e71c999c4b1151899ba53610b21ee21c90da3d986f0872a01a352f18be3",
+    "profileDigest": "343ebbc539302d9ff1611572142177b517172e2f1cdd1df60aa428b4b5be01e6"
+  },
+  "tools": {
+    "parser": { "id": "cscl02-odoo-source-parser", "version": "1.0.0" },
+    "canonicalizer": { "id": "cscl02-canonical-json", "version": "1.0.0" }
+  },
+  "tdd": {
+    "initialRedCommand": "node --test tests/cscl-02/odoo-profile.test.mjs",
+    "initialRedReason": "ERR_MODULE_NOT_FOUND src/cscl-02/odoo-profile.mjs",
+    "lateRedReason": "invented semantics with a retained exact locator was initially accepted before immutable cell-spec digest binding",
+    "greenTests": 6
+  },
+  "verification": {
+    "focused": "6/6 PASS",
+    "cscl01": "16/16 PASS",
+    "syntax": "PASS",
+    "networkRecaptureExact": true,
+    "offlineNetworkCalls": 0,
+    "replayRuns": 2,
+    "replayByteIdentical": true
+  },
+  "nonClaims": [
+    "NO_OTHER_ERP_OR_IDEMPIERE_INSPECTION",
+    "NO_CROSS_SYSTEM_EQUIVALENCE_OR_NORMALIZED_COMMON_CORE",
+    "NO_CAPABILITY_CANDIDATE",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "NO_PRODUCTION_SUPPORT_COMPATIBILITY_PROCUREMENT_OR_CUSTOMER_FIT_CLAIM"
+  ],
+  "boundary": { "authorityGrant": "NONE", "promotionGrant": "NONE", "executionGrant": "NONE" }
+}

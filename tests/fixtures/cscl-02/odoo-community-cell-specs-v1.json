@@ -1,0 +1,367 @@
+{
+  "schemaVersion": "pansphaira.cscl02/cell-specs/v1",
+  "cells": [
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "claim": "`res.partner` is described as `Contact`; its native fields distinguish `company_type` values `person` and `company`, and expose `Customer` as the `partner_id` label on `sale.order`.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "class ResPartner(models.Model):\n    _name = 'res.partner'\n    _description = 'Contact'",
+      "counterexamples": [],
+      "terminology": ["res.partner", "Contact", "company_type"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "claim": "`res.partner.parent_id` is the `Related Company` Many2one and `child_ids` is the inverse `Contact` One2many; `category_id` relates contacts to `res.partner.category` tags.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "parent_id: ResPartner = fields.Many2one('res.partner', string='Related Company', index=True)\n    parent_name = fields.Char(related='parent_id.name', readonly=True, string='Parent name')\n    child_ids: ResPartner = fields.One2many('res.partner', 'parent_id', string='Contact'",
+      "counterexamples": [],
+      "terminology": ["parent_id", "Related Company", "child_ids", "category_id"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "claim": "The `ResPartner` model overrides source-native ORM operations `create`, `write`, and deletion guarding through `_unlink_if_partner_in_account`.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "@api.model_create_multi\n    def create(self, vals_list):\n        if self.env.context.get('import_file')",
+      "counterexamples": [],
+      "terminology": ["create", "write", "_unlink_if_partner_in_account"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "claim": "`create` accepts `vals_list`, cleans `website`, clears `company_name` when `parent_id` is supplied, calls `super().create(vals_list)`, and returns the created `partners` recordset.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "for vals in vals_list:\n            if vals.get('website'):\n                vals['website'] = self._clean_website(vals['website'])\n            if vals.get('parent_id'):\n                vals['company_name'] = False\n        partners = super().create(vals_list)",
+      "counterexamples": [],
+      "terminology": ["vals_list", "website", "company_name", "partners"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "ABSENT",
+      "claim": "Within captured `res_partner.py`, `active` is a Boolean and `company_type` is a person/company selection; no `res.partner` workflow state selection or named transition table is declared.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "active = fields.Boolean(default=True)\n    employee = fields.Boolean(help=\"Check this box if this contact is an Employee.\")",
+      "counterexamples": ["Search scope: the complete captured `odoo/addons/base/models/res_partner.py`; `state = fields.Selection` and a `res.partner` transition table are absent."],
+      "terminology": ["active", "company_type"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "events",
+      "state": "AMBIGUOUS",
+      "claim": "`@api.onchange('company_type')` updates `is_company`; the captured model identifies this onchange hook but does not label it as a domain event.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "@api.onchange('company_type')\n    def onchange_company_type(self):\n        self.is_company = (self.company_type == 'company')",
+      "counterexamples": ["The source-native construct is an `api.onchange` method; no broader event contract is asserted."],
+      "terminology": ["onchange_company_type", "is_company"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "claim": "Archiving through `write({'active': False})` requires that no linked active `res.users` prevents the operation; the implementation redirects authorized users or raises `ValidationError` otherwise.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "if vals.get('active') is False:\n            # DLE: It should not be necessary to modify this to make work the ORM.",
+      "counterexamples": [],
+      "terminology": ["active", "res.users", "write"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "claim": "`_check_parent_id` rejects recursive Partner hierarchies, and `_check_partner_company` requires a partner representing a company to carry the matching `company_id`.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "@api.constrains('parent_id')\n    def _check_parent_id(self):\n        if self._has_cycle():\n            raise ValidationError(_('You cannot create recursive Partner hierarchies.'))",
+      "counterexamples": [],
+      "terminology": ["_check_parent_id", "Partner hierarchies", "company_id"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "claim": "The model raises `ValidationError` for recursive Partner hierarchies and duplicate partner barcodes, and `RedirectWarning` or `ValidationError` when archiving a contact linked to an active user.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "raise ValidationError(_('Another partner already has this barcode'))",
+      "counterexamples": [],
+      "terminology": ["ValidationError", "RedirectWarning", "barcode"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "claim": "Observable fields include `complete_name`, `email_formatted`, `display_name`, and the `active` flag; `create` returns the `partners` recordset and `write` returns its result.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "complete_name = fields.Char(compute='_compute_complete_name', store=True, index=True)",
+      "counterexamples": [],
+      "terminology": ["complete_name", "email_formatted", "display_name", "active"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "ABSENT",
+      "claim": "The captured `res.partner` model source declares ORM model methods but no `@route`, JSON-RPC, XML-RPC, or documented service endpoint for these behaviors.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "class ResPartner(models.Model):",
+      "counterexamples": ["Search scope: the complete captured `res_partner.py`; no `@route`, `jsonrpc`, `xmlrpc`, or service endpoint declaration occurs."],
+      "terminology": ["res.partner"]
+    },
+    {
+      "family": "PARTY_CUSTOMER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "AMBIGUOUS",
+      "claim": "`res.partner` is described as `Contact`, while `sale.order.partner_id` is labeled `Customer`; the captured bytes do not define these labels as separate models or establish a cross-system concept.",
+      "path": "odoo/addons/base/models/res_partner.py",
+      "anchor": "_description = 'Contact'",
+      "counterexamples": ["The same native model can be referenced under a field labeled `Customer`; no equivalence beyond this exact Odoo relation is inferred."],
+      "terminology": ["res.partner", "Contact", "Customer"]
+    },
+
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "claim": "`product.template` is described as `Product`, while `product.product` is described as `Product Variant` and delegates template fields through `product_tmpl_id`.",
+      "path": "addons/product/models/product_product.py",
+      "anchor": "class ProductProduct(models.Model):\n    _name = 'product.product'\n    _description = \"Product Variant\"\n    _inherits = {'product.template': 'product_tmpl_id'}",
+      "counterexamples": [],
+      "terminology": ["product.template", "Product", "product.product", "Product Variant"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "claim": "`product.template.product_variant_ids` is a One2many to `product.product`; each variant requires a cascading `product_tmpl_id`, and `product_template_attribute_value_ids` records its Attribute Values.",
+      "path": "addons/product/models/product_product.py",
+      "anchor": "product_tmpl_id = fields.Many2one(\n        'product.template', 'Product Template',\n        bypass_search_access=True, index=True, ondelete=\"cascade\", required=True)",
+      "counterexamples": [],
+      "terminology": ["product_variant_ids", "product_tmpl_id", "product_template_attribute_value_ids"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "claim": "`ProductTemplate` overrides `create` and `write`; creation calls `_create_variant_ids`, while writes affecting attribute lines or reactivation can also call `_create_variant_ids`.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "@api.model_create_multi\n    def create(self, vals_list):\n        ''' Store the initial standard price",
+      "counterexamples": [],
+      "terminology": ["ProductTemplate", "create", "write", "_create_variant_ids"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "claim": "`ProductTemplate.create(vals_list)` consumes value dictionaries, creates templates, creates variants unless `create_product_product` is false in context, and returns `templates`.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "templates = super(ProductTemplate, self).create(vals_list)\n        if self.env.context.get(\"create_product_product\", True):\n            templates._create_variant_ids()",
+      "counterexamples": [],
+      "terminology": ["vals_list", "templates", "create_product_product"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "AMBIGUOUS",
+      "claim": "`product.template.active` and `product.product.active` are Boolean archive flags; captured product model bytes do not declare a named product workflow-state selection or transition table.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "active = fields.Boolean('Active', default=True, help=\"If unchecked, it will allow you to hide the product without removing it.\")",
+      "counterexamples": ["Search scope: complete captured `product_template.py` and `product_product.py`; lifecycle behavior is an `active` archive flag, not a declared workflow state machine."],
+      "terminology": ["active", "Product", "Product Variant"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "claim": "`@api.onchange('standard_price')`, `@api.onchange('type')`, and `@api.onchange('uom_id')` are source-native onchange hooks; changing `uom_id` can return a warning describing updates to existing Sales orders and Purchase orders.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "@api.onchange('uom_id')\n    def _onchange_uom_id(self):",
+      "counterexamples": [],
+      "terminology": ["_onchange_standard_price", "_onchange_type", "_onchange_uom_id"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "claim": "A `combo` Product must have `combo_ids`; a sellable combo may contain only products with `sale_ok`, and changing a Product to combo is rejected when it has attributes or is already part of a combo.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "if template.type == 'combo' and not template.combo_ids:\n                raise ValidationError(_(\"A combo product must contain at least 1 combo choice.\"))",
+      "counterexamples": [],
+      "terminology": ["combo", "combo_ids", "sale_ok"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "claim": "`product.product` enforces at most one active variant for each `(product_tmpl_id, combination_indices)` combination through `_combination_unique`.",
+      "path": "addons/product/models/product_product.py",
+      "anchor": "_combination_unique = models.UniqueIndex(\"(product_tmpl_id, combination_indices) WHERE active IS TRUE\")",
+      "counterexamples": [],
+      "terminology": ["_combination_unique", "product_tmpl_id", "combination_indices"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "claim": "Product model validation raises `ValidationError` when Cost is negative or combo constraints fail, and raises `UserError` when combo type conflicts with attributes or combo membership.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "raise ValidationError(_(\"The cost of a product can't be negative.\"))",
+      "counterexamples": [],
+      "terminology": ["ValidationError", "UserError", "Cost", "combo"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "claim": "Observable product results include `product_variant_ids`, `product_variant_count`, `default_code`, `barcode`, `list_price`, `standard_price`, and `active`; `create` returns the `templates` recordset.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "product_variant_ids = fields.One2many('product.product', 'product_tmpl_id', 'Products', required=True)",
+      "counterexamples": [],
+      "terminology": ["product_variant_ids", "product_variant_count", "default_code", "barcode", "list_price", "standard_price"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "ABSENT",
+      "claim": "The captured Product and Product Variant model sources declare ORM methods but no `@route`, JSON-RPC, XML-RPC, or documented service endpoint for these behaviors.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "class ProductTemplate(models.Model):",
+      "counterexamples": ["Search scope: complete captured `product_template.py` and `product_product.py`; no `@route`, `jsonrpc`, `xmlrpc`, or service endpoint declaration occurs."],
+      "terminology": ["Product", "Product Variant"]
+    },
+    {
+      "family": "PRODUCT_ITEM_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "AMBIGUOUS",
+      "claim": "The source describes `product.template` as `Product` and `product.product` as `Product Variant`; it also labels template `product_variant_ids` as `Products`, so labels alone do not identify one interchangeable object.",
+      "path": "addons/product/models/product_template.py",
+      "anchor": "product_variant_ids = fields.One2many('product.product', 'product_tmpl_id', 'Products', required=True)",
+      "counterexamples": ["The exact Odoo inheritance and relation distinguish template and variant records despite overlapping display labels."],
+      "terminology": ["Product", "Product Variant", "Products"]
+    },
+
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "objects-roles",
+      "state": "SUPPORTED",
+      "claim": "`sale.order` is described as `Sales Order`; its required `partner_id` is labeled `Customer`, `user_id` is labeled `Salesperson`, and `order_line` contains `sale.order.line` Order Lines.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "class SaleOrder(models.Model):\n    _name = 'sale.order'",
+      "counterexamples": [],
+      "terminology": ["sale.order", "Sales Order", "Customer", "Salesperson", "Order Lines"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "relations",
+      "state": "SUPPORTED",
+      "claim": "`sale.order.partner_id`, `partner_invoice_id`, and `partner_shipping_id` relate to `res.partner`; `order_line` relates to `sale.order.line` through inverse `order_id`, and `invoice_ids` relates to `account.move`.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "order_line = fields.One2many(\n        comodel_name='sale.order.line',\n        inverse_name='order_id'",
+      "counterexamples": [],
+      "terminology": ["partner_id", "partner_invoice_id", "partner_shipping_id", "order_line", "invoice_ids"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "operations",
+      "state": "SUPPORTED",
+      "claim": "Native operations include `action_quotation_send`, `action_quotation_sent`, `action_confirm`, `action_cancel`, `action_draft`, `_create_invoices`, `create`, `write`, and deletion guarding through `_unlink_except_draft_or_cancel`.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "def action_confirm(self):\n        \"\"\" Confirm the given quotation(s) and set their confirmation date.",
+      "counterexamples": [],
+      "terminology": ["action_quotation_send", "action_confirm", "action_cancel", "action_draft", "_create_invoices"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "inputs-outputs",
+      "state": "SUPPORTED",
+      "claim": "`create(vals_list)` assigns a `sale.order` sequence name and returns created records; `action_confirm()` operates on quotations, writes confirmation values, and documents a Boolean `True` return.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": ":return: True\n        :rtype: bool\n        :raise: UserError if trying to confirm cancelled SO's",
+      "counterexamples": [],
+      "terminology": ["vals_list", "sale.order", "action_confirm", "True"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "states-transitions",
+      "state": "SUPPORTED",
+      "claim": "`SALE_ORDER_STATE` declares `draft` Quotation, `sent` Quotation Sent, `sale` Sales Order, and `cancel` Cancelled; `action_quotation_sent`, `action_confirm`, `action_cancel`, and `action_draft` perform native transitions.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "SALE_ORDER_STATE = [\n    ('draft', \"Quotation\"),\n    ('sent', \"Quotation Sent\"),\n    ('sale', \"Sales Order\"),\n    ('cancel', \"Cancelled\"),\n]",
+      "counterexamples": [],
+      "terminology": ["SALE_ORDER_STATE", "draft", "sent", "sale", "cancel"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "events",
+      "state": "SUPPORTED",
+      "claim": "`action_quotation_sent` marks a draft quotation as sent, and `action_confirm` confirms quotations and sets their confirmation date; tracked `state` changes are observable through the model's mail tracking inheritance.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "self.write({'state': 'sent'})",
+      "counterexamples": [],
+      "terminology": ["action_quotation_sent", "action_confirm", "confirmation date", "tracking"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "preconditions",
+      "state": "SUPPORTED",
+      "claim": "Only draft orders may be marked sent directly; confirmation calls `_confirmation_error_message`; deletion permits only `draft` or `cancel`; confirmed orders reject `pricelist_id` changes.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "if any(order.state != 'draft' for order in self):\n            raise UserError(_(\"Only draft orders can be marked as sent directly.\"))",
+      "counterexamples": [],
+      "terminology": ["draft", "_confirmation_error_message", "pricelist_id"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "invariants",
+      "state": "SUPPORTED",
+      "claim": "The `_date_order_conditional_required` constraint requires a non-null `date_order` when state is `sale`; `_check_order_line_company_id` rejects products from an inaccessible company branch.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "_date_order_conditional_required = models.Constraint(\n        \"CHECK((state = 'sale' AND date_order IS NOT NULL) OR state != 'sale')\",\n        'A confirmed sales order requires a confirmation date.'",
+      "counterexamples": [],
+      "terminology": ["_date_order_conditional_required", "date_order", "sale", "_check_order_line_company_id"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "exceptions-errors",
+      "state": "SUPPORTED",
+      "claim": "`UserError` is raised for invalid sent/confirm/delete/pricelist operations, while `_check_order_line_company_id` raises `ValidationError` when a quotation contains products from another inaccessible company.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "raise UserError(_(\n                    \"You can not delete a sent quotation or a confirmed sales order.\"",
+      "counterexamples": [],
+      "terminology": ["UserError", "ValidationError", "quotation", "confirmed sales order"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "readbacks",
+      "state": "SUPPORTED",
+      "claim": "Readback fields include `state`, `date_order`, `amount_untaxed`, `amount_tax`, `amount_total`, `invoice_status`, `invoice_ids`, `invoice_count`, `signature`, `signed_by`, and `signed_on`.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "amount_untaxed = fields.Monetary(string=\"Untaxed Amount\", store=True, compute='_compute_amounts', tracking=5)\n    amount_tax = fields.Monetary(string=\"Taxes\", store=True, compute='_compute_amounts')\n    amount_total = fields.Monetary(string=\"Total\", store=True, compute='_compute_amounts', tracking=4)",
+      "counterexamples": [],
+      "terminology": ["state", "date_order", "amount_total", "invoice_status", "invoice_ids"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "api-service-exposure",
+      "state": "AMBIGUOUS",
+      "claim": "`sale.order` inherits `portal.mixin` and computes an `access_url`, but the captured model file declares no `@route`, JSON-RPC, XML-RPC, or complete documented service contract for the listed operations.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "_inherit = ['portal.mixin', 'product.catalog.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin', 'account.document.import.mixin']",
+      "counterexamples": ["Search scope: complete captured `sale_order.py`; portal integration is evidenced, while endpoint routing and a service contract are not declared in this file."],
+      "terminology": ["portal.mixin", "access_url", "sale.order"]
+    },
+    {
+      "family": "SALES_ORDER_MANAGEMENT",
+      "questionId": "absence-ambiguity-conflict",
+      "state": "AMBIGUOUS",
+      "claim": "Native state `sale` is displayed as `Sales Order`, whereas `draft`, `sent`, and `cancel` are rendered by `_compute_type_name` as `Quotation`; labels therefore vary by state and do not establish an external normalized lifecycle.",
+      "path": "addons/sale/models/sale_order.py",
+      "anchor": "if record.state in ('draft', 'sent', 'cancel'):\n                record.type_name = _(\"Quotation\")\n            else:\n                record.type_name = _(\"Sales Order\")",
+      "counterexamples": ["The state keys and display labels are preserved exactly; no cross-system lifecycle correspondence is asserted."],
+      "terminology": ["sale", "Sales Order", "draft", "sent", "cancel", "Quotation"]
+    }
+  ]
+}
