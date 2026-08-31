@@ -1,0 +1,121 @@
+{
+  "schema_version": "pansphaira.fnd-ps-04/exact-head-local-gates/v1",
+  "issue": "https://github.com/JoFe2/PANSPHAIRA/issues/338",
+  "campaign_manifest_sha256": "891a2dc45016fc76c6c65af1b57e84f34df34137fdc107f8e7b1d62077ea8722",
+  "base": "dac921d459cbcfc16e4912dff558c8786e6438de",
+  "product_head": "f92a1ac6552b6d7ef409dabfe4a0b617919740d1",
+  "product_tree": "72009c04acc24ec459e67114f94a5693dd98f849",
+  "changed_paths": [
+    "SHA256SUMS",
+    "docs/architecture/canonical-json-profile-inventory.md",
+    "package.json",
+    "release/public-files.manifest",
+    "scripts/build-public-release.sh",
+    "tests/canonical-json-profile-inventory.test.ts",
+    "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
+    "tests/release-governance.test.mjs",
+    "verification/canonical-json-profile-inventory-v1.json",
+    "verification/verification-dag-v2.json"
+  ],
+  "clean": true,
+  "gates": [
+    {
+      "command": "npm run build --silent",
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/01.log"
+    },
+    {
+      "command": "node --test dist/tests/canonical-json-profile-inventory.test.js",
+      "exit_code": 0,
+      "output_sha256": "c8b97f8dd9202f6e2505ab627b64ce461df1ec9c17ab59457b9ce8f2de5fce3d",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/02.log"
+    },
+    {
+      "command": "node --test tests/canonical-json-runtime-parity.test.mjs",
+      "exit_code": 0,
+      "output_sha256": "4bb7b7e388361823c3dd44820689cf1e09afdd936e820e4905469c00dd5f4dd9",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/03.log"
+    },
+    {
+      "command": "node --test dist/tests/verification-fabric-v2.test.js",
+      "exit_code": 0,
+      "output_sha256": "ad6101fde9cdc81c6431dbcb8e0187a9772b01d0d85ebb18cbe2efbc5cc2cc36",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/04.log"
+    },
+    {
+      "command": "node --test tests/supply-chain-verifier.test.mjs",
+      "exit_code": 0,
+      "output_sha256": "cd84743e175f9e28ead799bb0100da0796128222266d580c748f7125eb1ed57b",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/05.log"
+    },
+    {
+      "command": "npm run release-governance:test",
+      "exit_code": 0,
+      "output_sha256": "a75323714be09ea60c430ce4db9d5689ae612797e4e9efa7494af8a9afcb82f1",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/06.log"
+    },
+    {
+      "command": "sha256sum -c SHA256SUMS",
+      "exit_code": 0,
+      "output_sha256": "ea1c1acd9fe93814faf84cd6d642ec7d0d48bee873fc8d7bdec2e742b18a8b29",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/07.log"
+    },
+    {
+      "command": "npm run verification:plan",
+      "exit_code": 0,
+      "output_sha256": "07b5570dd3384a25e18864a7f25794de0c88aa0ce1462457357c6d2ede0a008e",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/08.log"
+    },
+    {
+      "command": "git diff --check dac921d459cbcfc16e4912dff558c8786e6438de...HEAD",
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_path": "/mnt/data2/ai/development-conveyor/state/receipts/fnd-ps-04-finalizer-gates/09.log"
+    }
+  ],
+  "final_full_suite": {
+    "command": "npm test",
+    "exit_code": 0,
+    "process_session_id": "proc_6f88a50e1f90",
+    "completion_reason": "exited"
+  },
+  "independent_review": {
+    "count": 1,
+    "task_id": "CAMPAIGN-V1-FND-PS-04-ROOT-QS-01",
+    "reviewed_head": "1ecfb087e1c3429ce6d43ad8389ec281c519558f",
+    "classification": "RETURN_TO_WORKER",
+    "findings": [
+      {
+        "id": "FND-PS-04-R01",
+        "status": "CLOSED",
+        "proof": "actual ten-path scope documented and queue final-owner scope updated"
+      },
+      {
+        "id": "FND-PS-04-R02",
+        "status": "CLOSED",
+        "proof": "this exact-head gate receipt plus controller/state receipts"
+      },
+      {
+        "id": "FND-PS-04-R03",
+        "status": "CLOSED",
+        "proof": "immutable admitted-base fixture and candidate-ledger-regeneration denial test"
+      }
+    ]
+  },
+  "nonclaims": [
+    "no canonicalizer equivalence",
+    "no utility consolidation",
+    "no runtime behavior change",
+    "no production/customer-data claim"
+  ],
+  "delivery_required": [
+    "PR exact-head CI",
+    "SHA-bound merge",
+    "Main CI",
+    "daily release",
+    "anonymous readback",
+    "issue close",
+    "queue DONE"
+  ]
+}
