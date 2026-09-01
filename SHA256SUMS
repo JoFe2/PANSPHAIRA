@@ -300,7 +300,7 @@ dbcd3ac598aa743f8a7e4a95cc8c88eb1c5a27672eadced284b72bea74fd3265  ./docs/VISIBIL
 6f96c5b26a2b982aee479ba093f3c8c0afaecf3619df55fdf0a4c18ae633cc4b  ./docs/architecture/cks-11-governance-decision-v1.md
 419ca5a25e3b2adb78065e4230b0a95baf6cd4a6eaed57329be285d267498c99  ./docs/architecture/cks-11-governed-assets-v1.md
 117093e6a57eb4803f764a8307d923c1bcbd933a015084aa442d46cbcdedd5c7  ./docs/architecture/cks-12-closed-loop-boundary-v1.md
-d2d0cd9648306d888b2e952dd20b5a77e5d60e494a990ff750226137e915793f  ./docs/architecture/cks-12-top-level-envelope-policy-v1.md
+d298e5b3af25a3d099b5b74bb8b75a8a2ec5e71bd95d58100174ba7f4175a8e2  ./docs/architecture/cks-12-top-level-envelope-policy-v1.md
 8359bf9bba216727bf61e417995f628b2a0614de66ed7e4e7cdba0eb1c595ffc  ./docs/architecture/cks-m1/closure-v1.md
 4226d79e10ec53b14d8405518961ddddaa09bf527de0836775b56e094450a888  ./docs/architecture/cks-m1/criterion-traceability-v1.json
 817a889e5f6b0232e02b54f899254f5975d8a644c0c732b149811b25bd78ef60  ./docs/architecture/cscl-01-protocol-v1.md
@@ -579,7 +579,7 @@ c06991184e1892993c1792f692927aff168061d40c60c3ba02eb6d43800d2202  ./examples/dai
 ea8d5f564acdae86b6ce054c7fc5dcb0dead50e85c74982d0644a9493879217b  ./examples/poc-release/showcase-v1.json
 01f41d094b67c04b73c86e0677f176b8aa75f5103a967ab9d6bacf5ac6be0fa5  ./examples/poc-setup-planner/catalog-v1.json
 0f6a224183d3d2eb68eebc0c61483c60cb785a93e67259cab264dc54aa2790cf  ./package-lock.json
-e7df8f0f22f17dd5d56f38786b3c80b2eeef9e72c288cfffa81100413cc90bac  ./package.json
+db10e85100ba38107a110b20069cb1cecf314175954060b040862ddd1eea50a1  ./package.json
 187c4a5f5f5c78afe92d737e84aa08061b1cad64ecfb6e14ee84ac6db4398c78  ./packages/cks/src/applicability-aware-retrieval.ts
 b2da58dde3e00766d6c54d52b877b4c32e812382f378d76058993a799563e5f2  ./packages/cks/src/shadow-experience-ablation.ts
 94ab37d40c66c926cc899942a13e47acb43e1e0e207d36e28e7dc2f8e4c3c102  ./packages/cks/src/solution-pattern-candidate-evaluator.ts
@@ -934,7 +934,7 @@ dcf63073aa497aa7180fc987851db65d2f76ed73ad15fb9a909fc2db455f00d5  ./src/cks-12/f
 bbb8a068933045008b3ac603ffe3006d44a0a628ebe92b28add5ee7919f8fc99  ./src/cks-12/governed-promotion-lineage.ts
 4cc7ad94239716bc3b1556d9b8f3de68bb0fd621d9137cf6aecb0c233fc628ff  ./src/cks-12/pattern-shadow-workflow.ts
 0fff95cba1d661318ced1b42466d5215e0b453391cecf92c50676db8c8998199  ./src/cks-12/prerequisite-receipt-binder.ts
-9bb87f1b6b48c5205093d65586cd7171fd94cde9ba745b00bd947073c037bd29  ./src/cks-12/readonly-kaleidosphere-bridge.ts
+60c0022e7bbd312d6c6fcc3b62ed2ac336b670a1d47604166257621420723b10  ./src/cks-12/readonly-kaleidosphere-bridge.ts
 6a4ea91886db764c931482f9dfc6d926459849033c9a801e745bbaa56f7295e6  ./src/cks-12/story-step-manifest.ts
 e7927b33a173c5dc0917e152581e74321fc6838da9a4dd9415ed02bc3ad58206  ./src/cks/deterministic-function-parity-v1.ts
 b81e95e8889df339286849221b6db4157ad5ac2544699457187240b5c97c7ffb  ./src/cks/function-extraction-v1.ts
@@ -1075,7 +1075,7 @@ cff5f1bdd6ccd959600e33a38e655e8c38c40dbb1e9723867c54efe9a73cb513  ./tests/cks-12
 029e9f0adc3320c8316e8909edb5f65972bb045636d6e3da6e83f1466bcd5043  ./tests/cks-12/local-integration.test.ts
 0707ff66feec5a8f72625880ee9b71013e4a00606112a4f368967cc86d48bdec  ./tests/cks-12/pattern-shadow-workflow.test.ts
 00c8d959e64ec109759e305a5d23e6a7b3788f6935caddbebc5ff2e755667d5b  ./tests/cks-12/prerequisite-receipt-binder.test.ts
-e6c45c7cf6bebd0286498a041bc27011b5344e1497364eef3d9a23f2fcae73c4  ./tests/cks-12/readonly-kaleidosphere-bridge.test.ts
+d10c6414c739ff611c964e2d6cab5ef969b5a96dcbfb3f984410fd6b28fdec65  ./tests/cks-12/readonly-kaleidosphere-bridge.test.ts
 f56631fb0123774e7dafec991aa6e7358019af387bc6230b6222cc929d742fbf  ./tests/cks-12/story-step-manifest.test.ts
 8e67ec312db302d9dc9e12639804fade0103b1faa64f97bb750e3e1957a20941  ./tests/cks-applicability-aware-retrieval.test.ts
 ce079acc70238d37f5e27c645565709638e516cae6d5d1f3636659db00575a82  ./tests/cks-competence-runtime.test.ts
@@ -1713,5 +1713,5 @@ ad55a9fcceb49689da31a8ea1c8a5c9871ce99596152326c09cde2b3afe2fbfa  ./verification
 bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification/rks-01-falsification-report-v1.json
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
-82daa6d382f6c662c4ee9ac8f0955abb7a9a3434d87f41b01c5f49ed01873e54  ./verification/verification-dag-v2.json
+f5de069dc80101974b8592d3f98b339e510b5ac066c0d20d61494439b55b5f17  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

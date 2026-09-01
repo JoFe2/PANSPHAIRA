@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 37,
+  "graphVersion": 38,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -948,7 +948,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "e7df8f0f22f17dd5d56f38786b3c80b2eeef9e72c288cfffa81100413cc90bac"
+          "sha256": "db10e85100ba38107a110b20069cb1cecf314175954060b040862ddd1eea50a1"
         },
         {
           "path": "package-lock.json",
@@ -4207,7 +4207,7 @@
         {
           "path": "docs/architecture/cks-12-top-level-envelope-policy-v1.md",
           "role": "CONTRACT",
-          "sha256": "d2d0cd9648306d888b2e952dd20b5a77e5d60e494a990ff750226137e915793f"
+          "sha256": "d298e5b3af25a3d099b5b74bb8b75a8a2ec5e71bd95d58100174ba7f4175a8e2"
         },
         {
           "path": "scripts/run-cks-12-e2e-proof-dry-run.mjs",
@@ -4287,7 +4287,7 @@
         {
           "path": "src/cks-12/readonly-kaleidosphere-bridge.ts",
           "role": "VALIDATOR",
-          "sha256": "9bb87f1b6b48c5205093d65586cd7171fd94cde9ba745b00bd947073c037bd29"
+          "sha256": "60c0022e7bbd312d6c6fcc3b62ed2ac336b670a1d47604166257621420723b10"
         },
         {
           "path": "src/cks-12/story-step-manifest.ts",
@@ -4352,7 +4352,7 @@
         {
           "path": "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
           "role": "VALIDATOR",
-          "sha256": "e6c45c7cf6bebd0286498a041bc27011b5344e1497364eef3d9a23f2fcae73c4"
+          "sha256": "d10c6414c739ff611c964e2d6cab5ef969b5a96dcbfb3f984410fd6b28fdec65"
         },
         {
           "path": "tests/cks-12/story-step-manifest.test.ts",
@@ -4496,6 +4496,7 @@
         }
       ],
       "ownedTests": [
+        "npm run fnd-ps-fu-01:test",
         "npm run cks12:test"
       ],
       "invariants": [
@@ -4503,7 +4504,8 @@
         "Acquisition, validation and promotion remain separate governed states.",
         "KaleidoSphere receives only minimized read-only projections and returns authority-free candidates.",
         "Drift and unknown variants invalidate or safely abort fast paths.",
-        "Falsification reports bind raw counts, denominators, exclusions and stop conditions."
+        "Falsification reports bind raw counts, denominators, exclusions and stop conditions.",
+        "Cumulative delivery readiness requires exact head/tree-bound gates, integrity receipts, closed issue criteria, exact scope and immutable no-authority ownership."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
