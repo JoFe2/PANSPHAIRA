@@ -1,0 +1,528 @@
+{
+  "schemaVersion": "development-conveyor/cscl-09-exact-head-closure-audit/v1",
+  "taskId": "CSCL-AUTO-326-ROOT-QS-FINALIZER-01",
+  "recordedAt": "2026-09-01T15:21:55Z",
+  "sourceIssue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 326,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/326",
+    "bodySha256": "7dc5b18f4c4f6f712e7acf324e0e507c09331b95ce8dcee8eadf30f1e32ea53a"
+  },
+  "closureGraph": {
+    "id": "JoFe2/PANSPHAIRA#326@a01647cfdd292303136fce691ad579ac4e69ba51",
+    "manifestSha256": "abeefc10a9bed62bbb954c9e2522834a64cdb00b9cd7739ddacdc00ad74491eb",
+    "bundlePath": "/mnt/data2/ai/development-conveyor/planning/graphs/cscl-auto-326-closure-graph.json",
+    "bundleSha256": "7fe2fa46cebcf20541f275be3bbc18c84365ae06944263b41c93e8173332d88e",
+    "releaseDisposition": "RELEASE_REQUIRED",
+    "expectedNodeCount": 4
+  },
+  "disposition": {
+    "productCriteriaVerdict": "PASS",
+    "reviewInputStatus": "ROOT_QS_FINDINGS_FIXED_BY_FINAL_ISSUE_OWNER",
+    "finalClosureVerdict": "TECHNICALLY_COMPLETE_LOCAL_GATES_PASS_AWAITING_CONTROLLER_EXTERNAL_DELIVERY",
+    "externalEffectsPerformed": false,
+    "rootQsOwnsPrMergeReleaseClose": true
+  },
+  "headBinding": {
+    "admittedMainBase": "a01647cfdd292303136fce691ad579ac4e69ba51",
+    "implementationHead": "1e128e95f74995c58451a915e03d1459d615f086",
+    "implementationTree": "a6175244eb531103b68fd522fbf0de60a7622a22",
+    "integratedProductHead": "cec313444153ceac03803791a8c470cead55e834",
+    "integratedProductTree": "41cbb2aa52e92b086a05b782f222b8c6c78e3b13",
+    "branch": "auto/cscl-09-product",
+    "cleanCommittedProductHead": true,
+    "auditBindsTheProductHeadAndDoesNotClaimARecursiveAuditCommitBinding": true
+  },
+  "sourceAuthority": {
+    "releaseTag": "2026_08_31_v4",
+    "releasedMain": "27488888a35fc59caa51bff12fb4ba8c0f28c31d",
+    "matrixPath": "verification/cscl-07-semantic-evidence-matrix-v1.json",
+    "matrixBytesSha256": "02ffb40584d857b2f7a8fdf2ba193c78a2561721969d511348fff726a95a9797",
+    "matrixCanonicalSha256": "d68dff995ab03e426302f593a5f73e10ffa886040217b7355e310878aa957d8d",
+    "relationSpecPath": "tests/fixtures/cscl-07/relation-spec-v1.json",
+    "relationSpecBytesSha256": "6007e8729ff8a63b5dc94bf200008a34ac1d586edcb1b6a1bc8b71b39bea51d2",
+    "relationSpecCanonicalSha256": "a47e78346dbe3453b86f2545dfa437e966253490a9f2f993cdbca064e74d3599",
+    "evidenceReviewSha256": "779d304ff4ddc92f1bf1f1fc8471ff079ab9e89044331f098ddf0523375ccfc0",
+    "reviewLedgerCount": 36,
+    "productRows": 12,
+    "productCells": 60,
+    "productRelations": 12,
+    "originalEvidenceEdges": 60
+  },
+  "artifactBindings": {
+    "verification/cscl-09-product-candidate-v1.json": "26b2719ec82280454af9a517a80711a9901c0e288dc6fb7af7a6ef595d745d08",
+    "verification/cscl-09-product-candidate-receipt-v1.json": "0a96a15936e311100c4fd4e1740ed85ba90983c77fda2f705b30d617dfa5190e",
+    "verification/cscl-09-product-candidate-independent-replay-v1.json": "a920d229e9c80c395745f36e7dcd5e77261b92ecf93f1e4d990aa43b212251d9",
+    "docs/architecture/cscl-09-product-mapping-application-guide-v1.md": "4ec1240149ba3e5a0716cad00ddb4d471f6dd456ebb04d806c0c7fa6db06872c",
+    "src/cscl-09/product-candidate.mjs": "add2eaf71ff4243d6fbd65e9261ebb314ce86a265fbf59afc9a9d887ed1f6f78",
+    "tests/cscl-09/product-candidate-independent-oracle.mjs": "9abdd5ccb1a39fad681349fe2f3f9e4c6e6427c03f4480e0eba6303069b7754f",
+    "tests/cscl-09/product-candidate.test.mjs": "2ff0da2f91db3ebe0d3466f9f3317860cdd1f56eb8ee385d1dd4c0e6e513b8f3"
+  },
+  "cumulativeProductPathDigests": {
+    "SHA256SUMS": "a61bd2514e6bb191a5000387427c01b2ca13a5755dcdeb6817efaef034facef3",
+    "docs/architecture/cscl-09-product-mapping-application-guide-v1.md": "4ec1240149ba3e5a0716cad00ddb4d471f6dd456ebb04d806c0c7fa6db06872c",
+    "package.json": "2c6ac7da4c5e16c687fc1aad84501dc61046df4211fd6f7c61aead1284c65579",
+    "release/public-files.manifest": "be272f99826d52dcdf2608a338d4d4972708e4de0d1737c98457a4f40a290ef7",
+    "scripts/build-public-release.sh": "aa21a84245bac2fc36e5640e05fc1d0604550abc27807cc987799b853002819b",
+    "src/cscl-09/product-candidate.mjs": "add2eaf71ff4243d6fbd65e9261ebb314ce86a265fbf59afc9a9d887ed1f6f78",
+    "tests/canonical-json-profile-inventory.test.ts": "7474f1aa48dd202526dfc412e22c839c517a9a5abd84b6f686c55cf1512b1b0c",
+    "tests/contribution-intake-ledger.test.ts": "3fce333902755e547f32d74035df0cb309b20b67aa91947d6f56a9043d194458",
+    "tests/cscl-09/product-candidate-independent-oracle.mjs": "9abdd5ccb1a39fad681349fe2f3f9e4c6e6427c03f4480e0eba6303069b7754f",
+    "tests/cscl-09/product-candidate.test.mjs": "2ff0da2f91db3ebe0d3466f9f3317860cdd1f56eb8ee385d1dd4c0e6e513b8f3",
+    "tests/release-governance.test.mjs": "91dbf0a56dfb670d6e39b49b75e3e0e2bfacf05c3163ebcf1ebebfdae9a574ec",
+    "tests/verification-fabric-v2.test.ts": "47a2e541484fcb68ed94e1395832924325839a1b5c6863dc9bb9922b415c39f9",
+    "tools/video-production-reference/SHA256SUMS": "6c3243eed91aa02db771b165893f4226f0f91045ce3312baf982095beca6f4ee",
+    "tools/video-production-reference/tests/slice.test.mjs": "6044f42d7a22454834c1f673445639085e0881112c8fd3cce325c1f46c88d0b3",
+    "verification/canonical-json-profile-inventory-v1.json": "ca02eab8b1dca21d1d87e6af99d15ef76416541a796daf2817639cc1dffb8bdb",
+    "verification/cscl-09-product-candidate-independent-replay-v1.json": "a920d229e9c80c395745f36e7dcd5e77261b92ecf93f1e4d990aa43b212251d9",
+    "verification/cscl-09-product-candidate-receipt-v1.json": "0a96a15936e311100c4fd4e1740ed85ba90983c77fda2f705b30d617dfa5190e",
+    "verification/cscl-09-product-candidate-v1.json": "26b2719ec82280454af9a517a80711a9901c0e288dc6fb7af7a6ef595d745d08",
+    "verification/verification-dag-v2.json": "d97a4eae91bdd91b77a525de88d8131539a958642ad2a1becc4585e21a0432cc"
+  },
+  "frozenResult": {
+    "status": "NON_AUTHORITATIVE_CANDIDATE_FROZEN",
+    "relationCounts": {
+      "UNRESOLVED": 9,
+      "VARIANT_RELATION": 1,
+      "DENIED": 2
+    },
+    "classificationCounts": {
+      "CORE": 5,
+      "OPTIONAL_FEATURE": 0,
+      "SYSTEM_VARIANT": 46,
+      "PROCESS_VARIANT": 0,
+      "ABSENCE": 3,
+      "UNRESOLVED_CONFLICT": 6
+    },
+    "promotedRelation": "relation:PRODUCT_ITEM_MANAGEMENT:states-transitions",
+    "promotionBasis": "SINGLE_REVIEWED_VARIANT_RELATION_NOT_FREQUENCY",
+    "matchingDimension": "purpose",
+    "differingDimension": "statesTransitions",
+    "coreElementIds": [
+      "product-item:objects-roles:odoo-community",
+      "product-item:objects-roles:erpnext",
+      "product-item:objects-roles:dolibarr",
+      "product-item:objects-roles:tryton",
+      "product-item:objects-roles:apache-ofbiz"
+    ],
+    "explicitCounterevidenceElements": 10,
+    "positiveElementsWithCounterevidence": 1,
+    "positiveElementsWithExactEmptySourceCounterexamples": 50
+  },
+  "acceptance": {
+    "CSCL-09-AC01": {
+      "status": "PASS",
+      "criterion": "Derive semantic operations, canonical objects, inputs/outputs, states, invariants, preconditions, exceptions, readbacks and evidence expectations.",
+      "semanticDimensions": [
+        "objects-roles",
+        "relations",
+        "operations",
+        "inputs-outputs",
+        "states-transitions",
+        "events",
+        "preconditions",
+        "invariants",
+        "exceptions-errors",
+        "readbacks",
+        "api-service-exposure",
+        "absence-ambiguity-conflict"
+      ],
+      "proof": [
+        "src/cscl-09/product-candidate.mjs:49-73",
+        "tests/cscl-09/product-candidate.test.mjs:48-67",
+        "docs/architecture/cscl-09-product-mapping-application-guide-v1.md:32-58"
+      ]
+    },
+    "CSCL-09-AC02": {
+      "status": "PASS",
+      "criterion": "Bind every core element and variant to matrix cells and original system evidence.",
+      "proof": [
+        "60/60 Product matrix cells replayed by question/system pair",
+        "60/60 emitted original evidence edges replayed with fact ID, fact digest, exact locator and excerpt digest",
+        "src/cscl-09/product-candidate.mjs:56-72",
+        "tests/cscl-09/product-candidate.test.mjs:55-67",
+        "docs/architecture/cscl-09-product-mapping-application-guide-v1.md:34-43"
+      ]
+    },
+    "CSCL-09-AC03": {
+      "status": "PASS",
+      "criterion": "Distinguish core, optional feature, system variant, process variant, absence and unresolved conflict.",
+      "proof": [
+        "classification denominator CORE=5 OPTIONAL_FEATURE=0 SYSTEM_VARIANT=46 PROCESS_VARIANT=0 ABSENCE=3 UNRESOLVED_CONFLICT=6",
+        "src/cscl-09/product-candidate.mjs:118-267",
+        "tests/cscl-09/product-candidate.test.mjs:52-143",
+        "docs/architecture/cscl-09-product-mapping-application-guide-v1.md:21-32"
+      ]
+    },
+    "CSCL-09-AC04": {
+      "status": "PASS",
+      "criterion": "Emit explicit counterevidence or prove from complete evidence why none exists.",
+      "proof": [
+        "All 3 ABSENCE and all 6 UNRESOLVED_CONFLICT elements preserve non-empty released counterevidence",
+        "Complete exact replay of all 60 cells preserves exact empty source counterexamples for the other 50 positive elements",
+        "src/cscl-09/product-candidate.mjs:71-72",
+        "src/cscl-09/product-candidate.mjs:124",
+        "tests/cscl-09/product-candidate.test.mjs:65-66",
+        "docs/architecture/cscl-09-product-mapping-application-guide-v1.md:41-41"
+      ]
+    },
+    "CSCL-09-AC05": {
+      "status": "PASS",
+      "criterion": "Validate replay independently; caller labels and frequencies are ignored.",
+      "proof": [
+        "The independently implemented oracle at tests/cscl-09/product-candidate-independent-oracle.mjs imports no production derivation and reproduced all 12 relations, 60 classifications and 60 original evidence edges from exact released matrix and relation-spec bytes",
+        "verification/cscl-09-product-candidate-independent-replay-v1.json freezes the independent replay receipt and replay digests",
+        "Focused suite passed 5/5 and released CSCL-07 suite passed 8/8",
+        "tests/cscl-09/product-candidate.test.mjs:144-186"
+      ]
+    },
+    "CSCL-09-AC06": {
+      "status": "PASS",
+      "criterion": "No system field, route, state or policy may silently enter the common core.",
+      "proof": [
+        "Exactly one reviewed states-transitions VARIANT_RELATION is promotable at candidate scope",
+        "Only its matching purpose dimension, evidenced by five objects-roles cells, enters the bounded common core",
+        "All three positive states-transitions cells remain system variants and both ambiguous states-transitions cells remain unresolved",
+        "commonCoreSemantics admits one shared-purpose assertion and explicitly excludes source-native names, boundaries, fields, routes, states, transitions, policies and processes",
+        "src/cscl-09/product-candidate.mjs:118-267",
+        "tests/cscl-09/product-candidate.test.mjs:80-143",
+        "docs/architecture/cscl-09-product-mapping-application-guide-v1.md:9-32"
+      ]
+    },
+    "CSCL-09-AC07": {
+      "status": "PASS",
+      "criterion": "Freeze a non-authoritative candidate and Mapping/Application Guide for holdout validation.",
+      "proof": [
+        "Candidate, receipt and guide replay byte-identically",
+        "Candidate status is NON_AUTHORITATIVE_CANDIDATE_FROZEN",
+        "Holdout semantics are explicitly excluded",
+        "The nonclaim is narrowly NO_AUTHORITATIVE_OR_FURTHER_PROMOTION_CLAIM and does not contradict the recorded candidate-level purpose promotion",
+        "src/cscl-09/product-candidate.mjs:200-367",
+        "tests/cscl-09/product-candidate.test.mjs:228-258",
+        "docs/architecture/cscl-09-product-mapping-application-guide-v1.md:64-68"
+      ]
+    }
+  },
+  "mandatoryCases": {
+    "positive": {
+      "case": "Every emitted relation/classification and original evidence edge replays exactly from released CSCL-07 bytes.",
+      "status": "PASS",
+      "independentReplay": {
+        "oraclePath": "tests/cscl-09/product-candidate-independent-oracle.mjs",
+        "receiptPath": "verification/cscl-09-product-candidate-independent-replay-v1.json",
+        "rows": 12,
+        "cells": 60,
+        "relations": 12,
+        "originalEvidenceEdges": 60
+      }
+    },
+    "negative": {
+      "case": "Caller labels, frequency, digest drift, extra fields, holdout material, promotion or Authority claims fail closed.",
+      "status": "PASS",
+      "denials": {
+        "callerLabel": "SOURCE_MATRIX_DIGEST_MISMATCH",
+        "frequency": "SOURCE_MATRIX_DIGEST_MISMATCH",
+        "digestDrift": "SOURCE_MATRIX_DIGEST_MISMATCH",
+        "extraField": "SOURCE_MATRIX_DIGEST_MISMATCH",
+        "holdoutMaterial": "SOURCE_MATRIX_DIGEST_MISMATCH",
+        "promotionOrRelationMutation": "SOURCE_MATRIX_DIGEST_MISMATCH",
+        "Authority": "SOURCE_MATRIX_DIGEST_MISMATCH"
+      }
+    }
+  },
+  "controllerIntegrationEvidence": {
+    "telemetryPath": "/mnt/data2/ai/development-conveyor/state/logs/attempts/CSCL-AUTO-326-INTEGRATE.g1.a1/telemetry.json",
+    "telemetryFileSha256": "4fc724ee559ee049c7bcd97ae3a2f975e9c8fe2495fcb1127c30999aca8df371",
+    "telemetryHead": "6a34073c7a333f33229f027be38a950b5493ceb3",
+    "telemetryClean": true,
+    "nodeVersion": "v24.19.0",
+    "npmVersion": "11.17.0",
+    "gates": [
+      {
+        "command": "node --test tests/cscl-09/product-candidate.test.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "receiptDigest": "e9bc6291ed51fadac1497a6fb41109063de555b1a20b32692f3af3694a487dd6",
+        "receiptFileSha256": "0e3bb98a5283f2627fad3475539aa79ad93d5c55cdf395b2d51ff6db449b7551"
+      },
+      {
+        "command": "npm run cscl07:test",
+        "status": "PASS",
+        "exitCode": 0,
+        "receiptDigest": "b7c47b7b95b8890c31d3499b4fbc8e56733e36871085607eef7bafba8300e574",
+        "receiptFileSha256": "75bf2c3b0c26d81f717eee276dde934c9d051f28545cbea0f56555a7295d6810"
+      },
+      {
+        "command": "npm run release-governance:test",
+        "status": "PASS",
+        "exitCode": 0,
+        "receiptDigest": "dc700e82b77eb0c154d135895b5c47eb140b216eaacd30fa3bc7ad409c185c9a",
+        "receiptFileSha256": "f10a44f68fc7a1536b463b875c3e7861af2228a7b91e3c1bb013b34b11239ad9"
+      },
+      {
+        "command": "sha256sum --check SHA256SUMS",
+        "status": "PASS",
+        "exitCode": 0,
+        "receiptDigest": "181a9a52b94d44625e6d2b97870c86060992d72a8c82e66a4630aeb829c48e6b",
+        "receiptFileSha256": "da57b6bd154513ec20c73ef7206b970519059178f764f547b6857e1a94c309f6"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "status": "PASS",
+        "exitCode": 0,
+        "receiptDigest": "36657e0bbfb42e691c7132ab6855ab9a0914116b77275b3be00fabec216d8114",
+        "receiptFileSha256": "80da69749c0e0d99feeda959a72189a6371f10fdc8b3665a3825671b55dd26ae"
+      }
+    ]
+  },
+  "deliveryRevalidation": {
+    "immutableProductHead": "cec313444153ceac03803791a8c470cead55e834",
+    "immutableProductTree": "41cbb2aa52e92b086a05b782f222b8c6c78e3b13",
+    "pinnedNodeImage": "node@sha256:b506e7321f176aae77317f99d67a24b272c1f09f1d10f1761f2773447d8da26c",
+    "pinnedToolsImage": "sha256:766e49fd831e23487e9f0465c0cb78bbb4545fc63a53f64290d6b820b359b531",
+    "nodeVersion": "v24.14.1",
+    "npmVersion": "11.11.0",
+    "networkMode": "none",
+    "checks": [
+      {
+        "command": "node --test tests/cscl-09/product-candidate.test.mjs",
+        "status": "PASS",
+        "tests": 5,
+        "passed": 5
+      },
+      {
+        "command": "npm run cscl07:test",
+        "status": "PASS",
+        "tests": 8,
+        "passed": 8
+      },
+      {
+        "command": "independent source oracle replay from released CSCL-07 matrix and relation-spec bytes",
+        "status": "PASS",
+        "oraclePath": "tests/cscl-09/product-candidate-independent-oracle.mjs",
+        "receiptPath": "verification/cscl-09-product-candidate-independent-replay-v1.json",
+        "relations": 12,
+        "cells": 60,
+        "originalEvidenceEdges": 60
+      },
+      {
+        "command": "npm run release-governance:test",
+        "status": "PASS",
+        "tests": 54,
+        "passed": 54,
+        "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_EPHEMERAL_ANCESTOR_DEPENDENCIES"
+      },
+      {
+        "command": "npm run release-governance:verify",
+        "status": "PASS"
+      },
+      {
+        "command": "npm run supply-chain:verify",
+        "status": "PASS",
+        "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_EPHEMERAL_ANCESTOR_DEPENDENCIES"
+      },
+      {
+        "command": "sha256sum --check --strict SHA256SUMS",
+        "status": "PASS"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "status": "PASS"
+      },
+      {
+        "command": "npm run build",
+        "status": "PASS",
+        "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_EPHEMERAL_ANCESTOR_DEPENDENCIES"
+      },
+      {
+        "command": "npm run lint",
+        "status": "PASS",
+        "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_EPHEMERAL_ANCESTOR_DEPENDENCIES"
+      },
+      {
+        "command": "npm run verification:plan",
+        "status": "PASS",
+        "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_EPHEMERAL_ANCESTOR_DEPENDENCIES",
+        "planMode": "FULL_FALLBACK",
+        "planNodes": 48,
+        "planTests": 55,
+        "hardGates": 5
+      },
+      {
+        "command": "npm test",
+        "status": "PASS",
+        "exitCode": 0,
+        "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_EPHEMERAL_ANCESTOR_DEPENDENCIES_HOST_DOCKER",
+        "networkMode": "NONE_AFTER_DEPENDENCY_PROVISIONING",
+        "hostDockerVersion": "29.1.3",
+        "dockerfileFrontend": "docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e"
+      }
+    ]
+  },
+  "oneReviewInput": {
+    "authorityPath": "/mnt/data2/ai/development-conveyor/planning/campaigns/cscl-rolling-auto-v1.authority.json",
+    "authoritySha256": "1c3865a819811834656aff83e9bd5cf8e45425a50b14a5e6228480ee1c5b556c",
+    "maximumReviewCount": 1,
+    "requiredIndependentIntegratedReviewCount": 1,
+    "completedReviewCountAtAudit": 0,
+    "ownerTask": "CSCL-AUTO-326-ROOT-QS",
+    "maximumReviewReturns": 1,
+    "reviewReturnCountAtAudit": 0,
+    "reviewSubjectHead": "cec313444153ceac03803791a8c470cead55e834",
+    "reviewSubjectTree": "41cbb2aa52e92b086a05b782f222b8c6c78e3b13",
+    "plannedReviewedHeadSeed": "a01647cfdd292303136fce691ad579ac4e69ba51",
+    "plannedReviewedHeadSeedDisposition": "STALE_BASE_SEED_DO_NOT_USE_AS_REVIEW_SUBJECT",
+    "headDriftPolicy": "FAIL_CLOSED_AND_REBIND_BEFORE_REVIEW",
+    "inputStatus": "FINDINGS_FIXED_BY_FINAL_OWNER",
+    "requiredInputs": [
+      "this exact-head closure audit",
+      "the integrated product head and tree",
+      "all seven criterion proofs",
+      "the released CSCL-07 source authority and replay denominator",
+      "the controller integration telemetry and gate receipts",
+      "the completed local full-suite and pending external delivery-policy gates"
+    ]
+  },
+  "fullSuiteInput": {
+    "ownerTask": "CSCL-AUTO-326-ROOT-QS",
+    "requiredFinalCommand": "npm test",
+    "requiredImmutableProductHead": "cec313444153ceac03803791a8c470cead55e834",
+    "status": "PASS_PINNED_TOOLS_IMAGE_NODE_V24_14_1_HOST_DOCKER",
+    "productVerdictFromLocalInfrastructureFailures": null,
+    "packageJsonSha256": "2c6ac7da4c5e16c687fc1aad84501dc61046df4211fd6f7c61aead1284c65579",
+    "packageLockSha256": "0f6a224183d3d2eb68eebc0c61483c60cb785a93e67259cab264dc54aa2790cf",
+    "rootQsGateSet": [
+      "node --test tests/cscl-09/product-candidate.test.mjs",
+      "npm run verification:plan",
+      "npm run supply-chain:verify",
+      "npm run release-governance:test",
+      "sha256sum --check SHA256SUMS",
+      "npm test"
+    ],
+    "localGateSetVerdict": "PASS",
+    "repositoryProfileCompanionGates": [
+      "npm run build",
+      "npm run lint"
+    ]
+  },
+  "deliveryPolicyInput": {
+    "ownerTask": "CSCL-AUTO-326-ROOT-QS",
+    "repository": "JoFe2/PANSPHAIRA",
+    "baseBranch": "main",
+    "headBranch": "auto/cscl-09-product",
+    "mergeMethod": "squash",
+    "requiredPrCi": [
+      "CI"
+    ],
+    "requiredMainCi": [
+      "CI"
+    ],
+    "releaseRequired": true,
+    "releaseTagStrategy": "DAILY_SEQUENCE",
+    "issueCloseRequired": true,
+    "localPolicyInputs": {
+      "focusedAndSourceReplay": "PASS",
+      "releaseGovernanceTests": "PASS",
+      "releaseGovernanceVerifier": "PASS",
+      "supplyChainVerifier": "PASS",
+      "checksumInventory": "PASS",
+      "publicReleaseStaging": "PASS",
+      "verificationPlan": "PASS_PINNED_NODE_V24_14_1",
+      "finalFullSuite": "PASS_PINNED_TOOLS_IMAGE_NODE_V24_14_1_HOST_DOCKER"
+    },
+    "requiredExternalSequence": [
+      "EXACT_PR_HEAD_CI",
+      "SHA_BOUND_MERGE",
+      "EXACT_MAIN_HEAD_CI",
+      "SERIAL_DAILY_RELEASE",
+      "ANONYMOUS_ARTIFACT_AND_ISSUE_READBACK",
+      "ISSUE_CLOSED",
+      "QUEUE_DONE_AND_CLEANUP"
+    ],
+    "externalSequenceStatus": "NOT_STARTED_BY_DELIVERY_WORKER"
+  },
+  "infrastructureEvidence": [
+    {
+      "profile": "LOCAL_HOST_NODE_V24_19_0",
+      "commands": [
+        "npm run test",
+        "npm run lint",
+        "npm run build"
+      ],
+      "exitCodes": [
+        133,
+        133,
+        133
+      ],
+      "classification": "INFRASTRUCTURE_ONLY_EXECUTABLE_MEMORY_PERMISSION_SIGTRAP",
+      "suiteStarted": false,
+      "productVerdict": null
+    },
+    {
+      "profile": "PINNED_NODE_V24_14_1_WITHOUT_PROVISIONED_NODE_MODULES",
+      "commands": [
+        "npm run build",
+        "npm run verification:plan"
+      ],
+      "exitCodes": [
+        127,
+        127
+      ],
+      "classification": "INFRASTRUCTURE_ONLY_TSC_NOT_FOUND",
+      "productVerdict": null
+    },
+    {
+      "profile": "PINNED_NODE_SLIM_WITHOUT_GIT",
+      "command": "npm run release-governance:test",
+      "exitCode": 1,
+      "classification": "INFRASTRUCTURE_ONLY_GIT_EXECUTABLE_MISSING_FROM_IMAGE",
+      "replacementResult": "PASS_54_OF_54_IN_PINNED_NODE_TOOLS_IMAGE",
+      "productVerdict": null
+    },
+    {
+      "profile": "PINNED_NODE_V24_14_1_EPHEMERAL_OVERLAY_WITH_ROOT_OWNERSHIP_MISMATCH",
+      "commandsPassedBeforeInfrastructureStop": [
+        "npm run build",
+        "npm run lint",
+        "npm run verification:plan",
+        "npm run supply-chain:verify"
+      ],
+      "stoppingCommand": "npm run release-governance:test",
+      "exitCode": 1,
+      "testsPassed": 52,
+      "testsFailed": 2,
+      "classification": "INFRASTRUCTURE_ONLY_GIT_SAFE_DIRECTORY_OWNERSHIP_GUARD",
+      "fullSuiteStarted": false,
+      "productVerdict": null
+    },
+    {
+      "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_WITH_UNMAPPED_DOCKER_SOCKET_GROUP",
+      "command": "npm test",
+      "exitCode": 1,
+      "stoppingTest": "PSAI107 default-off offline container profile proves positive and fail-closed cases",
+      "classification": "INFRASTRUCTURE_ONLY_DOCKER_SOCKET_PERMISSION",
+      "replacementResult": "PASS_WITH_CONTAINER_GID_122_MATCHING_DOCKER_SOCKET",
+      "productVerdict": null
+    },
+    {
+      "profile": "PINNED_TOOLS_IMAGE_NODE_V24_14_1_WITH_UNCACHED_DOCKERFILE_FRONTEND",
+      "command": "npm test",
+      "exitCode": 1,
+      "stoppingTest": "PSAI107 default-off offline container profile proves positive and fail-closed cases",
+      "classification": "INFRASTRUCTURE_ONLY_UNCACHED_DOCKERFILE_FRONTEND_WITH_NETWORK_DISABLED",
+      "replacementResult": "PASS_AFTER_PRELOADING_DOCKERFILE_1_7_SHA256_A57DF69D0EA827FB7266491F2813635DE6F17269BE881F696FBDF2D83DDA33E",
+      "productVerdict": null
+    }
+  ],
+  "nonClaims": [
+    "NO_UNIVERSAL_ERP_CLAIM",
+    "NO_COMPATIBILITY_CLAIM",
+    "NO_EXECUTION_CLAIM",
+    "NO_AUTHORITATIVE_OR_FURTHER_PROMOTION_CLAIM",
+    "NO_AUTHORITY_CLAIM",
+    "NO_HOLDOUT_SEMANTICS_CLAIM",
+    "NO_INDEPENDENT_REVIEW_COMPLETION_CLAIM",
+    "NO_PR_PUSH_MERGE_RELEASE_OR_ISSUE_CLOSE",
+    "NO_QUEUE_DONE_CLAIM"
+  ]
+}

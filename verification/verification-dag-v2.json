@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 37,
+  "graphVersion": 39,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "098b6d75dd5d82f1d9a43023ada158aa76561a55cb1577a032dcd0f084d58b9f"
+          "sha256": "3fce333902755e547f32d74035df0cb309b20b67aa91947d6f56a9043d194458"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f4a4bcd0f94d02267c9f24301af77de0b81959a0608c2f1e96741e307566b62b"
+          "sha256": "47a2e541484fcb68ed94e1395832924325839a1b5c6863dc9bb9922b415c39f9"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -496,7 +496,8 @@
         "learning-routing-foundation",
         "etl-01-extension-assurance-profile-v1",
         "ud-psai53-update-controller-synthetic-v1",
-        "cscl-08-party-candidate-v1"
+        "cscl-08-party-candidate-v1",
+        "cscl-09-product-candidate-v1"
       ],
       "inputs": [
         {
@@ -507,12 +508,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "a988a960e82d92a68f7b2e319234561f25ea8f58a60ed0067e1cb2b3bb836907"
+          "sha256": "be272f99826d52dcdf2608a338d4d4972708e4de0d1737c98457a4f40a290ef7"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "5e171dfdcc5fb892a4b243a94d837c88ff76fe7ba1dd778d64a33d0736ddfedb"
+          "sha256": "aa21a84245bac2fc36e5640e05fc1d0604550abc27807cc987799b853002819b"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -537,17 +538,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "2fd026d60878e8acce3e9d96b8f47aaf0eea7043689a1af4bbae220d926034a0"
+          "sha256": "ca02eab8b1dca21d1d87e6af99d15ef76416541a796daf2817639cc1dffb8bdb"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "142cba983582e7fb8028a91bced008480c3bf2e27fe50bd1155fee582ce19e32"
+          "sha256": "7474f1aa48dd202526dfc412e22c839c517a9a5abd84b6f686c55cf1512b1b0c"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "ddbf5c1bd48eb2025d6db5a9ad65da00b25ad6a5099d270bc43e8d4a5356176d"
+          "sha256": "91dbf0a56dfb670d6e39b49b75e3e0e2bfacf05c3163ebcf1ebebfdae9a574ec"
         }
       ],
       "ownedTests": [
@@ -949,7 +950,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "4eec3283d9fbf04db7e9d47b90f3b8ee01883835b6952c78b9c421366e860170"
+          "sha256": "2c6ac7da4c5e16c687fc1aad84501dc61046df4211fd6f7c61aead1284c65579"
         },
         {
           "path": "package-lock.json",
@@ -1016,7 +1017,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "364400f226cce2d730c8db7c639a57c1f66ebd64ac48c036455df9afb85eb9c6"
+          "sha256": "6c3243eed91aa02db771b165893f4226f0f91045ce3312baf982095beca6f4ee"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1191,7 +1192,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "c34d1552636d0b6620e2d9abba3e1ae0a840a5aa8cfbe2951c81f329fb7efac2"
+          "sha256": "6044f42d7a22454834c1f673445639085e0881112c8fd3cce325c1f46c88d0b3"
         }
       ],
       "ownedTests": [
@@ -5482,6 +5483,60 @@
         "The exact released CSCL-07 matrix and complete Party 12-row review denominator are replayed without source, cell, fact or counterevidence substitution.",
         "Zero positive Party relations yields an empty common core; frequency, labels, shapes and caller verdicts cannot promote source-native elements.",
         "All system variants, absences and unresolved conflicts remain source-bound, non-authoritative and holdout-free."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-09-product-candidate-v1",
+      "dependsOn": [
+        "cscl-07-cross-system-semantic-matrix-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/cscl-09-product-mapping-application-guide-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4ec1240149ba3e5a0716cad00ddb4d471f6dd456ebb04d806c0c7fa6db06872c"
+        },
+        {
+          "path": "src/cscl-09/product-candidate.mjs",
+          "role": "VALIDATOR",
+          "sha256": "add2eaf71ff4243d6fbd65e9261ebb314ce86a265fbf59afc9a9d887ed1f6f78"
+        },
+        {
+          "path": "tests/cscl-09/product-candidate-independent-oracle.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9abdd5ccb1a39fad681349fe2f3f9e4c6e6427c03f4480e0eba6303069b7754f"
+        },
+        {
+          "path": "tests/cscl-09/product-candidate.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "2ff0da2f91db3ebe0d3466f9f3317860cdd1f56eb8ee385d1dd4c0e6e513b8f3"
+        },
+        {
+          "path": "verification/cscl-09-product-candidate-independent-replay-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a920d229e9c80c395745f36e7dcd5e77261b92ecf93f1e4d990aa43b212251d9"
+        },
+        {
+          "path": "verification/cscl-09-product-candidate-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0a96a15936e311100c4fd4e1740ed85ba90983c77fda2f705b30d617dfa5190e"
+        },
+        {
+          "path": "verification/cscl-09-product-candidate-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "26b2719ec82280454af9a517a80711a9901c0e288dc6fb7af7a6ef595d745d08"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl09:test"
+      ],
+      "invariants": [
+        "Every emitted Product relation and classification, matrix cell, source fact and original-evidence edge replays exactly from the released CSCL-07 bytes.",
+        "Only the matching purpose dimension of the single reviewed states-transitions VARIANT_RELATION yields the five evidence-bound core elements; every differing statesTransitions cell remains a system variant or unresolved and frequency is ignored.",
+        "The independent oracle replays all 12 relations, 60 classifications and 60 original-evidence edges without importing the production derivation.",
+        "Caller labels, digest drift, extra fields, holdout material, and promotion or Authority claims fail closed; optional features, process variants, absences and unresolved conflicts remain explicit."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
