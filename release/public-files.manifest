@@ -249,6 +249,7 @@ docs/architecture/cks-11-function-extraction-v1.md	docs/architecture/cks-11-func
 docs/architecture/cks-11-governance-decision-v1.md	docs/architecture/cks-11-governance-decision-v1.md	0644
 docs/architecture/cks-11-governed-assets-v1.md	docs/architecture/cks-11-governed-assets-v1.md	0644
 docs/architecture/cks-12-closed-loop-boundary-v1.md	docs/architecture/cks-12-closed-loop-boundary-v1.md	0644
+docs/architecture/cks-12-top-level-envelope-policy-v1.md	docs/architecture/cks-12-top-level-envelope-policy-v1.md	0644
 docs/architecture/cks-m1/closure-v1.md	docs/architecture/cks-m1/closure-v1.md	0644
 docs/architecture/cks-m1/criterion-traceability-v1.json	docs/architecture/cks-m1/criterion-traceability-v1.json	0644
 docs/architecture/cscl-01-protocol-v1.md	docs/architecture/cscl-01-protocol-v1.md	0644
