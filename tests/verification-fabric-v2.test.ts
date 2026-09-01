@@ -131,11 +131,32 @@ test("ERP capability-cell changes select the bounded owner and exact focused sui
   assert.deepEqual(result.selectedTests, ["npm run erp-order-cell:test"]);
 });
 
-test("external BI v2 client changes select only the thin client and downstream integrity gates", () => {
-  const result = plan(["packages/contracts/src/external-bi-service.ts"]);
-  assert.equal(result.mode, "IMPACTED_SHADOW");
-  assert.deepEqual(result.selectedNodes, ["external-bi-service-v2", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "secure-default-proof"]);
-  assert.ok(result.selectedTests.includes("npm run external-bi-service:test"));
+test("external BI v2 focused family is canonical and selects its owner test", () => {
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
+    scripts: Record<string, string>;
+  };
+  assert.equal(
+    packageJson.scripts["external-bi-service:test"],
+    "npm run build --silent && node --test dist/tests/external-bi-service.test.js",
+  );
+  assert.equal(
+    packageJson.scripts.pretest?.split(" && ")
+      .filter((command) => command === "npm run external-bi-service:test").length,
+    1,
+  );
+
+  for (const changed of [
+    "packages/contracts/src/external-bi-service.ts",
+    "tests/external-bi-service.test.ts",
+    "tests/fixtures/external-bi-service-v2-clean-room.json",
+    "scripts/verify-external-bi-service-v2-clean-room.mjs",
+    "docs/EXTERNAL-BI-SERVICE.md",
+  ]) {
+    const result = plan([changed]);
+    assert.equal(result.mode, "IMPACTED_SHADOW", changed);
+    assert.ok(result.selectedNodes.includes("external-bi-service-v2"), changed);
+    assert.ok(result.selectedTests.includes("npm run external-bi-service:test"), changed);
+  }
 });
 
 test("both canonical JSON implementations invalidate the M1.4 node and secure-default closure", () => {

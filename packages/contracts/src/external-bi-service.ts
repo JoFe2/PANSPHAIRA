@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { types as nodeTypes } from "node:util";
 
 import { canonicalJson } from "./canonical-json.js";
 
@@ -17,40 +18,76 @@ export const EXTERNAL_BI_SERVICE_REQUEST_SCHEMA_V2 =
 export const EXTERNAL_BI_SERVICE_RESULT_SCHEMA_V2 =
   "superset-bi-agent.external/intent-result/v2" as const;
 
-export const EXTERNAL_BI_SERVICE_CAPABILITIES_V2 = [
+export const EXTERNAL_BI_SERVICE_CAPABILITIES_V2 = Object.freeze([
   "bi.status.read",
   "bi.discovery.run",
   "bi.analysis.run",
   "bi.graph.adaptive-v1.plan",
   "bi.preview.create",
   "bi.readback.read",
-] as const;
+] as const);
 
-export const EXTERNAL_BI_SERVICE_ACTIONS_V2 = [
+export const EXTERNAL_BI_SERVICE_ACTIONS_V2 = Object.freeze([
   "status",
   "discovery",
   "analyze",
   "plan",
   "preview",
   "readback",
-] as const;
+] as const);
 
-const CAPABILITY_ATTESTATION_V2 = {
+const OWNER_CAPABILITY_DESCRIPTORS_V2 = deepFreeze({
   "bi.status.read": { action: "status", authority: "read-only" },
   "bi.discovery.run": { action: "discovery", authority: "local-evidence-write" },
   "bi.analysis.run": { action: "analyze", authority: "source-read-only" },
   "bi.graph.adaptive-v1.plan": { action: "plan", authority: "proposal-only" },
   "bi.preview.create": { action: "preview", authority: "proposal-only" },
   "bi.readback.read": { action: "readback", authority: "read-only" },
-} as const;
+} as const);
 
-const ENV_KEYS = [
+/**
+ * The expected compatibility profile is owned by PanSphaira. Transport
+ * configuration may select an endpoint and timeout, but it cannot select or
+ * attest a different product/contract/capability tuple.
+ */
+const OWNER_COMPATIBILITY_PROFILE_V2 = deepFreeze({
+  schemaVersion: "pansphaira.external-bi-service/compatibility-profile/v2",
+  product: {
+    id: "superset-bi-agent",
+    version: EXTERNAL_BI_SERVICE_PRODUCT_VERSION_V2,
+    component: "bi-agent-runtime",
+  },
+  contract: {
+    id: EXTERNAL_BI_SERVICE_CONTRACT_ID_V2,
+    version: EXTERNAL_BI_SERVICE_CONTRACT_VERSION_V2,
+  },
+  capabilities: EXTERNAL_BI_SERVICE_CAPABILITIES_V2.map((id) => ({
+    id,
+    ...OWNER_CAPABILITY_DESCRIPTORS_V2[id],
+  })),
+} as const);
+
+const OWNER_GRAPH_PROFILE_V2 = deepFreeze({
+  acceptedIncumbent: "adaptive-v1",
+  candidatePromotion: "none",
+} as const);
+
+const OWNER_BOUNDARY_PROFILE_V2 = deepFreeze({
+  sourceDatabaseCredentialsAccepted: false,
+  freeSqlAccepted: false,
+  rawSourceRowsReturned: false,
+  modelMutationAuthority: false,
+  directSupersetMutationIntentAccepted: false,
+  persistentSupersetWorkflow: "trusted-preview-approval-apply-readback-rollback-only",
+} as const);
+
+const ENV_KEYS = Object.freeze([
   "BI_AGENT_BASE_URL",
   "BI_AGENT_EXPECTED_PRODUCT_VERSION",
   "BI_AGENT_EXPECTED_CONTRACT_VERSION",
   "BI_AGENT_TIMEOUT_MS",
   "SUPERSET_BASE_URL",
-] as const;
+] as const);
 
 export type ExternalBiServiceReasonCodeV2 =
   | "EXTERNAL_BI_SERVICE_DISABLED"
@@ -124,25 +161,142 @@ export type ExternalBiServiceIntentResultV2 =
   | { readonly outcome: "DISABLED"; readonly reasonCodes: readonly ("EXTERNAL_BI_SERVICE_DISABLED" | "EXTERNAL_BI_SERVICE_NOT_CONFIGURED")[] }
   | { readonly outcome: "DENIED" | "UNAVAILABLE"; readonly reasonCodes: readonly ExternalBiServiceReasonCodeV2[] };
 
+const DANGEROUS_KEYS = new Set(["__proto__", "prototype", "constructor"]);
+const SHA256_DIGEST = /^sha256:[a-f0-9]{64}$/;
+const OWNER_VERIFIED_DECISIONS_V2 = new WeakSet<object>();
+
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object" && !Array.isArray(value)
-    && Object.getPrototypeOf(value) === Object.prototype;
+  if (value === null || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) return false;
+  try {
+    if (Object.getPrototypeOf(value) !== Object.prototype) return false;
+    for (const key of Reflect.ownKeys(value)) {
+      if (typeof key !== "string" || DANGEROUS_KEYS.has(key)) return false;
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (descriptor === undefined || !("value" in descriptor) || descriptor.enumerable !== true) return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function isDenseArray(value: unknown): value is unknown[] {
+  if (!Array.isArray(value) || nodeTypes.isProxy(value)) return false;
+  try {
+    if (Object.getPrototypeOf(value) !== Array.prototype) return false;
+    const keys = Reflect.ownKeys(value);
+    if (keys.some((key) => typeof key !== "string")) return false;
+    const expectedKeys = [
+      ...Array.from({ length: value.length }, (_, index) => String(index)),
+      "length",
+    ];
+    if (keys.length !== expectedKeys.length || expectedKeys.some((key) => !keys.includes(key))) return false;
+    return expectedKeys.slice(0, -1).every((key) => {
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      return descriptor !== undefined && "value" in descriptor && descriptor.enumerable === true;
+    });
+  } catch {
+    return false;
+  }
+}
+
+function safeJsonClone<T>(value: T, ancestors = new Set<object>()): T {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return value;
+  if (typeof value === "number") {
+    if (!Number.isFinite(value) || Object.is(value, -0)
+      || (Number.isInteger(value) && !Number.isSafeInteger(value))) {
+      throw new TypeError("UNSAFE_JSON_NUMBER");
+    }
+    return value;
+  }
+  if (isDenseArray(value)) {
+    if (ancestors.has(value)) throw new TypeError("CYCLIC_JSON_ARRAY");
+    const next = new Set(ancestors).add(value);
+    return Array.from({ length: value.length }, (_, index) => {
+      const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+      if (descriptor === undefined || !("value" in descriptor)) throw new TypeError("UNSAFE_JSON_ARRAY");
+      return safeJsonClone(descriptor.value, next);
+    }) as T;
+  }
+  if (!isRecord(value) || ancestors.has(value as object)) throw new TypeError("UNSAFE_JSON_OBJECT");
+  const next = new Set(ancestors).add(value as object);
+  const output: Record<string, unknown> = {};
+  for (const key of Object.keys(value)) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (descriptor === undefined || !("value" in descriptor)) throw new TypeError("UNSAFE_JSON_OBJECT");
+    Object.defineProperty(output, key, {
+      value: safeJsonClone(descriptor.value, next),
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    });
+  }
+  return output as T;
+}
+
+function deepFreeze<T>(value: T): T {
+  if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
+    for (const key of Reflect.ownKeys(value)) {
+      if (key !== "length") deepFreeze((value as Record<PropertyKey, unknown>)[key]);
+    }
+    Object.freeze(value);
+  }
+  return value;
+}
+
+function immutable<T>(value: T): T {
+  return deepFreeze(safeJsonClone(value));
+}
+
+function exactKeys(value: unknown, expected: readonly string[]): value is Record<string, unknown> {
+  if (!isRecord(value)) return false;
+  const actual = Object.keys(value).sort();
+  const sortedExpected = [...expected].sort();
+  return actual.length === sortedExpected.length
+    && actual.every((key, index) => key === sortedExpected[index]);
+}
+
+function sameCanonicalValue(actual: unknown, expected: unknown): boolean {
+  try {
+    return canonicalJson(actual) === canonicalJson(expected);
+  } catch {
+    return false;
+  }
+}
+
+function snapshotEnvironment(
+  value: unknown,
+): Partial<Record<typeof ENV_KEYS[number], string | undefined>> | null {
+  if (!isRecord(value)) return null;
+  const snapshot: Partial<Record<typeof ENV_KEYS[number], string | undefined>> = {};
+  for (const key of ENV_KEYS) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (descriptor === undefined) continue;
+    if (!("value" in descriptor)
+      || (descriptor.value !== undefined && typeof descriptor.value !== "string")) return null;
+    snapshot[key] = descriptor.value;
+  }
+  return snapshot;
+}
+
+function configDenied(reasonCode: ExternalBiServiceReasonCodeV2): ExternalBiServiceConfigDecisionV2 {
+  return immutable({ outcome: "DENIED" as const, reasonCodes: [reasonCode] });
 }
 
 function disabled(reasonCodes: readonly ("EXTERNAL_BI_SERVICE_DISABLED" | "EXTERNAL_BI_SERVICE_NOT_CONFIGURED")[]): ExternalBiServiceConfigDecisionV2 {
-  return {
+  return immutable({
     outcome: "DISABLED",
-    reasonCodes,
+    reasonCodes: [...reasonCodes],
     config: {
       schemaVersion: EXTERNAL_BI_SERVICE_CONFIG_SCHEMA_V2,
       enabled: false,
       biAgentBaseUrl: null,
-      expectedProductVersion: EXTERNAL_BI_SERVICE_PRODUCT_VERSION_V2,
-      expectedContractVersion: EXTERNAL_BI_SERVICE_CONTRACT_VERSION_V2,
+      expectedProductVersion: OWNER_COMPATIBILITY_PROFILE_V2.product.version,
+      expectedContractVersion: OWNER_COMPATIBILITY_PROFILE_V2.contract.version,
       timeoutMs: 5000,
-      requiredCapabilities: EXTERNAL_BI_SERVICE_CAPABILITIES_V2,
+      requiredCapabilities: [...EXTERNAL_BI_SERVICE_CAPABILITIES_V2],
     },
-  };
+  });
 }
 
 function sanitizeBaseUrl(input: string): string | null {
@@ -168,34 +322,40 @@ function parseTimeout(value: string | undefined): number | null {
 export function configureExternalBiServiceV2(
   env: Partial<Record<typeof ENV_KEYS[number], string | undefined>>,
 ): ExternalBiServiceConfigDecisionV2 {
-  const hasAny = ENV_KEYS.some((key) => env[key] !== undefined && env[key] !== "");
+  const envSnapshot = snapshotEnvironment(env);
+  if (envSnapshot === null) return configDenied("EXTERNAL_BI_SERVICE_URL_DENIED");
+  const hasAny = ENV_KEYS.some((key) => envSnapshot[key] !== undefined && envSnapshot[key] !== "");
   if (!hasAny) return disabled(["EXTERNAL_BI_SERVICE_NOT_CONFIGURED"]);
-  if (env.SUPERSET_BASE_URL) {
-    return { outcome: "DENIED", reasonCodes: ["EXTERNAL_BI_SERVICE_DIRECT_SUPERSET_CONFIG_DENIED"] };
+  if (envSnapshot.SUPERSET_BASE_URL) {
+    return configDenied("EXTERNAL_BI_SERVICE_DIRECT_SUPERSET_CONFIG_DENIED");
   }
-  const biAgentBaseUrl = env.BI_AGENT_BASE_URL ? sanitizeBaseUrl(env.BI_AGENT_BASE_URL) : null;
-  if (!biAgentBaseUrl) return { outcome: "DENIED", reasonCodes: ["EXTERNAL_BI_SERVICE_URL_DENIED"] };
-  const timeoutMs = parseTimeout(env.BI_AGENT_TIMEOUT_MS);
-  if (timeoutMs === null) return { outcome: "DENIED", reasonCodes: ["EXTERNAL_BI_SERVICE_TIMEOUT_DENIED"] };
-  if (env.BI_AGENT_EXPECTED_PRODUCT_VERSION && env.BI_AGENT_EXPECTED_PRODUCT_VERSION !== EXTERNAL_BI_SERVICE_PRODUCT_VERSION_V2) {
-    return { outcome: "DENIED", reasonCodes: ["EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED"] };
+  if (envSnapshot.BI_AGENT_EXPECTED_PRODUCT_VERSION) {
+    return configDenied("EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED");
   }
-  if (env.BI_AGENT_EXPECTED_CONTRACT_VERSION && env.BI_AGENT_EXPECTED_CONTRACT_VERSION !== EXTERNAL_BI_SERVICE_CONTRACT_VERSION_V2) {
-    return { outcome: "DENIED", reasonCodes: ["EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED"] };
+  if (envSnapshot.BI_AGENT_EXPECTED_CONTRACT_VERSION) {
+    return configDenied("EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED");
   }
-  return {
-    outcome: "VERIFIED",
-    reasonCodes: ["EXTERNAL_BI_SERVICE_CONFIG_VERIFIED"],
+  const biAgentBaseUrl = envSnapshot.BI_AGENT_BASE_URL
+    ? sanitizeBaseUrl(envSnapshot.BI_AGENT_BASE_URL)
+    : null;
+  if (!biAgentBaseUrl) return configDenied("EXTERNAL_BI_SERVICE_URL_DENIED");
+  const timeoutMs = parseTimeout(envSnapshot.BI_AGENT_TIMEOUT_MS);
+  if (timeoutMs === null) return configDenied("EXTERNAL_BI_SERVICE_TIMEOUT_DENIED");
+  const decision = immutable({
+    outcome: "VERIFIED" as const,
+    reasonCodes: ["EXTERNAL_BI_SERVICE_CONFIG_VERIFIED"] as const,
     config: {
       schemaVersion: EXTERNAL_BI_SERVICE_CONFIG_SCHEMA_V2,
       enabled: true,
       biAgentBaseUrl,
-      expectedProductVersion: EXTERNAL_BI_SERVICE_PRODUCT_VERSION_V2,
-      expectedContractVersion: EXTERNAL_BI_SERVICE_CONTRACT_VERSION_V2,
+      expectedProductVersion: OWNER_COMPATIBILITY_PROFILE_V2.product.version,
+      expectedContractVersion: OWNER_COMPATIBILITY_PROFILE_V2.contract.version,
       timeoutMs,
-      requiredCapabilities: EXTERNAL_BI_SERVICE_CAPABILITIES_V2,
+      requiredCapabilities: [...EXTERNAL_BI_SERVICE_CAPABILITIES_V2],
     },
-  };
+  });
+  OWNER_VERIFIED_DECISIONS_V2.add(decision);
+  return decision;
 }
 
 function endpoint(baseUrl: string, pathname: string): string {
@@ -218,32 +378,74 @@ function bodyWithout(value: Record<string, unknown>, key: string): Record<string
   return Object.fromEntries(Object.entries(value).filter(([entry]) => entry !== key));
 }
 
-function validateAttestation(value: unknown, config: ExternalBiServiceConfigV2): ExternalBiServiceReasonCodeV2 | null {
-  if (!isRecord(value) || value.schemaVersion !== EXTERNAL_BI_SERVICE_ATTESTATION_SCHEMA_V2) return "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED";
-  const product = isRecord(value.product) ? value.product : null;
-  const contract = isRecord(value.contract) ? value.contract : null;
-  if (!product || product.id !== "superset-bi-agent" || product.version !== config.expectedProductVersion) return "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED";
-  if (!contract || contract.id !== EXTERNAL_BI_SERVICE_CONTRACT_ID_V2 || contract.version !== config.expectedContractVersion) return "EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED";
-  const proof = isRecord(value.attestation) ? value.attestation : null;
-  if (!proof || proof.algorithm !== "sha256-canonical-json" || typeof proof.digest !== "string") return "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED";
+function ownerConfigError(value: unknown): ExternalBiServiceReasonCodeV2 | null {
+  if (!exactKeys(value, [
+    "schemaVersion", "enabled", "biAgentBaseUrl", "expectedProductVersion",
+    "expectedContractVersion", "timeoutMs", "requiredCapabilities",
+  ]) || value.schemaVersion !== EXTERNAL_BI_SERVICE_CONFIG_SCHEMA_V2 || value.enabled !== true) {
+    return "EXTERNAL_BI_SERVICE_REQUEST_DENIED";
+  }
+  if (value.expectedProductVersion !== OWNER_COMPATIBILITY_PROFILE_V2.product.version) {
+    return "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED";
+  }
+  if (value.expectedContractVersion !== OWNER_COMPATIBILITY_PROFILE_V2.contract.version) {
+    return "EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED";
+  }
+  if (!sameCanonicalValue(value.requiredCapabilities, EXTERNAL_BI_SERVICE_CAPABILITIES_V2)) {
+    return "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING";
+  }
+  if (typeof value.biAgentBaseUrl !== "string"
+    || sanitizeBaseUrl(value.biAgentBaseUrl) !== value.biAgentBaseUrl) {
+    return "EXTERNAL_BI_SERVICE_URL_DENIED";
+  }
+  if (!Number.isSafeInteger(value.timeoutMs)
+    || (value.timeoutMs as number) < 100 || (value.timeoutMs as number) > 30000) {
+    return "EXTERNAL_BI_SERVICE_TIMEOUT_DENIED";
+  }
+  return null;
+}
+
+function matchesOwnerProduct(value: unknown): boolean {
+  return exactKeys(value, ["id", "version", "component"])
+    && sameCanonicalValue(value, OWNER_COMPATIBILITY_PROFILE_V2.product);
+}
+
+function matchesOwnerContract(value: unknown): boolean {
+  return exactKeys(value, ["id", "version"])
+    && sameCanonicalValue(value, OWNER_COMPATIBILITY_PROFILE_V2.contract);
+}
+
+function matchesOwnerCapabilities(value: unknown): boolean {
+  return Array.isArray(value)
+    && value.length === OWNER_COMPATIBILITY_PROFILE_V2.capabilities.length
+    && value.every((item, index) => exactKeys(item, ["id", "action", "authority"])
+      && sameCanonicalValue(item, OWNER_COMPATIBILITY_PROFILE_V2.capabilities[index]));
+}
+
+function validateAttestation(value: unknown): ExternalBiServiceReasonCodeV2 | null {
+  if (!exactKeys(value, [
+    "schemaVersion", "product", "contract", "capabilities", "graph", "boundaries", "attestation",
+  ]) || value.schemaVersion !== EXTERNAL_BI_SERVICE_ATTESTATION_SCHEMA_V2) {
+    return "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED";
+  }
+  const proof = value.attestation;
+  if (!exactKeys(proof, ["algorithm", "digest"])
+    || proof.algorithm !== "sha256-canonical-json"
+    || typeof proof.digest !== "string" || !SHA256_DIGEST.test(proof.digest)) {
+    return "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED";
+  }
   try {
     if (proof.digest !== digest(bodyWithout(value, "attestation"))) return "EXTERNAL_BI_SERVICE_DIGEST_DENIED";
   } catch { return "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED"; }
-  if (!Array.isArray(value.capabilities)) return "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED";
-  for (const id of config.requiredCapabilities) {
-    const expected = CAPABILITY_ATTESTATION_V2[id];
-    const item = value.capabilities.find((candidate) => isRecord(candidate) && candidate.id === id);
-    if (!isRecord(item) || item.action !== expected.action || item.authority !== expected.authority || item.externalIntent === false) {
-      return "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING";
-    }
-  }
-  const graph = isRecord(value.graph) ? value.graph : null;
-  const boundaries = isRecord(value.boundaries) ? value.boundaries : null;
-  if (!graph || graph.acceptedIncumbent !== "adaptive-v1" || graph.candidatePromotion !== "none") return "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING";
-  if (!boundaries || boundaries.sourceDatabaseCredentialsAccepted !== false || boundaries.freeSqlAccepted !== false
-    || boundaries.rawSourceRowsReturned !== false || boundaries.modelMutationAuthority !== false
-    || boundaries.directSupersetMutationIntentAccepted !== false
-    || boundaries.persistentSupersetWorkflow !== "trusted-preview-approval-apply-readback-rollback-only") {
+  if (!matchesOwnerProduct(value.product)) return "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED";
+  if (!matchesOwnerContract(value.contract)) return "EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED";
+  if (!matchesOwnerCapabilities(value.capabilities)) return "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING";
+  if (!exactKeys(value.graph, ["acceptedIncumbent", "candidatePromotion"])
+    || !sameCanonicalValue(value.graph, OWNER_GRAPH_PROFILE_V2)) return "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING";
+  if (!exactKeys(value.boundaries, [
+    "sourceDatabaseCredentialsAccepted", "freeSqlAccepted", "rawSourceRowsReturned",
+    "modelMutationAuthority", "directSupersetMutationIntentAccepted", "persistentSupersetWorkflow",
+  ]) || !sameCanonicalValue(value.boundaries, OWNER_BOUNDARY_PROFILE_V2)) {
     return "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED";
   }
   return null;
@@ -261,12 +463,18 @@ function unsafeRequestValue(value: unknown): boolean {
   return Object.entries(value).some(([key, item]) => FORBIDDEN_REQUEST_KEY.test(key.replace(/[^A-Za-z0-9]/g, "")) || unsafeRequestValue(item));
 }
 
-function validateIntentRequest(request: ExternalBiServiceIntentRequestV2): ExternalBiServiceReasonCodeV2 | null {
-  if (!isRecord(request) || !REQUEST_ID.test(String(request.requestId ?? ""))) return "EXTERNAL_BI_SERVICE_REQUEST_DENIED";
+function validateIntentRequest(request: unknown): ExternalBiServiceReasonCodeV2 | null {
+  if (!isRecord(request) || typeof request.requestId !== "string"
+    || !REQUEST_ID.test(request.requestId)) return "EXTERNAL_BI_SERVICE_REQUEST_DENIED";
   if (!EXTERNAL_BI_SERVICE_ACTIONS_V2.includes(request.action as ExternalBiServiceActionV2)) return "EXTERNAL_BI_SERVICE_ACTION_DENIED";
-  const keys = Object.keys(request);
-  if (keys.some((key) => !["requestId", "action", "input"].includes(key))) return "EXTERNAL_BI_SERVICE_REQUEST_DENIED";
-  if (request.input !== undefined && (!isRecord(request.input) || unsafeRequestValue(request.input))) return "EXTERNAL_BI_SERVICE_UNSAFE_REQUEST_DENIED";
+  const expectedKeys = Object.hasOwn(request, "input")
+    ? ["requestId", "action", "input"]
+    : ["requestId", "action"];
+  if (!exactKeys(request, expectedKeys)) return "EXTERNAL_BI_SERVICE_REQUEST_DENIED";
+  if (Object.hasOwn(request, "input")
+    && (!isRecord(request.input) || unsafeRequestValue(request.input))) {
+    return "EXTERNAL_BI_SERVICE_UNSAFE_REQUEST_DENIED";
+  }
   try { canonicalJson(request); } catch { return "EXTERNAL_BI_SERVICE_REQUEST_DENIED"; }
   return null;
 }
@@ -275,25 +483,65 @@ function validateIntentEnvelope(
   value: unknown,
   request: ExternalBiServiceIntentRequestV2,
   attestationDigest: string,
-  config: ExternalBiServiceConfigV2,
 ): ExternalBiServiceReasonCodeV2 | null {
-  if (!isRecord(value) || value.schemaVersion !== EXTERNAL_BI_SERVICE_RESULT_SCHEMA_V2
-    || value.action !== request.action || value.requestId !== request.requestId) return "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED";
-  const runtime = isRecord(value.runtime) ? value.runtime : null;
-  const product = runtime && isRecord(runtime.product) ? runtime.product : null;
-  const contract = runtime && isRecord(runtime.contract) ? runtime.contract : null;
-  if (!product || product.id !== "superset-bi-agent" || product.version !== config.expectedProductVersion) return "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED";
-  if (!contract || contract.id !== EXTERNAL_BI_SERVICE_CONTRACT_ID_V2 || contract.version !== config.expectedContractVersion) return "EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED";
-  if (value.capabilityAttestationDigest !== attestationDigest) return "EXTERNAL_BI_SERVICE_DIGEST_DENIED";
-  const integrity = isRecord(value.integrity) ? value.integrity : null;
-  if (!integrity || integrity.algorithm !== "sha256-canonical-json" || typeof integrity.digest !== "string") return "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED";
+  if (!exactKeys(value, [
+    "schemaVersion", "requestId", "action", "runtime", "capabilityAttestationDigest", "result", "integrity",
+  ]) || value.schemaVersion !== EXTERNAL_BI_SERVICE_RESULT_SCHEMA_V2
+    || value.action !== request.action || value.requestId !== request.requestId) {
+    return "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED";
+  }
+  const runtime = value.runtime;
+  const integrity = value.integrity;
+  const result = value.result;
+  if (!exactKeys(runtime, ["product", "contract"])
+    || !exactKeys(integrity, ["algorithm", "digest"])
+    || integrity.algorithm !== "sha256-canonical-json"
+    || typeof integrity.digest !== "string" || !SHA256_DIGEST.test(integrity.digest)
+    || !isRecord(result) || typeof value.capabilityAttestationDigest !== "string") {
+    return "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED";
+  }
   try {
     if (integrity.digest !== digest(bodyWithout(value, "integrity"))) return "EXTERNAL_BI_SERVICE_DIGEST_DENIED";
   } catch { return "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED"; }
-  const result = isRecord(value.result) ? value.result : null;
-  if (!result) return "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED";
+  if (!matchesOwnerProduct(runtime.product)) return "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED";
+  if (!matchesOwnerContract(runtime.contract)) return "EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED";
+  if (value.capabilityAttestationDigest !== attestationDigest) return "EXTERNAL_BI_SERVICE_DIGEST_DENIED";
+  if (unsafeRequestValue(result)) return "EXTERNAL_BI_SERVICE_UNSAFE_REQUEST_DENIED";
   if (request.action === "status" && result.status !== "READY") return "EXTERNAL_BI_SERVICE_STATUS_MALFORMED";
   return null;
+}
+
+const REASON_CODES_V2 = new Set<ExternalBiServiceReasonCodeV2>([
+  "EXTERNAL_BI_SERVICE_DISABLED",
+  "EXTERNAL_BI_SERVICE_NOT_CONFIGURED",
+  "EXTERNAL_BI_SERVICE_CONFIG_VERIFIED",
+  "EXTERNAL_BI_SERVICE_DIRECT_SUPERSET_CONFIG_DENIED",
+  "EXTERNAL_BI_SERVICE_URL_DENIED",
+  "EXTERNAL_BI_SERVICE_TIMEOUT_DENIED",
+  "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED",
+  "EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED",
+  "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED",
+  "EXTERNAL_BI_SERVICE_DIGEST_DENIED",
+  "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING",
+  "EXTERNAL_BI_SERVICE_REQUEST_DENIED",
+  "EXTERNAL_BI_SERVICE_ACTION_DENIED",
+  "EXTERNAL_BI_SERVICE_UNSAFE_REQUEST_DENIED",
+  "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED",
+  "EXTERNAL_BI_SERVICE_STATUS_MALFORMED",
+  "EXTERNAL_BI_SERVICE_UNAVAILABLE",
+]);
+
+function isReasonCodeArray(value: unknown): value is ExternalBiServiceReasonCodeV2[] {
+  return Array.isArray(value) && value.length > 0
+    && value.every((item) => typeof item === "string"
+      && REASON_CODES_V2.has(item as ExternalBiServiceReasonCodeV2));
+}
+
+function intentFailure(
+  outcome: "DENIED" | "UNAVAILABLE",
+  reasonCode: ExternalBiServiceReasonCodeV2,
+): ExternalBiServiceIntentResultV2 {
+  return immutable({ outcome, reasonCodes: [reasonCode] });
 }
 
 export async function invokeExternalBiServiceV2(
@@ -301,53 +549,110 @@ export async function invokeExternalBiServiceV2(
   request: ExternalBiServiceIntentRequestV2,
   fetchImpl: typeof fetch = fetch,
 ): Promise<ExternalBiServiceIntentResultV2> {
-  if (decision.outcome === "DISABLED") return { outcome: "DISABLED", reasonCodes: decision.reasonCodes };
-  if (decision.outcome === "DENIED") return decision;
-  const requestError = validateIntentRequest(request);
-  if (requestError) return { outcome: "DENIED", reasonCodes: [requestError] };
-  const { config } = decision;
-  if (config.biAgentBaseUrl === null) return { outcome: "DENIED", reasonCodes: ["EXTERNAL_BI_SERVICE_URL_DENIED"] };
+  const ownerDerived = OWNER_VERIFIED_DECISIONS_V2.has(decision);
+  let decisionSnapshot: unknown;
   try {
-    const attestationResponse = await fetchImpl(endpoint(config.biAgentBaseUrl, "/v2/capabilities"), {
+    decisionSnapshot = safeJsonClone(decision);
+  } catch {
+    return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_REQUEST_DENIED");
+  }
+  if (!isRecord(decisionSnapshot) || typeof decisionSnapshot.outcome !== "string") {
+    return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_REQUEST_DENIED");
+  }
+  if (decisionSnapshot.outcome === "DISABLED") {
+    const disabledCodes = new Set(["EXTERNAL_BI_SERVICE_DISABLED", "EXTERNAL_BI_SERVICE_NOT_CONFIGURED"]);
+    if (!exactKeys(decisionSnapshot, ["outcome", "reasonCodes", "config"])
+      || !isReasonCodeArray(decisionSnapshot.reasonCodes)
+      || !decisionSnapshot.reasonCodes.every((code) => disabledCodes.has(code))) {
+      return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_REQUEST_DENIED");
+    }
+    return immutable({
+      outcome: "DISABLED" as const,
+      reasonCodes: [...decisionSnapshot.reasonCodes] as (
+        "EXTERNAL_BI_SERVICE_DISABLED" | "EXTERNAL_BI_SERVICE_NOT_CONFIGURED"
+      )[],
+    });
+  }
+  if (decisionSnapshot.outcome === "DENIED") {
+    if (!exactKeys(decisionSnapshot, ["outcome", "reasonCodes"])
+      || !isReasonCodeArray(decisionSnapshot.reasonCodes)) {
+      return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_REQUEST_DENIED");
+    }
+    return immutable({ outcome: "DENIED" as const, reasonCodes: [...decisionSnapshot.reasonCodes] });
+  }
+  if (decisionSnapshot.outcome !== "VERIFIED"
+    || !exactKeys(decisionSnapshot, ["outcome", "reasonCodes", "config"])
+    || !sameCanonicalValue(decisionSnapshot.reasonCodes, ["EXTERNAL_BI_SERVICE_CONFIG_VERIFIED"])) {
+    return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_REQUEST_DENIED");
+  }
+  const configError = ownerConfigError(decisionSnapshot.config);
+  if (configError) return intentFailure("DENIED", configError);
+  if (!ownerDerived) return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_REQUEST_DENIED");
+  const config = decisionSnapshot.config as unknown as ExternalBiServiceConfigV2;
+  const baseUrl = config.biAgentBaseUrl;
+  if (baseUrl === null) return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_URL_DENIED");
+
+  let requestSnapshot: unknown;
+  try {
+    requestSnapshot = safeJsonClone(request);
+  } catch {
+    return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_REQUEST_DENIED");
+  }
+  const requestError = validateIntentRequest(requestSnapshot);
+  if (requestError) return intentFailure("DENIED", requestError);
+  const safeRequest = requestSnapshot as ExternalBiServiceIntentRequestV2;
+
+  try {
+    const attestationResponse = await fetchImpl(endpoint(baseUrl, "/v2/capabilities"), {
       method: "GET", signal: AbortSignal.timeout(config.timeoutMs),
     });
-    if (!attestationResponse.ok) return { outcome: "UNAVAILABLE", reasonCodes: ["EXTERNAL_BI_SERVICE_UNAVAILABLE"] };
-    const attestation = await responseJson(attestationResponse);
-    const attestationError = validateAttestation(attestation, config);
-    if (attestationError) return { outcome: "DENIED", reasonCodes: [attestationError] };
+    if (!attestationResponse.ok) return intentFailure("UNAVAILABLE", "EXTERNAL_BI_SERVICE_UNAVAILABLE");
+    let attestation: unknown;
+    try {
+      attestation = safeJsonClone(await responseJson(attestationResponse));
+    } catch {
+      return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED");
+    }
+    const attestationError = validateAttestation(attestation);
+    if (attestationError) return intentFailure("DENIED", attestationError);
     const proof = (attestation as Record<string, unknown>).attestation as Record<string, unknown>;
     const attestationDigest = proof.digest as string;
     const payload = {
       schemaVersion: EXTERNAL_BI_SERVICE_REQUEST_SCHEMA_V2,
-      requestId: request.requestId,
-      action: request.action,
-      ...(request.input === undefined ? {} : { input: request.input }),
+      requestId: safeRequest.requestId,
+      action: safeRequest.action,
+      ...(safeRequest.input === undefined ? {} : { input: safeRequest.input }),
     };
-    const response = await fetchImpl(endpoint(config.biAgentBaseUrl, "/v2/intents"), {
+    const response = await fetchImpl(endpoint(baseUrl, "/v2/intents"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
       signal: AbortSignal.timeout(config.timeoutMs),
     });
-    if (!response.ok) return { outcome: "UNAVAILABLE", reasonCodes: ["EXTERNAL_BI_SERVICE_UNAVAILABLE"] };
-    const value = await responseJson(response);
-    const responseError = validateIntentEnvelope(value, request, attestationDigest, config);
-    if (responseError) return { outcome: "DENIED", reasonCodes: [responseError] };
+    if (!response.ok) return intentFailure("UNAVAILABLE", "EXTERNAL_BI_SERVICE_UNAVAILABLE");
+    let value: unknown;
+    try {
+      value = safeJsonClone(await responseJson(response));
+    } catch {
+      return intentFailure("DENIED", "EXTERNAL_BI_SERVICE_RESPONSE_MALFORMED");
+    }
+    const responseError = validateIntentEnvelope(value, safeRequest, attestationDigest);
+    if (responseError) return intentFailure("DENIED", responseError);
     const record = value as Record<string, unknown>;
     const integrity = record.integrity as Record<string, unknown>;
-    return {
-      outcome: "VERIFIED",
-      reasonCodes: ["EXTERNAL_BI_SERVICE_CONFIG_VERIFIED"],
+    return immutable({
+      outcome: "VERIFIED" as const,
+      reasonCodes: ["EXTERNAL_BI_SERVICE_CONFIG_VERIFIED"] as const,
       readback: {
-        action: request.action,
-        requestId: request.requestId,
+        action: safeRequest.action,
+        requestId: safeRequest.requestId,
         attestationDigest,
         responseDigest: integrity.digest as string,
         result: record.result as Readonly<Record<string, unknown>>,
       },
-    };
+    });
   } catch {
-    return { outcome: "UNAVAILABLE", reasonCodes: ["EXTERNAL_BI_SERVICE_UNAVAILABLE"] };
+    return intentFailure("UNAVAILABLE", "EXTERNAL_BI_SERVICE_UNAVAILABLE");
   }
 }
 
@@ -358,22 +663,25 @@ export async function probeExternalBiServiceV2(
   const status = await invokeExternalBiServiceV2(decision, { requestId: "cm-external-bi-probe", action: "status" }, fetchImpl);
   if (status.outcome !== "VERIFIED") return status;
   try {
-    return {
-      outcome: "VERIFIED",
-      reasonCodes: ["EXTERNAL_BI_SERVICE_CONFIG_VERIFIED"],
+    return immutable({
+      outcome: "VERIFIED" as const,
+      reasonCodes: ["EXTERNAL_BI_SERVICE_CONFIG_VERIFIED"] as const,
       readback: {
         schemaVersion: EXTERNAL_BI_SERVICE_READBACK_SCHEMA_V2,
         outcome: "READY",
-        productVersion: EXTERNAL_BI_SERVICE_PRODUCT_VERSION_V2,
-        contractVersion: EXTERNAL_BI_SERVICE_CONTRACT_VERSION_V2,
-        capabilities: EXTERNAL_BI_SERVICE_CAPABILITIES_V2,
+        productVersion: OWNER_COMPATIBILITY_PROFILE_V2.product.version,
+        contractVersion: OWNER_COMPATIBILITY_PROFILE_V2.contract.version,
+        capabilities: [...EXTERNAL_BI_SERVICE_CAPABILITIES_V2],
         acceptedGraphIncumbent: "adaptive-v1",
         attestationDigest: status.readback.attestationDigest,
         statusResponseDigest: status.readback.responseDigest,
         directSupersetAccessByCm: false,
       },
-    };
+    });
   } catch {
-    return { outcome: "UNAVAILABLE", reasonCodes: ["EXTERNAL_BI_SERVICE_UNAVAILABLE"] };
+    return immutable({
+      outcome: "UNAVAILABLE" as const,
+      reasonCodes: ["EXTERNAL_BI_SERVICE_UNAVAILABLE"] as const,
+    });
   }
 }
