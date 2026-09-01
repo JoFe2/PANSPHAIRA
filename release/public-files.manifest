@@ -819,6 +819,7 @@ tests/cscl-05/tryton-profile.test.mjs	tests/cscl-05/tryton-profile.test.mjs	0644
 tests/cscl-06/apache-ofbiz-profile.test.mjs	tests/cscl-06/apache-ofbiz-profile.test.mjs	0644
 tests/cscl-07/matrix.test.mjs	tests/cscl-07/matrix.test.mjs	0644
 tests/cscl-08/party-candidate.test.mjs	tests/cscl-08/party-candidate.test.mjs	0644
+tests/cscl-09/product-candidate-independent-oracle.mjs	tests/cscl-09/product-candidate-independent-oracle.mjs	0644
 tests/cscl-09/product-candidate.test.mjs	tests/cscl-09/product-candidate.test.mjs	0644
 tests/demo-admin-ai-poc.test.mjs	tests/demo-admin-ai-poc.test.mjs	0644
 tests/demo-approval-workbench.test.mjs	tests/demo-approval-workbench.test.mjs	0644
@@ -1413,6 +1414,7 @@ verification/cscl-07-semantic-evidence-matrix-receipt-v1.json	verification/cscl-
 verification/cscl-07-semantic-evidence-matrix-v1.json	verification/cscl-07-semantic-evidence-matrix-v1.json	0644
 verification/cscl-08-party-candidate-receipt-v1.json	verification/cscl-08-party-candidate-receipt-v1.json	0644
 verification/cscl-08-party-candidate-v1.json	verification/cscl-08-party-candidate-v1.json	0644
+verification/cscl-09-product-candidate-independent-replay-v1.json	verification/cscl-09-product-candidate-independent-replay-v1.json	0644
 verification/cscl-09-product-candidate-receipt-v1.json	verification/cscl-09-product-candidate-receipt-v1.json	0644
 verification/cscl-09-product-candidate-v1.json	verification/cscl-09-product-candidate-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
