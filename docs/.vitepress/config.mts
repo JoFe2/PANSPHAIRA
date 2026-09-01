@@ -142,13 +142,22 @@ export default defineConfig({
         ],
       },
       {
+        text: "Concepts and boundaries",
+        items: [
+          { text: "Canon", link: "/CANON" },
+          { text: "Architecture", link: "/ARCHITECTURE" },
+          { text: "Security assurance", link: "/SECURITY-ASSURANCE" },
+          { text: "Known limitations", link: "/KNOWN-LIMITATIONS" },
+        ],
+      },
+      {
         text: "Verify",
         items: [
           { text: "Capability evidence", link: "/capabilities" },
           { text: "ERP order capability cell", link: "/CAPABILITY-CELL-ERP-ORDER" },
           { text: "Local file knowledge corpus", link: "/LOCAL-FILE-KNOWLEDGE-CORPUS" },
           { text: "Agent-work event contract", link: "/AGENT-WORK-EVENT-CONTRACT" },
-          { text: "BI execution spine candidate", link: "/BI-EXECUTION-SPINE-CONTRACT" },
+          { text: "External BI service boundary", link: "/EXTERNAL-BI-SERVICE" },
           { text: "Extension assurance profiles", link: "/EXTENSION-ASSURANCE-PROFILES" },
           { text: "Integration profiles", link: "/INTEGRATION-PROFILES" },
           { text: "Resource-plane profiles", link: "/RESOURCE-PLANE-PROFILES" },
