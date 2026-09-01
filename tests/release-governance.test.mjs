@@ -35,18 +35,19 @@ test("repository release governance passes", () => {
   assert.deepEqual(validateRepository(ROOT), []);
 });
 
-test("release-bound public quickstarts match the current governance tuple", () => {
+test("the full Quickstart owns the immutable runnable archive tuple while README stays version-agnostic", () => {
   const governance = JSON.parse(readFileSync(join(ROOT, "release", "governance.json"), "utf8"));
   const archive = governance.currentRelease.assets.find(({ name }) => name.endsWith(".tar.gz"));
   assert.ok(archive, "CURRENT_RELEASE_ARCHIVE_MISSING");
   const extractedDirectory = archive.name.replace(/\.tar\.gz$/, "");
 
-  for (const path of ["README.md", "docs/QUICKSTART.md"]) {
-    const document = readFileSync(join(ROOT, path), "utf8");
-    assert.match(document, new RegExp(`^release=${governance.currentRelease.tag.replaceAll(".", "\\.")}$`, "m"), `${path}: stale release tag`);
-    assert.match(document, new RegExp(`^archive=${archive.name.replaceAll(".", "\\.")}$`, "m"), `${path}: stale archive name`);
-    assert.match(document, new RegExp(`^cd ${extractedDirectory.replaceAll(".", "\\.")}$`, "m"), `${path}: stale extracted directory`);
-  }
+  const quickstart = readFileSync(join(ROOT, "docs/QUICKSTART.md"), "utf8");
+  assert.match(quickstart, new RegExp(`^release=${governance.currentRelease.tag.replaceAll(".", "\\.")}$`, "m"), "Quickstart: stale release tag");
+  assert.match(quickstart, new RegExp(`^archive=${archive.name.replaceAll(".", "\\.")}$`, "m"), "Quickstart: stale archive name");
+  assert.match(quickstart, new RegExp(`^cd ${extractedDirectory.replaceAll(".", "\\.")}$`, "m"), "Quickstart: stale extracted directory");
+  const readme = readFileSync(join(ROOT, "README.md"), "utf8");
+  assert.doesNotMatch(readme, /^\s*(?:release|archive)=/m);
+  assert.doesNotMatch(readme, /^\s*cd cm-product-increment-/m);
 });
 
 test("public release builder binds its exact file count to the manifest", () => {
@@ -104,7 +105,7 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.doesNotMatch(readme, /^\s*Text fallback:/im);
   assert.doesNotMatch(readme, /assets\/brand\/chimpmaera-(?:master|negative)\.(?:png|svg)/);
   assert.doesNotMatch(readme, /(?:youtu\.be\/|youtube\.com\/)/);
-  assert.match(readme, /\*\*Status:\*\* \[current regular release\]\(https:\/\/github\.com\/JoFe2\/PANSPHAIRA\/releases\/latest\)/);
+  assert.match(readme, /\*\*Status:\*\* \[latest public evidence release\]\(https:\/\/github\.com\/JoFe2\/PANSPHAIRA\/releases\/latest\)/);
   assert.match(readme, /proof of concept · Linux x86_64 · \[Apache-2\.0\]\(LICENSE\)/);
   assert.ok(readme.indexOf("## How it works") < readme.indexOf("## Adaptive Knowledge Engineering"));
   assert.ok(readme.indexOf("## Adaptive Knowledge Engineering") < readme.indexOf("## Proof today"));
@@ -185,15 +186,13 @@ test("release governance negative probes fail closed", async (t) => {
     ["visible public-doc placeholder", "PUBLIC_DOC_UNENCAPSULATED_FALLBACK_LABEL:docs/index.md", (root) => append(root, "docs/index.md", "Placeholder: replace this architecture explanation")],
     ["empty HTML image alt", "PUBLIC_DOC_IMAGE_ALT_UNUSABLE:README.md", (root) => replace(root, "README.md", "alt=\"PanSphaira control architecture from Agent Sphere through governed crossing, Gateway, capability contract, adapter provider, readback receipt, and knowledge revision.\"", "alt=\"\"")],
     ["empty Markdown image alt", "PUBLIC_DOC_IMAGE_ALT_UNUSABLE:README.md", (root) => append(root, "README.md", "![](assets/diagrams/caged-agent-gateway-constellation.svg)")],
-    ["README version-bound release link", "README_STABLE_RELEASE_NAVIGATION_MISSING", (root) => replace(root, "README.md", "[Latest regular release](https://github.com/JoFe2/PANSPHAIRA/releases/latest)", "[Version-bound release](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.1.0)")],
-    ["README stale duplicate release tuple", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => append(root, "README.md", "release=v0.2.0-poc.20260821.1\narchive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz\ncd cm-product-increment-rc-20260821-adaptive-evidence-controller")],
+    ["README version-bound release link", "README_STABLE_RELEASE_NAVIGATION_MISSING", (root) => replace(root, "README.md", "[Latest public evidence release](https://github.com/JoFe2/PANSPHAIRA/releases/latest)", "[Version-bound release](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.1.0)")],
+    ["README volatile release tuple", "README_VOLATILE_RELEASE_TUPLE_DENIED", (root) => append(root, "README.md", "release=v0.2.0-poc.20260825.1\narchive=cm-product-increment-rc-20260825-canonical-number.tar.gz\ncd cm-product-increment-rc-20260825-canonical-number")],
     ["Quickstart stale duplicate release tuple", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:docs/QUICKSTART.md", (root) => append(root, "docs/QUICKSTART.md", "release=v0.2.0-poc.20260821.1\narchive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz\ncd cm-product-increment-rc-20260821-adaptive-evidence-controller")],
-    ["release archive declaration drift", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.currentRelease.assetManifest.declares = "other.tar.gz"; writeFileSync(p, JSON.stringify(j)); }],
-    ["duplicate declared release archive", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); const archive = j.currentRelease.assets.find(({ name }) => name === j.currentRelease.assetManifest.declares); j.currentRelease.assets.push({ ...archive }); writeFileSync(p, JSON.stringify(j)); }],
-    ["README stale increment prose", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => replace(root, "README.md", "canonical-number hardening", "adaptive-evidence controller")],
+    ["release archive declaration drift", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:docs/QUICKSTART.md", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.currentRelease.assetManifest.declares = "other.tar.gz"; writeFileSync(p, JSON.stringify(j)); }],
+    ["duplicate declared release archive", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:docs/QUICKSTART.md", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); const archive = j.currentRelease.assets.find(({ name }) => name === j.currentRelease.assetManifest.declares); j.currentRelease.assets.push({ ...archive }); writeFileSync(p, JSON.stringify(j)); }],
     ["Quickstart stale increment prose", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:docs/QUICKSTART.md", (root) => replace(root, "docs/QUICKSTART.md", "canonical-number hardening", "adaptive-evidence controller")],
-    ["README increment hidden in HTML comment", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => replace(root, "README.md", "This release is the **canonical-number hardening** increment.", "<!-- canonical-number hardening -->\nThis release is the current increment.")],
-    ["README indented stale tuple", "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:README.md", (root) => append(root, "README.md", "```sh\n  release=v0.2.0-poc.20260821.1\n  archive=cm-product-increment-rc-20260821-adaptive-evidence-controller.tar.gz\n  cd cm-product-increment-rc-20260821-adaptive-evidence-controller\n```")],
+    ["README indented release tuple", "README_VOLATILE_RELEASE_TUPLE_DENIED", (root) => append(root, "README.md", "```sh\n  release=v0.2.0-poc.20260825.1\n  archive=cm-product-increment-rc-20260825-canonical-number.tar.gz\n  cd cm-product-increment-rc-20260825-canonical-number\n```")],
     ["missing Quickstart document", "PUBLIC_QUICKSTART_MISSING:docs/QUICKSTART.md", (root) => rmSync(join(root, "docs/QUICKSTART.md"))],
     ["README Daily identity", "README_ACTIVE_DAILY_IDENTITY_DENIED", (root) => replace(root, "README.md", "Release pages own included capabilities", "Today's Daily snapshot owns included capabilities")],
     ["Knowledge OS promoted as current maturity", "README_POC_POSITIONING_MISSING", (root) => replace(root, "README.md", "broader direction is not a claim of current", "broader direction is current")],

@@ -48,6 +48,11 @@ Start with the [governed agent-action use case](./use-cases/governed-agent-actio
 follow the specific [CRM-to-ERP approval and readback path](./use-cases/crm-erp-approval-readback.md),
 then verify each capability against the [evidence matrix](./capabilities.md).
 
+For the governing concepts and boundaries, use the [documentation hub](./README.md),
+[Canon](./CANON.md), [Architecture](./ARCHITECTURE.md), [Security Assurance](./SECURITY-ASSURANCE.md),
+and [Known Limitations](./KNOWN-LIMITATIONS.md). These documents own the detail;
+the landing page remains an orientation surface.
+
 ## Choose, ask, or contribute
 
 Read [when PanSphaira is not the right tool](./alternatives.md) before choosing

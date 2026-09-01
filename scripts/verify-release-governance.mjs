@@ -129,13 +129,12 @@ export function validateRepository(root = process.cwd()) {
   const readmeOutsideQuickstart = readme.replace(quickstartSection, "");
   const releaseArchives = (release.assets ?? []).filter(({ name }) => name === release.assetManifest?.declares && name.endsWith(".tar.gz"));
   const releaseArchive = releaseArchives.length === 1 ? releaseArchives[0] : undefined;
-  for (const [path, document] of [["README.md", readme], ["docs/QUICKSTART.md", quickstart]]) {
-    issue(
-      issues,
-      releaseTupleMatches(document, release, releaseArchive),
-      `PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:${path}`,
-    );
-  }
+  issue(issues, releaseTupleMatches(quickstart, release, releaseArchive), "PUBLIC_QUICKSTART_RELEASE_TUPLE_STALE:docs/QUICKSTART.md");
+  issue(
+    issues,
+    !/^\s*(?:release|archive)=/m.test(readme) && !/^\s*cd cm-product-increment-/m.test(readme),
+    "README_VOLATILE_RELEASE_TUPLE_DENIED",
+  );
   issue(
     issues,
     [
@@ -158,7 +157,7 @@ export function validateRepository(root = process.cwd()) {
   issue(
     issues,
     /An open, knowledge-driven operating system for governed,\s+adaptable AI ecosystems\./i.test(readme)
-      && /current regular release provides an open-source proof-of-concept control\s+plane/i.test(readme)
+      && /public repository provides an open-source proof-of-concept control\s+plane/i.test(readme)
       && /runnable local synthetic demo/i.test(readme)
       && /broader direction is not a claim of current\s+product maturity or universal live compatibility/i.test(readme),
     "README_POC_POSITIONING_MISSING",

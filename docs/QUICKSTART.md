@@ -5,28 +5,57 @@ description: Install, verify, run, and ownership-scope cleanup for PanSphaira's 
 
 # Quickstart
 
-Before running the demo, read [The PanSphaira Canon](CANON.md),
-[The Operating Field Guide](OPERATING-FIELD-GUIDE.md),
-[Architecture](ARCHITECTURE.md) and [Known Limitations](KNOWN-LIMITATIONS.md).
+> **Local synthetic safety boundary**
+>
+> Run only on a disposable or development Linux x86_64 host. The demo uses
+> fictional fixtures, creates local random credentials, binds services to
+> loopback, and must be removed with the ownership-scoped cleanup command below.
+> It is not a production deployment or a live-system compatibility test.
+
+For background, see the [Canon](CANON.md), [Operating Field
+Guide](OPERATING-FIELD-GUIDE.md), [Architecture](ARCHITECTURE.md) and [Known
+Limitations](KNOWN-LIMITATIONS.md).
 
 ## Requirements
 
 Install Docker Engine with Docker Compose v2 and the local command-line tools
-`jq`, `curl`, OpenSSL and `sha256sum`. The demo targets Linux x86_64 and uses
-only loopback service bindings.
+`jq`, `curl`, OpenSSL and `sha256sum`. The repository requires the exact Node.js
+and npm ranges declared in [`package.json`](../package.json) (currently Node.js
+24 and npm 11).
 
-## Get the source
+Repository paths and stable technical identifiers may still use `chimpmaera` or
+`cm`; see the [terminology and identity guardrails](PANSPHAIRA-TERMINOLOGY.md).
 
-### Verified Latest release archive
+## Choose a source identity
 
-The current Latest release has a release-bound archive and SHA-256 sidecar.
-Download both exact public assets and verify the sidecar before extraction:
+### Current Main source candidate
 
-Its increment claim is canonical-number hardening. It rejects negative zero
-before canonicalization at established Verification Fabric timestamp and
-Extension Assurance Profile numeric boundaries. It does not grant trust,
-admission, activation, execution, marketplace authority, production readiness
-or customer evidence.
+Public Main is the runnable development source candidate. It is not a
+checksum-bound release asset and must remain distinct from released evidence:
+
+```sh
+git clone https://github.com/JoFe2/PANSPHAIRA.git
+cd PANSPHAIRA
+git switch main
+git rev-parse HEAD
+```
+
+The public **Latest** page may identify a source-only evidence release without
+a custom runnable archive or SHA-256 sidecar. Inspect its target and asset list
+on [Latest](https://github.com/JoFe2/PANSPHAIRA/releases/latest) before relying
+on that moving public identity. Record `git rev-parse HEAD` for a Main checkout;
+GitHub-generated source archives are not substitutes for a project-published
+checksum sidecar.
+
+### Historical verified runnable archive
+
+The prior `v0.2.0-poc.20260825.1` canonical-number hardening release remains a
+historical verified runnable PoC archive with a project-published SHA-256
+sidecar. It is **not Latest**. Use its immutable [release
+page](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260825.1)
+or the exact commands below to obtain and verify the archive and sidecar; do
+not infer current-Main content or current release status from that historical
+artifact.
 
 ```sh
 release=v0.2.0-poc.20260825.1
@@ -39,38 +68,32 @@ tar -xzf "$archive"
 cd cm-product-increment-rc-20260825-canonical-number
 ```
 
-The sidecar owns the expected digest; do not substitute a checksum copied from
-unverified prose. Check [Latest](https://github.com/JoFe2/PANSPHAIRA/releases/latest)
-before using these release-bound names.
-
-### Contributor checkout
-
-For development against public `main`, keep that source identity distinct from
-released evidence:
-
-```sh
-git clone https://github.com/JoFe2/PANSPHAIRA.git
-cd PANSPHAIRA
-git switch main
-```
-
 ## Verify the source candidate
 
-With Node.js 24 and npm 11, dependencies can be prepared from a populated
-local cache:
+Install the exact locked dependencies, then run the repository checks:
 
 ```sh
-npm ci --offline --ignore-scripts --no-audit --no-fund
+npm ci --ignore-scripts --no-audit --no-fund
 npm run lint
 npm test
 ```
 
-The external video boundary has a lightweight contract check that does not build a
-GPU image or download a model:
+If the complete npm cache is already populated and network-free installation is
+required, use the optional offline form instead:
+
+```sh
+npm ci --offline --ignore-scripts --no-audit --no-fund
+```
+
+The external video boundary has a lightweight contract check that neither
+builds a GPU image nor downloads a model:
 
 ```sh
 npm run external-video-service:test
 ```
+
+Passing source tests is local candidate evidence; it does not turn a Main
+checkout into a release archive or establish production fitness.
 
 ## Run the playable demo
 
@@ -84,16 +107,17 @@ performs semantic readback. Initial installation can download the pinned
 container images.
 
 Success prints `READY_VERIFIED` and three loopback URLs. Keep the generated
-credentials local. The guided demo also exercises the deterministic Admin-AI
-preview path for permitted, denied and escalation outcomes.
+credentials local. The default `SAFE_GUIDED` flow exercises permitted, denied
+and escalation outcomes. The separately confirmed `RAMPAGE` profile is an
+explicit local-demo opt-in and is outside the governed SAFE_GUIDED reference
+path.
 
 ## Optional external BI service
 
-BI is no longer embedded in the CM demo stack. To use the standalone BI
-subsystem, run the supported KaleidoSphere v0.8.0 compatibility release, then
-point CM only at its SBA loopback URL with `BI_AGENT_BASE_URL`. Direct Superset
-URLs are rejected. See
-[External BI service contract](EXTERNAL-BI-SERVICE.md).
+BI is not embedded in the CM demo stack. To use the standalone BI subsystem,
+run the supported KaleidoSphere v0.8.0 compatibility release, then point CM only
+at its SBA loopback URL with `BI_AGENT_BASE_URL`. Direct Superset URLs are
+rejected. See the [External BI service contract](EXTERNAL-BI-SERVICE.md).
 
 ## Stop and remove owned state
 
@@ -101,9 +125,6 @@ URLs are rejected. See
 ./demo/uninstall.sh --purge
 ```
 
-The cleanup command is ownership-scoped. Never substitute broad Docker prune
-or filesystem deletion commands.
-
-Cleanup is not provider Rollback or authority Revoke. The distinction is
-defined by
-[CM-CAN-13](CANON.md).
+The cleanup command is ownership-scoped. Never substitute broad Docker prune or
+filesystem deletion commands. Cleanup is not provider Rollback or authority
+Revoke; [CM-CAN-13](CANON.md) defines the distinction.
