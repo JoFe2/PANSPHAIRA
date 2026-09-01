@@ -1,0 +1,375 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CSCL-AUTO-327-DELIVERY",
+  "closureOwnerTaskId": "CSCL-AUTO-327-ROOT-QS",
+  "sourceIssue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 327,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/327"
+  },
+  "recordedAt": "2026-09-01T13:18:35Z",
+  "closureGraph": {
+    "graphId": "JoFe2/PANSPHAIRA#327@a01647cfdd292303136fce691ad579ac4e69ba51",
+    "graphBundleSha256": "82f93391c96d2874c1c36bfa62478a2aeebd42b123d6f54cbc4dbd7511bf7b40",
+    "sourceIssueBodySha256": "62acec946aba57abb3ba0ea1dabee8944e9d79980ff08ba96f93aaf14e060f74",
+    "expectedMaterializedNodeCount": 4,
+    "deliveryDependency": "CSCL-AUTO-327-INTEGRATE",
+    "rootQsDependency": "CSCL-AUTO-327-DELIVERY",
+    "releaseDisposition": "RELEASE_REQUIRED"
+  },
+  "baseCommit": "a01647cfdd292303136fce691ad579ac4e69ba51",
+  "implementationHead": "8c06eb3c0ebca43222792ce5f430b59ef3ee7cdb",
+  "implementationTree": "e4e35b816723de2c3e75e40c95c82730309c8218",
+  "testedProductHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
+  "testedProductTree": "1b8bcc083fc95d9f24199d6d704c1885823ba6fc",
+  "runCommits": [
+    "8c06eb3c0ebca43222792ce5f430b59ef3ee7cdb",
+    "6b9a59d751f9b4e5e055d812cbea505d8f633de3"
+  ],
+  "headBinding": {
+    "baseIsMergeBase": true,
+    "candidateBytesChangedDuringIntegration": false,
+    "worktreeCleanBeforeAudit": true,
+    "auditIsRepositoryOnlySelfExcludedEvidence": true
+  },
+  "changedPaths": [
+    "SHA256SUMS",
+    "docs/architecture/cscl-10-sales-mapping-application-guide-v1.md",
+    "package.json",
+    "release/public-files.manifest",
+    "scripts/build-public-release.sh",
+    "src/cscl-10/sales-candidate.mjs",
+    "tests/canonical-json-profile-inventory.test.ts",
+    "tests/contribution-intake-ledger.test.ts",
+    "tests/cscl-10/sales-candidate.test.mjs",
+    "tests/release-governance.test.mjs",
+    "tests/verification-fabric-v2.test.ts",
+    "tools/video-production-reference/SHA256SUMS",
+    "tools/video-production-reference/tests/slice.test.mjs",
+    "verification/canonical-json-profile-inventory-v1.json",
+    "verification/cscl-10-sales-candidate-receipt-v1.json",
+    "verification/cscl-10-sales-candidate-v1.json",
+    "verification/verification-dag-v2.json"
+  ],
+  "artifactBindings": {
+    "releasedMatrixBytes": {
+      "path": "verification/cscl-07-semantic-evidence-matrix-v1.json",
+      "fileSha256": "02ffb40584d857b2f7a8fdf2ba193c78a2561721969d511348fff726a95a9797",
+      "canonicalMatrixDigest": "d68dff995ab03e426302f593a5f73e10ffa886040217b7355e310878aa957d8d",
+      "evidenceReviewDigest": "779d304ff4ddc92f1bf1f1fc8471ff079ab9e89044331f098ddf0523375ccfc0",
+      "releaseTag": "2026_08_31_v4",
+      "releasedMain": "27488888a35fc59caa51bff12fb4ba8c0f28c31d"
+    },
+    "candidate": {
+      "path": "verification/cscl-10-sales-candidate-v1.json",
+      "sha256": "636c33318dc0b542e5be8b1849eb798dcebbf3ac51ea64ea86ffcacac99d6c0e",
+      "candidateId": "cscl-10-sales-order-management-candidate-v1",
+      "status": "NON_AUTHORITATIVE_CANDIDATE_FROZEN"
+    },
+    "candidateReceipt": {
+      "path": "verification/cscl-10-sales-candidate-receipt-v1.json",
+      "sha256": "1607a8d2a9b0767199ed8bb2417b99e3ad67caef61e2cace3df40b6d7ab6ee06",
+      "receiptDigest": "7bdbdd6c218120a4ff4251bf12b9817e45d744f1fdcd06ec05a5252558c236fc"
+    },
+    "mappingApplicationGuide": {
+      "path": "docs/architecture/cscl-10-sales-mapping-application-guide-v1.md",
+      "sha256": "f547a7eabbdd9766816136016815aac20ce06d6fc40328df2c3dd70510cec36e"
+    },
+    "deriver": {
+      "path": "src/cscl-10/sales-candidate.mjs",
+      "sha256": "6b15dca5df0e58e7670375325cc598a7f6c61e2cd45801aca1ef799bff738644"
+    },
+    "validator": {
+      "path": "tests/cscl-10/sales-candidate.test.mjs",
+      "sha256": "7856f9ea03e8eaec7094ad6b70f396c6726d96d89c0f663feb07d72c80686e17"
+    }
+  },
+  "evidenceTopology": {
+    "rows": 12,
+    "cells": 60,
+    "systems": 5,
+    "salesReviews": 12,
+    "analysisOriginalEvidenceEdges": 61,
+    "promotedVariantRelationEvidenceEdges": 5,
+    "counterevidenceEntries": 7,
+    "classifications": {
+      "CORE": 0,
+      "OPTIONAL_FEATURE": 0,
+      "SYSTEM_VARIANT": 53,
+      "PROCESS_VARIANT": 0,
+      "ABSENCE": 1,
+      "UNRESOLVED_CONFLICT": 6
+    },
+    "relations": {
+      "UNRESOLVED": 10,
+      "VARIANT_RELATION": 1,
+      "DENIED": 1
+    },
+    "commonCoreConclusion": "EMPTY_FROM_COMPLETE_EVIDENCE"
+  },
+  "acceptance": {
+    "CSCL-10-AC01": {
+      "status": "PASS",
+      "proof": "All 12 released dimensions preserve source-native descriptions for objects and roles, relations, operations, inputs and outputs, states and transitions, events, preconditions, invariants, exceptions and errors, readbacks, service exposure, and absence or conflict; the guide freezes their application and evidence expectations while proving that no canonical interface enters the empty common core.",
+      "evidence": [
+        "verification/cscl-10-sales-candidate-v1.json#analyses",
+        "docs/architecture/cscl-10-sales-mapping-application-guide-v1.md#reading-the-candidate",
+        "docs/architecture/cscl-10-sales-mapping-application-guide-v1.md#evidence-expectations"
+      ]
+    },
+    "CSCL-10-AC02": {
+      "status": "PASS",
+      "proof": "Every one of 60 emitted elements carries its question and system, source cell and profile digests, source fact IDs and digests, exact source-native claim, locator and excerpt digest; the sole emitted relation variant carries all five reviewed cell and original-evidence references. There are no core elements to bind.",
+      "evidence": [
+        "verification/cscl-10-sales-candidate-v1.json#analyses",
+        "verification/cscl-10-sales-candidate-v1.json#promotedVariantRelations",
+        "tests/cscl-10/sales-candidate.test.mjs"
+      ]
+    },
+    "CSCL-10-AC03": {
+      "status": "PASS",
+      "proof": "The frozen six-way classification is explicit and exhaustive: core 0, optional feature 0, system variant 53, process variant 0, absence 1, unresolved conflict 6.",
+      "evidence": [
+        "verification/cscl-10-sales-candidate-v1.json#classificationCounts",
+        "docs/architecture/cscl-10-sales-mapping-application-guide-v1.md#frozen-result"
+      ]
+    },
+    "CSCL-10-AC04": {
+      "status": "PASS",
+      "proof": "All seven ABSENT, AMBIGUOUS or CONFLICTING elements preserve non-empty explicit counterevidence. The complete 12-review sales denominator proves why no cross-system counterclaim can be silently substituted: one source-bound variant relation, ten unresolved relations, one denied relation and zero potential-equivalence reviews in the complete 36-review matrix.",
+      "evidence": [
+        "verification/cscl-10-sales-candidate-v1.json#analyses",
+        "verification/cscl-10-sales-candidate-v1.json#completeEvidenceConclusion",
+        "tests/cscl-10/sales-candidate.test.mjs"
+      ]
+    },
+    "CSCL-10-AC05": {
+      "status": "PASS",
+      "proof": "Independent derivation from released CSCL-07 bytes is deterministic and byte-identical. Caller labels, claimed frequency and source mutation cannot select, upgrade or redigest the result.",
+      "evidence": [
+        "src/cscl-10/sales-candidate.mjs#deriveSalesCandidate",
+        "tests/cscl-10/sales-candidate.test.mjs"
+      ]
+    },
+    "CSCL-10-AC06": {
+      "status": "PASS",
+      "proof": "The common core, optional-feature and process-variant arrays are empty. Extra fields, digest drift, holdout material, promotion mutations and Authority claims fail closed with SOURCE_MATRIX_DIGEST_MISMATCH; the sole states-transitions relation remains source-bound and explicitly not promoted to core.",
+      "evidence": [
+        "verification/cscl-10-sales-candidate-v1.json#commonCore",
+        "verification/cscl-10-sales-candidate-v1.json#promotedVariantRelations",
+        "tests/cscl-10/sales-candidate.test.mjs"
+      ]
+    },
+    "CSCL-10-AC07": {
+      "status": "PASS",
+      "proof": "The non-authoritative candidate, receipt and Mapping/Application Guide render deterministically and match the committed bytes exactly; the future validation boundary excludes holdout semantics, execution, promotion and Authority.",
+      "evidence": [
+        "verification/cscl-10-sales-candidate-v1.json",
+        "verification/cscl-10-sales-candidate-receipt-v1.json",
+        "docs/architecture/cscl-10-sales-mapping-application-guide-v1.md#future-validation-boundary",
+        "tests/cscl-10/sales-candidate.test.mjs"
+      ]
+    }
+  },
+  "releasedSourceReviewInput": {
+    "fullReviewLedgerCount": 36,
+    "salesReviewCount": 12,
+    "positiveSalesReviewCount": 1,
+    "potentialEquivalenceCount": 0,
+    "relationId": "relation:SALES_ORDER_MANAGEMENT:states-transitions",
+    "outcome": "VARIANT_RELATION",
+    "reason": "FROZEN_EXACT_PURPOSE_AND_DIFFERING_OPERATIONAL_DIMENSION_EDGE",
+    "supportedDimensions": [
+      "purpose",
+      "statesTransitions"
+    ],
+    "reviewedSystems": [
+      "odoo-community",
+      "erpnext",
+      "dolibarr",
+      "tryton",
+      "apache-ofbiz"
+    ],
+    "disposition": "SOURCE_BOUND_RELATION_VARIANT_ONLY_NOT_COMMON_CORE"
+  },
+  "independentIntegratedReviewInput": {
+    "requiredCount": 1,
+    "completedByDelivery": 0,
+    "status": "PENDING_ROOT_QS",
+    "owner": "CSCL-AUTO-327-ROOT-QS",
+    "reviewTargetHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
+    "reviewTargetTree": "1b8bcc083fc95d9f24199d6d704c1885823ba6fc",
+    "maxReviewReturns": 1,
+    "reviewReturnCountAtPlanning": 0,
+    "scope": [
+      "ALL_SEVEN_ACCEPTANCE_CRITERIA",
+      "EXACT_RELEASED_SOURCE_AND_ORIGINAL_EVIDENCE_REPLAY",
+      "COMPLETE_SALES_DENOMINATOR_AND_SINGLE_POSITIVE_REVIEW",
+      "FAIL_CLOSED_CALLER_FREQUENCY_DIGEST_EXTRA_HOLDOUT_PROMOTION_AUTHORITY_CASES",
+      "PUBLIC_DAG_CENSUS_NESTED_ROOT_INTEGRATION",
+      "NON_AUTHORITY_AND_HOLDOUT_ISOLATION_BOUNDARIES"
+    ],
+    "nonClaim": "DELIVERY_PREPARED_REVIEW_INPUTS_BUT_DID_NOT_PERFORM_THE_ROOT_QS_REVIEW"
+  },
+  "controllerGateReceipts": {
+    "implementation": [
+      {
+        "command": "node --test tests/cscl-10/sales-candidate.test.mjs",
+        "exitCode": 0,
+        "receiptSha256": "665af99daf77d5ef488cfbfe3995efadc57bee381cf97cb619658d088af3abe2"
+      },
+      {
+        "command": "npm run cscl07:test",
+        "exitCode": 0,
+        "receiptSha256": "56d2fb5d1561e963fb54ba5a00d7099bcc088b5036e5a616f5139011186cd447"
+      },
+      {
+        "command": "git diff --check a01647cfdd292303136fce691ad579ac4e69ba51...HEAD",
+        "exitCode": 0,
+        "receiptSha256": "9d466b79076ea0ec87e0e65acf0139e7f8f448c95274d60005695c02cc3da4cf"
+      }
+    ],
+    "integration": [
+      {
+        "command": "node --test tests/cscl-10/sales-candidate.test.mjs",
+        "exitCode": 0,
+        "receiptSha256": "8d5de0ee27ab6bbb3c42fe78a56cd3ef850d0924087e470f51d73a56f8a1fe16"
+      },
+      {
+        "command": "npm run cscl07:test",
+        "exitCode": 0,
+        "receiptSha256": "227e12fb2859d6fae6e8e37f40747f24bc7dcf509a66c8cdcd93134c9458eabf"
+      },
+      {
+        "command": "npm run release-governance:test",
+        "exitCode": 0,
+        "receiptSha256": "932434104d75d77bba081b85f019005eccac7aa69e18efb501970dcd74f621e9"
+      },
+      {
+        "command": "sha256sum --check SHA256SUMS",
+        "exitCode": 0,
+        "receiptSha256": "32769787071ec2aec52727e32642fcd909044fc35cea18eb635df8a7cd57188d"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "exitCode": 0,
+        "receiptSha256": "73aced2dc1e0d6e344880ebed995d0b364f8cbfdc61bd051dfbb9770e4b5fca0"
+      }
+    ]
+  },
+  "deliveryLocalChecks": [
+    {
+      "command": "node --test tests/cscl-10/sales-candidate.test.mjs",
+      "status": "PASS",
+      "tests": 4,
+      "passed": 4
+    },
+    {
+      "command": "npm run cscl07:test",
+      "status": "PASS",
+      "tests": 8,
+      "passed": 8
+    },
+    {
+      "command": "npm run release-governance:test",
+      "status": "PASS",
+      "tests": 54,
+      "passed": 54
+    },
+    {
+      "command": "npm run supply-chain:verify",
+      "status": "PASS"
+    },
+    {
+      "command": "sha256sum --check SHA256SUMS",
+      "status": "PASS",
+      "entries": 1727
+    },
+    {
+      "command": "git diff --check origin/main...HEAD",
+      "status": "PASS"
+    }
+  ],
+  "fullSuiteAndRootGateInput": {
+    "owner": "CSCL-AUTO-327-ROOT-QS",
+    "immutableCandidateHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
+    "immutableCandidateTree": "1b8bcc083fc95d9f24199d6d704c1885823ba6fc",
+    "requiredCommands": [
+      "node --test tests/cscl-10/sales-candidate.test.mjs",
+      "npm run verification:plan",
+      "npm run supply-chain:verify",
+      "npm run release-governance:test",
+      "sha256sum --check SHA256SUMS",
+      "npm test"
+    ],
+    "finalFullSuite": {
+      "command": "npm test",
+      "status": "PENDING_ROOT_QS_PINNED_ENVIRONMENT"
+    },
+    "deliveryHostPreflight": {
+      "node": "24.19.0",
+      "npm": "11.17.0",
+      "nodeModulesPresent": false,
+      "defaultNpmStartup": "EXIT_133_SIGTRAP_V8_SET_PERMISSIONS",
+      "replacementForRunnableNodeOnlyChecks": "NODE_OPTIONS=--jitless",
+      "npmRunBuild": "EXIT_127_TSC_NOT_FOUND",
+      "npmRunLint": "EXIT_127_TSC_NOT_FOUND",
+      "npmRunVerificationPlan": "EXIT_127_TSC_NOT_FOUND",
+      "npmTest": "EXIT_127_TSC_NOT_FOUND_DURING_FIRST_PRETEST_BUILD",
+      "classification": "INFRASTRUCTURE_ONLY_NO_PRODUCT_VERDICT"
+    }
+  },
+  "integrity": {
+    "publicManifestEntries": 1423,
+    "verificationDagVersion": 38,
+    "verificationDagNodes": 48,
+    "rootChecksumEntries": 1727,
+    "candidateOwnedTest": "npm run cscl10:test",
+    "repositoryIntegrityDependsOnCandidate": true
+  },
+  "deliveryPolicyInput": {
+    "schemaVersion": "delivery/v1",
+    "owner": "CSCL-AUTO-327-ROOT-QS",
+    "repository": "JoFe2/PANSPHAIRA",
+    "base": "main",
+    "headBranch": "auto/cscl-10-sales",
+    "reviewTargetHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
+    "mergeMethod": "squash",
+    "requiredPrCi": [
+      "CI"
+    ],
+    "requiredMainCi": [
+      "CI"
+    ],
+    "release": {
+      "required": true,
+      "tagStrategy": "DAILY_SEQUENCE",
+      "prerelease": false,
+      "ownerApprovedDeferred": false
+    },
+    "issue": {
+      "number": 327,
+      "close": true
+    },
+    "externalEffectsPerformedByDelivery": 0,
+    "status": "PENDING_ROOT_QS",
+    "requiredDownstreamGates": [
+      "EXACT_PR_HEAD_CI",
+      "SHA_BOUND_MERGE",
+      "EXACT_MAIN_HEAD_CI",
+      "SERIAL_DAILY_RELEASE",
+      "ANONYMOUS_ARTIFACT_AND_ISSUE_READBACK",
+      "ISSUE_CLOSED_COMPLETED",
+      "QUEUE_ROOT_DONE_AND_CLEANUP"
+    ]
+  },
+  "nonClaims": [
+    "NO_UNIVERSAL_ERP_OR_COMPATIBILITY_CLAIM",
+    "NO_COMMON_CORE_OPTIONAL_FEATURE_OR_PROCESS_VARIANT_CLAIM",
+    "NO_HOLDOUT_SEMANTICS_ACCESSED_OR_CLAIMED",
+    "NO_PROMOTION_EXECUTION_WRITE_OR_AUTHORITY_GRANT",
+    "NO_INDEPENDENT_ROOT_QS_REVIEW_CLAIM_BY_DELIVERY",
+    "NO_FULL_SUITE_PASS_CLAIM_FROM_MISSING_LOCAL_DEPENDENCIES",
+    "NO_PR_MERGE_RELEASE_READBACK_CLOSE_OR_QUEUE_DONE_CLAIM"
+  ]
+}
