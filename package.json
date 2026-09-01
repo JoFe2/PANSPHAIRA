@@ -112,7 +112,8 @@
     "cscl04:test": "node --test tests/cscl-04/profile.test.mjs",
     "cscl05:test": "node --test tests/cscl-05/tryton-profile.test.mjs",
     "cscl06:test": "node --test tests/cscl-06/apache-ofbiz-profile.test.mjs",
-    "cscl07:test": "node --test tests/cscl-07/matrix.test.mjs"
+    "cscl07:test": "node --test tests/cscl-07/matrix.test.mjs",
+    "cscl08:test": "node --test tests/cscl-08/party-candidate.test.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0",
