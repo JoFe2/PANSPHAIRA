@@ -2,12 +2,28 @@
   "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
   "taskId": "CSCL-AUTO-327-DELIVERY",
   "closureOwnerTaskId": "CSCL-AUTO-327-ROOT-QS",
+  "finalizerTaskId": "CSCL-AUTO-327-ROOT-QS-FINALIZER-01",
   "sourceIssue": {
     "repository": "JoFe2/PANSPHAIRA",
     "number": 327,
     "url": "https://github.com/JoFe2/PANSPHAIRA/issues/327"
   },
   "recordedAt": "2026-09-01T13:18:35Z",
+  "finalizedAt": "2026-09-01T14:52:25Z",
+  "governance": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "authorityGranted": false
+  },
   "closureGraph": {
     "graphId": "JoFe2/PANSPHAIRA#327@a01647cfdd292303136fce691ad579ac4e69ba51",
     "graphBundleSha256": "82f93391c96d2874c1c36bfa62478a2aeebd42b123d6f54cbc4dbd7511bf7b40",
@@ -20,17 +36,22 @@
   "baseCommit": "a01647cfdd292303136fce691ad579ac4e69ba51",
   "implementationHead": "8c06eb3c0ebca43222792ce5f430b59ef3ee7cdb",
   "implementationTree": "e4e35b816723de2c3e75e40c95c82730309c8218",
-  "testedProductHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
-  "testedProductTree": "1b8bcc083fc95d9f24199d6d704c1885823ba6fc",
+  "integratedProductHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
+  "integratedProductTree": "1b8bcc083fc95d9f24199d6d704c1885823ba6fc",
+  "testedProductHead": "88a413d7960374b5851d3d0289806774598ef399",
+  "testedProductTree": "c479a94b9b1f97ca5a8e9f575ea2ae4a6a7e3a59",
   "runCommits": [
     "8c06eb3c0ebca43222792ce5f430b59ef3ee7cdb",
-    "6b9a59d751f9b4e5e055d812cbea505d8f633de3"
+    "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
+    "88a413d7960374b5851d3d0289806774598ef399"
   ],
   "headBinding": {
     "baseIsMergeBase": true,
     "candidateBytesChangedDuringIntegration": false,
     "worktreeCleanBeforeAudit": true,
-    "auditIsRepositoryOnlySelfExcludedEvidence": true
+    "auditIsRepositoryOnlySelfExcludedEvidence": true,
+    "rootQsReviewRanOnExactTestedProductHead": true,
+    "dependencyHydrationChangedTrackedBytes": false
   },
   "changedPaths": [
     "SHA256SUMS",
@@ -195,12 +216,13 @@
   "independentIntegratedReviewInput": {
     "requiredCount": 1,
     "completedByDelivery": 0,
-    "status": "PENDING_ROOT_QS",
-    "owner": "CSCL-AUTO-327-ROOT-QS",
-    "reviewTargetHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
-    "reviewTargetTree": "1b8bcc083fc95d9f24199d6d704c1885823ba6fc",
+    "completedByRootQs": 1,
+    "status": "PASS",
+    "owner": "CSCL-AUTO-327-ROOT-QS-FINALIZER-01",
+    "reviewTargetHead": "88a413d7960374b5851d3d0289806774598ef399",
+    "reviewTargetTree": "c479a94b9b1f97ca5a8e9f575ea2ae4a6a7e3a59",
     "maxReviewReturns": 1,
-    "reviewReturnCountAtPlanning": 0,
+    "reviewReturnCount": 0,
     "scope": [
       "ALL_SEVEN_ACCEPTANCE_CRITERIA",
       "EXACT_RELEASED_SOURCE_AND_ORIGINAL_EVIDENCE_REPLAY",
@@ -209,7 +231,14 @@
       "PUBLIC_DAG_CENSUS_NESTED_ROOT_INTEGRATION",
       "NON_AUTHORITY_AND_HOLDOUT_ISOLATION_BOUNDARIES"
     ],
-    "nonClaim": "DELIVERY_PREPARED_REVIEW_INPUTS_BUT_DID_NOT_PERFORM_THE_ROOT_QS_REVIEW"
+    "verdicts": {
+      "allSevenAcceptanceCriteria": "PASS",
+      "exactReleasedSourceAndOriginalEvidenceReplay": "PASS",
+      "completeSalesDenominatorAndSinglePositiveReview": "PASS",
+      "failClosedMutationCases": "PASS",
+      "publicDagCensusNestedRootIntegration": "PASS",
+      "nonAuthorityAndHoldoutIsolationBoundaries": "PASS"
+    }
   },
   "controllerGateReceipts": {
     "implementation": [
@@ -255,6 +284,81 @@
         "exitCode": 0,
         "receiptSha256": "73aced2dc1e0d6e344880ebed995d0b364f8cbfdc61bd051dfbb9770e4b5fca0"
       }
+    ],
+    "rootQsFinalizer": [
+      {
+        "command": "node --test tests/cscl-10/sales-candidate.test.mjs",
+        "environment": "NODE_OPTIONS=--jitless",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS",
+        "tests": 4,
+        "passed": 4
+      },
+      {
+        "command": "npm run cscl07:test",
+        "environment": "NODE_OPTIONS=--jitless",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS",
+        "tests": 8,
+        "passed": 8
+      },
+      {
+        "command": "npm run verification:plan",
+        "environment": "NODE_OPTIONS=--jitless",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS",
+        "mode": "FULL_FALLBACK",
+        "selectedNodes": 48,
+        "selectedTests": 55,
+        "hardGates": 5,
+        "planDigest": "4c07d974399182509d4b71c100aff5f045783f360c57f3818eafa5ad3f4167ec"
+      },
+      {
+        "command": "npm run build",
+        "environment": "NODE_OPTIONS=--jitless",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS"
+      },
+      {
+        "command": "npm run lint",
+        "environment": "NODE_OPTIONS=--jitless",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS"
+      },
+      {
+        "command": "npm run supply-chain:verify",
+        "environment": "NODE_OPTIONS=--jitless",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS"
+      },
+      {
+        "command": "npm run release-governance:test",
+        "environment": "NODE_OPTIONS=--jitless",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS",
+        "tests": 54,
+        "passed": 54
+      },
+      {
+        "command": "sha256sum --check SHA256SUMS",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS",
+        "entries": 1727
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+        "exitCode": 0,
+        "status": "PASS"
+      }
     ]
   },
   "deliveryLocalChecks": [
@@ -291,9 +395,11 @@
     }
   ],
   "fullSuiteAndRootGateInput": {
-    "owner": "CSCL-AUTO-327-ROOT-QS",
+    "owner": "CSCL-AUTO-327-ROOT-QS-FINALIZER-01",
     "immutableCandidateHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
     "immutableCandidateTree": "1b8bcc083fc95d9f24199d6d704c1885823ba6fc",
+    "reviewedExactHead": "88a413d7960374b5851d3d0289806774598ef399",
+    "reviewedExactTree": "c479a94b9b1f97ca5a8e9f575ea2ae4a6a7e3a59",
     "requiredCommands": [
       "node --test tests/cscl-10/sales-candidate.test.mjs",
       "npm run verification:plan",
@@ -302,20 +408,57 @@
       "sha256sum --check SHA256SUMS",
       "npm test"
     ],
+    "dependencyHydration": {
+      "command": "NODE_OPTIONS=--jitless npm ci --ignore-scripts --no-audit --no-fund --cache closure-audits/CSCL-AUTO-327-ROOT-QS/.npm-cache",
+      "exitCode": 0,
+      "status": "PASS",
+      "packagesAdded": 139,
+      "packageLockChanged": false,
+      "trackedBytesChanged": false
+    },
+    "verificationPlan": {
+      "command": "npm run verification:plan",
+      "environment": "NODE_OPTIONS=--jitless",
+      "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+      "exitCode": 0,
+      "status": "PASS",
+      "mode": "FULL_FALLBACK",
+      "selectedNodes": 48,
+      "selectedTests": 55,
+      "hardGates": 5,
+      "planDigest": "4c07d974399182509d4b71c100aff5f045783f360c57f3818eafa5ad3f4167ec"
+    },
     "finalFullSuite": {
       "command": "npm test",
-      "status": "PENDING_ROOT_QS_PINNED_ENVIRONMENT"
+      "reviewedHead": "88a413d7960374b5851d3d0289806774598ef399",
+      "defaultRuntime": {
+        "exitCode": 133,
+        "signal": "SIGTRAP",
+        "status": "INFRASTRUCTURE_BLOCKED_BEFORE_NPM_ENTRY",
+        "evidence": "V8 SetPermissions failed with errno 12 before project code entered."
+      },
+      "jitlessRuntime": {
+        "environment": "NODE_OPTIONS=--jitless",
+        "exitCode": 1,
+        "status": "INFRASTRUCTURE_BLOCKED_AFTER_PRODUCT_TEST_ENTRY",
+        "dependencyCompilerAvailable": true,
+        "passedTestsBeforeInfrastructureBlock": 43,
+        "firstBlockedTest": "tests/knowledge-quality-api.test.mjs",
+        "evidence": "The loopback test reached fetch, but Node's undici could not initialize because --jitless makes WebAssembly unavailable."
+      },
+      "status": "AUTHORITATIVE_PINNED_NODE_ENVIRONMENT_REQUIRED",
+      "productVerdict": "NOT_DETERMINED_BY_LOCAL_RUNTIME_INFRASTRUCTURE"
     },
     "deliveryHostPreflight": {
       "node": "24.19.0",
       "npm": "11.17.0",
-      "nodeModulesPresent": false,
+      "nodeModulesPresent": true,
       "defaultNpmStartup": "EXIT_133_SIGTRAP_V8_SET_PERMISSIONS",
-      "replacementForRunnableNodeOnlyChecks": "NODE_OPTIONS=--jitless",
-      "npmRunBuild": "EXIT_127_TSC_NOT_FOUND",
-      "npmRunLint": "EXIT_127_TSC_NOT_FOUND",
-      "npmRunVerificationPlan": "EXIT_127_TSC_NOT_FOUND",
-      "npmTest": "EXIT_127_TSC_NOT_FOUND_DURING_FIRST_PRETEST_BUILD",
+      "replacementForRunnableNodeOnlyChecks": "NODE_OPTIONS=--jitless after npm ci dependency hydration",
+      "npmRunBuild": "PASS",
+      "npmRunLint": "PASS",
+      "npmRunVerificationPlan": "PASS",
+      "npmTest": "INFRASTRUCTURE_BLOCKED_AT_JITLESS_WEBASSEMBLY_LOOPBACK_AFTER_43_PASSING_TESTS",
       "classification": "INFRASTRUCTURE_ONLY_NO_PRODUCT_VERDICT"
     }
   },
@@ -329,11 +472,11 @@
   },
   "deliveryPolicyInput": {
     "schemaVersion": "delivery/v1",
-    "owner": "CSCL-AUTO-327-ROOT-QS",
+    "owner": "CSCL-AUTO-327-ROOT-QS-FINALIZER-01",
     "repository": "JoFe2/PANSPHAIRA",
     "base": "main",
     "headBranch": "auto/cscl-10-sales",
-    "reviewTargetHead": "6b9a59d751f9b4e5e055d812cbea505d8f633de3",
+    "reviewTargetHead": "88a413d7960374b5851d3d0289806774598ef399",
     "mergeMethod": "squash",
     "requiredPrCi": [
       "CI"
@@ -352,7 +495,7 @@
       "close": true
     },
     "externalEffectsPerformedByDelivery": 0,
-    "status": "PENDING_ROOT_QS",
+    "status": "ROOT_QS_REVIEW_COMPLETE_PENDING_AUTHORITATIVE_PINNED_NODE_HOST_DOCKER_GATES",
     "requiredDownstreamGates": [
       "EXACT_PR_HEAD_CI",
       "SHA_BOUND_MERGE",
@@ -363,13 +506,19 @@
       "QUEUE_ROOT_DONE_AND_CLEANUP"
     ]
   },
+  "localFinalizerDisposition": {
+    "technicalArtifact": "COMPLETE",
+    "verificationPlanFinding": "FIXED_PASS_ON_EXACT_REVIEWED_HEAD",
+    "fullSuiteFinding": "DEPENDENCY_GAP_FIXED_LOCAL_RUNTIME_INFRASTRUCTURE_RECORDED_CONTROLLER_GATE_REQUIRED",
+    "publicDeliveryActionsPerformed": 0,
+    "controllerHandoffRequired": true
+  },
   "nonClaims": [
     "NO_UNIVERSAL_ERP_OR_COMPATIBILITY_CLAIM",
     "NO_COMMON_CORE_OPTIONAL_FEATURE_OR_PROCESS_VARIANT_CLAIM",
     "NO_HOLDOUT_SEMANTICS_ACCESSED_OR_CLAIMED",
     "NO_PROMOTION_EXECUTION_WRITE_OR_AUTHORITY_GRANT",
-    "NO_INDEPENDENT_ROOT_QS_REVIEW_CLAIM_BY_DELIVERY",
-    "NO_FULL_SUITE_PASS_CLAIM_FROM_MISSING_LOCAL_DEPENDENCIES",
+    "NO_FULL_SUITE_PASS_CLAIM_FROM_LOCAL_V8_OR_JITLESS_WEBASSEMBLY_LIMITATIONS",
     "NO_PR_MERGE_RELEASE_READBACK_CLOSE_OR_QUEUE_DONE_CLAIM"
   ]
 }
