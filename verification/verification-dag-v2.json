@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 37,
+  "graphVersion": 38,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "098b6d75dd5d82f1d9a43023ada158aa76561a55cb1577a032dcd0f084d58b9f"
+          "sha256": "224ef802529c13db33909e36ab7fa7d062482f4ec25c382a09f922a63bf038d1"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f4a4bcd0f94d02267c9f24301af77de0b81959a0608c2f1e96741e307566b62b"
+          "sha256": "47a2e541484fcb68ed94e1395832924325839a1b5c6863dc9bb9922b415c39f9"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -496,7 +496,8 @@
         "learning-routing-foundation",
         "etl-01-extension-assurance-profile-v1",
         "ud-psai53-update-controller-synthetic-v1",
-        "cscl-08-party-candidate-v1"
+        "cscl-08-party-candidate-v1",
+        "cscl-09-product-candidate-v1"
       ],
       "inputs": [
         {
@@ -507,12 +508,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "a988a960e82d92a68f7b2e319234561f25ea8f58a60ed0067e1cb2b3bb836907"
+          "sha256": "786089b3de41c3e3da7186f49f950d75461e6a48b027f5f18fb104db8afe0cb7"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "5e171dfdcc5fb892a4b243a94d837c88ff76fe7ba1dd778d64a33d0736ddfedb"
+          "sha256": "bdc5887d1bd67737d1926a7072414b053e272ab15fdd58e028e5c36974c490ff"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -537,17 +538,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "2fd026d60878e8acce3e9d96b8f47aaf0eea7043689a1af4bbae220d926034a0"
+          "sha256": "416959fdd127ce772734208b678f280c42b0f701a875b6a1a57e40f25854e75c"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "142cba983582e7fb8028a91bced008480c3bf2e27fe50bd1155fee582ce19e32"
+          "sha256": "bdfdc5a8cf30f0578281f3a16f85e6e445e8b3e04f20e35c6d72416801648268"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "ddbf5c1bd48eb2025d6db5a9ad65da00b25ad6a5099d270bc43e8d4a5356176d"
+          "sha256": "0613e9fe83d00c4d196cc8fa7a07227152c50d5dff7e612729954b0b8454c5e8"
         }
       ],
       "ownedTests": [
@@ -949,7 +950,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "4eec3283d9fbf04db7e9d47b90f3b8ee01883835b6952c78b9c421366e860170"
+          "sha256": "2c6ac7da4c5e16c687fc1aad84501dc61046df4211fd6f7c61aead1284c65579"
         },
         {
           "path": "package-lock.json",
@@ -1016,7 +1017,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "364400f226cce2d730c8db7c639a57c1f66ebd64ac48c036455df9afb85eb9c6"
+          "sha256": "99872c382cf79f76f0818901e897f9868dab5c911d30766b045b553bf65e4550"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1191,7 +1192,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "c34d1552636d0b6620e2d9abba3e1ae0a840a5aa8cfbe2951c81f329fb7efac2"
+          "sha256": "8958ad6c2589d7303536af71560c40e4020a53dbe53d91bf83d9f5ad2bf343ec"
         }
       ],
       "ownedTests": [
@@ -5482,6 +5483,49 @@
         "The exact released CSCL-07 matrix and complete Party 12-row review denominator are replayed without source, cell, fact or counterevidence substitution.",
         "Zero positive Party relations yields an empty common core; frequency, labels, shapes and caller verdicts cannot promote source-native elements.",
         "All system variants, absences and unresolved conflicts remain source-bound, non-authoritative and holdout-free."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-09-product-candidate-v1",
+      "dependsOn": [
+        "cscl-07-cross-system-semantic-matrix-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/cscl-09-product-mapping-application-guide-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "75cc477c4288d6879d29c846242cc0e3f4faebdfa943a3299c9e0928ce39c0a2"
+        },
+        {
+          "path": "src/cscl-09/product-candidate.mjs",
+          "role": "VALIDATOR",
+          "sha256": "586de47c2b4bb8b9a06ade02eb055122f97203f91e3f63da512ca48d8e30e5c7"
+        },
+        {
+          "path": "tests/cscl-09/product-candidate.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6d8b8bb59d1029e95092f49fecb2e396d974c7cafc6a0331f16b144c0c0c0227"
+        },
+        {
+          "path": "verification/cscl-09-product-candidate-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e9e0e49cbf83770ca3c715646774988e42ddfe3bad07efe8b7941db4a7ae435f"
+        },
+        {
+          "path": "verification/cscl-09-product-candidate-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "06afea404efa9a9729997093e19928bda11ec80f85c8f35f36a2a6190d82bed8"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl09:test"
+      ],
+      "invariants": [
+        "Every emitted Product relation and classification, matrix cell, source fact and original-evidence edge replays exactly from the released CSCL-07 bytes.",
+        "Only the single reviewed states-transitions VARIANT_RELATION yields the bounded three-element common core; every other positive cell remains a system variant and frequency is ignored.",
+        "Caller labels, digest drift, extra fields, holdout material, and promotion or Authority claims fail closed; optional features, process variants, absences and unresolved conflicts remain explicit."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
