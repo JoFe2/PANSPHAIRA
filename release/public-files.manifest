@@ -256,6 +256,7 @@ docs/architecture/cscl-01-protocol-v1.md	docs/architecture/cscl-01-protocol-v1.m
 docs/architecture/cscl-07-semantic-evidence-matrix-v1.md	docs/architecture/cscl-07-semantic-evidence-matrix-v1.md	0644
 docs/architecture/cscl-08-party-mapping-application-guide-v1.md	docs/architecture/cscl-08-party-mapping-application-guide-v1.md	0644
 docs/architecture/cscl-09-product-mapping-application-guide-v1.md	docs/architecture/cscl-09-product-mapping-application-guide-v1.md	0644
+docs/architecture/cscl-10-sales-mapping-application-guide-v1.md	docs/architecture/cscl-10-sales-mapping-application-guide-v1.md	0644
 docs/architecture/rks-01-real-source-utility-result-v1.md	docs/architecture/rks-01-real-source-utility-result-v1.md	0644
 docs/architecture/rks-01-source-governance-v1.md	docs/architecture/rks-01-source-governance-v1.md	0644
 docs/architecture/rks-02-core-small-vs-raw-result-v1.md	docs/architecture/rks-02-core-small-vs-raw-result-v1.md	0644
@@ -657,6 +658,7 @@ src/cscl-06/profile.mjs	src/cscl-06/profile.mjs	0644
 src/cscl-07/matrix.mjs	src/cscl-07/matrix.mjs	0644
 src/cscl-08/party-candidate.mjs	src/cscl-08/party-candidate.mjs	0644
 src/cscl-09/product-candidate.mjs	src/cscl-09/product-candidate.mjs	0644
+src/cscl-10/sales-candidate.mjs	src/cscl-10/sales-candidate.mjs	0644
 src/rks-01/application-guide-projector.mjs	src/rks-01/application-guide-projector.mjs	0644
 src/rks-01/comparator.mjs	src/rks-01/comparator.mjs	0644
 src/rks-01/corpus-builder.mjs	src/rks-01/corpus-builder.mjs	0644
@@ -821,6 +823,7 @@ tests/cscl-07/matrix.test.mjs	tests/cscl-07/matrix.test.mjs	0644
 tests/cscl-08/party-candidate.test.mjs	tests/cscl-08/party-candidate.test.mjs	0644
 tests/cscl-09/product-candidate-independent-oracle.mjs	tests/cscl-09/product-candidate-independent-oracle.mjs	0644
 tests/cscl-09/product-candidate.test.mjs	tests/cscl-09/product-candidate.test.mjs	0644
+tests/cscl-10/sales-candidate.test.mjs	tests/cscl-10/sales-candidate.test.mjs	0644
 tests/demo-admin-ai-poc.test.mjs	tests/demo-admin-ai-poc.test.mjs	0644
 tests/demo-approval-workbench.test.mjs	tests/demo-approval-workbench.test.mjs	0644
 tests/demo-enforcement-gate.test.mjs	tests/demo-enforcement-gate.test.mjs	0644
@@ -919,6 +922,7 @@ tests/fixtures/azure-power-platform/tuple-valid.json	tests/fixtures/azure-power-
 tests/fixtures/azure-power-platform/zero-residue.json	tests/fixtures/azure-power-platform/zero-residue.json	0644
 tests/fixtures/builder/g2-zoo-system.json	tests/fixtures/builder/g2-zoo-system.json	0644
 tests/fixtures/builder/g3-capability-registry.json	tests/fixtures/builder/g3-capability-registry.json	0644
+tests/fixtures/canonical-json-profile-base-obligations-v1.json	tests/fixtures/canonical-json-profile-base-obligations-v1.json	0644
 tests/fixtures/capability-catalogue/synthetic-catalogue-v1.json	tests/fixtures/capability-catalogue/synthetic-catalogue-v1.json	0644
 tests/fixtures/ccp-admission/authority-change.json	tests/fixtures/ccp-admission/authority-change.json	0644
 tests/fixtures/ccp-admission/malicious.json	tests/fixtures/ccp-admission/malicious.json	0644
@@ -949,7 +953,6 @@ tests/fixtures/ccp-status/quarantined.json	tests/fixtures/ccp-status/quarantined
 tests/fixtures/ccp-status/rebase-required.json	tests/fixtures/ccp-status/rebase-required.json	0644
 tests/fixtures/ccp-supersession/force-push.json	tests/fixtures/ccp-supersession/force-push.json	0644
 tests/fixtures/ccp-supersession/reordered-deliveries.json	tests/fixtures/ccp-supersession/reordered-deliveries.json	0644
-tests/fixtures/canonical-json-profile-base-obligations-v1.json	tests/fixtures/canonical-json-profile-base-obligations-v1.json	0644
 tests/fixtures/cks-04/adapter-transcript-v1.json	tests/fixtures/cks-04/adapter-transcript-v1.json	0644
 tests/fixtures/cks-04/baseline-golden-v1.json	tests/fixtures/cks-04/baseline-golden-v1.json	0644
 tests/fixtures/cks-04/model-profile-template-v1.json	tests/fixtures/cks-04/model-profile-template-v1.json	0644
@@ -1417,6 +1420,8 @@ verification/cscl-08-party-candidate-v1.json	verification/cscl-08-party-candidat
 verification/cscl-09-product-candidate-independent-replay-v1.json	verification/cscl-09-product-candidate-independent-replay-v1.json	0644
 verification/cscl-09-product-candidate-receipt-v1.json	verification/cscl-09-product-candidate-receipt-v1.json	0644
 verification/cscl-09-product-candidate-v1.json	verification/cscl-09-product-candidate-v1.json	0644
+verification/cscl-10-sales-candidate-receipt-v1.json	verification/cscl-10-sales-candidate-receipt-v1.json	0644
+verification/cscl-10-sales-candidate-v1.json	verification/cscl-10-sales-candidate-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644
