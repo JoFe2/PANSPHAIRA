@@ -315,7 +315,7 @@ const assertDeepFrozen = (value: unknown): void => {
 
 test("FND-PS-02 accepts the exact owner-derived v2 edge and keeps every relation non-authoritative", () => {
   assert.equal(v2Bytes.toString("utf8"), bridge.canonicalJson(v2Fixture));
-  assert.equal(bridge.digest(bridge.PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2), bridge.FND_PS_02_EDGE_EVIDENCE_CONTRACT_V2.ownerEvidenceInputsSha256);
+  assert.equal(bridge.digest(bridge.PanSphairaEdgeEvidenceInputsV2), bridge.FND_PS_02_EDGE_EVIDENCE_CONTRACT_V2.ownerEvidenceInputsSha256);
   const result = runV2(v2Fixture);
   assert.equal(result.status, "CANDIDATE_RECORDED");
   if (result.status !== "CANDIDATE_RECORDED") return;
@@ -327,7 +327,7 @@ test("FND-PS-02 accepts the exact owner-derived v2 edge and keeps every relation
   const { evidenceBindingSha256, authority: _edgeAuthority, effect: _edgeEffect, relationTruth: _edgeRelationTruth, ...bindingBody } = returnedEdge!;
   assert.equal(bridge.digest(bindingBody), evidenceBindingSha256);
   assert.equal(result.projectionSha256, bridge.digest(v2Fixture.projection));
-  assert.equal(result.canonicalEvidenceSha256, bridge.PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.canonicalKnowledge.knowledgeSha256);
+  assert.equal(result.canonicalEvidenceSha256, bridge.PanSphairaEdgeEvidenceInputsV2.canonicalKnowledge.knowledgeSha256);
   assert.equal(result.edgeEvidenceAuthoritySha256, bridge.FND_PS_02_EDGE_EVIDENCE_CONTRACT_V2.ownerEvidenceInputsSha256);
   assert.equal(result.edgeEvidenceAuthorityVersion, bridge.EDGE_EVIDENCE_AUTHORITY_VERSION_V2);
   assert.equal(result.relationTruth, "NOT_GRANTED");

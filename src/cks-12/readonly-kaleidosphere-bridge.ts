@@ -84,13 +84,13 @@ const V2_NONCLAIMS = Object.freeze([
 ] as const);
 
 /**
- * The v2 oracle is owned by PANSPHAIRA source, not supplied by the caller.
+ * The v2 oracle is owned by PanSphaira source, not supplied by the caller.
  * Its two synthetic receipt locks jointly establish qualification and lineage;
  * neither node identifiers nor a caller-generated digest can replace them.
  */
-export const PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2 = Object.freeze({
+export const PanSphairaEdgeEvidenceInputsV2 = Object.freeze({
   schemaVersion: "pansphaira.fnd-ps-02/owner-edge-evidence-inputs/v2",
-  owner: "PANSPHAIRA",
+  owner: "PanSphaira",
   dataClass: "PUBLIC_SYNTHETIC_NON_CUSTOMER",
   capabilityId: V2_CAPABILITY_ID,
   canonicalKnowledge: Object.freeze({
@@ -128,7 +128,7 @@ export const FND_PS_02_EDGE_EVIDENCE_CONTRACT_V2 = Object.freeze({
   edgeEvidenceAuthorityVersion: EDGE_EVIDENCE_AUTHORITY_VERSION_V2,
   capabilityId: V2_CAPABILITY_ID,
   projectionId: V2_PROJECTION_ID,
-  ownerEvidenceInputsSha256: digest(PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2),
+  ownerEvidenceInputsSha256: digest(PanSphairaEdgeEvidenceInputsV2),
   envelopeKeys: TOP_LEVEL_ENVELOPE_KEYS_V2,
   projectionKeys: Object.freeze(["schemaVersion", "nodes", "edges", "projectionId"] as const),
   nodeKeys: Object.freeze(["id", "kind"] as const),
@@ -152,18 +152,18 @@ const freezeInternal = <T>(value: T): T => {
 
 const expectedEdgeBindingBodyV2 = (): EdgeEvidenceBindingBodyV2 => freezeInternal({
   bindingVersion: EDGE_EVIDENCE_AUTHORITY_VERSION_V2,
-  capabilityId: PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.capabilityId,
-  canonicalKnowledge: { ...PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.canonicalKnowledge },
-  edgeId: PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.relation.edgeId,
-  evidence: PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.evidence.map((ownerInput) => ({
+  capabilityId: PanSphairaEdgeEvidenceInputsV2.capabilityId,
+  canonicalKnowledge: { ...PanSphairaEdgeEvidenceInputsV2.canonicalKnowledge },
+  edgeId: PanSphairaEdgeEvidenceInputsV2.relation.edgeId,
+  evidence: PanSphairaEdgeEvidenceInputsV2.evidence.map((ownerInput) => ({
     evidenceId: ownerInput.evidenceId,
     evidenceVersion: ownerInput.evidenceVersion,
     evidenceSha256: digest(ownerInput),
   })),
-  from: PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.relation.from,
-  relation: PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.relation.relation,
+  from: PanSphairaEdgeEvidenceInputsV2.relation.from,
+  relation: PanSphairaEdgeEvidenceInputsV2.relation.relation,
   relationTruthClaimed: false,
-  to: PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.relation.to,
+  to: PanSphairaEdgeEvidenceInputsV2.relation.to,
 });
 
 const expectedEvidenceBoundEdgeV2 = (): EvidenceBoundEdgeV2 => {
@@ -173,7 +173,7 @@ const expectedEvidenceBoundEdgeV2 = (): EvidenceBoundEdgeV2 => {
 
 /** Returns a fresh, deeply frozen, synthetic-only exact-v2 input. */
 export function createFndPs02EdgeEvidenceEnvelopeV2(): EdgeEvidenceEnvelopeV2 {
-  const owner = PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2;
+  const owner = PanSphairaEdgeEvidenceInputsV2;
   return freezeInternal({
     authorityRequested: false,
     canonicalEvidenceAfterSha256: owner.canonicalKnowledge.knowledgeSha256,
@@ -393,7 +393,7 @@ function inspectReadOnlyMinimizedProjectionV2(inputData: Readonly<RecordValue>):
 
     if (nodesValid && edgesValid) {
       projectionSnapshot = { schemaVersion: projectionData.schemaVersion, nodes, edges, projectionId: projectionData.projectionId };
-      const owner = PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2;
+      const owner = PanSphairaEdgeEvidenceInputsV2;
       const expectedNodes = [{ id: owner.relation.from, kind: "KNOWLEDGE" }, { id: owner.relation.to, kind: "DECISION" }];
       if (canonicalJson(nodes) !== canonicalJson(expectedNodes)) add("RAW_PROJECTION_DENIED", "v2 projection nodes must match the frozen capability-specific subjects");
       const nodeIds = new Set(nodes.map(({ id }) => id));
@@ -406,13 +406,13 @@ function inspectReadOnlyMinimizedProjectionV2(inputData: Readonly<RecordValue>):
         const edge = edges[0]!;
         const { evidenceBindingSha256, ...suppliedBody } = edge;
         if (digest(suppliedBody) !== evidenceBindingSha256) add("EDGE_EVIDENCE_AUTHORITY_DENIED", "v2 edge self-binding digest mismatch");
-        if (canonicalJson(suppliedBody) !== canonicalJson(expectedBody)) add("EDGE_EVIDENCE_AUTHORITY_DENIED", "v2 edge is not derivable from immutable PANSPHAIRA-owned evidence");
+        if (canonicalJson(suppliedBody) !== canonicalJson(expectedBody)) add("EDGE_EVIDENCE_AUTHORITY_DENIED", "v2 edge is not derivable from immutable PanSphaira-owned evidence");
       }
     }
   }
 
-  const ownerKnowledgeSha256 = PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.canonicalKnowledge.knowledgeSha256;
-  if (inputData.canonicalEvidenceBeforeSha256 !== ownerKnowledgeSha256 || inputData.canonicalEvidenceAfterSha256 !== ownerKnowledgeSha256) add("KALEIDOSPHERE_MUTATION_DENIED", "canonical PANSPHAIRA Knowledge must remain owner-bound and digest-identical");
+  const ownerKnowledgeSha256 = PanSphairaEdgeEvidenceInputsV2.canonicalKnowledge.knowledgeSha256;
+  if (inputData.canonicalEvidenceBeforeSha256 !== ownerKnowledgeSha256 || inputData.canonicalEvidenceAfterSha256 !== ownerKnowledgeSha256) add("KALEIDOSPHERE_MUTATION_DENIED", "canonical PanSphaira Knowledge must remain owner-bound and digest-identical");
   if (inputData.authorityRequested !== false || inputData.capabilityRequested !== false || inputData.promotionRequested !== false) add("AUTHORITY_EXPANSION_DENIED", "candidate delivery cannot expand authority, capability, or promotion");
   if (reasons.length) return deny(reasons, details);
 
