@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 40,
+  "graphVersion": 41,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -3575,17 +3575,17 @@
         {
           "path": "packages/contracts/src/external-bi-service.ts",
           "role": "CONTRACT",
-          "sha256": "cca0c82b42faccb0767bd40e11dbc24157b21e2988bebbe978409044976d275b"
+          "sha256": "7ea7c5e68ee6aa190313521ffecc9b6b01b0f829e7c7bcc6bf85ffa4e734ba37"
         },
         {
           "path": "tests/external-bi-service.test.ts",
           "role": "VALIDATOR",
-          "sha256": "80c4622037e097a23d75a7be93e1c25b1df2817f7115252e455cfbbd842dc214"
+          "sha256": "77b9560e48eecc5a704187121ee1907491503eee305091fce146dac807a02fe8"
         },
         {
           "path": "tests/fixtures/external-bi-service-v2-clean-room.json",
           "role": "FIXTURE",
-          "sha256": "0e6a265a67626009e0a94a6e61504a3e19132081fd555540d3ce7ebf696c8bc6"
+          "sha256": "a5265dbf05a3bb14de5a8e2fa650278b24c8b47fa35a5e5c399b6c52c2c7acfd"
         },
         {
           "path": "scripts/verify-external-bi-service-v2-clean-room.mjs",
@@ -3595,7 +3595,7 @@
         {
           "path": "docs/EXTERNAL-BI-SERVICE.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "e3c8149ba3da5f381de1062a6418bc9e26add4bc65b0c7e65daf83e3c5336984"
+          "sha256": "18c98a410edd205f4e677f63853c4e824de1ca752dc6624da383879a46e76c0d"
         }
       ],
       "ownedTests": [
@@ -3603,7 +3603,8 @@
       ],
       "invariants": [
         "CM remains optional and default-off and addresses only the exact SBA base URL.",
-        "Product v0.8.0, external contract 2.0.0, required capabilities, accepted graph incumbent and canonical digests fail closed under drift.",
+        "PanSphaira owner-derives the versioned product, contract and capability-descriptor profile; endpoint configuration cannot select or attest a substitute profile.",
+        "Canonical attestation and result digests remain exact and bound; unknown, stale, substituted, incomplete, paired-substituted, fully re-digested forged and hostile in-process profiles fail closed.",
         "CM forwards only status, discovery, analyze, plan, preview and readback; direct Superset routes, credentials, raw rows, SQL and mutation intents are denied."
       ],
       "riskClass": "HIGH",
@@ -4615,7 +4616,7 @@
         {
           "path": "release/governance.json",
           "role": "CONTRACT",
-          "sha256": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7"
+          "sha256": "96e37f99ec3e688fb3f3982e928a8a2ddfbfd63ab2eff5895cf28e174d13ed7b"
         },
         {
           "path": "release/public-files.manifest",
@@ -5566,7 +5567,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "6b6ab0803eb6cd4c4574d7a120b63de0c496b7a57762f7f408b480c31318fe5a"
+          "sha256": "320f29d99adfd56c6fafca9371db58600a193dec6fdcdf9a6720ef7b18ac5d50"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",

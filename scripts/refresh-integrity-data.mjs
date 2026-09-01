@@ -114,7 +114,7 @@ proof.verifier.sha256 = digest(proof.verifier.path);
 writeJson(proofPath, proof);
 writeJson("security/secure-default-proof-evidence-v1.json", buildSecureDefaultEvidence(proof));
 
-dag.graphVersion = 36;
+dag.graphVersion = 41;
 const verificationFabricNode = dag.nodes.find(({ id }) => id === "vf-contract-v1");
 if (verificationFabricNode === undefined) throw new Error("VF_CONTRACT_V1_DAG_NODE_MISSING");
 const verificationFabricInputs = [
@@ -262,6 +262,13 @@ const externalBiInputs = [
   ["docs/EXTERNAL-BI-SERVICE.md", "DERIVED_EVIDENCE"],
 ];
 externalBiNode.inputs = externalBiInputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+externalBiNode.ownedTests = ["npm run external-bi-service:test"];
+externalBiNode.invariants = [
+  "CM remains optional and default-off and addresses only the exact SBA base URL.",
+  "PanSphaira owner-derives the versioned product, contract and capability-descriptor profile; endpoint configuration cannot select or attest a substitute profile.",
+  "Canonical attestation and result digests remain exact and bound; unknown, stale, substituted, incomplete, paired-substituted, fully re-digested forged and hostile in-process profiles fail closed.",
+  "CM forwards only status, discovery, analyze, plan, preview and readback; direct Superset routes, credentials, raw rows, SQL and mutation intents are denied.",
+];
 mediaNode.ownedTests = ["npm run external-video-service:test", "npm run video:test"];
 const mediaInputs = [
   ["packages/contracts/src/external-video-service.ts", "CONTRACT"],

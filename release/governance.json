@@ -1036,7 +1036,7 @@
     "claimId": "CM-REL-022",
     "component": "External SBA-v2 BI Client",
     "claim": "PANSPHAIRA ships only a thin, default-off and fail-closed SBA-v2 client for BI while SBA v0.8.0 remains the sole owner of BI discovery, database adapters, analysis, KPI/graph logic, previews and Superset execution.",
-    "userValue": "Maintainers can request six closed read-only BI intents through a version-, capability-, attestation- and digest-bound boundary without giving CM BI credentials, SQL, raw rows or mutation authority.",
+    "userValue": "Maintainers can request six closed BI intents through exact read-only, source-read-only, local-evidence-write and proposal-only capability descriptors without giving CM BI credentials, SQL, raw rows or mutation authority.",
     "includedBytes": [
       "packages/contracts/src/external-bi-service.ts",
       "tests/external-bi-service.test.ts",
@@ -1049,14 +1049,14 @@
         "tests/external-bi-service.test.ts",
         "scripts/verify-external-bi-service-v2-clean-room.mjs"
       ],
-      "result": "PASS: 13/13 focused CM probes and exact SBA v0.8.0 clean-room status, discovery, analyze, plan, preview and NOT_APPLIED readback verification."
+      "result": "PASS: 18/18 deterministic focused probes admit only the exact owner-derived SBA v0.8.0 / contract 2.0.0 / six-capability profile on synthetic non-customer bytes; the cross-repository clean-room runner separately covers status, discovery, analyze, plan, preview and NOT_APPLIED readback."
     },
     "safetyProof": {
       "testPaths": [
         "tests/external-bi-service.test.ts",
         "tests/fixtures/external-bi-service-v2-clean-room.json"
       ],
-      "result": "PASS: wrong version, contract mismatch, missing capability, attestation/digest tamper, unreachable, timeout, denied intent and malformed response fail closed; direct Superset access, credentials, SQL, raw rows and mutation/publish/apply are absent."
+      "result": "PASS: unknown, stale, substituted, incomplete, paired-substituted, fully re-digested forged, accessor, Proxy, hidden-key, symbol-key and post-validation-mutated profiles fail closed; attestation/result digest and pair binding remain exact, and direct Superset access, credentials, SQL, raw rows and mutation/publish/apply are absent."
     },
     "evidencePaths": [
       "docs/EXTERNAL-BI-SERVICE.md",
@@ -1068,13 +1068,17 @@
       "No deployment, runtime activation, production/customer data access, external database access, credential onboarding, mutation, publish/apply authority, Superset administration, Casuvia access or compatibility beyond exact SBA v0.8.0 and contract 2.0.0 is claimed."
     ],
     "traceability": {
-      "issues": [],
+      "issues": [
+        336
+      ],
       "pullRequests": [
         204
       ],
       "sourceCommits": [
         "80277c3e414118c967dec10fc053075e39809cd4",
-        "73c0133c3eea20475b155bc10ed25178138bf526"
+        "73c0133c3eea20475b155bc10ed25178138bf526",
+        "194c2a7aceadb69db515abc157dec2b852faf9d7",
+        "f01ba29154eb748ebfb95d5d0b0925fadf32c5e2"
       ],
       "pdcaPaths": [
         "docs/development/cm-bi-ownership-migration-v2-prepared.md"

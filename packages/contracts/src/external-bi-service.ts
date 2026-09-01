@@ -46,7 +46,7 @@ const OWNER_CAPABILITY_DESCRIPTORS_V2 = deepFreeze({
 } as const);
 
 /**
- * The expected compatibility profile is owned by PANSPHAIRA. Transport
+ * The expected compatibility profile is owned by PanSphaira. Transport
  * configuration may select an endpoint and timeout, but it cannot select or
  * attest a different product/contract/capability tuple.
  */
