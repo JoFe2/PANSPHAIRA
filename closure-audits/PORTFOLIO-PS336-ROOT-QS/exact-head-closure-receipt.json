@@ -1,0 +1,370 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-closure-receipt/v1",
+  "taskId": "PORTFOLIO-PS336-DELIVERY",
+  "closureOwnerTaskId": "PORTFOLIO-PS336-ROOT-QS",
+  "recordedAt": "2026-09-01T19:16:11Z",
+  "sourceIssue": {
+    "id": "FND-PS-03",
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 336,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/336",
+    "title": "[FND-PS-03] PANSPHAIRA qualified external BI compatibility admission profile",
+    "bodySha256": "26fe34445a8f68ba41f6de28cba97657d1b21232b9662a1856af4514a72014d4"
+  },
+  "governance": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "authorityGranted": false,
+    "externalEffectsAuthorizedForDeliveryWorker": false,
+    "finalOwnerThroughQueueDone": "PORTFOLIO-PS336-ROOT-QS"
+  },
+  "portfolioInput": {
+    "path": "/mnt/data2/ai/development-conveyor/planning/portfolios/portfolio-rolling-v1.json",
+    "sha256": "ed5a4228960969045687d136040c0231bff2c066ce894e7d018dcc7242971031",
+    "portfolioId": "PORTFOLIO-ROLLING-V1",
+    "portfolioItemId": "PORTFOLIO-V1-PS-336",
+    "frozenSourceMainHead": "a01647cfdd292303136fce691ad579ac4e69ba51",
+    "issueDependencies": [],
+    "risk": "C",
+    "reviewPerRepository": 1,
+    "terminalContract": "PUBLIC_TERMINAL_RELEASE_READBACK_QUEUE_DONE",
+    "frozenInputIsNotCurrentPublicReadback": true
+  },
+  "disposition": {
+    "technicalAcceptanceEvidence": "COMPLETE",
+    "acceptanceStatus": "FND_PS_03_AC01_TO_AC03_PASS_AC04_READY_FOR_ROOT_QS_DELIVERY",
+    "candidateVerdict": "TECHNICALLY_COMPLETE_PENDING_AUTHORITATIVE_PINNED_NODE_FULL_GATE_AND_ROOT_QS_EXTERNAL_DELIVERY",
+    "releaseDisposition": "RELEASE_REQUIRED",
+    "externalEffectsPerformed": false,
+    "pushMergeReleaseIssueCloseOrQueueDonePerformed": false,
+    "rootQsOwnsPrMergeReleaseReadbackIssueCloseAndQueueDone": true
+  },
+  "headBinding": {
+    "localMainRef": "origin/main",
+    "localMainSha": "39e5187b38e08946ea60196f32aaaea072af6544",
+    "localMainTree": "bcfbc59f3e1c2d08a348b597da19a639b73486a5",
+    "localMainObservation": "LOCAL_REF_ALREADY_PRESENT_NO_NETWORK_REFRESH_BY_DELIVERY_WORKER",
+    "mergeBase": "39e5187b38e08946ea60196f32aaaea072af6544",
+    "branch": "conveyor/portfolio-ps336-external-bi",
+    "integratedCandidateHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+    "integratedCandidateTree": "85365ad1d3ac0865e5081457627248aa5c16b03f",
+    "worktreeCleanBeforeReceiptWrite": true,
+    "candidateIsCommitted": true,
+    "receiptBindsCandidateHeadAndTree": true,
+    "receiptIsRepositoryOnlySelfExcludedEvidence": true,
+    "receiptDoesNotClaimRecursiveBindingToItsContainingCommit": true,
+    "productBytesAndThisHeadBoundReceiptAreSeparate": true,
+    "headDriftPolicy": "FAIL_CLOSED_REBIND_AND_REVERIFY_BEFORE_REVIEW_OR_DELIVERY"
+  },
+  "candidateCommits": [
+    {
+      "sha": "7e6cef20e14700345e5acdf807fbfd49f4161be7",
+      "tree": "8171467ab1aed1d2c572a65eda3baf2d47389385",
+      "subject": "fix(contracts): freeze external BI profile authority",
+      "dependencyOrder": 1,
+      "acceptedSourceSha": "194c2a7aceadb69db515abc157dec2b852faf9d7"
+    },
+    {
+      "sha": "8dd7285854a169ce35ed8551b5a9f2e4ea615b7f",
+      "tree": "f283d849b66be4d5100e8c7ac82b733dadb138c2",
+      "subject": "test(external-bi): add FND-PS-03 adversarial holdout",
+      "dependencyOrder": 2,
+      "acceptedSourceSha": "f01ba29154eb748ebfb95d5d0b0925fadf32c5e2"
+    },
+    {
+      "sha": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+      "tree": "85365ad1d3ac0865e5081457627248aa5c16b03f",
+      "subject": "chore(external-bi): integrate FND-PS-03 closure",
+      "dependencyOrder": 3
+    }
+  ],
+  "productEvidence": {
+    "integrationReceipt": {
+      "path": "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-local-gates.json",
+      "sha256": "c3d04afccef38ca8ef5a508b0418838b8f0a0148e55201637bebf2341a003454",
+      "gitBlob": "fad2f59909f9d034ce02317bd820fb0c4cc8bb61",
+      "containedByCandidateHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+      "use": "INTEGRATION_PROVENANCE_INPUT_NOT_A_RECURSIVE_BINDING_FOR_THIS_RECEIPT"
+    },
+    "contentSetAlgorithm": "sha256(concat(path + NUL + lowercase-sha256 + LF), paths sorted lexicographically)",
+    "contentSetDigest": "b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a",
+    "contentSetRecomputed": true,
+    "contentSetPathCount": 12,
+    "pathDigests": {
+      "SHA256SUMS": "6d5513bf4ac25dc065ca1d27349a7113a1ee726354be9da3f97ea4b0a5e49da1",
+      "docs/EXTERNAL-BI-SERVICE.md": "18c98a410edd205f4e677f63853c4e824de1ca752dc6624da383879a46e76c0d",
+      "package.json": "c98a47b9011b6741595a35148eba5bd6ac9b14437486748a0d3ec185b2b108eb",
+      "packages/contracts/src/external-bi-service.ts": "7ea7c5e68ee6aa190313521ffecc9b6b01b0f829e7c7bcc6bf85ffa4e734ba37",
+      "release/governance.json": "96e37f99ec3e688fb3f3982e928a8a2ddfbfd63ab2eff5895cf28e174d13ed7b",
+      "release/public-files.manifest": "2d2c7ef29d552220b0f5523acbd050c5270b6fb8768a7faf7ee68af72b8215cb",
+      "scripts/refresh-integrity-data.mjs": "e058d05493931f109dd26d747adcae62a0bed35c2654fd8cc7e43d20b47da03c",
+      "scripts/verify-external-bi-service-v2-clean-room.mjs": "76b6bf71b5d2d53447387bc2eb1969f4c5954f944a1fdc9795bfb14f757d9dd7",
+      "tests/external-bi-service.test.ts": "77b9560e48eecc5a704187121ee1907491503eee305091fce146dac807a02fe8",
+      "tests/fixtures/external-bi-service-v2-clean-room.json": "a5265dbf05a3bb14de5a8e2fa650278b24c8b47fa35a5e5c399b6c52c2c7acfd",
+      "tests/verification-fabric-v2.test.ts": "320f29d99adfd56c6fafca9371db58600a193dec6fdcdf9a6720ef7b18ac5d50",
+      "verification/verification-dag-v2.json": "45bb6ab525f9ac4367cfc579f97ae3d62d08b44c88b013264a9db88e0ccc68c8"
+    },
+    "changedProductPathsFromCurrentMain": [
+      "SHA256SUMS",
+      "docs/EXTERNAL-BI-SERVICE.md",
+      "packages/contracts/src/external-bi-service.ts",
+      "release/governance.json",
+      "scripts/refresh-integrity-data.mjs",
+      "tests/external-bi-service.test.ts",
+      "tests/fixtures/external-bi-service-v2-clean-room.json",
+      "tests/verification-fabric-v2.test.ts",
+      "verification/verification-dag-v2.json"
+    ],
+    "packageLockSha256": "0f6a224183d3d2eb68eebc0c61483c60cb785a93e67259cab264dc54aa2790cf",
+    "releaseClaimId": "CM-REL-022",
+    "releaseClaimIssueTraceability": [
+      336
+    ],
+    "verificationDag": {
+      "graphVersion": 41,
+      "nodeCount": 49,
+      "nodeId": "external-bi-service-v2",
+      "ownedTest": "npm run external-bi-service:test",
+      "graphFileSha256": "45bb6ab525f9ac4367cfc579f97ae3d62d08b44c88b013264a9db88e0ccc68c8"
+    },
+    "publicManifestEntries": 1430,
+    "checksumEntries": 1735
+  },
+  "acceptanceIds": [
+    "FND-PS-03-AC01",
+    "FND-PS-03-AC02",
+    "FND-PS-03-AC03",
+    "FND-PS-03-AC04"
+  ],
+  "acceptance": {
+    "FND-PS-03-AC01": {
+      "status": "PASS",
+      "criterion": "Allowed product/contract/capability combinations are explicit and versioned; checks are not disabled.",
+      "proof": [
+        "packages/contracts/src/external-bi-service.ts:6-68 freezes SBA v0.8.0, contract 2.0.0 and six ordered capability descriptors in owner-held v2 constants.",
+        "packages/contracts/src/external-bi-service.ts:408-451 requires exact product, contract, capability, graph and boundary values after exact digest validation.",
+        "tests/external-bi-service.test.ts:314-351 proves deterministic admission of the one exact synthetic tuple.",
+        "tests/verification-fabric-v2.test.ts:134-160 proves the focused command remains canonical, appears once in pretest and is selected for every owned input.",
+        "verification/verification-dag-v2.json:3570-3611 owns the focused test and fail-closed invariants."
+      ]
+    },
+    "FND-PS-03-AC02": {
+      "status": "PASS",
+      "criterion": "Unknown, stale, substituted or incomplete combinations remain denied.",
+      "proof": [
+        "tests/fixtures/external-bi-service-v2-clean-room.json:63-79 freezes unknown, stale, substituted, incomplete, paired-substituted and fully re-digested forged cases with exact reason codes.",
+        "tests/external-bi-service.test.ts:251-396 executes the reusable capability-specific adversarial matrix and requires DENIED for every case.",
+        "The fresh focused replay passed 18/18 on the bound candidate."
+      ]
+    },
+    "FND-PS-03-AC03": {
+      "status": "PASS",
+      "criterion": "Expected profile authority is server/owner-derived and attestation digest remains fail-closed.",
+      "proof": [
+        "packages/contracts/src/external-bi-service.ts:322-359 rejects caller expected-version pins and creates the owner-derived decision.",
+        "packages/contracts/src/external-bi-service.ts:425-451 checks the exact canonical attestation digest before owner profile admission.",
+        "packages/contracts/src/external-bi-service.ts:547-655 requires an owner-created decision, snapshots untrusted inputs and binds every result to the accepted attestation digest.",
+        "tests/external-bi-service.test.ts:353-439 proves exact digest binding plus accessor, Proxy, hidden-key, symbol-key and post-validation-mutation fail-closed behavior."
+      ]
+    },
+    "FND-PS-03-AC04": {
+      "status": "READY_PENDING_ROOT_QS_EXTERNAL_DELIVERY",
+      "technicalEvidenceStatus": "PASS",
+      "criterion": "PANSPHAIRA issue closes independently through exact-head content-addressed delivery.",
+      "proof": [
+        "The frozen portfolio item records zero issue dependencies and the terminal contract PUBLIC_TERMINAL_RELEASE_READBACK_QUEUE_DONE.",
+        "This receipt binds candidate head 23faa2fd5d4344c9b3e897fe2b34c82abe07c133, tree 85365ad1d3ac0865e5081457627248aa5c16b03f and product content-set digest b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a.",
+        "Root-QS retains the exact PR-head CI, SHA-bound merge, Main CI, serial release, anonymous readback, issue-close and Queue-DONE sequence."
+      ],
+      "publicIssueClosureClaimed": false
+    }
+  },
+  "mandatoryCases": {
+    "positive": {
+      "case": "Exact owner-derived SBA v0.8.0, external contract 2.0.0 and the six ordered capability descriptors verify deterministically on synthetic non-customer bytes.",
+      "status": "PASS",
+      "focusedTests": 18,
+      "focusedPassed": 18
+    },
+    "negative": {
+      "case": "Unknown, stale, substituted, incomplete, paired-substituted, fully re-digested forged, accessor, Proxy, hidden, symbol and post-validation-mutated profiles fail closed.",
+      "status": "PASS",
+      "matrixCaseCount": 15,
+      "unexpectedAdmissions": 0
+    }
+  },
+  "verificationOutcomes": {
+    "candidateHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+    "runtime": {
+      "hostNode": "v24.19.0",
+      "hostNpmObservedWithJitless": "11.17.0",
+      "repositoryPinnedNode": "24.14.1",
+      "repositoryPinnedNpm": "11.16.0"
+    },
+    "requiredProfileCommands": [
+      {
+        "command": "npm run external-bi-service:test",
+        "nativeHostStatus": "BLOCKED_INFRASTRUCTURE",
+        "nativeHostExitCode": 133,
+        "nativeHostOutputSha256": "c52956dfb1e33518ea321cbcca27f7fb0c38e493e3ea078946b4a59ba416e456",
+        "diagnosticCommand": "NODE_OPTIONS=--jitless npm run external-bi-service:test",
+        "diagnosticStatus": "PASS",
+        "diagnosticExitCode": 0,
+        "tests": 18,
+        "passed": 18,
+        "outputSha256": "b199f5736afa4be4841454b33fcdf10d0242b3154e1ea90e782cfa20a85af7d4"
+      },
+      {
+        "command": "npm run verification:plan",
+        "nativeHostStatus": "BLOCKED_INFRASTRUCTURE",
+        "nativeHostExitCode": 133,
+        "nativeHostOutputSha256": "975f6a43c3ecc616f436e0494ae119792d75d76cb5f9a0ba7cbd6329109bf218",
+        "diagnosticCommand": "NODE_OPTIONS=--jitless npm run verification:plan",
+        "diagnosticStatus": "PASS",
+        "diagnosticExitCode": 0,
+        "mode": "FULL_FALLBACK",
+        "reason": "GRAPH_CHANGED",
+        "nodes": 49,
+        "tests": 56,
+        "hardGates": 5,
+        "graphDigest": "107beaca19b1ce39648939114dc8b8bfea5bc14704f744c7291fad76887dee1b",
+        "planDigest": "e88a99b14b55de80f628739b4bcc31e167153d45759003258076530551756290",
+        "outputSha256": "01897c45c4c1ae99b171bf4046128c41fa738045b49f1d3f495f82c46e9e85e9"
+      },
+      {
+        "command": "git diff --check origin/main...HEAD",
+        "status": "PASS",
+        "exitCode": 0,
+        "reviewedCandidateHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+        "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "governance": [
+      {
+        "command": "NODE_OPTIONS=--jitless npm run build",
+        "status": "PASS",
+        "exitCode": 0,
+        "outputSha256": "4da17ccabc92dbc1ed13cdf55fcaff62ae1596570a972132518777abee45dde4"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless npm run lint",
+        "status": "PASS",
+        "exitCode": 0,
+        "outputSha256": "151ca83da0b2999b9061dc5a3d28bff4ca606721e77a1ffb2a87ff80010dc358"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless npm run release-governance:test",
+        "status": "PASS",
+        "exitCode": 0,
+        "tests": 52,
+        "passed": 52,
+        "outputSha256": "b44241fc46298ef6b570ed25d3f953c9c7ba50f9476596ae722ce18736b13cd9"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless npm run release-governance:verify",
+        "status": "PASS",
+        "exitCode": 0,
+        "outputSha256": "87318c6c839a1ac101c2be508431ef467fb7033681dc16cbaa0cdb59475d6e11"
+      },
+      {
+        "command": "NODE_OPTIONS=--jitless npm run supply-chain:verify",
+        "status": "PASS",
+        "exitCode": 0,
+        "outputSha256": "a71dd13d20a6564f34e54e37cf59c8a4b8fdedb04d6d53a89d6f5dbe8edb4b7b"
+      },
+      {
+        "command": "sha256sum --quiet -c SHA256SUMS",
+        "status": "PASS",
+        "exitCode": 0,
+        "entries": 1735
+      }
+    ],
+    "fullSuite": {
+      "requiredCommand": "npm test",
+      "nativeHostStatus": "BLOCKED_INFRASTRUCTURE",
+      "nativeHostExitCode": 133,
+      "nativeHostOutputSha256": "36023be7117c2c7c45b599ff57c1494bd74c434b837cff5c5816138768199c8b",
+      "nativeSuiteStarted": false,
+      "diagnosticCommand": "NODE_OPTIONS=--jitless npm test",
+      "diagnosticStatus": "BLOCKED_INFRASTRUCTURE",
+      "diagnosticExitCode": 1,
+      "diagnosticFailure": "Unrelated tests/knowledge-quality-api.test.mjs loopback fetch requires WebAssembly, which --jitless removes.",
+      "productVerdict": null,
+      "authoritativePinnedNodeHostDockerGate": "REQUIRED_BY_ROOT_QS"
+    },
+    "nativeFailureClassification": "INFRASTRUCTURE_ONLY_EXECUTABLE_MEMORY_PERMISSION_SIGTRAP_DURING_V8_ISOLATE_INITIALIZATION",
+    "checksDisabledOrSkippedByProductChange": false
+  },
+  "oneReviewInput": {
+    "requiredIndependentIntegratedReviewCount": 1,
+    "completedByDeliveryWorker": 0,
+    "status": "READY_FOR_ROOT_QS_ONE_REVIEW",
+    "owner": "PORTFOLIO-PS336-ROOT-QS",
+    "reviewSubjectHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+    "reviewSubjectTree": "85365ad1d3ac0865e5081457627248aa5c16b03f",
+    "reviewSubjectContentSetDigest": "b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a",
+    "headDriftPolicy": "FAIL_CLOSED_AND_REBIND_BEFORE_REVIEW",
+    "requiredInputs": [
+      "this self-excluded exact-head closure receipt",
+      "the exact candidate head, tree and twelve-path content-set binding",
+      "all four FND-PS-03 acceptance-ID proofs",
+      "the 18/18 focused positive and adversarial result",
+      "the FULL_FALLBACK verification plan and all governance outcomes",
+      "the authoritative full-suite infrastructure blocker and required pinned-Node/host-Docker replacement gate",
+      "the release disposition, external sequence and explicit nonclaims"
+    ],
+    "independentReviewCompletionClaimed": false
+  },
+  "deliveryPolicyInput": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "baseBranch": "main",
+    "headBranch": "conveyor/portfolio-ps336-external-bi",
+    "reviewTargetHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+    "reviewTargetTree": "85365ad1d3ac0865e5081457627248aa5c16b03f",
+    "mergeMethod": "squash",
+    "release": {
+      "required": true,
+      "strategy": "SERIAL_DAILY_RELEASE",
+      "owner": "PORTFOLIO-PS336-ROOT-QS"
+    },
+    "issue": {
+      "number": 336,
+      "independentDependencies": [],
+      "closeRequired": true
+    },
+    "requiredExternalSequence": [
+      "EXACT_PR_HEAD_CI",
+      "SHA_BOUND_MERGE",
+      "EXACT_MAIN_HEAD_CI",
+      "SERIAL_DAILY_RELEASE",
+      "ANONYMOUS_MAIN_TAG_RELEASE_AND_ISSUE_READBACK",
+      "ISSUE_CLOSED_COMPLETED",
+      "QUEUE_ROOT_DONE_AND_CLEANUP"
+    ],
+    "externalSequenceStatus": "NOT_STARTED_BY_DELIVERY_WORKER",
+    "soleFinalOwnerThroughQueueDone": "PORTFOLIO-PS336-ROOT-QS"
+  },
+  "nonClaims": [
+    "SYNTHETIC_NON_CUSTOMER_BYTES_ONLY",
+    "NO_PRODUCTION_OR_CUSTOMER_DATA_EVIDENCE",
+    "NO_UNIVERSAL_SBA_SUPERSET_OR_EXTERNAL_BI_COMPATIBILITY_CLAIM",
+    "NO_SECURITY_CERTIFICATION_CLAIM",
+    "NO_DEPLOYMENT_RUNTIME_ACTIVATION_EXTERNAL_DATABASE_OR_CREDENTIAL_ONBOARDING_CLAIM",
+    "NO_SQL_RAW_ROW_DIRECT_SUPERSET_MUTATION_PUBLISH_OR_APPLY_AUTHORITY_CLAIM",
+    "NO_AUTHORITY_BEYOND_THE_EXACT_OWNER_DERIVED_V2_PRODUCT_CONTRACT_CAPABILITY_TUPLE",
+    "NO_FND_XR_01_PAIRED_CLEAN_ROOM_CLOSURE_CLAIM",
+    "NO_AUTHORITATIVE_FULL_SUITE_PASS_CLAIM_FROM_NATIVE_SIGTRAP_OR_JITLESS_WEBASSEMBLY_DIAGNOSTICS",
+    "NO_INDEPENDENT_REVIEW_COMPLETION_CLAIM",
+    "NO_RECURSIVE_BINDING_OF_THIS_RECEIPT_TO_ITS_CONTAINING_COMMIT",
+    "NO_PUSH_PR_MERGE_RELEASE_PUBLIC_READBACK_ISSUE_CLOSE_OR_QUEUE_DONE_CLAIM"
+  ]
+}
