@@ -19,8 +19,11 @@ export const FND_PS_FU_01_DELIVERY_POLICY = Object.freeze({
     "release/public-files.manifest",
     "scripts/build-public-release.sh",
     "src/cks-12/readonly-kaleidosphere-bridge.ts",
+    "tests/canonical-json-profile-inventory.test.ts",
     "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
     "tests/release-governance.test.mjs",
+    "tests/verification-fabric-v2.test.ts",
+    "verification/canonical-json-profile-inventory-v1.json",
     "verification/verification-dag-v2.json",
   ]),
   gateInputs: Object.freeze([

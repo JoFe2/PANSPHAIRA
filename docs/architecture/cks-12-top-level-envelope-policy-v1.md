@@ -122,9 +122,12 @@ The admitted cumulative base is
 4. `release/public-files.manifest`
 5. `scripts/build-public-release.sh`
 6. `src/cks-12/readonly-kaleidosphere-bridge.ts`
-7. `tests/cks-12/readonly-kaleidosphere-bridge.test.ts`
-8. `tests/release-governance.test.mjs`
-9. `verification/verification-dag-v2.json`
+7. `tests/canonical-json-profile-inventory.test.ts`
+8. `tests/cks-12/readonly-kaleidosphere-bridge.test.ts`
+9. `tests/release-governance.test.mjs`
+10. `tests/verification-fabric-v2.test.ts`
+11. `verification/canonical-json-profile-inventory-v1.json`
+12. `verification/verification-dag-v2.json`
 
 The final clean commit supplies `candidateHead` from `git rev-parse HEAD` and
 `candidateTree` from `git rev-parse HEAD^{tree}`. Each observed repository

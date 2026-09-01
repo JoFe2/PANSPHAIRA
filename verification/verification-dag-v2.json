@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "90d39dd8102edc5de2e6a1b6518590c51bdf2db3e2827d6dbca3db0c3eed87ce"
+          "sha256": "5f11032ff7d2ae2542727b35808a5f2c17287f718ad2c75439491a697f1ee6bd"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -536,12 +536,12 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "90a001a2ebe52c25de677e2c1046877beca9ccae921390fe93d52c5c8e965225"
+          "sha256": "1cdeafad45bee1aa187df250eb1a3fd6e89e55d7c8f5c1e03272e28d8c99a921"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "3db3c92aa0ba6e87190e3385508a0539469ce55850ed3c7cc6d75d34b6bf6168"
+          "sha256": "a70ec89497783d0d7b8fdf4fafa996d57ef41874c21497728fac4b0d3bc179ef"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -4207,7 +4207,7 @@
         {
           "path": "docs/architecture/cks-12-top-level-envelope-policy-v1.md",
           "role": "CONTRACT",
-          "sha256": "d298e5b3af25a3d099b5b74bb8b75a8a2ec5e71bd95d58100174ba7f4175a8e2"
+          "sha256": "0a9ab538073a6eecb4986025a43de138dee86bed185acd42b92708cacba1b718"
         },
         {
           "path": "scripts/run-cks-12-e2e-proof-dry-run.mjs",
@@ -4287,7 +4287,7 @@
         {
           "path": "src/cks-12/readonly-kaleidosphere-bridge.ts",
           "role": "VALIDATOR",
-          "sha256": "60c0022e7bbd312d6c6fcc3b62ed2ac336b670a1d47604166257621420723b10"
+          "sha256": "3c0c1550f08333037fb10fce061ad9b0a63b10c71887a5cefd8ddc44a00d379d"
         },
         {
           "path": "src/cks-12/story-step-manifest.ts",
