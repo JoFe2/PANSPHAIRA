@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 41,
+  "graphVersion": 40,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -4616,7 +4616,7 @@
         {
           "path": "release/governance.json",
           "role": "CONTRACT",
-          "sha256": "96e37f99ec3e688fb3f3982e928a8a2ddfbfd63ab2eff5895cf28e174d13ed7b"
+          "sha256": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7"
         },
         {
           "path": "release/public-files.manifest",
