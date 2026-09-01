@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 38,
+  "graphVersion": 36,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
