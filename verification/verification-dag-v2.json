@@ -2635,7 +2635,7 @@
         {
           "path": "src/cks-12/readonly-kaleidosphere-bridge.ts",
           "role": "VALIDATOR",
-          "sha256": "3c0c1550f08333037fb10fce061ad9b0a63b10c71887a5cefd8ddc44a00d379d"
+          "sha256": "e4a4fdd6ceb684f5ed3b8bd7f613482b6185cabc9a5272763bc26ea1fbbd6ccc"
         },
         {
           "path": "src/cks-12/story-step-manifest.ts",
@@ -2700,7 +2700,7 @@
         {
           "path": "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d10c6414c739ff611c964e2d6cab5ef969b5a96dcbfb3f984410fd6b28fdec65"
+          "sha256": "77e1b61fe563a9feccfabd5b8488f1d05d684860eda889985c5458b45c18e781"
         },
         {
           "path": "tests/cks-12/story-step-manifest.test.ts",
@@ -2721,6 +2721,11 @@
           "path": "tests/fixtures/cks-12/e2e-proof-manifest-v1.json",
           "role": "FIXTURE",
           "sha256": "a6787bb9d277794838a081e0779f5bf21cc9b84b1877a1a9c6426e461c4ab02e"
+        },
+        {
+          "path": "tests/fixtures/cks-12/edge-authority-v2.json",
+          "role": "FIXTURE",
+          "sha256": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f"
         },
         {
           "path": "tests/fixtures/cks-12/empty-kb-acquisition-v1.json",
@@ -2850,7 +2855,9 @@
       "invariants": [
         "All 23 Part-II story steps bind immutable fixtures and exact component versions.",
         "Acquisition, validation and promotion remain separate governed states.",
-        "KaleidoSphere receives only minimized read-only projections and returns authority-free candidates.",
+        "Every v2 edge binds immutable PanSphaira-owner-derived evidence and canonical Knowledge; shared endpoints alone never grant relation truth.",
+        "Paired substitutions, fully re-digested forged relations, stale or incomplete evidence, hostile in-process inputs, post-validation mutation, promotion and canonical-Knowledge mutation fail closed.",
+        "KaleidoSphere receives only minimized read-only projections and returns authority-free, effect-free candidates.",
         "Drift and unknown variants invalidate or safely abort fast paths.",
         "Falsification reports bind raw counts, denominators, exclusions and stop conditions.",
         "Cumulative delivery readiness requires exact head/tree-bound gates, integrity receipts, closed issue criteria, exact scope and immutable no-authority ownership."
@@ -4651,17 +4658,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "19c7086935294502155fe955b580b71d7df42473a7033152a685c1a49bb4ed52"
+          "sha256": "d8ba0ae79f9260fc15f2058e9f3a89dbb2a3a5e608d20c5b8c87f64d7d5953dc"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "418567fc4bb39fa44dc1d9e1e6531ddb63bf86b40f671738f93fe083e820cad2"
+          "sha256": "f88fd12f5c97b1e50e7d665853d666d90fa3f81edb55d801721fe1304f7e8726"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8361205b7e1b71e5fc4bfc6b5d1fe4fd01df2da7e2e2bd27ec51b123ca49eadb"
+          "sha256": "31a3c7d1935a77f7d65d4540ce14e41911ce0c30cf22863227e0f6930b4b9787"
         }
       ],
       "ownedTests": [
@@ -5207,7 +5214,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "c98a47b9011b6741595a35148eba5bd6ac9b14437486748a0d3ec185b2b108eb"
+          "sha256": "9ec486f5fdb3946512c7dc87adc09abc10fab38cdad10e57a3eb22374c0e483f"
         },
         {
           "path": "package-lock.json",
@@ -5567,7 +5574,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "320f29d99adfd56c6fafca9371db58600a193dec6fdcdf9a6720ef7b18ac5d50"
+          "sha256": "62a967fc48278fd24bb60080b0fb1a587949cd8575444e77751e88d0808fd755"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
