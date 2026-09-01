@@ -6,9 +6,66 @@ const modulePath = import.meta.url.endsWith(".ts") ? "../../src/cks-12/readonly-
 const bridge: typeof import("../../src/cks-12/readonly-kaleidosphere-bridge.js") = await import(modulePath);
 const bytes = readFileSync("tests/fixtures/cks-12/minimized-projection-v1.json"); const fixture = JSON.parse(bytes.toString("utf8")); const receipt = JSON.parse(readFileSync("verification/cks-12/readonly-candidate-receipt-v1.json", "utf8"));
 const hash = (value: Uint8Array) => createHash("sha256").update(value).digest("hex");
+const topLevelEnvelopeKeysV1 = Object.freeze(["authorityRequested", "canonicalEvidenceAfterSha256", "canonicalEvidenceBeforeSha256", "capabilityRequested", "componentVersions", "dryRun", "operation", "projection", "promotionRequested", "schemaVersion"] as const);
+const topLevelEnvelopeDenial = { status: "DENIED", reasonCodes: ["MISSING_INPUT"], details: ["bridge input must be an object"] };
 test("CKS-12 SS-19 sends only minimized read-only projection and returns authority-free candidate", () => {
   const result = bridge.runReadOnlyMinimizedProjection(fixture); assert.deepEqual(result, receipt.candidate);
   assert.equal(result.status, "CANDIDATE_RECORDED"); if (result.status !== "CANDIDATE_RECORDED") return; assert.equal(result.inventedEdgeCount, 0); assert.equal(result.authority, "NONE");
+});
+test("v1 exact top-level own-data envelope preserves canonical candidate and receipt bytes", () => {
+  assert.deepEqual(Reflect.ownKeys(fixture), topLevelEnvelopeKeysV1);
+  for (const key of topLevelEnvelopeKeysV1) {
+    const descriptor = Object.getOwnPropertyDescriptor(fixture, key);
+    assert.ok(descriptor && descriptor.enumerable && "value" in descriptor, key);
+  }
+  const result = bridge.runReadOnlyMinimizedProjection(fixture);
+  assert.equal(bridge.canonicalJson(result), bridge.canonicalJson(receipt.candidate));
+  if (result.status === "CANDIDATE_RECORDED") assert.equal(bridge.canonicalJson(bridge.createReceipt(receipt.fixtureSha256, result)), bridge.canonicalJson(receipt));
+});
+test("top-level throwing Proxy reflection and get traps return a stable denial", () => {
+  for (const trap of ["ownKeys", "getOwnPropertyDescriptor", "get", "getPrototypeOf"]) {
+    let invocations = 0;
+    const input = new Proxy(structuredClone(fixture), { [trap]: () => { invocations += 1; throw new Error("attacker trap"); } });
+    assert.deepEqual(bridge.runReadOnlyMinimizedProjection(input), topLevelEnvelopeDenial, trap);
+    assert.equal(invocations, 0, `${trap}: caller-controlled trap must not run`);
+  }
+});
+test("top-level accessors are denied without invocation", () => {
+  for (const key of topLevelEnvelopeKeysV1) {
+    const value = structuredClone(fixture); let invocations = 0;
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (!descriptor || !("value" in descriptor)) throw new Error(`missing fixture data field: ${key}`);
+    Object.defineProperty(value, key, { enumerable: true, configurable: true, get: () => { invocations += 1; return descriptor.value; } });
+    assert.deepEqual(bridge.runReadOnlyMinimizedProjection(value), topLevelEnvelopeDenial, key);
+    assert.equal(invocations, 0, key);
+  }
+});
+test("missing, non-enumerable, and unknown top-level fields deny the exact v1 envelope", () => {
+  for (const key of topLevelEnvelopeKeysV1) {
+    const missing = structuredClone(fixture); delete missing[key];
+    assert.deepEqual(bridge.runReadOnlyMinimizedProjection(missing), topLevelEnvelopeDenial, `missing:${key}`);
+    const hidden = structuredClone(fixture);
+    Object.defineProperty(hidden, key, { ...Object.getOwnPropertyDescriptor(hidden, key), enumerable: false });
+    assert.deepEqual(bridge.runReadOnlyMinimizedProjection(hidden), topLevelEnvelopeDenial, `non-enumerable:${key}`);
+  }
+  const unknown = structuredClone(fixture); unknown.unknown = true;
+  assert.deepEqual(bridge.runReadOnlyMinimizedProjection(unknown), topLevelEnvelopeDenial, "unknown enumerable field");
+});
+test("hidden and symbol authority, capability, promotion, raw, and unknown fields fail closed", () => {
+  for (const field of ["authority", "capability", "promotion", "raw", "unknown"] as const) for (const surface of ["hidden", "symbol"] as const) {
+    const value = structuredClone(fixture);
+    const key: PropertyKey = surface === "hidden" ? field : Symbol(field);
+    Object.defineProperty(value, key, { value: true, enumerable: surface === "symbol", configurable: true });
+    assert.deepEqual(bridge.runReadOnlyMinimizedProjection(value), topLevelEnvelopeDenial, `${surface}:${field}`);
+  }
+});
+test("v1 envelope locks its schema and requires explicit no-authority values", () => {
+  const wrongVersion = structuredClone(fixture); wrongVersion.schemaVersion = "chimpmaera.cks/readonly-kaleidosphere-bridge/v2";
+  assert.deepEqual(bridge.runReadOnlyMinimizedProjection(wrongVersion), { status: "DENIED", reasonCodes: ["VERSION_LOCK_MISMATCH"], details: ["bridge envelope schema mismatch"] });
+  for (const field of ["authorityRequested", "capabilityRequested", "promotionRequested"] as const) for (const invalid of [true, null, 0, "false", undefined]) {
+    const value = structuredClone(fixture); value[field] = invalid;
+    assert.deepEqual(bridge.runReadOnlyMinimizedProjection(value), { status: "DENIED", reasonCodes: ["AUTHORITY_EXPANSION_DENIED"], details: ["candidate delivery cannot expand authority, capability, or promotion"] }, `${field}:${String(invalid)}`);
+  }
 });
 test("non-dry-run, mutation, raw projection, and authority expansion fail closed", () => {
   for (const mutate of [(value: any) => { value.dryRun = false; }, (value: any) => { value.operation = "MUTATE"; }, (value: any) => { value.projection.nodes[0].secret = "raw"; }, (value: any) => { value.projection.edges.push({ from: "invented", to: "decision-001" }); }, (value: any) => { value.canonicalEvidenceAfterSha256 = "0".repeat(64); }, (value: any) => { value.promotionRequested = true; }, (value: any) => { value.authorityRequested = true; }]) { const value = structuredClone(fixture); mutate(value); assert.equal(bridge.runReadOnlyMinimizedProjection(value).status, "DENIED"); }
@@ -18,7 +75,7 @@ const nodeShapeDenial = { status: "DENIED", reasonCodes: ["RAW_PROJECTION_DENIED
 const edgeShapeDenial = { status: "DENIED", reasonCodes: ["INVENTED_EDGE_DENIED"], details: ["every minimized edge endpoint must be reconstructible from projected nodes"] };
 test("missing projection returns a stable structural denial", () => {
   const value = structuredClone(fixture); delete value.projection;
-  assert.deepEqual(bridge.runReadOnlyMinimizedProjection(value), structuralDenial);
+  assert.deepEqual(bridge.runReadOnlyMinimizedProjection(value), topLevelEnvelopeDenial);
 });
 test("missing, null, and non-array nodes and edges return stable structural denials", () => {
   for (const field of ["nodes", "edges"] as const) for (const invalid of [undefined, null, {}, "not-an-array"]) {
