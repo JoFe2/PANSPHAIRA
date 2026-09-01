@@ -57,7 +57,7 @@
     "declarationFiles": 80,
     "importSites": 172,
     "importFiles": 171,
-    "note": "Historical lexical counts are hints only; the fresh mechanical scan supersedes them (33/33 declaration sites/files; 194/193 import sites/files)."
+    "note": "Historical lexical counts are hints only; the fresh mechanical scan supersedes them (34/34 declaration sites/files; 195/194 import sites/files)."
   },
   "uncertainty": [
     "Ad-hoc grep methods disagree on declaration/import counts; the scanner embedded in tests/canonical-json-profile-inventory.test.ts is the single source of truth.",
@@ -66,15 +66,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 591,
-    "declarationSites": 33,
-    "declarationFiles": 33,
-    "importSites": 194,
-    "importFiles": 193,
+    "filesScanned": 593,
+    "declarationSites": 34,
+    "declarationFiles": 34,
+    "importSites": 195,
+    "importFiles": 194,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1717,
-    "ledgerUniquePaths": 1717
+    "ledgerEntries": 1722,
+    "ledgerUniquePaths": 1722
   },
   "profiles": [
     {
@@ -302,6 +302,14 @@
       "sha256": null
     },
     {
+      "file": "src/cscl-08/party-candidate.mjs",
+      "line": 9,
+      "classification": "implementation",
+      "owner": "cscl-08",
+      "pinned": false,
+      "sha256": null
+    },
+    {
       "file": "src/rks-01/comparator.mjs",
       "line": 3,
       "classification": "implementation",
@@ -422,8 +430,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 36,
-      "importFiles": 35
+      "importSites": 37,
+      "importFiles": 36
     },
     {
       "owner": "usage-insights",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 36,
+  "graphVersion": 37,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -101,7 +101,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "4a6c60587878a653744037e26698c5f8e315fbb056e5703aefa7be538f5a9ca5"
+          "sha256": "098b6d75dd5d82f1d9a43023ada158aa76561a55cb1577a032dcd0f084d58b9f"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5f11032ff7d2ae2542727b35808a5f2c17287f718ad2c75439491a697f1ee6bd"
+          "sha256": "f4a4bcd0f94d02267c9f24301af77de0b81959a0608c2f1e96741e307566b62b"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -495,7 +495,8 @@
         "external-bi-service-v2",
         "learning-routing-foundation",
         "etl-01-extension-assurance-profile-v1",
-        "ud-psai53-update-controller-synthetic-v1"
+        "ud-psai53-update-controller-synthetic-v1",
+        "cscl-08-party-candidate-v1"
       ],
       "inputs": [
         {
@@ -506,12 +507,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "491a283fdc57ca8460a129b56f7907570519e287825d8e63f01b32a504d223d6"
+          "sha256": "a988a960e82d92a68f7b2e319234561f25ea8f58a60ed0067e1cb2b3bb836907"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "aef067dce3a6296f7661703c9a657f4dbc47ab353b5c666a5751722c60df5b07"
+          "sha256": "5e171dfdcc5fb892a4b243a94d837c88ff76fe7ba1dd778d64a33d0736ddfedb"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -536,17 +537,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "1cdeafad45bee1aa187df250eb1a3fd6e89e55d7c8f5c1e03272e28d8c99a921"
+          "sha256": "2fd026d60878e8acce3e9d96b8f47aaf0eea7043689a1af4bbae220d926034a0"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a70ec89497783d0d7b8fdf4fafa996d57ef41874c21497728fac4b0d3bc179ef"
+          "sha256": "142cba983582e7fb8028a91bced008480c3bf2e27fe50bd1155fee582ce19e32"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "50099459bdbca0a1f1a906ccc4f62e5ede7539d16935d708c021835b95bd3b63"
+          "sha256": "ddbf5c1bd48eb2025d6db5a9ad65da00b25ad6a5099d270bc43e8d4a5356176d"
         }
       ],
       "ownedTests": [
@@ -948,7 +949,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "db10e85100ba38107a110b20069cb1cecf314175954060b040862ddd1eea50a1"
+          "sha256": "4eec3283d9fbf04db7e9d47b90f3b8ee01883835b6952c78b9c421366e860170"
         },
         {
           "path": "package-lock.json",
@@ -1015,7 +1016,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "3d243b52e0351450ec9c377a8b1490b287c51c9924388e9bedf9dbd1de82ac6c"
+          "sha256": "364400f226cce2d730c8db7c639a57c1f66ebd64ac48c036455df9afb85eb9c6"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -1190,7 +1191,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "15bdb8222594c3475554a78c2da9b94869e48ad8a6a1bac4db6c18e318c78bac"
+          "sha256": "c34d1552636d0b6620e2d9abba3e1ae0a840a5aa8cfbe2951c81f329fb7efac2"
         }
       ],
       "ownedTests": [
@@ -5438,6 +5439,49 @@
         "Every relation is derived from a complete source-bound 36-review ledger; profile equivalence fields, names, frequency and shape are untrusted.",
         "All source-native meanings, variants, absences, ambiguities, conflicts and counterexamples remain intact.",
         "No holdout, Capability, Process Pattern, common-core, promotion, execution or Authority claim is admitted."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-08-party-candidate-v1",
+      "dependsOn": [
+        "cscl-07-cross-system-semantic-matrix-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/architecture/cscl-08-party-mapping-application-guide-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ab892473a3c1b3ea7442876ac093a91fd123df5e32c74a86189b9cebfb8b00f8"
+        },
+        {
+          "path": "src/cscl-08/party-candidate.mjs",
+          "role": "VALIDATOR",
+          "sha256": "92cf09118c9c12a26377213cdb36b8aed2403423d5854388c364c00ffa6901a3"
+        },
+        {
+          "path": "tests/cscl-08/party-candidate.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1d641ed27fcc5e443198e26c75af833d8ab7926c26502f5ebe126e9848f7833e"
+        },
+        {
+          "path": "verification/cscl-08-party-candidate-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "dc85664bb8594b61e1ae669e261f8c007ec7fdef9b0edadad82d35055b6c2e53"
+        },
+        {
+          "path": "verification/cscl-08-party-candidate-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "94bd8998d38edbd9728be6283206867f2b2aca5a161a216972994ab16ea4f111"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl08:test"
+      ],
+      "invariants": [
+        "The exact released CSCL-07 matrix and complete Party 12-row review denominator are replayed without source, cell, fact or counterevidence substitution.",
+        "Zero positive Party relations yields an empty common core; frequency, labels, shapes and caller verdicts cannot promote source-native elements.",
+        "All system variants, absences and unresolved conflicts remain source-bound, non-authoritative and holdout-free."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

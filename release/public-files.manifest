@@ -254,6 +254,7 @@ docs/architecture/cks-m1/closure-v1.md	docs/architecture/cks-m1/closure-v1.md	06
 docs/architecture/cks-m1/criterion-traceability-v1.json	docs/architecture/cks-m1/criterion-traceability-v1.json	0644
 docs/architecture/cscl-01-protocol-v1.md	docs/architecture/cscl-01-protocol-v1.md	0644
 docs/architecture/cscl-07-semantic-evidence-matrix-v1.md	docs/architecture/cscl-07-semantic-evidence-matrix-v1.md	0644
+docs/architecture/cscl-08-party-mapping-application-guide-v1.md	docs/architecture/cscl-08-party-mapping-application-guide-v1.md	0644
 docs/architecture/rks-01-real-source-utility-result-v1.md	docs/architecture/rks-01-real-source-utility-result-v1.md	0644
 docs/architecture/rks-01-source-governance-v1.md	docs/architecture/rks-01-source-governance-v1.md	0644
 docs/architecture/rks-02-core-small-vs-raw-result-v1.md	docs/architecture/rks-02-core-small-vs-raw-result-v1.md	0644
@@ -653,6 +654,7 @@ src/cscl-04/render-profile.mjs	src/cscl-04/render-profile.mjs	0644
 src/cscl-05/tryton-profile.mjs	src/cscl-05/tryton-profile.mjs	0644
 src/cscl-06/profile.mjs	src/cscl-06/profile.mjs	0644
 src/cscl-07/matrix.mjs	src/cscl-07/matrix.mjs	0644
+src/cscl-08/party-candidate.mjs	src/cscl-08/party-candidate.mjs	0644
 src/rks-01/application-guide-projector.mjs	src/rks-01/application-guide-projector.mjs	0644
 src/rks-01/comparator.mjs	src/rks-01/comparator.mjs	0644
 src/rks-01/corpus-builder.mjs	src/rks-01/corpus-builder.mjs	0644
@@ -814,6 +816,7 @@ tests/cscl-04/profile.test.mjs	tests/cscl-04/profile.test.mjs	0644
 tests/cscl-05/tryton-profile.test.mjs	tests/cscl-05/tryton-profile.test.mjs	0644
 tests/cscl-06/apache-ofbiz-profile.test.mjs	tests/cscl-06/apache-ofbiz-profile.test.mjs	0644
 tests/cscl-07/matrix.test.mjs	tests/cscl-07/matrix.test.mjs	0644
+tests/cscl-08/party-candidate.test.mjs	tests/cscl-08/party-candidate.test.mjs	0644
 tests/demo-admin-ai-poc.test.mjs	tests/demo-admin-ai-poc.test.mjs	0644
 tests/demo-approval-workbench.test.mjs	tests/demo-approval-workbench.test.mjs	0644
 tests/demo-enforcement-gate.test.mjs	tests/demo-enforcement-gate.test.mjs	0644
@@ -1405,6 +1408,8 @@ verification/cscl-05-tryton-source-native-profile-v1.json	verification/cscl-05-t
 verification/cscl-06-apache-ofbiz-profile-receipt-v1.json	verification/cscl-06-apache-ofbiz-profile-receipt-v1.json	0644
 verification/cscl-07-semantic-evidence-matrix-receipt-v1.json	verification/cscl-07-semantic-evidence-matrix-receipt-v1.json	0644
 verification/cscl-07-semantic-evidence-matrix-v1.json	verification/cscl-07-semantic-evidence-matrix-v1.json	0644
+verification/cscl-08-party-candidate-receipt-v1.json	verification/cscl-08-party-candidate-receipt-v1.json	0644
+verification/cscl-08-party-candidate-v1.json	verification/cscl-08-party-candidate-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644
