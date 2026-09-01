@@ -3,7 +3,7 @@
   "taskId": "PORTFOLIO-PS336-INTEGRATE",
   "issue": 336,
   "family": "FND-PS-03",
-  "generatedAt": "2026-09-01T19:01:22Z",
+  "generatedAt": "2026-09-01T22:22:23Z",
   "repository": "JoFe2/PANSPHAIRA",
   "publicMain": {
     "ref": "origin/main",
@@ -27,39 +27,23 @@
   ],
   "subject": {
     "contentSetAlgorithm": "sha256(concat(path + NUL + lowercase-sha256 + LF), paths sorted lexicographically)",
-    "contentSetDigest": "b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a",
+    "contentSetDigest": "28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a",
     "files": [
       {
         "path": "SHA256SUMS",
-        "sha256": "6d5513bf4ac25dc065ca1d27349a7113a1ee726354be9da3f97ea4b0a5e49da1"
+        "sha256": "0019fb528ae04f33162ccc0b63f44b7d594c9d4df703c9a4bc7d77a72befb5d7"
       },
       {
         "path": "docs/EXTERNAL-BI-SERVICE.md",
         "sha256": "18c98a410edd205f4e677f63853c4e824de1ca752dc6624da383879a46e76c0d"
       },
       {
-        "path": "package.json",
-        "sha256": "c98a47b9011b6741595a35148eba5bd6ac9b14437486748a0d3ec185b2b108eb"
-      },
-      {
         "path": "packages/contracts/src/external-bi-service.ts",
         "sha256": "7ea7c5e68ee6aa190313521ffecc9b6b01b0f829e7c7bcc6bf85ffa4e734ba37"
       },
       {
-        "path": "release/governance.json",
-        "sha256": "96e37f99ec3e688fb3f3982e928a8a2ddfbfd63ab2eff5895cf28e174d13ed7b"
-      },
-      {
-        "path": "release/public-files.manifest",
-        "sha256": "2d2c7ef29d552220b0f5523acbd050c5270b6fb8768a7faf7ee68af72b8215cb"
-      },
-      {
-        "path": "scripts/refresh-integrity-data.mjs",
-        "sha256": "e058d05493931f109dd26d747adcae62a0bed35c2654fd8cc7e43d20b47da03c"
-      },
-      {
-        "path": "scripts/verify-external-bi-service-v2-clean-room.mjs",
-        "sha256": "76b6bf71b5d2d53447387bc2eb1969f4c5954f944a1fdc9795bfb14f757d9dd7"
+        "path": "scripts/render-ccp-m1-evidence.mjs",
+        "sha256": "297a975b6588c9cd334a730fd8cde328420bb870936f4ff1aab103aa53e955fa"
       },
       {
         "path": "tests/external-bi-service.test.ts",
@@ -70,14 +54,47 @@
         "sha256": "a5265dbf05a3bb14de5a8e2fa650278b24c8b47fa35a5e5c399b6c52c2c7acfd"
       },
       {
+        "path": "tests/render-ccp-m1-evidence.test.mjs",
+        "sha256": "0c3e4bdbb61dfc4bb9bb571b4cd42209a8967ab54caa6762426ffb61abb1e574"
+      },
+      {
         "path": "tests/verification-fabric-v2.test.ts",
         "sha256": "320f29d99adfd56c6fafca9371db58600a193dec6fdcdf9a6720ef7b18ac5d50"
       },
       {
         "path": "verification/verification-dag-v2.json",
-        "sha256": "45bb6ab525f9ac4367cfc579f97ae3d62d08b44c88b013264a9db88e0ccc68c8"
+        "sha256": "59400fbf52b0f1759c8da24cf2e6c9bdc461ac3f191c2243c10d86410686a153"
       }
     ]
+  },
+  "fixForwardArtifactBinding": {
+    "status": "PASS",
+    "rejectedArtifactRange": "a01647cfdd292303136fce691ad579ac4e69ba51..2a0bab8f13cf253ff6f40f952213656aed2a8819",
+    "rejectedArtifactChangedPathCount": 40,
+    "rejectedArtifactOutOfScopePathCount": 26,
+    "baseRef": "origin/main",
+    "baseSha": "39e5187b38e08946ea60196f32aaaea072af6544",
+    "resumedCleanHead": "bb3c3f96819d75ba21cd31d01baa1b776128651c",
+    "comparison": "origin/main against tested worktree bytes; the two closure receipts are self-excluded from the content-set digest",
+    "changedPathCount": 11,
+    "changedPaths": [
+      "SHA256SUMS",
+      "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-closure-receipt.json",
+      "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-local-gates.json",
+      "docs/EXTERNAL-BI-SERVICE.md",
+      "packages/contracts/src/external-bi-service.ts",
+      "scripts/render-ccp-m1-evidence.mjs",
+      "tests/external-bi-service.test.ts",
+      "tests/fixtures/external-bi-service-v2-clean-room.json",
+      "tests/render-ccp-m1-evidence.test.mjs",
+      "tests/verification-fabric-v2.test.ts",
+      "verification/verification-dag-v2.json"
+    ],
+    "contentSetPathCount": 9,
+    "contentSetDigest": "28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a",
+    "outOfScopePathCount": 0,
+    "allChangedPathsWithinTaskAllowlist": true,
+    "containingCommitSelfExcluded": true
   },
   "acceptanceEvidence": [
     {
@@ -98,7 +115,7 @@
     {
       "criterion": "AC-04",
       "result": "READY",
-      "evidence": "The current-Main candidate is independently bound by content-set digest b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a. Public exact-head delivery and issue closure remain controller-owned downstream actions."
+      "evidence": "The corrected origin/main-scoped artifact is independently bound by nine-path content-set digest 28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a; all eleven changed paths, including the two self-excluded closure receipts, are inside the task allowlist. Public exact-head delivery and issue closure remain controller-owned downstream actions."
     }
   ],
   "localGates": [
@@ -131,9 +148,15 @@
       "summary": "1735/1735"
     },
     {
-      "command": "npm test",
-      "result": "BLOCKED_INFRASTRUCTURE",
-      "summary": "Local /usr/bin/node v24.19.0 exits 133/SIGTRAP during V8 isolate initialization before npm starts. A non-authoritative --jitless diagnostic reached the unrelated knowledge-quality loopback test but cannot provide WebAssembly to Node fetch. The controller-owned pinned-Node gate remains required."
+      "command": "docker run --rm --network host --user 1000:1000 --group-add 122 -e HOME=/tmp -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker:ro -v /usr/libexec/docker/cli-plugins:/usr/libexec/docker/cli-plugins:ro -v /mnt/data2/ai/development-conveyor/docker-workspaces/portfolio-planning/pansphaira-main/.git:/mnt/data2/ai/development-conveyor/docker-workspaces/portfolio-planning/pansphaira-main/.git:ro -v \"$PWD\":\"$PWD\" -w \"$PWD\" node:24.14.1-bookworm bash -lc \"npm install --global --prefix /tmp/npm-toolchain npm@11.16.0 --ignore-scripts --no-audit --no-fund >/tmp/npm-install.log && export PATH=/tmp/npm-toolchain/bin:$PATH && npm test\"",
+      "result": "PASS",
+      "summary": "Authoritative pinned Node 24.14.1/npm 11.16.0 host-Docker replacement gate completed the native pretest, test and posttest lifecycle with exit code 0; the suite started and no checks were disabled or skipped by this correction.",
+      "suiteStarted": true,
+      "exitCode": 0,
+      "replacementFor": [
+        "native npm test exit 133/SIGTRAP before suite start",
+        "NODE_OPTIONS=--jitless npm test diagnostic blocked by unavailable WebAssembly"
+      ]
     }
   ],
   "nonClaims": [
@@ -141,8 +164,8 @@
     "No universal Superset compatibility claim and no security certification.",
     "No authority beyond the exact owner-derived product, contract and capability tuple.",
     "Package completion is not public issue closure; exact-head public delivery remains separately required.",
-    "The local Node SIGTRAP is neither a product pass nor a product failure; authoritative pinned-Node npm test evidence remains controller-owned.",
+    "The historical local Node SIGTRAP and jitless WebAssembly failure remain infrastructure observations only; the authoritative pinned-Node/host-Docker replacement gate is the recorded product verdict.",
     "No push, merge, publication or release was performed by this receipt."
   ],
-  "candidateVerdict": "TECHNICALLY_COMPLETE_PENDING_PINNED_NODE_GATE"
+  "candidateVerdict": "TECHNICALLY_COMPLETE_LOCAL_HARD_GATES_PASS"
 }

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,6 +39,18 @@ const PACKET_SCHEMA = "cm.ccp-m1-local-proof-packet/v1";
 const HARNESS_SCHEMA = "cm.ccp-m1-local-proof-readback-input/v1";
 const TASK_ID = "TERRA-PSAI52-ROOT-QS-01";
 const PROFILE_RATES = [10, 50, 100, 1_000, 10_000];
+const BINDING_SCHEMA = "cm.ccp-m1-evidence-binding/v1";
+const EXPECTED_BINDING = Object.freeze({
+  baseCommit: "9aa9fec7d0320949c987f0a7a6dc8f1e3e3f4809",
+  baseRef: "origin/main",
+  branch: "conveyor/pansphaira-52",
+  diffCheck: "PASS",
+  headCommit: "1dde2511d0cedd580807a128790e4a3bcbde2cbe",
+  mergeBaseCommit: "9aa9fec7d0320949c987f0a7a6dc8f1e3e3f4809",
+  repository: "JoFe2/PANSPHAIRA",
+  worktreeBeforeRender: "CLEAN",
+});
+const EXPECTED_BINDING_DIGEST = ccpDigestDomainV1(BINDING_SCHEMA, EXPECTED_BINDING);
 
 const REQUIRED_KEYS = [
   "artifacts", "binding", "criterionMatrix", "evidenceClass", "externalRequestMade", "faultRecovery",
@@ -92,16 +103,6 @@ function requireFalse(value, code) {
   if (value !== false) fail(code);
 }
 
-function gitSucceeds(args) {
-  const result = spawnSync("git", args, { cwd: ROOT, encoding: "utf8" });
-  return result.error === undefined && result.status === 0;
-}
-
-function gitOutput(args) {
-  const result = spawnSync("git", args, { cwd: ROOT, encoding: "utf8" });
-  return result.error === undefined && result.status === 0 ? result.stdout.trim() : null;
-}
-
 function projectInfrastructure(infrastructure) {
   const keys = [
     "actualWorkspacePath", "declaredWorkspacePath", "declaredWorkspacePathPresent", "dockerEnoentObserved",
@@ -129,6 +130,7 @@ function projectInfrastructure(infrastructure) {
 
 function validateInput(input) {
   assertExactKeys(input, REQUIRED_KEYS, "CCP_M1_EVIDENCE_INPUT_SCHEMA_DENIED");
+  assertExactKeys(input.binding, Object.keys(EXPECTED_BINDING), "CCP_M1_EVIDENCE_BINDING_DENIED");
   if (input.schemaVersion !== "cm.ccp-m1-evidence-input/v1" || input.taskId !== TASK_ID) fail("CCP_M1_EVIDENCE_INPUT_SCHEMA_DENIED");
   if (input.evidenceClass !== "LOCAL_SYNTHETIC" || input.operatingModel !== "Operating Model v1.1") fail("CCP_M1_EVIDENCE_BOUNDARY_DENIED");
   if (input.externalRequestMade !== false || input.newProcessVariantIntroduced !== false) fail("CCP_M1_EVIDENCE_AUTHORITY_DENIED");
@@ -137,14 +139,8 @@ function validateInput(input) {
     || !/^[a-f0-9]{40}$/.test(input.binding.baseCommit)
     || input.binding.mergeBaseCommit !== input.binding.baseCommit
     || !/^[a-f0-9]{40}$/.test(input.binding.headCommit)
-    || input.binding.repository !== "JoFe2/PANSPHAIRA") fail("CCP_M1_EVIDENCE_BINDING_DENIED");
-  const currentHead = gitOutput(["rev-parse", "HEAD"]);
-  if (currentHead === null
-    || !gitSucceeds(["merge-base", "--is-ancestor", input.binding.headCommit, currentHead])
-    || !gitSucceeds(["merge-base", "--is-ancestor", input.binding.baseCommit, input.binding.headCommit])
-    || !gitSucceeds(["rev-parse", `${input.binding.headCommit}^{tree}`])) {
-    fail("CCP_M1_EVIDENCE_BINDING_DENIED");
-  }
+    || input.binding.repository !== "JoFe2/PANSPHAIRA"
+    || ccpDigestDomainV1(BINDING_SCHEMA, input.binding) !== EXPECTED_BINDING_DIGEST) fail("CCP_M1_EVIDENCE_BINDING_DENIED");
   if (!Array.isArray(input.criterionMatrix) || input.criterionMatrix.length !== 6) fail("CCP_M1_EVIDENCE_CRITERIA_DENIED");
   if (!Array.isArray(input.profiles) || input.profiles.length !== PROFILE_RATES.length) fail("CCP_M1_EVIDENCE_PROFILES_DENIED");
   if (!Array.isArray(input.faultRecovery) || input.faultRecovery.length !== 4) fail("CCP_M1_EVIDENCE_RECOVERY_DENIED");

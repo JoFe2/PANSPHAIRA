@@ -10,19 +10,15 @@ const staleHeadInput = "tests/fixtures/ccp-evidence/stale-head.json";
 const docs = "docs/ccp-m1-local-proof.md";
 const runtimeArgs = process.execArgv.includes("--jitless") ? ["--jitless"] : [];
 
-function run(args) {
+function run(args, env = {}) {
   return spawnSync(process.execPath, [...runtimeArgs, script, ...args], {
     encoding: "utf8",
-    env: { ...process.env, NODE_TEST_CONTEXT: undefined },
+    env: { ...process.env, NODE_TEST_CONTEXT: undefined, ...env },
   });
 }
 
-function runGit(args) {
-  return spawnSync("git", args, { encoding: "utf8" }).stdout.trim();
-}
-
-test("CCP-M1 evidence renderer emits deterministic packet and readback input", () => {
-  const first = run(["--check"]);
+test("CCP-M1 evidence renderer emits deterministic packet without live Git history", () => {
+  const first = run(["--check"], { PATH: "" });
   assert.equal(first.status, 0, first.stderr);
   const result = JSON.parse(first.stdout);
   assert.equal(result.status, "PASS");
@@ -32,10 +28,7 @@ test("CCP-M1 evidence renderer emits deterministic packet and readback input", (
   assert.equal(result.readbackHarnessInput.externalRequestMade, false);
   assert.equal(result.readbackHarnessInput.sourceBoundary, "LOCAL_SYNTHETIC_NON_PRODUCTION");
   assert.equal(result.readbackHarnessInput.expectedReadback.exactBaseCommit, "9aa9fec7d0320949c987f0a7a6dc8f1e3e3f4809");
-  const currentHead = runGit(["rev-parse", "HEAD"]);
-  const evidenceHead = result.readbackHarnessInput.expectedReadback.exactHeadCommit;
-  const ancestry = spawnSync("git", ["merge-base", "--is-ancestor", evidenceHead, currentHead]);
-  assert.equal(ancestry.status, 0);
+  assert.equal(result.readbackHarnessInput.expectedReadback.exactHeadCommit, "1dde2511d0cedd580807a128790e4a3bcbde2cbe");
   assert.equal(result.readbackHarnessInput.expectedReadback.profileReceiptDigests.length, 5);
   assert.equal(result.readbackHarnessInput.expectedReadback.recoveryReceiptDigests.length, 4);
   assert.equal(result.readbackHarnessInput.expectedReadback.statusDigests.length, 4);
@@ -83,8 +76,8 @@ test("CCP-M1 evidence renderer fails closed before rendering a redaction failure
   assert.equal(readFileSync(docs, "utf8").includes("customer@example.invalid"), false);
 });
 
-test("CCP-M1 evidence renderer fails closed for a stale integration head", () => {
-  const result = run(["--input", staleHeadInput]);
+test("CCP-M1 evidence renderer fails closed for substituted provenance without live Git history", () => {
+  const result = run(["--input", staleHeadInput], { PATH: "" });
   assert.notEqual(result.status, 0);
   assert.match(`${result.stdout}\n${result.stderr}`, /CCP_M1_EVIDENCE_BINDING_DENIED/);
   assert.equal(readFileSync(docs, "utf8").includes("4db140bcd056434fa278603e39461d429907c160"), false);

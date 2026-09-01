@@ -766,12 +766,12 @@
         {
           "path": "scripts/render-ccp-m1-evidence.mjs",
           "role": "TOOLCHAIN",
-          "sha256": "93fd12c83b5258e678f0aaa0b09b903befa0663ba1123683ddf8313e9eee3641"
+          "sha256": "297a975b6588c9cd334a730fd8cde328420bb870936f4ff1aab103aa53e955fa"
         },
         {
           "path": "tests/render-ccp-m1-evidence.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "4e961c9ffb17baba51fced0d76c2ea900b474a77db0c4e74f1473af5aa98bb08"
+          "sha256": "0c3e4bdbb61dfc4bb9bb571b4cd42209a8967ab54caa6762426ffb61abb1e574"
         }
       ],
       "ownedTests": [
@@ -781,7 +781,7 @@
       ],
       "invariants": [
         "Agents and candidates cannot self-authorize merge or promotion.",
-        "Current heads, fairness, recovery and exact LKG behavior remain evidence-bound.",
+        "Historical reviewed heads, fairness, recovery and exact LKG behavior remain evidence-bound without requiring live Git ancestry.",
         "Public evidence is synthetic, redacted and bound to an exact reviewed product parent."
       ],
       "riskClass": "CRITICAL",

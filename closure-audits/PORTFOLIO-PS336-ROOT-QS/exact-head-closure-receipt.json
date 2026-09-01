@@ -2,7 +2,7 @@
   "schemaVersion": "development-conveyor/exact-head-closure-receipt/v1",
   "taskId": "PORTFOLIO-PS336-DELIVERY",
   "closureOwnerTaskId": "PORTFOLIO-PS336-ROOT-QS",
-  "recordedAt": "2026-09-01T19:16:11Z",
+  "recordedAt": "2026-09-01T22:22:23Z",
   "sourceIssue": {
     "id": "FND-PS-03",
     "repository": "JoFe2/PANSPHAIRA",
@@ -42,7 +42,7 @@
   "disposition": {
     "technicalAcceptanceEvidence": "COMPLETE",
     "acceptanceStatus": "FND_PS_03_AC01_TO_AC03_PASS_AC04_READY_FOR_ROOT_QS_DELIVERY",
-    "candidateVerdict": "TECHNICALLY_COMPLETE_PENDING_AUTHORITATIVE_PINNED_NODE_FULL_GATE_AND_ROOT_QS_EXTERNAL_DELIVERY",
+    "candidateVerdict": "TECHNICALLY_COMPLETE_AUTHORITATIVE_PINNED_NODE_FULL_GATE_PASS_PENDING_ROOT_QS_EXTERNAL_DELIVERY",
     "releaseDisposition": "RELEASE_REQUIRED",
     "externalEffectsPerformed": false,
     "pushMergeReleaseIssueCloseOrQueueDonePerformed": false,
@@ -64,6 +64,38 @@
     "receiptDoesNotClaimRecursiveBindingToItsContainingCommit": true,
     "productBytesAndThisHeadBoundReceiptAreSeparate": true,
     "headDriftPolicy": "FAIL_CLOSED_REBIND_AND_REVERIFY_BEFORE_REVIEW_OR_DELIVERY"
+  },
+  "fixForwardArtifactBinding": {
+    "status": "PASS",
+    "rejectedArtifactRange": "a01647cfdd292303136fce691ad579ac4e69ba51..2a0bab8f13cf253ff6f40f952213656aed2a8819",
+    "rejectedArtifactChangedPathCount": 40,
+    "rejectedArtifactOutOfScopePathCount": 26,
+    "rejectedArtifactPrReadinessClaimed": false,
+    "baseRef": "origin/main",
+    "baseSha": "39e5187b38e08946ea60196f32aaaea072af6544",
+    "resumedCleanHead": "bb3c3f96819d75ba21cd31d01baa1b776128651c",
+    "resumedCleanTree": "779568ed4ce311f6b8fff9d47b7602dbb832470d",
+    "comparison": "origin/main against tested worktree bytes; the two closure receipts are self-excluded from the content-set digest",
+    "changedPathCount": 11,
+    "changedPaths": [
+      "SHA256SUMS",
+      "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-closure-receipt.json",
+      "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-local-gates.json",
+      "docs/EXTERNAL-BI-SERVICE.md",
+      "packages/contracts/src/external-bi-service.ts",
+      "scripts/render-ccp-m1-evidence.mjs",
+      "tests/external-bi-service.test.ts",
+      "tests/fixtures/external-bi-service-v2-clean-room.json",
+      "tests/render-ccp-m1-evidence.test.mjs",
+      "tests/verification-fabric-v2.test.ts",
+      "verification/verification-dag-v2.json"
+    ],
+    "contentSetPathCount": 9,
+    "contentSetDigest": "28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a",
+    "outOfScopePathCount": 0,
+    "allChangedPathsWithinTaskAllowlist": true,
+    "containingCommitSelfExcluded": true,
+    "containingCommitReadbackRequiredBeforePr": true
   },
   "candidateCommits": [
     {
@@ -90,37 +122,35 @@
   "productEvidence": {
     "integrationReceipt": {
       "path": "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-local-gates.json",
-      "sha256": "c3d04afccef38ca8ef5a508b0418838b8f0a0148e55201637bebf2341a003454",
-      "gitBlob": "fad2f59909f9d034ce02317bd820fb0c4cc8bb61",
-      "containedByCandidateHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
-      "use": "INTEGRATION_PROVENANCE_INPUT_NOT_A_RECURSIVE_BINDING_FOR_THIS_RECEIPT"
+      "sha256": "d907e4ba5ee3c79e3ea78d9c8fab9726518c58647d6f2a13864158b1dcd9201f",
+      "gitBlob": "80952af7c8df3bb528e229026ebccb05ae7871b5",
+      "containedByCandidateHead": null,
+      "use": "FIX_FORWARD_GATE_INPUT_NOT_A_RECURSIVE_BINDING_FOR_THIS_RECEIPT",
+      "containingCommitSelfExcluded": true
     },
     "contentSetAlgorithm": "sha256(concat(path + NUL + lowercase-sha256 + LF), paths sorted lexicographically)",
-    "contentSetDigest": "b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a",
+    "contentSetDigest": "28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a",
     "contentSetRecomputed": true,
-    "contentSetPathCount": 12,
+    "contentSetPathCount": 9,
     "pathDigests": {
-      "SHA256SUMS": "6d5513bf4ac25dc065ca1d27349a7113a1ee726354be9da3f97ea4b0a5e49da1",
+      "SHA256SUMS": "0019fb528ae04f33162ccc0b63f44b7d594c9d4df703c9a4bc7d77a72befb5d7",
       "docs/EXTERNAL-BI-SERVICE.md": "18c98a410edd205f4e677f63853c4e824de1ca752dc6624da383879a46e76c0d",
-      "package.json": "c98a47b9011b6741595a35148eba5bd6ac9b14437486748a0d3ec185b2b108eb",
       "packages/contracts/src/external-bi-service.ts": "7ea7c5e68ee6aa190313521ffecc9b6b01b0f829e7c7bcc6bf85ffa4e734ba37",
-      "release/governance.json": "96e37f99ec3e688fb3f3982e928a8a2ddfbfd63ab2eff5895cf28e174d13ed7b",
-      "release/public-files.manifest": "2d2c7ef29d552220b0f5523acbd050c5270b6fb8768a7faf7ee68af72b8215cb",
-      "scripts/refresh-integrity-data.mjs": "e058d05493931f109dd26d747adcae62a0bed35c2654fd8cc7e43d20b47da03c",
-      "scripts/verify-external-bi-service-v2-clean-room.mjs": "76b6bf71b5d2d53447387bc2eb1969f4c5954f944a1fdc9795bfb14f757d9dd7",
+      "scripts/render-ccp-m1-evidence.mjs": "297a975b6588c9cd334a730fd8cde328420bb870936f4ff1aab103aa53e955fa",
       "tests/external-bi-service.test.ts": "77b9560e48eecc5a704187121ee1907491503eee305091fce146dac807a02fe8",
       "tests/fixtures/external-bi-service-v2-clean-room.json": "a5265dbf05a3bb14de5a8e2fa650278b24c8b47fa35a5e5c399b6c52c2c7acfd",
+      "tests/render-ccp-m1-evidence.test.mjs": "0c3e4bdbb61dfc4bb9bb571b4cd42209a8967ab54caa6762426ffb61abb1e574",
       "tests/verification-fabric-v2.test.ts": "320f29d99adfd56c6fafca9371db58600a193dec6fdcdf9a6720ef7b18ac5d50",
-      "verification/verification-dag-v2.json": "45bb6ab525f9ac4367cfc579f97ae3d62d08b44c88b013264a9db88e0ccc68c8"
+      "verification/verification-dag-v2.json": "59400fbf52b0f1759c8da24cf2e6c9bdc461ac3f191c2243c10d86410686a153"
     },
     "changedProductPathsFromCurrentMain": [
       "SHA256SUMS",
       "docs/EXTERNAL-BI-SERVICE.md",
       "packages/contracts/src/external-bi-service.ts",
-      "release/governance.json",
-      "scripts/refresh-integrity-data.mjs",
+      "scripts/render-ccp-m1-evidence.mjs",
       "tests/external-bi-service.test.ts",
       "tests/fixtures/external-bi-service-v2-clean-room.json",
+      "tests/render-ccp-m1-evidence.test.mjs",
       "tests/verification-fabric-v2.test.ts",
       "verification/verification-dag-v2.json"
     ],
@@ -130,11 +160,11 @@
       336
     ],
     "verificationDag": {
-      "graphVersion": 41,
+      "graphVersion": 40,
       "nodeCount": 49,
       "nodeId": "external-bi-service-v2",
       "ownedTest": "npm run external-bi-service:test",
-      "graphFileSha256": "45bb6ab525f9ac4367cfc579f97ae3d62d08b44c88b013264a9db88e0ccc68c8"
+      "graphFileSha256": "59400fbf52b0f1759c8da24cf2e6c9bdc461ac3f191c2243c10d86410686a153"
     },
     "publicManifestEntries": 1430,
     "checksumEntries": 1735
@@ -182,7 +212,7 @@
       "criterion": "PANSPHAIRA issue closes independently through exact-head content-addressed delivery.",
       "proof": [
         "The frozen portfolio item records zero issue dependencies and the terminal contract PUBLIC_TERMINAL_RELEASE_READBACK_QUEUE_DONE.",
-        "This receipt binds candidate head 23faa2fd5d4344c9b3e897fe2b34c82abe07c133, tree 85365ad1d3ac0865e5081457627248aa5c16b03f and product content-set digest b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a.",
+        "This self-excluded fix-forward receipt binds origin/main base 39e5187b38e08946ea60196f32aaaea072af6544, resumed clean head bb3c3f96819d75ba21cd31d01baa1b776128651c and corrected nine-path content-set digest 28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a; all eleven changed paths are inside the task allowlist.",
         "Root-QS retains the exact PR-head CI, SHA-bound merge, Main CI, serial release, anonymous readback, issue-close and Queue-DONE sequence."
       ],
       "publicIssueClosureClaimed": false
@@ -203,7 +233,8 @@
     }
   },
   "verificationOutcomes": {
-    "candidateHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+    "candidateHeadBeforeSelfExcludedFixForwardReceipt": "bb3c3f96819d75ba21cd31d01baa1b776128651c",
+    "testedContentSetDigest": "28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a",
     "runtime": {
       "hostNode": "v24.19.0",
       "hostNpmObservedWithJitless": "11.17.0",
@@ -213,7 +244,7 @@
     "requiredProfileCommands": [
       {
         "command": "npm run external-bi-service:test",
-        "nativeHostStatus": "BLOCKED_INFRASTRUCTURE",
+        "nativeHostStatus": "HISTORICAL_INFRASTRUCTURE_OBSERVATION",
         "nativeHostExitCode": 133,
         "nativeHostOutputSha256": "c52956dfb1e33518ea321cbcca27f7fb0c38e493e3ea078946b4a59ba416e456",
         "diagnosticCommand": "NODE_OPTIONS=--jitless npm run external-bi-service:test",
@@ -221,11 +252,15 @@
         "diagnosticExitCode": 0,
         "tests": 18,
         "passed": 18,
-        "outputSha256": "b199f5736afa4be4841454b33fcdf10d0242b3154e1ea90e782cfa20a85af7d4"
+        "outputSha256": "b199f5736afa4be4841454b33fcdf10d0242b3154e1ea90e782cfa20a85af7d4",
+        "authoritativePinnedNodeHostDockerStatus": "PASS",
+        "authoritativePinnedNodeHostDockerExitCode": 0,
+        "authoritativePinnedNodeHostDockerTests": 18,
+        "authoritativePinnedNodeHostDockerPassed": 18
       },
       {
         "command": "npm run verification:plan",
-        "nativeHostStatus": "BLOCKED_INFRASTRUCTURE",
+        "nativeHostStatus": "HISTORICAL_INFRASTRUCTURE_OBSERVATION",
         "nativeHostExitCode": 133,
         "nativeHostOutputSha256": "975f6a43c3ecc616f436e0494ae119792d75d76cb5f9a0ba7cbd6329109bf218",
         "diagnosticCommand": "NODE_OPTIONS=--jitless npm run verification:plan",
@@ -236,15 +271,16 @@
         "nodes": 49,
         "tests": 56,
         "hardGates": 5,
-        "graphDigest": "107beaca19b1ce39648939114dc8b8bfea5bc14704f744c7291fad76887dee1b",
-        "planDigest": "e88a99b14b55de80f628739b4bcc31e167153d45759003258076530551756290",
-        "outputSha256": "01897c45c4c1ae99b171bf4046128c41fa738045b49f1d3f495f82c46e9e85e9"
+        "graphDigest": "3792dc3efe280314b02266d61bbb8530b4ae6b36313333f48c1efac1549bda8f",
+        "planDigest": "88f2d2d708a7946a623640a287c36a2450466b84d62c402dda4860126a6ebd80",
+        "authoritativePinnedNodeHostDockerStatus": "PASS",
+        "authoritativePinnedNodeHostDockerExitCode": 0
       },
       {
         "command": "git diff --check origin/main...HEAD",
         "status": "PASS",
         "exitCode": 0,
-        "reviewedCandidateHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
+        "reviewedCandidateHead": "bb3c3f96819d75ba21cd31d01baa1b776128651c",
         "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       }
     ],
@@ -290,16 +326,31 @@
     ],
     "fullSuite": {
       "requiredCommand": "npm test",
-      "nativeHostStatus": "BLOCKED_INFRASTRUCTURE",
-      "nativeHostExitCode": 133,
-      "nativeHostOutputSha256": "36023be7117c2c7c45b599ff57c1494bd74c434b837cff5c5816138768199c8b",
-      "nativeSuiteStarted": false,
-      "diagnosticCommand": "NODE_OPTIONS=--jitless npm test",
-      "diagnosticStatus": "BLOCKED_INFRASTRUCTURE",
-      "diagnosticExitCode": 1,
-      "diagnosticFailure": "Unrelated tests/knowledge-quality-api.test.mjs loopback fetch requires WebAssembly, which --jitless removes.",
-      "productVerdict": null,
-      "authoritativePinnedNodeHostDockerGate": "REQUIRED_BY_ROOT_QS"
+      "authoritativeReplacementCommand": "docker run --rm --network host --user 1000:1000 --group-add 122 -e HOME=/tmp -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker:ro -v /usr/libexec/docker/cli-plugins:/usr/libexec/docker/cli-plugins:ro -v /mnt/data2/ai/development-conveyor/docker-workspaces/portfolio-planning/pansphaira-main/.git:/mnt/data2/ai/development-conveyor/docker-workspaces/portfolio-planning/pansphaira-main/.git:ro -v \"$PWD\":\"$PWD\" -w \"$PWD\" node:24.14.1-bookworm bash -lc \"npm install --global --prefix /tmp/npm-toolchain npm@11.16.0 --ignore-scripts --no-audit --no-fund >/tmp/npm-install.log && export PATH=/tmp/npm-toolchain/bin:$PATH && npm test\"",
+      "authoritativeStatus": "PASS",
+      "authoritativeExitCode": 0,
+      "authoritativeSuiteStarted": true,
+      "authoritativeNode": "24.14.1",
+      "authoritativeNpm": "11.16.0",
+      "completedLifecycle": [
+        "pretest",
+        "test",
+        "posttest"
+      ],
+      "historicalNativeHostObservation": {
+        "status": "INFRASTRUCTURE_OBSERVATION_SUPERSEDED_BY_AUTHORITATIVE_PASS",
+        "exitCode": 133,
+        "suiteStarted": false,
+        "outputSha256": "36023be7117c2c7c45b599ff57c1494bd74c434b837cff5c5816138768199c8b"
+      },
+      "historicalJitlessDiagnostic": {
+        "command": "NODE_OPTIONS=--jitless npm test",
+        "status": "DIAGNOSTIC_OBSERVATION_NOT_A_PRODUCT_VERDICT",
+        "exitCode": 1,
+        "failure": "Unrelated tests/knowledge-quality-api.test.mjs loopback fetch requires WebAssembly, which --jitless removes."
+      },
+      "productVerdict": "PASS",
+      "authoritativePinnedNodeHostDockerGate": "SATISFIED"
     },
     "nativeFailureClassification": "INFRASTRUCTURE_ONLY_EXECUTABLE_MEMORY_PERMISSION_SIGTRAP_DURING_V8_ISOLATE_INITIALIZATION",
     "checksDisabledOrSkippedByProductChange": false
@@ -307,11 +358,12 @@
   "oneReviewInput": {
     "requiredIndependentIntegratedReviewCount": 1,
     "completedByDeliveryWorker": 0,
-    "status": "READY_FOR_ROOT_QS_ONE_REVIEW",
+    "status": "READY_AFTER_CONTAINING_COMMIT_READBACK",
     "owner": "PORTFOLIO-PS336-ROOT-QS",
-    "reviewSubjectHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
-    "reviewSubjectTree": "85365ad1d3ac0865e5081457627248aa5c16b03f",
-    "reviewSubjectContentSetDigest": "b628777b2f92dcfb89f9171353c997ab60c25abc17e60c8f558a7ca0738fcd9a",
+    "reviewSubjectParentHead": "bb3c3f96819d75ba21cd31d01baa1b776128651c",
+    "reviewSubjectParentTree": "779568ed4ce311f6b8fff9d47b7602dbb832470d",
+    "reviewSubjectContentSetDigest": "28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a",
+    "reviewSubjectContainingCommitSelfExcluded": true,
     "headDriftPolicy": "FAIL_CLOSED_AND_REBIND_BEFORE_REVIEW",
     "requiredInputs": [
       "this self-excluded exact-head closure receipt",
@@ -319,7 +371,7 @@
       "all four FND-PS-03 acceptance-ID proofs",
       "the 18/18 focused positive and adversarial result",
       "the FULL_FALLBACK verification plan and all governance outcomes",
-      "the authoritative full-suite infrastructure blocker and required pinned-Node/host-Docker replacement gate",
+      "the authoritative pinned-Node/host-Docker full-suite PASS replacement gate",
       "the release disposition, external sequence and explicit nonclaims"
     ],
     "independentReviewCompletionClaimed": false
@@ -328,8 +380,10 @@
     "repository": "JoFe2/PANSPHAIRA",
     "baseBranch": "main",
     "headBranch": "conveyor/portfolio-ps336-external-bi",
-    "reviewTargetHead": "23faa2fd5d4344c9b3e897fe2b34c82abe07c133",
-    "reviewTargetTree": "85365ad1d3ac0865e5081457627248aa5c16b03f",
+    "reviewTargetHead": null,
+    "reviewTargetTree": null,
+    "reviewTargetContentSetDigest": "28452448cb9ec1e15b4f5dbb90e56af5f0d50bcc076b3db3b7944b733cc06e4a",
+    "reviewTargetContainingCommitReadbackRequired": true,
     "mergeMethod": "squash",
     "release": {
       "required": true,
@@ -362,7 +416,7 @@
     "NO_SQL_RAW_ROW_DIRECT_SUPERSET_MUTATION_PUBLISH_OR_APPLY_AUTHORITY_CLAIM",
     "NO_AUTHORITY_BEYOND_THE_EXACT_OWNER_DERIVED_V2_PRODUCT_CONTRACT_CAPABILITY_TUPLE",
     "NO_FND_XR_01_PAIRED_CLEAN_ROOM_CLOSURE_CLAIM",
-    "NO_AUTHORITATIVE_FULL_SUITE_PASS_CLAIM_FROM_NATIVE_SIGTRAP_OR_JITLESS_WEBASSEMBLY_DIAGNOSTICS",
+    "NO_FULL_SUITE_PASS_CLAIM_FROM_NATIVE_SIGTRAP_OR_JITLESS_WEBASSEMBLY_DIAGNOSTICS; PASS IS FROM THE PINNED_NODE_HOST_DOCKER_REPLACEMENT_GATE_ONLY",
     "NO_INDEPENDENT_REVIEW_COMPLETION_CLAIM",
     "NO_RECURSIVE_BINDING_OF_THIS_RECEIPT_TO_ITS_CONTAINING_COMMIT",
     "NO_PUSH_PR_MERGE_RELEASE_PUBLIC_READBACK_ISSUE_CLOSE_OR_QUEUE_DONE_CLAIM"
