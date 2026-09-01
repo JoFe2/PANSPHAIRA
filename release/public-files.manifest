@@ -1031,6 +1031,7 @@ tests/fixtures/cks-11/shadow-replay-cases-v1.json	tests/fixtures/cks-11/shadow-r
 tests/fixtures/cks-12/delivery-readback-template-v1.json	tests/fixtures/cks-12/delivery-readback-template-v1.json	0644
 tests/fixtures/cks-12/drift-unknown-variants-v1.json	tests/fixtures/cks-12/drift-unknown-variants-v1.json	0644
 tests/fixtures/cks-12/e2e-proof-manifest-v1.json	tests/fixtures/cks-12/e2e-proof-manifest-v1.json	0644
+tests/fixtures/cks-12/edge-authority-v2.json	tests/fixtures/cks-12/edge-authority-v2.json	0644
 tests/fixtures/cks-12/empty-kb-acquisition-v1.json	tests/fixtures/cks-12/empty-kb-acquisition-v1.json	0644
 tests/fixtures/cks-12/experience-diversity-v1.json	tests/fixtures/cks-12/experience-diversity-v1.json	0644
 tests/fixtures/cks-12/falsification-report-v1.json	tests/fixtures/cks-12/falsification-report-v1.json	0644

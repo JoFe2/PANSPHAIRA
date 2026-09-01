@@ -4621,12 +4621,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "2d2c7ef29d552220b0f5523acbd050c5270b6fb8768a7faf7ee68af72b8215cb"
+          "sha256": "8452550711739c6db79ee4137e5e85b235e7b5f8dbcf353cd2e9b2670f684fb7"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "f83f8b71b2a9fa6e68e5e5b5a3c326fba980577d2375ab4d88c45c688cc1bdd9"
+          "sha256": "ed7a059e13afdf49f759485e43021d5e8397b7470f1eb8bc57da5cf6ec2ca0f7"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
