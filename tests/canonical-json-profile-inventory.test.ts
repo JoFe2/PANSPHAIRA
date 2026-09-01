@@ -69,6 +69,16 @@ const INTEGRATION_ARTIFACT_INPUTS = [
   { path: "verification/canonical-json-profile-inventory-v1.json", role: "CONTRACT" },
   { path: SELF_TEST_FILE, role: "VALIDATOR" },
 ] as const;
+const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] = Object.freeze([
+  Object.freeze({
+    migrationId: "PORTFOLIO-PS335-INTEGRATE/FND-PS-02-INTEGRITY-GENERATOR/V2",
+    path: "scripts/refresh-integrity-data.mjs",
+    profileVersion: 2,
+    fromSha256: "6bffef78ac4be77ec5ab8c6a043e653d292b1b97d451dcf2db5bfad0979154a8",
+    toSha256: "b19ee3ecb425a4404142b0a5e9edef48c8f22285a57504458c2c5ebd386fa12a",
+    reason: "Advance verification DAG generation to graph v41 and canonically own the FND-PS-02 focused input family; the immutable v1 digest remains in the admitted-base fixture.",
+  }),
+]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
 const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
@@ -90,7 +100,7 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1735, uniquePaths: 1735, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1736, uniquePaths: 1736, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -146,6 +156,15 @@ interface BaseObligations {
   baseLedgerSha256: string;
   pinnedProfiles: Array<{ path: string; sha256: string }>;
   byteObligations: ByteObligation[];
+}
+
+interface ProfileVersionMigration {
+  migrationId: string;
+  path: string;
+  profileVersion: number;
+  fromSha256: string;
+  toSha256: string;
+  reason: string;
 }
 
 function compareStrings(a: string, b: string): number {
@@ -299,6 +318,61 @@ function sha256OfFile(repoPath: string): string | null {
   }
 }
 
+function currentPinnedProfileDigests(): Map<string, string> {
+  const current = new Map(loadBaseObligations().pinnedProfiles.map((item) => [item.path, item.sha256]));
+  for (const migration of PROFILE_VERSION_MIGRATIONS) current.set(migration.path, migration.toSha256);
+  return current;
+}
+
+/**
+ * Version migrations are code-owned, exact and one-way. The immutable admitted
+ * base fixture remains the source of every v1 digest; candidate metadata may
+ * only reproduce the separately reviewed migration recorded here.
+ */
+function validateProfileVersionMigrations(doc: Record<string, unknown>, errors: string[]): void {
+  const migrationsRaw = doc.profileVersionMigrations;
+  if (!Array.isArray(migrationsRaw)) {
+    errors.push("profile-version-migration:missing");
+    return;
+  }
+  const expectedByPath = new Map(PROFILE_VERSION_MIGRATIONS.map((migration) => [migration.path, migration]));
+  const basePinned = new Map(loadBaseObligations().pinnedProfiles.map((item) => [item.path, item.sha256]));
+  const seen = new Set<string>();
+  for (const migrationRaw of migrationsRaw) {
+    if (typeof migrationRaw !== "object" || migrationRaw === null || Array.isArray(migrationRaw)) {
+      errors.push("profile-version-migration:structure");
+      continue;
+    }
+    const migration = migrationRaw as Record<string, unknown>;
+    const migrationPath = typeof migration.path === "string" ? migration.path : "";
+    const expected = expectedByPath.get(migrationPath);
+    if (expected === undefined || seen.has(migrationPath)) {
+      errors.push(`profile-version-migration:path:${migrationPath || "missing"}`);
+      continue;
+    }
+    seen.add(migrationPath);
+    const expectedRecord = expected as ProfileVersionMigration;
+    if (
+      Object.keys(migration).sort(compareStrings).join("\0") !== Object.keys(expectedRecord).sort(compareStrings).join("\0")
+      || Object.entries(expectedRecord).some(([key, value]) => migration[key] !== value)
+    ) {
+      errors.push(`profile-version-migration:metadata:${migrationPath}`);
+    }
+    if (basePinned.get(migrationPath) !== expected.fromSha256) {
+      errors.push(`profile-version-migration:base:${migrationPath}`);
+    }
+    if (expected.fromSha256 === expected.toSha256 || sha256OfFile(migrationPath) !== expected.toSha256) {
+      errors.push(`profile-version-migration:current:${migrationPath}`);
+    }
+  }
+  for (const expected of PROFILE_VERSION_MIGRATIONS) {
+    if (!seen.has(expected.path)) errors.push(`profile-version-migration:omitted:${expected.path}`);
+  }
+  if (migrationsRaw.length !== PROFILE_VERSION_MIGRATIONS.length) {
+    errors.push("profile-version-migration:count");
+  }
+}
+
 /**
  * The accepted census has one deterministic integration owner. The inventory
  * records the expected owner and the DAG binds the current bytes, so neither a
@@ -388,8 +462,14 @@ function validateIntegrationOwnership(doc: Record<string, unknown>, errors: stri
 function expectedByteObligations(scan: ScanResult, ledger: LedgerResult): ByteObligation[] {
   void scan;
   void ledger;
+  const migrations = new Map(PROFILE_VERSION_MIGRATIONS.map((migration) => [migration.path, migration]));
   return loadBaseObligations().byteObligations
-    .map((obligation) => ({ ...obligation }))
+    .map((obligation) => {
+      const migration = migrations.get(obligation.path);
+      return migration === undefined
+        ? { ...obligation }
+        : { ...obligation, sha256: migration.toSha256, basis: "profile-version-migration" };
+    })
     .sort((a, b) => compareStrings(a.path, b.path));
 }
 
@@ -407,6 +487,7 @@ function validateInventory(inv: unknown, scan: ScanResult, ledger: LedgerResult)
 
   // --- current-Main integration ownership ---------------------------------------------
   validateIntegrationOwnership(doc, errors);
+  validateProfileVersionMigrations(doc, errors);
 
   // --- profiles -------------------------------------------------------------
   const profilesRaw = doc.profiles;
@@ -415,7 +496,7 @@ function validateInventory(inv: unknown, scan: ScanResult, ledger: LedgerResult)
   } else {
     const scanDeclarations = new Map<string, Declaration>();
     for (const decl of scan.declarations) scanDeclarations.set(decl.file, decl);
-    const basePinnedProfiles = new Map(loadBaseObligations().pinnedProfiles.map((item) => [item.path, item.sha256]));
+    const pinnedProfileDigests = currentPinnedProfileDigests();
     const seenFiles = new Set<string>();
     const knownFiles = new Set<string>();
 
@@ -452,7 +533,7 @@ function validateInventory(inv: unknown, scan: ScanResult, ledger: LedgerResult)
         }
       }
 
-      const expectedDigest = basePinnedProfiles.get(file);
+      const expectedDigest = pinnedProfileDigests.get(file);
       const pinnedInBase = expectedDigest !== undefined;
       if (pinned === null) {
         errors.push(`structure-invalid:profiles[${index}].pinned`);
@@ -744,7 +825,7 @@ test("accepted census binds exact admitted Main and all derived artifacts to rep
   assert.deepEqual(validateCurrent(), []);
 });
 
-test("every historical digest-bound byte is unchanged on disk", () => {
+test("every current digest-bound byte is unchanged on disk", () => {
   const scan = getScan();
   const ledger = getLedger();
   const obligations = expectedByteObligations(scan, ledger);
@@ -755,15 +836,25 @@ test("every historical digest-bound byte is unchanged on disk", () => {
   }
 });
 
-test("all base-pinned canonicalization profiles keep their immutable digests", () => {
+test("all admitted pinned profiles keep their immutable digest or exact version migration", () => {
   const scan = getScan();
-  const basePinned = new Map(loadBaseObligations().pinnedProfiles.map((item) => [item.path, item.sha256]));
-  const pinned = scan.declarations.filter((d) => basePinned.has(d.file));
+  const currentPinned = currentPinnedProfileDigests();
+  const pinned = scan.declarations.filter((d) => currentPinned.has(d.file));
   assert.equal(pinned.length, EXPECTED_COUNTS.pinnedProfileFiles);
   for (const decl of pinned) {
-    const expected = basePinned.get(decl.file);
-    assert.equal(sha256OfFile(decl.file), expected, `base digest drift for ${decl.file}`);
+    const expected = currentPinned.get(decl.file);
+    assert.equal(sha256OfFile(decl.file), expected, `pinned digest drift for ${decl.file}`);
   }
+});
+
+test("integrity generator v2 migration preserves the immutable admitted v1 obligation", () => {
+  const base = loadBaseObligations();
+  const migration = PROFILE_VERSION_MIGRATIONS[0];
+  assert.ok(migration);
+  assert.equal(base.pinnedProfiles.find(({ path: file }) => file === migration.path)?.sha256, migration.fromSha256);
+  assert.equal(base.byteObligations.find(({ path: file }) => file === migration.path)?.sha256, migration.fromSha256);
+  assert.notEqual(migration.fromSha256, migration.toSha256);
+  assert.equal(sha256OfFile(migration.path), migration.toSha256);
 });
 
 test("no equivalence claim is made: stance NOT-PROVEN, unicode+number evidence missing", () => {
@@ -815,6 +906,18 @@ test("negative: stale public-Main base fails closed", () => {
   assertFails((inv) => {
     inv.baseCommit = "0".repeat(40);
   }, "stale-base:");
+});
+
+test("negative: omitted profile-version migration fails closed", () => {
+  assertFails((inv) => {
+    inv.profileVersionMigrations = [];
+  }, "profile-version-migration:");
+});
+
+test("negative: candidate-rewritten profile-version migration fails closed", () => {
+  assertFails((inv) => {
+    inv.profileVersionMigrations[0].toSha256 = "0".repeat(64);
+  }, "profile-version-migration:");
 });
 
 test("negative: unowned derived-integrity artifact fails closed", () => {

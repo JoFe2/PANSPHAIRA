@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "development-conveyor/current-main-replay-receipt/v1",
+  "taskId": "PORTFOLIO-PS335-ROOT-QS",
+  "sourceIssue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 335
+  },
+  "portfolioManifestSha256": "ed5a4228960969045687d136040c0231bff2c066ce894e7d018dcc7242971031",
+  "recordedAt": "2026-09-01T23:36:01Z",
+  "currentMain": {
+    "head": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+    "tree": "ff692880f1ad7b74e5a4ca8255ac983f23de12f9"
+  },
+  "mergeBase": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+  "productHead": "764fcdf3a8e58935ff4b40cb452614f76ce8b442",
+  "productTree": "0e96ef77e4aa7bca11959a4e9aa7e76e3d057ba5",
+  "branch": "conveyor/portfolio-ps335-edge-authority",
+  "provenance": {
+    "supersededReviewedHead": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+    "priorReceiptPath": "closure-audits/PORTFOLIO-PS335-ROOT-QS/exact-head-closure-receipt.json",
+    "priorReceiptSha256": "bed7a53ccddbc56beec61189c12655c58bde762f570214371d94f6dad5028ed9",
+    "replayMethod": "REBASE_PRODUCT_COMMITS_ONTO_CURRENT_PUBLIC_MAIN_THEN_FIX_FORWARD_INTEGRITY",
+    "reviewCount": 1,
+    "finalOwner": "sol",
+    "noIssuePingPong": true
+  },
+  "changedContentSet": {
+    "algorithm": "sha256(concat(path + NUL + lowercase-sha256 + LF), paths sorted lexicographically)",
+    "receiptSelfExcluded": true,
+    "pathCount": 14,
+    "digest": "5688b67fa0c9646177b9ddff8038bbd4ad7823aae60a44caaf3f3a4b94f24a08",
+    "pathDigests": {
+      "README.md": "6fe7c89591563646f029ccd4201ca76b50549b9fb262118845c7a689e73fbc55",
+      "SHA256SUMS": "3a7bd21202f2b371c7c540b2c23948329e3cc4f5c703dac91819d80a6506ecbb",
+      "package.json": "9ec486f5fdb3946512c7dc87adc09abc10fab38cdad10e57a3eb22374c0e483f",
+      "release/public-files.manifest": "8452550711739c6db79ee4137e5e85b235e7b5f8dbcf353cd2e9b2670f684fb7",
+      "scripts/build-public-release.sh": "ed7a059e13afdf49f759485e43021d5e8397b7470f1eb8bc57da5cf6ec2ca0f7",
+      "scripts/refresh-integrity-data.mjs": "b19ee3ecb425a4404142b0a5e9edef48c8f22285a57504458c2c5ebd386fa12a",
+      "src/cks-12/readonly-kaleidosphere-bridge.ts": "e4a4fdd6ceb684f5ed3b8bd7f613482b6185cabc9a5272763bc26ea1fbbd6ccc",
+      "tests/canonical-json-profile-inventory.test.ts": "f88fd12f5c97b1e50e7d665853d666d90fa3f81edb55d801721fe1304f7e8726",
+      "tests/cks-12/readonly-kaleidosphere-bridge.test.ts": "77e1b61fe563a9feccfabd5b8488f1d05d684860eda889985c5458b45c18e781",
+      "tests/fixtures/cks-12/edge-authority-v2.json": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f",
+      "tests/release-governance.test.mjs": "31a3c7d1935a77f7d65d4540ce14e41911ce0c30cf22863227e0f6930b4b9787",
+      "tests/verification-fabric-v2.test.ts": "62a967fc48278fd24bb60080b0fb1a587949cd8575444e77751e88d0808fd755",
+      "verification/canonical-json-profile-inventory-v1.json": "d8ba0ae79f9260fc15f2058e9f3a89dbb2a3a5e608d20c5b8c87f64d7d5953dc",
+      "verification/verification-dag-v2.json": "c31f3f4224d4782d14f657d0645386cf8e6c18a775593a27b08fa98dabbb2bd9"
+    }
+  },
+  "gates": [
+    {
+      "command": "npm run fnd-ps-fu-01:test",
+      "status": "PASS",
+      "tests": 34,
+      "passed": 34
+    },
+    {
+      "command": "npm run verification:plan",
+      "status": "PASS",
+      "mode": "FULL_FALLBACK",
+      "nodes": 49,
+      "tests": 56,
+      "hardGates": 5,
+      "graphDigest": "7d8ec11e72ca4622314517dd60fecca82160cdd09c1630b620641b474498186b",
+      "planDigest": "581761ad03d05cfe26c3349ad34227c920f24348dd99aab11ea6e9fcc7a1a18f"
+    },
+    {
+      "command": "npm run supply-chain:verify",
+      "status": "PASS",
+      "lockDigest": "19f9f5967563ed3f3dffce82430f5ebbd7cfb3b6b319015eb466c198f496b167"
+    },
+    {
+      "command": "npm run release-governance:test",
+      "status": "PASS",
+      "tests": 52,
+      "passed": 52
+    },
+    {
+      "command": "sha256sum -c SHA256SUMS",
+      "status": "PASS",
+      "entries": 1736
+    },
+    {
+      "command": "npm test",
+      "status": "PASS",
+      "runtime": {
+        "node": "v24.19.0",
+        "npm": "11.17.0"
+      }
+    }
+  ],
+  "findingResolution": {
+    "staleBase": "39e5187b38e08946ea60196f32aaaea072af6544",
+    "newBase": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+    "conflicts": [
+      "SHA256SUMS",
+      "tests/verification-fabric-v2.test.ts",
+      "verification/verification-dag-v2.json"
+    ],
+    "resolution": "Preserved current Main external-BI ownership, added FND-PS-02 verification ownership, refreshed nested integrity in serial order, bound public count 1431, and retained graphVersion 40 while generator inventory remains immutable."
+  },
+  "deliveryRequired": [
+    "push exact receipt head",
+    "PR exact-head CI",
+    "SHA-bound merge",
+    "exact merge-head CI",
+    "serial daily release",
+    "anonymous tag/release/issue readback",
+    "issue CLOSED completed",
+    "queue DONE unowned"
+  ],
+  "nonClaims": [
+    "NO_EXTERNAL_EFFECT_PERFORMED_BY_REPLAY",
+    "NO_SECOND_INDEPENDENT_REVIEW",
+    "NO_AUTHORITY_WIDENING",
+    "NO_CUSTOMER_OR_PRODUCTION_DATA",
+    "NO_RECURSIVE_RECEIPT_BINDING"
+  ]
+}

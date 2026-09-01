@@ -114,7 +114,7 @@ proof.verifier.sha256 = digest(proof.verifier.path);
 writeJson(proofPath, proof);
 writeJson("security/secure-default-proof-evidence-v1.json", buildSecureDefaultEvidence(proof));
 
-dag.graphVersion = 36;
+dag.graphVersion = 41;
 const verificationFabricNode = dag.nodes.find(({ id }) => id === "vf-contract-v1");
 if (verificationFabricNode === undefined) throw new Error("VF_CONTRACT_V1_DAG_NODE_MISSING");
 const verificationFabricInputs = [
@@ -262,6 +262,32 @@ const externalBiInputs = [
   ["docs/EXTERNAL-BI-SERVICE.md", "DERIVED_EVIDENCE"],
 ];
 externalBiNode.inputs = externalBiInputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+const cks12Node = dag.nodes.find(({ id }) => id === "cks-12-closed-learning-loop-v1");
+if (cks12Node === undefined) throw new Error("CKS_12_DAG_NODE_MISSING");
+const cks12FocusedInputs = [
+  ["src/cks-12/readonly-kaleidosphere-bridge.ts", "VALIDATOR"],
+  ["tests/cks-12/readonly-kaleidosphere-bridge.test.ts", "VALIDATOR"],
+  ["tests/fixtures/cks-12/edge-authority-v2.json", "FIXTURE"],
+];
+for (const [inputPath, role] of cks12FocusedInputs) {
+  const matches = cks12Node.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) {
+    throw new Error(`CKS_12_FOCUSED_INPUT_OWNERSHIP_DENIED:${inputPath}`);
+  }
+  if (matches.length === 0) cks12Node.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+cks12Node.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+cks12Node.ownedTests = ["npm run fnd-ps-fu-01:test", "npm run cks12:test"];
+cks12Node.invariants = [
+  "All 23 Part-II story steps bind immutable fixtures and exact component versions.",
+  "Acquisition, validation and promotion remain separate governed states.",
+  "Every v2 edge binds immutable PanSphaira-owner-derived evidence and canonical Knowledge; shared endpoints alone never grant relation truth.",
+  "Paired substitutions, fully re-digested forged relations, stale or incomplete evidence, hostile in-process inputs, post-validation mutation, promotion and canonical-Knowledge mutation fail closed.",
+  "KaleidoSphere receives only minimized read-only projections and returns authority-free, effect-free candidates.",
+  "Drift and unknown variants invalidate or safely abort fast paths.",
+  "Falsification reports bind raw counts, denominators, exclusions and stop conditions.",
+  "Cumulative delivery readiness requires exact head/tree-bound gates, integrity receipts, closed issue criteria, exact scope and immutable no-authority ownership.",
+];
 mediaNode.ownedTests = ["npm run external-video-service:test", "npm run video:test"];
 const mediaInputs = [
   ["packages/contracts/src/external-video-service.ts", "CONTRACT"],

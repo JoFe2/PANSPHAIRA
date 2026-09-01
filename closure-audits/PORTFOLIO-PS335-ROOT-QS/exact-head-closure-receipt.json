@@ -1,0 +1,492 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-closure-receipt/v1",
+  "taskId": "PORTFOLIO-PS335-ROOT-QS-FINALIZER-01",
+  "closureOwnerTaskId": "PORTFOLIO-PS335-ROOT-QS",
+  "recordedAt": "2026-09-01T23:16:05Z",
+  "sourceIssue": {
+    "id": "FND-PS-02",
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 335,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/335",
+    "title": "[FND-PS-02] CKS-12 evidence-bound edge authority",
+    "bodySha256": "7273f096c5f831f175642b8d25f54670408ff11314ab96afe1c9af909259e025"
+  },
+  "governance": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "authorityGranted": false,
+    "externalEffectsAuthorizedForDeliveryWorker": false,
+    "finalOwnerThroughQueueDone": "PORTFOLIO-PS335-ROOT-QS"
+  },
+  "portfolioInput": {
+    "path": "/mnt/data2/ai/development-conveyor/planning/portfolios/portfolio-rolling-v1.json",
+    "sha256": "ed5a4228960969045687d136040c0231bff2c066ce894e7d018dcc7242971031",
+    "portfolioId": "PORTFOLIO-ROLLING-V1",
+    "portfolioItemId": "PORTFOLIO-V1-PS-335",
+    "frozenSourceMainHead": "a01647cfdd292303136fce691ad579ac4e69ba51",
+    "issueDependencies": [],
+    "risk": "C",
+    "reviewPerRepository": 1,
+    "terminalContract": "PUBLIC_TERMINAL_RELEASE_READBACK_QUEUE_DONE",
+    "frozenInputIsNotCurrentPublicReadback": true
+  },
+  "closureGraph": {
+    "id": "JoFe2/PANSPHAIRA#335@a01647cfdd292303136fce691ad579ac4e69ba51",
+    "completedProductNodes": [
+      "PORTFOLIO-PS335-AUTHORITY-CONTRACT",
+      "PORTFOLIO-PS335-ADVERSARIAL-PROOF",
+      "PORTFOLIO-PS335-INTEGRATE"
+    ],
+    "remainingSoleFinalOwnerNode": "PORTFOLIO-PS335-ROOT-QS",
+    "releaseDisposition": "RELEASE_REQUIRED"
+  },
+  "disposition": {
+    "technicalAcceptanceEvidence": "COMPLETE",
+    "acceptanceStatus": "FND_PS_02_AC01_TO_AC04_PASS",
+    "candidateVerdict": "FOCUSED_GOVERNANCE_HARD_GATES_AND_FULL_SUITE_PASS_ON_EXACT_BOUND_CANDIDATE",
+    "fullSuiteStatus": "PASS_ON_BOUND_CANDIDATE",
+    "releaseDisposition": "RELEASE_REQUIRED",
+    "externalEffectsPerformed": false,
+    "pushPullRequestMergeReleaseIssueCloseOrQueueDonePerformed": false,
+    "rootQsReviewAndLocalFullGateComplete": true,
+    "rootQsOwnsPrMergeReleaseReadbackIssueCloseAndQueueDone": true
+  },
+  "headBinding": {
+    "localMainRef": "origin/main",
+    "localMainSha": "39e5187b38e08946ea60196f32aaaea072af6544",
+    "localMainTree": "bcfbc59f3e1c2d08a348b597da19a639b73486a5",
+    "mergeBase": "39e5187b38e08946ea60196f32aaaea072af6544",
+    "branch": "conveyor/portfolio-ps335-edge-authority",
+    "integratedCandidateHead": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+    "integratedCandidateTree": "53994ef8768478cdb7772f03479716a7cdb7d6e4",
+    "worktreeCleanBeforeReceiptWrite": true,
+    "candidateIsCommitted": true,
+    "receiptBindsCandidateHeadAndTree": true,
+    "receiptIsRepositoryOnlySelfExcludedEvidence": true,
+    "receiptDoesNotClaimRecursiveBindingToItsContainingCommit": true,
+    "productBytesAndThisHeadBoundReceiptAreSeparate": true,
+    "headDriftPolicy": "FAIL_CLOSED_REBIND_AND_REVERIFY_BEFORE_REVIEW_OR_DELIVERY"
+  },
+  "candidateCommits": [
+    {
+      "acceptedSourceSha": "32772c7abdb4d2697f7fc079ef0a83699ebb829a",
+      "acceptedSourceTree": "5e06eff73caadea3464607c4d3cc52ef7796a249",
+      "replayedSha": "9a86d2395b4e30c1a57844bd459f5c251ae0a8b4",
+      "replayedTree": "3cafba179b247ecc99459ea7eb46e6a98dcd6dff",
+      "stablePatchId": "e69f02718fa593fbbac08de7de697b8be5a9200a",
+      "subject": "feat(cks-12): bind v2 edges to owner evidence",
+      "taskId": "PORTFOLIO-PS335-AUTHORITY-CONTRACT",
+      "dependencyOrder": 1
+    },
+    {
+      "acceptedSourceSha": "0b2e42be9976bb9540e49c7b26e1377015e67efe",
+      "acceptedSourceTree": "48eb5044918288286ebc2e91a3f207ea428367f4",
+      "replayedSha": "a9adc736296cdd3bbce2224499adccd8113f09cd",
+      "replayedTree": "63f825fef4d859c810f23cacd9b71022274133c2",
+      "stablePatchId": "46310490fecfde4d676b50971cada97d24c3489e",
+      "subject": "test(fnd-ps-02): add adversarial edge authority oracle",
+      "taskId": "PORTFOLIO-PS335-ADVERSARIAL-PROOF",
+      "dependencyOrder": 2
+    },
+    {
+      "sha": "696b9ac4070581a532546ec210d4ce084d7ee023",
+      "tree": "5ab490a916e71be96295c9ea3d793a54512d961c",
+      "subject": "chore(fnd-ps-02): integrate edge authority evidence",
+      "taskId": "PORTFOLIO-PS335-INTEGRATE",
+      "dependencyOrder": 3
+    },
+    {
+      "sha": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+      "tree": "53994ef8768478cdb7772f03479716a7cdb7d6e4",
+      "subject": "fix(closure): restore full-suite compatibility",
+      "taskId": "PORTFOLIO-PS335-ROOT-QS-FINALIZER-01",
+      "dependencyOrder": 4
+    }
+  ],
+  "productEvidence": {
+    "changedContentSetAlgorithm": "sha256(concat(path + NUL + lowercase-sha256 + LF), paths sorted lexicographically)",
+    "changedContentSetDigest": "e32cf328091e3e5d52e28437a355fef65c43b76d9d9a510f17430e6dd9b65898",
+    "changedContentSetPathCount": 13,
+    "pathDigests": {
+      "README.md": "6fe7c89591563646f029ccd4201ca76b50549b9fb262118845c7a689e73fbc55",
+      "SHA256SUMS": "f7b60333e467877f2265a5d6d58abbdb6c50249de7850f5a2e3fc077a2267c90",
+      "package.json": "9ec486f5fdb3946512c7dc87adc09abc10fab38cdad10e57a3eb22374c0e483f",
+      "release/public-files.manifest": "8452550711739c6db79ee4137e5e85b235e7b5f8dbcf353cd2e9b2670f684fb7",
+      "scripts/build-public-release.sh": "ed7a059e13afdf49f759485e43021d5e8397b7470f1eb8bc57da5cf6ec2ca0f7",
+      "scripts/refresh-integrity-data.mjs": "b19ee3ecb425a4404142b0a5e9edef48c8f22285a57504458c2c5ebd386fa12a",
+      "src/cks-12/readonly-kaleidosphere-bridge.ts": "e4a4fdd6ceb684f5ed3b8bd7f613482b6185cabc9a5272763bc26ea1fbbd6ccc",
+      "tests/canonical-json-profile-inventory.test.ts": "f88fd12f5c97b1e50e7d665853d666d90fa3f81edb55d801721fe1304f7e8726",
+      "tests/cks-12/readonly-kaleidosphere-bridge.test.ts": "77e1b61fe563a9feccfabd5b8488f1d05d684860eda889985c5458b45c18e781",
+      "tests/fixtures/cks-12/edge-authority-v2.json": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f",
+      "tests/verification-fabric-v2.test.ts": "3de44b79951c3c275e6ceb6c39e28e9983fbaaa491f9fbcd99e80431ef3fd5d5",
+      "verification/canonical-json-profile-inventory-v1.json": "d8ba0ae79f9260fc15f2058e9f3a89dbb2a3a5e608d20c5b8c87f64d7d5953dc",
+      "verification/verification-dag-v2.json": "d23c42c995f0fe612deef4927c3046e4e20cffe908e83784ea26d10b3ec80838"
+    },
+    "changedProductPathsFromCurrentMain": [
+      "README.md",
+      "SHA256SUMS",
+      "package.json",
+      "release/public-files.manifest",
+      "scripts/build-public-release.sh",
+      "scripts/refresh-integrity-data.mjs",
+      "src/cks-12/readonly-kaleidosphere-bridge.ts",
+      "tests/canonical-json-profile-inventory.test.ts",
+      "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
+      "tests/fixtures/cks-12/edge-authority-v2.json",
+      "tests/verification-fabric-v2.test.ts",
+      "verification/canonical-json-profile-inventory-v1.json",
+      "verification/verification-dag-v2.json"
+    ],
+    "packageLockSha256": "0f6a224183d3d2eb68eebc0c61483c60cb785a93e67259cab264dc54aa2790cf",
+    "publicManifest": {
+      "path": "release/public-files.manifest",
+      "sha256": "8452550711739c6db79ee4137e5e85b235e7b5f8dbcf353cd2e9b2670f684fb7",
+      "entries": 1431,
+      "changedFromCurrentMain": true,
+      "addedPublicSyntheticFixture": "tests/fixtures/cks-12/edge-authority-v2.json"
+    },
+    "checksumInventory": {
+      "path": "SHA256SUMS",
+      "entries": 1736,
+      "status": "PASS"
+    },
+    "verificationDag": {
+      "graphVersion": 40,
+      "nodeCount": 49,
+      "nodeId": "cks-12-closed-learning-loop-v1",
+      "ownedTest": "npm run fnd-ps-fu-01:test",
+      "graphFileSha256": "d23c42c995f0fe612deef4927c3046e4e20cffe908e83784ea26d10b3ec80838"
+    }
+  },
+  "rootQsFindingResolution": {
+    "finding": "The immutable-candidate npm test gate stopped because verification/verification-dag-v2.json graphVersion 41 disagreed with both nested graphVersion 40 oracles.",
+    "resolution": "Restored graphVersion 40 without changing the 49-node CKS-12 evidence ownership expansion, published the additive synthetic v2 fixture, and advanced the release-manifest cardinality guard to 1431.",
+    "nestedVideoOracle": "PASS_116_OF_116",
+    "canonicalInventoryAndSupplyChainRegression": "PASS_40_OF_40",
+    "exactHeadFullSuite": "PASS",
+    "authorityGranted": false,
+    "productOrCustomerDataUsed": false
+  },
+  "edgeAuthorityBindings": {
+    "schemaVersion": "chimpmaera.cks/readonly-kaleidosphere-bridge/v2",
+    "edgeEvidenceAuthorityVersion": "pansphaira.fnd-ps-02/edge-evidence-authority/v2",
+    "capabilityId": "CKS-12_SYNTHETIC_KNOWLEDGE_DECISION_LINEAGE",
+    "projectionId": "CKS-12-MIN-EDGE-EVIDENCE-001",
+    "edgeId": "CKS-12-EDGE-KNOWLEDGE-001-DECISION-001",
+    "relation": "KNOWLEDGE_USED_BY_DECISION",
+    "ownerEvidenceInputsSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44",
+    "evidenceBindingSha256": "bf2e6f87f38511b86cac8a2e1e1ca7c872e612fe3bb1b0280e0f3b94c571c654",
+    "projectionSha256": "2026c3535fef613d092c68a786a3dde758a27ec22e8ddc16a185004db87874b3",
+    "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+    "returnedRelationTruth": "NOT_GRANTED",
+    "returnedAuthority": "NONE",
+    "returnedEffect": "NONE",
+    "returnedCanonicalKnowledgeMutation": "NONE",
+    "returnedPromotion": "NOT_AUTHORIZED",
+    "dataClass": "PUBLIC_SYNTHETIC_NON_CUSTOMER"
+  },
+  "historicalPreservation": {
+    "migrationPerformed": false,
+    "v1Fixture": {
+      "path": "tests/fixtures/cks-12/minimized-projection-v1.json",
+      "sha256": "b60c7850324882f05331439ea93895a502fefcca64194945a4ac5b2773565ffb",
+      "gitBlob": "2205d2d16dabf991257a26271a8a50ae6b34510a",
+      "changedFromCurrentMain": false
+    },
+    "v1Receipt": {
+      "path": "verification/cks-12/readonly-candidate-receipt-v1.json",
+      "sha256": "a7edb6241af4897d991a8440379c0136f974d812118921093ba217ccd10798fc",
+      "gitBlob": "0867cc7c1e537e112e27f2f3d179a21aafaaf811",
+      "changedFromCurrentMain": false
+    },
+    "v2Fixture": {
+      "path": "tests/fixtures/cks-12/edge-authority-v2.json",
+      "sha256": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f",
+      "gitBlob": "dc7d560a346fae77a1f285e85d4544d284bf3aac",
+      "status": "ADDITIVE_VERSIONED_FIXTURE"
+    },
+    "v1CanonicalFixtureAndReceiptReplay": "PASS",
+    "v2Nonclaims": [
+      "NO_RELATION_TRUTH_FROM_ENDPOINTS",
+      "NO_CANONICAL_KNOWLEDGE_MUTATION",
+      "NO_PROMOTION",
+      "NO_AUTHORITY",
+      "NO_EFFECT",
+      "NO_PRODUCTION_OR_CUSTOMER_DATA_CLAIM"
+    ]
+  },
+  "acceptanceIds": [
+    "FND-PS-02-AC01",
+    "FND-PS-02-AC02",
+    "FND-PS-02-AC03",
+    "FND-PS-02-AC04"
+  ],
+  "acceptance": {
+    "FND-PS-02-AC01": {
+      "status": "PASS",
+      "criterion": "Every returned edge binds internally derivable evidence; shared endpoints alone grant no relation truth.",
+      "proof": [
+        "src/cks-12/readonly-kaleidosphere-bridge.ts:91-171 freezes PanSphaira-owned synthetic evidence inputs and derives both evidence-reference and complete edge-binding digests internally.",
+        "src/cks-12/readonly-kaleidosphere-bridge.ts:402-409 requires the supplied body to equal the owner-derived body after verifying its self-binding digest.",
+        "src/cks-12/readonly-kaleidosphere-bridge.ts:419-448 returns the exact edge with relationTruth NOT_GRANTED, authority NONE and effect NONE.",
+        "tests/cks-12/readonly-kaleidosphere-bridge.test.ts:316-340 proves exact owner-derived admission; lines 386-392 prove endpoints without evidence remain denied."
+      ]
+    },
+    "FND-PS-02-AC02": {
+      "status": "PASS",
+      "criterion": "Paired substitutions and fully re-digested forged relations fail closed.",
+      "proof": [
+        "tests/cks-12/readonly-kaleidosphere-bridge.test.ts:257-309 freezes the reusable eight-case adversarial matrix.",
+        "tests/cks-12/readonly-kaleidosphere-bridge.test.ts:350-366 independently proves paired endpoint/evidence substitution and fully re-digested relation forgery denials.",
+        "tests/cks-12/readonly-kaleidosphere-bridge.test.ts:368-444 proves stale, incomplete, Proxy, accessor, hidden and symbol inputs fail closed.",
+        "The exact current-Main focused replay passed 34/34, including all nine FND-PS-02 v2 test cases."
+      ]
+    },
+    "FND-PS-02-AC03": {
+      "status": "PASS",
+      "criterion": "Candidate remains authority-free and cannot mutate/promote canonical Knowledge.",
+      "proof": [
+        "src/cks-12/readonly-kaleidosphere-bridge.ts:414-448 requires identical owner-bound canonical Knowledge digests and returns NONE/NOT_AUTHORIZED values in a deeply frozen candidate.",
+        "tests/cks-12/readonly-kaleidosphere-bridge.test.ts:446-477 proves authority, capability, promotion, canonical-Knowledge and post-validation mutations fail closed while returned bytes remain isolated and frozen.",
+        "The accepted exact candidate reports canonicalKnowledgeMutation NONE, relationTruth NOT_GRANTED, promotion NOT_AUTHORIZED, authority NONE, capabilityDelta NONE and effect NONE."
+      ]
+    },
+    "FND-PS-02-AC04": {
+      "status": "PASS",
+      "criterion": "Historical fixture bytes and nonclaims are preserved or explicitly version-migrated.",
+      "proof": [
+        "No migration was performed: tests/fixtures/cks-12/minimized-projection-v1.json remains byte-identical to current Main at sha256 b60c7850324882f05331439ea93895a502fefcca64194945a4ac5b2773565ffb.",
+        "verification/cks-12/readonly-candidate-receipt-v1.json remains byte-identical to current Main at sha256 a7edb6241af4897d991a8440379c0136f974d812118921093ba217ccd10798fc.",
+        "tests/cks-12/readonly-kaleidosphere-bridge.test.ts:11-154 replays the historical v1 candidate and receipt canonically; v2 is additive under distinct schema and fixture identities.",
+        "The v2 result preserves all six frozen nonclaims exactly and README.md:132-137 publishes the same authority, effect, relation-truth, production and customer-data boundary."
+      ]
+    }
+  },
+  "mandatoryCases": {
+    "positive": {
+      "case": "An exact v2 edge with owner-derived immutable evidence binding is accepted without granting relation truth from endpoints alone.",
+      "status": "PASS",
+      "focusedSuiteTests": 34,
+      "focusedSuitePassed": 34,
+      "capabilitySpecificV2Tests": 9,
+      "capabilitySpecificV2Passed": 9
+    },
+    "negative": {
+      "case": "Paired endpoint/evidence substitutions, fully re-digested forged relations, stale or incomplete evidence, Proxy/accessor/hidden/symbol inputs, post-validation mutation, promotion and canonical-Knowledge mutation all fail closed.",
+      "status": "PASS",
+      "reusableMatrixCases": 8,
+      "unexpectedAdmissions": 0
+    }
+  },
+  "controllerEvidence": {
+    "authorityContract": {
+      "telemetryPath": "/mnt/data2/ai/development-conveyor/state/logs/attempts/PORTFOLIO-PS335-AUTHORITY-CONTRACT.g1.a1/telemetry.json",
+      "telemetrySha256": "b1f5741e41f4978c90ed63054c1b017ae8f18eb6b43fad2f24576cde922feb88",
+      "acceptedHead": "32772c7abdb4d2697f7fc079ef0a83699ebb829a",
+      "clean": true,
+      "focusedRecovery": "PASS_25_OF_25_AFTER_DEPENDENCY_HYDRATION",
+      "initialFailureClassification": "INFRASTRUCTURE_ONLY_TSC_NOT_FOUND"
+    },
+    "adversarialProof": {
+      "telemetryPath": "/mnt/data2/ai/development-conveyor/state/logs/attempts/PORTFOLIO-PS335-ADVERSARIAL-PROOF.g1.a1/telemetry.json",
+      "telemetrySha256": "5d12b81ffdd9d2e9adbe4fb75a2395811ebbbcafabad204571543e382eca4c71",
+      "acceptedHead": "0b2e42be9976bb9540e49c7b26e1377015e67efe",
+      "clean": true,
+      "focusedGateReceiptSha256": "2976d314b6ba13914085b08410e49f7ac975a344748673d7fa42d3c1250f9e62",
+      "focusedOutputSha256": "f7cfb3c574c5cde2a4a6aa2c1e7b6c9f1a28ba4275384c3451dfcb1233cc31f2",
+      "focused": "PASS_34_OF_34",
+      "diffCheckGateReceiptSha256": "3bb34151a5065f905dc39a1939da18834925fe304507995e19b2a5eaab14b685"
+    },
+    "currentMainIntegration": {
+      "telemetryPath": "/mnt/data2/ai/development-conveyor/state/logs/attempts/PORTFOLIO-PS335-INTEGRATE.g2.a2/telemetry.json",
+      "telemetrySha256": "452941c9978d2d4b0e68471ba72cade2dfd89b5f1c043c27829b6fb017648160",
+      "baseHead": "39e5187b38e08946ea60196f32aaaea072af6544",
+      "integratedCandidateHead": "696b9ac4070581a532546ec210d4ce084d7ee023",
+      "integratedCandidateTree": "5ab490a916e71be96295c9ea3d793a54512d961c",
+      "clean": true,
+      "outsideAllowlist": []
+    },
+    "rootQsFinalizer": {
+      "taskId": "PORTFOLIO-PS335-ROOT-QS-FINALIZER-01",
+      "inputHead": "6d66d056295d72bfbcfa12b5d5a43287807a2541",
+      "candidateHead": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+      "candidateTree": "53994ef8768478cdb7772f03479716a7cdb7d6e4",
+      "cleanBeforeReceiptWrite": true,
+      "outsideAllowlist": [],
+      "reviewFinding": "RESOLVED",
+      "fullSuite": "PASS"
+    }
+  },
+  "verificationOutcomes": {
+    "candidateHead": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+    "candidateTree": "53994ef8768478cdb7772f03479716a7cdb7d6e4",
+    "exactHeadRuntime": {
+      "environmentClass": "PINNED_NODE_DOCKER_WITH_HOST_DOCKER",
+      "containerImage": "node@sha256:80fc934952c8f1b2b4d39907af7211f8a9fff1a4c2cf673fb49099292c251cec",
+      "node": "v24.14.1",
+      "npm": "11.11.0",
+      "hostDockerClient": "29.1.3",
+      "hostDockerEngine": "29.1.3",
+      "hostNativeNodeProbe": "INFRASTRUCTURE_ONLY_EXIT_133_SIGTRAP_DURING_V8_ISOLATE_INITIALIZATION",
+      "worktreeCleanAtGateStartAndEnd": true
+    },
+    "focused": {
+      "command": "npm run fnd-ps-fu-01:test",
+      "exactHeadStatus": "PASS",
+      "exactHeadExitCode": 0,
+      "tests": 34,
+      "passed": 34,
+      "failed": 0
+    },
+    "verificationPlan": {
+      "command": "npm run verification:plan",
+      "exactHeadStatus": "PASS",
+      "exactHeadExitCode": 0,
+      "mode": "FULL_FALLBACK",
+      "reason": "GRAPH_CHANGED",
+      "nodes": 49,
+      "tests": 56,
+      "hardGates": 5,
+      "graphDigest": "47350f6aed71b124851b0143fb84ffc69670e3d23d7abb646abc2c76199ae6b3",
+      "planDigest": "4a6e2902f5922a0defd4f39cec86bb2852ff643fd9ce4b51378cdd57bd27edfe"
+    },
+    "hardGates": [
+      {
+        "command": "npm run lint",
+        "exactHeadStatus": "PASS",
+        "exactHeadExitCode": 0
+      },
+      {
+        "command": "npm run release-governance:verify",
+        "exactHeadStatus": "PASS",
+        "exactHeadExitCode": 0,
+        "verdict": "RELEASE_GOVERNANCE_PASS"
+      },
+      {
+        "command": "npm run supply-chain:verify",
+        "exactHeadStatus": "PASS",
+        "exactHeadExitCode": 0,
+        "verdict": "PASS"
+      },
+      {
+        "command": "sha256sum -c SHA256SUMS",
+        "exactHeadStatus": "PASS",
+        "exactHeadExitCode": 0,
+        "entries": 1736
+      },
+      {
+        "command": "./scripts/build-public-release.sh --output /tmp/cm-product-increment-rc-20260902-ps335-root-qs",
+        "exactHeadStatus": "PASS",
+        "exactHeadExitCode": 0,
+        "isolatedEphemeralOutput": true,
+        "archiveSha256": "8be9caef1ba9754808f772780588d5dbb6e69045857f71a537286b6dc9ec8532"
+      }
+    ],
+    "diffCheck": {
+      "command": "git diff --check origin/main...HEAD",
+      "exactHeadStatus": "PASS",
+      "exactHeadExitCode": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fullSuite": {
+      "requiredCommand": "npm test",
+      "requiredCommandUnmodified": true,
+      "executionEnvelope": "pinned node:24.14.1 container with the exact repository path, read-only linked-worktree Git metadata, and host Docker access",
+      "exactHeadStatus": "PASS",
+      "exactHeadExitCode": 0,
+      "candidateHead": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+      "candidateTree": "53994ef8768478cdb7772f03479716a7cdb7d6e4",
+      "nestedVideoSuite": "PASS_116_OF_116",
+      "boundCandidateFullSuiteVerdict": "PASSING",
+      "productVerdict": "PASS"
+    }
+  },
+  "oneReviewInput": {
+    "requiredIndependentIntegratedReviewCount": 1,
+    "completedByRootQsFinalizer": 1,
+    "status": "PASS",
+    "owner": "PORTFOLIO-PS335-ROOT-QS-FINALIZER-01",
+    "reviewSubjectHead": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+    "reviewSubjectTree": "53994ef8768478cdb7772f03479716a7cdb7d6e4",
+    "reviewSubjectChangedContentSetDigest": "e32cf328091e3e5d52e28437a355fef65c43b76d9d9a510f17430e6dd9b65898",
+    "headDriftPolicy": "FAIL_CLOSED_AND_REBIND_BEFORE_REVIEW",
+    "requiredInputs": [
+      "this self-excluded exact-head closure receipt",
+      "the exact candidate head, tree and thirteen-path changed-content-set binding",
+      "all four FND-PS-02 acceptance-ID proofs",
+      "the 34/34 focused result and nine capability-specific v2 cases",
+      "the paired substitution, fully re-digested forgery and hostile-input fail-closed matrix",
+      "the FULL_FALLBACK verification plan and all five hard-gate PASS outcomes",
+      "the exact pinned-Node and host-Docker npm test PASS on the bound candidate",
+      "the release disposition, remaining external sequence, and explicit nonclaims"
+    ],
+    "independentReviewCompletionClaimed": true
+  },
+  "deliveryPolicyInput": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "baseBranch": "main",
+    "headBranch": "conveyor/portfolio-ps335-edge-authority",
+    "reviewTargetHead": "32d3ae20ba018505a559438ffa27a8ad3ace83f8",
+    "reviewTargetTree": "53994ef8768478cdb7772f03479716a7cdb7d6e4",
+    "mergeMethod": "squash",
+    "release": {
+      "required": true,
+      "strategy": "SERIAL_DAILY_RELEASE",
+      "owner": "PORTFOLIO-PS335-ROOT-QS"
+    },
+    "issue": {
+      "number": 335,
+      "independentDependencies": [],
+      "closeRequired": true
+    },
+    "blockingLocalPreconditions": [],
+    "completedLocalPreconditions": [
+      "ROOT_QS_INDEPENDENT_INTEGRATED_REVIEW_PASS",
+      "NESTED_GRAPH_VERSION_ORACLE_RESOLVED",
+      "EXACT_BOUND_CANDIDATE_PINNED_NODE_HOST_DOCKER_NPM_TEST_PASS"
+    ],
+    "requiredExternalSequence": [
+      "EXACT_PR_HEAD_CI",
+      "SHA_BOUND_MERGE",
+      "EXACT_MAIN_HEAD_CI",
+      "SERIAL_DAILY_RELEASE",
+      "ANONYMOUS_MAIN_TAG_RELEASE_AND_ISSUE_READBACK",
+      "ISSUE_CLOSED_COMPLETED",
+      "QUEUE_ROOT_DONE_AND_CLEANUP"
+    ],
+    "externalSequenceStatus": "READY_NOT_STARTED_BY_ROOT_QS_FINALIZER",
+    "soleFinalOwnerThroughQueueDone": "PORTFOLIO-PS335-ROOT-QS"
+  },
+  "externalEffects": {
+    "networkFetchesByDeliveryWorker": 0,
+    "pushes": 0,
+    "pullRequests": 0,
+    "merges": 0,
+    "releases": 0,
+    "issueMutations": 0,
+    "queueMutations": 0,
+    "credentialOrProviderChanges": 0
+  },
+  "nonClaims": [
+    "SYNTHETIC_NON_CUSTOMER_BYTES_ONLY",
+    "NO_PRODUCTION_OR_CUSTOMER_DATA_EVIDENCE",
+    "NO_RELATION_TRUTH_FROM_SHARED_ENDPOINTS",
+    "NO_UNIVERSAL_RELATION_OR_KALEIDOSPHERE_COMPATIBILITY_CLAIM",
+    "NO_SECURITY_CERTIFICATION_CLAIM",
+    "NO_CANONICAL_KNOWLEDGE_MUTATION_PROMOTION_CAPABILITY_OR_ACTION_AUTHORITY",
+    "NO_EFFECT_OR_RUNTIME_ACTIVATION_CLAIM",
+    "NO_HISTORICAL_V1_FIXTURE_OR_RECEIPT_MIGRATION_CLAIM",
+    "NO_PRODUCT_VERDICT_FROM_LOCAL_NATIVE_SIGTRAP_OR_JITLESS_WEBASSEMBLY_DIAGNOSTICS",
+    "NO_RECURSIVE_BINDING_OF_THIS_RECEIPT_TO_ITS_CONTAINING_COMMIT",
+    "NO_PUSH_PULL_REQUEST_MERGE_RELEASE_PUBLIC_READBACK_ISSUE_CLOSE_OR_QUEUE_DONE_CLAIM"
+  ]
+}

@@ -129,6 +129,13 @@ real-model arm stopped with a falsification result; it does not prove general
 small-model replacement, real-source ingestion utility, production model
 qualification, live routing or autonomous knowledge promotion.
 
+The FND-PS-02 synthetic edge-evidence profile accepts only the exact v2 edge
+binding derived from immutable PanSphaira-owned evidence. Shared endpoints alone
+grant no relation truth. Returned material remains candidate-only,
+authority-free and effect-free and cannot promote or mutate canonical Knowledge;
+no production, customer-data, universal-relation or security-certification claim
+is made.
+
 Arbitrary live-system onboarding, provider replacement and autonomous outcome
 learning remain planned or require external evidence. Every system/provider
 combination needs its own proof. See [Known Limitations](docs/KNOWN-LIMITATIONS.md).

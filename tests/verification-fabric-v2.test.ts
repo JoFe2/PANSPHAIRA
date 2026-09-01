@@ -159,6 +159,39 @@ test("external BI v2 focused family is canonical and selects its owner test", ()
   }
 });
 
+test("FND-PS-02 edge-evidence focused family is canonical and selects its owner test", () => {
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
+    scripts: Record<string, string>;
+  };
+  assert.equal(
+    packageJson.scripts["fnd-ps-fu-01:test"],
+    "npm run build --silent && node --test dist/tests/cks-12/readonly-kaleidosphere-bridge.test.js",
+  );
+  assert.equal(
+    packageJson.scripts.pretest?.split(" && ")
+      .filter((command) => command === "npm run fnd-ps-fu-01:test").length,
+    1,
+  );
+
+  for (const changed of [
+    "src/cks-12/readonly-kaleidosphere-bridge.ts",
+    "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
+    "tests/fixtures/cks-12/edge-authority-v2.json",
+  ]) {
+    const result = plan([changed]);
+    assert.equal(result.mode, "IMPACTED_SHADOW", changed);
+    assert.ok(result.selectedNodes.includes("cks-12-closed-learning-loop-v1"), changed);
+    assert.ok(result.selectedTests.includes("npm run fnd-ps-fu-01:test"), changed);
+  }
+});
+
+test("external BI v2 client changes select only the thin client and downstream integrity gates", () => {
+  const result = plan(["packages/contracts/src/external-bi-service.ts"]);
+  assert.equal(result.mode, "IMPACTED_SHADOW");
+  assert.deepEqual(result.selectedNodes, ["external-bi-service-v2", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "secure-default-proof"]);
+  assert.ok(result.selectedTests.includes("npm run external-bi-service:test"));
+});
+
 test("both canonical JSON implementations invalidate the M1.4 node and secure-default closure", () => {
   const m14 = graph().nodes.find(({ id }) => id === "openclaw-m1-4");
   assert.ok(m14);
