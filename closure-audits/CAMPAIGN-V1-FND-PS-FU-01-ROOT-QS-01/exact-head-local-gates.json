@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "CAMPAIGN-V1-FND-PS-FU-01-ROOT-QS-01",
+  "sourceIssue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 339,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/339"
+  },
+  "recordedAt": "2026-09-01T06:25:30Z",
+  "currentMainBase": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+  "testedProductHead": "6881320e4b14100edf6a6c1a32de5038d0fb35e6",
+  "testedProductTree": "4fafeec8f8c71b3b09525178deec2123ef2e8318",
+  "changedPaths": [
+    "SHA256SUMS",
+    "docs/architecture/cks-12-top-level-envelope-policy-v1.md",
+    "package.json",
+    "release/public-files.manifest",
+    "scripts/build-public-release.sh",
+    "src/cks-12/readonly-kaleidosphere-bridge.ts",
+    "tests/canonical-json-profile-inventory.test.ts",
+    "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
+    "tests/release-governance.test.mjs",
+    "tests/verification-fabric-v2.test.ts",
+    "verification/canonical-json-profile-inventory-v1.json",
+    "verification/verification-dag-v2.json"
+  ],
+  "acceptance": {
+    "FND-PS-FU-01-AC01": "PASS",
+    "FND-PS-FU-01-AC02": "PASS",
+    "FND-PS-FU-01-AC03": "PASS",
+    "FND-PS-FU-01-AC04": "PASS",
+    "FND-PS-FU-01-AC05": "PENDING_PUBLIC_DELIVERY"
+  },
+  "independentReview": {
+    "count": 1,
+    "queueEvent": 8329,
+    "verdict": "SOL_TAKEOVER",
+    "findingsClosedByProductHead": true,
+    "noFurtherReviewRequired": true,
+    "closureOwner": "sol",
+    "responsibleUntil": "ISSUE_CLOSED_AND_QUEUE_DONE"
+  },
+  "gates": [
+    {"command": "npm run fnd-ps-fu-01:test", "status": "PASS", "outputSha256": "7f08c3a8ef42a064311aa7238628d245acc8cec35cf25ba411c7c5b630b77387"},
+    {"command": "npm run cks12:test", "status": "PASS", "outputSha256": "7e3da8cb7d8608a9e7715a22556e66b57a323e2672a2b3e719cea298d5b1d75c"},
+    {"command": "npm run lint", "status": "PASS", "outputSha256": "d3b0a2d2dfed933f1827ba52024b52568e6ed473920e2e1a6860dc7e574dbe1d"},
+    {"command": "npm run release-governance:test", "status": "PASS", "outputSha256": "2a047d9ac65b176db7fe3dee644cdaf9486aea5d1436ca8189fe5a3f4aaff8a5"},
+    {"command": "npm run release-governance:verify", "status": "PASS", "outputSha256": "e06c82f5ae3411ddc8f54ee6a0b96eb61a60a3a823b91f8fb66ca091aeddd8da"},
+    {"command": "npm run supply-chain:verify", "status": "PASS", "outputSha256": "b8a6653725641599025499464decbd12ed8c6ee31b7035a15fc69ac7553f9b88"},
+    {"command": "sha256sum -c SHA256SUMS", "status": "PASS", "outputSha256": "2ef15fcb702166bc1cc5fac1e167210db9503e3bee7991ed224e87a2d6696916"},
+    {"command": "npm run verification:plan", "status": "PASS", "outputSha256": "d4fb37f367bbcfb4f41ae7bd998461d9d0986a77f46eb550d01bf9836b3bdcf9"},
+    {"command": "./scripts/build-public-release.sh --output /tmp/cm-product-increment-rc-20260901-fnd-ps-fu-01", "status": "PASS", "outputSha256": "60fcfd31d26ad11b2d77c7d5a894c9d957b577f62cbb82690e09e9ed80d46e43"},
+    {"command": "git diff --check origin/main...HEAD", "status": "PASS", "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    {"command": "npm test", "status": "PASS", "outputSha256": "74d77a8220bdf2a484ac92ead4e54fca79fc27aa29832988b07b1b6b7a5897d0"}
+  ],
+  "runtime": {
+    "node": "24.14.1",
+    "containerImageDigest": "sha256:b506e7321f176aae77317f99d67a24b272c1f09f1d10f1761f2773447d8da26c",
+    "hostNodeFailureClassification": "INFRASTRUCTURE_ONLY_EXECUTABLE_MEMORY_PERMISSION",
+    "replacementProfile": "PINNED_NODE_CONTAINER_WITH_DOCKER_SOCKET_AND_COMPOSE_PLUGIN"
+  },
+  "nonClaims": [
+    "NO_EXTERNAL_DATA",
+    "NO_RISK_D_EFFECT",
+    "NO_AUTHORITY_WIDENING",
+    "NO_PUBLIC_CLOSURE_BEFORE_PR_CI_MERGE_RELEASE_READBACK"
+  ],
+  "requiredDownstreamGates": [
+    "EXACT_PR_HEAD_CI",
+    "SHA_BOUND_MERGE",
+    "EXACT_MAIN_HEAD_CI",
+    "SERIAL_DAILY_RELEASE",
+    "ANONYMOUS_MAIN_TAG_RELEASE_ISSUE_READBACK",
+    "ISSUE_CLOSED_COMPLETED",
+    "QUEUE_ROOT_DONE"
+  ]
+}

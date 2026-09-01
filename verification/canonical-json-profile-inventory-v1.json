@@ -73,8 +73,8 @@
     "importFiles": 193,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1716,
-    "ledgerUniquePaths": 1716
+    "ledgerEntries": 1717,
+    "ledgerUniquePaths": 1717
   },
   "profiles": [
     {
@@ -247,7 +247,7 @@
     },
     {
       "file": "src/cks-12/readonly-kaleidosphere-bridge.ts",
-      "line": 9,
+      "line": 60,
       "classification": "implementation",
       "owner": "cks-12",
       "pinned": false,

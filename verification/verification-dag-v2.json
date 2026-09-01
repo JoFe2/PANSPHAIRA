@@ -285,7 +285,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "90d39dd8102edc5de2e6a1b6518590c51bdf2db3e2827d6dbca3db0c3eed87ce"
+          "sha256": "5f11032ff7d2ae2542727b35808a5f2c17287f718ad2c75439491a697f1ee6bd"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -504,9 +504,14 @@
           "sha256": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7"
         },
         {
+          "path": "release/public-files.manifest",
+          "role": "CONTRACT",
+          "sha256": "491a283fdc57ca8460a129b56f7907570519e287825d8e63f01b32a504d223d6"
+        },
+        {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "6729045e87681564692a37a92d77dc67d18f837623828e7cdb81c161e9a0095e"
+          "sha256": "aef067dce3a6296f7661703c9a657f4dbc47ab353b5c666a5751722c60df5b07"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -531,12 +536,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "90a001a2ebe52c25de677e2c1046877beca9ccae921390fe93d52c5c8e965225"
+          "sha256": "1cdeafad45bee1aa187df250eb1a3fd6e89e55d7c8f5c1e03272e28d8c99a921"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "3db3c92aa0ba6e87190e3385508a0539469ce55850ed3c7cc6d75d34b6bf6168"
+          "sha256": "a70ec89497783d0d7b8fdf4fafa996d57ef41874c21497728fac4b0d3bc179ef"
+        },
+        {
+          "path": "tests/release-governance.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "50099459bdbca0a1f1a906ccc4f62e5ede7539d16935d708c021835b95bd3b63"
         }
       ],
       "ownedTests": [
@@ -938,7 +948,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "e7df8f0f22f17dd5d56f38786b3c80b2eeef9e72c288cfffa81100413cc90bac"
+          "sha256": "db10e85100ba38107a110b20069cb1cecf314175954060b040862ddd1eea50a1"
         },
         {
           "path": "package-lock.json",
@@ -4195,6 +4205,11 @@
           "sha256": "117093e6a57eb4803f764a8307d923c1bcbd933a015084aa442d46cbcdedd5c7"
         },
         {
+          "path": "docs/architecture/cks-12-top-level-envelope-policy-v1.md",
+          "role": "CONTRACT",
+          "sha256": "0a9ab538073a6eecb4986025a43de138dee86bed185acd42b92708cacba1b718"
+        },
+        {
           "path": "scripts/run-cks-12-e2e-proof-dry-run.mjs",
           "role": "VALIDATOR",
           "sha256": "85b02dc20d39de43010be2bc5231c04c9f9ca8f826e89ef31ed55008ffae9fce"
@@ -4272,7 +4287,7 @@
         {
           "path": "src/cks-12/readonly-kaleidosphere-bridge.ts",
           "role": "VALIDATOR",
-          "sha256": "fa46d987c3dcd03ec2583ecca153566ffba7f2caf1aa3fa81472f56151e009a0"
+          "sha256": "3c0c1550f08333037fb10fce061ad9b0a63b10c71887a5cefd8ddc44a00d379d"
         },
         {
           "path": "src/cks-12/story-step-manifest.ts",
@@ -4337,7 +4352,7 @@
         {
           "path": "tests/cks-12/readonly-kaleidosphere-bridge.test.ts",
           "role": "VALIDATOR",
-          "sha256": "6a3fa21b5e119a815c364cd1361f694ea529bf198c21f07607c61952882d1d55"
+          "sha256": "d10c6414c739ff611c964e2d6cab5ef969b5a96dcbfb3f984410fd6b28fdec65"
         },
         {
           "path": "tests/cks-12/story-step-manifest.test.ts",
@@ -4481,6 +4496,7 @@
         }
       ],
       "ownedTests": [
+        "npm run fnd-ps-fu-01:test",
         "npm run cks12:test"
       ],
       "invariants": [
@@ -4488,7 +4504,8 @@
         "Acquisition, validation and promotion remain separate governed states.",
         "KaleidoSphere receives only minimized read-only projections and returns authority-free candidates.",
         "Drift and unknown variants invalidate or safely abort fast paths.",
-        "Falsification reports bind raw counts, denominators, exclusions and stop conditions."
+        "Falsification reports bind raw counts, denominators, exclusions and stop conditions.",
+        "Cumulative delivery readiness requires exact head/tree-bound gates, integrity receipts, closed issue criteria, exact scope and immutable no-authority ownership."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
