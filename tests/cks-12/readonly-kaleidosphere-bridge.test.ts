@@ -232,3 +232,246 @@ test("missing or malformed integrity receipt prevents delivery readiness", () =>
   const malformed = deliveryCandidate(); malformed.integrityReceipts[0]!.sha256 = "0".repeat(63);
   assert.deepEqual(deliveryReasonCodes(malformed), ["INTEGRITY_RECEIPT_INVALID"]);
 });
+
+type MutableV2 = Record<string, any>;
+type EdgeEvidenceEnvelopeV2 = import("../../src/cks-12/readonly-kaleidosphere-bridge.js").EdgeEvidenceEnvelopeV2;
+type V2Result = import("../../src/cks-12/readonly-kaleidosphere-bridge.js").CandidateV2 | import("../../src/cks-12/readonly-kaleidosphere-bridge.js").Denied;
+const v2Bytes = readFileSync("tests/fixtures/cks-12/edge-authority-v2.json");
+const v2Fixture = JSON.parse(v2Bytes.toString("utf8")) as MutableV2;
+const cloneV2 = (): MutableV2 => structuredClone(v2Fixture) as MutableV2;
+const runV2 = (value: unknown): V2Result => bridge.runReadOnlyMinimizedProjection(value as EdgeEvidenceEnvelopeV2);
+const v2Denial = (value: unknown, expectedReasonCode: string): import("../../src/cks-12/readonly-kaleidosphere-bridge.js").Denied => {
+  const result = runV2(value);
+  assert.equal(result.status, "DENIED");
+  if (result.status === "DENIED") {
+    assert.ok(result.reasonCodes.includes(expectedReasonCode as never), `${expectedReasonCode}: ${JSON.stringify(result)}`);
+    return result;
+  }
+  throw new Error("expected v2 denial");
+};
+const redigestEdge = (edge: MutableV2): MutableV2 => {
+  const { evidenceBindingSha256: _ignored, ...body } = edge;
+  return { ...body, evidenceBindingSha256: bridge.digest(body) };
+};
+type FndPs02AdversarialCase = Readonly<{ caseId: string; expectedReasonCode: string; mutate: (value: MutableV2) => void }>;
+const FND_PS_02_ADVERSARIAL_MATRIX: readonly FndPs02AdversarialCase[] = Object.freeze([
+  {
+    caseId: "PAIRED_ENDPOINT_EVIDENCE_SUBSTITUTION",
+    expectedReasonCode: "EDGE_EVIDENCE_AUTHORITY_DENIED",
+    mutate: (value) => {
+      value.projection.nodes[0].id = "knowledge-forged-001";
+      value.projection.edges[0] = redigestEdge({
+        ...value.projection.edges[0],
+        canonicalKnowledge: { ...value.projection.edges[0].canonicalKnowledge, knowledgeId: "CKS-12-KNOWLEDGE-FORGED-001" },
+        evidence: [{ ...value.projection.edges[0].evidence[0], evidenceId: "CKS-12-FORGED-VALIDATION-001" }, value.projection.edges[0].evidence[1]],
+        from: "knowledge-forged-001",
+      });
+    },
+  },
+  {
+    caseId: "FULLY_REDIGESTED_FORGED_RELATION",
+    expectedReasonCode: "EDGE_EVIDENCE_AUTHORITY_DENIED",
+    mutate: (value) => { value.projection.edges[0] = redigestEdge({ ...value.projection.edges[0], relation: "KNOWLEDGE_DECIDES" }); },
+  },
+  {
+    caseId: "STALE_EVIDENCE_REFERENCE",
+    expectedReasonCode: "EDGE_EVIDENCE_AUTHORITY_DENIED",
+    mutate: (value) => { value.projection.edges[0].evidence[0].evidenceSha256 = "0".repeat(64); },
+  },
+  {
+    caseId: "STALE_CANONICAL_KNOWLEDGE_BINDING",
+    expectedReasonCode: "EDGE_EVIDENCE_AUTHORITY_DENIED",
+    mutate: (value) => { value.projection.edges[0].canonicalKnowledge.knowledgeSha256 = "1".repeat(64); },
+  },
+  {
+    caseId: "INCOMPLETE_EVIDENCE_DENOMINATOR",
+    expectedReasonCode: "EDGE_EVIDENCE_AUTHORITY_DENIED",
+    mutate: (value) => { value.projection.edges[0].evidence.pop(); },
+  },
+  {
+    caseId: "ENDPOINTS_WITHOUT_EVIDENCE",
+    expectedReasonCode: "EDGE_EVIDENCE_AUTHORITY_DENIED",
+    mutate: (value) => {
+      value.projection.edges[0].evidence = [];
+      value.projection.edges[0] = redigestEdge(value.projection.edges[0]);
+    },
+  },
+  {
+    caseId: "PROMOTION_REQUEST",
+    expectedReasonCode: "AUTHORITY_EXPANSION_DENIED",
+    mutate: (value) => { value.promotionRequested = true; },
+  },
+  {
+    caseId: "CANONICAL_KNOWLEDGE_MUTATION",
+    expectedReasonCode: "KALEIDOSPHERE_MUTATION_DENIED",
+    mutate: (value) => { value.canonicalEvidenceBeforeSha256 = "f".repeat(64); },
+  },
+]);
+const assertDeepFrozen = (value: unknown): void => {
+  if (value === null || typeof value !== "object") return;
+  assert.equal(Object.isFrozen(value), true);
+  for (const nested of Object.values(value as Record<string, unknown>)) assertDeepFrozen(nested);
+};
+
+test("FND-PS-02 accepts the exact owner-derived v2 edge and keeps every relation non-authoritative", () => {
+  assert.equal(v2Bytes.toString("utf8"), bridge.canonicalJson(v2Fixture));
+  assert.equal(bridge.digest(bridge.PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2), bridge.FND_PS_02_EDGE_EVIDENCE_CONTRACT_V2.ownerEvidenceInputsSha256);
+  const result = runV2(v2Fixture);
+  assert.equal(result.status, "CANDIDATE_RECORDED");
+  if (result.status !== "CANDIDATE_RECORDED") return;
+  const suppliedEdge = v2Fixture.projection.edges[0];
+  const returnedEdge = result.edges[0];
+  assert.ok(returnedEdge);
+  const { authority: _authority, effect: _effect, relationTruth: _relationTruth, ...returnedBinding } = returnedEdge!;
+  assert.deepEqual(returnedBinding, suppliedEdge);
+  const { evidenceBindingSha256, authority: _edgeAuthority, effect: _edgeEffect, relationTruth: _edgeRelationTruth, ...bindingBody } = returnedEdge!;
+  assert.equal(bridge.digest(bindingBody), evidenceBindingSha256);
+  assert.equal(result.projectionSha256, bridge.digest(v2Fixture.projection));
+  assert.equal(result.canonicalEvidenceSha256, bridge.PANSPHAIRA_EDGE_EVIDENCE_INPUTS_V2.canonicalKnowledge.knowledgeSha256);
+  assert.equal(result.edgeEvidenceAuthoritySha256, bridge.FND_PS_02_EDGE_EVIDENCE_CONTRACT_V2.ownerEvidenceInputsSha256);
+  assert.equal(result.edgeEvidenceAuthorityVersion, bridge.EDGE_EVIDENCE_AUTHORITY_VERSION_V2);
+  assert.equal(result.relationTruth, "NOT_GRANTED");
+  assert.equal(result.canonicalKnowledgeMutation, "NONE");
+  assert.equal(result.promotion, "NOT_AUTHORIZED");
+  assert.equal(result.authority, "NONE");
+  assert.equal(result.effect, "NONE");
+  assert.deepEqual(result.nonclaims, bridge.FND_PS_02_EDGE_EVIDENCE_CONTRACT_V2.nonclaims);
+  assertDeepFrozen(result);
+});
+
+test("FND-PS-02 reusable adversarial matrix denies every owner/evidence authority substitution", () => {
+  for (const adversarialCase of FND_PS_02_ADVERSARIAL_MATRIX) {
+    const value = cloneV2();
+    adversarialCase.mutate(value);
+    v2Denial(value, adversarialCase.expectedReasonCode);
+  }
+});
+
+test("FND-PS-02 paired endpoint/evidence substitutions fail even after self-redigest", () => {
+  const value = cloneV2();
+  value.projection.nodes[0].id = "knowledge-forged-001";
+  value.projection.edges[0] = redigestEdge({
+    ...value.projection.edges[0],
+    canonicalKnowledge: { ...value.projection.edges[0].canonicalKnowledge, knowledgeId: "CKS-12-KNOWLEDGE-FORGED-001" },
+    evidence: [{ ...value.projection.edges[0].evidence[0], evidenceId: "CKS-12-FORGED-VALIDATION-001" }, value.projection.edges[0].evidence[1]],
+    from: "knowledge-forged-001",
+  });
+  v2Denial(value, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+});
+
+test("FND-PS-02 fully re-digested forged relation remains denied", () => {
+  const value = cloneV2();
+  value.projection.edges[0] = redigestEdge({ ...value.projection.edges[0], relation: "KNOWLEDGE_DECIDES" });
+  v2Denial(value, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+});
+
+test("FND-PS-02 stale and incomplete evidence fail closed", () => {
+  const staleEvidence = cloneV2();
+  staleEvidence.projection.edges[0].evidence[0].evidenceSha256 = "0".repeat(64);
+  v2Denial(staleEvidence, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+
+  const staleKnowledge = cloneV2();
+  staleKnowledge.projection.edges[0].canonicalKnowledge.knowledgeSha256 = "1".repeat(64);
+  v2Denial(staleKnowledge, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+
+  const incomplete = cloneV2();
+  incomplete.projection.edges[0].evidence.pop();
+  v2Denial(incomplete, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+
+  const missingBinding = cloneV2();
+  delete missingBinding.projection.edges[0].canonicalKnowledge;
+  v2Denial(missingBinding, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+});
+
+test("FND-PS-02 endpoint identifiers alone never grant relation truth", () => {
+  const value = cloneV2();
+  value.projection.edges[0].evidence = [];
+  value.projection.edges[0] = redigestEdge(value.projection.edges[0]);
+  const denial = v2Denial(value, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+  assert.equal(denial.reasonCodes.includes("INVENTED_EDGE_DENIED" as never), false);
+});
+
+test("FND-PS-02 proxy, accessor, hidden, and symbol inputs fail closed without attacker invocation", () => {
+  for (const trap of ["ownKeys", "getOwnPropertyDescriptor", "get", "getPrototypeOf"]) {
+    let invocations = 0;
+    const input = new Proxy(cloneV2(), { [trap]: () => { invocations += 1; throw new Error("attacker trap"); } });
+    const denial = v2Denial(input, "MISSING_INPUT");
+    assert.deepEqual(denial.reasonCodes, ["MISSING_INPUT"], trap);
+    assert.equal(invocations, 0, trap);
+  }
+
+  const proxyProjection = cloneV2();
+  proxyProjection.projection = new Proxy(proxyProjection.projection, { get: () => { throw new Error("projection getter"); } });
+  v2Denial(proxyProjection, "RAW_PROJECTION_DENIED");
+
+  const proxyNodes = cloneV2();
+  proxyNodes.projection.nodes = new Proxy(proxyNodes.projection.nodes, { ownKeys: () => { throw new Error("nodes trap"); } });
+  v2Denial(proxyNodes, "RAW_PROJECTION_DENIED");
+
+  const proxyEdge = cloneV2();
+  proxyEdge.projection.edges[0] = new Proxy(proxyEdge.projection.edges[0], { get: () => { throw new Error("edge getter"); } });
+  v2Denial(proxyEdge, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+
+  const accessorProjection = cloneV2();
+  let projectionAccesses = 0;
+  Object.defineProperty(accessorProjection.projection, "projectionId", { enumerable: true, configurable: true, get: () => { projectionAccesses += 1; return accessorProjection.projection.projectionId; } });
+  v2Denial(accessorProjection, "RAW_PROJECTION_DENIED");
+  assert.equal(projectionAccesses, 0);
+
+  const accessorNode = cloneV2();
+  let nodeAccesses = 0;
+  Object.defineProperty(accessorNode.projection.nodes[0], "id", { enumerable: true, configurable: true, get: () => { nodeAccesses += 1; return "knowledge-001"; } });
+  v2Denial(accessorNode, "RAW_PROJECTION_DENIED");
+  assert.equal(nodeAccesses, 0);
+
+  const accessorEdge = cloneV2();
+  let edgeAccesses = 0;
+  Object.defineProperty(accessorEdge.projection.edges[0], "from", { enumerable: true, configurable: true, get: () => { edgeAccesses += 1; return "knowledge-001"; } });
+  v2Denial(accessorEdge, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+  assert.equal(edgeAccesses, 0);
+
+  for (const surface of ["hidden", "symbol"] as const) {
+    const value = cloneV2();
+    const key: PropertyKey = surface === "hidden" ? "forgedAuthority" : Symbol("forgedAuthority");
+    Object.defineProperty(value, key, { value: true, enumerable: surface === "symbol", configurable: true });
+    v2Denial(value, "MISSING_INPUT");
+
+    const nested = cloneV2();
+    const nestedKey: PropertyKey = surface === "hidden" ? "raw" : Symbol("raw");
+    Object.defineProperty(nested.projection.edges[0], nestedKey, { value: true, enumerable: surface === "symbol", configurable: true });
+    v2Denial(nested, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+  }
+});
+
+test("FND-PS-02 authority expansion, promotion, and canonical-Knowledge mutation fail closed", () => {
+  for (const [field, expectedReasonCode] of [
+    ["authorityRequested", "AUTHORITY_EXPANSION_DENIED"],
+    ["capabilityRequested", "AUTHORITY_EXPANSION_DENIED"],
+    ["promotionRequested", "AUTHORITY_EXPANSION_DENIED"],
+    ["canonicalEvidenceBeforeSha256", "KALEIDOSPHERE_MUTATION_DENIED"],
+    ["canonicalEvidenceAfterSha256", "KALEIDOSPHERE_MUTATION_DENIED"],
+  ] as const) {
+    const value = cloneV2();
+    value[field] = field.startsWith("canonicalEvidence") ? "f".repeat(64) : true;
+    v2Denial(value, expectedReasonCode);
+  }
+});
+
+test("FND-PS-02 validation snapshots input and isolates the authority-free returned candidate", () => {
+  const input = cloneV2();
+  const result = runV2(input);
+  assert.equal(result.status, "CANDIDATE_RECORDED");
+  if (result.status !== "CANDIDATE_RECORDED") return;
+  const resultBytes = bridge.canonicalJson(result);
+  input.projection.edges[0].from = "post-validation-forgery";
+  input.projection.edges[0].canonicalKnowledge.knowledgeSha256 = "e".repeat(64);
+  assert.equal(bridge.canonicalJson(result), resultBytes);
+  assert.equal(result.edges[0]!.from, "knowledge-001");
+  assert.equal(result.edges[0]!.relationTruth, "NOT_GRANTED");
+  v2Denial(input, "EDGE_EVIDENCE_AUTHORITY_DENIED");
+
+  assert.throws(() => { (result.edges[0] as MutableV2).from = "returned-forgery"; }, TypeError);
+  assert.throws(() => { (result.edges[0]!.evidence as unknown as MutableV2[]).pop(); }, TypeError);
+  assert.throws(() => { (result.nonclaims as unknown as string[]).push("PROMOTED"); }, TypeError);
+  assert.deepEqual(runV2(v2Fixture), result);
+});
