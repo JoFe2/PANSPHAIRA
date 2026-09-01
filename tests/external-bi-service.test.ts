@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -13,6 +14,36 @@ import {
 
 const goodEnv = { BI_AGENT_BASE_URL: "http://127.0.0.1:18790", BI_AGENT_TIMEOUT_MS: "5000" };
 const sha256 = (value: unknown) => `sha256:${createHash("sha256").update(canonicalJson(value)).digest("hex")}`;
+type CleanRoomFixture = {
+  readonly expectedOutcome: "VERIFIED";
+  readonly expectedDirectSupersetAccessByCm: false;
+  readonly expectedSupersetReadback: "NOT_APPLIED";
+  readonly requiredCapabilities: readonly string[];
+  readonly syntheticHoldout: {
+    readonly id: string;
+    readonly bytes: string;
+    readonly attestationSchemaVersion: string;
+    readonly intentResultSchemaVersion: string;
+    readonly statusResult: Readonly<Record<string, unknown>>;
+  };
+  readonly authorityProfile: {
+    readonly profileVersion: "v2";
+    readonly schemaVersion: string;
+    readonly product: Readonly<Record<string, unknown>>;
+    readonly contract: Readonly<Record<string, unknown>>;
+    readonly capabilities: readonly Readonly<Record<string, unknown>>[];
+    readonly graph: Readonly<Record<string, unknown>>;
+    readonly boundaries: Readonly<Record<string, unknown>>;
+  };
+  readonly adversarialMatrix: readonly {
+    readonly id: string;
+    readonly class: string;
+    readonly expectedReasonCode: string;
+  }[];
+};
+const cleanRoom = JSON.parse(readFileSync(
+  "tests/fixtures/external-bi-service-v2-clean-room.json", "utf8",
+)) as CleanRoomFixture;
 const descriptor = {
   "bi.status.read": { action: "status", authority: "read-only" },
   "bi.discovery.run": { action: "discovery", authority: "local-evidence-write" },
@@ -29,30 +60,42 @@ function verified(): ExternalBiServiceConfigDecisionV2 {
 }
 
 function signedAttestation(overrides: Record<string, unknown> = {}) {
+  const authority = cleanRoom.authorityProfile;
   const body = {
-    schemaVersion: "superset-bi-agent.external/capability-attestation/v2",
-    product: { id: "superset-bi-agent", version: "v0.8.0", component: "bi-agent-runtime" },
-    contract: { id: "superset-bi-agent.external", version: "2.0.0" },
-    capabilities: EXTERNAL_BI_SERVICE_CAPABILITIES_V2.map((id) => ({ id, ...descriptor[id] })),
-    graph: { acceptedIncumbent: "adaptive-v1", candidatePromotion: "none" },
-    boundaries: { sourceDatabaseCredentialsAccepted: false, freeSqlAccepted: false, rawSourceRowsReturned: false, modelMutationAuthority: false, directSupersetMutationIntentAccepted: false, persistentSupersetWorkflow: "trusted-preview-approval-apply-readback-rollback-only" },
+    schemaVersion: cleanRoom.syntheticHoldout.attestationSchemaVersion,
+    product: structuredClone(authority.product),
+    contract: structuredClone(authority.contract),
+    capabilities: structuredClone(authority.capabilities),
+    graph: structuredClone(authority.graph),
+    boundaries: structuredClone(authority.boundaries),
     ...overrides,
   };
   return { ...body, attestation: { algorithm: "sha256-canonical-json", digest: sha256(body) } };
 }
 
 function signedResult(attestationDigest: string, requestId: string, action: string, result: Record<string, unknown> = {}) {
+  const authority = cleanRoom.authorityProfile;
   const body = {
-    schemaVersion: "superset-bi-agent.external/intent-result/v2", requestId, action,
-    runtime: { product: { id: "superset-bi-agent", version: "v0.8.0", component: "bi-agent-runtime" }, contract: { id: "superset-bi-agent.external", version: "2.0.0" } },
+    schemaVersion: cleanRoom.syntheticHoldout.intentResultSchemaVersion, requestId, action,
+    runtime: { product: structuredClone(authority.product), contract: structuredClone(authority.contract) },
     capabilityAttestationDigest: attestationDigest,
-    result: action === "status" ? { status: "READY", engine: "mssql", sourceMode: "fixture", catalogReady: true, ...result } : result,
+    result: action === "status" ? { ...cleanRoom.syntheticHoldout.statusResult, ...result } : result,
   };
   return { ...body, integrity: { algorithm: "sha256-canonical-json", digest: sha256(body) } };
 }
 
 function response(value: unknown, status = 200) {
   return new Response(JSON.stringify(value), { status, headers: { "content-type": "application/json" } });
+}
+
+function objectResponse(value: unknown): Response {
+  return { ok: true, status: 200, json: async () => value } as Response;
+}
+
+function objectFetch(attestation: unknown, result?: unknown): typeof fetch {
+  return (async (input: string | URL | Request) => String(input).endsWith("/v2/capabilities")
+    ? objectResponse(attestation)
+    : objectResponse(result ?? signedResult((attestation as { attestation: { digest: string } }).attestation.digest, "cm-external-bi-probe", "status"))) as typeof fetch;
 }
 
 function fakeFetch(attestation = signedAttestation(), capture: Array<{ url: string; init?: RequestInit }> = []): typeof fetch {
@@ -134,7 +177,7 @@ test("draft negative: missing required capability is denied", async () => {
 
 test("draft negative: attestation digest tamper is denied", async () => {
   const attestation = signedAttestation();
-  attestation.graph.acceptedIncumbent = "tampered";
+  (attestation.graph as Record<string, unknown>).acceptedIncumbent = "tampered";
   const result = await probeExternalBiServiceV2(verified(), fakeFetch(attestation));
   assert.deepEqual(result, { outcome: "DENIED", reasonCodes: ["EXTERNAL_BI_SERVICE_DIGEST_DENIED"] });
 });
@@ -203,4 +246,194 @@ test("negative: denied action, direct route metadata, credentials, raw rows and 
     assert.equal(result.outcome, "DENIED");
     assert.equal(calls, 0);
   }
+});
+
+function matrixAttestation(id: string): Record<string, unknown> {
+  const authority = cleanRoom.authorityProfile;
+  switch (id) {
+    case "unknown-product":
+      return signedAttestation({ product: { ...authority.product, id: "superset-bi-agent-unknown" } });
+    case "stale-product":
+      return signedAttestation({ product: { ...authority.product, version: "v0.7.9" } });
+    case "substituted-contract":
+      return signedAttestation({ contract: { ...authority.contract, id: "substituted-bi-agent.external" } });
+    case "substituted-capability":
+      return signedAttestation({
+        capabilities: authority.capabilities.map((capability, index) => index === 0
+          ? { ...capability, authority: "source-read-only" }
+          : capability),
+      });
+    case "incomplete-capability-set":
+      return signedAttestation({ capabilities: authority.capabilities.slice(1) });
+    case "paired-substitution":
+      return signedAttestation({
+        product: { ...authority.product, id: "substituted-bi-agent", version: "v9.9.9" },
+        contract: { ...authority.contract, id: "substituted-bi-agent.external", version: "9.9.9" },
+      });
+    case "fully-redigested-forgery":
+      return signedAttestation({
+        product: { ...authority.product, id: "forged-bi-agent", version: "v9.9.9" },
+        contract: { ...authority.contract, id: "forged-bi-agent.external", version: "9.9.9" },
+        capabilities: authority.capabilities.map((capability, index) => index === 0
+          ? { ...capability, id: "bi.forged.execute", authority: "model-mutation" }
+          : capability),
+        graph: { ...authority.graph, candidatePromotion: "forged-candidate" },
+        boundaries: { ...authority.boundaries, freeSqlAccepted: true, modelMutationAuthority: true },
+      });
+    case "attestation-digest": {
+      const value = signedAttestation();
+      (value.graph as Record<string, unknown>).acceptedIncumbent = "tampered";
+      return value;
+    }
+    case "accessor-profile": {
+      const value = signedAttestation();
+      Object.defineProperty(value.product, "version", {
+        configurable: true,
+        enumerable: true,
+        get: () => authority.product.version,
+      });
+      return value;
+    }
+    case "hidden-profile-key": {
+      const value = signedAttestation();
+      Object.defineProperty(value.product, "hidden", { configurable: true, value: "not-visible", enumerable: false });
+      return value;
+    }
+    case "symbol-profile-key": {
+      const value = signedAttestation();
+      Object.defineProperty(value.product, Symbol("hidden"), { configurable: true, value: "not-visible", enumerable: true });
+      return value;
+    }
+    case "proxy-profile":
+      return new Proxy(signedAttestation(), {});
+    default:
+      throw new Error(`matrix case is not an attestation case: ${id}`);
+  }
+}
+
+test("FND-PS-03 exact owner-derived profile admits only the versioned synthetic tuple", async () => {
+  assert.equal(cleanRoom.syntheticHoldout.id, "FND-PS-03-external-bi-v2-clean-room");
+  assert.equal(cleanRoom.syntheticHoldout.bytes, "synthetic-non-customer-bytes-only");
+  assert.equal(cleanRoom.authorityProfile.profileVersion, "v2");
+  assert.equal(cleanRoom.authorityProfile.schemaVersion, "pansphaira.external-bi-service/compatibility-profile/v2");
+  assert.deepEqual(cleanRoom.authorityProfile.product, {
+    id: "superset-bi-agent",
+    version: "v0.8.0",
+    component: "bi-agent-runtime",
+  });
+  assert.deepEqual(cleanRoom.authorityProfile.contract, {
+    id: "superset-bi-agent.external",
+    version: "2.0.0",
+  });
+  assert.deepEqual(cleanRoom.authorityProfile.capabilities, EXTERNAL_BI_SERVICE_CAPABILITIES_V2.map((id) => ({
+    id,
+    ...descriptor[id],
+  })));
+  assert.deepEqual(cleanRoom.requiredCapabilities, EXTERNAL_BI_SERVICE_CAPABILITIES_V2);
+  assert.deepEqual(cleanRoom.authorityProfile.capabilities.map(({ id }) => id), cleanRoom.requiredCapabilities);
+
+  const decision = verified();
+  if (decision.outcome !== "VERIFIED") throw new Error("fixture must configure");
+  assert.equal(decision.config.expectedProductVersion, cleanRoom.authorityProfile.product.version);
+  assert.equal(decision.config.expectedContractVersion, cleanRoom.authorityProfile.contract.version);
+  assert.deepEqual(decision.config.requiredCapabilities, cleanRoom.requiredCapabilities);
+
+  const first = await probeExternalBiServiceV2(decision, fakeFetch());
+  const second = await probeExternalBiServiceV2(decision, fakeFetch());
+  assert.deepEqual(first, second, "the synthetic positive proof must be deterministic");
+  assert.equal(first.outcome, cleanRoom.expectedOutcome);
+  if (first.outcome === "VERIFIED") {
+    assert.equal(first.readback.productVersion, cleanRoom.authorityProfile.product.version);
+    assert.equal(first.readback.contractVersion, cleanRoom.authorityProfile.contract.version);
+    assert.deepEqual(first.readback.capabilities, cleanRoom.requiredCapabilities);
+    assert.equal(first.readback.directSupersetAccessByCm, cleanRoom.expectedDirectSupersetAccessByCm);
+  }
+});
+
+test("FND-PS-03 every attestation and result evidence digest is exact and bound", async () => {
+  const attestation = signedAttestation();
+  const { attestation: ignoredAttestation, ...attestationBody } = attestation;
+  assert.equal(attestation.attestation.digest, sha256(attestationBody));
+
+  const result = signedResult(attestation.attestation.digest, "cm-digest-holdout", "status");
+  const { integrity: ignoredIntegrity, ...resultBody } = result;
+  assert.equal(result.integrity.digest, sha256(resultBody));
+
+  const accepted = await invokeExternalBiServiceV2(
+    verified(),
+    { requestId: "cm-digest-holdout", action: "status" },
+    objectFetch(attestation, result),
+  );
+  if (accepted.outcome !== "VERIFIED") throw new Error("exact digest fixture must verify");
+  assert.equal(accepted.readback.attestationDigest, attestation.attestation.digest);
+  assert.equal(accepted.readback.responseDigest, result.integrity.digest);
+  assert.equal(accepted.readback.result.status, cleanRoom.syntheticHoldout.statusResult.status);
+});
+
+test("FND-PS-03 reusable adversarial matrix denies unknown, stale, substituted, incomplete and forged profiles", async () => {
+  for (const matrixCase of cleanRoom.adversarialMatrix) {
+    let result: Awaited<ReturnType<typeof probeExternalBiServiceV2>>;
+    if (matrixCase.id === "result-integrity-digest") {
+      const attestation = signedAttestation();
+      const forgedResult = signedResult(attestation.attestation.digest, "cm-external-bi-probe", "status");
+      (forgedResult.result as Record<string, unknown>).status = "NOT_READY";
+      result = await probeExternalBiServiceV2(verified(), objectFetch(attestation, forgedResult));
+    } else if (matrixCase.id === "paired-attestation-result-binding") {
+      const attestation = signedAttestation();
+      const reboundResult = signedResult(`sha256:${"0".repeat(64)}`, "cm-external-bi-probe", "status");
+      result = await probeExternalBiServiceV2(verified(), objectFetch(attestation, reboundResult));
+    } else if (matrixCase.id === "post-validation-mutated-decision") {
+      const mutated = structuredClone(verified()) as ExternalBiServiceConfigDecisionV2;
+      if (mutated.outcome !== "VERIFIED") throw new Error("fixture must configure");
+      (mutated.config as { biAgentBaseUrl: string }).biAgentBaseUrl = "http://127.0.0.1:28791";
+      result = await probeExternalBiServiceV2(mutated, fakeFetch());
+    } else {
+      result = await probeExternalBiServiceV2(verified(), objectFetch(matrixAttestation(matrixCase.id)));
+    }
+    assert.equal(result.outcome, "DENIED", matrixCase.id);
+    assert.deepEqual(result.reasonCodes, [matrixCase.expectedReasonCode], matrixCase.id);
+  }
+});
+
+test("FND-PS-03 profile input boundary rejects accessor, Proxy, hidden and symbol keys", async () => {
+  for (const id of ["accessor-profile", "proxy-profile", "hidden-profile-key", "symbol-profile-key"] as const) {
+    const result = await probeExternalBiServiceV2(verified(), objectFetch(matrixAttestation(id)));
+    assert.deepEqual(result, {
+      outcome: "DENIED",
+      reasonCodes: ["EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED"],
+    }, id);
+  }
+});
+
+test("FND-PS-03 post-validation mutation cannot alter accepted evidence or returned objects", async () => {
+  const decision = verified();
+  const attestation = signedAttestation();
+  const result = signedResult(attestation.attestation.digest, "cm-isolation", "status");
+  const accepted = await invokeExternalBiServiceV2(
+    decision,
+    { requestId: "cm-isolation", action: "status" },
+    objectFetch(attestation, result),
+  );
+  if (accepted.outcome !== "VERIFIED") throw new Error("exact profile must verify");
+
+  (attestation.product as Record<string, unknown>).version = "v9.9.9";
+  (result.result as Record<string, unknown>).status = "NOT_READY";
+  assert.equal(accepted.readback.attestationDigest, sha256({
+    schemaVersion: cleanRoom.syntheticHoldout.attestationSchemaVersion,
+    product: cleanRoom.authorityProfile.product,
+    contract: cleanRoom.authorityProfile.contract,
+    capabilities: cleanRoom.authorityProfile.capabilities,
+    graph: cleanRoom.authorityProfile.graph,
+    boundaries: cleanRoom.authorityProfile.boundaries,
+  }));
+  assert.equal(accepted.readback.result.status, cleanRoom.syntheticHoldout.statusResult.status);
+  assert(Object.isFrozen(accepted));
+  assert(Object.isFrozen(accepted.readback));
+  assert(Object.isFrozen(accepted.readback.result));
+  assert.throws(() => {
+    (accepted.readback.result as Record<string, unknown>).status = "NOT_READY";
+  }, TypeError);
+  assert.throws(() => {
+    (decision as { config?: { biAgentBaseUrl: string } }).config!.biAgentBaseUrl = "http://127.0.0.1:28791";
+  }, TypeError);
 });

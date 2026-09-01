@@ -14,5 +14,67 @@
   ],
   "expectedOutcome": "VERIFIED",
   "expectedDirectSupersetAccessByCm": false,
-  "expectedSupersetReadback": "NOT_APPLIED"
+  "expectedSupersetReadback": "NOT_APPLIED",
+  "syntheticHoldout": {
+    "id": "FND-PS-03-external-bi-v2-clean-room",
+    "bytes": "synthetic-non-customer-bytes-only",
+    "attestationSchemaVersion": "superset-bi-agent.external/capability-attestation/v2",
+    "intentResultSchemaVersion": "superset-bi-agent.external/intent-result/v2",
+    "statusResult": {
+      "status": "READY",
+      "engine": "synthetic-fixture",
+      "sourceMode": "fixture",
+      "catalogReady": true
+    }
+  },
+  "authorityProfile": {
+    "profileVersion": "v2",
+    "schemaVersion": "pansphaira.external-bi-service/compatibility-profile/v2",
+    "product": {
+      "id": "superset-bi-agent",
+      "version": "v0.8.0",
+      "component": "bi-agent-runtime"
+    },
+    "contract": {
+      "id": "superset-bi-agent.external",
+      "version": "2.0.0"
+    },
+    "capabilities": [
+      { "id": "bi.status.read", "action": "status", "authority": "read-only" },
+      { "id": "bi.discovery.run", "action": "discovery", "authority": "local-evidence-write" },
+      { "id": "bi.analysis.run", "action": "analyze", "authority": "source-read-only" },
+      { "id": "bi.graph.adaptive-v1.plan", "action": "plan", "authority": "proposal-only" },
+      { "id": "bi.preview.create", "action": "preview", "authority": "proposal-only" },
+      { "id": "bi.readback.read", "action": "readback", "authority": "read-only" }
+    ],
+    "graph": {
+      "acceptedIncumbent": "adaptive-v1",
+      "candidatePromotion": "none"
+    },
+    "boundaries": {
+      "sourceDatabaseCredentialsAccepted": false,
+      "freeSqlAccepted": false,
+      "rawSourceRowsReturned": false,
+      "modelMutationAuthority": false,
+      "directSupersetMutationIntentAccepted": false,
+      "persistentSupersetWorkflow": "trusted-preview-approval-apply-readback-rollback-only"
+    }
+  },
+  "adversarialMatrix": [
+    { "id": "unknown-product", "class": "unknown", "expectedReasonCode": "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED" },
+    { "id": "stale-product", "class": "stale", "expectedReasonCode": "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED" },
+    { "id": "substituted-contract", "class": "substituted", "expectedReasonCode": "EXTERNAL_BI_SERVICE_CONTRACT_VERSION_DENIED" },
+    { "id": "substituted-capability", "class": "substituted", "expectedReasonCode": "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING" },
+    { "id": "incomplete-capability-set", "class": "incomplete", "expectedReasonCode": "EXTERNAL_BI_SERVICE_CAPABILITY_MISSING" },
+    { "id": "paired-substitution", "class": "paired-substituted", "expectedReasonCode": "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED" },
+    { "id": "fully-redigested-forgery", "class": "fully-redigested-forged", "expectedReasonCode": "EXTERNAL_BI_SERVICE_PRODUCT_VERSION_DENIED" },
+    { "id": "attestation-digest", "class": "evidence-digest", "expectedReasonCode": "EXTERNAL_BI_SERVICE_DIGEST_DENIED" },
+    { "id": "result-integrity-digest", "class": "evidence-digest", "expectedReasonCode": "EXTERNAL_BI_SERVICE_DIGEST_DENIED" },
+    { "id": "paired-attestation-result-binding", "class": "evidence-digest", "expectedReasonCode": "EXTERNAL_BI_SERVICE_DIGEST_DENIED" },
+    { "id": "accessor-profile", "class": "hostile-input", "expectedReasonCode": "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED" },
+    { "id": "proxy-profile", "class": "hostile-input", "expectedReasonCode": "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED" },
+    { "id": "hidden-profile-key", "class": "hostile-input", "expectedReasonCode": "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED" },
+    { "id": "symbol-profile-key", "class": "hostile-input", "expectedReasonCode": "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED" },
+    { "id": "post-validation-mutated-decision", "class": "post-validation-mutation", "expectedReasonCode": "EXTERNAL_BI_SERVICE_REQUEST_DENIED" }
+  ]
 }
