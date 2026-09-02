@@ -1,0 +1,1284 @@
+{
+  "authority": {
+    "closureGraph": {
+      "artifactSha256": "387726e91ccb3c575a4e37941cbe0907d247c4e6eeede5edbfde469ea19b486b",
+      "graphId": "JoFe2/PANSPHAIRA#333@7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+      "graphManifestDigest": "0a91fa3678d2251d020575be17a9efcbdb5c05d3cab5bba0c0648660a4618966",
+      "materializationReceiptSha256": "38b320b58c140dd16222e5165661d257bf4e1263c2db0e01c95dd8aa67036c34",
+      "predecessorStates": {
+        "JoFe2/KaleidoSphere#140": "PUBLIC_CLOSED_RELEASE_READBACK_DIRECT_CONTROL_LANE_TERMINAL",
+        "JoFe2/KaleidoSphere#141": "PUBLIC_CLOSED_RELEASE_READBACK_QUEUE_DONE",
+        "JoFe2/PANSPHAIRA#334": "PUBLIC_CLOSED_RELEASE_READBACK_DIRECT_CONTROL_LANE_TERMINAL",
+        "JoFe2/PANSPHAIRA#335": "PUBLIC_CLOSED_RELEASE_READBACK_QUEUE_DONE",
+        "JoFe2/PANSPHAIRA#336": "PUBLIC_CLOSED_RELEASE_READBACK_QUEUE_DONE",
+        "JoFe2/PANSPHAIRA#337": "PUBLIC_CLOSED_RELEASE_READBACK_QUEUE_DONE",
+        "JoFe2/PANSPHAIRA#338": "PUBLIC_CLOSED_RELEASE_READBACK_QUEUE_DONE"
+      }
+    },
+    "frozenPortfolio": {
+      "authorityDecision": "D-044",
+      "manifestPath": "planning/portfolios/portfolio-rolling-v1.json",
+      "manifestSha256": "ed5a4228960969045687d136040c0231bff2c066ce894e7d018dcc7242971031",
+      "parentDependencies": [
+        "JoFe2/PANSPHAIRA#335",
+        "JoFe2/PANSPHAIRA#336",
+        "JoFe2/PANSPHAIRA#337"
+      ],
+      "parentManifestStatus": "BLOCKED",
+      "planningReadbackState": "PLANNED",
+      "promotionReceiptSha256": "80e05aa0c3cbcc6fa4c630151ab68ad32d166162467289b8d758574242e88028",
+      "promotionWasPlanningAdmissionOnly": true
+    },
+    "operatingModel": "v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ]
+  },
+  "capture": {
+    "anonymousPublicReadback": true,
+    "captureCompletedAt": "2026-09-02T09:32:02Z",
+    "currentPanSphairaMain": {
+      "branch": "main",
+      "commit": "28fe46aaf6385ee7ea25cadecb67d56f58ae0fc3",
+      "commitParent": "36ea3920979da206f5fb12c48cf3ccab83f2e55b",
+      "commitTree": "5a7e7874d3526a8bccbf8346f77ac6ba2e2b3330",
+      "repository": "JoFe2/PANSPHAIRA"
+    },
+    "productiveSystemsCalled": false,
+    "publicEvidenceReadbackCompletedAt": "2026-09-02T05:13:58Z",
+    "publicTransport": "ANONYMOUS_GITHUB_REST_AND_GIT_SMART_HTTP",
+    "queueMutationCount": 0,
+    "queueReadOnly": true
+  },
+  "children": [
+    {
+      "acceptance": [
+        {
+          "id": "FND-PS-01-AC01",
+          "title": "Missing/null/non-array nodes and edges return structured DENIED without exception."
+        },
+        {
+          "id": "FND-PS-01-AC02",
+          "title": "Duplicate node IDs and malformed node/edge shapes fail closed with stable reason codes."
+        },
+        {
+          "id": "FND-PS-01-AC03",
+          "title": "Valid frozen projection remains byte/digest compatible unless an explicitly versioned contract change is required."
+        },
+        {
+          "id": "FND-PS-01-AC04",
+          "title": "Sabotage run proves the new regression test fails on the current vulnerable implementation."
+        },
+        {
+          "id": "FND-PS-01-AC05",
+          "title": "Issue closes through exact-head content-addressed delivery and anonymous readback."
+        }
+      ],
+      "acceptanceOwner": "DIRECT-CONTROL-LANE:JoFe2/PANSPHAIRA#334",
+      "dependencies": {
+        "authorityPredecessors": [],
+        "declared": []
+      },
+      "issueKey": "JoFe2/PANSPHAIRA#334",
+      "ordinal": 1,
+      "publicDelivery": {
+        "anonymousReadback": {
+          "assets": [],
+          "issueState": "closed",
+          "issueStateReason": "completed",
+          "mainSha": "dac921d459cbcfc16e4912dff558c8786e6438de",
+          "releaseDraft": false,
+          "releasePrerelease": false,
+          "releaseTarget": "dac921d459cbcfc16e4912dff558c8786e6438de",
+          "status": "PASS",
+          "tagResolvedSha": "dac921d459cbcfc16e4912dff558c8786e6438de",
+          "transport": "ANONYMOUS_GITHUB_REST_AND_GIT_LS_REMOTE"
+        },
+        "chains": [
+          {
+            "disposition": "FINAL",
+            "mainCi": {
+              "conclusion": "success",
+              "event": "push",
+              "headSha": "dac921d459cbcfc16e4912dff558c8786e6438de",
+              "runAttempt": 1,
+              "runId": 33418611512,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33418611512"
+            },
+            "mergeSha": "dac921d459cbcfc16e4912dff558c8786e6438de",
+            "mergedAt": "2026-08-31T17:15:45Z",
+            "pr": {
+              "baseSha": "27488888a35fc59caa51bff12fb4ba8c0f28c31d",
+              "headSha": "67555ca2ddd630089ccf7c5be02dc40365feb18b",
+              "number": 340,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/pull/340"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "67555ca2ddd630089ccf7c5be02dc40365feb18b",
+              "runAttempt": 1,
+              "runId": 33416619926,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33416619926"
+            }
+          }
+        ],
+        "finalMergeSha": "dac921d459cbcfc16e4912dff558c8786e6438de",
+        "receiptCommentId": 5482139438,
+        "relationToCapturedPanMain": "ANCESTOR",
+        "release": {
+          "assets": [],
+          "createdAt": "2026-08-31T17:15:45Z",
+          "draft": false,
+          "id": 379939318,
+          "prerelease": false,
+          "publishedAt": "2026-08-31T17:37:59Z",
+          "tag": "2026_08_31_v5",
+          "target": "dac921d459cbcfc16e4912dff558c8786e6438de",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/2026_08_31_v5"
+        }
+      },
+      "terminalProof": {
+        "assertions": {
+          "anonymousReadbackPass": true,
+          "directControlLaneTerminal": true,
+          "issueClosedCompleted": true,
+          "noQueueRowMaterialized": true,
+          "releasePublished": true
+        },
+        "kind": "DIRECT_CONTROL_LANE_TERMINAL",
+        "ownerCommentBodySha256": "0f0a4f019c1b74eef9caee05c3c2ec0c7d420b7652c7b012d52a3ac1a4df113c",
+        "ownerCommentId": 5482139438,
+        "queueLookup": {
+          "matchedTaskIds": [],
+          "predicate": "work_order_json.source_issue.repository+number == JoFe2/PANSPHAIRA#334"
+        }
+      }
+    },
+    {
+      "acceptance": [
+        {
+          "id": "FND-KS-01-AC01",
+          "title": "Model-synthesis output never receives claimsBounded from JSON parsing alone."
+        },
+        {
+          "id": "FND-KS-01-AC02",
+          "title": "Independent closed verifier derives bounded/unbounded outcome from schema, evidence tables and blind spots."
+        },
+        {
+          "id": "FND-KS-01-AC03",
+          "title": "Malformed, invented, unknown-field, evidence-table and paired-substitution negatives fail closed."
+        },
+        {
+          "id": "FND-KS-01-AC04",
+          "title": "Existing deterministic path and default-off behavior remain unchanged."
+        },
+        {
+          "id": "FND-KS-01-AC05",
+          "title": "Issue closes through canonical tests, Root-QS, PR/Main CI, release decision, anonymous readback and queue reconciliation."
+        }
+      ],
+      "acceptanceOwner": "DIRECT-CONTROL-LANE:JoFe2/KaleidoSphere#140",
+      "dependencies": {
+        "authorityPredecessors": [
+          "JoFe2/PANSPHAIRA#334"
+        ],
+        "declared": []
+      },
+      "issueKey": "JoFe2/KaleidoSphere#140",
+      "ordinal": 2,
+      "publicDelivery": {
+        "anonymousReadback": {
+          "assets": [],
+          "issueState": "closed",
+          "issueStateReason": "completed",
+          "mainSha": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+          "releaseDraft": false,
+          "releasePrerelease": false,
+          "releaseTarget": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+          "status": "PASS",
+          "tagResolvedSha": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+          "transport": "ANONYMOUS_GITHUB_REST_AND_GIT_LS_REMOTE"
+        },
+        "chains": [
+          {
+            "disposition": "FINAL",
+            "mainCi": {
+              "conclusion": "success",
+              "event": "push",
+              "headSha": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+              "runAttempt": 1,
+              "runId": 33421156667,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/KaleidoSphere/actions/runs/33421156667"
+            },
+            "mergeSha": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+            "mergedAt": "2026-08-31T17:43:57Z",
+            "pr": {
+              "baseSha": "724197edfc30a2468be1823164605e32a4e45196",
+              "headSha": "4dad68bf8e8df4a7374013251f56b5cdf991659a",
+              "number": 142,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/KaleidoSphere/pull/142"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "4dad68bf8e8df4a7374013251f56b5cdf991659a",
+              "runAttempt": 1,
+              "runId": 33421071323,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/KaleidoSphere/actions/runs/33421071323"
+            }
+          }
+        ],
+        "finalMergeSha": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+        "receiptCommentId": 5482217325,
+        "relationToCapturedPanMain": "NOT_APPLICABLE_CROSS_REPOSITORY",
+        "release": {
+          "assets": [],
+          "createdAt": "2026-08-31T17:43:56Z",
+          "draft": false,
+          "id": 379943289,
+          "prerelease": false,
+          "publishedAt": "2026-08-31T17:45:25Z",
+          "tag": "2026_08_31_v1",
+          "target": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+          "url": "https://github.com/JoFe2/KaleidoSphere/releases/tag/2026_08_31_v1"
+        }
+      },
+      "terminalProof": {
+        "assertions": {
+          "anonymousReadbackPass": true,
+          "directControlLaneTerminal": true,
+          "issueClosedCompleted": true,
+          "noQueueRowMaterialized": true,
+          "releasePublished": true
+        },
+        "kind": "DIRECT_CONTROL_LANE_TERMINAL",
+        "ownerCommentBodySha256": "2510c8bf631c51cdfd0120426c42a8338668e02b05d347a32571f463512a1139",
+        "ownerCommentId": 5482217325,
+        "queueLookup": {
+          "matchedTaskIds": [],
+          "predicate": "work_order_json.source_issue.repository+number == JoFe2/KaleidoSphere#140"
+        }
+      }
+    },
+    {
+      "acceptance": [
+        {
+          "id": "FND-KS-02-AC01",
+          "title": "KaleidoSphere attests only product, contract and capabilities actually present at runtime."
+        },
+        {
+          "id": "FND-KS-02-AC02",
+          "title": "Partial, unsupported and nonclaims are runtime-derived and digest-bound."
+        },
+        {
+          "id": "FND-KS-02-AC03",
+          "title": "Stale, substituted and forged attestations fail closed."
+        },
+        {
+          "id": "FND-KS-02-AC04",
+          "title": "KaleidoSphere issue closes independently through exact-head delivery and anonymous readback."
+        }
+      ],
+      "acceptanceOwner": "CAMPAIGN-V1-FND-KS-02-ROOT-QS-01",
+      "dependencies": {
+        "authorityPredecessors": [
+          "JoFe2/PANSPHAIRA#338"
+        ],
+        "declared": []
+      },
+      "issueKey": "JoFe2/KaleidoSphere#141",
+      "ordinal": 3,
+      "publicDelivery": {
+        "anonymousReadback": {
+          "assets": [],
+          "issueState": "closed",
+          "issueStateReason": "completed",
+          "mainSha": "90c574e9a06cb752be06270395d44a31eabc44ae",
+          "releaseDraft": false,
+          "releasePrerelease": false,
+          "releaseTarget": "90c574e9a06cb752be06270395d44a31eabc44ae",
+          "status": "PASS",
+          "tagResolvedSha": "90c574e9a06cb752be06270395d44a31eabc44ae",
+          "transport": "ANONYMOUS_GITHUB_REST_AND_GIT_LS_REMOTE"
+        },
+        "chains": [
+          {
+            "disposition": "FINAL",
+            "mainCi": {
+              "conclusion": "success",
+              "event": "push",
+              "headSha": "90c574e9a06cb752be06270395d44a31eabc44ae",
+              "runAttempt": 1,
+              "runId": 33465671685,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/KaleidoSphere/actions/runs/33465671685"
+            },
+            "mergeSha": "90c574e9a06cb752be06270395d44a31eabc44ae",
+            "mergedAt": "2026-09-01T03:17:25Z",
+            "pr": {
+              "baseSha": "da98b6475fa0e3f22104e341f7bb1d26f97fb6d0",
+              "headSha": "f3a88790e065b741882fd6554bb023c06d893966",
+              "number": 153,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/KaleidoSphere/pull/153"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "f3a88790e065b741882fd6554bb023c06d893966",
+              "runAttempt": 1,
+              "runId": 33465630883,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/KaleidoSphere/actions/runs/33465630883"
+            }
+          }
+        ],
+        "finalMergeSha": "90c574e9a06cb752be06270395d44a31eabc44ae",
+        "receiptCommentId": 5488387009,
+        "relationToCapturedPanMain": "NOT_APPLICABLE_CROSS_REPOSITORY",
+        "release": {
+          "assets": [],
+          "createdAt": "2026-09-01T03:17:24Z",
+          "draft": false,
+          "id": 380190392,
+          "prerelease": false,
+          "publishedAt": "2026-09-01T03:17:58Z",
+          "tag": "2026_09_01_v1",
+          "target": "90c574e9a06cb752be06270395d44a31eabc44ae",
+          "url": "https://github.com/JoFe2/KaleidoSphere/releases/tag/2026_09_01_v1"
+        }
+      },
+      "terminalProof": {
+        "claimGeneration": 16,
+        "deliveryFinalHead": "90c574e9a06cb752be06270395d44a31eabc44ae",
+        "doneEvent": {
+          "attempt": 0,
+          "eventId": 8301,
+          "fromState": "RELEASED",
+          "occurredAtEpochSeconds": 1788232682.8883023,
+          "toState": "DONE"
+        },
+        "kind": "QUEUE_DONE",
+        "lease": {
+          "claimedAt": null,
+          "controllerId": null,
+          "heartbeatAt": null,
+          "workerPid": null,
+          "workerStartTicks": null
+        },
+        "packageDoneSubstitution": false,
+        "resultHead": "f3a88790e065b741882fd6554bb023c06d893966",
+        "resultHeadSemantics": "REVIEWED_PR_HEAD",
+        "state": "DONE",
+        "taskId": "CAMPAIGN-V1-FND-KS-02-ROOT-QS-01",
+        "unowned": true
+      }
+    },
+    {
+      "acceptance": [
+        {
+          "id": "FND-PS-02-AC01",
+          "title": "Every returned edge binds internally derivable evidence; shared endpoints alone grant no relation truth."
+        },
+        {
+          "id": "FND-PS-02-AC02",
+          "title": "Paired substitutions and fully re-digested forged relations fail closed."
+        },
+        {
+          "id": "FND-PS-02-AC03",
+          "title": "Candidate remains authority-free and cannot mutate/promote canonical Knowledge."
+        },
+        {
+          "id": "FND-PS-02-AC04",
+          "title": "Historical fixture bytes and nonclaims are preserved or explicitly version-migrated."
+        }
+      ],
+      "acceptanceOwner": "PORTFOLIO-PS335-ROOT-QS",
+      "dependencies": {
+        "authorityPredecessors": [],
+        "declared": [
+          "JoFe2/PANSPHAIRA#334"
+        ]
+      },
+      "issueKey": "JoFe2/PANSPHAIRA#335",
+      "ordinal": 4,
+      "publicDelivery": {
+        "anonymousReadback": {
+          "assets": [],
+          "issueState": "closed",
+          "issueStateReason": "completed",
+          "mainSha": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+          "releaseDraft": false,
+          "releasePrerelease": false,
+          "releaseTarget": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+          "status": "PASS",
+          "tagResolvedSha": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+          "transport": "ANONYMOUS_GITHUB_REST_AND_GIT_LS_REMOTE"
+        },
+        "chains": [
+          {
+            "disposition": "FINAL",
+            "mainCi": {
+              "conclusion": "success",
+              "event": "push",
+              "headSha": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+              "runAttempt": 1,
+              "runId": 33573369782,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33573369782"
+            },
+            "mergeSha": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+            "mergedAt": "2026-09-01T23:58:52Z",
+            "pr": {
+              "baseSha": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+              "headSha": "80d78725f098cc1b901cc71aa73947f3c1588568",
+              "number": 357,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/pull/357"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "80d78725f098cc1b901cc71aa73947f3c1588568",
+              "runAttempt": 1,
+              "runId": 33571899316,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33571899316"
+            }
+          }
+        ],
+        "finalMergeSha": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+        "receiptCommentId": 5502419153,
+        "relationToCapturedPanMain": "ANCESTOR",
+        "release": {
+          "assets": [],
+          "createdAt": "2026-09-01T23:58:52Z",
+          "draft": false,
+          "id": 380902180,
+          "prerelease": false,
+          "publishedAt": "2026-09-02T00:19:36Z",
+          "tag": "2026_09_02_v2",
+          "target": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/2026_09_02_v2"
+        }
+      },
+      "terminalProof": {
+        "claimGeneration": 678,
+        "deliveryFinalHead": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+        "doneEvent": {
+          "attempt": 0,
+          "eventId": 13546,
+          "fromState": "RELEASED",
+          "occurredAtEpochSeconds": 1788308381.0318644,
+          "toState": "DONE"
+        },
+        "kind": "QUEUE_DONE",
+        "lease": {
+          "claimedAt": null,
+          "controllerId": null,
+          "heartbeatAt": null,
+          "workerPid": null,
+          "workerStartTicks": null
+        },
+        "packageDoneSubstitution": false,
+        "resultHead": "80d78725f098cc1b901cc71aa73947f3c1588568",
+        "resultHeadSemantics": "REVIEWED_PR_HEAD",
+        "state": "DONE",
+        "taskId": "PORTFOLIO-PS335-ROOT-QS",
+        "unowned": true
+      }
+    },
+    {
+      "acceptance": [
+        {
+          "id": "FND-PS-03-AC01",
+          "title": "Allowed product/contract/capability combinations are explicit and versioned; checks are not disabled."
+        },
+        {
+          "id": "FND-PS-03-AC02",
+          "title": "Unknown, stale, substituted or incomplete combinations remain denied."
+        },
+        {
+          "id": "FND-PS-03-AC03",
+          "title": "Expected profile authority is server/owner-derived and attestation digest remains fail-closed."
+        },
+        {
+          "id": "FND-PS-03-AC04",
+          "title": "PANS\u0050HAIRA issue closes independently through exact-head content-addressed delivery."
+        }
+      ],
+      "acceptanceOwner": "PORTFOLIO-PS336-ROOT-QS",
+      "dependencies": {
+        "authorityPredecessors": [],
+        "declared": []
+      },
+      "issueKey": "JoFe2/PANSPHAIRA#336",
+      "ordinal": 5,
+      "publicDelivery": {
+        "anonymousReadback": {
+          "assets": [],
+          "issueState": "closed",
+          "issueStateReason": "completed",
+          "mainSha": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+          "releaseDraft": false,
+          "releasePrerelease": false,
+          "releaseTarget": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+          "status": "PASS",
+          "tagResolvedSha": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+          "transport": "ANONYMOUS_GITHUB_REST_AND_GIT_LS_REMOTE"
+        },
+        "chains": [
+          {
+            "disposition": "FINAL",
+            "mainCi": {
+              "conclusion": "success",
+              "event": "push",
+              "headSha": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+              "runAttempt": 1,
+              "runId": 33568706507,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33568706507"
+            },
+            "mergeSha": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+            "mergedAt": "2026-09-01T22:56:40Z",
+            "pr": {
+              "baseSha": "39e5187b38e08946ea60196f32aaaea072af6544",
+              "headSha": "1afe8cb7b44597c8b116670e2974509a836b9945",
+              "number": 356,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/pull/356"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "1afe8cb7b44597c8b116670e2974509a836b9945",
+              "runAttempt": 1,
+              "runId": 33567148727,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33567148727"
+            }
+          }
+        ],
+        "finalMergeSha": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+        "receiptCommentId": 5501738387,
+        "relationToCapturedPanMain": "ANCESTOR",
+        "release": {
+          "assets": [],
+          "createdAt": "2026-09-01T22:56:40Z",
+          "draft": false,
+          "id": 380881340,
+          "prerelease": false,
+          "publishedAt": "2026-09-01T23:12:34Z",
+          "tag": "2026_09_02_v1",
+          "target": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/2026_09_02_v1"
+        }
+      },
+      "terminalProof": {
+        "claimGeneration": 430,
+        "deliveryFinalHead": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+        "doneEvent": {
+          "attempt": 0,
+          "eventId": 12171,
+          "fromState": "RELEASED",
+          "occurredAtEpochSeconds": 1788304359.2385683,
+          "toState": "DONE"
+        },
+        "kind": "QUEUE_DONE",
+        "lease": {
+          "claimedAt": null,
+          "controllerId": null,
+          "heartbeatAt": null,
+          "workerPid": null,
+          "workerStartTicks": null
+        },
+        "packageDoneSubstitution": false,
+        "resultHead": "1afe8cb7b44597c8b116670e2974509a836b9945",
+        "resultHeadSemantics": "REVIEWED_PR_HEAD",
+        "state": "DONE",
+        "taskId": "PORTFOLIO-PS336-ROOT-QS",
+        "unowned": true
+      }
+    },
+    {
+      "acceptance": [
+        {
+          "id": "FND-XR-01-AC01",
+          "title": "Accepted and rejected product/contract/capability pairs run against exact released repository heads."
+        },
+        {
+          "id": "FND-XR-01-AC02",
+          "title": "Both repository releases, fixtures and receipts bind one paired compatibility evidence record."
+        },
+        {
+          "id": "FND-XR-01-AC03",
+          "title": "Unknown pairs remain denied and no compatibility claim exceeds the tested pair."
+        },
+        {
+          "id": "FND-XR-01-AC04",
+          "title": "Cross-repo parent closes only after both child issues are publicly released/read back."
+        }
+      ],
+      "acceptanceOwner": "PORTFOLIO-PS337-ROOT-QS",
+      "dependencies": {
+        "authorityPredecessors": [],
+        "declared": [
+          "JoFe2/PANSPHAIRA#336",
+          "JoFe2/KaleidoSphere#141"
+        ]
+      },
+      "issueKey": "JoFe2/PANSPHAIRA#337",
+      "ordinal": 6,
+      "publicDelivery": {
+        "anonymousReadback": {
+          "assets": [],
+          "issueState": "closed",
+          "issueStateReason": "completed",
+          "mainSha": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+          "releaseDraft": false,
+          "releasePrerelease": false,
+          "releaseTarget": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+          "status": "PASS",
+          "tagResolvedSha": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+          "transport": "ANONYMOUS_GITHUB_REST_AND_GIT_LS_REMOTE"
+        },
+        "chains": [
+          {
+            "disposition": "FINAL",
+            "mainCi": {
+              "conclusion": "success",
+              "event": "push",
+              "headSha": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+              "runAttempt": 2,
+              "runId": 33585233361,
+              "status": "completed",
+              "supersededAttempts": [
+                {
+                  "classification": "GITHUB_ACTIONS_RUNNER_TIMEOUT_ENFORCEMENT_FAILURE",
+                  "conclusion": "cancelled",
+                  "runAttempt": 1,
+                  "sameHead": true
+                }
+              ],
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33585233361"
+            },
+            "mergeSha": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+            "mergedAt": "2026-09-02T02:58:30Z",
+            "pr": {
+              "baseSha": "55dcf6dce3a985e13de9768ee8637a3fbb38f939",
+              "headSha": "dd926927a983ff10ffe555f6eebe26cfa5402ff0",
+              "number": 358,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/pull/358"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "dd926927a983ff10ffe555f6eebe26cfa5402ff0",
+              "runAttempt": 1,
+              "runId": 33583893885,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33583893885"
+            }
+          }
+        ],
+        "finalMergeSha": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+        "receiptCommentId": 5503866738,
+        "relationToCapturedPanMain": "ANCESTOR",
+        "release": {
+          "assets": [],
+          "createdAt": "2026-09-02T02:58:29Z",
+          "draft": false,
+          "id": 380957395,
+          "prerelease": false,
+          "publishedAt": "2026-09-02T03:26:25Z",
+          "tag": "2026_09_02_v3",
+          "target": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/2026_09_02_v3"
+        }
+      },
+      "terminalProof": {
+        "claimGeneration": 578,
+        "deliveryFinalHead": "7d794431d8f094dbcccf4e8f4aa249c6db816c82",
+        "doneEvent": {
+          "attempt": 0,
+          "eventId": 14742,
+          "fromState": "RELEASED",
+          "occurredAtEpochSeconds": 1788319589.772967,
+          "toState": "DONE"
+        },
+        "kind": "QUEUE_DONE",
+        "lease": {
+          "claimedAt": null,
+          "controllerId": null,
+          "heartbeatAt": null,
+          "workerPid": null,
+          "workerStartTicks": null
+        },
+        "packageDoneSubstitution": false,
+        "resultHead": "dd926927a983ff10ffe555f6eebe26cfa5402ff0",
+        "resultHeadSemantics": "REVIEWED_PR_HEAD",
+        "state": "DONE",
+        "taskId": "PORTFOLIO-PS337-ROOT-QS",
+        "unowned": true
+      }
+    },
+    {
+      "acceptance": [
+        {
+          "id": "FND-PS-04-AC01",
+          "title": "All discovered canonicalization profiles, owners, consumers and historical byte obligations are inventoried on current Main."
+        },
+        {
+          "id": "FND-PS-04-AC02",
+          "title": "No implementation is declared equivalent without shared valid/invalid/Unicode/number evidence."
+        },
+        {
+          "id": "FND-PS-04-AC03",
+          "title": "Historical digest-bound bytes are not regenerated."
+        },
+        {
+          "id": "FND-PS-04-AC04",
+          "title": "Output is a decision artifact and testable inventory, not a premature utility consolidation."
+        }
+      ],
+      "acceptanceOwner": "CAMPAIGN-V1-FND-PS-04-ROOT-QS-01",
+      "dependencies": {
+        "authorityPredecessors": [],
+        "declared": []
+      },
+      "issueKey": "JoFe2/PANSPHAIRA#338",
+      "ordinal": 7,
+      "publicDelivery": {
+        "anonymousReadback": {
+          "assets": [],
+          "issueState": "closed",
+          "issueStateReason": "completed",
+          "mainSha": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+          "releaseDraft": false,
+          "releasePrerelease": false,
+          "releaseTarget": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+          "status": "PASS",
+          "tagResolvedSha": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+          "transport": "ANONYMOUS_GITHUB_REST_AND_GIT_LS_REMOTE"
+        },
+        "chains": [
+          {
+            "disposition": "SUPERSEDED_MAIN_CI_FAILURE",
+            "mainCi": {
+              "conclusion": "failure",
+              "event": "push",
+              "headSha": "1393e94bafffc5c7d3a5b629b4ae2e957e37ab4e",
+              "runAttempt": 1,
+              "runId": 33446231253,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33446231253"
+            },
+            "mergeSha": "1393e94bafffc5c7d3a5b629b4ae2e957e37ab4e",
+            "mergedAt": "2026-08-31T22:26:34Z",
+            "pr": {
+              "baseSha": "dac921d459cbcfc16e4912dff558c8786e6438de",
+              "headSha": "ca934a44813bd3a21a798ab0da154b8c407c39f6",
+              "number": 347,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/pull/347"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "ca934a44813bd3a21a798ab0da154b8c407c39f6",
+              "runAttempt": 1,
+              "runId": 33444620129,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33444620129"
+            }
+          },
+          {
+            "disposition": "FINAL",
+            "mainCi": {
+              "conclusion": "success",
+              "event": "push",
+              "headSha": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+              "runAttempt": 1,
+              "runId": 33450256746,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33450256746"
+            },
+            "mergeSha": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+            "mergedAt": "2026-08-31T23:20:16Z",
+            "pr": {
+              "baseSha": "1393e94bafffc5c7d3a5b629b4ae2e957e37ab4e",
+              "headSha": "1efe5658733e53b240957c12a1b47df86d4ed4e3",
+              "number": 348,
+              "state": "closed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/pull/348"
+            },
+            "prCi": {
+              "conclusion": "success",
+              "event": "pull_request",
+              "headSha": "1efe5658733e53b240957c12a1b47df86d4ed4e3",
+              "runAttempt": 1,
+              "runId": 33448727314,
+              "status": "completed",
+              "url": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/33448727314"
+            }
+          }
+        ],
+        "finalMergeSha": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+        "receiptCommentId": 5486322193,
+        "relationToCapturedPanMain": "ANCESTOR",
+        "release": {
+          "assets": [],
+          "createdAt": "2026-08-31T23:20:15Z",
+          "draft": false,
+          "id": 380121007,
+          "prerelease": false,
+          "publishedAt": "2026-08-31T23:40:09Z",
+          "tag": "2026_08_31_v6",
+          "target": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/2026_08_31_v6"
+        }
+      },
+      "terminalProof": {
+        "claimGeneration": 289,
+        "deliveryFinalHead": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+        "doneEvent": {
+          "attempt": 0,
+          "eventId": 8222,
+          "fromState": "RELEASED",
+          "occurredAtEpochSeconds": 1788219644,
+          "toState": "DONE"
+        },
+        "kind": "QUEUE_DONE",
+        "lease": {
+          "claimedAt": null,
+          "controllerId": null,
+          "heartbeatAt": null,
+          "workerPid": null,
+          "workerStartTicks": null
+        },
+        "packageDoneSubstitution": false,
+        "protectedSuccessorReceiptSha256": "9faebf8883f5e4c5f8efc27a4a7288623c8353c244d8bb44ec395b3c8f3ef5ea",
+        "resultHead": "b41337348f3b379870c3006a9647ecdfdc29f6f7",
+        "resultHeadSemantics": "PROTECTED_SUCCESSOR_FINAL_MERGE_HEAD",
+        "state": "DONE",
+        "taskId": "CAMPAIGN-V1-FND-PS-04-ROOT-QS-01",
+        "unowned": true
+      }
+    }
+  ],
+  "governance": {
+    "exactEvidenceRequired": true,
+    "packageDoneSubstitutesForDone": false,
+    "releaseGovernance": {
+      "serialWithinRepository": true,
+      "sourcePath": "release/governance.json",
+      "sourceSha256": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7",
+      "tagStrategy": "DAILY_SEQUENCE"
+    },
+    "serialReleaseOrder": {
+      "JoFe2/KaleidoSphere": [
+        {
+          "issueKey": "JoFe2/KaleidoSphere#140",
+          "publishedAt": "2026-08-31T17:45:25Z",
+          "tag": "2026_08_31_v1"
+        },
+        {
+          "issueKey": "JoFe2/KaleidoSphere#141",
+          "publishedAt": "2026-09-01T03:17:58Z",
+          "tag": "2026_09_01_v1"
+        }
+      ],
+      "JoFe2/PANSPHAIRA": [
+        {
+          "issueKey": "JoFe2/PANSPHAIRA#334",
+          "publishedAt": "2026-08-31T17:37:59Z",
+          "tag": "2026_08_31_v5"
+        },
+        {
+          "issueKey": "JoFe2/PANSPHAIRA#338",
+          "publishedAt": "2026-08-31T23:40:09Z",
+          "tag": "2026_08_31_v6"
+        },
+        {
+          "issueKey": "JoFe2/PANSPHAIRA#336",
+          "publishedAt": "2026-09-01T23:12:34Z",
+          "tag": "2026_09_02_v1"
+        },
+        {
+          "issueKey": "JoFe2/PANSPHAIRA#335",
+          "publishedAt": "2026-09-02T00:19:36Z",
+          "tag": "2026_09_02_v2"
+        },
+        {
+          "issueKey": "JoFe2/PANSPHAIRA#337",
+          "publishedAt": "2026-09-02T03:26:25Z",
+          "tag": "2026_09_02_v3"
+        }
+      ]
+    },
+    "sameParentThreadEvidenceRequired": true,
+    "unknownMayPromoteToSuccess": false
+  },
+  "integrity": {
+    "canonicalProfile": "packages/contracts/src/canonical-json.ts",
+    "childSetSha256": "6d1bbddedf5ed23ca7fd6bb7b4f31f74c20a19b4bc4f73fc7898528e63f74ee9",
+    "publicThreadSetSha256": "e8f34d4ee4ab96e932ea6e80856d4561d6aa8c449e3e11bdddf69d6f809a4b08",
+    "recordSha256": "4b44633509b6b61f4c53b745a475d8a918cdfe47da355e137b9f3fde1a7e067c",
+    "sha256": "SHA-256"
+  },
+  "nonclaims": [
+    "This integration record does not close PanSphaira #333; E-FND-1-AC05 remains with the delivery and Root-QS final owner.",
+    "Publicly terminal child chains prove only the exact released heads and acceptance sets recorded here, not universal compatibility, production readiness or security certification.",
+    "No productive external effect, customer or external data, Risk-D action, credential change, Queue mutation or Authority widening was performed.",
+    "The pre-D-044 parent issue checklist and comments remain historical public thread bytes; this record does not rewrite or substitute that thread.",
+    "The superseded PanSphaira #338 failed Main-CI chain and PanSphaira #337 cancelled runner attempt remain retained rather than erased.",
+    "Direct-Control-Lane reconciliation for #334 and #140 records the explicit absence of Queue rows and never invents DONE rows.",
+    "PACKAGE_DONE is never treated as Queue DONE or public issue closure, and UNKNOWN is never promoted to success."
+  ],
+  "parent": {
+    "deferredAcceptance": [
+      {
+        "id": "E-FND-1-AC05",
+        "owner": "PORTFOLIO-PS333-ROOT-QS",
+        "sourceAnchor": "issue-body:parent-close-criterion",
+        "status": "REMAINING_AFTER_INTEGRATION",
+        "title": "The parent closes only after all authorized epic criteria pass on one immutable current-Main candidate through exactly one review, final Sol ownership, exact CI/release/readback and Queue DONE."
+      }
+    ],
+    "integrationAcceptance": [
+      {
+        "id": "E-FND-1-AC01",
+        "owner": "PORTFOLIO-PS333-INTEGRATE",
+        "sourceAnchor": "issue-body:epic-acceptance-child-ownership",
+        "title": "Every acceptance ID belonging to PANS\u0050HAIRA #334 through #338 and KaleidoSphere #140 and #141 is uniquely owned, dependency-correct and reconciled without weakening child criteria."
+      },
+      {
+        "id": "E-FND-1-AC02",
+        "owner": "PORTFOLIO-PS333-INTEGRATE",
+        "sourceAnchor": "issue-body:children-plus-public-closure-governance",
+        "title": "All seven children have exact public PR/CI/merge/release/readback/issue-terminal and Queue-DONE or explicit direct-Control-Lane terminal reconciliation evidence."
+      },
+      {
+        "id": "E-FND-1-AC03",
+        "owner": "PORTFOLIO-PS333-INTEGRATE",
+        "sourceAnchor": "D-044:exact-parent-reconciliation",
+        "title": "One deterministic cumulative foundation record binds the frozen D-044 manifest, live parent thread, every child acceptance set, exact merge/release heads, public receipts and Queue proofs with no unresolved child or criterion."
+      },
+      {
+        "id": "E-FND-1-AC04",
+        "owner": "PORTFOLIO-PS333-INTEGRATE",
+        "sourceAnchor": "issue-body:governance-and-nonclaims",
+        "title": "The record preserves process observations, serial-release governance, exact-evidence requirements and bounded nonclaims without granting productive external effects or deferred capability claims."
+      }
+    ],
+    "issueKey": "JoFe2/PANSPHAIRA#333",
+    "publicIssueState": "open",
+    "publicThreadDisposition": "PRE_D044_HISTORICAL_BYTES_PRESERVED",
+    "remainingCriterion": "The parent closes only after all authorized epic criteria pass on one immutable current-Main candidate through exactly one review, final Sol ownership, exact CI/release/readback and Queue DONE."
+  },
+  "processObservations": {
+    "boundary": "HISTORICAL_PUBLIC_PARENT_THREAD_ONLY_NO_UNRECORDED_METRIC_INFERENCE",
+    "initialWave": {
+      "firstPassReviews": {
+        "accepted": 0,
+        "total": 2
+      },
+      "materialHighFindingsClosedInIssueScope": 4,
+      "nonBlockingFollowUp": {
+        "activated": false,
+        "issueKey": "JoFe2/PANSPHAIRA#339"
+      },
+      "postCorrectionReviews": {
+        "accepted": 2,
+        "total": 2
+      }
+    },
+    "notSeparatelyQuantifiedInPublicParentThread": [
+      "rewriteRatio",
+      "contextAndCompaction",
+      "cleanup"
+    ],
+    "revisedLoop": [
+      "FOCUSED_GATES",
+      "ONE_REVIEW",
+      "ONE_CORRECTION",
+      "BOUNDED_RE_REVIEW",
+      "ONE_FINAL_LOCAL_FULL_SUITE",
+      "PUBLIC_DELIVERY"
+    ],
+    "sourceCommentBodySha256": "4c780655fbf30f513b5dbec5ea9b826da52b10be6848d34d5faceb17e47ef1e2",
+    "sourceCommentId": 5482272812,
+    "sourceIssueKey": "JoFe2/PANSPHAIRA#333"
+  },
+  "publicIssues": [
+    {
+      "apiId": 5302206949,
+      "apiUrl": "https://api.github.com/repos/JoFe2/PANSPHAIRA/issues/333",
+      "bodySha256": "7271c8058380b4a4df3ebd83000cb9b82c60004cfb8e5ca3b9e2dd938092bc9c",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "4c780655fbf30f513b5dbec5ea9b826da52b10be6848d34d5faceb17e47ef1e2",
+          "createdAt": "2026-08-31T17:51:38Z",
+          "id": 5482272812,
+          "nodeId": "IC_kwDOToGU7c8AAAABRsTYLA",
+          "updatedAt": "2026-08-31T17:51:38Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/333#issuecomment-5482272812"
+        },
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "9a6b48815068027b79b94c1c8153fdd002901cd3c453ce1c80a6c507474f7b96",
+          "createdAt": "2026-08-31T19:34:23Z",
+          "id": 5483471822,
+          "nodeId": "IC_kwDOToGU7c8AAAABRtcjzg",
+          "updatedAt": "2026-08-31T19:34:23Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/333#issuecomment-5483471822"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:09Z",
+      "issueKey": "JoFe2/PANSPHAIRA#333",
+      "locked": false,
+      "nodeId": "I_kwDOToGU7c8AAAABPAlB5Q",
+      "number": 333,
+      "repository": "JoFe2/PANSPHAIRA",
+      "state": "open",
+      "stateReason": null,
+      "title": "[E-FND-1] Trust and Compatibility Foundation",
+      "updatedAt": "2026-08-31T19:34:23Z",
+      "url": "https://github.com/JoFe2/PANSPHAIRA/issues/333"
+    },
+    {
+      "apiId": 5302207410,
+      "apiUrl": "https://api.github.com/repos/JoFe2/PANSPHAIRA/issues/334",
+      "bodySha256": "3693da31a1c076cb14f176ad6b5978aa07dec8ab6f13e20dd811be4d5867783c",
+      "closedAt": "2026-08-31T17:15:47Z",
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "0f0a4f019c1b74eef9caee05c3c2ec0c7d420b7652c7b012d52a3ac1a4df113c",
+          "createdAt": "2026-08-31T17:39:42Z",
+          "id": 5482139438,
+          "nodeId": "IC_kwDOToGU7c8AAAABRsLPLg",
+          "updatedAt": "2026-08-31T17:39:42Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/334#issuecomment-5482139438"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:12Z",
+      "issueKey": "JoFe2/PANSPHAIRA#334",
+      "locked": false,
+      "nodeId": "I_kwDOToGU7c8AAAABPAlDsg",
+      "number": 334,
+      "repository": "JoFe2/PANSPHAIRA",
+      "state": "closed",
+      "stateReason": "completed",
+      "title": "[FND-PS-01] CKS-12 structural fail-closed projection validation",
+      "updatedAt": "2026-08-31T17:39:42Z",
+      "url": "https://github.com/JoFe2/PANSPHAIRA/issues/334"
+    },
+    {
+      "apiId": 5302207150,
+      "apiUrl": "https://api.github.com/repos/JoFe2/KaleidoSphere/issues/140",
+      "bodySha256": "08b63d108aa8f7545a3a00d20847e1bef42bec39fcf55637d9a043e57f44853f",
+      "closedAt": "2026-08-31T17:43:58Z",
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "2510c8bf631c51cdfd0120426c42a8338668e02b05d347a32571f463512a1139",
+          "createdAt": "2026-08-31T17:46:31Z",
+          "id": 5482217325,
+          "nodeId": "IC_kwDOT3K3rs8AAAABRsP_bQ",
+          "updatedAt": "2026-08-31T17:46:31Z",
+          "url": "https://github.com/JoFe2/KaleidoSphere/issues/140#issuecomment-5482217325"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:10Z",
+      "issueKey": "JoFe2/KaleidoSphere#140",
+      "locked": false,
+      "nodeId": "I_kwDOT3K3rs8AAAABPAlCrg",
+      "number": 140,
+      "repository": "JoFe2/KaleidoSphere",
+      "state": "closed",
+      "stateReason": "completed",
+      "title": "[FND-KS-01] Verifier-derived BI synthesis claim boundedness",
+      "updatedAt": "2026-08-31T17:46:31Z",
+      "url": "https://github.com/JoFe2/KaleidoSphere/issues/140"
+    },
+    {
+      "apiId": 5302208079,
+      "apiUrl": "https://api.github.com/repos/JoFe2/KaleidoSphere/issues/141",
+      "bodySha256": "ffe87390024015d72125df3a63190a7356f8ba0d06b3370da3f9c4f75200502f",
+      "closedAt": "2026-09-01T03:18:01Z",
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "e2f6203a5a9fe37c8442c44b778ad12bb6246914c284b7cee8ada0f3aa1223f2",
+          "createdAt": "2026-09-01T03:18:01Z",
+          "id": 5488387009,
+          "nodeId": "IC_kwDOT3K3rs8AAAABRyIjwQ",
+          "updatedAt": "2026-09-01T03:18:01Z",
+          "url": "https://github.com/JoFe2/KaleidoSphere/issues/141#issuecomment-5488387009"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:17Z",
+      "issueKey": "JoFe2/KaleidoSphere#141",
+      "locked": false,
+      "nodeId": "I_kwDOT3K3rs8AAAABPAlGTw",
+      "number": 141,
+      "repository": "JoFe2/KaleidoSphere",
+      "state": "closed",
+      "stateReason": "completed",
+      "title": "[FND-KS-02] Runtime-derived external BI consumer and attestation profile",
+      "updatedAt": "2026-09-01T03:18:01Z",
+      "url": "https://github.com/JoFe2/KaleidoSphere/issues/141"
+    },
+    {
+      "apiId": 5302207678,
+      "apiUrl": "https://api.github.com/repos/JoFe2/PANSPHAIRA/issues/335",
+      "bodySha256": "7273f096c5f831f175642b8d25f54670408ff11314ab96afe1c9af909259e025",
+      "closedAt": "2026-09-02T00:19:40Z",
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "96fed213e5480e2a80c03bae1c3244812b1e921139d7e7868dd4f881aa9be710",
+          "createdAt": "2026-09-02T00:19:39Z",
+          "id": 5502419153,
+          "nodeId": "IC_kwDOToGU7c8AAAABR_hA0Q",
+          "updatedAt": "2026-09-02T00:19:39Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/335#issuecomment-5502419153"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:14Z",
+      "issueKey": "JoFe2/PANSPHAIRA#335",
+      "locked": false,
+      "nodeId": "I_kwDOToGU7c8AAAABPAlEvg",
+      "number": 335,
+      "repository": "JoFe2/PANSPHAIRA",
+      "state": "closed",
+      "stateReason": "completed",
+      "title": "[FND-PS-02] CKS-12 evidence-bound edge authority",
+      "updatedAt": "2026-09-02T00:19:40Z",
+      "url": "https://github.com/JoFe2/PANSPHAIRA/issues/335"
+    },
+    {
+      "apiId": 5302207837,
+      "apiUrl": "https://api.github.com/repos/JoFe2/PANSPHAIRA/issues/336",
+      "bodySha256": "26fe34445a8f68ba41f6de28cba97657d1b21232b9662a1856af4514a72014d4",
+      "closedAt": "2026-09-01T23:12:38Z",
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "5c694988dd9902b324fcf68aca93725f997cbff2bcb25a066d517424710713bb",
+          "createdAt": "2026-09-01T23:12:37Z",
+          "id": 5501738387,
+          "nodeId": "IC_kwDOToGU7c8AAAABR-3dkw",
+          "updatedAt": "2026-09-01T23:12:37Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/336#issuecomment-5501738387"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:15Z",
+      "issueKey": "JoFe2/PANSPHAIRA#336",
+      "locked": false,
+      "nodeId": "I_kwDOToGU7c8AAAABPAlFXQ",
+      "number": 336,
+      "repository": "JoFe2/PANSPHAIRA",
+      "state": "closed",
+      "stateReason": "completed",
+      "title": "[FND-PS-03] PANS\u0050HAIRA qualified external BI compatibility admission profile",
+      "updatedAt": "2026-09-01T23:12:38Z",
+      "url": "https://github.com/JoFe2/PANSPHAIRA/issues/336"
+    },
+    {
+      "apiId": 5302208462,
+      "apiUrl": "https://api.github.com/repos/JoFe2/PANSPHAIRA/issues/337",
+      "bodySha256": "63792bb7851aeefc9b4e8c94c8c0a76d244658c4e71c705709f2f62cb4e434b5",
+      "closedAt": "2026-09-02T03:26:28Z",
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "aa47d75d1a6bc4c8a17271630b1e62dac0326ab697946d40d4c2e1af1f12febe",
+          "createdAt": "2026-09-02T03:26:28Z",
+          "id": 5503866738,
+          "nodeId": "IC_kwDOToGU7c8AAAABSA5Xcg",
+          "updatedAt": "2026-09-02T03:26:28Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/337#issuecomment-5503866738"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:18Z",
+      "issueKey": "JoFe2/PANSPHAIRA#337",
+      "locked": false,
+      "nodeId": "I_kwDOToGU7c8AAAABPAlHzg",
+      "number": 337,
+      "repository": "JoFe2/PANSPHAIRA",
+      "state": "closed",
+      "stateReason": "completed",
+      "title": "[FND-XR-01] Paired PANS\u0050HAIRA/KaleidoSphere compatibility clean-room",
+      "updatedAt": "2026-09-02T03:26:28Z",
+      "url": "https://github.com/JoFe2/PANSPHAIRA/issues/337"
+    },
+    {
+      "apiId": 5302208688,
+      "apiUrl": "https://api.github.com/repos/JoFe2/PANSPHAIRA/issues/338",
+      "bodySha256": "29964f9c5a39cb1db5d2610f7a27f0f08a2f9071ccb85dce4bbf0248497f9bc5",
+      "closedAt": "2026-08-31T23:40:44Z",
+      "comments": [
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "b28d83ebba981176b09b2e0a2e11f4ef198313f95e84b4bac20cedda124d9897",
+          "createdAt": "2026-08-31T19:34:22Z",
+          "id": 5483471644,
+          "nodeId": "IC_kwDOToGU7c8AAAABRtcjHA",
+          "updatedAt": "2026-08-31T19:34:22Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/338#issuecomment-5483471644"
+        },
+        {
+          "author": "JoFe2",
+          "authorAssociation": "OWNER",
+          "bodySha256": "174ec623c50b57c75c2f41c8fecac6d077f7ba1c7af0b82a93f84f4f9385c65b",
+          "createdAt": "2026-08-31T23:40:44Z",
+          "id": 5486322193,
+          "nodeId": "IC_kwDOToGU7c8AAAABRwKiEQ",
+          "updatedAt": "2026-08-31T23:40:44Z",
+          "url": "https://github.com/JoFe2/PANSPHAIRA/issues/338#issuecomment-5486322193"
+        }
+      ],
+      "createdAt": "2026-08-31T15:59:20Z",
+      "issueKey": "JoFe2/PANSPHAIRA#338",
+      "locked": false,
+      "nodeId": "I_kwDOToGU7c8AAAABPAlIsA",
+      "number": 338,
+      "repository": "JoFe2/PANSPHAIRA",
+      "state": "closed",
+      "stateReason": "completed",
+      "title": "[FND-PS-04] Canonical JSON and digest profile census decision artifact",
+      "updatedAt": "2026-08-31T23:40:44Z",
+      "url": "https://github.com/JoFe2/PANSPHAIRA/issues/338"
+    }
+  ],
+  "schemaVersion": "pansphaira.e-fnd-1/trust-compatibility-foundation-closure/v1",
+  "status": "INTEGRATION_READY_FOR_DELIVERY_NOT_PARENT_CLOSED",
+  "taskId": "PORTFOLIO-PS333-INTEGRATE"
+}

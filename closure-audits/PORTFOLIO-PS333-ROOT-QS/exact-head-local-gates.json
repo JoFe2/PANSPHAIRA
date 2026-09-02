@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "development-conveyor/exact-head-local-gate-receipt/v1",
+  "taskId": "PORTFOLIO-PS333-ROOT-QS",
+  "sourceIssue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 333,
+    "family": "E-FND-1",
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/333"
+  },
+  "recordedAt": "2026-09-02T14:21:19Z",
+  "governance": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "processVariantIntroduced": false,
+    "finalOwner": "sol",
+    "soleFinalOwnerTaskId": "PORTFOLIO-PS333-ROOT-QS",
+    "authorityWidened": false,
+    "productiveExternalEffectsActivated": false,
+    "queueMutationCount": 0
+  },
+  "independentIntegratedReview": {
+    "requiredCount": 1,
+    "completedCount": 1,
+    "secondIndependentReviewPerformed": false,
+    "reviewedHead": "9de09bc0c15818b3033b47343b37a3e741665d29",
+    "reviewedTree": "5d11dbed2376132b3672ffe41a3e469c58dbd0e2",
+    "reviewedParent": "28fe46aaf6385ee7ea25cadecb67d56f58ae0fc3",
+    "reviewDisposition": "REBASE_REQUIRED",
+    "findings": [
+      {
+        "id": "REBASE_REQUIRED",
+        "severity": "BLOCKING",
+        "finding": "Current Main head 2622ebc15bd231553f290cf22759127cafa33e16 was not an ancestor of reviewed head 9de09bc0c15818b3033b47343b37a3e741665d29.",
+        "resolution": "FIXED_FORWARD",
+        "resolutionEvidence": "The accepted eleven-path product change set and self-excluded receipt were replayed onto exact current Main 2622ebc15bd231553f290cf22759127cafa33e16, nested integrity was refreshed in repository order, and the clean successor candidate before this refreshed self-excluded receipt is d5a9f318f88116ea08977dfc38f8d75833a2c1a2."
+      },
+      {
+        "id": "DAG_ORACLE_VERSION_MISMATCH",
+        "severity": "BLOCKING",
+        "finding": "The reviewed artifact's Verification DAG version did not match the independent nested video oracle.",
+        "resolution": "FIXED_FORWARD",
+        "resolutionEvidence": "The current-Main replay retains graphVersion 43, matching tools/video-production-reference/tests/slice.test.mjs:808; the independent video suite passes all 116 tests under the local --jitless diagnostic runtime."
+      },
+      {
+        "id": "ARTIFACT_PATH_BOUNDARY",
+        "severity": "BLOCKING",
+        "finding": "The reviewed base-to-head artifact included four paths outside the writable boundary.",
+        "resolution": "FIXED_FORWARD",
+        "resolutionEvidence": "After replay onto current public Main, origin/main...HEAD contains exactly the eleven allowlisted product paths plus this allowlisted self-excluded receipt; the four reported paths are inherited base content and are absent from the candidate diff."
+      }
+    ],
+    "postCorrectionCheck": "BOUNDED_MECHANICAL_FINDING_VERIFICATION_NOT_A_SECOND_INDEPENDENT_REVIEW"
+  },
+  "currentMainReplay": {
+    "publicMainRef": "origin/main",
+    "publicMainHead": "2622ebc15bd231553f290cf22759127cafa33e16",
+    "publicMainTree": "4d0e8938b6839a2b9e6ab22fe3d813aeb59e0ff1",
+    "networkFetchPerformed": false,
+    "candidateHeadBeforeSelfExcludedReceipt": "d5a9f318f88116ea08977dfc38f8d75833a2c1a2",
+    "candidateTreeBeforeSelfExcludedReceipt": "76727f8f6cd82ef9caa621ecccb3290d3b6c1ffb",
+    "candidateParent": "2622ebc15bd231553f290cf22759127cafa33e16",
+    "currentMainIsCandidateAncestor": true,
+    "reviewedAndReplayedPathSetsEqual": true,
+    "replayMethod": "REPLAY_ACCEPTED_CHANGE_ONTO_CURRENT_MAIN_THEN_REFRESH_NESTED_INTEGRITY",
+    "headDriftPolicy": "FAIL_CLOSED_REBIND_AND_REVERIFY_BEFORE_PUBLIC_DELIVERY"
+  },
+  "productContentBinding": {
+    "algorithm": "sha256(concat(path + NUL + lowercase-sha256 + LF), paths sorted lexicographically)",
+    "receiptSelfExcluded": true,
+    "pathCount": 11,
+    "digest": "52b7176fff1a8974a82c12ea32d33cc51c8a8a6eab10133fe1c9dd16849c9f78",
+    "pathDigests": {
+      "SHA256SUMS": "03d8fd58d72e9a05c86b3edab983b4778b89ac9daaf96e6ac6d831cb229759e9",
+      "package.json": "b31125b07f468e1286bf44b1adb08334e90dbd1a8bcb170ed805e9869bf5165b",
+      "scripts/build-public-release.sh": "268baecc62e9b174b0cc6956cee842ae3b326f81c0213cf6b9e4e19a00aaf6b4",
+      "scripts/refresh-integrity-data.mjs": "fc0c76558346b3d6487b577a5283569f282fa5b3385b1f79de8efcae8d61ffa2",
+      "tests/canonical-json-profile-inventory.test.ts": "878c544ac0ff77b1c1928525bed75e99f8da012bce612e03528aa73213ced66b",
+      "tests/release-governance.test.mjs": "55aaa6f926b29707f6dae13424c8600c113fe93d147b789a530cda036ddfe7aa",
+      "tests/trust-compatibility-foundation-closure.test.ts": "1f629c9dea53ec46f14d3dcf5e1bb69812fcc8f25c4cd6c79233f30336ef377e",
+      "tests/verification-fabric-v2.test.ts": "7e04dc567cbcfb558c1ff4f91e448cd1ca6d18dd4bacae030f2a9178c8400101",
+      "verification/canonical-json-profile-inventory-v1.json": "1c712564926872812b731336413b139e3a064de8b5e7efa4281d9cf15bc5f9e8",
+      "verification/trust-compatibility-foundation-closure-v1.json": "e2db063c7522c82801ffd1243b3205c3f86cb42dacb442b5afbd76bfe78814e0",
+      "verification/verification-dag-v2.json": "1afc6b45342042fe4e962dcd62e1a32fd0b7d70fd865da25ad9c0116266f5429"
+    },
+    "allProductPathsWithinTaskAllowlist": true,
+    "containingCommitSelfExcluded": true,
+    "containingCommitReadbackRequiredBeforePr": true
+  },
+  "acceptance": {
+    "integrationRecord": "verification/trust-compatibility-foundation-closure-v1.json",
+    "integrationRecordSha256": "e2db063c7522c82801ffd1243b3205c3f86cb42dacb442b5afbd76bfe78814e0",
+    "E-FND-1-AC01": {
+      "status": "PASS",
+      "evidence": "All seven exact child acceptance sets are uniquely owned and dependency-correct in the immutable cumulative record."
+    },
+    "E-FND-1-AC02": {
+      "status": "PASS",
+      "evidence": "Seven final public PR/CI/merge/release/readback/issue chains reconcile to five terminal unowned Queue DONE proofs and two explicit direct-Control-Lane no-row terminal proofs."
+    },
+    "E-FND-1-AC03": {
+      "status": "PASS",
+      "evidence": "The cumulative record binds D-044, the parent thread, every child acceptance set, exact delivery heads, public receipts and terminal proofs under frozen canonical digests."
+    },
+    "E-FND-1-AC04": {
+      "status": "PASS",
+      "evidence": "Serial daily release ordering, exact-evidence requirements, retained failed history and bounded nonclaims remain fail closed without external effects or Authority widening."
+    },
+    "E-FND-1-AC05": {
+      "status": "PACKAGE_DONE_PENDING_CONTROLLER_PUBLIC_TERMINAL_CHAIN",
+      "evidence": "Exactly one independent review and its sole blocking finding are reconciled on the current-Main successor; exact PR/Main CI, release, anonymous parent readback, public issue closure, Queue DONE and cleanup remain downstream and are not claimed here."
+    }
+  },
+  "mandatoryCases": {
+    "positive": {
+      "status": "PASS",
+      "evidence": "The focused validator accepted AC01 through AC04, the exact deferred AC05 disposition, and all seven child terminal chains on the one content-bound current-Main successor."
+    },
+    "negative": {
+      "status": "PASS",
+      "failClosedCases": [
+        "MISSING_OR_DUPLICATE_CHILD_PROOF",
+        "MISSING_OR_DUPLICATE_ACCEPTANCE_CRITERION",
+        "REMAINING_PARENT_CRITERION_AT_PUBLIC_CLOSE",
+        "SECOND_INDEPENDENT_REVIEW",
+        "STALE_OR_SUBSTITUTED_ISSUE_OR_PR_HEAD",
+        "STALE_OR_FAILED_MAIN_CI",
+        "MERGE_OR_RELEASE_MISMATCH",
+        "ANONYMOUS_READBACK_GAP_OR_UNKNOWN",
+        "PREMATURE_PARENT_ISSUE_CLOSURE",
+        "PACKAGE_DONE_AS_QUEUE_DONE_SUBSTITUTION",
+        "QUEUE_STATE_OTHER_THAN_DONE",
+        "RESIDUAL_QUEUE_LEASE",
+        "RESIDUAL_WORKER_PROCESS",
+        "DIRTY_OR_EXTRA_WORKTREE",
+        "INVENTED_DIRECT_CONTROL_LANE_QUEUE_ROW",
+        "CHANGED_OR_FULLY_REDIGESTED_PUBLIC_THREAD",
+        "POST_VALIDATION_MUTATION"
+      ]
+    }
+  },
+  "localGates": [
+    {
+      "command": "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js",
+      "nativeStatus": "INFRASTRUCTURE_EVIDENCE_NO_PRODUCT_VERDICT",
+      "nativeExitCode": 133,
+      "nativeSuiteStarted": false,
+      "diagnosticCommand": "NODE_OPTIONS=--jitless npm run build --silent && NODE_OPTIONS=--jitless node --test dist/tests/trust-compatibility-foundation-closure.test.js",
+      "diagnosticStatus": "PASS",
+      "tests": 9,
+      "passed": 9
+    },
+    {
+      "command": "npm run verification:plan",
+      "nativeStatus": "INFRASTRUCTURE_EVIDENCE_NO_PRODUCT_VERDICT",
+      "nativeExitCode": 133,
+      "diagnosticCommand": "NODE_OPTIONS=--jitless npm run verification:plan",
+      "diagnosticStatus": "PASS",
+      "mode": "FULL_FALLBACK",
+      "reason": "GRAPH_CHANGED",
+      "nodes": 52,
+      "tests": 60,
+      "hardGates": 5,
+      "graphDigest": "0a915f0492a189c5b1460b0a6700688e994ecc914e448e975a086993a8a586d6",
+      "planDigest": "ebc7731a1f1dd581ec17e4dc1542f5d2f373af88d1c4767d0c68ec310f553862"
+    },
+    {
+      "command": "npm run supply-chain:verify",
+      "nativeStatus": "INFRASTRUCTURE_EVIDENCE_NO_PRODUCT_VERDICT",
+      "nativeExitCode": 133,
+      "diagnosticCommand": "NODE_OPTIONS=--jitless npm run supply-chain:verify",
+      "diagnosticStatus": "PASS",
+      "lockDigest": "19f9f5967563ed3f3dffce82430f5ebbd7cfb3b6b319015eb466c198f496b167"
+    },
+    {
+      "command": "npm run release-governance:test",
+      "nativeStatus": "INFRASTRUCTURE_EVIDENCE_NO_PRODUCT_VERDICT",
+      "nativeExitCode": 133,
+      "diagnosticCommand": "NODE_OPTIONS=--jitless npm run release-governance:test",
+      "diagnosticStatus": "PASS",
+      "tests": 53,
+      "passed": 53
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless npm run lint",
+      "status": "PASS"
+    },
+    {
+      "command": "sha256sum --quiet -c SHA256SUMS",
+      "status": "PASS",
+      "entries": 1755
+    },
+    {
+      "command": "npm test",
+      "status": "INFRASTRUCTURE_EVIDENCE_NO_PRODUCT_VERDICT",
+      "processExitCode": 133,
+      "signal": "SIGTRAP",
+      "suiteStarted": false,
+      "diagnosticCommand": "NODE_OPTIONS=--jitless npm test",
+      "diagnosticStatus": "INFRASTRUCTURE_EVIDENCE_NO_PRODUCT_VERDICT",
+      "diagnosticBlocker": "The local --jitless workaround disables WebAssembly required by Node's fetch implementation; the suite stopped at tests/knowledge-quality-api.test.mjs without a product verdict.",
+      "namedFindingDiagnostic": "NODE_OPTIONS=--jitless npm run video:test passed all 116 tests, including the independent graphVersion 43 DAG oracle.",
+      "authoritativePinnedNodeHostDockerStatus": "PENDING_CONTROLLER"
+    }
+  ],
+  "runtime": {
+    "hostNode": "v24.19.0",
+    "hostNpmUnderJitless": "11.17.0",
+    "repositoryRequiredNode": ">=24.14.1 <25",
+    "repositoryRequiredNpm": ">=11.11.0 <12",
+    "nativeFailureClassification": "LOCAL_V8_EXECUTABLE_MEMORY_PERMISSION_SIGTRAP_DURING_ISOLATE_INITIALIZATION"
+  },
+  "deliveryHandoff": {
+    "localDisposition": "PACKAGE_DONE",
+    "packageDoneSubstitutesForQueueDoneOrPublicClosure": false,
+    "externalEffectsPerformed": false,
+    "requiredSequence": [
+      "CONTAINING_COMMIT_READBACK",
+      "EXACT_PR_HEAD_CI",
+      "SHA_BOUND_MERGE",
+      "EXACT_MAIN_HEAD_CI",
+      "SERIAL_DAILY_RELEASE",
+      "ANONYMOUS_MAIN_TAG_RELEASE_AND_ISSUE_READBACK",
+      "PUBLIC_ISSUE_333_CLOSED_COMPLETED",
+      "QUEUE_DONE_UNOWNED_AND_CLEANUP"
+    ],
+    "sequenceStatus": "NOT_STARTED_BY_LOCAL_WORKER",
+    "ownerThroughTerminalReconciliation": "PORTFOLIO-PS333-ROOT-QS"
+  },
+  "nonClaims": [
+    "NO_SECOND_INDEPENDENT_REVIEW",
+    "NO_PRODUCTIVE_EXTERNAL_EFFECT",
+    "NO_AUTHORITY_WIDENING",
+    "NO_PUSH_PR_MERGE_RELEASE_OR_ISSUE_MUTATION",
+    "NO_PUBLIC_PARENT_CLOSURE_CLAIM",
+    "NO_QUEUE_DONE_OR_CLEANUP_CLAIM",
+    "NO_PACKAGE_DONE_SUBSTITUTION_FOR_QUEUE_DONE",
+    "NO_FULL_SUITE_PRODUCT_VERDICT_FROM_LOCAL_SIGTRAP",
+    "NO_RECURSIVE_BINDING_OF_THIS_RECEIPT_TO_ITS_CONTAINING_COMMIT"
+  ],
+  "candidateVerdict": "PACKAGE_DONE_TECHNICALLY_COMPLETE_PENDING_AUTHORITATIVE_PINNED_NODE_GATE_AND_CONTROLLER_PUBLIC_TERMINAL_CHAIN"
+}
