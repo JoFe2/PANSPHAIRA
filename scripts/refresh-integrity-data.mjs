@@ -114,7 +114,7 @@ proof.verifier.sha256 = digest(proof.verifier.path);
 writeJson(proofPath, proof);
 writeJson("security/secure-default-proof-evidence-v1.json", buildSecureDefaultEvidence(proof));
 
-dag.graphVersion = 40;
+dag.graphVersion = 41;
 const verificationFabricNode = dag.nodes.find(({ id }) => id === "vf-contract-v1");
 if (verificationFabricNode === undefined) throw new Error("VF_CONTRACT_V1_DAG_NODE_MISSING");
 const verificationFabricInputs = [
@@ -440,6 +440,29 @@ adaptiveGateNode.inputs = adaptiveGateInputs.map(([inputPath, role]) => ({
   role,
   sha256: digest(inputPath),
 }));
+let incomingInvoiceNode = dag.nodes.find(({ id }) => id === "ap-01-incoming-invoice-blueprint-v1");
+if (incomingInvoiceNode === undefined) {
+  incomingInvoiceNode = {
+    id: "ap-01-incoming-invoice-blueprint-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run incoming-invoice:test"],
+    invariants: [
+      "The eight-layer Blueprint follows the frozen local-synthetic source-to-receipt proof chain.",
+      "LEAN, CONTROLLED and SEGREGATED_ENTERPRISE derive only from the declared process-complexity vector; company size is not an input.",
+      "Unknown fields, unsupported effects, customer data and productive booking authority fail closed.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(incomingInvoiceNode);
+}
+incomingInvoiceNode.inputs = [
+  ["packages/contracts/src/incoming-invoice-blueprint.ts", "CONTRACT"],
+  ["schemas/contracts/incoming-invoice-blueprint-v1.schema.json", "SCHEMA"],
+  ["tests/incoming-invoice-blueprint.test.ts", "VALIDATOR"],
+].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+incomingInvoiceNode.ownedTests = ["npm run incoming-invoice:test"];
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

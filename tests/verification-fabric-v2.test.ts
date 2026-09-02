@@ -131,6 +131,19 @@ test("ERP capability-cell changes select the bounded owner and exact focused sui
   assert.deepEqual(result.selectedTests, ["npm run erp-order-cell:test"]);
 });
 
+test("AP-01 blueprint changes select one bounded semantic owner and focused suite", () => {
+  for (const changed of [
+    "packages/contracts/src/incoming-invoice-blueprint.ts",
+    "schemas/contracts/incoming-invoice-blueprint-v1.schema.json",
+    "tests/incoming-invoice-blueprint.test.ts",
+  ]) {
+    const result = plan([changed]);
+    assert.equal(result.mode, "IMPACTED_SHADOW", changed);
+    assert.deepEqual(result.selectedNodes, ["ap-01-incoming-invoice-blueprint-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice:test"], changed);
+  }
+});
+
 test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pre-closure", () => {
   const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
     scripts: Record<string, string>;
@@ -177,7 +190,7 @@ test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pr
   ]) {
     assert.equal(publicPaths.has(publicPath), true, `public external-BI byte: ${publicPath}`);
   }
-  assert.equal(publicManifestPaths.length, 1435, "current release controls retain their exact public count");
+  assert.equal(publicManifestPaths.length, 1438, "current release controls retain their exact public count");
   assert.equal(publicPaths.size, publicManifestPaths.length, "public manifest paths remain unique");
   assert.equal(publicPaths.has(evidencePath), false, "pre-closure paired evidence remains repository-only");
 
