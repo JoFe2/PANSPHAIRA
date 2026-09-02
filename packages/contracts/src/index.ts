@@ -105,6 +105,7 @@ export * from "./external-video-service.js";
 export * from "./integration-profile.js";
 export * from "./erp-order-capability-cell.js";
 export * from "./incoming-invoice-blueprint.js";
+export * from "./incoming-invoice-intake.js";
 export * from "./voice-local-ptt.js";
 export * from "./usage-insights.js";
 export * from "./competence-knowledge-vocabulary.js";

@@ -1,0 +1,6 @@
+PANSPHAIRA SYNTHETIC SUPPLIER INVOICE V1
+supplier_id=SYN-SUP-001
+invoice_number=SYN-INV-2026-0001
+issue_date=2026-09-02
+currency=EUR
+gross_amount=123.45

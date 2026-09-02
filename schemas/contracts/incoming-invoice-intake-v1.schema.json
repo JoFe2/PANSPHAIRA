@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/schemas/contracts/incoming-invoice-intake-v1.schema.json",
+  "title": "Incoming invoice intake record or readback v1",
+  "oneOf": [
+    { "$ref": "#/$defs/record" },
+    { "$ref": "#/$defs/readback" }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "reasonCode"],
+      "properties": {
+        "state": { "const": "UNKNOWN" },
+        "reasonCode": { "const": "NOT_EXTRACTED" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "extractorId", "sourceVersionId"],
+      "properties": {
+        "stage": { "const": "EXTRACTION" },
+        "extractorId": { "type": "string", "minLength": 1 },
+        "sourceVersionId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "knownNumber": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "value", "evidence"],
+      "properties": { "state": { "const": "KNOWN" }, "value": { "type": "number" }, "evidence": { "$ref": "#/$defs/evidence" } }
+    },
+    "knownString": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "value", "evidence"],
+      "properties": { "state": { "const": "KNOWN" }, "value": { "type": "string", "minLength": 1 }, "evidence": { "$ref": "#/$defs/evidence" } }
+    },
+    "derived": {
+      "type": "object", "additionalProperties": false,
+      "required": ["grossAmountMinor", "purchaseOrderNumber", "receiptReference"],
+      "properties": {
+        "grossAmountMinor": { "oneOf": [{ "$ref": "#/$defs/unknown" }, { "$ref": "#/$defs/knownNumber" }] },
+        "purchaseOrderNumber": { "oneOf": [{ "$ref": "#/$defs/unknown" }, { "$ref": "#/$defs/knownString" }] },
+        "receiptReference": { "oneOf": [{ "$ref": "#/$defs/unknown" }, { "$ref": "#/$defs/knownString" }] }
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceId", "sourceKind", "locator", "capturedAt", "generator", "synthetic", "customerData", "externalRetrieval"],
+      "properties": {
+        "sourceId": { "const": "source:synthetic:ap-02:supplier-invoice-v1" },
+        "sourceKind": { "const": "LOCAL_SYNTHETIC_FIXTURE" },
+        "locator": { "const": "tests/fixtures/incoming-invoice/supplier-invoice-v1.txt" },
+        "capturedAt": { "const": "2026-09-02T00:00:00.000Z" },
+        "generator": { "const": "AP-02_FROZEN_HAND_AUTHORED_V1" },
+        "synthetic": { "const": true }, "customerData": { "const": false }, "externalRetrieval": { "const": false }
+      }
+    },
+    "original": {
+      "type": "object", "additionalProperties": false,
+      "required": ["bytesBase64", "fileName", "mediaType", "provenance"],
+      "properties": {
+        "bytesBase64": { "type": "string", "minLength": 1, "contentEncoding": "base64" },
+        "fileName": { "const": "supplier-invoice-v1.txt" },
+        "mediaType": { "const": "text/plain; charset=utf-8" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["documentId", "versionOrdinal", "documentKind", "issueDate", "currency"],
+      "properties": {
+        "documentId": { "type": "string", "pattern": "^doc:synthetic:ap-02:[a-z0-9-]+$" },
+        "versionOrdinal": { "const": 1 }, "documentKind": { "const": "SUPPLIER_INVOICE" },
+        "issueDate": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+      }
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "document", "version", "supplierInvoiceIdentity", "metadata", "original", "derived", "authority", "recordDigest"],
+      "properties": {
+        "schemaVersion": { "const": "chimpmaera.incoming-invoice/intake-record/v1" },
+        "document": {
+          "type": "object", "additionalProperties": false, "required": ["documentId", "documentKind"],
+          "properties": { "documentId": { "type": "string" }, "documentKind": { "const": "SUPPLIER_INVOICE" } }
+        },
+        "version": {
+          "type": "object", "additionalProperties": false,
+          "required": ["versionId", "ordinal", "contentSha256", "byteLength", "metadataDigest"],
+          "properties": {
+            "versionId": { "type": "string", "pattern": "^version:sha256:[a-f0-9]{64}$" }, "ordinal": { "const": 1 },
+            "contentSha256": { "$ref": "#/$defs/sha256" }, "byteLength": { "type": "integer", "minimum": 1 }, "metadataDigest": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "supplierInvoiceIdentity": {
+          "type": "object", "additionalProperties": false, "required": ["supplierId", "invoiceNumber", "identityDigest"],
+          "properties": { "supplierId": { "type": "string", "minLength": 3 }, "invoiceNumber": { "type": "string", "minLength": 3 }, "identityDigest": { "$ref": "#/$defs/sha256" } }
+        },
+        "metadata": { "$ref": "#/$defs/metadata" }, "original": { "$ref": "#/$defs/original" }, "derived": { "$ref": "#/$defs/derived" },
+        "authority": {
+          "type": "object", "additionalProperties": false,
+          "required": ["mode", "customerDataAuthorized", "productiveBookingAuthorized", "externalCallsAuthorized"],
+          "properties": { "mode": { "const": "LOCAL_SYNTHETIC_PROOF" }, "customerDataAuthorized": { "const": false }, "productiveBookingAuthorized": { "const": false }, "externalCallsAuthorized": { "const": false } }
+        },
+        "recordDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "readback": {
+      "type": "object", "additionalProperties": false,
+      "required": ["outcome", "schemaVersion", "bindings", "original", "derived"],
+      "properties": {
+        "outcome": { "const": "FOUND" }, "schemaVersion": { "const": "chimpmaera.incoming-invoice/readback/v1" },
+        "bindings": {
+          "type": "object", "additionalProperties": false,
+          "required": ["recordDigest", "versionId", "contentSha256", "metadataDigest", "supplierInvoiceIdentityDigest"],
+          "properties": { "recordDigest": { "$ref": "#/$defs/sha256" }, "versionId": { "type": "string", "pattern": "^version:sha256:[a-f0-9]{64}$" }, "contentSha256": { "$ref": "#/$defs/sha256" }, "metadataDigest": { "$ref": "#/$defs/sha256" }, "supplierInvoiceIdentityDigest": { "$ref": "#/$defs/sha256" } }
+        },
+        "original": {
+          "type": "object", "additionalProperties": false,
+          "required": ["bytesBase64", "fileName", "mediaType", "provenance", "byteLength"],
+          "properties": {
+            "bytesBase64": { "type": "string", "minLength": 1, "contentEncoding": "base64" },
+            "fileName": { "const": "supplier-invoice-v1.txt" },
+            "mediaType": { "const": "text/plain; charset=utf-8" },
+            "provenance": { "$ref": "#/$defs/provenance" },
+            "byteLength": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "derived": { "$ref": "#/$defs/derived" }
+      }
+    }
+  }
+}
