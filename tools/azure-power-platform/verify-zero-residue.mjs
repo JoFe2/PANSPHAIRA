@@ -45,7 +45,7 @@ const EXACT_EVIDENCE = {
   'contracts/azure-power-platform/authoritative-readback-receipt.schema.json': '20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8',
   'power-platform/readonly-canvas-workbench/manifest.json': PACKAGE.manifestSha256,
   'power-platform/readonly-canvas-workbench/connector-binding.json': PACKAGE.bindingSha256,
-  'tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs': '30b68a35cb950058a2e13a2c1f1637059ed4902f0b113b1ebde06062ca29edc9',
+  'tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs': '3ba0895ef9d4ff88431296cf86503a494a4893da4e3e0070fa23cc012d690ba3',
   'tests/azure-power-platform/authoritative-readback-receipt.test.mjs': '3542b9c5b578d37b4562f8f5f5cb4808aef666e721f5f0358a99e81e1a80dd58',
 };
 

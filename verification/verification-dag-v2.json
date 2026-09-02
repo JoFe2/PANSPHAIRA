@@ -244,7 +244,7 @@
         {
           "path": "contracts/azure-power-platform/proposal-approval-execution.schema.json",
           "role": "SCHEMA",
-          "sha256": "9974ad7d376bacc9ca973bb80e3dd050823b492492a8418727461a3d5b73e3cb"
+          "sha256": "1086bb4764445168b69ca18b9bf7d7df4e2f6ff57ea18da19559deb752d8700a"
         },
         {
           "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
@@ -269,7 +269,7 @@
         {
           "path": "docs/development/azure-power-platform/azpp-m1-public-evidence.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "21c5dac45e9eabed03d66f61d769cb167f8fa64cbe5d9891b3590be88fac15fa"
+          "sha256": "84d6a67f8fd01e9c913be1f2c5da3b43c5f29bb039b88e0e7ee027be7dfda7bb"
         },
         {
           "path": "docs/development/azure-power-platform/azpp-m1-tuple-ledger.schema.json",
@@ -329,7 +329,7 @@
         {
           "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "30b68a35cb950058a2e13a2c1f1637059ed4902f0b113b1ebde06062ca29edc9"
+          "sha256": "3ba0895ef9d4ff88431296cf86503a494a4893da4e3e0070fa23cc012d690ba3"
         },
         {
           "path": "tests/azure-power-platform/canvas-package.test.mjs",
@@ -509,7 +509,7 @@
         {
           "path": "tests/fixtures/azure-power-platform/public-readback-safe.json",
           "role": "FIXTURE",
-          "sha256": "9bc687652f741861ca5d5f70c7eb2308b756c11901509fb85baf15eb2b1b9b70"
+          "sha256": "70af3e6d774c0a3afd20350e4d77514e17b0e0297873f08ffd904dc3561336ba"
         },
         {
           "path": "tests/fixtures/azure-power-platform/public-readback-unsafe.json",
@@ -549,17 +549,17 @@
         {
           "path": "tests/fixtures/azure-power-platform/tuple-digest-drift.json",
           "role": "FIXTURE",
-          "sha256": "372a1e9a1e457640cd6f248490773a7f6964ce976e00a57a310cbc0e15648d1b"
+          "sha256": "cf5e37da7485a8bf04d7629e5880e1ac7cf3626f1cb9092c05e331f4e4294e2e"
         },
         {
           "path": "tests/fixtures/azure-power-platform/tuple-valid.json",
           "role": "FIXTURE",
-          "sha256": "cec24d8647ef1a9ce0f7ce5e3767524442300c2b7fa549328b3843624f800f19"
+          "sha256": "0e5fec98360b8d12fcefaa39063e4ca5344a707409c890daa51e5ff3db88e949"
         },
         {
           "path": "tests/fixtures/azure-power-platform/zero-residue.json",
           "role": "FIXTURE",
-          "sha256": "d98700ac4c12df278aec79c06863f5c28d111ac4cf6a2f2eb3f8045360ad9ab5"
+          "sha256": "8607a499bbdb729fda491df9d99d6964750f04bce9a75f8281b14ef1c14e57b9"
         },
         {
           "path": "tools/azure-power-platform/render-public-readback.mjs",
@@ -614,7 +614,7 @@
         {
           "path": "tools/azure-power-platform/verify-zero-residue.mjs",
           "role": "VALIDATOR",
-          "sha256": "46917542d249126496dfb29cac709dbbe9e14313b8899f69631eee5058ba7606"
+          "sha256": "ccdb47a5cbe45f5d4b58d0c0ccc123cfc2780a1c6d90d17e2d4616751917bafc"
         }
       ],
       "ownedTests": [
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5d3f7000b2c76c378d6c3785378eb3bf1acb5d8db7591f4c7003acbabbe5ae55"
+          "sha256": "d67ed6d2afdc012614a1edffdf5c76c21d3e3fd9ebc7c1e45ed78c513366e7e9"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -1455,7 +1455,7 @@
         {
           "path": "scripts/cks-07-validate-public-readback.mjs",
           "role": "VALIDATOR",
-          "sha256": "b8f61e74da6b60d0f2daf7debc87e36d6b55a87e0834d1f2507bf9150e2c6fb4"
+          "sha256": "8f63997562aa00efc662ff21c59caa63f8a0b3ed0f1c618e2475963a8714956a"
         },
         {
           "path": "scripts/run-cks-07-empty-kb-dry-run.mjs",
@@ -3774,7 +3774,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "c09cedbe4ed2578d5a3959e106671cf88d968f07994dd92caa744cdf970d9858"
+          "sha256": "ba0db88df7543eb5cc846a47f28f2d99ec5a44bf14c67a683cfca79cc48451b3"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3949,7 +3949,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "c4aa0a2b811a0c53e6a315b477cbb475a6334a7ac01115040784356e6622c2f4"
+          "sha256": "afad51ba1b158795f99eef3df54027f791d6ca00801f8605ccc6a1fce252426e"
         }
       ],
       "ownedTests": [
@@ -4639,26 +4639,6 @@
           "sha256": "a1cefd6163fbe7a9e70fa5ee750c1697901b7e80d2d589e02a1c5ac7aefd9bda"
         },
         {
-          "path": "README.md",
-          "role": "DERIVED_EVIDENCE",
-          "sha256": "714d5867d0577fb65b14327370141e9dded9fa6ed7bc95834dbeae62470d48cd"
-        },
-        {
-          "path": "docs/README.md",
-          "role": "DERIVED_EVIDENCE",
-          "sha256": "c9d48b0771c127eedbdce9f930f16272b6f9aee097cba376fc2c7ad3b2d73a26"
-        },
-        {
-          "path": "docs/QUICKSTART.md",
-          "role": "DERIVED_EVIDENCE",
-          "sha256": "b7bf3799004d82528d79accf4e7157507a953af5eb4b42561aa406ba7ff6723b"
-        },
-        {
-          "path": "docs/RELEASE-GOVERNANCE.md",
-          "role": "DERIVED_EVIDENCE",
-          "sha256": "e477248bc7e9362626c456ec3b1f619a37776fae958142d9c4b40c214c145df7"
-        },
-        {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "98f53741b543fb6037233a9184125a7d77ae04abd2bfb5461e00a03f89d1dd69"
@@ -4667,6 +4647,26 @@
           "path": "docs/index.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "cbc3875f09b2d6629deb6e943d3ab1de3405b33f28f2bd665a79f9b6809731df"
+        },
+        {
+          "path": "docs/QUICKSTART.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b7bf3799004d82528d79accf4e7157507a953af5eb4b42561aa406ba7ff6723b"
+        },
+        {
+          "path": "docs/README.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "c9d48b0771c127eedbdce9f930f16272b6f9aee097cba376fc2c7ad3b2d73a26"
+        },
+        {
+          "path": "docs/RELEASE-GOVERNANCE.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e477248bc7e9362626c456ec3b1f619a37776fae958142d9c4b40c214c145df7"
+        },
+        {
+          "path": "README.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "714d5867d0577fb65b14327370141e9dded9fa6ed7bc95834dbeae62470d48cd"
         },
         {
           "path": "release/governance.json",
@@ -4696,7 +4696,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "878c544ac0ff77b1c1928525bed75e99f8da012bce612e03528aa73213ced66b"
+          "sha256": "b6a02e1f48f530661c58bde3a0076a5031ba56670892e12521d91388f16dae6e"
         },
         {
           "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
@@ -4716,17 +4716,17 @@
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
           "role": "VALIDATOR",
-          "sha256": "1f629c9dea53ec46f14d3dcf5e1bb69812fcc8f25c4cd6c79233f30336ef377e"
+          "sha256": "68187314db99e493d0523bebd462390d23a414572ac8583ac68ff109b8ab1999"
         },
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "1c712564926872812b731336413b139e3a064de8b5e7efa4281d9cf15bc5f9e8"
+          "sha256": "079f6f1778a406869859565c2bf8dacc448b855c4c60cc2701c672210b3f0596"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "e2db063c7522c82801ffd1243b3205c3f86cb42dacb442b5afbd76bfe78814e0"
+          "sha256": "9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9"
         }
       ],
       "ownedTests": [

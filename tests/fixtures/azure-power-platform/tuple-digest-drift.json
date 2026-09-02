@@ -76,7 +76,7 @@
     ],
     "release": {
       "ref": "release/governance.json",
-      "digest": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7"
+      "digest": "c6a1db89d55c00edcbb72f6fd4b71719f691d319b95d26a0f50a37dd4b98add1"
     },
     "publicReadback": {
       "ref": "docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md",
