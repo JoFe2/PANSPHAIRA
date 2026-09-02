@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 40,
+  "graphVersion": 42,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -3587,12 +3587,12 @@
         {
           "path": "tests/external-bi-service.test.ts",
           "role": "VALIDATOR",
-          "sha256": "77b9560e48eecc5a704187121ee1907491503eee305091fce146dac807a02fe8"
+          "sha256": "40a6acfc49a88f5bd3790f9ebd3a75f5e79d801dd2e73a84a5b7e2e56a2c23af"
         },
         {
           "path": "tests/fixtures/external-bi-service-v2-clean-room.json",
           "role": "FIXTURE",
-          "sha256": "a5265dbf05a3bb14de5a8e2fa650278b24c8b47fa35a5e5c399b6c52c2c7acfd"
+          "sha256": "249234661e0b5e945296f03ed5c0425c257e700378f5c8f27a2c8d21d6857f2c"
         },
         {
           "path": "scripts/verify-external-bi-service-v2-clean-room.mjs",
@@ -3603,6 +3603,11 @@
           "path": "docs/EXTERNAL-BI-SERVICE.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "18c98a410edd205f4e677f63853c4e824de1ca752dc6624da383879a46e76c0d"
+        },
+        {
+          "path": "verification/external-bi-service-paired-compatibility-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2b29f7e4bfc49ed3c485e7815b0b83b803815ea76fe8eff97bee7b47487b6c21"
         }
       ],
       "ownedTests": [
@@ -3611,8 +3616,10 @@
       "invariants": [
         "CM remains optional and default-off and addresses only the exact SBA base URL.",
         "PanSphaira owner-derives the versioned product, contract and capability-descriptor profile; endpoint configuration cannot select or attest a substitute profile.",
-        "Canonical attestation and result digests remain exact and bound; unknown, stale, substituted, incomplete, paired-substituted, fully re-digested forged and hostile in-process profiles fail closed.",
-        "CM forwards only status, discovery, analyze, plan, preview and readback; direct Superset routes, credentials, raw rows, SQL and mutation intents are denied."
+        "Exact publicly released PanSphaira and KaleidoSphere heads, fixtures, contracts, capabilities and receipts bind one paired compatibility record.",
+        "Product-version mismatch, unknown pairs, stale or substituted heads, missing evidence and fully or partially re-digested inputs fail closed; no claim exceeds the exact tested pair.",
+        "CM forwards only status, discovery, analyze, plan, preview and readback; direct Superset routes, credentials, raw rows, SQL and mutation intents are denied.",
+        "The paired record performs no production, customer, external, publication or closure effect; final public closure remains separately governed."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
@@ -4658,12 +4665,12 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "d8ba0ae79f9260fc15f2058e9f3a89dbb2a3a5e608d20c5b8c87f64d7d5953dc"
+          "sha256": "160dca9daf283dd88ec6f632798c743c8ec86376a8a2721124c32352bcba68e1"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f88fd12f5c97b1e50e7d665853d666d90fa3f81edb55d801721fe1304f7e8726"
+          "sha256": "465ad39c7a201bc0e8b84e364880b21ecbbbabde448d03dc0cf9b271c2e49803"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -5574,7 +5581,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "62a967fc48278fd24bb60080b0fb1a587949cd8575444e77751e88d0808fd755"
+          "sha256": "a2b4bff62b8c45976beb46b0f8ad2df9bedb9868445aa2477f5bc1dd98d81976"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",

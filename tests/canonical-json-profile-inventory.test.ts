@@ -78,6 +78,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "b19ee3ecb425a4404142b0a5e9edef48c8f22285a57504458c2c5ebd386fa12a",
     reason: "Advance verification DAG generation to graph v41 and canonically own the FND-PS-02 focused input family; the immutable v1 digest remains in the admitted-base fixture.",
   }),
+  Object.freeze({
+    migrationId: "PORTFOLIO-PS337-INTEGRATE/FND-XR-01-INTEGRITY-GENERATOR/V3",
+    path: "scripts/refresh-integrity-data.mjs",
+    profileVersion: 3,
+    fromSha256: "b19ee3ecb425a4404142b0a5e9edef48c8f22285a57504458c2c5ebd386fa12a",
+    toSha256: "4fc07b551e634b9469ee6a4354dce6c2fd9fd03855572ad8bf3b2973a1a9207a",
+    reason: "Advance verification DAG generation to graph v42, canonically bind the FND-XR-01 paired-compatibility evidence, and retain its repository-only pre-closure classification; the admitted v1 and reviewed v2 digests remain immutable.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -100,7 +108,7 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1736, uniquePaths: 1736, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1737, uniquePaths: 1737, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -335,38 +343,64 @@ function validateProfileVersionMigrations(doc: Record<string, unknown>, errors: 
     errors.push("profile-version-migration:missing");
     return;
   }
-  const expectedByPath = new Map(PROFILE_VERSION_MIGRATIONS.map((migration) => [migration.path, migration]));
+  const expectedById = new Map(PROFILE_VERSION_MIGRATIONS.map((migration) => [migration.migrationId, migration]));
   const basePinned = new Map(loadBaseObligations().pinnedProfiles.map((item) => [item.path, item.sha256]));
   const seen = new Set<string>();
-  for (const migrationRaw of migrationsRaw) {
+  migrationsRaw.forEach((migrationRaw, index) => {
     if (typeof migrationRaw !== "object" || migrationRaw === null || Array.isArray(migrationRaw)) {
       errors.push("profile-version-migration:structure");
-      continue;
+      return;
     }
     const migration = migrationRaw as Record<string, unknown>;
+    const migrationId = typeof migration.migrationId === "string" ? migration.migrationId : "";
     const migrationPath = typeof migration.path === "string" ? migration.path : "";
-    const expected = expectedByPath.get(migrationPath);
-    if (expected === undefined || seen.has(migrationPath)) {
-      errors.push(`profile-version-migration:path:${migrationPath || "missing"}`);
-      continue;
+    const expected = expectedById.get(migrationId);
+    if (expected === undefined || seen.has(migrationId)) {
+      errors.push(`profile-version-migration:id:${migrationId || "missing"}`);
+      return;
     }
-    seen.add(migrationPath);
+    seen.add(migrationId);
     const expectedRecord = expected as ProfileVersionMigration;
     if (
       Object.keys(migration).sort(compareStrings).join("\0") !== Object.keys(expectedRecord).sort(compareStrings).join("\0")
       || Object.entries(expectedRecord).some(([key, value]) => migration[key] !== value)
     ) {
-      errors.push(`profile-version-migration:metadata:${migrationPath}`);
+      errors.push(`profile-version-migration:metadata:${migrationId}`);
     }
-    if (basePinned.get(migrationPath) !== expected.fromSha256) {
-      errors.push(`profile-version-migration:base:${migrationPath}`);
+    if (PROFILE_VERSION_MIGRATIONS[index]?.migrationId !== migrationId) {
+      errors.push(`profile-version-migration:order:${migrationId}`);
     }
-    if (expected.fromSha256 === expected.toSha256 || sha256OfFile(migrationPath) !== expected.toSha256) {
-      errors.push(`profile-version-migration:current:${migrationPath}`);
+    if (migrationPath !== expected.path) {
+      errors.push(`profile-version-migration:path:${migrationId}`);
     }
+  });
+
+  const currentByPath = new Map(basePinned);
+  const versionByPath = new Map<string, number>();
+  const migratedPaths = new Set<string>();
+  for (const expected of PROFILE_VERSION_MIGRATIONS) {
+    const previousDigest = currentByPath.get(expected.path);
+    const previousVersion = versionByPath.get(expected.path) ?? 1;
+    if (previousDigest !== expected.fromSha256) {
+      errors.push(`profile-version-migration:chain:${expected.migrationId}`);
+    }
+    if (expected.profileVersion !== previousVersion + 1) {
+      errors.push(`profile-version-migration:version:${expected.migrationId}`);
+    }
+    if (expected.fromSha256 === expected.toSha256) {
+      errors.push(`profile-version-migration:no-op:${expected.migrationId}`);
+    }
+    currentByPath.set(expected.path, expected.toSha256);
+    versionByPath.set(expected.path, expected.profileVersion);
+    migratedPaths.add(expected.path);
   }
   for (const expected of PROFILE_VERSION_MIGRATIONS) {
-    if (!seen.has(expected.path)) errors.push(`profile-version-migration:omitted:${expected.path}`);
+    if (!seen.has(expected.migrationId)) errors.push(`profile-version-migration:omitted:${expected.migrationId}`);
+  }
+  for (const migrationPath of migratedPaths) {
+    if (sha256OfFile(migrationPath) !== currentByPath.get(migrationPath)) {
+      errors.push(`profile-version-migration:current:${migrationPath}`);
+    }
   }
   if (migrationsRaw.length !== PROFILE_VERSION_MIGRATIONS.length) {
     errors.push("profile-version-migration:count");
@@ -847,14 +881,19 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
   }
 });
 
-test("integrity generator v2 migration preserves the immutable admitted v1 obligation", () => {
+test("integrity generator migration chain preserves immutable admitted v1 and reviewed v2 obligations", () => {
   const base = loadBaseObligations();
-  const migration = PROFILE_VERSION_MIGRATIONS[0];
-  assert.ok(migration);
-  assert.equal(base.pinnedProfiles.find(({ path: file }) => file === migration.path)?.sha256, migration.fromSha256);
-  assert.equal(base.byteObligations.find(({ path: file }) => file === migration.path)?.sha256, migration.fromSha256);
-  assert.notEqual(migration.fromSha256, migration.toSha256);
-  assert.equal(sha256OfFile(migration.path), migration.toSha256);
+  const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3]);
+  const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
+  assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
+  let previousDigest = baseDigest;
+  for (const migration of migrations) {
+    assert.equal(migration.fromSha256, previousDigest);
+    assert.notEqual(migration.fromSha256, migration.toSha256);
+    previousDigest = migration.toSha256;
+  }
+  assert.equal(sha256OfFile(migrations.at(-1)!.path), previousDigest);
 });
 
 test("no equivalence claim is made: stance NOT-PROVEN, unicode+number evidence missing", () => {
@@ -910,7 +949,7 @@ test("negative: stale public-Main base fails closed", () => {
 
 test("negative: omitted profile-version migration fails closed", () => {
   assertFails((inv) => {
-    inv.profileVersionMigrations = [];
+    inv.profileVersionMigrations.pop();
   }, "profile-version-migration:");
 });
 
