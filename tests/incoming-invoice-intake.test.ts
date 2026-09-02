@@ -139,7 +139,7 @@ test("AP-02 AC03 fails closed before insertion for malformed, unsupported, tampe
   }
 });
 
-test("AP-02 AC03 atomically denies duplicate content and duplicate supplier identity", async () => {
+test("AP-02 AC03 atomically denies duplicate content and self-consistently rehashed non-frozen bytes", async () => {
   const store = new InMemorySyntheticInvoiceIntakeStoreV1();
   assert.equal((await intakeSyntheticSupplierInvoiceV1(request(), store)).outcome, "ACCEPTED");
   assert.deepEqual(await intakeSyntheticSupplierInvoiceV1(request(), store), {
@@ -150,7 +150,7 @@ test("AP-02 AC03 atomically denies duplicate content and duplicate supplier iden
     bytes: changedBytes,
     claimedSha256: sha256HexV1(changedBytes),
     metadata: { ...request().metadata, documentId: "doc:synthetic:ap-02:second" },
-  }), store), { outcome: "DENIED", reasonCodes: ["DUPLICATE_IDENTITY_DENIED"] });
+  }), store), { outcome: "DENIED", reasonCodes: ["TAMPERED_CONTENT_DENIED"] });
   assert.equal(store.size, 1);
 });
 
@@ -185,6 +185,19 @@ test("AP-02 AC05 reads exact originals separately and denies corrupted readback"
     getByVersionId: async () => ({ ...structuredClone(record), metadata: { ...record.metadata, currency: "USD" } }),
   };
   assert.deepEqual(await readSyntheticSupplierInvoiceV1(record.version.versionId, corruptStore), {
+    outcome: "DENIED", reasonCodes: ["INTEGRITY_READBACK_DENIED"],
+  });
+});
+
+test("AP-02 AC05 denies a valid record returned for a different requested version", async () => {
+  const { record } = await accepted();
+  const wrongKeyStore: SyntheticInvoiceIntakeStoreV1 = {
+    insertIfAbsent: async () => "STORE_ERROR",
+    getByVersionId: async () => structuredClone(record),
+  };
+  const wrongVersionId = `version:sha256:${"0".repeat(64)}`;
+  assert.notEqual(wrongVersionId, record.version.versionId);
+  assert.deepEqual(await readSyntheticSupplierInvoiceV1(wrongVersionId, wrongKeyStore), {
     outcome: "DENIED", reasonCodes: ["INTEGRITY_READBACK_DENIED"],
   });
 });

@@ -5,6 +5,7 @@ export const INCOMING_INVOICE_INTAKE_REQUEST_V1 = "chimpmaera.incoming-invoice/i
 export const INCOMING_INVOICE_INTAKE_RECORD_V1 = "chimpmaera.incoming-invoice/intake-record/v1" as const;
 export const INCOMING_INVOICE_READBACK_V1 = "chimpmaera.incoming-invoice/readback/v1" as const;
 export const AP01_BLUEPRINT_SCHEMA_V1 = "chimpmaera.incoming-invoice/blueprint/v1" as const;
+const AP02_FROZEN_SOURCE_SHA256_V1 = "fad5979234e5ca8d31e2a10e7a9650c5f4f32693610c2fcf2678b0ab5a5f525b";
 
 export type Sha256Hex = string;
 export interface SyntheticSourceProvenanceV1 {
@@ -144,7 +145,7 @@ export async function intakeSyntheticSupplierInvoiceV1(candidate: unknown, store
   if (!provenanceIsExactV1(request.provenance)) return deny("NON_SYNTHETIC_PROVENANCE_DENIED");
   const ownedBytes = Uint8Array.from(request.bytes);
   const contentSha256 = sha256HexV1(ownedBytes);
-  if (!digestMatchesV1(request.claimedSha256, contentSha256)) return deny("TAMPERED_CONTENT_DENIED");
+  if (!digestMatchesV1(request.claimedSha256, contentSha256) || !digestMatchesV1(AP02_FROZEN_SOURCE_SHA256_V1, contentSha256)) return deny("TAMPERED_CONTENT_DENIED");
   if (request.identityCandidates.length !== 1) return deny("AMBIGUOUS_IDENTITY_DENIED");
   const identityCandidate = request.identityCandidates[0]!;
   if (!validIdentityV1(identityCandidate) || !validMetadataV1(request.metadata)) return deny("INVALID_METADATA_DENIED");
@@ -177,7 +178,7 @@ export async function readSyntheticSupplierInvoiceV1(versionId: string, store: S
   const metadataDigest = canonicalDigestV1(stored.metadata);
   const expectedVersionId = `version:sha256:${canonicalDigestV1({ documentId: stored.document.documentId, ordinal: stored.version.ordinal, contentSha256: stored.version.contentSha256, metadataDigest, identityDigest })}`;
   const { recordDigest: _recordDigest, ...unsignedRecord } = stored;
-  const valid = sha256HexV1(decoded) === stored.version.contentSha256 && decoded.byteLength === stored.version.byteLength && metadataDigest === stored.version.metadataDigest && identityDigest === stored.supplierInvoiceIdentity.identityDigest && expectedVersionId === stored.version.versionId && canonicalDigestV1(unsignedRecord) === stored.recordDigest;
+  const valid = versionId === stored.version.versionId && sha256HexV1(decoded) === stored.version.contentSha256 && decoded.byteLength === stored.version.byteLength && metadataDigest === stored.version.metadataDigest && identityDigest === stored.supplierInvoiceIdentity.identityDigest && expectedVersionId === stored.version.versionId && canonicalDigestV1(unsignedRecord) === stored.recordDigest;
   if (!valid) return deepFreeze({ outcome: "DENIED" as const, reasonCodes: ["INTEGRITY_READBACK_DENIED"] as const });
   return deepFreeze({ outcome: "FOUND" as const, schemaVersion: INCOMING_INVOICE_READBACK_V1, bindings: { recordDigest: stored.recordDigest, versionId: stored.version.versionId, contentSha256: stored.version.contentSha256, metadataDigest: stored.version.metadataDigest, supplierInvoiceIdentityDigest: stored.supplierInvoiceIdentity.identityDigest }, original: { ...structuredClone(stored.original), byteLength: stored.version.byteLength }, derived: structuredClone(stored.derived) });
 }
