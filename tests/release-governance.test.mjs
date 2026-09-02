@@ -122,15 +122,24 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.match(readme, /open-ended,\s+user-need-driven option space/);
   assert.match(readme, /unverified knowledge record may exist without becoming an authoritative\s+default/);
   assert.match(readme, /Adapt any process\. Prove what works\./);
+  assert.match(readme, /WORK IN PROGRESS · PLANNED · SHORT-TERM PROOF/);
+  assert.match(readme, /PanSphaira is building a governed path from individual needs/);
+  assert.doesNotMatch(readme, /PanSphaira turns individual needs/);
+  assert.doesNotMatch(readme, /It turns these inputs into a Capability or Process Blueprint/);
+  assert.match(readme, /github\.com\/JoFe2\/PANSPHAIRA\/issues\/360/);
+  for (const issue of [361, 362, 363, 364, 365, 366]) {
+    assert.match(readme, new RegExp(`github\\.com/JoFe2/PANSPHAIRA/issues/${issue}`));
+  }
+  assert.match(readme, /Remove this work-in-progress marker only after #366 has a public local-synthetic PoC release and anonymous readback/);
   assert.match(readme, /docs\/INCOMING-INVOICE-PROVING-GROUND\.md/);
   assert.match(readme, /https:\/\/github\.com\/JoFe2\/KaleidoSphere/);
   assert.match(hierarchySource, /ROWS · SHARED HIERARCHY/);
   assert.match(hierarchySource, /COLUMNS · APPLICATION-SPECIFIC INSTANTIATIONS/);
   assert.match(hierarchySource, /t=q\.get\('theme'\)\|\|'blueprint'/);
   assert.doesNotMatch(hierarchySource, /<(?:script|img)[^>]+(?:src|href)="https?:\/\//i);
-  assert.match(incomingInvoice, /`PLANNED_NOT_DELIVERED`/);
+  assert.match(incomingInvoice, /`WORK_IN_PROGRESS_PLANNED_NOT_DELIVERED`/);
   assert.match(incomingInvoice, /Work-package specifications \| `6\/6` planned/);
-  assert.match(incomingInvoice, /Public AP implementation issues \| `0\/6`/);
+  assert.match(incomingInvoice, /Public AP implementation issues \| `6\/6` open/);
   assert.doesNotMatch(readme, /\b(?:infinite|one-click|minutes?|hours?|production-ready)\b/i);
   assert.ok(words.length >= 600 && words.length <= 1000, `README_WORD_COUNT:${words.length}`);
   assert.ok(h2s.length <= 8, `README_H2_COUNT:${h2s.length}`);
