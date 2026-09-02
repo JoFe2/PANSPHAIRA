@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 42,
+  "graphVersion": 43,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d52bf16177c5a78109677fe50b19149979a463baffa14cfb052a0bac2c6f50b9"
+          "sha256": "5d3f7000b2c76c378d6c3785378eb3bf1acb5d8db7591f4c7003acbabbe5ae55"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3774,7 +3774,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "45771fa4ba6726762279eb3ae3ca2be75e593e9c6852c720d32b99c3346d37a4"
+          "sha256": "c09cedbe4ed2578d5a3959e106671cf88d968f07994dd92caa744cdf970d9858"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3949,7 +3949,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "07885c7b6bb680291d5885e94ee069a76089aee993f6a40dc6ddfd409a95bb27"
+          "sha256": "c4aa0a2b811a0c53e6a315b477cbb475a6334a7ac01115040784356e6622c2f4"
         }
       ],
       "ownedTests": [
@@ -3974,7 +3974,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "c91c6eb30d3038f367a0e7bc56ba3c27ed778a530efb1d0a2919133cdbac7cfe"
+          "sha256": "17943a42888dbe6da2edc0b24d9cfce79fd9d08ffe060324637847a2532bf4f7"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -4635,12 +4635,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "89f5d5943193c292694d5de36fcadcf9e94ac6ea58b7cab6ea1becffe0fd447c"
+          "sha256": "1f9fb40ad9ed0f29644139f48969b84ca3e8a0749b3935a5494b92bd8539797e"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "156f59d2779c85808f2eb36d2f67dc23fb098c4bbfa953cbba7b77f1e54aa9e1"
+          "sha256": "2be86952fbc5050b406261f6fd5b8512f2d6bdcad1cc2c0b11332ab9c9d3d419"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4665,17 +4665,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "2d6414f8e9d1a5d9a28b17f11a9a628a5a82b7cb3911cfac5edfbfff416642d0"
+          "sha256": "7f0612de8d8ec962ff631c8f9f14994b4485512ed5a4d992575aaca1edcca276"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "0993e9bd0a57b6c09e13e9e09a341e8e43a445d538fba975f691f4b9c2c8c7ee"
+          "sha256": "926b83654c5b24cf2d129c0fb2fb4496f156b062a5104cb8abc627108f2d1bb5"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "21c73126c32c355e79d044a8d586f64a60ec7859f35aad14632a47cbfabf9ac8"
+          "sha256": "6abf9ab7d575040d4a68c96570e9371fdc417ff30b2b3784723a2cb1351a3a5d"
         }
       ],
       "ownedTests": [
@@ -5221,7 +5221,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "708c876d3c9344c66d024358e98748994604c2141652ba7f59f8aa465b08c149"
+          "sha256": "bb6b034b8121470678a89323973ddbed1bec1cc594dc8517d96a001685a69af7"
         },
         {
           "path": "package-lock.json",
@@ -5581,7 +5581,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "2598c4c59579fa3740de65a82aae0ac282d536dda6dcd21e2a480c25800ca909"
+          "sha256": "5c863c164e50ce7c0b2caf44fba46ccec50a89c01386e9efd7c6f10ade78bdcb"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5670,6 +5670,44 @@
         "Only the exact frozen local-synthetic invoice bytes and provenance may enter the AP intake record.",
         "Document version, content, metadata and supplier-invoice identity remain exact-bound through readback.",
         "Duplicate, tampered, unsupported and ambiguous input fails closed; unextracted fields remain explicit UNKNOWN values."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ap-03-incoming-invoice-extraction-benchmark-v1",
+      "dependsOn": [
+        "ap-02-incoming-invoice-intake-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-extraction-benchmark.ts",
+          "role": "CONTRACT",
+          "sha256": "f64575a455e69906f930d8b9c0b6303a73c1a3896d98a9b451aee488229b52df"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "ef553e35ecaf171f097f1ef78803087116b877588b65717177d9b9aa3e454e81"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-03-holdout-v1.json",
+          "role": "FIXTURE",
+          "sha256": "41959bab323542694b120f8d55314620c214f3a44f7c8d36270e47ac8f9b9edb"
+        },
+        {
+          "path": "tests/incoming-invoice-extraction-benchmark.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "0773cbd6345fb90512d69f8199f9a80f8d3345587f63e19a4a5eac6a52e456ac"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice-extraction:test"
+      ],
+      "invariants": [
+        "The exact frozen local-synthetic holdout covers layout, line items, taxes, totals and explicit failure cases.",
+        "Deterministic baseline and bounded synthetic model proposals are scored against internally derived exact denominators.",
+        "Every proposal is independently validated, remains non-authoritative and grants no customer-data, provider, allocation or posting authority."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

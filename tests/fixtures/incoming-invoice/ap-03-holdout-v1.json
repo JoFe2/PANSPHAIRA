@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "chimpmaera.incoming-invoice/extraction-holdout/v1",
+  "holdoutId": "ap-03-local-synthetic-holdout-v1",
+  "frozenAt": "2026-09-02T00:00:00.000Z",
+  "sourceBinding": {
+    "sourceId": "source:synthetic:ap-02:supplier-invoice-v1",
+    "sourceSha256": "fad5979234e5ca8d31e2a10e7a9650c5f4f32693610c2fcf2678b0ab5a5f525b",
+    "supplierId": "SYN-SUP-001",
+    "invoiceNumber": "SYN-INV-2026-0001"
+  },
+  "authority": {
+    "mode": "LOCAL_SYNTHETIC_PROOF",
+    "customerData": false,
+    "externalProvider": false,
+    "productivePosting": false
+  },
+  "cases": [
+    {
+      "caseId": "layout-table-single-tax",
+      "document": "LAYOUT=TABLE\nLINE=Widget A|2|1000|2000\nTAX=20|2000|400\nTOTAL=2000|400|2400",
+      "expected": {
+        "disposition": "VALID",
+        "extraction": {
+          "layout": "TABLE",
+          "lineItems": [{ "description": "Widget A", "quantity": 2, "unitAmountMinor": 1000, "netAmountMinor": 2000 }],
+          "taxes": [{ "rateBasisPoints": 2000, "baseAmountMinor": 2000, "taxAmountMinor": 400 }],
+          "totals": { "netAmountMinor": 2000, "taxAmountMinor": 400, "grossAmountMinor": 2400 }
+        }
+      }
+    },
+    {
+      "caseId": "layout-compact-multi-line",
+      "document": "LAYOUT=COMPACT\nLINE=Part B|1|500|500\nLINE=Service C|3|200|600\nTAX=10|1100|110\nTOTAL=1100|110|1210",
+      "expected": {
+        "disposition": "VALID",
+        "extraction": {
+          "layout": "COMPACT",
+          "lineItems": [
+            { "description": "Part B", "quantity": 1, "unitAmountMinor": 500, "netAmountMinor": 500 },
+            { "description": "Service C", "quantity": 3, "unitAmountMinor": 200, "netAmountMinor": 600 }
+          ],
+          "taxes": [{ "rateBasisPoints": 1000, "baseAmountMinor": 1100, "taxAmountMinor": 110 }],
+          "totals": { "netAmountMinor": 1100, "taxAmountMinor": 110, "grossAmountMinor": 1210 }
+        }
+      }
+    },
+    {
+      "caseId": "layout-tax-exempt",
+      "document": "LAYOUT=TAX_EXEMPT\nLINE=Training|1|7500|7500\nTAX=0|7500|0\nTOTAL=7500|0|7500",
+      "expected": {
+        "disposition": "VALID",
+        "extraction": {
+          "layout": "TAX_EXEMPT",
+          "lineItems": [{ "description": "Training", "quantity": 1, "unitAmountMinor": 7500, "netAmountMinor": 7500 }],
+          "taxes": [{ "rateBasisPoints": 0, "baseAmountMinor": 7500, "taxAmountMinor": 0 }],
+          "totals": { "netAmountMinor": 7500, "taxAmountMinor": 0, "grossAmountMinor": 7500 }
+        }
+      }
+    },
+    {
+      "caseId": "failure-total-mismatch",
+      "document": "LAYOUT=TABLE\nLINE=Broken total|1|1000|1000\nTAX=20|1000|200\nTOTAL=1000|200|9999",
+      "expected": { "disposition": "REJECTED", "reasonCode": "VALIDATION_TOTAL_MISMATCH" }
+    },
+    {
+      "caseId": "failure-unsupported-layout",
+      "document": "LAYOUT=FREEFORM\nLINE=Unknown|1|100|100\nTAX=20|100|20\nTOTAL=100|20|120",
+      "expected": { "disposition": "REJECTED", "reasonCode": "LAYOUT_UNSUPPORTED" }
+    }
+  ]
+}

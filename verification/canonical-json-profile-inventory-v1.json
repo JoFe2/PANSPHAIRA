@@ -58,6 +58,14 @@
       "fromSha256": "11805df03d04b7c862645f25304b0c81a252535c7f48bdf72df81e9f72b8a216",
       "toSha256": "1bb497ec42c16f2865502234404302af10da4a75f1fe293fc03bfa9dede195a2",
       "reason": "Advance the Verification DAG to graph v42 and canonically own the AP-02 frozen local-synthetic incoming-invoice intake family."
+    },
+    {
+      "migrationId": "AP-03-INTEGRATE/INCOMING-INVOICE-EXTRACTION-INTEGRITY-GENERATOR/V6",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 6,
+      "fromSha256": "1bb497ec42c16f2865502234404302af10da4a75f1fe293fc03bfa9dede195a2",
+      "toSha256": "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69",
+      "reason": "Advance the Verification DAG to graph v43 and canonically own the AP-03 frozen local-synthetic extraction benchmark family."
     }
   ],
   "scanScope": {
@@ -100,15 +108,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 602,
+    "filesScanned": 604,
     "declarationSites": 36,
     "declarationFiles": 36,
     "importSites": 197,
     "importFiles": 196,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1749,
-    "ledgerUniquePaths": 1749
+    "ledgerEntries": 1753,
+    "ledgerUniquePaths": 1753
   },
   "profiles": [
     {
@@ -181,7 +189,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "1bb497ec42c16f2865502234404302af10da4a75f1fe293fc03bfa9dede195a2"
+      "sha256": "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -774,7 +782,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "1bb497ec42c16f2865502234404302af10da4a75f1fe293fc03bfa9dede195a2",
+      "sha256": "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69",
       "basis": "profile-version-migration"
     },
     {
