@@ -61,6 +61,19 @@ test("public release builder binds its exact file count to the manifest", () => 
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
+test("E-FND-1 exact-input closure bytes are explicitly repository-only", () => {
+  const repositoryOnlyPaths = [
+    "tests/trust-compatibility-foundation-closure.test.ts",
+    "verification/trust-compatibility-foundation-closure-v1.json",
+  ];
+  const manifest = readFileSync(join(ROOT, "release", "public-files.manifest"), "utf8").split("\n");
+  const builder = readFileSync(join(ROOT, "scripts", "build-public-release.sh"), "utf8");
+  for (const path of repositoryOnlyPaths) {
+    assert.equal(manifest.filter((line) => line.startsWith(`${path}\t`)).length, 0, path);
+    assert.ok(builder.includes(`    "${path}",`), `repository-only classification: ${path}`);
+  }
+});
+
 test("Verification Fabric release truth delegates volatile Shadow progress to its issue", () => {
   const governance = JSON.parse(readFileSync(join(ROOT, "release", "governance.json"), "utf8"));
   const verification = governance.claimEvidence.find(({ claimId }) => claimId === "CM-REL-004");

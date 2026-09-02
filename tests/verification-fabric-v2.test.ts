@@ -63,7 +63,7 @@ test("AWI-03 knowledge changes select the bounded critical owner and hard gates"
   const result = plan(["packages/contracts/src/knowledge-envelope.ts"]);
   assert.equal(result.mode, "IMPACTED_SHADOW");
   assert.deepEqual(result.selectedNodes, ["awi-03-knowledge-envelope", "awi-plugin-01-knowledge-harvest-v1", "cks-02-local-knowledge-fabric-closure-v1", "cks-03-fresh-synthetic-qualification-v1", "cks-04-no-finetune-runtime-baseline-v1", "cks-05-comparative-falsification-v1", "cks-07-empty-kb-sufficiency-v1", "cks-08-usage-lineage-attribution-v1", "cks-09-task-pattern-proof-v1", "cks-10-readonly-analytics-bridge-v1", "cks-11-governed-workflow-function-v1", "cks-12-closed-learning-loop-v1", "cks-m1-parent-closure-v1", "cscl-01-cross-system-protocol-freeze-v1", "cscl-02-odoo-source-native-profile-v1", "cscl-03-erpnext-source-native-profile-v1", "cscl-04-dolibarr-source-native-profile-v1", "cscl-05-tryton-source-native-profile-v1", "cscl-06-ofbiz-source-native-profile-v1", "cscl-07-cross-system-semantic-matrix-v1", "cscl-08-party-candidate-v1", "cscl-09-product-candidate-v1", "cscl-10-sales-candidate-v1", "lkc-files-01-local-file-corpus", "lkc-wiki-01-governed-local-edition-v1", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "rks-01-real-source-protocol-falsification-v1", "rks-02-core-small-vs-raw-falsification-v1", "secure-default-proof"]);
-  assert.deepEqual(result.selectedTests, ["node --test dist/tests/canonical-json-profile-inventory.test.js", "node --test tests/supply-chain-verifier.test.mjs", "npm run cks02:test", "npm run cks03:test", "npm run cks04:test", "npm run cks05:test", "npm run cks07:test", "npm run cks08:test", "npm run cks09:test", "npm run cks10:test", "npm run cks11:test", "npm run cks12:test", "npm run cksm1:test", "npm run cscl01:test", "npm run cscl02:test", "npm run cscl03:test", "npm run cscl04:test", "npm run cscl05:test", "npm run cscl06:test", "npm run cscl07:test", "npm run cscl08:test", "npm run cscl09:test", "npm run cscl10:test", "npm run fnd-ps-fu-01:test", "npm run knowledge-envelope:test", "npm run local-file-corpus:test", "npm run openclaw-m1.4:test", "npm run openclaw-m1.5:evidence", "npm run openclaw-m1.5:test", "npm run plugin-knowledge-harvest:test", "npm run proof:secure-default", "npm run release-governance:test", "npm run rks01:test", "npm run rks02:test", "npm run wiki:test"]);
+  assert.deepEqual(result.selectedTests, ["node --test dist/tests/canonical-json-profile-inventory.test.js", "node --test tests/supply-chain-verifier.test.mjs", "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js", "npm run cks02:test", "npm run cks03:test", "npm run cks04:test", "npm run cks05:test", "npm run cks07:test", "npm run cks08:test", "npm run cks09:test", "npm run cks10:test", "npm run cks11:test", "npm run cks12:test", "npm run cksm1:test", "npm run cscl01:test", "npm run cscl02:test", "npm run cscl03:test", "npm run cscl04:test", "npm run cscl05:test", "npm run cscl06:test", "npm run cscl07:test", "npm run cscl08:test", "npm run cscl09:test", "npm run cscl10:test", "npm run fnd-ps-fu-01:test", "npm run knowledge-envelope:test", "npm run local-file-corpus:test", "npm run openclaw-m1.4:test", "npm run openclaw-m1.5:evidence", "npm run openclaw-m1.5:test", "npm run plugin-knowledge-harvest:test", "npm run proof:secure-default", "npm run release-governance:test", "npm run rks01:test", "npm run rks02:test", "npm run wiki:test"]);
   assert.deepEqual(result.hardGates, [...graph().hardGates].sort((a, b) => a.localeCompare(b, "en")));
 });
 
@@ -318,6 +318,18 @@ test("external BI v2 client changes select only the thin client and downstream i
   assert.equal(result.mode, "IMPACTED_SHADOW");
   assert.deepEqual(result.selectedNodes, ["external-bi-service-v2", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "secure-default-proof"]);
   assert.ok(result.selectedTests.includes("npm run external-bi-service:test"));
+});
+
+test("E-FND-1 cumulative evidence changes select the exact repository-integrity owner and focused suite", () => {
+  for (const changed of [
+    "tests/trust-compatibility-foundation-closure.test.ts",
+    "verification/trust-compatibility-foundation-closure-v1.json",
+  ]) {
+    const result = plan([changed]);
+    assert.equal(result.mode, "IMPACTED_SHADOW", changed);
+    assert.deepEqual(result.selectedNodes, ["openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "secure-default-proof"]);
+    assert.ok(result.selectedTests.includes("npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js"), changed);
+  }
 });
 
 test("both canonical JSON implementations invalidate the M1.4 node and secure-default closure", () => {

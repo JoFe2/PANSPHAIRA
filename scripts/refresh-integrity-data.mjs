@@ -271,6 +271,34 @@ externalBiNode.invariants = [
   "CM forwards only status, discovery, analyze, plan, preview and readback; direct Superset routes, credentials, raw rows, SQL and mutation intents are denied.",
   "The paired record performs no production, customer, external, publication or closure effect; final public closure remains separately governed.",
 ];
+const foundationClosureInputs = [
+  ["tests/trust-compatibility-foundation-closure.test.ts", "VALIDATOR"],
+  ["verification/trust-compatibility-foundation-closure-v1.json", "DERIVED_EVIDENCE"],
+];
+for (const [inputPath, role] of foundationClosureInputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) {
+    throw new Error(`E_FND_1_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  }
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+for (const dependency of ["cks-12-closed-learning-loop-v1", "external-bi-service-v2"]) {
+  if (!repositoryIntegrityNode.dependsOn.includes(dependency)) repositoryIntegrityNode.dependsOn.push(dependency);
+}
+repositoryIntegrityNode.dependsOn.sort((left, right) => left.localeCompare(right, "en"));
+const foundationClosureTest = "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js";
+if (!repositoryIntegrityNode.ownedTests.includes(foundationClosureTest)) repositoryIntegrityNode.ownedTests.push(foundationClosureTest);
+const foundationClosureInvariants = [
+  "All seven child acceptance sets are uniquely owned, dependency-correct and bound to exact issue-thread, PR, CI, merge, release, tag and anonymous-readback evidence.",
+  "Queue-backed children require terminal unowned DONE rows; PACKAGE_DONE never substitutes, while pre-campaign direct-Control-Lane children retain explicit no-row terminal reconciliation without invented Queue history.",
+  "Missing, duplicate, stale, substituted, UNKNOWN, re-digested or post-validation-mutated child evidence fails closed.",
+  "Daily release sequence, additive protected history, exact-evidence rules and bounded nonclaims remain intact without productive effects or Authority widening.",
+  "This integration record does not close parent issue 333; E-FND-1-AC05 remains with the delivery and Root-QS final owner.",
+];
+for (const invariant of foundationClosureInvariants) {
+  if (!repositoryIntegrityNode.invariants.includes(invariant)) repositoryIntegrityNode.invariants.push(invariant);
+}
 const cks12Node = dag.nodes.find(({ id }) => id === "cks-12-closed-learning-loop-v1");
 if (cks12Node === undefined) throw new Error("CKS_12_DAG_NODE_MISSING");
 const cks12FocusedInputs = [
@@ -531,7 +559,9 @@ for (const relative of [
   "scripts/refresh-integrity-data.mjs",
   "docs/development/cap-cell-erp-01-pdca.md",
   "docs/development/vf-m2-adaptive-evidence-gates-pdca.md",
+  "tests/trust-compatibility-foundation-closure.test.ts",
   "verification/external-bi-service-paired-compatibility-v1.json",
+  "verification/trust-compatibility-foundation-closure-v1.json",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);

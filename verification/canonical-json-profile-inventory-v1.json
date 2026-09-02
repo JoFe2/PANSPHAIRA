@@ -66,6 +66,14 @@
       "fromSha256": "1bb497ec42c16f2865502234404302af10da4a75f1fe293fc03bfa9dede195a2",
       "toSha256": "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69",
       "reason": "Advance the Verification DAG to graph v43 and canonically own the AP-03 frozen local-synthetic extraction benchmark family."
+    },
+    {
+      "migrationId": "PORTFOLIO-PS333-INTEGRATE/E-FND-1-CUMULATIVE-CLOSURE/V7",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 7,
+      "fromSha256": "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69",
+      "toSha256": "fc0c76558346b3d6487b577a5283569f282fa5b3385b1f79de8efcae8d61ffa2",
+      "reason": "Retain the current-Main graph v43 compatibility contract while canonically binding the repository-only E-FND-1 cumulative closure inputs to the existing repository-integrity owner after all seven child terminal chains; admitted v1 and reviewed v2-v6 digests remain immutable."
     }
   ],
   "scanScope": {
@@ -99,24 +107,24 @@
     "declarationFiles": 80,
     "importSites": 172,
     "importFiles": 171,
-    "note": "Historical lexical counts are hints only; the fresh mechanical scan supersedes them (36/36 declaration sites/files; 197/196 import sites/files)."
+    "note": "Historical lexical counts are hints only; the fresh mechanical scan supersedes them (36/36 declaration sites/files; 198/197 import sites/files)."
   },
   "uncertainty": [
     "Ad-hoc grep methods disagree on declaration/import counts; the scanner embedded in tests/canonical-json-profile-inventory.test.ts is the single source of truth.",
-    "Current SHA256SUMS is normalized to 1744 unique ./-prefixed paths with no duplicate or conflicting path digests.",
+    "Current SHA256SUMS is normalized to 1755 unique ./-prefixed paths with no duplicate or conflicting path digests.",
     "Owner families derive mechanically from the second path segment under src/, packages/, tools/ (e.g. 'cks' spans src/cks and packages/cks).",
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 604,
+    "filesScanned": 605,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 197,
-    "importFiles": 196,
+    "importSites": 198,
+    "importFiles": 197,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1753,
-    "ledgerUniquePaths": 1753
+    "ledgerEntries": 1755,
+    "ledgerUniquePaths": 1755
   },
   "profiles": [
     {
@@ -189,7 +197,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69"
+      "sha256": "fc0c76558346b3d6487b577a5283569f282fa5b3385b1f79de8efcae8d61ffa2"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -488,8 +496,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 39,
-      "importFiles": 38
+      "importSites": 40,
+      "importFiles": 39
     },
     {
       "owner": "usage-insights",
@@ -782,7 +790,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69",
+      "sha256": "fc0c76558346b3d6487b577a5283569f282fa5b3385b1f79de8efcae8d61ffa2",
       "basis": "profile-version-migration"
     },
     {

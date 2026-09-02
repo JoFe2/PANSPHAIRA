@@ -4615,6 +4615,7 @@
     {
       "id": "repository-integrity",
       "dependsOn": [
+        "cks-12-closed-learning-loop-v1",
         "cscl-08-party-candidate-v1",
         "cscl-09-product-candidate-v1",
         "cscl-10-sales-candidate-v1",
@@ -4628,6 +4629,11 @@
       ],
       "inputs": [
         {
+          "path": "docs/architecture/canonical-json-profile-inventory.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "98f53741b543fb6037233a9184125a7d77ae04abd2bfb5461e00a03f89d1dd69"
+        },
+        {
           "path": "release/governance.json",
           "role": "CONTRACT",
           "sha256": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7"
@@ -4640,7 +4646,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "2be86952fbc5050b406261f6fd5b8512f2d6bdcad1cc2c0b11332ab9c9d3d419"
+          "sha256": "268baecc62e9b174b0cc6956cee842ae3b326f81c0213cf6b9e4e19a00aaf6b4"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4653,9 +4659,9 @@
           "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641"
         },
         {
-          "path": "docs/architecture/canonical-json-profile-inventory.md",
-          "role": "DERIVED_EVIDENCE",
-          "sha256": "98f53741b543fb6037233a9184125a7d77ae04abd2bfb5461e00a03f89d1dd69"
+          "path": "tests/canonical-json-profile-inventory.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "878c544ac0ff77b1c1928525bed75e99f8da012bce612e03528aa73213ced66b"
         },
         {
           "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
@@ -4663,29 +4669,40 @@
           "sha256": "082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3"
         },
         {
-          "path": "verification/canonical-json-profile-inventory-v1.json",
-          "role": "CONTRACT",
-          "sha256": "7f0612de8d8ec962ff631c8f9f14994b4485512ed5a4d992575aaca1edcca276"
-        },
-        {
-          "path": "tests/canonical-json-profile-inventory.test.ts",
-          "role": "VALIDATOR",
-          "sha256": "926b83654c5b24cf2d129c0fb2fb4496f156b062a5104cb8abc627108f2d1bb5"
-        },
-        {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "6abf9ab7d575040d4a68c96570e9371fdc417ff30b2b3784723a2cb1351a3a5d"
+          "sha256": "55aaa6f926b29707f6dae13424c8600c113fe93d147b789a530cda036ddfe7aa"
+        },
+        {
+          "path": "tests/trust-compatibility-foundation-closure.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "1f629c9dea53ec46f14d3dcf5e1bb69812fcc8f25c4cd6c79233f30336ef377e"
+        },
+        {
+          "path": "verification/canonical-json-profile-inventory-v1.json",
+          "role": "CONTRACT",
+          "sha256": "1c712564926872812b731336413b139e3a064de8b5e7efa4281d9cf15bc5f9e8"
+        },
+        {
+          "path": "verification/trust-compatibility-foundation-closure-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e2db063c7522c82801ffd1243b3205c3f86cb42dacb442b5afbd76bfe78814e0"
         }
       ],
       "ownedTests": [
         "npm run release-governance:test",
         "node --test tests/supply-chain-verifier.test.mjs",
-        "node --test dist/tests/canonical-json-profile-inventory.test.js"
+        "node --test dist/tests/canonical-json-profile-inventory.test.js",
+        "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
-        "Repository checksums and release governance fail closed."
+        "Repository checksums and release governance fail closed.",
+        "All seven child acceptance sets are uniquely owned, dependency-correct and bound to exact issue-thread, PR, CI, merge, release, tag and anonymous-readback evidence.",
+        "Queue-backed children require terminal unowned DONE rows; PACKAGE_DONE never substitutes, while pre-campaign direct-Control-Lane children retain explicit no-row terminal reconciliation without invented Queue history.",
+        "Missing, duplicate, stale, substituted, UNKNOWN, re-digested or post-validation-mutated child evidence fails closed.",
+        "Daily release sequence, additive protected history, exact-evidence rules and bounded nonclaims remain intact without productive effects or Authority widening.",
+        "This integration record does not close parent issue 333; E-FND-1-AC05 remains with the delivery and Root-QS final owner."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false
@@ -5221,7 +5238,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "bb6b034b8121470678a89323973ddbed1bec1cc594dc8517d96a001685a69af7"
+          "sha256": "b31125b07f468e1286bf44b1adb08334e90dbd1a8bcb170ed805e9869bf5165b"
         },
         {
           "path": "package-lock.json",
@@ -5581,7 +5598,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5c863c164e50ce7c0b2caf44fba46ccec50a89c01386e9efd7c6f10ade78bdcb"
+          "sha256": "7e04dc567cbcfb558c1ff4f91e448cd1ca6d18dd4bacae030f2a9178c8400101"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
