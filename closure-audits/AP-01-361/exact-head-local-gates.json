@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "pansphaira.issue-closure/exact-head-local-gates/v1",
+  "issue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 361,
+    "acceptanceIds": [
+      "AP-01-AC01",
+      "AP-01-AC02",
+      "AP-01-AC03",
+      "AP-01-AC04",
+      "AP-01-AC05"
+    ]
+  },
+  "closureOwner": "sol",
+  "noIssuePingPong": true,
+  "responsibleUntil": "ISSUE_CLOSED_AND_QUEUE_DONE",
+  "reviewCount": 1,
+  "currentMainBase": "d4859743777c0c9ff278aac0693541ceb0ee4c9d",
+  "testedProductHead": "62d0d11b06946afd9cf10c11f89d03348b287b09",
+  "testedTree": "c5bd01c02a9933e98ecc1b5b50a1850ec941ae9c",
+  "review": {
+    "classification": "PASS_AFTER_FIX_FORWARD",
+    "finding": "The prepared implementation used generic intake/normalization/approval/preview layers instead of the frozen eight-stage incoming-invoice proof chain and did not register its focused test canonically.",
+    "correction": "A meaningful RED required the exact Source-to-receipt stages and canonical npm test registration; the implementation, schema, manifest, Verification DAG owner and nested integrity expectations were corrected and independently rerun."
+  },
+  "tdd": {
+    "red": [
+      "incoming-invoice suite: 2 expected failures for the frozen layer sequence and missing canonical registration",
+      "Verification DAG focused regression: FULL_FALLBACK instead of the AP-01 owner",
+      "canonical full suite: stale graph-version and integrity-census expectations"
+    ],
+    "green": [
+      "npm run incoming-invoice:test: 5/5 PASS",
+      "AP-01 Verification DAG selection regression: 1/1 PASS",
+      "canonical inventory regression: 35/35 PASS",
+      "nested video reference suite: 116/116 PASS"
+    ]
+  },
+  "gates": [
+    { "command": "npm run incoming-invoice:test", "outcome": "PASS", "tests": 5 },
+    { "command": "npm run verification:plan", "outcome": "PASS", "mode": "FULL_FALLBACK", "nodes": 50 },
+    { "command": "npm run release-governance:test", "outcome": "PASS", "tests": 52 },
+    { "command": "npm run supply-chain:verify", "outcome": "PASS" },
+    { "command": "sha256sum -c SHA256SUMS", "outcome": "PASS", "entries": 1744 },
+    { "command": "isolated public release staging", "outcome": "PASS", "publicFiles": 1438 },
+    { "command": "npm test", "outcome": "PASS" },
+    { "command": "git diff --check", "outcome": "PASS" }
+  ],
+  "nonclaims": [
+    "Local synthetic Blueprint and scenario resolution only.",
+    "No customer data, external provider call or live-system compatibility is evidenced.",
+    "No productive allocation, accounting posting or booking authority is granted.",
+    "AP-02 through AP-06 and the end-to-end PoC verdict remain unproved."
+  ],
+  "requiredDeliveryGates": [
+    "exact PR-head CI PASS",
+    "SHA-bound merge",
+    "exact merge-head CI PASS",
+    "serial daily release",
+    "anonymous tag-to-merge-SHA and issue-state readback",
+    "issue CLOSED and queue reconciliation"
+  ],
+  "recordedAt": "2026-09-02T09:04:37+02:00"
+}
