@@ -110,9 +110,9 @@ function verifyEntrypointBinding() {
   assert(process.env.GH_TOKEN === undefined, "GH_TOKEN_MUST_BE_UNSET");
   const source = readFileSync(resolve(ROOT, ENTRYPOINT), "utf8");
   for (const requiredSource of [
-    "export async function verifyPublicReadback(root = process.cwd()) {",
-    "if (process.env.GH_TOKEN && publicReadback) throw new Error(\"PUBLIC_READBACK_REQUIRES_GH_TOKEN_UNSET\");",
-    "if (publicReadback) console.log(JSON.stringify(await verifyPublicReadback(process.cwd()), null, 2));",
+    "export async function verifyPublicReadback(root = process.cwd(), options = {}) {",
+    "if ((process.env.GH_TOKEN || process.env.GITHUB_TOKEN) && publicReadback) {",
+    "console.log(JSON.stringify(await verifyPublicReadback(process.cwd(), { releaseTag, requireConforming }), null, 2));",
   ]) assert(source.includes(requiredSource), "READBACK_ENTRYPOINT_UNBOUND");
 }
 

@@ -1,6 +1,140 @@
 {
-  "schemaVersion": "chimpmaera.release-governance/v1",
+  "schemaVersion": "chimpmaera.release-governance/v2",
   "repository": "JoFe2/PANSPHAIRA",
+  "releaseTaxonomy": {
+    "schemaVersion": "chimpmaera.release-taxonomy/v1",
+    "githubLatestOwnerClass": "SOURCE_EVIDENCE_ONLY",
+    "classes": [
+      {
+        "id": "REGULAR_RUNNABLE_ARTIFACT",
+        "runnable": true,
+        "evidenceOnly": false,
+        "githubLatestPolicy": "ELIGIBLE_ONLY_WHEN_DESIGNATED_OWNER",
+        "assetContract": "ARCHIVE_AND_SHA256_SIDECAR",
+        "meaning": "A project-built runnable archive whose exact bytes, size, SHA-256 digest and checksum sidecar are public evidence."
+      },
+      {
+        "id": "SOURCE_EVIDENCE_ONLY",
+        "runnable": false,
+        "evidenceOnly": true,
+        "githubLatestPolicy": "ELIGIBLE_ONLY_WHEN_DESIGNATED_OWNER_WITHOUT_SUPERSEDING_RUNNABLE_ARTIFACT",
+        "assetContract": "NO_CUSTOM_ASSETS_SOURCE_ONLY",
+        "meaning": "A source and evidence record at an exact commit. GitHub-generated source archives are not project-built runnable assets."
+      }
+    ]
+  },
+  "releaseBodyContract": {
+    "schemaVersion": "chimpmaera.release-body/v1",
+    "appliesTo": "EVERY_NEW_RELEASE_NO_RETROACTIVE_CONFORMANCE",
+    "requiredSections": [
+      "Release class",
+      "Exact merge SHA",
+      "Included capabilities and issues",
+      "Evidence boundary",
+      "Tests",
+      "Assets and checksums",
+      "Nonclaims",
+      "Closure state"
+    ],
+    "sourceOnlyNoAssetsMarker": "NO_ASSETS_SOURCE_ONLY",
+    "pendingPublicReadback": "PUBLIC_READBACK: PENDING",
+    "blockedTerminalState": "ISSUE_QUEUE_TERMINAL: BLOCKED_PENDING_PUBLIC_READBACK",
+    "claimProofFields": [
+      "CLAIM_PROOF",
+      "MATURITY",
+      "PROOF_CLASS",
+      "ARTIFACT",
+      "EXACT_IDENTITY",
+      "GATE",
+      "NONCLAIM"
+    ]
+  },
+  "contradictionPreflight": {
+    "schemaVersion": "chimpmaera.public-delivery-contradiction-preflight/v1",
+    "appliesTo": "EVERY_PUBLIC_DELIVERY",
+    "requiredClaimOwnership": [
+      "materialClaimId",
+      "maturity",
+      "proofClass",
+      "authoritativeArtifact",
+      "exactIdentity",
+      "executableOrAnonymousReadbackGate",
+      "explicitNonclaim"
+    ],
+    "maturityProofMatrix": [
+      {
+        "maturity": "RELEASED_LOCAL_SYNTHETIC",
+        "proofClass": "LOCAL_EXECUTABLE",
+        "gate": "EXECUTABLE"
+      },
+      {
+        "maturity": "SOURCE_EVIDENCE_ONLY",
+        "proofClass": "SOURCE_EVIDENCE",
+        "gate": "EXECUTABLE_OR_ANONYMOUS_PUBLIC_READBACK"
+      },
+      {
+        "maturity": "PUBLIC_PROVIDER_OBSERVED",
+        "proofClass": "ANONYMOUS_PUBLIC_READBACK",
+        "gate": "ANONYMOUS_PUBLIC_READBACK"
+      }
+    ],
+    "failureModes": [
+      {
+        "id": "RELEASE_IDENTITY_DRIFT",
+        "disposition": "FAIL_CLOSED",
+        "negativeProbe": "wrong Latest and wrong target"
+      },
+      {
+        "id": "PROOF_CLASS_INFLATION",
+        "disposition": "FAIL_CLOSED",
+        "negativeProbe": "proof-class inflation"
+      },
+      {
+        "id": "MISSING_EXACT_HEAD_DOCUMENTED_PATH",
+        "disposition": "FAIL_CLOSED",
+        "negativeProbe": "missing exact-head documented path"
+      },
+      {
+        "id": "CIRCULAR_OR_CALLER_MINTED_PROVENANCE",
+        "disposition": "FAIL_CLOSED",
+        "negativeProbe": "circular provenance"
+      },
+      {
+        "id": "STALE_PUBLIC_STATUS",
+        "disposition": "FAIL_CLOSED",
+        "negativeProbe": "stale public status"
+      },
+      {
+        "id": "STALE_GOVERNANCE",
+        "disposition": "FAIL_CLOSED",
+        "negativeProbe": "stale recorded governance"
+      }
+    ],
+    "exceptionContract": {
+      "acceptanceIdRequired": true,
+      "negativeRegressionProbeRequired": true,
+      "mayGrantConformance": false,
+      "mayAuthorizeHistoricalMutation": false
+    }
+  },
+  "publicLatestRelease": {
+    "releaseId": 381369060,
+    "tag": "2026_09_02_v7",
+    "title": "2026_09_02_v7",
+    "targetCommitish": "1e65fee46c609ba7239d63b9c245b32e045e004c",
+    "tagObjectSha": "1e65fee46c609ba7239d63b9c245b32e045e004c",
+    "publishedAt": "2026-09-02T15:20:57Z",
+    "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/2026_09_02_v7",
+    "draft": false,
+    "prerelease": false,
+    "mustBeLatest": true,
+    "releaseClass": "SOURCE_EVIDENCE_ONLY",
+    "contractStatus": "LEGACY_PRE_V2_NONCONFORMING_RECONCILED",
+    "classificationBasis": "REL-TRUTH-AC06_EXPLICIT_FORWARD_ONLY_RECONCILIATION",
+    "legacyBody": "## What's Changed\n* Deliver auto/e-fnd-1-foundation-closure by @JoFe2 in https://github.com/JoFe2/PANSPHAIRA/pull/381\n\n\n**Full Changelog**: https://github.com/JoFe2/PANSPHAIRA/compare/2026_09_02_v6...2026_09_02_v7",
+    "bodySha256": "2fda355ff8831256db56b3a73403f111d1ac02391ec2650e06578d82f5bd57a9",
+    "assets": []
+  },
   "currentRelease": {
     "releaseId": 376149037,
     "tag": "v0.2.0-poc.20260825.1",
@@ -12,7 +146,11 @@
     "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.2.0-poc.20260825.1",
     "draft": false,
     "prerelease": false,
-    "mustBeLatest": true,
+    "mustBeLatest": false,
+    "releaseClass": "REGULAR_RUNNABLE_ARTIFACT",
+    "contractStatus": "LEGACY_PRE_V2_BODY_WITH_VERIFIED_ARTIFACTS",
+    "historical": true,
+    "bodySha256": "47ff0ba94d041cb696ea732c788f71ef34a5befe6f6435fec43262275308b3b4",
     "assets": [
       {
         "name": "cm-product-increment-rc-20260825-canonical-number.tar.gz",
@@ -30,13 +168,53 @@
       "declares": "cm-product-increment-rc-20260825-canonical-number.tar.gz"
     }
   },
+  "legacyReleaseExceptions": [
+    {
+      "acceptanceId": "REL-TRUTH-AC06",
+      "tag": "2026_09_02_v7",
+      "releaseId": 381369060,
+      "releaseClass": "SOURCE_EVIDENCE_ONLY",
+      "nonconformities": [
+        "FUNCTIONAL_INCREMENT_TITLE_MISSING",
+        "PUBLIC_BODY_CONTRACT_INCOMPLETE",
+        "NO_ASSETS_SOURCE_ONLY_MARKER_ABSENT"
+      ],
+      "futureReleasePrecedent": false,
+      "metadataTagOrAssetMutationAuthorized": false
+    },
+    {
+      "acceptanceId": "REL-TRUTH-AC06",
+      "tag": "v0.2.0-poc.20260825.1",
+      "releaseId": 376149037,
+      "releaseClass": "REGULAR_RUNNABLE_ARTIFACT",
+      "nonconformities": [
+        "PUBLIC_BODY_CONTRACT_INCOMPLETE"
+      ],
+      "futureReleasePrecedent": false,
+      "metadataTagOrAssetMutationAuthorized": false
+    }
+  ],
+  "historicalReleasePolicy": {
+    "tagsAndAssetsImmutable": true,
+    "retroactiveV2ConformanceDenied": true,
+    "unlistedPreV2Records": "LEGACY_UNCLASSIFIED_PRESERVE_AS_EVIDENCE",
+    "namedHistoricalIdentity": {
+      "tag": "v0.1.0",
+      "releaseId": 363289147,
+      "releaseClass": "LEGACY_UNCLASSIFIED",
+      "contractStatus": "PRE_TAXONOMY_HISTORICAL_EVIDENCE_ONLY"
+    }
+  },
   "policy": {
-    "latest": "The newest accepted regular product increment is draft=false, prerelease=false and must resolve from GitHub /releases/latest after publication.",
+    "latest": "GitHub /releases/latest must resolve to the one class named by releaseTaxonomy.githubLatestOwnerClass with draft=false and prerelease=false. A source/evidence-only Latest does not supersede the separately named runnable artifact.",
     "draft": "Draft releases are preparation only and must never be described as public or current.",
-    "prerelease": "Prereleases are optional preview artifacts and must never be described as regular Latest.",
+    "prerelease": "Prereleases are optional preview records and must never own GitHub Latest under this contract.",
     "anonymousReadbackRequired": true,
-    "assetManifestRequired": true,
-    "assetHashesRequired": true
+    "classSpecificAssetContractRequired": true,
+    "regularAssetManifestRequired": true,
+    "regularAssetHashesRequired": true,
+    "sourceOnlyMarkerRequired": true,
+    "issueQueueTerminalizationRequiresPublicReadback": true
   },
   "activePublicFiles": [
     "README.md",
@@ -55,6 +233,8 @@
     "docs/INTEGRATION-PROFILES.md",
     "benchmarks/adaptability-m0/README.md",
     "docs/index.md",
+    "docs/README.md",
+    "docs/QUICKSTART.md",
     "docs/alternatives.md",
     "docs/capabilities.md",
     "docs/examples.md",
@@ -84,9 +264,9 @@
   "claimEvidence": [
     {
       "claimId": "CM-REL-001",
-      "claim": "v0.2.0-poc.20260825.1 is the current regular Latest release for canonical-number hardening.",
+      "claim": "v0.2.0-poc.20260825.1 is the historical, current verified runnable artifact for canonical-number hardening; it is not GitHub Latest.",
       "evidencePaths": ["packages/contracts/src/verification-fabric.ts", "packages/contracts/src/extension-assurance-profile.ts", "tests/verification-fabric-negative-zero.test.ts", "tests/extension-assurance-profile-negative-zero.test.ts", "docs/RELEASE-GOVERNANCE.md", "release/governance.json"],
-      "nonClaims": ["A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The increment does not grant trust, admission, activation, execution, marketplace, tenant, credential or external authority."]
+      "nonClaims": ["The runnable artifact is not GitHub Latest and does not contain later Main source.", "A tag or draft alone is not public release evidence.", "Calendar cadence does not determine release status.", "The increment does not grant trust, admission, activation, execution, marketplace, tenant, credential or external authority."]
     },
     {
       "claimId": "CM-REL-002",
@@ -112,6 +292,23 @@
       "nonClaims": [
         "Repository tests do not replace anonymous public asset readback.",
         "Release metadata edits do not authorize tag or asset replacement."
+      ]
+    },
+    {
+      "claimId": "CM-REL-024",
+      "claim": "Release authority uses a versioned regular/runnable-artifact versus source/evidence-only taxonomy, an exact release-body contract and a mandatory anonymous post-publication readback gate.",
+      "evidencePaths": [
+        ".github/workflows/release-public-readback.yml",
+        "CONTRIBUTING.md",
+        "docs/RELEASE-GOVERNANCE.md",
+        "scripts/verify-release-governance.mjs",
+        "tests/release-governance.test.mjs",
+        "release/governance.json"
+      ],
+      "nonClaims": [
+        "This contract does not rewrite or retroactively confer v2 conformance on historical release tags, bodies or assets.",
+        "The read-only workflow grants no release creation, issue closure, Queue mutation, credential or other external-write authority.",
+        "A source/evidence-only Latest is not a runnable artifact and GitHub-generated source archives are not project checksum evidence."
       ]
     },
     {

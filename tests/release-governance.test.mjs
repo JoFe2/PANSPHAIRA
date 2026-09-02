@@ -1,9 +1,15 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
-import { validateRepository } from "../scripts/verify-release-governance.mjs";
+import {
+  validateRecordedPublicState,
+  validateReleaseContract,
+  validateRepository,
+  verifyPublicReadback,
+} from "../scripts/verify-release-governance.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 
@@ -11,7 +17,7 @@ function fixture() {
   const root = mkdtempSync(join(tmpdir(), "cm-release-governance-"));
   cpSync(ROOT, root, {
     recursive: true,
-    filter: (source) => !source.includes("node_modules") && !source.includes("/.git") && !source.includes("/dist")
+    filter: (source) => !source.includes("node_modules") && !/(?:^|\/)\.git(?:\/|$)/.test(source) && !source.includes("/dist")
   });
   return root;
 }
@@ -31,8 +37,264 @@ function append(root, path, value) {
   writeFileSync(file, `${readFileSync(file, "utf8")}\n${value}\n`);
 }
 
+const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
+
+function conformingReleaseFixture(releaseClass) {
+  const governance = structuredClone(JSON.parse(readFileSync(join(ROOT, "release", "governance.json"), "utf8")));
+  governance.releaseTaxonomy.githubLatestOwnerClass = releaseClass;
+  const mergeSha = releaseClass === "REGULAR_RUNNABLE_ARTIFACT" ? "a".repeat(40) : "b".repeat(40);
+  const tag = releaseClass === "REGULAR_RUNNABLE_ARTIFACT" ? "v9.9.9-poc.20260902.1" : "2026_09_02_v8";
+  const archiveBytes = Buffer.from("bounded runnable fixture\n");
+  const archiveName = "cm-product-increment-rc-20260902-release-authority.tar.gz";
+  const archiveDigest = digest(archiveBytes);
+  const sidecarName = `${archiveName}.sha256`;
+  const sidecarBytes = Buffer.from(`${archiveDigest}  ${archiveName}\n`);
+  const assets = releaseClass === "REGULAR_RUNNABLE_ARTIFACT"
+    ? [
+      { name: archiveName, size: archiveBytes.length, sha256: archiveDigest },
+      { name: sidecarName, size: sidecarBytes.length, sha256: digest(sidecarBytes) },
+    ]
+    : [];
+  const maturity = releaseClass === "REGULAR_RUNNABLE_ARTIFACT" ? "RELEASED_LOCAL_SYNTHETIC" : "SOURCE_EVIDENCE_ONLY";
+  const proofClass = releaseClass === "REGULAR_RUNNABLE_ARTIFACT" ? "LOCAL_EXECUTABLE" : "SOURCE_EVIDENCE";
+  const artifactPath = "README.md";
+  const artifactDigest = digest(readFileSync(join(ROOT, artifactPath)));
+  const assetBody = releaseClass === "REGULAR_RUNNABLE_ARTIFACT"
+    ? assets.map(({ name, size, sha256 }) => `- ASSET: ${name} | SIZE=${size} | SHA256=${sha256}`).join("\n")
+    : "NO_ASSETS_SOURCE_ONLY";
+  const body = [
+    "## Release class",
+    `RELEASE_CLASS: ${releaseClass}`,
+    "",
+    "## Exact merge SHA",
+    `MERGE_SHA: ${mergeSha}`,
+    "",
+    "## Included capabilities and issues",
+    "- CAPABILITY: REL-TRUTH-AC01",
+    "- ISSUE: #376",
+    "",
+    "## Evidence boundary",
+    `- CLAIM_PROOF: REL-TRUTH-AC01 | MATURITY=${maturity} | PROOF_CLASS=${proofClass} | ARTIFACT=${artifactPath} | EXACT_IDENTITY=sha256:${artifactDigest} | GATE=EXECUTABLE:npm run release-governance:test | NONCLAIM=No production fitness or authority expansion is claimed.`,
+    "",
+    "## Tests",
+    "- TEST: npm run release-governance:test => PASS",
+    "",
+    "## Assets and checksums",
+    assetBody,
+    "",
+    "## Nonclaims",
+    "- NONCLAIM: No production readiness, credential, tenant, publication, or runtime authority is claimed.",
+    "",
+    "## Closure state",
+    "PUBLIC_READBACK: PENDING",
+    "ISSUE_QUEUE_TERMINAL: BLOCKED_PENDING_PUBLIC_READBACK",
+  ].join("\n");
+  const release = {
+    id: releaseClass === "REGULAR_RUNNABLE_ARTIFACT" ? 900000001 : 900000002,
+    tag_name: tag,
+    name: "PanSphaira release-authority correction",
+    target_commitish: mergeSha,
+    draft: false,
+    prerelease: false,
+    published_at: "2026-09-02T16:00:00Z",
+    html_url: `https://github.com/JoFe2/PANSPHAIRA/releases/tag/${tag}`,
+    body,
+    assets: assets.map(({ name, size }) => ({
+      name,
+      size,
+      browser_download_url: `https://github.com/JoFe2/PANSPHAIRA/releases/download/${tag}/${name}`,
+    })),
+  };
+  const downloadedAssets = new Map(releaseClass === "REGULAR_RUNNABLE_ARTIFACT"
+    ? [[archiveName, archiveBytes], [sidecarName, sidecarBytes]]
+    : []);
+  return {
+    root: ROOT,
+    governance,
+    release,
+    latest: { tag_name: tag },
+    tagRef: { object: { sha: mergeSha, type: "commit" } },
+    downloadedAssets,
+  };
+}
+
 test("repository release governance passes", () => {
   assert.deepEqual(validateRepository(ROOT), []);
+});
+
+test("REL-TRUTH taxonomy reconciles current Main, GitHub Latest, and the historical runnable artifact", () => {
+  const governance = JSON.parse(readFileSync(join(ROOT, "release", "governance.json"), "utf8"));
+  assert.equal(governance.schemaVersion, "chimpmaera.release-governance/v2");
+  assert.equal(governance.releaseTaxonomy.schemaVersion, "chimpmaera.release-taxonomy/v1");
+  assert.equal(governance.releaseTaxonomy.githubLatestOwnerClass, "SOURCE_EVIDENCE_ONLY");
+  assert.deepEqual(
+    governance.releaseTaxonomy.classes.map(({ id }) => id),
+    ["REGULAR_RUNNABLE_ARTIFACT", "SOURCE_EVIDENCE_ONLY"],
+  );
+  assert.equal(governance.publicLatestRelease.tag, "2026_09_02_v7");
+  assert.equal(governance.publicLatestRelease.targetCommitish, "1e65fee46c609ba7239d63b9c245b32e045e004c");
+  assert.equal(governance.publicLatestRelease.releaseClass, "SOURCE_EVIDENCE_ONLY");
+  assert.deepEqual(governance.publicLatestRelease.assets, []);
+  assert.equal(governance.currentRelease.tag, "v0.2.0-poc.20260825.1");
+  assert.equal(governance.currentRelease.releaseClass, "REGULAR_RUNNABLE_ARTIFACT");
+  assert.equal(governance.currentRelease.mustBeLatest, false);
+  assert.equal(governance.currentRelease.historical, true);
+});
+
+test("regular/runnable and source/evidence-only releases pass only their class-specific public contract", () => {
+  for (const releaseClass of ["REGULAR_RUNNABLE_ARTIFACT", "SOURCE_EVIDENCE_ONLY"]) {
+    const input = conformingReleaseFixture(releaseClass);
+    assert.deepEqual(validateReleaseContract(input), [], releaseClass);
+  }
+});
+
+test("bounded contradiction preflight has one closed ownership and failure matrix", () => {
+  const governance = JSON.parse(readFileSync(join(ROOT, "release", "governance.json"), "utf8"));
+  assert.deepEqual(governance.contradictionPreflight.requiredClaimOwnership, [
+    "materialClaimId",
+    "maturity",
+    "proofClass",
+    "authoritativeArtifact",
+    "exactIdentity",
+    "executableOrAnonymousReadbackGate",
+    "explicitNonclaim",
+  ]);
+  assert.deepEqual(
+    governance.contradictionPreflight.failureModes.map(({ id, disposition, negativeProbe }) => ({ id, disposition, negativeProbe })),
+    [
+      { id: "RELEASE_IDENTITY_DRIFT", disposition: "FAIL_CLOSED", negativeProbe: "wrong Latest and wrong target" },
+      { id: "PROOF_CLASS_INFLATION", disposition: "FAIL_CLOSED", negativeProbe: "proof-class inflation" },
+      { id: "MISSING_EXACT_HEAD_DOCUMENTED_PATH", disposition: "FAIL_CLOSED", negativeProbe: "missing exact-head documented path" },
+      { id: "CIRCULAR_OR_CALLER_MINTED_PROVENANCE", disposition: "FAIL_CLOSED", negativeProbe: "circular provenance" },
+      { id: "STALE_PUBLIC_STATUS", disposition: "FAIL_CLOSED", negativeProbe: "stale public status" },
+      { id: "STALE_GOVERNANCE", disposition: "FAIL_CLOSED", negativeProbe: "stale recorded governance" },
+    ],
+  );
+  assert.deepEqual(governance.contradictionPreflight.exceptionContract, {
+    acceptanceIdRequired: true,
+    negativeRegressionProbeRequired: true,
+    mayGrantConformance: false,
+    mayAuthorizeHistoricalMutation: false,
+  });
+});
+
+test("complete release-authority adversarial matrix fails closed", async (t) => {
+  const probes = [
+    ["wrong Latest", "PUBLIC_LATEST_MISMATCH", (input) => { input.latest.tag_name = "stale-tag"; }],
+    ["wrong class", "PUBLIC_LATEST_CLASS_MISMATCH", (input) => { input.governance.releaseTaxonomy.githubLatestOwnerClass = "REGULAR_RUNNABLE_ARTIFACT"; }],
+    ["missing body scope", "PUBLIC_BODY_SCOPE_MISSING", (input) => { input.release.body = input.release.body.replace("## Included capabilities and issues", "## Scope removed"); }],
+    ["unexpected or reordered body section", "PUBLIC_BODY_SECTION_ORDER_OR_EXTRA_INVALID", (input) => { input.release.body = input.release.body.replace("## Nonclaims", "## Undeclared evidence\n- value\n\n## Nonclaims"); }],
+    ["unowned extra claim proof", "PUBLIC_BODY_CLAIM_PROOF_OWNERSHIP_MISSING", (input) => { const line = input.release.body.split("\n").find((value) => value.startsWith("- CLAIM_PROOF:")); input.release.body = input.release.body.replace(line, `${line}\n${line.replaceAll("REL-TRUTH-AC01", "REL-TRUTH-AC99")}`); }],
+    ["missing NO_ASSETS_SOURCE_ONLY", "PUBLIC_SOURCE_ONLY_MARKER_MISSING", (input) => { input.release.body = input.release.body.replace("NO_ASSETS_SOURCE_ONLY", "No files attached"); }],
+    ["absent expected asset", "PUBLIC_ASSET_SET_OR_SIZE_MISMATCH", (input) => { input.release.assets.pop(); }],
+    ["asset checksum mismatch", "PUBLIC_ASSET_SHA256_MISMATCH:cm-product-increment-rc-20260902-release-authority.tar.gz", (input) => { input.release.body = input.release.body.replace(/SHA256=[a-f0-9]{64}/, `SHA256=${"f".repeat(64)}`); }],
+    ["asset URL drift", "PUBLIC_ASSET_URL_MISMATCH", (input) => { input.release.assets[0].browser_download_url = "https://example.invalid/substitute"; }],
+    ["wrong target", "PUBLIC_TARGET_MISMATCH", (input) => { input.release.target_commitish = "main"; }],
+    ["draft drift", "PUBLIC_DRAFT_MISMATCH", (input) => { input.release.draft = true; }],
+    ["prerelease drift", "PUBLIC_PRERELEASE_MISMATCH", (input) => { input.release.prerelease = true; }],
+    ["proof-class inflation", "PUBLIC_BODY_PROOF_CLASS_INFLATION", (input) => { input.release.body = input.release.body.replace("MATURITY=SOURCE_EVIDENCE_ONLY", "MATURITY=PRODUCTION"); }],
+    ["missing exact-head documented path", "PUBLIC_BODY_ARTIFACT_MISSING:docs/missing-release-proof.md", (input) => { input.release.body = input.release.body.replace("ARTIFACT=README.md", "ARTIFACT=docs/missing-release-proof.md"); }],
+    ["circular provenance", "PUBLIC_BODY_PROVENANCE_CIRCULAR_OR_CALLER_MINTED", (input) => { input.release.body = input.release.body.replace("ARTIFACT=README.md", "ARTIFACT=CALLER_MINTED"); }],
+    ["stale public status", "PUBLIC_STATUS_TERMINAL_BEFORE_READBACK", (input) => { input.release.body = input.release.body.replace("BLOCKED_PENDING_PUBLIC_READBACK", "DONE"); }],
+  ];
+  for (const [name, expected, mutate] of probes) {
+    await t.test(name, () => {
+      const input = conformingReleaseFixture(["absent expected asset", "asset checksum mismatch", "asset URL drift"].includes(name) ? "REGULAR_RUNNABLE_ARTIFACT" : "SOURCE_EVIDENCE_ONLY");
+      mutate(input);
+      assert.ok(validateReleaseContract(input).includes(expected), validateReleaseContract(input).join("\n"));
+    });
+  }
+});
+
+test("stale recorded governance fails public-state readback", () => {
+  const governance = JSON.parse(readFileSync(join(ROOT, "release", "governance.json"), "utf8"));
+  const live = {
+    latestRelease: {
+      ...governance.publicLatestRelease,
+      tag_name: governance.publicLatestRelease.tag,
+      name: governance.publicLatestRelease.title,
+      published_at: governance.publicLatestRelease.publishedAt,
+      html_url: governance.publicLatestRelease.url,
+      body: governance.publicLatestRelease.legacyBody,
+    },
+    latest: { tag_name: governance.publicLatestRelease.tag },
+    latestTagRef: { object: { sha: governance.publicLatestRelease.tagObjectSha, type: "commit" } },
+  };
+  governance.publicLatestRelease.tag = "2026_09_02_stale";
+  assert.ok(validateRecordedPublicState({ governance, ...live }).includes("PUBLIC_GOVERNANCE_STALE"));
+});
+
+test("post-creation publication workflow gates terminalization on anonymous public readback", () => {
+  const workflow = readFileSync(join(ROOT, ".github", "workflows", "release-public-readback.yml"), "utf8");
+  assert.match(workflow, /^\s*release:\s*$/m);
+  assert.match(workflow, /^\s*types:\s*\[published\]\s*$/m);
+  assert.match(workflow, /^permissions:\s*\n\s+contents: read$/m);
+  assert.match(workflow, /persist-credentials: false/);
+  assert.match(workflow, /github\.event\.release\.tag_name/);
+  assert.match(workflow, /env -u GH_TOKEN -u GITHUB_TOKEN npm run release-governance:test/);
+  assert.match(workflow, /env -u GH_TOKEN -u GITHUB_TOKEN npm run release-governance:public-readback -- --release-tag "\$RELEASE_TAG" --require-conforming/);
+  assert.ok(workflow.indexOf("release-governance:test") < workflow.indexOf("release-governance:public-readback"));
+  assert.doesNotMatch(workflow, /contents: write|issues: write|pull-requests: write|gh issue close|queue[^\n]*done/i);
+});
+
+test("post-creation readback derives a conforming gate only from anonymous provider responses", async () => {
+  const input = conformingReleaseFixture("SOURCE_EVIDENCE_ONLY");
+  const repository = input.governance.repository;
+  const api = `https://api.github.com/repos/${repository}`;
+  const rawPrefix = `https://raw.githubusercontent.com/${repository}/${input.tagRef.object.sha}/`;
+  const requested = [];
+  const response = (value, text = undefined) => ({
+    ok: true,
+    status: 200,
+    async json() { return structuredClone(value); },
+    async text() { return text; },
+    async arrayBuffer() { return Buffer.from(text ?? ""); },
+  });
+  const fetchImpl = async (url, options = {}) => {
+    requested.push(url);
+    assert.equal(options.headers?.Authorization, undefined);
+    assert.equal(options.headers?.authorization, undefined);
+    if (url === `${api}/releases/tags/${input.release.tag_name}`) return response(input.release);
+    if (url === `${api}/releases/latest`) return response(input.latest);
+    if (url === `${api}/git/ref/tags/${input.release.tag_name}`) return response(input.tagRef);
+    if (url.startsWith(rawPrefix)) {
+      const path = url.slice(rawPrefix.length);
+      return response(undefined, readFileSync(join(ROOT, path), "utf8"));
+    }
+    throw new Error(`UNEXPECTED_READBACK_URL:${url}`);
+  };
+
+  const result = await verifyPublicReadback(ROOT, {
+    releaseTag: input.release.tag_name,
+    requireConforming: true,
+    fetchImpl,
+    readLocalHead: () => input.tagRef.object.sha,
+  });
+  assert.equal(result.tag, input.release.tag_name);
+  assert.equal(result.releaseClass, "SOURCE_EVIDENCE_ONLY");
+  assert.equal(result.anonymous, true);
+  assert.equal(result.terminalizationEligible, true);
+  assert.equal(requested.length, 8);
+});
+
+test("all seven public issue criteria are verbatim and solely owned by this correction", () => {
+  const evidence = JSON.parse(readFileSync(
+    join(ROOT, "closure-audits", "AUDIT-CORRECTION-376-ROOT-QS", "implementation-evidence.json"),
+    "utf8",
+  ));
+  const criteria = [
+    "Versioned schema distinguishes regular/runnable artifact releases from source/evidence-only releases and defines which class may own GitHub Latest.",
+    "`release/governance.json`, Quickstart, README and release docs agree on current/latest/historical identities and asset expectations.",
+    "Every new release body names exact merge SHA, included capability/issues, evidence boundary, tests, assets/checksums or explicit `NO_ASSETS_SOURCE_ONLY`, and nonclaims.",
+    "Publication workflow executes anonymous `release-governance:public-readback` after release creation; mismatch fails closure and cannot leave issue/queue DONE.",
+    "Negative probes cover wrong Latest, wrong class, missing body scope, absent expected asset, wrong target, draft/prerelease drift and stale governance.",
+    "Current public state is reconciled without rewriting tags or silently reclassifying historical evidence.",
+    "`CONTRIBUTING.md`, release governance and the machine validator define one bounded contradiction preflight for every public delivery: each material claim maps to its maturity/proof class, authoritative artifact, exact identity, executable or anonymous-readback gate and explicit nonclaim. Release-identity drift, proof-class inflation, missing exact-head documented paths, circular/caller-minted provenance and stale public status must fail or be owned by an explicit acceptance ID with a negative regression probe.",
+  ];
+  assert.deepEqual(evidence.acceptanceOwnership.map(({ criterion }) => criterion), criteria);
+  assert.deepEqual(evidence.acceptanceOwnership.map(({ id }) => id), criteria.map((_, index) => `REL-TRUTH-AC0${index + 1}`));
+  assert.ok(evidence.acceptanceOwnership.every(({ soleTaskOwner }) => soleTaskOwner === "AUDIT-CORRECTION-376-IMPLEMENT"));
+  assert.equal(new Set(evidence.acceptanceOwnership.map(({ canonicalTest }) => canonicalTest)).size, 7);
 });
 
 test("the full Quickstart owns the immutable runnable archive tuple while README stays version-agnostic", () => {
@@ -256,6 +518,12 @@ test("release governance negative probes fail closed", async (t) => {
     ["missing evidence path", "CLAIM_EVIDENCE_MISSING:CM-REL-001:docs/missing.md", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.claimEvidence[0].evidencePaths.push("docs/missing.md"); writeFileSync(p, JSON.stringify(j)); }],
     ["missing grouped component evidence", "RELEASE_COMPONENT_EVIDENCE_MISSING:Verification Fabric", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.claimEvidence = j.claimEvidence.filter((claim) => claim.component !== "Verification Fabric"); writeFileSync(p, JSON.stringify(j)); }],
     ["component byte not in public manifest", "COMPONENT_PATH_UNMANIFESTED:CM-REL-004:packages/contracts/src/verification-fabric.ts", (root) => replace(root, "release/public-files.manifest", "packages/contracts/src/verification-fabric.ts\tpackages/contracts/src/verification-fabric.ts\t0644\n", "")],
+    ["release taxonomy class drift", "RELEASE_CLASS_TAXONOMY_INVALID", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.releaseTaxonomy.classes[1].runnable = true; writeFileSync(p, JSON.stringify(j)); }],
+    ["release body contract drift", "RELEASE_BODY_CONTRACT_INVALID", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.releaseBodyContract.sourceOnlyNoAssetsMarker = "NO_FILES"; writeFileSync(p, JSON.stringify(j)); }],
+    ["reconciled Latest target stale", "PUBLIC_LATEST_RECONCILIATION_INVALID", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.publicLatestRelease.targetCommitish = "f".repeat(40); writeFileSync(p, JSON.stringify(j)); }],
+    ["legacy exception tries to grant precedent", "LEGACY_RELEASE_EXCEPTION_INVALID", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.legacyReleaseExceptions[0].futureReleasePrecedent = true; writeFileSync(p, JSON.stringify(j)); }],
+    ["contradiction preflight loses circular-provenance probe", "CONTRADICTION_PREFLIGHT_INVALID", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.contradictionPreflight.failureModes = j.contradictionPreflight.failureModes.filter(({ id }) => id !== "CIRCULAR_OR_CALLER_MINTED_PROVENANCE"); writeFileSync(p, JSON.stringify(j)); }],
+    ["publication workflow loses anonymous command", "PUBLICATION_READBACK_WORKFLOW_INVALID", (root) => replace(root, ".github/workflows/release-public-readback.yml", "release-governance:public-readback", "release-governance:verify")],
     ["asset hash removed", "ASSET_INVENTORY_INVALID", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.currentRelease.assets[0].sha256 = "unknown"; writeFileSync(p, JSON.stringify(j)); }],
     ["publication metadata removed", "CURRENT_PUBLICATION_METADATA_INVALID", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); delete j.currentRelease.releaseId; writeFileSync(p, JSON.stringify(j)); }],
     ["functional increment title drift", "FUNCTIONAL_INCREMENT_TITLE_MISSING", (root) => { const p = join(root, "release/governance.json"); const j = JSON.parse(readFileSync(p)); j.currentRelease.increment = "MSSQL Scope Compatibility"; writeFileSync(p, JSON.stringify(j)); }],

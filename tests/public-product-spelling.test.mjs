@@ -82,6 +82,32 @@ test("current public product display is PanSphaira while stable contracts remain
   assert.match(read("packages/dev-worker/src/controller.ts"), new RegExp(`JoFe2/${legacyDisplay}`));
 });
 
+test("public release surfaces preserve source/latest/runnable identity boundaries", () => {
+  const governance = JSON.parse(read("release/governance.json"));
+  const quickstart = read("docs/QUICKSTART.md");
+  const releaseDocs = read("docs/RELEASE-GOVERNANCE.md");
+  const readme = read("README.md");
+  const hub = read("docs/README.md");
+  const index = read("docs/index.md");
+
+  assert.equal(governance.publicLatestRelease.tag, "2026_09_02_v7");
+  assert.equal(governance.publicLatestRelease.releaseClass, "SOURCE_EVIDENCE_ONLY");
+  assert.equal(governance.publicLatestRelease.assets.length, 0);
+  assert.equal(governance.currentRelease.tag, "v0.2.0-poc.20260825.1");
+  assert.equal(governance.currentRelease.releaseClass, "REGULAR_RUNNABLE_ARTIFACT");
+  assert.equal(governance.currentRelease.mustBeLatest, false);
+
+  for (const surface of [quickstart, releaseDocs]) {
+    assert.match(surface, /2026_09_02_v7/);
+    assert.match(surface, /v0\.2\.0-poc\.20260825\.1/);
+  }
+  assert.doesNotMatch(readme, /2026_09_02_v7|v0\.2\.0-poc\.20260825\.1/);
+  for (const surface of [readme, hub, index]) {
+    assert.match(surface, /source\/evidence-only/i);
+    assert.match(surface, /runnable artifact/i);
+  }
+});
+
 test("every retained all-caps token has an explicit KEEP classification", (t) => {
   const listed = spawnSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard"], { cwd: ROOT, encoding: "utf8" });
   assert.equal(listed.status, 0, listed.stderr);

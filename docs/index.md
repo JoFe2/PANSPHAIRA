@@ -44,6 +44,12 @@ Sphere is terminology and visualization only; the existing isolation,
 mediation, Policy, Approval, Broker, Readback, Receipt and Evidence semantics
 remain unchanged.
 
+GitHub Latest and runnable proof are intentionally distinct: the current
+source/evidence-only release has no project-built runnable artifact, while the
+historical checksum-bound runnable artifact remains available through the
+[Quickstart](./QUICKSTART.md). Latest source evidence does not expand the
+runnable artifact's claims.
+
 Start with the [governed agent-action use case](./use-cases/governed-agent-actions.md),
 follow the specific [CRM-to-ERP approval and readback path](./use-cases/crm-erp-approval-readback.md),
 then verify each capability against the [evidence matrix](./capabilities.md).

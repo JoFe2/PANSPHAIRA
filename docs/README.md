@@ -17,6 +17,13 @@ the declared local-synthetic paths are currently evidenced.
 
 Status labels used here:
 
+Release-page position and runnable bytes are separate. The current
+source/evidence-only GitHub Latest has no project-built archive; it does not
+supersede the historical verified regular/runnable artifact named by the
+[release-governance contract](RELEASE-GOVERNANCE.md). “Released bytes” below
+means inclusion in that checksum-bound runnable artifact, not inclusion in any
+later source/evidence record.
+
 - **Released bytes** — bytes are in the current regular release; inclusion does
   not activate or promote a capability, binding, runtime or product claim.
 - **Locally validated** — reproducible local evidence exists, but it does not

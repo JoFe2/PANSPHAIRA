@@ -10,7 +10,7 @@ const D044_MANIFEST_SHA256 = "ed5a4228960969045687d136040c0231bff2c066ce894e7d01
 const CAPTURED_MAIN = "28fe46aaf6385ee7ea25cadecb67d56f58ae0fc3";
 const EXPECTED_CHILD_SET_SHA256 = "6d1bbddedf5ed23ca7fd6bb7b4f31f74c20a19b4bc4f73fc7898528e63f74ee9";
 const EXPECTED_PUBLIC_THREAD_SET_SHA256 = "e8f34d4ee4ab96e932ea6e80856d4561d6aa8c449e3e11bdddf69d6f809a4b08";
-const EXPECTED_RECORD_SHA256 = "4b44633509b6b61f4c53b745a475d8a918cdfe47da355e137b9f3fde1a7e067c";
+const EXPECTED_RECORD_SHA256 = "b42ff34fc145f4386d712a68444ccffece81d9c26a8be39d307f1e4d6404992d";
 const TEST_COMMAND = "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js";
 const LEGACY_DISPLAY = ["PANS", "PHAIRA"].join("");
 

@@ -198,7 +198,11 @@ An unverified knowledge record may exist without becoming an authoritative defau
 Release pages own included capabilities, evidence boundaries, related
 issues/PRs, tests, assets, and SHA-256 information. [Release
 governance](docs/RELEASE-GOVERNANCE.md) defines publication and anonymous
-readback.
+readback. GitHub Latest currently identifies a source/evidence-only record with
+no project-built runnable archive; it does not supersede the separately named
+historical verified runnable artifact. The [full
+Quickstart](docs/QUICKSTART.md) and machine governance own those exact moving
+and immutable identities.
 
 ## Project and community
 

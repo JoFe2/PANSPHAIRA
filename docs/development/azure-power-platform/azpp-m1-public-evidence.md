@@ -47,7 +47,7 @@ Evidence references are repository-relative and digest-pinned:
 - `negative-matrix` → `tests/azure-power-platform/readonly-denial-matrix.test.mjs`
   (`e8eb5a2d9f59d13fbe4ed477e63023f866da43e59f3dabc7985855f9efe6f0e0`)
 - `rollback-lkg` → `tests/fixtures/azure-power-platform/tuple-valid.json`
-  (`cec24d8647ef1a9ce0f7ce5e3767524442300c2b7fa549328b3843624f800f19`)
+  (`0e5fec98360b8d12fcefaa39063e4ca5344a707409c890daa51e5ff3db88e949`)
 
 ## Rollback target
 
