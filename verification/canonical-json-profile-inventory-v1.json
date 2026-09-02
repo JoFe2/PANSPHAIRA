@@ -42,6 +42,14 @@
       "fromSha256": "b19ee3ecb425a4404142b0a5e9edef48c8f22285a57504458c2c5ebd386fa12a",
       "toSha256": "cd13f5b07971b60c7440fc3ac102eb26f412b980798c56fb30e23ac947ad002f",
       "reason": "Retain the reviewed graph v40 compatibility contract while canonically binding the FND-XR-01 paired-compatibility evidence and its repository-only pre-closure classification; the admitted v1 and reviewed v2 digests remain immutable."
+    },
+    {
+      "migrationId": "AP-01-INTEGRATE/INCOMING-INVOICE-INTEGRITY-GENERATOR/V4",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 4,
+      "fromSha256": "cd13f5b07971b60c7440fc3ac102eb26f412b980798c56fb30e23ac947ad002f",
+      "toSha256": "11805df03d04b7c862645f25304b0c81a252535c7f48bdf72df81e9f72b8a216",
+      "reason": "Advance the Verification DAG to graph v41 and canonically own the AP-01 local-synthetic incoming-invoice Blueprint family."
     }
   ],
   "scanScope": {
@@ -79,20 +87,20 @@
   },
   "uncertainty": [
     "Ad-hoc grep methods disagree on declaration/import counts; the scanner embedded in tests/canonical-json-profile-inventory.test.ts is the single source of truth.",
-    "Current SHA256SUMS is normalized to 1741 unique ./-prefixed paths with no duplicate or conflicting path digests.",
+    "Current SHA256SUMS is normalized to 1744 unique ./-prefixed paths with no duplicate or conflicting path digests.",
     "Owner families derive mechanically from the second path segment under src/, packages/, tools/ (e.g. 'cks' spans src/cks and packages/cks).",
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 598,
+    "filesScanned": 600,
     "declarationSites": 36,
     "declarationFiles": 36,
     "importSites": 197,
     "importFiles": 196,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1741,
-    "ledgerUniquePaths": 1741
+    "ledgerEntries": 1744,
+    "ledgerUniquePaths": 1744
   },
   "profiles": [
     {
@@ -165,7 +173,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "cd13f5b07971b60c7440fc3ac102eb26f412b980798c56fb30e23ac947ad002f"
+      "sha256": "11805df03d04b7c862645f25304b0c81a252535c7f48bdf72df81e9f72b8a216"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -758,7 +766,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "cd13f5b07971b60c7440fc3ac102eb26f412b980798c56fb30e23ac947ad002f",
+      "sha256": "11805df03d04b7c862645f25304b0c81a252535c7f48bdf72df81e9f72b8a216",
       "basis": "profile-version-migration"
     },
     {
