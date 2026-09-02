@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "pansphaira.ap-03/exact-head-local-gates/v1",
+  "sourceIssue": "JoFe2/PANSPHAIRA#363",
+  "closureOwner": "sol",
+  "noIssuePingPong": true,
+  "review": {
+    "count": 1,
+    "classification": "PASS",
+    "reviewedProductHead": "50b1c19b6059eb1f8e6eaf09325884d0562753f8",
+    "findings": []
+  },
+  "currentMainBase": "418ebd8a508388c0f5db971a8e428f796802f19f",
+  "tddProductCommit": "e5ee876",
+  "testedProductHead": "50b1c19b6059eb1f8e6eaf09325884d0562753f8",
+  "testedProductTree": "c08f3bfd31f9ab4f1a06e4908f63d02c9cd02eae",
+  "acceptance": {
+    "AP-03-AC01": "PASS — exact frozen five-case holdout covers TABLE, COMPACT, TAX_EXEMPT, line items, taxes, totals and two explicit failures",
+    "AP-03-AC02": "PASS — deterministic baseline and bounded synthetic proposal are scored against internally derived 5-case and 3-valid-case denominators",
+    "AP-03-AC03": "PASS — proposal shape and independently parsed arithmetic validation precede every result; authoritativeOutputs remains false",
+    "AP-03-AC04": "PASS — exact errors, Brier calibration and five bounded nonclaims are schema validated"
+  },
+  "tdd": {
+    "red": "npm run build --silent — expected TS2305 failures because the AP-03 exports did not exist",
+    "green": "npm run incoming-invoice-extraction:test — 6/6 PASS after minimal implementation",
+    "verticalCorrection": "intermediate confidence-calibration assertion failed before the minimal scoring correction, then the same focused command passed"
+  },
+  "gates": [
+    {"command": "npm run incoming-invoice-extraction:test", "outcome": "PASS", "detail": "6/6"},
+    {"command": "npm run build --silent && node --test dist/tests/incoming-invoice-extraction-benchmark.test.js dist/tests/verification-fabric-v2.test.js dist/tests/contribution-intake-ledger.test.js", "outcome": "PASS", "detail": "61/61"},
+    {"command": "npm run release-governance:test", "outcome": "PASS", "detail": "52/52"},
+    {"command": "npm run supply-chain:verify", "outcome": "PASS"},
+    {"command": "sha256sum -c SHA256SUMS", "outcome": "PASS", "detail": "1753 entries"},
+    {"command": "./scripts/build-public-release.sh --output /tmp/cm-product-increment-rc-20260902-ap03", "outcome": "PASS", "detail": "1447 public files"},
+    {"command": "npm test", "outcome": "INFRASTRUCTURE_PROFILE_REJECTED", "detail": "product assertions remained green until anonymous CKS-07 dry-run correctly rejected inherited GH_TOKEN"},
+    {"command": "env -u GH_TOKEN npm test", "outcome": "PASS", "detail": "canonical full suite including posttest completed with exit 0"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "integrity": {
+    "publicFileCount": 1447,
+    "rootChecksumEntries": 1753,
+    "verificationDagGraphVersion": 43,
+    "verificationDagNodeCount": 52,
+    "closureReceiptExcludedFromSelfReferentialPublicAndRootInventories": true
+  },
+  "nonclaims": [
+    "local-synthetic bounded extraction benchmark only",
+    "no customer data or productive allocation, posting or booking",
+    "no external provider or arbitrary-model fitness claim",
+    "no authoritative model output",
+    "AP-04 through AP-06 remain unproved"
+  ],
+  "downstreamRequired": [
+    "current-Main ancestry readback",
+    "exact PR-head CI PASS",
+    "SHA-bound merge",
+    "exact merge-head CI PASS",
+    "serial daily release and anonymous tag readback",
+    "issue #363 CLOSED and Queue DONE",
+    "promote #364 only after terminal closure"
+  ]
+}
