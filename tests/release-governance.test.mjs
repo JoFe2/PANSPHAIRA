@@ -130,7 +130,7 @@ test("README presents governed adaptability and evidence-driven improvement with
   for (const issue of [361, 362, 363, 364, 365, 366]) {
     assert.match(readme, new RegExp(`github\\.com/JoFe2/PANSPHAIRA/issues/${issue}`));
   }
-  assert.match(readme, /Remove this work-in-progress marker only after #366 has a public local-synthetic PoC release and anonymous readback/);
+  assert.match(readme, /Remove this work-in-progress marker only after #366 is closed with a public local-synthetic PoC release, anonymous readback, and a public `GO` or `NARROW_GO` verdict/);
   assert.match(readme, /docs\/INCOMING-INVOICE-PROVING-GROUND\.md/);
   assert.match(readme, /https:\/\/github\.com\/JoFe2\/KaleidoSphere/);
   assert.match(hierarchySource, /ROWS · SHARED HIERARCHY/);
