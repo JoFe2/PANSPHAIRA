@@ -12,9 +12,11 @@
 
 **Governed by default. Adaptable by design. Improved through evidence.**
 
-PanSphaira turns individual needs and source-bound knowledge into governed,
-AI-enabled process Blueprints—tailored to specific systems, verified through
-readback, and reusable wherever the evidence fits.
+PanSphaira is building a governed path from individual needs and source-bound
+knowledge to AI-enabled process Blueprints, system-specific adaptations,
+readback and reusable evidence. Today it proves bounded parts of that path
+through released local-synthetic references; the general end-to-end product is
+[work in progress](https://github.com/JoFe2/PANSPHAIRA/issues/360).
 
 Build privately for your own environment, or contribute a proven adaptation to
 an open Capability Library.
@@ -34,10 +36,11 @@ an open Capability Library.
 available in the target environment, and the controls the process needs. Unlike
 fixed automation or a generic AI promise, it keeps the adaptation traceable.
 
-It turns these inputs into a Capability or Process Blueprint, materializes the
-Blueprint through governed software components, binds it to specific systems,
-and reads the result back. Every application follows the same hierarchy while
-retaining its own process, integration, and evidence.
+The product direction is to turn these inputs into a Capability or Process
+Blueprint, materialize it through governed software components, bind it to
+specific systems, and read the result back. Released local-synthetic slices
+already prove individual layers and selected complete paths; arbitrary-process
+generation and live-system adaptation remain planned.
 
 <p align="center">
   <img src="assets/diagrams/layers/04-application-hierarchy-blueprint.png" width="1000" alt="PanSphaira application hierarchy with four shared macro layers as rows, Incoming Invoice, Connected BI, and Provider Adaptation as columns, and a bottom-up evidence axis.">
@@ -71,11 +74,21 @@ silently expanding authority.
 
 ### Adapt incoming-invoice processing to the controls the situation needs
 
-`NEXT PROVING GROUND · PLANNED`
+`WORK IN PROGRESS · PLANNED · SHORT-TERM PROOF`
 
 One AP model is designed to derive `LEAN`, `CONTROLLED`, and
 `SEGREGATED_ENTERPRISE` process variants from evidence, risk, approval, and
 separation needs—not from company-size stereotypes.
+
+Track the [AP proof epic #360](https://github.com/JoFe2/PANSPHAIRA/issues/360)
+and its delivery chain:
+[AP-01 #361](https://github.com/JoFe2/PANSPHAIRA/issues/361) →
+[AP-02 #362](https://github.com/JoFe2/PANSPHAIRA/issues/362) →
+[AP-03 #363](https://github.com/JoFe2/PANSPHAIRA/issues/363) →
+[AP-04 #364](https://github.com/JoFe2/PANSPHAIRA/issues/364) →
+[AP-05 #365](https://github.com/JoFe2/PANSPHAIRA/issues/365) →
+[AP-06 #366](https://github.com/JoFe2/PANSPHAIRA/issues/366).
+Remove this work-in-progress marker only after #366 has a public local-synthetic PoC release and anonymous readback.
 
 **[Explore the planned Source→Document AI→Matching→Advisor→UI→Receipt
 PoC](docs/INCOMING-INVOICE-PROVING-GROUND.md).**

@@ -4675,7 +4675,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0b0c1bbfac39157aca7fc49e2985d29e0da14c7b45392e75a49c2813a58752ad"
+          "sha256": "f18c3ffb5675fe021b59a50d9cc8d21b3381511d97fe0e8c4765bfef1f299546"
         }
       ],
       "ownedTests": [

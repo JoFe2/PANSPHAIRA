@@ -5,7 +5,16 @@ description: Planned synthetic PoC for evidence-derived LEAN, CONTROLLED, and SE
 
 # Incoming-invoice adaptability proving ground
 
-`PLANNED_NOT_DELIVERED`
+`WORK_IN_PROGRESS_PLANNED_NOT_DELIVERED`
+
+Public delivery is tracked by
+[epic #360](https://github.com/JoFe2/PANSPHAIRA/issues/360) and sequential
+issues [#361](https://github.com/JoFe2/PANSPHAIRA/issues/361),
+[#362](https://github.com/JoFe2/PANSPHAIRA/issues/362),
+[#363](https://github.com/JoFe2/PANSPHAIRA/issues/363),
+[#364](https://github.com/JoFe2/PANSPHAIRA/issues/364),
+[#365](https://github.com/JoFe2/PANSPHAIRA/issues/365), and
+[#366](https://github.com/JoFe2/PANSPHAIRA/issues/366).
 
 The incoming-invoice proving ground is designed to test whether one capability
 model can derive different process depths from evidence, risk, approval,
@@ -66,7 +75,7 @@ These are process-complexity vectors, not company-size stereotypes.
 | Work-package specifications | `6/6` planned |
 | Acceptance identifiers | `28/28` preserved |
 | Scenario packs | `3/3` defined |
-| Public AP implementation issues | `0/6` |
+| Public AP implementation issues | `6/6` open |
 | Product implementation | Not started |
 | Product release | None |
 
