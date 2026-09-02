@@ -382,6 +382,7 @@ packages/contracts/src/hmi-explain-payload.ts	packages/contracts/src/hmi-explain
 packages/contracts/src/hmi-harness-adapter.ts	packages/contracts/src/hmi-harness-adapter.ts	0644
 packages/contracts/src/index.ts	packages/contracts/src/index.ts	0644
 packages/contracts/src/injection-trust-boundary.ts	packages/contracts/src/injection-trust-boundary.ts	0644
+packages/contracts/src/incoming-invoice-blueprint.ts	packages/contracts/src/incoming-invoice-blueprint.ts	0644
 packages/contracts/src/integration-profile.ts	packages/contracts/src/integration-profile.ts	0644
 packages/contracts/src/issue-candidate.ts	packages/contracts/src/issue-candidate.ts	0644
 packages/contracts/src/knowledge-envelope.ts	packages/contracts/src/knowledge-envelope.ts	0644
@@ -509,6 +510,7 @@ schemas/contracts/hmi-contribute-preflight-v1.schema.json	schemas/contracts/hmi-
 schemas/contracts/hmi-discover-payload-v1.schema.json	schemas/contracts/hmi-discover-payload-v1.schema.json	0644
 schemas/contracts/hmi-explain-payload-v1.schema.json	schemas/contracts/hmi-explain-payload-v1.schema.json	0644
 schemas/contracts/hmi-generation-bundle-v1.schema.json	schemas/contracts/hmi-generation-bundle-v1.schema.json	0644
+schemas/contracts/incoming-invoice-blueprint-v1.schema.json	schemas/contracts/incoming-invoice-blueprint-v1.schema.json	0644
 schemas/contracts/integration-profile-v1.schema.json	schemas/contracts/integration-profile-v1.schema.json	0644
 schemas/contracts/issue-candidate-v1.schema.json	schemas/contracts/issue-candidate-v1.schema.json	0644
 schemas/contracts/knowledge-contribution-envelope-v1.schema.json	schemas/contracts/knowledge-contribution-envelope-v1.schema.json	0644
@@ -1215,6 +1217,7 @@ tests/hmi-harness-adapter.test.ts	tests/hmi-harness-adapter.test.ts	0644
 tests/hmi-post-contribute-consistency.test.ts	tests/hmi-post-contribute-consistency.test.ts	0644
 tests/hmi-post-explain-consistency.test.ts	tests/hmi-post-explain-consistency.test.ts	0644
 tests/injection-trust-boundary.test.ts	tests/injection-trust-boundary.test.ts	0644
+tests/incoming-invoice-blueprint.test.ts	tests/incoming-invoice-blueprint.test.ts	0644
 tests/integration-profile.test.ts	tests/integration-profile.test.ts	0644
 tests/issue-candidate.test.ts	tests/issue-candidate.test.ts	0644
 tests/kiwix-zim-assessment.test.mjs	tests/kiwix-zim-assessment.test.mjs	0644

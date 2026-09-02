@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/contracts/incoming-invoice-blueprint-v1.schema.json",
+  "title": "ChimpMaera incoming-invoice local-synthetic Blueprint v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "blueprintVersion", "claim", "layers", "complexityModel", "scopeFreeze", "authority"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.incoming-invoice/blueprint/v1" },
+    "blueprintVersion": { "const": "1.0.0" },
+    "claim": { "const": "LOCAL_SYNTHETIC_BLUEPRINT_ONLY_NO_CUSTOMER_DATA_NO_PRODUCTIVE_BOOKING" },
+    "layers": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "prefixItems": [
+        { "$ref": "#/$defs/sourceLayer" },
+        { "$ref": "#/$defs/documentLayer" },
+        { "$ref": "#/$defs/extractionLayer" },
+        { "$ref": "#/$defs/validationLayer" },
+        { "$ref": "#/$defs/matchingLayer" },
+        { "$ref": "#/$defs/exceptionAdvisorLayer" },
+        { "$ref": "#/$defs/adaptiveUiLayer" },
+        { "$ref": "#/$defs/receiptEvidenceVerdictLayer" }
+      ],
+      "items": false
+    },
+    "complexityModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vectorVersion", "fields", "rules"],
+      "properties": {
+        "vectorVersion": { "const": "1.0.0" },
+        "fields": {
+          "const": ["documentVariance", "approvalDepth", "integrationCount", "segregationRequired"]
+        },
+        "rules": {
+          "const": [
+            { "priority": 1, "ruleId": "SEGREGATION_REQUIRED_V1", "scenario": "SEGREGATED_ENTERPRISE", "predicate": "segregationRequired === true" },
+            { "priority": 2, "ruleId": "CONTROLLED_SCORE_V1", "scenario": "CONTROLLED", "predicate": "documentVariance + approvalDepth + integrationCount >= 3" },
+            { "priority": 3, "ruleId": "LEAN_LOW_COMPLEXITY_V1", "scenario": "LEAN", "predicate": "otherwise" }
+          ]
+        }
+      }
+    },
+    "scopeFreeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "nonScope", "actors", "outcomes", "risks", "falsifiers"],
+      "properties": {
+        "scope": { "$ref": "#/$defs/frozenTextList" },
+        "nonScope": { "$ref": "#/$defs/frozenTextList" },
+        "actors": { "$ref": "#/$defs/frozenTextList" },
+        "outcomes": { "$ref": "#/$defs/frozenTextList" },
+        "risks": { "$ref": "#/$defs/frozenTextList" },
+        "falsifiers": { "$ref": "#/$defs/frozenTextList" }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "allowedEffects", "customerDataAuthorized", "productiveBookingAuthorized", "externalCallsAuthorized"],
+      "properties": {
+        "mode": { "const": "LOCAL_SYNTHETIC_PROOF" },
+        "allowedEffects": { "const": ["READ_SYNTHETIC", "WRITE_LOCAL_PROOF"] },
+        "customerDataAuthorized": { "const": false },
+        "productiveBookingAuthorized": { "const": false },
+        "externalCallsAuthorized": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinal", "layerId", "version"],
+      "properties": {
+        "ordinal": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "layerId": { "type": "string" },
+        "version": { "const": "1.0.0" }
+      }
+    },
+    "sourceLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 1 }, "layerId": { "const": "SOURCE" } } }] },
+    "documentLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 2 }, "layerId": { "const": "DOCUMENT" } } }] },
+    "extractionLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 3 }, "layerId": { "const": "EXTRACTION" } } }] },
+    "validationLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 4 }, "layerId": { "const": "VALIDATION" } } }] },
+    "matchingLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 5 }, "layerId": { "const": "MATCHING" } } }] },
+    "exceptionAdvisorLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 6 }, "layerId": { "const": "EXCEPTION_ADVISOR" } } }] },
+    "adaptiveUiLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 7 }, "layerId": { "const": "ADAPTIVE_UI" } } }] },
+    "receiptEvidenceVerdictLayer": { "allOf": [{ "$ref": "#/$defs/layer" }, { "type": "object", "properties": { "ordinal": { "const": 8 }, "layerId": { "const": "RECEIPT_EVIDENCE_VERDICT" } } }] },
+    "frozenTextList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "complexityVector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["documentVariance", "approvalDepth", "integrationCount", "segregationRequired"],
+      "properties": {
+        "documentVariance": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "approvalDepth": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "integrationCount": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "segregationRequired": { "type": "boolean" }
+      }
+    },
+    "scenarioInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "vector", "requestedAuthority", "requestedEffects"],
+      "properties": {
+        "schemaVersion": { "const": "chimpmaera.incoming-invoice/scenario-input/v1" },
+        "vector": { "$ref": "#/$defs/complexityVector" },
+        "requestedAuthority": { "const": "LOCAL_SYNTHETIC_PROOF" },
+        "requestedEffects": { "const": ["READ_SYNTHETIC", "WRITE_LOCAL_PROOF"] }
+      }
+    }
+  }
+}
