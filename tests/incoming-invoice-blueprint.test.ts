@@ -29,7 +29,16 @@ test("AP-01 versions eight source-to-proof layers and transparently resolves LEA
   assert.equal(validate(INCOMING_INVOICE_BLUEPRINT_V1), true, JSON.stringify(validate.errors));
   assert.deepEqual(
     INCOMING_INVOICE_BLUEPRINT_V1.layers.map(({ layerId }) => layerId),
-    ["SOURCE", "INTAKE", "EXTRACTION", "NORMALIZATION", "VALIDATION", "APPROVAL", "BOOKING_PREVIEW", "PROOF"],
+    [
+      "SOURCE",
+      "DOCUMENT",
+      "EXTRACTION",
+      "VALIDATION",
+      "MATCHING",
+      "EXCEPTION_ADVISOR",
+      "ADAPTIVE_UI",
+      "RECEIPT_EVIDENCE_VERDICT",
+    ],
   );
   assert.ok(INCOMING_INVOICE_BLUEPRINT_V1.layers.every(({ version }) => version === "1.0.0"));
 
@@ -48,6 +57,18 @@ test("AP-01 versions eight source-to-proof layers and transparently resolves LEA
       productiveBookingAuthorized: false,
     },
   });
+});
+
+test("AP-01 focused suite is registered in the canonical full test entrypoint", () => {
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
+    scripts: Record<string, string>;
+  };
+
+  assert.equal(
+    packageJson.scripts["incoming-invoice:test"],
+    "npm run build --silent && node --test dist/tests/incoming-invoice-blueprint.test.js",
+  );
+  assert.match(packageJson.scripts.pretest ?? "", /npm run incoming-invoice:test/);
 });
 
 test("AP-01 derives CONTROLLED and SEGREGATED_ENTERPRISE only from the declared vector", () => {
