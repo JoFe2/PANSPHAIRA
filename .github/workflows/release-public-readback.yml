@@ -1,0 +1,41 @@
+name: Release authority anonymous public readback
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-public-readback-${{ github.event.release.id }}
+  cancel-in-progress: false
+
+jobs:
+  anonymous-public-readback-before-terminalization:
+    name: Anonymous public readback before terminalization
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out the immutable published tag without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up the exact supported Node.js runtime
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.14.1
+
+      - name: Verify checked-in integrity before public observation
+        run: sha256sum --check SHA256SUMS
+
+      - name: Verify the release-authority contract and adversarial matrix
+        run: env -u GH_TOKEN -u GITHUB_TOKEN npm run release-governance:test
+
+      - name: Require anonymous provider readback of the new release
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: env -u GH_TOKEN -u GITHUB_TOKEN npm run release-governance:public-readback -- --release-tag "$RELEASE_TAG" --require-conforming

@@ -1,0 +1,262 @@
+{
+  "schemaVersion": "pansphaira.audit-correction/release-truth-implementation-evidence/v1",
+  "taskId": "AUDIT-CORRECTION-376-IMPLEMENT",
+  "sourceIssue": {
+    "repository": "JoFe2/PANSPHAIRA",
+    "number": 376,
+    "url": "https://github.com/JoFe2/PANSPHAIRA/issues/376",
+    "publicReadAt": "2026-09-02T16:18:15Z"
+  },
+  "base": {
+    "ref": "origin/main",
+    "commit": "1e65fee46c609ba7239d63b9c245b32e045e004c",
+    "tree": "41c6c85775a54c9663aa9fd0a17a6d5c7c8d2880",
+    "exactCurrentMainAtImplementationStart": true
+  },
+  "process": {
+    "operatingModel": "Operating Model v1.1",
+    "preservedDecisions": [
+      "D-001",
+      "D-002",
+      "D-003",
+      "D-004",
+      "D-005",
+      "D-006",
+      "D-007"
+    ],
+    "newProcessVariantIntroduced": false,
+    "authorityWidened": false,
+    "secretsUsed": false,
+    "publicWritesPerformed": false,
+    "queueMutationsPerformed": 0,
+    "historicalReleaseMutationsPerformed": 0
+  },
+  "acceptanceOwnership": [
+    {
+      "id": "REL-TRUTH-AC01",
+      "criterion": "Versioned schema distinguishes regular/runnable artifact releases from source/evidence-only releases and defines which class may own GitHub Latest.",
+      "soleTaskOwner": "AUDIT-CORRECTION-376-IMPLEMENT",
+      "implementation": [
+        "release/governance.json",
+        "docs/RELEASE-GOVERNANCE.md",
+        "scripts/verify-release-governance.mjs"
+      ],
+      "canonicalTest": "REL-TRUTH taxonomy reconciles current Main, GitHub Latest, and the historical runnable artifact"
+    },
+    {
+      "id": "REL-TRUTH-AC02",
+      "criterion": "`release/governance.json`, Quickstart, README and release docs agree on current/latest/historical identities and asset expectations.",
+      "soleTaskOwner": "AUDIT-CORRECTION-376-IMPLEMENT",
+      "implementation": [
+        "release/governance.json",
+        "docs/QUICKSTART.md",
+        "README.md",
+        "docs/README.md",
+        "docs/index.md",
+        "docs/RELEASE-GOVERNANCE.md"
+      ],
+      "canonicalTest": "public release surfaces preserve source/latest/runnable identity boundaries"
+    },
+    {
+      "id": "REL-TRUTH-AC03",
+      "criterion": "Every new release body names exact merge SHA, included capability/issues, evidence boundary, tests, assets/checksums or explicit `NO_ASSETS_SOURCE_ONLY`, and nonclaims.",
+      "soleTaskOwner": "AUDIT-CORRECTION-376-IMPLEMENT",
+      "implementation": [
+        "release/governance.json",
+        "docs/RELEASE-GOVERNANCE.md",
+        "scripts/verify-release-governance.mjs"
+      ],
+      "canonicalTest": "regular/runnable and source/evidence-only releases pass only their class-specific public contract"
+    },
+    {
+      "id": "REL-TRUTH-AC04",
+      "criterion": "Publication workflow executes anonymous `release-governance:public-readback` after release creation; mismatch fails closure and cannot leave issue/queue DONE.",
+      "soleTaskOwner": "AUDIT-CORRECTION-376-IMPLEMENT",
+      "implementation": [
+        ".github/workflows/release-public-readback.yml",
+        "scripts/verify-release-governance.mjs",
+        "CONTRIBUTING.md"
+      ],
+      "canonicalTest": "post-creation publication workflow gates terminalization on anonymous public readback"
+    },
+    {
+      "id": "REL-TRUTH-AC05",
+      "criterion": "Negative probes cover wrong Latest, wrong class, missing body scope, absent expected asset, wrong target, draft/prerelease drift and stale governance.",
+      "soleTaskOwner": "AUDIT-CORRECTION-376-IMPLEMENT",
+      "implementation": [
+        "scripts/verify-release-governance.mjs",
+        "tests/release-governance.test.mjs"
+      ],
+      "canonicalTest": "complete release-authority adversarial matrix fails closed"
+    },
+    {
+      "id": "REL-TRUTH-AC06",
+      "criterion": "Current public state is reconciled without rewriting tags or silently reclassifying historical evidence.",
+      "soleTaskOwner": "AUDIT-CORRECTION-376-IMPLEMENT",
+      "implementation": [
+        "release/governance.json",
+        "docs/QUICKSTART.md",
+        "docs/RELEASE-GOVERNANCE.md",
+        "scripts/verify-release-governance.mjs"
+      ],
+      "canonicalTest": "stale recorded governance fails public-state readback"
+    },
+    {
+      "id": "REL-TRUTH-AC07",
+      "criterion": "`CONTRIBUTING.md`, release governance and the machine validator define one bounded contradiction preflight for every public delivery: each material claim maps to its maturity/proof class, authoritative artifact, exact identity, executable or anonymous-readback gate and explicit nonclaim. Release-identity drift, proof-class inflation, missing exact-head documented paths, circular/caller-minted provenance and stale public status must fail or be owned by an explicit acceptance ID with a negative regression probe.",
+      "soleTaskOwner": "AUDIT-CORRECTION-376-IMPLEMENT",
+      "implementation": [
+        "CONTRIBUTING.md",
+        "release/governance.json",
+        "docs/RELEASE-GOVERNANCE.md",
+        "scripts/verify-release-governance.mjs",
+        "tests/release-governance.test.mjs"
+      ],
+      "canonicalTest": "bounded contradiction preflight has one closed ownership and failure matrix"
+    }
+  ],
+  "redEvidence": [
+    {
+      "finding": "PUBLIC_LATEST_MISMATCH",
+      "beforeExpected": "v0.2.0-poc.20260825.1",
+      "anonymousActual": "2026_09_02_v7",
+      "status": "EXPECTED_RED_OBSERVED"
+    },
+    {
+      "finding": "PUBLIC_RELEASE_BODY_CONTRACT_INCOMPLETE",
+      "anonymousActualTag": "2026_09_02_v7",
+      "missingSections": [
+        "Release class",
+        "Exact merge SHA",
+        "Included capabilities and issues",
+        "Evidence boundary",
+        "Tests",
+        "Assets and checksums",
+        "Nonclaims",
+        "Closure state"
+      ],
+      "customAssetCount": 0,
+      "sourceOnlyMarkerPresent": false,
+      "status": "EXPECTED_RED_OBSERVED"
+    }
+  ],
+  "publicTruthReadback": {
+    "command": "env -u GH_TOKEN -u GITHUB_TOKEN NODE_OPTIONS=--jitless npm run release-governance:public-readback",
+    "status": "PASS",
+    "anonymous": true,
+    "githubLatest": {
+      "tag": "2026_09_02_v7",
+      "class": "SOURCE_EVIDENCE_ONLY",
+      "target": "1e65fee46c609ba7239d63b9c245b32e045e004c",
+      "customAssets": []
+    },
+    "runnableArtifact": {
+      "tag": "v0.2.0-poc.20260825.1",
+      "class": "REGULAR_RUNNABLE_ARTIFACT",
+      "latest": false,
+      "archive": "cm-product-increment-rc-20260825-canonical-number.tar.gz",
+      "archiveSha256": "262143e0d51cbc83422b0fe35d2019a15c5c57c099d5054bd176c3e1649bb0ca"
+    }
+  },
+  "verifiedLocalGates": [
+    {
+      "command": "NODE_OPTIONS=--jitless npm run release-governance:test",
+      "status": "PASS",
+      "tests": 84,
+      "passed": 84
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless npm run release-governance:verify",
+      "status": "PASS",
+      "result": "RELEASE_GOVERNANCE_PASS"
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless npm run public-spelling:test",
+      "status": "PASS",
+      "tests": 5,
+      "passed": 5
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless npm run build",
+      "status": "PASS"
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless npm run lint",
+      "status": "PASS"
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless node --test dist/tests/verification-fabric-v2.test.js",
+      "status": "PASS",
+      "tests": 30,
+      "passed": 30
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless npm run supply-chain:verify",
+      "status": "PASS",
+      "lockDigest": "19f9f5967563ed3f3dffce82430f5ebbd7cfb3b6b319015eb466c198f496b167"
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless ./scripts/build-public-release.sh --output /tmp/cm-product-increment-rc-20260902-audit-correction-376",
+      "status": "PASS",
+      "ephemeralArchiveSha256": "75445017d43a8b730a50e0f21deb87d22ae8a65fd771dd57af29f2a4d7347d79",
+      "ephemeralOutputRemoved": true
+    },
+    {
+      "command": "sha256sum -c SHA256SUMS",
+      "status": "PASS",
+      "entries": 1756
+    }
+  ],
+  "localInfrastructureEvidence": [
+    {
+      "command": "npm ci --ignore-scripts --no-audit --no-fund",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "productVerdict": "NONE",
+      "diagnosticCommand": "NODE_OPTIONS=--jitless npm ci --ignore-scripts --no-audit --no-fund",
+      "diagnosticStatus": "PASS"
+    },
+    {
+      "command": "npm run test",
+      "exitCode": 133,
+      "signal": "SIGTRAP",
+      "productVerdict": "NONE"
+    },
+    {
+      "command": "NODE_OPTIONS=--jitless npm run test",
+      "exitCode": 1,
+      "productVerdict": "NONE",
+      "completedBeforeBlocker": 65,
+      "blocker": "Node --jitless disables WebAssembly required by the pre-existing loopback knowledge-quality API test's undici fetch implementation."
+    }
+  ],
+  "canonicalRegistration": {
+    "npmScript": "release-governance:test",
+    "verificationNode": "repository-integrity",
+    "verificationGraphVersion": 44,
+    "ownedTestCommand": "npm run release-governance:test",
+    "publicManifestCountUnchanged": 1447,
+    "rootChecksums": "REFRESHED_AND_VERIFIED"
+  },
+  "pendingExternalSequence": [
+    "ONE_INDEPENDENT_ISSUE_LEVEL_REVIEW",
+    "EXACT_PR_HEAD_CI",
+    "SHA_BOUND_MERGE",
+    "EXACT_MAIN_HEAD_CI",
+    "RELEASE_OR_NO_RELEASE_DECISION",
+    "POST_CREATION_ANONYMOUS_PUBLIC_READBACK_IF_RELEASED",
+    "ISSUE_CLOSED_ONLY_AFTER_SUCCESSFUL_READBACK",
+    "QUEUE_RECONCILIATION_BY_FINAL_OWNER"
+  ],
+  "nonclaims": [
+    "NO_PUSH_PR_MERGE_RELEASE_ISSUE_CLOSE_OR_QUEUE_MUTATION",
+    "NO_HISTORICAL_TAG_BODY_TARGET_OR_ASSET_REWRITE",
+    "NO_RETROACTIVE_V2_CONFORMANCE_FOR_LEGACY_RELEASES",
+    "NO_SOURCE_EVIDENCE_AS_RUNNABLE_ARTIFACT_CLAIM",
+    "NO_PRODUCTION_FITNESS_OR_LIVE_PROVIDER_CLAIM",
+    "NO_EXTERNAL_TERMINAL_STATE_CLAIM",
+    "NO_FULL_SUITE_PRODUCT_VERDICT_FROM_LOCAL_SIGTRAP_OR_JITLESS_WEBASSEMBLY_BLOCKER",
+    "NO_RECURSIVE_BINDING_OF_THIS_RECEIPT_TO_ITS_CONTAINING_COMMIT"
+  ],
+  "candidateDisposition": "PACKAGE_DONE_PENDING_LOCAL_COMMIT_INDEPENDENT_REVIEW_AND_CONTROLLER_PUBLIC_SEQUENCE"
+}

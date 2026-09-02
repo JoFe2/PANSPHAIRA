@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { request } from "node:https";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -88,6 +90,319 @@ function publicDocumentationPresentationIssues(text, path) {
   return [...new Set(issues)];
 }
 
+function markdownSections(markdown) {
+  const headings = [...markdown.matchAll(/^## ([^\n]+)\s*$/gm)];
+  const sections = new Map();
+  for (const [index, heading] of headings.entries()) {
+    const name = heading[1].trim();
+    const start = heading.index + heading[0].length;
+    const end = headings[index + 1]?.index ?? markdown.length;
+    const values = sections.get(name) ?? [];
+    values.push(markdown.slice(start, end).trim());
+    sections.set(name, values);
+  }
+  return sections;
+}
+
+function oneSection(sections, name) {
+  const values = sections.get(name) ?? [];
+  return values.length === 1 ? values[0] : "";
+}
+
+function exactPublicMetadata(record, release) {
+  return release?.tag_name === record?.tag
+    && release?.id === record?.releaseId
+    && release?.name === record?.title
+    && release?.target_commitish === record?.targetCommitish
+    && release?.draft === record?.draft
+    && release?.prerelease === record?.prerelease
+    && release?.published_at === record?.publishedAt
+    && release?.html_url === record?.url;
+}
+
+function assetInventoryMatches(expectedAssets, actualAssets) {
+  const normalize = (assets) => [...(assets ?? [])]
+    .map(({ name, size }) => ({ name, size }))
+    .sort((left, right) => left.name.localeCompare(right.name, "en"));
+  return JSON.stringify(normalize(expectedAssets)) === JSON.stringify(normalize(actualAssets));
+}
+
+function validateDownloadedAssets(issues, expectedAssets, downloadedAssets, assetManifest) {
+  if (!(downloadedAssets instanceof Map)) return;
+  for (const asset of expectedAssets ?? []) {
+    const bytes = downloadedAssets.get(asset.name);
+    issue(issues, bytes !== undefined, `PUBLIC_ASSET_BYTES_MISSING:${asset.name}`);
+    if (bytes === undefined) continue;
+    const buffer = Buffer.from(bytes);
+    issue(issues, buffer.length === asset.size, `PUBLIC_ASSET_SIZE_MISMATCH:${asset.name}`);
+    issue(issues, sha256(buffer) === asset.sha256, `PUBLIC_ASSET_SHA256_MISMATCH:${asset.name}`);
+  }
+  if (assetManifest?.name && assetManifest?.declares) {
+    const declarationBytes = downloadedAssets.get(assetManifest.name);
+    const declaredAsset = (expectedAssets ?? []).find(({ name }) => name === assetManifest.declares);
+    if (declarationBytes !== undefined && declaredAsset !== undefined) {
+      issue(
+        issues,
+        Buffer.from(declarationBytes).toString("utf8").trim() === `${declaredAsset.sha256}  ${declaredAsset.name}`,
+        "PUBLIC_ASSET_MANIFEST_CONTENT_MISMATCH",
+      );
+    }
+  }
+}
+
+export function validateReleaseContract({
+  root = process.cwd(),
+  governance,
+  release,
+  latest,
+  tagRef,
+  downloadedAssets = new Map(),
+}) {
+  const issues = [];
+  const body = typeof release?.body === "string" ? release.body : "";
+  const sections = markdownSections(body);
+  const requiredSections = governance?.releaseBodyContract?.requiredSections ?? [];
+  const observedHeadings = [...body.matchAll(/^## ([^\n]+)\s*$/gm)].map((match) => match[1].trim());
+  issue(
+    issues,
+    JSON.stringify(observedHeadings) === JSON.stringify(requiredSections),
+    "PUBLIC_BODY_SECTION_ORDER_OR_EXTRA_INVALID",
+  );
+  for (const name of requiredSections) {
+    const values = sections.get(name) ?? [];
+    issue(
+      issues,
+      values.length === 1 && values[0].length > 0,
+      name === "Included capabilities and issues" ? "PUBLIC_BODY_SCOPE_MISSING" : `PUBLIC_BODY_SECTION_MISSING:${name}`,
+    );
+  }
+
+  const classSection = oneSection(sections, "Release class");
+  const classMatches = [...classSection.matchAll(/^RELEASE_CLASS: ([A-Z_]+)$/gm)];
+  const releaseClass = classMatches.length === 1 ? classMatches[0][1] : "";
+  const knownClasses = new Set((governance?.releaseTaxonomy?.classes ?? []).map(({ id }) => id));
+  issue(issues, knownClasses.has(releaseClass), "PUBLIC_RELEASE_CLASS_INVALID");
+  issue(
+    issues,
+    releaseClass !== "" && releaseClass === governance?.releaseTaxonomy?.githubLatestOwnerClass,
+    "PUBLIC_LATEST_CLASS_MISMATCH",
+  );
+
+  issue(issues, latest?.tag_name === release?.tag_name, "PUBLIC_LATEST_MISMATCH");
+  issue(issues, release?.draft === false, "PUBLIC_DRAFT_MISMATCH");
+  issue(issues, release?.prerelease === false, "PUBLIC_PRERELEASE_MISMATCH");
+  issue(
+    issues,
+    Number.isSafeInteger(release?.id) && release.id > 0
+      && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(release?.published_at ?? "")
+      && release?.html_url === `https://github.com/${governance?.repository}/releases/tag/${release?.tag_name}`,
+    "PUBLIC_RELEASE_METADATA_MISMATCH",
+  );
+  issue(
+    issues,
+    typeof release?.name === "string" && release.name.trim().length > 0
+      && !/\b(?:daily|today(?:'s)?|calendar)\b/i.test(release.name),
+    "PUBLIC_FUNCTIONAL_TITLE_MISSING",
+  );
+
+  const mergeSection = oneSection(sections, "Exact merge SHA");
+  const mergeMatches = [...mergeSection.matchAll(/^MERGE_SHA: ([a-f0-9]{40})$/gm)];
+  const mergeSha = mergeMatches.length === 1 ? mergeMatches[0][1] : "";
+  issue(issues, mergeSha !== "", "PUBLIC_BODY_MERGE_SHA_MISSING");
+  issue(
+    issues,
+    mergeSha !== ""
+      && release?.target_commitish === mergeSha
+      && tagRef?.object?.sha === mergeSha
+      && tagRef?.object?.type === "commit",
+    "PUBLIC_TARGET_MISMATCH",
+  );
+
+  const scope = oneSection(sections, "Included capabilities and issues");
+  const capabilityIds = [...scope.matchAll(/^- CAPABILITY: ([A-Z0-9][A-Z0-9._:-]*)$/gm)].map((match) => match[1]);
+  const issueIds = [...scope.matchAll(/^- ISSUE: #(\d+)$/gm)].map((match) => Number(match[1]));
+  issue(
+    issues,
+    capabilityIds.length > 0 && new Set(capabilityIds).size === capabilityIds.length
+      && issueIds.length > 0 && issueIds.every((value) => Number.isSafeInteger(value) && value > 0),
+    "PUBLIC_BODY_SCOPE_MISSING",
+  );
+
+  const evidence = oneSection(sections, "Evidence boundary");
+  const proofLines = evidence.split("\n").filter((line) => line.startsWith("- CLAIM_PROOF:"));
+  const proofPattern = /^- CLAIM_PROOF: ([A-Z0-9][A-Z0-9._:-]*) \| MATURITY=([A-Z_]+) \| PROOF_CLASS=([A-Z_]+) \| ARTIFACT=([^|\n]+) \| EXACT_IDENTITY=([^|\n]+) \| GATE=([^|\n]+) \| NONCLAIM=(.+)$/;
+  const proofs = proofLines.map((line) => line.match(proofPattern)).filter(Boolean).map((match) => ({
+    claimId: match[1],
+    maturity: match[2],
+    proofClass: match[3],
+    artifact: match[4].trim(),
+    exactIdentity: match[5].trim(),
+    gate: match[6].trim(),
+    nonclaim: match[7].trim(),
+  }));
+  issue(
+    issues,
+    proofs.length > 0 && proofs.length === proofLines.length && new Set(proofs.map(({ claimId }) => claimId)).size === proofs.length,
+    "PUBLIC_BODY_CLAIM_PROOF_INVALID",
+  );
+  const proofIds = new Set(proofs.map(({ claimId }) => claimId));
+  issue(
+    issues,
+    capabilityIds.length === proofs.length && capabilityIds.every((claimId) => proofIds.has(claimId)),
+    "PUBLIC_BODY_CLAIM_PROOF_OWNERSHIP_MISSING",
+  );
+
+  const matrix = new Map((governance?.contradictionPreflight?.maturityProofMatrix ?? [])
+    .map((entry) => [`${entry.maturity}\0${entry.proofClass}`, entry.gate]));
+  const testsSection = oneSection(sections, "Tests");
+  let packageScripts = {};
+  let publicManifestPaths = new Set();
+  try {
+    packageScripts = JSON.parse(read(root, "package.json")).scripts ?? {};
+    publicManifestPaths = new Set(read(root, "release/public-files.manifest").split("\n")
+      .filter((line) => line && !line.startsWith("#"))
+      .map((line) => line.split("\t")[0]));
+  } catch {
+    issues.push("PUBLIC_BODY_PROOF_REPOSITORY_CONTEXT_UNREADABLE");
+  }
+  for (const proof of proofs) {
+    const gateContract = matrix.get(`${proof.maturity}\0${proof.proofClass}`);
+    issue(issues, gateContract !== undefined, "PUBLIC_BODY_PROOF_CLASS_INFLATION");
+    const executable = proof.gate.startsWith("EXECUTABLE:");
+    const anonymous = proof.gate === "ANONYMOUS_PUBLIC_READBACK";
+    issue(
+      issues,
+      gateContract === "EXECUTABLE" ? executable
+        : gateContract === "ANONYMOUS_PUBLIC_READBACK" ? anonymous
+          : gateContract === "EXECUTABLE_OR_ANONYMOUS_PUBLIC_READBACK" && (executable || anonymous),
+      "PUBLIC_BODY_PROOF_GATE_INVALID",
+    );
+    issue(issues, proof.nonclaim.length >= 10 && !/^none$/i.test(proof.nonclaim), "PUBLIC_BODY_CLAIM_NONCLAIM_MISSING");
+
+    const localArtifact = /^[A-Za-z0-9._/-]+$/.test(proof.artifact)
+      && !proof.artifact.startsWith("/")
+      && !proof.artifact.split("/").some((part) => part === "" || part === "." || part === "..");
+    const providerArtifact = proof.artifact === `https://github.com/${governance?.repository}/commit/${mergeSha}`;
+    const callerMinted = /(?:CALLER|RELEASE[_ -]?BODY|SELF[_ -]?ASSERT)/i.test(proof.artifact);
+    issue(
+      issues,
+      !callerMinted && (localArtifact || providerArtifact),
+      "PUBLIC_BODY_PROVENANCE_CIRCULAR_OR_CALLER_MINTED",
+    );
+    if (localArtifact) {
+      let bytes;
+      try { bytes = readFileSync(resolve(root, proof.artifact)); } catch { /* handled below */ }
+      issue(issues, bytes !== undefined && publicManifestPaths.has(proof.artifact), `PUBLIC_BODY_ARTIFACT_MISSING:${proof.artifact}`);
+      issue(
+        issues,
+        bytes !== undefined && proof.exactIdentity === `sha256:${sha256(bytes)}`,
+        `PUBLIC_BODY_ARTIFACT_IDENTITY_MISMATCH:${proof.artifact}`,
+      );
+    } else if (providerArtifact) {
+      issue(issues, proof.exactIdentity === `git:${mergeSha}`, "PUBLIC_BODY_PROVIDER_IDENTITY_MISMATCH");
+    }
+    if (executable) {
+      const command = proof.gate.slice("EXECUTABLE:".length);
+      issue(issues, testsSection.includes(`- TEST: ${command} => PASS`), "PUBLIC_BODY_EXECUTABLE_GATE_UNLISTED");
+      const npmScript = command.match(/^npm run ([A-Za-z0-9:_-]+)$/)?.[1];
+      issue(issues, npmScript !== undefined && typeof packageScripts[npmScript] === "string", "PUBLIC_BODY_EXECUTABLE_GATE_UNKNOWN");
+    }
+  }
+
+  const nonclaims = oneSection(sections, "Nonclaims");
+  issue(issues, /^- NONCLAIM: .{10,}$/m.test(nonclaims), "PUBLIC_BODY_NONCLAIMS_MISSING");
+  const closure = oneSection(sections, "Closure state");
+  issue(
+    issues,
+    closure.includes(governance?.releaseBodyContract?.pendingPublicReadback ?? "__missing__")
+      && closure.includes(governance?.releaseBodyContract?.blockedTerminalState ?? "__missing__")
+      && !/^(?:PUBLIC_READBACK|ISSUE_QUEUE_TERMINAL):\s*(?:DONE|PASS|CLOSED|RELEASED)\b/im.test(closure),
+    "PUBLIC_STATUS_TERMINAL_BEFORE_READBACK",
+  );
+
+  const assetSection = oneSection(sections, "Assets and checksums");
+  const assetPattern = /^- ASSET: ([A-Za-z0-9._-]+) \| SIZE=(\d+) \| SHA256=([a-f0-9]{64})$/;
+  const assetLines = assetSection.split("\n").filter((line) => line.startsWith("- ASSET:"));
+  const bodyAssets = assetLines.map((line) => line.match(assetPattern)).filter(Boolean).map((match) => ({
+    name: match[1],
+    size: Number(match[2]),
+    sha256: match[3],
+  }));
+  if (releaseClass === "REGULAR_RUNNABLE_ARTIFACT") {
+    const archives = bodyAssets.filter(({ name }) => name.endsWith(".tar.gz"));
+    const sidecars = bodyAssets.filter(({ name }) => name.endsWith(".tar.gz.sha256"));
+    issue(
+      issues,
+      bodyAssets.length === assetLines.length && archives.length === 1 && sidecars.length === 1
+        && sidecars[0].name === `${archives[0].name}.sha256`,
+      "PUBLIC_REGULAR_ASSET_CONTRACT_INVALID",
+    );
+    issue(
+      issues,
+      bodyAssets.every(({ size }) => Number.isSafeInteger(size) && size > 0),
+      "PUBLIC_REGULAR_ASSET_CONTRACT_INVALID",
+    );
+    issue(issues, assetInventoryMatches(bodyAssets, release?.assets), "PUBLIC_ASSET_SET_OR_SIZE_MISMATCH");
+    issue(
+      issues,
+      (release?.assets ?? []).every(({ name, browser_download_url: url }) => url === `https://github.com/${governance?.repository}/releases/download/${release?.tag_name}/${name}`),
+      "PUBLIC_ASSET_URL_MISMATCH",
+    );
+    validateDownloadedAssets(issues, bodyAssets, downloadedAssets, {
+      name: sidecars[0]?.name,
+      declares: archives[0]?.name,
+    });
+    issue(issues, !assetSection.includes("NO_ASSETS_SOURCE_ONLY"), "PUBLIC_REGULAR_SOURCE_ONLY_MARKER_DENIED");
+  } else if (releaseClass === "SOURCE_EVIDENCE_ONLY") {
+    issue(issues, assetSection === governance?.releaseBodyContract?.sourceOnlyNoAssetsMarker, "PUBLIC_SOURCE_ONLY_MARKER_MISSING");
+    issue(
+      issues,
+      (release?.assets ?? []).length === 0 && bodyAssets.length === 0 && downloadedAssets.size === 0,
+      "PUBLIC_SOURCE_ONLY_ASSET_DENIED",
+    );
+  }
+  return [...new Set(issues)].sort();
+}
+
+export function validateRecordedPublicState({
+  governance,
+  latestRelease,
+  latest,
+  latestTagRef,
+  runnableRelease,
+  runnableTagRef,
+  downloadedRunnableAssets,
+}) {
+  const issues = [];
+  const expectedLatest = governance?.publicLatestRelease ?? {};
+  const latestMatches = exactPublicMetadata(expectedLatest, latestRelease)
+    && latest?.tag_name === expectedLatest.tag
+    && latestTagRef?.object?.sha === expectedLatest.tagObjectSha
+    && latestTagRef?.object?.type === "commit"
+    && sha256(Buffer.from(latestRelease?.body ?? "", "utf8")) === expectedLatest.bodySha256
+    && assetInventoryMatches(expectedLatest.assets, latestRelease?.assets);
+  issue(issues, latestMatches, "PUBLIC_GOVERNANCE_STALE");
+  issue(issues, latest?.tag_name === expectedLatest.tag, "PUBLIC_LATEST_MISMATCH");
+  issue(
+    issues,
+    expectedLatest.releaseClass === governance?.releaseTaxonomy?.githubLatestOwnerClass,
+    "PUBLIC_LATEST_CLASS_MISMATCH",
+  );
+
+  if (runnableRelease !== undefined || runnableTagRef !== undefined) {
+    const expectedRunnable = governance?.currentRelease ?? {};
+    const runnableMatches = exactPublicMetadata(expectedRunnable, runnableRelease)
+      && runnableTagRef?.object?.sha === expectedRunnable.tagObjectSha
+      && runnableTagRef?.object?.type === "commit"
+      && sha256(Buffer.from(runnableRelease?.body ?? "", "utf8")) === expectedRunnable.bodySha256
+      && assetInventoryMatches(expectedRunnable.assets, runnableRelease?.assets);
+    issue(issues, runnableMatches, "PUBLIC_RUNNABLE_GOVERNANCE_STALE");
+    issue(issues, latest?.tag_name !== expectedRunnable.tag, "PUBLIC_RUNNABLE_INCORRECTLY_LATEST");
+    validateDownloadedAssets(issues, expectedRunnable.assets ?? [], downloadedRunnableAssets, expectedRunnable.assetManifest);
+  }
+  return [...new Set(issues)].sort();
+}
+
 export function validateRepository(root = process.cwd()) {
   const issues = [];
   let governance;
@@ -97,7 +412,80 @@ export function validateRepository(root = process.cwd()) {
     return [`GOVERNANCE_CONFIG_UNREADABLE:${error.code ?? error.message}`];
   }
 
-  issue(issues, governance.schemaVersion === "chimpmaera.release-governance/v1", "GOVERNANCE_SCHEMA_DENIED");
+  issue(issues, governance.schemaVersion === "chimpmaera.release-governance/v2", "GOVERNANCE_SCHEMA_DENIED");
+  const taxonomy = governance.releaseTaxonomy ?? {};
+  const classes = taxonomy.classes ?? [];
+  issue(issues, taxonomy.schemaVersion === "chimpmaera.release-taxonomy/v1", "RELEASE_TAXONOMY_SCHEMA_DENIED");
+  issue(
+    issues,
+    JSON.stringify(classes.map(({ id }) => id)) === JSON.stringify(["REGULAR_RUNNABLE_ARTIFACT", "SOURCE_EVIDENCE_ONLY"])
+      && classes[0]?.runnable === true && classes[0]?.evidenceOnly === false
+      && classes[0]?.assetContract === "ARCHIVE_AND_SHA256_SIDECAR"
+      && classes[1]?.runnable === false && classes[1]?.evidenceOnly === true
+      && classes[1]?.assetContract === "NO_CUSTOM_ASSETS_SOURCE_ONLY",
+    "RELEASE_CLASS_TAXONOMY_INVALID",
+  );
+  issue(issues, taxonomy.githubLatestOwnerClass === "SOURCE_EVIDENCE_ONLY", "LATEST_OWNER_CLASS_INVALID");
+  issue(
+    issues,
+    governance.releaseBodyContract?.schemaVersion === "chimpmaera.release-body/v1"
+      && governance.releaseBodyContract?.appliesTo === "EVERY_NEW_RELEASE_NO_RETROACTIVE_CONFORMANCE"
+      && JSON.stringify(governance.releaseBodyContract?.requiredSections) === JSON.stringify([
+        "Release class",
+        "Exact merge SHA",
+        "Included capabilities and issues",
+        "Evidence boundary",
+        "Tests",
+        "Assets and checksums",
+        "Nonclaims",
+        "Closure state",
+      ])
+      && governance.releaseBodyContract?.sourceOnlyNoAssetsMarker === "NO_ASSETS_SOURCE_ONLY"
+      && governance.releaseBodyContract?.pendingPublicReadback === "PUBLIC_READBACK: PENDING"
+      && governance.releaseBodyContract?.blockedTerminalState === "ISSUE_QUEUE_TERMINAL: BLOCKED_PENDING_PUBLIC_READBACK",
+    "RELEASE_BODY_CONTRACT_INVALID",
+  );
+
+  const preflight = governance.contradictionPreflight ?? {};
+  const expectedFailureModes = [
+    "RELEASE_IDENTITY_DRIFT",
+    "PROOF_CLASS_INFLATION",
+    "MISSING_EXACT_HEAD_DOCUMENTED_PATH",
+    "CIRCULAR_OR_CALLER_MINTED_PROVENANCE",
+    "STALE_PUBLIC_STATUS",
+    "STALE_GOVERNANCE",
+  ];
+  issue(
+    issues,
+    preflight.schemaVersion === "chimpmaera.public-delivery-contradiction-preflight/v1"
+      && preflight.appliesTo === "EVERY_PUBLIC_DELIVERY"
+      && JSON.stringify(preflight.requiredClaimOwnership) === JSON.stringify([
+        "materialClaimId",
+        "maturity",
+        "proofClass",
+        "authoritativeArtifact",
+        "exactIdentity",
+        "executableOrAnonymousReadbackGate",
+        "explicitNonclaim",
+      ])
+      && JSON.stringify((preflight.failureModes ?? []).map(({ id }) => id)) === JSON.stringify(expectedFailureModes)
+      && preflight.failureModes.every(({ disposition, negativeProbe }) => disposition === "FAIL_CLOSED" && typeof negativeProbe === "string" && negativeProbe.length > 0)
+      && preflight.exceptionContract?.acceptanceIdRequired === true
+      && preflight.exceptionContract?.negativeRegressionProbeRequired === true
+      && preflight.exceptionContract?.mayGrantConformance === false
+      && preflight.exceptionContract?.mayAuthorizeHistoricalMutation === false,
+    "CONTRADICTION_PREFLIGHT_INVALID",
+  );
+  issue(
+    issues,
+    JSON.stringify((preflight.maturityProofMatrix ?? []).map(({ maturity, proofClass, gate }) => [maturity, proofClass, gate])) === JSON.stringify([
+      ["RELEASED_LOCAL_SYNTHETIC", "LOCAL_EXECUTABLE", "EXECUTABLE"],
+      ["SOURCE_EVIDENCE_ONLY", "SOURCE_EVIDENCE", "EXECUTABLE_OR_ANONYMOUS_PUBLIC_READBACK"],
+      ["PUBLIC_PROVIDER_OBSERVED", "ANONYMOUS_PUBLIC_READBACK", "ANONYMOUS_PUBLIC_READBACK"],
+    ]),
+    "CLAIM_PROOF_MATRIX_INVALID",
+  );
+
   const release = governance.currentRelease ?? {};
   issue(issues, /^v\d+\.\d+\.\d+-poc\.\d{8}\.\d+$/.test(release.tag ?? ""), "CURRENT_TAG_INVALID");
   issue(issues, Number.isSafeInteger(release.releaseId) && release.releaseId > 0
@@ -106,9 +494,64 @@ export function validateRepository(root = process.cwd()) {
   issue(issues, typeof release.title === "string"
     && release.title.toLowerCase().includes((release.increment ?? "__missing__").toLowerCase()), "FUNCTIONAL_INCREMENT_TITLE_MISSING");
   issue(issues, !/\b(?:daily|today(?:'s)?|calendar)\b/i.test(release.title ?? ""), "CALENDAR_RELEASE_IDENTITY_DENIED");
-  issue(issues, release.draft === false && release.prerelease === false && release.mustBeLatest === true, "LATEST_POLICY_NOT_FAIL_CLOSED");
-  issue(issues, governance.policy?.anonymousReadbackRequired === true, "ANONYMOUS_READBACK_NOT_REQUIRED");
-  issue(issues, governance.policy?.assetManifestRequired === true && governance.policy?.assetHashesRequired === true, "ASSET_EVIDENCE_NOT_REQUIRED");
+  issue(
+    issues,
+    release.draft === false && release.prerelease === false && release.mustBeLatest === false
+      && release.releaseClass === "REGULAR_RUNNABLE_ARTIFACT" && release.historical === true
+      && /^[a-f0-9]{64}$/.test(release.bodySha256 ?? ""),
+    "RUNNABLE_ARTIFACT_IDENTITY_INVALID",
+  );
+
+  const publicLatest = governance.publicLatestRelease ?? {};
+  issue(
+    issues,
+    Number.isSafeInteger(publicLatest.releaseId) && publicLatest.releaseId > 0
+      && /^\d{4}_\d{2}_\d{2}_v\d+$/.test(publicLatest.tag ?? "")
+      && /^[a-f0-9]{40}$/.test(publicLatest.targetCommitish ?? "")
+      && publicLatest.targetCommitish === publicLatest.tagObjectSha
+      && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(publicLatest.publishedAt ?? "")
+      && publicLatest.url === `https://github.com/${governance.repository}/releases/tag/${publicLatest.tag}`
+      && publicLatest.draft === false && publicLatest.prerelease === false && publicLatest.mustBeLatest === true
+      && publicLatest.releaseClass === "SOURCE_EVIDENCE_ONLY"
+      && publicLatest.contractStatus === "LEGACY_PRE_V2_NONCONFORMING_RECONCILED"
+      && publicLatest.classificationBasis === "REL-TRUTH-AC06_EXPLICIT_FORWARD_ONLY_RECONCILIATION"
+      && Array.isArray(publicLatest.assets) && publicLatest.assets.length === 0
+      && sha256(Buffer.from(publicLatest.legacyBody ?? "", "utf8")) === publicLatest.bodySha256,
+    "PUBLIC_LATEST_RECONCILIATION_INVALID",
+  );
+  const exceptions = governance.legacyReleaseExceptions ?? [];
+  issue(
+    issues,
+    exceptions.length === 2
+      && exceptions.map(({ tag }) => tag).join("\0") === `${publicLatest.tag}\0${release.tag}`
+      && exceptions.every(({ acceptanceId, futureReleasePrecedent, metadataTagOrAssetMutationAuthorized, nonconformities }) => acceptanceId === "REL-TRUTH-AC06"
+        && futureReleasePrecedent === false && metadataTagOrAssetMutationAuthorized === false
+        && Array.isArray(nonconformities) && nonconformities.length > 0),
+    "LEGACY_RELEASE_EXCEPTION_INVALID",
+  );
+  issue(
+    issues,
+    governance.historicalReleasePolicy?.tagsAndAssetsImmutable === true
+      && governance.historicalReleasePolicy?.retroactiveV2ConformanceDenied === true
+      && governance.historicalReleasePolicy?.unlistedPreV2Records === "LEGACY_UNCLASSIFIED_PRESERVE_AS_EVIDENCE"
+      && governance.historicalReleasePolicy?.namedHistoricalIdentity?.tag === "v0.1.0"
+      && governance.historicalReleasePolicy?.namedHistoricalIdentity?.releaseClass === "LEGACY_UNCLASSIFIED",
+    "HISTORICAL_RELEASE_POLICY_INVALID",
+  );
+  issue(
+    issues,
+    governance.policy?.anonymousReadbackRequired === true
+      && governance.policy?.issueQueueTerminalizationRequiresPublicReadback === true,
+    "ANONYMOUS_READBACK_NOT_REQUIRED",
+  );
+  issue(
+    issues,
+    governance.policy?.classSpecificAssetContractRequired === true
+      && governance.policy?.regularAssetManifestRequired === true
+      && governance.policy?.regularAssetHashesRequired === true
+      && governance.policy?.sourceOnlyMarkerRequired === true,
+    "ASSET_EVIDENCE_NOT_REQUIRED",
+  );
   issue(issues, /draft=false/.test(governance.policy?.latest ?? "") && /prerelease=false/.test(governance.policy?.latest ?? ""), "LATEST_POLICY_UNSPECIFIED");
 
   const files = new Map();
@@ -276,6 +719,20 @@ export function validateRepository(root = process.cwd()) {
     && /Agent Sphere → governed Connections and\s+Crossings → Gateway Sphere/.test(docsHub)
     && /Sphere is terminology and\s+visualization only, not a protocol, schema, API or runtime abstraction/.test(docsHub), "DOCS_HUB_PRODUCT_ARCHITECTURE_MISSING");
   issue(issues, /contribution preflight[\s\S]{0,260}no\s+submission, publication, external write/i.test(docsHub), "HMI_PREFLIGHT_HUB_BOUNDARY_MISSING");
+  issue(
+    issues,
+    /source\/evidence-only GitHub Latest/i.test(docsHub)
+      && /regular\/runnable artifact/i.test(docsHub)
+      && /does not\s+supersede/i.test(docsHub),
+    "DOCS_HUB_RELEASE_CLASS_BOUNDARY_MISSING",
+  );
+
+  const docsIndex = files.get("docs/index.md") ?? "";
+  issue(
+    issues,
+    /source\/evidence-only/i.test(docsIndex) && /runnable artifact/i.test(docsIndex),
+    "DOCS_INDEX_RELEASE_CLASS_BOUNDARY_MISSING",
+  );
 
   const connectionGuide = read(root, "docs/CONNECT-YOUR-FIRST-SYSTEM.md");
   issue(issues, /RELEASED LOCAL-SYNTHETIC AUTHORING\/VALIDATION CONTRACT/.test(connectionGuide) && /PLANNED LIVE REALIZATION/.test(connectionGuide), "CONNECTION_MATURITY_BOUNDARY_MISSING");
@@ -292,14 +749,65 @@ export function validateRepository(root = process.cwd()) {
   const contributing = files.get("CONTRIBUTING.md") ?? "";
   issue(issues, /functional product increment/i.test(contributing) && /anonymous public\s+readback/i.test(contributing), "CONTRIBUTING_RELEASE_RULE_MISSING");
   issue(issues, /editorial Daily/i.test(contributing) && /does not gate/i.test(contributing), "EDITORIAL_RELEASE_SEPARATION_MISSING");
+  issue(
+    issues,
+    /bounded contradiction preflight/i.test(contributing)
+      && /material claim ID/i.test(contributing)
+      && /maturity and proof class/i.test(contributing)
+      && /authoritative artifact/i.test(contributing)
+      && /exact identity/i.test(contributing)
+      && /executable or anonymous-readback gate/i.test(contributing)
+      && /explicit nonclaim/i.test(contributing)
+      && /proof-class inflation/i.test(contributing)
+      && /circular or caller-minted provenance/i.test(contributing),
+    "CONTRIBUTING_CONTRADICTION_PREFLIGHT_MISSING",
+  );
   const releaseDocs = files.get("docs/RELEASE-GOVERNANCE.md") ?? "";
-  for (const heading of ["Product increments, not calendar identity", "Release-state policy", "Required publication evidence", "Public README and documentation presentation", "Claim/evidence boundary", "Active videos and historical evidence"]) {
+  for (const heading of ["Release taxonomy and current public truth", "Product increments, not calendar identity", "Release-state policy", "Exact release-body contract", "Required publication evidence", "Publication workflow gate", "Bounded contradiction preflight", "Public README and documentation presentation", "Claim/evidence boundary", "Active videos and historical evidence"]) {
     issue(issues, releaseDocs.includes(`## ${heading}`), `GOVERNANCE_SECTION_MISSING:${heading}`);
   }
+  issue(
+    issues,
+    releaseDocs.includes(publicLatest.tag) && releaseDocs.includes(publicLatest.targetCommitish)
+      && releaseDocs.includes(release.tag) && releaseDocs.includes("NO_ASSETS_SOURCE_ONLY")
+      && /not GitHub Latest/i.test(releaseDocs) && /legacy pre-v2/i.test(releaseDocs),
+    "GOVERNANCE_PUBLIC_IDENTITY_RECONCILIATION_MISSING",
+  );
+  issue(
+    issues,
+    quickstart.includes(release.tag) && /not Latest/i.test(quickstart)
+      && /source-only evidence release/i.test(quickstart) && /GitHub-generated source archives are not substitutes/i.test(quickstart),
+    "QUICKSTART_RELEASE_CLASS_BOUNDARY_MISSING",
+  );
+  issue(
+    issues,
+    /source\/evidence-only/i.test(releaseSection)
+      && /runnable artifact/i.test(releaseSection)
+      && /does not supersede/i.test(releaseSection),
+    "README_RELEASE_CLASS_BOUNDARY_MISSING",
+  );
+
+  let publicationWorkflow = "";
+  try { publicationWorkflow = read(root, ".github/workflows/release-public-readback.yml"); } catch { issues.push("PUBLICATION_READBACK_WORKFLOW_MISSING"); }
+  issue(
+    issues,
+    /^\s*release:\s*$/m.test(publicationWorkflow)
+      && /^\s*types:\s*\[published\]\s*$/m.test(publicationWorkflow)
+      && /^permissions:\s*\n\s+contents: read$/m.test(publicationWorkflow)
+      && /persist-credentials: false/.test(publicationWorkflow)
+      && /github\.event\.release\.tag_name/.test(publicationWorkflow)
+      && /env -u GH_TOKEN -u GITHUB_TOKEN npm run release-governance:test/.test(publicationWorkflow)
+      && /env -u GH_TOKEN -u GITHUB_TOKEN npm run release-governance:public-readback -- --release-tag "\$RELEASE_TAG" --require-conforming/.test(publicationWorkflow)
+      && publicationWorkflow.indexOf("release-governance:test") < publicationWorkflow.indexOf("release-governance:public-readback")
+      && !/contents: write|issues: write|pull-requests: write|gh issue close|queue[^\n]*done/i.test(publicationWorkflow),
+    "PUBLICATION_READBACK_WORKFLOW_INVALID",
+  );
 
   const publicManifest = read(root, "release/public-files.manifest");
   const publicPaths = new Set(publicManifest.trim().split("\n").map((line) => line.split("\t")[0]));
   issue(issues, Array.isArray(governance.claimEvidence) && governance.claimEvidence.length > 0, "CLAIM_EVIDENCE_MAPPING_MISSING");
+  const claimIds = (governance.claimEvidence ?? []).map(({ claimId }) => claimId);
+  issue(issues, new Set(claimIds).size === claimIds.length && claimIds.includes("CM-REL-024"), "CLAIM_EVIDENCE_IDENTITY_INVALID");
   const expectedComponents = new Set(["Verification Fabric", "Update/Doctor", "HMI/Harness Multitool", "Azure/Entra Identity Contract", "Power Platform Read Connector", "Resource-Plane Profiles M0", "ADD to REPLACE Adaptability Benchmark M0", "Extension Assurance Profiles", "Minimized Agent-Work Event Contract", "AWI-03 Universal Knowledge Envelope", "External Video Service", "Synthetic CPU Video Package Reference", "External SBA-v2 BI Client", "ASF-INTAKE-2 Signal Release Intake", "INT-PROFILE-001 Integration Profiles", "VOICE-M0 Local PTT"]);
   const observedComponents = new Set();
   for (const mapping of governance.claimEvidence ?? []) {
@@ -345,74 +853,186 @@ export function validateRepository(root = process.cwd()) {
   return [...new Set(issues)].sort();
 }
 
-async function getJson(url) {
-  const response = await fetch(url, { headers: { Accept: "application/vnd.github+json", "User-Agent": "chimpmaera-release-governance" } });
+async function getJson(url, fetchImpl) {
+  const response = await fetchImpl(url, { headers: { Accept: "application/vnd.github+json", "User-Agent": "pansphaira-release-governance" } });
   assert.equal(response.ok, true, `PUBLIC_READBACK_HTTP_${response.status}:${url}`);
   return response.json();
 }
 
-export async function verifyPublicReadback(root = process.cwd()) {
-  const localIssues = validateRepository(root);
-  assert.deepEqual(localIssues, [], localIssues.join("\n"));
-  const governance = JSON.parse(read(root, "release/governance.json"));
-  const expected = governance.currentRelease;
-  const api = `https://api.github.com/repos/${governance.repository}`;
-  const [release, latest, tagRef] = await Promise.all([
-    getJson(`${api}/releases/tags/${expected.tag}`),
-    getJson(`${api}/releases/latest`),
-    getJson(`${api}/git/ref/tags/${expected.tag}`)
-  ]);
-  assert.equal(release.tag_name, expected.tag, "PUBLIC_TAG_MISMATCH");
-  assert.equal(release.id, expected.releaseId, "PUBLIC_RELEASE_ID_MISMATCH");
-  assert.equal(release.name, expected.title, "PUBLIC_TITLE_MISMATCH");
-  assert.equal(release.target_commitish, expected.targetCommitish, "PUBLIC_TARGET_MISMATCH");
-  assert.equal(release.draft, expected.draft, "PUBLIC_DRAFT_MISMATCH");
-  assert.equal(release.prerelease, expected.prerelease, "PUBLIC_PRERELEASE_MISMATCH");
-  assert.equal(release.published_at, expected.publishedAt, "PUBLIC_PUBLISHED_AT_MISMATCH");
-  assert.equal(release.html_url, expected.url, "PUBLIC_RELEASE_URL_MISMATCH");
-  assert.equal(latest.tag_name, expected.tag, "PUBLIC_LATEST_MISMATCH");
-  assert.equal(tagRef.object.sha, expected.tagObjectSha, "PUBLIC_TAG_OBJECT_MUTATED");
-  assert.equal(tagRef.object.type, "commit", "PUBLIC_TAG_TYPE_MUTATED");
-  assert.ok((release.body ?? "").toLowerCase().includes(expected.increment.toLowerCase()), "PUBLIC_BODY_INCREMENT_MISSING");
-  assert.doesNotMatch(release.body ?? "", /POC Daily|Today's Daily|Previous Daily/i, "PUBLIC_BODY_DAILY_IDENTITY_DENIED");
+function anonymousFetch(url, options = {}, redirectCount = 0) {
+  return new Promise((resolveRequest, reject) => {
+    const parsed = new URL(url);
+    const allowedHost = parsed.hostname === "api.github.com"
+      || parsed.hostname === "github.com"
+      || parsed.hostname === "raw.githubusercontent.com"
+      || parsed.hostname.endsWith(".githubusercontent.com");
+    if (parsed.protocol !== "https:" || !allowedHost) {
+      reject(new Error(`PUBLIC_READBACK_HOST_DENIED:${parsed.hostname}`));
+      return;
+    }
+    const req = request(parsed, {
+      method: "GET",
+      headers: options.headers ?? {},
+    }, (response) => {
+      const status = response.statusCode ?? 0;
+      const location = response.headers.location;
+      if (location && [301, 302, 303, 307, 308].includes(status)) {
+        response.resume();
+        if (redirectCount >= 5) {
+          reject(new Error("PUBLIC_READBACK_REDIRECT_LIMIT"));
+          return;
+        }
+        anonymousFetch(new URL(location, parsed).href, options, redirectCount + 1).then(resolveRequest, reject);
+        return;
+      }
+      const chunks = [];
+      let size = 0;
+      response.on("data", (chunk) => {
+        size += chunk.length;
+        if (size > 128 * 1024 * 1024) req.destroy(new Error("PUBLIC_READBACK_RESPONSE_TOO_LARGE"));
+        else chunks.push(chunk);
+      });
+      response.on("end", () => {
+        const bytes = Buffer.concat(chunks);
+        resolveRequest({
+          ok: status >= 200 && status < 300,
+          status,
+          async arrayBuffer() { return bytes; },
+          async json() { return JSON.parse(bytes.toString("utf8")); },
+          async text() { return bytes.toString("utf8"); },
+        });
+      });
+    });
+    req.setTimeout(30_000, () => req.destroy(new Error("PUBLIC_READBACK_TIMEOUT")));
+    req.on("error", reject);
+    req.end();
+  });
+}
 
-  const actualAssets = [...release.assets].sort((a, b) => a.name.localeCompare(b.name));
-  const expectedAssets = [...expected.assets].sort((a, b) => a.name.localeCompare(b.name));
-  assert.deepEqual(actualAssets.map(({ name, size }) => ({ name, size })), expectedAssets.map(({ name, size }) => ({ name, size })), "PUBLIC_ASSET_SET_OR_SIZE_MISMATCH");
+async function downloadReleaseAssets(release, fetchImpl) {
   const downloaded = new Map();
-  for (const asset of actualAssets) {
-    const response = await fetch(asset.browser_download_url, { headers: { "User-Agent": "chimpmaera-release-governance" }, redirect: "follow" });
+  for (const asset of release?.assets ?? []) {
+    const response = await fetchImpl(asset.browser_download_url, {
+      headers: { "User-Agent": "pansphaira-release-governance" },
+      redirect: "follow",
+    });
     assert.equal(response.ok, true, `PUBLIC_ASSET_HTTP_${response.status}:${asset.name}`);
-    const bytes = Buffer.from(await response.arrayBuffer());
-    const wanted = expectedAssets.find((item) => item.name === asset.name);
-    assert.equal(bytes.length, wanted.size, `PUBLIC_ASSET_SIZE_MISMATCH:${asset.name}`);
-    assert.equal(sha256(bytes), wanted.sha256, `PUBLIC_ASSET_SHA256_MISMATCH:${asset.name}`);
-    downloaded.set(asset.name, bytes);
+    downloaded.set(asset.name, Buffer.from(await response.arrayBuffer()));
   }
-  const declaration = downloaded.get(expected.assetManifest.name).toString("utf8").trim();
-  const declaredAsset = expectedAssets.find((asset) => asset.name === expected.assetManifest.declares);
-  assert.equal(declaration, `${declaredAsset.sha256}  ${declaredAsset.name}`, "PUBLIC_ASSET_MANIFEST_CONTENT_MISMATCH");
+  return downloaded;
+}
 
-  for (const path of ["README.md", "SECURITY.md", "SUPPORT.md", "docs/SECURITY-ASSURANCE.md", "docs/KNOWN-LIMITATIONS.md"]) {
-    const response = await fetch(`https://raw.githubusercontent.com/${governance.repository}/main/${path}`, { headers: { "User-Agent": "chimpmaera-release-governance" } });
+async function verifyPublishedSurfaces(root, governance, commitSha, fetchImpl) {
+  for (const path of [
+    "README.md",
+    "CONTRIBUTING.md",
+    "docs/QUICKSTART.md",
+    "docs/RELEASE-GOVERNANCE.md",
+    "release/governance.json",
+  ]) {
+    const response = await fetchImpl(`https://raw.githubusercontent.com/${governance.repository}/${commitSha}/${path}`, {
+      headers: { "User-Agent": "pansphaira-release-governance" },
+    });
     assert.equal(response.ok, true, `PUBLIC_SURFACE_HTTP_${response.status}:${path}`);
     assert.equal(await response.text(), read(root, path), `PUBLIC_SURFACE_MISMATCH:${path}`);
   }
+}
+
+export async function verifyPublicReadback(root = process.cwd(), options = {}) {
+  const localIssues = validateRepository(root);
+  assert.deepEqual(localIssues, [], localIssues.join("\n"));
+  const governance = JSON.parse(read(root, "release/governance.json"));
+  const fetchImpl = options.fetchImpl ?? anonymousFetch;
+  assert.equal(typeof fetchImpl, "function", "PUBLIC_READBACK_FETCH_UNAVAILABLE");
+  const api = `https://api.github.com/repos/${governance.repository}`;
+
+  if (options.requireConforming === true) {
+    assert.match(options.releaseTag ?? "", /^[A-Za-z0-9._-]+$/, "PUBLIC_RELEASE_TAG_ARGUMENT_INVALID");
+    const [release, latest, tagRef] = await Promise.all([
+      getJson(`${api}/releases/tags/${options.releaseTag}`, fetchImpl),
+      getJson(`${api}/releases/latest`, fetchImpl),
+      getJson(`${api}/git/ref/tags/${options.releaseTag}`, fetchImpl),
+    ]);
+    const downloadedAssets = await downloadReleaseAssets(release, fetchImpl);
+    const localHead = options.readLocalHead === undefined
+      ? execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim()
+      : options.readLocalHead();
+    assert.equal(localHead, tagRef.object.sha, "PUBLIC_CHECKOUT_HEAD_MISMATCH");
+    const contractIssues = validateReleaseContract({
+      root,
+      governance,
+      release,
+      latest,
+      tagRef,
+      downloadedAssets,
+    });
+    assert.deepEqual(contractIssues, [], contractIssues.join("\n"));
+    await verifyPublishedSurfaces(root, governance, tagRef.object.sha, fetchImpl);
+    return {
+      tag: release.tag_name,
+      releaseClass: oneSection(markdownSections(release.body ?? ""), "Release class").replace("RELEASE_CLASS: ", ""),
+      targetCommitish: release.target_commitish,
+      latest: true,
+      draft: false,
+      prerelease: false,
+      assets: release.assets.map(({ name, size }) => ({ name, size })),
+      anonymous: true,
+      terminalizationEligible: true,
+    };
+  }
+
+  assert.equal(options.releaseTag, undefined, "PUBLIC_RELEASE_TAG_REQUIRES_CONFORMING_MODE");
+  const expectedLatest = governance.publicLatestRelease;
+  const expectedRunnable = governance.currentRelease;
+  const [latestRelease, latest, latestTagRef, runnableRelease, runnableTagRef] = await Promise.all([
+    getJson(`${api}/releases/tags/${expectedLatest.tag}`, fetchImpl),
+    getJson(`${api}/releases/latest`, fetchImpl),
+    getJson(`${api}/git/ref/tags/${expectedLatest.tag}`, fetchImpl),
+    getJson(`${api}/releases/tags/${expectedRunnable.tag}`, fetchImpl),
+    getJson(`${api}/git/ref/tags/${expectedRunnable.tag}`, fetchImpl),
+  ]);
+  const downloadedRunnableAssets = await downloadReleaseAssets(runnableRelease, fetchImpl);
+  const stateIssues = validateRecordedPublicState({
+    governance,
+    latestRelease,
+    latest,
+    latestTagRef,
+    runnableRelease,
+    runnableTagRef,
+    downloadedRunnableAssets,
+  });
+  assert.deepEqual(stateIssues, [], stateIssues.join("\n"));
   return {
-    tag: expected.tag,
-    title: expected.title,
-    latest: true,
-    draft: false,
-    prerelease: false,
-    tagObjectSha: expected.tagObjectSha,
-    assets: expectedAssets.map(({ name, size, sha256: digest }) => ({ name, size, sha256: digest }))
+    githubLatest: {
+      tag: expectedLatest.tag,
+      releaseClass: expectedLatest.releaseClass,
+      targetCommitish: expectedLatest.targetCommitish,
+      contractStatus: expectedLatest.contractStatus,
+      assets: [],
+    },
+    runnableArtifact: {
+      tag: expectedRunnable.tag,
+      releaseClass: expectedRunnable.releaseClass,
+      latest: false,
+      historical: true,
+      assets: expectedRunnable.assets.map(({ name, size, sha256: digest }) => ({ name, size, sha256: digest })),
+    },
+    anonymous: true,
   };
 }
 
 async function main() {
   const publicReadback = process.argv.includes("--public-readback");
-  if (process.env.GH_TOKEN && publicReadback) throw new Error("PUBLIC_READBACK_REQUIRES_GH_TOKEN_UNSET");
-  if (publicReadback) console.log(JSON.stringify(await verifyPublicReadback(process.cwd()), null, 2));
+  if ((process.env.GH_TOKEN || process.env.GITHUB_TOKEN) && publicReadback) {
+    throw new Error("PUBLIC_READBACK_REQUIRES_GH_TOKEN_AND_GITHUB_TOKEN_UNSET");
+  }
+  const releaseTagIndex = process.argv.indexOf("--release-tag");
+  const releaseTag = releaseTagIndex < 0 ? undefined : process.argv[releaseTagIndex + 1];
+  const requireConforming = process.argv.includes("--require-conforming");
+  if (requireConforming && releaseTag === undefined) throw new Error("CONFORMING_READBACK_REQUIRES_RELEASE_TAG");
+  if (publicReadback) {
+    console.log(JSON.stringify(await verifyPublicReadback(process.cwd(), { releaseTag, requireConforming }), null, 2));
+  }
   else {
     const issues = validateRepository(process.cwd());
     if (issues.length) { console.error(issues.join("\n")); process.exitCode = 2; }
@@ -420,4 +1040,6 @@ async function main() {
   }
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) main().catch((error) => { console.error(error.message); process.exitCode = 2; });
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((error) => { console.error(error.message); process.exitCode = 2; });
+}

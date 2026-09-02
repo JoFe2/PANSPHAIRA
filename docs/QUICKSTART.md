@@ -40,12 +40,15 @@ git switch main
 git rev-parse HEAD
 ```
 
-The public **Latest** page may identify a source-only evidence release without
-a custom runnable archive or SHA-256 sidecar. Inspect its target and asset list
-on [Latest](https://github.com/JoFe2/PANSPHAIRA/releases/latest) before relying
-on that moving public identity. Record `git rev-parse HEAD` for a Main checkout;
-GitHub-generated source archives are not substitutes for a project-published
-checksum sidecar.
+At this governance baseline the public **Latest** page identifies the
+source-only evidence release `2026_09_02_v7`, exact target
+`1e65fee46c609ba7239d63b9c245b32e045e004c`, with zero custom assets. It is an
+explicit legacy pre-v2 record, not a conforming body template. Inspect the live
+target and asset list on
+[Latest](https://github.com/JoFe2/PANSPHAIRA/releases/latest) before relying on
+that moving public identity. Record `git rev-parse HEAD` for a Main checkout;
+GitHub-generated source archives are not substitutes for the project-published
+checksum sidecar of the historical runnable archive below.
 
 ### Historical verified runnable archive
 

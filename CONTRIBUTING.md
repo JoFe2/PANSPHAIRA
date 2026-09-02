@@ -83,19 +83,39 @@ as `released`, or `planned` as `proven`. Security-sensitive final integration,
 merge, and release remain maintainer-controlled.
 
 Each published release is named for a functional product increment, never a
-calendar-driven “Daily” identity. Its notes use `Added`, `Changed`, `Security`,
-`Evidence`, `Known limitations`, and `Planned next`, with applicable issue,
-pull-request, and claim IDs in each section. They must also bind the exact tag,
-target, asset manifest, asset names/sizes/SHA-256 values, claim/evidence
-mappings and non-claims. Publication is complete only after anonymous public
-readback confirms the tag, regular Latest state (`draft=false`,
-`prerelease=false`), public docs, metadata and asset bytes.
+calendar-driven “Daily” identity. Choose exactly one versioned class. A
+`REGULAR_RUNNABLE_ARTIFACT` has a project-built archive plus exact SHA-256
+sidecar; a `SOURCE_EVIDENCE_ONLY` release has no custom assets and says exactly
+`NO_ASSETS_SOURCE_ONLY`. Governance designates which class may own GitHub
+Latest. A source/evidence-only Latest does not supersede or broaden the
+separately identified runnable artifact.
+
+Every new body follows the exact [release governance
+contract](docs/RELEASE-GOVERNANCE.md): class, exact merge SHA, included
+capabilities and issues, claim/proof boundary, tests, class-specific assets and
+checksums, explicit nonclaims, and a closure state that remains blocked pending
+public readback. Publication is complete only after anonymous public readback
+confirms the tag-derived target, Latest class/state (`draft=false`,
+`prerelease=false`), body, exact-head public docs and every declared asset byte.
+The post-creation read-only workflow must pass before the final owner closes an
+issue or marks its Queue row terminal; local or authenticated evidence cannot
+substitute.
+
+Run one **bounded contradiction preflight** for every public delivery. Map each
+material claim ID to its maturity and proof class, authoritative artifact,
+exact identity, executable or anonymous-readback gate, and explicit nonclaim.
+Release-identity drift, proof-class inflation, a missing exact-head documented
+path, circular or caller-minted provenance, and stale public status or
+governance fail closed. The sole exception form is an exact acceptance ID with
+a named negative regression probe; it cannot grant conformance or authorize a
+historical tag, body, target, or asset mutation.
 
 An editorial Daily may tell progress, decisions, learnings or preview a future
 increment. It does not gate a release and must not describe a candidate as
 published before that anonymous readback passes. Historical Daily manifests
 remain provenance, not current release identity. Follow the canonical
-[release governance contract](docs/RELEASE-GOVERNANCE.md).
+[release governance contract](docs/RELEASE-GOVERNANCE.md); no historical record
+is silently reclassified under the new taxonomy.
 
 ## Pull-request contract
 

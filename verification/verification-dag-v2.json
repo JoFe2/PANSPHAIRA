@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 43,
+  "graphVersion": 44,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -4629,14 +4629,49 @@
       ],
       "inputs": [
         {
+          "path": ".github/workflows/release-public-readback.yml",
+          "role": "SECURITY",
+          "sha256": "26972a2e879315e193270560e41886c64040c9de3054cf3a0226e4b8c718d4e8"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a1cefd6163fbe7a9e70fa5ee750c1697901b7e80d2d589e02a1c5ac7aefd9bda"
+        },
+        {
+          "path": "README.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "714d5867d0577fb65b14327370141e9dded9fa6ed7bc95834dbeae62470d48cd"
+        },
+        {
+          "path": "docs/README.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "c9d48b0771c127eedbdce9f930f16272b6f9aee097cba376fc2c7ad3b2d73a26"
+        },
+        {
+          "path": "docs/QUICKSTART.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b7bf3799004d82528d79accf4e7157507a953af5eb4b42561aa406ba7ff6723b"
+        },
+        {
+          "path": "docs/RELEASE-GOVERNANCE.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e477248bc7e9362626c456ec3b1f619a37776fae958142d9c4b40c214c145df7"
+        },
+        {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "98f53741b543fb6037233a9184125a7d77ae04abd2bfb5461e00a03f89d1dd69"
         },
         {
+          "path": "docs/index.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "cbc3875f09b2d6629deb6e943d3ab1de3405b33f28f2bd665a79f9b6809731df"
+        },
+        {
           "path": "release/governance.json",
           "role": "CONTRACT",
-          "sha256": "9e472f500636d97ae3dd0227117168f24ec36bdc6335a0fb85a5bb61ca28d9e7"
+          "sha256": "c6a1db89d55c00edcbb72f6fd4b71719f691d319b95d26a0f50a37dd4b98add1"
         },
         {
           "path": "release/public-files.manifest",
@@ -4651,7 +4686,7 @@
         {
           "path": "scripts/verify-release-governance.mjs",
           "role": "SECURITY",
-          "sha256": "661ffc1462b96cada4d228d937d9efe521bd907fda5751c90088163047e01c19"
+          "sha256": "8cebdcc5c273468241035280dac5a1179441b3ac4f5e9e6c9063b056f13621ff"
         },
         {
           "path": "scripts/verify-supply-chain.mjs",
@@ -4669,9 +4704,14 @@
           "sha256": "082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3"
         },
         {
+          "path": "tests/public-product-spelling.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "ec142cae65b548cf14e2d79a9fb9dec6777e9357fe48f43ca9114274c5d3afc0"
+        },
+        {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "55aaa6f926b29707f6dae13424c8600c113fe93d147b789a530cda036ddfe7aa"
+          "sha256": "b74446512e148bc26cb0150780686fb4bf1efb194f43180e05eda15e208c4a99"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4698,6 +4738,10 @@
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
         "Repository checksums and release governance fail closed.",
+        "Exactly one versioned release class owns GitHub Latest without inflating source/evidence-only records into runnable artifacts.",
+        "Every new release body binds exact merge SHA, scope, claim-proof ownership, tests, class-specific assets and nonclaims.",
+        "Anonymous post-creation public readback succeeds before issue or Queue terminalization; the workflow has no external-write authority.",
+        "Release identity drift, proof-class inflation, missing exact-head paths, circular provenance and stale public status fail closed.",
         "All seven child acceptance sets are uniquely owned, dependency-correct and bound to exact issue-thread, PR, CI, merge, release, tag and anonymous-readback evidence.",
         "Queue-backed children require terminal unowned DONE rows; PACKAGE_DONE never substitutes, while pre-campaign direct-Control-Lane children retain explicit no-row terminal reconciliation without invented Queue history.",
         "Missing, duplicate, stale, substituted, UNKNOWN, re-digested or post-validation-mutated child evidence fails closed.",
@@ -5598,7 +5642,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "7e04dc567cbcfb558c1ff4f91e448cd1ca6d18dd4bacae030f2a9178c8400101"
+          "sha256": "08f66b8cd3e0b9d0c7deaa1341d88461eb776d8561fdcac12b73a1d28b7c552a"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",

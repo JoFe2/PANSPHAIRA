@@ -59,6 +59,49 @@ test("canonical Evidence DAG input digests match the current repository bytes", 
   }
 });
 
+test("REL-TRUTH release authority is canonically owned by repository integrity", () => {
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
+    scripts: Record<string, string>;
+  };
+  const node = graph().nodes.find(({ id }) => id === "repository-integrity");
+  assert.ok(node);
+  assert.equal(
+    packageJson.scripts["release-governance:test"],
+    "node --test tests/release-governance.test.mjs tests/public-product-spelling.test.mjs",
+  );
+  assert.equal(
+    node.ownedTests.filter((command) => command === "npm run release-governance:test").length,
+    1,
+  );
+
+  const ownedInputs = new Map(node.inputs.map(({ path, role }) => [path, role]));
+  const expectedInputs = new Map([
+    [".github/workflows/release-public-readback.yml", "SECURITY"],
+    ["CONTRIBUTING.md", "DERIVED_EVIDENCE"],
+    ["README.md", "DERIVED_EVIDENCE"],
+    ["docs/README.md", "DERIVED_EVIDENCE"],
+    ["docs/QUICKSTART.md", "DERIVED_EVIDENCE"],
+    ["docs/RELEASE-GOVERNANCE.md", "DERIVED_EVIDENCE"],
+    ["docs/index.md", "DERIVED_EVIDENCE"],
+    ["release/governance.json", "CONTRACT"],
+    ["scripts/verify-release-governance.mjs", "SECURITY"],
+    ["tests/public-product-spelling.test.mjs", "VALIDATOR"],
+    ["tests/release-governance.test.mjs", "VALIDATOR"],
+  ]);
+  for (const [path, role] of expectedInputs) {
+    assert.equal(ownedInputs.get(path), role, `${path} ownership`);
+    const result = plan([path]);
+    assert.ok(result.selectedNodes.includes("repository-integrity"), path);
+    assert.ok(result.selectedTests.includes("npm run release-governance:test"), path);
+  }
+  for (const invariant of [
+    "Exactly one versioned release class owns GitHub Latest without inflating source/evidence-only records into runnable artifacts.",
+    "Every new release body binds exact merge SHA, scope, claim-proof ownership, tests, class-specific assets and nonclaims.",
+    "Anonymous post-creation public readback succeeds before issue or Queue terminalization; the workflow has no external-write authority.",
+    "Release identity drift, proof-class inflation, missing exact-head paths, circular provenance and stale public status fail closed.",
+  ]) assert.ok(node.invariants.includes(invariant), invariant);
+});
+
 test("AWI-03 knowledge changes select the bounded critical owner and hard gates", () => {
   const result = plan(["packages/contracts/src/knowledge-envelope.ts"]);
   assert.equal(result.mode, "IMPACTED_SHADOW");

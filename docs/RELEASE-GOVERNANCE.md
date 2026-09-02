@@ -5,19 +5,51 @@ PanSphaira. The machine-readable companion is
 [`release/governance.json`](../release/governance.json), enforced by
 `npm run release-governance:verify` in every pull request.
 
+## Release taxonomy and current public truth
+
+The versioned `chimpmaera.release-taxonomy/v1` contract has two new-release
+classes:
+
+| Class | Runnable meaning | Custom-asset contract | GitHub Latest |
+| --- | --- | --- | --- |
+| `REGULAR_RUNNABLE_ARTIFACT` | A project-built runnable archive | One `.tar.gz` archive and its exact `.sha256` sidecar; body, API inventory, downloaded size/hash and sidecar content must agree | Eligible only when governance designates this class |
+| `SOURCE_EVIDENCE_ONLY` | Source/evidence at one exact merge commit; not a project-built runnable artifact | No custom assets and the body must say exactly `NO_ASSETS_SOURCE_ONLY` | Eligible only when governance designates this class; ownership does not supersede the runnable artifact |
+
+The reconciled public identities at this governance baseline are deliberately
+separate:
+
+- **Current Main source:** the moving public `main` ref. A checkout obtains its
+  exact identity with `git rev-parse HEAD`; governance cannot self-embed the SHA
+  of the commit that contains itself.
+- **GitHub Latest:** `2026_09_02_v7`, target
+  `1e65fee46c609ba7239d63b9c245b32e045e004c`, an explicitly reconciled
+  `SOURCE_EVIDENCE_ONLY` record with no custom assets.
+- **Historical verified runnable artifact:**
+  `v0.2.0-poc.20260825.1`, target
+  `33d19f3e96ccc512038dbf06063f19489e067390`, with its immutable archive and
+  SHA-256 sidecar. It remains the current verified runnable artifact, but it is
+  not GitHub Latest and does not contain later Main source.
+- **Earlier history:** `v0.1.0` and unlisted pre-taxonomy releases remain
+  historical evidence. They are not silently reclassified or granted v2
+  conformance.
+
+Both named records above are legacy pre-v2 releases. Their exact existing
+metadata/body/asset state is recorded under `legacyReleaseExceptions` solely
+for `REL-TRUTH-AC06` readback. That explicit exception does not authorize a tag,
+body, target or asset rewrite and is no precedent for a new release.
+
 ## Product increments, not calendar identity
 
 A public release is named for the functional, evidence-backed increment it
 delivers. A date or editorial cadence may appear as provenance, but labels such
-as “Daily”, “today's release” or “previous Daily” must not be the identity of an
-active public release. The current regular release is
-`v0.2.0-poc.20260825.1`, **PanSphaira v0.2.0-poc.20260825.1 — canonical-number
-hardening**. Its increment rejects negative zero before canonicalization in
+as “Daily”, “today's release” or “previous Daily” must not be the identity of a
+new conforming release. Calendar-shaped historical records remain factual
+provenance rather than a naming template. The verified runnable artifact's
+canonical-number hardening rejects negative zero before canonicalization in
 Verification Fabric timestamps and Extension Assurance Profile numeric
-boundaries. It performs no migration, restore, filesystem, package, schema or service
-mutation, pointer switch, migration or rollback execution, activation,
-promotion, production deployment or external completion inference.
-`v0.1.0` is historical only.
+boundaries. It performs no migration, restore, filesystem, package, schema or
+service mutation, pointer switch, rollback execution, activation, promotion,
+production deployment or external completion inference.
 
 Editorial Daily content is independent. It may describe progress, decisions,
 learnings or a preview. It does not gate a release and must not claim that a
@@ -26,40 +58,118 @@ version was published until the anonymous public readback below passes.
 ## Release-state policy
 
 - **Draft:** preparation only; never public/current.
-- **Prerelease:** an explicitly labeled preview; never regular Latest.
-- **Regular Latest:** the newest accepted product increment with
-  `draft=false`, `prerelease=false`, and an exact anonymous
-  `/releases/latest` readback matching its tag.
+- **Prerelease:** an explicitly labeled preview; never GitHub Latest under this
+  contract.
+- **GitHub Latest:** exactly one `draft=false`, `prerelease=false` release whose
+  body class equals `releaseTaxonomy.githubLatestOwnerClass` and whose tag
+  resolves from anonymous `/releases/latest` readback.
+- **Runnable-artifact current:** the separately recorded, checksum-bound
+  runnable artifact. It can differ from GitHub Latest when Latest is
+  `SOURCE_EVIDENCE_ONLY`.
 
 Repository state, CI, a tag, authenticated API output or an editorial post is
 insufficient by itself. After publication, run:
 
 ```sh
-env -u GH_TOKEN npm run release-governance:public-readback
+env -u GH_TOKEN -u GITHUB_TOKEN npm run release-governance:public-readback
 ```
 
-The verifier sends no authorization header. It checks the release ID,
-publication timestamp and URL, tag reference, release title/body, target,
-Latest/draft/prerelease state, raw `main` public
-surfaces, exact asset-name set, sizes, asset-manifest content and SHA-256 bytes.
-Unknown, missing or extra evidence fails closed.
+The verifier sends no authorization header. The baseline readback checks the
+release ID, publication timestamp and URL, tag reference, release title/body,
+target, Latest/draft/prerelease state, exact asset-name set, sizes,
+asset-manifest content and SHA-256 bytes. New-release mode also compares the
+local governed surfaces with anonymous raw bytes at the exact target commit.
+Unknown, missing or extra evidence fails closed. The baseline command reads the
+two explicitly reconciled legacy records. New publication closure uses the
+release-event command documented below and never accepts a legacy exception.
+
+## Exact release-body contract
+
+Every new release body uses each of these H2 headings exactly once and in the
+declared contract order:
+
+1. `Release class` with one `RELEASE_CLASS: <class>` line;
+2. `Exact merge SHA` with `MERGE_SHA: <40-lowercase-hex>`;
+3. `Included capabilities and issues` with at least one `CAPABILITY` and one
+   `ISSUE` line;
+4. `Evidence boundary` with one exact `CLAIM_PROOF` ownership line for every
+   listed material capability;
+5. `Tests` with every executable gate and `=> PASS`;
+6. `Assets and checksums`, containing every exact asset name, byte size and
+   SHA-256 digest for a runnable release, or exactly
+   `NO_ASSETS_SOURCE_ONLY` for a source/evidence-only release;
+7. `Nonclaims` with at least one explicit limitation; and
+8. `Closure state`, containing `PUBLIC_READBACK: PENDING` and
+   `ISSUE_QUEUE_TERMINAL: BLOCKED_PENDING_PUBLIC_READBACK`.
+
+Each evidence line has this closed field order:
+
+```text
+- CLAIM_PROOF: <claim-id> | MATURITY=<maturity> | PROOF_CLASS=<proof-class> | ARTIFACT=<documented-path-or-exact-provider-commit> | EXACT_IDENTITY=<sha256:digest-or-git:sha> | GATE=<EXECUTABLE:command-or-ANONYMOUS_PUBLIC_READBACK> | NONCLAIM=<bounded nonclaim>
+```
+
+Local artifact paths must exist at the exact published head, be present in the
+public manifest and match the stated digest. A release page/body cannot attest
+itself, and caller-supplied expected values cannot replace tag/provider
+readback. A regular/runnable body lists the archive and sidecar as
+`- ASSET: <name> | SIZE=<bytes> | SHA256=<digest>`. The source/evidence-only
+marker and an asset list are mutually exclusive.
 
 ## Required publication evidence
 
 Before publication, the pull request must contain:
 
-1. a functional increment name and exact expected tag;
-2. claim-to-evidence mappings and explicit non-claims;
-3. conservative Security Assurance and Known Limitations boundaries;
-4. a complete release-asset inventory, manifest and SHA-256 digests;
-5. focused positive and negative validator tests;
-6. secret/private-path scanning of active public surfaces;
-7. green repository, lint, checksum and supply-chain gates.
+1. a functional increment name, intended class and exact expected tag;
+2. the complete release body except for provider-created metadata, with the
+   exact merge SHA filled only from the merged commit;
+3. claim-to-proof ownership and explicit nonclaims;
+4. class-specific asset inventory or `NO_ASSETS_SOURCE_ONLY`;
+5. conservative Security Assurance and Known Limitations boundaries;
+6. focused positive and complete adversarial validator tests;
+7. secret/private-path scanning of active public surfaces; and
+8. green repository, lint, checksum, supply-chain and contradiction-preflight
+   gates.
 
 After publication, preserve an anonymous readback record for the tag, Latest
 state, public docs, release metadata and every asset byte. Editing title/body
 does not authorize changing a tag, target or asset. Any mismatch blocks the
 public claim and requires correction or rollback.
+
+## Publication workflow gate
+
+`.github/workflows/release-public-readback.yml` is triggered only after GitHub
+emits `release.published`. It checks out the event's immutable tag without
+persisted credentials, verifies repository integrity and the release-authority
+adversarial matrix, unsets both `GH_TOKEN` and `GITHUB_TOKEN`, then runs:
+
+```sh
+npm run release-governance:public-readback -- --release-tag "$RELEASE_TAG" --require-conforming
+```
+
+The tag comes from `github.event.release.tag_name`; class, merge SHA, target,
+Latest state, body, assets and checksums are derived from anonymous provider
+readback rather than caller assertions. The workflow has only `contents: read`
+and no issue or Queue mutation authority. A failing or missing gate is not
+closure evidence: the final owner must not close an included issue or mark its
+Queue row terminal until this exact post-creation job succeeds.
+
+## Bounded contradiction preflight
+
+Every public delivery maps each material claim ID to one maturity, one allowed
+proof class, one authoritative artifact, one exact identity, one executable or
+anonymous-readback gate and an explicit nonclaim. The v1 matrix allows only:
+
+- `RELEASED_LOCAL_SYNTHETIC` → `LOCAL_EXECUTABLE` → `EXECUTABLE`;
+- `SOURCE_EVIDENCE_ONLY` → `SOURCE_EVIDENCE` → executable or anonymous public
+  readback; and
+- `PUBLIC_PROVIDER_OBSERVED` → `ANONYMOUS_PUBLIC_READBACK` → anonymous public
+  readback.
+
+Release-identity drift, proof-class inflation, a missing exact-head documented
+path, circular or caller-minted provenance, stale public status and stale
+governance fail closed. A bounded legacy inconsistency is allowed only when the
+governance file names an exact acceptance ID and its negative regression probe;
+an exception cannot manufacture conformance or authorize historical mutation.
 
 ## Public README and documentation presentation
 
