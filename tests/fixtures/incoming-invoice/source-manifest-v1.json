@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "chimpmaera.incoming-invoice/source-manifest/v1",
+  "fileName": "supplier-invoice-v1.txt",
+  "mediaType": "text/plain; charset=utf-8",
+  "byteLength": 153,
+  "sha256": "fad5979234e5ca8d31e2a10e7a9650c5f4f32693610c2fcf2678b0ab5a5f525b",
+  "provenance": {
+    "sourceId": "source:synthetic:ap-02:supplier-invoice-v1",
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/supplier-invoice-v1.txt",
+    "capturedAt": "2026-09-02T00:00:00.000Z",
+    "generator": "AP-02_FROZEN_HAND_AUTHORED_V1",
+    "synthetic": true,
+    "customerData": false,
+    "externalRetrieval": false
+  },
+  "declaredIdentity": {
+    "supplierId": "SYN-SUP-001",
+    "invoiceNumber": "SYN-INV-2026-0001"
+  }
+}

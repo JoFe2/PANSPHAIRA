@@ -463,6 +463,32 @@ incomingInvoiceNode.inputs = [
   ["tests/incoming-invoice-blueprint.test.ts", "VALIDATOR"],
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 incomingInvoiceNode.ownedTests = ["npm run incoming-invoice:test"];
+let incomingInvoiceIntakeNode = dag.nodes.find(({ id }) => id === "ap-02-incoming-invoice-intake-v1");
+if (incomingInvoiceIntakeNode === undefined) {
+  incomingInvoiceIntakeNode = {
+    id: "ap-02-incoming-invoice-intake-v1",
+    dependsOn: ["ap-01-incoming-invoice-blueprint-v1"],
+    inputs: [],
+    ownedTests: ["npm run incoming-invoice-intake:test"],
+    invariants: [
+      "Only the exact frozen local-synthetic invoice bytes and provenance may enter the AP intake record.",
+      "Document version, content, metadata and supplier-invoice identity remain exact-bound through readback.",
+      "Duplicate, tampered, unsupported and ambiguous input fails closed; unextracted fields remain explicit UNKNOWN values.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(incomingInvoiceIntakeNode);
+}
+incomingInvoiceIntakeNode.inputs = [
+  ["packages/contracts/src/incoming-invoice-intake.ts", "CONTRACT"],
+  ["schemas/contracts/incoming-invoice-intake-v1.schema.json", "SCHEMA"],
+  ["tests/fixtures/incoming-invoice/source-manifest-v1.json", "FIXTURE"],
+  ["tests/fixtures/incoming-invoice/supplier-invoice-v1.txt", "FIXTURE"],
+  ["tests/incoming-invoice-intake.test.ts", "VALIDATOR"],
+].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+incomingInvoiceIntakeNode.ownedTests = ["npm run incoming-invoice-intake:test"];
+dag.graphVersion = 42;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

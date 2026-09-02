@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "pansphaira.closure/local-gates/v1",
+  "sourceIssue": "JoFe2/PANSPHAIRA#362",
+  "acceptanceIds": [
+    "AP-02-AC01",
+    "AP-02-AC02",
+    "AP-02-AC03",
+    "AP-02-AC04",
+    "AP-02-AC05"
+  ],
+  "currentMainBase": "28fe46aaf6385ee7ea25cadecb67d56f58ae0fc3",
+  "testedProductHead": "f556fe807afc4e5357ca66241507ebaf6aa5f026",
+  "testedProductTree": "60b140cf57a65e55e2ad66c321f42d6d8ae134b4",
+  "closureOwner": "sol",
+  "noIssuePingPong": true,
+  "responsibleUntil": "ISSUE_CLOSED_AND_QUEUE_DONE",
+  "review": {
+    "count": 1,
+    "reviewedHead": "abb9d9fb1ec083d7b46383679916436cb87031ef",
+    "findings": [
+      "Bind intake to the frozen fixture digest rather than caller self-attestation.",
+      "Bind readback to the requested version identifier."
+    ],
+    "disposition": "FIXED_FORWARD"
+  },
+  "tdd": {
+    "meaningfulRedObserved": [
+      "Self-consistently rehashed non-frozen bytes were accepted until the frozen digest binding was implemented.",
+      "A valid record returned for a different lookup key produced FOUND until requested-key binding was implemented.",
+      "Rejected store operations escaped until STORE_DENIED containment was implemented.",
+      "Malformed persisted records threw until fail-closed readback containment was implemented.",
+      "AP-02 paths selected FULL_FALLBACK until a bounded Verification DAG owner was registered."
+    ],
+    "focusedGreen": "11/11 PASS"
+  },
+  "gates": [
+    {"command": "npm run incoming-invoice-intake:test", "outcome": "PASS", "detail": "11/11"},
+    {"command": "node --test dist/tests/verification-fabric-v2.test.js", "outcome": "PASS", "detail": "27/27"},
+    {"command": "npm run release-governance:test", "outcome": "PASS", "detail": "52/52"},
+    {"command": "npm run verification:plan", "outcome": "PASS", "detail": "FULL_FALLBACK plan, 51 nodes, 58 tests, 5 hard gates"},
+    {"command": "npm run supply-chain:verify", "outcome": "PASS"},
+    {"command": "sha256sum -c SHA256SUMS", "outcome": "PASS", "detail": "1749 entries"},
+    {"command": "./scripts/build-public-release.sh --output <isolated-compliant-path>", "outcome": "PASS", "detail": "1443 public files"},
+    {"command": "npm test", "outcome": "PASS_AFTER_INFRASTRUCTURE_RECOVERY", "detail": "Initial final-tree run passed 670/673; the only failures were ENOSPC while creating supply-chain test fixtures. After deleting only owned /tmp/cm-supply-chain-test-* residue, the exact failed supply-chain family passed 5/5. No product assertion failed."},
+    {"command": "git diff --check origin/main...HEAD", "outcome": "PASS"}
+  ],
+  "integrity": {
+    "publicFileCount": 1443,
+    "rootChecksumEntries": 1749,
+    "verificationDagGraphVersion": 42,
+    "verificationDagNodeCount": 51,
+    "nestedVideoChecksumRefreshedBeforeRoot": true,
+    "receiptExcludedFromSelfReferentialIntegrity": true
+  },
+  "nonclaims": [
+    "Local-synthetic supplier-invoice intake only.",
+    "No customer or personal data.",
+    "No productive allocation, posting or booking.",
+    "No external provider, arbitrary document, accounting completeness or live-system compatibility claim.",
+    "AP-03 through AP-06 remain unproven."
+  ],
+  "requiredDownstreamGates": [
+    "exact PR-head CI PASS",
+    "SHA-bound merge",
+    "exact merge-head CI PASS",
+    "serial daily release",
+    "anonymous tag-to-merge-SHA readback",
+    "anonymous issue CLOSED readback",
+    "queue reconciliation"
+  ]
+}
