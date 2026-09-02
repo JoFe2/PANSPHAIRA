@@ -154,6 +154,18 @@ test("AP-02 AC03 atomically denies duplicate content and self-consistently rehas
   assert.equal(store.size, 1);
 });
 
+test("AP-02 AC03 contains rejected store operations as STORE_DENIED", async () => {
+  let calls = 0;
+  const rejectingStore: SyntheticInvoiceIntakeStoreV1 = {
+    insertIfAbsent: async () => { calls += 1; throw new Error("backend unavailable"); },
+    getByVersionId: async () => undefined,
+  };
+  assert.deepEqual(await intakeSyntheticSupplierInvoiceV1(request(), rejectingStore), {
+    outcome: "DENIED", reasonCodes: ["STORE_DENIED"],
+  });
+  assert.equal(calls, 1);
+});
+
 test("AP-02 AC04 preserves UNKNOWN as distinct from zero, null, value and absence", async () => {
   const { record } = await accepted();
   const expected = { state: "UNKNOWN", reasonCode: "NOT_EXTRACTED" };
@@ -198,6 +210,16 @@ test("AP-02 AC05 denies a valid record returned for a different requested versio
   const wrongVersionId = `version:sha256:${"0".repeat(64)}`;
   assert.notEqual(wrongVersionId, record.version.versionId);
   assert.deepEqual(await readSyntheticSupplierInvoiceV1(wrongVersionId, wrongKeyStore), {
+    outcome: "DENIED", reasonCodes: ["INTEGRITY_READBACK_DENIED"],
+  });
+});
+
+test("AP-02 AC05 denies malformed persisted records without throwing", async () => {
+  const malformedStore: SyntheticInvoiceIntakeStoreV1 = {
+    insertIfAbsent: async () => "STORE_ERROR",
+    getByVersionId: async () => ({ schemaVersion: "broken" } as unknown as IncomingInvoiceRecordV1),
+  };
+  assert.deepEqual(await readSyntheticSupplierInvoiceV1(`version:sha256:${"0".repeat(64)}`, malformedStore), {
     outcome: "DENIED", reasonCodes: ["INTEGRITY_READBACK_DENIED"],
   });
 });

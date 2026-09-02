@@ -163,7 +163,12 @@ export async function intakeSyntheticSupplierInvoiceV1(candidate: unknown, store
     authority: { mode: "LOCAL_SYNTHETIC_PROOF" as const, customerDataAuthorized: false as const, productiveBookingAuthorized: false as const, externalCallsAuthorized: false as const },
   };
   const record = deepFreeze({ ...unsignedRecord, recordDigest: canonicalDigestV1(unsignedRecord) }) as IncomingInvoiceRecordV1;
-  const verdict = await store.insertIfAbsent(record);
+  let verdict: InsertVerdictV1;
+  try {
+    verdict = await store.insertIfAbsent(record);
+  } catch {
+    return deny("STORE_DENIED");
+  }
   if (verdict === "DUPLICATE_CONTENT") return deny("DUPLICATE_CONTENT_DENIED");
   if (verdict === "DUPLICATE_IDENTITY") return deny("DUPLICATE_IDENTITY_DENIED");
   if (verdict !== "INSERTED") return deny("STORE_DENIED");
@@ -171,16 +176,20 @@ export async function intakeSyntheticSupplierInvoiceV1(candidate: unknown, store
 }
 
 export async function readSyntheticSupplierInvoiceV1(versionId: string, store: SyntheticInvoiceIntakeStoreV1): Promise<ReadbackResultV1> {
-  const stored = await store.getByVersionId(versionId);
-  if (stored === undefined) return deepFreeze({ outcome: "NOT_FOUND" as const });
-  const decoded = Buffer.from(stored.original.bytesBase64, "base64");
-  const identityDigest = supplierInvoiceIdentityDigestV1(stored.supplierInvoiceIdentity);
-  const metadataDigest = canonicalDigestV1(stored.metadata);
-  const expectedVersionId = `version:sha256:${canonicalDigestV1({ documentId: stored.document.documentId, ordinal: stored.version.ordinal, contentSha256: stored.version.contentSha256, metadataDigest, identityDigest })}`;
-  const { recordDigest: _recordDigest, ...unsignedRecord } = stored;
-  const valid = versionId === stored.version.versionId && sha256HexV1(decoded) === stored.version.contentSha256 && decoded.byteLength === stored.version.byteLength && metadataDigest === stored.version.metadataDigest && identityDigest === stored.supplierInvoiceIdentity.identityDigest && expectedVersionId === stored.version.versionId && canonicalDigestV1(unsignedRecord) === stored.recordDigest;
-  if (!valid) return deepFreeze({ outcome: "DENIED" as const, reasonCodes: ["INTEGRITY_READBACK_DENIED"] as const });
-  return deepFreeze({ outcome: "FOUND" as const, schemaVersion: INCOMING_INVOICE_READBACK_V1, bindings: { recordDigest: stored.recordDigest, versionId: stored.version.versionId, contentSha256: stored.version.contentSha256, metadataDigest: stored.version.metadataDigest, supplierInvoiceIdentityDigest: stored.supplierInvoiceIdentity.identityDigest }, original: { ...structuredClone(stored.original), byteLength: stored.version.byteLength }, derived: structuredClone(stored.derived) });
+  try {
+    const stored = await store.getByVersionId(versionId);
+    if (stored === undefined) return deepFreeze({ outcome: "NOT_FOUND" as const });
+    const decoded = Buffer.from(stored.original.bytesBase64, "base64");
+    const identityDigest = supplierInvoiceIdentityDigestV1(stored.supplierInvoiceIdentity);
+    const metadataDigest = canonicalDigestV1(stored.metadata);
+    const expectedVersionId = `version:sha256:${canonicalDigestV1({ documentId: stored.document.documentId, ordinal: stored.version.ordinal, contentSha256: stored.version.contentSha256, metadataDigest, identityDigest })}`;
+    const { recordDigest: _recordDigest, ...unsignedRecord } = stored;
+    const valid = versionId === stored.version.versionId && sha256HexV1(decoded) === stored.version.contentSha256 && decoded.byteLength === stored.version.byteLength && metadataDigest === stored.version.metadataDigest && identityDigest === stored.supplierInvoiceIdentity.identityDigest && expectedVersionId === stored.version.versionId && canonicalDigestV1(unsignedRecord) === stored.recordDigest;
+    if (!valid) return deepFreeze({ outcome: "DENIED" as const, reasonCodes: ["INTEGRITY_READBACK_DENIED"] as const });
+    return deepFreeze({ outcome: "FOUND" as const, schemaVersion: INCOMING_INVOICE_READBACK_V1, bindings: { recordDigest: stored.recordDigest, versionId: stored.version.versionId, contentSha256: stored.version.contentSha256, metadataDigest: stored.version.metadataDigest, supplierInvoiceIdentityDigest: stored.supplierInvoiceIdentity.identityDigest }, original: { ...structuredClone(stored.original), byteLength: stored.version.byteLength }, derived: structuredClone(stored.derived) });
+  } catch {
+    return deepFreeze({ outcome: "DENIED" as const, reasonCodes: ["INTEGRITY_READBACK_DENIED"] as const });
+  }
 }
 
 export class InMemorySyntheticInvoiceIntakeStoreV1 implements SyntheticInvoiceIntakeStoreV1 {

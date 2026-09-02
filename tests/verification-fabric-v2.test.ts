@@ -131,7 +131,7 @@ test("ERP capability-cell changes select the bounded owner and exact focused sui
   assert.deepEqual(result.selectedTests, ["npm run erp-order-cell:test"]);
 });
 
-test("AP-01 blueprint changes select one bounded semantic owner and focused suite", () => {
+test("AP-01 blueprint changes select its owner and dependent AP-02 intake", () => {
   for (const changed of [
     "packages/contracts/src/incoming-invoice-blueprint.ts",
     "schemas/contracts/incoming-invoice-blueprint-v1.schema.json",
@@ -139,8 +139,23 @@ test("AP-01 blueprint changes select one bounded semantic owner and focused suit
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW", changed);
-    assert.deepEqual(result.selectedNodes, ["ap-01-incoming-invoice-blueprint-v1"], changed);
-    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice:test"], changed);
+    assert.deepEqual(result.selectedNodes, ["ap-01-incoming-invoice-blueprint-v1", "ap-02-incoming-invoice-intake-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-intake:test", "npm run incoming-invoice:test"], changed);
+  }
+});
+
+test("AP-02 intake changes select one bounded semantic owner and focused suite", () => {
+  for (const changed of [
+    "packages/contracts/src/incoming-invoice-intake.ts",
+    "schemas/contracts/incoming-invoice-intake-v1.schema.json",
+    "tests/fixtures/incoming-invoice/source-manifest-v1.json",
+    "tests/fixtures/incoming-invoice/supplier-invoice-v1.txt",
+    "tests/incoming-invoice-intake.test.ts",
+  ]) {
+    const result = plan([changed]);
+    assert.equal(result.mode, "IMPACTED_SHADOW", changed);
+    assert.deepEqual(result.selectedNodes, ["ap-02-incoming-invoice-intake-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-intake:test"], changed);
   }
 });
 
@@ -190,7 +205,7 @@ test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pr
   ]) {
     assert.equal(publicPaths.has(publicPath), true, `public external-BI byte: ${publicPath}`);
   }
-  assert.equal(publicManifestPaths.length, 1438, "current release controls retain their exact public count");
+  assert.equal(publicManifestPaths.length, 1443, "current release controls retain their exact public count");
   assert.equal(publicPaths.size, publicManifestPaths.length, "public manifest paths remain unique");
   assert.equal(publicPaths.has(evidencePath), false, "pre-closure paired evidence remains repository-only");
 
