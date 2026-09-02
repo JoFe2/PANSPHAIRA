@@ -15,9 +15,9 @@
   "noIssuePingPong": true,
   "responsibleUntil": "ISSUE_CLOSED_AND_QUEUE_DONE",
   "reviewCount": 1,
-  "currentMainBase": "d4859743777c0c9ff278aac0693541ceb0ee4c9d",
-  "testedProductHead": "62d0d11b06946afd9cf10c11f89d03348b287b09",
-  "testedTree": "c5bd01c02a9933e98ecc1b5b50a1850ec941ae9c",
+  "currentMainBase": "36ea3920979da206f5fb12c48cf3ccab83f2e55b",
+  "testedProductHead": "7be3a984c6a1bfd742805d449e2b96a65ce443e6",
+  "testedTree": "21f1db6aa92e7b503fe4946eb427be551227faa3",
   "review": {
     "classification": "PASS_AFTER_FIX_FORWARD",
     "finding": "The prepared implementation used generic intake/normalization/approval/preview layers instead of the frozen eight-stage incoming-invoice proof chain and did not register its focused test canonically.",
@@ -60,5 +60,5 @@
     "anonymous tag-to-merge-SHA and issue-state readback",
     "issue CLOSED and queue reconciliation"
   ],
-  "recordedAt": "2026-09-02T09:04:37+02:00"
+  "recordedAt": "2026-09-02T09:19:56+02:00"
 }
