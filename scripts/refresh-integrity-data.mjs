@@ -488,7 +488,31 @@ incomingInvoiceIntakeNode.inputs = [
   ["tests/incoming-invoice-intake.test.ts", "VALIDATOR"],
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 incomingInvoiceIntakeNode.ownedTests = ["npm run incoming-invoice-intake:test"];
-dag.graphVersion = 42;
+let incomingInvoiceExtractionNode = dag.nodes.find(({ id }) => id === "ap-03-incoming-invoice-extraction-benchmark-v1");
+if (incomingInvoiceExtractionNode === undefined) {
+  incomingInvoiceExtractionNode = {
+    id: "ap-03-incoming-invoice-extraction-benchmark-v1",
+    dependsOn: ["ap-02-incoming-invoice-intake-v1"],
+    inputs: [],
+    ownedTests: ["npm run incoming-invoice-extraction:test"],
+    invariants: [
+      "The exact frozen local-synthetic holdout covers layout, line items, taxes, totals and explicit failure cases.",
+      "Deterministic baseline and bounded synthetic model proposals are scored against internally derived exact denominators.",
+      "Every proposal is independently validated, remains non-authoritative and grants no customer-data, provider, allocation or posting authority.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(incomingInvoiceExtractionNode);
+}
+incomingInvoiceExtractionNode.inputs = [
+  ["packages/contracts/src/incoming-invoice-extraction-benchmark.ts", "CONTRACT"],
+  ["schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json", "SCHEMA"],
+  ["tests/fixtures/incoming-invoice/ap-03-holdout-v1.json", "FIXTURE"],
+  ["tests/incoming-invoice-extraction-benchmark.test.ts", "VALIDATOR"],
+].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+incomingInvoiceExtractionNode.ownedTests = ["npm run incoming-invoice-extraction:test"];
+dag.graphVersion = 43;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

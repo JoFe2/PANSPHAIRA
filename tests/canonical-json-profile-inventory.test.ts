@@ -102,6 +102,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "1bb497ec42c16f2865502234404302af10da4a75f1fe293fc03bfa9dede195a2",
     reason: "Advance the Verification DAG to graph v42 and canonically own the AP-02 frozen local-synthetic incoming-invoice intake family.",
   }),
+  Object.freeze({
+    migrationId: "AP-03-INTEGRATE/INCOMING-INVOICE-EXTRACTION-INTEGRITY-GENERATOR/V6",
+    path: "scripts/refresh-integrity-data.mjs",
+    profileVersion: 6,
+    fromSha256: "1bb497ec42c16f2865502234404302af10da4a75f1fe293fc03bfa9dede195a2",
+    toSha256: "fab476df3904cb066dc9912afb28dc0d15965e0f2bf6fe71117f817981e70c69",
+    reason: "Advance the Verification DAG to graph v43 and canonically own the AP-03 frozen local-synthetic extraction benchmark family.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -114,7 +122,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  filesScanned: 602,
+  filesScanned: 604,
   declarationSites: 36,
   declarationFiles: 36,
   importSites: 197,
@@ -124,7 +132,7 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1749, uniquePaths: 1749, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1753, uniquePaths: 1753, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -900,7 +908,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;

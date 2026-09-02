@@ -131,7 +131,7 @@ test("ERP capability-cell changes select the bounded owner and exact focused sui
   assert.deepEqual(result.selectedTests, ["npm run erp-order-cell:test"]);
 });
 
-test("AP-01 blueprint changes select its owner and dependent AP-02 intake", () => {
+test("AP-01 blueprint changes select its owner and dependent AP-02/AP-03 slices", () => {
   for (const changed of [
     "packages/contracts/src/incoming-invoice-blueprint.ts",
     "schemas/contracts/incoming-invoice-blueprint-v1.schema.json",
@@ -139,12 +139,12 @@ test("AP-01 blueprint changes select its owner and dependent AP-02 intake", () =
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW", changed);
-    assert.deepEqual(result.selectedNodes, ["ap-01-incoming-invoice-blueprint-v1", "ap-02-incoming-invoice-intake-v1"], changed);
-    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-intake:test", "npm run incoming-invoice:test"], changed);
+    assert.deepEqual(result.selectedNodes, ["ap-01-incoming-invoice-blueprint-v1", "ap-02-incoming-invoice-intake-v1", "ap-03-incoming-invoice-extraction-benchmark-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-extraction:test", "npm run incoming-invoice-intake:test", "npm run incoming-invoice:test"], changed);
   }
 });
 
-test("AP-02 intake changes select one bounded semantic owner and focused suite", () => {
+test("AP-02 intake changes select its owner and dependent AP-03 benchmark", () => {
   for (const changed of [
     "packages/contracts/src/incoming-invoice-intake.ts",
     "schemas/contracts/incoming-invoice-intake-v1.schema.json",
@@ -154,8 +154,22 @@ test("AP-02 intake changes select one bounded semantic owner and focused suite",
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW", changed);
-    assert.deepEqual(result.selectedNodes, ["ap-02-incoming-invoice-intake-v1"], changed);
-    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-intake:test"], changed);
+    assert.deepEqual(result.selectedNodes, ["ap-02-incoming-invoice-intake-v1", "ap-03-incoming-invoice-extraction-benchmark-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-extraction:test", "npm run incoming-invoice-intake:test"], changed);
+  }
+});
+
+test("AP-03 extraction benchmark changes select one bounded semantic owner and focused suite", () => {
+  for (const changed of [
+    "packages/contracts/src/incoming-invoice-extraction-benchmark.ts",
+    "schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json",
+    "tests/fixtures/incoming-invoice/ap-03-holdout-v1.json",
+    "tests/incoming-invoice-extraction-benchmark.test.ts",
+  ]) {
+    const result = plan([changed]);
+    assert.equal(result.mode, "IMPACTED_SHADOW", changed);
+    assert.deepEqual(result.selectedNodes, ["ap-03-incoming-invoice-extraction-benchmark-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-extraction:test"], changed);
   }
 });
 
@@ -205,7 +219,7 @@ test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pr
   ]) {
     assert.equal(publicPaths.has(publicPath), true, `public external-BI byte: ${publicPath}`);
   }
-  assert.equal(publicManifestPaths.length, 1443, "current release controls retain their exact public count");
+  assert.equal(publicManifestPaths.length, 1447, "current release controls retain their exact public count");
   assert.equal(publicPaths.size, publicManifestPaths.length, "public manifest paths remain unique");
   assert.equal(publicPaths.has(evidencePath), false, "pre-closure paired evidence remains repository-only");
 
