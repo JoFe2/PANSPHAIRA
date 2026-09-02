@@ -57,7 +57,7 @@ test("public release builder binds its exact file count to the manifest", () => 
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), count);
-  assert.equal(count, 1431);
+  assert.equal(count, 1435);
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
@@ -86,6 +86,8 @@ test("README presents governed adaptability and evidence-driven improvement with
   const positiveIcon = readFileSync(join(ROOT, "assets", "brand", "pansphaira-icon-positive.svg"), "utf8");
   const negativeIcon = readFileSync(join(ROOT, "assets", "brand", "pansphaira-icon-negative.svg"), "utf8");
   const capabilityDiagram = readFileSync(join(ROOT, "assets", "diagrams", "capability-provider-bindings.svg"), "utf8");
+  const hierarchySource = readFileSync(join(ROOT, "tools", "readme-visuals", "application-hierarchy.html"), "utf8");
+  const incomingInvoice = readFileSync(join(ROOT, "docs", "INCOMING-INVOICE-PROVING-GROUND.md"), "utf8");
   const koFi = readFileSync(join(ROOT, "assets", "support", "ko-fi.svg"), "utf8");
   const buyMeACoffee = readFileSync(join(ROOT, "assets", "support", "buy-me-a-coffee.svg"), "utf8");
   const words = readme.replace(/<[^>]+>/g, " ").trim().split(/\s+/);
@@ -97,18 +99,19 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.match(readme, /srcset="assets\/brand\/pansphaira-icon-negative\.svg"/);
   assert.match(readme, /srcset="assets\/brand\/pansphaira-icon-positive\.svg"/);
   assert.match(readme, /alt="PanSphaira geometric icon of seven connected circles"/);
-  assert.match(readme, /src="assets\/diagrams\/layers\/02-control-architecture-v3\.png"/);
-  assert.match(readme, /alt="PanSphaira control architecture from Agent Sphere through governed crossing, Gateway, capability contract, adapter provider, readback receipt, and knowledge revision\."/);
+  assert.match(readme, /src="assets\/diagrams\/layers\/04-application-hierarchy-blueprint\.png"/);
+  assert.match(readme, /alt="PanSphaira application hierarchy with four shared macro layers as rows, Incoming Invoice, Connected BI, and Provider Adaptation as columns, and a bottom-up evidence axis\."/);
+  assert.doesNotMatch(readme, /src="assets\/diagrams\/layers\/02-control-architecture-v3\.png"/);
   assert.doesNotMatch(readme, /assets\/diagrams\/layers\/01-product-canon-v3\.(?:png|svg)/);
   assert.doesNotMatch(readme, /assets\/diagrams\/layers\/03-crm-agent-gateway-owner-erp-readback-v3\.(?:png|svg)/);
-  assert.match(readme, /<details>\s*<summary>Accessible architecture description<\/summary>/);
+  assert.match(readme, /<details>\s*<summary>Accessible hierarchy description<\/summary>/);
   assert.doesNotMatch(readme, /^\s*Text fallback:/im);
   assert.doesNotMatch(readme, /assets\/brand\/chimpmaera-(?:master|negative)\.(?:png|svg)/);
   assert.doesNotMatch(readme, /(?:youtu\.be\/|youtube\.com\/)/);
   assert.match(readme, /\*\*Status:\*\* \[latest public evidence release\]\(https:\/\/github\.com\/JoFe2\/PANSPHAIRA\/releases\/latest\)/);
   assert.match(readme, /proof of concept · Linux x86_64 · \[Apache-2\.0\]\(LICENSE\)/);
-  assert.ok(readme.indexOf("## How it works") < readme.indexOf("## Adaptive Knowledge Engineering"));
-  assert.ok(readme.indexOf("## Adaptive Knowledge Engineering") < readme.indexOf("## Proof today"));
+  assert.ok(readme.indexOf("## Adaptive Knowledge Engineering") < readme.indexOf("## Applications"));
+  assert.ok(readme.indexOf("## Applications") < readme.indexOf("## Proof today"));
   assert.ok(readme.indexOf("## Proof today") < readme.indexOf("## Quickstart"));
   assert.ok(readme.indexOf("## Evidence and scope") < readme.indexOf("## Releases"));
   assert.match(readme, /\*\*Adaptive Knowledge Engineering\*\*/);
@@ -118,6 +121,16 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.match(readme, /Every integration can teach the system how to\s+adapt the\s+next one—without\s+silently expanding authority/);
   assert.match(readme, /open-ended,\s+user-need-driven option space/);
   assert.match(readme, /unverified knowledge record may exist without becoming an authoritative\s+default/);
+  assert.match(readme, /Adapt any process\. Prove what works\./);
+  assert.match(readme, /docs\/INCOMING-INVOICE-PROVING-GROUND\.md/);
+  assert.match(readme, /https:\/\/github\.com\/JoFe2\/KaleidoSphere/);
+  assert.match(hierarchySource, /ROWS · SHARED HIERARCHY/);
+  assert.match(hierarchySource, /COLUMNS · APPLICATION-SPECIFIC INSTANTIATIONS/);
+  assert.match(hierarchySource, /t=q\.get\('theme'\)\|\|'blueprint'/);
+  assert.doesNotMatch(hierarchySource, /<(?:script|img)[^>]+(?:src|href)="https?:\/\//i);
+  assert.match(incomingInvoice, /`PLANNED_NOT_DELIVERED`/);
+  assert.match(incomingInvoice, /Work-package specifications \| `6\/6` planned/);
+  assert.match(incomingInvoice, /Public AP implementation issues \| `0\/6`/);
   assert.doesNotMatch(readme, /\b(?:infinite|one-click|minutes?|hours?|production-ready)\b/i);
   assert.ok(words.length >= 600 && words.length <= 1000, `README_WORD_COUNT:${words.length}`);
   assert.ok(h2s.length <= 8, `README_H2_COUNT:${h2s.length}`);
@@ -146,6 +159,10 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.match(buyMeACoffee, /<title id="title">Support PanSphaira on Buy Me a Coffee<\/title>/);
   assert.match(manifest, /^assets\/diagrams\/caged-agent-gateway-constellation\.svg\tassets\/diagrams\/caged-agent-gateway-constellation\.svg\t0644$/m);
   assert.match(manifest, /^assets\/diagrams\/layers\/02-control-architecture-v3\.png\tassets\/diagrams\/layers\/02-control-architecture-v3\.png\t0644$/m);
+  assert.match(manifest, /^assets\/diagrams\/layers\/04-application-hierarchy-blueprint\.png\tassets\/diagrams\/layers\/04-application-hierarchy-blueprint\.png\t0644$/m);
+  assert.match(manifest, /^docs\/INCOMING-INVOICE-PROVING-GROUND\.md\tdocs\/INCOMING-INVOICE-PROVING-GROUND\.md\t0644$/m);
+  assert.match(manifest, /^tools\/readme-visuals\/application-hierarchy\.html\ttools\/readme-visuals\/application-hierarchy\.html\t0644$/m);
+  assert.match(manifest, /^tools\/readme-visuals\/README\.md\ttools\/readme-visuals\/README\.md\t0644$/m);
   for (const path of [
     "assets/brand/README.md",
     "assets/brand/pansphaira-icon-negative.png",
@@ -184,7 +201,7 @@ test("release governance negative probes fail closed", async (t) => {
   const probes = [
     ["visible README text fallback", "PUBLIC_DOC_UNENCAPSULATED_FALLBACK_LABEL:README.md", (root) => append(root, "README.md", "Text fallback: technical architecture copy")],
     ["visible public-doc placeholder", "PUBLIC_DOC_UNENCAPSULATED_FALLBACK_LABEL:docs/index.md", (root) => append(root, "docs/index.md", "Placeholder: replace this architecture explanation")],
-    ["empty HTML image alt", "PUBLIC_DOC_IMAGE_ALT_UNUSABLE:README.md", (root) => replace(root, "README.md", "alt=\"PanSphaira control architecture from Agent Sphere through governed crossing, Gateway, capability contract, adapter provider, readback receipt, and knowledge revision.\"", "alt=\"\"")],
+    ["empty HTML image alt", "PUBLIC_DOC_IMAGE_ALT_UNUSABLE:README.md", (root) => replace(root, "README.md", "alt=\"PanSphaira application hierarchy with four shared macro layers as rows, Incoming Invoice, Connected BI, and Provider Adaptation as columns, and a bottom-up evidence axis.\"", "alt=\"\"")],
     ["empty Markdown image alt", "PUBLIC_DOC_IMAGE_ALT_UNUSABLE:README.md", (root) => append(root, "README.md", "![](assets/diagrams/caged-agent-gateway-constellation.svg)")],
     ["README version-bound release link", "README_STABLE_RELEASE_NAVIGATION_MISSING", (root) => replace(root, "README.md", "[Latest public evidence release](https://github.com/JoFe2/PANSPHAIRA/releases/latest)", "[Version-bound release](https://github.com/JoFe2/PANSPHAIRA/releases/tag/v0.1.0)")],
     ["README volatile release tuple", "README_VOLATILE_RELEASE_TUPLE_DENIED", (root) => append(root, "README.md", "release=v0.2.0-poc.20260825.1\narchive=cm-product-increment-rc-20260825-canonical-number.tar.gz\ncd cm-product-increment-rc-20260825-canonical-number")],

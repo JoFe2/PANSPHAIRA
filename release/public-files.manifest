@@ -21,6 +21,7 @@ assets/brand/pansphaira-icon-positive.svg	assets/brand/pansphaira-icon-positive.
 assets/diagrams/caged-agent-gateway-constellation.svg	assets/diagrams/caged-agent-gateway-constellation.svg	0644
 assets/diagrams/capability-provider-bindings.svg	assets/diagrams/capability-provider-bindings.svg	0644
 assets/diagrams/layers/02-control-architecture-v3.png	assets/diagrams/layers/02-control-architecture-v3.png	0644
+assets/diagrams/layers/04-application-hierarchy-blueprint.png	assets/diagrams/layers/04-application-hierarchy-blueprint.png	0644
 assets/diagrams/safe-guided-flow.svg	assets/diagrams/safe-guided-flow.svg	0644
 assets/support/buy-me-a-coffee.png	assets/support/buy-me-a-coffee.png	0644
 assets/support/buy-me-a-coffee.svg	assets/support/buy-me-a-coffee.svg	0644
@@ -212,6 +213,7 @@ docs/EXTERNAL-BI-SERVICE.md	docs/EXTERNAL-BI-SERVICE.md	0644
 docs/EXTERNAL-PLUGIN-PREFLIGHT.md	docs/EXTERNAL-PLUGIN-PREFLIGHT.md	0644
 docs/EXTERNAL-VIDEO-SERVICE.md	docs/EXTERNAL-VIDEO-SERVICE.md	0644
 docs/HMI-CONFORMANT-ENTRYPOINTS.md	docs/HMI-CONFORMANT-ENTRYPOINTS.md	0644
+docs/INCOMING-INVOICE-PROVING-GROUND.md	docs/INCOMING-INVOICE-PROVING-GROUND.md	0644
 docs/INTEGRATION-PROFILES.md	docs/INTEGRATION-PROFILES.md	0644
 docs/ISSUE-CANDIDATE-OPERATOR-GUIDE.md	docs/ISSUE-CANDIDATE-OPERATOR-GUIDE.md	0644
 docs/KNOWLEDGE-ENVELOPE.md	docs/KNOWLEDGE-ENVELOPE.md	0644
@@ -1299,6 +1301,8 @@ tools/azure-power-platform/validate-limited-production-pilot-decision-packet.mjs
 tools/azure-power-platform/validate-observability-dr-evidence.mjs	tools/azure-power-platform/validate-observability-dr-evidence.mjs	0644
 tools/azure-power-platform/validate-sandbox-preflight.mjs	tools/azure-power-platform/validate-sandbox-preflight.mjs	0644
 tools/azure-power-platform/verify-zero-residue.mjs	tools/azure-power-platform/verify-zero-residue.mjs	0644
+tools/readme-visuals/README.md	tools/readme-visuals/README.md	0644
+tools/readme-visuals/application-hierarchy.html	tools/readme-visuals/application-hierarchy.html	0644
 tools/video-production-reference/EXTENSION-GUIDE.md	tools/video-production-reference/EXTENSION-GUIDE.md	0644
 tools/video-production-reference/NOTICE	tools/video-production-reference/NOTICE	0644
 tools/video-production-reference/README.md	tools/video-production-reference/README.md	0644
