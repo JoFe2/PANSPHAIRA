@@ -88,7 +88,7 @@ and its delivery chain:
 [AP-04 #364](https://github.com/JoFe2/PANSPHAIRA/issues/364) →
 [AP-05 #365](https://github.com/JoFe2/PANSPHAIRA/issues/365) →
 [AP-06 #366](https://github.com/JoFe2/PANSPHAIRA/issues/366).
-Remove this work-in-progress marker only after #366 has a public local-synthetic PoC release and anonymous readback.
+Remove this work-in-progress marker only after #366 is closed with a public local-synthetic PoC release, anonymous readback, and a public `GO` or `NARROW_GO` verdict.
 
 **[Explore the planned Source→Document AI→Matching→Advisor→UI→Receipt
 PoC](docs/INCOMING-INVOICE-PROVING-GROUND.md).**
