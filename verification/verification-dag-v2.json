@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 40,
+  "graphVersion": 41,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -3974,7 +3974,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "df7652f08edf0efdd878df0798b407d05382f88d1b88a35a1f63c2a56b117fab"
+          "sha256": "23939a90c3c287f6723d3a0a1906fe133eb5f8532352e735581e19a6e92c7e13"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -4635,12 +4635,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "24575df95c74d04a9fec72b51b798b68a7b458467c8cdc66b39f526c9346d250"
+          "sha256": "0e90b6e0b4edc2d2a4022d3923ad52f8b90cdff687e0099e837076a2e1cef199"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "c0dc627efeb0cb4a567e50374013a34f6a4c64524f79d3c303a1729949480a4b"
+          "sha256": "7fca03f37c9dade3d874d1d5ca31b3f3f560dcc942e965723bf59c4492160065"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4675,7 +4675,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "56a36d68285eec0c66d12d2a50aa5896745870c1abd10092af3ed2eef10441ca"
+          "sha256": "c888d6d8cbea4ed5b0676d0319211d45f8d9c99027cebb1d41e23b0565510c63"
         }
       ],
       "ownedTests": [
@@ -5221,7 +5221,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "9ec486f5fdb3946512c7dc87adc09abc10fab38cdad10e57a3eb22374c0e483f"
+          "sha256": "17049b1d17eea479443be2254efab1c7e3afc991a27bd299011f3232cb4d7d4b"
         },
         {
           "path": "package-lock.json",
@@ -5581,7 +5581,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "af73042ca4ecd124c6e74a8605ea4ac7993595161d91d6bf5d21ac66da379638"
+          "sha256": "47cf20ed3aaa4ccdd8ba842d08228d7c17ec54ccf9d83e9539a616ebc1ff12cd"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5596,6 +5596,37 @@
         "Any uncertainty produces FULL_FALLBACK rather than silent omission.",
         "The existing npm test suite remains the authoritative Shadow comparator.",
         "Prototype attestations are never authoritative in this slice."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ap-01-incoming-invoice-blueprint-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-blueprint.ts",
+          "role": "CONTRACT",
+          "sha256": "aad1b877c096d4605b80b141100897fab41f62622f5434be59059989b8514550"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-blueprint-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "0156e124a1a0295842d673e368df2b93322bdb54feeef0a2fa3553f9b89e3108"
+        },
+        {
+          "path": "tests/incoming-invoice-blueprint.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "07a7c0648463ae3ef3d08ff7cb6c1a8dd343b956646191a8e78ea83efd34bd44"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice:test"
+      ],
+      "invariants": [
+        "The eight-layer Blueprint follows the frozen local-synthetic source-to-receipt proof chain.",
+        "LEAN, CONTROLLED and SEGREGATED_ENTERPRISE derive only from the declared process-complexity vector; company size is not an input.",
+        "Unknown fields, unsupported effects, customer data and productive booking authority fail closed."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
