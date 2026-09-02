@@ -114,7 +114,7 @@ proof.verifier.sha256 = digest(proof.verifier.path);
 writeJson(proofPath, proof);
 writeJson("security/secure-default-proof-evidence-v1.json", buildSecureDefaultEvidence(proof));
 
-dag.graphVersion = 41;
+dag.graphVersion = 40;
 const verificationFabricNode = dag.nodes.find(({ id }) => id === "vf-contract-v1");
 if (verificationFabricNode === undefined) throw new Error("VF_CONTRACT_V1_DAG_NODE_MISSING");
 const verificationFabricInputs = [
@@ -260,8 +260,17 @@ const externalBiInputs = [
   ["tests/fixtures/external-bi-service-v2-clean-room.json", "FIXTURE"],
   ["scripts/verify-external-bi-service-v2-clean-room.mjs", "VALIDATOR"],
   ["docs/EXTERNAL-BI-SERVICE.md", "DERIVED_EVIDENCE"],
+  ["verification/external-bi-service-paired-compatibility-v1.json", "DERIVED_EVIDENCE"],
 ];
 externalBiNode.inputs = externalBiInputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+externalBiNode.invariants = [
+  "CM remains optional and default-off and addresses only the exact SBA base URL.",
+  "PanSphaira owner-derives the versioned product, contract and capability-descriptor profile; endpoint configuration cannot select or attest a substitute profile.",
+  "Exact publicly released PanSphaira and KaleidoSphere heads, fixtures, contracts, capabilities and receipts bind one paired compatibility record.",
+  "Product-version mismatch, unknown pairs, stale or substituted heads, missing evidence and fully or partially re-digested inputs fail closed; no claim exceeds the exact tested pair.",
+  "CM forwards only status, discovery, analyze, plan, preview and readback; direct Superset routes, credentials, raw rows, SQL and mutation intents are denied.",
+  "The paired record performs no production, customer, external, publication or closure effect; final public closure remains separately governed.",
+];
 const cks12Node = dag.nodes.find(({ id }) => id === "cks-12-closed-learning-loop-v1");
 if (cks12Node === undefined) throw new Error("CKS_12_DAG_NODE_MISSING");
 const cks12FocusedInputs = [
@@ -449,6 +458,7 @@ for (const relative of [
   "scripts/refresh-integrity-data.mjs",
   "docs/development/cap-cell-erp-01-pdca.md",
   "docs/development/vf-m2-adaptive-evidence-gates-pdca.md",
+  "verification/external-bi-service-paired-compatibility-v1.json",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);

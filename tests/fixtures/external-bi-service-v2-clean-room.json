@@ -76,5 +76,229 @@
     { "id": "hidden-profile-key", "class": "hostile-input", "expectedReasonCode": "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED" },
     { "id": "symbol-profile-key", "class": "hostile-input", "expectedReasonCode": "EXTERNAL_BI_SERVICE_ATTESTATION_MALFORMED" },
     { "id": "post-validation-mutated-decision", "class": "post-validation-mutation", "expectedReasonCode": "EXTERNAL_BI_SERVICE_REQUEST_DENIED" }
-  ]
+  ],
+  "pairedCompatibility": {
+    "schemaVersion": "pansphaira.external-bi-service/paired-compatibility-input/v1",
+    "evidenceId": "FND-XR-01-PS336-KS141-PAIRED-CLEAN-ROOM-V1",
+    "sourceClass": "IMMUTABLE_OWNER_DERIVED_PUBLIC_RELEASE_INPUTS",
+    "repositories": {
+      "pansphaira": {
+        "repository": "JoFe2/PANSPHAIRA",
+        "issueClosure": {
+          "number": 336,
+          "state": "closed",
+          "stateReason": "completed",
+          "closedAt": "2026-09-01T23:12:38Z",
+          "bodySha256": "26fe34445a8f68ba41f6de28cba97657d1b21232b9662a1856af4514a72014d4",
+          "ownerComment": {
+            "id": 5501738387,
+            "author": "JoFe2",
+            "authorAssociation": "OWNER",
+            "body": "Delivered and publicly verified at 24db4e926385b006c9f2fbca3588adece72e7fb0",
+            "bodySha256": "5c694988dd9902b324fcf68aca93725f997cbff2bcb25a066d517424710713bb"
+          }
+        },
+        "release": {
+          "releaseId": 380881340,
+          "tag": "2026_09_02_v1",
+          "head": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+          "tree": "ff692880f1ad7b74e5a4ca8255ac983f23de12f9",
+          "publishedAt": "2026-09-01T23:12:34Z",
+          "prerelease": false
+        },
+        "profile": {
+          "schemaVersion": "pansphaira.external-bi-service/compatibility-profile/v2",
+          "product": {
+            "id": "superset-bi-agent",
+            "version": "v0.8.0",
+            "component": "bi-agent-runtime"
+          },
+          "contract": {
+            "id": "superset-bi-agent.external",
+            "version": "2.0.0"
+          },
+          "capabilities": [
+            { "id": "bi.status.read", "action": "status", "authority": "read-only" },
+            { "id": "bi.discovery.run", "action": "discovery", "authority": "local-evidence-write" },
+            { "id": "bi.analysis.run", "action": "analyze", "authority": "source-read-only" },
+            { "id": "bi.graph.adaptive-v1.plan", "action": "plan", "authority": "proposal-only" },
+            { "id": "bi.preview.create", "action": "preview", "authority": "proposal-only" },
+            { "id": "bi.readback.read", "action": "readback", "authority": "read-only" }
+          ]
+        },
+        "byteIdentities": [
+          {
+            "roles": ["release-manifest"],
+            "path": "SHA256SUMS",
+            "gitBlob": "f039d216c793565bd9eb9f542f41f516d6be4b65",
+            "sha256": "0019fb528ae04f33162ccc0b63f44b7d594c9d4df703c9a4bc7d77a72befb5d7"
+          },
+          {
+            "roles": ["contract", "capability"],
+            "path": "packages/contracts/src/external-bi-service.ts",
+            "gitBlob": "d21657c68fe3e9b1c5400f63f3d98e590359635a",
+            "sha256": "7ea7c5e68ee6aa190313521ffecc9b6b01b0f829e7c7bcc6bf85ffa4e734ba37"
+          },
+          {
+            "roles": ["fixture"],
+            "path": "tests/fixtures/external-bi-service-v2-clean-room.json",
+            "gitBlob": "dcaf3e8cb3f963e35b54fbe774843639277d2f0b",
+            "sha256": "a5265dbf05a3bb14de5a8e2fa650278b24c8b47fa35a5e5c399b6c52c2c7acfd"
+          },
+          {
+            "roles": ["receipt", "issue-delivery-receipt"],
+            "path": "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-closure-receipt.json",
+            "gitBlob": "8b6cf6a61d24fde6a08f8375f0942a07d0b935f7",
+            "sha256": "1befbc60e632d8b029f5ea1380f7cb18ed9a64fa989a23619875a3298d66b0c1"
+          },
+          {
+            "roles": ["receipt", "gate-receipt"],
+            "path": "closure-audits/PORTFOLIO-PS336-ROOT-QS/exact-head-local-gates.json",
+            "gitBlob": "80952af7c8df3bb528e229026ebccb05ae7871b5",
+            "sha256": "d907e4ba5ee3c79e3ea78d9c8fab9726518c58647d6f2a13864158b1dcd9201f"
+          }
+        ]
+      },
+      "kaleidoSphere": {
+        "repository": "JoFe2/KaleidoSphere",
+        "issueClosure": {
+          "number": 141,
+          "state": "closed",
+          "stateReason": "completed",
+          "closedAt": "2026-09-01T03:18:01Z",
+          "bodySha256": "ffe87390024015d72125df3a63190a7356f8ba0d06b3370da3f9c4f75200502f",
+          "ownerComment": {
+            "id": 5488387009,
+            "author": "JoFe2",
+            "authorAssociation": "OWNER",
+            "body": "Delivered and publicly verified at 90c574e9a06cb752be06270395d44a31eabc44ae",
+            "bodySha256": "e2f6203a5a9fe37c8442c44b778ad12bb6246914c284b7cee8ada0f3aa1223f2"
+          }
+        },
+        "release": {
+          "releaseId": 380190392,
+          "tag": "2026_09_01_v1",
+          "head": "90c574e9a06cb752be06270395d44a31eabc44ae",
+          "tree": "e1e332f218d2af348cf18ff25614bec746268105",
+          "publishedAt": "2026-09-01T03:17:58Z",
+          "prerelease": false
+        },
+        "profile": {
+          "schemaVersion": "superset-bi-agent.external/consumer-profile/v1",
+          "product": {
+            "id": "superset-bi-agent",
+            "version": "v0.18.1",
+            "component": "bi-agent-runtime"
+          },
+          "contract": {
+            "id": "superset-bi-agent.external",
+            "version": "2.0.0"
+          },
+          "capabilities": [
+            { "id": "bi.status.read", "action": "status", "authority": "read-only" },
+            { "id": "bi.discovery.run", "action": "discovery", "authority": "local-evidence-write" },
+            { "id": "bi.analysis.run", "action": "analyze", "authority": "source-read-only" },
+            { "id": "bi.graph.adaptive-v1.plan", "action": "plan", "authority": "proposal-only" },
+            { "id": "bi.preview.create", "action": "preview", "authority": "proposal-only" },
+            { "id": "bi.readback.read", "action": "readback", "authority": "read-only" }
+          ],
+          "partialCapabilities": [
+            { "id": "superset.trusted-apply", "action": "trusted-apply", "authority": "trusted-approval-only", "externalIntent": false },
+            { "id": "superset.trusted-readback", "action": "trusted-readback", "authority": "trusted-approval-only", "externalIntent": false },
+            { "id": "superset.trusted-rollback", "action": "trusted-rollback", "authority": "trusted-approval-only", "externalIntent": false }
+          ],
+          "unsupported": [
+            { "surface": "sourceDatabaseCredentials", "accepted": false },
+            { "surface": "freeSql", "accepted": false },
+            { "surface": "rawSourceRows", "accepted": false },
+            { "surface": "modelMutation", "accepted": false },
+            { "surface": "directSupersetMutationIntent", "accepted": false }
+          ],
+          "boundaries": {
+            "sourceDatabaseCredentialsAccepted": false,
+            "freeSqlAccepted": false,
+            "rawSourceRowsReturned": false,
+            "modelMutationAuthority": false,
+            "directSupersetMutationIntentAccepted": false,
+            "persistentSupersetWorkflow": "trusted-preview-approval-apply-readback-rollback-only"
+          }
+        },
+        "byteIdentities": [
+          {
+            "roles": ["release-manifest"],
+            "path": "SOURCE-MAP.json",
+            "gitBlob": "9fc20b56661d93d63ac71d0d167be05eed8f2038",
+            "sha256": "4fd7a95cfadaad9ac212e1f91a4b5bd70a33190cae0f43b5aaa0548e9a0fb8d7"
+          },
+          {
+            "roles": ["product"],
+            "path": "services/bi-agent/package.json",
+            "gitBlob": "90e596ecc8a2501861e2cfd913385042722c0ddd",
+            "sha256": "826bcc27fa1a59514001b550a8d07c2fd129bf68089ddc98bdf626b2eb346145"
+          },
+          {
+            "roles": ["contract"],
+            "path": "contracts/external-api/v2/external-bi-api.schema.json",
+            "gitBlob": "4afff59b627e749b8e362d96fd64d27aef2f89cb",
+            "sha256": "0d3834ab0cfd5626fdb407f088cd2e3526963dd999276c23e23d908c39de3a28"
+          },
+          {
+            "roles": ["contract", "capability"],
+            "path": "contracts/external-api/v2/capability-manifest.schema.json",
+            "gitBlob": "844d0e0c09b2b4a93a6f5fa54ff3cacb1807951a",
+            "sha256": "e7d1859419499d7a1bc62d45d1d1934a143ccb38ae37e812c381dc1888e637dc"
+          },
+          {
+            "roles": ["capability"],
+            "path": "services/bi-agent/src/capability-manifest-v1.mjs",
+            "gitBlob": "8f5a9d5fffa9ef54a0602fdd2081dc60faae3a57",
+            "sha256": "74d0d31bbd555776a6eaddc5874eb1bd98657e292d8890620424bca5ef692177"
+          },
+          {
+            "roles": ["contract", "capability", "runtime"],
+            "path": "services/bi-agent/src/external-api-v2.mjs",
+            "gitBlob": "28803bbe8836e075240c5708f3c9fec4fe8baf0d",
+            "sha256": "f55d605c734364d4be13d13585c575672e42ea247eea3d6e725e20f61b3200f6"
+          },
+          {
+            "roles": ["clean-room-runner"],
+            "path": "scripts/run-external-api-v2-clean-room.mjs",
+            "gitBlob": "ccf33371de105ef3b9536fb015273df728090ec2",
+            "sha256": "670c9aa22fdba18df697da83a073e48d680733de9f61f6bf83409be872d33331"
+          },
+          {
+            "roles": ["fixture", "test-oracle"],
+            "path": "tests/external-api-v2.test.mjs",
+            "gitBlob": "533cbdd2c3e6aa8881d2b02b69bae73010a2d0b8",
+            "sha256": "b29fc04c436095ae86e0c32635e8fbca4bb0379961a45a24e9c56caaa80c7c4d"
+          },
+          {
+            "roles": ["fixture", "portable-synthetic-fixture"],
+            "path": "services/bi-control/fixtures/portable-companion/synthetic-demo-v1.json",
+            "gitBlob": "90caaf613bee98d6ebc8ace2714d0df159a48932",
+            "sha256": "aeb755b1660e226e06693c5dafc7f7ecede0de9639ccd7192e1adbec64f16f10"
+          },
+          {
+            "roles": ["receipt", "portable-synthetic-receipt"],
+            "path": "services/bi-control/fixtures/portable-companion/receipt-valid-synthetic.json",
+            "gitBlob": "19864eb1a56ff5b1489e06c0c4bb1264ae747c46",
+            "sha256": "8870091fe40ef9d5430784f937d01f198a1a64c3ad37753881a5e610e407e701"
+          },
+          {
+            "roles": ["receipt-context"],
+            "path": "services/bi-control/fixtures/portable-companion/receipt-synthetic-context.json",
+            "gitBlob": "573cc5dcd7eadd8f44499e691b7a562269d5b27b",
+            "sha256": "906164c460d6aef3ba0858ecf88bc18b07f819f0823c86032f573b4b7a3c82f0"
+          }
+        ]
+      }
+    },
+    "claimBoundary": {
+      "testedPairOnly": true,
+      "unknownPairsDenied": true,
+      "productionOrCustomerEffect": false,
+      "externalCallRequired": false,
+      "compatibilityClaimOnDeniedPair": false
+    }
+  }
 }

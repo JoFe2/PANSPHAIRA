@@ -199,6 +199,7 @@ repository_only_files = {
     ".github/FUNDING.yml",
     ".github/workflows/daily-poc-candidate.yml",
     "SHA256SUMS",
+    "verification/external-bi-service-paired-compatibility-v1.json",
     "tests/fixtures/local-knowledge-wiki-container/credential-like.env",
     "tests/fixtures/rks-01/raw-rag-corpus-v1.json",
     "tests/fixtures/rks-01/typed-knowledge-corpus-v1.json",

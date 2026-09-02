@@ -131,10 +131,18 @@ test("ERP capability-cell changes select the bounded owner and exact focused sui
   assert.deepEqual(result.selectedTests, ["npm run erp-order-cell:test"]);
 });
 
-test("external BI v2 focused family is canonical and selects its owner test", () => {
+test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pre-closure", () => {
   const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
     scripts: Record<string, string>;
   };
+  const evidencePath = "verification/external-bi-service-paired-compatibility-v1.json";
+  const publicManifestPaths = readFileSync("release/public-files.manifest", "utf8")
+    .split("\n")
+    .filter((line) => line !== "" && !line.startsWith("#"))
+    .map((line) => line.split("\t")[0]!);
+  const publicPaths = new Set(publicManifestPaths);
+  const externalBiNode = graph().nodes.find(({ id }) => id === "external-bi-service-v2");
+  assert.ok(externalBiNode);
   assert.equal(
     packageJson.scripts["external-bi-service:test"],
     "npm run build --silent && node --test dist/tests/external-bi-service.test.js",
@@ -151,12 +159,90 @@ test("external BI v2 focused family is canonical and selects its owner test", ()
     "tests/fixtures/external-bi-service-v2-clean-room.json",
     "scripts/verify-external-bi-service-v2-clean-room.mjs",
     "docs/EXTERNAL-BI-SERVICE.md",
+    evidencePath,
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW", changed);
     assert.ok(result.selectedNodes.includes("external-bi-service-v2"), changed);
     assert.ok(result.selectedTests.includes("npm run external-bi-service:test"), changed);
   }
+
+  assert.deepEqual(externalBiNode.inputs.find(({ path }) => path === evidencePath)?.role, "DERIVED_EVIDENCE");
+  for (const publicPath of [
+    "packages/contracts/src/external-bi-service.ts",
+    "tests/external-bi-service.test.ts",
+    "tests/fixtures/external-bi-service-v2-clean-room.json",
+    "scripts/verify-external-bi-service-v2-clean-room.mjs",
+    "docs/EXTERNAL-BI-SERVICE.md",
+  ]) {
+    assert.equal(publicPaths.has(publicPath), true, `public external-BI byte: ${publicPath}`);
+  }
+  assert.equal(publicManifestPaths.length, 1431, "current release controls retain their exact public count");
+  assert.equal(publicPaths.size, publicManifestPaths.length, "public manifest paths remain unique");
+  assert.equal(publicPaths.has(evidencePath), false, "pre-closure paired evidence remains repository-only");
+
+  const acceptanceMarkers = new Map<string, readonly string[]>([
+    ["FND-XR-01-AC01", [
+      "FND-XR-01 exact #336/#141 released inputs recompute one deterministic bounded evidence record",
+      "FND-XR-01 stale, substituted, paired and fully or partially re-digested inputs fail closed",
+    ]],
+    ["FND-XR-01-AC02", [
+      "FND-XR-01 both public releases, issue closures, fixtures, contracts, capabilities and receipts are byte-bound",
+    ]],
+    ["FND-XR-01-AC03", [
+      "FND-XR-01 missing receipt, fixture or capability and every unknown pair remain denied",
+      "FND-XR-01 a fully re-digested evidence forgery cannot manufacture a compatibility claim",
+    ]],
+    ["FND-XR-01-AC04", [
+      "FND-XR-01 both public releases, issue closures, fixtures, contracts, capabilities and receipts are byte-bound",
+    ]],
+  ]);
+  assert.deepEqual([...acceptanceMarkers.keys()], [
+    "FND-XR-01-AC01",
+    "FND-XR-01-AC02",
+    "FND-XR-01-AC03",
+    "FND-XR-01-AC04",
+  ]);
+  const focusedValidator = readFileSync("tests/external-bi-service.test.ts", "utf8");
+  for (const [acceptanceId, markers] of acceptanceMarkers) {
+    for (const marker of markers) assert.equal(focusedValidator.includes(marker), true, `${acceptanceId}:${marker}`);
+  }
+
+  const evidence = JSON.parse(readFileSync(evidencePath, "utf8")) as {
+    repositoryBindings: Array<{
+      issueClosure: { state: string; stateReason: string; deliveredHead: string };
+      release: { head: string; prerelease: boolean };
+      receiptBytes: Array<{ path: string }>;
+    }>;
+    claimBoundary: {
+      testedCrossRepositoryPairCount: number;
+      unknownPairsDenied: boolean;
+      externalEffectPerformed: boolean;
+      compatibilityClaimOnDeniedPair: boolean;
+    };
+    reviewPolicy: { publicClosureAndQueueDone: string };
+    nonClaims: string[];
+  };
+  assert.equal(evidence.repositoryBindings.length, 2);
+  for (const binding of evidence.repositoryBindings) {
+    assert.equal(binding.issueClosure.state, "closed");
+    assert.equal(binding.issueClosure.stateReason, "completed");
+    assert.equal(binding.issueClosure.deliveredHead, binding.release.head);
+    assert.equal(binding.release.prerelease, false);
+    assert(binding.receiptBytes.every(({ path }) => path !== evidencePath), "self-referential receipt denied");
+  }
+  assert.deepEqual(evidence.claimBoundary, {
+    ...evidence.claimBoundary,
+    testedCrossRepositoryPairCount: 1,
+    unknownPairsDenied: true,
+    externalEffectPerformed: false,
+    compatibilityClaimOnDeniedPair: false,
+  });
+  assert.equal(
+    evidence.reviewPolicy.publicClosureAndQueueDone,
+    "FINAL_SOL_OWNER_ONLY_NOT_PERFORMED_BY_LOCAL_WORKER",
+  );
+  assert(evidence.nonClaims.includes("NO_ISSUE_337_PUBLIC_CLOSURE_OR_QUEUE_DONE_CLAIM"));
 });
 
 test("FND-PS-02 edge-evidence focused family is canonical and selects its owner test", () => {
