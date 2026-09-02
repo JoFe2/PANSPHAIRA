@@ -40,8 +40,8 @@
       "path": "scripts/refresh-integrity-data.mjs",
       "profileVersion": 3,
       "fromSha256": "b19ee3ecb425a4404142b0a5e9edef48c8f22285a57504458c2c5ebd386fa12a",
-      "toSha256": "4fc07b551e634b9469ee6a4354dce6c2fd9fd03855572ad8bf3b2973a1a9207a",
-      "reason": "Advance verification DAG generation to graph v42, canonically bind the FND-XR-01 paired-compatibility evidence, and retain its repository-only pre-closure classification; the admitted v1 and reviewed v2 digests remain immutable."
+      "toSha256": "cd13f5b07971b60c7440fc3ac102eb26f412b980798c56fb30e23ac947ad002f",
+      "reason": "Retain the reviewed graph v40 compatibility contract while canonically binding the FND-XR-01 paired-compatibility evidence and its repository-only pre-closure classification; the admitted v1 and reviewed v2 digests remain immutable."
     }
   ],
   "scanScope": {
@@ -165,7 +165,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "4fc07b551e634b9469ee6a4354dce6c2fd9fd03855572ad8bf3b2973a1a9207a"
+      "sha256": "cd13f5b07971b60c7440fc3ac102eb26f412b980798c56fb30e23ac947ad002f"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -758,7 +758,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "4fc07b551e634b9469ee6a4354dce6c2fd9fd03855572ad8bf3b2973a1a9207a",
+      "sha256": "cd13f5b07971b60c7440fc3ac102eb26f412b980798c56fb30e23ac947ad002f",
       "basis": "profile-version-migration"
     },
     {
