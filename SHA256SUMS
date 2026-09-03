@@ -86,7 +86,7 @@ f148cae0e6212af25f33e2254e4e2c3f3f745b5eb2f3b433b47ed7709fab8c79  ./assets/suppo
 9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0  ./closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json
 20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8  ./contracts/azure-power-platform/authoritative-readback-receipt.schema.json
 1b16e39a1941368fa6b9ad8595c2c0b4b8684ab8f1f3fd3e9c6cc83a32d02809  ./contracts/azure-power-platform/compatibility-migration.schema.json
-1086bb4764445168b69ca18b9bf7d7df4e2f6ff57ea18da19559deb752d8700a  ./contracts/azure-power-platform/proposal-approval-execution.schema.json
+879ccfd12b668274c1336129c5c3c21093b012cbb2e46ff3fb106236ca98c48c  ./contracts/azure-power-platform/proposal-approval-execution.schema.json
 20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287  ./contracts/azure-power-platform/readonly-connector.openapi.yaml
 63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68  ./contracts/azure-power-platform/readonly-connector.schema.json
 a81676c8777f5244889bd26b7900ce7d120c8d93284dd2d12cf0073d51dfc642  ./contracts/azure-power-platform/readonly-denial-matrix.schema.json
@@ -1000,7 +1000,7 @@ b9eb0d76bef49007871f0e616a616c737526229a301ee988201e41e59ec44900  ./tests/asf-ro
 1547da81d0b6a70681fcff3e23e3fd775576cd4a3583585bf94a600b39bb41f9  ./tests/azure-identity-profile.test.ts
 21d2ae0645a6b88ec79f0f84faf8ffdfb5a41d686ed4147229f64c439f3bdc8e  ./tests/azure-power-platform/alm-package-plan.test.mjs
 3542b9c5b578d37b4562f8f5f5cb4808aef666e721f5f0358a99e81e1a80dd58  ./tests/azure-power-platform/authoritative-readback-receipt.test.mjs
-3ba0895ef9d4ff88431296cf86503a494a4893da4e3e0070fa23cc012d690ba3  ./tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs
+ce9a873cf40afc9a7b4df146e9f905129720461ba9487cb0f6d8268d49f6979c  ./tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs
 8562b1a1165742b6daaca0ba594a50df509f386cbe61265b8d13f5884738cfbb  ./tests/azure-power-platform/canvas-package.test.mjs
 82cea45e216b1ef8f4554be2983b3fc5050b054e7364b30035fde484e6ae590e  ./tests/azure-power-platform/compatibility-migration.test.mjs
 cb90103fdeb8a3570cb88844d552c2c5bd9995634a9fd7f916fe170955372b2f  ./tests/azure-power-platform/enterprise-profile-evidence.test.mjs
@@ -1124,7 +1124,7 @@ b6efdc79b365497f1670ba1ebac45e646c81ba1447a8f597439408d7528011a6  ./tests/cks-ta
 21e844b86c02ef21ebd6e2d18efec7339d57ecdbc87b9c7cb76948a6a00627d6  ./tests/cks-vocabulary.test.ts
 3b326ea362a317096ce28573c824473ffeec8b65c760950636d0b038dfbb9cf8  ./tests/company-data-graph.test.mjs
 b1c6f1a3f8abc0605e49c9307c69ac255b337af1ec84b3bacd05a5612e972a46  ./tests/company-data-pack.test.mjs
-d67ed6d2afdc012614a1edffdf5c76c21d3e3fd9ebc7c1e45ed78c513366e7e9  ./tests/contribution-intake-ledger.test.ts
+0c1243af0bea71c85b48623d543f60ea4b53199e6be207346bbf92232909850a  ./tests/contribution-intake-ledger.test.ts
 5b437b3f7feac8d367eeae342c701b33a0e90bc5d4bb7e4f30f5b559f77a0b36  ./tests/crm-read-connector.test.ts
 4187f4ff006d3dc87dd81b0d138a32dc010117e72554920a5535be7d7ce31aaa  ./tests/cscl-01/protocol.test.mjs
 dc958a6c75e217a91e2ad2a2197f886d8fe20a55f876320657f1529ededa524b  ./tests/cscl-02/odoo-profile.test.mjs
@@ -1234,7 +1234,7 @@ d2072dbe786b83d2450f9c90519c4cebf696d72064f27a68dd63cd3f420a8b67  ./tests/fixtur
 26c64d39fd2f9b0aba725f618a9bbcfcd2b761efb0d7dd6989d26720f64e922b  ./tests/fixtures/azure-power-platform/sandbox-preflight-denied.json
 cf5e37da7485a8bf04d7629e5880e1ac7cf3626f1cb9092c05e331f4e4294e2e  ./tests/fixtures/azure-power-platform/tuple-digest-drift.json
 0e5fec98360b8d12fcefaa39063e4ca5344a707409c890daa51e5ff3db88e949  ./tests/fixtures/azure-power-platform/tuple-valid.json
-8607a499bbdb729fda491df9d99d6964750f04bce9a75f8281b14ef1c14e57b9  ./tests/fixtures/azure-power-platform/zero-residue.json
+fe7ee77ca555daa0f779dd33200f04803400bec78dcc30c7871c8a9439456ac0  ./tests/fixtures/azure-power-platform/zero-residue.json
 c7e372d7eb0d701f7cde55147bdeadf73d0c8e7202b2f3be49e83e78172db429  ./tests/fixtures/builder/g2-zoo-system.json
 73bfa0d3ebf0de709f80f0449b7fa26ef76e1885be4d89fb418bc8a087ec8b1b  ./tests/fixtures/builder/g3-capability-registry.json
 082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3  ./tests/fixtures/canonical-json-profile-base-obligations-v1.json
@@ -1588,7 +1588,7 @@ dbe9e5c5e3cbf402fa7bab68765114bb887e9bcd5239bcac60cc351e272124a7  ./tests/rks-02
 b8c70273fd4992a13e46b671603b19f75e3876e5a1e07f6e7f92045830f872dd  ./tests/skill-admission.test.ts
 b4cb7c2f3b2570316979405def59070160fb3df38ca0a9fce7a5a5dd7ad2ce28  ./tests/skill-bundle.test.ts
 33f5a2089d41efb4be46d9054ebdb6a90823674b235083481dc55bffb84df8d2  ./tests/supply-chain-verifier.test.mjs
-68187314db99e493d0523bebd462390d23a414572ac8583ac68ff109b8ab1999  ./tests/trust-compatibility-foundation-closure.test.ts
+b8cf73a89ca40426a56ce9dbb6c938f12a4d6917d7592c9233719163ab9c64de  ./tests/trust-compatibility-foundation-closure.test.ts
 b3f43cff22245094bd576a572a88b0709808dcee53b256066b33002a0e853da6  ./tests/update-apply-journal.test.ts
 b60165c6b39347c3e1a9888ad550214436c522726323001f4b285e1a263f5560  ./tests/update-apply-postcondition.test.ts
 77271e3aa0b97f6e1c73f3fc02c9a55e660de87bea8285c901888f61e064aa9e  ./tests/update-apply-tuple-lock.test.ts
@@ -1622,13 +1622,13 @@ c2c6432ab6180de861537328a7b86f9ef29c550303d20ea55b0df5151f571c91  ./tools/azure-
 1da70604fc2f28629ecade407e6a72f386f80e3ecb503284e3e23d45e2a16c87  ./tools/azure-power-platform/validate-limited-production-pilot-decision-packet.mjs
 0478665ef882b9b1836a4188c4677d065b26662b587a22333e46f00bc05295fd  ./tools/azure-power-platform/validate-observability-dr-evidence.mjs
 9072ea08743e1f2b0b68278fe3ee81210d6337d5f85d6c9aeb0693fff5ff3383  ./tools/azure-power-platform/validate-sandbox-preflight.mjs
-ccdb47a5cbe45f5d4b58d0c0ccc123cfc2780a1c6d90d17e2d4616751917bafc  ./tools/azure-power-platform/verify-zero-residue.mjs
+7a1e55e3ef4b1b9a39b995f62d7c66f30759e41045155b53b08ab68d317ca535  ./tools/azure-power-platform/verify-zero-residue.mjs
 f6832c8d9ce26b0de11d654c89c3f32846be73116ff581b9922b6e9af0a28037  ./tools/readme-visuals/README.md
 ab0f4d8c9c8f208bb6fa0e3248a3679a55a8258d681f4dbb7760a3eed72d6364  ./tools/readme-visuals/application-hierarchy.html
 65a15a5853714a50d410e431d6e71900fe590a09dc3099ae347fffe8b63e577a  ./tools/video-production-reference/EXTENSION-GUIDE.md
 0c75ff07b3732d5f810725bb58def85c0c595191a541d9405a9ed681acbd22c3  ./tools/video-production-reference/NOTICE
 bb3a0592e9a9a5e9ce0e645e38bbcd55dab90c47adf97a5f9e9186ecaebaf89c  ./tools/video-production-reference/README.md
-ba0db88df7543eb5cc846a47f28f2d99ec5a44bf14c67a683cfca79cc48451b3  ./tools/video-production-reference/SHA256SUMS
+dc63c56be011945299b522530b0e332656d9b2b12e78a221b08dbe29f0bed3f8  ./tools/video-production-reference/SHA256SUMS
 49c0ab6c7fe8e28725b57036f9ae921ffca088aa53417a4ff3e45d54c1931c76  ./tools/video-production-reference/assets/synthetic/frame-s01.png
 59ac2035972203d2e4d9704617109aa3205c7e25cc00a39b6de596df461acdc8  ./tools/video-production-reference/assets/synthetic/frame-s02.png
 fc48018519057b6e430a16e188429d91ce08ac82ccde63a2f3e2f1b9e609c9d3  ./tools/video-production-reference/assets/synthetic/frame-s03.png
@@ -1663,7 +1663,7 @@ dc3bf18be5004052d0c4abe40778df6227ee8c20f02408ecac10039cb2873a30  ./tools/video-
 54f9a01d34131ece91fca433122b0dd72afa7ab7fe92a3483d5b460857bd222e  ./tools/video-production-reference/src/strict-json.mjs
 d4b6a9466794306b59f1465aa668464074c1ecefb5fb0b62e9423c14c7bef6ba  ./tools/video-production-reference/src/verify-closure.mjs
 2452223d6db0162e5f80fd68fb9dbfd73b0bdcd8fdfc60944e78c2f81b543b04  ./tools/video-production-reference/tests/closure.test.mjs
-afad51ba1b158795f99eef3df54027f791d6ca00801f8605ccc6a1fce252426e  ./tools/video-production-reference/tests/slice.test.mjs
+4931251fbccbc19a5f58f97634f73191c56707222b698a1673d48d3af6eea597  ./tools/video-production-reference/tests/slice.test.mjs
 f86763bdd1a23123a244541d87254c46a512fb5941ac15859ec0923add825838  ./tsconfig.json
 b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification/awi-03-knowledge-envelope-evidence-v1.json
 40b6a9bbe263b9cd67ef034dec0eb87c350aa1587904e385a2acb1072b3e0bc3  ./verification/bi-002-crm-read-connector-evidence-v1.json
@@ -1758,5 +1758,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-96f9336f2378771d6ddc8f86df281fa22cb663778dc297cf836d87a5d4975c0e  ./verification/verification-dag-v2.json
+56c5dab0aa7b7b5181f36f96bdae1e312c78023296c0cde719018ac579637e0f  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

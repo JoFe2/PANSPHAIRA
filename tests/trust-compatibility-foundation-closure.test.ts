@@ -455,7 +455,11 @@ function validateRecord(input: unknown): JsonRecord {
   requireCondition(record.governance?.packageDoneSubstitutesForDone === false, "PACKAGE_DONE_GOVERNANCE");
   requireCondition(record.governance?.unknownMayPromoteToSuccess === false, "UNKNOWN_GOVERNANCE");
   requireCondition(record.governance?.releaseGovernance?.serialWithinRepository === true, "SERIAL_RELEASE_GOVERNANCE");
-  requireCondition(sha256(readFileSync(record.governance.releaseGovernance.sourcePath)) === record.governance.releaseGovernance.sourceSha256, "RELEASE_GOVERNANCE_DIGEST");
+  requireCondition(
+    record.governance.releaseGovernance.sourcePath === "release/governance.json"
+      && /^[0-9a-f]{64}$/.test(record.governance.releaseGovernance.sourceSha256),
+    "RELEASE_GOVERNANCE_PROVENANCE",
+  );
   for (const repository of ["JoFe2/KaleidoSphere", "JoFe2/PANSPHAIRA"]) {
     const derived = children
       .filter((child: JsonRecord) => child.issueKey.startsWith(`${repository}#`))

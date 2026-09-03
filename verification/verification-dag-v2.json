@@ -244,7 +244,7 @@
         {
           "path": "contracts/azure-power-platform/proposal-approval-execution.schema.json",
           "role": "SCHEMA",
-          "sha256": "1086bb4764445168b69ca18b9bf7d7df4e2f6ff57ea18da19559deb752d8700a"
+          "sha256": "879ccfd12b668274c1336129c5c3c21093b012cbb2e46ff3fb106236ca98c48c"
         },
         {
           "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
@@ -329,7 +329,7 @@
         {
           "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "3ba0895ef9d4ff88431296cf86503a494a4893da4e3e0070fa23cc012d690ba3"
+          "sha256": "ce9a873cf40afc9a7b4df146e9f905129720461ba9487cb0f6d8268d49f6979c"
         },
         {
           "path": "tests/azure-power-platform/canvas-package.test.mjs",
@@ -559,7 +559,7 @@
         {
           "path": "tests/fixtures/azure-power-platform/zero-residue.json",
           "role": "FIXTURE",
-          "sha256": "8607a499bbdb729fda491df9d99d6964750f04bce9a75f8281b14ef1c14e57b9"
+          "sha256": "fe7ee77ca555daa0f779dd33200f04803400bec78dcc30c7871c8a9439456ac0"
         },
         {
           "path": "tools/azure-power-platform/render-public-readback.mjs",
@@ -614,7 +614,7 @@
         {
           "path": "tools/azure-power-platform/verify-zero-residue.mjs",
           "role": "VALIDATOR",
-          "sha256": "ccdb47a5cbe45f5d4b58d0c0ccc123cfc2780a1c6d90d17e2d4616751917bafc"
+          "sha256": "7a1e55e3ef4b1b9a39b995f62d7c66f30759e41045155b53b08ab68d317ca535"
         }
       ],
       "ownedTests": [
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d67ed6d2afdc012614a1edffdf5c76c21d3e3fd9ebc7c1e45ed78c513366e7e9"
+          "sha256": "0c1243af0bea71c85b48623d543f60ea4b53199e6be207346bbf92232909850a"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3774,7 +3774,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "ba0db88df7543eb5cc846a47f28f2d99ec5a44bf14c67a683cfca79cc48451b3"
+          "sha256": "dc63c56be011945299b522530b0e332656d9b2b12e78a221b08dbe29f0bed3f8"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3949,7 +3949,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "afad51ba1b158795f99eef3df54027f791d6ca00801f8605ccc6a1fce252426e"
+          "sha256": "4931251fbccbc19a5f58f97634f73191c56707222b698a1673d48d3af6eea597"
         }
       ],
       "ownedTests": [
@@ -4761,7 +4761,7 @@
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
           "role": "VALIDATOR",
-          "sha256": "68187314db99e493d0523bebd462390d23a414572ac8583ac68ff109b8ab1999"
+          "sha256": "b8cf73a89ca40426a56ce9dbb6c938f12a4d6917d7592c9233719163ab9c64de"
         },
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
