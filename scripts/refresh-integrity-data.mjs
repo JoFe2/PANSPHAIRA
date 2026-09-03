@@ -299,6 +299,42 @@ const foundationClosureInvariants = [
 for (const invariant of foundationClosureInvariants) {
   if (!repositoryIntegrityNode.invariants.includes(invariant)) repositoryIntegrityNode.invariants.push(invariant);
 }
+const currentHeadDockerE2EInputs = [
+  [".github/workflows/demo-current-head-e2e.yml", "SECURITY"],
+  [".github/workflows/release-public-readback.yml", "SECURITY"],
+  ["closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json", "DERIVED_EVIDENCE"],
+  ["demo/install.sh", "SECURITY"],
+  ["demo/manifests/supply-chain/artifact-lock-v1.json", "CONTRACT"],
+  ["demo/README.md", "DERIVED_EVIDENCE"],
+  ["demo/uninstall.sh", "SECURITY"],
+  ["docs/DEMO-CURRENT-HEAD-E2E.md", "DERIVED_EVIDENCE"],
+  ["docs/RELEASE-GOVERNANCE.md", "DERIVED_EVIDENCE"],
+  ["release/governance.json", "CONTRACT"],
+  ["scripts/demo-current-head-e2e.mjs", "SECURITY"],
+  ["tests/demo-current-head-e2e.test.mjs", "VALIDATOR"],
+  ["tests/release-governance.test.mjs", "VALIDATOR"],
+  ["verification/demo-current-head-e2e/contract-v1.json", "CONTRACT"],
+];
+for (const [inputPath, role] of currentHeadDockerE2EInputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) {
+    throw new Error(`CURRENT_HEAD_DOCKER_E2E_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  }
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+const currentHeadDockerE2ETest = "node --test tests/demo-current-head-e2e*.test.mjs";
+if (!repositoryIntegrityNode.ownedTests.includes(currentHeadDockerE2ETest)) {
+  repositoryIntegrityNode.ownedTests.push(currentHeadDockerE2ETest);
+}
+for (const invariant of [
+  "Scheduled and release Docker E2E checks out one exact clean SHA, uses an isolated Compose namespace and remains absent from ordinary pull-request Docker work.",
+  "A successful retained receipt binds exact commit/tree, image and Compose locks, fixtures, health, governed effect, authoritative readback, cleanup and zero owned residue.",
+  "Failed health, fixture drift, missing readback, timeout, stale evidence, caller-authored PASS, hard-gate failure, overclaim and residual ownership fail closed.",
+  "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation.",
+]) {
+  if (!repositoryIntegrityNode.invariants.includes(invariant)) repositoryIntegrityNode.invariants.push(invariant);
+}
 const cks12Node = dag.nodes.find(({ id }) => id === "cks-12-closed-learning-loop-v1");
 if (cks12Node === undefined) throw new Error("CKS_12_DAG_NODE_MISSING");
 const cks12FocusedInputs = [
@@ -540,7 +576,7 @@ incomingInvoiceExtractionNode.inputs = [
   ["tests/incoming-invoice-extraction-benchmark.test.ts", "VALIDATOR"],
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 incomingInvoiceExtractionNode.ownedTests = ["npm run incoming-invoice-extraction:test"];
-dag.graphVersion = 44;
+dag.graphVersion = 45;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -557,6 +593,8 @@ for (const line of readFileSync(path.join(root, "release/public-files.manifest")
 }
 for (const relative of [
   "scripts/refresh-integrity-data.mjs",
+  ".github/workflows/demo-current-head-e2e.yml",
+  "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
   "docs/development/cap-cell-erp-01-pdca.md",
   "docs/development/vf-m2-adaptive-evidence-gates-pdca.md",
   "tests/trust-compatibility-foundation-closure.test.ts",

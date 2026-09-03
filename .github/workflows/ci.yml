@@ -52,7 +52,7 @@ jobs:
             | sha256sum --check -
           chmod 0755 "$compose_binary"
           printf 'DOCKER_CONFIG=%s\n' "$compose_root" >> "$GITHUB_ENV"
-          DOCKER_CONFIG="$compose_root" docker compose version
+          test "v$(DOCKER_CONFIG="$compose_root" docker compose version --short)" = v2.40.3
 
       - name: Verify release-tree checksums
         run: sha256sum --check SHA256SUMS

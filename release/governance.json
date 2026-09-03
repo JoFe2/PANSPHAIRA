@@ -49,6 +49,40 @@
       "NONCLAIM"
     ]
   },
+  "currentHeadDockerE2E": {
+    "schemaVersion": "pansphaira.release/current-head-docker-e2e/v1",
+    "workflowPath": ".github/workflows/demo-current-head-e2e.yml",
+    "contractPath": "verification/demo-current-head-e2e/contract-v1.json",
+    "validatorCommand": "node scripts/demo-current-head-e2e.mjs verify-completion --envelope <provider-readback-envelope> --target-sha <release-sha> --target-tree <release-tree> --now-ms <epoch-ms>",
+    "receiptSchemaVersion": "pansphaira.demo/current-head-e2e-receipt/v1",
+    "completionSchemaVersion": "pansphaira.demo/current-head-e2e-completion/v1",
+    "maximumReceiptAgeHours": 168,
+    "releaseReadbackRequiresE2E": true,
+    "ordinaryPullRequestDockerRunRequired": false,
+    "requiredHardGates": [
+      "demo-current-head-e2e",
+      "release-governance-public-readback",
+      "repository-tests"
+    ],
+    "requiredNegativeProofCaseIds": [
+      "FAILED_HEALTH",
+      "WRONG_FIXTURE",
+      "MISSING_READBACK",
+      "OWNED_RESIDUE",
+      "RUNTIME_TIMEOUT",
+      "STALE_RECEIPT",
+      "STALE_HEAD",
+      "CALLER_AUTHORED_PASS",
+      "MISSING_NEGATIVE_PROOF",
+      "FAILED_HARD_GATE",
+      "OVERCLAIM",
+      "ISSUE_NOT_PUBLIC_CLOSED",
+      "QUEUE_NOT_DONE",
+      "RESIDUAL_OWNERSHIP"
+    ],
+    "terminalIssueState": "CLOSED_COMPLETED_PUBLIC_PROVIDER_READBACK",
+    "terminalQueueState": "DONE_UNOWNED_ZERO_RESIDUAL_OWNERSHIP"
+  },
   "contradictionPreflight": {
     "schemaVersion": "chimpmaera.public-delivery-contradiction-preflight/v1",
     "appliesTo": "EVERY_PUBLIC_DELIVERY",

@@ -442,7 +442,7 @@
           { "id": "reset-uninstall-plan", "path": "docs/development/azure-power-platform/reset-uninstall-plan.schema.json", "sha256": "47c764598a305367e677f5608a78dd36b501ce203f27b5699508977015cabf33" },
           { "id": "proposal-approval-test", "path": "tests/azure-power-platform/proposal-approval-execution.test.mjs", "sha256": "cec6301cd422218845f0a42c1445051c1dced8df43c51ed1dacf9f1bdb91810b" },
           { "id": "readonly-openapi-test", "path": "tests/azure-power-platform/readonly-openapi.test.mjs", "sha256": "cefdeb16e01ccc724d888d7a22e610238fb7545e259f85c42f5c05c6c9a9100a" },
-          { "id": "tuple-ledger-test", "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs", "sha256": "3ba0895ef9d4ff88431296cf86503a494a4893da4e3e0070fa23cc012d690ba3" },
+          { "id": "tuple-ledger-test", "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs", "sha256": "ce9a873cf40afc9a7b4df146e9f905129720461ba9487cb0f6d8268d49f6979c" },
           { "id": "synthetic-harness", "path": "tools/azure-power-platform/run-synthetic-governance-harness.mjs", "sha256": "3ef2a624a64ed0392f308233cb88af21f974cf63a425f044eb6f396c2189bd5c" },
           { "id": "synthetic-harness-test", "path": "tests/azure-power-platform/synthetic-governance-harness.test.mjs", "sha256": "0b09f487920ba4eafe084de4509b4ec54af233bddede146456901e20adf40257" },
           { "id": "public-readback-renderer", "path": "tools/azure-power-platform/render-public-readback.mjs", "sha256": "be18daa6310edb12d5c67179bf51ed8a028dfb8f07a701cc4b079997b31c2690" },

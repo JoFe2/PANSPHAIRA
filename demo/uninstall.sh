@@ -8,6 +8,7 @@ docker compose --env-file "$config" -f "$root/demo/compose.yaml" down --remove-o
   ${1:+--volumes}
 if [ "${1:-}" = --purge ]; then
   image_ref="$(sed -n 's/^CM_CHIMP_IMAGE=//p' "$config")"
+  run_owner="$(sed -n 's/^CM_DEMO_RUN_OWNER=//p' "$config")"
   image_id=''
   if [ -n "$image_ref" ]; then
     image_id="$(docker image inspect "$image_ref" --format '{{.Id}}' 2>/dev/null || true)"
@@ -21,6 +22,16 @@ if [ "${1:-}" = --purge ]; then
       printf >&2 'Refusing to remove runtime image without the installer ownership label.\n'
       exit 1
     }
+    if [ -n "$run_owner" ]; then
+      observed_run_owner="$(
+        docker image inspect "$image_id" \
+          --format '{{index .Config.Labels "io.chimpmaera.demo.run-owner"}}'
+      )"
+      [ "$observed_run_owner" = "$run_owner" ] || {
+        printf >&2 'Refusing to remove runtime image without exact run ownership.\n'
+        exit 1
+      }
+    fi
     tag_id="$(
       docker image inspect chimpmaera/v01-runtime:local \
         --format '{{.Id}}' 2>/dev/null || true

@@ -77,6 +77,12 @@ The installer generates random local demo secrets and state under
 `.chimpmaera-acceptance/`. Neither directory belongs in a source or release
 archive.
 
+The scheduled/release exact-head gate is documented in
+[Current-head Docker E2E](../docs/DEMO-CURRENT-HEAD-E2E.md). Its
+`CM_DEMO_RUN_OWNER` input is reserved for the bounded CI runner: it must equal
+the isolated Compose project and adds a second ownership label to the locally
+built image. Ordinary interactive installs leave it unset.
+
 ## Cleanup
 
 Remove only installer-owned resources:
@@ -86,8 +92,8 @@ Remove only installer-owned resources:
 ```
 
 `--purge` removes the locally built demo image only after verifying its
-ownership label. Do not replace this command with Docker pruning or broad
-filesystem deletion.
+installer ownership label and, when set, its exact E2E run-owner label. Do not
+replace this command with Docker pruning or broad filesystem deletion.
 
 `READY_VERIFIED` applies only to the selected local run. It is not a
 publication, production, support, performance or security-certification

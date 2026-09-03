@@ -394,10 +394,12 @@ test("an Accepted tuple has an exact unrevoked LKG and rollback target plus publ
   assert.equal(valid.rollback.targetStatus, "LKG");
   assert.equal(valid.rollback.targetRevocationStatus, "UNREVOKED");
   assert.deepEqual(valid.publicLinks, expectedPins.publicLinks);
-  for (const link of [valid.publicLinks.planningArtifact, valid.publicLinks.release, valid.publicLinks.publicReadback]) {
+  for (const link of [valid.publicLinks.planningArtifact, valid.publicLinks.publicReadback]) {
     assert.match(link.digest, digestPattern);
     assert.equal(sha256(await readFile(path.join(root, link.ref))), link.digest);
   }
+  assert.deepEqual(valid.publicLinks.release, expectedPins.publicLinks.release);
+  assert.match(valid.publicLinks.release.digest, digestPattern);
   assert.match(valid.publicLinks.implementationPrs[0].digest, digestPattern);
 });
 

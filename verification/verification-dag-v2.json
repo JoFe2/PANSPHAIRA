@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 44,
+  "graphVersion": 45,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -244,7 +244,7 @@
         {
           "path": "contracts/azure-power-platform/proposal-approval-execution.schema.json",
           "role": "SCHEMA",
-          "sha256": "1086bb4764445168b69ca18b9bf7d7df4e2f6ff57ea18da19559deb752d8700a"
+          "sha256": "879ccfd12b668274c1336129c5c3c21093b012cbb2e46ff3fb106236ca98c48c"
         },
         {
           "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
@@ -329,7 +329,7 @@
         {
           "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "3ba0895ef9d4ff88431296cf86503a494a4893da4e3e0070fa23cc012d690ba3"
+          "sha256": "ce9a873cf40afc9a7b4df146e9f905129720461ba9487cb0f6d8268d49f6979c"
         },
         {
           "path": "tests/azure-power-platform/canvas-package.test.mjs",
@@ -559,7 +559,7 @@
         {
           "path": "tests/fixtures/azure-power-platform/zero-residue.json",
           "role": "FIXTURE",
-          "sha256": "8607a499bbdb729fda491df9d99d6964750f04bce9a75f8281b14ef1c14e57b9"
+          "sha256": "fe7ee77ca555daa0f779dd33200f04803400bec78dcc30c7871c8a9439456ac0"
         },
         {
           "path": "tools/azure-power-platform/render-public-readback.mjs",
@@ -614,7 +614,7 @@
         {
           "path": "tools/azure-power-platform/verify-zero-residue.mjs",
           "role": "VALIDATOR",
-          "sha256": "ccdb47a5cbe45f5d4b58d0c0ccc123cfc2780a1c6d90d17e2d4616751917bafc"
+          "sha256": "7a1e55e3ef4b1b9a39b995f62d7c66f30759e41045155b53b08ab68d317ca535"
         }
       ],
       "ownedTests": [
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d67ed6d2afdc012614a1edffdf5c76c21d3e3fd9ebc7c1e45ed78c513366e7e9"
+          "sha256": "0c1243af0bea71c85b48623d543f60ea4b53199e6be207346bbf92232909850a"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3774,7 +3774,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "ba0db88df7543eb5cc846a47f28f2d99ec5a44bf14c67a683cfca79cc48451b3"
+          "sha256": "dc63c56be011945299b522530b0e332656d9b2b12e78a221b08dbe29f0bed3f8"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3949,7 +3949,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "afad51ba1b158795f99eef3df54027f791d6ca00801f8605ccc6a1fce252426e"
+          "sha256": "4931251fbccbc19a5f58f97634f73191c56707222b698a1673d48d3af6eea597"
         }
       ],
       "ownedTests": [
@@ -4629,9 +4629,19 @@
       ],
       "inputs": [
         {
+          "path": ".github/workflows/demo-current-head-e2e.yml",
+          "role": "SECURITY",
+          "sha256": "17a408992e4fb58c4aa5e5139e9fc64a9492bf4a7b4d699e69738af4c38c149f"
+        },
+        {
           "path": ".github/workflows/release-public-readback.yml",
           "role": "SECURITY",
-          "sha256": "26972a2e879315e193270560e41886c64040c9de3054cf3a0226e4b8c718d4e8"
+          "sha256": "ae4f1a874d88f9319c56b40b266b42c981f79a859754e8c65b636cddc968e568"
+        },
+        {
+          "path": "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0"
         },
         {
           "path": "CONTRIBUTING.md",
@@ -4639,9 +4649,34 @@
           "sha256": "a1cefd6163fbe7a9e70fa5ee750c1697901b7e80d2d589e02a1c5ac7aefd9bda"
         },
         {
+          "path": "demo/install.sh",
+          "role": "SECURITY",
+          "sha256": "747a975556b3755404e98c7e60705906071a0a6c17dc42b6be2a90e407428984"
+        },
+        {
+          "path": "demo/manifests/supply-chain/artifact-lock-v1.json",
+          "role": "CONTRACT",
+          "sha256": "26df4b6fb9a321d9faab8356b8b56cef53dc286ecdbeb37fdca4e8fbf44268a0"
+        },
+        {
+          "path": "demo/README.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f688c9dad8aeac99afc6321a62e4a5452a7ded6e469080e9023c365383bebeb0"
+        },
+        {
+          "path": "demo/uninstall.sh",
+          "role": "SECURITY",
+          "sha256": "e72bf4f86af24b0017497dcaca63927c64aab9fa558b83970d1d2d8240b972bb"
+        },
+        {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "98f53741b543fb6037233a9184125a7d77ae04abd2bfb5461e00a03f89d1dd69"
+        },
+        {
+          "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "741bb5b329d1872bfecf3a6f9087b140d72aedb17ae1a8717b8d8f047061eb69"
         },
         {
           "path": "docs/index.md",
@@ -4661,7 +4696,7 @@
         {
           "path": "docs/RELEASE-GOVERNANCE.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "e477248bc7e9362626c456ec3b1f619a37776fae958142d9c4b40c214c145df7"
+          "sha256": "393389a34ba5ac375464dea2505f7556685751fbb6ac6790ac2c0b27391a376c"
         },
         {
           "path": "README.md",
@@ -4671,17 +4706,22 @@
         {
           "path": "release/governance.json",
           "role": "CONTRACT",
-          "sha256": "c6a1db89d55c00edcbb72f6fd4b71719f691d319b95d26a0f50a37dd4b98add1"
+          "sha256": "2b6c8746a98d6a1103d0cd8740af797ce44819fc13fd9f9233430e70504cbda7"
         },
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "1f9fb40ad9ed0f29644139f48969b84ca3e8a0749b3935a5494b92bd8539797e"
+          "sha256": "989a940ea09b74ba320bd22d6574e54ac5d6e381c5f612c4a54e4f49cb005ab8"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "268baecc62e9b174b0cc6956cee842ae3b326f81c0213cf6b9e4e19a00aaf6b4"
+          "sha256": "7faacd9d01237f9518d8cdec9d6abcbe873b1e6e10ce42347d8e3513d47aba4a"
+        },
+        {
+          "path": "scripts/demo-current-head-e2e.mjs",
+          "role": "SECURITY",
+          "sha256": "aad34f5f7380537f65c78f4f8f507235ba6a2adc7b1bde64f6c972de4f8e9e65"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4696,7 +4736,12 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "b6a02e1f48f530661c58bde3a0076a5031ba56670892e12521d91388f16dae6e"
+          "sha256": "10ddb34aadccb5e6355fb09ed4c1ae3e932fccab46ff836a0ec05ff69e07ec18"
+        },
+        {
+          "path": "tests/demo-current-head-e2e.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "15b8c41a477fd83e8a45e0a141773b395062ba12e7c962714504dea3f7958dc0"
         },
         {
           "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
@@ -4711,17 +4756,22 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b74446512e148bc26cb0150780686fb4bf1efb194f43180e05eda15e208c4a99"
+          "sha256": "d738763524ef31f8a2e285e6f283d3d8b2505291f81a1490b4a3cf0836414155"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
           "role": "VALIDATOR",
-          "sha256": "68187314db99e493d0523bebd462390d23a414572ac8583ac68ff109b8ab1999"
+          "sha256": "b8cf73a89ca40426a56ce9dbb6c938f12a4d6917d7592c9233719163ab9c64de"
         },
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "079f6f1778a406869859565c2bf8dacc448b855c4c60cc2701c672210b3f0596"
+          "sha256": "07dc6dbe86fa435893f96753b86fd7b4f27cc004bc97e409a86aeeb75837f239"
+        },
+        {
+          "path": "verification/demo-current-head-e2e/contract-v1.json",
+          "role": "CONTRACT",
+          "sha256": "f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
@@ -4733,7 +4783,8 @@
         "npm run release-governance:test",
         "node --test tests/supply-chain-verifier.test.mjs",
         "node --test dist/tests/canonical-json-profile-inventory.test.js",
-        "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js"
+        "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js",
+        "node --test tests/demo-current-head-e2e*.test.mjs"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -4746,7 +4797,11 @@
         "Queue-backed children require terminal unowned DONE rows; PACKAGE_DONE never substitutes, while pre-campaign direct-Control-Lane children retain explicit no-row terminal reconciliation without invented Queue history.",
         "Missing, duplicate, stale, substituted, UNKNOWN, re-digested or post-validation-mutated child evidence fails closed.",
         "Daily release sequence, additive protected history, exact-evidence rules and bounded nonclaims remain intact without productive effects or Authority widening.",
-        "This integration record does not close parent issue 333; E-FND-1-AC05 remains with the delivery and Root-QS final owner."
+        "This integration record does not close parent issue 333; E-FND-1-AC05 remains with the delivery and Root-QS final owner.",
+        "Scheduled and release Docker E2E checks out one exact clean SHA, uses an isolated Compose namespace and remains absent from ordinary pull-request Docker work.",
+        "A successful retained receipt binds exact commit/tree, image and Compose locks, fixtures, health, governed effect, authoritative readback, cleanup and zero owned residue.",
+        "Failed health, fixture drift, missing readback, timeout, stale evidence, caller-authored PASS, hard-gate failure, overclaim and residual ownership fail closed.",
+        "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false
@@ -5282,7 +5337,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "b31125b07f468e1286bf44b1adb08334e90dbd1a8bcb170ed805e9869bf5165b"
+          "sha256": "9caddea177da0c828f478510cc365642bcd44880b691d983282e875d52edfb90"
         },
         {
           "path": "package-lock.json",
@@ -5297,7 +5352,7 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "ebc243709dd312c7721ae52ccdc9fa2aedd08bbaf1af59e8f82c214f44d965f6"
+          "sha256": "db0cbfc26c0a74e1f1a959781794bdb75e26fc015c4220118e7fbc2d65cc0e58"
         }
       ],
       "ownedTests": [
@@ -5642,7 +5697,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "08f66b8cd3e0b9d0c7deaa1341d88461eb776d8561fdcac12b73a1d28b7c552a"
+          "sha256": "a135363d1f375bd6d436d83d40bf1ce71384fae7ed830ae4a19c93613ea353ff"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
