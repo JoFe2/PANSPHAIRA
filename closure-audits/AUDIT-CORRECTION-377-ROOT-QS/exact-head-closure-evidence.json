@@ -1,8 +1,8 @@
 {
   "schemaVersion": "pansphaira.audit-correction/exact-head-closure-evidence/v1",
-  "taskId": "AUDIT-CORRECTION-377-DELIVERY",
+  "taskId": "AUDIT-CORRECTION-377-ROOT-QS-FINALIZER-01",
   "closureOwnerTaskId": "AUDIT-CORRECTION-377-ROOT-QS",
-  "recordedAt": "2026-09-03T06:14:50Z",
+  "recordedAt": "2026-09-03T08:23:16Z",
   "issue": {
     "id": "AUDIT-CORRECTION-377",
     "repository": "JoFe2/PANSPHAIRA",
@@ -26,19 +26,23 @@
     "publicWritesPerformed": false,
     "pushMergeReleaseOrIssueClosePerformed": false,
     "queueMutationPerformed": false,
+    "independentIntegratedIssueReviewsPerformed": 1,
+    "closureOwner": "sol",
     "soleFinalOwnerThroughQueueDone": "AUDIT-CORRECTION-377-ROOT-QS"
   },
   "candidateIdentity": {
     "id": "AUDIT-CORRECTION-377-CANDIDATE-01",
-    "baseRef": "origin/main",
-    "baseHead": "2c8a34abc9c42c662ae3d51294ad29968a093cf4",
-    "baseTree": "cca8fa2ef44c60f594600a0d109f904316cae5bc",
+    "baseRef": "merge-base(origin/main, candidateHead)",
+    "baseHead": "01fd300c66efee82979b4c5d9958be777d5c4eb9",
+    "baseTree": "9268ee37839e348a31107c8acf5d258213106adc",
     "branch": "conveyor/audit-correction-377-docker-e2e",
-    "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-    "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c",
-    "subject": "feat: add bounded current-head Docker E2E",
+    "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+    "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e",
+    "subject": "fix: align #377 acceptance IDs",
     "committed": true,
-    "worktreeCleanBeforeReceiptWrite": true,
+    "requiredMainIsAncestor": true,
+    "rebaseRequiredDossierResolved": true,
+    "onlySelfExcludedReceiptModifiedBeforeReceiptRebind": true,
     "allMappedEvidenceUsesThisIdentity": true,
     "headDriftPolicy": "FAIL_CLOSED_REBIND_AND_REVERIFY",
     "receiptPath": "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/exact-head-closure-evidence.json",
@@ -49,14 +53,14 @@
   "candidateContentSet": {
     "algorithm": "sha256(concat(path + NUL + lowercase-sha256 + LF), paths sorted lexicographically)",
     "pathCount": 24,
-    "digest": "597633a93c699fe21bdb0513f85a08048d0767ae255056e97ccbba3441afc9b9",
+    "digest": "1a37739f8d66db51a9f6859b5be1da1b262fcfdb1d1da37815d075aee83219b0",
     "source": "GIT_OBJECT_BYTES_AT_AUDIT_CORRECTION_377_CANDIDATE_01",
     "files": {
       ".github/workflows/ci.yml": "db0cbfc26c0a74e1f1a959781794bdb75e26fc015c4220118e7fbc2d65cc0e58",
       ".github/workflows/demo-current-head-e2e.yml": "17a408992e4fb58c4aa5e5139e9fc64a9492bf4a7b4d699e69738af4c38c149f",
       ".github/workflows/release-public-readback.yml": "ae4f1a874d88f9319c56b40b266b42c981f79a859754e8c65b636cddc968e568",
-      "SHA256SUMS": "01a68f07af7f744d56c0bf3f53ed12e74a1b1ab9e0a7130fe5773548b401ae1b",
-      "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json": "970f7ce154b49ee6775db51250a26e12d606a8a1d7bd1f569f97207f62f437cb",
+      "SHA256SUMS": "07e105cc96d0fd5289d2dc281f56caadd3db3ec5469e5288743042e7b9ce19ce",
+      "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json": "9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0",
       "demo/README.md": "f688c9dad8aeac99afc6321a62e4a5452a7ded6e469080e9023c365383bebeb0",
       "demo/install.sh": "747a975556b3755404e98c7e60705906071a0a6c17dc42b6be2a90e407428984",
       "demo/manifests/supply-chain/artifact-lock-v1.json": "26df4b6fb9a321d9faab8356b8b56cef53dc286ecdbeb37fdca4e8fbf44268a0",
@@ -70,38 +74,38 @@
       "scripts/demo-current-head-e2e.mjs": "aad34f5f7380537f65c78f4f8f507235ba6a2adc7b1bde64f6c972de4f8e9e65",
       "scripts/refresh-integrity-data.mjs": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
       "tests/canonical-json-profile-inventory.test.ts": "10ddb34aadccb5e6355fb09ed4c1ae3e932fccab46ff836a0ec05ff69e07ec18",
-      "tests/demo-current-head-e2e.test.mjs": "8621195d5a62da939a259e8f8eda87ca2a823c79f605bada2d9ac2d3952dd476",
+      "tests/demo-current-head-e2e.test.mjs": "15b8c41a477fd83e8a45e0a141773b395062ba12e7c962714504dea3f7958dc0",
       "tests/release-governance.test.mjs": "d738763524ef31f8a2e285e6f283d3d8b2505291f81a1490b4a3cf0836414155",
       "tests/verification-fabric-v2.test.ts": "a135363d1f375bd6d436d83d40bf1ce71384fae7ed830ae4a19c93613ea353ff",
       "verification/canonical-json-profile-inventory-v1.json": "07dc6dbe86fa435893f96753b86fd7b4f27cc004bc97e409a86aeeb75837f239",
-      "verification/demo-current-head-e2e/contract-v1.json": "224c8ccaf7af8cefb77938cba94a8d811c53ebb05a0952f424274257b8e864b3",
-      "verification/verification-dag-v2.json": "4b486b1bf2ee4a6d6cec966823df65f2f091e7c860f3dc90b6ed808646df4800"
+      "verification/demo-current-head-e2e/contract-v1.json": "f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e",
+      "verification/verification-dag-v2.json": "96f9336f2378771d6ddc8f86df281fa22cb663778dc297cf836d87a5d4975c0e"
     }
   },
   "acceptanceClosure": {
     "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
     "expectedIds": [
-      "AUDIT-CORRECTION-377-AC01",
-      "AUDIT-CORRECTION-377-AC02",
-      "AUDIT-CORRECTION-377-AC03",
-      "AUDIT-CORRECTION-377-AC04",
-      "AUDIT-CORRECTION-377-AC05",
-      "AUDIT-CORRECTION-377-AC06"
+      "DEMO-CI-AC01",
+      "DEMO-CI-AC02",
+      "DEMO-CI-AC03",
+      "DEMO-CI-AC04",
+      "DEMO-CI-AC05",
+      "DEMO-CI-AC06"
     ],
     "mappedIds": [
-      "AUDIT-CORRECTION-377-AC01",
-      "AUDIT-CORRECTION-377-AC02",
-      "AUDIT-CORRECTION-377-AC03",
-      "AUDIT-CORRECTION-377-AC04",
-      "AUDIT-CORRECTION-377-AC05",
-      "AUDIT-CORRECTION-377-AC06"
+      "DEMO-CI-AC01",
+      "DEMO-CI-AC02",
+      "DEMO-CI-AC03",
+      "DEMO-CI-AC04",
+      "DEMO-CI-AC05",
+      "DEMO-CI-AC06"
     ],
     "unmappedIds": [],
     "mappingRemainder": [],
     "mappingVerdict": "PASS_ALL_6_MAPPED_TO_EXECUTABLE_EXACT_HEAD_EVIDENCE",
     "entries": [
       {
-        "id": "AUDIT-CORRECTION-377-AC01",
+        "id": "DEMO-CI-AC01",
         "criterion": "A pinned CI job checks out the exact SHA, starts the declared Compose stack in an isolated namespace and runs install, acceptance, provider readback and ownership-scoped purge.",
         "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
         "mappingStatus": "MAPPED_EXECUTABLE",
@@ -115,7 +119,7 @@
         "runtimeBoundary": "EXACT_HEAD_HOST_DOCKER_RECEIPT_PENDING_CONTROLLER"
       },
       {
-        "id": "AUDIT-CORRECTION-377-AC02",
+        "id": "DEMO-CI-AC02",
         "criterion": "The retained receipt binds commit/tree, image and Compose locks, fixture digests, service health, governed effect, authoritative readback, cleanup and zero owned residue.",
         "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
         "mappingStatus": "MAPPED_EXECUTABLE",
@@ -128,7 +132,7 @@
         "runtimeBoundary": "NO_LOCAL_SYNTHETIC_RECEIPT_SUBSTITUTES_FOR_PROVIDER_READBACK"
       },
       {
-        "id": "AUDIT-CORRECTION-377-AC03",
+        "id": "DEMO-CI-AC03",
         "criterion": "Logs and artifacts are sanitized and retained without credentials, customer data, runner paths or uncontrolled external network exposure.",
         "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
         "mappingStatus": "MAPPED_EXECUTABLE",
@@ -143,7 +147,7 @@
         "runtimeBoundary": "SANITIZED_SYNTHETIC_EVIDENCE_ONLY"
       },
       {
-        "id": "AUDIT-CORRECTION-377-AC04",
+        "id": "DEMO-CI-AC04",
         "criterion": "Negative probes prove failed health, wrong fixture, missing readback, residue, timeout and stale receipt cannot pass.",
         "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
         "mappingStatus": "MAPPED_EXECUTABLE",
@@ -155,7 +159,7 @@
         "focusedProofStatus": "PASS_23_OF_23_JITLESS_DIAGNOSTIC"
       },
       {
-        "id": "AUDIT-CORRECTION-377-AC05",
+        "id": "DEMO-CI-AC05",
         "criterion": "Release closure requires a successful current-head E2E receipt no older than the released tree while ordinary pull requests use focused non-Docker tests.",
         "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
         "mappingStatus": "MAPPED_EXECUTABLE",
@@ -169,7 +173,7 @@
         "runtimeBoundary": "RELEASE_AND_PUBLIC_TERMINAL_SEQUENCE_NOT_EXECUTED_BY_DELIVERY_WORKER"
       },
       {
-        "id": "AUDIT-CORRECTION-377-AC06",
+        "id": "DEMO-CI-AC06",
         "criterion": "Runtime cost, timeout and cleanup are bounded and a failed run cannot leak containers, volumes, networks or run-owned images.",
         "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
         "mappingStatus": "MAPPED_EXECUTABLE",
@@ -287,73 +291,73 @@
     ],
     "claimOwnership": [
       {
-        "materialClaimId": "AUDIT-CORRECTION-377-AC01",
+        "materialClaimId": "DEMO-CI-AC01",
         "maturity": "SOURCE_EVIDENCE_ONLY",
         "proofClass": "SOURCE_EVIDENCE",
         "authoritativeArtifact": "verification/demo-current-head-e2e/contract-v1.json#acceptance[0]",
         "exactIdentity": {
-          "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-          "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c"
+          "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+          "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e"
         },
         "executableOrAnonymousReadbackGate": "node --test tests/demo-current-head-e2e*.test.mjs; exact-head host-Docker receipt remains required",
         "explicitNonclaim": "NC-01 NO_CURRENT_HEAD_HOST_DOCKER_RUNTIME_PASS_RECEIPT"
       },
       {
-        "materialClaimId": "AUDIT-CORRECTION-377-AC02",
+        "materialClaimId": "DEMO-CI-AC02",
         "maturity": "SOURCE_EVIDENCE_ONLY",
         "proofClass": "SOURCE_EVIDENCE",
         "authoritativeArtifact": "verification/demo-current-head-e2e/contract-v1.json#acceptance[1]",
         "exactIdentity": {
-          "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-          "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c"
+          "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+          "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e"
         },
         "executableOrAnonymousReadbackGate": "validateSuccessReceipt plus retained GitHub Actions provider artifact readback",
         "explicitNonclaim": "NC-02 NO_LOCAL_SYNTHETIC_RECEIPT_AS_PROVIDER_READBACK"
       },
       {
-        "materialClaimId": "AUDIT-CORRECTION-377-AC03",
+        "materialClaimId": "DEMO-CI-AC03",
         "maturity": "SOURCE_EVIDENCE_ONLY",
         "proofClass": "SOURCE_EVIDENCE",
         "authoritativeArtifact": "verification/demo-current-head-e2e/contract-v1.json#acceptance[2]",
         "exactIdentity": {
-          "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-          "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c"
+          "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+          "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e"
         },
         "executableOrAnonymousReadbackGate": "artifactSafetyIssues and the closed retained-artifact-set focused probes",
         "explicitNonclaim": "NC-03 NO_PRODUCTION_CUSTOMER_DATA_OR_SECURITY_CERTIFICATION_CLAIM"
       },
       {
-        "materialClaimId": "AUDIT-CORRECTION-377-AC04",
+        "materialClaimId": "DEMO-CI-AC04",
         "maturity": "SOURCE_EVIDENCE_ONLY",
         "proofClass": "SOURCE_EVIDENCE",
         "authoritativeArtifact": "tests/demo-current-head-e2e.test.mjs:233-318",
         "exactIdentity": {
-          "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-          "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c"
+          "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+          "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e"
         },
         "executableOrAnonymousReadbackGate": "NODE_OPTIONS=--jitless node --test tests/demo-current-head-e2e*.test.mjs returned 23/23",
         "explicitNonclaim": "NC-04 NO_NEGATIVE_PROBE_AS_EXTERNAL_TERMINAL_STATE_CLAIM"
       },
       {
-        "materialClaimId": "AUDIT-CORRECTION-377-AC05",
+        "materialClaimId": "DEMO-CI-AC05",
         "maturity": "SOURCE_EVIDENCE_ONLY",
         "proofClass": "SOURCE_EVIDENCE",
         "authoritativeArtifact": "release/governance.json#currentHeadDockerE2E",
         "exactIdentity": {
-          "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-          "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c"
+          "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+          "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e"
         },
         "executableOrAnonymousReadbackGate": "validateReleaseCompletion plus GitHub Actions and anonymous provider readbacks",
         "explicitNonclaim": "NC-05 NO_RELEASE_PUBLICATION_ISSUE_CLOSE_OR_QUEUE_DONE_CLAIM"
       },
       {
-        "materialClaimId": "AUDIT-CORRECTION-377-AC06",
+        "materialClaimId": "DEMO-CI-AC06",
         "maturity": "SOURCE_EVIDENCE_ONLY",
         "proofClass": "SOURCE_EVIDENCE",
         "authoritativeArtifact": "scripts/demo-current-head-e2e.mjs:658-720,823-985",
         "exactIdentity": {
-          "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-          "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c"
+          "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+          "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e"
         },
         "executableOrAnonymousReadbackGate": "focused timeout/residue probes plus exact-head host-Docker cleanup readback",
         "explicitNonclaim": "NC-06 NO_UNSCOPED_DOCKER_CLEANUP_OR_RUNTIME_EXECUTION_CLAIM"
@@ -463,10 +467,10 @@
         "nodes": 52,
         "tests": 61,
         "hardGates": 5,
-        "baseHead": "2c8a34abc9c42c662ae3d51294ad29968a093cf4",
-        "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
-        "graphDigest": "a8a138367cad0733a8503111c2f17a062ab848733f7abb2419c297201e62066a",
-        "planDigest": "8a7ef86797f93b62fb257a34941bc2df66b25c3e8c2cb1edd7d50679c8160a26"
+        "baseHead": "01fd300c66efee82979b4c5d9958be777d5c4eb9",
+        "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+        "graphDigest": "06057da50eb4cf4878c4af426e31fc18008b2bb8f4a6718d52424370ca478343",
+        "planDigest": "b8690e0182d8a4bac20c2e13beddeec21ef68a360aa06c12af7a22cd0c43bf10"
       },
       {
         "requiredCommand": "npm run supply-chain:verify",
@@ -523,25 +527,47 @@
     "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
     "requiredIndependentIssueReviewCount": 1,
     "completedByDeliveryWorker": 0,
-    "independentReviewCompletionClaimed": false,
-    "owner": "AUDIT-CORRECTION-377-ROOT-QS",
-    "status": "READY_AFTER_CONTAINING_COMMIT_READBACK",
-    "reviewSubject": {
+    "completedByRootQsFinalizer": 1,
+    "secondIndependentReviewPerformed": false,
+    "independentReviewCompletionClaimed": true,
+    "owner": "AUDIT-CORRECTION-377-ROOT-QS-FINALIZER-01",
+    "closureOwner": "sol",
+    "status": "PASS_AFTER_FIX_FORWARD",
+    "reviewedContainingCommit": {
+      "head": "020fc8c386d5717ad7eff99dfe284f13ffc457af",
+      "tree": "d0cbd0b18f4ded182d6df3175f109d4a1e90dfb2"
+    },
+    "reviewedCandidate": {
       "head": "d6ea43b259e731c88193610a8d12cbc055877f0d",
       "tree": "2c43bcdaf7883e37b97c7ab5268bc1686352c98c",
       "contentSetDigest": "597633a93c699fe21bdb0513f85a08048d0767ae255056e97ccbba3441afc9b9"
     },
+    "findings": [
+      {
+        "id": "LIVE_ISSUE_ACCEPTANCE_ID_MISMATCH",
+        "severity": "BLOCKING",
+        "finding": "The contract, positive mapping test and closure evidence used task-local acceptance identifiers instead of the live issue's DEMO-CI-AC01 through DEMO-CI-AC06 identifiers.",
+        "resolution": "FIXED_FORWARD",
+        "resolutionEvidence": "The contract, executable positive mapping assertion, implementation evidence and self-excluded closure evidence now use exactly DEMO-CI-AC01 through DEMO-CI-AC06; the focused suite passes 23/23 and the exact mapping has zero remainder."
+      }
+    ],
+    "correctedCandidate": {
+      "head": "1455f3de3d2815daf2580af07ed4db6b02de606a",
+      "tree": "98fafe8b4d20560fb40b6e266c3649f52c2d1c8e",
+      "contentSetDigest": "1a37739f8d66db51a9f6859b5be1da1b262fcfdb1d1da37815d075aee83219b0"
+    },
     "requiredInputs": [
       "the self-excluded exact-head closure evidence and its containing-commit readback",
       "the exact candidate head, tree and 24-path content-set binding",
-      "all six acceptance-ID executable mappings with zero remainder",
+      "all six live DEMO-CI acceptance-ID executable mappings with zero remainder",
       "all six contradiction-preflight claim-ownership records and six fail-closed policy modes",
       "the 23/23 current-head focused result and 16/16 governed-effect/lifecycle focused result",
       "the 85/85 release-governance result, FULL_FALLBACK verification plan, supply-chain and checksum outcomes",
       "the native full-suite infrastructure classification and pending controller pinned-Node/host-Docker gates",
       "the external completion denials, authority boundary and exact-head nonclaims"
     ],
-    "headDriftPolicy": "FAIL_CLOSED_REBIND_AND_REVERIFY_BEFORE_REVIEW"
+    "postCorrectionCheck": "BOUNDED_MECHANICAL_FINDING_VERIFICATION_NOT_A_SECOND_INDEPENDENT_REVIEW",
+    "headDriftPolicy": "FAIL_CLOSED_REBIND_AND_REVERIFY_BEFORE_DELIVERY"
   },
   "externalCompletionBoundary": {
     "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
@@ -557,7 +583,6 @@
     "externalSequenceStatus": "NOT_STARTED_BY_DELIVERY_WORKER",
     "requiredExternalSequence": [
       "CONTAINING_COMMIT_READBACK",
-      "EXACTLY_ONE_INDEPENDENT_ISSUE_REVIEW",
       "EXACT_PR_HEAD_CI",
       "SHA_BOUND_MERGE",
       "EXACT_MAIN_HEAD_CI",
@@ -609,7 +634,7 @@
     {
       "id": "NC-08",
       "exactIdentityRef": "AUDIT-CORRECTION-377-CANDIDATE-01",
-      "statement": "NO_INDEPENDENT_REVIEW_COMPLETION_CLAIM"
+      "statement": "NO_SECOND_INDEPENDENT_REVIEW_OR_REVIEW_RETURN_CLAIM"
     },
     {
       "id": "NC-09",
@@ -635,5 +660,5 @@
     "unboundItems": [],
     "verdict": "EXACT_CANDIDATE_BINDING_COMPLETE_WITH_EXTERNAL_TERMINAL_STATES_EXPLICITLY_PENDING"
   },
-  "candidateDisposition": "TECHNICALLY_COMPLETE_SOURCE_EVIDENCE_PENDING_CONTAINING_COMMIT_READBACK_ONE_REVIEW_AUTHORITATIVE_PINNED_NODE_HOST_DOCKER_GATES_AND_ROOT_QS_EXTERNAL_SEQUENCE"
+  "candidateDisposition": "TECHNICALLY_COMPLETE_SOURCE_EVIDENCE_WITH_ONE_REVIEW_COMPLETE_PENDING_CONTAINING_COMMIT_READBACK_AUTHORITATIVE_PINNED_NODE_HOST_DOCKER_GATES_AND_ROOT_QS_EXTERNAL_SEQUENCE"
 }
