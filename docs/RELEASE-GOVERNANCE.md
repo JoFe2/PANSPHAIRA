@@ -139,8 +139,12 @@ public claim and requires correction or rollback.
 
 `.github/workflows/release-public-readback.yml` is triggered only after GitHub
 emits `release.published`. It checks out the event's immutable tag without
-persisted credentials, verifies repository integrity and the release-authority
-adversarial matrix, unsets both `GH_TOKEN` and `GITHUB_TOKEN`, then runs:
+persisted credentials. Before public readback it requires the reusable bounded
+current-head Docker E2E at the release event's exact 40-hex target. A branch,
+tag alias, stale head, failed or missing receipt, unhealthy service, fixture
+drift, missing provider readback, timeout or owned residue fails the release
+job. It then verifies repository integrity and the release-authority
+adversarial matrix, unsets both `GH_TOKEN` and `GITHUB_TOKEN`, and runs:
 
 ```sh
 npm run release-governance:public-readback -- --release-tag "$RELEASE_TAG" --require-conforming
@@ -152,6 +156,33 @@ readback rather than caller assertions. The workflow has only `contents: read`
 and no issue or Queue mutation authority. A failing or missing gate is not
 closure evidence: the final owner must not close an included issue or mark its
 Queue row terminal until this exact post-creation job succeeds.
+
+## Current-head Docker E2E closure
+
+The machine policy is `currentHeadDockerE2E` in `release/governance.json`; the
+closed six-criterion mapping is
+`verification/demo-current-head-e2e/contract-v1.json`. Scheduled and manual
+runs use the immutable workflow-event SHA, while a release run receives only
+the provider event's exact target. Ordinary pull requests execute
+`node --test tests/demo-current-head-e2e*.test.mjs` and do not pay the Docker
+runtime cost.
+
+The retained 14-day receipt binds commit/tree, pinned OCI and Compose inputs,
+fixture digests, healthy services, governed synthetic effect, authoritative
+provider readback and ownership-scoped zero-residue purge. It retains no raw
+provider payload, generated credential, customer data or runner path. The
+runtime is capped at 2,100 seconds inside a 45-minute job, and `always()` runs
+an idempotent exact-namespace purge before artifact upload.
+
+Release publication success is not final completion by itself. Final closure
+requires provider-read successful E2E, public-readback and repository hard
+gates for the same commit/tree; a receipt completed after the released-tree
+timestamp and no more than 168 hours old; the complete fixed adversarial case
+set; anonymous public issue `CLOSED`/`COMPLETED`; and authoritative Queue
+`DONE` with no owner or residual ownership. Caller-authored PASS, a release
+body, local package state and a re-digested overclaim are not evidence. The
+validator is read-only and performs no release, issue, Queue or provider
+mutation.
 
 ## Bounded contradiction preflight
 

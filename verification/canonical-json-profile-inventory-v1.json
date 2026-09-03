@@ -82,6 +82,14 @@
       "fromSha256": "fc0c76558346b3d6487b577a5283569f282fa5b3385b1f79de8efcae8d61ffa2",
       "toSha256": "ed305fbf67bc649682876730e71c2b795d18fade41ddb3c5f1d67f1072ba189b",
       "reason": "Advance the Verification DAG to graph v44 while reconciling REL-TRUTH-01 release-governance authority and its canonical integrity dependants; admitted v1 and reviewed v2-v7 digests remain immutable."
+    },
+    {
+      "migrationId": "AUDIT-CORRECTION-377/CURRENT-HEAD-DOCKER-E2E-INTEGRITY-GENERATOR/V9",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 9,
+      "fromSha256": "ed305fbf67bc649682876730e71c2b795d18fade41ddb3c5f1d67f1072ba189b",
+      "toSha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
+      "reason": "Advance the Verification DAG to graph v45 and canonically own the bounded current-head Docker E2E contract, focused fail-closed proof and repository-only implementation record; admitted v1 and reviewed v2-v8 digests remain immutable."
     }
   ],
   "scanScope": {
@@ -124,15 +132,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 605,
+    "filesScanned": 607,
     "declarationSites": 36,
     "declarationFiles": 36,
     "importSites": 198,
     "importFiles": 197,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1756,
-    "ledgerUniquePaths": 1756
+    "ledgerEntries": 1762,
+    "ledgerUniquePaths": 1762
   },
   "profiles": [
     {
@@ -205,7 +213,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "ed305fbf67bc649682876730e71c2b795d18fade41ddb3c5f1d67f1072ba189b"
+      "sha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -798,7 +806,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "ed305fbf67bc649682876730e71c2b795d18fade41ddb3c5f1d67f1072ba189b",
+      "sha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
       "basis": "profile-version-migration"
     },
     {

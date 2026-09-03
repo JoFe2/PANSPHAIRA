@@ -102,11 +102,45 @@ test("REL-TRUTH release authority is canonically owned by repository integrity",
   ]) assert.ok(node.invariants.includes(invariant), invariant);
 });
 
+test("#377 current-head Docker E2E is a focused repository-integrity obligation", () => {
+  const manifest = graph();
+  const node = manifest.nodes.find(({ id }) => id === "repository-integrity");
+  assert.ok(node);
+  assert.equal(manifest.graphVersion, 45);
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
+    scripts: Record<string, string>;
+  };
+  const command = "node --test tests/demo-current-head-e2e*.test.mjs";
+  assert.equal(packageJson.scripts["demo-current-head-e2e:test"], command);
+  assert.equal(node.ownedTests.filter((candidate) => candidate === command).length, 1);
+  const expectedInputs = new Map([
+    [".github/workflows/demo-current-head-e2e.yml", "SECURITY"],
+    ["demo/install.sh", "SECURITY"],
+    ["demo/manifests/supply-chain/artifact-lock-v1.json", "CONTRACT"],
+    ["demo/uninstall.sh", "SECURITY"],
+    ["docs/DEMO-CURRENT-HEAD-E2E.md", "DERIVED_EVIDENCE"],
+    ["scripts/demo-current-head-e2e.mjs", "SECURITY"],
+    ["tests/demo-current-head-e2e.test.mjs", "VALIDATOR"],
+    ["verification/demo-current-head-e2e/contract-v1.json", "CONTRACT"],
+  ]);
+  const actualInputs = new Map(node.inputs.map(({ path, role }) => [path, role]));
+  for (const [path, role] of expectedInputs) {
+    assert.equal(actualInputs.get(path), role, path);
+    const result = plan([path]);
+    assert.ok(result.selectedNodes.includes("repository-integrity"), path);
+    assert.ok(result.selectedTests.includes(command), path);
+  }
+  for (const required of [
+    "A successful retained receipt binds exact commit/tree, image and Compose locks, fixtures, health, governed effect, authoritative readback, cleanup and zero owned residue.",
+    "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation.",
+  ]) assert.ok(node.invariants.includes(required), required);
+});
+
 test("AWI-03 knowledge changes select the bounded critical owner and hard gates", () => {
   const result = plan(["packages/contracts/src/knowledge-envelope.ts"]);
   assert.equal(result.mode, "IMPACTED_SHADOW");
   assert.deepEqual(result.selectedNodes, ["awi-03-knowledge-envelope", "awi-plugin-01-knowledge-harvest-v1", "cks-02-local-knowledge-fabric-closure-v1", "cks-03-fresh-synthetic-qualification-v1", "cks-04-no-finetune-runtime-baseline-v1", "cks-05-comparative-falsification-v1", "cks-07-empty-kb-sufficiency-v1", "cks-08-usage-lineage-attribution-v1", "cks-09-task-pattern-proof-v1", "cks-10-readonly-analytics-bridge-v1", "cks-11-governed-workflow-function-v1", "cks-12-closed-learning-loop-v1", "cks-m1-parent-closure-v1", "cscl-01-cross-system-protocol-freeze-v1", "cscl-02-odoo-source-native-profile-v1", "cscl-03-erpnext-source-native-profile-v1", "cscl-04-dolibarr-source-native-profile-v1", "cscl-05-tryton-source-native-profile-v1", "cscl-06-ofbiz-source-native-profile-v1", "cscl-07-cross-system-semantic-matrix-v1", "cscl-08-party-candidate-v1", "cscl-09-product-candidate-v1", "cscl-10-sales-candidate-v1", "lkc-files-01-local-file-corpus", "lkc-wiki-01-governed-local-edition-v1", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "rks-01-real-source-protocol-falsification-v1", "rks-02-core-small-vs-raw-falsification-v1", "secure-default-proof"]);
-  assert.deepEqual(result.selectedTests, ["node --test dist/tests/canonical-json-profile-inventory.test.js", "node --test tests/supply-chain-verifier.test.mjs", "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js", "npm run cks02:test", "npm run cks03:test", "npm run cks04:test", "npm run cks05:test", "npm run cks07:test", "npm run cks08:test", "npm run cks09:test", "npm run cks10:test", "npm run cks11:test", "npm run cks12:test", "npm run cksm1:test", "npm run cscl01:test", "npm run cscl02:test", "npm run cscl03:test", "npm run cscl04:test", "npm run cscl05:test", "npm run cscl06:test", "npm run cscl07:test", "npm run cscl08:test", "npm run cscl09:test", "npm run cscl10:test", "npm run fnd-ps-fu-01:test", "npm run knowledge-envelope:test", "npm run local-file-corpus:test", "npm run openclaw-m1.4:test", "npm run openclaw-m1.5:evidence", "npm run openclaw-m1.5:test", "npm run plugin-knowledge-harvest:test", "npm run proof:secure-default", "npm run release-governance:test", "npm run rks01:test", "npm run rks02:test", "npm run wiki:test"]);
+  assert.deepEqual(result.selectedTests, ["node --test dist/tests/canonical-json-profile-inventory.test.js", "node --test tests/demo-current-head-e2e*.test.mjs", "node --test tests/supply-chain-verifier.test.mjs", "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js", "npm run cks02:test", "npm run cks03:test", "npm run cks04:test", "npm run cks05:test", "npm run cks07:test", "npm run cks08:test", "npm run cks09:test", "npm run cks10:test", "npm run cks11:test", "npm run cks12:test", "npm run cksm1:test", "npm run cscl01:test", "npm run cscl02:test", "npm run cscl03:test", "npm run cscl04:test", "npm run cscl05:test", "npm run cscl06:test", "npm run cscl07:test", "npm run cscl08:test", "npm run cscl09:test", "npm run cscl10:test", "npm run fnd-ps-fu-01:test", "npm run knowledge-envelope:test", "npm run local-file-corpus:test", "npm run openclaw-m1.4:test", "npm run openclaw-m1.5:evidence", "npm run openclaw-m1.5:test", "npm run plugin-knowledge-harvest:test", "npm run proof:secure-default", "npm run release-governance:test", "npm run rks01:test", "npm run rks02:test", "npm run wiki:test"]);
   assert.deepEqual(result.hardGates, [...graph().hardGates].sort((a, b) => a.localeCompare(b, "en")));
 });
 
@@ -262,7 +296,7 @@ test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pr
   ]) {
     assert.equal(publicPaths.has(publicPath), true, `public external-BI byte: ${publicPath}`);
   }
-  assert.equal(publicManifestPaths.length, 1447, "current release controls retain their exact public count");
+  assert.equal(publicManifestPaths.length, 1451, "current release controls retain their exact public count");
   assert.equal(publicPaths.size, publicManifestPaths.length, "public manifest paths remain unique");
   assert.equal(publicPaths.has(evidencePath), false, "pre-closure paired evidence remains repository-only");
 

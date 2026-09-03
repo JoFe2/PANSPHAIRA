@@ -8,6 +8,7 @@ mode="${CM_DEMO_MODE:-}"
 profile="${CM_AUTHORITY_PROFILE:-}"
 seed="${CM_DEMO_SEED:-}"
 requested_project="${CM_DEMO_PROJECT:-}"
+run_owner="${CM_DEMO_RUN_OWNER:-}"
 
 fail() {
   printf >&2 'ERROR: %s\n' "$*"
@@ -50,6 +51,7 @@ existing_project=''
 existing_chimp_port=''
 existing_espo_port=''
 existing_doli_port=''
+existing_run_owner=''
 if [ -f "$config" ]; then
   existing_mode="$(sed -n 's/^CM_DEMO_MODE=//p' "$config")"
   existing_profile="$(sed -n 's/^CM_AUTHORITY_PROFILE=//p' "$config")"
@@ -58,6 +60,7 @@ if [ -f "$config" ]; then
   existing_chimp_port="$(sed -n 's/^CM_CHIMP_PORT=//p' "$config")"
   existing_espo_port="$(sed -n 's/^CM_ESPO_PORT=//p' "$config")"
   existing_doli_port="$(sed -n 's/^CM_DOLI_PORT=//p' "$config")"
+  existing_run_owner="$(sed -n 's/^CM_DEMO_RUN_OWNER=//p' "$config")"
 fi
 
 journal_phase_start preflight "$(journal_sha_text "$(uname -s):$(uname -m)")"
@@ -79,6 +82,12 @@ espo_port="${CM_ESPO_PORT:-${existing_espo_port:-127.0.0.1:7781}}"
 doli_port="${CM_DOLI_PORT:-${existing_doli_port:-127.0.0.1:7782}}"
 [ -z "$existing_project" ] || [ "$project" = "$existing_project" ] ||
   fail "existing install belongs to project $existing_project; project drift is denied"
+[ -z "$run_owner" ] || [[ "$run_owner" =~ ^pansphaira-e2e-[1-9][0-9]{0,19}-[1-9][0-9]{0,5}$ ]] ||
+  fail "CM_DEMO_RUN_OWNER must be an isolated scheduled/release E2E namespace"
+[ -z "$run_owner" ] || [ "$run_owner" = "$project" ] ||
+  fail "CM_DEMO_RUN_OWNER must equal the Compose project"
+[ ! -f "$config" ] || [ "$existing_run_owner" = "$run_owner" ] ||
+  fail "existing install run ownership drift is denied"
 case "$mode" in complete|minimal) ;; *) fail "mode must be complete or minimal" ;; esac
 case "$profile" in
   SAFE_GUIDED) ;;
@@ -197,9 +206,14 @@ journal_phase_start runtime_image_materialization "$(journal_sha_text "$(
       sort -z | xargs -0 sha256sum
   } | sha256sum | cut -d' ' -f1
 )")"
+run_owner_label_args=()
+if [ -n "$run_owner" ]; then
+  run_owner_label_args=(--label "io.chimpmaera.demo.run-owner=$run_owner")
+fi
 docker build \
   --file "$root/demo/chimpmaera.Dockerfile" \
   --provenance=false \
+  "${run_owner_label_args[@]}" \
   --tag chimpmaera/v01-runtime:local \
   "$root"
 chimp_image="$(
@@ -216,6 +230,7 @@ journal_phase_start configuration_materialization "$(journal_sha_text "$selectio
 config_tmp="$(mktemp "$state/.config.env.XXXXXX")"
 cat > "$config_tmp" <<EOF
 COMPOSE_PROJECT_NAME=$project
+CM_DEMO_RUN_OWNER=$run_owner
 CM_DEMO_MODE=$mode
 CM_AUTHORITY_PROFILE=$profile
 CM_DEMO_SEED=$seed

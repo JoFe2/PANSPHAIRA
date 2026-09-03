@@ -120,7 +120,9 @@
   },
   "ci": {
     "workflowPath": ".github/workflows/ci.yml",
-    "additionalWorkflowPaths": [],
+    "additionalWorkflowPaths": [
+      ".github/workflows/demo-current-head-e2e.yml"
+    ],
     "actionsRequireFullCommitSha": true,
     "dockerCompose": {
       "version": "v2.40.3",
@@ -146,6 +148,7 @@
       "docs/BUILDER-AGENT-OPERATOR-GUIDE.md",
       "docs/EXTERNAL-BI-SERVICE.md",
       "docs/BUILDER-CONFIGURATION-DEFAULTS.md",
+      "docs/DEMO-CURRENT-HEAD-E2E.md",
       "docs/SYSTEM-ADVISOR-GUIDE.md",
       "examples/builder-agent/contribution-bundle-v1.json",
       "examples/builder-agent/contribution-input-v1.json",
@@ -164,6 +167,7 @@
       "packages/contracts/src/skill-admission.ts",
       "packages/contracts/src/policy-evaluator.ts",
       "scripts/verify-supply-chain.mjs",
+      "scripts/demo-current-head-e2e.mjs",
       "tests/demo-approval-workbench.test.mjs",
       "tests/builder-agent-runtime.test.mjs",
       "tests/builder-contribution-bundle.test.ts",
@@ -171,10 +175,12 @@
       "tests/demo-paperless-ngx-zoo-adapter.test.mjs",
       "tests/demo-policy-evaluator.test.mjs",
       "tests/demo-policy-generation-fence.test.mjs",
+      "tests/demo-current-head-e2e.test.mjs",
       "tests/external-bi-service.test.ts",
       "tests/managed-skill-lifecycle-runtime.test.mjs",
       "tests/skill-admission.test.ts",
-      "tests/supply-chain-verifier.test.mjs"
+      "tests/supply-chain-verifier.test.mjs",
+      "verification/demo-current-head-e2e/contract-v1.json"
     ],
     "developmentEvidenceExcluded": true
   },

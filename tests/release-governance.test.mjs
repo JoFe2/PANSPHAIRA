@@ -319,7 +319,7 @@ test("public release builder binds its exact file count to the manifest", () => 
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), count);
-  assert.equal(count, 1447);
+  assert.equal(count, 1451);
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
@@ -538,4 +538,24 @@ test("release governance negative probes fail closed", async (t) => {
       assert.ok(validateRepository(root).some((value) => value.includes(expected)), validateRepository(root).join("\n"));
     });
   }
+});
+
+test("release closure is gated by the bounded exact-head Docker E2E contract", () => {
+  const governance = JSON.parse(readFileSync(join(ROOT, "release/governance.json"), "utf8"));
+  const policy = governance.currentHeadDockerE2E;
+  assert.equal(policy.schemaVersion, "pansphaira.release/current-head-docker-e2e/v1");
+  assert.equal(policy.workflowPath, ".github/workflows/demo-current-head-e2e.yml");
+  assert.equal(policy.contractPath, "verification/demo-current-head-e2e/contract-v1.json");
+  assert.equal(policy.maximumReceiptAgeHours, 168);
+  assert.equal(policy.releaseReadbackRequiresE2E, true);
+  assert.equal(policy.ordinaryPullRequestDockerRunRequired, false);
+  assert.equal(policy.terminalIssueState, "CLOSED_COMPLETED_PUBLIC_PROVIDER_READBACK");
+  assert.equal(policy.terminalQueueState, "DONE_UNOWNED_ZERO_RESIDUAL_OWNERSHIP");
+  assert.equal(policy.requiredHardGates.includes("demo-current-head-e2e"), true);
+  assert.equal(policy.requiredNegativeProofCaseIds.length, 14);
+
+  const workflow = readFileSync(join(ROOT, ".github/workflows/release-public-readback.yml"), "utf8");
+  assert.match(workflow, /current-head-docker-e2e:[\s\S]*uses: \.\/\.github\/workflows\/demo-current-head-e2e\.yml/);
+  assert.match(workflow, /target_sha: \$\{\{ github\.event\.release\.target_commitish \}\}/);
+  assert.match(workflow, /anonymous-public-readback-before-terminalization:[\s\S]*needs: current-head-docker-e2e/);
 });

@@ -12,8 +12,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  current-head-docker-e2e:
+    name: Require exact released-tree Docker E2E
+    uses: ./.github/workflows/demo-current-head-e2e.yml
+    with:
+      target_sha: ${{ github.event.release.target_commitish }}
+
   anonymous-public-readback-before-terminalization:
     name: Anonymous public readback before terminalization
+    needs: current-head-docker-e2e
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

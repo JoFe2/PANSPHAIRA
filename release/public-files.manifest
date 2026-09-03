@@ -204,6 +204,7 @@ docs/COMPANY-DATA-VALIDATION.md	docs/COMPANY-DATA-VALIDATION.md	0644
 docs/COMPETENCE-KNOWLEDGE-CONTRACTS.md	docs/COMPETENCE-KNOWLEDGE-CONTRACTS.md	0644
 docs/CONNECT-YOUR-FIRST-SYSTEM.md	docs/CONNECT-YOUR-FIRST-SYSTEM.md	0644
 docs/CRM-READ-CONNECTOR-GUIDE.md	docs/CRM-READ-CONNECTOR-GUIDE.md	0644
+docs/DEMO-CURRENT-HEAD-E2E.md	docs/DEMO-CURRENT-HEAD-E2E.md	0644
 docs/DEV-WORKER-M0-OPERATOR-GUIDE.md	docs/DEV-WORKER-M0-OPERATOR-GUIDE.md	0644
 docs/DEV-WORKER-RECEIPT-REVIEW-CHECKLIST.md	docs/DEV-WORKER-RECEIPT-REVIEW-CHECKLIST.md	0644
 docs/DISCOVERABILITY-BASELINE.md	docs/DISCOVERABILITY-BASELINE.md	0644
@@ -579,6 +580,7 @@ scripts/cks-08-score-synthetic-lineage.mjs	scripts/cks-08-score-synthetic-lineag
 scripts/cks-08-validate-public-readback.mjs	scripts/cks-08-validate-public-readback.mjs	0644
 scripts/cks-09-score-synthetic-proof.mjs	scripts/cks-09-score-synthetic-proof.mjs	0644
 scripts/cks-09-validate-public-readback.mjs	scripts/cks-09-validate-public-readback.mjs	0644
+scripts/demo-current-head-e2e.mjs	scripts/demo-current-head-e2e.mjs	0755
 scripts/extension-dynamic-process-lifecycle.mjs	scripts/extension-dynamic-process-lifecycle.mjs	0644
 scripts/extension-dynamic-synthetic.mjs	scripts/extension-dynamic-synthetic.mjs	0644
 scripts/learning-routing-baseline.mjs	scripts/learning-routing-baseline.mjs	0644
@@ -834,6 +836,7 @@ tests/cscl-09/product-candidate.test.mjs	tests/cscl-09/product-candidate.test.mj
 tests/cscl-10/sales-candidate.test.mjs	tests/cscl-10/sales-candidate.test.mjs	0644
 tests/demo-admin-ai-poc.test.mjs	tests/demo-admin-ai-poc.test.mjs	0644
 tests/demo-approval-workbench.test.mjs	tests/demo-approval-workbench.test.mjs	0644
+tests/demo-current-head-e2e.test.mjs	tests/demo-current-head-e2e.test.mjs	0644
 tests/demo-enforcement-gate.test.mjs	tests/demo-enforcement-gate.test.mjs	0644
 tests/demo-fixture-manifest.test.ts	tests/demo-fixture-manifest.test.ts	0644
 tests/demo-local-egress-policy.test.mjs	tests/demo-local-egress-policy.test.mjs	0644
@@ -1439,6 +1442,7 @@ verification/cscl-09-product-candidate-receipt-v1.json	verification/cscl-09-prod
 verification/cscl-09-product-candidate-v1.json	verification/cscl-09-product-candidate-v1.json	0644
 verification/cscl-10-sales-candidate-receipt-v1.json	verification/cscl-10-sales-candidate-receipt-v1.json	0644
 verification/cscl-10-sales-candidate-v1.json	verification/cscl-10-sales-candidate-v1.json	0644
+verification/demo-current-head-e2e/contract-v1.json	verification/demo-current-head-e2e/contract-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644

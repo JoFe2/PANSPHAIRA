@@ -1,0 +1,132 @@
+name: Bounded current-head Docker E2E
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      target_sha:
+        description: Exact release commit supplied by the release-event caller
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pansphaira-demo-current-head-e2e
+  cancel-in-progress: false
+
+jobs:
+  docker-e2e:
+    name: Exact-head install, acceptance, readback and purge
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      TARGET_SHA: ${{ inputs.target_sha != '' && inputs.target_sha || github.sha }}
+      CM_E2E_NAMESPACE: pansphaira-e2e-${{ github.run_id }}-${{ github.run_attempt }}
+      CM_E2E_ARTIFACT_DIR: ${{ runner.temp }}/demo-current-head-e2e
+
+    steps:
+      - name: Check out the immutable event head without writable credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          ref: ${{ inputs.target_sha != '' && inputs.target_sha || github.sha }}
+
+      - name: Prove exact clean checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TARGET_SHA" =~ ^[a-f0-9]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          install -d -m 700 "$CM_E2E_ARTIFACT_DIR"
+
+      - name: Set up pinned Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.14.1
+          cache: npm
+
+      - name: Set up pinned npm
+        run: npm install --global npm@11.16.0
+
+      - name: Set up digest-verified Docker Compose
+        env:
+          CM_COMPOSE_URL: https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-x86_64
+          CM_COMPOSE_SHA256: dba9d98e1ba5bfe11d88c99b9bd32fc4a0624a30fafe68eea34d61a3e42fd372
+        shell: bash
+        run: |
+          set -euo pipefail
+          compose_root="$RUNNER_TEMP/chimpmaera-docker-config"
+          plugin_dir="$compose_root/cli-plugins"
+          compose_binary="$plugin_dir/docker-compose"
+          install -d -m 700 "$plugin_dir"
+          curl --fail --location --silent --show-error \
+            --output "$compose_binary" "$CM_COMPOSE_URL"
+          printf '%s  %s\n' "$CM_COMPOSE_SHA256" "$compose_binary" \
+            | sha256sum --check -
+          chmod 0755 "$compose_binary"
+          printf 'DOCKER_CONFIG=%s\n' "$compose_root" >> "$GITHUB_ENV"
+          test "v$(DOCKER_CONFIG="$compose_root" docker compose version --short)" = v2.40.3
+
+      - name: Install exact repository dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Verify focused contract and locked declarations
+        run: |
+          npm run demo-current-head-e2e:test
+          npm run supply-chain:verify
+          sha256sum --check SHA256SUMS
+
+      - name: Run bounded current-head Docker E2E
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/demo-current-head-e2e.mjs run \
+            --target-sha "$TARGET_SHA" \
+            --namespace "$CM_E2E_NAMESPACE" \
+            --artifact-dir "$CM_E2E_ARTIFACT_DIR" \
+            --timeout-seconds 2100 \
+            --event "${{ github.event_name }}" \
+            --run-id "${{ github.run_id }}" \
+            --run-attempt "${{ github.run_attempt }}"
+
+      - name: Revalidate retained exact-head receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/demo-current-head-e2e.mjs verify \
+            --receipt "$CM_E2E_ARTIFACT_DIR/receipt.json" \
+            --target-sha "$TARGET_SHA" \
+            --target-tree "$(git rev-parse HEAD^{tree})" \
+            --now-ms "$(date +%s000)"
+
+      - name: Purge only this run's owned namespace again
+        if: always()
+        run: node scripts/demo-current-head-e2e.mjs purge --namespace "$CM_E2E_NAMESPACE"
+
+      - name: Materialize a sanitized pre-run failure marker when needed
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -d -m 700 "$CM_E2E_ARTIFACT_DIR"
+          if ! compgen -G "$CM_E2E_ARTIFACT_DIR/*" >/dev/null; then
+            printf 'E2E_PRECONDITION_FAILED_NO_RUNTIME_RECEIPT\n' \
+              > "$CM_E2E_ARTIFACT_DIR/failure.log"
+          fi
+
+      - name: Retain sanitized E2E evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: demo-current-head-e2e-${{ env.TARGET_SHA }}
+          path: ${{ env.CM_E2E_ARTIFACT_DIR }}
+          if-no-files-found: error
+          include-hidden-files: false
+          retention-days: 14
