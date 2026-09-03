@@ -393,7 +393,7 @@ test("installer and purge bind the optional E2E run owner without changing ordin
 test("all six #377 criteria map to executable evidence with no remainder", () => {
   const contract = JSON.parse(readFileSync("verification/demo-current-head-e2e/contract-v1.json", "utf8"));
   assert.deepEqual(contract.acceptance.map(({ id }) => id), Array.from({ length: 6 }, (_, index) =>
-    `AUDIT-CORRECTION-377-AC${String(index + 1).padStart(2, "0")}`));
+    `DEMO-CI-AC${String(index + 1).padStart(2, "0")}`));
   assert.equal(contract.acceptance.every(({ executableProof }) => executableProof.length > 0), true);
   assert.deepEqual(contract.negativeProofCaseIds, NEGATIVE_PROOF_CASES);
   assert.equal(contract.implementationState, "EXECUTABLE_CONTRACT_COMPLETE_PENDING_EXACT_HEAD_HOST_DOCKER_RECEIPT");

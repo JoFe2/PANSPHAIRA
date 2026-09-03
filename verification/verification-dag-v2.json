@@ -4641,7 +4641,7 @@
         {
           "path": "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "970f7ce154b49ee6775db51250a26e12d606a8a1d7bd1f569f97207f62f437cb"
+          "sha256": "9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0"
         },
         {
           "path": "CONTRIBUTING.md",
@@ -4741,7 +4741,7 @@
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8621195d5a62da939a259e8f8eda87ca2a823c79f605bada2d9ac2d3952dd476"
+          "sha256": "15b8c41a477fd83e8a45e0a141773b395062ba12e7c962714504dea3f7958dc0"
         },
         {
           "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
@@ -4771,7 +4771,7 @@
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
           "role": "CONTRACT",
-          "sha256": "224c8ccaf7af8cefb77938cba94a8d811c53ebb05a0952f424274257b8e864b3"
+          "sha256": "f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",

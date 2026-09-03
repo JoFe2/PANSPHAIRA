@@ -8,20 +8,20 @@
   "implementationState": "TECHNICALLY_COMPLETE_PENDING_COMMITTED_EXACT_HEAD_HOST_DOCKER_RECEIPT",
   "acceptanceOwnership": {
     "expectedIds": [
-      "AUDIT-CORRECTION-377-AC01",
-      "AUDIT-CORRECTION-377-AC02",
-      "AUDIT-CORRECTION-377-AC03",
-      "AUDIT-CORRECTION-377-AC04",
-      "AUDIT-CORRECTION-377-AC05",
-      "AUDIT-CORRECTION-377-AC06"
+      "DEMO-CI-AC01",
+      "DEMO-CI-AC02",
+      "DEMO-CI-AC03",
+      "DEMO-CI-AC04",
+      "DEMO-CI-AC05",
+      "DEMO-CI-AC06"
     ],
     "mappedIds": [
-      "AUDIT-CORRECTION-377-AC01",
-      "AUDIT-CORRECTION-377-AC02",
-      "AUDIT-CORRECTION-377-AC03",
-      "AUDIT-CORRECTION-377-AC04",
-      "AUDIT-CORRECTION-377-AC05",
-      "AUDIT-CORRECTION-377-AC06"
+      "DEMO-CI-AC01",
+      "DEMO-CI-AC02",
+      "DEMO-CI-AC03",
+      "DEMO-CI-AC04",
+      "DEMO-CI-AC05",
+      "DEMO-CI-AC06"
     ],
     "unmappedIds": [],
     "mapping": "verification/demo-current-head-e2e/contract-v1.json"

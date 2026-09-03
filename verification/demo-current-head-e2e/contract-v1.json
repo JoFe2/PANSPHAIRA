@@ -19,7 +19,7 @@
   },
   "acceptance": [
     {
-      "id": "AUDIT-CORRECTION-377-AC01",
+      "id": "DEMO-CI-AC01",
       "criterion": "A pinned CI job checks out the exact SHA, starts the declared Compose stack in an isolated namespace and runs install, acceptance, provider readback and ownership-scoped purge.",
       "executableProof": [
         ".github/workflows/demo-current-head-e2e.yml",
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "id": "AUDIT-CORRECTION-377-AC02",
+      "id": "DEMO-CI-AC02",
       "criterion": "The retained receipt binds commit/tree, image and Compose locks, fixture digests, service health, governed effect, authoritative readback, cleanup and zero owned residue.",
       "executableProof": [
         "scripts/demo-current-head-e2e.mjs",
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "id": "AUDIT-CORRECTION-377-AC03",
+      "id": "DEMO-CI-AC03",
       "criterion": "Logs and artifacts are sanitized and retained without credentials, customer data, runner paths or uncontrolled external network exposure.",
       "executableProof": [
         ".github/workflows/demo-current-head-e2e.yml",
@@ -45,14 +45,14 @@
       ]
     },
     {
-      "id": "AUDIT-CORRECTION-377-AC04",
+      "id": "DEMO-CI-AC04",
       "criterion": "Negative probes prove failed health, wrong fixture, missing readback, residue, timeout and stale receipt cannot pass.",
       "executableProof": [
         "tests/demo-current-head-e2e.test.mjs"
       ]
     },
     {
-      "id": "AUDIT-CORRECTION-377-AC05",
+      "id": "DEMO-CI-AC05",
       "criterion": "Release closure requires a successful current-head E2E receipt no older than the released tree while ordinary pull requests use focused non-Docker tests.",
       "executableProof": [
         ".github/workflows/release-public-readback.yml",
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "id": "AUDIT-CORRECTION-377-AC06",
+      "id": "DEMO-CI-AC06",
       "criterion": "Runtime cost, timeout and cleanup are bounded and a failed run cannot leak containers, volumes, networks or run-owned images.",
       "executableProof": [
         ".github/workflows/demo-current-head-e2e.yml",
