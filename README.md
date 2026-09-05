@@ -46,7 +46,7 @@ generation and live-system adaptation remain planned.
   <img src="assets/diagrams/layers/04-application-hierarchy-blueprint.png" width="1000" alt="PanSphaira application hierarchy with four shared macro layers as rows, Incoming Invoice, Connected BI, and Provider Adaptation as columns, and a bottom-up evidence axis.">
 </p>
 
-<p align="center"><em>Shared hierarchy, application-specific columns: each adaptation moves from thesis and knowledge through process and software to integration, readback, and qualified reuse.</em></p>
+<p align="center"><em>Shared hierarchy, application-specific columns: each adaptation moves through thesis, process, software, integration, readback, and qualified reuse.</em></p>
 
 <details>
 <summary>Accessible hierarchy description</summary>
@@ -62,8 +62,7 @@ qualified reuse.
 
 **Need → Blueprint → governed process → integration → readback → reusable
 evidence.** The [Canon](docs/CANON.md) and
-[Architecture](docs/ARCHITECTURE.md) define the durable laws and technical
-boundaries behind the hierarchy.
+[Architecture](docs/ARCHITECTURE.md) define the boundaries behind the hierarchy.
 
 **Adapt once. Validate it. Reuse it everywhere it fits.**
 Solve → Validate → Package as Knowledge → Share → Reuse → Improve.
@@ -78,7 +77,9 @@ silently expanding authority.
 
 One AP model is designed to derive `LEAN`, `CONTROLLED`, and
 `SEGREGATED_ENTERPRISE` process variants from evidence, risk, approval, and
-separation needs—not from company-size stereotypes.
+separation needs—not company-size stereotypes. The short-term proof adds a
+bounded setup-agent dialogue reusing existing capability/process variants to
+configure an altered ERV requirement.
 
 Track the [AP proof epic #360](https://github.com/JoFe2/PANSPHAIRA/issues/360)
 and its delivery chain:
