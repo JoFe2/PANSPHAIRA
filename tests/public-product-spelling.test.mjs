@@ -30,6 +30,11 @@ function classify(path, line) {
   ) return "stable-cks10-authority-identifier";
   if (path.startsWith("tests/cks-12/")) return "stable-cks12-technical-identifier";
   if (path.startsWith("docs/architecture/rks-01")) return "stable-rks01-technical-identifier";
+  if (
+    path === "packages/contracts/src/kaleidosphere-analytics-projection.ts"
+    || path === "tests/cks-analytics-projection-profile.test.ts"
+    || path === "tests/fixtures/cks-analytics/projection-v1.json"
+  ) return "stable-xra-ps01-purpose-identifier";
   if (path === "demo/manifests/network/local-egress-policy-v1.json") return "technical-fixture-identifier";
   if (path === "tests/fixtures/incoming-invoice/supplier-invoice-v1.txt") return "frozen-synthetic-fixture-display";
   if (path.startsWith("schemas/")) return "stable-schema";

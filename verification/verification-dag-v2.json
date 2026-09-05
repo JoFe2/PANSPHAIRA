@@ -4751,12 +4751,12 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "ec142cae65b548cf14e2d79a9fb9dec6777e9357fe48f43ca9114274c5d3afc0"
+          "sha256": "5e163bda2c1a0ca3f5dfa25d54889b73123ed322161d8585a5449a7472766401"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "d738763524ef31f8a2e285e6f283d3d8b2505291f81a1490b4a3cf0836414155"
+          "sha256": "9055f61a4d25ce35d55c96b288ea352de9dfd61dfe35661aaf3c0a95b51ee5b2"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",

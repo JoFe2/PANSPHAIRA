@@ -1577,8 +1577,8 @@ e9c6a95d47fbc5d3b061b17e1bc1fbd76d4a99e6f0cb908d156b7ae5c4ae750a  ./tests/poc-se
 e1e4304dde40a18146d905885a7d7dc9646a8d22a7702a758ad0da50d1ee00e0  ./tests/poc-showcase.test.ts
 4bbdb6acb54291a49e12347f72a9b4b85241e28d639df56fc78c69f050103cc1  ./tests/power-platform-read-connector.test.ts
 dfe7338a6655c3a70f304f59c3a3e1e748ad62a8b78726eeb125db4e3f16332d  ./tests/protected-audit-timeline.test.ts
-ec142cae65b548cf14e2d79a9fb9dec6777e9357fe48f43ca9114274c5d3afc0  ./tests/public-product-spelling.test.mjs
-d738763524ef31f8a2e285e6f283d3d8b2505291f81a1490b4a3cf0836414155  ./tests/release-governance.test.mjs
+5e163bda2c1a0ca3f5dfa25d54889b73123ed322161d8585a5449a7472766401  ./tests/public-product-spelling.test.mjs
+9055f61a4d25ce35d55c96b288ea352de9dfd61dfe35661aaf3c0a95b51ee5b2  ./tests/release-governance.test.mjs
 0c3e4bdbb61dfc4bb9bb571b4cd42209a8967ab54caa6762426ffb61abb1e574  ./tests/render-ccp-m1-evidence.test.mjs
 af0f2117460bf2fc8478d9a45c58b17ad1bc6c839a9a0654a325078354fb4990  ./tests/resource-plane-profiles.test.ts
 1ba5a47a97c81c3d51a91cf4e00938c4708bf0cdc766082bf614e976dccbfd18  ./tests/rks-01/comparative-utility.test.mjs
@@ -1761,5 +1761,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-77a3e52af1a3f80a70199b6a4256af68ca2ac23afbb5c15895b4516112967888  ./verification/verification-dag-v2.json
+b1e9aa8593ac7c1abb7cefb73f2d4025d4a6f76feabe0b1a217baccd1e910d13  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
