@@ -1,0 +1,94 @@
+{
+  "acceptanceOwnership": {
+    "expectedIds": [
+      "DEMO-CI-AC01",
+      "DEMO-CI-AC02",
+      "DEMO-CI-AC03",
+      "DEMO-CI-AC04",
+      "DEMO-CI-AC05",
+      "DEMO-CI-AC06"
+    ],
+    "mappedIds": [
+      "DEMO-CI-AC01",
+      "DEMO-CI-AC02",
+      "DEMO-CI-AC03",
+      "DEMO-CI-AC04",
+      "DEMO-CI-AC05",
+      "DEMO-CI-AC06"
+    ],
+    "mapping": "verification/demo-current-head-e2e/contract-v1.json",
+    "unmappedIds": []
+  },
+  "authorityBoundary": {
+    "authorityWidening": false,
+    "credentialAccess": false,
+    "customerDataAccess": false,
+    "issueMutation": false,
+    "productiveExternalEffect": false,
+    "publication": false,
+    "pushMergeRelease": false,
+    "queueMutation": false
+  },
+  "baseHead": "b676c984b3fb53381b456010047d32e775fb3782",
+  "baseTree": "e1075f0f4945cc88918548eacc07083a1c705481",
+  "deliveryId": "PS377-DEMO-CI-01-R1",
+  "exactHeadRuntimeEvidence": {
+    "callerAuthoredPassAccepted": false,
+    "localSyntheticReceiptSubstitutesForProviderReadback": false,
+    "producedByThisDelivery": false,
+    "receiptSchemaVersion": "pansphaira.demo/current-head-e2e-receipt/v1",
+    "retainedArtifact": "demo-current-head-e2e-<exact-40-hex-head>",
+    "state": "PENDING_CI_ONLY_EXACT_HEAD_HOST_DOCKER_RECEIPT"
+  },
+  "executableContract": {
+    "deliveryRecordContractProof": "tests/demo-current-head-e2e-delivery.test.mjs",
+    "focusedProof": "tests/demo-current-head-e2e.test.mjs",
+    "releasePolicy": "release/governance.json#currentHeadDockerE2E",
+    "releasePrerequisite": ".github/workflows/release-public-readback.yml",
+    "runnerAndValidator": "scripts/demo-current-head-e2e.mjs",
+    "workflow": ".github/workflows/demo-current-head-e2e.yml"
+  },
+  "focusedReplay": {
+    "baseHead": "b676c984b3fb53381b456010047d32e775fb3782",
+    "baseTree": "e1075f0f4945cc88918548eacc07083a1c705481",
+    "command": "node --test tests/demo-current-head-e2e*.test.mjs",
+    "note": "Replayed the #377 product focused adversarial matrix on the exact base head before this delivery commit: all 23 product tests passed with zero failures. This delivery round adds one focused delivery-record contract test on top of that matrix; the exact-head host Docker receipt itself is produced only by the pinned CI job and is not reproduced here.",
+    "outcome": "PASS",
+    "productFail": 0,
+    "productPass": 23,
+    "productTests": 23
+  },
+  "implementationState": "QWEN_R1_VERIFIED_COMPLETE_PENDING_EXACT_HEAD_HOST_DOCKER_RECEIPT",
+  "issue": {
+    "number": 377,
+    "repository": "JoFe2/PANSPHAIRA",
+    "title": "[DEMO-CI-01] Prove the current release Docker path end to end"
+  },
+  "nonClaims": [
+    "THIS_RECORD_IS_NOT_A_RUNTIME_PASS_RECEIPT",
+    "EXACT_HEAD_HOST_DOCKER_RECEIPT_IS_CI_ONLY_AND_PENDING",
+    "NO_PUBLIC_ISSUE_CLOSED_OR_QUEUE_DONE_CLAIM",
+    "NO_PRODUCTION_FITNESS_SECURITY_CERTIFICATION_OR_REPRODUCIBLE_BUILD_CLAIM",
+    "NO_PRODUCTIVE_EXTERNAL_EFFECT_OR_AUTHORITY_GRANT",
+    "FINAL_COMPLETION_REMAINS_WITH_PR_HEAD_CI_MERGE_HEAD_CI_RELEASE_READBACK_AND_QUEUE_RECONCILIATION"
+  ],
+  "provenanceNote": "The #377 bounded current-head Docker E2E product (exact-SHA scheduled/reusable Compose workflow, digest-pinned runtime inputs, 2100 s bounded run, ownership-scoped purge, sanitized 14-day retained artifacts, fail-closed receipt and completion validators, the release gate, and the complete 14-case adversarial negative-proof matrix) was delivered by the prior auto/audit-correction-377 sequence (merge 1319ca8) and is already present in this delivery's base head. This R1 round verifies that complete implementation on the exact base head and records that verification as an honest forward-record; it does not re-implement, replace, or regenerate it.",
+  "requiredNegativeProofCaseIds": [
+    "FAILED_HEALTH",
+    "WRONG_FIXTURE",
+    "MISSING_READBACK",
+    "OWNED_RESIDUE",
+    "RUNTIME_TIMEOUT",
+    "STALE_RECEIPT",
+    "STALE_HEAD",
+    "CALLER_AUTHORED_PASS",
+    "MISSING_NEGATIVE_PROOF",
+    "FAILED_HARD_GATE",
+    "OVERCLAIM",
+    "ISSUE_NOT_PUBLIC_CLOSED",
+    "QUEUE_NOT_DONE",
+    "RESIDUAL_OWNERSHIP"
+  ],
+  "round": "R1",
+  "schemaVersion": "pansphaira.qwen-delivery/implementation-evidence/v1"
+}
