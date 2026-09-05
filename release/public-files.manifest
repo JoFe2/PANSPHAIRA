@@ -365,6 +365,7 @@ packages/contracts/src/development-worker.ts	packages/contracts/src/development-
 packages/contracts/src/effective-rights.ts	packages/contracts/src/effective-rights.ts	0644
 packages/contracts/src/erp-order-capability-cell.ts	packages/contracts/src/erp-order-capability-cell.ts	0644
 packages/contracts/src/erp-read-connector.ts	packages/contracts/src/erp-read-connector.ts	0644
+packages/contracts/src/evidence-provenance.ts	packages/contracts/src/evidence-provenance.ts	0644
 packages/contracts/src/extension-assurance-appeal.ts	packages/contracts/src/extension-assurance-appeal.ts	0644
 packages/contracts/src/extension-assurance-profile.ts	packages/contracts/src/extension-assurance-profile.ts	0644
 packages/contracts/src/extension-assurance-retest-ledger.ts	packages/contracts/src/extension-assurance-retest-ledger.ts	0644
@@ -852,6 +853,7 @@ tests/docs-site.test.mjs	tests/docs-site.test.mjs	0644
 tests/effective-rights.test.ts	tests/effective-rights.test.ts	0644
 tests/erp-order-capability-cell.test.ts	tests/erp-order-capability-cell.test.ts	0644
 tests/erp-read-connector.test.ts	tests/erp-read-connector.test.ts	0644
+tests/evidence-provenance-profile.test.ts	tests/evidence-provenance-profile.test.ts	0644
 tests/extension-assurance-appeal.test.ts	tests/extension-assurance-appeal.test.ts	0644
 tests/extension-assurance-profile-negative-zero.test.ts	tests/extension-assurance-profile-negative-zero.test.ts	0644
 tests/extension-assurance-profile.test.ts	tests/extension-assurance-profile.test.ts	0644

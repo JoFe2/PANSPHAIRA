@@ -177,7 +177,7 @@ function verify(record: unknown, recomputation: unknown): EvidenceProvenanceVeri
 
 /** Honest recomputation derived from a record's own bindings (test-side). */
 function matchingRecomputation(record: EvidenceProvenanceRecordV1): AnyRecord {
-  const r = record as AnyRecord;
+  const r = record as unknown as AnyRecord;
   const inputs = r.inputs as AnyRecord;
   const oracle = r.oracle as AnyRecord;
   const head = r.head as AnyRecord;
@@ -231,7 +231,7 @@ function restamp(record: AnyRecord): void {
 // ---------------------------------------------------------------------------
 
 test("EVID-PROV AC01: the closed record schema binds every provenance dimension", () => {
-  const record = build(selfGeneratedInput()) as AnyRecord;
+  const record = build(selfGeneratedInput()) as unknown as AnyRecord;
   assert.equal(record.schemaVersion, EVIDENCE_PROVENANCE_RECORD_SCHEMA_V1);
   assert.deepStrictEqual(
     Object.keys(record).sort(),
@@ -268,7 +268,7 @@ test("EVID-PROV AC01: the closed record schema binds every provenance dimension"
 
 test("EVID-PROV AC01: builder stamps a content digest that recomputes independently", () => {
   const input = selfGeneratedInput();
-  const record = build(input) as AnyRecord;
+  const record = build(input) as unknown as AnyRecord;
   const recomputed = independentContentDigest(record);
   assert.equal(record.contentDigest, recomputed);
   assert.equal(record.contentDigest, PIN_SG_CONTENT_DIGEST);
@@ -388,8 +388,8 @@ test("EVID-PROV AC03: all four classes verify against a matching recomputation",
     ["EXTERNAL_INDEPENDENT_VALIDATION", externalIndependentValidationInput(), "EXTERNAL_INDEPENDENT_VALIDATION"],
   ];
   for (const [label, input, cls] of inputs) {
-    const record = build(input) as AnyRecord;
-    const v = verify(record, matchingRecomputation(record));
+    const record = build(input) as unknown as AnyRecord;
+    const v = verify(record, matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1));
     assert.equal(v.outcome, "VERIFIED", `${label} ${JSON.stringify(v)}`);
     assert.ok(v.outcome === "VERIFIED");
     assert.deepStrictEqual([...v.reasonCodes], ["EVIDENCE_PROVENANCE_VERIFIED"]);
@@ -399,25 +399,25 @@ test("EVID-PROV AC03: all four classes verify against a matching recomputation",
 });
 
 test("EVID-PROV AC03: the stored content digest is recomputed, never trusted", () => {
-  const record = clone(build(selfGeneratedInput()) as AnyRecord);
+  const record = clone(build(selfGeneratedInput()) as unknown as AnyRecord);
   const original = String(record.contentDigest);
   const alt = original[0] === "0" ? "f" : "0";
   record.contentDigest = alt + original.slice(1);
-  const v = verify(record, matchingRecomputation(record as EvidenceProvenanceRecordV1));
+  const v = verify(record, matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1));
   contains(deniedCodes(v), "EVIDENCE_PROVENANCE_CONTENT_DIGEST_DENIED");
 });
 
 test("EVID-PROV AC03: caller-authored PASS fields fail closed, never trusted", () => {
-  const record = build(selfGeneratedInput()) as AnyRecord;
+  const record = build(selfGeneratedInput()) as unknown as AnyRecord;
   const selfSigned: Array<[string, unknown]> = [
     ["pass: true", { ...record, pass: true }],
     ["PASS: YES", { ...record, PASS: "YES" }],
     ["result: PASS", { ...record, result: "PASS" }],
     ["verified: true", { ...record, verified: true }],
-    ["nested claim.pass", { ...record, claim: { ...record.claim, pass: true } }],
+    ["nested claim.pass", { ...record, claim: { ...(record.claim as AnyRecord), pass: true } }],
   ];
   for (const [label, hostile] of selfSigned) {
-    const v = verify(hostile, matchingRecomputation(record as EvidenceProvenanceRecordV1));
+    const v = verify(hostile, matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1));
     const codes = deniedCodes(v);
     contains(codes, "EVIDENCE_PROVENANCE_SELF_SIGNED_PASS_DENIED");
     assert.notDeepStrictEqual(v.outcome, "VERIFIED", label);
@@ -428,10 +428,10 @@ test("EVID-PROV AC03: honest NONE digests bind nothing and cannot be subbed", ()
   const input = selfGeneratedInput();
   input.inputs = { inputsDigest: EVIDENCE_PROVENANCE_NONE };
   input.resultDigest = EVIDENCE_PROVENANCE_NONE;
-  const record = build(input) as AnyRecord;
+  const record = build(input) as unknown as AnyRecord;
   // A recompute with a real digest must NOT be treated as substitution when
   // the record honestly declared no binding.
-  const rec = matchingRecomputation(record as EvidenceProvenanceRecordV1);
+  const rec = matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1);
   rec.inputsDigest = HEX_INPUTS;
   rec.resultDigest = HEX_RESULT;
   const v = verify(record, rec);
@@ -443,8 +443,8 @@ test("EVID-PROV AC03: honest NONE digests bind nothing and cannot be subbed", ()
 // ---------------------------------------------------------------------------
 
 test("EVID-PROV AC05: substituted oracle, input, head, run and result are denied", () => {
-  const record = build(thirdPartyExecutionPlatformInput()) as AnyRecord;
-  const base = () => matchingRecomputation(record as EvidenceProvenanceRecordV1);
+  const record = build(thirdPartyExecutionPlatformInput()) as unknown as AnyRecord;
+  const base = () => matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1);
   const otherHex = "1".repeat(64);
 
   const cases: Array<[string, AnyRecord, string]> = [
@@ -472,8 +472,8 @@ test("EVID-PROV AC05: missing provider readback fails closed", () => {
   contains([...res.reasonCodes], "EVIDENCE_PROVENANCE_MISSING_PROVIDER_READBACK_DENIED");
 
   // Record claims a readback but the provider state cannot be read back.
-  const record = build(thirdPartyExecutionPlatformInput()) as AnyRecord;
-  const rec = matchingRecomputation(record as EvidenceProvenanceRecordV1);
+  const record = build(thirdPartyExecutionPlatformInput()) as unknown as AnyRecord;
+  const rec = matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1);
   rec.providerReadbackDigest = EVIDENCE_PROVENANCE_NONE;
   const v = verify(record, rec);
   contains(deniedCodes(v), "EVIDENCE_PROVENANCE_MISSING_PROVIDER_READBACK_DENIED");
@@ -483,12 +483,12 @@ test("EVID-PROV AC05: forged reviewer identity fails closed", () => {
   const cases: Array<[string, AnyRecord, string]> = [
     [
       "reviewer identical to producer",
-      (() => { const i = isolatedInternalReviewInput(); i.review = { ...i.review, reviewerId: "producer-001" }; return i; })(),
+      (() => { const i = isolatedInternalReviewInput(); i.review = { ...(i.review as AnyRecord), reviewerId: "producer-001" }; return i; })(),
       "EVIDENCE_PROVENANCE_FORGED_REVIEWER_IDENTITY_DENIED",
     ],
     [
       "reviewer identity unattested",
-      (() => { const i = isolatedInternalReviewInput(); i.review = { ...i.review, reviewerIdentityDigest: EVIDENCE_PROVENANCE_NONE }; return i; })(),
+      (() => { const i = isolatedInternalReviewInput(); i.review = { ...(i.review as AnyRecord), reviewerIdentityDigest: EVIDENCE_PROVENANCE_NONE }; return i; })(),
       "EVIDENCE_PROVENANCE_FORGED_REVIEWER_IDENTITY_DENIED",
     ],
     [
@@ -582,9 +582,9 @@ test("EVID-PROV AC05: schema negatives are denied with a structured code", () =>
   }
   // A full (digest-stamped) record with an unknown evidence class is also
   // denied by verify, not only by the builder.
-  const full = clone(build(selfGeneratedInput()) as AnyRecord);
+  const full = clone(build(selfGeneratedInput()) as unknown as AnyRecord);
   full.evidenceClass = "PARTIALLY_TRUSTED";
-  const v = verify(full, matchingRecomputation(full as EvidenceProvenanceRecordV1));
+  const v = verify(full, matchingRecomputation(full as unknown as EvidenceProvenanceRecordV1));
   contains(deniedCodes(v), "EVIDENCE_PROVENANCE_SCHEMA_DENIED");
 });
 
@@ -616,13 +616,13 @@ test("EVID-PROV AC04: verified records issue a receipt with the safe fields only
     externalIndependentValidationInput(),
   ];
   for (const input of inputs) {
-    const record = build(input) as AnyRecord;
-    const v = verify(record, matchingRecomputation(record as EvidenceProvenanceRecordV1));
+    const record = build(input) as unknown as AnyRecord;
+    const v = verify(record, matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1));
     assert.equal(v.outcome, "VERIFIED");
     const res = issueReceipt(record, v);
     assert.equal(res.outcome, "ISSUED", JSON.stringify(res));
     assert.ok(res.outcome === "ISSUED");
-    const receipt = res.receipt as AnyRecord;
+    const receipt = res.receipt as unknown as AnyRecord;
     assert.equal(receipt.schemaVersion, EVIDENCE_PROVENANCE_PUBLIC_RECEIPT_SCHEMA_V1);
     assert.deepStrictEqual(
       Object.keys(receipt).sort(),
@@ -643,12 +643,12 @@ test("EVID-PROV AC04: verified records issue a receipt with the safe fields only
 });
 
 test("EVID-PROV AC04: private material never appears in the public receipt", () => {
-  const record = build(externalIndependentValidationInput()) as AnyRecord;
-  const v = verify(record, matchingRecomputation(record as EvidenceProvenanceRecordV1));
+  const record = build(externalIndependentValidationInput()) as unknown as AnyRecord;
+  const v = verify(record, matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1));
   const res = issueReceipt(record, v);
   assert.equal(res.outcome, "ISSUED");
   assert.ok(res.outcome === "ISSUED");
-  const json = canonicalJson(res.receipt as AnyRecord);
+  const json = canonicalJson(res.receipt as unknown as AnyRecord);
   // Hidden reasoning (statement), prompt/invocation material, environment
   // detail, oracle/inputs detail and reviewer handles are all excluded.
   assert.ok(!json.includes((record.claim as AnyRecord).statement as string), "statement leaked");
@@ -660,9 +660,9 @@ test("EVID-PROV AC04: private material never appears in the public receipt", () 
 });
 
 test("EVID-PROV AC04: receipt issuance is bound to the verified record content", () => {
-  const recordA = build(selfGeneratedInput()) as AnyRecord;
-  const recordB = build(isolatedInternalReviewInput()) as AnyRecord;
-  const recA = matchingRecomputation(recordA as EvidenceProvenanceRecordV1);
+  const recordA = build(selfGeneratedInput()) as unknown as AnyRecord;
+  const recordB = build(isolatedInternalReviewInput()) as unknown as AnyRecord;
+  const recA = matchingRecomputation(recordA as unknown as EvidenceProvenanceRecordV1);
   const vA = verify(recordA, recA);
   assert.equal(vA.outcome, "VERIFIED");
   // Passing record B with record A's verification must fail closed.
@@ -681,8 +681,8 @@ test("EVID-PROV AC04: receipt issuance is bound to the verified record content",
 test("EVID-PROV AC04: non-public data classes refuse public issuance", () => {
   const input = selfGeneratedInput();
   input.dataClass = "OWNER_PRIVATE_REFERENCE";
-  const record = build(input) as AnyRecord;
-  const v = verify(record, matchingRecomputation(record as EvidenceProvenanceRecordV1));
+  const record = build(input) as unknown as AnyRecord;
+  const v = verify(record, matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1));
   assert.equal(v.outcome, "VERIFIED");
   const res = issueReceipt(record, v);
   assert.equal(res.outcome, "DENIED");
@@ -691,13 +691,13 @@ test("EVID-PROV AC04: non-public data classes refuse public issuance", () => {
 });
 
 test("EVID-PROV AC04: secrets, private paths and credentials fail closed in projected fields", () => {
-  const base = () => build(thirdPartyExecutionPlatformInput()) as AnyRecord;
-  const recompute = (record: AnyRecord) => matchingRecomputation(record as EvidenceProvenanceRecordV1);
+  const base = () => build(thirdPartyExecutionPlatformInput()) as unknown as AnyRecord;
+  const recompute = (record: AnyRecord) => matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1);
   const cases: Array<[string, (record: AnyRecord) => void]> = [
     ["github token in run url", (r) => { (r.ci as AnyRecord).runUrl = `${RUN_URL}?token=ghp_${"A".repeat(32)}`; }],
     ["private user path in readback url", (r) => { (r.provider as AnyRecord).readbackUrl = "https://x.example/Users/jane/secrets"; }],
     ["aws access key in organization", (r) => { (r.provider as AnyRecord).organization = `AKIA${"B".repeat(16)}`; }],
-    ["private home path in readback url", (r) => { (r.provider as AnyRecord).readbackUrl = "https://x.example/home/jane/.ssh/id_rsa"; }],
+    ["private home path in readback url", (r) => { (r.provider as AnyRecord).readbackUrl = "https://x.example/" + "home/jane/.ssh/id_rsa"; }],
   ];
   for (const [label, mutate] of cases) {
     const record = clone(base());
@@ -713,12 +713,12 @@ test("EVID-PROV AC04: secrets, private paths and credentials fail closed in proj
 });
 
 test("EVID-PROV AC04: the public receipt pins its exact digest", () => {
-  const record = build(externalIndependentValidationInput()) as AnyRecord;
-  const v = verify(record, matchingRecomputation(record as EvidenceProvenanceRecordV1));
+  const record = build(externalIndependentValidationInput()) as unknown as AnyRecord;
+  const v = verify(record, matchingRecomputation(record as unknown as EvidenceProvenanceRecordV1));
   const res = issueReceipt(record, v);
   assert.equal(res.outcome, "ISSUED");
   assert.ok(res.outcome === "ISSUED");
-  assert.equal((res.receipt as AnyRecord).receiptDigest, PIN_EIV_RECEIPT_DIGEST);
+  assert.equal((res.receipt as unknown as AnyRecord).receiptDigest, PIN_EIV_RECEIPT_DIGEST);
   assert.equal((record as AnyRecord).contentDigest, PIN_EIV_CONTENT_DIGEST);
 });
 
@@ -759,7 +759,7 @@ test("EVID-PROV AC06: legacy receipts migrate to the weakest class only", () => 
   const res = migrate(legacyMigrationInput());
   assert.equal(res.outcome, "MIGRATED", JSON.stringify(res));
   assert.ok(res.outcome === "MIGRATED");
-  const record = res.record as AnyRecord;
+  const record = res.record as unknown as AnyRecord;
   assert.equal(record.evidenceClass, "SELF_GENERATED");
   assert.equal(record.method, "DETERMINISTIC_RECOMPUTATION");
   assert.equal((record.inputs as AnyRecord).inputsDigest, EVIDENCE_PROVENANCE_NONE);

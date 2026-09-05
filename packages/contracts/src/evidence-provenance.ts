@@ -722,7 +722,7 @@ export function createEvidenceProvenanceRecordV1(input: unknown): EvidenceProven
   if (defects.size > 0) return deny(defects);
   const stamped: Record<string, unknown> = { ...plain, schemaVersion: EVIDENCE_PROVENANCE_RECORD_SCHEMA_V1 };
   const record: Record<string, unknown> = { ...stamped, contentDigest: digestHex(stamped) };
-  return freeze({ outcome: "BUILT" as const, record: record as EvidenceProvenanceRecordV1 });
+  return freeze({ outcome: "BUILT" as const, record: record as unknown as EvidenceProvenanceRecordV1 });
 }
 
 /**
@@ -825,7 +825,7 @@ export function publicReviewReceiptV1(
     ...receiptBody,
     receiptDigest: digestHex(receiptBody),
   };
-  return freeze({ outcome: "ISSUED" as const, receipt: receipt as EvidenceProvenancePublicReceiptV1 });
+  return freeze({ outcome: "ISSUED" as const, receipt: receipt as unknown as EvidenceProvenancePublicReceiptV1 });
 }
 
 function scanForSecrets(value: unknown, hits: Set<string>): void {
@@ -931,7 +931,7 @@ export function migrateLegacyEvidenceReceiptV1(input: unknown): EvidenceProvenan
     method: "DETERMINISTIC_RECOMPUTATION",
     resultDigest: EVIDENCE_PROVENANCE_NONE,
   });
-  if (built.outcome !== "BUILT") return deny(new Set(built.reasonCodes));
+  if (built.outcome !== "BUILT") return deny(new Set(built.reasonCodes as readonly DefectCode[]));
   return freeze({
     outcome: "MIGRATED" as const,
     record: built.record,
