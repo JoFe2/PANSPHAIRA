@@ -839,6 +839,7 @@ tests/cscl-09/product-candidate.test.mjs	tests/cscl-09/product-candidate.test.mj
 tests/cscl-10/sales-candidate.test.mjs	tests/cscl-10/sales-candidate.test.mjs	0644
 tests/demo-admin-ai-poc.test.mjs	tests/demo-admin-ai-poc.test.mjs	0644
 tests/demo-approval-workbench.test.mjs	tests/demo-approval-workbench.test.mjs	0644
+tests/demo-current-head-e2e-delivery.test.mjs	tests/demo-current-head-e2e-delivery.test.mjs	0644
 tests/demo-current-head-e2e.test.mjs	tests/demo-current-head-e2e.test.mjs	0644
 tests/demo-enforcement-gate.test.mjs	tests/demo-enforcement-gate.test.mjs	0644
 tests/demo-fixture-manifest.test.ts	tests/demo-fixture-manifest.test.ts	0644
