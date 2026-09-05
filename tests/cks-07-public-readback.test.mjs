@@ -12,6 +12,16 @@ const RELEASE = resolve(ROOT, "docs/evidence/conveyor/sol-psai287-release-or-no-
 const INTEGRATION = resolve(ROOT, "docs/evidence/conveyor/int-psai287-pr-ci-package-01.json");
 const template = () => JSON.parse(readFileSync(TEMPLATE, "utf8"));
 
+// CKS-07 verifies the anonymous public-readback preparation path, whose
+// precondition is that no ambient GitHub token is present (the validator
+// fails closed with GH_TOKEN_MUST_BE_UNSET otherwise). Establish that
+// precondition hermetically so the suite is deterministic whether or not the
+// ambient (e.g. CI/conveyor) environment exports GH_TOKEN/GITHUB_TOKEN. This
+// does not weaken the guard: the validator still enforces it for the child
+// process and for the in-process dryRun below, it only stops the ambient
+// token from leaking in.
+for (const tokenVar of ["GH_TOKEN", "GITHUB_TOKEN"]) delete process.env[tokenVar];
+
 function run() {
   const nodeOptions = `${process.env.NODE_OPTIONS ?? ""} --jitless`.trim();
   return JSON.parse(execFileSync(process.execPath, [SCRIPT, "--template", TEMPLATE, "--dry-run"], {

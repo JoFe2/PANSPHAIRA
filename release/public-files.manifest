@@ -388,6 +388,7 @@ packages/contracts/src/incoming-invoice-extraction-benchmark.ts	packages/contrac
 packages/contracts/src/incoming-invoice-intake.ts	packages/contracts/src/incoming-invoice-intake.ts	0644
 packages/contracts/src/integration-profile.ts	packages/contracts/src/integration-profile.ts	0644
 packages/contracts/src/issue-candidate.ts	packages/contracts/src/issue-candidate.ts	0644
+packages/contracts/src/kaleidosphere-analytics-projection.ts	packages/contracts/src/kaleidosphere-analytics-projection.ts	0644
 packages/contracts/src/knowledge-envelope.ts	packages/contracts/src/knowledge-envelope.ts	0644
 packages/contracts/src/knowledge-quality.ts	packages/contracts/src/knowledge-quality.ts	0644
 packages/contracts/src/learning-routing-baseline.ts	packages/contracts/src/learning-routing-baseline.ts	0644
@@ -794,6 +795,7 @@ tests/cks-12/pattern-shadow-workflow.test.ts	tests/cks-12/pattern-shadow-workflo
 tests/cks-12/prerequisite-receipt-binder.test.ts	tests/cks-12/prerequisite-receipt-binder.test.ts	0644
 tests/cks-12/readonly-kaleidosphere-bridge.test.ts	tests/cks-12/readonly-kaleidosphere-bridge.test.ts	0644
 tests/cks-12/story-step-manifest.test.ts	tests/cks-12/story-step-manifest.test.ts	0644
+tests/cks-analytics-projection-profile.test.ts	tests/cks-analytics-projection-profile.test.ts	0644
 tests/cks-applicability-aware-retrieval.test.ts	tests/cks-applicability-aware-retrieval.test.ts	0644
 tests/cks-competence-runtime.test.ts	tests/cks-competence-runtime.test.ts	0644
 tests/cks-epistemic-verifier.test.ts	tests/cks-epistemic-verifier.test.ts	0644
@@ -1053,6 +1055,7 @@ tests/fixtures/cks-12/minimized-projection-v1.json	tests/fixtures/cks-12/minimiz
 tests/fixtures/cks-12/part-ii-23-step-fixture-v1.json	tests/fixtures/cks-12/part-ii-23-step-fixture-v1.json	0644
 tests/fixtures/cks-12/pattern-shadow-parity-v1.json	tests/fixtures/cks-12/pattern-shadow-parity-v1.json	0644
 tests/fixtures/cks-12/prerequisite-receipts-v1.json	tests/fixtures/cks-12/prerequisite-receipts-v1.json	0644
+tests/fixtures/cks-analytics/projection-v1.json	tests/fixtures/cks-analytics/projection-v1.json	0644
 tests/fixtures/cks-qualification/escalation-causes-v1.json	tests/fixtures/cks-qualification/escalation-causes-v1.json	0644
 tests/fixtures/cks-qualification/profile-binding-v1.json	tests/fixtures/cks-qualification/profile-binding-v1.json	0644
 tests/fixtures/cks-qualification/smallest-qualified-v1.json	tests/fixtures/cks-qualification/smallest-qualified-v1.json	0644
