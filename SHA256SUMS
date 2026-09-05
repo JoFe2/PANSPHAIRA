@@ -684,6 +684,7 @@ c5b7d230b24b548c7ed3bfbe51ada53ef1fbcbcf7018fae10e29177a9567b78f  ./packages/con
 36c8b8c157ce5590b516f1680f8922eef9cf736c34a42649c0b0d4a764c1f1ff  ./packages/contracts/src/hmi-explain-payload.ts
 447e03953e315efb569ff9ee7f8f4963caca7ffa3000595363a3efc21df8dc0e  ./packages/contracts/src/hmi-harness-adapter.ts
 aad1b877c096d4605b80b141100897fab41f62622f5434be59059989b8514550  ./packages/contracts/src/incoming-invoice-blueprint.ts
+6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf  ./packages/contracts/src/incoming-invoice-erv.ts
 f64575a455e69906f930d8b9c0b6303a73c1a3896d98a9b451aee488229b52df  ./packages/contracts/src/incoming-invoice-extraction-benchmark.ts
 38490af300dce7965deebf56755ac59be117db711bd7bc478e19538947a412fc  ./packages/contracts/src/incoming-invoice-intake.ts
 b84754737a71f4427d79aabcc75b28a1c6df84bb2cdd06ead60f4cc44e8c9cca  ./packages/contracts/src/index.ts
@@ -817,6 +818,7 @@ ca46feec3b71ff70631c793c3c08d3d768fc43b6646542d8254171ae9a45124d  ./schemas/cont
 50b8329277a96146956430a54dd559280914f1ba1ab0eaf09d1d7e1f90e0ce77  ./schemas/contracts/hmi-explain-payload-v1.schema.json
 c530db9e49e7ad4aed36476525684fb67e7389037b768873a183342bd0948dd9  ./schemas/contracts/hmi-generation-bundle-v1.schema.json
 0156e124a1a0295842d673e368df2b93322bdb54feeef0a2fa3553f9b89e3108  ./schemas/contracts/incoming-invoice-blueprint-v1.schema.json
+7eabf5156f5a74404499b67d435c879f123f9d842028c739033269edd7959caf  ./schemas/contracts/incoming-invoice-erv-v1.schema.json
 ef553e35ecaf171f097f1ef78803087116b877588b65717177d9b9aa3e454e81  ./schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json
 5f9b4e7308e2e1e74704cc47481d98417a3fcc79d7c8b3839073e9b8d638bf7b  ./schemas/contracts/incoming-invoice-intake-v1.schema.json
 66495d4d334d26afaaaf5137147fb7803061c4338ed3de3475770ed4f12a7d68  ./schemas/contracts/integration-profile-v1.schema.json
@@ -1411,6 +1413,7 @@ b95c61a62dbad78dacaea088b35b1cf1689f7f5922bc58a2f9ebc0aee986edd0  ./tests/fixtur
 91e10cad05f8f6409e817e110deefb1f2a6689de09802cc8df69cec181b9a633  ./tests/fixtures/hmi/positive-explain-payload-v1.json
 522006b8a6cef2b8fdd7e7cc840cb150bd102566151b251e6a537857009e74bb  ./tests/fixtures/hmi/positive-generation-v1.json
 41959bab323542694b120f8d55314620c214f3a44f7c8d36270e47ac8f9b9edb  ./tests/fixtures/incoming-invoice/ap-03-holdout-v1.json
+136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845  ./tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json
 157cb5463b01a2620fbe5c5faa9654a01e2989a12f520dd129f5ddc06b35c880  ./tests/fixtures/incoming-invoice/source-manifest-v1.json
 fad5979234e5ca8d31e2a10e7a9650c5f4f32693610c2fcf2678b0ab5a5f525b  ./tests/fixtures/incoming-invoice/supplier-invoice-v1.txt
 371624fea662e1dc02bfd217aaa57564cc8b47c2a0d4d8ba889751ce85de251e  ./tests/fixtures/integration-profile/negative-probes-v1.json
@@ -1539,6 +1542,7 @@ c131d1a841ac32ffd1fad35b4261008cf9ab3fca9141b574517f12923fbcb332  ./tests/hmi-di
 871cbcb425ca5392e11a9d18bdb733b499bb1085a21a55abc856c3d7e5667011  ./tests/hmi-post-contribute-consistency.test.ts
 16b83837da00d17db7663505ad08c65d76b584e9c4f433a2425ce845d5022e66  ./tests/hmi-post-explain-consistency.test.ts
 07a7c0648463ae3ef3d08ff7cb6c1a8dd343b956646191a8e78ea83efd34bd44  ./tests/incoming-invoice-blueprint.test.ts
+fcc5e31702f327b0976da50fd42335d2e7741a3debc1218e7ece82cfa9efaf66  ./tests/incoming-invoice-erv.test.ts
 0773cbd6345fb90512d69f8199f9a80f8d3345587f63e19a4a5eac6a52e456ac  ./tests/incoming-invoice-extraction-benchmark.test.ts
 f86b3deef561532fdbbda55ec427d4930dcd298acf2c4afcc0102cc4aeb7ce0f  ./tests/incoming-invoice-intake.test.ts
 906fe47671bedf4f1de0cb697c2e87f67580f153a9d08105ca3d7e539e991e5f  ./tests/injection-trust-boundary.test.ts
