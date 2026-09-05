@@ -385,6 +385,7 @@ packages/contracts/src/hmi-harness-adapter.ts	packages/contracts/src/hmi-harness
 packages/contracts/src/index.ts	packages/contracts/src/index.ts	0644
 packages/contracts/src/injection-trust-boundary.ts	packages/contracts/src/injection-trust-boundary.ts	0644
 packages/contracts/src/incoming-invoice-blueprint.ts	packages/contracts/src/incoming-invoice-blueprint.ts	0644
+packages/contracts/src/incoming-invoice-erv.ts	packages/contracts/src/incoming-invoice-erv.ts	0644
 packages/contracts/src/incoming-invoice-extraction-benchmark.ts	packages/contracts/src/incoming-invoice-extraction-benchmark.ts	0644
 packages/contracts/src/incoming-invoice-intake.ts	packages/contracts/src/incoming-invoice-intake.ts	0644
 packages/contracts/src/integration-profile.ts	packages/contracts/src/integration-profile.ts	0644
@@ -516,6 +517,7 @@ schemas/contracts/hmi-discover-payload-v1.schema.json	schemas/contracts/hmi-disc
 schemas/contracts/hmi-explain-payload-v1.schema.json	schemas/contracts/hmi-explain-payload-v1.schema.json	0644
 schemas/contracts/hmi-generation-bundle-v1.schema.json	schemas/contracts/hmi-generation-bundle-v1.schema.json	0644
 schemas/contracts/incoming-invoice-blueprint-v1.schema.json	schemas/contracts/incoming-invoice-blueprint-v1.schema.json	0644
+schemas/contracts/incoming-invoice-erv-v1.schema.json	schemas/contracts/incoming-invoice-erv-v1.schema.json	0644
 schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json	schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json	0644
 schemas/contracts/incoming-invoice-intake-v1.schema.json	schemas/contracts/incoming-invoice-intake-v1.schema.json	0644
 schemas/contracts/integration-profile-v1.schema.json	schemas/contracts/integration-profile-v1.schema.json	0644
@@ -1111,6 +1113,7 @@ tests/fixtures/issue-candidate/positive-v1.json	tests/fixtures/issue-candidate/p
 tests/fixtures/issue-candidate/quarantine-v1.json	tests/fixtures/issue-candidate/quarantine-v1.json	0644
 tests/fixtures/incoming-invoice/source-manifest-v1.json	tests/fixtures/incoming-invoice/source-manifest-v1.json	0644
 tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	0644
+tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	0644
 tests/fixtures/incoming-invoice/supplier-invoice-v1.txt	tests/fixtures/incoming-invoice/supplier-invoice-v1.txt	0644
 tests/fixtures/kiwix-zim-assessment/assessment-v1.json	tests/fixtures/kiwix-zim-assessment/assessment-v1.json	0644
 tests/fixtures/knowledge-envelope/adversarial-matrix-v1.json	tests/fixtures/knowledge-envelope/adversarial-matrix-v1.json	0644
@@ -1235,6 +1238,7 @@ tests/hmi-post-explain-consistency.test.ts	tests/hmi-post-explain-consistency.te
 tests/injection-trust-boundary.test.ts	tests/injection-trust-boundary.test.ts	0644
 tests/incoming-invoice-blueprint.test.ts	tests/incoming-invoice-blueprint.test.ts	0644
 tests/incoming-invoice-extraction-benchmark.test.ts	tests/incoming-invoice-extraction-benchmark.test.ts	0644
+tests/incoming-invoice-erv.test.ts	tests/incoming-invoice-erv.test.ts	0644
 tests/incoming-invoice-intake.test.ts	tests/incoming-invoice-intake.test.ts	0644
 tests/integration-profile.test.ts	tests/integration-profile.test.ts	0644
 tests/issue-candidate.test.ts	tests/issue-candidate.test.ts	0644
