@@ -4711,12 +4711,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "14b5ef9c5ba612b799942dc66cf4ee985670265c9afb01cbf76d251d15a8cb38"
+          "sha256": "30f5c217aef4cc15643268dd7e6df8f8f3fa20cb26acb7c0bcb472bc305988a8"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "05eb28b3c9d622603e42e9dd2dd23f0ccb284469c07c1ee1b8990e8d56415357"
+          "sha256": "6dd9b69451dbe90a302a6273cfa826b7de1549f6b729d39e43195d21c25c821d"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4736,7 +4736,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "2f2b8a6e872cd29333b1bef30f09cf405d310273361d7ca3bd1ecd0178bf493d"
+          "sha256": "ed978e033bbf40eeff485f2418c7877ac649e88bec162aeee15ea3241c93fffc"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4756,7 +4756,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "9055f61a4d25ce35d55c96b288ea352de9dfd61dfe35661aaf3c0a95b51ee5b2"
+          "sha256": "d85690647698396cf8e5270cb2c3d97c6b1da9d2cf533f119022aacf46f293b6"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4766,7 +4766,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "e98fd825860c554923fa34d05f473e07cabef47708f9a74f8bca334504633f5e"
+          "sha256": "eba6a05474687097a657ca4eae9b8295d1aa578e5333ba62c742f93a7bc3a28f"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5337,7 +5337,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "6f771fbf6d8e27adccb7d181dfab27ae186866152a6a89de51c79ee6443f4845"
+          "sha256": "bf9bf1584d85d076c675a06ac3cfcae80e0d527b99639480902bce2ef0110abb"
         },
         {
           "path": "package-lock.json",
@@ -5697,7 +5697,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "eb8fafd8d7182f631660e4ea9f950e358d0d1324f63230f4a2266919013a5011"
+          "sha256": "dc462146e2f471014100c2adf50c7fefcc8b6ce144210d8403c5317baca7d5a9"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
