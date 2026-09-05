@@ -267,11 +267,19 @@ const MATRIX: readonly MatrixCase[] = [
   { name: "forged receipt identity (paired substitution + redigest)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_STALE_DENIED", apply: (p) => { evidence(p, 0, 1).evidenceId = "CKS-12-FORGED-RECEIPT-001"; }, redigest: true },
   { name: "stale source contractSha256", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_STALE_DENIED", apply: (p) => { (p.source as AnyRecord).contractSha256 = "a".repeat(64); } },
   { name: "stale node source evidence", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_STALE_DENIED", apply: (p) => { (node(p, 0).sourceEvidence as AnyRecord).contractSha256 = "b".repeat(64); } },
+  { name: "swapped node kind (knowledge-001 as DECISION, redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_SCHEMA_DENIED", apply: (p) => { node(p, 0).kind = "DECISION"; }, redigest: true },
+  { name: "swapped node kind (decision-001 as KNOWLEDGE, redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_SCHEMA_DENIED", apply: (p) => { node(p, 1).kind = "KNOWLEDGE"; }, redigest: true },
+  { name: "both node kinds swapped (redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_SCHEMA_DENIED", apply: (p) => { node(p, 0).kind = "DECISION"; node(p, 1).kind = "KNOWLEDGE"; }, redigest: true },
+  { name: "invented node counterevidence (redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_SCHEMA_DENIED", apply: (p) => { node(p, 0).counterevidence = ["invented-counterevidence"]; }, redigest: true },
+  { name: "invented edge counterevidence (redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_SCHEMA_DENIED", apply: (p) => { edge(p, 0).counterevidence = ["invented-counterevidence"]; }, redigest: true },
+  { name: "rewritten node source reference (redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_STALE_DENIED", apply: (p) => { (node(p, 0).sourceEvidence as AnyRecord).reference = "relation"; }, redigest: true },
+  { name: "invented node source reference (redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_STALE_DENIED", apply: (p) => { (node(p, 1).sourceEvidence as AnyRecord).reference = "invented-reference"; }, redigest: true },
+  { name: "rewritten edge source reference (redigested)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_STALE_DENIED", apply: (p) => { (edge(p, 0).sourceEvidence as AnyRecord).reference = "canonicalKnowledge"; }, redigest: true },
   { name: "top projectionDigest flip (digest mismatch)", expected: "KALEIDOSPHERE_ANALYTICS_PROJECTION_DIGEST_DENIED", apply: (p) => { const d = p.projectionDigest as string; p.projectionDigest = (d[0] === "0" ? "1" : "0") + d.slice(1); } },
 ];
 
 test("XRA-PS-01 AC03 returns a structured denial (no exception, no partial mutation, no ordinary success) for every adversarial input", () => {
-  assert.equal(MATRIX.length, 26, "adversarial matrix breadth");
+  assert.equal(MATRIX.length, 34, "adversarial matrix breadth");
   for (const c of MATRIX) {
     const candidate = cloneProjection();
     c.apply(candidate);

@@ -48,33 +48,33 @@ const SOURCE_CONTRACT_VERSION = "v2" as const;
 const OWNER = "PanSphaira" as const;
 const OWNER_DATA_CLASS = "PUBLIC_SYNTHETIC_NON_CUSTOMER" as const;
 const CAPABILITY_ID = "CKS-12_SYNTHETIC_KNOWLEDGE_DECISION_LINEAGE" as const;
-const CANONICAL_KNOWLEDGE = Object.freeze({
+const CANONICAL_KNOWLEDGE = freeze({
   knowledgeId: "CKS-12-KNOWLEDGE-001",
   knowledgeVersion: "v1",
   knowledgeSha256: "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
-}) as const;
-const RELATION = Object.freeze({
+} as const);
+const RELATION = freeze({
   edgeId: "CKS-12-EDGE-KNOWLEDGE-001-DECISION-001",
   from: "knowledge-001",
   to: "decision-001",
   relation: "KNOWLEDGE_USED_BY_DECISION",
-}) as const;
-const EXPECTED_EVIDENCE = Object.freeze([
-  Object.freeze({
+} as const);
+const EXPECTED_EVIDENCE = freeze([
+  {
     evidenceId: "CKS-12-VALIDATION-RECEIPT-001",
     evidenceVersion: "v1",
     evidenceRole: "KNOWLEDGE_QUALIFICATION",
     sourceReceiptSha256: "38cba2f03660d759751518940c8eb0cf658ad411a7e12bba92337b5be5491aae",
     immutable: true,
-  }),
-  Object.freeze({
+  },
+  {
     evidenceId: "CKS-12-LINEAGE-RECEIPT-001",
     evidenceVersion: "v1",
     evidenceRole: "RELATION_ASSERTION",
     sourceReceiptSha256: "ef7dff41f22d574799242457705b10ef9c965f4f0374ef3d84fe134d38639d57",
     immutable: true,
-  }),
-]) as const;
+  },
+] as const);
 /** A faithful structural reproduction of the CKS-12 owner edge-evidence inputs. */
 const OWNER_INPUTS = Object.freeze({
   schemaVersion: SOURCE_CONTRACT,
@@ -88,10 +88,12 @@ const OWNER_INPUTS = Object.freeze({
 /** Digest of the selected existing CKS proof inputs (matches CKS-12 ownerEvidenceInputsSha256). */
 export const SOURCE_CONTRACT_SHA256 = digest(OWNER_INPUTS);
 
-const FROZEN_SUBJECTS = Object.freeze([
-  Object.freeze({ id: "knowledge-001", kind: "KNOWLEDGE", reference: "canonicalKnowledge" } as const),
-  Object.freeze({ id: "decision-001", kind: "DECISION", reference: "relation" } as const),
-]) as const;
+const FROZEN_SUBJECTS = freeze([
+  { id: "knowledge-001", kind: "KNOWLEDGE", reference: "canonicalKnowledge" },
+  { id: "decision-001", kind: "DECISION", reference: "relation" },
+] as const);
+/** Frozen source-evidence reference of the single purpose-bound edge. */
+const EDGE_SOURCE_REFERENCE = "edge" as const;
 
 const NONCLAIMS = Object.freeze([
   "NO_RELATION_TRUTH_FROM_ENDPOINTS",
@@ -325,7 +327,7 @@ export function buildKaleidosphereAnalyticsProjectionV1(): KaleidosphereAnalytic
     from: RELATION.from,
     to: RELATION.to,
     relation: RELATION.relation,
-    sourceEvidence: nodeSourceEvidence("edge"),
+    sourceEvidence: nodeSourceEvidence(EDGE_SOURCE_REFERENCE),
     evidence,
     evidenceSha256: digest(evidence),
     coverage: "FULL",
@@ -439,17 +441,32 @@ export function verifyKaleidosphereAnalyticsProjectionV1(value: unknown): Kaleid
         mark(CODE.SCHEMA, "node must carry the v1 node keys");
         continue;
       }
-      if (typeof node.id !== "string" || (node.kind !== "KNOWLEDGE" && node.kind !== "DECISION")) {
+      // The (id, kind) pairing must be the exact frozen subject: a re-digested
+      // projection with swapped kinds is not the frozen purpose-bound projection
+      // and is denied even though every digest is self-consistent (mirrors the
+      // CKS-12 oracle's exact frozen-subject convention).
+      const subject = typeof node.id === "string" ? FROZEN_SUBJECTS.find((candidate) => candidate.id === node.id) : undefined;
+      if (subject === undefined || node.kind !== subject.kind) {
         mark(CODE.SCHEMA, "node id and kind must be the frozen synthetic subjects");
       }
       const nodeSource = asExactRecord(node.sourceEvidence, SOURCE_EVIDENCE_KEYS);
-      if (nodeSource === null || nodeSource.contract !== SOURCE_CONTRACT || nodeSource.contractSha256 !== SOURCE_CONTRACT_SHA256) {
+      if (
+        nodeSource === null
+        || nodeSource.contract !== SOURCE_CONTRACT
+        || nodeSource.contractSha256 !== SOURCE_CONTRACT_SHA256
+        || (subject !== undefined && nodeSource.reference !== subject.reference)
+      ) {
         mark(CODE.STALE, "node source evidence is stale or not the frozen CKS proof input");
       }
       if (node.authority !== "NONE") {
         mark(CODE.AUTHORITY, "node authority must remain NONE");
       }
-      if (node.coverage !== "FULL" || node.unknown !== false || !Array.isArray(node.counterevidence)) {
+      if (
+        node.coverage !== "FULL"
+        || node.unknown !== false
+        || !Array.isArray(node.counterevidence)
+        || node.counterevidence.length > 0
+      ) {
         mark(CODE.SCHEMA, "node coverage, unknown, and counterevidence must be the frozen v1 values");
       }
       if (typeof node.id === "string") {
@@ -457,7 +474,7 @@ export function verifyKaleidosphereAnalyticsProjectionV1(value: unknown): Kaleid
         seenIds.add(node.id);
       }
     }
-    const frozenIds = FROZEN_SUBJECTS.map((subject) => subject.id);
+    const frozenIds: string[] = FROZEN_SUBJECTS.map((subject) => subject.id);
     for (const id of seenIds) if (!frozenIds.includes(id)) mark(CODE.OVERBROAD, `node ${id} is outside the frozen purpose-bound subjects`);
     for (const id of frozenIds) if (!seenIds.has(id)) mark(CODE.SCHEMA, `frozen subject ${id} is missing from the projection`);
     if (nodes.length > frozenIds.length) mark(CODE.OVERBROAD, "the projection carries more nodes than the frozen purpose-bound subjects");
@@ -479,7 +496,12 @@ export function verifyKaleidosphereAnalyticsProjectionV1(value: unknown): Kaleid
         mark(CODE.SCHEMA, "edge must be the frozen purpose-bound relation");
       }
       const edgeSource = asExactRecord(edge.sourceEvidence, SOURCE_EVIDENCE_KEYS);
-      if (edgeSource === null || edgeSource.contract !== SOURCE_CONTRACT || edgeSource.contractSha256 !== SOURCE_CONTRACT_SHA256) {
+      if (
+        edgeSource === null
+        || edgeSource.contract !== SOURCE_CONTRACT
+        || edgeSource.contractSha256 !== SOURCE_CONTRACT_SHA256
+        || edgeSource.reference !== EDGE_SOURCE_REFERENCE
+      ) {
         mark(CODE.STALE, "edge source evidence is stale or not the frozen CKS proof input");
       }
       const evidence = asArray(edge.evidence);
@@ -521,7 +543,12 @@ export function verifyKaleidosphereAnalyticsProjectionV1(value: unknown): Kaleid
       ) {
         mark(CODE.AUTHORITY, "edge authority, promotion, and effect must remain NONE / not granted");
       }
-      if (edge.coverage !== "FULL" || edge.unknown !== false || !Array.isArray(edge.counterevidence)) {
+      if (
+        edge.coverage !== "FULL"
+        || edge.unknown !== false
+        || !Array.isArray(edge.counterevidence)
+        || edge.counterevidence.length > 0
+      ) {
         mark(CODE.SCHEMA, "edge coverage, unknown, and counterevidence must be the frozen v1 values");
       }
     }
