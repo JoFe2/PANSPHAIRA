@@ -1061,7 +1061,7 @@ f81446ae911121725208ba43be1c4535b8c4ecae38534c68178e36fc3cd0debc  ./tests/cks-05
 62ffe186cbf8dbc363bfcecc57bbfe8538fbc093f3f19b04acdbebe1913cb8df  ./tests/cks-05-terminal-falsification.test.mjs
 9168b0ad9f980b7ec53492533cf4454aa2e56e5986b4beb2d11ac1ba3b43fff2  ./tests/cks-07-empty-kb-dry-run.test.mjs
 7937029685345d74b463f7d83e04828e0dd6fe77c9539bd15fd4ee67d266fabb  ./tests/cks-07-empty-kb-metrics.test.mjs
-2883cfc6f0c3e109f6c9997e8f3f0cd3506d10af7d8f361e37f301578b0d210c  ./tests/cks-07-public-readback.test.mjs
+b4377d9afacf6c7028775eb6800c1673c06b45b2afc541c5c150abdfa9936d37  ./tests/cks-07-public-readback.test.mjs
 b4e9b4a1dac95b30c54df385a22f73dda319fbb6ca8d8bd4debed235b08de6b0  ./tests/cks-08-lineage-dry-run.test.mjs
 6a8f049cce939927dd6936d47c7322ec5fd97afdd8380da062aee921c3e767a7  ./tests/cks-08-public-readback.test.mjs
 15c51bdf7a54ad88ded39dbfab98c578022bd6061ef7c479d4e2ab1a1410866c  ./tests/cks-08-synthetic-lineage-fixtures.test.mjs
@@ -1761,5 +1761,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-8a97e742637dd8c3d07035e4f7385fd38c4c735d20bab33e7baf06c52bfdd615  ./verification/verification-dag-v2.json
+77a3e52af1a3f80a70199b6a4256af68ca2ac23afbb5c15895b4516112967888  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

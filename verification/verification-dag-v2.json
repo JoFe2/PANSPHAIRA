@@ -1475,7 +1475,7 @@
         {
           "path": "tests/cks-07-public-readback.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "2883cfc6f0c3e109f6c9997e8f3f0cd3506d10af7d8f361e37f301578b0d210c"
+          "sha256": "b4377d9afacf6c7028775eb6800c1673c06b45b2afc541c5c150abdfa9936d37"
         },
         {
           "path": "tests/cks-gap-acquisition.test.ts",
