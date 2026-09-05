@@ -415,6 +415,52 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.match(incomingInvoice, /`WORK_IN_PROGRESS_PLANNED_NOT_DELIVERED`/);
   assert.match(incomingInvoice, /Work-package specifications \| `6\/6` planned/);
   assert.match(incomingInvoice, /Public AP implementation issues \| `6\/6` open/);
+  // PS373: ERV setup-agent dialogue and baseline-vs-adapted variant proof.
+  // README teaser states the short-term proof adds a bounded setup-agent
+  // dialogue that configures an altered ERV requirement by reusing existing
+  // capability/process variants (without claiming it is delivered).
+  assert.match(readme, /bounded setup-agent dialogue/);
+  assert.match(readme, /reusing existing\s+capability\/process variants/);
+  assert.match(readme, /configure an altered ERV requirement/);
+  // The ERV doc documents the setup pipeline.
+  assert.match(incomingInvoice, /requirement\s*→\s*clarification dialogue/);
+  assert.match(incomingInvoice, /versioned configuration delta/);
+  assert.match(incomingInvoice, /reused capabilities/);
+  assert.match(incomingInvoice, /reuse receipt/);
+  // Both valid compositions: self-contained core and optional ERP-enhanced.
+  assert.match(incomingInvoice, /ERV Capability Core/);
+  assert.match(incomingInvoice, /local decision and\s+evidence package/);
+  assert.match(incomingInvoice, /ERP-enhanced/);
+  assert.match(incomingInvoice, /authoritative ERP reads/);
+  assert.match(incomingInvoice, /system-of-record readback/);
+  assert.match(incomingInvoice, /not a prerequisite for the core proof/);
+  assert.match(incomingInvoice, /productive posting remains separately authorized/);
+  // Baseline vs adapted variant: digests preserved, oracle-predicted behavior.
+  assert.match(incomingInvoice, /preserve the exact core and\s+module digests/);
+  assert.match(incomingInvoice, /oracle-predicted/);
+  assert.match(incomingInvoice, /configuration-specific behavior/);
+  // Falsifiers remain explicit.
+  assert.match(incomingInvoice, /Core mutation, substituting an answer/);
+  assert.match(incomingInvoice, /omitting the delta/);
+  assert.match(incomingInvoice, /unsupported\s+function or requirement/);
+  assert.match(incomingInvoice, /hiding Authority are falsifiers/);
+  // Public acceptance count moves 28 → 34 without a delivered claim.
+  assert.match(incomingInvoice, /Acceptance identifiers \| `34\/34`/);
+  assert.doesNotMatch(incomingInvoice, /`28\/28`/);
+  assert.match(incomingInvoice, /AP-05-AC05/);
+  assert.match(incomingInvoice, /AP-05-AC08/);
+  assert.match(incomingInvoice, /AP-06-AC06/);
+  assert.match(incomingInvoice, /AP-06-AC07/);
+  assert.match(incomingInvoice, /not delivered/);
+  // Replay and promotion gating on the new criteria.
+  assert.match(incomingInvoice, /replays on Current Main/);
+  assert.match(incomingInvoice, /dependency order/);
+  assert.match(incomingInvoice, /`GO` or `NARROW_GO` verdict satisfying/);
+  // Required standalone ERV package extensions and optional BI composition.
+  assert.match(incomingInvoice, /github\.com\/JoFe2\/PANSPHAIRA\/issues\/374/);
+  assert.match(incomingInvoice, /github\.com\/JoFe2\/PANSPHAIRA\/issues\/375/);
+  assert.match(incomingInvoice, /github\.com\/JoFe2\/KaleidoSphere\/issues\/157/);
+  assert.match(incomingInvoice, /does not gate core use/);
   assert.doesNotMatch(readme, /\b(?:infinite|one-click|minutes?|hours?|production-ready)\b/i);
   assert.ok(words.length >= 600 && words.length <= 1000, `README_WORD_COUNT:${words.length}`);
   assert.ok(h2s.length <= 8, `README_H2_COUNT:${h2s.length}`);
