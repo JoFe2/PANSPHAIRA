@@ -107,6 +107,7 @@ export * from "./erp-order-capability-cell.js";
 export * from "./incoming-invoice-blueprint.js";
 export * from "./incoming-invoice-intake.js";
 export * from "./incoming-invoice-extraction-benchmark.js";
+export * from "./incoming-invoice-erv.js";
 export * from "./voice-local-ptt.js";
 export * from "./usage-insights.js";
 export * from "./competence-knowledge-vocabulary.js";

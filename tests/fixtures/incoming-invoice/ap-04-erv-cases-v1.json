@@ -1,0 +1,592 @@
+{
+  "schemaVersion": "chimpmaera.incoming-invoice/erv-case-pack/v1",
+  "packId": "ap-04-local-synthetic-erv-cases-v1",
+  "frozenAt": "2026-09-02T00:00:00.000Z",
+  "authority": {
+    "mode": "LOCAL_SYNTHETIC_PROOF",
+    "customerData": false,
+    "externalProvider": false,
+    "productivePosting": false
+  },
+  "variants": {
+    "matchingModes": [
+      {
+        "variantId": "TWO_WAY_INVOICE_PO_V1",
+        "version": "1.0.0",
+        "requiredKinds": [
+          "SUPPLIER",
+          "PURCHASE_ORDER",
+          "INVOICE"
+        ],
+        "amountKinds": [
+          "INVOICE",
+          "PURCHASE_ORDER"
+        ]
+      },
+      {
+        "variantId": "THREE_WAY_INVOICE_PO_RECEIPT_V1",
+        "version": "1.0.0",
+        "requiredKinds": [
+          "SUPPLIER",
+          "PURCHASE_ORDER",
+          "RECEIPT",
+          "INVOICE"
+        ],
+        "amountKinds": [
+          "INVOICE",
+          "PURCHASE_ORDER",
+          "RECEIPT"
+        ]
+      }
+    ],
+    "tolerancePolicies": [
+      {
+        "variantId": "STRICT_ZERO_V1",
+        "version": "1.0.0",
+        "absoluteToleranceMinor": 0,
+        "rateBasisPoints": 0
+      },
+      {
+        "variantId": "ABS_MINOR_V1",
+        "version": "1.0.0",
+        "absoluteToleranceMinor": 50,
+        "rateBasisPoints": 0
+      },
+      {
+        "variantId": "RATE_BPS_V1",
+        "version": "1.0.0",
+        "absoluteToleranceMinor": 0,
+        "rateBasisPoints": 100
+      }
+    ]
+  },
+  "cases": [
+    {
+      "caseId": "two-way-matched-strict",
+      "matchingMode": {
+        "variantId": "TWO_WAY_INVOICE_PO_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "STRICT_ZERO_V1",
+        "version": "1.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "5756fbaff13516efbe40468a7ad24eb1cd2ab8732527962253f96e55917f1f72"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "two-way-matched-abs-tolerance",
+      "matchingMode": {
+        "variantId": "TWO_WAY_INVOICE_PO_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "ABS_MINOR_V1",
+        "version": "1.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2430,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "c1e3be09f27bf94267905318f89c61e403be20e823b6742a93dceae95343492f"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "three-way-matched-rate-tolerance",
+      "matchingMode": {
+        "variantId": "THREE_WAY_INVOICE_PO_RECEIPT_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "RATE_BPS_V1",
+        "version": "1.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "RECEIPT",
+            "referenceId": "RCV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#RCV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "79bea718dc45481ebfaa188335ba544d2f2fc3f81d77deb1fbb4ce4c641fd67b"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2415,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "5d3af5de480dad0c51a48fc330854665b8e394cbb3795ffbf0e322861747ee46"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "three-way-conflict-strict",
+      "matchingMode": {
+        "variantId": "THREE_WAY_INVOICE_PO_RECEIPT_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "STRICT_ZERO_V1",
+        "version": "1.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "RECEIPT",
+            "referenceId": "RCV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2350,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#RCV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "518c8e11ab6f6bfd3bd91091b47f2b1ba9881abf09750bfac990ab2fcb9051f9"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "5756fbaff13516efbe40468a7ad24eb1cd2ab8732527962253f96e55917f1f72"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "three-way-missing-receipt-context",
+      "matchingMode": {
+        "variantId": "THREE_WAY_INVOICE_PO_RECEIPT_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "STRICT_ZERO_V1",
+        "version": "1.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "5756fbaff13516efbe40468a7ad24eb1cd2ab8732527962253f96e55917f1f72"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "two-way-unverified-reference-evidence",
+      "matchingMode": {
+        "variantId": "TWO_WAY_INVOICE_PO_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "STRICT_ZERO_V1",
+        "version": "1.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "two-way-unknown-variant-version",
+      "matchingMode": {
+        "variantId": "TWO_WAY_INVOICE_PO_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "ABS_MINOR_V1",
+        "version": "2.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "5756fbaff13516efbe40468a7ad24eb1cd2ab8732527962253f96e55917f1f72"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "two-way-productive-posting-denied",
+      "matchingMode": {
+        "variantId": "TWO_WAY_INVOICE_PO_V1",
+        "version": "1.0.0"
+      },
+      "tolerancePolicy": {
+        "variantId": "STRICT_ZERO_V1",
+        "version": "1.0.0"
+      },
+      "requestedEffects": [
+        "READ_SYNTHETIC",
+        "WRITE_LOCAL_PROOF",
+        "POST_PRODUCTIVE"
+      ],
+      "references": [
+        {
+          "body": {
+            "referenceKind": "SUPPLIER",
+            "referenceId": "SUP-SYN-SUP-001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 0,
+            "quantity": 0
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#SUP-SYN-SUP-001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "9e481c38b78c0cdf559c2cc155313e33ee2929824ea2e4bca8b8b6bc10ca8160"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "PURCHASE_ORDER",
+            "referenceId": "PO-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#PO-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "418afe8b62358f4a19b7ea7bd4c26330849af8f279cfbe64f0c9040ec8095c00"
+          }
+        },
+        {
+          "body": {
+            "referenceKind": "INVOICE",
+            "referenceId": "INV-2026-0001",
+            "supplierId": "SYN-SUP-001",
+            "matchAmountMinor": 2400,
+            "quantity": 2
+          },
+          "evidence": {
+            "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+            "locator": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json#INV-2026-0001",
+            "generator": "AP-04_FROZEN_HAND_AUTHORED_V1",
+            "contentSha256": "5756fbaff13516efbe40468a7ad24eb1cd2ab8732527962253f96e55917f1f72"
+          }
+        }
+      ]
+    }
+  ]
+}
