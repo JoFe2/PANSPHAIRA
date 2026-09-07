@@ -2625,7 +2625,7 @@
         {
           "path": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
           "role": "VALIDATOR",
-          "sha256": "bbf7561c1101c14a071cbd3b53a1b2beb2bb913f682248fbc3e3c77f6db7e0db"
+          "sha256": "127fd40a64f8dadb9024561f6f493ad27bd6f3dcf0365edb4dccca75464e00b4"
         },
         {
           "path": "src/cks-12/pattern-shadow-workflow.ts",
@@ -2690,7 +2690,7 @@
         {
           "path": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
           "role": "VALIDATOR",
-          "sha256": "79830dfcbf9e7a145d85de04219fe1cf3d9f403e9375e949650f0377d5eb7995"
+          "sha256": "b7e4611f13eb9114d207b6c14ea2853058daa377fb6f8833e4653a25099b1ffe"
         },
         {
           "path": "tests/cks-12/local-integration.test.ts",
@@ -4766,7 +4766,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5e163bda2c1a0ca3f5dfa25d54889b73123ed322161d8585a5449a7472766401"
+          "sha256": "8ffc2368a1ad48b31758f4266a2433fdf2411fd83af8e6c0582718c31e52bafc"
         },
         {
           "path": "tests/release-governance.test.mjs",

@@ -99,6 +99,17 @@ test("XRA-PS-02 AC03 receipt binds both released heads and every local chain sta
     effect: "NONE",
   });
 
+  const creatorIncompleteCandidate = structuredClone(candidate) as Record<string, any>;
+  delete creatorIncompleteCandidate.evidence;
+  creatorIncompleteCandidate.candidateDigest = candidateDigestV1(creatorIncompleteCandidate as CandidateV1);
+  const creatorIncompleteAdjudication = adjudicateCandidateV1({ candidate: creatorIncompleteCandidate, releasedHeads: RELEASED_HEADS });
+  assert.equal(creatorIncompleteAdjudication.outcome, "DENIED");
+  assert.throws(() => createPairedAdjudicationReceiptV1({
+    releasedHeads: RELEASED_HEADS,
+    candidate: creatorIncompleteCandidate as CandidateV1,
+    adjudication: creatorIncompleteAdjudication,
+  }), /XRA_PS_02_RECEIPT_INPUT_DENIED/);
+
   const tampered = structuredClone(receipt) as Record<string, any>;
   tampered.releasedHeads.kaleidoSphere = "e".repeat(40);
   assert.equal(verifyPairedAdjudicationReceiptV1(tampered).outcome, "DENIED");

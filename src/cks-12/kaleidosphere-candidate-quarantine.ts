@@ -458,6 +458,9 @@ export function createPairedAdjudicationReceiptV1(input: Readonly<{
   const authoritative = buildAuthoritativeAdjudicationInputs();
   if (!validHeads(input.releasedHeads) || !authoritativeHeads(input.releasedHeads, authoritative)) throw new TypeError("XRA_PS_02_RELEASED_HEAD_DENIED");
   if (
+    !validCandidateRecord(input.candidate)
+    || !validAdjudicationRecord(input.adjudication)
+    ||
     candidateDigestV1(input.candidate) !== input.candidate.candidateDigest
     || canonicalJson(input.candidate.releasedHeads) !== canonicalJson(input.releasedHeads)
     || canonicalJson(input.adjudication) !== canonicalJson(adjudicateCandidateV1({ candidate: input.candidate, releasedHeads: input.releasedHeads }))
