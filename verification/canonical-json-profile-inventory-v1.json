@@ -90,6 +90,14 @@
       "fromSha256": "ed305fbf67bc649682876730e71c2b795d18fade41ddb3c5f1d67f1072ba189b",
       "toSha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
       "reason": "Advance the Verification DAG to graph v45 and canonically own the bounded current-head Docker E2E contract, focused fail-closed proof and repository-only implementation record; admitted v1 and reviewed v2-v8 digests remain immutable."
+    },
+    {
+      "migrationId": "P0-PS391-AUD-01/OWNER-AUTHORITY-USE-TIME-REVALIDATION/V2",
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "profileVersion": 2,
+      "fromSha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
+      "toSha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+      "reason": "Bind the owner-authority use-time revalidation implementation to the immutable admitted-base digest; the admitted v1 digest remains immutable."
     }
   ],
   "scanScope": {
@@ -149,7 +157,7 @@
       "classification": "implementation",
       "owner": "demo",
       "pinned": true,
-      "sha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5"
+      "sha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036"
     },
     {
       "file": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
@@ -746,8 +754,8 @@
   "byteObligations": [
     {
       "path": "demo/runtime/enforcement-gate.mjs",
-      "sha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
-      "basis": "profile-implementation"
+      "sha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+      "basis": "profile-version-migration"
     },
     {
       "path": "docs/evidence/conveyor/terra-psai285-canonical-root-qs-01.json",

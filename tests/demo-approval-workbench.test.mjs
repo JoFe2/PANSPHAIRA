@@ -63,6 +63,7 @@ function harness({
   root,
   snapshotRecords = [],
   snapshotTransform = (snapshot) => snapshot,
+  assertPolicyUse = () => true,
 } = {}) {
   const clock = { value: nowMs };
   const dir = root ?? mkdtempSync(join(tmpdir(), "cm-approval-workbench-"));
@@ -102,6 +103,7 @@ function harness({
     adminAiPolicyDigest: policyDigest,
     now: () => clock.value,
     authorityContext,
+    assertPolicyUse,
   });
   const poc = new AdminAiPoc({
     policy,
@@ -459,6 +461,117 @@ test("not-yet-valid and expired leases fail before provider access", async () =>
     );
     assert.equal(current.mutations(), 0);
   }
+});
+
+test("deferred snapshot read revalidates lease before reservation", async () => {
+  let releaseSnapshot;
+  let resolveSnapshotReadStarted;
+  const snapshotReadStarted = new Promise((resolve) => {
+    resolveSnapshotReadStarted = resolve;
+  });
+  const deferredSnapshot = new Promise((resolve) => {
+    releaseSnapshot = resolve;
+  });
+  let reads = 0;
+  const current = harness({
+    snapshotTransform: async (snapshot) => {
+      reads += 1;
+      if (reads === 3) {
+        resolveSnapshotReadStarted();
+        await deferredSnapshot;
+      }
+      return snapshot;
+    },
+  });
+  const { decision, proposal } = await escalation(current, "temporal-001");
+  const approved = await ownerDecision(current, decision, "APPROVE");
+  const pending = current.gate.execute(
+    localRequest(),
+    effectEnvelope(decision, proposal, approved.authority),
+  );
+  await snapshotReadStarted;
+  current.clock.value = approved.authority.expiresAtMs;
+  releaseSnapshot();
+  await assert.rejects(pending, /AUTHORITY_EXPIRED_DENIED/);
+  assert.equal(current.mutations(), 0);
+  assert.deepEqual(current.gate.state.reservations, {});
+});
+
+test("deferred snapshot read revalidates policy and profile generations", async () => {
+  for (const [label, change] of [
+    ["policy", (current) => { current.gate.authorityContext.policyGeneration += 1; }],
+    ["profile", (current) => { current.gate.authorityContext.profileGeneration = "profile-revoked-v2"; }],
+  ]) {
+    let releaseSnapshot;
+    let resolveSnapshotReadStarted;
+    const snapshotReadStarted = new Promise((resolve) => {
+      resolveSnapshotReadStarted = resolve;
+    });
+    const deferredSnapshot = new Promise((resolve) => {
+      releaseSnapshot = resolve;
+    });
+    let reads = 0;
+    const current = harness({
+      snapshotTransform: async (snapshot) => {
+        reads += 1;
+        if (reads === 3) {
+          resolveSnapshotReadStarted();
+          await deferredSnapshot;
+        }
+        return snapshot;
+      },
+    });
+    const { decision, proposal } = await escalation(current, `binding-${label}`);
+    const approved = await ownerDecision(current, decision, "APPROVE");
+    const pending = current.gate.execute(
+      localRequest(),
+      effectEnvelope(decision, proposal, approved.authority),
+    );
+    await snapshotReadStarted;
+    change(current);
+    releaseSnapshot();
+    await assert.rejects(pending, /OWNER_AUTHORITY_INVALID_DENIED/);
+    assert.equal(current.mutations(), 0);
+    assert.deepEqual(current.gate.state.reservations, {});
+  }
+});
+
+test("deferred snapshot read revalidates the current policy state", async () => {
+  let revoked = false;
+  let releaseSnapshot;
+  let resolveSnapshotReadStarted;
+  const snapshotReadStarted = new Promise((resolve) => {
+    resolveSnapshotReadStarted = resolve;
+  });
+  const deferredSnapshot = new Promise((resolve) => {
+    releaseSnapshot = resolve;
+  });
+  let reads = 0;
+  const current = harness({
+    assertPolicyUse: () => {
+      if (revoked) throw new Error("POLICY_USE_REVOKED_DENIED");
+    },
+    snapshotTransform: async (snapshot) => {
+      reads += 1;
+      if (reads === 3) {
+        resolveSnapshotReadStarted();
+        await deferredSnapshot;
+      }
+      return snapshot;
+    },
+  });
+  const { decision, proposal } = await escalation(current, "revocation-001");
+  const approved = await ownerDecision(current, decision, "APPROVE");
+  const pending = current.gate.execute(
+    localRequest(),
+    effectEnvelope(decision, proposal, approved.authority),
+  );
+  await snapshotReadStarted;
+  revoked = true;
+  releaseSnapshot();
+  await assert.rejects(pending, /POLICY_USE_REVOKED_DENIED/);
+  assert.equal(current.mutations(), 0);
+  assert.deepEqual(current.gate.state.reservations, {});
 });
 
 test("consumed authority replay cannot act a second time", async () => {
