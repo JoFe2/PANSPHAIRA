@@ -226,7 +226,7 @@ a20a80657717216974989224a608ac2153df933ce4105c2d01fe706523011ce4  ./demo/runtime
 9d6bbe24f4d1343f41cac830ee8ee035157cebbf70ae96961045dbec8e869dc5  ./demo/runtime/admin-ai-policy.mjs
 9b7e133473dde1d060812d1689c4e21aea864a59fbfca3826018f52dda9769d6  ./demo/runtime/approval-workbench.mjs
 48bdfb5154e5a1deb066de20c7edcd671211622950011b9d2bf22e17bfe69973  ./demo/runtime/authoritative-approval-snapshot.mjs
-14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5  ./demo/runtime/enforcement-gate.mjs
+ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036  ./demo/runtime/enforcement-gate.mjs
 53efb14cd13dc1cf851570905dc06571248a72d3c4510ffe208427d6e4eaa9db  ./demo/runtime/paperless-ngx-zoo-adapter.mjs
 47bf4724a85c6f208d29faefebfbc4650949b2392f5672ef0c5df4b92718ff63  ./demo/runtime/policy-evaluator.mjs
 a509d9db5668cfe5e3bcd32b6a0f8140f248ccbc403dc465cc12751b70329d51  ./demo/runtime/policy-generation-fence.mjs
@@ -943,8 +943,8 @@ d9425a27b387b69f62c0a53d9b1ffee6b5b48a99c53c2ea3ef1493a547ea238e  ./scripts/veri
 f5545b9c65c4c136baf60fe8f190e253f9a397ef805647fdf61a8ec45e0a29e2  ./security/openclaw-m1.3-evidence-v1.json
 c4359d5548a5b6cfaee765979879cb348283b34f47f4d3273c188c6eeaea7da6  ./security/openclaw-m1.4-evidence-v1.json
 9827bf56a836d90d54ca109b15797bc9229972cbf53b3218ab589b03be264f91  ./security/openclaw-m1.5-evidence-index-v1.json
-6cc66997ad5fb1daaae5390a9aa98ca962640fc7c05271c3f221875e5a09eb90  ./security/secure-default-proof-evidence-v1.json
-1c210c88d277387fe06030d04c0a94d31fe175e60791de9c72c8e39f16d223cd  ./security/secure-default-proof-v1.json
+c9c6f5aabd04aa34faf2706be04d82fca8c4769c6191b6c3061ffd91d7a103c2  ./security/secure-default-proof-evidence-v1.json
+84379afd84bc471c5b59f7ecd9698a0b27660fd6ded4b15319c8648e97deff49  ./security/secure-default-proof-v1.json
 31a23830db55875a0a98f93c4f40b518acf243e7384cc8c7b7e2533af66838b2  ./src/cks-10/projection-envelope-guards.mjs
 aeb383222801cf976a69f0eab00465c6323a9000ba1d1c72dea1a39b7c9ab7fc  ./src/cks-10/read-only-projection-publisher.mjs
 cf0fe8b89f2c519fc96c2c1709d5e49df3b239945ac26c79bd7ddc4386c174c6  ./src/cks-12/deterministic-function-cost-parity.ts
@@ -1146,7 +1146,7 @@ fbc806eff28ce4064599e327f0bb2655c798c4478ac957ee0b3ba20e5a44f0e6  ./tests/cscl-0
 7856f9ea03e8eaec7094ad6b70f396c6726d96d89c0f663feb07d72c80686e17  ./tests/cscl-10/sales-candidate.test.mjs
 516194226603e1b484d3a6bb9201ea9245499750f0e39c84646be75c32649e09  ./tests/daily-poc.test.mjs
 9c66323902b85d2c3eed9776da1e659a30acaa4058ab9096f35367def2f20059  ./tests/demo-admin-ai-poc.test.mjs
-2cb4aaad1ca1435c2c0abca543796f21de783ae678eabed1adac308ce1969e2b  ./tests/demo-approval-workbench.test.mjs
+818469c076fd99e9d0e9a62a94f44d38ab1ba5d25bc948967dea9aa81fd8b0da  ./tests/demo-approval-workbench.test.mjs
 fafb64246fd56a4baff65cce8859e7d3fda49b8a5d873e9e9440952052808775  ./tests/demo-current-head-e2e-delivery.test.mjs
 15b8c41a477fd83e8a45e0a141773b395062ba12e7c962714504dea3f7958dc0  ./tests/demo-current-head-e2e.test.mjs
 7008d94365118fe01861190c6f461eb10b67461810bf889d13f79cf9b2fe8b74  ./tests/demo-enforcement-gate.test.mjs
@@ -1771,5 +1771,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-4a81ded48f796d887d832fdde61b840128ba2893526ac1b1242c76bc508ab0f3  ./verification/verification-dag-v2.json
+f0c0161b97b5ee48f34769fd0b231bdb47ec87d4452452b36ec9a55e7a5c789b  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
