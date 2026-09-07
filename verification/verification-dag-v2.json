@@ -2625,7 +2625,7 @@
         {
           "path": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
           "role": "VALIDATOR",
-          "sha256": "127fd40a64f8dadb9024561f6f493ad27bd6f3dcf0365edb4dccca75464e00b4"
+          "sha256": "648e06dceab45b09230fc0cc02e0e78ad9bbcc5e5fe4faa776daa6b43e480b3e"
         },
         {
           "path": "src/cks-12/pattern-shadow-workflow.ts",
@@ -2690,7 +2690,7 @@
         {
           "path": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
           "role": "VALIDATOR",
-          "sha256": "b7e4611f13eb9114d207b6c14ea2853058daa377fb6f8833e4653a25099b1ffe"
+          "sha256": "874bfe3e8e7a69bd6a31474c5ca1b8712437a5f8e54b3d51cb48bbfce4e7507f"
         },
         {
           "path": "tests/cks-12/local-integration.test.ts",

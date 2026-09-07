@@ -157,4 +157,23 @@ test("XRA-PS-02 adjudication is fail-closed and does not invoke exotic candidate
   const result = adjudicateCandidateV1({ candidate, releasedHeads: RELEASED_HEADS });
   assert.equal(result.outcome, "DENIED");
   assert.equal(invocations, 0);
+
+  const nestedProxyCandidate = structuredClone(validCandidate()) as Record<string, any>;
+  nestedProxyCandidate.evidence[0] = new Proxy(nestedProxyCandidate.evidence[0], {
+    ownKeys: () => { invocations += 1; throw new Error("nested proxy trap"); },
+  });
+  assert.equal(adjudicateCandidateV1({ candidate: nestedProxyCandidate, releasedHeads: RELEASED_HEADS }).outcome, "DENIED");
+  assert.equal(invocations, 0);
+
+  const accessorCandidate = structuredClone(validCandidate()) as Record<string, any>;
+  Object.defineProperty(accessorCandidate.evidence[0], "evidenceId", {
+    enumerable: true,
+    get: () => { invocations += 1; throw new Error("accessor trap"); },
+  });
+  assert.equal(adjudicateCandidateV1({ candidate: accessorCandidate, releasedHeads: RELEASED_HEADS }).outcome, "DENIED");
+  assert.equal(invocations, 0);
+
+  const sharedReferenceCandidate = structuredClone(validCandidate()) as Record<string, any>;
+  sharedReferenceCandidate.evidence.push(sharedReferenceCandidate.evidence[0]);
+  assert.equal(adjudicateCandidateV1({ candidate: sharedReferenceCandidate, releasedHeads: RELEASED_HEADS }).outcome, "DENIED");
 });

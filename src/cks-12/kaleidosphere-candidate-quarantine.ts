@@ -388,8 +388,14 @@ export function adjudicateCandidateV1(input: unknown): AdjudicationV1 {
     || candidate.kaleidoSphereHead !== releasedHeads.kaleidoSphere
     || candidate.candidateHead !== releasedHeads.kaleidoSphere
     || typeof candidate.candidateDigest !== "string" || !HEX64.test(candidate.candidateDigest)
-    || candidateDigestV1(candidate as CandidateV1) !== candidate.candidateDigest
   ) return result(authoritative, "DENIED", ["FORGED_CANDIDATE_DENIED"], candidateDigest);
+  let computedCandidateDigest: string;
+  try {
+    computedCandidateDigest = candidateDigestV1(candidate as CandidateV1);
+  } catch {
+    return result(authoritative, "DENIED", ["CANDIDATE_SCHEMA_DENIED"], candidateDigest);
+  }
+  if (computedCandidateDigest !== candidate.candidateDigest) return result(authoritative, "DENIED", ["FORGED_CANDIDATE_DENIED"], candidateDigest);
   if (![
     "ACCEPTED_BOUNDED", "RESTRICTED", "DENIED", "UNKNOWN",
   ].includes(candidate.kaleidoSphereVerdict as string) || typeof candidate.unknown !== "boolean" || !Array.isArray(candidate.counterevidence)) return result(authoritative, "DENIED", ["CANDIDATE_SCHEMA_DENIED"], candidateDigest);
