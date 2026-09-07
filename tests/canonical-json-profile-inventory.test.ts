@@ -134,6 +134,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
     reason: "Advance the Verification DAG to graph v45 and canonically own the bounded current-head Docker E2E contract, focused fail-closed proof and repository-only implementation record; admitted v1 and reviewed v2-v8 digests remain immutable.",
   }),
+  Object.freeze({
+    migrationId: "P0-PS391-AUD-01/OWNER-AUTHORITY-USE-TIME-REVALIDATION/V2",
+    path: "demo/runtime/enforcement-gate.mjs",
+    profileVersion: 2,
+    fromSha256: "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
+    toSha256: "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+    reason: "Bind the owner-authority use-time revalidation implementation to the immutable admitted-base digest; the admitted v1 digest remains immutable.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -1115,8 +1123,10 @@ test("candidate ledger regeneration cannot redefine immutable base obligations",
   assert.ok(firstObligation);
   mutated.entries.set(pinned.path, "f".repeat(64));
   assert.deepEqual(validateInventory(loadInventory(), getScan(), mutated), []);
-  assert.equal(expectedByteObligations(getScan(), mutated)[0]?.sha256,
-    firstObligation.sha256);
+  const expectedFirst = expectedByteObligations(getScan(), mutated)[0];
+  assert.ok(expectedFirst);
+  const migration = PROFILE_VERSION_MIGRATIONS.find((item) => item.path === firstObligation.path);
+  assert.equal(expectedFirst.sha256, migration?.toSha256 ?? firstObligation.sha256);
 });
 
 test("negative: similar-shape site never yields an equivalence claim", () => {
