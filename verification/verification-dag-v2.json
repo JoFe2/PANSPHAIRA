@@ -2623,6 +2623,11 @@
           "sha256": "bbb8a068933045008b3ac603ffe3006d44a0a628ebe92b28add5ee7919f8fc99"
         },
         {
+          "path": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
+          "role": "VALIDATOR",
+          "sha256": "648e06dceab45b09230fc0cc02e0e78ad9bbcc5e5fe4faa776daa6b43e480b3e"
+        },
+        {
           "path": "src/cks-12/pattern-shadow-workflow.ts",
           "role": "VALIDATOR",
           "sha256": "4cc7ad94239716bc3b1556d9b8f3de68bb0fd621d9137cf6aecb0c233fc628ff"
@@ -2681,6 +2686,11 @@
           "path": "tests/cks-12/governed-promotion-lineage.test.ts",
           "role": "VALIDATOR",
           "sha256": "4c5bed64eadca67165e1909db985f0d6de501b76de9c7131da28ff47b59a4001"
+        },
+        {
+          "path": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "874bfe3e8e7a69bd6a31474c5ca1b8712437a5f8e54b3d51cb48bbfce4e7507f"
         },
         {
           "path": "tests/cks-12/local-integration.test.ts",
@@ -2846,6 +2856,11 @@
           "path": "verification/cks-12/story-step-version-receipt-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "8effa07a725ea6d662e0d1916b687e5a996de14bd916e25db69342529145589b"
+        },
+        {
+          "path": "verification/pansphaira-kaleidosphere-analytics-slice-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0139d4d435d12a3a277d999b6bd80695c56ef4d1c9e910cd3f317a0197e8dc79"
         }
       ],
       "ownedTests": [
@@ -4716,7 +4731,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "056aacae8a05ef8244802a99b79bf1ef339e4149313d9028a4b5e8ed9d44706a"
+          "sha256": "dab4fc9affd6de0fe4a0d6a8c2afd7e7c82ce5feb3c80a427172fd7cd1f25122"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4736,7 +4751,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "fe0aff3c25827bfc94d0ef7f39c0ec385e141708cc35b104ed91f019d6e6e266"
+          "sha256": "58171f9b55aa0471e561cb3ff73903818bfe96be2e18a3127ff585e3ae972d75"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4751,7 +4766,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5e163bda2c1a0ca3f5dfa25d54889b73123ed322161d8585a5449a7472766401"
+          "sha256": "8ffc2368a1ad48b31758f4266a2433fdf2411fd83af8e6c0582718c31e52bafc"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -4766,7 +4781,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "bcdf2d20be37cadae1d4c448fe63151f0cdbf5fb54d873cc5836e1481588abda"
+          "sha256": "465f53ec5f9acc543c55f2865e7b12eded4af44a89efba2e45f6e8b28a74ce1b"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5337,7 +5352,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "aff582bb2ad2ddffa742911445774dd5349eb725d26e037c860c1ffdb58844e5"
+          "sha256": "77fd364bddca7e12e8ef281361c3b342a837d24bffa935e45fd69cac8573b5f0"
         },
         {
           "path": "package-lock.json",

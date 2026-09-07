@@ -127,20 +127,20 @@
   },
   "uncertainty": [
     "Ad-hoc grep methods disagree on declaration/import counts; the scanner embedded in tests/canonical-json-profile-inventory.test.ts is the single source of truth.",
-    "Current SHA256SUMS is normalized to 1755 unique ./-prefixed paths with no duplicate or conflicting path digests.",
+    "Current SHA256SUMS is normalized to 1775 unique ./-prefixed paths with no duplicate or conflicting path digests.",
     "Owner families derive mechanically from the second path segment under src/, packages/, tools/ (e.g. 'cks' spans src/cks and packages/cks).",
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 614,
+    "filesScanned": 616,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 202,
-    "importFiles": 201,
+    "importSites": 203,
+    "importFiles": 202,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1772,
-    "ledgerUniquePaths": 1772
+    "ledgerEntries": 1775,
+    "ledgerUniquePaths": 1775
   },
   "profiles": [
     {
@@ -459,6 +459,11 @@
       "owner": "cks",
       "importSites": 3,
       "importFiles": 3
+    },
+    {
+      "owner": "cks-12",
+      "importSites": 1,
+      "importFiles": 1
     },
     {
       "owner": "competence-runtime",
