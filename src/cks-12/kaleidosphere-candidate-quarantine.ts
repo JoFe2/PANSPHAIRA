@@ -287,6 +287,78 @@ const validHeads = (value: unknown): value is ReleasedHeadsV1 => {
     && HEAD40.test(heads.kaleidoSphere);
 };
 
+const validCandidateRecord = (value: unknown): value is CandidateV1 => {
+  const candidate = exactRecord(value, [
+    "candidateDigest", "candidateHead", "candidateId", "canonicalKnowledgeSha256", "counterevidence", "evidence",
+    "kaleidoSphereHead", "kaleidoSphereVerdict", "pansphairaHead", "projectionDigest", "releasedHeads", "schemaVersion", "unknown",
+  ]);
+  if (!candidate || !validHeads(candidate.releasedHeads)) return false;
+  if (
+    typeof candidate.candidateDigest !== "string" || !HEX64.test(candidate.candidateDigest)
+    || typeof candidate.candidateHead !== "string" || !HEAD40.test(candidate.candidateHead)
+    || candidate.candidateId !== CANDIDATE_ID_V1
+    || typeof candidate.canonicalKnowledgeSha256 !== "string" || !HEX64.test(candidate.canonicalKnowledgeSha256)
+    || typeof candidate.kaleidoSphereHead !== "string" || !HEAD40.test(candidate.kaleidoSphereHead)
+    || typeof candidate.pansphairaHead !== "string" || !HEAD40.test(candidate.pansphairaHead)
+    || typeof candidate.projectionDigest !== "string" || !HEX64.test(candidate.projectionDigest)
+    || candidate.schemaVersion !== KALEIDOSPHERE_CANDIDATE_QUARANTINE_SCHEMA_V1
+    || typeof candidate.unknown !== "boolean"
+    || !["ACCEPTED_BOUNDED", "RESTRICTED", "DENIED", "UNKNOWN"].includes(candidate.kaleidoSphereVerdict as string)
+    || !Array.isArray(candidate.evidence)
+    || !Array.isArray(candidate.counterevidence)
+  ) return false;
+  return candidate.evidence.every((entry) => {
+    const evidence = exactRecord(entry, ["evidenceId", "evidenceRole", "evidenceSha256", "evidenceVersion"]);
+    return evidence !== undefined
+      && typeof evidence.evidenceId === "string"
+      && typeof evidence.evidenceRole === "string"
+      && typeof evidence.evidenceSha256 === "string"
+      && HEX64.test(evidence.evidenceSha256)
+      && typeof evidence.evidenceVersion === "string";
+  }) && candidate.counterevidence.every((entry) => {
+    const counterevidence = exactRecord(entry, ["evidenceId", "evidenceSha256", "reason"]);
+    return counterevidence !== undefined
+      && typeof counterevidence.evidenceId === "string"
+      && typeof counterevidence.evidenceSha256 === "string"
+      && HEX64.test(counterevidence.evidenceSha256)
+      && counterevidence.reason === "CONTRADICTS_OWNER_EVIDENCE";
+  });
+};
+
+const validAdjudicationRecord = (value: unknown): value is AdjudicationV1 => {
+  const adjudication = exactRecord(value, [
+    "authoritativeProjectionDigest", "authoritativeSourceContractSha256", "authority", "canonicalKnowledgeAfterSha256",
+    "canonicalKnowledgeBeforeSha256", "canonicalKnowledgeMutation", "capabilityDelta", "candidateDigest", "effect",
+    "kaleidoSphereVerdictAuthoritative", "outcome", "reasonCodes", "schemaVersion",
+  ]);
+  if (!adjudication || !Array.isArray(adjudication.reasonCodes)) return false;
+  return typeof adjudication.authoritativeProjectionDigest === "string"
+    && HEX64.test(adjudication.authoritativeProjectionDigest)
+    && typeof adjudication.authoritativeSourceContractSha256 === "string"
+    && HEX64.test(adjudication.authoritativeSourceContractSha256)
+    && adjudication.authority === "NONE"
+    && typeof adjudication.canonicalKnowledgeAfterSha256 === "string"
+    && HEX64.test(adjudication.canonicalKnowledgeAfterSha256)
+    && typeof adjudication.canonicalKnowledgeBeforeSha256 === "string"
+    && HEX64.test(adjudication.canonicalKnowledgeBeforeSha256)
+    && adjudication.canonicalKnowledgeMutation === "NONE"
+    && adjudication.capabilityDelta === "NONE"
+    && typeof adjudication.candidateDigest === "string"
+    && HEX64.test(adjudication.candidateDigest)
+    && adjudication.effect === "NONE"
+    && adjudication.kaleidoSphereVerdictAuthoritative === false
+    && ["ACCEPTED_BOUNDED", "RESTRICTED", "DENIED"].includes(adjudication.outcome as string)
+    && adjudication.reasonCodes.every((reason) => [
+      "AUTHORITATIVE_EVIDENCE_ACCEPTED",
+      "AUTHORITATIVE_EVIDENCE_RESTRICTED_UNKNOWN",
+      "CANDIDATE_SCHEMA_DENIED",
+      "CONFLICTING_COUNTEREVIDENCE_DENIED",
+      "FORGED_CANDIDATE_DENIED",
+      "STALE_HEAD_DENIED",
+    ].includes(reason as string))
+    && adjudication.schemaVersion === KALEIDOSPHERE_CANDIDATE_QUARANTINE_SCHEMA_V1;
+};
+
 const authoritativeHeads = (heads: ReleasedHeadsV1, authoritative: AuthoritativeAdjudicationInputsV1): boolean => (
   heads.pansphaira === authoritative.releasedPansphairaHead
   && heads.kaleidoSphere === authoritative.kaleidoSphereReleasedHead
@@ -412,32 +484,50 @@ export function verifyPairedAdjudicationReceiptV1(value: unknown): PairedReceipt
   const receipt = snapshot as PlainRecord;
   const keys = ["adjudication", "adjudicationDigest", "authority", "candidate", "candidateDigest", "chain", "effect", "receiptDigest", "receiptId", "releasedHeads", "schemaVersion"] as const;
   if (Reflect.ownKeys(receipt).length !== keys.length || Reflect.ownKeys(receipt).some((key) => typeof key !== "string" || !keys.includes(key as (typeof keys)[number]))) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
-  const authoritative = buildAuthoritativeAdjudicationInputs();
-  if (receipt.schemaVersion !== KALEIDOSPHERE_CANDIDATE_QUARANTINE_SCHEMA_V1 || receipt.receiptId !== ADJUDICATION_RECEIPT_ID_V1 || receipt.authority !== "NONE" || receipt.effect !== "NONE" || !validHeads(receipt.releasedHeads) || !authoritativeHeads(receipt.releasedHeads, authoritative)) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
-  const candidate = receipt.candidate as CandidateV1;
-  const adjudication = receipt.adjudication as AdjudicationV1;
-  if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate) || adjudication === null || typeof adjudication !== "object" || Array.isArray(adjudication)) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
-  const expectedAdjudication = adjudicateCandidateV1({ candidate, releasedHeads: receipt.releasedHeads });
-  if (
-    receipt.candidateDigest !== candidate.candidateDigest
-    || candidate.candidateDigest !== candidateDigestV1(candidate)
-    || receipt.adjudicationDigest !== digest(adjudication)
-    || canonicalJson(adjudication) !== canonicalJson(expectedAdjudication)
-  ) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
-  const chain = receipt.chain;
-  if (!Array.isArray(chain) || chain.length !== ADJUDICATION_CHAIN_STAGES.length || chain.some((entry, index) => {
-    const stage = exactRecord(entry, ["digest", "stage"]);
-    return !stage || stage.stage !== ADJUDICATION_CHAIN_STAGES[index] || typeof stage.digest !== "string" || !HEX64.test(stage.digest);
-  })) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
-  if (!arraysEqual(chain, authoritativeChain(authoritative, candidate, adjudication))) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
-  const expectedDigest = digest(receiptBody({ ...receipt, receiptDigest: receipt.receiptDigest } as PairedAdjudicationReceiptV1));
-  if (receipt.receiptDigest !== expectedDigest) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
-  return {
-    authority: "NONE",
-    chainStages: [...ADJUDICATION_CHAIN_STAGES],
-    effect: "NONE",
-    outcome: "VERIFIED",
-    receiptDigest: receipt.receiptDigest as string,
-    releasedHeads: receipt.releasedHeads as ReleasedHeadsV1,
-  };
+  try {
+    const authoritative = buildAuthoritativeAdjudicationInputs();
+    if (
+      receipt.schemaVersion !== KALEIDOSPHERE_CANDIDATE_QUARANTINE_SCHEMA_V1
+      || receipt.receiptId !== ADJUDICATION_RECEIPT_ID_V1
+      || receipt.authority !== "NONE"
+      || receipt.effect !== "NONE"
+      || typeof receipt.adjudicationDigest !== "string"
+      || !HEX64.test(receipt.adjudicationDigest)
+      || typeof receipt.candidateDigest !== "string"
+      || !HEX64.test(receipt.candidateDigest)
+      || typeof receipt.receiptDigest !== "string"
+      || !HEX64.test(receipt.receiptDigest)
+      || !validHeads(receipt.releasedHeads)
+      || !authoritativeHeads(receipt.releasedHeads, authoritative)
+      || !validCandidateRecord(receipt.candidate)
+      || !validAdjudicationRecord(receipt.adjudication)
+    ) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
+    const candidate = receipt.candidate;
+    const adjudication = receipt.adjudication;
+    const expectedAdjudication = adjudicateCandidateV1({ candidate, releasedHeads: receipt.releasedHeads });
+    if (
+      receipt.candidateDigest !== candidate.candidateDigest
+      || candidate.candidateDigest !== candidateDigestV1(candidate)
+      || receipt.adjudicationDigest !== digest(adjudication)
+      || canonicalJson(adjudication) !== canonicalJson(expectedAdjudication)
+    ) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
+    const chain = receipt.chain;
+    if (!Array.isArray(chain) || chain.length !== ADJUDICATION_CHAIN_STAGES.length || chain.some((entry, index) => {
+      const stage = exactRecord(entry, ["digest", "stage"]);
+      return !stage || stage.stage !== ADJUDICATION_CHAIN_STAGES[index] || typeof stage.digest !== "string" || !HEX64.test(stage.digest);
+    })) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
+    if (!arraysEqual(chain, authoritativeChain(authoritative, candidate, adjudication))) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
+    const expectedDigest = digest(receiptBody({ ...receipt, receiptDigest: receipt.receiptDigest } as PairedAdjudicationReceiptV1));
+    if (receipt.receiptDigest !== expectedDigest) return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
+    return {
+      authority: "NONE",
+      chainStages: [...ADJUDICATION_CHAIN_STAGES],
+      effect: "NONE",
+      outcome: "VERIFIED",
+      receiptDigest: receipt.receiptDigest,
+      releasedHeads: receipt.releasedHeads,
+    };
+  } catch {
+    return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
+  }
 }

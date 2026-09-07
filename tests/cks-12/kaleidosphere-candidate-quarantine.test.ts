@@ -107,6 +107,14 @@ test("XRA-PS-02 AC03 receipt binds both released heads and every local chain sta
   malformed.candidate = null;
   assert.equal(verifyPairedAdjudicationReceiptV1(malformed).outcome, "DENIED");
 
+  const incompleteCandidate = structuredClone(receipt) as Record<string, any>;
+  delete incompleteCandidate.candidate.evidence;
+  assert.deepEqual(verifyPairedAdjudicationReceiptV1(incompleteCandidate), { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] });
+
+  const incompleteAdjudication = structuredClone(receipt) as Record<string, any>;
+  delete incompleteAdjudication.adjudication.reasonCodes;
+  assert.deepEqual(verifyPairedAdjudicationReceiptV1(incompleteAdjudication), { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] });
+
   const forgedChain = structuredClone(receipt) as Record<string, any>;
   forgedChain.chain[0].digest = "f".repeat(64);
   assert.equal(verifyPairedAdjudicationReceiptV1(forgedChain).outcome, "DENIED");

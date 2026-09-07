@@ -6,6 +6,23 @@
   "focusedCommand": "npm run xra-ps-02:test",
   "implementation": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
   "focusedTest": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
+  "gateReceipts": [
+    {
+      "command": "npm run build --silent",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "git diff --check HEAD^..HEAD",
+      "exitCode": 0,
+      "status": "PASS"
+    }
+  ],
   "acceptance": {
     "XRA-PS-02-AC01": {
       "status": "PROVEN_LOCALLY",
@@ -67,5 +84,5 @@
     "NO_XRA_KS_01_ADMISSION_OR_EXACT_HEAD_CLOSURE",
     "NO_EXTERNAL_RELEASE_OR_CROSS_REPOSITORY_CHAIN_PROOF"
   ],
-  "integrityNote": "This slice records only its local, purpose-bound digests. The existing repository-integrity chain was updated only for the changed inventory, validator, and public-release input pins; no Root-QS, external readback, release, or parent-closure evidence is asserted."
+  "integrityNote": "This slice records only its local, purpose-bound digests. SHA256SUMS and the CKS-12 verification-DAG input chain bind this implementation, focused test, and receipt; no Root-QS, external readback, release, or parent-closure evidence is asserted."
 }
