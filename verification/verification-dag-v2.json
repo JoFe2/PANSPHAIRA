@@ -4731,7 +4731,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "dab4fc9affd6de0fe4a0d6a8c2afd7e7c82ce5feb3c80a427172fd7cd1f25122"
+          "sha256": "d800df8bbc10b2e93ed720b1cadf105d13c2967355079afd8e13f3306f7176df"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",

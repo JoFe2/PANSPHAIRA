@@ -204,6 +204,7 @@ repository_only_files = {
     "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
     "verification/external-bi-service-paired-compatibility-v1.json",
     "verification/pansphaira-kaleidosphere-analytics-slice-v1.json",
+    "verification/ps391-temporal-focused-receipt-v1.json",
     "verification/trust-compatibility-foundation-closure-v1.json",
     "tests/fixtures/local-knowledge-wiki-container/credential-like.env",
     "tests/fixtures/rks-01/raw-rag-corpus-v1.json",

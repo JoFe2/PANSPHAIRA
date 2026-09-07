@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "chimpmaera.verification/ps391-temporal-focused-receipt/v1",
+  "issue": 391,
+  "purpose": "Bound RED-before-GREEN evidence for owner-authority use-time revalidation",
+  "sourceBinding": {
+    "baseImplementationCommit": "c385745043698d5bc19fd5ee0ee9c812a1ecd44e",
+    "baseImplementationPath": "demo/runtime/enforcement-gate.mjs",
+    "baseImplementationSha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
+    "fixedImplementationCommit": "b5043ce78b64acf882522d4ab87cd2d5b6ce26a7",
+    "fixedImplementationPath": "demo/runtime/enforcement-gate.mjs",
+    "fixedImplementationSha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+    "focusedTestPath": "tests/demo-approval-workbench.test.mjs",
+    "focusedTestSha256": "818469c076fd99e9d0e9a62a94f44d38ab1ba5d25bc948967dea9aa81fd8b0da"
+  },
+  "focusedCommand": "node --test --test-name-pattern='deferred snapshot read revalidates (lease before reservation|policy and profile generations|the current policy state)' tests/demo-approval-workbench.test.mjs",
+  "temporalCases": [
+    "deferred snapshot read revalidates lease before reservation",
+    "deferred snapshot read revalidates policy and profile generations",
+    "deferred snapshot read revalidates the current policy state"
+  ],
+  "redBeforeGreen": true,
+  "executions": [
+    {
+      "stage": "RED",
+      "implementationCommit": "c385745043698d5bc19fd5ee0ee9c812a1ecd44e",
+      "exitCode": 1,
+      "tests": 3,
+      "passed": 0,
+      "failed": 3,
+      "observedFailure": "Each temporal case reported AssertionError: Missing expected rejection.",
+      "expectedDenials": [
+        "AUTHORITY_EXPIRED_DENIED",
+        "OWNER_AUTHORITY_INVALID_DENIED",
+        "POLICY_USE_REVOKED_DENIED"
+      ],
+      "expectedProviderMutationCount": 0
+    },
+    {
+      "stage": "GREEN",
+      "implementationCommit": "b5043ce78b64acf882522d4ab87cd2d5b6ce26a7",
+      "exitCode": 0,
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "providerMutationCountAssertions": [
+        0,
+        0,
+        0
+      ],
+      "result": "All selected temporal counterexamples deny before reservation and provider mutation."
+    }
+  ]
+}
