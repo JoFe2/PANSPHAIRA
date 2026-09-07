@@ -226,7 +226,7 @@ a20a80657717216974989224a608ac2153df933ce4105c2d01fe706523011ce4  ./demo/runtime
 9d6bbe24f4d1343f41cac830ee8ee035157cebbf70ae96961045dbec8e869dc5  ./demo/runtime/admin-ai-policy.mjs
 9b7e133473dde1d060812d1689c4e21aea864a59fbfca3826018f52dda9769d6  ./demo/runtime/approval-workbench.mjs
 48bdfb5154e5a1deb066de20c7edcd671211622950011b9d2bf22e17bfe69973  ./demo/runtime/authoritative-approval-snapshot.mjs
-6ec51b4f3a40279dd30ac5aa8f3f9a2644a98361ca475819621245e24f4a43f7  ./demo/runtime/enforcement-gate.mjs
+ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df  ./demo/runtime/enforcement-gate.mjs
 53efb14cd13dc1cf851570905dc06571248a72d3c4510ffe208427d6e4eaa9db  ./demo/runtime/paperless-ngx-zoo-adapter.mjs
 47bf4724a85c6f208d29faefebfbc4650949b2392f5672ef0c5df4b92718ff63  ./demo/runtime/policy-evaluator.mjs
 a509d9db5668cfe5e3bcd32b6a0f8140f248ccbc403dc465cc12751b70329d51  ./demo/runtime/policy-generation-fence.mjs

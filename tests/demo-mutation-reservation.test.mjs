@@ -243,6 +243,52 @@ test("write-then-disconnect persists AMBIGUOUS/RECONCILE and restart recovers wi
   assert.equal(restarted.state.reservations[action.replayKey].status, "APPLIED");
 });
 
+test("initially stale readback makes a conflicting ambiguous retry fail before reconciliation", async () => {
+  let mutations = 0;
+  let reconciliations = 0;
+  const current = gate({
+    provider: {
+      async mutate() {
+        mutations += 1;
+        return { id: "effect-1" };
+      },
+      async readback() {
+        return {
+          id: "effect-1",
+          description: "PanSphaira Admin AI deterministic PoC contact",
+          emailAddress: "admin-ai-poc@example.invalid",
+          firstName: "STALE-READBACK",
+          lastName: "Admin AI PoC",
+        };
+      },
+      async reconcile() {
+        reconciliations += 1;
+        return {
+          providerResult: { id: "effect-1" },
+          readback: validReadback(installerAction("installer:stale-readback-001")),
+        };
+      },
+    },
+  });
+  const firstAction = agentAction("agent:stale-readback-001");
+  await assert.rejects(
+    current.execute(request(), agentEnvelope(current, firstAction)),
+    /PROVIDER_READBACK_MISMATCH_DENIED/,
+  );
+  assert.equal(mutations, 1);
+  assert.equal(current.state.reservations[firstAction.replayKey].status, "AMBIGUOUS");
+  assert.equal(current.state.reservations[firstAction.replayKey].recovery, "RECONCILE");
+
+  const conflictingAction = installerAction(firstAction.replayKey, "CM-SECOND-STALE-001");
+  await assert.rejects(
+    current.execute(request(), installerEnvelope(current, conflictingAction)),
+    /REPLAY_KEY_CONFLICT_DENIED/,
+  );
+  assert.equal(mutations, 1);
+  assert.equal(reconciliations, 0);
+  assert.equal(current.state.effects[firstAction.replayKey], undefined);
+});
+
 test("never-response deadline aborts the operation and leaves a durable ambiguous reservation", async () => {
   let seenSignal;
   const current = gate({

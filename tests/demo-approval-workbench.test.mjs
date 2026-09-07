@@ -592,11 +592,16 @@ test("consumed authority replay cannot act a second time", async () => {
 
 test("concurrent and restart replay see the durable EXECUTING reservation", async () => {
   let releaseMutation;
+  let resolveMutationStarted;
+  const mutationStarted = new Promise((resolve) => {
+    resolveMutationStarted = resolve;
+  });
   const mutationBarrier = new Promise((resolve) => {
     releaseMutation = resolve;
   });
   const current = harness({
     mutate: async () => {
+      resolveMutationStarted();
       await mutationBarrier;
       return { id: "order-concurrent" };
     },
@@ -605,6 +610,7 @@ test("concurrent and restart replay see the durable EXECUTING reservation", asyn
   const approved = await ownerDecision(current, decision, "APPROVE");
   const envelope = effectEnvelope(decision, proposal, approved.authority);
   const first = current.gate.execute(localRequest(), envelope);
+  await mutationStarted;
 
   await assert.rejects(
     current.gate.execute(localRequest(), envelope),

@@ -715,6 +715,9 @@ export class DemoMutationGate {
   async reconcileOperation({ operationKey, action, computedDigest, authority, signal, runBounded }) {
     const reservation = this.state.reservations[operationKey];
     if (reservation?.status !== "AMBIGUOUS") return null;
+    if (reservation.actionDigest !== computedDigest) {
+      throw new Error("REPLAY_KEY_CONFLICT_DENIED");
+    }
     if (typeof this.provider.reconcile !== "function") {
       throw new Error("EFFECT_AMBIGUOUS_RECONCILE_REQUIRED");
     }
@@ -917,6 +920,9 @@ export class DemoMutationGate {
 
       const existing = this.state.reservations[operationKey];
       if (existing?.status === "AMBIGUOUS") {
+        if (existing.actionDigest !== computedDigest) {
+          throw new Error("REPLAY_KEY_CONFLICT_DENIED");
+        }
         const recovered = await this.reconcileOperation({
           operationKey,
           action,

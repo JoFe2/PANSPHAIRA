@@ -147,7 +147,7 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     path: "demo/runtime/enforcement-gate.mjs",
     profileVersion: 3,
     fromSha256: "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
-    toSha256: "6ec51b4f3a40279dd30ac5aa8f3f9a2644a98361ca475819621245e24f4a43f7",
+    toSha256: "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
     reason: "Bind the unified mutation reservation, operation deadline and uncertain-outcome recovery implementation to the reviewed P0-PS392 source digest; admitted v1 and reviewed P0-PS391 v2 bytes remain immutable.",
   }),
 ]);
