@@ -128,7 +128,7 @@ export interface IncomingInvoiceConfigurationDeltaV1 {
   readonly beforeConfigurationDigest: string;
   readonly afterConfigurationDigest: string;
   readonly reusedCapabilityIds: readonly string[];
-  readonly changedSettings: readonly Readonly<{ setting: "matchingMode" | "tolerancePolicy"; before: string; after: string }>[];
+  readonly changedSettings: readonly Readonly<{ setting: "matchingMode" | "tolerancePolicy" | "requestedEffects"; before: string; after: string }>[];
   readonly evidenceReferences: readonly string[];
   readonly unresolvedGaps: readonly string[];
   readonly authorityGranted: false;
@@ -203,7 +203,9 @@ function requirementValid(value: unknown): value is IncomingInvoiceErvRequiremen
     && typeof value.requirementId === "string" && value.requirementId.length > 0
     && validVariantShape(value.matchingMode)
     && validVariantShape(value.tolerancePolicy)
-    && Array.isArray(value.requestedEffects) && value.requestedEffects.every((effect) => typeof effect === "string")
+    && Array.isArray(value.requestedEffects) && value.requestedEffects.length > 0
+    && value.requestedEffects.every((effect) => typeof effect === "string")
+    && new Set(value.requestedEffects).size === value.requestedEffects.length
     && Array.isArray(value.evidenceRefs) && value.evidenceRefs.every((ref) => typeof ref === "string" && ref.length > 0)
     && value.synthetic === true && value.customerData === false;
 }
@@ -260,7 +262,10 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
   if (!uiInputValid(input)) return deniedUi("INPUT_SHAPE_DENIED");
   const required = modeRequiredKinds(input.evidence.matchingMode.variantId);
   const referencesByKind = new Map(input.evidence.references.map((reference) => [reference.kind, reference]));
-  if (input.evidence.references.length === 0 || required.some((kind) => !referencesByKind.has(kind))) return deniedUi("CONTEXT_COLLAPSE_DENIED");
+  const referenceKinds = input.evidence.references.map(({ kind }) => kind);
+  const hasDuplicateKind = new Set(referenceKinds).size !== referenceKinds.length;
+  const hasExtraneousKind = referenceKinds.some((kind) => !required.includes(kind));
+  if (input.evidence.references.length === 0 || hasDuplicateKind || hasExtraneousKind || required.some((kind) => !referencesByKind.has(kind))) return deniedUi("CONTEXT_COLLAPSE_DENIED");
   const evidenceRefs = input.evidence.references.map(({ evidenceRef }) => evidenceRef);
   const fields: IncomingInvoiceUiFieldV1[] = [
     { fieldId: "supplier", label: "Supplier", state: "VISIBLE", evidenceRefs: evidenceRefs.filter((_, index) => input.evidence.references[index]?.kind === "SUPPLIER") },
@@ -275,7 +280,7 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
     fields.push({ fieldId: "separationOfDuties", label: "Separation of duties", state: "VISIBLE", evidenceRefs });
   }
   fields.push({ fieldId: "evidenceReferences", label: "Evidence references", state: "VISIBLE", evidenceRefs });
-  const allVerified = required.every((kind) => referencesByKind.get(kind)?.verified === true);
+  const allVerified = input.evidence.references.every(({ verified }) => verified);
   const actions: IncomingInvoiceUiActionV1[] = [{ actionId: "VIEW_EVIDENCE", enabled: true, reason: "Evidence is available for read-only inspection.", evidenceRefs }];
   if (input.evidence.outcome === "MATCHED" && allVerified) actions.push({ actionId: "ACKNOWLEDGE_MATCH", enabled: true, reason: "All required evidence references are verified and matched.", evidenceRefs });
   if (input.evidence.outcome === "MATCHED" && !allVerified) actions.push({ actionId: "REQUEST_CLARIFICATION", enabled: true, reason: "A required reference is not verified; acknowledgement is withheld.", evidenceRefs });
@@ -298,6 +303,7 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
 }
 
 function variantName(variant: RequirementVariantV1): string { return `${variant.variantId}@${variant.version}`; }
+function effectNames(effects: readonly string[]): string { return effects.join(","); }
 function requirementDigest(requirement: IncomingInvoiceErvRequirementV1): string { return digest(requirement); }
 function configurationDigest(requirement: IncomingInvoiceErvRequirementV1): string {
   return digest({ matchingMode: requirement.matchingMode, tolerancePolicy: requirement.tolerancePolicy, requestedEffects: requirement.requestedEffects });
@@ -344,7 +350,7 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     ...setupInput.changed.requestedEffects.filter((effect) => !ALLOWED_EFFECTS.includes(effect as EffectV1)).map(() => "UNSUPPORTED_EFFECT"),
   ];
   if (unsupported.length > 0) return setupDenied(setupInput, unsupported);
-  const questions: Array<Readonly<{ questionId: string; setting: "matchingMode" | "tolerancePolicy"; evidenceRefs: readonly string[] }>> = [];
+  const questions: Array<Readonly<{ questionId: string; setting: "matchingMode" | "tolerancePolicy" | "requestedEffects"; evidenceRefs: readonly string[] }>> = [];
   if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) {
     if (setupInput.changed.evidenceRefs.length === 0) questions.push({ questionId: "gap:matching-mode", setting: "matchingMode", evidenceRefs: [] });
     else questions.push({ questionId: "confirm:matching-mode", setting: "matchingMode", evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
@@ -353,7 +359,11 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     if (setupInput.changed.evidenceRefs.length === 0) questions.push({ questionId: "gap:tolerance-policy", setting: "tolerancePolicy", evidenceRefs: [] });
     else questions.push({ questionId: "confirm:tolerance-policy", setting: "tolerancePolicy", evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
   }
-  const evidenceGaps = questions.filter(({ questionId }) => questionId.startsWith("gap:")).map(({ setting }) => `MISSING_EVIDENCE_FOR_${setting === "matchingMode" ? "MATCHING_MODE" : "TOLERANCE_POLICY"}`);
+  if (canonicalJson(setupInput.baseline.requestedEffects) !== canonicalJson(setupInput.changed.requestedEffects)) {
+    if (setupInput.changed.evidenceRefs.length === 0) questions.push({ questionId: "gap:requested-effects", setting: "requestedEffects", evidenceRefs: [] });
+    else questions.push({ questionId: "confirm:requested-effects", setting: "requestedEffects", evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
+  }
+  const evidenceGaps = questions.filter(({ questionId }) => questionId.startsWith("gap:")).map(({ setting }) => `MISSING_EVIDENCE_FOR_${setting === "matchingMode" ? "MATCHING_MODE" : setting === "tolerancePolicy" ? "TOLERANCE_POLICY" : "REQUESTED_EFFECTS"}`);
   const confirmQuestions = questions.filter(({ questionId }) => questionId.startsWith("confirm:")).sort((a, b) => a.questionId.localeCompare(b.questionId));
   const turns = baseTurns(setupInput);
   for (const question of confirmQuestions) turns.push({ ordinal: turns.length + 1, speaker: "AGENT", kind: "CLARIFICATION", payload: { questionId: question.questionId, question: `Confirm changed ${question.setting} from the evidence-backed AP-04 variant.` }, evidenceRefs: question.evidenceRefs });
@@ -372,9 +382,10 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     turns.push({ ordinal: turns.length + 1, speaker: "SYSTEM", kind: "OUTCOME", payload: { outcome: "NEEDS_CLARIFICATION", gaps: orderedGaps }, evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
     return deepFreeze({ outcome: "NEEDS_CLARIFICATION" as const, transcript: transcript(turns), unresolvedGaps: orderedGaps });
   }
-  const changedSettings: Array<Readonly<{ setting: "matchingMode" | "tolerancePolicy"; before: string; after: string }>> = [];
+  const changedSettings: Array<Readonly<{ setting: "matchingMode" | "tolerancePolicy" | "requestedEffects"; before: string; after: string }>> = [];
   if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) changedSettings.push({ setting: "matchingMode", before: variantName(setupInput.baseline.matchingMode), after: variantName(setupInput.changed.matchingMode) });
   if (variantName(setupInput.baseline.tolerancePolicy) !== variantName(setupInput.changed.tolerancePolicy)) changedSettings.push({ setting: "tolerancePolicy", before: variantName(setupInput.baseline.tolerancePolicy), after: variantName(setupInput.changed.tolerancePolicy) });
+  if (canonicalJson(setupInput.baseline.requestedEffects) !== canonicalJson(setupInput.changed.requestedEffects)) changedSettings.push({ setting: "requestedEffects", before: effectNames(setupInput.baseline.requestedEffects), after: effectNames(setupInput.changed.requestedEffects) });
   const unsignedDelta = {
     schemaVersion: INCOMING_INVOICE_CONFIGURATION_DELTA_SCHEMA_V1,
     deltaVersion: "1.0.0" as const,

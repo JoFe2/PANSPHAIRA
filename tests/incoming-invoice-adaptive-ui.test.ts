@@ -105,6 +105,27 @@ test("AP-05 hidden authority, unsupported action and context collapse fail close
 
   const collapsed = deriveIncomingInvoiceUiManifestV1({ ...uiInput("MATCHED"), evidence: { ...uiInput("MATCHED").evidence, references: [] } });
   assert.deepEqual(collapsed, { outcome: "DENIED", reasonCode: "CONTEXT_COLLAPSE_DENIED" });
+
+  const duplicateReference = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    evidence: {
+      ...uiInput("MATCHED").evidence,
+      references: [
+        { kind: "INVOICE", referenceId: "INV-SYN-UNVERIFIED", verified: false, evidenceRef: "evidence:invoice-unverified" },
+        ...uiInput("MATCHED").evidence.references,
+      ],
+    },
+  });
+  assert.deepEqual(duplicateReference, { outcome: "DENIED", reasonCode: "CONTEXT_COLLAPSE_DENIED" });
+
+  const extraneousReference = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    evidence: {
+      ...uiInput("MATCHED").evidence,
+      matchingMode: { variantId: "TWO_WAY_INVOICE_PO_V1", version: "1.0.0" },
+    },
+  });
+  assert.deepEqual(extraneousReference, { outcome: "DENIED", reasonCode: "CONTEXT_COLLAPSE_DENIED" });
 });
 
 test("AP-05 Application Guide records applicability, variants, limits and nonclaims", () => {
@@ -143,6 +164,20 @@ test("AP-05 setup dialogue preserves typed synthetic transcript and resolves a v
   assert.match(first.configurationDelta.afterConfigurationDigest, /^[a-f0-9]{64}$/);
 });
 
+test("AP-05 setup dialogue clarifies and binds changed requested effects", () => {
+  const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
+  const changed = { ...requirement("requirement:changed", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1"), requestedEffects: ["READ_SYNTHETIC"] };
+  const result = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [
+    { questionId: "confirm:requested-effects", answer: "CONFIRM" },
+  ] });
+  assert.equal(result.outcome, "RESOLVED");
+  if (result.outcome === "RESOLVED") {
+    assert.deepEqual(result.configurationDelta.changedSettings, [
+      { setting: "requestedEffects", before: "READ_SYNTHETIC,WRITE_LOCAL_PROOF", after: "READ_SYNTHETIC" },
+    ]);
+  }
+});
+
 test("AP-05 dialogue asks only evidence-backed unresolved questions and fails closed", () => {
   const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
   const changed = requirement("requirement:changed", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "ABS_MINOR_V1", []);
@@ -168,6 +203,14 @@ test("AP-05 dialogue asks only evidence-backed unresolved questions and fails cl
 
   const malformedAnswer = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [{ questionId: "confirm:matching-mode", answer: "MAYBE" }] });
   assert.equal(malformedAnswer.outcome, "DENIED_UNSUPPORTED");
+
+  const emptyEffects = runIncomingInvoiceSetupAgentV1({ baseline, changed: { ...changed, requestedEffects: [] }, answers: [] });
+  assert.equal(emptyEffects.outcome, "DENIED_UNSUPPORTED");
+  if (emptyEffects.outcome === "DENIED_UNSUPPORTED") assert.deepEqual(emptyEffects.unresolvedGaps, ["INPUT_SHAPE_DENIED"]);
+
+  const duplicateEffects = runIncomingInvoiceSetupAgentV1({ baseline, changed: { ...changed, requestedEffects: ["READ_SYNTHETIC", "READ_SYNTHETIC"] }, answers: [] });
+  assert.equal(duplicateEffects.outcome, "DENIED_UNSUPPORTED");
+  if (duplicateEffects.outcome === "DENIED_UNSUPPORTED") assert.deepEqual(duplicateEffects.unresolvedGaps, ["INPUT_SHAPE_DENIED"]);
 });
 
 test("AP-05 focused suite is registered once and its output conforms to the contract schema", () => {
