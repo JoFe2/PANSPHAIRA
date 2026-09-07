@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "pansphaira.xra-ps-02/candidate-adjudication-verification/v1",
+  "issue": "PANSPHAIRA#344",
+  "baseHead": "90512ba63587d10b4a833a7f31e1f91595531467",
+  "scope": "LOCAL_SYNTHETIC_ONLY",
+  "focusedCommand": "npm run xra-ps-02:test",
+  "implementation": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
+  "focusedTest": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
+  "acceptance": {
+    "XRA-PS-02-AC01": {
+      "status": "PROVEN_LOCALLY",
+      "assertions": [
+        "PANSPHAIRA rebuilds the existing owner projection and evidence before adjudication",
+        "the KaleidoSphere verdict is recorded but is not authoritative",
+        "malformed or exotic candidate objects are denied without invoking candidate traps"
+      ]
+    },
+    "XRA-PS-02-AC02": {
+      "status": "PROVEN_LOCALLY",
+      "cases": {
+        "positive": "ACCEPTED_BOUNDED",
+        "restricted-unknown": "RESTRICTED",
+        "conflicting-counterevidence": "DENIED",
+        "forged-candidate": "DENIED",
+        "stale-head": "DENIED"
+      }
+    },
+    "XRA-PS-02-AC03": {
+      "status": "LOCAL_RECEIPT_CONTRACT_PROVEN",
+      "chainStages": [
+        "GENERATION",
+        "PROJECTION",
+        "INGESTION",
+        "SEMANTICS",
+        "ANALYSIS",
+        "CANDIDATE",
+        "ADJUDICATION"
+      ],
+      "syntheticReceipt": {
+        "pansphairaHead": "90512ba63587d10b4a833a7f31e1f91595531467",
+        "kaleidoSphereHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "candidateDigest": "9f21c44716073575c4e93e6ef2ecfe3f304167eb067e99a625bfde660d515109",
+        "adjudicationDigest": "175b4e4dca34ba4d3c7af69bbefb590ca5192dde69afcb329d04544e78312ffd",
+        "receiptDigest": "574c867341fbf00f734684df54ab7ee443f16b1491b6843fe66736a6d73c16b5"
+      },
+      "nonclaim": "The synthetic KaleidoSphere head and stage digests are test values; no cross-repository release, CI, readback, or external chain is claimed."
+    },
+    "XRA-PS-02-AC04": {
+      "status": "PROVEN_LOCALLY",
+      "beforeAfter": "canonical knowledge digest, authority, capability, and effect remain unchanged",
+      "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a"
+    }
+  },
+  "authoritativeInputs": {
+    "schemaVersion": "pansphaira.xra-ps-02/candidate-adjudication/v1",
+    "projectionDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+    "sourceContractSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44",
+    "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a"
+  },
+  "authorityState": {
+    "authority": "NONE",
+    "capabilityDelta": "NONE",
+    "effect": "NONE",
+    "canonicalKnowledgeMutation": "NONE"
+  },
+  "requiredNonclaims": [
+    "NO_CANDIDATE_PROMOTION",
+    "NO_PERSISTENCE_OR_HISTORY",
+    "NO_GLOBAL_TRUTH_OR_UTILITY_CLAIM",
+    "NO_PARITY_GENERALIZATION",
+    "NO_EXTERNAL_RELEASE_OR_CROSS_REPOSITORY_CHAIN_PROOF"
+  ],
+  "integrityNote": "This slice records only its local, purpose-bound digests. Repository-global manifests, inventories, verification DAGs, SOURCE-MAP, and root checksums remain untouched for serial integration."
+}
