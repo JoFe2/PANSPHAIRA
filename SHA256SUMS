@@ -821,12 +821,12 @@ ca46feec3b71ff70631c793c3c08d3d768fc43b6646542d8254171ae9a45124d  ./schemas/cont
 c530db9e49e7ad4aed36476525684fb67e7389037b768873a183342bd0948dd9  ./schemas/contracts/hmi-generation-bundle-v1.schema.json
 932159fbb18633ebe7326cb66d94899c498dc2ac394c1265b5ce3d529e091c46  ./schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json
 e668fd1676c762d959dae185277896d200c386d85a37f495241b8e11793829ee  ./schemas/contracts/incoming-invoice-application-guide-v1.schema.json
-d06e652fda0021eb42848b248dd0bf886d38bae132334356d9f90550efc15787  ./schemas/contracts/incoming-invoice-configuration-delta-v1.schema.json
-df641af5d63b22ee5cf0c2c1d794e09da4329f9dd2f07b81e5fb39a16e5e4301  ./schemas/contracts/incoming-invoice-setup-dialogue-v1.schema.json
 0156e124a1a0295842d673e368df2b93322bdb54feeef0a2fa3553f9b89e3108  ./schemas/contracts/incoming-invoice-blueprint-v1.schema.json
+d06e652fda0021eb42848b248dd0bf886d38bae132334356d9f90550efc15787  ./schemas/contracts/incoming-invoice-configuration-delta-v1.schema.json
 7eabf5156f5a74404499b67d435c879f123f9d842028c739033269edd7959caf  ./schemas/contracts/incoming-invoice-erv-v1.schema.json
 ef553e35ecaf171f097f1ef78803087116b877588b65717177d9b9aa3e454e81  ./schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json
 5f9b4e7308e2e1e74704cc47481d98417a3fcc79d7c8b3839073e9b8d638bf7b  ./schemas/contracts/incoming-invoice-intake-v1.schema.json
+df641af5d63b22ee5cf0c2c1d794e09da4329f9dd2f07b81e5fb39a16e5e4301  ./schemas/contracts/incoming-invoice-setup-dialogue-v1.schema.json
 66495d4d334d26afaaaf5137147fb7803061c4338ed3de3475770ed4f12a7d68  ./schemas/contracts/integration-profile-v1.schema.json
 e442f491bcbde525603b8bf9d4153758af93889138aedcbf64e0ced8ff6940af  ./schemas/contracts/issue-candidate-v1.schema.json
 731349165a14d5de6526560ff8e35348241868f192b56d8c290990527e4d5494  ./schemas/contracts/knowledge-contribution-envelope-v1.schema.json
