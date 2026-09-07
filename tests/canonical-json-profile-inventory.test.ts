@@ -142,6 +142,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
     reason: "Bind the owner-authority use-time revalidation implementation to the immutable admitted-base digest; the admitted v1 digest remains immutable.",
   }),
+  Object.freeze({
+    migrationId: "P0-PS392-AUD-02/UNIFIED-MUTATION-RESERVATION-UNCERTAIN-RECOVERY/V3",
+    path: "demo/runtime/enforcement-gate.mjs",
+    profileVersion: 3,
+    fromSha256: "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+    toSha256: "6ec51b4f3a40279dd30ac5aa8f3f9a2644a98361ca475819621245e24f4a43f7",
+    reason: "Bind the unified mutation reservation, operation deadline and uncertain-outcome recovery implementation to the reviewed P0-PS392 source digest; admitted v1 and reviewed P0-PS391 v2 bytes remain immutable.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -154,7 +162,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  filesScanned: 616,
+  filesScanned: 617,
   declarationSites: 36,
   declarationFiles: 36,
   importSites: 203,
@@ -1125,7 +1133,8 @@ test("candidate ledger regeneration cannot redefine immutable base obligations",
   assert.deepEqual(validateInventory(loadInventory(), getScan(), mutated), []);
   const expectedFirst = expectedByteObligations(getScan(), mutated)[0];
   assert.ok(expectedFirst);
-  const migration = PROFILE_VERSION_MIGRATIONS.find((item) => item.path === firstObligation.path);
+  const migrations = PROFILE_VERSION_MIGRATIONS.filter((item) => item.path === firstObligation.path);
+  const migration = migrations[migrations.length - 1];
   assert.equal(expectedFirst.sha256, migration?.toSha256 ?? firstObligation.sha256);
 });
 

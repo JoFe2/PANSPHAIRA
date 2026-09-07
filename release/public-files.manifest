@@ -846,6 +846,7 @@ tests/demo-current-head-e2e.test.mjs	tests/demo-current-head-e2e.test.mjs	0644
 tests/demo-enforcement-gate.test.mjs	tests/demo-enforcement-gate.test.mjs	0644
 tests/demo-fixture-manifest.test.ts	tests/demo-fixture-manifest.test.ts	0644
 tests/demo-local-egress-policy.test.mjs	tests/demo-local-egress-policy.test.mjs	0644
+tests/demo-mutation-reservation.test.mjs	tests/demo-mutation-reservation.test.mjs	0644
 tests/demo-paperless-ngx-zoo-adapter.test.mjs	tests/demo-paperless-ngx-zoo-adapter.test.mjs	0644
 tests/demo-policy-evaluator.test.mjs	tests/demo-policy-evaluator.test.mjs	0644
 tests/demo-policy-generation-fence.test.mjs	tests/demo-policy-generation-fence.test.mjs	0644

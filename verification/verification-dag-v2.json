@@ -4726,12 +4726,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "8b4c52115bd6bac7ba28d85b7f11f4c79bc963a69f534e02860292c5fcef7431"
+          "sha256": "6554a136299e9898f358a44b0456b8ca41f45dfa22220cf69088a966fae80ce9"
         },
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d800df8bbc10b2e93ed720b1cadf105d13c2967355079afd8e13f3306f7176df"
+          "sha256": "453a74ee90f0b3b00545224301900d9c8eb3fe297d045579fee1e648c6e1942a"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4751,7 +4751,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "9611dabb0ea30261fe3705445ce57bb74357ce7ce1cefe55e640089dd7b8a626"
+          "sha256": "c7077a992e949897108ef30e119e555febbfc43ad3e513329f6a36bb6496386b"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4781,7 +4781,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "2f327b4910f7f1acb90116f6893c9c321124177d4d2195729a0a7e24886837f8"
+          "sha256": "f24fd023cf14dd1bb02b26c261ee6fe592d6c6246da4e8cfbc0867862b9a886d"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5712,7 +5712,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "be75475253146b929efebfdbb007449030d23912e99735b9ec57cb7d7ac81e36"
+          "sha256": "c2bf8d795f0552388cbfb50f4ead1a2f2493a89267441c987adf9543dea45d34"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",

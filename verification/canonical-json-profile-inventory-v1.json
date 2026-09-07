@@ -98,6 +98,14 @@
       "fromSha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
       "toSha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
       "reason": "Bind the owner-authority use-time revalidation implementation to the immutable admitted-base digest; the admitted v1 digest remains immutable."
+    },
+    {
+      "migrationId": "P0-PS392-AUD-02/UNIFIED-MUTATION-RESERVATION-UNCERTAIN-RECOVERY/V3",
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "profileVersion": 3,
+      "fromSha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+      "toSha256": "6ec51b4f3a40279dd30ac5aa8f3f9a2644a98361ca475819621245e24f4a43f7",
+      "reason": "Bind the unified mutation reservation, operation deadline and uncertain-outcome recovery implementation to the reviewed P0-PS392 source digest; admitted v1 and reviewed P0-PS391 v2 bytes remain immutable."
     }
   ],
   "scanScope": {
@@ -140,7 +148,7 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 616,
+    "filesScanned": 617,
     "declarationSites": 36,
     "declarationFiles": 36,
     "importSites": 203,
@@ -157,7 +165,7 @@
       "classification": "implementation",
       "owner": "demo",
       "pinned": true,
-      "sha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036"
+      "sha256": "6ec51b4f3a40279dd30ac5aa8f3f9a2644a98361ca475819621245e24f4a43f7"
     },
     {
       "file": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
@@ -754,7 +762,7 @@
   "byteObligations": [
     {
       "path": "demo/runtime/enforcement-gate.mjs",
-      "sha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+      "sha256": "6ec51b4f3a40279dd30ac5aa8f3f9a2644a98361ca475819621245e24f4a43f7",
       "basis": "profile-version-migration"
     },
     {
