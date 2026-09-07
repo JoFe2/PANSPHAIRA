@@ -593,6 +593,51 @@ export class DemoMutationGate {
     if (!Number.isSafeInteger(now)) throw new Error("AUTHORITY_CLOCK_INVALID_DENIED");
     if (now < authority.notBeforeMs) throw new Error("AUTHORITY_NOT_YET_VALID_DENIED");
     if (now >= authority.expiresAtMs) throw new Error("AUTHORITY_EXPIRED_DENIED");
+    return now;
+  }
+
+  authorizeOwnerLeaseReservation({
+    authority,
+    action,
+    computedDigest,
+    businessDiff,
+    businessDiffDigest,
+  }) {
+    // This is the local authorization/reservation point. It must remain after
+    // the final authoritative snapshot await and before durable reservation.
+    const reservedAtMs = this.validateOwnerAuthority(
+      authority,
+      action,
+      computedDigest,
+      businessDiff,
+      businessDiffDigest,
+    );
+    this.assertPolicyUse({
+      tenant: action.scope.tenant,
+      policyId: authority.policyId,
+      policyGeneration: authority.policyGeneration,
+      policySourceDigest: authority.policyDigest,
+    });
+    if (this.state.consumedAuthorityLeases[authority.leaseId] !== undefined) {
+      throw new Error("AUTHORITY_LEASE_REPLAY_DENIED");
+    }
+    if (
+      this.state.effects[action.replayKey] !== undefined
+      || this.state.reservations[action.replayKey] !== undefined
+    ) throw new Error("EFFECT_REPLAY_OR_AMBIGUOUS_DENIED");
+    const consumed = {
+      actionDigest: computedDigest,
+      replayKey: action.replayKey,
+      reservedAtMs,
+    };
+    this.state.consumedAuthorityLeases[authority.leaseId] = consumed;
+    this.state.reservations[action.replayKey] = {
+      actionDigest: computedDigest,
+      leaseId: authority.leaseId,
+      reservedAtMs,
+      status: "EXECUTING",
+    };
+    this.persist();
   }
 
   persist() {
@@ -686,30 +731,13 @@ export class DemoMutationGate {
         currentSnapshot.snapshotDigest !== authority.snapshotDigest
         || currentSnapshot.version !== authority.snapshotVersion
       ) throw new Error("APPROVAL_SNAPSHOT_STALE_DENIED");
-      // The provider read yields. Repeat the durable replay checks after it so
-      // concurrent callers cannot both pass the pre-read check and reserve one
-      // lease twice.
-      if (this.state.consumedAuthorityLeases[authority.leaseId] !== undefined) {
-        throw new Error("AUTHORITY_LEASE_REPLAY_DENIED");
-      }
-      if (
-        this.state.effects[action.replayKey] !== undefined
-        || this.state.reservations[action.replayKey] !== undefined
-      ) throw new Error("EFFECT_REPLAY_OR_AMBIGUOUS_DENIED");
-      const reservedAtMs = this.now();
-      const consumed = {
-        actionDigest: computedDigest,
-        replayKey: action.replayKey,
-        reservedAtMs,
-      };
-      this.state.consumedAuthorityLeases[authority.leaseId] = consumed;
-      this.state.reservations[action.replayKey] = {
-        actionDigest: computedDigest,
-        leaseId: authority.leaseId,
-        reservedAtMs,
-        status: "EXECUTING",
-      };
-      this.persist();
+      this.authorizeOwnerLeaseReservation({
+        authority,
+        action,
+        computedDigest,
+        businessDiff,
+        businessDiffDigest,
+      });
     }
 
     const prior = this.state.effects[action.replayKey];
