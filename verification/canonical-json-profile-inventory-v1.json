@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "aa343230df8f14c706616f7e93888f69cb02266ffc76801f588cf5cbaf27bce3"
+        "sha256": "46e733d4c5b553cecc15f62db1917801e404a14cc8f3a156388704942c6592b4"
       }
     ]
   },
@@ -107,6 +107,14 @@
       "fromSha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
       "toSha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
       "reason": "Bind the unified mutation reservation, operation deadline and uncertain-outcome recovery implementation to the reviewed P0-PS392 source digest; admitted v1 and reviewed P0-PS391 v2 bytes remain immutable."
+    },
+    {
+      "migrationId": "P0-PS392-AUD-02/AUTHORITY-BOUND-UNCERTAIN-RECOVERY/V4",
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "profileVersion": 4,
+      "fromSha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
+      "toSha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
+      "reason": "Bind ambiguous reconciliation to the originally reserved authority decision or owner lease and preserve operation-key conflict precedence; admitted v1 and reviewed v2-v3 bytes remain immutable."
     }
   ],
   "scanScope": {
@@ -166,7 +174,7 @@
       "classification": "implementation",
       "owner": "demo",
       "pinned": true,
-      "sha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df"
+      "sha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c"
     },
     {
       "file": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
@@ -763,7 +771,7 @@
   "byteObligations": [
     {
       "path": "demo/runtime/enforcement-gate.mjs",
-      "sha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
+      "sha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
       "basis": "profile-version-migration"
     },
     {

@@ -98,7 +98,7 @@ function installerEnvelope(gateValue, action) {
   };
 }
 
-function agentEnvelope(gateValue, action) {
+function agentEnvelope(gateValue, action, decisionDigest = "e".repeat(64)) {
   const actionDigest = sha256(canonicalJson(action));
   return {
     action,
@@ -111,7 +111,7 @@ function agentEnvelope(gateValue, action) {
       policyId: "admin-ai-poc-policy-v1",
       policyGeneration: 1,
       policyDigest,
-      decisionDigest: "e".repeat(64),
+      decisionDigest,
     }),
   };
 }
@@ -287,6 +287,55 @@ test("initially stale readback makes a conflicting ambiguous retry fail before r
   assert.equal(mutations, 1);
   assert.equal(reconciliations, 0);
   assert.equal(current.state.effects[firstAction.replayKey], undefined);
+});
+
+test("ambiguous agent recovery rejects substituted authority before reconciliation", async () => {
+  const root = mkdtempSync(join(tmpdir(), "cm-reservation-authority-"));
+  let reconciliations = 0;
+  const firstGate = gate({
+    root,
+    provider: {
+      async mutate() {
+        return { id: "effect-1" };
+      },
+      async readback(action) {
+        return { ...validReadback(action), firstName: "STALE-READBACK" };
+      },
+    },
+  });
+  const action = agentAction("agent:authority-recovery-001");
+  const originalEnvelope = agentEnvelope(firstGate, action);
+  await assert.rejects(
+    firstGate.execute(request(), originalEnvelope),
+    /PROVIDER_READBACK_MISMATCH_DENIED/,
+  );
+  assert.equal(
+    firstGate.state.reservations[action.replayKey].authorityBinding,
+    originalEnvelope.authority.binding,
+  );
+
+  const restarted = gate({
+    root,
+    provider: {
+      async mutate() {
+        throw new Error("must-not-mutate");
+      },
+      async reconcile(retryAction) {
+        reconciliations += 1;
+        return {
+          providerResult: { id: "effect-1" },
+          readback: validReadback(retryAction),
+        };
+      },
+    },
+  });
+  const substitutedEnvelope = agentEnvelope(restarted, action, "f".repeat(64));
+  await assert.rejects(
+    restarted.execute(request(), substitutedEnvelope),
+    /REPLAY_AUTHORITY_CONFLICT_DENIED/,
+  );
+  assert.equal(reconciliations, 0);
+  assert.equal(restarted.state.effects[action.replayKey], undefined);
 });
 
 test("never-response deadline aborts the operation and leaves a durable ambiguous reservation", async () => {

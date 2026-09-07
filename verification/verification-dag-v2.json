@@ -4751,7 +4751,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "aa343230df8f14c706616f7e93888f69cb02266ffc76801f588cf5cbaf27bce3"
+          "sha256": "46e733d4c5b553cecc15f62db1917801e404a14cc8f3a156388704942c6592b4"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4781,7 +4781,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "a6dbf6af8004cd60393c5665a29c5456c3bdefb886cb5901b1c11028c6cf8a39"
+          "sha256": "b996571238b2b3144996d055208734273b3700bb03cf125e46148b53c509b726"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5306,7 +5306,7 @@
         {
           "path": "security/secure-default-proof-v1.json",
           "role": "CONTRACT",
-          "sha256": "fe5eb611f9d6a20e2fa3c607ba8754dca399733e5b046e17f977f592db445020"
+          "sha256": "58512d133416f7b6a1c8f2b8c7c24937cb73b197f892cd5237256928c649b55c"
         },
         {
           "path": "schemas/security/secure-default-proof-v1.schema.json",
@@ -5316,7 +5316,7 @@
         {
           "path": "security/secure-default-proof-evidence-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "bd5c26fa042a5a469f6aa1f533462a1f308b0d470673f49656a9dd2b0a6773ef"
+          "sha256": "238b584d3be19b38a5824f773977ec8dec91377c6f808904d452ccf61e4790b8"
         },
         {
           "path": "scripts/verify-secure-default-proof.mjs",
@@ -5352,7 +5352,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "77fd364bddca7e12e8ef281361c3b342a837d24bffa935e45fd69cac8573b5f0"
+          "sha256": "be5475bee27cd889a11147718c9b620827b07f3835f9f9e18fa3827c73c491fd"
         },
         {
           "path": "package-lock.json",

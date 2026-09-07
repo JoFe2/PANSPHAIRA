@@ -150,6 +150,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
     reason: "Bind the unified mutation reservation, operation deadline and uncertain-outcome recovery implementation to the reviewed P0-PS392 source digest; admitted v1 and reviewed P0-PS391 v2 bytes remain immutable.",
   }),
+  Object.freeze({
+    migrationId: "P0-PS392-AUD-02/AUTHORITY-BOUND-UNCERTAIN-RECOVERY/V4",
+    path: "demo/runtime/enforcement-gate.mjs",
+    profileVersion: 4,
+    fromSha256: "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
+    toSha256: "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
+    reason: "Bind ambiguous reconciliation to the originally reserved authority decision or owner lease and preserve operation-key conflict precedence; admitted v1 and reviewed v2-v3 bytes remain immutable.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;

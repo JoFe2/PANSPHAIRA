@@ -69,7 +69,7 @@
     {
       "path": "demo/runtime/enforcement-gate.mjs",
       "role": "IMPLEMENTATION",
-      "sha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df"
+      "sha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c"
     },
     {
       "path": "demo/seed-and-flow.sh",
@@ -124,7 +124,7 @@
     {
       "path": "tests/demo-approval-workbench.test.mjs",
       "role": "TEST",
-      "sha256": "b49de913744447d61b96576fe0c63e04b56e1dd007f77b242c59df3289205b4f"
+      "sha256": "dd09768d41230256fdef94d79541e7c2ddb6a4dc7390563a29a00368a05caa02"
     },
     {
       "path": "tests/openclaw-agent-runtime.test.mjs",

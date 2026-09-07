@@ -257,10 +257,17 @@ function normalizeEffectStore(value) {
       "reservations",
       "schemaVersion",
     ]);
-  if (!isV1 && !isV2 && !isV3) throw new Error("EFFECT_STORE_INVALID_DENIED");
+  const isV4 = value.schemaVersion === "chimpmaera.demo/effect-store/v4"
+    && canonicalJson(keys) === canonicalJson([
+      "consumedAuthorityLeases",
+      "effects",
+      "reservations",
+      "schemaVersion",
+    ]);
+  if (!isV1 && !isV2 && !isV3 && !isV4) throw new Error("EFFECT_STORE_INVALID_DENIED");
   for (const collection of [
     value.effects,
-    ...(isV2 || isV3 ? [value.reservations, value.consumedAuthorityLeases] : []),
+    ...(isV2 || isV3 || isV4 ? [value.reservations, value.consumedAuthorityLeases] : []),
   ]) {
     if (collection === null || typeof collection !== "object" || Array.isArray(collection)) {
       throw new Error("EFFECT_STORE_INVALID_DENIED");
@@ -299,27 +306,42 @@ function normalizeEffectStore(value) {
         || (record.status === "APPLIED") !== (value.effects[replayKey] !== undefined)
       ) throw new Error("EFFECT_STORE_INVALID_DENIED");
     }
-  } else if (isV3) {
+  } else if (isV3 || isV4) {
     for (const [operationKey, record] of Object.entries(value.reservations)) {
       if (
         record === null
         || typeof record !== "object"
         || Array.isArray(record)
-        || canonicalJson(Object.keys(record).sort()) !== canonicalJson([
-          "actionDigest", "authorityKind", "leaseId", "recovery", "reservedAtMs", "status",
-        ])
+        || canonicalJson(Object.keys(record).sort()) !== canonicalJson(isV4
+          ? [
+            "actionDigest", "authorityBinding", "authorityKind", "leaseId", "recovery",
+            "reservedAtMs", "status",
+          ]
+          : ["actionDigest", "authorityKind", "leaseId", "recovery", "reservedAtMs", "status"])
         || !["INSTALLER_APPROVAL_V1", "ADMIN_AI_POC_HMAC_V1", "OWNER_ESCALATION_LEASE_HMAC_V1"].includes(record.authorityKind)
         || !["EXECUTING", "APPLIED", "AMBIGUOUS"].includes(record.status)
         || !["NONE", "RECONCILE"].includes(record.recovery)
         || (record.status === "AMBIGUOUS" ? record.recovery !== "RECONCILE" : record.recovery !== "NONE")
         || !/^[a-f0-9]{64}$/.test(record.actionDigest ?? "")
+        || (isV4
+          && record.authorityBinding !== null
+          && !/^[a-f0-9]{64}$/.test(record.authorityBinding ?? ""))
         || (record.leaseId !== null && !/^[a-f0-9]{64}$/.test(record.leaseId ?? ""))
         || !Number.isSafeInteger(record.reservedAtMs)
         || (record.status === "APPLIED") !== (value.effects[operationKey] !== undefined)
       ) throw new Error("EFFECT_STORE_INVALID_DENIED");
       if (
         record.authorityKind === "OWNER_ESCALATION_LEASE_HMAC_V1"
-        && (record.leaseId === null || value.consumedAuthorityLeases[record.leaseId]?.replayKey !== operationKey)
+        && (
+          record.leaseId === null
+          || (isV4 && record.authorityBinding !== record.leaseId)
+          || value.consumedAuthorityLeases[record.leaseId]?.replayKey !== operationKey
+          || value.consumedAuthorityLeases[record.leaseId]?.actionDigest !== record.actionDigest
+        )
+      ) throw new Error("EFFECT_STORE_INVALID_DENIED");
+      if (
+        record.authorityKind !== "OWNER_ESCALATION_LEASE_HMAC_V1"
+        && record.leaseId !== null
       ) throw new Error("EFFECT_STORE_INVALID_DENIED");
     }
     for (const [leaseId, record] of Object.entries(value.consumedAuthorityLeases)) {
@@ -337,13 +359,14 @@ function normalizeEffectStore(value) {
     }
   }
   return {
-    schemaVersion: "chimpmaera.demo/effect-store/v3",
+    schemaVersion: "chimpmaera.demo/effect-store/v4",
     effects: value.effects,
     reservations: isV2
       ? Object.fromEntries(Object.entries(value.reservations).map(([operationKey, record]) => [
         operationKey,
         {
           actionDigest: record.actionDigest,
+          authorityBinding: record.leaseId,
           authorityKind: "OWNER_ESCALATION_LEASE_HMAC_V1",
           leaseId: record.leaseId,
           recovery: record.status === "AMBIGUOUS" ? "RECONCILE" : "NONE",
@@ -351,8 +374,18 @@ function normalizeEffectStore(value) {
           status: record.status,
         },
       ]))
-      : isV3 ? value.reservations : {},
-    consumedAuthorityLeases: isV2 || isV3 ? value.consumedAuthorityLeases : {},
+      : isV3
+        ? Object.fromEntries(Object.entries(value.reservations).map(([operationKey, record]) => [
+          operationKey,
+          {
+            ...record,
+            authorityBinding: record.authorityKind === "OWNER_ESCALATION_LEASE_HMAC_V1"
+              ? record.leaseId
+              : null,
+          },
+        ]))
+        : isV4 ? value.reservations : {},
+    consumedAuthorityLeases: isV2 || isV3 || isV4 ? value.consumedAuthorityLeases : {},
   };
 }
 
@@ -410,7 +443,7 @@ export class DemoMutationGate {
     this.adminAiPolicyId = adminAiPolicyId;
     this.assertPolicyUse = assertPolicyUse;
     this.state = {
-      schemaVersion: "chimpmaera.demo/effect-store/v3",
+      schemaVersion: "chimpmaera.demo/effect-store/v4",
       effects: {},
       reservations: {},
       consumedAuthorityLeases: {},
@@ -663,10 +696,18 @@ export class DemoMutationGate {
     operationKey,
     action,
     computedDigest,
+    authorityBinding,
     authorityKind,
     leaseId = null,
     reservedAtMs,
   }) {
+    if (
+      !["INSTALLER_APPROVAL_V1", "ADMIN_AI_POC_HMAC_V1", "OWNER_ESCALATION_LEASE_HMAC_V1"].includes(authorityKind)
+      || !/^[a-f0-9]{64}$/.test(authorityBinding ?? "")
+      || (authorityKind === "OWNER_ESCALATION_LEASE_HMAC_V1"
+        ? authorityBinding !== leaseId
+        : leaseId !== null)
+    ) throw new Error("RESERVATION_AUTHORITY_BINDING_INVALID_DENIED");
     const prior = this.state.effects[operationKey];
     if (prior !== undefined && prior.actionDigest !== computedDigest) {
       throw new Error("REPLAY_KEY_CONFLICT_DENIED");
@@ -676,6 +717,11 @@ export class DemoMutationGate {
       if (reservation.actionDigest !== computedDigest) {
         throw new Error("REPLAY_KEY_CONFLICT_DENIED");
       }
+      if (
+        reservation.authorityKind !== authorityKind
+        || typeof reservation.authorityBinding !== "string"
+        || !equalSecret(reservation.authorityBinding, authorityBinding)
+      ) throw new Error("REPLAY_AUTHORITY_CONFLICT_DENIED");
       if (
         authorityKind === "OWNER_ESCALATION_LEASE_HMAC_V1"
         && reservation.leaseId === leaseId
@@ -687,6 +733,7 @@ export class DemoMutationGate {
     }
     this.state.reservations[operationKey] = {
       actionDigest: computedDigest,
+      authorityBinding,
       authorityKind,
       leaseId,
       recovery: "NONE",
@@ -712,12 +759,26 @@ export class DemoMutationGate {
     this.persist();
   }
 
-  async reconcileOperation({ operationKey, action, computedDigest, authority, signal, runBounded }) {
+  async reconcileOperation({
+    operationKey,
+    action,
+    computedDigest,
+    authority,
+    authorityBinding,
+    authorityKind,
+    signal,
+    runBounded,
+  }) {
     const reservation = this.state.reservations[operationKey];
     if (reservation?.status !== "AMBIGUOUS") return null;
     if (reservation.actionDigest !== computedDigest) {
       throw new Error("REPLAY_KEY_CONFLICT_DENIED");
     }
+    if (
+      reservation.authorityKind !== authorityKind
+      || typeof reservation.authorityBinding !== "string"
+      || !equalSecret(reservation.authorityBinding, authorityBinding)
+    ) throw new Error("REPLAY_AUTHORITY_CONFLICT_DENIED");
     if (typeof this.provider.reconcile !== "function") {
       throw new Error("EFFECT_AMBIGUOUS_RECONCILE_REQUIRED");
     }
@@ -828,6 +889,16 @@ export class DemoMutationGate {
       }
 
       const ownerLease = authority?.kind === "OWNER_ESCALATION_LEASE_HMAC_V1";
+      const authorityKind = ownerLease
+        ? "OWNER_ESCALATION_LEASE_HMAC_V1"
+        : action.actor === "agent:admin-ai-poc"
+          ? "ADMIN_AI_POC_HMAC_V1"
+          : "INSTALLER_APPROVAL_V1";
+      const authorityBinding = ownerLease
+        ? authority.leaseId
+        : action.actor === "agent:admin-ai-poc"
+          ? authority?.binding
+          : approval?.binding;
       if (action.actor === "agent:admin-ai-poc") {
         if (ownerLease) {
           validateAdminAiAction(action, authority.kind);
@@ -861,8 +932,22 @@ export class DemoMutationGate {
         });
       }
 
+      const prior = this.state.effects[operationKey];
+      const existing = this.state.reservations[operationKey];
+      if (
+        (prior !== undefined && prior.actionDigest !== computedDigest)
+        || (existing !== undefined && existing.actionDigest !== computedDigest)
+      ) throw new Error("REPLAY_KEY_CONFLICT_DENIED");
+      if (
+        existing !== undefined
+        && (
+          existing.authorityKind !== authorityKind
+          || typeof existing.authorityBinding !== "string"
+          || !equalSecret(existing.authorityBinding, authorityBinding)
+        )
+      ) throw new Error("REPLAY_AUTHORITY_CONFLICT_DENIED");
+
       if (ownerLease && this.state.consumedAuthorityLeases[authority.leaseId] !== undefined) {
-        const existing = this.state.reservations[operationKey];
         if (existing?.status !== "AMBIGUOUS" || typeof this.provider.reconcile !== "function") {
           throw new Error("AUTHORITY_LEASE_REPLAY_DENIED");
         }
@@ -894,11 +979,7 @@ export class DemoMutationGate {
         });
       }
 
-      const prior = this.state.effects[operationKey];
       if (prior !== undefined) {
-        if (prior.actionDigest !== computedDigest) {
-          throw new Error("REPLAY_KEY_CONFLICT_DENIED");
-        }
         if (
           action.actor === "agent:admin-ai-poc"
           && (
@@ -918,31 +999,25 @@ export class DemoMutationGate {
         };
       }
 
-      const existing = this.state.reservations[operationKey];
       if (existing?.status === "AMBIGUOUS") {
-        if (existing.actionDigest !== computedDigest) {
-          throw new Error("REPLAY_KEY_CONFLICT_DENIED");
-        }
         const recovered = await this.reconcileOperation({
           operationKey,
           action,
           computedDigest,
           authority,
+          authorityBinding,
+          authorityKind,
           signal: controller.signal,
           runBounded,
         });
         if (recovered !== null) return recovered;
       }
 
-      const authorityKind = ownerLease
-        ? "OWNER_ESCALATION_LEASE_HMAC_V1"
-        : action.actor === "agent:admin-ai-poc"
-          ? "ADMIN_AI_POC_HMAC_V1"
-          : "INSTALLER_APPROVAL_V1";
       this.reserveOperation({
         operationKey,
         action,
         computedDigest,
+        authorityBinding,
         authorityKind,
         leaseId: ownerLease ? authority.leaseId : null,
         reservedAtMs: this.now(),
