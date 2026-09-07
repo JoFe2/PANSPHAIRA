@@ -32,6 +32,13 @@ export function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
+export function normalizeOperationKey(value) {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("OPERATION_KEY_INVALID_DENIED");
+  }
+  return value.normalize("NFC");
+}
+
 function equalSecret(presented, expected) {
   const left = Buffer.from(presented ?? "");
   const right = Buffer.from(expected);
@@ -163,7 +170,7 @@ function validateMutationScope(action) {
   ) throw new Error("SCOPE_MISMATCH_DENIED");
 }
 
-function receiptCore(action, actionDigest, providerResult, readback, authority) {
+function receiptCore(action, actionDigest, providerResult, readback, authority, replayState = "FIRST_EXECUTION") {
   return {
     schemaVersion: authority?.kind === "OWNER_ESCALATION_LEASE_HMAC_V1"
       ? "chimpmaera.demo/effect-receipt/v3"
@@ -181,7 +188,7 @@ function receiptCore(action, actionDigest, providerResult, readback, authority) 
       ),
     },
     outcome: "PROVIDER_MUTATION_READBACK_VERIFIED",
-    replayState: "FIRST_EXECUTION",
+    replayState,
     readbackDigest: sha256(canonicalJson(readback)),
     ...(authority === undefined ? {} : {
       authority: {
@@ -243,10 +250,17 @@ function normalizeEffectStore(value) {
       "reservations",
       "schemaVersion",
     ]);
-  if (!isV1 && !isV2) throw new Error("EFFECT_STORE_INVALID_DENIED");
+  const isV3 = value.schemaVersion === "chimpmaera.demo/effect-store/v3"
+    && canonicalJson(keys) === canonicalJson([
+      "consumedAuthorityLeases",
+      "effects",
+      "reservations",
+      "schemaVersion",
+    ]);
+  if (!isV1 && !isV2 && !isV3) throw new Error("EFFECT_STORE_INVALID_DENIED");
   for (const collection of [
     value.effects,
-    ...(isV2 ? [value.reservations, value.consumedAuthorityLeases] : []),
+    ...(isV2 || isV3 ? [value.reservations, value.consumedAuthorityLeases] : []),
   ]) {
     if (collection === null || typeof collection !== "object" || Array.isArray(collection)) {
       throw new Error("EFFECT_STORE_INVALID_DENIED");
@@ -285,6 +299,29 @@ function normalizeEffectStore(value) {
         || (record.status === "APPLIED") !== (value.effects[replayKey] !== undefined)
       ) throw new Error("EFFECT_STORE_INVALID_DENIED");
     }
+  } else if (isV3) {
+    for (const [operationKey, record] of Object.entries(value.reservations)) {
+      if (
+        record === null
+        || typeof record !== "object"
+        || Array.isArray(record)
+        || canonicalJson(Object.keys(record).sort()) !== canonicalJson([
+          "actionDigest", "authorityKind", "leaseId", "recovery", "reservedAtMs", "status",
+        ])
+        || !["INSTALLER_APPROVAL_V1", "ADMIN_AI_POC_HMAC_V1", "OWNER_ESCALATION_LEASE_HMAC_V1"].includes(record.authorityKind)
+        || !["EXECUTING", "APPLIED", "AMBIGUOUS"].includes(record.status)
+        || !["NONE", "RECONCILE"].includes(record.recovery)
+        || (record.status === "AMBIGUOUS" ? record.recovery !== "RECONCILE" : record.recovery !== "NONE")
+        || !/^[a-f0-9]{64}$/.test(record.actionDigest ?? "")
+        || (record.leaseId !== null && !/^[a-f0-9]{64}$/.test(record.leaseId ?? ""))
+        || !Number.isSafeInteger(record.reservedAtMs)
+        || (record.status === "APPLIED") !== (value.effects[operationKey] !== undefined)
+      ) throw new Error("EFFECT_STORE_INVALID_DENIED");
+      if (
+        record.authorityKind === "OWNER_ESCALATION_LEASE_HMAC_V1"
+        && (record.leaseId === null || value.consumedAuthorityLeases[record.leaseId]?.replayKey !== operationKey)
+      ) throw new Error("EFFECT_STORE_INVALID_DENIED");
+    }
     for (const [leaseId, record] of Object.entries(value.consumedAuthorityLeases)) {
       if (
         record === null
@@ -300,10 +337,22 @@ function normalizeEffectStore(value) {
     }
   }
   return {
-    schemaVersion: "chimpmaera.demo/effect-store/v2",
+    schemaVersion: "chimpmaera.demo/effect-store/v3",
     effects: value.effects,
-    reservations: isV2 ? value.reservations : {},
-    consumedAuthorityLeases: isV2 ? value.consumedAuthorityLeases : {},
+    reservations: isV2
+      ? Object.fromEntries(Object.entries(value.reservations).map(([operationKey, record]) => [
+        operationKey,
+        {
+          actionDigest: record.actionDigest,
+          authorityKind: "OWNER_ESCALATION_LEASE_HMAC_V1",
+          leaseId: record.leaseId,
+          recovery: record.status === "AMBIGUOUS" ? "RECONCILE" : "NONE",
+          reservedAtMs: record.reservedAtMs,
+          status: record.status,
+        },
+      ]))
+      : isV3 ? value.reservations : {},
+    consumedAuthorityLeases: isV2 || isV3 ? value.consumedAuthorityLeases : {},
   };
 }
 
@@ -319,6 +368,7 @@ export class DemoMutationGate {
     assertPolicyUse = () => true,
     ownerAuthorityToken = controlToken,
     now = () => Date.now(),
+    operationTimeoutMs = 30_000,
     authorityContext = {
       profileId: "SAFE_GUIDED",
       profileGeneration: randomUUID(),
@@ -329,6 +379,9 @@ export class DemoMutationGate {
       apiToken.length < 32
       || controlToken.length < 32
       || ownerAuthorityToken.length < 32
+      || !Number.isSafeInteger(operationTimeoutMs)
+      || operationTimeoutMs < 1
+      || operationTimeoutMs > 300_000
     ) {
       throw new Error("GATE_SECRET_INVALID");
     }
@@ -338,6 +391,7 @@ export class DemoMutationGate {
     this.expectedOrigin = expectedOrigin;
     this.receiptPath = receiptPath;
     this.provider = provider;
+    this.operationTimeoutMs = operationTimeoutMs;
     this.adminAiPolicyDigest = adminAiPolicyDigest;
     if (
       typeof now !== "function"
@@ -356,13 +410,22 @@ export class DemoMutationGate {
     this.adminAiPolicyId = adminAiPolicyId;
     this.assertPolicyUse = assertPolicyUse;
     this.state = {
-      schemaVersion: "chimpmaera.demo/effect-store/v2",
+      schemaVersion: "chimpmaera.demo/effect-store/v3",
       effects: {},
       reservations: {},
       consumedAuthorityLeases: {},
     };
     try {
       this.state = normalizeEffectStore(JSON.parse(readFileSync(receiptPath, "utf8")));
+      let recoveredExecuting = false;
+      for (const reservation of Object.values(this.state.reservations)) {
+        if (reservation.status === "EXECUTING") {
+          reservation.status = "AMBIGUOUS";
+          reservation.recovery = "RECONCILE";
+          recoveredExecuting = true;
+        }
+      }
+      if (recoveredExecuting) this.persist();
     } catch (error) {
       if (error?.code !== "ENOENT") throw error;
     }
@@ -596,48 +659,109 @@ export class DemoMutationGate {
     return now;
   }
 
-  authorizeOwnerLeaseReservation({
-    authority,
+  reserveOperation({
+    operationKey,
     action,
     computedDigest,
-    businessDiff,
-    businessDiffDigest,
+    authorityKind,
+    leaseId = null,
+    reservedAtMs,
   }) {
-    // This is the local authorization/reservation point. It must remain after
-    // the final authoritative snapshot await and before durable reservation.
-    const reservedAtMs = this.validateOwnerAuthority(
-      authority,
-      action,
-      computedDigest,
-      businessDiff,
-      businessDiffDigest,
-    );
-    this.assertPolicyUse({
-      tenant: action.scope.tenant,
-      policyId: authority.policyId,
-      policyGeneration: authority.policyGeneration,
-      policySourceDigest: authority.policyDigest,
-    });
-    if (this.state.consumedAuthorityLeases[authority.leaseId] !== undefined) {
-      throw new Error("AUTHORITY_LEASE_REPLAY_DENIED");
+    const prior = this.state.effects[operationKey];
+    if (prior !== undefined && prior.actionDigest !== computedDigest) {
+      throw new Error("REPLAY_KEY_CONFLICT_DENIED");
     }
-    if (
-      this.state.effects[action.replayKey] !== undefined
-      || this.state.reservations[action.replayKey] !== undefined
-    ) throw new Error("EFFECT_REPLAY_OR_AMBIGUOUS_DENIED");
-    const consumed = {
+    const reservation = this.state.reservations[operationKey];
+    if (reservation !== undefined) {
+      if (reservation.actionDigest !== computedDigest) {
+        throw new Error("REPLAY_KEY_CONFLICT_DENIED");
+      }
+      if (
+        authorityKind === "OWNER_ESCALATION_LEASE_HMAC_V1"
+        && reservation.leaseId === leaseId
+        && reservation.status !== "AMBIGUOUS"
+      ) throw new Error("AUTHORITY_LEASE_REPLAY_DENIED");
+      if (reservation.status === "AMBIGUOUS") return reservation;
+      if (reservation.status === "APPLIED" && prior !== undefined) return reservation;
+      throw new Error("EFFECT_REPLAY_IN_PROGRESS_DENIED");
+    }
+    this.state.reservations[operationKey] = {
       actionDigest: computedDigest,
-      replayKey: action.replayKey,
-      reservedAtMs,
-    };
-    this.state.consumedAuthorityLeases[authority.leaseId] = consumed;
-    this.state.reservations[action.replayKey] = {
-      actionDigest: computedDigest,
-      leaseId: authority.leaseId,
+      authorityKind,
+      leaseId,
+      recovery: "NONE",
       reservedAtMs,
       status: "EXECUTING",
     };
+    if (authorityKind === "OWNER_ESCALATION_LEASE_HMAC_V1") {
+      this.state.consumedAuthorityLeases[leaseId] = {
+        actionDigest: computedDigest,
+        replayKey: operationKey,
+        reservedAtMs,
+      };
+    }
     this.persist();
+    return this.state.reservations[operationKey];
+  }
+
+  markAmbiguous(operationKey) {
+    const reservation = this.state.reservations[operationKey];
+    if (reservation === undefined || this.state.effects[operationKey] !== undefined) return;
+    reservation.status = "AMBIGUOUS";
+    reservation.recovery = "RECONCILE";
+    this.persist();
+  }
+
+  async reconcileOperation({ operationKey, action, computedDigest, authority, signal, runBounded }) {
+    const reservation = this.state.reservations[operationKey];
+    if (reservation?.status !== "AMBIGUOUS") return null;
+    if (typeof this.provider.reconcile !== "function") {
+      throw new Error("EFFECT_AMBIGUOUS_RECONCILE_REQUIRED");
+    }
+    const result = await runBounded((providerSignal) =>
+      this.provider.reconcile(action, providerSignal), signal);
+    if (result === null || result === undefined) {
+      throw new Error("EFFECT_RECONCILIATION_PENDING");
+    }
+    const readback = result?.readback ?? result;
+    const providerResult = result?.readback === undefined
+      ? result
+      : result.providerResult ?? { id: readback.id };
+    if (
+      readback === null
+      || typeof readback !== "object"
+      || Array.isArray(readback)
+    ) throw new Error("PROVIDER_READBACK_REQUIRED");
+    validateSemanticReadback(action, readback);
+    const core = receiptCore(
+      action,
+      computedDigest,
+      providerResult,
+      readback,
+      action.actor === "agent:admin-ai-poc" ? authority : undefined,
+      "RECONCILED_AFTER_AMBIGUITY",
+    );
+    const receipt = {
+      ...core,
+      receiptDigest: sha256(canonicalJson(core)),
+    };
+    this.state.effects[operationKey] = {
+      actionDigest: computedDigest,
+      providerResult,
+      readback,
+      receipt,
+    };
+    reservation.status = "APPLIED";
+    reservation.recovery = "NONE";
+    this.persist();
+    return {
+      status: "PASS",
+      replayed: true,
+      replayState: "RECONCILE_NO_DUPLICATE",
+      providerResult,
+      readback,
+      receipt,
+    };
   }
 
   persist() {
@@ -651,6 +775,25 @@ export class DemoMutationGate {
 
   async execute(request, envelope) {
     this.authorize(request);
+    const controller = new AbortController();
+    const deadlineError = new Error("OPERATION_DEADLINE_EXCEEDED");
+    let deadlineTimer;
+    const deadlinePromise = new Promise((_, reject) => {
+      deadlineTimer = setTimeout(() => {
+        controller.abort(deadlineError);
+        reject(deadlineError);
+      }, this.operationTimeoutMs);
+    });
+    deadlinePromise.catch(() => {});
+    const runBounded = async (operation) => {
+      if (controller.signal.aborted) throw deadlineError;
+      return Promise.race([
+        Promise.resolve().then(() => operation(controller.signal)),
+        deadlinePromise,
+      ]);
+    };
+    let operationKey;
+    let reserved = false;
     const {
       action,
       actionDigest,
@@ -659,28 +802,80 @@ export class DemoMutationGate {
       businessDiff,
       businessDiffDigest,
     } = envelope ?? {};
-    if (
-      authority?.kind === "OWNER_ESCALATION_LEASE_HMAC_V1"
-      && canonicalJson(Object.keys(envelope).sort()) !== canonicalJson([
-        "action",
-        "actionDigest",
-        "authority",
-        "businessDiff",
-        "businessDiffDigest",
-      ])
-    ) throw new Error("OWNER_EFFECT_ENVELOPE_INVALID_DENIED");
-    validateActionShape(action);
-    if (action.scope.actor !== action.actor) {
-      throw new Error("IDENTITY_MISMATCH_DENIED");
-    }
-    validateMutationScope(action);
-    const computedDigest = sha256(canonicalJson(action));
-    if (!equalSecret(actionDigest, computedDigest)) {
-      throw new Error("ACTION_DIGEST_MISMATCH_DENIED");
-    }
-    if (action.actor === "agent:admin-ai-poc") {
-      if (authority?.kind === "OWNER_ESCALATION_LEASE_HMAC_V1") {
-        validateAdminAiAction(action, authority.kind);
+    try {
+      if (
+        authority?.kind === "OWNER_ESCALATION_LEASE_HMAC_V1"
+        && canonicalJson(Object.keys(envelope).sort()) !== canonicalJson([
+          "action",
+          "actionDigest",
+          "authority",
+          "businessDiff",
+          "businessDiffDigest",
+        ])
+      ) throw new Error("OWNER_EFFECT_ENVELOPE_INVALID_DENIED");
+      validateActionShape(action);
+      if (action.scope.actor !== action.actor) {
+        throw new Error("IDENTITY_MISMATCH_DENIED");
+      }
+      validateMutationScope(action);
+      operationKey = normalizeOperationKey(action.replayKey);
+      const computedDigest = sha256(canonicalJson(action));
+      if (!equalSecret(actionDigest, computedDigest)) {
+        throw new Error("ACTION_DIGEST_MISMATCH_DENIED");
+      }
+
+      const ownerLease = authority?.kind === "OWNER_ESCALATION_LEASE_HMAC_V1";
+      if (action.actor === "agent:admin-ai-poc") {
+        if (ownerLease) {
+          validateAdminAiAction(action, authority.kind);
+          this.validateOwnerAuthority(
+            authority,
+            action,
+            computedDigest,
+            businessDiff,
+            businessDiffDigest,
+          );
+        } else {
+          validateAdminAiAction(action, "ADMIN_AI_POC_HMAC_V1");
+          this.validateAgentAuthority(authority, action, computedDigest);
+        }
+      } else if (
+        approval?.decision !== "APPROVE"
+        || approval?.approver !== "owner:local-demo"
+        || !equalSecret(approval?.actionDigest, computedDigest)
+        || !equalSecret(
+          approval?.binding,
+          this.approvalBinding(computedDigest, action),
+        )
+      ) throw new Error("APPROVAL_BINDING_INVALID_DENIED");
+
+      if (action.actor === "agent:admin-ai-poc") {
+        this.assertPolicyUse({
+          tenant: action.scope.tenant,
+          policyId: authority.policyId,
+          policyGeneration: authority.policyGeneration,
+          policySourceDigest: authority.policyDigest,
+        });
+      }
+
+      if (ownerLease && this.state.consumedAuthorityLeases[authority.leaseId] !== undefined) {
+        const existing = this.state.reservations[operationKey];
+        if (existing?.status !== "AMBIGUOUS" || typeof this.provider.reconcile !== "function") {
+          throw new Error("AUTHORITY_LEASE_REPLAY_DENIED");
+        }
+      }
+      if (ownerLease) {
+        if (typeof this.provider.readAuthoritativeSnapshot !== "function") {
+          throw new Error("APPROVAL_SNAPSHOT_UNAVAILABLE_DENIED");
+        }
+        const currentSnapshot = validateAuthoritativeApprovalSnapshot(
+          await runBounded((signal) => this.provider.readAuthoritativeSnapshot(action, signal)),
+          action,
+        );
+        if (
+          currentSnapshot.snapshotDigest !== authority.snapshotDigest
+          || currentSnapshot.version !== authority.snapshotVersion
+        ) throw new Error("APPROVAL_SNAPSHOT_STALE_DENIED");
         this.validateOwnerAuthority(
           authority,
           action,
@@ -688,85 +883,70 @@ export class DemoMutationGate {
           businessDiff,
           businessDiffDigest,
         );
-      } else {
-        validateAdminAiAction(action, "ADMIN_AI_POC_HMAC_V1");
-        this.validateAgentAuthority(authority, action, computedDigest);
+        this.assertPolicyUse({
+          tenant: action.scope.tenant,
+          policyId: authority.policyId,
+          policyGeneration: authority.policyGeneration,
+          policySourceDigest: authority.policyDigest,
+        });
       }
-    } else if (
-      approval?.decision !== "APPROVE"
-      || approval?.approver !== "owner:local-demo"
-      || !equalSecret(approval?.actionDigest, computedDigest)
-      || !equalSecret(
-        approval?.binding,
-        this.approvalBinding(computedDigest, action),
-      )
-    ) throw new Error("APPROVAL_BINDING_INVALID_DENIED");
 
-    if (action.actor === "agent:admin-ai-poc") {
-      this.assertPolicyUse({
-        tenant: action.scope.tenant,
-        policyId: authority.policyId,
-        policyGeneration: authority.policyGeneration,
-        policySourceDigest: authority.policyDigest,
-      });
-    }
+      const prior = this.state.effects[operationKey];
+      if (prior !== undefined) {
+        if (prior.actionDigest !== computedDigest) {
+          throw new Error("REPLAY_KEY_CONFLICT_DENIED");
+        }
+        if (
+          action.actor === "agent:admin-ai-poc"
+          && (
+            !equalSecret(prior.receipt.decisionDigest, authority.decisionDigest)
+            || prior.receipt.policyId !== authority.policyId
+            || prior.receipt.policyGeneration !== authority.policyGeneration
+            || !equalSecret(prior.receipt.policyDigest, authority.policyDigest)
+          )
+        ) throw new Error("REPLAY_AUTHORITY_CONFLICT_DENIED");
+        return {
+          status: "PASS",
+          replayed: true,
+          replayState: "REPLAY_NO_DUPLICATE",
+          providerResult: prior.providerResult,
+          readback: prior.readback,
+          receipt: prior.receipt,
+        };
+      }
 
-    const ownerLease = authority?.kind === "OWNER_ESCALATION_LEASE_HMAC_V1";
-    if (ownerLease) {
-      if (this.state.consumedAuthorityLeases[authority.leaseId] !== undefined) {
-        throw new Error("AUTHORITY_LEASE_REPLAY_DENIED");
+      const existing = this.state.reservations[operationKey];
+      if (existing?.status === "AMBIGUOUS") {
+        const recovered = await this.reconcileOperation({
+          operationKey,
+          action,
+          computedDigest,
+          authority,
+          signal: controller.signal,
+          runBounded,
+        });
+        if (recovered !== null) return recovered;
       }
-      if (
-        this.state.effects[action.replayKey] !== undefined
-        || this.state.reservations[action.replayKey] !== undefined
-      ) throw new Error("EFFECT_REPLAY_OR_AMBIGUOUS_DENIED");
-      if (typeof this.provider.readAuthoritativeSnapshot !== "function") {
-        throw new Error("APPROVAL_SNAPSHOT_UNAVAILABLE_DENIED");
-      }
-      const currentSnapshot = validateAuthoritativeApprovalSnapshot(
-        await this.provider.readAuthoritativeSnapshot(action),
-        action,
-      );
-      if (
-        currentSnapshot.snapshotDigest !== authority.snapshotDigest
-        || currentSnapshot.version !== authority.snapshotVersion
-      ) throw new Error("APPROVAL_SNAPSHOT_STALE_DENIED");
-      this.authorizeOwnerLeaseReservation({
-        authority,
+
+      const authorityKind = ownerLease
+        ? "OWNER_ESCALATION_LEASE_HMAC_V1"
+        : action.actor === "agent:admin-ai-poc"
+          ? "ADMIN_AI_POC_HMAC_V1"
+          : "INSTALLER_APPROVAL_V1";
+      this.reserveOperation({
+        operationKey,
         action,
         computedDigest,
-        businessDiff,
-        businessDiffDigest,
+        authorityKind,
+        leaseId: ownerLease ? authority.leaseId : null,
+        reservedAtMs: this.now(),
       });
-    }
+      reserved = true;
 
-    const prior = this.state.effects[action.replayKey];
-    if (prior !== undefined) {
-      if (prior.actionDigest !== computedDigest) {
-        throw new Error("REPLAY_KEY_CONFLICT_DENIED");
-      }
-      if (
-        action.actor === "agent:admin-ai-poc"
-        && (
-          !equalSecret(prior.receipt.decisionDigest, authority.decisionDigest)
-          || prior.receipt.policyId !== authority.policyId
-          || prior.receipt.policyGeneration !== authority.policyGeneration
-          || !equalSecret(prior.receipt.policyDigest, authority.policyDigest)
-        )
-      ) throw new Error("REPLAY_AUTHORITY_CONFLICT_DENIED");
-      return {
-        status: "PASS",
-        replayed: true,
-        replayState: "REPLAY_NO_DUPLICATE",
-        providerResult: prior.providerResult,
-        readback: prior.readback,
-        receipt: prior.receipt,
-      };
-    }
-
-    try {
-      const providerResult = await this.provider.mutate(action);
-      const readback = await this.provider.readback(action, providerResult);
+      const providerResult = await runBounded((signal) =>
+        this.provider.mutate(action, signal));
+      const readback = await runBounded((signal) =>
+        this.provider.readback(action, providerResult, signal));
       if (
         readback === null
         || typeof readback !== "object"
@@ -784,15 +964,13 @@ export class DemoMutationGate {
         ...core,
         receiptDigest: sha256(canonicalJson(core)),
       };
-      this.state.effects[action.replayKey] = {
+      this.state.effects[operationKey] = {
         actionDigest: computedDigest,
         providerResult,
         readback,
         receipt,
       };
-      if (ownerLease) {
-        this.state.reservations[action.replayKey].status = "APPLIED";
-      }
+      this.state.reservations[operationKey].status = "APPLIED";
       this.persist();
       return {
         status: "PASS",
@@ -802,11 +980,12 @@ export class DemoMutationGate {
         receipt,
       };
     } catch (error) {
-      if (ownerLease) {
-        this.state.reservations[action.replayKey].status = "AMBIGUOUS";
-        this.persist();
+      if (reserved && operationKey !== undefined && this.state.effects[operationKey] === undefined) {
+        this.markAmbiguous(operationKey);
       }
       throw error;
+    } finally {
+      clearTimeout(deadlineTimer);
     }
   }
 }
@@ -815,7 +994,11 @@ export function createHttpProvider({
   espoPassword,
   doliApiKey,
   fetchImpl = fetch,
+  operationTimeoutMs = 30_000,
 }) {
+  if (!Number.isSafeInteger(operationTimeoutMs) || operationTimeoutMs < 1 || operationTimeoutMs > 300_000) {
+    throw new Error("PROVIDER_TIMEOUT_INVALID");
+  }
   const base = {
     espocrm: "http://espocrm/api/v1",
     dolibarr: "http://dolibarr/api/index.php",
@@ -830,7 +1013,10 @@ export function createHttpProvider({
     ...(json ? { "content-type": "application/json" } : {}),
   });
   const call = async (provider, path, options = {}) => {
-    const response = await fetchImpl(`${base[provider]}${path}`, options);
+    const response = await fetchImpl(`${base[provider]}${path}`, {
+      ...options,
+      signal: options.signal ?? AbortSignal.timeout(operationTimeoutMs),
+    });
     const text = await response.text();
     if (!response.ok) throw new Error(`PROVIDER_${response.status}_DENIED`);
     try {
@@ -840,7 +1026,7 @@ export function createHttpProvider({
     }
   };
   return {
-    async read(provider, path, query = {}) {
+    async read(provider, path, query = {}, signal) {
       if (
         !["espocrm", "dolibarr"].includes(provider)
         || typeof path !== "string"
@@ -852,19 +1038,20 @@ export function createHttpProvider({
       }
       const response = await fetchImpl(url, {
         headers: headersFor(provider),
+        signal: signal ?? AbortSignal.timeout(operationTimeoutMs),
       });
       const text = await response.text();
       if (response.status === 404 && provider === "dolibarr") return [];
       if (!response.ok) throw new Error(`PROVIDER_${response.status}_DENIED`);
       return JSON.parse(text);
     },
-    async readAuthoritativeSnapshot(action) {
+    async readAuthoritativeSnapshot(action, signal) {
       const rows = await this.read("dolibarr", "/orders", {
         // Read one sentinel beyond the closed snapshot limit so a hidden third
         // match fails snapshot construction instead of being called complete.
         limit: "3",
         sqlfilters: "(t.ref_client:=:'CM-ADMIN-AI-ESCALATION-001')",
-      });
+      }, signal);
       if (!Array.isArray(rows)) {
         throw new Error("APPROVAL_SNAPSHOT_SOURCE_INVALID_DENIED");
       }
@@ -878,26 +1065,29 @@ export function createHttpProvider({
         })),
       );
     },
-    async mutate(action) {
+    async mutate(action, signal) {
       return call(action.scope.provider, action.payload.path, {
         method: "POST",
         headers: headersFor(action.scope.provider, true),
         body: JSON.stringify(action.payload.body),
+        signal,
       });
     },
-    async readback(action, result) {
+    async readback(action, result, signal) {
       const id = typeof result === "object" && result !== null
         ? result.id
         : result;
       if (action.scope.provider === "espocrm") {
         return call("espocrm", `${action.payload.path}/${id}`, {
           headers: headersFor("espocrm"),
+          signal,
         });
       }
       if (action.scope.entity === "OrderLine") {
         const orderPath = action.payload.path.replace(/\/lines$/, "");
         const order = await call("dolibarr", orderPath, {
           headers: headersFor("dolibarr"),
+          signal,
         });
         const matching = (order.lines ?? []).filter((line) =>
           line.desc === action.payload.body.desc
@@ -907,7 +1097,13 @@ export function createHttpProvider({
       }
       return call("dolibarr", `${action.payload.path}/${id}`, {
         headers: headersFor("dolibarr"),
+        signal,
       });
+    },
+    async reconcile() {
+      // Provider-specific reconciliation must be explicit; never guess that
+      // an uncertain POST did not land.
+      return null;
     },
   };
 }
