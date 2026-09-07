@@ -3,6 +3,8 @@ import test from "node:test";
 
 import {
   ADJUDICATION_CHAIN_STAGES,
+  KALEIDOSPHERE_EXACT_RELEASED_HEAD_V1,
+  PANSPHAIRA_EXACT_RELEASED_HEAD_V1,
   buildAuthoritativeAdjudicationInputs,
   candidateDigestV1,
   createCandidateV1,
@@ -14,8 +16,8 @@ import {
 } from "../../src/cks-12/kaleidosphere-candidate-quarantine.js";
 
 const RELEASED_HEADS: ReleasedHeadsV1 = Object.freeze({
-  pansphaira: "90512ba63587d10b4a833a7f31e1f91595531467",
-  kaleidoSphere: "a".repeat(40),
+  pansphaira: PANSPHAIRA_EXACT_RELEASED_HEAD_V1,
+  kaleidoSphere: KALEIDOSPHERE_EXACT_RELEASED_HEAD_V1,
 });
 
 const validCandidate = (): CandidateV1 => createCandidateV1({
@@ -58,13 +60,24 @@ test("XRA-PS-02 AC02 returns exact outcomes for positive, restricted-unknown, co
       candidate.kaleidoSphereVerdict = "RESTRICTED";
     }), "DENIED"],
     ["forged-candidate", withCandidateMutation((candidate) => { candidate.projectionDigest = "c".repeat(64); }), "DENIED"],
-    ["stale-head", withCandidateMutation((candidate) => { candidate.candidateHead = "d".repeat(40); }), "DENIED"],
+    ["stale-head", withCandidateMutation((candidate) => {
+      candidate.releasedHeads = { pansphaira: RELEASED_HEADS.pansphaira, kaleidoSphere: "d".repeat(40) };
+      candidate.kaleidoSphereHead = "d".repeat(40);
+      candidate.candidateHead = "d".repeat(40);
+    }), "DENIED"],
   ];
 
   assert.deepEqual(
     cases.map(([name, candidate]) => [name, adjudicateCandidateV1({ candidate, releasedHeads: RELEASED_HEADS }).outcome]),
     cases.map(([name, , expected]) => [name, expected]),
   );
+
+  const staleEnvelope = { pansphaira: RELEASED_HEADS.pansphaira, kaleidoSphere: "e".repeat(40) };
+  assert.equal(adjudicateCandidateV1({ candidate: validCandidate(), releasedHeads: staleEnvelope }).outcome, "DENIED");
+
+  const arbitraryHeads: ReleasedHeadsV1 = { pansphaira: "1".repeat(40), kaleidoSphere: "2".repeat(40) };
+  const arbitraryCandidate = createCandidateV1({ releasedHeads: arbitraryHeads, kaleidoSphereVerdict: "ACCEPTED_BOUNDED" });
+  assert.equal(adjudicateCandidateV1({ candidate: arbitraryCandidate, releasedHeads: arbitraryHeads }).outcome, "DENIED");
 });
 
 test("XRA-PS-02 AC03 receipt binds both released heads and every local chain stage", () => {
@@ -76,7 +89,6 @@ test("XRA-PS-02 AC03 receipt binds both released heads and every local chain sta
     releasedHeads: RELEASED_HEADS,
     candidate,
     adjudication,
-    stageDigests: Object.fromEntries(ADJUDICATION_CHAIN_STAGES.map((stage, index) => [stage, `${index + 1}`.repeat(64)])) as Record<typeof ADJUDICATION_CHAIN_STAGES[number], string>,
   });
   assert.deepEqual(verifyPairedAdjudicationReceiptV1(receipt), {
     outcome: "VERIFIED",
@@ -94,6 +106,10 @@ test("XRA-PS-02 AC03 receipt binds both released heads and every local chain sta
   const malformed = structuredClone(receipt) as Record<string, any>;
   malformed.candidate = null;
   assert.equal(verifyPairedAdjudicationReceiptV1(malformed).outcome, "DENIED");
+
+  const forgedChain = structuredClone(receipt) as Record<string, any>;
+  forgedChain.chain[0].digest = "f".repeat(64);
+  assert.equal(verifyPairedAdjudicationReceiptV1(forgedChain).outcome, "DENIED");
 });
 
 test("XRA-PS-02 AC04 leaves canonical evidence, authority, capability, and effect unchanged", () => {

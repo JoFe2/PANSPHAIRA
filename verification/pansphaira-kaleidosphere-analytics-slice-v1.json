@@ -26,7 +26,7 @@
       }
     },
     "XRA-PS-02-AC03": {
-      "status": "LOCAL_RECEIPT_CONTRACT_PROVEN",
+      "status": "NOT_PROVEN",
       "chainStages": [
         "GENERATION",
         "PROJECTION",
@@ -36,14 +36,8 @@
         "CANDIDATE",
         "ADJUDICATION"
       ],
-      "syntheticReceipt": {
-        "pansphairaHead": "90512ba63587d10b4a833a7f31e1f91595531467",
-        "kaleidoSphereHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "candidateDigest": "9f21c44716073575c4e93e6ef2ecfe3f304167eb067e99a625bfde660d515109",
-        "adjudicationDigest": "175b4e4dca34ba4d3c7af69bbefb590ca5192dde69afcb329d04544e78312ffd",
-        "receiptDigest": "574c867341fbf00f734684df54ab7ee443f16b1491b6843fe66736a6d73c16b5"
-      },
-      "nonclaim": "The synthetic KaleidoSphere head and stage digests are test values; no cross-repository release, CI, readback, or external chain is claimed."
+      "localFinding": "The verifier now reconstructs the local chain from frozen owner inputs and the adjudicated candidate; this is not Root-QS, cross-repository CI/readback, or parent-closure evidence.",
+      "nonclaim": "XRA-PS-02-AC03 is not proven: XRA-KS-01/#151 admission, both exact released-head readbacks, Root-QS, repository CI, and parent closure are absent."
     },
     "XRA-PS-02-AC04": {
       "status": "PROVEN_LOCALLY",
@@ -55,7 +49,9 @@
     "schemaVersion": "pansphaira.xra-ps-02/candidate-adjudication/v1",
     "projectionDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
     "sourceContractSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44",
-    "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a"
+    "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+    "releasedPansphairaHead": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+    "kaleidoSphereReleasedHead": "90c574e9a06cb752be06270395d44a31eabc44ae"
   },
   "authorityState": {
     "authority": "NONE",
@@ -68,7 +64,8 @@
     "NO_PERSISTENCE_OR_HISTORY",
     "NO_GLOBAL_TRUTH_OR_UTILITY_CLAIM",
     "NO_PARITY_GENERALIZATION",
+    "NO_XRA_KS_01_ADMISSION_OR_EXACT_HEAD_CLOSURE",
     "NO_EXTERNAL_RELEASE_OR_CROSS_REPOSITORY_CHAIN_PROOF"
   ],
-  "integrityNote": "This slice records only its local, purpose-bound digests. Repository-global manifests, inventories, verification DAGs, SOURCE-MAP, and root checksums remain untouched for serial integration."
+  "integrityNote": "This slice records only its local, purpose-bound digests. The existing repository-integrity chain was updated only for the changed inventory, validator, and public-release input pins; no Root-QS, external readback, release, or parent-closure evidence is asserted."
 }

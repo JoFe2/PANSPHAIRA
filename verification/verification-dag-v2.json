@@ -4716,7 +4716,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "056aacae8a05ef8244802a99b79bf1ef339e4149313d9028a4b5e8ed9d44706a"
+          "sha256": "dab4fc9affd6de0fe4a0d6a8c2afd7e7c82ce5feb3c80a427172fd7cd1f25122"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4736,7 +4736,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "fe0aff3c25827bfc94d0ef7f39c0ec385e141708cc35b104ed91f019d6e6e266"
+          "sha256": "2c860f27ff6be00b807362b3ac5cc27444c88c18a10ddddf16fe047eebd75b50"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4766,7 +4766,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "bcdf2d20be37cadae1d4c448fe63151f0cdbf5fb54d873cc5836e1481588abda"
+          "sha256": "1cf56e888c74efe6722940d57a0a8959709f3bc0a70f9d9d709ebcd834dfde81"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
