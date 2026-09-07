@@ -225,7 +225,7 @@ function requirementValid(value: unknown): value is IncomingInvoiceErvRequiremen
     && Array.isArray(value.requestedEffects) && value.requestedEffects.length > 0
     && value.requestedEffects.every((effect) => typeof effect === "string")
     && new Set(value.requestedEffects).size === value.requestedEffects.length
-    && Array.isArray(value.evidenceRefs) && value.evidenceRefs.every((ref) => typeof ref === "string" && ref.length > 0)
+    && Array.isArray(value.evidenceRefs) && value.evidenceRefs.every((ref) => typeof ref === "string" && SYNTHETIC_EVIDENCE_REF_PATTERN.test(ref))
     && value.synthetic === true && value.customerData === false;
 }
 function referenceValid(value: unknown): value is IncomingInvoiceUiEvidenceReferenceV1 {
@@ -350,15 +350,36 @@ function baseTurns(input: IncomingInvoiceSetupInputV1): IncomingInvoiceDialogueT
   ];
 }
 function setupDenied(input: unknown, gaps: readonly string[]): IncomingInvoiceSetupAgentResultV1 {
-  const turns: IncomingInvoiceDialogueTurnV1[] = isRecord(input) && requirementValid(input.baseline) && requirementValid(input.changed)
-    && Array.isArray(input.answers)
-    ? baseTurns(input as unknown as IncomingInvoiceSetupInputV1)
-    : [
-      { ordinal: 1, speaker: "SYSTEM", kind: "BASELINE_REQUIREMENT", payload: { invalid: true as const }, evidenceRefs: [] },
-      { ordinal: 2, speaker: "SYSTEM", kind: "CHANGED_REQUIREMENT", payload: { invalid: true as const }, evidenceRefs: [] },
-    ];
-  const evidenceRefs = isRecord(input) && requirementValid(input.changed) ? [...input.changed.evidenceRefs].sort() : [];
-  turns.push({ ordinal: turns.length + 1, speaker: "SYSTEM", kind: "OUTCOME", payload: { outcome: "DENIED_UNSUPPORTED", gaps: [...gaps].sort() }, evidenceRefs });
+  const record = isRecord(input) ? input : undefined;
+  const baselineValid = record !== undefined && requirementValid(record.baseline);
+  const changedValid = record !== undefined && requirementValid(record.changed);
+  const changedEvidenceRefs = changedValid ? [...(record.changed as IncomingInvoiceErvRequirementV1).evidenceRefs].sort() : [];
+  const turns: IncomingInvoiceDialogueTurnV1[] = [
+    {
+      ordinal: 1,
+      speaker: "SYSTEM",
+      kind: "BASELINE_REQUIREMENT",
+      payload: baselineValid ? record.baseline as IncomingInvoiceErvRequirementV1 : { invalid: true as const },
+      evidenceRefs: baselineValid ? [...(record.baseline as IncomingInvoiceErvRequirementV1).evidenceRefs].sort() : [],
+    },
+    {
+      ordinal: 2,
+      speaker: "SYSTEM",
+      kind: "CHANGED_REQUIREMENT",
+      payload: changedValid ? record.changed as IncomingInvoiceErvRequirementV1 : { invalid: true as const },
+      evidenceRefs: changedEvidenceRefs,
+    },
+  ];
+  if (record !== undefined && Array.isArray(record.answers)) {
+    for (const answer of record.answers) turns.push({
+      ordinal: turns.length + 1,
+      speaker: "OPERATOR",
+      kind: "ANSWER",
+      payload: answerValid(answer) ? answer : { invalid: true as const },
+      evidenceRefs: changedEvidenceRefs,
+    });
+  }
+  turns.push({ ordinal: turns.length + 1, speaker: "SYSTEM", kind: "OUTCOME", payload: { outcome: "DENIED_UNSUPPORTED", gaps: [...gaps].sort() }, evidenceRefs: changedEvidenceRefs });
   return deepFreeze({ outcome: "DENIED_UNSUPPORTED" as const, transcript: transcript(turns), unresolvedGaps: [...gaps].sort() });
 }
 

@@ -8,6 +8,7 @@ import {
   deriveIncomingInvoiceUiManifestV1,
   runIncomingInvoiceSetupAgentV1,
   type IncomingInvoiceErvRequirementV1,
+  type IncomingInvoiceSetupInputV1,
   type IncomingInvoiceUiInputV1,
 } from "../packages/contracts/src/index.js";
 
@@ -251,6 +252,51 @@ test("AP-05 dialogue asks only evidence-backed unresolved questions and fails cl
 
   const malformedAnswer = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [{ questionId: "confirm:matching-mode", answer: "MAYBE" }] });
   assert.equal(malformedAnswer.outcome, "DENIED_UNSUPPORTED");
+
+  const customerBaselineEvidence = runIncomingInvoiceSetupAgentV1({
+    baseline: requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1", ["evidence:customer-live-001"]),
+    changed,
+    answers: [],
+  });
+  assert.equal(customerBaselineEvidence.outcome, "DENIED_UNSUPPORTED");
+  if (customerBaselineEvidence.outcome === "DENIED_UNSUPPORTED") {
+    assert.deepEqual(customerBaselineEvidence.transcript.turns.slice(0, 2).map(({ payload }) => payload), [
+      { invalid: true },
+      changed,
+    ]);
+  }
+
+  const externalChangedEvidence = runIncomingInvoiceSetupAgentV1({
+    baseline,
+    changed: requirement("requirement:changed", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "ABS_MINOR_V1", ["evidence:external-system-001"]),
+    answers: [],
+  });
+  assert.equal(externalChangedEvidence.outcome, "DENIED_UNSUPPORTED");
+  if (externalChangedEvidence.outcome === "DENIED_UNSUPPORTED") {
+    assert.deepEqual(externalChangedEvidence.transcript.turns.slice(0, 2).map(({ payload }) => payload), [
+      baseline,
+      { invalid: true },
+    ]);
+  }
+
+  const completeMalformedTranscript = runIncomingInvoiceSetupAgentV1({
+    baseline,
+    changed,
+    answers: [
+      { questionId: "confirm:tolerance-policy", answer: "CONFIRM" },
+      { questionId: "confirm:matching-mode", answer: "MAYBE" },
+    ] as unknown as IncomingInvoiceSetupInputV1["answers"],
+  });
+  assert.equal(completeMalformedTranscript.outcome, "DENIED_UNSUPPORTED");
+  if (completeMalformedTranscript.outcome === "DENIED_UNSUPPORTED") {
+    assert.deepEqual(completeMalformedTranscript.transcript.turns.map(({ kind, payload }) => ({ kind, payload })), [
+      { kind: "BASELINE_REQUIREMENT", payload: baseline },
+      { kind: "CHANGED_REQUIREMENT", payload: changed },
+      { kind: "ANSWER", payload: { questionId: "confirm:tolerance-policy", answer: "CONFIRM" } },
+      { kind: "ANSWER", payload: { invalid: true } },
+      { kind: "OUTCOME", payload: { outcome: "DENIED_UNSUPPORTED", gaps: ["INPUT_SHAPE_DENIED"] } },
+    ]);
+  }
 
   const emptyEffects = runIncomingInvoiceSetupAgentV1({ baseline, changed: { ...changed, requestedEffects: [] }, answers: [] });
   assert.equal(emptyEffects.outcome, "DENIED_UNSUPPORTED");

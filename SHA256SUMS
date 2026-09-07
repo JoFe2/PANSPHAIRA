@@ -684,7 +684,7 @@ ba2f89720fc9a6e0d7b4d9f3287d6510126a1011a4100fd6dce795a541ab2a8f  ./packages/con
 c5b7d230b24b548c7ed3bfbe51ada53ef1fbcbcf7018fae10e29177a9567b78f  ./packages/contracts/src/hmi-discover-payload.ts
 36c8b8c157ce5590b516f1680f8922eef9cf736c34a42649c0b0d4a764c1f1ff  ./packages/contracts/src/hmi-explain-payload.ts
 447e03953e315efb569ff9ee7f8f4963caca7ffa3000595363a3efc21df8dc0e  ./packages/contracts/src/hmi-harness-adapter.ts
-4c32bebc8c02c48c2fddb8389eeda6d9e4fbd00d81e192791d91feb77a9b8240  ./packages/contracts/src/incoming-invoice-adaptive-ui.ts
+81eb8d8f2a79a371a097865eaa5564c07bc626c55f8d5008b8e9c0865019110e  ./packages/contracts/src/incoming-invoice-adaptive-ui.ts
 aad1b877c096d4605b80b141100897fab41f62622f5434be59059989b8514550  ./packages/contracts/src/incoming-invoice-blueprint.ts
 6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf  ./packages/contracts/src/incoming-invoice-erv.ts
 f64575a455e69906f930d8b9c0b6303a73c1a3896d98a9b451aee488229b52df  ./packages/contracts/src/incoming-invoice-extraction-benchmark.ts
@@ -1547,7 +1547,7 @@ c131d1a841ac32ffd1fad35b4261008cf9ab3fca9141b574517f12923fbcb332  ./tests/hmi-di
 08f3ad41a6158b339f5565177406b3dbf9fc5ea6f99d1a18d7f884e41ebbcc6d  ./tests/hmi-harness-adapter.test.ts
 871cbcb425ca5392e11a9d18bdb733b499bb1085a21a55abc856c3d7e5667011  ./tests/hmi-post-contribute-consistency.test.ts
 16b83837da00d17db7663505ad08c65d76b584e9c4f433a2425ce845d5022e66  ./tests/hmi-post-explain-consistency.test.ts
-656ae8c37eb3d42fc5f22606a6da41fb07d0a235e1d659840d962e51f81d70f9  ./tests/incoming-invoice-adaptive-ui.test.ts
+6279078d10e805e37d2a8b6d949f3298112fe2988512fe2790431487bb7c94d1  ./tests/incoming-invoice-adaptive-ui.test.ts
 07a7c0648463ae3ef3d08ff7cb6c1a8dd343b956646191a8e78ea83efd34bd44  ./tests/incoming-invoice-blueprint.test.ts
 fcc5e31702f327b0976da50fd42335d2e7741a3debc1218e7ece82cfa9efaf66  ./tests/incoming-invoice-erv.test.ts
 0773cbd6345fb90512d69f8199f9a80f8d3345587f63e19a4a5eac6a52e456ac  ./tests/incoming-invoice-extraction-benchmark.test.ts
