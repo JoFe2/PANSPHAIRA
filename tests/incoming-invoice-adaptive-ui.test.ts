@@ -41,11 +41,12 @@ function uiInput(
       outcome,
       matchingMode: { variantId: "THREE_WAY_INVOICE_PO_RECEIPT_V1", version: "1.0.0" },
       tolerancePolicy: { variantId: "ABS_MINOR_V1", version: "1.0.0" },
+      provenance: { source: "SYNTHETIC_FIXTURE", synthetic: true, customerData: false },
       references: [
-        { kind: "SUPPLIER", referenceId: "SUP-SYN-001", verified: true, evidenceRef: "evidence:supplier-001" },
-        { kind: "PURCHASE_ORDER", referenceId: "PO-SYN-001", verified: true, evidenceRef: "evidence:po-001" },
-        { kind: "RECEIPT", referenceId: "RCV-SYN-001", verified: true, evidenceRef: "evidence:receipt-001" },
-        { kind: "INVOICE", referenceId: "INV-SYN-001", verified: true, evidenceRef: "evidence:invoice-001" },
+        { kind: "SUPPLIER", referenceId: "SUP-SYN-001", verified: true, evidenceRef: "evidence:synthetic-supplier-001" },
+        { kind: "PURCHASE_ORDER", referenceId: "PO-SYN-001", verified: true, evidenceRef: "evidence:synthetic-po-001" },
+        { kind: "RECEIPT", referenceId: "RCV-SYN-001", verified: true, evidenceRef: "evidence:synthetic-receipt-001" },
+        { kind: "INVOICE", referenceId: "INV-SYN-001", verified: true, evidenceRef: "evidence:synthetic-invoice-001" },
       ],
     },
     authority: {
@@ -85,7 +86,18 @@ test("AP-05 LEAN, CONTROLLED and SEGREGATED variants remain explicit and testabl
     scenario: "LEAN",
     evidence: { ...uiInput("EXCEPTION").evidence, matchingMode: { variantId: "TWO_WAY_INVOICE_PO_V1", version: "1.0.0" }, tolerancePolicy: { variantId: "STRICT_ZERO_V1", version: "1.0.0" }, references: uiInput("EXCEPTION").evidence.references.filter(({ kind }) => kind !== "RECEIPT") },
   });
-  const segregated = deriveIncomingInvoiceUiManifestV1({ ...uiInput("CONFLICT"), scenario: "SEGREGATED_ENTERPRISE" });
+  const segregated = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("CONFLICT"),
+    scenario: "SEGREGATED_ENTERPRISE",
+    evidence: {
+      ...uiInput("CONFLICT").evidence,
+      references: [
+        ...uiInput("CONFLICT").evidence.references,
+        { kind: "APPROVAL_TRAIL", referenceId: "APPROVAL-SYN-001", verified: true, evidenceRef: "evidence:synthetic-approval-001" },
+        { kind: "SEPARATION_OF_DUTIES", referenceId: "SOD-SYN-001", verified: true, evidenceRef: "evidence:synthetic-sod-001" },
+      ],
+    },
+  });
   assert.equal(lean.outcome, "DERIVED");
   assert.equal(segregated.outcome, "DERIVED");
   if (lean.outcome === "DERIVED" && segregated.outcome === "DERIVED") {
@@ -111,7 +123,7 @@ test("AP-05 hidden authority, unsupported action and context collapse fail close
     evidence: {
       ...uiInput("MATCHED").evidence,
       references: [
-        { kind: "INVOICE", referenceId: "INV-SYN-UNVERIFIED", verified: false, evidenceRef: "evidence:invoice-unverified" },
+        { kind: "INVOICE", referenceId: "INV-SYN-UNVERIFIED", verified: false, evidenceRef: "evidence:synthetic-invoice-unverified" },
         ...uiInput("MATCHED").evidence.references,
       ],
     },
@@ -120,12 +132,48 @@ test("AP-05 hidden authority, unsupported action and context collapse fail close
 
   const extraneousReference = deriveIncomingInvoiceUiManifestV1({
     ...uiInput("MATCHED"),
+    scenario: "LEAN",
     evidence: {
       ...uiInput("MATCHED").evidence,
       matchingMode: { variantId: "TWO_WAY_INVOICE_PO_V1", version: "1.0.0" },
     },
   });
   assert.deepEqual(extraneousReference, { outcome: "DENIED", reasonCode: "CONTEXT_COLLAPSE_DENIED" });
+
+  const provenanceMissing = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    evidence: { ...uiInput("MATCHED").evidence, provenance: undefined as never },
+  });
+  assert.deepEqual(provenanceMissing, { outcome: "DENIED", reasonCode: "INPUT_SHAPE_DENIED" });
+
+  const customerReference = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    evidence: {
+      ...uiInput("MATCHED").evidence,
+      references: uiInput("MATCHED").evidence.references.map((reference, index) => index === 0
+        ? { ...reference, referenceId: "customer-live-001", evidenceRef: "evidence:customer-live-001" }
+        : reference),
+    },
+  });
+  assert.deepEqual(customerReference, { outcome: "DENIED", reasonCode: "INPUT_SHAPE_DENIED" });
+
+  const leanThreeWay = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    scenario: "LEAN",
+  });
+  assert.deepEqual(leanThreeWay, { outcome: "DENIED", reasonCode: "UNSUPPORTED_ACTION_DENIED" });
+
+  const controlledTwoWay = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    evidence: { ...uiInput("MATCHED").evidence, matchingMode: { variantId: "TWO_WAY_INVOICE_PO_V1", version: "1.0.0" } },
+  });
+  assert.deepEqual(controlledTwoWay, { outcome: "DENIED", reasonCode: "UNSUPPORTED_ACTION_DENIED" });
+
+  const segregatedWithoutSeparationEvidence = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    scenario: "SEGREGATED_ENTERPRISE",
+  });
+  assert.deepEqual(segregatedWithoutSeparationEvidence, { outcome: "DENIED", reasonCode: "CONTEXT_COLLAPSE_DENIED" });
 });
 
 test("AP-05 Application Guide records applicability, variants, limits and nonclaims", () => {
@@ -223,4 +271,25 @@ test("AP-05 focused suite is registered once and its output conforms to the cont
   assert.equal(result.outcome, "DERIVED");
   assert.equal(INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1, "chimpmaera.incoming-invoice/adaptive-ui/v1");
   if (result.outcome === "DERIVED") assert.equal(validate(result.manifest), true, JSON.stringify(validate.errors));
+});
+
+test("AP-05 all versioned evidence contracts conform to closed JSON Schemas", () => {
+  const schemas = [
+    "schemas/contracts/incoming-invoice-setup-dialogue-v1.schema.json",
+    "schemas/contracts/incoming-invoice-configuration-delta-v1.schema.json",
+    "schemas/contracts/incoming-invoice-application-guide-v1.schema.json",
+  ];
+  const validators = schemas.map((path) => new Ajv2020({ strict: true }).compile(JSON.parse(readFileSync(path, "utf8"))));
+  const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
+  const changed = requirement("requirement:changed", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "ABS_MINOR_V1", ["evidence:ap04-synthetic-002"]);
+  const result = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [
+    { questionId: "confirm:matching-mode", answer: "CONFIRM" },
+    { questionId: "confirm:tolerance-policy", answer: "CONFIRM" },
+  ] });
+  assert.equal(result.outcome, "RESOLVED");
+  if (result.outcome === "RESOLVED") {
+    assert.equal(validators[0]!(result.transcript), true, JSON.stringify(validators[0]!.errors));
+    assert.equal(validators[1]!(result.configurationDelta), true, JSON.stringify(validators[1]!.errors));
+  }
+  assert.equal(validators[2]!(INCOMING_INVOICE_APPLICATION_GUIDE_V1), true, JSON.stringify(validators[2]!.errors));
 });

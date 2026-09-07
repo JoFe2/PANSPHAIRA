@@ -11,14 +11,22 @@ export const INCOMING_INVOICE_CONFIGURATION_DELTA_SCHEMA_V1 = "chimpmaera.incomi
 const ALLOWED_EFFECTS = ["READ_SYNTHETIC", "WRITE_LOCAL_PROOF"] as const;
 const MATCHING_MODES = ["TWO_WAY_INVOICE_PO_V1", "THREE_WAY_INVOICE_PO_RECEIPT_V1"] as const;
 const TOLERANCE_POLICIES = ["STRICT_ZERO_V1", "ABS_MINOR_V1", "RATE_BPS_V1"] as const;
-const REFERENCE_KINDS = ["SUPPLIER", "PURCHASE_ORDER", "RECEIPT", "INVOICE"] as const;
+const REFERENCE_KINDS = ["SUPPLIER", "PURCHASE_ORDER", "RECEIPT", "INVOICE", "APPROVAL_TRAIL", "SEPARATION_OF_DUTIES"] as const;
 const CAPABILITY_IDS = [INCOMING_INVOICE_ERV_CORE_V1, INCOMING_INVOICE_ERV_CASE_PACK_V1] as const;
+const SYNTHETIC_REFERENCE_PATTERN = /(?:^|[-_:])SYN(?:THETIC)?(?:[-_:]|$)/i;
+const SYNTHETIC_EVIDENCE_REF_PATTERN = /^evidence:[a-z0-9-]*synthetic[a-z0-9-]*$/;
 
 type MatchingModeIdV1 = typeof MATCHING_MODES[number];
 type TolerancePolicyIdV1 = typeof TOLERANCE_POLICIES[number];
 type EffectV1 = typeof ALLOWED_EFFECTS[number];
 type ReferenceKindV1 = typeof REFERENCE_KINDS[number];
 type RequirementVariantV1 = Readonly<{ variantId: string; version: string }>;
+
+export interface IncomingInvoiceUiEvidenceProvenanceV1 {
+  readonly source: "SYNTHETIC_FIXTURE";
+  readonly synthetic: true;
+  readonly customerData: false;
+}
 
 export interface IncomingInvoiceErvRequirementV1 {
   readonly schemaVersion: "chimpmaera.incoming-invoice/erv-requirement/v1";
@@ -45,6 +53,7 @@ export interface IncomingInvoiceUiInputV1 {
     readonly outcome: "MATCHED" | "CONFLICT" | "EXCEPTION" | "DENIED";
     readonly matchingMode: RequirementVariantV1;
     readonly tolerancePolicy: RequirementVariantV1;
+    readonly provenance: IncomingInvoiceUiEvidenceProvenanceV1;
     readonly references: readonly IncomingInvoiceUiEvidenceReferenceV1[];
   }>;
   readonly authority: Readonly<{
@@ -72,6 +81,7 @@ export interface IncomingInvoiceUiManifestV1 {
   readonly manifestVersion: "1.0.0";
   readonly scenario: IncomingInvoiceScenarioV1;
   readonly evidenceState: IncomingInvoiceUiInputV1["evidence"]["outcome"];
+  readonly evidenceProvenance: IncomingInvoiceUiEvidenceProvenanceV1;
   readonly fields: readonly IncomingInvoiceUiFieldV1[];
   readonly actions: readonly IncomingInvoiceUiActionV1[];
   readonly reusedCapabilityIds: readonly string[];
@@ -197,6 +207,15 @@ function modeRequiredKinds(mode: string): readonly ReferenceKindV1[] {
     ? ["SUPPLIER", "PURCHASE_ORDER", "INVOICE"]
     : ["SUPPLIER", "PURCHASE_ORDER", "RECEIPT", "INVOICE"];
 }
+function requiredReferenceKinds(scenario: IncomingInvoiceScenarioV1, mode: string): readonly ReferenceKindV1[] {
+  return scenario === "SEGREGATED_ENTERPRISE"
+    ? [...modeRequiredKinds(mode), "APPROVAL_TRAIL", "SEPARATION_OF_DUTIES"]
+    : modeRequiredKinds(mode);
+}
+function scenarioMatchingModeValid(scenario: IncomingInvoiceScenarioV1, mode: string): boolean {
+  return (scenario === "LEAN" && mode === "TWO_WAY_INVOICE_PO_V1")
+    || (scenario !== "LEAN" && mode === "THREE_WAY_INVOICE_PO_RECEIPT_V1");
+}
 function requirementValid(value: unknown): value is IncomingInvoiceErvRequirementV1 {
   if (!isRecord(value) || !exactKeys(value, ["schemaVersion", "requirementId", "matchingMode", "tolerancePolicy", "requestedEffects", "evidenceRefs", "synthetic", "customerData"])) return false;
   return value.schemaVersion === "chimpmaera.incoming-invoice/erv-requirement/v1"
@@ -212,17 +231,22 @@ function requirementValid(value: unknown): value is IncomingInvoiceErvRequiremen
 function referenceValid(value: unknown): value is IncomingInvoiceUiEvidenceReferenceV1 {
   return isRecord(value) && exactKeys(value, ["kind", "referenceId", "verified", "evidenceRef"])
     && typeof value.kind === "string" && REFERENCE_KINDS.includes(value.kind as ReferenceKindV1)
-    && typeof value.referenceId === "string" && value.referenceId.length > 0
-    && typeof value.verified === "boolean" && typeof value.evidenceRef === "string" && value.evidenceRef.length > 0;
+    && typeof value.referenceId === "string" && SYNTHETIC_REFERENCE_PATTERN.test(value.referenceId)
+    && typeof value.verified === "boolean" && typeof value.evidenceRef === "string" && SYNTHETIC_EVIDENCE_REF_PATTERN.test(value.evidenceRef);
 }
 function uiInputValid(value: unknown): value is IncomingInvoiceUiInputV1 {
   if (!isRecord(value) || !exactKeys(value, ["schemaVersion", "scenario", "evidence", "authority"])) return false;
   if (value.schemaVersion !== INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1
     || !["LEAN", "CONTROLLED", "SEGREGATED_ENTERPRISE"].includes(value.scenario as string)
-    || !isRecord(value.evidence) || !exactKeys(value.evidence, ["outcome", "matchingMode", "tolerancePolicy", "references"])
+    || !isRecord(value.evidence) || !exactKeys(value.evidence, ["outcome", "matchingMode", "tolerancePolicy", "provenance", "references"])
     || !["MATCHED", "CONFLICT", "EXCEPTION", "DENIED"].includes(value.evidence.outcome as string)
     || !validVariant(value.evidence.matchingMode, MATCHING_MODES)
     || !validVariant(value.evidence.tolerancePolicy, TOLERANCE_POLICIES)
+    || !isRecord(value.evidence.provenance)
+    || !exactKeys(value.evidence.provenance, ["source", "synthetic", "customerData"])
+    || value.evidence.provenance.source !== "SYNTHETIC_FIXTURE"
+    || value.evidence.provenance.synthetic !== true
+    || value.evidence.provenance.customerData !== false
     || !Array.isArray(value.evidence.references) || !value.evidence.references.every(referenceValid)) return false;
   return isRecord(value.authority) && exactKeys(value.authority, ["mode", "customerDataAuthorized", "productiveBookingAuthorized", "externalCallsAuthorized"])
     && value.authority.mode === "LOCAL_SYNTHETIC_PROOF"
@@ -260,7 +284,8 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
       || (typeof tolerancePolicy === "string" && !TOLERANCE_POLICIES.includes(tolerancePolicy as TolerancePolicyIdV1))) return deniedUi("UNSUPPORTED_ACTION_DENIED");
   }
   if (!uiInputValid(input)) return deniedUi("INPUT_SHAPE_DENIED");
-  const required = modeRequiredKinds(input.evidence.matchingMode.variantId);
+  if (!scenarioMatchingModeValid(input.scenario, input.evidence.matchingMode.variantId)) return deniedUi("UNSUPPORTED_ACTION_DENIED");
+  const required = requiredReferenceKinds(input.scenario, input.evidence.matchingMode.variantId);
   const referencesByKind = new Map(input.evidence.references.map((reference) => [reference.kind, reference]));
   const referenceKinds = input.evidence.references.map(({ kind }) => kind);
   const hasDuplicateKind = new Set(referenceKinds).size !== referenceKinds.length;
@@ -293,6 +318,7 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
     manifestVersion: "1.0.0" as const,
     scenario: input.scenario,
     evidenceState: input.evidence.outcome,
+    evidenceProvenance: input.evidence.provenance,
     fields,
     actions,
     reusedCapabilityIds: [...CAPABILITY_IDS],

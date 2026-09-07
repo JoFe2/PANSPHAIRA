@@ -519,10 +519,13 @@ schemas/contracts/hmi-discover-payload-v1.schema.json	schemas/contracts/hmi-disc
 schemas/contracts/hmi-explain-payload-v1.schema.json	schemas/contracts/hmi-explain-payload-v1.schema.json	0644
 schemas/contracts/hmi-generation-bundle-v1.schema.json	schemas/contracts/hmi-generation-bundle-v1.schema.json	0644
 schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json	schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json	0644
+schemas/contracts/incoming-invoice-application-guide-v1.schema.json	schemas/contracts/incoming-invoice-application-guide-v1.schema.json	0644
 schemas/contracts/incoming-invoice-blueprint-v1.schema.json	schemas/contracts/incoming-invoice-blueprint-v1.schema.json	0644
+schemas/contracts/incoming-invoice-configuration-delta-v1.schema.json	schemas/contracts/incoming-invoice-configuration-delta-v1.schema.json	0644
 schemas/contracts/incoming-invoice-erv-v1.schema.json	schemas/contracts/incoming-invoice-erv-v1.schema.json	0644
 schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json	schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json	0644
 schemas/contracts/incoming-invoice-intake-v1.schema.json	schemas/contracts/incoming-invoice-intake-v1.schema.json	0644
+schemas/contracts/incoming-invoice-setup-dialogue-v1.schema.json	schemas/contracts/incoming-invoice-setup-dialogue-v1.schema.json	0644
 schemas/contracts/integration-profile-v1.schema.json	schemas/contracts/integration-profile-v1.schema.json	0644
 schemas/contracts/issue-candidate-v1.schema.json	schemas/contracts/issue-candidate-v1.schema.json	0644
 schemas/contracts/knowledge-contribution-envelope-v1.schema.json	schemas/contracts/knowledge-contribution-envelope-v1.schema.json	0644

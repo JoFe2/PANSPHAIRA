@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/contracts/incoming-invoice-application-guide-v1.schema.json",
+  "title": "ChimpMaera incoming-invoice Application Guide v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "guideVersion", "applicability", "variants", "limits", "nonclaims"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.incoming-invoice/application-guide/v1" },
+    "guideVersion": { "const": "1.0.0" },
+    "applicability": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "variants": { "type": "array", "minItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/variant" } },
+    "limits": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "nonclaims": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "variant": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scenario", "selectionRule", "capabilityIds", "processVariant"],
+      "properties": {
+        "scenario": { "enum": ["LEAN", "CONTROLLED", "SEGREGATED_ENTERPRISE"] },
+        "selectionRule": { "type": "string", "minLength": 1 },
+        "capabilityIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "processVariant": { "enum": ["TWO_WAY_INVOICE_PO_V1", "THREE_WAY_INVOICE_PO_RECEIPT_V1"] }
+      }
+    }
+  }
+}

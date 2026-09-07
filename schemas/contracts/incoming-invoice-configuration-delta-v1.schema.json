@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/contracts/incoming-invoice-configuration-delta-v1.schema.json",
+  "title": "ChimpMaera incoming-invoice configuration delta v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "deltaVersion", "beforeRequirementDigest", "afterRequirementDigest", "beforeConfigurationDigest", "afterConfigurationDigest", "reusedCapabilityIds", "changedSettings", "evidenceReferences", "unresolvedGaps", "authorityGranted", "inventedExecutableFunctions", "configurationDeltaDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.incoming-invoice/configuration-delta/v1" },
+    "deltaVersion": { "const": "1.0.0" },
+    "beforeRequirementDigest": { "$ref": "#/$defs/digest" },
+    "afterRequirementDigest": { "$ref": "#/$defs/digest" },
+    "beforeConfigurationDigest": { "$ref": "#/$defs/digest" },
+    "afterConfigurationDigest": { "$ref": "#/$defs/digest" },
+    "reusedCapabilityIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "changedSettings": { "type": "array", "items": { "$ref": "#/$defs/changedSetting" } },
+    "evidenceReferences": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "unresolvedGaps": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "authorityGranted": { "const": false },
+    "inventedExecutableFunctions": { "type": "array", "maxItems": 0 },
+    "configurationDeltaDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "changedSetting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["setting", "before", "after"],
+      "properties": {
+        "setting": { "enum": ["matchingMode", "tolerancePolicy", "requestedEffects"] },
+        "before": { "type": "string", "minLength": 1 },
+        "after": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
