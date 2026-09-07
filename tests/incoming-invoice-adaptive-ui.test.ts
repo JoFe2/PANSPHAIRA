@@ -227,6 +227,17 @@ test("AP-05 setup dialogue clarifies and binds changed requested effects", () =>
   }
 });
 
+test("AP-05 setup dialogue fails closed when an unchanged configuration has no evidence", () => {
+  const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1", []);
+  const changed = requirement("requirement:changed", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1", []);
+  const result = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [] });
+  assert.equal(result.outcome, "NEEDS_CLARIFICATION");
+  if (result.outcome === "NEEDS_CLARIFICATION") {
+    assert.deepEqual(result.unresolvedGaps, ["MISSING_EVIDENCE_FOR_CONFIGURATION"]);
+    assert.equal(result.transcript.turns.at(-1)?.kind, "OUTCOME");
+  }
+});
+
 test("AP-05 dialogue asks only evidence-backed unresolved questions and fails closed", () => {
   const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
   const changed = requirement("requirement:changed", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "ABS_MINOR_V1", []);

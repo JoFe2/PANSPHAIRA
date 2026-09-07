@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 45,
+  "graphVersion": 46,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "0c1243af0bea71c85b48623d543f60ea4b53199e6be207346bbf92232909850a"
+          "sha256": "416e187468e487d881a2a8ce150155cd0c69604063ba4d3abc536d03fc464b2c"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3774,7 +3774,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "dc63c56be011945299b522530b0e332656d9b2b12e78a221b08dbe29f0bed3f8"
+          "sha256": "3c5bbd621b46c8d40c584795480f4a9a4e126729bf721bd5a99b169d054347ff"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3949,7 +3949,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "4931251fbccbc19a5f58f97634f73191c56707222b698a1673d48d3af6eea597"
+          "sha256": "0b9a44a2776c9c0f14bc67e6632688f48bb20feaf8807a90bc4576899ce198d5"
         }
       ],
       "ownedTests": [
@@ -5697,7 +5697,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "9e4ff81312823ea5eafb5258260a570a9d0c0979609a7f1cf2ab178ac88f1b3f"
+          "sha256": "d7f1bba65d66f31a0c5ea3743d12ff2508deb8cf734f78e9a9c2db1eec45e5db"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5824,6 +5824,99 @@
         "The exact frozen local-synthetic holdout covers layout, line items, taxes, totals and explicit failure cases.",
         "Deterministic baseline and bounded synthetic model proposals are scored against internally derived exact denominators.",
         "Every proposal is independently validated, remains non-authoritative and grants no customer-data, provider, allocation or posting authority."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ap-04-incoming-invoice-erv-v1",
+      "dependsOn": [
+        "ap-03-incoming-invoice-extraction-benchmark-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-erv.ts",
+          "role": "CONTRACT",
+          "sha256": "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-erv-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "7eabf5156f5a74404499b67d435c879f123f9d842028c739033269edd7959caf"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845"
+        },
+        {
+          "path": "tests/incoming-invoice-erv.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "fcc5e31702f327b0976da50fd42335d2e7741a3debc1218e7ece82cfa9efaf66"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice-erv:test"
+      ],
+      "invariants": [
+        "Supplier, purchase-order, receipt and invoice evidence remain independently evidenced in the bounded local-synthetic ERV case pack.",
+        "Two-way and three-way matching plus tolerance policies are explicit, versioned and deterministic variants.",
+        "Missing context, conflicts, unsupported variants and productive allocation or posting remain explicit fail-closed outcomes without booking authority."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ap-05-incoming-invoice-adaptive-ui-v1",
+      "dependsOn": [
+        "ap-04-incoming-invoice-erv-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
+          "role": "CONTRACT",
+          "sha256": "de0dabef7a8472b9c868dc590163fd4c6fc3feeed06224fcf795341e635d2963"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "932159fbb18633ebe7326cb66d94899c498dc2ac394c1265b5ce3d529e091c46"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-application-guide-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "e668fd1676c762d959dae185277896d200c386d85a37f495241b8e11793829ee"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-setup-dialogue-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "df641af5d63b22ee5cf0c2c1d794e09da4329f9dd2f07b81e5fb39a16e5e4301"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-configuration-delta-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "d06e652fda0021eb42848b248dd0bf886d38bae132334356d9f90550efc15787"
+        },
+        {
+          "path": "tests/incoming-invoice-adaptive-ui.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "73958f29ae6edf6dd24774acad561375560459e5a2f50918ca570188581432ae"
+        },
+        {
+          "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "256a561a29445c83a4d56e10e1b3757c9da959e491dfd8a9852e4a20a236f917"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice-adaptive-ui:test"
+      ],
+      "invariants": [
+        "The manifest derives explainable fields and read-only actions from scenario and evidence state across LEAN, CONTROLLED and SEGREGATED_ENTERPRISE variants.",
+        "Hidden authority, unsupported actions, customer data and collapsed context fail closed; the Application Guide records applicability, limits and nonclaims.",
+        "The setup dialogue accepts one baseline and one changed ERV requirement, asks only evidence-backed unresolved clarifications, and preserves a typed synthetic transcript.",
+        "Resolved deltas bind before and after requirement and configuration digests, reused AP-04 capability IDs, changed settings, evidence references and unresolved gaps without inventing executable functions or granting authority.",
+        "Dialogue and configuration-delta replay is deterministic, equivalent answer order is byte-identical, and company size is not an input."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

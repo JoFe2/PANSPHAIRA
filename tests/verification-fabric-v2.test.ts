@@ -106,7 +106,7 @@ test("#377 current-head Docker E2E is a focused repository-integrity obligation"
   const manifest = graph();
   const node = manifest.nodes.find(({ id }) => id === "repository-integrity");
   assert.ok(node);
-  assert.equal(manifest.graphVersion, 45);
+  assert.equal(manifest.graphVersion, 46);
   const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
     scripts: Record<string, string>;
   };
@@ -216,8 +216,8 @@ test("AP-01 blueprint changes select its owner and dependent AP-02/AP-03 slices"
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW", changed);
-    assert.deepEqual(result.selectedNodes, ["ap-01-incoming-invoice-blueprint-v1", "ap-02-incoming-invoice-intake-v1", "ap-03-incoming-invoice-extraction-benchmark-v1"], changed);
-    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-extraction:test", "npm run incoming-invoice-intake:test", "npm run incoming-invoice:test"], changed);
+    assert.deepEqual(result.selectedNodes, ["ap-01-incoming-invoice-blueprint-v1", "ap-02-incoming-invoice-intake-v1", "ap-03-incoming-invoice-extraction-benchmark-v1", "ap-04-incoming-invoice-erv-v1", "ap-05-incoming-invoice-adaptive-ui-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-adaptive-ui:test", "npm run incoming-invoice-erv:test", "npm run incoming-invoice-extraction:test", "npm run incoming-invoice-intake:test", "npm run incoming-invoice:test"], changed);
   }
 });
 
@@ -231,8 +231,8 @@ test("AP-02 intake changes select its owner and dependent AP-03 benchmark", () =
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW", changed);
-    assert.deepEqual(result.selectedNodes, ["ap-02-incoming-invoice-intake-v1", "ap-03-incoming-invoice-extraction-benchmark-v1"], changed);
-    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-extraction:test", "npm run incoming-invoice-intake:test"], changed);
+    assert.deepEqual(result.selectedNodes, ["ap-02-incoming-invoice-intake-v1", "ap-03-incoming-invoice-extraction-benchmark-v1", "ap-04-incoming-invoice-erv-v1", "ap-05-incoming-invoice-adaptive-ui-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-adaptive-ui:test", "npm run incoming-invoice-erv:test", "npm run incoming-invoice-extraction:test", "npm run incoming-invoice-intake:test"], changed);
   }
 });
 
@@ -245,8 +245,8 @@ test("AP-03 extraction benchmark changes select one bounded semantic owner and f
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW", changed);
-    assert.deepEqual(result.selectedNodes, ["ap-03-incoming-invoice-extraction-benchmark-v1"], changed);
-    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-extraction:test"], changed);
+    assert.deepEqual(result.selectedNodes, ["ap-03-incoming-invoice-extraction-benchmark-v1", "ap-04-incoming-invoice-erv-v1", "ap-05-incoming-invoice-adaptive-ui-v1"], changed);
+    assert.deepEqual(result.selectedTests, ["npm run incoming-invoice-adaptive-ui:test", "npm run incoming-invoice-erv:test", "npm run incoming-invoice-extraction:test"], changed);
   }
 });
 

@@ -411,6 +411,7 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     else questions.push({ questionId: "confirm:requested-effects", setting: "requestedEffects", evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
   }
   const evidenceGaps = questions.filter(({ questionId }) => questionId.startsWith("gap:")).map(({ setting }) => `MISSING_EVIDENCE_FOR_${setting === "matchingMode" ? "MATCHING_MODE" : setting === "tolerancePolicy" ? "TOLERANCE_POLICY" : "REQUESTED_EFFECTS"}`);
+  if (questions.length === 0 && setupInput.baseline.evidenceRefs.length === 0 && setupInput.changed.evidenceRefs.length === 0) evidenceGaps.push("MISSING_EVIDENCE_FOR_CONFIGURATION");
   const confirmQuestions = questions.filter(({ questionId }) => questionId.startsWith("confirm:")).sort((a, b) => a.questionId.localeCompare(b.questionId));
   const turns = baseTurns(setupInput);
   for (const question of confirmQuestions) turns.push({ ordinal: turns.length + 1, speaker: "AGENT", kind: "CLARIFICATION", payload: { questionId: question.questionId, question: `Confirm changed ${question.setting} from the evidence-backed AP-04 variant.` }, evidenceRefs: question.evidenceRefs });
