@@ -60,6 +60,7 @@ function harness({
   nowMs = 1_000_000,
   mutate,
   readback,
+  reconcile,
   root,
   snapshotRecords = [],
   snapshotTransform = (snapshot) => snapshot,
@@ -92,6 +93,11 @@ function harness({
         }
         : readback(action, result);
     },
+    ...(reconcile === undefined ? {} : {
+      async reconcile(action) {
+        return reconcile(action);
+      },
+    }),
   };
   const gate = new DemoMutationGate({
     apiToken,
@@ -592,11 +598,16 @@ test("consumed authority replay cannot act a second time", async () => {
 
 test("concurrent and restart replay see the durable EXECUTING reservation", async () => {
   let releaseMutation;
+  let resolveMutationStarted;
+  const mutationStarted = new Promise((resolve) => {
+    resolveMutationStarted = resolve;
+  });
   const mutationBarrier = new Promise((resolve) => {
     releaseMutation = resolve;
   });
   const current = harness({
     mutate: async () => {
+      resolveMutationStarted();
       await mutationBarrier;
       return { id: "order-concurrent" };
     },
@@ -605,6 +616,7 @@ test("concurrent and restart replay see the durable EXECUTING reservation", asyn
   const approved = await ownerDecision(current, decision, "APPROVE");
   const envelope = effectEnvelope(decision, proposal, approved.authority);
   const first = current.gate.execute(localRequest(), envelope);
+  await mutationStarted;
 
   await assert.rejects(
     current.gate.execute(localRequest(), envelope),
@@ -646,6 +658,91 @@ test("semantic readback mismatch records ambiguity and no success receipt", asyn
     current.gate.state.reservations[decision.replayKey].status,
     "AMBIGUOUS",
   );
+});
+
+test("ambiguous owner recovery is bound to the originally consumed lease", async () => {
+  let reconciliations = 0;
+  const current = harness({
+    readback: async () => ({
+      id: "order-wrong",
+      date: 1767225600,
+      ref_client: "WRONG",
+      socid: 7,
+    }),
+    reconcile: async (action) => {
+      reconciliations += 1;
+      return {
+        providerResult: { id: "order-42" },
+        readback: {
+          id: "order-42",
+          date: action.payload.body.date,
+          ref_client: action.payload.body.ref_client,
+          socid: action.payload.body.socid,
+        },
+      };
+    },
+  });
+  const { decision, proposal } = await escalation(current, "authority-recovery-001");
+  const approved = await ownerDecision(current, decision, "APPROVE");
+  await assert.rejects(
+    current.gate.execute(
+      localRequest(),
+      effectEnvelope(decision, proposal, approved.authority),
+    ),
+    /PROVIDER_READBACK_MISMATCH_DENIED/,
+  );
+  assert.equal(
+    current.gate.state.reservations[decision.replayKey].authorityBinding,
+    approved.authority.leaseId,
+  );
+
+  current.clock.value += 1;
+  const substitutedAuthority = current.gate.ownerAuthority({
+    proposal,
+    ownerDecisionReceiptDigest: approved.decisionReceipt.receiptDigest,
+    issuedAtMs: current.clock.value,
+    expiresAtMs: current.clock.value + 30_000,
+  });
+  assert.notEqual(substitutedAuthority.leaseId, approved.authority.leaseId);
+  const snapshotReadsBeforeRetry = current.snapshotReads();
+  await assert.rejects(
+    current.gate.execute(
+      localRequest(),
+      effectEnvelope(decision, proposal, substitutedAuthority),
+    ),
+    /REPLAY_AUTHORITY_CONFLICT_DENIED/,
+  );
+  assert.equal(current.snapshotReads(), snapshotReadsBeforeRetry);
+  assert.equal(reconciliations, 0);
+  assert.equal(current.gate.state.effects[decision.replayKey], undefined);
+});
+
+test("owner operation binding conflict takes precedence over consumed-lease replay", async () => {
+  const current = harness({
+    readback: async () => ({
+      id: "order-wrong",
+      date: 1767225600,
+      ref_client: "WRONG",
+      socid: 7,
+    }),
+  });
+  const { decision, proposal } = await escalation(current, "binding-order-001");
+  const approved = await ownerDecision(current, decision, "APPROVE");
+  const envelope = effectEnvelope(decision, proposal, approved.authority);
+  await assert.rejects(
+    current.gate.execute(localRequest(), envelope),
+    /PROVIDER_READBACK_MISMATCH_DENIED/,
+  );
+
+  const differentActionDigest = "0".repeat(64);
+  current.gate.state.reservations[decision.replayKey].actionDigest = differentActionDigest;
+  current.gate.state.consumedAuthorityLeases[approved.authority.leaseId].actionDigest =
+    differentActionDigest;
+  await assert.rejects(
+    current.gate.execute(localRequest(), envelope),
+    /REPLAY_KEY_CONFLICT_DENIED/,
+  );
+  assert.equal(current.mutations(), 1);
 });
 
 test("tampered persisted approval and effect stores refuse startup", async () => {

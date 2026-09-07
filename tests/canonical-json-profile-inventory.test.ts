@@ -142,6 +142,22 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
     reason: "Bind the owner-authority use-time revalidation implementation to the immutable admitted-base digest; the admitted v1 digest remains immutable.",
   }),
+  Object.freeze({
+    migrationId: "P0-PS392-AUD-02/UNIFIED-MUTATION-RESERVATION-UNCERTAIN-RECOVERY/V3",
+    path: "demo/runtime/enforcement-gate.mjs",
+    profileVersion: 3,
+    fromSha256: "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+    toSha256: "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
+    reason: "Bind the unified mutation reservation, operation deadline and uncertain-outcome recovery implementation to the reviewed P0-PS392 source digest; admitted v1 and reviewed P0-PS391 v2 bytes remain immutable.",
+  }),
+  Object.freeze({
+    migrationId: "P0-PS392-AUD-02/AUTHORITY-BOUND-UNCERTAIN-RECOVERY/V4",
+    path: "demo/runtime/enforcement-gate.mjs",
+    profileVersion: 4,
+    fromSha256: "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
+    toSha256: "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
+    reason: "Bind ambiguous reconciliation to the originally reserved authority decision or owner lease and preserve operation-key conflict precedence; admitted v1 and reviewed v2-v3 bytes remain immutable.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -154,7 +170,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  filesScanned: 616,
+  filesScanned: 617,
   declarationSites: 36,
   declarationFiles: 36,
   importSites: 203,
@@ -164,7 +180,7 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1775, uniquePaths: 1775, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1776, uniquePaths: 1776, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1125,7 +1141,8 @@ test("candidate ledger regeneration cannot redefine immutable base obligations",
   assert.deepEqual(validateInventory(loadInventory(), getScan(), mutated), []);
   const expectedFirst = expectedByteObligations(getScan(), mutated)[0];
   assert.ok(expectedFirst);
-  const migration = PROFILE_VERSION_MIGRATIONS.find((item) => item.path === firstObligation.path);
+  const migrations = PROFILE_VERSION_MIGRATIONS.filter((item) => item.path === firstObligation.path);
+  const migration = migrations[migrations.length - 1];
   assert.equal(expectedFirst.sha256, migration?.toSha256 ?? firstObligation.sha256);
 });
 

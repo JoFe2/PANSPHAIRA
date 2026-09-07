@@ -22,7 +22,8 @@
       },
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
-        "role": "VALIDATOR"
+        "role": "VALIDATOR",
+        "sha256": "46e733d4c5b553cecc15f62db1917801e404a14cc8f3a156388704942c6592b4"
       }
     ]
   },
@@ -98,6 +99,22 @@
       "fromSha256": "14a2f4f8b47ce045321576f0b485da8e5370910f14949d1b548359066ef1bad5",
       "toSha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
       "reason": "Bind the owner-authority use-time revalidation implementation to the immutable admitted-base digest; the admitted v1 digest remains immutable."
+    },
+    {
+      "migrationId": "P0-PS392-AUD-02/UNIFIED-MUTATION-RESERVATION-UNCERTAIN-RECOVERY/V3",
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "profileVersion": 3,
+      "fromSha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+      "toSha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
+      "reason": "Bind the unified mutation reservation, operation deadline and uncertain-outcome recovery implementation to the reviewed P0-PS392 source digest; admitted v1 and reviewed P0-PS391 v2 bytes remain immutable."
+    },
+    {
+      "migrationId": "P0-PS392-AUD-02/AUTHORITY-BOUND-UNCERTAIN-RECOVERY/V4",
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "profileVersion": 4,
+      "fromSha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
+      "toSha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
+      "reason": "Bind ambiguous reconciliation to the originally reserved authority decision or owner lease and preserve operation-key conflict precedence; admitted v1 and reviewed v2-v3 bytes remain immutable."
     }
   ],
   "scanScope": {
@@ -135,20 +152,20 @@
   },
   "uncertainty": [
     "Ad-hoc grep methods disagree on declaration/import counts; the scanner embedded in tests/canonical-json-profile-inventory.test.ts is the single source of truth.",
-    "Current SHA256SUMS is normalized to 1775 unique ./-prefixed paths with no duplicate or conflicting path digests.",
+    "Current SHA256SUMS is normalized to 1776 unique ./-prefixed paths with no duplicate or conflicting path digests.",
     "Owner families derive mechanically from the second path segment under src/, packages/, tools/ (e.g. 'cks' spans src/cks and packages/cks).",
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 616,
+    "filesScanned": 617,
     "declarationSites": 36,
     "declarationFiles": 36,
     "importSites": 203,
     "importFiles": 202,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1775,
-    "ledgerUniquePaths": 1775
+    "ledgerEntries": 1776,
+    "ledgerUniquePaths": 1776
   },
   "profiles": [
     {
@@ -157,7 +174,7 @@
       "classification": "implementation",
       "owner": "demo",
       "pinned": true,
-      "sha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036"
+      "sha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c"
     },
     {
       "file": "packages/contracts/src/asf-synthetic-lifecycle-harness.ts",
@@ -754,7 +771,7 @@
   "byteObligations": [
     {
       "path": "demo/runtime/enforcement-gate.mjs",
-      "sha256": "ccbbf73fe52c4453c13ff08e083527021f6af3a436898151688024c2e0dbd036",
+      "sha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
       "basis": "profile-version-migration"
     },
     {
