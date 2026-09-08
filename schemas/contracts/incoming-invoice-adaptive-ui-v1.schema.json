@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
+  "title": "ChimpMaera incoming-invoice adaptive UI manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "manifestVersion", "scenario", "evidenceState", "fields", "actions", "reusedCapabilityIds", "applicationGuideVersion", "authority", "manifestDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.incoming-invoice/adaptive-ui/v1" },
+    "manifestVersion": { "const": "1.0.0" },
+    "scenario": { "enum": ["LEAN", "CONTROLLED", "SEGREGATED_ENTERPRISE"] },
+    "evidenceState": { "enum": ["MATCHED", "CONFLICT", "EXCEPTION", "DENIED"] },
+    "fields": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/field" } },
+    "actions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/action" } },
+    "reusedCapabilityIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "applicationGuideVersion": { "const": "1.0.0" },
+    "authority": { "$ref": "#/$defs/authority" },
+    "manifestDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "$defs": {
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fieldId", "label", "state", "evidenceRefs"],
+      "properties": {
+        "fieldId": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "state": { "const": "VISIBLE" },
+        "evidenceRefs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionId", "enabled", "reason", "evidenceRefs"],
+      "properties": {
+        "actionId": { "type": "string", "minLength": 1 },
+        "enabled": { "type": "boolean" },
+        "reason": { "type": "string", "minLength": 1 },
+        "evidenceRefs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "bookingAuthorityGranted", "externalCallsAuthorized"],
+      "properties": {
+        "mode": { "const": "LOCAL_SYNTHETIC_PROOF" },
+        "bookingAuthorityGranted": { "const": false },
+        "externalCallsAuthorized": { "const": false }
+      }
+    }
+  }
+}
