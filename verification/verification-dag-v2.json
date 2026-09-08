@@ -4746,7 +4746,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "453a74ee90f0b3b00545224301900d9c8eb3fe297d045579fee1e648c6e1942a"
+          "sha256": "e2b5a76b986977d051dc6cfc90fcfa438a30107895c543a53e1717bd249faf7a"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4791,7 +4791,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e7d89b54dd3e01174bf929fe6bc916d5bbdd274e03e6e7d586509f97f1333b2c"
+          "sha256": "51a8e08d319984ab36b7b4703640d91d1bb268e5a6d226569347e532fce9e695"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
