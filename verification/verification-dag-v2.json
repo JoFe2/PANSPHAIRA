@@ -4696,7 +4696,7 @@
         {
           "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "01cd4350b05e2db5828b0bd7fbd1add2043b0f11b1e2bd4ff4b259cb6bf88547"
+          "sha256": "8ee060c3f158810c93e097e83ab55297c0d976b92c0392fdd290d6d33a88b7bd"
         },
         {
           "path": "docs/index.md",
@@ -4721,7 +4721,7 @@
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
           "role": "CONTRACT",
-          "sha256": "69541b22c8545cf24ccb7e3004337cb6572209547ee926bc6d490954170a9aa4"
+          "sha256": "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f"
         },
         {
           "path": "README.md",
@@ -4781,7 +4781,7 @@
         {
           "path": "tests/incoming-invoice-adaptive-ui.test.ts",
           "role": "VALIDATOR",
-          "sha256": "bb3f1946702ecf2431af343b66d0a4bc4a426684916956fb04b0047a0763f550"
+          "sha256": "9d8dcd5025fb8f2351eb4d5824123fbf7a1372af1370b614e936d52c6a3e520f"
         },
         {
           "path": "tests/public-product-spelling.test.mjs",
