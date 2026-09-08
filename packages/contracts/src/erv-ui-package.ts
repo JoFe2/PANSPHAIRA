@@ -25,7 +25,6 @@ export const ERV_UI_PACKAGE_VERSION_V1 = "1.0.0" as const;
 
 const DISPLAY_KINDS = ["TEXT", "STATUS", "EVIDENCE_LIST", "ACTION"] as const;
 const COMPONENT_STATES = ["VALUE", "UNKNOWN", "CONFLICT", "UNSUPPORTED"] as const;
-const SCENARIOS = ["LEAN", "CONTROLLED", "SEGREGATED_ENTERPRISE"] as const;
 const NONCLAIMS = [
   "NO_PRODUCTION_FRONTEND",
   "NO_CUSTOMER_DATA",
@@ -284,16 +283,33 @@ function validManifest(manifest: IncomingInvoiceUiManifestV1): boolean {
     && digest(withoutDigest(manifest as unknown as Record<string, unknown>, "manifestDigest")) === manifest.manifestDigest;
 }
 
-function validCore(core: ErvCorePackageV1): boolean {
-  return core.schemaVersion === INCOMING_INVOICE_ERV_CORE_V1
-    && core.authority.mode === "LOCAL_SYNTHETIC_PROOF"
-    && core.authority.customerDataAuthorized === false
-    && core.authority.externalProviderCalls === false
-    && core.authority.productivePostingAuthorized === false
-    && core.authority.bookingAuthorityGranted === false
-    && core.readback.packSha256 === "899d8dfc44be526011c35ad5aba4c2cb89bca433f1520e61fe05268d4816ad20"
-    && core.readback.deterministicReplay === true
-    && digest(core.decisions) === core.readback.decisionDigest;
+function validCore(value: unknown): value is ErvCorePackageV1 {
+  if (!isRecord(value)
+    || !exactKeys(value, ["schemaVersion", "packId", "caseCount", "decisions", "authority", "nonclaims", "readback"])
+    || typeof value.packId !== "string" || value.packId.length === 0
+    || typeof value.caseCount !== "number" || !Number.isSafeInteger(value.caseCount) || value.caseCount < 1
+    || !Array.isArray(value.decisions)
+    || !Array.isArray(value.nonclaims) || !value.nonclaims.every((claim) => typeof claim === "string" && claim.length > 0)) return false;
+  const authority = value.authority;
+  const readback = value.readback;
+  if (!isRecord(authority) || !exactKeys(authority, ["mode", "customerDataAuthorized", "externalProviderCalls", "productivePostingAuthorized", "bookingAuthorityGranted", "riskDCapability"])
+    || !isRecord(readback) || !exactKeys(readback, ["packSha256", "decisionDigest", "deterministicReplay"])) return false;
+  try {
+    return value.schemaVersion === INCOMING_INVOICE_ERV_CORE_V1
+      && authority.mode === "LOCAL_SYNTHETIC_PROOF"
+      && authority.customerDataAuthorized === false
+      && authority.externalProviderCalls === false
+      && authority.productivePostingAuthorized === false
+      && authority.bookingAuthorityGranted === false
+      && authority.riskDCapability === "SEPARATELY_AUTHORIZED"
+      && typeof readback.packSha256 === "string"
+      && readback.packSha256 === "899d8dfc44be526011c35ad5aba4c2cb89bca433f1520e61fe05268d4816ad20"
+      && sha256(readback.decisionDigest)
+      && readback.deterministicReplay === true
+      && digest(value.decisions) === readback.decisionDigest;
+  } catch {
+    return false;
+  }
 }
 
 function validDelta(delta: IncomingInvoiceConfigurationDeltaV1, requirementDigest: string, configuration: string): boolean {
@@ -362,14 +378,15 @@ function componentFromField(field: IncomingInvoiceUiManifestV1["fields"][number]
 }
 
 export function buildErvUiPackageV1(input: ErvUiPackageBuildInputV1): ErvUiPackageResultV1 {
-  if (!isRecord(input) || !isRecord(input.requirement) || !isRecord(input.adaptiveUiManifest) || !isRecord(input.corePackage)) return deny("INPUT_SHAPE_DENIED");
+  try {
+    if (!isRecord(input) || !isRecord(input.requirement) || !isRecord(input.adaptiveUiManifest) || !isRecord(input.corePackage)) return deny("INPUT_SHAPE_DENIED");
   const resolution = resolveIncomingInvoiceScenarioV1(input.scenarioInput);
   if (resolution.outcome !== "ACCEPTED" || input.requirement.scenario !== resolution.scenario || input.adaptiveUiManifest.scenario !== resolution.scenario) return deny("SOURCE_BINDING_DENIED");
   const requirementDigest = digest(input.requirement);
   const configuration = configurationDigest(input.requirement);
-  if (!sourceChainMatches(input, resolution)
-    || !validManifest(input.adaptiveUiManifest)
-    || !validCore(input.corePackage)) return deny("SOURCE_BINDING_DENIED");
+  if (!validManifest(input.adaptiveUiManifest)
+    || !validCore(input.corePackage)
+    || !sourceChainMatches(input, resolution)) return deny("SOURCE_BINDING_DENIED");
   if (input.adaptiveUiManifest.reusedCapabilityIds.join("|") !== CAPABILITY_IDS.join("|")) return deny("SOURCE_BINDING_DENIED");
   if (input.configurationDelta !== undefined && !validDelta(input.configurationDelta, requirementDigest, configuration)) return deny("SOURCE_BINDING_DENIED");
   if (input.setupTranscript !== undefined && !validTranscript(input.setupTranscript)) return deny("SOURCE_BINDING_DENIED");
@@ -431,12 +448,15 @@ export function buildErvUiPackageV1(input: ErvUiPackageBuildInputV1): ErvUiPacka
     nonclaims: [...NONCLAIMS],
   };
   return deepFreeze({ outcome: "PUBLISHED" as const, package: { ...unsigned, packageDigest: digest(unsigned) } });
+  } catch {
+    return deny("INPUT_SHAPE_DENIED");
+  }
 }
 
 function validComponent(value: unknown, evidenceRefs: readonly string[], ordinal: number): value is ErvUiComponentV1 {
   return isRecord(value)
     && exactKeys(value, ["componentId", "ordinal", "fieldId", "displayKind", "state", "value", "label", "helpText", "accessibilityText", "evidenceRefs", "reasonCodes"])
-    && value.componentId === `component:${String(value.fieldId)}`
+    && typeof value.componentId === "string" && value.componentId.length > 0
     && value.ordinal === ordinal
     && typeof value.fieldId === "string" && value.fieldId.length > 0
     && DISPLAY_KINDS.includes(value.displayKind as DisplayKindV1)
@@ -465,48 +485,56 @@ function validAction(value: unknown, evidenceRefs: readonly string[], ordinal: n
     && typeof value.accessibilityText === "string" && value.accessibilityText.length > 0;
 }
 
+function validBindings(value: unknown): value is ErvUiBindingsV1 {
+  if (!isRecord(value)
+    || !exactKeys(value, ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion", "adaptiveUiManifestDigest", "configurationDeltaDigest", "setupTranscriptDigest"])) return false;
+  return ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "adaptiveUiManifestDigest"].every((key) => sha256(value[key]))
+    && ["casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion"].every((key) => typeof value[key] === "string" && (value[key] as string).length > 0)
+    && (value.configurationDeltaDigest === null || sha256(value.configurationDeltaDigest))
+    && (value.setupTranscriptDigest === null || sha256(value.setupTranscriptDigest));
+}
+
 function validateForRender(value: unknown): ErvUiRenderDenialReasonV1 | null {
   if (!isRecord(value) || !exactKeys(value, ["schemaVersion", "packageVersion", "scenario", "screens", "actions", "componentIds", "bindings", "nonclaims", "packageDigest"])) return "PACKAGE_INTEGRITY_DENIED";
-  if (value.schemaVersion !== ERV_UI_PACKAGE_SCHEMA_V1 || value.packageVersion !== ERV_UI_PACKAGE_VERSION_V1 || !SCENARIOS.includes(value.scenario as IncomingInvoiceScenarioV1) || !Array.isArray(value.screens) || value.screens.length !== 1 || !Array.isArray(value.actions) || value.actions.length === 0 || !Array.isArray(value.componentIds) || !Array.isArray(value.nonclaims) || !sha256(value.packageDigest)) return "PACKAGE_INTEGRITY_DENIED";
-  const bindings = value.bindings;
-  if (!isRecord(bindings) || !exactKeys(bindings, ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion", "adaptiveUiManifestDigest", "configurationDeltaDigest", "setupTranscriptDigest"]) || ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "adaptiveUiManifestDigest"].some((key) => !sha256(bindings[key]))) return "PACKAGE_INTEGRITY_DENIED";
-  if (bindings.casePackSha256 !== AP04_ERV_CASE_PACK_SHA256_V1 || bindings.casePackSchemaVersion !== INCOMING_INVOICE_ERV_CASE_PACK_V1 || bindings.coreSchemaVersion !== INCOMING_INVOICE_ERV_CORE_V1 || bindings.adaptiveUiSchemaVersion !== INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1) return "CROSS_CONTEXT_DENIED";
-  const expected = sourceBindingForScenario(value.scenario as IncomingInvoiceScenarioV1);
-  if (expected === undefined
-    || bindings.requirementDigest !== expected.requirementDigest
-    || bindings.configurationDigest !== expected.configurationDigest
-    || bindings.scenarioDigest !== expected.scenarioDigest
-    || bindings.coreDigest !== expected.coreDigest
-    || bindings.adaptiveUiManifestDigest !== expected.adaptiveUiManifestDigest
-    || bindings.configurationDeltaDigest !== expected.configurationDeltaDigest
-    || bindings.setupTranscriptDigest !== expected.setupTranscriptDigest) return "CROSS_CONTEXT_DENIED";
-  if (value.nonclaims.length !== NONCLAIMS.length || value.nonclaims.some((claim, index) => claim !== NONCLAIMS[index])) return "PACKAGE_INTEGRITY_DENIED";
+  if (value.schemaVersion !== ERV_UI_PACKAGE_SCHEMA_V1
+    || value.packageVersion !== ERV_UI_PACKAGE_VERSION_V1
+    || typeof value.scenario !== "string" || value.scenario.length === 0
+    || !Array.isArray(value.screens) || value.screens.length === 0
+    || !Array.isArray(value.actions) || value.actions.length === 0
+    || !Array.isArray(value.componentIds) || value.componentIds.length === 0
+    || !Array.isArray(value.nonclaims) || value.nonclaims.length === 0
+    || !sha256(value.packageDigest)
+    || !validBindings(value.bindings)
+    || !value.nonclaims.every((claim) => typeof claim === "string" && claim.length > 0)) return "PACKAGE_INTEGRITY_DENIED";
+
   const evidenceRefs: string[] = [];
-  const screen = value.screens[0];
-  if (!isRecord(screen) || !exactKeys(screen, ["screenId", "ordinal", "label", "sections"]) || screen.ordinal !== 1 || typeof screen.screenId !== "string" || !Array.isArray(screen.sections) || screen.sections.length !== 2) return "ORDER_DENIED";
-  if (screen.sections[0] === undefined || screen.sections[1] === undefined
-    || !isRecord(screen.sections[0]) || !isRecord(screen.sections[1])
-    || !Array.isArray(screen.sections[0].components) || !Array.isArray(screen.sections[1].components)
-    || screen.sections[0].components.length !== expected.fieldIds.length
-    || screen.sections[1].components.length !== expected.actionIds.length
-    || value.actions.length !== expected.actionIds.length
-    || value.actions.some((action, index) => !isRecord(action) || action.actionId !== expected.actionIds[index])) return "UNKNOWN_COMPONENT_DENIED";
-  for (let sectionIndex = 0; sectionIndex < screen.sections.length; sectionIndex += 1) {
-    const section = screen.sections[sectionIndex];
-    if (!isRecord(section) || !exactKeys(section, ["sectionId", "ordinal", "label", "components"]) || section.ordinal !== sectionIndex + 1 || typeof section.sectionId !== "string" || !Array.isArray(section.components) || section.components.length === 0) return "ORDER_DENIED";
-    for (const component of section.components) {
-      if (!isRecord(component) || !Array.isArray(component.evidenceRefs)) return "MISSING_EVIDENCE_DENIED";
-      evidenceRefs.push(...component.evidenceRefs.filter((ref): ref is string => typeof ref === "string"));
+  const componentIds: string[] = [];
+  for (const [screenIndex, screen] of value.screens.entries()) {
+    if (!isRecord(screen) || !exactKeys(screen, ["screenId", "ordinal", "label", "sections"])
+      || screen.ordinal !== screenIndex + 1 || typeof screen.screenId !== "string" || screen.screenId.length === 0
+      || typeof screen.label !== "string" || screen.label.length === 0 || !Array.isArray(screen.sections) || screen.sections.length === 0) return "ORDER_DENIED";
+    for (const [sectionIndex, section] of screen.sections.entries()) {
+      if (!isRecord(section) || !exactKeys(section, ["sectionId", "ordinal", "label", "components"])
+        || section.ordinal !== sectionIndex + 1 || typeof section.sectionId !== "string" || section.sectionId.length === 0
+        || typeof section.label !== "string" || section.label.length === 0 || !Array.isArray(section.components) || section.components.length === 0) return "ORDER_DENIED";
+      for (const component of section.components) {
+        if (!isRecord(component)) return "PACKAGE_INTEGRITY_DENIED";
+        if (!Array.isArray(component.evidenceRefs)) return "MISSING_EVIDENCE_DENIED";
+        evidenceRefs.push(...component.evidenceRefs.filter((ref): ref is string => typeof ref === "string"));
+      }
     }
   }
   if (new Set(evidenceRefs).size === 0) return "MISSING_EVIDENCE_DENIED";
-  for (const [sectionIndex, section] of screen.sections.entries()) {
-    if (!isRecord(section) || !Array.isArray(section.components)) return "ORDER_DENIED";
-    for (const [componentIndex, component] of section.components.entries()) {
-      if (!validComponent(component, evidenceRefs, componentIndex + 1)) return DISPLAY_KINDS.includes((component as Record<string, unknown>).displayKind as DisplayKindV1) ? "PACKAGE_INTEGRITY_DENIED" : "UNSUPPORTED_DISPLAY_KIND_DENIED";
-      const expectedFieldId = sectionIndex === 0 ? expected.fieldIds[componentIndex] : `action:${expected.actionIds[componentIndex]}`;
-      const expectedDisplayKind = sectionIndex === 0 ? "TEXT" : "ACTION";
-      if (component.fieldId !== expectedFieldId || component.displayKind !== expectedDisplayKind) return "UNKNOWN_COMPONENT_DENIED";
+  for (const screen of value.screens) {
+    if (!isRecord(screen) || !Array.isArray(screen.sections)) return "ORDER_DENIED";
+    for (const section of screen.sections) {
+      if (!isRecord(section) || !Array.isArray(section.components)) return "ORDER_DENIED";
+      for (const [componentIndex, component] of section.components.entries()) {
+        if (!validComponent(component, evidenceRefs, componentIndex + 1)) {
+          return DISPLAY_KINDS.includes(component.displayKind as DisplayKindV1) ? "PACKAGE_INTEGRITY_DENIED" : "UNSUPPORTED_DISPLAY_KIND_DENIED";
+        }
+        componentIds.push(component.componentId);
+      }
     }
   }
   const actionEvidence = value.actions.flatMap((action) => isRecord(action) && Array.isArray(action.requiredEvidence) ? action.requiredEvidence : []);
@@ -514,25 +542,33 @@ function validateForRender(value: unknown): ErvUiRenderDenialReasonV1 | null {
   for (const [index, action] of value.actions.entries()) {
     if (!validAction(action, evidenceRefs, index + 1)) return isRecord(action) && action.visible === false ? "HIDDEN_ACTION_DENIED" : "PACKAGE_INTEGRITY_DENIED";
   }
-  const ids = screen.sections.flatMap((section) => isRecord(section) && Array.isArray(section.components) ? section.components.map((component) => isRecord(component) ? component.componentId : undefined) : []);
-  if (ids.some((id) => typeof id !== "string") || new Set(ids).size !== ids.length || JSON.stringify(value.componentIds) !== JSON.stringify(ids)) return "UNKNOWN_COMPONENT_DENIED";
-  if (digest(withoutDigest(value, "packageDigest")) !== value.packageDigest) return "PACKAGE_INTEGRITY_DENIED";
+  if (value.componentIds.some((id) => typeof id !== "string" || id.length === 0)
+    || new Set(componentIds).size !== componentIds.length
+    || JSON.stringify(value.componentIds) !== JSON.stringify(componentIds)) return "UNKNOWN_COMPONENT_DENIED";
+  try {
+    if (digest(withoutDigest(value, "packageDigest")) !== value.packageDigest) return "PACKAGE_INTEGRITY_DENIED";
+  } catch {
+    return "PACKAGE_INTEGRITY_DENIED";
+  }
   return null;
 }
 
 export function renderErvUiPackageV1(value: unknown): ErvUiRenderResultV1 {
-  const reason = validateForRender(value);
+  try {
+    const reason = validateForRender(value);
   if (reason !== null) return deepFreeze({ outcome: "DENIED" as const, reasonCode: reason });
   const pkg = value as ErvUiPackageV1;
-  const screen = pkg.screens[0]!;
-  const snapshot = ["main", screen.screenId, ...screen.sections.flatMap((section) => [section.sectionId, ...section.components.map(({ componentId }) => componentId)])].join(">");
+  const snapshot = ["main", ...pkg.screens.flatMap((screen) => [screen.screenId, ...screen.sections.flatMap((section) => [section.sectionId, ...section.components.map(({ componentId }) => componentId)])])].join(">");
   const readback = {
     schemaVersion: ERV_UI_PACKAGE_SCHEMA_V1,
     packageDigest: pkg.packageDigest,
     snapshot,
-    accessibility: { landmarks: ["main", screen.screenId], labelledControls: pkg.actions.map(({ actionId }) => actionId) },
+    accessibility: { landmarks: ["main", ...pkg.screens.map(({ screenId }) => screenId)], labelledControls: pkg.actions.map(({ actionId }) => actionId) },
     authority: "NONE" as const,
-    nonclaims: [...NONCLAIMS],
+    nonclaims: [...pkg.nonclaims],
   };
   return deepFreeze({ outcome: "RENDERED" as const, readback });
+  } catch {
+    return deepFreeze({ outcome: "DENIED" as const, reasonCode: "PACKAGE_INTEGRITY_DENIED" });
+  }
 }

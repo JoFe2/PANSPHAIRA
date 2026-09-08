@@ -667,7 +667,7 @@ b22095ceeba787ae4207fb30483e74b637ac592d7498dda1c345b068566a7ad4  ./packages/con
 b0ae29b9bda430c16ff6091d09f411f87b55334e79f2482386f471f7da42cf11  ./packages/contracts/src/effective-rights.ts
 a13750c0abeaae4fe9f2ce9580021d22f86eb9550f19ad7e104119a7603f2ea1  ./packages/contracts/src/erp-order-capability-cell.ts
 b76f12d77f9b5b0bf5dade6aaac5afa7356e8049c856d0906a92103c6d204ed4  ./packages/contracts/src/erp-read-connector.ts
-352e6e263846f5ac8efc1a9ca48fcd7f6335c1a9157356712ed09b640c7afde7  ./packages/contracts/src/erv-ui-package.ts
+71549542d85adf68fbc6d3bb1d1b2f900bb5672386799e522afb38fe312d1908  ./packages/contracts/src/erv-ui-package.ts
 eb438b5e8c079419e1bc87b21dbb205d862e4400a187716f64a57c9f1a89e81e  ./packages/contracts/src/evidence-provenance.ts
 ce20e154565b760911f4fca7962891853a39c04e60d283f6f0a7e3de062e4901  ./packages/contracts/src/extension-assurance-appeal.ts
 066802b5e4b7ca13f42a297f20e00e087197f91d34e960389f999d1497db641a  ./packages/contracts/src/extension-assurance-profile.ts
@@ -1032,7 +1032,7 @@ d7460b81e2855d881f6f1a2836ce0a16eb3235497289d097cb122c2e15cf988c  ./tests/builde
 2861051684d67a61ad62e484a2178cacf300af620bf369541909e8e6e5398028  ./tests/builder-integration-plan.test.ts
 4c2de11b24976709c3571306546d5c458a25bc86f62177a2c361cd5645c9e759  ./tests/builder-quality-evidence.test.ts
 8875de9745ef77b5ea182208d68aa0c47905e288b3fd5b865d4018c4b5c04b06  ./tests/builder-reuse-conformance.test.mjs
-287aa5add746fab8386fb4de0b589302b35c8794e781c54cf01808a45411b47b  ./tests/canonical-json-profile-inventory.test.ts
+fb2ce3295eae64cf3eee505f183f9e92c4cd8e5dd542ab95d8f8a9f96b2b6d8a  ./tests/canonical-json-profile-inventory.test.ts
 929ab3a426ed99e3aaadf00b0a8ffe6866503bdaadebbd348995a871b63f2ed2  ./tests/canonical-json-runtime-parity.test.mjs
 3fb6871824cc52620fd580e386a98bcc12dcf5a8f395ebdb08e8fa115f1ca5cc  ./tests/capability-catalogue.test.ts
 2697dc2108511a992917837d0eebf0c52beb34298c74eb9b9b1e24abd6141281  ./tests/ccp-admission-gate.test.ts
@@ -1168,7 +1168,7 @@ b81224c8dfaf36278875e829a15808b5debcc8f3d69d33d4ab4a5e4bc043b8a1  ./tests/docs-s
 7d98acfa30bc054954fa1c8268794164662128515b0324244695c5dc5b9bb347  ./tests/effective-rights.test.ts
 5d1463db1bcb4cf16aa5fa8f76fd2437e9bd8f9041016b78c6a6ff87458567ef  ./tests/erp-order-capability-cell.test.ts
 6dc00ffa1982e4833d0b7cd837ed77974a50c1c82a5ea662e76f43d5089dbe16  ./tests/erp-read-connector.test.ts
-8c2b98a4a61bcefcfdd5afcaa41975f3d146fdede1ff518e557ee63507bda9e7  ./tests/erv-ui-package.test.ts
+15d0ce89b770c6381fa7f0f8a92c169f10d91760dc24726c34b9f295036e4c2a  ./tests/erv-ui-package.test.ts
 ddb59d5743fc7b8cd4388f87a6938344139ea5274498530c60586732fed50198  ./tests/evidence-provenance-profile.test.ts
 86423b1c84ee4f89a635673fc0adbce4d06d1925aaf01792dba81fa2255dfc93  ./tests/extension-assurance-appeal.test.ts
 85e84929568755e7815d43273ab6dd82b368bfc302b5f75998b50e0ced1fa029  ./tests/extension-assurance-profile-negative-zero.test.ts
@@ -1688,7 +1688,7 @@ f86763bdd1a23123a244541d87254c46a512fb5941ac15859ec0923add825838  ./tsconfig.jso
 b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification/awi-03-knowledge-envelope-evidence-v1.json
 40b6a9bbe263b9cd67ef034dec0eb87c350aa1587904e385a2acb1072b3e0bc3  ./verification/bi-002-crm-read-connector-evidence-v1.json
 93f42b3e9e78b32cc1e1193e3f7a7ef59ca7ccd2e4116bd184d22d504987d46a  ./verification/bi-003-erp-read-connector-evidence-v1.json
-9427e4ea6f9f0c15af99203b6601fd50e8b26f2809f835edd30db5c88db3e4dd  ./verification/canonical-json-profile-inventory-v1.json
+8e3ce57b21d515330b91be404a5fc8777e1b8a163be62b710a4ae81de848c2f9  ./verification/canonical-json-profile-inventory-v1.json
 1e25b300491c6eeabe7f4a88c3358b59651dbd0e474ff1e8ce4a11fa18c52da3  ./verification/cks-03-public-manifests-v1.json
 81ab161fc2f4cd38ca0cc0f40d8c289f5d37b036fd4aef7a31e16ef47bf72e05  ./verification/cks-04-baseline-manifest-template-v1.json
 5e83eb24a343b7d29c0c0e99f54c26855b645b99f63df03acfd598d75222928c  ./verification/cks-04-no-finetune-baseline-evidence-v1.json
@@ -1779,5 +1779,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-320ec1b638dbeed10d2e7866bdd76e3ace297b302d8b357ae78d7a8578ab84d2  ./verification/verification-dag-v2.json
+5c31ba035cb8d62b557d65fa3b2caa8ee99c34e1ec271812b2d5b46b0a222a00  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
