@@ -107,6 +107,20 @@ test("AP-05 hidden authority, unsupported action and context collapse fail close
   const unknownVariant = deriveIncomingInvoiceUiManifestV1({ ...uiInput("MATCHED"), evidence: { ...uiInput("MATCHED").evidence, matchingMode: { variantId: "INVENTED_MODE", version: "1.0.0" } } });
   assert.deepEqual(unknownVariant, { outcome: "DENIED", reasonCode: "UNSUPPORTED_ACTION_DENIED" });
 
+  const conflictingPairings = [
+    { scenario: "LEAN", matchingMode: "THREE_WAY_INVOICE_PO_RECEIPT_V1" },
+    { scenario: "CONTROLLED", matchingMode: "TWO_WAY_INVOICE_PO_V1" },
+    { scenario: "SEGREGATED_ENTERPRISE", matchingMode: "TWO_WAY_INVOICE_PO_V1" },
+  ] as const;
+  for (const { scenario, matchingMode } of conflictingPairings) {
+    const conflicting = deriveIncomingInvoiceUiManifestV1({
+      ...uiInput("MATCHED"),
+      scenario,
+      evidence: { ...uiInput("MATCHED").evidence, matchingMode: { variantId: matchingMode, version: "1.0.0" } },
+    });
+    assert.deepEqual(conflicting, { outcome: "DENIED", reasonCode: "INPUT_SHAPE_DENIED" });
+  }
+
   const duplicateUnverified = deriveIncomingInvoiceUiManifestV1({
     ...uiInput("MATCHED"),
     evidence: {

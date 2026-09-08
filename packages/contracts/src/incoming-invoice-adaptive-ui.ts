@@ -279,6 +279,7 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
       || (typeof tolerancePolicy === "string" && !TOLERANCE_POLICIES.includes(tolerancePolicy as TolerancePolicyIdV1))) return deniedUi("UNSUPPORTED_ACTION_DENIED");
   }
   if (!uiInputValid(input)) return deniedUi("INPUT_SHAPE_DENIED");
+  if (!scenarioMatchingModeValid(input.scenario, input.evidence.matchingMode.variantId)) return deniedUi("INPUT_SHAPE_DENIED");
   const required = modeRequiredKinds(input.evidence.matchingMode.variantId);
   const referencesByKind = new Map(input.evidence.references.map((reference) => [reference.kind, reference]));
   if (input.evidence.references.length === 0 || required.some((kind) => !referencesByKind.has(kind))) return deniedUi("CONTEXT_COLLAPSE_DENIED");
