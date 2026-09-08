@@ -35,6 +35,50 @@ const NONCLAIMS = [
 ] as const;
 const CAPABILITY_IDS = [INCOMING_INVOICE_ERV_CORE_V1, INCOMING_INVOICE_ERV_CASE_PACK_V1] as const;
 
+type SourceBindingV1 = Readonly<{
+  requirementDigest: string;
+  configurationDigest: string;
+  scenarioDigest: string;
+  coreDigest: string;
+  adaptiveUiManifestDigest: string;
+  configurationDeltaDigest: string | null;
+  setupTranscriptDigest: string | null;
+  fieldIds: readonly string[];
+  actionIds: readonly string[];
+}>;
+
+// These are the content-addressed AP-05 release identities. The package
+// contract is not a general-purpose adapter for caller-owned AP-05-shaped
+// inputs: only these released source chains may be published or rendered.
+const SOURCE_BINDINGS: Partial<Record<IncomingInvoiceScenarioV1, SourceBindingV1>> = {
+  LEAN: {
+    requirementDigest: "8e13d2d6c04c184ae8b3f6345c5ad9b57914023e7cbe0c4259d9c7095982440a",
+    configurationDigest: "bc34026fd7c89a63a62123bf16e5c5ae608202bdc37bd5c9113303dcc093fff3",
+    scenarioDigest: "eee66e73040fefc58f60645d4fa403bdafe3f8a31f3f7c7907a71fae63015a6d",
+    coreDigest: "618aeba909d7210dd5fe412e068cea204c9b64da2aaa4e1c409a94694850132d",
+    adaptiveUiManifestDigest: "32a99392fad099ee1534e9565fa84bf5f6c32c0846abccf24f7034fe6898a0a1",
+    configurationDeltaDigest: null,
+    setupTranscriptDigest: null,
+    fieldIds: ["supplier", "purchaseOrder", "invoice", "matchStatus", "evidenceReferences"],
+    actionIds: ["VIEW_EVIDENCE", "PROVIDE_MISSING_CONTEXT"],
+  },
+  SEGREGATED_ENTERPRISE: {
+    requirementDigest: "82f245dfb1e71ee66cde0191c91708c084a7083d15fd99690332cc2e32096698",
+    configurationDigest: "deada62bbe444bdc3c2eed88df0a5b93330f78d1da847a8e569a91c75c159737",
+    scenarioDigest: "6f1c891db95bbfac8714dcbc1a866c349efc013638bfc5d8db7259f6b06dedf0",
+    coreDigest: "618aeba909d7210dd5fe412e068cea204c9b64da2aaa4e1c409a94694850132d",
+    adaptiveUiManifestDigest: "ebfde15249678a8fa7bc837adcfce7998f694d7ae6d9744c59b132220c99aba4",
+    configurationDeltaDigest: "5414172a7b17d44accde919c2ec8208e206c40f9e14aec22a479b347983e7666",
+    setupTranscriptDigest: "b885f5eff422fb7215619996de80c4896c6e3be58ebead2950a630c7098ebb6e",
+    fieldIds: ["supplier", "purchaseOrder", "receipt", "invoice", "matchStatus", "tolerancePolicy", "approvalTrail", "separationOfDuties", "evidenceReferences"],
+    actionIds: ["VIEW_EVIDENCE", "IDENTIFY_AUTHORITATIVE_REFERENCE", "ESCALATE_SEPARATION_REVIEW"],
+  },
+};
+
+function sourceBindingForScenario(scenario: IncomingInvoiceScenarioV1): SourceBindingV1 | undefined {
+  return SOURCE_BINDINGS[scenario];
+}
+
 type DisplayKindV1 = typeof DISPLAY_KINDS[number];
 type ComponentStateV1 = typeof COMPONENT_STATES[number];
 type ComponentValueV1 = string | readonly string[] | null;
@@ -202,17 +246,42 @@ function scenarioDigest(resolution: IncomingInvoiceScenarioResolutionV1): string
 }
 
 function validManifest(manifest: IncomingInvoiceUiManifestV1): boolean {
-  return manifest.schemaVersion === INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1
+  const expected = sourceBindingForScenario(manifest.scenario);
+  return isRecord(manifest)
+    && exactKeys(manifest, ["schemaVersion", "manifestVersion", "scenario", "evidenceState", "fields", "actions", "reusedCapabilityIds", "applicationGuideVersion", "authority", "manifestDigest"])
+    && expected !== undefined
+    && manifest.schemaVersion === INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1
     && manifest.manifestVersion === "1.0.0"
     && manifest.applicationGuideVersion === "1.0.0"
+    && isRecord(manifest.authority)
+    && exactKeys(manifest.authority, ["mode", "bookingAuthorityGranted", "externalCallsAuthorized"])
     && manifest.authority.mode === "LOCAL_SYNTHETIC_PROOF"
     && manifest.authority.bookingAuthorityGranted === false
     && manifest.authority.externalCallsAuthorized === false
+    && Array.isArray(manifest.reusedCapabilityIds)
     && manifest.reusedCapabilityIds.length === CAPABILITY_IDS.length
     && manifest.reusedCapabilityIds.every((id, index) => id === CAPABILITY_IDS[index])
-    && digest(withoutDigest(manifest as unknown as Record<string, unknown>, "manifestDigest")) === manifest.manifestDigest
-    && manifest.fields.length > 0
-    && manifest.actions.length > 0;
+    && Array.isArray(manifest.fields)
+    && manifest.fields.length === expected.fieldIds.length
+    && manifest.fields.every((field, index) => isRecord(field)
+      && exactKeys(field, ["fieldId", "label", "state", "evidenceRefs"])
+      && field.fieldId === expected.fieldIds[index]
+      && typeof field.label === "string" && field.label.length > 0
+      && field.state === "VISIBLE"
+      && Array.isArray(field.evidenceRefs)
+      && field.evidenceRefs.length > 0
+      && field.evidenceRefs.every((ref) => typeof ref === "string" && ref.length > 0))
+    && Array.isArray(manifest.actions)
+    && manifest.actions.length === expected.actionIds.length
+    && manifest.actions.every((action, index) => isRecord(action)
+      && exactKeys(action, ["actionId", "enabled", "reason", "evidenceRefs"])
+      && action.actionId === expected.actionIds[index]
+      && typeof action.enabled === "boolean"
+      && typeof action.reason === "string" && action.reason.length > 0
+      && Array.isArray(action.evidenceRefs)
+      && action.evidenceRefs.length > 0
+      && action.evidenceRefs.every((ref) => typeof ref === "string" && ref.length > 0))
+    && digest(withoutDigest(manifest as unknown as Record<string, unknown>, "manifestDigest")) === manifest.manifestDigest;
 }
 
 function validCore(core: ErvCorePackageV1): boolean {
@@ -228,20 +297,44 @@ function validCore(core: ErvCorePackageV1): boolean {
 }
 
 function validDelta(delta: IncomingInvoiceConfigurationDeltaV1, requirementDigest: string, configuration: string): boolean {
-  return delta.schemaVersion === "chimpmaera.incoming-invoice/configuration-delta/v1"
+  return isRecord(delta)
+    && exactKeys(delta, ["schemaVersion", "deltaVersion", "beforeRequirementDigest", "afterRequirementDigest", "beforeConfigurationDigest", "afterConfigurationDigest", "reusedCapabilityIds", "changedSettings", "evidenceReferences", "unresolvedGaps", "authorityGranted", "inventedExecutableFunctions", "configurationDeltaDigest"])
+    && delta.schemaVersion === "chimpmaera.incoming-invoice/configuration-delta/v1"
     && delta.deltaVersion === "1.0.0"
     && delta.afterRequirementDigest === requirementDigest
     && delta.afterConfigurationDigest === configuration
     && delta.authorityGranted === false
+    && Array.isArray(delta.inventedExecutableFunctions)
     && delta.inventedExecutableFunctions.length === 0
     && digest(withoutDigest(delta as unknown as Record<string, unknown>, "configurationDeltaDigest")) === delta.configurationDeltaDigest;
 }
 
 function validTranscript(transcript: IncomingInvoiceSetupTranscriptV1): boolean {
-  return transcript.schemaVersion === "chimpmaera.incoming-invoice/setup-dialogue/v1"
+  return isRecord(transcript)
+    && exactKeys(transcript, ["schemaVersion", "transcriptVersion", "syntheticEvidence", "turns", "transcriptDigest"])
+    && transcript.schemaVersion === "chimpmaera.incoming-invoice/setup-dialogue/v1"
     && transcript.transcriptVersion === "1.0.0"
     && transcript.syntheticEvidence === true
+    && Array.isArray(transcript.turns)
     && digest(withoutDigest(transcript as unknown as Record<string, unknown>, "transcriptDigest")) === transcript.transcriptDigest;
+}
+
+function sourceChainMatches(
+  input: ErvUiPackageBuildInputV1,
+  resolution: IncomingInvoiceScenarioResolutionV1,
+): boolean {
+  if (resolution.outcome !== "ACCEPTED") return false;
+  const expected = sourceBindingForScenario(resolution.scenario);
+  if (expected === undefined) return false;
+  const delta = isRecord(input.configurationDelta) ? input.configurationDelta.configurationDeltaDigest : null;
+  const transcript = isRecord(input.setupTranscript) ? input.setupTranscript.transcriptDigest : null;
+  return digest(input.requirement) === expected.requirementDigest
+    && configurationDigest(input.requirement) === expected.configurationDigest
+    && scenarioDigest(resolution) === expected.scenarioDigest
+    && digest(input.corePackage) === expected.coreDigest
+    && input.adaptiveUiManifest.manifestDigest === expected.adaptiveUiManifestDigest
+    && delta === expected.configurationDeltaDigest
+    && transcript === expected.setupTranscriptDigest;
 }
 
 type ErvUiPackageDenialReasonV1 = Extract<ErvUiPackageResultV1, { outcome: "DENIED" }>["reasonCode"];
@@ -274,7 +367,9 @@ export function buildErvUiPackageV1(input: ErvUiPackageBuildInputV1): ErvUiPacka
   if (resolution.outcome !== "ACCEPTED" || input.requirement.scenario !== resolution.scenario || input.adaptiveUiManifest.scenario !== resolution.scenario) return deny("SOURCE_BINDING_DENIED");
   const requirementDigest = digest(input.requirement);
   const configuration = configurationDigest(input.requirement);
-  if (!validManifest(input.adaptiveUiManifest) || !validCore(input.corePackage)) return deny("SOURCE_BINDING_DENIED");
+  if (!sourceChainMatches(input, resolution)
+    || !validManifest(input.adaptiveUiManifest)
+    || !validCore(input.corePackage)) return deny("SOURCE_BINDING_DENIED");
   if (input.adaptiveUiManifest.reusedCapabilityIds.join("|") !== CAPABILITY_IDS.join("|")) return deny("SOURCE_BINDING_DENIED");
   if (input.configurationDelta !== undefined && !validDelta(input.configurationDelta, requirementDigest, configuration)) return deny("SOURCE_BINDING_DENIED");
   if (input.setupTranscript !== undefined && !validTranscript(input.setupTranscript)) return deny("SOURCE_BINDING_DENIED");
@@ -376,10 +471,26 @@ function validateForRender(value: unknown): ErvUiRenderDenialReasonV1 | null {
   const bindings = value.bindings;
   if (!isRecord(bindings) || !exactKeys(bindings, ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion", "adaptiveUiManifestDigest", "configurationDeltaDigest", "setupTranscriptDigest"]) || ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "adaptiveUiManifestDigest"].some((key) => !sha256(bindings[key]))) return "PACKAGE_INTEGRITY_DENIED";
   if (bindings.casePackSha256 !== AP04_ERV_CASE_PACK_SHA256_V1 || bindings.casePackSchemaVersion !== INCOMING_INVOICE_ERV_CASE_PACK_V1 || bindings.coreSchemaVersion !== INCOMING_INVOICE_ERV_CORE_V1 || bindings.adaptiveUiSchemaVersion !== INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1) return "CROSS_CONTEXT_DENIED";
+  const expected = sourceBindingForScenario(value.scenario as IncomingInvoiceScenarioV1);
+  if (expected === undefined
+    || bindings.requirementDigest !== expected.requirementDigest
+    || bindings.configurationDigest !== expected.configurationDigest
+    || bindings.scenarioDigest !== expected.scenarioDigest
+    || bindings.coreDigest !== expected.coreDigest
+    || bindings.adaptiveUiManifestDigest !== expected.adaptiveUiManifestDigest
+    || bindings.configurationDeltaDigest !== expected.configurationDeltaDigest
+    || bindings.setupTranscriptDigest !== expected.setupTranscriptDigest) return "CROSS_CONTEXT_DENIED";
   if (value.nonclaims.length !== NONCLAIMS.length || value.nonclaims.some((claim, index) => claim !== NONCLAIMS[index])) return "PACKAGE_INTEGRITY_DENIED";
   const evidenceRefs: string[] = [];
   const screen = value.screens[0];
   if (!isRecord(screen) || !exactKeys(screen, ["screenId", "ordinal", "label", "sections"]) || screen.ordinal !== 1 || typeof screen.screenId !== "string" || !Array.isArray(screen.sections) || screen.sections.length !== 2) return "ORDER_DENIED";
+  if (screen.sections[0] === undefined || screen.sections[1] === undefined
+    || !isRecord(screen.sections[0]) || !isRecord(screen.sections[1])
+    || !Array.isArray(screen.sections[0].components) || !Array.isArray(screen.sections[1].components)
+    || screen.sections[0].components.length !== expected.fieldIds.length
+    || screen.sections[1].components.length !== expected.actionIds.length
+    || value.actions.length !== expected.actionIds.length
+    || value.actions.some((action, index) => !isRecord(action) || action.actionId !== expected.actionIds[index])) return "UNKNOWN_COMPONENT_DENIED";
   for (let sectionIndex = 0; sectionIndex < screen.sections.length; sectionIndex += 1) {
     const section = screen.sections[sectionIndex];
     if (!isRecord(section) || !exactKeys(section, ["sectionId", "ordinal", "label", "components"]) || section.ordinal !== sectionIndex + 1 || typeof section.sectionId !== "string" || !Array.isArray(section.components) || section.components.length === 0) return "ORDER_DENIED";
@@ -393,7 +504,9 @@ function validateForRender(value: unknown): ErvUiRenderDenialReasonV1 | null {
     if (!isRecord(section) || !Array.isArray(section.components)) return "ORDER_DENIED";
     for (const [componentIndex, component] of section.components.entries()) {
       if (!validComponent(component, evidenceRefs, componentIndex + 1)) return DISPLAY_KINDS.includes((component as Record<string, unknown>).displayKind as DisplayKindV1) ? "PACKAGE_INTEGRITY_DENIED" : "UNSUPPORTED_DISPLAY_KIND_DENIED";
-      if (sectionIndex === 1 && !String(component.fieldId).startsWith("action:")) return "UNKNOWN_COMPONENT_DENIED";
+      const expectedFieldId = sectionIndex === 0 ? expected.fieldIds[componentIndex] : `action:${expected.actionIds[componentIndex]}`;
+      const expectedDisplayKind = sectionIndex === 0 ? "TEXT" : "ACTION";
+      if (component.fieldId !== expectedFieldId || component.displayKind !== expectedDisplayKind) return "UNKNOWN_COMPONENT_DENIED";
     }
   }
   const actionEvidence = value.actions.flatMap((action) => isRecord(action) && Array.isArray(action.requiredEvidence) ? action.requiredEvidence : []);

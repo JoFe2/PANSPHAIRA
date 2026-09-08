@@ -366,6 +366,7 @@ packages/contracts/src/development-worker.ts	packages/contracts/src/development-
 packages/contracts/src/effective-rights.ts	packages/contracts/src/effective-rights.ts	0644
 packages/contracts/src/erp-order-capability-cell.ts	packages/contracts/src/erp-order-capability-cell.ts	0644
 packages/contracts/src/erp-read-connector.ts	packages/contracts/src/erp-read-connector.ts	0644
+packages/contracts/src/erv-ui-package.ts	packages/contracts/src/erv-ui-package.ts	0644
 packages/contracts/src/evidence-provenance.ts	packages/contracts/src/evidence-provenance.ts	0644
 packages/contracts/src/extension-assurance-appeal.ts	packages/contracts/src/extension-assurance-appeal.ts	0644
 packages/contracts/src/extension-assurance-profile.ts	packages/contracts/src/extension-assurance-profile.ts	0644
@@ -512,6 +513,7 @@ schemas/contracts/crm-read-connector-v1.schema.json	schemas/contracts/crm-read-c
 schemas/contracts/doctor-report-v1.schema.json	schemas/contracts/doctor-report-v1.schema.json	0644
 schemas/contracts/erp-order-capability-cell-profile-v1.schema.json	schemas/contracts/erp-order-capability-cell-profile-v1.schema.json	0644
 schemas/contracts/erp-read-connector-v1.schema.json	schemas/contracts/erp-read-connector-v1.schema.json	0644
+schemas/contracts/erv-ui-package-v1.schema.json	schemas/contracts/erv-ui-package-v1.schema.json	0644
 schemas/contracts/extension-assurance-profile-v1.schema.json	schemas/contracts/extension-assurance-profile-v1.schema.json	0644
 schemas/contracts/external-plugin-preflight-v1.schema.json	schemas/contracts/external-plugin-preflight-v1.schema.json	0644
 schemas/contracts/hmi-contribute-preflight-v1.schema.json	schemas/contracts/hmi-contribute-preflight-v1.schema.json	0644
@@ -1245,6 +1247,7 @@ tests/incoming-invoice-blueprint.test.ts	tests/incoming-invoice-blueprint.test.t
 tests/incoming-invoice-extraction-benchmark.test.ts	tests/incoming-invoice-extraction-benchmark.test.ts	0644
 tests/incoming-invoice-erv.test.ts	tests/incoming-invoice-erv.test.ts	0644
 tests/incoming-invoice-intake.test.ts	tests/incoming-invoice-intake.test.ts	0644
+tests/erv-ui-package.test.ts	tests/erv-ui-package.test.ts	0644
 tests/integration-profile.test.ts	tests/integration-profile.test.ts	0644
 tests/issue-candidate.test.ts	tests/issue-candidate.test.ts	0644
 tests/kiwix-zim-assessment.test.mjs	tests/kiwix-zim-assessment.test.mjs	0644

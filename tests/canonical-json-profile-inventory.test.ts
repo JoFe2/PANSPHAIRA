@@ -170,11 +170,11 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  filesScanned: 619,
+  filesScanned: 621,
   declarationSites: 36,
   declarationFiles: 36,
-  importSites: 204,
-  importFiles: 203,
+  importSites: 205,
+  importFiles: 204,
   reexportSites: 4,
   similarShapeSites: 30,
   byteObligations: 21,

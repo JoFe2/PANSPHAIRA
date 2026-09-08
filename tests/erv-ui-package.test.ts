@@ -115,6 +115,12 @@ function independentDigest(value: unknown): string {
   return createHash("sha256").update(independentCanonical(value)).digest("hex");
 }
 
+function recomputePackageDigest(value: any): any {
+  const { packageDigest: _packageDigest, ...unsigned } = value;
+  value.packageDigest = independentDigest(unsigned);
+  return value;
+}
+
 test("ERV-UI AC01-03 publishes closed ordered baseline and adapted packages with exact source bindings", () => {
   const lean = published(false);
   const segregated = published(true);
@@ -174,17 +180,41 @@ test("ERV-UI AC05 rejects tampering, unknown vocabulary, missing evidence, reord
     (value: any) => { value.screens[0].sections[0].components.push({ ...value.screens[0].sections[0].components[0], componentId: "unknown", fieldId: "unknown" }); },
     (value: any) => { value.actions[0].visible = false; },
     (value: any) => { value.screens[0].sections[0].components[0].evidenceRefs = []; },
-    (value: any) => { value.actions[0].evidenceRefs = ["evidence:foreign-context"]; },
+    (value: any) => { value.actions[0].requiredEvidence = ["evidence:foreign-context"]; },
     (value: any) => { value.screens[0].sections[0].components.reverse(); },
     (value: any) => { value.packageDigest = "0".repeat(64); },
   ];
-  const expectedReasons = ["UNSUPPORTED_DISPLAY_KIND_DENIED", "PACKAGE_INTEGRITY_DENIED", "HIDDEN_ACTION_DENIED", "PACKAGE_INTEGRITY_DENIED", "PACKAGE_INTEGRITY_DENIED", "PACKAGE_INTEGRITY_DENIED", "PACKAGE_INTEGRITY_DENIED"] as const;
+  const expectedReasons = ["UNSUPPORTED_DISPLAY_KIND_DENIED", "UNKNOWN_COMPONENT_DENIED", "HIDDEN_ACTION_DENIED", "PACKAGE_INTEGRITY_DENIED", "CROSS_CONTEXT_DENIED", "PACKAGE_INTEGRITY_DENIED", "PACKAGE_INTEGRITY_DENIED"] as const;
   for (const [index, mutate] of cases.entries()) {
     const candidate = structuredClone(packageValue);
     mutate(candidate);
     const result = renderErvUiPackageV1(candidate);
     assert.deepEqual(result, { outcome: "DENIED", reasonCode: expectedReasons[index] });
   }
+});
+
+test("ERV-UI AC05 source identities and vocabulary remain fail-closed after caller rehashing", () => {
+  const alteredInput = publishedInput(false) as any;
+  alteredInput.requirement = { ...alteredInput.requirement, requirementId: "caller-minted-requirement" };
+  assert.deepEqual(buildErvUiPackageV1(alteredInput), { outcome: "DENIED", reasonCode: "SOURCE_BINDING_DENIED" });
+
+  const forgedBinding = recomputePackageDigest(structuredClone(published(false)));
+  forgedBinding.bindings.requirementDigest = "1".repeat(64);
+  recomputePackageDigest(forgedBinding);
+  assert.deepEqual(renderErvUiPackageV1(forgedBinding), { outcome: "DENIED", reasonCode: "CROSS_CONTEXT_DENIED" });
+
+  const inventedField = structuredClone(published(false)) as any;
+  inventedField.screens[0].sections[0].components[0].fieldId = "inventedField";
+  inventedField.screens[0].sections[0].components[0].componentId = "component:inventedField";
+  recomputePackageDigest(inventedField);
+  assert.deepEqual(renderErvUiPackageV1(inventedField), { outcome: "DENIED", reasonCode: "UNKNOWN_COMPONENT_DENIED" });
+
+  const inventedAction = structuredClone(published(false)) as any;
+  inventedAction.actions[0].actionId = "INVENTED_ACTION";
+  inventedAction.screens[0].sections[1].components[0].fieldId = "action:INVENTED_ACTION";
+  inventedAction.screens[0].sections[1].components[0].componentId = "component:action:INVENTED_ACTION";
+  recomputePackageDigest(inventedAction);
+  assert.deepEqual(renderErvUiPackageV1(inventedAction), { outcome: "DENIED", reasonCode: "UNKNOWN_COMPONENT_DENIED" });
 });
 
 test("ERV-UI AC06 package and readback are deeply immutable and schema-conformant", () => {
