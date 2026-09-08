@@ -371,6 +371,37 @@ test("scheduled/reusable workflow is exact-SHA, pinned, bounded, read-only and a
   }
 });
 
+test("runner context stays in step scope and the artifact dir initializes before first use", () => {
+  const workflow = readFileSync(".github/workflows/demo-current-head-e2e.yml", "utf8");
+  const jobEnv = workflow.slice(
+    workflow.indexOf("\n    env:\n") + "\n    env:\n".length,
+    workflow.indexOf("\n    steps:"),
+  );
+  assert.doesNotMatch(jobEnv, /runner/, "job-level env must not use the step-scoped runner context");
+  assert.match(workflow, /install -d -m 700 "\$\{RUNNER_TEMP\}\/demo-current-head-e2e"/);
+  assert.match(workflow, /printf 'CM_E2E_ARTIFACT_DIR=%s\\n' "\$\{RUNNER_TEMP\}\/demo-current-head-e2e" >> "\$GITHUB_ENV"/);
+  const initialized = workflow.indexOf("printf 'CM_E2E_ARTIFACT_DIR=");
+  const firstUse = workflow.indexOf('"$CM_E2E_ARTIFACT_DIR"');
+  assert.ok(initialized > -1, "step-scoped artifact dir initialization is missing");
+  assert.ok(firstUse > -1, "artifact dir is never consumed by a step runtime");
+  assert.ok(initialized < firstUse, "artifact dir must be initialized before its first use");
+});
+
+test("ordinary CI validates every workflow with digest-pinned actionlint", () => {
+  const ci = readFileSync(".github/workflows/ci.yml", "utf8");
+  assert.match(ci, /releases\/download\/v1\.7\.12\/actionlint_1\.7\.12_linux_amd64\.tar\.gz/);
+  assert.match(ci, /CM_ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8/);
+  const pinnedDigest = ci.indexOf("8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8");
+  const digestCheck = ci.indexOf("sha256sum --check -", pinnedDigest);
+  const lintInvocation = ci.indexOf("-shellcheck= -pyflakes= .github/workflows/*.yml");
+  assert.ok(digestCheck > pinnedDigest, "pinned archive digest must be verified with sha256sum before use");
+  assert.ok(lintInvocation > digestCheck, "validator must run only after the digest verification");
+  assert.match(ci, /--version\)" = "actionlint 1\.7\.12"/);
+  for (const line of ci.split("\n").filter((candidate) => /^\s*-?\s*uses:/.test(candidate))) {
+    assert.match(line, /@[a-f0-9]{40}(?:\s|$)/, line);
+  }
+});
+
 test("release public readback cannot run until the exact-tree E2E reusable gate succeeds", () => {
   const workflow = readFileSync(".github/workflows/release-public-readback.yml", "utf8");
   assert.match(workflow, /current-head-docker-e2e:[\s\S]*uses: \.\/\.github\/workflows\/demo-current-head-e2e\.yml[\s\S]*target_sha: \$\{\{ github\.event\.release\.target_commitish \}\}/);
