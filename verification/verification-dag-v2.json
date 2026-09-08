@@ -3989,7 +3989,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "1d9ebe7ee250e141c11dcb2eb28efe92017609bd9643772676ae90bc11747807"
+          "sha256": "a0cc95e8f0020205bec7e34f6a63525d2d76eef8169c759d73a5782f8dfd7575"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -5372,7 +5372,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "66404496348efe3ea39c1536b54bc8c78dec0292b6adc0188563d923411adde4"
+          "sha256": "ce1adecb9938070eb2165e0b4ced78790ed2928bf2750a3633ab3d9d53f77344"
         },
         {
           "path": "package-lock.json",
