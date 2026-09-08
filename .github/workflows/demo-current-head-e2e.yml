@@ -27,9 +27,15 @@ jobs:
     env:
       TARGET_SHA: ${{ inputs.target_sha != '' && inputs.target_sha || github.sha }}
       CM_E2E_NAMESPACE: pansphaira-e2e-${{ github.run_id }}-${{ github.run_attempt }}
-      CM_E2E_ARTIFACT_DIR: ${{ runner.temp }}/demo-current-head-e2e
 
     steps:
+      - name: Initialize the bounded run artifact directory in step scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -d -m 700 "${RUNNER_TEMP}/demo-current-head-e2e"
+          printf 'CM_E2E_ARTIFACT_DIR=%s\n' "${RUNNER_TEMP}/demo-current-head-e2e" >> "$GITHUB_ENV"
+
       - name: Check out the immutable event head without writable credentials
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -123,6 +129,8 @@ jobs:
 
       - name: Retain sanitized E2E evidence
         if: always()
+        env:
+          CM_E2E_ARTIFACT_DIR: ${{ runner.temp }}/demo-current-head-e2e
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: demo-current-head-e2e-${{ env.TARGET_SHA }}

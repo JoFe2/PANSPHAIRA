@@ -33,6 +33,21 @@ loopback ports. Registry/build inputs are the digest-pinned declarations in
 are internal or have IP masquerading disabled. No arbitrary provider endpoint
 is accepted.
 
+## Workflow expression gate
+
+GitHub evaluates workflow expressions with per-scope context availability:
+the `runner` context exists only in step scope, so a job-level `env` entry
+such as `runner.temp` is rejected before any step executes (live run
+34145421939). Ordinary CI therefore validates every workflow with the pinned
+actionlint v1.7.12 linux/amd64 archive. The `workflow-lint` job in `ci.yml`
+downloads the exact upstream release asset, verifies its SHA-256 digest and
+the executable's reported version, and then runs the validator over all of
+`.github/workflows/*.yml` with `-shellcheck=` and `-pyflakes=` so the check
+is bounded to the workflow and expression validator itself. The focused suite
+keeps the deterministic regressions: no `runner` context in job-level `env`,
+the artifact directory initialized in step scope before first use, and the
+digest-verified all-workflow invocation.
+
 ## Positive lifecycle
 
 The runner performs, in order:

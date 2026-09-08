@@ -3,9 +3,9 @@ be11d10c855ee8c64ac199042dbe0aa3b86954c992a047e74faad0d56b185cf5  ./.github/ISSU
 007378504145fcb44cfbca420728f7c2a094576a1209dbf7603033de4d8da97f  ./.github/ISSUE_TEMPLATE/config.yml
 bc9b83b752e2d2196cf1a3b0aba43e12ab7f3485cfbdc96d2c072f92b59356a4  ./.github/ISSUE_TEMPLATE/feature-request.yml
 deec68918022452012f00abeb2d6b5578a3763a02320139ce074bf124b61c608  ./.github/PULL_REQUEST_TEMPLATE.md
-db0cbfc26c0a74e1f1a959781794bdb75e26fc015c4220118e7fbc2d65cc0e58  ./.github/workflows/ci.yml
+abde48ad0ab16337f1731bd4e6b3a953ce1aa1e83ab71d2f76b925f3bb6551c5  ./.github/workflows/ci.yml
 3cb93d13f4a3ed8f4666fbd68d033aa5446d473ddd35a39b12fad8e57e29b00a  ./.github/workflows/daily-poc-candidate.yml
-17a408992e4fb58c4aa5e5139e9fc64a9492bf4a7b4d699e69738af4c38c149f  ./.github/workflows/demo-current-head-e2e.yml
+58b7743dc986a6f4c9faf661ab9a774446f02bf3d215315578d041af0ca477e4  ./.github/workflows/demo-current-head-e2e.yml
 9d4ce3ce2b2ceeb992b6f31ebfd9e7e0fbcd8ff5b4e9b40c1888c11c71be55cf  ./.github/workflows/docs-pages.yml
 ae4f1a874d88f9319c56b40b266b42c981f79a859754e8c65b636cddc968e568  ./.github/workflows/release-public-readback.yml
 3f9f74e0d1a730816b6ff8297ab6e29ae4da0107fbec40a0e1ba5409be6f3f9d  ./.gitignore
@@ -258,7 +258,7 @@ e319c03de834e7679028c5c031387d11febbc7ae990f499428ae8f21738e0c10  ./docs/CONNECT
 c824eb1bbb8416b7fc9f5e75d3a15a566aef4b29008a843740d007a9f8c15783  ./docs/CRM-READ-CONNECTOR-GUIDE.md
 c4d99554a7285c40f4464735a71e3a1807dde74c31a93a69d1be6891171cb659  ./docs/DAILY-POC-CANDIDATES.md
 6b838a24fc6a532157fbe6bc0c20d80aa48f12243429d4c6e6b891ee01280cde  ./docs/DAILY-POC-ITERATION.md
-741bb5b329d1872bfecf3a6f9087b140d72aedb17ae1a8717b8d8f047061eb69  ./docs/DEMO-CURRENT-HEAD-E2E.md
+e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e  ./docs/DEMO-CURRENT-HEAD-E2E.md
 4b48c67648fb4b72fec3139680299e4e18f56e9e02575946770342e905bedfbe  ./docs/DEV-WORKER-M0-OPERATOR-GUIDE.md
 207b5443d2a747ba740440cef4710b3ed02fcf8d468fab4daca511517fc840c0  ./docs/DEV-WORKER-RECEIPT-REVIEW-CHECKLIST.md
 679bae40f1a8858f6f1e618016eec9ba9697788bbb7d67dd06e2071e12f6d404  ./docs/DISCOVERABILITY-BASELINE.md
@@ -1148,7 +1148,7 @@ fbc806eff28ce4064599e327f0bb2655c798c4478ac957ee0b3ba20e5a44f0e6  ./tests/cscl-0
 9c66323902b85d2c3eed9776da1e659a30acaa4058ab9096f35367def2f20059  ./tests/demo-admin-ai-poc.test.mjs
 dd09768d41230256fdef94d79541e7c2ddb6a4dc7390563a29a00368a05caa02  ./tests/demo-approval-workbench.test.mjs
 fafb64246fd56a4baff65cce8859e7d3fda49b8a5d873e9e9440952052808775  ./tests/demo-current-head-e2e-delivery.test.mjs
-15b8c41a477fd83e8a45e0a141773b395062ba12e7c962714504dea3f7958dc0  ./tests/demo-current-head-e2e.test.mjs
+7d1b9e6cf8faba4198c9950d8d1be16feb2e0562d23002b2035f11e681566e25  ./tests/demo-current-head-e2e.test.mjs
 7008d94365118fe01861190c6f461eb10b67461810bf889d13f79cf9b2fe8b74  ./tests/demo-enforcement-gate.test.mjs
 85011403921880eca4fd6da531d29f7dbc355578fc1efc7e57edc2f755124107  ./tests/demo-fixture-manifest.test.ts
 a2cecb00593c2e3d4cfc770b880dc1f3287a6c8de37573dce9748ea9536509ea  ./tests/demo-local-egress-policy.test.mjs
@@ -1772,5 +1772,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-590ab40263717b5d2c1252a0c0545068fb07d51cb389b1e74d617e113a0f9250  ./verification/verification-dag-v2.json
+93aae42db8d81a9f6df54c02d6a008d0f4c2d8b19ec21c84c5d0d9bfda82b08b  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

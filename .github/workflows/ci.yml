@@ -82,3 +82,39 @@ jobs:
 
       - name: Confirm tests did not modify tracked files
         run: git diff --exit-code
+
+  workflow-lint:
+    name: Validate all workflows with pinned actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 1
+
+      - name: Install digest-verified pinned actionlint
+        env:
+          CM_ACTIONLINT_ARCHIVE: https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
+          CM_ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+        shell: bash
+        run: |
+          set -euo pipefail
+          download_dir="${RUNNER_TEMP}/actionlint-v1.7.12"
+          install -d -m 700 "$download_dir"
+          curl --fail --location --silent --show-error \
+            --output "$download_dir/actionlint.tar.gz" "$CM_ACTIONLINT_ARCHIVE"
+          printf '%s  %s\n' "$CM_ACTIONLINT_SHA256" "$download_dir/actionlint.tar.gz" \
+            | sha256sum --check -
+          tar -xzf "$download_dir/actionlint.tar.gz" -C "$download_dir"
+          test -x "$download_dir/actionlint"
+          version_output="$("$download_dir/actionlint" --version)"
+          test "${version_output%%$'\n'*}" = "1.7.12"
+
+      - name: Validate every workflow with the pinned validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          "${RUNNER_TEMP}/actionlint-v1.7.12/actionlint" \
+            -shellcheck= -pyflakes= .github/workflows/*.yml
