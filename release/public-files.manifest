@@ -573,6 +573,7 @@ schemas/work-order-v1.schema.json	schemas/work-order-v1.schema.json	0644
 schemas/work-receipt-v1.schema.json	schemas/work-receipt-v1.schema.json	0644
 scripts/adaptive-controller.mjs	scripts/adaptive-controller.mjs	0755
 scripts/adaptive-delivery-status.mjs	scripts/adaptive-delivery-status.mjs	0755
+scripts/generate-status-truth.mjs	scripts/generate-status-truth.mjs	0755
 scripts/adaptive-evidence-gates.mjs	scripts/adaptive-evidence-gates.mjs	0755
 scripts/build-public-release.sh	scripts/build-public-release.sh	0755
 scripts/build-rks-01-pilot-corpora.mjs	scripts/build-rks-01-pilot-corpora.mjs	0644
