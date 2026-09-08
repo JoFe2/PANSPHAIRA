@@ -7,6 +7,7 @@ export const INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1 = "chimpmaera.incoming-invoi
 export const INCOMING_INVOICE_APPLICATION_GUIDE_SCHEMA_V1 = "chimpmaera.incoming-invoice/application-guide/v1" as const;
 export const INCOMING_INVOICE_SETUP_DIALOGUE_SCHEMA_V1 = "chimpmaera.incoming-invoice/setup-dialogue/v1" as const;
 export const INCOMING_INVOICE_CONFIGURATION_DELTA_SCHEMA_V1 = "chimpmaera.incoming-invoice/configuration-delta/v1" as const;
+export const INCOMING_INVOICE_TOLERANCE_CONFIGURATION_SCHEMA_V1 = "chimpmaera.incoming-invoice/tolerance-configuration/v1" as const;
 
 const ALLOWED_EFFECTS = ["READ_SYNTHETIC", "WRITE_LOCAL_PROOF"] as const;
 const MATCHING_MODES = ["TWO_WAY_INVOICE_PO_V1", "THREE_WAY_INVOICE_PO_RECEIPT_V1"] as const;
@@ -19,13 +20,14 @@ type TolerancePolicyIdV1 = typeof TOLERANCE_POLICIES[number];
 type EffectV1 = typeof ALLOWED_EFFECTS[number];
 type ReferenceKindV1 = typeof REFERENCE_KINDS[number];
 type RequirementVariantV1 = Readonly<{ variantId: string; version: string }>;
+type TolerancePolicyRequirementV1 = RequirementVariantV1 & Readonly<{ rateBasisPoints?: number }>;
 
 export interface IncomingInvoiceErvRequirementV1 {
   readonly schemaVersion: "chimpmaera.incoming-invoice/erv-requirement/v1";
   readonly requirementId: string;
   readonly scenario: IncomingInvoiceScenarioV1;
   readonly matchingMode: RequirementVariantV1;
-  readonly tolerancePolicy: RequirementVariantV1;
+  readonly tolerancePolicy: TolerancePolicyRequirementV1;
   readonly separateApprovalThresholdEur: number | null;
   readonly requestedEffects: readonly string[];
   readonly evidenceRefs: readonly string[];
@@ -122,6 +124,14 @@ export interface IncomingInvoiceSetupTranscriptV1 {
   readonly turns: readonly IncomingInvoiceDialogueTurnV1[];
   readonly transcriptDigest: string;
 }
+export interface IncomingInvoiceToleranceConfigurationV1 {
+  readonly schemaVersion: typeof INCOMING_INVOICE_TOLERANCE_CONFIGURATION_SCHEMA_V1;
+  readonly configurationVersion: "1.0.0";
+  readonly selection: RequirementVariantV1;
+  readonly rateBasisPoints: number | null;
+  readonly resolution: "FROZEN_VARIANT_DEFAULT" | "REQUESTED_PARAMETER";
+  readonly configurationDigest: string;
+}
 export interface IncomingInvoiceConfigurationDeltaV1 {
   readonly schemaVersion: typeof INCOMING_INVOICE_CONFIGURATION_DELTA_SCHEMA_V1;
   readonly deltaVersion: "1.0.0";
@@ -131,10 +141,11 @@ export interface IncomingInvoiceConfigurationDeltaV1 {
   readonly afterConfigurationDigest: string;
   readonly reusedCapabilityIds: readonly string[];
   readonly changedSettings: readonly Readonly<{
-    readonly setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur";
+    readonly setting: "matchingMode" | "tolerancePolicy" | "toleranceRateBasisPoints" | "scenario" | "separateApprovalThresholdEur";
     readonly before: string;
     readonly after: string;
   }>[];
+  readonly configuration: Readonly<{ readonly tolerancePolicy: IncomingInvoiceToleranceConfigurationV1 }>;
   readonly evidenceReferences: readonly string[];
   readonly unresolvedGaps: readonly string[];
   readonly authorityGranted: false;
@@ -198,6 +209,16 @@ function validVariantShape(value: unknown): value is RequirementVariantV1 {
     && typeof value.variantId === "string" && value.variantId.length > 0
     && value.version === "1.0.0";
 }
+function validTolerancePolicyRequirementShape(value: unknown): value is TolerancePolicyRequirementV1 {
+  if (!isRecord(value) || !(exactKeys(value, ["variantId", "version"]) || exactKeys(value, ["variantId", "version", "rateBasisPoints"]))) return false;
+  if (typeof value.variantId !== "string" || value.variantId.length === 0 || value.version !== "1.0.0") return false;
+  if (!Object.hasOwn(value, "rateBasisPoints")) return true;
+  return value.variantId === "RATE_BPS_V1"
+    && typeof value.rateBasisPoints === "number"
+    && Number.isSafeInteger(value.rateBasisPoints)
+    && value.rateBasisPoints >= 0
+    && value.rateBasisPoints <= 10000;
+}
 function modeRequiredKinds(mode: string): readonly ReferenceKindV1[] {
   return mode === "TWO_WAY_INVOICE_PO_V1"
     ? ["SUPPLIER", "PURCHASE_ORDER", "INVOICE"]
@@ -221,7 +242,7 @@ function requirementValid(value: unknown): value is IncomingInvoiceErvRequiremen
     && typeof value.requirementId === "string" && value.requirementId.length > 0
     && (value.scenario === "LEAN" || value.scenario === "CONTROLLED" || value.scenario === "SEGREGATED_ENTERPRISE")
     && validVariantShape(value.matchingMode)
-    && validVariantShape(value.tolerancePolicy)
+    && validTolerancePolicyRequirementShape(value.tolerancePolicy)
     && thresholdValid(value.separateApprovalThresholdEur)
     && approvalConfigurationValid(value.scenario, value.separateApprovalThresholdEur)
     && Array.isArray(value.requestedEffects) && value.requestedEffects.every((effect) => typeof effect === "string")
@@ -321,12 +342,24 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
 }
 
 function variantName(variant: RequirementVariantV1): string { return `${variant.variantId}@${variant.version}`; }
+function toleranceConfiguration(requirement: IncomingInvoiceErvRequirementV1): IncomingInvoiceToleranceConfigurationV1 {
+  const requestedRate = requirement.tolerancePolicy.rateBasisPoints;
+  const isRatePolicy = requirement.tolerancePolicy.variantId === "RATE_BPS_V1";
+  const unsigned = {
+    schemaVersion: INCOMING_INVOICE_TOLERANCE_CONFIGURATION_SCHEMA_V1,
+    configurationVersion: "1.0.0" as const,
+    selection: { variantId: requirement.tolerancePolicy.variantId, version: requirement.tolerancePolicy.version },
+    rateBasisPoints: isRatePolicy ? requestedRate ?? 100 : null,
+    resolution: isRatePolicy && requestedRate !== undefined ? "REQUESTED_PARAMETER" as const : "FROZEN_VARIANT_DEFAULT" as const,
+  };
+  return deepFreeze({ ...unsigned, configurationDigest: digest(unsigned) });
+}
 function requirementDigest(requirement: IncomingInvoiceErvRequirementV1): string { return digest(requirement); }
 function configurationDigest(requirement: IncomingInvoiceErvRequirementV1): string {
   return digest({
     scenario: requirement.scenario,
     matchingMode: requirement.matchingMode,
-    tolerancePolicy: requirement.tolerancePolicy,
+    tolerancePolicy: toleranceConfiguration(requirement),
     separateApprovalThresholdEur: requirement.separateApprovalThresholdEur,
     requestedEffects: requirement.requestedEffects,
   });
@@ -393,7 +426,12 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
   const evidenceGaps = questions.filter(({ questionId }) => questionId.startsWith("gap:")).map(({ setting }) => `MISSING_EVIDENCE_FOR_${setting === "matchingMode" ? "MATCHING_MODE" : setting === "tolerancePolicy" ? "TOLERANCE_POLICY" : setting === "scenario" ? "SCENARIO" : "SEPARATE_APPROVAL_THRESHOLD"}`);
   const confirmQuestions = questions.filter(({ questionId }) => questionId.startsWith("confirm:")).sort((a, b) => a.questionId.localeCompare(b.questionId));
   const turns = baseTurns(setupInput);
-  for (const question of confirmQuestions) turns.push({ ordinal: turns.length + 1, speaker: "AGENT", kind: "CLARIFICATION", payload: { questionId: question.questionId, question: `Confirm changed ${question.setting} from the evidence-backed AP-04 variant.` }, evidenceRefs: question.evidenceRefs });
+  for (const question of confirmQuestions) {
+    const requestedRate = question.setting === "tolerancePolicy" && setupInput.changed.tolerancePolicy.variantId === "RATE_BPS_V1"
+      ? ` Requested rateBasisPoints=${setupInput.changed.tolerancePolicy.rateBasisPoints ?? 100}.`
+      : "";
+    turns.push({ ordinal: turns.length + 1, speaker: "AGENT", kind: "CLARIFICATION", payload: { questionId: question.questionId, question: `Confirm changed ${question.setting} from the evidence-backed AP-04 variant.${requestedRate}` }, evidenceRefs: question.evidenceRefs });
+  }
   const answers = setupInput.answers.map((answer) => ({ questionId: answer.questionId, answer: answer.answer })).sort((a, b) => a.questionId.localeCompare(b.questionId) || a.answer.localeCompare(b.answer));
   const contradictions = answers.filter((answer, index) => index > 0 && answers[index - 1]?.questionId === answer.questionId && answers[index - 1]?.answer !== answer.answer);
   for (const answer of answers) turns.push({ ordinal: turns.length + 1, speaker: "OPERATOR", kind: "ANSWER", payload: answer, evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
@@ -409,9 +447,17 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     turns.push({ ordinal: turns.length + 1, speaker: "SYSTEM", kind: "OUTCOME", payload: { outcome: "NEEDS_CLARIFICATION", gaps: orderedGaps }, evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
     return deepFreeze({ outcome: "NEEDS_CLARIFICATION" as const, transcript: transcript(turns), unresolvedGaps: orderedGaps });
   }
-  const changedSettings: Array<Readonly<{ setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur"; before: string; after: string }>> = [];
+  const changedSettings: Array<Readonly<{ setting: "matchingMode" | "tolerancePolicy" | "toleranceRateBasisPoints" | "scenario" | "separateApprovalThresholdEur"; before: string; after: string }>> = [];
+  const beforeToleranceConfiguration = toleranceConfiguration(setupInput.baseline);
+  const afterToleranceConfiguration = toleranceConfiguration(setupInput.changed);
   if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) changedSettings.push({ setting: "matchingMode", before: variantName(setupInput.baseline.matchingMode), after: variantName(setupInput.changed.matchingMode) });
   if (variantName(setupInput.baseline.tolerancePolicy) !== variantName(setupInput.changed.tolerancePolicy)) changedSettings.push({ setting: "tolerancePolicy", before: variantName(setupInput.baseline.tolerancePolicy), after: variantName(setupInput.changed.tolerancePolicy) });
+  if (beforeToleranceConfiguration.rateBasisPoints !== afterToleranceConfiguration.rateBasisPoints
+    && (beforeToleranceConfiguration.rateBasisPoints !== null || afterToleranceConfiguration.rateBasisPoints !== null)) changedSettings.push({
+    setting: "toleranceRateBasisPoints",
+    before: beforeToleranceConfiguration.rateBasisPoints === null ? "NONE" : String(beforeToleranceConfiguration.rateBasisPoints),
+    after: afterToleranceConfiguration.rateBasisPoints === null ? "NONE" : String(afterToleranceConfiguration.rateBasisPoints),
+  });
   if (setupInput.baseline.scenario !== setupInput.changed.scenario) changedSettings.push({ setting: "scenario", before: setupInput.baseline.scenario, after: setupInput.changed.scenario });
   if (setupInput.baseline.separateApprovalThresholdEur !== setupInput.changed.separateApprovalThresholdEur) changedSettings.push({
     setting: "separateApprovalThresholdEur",
@@ -427,6 +473,7 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     afterConfigurationDigest: configurationDigest(setupInput.changed),
     reusedCapabilityIds: [...CAPABILITY_IDS],
     changedSettings,
+    configuration: { tolerancePolicy: afterToleranceConfiguration },
     evidenceReferences: [...new Set([...setupInput.baseline.evidenceRefs, ...setupInput.changed.evidenceRefs])].sort(),
     unresolvedGaps: [] as const,
     authorityGranted: false as const,

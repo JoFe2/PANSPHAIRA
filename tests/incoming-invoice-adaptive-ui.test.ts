@@ -20,13 +20,18 @@ function requirement(
   evidenceRefs = ["evidence:ap04-synthetic-001"],
   scenario: IncomingInvoiceErvRequirementV1["scenario"] = matchingMode === "TWO_WAY_INVOICE_PO_V1" ? "LEAN" : "CONTROLLED",
   separateApprovalThresholdEur: number | null = null,
+  rateBasisPoints?: number,
 ): IncomingInvoiceErvRequirementV1 {
   return {
     schemaVersion: "chimpmaera.incoming-invoice/erv-requirement/v1",
     requirementId,
     scenario,
     matchingMode: { variantId: matchingMode, version: "1.0.0" },
-    tolerancePolicy: { variantId: tolerancePolicy, version: "1.0.0" },
+    tolerancePolicy: {
+      variantId: tolerancePolicy,
+      version: "1.0.0",
+      ...(rateBasisPoints === undefined ? {} : { rateBasisPoints }),
+    },
     separateApprovalThresholdEur,
     requestedEffects: allowedEffects,
     evidenceRefs,
@@ -180,6 +185,64 @@ test("AP-05 setup dialogue preserves typed synthetic transcript and resolves a v
   assert.equal(first.configurationDelta.inventedExecutableFunctions.length, 0);
   assert.match(first.configurationDelta.beforeRequirementDigest, /^[a-f0-9]{64}$/);
   assert.match(first.configurationDelta.afterConfigurationDigest, /^[a-f0-9]{64}$/);
+});
+
+test("AP-05 frozen rate tolerance carries the exact requested value through a deterministic delta", () => {
+  const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
+  const changed = requirement("requirement:changed-rate", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "RATE_BPS_V1", ["evidence:ap04-synthetic-rate-002"], "SEGREGATED_ENTERPRISE", 10000, 200);
+  const first = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [
+    { questionId: "confirm:matching-mode", answer: "CONFIRM" },
+    { questionId: "confirm:tolerance-policy", answer: "CONFIRM" },
+    { questionId: "confirm:scenario", answer: "CONFIRM" },
+    { questionId: "confirm:separate-approval-threshold", answer: "CONFIRM" },
+  ] });
+  const replay = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [
+    { questionId: "confirm:separate-approval-threshold", answer: "CONFIRM" },
+    { questionId: "confirm:scenario", answer: "CONFIRM" },
+    { questionId: "confirm:tolerance-policy", answer: "CONFIRM" },
+    { questionId: "confirm:matching-mode", answer: "CONFIRM" },
+  ] });
+  assert.equal(first.outcome, "RESOLVED");
+  assert.deepEqual(replay, first);
+  if (first.outcome !== "RESOLVED") throw new Error("expected exact rate configuration");
+  const delta = first.configurationDelta as any;
+  assert.deepEqual(delta.configuration.tolerancePolicy, {
+    schemaVersion: "chimpmaera.incoming-invoice/tolerance-configuration/v1",
+    configurationVersion: "1.0.0",
+    selection: { variantId: "RATE_BPS_V1", version: "1.0.0" },
+    rateBasisPoints: 200,
+    resolution: "REQUESTED_PARAMETER",
+    configurationDigest: delta.configuration.tolerancePolicy.configurationDigest,
+  });
+  assert.match(delta.configuration.tolerancePolicy.configurationDigest, /^[a-f0-9]{64}$/);
+  assert.deepEqual(delta.changedSettings.find(({ setting }: { setting: string }) => setting === "toleranceRateBasisPoints"), {
+    setting: "toleranceRateBasisPoints", before: "NONE", after: "200",
+  });
+  const toleranceQuestion = first.transcript.turns.find(({ kind, payload }) => kind === "CLARIFICATION" && JSON.stringify(payload).includes("confirm:tolerance-policy"));
+  assert.ok(toleranceQuestion);
+  assert.match(JSON.stringify(toleranceQuestion.payload), /200/);
+  assert.equal(first.configurationDelta.authorityGranted, false);
+});
+
+test("AP-05 dialogue rejects invalid or contradictory tolerance parameters and preserves unknown evidence", () => {
+  const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
+  const changed = requirement("requirement:changed-rate", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "RATE_BPS_V1", ["evidence:ap04-synthetic-rate-002"], "CONTROLLED", null, 200);
+  for (const rateBasisPoints of [200.5, -1, 10001]) {
+    const invalid = runIncomingInvoiceSetupAgentV1({ baseline, changed: { ...changed, tolerancePolicy: { ...changed.tolerancePolicy, rateBasisPoints } }, answers: [] });
+    assert.equal(invalid.outcome, "DENIED_UNSUPPORTED");
+    assert.ok(invalid.unresolvedGaps.includes("INPUT_SHAPE_DENIED"));
+  }
+  const contradictory = runIncomingInvoiceSetupAgentV1({
+    baseline,
+    changed: { ...changed, tolerancePolicy: { ...changed.tolerancePolicy, variantId: "ABS_MINOR_V1", rateBasisPoints: 200 } },
+    answers: [],
+  });
+  assert.equal(contradictory.outcome, "DENIED_UNSUPPORTED");
+  assert.ok(contradictory.unresolvedGaps.includes("INPUT_SHAPE_DENIED"));
+
+  const unknown = runIncomingInvoiceSetupAgentV1({ baseline, changed: { ...changed, evidenceRefs: [] }, answers: [] });
+  assert.equal(unknown.outcome, "NEEDS_CLARIFICATION");
+  if (unknown.outcome === "NEEDS_CLARIFICATION") assert.ok(unknown.unresolvedGaps.includes("MISSING_EVIDENCE_FOR_TOLERANCE_POLICY"));
 });
 
 test("AP-05 dialogue asks only evidence-backed unresolved questions and fails closed", () => {
