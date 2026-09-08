@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "chimpmaera.verification/released-dependency-receipt/v1",
+  "dependencies_released": ["PS365-AP-05"],
+  "released_dependency_receipts": [
+    {
+      "taskId": "PS365-AP-05",
+      "issueNumber": 365,
+      "repository": "JoFe2/PANSPHAIRA",
+      "state": "DONE",
+      "mergeSha": "988395110a9189d1b8cd4ee98184ed5c1d77a15d",
+      "release": {
+        "releaseId": 384942092,
+        "tag": "pan365-adaptive-ui-source-v1",
+        "url": "https://github.com/JoFe2/PANSPHAIRA/releases/tag/pan365-adaptive-ui-source-v1",
+        "workflowId": 34259112516,
+        "workflowConclusion": "success"
+      },
+      "publicReadback": {
+        "anonymous": true,
+        "commit": "988395110a9189d1b8cd4ee98184ed5c1d77a15d"
+      },
+      "sourceFiles": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
+          "sha256": "69541b22c8545cf24ccb7e3004337cb6572209547ee926bc6d490954170a9aa4",
+          "bytes": 29722,
+          "url": "https://raw.githubusercontent.com/JoFe2/PANSPHAIRA/988395110a9189d1b8cd4ee98184ed5c1d77a15d/packages/contracts/src/incoming-invoice-adaptive-ui.ts"
+        },
+        {
+          "path": "packages/contracts/src/incoming-invoice-erv.ts",
+          "sha256": "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf",
+          "bytes": 21114,
+          "url": "https://raw.githubusercontent.com/JoFe2/PANSPHAIRA/988395110a9189d1b8cd4ee98184ed5c1d77a15d/packages/contracts/src/incoming-invoice-erv.ts"
+        },
+        {
+          "path": "packages/contracts/src/incoming-invoice-blueprint.ts",
+          "sha256": "aad1b877c096d4605b80b141100897fab41f62622f5434be59059989b8514550",
+          "bytes": 7414,
+          "url": "https://raw.githubusercontent.com/JoFe2/PANSPHAIRA/988395110a9189d1b8cd4ee98184ed5c1d77a15d/packages/contracts/src/incoming-invoice-blueprint.ts"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json",
+          "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845",
+          "bytes": 19841,
+          "url": "https://raw.githubusercontent.com/JoFe2/PANSPHAIRA/988395110a9189d1b8cd4ee98184ed5c1d77a15d/tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json"
+        },
+        {
+          "path": "tests/incoming-invoice-adaptive-ui.test.ts",
+          "sha256": "bb3f1946702ecf2431af343b66d0a4bc4a426684916956fb04b0047a0763f550",
+          "bytes": 12891,
+          "url": "https://raw.githubusercontent.com/JoFe2/PANSPHAIRA/988395110a9189d1b8cd4ee98184ed5c1d77a15d/tests/incoming-invoice-adaptive-ui.test.ts"
+        }
+      ],
+      "nonclaim": "Old AP05 release is authentic source input, not proof of the currently running frozen-200bps correction or current full issue365 closure."
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
@@ -129,8 +130,8 @@ test("ERV-UI AC01-03 publishes closed ordered baseline and adapted packages with
   assert.equal(lean.bindings.casePackSchemaVersion, INCOMING_INVOICE_ERV_CASE_PACK_V1);
   assert.equal(lean.bindings.coreSchemaVersion, INCOMING_INVOICE_ERV_CORE_V1);
   assert.equal(lean.bindings.casePackSha256, AP04_ERV_CASE_PACK_SHA256_V1);
-  assert.deepEqual(lean.bindings, AP05_SOURCE_ORACLE.LEAN);
-  assert.deepEqual(segregated.bindings, AP05_SOURCE_ORACLE.SEGREGATED_ENTERPRISE);
+  assert.deepEqual(lean.bindings, releasedAp05Oracle(publishedInput(false)));
+  assert.deepEqual(segregated.bindings, releasedAp05Oracle(publishedInput(true)));
   assert.equal(segregated.bindings.configurationDeltaDigest !== null, true);
   for (const action of segregated.actions) {
     assert.equal(action.effectiveAuthority, "NONE");
@@ -190,9 +191,9 @@ function genericPackage(): any {
       scenarioDigest: "c".repeat(64),
       coreDigest: "d".repeat(64),
       casePackSha256: "e".repeat(64),
-      casePackSchemaVersion: "generic.case-pack/v1",
-      coreSchemaVersion: "generic.core/v1",
-      adaptiveUiSchemaVersion: "generic.adaptive-ui/v1",
+      casePackSchemaVersion: INCOMING_INVOICE_ERV_CASE_PACK_V1,
+      coreSchemaVersion: INCOMING_INVOICE_ERV_CORE_V1,
+      adaptiveUiSchemaVersion: INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1,
       adaptiveUiManifestDigest: "f".repeat(64),
       configurationDeltaDigest: null,
       setupTranscriptDigest: null,
@@ -202,34 +203,82 @@ function genericPackage(): any {
   return { ...unsigned, packageDigest: independentDigest(unsigned) };
 }
 
-const AP05_SOURCE_ORACLE = {
-  LEAN: {
-    requirementDigest: "8e13d2d6c04c184ae8b3f6345c5ad9b57914023e7cbe0c4259d9c7095982440a",
-    configurationDigest: "bc34026fd7c89a63a62123bf16e5c5ae608202bdc37bd5c9113303dcc093fff3",
-    scenarioDigest: "eee66e73040fefc58f60645d4fa403bdafe3f8a31f3f7c7907a71fae63015a6d",
-    coreDigest: "618aeba909d7210dd5fe412e068cea204c9b64da2aaa4e1c409a94694850132d",
-    casePackSha256: "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845",
-    casePackSchemaVersion: "chimpmaera.incoming-invoice/erv-case-pack/v1",
-    coreSchemaVersion: "chimpmaera.incoming-invoice/erv-core/v1",
-    adaptiveUiSchemaVersion: "chimpmaera.incoming-invoice/adaptive-ui/v1",
-    adaptiveUiManifestDigest: "32a99392fad099ee1534e9565fa84bf5f6c32c0846abccf24f7034fe6898a0a1",
-    configurationDeltaDigest: null,
-    setupTranscriptDigest: null,
-  },
-  SEGREGATED_ENTERPRISE: {
-    requirementDigest: "82f245dfb1e71ee66cde0191c91708c084a7083d15fd99690332cc2e32096698",
-    configurationDigest: "deada62bbe444bdc3c2eed88df0a5b93330f78d1da847a8e569a91c75c159737",
-    scenarioDigest: "6f1c891db95bbfac8714dcbc1a866c349efc013638bfc5d8db7259f6b06dedf0",
-    coreDigest: "618aeba909d7210dd5fe412e068cea204c9b64da2aaa4e1c409a94694850132d",
-    casePackSha256: "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845",
-    casePackSchemaVersion: "chimpmaera.incoming-invoice/erv-case-pack/v1",
-    coreSchemaVersion: "chimpmaera.incoming-invoice/erv-core/v1",
-    adaptiveUiSchemaVersion: "chimpmaera.incoming-invoice/adaptive-ui/v1",
-    adaptiveUiManifestDigest: "ebfde15249678a8fa7bc837adcfce7998f694d7ae6d9744c59b132220c99aba4",
-    configurationDeltaDigest: "5414172a7b17d44accde919c2ec8208e206c40f9e14aec22a479b347983e7666",
-    setupTranscriptDigest: "b885f5eff422fb7215619996de80c4896c6e3be58ebead2950a630c7098ebb6e",
-  },
-} as const;
+type ReleasedAp05Receipt = {
+  dependencies_released: string[];
+  released_dependency_receipts: Array<{
+    taskId: string;
+    issueNumber: number;
+    repository: string;
+    state: string;
+    mergeSha: string;
+    release: { releaseId: number; tag: string; url: string; workflowId: number; workflowConclusion: string };
+    publicReadback: { anonymous: boolean; commit: string };
+    sourceFiles: Array<{ path: string; sha256: string; bytes: number; url: string }>;
+  }>;
+};
+
+const AP05_RELEASE_RECEIPT = JSON.parse(readFileSync("verification/erv-ui-ap05-release-receipt-v1.json", "utf8")) as ReleasedAp05Receipt;
+
+function releasedAp05Receipt() {
+  assert.deepEqual(AP05_RELEASE_RECEIPT.dependencies_released, ["PS365-AP-05"]);
+  assert.equal(AP05_RELEASE_RECEIPT.released_dependency_receipts.length, 1);
+  const receipt = AP05_RELEASE_RECEIPT.released_dependency_receipts[0]!;
+  assert.equal(receipt.taskId, "PS365-AP-05");
+  assert.equal(receipt.issueNumber, 365);
+  assert.equal(receipt.repository, "JoFe2/PANSPHAIRA");
+  assert.equal(receipt.state, "DONE");
+  assert.match(receipt.mergeSha, /^[a-f0-9]{40}$/);
+  assert.equal(receipt.publicReadback.anonymous, true);
+  assert.equal(receipt.publicReadback.commit, receipt.mergeSha);
+  assert.equal(receipt.release.workflowConclusion, "success");
+  assert.match(receipt.release.url, /^https:\/\/github\.com\//);
+  for (const source of receipt.sourceFiles) {
+    const local = readFileSync(source.path);
+    assert.equal(local.byteLength, source.bytes, source.path);
+    assert.equal(createHash("sha256").update(local).digest("hex"), source.sha256, source.path);
+    const released = execFileSync("git", ["show", `${receipt.mergeSha}:${source.path}`]);
+    assert.deepEqual(released, local, source.path);
+  }
+  return receipt;
+}
+
+function withoutDigest(value: Record<string, unknown>, key: string): Record<string, unknown> {
+  const copy = { ...value };
+  delete copy[key];
+  return copy;
+}
+
+function releasedAp05Oracle(input: ErvUiPackageBuildInputV1) {
+  const receipt = releasedAp05Receipt();
+  const fixture = receipt.sourceFiles.find(({ path }) => path === "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json");
+  assert.ok(fixture);
+  const resolution = resolveIncomingInvoiceScenarioV1(input.scenarioInput);
+  assert.equal(resolution.outcome, "ACCEPTED");
+  if (resolution.outcome !== "ACCEPTED") throw new Error("released AP-05 oracle input did not resolve");
+  return {
+    requirementDigest: independentDigest(input.requirement),
+    configurationDigest: independentDigest({
+      scenario: input.requirement.scenario,
+      matchingMode: input.requirement.matchingMode,
+      tolerancePolicy: input.requirement.tolerancePolicy,
+      separateApprovalThresholdEur: input.requirement.separateApprovalThresholdEur,
+      requestedEffects: input.requirement.requestedEffects,
+    }),
+    scenarioDigest: independentDigest(resolution),
+    coreDigest: independentDigest(input.corePackage),
+    casePackSha256: fixture.sha256,
+    casePackSchemaVersion: INCOMING_INVOICE_ERV_CASE_PACK_V1,
+    coreSchemaVersion: INCOMING_INVOICE_ERV_CORE_V1,
+    adaptiveUiSchemaVersion: INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1,
+    adaptiveUiManifestDigest: independentDigest(withoutDigest(input.adaptiveUiManifest as unknown as Record<string, unknown>, "manifestDigest")),
+    configurationDeltaDigest: input.configurationDelta === undefined
+      ? null
+      : independentDigest(withoutDigest(input.configurationDelta as unknown as Record<string, unknown>, "configurationDeltaDigest")),
+    setupTranscriptDigest: input.setupTranscript === undefined
+      ? null
+      : independentDigest(withoutDigest(input.setupTranscript as unknown as Record<string, unknown>, "transcriptDigest")),
+  };
+}
 
 test("ERV-UI AC04/06 generic consumer renders schema-shaped packages without ERV allowlists", () => {
   const value = genericPackage();
@@ -248,6 +297,25 @@ test("ERV-UI AC04/06 generic consumer renders schema-shaped packages without ERV
   const genericValidationSource = consumerSource.slice(consumerSource.indexOf("function validComponent"));
   assert.doesNotMatch(renderSource, /supplier|purchaseOrder|SEGREGATED_ENTERPRISE|LEAN/);
   assert.doesNotMatch(genericValidationSource, /supplier|purchaseOrder|SEGREGATED_ENTERPRISE|LEAN|SOURCE_BINDINGS|sourceBindingForScenario/);
+});
+
+test("ERV-UI AC05 schema mutations are denied by both Ajv and runtime after re-digesting", () => {
+  const schema = JSON.parse(readFileSync("schemas/contracts/erv-ui-package-v1.schema.json", "utf8"));
+  const validate = new Ajv2020({ allErrors: true, strict: true }).compile(schema);
+  const mutations = [
+    (value: any) => { value.bindings.casePackSchemaVersion = "caller.case-pack/v1"; },
+    (value: any) => { value.bindings.coreSchemaVersion = "caller.core/v1"; },
+    (value: any) => { value.bindings.adaptiveUiSchemaVersion = "caller.adaptive-ui/v1"; },
+    (value: any) => { value.nonclaims = value.nonclaims.slice(0, 4); },
+    (value: any) => { value.scenario = "CALLER_SCENARIO"; },
+  ];
+  for (const mutate of mutations) {
+    const candidate = genericPackage();
+    mutate(candidate);
+    candidate.packageDigest = independentDigest(withoutDigest(candidate, "packageDigest"));
+    assert.equal(validate(candidate), false);
+    assert.deepEqual(renderErvUiPackageV1(candidate), { outcome: "DENIED", reasonCode: "PACKAGE_INTEGRITY_DENIED" });
+  }
 });
 
 test("ERV-UI AC05 rejects tampering, unknown vocabulary, missing evidence, reorder and forged digests before render", () => {
@@ -273,8 +341,8 @@ test("ERV-UI AC05 rejects tampering, unknown vocabulary, missing evidence, reord
 test("ERV-UI AC05 source identities use an independent AP-05 oracle and malformed cores fail closed", () => {
   const lean = published(false);
   const segregated = published(true);
-  assert.deepEqual(lean.bindings, AP05_SOURCE_ORACLE.LEAN);
-  assert.deepEqual(segregated.bindings, AP05_SOURCE_ORACLE.SEGREGATED_ENTERPRISE);
+  assert.deepEqual(lean.bindings, releasedAp05Oracle(publishedInput(false)));
+  assert.deepEqual(segregated.bindings, releasedAp05Oracle(publishedInput(true)));
 
   const alteredInput = publishedInput(false) as any;
   alteredInput.requirement = { ...alteredInput.requirement, requirementId: "caller-minted-requirement" };

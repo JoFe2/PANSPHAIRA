@@ -1380,6 +1380,7 @@ verification/awi-03-knowledge-envelope-evidence-v1.json	verification/awi-03-know
 verification/bi-002-crm-read-connector-evidence-v1.json	verification/bi-002-crm-read-connector-evidence-v1.json	0644
 verification/bi-003-erp-read-connector-evidence-v1.json	verification/bi-003-erp-read-connector-evidence-v1.json	0644
 verification/canonical-json-profile-inventory-v1.json	verification/canonical-json-profile-inventory-v1.json	0644
+verification/erv-ui-ap05-release-receipt-v1.json	verification/erv-ui-ap05-release-receipt-v1.json	0644
 verification/cks-03-public-manifests-v1.json	verification/cks-03-public-manifests-v1.json	0644
 verification/cks-04-baseline-manifest-template-v1.json	verification/cks-04-baseline-manifest-template-v1.json	0644
 verification/cks-04-no-finetune-baseline-evidence-v1.json	verification/cks-04-no-finetune-baseline-evidence-v1.json	0644

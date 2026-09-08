@@ -25,6 +25,7 @@ export const ERV_UI_PACKAGE_VERSION_V1 = "1.0.0" as const;
 
 const DISPLAY_KINDS = ["TEXT", "STATUS", "EVIDENCE_LIST", "ACTION"] as const;
 const COMPONENT_STATES = ["VALUE", "UNKNOWN", "CONFLICT", "UNSUPPORTED"] as const;
+const SCENARIOS = ["LEAN", "CONTROLLED", "SEGREGATED_ENTERPRISE"] as const;
 const NONCLAIMS = [
   "NO_PRODUCTION_FRONTEND",
   "NO_CUSTOMER_DATA",
@@ -489,7 +490,9 @@ function validBindings(value: unknown): value is ErvUiBindingsV1 {
   if (!isRecord(value)
     || !exactKeys(value, ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion", "adaptiveUiManifestDigest", "configurationDeltaDigest", "setupTranscriptDigest"])) return false;
   return ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "adaptiveUiManifestDigest"].every((key) => sha256(value[key]))
-    && ["casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion"].every((key) => typeof value[key] === "string" && (value[key] as string).length > 0)
+    && value.casePackSchemaVersion === INCOMING_INVOICE_ERV_CASE_PACK_V1
+    && value.coreSchemaVersion === INCOMING_INVOICE_ERV_CORE_V1
+    && value.adaptiveUiSchemaVersion === INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1
     && (value.configurationDeltaDigest === null || sha256(value.configurationDeltaDigest))
     && (value.setupTranscriptDigest === null || sha256(value.setupTranscriptDigest));
 }
@@ -498,11 +501,11 @@ function validateForRender(value: unknown): ErvUiRenderDenialReasonV1 | null {
   if (!isRecord(value) || !exactKeys(value, ["schemaVersion", "packageVersion", "scenario", "screens", "actions", "componentIds", "bindings", "nonclaims", "packageDigest"])) return "PACKAGE_INTEGRITY_DENIED";
   if (value.schemaVersion !== ERV_UI_PACKAGE_SCHEMA_V1
     || value.packageVersion !== ERV_UI_PACKAGE_VERSION_V1
-    || typeof value.scenario !== "string" || value.scenario.length === 0
+    || !SCENARIOS.includes(value.scenario as typeof SCENARIOS[number])
     || !Array.isArray(value.screens) || value.screens.length === 0
     || !Array.isArray(value.actions) || value.actions.length === 0
     || !Array.isArray(value.componentIds) || value.componentIds.length === 0
-    || !Array.isArray(value.nonclaims) || value.nonclaims.length === 0
+    || !Array.isArray(value.nonclaims) || value.nonclaims.length < NONCLAIMS.length
     || !sha256(value.packageDigest)
     || !validBindings(value.bindings)
     || !value.nonclaims.every((claim) => typeof claim === "string" && claim.length > 0)) return "PACKAGE_INTEGRITY_DENIED";
