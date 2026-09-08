@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/contracts/erv-ui-package-v1.schema.json",
+  "title": "ChimpMaera renderer-neutral ERV UI package v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "packageVersion", "scenario", "screens", "actions", "componentIds", "bindings", "nonclaims", "packageDigest"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.incoming-invoice/erv-ui-package/v1" },
+    "packageVersion": { "const": "1.0.0" },
+    "scenario": { "enum": ["LEAN", "CONTROLLED", "SEGREGATED_ENTERPRISE"] },
+    "screens": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/screen" } },
+    "actions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/action" } },
+    "componentIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "bindings": { "$ref": "#/$defs/bindings" },
+    "nonclaims": { "type": "array", "minItems": 5, "items": { "type": "string", "minLength": 1 } },
+    "packageDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["componentId", "ordinal", "fieldId", "displayKind", "state", "value", "label", "helpText", "accessibilityText", "evidenceRefs", "reasonCodes"],
+      "properties": {
+        "componentId": { "type": "string", "minLength": 1 },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "fieldId": { "type": "string", "minLength": 1 },
+        "displayKind": { "enum": ["TEXT", "STATUS", "EVIDENCE_LIST", "ACTION"] },
+        "state": { "enum": ["VALUE", "UNKNOWN", "CONFLICT", "UNSUPPORTED"] },
+        "value": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }, { "type": "null" }] },
+        "label": { "type": "string", "minLength": 1 },
+        "helpText": { "type": "string", "minLength": 1 },
+        "accessibilityText": { "type": "string", "minLength": 1 },
+        "evidenceRefs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "reasonCodes": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sectionId", "ordinal", "label", "components"],
+      "properties": {
+        "sectionId": { "type": "string", "minLength": 1 },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "components": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/component" } }
+      }
+    },
+    "screen": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["screenId", "ordinal", "label", "sections"],
+      "properties": {
+        "screenId": { "type": "string", "minLength": 1 },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "sections": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/section" } }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionId", "ordinal", "visible", "enabled", "disabledReasons", "requiredEvidence", "effectiveAuthority", "confirmationIntent", "readbackIntent", "label", "helpText", "accessibilityText"],
+      "properties": {
+        "actionId": { "type": "string", "minLength": 1 },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "visible": { "const": true },
+        "enabled": { "type": "boolean" },
+        "disabledReasons": { "type": "array", "items": { "type": "string" } },
+        "requiredEvidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "effectiveAuthority": { "const": "NONE" },
+        "confirmationIntent": { "const": "EXPLICIT_OPERATOR_CONFIRMATION" },
+        "readbackIntent": { "const": "LOCAL_READBACK_ONLY" },
+        "label": { "type": "string", "minLength": 1 },
+        "helpText": { "type": "string", "minLength": 1 },
+        "accessibilityText": { "type": "string", "minLength": 1 }
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion", "adaptiveUiManifestDigest", "configurationDeltaDigest", "setupTranscriptDigest"],
+      "properties": {
+        "requirementDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "configurationDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "scenarioDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "coreDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "casePackSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "casePackSchemaVersion": { "const": "chimpmaera.incoming-invoice/erv-case-pack/v1" },
+        "coreSchemaVersion": { "const": "chimpmaera.incoming-invoice/erv-core/v1" },
+        "adaptiveUiSchemaVersion": { "const": "chimpmaera.incoming-invoice/adaptive-ui/v1" },
+        "adaptiveUiManifestDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "configurationDeltaDigest": { "oneOf": [{ "type": "string", "pattern": "^[a-f0-9]{64}$" }, { "type": "null" }] },
+        "setupTranscriptDigest": { "oneOf": [{ "type": "string", "pattern": "^[a-f0-9]{64}$" }, { "type": "null" }] }
+      }
+    }
+  }
+}
