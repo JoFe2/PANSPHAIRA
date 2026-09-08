@@ -1689,7 +1689,6 @@ b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification
 40b6a9bbe263b9cd67ef034dec0eb87c350aa1587904e385a2acb1072b3e0bc3  ./verification/bi-002-crm-read-connector-evidence-v1.json
 93f42b3e9e78b32cc1e1193e3f7a7ef59ca7ccd2e4116bd184d22d504987d46a  ./verification/bi-003-erp-read-connector-evidence-v1.json
 91188e036f0634993b8da106a25718eddf0d15fe43a9d616fb0474e94370a825  ./verification/canonical-json-profile-inventory-v1.json
-5e7b9a1099b34186a84c0df0357e18a3eb92b61acea3aebf009795105bc313e1  ./verification/erv-ui-ap05-release-receipt-v1.json
 1e25b300491c6eeabe7f4a88c3358b59651dbd0e474ff1e8ce4a11fa18c52da3  ./verification/cks-03-public-manifests-v1.json
 81ab161fc2f4cd38ca0cc0f40d8c289f5d37b036fd4aef7a31e16ef47bf72e05  ./verification/cks-04-baseline-manifest-template-v1.json
 5e83eb24a343b7d29c0c0e99f54c26855b645b99f63df03acfd598d75222928c  ./verification/cks-04-no-finetune-baseline-evidence-v1.json
@@ -1771,6 +1770,7 @@ a920d229e9c80c395745f36e7dcd5e77261b92ecf93f1e4d990aa43b212251d9  ./verification
 1607a8d2a9b0767199ed8bb2417b99e3ad67caef61e2cace3df40b6d7ab6ee06  ./verification/cscl-10-sales-candidate-receipt-v1.json
 636c33318dc0b542e5be8b1849eb798dcebbf3ac51ea64ea86ffcacac99d6c0e  ./verification/cscl-10-sales-candidate-v1.json
 f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e  ./verification/demo-current-head-e2e/contract-v1.json
+5e7b9a1099b34186a84c0df0357e18a3eb92b61acea3aebf009795105bc313e1  ./verification/erv-ui-ap05-release-receipt-v1.json
 2b29f7e4bfc49ed3c485e7815b0b83b803815ea76fe8eff97bee7b47487b6c21  ./verification/external-bi-service-paired-compatibility-v1.json
 d43b38be4695e0e5c70e3a8e0ebd2a55b527974d7d9721cc43d94ee248245432  ./verification/intake-001-evidence-v1.json
 e2fa73eb5312982af288d29df015b0dc3e010f3fdba6405ce3b464b4ccece660  ./verification/lkc-qual-01-m0-evidence-v1.json
