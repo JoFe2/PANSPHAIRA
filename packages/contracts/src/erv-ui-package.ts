@@ -35,7 +35,7 @@ const NONCLAIMS = [
 ] as const;
 const CAPABILITY_IDS = [INCOMING_INVOICE_ERV_CORE_V1, INCOMING_INVOICE_ERV_CASE_PACK_V1] as const;
 
-type SourceBindingV1 = Readonly<{
+type ReleasedAp05AuthorityV1 = Readonly<{
   requirementDigest: string;
   configurationDigest: string;
   scenarioDigest: string;
@@ -47,10 +47,10 @@ type SourceBindingV1 = Readonly<{
   actionIds: readonly string[];
 }>;
 
-// These are the content-addressed AP-05 release identities. The package
-// contract is not a general-purpose adapter for caller-owned AP-05-shaped
-// inputs: only these released source chains may be published or rendered.
-const SOURCE_BINDINGS: Partial<Record<IncomingInvoiceScenarioV1, SourceBindingV1>> = {
+// These identities are the verified output of the released AP-05 source chain
+// recorded by verification/erv-ui-ap05-release-receipt-v1.json. They are
+// release authority, not caller-supplied AP-05-shaped input.
+const RELEASED_AP05_AUTHORITY_V1: Partial<Record<IncomingInvoiceScenarioV1, ReleasedAp05AuthorityV1>> = {
   LEAN: {
     requirementDigest: "8e13d2d6c04c184ae8b3f6345c5ad9b57914023e7cbe0c4259d9c7095982440a",
     configurationDigest: "bc34026fd7c89a63a62123bf16e5c5ae608202bdc37bd5c9113303dcc093fff3",
@@ -75,8 +75,8 @@ const SOURCE_BINDINGS: Partial<Record<IncomingInvoiceScenarioV1, SourceBindingV1
   },
 };
 
-function sourceBindingForScenario(scenario: IncomingInvoiceScenarioV1): SourceBindingV1 | undefined {
-  return SOURCE_BINDINGS[scenario];
+function releasedAp05AuthorityForScenario(scenario: IncomingInvoiceScenarioV1): ReleasedAp05AuthorityV1 | undefined {
+  return RELEASED_AP05_AUTHORITY_V1[scenario];
 }
 
 type DisplayKindV1 = typeof DISPLAY_KINDS[number];
@@ -246,7 +246,7 @@ function scenarioDigest(resolution: IncomingInvoiceScenarioResolutionV1): string
 }
 
 function validManifest(manifest: IncomingInvoiceUiManifestV1): boolean {
-  const expected = sourceBindingForScenario(manifest.scenario);
+  const expected = releasedAp05AuthorityForScenario(manifest.scenario);
   return isRecord(manifest)
     && exactKeys(manifest, ["schemaVersion", "manifestVersion", "scenario", "evidenceState", "fields", "actions", "reusedCapabilityIds", "applicationGuideVersion", "authority", "manifestDigest"])
     && expected !== undefined
@@ -341,7 +341,7 @@ function sourceChainMatches(
   resolution: IncomingInvoiceScenarioResolutionV1,
 ): boolean {
   if (resolution.outcome !== "ACCEPTED") return false;
-  const expected = sourceBindingForScenario(resolution.scenario);
+  const expected = releasedAp05AuthorityForScenario(resolution.scenario);
   if (expected === undefined) return false;
   const delta = isRecord(input.configurationDelta) ? input.configurationDelta.configurationDeltaDigest : null;
   const transcript = isRecord(input.setupTranscript) ? input.setupTranscript.transcriptDigest : null;
@@ -486,15 +486,22 @@ function validAction(value: unknown, evidenceRefs: readonly string[], ordinal: n
     && typeof value.accessibilityText === "string" && value.accessibilityText.length > 0;
 }
 
-function validBindings(value: unknown): value is ErvUiBindingsV1 {
+function validBindings(value: unknown, scenario: IncomingInvoiceScenarioV1): value is ErvUiBindingsV1 {
   if (!isRecord(value)
     || !exactKeys(value, ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "casePackSchemaVersion", "coreSchemaVersion", "adaptiveUiSchemaVersion", "adaptiveUiManifestDigest", "configurationDeltaDigest", "setupTranscriptDigest"])) return false;
-  return ["requirementDigest", "configurationDigest", "scenarioDigest", "coreDigest", "casePackSha256", "adaptiveUiManifestDigest"].every((key) => sha256(value[key]))
+  const expected = releasedAp05AuthorityForScenario(scenario);
+  return expected !== undefined
+    && value.requirementDigest === expected.requirementDigest
+    && value.configurationDigest === expected.configurationDigest
+    && value.scenarioDigest === expected.scenarioDigest
+    && value.coreDigest === expected.coreDigest
+    && value.casePackSha256 === AP04_ERV_CASE_PACK_SHA256_V1
+    && value.adaptiveUiManifestDigest === expected.adaptiveUiManifestDigest
     && value.casePackSchemaVersion === INCOMING_INVOICE_ERV_CASE_PACK_V1
     && value.coreSchemaVersion === INCOMING_INVOICE_ERV_CORE_V1
     && value.adaptiveUiSchemaVersion === INCOMING_INVOICE_ADAPTIVE_UI_SCHEMA_V1
-    && (value.configurationDeltaDigest === null || sha256(value.configurationDeltaDigest))
-    && (value.setupTranscriptDigest === null || sha256(value.setupTranscriptDigest));
+    && value.configurationDeltaDigest === expected.configurationDeltaDigest
+    && value.setupTranscriptDigest === expected.setupTranscriptDigest;
 }
 
 function validateForRender(value: unknown): ErvUiRenderDenialReasonV1 | null {
@@ -506,9 +513,12 @@ function validateForRender(value: unknown): ErvUiRenderDenialReasonV1 | null {
     || !Array.isArray(value.actions) || value.actions.length === 0
     || !Array.isArray(value.componentIds) || value.componentIds.length === 0
     || !Array.isArray(value.nonclaims) || value.nonclaims.length < NONCLAIMS.length
-    || !sha256(value.packageDigest)
-    || !validBindings(value.bindings)
-    || !value.nonclaims.every((claim) => typeof claim === "string" && claim.length > 0)) return "PACKAGE_INTEGRITY_DENIED";
+    || !sha256(value.packageDigest)) return "PACKAGE_INTEGRITY_DENIED";
+  const scenario = value.scenario as IncomingInvoiceScenarioV1;
+  const nonclaims = value.nonclaims;
+  if (!NONCLAIMS.every((claim) => nonclaims.includes(claim))
+    || !validBindings(value.bindings, scenario)
+    || !nonclaims.every((claim) => typeof claim === "string" && claim.length > 0)) return "PACKAGE_INTEGRITY_DENIED";
 
   const evidenceRefs: string[] = [];
   const componentIds: string[] = [];

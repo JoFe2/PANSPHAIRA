@@ -13,7 +13,18 @@
     "actions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/action" } },
     "componentIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
     "bindings": { "$ref": "#/$defs/bindings" },
-    "nonclaims": { "type": "array", "minItems": 5, "items": { "type": "string", "minLength": 1 } },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 5,
+      "items": { "type": "string", "minLength": 1 },
+      "allOf": [
+        { "contains": { "const": "NO_PRODUCTION_FRONTEND" } },
+        { "contains": { "const": "NO_CUSTOMER_DATA" } },
+        { "contains": { "const": "NO_LIVE_ERP_INTEGRATION" } },
+        { "contains": { "const": "NO_FINANCIAL_OPINION" } },
+        { "contains": { "const": "NO_EXTERNAL_EXECUTION_AUTHORITY" } }
+      ]
+    },
     "packageDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
   },
   "$defs": {
