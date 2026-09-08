@@ -23,8 +23,10 @@ type RequirementVariantV1 = Readonly<{ variantId: string; version: string }>;
 export interface IncomingInvoiceErvRequirementV1 {
   readonly schemaVersion: "chimpmaera.incoming-invoice/erv-requirement/v1";
   readonly requirementId: string;
+  readonly scenario: IncomingInvoiceScenarioV1;
   readonly matchingMode: RequirementVariantV1;
   readonly tolerancePolicy: RequirementVariantV1;
+  readonly separateApprovalThresholdEur: number | null;
   readonly requestedEffects: readonly string[];
   readonly evidenceRefs: readonly string[];
   readonly synthetic: true;
@@ -128,7 +130,11 @@ export interface IncomingInvoiceConfigurationDeltaV1 {
   readonly beforeConfigurationDigest: string;
   readonly afterConfigurationDigest: string;
   readonly reusedCapabilityIds: readonly string[];
-  readonly changedSettings: readonly Readonly<{ setting: "matchingMode" | "tolerancePolicy"; before: string; after: string }>[];
+  readonly changedSettings: readonly Readonly<{
+    readonly setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur";
+    readonly before: string;
+    readonly after: string;
+  }>[];
   readonly evidenceReferences: readonly string[];
   readonly unresolvedGaps: readonly string[];
   readonly authorityGranted: false;
@@ -197,12 +203,27 @@ function modeRequiredKinds(mode: string): readonly ReferenceKindV1[] {
     ? ["SUPPLIER", "PURCHASE_ORDER", "INVOICE"]
     : ["SUPPLIER", "PURCHASE_ORDER", "RECEIPT", "INVOICE"];
 }
+function scenarioMatchingModeValid(scenario: IncomingInvoiceScenarioV1, mode: string): boolean {
+  return (scenario === "LEAN" && mode === "TWO_WAY_INVOICE_PO_V1")
+    || (scenario !== "LEAN" && mode === "THREE_WAY_INVOICE_PO_RECEIPT_V1");
+}
+function thresholdValid(value: unknown): value is number | null {
+  return value === null || (typeof value === "number" && Number.isSafeInteger(value) && value >= 0);
+}
+function approvalConfigurationValid(scenario: unknown, threshold: number | null): boolean {
+  return scenario === "SEGREGATED_ENTERPRISE"
+    ? threshold !== null && threshold >= 10000
+    : threshold === null;
+}
 function requirementValid(value: unknown): value is IncomingInvoiceErvRequirementV1 {
-  if (!isRecord(value) || !exactKeys(value, ["schemaVersion", "requirementId", "matchingMode", "tolerancePolicy", "requestedEffects", "evidenceRefs", "synthetic", "customerData"])) return false;
+  if (!isRecord(value) || !exactKeys(value, ["schemaVersion", "requirementId", "scenario", "matchingMode", "tolerancePolicy", "separateApprovalThresholdEur", "requestedEffects", "evidenceRefs", "synthetic", "customerData"])) return false;
   return value.schemaVersion === "chimpmaera.incoming-invoice/erv-requirement/v1"
     && typeof value.requirementId === "string" && value.requirementId.length > 0
+    && (value.scenario === "LEAN" || value.scenario === "CONTROLLED" || value.scenario === "SEGREGATED_ENTERPRISE")
     && validVariantShape(value.matchingMode)
     && validVariantShape(value.tolerancePolicy)
+    && thresholdValid(value.separateApprovalThresholdEur)
+    && approvalConfigurationValid(value.scenario, value.separateApprovalThresholdEur)
     && Array.isArray(value.requestedEffects) && value.requestedEffects.every((effect) => typeof effect === "string")
     && Array.isArray(value.evidenceRefs) && value.evidenceRefs.every((ref) => typeof ref === "string" && ref.length > 0)
     && value.synthetic === true && value.customerData === false;
@@ -275,7 +296,8 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
     fields.push({ fieldId: "separationOfDuties", label: "Separation of duties", state: "VISIBLE", evidenceRefs });
   }
   fields.push({ fieldId: "evidenceReferences", label: "Evidence references", state: "VISIBLE", evidenceRefs });
-  const allVerified = required.every((kind) => referencesByKind.get(kind)?.verified === true);
+  const allVerified = input.evidence.references.every(({ verified }) => verified)
+    && required.every((kind) => referencesByKind.get(kind)?.verified === true);
   const actions: IncomingInvoiceUiActionV1[] = [{ actionId: "VIEW_EVIDENCE", enabled: true, reason: "Evidence is available for read-only inspection.", evidenceRefs }];
   if (input.evidence.outcome === "MATCHED" && allVerified) actions.push({ actionId: "ACKNOWLEDGE_MATCH", enabled: true, reason: "All required evidence references are verified and matched.", evidenceRefs });
   if (input.evidence.outcome === "MATCHED" && !allVerified) actions.push({ actionId: "REQUEST_CLARIFICATION", enabled: true, reason: "A required reference is not verified; acknowledgement is withheld.", evidenceRefs });
@@ -300,7 +322,13 @@ export function deriveIncomingInvoiceUiManifestV1(input: unknown): IncomingInvoi
 function variantName(variant: RequirementVariantV1): string { return `${variant.variantId}@${variant.version}`; }
 function requirementDigest(requirement: IncomingInvoiceErvRequirementV1): string { return digest(requirement); }
 function configurationDigest(requirement: IncomingInvoiceErvRequirementV1): string {
-  return digest({ matchingMode: requirement.matchingMode, tolerancePolicy: requirement.tolerancePolicy, requestedEffects: requirement.requestedEffects });
+  return digest({
+    scenario: requirement.scenario,
+    matchingMode: requirement.matchingMode,
+    tolerancePolicy: requirement.tolerancePolicy,
+    separateApprovalThresholdEur: requirement.separateApprovalThresholdEur,
+    requestedEffects: requirement.requestedEffects,
+  });
 }
 function transcript(turns: IncomingInvoiceDialogueTurnV1[]): IncomingInvoiceSetupTranscriptV1 {
   const unsigned = { schemaVersion: INCOMING_INVOICE_SETUP_DIALOGUE_SCHEMA_V1, transcriptVersion: "1.0.0" as const, syntheticEvidence: true as const, turns };
@@ -340,20 +368,28 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     ...(!MATCHING_MODES.includes(setupInput.changed.matchingMode.variantId as MatchingModeIdV1) ? ["UNSUPPORTED_MATCHING_MODE"] : []),
     ...(!TOLERANCE_POLICIES.includes(setupInput.baseline.tolerancePolicy.variantId as TolerancePolicyIdV1) ? ["UNSUPPORTED_TOLERANCE_POLICY"] : []),
     ...(!TOLERANCE_POLICIES.includes(setupInput.changed.tolerancePolicy.variantId as TolerancePolicyIdV1) ? ["UNSUPPORTED_TOLERANCE_POLICY"] : []),
+    ...(!scenarioMatchingModeValid(setupInput.baseline.scenario, setupInput.baseline.matchingMode.variantId) || !scenarioMatchingModeValid(setupInput.changed.scenario, setupInput.changed.matchingMode.variantId) ? ["UNSUPPORTED_SCENARIO_CONFIGURATION"] : []),
     ...setupInput.baseline.requestedEffects.filter((effect) => !ALLOWED_EFFECTS.includes(effect as EffectV1)).map(() => "UNSUPPORTED_EFFECT"),
     ...setupInput.changed.requestedEffects.filter((effect) => !ALLOWED_EFFECTS.includes(effect as EffectV1)).map(() => "UNSUPPORTED_EFFECT"),
   ];
   if (unsupported.length > 0) return setupDenied(setupInput, unsupported);
-  const questions: Array<Readonly<{ questionId: string; setting: "matchingMode" | "tolerancePolicy"; evidenceRefs: readonly string[] }>> = [];
-  if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) {
-    if (setupInput.changed.evidenceRefs.length === 0) questions.push({ questionId: "gap:matching-mode", setting: "matchingMode", evidenceRefs: [] });
-    else questions.push({ questionId: "confirm:matching-mode", setting: "matchingMode", evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
-  }
-  if (variantName(setupInput.baseline.tolerancePolicy) !== variantName(setupInput.changed.tolerancePolicy)) {
-    if (setupInput.changed.evidenceRefs.length === 0) questions.push({ questionId: "gap:tolerance-policy", setting: "tolerancePolicy", evidenceRefs: [] });
-    else questions.push({ questionId: "confirm:tolerance-policy", setting: "tolerancePolicy", evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
-  }
-  const evidenceGaps = questions.filter(({ questionId }) => questionId.startsWith("gap:")).map(({ setting }) => `MISSING_EVIDENCE_FOR_${setting === "matchingMode" ? "MATCHING_MODE" : "TOLERANCE_POLICY"}`);
+  const questions: Array<Readonly<{
+    questionId: string;
+    setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur";
+    evidenceRefs: readonly string[];
+  }>> = [];
+  const addQuestion = (
+    questionId: string,
+    setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur",
+  ): void => {
+    if (setupInput.changed.evidenceRefs.length === 0) questions.push({ questionId: `gap:${setting}`, setting, evidenceRefs: [] });
+    else questions.push({ questionId, setting, evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
+  };
+  if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) addQuestion("confirm:matching-mode", "matchingMode");
+  if (variantName(setupInput.baseline.tolerancePolicy) !== variantName(setupInput.changed.tolerancePolicy)) addQuestion("confirm:tolerance-policy", "tolerancePolicy");
+  if (setupInput.baseline.scenario !== setupInput.changed.scenario) addQuestion("confirm:scenario", "scenario");
+  if (setupInput.baseline.separateApprovalThresholdEur !== setupInput.changed.separateApprovalThresholdEur) addQuestion("confirm:separate-approval-threshold", "separateApprovalThresholdEur");
+  const evidenceGaps = questions.filter(({ questionId }) => questionId.startsWith("gap:")).map(({ setting }) => `MISSING_EVIDENCE_FOR_${setting === "matchingMode" ? "MATCHING_MODE" : setting === "tolerancePolicy" ? "TOLERANCE_POLICY" : setting === "scenario" ? "SCENARIO" : "SEPARATE_APPROVAL_THRESHOLD"}`);
   const confirmQuestions = questions.filter(({ questionId }) => questionId.startsWith("confirm:")).sort((a, b) => a.questionId.localeCompare(b.questionId));
   const turns = baseTurns(setupInput);
   for (const question of confirmQuestions) turns.push({ ordinal: turns.length + 1, speaker: "AGENT", kind: "CLARIFICATION", payload: { questionId: question.questionId, question: `Confirm changed ${question.setting} from the evidence-backed AP-04 variant.` }, evidenceRefs: question.evidenceRefs });
@@ -372,9 +408,15 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     turns.push({ ordinal: turns.length + 1, speaker: "SYSTEM", kind: "OUTCOME", payload: { outcome: "NEEDS_CLARIFICATION", gaps: orderedGaps }, evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
     return deepFreeze({ outcome: "NEEDS_CLARIFICATION" as const, transcript: transcript(turns), unresolvedGaps: orderedGaps });
   }
-  const changedSettings: Array<Readonly<{ setting: "matchingMode" | "tolerancePolicy"; before: string; after: string }>> = [];
+  const changedSettings: Array<Readonly<{ setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur"; before: string; after: string }>> = [];
   if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) changedSettings.push({ setting: "matchingMode", before: variantName(setupInput.baseline.matchingMode), after: variantName(setupInput.changed.matchingMode) });
   if (variantName(setupInput.baseline.tolerancePolicy) !== variantName(setupInput.changed.tolerancePolicy)) changedSettings.push({ setting: "tolerancePolicy", before: variantName(setupInput.baseline.tolerancePolicy), after: variantName(setupInput.changed.tolerancePolicy) });
+  if (setupInput.baseline.scenario !== setupInput.changed.scenario) changedSettings.push({ setting: "scenario", before: setupInput.baseline.scenario, after: setupInput.changed.scenario });
+  if (setupInput.baseline.separateApprovalThresholdEur !== setupInput.changed.separateApprovalThresholdEur) changedSettings.push({
+    setting: "separateApprovalThresholdEur",
+    before: setupInput.baseline.separateApprovalThresholdEur === null ? "NONE" : String(setupInput.baseline.separateApprovalThresholdEur),
+    after: setupInput.changed.separateApprovalThresholdEur === null ? "NONE" : String(setupInput.changed.separateApprovalThresholdEur),
+  });
   const unsignedDelta = {
     schemaVersion: INCOMING_INVOICE_CONFIGURATION_DELTA_SCHEMA_V1,
     deltaVersion: "1.0.0" as const,

@@ -21,9 +21,11 @@ evidence state; it is not a frontend or a requirements authority.
 
 The manifest always exposes evidence references and status. Receipt,
 tolerance, approval-trail and separation-of-duties fields are exposed only
-when the selected scenario/evidence requires them. Actions are derived from
-the ERV outcome; an unverified or incomplete reference never enables match
-acknowledgement.
+when the selected scenario/evidence requires them. A changed requirement with
+separate approval above EUR 10,000 selects `SEGREGATED_ENTERPRISE`; the setup
+delta records that threshold and scenario change explicitly. Actions are
+derived from the ERV outcome; an unverified or incomplete reference never enables
+match acknowledgement.
 
 ## Limits and nonclaims
 

@@ -18,12 +18,16 @@ function requirement(
   matchingMode: string,
   tolerancePolicy: string,
   evidenceRefs = ["evidence:ap04-synthetic-001"],
+  scenario: IncomingInvoiceErvRequirementV1["scenario"] = matchingMode === "TWO_WAY_INVOICE_PO_V1" ? "LEAN" : "CONTROLLED",
+  separateApprovalThresholdEur: number | null = null,
 ): IncomingInvoiceErvRequirementV1 {
   return {
     schemaVersion: "chimpmaera.incoming-invoice/erv-requirement/v1",
     requirementId,
+    scenario,
     matchingMode: { variantId: matchingMode, version: "1.0.0" },
     tolerancePolicy: { variantId: tolerancePolicy, version: "1.0.0" },
+    separateApprovalThresholdEur,
     requestedEffects: allowedEffects,
     evidenceRefs,
     synthetic: true,
@@ -103,6 +107,21 @@ test("AP-05 hidden authority, unsupported action and context collapse fail close
   const unknownVariant = deriveIncomingInvoiceUiManifestV1({ ...uiInput("MATCHED"), evidence: { ...uiInput("MATCHED").evidence, matchingMode: { variantId: "INVENTED_MODE", version: "1.0.0" } } });
   assert.deepEqual(unknownVariant, { outcome: "DENIED", reasonCode: "UNSUPPORTED_ACTION_DENIED" });
 
+  const duplicateUnverified = deriveIncomingInvoiceUiManifestV1({
+    ...uiInput("MATCHED"),
+    evidence: {
+      ...uiInput("MATCHED").evidence,
+      references: [
+        { kind: "PURCHASE_ORDER", referenceId: "PO-SYN-UNVERIFIED", verified: false, evidenceRef: "evidence:po-unverified" },
+        ...uiInput("MATCHED").evidence.references,
+      ],
+    },
+  });
+  assert.equal(duplicateUnverified.outcome, "DERIVED");
+  if (duplicateUnverified.outcome === "DERIVED") {
+    assert.deepEqual(duplicateUnverified.manifest.actions.map(({ actionId }) => actionId), ["VIEW_EVIDENCE", "REQUEST_CLARIFICATION"]);
+  }
+
   const collapsed = deriveIncomingInvoiceUiManifestV1({ ...uiInput("MATCHED"), evidence: { ...uiInput("MATCHED").evidence, references: [] } });
   assert.deepEqual(collapsed, { outcome: "DENIED", reasonCode: "CONTEXT_COLLAPSE_DENIED" });
 });
@@ -117,12 +136,16 @@ test("AP-05 Application Guide records applicability, variants, limits and noncla
 
 test("AP-05 setup dialogue preserves typed synthetic transcript and resolves a versioned reused-variant delta", () => {
   const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
-  const changed = requirement("requirement:changed", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "ABS_MINOR_V1", ["evidence:ap04-synthetic-002"]);
+  const changed = requirement("requirement:changed", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "ABS_MINOR_V1", ["evidence:ap04-synthetic-002"], "SEGREGATED_ENTERPRISE", 10000);
   const first = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [
     { questionId: "confirm:matching-mode", answer: "CONFIRM" },
     { questionId: "confirm:tolerance-policy", answer: "CONFIRM" },
+    { questionId: "confirm:scenario", answer: "CONFIRM" },
+    { questionId: "confirm:separate-approval-threshold", answer: "CONFIRM" },
   ] });
   const second = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [
+    { questionId: "confirm:separate-approval-threshold", answer: "CONFIRM" },
+    { questionId: "confirm:scenario", answer: "CONFIRM" },
     { questionId: "confirm:tolerance-policy", answer: "CONFIRM" },
     { questionId: "confirm:matching-mode", answer: "CONFIRM" },
   ] });
@@ -130,11 +153,13 @@ test("AP-05 setup dialogue preserves typed synthetic transcript and resolves a v
   assert.deepEqual(second, first);
   if (first.outcome !== "RESOLVED") throw new Error("expected resolved delta");
   assert.equal(first.transcript.syntheticEvidence, true);
-  assert.deepEqual(first.transcript.turns.map(({ speaker }) => speaker), ["SYSTEM", "SYSTEM", "AGENT", "AGENT", "OPERATOR", "OPERATOR", "SYSTEM"]);
+  assert.deepEqual(first.transcript.turns.map(({ speaker }) => speaker), ["SYSTEM", "SYSTEM", "AGENT", "AGENT", "AGENT", "AGENT", "OPERATOR", "OPERATOR", "OPERATOR", "OPERATOR", "SYSTEM"]);
   assert.deepEqual(first.configurationDelta.reusedCapabilityIds, ["chimpmaera.incoming-invoice/erv-core/v1", "chimpmaera.incoming-invoice/erv-case-pack/v1"]);
   assert.deepEqual(first.configurationDelta.changedSettings, [
     { setting: "matchingMode", before: "TWO_WAY_INVOICE_PO_V1@1.0.0", after: "THREE_WAY_INVOICE_PO_RECEIPT_V1@1.0.0" },
     { setting: "tolerancePolicy", before: "STRICT_ZERO_V1@1.0.0", after: "ABS_MINOR_V1@1.0.0" },
+    { setting: "scenario", before: "LEAN", after: "SEGREGATED_ENTERPRISE" },
+    { setting: "separateApprovalThresholdEur", before: "NONE", after: "10000" },
   ]);
   assert.equal(first.configurationDelta.unresolvedGaps.length, 0);
   assert.equal(first.configurationDelta.authorityGranted, false);
@@ -149,7 +174,7 @@ test("AP-05 dialogue asks only evidence-backed unresolved questions and fails cl
   const unresolved = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [] });
   assert.equal(unresolved.outcome, "NEEDS_CLARIFICATION");
   if (unresolved.outcome === "NEEDS_CLARIFICATION") {
-    assert.deepEqual(unresolved.unresolvedGaps, ["MISSING_EVIDENCE_FOR_MATCHING_MODE", "MISSING_EVIDENCE_FOR_TOLERANCE_POLICY"]);
+    assert.deepEqual(unresolved.unresolvedGaps, ["MISSING_EVIDENCE_FOR_MATCHING_MODE", "MISSING_EVIDENCE_FOR_SCENARIO", "MISSING_EVIDENCE_FOR_TOLERANCE_POLICY"]);
     assert.equal(unresolved.transcript.turns.filter(({ speaker }) => speaker === "AGENT").length, 0);
   }
 

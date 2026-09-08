@@ -4694,6 +4694,11 @@
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
         },
         {
+          "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "01cd4350b05e2db5828b0bd7fbd1add2043b0f11b1e2bd4ff4b259cb6bf88547"
+        },
+        {
           "path": "docs/index.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "cbc3875f09b2d6629deb6e943d3ab1de3405b33f28f2bd665a79f9b6809731df"
@@ -4714,6 +4719,11 @@
           "sha256": "393389a34ba5ac375464dea2505f7556685751fbb6ac6790ac2c0b27391a376c"
         },
         {
+          "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
+          "role": "CONTRACT",
+          "sha256": "02401f7ab1dd2bf7bc830eddeabee0e65bdc927bb7f3cc7bc9da14a7b95a8ec3"
+        },
+        {
           "path": "README.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "ab92393574944c27229ed163c6e51fb99afc42ceb5ea1e0d4604768cc4722989"
@@ -4726,7 +4736,12 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "6554a136299e9898f358a44b0456b8ca41f45dfa22220cf69088a966fae80ce9"
+          "sha256": "56aac6836439cc48b4ae74ed0a4e5f01a981aa42e8bfed77639502fae8b004e3"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "5d4f7271a2a4cc67d6e6be2f75cc668f8b4dcefa45371c0172eab3d09943d994"
         },
         {
           "path": "scripts/build-public-release.sh",
@@ -4762,6 +4777,11 @@
           "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
           "role": "FIXTURE",
           "sha256": "082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3"
+        },
+        {
+          "path": "tests/incoming-invoice-adaptive-ui.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "fb43af4ed70011aacf49b630d285e3634d6f60771f681e0b6b59af260ec6fac2"
         },
         {
           "path": "tests/public-product-spelling.test.mjs",
