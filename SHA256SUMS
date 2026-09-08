@@ -667,7 +667,7 @@ b22095ceeba787ae4207fb30483e74b637ac592d7498dda1c345b068566a7ad4  ./packages/con
 b0ae29b9bda430c16ff6091d09f411f87b55334e79f2482386f471f7da42cf11  ./packages/contracts/src/effective-rights.ts
 a13750c0abeaae4fe9f2ce9580021d22f86eb9550f19ad7e104119a7603f2ea1  ./packages/contracts/src/erp-order-capability-cell.ts
 b76f12d77f9b5b0bf5dade6aaac5afa7356e8049c856d0906a92103c6d204ed4  ./packages/contracts/src/erp-read-connector.ts
-f3882dc4f01bcb7d24f3973dbdeeca6da8e41488a3e67bc7db2825420d5e2463  ./packages/contracts/src/erv-ui-package.ts
+2f563e46160c20cfc97d9d41d2bcfd92d4daa7f4aaacecc08d0117abd27a24e3  ./packages/contracts/src/erv-ui-package.ts
 eb438b5e8c079419e1bc87b21dbb205d862e4400a187716f64a57c9f1a89e81e  ./packages/contracts/src/evidence-provenance.ts
 ce20e154565b760911f4fca7962891853a39c04e60d283f6f0a7e3de062e4901  ./packages/contracts/src/extension-assurance-appeal.ts
 066802b5e4b7ca13f42a297f20e00e087197f91d34e960389f999d1497db641a  ./packages/contracts/src/extension-assurance-profile.ts
@@ -814,7 +814,7 @@ caea2307c8b985b4a4c450bd1bf5de64aea0a678a226597030a2bfbb9a1ff25e  ./schemas/cont
 e21faa449a9bf7de51bb3bdd55fb33825aeee05c1fa58d4733075f947b172e51  ./schemas/contracts/doctor-report-v1.schema.json
 60efae2adbfa365e0a07fffa6d199ace406e073684ec5d01dc1b57464ae97e5a  ./schemas/contracts/erp-order-capability-cell-profile-v1.schema.json
 8092d310682d352ae6db13f3171269fc2dc5a4f67a85ed63e9258f6c66c00cae  ./schemas/contracts/erp-read-connector-v1.schema.json
-38678e28de7bccae7fd79ae66128d76cca6637166901e4e5358d178b8fa3e7f3  ./schemas/contracts/erv-ui-package-v1.schema.json
+2baf31a8a218148cc195301205a1e58270a7d82c2fa5e0d2c6b00083ce4253d4  ./schemas/contracts/erv-ui-package-v1.schema.json
 d4dbcc5b9d7e9497bac3ccf5849d1b3820cb2b20f7e4d6c236374c7b4e223431  ./schemas/contracts/extension-assurance-profile-v1.schema.json
 0af36cda6cdd788754b1b72e65013b9590619dbe77ac48b2bcd82dec69549a87  ./schemas/contracts/external-plugin-preflight-v1.schema.json
 6757bb197499d6107906aa0cf77fcf915fd7f354d37a79940c9fe5b67d9f6d59  ./schemas/contracts/hmi-contribute-preflight-v1.schema.json
@@ -1168,7 +1168,7 @@ b81224c8dfaf36278875e829a15808b5debcc8f3d69d33d4ab4a5e4bc043b8a1  ./tests/docs-s
 7d98acfa30bc054954fa1c8268794164662128515b0324244695c5dc5b9bb347  ./tests/effective-rights.test.ts
 5d1463db1bcb4cf16aa5fa8f76fd2437e9bd8f9041016b78c6a6ff87458567ef  ./tests/erp-order-capability-cell.test.ts
 6dc00ffa1982e4833d0b7cd837ed77974a50c1c82a5ea662e76f43d5089dbe16  ./tests/erp-read-connector.test.ts
-96915c0a8c562bbc22e9516dbab7fbf896fc09c3be64e9e6bda66416a7c80083  ./tests/erv-ui-package.test.ts
+d7ec9d12e5b7eab888405a503d99afa4fadf1f1ca44a7cc45744b44976bda393  ./tests/erv-ui-package.test.ts
 ddb59d5743fc7b8cd4388f87a6938344139ea5274498530c60586732fed50198  ./tests/evidence-provenance-profile.test.ts
 86423b1c84ee4f89a635673fc0adbce4d06d1925aaf01792dba81fa2255dfc93  ./tests/extension-assurance-appeal.test.ts
 85e84929568755e7815d43273ab6dd82b368bfc302b5f75998b50e0ced1fa029  ./tests/extension-assurance-profile-negative-zero.test.ts
