@@ -412,6 +412,8 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur";
     evidenceRefs: readonly string[];
   }>> = [];
+  const beforeToleranceConfiguration = toleranceConfiguration(setupInput.baseline);
+  const afterToleranceConfiguration = toleranceConfiguration(setupInput.changed);
   const addQuestion = (
     questionId: string,
     setting: "matchingMode" | "tolerancePolicy" | "scenario" | "separateApprovalThresholdEur",
@@ -420,7 +422,7 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     else questions.push({ questionId, setting, evidenceRefs: [...setupInput.changed.evidenceRefs].sort() });
   };
   if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) addQuestion("confirm:matching-mode", "matchingMode");
-  if (variantName(setupInput.baseline.tolerancePolicy) !== variantName(setupInput.changed.tolerancePolicy)) addQuestion("confirm:tolerance-policy", "tolerancePolicy");
+  if (beforeToleranceConfiguration.configurationDigest !== afterToleranceConfiguration.configurationDigest) addQuestion("confirm:tolerance-policy", "tolerancePolicy");
   if (setupInput.baseline.scenario !== setupInput.changed.scenario) addQuestion("confirm:scenario", "scenario");
   if (setupInput.baseline.separateApprovalThresholdEur !== setupInput.changed.separateApprovalThresholdEur) addQuestion("confirm:separate-approval-threshold", "separateApprovalThresholdEur");
   const evidenceGaps = questions.filter(({ questionId }) => questionId.startsWith("gap:")).map(({ setting }) => `MISSING_EVIDENCE_FOR_${setting === "matchingMode" ? "MATCHING_MODE" : setting === "tolerancePolicy" ? "TOLERANCE_POLICY" : setting === "scenario" ? "SCENARIO" : "SEPARATE_APPROVAL_THRESHOLD"}`);
@@ -448,8 +450,6 @@ export function runIncomingInvoiceSetupAgentV1(input: unknown): IncomingInvoiceS
     return deepFreeze({ outcome: "NEEDS_CLARIFICATION" as const, transcript: transcript(turns), unresolvedGaps: orderedGaps });
   }
   const changedSettings: Array<Readonly<{ setting: "matchingMode" | "tolerancePolicy" | "toleranceRateBasisPoints" | "scenario" | "separateApprovalThresholdEur"; before: string; after: string }>> = [];
-  const beforeToleranceConfiguration = toleranceConfiguration(setupInput.baseline);
-  const afterToleranceConfiguration = toleranceConfiguration(setupInput.changed);
   if (variantName(setupInput.baseline.matchingMode) !== variantName(setupInput.changed.matchingMode)) changedSettings.push({ setting: "matchingMode", before: variantName(setupInput.baseline.matchingMode), after: variantName(setupInput.changed.matchingMode) });
   if (variantName(setupInput.baseline.tolerancePolicy) !== variantName(setupInput.changed.tolerancePolicy)) changedSettings.push({ setting: "tolerancePolicy", before: variantName(setupInput.baseline.tolerancePolicy), after: variantName(setupInput.changed.tolerancePolicy) });
   if (beforeToleranceConfiguration.rateBasisPoints !== afterToleranceConfiguration.rateBasisPoints

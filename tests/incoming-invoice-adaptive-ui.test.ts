@@ -187,6 +187,24 @@ test("AP-05 setup dialogue preserves typed synthetic transcript and resolves a v
   assert.match(first.configurationDelta.afterConfigurationDigest, /^[a-f0-9]{64}$/);
 });
 
+test("AP-05 same-variant rate changes require evidence-backed clarification", () => {
+  const baseline = requirement("requirement:baseline-rate", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "RATE_BPS_V1", ["evidence:ap04-synthetic-rate-001"], "CONTROLLED", null, 100);
+  const changed = requirement("requirement:changed-rate", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "RATE_BPS_V1", ["evidence:ap04-synthetic-rate-002"], "CONTROLLED", null, 200);
+  const unresolved = runIncomingInvoiceSetupAgentV1({ baseline, changed, answers: [] });
+  assert.equal(unresolved.outcome, "NEEDS_CLARIFICATION");
+  if (unresolved.outcome === "NEEDS_CLARIFICATION") {
+    assert.ok(unresolved.transcript.turns.some(({ kind, payload }) => kind === "CLARIFICATION" && JSON.stringify(payload).includes("confirm:tolerance-policy")));
+    assert.ok(unresolved.unresolvedGaps.includes("UNANSWERED_TOLERANCEPOLICY"));
+  }
+
+  const missingEvidence = runIncomingInvoiceSetupAgentV1({ baseline, changed: { ...changed, evidenceRefs: [] }, answers: [] });
+  assert.equal(missingEvidence.outcome, "NEEDS_CLARIFICATION");
+  if (missingEvidence.outcome === "NEEDS_CLARIFICATION") {
+    assert.deepEqual(missingEvidence.unresolvedGaps, ["MISSING_EVIDENCE_FOR_TOLERANCE_POLICY"]);
+    assert.equal(missingEvidence.transcript.turns.filter(({ speaker }) => speaker === "AGENT").length, 0);
+  }
+});
+
 test("AP-05 frozen rate tolerance carries the exact requested value through a deterministic delta", () => {
   const baseline = requirement("requirement:baseline", "TWO_WAY_INVOICE_PO_V1", "STRICT_ZERO_V1");
   const changed = requirement("requirement:changed-rate", "THREE_WAY_INVOICE_PO_RECEIPT_V1", "RATE_BPS_V1", ["evidence:ap04-synthetic-rate-002"], "SEGREGATED_ENTERPRISE", 10000, 200);
