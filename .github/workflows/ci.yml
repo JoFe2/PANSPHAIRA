@@ -71,11 +71,10 @@ jobs:
       - name: Verify supply-chain declarations
         run: npm run supply-chain:verify
 
-      - name: Run SAFE_GUIDED secure-default proof
+      # Includes the authoritative npm test lifecycle (pretest + test + posttest)
+      # in the proof's sanitized child environment; do not run it a second time.
+      - name: Run SAFE_GUIDED secure-default proof and full project suite
         run: npm run proof:secure-default
-
-      - name: Run project tests
-        run: npm test
 
       - name: Verify external video service boundary
         run: npm run external-video-service:test
