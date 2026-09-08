@@ -109,7 +109,8 @@ jobs:
             | sha256sum --check -
           tar -xzf "$download_dir/actionlint.tar.gz" -C "$download_dir"
           test -x "$download_dir/actionlint"
-          test "$("$download_dir/actionlint" --version)" = "actionlint 1.7.12"
+          version_output="$("$download_dir/actionlint" --version)"
+          test "${version_output%%$'\n'*}" = "1.7.12"
 
       - name: Validate every workflow with the pinned validator
         shell: bash

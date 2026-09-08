@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
@@ -396,9 +397,30 @@ test("ordinary CI validates every workflow with digest-pinned actionlint", () =>
   const lintInvocation = ci.indexOf("-shellcheck= -pyflakes= .github/workflows/*.yml");
   assert.ok(digestCheck > pinnedDigest, "pinned archive digest must be verified with sha256sum before use");
   assert.ok(lintInvocation > digestCheck, "validator must run only after the digest verification");
-  assert.match(ci, /--version\)" = "actionlint 1\.7\.12"/);
+  assert.match(ci, /actionlint" --version/);
   for (const line of ci.split("\n").filter((candidate) => /^\s*-?\s*uses:/.test(candidate))) {
     assert.match(line, /@[a-f0-9]{40}(?:\s|$)/, line);
+  }
+});
+
+test("CI version guard accepts the observed actionlint output and rejects another version", () => {
+  const ci = readFileSync(".github/workflows/ci.yml", "utf8");
+  const guard = ci.split("\n")
+    .filter((line) => line.includes('actionlint" --version') || line.includes('test "${version_output'))
+    .map((line) => line.trim().replace('"$download_dir/actionlint" --version', 'printf "%s" "$OBSERVED_VERSION"'))
+    .join("\n");
+  assert.ok(guard.includes("test "), "the real CI version guard must be exercised");
+  for (const [output, expected] of [
+    ["1.7.12\ninstalled by downloading from release page\nbuilt with go1.26.1 compiler for linux/amd64\n", 0],
+    ["1.7.11\ninstalled by downloading from release page\n", 1],
+    ["actionlint 1.7.12\n", 1],
+    ["", 1],
+  ]) {
+    const result = spawnSync("bash", ["--noprofile", "--norc", "-c", `set -eu\n${guard}`], {
+      encoding: "utf8", timeout: 5000,
+      env: { PATH: process.env.PATH, OBSERVED_VERSION: output },
+    });
+    assert.equal(result.status, expected, `unexpected version result for ${JSON.stringify(output)}: ${result.stderr}`);
   }
 });
 
