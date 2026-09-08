@@ -5352,7 +5352,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "be5475bee27cd889a11147718c9b620827b07f3835f9f9e18fa3827c73c491fd"
+          "sha256": "2602baa3964bc248f3464b2eed8d22d461b2ce0bc3c121a3407afc16b5651cab"
         },
         {
           "path": "package-lock.json",
@@ -5367,7 +5367,7 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "abde48ad0ab16337f1731bd4e6b3a953ce1aa1e83ab71d2f76b925f3bb6551c5"
+          "sha256": "4f57e18b2fa830bd249ab678bf5f614974f4c1adf0867e0d87e611628d3d3c55"
         }
       ],
       "ownedTests": [
@@ -5712,7 +5712,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "c2bf8d795f0552388cbfb50f4ead1a2f2493a89267441c987adf9543dea45d34"
+          "sha256": "b759b518606594d0f971c56d5d256b1cb03bcbf958d457499c186e85a6dfcf6e"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
