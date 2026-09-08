@@ -192,3 +192,32 @@ test("unsafe or malformed public manifest entries fail closed", async () => {
     );
   }
 });
+
+test("CI runs the complete authoritative lifecycle once through secure-default proof", async () => {
+  const workflow = await readFile(path.join(root, ".github/workflows/ci.yml"), "utf8");
+  const manifest = JSON.parse(await readFile(path.join(root, "security/secure-default-proof-v1.json"), "utf8"));
+  assert.equal((workflow.match(/^\s+run: npm run proof:secure-default$/gm) ?? []).length, 1);
+  assert.equal((workflow.match(/^\s+run: npm (?:test|run test)$/gm) ?? []).length, 0,
+    "proof already runs npm test including pretest and posttest");
+  assert.equal(manifest.commands.authoritative, "npm test");
+  assert.match(workflow, /run: git diff --exit-code/);
+});
+
+test("canonical lifecycle builds once and compiled variants preserve standalone tests", async () => {
+  const { scripts } = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
+  function leaves(name) {
+    return scripts[name].split(" && ").flatMap(command => {
+      const match = /^npm run ([\w:-]+)(?: --silent)?$/.exec(command);
+      return match ? leaves(match[1]) : [command];
+    });
+  }
+  const expanded = ["pretest", "test", "posttest"].flatMap(leaves);
+  assert.equal(expanded.filter(command => command === "tsc -p tsconfig.json").length, 1);
+  assert.equal(scripts.pretest.split(" && ")[0], "npm run build");
+  const compiled = Object.keys(scripts).filter(name => name.endsWith(":compiled"));
+  assert.ok(compiled.length > 0);
+  for (const name of compiled) {
+    assert.equal(scripts[name.slice(0, -":compiled".length)], "npm run build --silent && " + scripts[name]);
+    assert.ok(scripts[name].startsWith("node --test "));
+  }
+});

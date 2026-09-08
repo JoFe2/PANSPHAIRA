@@ -268,7 +268,7 @@ test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pr
   );
   assert.equal(
     packageJson.scripts.pretest?.split(" && ")
-      .filter((command) => command === "npm run external-bi-service:test").length,
+      .filter((command) => command === "npm run external-bi-service:test:compiled").length,
     1,
   );
 
@@ -374,7 +374,7 @@ test("FND-PS-02 edge-evidence focused family is canonical and selects its owner 
   );
   assert.equal(
     packageJson.scripts.pretest?.split(" && ")
-      .filter((command) => command === "npm run fnd-ps-fu-01:test").length,
+      .filter((command) => command === "npm run fnd-ps-fu-01:test:compiled").length,
     1,
   );
 
