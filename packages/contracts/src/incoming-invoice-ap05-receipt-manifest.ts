@@ -50,7 +50,7 @@ const OUTCOMES_V1 = ["MATCHED", "CONFLICT", "EXCEPTION", "DENIED"] as const;
 const REFERENCE_KINDS_V1 = ["SUPPLIER", "PURCHASE_ORDER", "RECEIPT", "INVOICE"] as const;
 
 type IdentityV1 = Readonly<{ byteLength: number; sha256: string }>;
-type SourceInputV1 = Readonly<{ path: string; bytes: Uint8Array }>;
+type SourceInputV1 = Readonly<{ releaseId: string; path: string; bytes: Uint8Array }>;
 type BoundSourceV1 = Readonly<{ path: string; identity: IdentityV1; releaseIds: readonly string[] }>;
 type PublicOutcomeV1 = typeof OUTCOMES_V1[number];
 type UnknownOutcomeCountV1 = Readonly<{ state: "UNKNOWN"; reasonCode: typeof UNKNOWN_OUTCOME_REASON_V1 }>;
@@ -131,8 +131,8 @@ function identity(value: Uint8Array | string): IdentityV1 {
   return { byteLength: bytes.byteLength, sha256: sha256HexV1(bytes) };
 }
 function canonicalIdentity(value: unknown): IdentityV1 { return identity(canonicalJson(value)); }
-function sourceByPath(sources: readonly SourceInputV1[], path: string): SourceInputV1 {
-  const source = sources.find((candidate) => candidate.path === path);
+function sourceByRelease(sources: readonly SourceInputV1[], releaseId: string, path: string): SourceInputV1 {
+  const source = sources.find((candidate) => candidate.releaseId === releaseId && candidate.path === path);
   if (source === undefined) throw new ManifestError("SOURCE_MISSING");
   return source;
 }
@@ -143,9 +143,6 @@ function exactSource(source: SourceInputV1, expectedSha256: string, expectedByte
 }
 function sourceRecord(source: SourceInputV1, expectedSha256: string, expectedByteLength: number, releaseIds: readonly string[]): BoundSourceV1 {
   return { path: source.path, identity: exactSource(source, expectedSha256, expectedByteLength), releaseIds };
-}
-function boundSource(path: string, sha256: string, byteLength: number, releaseIds: readonly string[]): BoundSourceV1 {
-  return { path, identity: { sha256, byteLength }, releaseIds };
 }
 function requirementMatches(value: IncomingInvoiceErvRequirementV1, expected: Readonly<Partial<IncomingInvoiceErvRequirementV1>>): boolean {
   return Object.entries(expected).every(([key, expectedValue]) => canonicalJson(value[key as keyof IncomingInvoiceErvRequirementV1]) === canonicalJson(expectedValue));
@@ -218,17 +215,21 @@ function buildReceipt(pack: ErvCasePackV1, decisions: readonly { outcome: Public
 
 export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvoiceAp05ReceiptManifestInputV1): Readonly<{ manifest: IncomingInvoiceAp05ReceiptManifestV1; serialized: string }> {
   verifySetupShape(input.setup);
-  const adaptiveUi = sourceByPath(input.predecessorSources, ADAPTIVE_UI_SOURCE_PATH_V1);
-  const guide = sourceByPath(input.predecessorSources, APPLICATION_GUIDE_PATH_V1);
-  const erv = sourceByPath(input.predecessorSources, ERV_SOURCE_PATH_V1);
-  const casePackSource = sourceByPath(input.predecessorSources, CASE_PACK_PATH_V1);
+  const adaptiveUi = sourceByRelease(input.predecessorSources, "pan365-adaptive-ui-source-v1", ADAPTIVE_UI_SOURCE_PATH_V1);
+  const guide = sourceByRelease(input.predecessorSources, "pan365-adaptive-ui-source-v1", APPLICATION_GUIDE_PATH_V1);
+  const frozenAdaptiveUi = sourceByRelease(input.predecessorSources, "pan365-frozen-tolerance-source-v1", ADAPTIVE_UI_SOURCE_PATH_V1);
+  const frozenGuide = sourceByRelease(input.predecessorSources, "pan365-frozen-tolerance-source-v1", APPLICATION_GUIDE_PATH_V1);
+  const erv = sourceByRelease(input.predecessorSources, "ap04-erv-source-v1", ERV_SOURCE_PATH_V1);
+  const casePackSource = sourceByRelease(input.predecessorSources, "ap04-erv-source-v1", CASE_PACK_PATH_V1);
+  const schema = sourceByRelease(input.predecessorSources, "ap04-erv-source-v1", AP04_SCHEMA_PATH_V1);
   const sources: readonly BoundSourceV1[] = [
-    boundSource(ADAPTIVE_UI_SOURCE_PATH_V1, ADAPTIVE_UI_RELEASE_SOURCE_SHA256_V1, ADAPTIVE_UI_RELEASE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1"]),
-    boundSource(APPLICATION_GUIDE_PATH_V1, APPLICATION_GUIDE_RELEASE_SOURCE_SHA256_V1, APPLICATION_GUIDE_RELEASE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1"]),
-    sourceRecord(adaptiveUi, FROZEN_ADAPTIVE_UI_SOURCE_SHA256_V1, FROZEN_ADAPTIVE_UI_SOURCE_BYTES_V1, ["pan365-frozen-tolerance-source-v1"]),
-    sourceRecord(guide, FROZEN_APPLICATION_GUIDE_SOURCE_SHA256_V1, FROZEN_APPLICATION_GUIDE_SOURCE_BYTES_V1, ["pan365-frozen-tolerance-source-v1"]),
+    sourceRecord(adaptiveUi, ADAPTIVE_UI_RELEASE_SOURCE_SHA256_V1, ADAPTIVE_UI_RELEASE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1"]),
+    sourceRecord(guide, APPLICATION_GUIDE_RELEASE_SOURCE_SHA256_V1, APPLICATION_GUIDE_RELEASE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1"]),
+    sourceRecord(frozenAdaptiveUi, FROZEN_ADAPTIVE_UI_SOURCE_SHA256_V1, FROZEN_ADAPTIVE_UI_SOURCE_BYTES_V1, ["pan365-frozen-tolerance-source-v1"]),
+    sourceRecord(frozenGuide, FROZEN_APPLICATION_GUIDE_SOURCE_SHA256_V1, FROZEN_APPLICATION_GUIDE_SOURCE_BYTES_V1, ["pan365-frozen-tolerance-source-v1"]),
     sourceRecord(erv, AP04_CORE_SOURCE_SHA256_V1, AP04_CORE_SOURCE_BYTES_V1, [AP04_RELEASE_TAG_V1]),
     sourceRecord(casePackSource, AP04_ERV_CASE_PACK_SHA256_V1, AP04_CASE_PACK_BYTES_V1, [AP04_RELEASE_TAG_V1]),
+    sourceRecord(schema, AP04_SCHEMA_SHA256_V1, AP04_SCHEMA_BYTES_V1, [AP04_RELEASE_TAG_V1]),
   ];
   const pack = JSON.parse(Buffer.from(casePackSource.bytes).toString("utf8")) as ErvCasePackV1;
   const coreResult = compileErvCapabilityCoreV1(pack, AP04_CLAIMED_PACK_SHA256_V1);
@@ -256,7 +257,7 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
       releases: [
         { releaseId: "pan365-adaptive-ui-source-v1", releaseTag: "pan365-adaptive-ui-source-v1", mergeSha: AP05_ADAPTIVE_MERGE_SHA_V1, sourceCommit: AP05_ADAPTIVE_MERGE_SHA_V1, sourcePaths: [ADAPTIVE_UI_SOURCE_PATH_V1, APPLICATION_GUIDE_PATH_V1] },
         { releaseId: "pan365-frozen-tolerance-source-v1", releaseTag: "pan365-frozen-tolerance-source-v1", mergeSha: AP05_FROZEN_TOLERANCE_MERGE_SHA_V1, sourceCommit: AP05_FROZEN_TOLERANCE_MERGE_SHA_V1, sourcePaths: [ADAPTIVE_UI_SOURCE_PATH_V1, APPLICATION_GUIDE_PATH_V1] },
-        { releaseId: "ap04-erv-source-v1", releaseTag: AP04_RELEASE_TAG_V1, mergeSha: AP04_MERGE_SHA_V1, sourceCommit: AP04_MERGE_SHA_V1, sourcePaths: [ERV_SOURCE_PATH_V1, CASE_PACK_PATH_V1] },
+        { releaseId: "ap04-erv-source-v1", releaseTag: AP04_RELEASE_TAG_V1, mergeSha: AP04_MERGE_SHA_V1, sourceCommit: AP04_MERGE_SHA_V1, sourcePaths: [ERV_SOURCE_PATH_V1, CASE_PACK_PATH_V1, AP04_SCHEMA_PATH_V1] },
       ],
       sources,
     },
@@ -285,7 +286,7 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
       },
       boundArtifacts: [
         { path: ERV_SOURCE_PATH_V1, identity: identity(erv.bytes) },
-        { path: AP04_SCHEMA_PATH_V1, identity: { byteLength: AP04_SCHEMA_BYTES_V1, sha256: AP04_SCHEMA_SHA256_V1 } },
+        { path: AP04_SCHEMA_PATH_V1, identity: identity(schema.bytes) },
       ],
     }],
     ap04: {

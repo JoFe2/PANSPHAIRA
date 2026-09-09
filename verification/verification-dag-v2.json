@@ -4736,7 +4736,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "fbcaa0a65a987785d9021ffaeccac849127b42c4950d3f64a882c808a712521e"
+          "sha256": "53b51eebe60651f2c64461d78a388f4f06835f11b02b7a5aa9a2e13222b766c1"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4746,7 +4746,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "3fc3a34772a2adc9d86c4c664a9588dbea33d268c28519dcf0fb9c717619de50"
+          "sha256": "08277b5ca427b68bd4ef5cf8145596b4f94cf77ef8ccc8bd53233c24b5a46293"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5707,12 +5707,12 @@
         {
           "path": "packages/contracts/src/verification-fabric-v2.ts",
           "role": "CONTRACT",
-          "sha256": "e673fd892d39fec139af7b6706420dfd23aa8c4f2f5d202a4d9e817259e062d0"
+          "sha256": "318493290024e3f84b6a08beac656997eff66611335562aa1ab5fb495e8fffc1"
         },
         {
           "path": "schemas/contracts/verification-evidence-dag-v2.schema.json",
           "role": "SCHEMA",
-          "sha256": "5286ece3ec3ef1b8619ffa4926a43ebd36b62b9f15169547d9c4a47e3c36f133"
+          "sha256": "d5d150db3756bd56880a83ecb33e0eae9924487777cb931944b9728a659f338d"
         },
         {
           "path": "schemas/contracts/verification-attestation-v2.schema.json",
@@ -5732,7 +5732,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "fb9e776f9369117ed78d6deda8c879266beea581013ce861e29cb348cb33adba"
+          "sha256": "5cc14cdba34e6f4b937c4ae39a07ad9b48315ecf672cad37533408064481f7c2"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5878,6 +5878,11 @@
           "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845"
         },
         {
+          "path": "schemas/contracts/incoming-invoice-erv-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "7eabf5156f5a74404499b67d435c879f123f9d842028c739033269edd7959caf"
+        },
+        {
           "path": "tests/incoming-invoice-erv.test.ts",
           "role": "VALIDATOR",
           "sha256": "fcc5e31702f327b0976da50fd42335d2e7741a3debc1218e7ece82cfa9efaf66"
@@ -5898,11 +5903,25 @@
       "dependsOn": [],
       "inputs": [
         {
+          "releaseId": "pan365-adaptive-ui-source-v1",
+          "path": "tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/incoming-invoice-adaptive-ui.ts.bytes",
+          "role": "SOURCE",
+          "sha256": "69541b22c8545cf24ccb7e3004337cb6572209547ee926bc6d490954170a9aa4"
+        },
+        {
+          "releaseId": "pan365-adaptive-ui-source-v1",
+          "path": "tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/INCOMING-INVOICE-APPLICATION-GUIDE.md",
+          "role": "SOURCE",
+          "sha256": "01cd4350b05e2db5828b0bd7fbd1add2043b0f11b1e2bd4ff4b259cb6bf88547"
+        },
+        {
+          "releaseId": "pan365-frozen-tolerance-source-v1",
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
           "role": "SOURCE",
           "sha256": "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f"
         },
         {
+          "releaseId": "pan365-frozen-tolerance-source-v1",
           "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
           "role": "SOURCE",
           "sha256": "8ee060c3f158810c93e097e83ab55297c0d976b92c0392fdd290d6d33a88b7bd"
@@ -5933,7 +5952,7 @@
         {
           "path": "packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts",
           "role": "CONTRACT",
-          "sha256": "6e6d7084497450311285584c731eaca1eca0a131a6bd4b24289c4ef32f418bfe"
+          "sha256": "fdddfe45d695f5bb6b0f727119b7df6d4e974ed2fe6e1301f174fadee27f3ea4"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
@@ -5963,22 +5982,22 @@
         {
           "path": "scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs",
           "role": "TOOLCHAIN",
-          "sha256": "a0cebe3e133303797d5b05e312b44a5146e36b5706da5c4e85478e4c380ea9c7"
+          "sha256": "5da094758f7f6b2809b23ece3f3d245cbe15eabf34ff596d46b14af7f8fc5a2c"
         },
         {
           "path": "tests/incoming-invoice-ap05-receipt-manifest.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a7a2f0555fd9cd40bd624647b9c17da1e24a0ca43309c644c8caa58a8c73bd74"
+          "sha256": "e154a17cc99c1e3ca41e9516a12b1298c8b73fea095d795790423e40fbb1a4fb"
         },
         {
           "path": "verification/incoming-invoice-ap05-receipt-manifest-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "f1bd988dcb7b6e25d7f50589275ba15119a9bbc6f9f172fde10e0ac50cfca795"
+          "sha256": "356572b37eaa1a11ec1d55dad14673acb40f9f9f85dfd3c6bd6cea38998e6baa"
         },
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "fbcaa0a65a987785d9021ffaeccac849127b42c4950d3f64a882c808a712521e"
+          "sha256": "53b51eebe60651f2c64461d78a388f4f06835f11b02b7a5aa9a2e13222b766c1"
         }
       ],
       "ownedTests": [

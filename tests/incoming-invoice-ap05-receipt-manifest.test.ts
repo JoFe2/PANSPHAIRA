@@ -9,7 +9,10 @@ import {
 } from "../packages/contracts/src/index.js";
 
 const CASE_PACK = "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json";
+const SCHEMA = "schemas/contracts/incoming-invoice-erv-v1.schema.json";
 const SETUP = "tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json";
+const ADAPTIVE_RELEASE_SOURCE = "tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/incoming-invoice-adaptive-ui.ts.bytes";
+const ADAPTIVE_RELEASE_GUIDE = "tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/INCOMING-INVOICE-APPLICATION-GUIDE.md";
 
 function bytes(path: string): Uint8Array {
   return Uint8Array.from(readFileSync(path));
@@ -18,10 +21,13 @@ function input(): IncomingInvoiceAp05ReceiptManifestInputV1 {
   return {
     setup: JSON.parse(readFileSync(SETUP, "utf8")),
     predecessorSources: [
-      { path: "packages/contracts/src/incoming-invoice-adaptive-ui.ts", bytes: bytes("packages/contracts/src/incoming-invoice-adaptive-ui.ts") },
-      { path: "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md", bytes: bytes("docs/INCOMING-INVOICE-APPLICATION-GUIDE.md") },
-      { path: "packages/contracts/src/incoming-invoice-erv.ts", bytes: bytes("packages/contracts/src/incoming-invoice-erv.ts") },
-      { path: CASE_PACK, bytes: bytes(CASE_PACK) },
+      { releaseId: "pan365-adaptive-ui-source-v1", path: "packages/contracts/src/incoming-invoice-adaptive-ui.ts", bytes: bytes(ADAPTIVE_RELEASE_SOURCE) },
+      { releaseId: "pan365-adaptive-ui-source-v1", path: "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md", bytes: bytes(ADAPTIVE_RELEASE_GUIDE) },
+      { releaseId: "pan365-frozen-tolerance-source-v1", path: "packages/contracts/src/incoming-invoice-adaptive-ui.ts", bytes: bytes("packages/contracts/src/incoming-invoice-adaptive-ui.ts") },
+      { releaseId: "pan365-frozen-tolerance-source-v1", path: "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md", bytes: bytes("docs/INCOMING-INVOICE-APPLICATION-GUIDE.md") },
+      { releaseId: "ap04-erv-source-v1", path: "packages/contracts/src/incoming-invoice-erv.ts", bytes: bytes("packages/contracts/src/incoming-invoice-erv.ts") },
+      { releaseId: "ap04-erv-source-v1", path: CASE_PACK, bytes: bytes(CASE_PACK) },
+      { releaseId: "ap04-erv-source-v1", path: SCHEMA, bytes: bytes(SCHEMA) },
     ],
   };
 }
@@ -142,6 +148,18 @@ test("AP-05 projection denies invented capability and public identity/free-text 
   const sourceSubstitution = input() as any;
   sourceSubstitution.predecessorSources[0].bytes = Uint8Array.from([...sourceSubstitution.predecessorSources[0].bytes, 0]);
   assert.throws(() => generateIncomingInvoiceAp05ReceiptManifestV1(sourceSubstitution), /SOURCE_IDENTITY_MISMATCH/);
+
+  const genuineOlderSourceSubstitution = input() as any;
+  genuineOlderSourceSubstitution.predecessorSources[2].bytes = genuineOlderSourceSubstitution.predecessorSources[0].bytes;
+  assert.throws(() => generateIncomingInvoiceAp05ReceiptManifestV1(genuineOlderSourceSubstitution), /SOURCE_IDENTITY_MISMATCH/);
+
+  const missingSchema = input() as any;
+  missingSchema.predecessorSources = missingSchema.predecessorSources.filter(({ path }: { path: string }) => path !== SCHEMA);
+  assert.throws(() => generateIncomingInvoiceAp05ReceiptManifestV1(missingSchema), /SOURCE_MISSING/);
+
+  const substitutedSchema = input() as any;
+  substitutedSchema.predecessorSources[6].bytes = Uint8Array.from([...substitutedSchema.predecessorSources[6].bytes, 0]);
+  assert.throws(() => generateIncomingInvoiceAp05ReceiptManifestV1(substitutedSchema), /SOURCE_IDENTITY_MISMATCH/);
 
   const unsupported = input() as any;
   unsupported.setup.changed.requestedEffects = ["READ_SYNTHETIC", "POST_PRODUCTIVE"];

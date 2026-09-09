@@ -1120,6 +1120,8 @@ tests/fixtures/issue-candidate/quarantine-v1.json	tests/fixtures/issue-candidate
 tests/fixtures/incoming-invoice/source-manifest-v1.json	tests/fixtures/incoming-invoice/source-manifest-v1.json	0644
 tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	0644
 tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	0644
+tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/INCOMING-INVOICE-APPLICATION-GUIDE.md	tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/INCOMING-INVOICE-APPLICATION-GUIDE.md	0644
+tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/incoming-invoice-adaptive-ui.ts.bytes	tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/incoming-invoice-adaptive-ui.ts.bytes	0644
 tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json	tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json	0644
 tests/fixtures/incoming-invoice/supplier-invoice-v1.txt	tests/fixtures/incoming-invoice/supplier-invoice-v1.txt	0644
 tests/fixtures/kiwix-zim-assessment/assessment-v1.json	tests/fixtures/kiwix-zim-assessment/assessment-v1.json	0644
