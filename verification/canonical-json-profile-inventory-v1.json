@@ -93,6 +93,14 @@
       "reason": "Advance the Verification DAG to graph v45 and canonically own the bounded current-head Docker E2E contract, focused fail-closed proof and repository-only implementation record; admitted v1 and reviewed v2-v8 digests remain immutable."
     },
     {
+      "migrationId": "PS365-AP05-RECEIPT-MANIFEST-01/INTEGRITY-GENERATOR/V10",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 10,
+      "fromSha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
+      "toSha256": "2a0f330f67410cb4cab426e9d57e69c7205743a5675521b3f842229c1fd81314",
+      "reason": "Advance the Verification DAG to graph v46 and canonically bind the AP-05 receipt manifest integrity chain; admitted v1 and reviewed v2-v9 digests remain immutable."
+    },
+    {
       "migrationId": "P0-PS391-AUD-01/OWNER-AUTHORITY-USE-TIME-REVALIDATION/V2",
       "path": "demo/runtime/enforcement-gate.mjs",
       "profileVersion": 2,
@@ -238,7 +246,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54"
+      "sha256": "2a0f330f67410cb4cab426e9d57e69c7205743a5675521b3f842229c1fd81314"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -836,7 +844,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
+      "sha256": "2a0f330f67410cb4cab426e9d57e69c7205743a5675521b3f842229c1fd81314",
       "basis": "profile-version-migration"
     },
     {

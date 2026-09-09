@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 45,
+  "graphVersion": 46,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -4766,7 +4766,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8d83d8830b1da4420e5b6bf2268f3200c18082144a542d82a03d239e85b741a9"
+          "sha256": "db0d6e2d0393c16e95663a1f52433af69d93518117dd60d80a39e1cb685fd7fd"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4801,7 +4801,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "5404154742c4eb6d36a8dce7ac0bcb7a9b715eb552291aef9f14d6c0ed14c924"
+          "sha256": "cc921299ead03310352390f3d340acb1b9541877c7741eb03d0c65bfd7190e0c"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
