@@ -45,17 +45,33 @@ function clone<T>(value: T): T {
   assert.equal(first.manifest.sourceEvidenceRelease.sourceCommit, null);
   const prerequisite = first.manifest.externalPrerequisites[0];
   assert.ok(prerequisite);
-  assert.equal(prerequisite.status, "VERIFIED");
+  assert.equal(prerequisite.status, "SOURCE_VERIFIED");
   assert.deepEqual(prerequisite.boundPredecessor, {
     releaseId: "ap04-erv-source-v1",
     releaseTag: "pan377-current-head-docker-e2e-source-v1",
     mergeSha: "ff68eda6cacc510ee67ed3b5b6cd51545f017a21",
     sourceCommit: "ff68eda6cacc510ee67ed3b5b6cd51545f017a21",
   });
-  assert.equal(prerequisite.pairedClosureReceipt.receiptId, "ap04-erv-core-readback-v1");
-  assert.equal(prerequisite.pairedClosureReceipt.releaseTag, "pan377-current-head-docker-e2e-source-v1");
-  assert.equal(prerequisite.pairedClosureReceipt.sourceArtifact.identity.sha256, first.manifest.ap04.casePack.identity.sha256);
-  assert.equal(prerequisite.pairedClosureReceipt.outputArtifact.identity.sha256, first.manifest.ap04.coreOutput.identity.sha256);
+  const releases = first.manifest.predecessorLineage.releases;
+  assert.equal(releases.length, 3);
+  assert.equal(releases[0]!.mergeSha, "988395110a9189d1b8cd4ee98184ed5c1d77a15d");
+  assert.equal(releases[0]!.sourceCommit, "988395110a9189d1b8cd4ee98184ed5c1d77a15d");
+  assert.equal(releases[1]!.mergeSha, "ef10d39fa7843e7c45e6e46cbc73647ad4a3ea2c");
+  assert.equal(releases[1]!.sourceCommit, "ef10d39fa7843e7c45e6e46cbc73647ad4a3ea2c");
+  assert.equal("pairedClosureReceipt" in prerequisite, false);
+  assert.deepEqual(prerequisite.boundArtifacts, [
+    { path: "packages/contracts/src/incoming-invoice-erv.ts", identity: { byteLength: 21114, sha256: "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf" } },
+    { path: "schemas/contracts/incoming-invoice-erv-v1.schema.json", identity: { byteLength: 12657, sha256: "7eabf5156f5a74404499b67d435c879f123f9d842028c739033269edd7959caf" } },
+  ]);
+  const lineageSources = first.manifest.predecessorLineage.sources;
+  const adaptiveSource = lineageSources[0];
+  const frozenSource = lineageSources[2];
+  assert.ok(adaptiveSource);
+  assert.ok(frozenSource);
+  assert.equal(adaptiveSource.identity.sha256, "69541b22c8545cf24ccb7e3004337cb6572209547ee926bc6d490954170a9aa4");
+  assert.equal(adaptiveSource.identity.byteLength, 29722);
+  assert.deepEqual(adaptiveSource.releaseIds, ["pan365-adaptive-ui-source-v1"]);
+  assert.equal(frozenSource.identity.sha256, "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f");
   assert.deepEqual(first.manifest.publicReceipt.baseline.outcomeCounts, {
     MATCHED: 3,
     CONFLICT: 1,
@@ -89,7 +105,7 @@ test("AP-05 verifier rejects missing, substituted or re-digested identities and 
     ["omitted predecessor release lineage", (value) => { delete value.predecessorLineage.releases[0]; }],
     ["unverified external prerequisite", (value) => { value.externalPrerequisites[0].status = "UNVERIFIED"; }],
     ["substituted external predecessor", (value) => { value.externalPrerequisites[0].boundPredecessor.mergeSha = "6".repeat(40); }],
-    ["missing paired closure receipt", (value) => { value.externalPrerequisites[0].pairedClosureReceipt = null; }],
+    ["missing bound external artifact", (value) => { delete value.externalPrerequisites[0].boundArtifacts[1]; }],
   ];
   for (const [name, mutate] of mutations) {
     const candidate = clone(generated);

@@ -24,13 +24,20 @@ const AP04_MERGE_SHA_V1 = "ff68eda6cacc510ee67ed3b5b6cd51545f017a21";
 const AP04_RELEASE_TAG_V1 = "pan377-current-head-docker-e2e-source-v1";
 const AP04_CORE_SOURCE_SHA256_V1 = "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf";
 const AP04_CORE_SOURCE_BYTES_V1 = 21114;
+const AP04_SCHEMA_PATH_V1 = "schemas/contracts/incoming-invoice-erv-v1.schema.json";
+const AP04_SCHEMA_SHA256_V1 = "7eabf5156f5a74404499b67d435c879f123f9d842028c739033269edd7959caf";
+const AP04_SCHEMA_BYTES_V1 = 12657;
 const AP04_CASE_PACK_BYTES_V1 = 19841;
 const AP05_ADAPTIVE_MERGE_SHA_V1 = "988395110a9189d1b8cd4ee98184ed5c1d77a15d";
-const AP05_FROZEN_TOLERANCE_MERGE_SHA_V1 = "605eff8118be0e60c3e1ed92ca91ff9a9ab610bd";
-const ADAPTIVE_UI_SOURCE_SHA256_V1 = "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f";
-const ADAPTIVE_UI_SOURCE_BYTES_V1 = 33045;
-const APPLICATION_GUIDE_SOURCE_SHA256_V1 = "8ee060c3f158810c93e097e83ab55297c0d976b92c0392fdd290d6d33a88b7bd";
-const APPLICATION_GUIDE_SOURCE_BYTES_V1 = 2504;
+const AP05_FROZEN_TOLERANCE_MERGE_SHA_V1 = AP05_EXACT_HEAD_V1;
+const ADAPTIVE_UI_RELEASE_SOURCE_SHA256_V1 = "69541b22c8545cf24ccb7e3004337cb6572209547ee926bc6d490954170a9aa4";
+const ADAPTIVE_UI_RELEASE_SOURCE_BYTES_V1 = 29722;
+const APPLICATION_GUIDE_RELEASE_SOURCE_SHA256_V1 = "01cd4350b05e2db5828b0bd7fbd1add2043b0f11b1e2bd4ff4b259cb6bf88547";
+const APPLICATION_GUIDE_RELEASE_SOURCE_BYTES_V1 = 1697;
+const FROZEN_ADAPTIVE_UI_SOURCE_SHA256_V1 = "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f";
+const FROZEN_ADAPTIVE_UI_SOURCE_BYTES_V1 = 33045;
+const FROZEN_APPLICATION_GUIDE_SOURCE_SHA256_V1 = "8ee060c3f158810c93e097e83ab55297c0d976b92c0392fdd290d6d33a88b7bd";
+const FROZEN_APPLICATION_GUIDE_SOURCE_BYTES_V1 = 2504;
 const CASE_PACK_PATH_V1 = "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json";
 const ERV_SOURCE_PATH_V1 = "packages/contracts/src/incoming-invoice-erv.ts";
 const ADAPTIVE_UI_SOURCE_PATH_V1 = "packages/contracts/src/incoming-invoice-adaptive-ui.ts";
@@ -44,6 +51,7 @@ const REFERENCE_KINDS_V1 = ["SUPPLIER", "PURCHASE_ORDER", "RECEIPT", "INVOICE"] 
 
 type IdentityV1 = Readonly<{ byteLength: number; sha256: string }>;
 type SourceInputV1 = Readonly<{ path: string; bytes: Uint8Array }>;
+type BoundSourceV1 = Readonly<{ path: string; identity: IdentityV1; releaseIds: readonly string[] }>;
 type PublicOutcomeV1 = typeof OUTCOMES_V1[number];
 type UnknownOutcomeCountV1 = Readonly<{ state: "UNKNOWN"; reasonCode: typeof UNKNOWN_OUTCOME_REASON_V1 }>;
 type DenominatorV1 = Readonly<{ caseCount: number; decisionCount: number; referenceCount: number; referenceCountByKind: Readonly<Record<typeof REFERENCE_KINDS_V1[number], number>> }>;
@@ -60,7 +68,7 @@ export interface IncomingInvoiceAp05ReceiptManifestV1 {
   readonly predecessorLineage: Readonly<{
     readonly exactHead: typeof AP05_EXACT_HEAD_V1;
     readonly releases: readonly Readonly<{ releaseId: string; releaseTag: string; mergeSha: string; sourceCommit: string; sourcePaths: readonly string[] }>[];
-    readonly sources: readonly Readonly<{ path: string; identity: IdentityV1; releaseIds: readonly string[] }>[];
+    readonly sources: readonly BoundSourceV1[];
   }>;
   readonly sourceEvidenceRelease: Readonly<{
     readonly releaseId: "pan365-ap05-receipt-manifest-source-v1";
@@ -73,21 +81,14 @@ export interface IncomingInvoiceAp05ReceiptManifestV1 {
     readonly repository: "JoFe2/PANSPHAIRA";
     readonly issueNumber: 364;
     readonly required: true;
-    readonly status: "VERIFIED";
+    readonly status: "SOURCE_VERIFIED";
     readonly boundPredecessor: Readonly<{
       readonly releaseId: "ap04-erv-source-v1";
       readonly releaseTag: typeof AP04_RELEASE_TAG_V1;
       readonly mergeSha: typeof AP04_MERGE_SHA_V1;
       readonly sourceCommit: typeof AP04_MERGE_SHA_V1;
     }>;
-    readonly pairedClosureReceipt: Readonly<{
-      readonly receiptId: "ap04-erv-core-readback-v1";
-      readonly releaseId: "ap04-erv-source-v1";
-      readonly releaseTag: typeof AP04_RELEASE_TAG_V1;
-      readonly mergeSha: typeof AP04_MERGE_SHA_V1;
-      readonly sourceArtifact: Readonly<{ path: typeof CASE_PACK_PATH_V1; identity: IdentityV1 }>;
-      readonly outputArtifact: Readonly<{ schemaVersion: string; identity: IdentityV1 }>;
-    }>;
+    readonly boundArtifacts: readonly Readonly<{ path: string; identity: IdentityV1 }>[];
   }>[];
   readonly ap04: Readonly<{
     readonly casePack: Readonly<{ path: typeof CASE_PACK_PATH_V1; identity: IdentityV1; canonicalSha256: string }>;
@@ -140,8 +141,11 @@ function exactSource(source: SourceInputV1, expectedSha256: string, expectedByte
   if (actual.sha256 !== expectedSha256 || actual.byteLength !== expectedByteLength) throw new ManifestError("SOURCE_IDENTITY_MISMATCH");
   return actual;
 }
-function sourceRecord(source: SourceInputV1, expectedSha256: string, expectedByteLength: number, releaseIds: readonly string[]): Readonly<{ path: string; identity: IdentityV1; releaseIds: readonly string[] }> {
+function sourceRecord(source: SourceInputV1, expectedSha256: string, expectedByteLength: number, releaseIds: readonly string[]): BoundSourceV1 {
   return { path: source.path, identity: exactSource(source, expectedSha256, expectedByteLength), releaseIds };
+}
+function boundSource(path: string, sha256: string, byteLength: number, releaseIds: readonly string[]): BoundSourceV1 {
+  return { path, identity: { sha256, byteLength }, releaseIds };
 }
 function requirementMatches(value: IncomingInvoiceErvRequirementV1, expected: Readonly<Partial<IncomingInvoiceErvRequirementV1>>): boolean {
   return Object.entries(expected).every(([key, expectedValue]) => canonicalJson(value[key as keyof IncomingInvoiceErvRequirementV1]) === canonicalJson(expectedValue));
@@ -218,9 +222,11 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
   const guide = sourceByPath(input.predecessorSources, APPLICATION_GUIDE_PATH_V1);
   const erv = sourceByPath(input.predecessorSources, ERV_SOURCE_PATH_V1);
   const casePackSource = sourceByPath(input.predecessorSources, CASE_PACK_PATH_V1);
-  const sources = [
-    sourceRecord(adaptiveUi, ADAPTIVE_UI_SOURCE_SHA256_V1, ADAPTIVE_UI_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1", "pan365-frozen-tolerance-source-v1"]),
-    sourceRecord(guide, APPLICATION_GUIDE_SOURCE_SHA256_V1, APPLICATION_GUIDE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1", "pan365-frozen-tolerance-source-v1"]),
+  const sources: readonly BoundSourceV1[] = [
+    boundSource(ADAPTIVE_UI_SOURCE_PATH_V1, ADAPTIVE_UI_RELEASE_SOURCE_SHA256_V1, ADAPTIVE_UI_RELEASE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1"]),
+    boundSource(APPLICATION_GUIDE_PATH_V1, APPLICATION_GUIDE_RELEASE_SOURCE_SHA256_V1, APPLICATION_GUIDE_RELEASE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1"]),
+    sourceRecord(adaptiveUi, FROZEN_ADAPTIVE_UI_SOURCE_SHA256_V1, FROZEN_ADAPTIVE_UI_SOURCE_BYTES_V1, ["pan365-frozen-tolerance-source-v1"]),
+    sourceRecord(guide, FROZEN_APPLICATION_GUIDE_SOURCE_SHA256_V1, FROZEN_APPLICATION_GUIDE_SOURCE_BYTES_V1, ["pan365-frozen-tolerance-source-v1"]),
     sourceRecord(erv, AP04_CORE_SOURCE_SHA256_V1, AP04_CORE_SOURCE_BYTES_V1, [AP04_RELEASE_TAG_V1]),
     sourceRecord(casePackSource, AP04_ERV_CASE_PACK_SHA256_V1, AP04_CASE_PACK_BYTES_V1, [AP04_RELEASE_TAG_V1]),
   ];
@@ -248,8 +254,8 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
     predecessorLineage: {
       exactHead: AP05_EXACT_HEAD_V1,
       releases: [
-        { releaseId: "pan365-adaptive-ui-source-v1", releaseTag: "pan365-adaptive-ui-source-v1", mergeSha: AP05_ADAPTIVE_MERGE_SHA_V1, sourceCommit: AP05_EXACT_HEAD_V1, sourcePaths: [ADAPTIVE_UI_SOURCE_PATH_V1, APPLICATION_GUIDE_PATH_V1] },
-        { releaseId: "pan365-frozen-tolerance-source-v1", releaseTag: "pan365-frozen-tolerance-source-v1", mergeSha: AP05_FROZEN_TOLERANCE_MERGE_SHA_V1, sourceCommit: AP05_EXACT_HEAD_V1, sourcePaths: [ADAPTIVE_UI_SOURCE_PATH_V1, APPLICATION_GUIDE_PATH_V1] },
+        { releaseId: "pan365-adaptive-ui-source-v1", releaseTag: "pan365-adaptive-ui-source-v1", mergeSha: AP05_ADAPTIVE_MERGE_SHA_V1, sourceCommit: AP05_ADAPTIVE_MERGE_SHA_V1, sourcePaths: [ADAPTIVE_UI_SOURCE_PATH_V1, APPLICATION_GUIDE_PATH_V1] },
+        { releaseId: "pan365-frozen-tolerance-source-v1", releaseTag: "pan365-frozen-tolerance-source-v1", mergeSha: AP05_FROZEN_TOLERANCE_MERGE_SHA_V1, sourceCommit: AP05_FROZEN_TOLERANCE_MERGE_SHA_V1, sourcePaths: [ADAPTIVE_UI_SOURCE_PATH_V1, APPLICATION_GUIDE_PATH_V1] },
         { releaseId: "ap04-erv-source-v1", releaseTag: AP04_RELEASE_TAG_V1, mergeSha: AP04_MERGE_SHA_V1, sourceCommit: AP04_MERGE_SHA_V1, sourcePaths: [ERV_SOURCE_PATH_V1, CASE_PACK_PATH_V1] },
       ],
       sources,
@@ -270,21 +276,17 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
       repository: "JoFe2/PANSPHAIRA",
       issueNumber: 364,
       required: true,
-      status: "VERIFIED",
+      status: "SOURCE_VERIFIED",
       boundPredecessor: {
         releaseId: "ap04-erv-source-v1",
         releaseTag: AP04_RELEASE_TAG_V1,
         mergeSha: AP04_MERGE_SHA_V1,
         sourceCommit: AP04_MERGE_SHA_V1,
       },
-      pairedClosureReceipt: {
-        receiptId: "ap04-erv-core-readback-v1",
-        releaseId: "ap04-erv-source-v1",
-        releaseTag: AP04_RELEASE_TAG_V1,
-        mergeSha: AP04_MERGE_SHA_V1,
-        sourceArtifact: { path: CASE_PACK_PATH_V1, identity: casePackIdentity },
-        outputArtifact: { schemaVersion: coreResult.package.schemaVersion, identity: coreOutputIdentity },
-      },
+      boundArtifacts: [
+        { path: ERV_SOURCE_PATH_V1, identity: identity(erv.bytes) },
+        { path: AP04_SCHEMA_PATH_V1, identity: { byteLength: AP04_SCHEMA_BYTES_V1, sha256: AP04_SCHEMA_SHA256_V1 } },
+      ],
     }],
     ap04: {
       casePack: { path: CASE_PACK_PATH_V1, identity: casePackIdentity, canonicalSha256: coreResult.package.readback.packSha256 },

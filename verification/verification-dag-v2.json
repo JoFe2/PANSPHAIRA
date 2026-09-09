@@ -5933,7 +5933,7 @@
         {
           "path": "packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts",
           "role": "CONTRACT",
-          "sha256": "9b6a676b9c4a12e8d9f7353ea3ddb4434648c3b1b3661c34d8825efd7e7a0d1a"
+          "sha256": "6e6d7084497450311285584c731eaca1eca0a131a6bd4b24289c4ef32f418bfe"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
@@ -5968,12 +5968,12 @@
         {
           "path": "tests/incoming-invoice-ap05-receipt-manifest.test.ts",
           "role": "VALIDATOR",
-          "sha256": "b198d0422b6f63483814c2b4c41116b9f73ffee7040ba8127d7cb2bc0f77b51b"
+          "sha256": "a7a2f0555fd9cd40bd624647b9c17da1e24a0ca43309c644c8caa58a8c73bd74"
         },
         {
           "path": "verification/incoming-invoice-ap05-receipt-manifest-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "c1b0450ee0a229cd6b4545f504e0b2873a31721878fec089b17b81da48cdf538"
+          "sha256": "f1bd988dcb7b6e25d7f50589275ba15119a9bbc6f9f172fde10e0ac50cfca795"
         },
         {
           "path": "release/public-files.manifest",
@@ -5988,7 +5988,7 @@
         "Only the exact released #365/AP04 producer bytes and frozen public-synthetic setup can regenerate this manifest.",
         "Baseline ERV outcomes are projected from deterministic AP04 core readback; the requested adapted 200-bps receipt is typed UNKNOWN when the released core cannot produce it.",
         "The public receipt is authority NONE and PUBLIC_SYNTHETIC_NON_CUSTOMER, with identity-bearing source fields and free text removed.",
-        "Required external prerequisite JoFe2/PANSPHAIRA#364 is verified only when the AP04 released predecessor and paired core readback are both bound to the manifest.",
+        "Required external prerequisite JoFe2/PANSPHAIRA#364 is source-verified only when the AP04 released predecessor source and schema artifacts are bound; local AP04 replay is not a predecessor-issued paired closure receipt.",
         "Missing, substituted, aliased or re-digested source, setup, core, receipt, manifest, external prerequisite or predecessor lineage fails closed."
       ],
       "riskClass": "HIGH",
