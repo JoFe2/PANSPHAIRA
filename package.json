@@ -162,6 +162,7 @@
     "incoming-invoice-adaptive-ui:test": "npm run build --silent && node --test dist/tests/incoming-invoice-adaptive-ui.test.js",
     "incoming-invoice-adaptive-ui:test:compiled": "node --test dist/tests/incoming-invoice-adaptive-ui.test.js",
     "incoming-invoice-ap05-receipt-manifest:generate": "npm run build --silent && node scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs",
+    "incoming-invoice-ap05-receipt-manifest:test": "npm run build --silent && node --test dist/tests/incoming-invoice-ap05-receipt-manifest.test.js",
     "incoming-invoice-ap05-receipt-manifest:test:compiled": "node --test dist/tests/incoming-invoice-ap05-receipt-manifest.test.js"
   },
   "dependencies": {

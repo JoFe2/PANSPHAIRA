@@ -62,7 +62,21 @@ export interface IncomingInvoiceAp05ReceiptManifestV1 {
     readonly releases: readonly Readonly<{ releaseId: string; releaseTag: string; mergeSha: string; sourceCommit: string; sourcePaths: readonly string[] }>[];
     readonly sources: readonly Readonly<{ path: string; identity: IdentityV1; releaseIds: readonly string[] }>[];
   }>;
-  readonly sourceEvidenceRelease: Readonly<{ releaseId: "pan365-ap05-receipt-manifest-source-v1"; releaseTag: "pan365-ap05-receipt-manifest-source-v1"; sourceCommit: typeof AP05_EXACT_HEAD_V1; sourcePaths: readonly string[] }>;
+  readonly sourceEvidenceRelease: Readonly<{
+    readonly releaseId: "pan365-ap05-receipt-manifest-source-v1";
+    readonly releaseTag: "pan365-ap05-receipt-manifest-source-v1";
+    readonly releaseStatus: "PENDING_EXACT_SOURCE_RELEASE";
+    readonly sourceCommit: null;
+    readonly sourcePaths: readonly string[];
+  }>;
+  readonly externalPrerequisites: readonly Readonly<{
+    readonly repository: "JoFe2/PANSPHAIRA";
+    readonly issueNumber: 364;
+    readonly required: true;
+    readonly status: "UNVERIFIED";
+    readonly boundPredecessor: null;
+    readonly pairedClosureReceipt: null;
+  }>[];
   readonly ap04: Readonly<{
     readonly casePack: Readonly<{ path: typeof CASE_PACK_PATH_V1; identity: IdentityV1; canonicalSha256: string }>;
     readonly coreOutput: Readonly<{ schemaVersion: string; caseCount: number; decisionDigest: string; identity: IdentityV1; deterministicReplay: true }>;
@@ -229,15 +243,23 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
     sourceEvidenceRelease: {
       releaseId: "pan365-ap05-receipt-manifest-source-v1",
       releaseTag: "pan365-ap05-receipt-manifest-source-v1",
-      sourceCommit: AP05_EXACT_HEAD_V1,
+      releaseStatus: "PENDING_EXACT_SOURCE_RELEASE",
+      sourceCommit: null,
       sourcePaths: [
         "packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts",
         "scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs",
         "tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json",
         "tests/incoming-invoice-ap05-receipt-manifest.test.ts",
-        "verification/incoming-invoice-ap05-receipt-manifest-v1.json",
       ],
     },
+    externalPrerequisites: [{
+      repository: "JoFe2/PANSPHAIRA",
+      issueNumber: 364,
+      required: true,
+      status: "UNVERIFIED",
+      boundPredecessor: null,
+      pairedClosureReceipt: null,
+    }],
     ap04: {
       casePack: { path: CASE_PACK_PATH_V1, identity: identity(casePackSource.bytes), canonicalSha256: coreResult.package.readback.packSha256 },
       coreOutput: { schemaVersion: coreResult.package.schemaVersion, caseCount: coreResult.package.caseCount, decisionDigest: coreResult.package.readback.decisionDigest, identity: canonicalIdentity(coreResult.package), deterministicReplay: true },

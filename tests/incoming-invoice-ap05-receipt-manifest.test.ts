@@ -41,6 +41,16 @@ function clone<T>(value: T): T {
   assert.equal(first.manifest.publicReceipt.adapted.outcome.state, "UNKNOWN");
   assert.equal(first.manifest.publicReceipt.adapted.denominator.decisionCount, 0);
   assert.equal(first.manifest.sourceEvidenceRelease.releaseTag, "pan365-ap05-receipt-manifest-source-v1");
+  assert.equal(first.manifest.sourceEvidenceRelease.releaseStatus, "PENDING_EXACT_SOURCE_RELEASE");
+  assert.equal(first.manifest.sourceEvidenceRelease.sourceCommit, null);
+  assert.deepEqual(first.manifest.externalPrerequisites, [{
+    repository: "JoFe2/PANSPHAIRA",
+    issueNumber: 364,
+    required: true,
+    status: "UNVERIFIED",
+    boundPredecessor: null,
+    pairedClosureReceipt: null,
+  }]);
   assert.deepEqual(first.manifest.publicReceipt.baseline.outcomeCounts, {
     MATCHED: 3,
     CONFLICT: 1,

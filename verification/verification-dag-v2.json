@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 45,
+  "graphVersion": 46,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "0c1243af0bea71c85b48623d543f60ea4b53199e6be207346bbf92232909850a"
+          "sha256": "44253674de8ccb48254d9f16e95a5b7cefa719ca28d600a5caf3ad8e956e0e27"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3789,7 +3789,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "dc63c56be011945299b522530b0e332656d9b2b12e78a221b08dbe29f0bed3f8"
+          "sha256": "3c5bbd621b46c8d40c584795480f4a9a4e126729bf721bd5a99b169d054347ff"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3964,7 +3964,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "4931251fbccbc19a5f58f97634f73191c56707222b698a1673d48d3af6eea597"
+          "sha256": "0b9a44a2776c9c0f14bc67e6632688f48bb20feaf8807a90bc4576899ce198d5"
         }
       ],
       "ownedTests": [
@@ -4766,7 +4766,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "74a8e9dc2edfb2d7ac694c56201b7db8920a7180721f79ca3557b467bfeeb912"
+          "sha256": "8d83d8830b1da4420e5b6bf2268f3200c18082144a542d82a03d239e85b741a9"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4801,7 +4801,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "dad2f747d280b23135fbd0085cbc525a1df6318945b9e1a12e643aa971ed3bc7"
+          "sha256": "5404154742c4eb6d36a8dce7ac0bcb7a9b715eb552291aef9f14d6c0ed14c924"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5372,7 +5372,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "7c23d0882fe2ed6663e2833969d26fd7dfef25acb7353cecfcfef40c1bec84c2"
+          "sha256": "b86119b4ff8454eaf42daba6f4d4f00a518bd5d4c191b55ca367563e87b4defa"
         },
         {
           "path": "package-lock.json",
@@ -5732,7 +5732,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8f32fecd557b59baa2af84e95e4b815182335730afa0545cf5740fb37a8558e3"
+          "sha256": "fb9e776f9369117ed78d6deda8c879266beea581013ce861e29cb348cb33adba"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5864,29 +5864,95 @@
       "globalInvalidation": false
     },
     {
+      "id": "ap-04-incoming-invoice-erv-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-erv.ts",
+          "role": "CONTRACT",
+          "sha256": "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845"
+        },
+        {
+          "path": "tests/incoming-invoice-erv.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "fcc5e31702f327b0976da50fd42335d2e7741a3debc1218e7ece82cfa9efaf66"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice-erv:test"
+      ],
+      "invariants": [
+        "The AP-04 ERV producer and case pack remain exact released predecessor inputs.",
+        "Core decisions are deterministic and do not grant productive or external authority."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ap-05-released-predecessor-artifacts-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
+          "role": "SOURCE",
+          "sha256": "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f"
+        },
+        {
+          "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
+          "role": "SOURCE",
+          "sha256": "8ee060c3f158810c93e097e83ab55297c0d976b92c0392fdd290d6d33a88b7bd"
+        },
+        {
+          "path": "tests/incoming-invoice-adaptive-ui.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "9d8dcd5025fb8f2351eb4d5824123fbf7a1372af1370b614e936d52c6a3e520f"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice-adaptive-ui:test"
+      ],
+      "invariants": [
+        "Released AP-05 predecessor artifacts are bound to their own source evidence and are not conflated with the AP-05 delivery source release.",
+        "The application guide is a required predecessor source whenever the adaptive UI producer is replayed."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
       "id": "ap-05-incoming-invoice-receipt-manifest-v1",
       "dependsOn": [
-        "ap-03-incoming-invoice-extraction-benchmark-v1"
+        "ap-04-incoming-invoice-erv-v1",
+        "ap-05-released-predecessor-artifacts-v1"
       ],
       "inputs": [
         {
           "path": "packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts",
           "role": "CONTRACT",
-          "sha256": "882055c97f13f7c850fb5381eafca9f4626e5d1cb7a463a77dbd19b246cfecf0"
+          "sha256": "cf35696b99990cc90da514dc0b0bcf5e6337cb92e0718e031fa4556c5370a3ff"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
-          "role": "PREDECESSOR_SOURCE",
+          "role": "SOURCE",
           "sha256": "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f"
         },
         {
+          "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
+          "role": "SOURCE",
+          "sha256": "8ee060c3f158810c93e097e83ab55297c0d976b92c0392fdd290d6d33a88b7bd"
+        },
+        {
           "path": "packages/contracts/src/incoming-invoice-erv.ts",
-          "role": "PREDECESSOR_SOURCE",
+          "role": "SOURCE",
           "sha256": "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf"
         },
         {
           "path": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json",
-          "role": "PREDECESSOR_FIXTURE",
+          "role": "FIXTURE",
           "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845"
         },
         {
@@ -5896,22 +5962,22 @@
         },
         {
           "path": "scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs",
-          "role": "GENERATOR",
+          "role": "TOOLCHAIN",
           "sha256": "a0cebe3e133303797d5b05e312b44a5146e36b5706da5c4e85478e4c380ea9c7"
         },
         {
           "path": "tests/incoming-invoice-ap05-receipt-manifest.test.ts",
           "role": "VALIDATOR",
-          "sha256": "e81d204e6c69a8e2efcfb09b3ea08f5c891542260d210da17d7b4a227f9539f9"
+          "sha256": "f32e6d9d20d93aa5af92cd883893297a72a21e192455c8b502a80f30fbc555ef"
         },
         {
           "path": "verification/incoming-invoice-ap05-receipt-manifest-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "ad9ae08112d6325f2239cd47492c872e5655f6ee9ea21b66b2a8bd5d2869f0d0"
+          "sha256": "f1f8ddbbea5449cf31eff69ab0c26be0da34cfaf59f577e94b0c6c7b50f85e69"
         },
         {
           "path": "release/public-files.manifest",
-          "role": "PUBLIC_FILE_OWNERSHIP",
+          "role": "DERIVED_EVIDENCE",
           "sha256": "fbcaa0a65a987785d9021ffaeccac849127b42c4950d3f64a882c808a712521e"
         }
       ],
