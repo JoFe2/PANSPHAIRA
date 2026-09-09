@@ -5862,6 +5862,70 @@
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
+    },
+    {
+      "id": "ap-05-incoming-invoice-receipt-manifest-v1",
+      "dependsOn": [
+        "ap-03-incoming-invoice-extraction-benchmark-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts",
+          "role": "CONTRACT",
+          "sha256": "882055c97f13f7c850fb5381eafca9f4626e5d1cb7a463a77dbd19b246cfecf0"
+        },
+        {
+          "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
+          "role": "PREDECESSOR_SOURCE",
+          "sha256": "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f"
+        },
+        {
+          "path": "packages/contracts/src/incoming-invoice-erv.ts",
+          "role": "PREDECESSOR_SOURCE",
+          "sha256": "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json",
+          "role": "PREDECESSOR_FIXTURE",
+          "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json",
+          "role": "FIXTURE",
+          "sha256": "fb239dd4fdc964ce0124f8be69ea97078205d31642ff034cdf95dfeb9a7364ec"
+        },
+        {
+          "path": "scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs",
+          "role": "GENERATOR",
+          "sha256": "a0cebe3e133303797d5b05e312b44a5146e36b5706da5c4e85478e4c380ea9c7"
+        },
+        {
+          "path": "tests/incoming-invoice-ap05-receipt-manifest.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "e81d204e6c69a8e2efcfb09b3ea08f5c891542260d210da17d7b4a227f9539f9"
+        },
+        {
+          "path": "verification/incoming-invoice-ap05-receipt-manifest-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ad9ae08112d6325f2239cd47492c872e5655f6ee9ea21b66b2a8bd5d2869f0d0"
+        },
+        {
+          "path": "release/public-files.manifest",
+          "role": "PUBLIC_FILE_OWNERSHIP",
+          "sha256": "fbcaa0a65a987785d9021ffaeccac849127b42c4950d3f64a882c808a712521e"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice-ap05-receipt-manifest:test:compiled"
+      ],
+      "invariants": [
+        "Only the exact released #365/AP04 producer bytes and frozen public-synthetic setup can regenerate this manifest.",
+        "Baseline ERV outcomes are projected from deterministic AP04 core readback; the requested adapted 200-bps receipt is typed UNKNOWN when the released core cannot produce it.",
+        "The public receipt is authority NONE and PUBLIC_SYNTHETIC_NON_CUSTOMER, with identity-bearing source fields and free text removed.",
+        "Missing, substituted, aliased or re-digested source, setup, core, receipt, manifest or predecessor lineage fails closed."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
     }
   ]
 }

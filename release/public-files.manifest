@@ -386,6 +386,7 @@ packages/contracts/src/hmi-harness-adapter.ts	packages/contracts/src/hmi-harness
 packages/contracts/src/index.ts	packages/contracts/src/index.ts	0644
 packages/contracts/src/injection-trust-boundary.ts	packages/contracts/src/injection-trust-boundary.ts	0644
 packages/contracts/src/incoming-invoice-adaptive-ui.ts	packages/contracts/src/incoming-invoice-adaptive-ui.ts	0644
+packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts	packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts	0644
 packages/contracts/src/incoming-invoice-blueprint.ts	packages/contracts/src/incoming-invoice-blueprint.ts	0644
 packages/contracts/src/incoming-invoice-erv.ts	packages/contracts/src/incoming-invoice-erv.ts	0644
 packages/contracts/src/incoming-invoice-extraction-benchmark.ts	packages/contracts/src/incoming-invoice-extraction-benchmark.ts	0644
@@ -590,6 +591,7 @@ scripts/cks-09-validate-public-readback.mjs	scripts/cks-09-validate-public-readb
 scripts/demo-current-head-e2e.mjs	scripts/demo-current-head-e2e.mjs	0755
 scripts/extension-dynamic-process-lifecycle.mjs	scripts/extension-dynamic-process-lifecycle.mjs	0644
 scripts/extension-dynamic-synthetic.mjs	scripts/extension-dynamic-synthetic.mjs	0644
+scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs	scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs	0644
 scripts/learning-routing-baseline.mjs	scripts/learning-routing-baseline.mjs	0644
 scripts/refresh-integrity-data.mjs	scripts/refresh-integrity-data.mjs	0644
 scripts/render-asf-public-readback.mjs	scripts/render-asf-public-readback.mjs	0644
@@ -1118,6 +1120,7 @@ tests/fixtures/issue-candidate/quarantine-v1.json	tests/fixtures/issue-candidate
 tests/fixtures/incoming-invoice/source-manifest-v1.json	tests/fixtures/incoming-invoice/source-manifest-v1.json	0644
 tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	0644
 tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	0644
+tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json	tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json	0644
 tests/fixtures/incoming-invoice/supplier-invoice-v1.txt	tests/fixtures/incoming-invoice/supplier-invoice-v1.txt	0644
 tests/fixtures/kiwix-zim-assessment/assessment-v1.json	tests/fixtures/kiwix-zim-assessment/assessment-v1.json	0644
 tests/fixtures/knowledge-envelope/adversarial-matrix-v1.json	tests/fixtures/knowledge-envelope/adversarial-matrix-v1.json	0644
@@ -1241,6 +1244,7 @@ tests/hmi-post-contribute-consistency.test.ts	tests/hmi-post-contribute-consiste
 tests/hmi-post-explain-consistency.test.ts	tests/hmi-post-explain-consistency.test.ts	0644
 tests/injection-trust-boundary.test.ts	tests/injection-trust-boundary.test.ts	0644
 tests/incoming-invoice-adaptive-ui.test.ts	tests/incoming-invoice-adaptive-ui.test.ts	0644
+tests/incoming-invoice-ap05-receipt-manifest.test.ts	tests/incoming-invoice-ap05-receipt-manifest.test.ts	0644
 tests/incoming-invoice-blueprint.test.ts	tests/incoming-invoice-blueprint.test.ts	0644
 tests/incoming-invoice-extraction-benchmark.test.ts	tests/incoming-invoice-extraction-benchmark.test.ts	0644
 tests/incoming-invoice-erv.test.ts	tests/incoming-invoice-erv.test.ts	0644
@@ -1460,6 +1464,7 @@ verification/cscl-10-sales-candidate-v1.json	verification/cscl-10-sales-candidat
 verification/demo-current-head-e2e/contract-v1.json	verification/demo-current-head-e2e/contract-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644
+verification/incoming-invoice-ap05-receipt-manifest-v1.json	verification/incoming-invoice-ap05-receipt-manifest-v1.json	0644
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644
 verification/rks-01-falsification-report-v1.json	verification/rks-01-falsification-report-v1.json	0644
 verification/rks-01-source-capture-receipt-v1.json	verification/rks-01-source-capture-receipt-v1.json	0644
