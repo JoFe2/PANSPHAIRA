@@ -43,14 +43,18 @@ function clone<T>(value: T): T {
   assert.equal(first.manifest.sourceEvidenceRelease.releaseTag, "pan365-ap05-receipt-manifest-source-v1");
   assert.equal(first.manifest.sourceEvidenceRelease.releaseStatus, "PENDING_EXACT_SOURCE_RELEASE");
   assert.equal(first.manifest.sourceEvidenceRelease.sourceCommit, null);
-  assert.deepEqual(first.manifest.externalPrerequisites, [{
-    repository: "JoFe2/PANSPHAIRA",
-    issueNumber: 364,
-    required: true,
-    status: "UNVERIFIED",
-    boundPredecessor: null,
-    pairedClosureReceipt: null,
-  }]);
+  const prerequisite = first.manifest.externalPrerequisites[0];
+  assert.ok(prerequisite);
+  assert.equal(prerequisite.status, "VERIFIED");
+  assert.deepEqual(prerequisite.boundPredecessor, {
+    releaseId: "ap04-erv-source-v1",
+    releaseTag: "2026_09_05_v5",
+    mergeSha: "90512ba63587d10b4a833a7f31e1f91595531467",
+    sourceCommit: "90512ba63587d10b4a833a7f31e1f91595531467",
+  });
+  assert.equal(prerequisite.pairedClosureReceipt.receiptId, "ap04-erv-core-readback-v1");
+  assert.equal(prerequisite.pairedClosureReceipt.sourceArtifact.identity.sha256, first.manifest.ap04.casePack.identity.sha256);
+  assert.equal(prerequisite.pairedClosureReceipt.outputArtifact.identity.sha256, first.manifest.ap04.coreOutput.identity.sha256);
   assert.deepEqual(first.manifest.publicReceipt.baseline.outcomeCounts, {
     MATCHED: 3,
     CONFLICT: 1,
@@ -82,6 +86,9 @@ test("AP-05 verifier rejects missing, substituted or re-digested identities and 
     ["receipt identity", (value) => { value.publicReceipt.baseline.receiptIdentity.sha256 = "4".repeat(64); }],
     ["manifest identity", (value) => { value.manifestIdentity.sha256 = "5".repeat(64); }],
     ["omitted predecessor release lineage", (value) => { delete value.predecessorLineage.releases[0]; }],
+    ["unverified external prerequisite", (value) => { value.externalPrerequisites[0].status = "UNVERIFIED"; }],
+    ["substituted external predecessor", (value) => { value.externalPrerequisites[0].boundPredecessor.mergeSha = "6".repeat(40); }],
+    ["missing paired closure receipt", (value) => { value.externalPrerequisites[0].pairedClosureReceipt = null; }],
   ];
   for (const [name, mutate] of mutations) {
     const candidate = clone(generated);

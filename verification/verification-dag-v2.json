@@ -5933,7 +5933,7 @@
         {
           "path": "packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts",
           "role": "CONTRACT",
-          "sha256": "cf35696b99990cc90da514dc0b0bcf5e6337cb92e0718e031fa4556c5370a3ff"
+          "sha256": "a179213909a64a05cebab3a39a127bf9d316bfdb85dc8f2d1c644a77606c6e55"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
@@ -5968,12 +5968,12 @@
         {
           "path": "tests/incoming-invoice-ap05-receipt-manifest.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f32e6d9d20d93aa5af92cd883893297a72a21e192455c8b502a80f30fbc555ef"
+          "sha256": "ed14f613f957b2a7555d344cb5cf3e808e2c19ff09d72a328eaa4b804b646cc3"
         },
         {
           "path": "verification/incoming-invoice-ap05-receipt-manifest-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "f1f8ddbbea5449cf31eff69ab0c26be0da34cfaf59f577e94b0c6c7b50f85e69"
+          "sha256": "9bf1e507a247db1c4292bac7cc5249afd7d4487979bdf829f4df5436e4360c77"
         },
         {
           "path": "release/public-files.manifest",
@@ -5988,7 +5988,8 @@
         "Only the exact released #365/AP04 producer bytes and frozen public-synthetic setup can regenerate this manifest.",
         "Baseline ERV outcomes are projected from deterministic AP04 core readback; the requested adapted 200-bps receipt is typed UNKNOWN when the released core cannot produce it.",
         "The public receipt is authority NONE and PUBLIC_SYNTHETIC_NON_CUSTOMER, with identity-bearing source fields and free text removed.",
-        "Missing, substituted, aliased or re-digested source, setup, core, receipt, manifest or predecessor lineage fails closed."
+        "Required external prerequisite JoFe2/PANSPHAIRA#364 is verified only when the AP04 released predecessor and paired core readback are both bound to the manifest.",
+        "Missing, substituted, aliased or re-digested source, setup, core, receipt, manifest, external prerequisite or predecessor lineage fails closed."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
