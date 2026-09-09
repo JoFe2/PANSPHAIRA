@@ -576,7 +576,7 @@ incomingInvoiceExtractionNode.inputs = [
   ["tests/incoming-invoice-extraction-benchmark.test.ts", "VALIDATOR"],
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 incomingInvoiceExtractionNode.ownedTests = ["npm run incoming-invoice-extraction:test"];
-dag.graphVersion = 45;
+dag.graphVersion = 46;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

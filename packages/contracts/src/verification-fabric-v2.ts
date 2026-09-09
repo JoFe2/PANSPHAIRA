@@ -26,6 +26,7 @@ export type VerificationInputRoleV2 =
   | "DERIVED_EVIDENCE";
 
 export interface VerificationDagInputV2 {
+  readonly releaseId?: string;
   readonly path: string;
   readonly role: VerificationInputRoleV2;
   readonly sha256: string;
@@ -166,7 +167,8 @@ function validInput(value: unknown): value is VerificationDagInputV2 {
     "SOURCE", "CONTRACT", "SCHEMA", "FIXTURE", "VALIDATOR", "TOOLCHAIN",
     "ENVIRONMENT", "SECURITY", "DERIVED_EVIDENCE",
   ];
-  return exactKeys(value, ["path", "role", "sha256"])
+  return exactKeys(value, ["path", "role", "sha256"], ["releaseId"])
+    && (!Object.hasOwn(value, "releaseId") || isIdentifier(value.releaseId))
     && isSafeRepositoryPathV2(value.path)
     && roles.includes(value.role as VerificationInputRoleV2)
     && isDigest(value.sha256);

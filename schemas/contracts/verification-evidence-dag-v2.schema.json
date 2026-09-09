@@ -48,6 +48,7 @@
       "additionalProperties": false,
       "required": ["path", "role", "sha256"],
       "properties": {
+        "releaseId": { "$ref": "#/$defs/id" },
         "path": { "$ref": "#/$defs/path" },
         "role": {
           "enum": ["SOURCE", "CONTRACT", "SCHEMA", "FIXTURE", "VALIDATOR", "TOOLCHAIN", "ENVIRONMENT", "SECURITY", "DERIVED_EVIDENCE"]

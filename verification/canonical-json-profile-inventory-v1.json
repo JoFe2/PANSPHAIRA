@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "46e733d4c5b553cecc15f62db1917801e404a14cc8f3a156388704942c6592b4"
+        "sha256": "8d83d8830b1da4420e5b6bf2268f3200c18082144a542d82a03d239e85b741a9"
       }
     ]
   },
@@ -93,6 +93,14 @@
       "reason": "Advance the Verification DAG to graph v45 and canonically own the bounded current-head Docker E2E contract, focused fail-closed proof and repository-only implementation record; admitted v1 and reviewed v2-v8 digests remain immutable."
     },
     {
+      "migrationId": "PS365-AP05-RECEIPT-MANIFEST-01/INTEGRITY-GENERATOR/V10",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 10,
+      "fromSha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
+      "toSha256": "2a0f330f67410cb4cab426e9d57e69c7205743a5675521b3f842229c1fd81314",
+      "reason": "Advance the Verification DAG to graph v46 and canonically bind the AP-05 receipt manifest integrity chain; admitted v1 and reviewed v2-v9 digests remain immutable."
+    },
+    {
       "migrationId": "P0-PS391-AUD-01/OWNER-AUTHORITY-USE-TIME-REVALIDATION/V2",
       "path": "demo/runtime/enforcement-gate.mjs",
       "profileVersion": 2,
@@ -157,15 +165,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 619,
+    "filesScanned": 622,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 204,
-    "importFiles": 203,
+    "importSites": 205,
+    "importFiles": 204,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1780,
-    "ledgerUniquePaths": 1780
+    "ledgerEntries": 1787,
+    "ledgerUniquePaths": 1787
   },
   "profiles": [
     {
@@ -238,7 +246,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54"
+      "sha256": "2a0f330f67410cb4cab426e9d57e69c7205743a5675521b3f842229c1fd81314"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -497,8 +505,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 127,
-      "importFiles": 127
+      "importSites": 128,
+      "importFiles": 128
     },
     {
       "owner": "cscl-03",
@@ -836,7 +844,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "440b64c5769aef5bb2f90670802aebb08201b13c86de20889488b965cfeb4d54",
+      "sha256": "2a0f330f67410cb4cab426e9d57e69c7205743a5675521b3f842229c1fd81314",
       "basis": "profile-version-migration"
     },
     {

@@ -1,0 +1,32 @@
+{
+  "baseline": {
+    "schemaVersion": "chimpmaera.incoming-invoice/erv-requirement/v1",
+    "requirementId": "requirement:baseline",
+    "scenario": "LEAN",
+    "matchingMode": { "variantId": "TWO_WAY_INVOICE_PO_V1", "version": "1.0.0" },
+    "tolerancePolicy": { "variantId": "STRICT_ZERO_V1", "version": "1.0.0" },
+    "separateApprovalThresholdEur": null,
+    "requestedEffects": ["READ_SYNTHETIC", "WRITE_LOCAL_PROOF"],
+    "evidenceRefs": ["evidence:ap04-synthetic-001"],
+    "synthetic": true,
+    "customerData": false
+  },
+  "changed": {
+    "schemaVersion": "chimpmaera.incoming-invoice/erv-requirement/v1",
+    "requirementId": "requirement:changed-rate",
+    "scenario": "SEGREGATED_ENTERPRISE",
+    "matchingMode": { "variantId": "THREE_WAY_INVOICE_PO_RECEIPT_V1", "version": "1.0.0" },
+    "tolerancePolicy": { "variantId": "RATE_BPS_V1", "version": "1.0.0", "rateBasisPoints": 200 },
+    "separateApprovalThresholdEur": 10000,
+    "requestedEffects": ["READ_SYNTHETIC", "WRITE_LOCAL_PROOF"],
+    "evidenceRefs": ["evidence:ap04-synthetic-rate-002"],
+    "synthetic": true,
+    "customerData": false
+  },
+  "answers": [
+    { "questionId": "confirm:matching-mode", "answer": "CONFIRM" },
+    { "questionId": "confirm:tolerance-policy", "answer": "CONFIRM" },
+    { "questionId": "confirm:scenario", "answer": "CONFIRM" },
+    { "questionId": "confirm:separate-approval-threshold", "answer": "CONFIRM" }
+  ]
+}
