@@ -5933,7 +5933,7 @@
         {
           "path": "packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts",
           "role": "CONTRACT",
-          "sha256": "a179213909a64a05cebab3a39a127bf9d316bfdb85dc8f2d1c644a77606c6e55"
+          "sha256": "f7197a563128eea2c5fcf31e2923423ed96ba346ea53117ac83e52e37a8b30f1"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
@@ -5968,12 +5968,12 @@
         {
           "path": "tests/incoming-invoice-ap05-receipt-manifest.test.ts",
           "role": "VALIDATOR",
-          "sha256": "ed14f613f957b2a7555d344cb5cf3e808e2c19ff09d72a328eaa4b804b646cc3"
+          "sha256": "464f79fee895b4c9acb59a51ff562aca11f2f22e2d7efe33f54daaa03dfeda97"
         },
         {
           "path": "verification/incoming-invoice-ap05-receipt-manifest-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "9bf1e507a247db1c4292bac7cc5249afd7d4487979bdf829f4df5436e4360c77"
+          "sha256": "f1f8ddbbea5449cf31eff69ab0c26be0da34cfaf59f577e94b0c6c7b50f85e69"
         },
         {
           "path": "release/public-files.manifest",

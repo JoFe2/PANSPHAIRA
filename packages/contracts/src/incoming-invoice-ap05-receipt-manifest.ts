@@ -73,21 +73,9 @@ export interface IncomingInvoiceAp05ReceiptManifestV1 {
     readonly repository: "JoFe2/PANSPHAIRA";
     readonly issueNumber: 364;
     readonly required: true;
-    readonly status: "VERIFIED";
-    readonly boundPredecessor: Readonly<{
-      readonly releaseId: "ap04-erv-source-v1";
-      readonly releaseTag: typeof AP04_RELEASE_TAG_V1;
-      readonly mergeSha: typeof AP04_MERGE_SHA_V1;
-      readonly sourceCommit: typeof AP04_MERGE_SHA_V1;
-    }>;
-    readonly pairedClosureReceipt: Readonly<{
-      readonly receiptId: "ap04-erv-core-readback-v1";
-      readonly releaseId: "ap04-erv-source-v1";
-      readonly releaseTag: typeof AP04_RELEASE_TAG_V1;
-      readonly mergeSha: typeof AP04_MERGE_SHA_V1;
-      readonly sourceArtifact: Readonly<{ path: typeof CASE_PACK_PATH_V1; identity: IdentityV1 }>;
-      readonly outputArtifact: Readonly<{ schemaVersion: string; identity: IdentityV1 }>;
-    }>;
+    readonly status: "UNVERIFIED";
+    readonly boundPredecessor: null;
+    readonly pairedClosureReceipt: null;
   }>[];
   readonly ap04: Readonly<{
     readonly casePack: Readonly<{ path: typeof CASE_PACK_PATH_V1; identity: IdentityV1; canonicalSha256: string }>;
@@ -270,21 +258,9 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
       repository: "JoFe2/PANSPHAIRA",
       issueNumber: 364,
       required: true,
-      status: "VERIFIED",
-      boundPredecessor: {
-        releaseId: "ap04-erv-source-v1",
-        releaseTag: AP04_RELEASE_TAG_V1,
-        mergeSha: AP04_MERGE_SHA_V1,
-        sourceCommit: AP04_MERGE_SHA_V1,
-      },
-      pairedClosureReceipt: {
-        receiptId: "ap04-erv-core-readback-v1",
-        releaseId: "ap04-erv-source-v1",
-        releaseTag: AP04_RELEASE_TAG_V1,
-        mergeSha: AP04_MERGE_SHA_V1,
-        sourceArtifact: { path: CASE_PACK_PATH_V1, identity: casePackIdentity },
-        outputArtifact: { schemaVersion: coreResult.package.schemaVersion, identity: coreOutputIdentity },
-      },
+      status: "UNVERIFIED",
+      boundPredecessor: null,
+      pairedClosureReceipt: null,
     }],
     ap04: {
       casePack: { path: CASE_PACK_PATH_V1, identity: casePackIdentity, canonicalSha256: coreResult.package.readback.packSha256 },
