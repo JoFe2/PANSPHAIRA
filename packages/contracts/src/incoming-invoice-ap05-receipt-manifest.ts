@@ -20,8 +20,8 @@ import { sha256HexV1 } from "./incoming-invoice-intake.js";
 export const AP05_EXACT_HEAD_V1 = "ef10d39fa7843e7c45e6e46cbc73647ad4a3ea2c" as const;
 export const AP05_RECEIPT_MANIFEST_SCHEMA_V1 = "chimpmaera.incoming-invoice/ap05-receipt-manifest/v1" as const;
 
-const AP04_MERGE_SHA_V1 = "90512ba63587d10b4a833a7f31e1f91595531467";
-const AP04_RELEASE_TAG_V1 = "2026_09_05_v5";
+const AP04_MERGE_SHA_V1 = "ff68eda6cacc510ee67ed3b5b6cd51545f017a21";
+const AP04_RELEASE_TAG_V1 = "pan377-current-head-docker-e2e-source-v1";
 const AP04_CORE_SOURCE_SHA256_V1 = "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf";
 const AP04_CORE_SOURCE_BYTES_V1 = 21114;
 const AP04_CASE_PACK_BYTES_V1 = 19841;
@@ -73,9 +73,21 @@ export interface IncomingInvoiceAp05ReceiptManifestV1 {
     readonly repository: "JoFe2/PANSPHAIRA";
     readonly issueNumber: 364;
     readonly required: true;
-    readonly status: "UNVERIFIED";
-    readonly boundPredecessor: null;
-    readonly pairedClosureReceipt: null;
+    readonly status: "VERIFIED";
+    readonly boundPredecessor: Readonly<{
+      readonly releaseId: "ap04-erv-source-v1";
+      readonly releaseTag: typeof AP04_RELEASE_TAG_V1;
+      readonly mergeSha: typeof AP04_MERGE_SHA_V1;
+      readonly sourceCommit: typeof AP04_MERGE_SHA_V1;
+    }>;
+    readonly pairedClosureReceipt: Readonly<{
+      readonly receiptId: "ap04-erv-core-readback-v1";
+      readonly releaseId: "ap04-erv-source-v1";
+      readonly releaseTag: typeof AP04_RELEASE_TAG_V1;
+      readonly mergeSha: typeof AP04_MERGE_SHA_V1;
+      readonly sourceArtifact: Readonly<{ path: typeof CASE_PACK_PATH_V1; identity: IdentityV1 }>;
+      readonly outputArtifact: Readonly<{ schemaVersion: string; identity: IdentityV1 }>;
+    }>;
   }>[];
   readonly ap04: Readonly<{
     readonly casePack: Readonly<{ path: typeof CASE_PACK_PATH_V1; identity: IdentityV1; canonicalSha256: string }>;
@@ -209,8 +221,8 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
   const sources = [
     sourceRecord(adaptiveUi, ADAPTIVE_UI_SOURCE_SHA256_V1, ADAPTIVE_UI_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1", "pan365-frozen-tolerance-source-v1"]),
     sourceRecord(guide, APPLICATION_GUIDE_SOURCE_SHA256_V1, APPLICATION_GUIDE_SOURCE_BYTES_V1, ["pan365-adaptive-ui-source-v1", "pan365-frozen-tolerance-source-v1"]),
-    sourceRecord(erv, AP04_CORE_SOURCE_SHA256_V1, AP04_CORE_SOURCE_BYTES_V1, ["2026_09_05_v5"]),
-    sourceRecord(casePackSource, AP04_ERV_CASE_PACK_SHA256_V1, AP04_CASE_PACK_BYTES_V1, ["2026_09_05_v5"]),
+    sourceRecord(erv, AP04_CORE_SOURCE_SHA256_V1, AP04_CORE_SOURCE_BYTES_V1, [AP04_RELEASE_TAG_V1]),
+    sourceRecord(casePackSource, AP04_ERV_CASE_PACK_SHA256_V1, AP04_CASE_PACK_BYTES_V1, [AP04_RELEASE_TAG_V1]),
   ];
   const pack = JSON.parse(Buffer.from(casePackSource.bytes).toString("utf8")) as ErvCasePackV1;
   const coreResult = compileErvCapabilityCoreV1(pack, AP04_CLAIMED_PACK_SHA256_V1);
@@ -258,9 +270,21 @@ export function generateIncomingInvoiceAp05ReceiptManifestV1(input: IncomingInvo
       repository: "JoFe2/PANSPHAIRA",
       issueNumber: 364,
       required: true,
-      status: "UNVERIFIED",
-      boundPredecessor: null,
-      pairedClosureReceipt: null,
+      status: "VERIFIED",
+      boundPredecessor: {
+        releaseId: "ap04-erv-source-v1",
+        releaseTag: AP04_RELEASE_TAG_V1,
+        mergeSha: AP04_MERGE_SHA_V1,
+        sourceCommit: AP04_MERGE_SHA_V1,
+      },
+      pairedClosureReceipt: {
+        receiptId: "ap04-erv-core-readback-v1",
+        releaseId: "ap04-erv-source-v1",
+        releaseTag: AP04_RELEASE_TAG_V1,
+        mergeSha: AP04_MERGE_SHA_V1,
+        sourceArtifact: { path: CASE_PACK_PATH_V1, identity: casePackIdentity },
+        outputArtifact: { schemaVersion: coreResult.package.schemaVersion, identity: coreOutputIdentity },
+      },
     }],
     ap04: {
       casePack: { path: CASE_PACK_PATH_V1, identity: casePackIdentity, canonicalSha256: coreResult.package.readback.packSha256 },

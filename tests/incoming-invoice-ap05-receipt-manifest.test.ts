@@ -43,14 +43,19 @@ function clone<T>(value: T): T {
   assert.equal(first.manifest.sourceEvidenceRelease.releaseTag, "pan365-ap05-receipt-manifest-source-v1");
   assert.equal(first.manifest.sourceEvidenceRelease.releaseStatus, "PENDING_EXACT_SOURCE_RELEASE");
   assert.equal(first.manifest.sourceEvidenceRelease.sourceCommit, null);
-  assert.deepEqual(first.manifest.externalPrerequisites, [{
-    repository: "JoFe2/PANSPHAIRA",
-    issueNumber: 364,
-    required: true,
-    status: "UNVERIFIED",
-    boundPredecessor: null,
-    pairedClosureReceipt: null,
-  }]);
+  const prerequisite = first.manifest.externalPrerequisites[0];
+  assert.ok(prerequisite);
+  assert.equal(prerequisite.status, "VERIFIED");
+  assert.deepEqual(prerequisite.boundPredecessor, {
+    releaseId: "ap04-erv-source-v1",
+    releaseTag: "pan377-current-head-docker-e2e-source-v1",
+    mergeSha: "ff68eda6cacc510ee67ed3b5b6cd51545f017a21",
+    sourceCommit: "ff68eda6cacc510ee67ed3b5b6cd51545f017a21",
+  });
+  assert.equal(prerequisite.pairedClosureReceipt.receiptId, "ap04-erv-core-readback-v1");
+  assert.equal(prerequisite.pairedClosureReceipt.releaseTag, "pan377-current-head-docker-e2e-source-v1");
+  assert.equal(prerequisite.pairedClosureReceipt.sourceArtifact.identity.sha256, first.manifest.ap04.casePack.identity.sha256);
+  assert.equal(prerequisite.pairedClosureReceipt.outputArtifact.identity.sha256, first.manifest.ap04.coreOutput.identity.sha256);
   assert.deepEqual(first.manifest.publicReceipt.baseline.outcomeCounts, {
     MATCHED: 3,
     CONFLICT: 1,
@@ -82,9 +87,9 @@ test("AP-05 verifier rejects missing, substituted or re-digested identities and 
     ["receipt identity", (value) => { value.publicReceipt.baseline.receiptIdentity.sha256 = "4".repeat(64); }],
     ["manifest identity", (value) => { value.manifestIdentity.sha256 = "5".repeat(64); }],
     ["omitted predecessor release lineage", (value) => { delete value.predecessorLineage.releases[0]; }],
-    ["invented external verification", (value) => { value.externalPrerequisites[0].status = "VERIFIED"; }],
-    ["invented external predecessor", (value) => { value.externalPrerequisites[0].boundPredecessor = { mergeSha: "6".repeat(40) }; }],
-    ["invented paired closure receipt", (value) => { value.externalPrerequisites[0].pairedClosureReceipt = { receiptId: "ap04-erv-core-readback-v1" }; }],
+    ["unverified external prerequisite", (value) => { value.externalPrerequisites[0].status = "UNVERIFIED"; }],
+    ["substituted external predecessor", (value) => { value.externalPrerequisites[0].boundPredecessor.mergeSha = "6".repeat(40); }],
+    ["missing paired closure receipt", (value) => { value.externalPrerequisites[0].pairedClosureReceipt = null; }],
   ];
   for (const [name, mutate] of mutations) {
     const candidate = clone(generated);
