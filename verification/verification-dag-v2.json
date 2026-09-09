@@ -3989,7 +3989,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "1d9ebe7ee250e141c11dcb2eb28efe92017609bd9643772676ae90bc11747807"
+          "sha256": "fcabba8d14d588aa4336b8d8d71405b8f0e116709a12d038d12e4dd4976a4c1a"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -4736,7 +4736,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "56aac6836439cc48b4ae74ed0a4e5f01a981aa42e8bfed77639502fae8b004e3"
+          "sha256": "fbcaa0a65a987785d9021ffaeccac849127b42c4950d3f64a882c808a712521e"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4746,7 +4746,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "e2b5a76b986977d051dc6cfc90fcfa438a30107895c543a53e1717bd249faf7a"
+          "sha256": "3fc3a34772a2adc9d86c4c664a9588dbea33d268c28519dcf0fb9c717619de50"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4791,7 +4791,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "51a8e08d319984ab36b7b4703640d91d1bb268e5a6d226569347e532fce9e695"
+          "sha256": "21983d33a351281a1a363535cf823619f093bbaae4d8917bdd60898291e78ece"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -5372,7 +5372,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "66404496348efe3ea39c1536b54bc8c78dec0292b6adc0188563d923411adde4"
+          "sha256": "7c23d0882fe2ed6663e2833969d26fd7dfef25acb7353cecfcfef40c1bec84c2"
         },
         {
           "path": "package-lock.json",
