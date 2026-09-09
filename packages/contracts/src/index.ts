@@ -108,6 +108,7 @@ export * from "./incoming-invoice-blueprint.js";
 export * from "./incoming-invoice-intake.js";
 export * from "./incoming-invoice-extraction-benchmark.js";
 export * from "./incoming-invoice-erv.js";
+export * from "./incoming-invoice-erv-relational-v2.js";
 export * from "./incoming-invoice-adaptive-ui.js";
 export * from "./incoming-invoice-ap05-receipt-manifest.js";
 export * from "./voice-local-ptt.js";
