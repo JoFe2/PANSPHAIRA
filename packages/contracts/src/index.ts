@@ -110,6 +110,7 @@ export * from "./incoming-invoice-extraction-benchmark.js";
 export * from "./incoming-invoice-erv.js";
 export * from "./incoming-invoice-adaptive-ui.js";
 export * from "./incoming-invoice-ap05-receipt-manifest.js";
+export * from "./incoming-invoice-erv-analytics.js";
 export * from "./voice-local-ptt.js";
 export * from "./usage-insights.js";
 export * from "./competence-knowledge-vocabulary.js";
