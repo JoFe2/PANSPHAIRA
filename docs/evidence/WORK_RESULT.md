@@ -155,3 +155,64 @@ All npm commands required `--cache /tmp/npm-cache` (read-only home).
   non-customer data only. The historical AP-04 v1 pack, contract, schema and
   tests remain byte-identical and replayable. Nothing here is a claim that the
   work is delivered.
+
+## Correction — candidate release-title gate (post v2 commit)
+
+Status: local correction complete. NOT delivered. The prior v2 work commit
+(`ec7b60b`) is preserved untouched; this correction is a new, minimal,
+additive commit on top of it. No history rewrite, no frozen pack/contract/test
+mutation, no public mutation.
+
+Rejected gate (exact): `Denied: functional release title required`.
+
+Root cause: the exact release-body contract
+(`release/governance.json#releaseBodyContract`) and the publication-evidence
+rule in `docs/RELEASE-GOVERNANCE.md` require every publication to carry a
+functional increment title and a named intended class, and the repository's
+candidate records had no repository-only declaration binding this candidate to
+that requirement. The v2 slice recorded the code evidence but did not declare
+the functional release title, intended class or exact expected tag for the
+source/evidence-only release this candidate is bound to.
+
+Correction (additive; TDD RED -> GREEN; no governance weakened):
+
+- RED: `tests/release-governance.test.mjs` gains a fail-closed validator
+  `validateCandidateReleaseTitle` and a focused suite
+  "candidate AP-04 relational hardening declares a functional release title
+  (issue #393)". It fails on the fresh tree with
+  `CANDIDATE_RELEASE_TITLE_MISSING` (declaration absent).
+- GREEN: `docs/evidence/ap-04-erv-relational-release-title-v1.json`
+  (repository-only, not public) declares, for candidate base
+  `ec7b60b29700aa8d1b66280f756f5d11315dac9b`:
+  - functional increment / release title:
+    `PanSphaira — AP-04 ERV relational hardening: bounded relational matching
+    and exact evidence semantics (Increment Candidate)`,
+  - intended class `SOURCE_EVIDENCE_ONLY` (asset contract
+    `NO_CUSTOM_ASSETS_SOURCE_ONLY`), cross-checked against
+    `release/governance.json#releaseTaxonomy.classes[1]`,
+  - exact expected tag `pan364-ap04-erv-relational-v2-source-v1` (the
+    `pan<portfolio>-<slug>-source-v1` source-evidence tag convention),
+  - the eight required body-contract sections and
+    `NO_ASSETS_SOURCE_ONLY`, plus the exact closure-state markers
+    `PUBLIC_READBACK: PENDING` and
+    `ISSUE_QUEUE_TERMINAL: BLOCKED_PENDING_PUBLIC_READBACK`, all bound to the
+    frozen `releaseBodyContract` in `release/governance.json`,
+  - `delivered: false` and the three frozen nonclaims
+    (`NO_SYSTEM_OF_RECORD_READBACK_PERFORMED`,
+    `NOT_DELIVERED_NO_PUBLIC_MUTATION_NO_TAG_NO_RELEASE`,
+    `NO_PRODUCTIVE_POSTING_OR_ALLOCATION_AUTHORITY`).
+- `tests/release-governance.test.mjs` SHA-256 re-pinned in
+  `SHA256SUMS` (entry count unchanged at 1791; `sha256sum --check` all OK).
+- `verification/verification-dag-v2.json` lockstep re-pin: the
+  `repository-integrity` node's input digest for
+  `tests/release-governance.test.mjs` advanced to the corrected file's bytes
+  (single hash change; `graphVersion` remains 47; node count unchanged at 56),
+  and the DAG's own `SHA256SUMS` entry re-pinned to the re-pinned DAG bytes.
+  No exact-count site changed (graphVersion 47, public count 1477, ledger
+  1791/1791/0). The new declaration file, like `WORK_RESULT.md`, is a
+  repository-only evidence record and is deliberately not added to the
+  frozen 1791-entry census ledger.
+
+The declaration is a repository-only planning record. It grants no
+publication, tag, release, delivery or external authority; it is not a claim
+that this candidate is delivered.
