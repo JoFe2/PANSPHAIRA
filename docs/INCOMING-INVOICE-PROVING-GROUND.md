@@ -100,7 +100,18 @@ Any of them fails the variant proof.
 4. **AP-04 — Validation, matching, and advisor**
    Keep supplier, purchase order, receipt, and invoice evidence distinct;
    version two-/three-way matching and tolerance variants; preserve exceptions
-   and missing context.
+   and missing context. The additive versioned relational hardening slice (v2)
+   keeps the historical v1 pack byte-identical and distinguishes amount-level
+   matching from general invoice/PO/receipt matching: versioned amount-level
+   modes verify only the match amounts and return `UNKNOWN` — never `MATCHED` —
+   while a supplier, quantity, unit, or currency relation is not enforced by
+   that mode, and relational modes return `CONFLICT` on a wrong relation at
+   equal amounts. Duplicate reference kinds are denied deterministically and
+   order-independently (no last-write-wins). The evidence package records four
+   distinct dimensions — integrity, origin, semantics, and runtime observation
+   — and repeating the local compiler is deterministic replay of frozen
+   local-synthetic inputs, not an external or system-of-record readback. The
+   standalone authority-free core remains useful without ERP or posting.
 5. **AP-05 — Adaptive UI and Application Guide**
    Derive fields and actions from scenario and evidence state while keeping all
    variants explainable and testable.

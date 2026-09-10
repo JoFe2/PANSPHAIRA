@@ -319,7 +319,7 @@ test("public release builder binds its exact file count to the manifest", () => 
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), count);
-  assert.equal(count, 1480);
+  assert.equal(count, 1491);
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
@@ -604,4 +604,115 @@ test("release closure is gated by the bounded exact-head Docker E2E contract", (
   assert.match(workflow, /current-head-docker-e2e:[\s\S]*uses: \.\/\.github\/workflows\/demo-current-head-e2e\.yml/);
   assert.match(workflow, /target_sha: \$\{\{ github\.event\.release\.target_commitish \}\}/);
   assert.match(workflow, /anonymous-public-readback-before-terminalization:[\s\S]*needs: current-head-docker-e2e/);
+});
+
+// AP-04 ERV relational hardening candidate (issue #393, candidate base
+// ec7b60b29700aa8d1b66280f756f5d11315dac9b): the repository-only candidate
+// record must declare the functional release title required by the exact
+// release-body contract (release/governance.json#releaseBodyContract) and
+// the taxonomy class SOURCE_EVIDENCE_ONLY. The declaration is deterministic
+// and fail-closed; it grants no publication, tag, release or delivery
+// authority.
+const AP04_RELATIONAL_RELEASE_TITLE_DECLARATION = "docs/evidence/ap-04-erv-relational-release-title-v1.json";
+const AP04_RELATIONAL_RELEASE_TITLE_SCHEMA = "chimpmaera.candidate-release-title/v1";
+const AP04_RELATIONAL_FUNCTIONAL_INCREMENT = "AP-04 ERV relational hardening: bounded relational matching and exact evidence semantics";
+const AP04_RELATIONAL_EXPECTED_TAG = "pan364-ap04-erv-relational-v2-source-v1";
+const AP04_RELATIONAL_CANDIDATE_BASE_COMMIT = "ec7b60b29700aa8d1b66280f756f5d11315dac9b";
+const AP04_RELATIONAL_NONCLAIMS = [
+  "NO_SYSTEM_OF_RECORD_READBACK_PERFORMED",
+  "NOT_DELIVERED_NO_PUBLIC_MUTATION_NO_TAG_NO_RELEASE",
+  "NO_PRODUCTIVE_POSTING_OR_ALLOCATION_AUTHORITY",
+];
+const AP04_RELATIONAL_TITLE_KEYS = [
+  "assetContract",
+  "bodyContract",
+  "candidateBaseCommit",
+  "closureState",
+  "delivered",
+  "expectedTag",
+  "functionalIncrement",
+  "intendedClass",
+  "issue",
+  "nonclaims",
+  "portfolio",
+  "releaseTitle",
+  "repository",
+  "schemaVersion",
+];
+
+function validateCandidateReleaseTitle(root = ROOT) {
+  const issues = [];
+  let declaration;
+  try {
+    declaration = JSON.parse(readFileSync(join(root, AP04_RELATIONAL_RELEASE_TITLE_DECLARATION), "utf8"));
+  } catch {
+    return ["CANDIDATE_RELEASE_TITLE_MISSING"];
+  }
+  const governance = JSON.parse(readFileSync(join(root, "release", "governance.json"), "utf8"));
+  if (typeof declaration !== "object" || declaration === null || Array.isArray(declaration)
+    || JSON.stringify(Object.keys(declaration).sort()) !== JSON.stringify(AP04_RELATIONAL_TITLE_KEYS)) {
+    return ["CANDIDATE_RELEASE_TITLE_SCHEMA_INVALID"];
+  }
+  if (declaration.schemaVersion !== AP04_RELATIONAL_RELEASE_TITLE_SCHEMA
+    || declaration.repository !== governance.repository
+    || declaration.issue !== 393
+    || declaration.portfolio !== "PS364"
+    || typeof declaration.functionalIncrement !== "string"
+    || declaration.candidateBaseCommit !== AP04_RELATIONAL_CANDIDATE_BASE_COMMIT) {
+    issues.push("CANDIDATE_RELEASE_TITLE_SCHEMA_INVALID");
+  }
+  const functional = declaration.functionalIncrement ?? "";
+  if (functional !== AP04_RELATIONAL_FUNCTIONAL_INCREMENT
+    || !/AP-04/.test(functional)
+    || /\b(?:daily|today(?:'s)?|calendar)\b/i.test(functional)
+    || typeof declaration.releaseTitle !== "string"
+    || declaration.releaseTitle !== `PanSphaira — ${functional} (Increment Candidate)`
+    || !declaration.releaseTitle.toLowerCase().includes(functional.toLowerCase())) {
+    issues.push("CANDIDATE_RELEASE_TITLE_NOT_FUNCTIONAL");
+  }
+  const sourceClass = governance.releaseTaxonomy?.classes?.[1] ?? {};
+  if (declaration.intendedClass !== "SOURCE_EVIDENCE_ONLY"
+    || declaration.intendedClass !== sourceClass.id
+    || sourceClass.evidenceOnly !== true
+    || declaration.assetContract !== sourceClass.assetContract
+    || declaration.assetContract !== "NO_CUSTOM_ASSETS_SOURCE_ONLY") {
+    issues.push("CANDIDATE_RELEASE_TITLE_CLASS_DRIFT");
+  }
+  if (declaration.expectedTag !== AP04_RELATIONAL_EXPECTED_TAG
+    || !/^pan\d+-[a-z0-9-]+-source-v1$/.test(declaration.expectedTag)) {
+    issues.push("CANDIDATE_RELEASE_TITLE_TAG_DRIFT");
+  }
+  const bodyContract = governance.releaseBodyContract ?? {};
+  if (JSON.stringify(declaration.bodyContract?.requiredSections) !== JSON.stringify(bodyContract.requiredSections)
+    || declaration.bodyContract?.sourceOnlyNoAssetsMarker !== bodyContract.sourceOnlyNoAssetsMarker
+    || declaration.closureState?.pendingPublicReadback !== bodyContract.pendingPublicReadback
+    || declaration.closureState?.blockedTerminalState !== bodyContract.blockedTerminalState) {
+    issues.push("CANDIDATE_RELEASE_TITLE_CONTRACT_DRIFT");
+  }
+  if (declaration.delivered !== false
+    || JSON.stringify(declaration.nonclaims) !== JSON.stringify(AP04_RELATIONAL_NONCLAIMS)) {
+    issues.push("CANDIDATE_RELEASE_TITLE_DELIVERY_CLAIM_DENIED");
+  }
+  return issues;
+}
+
+test("candidate AP-04 relational hardening declares a functional release title (issue #393)", async (t) => {
+  assert.deepEqual(validateCandidateReleaseTitle(), []);
+
+  const probes = [
+    ["candidate release title missing", "CANDIDATE_RELEASE_TITLE_MISSING", (root) => rmSync(join(root, AP04_RELATIONAL_RELEASE_TITLE_DECLARATION))],
+    ["candidate release title calendar identity", "CANDIDATE_RELEASE_TITLE_NOT_FUNCTIONAL", (root) => replace(root, AP04_RELATIONAL_RELEASE_TITLE_DECLARATION, "bounded relational matching", "today's relational matching")],
+    ["candidate release title non-functional increment", "CANDIDATE_RELEASE_TITLE_NOT_FUNCTIONAL", (root) => replace(root, AP04_RELATIONAL_RELEASE_TITLE_DECLARATION, AP04_RELATIONAL_FUNCTIONAL_INCREMENT, "MSSQL Scope Compatibility")],
+    ["candidate release title class drift", "CANDIDATE_RELEASE_TITLE_CLASS_DRIFT", (root) => replace(root, AP04_RELATIONAL_RELEASE_TITLE_DECLARATION, "\"intendedClass\": \"SOURCE_EVIDENCE_ONLY\"", "\"intendedClass\": \"REGULAR_RUNNABLE_ARTIFACT\"")],
+    ["candidate release title tag drift", "CANDIDATE_RELEASE_TITLE_TAG_DRIFT", (root) => replace(root, AP04_RELATIONAL_RELEASE_TITLE_DECLARATION, AP04_RELATIONAL_EXPECTED_TAG, "pan364-ap04-erv-relational-v3-source-v1")],
+    ["candidate release title claims delivered", "CANDIDATE_RELEASE_TITLE_DELIVERY_CLAIM_DENIED", (root) => replace(root, AP04_RELATIONAL_RELEASE_TITLE_DECLARATION, "\"delivered\": false", "\"delivered\": true")],
+  ];
+  for (const [name, expected, mutate] of probes) {
+    await t.test(name, (t) => {
+      const root = fixture();
+      t.after(() => rmSync(root, { recursive: true, force: true }));
+      mutate(root);
+      assert.ok(validateCandidateReleaseTitle(root).includes(expected), validateCandidateReleaseTitle(root).join("\n"));
+    });
+  }
 });

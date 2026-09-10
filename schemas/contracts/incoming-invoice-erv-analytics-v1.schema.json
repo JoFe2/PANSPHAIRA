@@ -1,0 +1,533 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.dev/schemas/contracts/incoming-invoice-erv-analytics-v1.schema.json",
+  "title": "Local synthetic incoming-invoice ERV analytics pack v1",
+  "description": "Validates the standalone, prebuilt, privacy-minimized ERV analytics pack derived ONLY from the exact released ERV receipts (AP-03 extraction holdout, AP-04 ERV capability core). It asserts the frozen schema/task/scope, the closed 6-entry metric catalog, the frozen nonclaims and all-false authority, the two byte-pinned receipt identities, the deterministic core readback, the six closed metric results with COMPLETE/PARTIAL/UNKNOWN/DENIED states, and the canonical + TABLE projections that bind the same metric/result/config/core digests. It never emits party/invoice identity, free text, credentials or customer data, and never claims financial opinion, fraud, an ERP dependency or BI execution authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packVersion",
+    "packId",
+    "taskId",
+    "scope",
+    "scenario",
+    "nonclaims",
+    "authority",
+    "receipts",
+    "core",
+    "metricCatalog",
+    "config",
+    "metrics",
+    "binding",
+    "projections",
+    "packDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "chimpmaera.incoming-invoice/erv-analytics-pack/v1"
+    },
+    "packVersion": {
+      "const": "1.0.0"
+    },
+    "packId": {
+      "pattern": "^erv-analytics-pack:(baseline|adapted):v1$",
+      "type": "string"
+    },
+    "taskId": {
+      "const": "PS365-ERV-ANALYTICS-PACK-01"
+    },
+    "scope": {
+      "const": "PREBUILT_AGGREGATE_ANALYSIS"
+    },
+    "scenario": {
+      "enum": [
+        "BASELINE",
+        "ADAPTED"
+      ]
+    },
+    "nonclaims": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 9,
+      "minItems": 9,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "receipts": {
+      "$ref": "#/$defs/receipts"
+    },
+    "core": {
+      "$ref": "#/$defs/core"
+    },
+    "metricCatalog": {
+      "items": {
+        "$ref": "#/$defs/metricDefinition"
+      },
+      "maxItems": 6,
+      "minItems": 6,
+      "type": "array"
+    },
+    "config": {
+      "additionalProperties": false,
+      "properties": {
+        "amountBandsMinor": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "amountBandsMinor"
+      ],
+      "type": "object"
+    },
+    "metrics": {
+      "items": {
+        "$ref": "#/$defs/metricResult"
+      },
+      "maxItems": 6,
+      "minItems": 6,
+      "type": "array"
+    },
+    "binding": {
+      "$ref": "#/$defs/binding"
+    },
+    "projections": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical": {
+          "additionalProperties": false,
+          "properties": {
+            "binding": {
+              "$ref": "#/$defs/binding"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "format": {
+              "const": "CANONICAL_JSON_V1"
+            }
+          },
+          "required": [
+            "format",
+            "binding",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "table": {
+          "additionalProperties": false,
+          "properties": {
+            "binding": {
+              "$ref": "#/$defs/binding"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "format": {
+              "const": "TABLE_V1"
+            },
+            "rows": {
+              "items": {
+                "$ref": "#/$defs/tableRow"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "format",
+            "rows",
+            "binding",
+            "digest"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "canonical",
+        "table"
+      ],
+      "type": "object"
+    },
+    "packDigest": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "binding": {
+      "additionalProperties": false,
+      "properties": {
+        "ap03ReceiptSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "ap04CoreDigest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "configDigest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "metricCatalogDigest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "resultDigest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "ap03ReceiptSha256",
+        "ap04CoreDigest",
+        "metricCatalogDigest",
+        "resultDigest",
+        "configDigest"
+      ],
+      "type": "object"
+    },
+    "authority": {
+      "additionalProperties": false,
+      "properties": {
+        "bookingAuthorityGranted": {
+          "const": false
+        },
+        "productivePostingAuthorized": {
+          "const": false
+        },
+        "systemOfRecord": {
+          "const": false
+        },
+        "arbitraryQueryAllowed": {
+          "const": false
+        },
+        "erpRequired": {
+          "const": false
+        },
+        "externalPublication": {
+          "const": false
+        },
+        "biExecutionAuthority": {
+          "const": false
+        },
+        "financialOpinion": {
+          "const": false
+        },
+        "fraudClaim": {
+          "const": false
+        }
+      },
+      "required": [
+        "bookingAuthorityGranted",
+        "productivePostingAuthorized",
+        "systemOfRecord",
+        "arbitraryQueryAllowed",
+        "erpRequired",
+        "externalPublication",
+        "biExecutionAuthority",
+        "financialOpinion",
+        "fraudClaim"
+      ],
+      "type": "object"
+    },
+    "receipts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "identity": {
+            "additionalProperties": false,
+            "properties": {
+              "byteLength": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "sha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            },
+            "required": [
+              "byteLength",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "receiptId": {
+            "enum": [
+              "AP03_EXTRACTION_RECEIPT_V1",
+              "AP04_ERV_CORE_V1"
+            ]
+          },
+          "state": {
+            "enum": [
+              "RELEASED",
+              "REQUESTED_NOT_EXECUTED"
+            ]
+          }
+        },
+        "required": [
+          "receiptId",
+          "path",
+          "state",
+          "identity"
+        ],
+        "type": "object"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "core": {
+      "additionalProperties": false,
+      "properties": {
+        "caseCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "decisionDigest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "deterministicReplay": {
+          "const": true
+        },
+        "schemaVersion": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "caseCount",
+        "decisionDigest",
+        "deterministicReplay"
+      ],
+      "type": "object"
+    },
+    "metricDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis": {
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "applicability": {
+          "pattern": "^APPLIES_WHEN_",
+          "type": "string"
+        },
+        "denominator": {
+          "additionalProperties": false,
+          "properties": {
+            "basis": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "expected": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "basis",
+            "expected"
+          ],
+          "type": "object"
+        },
+        "dimensions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "formula": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "metricId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "metricVersion": {
+          "const": "1.0.0"
+        },
+        "sourceReceipt": {
+          "enum": [
+            "AP03_EXTRACTION_RECEIPT_V1",
+            "AP04_ERV_CORE_V1"
+          ]
+        },
+        "title": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "units": {
+          "const": "count"
+        },
+        "unknownHandling": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "metricId",
+        "metricVersion",
+        "analysis",
+        "title",
+        "sourceReceipt",
+        "formula",
+        "dimensions",
+        "denominator",
+        "unknownHandling",
+        "units",
+        "applicability"
+      ],
+      "type": "object"
+    },
+    "metricResult": {
+      "additionalProperties": false,
+      "properties": {
+        "denominator": {
+          "additionalProperties": false,
+          "properties": {
+            "basis": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "total": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "basis",
+            "total"
+          ],
+          "type": "object"
+        },
+        "metricDigest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "metricId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "metricVersion": {
+          "const": "1.0.0"
+        },
+        "reasonCode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rows": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "dimension": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "value": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "dimension",
+              "value"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "state": {
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "UNKNOWN",
+            "DENIED"
+          ]
+        }
+      },
+      "required": [
+        "metricId",
+        "metricVersion",
+        "state",
+        "reasonCode",
+        "denominator",
+        "rows",
+        "metricDigest"
+      ],
+      "type": "object"
+    },
+    "tableRow": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis": {
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "dimension": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "metricId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "UNKNOWN",
+            "DENIED"
+          ]
+        },
+        "units": {
+          "const": "count"
+        },
+        "value": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "analysis",
+        "metricId",
+        "dimension",
+        "value",
+        "state",
+        "units"
+      ],
+      "type": "object"
+    }
+  }
+}
