@@ -4736,7 +4736,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "236629be92f006a43ecf2289b437c7d2ee1e9b0a25c2af9ad39f64538f87f86f"
+          "sha256": "447e60f2f3208406db368a94c7de8885bc4dee10949a941c23a540eabab83336"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4746,7 +4746,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "7af1ad1fbf07942802e4364e4acf3d913c2b1ec56e873967a79d0f3b5f3bd768"
+          "sha256": "8578c67983c13a1a03b22fedf6e75c056fcd901d280b9bd4ba845ec540c523ab"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4791,7 +4791,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "2852532f792b83982e5f85a5b506adf1110e7551dc1799202677df2d022ee03b"
+          "sha256": "d0b8c3ace879bcc14971c99995263d129ada98b85db1724a9c97fb70b42364b0"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -5372,7 +5372,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "956bfc78d66ad8a5627768082f52ae04d99b34d1df0b980055d3d830cbf778cc"
+          "sha256": "9762cf47f8fbf2c1f31d4e02f27312034292c0d3a666b4d675ec950a665cc86e"
         },
         {
           "path": "package-lock.json",
@@ -5732,7 +5732,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "cf6aebd24cdbf0d462158d213200d9022c037e3d6724b895cd30266950efabf8"
+          "sha256": "b7841907f67b2153c1acd46139e92df739bf34420dd8db241af1c14969645531"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5997,7 +5997,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "236629be92f006a43ecf2289b437c7d2ee1e9b0a25c2af9ad39f64538f87f86f"
+          "sha256": "447e60f2f3208406db368a94c7de8885bc4dee10949a941c23a540eabab83336"
         }
       ],
       "ownedTests": [

@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimpmaera.org/schemas/contracts/erv-ui-package-v1.schema.json",
+  "title": "ChimpMaera renderer-neutral ERV UI package v1",
+  "description": "Closed, versioned, renderer-neutral contract for an ERV UI package (PS374-ERV-UI-01). A generic frontend consumer renders baseline and adapted packages using only this schema, with no ERV business logic and no hard-coded trusted-source bindings. It enforces ordered screens/sections/components, field IDs, display kinds, explicit VALUE/UNKNOWN/CONFLICT/UNSUPPORTED states, labels/help/accessibility text, evidence refs and reason codes. Safe actions carry a stable action ID, enabled/disabled with reasons, required evidence, effective Authority NONE, a confirmation/readback intent and no callback/code/route token. The package binds requirement/configuration/scenario/core digests and carries a self-integrity readback. It never grants booking or productive authority and never claims an ERP.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "packageVersion", "contextId", "scenario", "authority", "bound", "evidence", "screens", "inventory", "readback"],
+  "properties": {
+    "schemaVersion": { "const": "chimpmaera.erv-ui/v1" },
+    "packageVersion": { "const": "1.0.0" },
+    "contextId": { "type": "string", "minLength": 1 },
+    "scenario": { "enum": ["LEAN", "SEGREGATED_ENTERPRISE"] },
+    "authority": { "$ref": "#/$defs/authority" },
+    "bound": { "$ref": "#/$defs/bound" },
+    "evidence": { "$ref": "#/$defs/evidenceRegistry" },
+    "screens": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/screen" } },
+    "inventory": { "$ref": "#/$defs/inventory" },
+    "readback": { "$ref": "#/$defs/readback" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "nonEmpty": { "type": "string", "minLength": 1 },
+    "fieldValue": { "anyOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }, { "type": "array" }] },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "bookingAuthorityGranted", "externalCallsAuthorized", "customerDataAuthorized", "productivePostingAuthorized"],
+      "properties": {
+        "mode": { "const": "NONE" },
+        "bookingAuthorityGranted": { "const": false },
+        "externalCallsAuthorized": { "const": false },
+        "customerDataAuthorized": { "const": false },
+        "productivePostingAuthorized": { "const": false }
+      }
+    },
+    "boundDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["descriptor", "digest"],
+      "properties": {
+        "descriptor": { "type": "object" },
+        "digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "bound": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement", "configuration", "scenario", "core"],
+      "properties": {
+        "requirement": { "$ref": "#/$defs/boundDescriptor" },
+        "configuration": { "$ref": "#/$defs/boundDescriptor" },
+        "scenario": { "$ref": "#/$defs/boundDescriptor" },
+        "core": { "$ref": "#/$defs/boundDescriptor" }
+      }
+    },
+    "evidenceEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "kind", "contentDigest"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/nonEmpty" },
+        "kind": { "$ref": "#/$defs/nonEmpty" },
+        "contentDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "evidenceRegistry": { "type": "array", "items": { "$ref": "#/$defs/evidenceEntry" } },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionId", "order", "enabled", "requiredEvidenceRefs", "authority", "confirmationIntent", "readbackIntent", "evidenceRefs"],
+      "properties": {
+        "actionId": { "$ref": "#/$defs/nonEmpty" },
+        "order": { "type": "integer", "minimum": 0 },
+        "enabled": { "type": "boolean" },
+        "disabledReason": { "type": "string", "minLength": 1 },
+        "requiredEvidenceRefs": { "type": "array", "items": { "$ref": "#/$defs/nonEmpty" } },
+        "authority": { "const": "NONE" },
+        "confirmationIntent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "label"],
+          "properties": { "required": { "type": "boolean" }, "label": { "$ref": "#/$defs/nonEmpty" } }
+        },
+        "readbackIntent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label"],
+          "properties": { "label": { "$ref": "#/$defs/nonEmpty" } }
+        },
+        "evidenceRefs": { "type": "array", "items": { "$ref": "#/$defs/nonEmpty" } }
+      },
+      "if": { "properties": { "enabled": { "const": false } }, "required": ["enabled"] },
+      "then": {
+        "properties": { "disabledReason": { "type": "string", "minLength": 1 } },
+        "required": ["disabledReason"]
+      },
+      "else": {
+        "not": { "properties": { "disabledReason": { "type": "string", "minLength": 1 } }, "required": ["disabledReason"] }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fieldId", "label", "accessibilityLabel", "displayKind", "state", "evidenceRefs"],
+      "properties": {
+        "fieldId": { "$ref": "#/$defs/nonEmpty" },
+        "label": { "$ref": "#/$defs/nonEmpty" },
+        "help": { "type": "string", "minLength": 1 },
+        "accessibilityLabel": { "$ref": "#/$defs/nonEmpty" },
+        "displayKind": { "enum": ["TEXT", "NUMBER", "CURRENCY", "BOOLEAN", "ENUM", "DATETIME", "LIST", "PERCENT"] },
+        "state": { "enum": ["VALUE", "UNKNOWN", "CONFLICT", "UNSUPPORTED"] },
+        "value": { "$ref": "#/$defs/fieldValue" },
+        "reasonCode": { "$ref": "#/$defs/nonEmpty" },
+        "evidenceRefs": { "type": "array", "items": { "$ref": "#/$defs/nonEmpty" } }
+      },
+      "if": { "properties": { "state": { "const": "VALUE" } }, "required": ["state"] },
+      "then": {
+        "properties": { "value": { "$ref": "#/$defs/fieldValue" } },
+        "required": ["value"],
+        "not": { "properties": { "reasonCode": { "$ref": "#/$defs/nonEmpty" } }, "required": ["reasonCode"] }
+      },
+      "else": {
+        "properties": { "reasonCode": { "$ref": "#/$defs/nonEmpty" } },
+        "required": ["reasonCode"],
+        "not": { "properties": { "value": { "$ref": "#/$defs/fieldValue" } }, "required": ["value"] }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["componentId", "order", "kind", "field", "actions"],
+      "properties": {
+        "componentId": { "$ref": "#/$defs/nonEmpty" },
+        "order": { "type": "integer", "minimum": 0 },
+        "kind": { "enum": ["FIELD", "METRIC", "LIST", "BADGE", "CALLOUT"] },
+        "field": { "$ref": "#/$defs/field" },
+        "actions": { "type": "array", "items": { "$ref": "#/$defs/action" } }
+      }
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sectionId", "order", "components"],
+      "properties": {
+        "sectionId": { "$ref": "#/$defs/nonEmpty" },
+        "order": { "type": "integer", "minimum": 0 },
+        "components": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/component" } }
+      }
+    },
+    "screen": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["screenId", "order", "sections"],
+      "properties": {
+        "screenId": { "$ref": "#/$defs/nonEmpty" },
+        "order": { "type": "integer", "minimum": 0 },
+        "sections": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/section" } }
+      }
+    },
+    "inventoryId": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": { "id": { "$ref": "#/$defs/nonEmpty" } }
+    },
+    "inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fields", "components", "actions"],
+      "properties": {
+        "fields": { "type": "array", "items": { "$ref": "#/$defs/inventoryId" } },
+        "components": { "type": "array", "items": { "$ref": "#/$defs/inventoryId" } },
+        "actions": { "type": "array", "items": { "$ref": "#/$defs/inventoryId" } }
+      }
+    },
+    "readback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packageSha256", "deterministicReplay"],
+      "properties": {
+        "packageSha256": { "$ref": "#/$defs/sha256" },
+        "deterministicReplay": { "const": true }
+      }
+    }
+  }
+}
