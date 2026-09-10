@@ -11,6 +11,18 @@ capability is released. The [capability matrix](./capabilities.md) owns current
 maturity; regular [releases](https://github.com/JoFe2/PANSPHAIRA/releases/latest)
 own shipped scope.
 
+## Status truth
+
+Current issue, epic and release status is generated, not hand-maintained.
+The [status-truth generator](https://github.com/JoFe2/PANSPHAIRA/blob/main/packages/contracts/src/status-truth.ts)
+consumes an explicit allowlisted manifest and one anonymous provider readback,
+binds every projection to a retrieval time, source URL and exact state digests,
+and fails closed on material contradictions. A red, missing, stale or
+wrong-head required workflow can never project `closure verified` or `DONE`,
+and historical issue bodies and receipts stay immutable. Its deterministic
+rendering, completeness and failure-on-partial-data behavior are fixed by the
+[status-truth profile test](https://github.com/JoFe2/PANSPHAIRA/blob/main/tests/status-truth-profile.test.ts).
+
 ## Now — verify and harden the released local proof
 
 - Reproduce the released [CRM-to-ERP approval and readback path](./use-cases/crm-erp-approval-readback.md)
