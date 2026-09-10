@@ -290,7 +290,6 @@ examples/poc-release/showcase-v1.json	examples/poc-release/showcase-v1.json	0644
 examples/poc-setup-planner/catalog-v1.json	examples/poc-setup-planner/catalog-v1.json	0644
 package-lock.json	package-lock.json	0644
 package.json	package.json	0644
-packages/cks/src/applicability-aware-retrieval-indexed.ts	packages/cks/src/applicability-aware-retrieval-indexed.ts	0644
 packages/cks/src/applicability-aware-retrieval.ts	packages/cks/src/applicability-aware-retrieval.ts	0644
 packages/cks/src/shadow-experience-ablation.ts	packages/cks/src/shadow-experience-ablation.ts	0644
 packages/cks/src/solution-pattern-candidate-evaluator.ts	packages/cks/src/solution-pattern-candidate-evaluator.ts	0644
@@ -594,7 +593,6 @@ scripts/extension-dynamic-process-lifecycle.mjs	scripts/extension-dynamic-proces
 scripts/extension-dynamic-synthetic.mjs	scripts/extension-dynamic-synthetic.mjs	0644
 scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs	scripts/generate-incoming-invoice-ap05-receipt-manifest.mjs	0644
 scripts/learning-routing-baseline.mjs	scripts/learning-routing-baseline.mjs	0644
-scripts/measure-node-pure-compute.mjs	scripts/measure-node-pure-compute.mjs	0644
 scripts/refresh-integrity-data.mjs	scripts/refresh-integrity-data.mjs	0644
 scripts/render-asf-public-readback.mjs	scripts/render-asf-public-readback.mjs	0644
 scripts/render-ccp-m1-evidence.mjs	scripts/render-ccp-m1-evidence.mjs	0644
@@ -806,7 +804,6 @@ tests/cks-12/prerequisite-receipt-binder.test.ts	tests/cks-12/prerequisite-recei
 tests/cks-12/readonly-kaleidosphere-bridge.test.ts	tests/cks-12/readonly-kaleidosphere-bridge.test.ts	0644
 tests/cks-12/story-step-manifest.test.ts	tests/cks-12/story-step-manifest.test.ts	0644
 tests/cks-analytics-projection-profile.test.ts	tests/cks-analytics-projection-profile.test.ts	0644
-tests/cks-applicability-aware-retrieval-indexed.test.ts	tests/cks-applicability-aware-retrieval-indexed.test.ts	0644
 tests/cks-applicability-aware-retrieval.test.ts	tests/cks-applicability-aware-retrieval.test.ts	0644
 tests/cks-competence-runtime.test.ts	tests/cks-competence-runtime.test.ts	0644
 tests/cks-epistemic-verifier.test.ts	tests/cks-epistemic-verifier.test.ts	0644
