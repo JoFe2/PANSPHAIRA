@@ -1,11 +1,11 @@
 ---
 title: Incoming-invoice adaptability proving ground
-description: Planned synthetic PoC for evidence-derived LEAN, CONTROLLED, and SEGREGATED_ENTERPRISE incoming-invoice processes.
+description: Proven local-synthetic PoC for evidence-derived LEAN, CONTROLLED, and SEGREGATED_ENTERPRISE incoming-invoice processes.
 ---
 
 # Incoming-invoice adaptability proving ground
 
-`WORK_IN_PROGRESS_PLANNED_NOT_DELIVERED`
+`PROVEN_LOCAL_SYNTHETIC_POC_NARROW_GO`
 
 Public delivery is tracked by
 [epic #360](https://github.com/JoFe2/PANSPHAIRA/issues/360) and sequential
@@ -85,7 +85,7 @@ Core mutation, substituting an answer, omitting the delta, inventing an
 unsupported function or requirement, or hiding Authority are falsifiers.
 Any of them fails the variant proof.
 
-## Planned proof packages
+## Proof packages
 
 1. **AP-01 — Blueprint and scenario vectors**
    Freeze eight layers from source to proof, actors, outcomes, risks,
@@ -124,20 +124,20 @@ Any of them fails the variant proof.
 
 | Item | Current state |
 |---|---|
-| Work-package specifications | `6/6` planned |
-| Acceptance identifiers | `34/34` preserved (28 + 6 planned) |
+| Work-package specifications | `6/6` frozen and executed |
+| Acceptance identifiers | `34/34` preserved (28 + 6 exercised) |
 | Scenario packs | `3/3` defined |
 | Public AP implementation issues | `6/6` open |
-| Product implementation | Not started |
-| Product release | None |
+| Product implementation | Bounded local-synthetic proof released; general product not started |
+| Product release | Public local-synthetic PoC release (AP-06); general product none |
 
 Preparation artifacts may contain Blueprints, pseudocode, tentative paths,
 tests, gaps, and UNKNOWNs. They are not implementation or compatibility
 evidence.
 
-The `34/34` count adds six planned acceptance identifiers—four on AP-05
+The `34/34` count adds six acceptance identifiers—four on AP-05
 (`AP-05-AC05`–`AP-05-AC08`) and two on AP-06 (`AP-06-AC06`–`AP-06-AC07`)—
-preserved as planned criteria, not delivered.
+exercised by the released AP-05 receipt manifest and the AP-06 proof probe.
 
 ## Dependencies and promotion
 
@@ -156,13 +156,16 @@ Standalone ERV package extensions are required and tracked separately:
 composition, [KaleidoSphere #157](https://github.com/JoFe2/KaleidoSphere/issues/157),
 does not gate core use.
 
-Any productive allocation or posting remains separately governed. The planned
+Any productive allocation or posting remains separately governed. The
 PoC uses synthetic data and does not claim production accounts-payable fitness,
 universal extraction quality, tax/accounting completeness, or autonomous
-booking Authority. This marker is removed only after #366 is closed with a
-public local-synthetic PoC release, anonymous readback, and a public
+booking Authority. This marker is removed now that a public
 `GO` or `NARROW_GO` verdict satisfying `AP-05-AC05`–`AP-05-AC08` and
-`AP-06-AC06`–`AP-06-AC07`.
+`AP-06-AC06`–`AP-06-AC07` is carried by the public AP-06 local-synthetic
+PoC release: the public verdict is `NARROW_GO`, the released capability
+chain is proven, and the requested 200-bps three-way variant has no
+released executable variant and is reported as typed `UNKNOWN`, not
+invented. The general end-to-end product is not delivered.
 
 Return to the [PanSphaira overview](../README.md#applications) or inspect the
 [Capability Matrix](capabilities.md).
