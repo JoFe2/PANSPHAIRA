@@ -278,6 +278,10 @@ docs/roadmap.md	docs/roadmap.md	0644
 docs/update-controller-synthetic-proof.md	docs/update-controller-synthetic-proof.md	0644
 docs/use-cases/crm-erp-approval-readback.md	docs/use-cases/crm-erp-approval-readback.md	0644
 docs/use-cases/governed-agent-actions.md	docs/use-cases/governed-agent-actions.md	0644
+erv-ui-reference/descriptors.mjs	erv-ui-reference/descriptors.mjs	0644
+erv-ui-reference/reference.mjs	erv-ui-reference/reference.mjs	0644
+erv-ui-reference/schema.json	erv-ui-reference/schema.json	0644
+erv-ui-reference/test.mjs	erv-ui-reference/test.mjs	0644
 examples/builder-agent/contribution-bundle-v1.json	examples/builder-agent/contribution-bundle-v1.json	0644
 examples/builder-agent/contribution-input-v1.json	examples/builder-agent/contribution-input-v1.json	0644
 examples/company-data/erp-crm-canonical-company-data-pack.example.json	examples/company-data/erp-crm-canonical-company-data-pack.example.json	0644
