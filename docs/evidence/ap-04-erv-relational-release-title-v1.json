@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "chimpmaera.candidate-release-title/v1",
+  "repository": "JoFe2/PANSPHAIRA",
+  "issue": 393,
+  "portfolio": "PS364",
+  "functionalIncrement": "AP-04 ERV relational hardening: bounded relational matching and exact evidence semantics",
+  "releaseTitle": "PanSphaira — AP-04 ERV relational hardening: bounded relational matching and exact evidence semantics (Increment Candidate)",
+  "intendedClass": "SOURCE_EVIDENCE_ONLY",
+  "assetContract": "NO_CUSTOM_ASSETS_SOURCE_ONLY",
+  "expectedTag": "pan364-ap04-erv-relational-v2-source-v1",
+  "bodyContract": {
+    "requiredSections": [
+      "Release class",
+      "Exact merge SHA",
+      "Included capabilities and issues",
+      "Evidence boundary",
+      "Tests",
+      "Assets and checksums",
+      "Nonclaims",
+      "Closure state"
+    ],
+    "sourceOnlyNoAssetsMarker": "NO_ASSETS_SOURCE_ONLY"
+  },
+  "closureState": {
+    "pendingPublicReadback": "PUBLIC_READBACK: PENDING",
+    "blockedTerminalState": "ISSUE_QUEUE_TERMINAL: BLOCKED_PENDING_PUBLIC_READBACK"
+  },
+  "candidateBaseCommit": "ec7b60b29700aa8d1b66280f756f5d11315dac9b",
+  "delivered": false,
+  "nonclaims": [
+    "NO_SYSTEM_OF_RECORD_READBACK_PERFORMED",
+    "NOT_DELIVERED_NO_PUBLIC_MUTATION_NO_TAG_NO_RELEASE",
+    "NO_PRODUCTIVE_POSTING_OR_ALLOCATION_AUTHORITY"
+  ]
+}
