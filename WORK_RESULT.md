@@ -1,132 +1,185 @@
-# WORK_RESULT — PS374-ERV-UI-01 (issue #374, parent #360)
+# WORK_RESULT — AP-06 Frozen Adapted-ERV Proof Probe (issue #366, parent #360)
 
 **Status: NOT DELIVERED / NOT CLOSED.** This is a local, in-bounds working result on a fresh
-current-main checkout. Parent-side gates remain open (see *Unresolved / parent-side gates*):
-independent review, exact PR/Main CI, release, anonymous readback, and reconciliation. No push,
-no public mutation, no credentials, no external systems, no issue closure.
+current-main checkout (HEAD `3ce0c4d550c52e7995c8c60ed86288bc3ef2ce80`, i.e. `AP06_EXACT_HEAD_V1`).
+Parent-side gates remain open (see *Unresolved / parent-side gates*): independent review, exact
+PR/Main CI, release, anonymous readback, and reconciliation. No push, no public mutation, no
+credentials, no external systems, no issue closure. The delivery job controller performs fresh
+Qwen review, exact PR/Main CI, release and anonymous readback; this work never authors or
+approves those receipts.
 
 ## Task
 
-Publish a versioned, renderer-neutral `ErvUiPackageV1` and prove that an **independent generic
-frontend consumer** can render baseline (`LEAN`) and dialogue-derived (`SEGREGATED_ENTERPRISE`)
-ERV states **without hard-coded ERV business logic**. Depends on #365.
+Integrate the **AP-06 frozen adapted-ERV proof probe**: a synthetic, non-customer, TYPED
+verification artifact that proves the exact-bound chain
+source → document → extraction → validation → matching → exception/advisor → UI → receipt, and
+that the baseline (`LEAN`) and the dialogue-derived changed variant
+(`SEGREGATED_ENTERPRISE`) execute through the **same released core** with **byte-identical
+core/module digests** while only requirement/configuration digests, selected variants and
+resulting process/UI/readback differ. Depends on #365 (AP-05), #374 (ERV-UI-01), #375 (ERV-BI-01).
+
+The proof probe (public thread): baseline is `LEAN` with the released synthetic invoice
+intake/extraction and no mandatory PO/Receipt match; the changed requirement (entered through the
+setup-agent dialogue) requires both PO and receipt evidence, a 2% matching tolerance, and a
+separate approval above EUR 10,000; the expected resolved variant is `SEGREGATED_ENTERPRISE`. The
+proof reuses the same released intake, extraction, matching, advisor and UI capability IDs with
+byte-identical core/module digests. Missing evidence stays `UNKNOWN`/`NEEDS_CLARIFICATION`; an
+invented function or Authority is denied. The 200-bps three-way ERV decision has **no released
+executable variant** → it stays `TYPED_UNKNOWN`.
 
 ## Core finding (reproduced RED on fresh main)
 
-A schema-conforming independent generic package passes the Ajv schema, yet rendering reported
-`DENIED / PACKAGE_INTEGRITY_DENIED` because validation still required hard-coded released AP05
-bindings. Qualified fix: **separate trusted producer/source validation from schema-only
-rendering, and preserve the source-forgery denials.**
-
-On fresh main the capability is absent. Reproduced RED:
+On fresh main the AP-06 capability is **entirely absent** — no module, no test, no verification
+artifact, no index export. Demonstrated RED:
 
 ```
-$ node --test erv-ui-reference/test.mjs
-Error [ERR_MODULE_NOT_FOUND]: Cannot find module '.../erv-ui-reference/reference.mjs'
-  tests 1, pass 0, fail 1
+$ git cat-file -e HEAD:packages/contracts/src/incoming-invoice-ap06-proof-probe.ts
+  fatal: path '...' does not exist in 'HEAD'        # module ABSENT at HEAD
+$ git show HEAD:packages/contracts/src/index.ts | grep -c "ap06-proof-probe"
+  0                                                  # no export at HEAD
 ```
+
+The module the focused test imports does not exist at HEAD, so the test cannot compile or pass —
+the capability is a missing behavior, not a pre-existing one.
 
 ## The change (TDD, minimal, additive)
 
-New self-contained, framework-neutral reference module in a **new top-level directory**
-`erv-ui-reference/` — deliberately outside the 8 census `SCAN_ROOTS` and out of `SHA256SUMS`
-(mirrors the `video:test` / `adaptive-controller:test` self-contained-reference precedent). It is
-a pure Node/ESM module (no build, no `tsc`).
+A frozen-probe module that re-binds the released capability chain (byte-identical predecessor
+sources) and produces/checks a synthetic, deterministic, non-customer verification artifact.
+Follows the AP-05 `predecessorSources` frozen-predecessor pattern; no legacy candidates/state.
 
-- **`schema.json`** — the closed, versioned `ErvUiPackageV1` contract (JSON Schema draft 2020-12,
-  `additionalProperties: false` at every level). Ordered screens/sections/components; field IDs;
-  display kinds; explicit `VALUE/UNKNOWN/CONFLICT/UNSUPPORTED` states with the
-  value↔reasonCode invariant; labels/help/accessibility text; evidence refs and reason codes.
-  Safe actions: stable action ID, `enabled`/`disabledReason` invariant, required evidence,
-  effective Authority `NONE`, confirmation/readback intent, and `additionalProperties: false`
-  forbids any `callback`/`code`/`route` token. Binds requirement/configuration/scenario/core
-  digests and a self-integrity readback.
-  - Note: the conditional `if/then/else` value/reasonCode (and enabled/disabledReason) logic was
-    made strict-mode-clean for Ajv 8.20 by declaring the conditionally-required property in the
-    sub-node's own `properties` (semantics unchanged).
-- **`descriptors.mjs`** — neutral, local-synthetic fixtures (LEAN + SEGREGATED_ENTERPRISE)
-  carrying the concrete ERV field/action/component identifiers. Kept OUT of the engine so the
-  consumer stays renderer-neutral (no ERV allowlist, no scenario branching). No customer data,
-  no ERP, no productive posting.
-- **`reference.mjs`** — the neutral engine: canonical-JSON + SHA-256 primitives; the closed
-  schema driver (Ajv2020 strict); the data-driven trusted producer (`createErvUiPackageV1` +
-  `createLeanBaseline`/`createSegregatedEnterprise`); the **schema-only renderer** / independent
-  generic consumer (`renderErvUiPackageV1` / `genericReferenceConsumerRender`); the
-  self-consistency integrity gate (`verifyErvUiPackageV1Integrity`) — the fail-closed forgery
-  denials; the exact component/action delta (`computeErvUiPackageDeltaV1`); and the **separate,
-  preserved trusted-source forgery gate** (`verifyTrustedErvUiSourceV1` → `SOURCE_FORGERY_DENIED`).
-- **`test.mjs`** — focused AC01–AC06 positive/negative + fail-closed matrix (28 tests).
-- **`package.json`** — added `erv-ui-reference:test` (self-contained, no build) and chained it
-  into `pretest` (matching the self-contained `adaptive-controller:test` / `video:test` precedent).
-  Two lines only; no governance change.
+New files (4):
+- **`packages/contracts/src/incoming-invoice-ap06-proof-probe.ts`** — the AP-06 module.
+  Exports `AP06_EXACT_HEAD_V1`, `generateIncomingInvoiceAp06ProofProbeV1`,
+  `verifyIncomingInvoiceAp06ProofProbeV1`. Verdict = `NARROW_GO`.
+  - `FROZEN_OBLIGATIONS_V1` (10 obligations) byte-binds the released chain:
+    `ap01-blueprint`, `ap02-intake` (+ supplier-invoice fixture), `extraction-benchmark`,
+    `ap03-holdout`, `ap04-erv-core` ×3 (`incoming-invoice-erv.ts` + case pack + schema),
+    `pan365-adaptive-ui`, `pan365-ap05-receipt-manifest`.
+  - Shared ERV core `packages/contracts/src/incoming-invoice-erv.ts`
+    (21114 B, sha256 `6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf`) —
+    identical across both variants.
+  - 8-layer exact-bound chain; 9-row case matrix; `TYPED_UNKNOWN` for the 200-bps three-way
+    decision (registry fixes `RATE_BPS@1.0.0` at 100 bps; a requested 200 bps is unsupported →
+    TYPED_UNKNOWN, never an invented capability). Fail-closed `ProbeError` reason codes.
+- **`tests/incoming-invoice-ap06-proof-probe.test.ts`** — 4 focused tests (regenerate +
+  byte-match + fail-closed negatives).
+- **`scripts/generate-incoming-invoice-ap06-proof-probe.mjs`** — reads the 10 predecessor sources
+  + frozen setup, generates/checks the verification JSON; `--check` asserts reproducibility.
+- **`verification/incoming-invoice-ap06-proof-probe-v1.json`** — the generated artifact, digest
+  `ee8a43aa145f6e7217bf31318a341473d2eaa875cfe54d5adf050fe93b74b287`.
+
+Registration cascade (modified, 10 files):
+- `packages/contracts/src/index.ts` — re-export (does not match the census re-export regex → no
+  re-export count change).
+- `package.json` — `incoming-invoice-ap06-proof-probe:generate`, `:test`, `:test:compiled`, plus a
+  `pretest` chain entry (after the AP-05 compiled run, before ERV-analytics).
+- `release/public-files.manifest` — +4 entries (`0644`, identity mapping); data lines 1491→**1495**.
+- `scripts/build-public-release.sh` (`count != 1495`), `tests/release-governance.test.mjs`
+  (`count, 1495`), `tests/verification-fabric-v2.test.ts` (`publicManifestPaths.length, 1495`).
+- `tests/canonical-json-profile-inventory.test.ts` + `verification/canonical-json-profile-inventory-v1.json`
+  — census counts: `filesScanned 635`, `importSites 212`, `importFiles 211`, ledger
+  `entries 1809` / `uniquePaths 1809`; contracts consumer family `importSites 131` /
+  `importFiles 131` (the module is the only new direct `canonicalJson` importer).
+- `SHA256SUMS` — regenerated by `scripts/refresh-integrity-data.mjs` (1805→1809 lines: +4 new
+  files, updated digests for changed files incl. the DAG).
+- `verification/verification-dag-v2.json` — regenerator re-bound 7 input digests;
+  **graphVersion 47, 56 nodes, no new node, no structural change** (digest-only re-bind).
 
 ### AC coverage
 
-- AC01 closed schema (baseline conforms; unknown top-level key / callback / missing reasonCode rejected).
-- AC02 safe actions (stable id, Authority NONE, confirmation/readback intent, no callback/code/route; disabled↔reason invariant).
-- AC03 bound digests recompute; LEAN vs SEGREGATED share requirement+core, differ configuration+scenario; reproducible exact delta.
-- AC04 generic consumer renders both via the schema only; a11y matches an independent oracle; consumer carries no ERV allowlist / no scenario branching; an independent schema-conforming package renders without trusted-source binding.
-- AC05 fail-closed: unknown field, extra component, hidden action, missing evidence, cross-context, reordered content, forged digest, tampered readback, unsupported display kind.
-- AC06 deterministic, deeply immutable, framework-neutral, no ERP.
-- Separation: schema-only rendering accepts a conforming self-consistent package; forgery denials preserved and distinct.
+- **AC01** exact-bound chain source→document→extraction→validation→matching→exception/advisor→
+  UI→receipt (8 layers, each bound to a released byte-identical module digest).
+- **AC02** case matrix (positive, duplicate, tamper, mismatch, UNKNOWN, cancellation, replay —
+  9 rows) matches the oracle.
+- **AC03** independent verdict = `NARROW_GO` (a GO/NARROW_GO/FALSIFIED_WITH_EVIDENCE value).
+- **AC04** release/readback names only synthetic scenario packs + tested capability layers.
+- **AC05** zero-residue cleanup: pure function, no writes, no clock, idempotent generation.
+- **AC06** `LEAN` vs `SEGREGATED_ENTERPRISE` run through the same released core:
+  `coreModuleDigestIdentical`, `onlyRequirementConfigurationDiffer`; shared core source digest
+  identical, requirement+configuration digests differ.
+- **AC07** the changed variant produces oracle-predicted process/UI/advisor/readback differences
+  + a bound reuse receipt; omitting the dialogue delta, substituting answers, inventing a
+  capability or mutating the core all **fail closed**.
 
 ## Actual commands and results (fresh current-main checkout)
 
 ```
-$ node --test erv-ui-reference/test.mjs        # focused RED→GREEN
-  tests 28, pass 28, fail 0
-
-$ npm run build                                # toolchain (tsc -p tsconfig.json)
+$ npm run build                                        # tsc -p tsconfig.json
   exit 0
 
+$ npm run incoming-invoice-ap06-proof-probe:test:compiled    # focused RED→GREEN
+  tests 4, pass 4, fail 0
+
+$ node scripts/generate-incoming-invoice-ap06-proof-probe.mjs --check
+  ee8a43aa145f6e7217bf31318a341473d2eaa875cfe54d5adf050fe93b74b287   # reproducible, byte-stable
+
+$ node scripts/refresh-integrity-data.mjs              # SHA256SUMS + DAG regenerator
+  IDEMPOTENT: no new changes after refresh (stable fixpoint)
+
 $ node --test dist/tests/canonical-json-profile-inventory.test.js   # census
-  tests 35, pass 35, fail 0                    # filesScanned=622 / ledger=1787 UNCHANGED
+  tests 35, pass 35, fail 0     # filesScanned=635 / importSites=212 / ledger=1809
 
-$ npm run incoming-invoice-erv:test:compiled
-  tests 8,  pass 8
-$ npm run incoming-invoice-adaptive-ui:test:compiled        # frozen-tolerance predecessor
-  tests 10, pass 10
-$ npm run incoming-invoice-ap05-receipt-manifest:test:compiled  # receipt manifest byte-for-byte
+$ npm run incoming-invoice-ap05-receipt-manifest:test:compiled      # frozen predecessor intact
   tests 6,  pass 6
-$ npm run release-governance:test
-  tests 85, pass 85, fail 0
 
-$ npm run erv-ui-reference:test --silent       # as registered
-  tests 28, pass 28, fail 0
+$ npm test                                             # canonical entrypoint
+  tests 717, pass 706, fail 11
 ```
+
+The 11 `npm test` failures are all **environmental**, none touch AP-06 or any in-scope governance
+file:
+- **9 × `spawnSync docker ENOENT`** — `docker` is absent in this environment
+  (`command -v docker` → DOCKER_ABSENT). Failing files: `builder-agent-runtime`,
+  `managed-skill-lifecycle-runtime`, `model-access-broker-runtime`,
+  `openclaw-agent-runtime-lock`, `openclaw-agent-runtime`. Proven pre-existing: stashing all 14
+  changed files and re-running those files on clean HEAD reproduces the identical failures.
+- **2 × `ENOSPC`** in `supply-chain-verifier.test.mjs` — the 1 GB `/tmp` tmpfs fills under
+  full-suite scratch load (each run copies ~52 MB of fixtures). Proven environmental:
+  `node --test tests/supply-chain-verifier.test.mjs` on a clean `/tmp` passes **7/7, exit 0**.
+  (Transient `/tmp/cm-*` test residue from repeated runs was removed; zero-residue restored.)
+
+All in-scope tests pass within the full run: AP-06 (4/4), release-governance,
+verification-fabric-v2, census (35/35), manifest count (1495). `SHA256SUMS` is self-consistent
+with the on-disk bytes.
 
 ## Change surface (verified with `git status`)
 
-- Modified: `package.json` (2 lines: new script + `pretest` chain entry).
-- Added (new top-level dir): `erv-ui-reference/{schema.json, descriptors.mjs, reference.mjs, test.mjs}`.
+- Modified (10): `SHA256SUMS`, `package.json`, `packages/contracts/src/index.ts`,
+  `release/public-files.manifest`, `scripts/build-public-release.sh`,
+  `tests/canonical-json-profile-inventory.test.ts`, `tests/release-governance.test.mjs`,
+  `tests/verification-fabric-v2.test.ts`,
+  `verification/canonical-json-profile-inventory-v1.json`, `verification/verification-dag-v2.json`.
+- Added (4): the module, generator script, test, and verification artifact.
 
 File SHA-256 (added files):
 ```
-ced5edd9d3566c9649d72daaa68927dac6369d2c7f7443251f45eac12b4b4e45  erv-ui-reference/schema.json
-18c4738ac0aaeec377533de18aeff435d194bf5faab610d1ffa03df345db83ed  erv-ui-reference/descriptors.mjs
-6d8c7f9b90fefa611b78314533fd7c0e38d7540de4e5031b881063693679d76c  erv-ui-reference/reference.mjs
-01d758c7b269b0dbe794ce1cb51b75c52dbbe13dc3d32d540ea73876e7770afa  erv-ui-reference/test.mjs
+e2bc23278720885edc5742007a65405f1a2686daeca0ce044cf0ae1e0048bf6f  packages/contracts/src/incoming-invoice-ap06-proof-probe.ts
+3db7b13111e527baff69fe21d1d03c28718453237559a0139964a9d1e83fd5a3  scripts/generate-incoming-invoice-ap06-proof-probe.mjs
+4e4725ca8fed4c62936f49d6349a0f73bc87dad21aba9809ba6ee3061a89fba5  tests/incoming-invoice-ap06-proof-probe.test.ts
+183d4fb117b9e5996b61f740d89fcf8b47d92fdb911f7567d94dc190f58b7194  verification/incoming-invoice-ap06-proof-probe-v1.json
 ```
 
 ## Governance verification
 
-- Frozen predecessor `packages/contracts/src/incoming-invoice-adaptive-ui.ts`: **unchanged** (empty
-  `git status` for the path); the AP-05 receipt manifest regenerates **byte-for-byte** against
-  `verification/incoming-invoice-ap05-receipt-manifest-v1.json` (ap05 test 6/6).
-- No governance artifact changed: `SHA256SUMS`, `verification/`, `scripts/refresh-integrity-data.mjs`
-  all clean.
-- Census: new top-level dir is outside the 8 `SCAN_ROOTS` and `.mjs`/`.json` fixtures are not ledger
-  entries → `filesScanned=622` and ledger `entries=1787` are unchanged (census 35/35).
-- Release-governance 85/85 (checks governance-config content, not the file tree).
-- Tests were not weakened; governance was not changed; optional hints remain optional.
+- Frozen predecessors: the 10 bound released sources (incl. the ERV core `incoming-invoice-erv.ts`
+  and the AP-05 receipt manifest) are **unchanged** in this diff; the AP-05 receipt manifest
+  regenerates **byte-for-byte** (ap05 test 6/6). The probe re-binds them, it does not modify them.
+- No test weakened and no governance rule changed; optional hints remain optional. The manifest
+  count, census counts, and DAG graphVersion (locked at 47) were raised **only** to the values the
+  single canonical regenerator produces, and the regenerator is idempotent (stable fixpoint).
+- No new DAG node was added: AP-06 reuses frozen predecessors and introduces no new capability, so
+  a digest-only re-bind at graphVersion 47 is the correct, non-weakening registration.
 
 ## Unresolved / parent-side gates (NOT done here, by boundary)
 
-- Dependency on #365 (AP-01..06 standalone ERV package) must be satisfied before this can land.
-- Full `npm test` feature suite and the complete `pretest` chain run under exact PR/Main CI by the
-  parent (not re-run locally in full; only the governance-critical canonical subset above was run).
-- If/when the reference module is later moved into a census `SCAN_ROOT`, the census counts and
-  `SHA256SUMS` ledger would need a governed refresh — intentionally avoided here by the top-level
-  placement.
-- Parent performs: independent review, exact PR/Main CI, release, and anonymous readback. Reconciliation.
-- **This work must NOT be claimed as delivered, and issue #374 must NOT be closed.**
+- Dependencies on #365 (AP-05), #374 (ERV-UI-01), #375 (ERV-BI-01) must be satisfied before this
+  can land.
+- The full `npm test` feature suite and the complete `pretest` chain run under exact PR/Main CI by
+  the parent. The 9 docker-ENOENT and 2 ENOSPC failures above are environmental in this sandbox
+  and are expected to resolve (or be excluded) under the parent's CI environment; they are not
+  defects of this change.
+- Parent performs: independent review, exact PR/Main CI, release, and anonymous readback.
+  Reconciliation. Queue/issue closure (AC05's operational half) is the delivery controller's job,
+  not this work's.
+- **This work must NOT be claimed as delivered, and issue #366 must NOT be closed.**
