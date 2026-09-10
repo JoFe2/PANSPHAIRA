@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 46,
+  "graphVersion": 47,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "44253674de8ccb48254d9f16e95a5b7cefa719ca28d600a5caf3ad8e956e0e27"
+          "sha256": "5f28abbde912c6b7bd7af929513c172613bd8849e0232fef630ac49e80c770c9"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3789,7 +3789,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "3c5bbd621b46c8d40c584795480f4a9a4e126729bf721bd5a99b169d054347ff"
+          "sha256": "42e22e407a17c9afd48c581443dc7de03a47a4c3e95f1478ec790046d23f5368"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3964,7 +3964,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "0b9a44a2776c9c0f14bc67e6632688f48bb20feaf8807a90bc4576899ce198d5"
+          "sha256": "2cde95fe7cd310089fbc2d0822221a72b6147491ada917eef1731d8791e8aebb"
         }
       ],
       "ownedTests": [
@@ -3989,7 +3989,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "fcabba8d14d588aa4336b8d8d71405b8f0e116709a12d038d12e4dd4976a4c1a"
+          "sha256": "135c59e7b3699f165e1ca3c75c419da49e913823d3376caa8a21627e41ec3041"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -4736,7 +4736,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "f05ff9ff880d7288d74252ab37bdfd4a2af287a50bf80ce671167525eb3fbf2b"
+          "sha256": "5c7cd820d378d90b2efba49baa81e3537bcc486ab5ddbb81f5ff7a009e2c0ddb"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4746,7 +4746,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "6ced09da530f0e2b1d9d9ee2085cb9ed68b3323a878a5ceaa70e306abc3b8f7b"
+          "sha256": "bf9ca1aa6cf8ff1d8c087627a857ec754fbc8a427897f3d8910cda119eb5656e"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4766,7 +4766,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "419f2f478f08e29ded5123e68719ab104d407595f8e084e9e6b8a8af7244d054"
+          "sha256": "4a36c0484f610332b16fa0c5254b10ee1ed6a578283d661866843b7d4bf161da"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4791,7 +4791,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "57ad046235899ca25d39d631ed201ee7b3c0ad460369fda76982600c4d431f42"
+          "sha256": "25ea0931a3c34624910c8b7cfd3d92e11a5c98f425baffe93fc96a1c6410b774"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4801,7 +4801,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "96a9598fa9a51619d6309f436bb38f8fdea4d4f620807eb70f3e34d98db72dee"
+          "sha256": "d16463092b54013ef29f483348d09879ce488cc7dd04ab616f38f80c9e23f046"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5372,7 +5372,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "71d39b5d0f9a233b3d639019f2c5c1cad1cd529af12fa7d43e306727e97e65c6"
+          "sha256": "07a0739b4df793c0ec896fb3f39f1636dbddd91e9ed464749bafb394d5212d7f"
         },
         {
           "path": "package-lock.json",
@@ -5732,7 +5732,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "4ad9d2625a146f5e08a2fe545b6655d2f8642aa2d037d1e1232e433b6de937f9"
+          "sha256": "3e43206b036bed571fa06915a2ce794640709e7408e991321520c43ee94fbfec"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5997,7 +5997,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "f05ff9ff880d7288d74252ab37bdfd4a2af287a50bf80ce671167525eb3fbf2b"
+          "sha256": "5c7cd820d378d90b2efba49baa81e3537bcc486ab5ddbb81f5ff7a009e2c0ddb"
         }
       ],
       "ownedTests": [
@@ -6009,6 +6009,56 @@
         "The public receipt is authority NONE and PUBLIC_SYNTHETIC_NON_CUSTOMER, with identity-bearing source fields and free text removed.",
         "Required external prerequisite JoFe2/PANSPHAIRA#364 is source-verified only when the AP04 released predecessor source and schema artifacts are bound; local AP04 replay is not a predecessor-issued paired closure receipt.",
         "Missing, substituted, aliased or re-digested source, setup, core, receipt, manifest, external prerequisite or predecessor lineage fails closed."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ap-04-incoming-invoice-erv-relational-v2",
+      "dependsOn": [
+        "ap-04-incoming-invoice-erv-v1"
+      ],
+      "inputs": [
+        {
+          "path": "packages/contracts/src/incoming-invoice-erv-relational-v2.ts",
+          "role": "CONTRACT",
+          "sha256": "7ed18a5e731ab438b476f1d9567e318fcceac0527c0d533928529391265a47e8"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-04-erv-relational-cases-v2.json",
+          "role": "FIXTURE",
+          "sha256": "a6888ec06f92d4236061b393c2ed3e0d7fd54ca9875558b9a3b7295d25fe6ae5"
+        },
+        {
+          "path": "schemas/contracts/incoming-invoice-erv-relational-v2.schema.json",
+          "role": "SCHEMA",
+          "sha256": "6916f291f33e5959df11e3864f4b5e3aacdc23c287c3cb4803f4132c4be3cad7"
+        },
+        {
+          "path": "tests/incoming-invoice-erv-relational.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "006a1031895bb5014af8ba9713d0cc18a0a501e02919c4de5cbe9303a7b80963"
+        },
+        {
+          "path": "packages/contracts/src/incoming-invoice-erv.ts",
+          "role": "SOURCE",
+          "sha256": "6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf"
+        },
+        {
+          "path": "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json",
+          "role": "FIXTURE",
+          "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845"
+        }
+      ],
+      "ownedTests": [
+        "npm run incoming-invoice-erv-relational:test"
+      ],
+      "invariants": [
+        "The historical AP-04 v1 pack, contract, schema and tests remain byte-identical and replayable; the relational slice is additive and never rewrites that history.",
+        "Amount-level modes return UNKNOWN for unverified supplier relations and never MATCHED; wrong supplier, quantity, unit or currency relations at equal amounts return CONFLICT.",
+        "Duplicate reference kinds are denied deterministically and order-independently; no last-write-wins.",
+        "Repeating the local compiler is deterministic replay of frozen local-synthetic inputs; no external or system-of-record readback is performed.",
+        "The standalone core grants no productive, external, customer-data or booking authority."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
