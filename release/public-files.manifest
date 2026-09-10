@@ -393,6 +393,7 @@ packages/contracts/src/incoming-invoice-adaptive-ui.ts	packages/contracts/src/in
 packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts	packages/contracts/src/incoming-invoice-ap05-receipt-manifest.ts	0644
 packages/contracts/src/incoming-invoice-blueprint.ts	packages/contracts/src/incoming-invoice-blueprint.ts	0644
 packages/contracts/src/incoming-invoice-erv-analytics.ts	packages/contracts/src/incoming-invoice-erv-analytics.ts	0644
+packages/contracts/src/incoming-invoice-erv-relational-v2.ts	packages/contracts/src/incoming-invoice-erv-relational-v2.ts	0644
 packages/contracts/src/incoming-invoice-erv.ts	packages/contracts/src/incoming-invoice-erv.ts	0644
 packages/contracts/src/incoming-invoice-extraction-benchmark.ts	packages/contracts/src/incoming-invoice-extraction-benchmark.ts	0644
 packages/contracts/src/incoming-invoice-intake.ts	packages/contracts/src/incoming-invoice-intake.ts	0644
@@ -527,6 +528,7 @@ schemas/contracts/hmi-generation-bundle-v1.schema.json	schemas/contracts/hmi-gen
 schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json	schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json	0644
 schemas/contracts/incoming-invoice-blueprint-v1.schema.json	schemas/contracts/incoming-invoice-blueprint-v1.schema.json	0644
 schemas/contracts/incoming-invoice-erv-analytics-v1.schema.json	schemas/contracts/incoming-invoice-erv-analytics-v1.schema.json	0644
+schemas/contracts/incoming-invoice-erv-relational-v2.schema.json	schemas/contracts/incoming-invoice-erv-relational-v2.schema.json	0644
 schemas/contracts/incoming-invoice-erv-v1.schema.json	schemas/contracts/incoming-invoice-erv-v1.schema.json	0644
 schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json	schemas/contracts/incoming-invoice-extraction-benchmark-v1.schema.json	0644
 schemas/contracts/incoming-invoice-intake-v1.schema.json	schemas/contracts/incoming-invoice-intake-v1.schema.json	0644
@@ -1127,6 +1129,7 @@ tests/fixtures/issue-candidate/quarantine-v1.json	tests/fixtures/issue-candidate
 tests/fixtures/incoming-invoice/source-manifest-v1.json	tests/fixtures/incoming-invoice/source-manifest-v1.json	0644
 tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	tests/fixtures/incoming-invoice/ap-03-holdout-v1.json	0644
 tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json	0644
+tests/fixtures/incoming-invoice/ap-04-erv-relational-cases-v2.json	tests/fixtures/incoming-invoice/ap-04-erv-relational-cases-v2.json	0644
 tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/INCOMING-INVOICE-APPLICATION-GUIDE.md	tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/INCOMING-INVOICE-APPLICATION-GUIDE.md	0644
 tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/incoming-invoice-adaptive-ui.ts.bytes	tests/fixtures/incoming-invoice/ap-05-adaptive-release-v1/incoming-invoice-adaptive-ui.ts.bytes	0644
 tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json	tests/fixtures/incoming-invoice/ap-05-frozen-setup-v1.json	0644
@@ -1257,6 +1260,7 @@ tests/incoming-invoice-ap05-receipt-manifest.test.ts	tests/incoming-invoice-ap05
 tests/incoming-invoice-blueprint.test.ts	tests/incoming-invoice-blueprint.test.ts	0644
 tests/incoming-invoice-erv-analytics.test.ts	tests/incoming-invoice-erv-analytics.test.ts	0644
 tests/incoming-invoice-extraction-benchmark.test.ts	tests/incoming-invoice-extraction-benchmark.test.ts	0644
+tests/incoming-invoice-erv-relational.test.ts	tests/incoming-invoice-erv-relational.test.ts	0644
 tests/incoming-invoice-erv.test.ts	tests/incoming-invoice-erv.test.ts	0644
 tests/incoming-invoice-intake.test.ts	tests/incoming-invoice-intake.test.ts	0644
 tests/integration-profile.test.ts	tests/integration-profile.test.ts	0644
