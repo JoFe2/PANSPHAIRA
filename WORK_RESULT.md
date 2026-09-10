@@ -1,185 +1,199 @@
-# WORK_RESULT — AP-06 Frozen Adapted-ERV Proof Probe (issue #366, parent #360)
+# WORK_RESULT — PS360 source/documentation acceptance gap closure (parent #360)
 
-**Status: NOT DELIVERED / NOT CLOSED.** This is a local, in-bounds working result on a fresh
-current-main checkout (HEAD `3ce0c4d550c52e7995c8c60ed86288bc3ef2ce80`, i.e. `AP06_EXACT_HEAD_V1`).
-Parent-side gates remain open (see *Unresolved / parent-side gates*): independent review, exact
-PR/Main CI, release, anonymous readback, and reconciliation. No push, no public mutation, no
-credentials, no external systems, no issue closure. The delivery job controller performs fresh
-Qwen review, exact PR/Main CI, release and anonymous readback; this work never authors or
-approves those receipts.
+**Status: local source closure complete. NOT DELIVERED / NOT CLOSED.** This is a
+bounded source-only working result on a fresh current-main checkout (HEAD
+`ae765100ac731b519906bacee5ce02dbeb2680d9`, the public AP-06 release commit).
+This is **not** a duplicate AP implementation: the AP-01…AP-06 work and the
+AP-06 frozen adapted-ERV proof probe (verdict `NARROW_GO`) and its release are
+already public and byte-frozen. The one remaining unimplemented acceptance
+criterion was the stale `WORK IN PROGRESS` ERV status in the released README
+whose own text required removal after the public #366 `NARROW_GO` verdict and
+closure. Parent-side gates remain open (see *Unresolved / parent-side gates*):
+independent review, exact PR/Main CI, release, anonymous readback, and issue
+closure. No push, no public mutation, no credentials, no external systems, no
+issue closure. The delivery job controller performs fresh Qwen review, exact
+PR/Main CI, release and anonymous readback; this work never authors or approves
+those receipts and never claims delivered.
 
 ## Task
 
-Integrate the **AP-06 frozen adapted-ERV proof probe**: a synthetic, non-customer, TYPED
-verification artifact that proves the exact-bound chain
-source → document → extraction → validation → matching → exception/advisor → UI → receipt, and
-that the baseline (`LEAN`) and the dialogue-derived changed variant
-(`SEGREGATED_ENTERPRISE`) execute through the **same released core** with **byte-identical
-core/module digests** while only requirement/configuration digests, selected variants and
-resulting process/UI/readback differ. Depends on #365 (AP-05), #374 (ERV-UI-01), #375 (ERV-BI-01).
+Complete the remaining source/documentation acceptance gap of #360: replace the
+stale ERV status marker with `PROVEN_LOCAL_SYNTHETIC_POC` carrying the exact
+immutable public proof/release links and a bounded `NARROW_GO` explanation;
+reconcile the related proof documentation only as needed; map every parent
+criterion to released evidence and test paths in a source-bound closure
+document; keep the changed 200-bps variant typed `UNKNOWN` and never present it
+as a released/supported/proven execution.
 
-The proof probe (public thread): baseline is `LEAN` with the released synthetic invoice
-intake/extraction and no mandatory PO/Receipt match; the changed requirement (entered through the
-setup-agent dialogue) requires both PO and receipt evidence, a 2% matching tolerance, and a
-separate approval above EUR 10,000; the expected resolved variant is `SEGREGATED_ENTERPRISE`. The
-proof reuses the same released intake, extraction, matching, advisor and UI capability IDs with
-byte-identical core/module digests. Missing evidence stays `UNKNOWN`/`NEEDS_CLARIFICATION`; an
-invented function or Authority is denied. The 200-bps three-way ERV decision has **no released
-executable variant** → it stays `TYPED_UNKNOWN`.
+## Source inspection (fresh Main, ae76510)
 
-## Core finding (reproduced RED on fresh main)
+SOURCE_ALREADY_PRESENT for all AP proof work: AP-01…AP-06 artifacts are
+released, byte-frozen and replayable on this HEAD (probe
+`verification/incoming-invoice-ap06-proof-probe-v1.json`, verdict
+`NARROW_GO`, all nine `caseMatrix` rows oracle-matched, all eight `chain`
+layers bound to released module digests). Nothing was rebuilt.
 
-On fresh main the AP-06 capability is **entirely absent** — no module, no test, no verification
-artifact, no index export. Demonstrated RED:
+The stale marker reproduced RED before the fix:
+`README.md` still carried `WORK IN PROGRESS · PLANNED · SHORT-TERM PROOF` and
+the "Remove this work-in-progress marker only after #366 …" sentence;
+`docs/INCOMING-INVOICE-PROVING-GROUND.md` still carried
+`WORK_IN_PROGRESS_PLANNED_NOT_DELIVERED` with a stale `Current status` table
+(`Product implementation | Not started`, `Product release | None`).
 
-```
-$ git cat-file -e HEAD:packages/contracts/src/incoming-invoice-ap06-proof-probe.ts
-  fatal: path '...' does not exist in 'HEAD'        # module ABSENT at HEAD
-$ git show HEAD:packages/contracts/src/index.ts | grep -c "ap06-proof-probe"
-  0                                                  # no export at HEAD
-```
+## TDD (RED → GREEN)
 
-The module the focused test imports does not exist at HEAD, so the test cannot compile or pass —
-the capability is a missing behavior, not a pre-existing one.
+- RED: `tests/release-governance.test.mjs` gained the PS360 assertion block
+  (new marker, exact public release tag + raw proof URL substrings, `NARROW_GO`
+  verdict substrings, baseline `MATCHED` through the released core, 200-bps
+  typed `UNKNOWN` wording, and the fail-closed negative that the 200-bps
+  variant is never presented as released/supported/proven). Focused run on the
+  fresh tree: 1 failure at the new marker assertion (86/87) — the stale README
+  body in the failure diff confirmed the RED.
+- GREEN: minimal source edits (below); focused run 87/87, and the canonical
+  `release-governance:test` pair 92/92.
 
-## The change (TDD, minimal, additive)
+## Source changes (bounded; no governance weakened)
 
-A frozen-probe module that re-binds the released capability chain (byte-identical predecessor
-sources) and produces/checks a synthetic, deterministic, non-customer verification artifact.
-Follows the AP-05 `predecessorSources` frozen-predecessor pattern; no legacy candidates/state.
+- `README.md`: the ERV marker is now
+  `PROVEN_LOCAL_SYNTHETIC_POC · NARROW_GO · LOCAL SYNTHETIC`; the
+  marker-removal sentence is replaced by the exact immutable public links
+  (release tag
+  `ap-06-frozen-adapted-erv-proof-probe-with-narrow-go-verdict-issue-366-95ecd4d587d9`
+  and raw proof
+  `https://raw.githubusercontent.com/JoFe2/PANSPHAIRA/ae765100ac731b519906bacee5ce02dbeb2680d9/verification/incoming-invoice-ap06-proof-probe-v1.json`)
+  plus the bounded NARROW_GO explanation: the baseline resolves `MATCHED`
+  through the released core, while the changed 200-bps tolerance has no
+  released executable variant and stays typed `UNKNOWN` — not a proven 200-bps
+  execution or arbitrary adaptability. Marketing-first layout, standalone core
+  plus optional ERP framing, all nonclaim boundaries and the PS373 substrings
+  are preserved; README word count (test metric) 999 → 997 (≤ 1000) and H2
+  count unchanged at 8 (≤ 8). Two small unasserted marketing phrases were
+  trimmed to keep the hard word budget; no asserted or probe-guarded text was
+  removed.
+- `docs/INCOMING-INVOICE-PROVING-GROUND.md`: marker now
+  `PROVEN_LOCAL_SYNTHETIC_POC_NARROW_GO`; frontmatter and `## Proof packages`
+  heading updated from "planned"; `Current status` table reconciled (work
+  packages `6/6` frozen and executed; acceptance identifiers `34/34` preserved
+  (28 + 6 exercised); public AP implementation issues kept at `6/6 open` —
+  last recorded state, closure is the controller's; product implementation:
+  bounded local-synthetic proof released, general product not started; product
+  release: public local-synthetic PoC release (AP-06), general product none);
+  the six added acceptance identifiers are now recorded as exercised by the
+  released AP-05 receipt manifest and AP-06 proof probe; the promotion-gating
+  paragraph records the public `NARROW_GO` verdict satisfying
+  `AP-05-AC05`–`AP-05-AC08` and `AP-06-AC06`–`AP-06-AC07`, the 200-bps
+  `TYPED_UNKNOWN` boundary, and states the general end-to-end product is not
+  delivered.
+- `tests/release-governance.test.mjs`: the two stale positive assertions
+  (README marker-removal sentence, doc WIP marker) became fail-closed
+  negatives; new positives for the new markers, the exact public links, the
+  NARROW_GO substrings and the reconciled status rows. No existing assertion
+  was weakened or deleted.
+- `docs/evidence/PS360-SOURCE-CLOSURE-v1.md` (new, repository-only, not in the
+  public manifest): source-bound closure record mapping every parent #360
+  criterion (the 34 acceptance identifiers across AP-01…AP-06) to released
+  evidence artifacts and focused test paths, with the genuinely unmet items
+  retained explicitly (200-bps variant `TYPED_UNKNOWN`; parent delivery
+  receipts owned by the controller; general product not delivered;
+  ERP-enhanced composition separately authorized).
+- `SHA256SUMS` and `verification/verification-dag-v2.json`:
+  repository-required integrity refresh for the changed source only. The DAG
+  diff is exactly two re-hashed inputs (`README.md`,
+  `tests/release-governance.test.mjs`); `graphVersion` remains 47, node count
+  56, no manifest entry added, no frozen producer/fixture/contract touched
+  (the frozen AP-06 probe bytes are unchanged — `git status` shows none of the
+  `verification/incoming-invoice-*` artifacts modified).
 
-New files (4):
-- **`packages/contracts/src/incoming-invoice-ap06-proof-probe.ts`** — the AP-06 module.
-  Exports `AP06_EXACT_HEAD_V1`, `generateIncomingInvoiceAp06ProofProbeV1`,
-  `verifyIncomingInvoiceAp06ProofProbeV1`. Verdict = `NARROW_GO`.
-  - `FROZEN_OBLIGATIONS_V1` (10 obligations) byte-binds the released chain:
-    `ap01-blueprint`, `ap02-intake` (+ supplier-invoice fixture), `extraction-benchmark`,
-    `ap03-holdout`, `ap04-erv-core` ×3 (`incoming-invoice-erv.ts` + case pack + schema),
-    `pan365-adaptive-ui`, `pan365-ap05-receipt-manifest`.
-  - Shared ERV core `packages/contracts/src/incoming-invoice-erv.ts`
-    (21114 B, sha256 `6ba5250783df35f60602a11437c843272ab014bf24e69135cfbf52dfb41750cf`) —
-    identical across both variants.
-  - 8-layer exact-bound chain; 9-row case matrix; `TYPED_UNKNOWN` for the 200-bps three-way
-    decision (registry fixes `RATE_BPS@1.0.0` at 100 bps; a requested 200 bps is unsupported →
-    TYPED_UNKNOWN, never an invented capability). Fail-closed `ProbeError` reason codes.
-- **`tests/incoming-invoice-ap06-proof-probe.test.ts`** — 4 focused tests (regenerate +
-  byte-match + fail-closed negatives).
-- **`scripts/generate-incoming-invoice-ap06-proof-probe.mjs`** — reads the 10 predecessor sources
-  + frozen setup, generates/checks the verification JSON; `--check` asserts reproducibility.
-- **`verification/incoming-invoice-ap06-proof-probe-v1.json`** — the generated artifact, digest
-  `ee8a43aa145f6e7217bf31318a341473d2eaa875cfe54d5adf050fe93b74b287`.
+## Commands and actual results (local, offline-capable, Node ≥ 24)
 
-Registration cascade (modified, 10 files):
-- `packages/contracts/src/index.ts` — re-export (does not match the census re-export regex → no
-  re-export count change).
-- `package.json` — `incoming-invoice-ap06-proof-probe:generate`, `:test`, `:test:compiled`, plus a
-  `pretest` chain entry (after the AP-05 compiled run, before ERV-analytics).
-- `release/public-files.manifest` — +4 entries (`0644`, identity mapping); data lines 1491→**1495**.
-- `scripts/build-public-release.sh` (`count != 1495`), `tests/release-governance.test.mjs`
-  (`count, 1495`), `tests/verification-fabric-v2.test.ts` (`publicManifestPaths.length, 1495`).
-- `tests/canonical-json-profile-inventory.test.ts` + `verification/canonical-json-profile-inventory-v1.json`
-  — census counts: `filesScanned 635`, `importSites 212`, `importFiles 211`, ledger
-  `entries 1809` / `uniquePaths 1809`; contracts consumer family `importSites 131` /
-  `importFiles 131` (the module is the only new direct `canonicalJson` importer).
-- `SHA256SUMS` — regenerated by `scripts/refresh-integrity-data.mjs` (1805→1809 lines: +4 new
-  files, updated digests for changed files incl. the DAG).
-- `verification/verification-dag-v2.json` — regenerator re-bound 7 input digests;
-  **graphVersion 47, 56 nodes, no new node, no structural change** (digest-only re-bind).
+- `npm install --cache /tmp/npm-cache --no-audit --no-fund` — exit 0
+  (fresh environment; 139 packages).
+- RED: `node --test tests/release-governance.test.mjs` on the fresh tree —
+  exit 1, 86/87 (single failure at the new marker assertion).
+- `npm run release-governance:test --cache /tmp/npm-cache`
+  (`tests/release-governance.test.mjs` + `tests/public-product-spelling.test.mjs`)
+  — exit 0, 92/92.
+- `npm run integrity:refresh --cache /tmp/npm-cache` — exit 0: "refreshed 30
+  runtime-lock artifacts, 47 proof artifacts, and 1809 checksums" (entry count
+  unchanged at 1809).
+- `sha256sum --check SHA256SUMS` — exit 0, 1809/1809 OK.
+- `npm run release-governance:verify --cache /tmp/npm-cache` — exit 0,
+  `RELEASE_GOVERNANCE_PASS`.
+- `npm test --cache /tmp/npm-cache` (pretest chain: build + 25 focused suites
+  including `incoming-invoice-ap06-proof-probe:test:compiled` proving the
+  frozen probe regenerates byte-identically; then the main suite) — see
+  *Full suite result* below.
+- `npm run lint --cache /tmp/npm-cache` — see *Full suite result* below.
 
-### AC coverage
+## Full suite result
 
-- **AC01** exact-bound chain source→document→extraction→validation→matching→exception/advisor→
-  UI→receipt (8 layers, each bound to a released byte-identical module digest).
-- **AC02** case matrix (positive, duplicate, tamper, mismatch, UNKNOWN, cancellation, replay —
-  9 rows) matches the oracle.
-- **AC03** independent verdict = `NARROW_GO` (a GO/NARROW_GO/FALSIFIED_WITH_EVIDENCE value).
-- **AC04** release/readback names only synthetic scenario packs + tested capability layers.
-- **AC05** zero-residue cleanup: pure function, no writes, no clock, idempotent generation.
-- **AC06** `LEAN` vs `SEGREGATED_ENTERPRISE` run through the same released core:
-  `coreModuleDigestIdentical`, `onlyRequirementConfigurationDiffer`; shared core source digest
-  identical, requirement+configuration digests differ.
-- **AC07** the changed variant produces oracle-predicted process/UI/advisor/readback differences
-  + a bound reuse receipt; omitting the dialogue delta, substituting answers, inventing a
-  capability or mutating the core all **fail closed**.
+`npm test --cache /tmp/npm-cache` (single invocation: pretest chain, then the
+main `node --test` suite) — overall exit 1, caused solely by the environment
+(not Docker installed in this container):
 
-## Actual commands and results (fresh current-main checkout)
+- **Pretest chain (build + 25 focused suites): fully green.** `tsc -p
+  tsconfig.json` (exit 0), then all 25 focused suites pass with zero
+  failures — 432/432 focused tests — including
+  `incoming-invoice-ap06-proof-probe:test:compiled` (4/4: the frozen AP-06
+  proof probe regenerates byte-for-byte, binds source/setup/variant/probe
+  identities against the checked-in bytes, the verifier rejects an omitted
+  delta / invented capability / mutated identities, and the generator fails
+  closed). No focused suite failure.
+- **Main suite: 717 tests, 708 pass, 9 fail.** All 9 failures are
+  `Error: spawnSync docker ENOENT` — the `docker` binary is absent in this
+  container, so the five runtime-posture suites that shell out to
+  `docker compose config` cannot run:
+  - `tests/builder-agent-runtime.test.mjs` — `BLD-001-G6 remains default-off
+    and pins the real OpenClaw fixture image`, `BLD-001-G6 services are
+    non-root, read-only, unprivileged and closed-network only` (2)
+  - `tests/managed-skill-lifecycle-runtime.test.mjs` — `AAS-037 runtime is
+    default-off and pins the proven OpenClaw image`, `AAS-037 agent is
+    non-root/read-only with a read-only managed skill volume and one closed
+    network` (2)
+  - `tests/model-access-broker-runtime.test.mjs` — `AAS-036-6/8 runtime is
+    default-off, pinned, isolated and rollback scoped` (1)
+  - `tests/openclaw-agent-runtime-lock.test.mjs` — `OPENCLAW-M1.1 accepted
+    setup sends only explicit linux/amd64 build and run requests`,
+    `OPENCLAW-M1.1 reset after interruption is idempotent, default-off and
+    ownership-scoped` (2)
+  - `tests/openclaw-agent-runtime.test.mjs` — `AAS-035 default-off profile
+    and immutable OpenClaw image lock`, `AAS-035 non-root read-only bounded
+    posture has one closed network` (2)
+- Combined (focused + main): 1139 tests, 1130 pass, 9 fail — every failure
+  is the docker-binary-missing `ENOENT` spawn error above, none is an
+  assertion failure, and none involves a file changed by this work
+  (`README.md`, `docs/INCOMING-INVOICE-PROVING-GROUND.md`,
+  `tests/release-governance.test.mjs`, `SHA256SUMS`,
+  `verification/verification-dag-v2.json`). An A/B re-run of the main suite
+  against pristine `ae76510` was not performed in this session; the failure
+  signatures (missing `docker` binary) are environmental by construction.
+- `npm run lint --cache /tmp/npm-cache` — exit 0 (`tsc -p tsconfig.json`, the
+  same build already executed and green as the first step of the pretest
+  chain).
 
-```
-$ npm run build                                        # tsc -p tsconfig.json
-  exit 0
+## Unresolved / parent-side gates
 
-$ npm run incoming-invoice-ap06-proof-probe:test:compiled    # focused RED→GREEN
-  tests 4, pass 4, fail 0
+- **200-bps changed variant (genuinely unmet, by design)**: the requested
+  `RATE_BPS_V1@1.0.0 rateBasisPoints=200` has no released AP-04 core variant
+  (released variant is `rateBasisPoints=100`); the changed execution stays
+  `TYPED_UNKNOWN` with `coreExecutable=false`. This is the narrow boundary of
+  the public `NARROW_GO` verdict, not a defect of this source work.
+- **Parent delivery receipts (out of scope per directives, not performed
+  here)**: independent (Qwen) review, exact PR/Main CI, release publication,
+  anonymous readback, and public issue closure for #360/#361–#366. The public
+  AP implementation issues remain recorded as `6/6 open`; closure happens
+  after controller readback.
+- **General end-to-end product**: not delivered; the README keeps the
+  `[work in progress](https://github.com/JoFe2/PANSPHAIRA/issues/360)` link
+  for the general product. Only the bounded incoming-invoice local-synthetic
+  proof slice is proven.
 
-$ node scripts/generate-incoming-invoice-ap06-proof-probe.mjs --check
-  ee8a43aa145f6e7217bf31318a341473d2eaa875cfe54d5adf050fe93b74b287   # reproducible, byte-stable
+## Nonclaims
 
-$ node scripts/refresh-integrity-data.mjs              # SHA256SUMS + DAG regenerator
-  IDEMPOTENT: no new changes after refresh (stable fixpoint)
-
-$ node --test dist/tests/canonical-json-profile-inventory.test.js   # census
-  tests 35, pass 35, fail 0     # filesScanned=635 / importSites=212 / ledger=1809
-
-$ npm run incoming-invoice-ap05-receipt-manifest:test:compiled      # frozen predecessor intact
-  tests 6,  pass 6
-
-$ npm test                                             # canonical entrypoint
-  tests 717, pass 706, fail 11
-```
-
-The 11 `npm test` failures are all **environmental**, none touch AP-06 or any in-scope governance
-file:
-- **9 × `spawnSync docker ENOENT`** — `docker` is absent in this environment
-  (`command -v docker` → DOCKER_ABSENT). Failing files: `builder-agent-runtime`,
-  `managed-skill-lifecycle-runtime`, `model-access-broker-runtime`,
-  `openclaw-agent-runtime-lock`, `openclaw-agent-runtime`. Proven pre-existing: stashing all 14
-  changed files and re-running those files on clean HEAD reproduces the identical failures.
-- **2 × `ENOSPC`** in `supply-chain-verifier.test.mjs` — the 1 GB `/tmp` tmpfs fills under
-  full-suite scratch load (each run copies ~52 MB of fixtures). Proven environmental:
-  `node --test tests/supply-chain-verifier.test.mjs` on a clean `/tmp` passes **7/7, exit 0**.
-  (Transient `/tmp/cm-*` test residue from repeated runs was removed; zero-residue restored.)
-
-All in-scope tests pass within the full run: AP-06 (4/4), release-governance,
-verification-fabric-v2, census (35/35), manifest count (1495). `SHA256SUMS` is self-consistent
-with the on-disk bytes.
-
-## Change surface (verified with `git status`)
-
-- Modified (10): `SHA256SUMS`, `package.json`, `packages/contracts/src/index.ts`,
-  `release/public-files.manifest`, `scripts/build-public-release.sh`,
-  `tests/canonical-json-profile-inventory.test.ts`, `tests/release-governance.test.mjs`,
-  `tests/verification-fabric-v2.test.ts`,
-  `verification/canonical-json-profile-inventory-v1.json`, `verification/verification-dag-v2.json`.
-- Added (4): the module, generator script, test, and verification artifact.
-
-File SHA-256 (added files):
-```
-e2bc23278720885edc5742007a65405f1a2686daeca0ce044cf0ae1e0048bf6f  packages/contracts/src/incoming-invoice-ap06-proof-probe.ts
-3db7b13111e527baff69fe21d1d03c28718453237559a0139964a9d1e83fd5a3  scripts/generate-incoming-invoice-ap06-proof-probe.mjs
-4e4725ca8fed4c62936f49d6349a0f73bc87dad21aba9809ba6ee3061a89fba5  tests/incoming-invoice-ap06-proof-probe.test.ts
-183d4fb117b9e5996b61f740d89fcf8b47d92fdb911f7567d94dc190f58b7194  verification/incoming-invoice-ap06-proof-probe-v1.json
-```
-
-## Governance verification
-
-- Frozen predecessors: the 10 bound released sources (incl. the ERV core `incoming-invoice-erv.ts`
-  and the AP-05 receipt manifest) are **unchanged** in this diff; the AP-05 receipt manifest
-  regenerates **byte-for-byte** (ap05 test 6/6). The probe re-binds them, it does not modify them.
-- No test weakened and no governance rule changed; optional hints remain optional. The manifest
-  count, census counts, and DAG graphVersion (locked at 47) were raised **only** to the values the
-  single canonical regenerator produces, and the regenerator is idempotent (stable fixpoint).
-- No new DAG node was added: AP-06 reuses frozen predecessors and introduces no new capability, so
-  a digest-only re-bind at graphVersion 47 is the correct, non-weakening registration.
-
-## Unresolved / parent-side gates (NOT done here, by boundary)
-
-- Dependencies on #365 (AP-05), #374 (ERV-UI-01), #375 (ERV-BI-01) must be satisfied before this
-  can land.
-- The full `npm test` feature suite and the complete `pretest` chain run under exact PR/Main CI by
-  the parent. The 9 docker-ENOENT and 2 ENOSPC failures above are environmental in this sandbox
-  and are expected to resolve (or be excluded) under the parent's CI environment; they are not
-  defects of this change.
-- Parent performs: independent review, exact PR/Main CI, release, and anonymous readback.
-  Reconciliation. Queue/issue closure (AC05's operational half) is the delivery controller's job,
-  not this work's.
-- **This work must NOT be claimed as delivered, and issue #366 must NOT be closed.**
+- `NO_CUSTOMER_DATA_EVALUATED`; `NO_EXTERNAL_PROVIDER_EVALUATED`;
+  `NO_PRODUCTIVE_ALLOCATION_OR_POSTING_AUTHORIZED`; `NO_BOOKING_AUTHORITY_GRANTED`;
+  `NO_LIVE_ERP_SYSTEM_CLAIM`; `NO_INVENTED_CAPABILITY_OR_AUTHORITY`;
+  `NO_TOLERANCE_SUBSTITUTION_FOR_MISSING_VARIANT`. Nothing here is a claim
+  that #360 is delivered or closed; the 200-bps variant is never presented as
+  a released, supported or proven execution, and no arbitrary adaptability is
+  claimed as proven.

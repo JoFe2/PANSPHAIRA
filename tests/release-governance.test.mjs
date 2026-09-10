@@ -397,7 +397,21 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.match(readme, /open-ended,\s+user-need-driven option space/);
   assert.match(readme, /unverified knowledge record may exist without becoming an authoritative\s+default/);
   assert.match(readme, /Adapt any process\. Prove what works\./);
-  assert.match(readme, /WORK IN PROGRESS · PLANNED · SHORT-TERM PROOF/);
+  // PS360 source closure: the stale ERV WIP marker is replaced by the
+  // proven local-synthetic status with the exact immutable public proof
+  // and release links after the public #366 NARROW_GO verdict.
+  assert.match(readme, /`PROVEN_LOCAL_SYNTHETIC_POC · NARROW_GO · LOCAL SYNTHETIC`/);
+  assert.doesNotMatch(readme, /WORK IN PROGRESS · PLANNED · SHORT-TERM PROOF/);
+  assert.doesNotMatch(readme, /WORK IN PROGRESS/);
+  assert.match(readme, /releases\/tag\/ap-06-frozen-adapted-erv-proof-probe-with-narrow-go-verdict-issue-366-95ecd4d587d9/);
+  assert.match(readme, /raw\.githubusercontent\.com\/JoFe2\/PANSPHAIRA\/ae765100ac731b519906bacee5ce02dbeb2680d9\/verification\/incoming-invoice-ap06-proof-probe-v1\.json/);
+  assert.match(readme, /`NARROW_GO` verdict/);
+  assert.match(readme, /resolves `MATCHED`\s+through the released core/);
+  assert.match(readme, /200-bps\s+tolerance has no released executable variant and stays typed `UNKNOWN`/);
+  assert.match(readme, /not\s+a\s+proven 200-bps execution or arbitrary adaptability/);
+  // The requested 200-bps variant must never be presented as a released,
+  // supported or proven execution.
+  assert.doesNotMatch(readme, /200-bps (?:tolerance|variant) is (?:released|supported|proven)/i);
   assert.match(readme, /PanSphaira is building a governed path from individual needs/);
   assert.doesNotMatch(readme, /PanSphaira turns individual needs/);
   assert.doesNotMatch(readme, /It turns these inputs into a Capability or Process Blueprint/);
@@ -405,15 +419,19 @@ test("README presents governed adaptability and evidence-driven improvement with
   for (const issue of [361, 362, 363, 364, 365, 366]) {
     assert.match(readme, new RegExp(`github\\.com/JoFe2/PANSPHAIRA/issues/${issue}`));
   }
-  assert.match(readme, /Remove this work-in-progress marker only after #366 is closed with a public local-synthetic PoC release, anonymous readback, and a public `GO` or `NARROW_GO` verdict/);
+  assert.doesNotMatch(readme, /Remove this work-in-progress marker/);
   assert.match(readme, /docs\/INCOMING-INVOICE-PROVING-GROUND\.md/);
   assert.match(readme, /https:\/\/github\.com\/JoFe2\/KaleidoSphere/);
   assert.match(hierarchySource, /ROWS · SHARED HIERARCHY/);
   assert.match(hierarchySource, /COLUMNS · APPLICATION-SPECIFIC INSTANTIATIONS/);
   assert.match(hierarchySource, /t=q\.get\('theme'\)\|\|'blueprint'/);
   assert.doesNotMatch(hierarchySource, /<(?:script|img)[^>]+(?:src|href)="https?:\/\//i);
-  assert.match(incomingInvoice, /`WORK_IN_PROGRESS_PLANNED_NOT_DELIVERED`/);
-  assert.match(incomingInvoice, /Work-package specifications \| `6\/6` planned/);
+  assert.match(incomingInvoice, /`PROVEN_LOCAL_SYNTHETIC_POC_NARROW_GO`/);
+  assert.doesNotMatch(incomingInvoice, /WORK_IN_PROGRESS_PLANNED_NOT_DELIVERED/);
+  assert.doesNotMatch(incomingInvoice, /Product implementation \| Not started/);
+  assert.doesNotMatch(incomingInvoice, /Product release \| None/);
+  assert.match(incomingInvoice, /The general end-to-end product is\s+not delivered/);
+  assert.match(incomingInvoice, /Work-package specifications \| `6\/6` frozen and executed/);
   assert.match(incomingInvoice, /Public AP implementation issues \| `6\/6` open/);
   // PS373: ERV setup-agent dialogue and baseline-vs-adapted variant proof.
   // README teaser states the short-term proof adds a bounded setup-agent

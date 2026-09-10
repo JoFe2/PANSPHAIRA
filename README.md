@@ -14,12 +14,11 @@
 
 PanSphaira is building a governed path from individual needs and source-bound
 knowledge to AI-enabled process Blueprints, system-specific adaptations,
-readback and reusable evidence. Today it proves bounded parts of that path
-through released local-synthetic references; the general end-to-end product is
+readback and reusable evidence. Today it proves bounded parts of that path; the general end-to-end product is
 [work in progress](https://github.com/JoFe2/PANSPHAIRA/issues/360).
 
-Build privately for your own environment, or contribute a proven adaptation to
-an open Capability Library.
+Build privately, or contribute a proven adaptation to an open
+Capability Library.
 
 **Status:** [latest public evidence release](https://github.com/JoFe2/PANSPHAIRA/releases/latest)
 · proof of concept · Linux x86_64 · [Apache-2.0](LICENSE)
@@ -33,8 +32,8 @@ an open Capability Library.
 ## Adaptive Knowledge Engineering
 
 **Adaptive Knowledge Engineering** starts with the required outcome, the knowledge
-available in the target environment, and the controls the process needs. Unlike
-fixed automation or a generic AI promise, it keeps the adaptation traceable.
+available in the target environment, and the controls the process needs. It
+keeps the adaptation traceable.
 
 The product direction is to turn these inputs into a Capability or Process
 Blueprint, materialize it through governed software components, bind it to
@@ -73,7 +72,7 @@ silently expanding authority.
 
 ### Adapt incoming-invoice processing to the controls the situation needs
 
-`WORK IN PROGRESS · PLANNED · SHORT-TERM PROOF`
+`PROVEN_LOCAL_SYNTHETIC_POC · NARROW_GO · LOCAL SYNTHETIC`
 
 One AP model is designed to derive `LEAN`, `CONTROLLED`, and
 `SEGREGATED_ENTERPRISE` process variants from evidence, risk, approval, and
@@ -89,7 +88,7 @@ and its delivery chain:
 [AP-04 #364](https://github.com/JoFe2/PANSPHAIRA/issues/364) →
 [AP-05 #365](https://github.com/JoFe2/PANSPHAIRA/issues/365) →
 [AP-06 #366](https://github.com/JoFe2/PANSPHAIRA/issues/366).
-Remove this work-in-progress marker only after #366 is closed with a public local-synthetic PoC release, anonymous readback, and a public `GO` or `NARROW_GO` verdict.
+The frozen [AP-06 proof probe](https://github.com/JoFe2/PANSPHAIRA/releases/tag/ap-06-frozen-adapted-erv-proof-probe-with-narrow-go-verdict-issue-366-95ecd4d587d9) ([raw proof](https://raw.githubusercontent.com/JoFe2/PANSPHAIRA/ae765100ac731b519906bacee5ce02dbeb2680d9/verification/incoming-invoice-ap06-proof-probe-v1.json)) carries the `NARROW_GO` verdict: the baseline resolves `MATCHED` through the released core, while the changed 200-bps tolerance has no released executable variant and stays typed `UNKNOWN`—not a proven 200-bps execution or arbitrary adaptability.
 
 **[Explore the planned Source→Document AI→Matching→Advisor→UI→Receipt
 PoC](docs/INCOMING-INVOICE-PROVING-GROUND.md).**
