@@ -30,6 +30,41 @@ Security-critical issues may be marked `help wanted`, but are never beginner
 tasks. A `good first issue` label is reserved for independent, low-risk work
 whose dependencies are satisfied.
 
+## Delivery-contract template
+
+For an independently authorized, scoped deliverable, open an issue with the
+[delivery-contract template](.github/ISSUE_TEMPLATE/delivery-contract.yml). It
+is a request for review, structured in four parts: Ergebnis / Definition of
+Done, Readiness, Integration / Lieferung, and Fortsetzung / Nachweis.
+
+- **Readiness is scoped to the named range.** It lists only the technical
+  prerequisites inside that range. External evidence, outstanding holds, and
+  administration are a separate field, not readiness.
+- **The stages are distinct.** Code change, integration, public delivery,
+  certification, and administration are separate concerns; the template keeps
+  them in separate fields so one is not implied by another.
+- **Filled fields grant no approval and lift no holds.** Filling the form does
+  not assert readiness, delivery, or certification, and it does not remove any
+  hold. Independent reviews plus the release and readback rules in the [release
+  governance contract](docs/RELEASE-GOVERNANCE.md) remain binding.
+
+Two short, fictional examples of a filled contract:
+
+1. *Independently deliverable tooling.* Result: a new lint rule that flags
+   unclassified all-caps tokens in docs. Non-claims: does not change CI,
+   credentials, or release identity. Acceptance class: TOOLING. Hard AC:
+   `npm test` passes with the added rule (evidence: focused test). Authority:
+   Qwen product ownership. Readiness (technical, named range only): the rule
+   module exists. External evidence / holds: none.
+2. *Certification waits on external evidence; independent work continues.*
+   Result: a local candidate build ready for review. Non-claims: does not claim
+   release or certification. Acceptance class: CODE_CHANGE. Hard AC: the
+   canonical local check set is GREEN (evidence: test run plus
+   `sha256sum --check`). Readiness (technical, named range only): local checks
+   pass. External evidence / holds: public readback and release remain on hold,
+   owned by the delivery controller; independent work continues. On-hold owner:
+   delivery controller. Resume trigger: anonymous public readback passes.
+
 ## Validation and evidence
 
 Use evidence proportional to the changed surface:
