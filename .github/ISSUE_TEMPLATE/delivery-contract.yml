@@ -1,0 +1,187 @@
+name: Delivery contract
+description: Open a delivery-contract issue for an independently authorized, scoped PanSphaira deliverable. A filled form requests review; it grants no approval, lifts no holds, and does not assert readiness, delivery, or certification.
+title: "[Delivery]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Delivery contract
+
+        This form requests review of an independently authorized, scoped deliverable. A filled form
+        grants no approval and lifts no holds, and does not assert readiness, delivery, or certification.
+        Readiness is scoped to the named range only, and independent reviews plus release and readback
+        rules remain binding. See the [CONTRIBUTING guide](CONTRIBUTING.md) and the release governance
+        contract ([docs/RELEASE-GOVERNANCE.md](docs/RELEASE-GOVERNANCE.md)).
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Ergebnis / Definition of Done
+
+  - type: textarea
+    id: result
+    attributes:
+      label: Result / Definition of Done
+      description: The concrete, checkable result this deliverable produces, stated as facts.
+      placeholder: One or more short, verifiable outcomes (no status words).
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_claims
+    attributes:
+      label: Explicit non-claims (statement boundary)
+      description: What this deliverable explicitly does not do, assert, or change.
+      placeholder: e.g. does not open public issues; does not run external CI; does not remove holds.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: acceptance_class
+    attributes:
+      label: Acceptance class
+      description: Which acceptance class applies to the result.
+      options:
+        - CODE_CHANGE
+        - TOOLING
+        - DOCS
+        - GOVERNANCE
+        - EVIDENCE_ONLY
+    validations:
+      required: true
+
+  - type: textarea
+    id: hard_ac
+    attributes:
+      label: Hard acceptance criteria (with evidence type)
+      description: Each hard acceptance criterion and the type of evidence that proves it.
+      placeholder: AC1 statement; evidence type; one line per AC.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence_plan
+    attributes:
+      label: Evidence plan
+      description: How each piece of evidence is produced and where it is checked.
+      placeholder: Map each hard AC to a concrete check or artifact.
+    validations:
+      required: true
+
+  - type: textarea
+    id: inputs_provenance
+    attributes:
+      label: Versioned inputs and provenance
+      description: The versioned inputs and their provenance (admission base, spec digest, sources).
+      placeholder: admission_base sha; spec_digest sha; source of each input.
+    validations:
+      required: true
+
+  - type: textarea
+    id: authority
+    attributes:
+      label: Required authority
+      description: The authority required for this deliverable and which role holds it.
+      placeholder: e.g. Qwen product ownership plus controller review.
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Readiness
+
+  - type: textarea
+    id: technical_prereqs
+    attributes:
+      label: Technical prerequisites (internal, scoped to the named range)
+      description: Only the technical prerequisites that gate this deliverable, kept separate from external evidence, holds, and administration.
+      placeholder: Internal technical gates only; no external or administrative items.
+    validations:
+      required: true
+
+  - type: textarea
+    id: external_holds_admin
+    attributes:
+      label: External evidence / holds / administration (kept separate)
+      description: External evidence, outstanding holds, and administrative steps. These do not belong in technical readiness and are tracked by the delivery controller.
+      placeholder: List external evidence and holds, or none.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: Priority label for triage.
+      options:
+        - p0
+        - p1
+        - p2
+        - p3
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Integration / Lieferung
+
+  - type: textarea
+    id: integration_surfaces
+    attributes:
+      label: Common integration surfaces
+      description: The shared integration surfaces this deliverable touches (registers, manifests, integrity data, CI).
+      placeholder: Name the canonical surfaces and how each is updated.
+    validations:
+      required: true
+
+  - type: textarea
+    id: candidate_line
+    attributes:
+      label: Candidate line
+      description: The candidate line (branch and commit) that carries the deliverable.
+      placeholder: branch and base plus candidate commit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: delivery_owner
+    attributes:
+      label: Delivery Owner
+      description: The role or identity owning delivery of this deliverable.
+      placeholder: The owner role or identity.
+    validations:
+      required: true
+
+  - type: textarea
+    id: independent_reviewer
+    attributes:
+      label: Independent Reviewer
+      description: The independent reviewer for the candidate, distinct from the owner.
+      placeholder: The independent reviewer role or identity.
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Fortsetzung / Nachweis
+
+  - type: textarea
+    id: hold_owner
+    attributes:
+      label: On-hold owner (when waiting)
+      description: If the deliverable is on hold, who owns resuming it.
+      placeholder: Owner for the on-hold state, or n/a (not on hold).
+    validations:
+      required: true
+
+  - type: textarea
+    id: resume_trigger
+    attributes:
+      label: Resume trigger (when waiting)
+      description: The specific trigger that resumes the deliverable from hold.
+      placeholder: The event that resumes work, or n/a (not on hold).
+    validations:
+      required: true

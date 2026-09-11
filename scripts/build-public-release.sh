@@ -203,6 +203,7 @@ repository_only_files = {
     "src/cks-12/kaleidosphere-candidate-quarantine.ts",
     "tests/trust-compatibility-foundation-closure.test.ts",
     "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
+    "tests/delivery-contract-template.test.mjs",
     "verification/external-bi-service-paired-compatibility-v1.json",
     "verification/pansphaira-kaleidosphere-analytics-slice-v1.json",
     "verification/ps391-temporal-focused-receipt-v1.json",

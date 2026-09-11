@@ -4661,7 +4661,7 @@
         {
           "path": "CONTRIBUTING.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "a1cefd6163fbe7a9e70fa5ee750c1697901b7e80d2d589e02a1c5ac7aefd9bda"
+          "sha256": "8702a1b8d5d9b68560d0f21d98cb349b5e567fb634c2d5f0cd6e4548f47e514e"
         },
         {
           "path": "demo/install.sh",
@@ -4746,7 +4746,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "0273924949507a1aa9228b83dfafccee2070dea6ac570018acb2fb541c41adbc"
+          "sha256": "bb465a17eb5b1f6d2f952cfb85e1d07b8d53c0bc984afb5c806a41698d183ed0"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4766,7 +4766,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "dee1c3112a29405aac77eefcb722bec8a93c0a086af2f1173b9bc67455622c14"
+          "sha256": "005411249d3e5cc89bac274e47fcf64f99dccb1d826c4373d06fd67f4c06418a"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4801,7 +4801,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "0a9db2d719bf754a77f7f081022160c61eba053d7705caa631894cf68a18a2cb"
+          "sha256": "505971d80419b879659e9ce07a76d46a868cce811432f0e6815850929269f850"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5372,12 +5372,12 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "e5bb833a9397872b29d962616fe3d473a35cd7b11d41bb00799a4c8ae9bffc89"
+          "sha256": "e2cbacc0a32a188b6904c72c2c7bd069a7c5e4cbed8bf11e8661c322559a89f4"
         },
         {
           "path": "package-lock.json",
           "role": "TOOLCHAIN",
-          "sha256": "f9c8cf8dd234a3596fbdc00d350f7ce9d6eac358239aac6f1d37f66822abee83"
+          "sha256": "6abaac85f64cecc6b088652a8d8e8a30448cb767403870812d44467a8e10b75f"
         },
         {
           "path": "tsconfig.json",
