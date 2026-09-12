@@ -576,7 +576,45 @@ incomingInvoiceExtractionNode.inputs = [
   ["tests/incoming-invoice-extraction-benchmark.test.ts", "VALIDATOR"],
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 incomingInvoiceExtractionNode.ownedTests = ["npm run incoming-invoice-extraction:test"];
-dag.graphVersion = 47;
+let cscl11Node = dag.nodes.find(({ id }) => id === "cscl-11-idempiere-serial-holdout-gate-v1");
+if (cscl11Node === undefined) {
+  cscl11Node = {
+    id: "cscl-11-idempiere-serial-holdout-gate-v1",
+    dependsOn: ["cscl-08-party-candidate-v1", "cscl-09-product-candidate-v1", "cscl-10-sales-candidate-v1"],
+    inputs: [],
+    ownedTests: ["npm run cscl11:test"],
+    invariants: [
+      "The byte-frozen CSCL-08/09/10 candidates are consumed read-only: raw candidate bytes, frozen digests and frozen slots are replayed without editing, and any drift fails CANDIDATE_BYTES_MUTATED_AFTER_FREEZE.",
+      "The exact official iDempiere bytes at the pinned immutable commit 731515dcdd5278b843db33b9d3109d155b881951 are bound: 16-file capture receipt with per-file sha256/byteLength, GPL-2.0-or-later license bytes and committed locator evidence (HTTP 200 plus whole-file digest match for all 16 rawUrls); any dead, drifted or digest-mismatched locator fails the source gate closed.",
+      "All 36 holdout source facts, 36 evidence cells and the complete party/product/sales denominators replay deterministically from the frozen bytes; the empty party and sales frozen cores are reported as FALSIFIED_WITH_EVIDENCE narrowing, never patched.",
+      "No holdout tuning, no universal-ERP-compatibility claim and no Authority, promotion or execution grant; the overall GO / NARROW_GO / FALSIFIED_WITH_EVIDENCE verdict derives only from the frozen protocol functions and the six governance gates.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(cscl11Node);
+}
+cscl11Node.inputs = [
+  ["src/cscl-11/holdout-facts.mjs", "VALIDATOR"],
+  ["src/cscl-11/holdout-gate.mjs", "VALIDATOR"],
+  ["tests/cscl-11/holdout-gate.test.mjs", "VALIDATOR"],
+  ["scripts/capture-cscl-11-source-locators.mjs", "VALIDATOR"],
+  ["verification/cscl-11-idempiere-source-capture-receipt-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-source-locator-verification-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-holdout-profile-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-isolation-proof-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-governance-gates-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-family-results-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-mapping-party-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-mapping-product-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-mapping-sales-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-holdout-verdict-party-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-holdout-verdict-product-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-holdout-verdict-sales-v1.json", "DERIVED_EVIDENCE"],
+  ["verification/cscl-11-idempiere-holdout-verdict-overall-v1.json", "DERIVED_EVIDENCE"],
+].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+cscl11Node.ownedTests = ["npm run cscl11:test"];
+dag.graphVersion = 48;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
