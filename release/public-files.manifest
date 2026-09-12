@@ -588,6 +588,7 @@ scripts/adaptive-delivery-status.mjs	scripts/adaptive-delivery-status.mjs	0755
 scripts/adaptive-evidence-gates.mjs	scripts/adaptive-evidence-gates.mjs	0755
 scripts/build-public-release.sh	scripts/build-public-release.sh	0755
 scripts/build-rks-01-pilot-corpora.mjs	scripts/build-rks-01-pilot-corpora.mjs	0644
+scripts/capture-cscl-11-source-locators.mjs	scripts/capture-cscl-11-source-locators.mjs	0644
 scripts/capture-rks-01-sources.mjs	scripts/capture-rks-01-sources.mjs	0644
 scripts/cks-05-build-arm-inputs.mjs	scripts/cks-05-build-arm-inputs.mjs	0644
 scripts/cks-05-materialize-hidden-run.mjs	scripts/cks-05-materialize-hidden-run.mjs	0644
@@ -692,6 +693,8 @@ src/cscl-07/matrix.mjs	src/cscl-07/matrix.mjs	0644
 src/cscl-08/party-candidate.mjs	src/cscl-08/party-candidate.mjs	0644
 src/cscl-09/product-candidate.mjs	src/cscl-09/product-candidate.mjs	0644
 src/cscl-10/sales-candidate.mjs	src/cscl-10/sales-candidate.mjs	0644
+src/cscl-11/holdout-facts.mjs	src/cscl-11/holdout-facts.mjs	0644
+src/cscl-11/holdout-gate.mjs	src/cscl-11/holdout-gate.mjs	0644
 src/rks-01/application-guide-projector.mjs	src/rks-01/application-guide-projector.mjs	0644
 src/rks-01/comparator.mjs	src/rks-01/comparator.mjs	0644
 src/rks-01/corpus-builder.mjs	src/rks-01/corpus-builder.mjs	0644
@@ -859,6 +862,7 @@ tests/cscl-08/party-candidate.test.mjs	tests/cscl-08/party-candidate.test.mjs	06
 tests/cscl-09/product-candidate-independent-oracle.mjs	tests/cscl-09/product-candidate-independent-oracle.mjs	0644
 tests/cscl-09/product-candidate.test.mjs	tests/cscl-09/product-candidate.test.mjs	0644
 tests/cscl-10/sales-candidate.test.mjs	tests/cscl-10/sales-candidate.test.mjs	0644
+tests/cscl-11/holdout-gate.test.mjs	tests/cscl-11/holdout-gate.test.mjs	0644
 tests/demo-admin-ai-poc.test.mjs	tests/demo-admin-ai-poc.test.mjs	0644
 tests/demo-approval-workbench.test.mjs	tests/demo-approval-workbench.test.mjs	0644
 tests/demo-current-head-e2e-delivery.test.mjs	tests/demo-current-head-e2e-delivery.test.mjs	0644
@@ -1483,6 +1487,19 @@ verification/cscl-09-product-candidate-receipt-v1.json	verification/cscl-09-prod
 verification/cscl-09-product-candidate-v1.json	verification/cscl-09-product-candidate-v1.json	0644
 verification/cscl-10-sales-candidate-receipt-v1.json	verification/cscl-10-sales-candidate-receipt-v1.json	0644
 verification/cscl-10-sales-candidate-v1.json	verification/cscl-10-sales-candidate-v1.json	0644
+verification/cscl-11-idempiere-family-results-v1.json	verification/cscl-11-idempiere-family-results-v1.json	0644
+verification/cscl-11-idempiere-governance-gates-v1.json	verification/cscl-11-idempiere-governance-gates-v1.json	0644
+verification/cscl-11-idempiere-holdout-profile-v1.json	verification/cscl-11-idempiere-holdout-profile-v1.json	0644
+verification/cscl-11-idempiere-holdout-verdict-overall-v1.json	verification/cscl-11-idempiere-holdout-verdict-overall-v1.json	0644
+verification/cscl-11-idempiere-holdout-verdict-party-v1.json	verification/cscl-11-idempiere-holdout-verdict-party-v1.json	0644
+verification/cscl-11-idempiere-holdout-verdict-product-v1.json	verification/cscl-11-idempiere-holdout-verdict-product-v1.json	0644
+verification/cscl-11-idempiere-holdout-verdict-sales-v1.json	verification/cscl-11-idempiere-holdout-verdict-sales-v1.json	0644
+verification/cscl-11-idempiere-isolation-proof-v1.json	verification/cscl-11-idempiere-isolation-proof-v1.json	0644
+verification/cscl-11-idempiere-mapping-party-v1.json	verification/cscl-11-idempiere-mapping-party-v1.json	0644
+verification/cscl-11-idempiere-mapping-product-v1.json	verification/cscl-11-idempiere-mapping-product-v1.json	0644
+verification/cscl-11-idempiere-mapping-sales-v1.json	verification/cscl-11-idempiere-mapping-sales-v1.json	0644
+verification/cscl-11-idempiere-source-capture-receipt-v1.json	verification/cscl-11-idempiere-source-capture-receipt-v1.json	0644
+verification/cscl-11-idempiere-source-locator-verification-v1.json	verification/cscl-11-idempiere-source-locator-verification-v1.json	0644
 verification/demo-current-head-e2e/contract-v1.json	verification/demo-current-head-e2e/contract-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644

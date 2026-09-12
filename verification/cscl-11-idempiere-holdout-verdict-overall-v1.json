@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "pansphaira.cscl01/holdout-verdict/v1",
+  "verdictId": "cscl-11-idempiere-holdout-verdict-overall-v1",
+  "scope": "OVERALL",
+  "familyVerdicts": [
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "mappingReceiptDigest": "d2c48189289e49f6b1d8e750e871c10fb7cc4a0f8f5b116ab397a2b77672f0f8",
+      "mappedRatio": 1,
+      "unmappedRatio": 0,
+      "corePreservationRatio": 0,
+      "coreContradictions": 0,
+      "verdict": "FALSIFIED_WITH_EVIDENCE"
+    },
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "mappingReceiptDigest": "a9574e390bb3d7ad947ad7c4d97d853c1ebdc53e4601c2f06aa185a8099b0729",
+      "mappedRatio": 1,
+      "unmappedRatio": 0,
+      "corePreservationRatio": 1,
+      "coreContradictions": 0,
+      "verdict": "GO"
+    },
+    {
+      "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+      "mappingReceiptDigest": "1e24452a6ba33bb3006b0d17b7107c5d558b0be22a778b323a89aba68c09e9b0",
+      "mappedRatio": 1,
+      "unmappedRatio": 0,
+      "corePreservationRatio": 0,
+      "coreContradictions": 0,
+      "verdict": "FALSIFIED_WITH_EVIDENCE"
+    }
+  ],
+  "governanceGates": {
+    "source": true,
+    "legal": true,
+    "history": true,
+    "integrity": true,
+    "denominator": true,
+    "isolation": true
+  },
+  "verdict": "NARROW_GO",
+  "reasonCodes": [
+    "ONE_OR_TWO_FAMILIES_GO"
+  ],
+  "nonClaims": [
+    "NO_HOLDOUT_TUNING_APPLIED",
+    "NO_UNIVERSAL_ERP_COMPATIBILITY_CLAIM",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "EMPTY_FROZEN_CORE_REPORTED_AS_NARROWING_NOT_PATCHED"
+  ],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "verdictDigest": "7a8056b2c254256e046116aba9ebb559ebf71b966d5e2d752643fc1c680f18fa"
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "pansphaira.cscl01/mapping-receipt/v1",
+  "receiptId": "cscl-11-idempiere-mapping-party-v1",
+  "holdoutSystemId": "idempiere",
+  "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+  "frozenCandidateDigest": "94bd8998d38edbd9728be6283206867f2b2aca5a161a216972994ab16ea4f111",
+  "frozenCandidateBytesSha256": "94bd8998d38edbd9728be6283206867f2b2aca5a161a216972994ab16ea4f111",
+  "holdoutProfileDigest": "0e54472ef7d6ce09877f5b9b5abdaf08623889a213337f67cb2c6a03f4446014",
+  "mappings": [
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.objects-roles",
+      "classification": "VARIANT",
+      "candidateElementId": "party-objects-roles",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "8403ab9af889b29e36f00d40f7456d9485cd7f2452854d5050ed993be4627f6d"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.relations",
+      "classification": "VARIANT",
+      "candidateElementId": "party-relations",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "d06b1201cb51d9b59aab942720660616ccff03b8dc2bcf5cfb37f7f82dbf8d3d"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.operations",
+      "classification": "VARIANT",
+      "candidateElementId": "party-operations",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "bb32916751d99204a6ed25e521f58a714f6cf817c74259652aa9ee50d7b8916b"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.inputs-outputs",
+      "classification": "VARIANT",
+      "candidateElementId": "party-inputs-outputs",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "e30fde9611c013c89c404d294218ff095c320e5e1a489a8714af9124c9449633"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.states-transitions",
+      "classification": "VARIANT",
+      "candidateElementId": "party-states-transitions",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "e32a9ff37327e1e1524e4e186f8888f7b5f5d75e469108945f6972771afe6fa2"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.preconditions",
+      "classification": "VARIANT",
+      "candidateElementId": "party-preconditions",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "d8105da1f4e285b3d62d8c8787380e78bd9577f0dcdb09f627336970e8b7383f"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.invariants",
+      "classification": "VARIANT",
+      "candidateElementId": "party-invariants",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "a6d11e7a92e95407b2f69329e4170f977aa59c1156960dda2561a626f201d9c5"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.exceptions-errors",
+      "classification": "VARIANT",
+      "candidateElementId": "party-exceptions-errors",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "a326e2b3271e3c4b2aeef101f5c7edef830d6e9b5b1a7de99913f88e7646a3a4"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.party-customer-management.readbacks",
+      "classification": "VARIANT",
+      "candidateElementId": "party-readbacks",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "d2509d9b8bdfca41d18d1a14890ad16445e5ee95c3feb2cefb150b8dbad21d30"
+      ]
+    }
+  ],
+  "denominators": {
+    "applicable": 9,
+    "mappedToCore": 0,
+    "mappedToVariant": 9,
+    "unmapped": 0,
+    "coreTotal": 0,
+    "coreIdentityPreserved": 0,
+    "coreContradictions": 0
+  },
+  "extensions": [],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "receiptDigest": "d2c48189289e49f6b1d8e750e871c10fb7cc4a0f8f5b116ab397a2b77672f0f8"
+}

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "pansphaira.cscl01/mapping-receipt/v1",
+  "receiptId": "cscl-11-idempiere-mapping-sales-v1",
+  "holdoutSystemId": "idempiere",
+  "capabilityFamily": "SALES_ORDER_MANAGEMENT",
+  "frozenCandidateDigest": "636c33318dc0b542e5be8b1849eb798dcebbf3ac51ea64ea86ffcacac99d6c0e",
+  "frozenCandidateBytesSha256": "636c33318dc0b542e5be8b1849eb798dcebbf3ac51ea64ea86ffcacac99d6c0e",
+  "holdoutProfileDigest": "0e54472ef7d6ce09877f5b9b5abdaf08623889a213337f67cb2c6a03f4446014",
+  "mappings": [
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.objects-roles",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-objects-roles",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "58f79c1990ac890653c3303ab5b9805f038d27757b19bb33cd980d9c0156506d"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.relations",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-relations",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "01ac81ba16dbfdcd5a83fe15bf7e614d8d35e15bdfc689f02e3dbec5060ba6b1"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.operations",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-operations",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "bfab53458390db7699d6539d2cd5fd8ab434936a2b17d4b113af1d5c927af483"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.inputs-outputs",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-inputs-outputs",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "5d94516c8ff84fedaa4018d4d9fbae055fa00fa3689af539fad055d86895095e"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.states-transitions",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-states-transitions",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "f0ed6c0baa634e1080437d8e751a1a99a87c316ffc1ec328a09ccb87bd52d7d2"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.preconditions",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-preconditions",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "aeaf8efe7bad3e0d41c651105d7850ac134a59e1058f0e3dbfa3cad86fe81efd"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.invariants",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-invariants",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "055d3054d6e577d3277c544b002a2be4567f2ead3f641a0c46c8021dac11390c"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.exceptions-errors",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-exceptions-errors",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "d056e211e72a5dfd488b15bfb44f2f03f1a48a88b3d5efab5fbc32ffa7848770"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.readbacks",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-readbacks",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "2d6c09f51ef47ab0ef465aa60360d7262170fe13af1f6b3f16d71aa4f2efc062"
+      ]
+    },
+    {
+      "holdoutConceptId": "idempiere.sales-order-management.absence-ambiguity-conflict",
+      "classification": "VARIANT",
+      "candidateElementId": "sales-absence-ambiguity-conflict",
+      "meaningPreserved": true,
+      "sourceFactDigests": [
+        "63e858a2ad322a7c9793d7e93df6c6688e236b9e601ed9650c9512786e08cca1"
+      ]
+    }
+  ],
+  "denominators": {
+    "applicable": 10,
+    "mappedToCore": 0,
+    "mappedToVariant": 10,
+    "unmapped": 0,
+    "coreTotal": 0,
+    "coreIdentityPreserved": 0,
+    "coreContradictions": 0
+  },
+  "extensions": [],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "receiptDigest": "1e24452a6ba33bb3006b0d17b7107c5d558b0be22a778b323a89aba68c09e9b0"
+}
