@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "pansphaira.cscl11/idempiere-source-capture/v1",
+  "receiptId": "cscl-11-idempiere-source-capture-receipt-v1",
+  "systemId": "idempiere",
+  "systemRole": "HOLDOUT",
+  "selector": "refs/heads/release-13",
+  "resolvedCommit": "731515dcdd5278b843db33b9d3109d155b881951",
+  "officialRepository": "https://github.com/idempiere/idempiere.git",
+  "files": [
+    {
+      "name": "I_C_BPartner.java",
+      "path": "org.adempiere.base/src/org/compiere/model/I_C_BPartner.java",
+      "byteLength": 28116,
+      "sha256": "7bef3437bf13bbf29b6b663a5a0c8a7f3b804be439f5971069c23291336b9f5f",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/I_C_BPartner.java"
+    },
+    {
+      "name": "I_C_BPartner_Location.java",
+      "path": "org.adempiere.base/src/org/compiere/model/I_C_BPartner_Location.java",
+      "byteLength": 8907,
+      "sha256": "c1cc97defb52fa2e52fd61c2d54c1122a4dda238b86ab4375e799bb32d9ecfec",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/I_C_BPartner_Location.java"
+    },
+    {
+      "name": "I_C_Location.java",
+      "path": "org.adempiere.base/src/org/compiere/model/I_C_Location.java",
+      "byteLength": 9409,
+      "sha256": "8181381692fab844667e4a6f4bcd79a926b52671e8e14d45b06a4d9e8a0419b3",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/I_C_Location.java"
+    },
+    {
+      "name": "I_C_Order.java",
+      "path": "org.adempiere.base/src/org/compiere/model/I_C_Order.java",
+      "byteLength": 36547,
+      "sha256": "3c1867dc69f2ea88243b93ed6734342c9c504c3f4833b3e08eef8cb38029215a",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/I_C_Order.java"
+    },
+    {
+      "name": "I_C_OrderLine.java",
+      "path": "org.adempiere.base/src/org/compiere/model/I_C_OrderLine.java",
+      "byteLength": 23828,
+      "sha256": "1efe83ab7cefe9623f2af322f298eedab602e2404f51911cedc9ff9a6f25a1e3",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/I_C_OrderLine.java"
+    },
+    {
+      "name": "I_M_Product.java",
+      "path": "org.adempiere.base/src/org/compiere/model/I_M_Product.java",
+      "byteLength": 25882,
+      "sha256": "ea0b281093dc554c64bb4a37e2204d4a10f6a4d09b8c080b3dea8572bb6269ca",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/I_M_Product.java"
+    },
+    {
+      "name": "I_M_Product_Category.java",
+      "path": "org.adempiere.base/src/org/compiere/model/I_M_Product_Category.java",
+      "byteLength": 8010,
+      "sha256": "c79eb991db5513ab2a074d670266388ac8476de860754298e1358e7734d610d4",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/I_M_Product_Category.java"
+    },
+    {
+      "name": "MBPartner.java",
+      "path": "org.adempiere.base/src/org/compiere/model/MBPartner.java",
+      "byteLength": 30989,
+      "sha256": "970adb40d1770cef1b25067ab93b0defc246fd013aefc938b015d32d663a1ec3",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/MBPartner.java"
+    },
+    {
+      "name": "MBPartnerLocation.java",
+      "path": "org.adempiere.base/src/org/compiere/model/MBPartnerLocation.java",
+      "byteLength": 8858,
+      "sha256": "c495d4065848094ffcbccba8c9695518792bb407ac65c9729d4d8150bbd15cfb",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/MBPartnerLocation.java"
+    },
+    {
+      "name": "MOrder.java",
+      "path": "org.adempiere.base/src/org/compiere/model/MOrder.java",
+      "byteLength": 104734,
+      "sha256": "f41fe130cca88cf133dc8f5159e991ee05702382d7db389df0ac1e29dee7e518",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/MOrder.java"
+    },
+    {
+      "name": "MOrderLine.java",
+      "path": "org.adempiere.base/src/org/compiere/model/MOrderLine.java",
+      "byteLength": 30799,
+      "sha256": "e990a28298d9fb2afa4a0c7c72d10be5997e8402e2c98c0babe0541e033cf945",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/MOrderLine.java"
+    },
+    {
+      "name": "MProduct.java",
+      "path": "org.adempiere.base/src/org/compiere/model/MProduct.java",
+      "byteLength": 36264,
+      "sha256": "a9377e7ae32dce65a862f5106f199ca835dbede460a2c633acea766d1a5a670d",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/MProduct.java"
+    },
+    {
+      "name": "MProductCategory.java",
+      "path": "org.adempiere.base/src/org/compiere/model/MProductCategory.java",
+      "byteLength": 10214,
+      "sha256": "55528cb9f0505cc3da8d92f516e8f36bd3c16c2fc21e3fc513081e6b3919093d",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/MProductCategory.java"
+    },
+    {
+      "name": "overview.html",
+      "path": "org.adempiere.base/src/org/compiere/model/overview.html",
+      "byteLength": 323,
+      "sha256": "683f72cba8b7463b6def85c6423b04e58f0086c76216728947f1cb5bdf85e37f",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/overview.html"
+    },
+    {
+      "name": "LICENSE.md",
+      "path": "LICENSE.md",
+      "byteLength": 15057,
+      "sha256": "ff71df08df5d013473e420dfe5a0208f4dfdadbade1805204afc6f586a6f7624",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/LICENSE.md"
+    },
+    {
+      "name": "README.md",
+      "path": "README.md",
+      "byteLength": 3486,
+      "sha256": "83de5b14fceeb3dafff7bd938aab5422471672e839d8415cf7cfe57a1ceb6742",
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/README.md"
+    }
+  ],
+  "legal": {
+    "licenseId": "GPL-2.0-or-later",
+    "licenseSha256": "ff71df08df5d013473e420dfe5a0208f4dfdadbade1805204afc6f586a6f7624",
+    "noticeStatus": "ABSENT_AT_PIN",
+    "projectMetadataSha256": "83de5b14fceeb3dafff7bd938aab5422471672e839d8415cf7cfe57a1ceb6742"
+  },
+  "factCount": 36,
+  "note": "Exact official bytes captured at the pinned commit on the protected release branch; digests are sha256 of the whole captured file. iDempiere semantics are used ONLY for this holdout gate, never for training (AC1).",
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "receiptDigest": "7821b3bd7fe4cf6dbb574104b39fd93ebbcfffbc8fb79be3e699e378f5445cd8"
+}

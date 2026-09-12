@@ -4736,7 +4736,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "671d14887e1a4959b9efa79241a6a6f823a9acf4064145aad32561ad3b632b23"
+          "sha256": "9934f08411fbc348a70b95cb171b53209533150de874ee8fe2e9a8d551717e59"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4746,7 +4746,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "bb465a17eb5b1f6d2f952cfb85e1d07b8d53c0bc984afb5c806a41698d183ed0"
+          "sha256": "4225348335c793ccb46253e6058402e6176ecfdbfed171555026c5fa0ce940e4"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4766,7 +4766,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "005411249d3e5cc89bac274e47fcf64f99dccb1d826c4373d06fd67f4c06418a"
+          "sha256": "e23c4291da25fea909819b4985ae927abbb6712ee507191efa9b2562de9ea724"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4791,7 +4791,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e8e94e72ef77884420e827e841dea0b6e62b5dc81df6da4fa4996f768f0aab7f"
+          "sha256": "e11bb17c64ca270f2da46257ee2de6e6ea6ea2f5fed55be7bde906ff16893926"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4801,7 +4801,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "505971d80419b879659e9ce07a76d46a868cce811432f0e6815850929269f850"
+          "sha256": "c7116fd065a0a57365829397081123cc0fadca1ca05677801c8c713b18e2f496"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5372,7 +5372,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "e2cbacc0a32a188b6904c72c2c7bd069a7c5e4cbed8bf11e8661c322559a89f4"
+          "sha256": "25e45adf034c7f668aa375e104d4f773b3c7041b3b49ad18e5657976e0ae69b0"
         },
         {
           "path": "package-lock.json",
@@ -5732,7 +5732,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "002d2af9d17bf3493f1c891114c6d4453f45bf5cb1b067c9a6648753aadf6be5"
+          "sha256": "c4a5c56fad5239a789ca63c82fecc510c891952d5f8fb983dd1d0394c60afaea"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -5997,7 +5997,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "671d14887e1a4959b9efa79241a6a6f823a9acf4064145aad32561ad3b632b23"
+          "sha256": "9934f08411fbc348a70b95cb171b53209533150de874ee8fe2e9a8d551717e59"
         }
       ],
       "ownedTests": [

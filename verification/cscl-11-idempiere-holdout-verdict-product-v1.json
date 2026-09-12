@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "pansphaira.cscl01/holdout-verdict/v1",
+  "verdictId": "cscl-11-idempiere-holdout-verdict-product-v1",
+  "scope": "FAMILY",
+  "familyVerdicts": [
+    {
+      "capabilityFamily": "PRODUCT_ITEM_MANAGEMENT",
+      "mappingReceiptDigest": "a9574e390bb3d7ad947ad7c4d97d853c1ebdc53e4601c2f06aa185a8099b0729",
+      "mappedRatio": 1,
+      "unmappedRatio": 0,
+      "corePreservationRatio": 1,
+      "coreContradictions": 0,
+      "verdict": "GO"
+    }
+  ],
+  "governanceGates": {
+    "source": true,
+    "legal": true,
+    "history": true,
+    "integrity": true,
+    "denominator": true,
+    "isolation": true
+  },
+  "verdict": "GO",
+  "reasonCodes": [
+    "HOLDOUT_FAMILY_GO"
+  ],
+  "nonClaims": [
+    "NO_HOLDOUT_TUNING_APPLIED",
+    "NO_UNIVERSAL_ERP_COMPATIBILITY_CLAIM",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "CORE_FROZEN_CANDIDATES_UNMODIFIED"
+  ],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "verdictDigest": "0e7342a61dc385badb72f80ccdcbfcb003c2ef664adbbde22cb80eb310113c45"
+}

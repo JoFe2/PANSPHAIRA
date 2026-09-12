@@ -1,0 +1,28 @@
+{
+  "clean": true,
+  "conclusion": "NO_IDEMPIERE_SEMANTIC_SOURCE_CONSUMED_BY_CSCL_01_10",
+  "perCandidate": [
+    {
+      "file": "verification/cscl-08-party-candidate-v1.json",
+      "frozenDigestMatchesActual": true,
+      "idempiereFactRefs": [],
+      "nonTrainingSystemIds": [],
+      "clean": true
+    },
+    {
+      "file": "verification/cscl-09-product-candidate-v1.json",
+      "frozenDigestMatchesActual": true,
+      "idempiereFactRefs": [],
+      "nonTrainingSystemIds": [],
+      "clean": true
+    },
+    {
+      "file": "verification/cscl-10-sales-candidate-v1.json",
+      "frozenDigestMatchesActual": true,
+      "idempiereFactRefs": [],
+      "nonTrainingSystemIds": [],
+      "clean": true
+    }
+  ],
+  "basis": "cscl-01 selector marks idempiere role=HOLDOUT; cscl-01 freeze receipt records IDENTITY_ONLY_RESOLVED_HOLDOUT_SEMANTICS_NOT_INSPECTED; cscl-08/09/10 candidates cite only the five training systems' source facts (verified above by byte scan)."
+}

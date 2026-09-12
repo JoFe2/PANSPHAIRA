@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "pansphaira.cscl01/holdout-verdict/v1",
+  "verdictId": "cscl-11-idempiere-holdout-verdict-party-v1",
+  "scope": "FAMILY",
+  "familyVerdicts": [
+    {
+      "capabilityFamily": "PARTY_CUSTOMER_MANAGEMENT",
+      "mappingReceiptDigest": "d2c48189289e49f6b1d8e750e871c10fb7cc4a0f8f5b116ab397a2b77672f0f8",
+      "mappedRatio": 1,
+      "unmappedRatio": 0,
+      "corePreservationRatio": 0,
+      "coreContradictions": 0,
+      "verdict": "FALSIFIED_WITH_EVIDENCE"
+    }
+  ],
+  "governanceGates": {
+    "source": true,
+    "legal": true,
+    "history": true,
+    "integrity": true,
+    "denominator": true,
+    "isolation": true
+  },
+  "verdict": "FALSIFIED_WITH_EVIDENCE",
+  "reasonCodes": [
+    "INVALID_CORE_DENOMINATOR",
+    "CORE_IDENTITY_OR_MEANING_NOT_100_PERCENT_PRESERVED"
+  ],
+  "nonClaims": [
+    "NO_HOLDOUT_TUNING_APPLIED",
+    "NO_UNIVERSAL_ERP_COMPATIBILITY_CLAIM",
+    "NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT",
+    "CORE_FROZEN_CANDIDATES_UNMODIFIED"
+  ],
+  "boundary": {
+    "authorityGrant": "NONE",
+    "promotionGrant": "NONE",
+    "executionGrant": "NONE"
+  },
+  "verdictDigest": "d434857e7a150efbef30aff9728eb076791db794881a09b31d11f40f73d4184c"
+}
