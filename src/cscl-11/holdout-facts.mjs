@@ -555,7 +555,7 @@ export const FILES = [
   },
   {
     "name": "overview.html",
-    "path": "org.adempiere.base/src/org/compiere/model/overview.html",
+    "path": "doc/doc/overview.html",
     "byteLength": 323,
     "sha256": "683f72cba8b7463b6def85c6423b04e58f0086c76216728947f1cb5bdf85e37f"
   },

@@ -3,7 +3,10 @@
 // This module is READ-ONLY over the byte-frozen CSCL-08/09/10 capability
 // candidates and the CSCL-01 frozen protocol. It:
 //   AC2  records the exact official iDempiere source/doc/license bytes at the
-//        pinned commit (a source-capture receipt over 16 pinned files);
+//        pinned commit (a source-capture receipt over 16 pinned files) and
+//        proves every capture rawUrl is resolvable at the pin: the source gate
+//        fails closed unless the committed locator-verification evidence
+//        (per-file HTTP 200 + whole-file digest match) binds to the receipt;
 //   AC3  builds the three-family (Party/Product/Sales) holdout profile
 //        bundle {profile, cells, sourceFacts} independently of the candidates;
 //   AC4  maps holdout facts to the frozen core/variant/absence slots WITHOUT
@@ -50,6 +53,11 @@ export const SELECTOR_SET_DIGEST = "ea6029f3691b5e4ac635945541a2680b9c81eaefb712
 export const QUESTION_INVENTORY_DIGEST = "842527ddfdc7fb706b2fd0af798be286c03aa85b37152a011a8f0affff331c28";
 export const RAW_BASE = `https://raw.githubusercontent.com/idempiere/idempiere/${COMMIT}`;
 export const PROJECT_METADATA_URL = `${RAW_BASE}/README.md`;
+// Committed fetch evidence for the AC2 provenance boundary: per-file HTTP status +
+// whole-file digest of each rawUrl at the pinned immutable commit. Produced by
+// scripts/capture-cscl-11-source-locators.mjs; the source gate fails closed when
+// any locator is missing, unresolved (non-200) or digest-mismatched.
+export const LOCATOR_VERIFICATION_FILE = "verification/cscl-11-idempiere-source-locator-verification-v1.json";
 
 export const LEGAL = Object.freeze({
   licenseId: "GPL-2.0-or-later",
@@ -241,7 +249,18 @@ export function buildProfileBundle() {
 }
 
 // ---- AC2: source-capture receipt (16 pinned files) ----
-export function buildSourceCaptureReceipt() {
+// The receipt binds its provenance to the committed locator-verification
+// artifact (per-file HTTP status + digest at the pinned commit). The digest is
+// read from that artifact (never self-attested here); the source gate separately
+// re-validates the artifact's entries against the capture files (fail-closed).
+export function buildSourceCaptureReceipt({ repoRoot = DEFAULT_REPO_ROOT, locatorVerificationDigest } = {}) {
+  let artifactReceiptDigest = locatorVerificationDigest;
+  if (artifactReceiptDigest === undefined) {
+    const parsed = readSourceLocatorVerification(repoRoot);
+    const body = { ...parsed };
+    delete body.receiptDigest;
+    artifactReceiptDigest = sha256Bytes(Buffer.from(canonicalJson(body)));
+  }
   const body = {
     schemaVersion: "pansphaira.cscl11/idempiere-source-capture/v1",
     receiptId: "cscl-11-idempiere-source-capture-receipt-v1",
@@ -264,10 +283,59 @@ export function buildSourceCaptureReceipt() {
       projectMetadataSha256: LEGAL.projectMetadataSha256,
     },
     factCount: FACTS.length,
+    locatorVerification: {
+      artifact: LOCATOR_VERIFICATION_FILE,
+      artifactReceiptDigest,
+    },
     note: "Exact official bytes captured at the pinned commit on the protected release branch; digests are sha256 of the whole captured file. iDempiere semantics are used ONLY for this holdout gate, never for training (AC1).",
     boundary: { ...BOUNDARY },
   };
   return { ...body, receiptDigest: sha256Bytes(Buffer.from(canonicalJson(body))) };
+}
+
+// ---- AC2: locator verification (committed fetch evidence, fail-closed) ----
+export function readSourceLocatorVerification(repoRoot) {
+  const raw = readFileSync(resolve(repoRoot, LOCATOR_VERIFICATION_FILE));
+  return JSON.parse(raw.toString("utf8"));
+}
+// Validate the committed locator-verification artifact against the capture files.
+// Every one of the 16 rawUrls must have been fetched at the pinned commit with
+// HTTP 200, a response body whose sha256 equals the capture digest, and an exact
+// rawUrl of the form <rawBase>/<path>. Any miss is a provenance-boundary violation
+// and returns ok:false (the source gate then fails closed).
+export function validateSourceLocator(verification, files = FILES, rawBase = RAW_BASE, commit = COMMIT) {
+  if (!verification || typeof verification !== "object" || Array.isArray(verification)) {
+    return { ok: false, errors: ["LOCATOR_VERIFICATION_MISSING"] };
+  }
+  const errors = [];
+  if (verification.resolvedCommit !== commit) errors.push("LOCATOR_COMMIT_MISMATCH");
+  if (verification.rawBase !== rawBase) errors.push("LOCATOR_RAW_BASE_MISMATCH");
+  const entries = Array.isArray(verification.entries) ? verification.entries : [];
+  if (entries.length !== files.length) errors.push(`LOCATOR_ENTRY_COUNT:${entries.length}/${files.length}`);
+  const names = entries.map((e) => (e && typeof e === "object" ? e.name : null));
+  if (new Set(names).size !== names.length) errors.push("LOCATOR_ENTRY_DUPLICATE");
+  const byName = new Map(entries.map((e) => [e && e.name, e]));
+  let resolved = 0;
+  for (const f of files) {
+    const e = byName.get(f.name);
+    if (!e) {
+      errors.push(`LOCATOR_ENTRY_MISSING:${f.name}`);
+      continue;
+    }
+    if (e.httpStatus === 200) resolved += 1;
+    if (e.rawUrl !== `${rawBase}/${f.path}`) errors.push(`LOCATOR_RAW_URL_DRIFT:${f.name}`);
+    if (e.httpStatus !== 200) errors.push(`LOCATOR_UNRESOLVED:${f.name}:${e.httpStatus}`);
+    if (e.contentSha256 !== f.sha256) errors.push(`LOCATOR_DIGEST_MISMATCH:${f.name}`);
+    if (e.byteLength !== f.byteLength) errors.push(`LOCATOR_LENGTH_MISMATCH:${f.name}`);
+  }
+  if (verification.resolvedCount !== resolved) errors.push(`LOCATOR_RESOLVED_COUNT:${verification.resolvedCount}/${resolved}`);
+  if (!Array.isArray(verification.unresolved) || verification.unresolved.length !== files.length - resolved) {
+    errors.push("LOCATOR_UNRESOLVED_LIST_MISMATCH");
+  }
+  const body = { ...verification };
+  delete body.receiptDigest;
+  if (sha256Bytes(Buffer.from(canonicalJson(body))) !== verification.receiptDigest) errors.push("LOCATOR_RECEIPT_DIGEST_MISMATCH");
+  return { ok: errors.length === 0, errors };
 }
 
 // ---- candidate read (read-only) ----
@@ -370,13 +438,17 @@ export function ac1HoldoutIsolationProof(candidates) {
 }
 
 // ---- governance gates (each a real, computed check) ----
-export function computeGates({ sourceFacts, cells, profile, mappingReceipts, candidates, isolation }) {
+export function computeGates({ sourceFacts, cells, profile, mappingReceipts, candidates, isolation, locator }) {
   const fileDigestByName = Object.fromEntries(FILES.map((f) => [f.name, f.sha256]));
   const gates = {};
-  // source: every fact references one of the 16 captured pinned files with a matching whole-file digest
+  // source: every fact references one of the 16 captured pinned files with a
+  // matching whole-file digest AND every capture rawUrl is proven resolvable at
+  // the pinned commit (committed locator-verification evidence: HTTP 200 +
+  // digest match); a dead locator fails the gate closed
   gates.source = FILES.length === 16
     && FACTS.every((f) => fileDigestByName[f.file] === f.sourceBytesSha256)
-    && FILES.every((f) => /^[a-f0-9]{64}$/.test(f.sha256) && f.byteLength > 0);
+    && FILES.every((f) => /^[a-f0-9]{64}$/.test(f.sha256) && f.byteLength > 0)
+    && locator?.ok === true;
   // legal: pinned GPL-2.0-or-later identity, ABSENT_AT_PIN notice
   gates.legal = LEGAL.licenseId === "GPL-2.0-or-later"
     && LEGAL.licenseSha256 === "ff71df08df5d013473e420dfe5a0208f4dfdadbade1805204afc6f586a6f7624"
@@ -427,7 +499,15 @@ export function buildHoldoutGate({ repoRoot = DEFAULT_REPO_ROOT } = {}) {
     mappingReceipts[family] = buildMappingReceipt({ family, sourceFacts, candidate: candidates[family], profileDigest: profile.profileDigest });
   }
 
-  const governanceGates = computeGates({ sourceFacts, cells, profile, mappingReceipts, candidates, isolation });
+  // AC2 provenance boundary: the committed locator-verification evidence must
+  // bind every capture rawUrl to the pinned commit (fail-closed on any miss).
+  const locatorVerification = readSourceLocatorVerification(repoRoot);
+  const locator = validateSourceLocator(locatorVerification);
+  const locatorBody = { ...locatorVerification };
+  delete locatorBody.receiptDigest;
+  const locatorArtifactDigest = sha256Bytes(Buffer.from(canonicalJson(locatorBody)));
+
+  const governanceGates = computeGates({ sourceFacts, cells, profile, mappingReceipts, candidates, isolation, locator });
 
   const familyResults = {};
   for (const family of CAPABILITY_FAMILIES) {
@@ -464,7 +544,13 @@ export function buildHoldoutGate({ repoRoot = DEFAULT_REPO_ROOT } = {}) {
     profile,
     cells,
     sourceFacts,
-    sourceCaptureReceipt: buildSourceCaptureReceipt(),
+    sourceCaptureReceipt: buildSourceCaptureReceipt({ repoRoot, locatorVerificationDigest: locatorArtifactDigest }),
+    sourceLocator: {
+      artifact: LOCATOR_VERIFICATION_FILE,
+      artifactReceiptDigest: locatorArtifactDigest,
+      ok: locator.ok,
+      errors: locator.errors,
+    },
     candidates: Object.fromEntries(CAPABILITY_FAMILIES.map((f) => [f, {
       file: candidates[f].file,
       frozenDigest: candidates[f].frozenDigest,

@@ -588,6 +588,7 @@ scripts/adaptive-delivery-status.mjs	scripts/adaptive-delivery-status.mjs	0755
 scripts/adaptive-evidence-gates.mjs	scripts/adaptive-evidence-gates.mjs	0755
 scripts/build-public-release.sh	scripts/build-public-release.sh	0755
 scripts/build-rks-01-pilot-corpora.mjs	scripts/build-rks-01-pilot-corpora.mjs	0644
+scripts/capture-cscl-11-source-locators.mjs	scripts/capture-cscl-11-source-locators.mjs	0644
 scripts/capture-rks-01-sources.mjs	scripts/capture-rks-01-sources.mjs	0644
 scripts/cks-05-build-arm-inputs.mjs	scripts/cks-05-build-arm-inputs.mjs	0644
 scripts/cks-05-materialize-hidden-run.mjs	scripts/cks-05-materialize-hidden-run.mjs	0644
@@ -1498,6 +1499,7 @@ verification/cscl-11-idempiere-mapping-party-v1.json	verification/cscl-11-idempi
 verification/cscl-11-idempiere-mapping-product-v1.json	verification/cscl-11-idempiere-mapping-product-v1.json	0644
 verification/cscl-11-idempiere-mapping-sales-v1.json	verification/cscl-11-idempiere-mapping-sales-v1.json	0644
 verification/cscl-11-idempiere-source-capture-receipt-v1.json	verification/cscl-11-idempiere-source-capture-receipt-v1.json	0644
+verification/cscl-11-idempiere-source-locator-verification-v1.json	verification/cscl-11-idempiere-source-locator-verification-v1.json	0644
 verification/demo-current-head-e2e/contract-v1.json	verification/demo-current-head-e2e/contract-v1.json	0644
 verification/intake-001-evidence-v1.json	verification/intake-001-evidence-v1.json	0644
 verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidence-v1.json	0644

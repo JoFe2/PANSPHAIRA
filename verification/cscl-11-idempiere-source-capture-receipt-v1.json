@@ -100,10 +100,10 @@
     },
     {
       "name": "overview.html",
-      "path": "org.adempiere.base/src/org/compiere/model/overview.html",
+      "path": "doc/doc/overview.html",
       "byteLength": 323,
       "sha256": "683f72cba8b7463b6def85c6423b04e58f0086c76216728947f1cb5bdf85e37f",
-      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/org.adempiere.base/src/org/compiere/model/overview.html"
+      "rawUrl": "https://raw.githubusercontent.com/idempiere/idempiere/731515dcdd5278b843db33b9d3109d155b881951/doc/doc/overview.html"
     },
     {
       "name": "LICENSE.md",
@@ -127,11 +127,15 @@
     "projectMetadataSha256": "83de5b14fceeb3dafff7bd938aab5422471672e839d8415cf7cfe57a1ceb6742"
   },
   "factCount": 36,
+  "locatorVerification": {
+    "artifact": "verification/cscl-11-idempiere-source-locator-verification-v1.json",
+    "artifactReceiptDigest": "3511b300fbef2050fdd43bb98bf556bcdde982967c25dc78955cc7209b263d72"
+  },
   "note": "Exact official bytes captured at the pinned commit on the protected release branch; digests are sha256 of the whole captured file. iDempiere semantics are used ONLY for this holdout gate, never for training (AC1).",
   "boundary": {
     "authorityGrant": "NONE",
     "promotionGrant": "NONE",
     "executionGrant": "NONE"
   },
-  "receiptDigest": "7821b3bd7fe4cf6dbb574104b39fd93ebbcfffbc8fb79be3e699e378f5445cd8"
+  "receiptDigest": "a63443cef24cea735f3f8c4b2872e5358af30e0e7f69c3bf1f44c97c04a8699b"
 }

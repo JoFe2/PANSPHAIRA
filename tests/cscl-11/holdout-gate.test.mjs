@@ -1,8 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import {
   buildProfileBundle,
   buildSourceCaptureReceipt,
@@ -11,6 +12,9 @@ import {
   CANDIDATE_MEANING_SENTINEL,
   COMMIT,
   FILES,
+  LOCATOR_VERIFICATION_FILE,
+  RAW_BASE,
+  validateSourceLocator,
 } from "../../src/cscl-11/holdout-gate.mjs";
 import {
   CAPABILITY_FAMILIES,
@@ -113,10 +117,82 @@ test("AC2: source-capture receipt records the 16 pinned files with byte lengths 
     assert.ok(DIGEST.test(f.sha256));
     assert.ok(f.byteLength > 0);
     assert.ok(f.rawUrl.startsWith("https://raw.githubusercontent.com/idempiere/idempiere/"));
+    assert.equal(f.rawUrl, `${RAW_BASE}/${f.path}`, `rawUrl must be exactly the pinned raw base + path: ${f.name}`);
   }
   assert.equal(r.legal.licenseId, "GPL-2.0-or-later");
   assert.equal(r.legal.noticeStatus, "ABSENT_AT_PIN");
   assert.ok(DIGEST.test(r.receiptDigest));
+});
+
+// ---- AC2: provenance boundary -- every rawUrl must be resolvable at the pin ----
+test("AC2: the committed locator verification resolves all 16 rawUrls (HTTP 200) with digest match", () => {
+  const raw = readFileSync(resolve(REPO_ROOT, LOCATOR_VERIFICATION_FILE), "utf8");
+  const result = validateSourceLocator(JSON.parse(raw));
+  assert.deepEqual(result.errors, [], JSON.stringify(result.errors));
+  assert.equal(result.ok, true);
+});
+
+test("AC2: source-capture receipt binds its locator evidence to the committed verification artifact", () => {
+  const r = buildSourceCaptureReceipt();
+  assert.equal(r.locatorVerification.artifact, LOCATOR_VERIFICATION_FILE);
+  const loc = JSON.parse(readFileSync(resolve(REPO_ROOT, LOCATOR_VERIFICATION_FILE), "utf8"));
+  const body = { ...loc };
+  delete body.receiptDigest;
+  assert.equal(r.locatorVerification.artifactReceiptDigest, sha256Bytes(Buffer.from(canonicalJson(body))));
+  assert.ok(DIGEST.test(r.locatorVerification.artifactReceiptDigest));
+});
+
+test("AC2: source gate fails closed on a dead locator (404), a digest mismatch, and rawUrl drift", () => {
+  const base = JSON.parse(readFileSync(resolve(REPO_ROOT, LOCATOR_VERIFICATION_FILE), "utf8"));
+  const withBody = (mutate) => {
+    const body = structuredClone(base);
+    mutate(body);
+    const digested = { ...body };
+    delete digested.receiptDigest;
+    return { ...digested, receiptDigest: sha256Bytes(Buffer.from(canonicalJson(digested))) };
+  };
+  // a dead locator (HTTP 404 at the pin) is a provenance-boundary violation
+  const notFound = withBody((b) => {
+    b.entries.find((e) => e.name === "overview.html").httpStatus = 404;
+    b.resolvedCount = 15;
+    b.unresolved = ["overview.html"];
+  });
+  const nf = validateSourceLocator(notFound);
+  assert.equal(nf.ok, false);
+  assert.ok(nf.errors.includes("LOCATOR_UNRESOLVED:overview.html:404"), JSON.stringify(nf.errors));
+  // a response body that no longer matches the capture digest
+  const badDigest = withBody((b) => {
+    b.entries.find((e) => e.name === "MOrder.java").contentSha256 = "0".repeat(64);
+  });
+  assert.ok(!validateSourceLocator(badDigest).ok);
+  assert.ok(validateSourceLocator(badDigest).errors.includes("LOCATOR_DIGEST_MISMATCH:MOrder.java"));
+  // a rawUrl that drifts from the pinned path
+  const drifted = withBody((b) => {
+    b.entries.find((e) => e.name === "overview.html").rawUrl = `${RAW_BASE}/org.adempiere.base/src/org/compiere/model/overview.html`;
+  });
+  const dr = validateSourceLocator(drifted);
+  assert.ok(!dr.ok);
+  assert.ok(dr.errors.includes("LOCATOR_RAW_URL_DRIFT:overview.html"), JSON.stringify(dr.errors));
+});
+
+test("negative: a 404-tampered locator artifact forces the source gate false and the overall verdict FALSIFIED", () => {
+  const root = mkdtempSync(join(tmpdir(), "cscl11-locator-"));
+  mkdirSync(join(root, "verification"), { recursive: true });
+  for (const name of ["cscl-08-party-candidate-v1.json", "cscl-09-product-candidate-v1.json", "cscl-10-sales-candidate-v1.json"]) {
+    cpSync(resolve(REPO_ROOT, "verification", name), join(root, "verification", name));
+  }
+  const loc = JSON.parse(readFileSync(resolve(REPO_ROOT, LOCATOR_VERIFICATION_FILE), "utf8"));
+  loc.entries.find((e) => e.name === "overview.html").httpStatus = 404;
+  loc.resolvedCount = 15;
+  loc.unresolved = ["overview.html"];
+  const body = { ...loc };
+  delete body.receiptDigest;
+  const artifact = { ...body, receiptDigest: sha256Bytes(Buffer.from(canonicalJson(body))) };
+  writeFileSync(join(root, LOCATOR_VERIFICATION_FILE), JSON.stringify(artifact, null, 2));
+  const gate = buildHoldoutGate({ repoRoot: root });
+  assert.equal(gate.governanceGates.source, false, "the source gate must fail closed on a dead locator");
+  assert.equal(gate.overall.verdict, "FALSIFIED_WITH_EVIDENCE");
+  assert.ok(gate.overall.reasonCodes.includes("SOURCE_HARD_GATE_FAILED"));
 });
 
 // ---- AC4: mapping receipts (read-only over frozen candidates) ----

@@ -20,6 +20,14 @@ or approves those receipts and never claims delivered. `publicly_delivered` rema
 false. No push, no public mutation, no credentials, no external systems, no issue
 closure.
 
+**Correction recorded below:** on the released candidate
+`972435573c9d48b6db7ee33f4f8022fa28aa0e1d` the AC2 provenance-boundary blocker
+(`overview.html` dead locator) was corrected as a bounded, issue-backed corrective
+commit on the SAME candidate — see *Correction (AC2 provenance boundary)*. The
+original sections below are preserved verbatim as the released record; the
+correction section supersedes only the AC2 receipt bytes and the governance counts it
+forces.
+
 ## Task
 
 Execute the CSCL-11 serial holdout gate against the byte-frozen CSCL-08/09/10
@@ -232,6 +240,120 @@ Two environmental notes (neither is a regression from this change):
   file set to `/tmp`; a run started while `/tmp` (1.0G tmpfs) was full from leftover
   staging dirs fails only with `ENOSPC` (`copyfile`). With free space it passes 7/7
   (run above).
+
+## Correction (AC2 provenance boundary) — candidate `9724355`
+
+**Blocker (single hard blocker; no Main integration conflict, no merge performed):**
+the released AC2 receipt
+`verification/cscl-11-idempiere-source-capture-receipt-v1.json` recorded
+`overview.html` at the dead locator
+`org.adempiere.base/src/org/compiere/model/overview.html` whose rawUrl is **HTTP 404**
+at the pinned commit `731515dcdd5278b843db33b9d3109d155b881951`. The genuine 323-byte
+content (digest `683f72cba8b7463b6def85c6423b04e58f0086c76216728947f1cb5bdf85e37f`)
+resolves only at `doc/doc/overview.html` (HTTP 200, digest + byteLength match). A
+fresh re-sweep of all 16 capture rawUrls at the pin: **15/16 resolve + digest-match;
+the 1 dead link is `overview.html`**. Root cause: the source gate validated
+digests/byte-lengths but **not rawUrl/path resolvability**, so it reported
+`source: true` despite the 404.
+
+**Fix (data + root cause, TDD):**
+
+1. **Data fix:** `src/cscl-11/holdout-facts.mjs` — `overview.html` path corrected to
+   `doc/doc/overview.html` (byteLength 323 / sha256 `683f72…` unchanged — same bytes,
+   right locator). The AC2 receipt chain re-digested via `writeArtifacts()`: new
+   receipt `rawUrl …/doc/doc/overview.html`, new self-referential
+   `receiptDigest a63443cef24cea735f3f8c4b2872e5358af30e0e7f69c3bf1f44c97c04a8699b`
+   (was `7821b3bd…`). No other of the 12 CSCL-11 artifacts changed byte-for-byte
+   (profile/mapping/isolation/gates/family/verdict artifacts are
+   `git diff`-empty; overall verdict `7a8056b2…` and `NARROW_GO` unchanged).
+2. **Real provenance evidence (not invented):**
+   `verification/cscl-11-idempiere-source-locator-verification-v1.json` — committed
+   fetch evidence produced by the new
+   `scripts/capture-cscl-11-source-locators.mjs --network` (bounded read-only GET
+   sweep of all 16 rawUrls at the pinned immutable commit, redirects denied):
+   per-file `httpStatus` (all **200**), `contentSha256` (all equal to the capture
+   digest), `byteLength`; `resolvedCount: 16`, `unresolved: []`; self-referential
+   `receiptDigest 3511b300fbef2050fdd43bb98bf556bcdde982967c25dc78955cc7209b263d72`.
+   The producer exits non-zero on any non-200 status or digest/length mismatch, so it
+   cannot emit a conforming artifact over a dead locator. Offline re-validation:
+   `--verify` → `{ok: true}`.
+3. **Root cause (gate fails closed on unresolvable locators):**
+   `src/cscl-11/holdout-gate.mjs` — the frozen six-gate set is **unchanged**
+   (`GATE_NAMES` in `src/cscl-01/protocol.mjs` untouched; no 7th gate). The existing
+   `source` gate computation now additionally requires the committed
+   locator-verification evidence to bind: new `validateSourceLocator()` fails closed
+   with fixed reason codes (`LOCATOR_VERIFICATION_MISSING`,
+   `LOCATOR_COMMIT_MISMATCH`, `LOCATOR_RAW_BASE_MISMATCH`, `LOCATOR_ENTRY_COUNT`,
+   `LOCATOR_ENTRY_DUPLICATE`, `LOCATOR_ENTRY_MISSING`, `LOCATOR_RAW_URL_DRIFT`,
+   `LOCATOR_UNRESOLVED`, `LOCATOR_DIGEST_MISMATCH`, `LOCATOR_LENGTH_MISMATCH`,
+   `LOCATOR_RESOLVED_COUNT`, `LOCATOR_UNRESOLVED_LIST_MISMATCH`,
+   `LOCATOR_RECEIPT_DIGEST_MISMATCH`) when any of the 16 rawUrls is missing, not
+   `https://raw.githubusercontent.com/idempiere/idempiere/<pin>/<path>`, non-200 at
+   the pin, or digest/length-mismatched. `buildSourceCaptureReceipt` now binds the
+   evidence (`locatorVerification.artifact` + `artifactReceiptDigest`, read from the
+   artifact, never self-attested).
+4. **TDD (RED → GREEN):** RED — the new tests fail on the pre-fix module
+   (`LOCATOR_VERIFICATION_FILE` export absent → `SyntaxError`; committed artifact
+   absent → `ENOENT`). GREEN — `tests/cscl-11/holdout-gate.test.mjs` grew 16 → **20
+   tests**: the committed artifact validates with zero errors; the receipt binds the
+   artifact digest; the source gate fails closed on a 404
+   (`LOCATOR_UNRESOLVED:overview.html:404`), on a digest mismatch
+   (`LOCATOR_DIGEST_MISMATCH:MOrder.java`) and on rawUrl drift
+   (`LOCATOR_RAW_URL_DRIFT:overview.html`); and a **negative end-to-end**: a
+   404-tampered locator artifact in a temp repoRoot forces
+   `governanceGates.source === false`, overall `FALSIFIED_WITH_EVIDENCE` and
+   `SOURCE_HARD_GATE_FAILED`. **20/20 PASS.**
+
+**Governance reconciliation (repository tools; no weakening):** the two new public
+files are registered and all counts move together as prior additions did:
+
+- `release/public-files.manifest` — +2 data lines (`1510 → 1512`), sorted, identity
+  mapping, mode `0644`.
+- `scripts/build-public-release.sh` line 192 — count bound `1510 → 1512`.
+- `tests/release-governance.test.mjs` line 322 and
+  `tests/verification-fabric-v2.test.ts` line 299 — `1510 → 1512`.
+- `SHA256SUMS` — `npm run integrity:refresh` → **1828** entries (was 1826).
+- `tests/canonical-json-profile-inventory.test.ts` +
+  `verification/canonical-json-profile-inventory-v1.json` — census
+  `filesScanned 639 → 640`, `importSites 212 → 213`, `importFiles 211 → 212` (the new
+  producer script's single-line `canonicalJson` import; declarations/reexports/
+  similar-shape unchanged), ledger `1826 → 1828`, `consumerFamilies["scripts"]
+  9 → 10` sites/files.
+- `verification/verification-dag-v2.json` — re-digested by `integrity:refresh`
+  (six changed-input digests: manifest ×2 nodes, `build-public-release.sh`, census
+  test, release-governance test, `verification-fabric-v2.test.ts`, census
+  artifact); `graphVersion` stays `47`.
+
+**Commands and actual results (correction battery, local, Node v24):**
+
+1. `node scripts/capture-cscl-11-source-locators.mjs --network` — exit 0,
+   `{"ok": true, "resolved": 16, "total": 16}`.
+2. `node scripts/capture-cscl-11-source-locators.mjs --verify` — exit 0,
+   `{"ok": true, "mode": "verify-offline"}`.
+3. `node --test tests/cscl-11/holdout-gate.test.mjs` — exit 0, **20/20 PASS**.
+4. CSCL chain (`cscl01 → cscl11` file targets): **92/92 PASS** (16+6+4+5+9+10+8+5+5+4+20).
+5. `npm run build` — exit 0; dist carries the new census constants
+   (`filesScanned: 640`, ledger `1828`) and `1512` public count.
+6. `node --test dist/tests/canonical-json-profile-inventory.test.js dist/tests/
+   verification-fabric-v2.test.js` — exit 0, **66/0** (census 35 + fabric-v2 31).
+7. `npm run release-governance:test` — exit 0, **92/0** (release-governance 87 +
+   public-product-spelling 5).
+8. `node --test tests/supply-chain-verifier.test.mjs` — exit 0, **7/7** (stages all
+   **1512** public files; extracted bound `1512 == 1512` ✓).
+9. `sha256sum --check SHA256SUMS` — exit 0, **1828/1828 OK**.
+10. `npm run release-governance:verify` — exit 0, `RELEASE_GOVERNANCE_PASS`.
+11. `node --test tests/daily-poc.test.mjs tests/secure-default-proof.test.mjs
+    dist/tests/trust-compatibility-foundation-closure.test.js` — exit 0, **49/0**.
+12. `writeArtifacts()` re-run — overall `NARROW_GO` / product `GO` / party+sales
+    `FALSIFIED_WITH_EVIDENCE` (unchanged verdict); only the source-capture receipt
+    byte-changed among the 12 artifacts.
+
+**Verdict after correction: unchanged** — `NARROW_GO`,
+`reasonCodes: ["ONE_OR_TWO_FAMILIES_GO"]`, all six governance gates `true` (the
+`source` gate is now additionally evidence-bound, not weakened). The correction adds
+no claim: it repairs the AC2 provenance boundary with real pinned-commit fetch
+evidence and makes the gate fail closed on dead locators. `publicly_delivered`
+remains false.
 
 ## Unresolved / parent-side gates (NOT done here; owned by the delivery controller)
 
