@@ -151,6 +151,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     reason: "Advance the Verification DAG to graph v47 and canonically own the AP-04 relational hardening v2 family (versioned relational matching, deterministic duplicate-kind denial and distinct evidence dimensions) while the historical v1 pack remains byte-identical; admitted v1 and reviewed v2-v10 digests remain immutable.",
   }),
   Object.freeze({
+    migrationId: "CSCL-12-PILOT-RECONCILIATION/INTEGRITY-GENERATOR/V12",
+    path: "scripts/refresh-integrity-data.mjs",
+    profileVersion: 12,
+    fromSha256: "11a5f5657e40951d323538bb2fc51d970a31843d0a2c5681126785b3074cbed0",
+    toSha256: "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4",
+    reason: "Advance the Verification DAG to graph v48 and canonically own the CSCL-11 iDempiere serial holdout gate family registered as the reconciled pilot node; admitted v1 and reviewed v2-v11 digests remain immutable.",
+  }),
+  Object.freeze({
     migrationId: "P0-PS391-AUD-01/OWNER-AUTHORITY-USE-TIME-REVALIDATION/V2",
     path: "demo/runtime/enforcement-gate.mjs",
     profileVersion: 2,
@@ -972,7 +980,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;

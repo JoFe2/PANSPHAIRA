@@ -109,6 +109,14 @@
       "reason": "Advance the Verification DAG to graph v47 and canonically own the AP-04 relational hardening v2 family (versioned relational matching, deterministic duplicate-kind denial and distinct evidence dimensions) while the historical v1 pack remains byte-identical; admitted v1 and reviewed v2-v10 digests remain immutable."
     },
     {
+      "migrationId": "CSCL-12-PILOT-RECONCILIATION/INTEGRITY-GENERATOR/V12",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 12,
+      "fromSha256": "11a5f5657e40951d323538bb2fc51d970a31843d0a2c5681126785b3074cbed0",
+      "toSha256": "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4",
+      "reason": "Advance the Verification DAG to graph v48 and canonically own the CSCL-11 iDempiere serial holdout gate family registered as the reconciled pilot node; admitted v1 and reviewed v2-v11 digests remain immutable."
+    },
+    {
       "migrationId": "P0-PS391-AUD-01/OWNER-AUTHORITY-USE-TIME-REVALIDATION/V2",
       "path": "demo/runtime/enforcement-gate.mjs",
       "profileVersion": 2,
@@ -254,7 +262,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "11a5f5657e40951d323538bb2fc51d970a31843d0a2c5681126785b3074cbed0"
+      "sha256": "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -852,7 +860,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "11a5f5657e40951d323538bb2fc51d970a31843d0a2c5681126785b3074cbed0",
+      "sha256": "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4",
       "basis": "profile-version-migration"
     },
     {

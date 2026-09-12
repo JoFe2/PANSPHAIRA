@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 47,
+  "graphVersion": 48,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5f28abbde912c6b7bd7af929513c172613bd8849e0232fef630ac49e80c770c9"
+          "sha256": "1d80109940117ef383d2a0ca9ae4777e38a593dba04894bbe03c152e88b5e56c"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3789,7 +3789,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "42e22e407a17c9afd48c581443dc7de03a47a4c3e95f1478ec790046d23f5368"
+          "sha256": "869a10731b53d1489d584a45c57c01205df220740520ecb0e44b8b05002054e9"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -3964,7 +3964,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "2cde95fe7cd310089fbc2d0822221a72b6147491ada917eef1731d8791e8aebb"
+          "sha256": "a9956794610e99122e6955a584d3e47e87efc665f2d116a3a37b60550b731be0"
         }
       ],
       "ownedTests": [
@@ -4766,7 +4766,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "4256b3cb8ad4fc10ea302b243d0aa135460bd9147a557a3d839b75366a118e3c"
+          "sha256": "7a72346e05923d38d4c90e02dbc8c2b9af3be798cf204951288a90e3212d4f54"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4801,7 +4801,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "1eaa106fc5c9c834ca5a871ce59cdd7974efbf7118392227c3d37b3861b3090e"
+          "sha256": "2d80d0420fd8f7d8c8554aed30e2fc84d18384896daeeadf8c4a0b4627d44411"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5732,7 +5732,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "25fbc70371fcdee72b02f735ad712904ac0162d53313c5b6b0c8e5da2d7e33a1"
+          "sha256": "f72c63506c05b43b144e50a3a337fd357eb98831261fcf82e6ee7bb24ad3731c"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6059,6 +6059,112 @@
         "Duplicate reference kinds are denied deterministically and order-independently; no last-write-wins.",
         "Repeating the local compiler is deterministic replay of frozen local-synthetic inputs; no external or system-of-record readback is performed.",
         "The standalone core grants no productive, external, customer-data or booking authority."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-11-idempiere-serial-holdout-gate-v1",
+      "dependsOn": [
+        "cscl-08-party-candidate-v1",
+        "cscl-09-product-candidate-v1",
+        "cscl-10-sales-candidate-v1"
+      ],
+      "inputs": [
+        {
+          "path": "src/cscl-11/holdout-facts.mjs",
+          "role": "VALIDATOR",
+          "sha256": "cd45da6e602ebbe5043e56169e0b638aa997516f246a70290c4cc875486228f0"
+        },
+        {
+          "path": "src/cscl-11/holdout-gate.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5f6d75bf87c844925bb74e97923dc59bd19b9502270d85defe724b8821d1ee87"
+        },
+        {
+          "path": "tests/cscl-11/holdout-gate.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "a59c27926addbffd6d89e0fac694a59c0ed4f89dc36a1484704622b9c0c65665"
+        },
+        {
+          "path": "scripts/capture-cscl-11-source-locators.mjs",
+          "role": "VALIDATOR",
+          "sha256": "b7cb4e1f43374e0b586d56825460f03d18e93498d072a3eeb719fa0cadc0eb36"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-source-capture-receipt-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "51ccb25cda0b43ee11925a7a3682f14a05d40e61506d54e3bd8dc850ea55e39d"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-source-locator-verification-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a17426f8ea161006ef9622517832488bc47a6c955fbb850af7c816dda0baee19"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-holdout-profile-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "27451933b9094ae828fb35836a5695a213a059dc22ef77276250bce25ff3c1d5"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-isolation-proof-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "11e590c270ea85a33efc04cd54cd22557d6cc5fa3187fc3bcdcf045ca96ca58f"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-governance-gates-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d9f1c549d83a3fa4f581b38c3d3e96d9408cadba5d1249047fb3931905c0dcb4"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-family-results-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d6519f36bdcce3939659a10122b4cce392cacc3541f0bf8a2c0df4db5a45ca0d"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-mapping-party-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "38e42afa959a01850aba1c4c10bc3053675ae021310696c7e04c0aa1e323d4fa"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-mapping-product-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e80f2df87bc63254faad2b4c9758684382fe3558b8d6d2b8723b70fedc61c710"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-mapping-sales-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "78284b80cd4a6a19e223e240ef01ce7f1d5be664406b12badd87abd140eb00ff"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-holdout-verdict-party-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f7bc6a91b0409897b2fa92e9bec312680b859391500d754f056837f35245ac0e"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-holdout-verdict-product-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9cad5fc73b309098d8e74cde1a8573e28b542d672f5f9801d7e295378db5c573"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-holdout-verdict-sales-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8e31a30af019b4d1e42c692fb96ed2758481a320d3d943a19e25e51fb1ca675c"
+        },
+        {
+          "path": "verification/cscl-11-idempiere-holdout-verdict-overall-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "cd512f62093208f4e2679fdee249aa0821ca210d84ddb156c3d0295d3864643b"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl11:test"
+      ],
+      "invariants": [
+        "The byte-frozen CSCL-08/09/10 candidates are consumed read-only: raw candidate bytes, frozen digests and frozen slots are replayed without editing, and any drift fails CANDIDATE_BYTES_MUTATED_AFTER_FREEZE.",
+        "The exact official iDempiere bytes at the pinned immutable commit 731515dcdd5278b843db33b9d3109d155b881951 are bound: 16-file capture receipt with per-file sha256/byteLength, GPL-2.0-or-later license bytes and committed locator evidence (HTTP 200 plus whole-file digest match for all 16 rawUrls); any dead, drifted or digest-mismatched locator fails the source gate closed.",
+        "All 36 holdout source facts, 36 evidence cells and the complete party/product/sales denominators replay deterministically from the frozen bytes; the empty party and sales frozen cores are reported as FALSIFIED_WITH_EVIDENCE narrowing, never patched.",
+        "No holdout tuning, no universal-ERP-compatibility claim and no Authority, promotion or execution grant; the overall GO / NARROW_GO / FALSIFIED_WITH_EVIDENCE verdict derives only from the frozen protocol functions and the six governance gates."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

@@ -1,376 +1,337 @@
-# WORK_RESULT — CSCL-11 serial holdout gate against the held-out iDempiere ERP
+# WORK_RESULT — CSCL-12 terminal verdict derivation and versioned Capability Library pilot delivery
 
 **Status: local PanSphaira change complete. NOT DELIVERED / NOT CLOSED.** This is a
 bounded, locally validated source result on fresh current main
-`f4a98e0837a0c4d329f394328e86e81b9d81e689` (the V001 delivery-contract commit), with
-no legacy CSCL-11 state. The scope is ONLY the CSCL-11 serial holdout gate: it
-consumes the three byte-frozen CSCL-08/09/10 capability candidates **read-only**,
-builds a held-out iDempiere ERP profile **independently** of those candidates, maps
-the holdout facts onto the frozen core/variant/absence/counterexample slots, computes
-the frozen coverage/core-preservation/contradiction/unmapped/rewrite metrics with
-complete denominators, and emits the independent
-`GO / NARROW_GO / FALSIFIED_WITH_EVIDENCE` holdout receipt conforming to
-`contracts/cscl-01/holdout-verdict-v1.schema.json` — without holdout tuning, without a
-universal-compatibility claim, and without any Authority/promotion/execution claim.
-Parent-side gates remain open (see *Unresolved / parent-side gates*): independent
-review, semantic main integration, exact PR/Main CI, release + Docker-E2E, and
-anonymous / version-bound public readback. The delivery job controller performs fresh
-Qwen review, exact PR/Main CI, release and anonymous readback; this work never authors
-or approves those receipts and never claims delivered. `publicly_delivered` remains
-false. No push, no public mutation, no credentials, no external systems, no issue
-closure.
-
-**Correction recorded below:** on the released candidate
-`972435573c9d48b6db7ee33f4f8022fa28aa0e1d` the AC2 provenance-boundary blocker
-(`overview.html` dead locator) was corrected as a bounded, issue-backed corrective
-commit on the SAME candidate — see *Correction (AC2 provenance boundary)*. The
-original sections below are preserved verbatim as the released record; the
-correction section supersedes only the AC2 receipt bytes and the governance counts it
-forces.
+`faa35380928d29ec8aecc1e36277712c083754c8` (the CSCL-11 holdout-gate commit), with no
+legacy CSCL-12 state. The scope is ONLY the CSCL-12 pilot reconciliation:
+independently verify the CSCL-01..11 chain (AC1), recompute the terminal verdict
+from the byte-frozen candidate bytes plus #328's holdout mappings **without trusting
+child labels or aggregates** (AC2), emit exactly one terminal verdict and name the
+failed boundaries (AC3), and register the reconciled pilot in the Verification DAG
+with canonical tests, sanitized public evidence and nested-then-root integrity
+(AC4). All hard gates pass on the exact PR head (AC5). AC6/AC7 — the SHA-bound merge,
+exact Main CI, serial release and anonymous readback, plus closure of the terminal
+children and #317 and queue reconciliation — are owned by the delivery job
+controller; this work never authors or approves those receipts and never claims
+delivered. No holdout tuning, no universal-compatibility or Authority claim; all
+original ACs and publication fences unchanged. No push, no public mutation, no
+credentials, no external systems, no issue closure. `publicly_delivered` remains
+false.
 
 ## Task
 
-Execute the CSCL-11 serial holdout gate against the byte-frozen CSCL-08/09/10
-capability candidates and the held-out iDempiere ERP. Acceptance criteria:
+Execute issue #329 [CSCL-12] "Derive terminal verdict and deliver versioned
+Capability Library pilot" on exact Main head `faa3538`. Acceptance criteria:
 
-- **AC1** — Prove no iDempiere semantic source was consumed by CSCL-01..10 beyond
-  identity/legal preflight.
-- **AC2** — Capture the exact official iDempiere source, documentation and license
-  bytes at the pinned commit.
-- **AC3** — Build the three-family (Party/Product/Sales) holdout profile
-  independently of the candidates.
-- **AC4** — Map holdout facts to the frozen core/variant/absence/counterexample slots
-  **without editing candidate bytes**.
-- **AC5** — Compute the frozen coverage, core-preservation, contradiction, unmapped
-  and rewrite metrics with complete denominators.
-- **AC6** — Any required core edit is reported as narrowing/falsification,
-  **not patched away**.
-- **AC7** — Produce the independent `GO / NARROW_GO / FALSIFIED_WITH_EVIDENCE` holdout
-  receipt conforming to `contracts/cscl-01/holdout-verdict-v1.schema.json` — without
-  holdout tuning, universal-compatibility, or Authority claims.
+- **AC1** — Independently verify CSCL-01..11 exact commits, schemas, denominators,
+  digests and nonclaims — including #328's `NARROW_GO` holdout receipt (verdictDigest
+  `7a8056b2c254…8fa`), the iDempiere source/legal/license byte binding at pinned
+  commit `731515dcdd5278b843db33b9d3109d155b881951` (16-file capture receipt +
+  locator verification, 36 facts), and the byte-frozen CSCL-08/09/10 candidate
+  digests (`94bd8998…` / `26b2719e…` / `636c3331…`).
+- **AC2** — Recompute the terminal verdict from frozen candidate bytes plus #328's
+  holdout mappings **without trusting child labels or aggregates**.
+- **AC3** — Emit exactly one of `GO` / `NARROW_GO` / `FALSIFIED_WITH_EVIDENCE` and
+  name the failed boundaries.
+- **AC4** — Register canonical tests, sanitized public evidence, the Verification
+  DAG node(s) for the reconciled pilot (CSCL-11 currently has none) and
+  nested-then-root integrity.
+- **AC5** — Pass full suite, lint, integrity, governance and diff gates on the exact
+  PR head.
+- **AC6/AC7** — SHA-bound merge, exact Main CI, serial release, anonymous readback,
+  closure of terminal children and #317, queue reconciliation — owned by the
+  delivery job controller; the worker never authors or approves those receipts.
 
-## Source inspection (fresh main, f4a98e0)
+## Source inspection (fresh main, faa3538)
 
-- **RED (feature absent):** at HEAD `f4a98e0` there are no `src/cscl-11/` or
-  `tests/cscl-11/` files tracked, no `cscl11:test` script, and the `posttest` chain
-  begins at `npm run cscl09:test` (no cscl11). `npm run cscl11:test` is a missing
-  script and `node --test tests/cscl-11/holdout-gate.test.mjs` is a missing file.
-  Confirmed: `git ls-tree -r --name-only HEAD | grep cscl-11` → none;
-  `git show HEAD:package.json | grep cscl11:test` → none.
-- **Frozen protocol (read-only, DO NOT EDIT):** `src/cscl-01/protocol.mjs` provides
-  `evaluateHoldoutFamily(input)` and `deriveOverallVerdict(familyResults,
-  governanceGates)`, plus the internal `GATE_NAMES`
-  (`source, legal, history, integrity, denominator, isolation`). The CSCL-11 gate
-  drives the verdict through this frozen protocol; it does not redefine it.
-- **Byte-frozen candidates (read-only):** `verification/cscl-08-party-candidate-v1.json`
-  (frozen `94bd8998…`), `verification/cscl-09-product-candidate-v1.json`
-  (frozen `26b2719e…`), `verification/cscl-10-sales-candidate-v1.json`
-  (frozen `636c3331…`). The gate re-reads these and asserts
-  `actualDigest === frozenDigest` (no mutation); any drift trips
-  `CANDIDATE_BYTES_MUTATED_AFTER_FREEZE`.
-- **Held-out iDempiere pin:** upstream
-  `https://github.com/idempiere/idempiere.git`, commit
-  `731515dcdd5278b843db33b9d3109d155b881951` at selector `refs/heads/release-13`,
-  license `GPL-2.0-or-later`, `noticeStatus: ABSENT_AT_PIN`, 16 pinned files
-  (14 Java + `LICENSE.md` + `README.md`), 36 captured source facts.
-- **Governance state to reconcile:** the 15 newly-public cscl-11 files require the
-  fail-closed governance reconciliation (manifest `1495 → 1510` data lines; canonical-
-  JSON census `filesScanned 636 → 639`, ledger `1811 → 1826`), described below. No gate
-  or test is weakened; the count bound and census are the same fail-closed mechanisms
-  prior public-file additions maintained.
+- **RED (registration absent):** at HEAD `faa3538` the Verification DAG v2
+  (`verification/verification-dag-v2.json`, graphId
+  `chimpmaera.verification/evidence-dag/v2`, graph
+  `verification-fabric-shadow`) has `graphVersion 47` with **56 nodes** and **no**
+  `cscl-11-idempiere-serial-holdout-gate-v1` node: the reconciled pilot (the 13
+  `verification/cscl-11-idempiere-*.json` artifacts, the gate modules, the locator
+  producer and its test) is owned by no DAG node, so `buildVerificationImpactPlanV2`
+  would report `UNMAPPED_PATH` for any cscl-11 path. The new focused test
+  (`CSCL-11 serial holdout gate is a registered DAG node bound to the frozen
+  reconciled pilot`) fails RED on the pre-fix manifest: `47 !== 48` (graphVersion
+  pin) and the node lookup is `undefined`. Additionally, the moment the test file
+  itself (a DAG input of the `repository-integrity` owner) is edited, the canonical
+  digest test fails RED (`vf-shadow-v2:tests/verification-fabric-v2.test.ts`,
+  observed `55876784…` vs recorded `25fbc703…`) — the drift detector correctly
+  refuses the stale pin until the graph is re-anchored.
+- **Frozen pilot bytes (read-only, DO NOT EDIT):** the 13 committed `verification/
+  cscl-11-idempiere-*.json` artifacts (12 gate-produced + the locator-verification
+  evidence), the frozen CSCL-08/09/10 candidate bytes, `src/cscl-01/protocol.mjs`
+  (frozen verdict rule), `src/cscl-11/holdout-gate.mjs` / `holdout-facts.mjs` and
+  `scripts/capture-cscl-11-source-locators.mjs` — all consumed read-only by this
+  change; none is modified.
+- **Registration surfaces to reconcile:** `tests/verification-fabric-v2.test.ts`
+  (graphVersion pin, the two exact `selectedNodes` lists, the exact `selectedTests`
+  list, and the new focused test), `tests/contribution-intake-ledger.test.ts`
+  (graphVersion + node-count pins), `tools/video-production-reference/tests/
+  slice.test.mjs` (independent DAG oracle version pin), `scripts/refresh-
+  integrity-data.mjs` (the canonical integrity generator must own the new node),
+  `verification/canonical-json-profile-inventory-v1.json` + its census test (the
+  generator byte change requires the fail-closed canonical-JSON profile version
+  migration), and the two integrity manifests (`SHA256SUMS`, the video tool's
+  internal `SHA256SUMS`) which re-anchor via `npm run integrity:refresh`.
+- **Public evidence already registered:** all 15 cscl-11 public files are already in
+  `release/public-files.manifest` (1514 total / 1512 data lines) from `faa3538`;
+  this change adds **no new public files** and does not touch the manifest, the
+  builder count bound, or `package.json` (the `cscl11:test` script and its `posttest`
+  head were already registered by the CSCL-11 commit).
 
 ## TDD (RED → GREEN)
 
-- **RED (base `f4a98e0`, before the fix):** the CSCL-11 holdout gate is entirely
-  absent (see *Source inspection*). `npm run cscl11:test` → `missing script`;
-  `node --test tests/cscl-11/holdout-gate.test.mjs` → no such file. This is the real,
-  non-environmental RED demonstrated before authoring.
-- **GREEN (minimal add):** `src/cscl-11/holdout-gate.mjs` + `src/cscl-11/holdout-
-  facts.mjs`, `tests/cscl-11/holdout-gate.test.mjs` (16 tests), and 12
-  `verification/cscl-11-idempiere-*.json` artifacts. `npm run cscl11:test` →
-  **16/16 PASS** (exit 0).
-- **Positive (focused):**
-  - AC3: the holdout profile bundle is schema-valid, `HOLDOUT` role, 36 source facts /
-    36 cells, digest self-consistent, with ≥1 `ABSENT` counterexample and 0
-    `SUPPORTED` (no affirmative iDempiere semantic support asserted by the
-    candidates).
-  - AC2: the source-capture receipt binds exactly 16 pinned files at commit
-    `731515d…` with the `GPL-2.0-or-later` license bytes and `ABSENT_AT_PIN` notice.
-  - AC4: the product mapping is 1 CORE + 8 VARIANT (`coreTotal=5`,
-    `coreIdentityPreserved=5`, 0 unmapped); the party/sales mappings carry
-    `coreTotal=0`, which the mapping-receipt schema rejects at
-    `/denominators/coreTotal` minimum — **that rejection is the falsification signal,
-    not a defect to patch** (AC6).
-  - AC5: party/sales → `FALSIFIED_WITH_EVIDENCE`, product → `GO`, all 6 governance
-    gates true, overall `NARROW_GO`.
-  - AC7: all 4 `holdout-verdict-v1` receipts (party/product/sales/overall) conform to
-    the frozen schema and are digest self-consistent.
-  - AC1: the isolation proof is `clean: true` — `NO_IDEMPIERE_SEMANTIC_SOURCE_
-    CONSUMED_BY_CSCL_01_10`, every candidate `frozenDigestMatchesActual: true` with
-    empty `idempiereFactRefs` and empty `nonTrainingSystemIds`.
-- **Negative / mutation:**
-  - flipping a frozen candidate byte → `CANDIDATE_BYTES_MUTATED_AFTER_FREEZE`.
-  - a deliberately broken isolation governance gate → `deriveOverallVerdict`
-    `FALSIFIED_WITH_EVIDENCE` + `ISOLATION_HARD_GATE_FAILED`.
-- **Toolchain:** all eight frozen `contracts/cscl-01/*.schema.json` compile.
+- **RED (base `faa3538`, before the fix):** the focused registration test fails
+  (`graphVersion 47 !== 48`; node absent) and the canonical DAG digest test fails
+  on the edited test-file input — both demonstrated before the fix, with the drift
+  detector correctly naming the stale path. See *Source inspection*.
+- **GREEN (minimal add):** one DAG node + its canonical generator ownership + the
+  focused positive/negative tests + the version pins. `node --test dist/tests/
+  verification-fabric-v2.test.js` → **32/32 PASS** (was 30/32 RED with the new test
+  failing).
+- **Positive (focused):** the new test asserts the node exists with `dependsOn`
+  exactly `["cscl-08-party-candidate-v1", "cscl-09-product-candidate-v1",
+  "cscl-10-sales-candidate-v1"]`, `ownedTests ["npm run cscl11:test"]`,
+  `riskClass "HIGH"`, `globalInvalidation false`, exactly 17 inputs (4 `VALIDATOR`:
+  the two gate modules, the gate test, the locator producer; 13 `DERIVED_EVIDENCE`:
+  the 13 pilot artifacts) with every on-disk sha256 re-hashed and matched, the four
+  invariants verbatim, `graphVersion 48`, and the `cscl11:test` script + `posttest`
+  head binding. Bounded ownership: a change to `src/cscl-11/holdout-gate.mjs` or to
+  `verification/cscl-11-idempiere-holdout-verdict-overall-v1.json` selects **only**
+  `["cscl-11-idempiere-serial-holdout-gate-v1"]` with `selectedTests ["npm run
+  cscl11:test"]` (mode `IMPACTED_SHADOW`, no full fallback).
+- **Negative / fail-closed (focused):** observed digest drift on any node input →
+  `GRAPH_DRIFT`; a tampered input sha256 (`"0"×63 + "g"`) or an orphaned dependency
+  (`cscl-99-missing-node`) makes `validateVerificationDagV2` reject the graph. The
+  census fail-closed chain rejects any generator byte change without a recorded
+  version migration (`profile-version-migration:current:…`,
+  `byte-obligation-mismatch:…#on-disk`).
 
 ## Source changes (bounded; no governance weakened)
 
-New files (all mode `0644`, registered in the release manifest and
-`repository_only`/public set as applicable):
+Nine files modified; **no new files**, **no public manifest change**, **no
+package.json change**, no governance/authority file altered, no test weakened, no
+exempt prefix widened.
 
-- `src/cscl-11/holdout-gate.mjs` — the gate module: pin/selector/legal constants,
-  frozen candidate digests, `buildSourceFacts`, `buildCells`, `buildProfile`,
-  `buildProfileBundle`, `buildSourceCaptureReceipt`, `buildMappingReceipt`,
-  `ac1HoldoutIsolationProof`, `computeGates`, `buildHoldoutGate`,
-  `buildVerdictReceipts`, `writeArtifacts`.
-- `src/cscl-11/holdout-facts.mjs` — `FACTS` (36 held-out iDempiere source facts) and
-  `FILES` (16 pinned file bytes).
-- `tests/cscl-11/holdout-gate.test.mjs` — 16 tests (AC1..AC7 + mutation + negative +
-  toolchain).
-- 12 `verification/cscl-11-idempiere-*.json` artifacts (source-capture receipt,
-  holdout profile, mapping ×3, isolation proof, governance gates, family results,
-  holdout verdict ×3 [party/product/sales] + overall).
+- `verification/verification-dag-v2.json` — **one node added**
+  (`cscl-11-idempiere-serial-holdout-gate-v1`; `graphVersion 47 → 48`, 56 → 57
+  nodes), produced by the canonical generator; four changed-input digests
+  re-anchored by `npm run integrity:refresh`. The node's four invariants (verbatim):
+  1. "The byte-frozen CSCL-08/09/10 candidates are consumed read-only: raw
+     candidate bytes, frozen digests and frozen slots are replayed without editing,
+     and any drift fails CANDIDATE_BYTES_MUTATED_AFTER_FREEZE."
+  2. "The exact official iDempiere bytes at the pinned immutable commit
+     731515dcdd5278b843db33b9d3109d155b881951 are bound: 16-file capture receipt
+     with per-file sha256/byteLength, GPL-2.0-or-later license bytes and committed
+     locator evidence (HTTP 200 plus whole-file digest match for all 16 rawUrls);
+     any dead, drifted or digest-mismatched locator fails the source gate closed."
+  3. "All 36 holdout source facts, 36 evidence cells and the complete
+     party/product/sales denominators replay deterministically from the frozen
+     bytes; the empty party and sales frozen cores are reported as
+     FALSIFIED_WITH_EVIDENCE narrowing, never patched."
+  4. "No holdout tuning, no universal-ERP-compatibility claim and no Authority,
+     promotion or execution grant; the overall GO / NARROW_GO /
+     FALSIFIED_WITH_EVIDENCE verdict derives only from the frozen protocol
+     functions and the six governance gates."
+- `scripts/refresh-integrity-data.mjs` — the canonical integrity generator now owns
+  the new node (find-or-push block that re-digests its 17 inputs from the current
+  bytes) and advances `graphVersion` to `48`. This byte change is canonically
+  admitted via the fail-closed canonical-JSON census below — the same mechanism
+  every prior generator advance used.
+- `verification/canonical-json-profile-inventory-v1.json` — **one**
+  `profileVersionMigrations` entry added (`CSCL-12-PILOT-RECONCILIATION/INTEGRITY-
+  GENERATOR/V12`, `fromSha256 11a5f565…` = the HEAD generator digest, `toSha256
+  c37787b6…` = the new generator digest; reason: "Advance the Verification DAG to
+  graph v48 and canonically own the CSCL-11 iDempiere serial holdout gate family
+  registered as the reconciled pilot node; admitted v1 and reviewed v2-v11 digests
+  remain immutable.") plus the two recorded generator digests advanced
+  (`profiles` declaration + `byteObligations`, basis `profile-version-migration`)
+  — exactly the reconciliation the V11 advance made in `faa3538`. Byte-exact
+  `JSON.stringify(…, 2)` round-trip preserved; the immutable v1 admitted-base
+  fixture is untouched.
+- `tests/canonical-json-profile-inventory.test.ts` — the mirrored migration chain
+  gains the identical V12 entry and the generator version pin extends
+  `[2..11] → [2..12]`.
+- `tests/verification-fabric-v2.test.ts` — `graphVersion` pin `47 → 48`; the new
+  focused test (positive + bounded-ownership + `GRAPH_DRIFT` + tamper/orphan
+  negatives); the node inserted into the two exact `selectedNodes` lists (AWI-03
+  and contract-changes) and `npm run cscl11:test` into the exact AWI-03
+  `selectedTests` list.
+- `tests/contribution-intake-ledger.test.ts` — pins `graphVersion 47 → 48`,
+  `nodes.length 56 → 57`.
+- `tools/video-production-reference/tests/slice.test.mjs` — the independent DAG
+  oracle pin `47 → 48`; its internal closure manifest
+  (`tools/video-production-reference/SHA256SUMS`) re-digests that one line, keeping
+  the tool-internal `verifyClosure` PASS.
+- `SHA256SUMS` — re-digested by `npm run integrity:refresh` (1828 entries; 8 lines
+  re-digested for content-changed files; zero pre-existing entries dropped).
 
-Modified files (bounded governance reconciliation; fail-closed, not weakened):
+## AC1 — independent verification (byte-level, this session)
 
-- `package.json` — **+1 line** `cscl11:test = node --test tests/cscl-11/
-  holdout-gate.test.mjs`, and `cscl11:test` **prepended** to `posttest` (single
-  canonical registration).
-- `release/public-files.manifest` — **+15** cscl-11 data lines
-  (`1495 → 1510` total data lines).
-- `scripts/build-public-release.sh` — **line 192**: fail-closed manifest
-  count-bound `1495 → 1510` (the single declared owner of that bound; the same
-  reconciliation prior public-file additions performed — maintaining the gate, not
-  weakening it).
-- `tests/verification-fabric-v2.test.ts` — **line 299**: `publicManifestPaths.length`
-  `1495 → 1510`.
-- `tests/release-governance.test.mjs` — **line 322**: `count` `1495 → 1510`
-  (this test cross-checks the builder's regex-extracted bound against the manifest
-  data-line count, so it and `build-public-release.sh` move together).
-- `tests/canonical-json-profile-inventory.test.ts` — census `filesScanned 636 → 639`,
-  ledger `1811 → 1826` (all other census counts unchanged; the cscl-11 imports are
-  multi-line and the scanner's `IMPORT_RE` is line-local).
-- `verification/canonical-json-profile-inventory-v1.json` — matching
-  `freshCounts` (`filesScanned 636 → 639`; `ledgerEntries` and
-  `ledgerUniquePaths` `1811 → 1826`); byte-exact `JSON.stringify(…, 2)` round-trip.
-- `verification/verification-dag-v2.json` — re-digested by `integrity:refresh`;
-  `graphVersion` stays pinned at `47` (no structural change).
-- `SHA256SUMS` — re-digested by `integrity:refresh` (`1811 → 1826` entries; +15
-  cscl-11, 8 re-digested content-changed files; zero pre-existing entries dropped).
+- **Introducing commits (verified by `git log` at `faa3538`):**
+  `201baa3` CSCL-01 protocol (#330), `8dae13e` CSCL-02..06 five source-native
+  profiles (#331), `2748888` CSCL-07 adversarial evidence matrix (#332),
+  `a01647c` CSCL-08 Party candidate (#350), `ea664cb` CSCL-09 Product candidate
+  (#351), `57c2dba` CSCL-10 Sales candidate (#353), `faa3538` CSCL-11 holdout gate
+  (this base head).
+- **#328 holdout receipt:** `verification/cscl-11-idempiere-holdout-verdict-
+  overall-v1.json` carries `verdictDigest
+  7a8056b2c254256e046116aba9ebb559ebf71b966d5e2d752643fc1c680f18fa` — reproduced
+  byte-identically by the independent recompute (below), so the committed receipt is
+  not a trusted label: it is the output of the frozen rule over the frozen inputs.
+- **iDempiere source/legal/license binding (receipt re-read independently):**
+  `resolvedCommit 731515dcdd5278b843db33b9d3109d155b881951`,
+  `officialRepository https://github.com/idempiere/idempiere.git`, selector
+  `refs/heads/release-13`, `factCount 36`, 16 captured files,
+  `legal.licenseId GPL-2.0-or-later` (license bytes sha256 `ff71df08…`),
+  `noticeStatus ABSENT_AT_PIN`, and the committed locator-verification evidence
+  (`artifactReceiptDigest 3511b300fbef2050fdd43bb98bf556bcdde982967c25dc78955cc7209b263d72`,
+  `resolvedCount 16`, `unresolved []`). Offline re-validation this session:
+  `node scripts/capture-cscl-11-source-locators.mjs --verify` →
+  `{"ok": true, "mode": "verify-offline"}`.
+- **Byte-frozen candidate digests (independent reads):**
+  party `94bd8998d38edbd9728be6283206867f2b2aca5a161a216972994ab16ea4f111`,
+  product `26b2719ec82280454af9a517a80711a9901c0e288dc6fb7af7a6ef595d745d08`,
+  sales `636c33318dc0b542e5be8b1849eb798dcebbf3ac51ea64ea86ffcacac99d6c0e` — each
+  `frozenDigest === actualDigest` (**BOUND**, no drift).
+- **Nonclaims in the committed receipts:** `NO_HOLDOUT_TUNING_APPLIED`,
+  `NO_UNIVERSAL_ERP_COMPATIBILITY_CLAIM`, `NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT`,
+  `EMPTY_FROZEN_CORE_REPORTED_AS_NARROWING_NOT_PATCHED`; boundary
+  `authorityGrant/promotionGrant/executionGrant` all `NONE`. AC1 isolation:
+  `clean: true`, `NO_IDEMPIERE_SEMANTIC_SOURCE_CONSUMED_BY_CSCL_01_10`.
 
-Explicitly **NOT** changed: `src/cscl-01/protocol.mjs` (frozen), the three frozen
-candidate byte sets, no test weakened, no exempt prefix widened, no
-governance/authority file altered, no credential or execution-policy change.
+## AC2 — terminal verdict recompute (no trusted labels)
 
-## Verdict (the independent holdout receipt — AC6/AC7)
+Independent driver: `buildHoldoutGate({ repoRoot: "/workspace" })` from the
+unmodified `src/cscl-11/holdout-gate.mjs` (which reads the frozen candidate bytes,
+the frozen 36 iDempiere facts, the committed locator evidence, and drives the frozen
+`src/cscl-01/protocol.mjs` functions `evaluateHoldoutFamily` /
+`deriveOverallVerdict`); each of the 12 artifact values re-serialized as
+`JSON.stringify(value, null, 2) + "\n"` and sha256-compared against the committed
+bytes in `verification/`. Result this session:
+
+- **12/12 artifacts byte-identical** to the committed receipts (source-capture
+  receipt, holdout profile, mapping ×3, isolation proof, governance gates, family
+  results, holdout verdict ×4). The committed labels are therefore *reproduced
+  outputs*, not inputs: no child label or aggregate was trusted.
+- **Terminal verdict: `NARROW_GO`**, `reasonCodes ["ONE_OR_TWO_FAMILIES_GO"]`,
+  `verdictDigest 7a8056b2c254…18fa` (recomputed == committed).
+
+## AC3 — the one terminal verdict and its failed boundaries
 
 `verification/cscl-11-idempiere-holdout-verdict-overall-v1.json`:
 `schemaVersion pansphaira.cscl01/holdout-verdict/v1`, scope `OVERALL`.
 
 | Capability family | Applicable facts | Core/Variant/Unmapped | `coreTotal` | Verdict | reasonCodes |
 |---|---|---|---|---|---|
-| `PARTY_CUSTOMER_MANAGEMENT` | 9 | 0 / 9 / 0 | 0 | `FALSIFIED_WITH_EVIDENCE` | `INVALID_CORE_DENOMINATOR`, `CORE_IDENTITY_OR_MEANING_NOT_100_PERCENT_PRESERVED` |
-| `PRODUCT_ITEM_MANAGEMENT` | 9 | 1 / 8 / 0 | 5 | `GO` | `HOLDOUT_FAMILY_GO` |
-| `SALES_ORDER_MANAGEMENT` | 10 | 0 / 10 / 0 | 0 | `FALSIFIED_WITH_EVIDENCE` | `INVALID_CORE_DENOMINATOR`, `CORE_IDENTITY_OR_MEANING_NOT_100_PERCENT_PRESERVED` |
+| `PARTY_CUSTOMER_MANAGEMENT` | 9 | 0 / 9 / 0 | 0 | **`FALSIFIED_WITH_EVIDENCE`** (failed boundary) | `INVALID_CORE_DENOMINATOR`, `CORE_IDENTITY_OR_MEANING_NOT_100_PERCENT_PRESERVED` |
+| `PRODUCT_ITEM_MANAGEMENT` | 9 | 1 / 8 / 0 | 5 | `GO` | `HOLDOUT_FAMILY_GO` (receipt nonclaim code) |
+| `SALES_ORDER_MANAGEMENT` | 10 | 0 / 10 / 0 | 0 | **`FALSIFIED_WITH_EVIDENCE`** (failed boundary) | `INVALID_CORE_DENOMINATOR`, `CORE_IDENTITY_OR_MEANING_NOT_100_PERCENT_PRESERVED` |
 
-- **Overall: `NARROW_GO`**, `reasonCodes: ["ONE_OR_TWO_FAMILIES_GO"]`,
-  `verdictDigest 7a8056b2c254256e046116aba9ebb559ebf71b966d5e2d752643fc1c680f18fa`.
-  Family receipts: party `d434857e…`, product `0e7342a6…`, sales `850b0e18…`.
-- **Governance gates:** `source, legal, history, integrity, denominator, isolation`
-  — all `true`.
-- **AC1 isolation:** `clean: true`,
-  `NO_IDEMPIERE_SEMANTIC_SOURCE_CONSUMED_BY_CSCL_01_10`; all three candidates
-  `frozenDigestMatchesActual: true`, `idempiereFactRefs: []`,
-  `nonTrainingSystemIds: []`.
-- **AC6 (not patched away):** the empty frozen core for party/sales
-  (`coreTotal=0`) is reported as `INVALID_CORE_DENOMINATOR` /
-  `CORE_IDENTITY_OR_MEANING_NOT_100_PERCENT_PRESERVED` — a narrowing/falsification
-  finding, not a defect the gate edits around. The mapping-receipt schema's
-  `/denominators/coreTotal` minimum is what rejects it; the gate surfaces that
-  rejection as the verdict.
-- **Non-claims in the receipt:** `NO_HOLDOUT_TUNING_APPLIED`,
-  `NO_UNIVERSAL_ERP_COMPATIBILITY_CLAIM`,
-  `NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT`,
-  `EMPTY_FROZEN_CORE_REPORTED_AS_NARROWING_NOT_PATCHED`; boundary
-  `authorityGrant/promotionGrant/executionGrant` all `NONE`.
+- **Overall: `NARROW_GO`** — exactly one verdict, emitted by the frozen
+  `deriveOverallVerdict` over the three family verdicts plus the six governance
+  gates (`source, legal, history, integrity, denominator, isolation` — all `true`).
+- **Failed boundaries (named):** `PARTY_CUSTOMER_MANAGEMENT` and
+  `SALES_ORDER_MANAGEMENT`. The empty frozen cores (`coreTotal = 0`) are reported
+  as `FALSIFIED_WITH_EVIDENCE` narrowing — **never patched away**; the mapping-
+  receipt schema's `/denominators/coreTotal` minimum is what rejects them, and the
+  gate surfaces that rejection as the verdict.
+- **Governance gates:** all six `true`. **Nonclaims:** as listed under AC1 — no
+  holdout tuning, no universal-compatibility claim, no Authority grant.
 
-## Commands and actual results (local, offline-capable, Node ≥ 24)
+## AC4 — registration (nested-then-root integrity)
 
-Ran on fresh current main `f4a98e0`. Environment note: `/tmp` is a 1.0G RAM-backed
-tmpfs; the public-release staging test copies the ~52M public file set into `/tmp`, so
-`/tmp` staging dirs are cleaned between runs (a run that starts on a full `/tmp`
-fails only with `ENOSPC`, not an assertion — see *Full suite result*).
+- **DAG node (nested):** `cscl-11-idempiere-serial-holdout-gate-v1` —
+  `dependsOn` the three frozen-candidate nodes (the pilot consumes them read-only),
+  `ownedTests ["npm run cscl11:test"]` (the canonical focused suite, already
+  registered in `package.json` and at the `posttest` head), `riskClass "HIGH"`,
+  `globalInvalidation false`, 17 inputs (4 `VALIDATOR` + 13 `DERIVED_EVIDENCE`,
+  each sha256-bound to the current bytes), 4 invariants. Final verified shape:
+  `graphVersion 48`, 57 nodes, 17 node inputs, 4 invariants.
+- **Root integrity:** `npm run integrity:refresh` re-digested all changed node
+  inputs and re-wrote `SHA256SUMS` (1828 entries) from the manifest union; a second
+  run is a byte-for-byte **no-op** (idempotent), proving the tree is stably
+  anchored. The canonical-JSON census admitted the generator byte change only via
+  the fail-closed V12 version migration (immutable v1 base + reviewed v2-v11
+  digests untouched). The video tool's internal closure manifest re-digests its
+  single changed line and `verifyClosure` stays PASS.
+- **Sanitized public evidence:** the 15 cscl-11 public files were already registered
+  in `release/public-files.manifest` (1514 total / 1512 data lines) and are
+  re-staged byte-identically by the public build below; this change adds no new
+  public files and alters no manifest line.
 
-1. `npm run cscl11:test` — exit 0, **16/16 PASS**.
-2. CSCL chain via canonical file targets (`cscl01 → cscl11`): **88/88 PASS**, all
-   exit 0 (16+6+4+5+9+10+8+5+5+4+16).
-3. `npm run build` (`tsc -p tsconfig.json`) — exit 0; fresh `dist` carries the new
-   census constants (`filesScanned: 639`, ledger `1826`).
-4. `node --test dist/tests/canonical-json-profile-inventory.test.js dist/tests/
-   verification-fabric-v2.test.js` — exit 0, **66/0** (census 35 + fabric-v2 31).
-5. `node --test tests/release-governance.test.mjs` — exit 0, **87/0**.
-6. `node --test tests/public-product-spelling.test.mjs` — exit 0, **5/5**
-   (`retained-total=605`, every retained token classified; no unclassified).
-7. `node --test tests/supply-chain-verifier.test.mjs` — exit 0, **7/7** (the real
-   `build-public-release.sh` builder stages all **1510** public files, finds no
-   unmanifested file, and the extracted count bound equals the manifest data-line
-   count: `1510 == 1510` ✓).
-8. `sha256sum --check SHA256SUMS` — exit 0, **1826/1826 OK**.
-9. `npm run release-governance:verify` — exit 0, `RELEASE_GOVERNANCE_PASS`.
+## Commands and actual results (local, offline-capable, Node v24)
+
+Ran on exact Main head `faa3538` (local working head after the change; no push).
+
+1. Independent AC2 recompute (driver described above, 12 artifacts recomputed and
+   sha256-compared): **12/12 byte-identical**, terminal `NARROW_GO`,
+   `verdictDigest 7a8056b2c254256e046116aba9ebb559ebf71b966d5e2d752643fc1c680f18fa`
+   recomputed == committed, `OVERALL_RECOMPUTE_MATCH: true`; all three candidates
+   `BOUND`; locator `resolvedCount 16`, `unresolved []`.
+2. `node scripts/capture-cscl-11-source-locators.mjs --verify` — exit 0,
+   `{"ok": true, "mode": "verify-offline"}`.
+3. `npm run cscl11:test` — exit 0, **20/20 PASS**.
+4. CSCL chain, canonical file targets (`cscl-01 → cscl-11`, 11 test files):
+   **92/92 PASS**, all exit 0 (16+6+4+5+9+10+8+5+5+4+20).
+5. `npm run build` (`tsc -p tsconfig.json`) — exit 0.
+6. `node --test dist/tests/verification-fabric-v2.test.js dist/tests/
+   contribution-intake-ledger.test.js dist/tests/canonical-json-profile-
+   inventory.test.js` — exit 0, **94/94** (fabric-v2 32 + ledger 27 + census 35).
+7. `node --test tools/video-production-reference/tests/slice.test.mjs tools/
+   video-production-reference/tests/closure.test.mjs` — exit 0, **116/116**
+   (slice 100 + closure 16; internal closure verify PASS).
+8. `sha256sum -c SHA256SUMS` — exit 0, **1828/1828 OK**.
+9. `npm run integrity:refresh` — exit 0; second run a **no-op** (stable tree).
+10. `npm run lint` — exit 0.
+11. `npm run release-governance:verify` — exit 0, `RELEASE_GOVERNANCE_PASS`.
+12. `npm run supply-chain:verify` — exit 0.
+13. `./scripts/build-public-release.sh --output /tmp/public-build-cscl12b/cm-
+    product-increment-rc-20260912` — exit 0,
+    `ARCHIVE_SHA256=056aee79023a4075e816087ac8348f248d889e12c4643239072bfb8a9ee62481`
+    (new archive SHA vs the CSCL-11 run because the census artifact, census test,
+    DAG and their SHA256SUMS lines are now the re-anchored bytes; the public file
+    set itself is unchanged at 1512 data lines).
 
 ## Full suite result
 
-Green and offline-capable across every directly-affected + CSCL + governance check
-(88 CSCL + 35 census + 31 fabric-v2 + 87 release-governance + 5 spelling + 7
-supply-chain, plus the `release-governance:verify` and `sha256sum --check` gates).
-No assertion-level failure is attributable to this change.
+`npm test` on the exact PR head: **729 tests, 720 pass, 9 fail, 0 cancelled** —
+every census/fabric/ledger/governance/supply-chain/public-build/integrity check
+green. The 9 failures are exclusively `Error: spawnSync docker ENOENT` in the five
+docker-spawning runtime test files (`tests/builder-agent-runtime.test.mjs` ×2,
+`tests/managed-skill-lifecycle-runtime.test.mjs` ×2, `tests/model-access-broker-
+runtime.test.mjs` ×1, `tests/openclaw-agent-runtime-lock.test.mjs` ×2, `tests/
+openclaw-agent-runtime.test.mjs` ×2): `docker` is not on the host `PATH` (the Docker
+daemon is inside the `qwen-test` guest VM, not the host). **Proven pre-existing at
+clean HEAD:** with all nine tracked changes stashed, the same five files at `faa3538`
+fail the same 9 tests with the identical `ENOENT` (29 tests in those files: 20
+pass / 9 fail). They run in the guest VM / exact PR/Main CI. Zero assertion-level
+failure is attributable to this change.
 
-Two environmental notes (neither is a regression from this change):
-
-- **Docker-spawning tests** — `tests/openclaw-agent-runtime-lock.test.mjs`,
-  `tests/openclaw-agent-runtime.test.mjs`, and
-  `tests/model-access-broker-runtime.test.mjs` spawn `docker compose` and fail on
-  this host with `Error: spawnSync docker ENOENT` because `docker` is not on the host
-  `PATH` (per the operator model the Docker daemon is inside the `qwen-test` guest VM,
-  not the host). Proven **pre-existing at clean HEAD**: stashing all nine tracked
-  changes and re-running the three at HEAD reproduces the identical `ENOENT` failures
-  with zero of this diff applied. They would pass in the guest VM / exact PR/Main CI.
-- **`/tmp` `ENOSPC`** — the `supply-chain-verifier` staging test copies the public
-  file set to `/tmp`; a run started while `/tmp` (1.0G tmpfs) was full from leftover
-  staging dirs fails only with `ENOSPC` (`copyfile`). With free space it passes 7/7
-  (run above).
-
-## Correction (AC2 provenance boundary) — candidate `9724355`
-
-**Blocker (single hard blocker; no Main integration conflict, no merge performed):**
-the released AC2 receipt
-`verification/cscl-11-idempiere-source-capture-receipt-v1.json` recorded
-`overview.html` at the dead locator
-`org.adempiere.base/src/org/compiere/model/overview.html` whose rawUrl is **HTTP 404**
-at the pinned commit `731515dcdd5278b843db33b9d3109d155b881951`. The genuine 323-byte
-content (digest `683f72cba8b7463b6def85c6423b04e58f0086c76216728947f1cb5bdf85e37f`)
-resolves only at `doc/doc/overview.html` (HTTP 200, digest + byteLength match). A
-fresh re-sweep of all 16 capture rawUrls at the pin: **15/16 resolve + digest-match;
-the 1 dead link is `overview.html`**. Root cause: the source gate validated
-digests/byte-lengths but **not rawUrl/path resolvability**, so it reported
-`source: true` despite the 404.
-
-**Fix (data + root cause, TDD):**
-
-1. **Data fix:** `src/cscl-11/holdout-facts.mjs` — `overview.html` path corrected to
-   `doc/doc/overview.html` (byteLength 323 / sha256 `683f72…` unchanged — same bytes,
-   right locator). The AC2 receipt chain re-digested via `writeArtifacts()`: new
-   receipt `rawUrl …/doc/doc/overview.html`, new self-referential
-   `receiptDigest a63443cef24cea735f3f8c4b2872e5358af30e0e7f69c3bf1f44c97c04a8699b`
-   (was `7821b3bd…`). No other of the 12 CSCL-11 artifacts changed byte-for-byte
-   (profile/mapping/isolation/gates/family/verdict artifacts are
-   `git diff`-empty; overall verdict `7a8056b2…` and `NARROW_GO` unchanged).
-2. **Real provenance evidence (not invented):**
-   `verification/cscl-11-idempiere-source-locator-verification-v1.json` — committed
-   fetch evidence produced by the new
-   `scripts/capture-cscl-11-source-locators.mjs --network` (bounded read-only GET
-   sweep of all 16 rawUrls at the pinned immutable commit, redirects denied):
-   per-file `httpStatus` (all **200**), `contentSha256` (all equal to the capture
-   digest), `byteLength`; `resolvedCount: 16`, `unresolved: []`; self-referential
-   `receiptDigest 3511b300fbef2050fdd43bb98bf556bcdde982967c25dc78955cc7209b263d72`.
-   The producer exits non-zero on any non-200 status or digest/length mismatch, so it
-   cannot emit a conforming artifact over a dead locator. Offline re-validation:
-   `--verify` → `{ok: true}`.
-3. **Root cause (gate fails closed on unresolvable locators):**
-   `src/cscl-11/holdout-gate.mjs` — the frozen six-gate set is **unchanged**
-   (`GATE_NAMES` in `src/cscl-01/protocol.mjs` untouched; no 7th gate). The existing
-   `source` gate computation now additionally requires the committed
-   locator-verification evidence to bind: new `validateSourceLocator()` fails closed
-   with fixed reason codes (`LOCATOR_VERIFICATION_MISSING`,
-   `LOCATOR_COMMIT_MISMATCH`, `LOCATOR_RAW_BASE_MISMATCH`, `LOCATOR_ENTRY_COUNT`,
-   `LOCATOR_ENTRY_DUPLICATE`, `LOCATOR_ENTRY_MISSING`, `LOCATOR_RAW_URL_DRIFT`,
-   `LOCATOR_UNRESOLVED`, `LOCATOR_DIGEST_MISMATCH`, `LOCATOR_LENGTH_MISMATCH`,
-   `LOCATOR_RESOLVED_COUNT`, `LOCATOR_UNRESOLVED_LIST_MISMATCH`,
-   `LOCATOR_RECEIPT_DIGEST_MISMATCH`) when any of the 16 rawUrls is missing, not
-   `https://raw.githubusercontent.com/idempiere/idempiere/<pin>/<path>`, non-200 at
-   the pin, or digest/length-mismatched. `buildSourceCaptureReceipt` now binds the
-   evidence (`locatorVerification.artifact` + `artifactReceiptDigest`, read from the
-   artifact, never self-attested).
-4. **TDD (RED → GREEN):** RED — the new tests fail on the pre-fix module
-   (`LOCATOR_VERIFICATION_FILE` export absent → `SyntaxError`; committed artifact
-   absent → `ENOENT`). GREEN — `tests/cscl-11/holdout-gate.test.mjs` grew 16 → **20
-   tests**: the committed artifact validates with zero errors; the receipt binds the
-   artifact digest; the source gate fails closed on a 404
-   (`LOCATOR_UNRESOLVED:overview.html:404`), on a digest mismatch
-   (`LOCATOR_DIGEST_MISMATCH:MOrder.java`) and on rawUrl drift
-   (`LOCATOR_RAW_URL_DRIFT:overview.html`); and a **negative end-to-end**: a
-   404-tampered locator artifact in a temp repoRoot forces
-   `governanceGates.source === false`, overall `FALSIFIED_WITH_EVIDENCE` and
-   `SOURCE_HARD_GATE_FAILED`. **20/20 PASS.**
-
-**Governance reconciliation (repository tools; no weakening):** the two new public
-files are registered and all counts move together as prior additions did:
-
-- `release/public-files.manifest` — +2 data lines (`1510 → 1512`), sorted, identity
-  mapping, mode `0644`.
-- `scripts/build-public-release.sh` line 192 — count bound `1510 → 1512`.
-- `tests/release-governance.test.mjs` line 322 and
-  `tests/verification-fabric-v2.test.ts` line 299 — `1510 → 1512`.
-- `SHA256SUMS` — `npm run integrity:refresh` → **1828** entries (was 1826).
-- `tests/canonical-json-profile-inventory.test.ts` +
-  `verification/canonical-json-profile-inventory-v1.json` — census
-  `filesScanned 639 → 640`, `importSites 212 → 213`, `importFiles 211 → 212` (the new
-  producer script's single-line `canonicalJson` import; declarations/reexports/
-  similar-shape unchanged), ledger `1826 → 1828`, `consumerFamilies["scripts"]
-  9 → 10` sites/files.
-- `verification/verification-dag-v2.json` — re-digested by `integrity:refresh`
-  (six changed-input digests: manifest ×2 nodes, `build-public-release.sh`, census
-  test, release-governance test, `verification-fabric-v2.test.ts`, census
-  artifact); `graphVersion` stays `47`.
-
-**Commands and actual results (correction battery, local, Node v24):**
-
-1. `node scripts/capture-cscl-11-source-locators.mjs --network` — exit 0,
-   `{"ok": true, "resolved": 16, "total": 16}`.
-2. `node scripts/capture-cscl-11-source-locators.mjs --verify` — exit 0,
-   `{"ok": true, "mode": "verify-offline"}`.
-3. `node --test tests/cscl-11/holdout-gate.test.mjs` — exit 0, **20/20 PASS**.
-4. CSCL chain (`cscl01 → cscl11` file targets): **92/92 PASS** (16+6+4+5+9+10+8+5+5+4+20).
-5. `npm run build` — exit 0; dist carries the new census constants
-   (`filesScanned: 640`, ledger `1828`) and `1512` public count.
-6. `node --test dist/tests/canonical-json-profile-inventory.test.js dist/tests/
-   verification-fabric-v2.test.js` — exit 0, **66/0** (census 35 + fabric-v2 31).
-7. `npm run release-governance:test` — exit 0, **92/0** (release-governance 87 +
-   public-product-spelling 5).
-8. `node --test tests/supply-chain-verifier.test.mjs` — exit 0, **7/7** (stages all
-   **1512** public files; extracted bound `1512 == 1512` ✓).
-9. `sha256sum --check SHA256SUMS` — exit 0, **1828/1828 OK**.
-10. `npm run release-governance:verify` — exit 0, `RELEASE_GOVERNANCE_PASS`.
-11. `node --test tests/daily-poc.test.mjs tests/secure-default-proof.test.mjs
-    dist/tests/trust-compatibility-foundation-closure.test.js` — exit 0, **49/0**.
-12. `writeArtifacts()` re-run — overall `NARROW_GO` / product `GO` / party+sales
-    `FALSIFIED_WITH_EVIDENCE` (unchanged verdict); only the source-capture receipt
-    byte-changed among the 12 artifacts.
-
-**Verdict after correction: unchanged** — `NARROW_GO`,
-`reasonCodes: ["ONE_OR_TWO_FAMILIES_GO"]`, all six governance gates `true` (the
-`source` gate is now additionally evidence-bound, not weakened). The correction adds
-no claim: it repairs the AC2 provenance boundary with real pinned-commit fetch
-evidence and makes the gate fail closed on dead locators. `publicly_delivered`
-remains false.
+Environmental note (not a regression): `/tmp` is a 1.0G RAM-backed tmpfs. Stale
+`cm-supply-chain-test-*` staging dirs (≈52M each, 20 leftover from a prior
+ENOSPC-interrupted run) had filled it and killed an intermediate suite run with
+`ENOSPC`. After removing the stale staging dirs (test artifacts, recreated on
+demand) the full suite completed as recorded above; `/tmp` staging dirs should be
+cleaned between runs.
 
 ## Unresolved / parent-side gates (NOT done here; owned by the delivery controller)
 
 Per the mandate, the delivery job controller — not this work — performs the
 following. They are recorded as UNRESOLVED and are **never** claimed delivered here:
 
-- AC7 independent candidate review (fresh Qwen review).
-- Semantic main integration / merge.
-- Exact PR/Main CI.
-- Release (functional product increment, exact versioned class, SHA-256 sidecar) and
-  Docker-E2E.
+- AC6/AC7 fresh Qwen review of the candidate.
+- SHA-bound merge to Main and exact PR/Main CI (including the five docker-spawning
+  runtime tests above, which run in the guest VM / CI).
+- Serial release (functional product increment, exact versioned class, SHA-256
+  sidecar) and Docker-E2E.
 - Anonymous public readback and functional + version-bound public readback
   (`release-governance:public-readback` / `--public-readback` is a network action
   reserved to the controller and was **not** run here).
-- The three docker-spawning tests above run in the guest VM / CI, not the host.
-- Public issue closure, only after the post-creation read-only workflow passes, per
-  the release governance contract in `JoFe2/PANSPHAIRA`
+- Closure of the terminal CSCL children and #317, and queue reconciliation, only
+  after the post-creation read-only workflow passes, per
   `docs/RELEASE-GOVERNANCE.md`.
 
 No push, no public mutation, no credentials, no external systems, and no issue
@@ -378,17 +339,21 @@ closure were performed in this work.
 
 ## Nonclaims
 
-- This does not claim readiness, delivery, or certification for CSCL-11.
-- This does not assert universal ERP compatibility — the overall verdict is
-  `NARROW_GO` (one of three families `GO`); `NO_UNIVERSAL_ERP_COMPATIBILITY_CLAIM`.
-- This does not apply holdout tuning (`NO_HOLDOUT_TUNING_APPLIED`); the held-out
-  profile is built independently of the candidates.
-- This does not grant or claim authority/promotion/execution (boundary `NONE`);
-  `NO_AUTHORITY_PROMOTION_OR_EXECUTION_GRANT`.
-- This does not patch away the falsification — the empty frozen core is reported as
-  narrowing/falsification (`EMPTY_FROZEN_CORE_REPORTED_AS_NARROWING_NOT_PATCHED`).
-- This does not weaken any test or governance gate; the count-bound and census
-  reconciliation maintain the fail-closed `build-public-release.sh` / release-
-  governance / canonical-JSON census state.
-- `publicly_delivered` remains false; delivery and readback stay with the delivery
-  controller.
+- This does not claim readiness, delivery, or certification for the Capability
+  Library pilot; `publicly_delivered` remains false and delivery/readback stay with
+  the delivery controller.
+- The terminal verdict is `NARROW_GO` — one of three capability families is `GO`;
+  `PARTY_CUSTOMER_MANAGEMENT` and `SALES_ORDER_MANAGEMENT` are
+  `FALSIFIED_WITH_EVIDENCE` (failed boundaries, empty frozen cores reported as
+  narrowing, never patched). No universal ERP compatibility is claimed
+  (`NO_UNIVERSAL_ERP_COMPATIBILITY_CLAIM`).
+- No holdout tuning was applied (`NO_HOLDOUT_TUNING_APPLIED`); the verdict derives
+  only from the frozen protocol functions and the six governance gates over the
+  frozen bytes.
+- No Authority, promotion or execution grant is made or claimed (boundary `NONE`).
+- No test was weakened and no governance gate changed: the count bound, the public
+  manifest (unchanged), the canonical-JSON census (admitted only via the fail-closed
+  V12 migration) and the DAG drift detector all retain their fail-closed behavior.
+- Missing-input reporting: none. All required source/evidence bytes, registrations
+  and public transport were present at `faa3538` or are produced locally here; no
+  RELEASE_BLOCKER with an external owner arises from this change.
