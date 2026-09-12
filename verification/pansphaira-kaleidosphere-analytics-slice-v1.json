@@ -1,11 +1,14 @@
 {
   "schemaVersion": "pansphaira.xra-ps-02/candidate-adjudication-verification/v1",
   "issue": "PANSPHAIRA#344",
-  "baseHead": "90512ba63587d10b4a833a7f31e1f91595531467",
-  "scope": "LOCAL_SYNTHETIC_ONLY",
+  "baseHead": "a70b3ff9ca07d5061e8c6e22564d23b0cc97acf8",
+  "scope": "LOCAL_SYNTHETIC_AND_LOCAL_VM_REAL_HTTP",
   "focusedCommand": "npm run xra-ps-02:test",
   "implementation": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
+  "implementationSha256": "d39fbfc9f982c9bbe33567134f3b5a9d0eecaa1935f49e66815c8b5a1ef815a9",
   "focusedTest": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
+  "focusedTestNative": "tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts",
+  "focusedTestNativeSha256": "f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0",
   "gateReceipts": [
     {
       "command": "npm run build --silent",
@@ -29,7 +32,8 @@
       "assertions": [
         "PANSPHAIRA rebuilds the existing owner projection and evidence before adjudication",
         "the KaleidoSphere verdict is recorded but is not authoritative",
-        "malformed or exotic candidate objects are denied without invoking candidate traps"
+        "malformed or exotic candidate objects are denied without invoking candidate traps",
+        "the native adjudicator re-derives the deterministic analysis from the canonical transport bytes and the PAN-owned projection and keeps the service verdict non-authoritative"
       ]
     },
     "XRA-PS-02-AC02": {
@@ -40,7 +44,15 @@
         "conflicting-counterevidence": "DENIED",
         "forged-candidate": "DENIED",
         "stale-head": "DENIED"
-      }
+      },
+      "nativeScope": {
+        "positive": "ACCEPTED_BOUNDED",
+        "restricted-unknown": "RESTRICTED",
+        "conflicting-counterevidence": "DENIED",
+        "forged-candidate": "DENIED",
+        "stale-head": "DENIED"
+      },
+      "nativeScopeNote": "The native restriction and conflict cases come from the independently sourced PAN adjudication context; native v1 service output freezes unknown=false and an empty counterevidence channel, so those cases are never fabricated as normal service output."
     },
     "XRA-PS-02-AC03": {
       "status": "NOT_PROVEN",
@@ -53,14 +65,64 @@
         "CANDIDATE",
         "ADJUDICATION"
       ],
-      "localFinding": "The verifier now reconstructs the local chain from frozen owner inputs and the adjudicated candidate; this is not Root-QS, cross-repository CI/readback, or parent-closure evidence.",
+      "localFinding": "The native paired receipt binds both reconciled released heads and the complete seven-stage chain; local verification is VERIFIED with exact material and fail-closed DENIED without material or on any tamper. This is not Root-QS, cross-repository CI/readback, or parent-closure evidence.",
       "nonclaim": "XRA-PS-02-AC03 is not proven: XRA-KS-01/#151 admission, both exact released-head readbacks, Root-QS, repository CI, and parent closure are absent."
     },
     "XRA-PS-02-AC04": {
       "status": "PROVEN_LOCALLY",
-      "beforeAfter": "canonical knowledge digest, authority, capability, and effect remain unchanged",
+      "beforeAfter": "canonical knowledge digest, authority, capability, and effect remain unchanged on both the flat and the native surfaces",
       "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a"
     }
+  },
+  "nativeScope": {
+    "schemaVersion": "pansphaira.xra-ps-02/native-candidate-adjudication/v1",
+    "supersedes": {
+      "flatSyntheticCandidate": "the local flat synthetic candidate (v1 surface retained unchanged)",
+      "staleBoundHeads": [
+        "24db4e926385b006c9f2fbca3588adece72e7fb0",
+        "90c574e9a06cb752be06270395d44a31eabc44ae"
+      ]
+    },
+    "reconciledReleasedHeads": {
+      "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
+      "kaleidoSphere": "545a3b44ea88c96eded060c11c7c3a2afe0edff6"
+    },
+    "kaleidoSphereReleasedTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+    "service": {
+      "repository": "KaleidoSphere",
+      "endpoint": "/v1/pansphaira-analytics/native-projection",
+      "transport": "loopback HTTP (127.0.0.1) inside the dedicated root test VM",
+      "scope": "LOCAL_VM_REAL_HTTP"
+    },
+    "pairedReceipt": {
+      "receiptId": "pansphaira:xra-ps-02-native-paired-receipt-001",
+      "schemaVersion": "pansphaira.xra-ps-02/native-paired-receipt/v1",
+      "chainStages": [
+        "GENERATION",
+        "PROJECTION",
+        "INGESTION",
+        "SEMANTICS",
+        "ANALYSIS",
+        "CANDIDATE",
+        "ADJUDICATION"
+      ],
+      "localVerification": "VERIFIED with exact material; fail-closed DENIED without material or on any tampered field"
+    },
+    "evidenceFixtures": [
+      {
+        "path": "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json",
+        "sha256": "949632ef2b517b36ec8969700c9b54fd2a94d3b47751bdd070b319a76864ee4a",
+        "scope": "LOCAL_VM_REAL_HTTP"
+      },
+      {
+        "path": "tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json",
+        "sha256": "645c238a2fbb762958dc2473414c2a85ab8feb104185b9f938ea374c0887dbff",
+        "derivation": "identical-input-substitution",
+        "scope": "LOCAL_VM_REAL_HTTP"
+      }
+    ],
+    "restrictionConflictSource": "Independently sourced PAN adjudication context (native context v1); the KS verifier and service output are never trusted as PAN authority.",
+    "nonclaim": "Local VM loopback success does not establish a working public evidence URL (HTTP 404 remains missing); this receipt asserts no public transport, admission, or closure."
   },
   "authoritativeInputs": {
     "schemaVersion": "pansphaira.xra-ps-02/candidate-adjudication/v1",
@@ -84,5 +146,5 @@
     "NO_XRA_KS_01_ADMISSION_OR_EXACT_HEAD_CLOSURE",
     "NO_EXTERNAL_RELEASE_OR_CROSS_REPOSITORY_CHAIN_PROOF"
   ],
-  "integrityNote": "This slice records only its local, purpose-bound digests. SHA256SUMS and the CKS-12 verification-DAG input chain bind this implementation, focused test, and receipt; no Root-QS, external readback, release, or parent-closure evidence is asserted."
+  "integrityNote": "This slice records only its local, purpose-bound digests. SHA256SUMS and the CKS-12 verification-DAG input chain bind this implementation, both focused tests, the native paired receipt identity, the real-HTTP capture fixtures, and this receipt; no Root-QS, external readback, release, or parent-closure evidence is asserted."
 }

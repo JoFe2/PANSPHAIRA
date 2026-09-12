@@ -1086,6 +1086,8 @@ tests/fixtures/cks-12/part-ii-23-step-fixture-v1.json	tests/fixtures/cks-12/part
 tests/fixtures/cks-12/pattern-shadow-parity-v1.json	tests/fixtures/cks-12/pattern-shadow-parity-v1.json	0644
 tests/fixtures/cks-12/prerequisite-receipts-v1.json	tests/fixtures/cks-12/prerequisite-receipts-v1.json	0644
 tests/fixtures/cks-analytics/projection-v1.json	tests/fixtures/cks-analytics/projection-v1.json	0644
+tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json	tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json	0644
+tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json	tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json	0644
 tests/fixtures/cks-qualification/escalation-causes-v1.json	tests/fixtures/cks-qualification/escalation-causes-v1.json	0644
 tests/fixtures/cks-qualification/profile-binding-v1.json	tests/fixtures/cks-qualification/profile-binding-v1.json	0644
 tests/fixtures/cks-qualification/smallest-qualified-v1.json	tests/fixtures/cks-qualification/smallest-qualified-v1.json	0644

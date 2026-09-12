@@ -38,6 +38,8 @@ function classify(path, line) {
   if (
     path === "src/cks-12/kaleidosphere-candidate-quarantine.ts"
     || path === "verification/pansphaira-kaleidosphere-analytics-slice-v1.json"
+    || path === "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json"
+    || path === "tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json"
   ) return "stable-xra-ps02-technical-identifier";
   if (path === "demo/manifests/network/local-egress-policy-v1.json") return "technical-fixture-identifier";
   if (path === "tests/fixtures/incoming-invoice/supplier-invoice-v1.txt") return "frozen-synthetic-fixture-display";
