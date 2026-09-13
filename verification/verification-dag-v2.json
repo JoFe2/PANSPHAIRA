@@ -4801,7 +4801,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "fefc4004c88f72af7c021f16b5f907d12be25592ed8dd981eb1e46c4694a6ebb"
+          "sha256": "e3051aef473bda7daf619a5d88b027815468f9c723bc1256dff64c1da7d6befa"
         },
         {
           "path": "tests/release-governance.test.mjs",
