@@ -326,3 +326,145 @@ AC04 BEFORE_AFTER_DEEPEQUAL: PASS
    URL remains HTTP 404 / missing.
 All of the above remain WAIT. Nothing here claims delivery; `publicly_delivered`
 remains false.
+
+## Follow-up correction — PublicationRegistrationFailure (on top of 63f87df)
+
+**Status: local registration correction complete. NOT DELIVERED / NOT CLOSED.**
+This is an additive, locally validated source correction on the exact committed
+candidate head `63f87df47a3390ccac030102b1e404a83f92975a` (tree
+`4e63c6ae876eb7567dd9b0c8d5837afc7eb2995f`) for the named defect
+**PublicationRegistrationFailure** (issue #344, campaign node XRA-PS-02). It does
+not alter the prior native wire/head integration (commit `63f87df`); it restores
+the canonical registration and nested/root/DAG integrity of the four
+repository-only independent adjudicator/proof-closure files. No push, no public
+mutation, no credentials, no external systems, no issue closure.
+`publicly_delivered` remains false.
+
+### Defect
+
+The four repository-only closure files are:
+
+- `src/cks-12/kaleidosphere-candidate-quarantine.ts` (independent PAN
+  adjudicator, sha256 `d39fbfc9f982c9bbe33567134f3b5a9d0eecaa1935f49e66815c8b5a1ef815a9`)
+- `tests/cks-12/kaleidosphere-candidate-quarantine.test.ts` (flat test,
+  sha256 `874bfe3e8e7a69bd6a31474c5ca1b8712437a5f8e54b3d51cb48bbfce4e7507f`)
+- `tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts` (native test,
+  sha256 `f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0`)
+- `verification/pansphaira-kaleidosphere-analytics-slice-v1.json` (paired slice
+  receipt)
+
+At `63f87df` all four were already repository-only (absent from
+`release/public-files.manifest` and present in the builder's
+`repository_only_files` set), the manifest count was already consistently 1514,
+and three of the four were already registered in both the root `SHA256SUMS` and
+the verification-DAG node `cks-12-closed-learning-loop-v1`. The concrete gap was
+that the **native test** was **additionally absent from (a) the root
+`SHA256SUMS` and (b) the verification-DAG path registration** on node
+`cks-12-closed-learning-loop-v1`, despite the slice receipt claiming both tests
+are bound. The required correction: register the actual independent
+adjudicator/proof closure, reconcile the four repository-only exceptions, and
+derive the exact manifest count consistently in the builder and the governance
+tests (compute the actual final count), restoring canonical registration and
+coherent nested/root/DAG integrity using repository-native tooling in dependency
+order.
+
+### Correction (minimal, TDD, repository-native tooling, dependency order)
+
+- `tests/release-governance.test.mjs` (sha256
+  `0c6fd608f063fd864158cb75c18c26ce703668686985fb7cd2fd65c53952ee9a`): +1 test
+  (TDD RED→GREEN) asserting, for each of the four closure paths — repository-only
+  manifest exclusion (0 manifest lines) and builder `repository_only_files`
+  classification; exact root `SHA256SUMS` registration at the file's true
+  sha256; exact verification-DAG path registration on
+  `cks-12-closed-learning-loop-v1` with role `VALIDATOR` for the three
+  code/test files and `DERIVED_EVIDENCE` for the slice receipt, each at the
+  file's true sha256; and that the builder's exact-count binding
+  (`if count != N:`) equals the actual manifest line count (the consistent
+  derived count, not a hand-set constant).
+- Root `SHA256SUMS` (sha256 `f2bae9a827006e1dc3d682e642ed19cef45d836b7debfbe2047552fd99a13cb7`):
+  +1 line `f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0  ./tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts`,
+  placed at the tool-sorted position (1830 → 1831 lines).
+- `verification/verification-dag-v2.json` (sha256
+  `3e3709c67ac1bee8f369e2384a6369071f7fefb6559a36bffed75545b82a7d86`): the native
+  test is registered as a `VALIDATOR` input on node
+  `cks-12-closed-learning-loop-v1` at the localeCompare-sorted position;
+  `graphVersion` remains 49.
+- `verification/canonical-json-profile-inventory-v1.json` (sha256
+  `e9614ff422f0abb83293d696f914720f4b9bcd90d440ab2012f8a42e1a55e436`):
+  `freshCounts.ledgerEntries` and `ledgerUniquePaths` 1830 → 1831 to match the
+  new root `SHA256SUMS` line. The census test's self-exclusion and `filesScanned`
+  (641) are unchanged; the stale unvalidated `integrationOwnership` pin for the
+  census test was deliberately left untouched (it is not validated by any gate).
+- `tests/canonical-json-profile-inventory.test.ts` (sha256
+  `83dbed4d3bb3a34294ff2636a4ed4dcfe2e6b6cfde166b261886bc9ce4051b0a`):
+  `EXPECTED_LEDGER` 1830 → 1831 (`entries`/`uniquePaths`); `filesScanned` stays
+  641; the V2–V13 migration chain is unchanged. The census test validates the
+  census-test file's sha256 against the DAG `repository-integrity` node input
+  (auto-updated by `integrity:refresh`), not the stale inventory pin.
+- `npm run integrity:refresh` (`scripts/refresh-integrity-data.mjs`, sha256
+  `c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640` — **unchanged,
+  net-zero diff**): re-digested the `repository-integrity` node's pins for the
+  census test, governance test, and inventory to their new post-edit bytes, and
+  re-sorted the root `SHA256SUMS`. The tool was **not** edited to force the
+  closure through `cks12FocusedInputs`/the additions list — doing so would have
+  cascaded into a new canonical-JSON profile migration (V14) and profile/byte
+  obligation pins, contradicting the minimal-correction constraint. The closure
+  files follow the established sibling pattern of **direct** registration in the
+  DAG and `SHA256SUMS`, then a repository-native `integrity:refresh` to
+  re-digest/sort/preserve.
+
+### Preserved (unchanged by this correction)
+
+- Implementation semantics, legacy historical evidence, and the native
+  restricted/conflicting semantics; the exact reconciled released-head pair
+  identities (`7f662672…` PAN / `545a3b44…` KS); the `LOCAL_VM_REAL_HTTP`
+  scope and the `AC03 NOT_PROVEN` nonclaim. All four closure files are
+  **byte-identical to `63f87df`** (verified: empty `git diff` vs HEAD for all
+  four).
+- `review.artifact` / the paired slice receipt were **not** replaced with an
+  unrelated capture or a generic public file. No manifest membership was waived
+  (all four remain excluded from the public manifest). No CI or Root-QS success
+  was invented. No no-op KS release was added. The manifest count (1514) was
+  computed, not asserted by hand.
+
+### Test results (actual commands, this candidate)
+
+- `npm run release-governance:test` (release-governance + public-product-spelling)
+  → **93/93 pass** (was 92/92; +1 new governance test, RED→GREEN).
+- `node --test dist/tests/canonical-json-profile-inventory.test.js` → **35/35 pass**.
+- `npm run xra-ps-02:test:compiled` (flat + native quarantine suites, all four
+  ACs) → **11/11 pass**.
+- `node --test dist/tests/verification-fabric-v2.test.js` → **32/32 pass**.
+- `node --test dist/tests/contribution-intake-ledger.test.js` → **27/27 pass**.
+- `node --test dist/tests/trust-compatibility-foundation-closure.test.js` → **9/9 pass**.
+- `node --test tools/video-production-reference/tests/slice.test.mjs
+  tools/video-production-reference/tests/closure.test.mjs` → **116/116 pass**.
+- `npm run build` → exit 0.
+- Public-release builder local verification (local only, output discarded, **not**
+  a public release): `bash scripts/build-public-release.sh --output
+  /tmp/xra-ps02-staging/cm-product-increment-rc-20260913` → exit 0,
+  `ARCHIVE_SHA256=e8cedd682856643736c9948d7a6b2996065208830074fa33652c66bc1349c2a8`;
+  the 1514-count binding held (no `UNMANIFESTED_SOURCE_FILE`); all four closure
+  files confirmed **absent** from the staged public tree; staged public file
+  count = 1514 (1513 + the staged `SHA256SUMS`). Temp output removed. The archive
+  fingerprint differs from the `63f87df` record because four already-public
+  manifest files (the two test files and the two verification JSONs) changed
+  bytes in this correction — no closure file entered the public tree.
+- `git diff --check` → clean.
+
+### Diff confinement
+
+`git diff` vs `63f87df` is confined to exactly **5 files**:
+`SHA256SUMS`, `tests/canonical-json-profile-inventory.test.ts`,
+`tests/release-governance.test.mjs`,
+`verification/canonical-json-profile-inventory-v1.json`,
+`verification/verification-dag-v2.json`. The four closure files and the
+repository-native tool are unchanged.
+
+### Unresolved gates (controller-owned; RELEASE_BLOCKERS, not FOLLOW_UPs)
+
+Unchanged from the prior record: fresh Qwen review of this exact candidate,
+exact PR/Main CI, serial release of the public artifact, anonymous public
+readback, and the AC03 public chain proof (NOT_PROVEN; public evidence URL
+remains HTTP 404 / missing). All remain WAIT. Nothing here claims delivery;
+`publicly_delivered` remains false.
