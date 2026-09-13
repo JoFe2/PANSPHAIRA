@@ -613,7 +613,7 @@ add `contracts/analytics/producer-manifest-v1.json` produced by a deterministic
 `scripts/build-producer-analytics-manifest.mjs` and covered by
 `tests/producer-analytics-manifest.test.ts`, describing only the concepts,
 fields, evidence, coverage, and semantics actually emitted by the delivered
-XRA-PS-02 paired slice (PANSPHAIRA #344). The admission gate is "XRA-PS-02
+XRA-PS-02 paired slice (issue #344). The admission gate is "XRA-PS-02
 paired slice delivered."
 
 ## Admission gate revalidation on the current head (actual commands, actual
@@ -769,3 +769,77 @@ are asserted anywhere by this record.
 This record only. `WORK_RESULT.md` is a `repository_only_files` exclusion in
 `scripts/build-public-release.sh` (tracked; excluded from the public release;
 pinned by no manifest), so this commit affects no release content.
+
+---
+
+# WORK_RESULT — PAR-PS-01 receipt correction (spelling-classification
+boundary; record bytes only)
+
+**Status: candidate record repair. Admission-gate verdict unchanged —
+ADMISSION GATE UNMET (WAIT_DEPENDENCY). NOT DELIVERED / NOT CLOSED.**
+
+## Defect found in the committed receipt (provenance boundary)
+
+The section above, committed at `707d269607931d5b1a2916bdae6e4d43d6bffec9`,
+records `npm run release-governance:test` as "93/93 pass, exit 0" and
+asserts "every other canonical check passed locally on this head". At that
+exact committed head the deterministic in-tree run yields **92/93, exit 1**:
+the record byte that commit introduced — the bare legacy all-caps product
+display token in the parenthetical issue reference at line 616 of this file
+— has no KEEP classification in the tracked gate
+`tests/public-product-spelling.test.mjs` ("every retained all-caps token
+has an explicit KEEP classification", assertion at line 142). Base
+`45c2c77143a6e123e3d6dd43370dfd310dd50554` has zero occurrences of that
+token in this file, so the commit's own diff introduced the failure and the
+committed receipt did not match the tested head.
+
+## Reproduction (exact head 707d269, before correction; actual output)
+
+- `git rev-parse HEAD` → `707d269607931d5b1a2916bdae6e4d43d6bffec9`
+- `npm run release-governance:test` → `# pass 92 / # fail 1`, exit 1.
+  Failing test: `every retained all-caps token has an explicit KEEP
+  classification`; unclassified entry
+  `WORK_RESULT.md:616:XRA-PS-02 paired slice (…) The admission gate is
+  "XRA-PS-02` (the bare legacy all-caps display token elided here so this
+  record itself stays inside the gate).
+
+## Correction (minimal; record bytes only)
+
+- Line 616 reworded: the parenthetical issue reference no longer carries
+  the bare legacy all-caps display token; it now reads `(issue #344)`,
+  matching the reference convention used by every other section of this
+  file (issue number + campaign node name).
+- No test bytes, contract bytes, manifest bytes, release bytes, or product
+  bytes changed: the diff shows `WORK_RESULT.md` only (the reworded line,
+  plus this appended correction record). The tracked gate
+  `tests/public-product-spelling.test.mjs` is preserved unchanged; no test,
+  public entry, or evidence was removed or reclassified.
+- `WORK_RESULT.md` is a `repository_only_files` exclusion in
+  `scripts/build-public-release.sh` and is absent from `SHA256SUMS` and
+  `release/public-files.manifest`; neither `scripts/verify-release-governance.mjs`
+  nor any `.github/workflows/` step reads it, so this correction affects no
+  release content and no other registered gate.
+
+## Re-validation (corrected tree; actual commands, actual observations)
+
+- `npm run release-governance:test` → 93/93 pass, 0 fail, exit 0 (run on
+  the corrected tree after the line rewording, before this record was
+  appended).
+- `sha256sum --check SHA256SUMS` → exit 0 (all 1831 entries OK).
+- `npm run release-governance:verify` → `RELEASE_GOVERNANCE_PASS`, exit 0.
+- `npm run release-governance:test` with this record appended (final
+  tree) → 93/93 pass, 0 fail, exit 0.
+- `git status --short` after the final run → only `WORK_RESULT.md`
+  modified (the reworded line plus this record); no other tracked bytes
+  touched.
+
+## Unchanged
+
+The admission-gate verdict of the section above is unchanged and remains in
+force: the XRA-PS-02 paired slice is not delivered (the in-tree slice
+receipt holds AC03 `NOT_PROVEN`; `publicly_delivered` remains false;
+controller-owned gates WAIT). No product work is performed or claimed;
+nothing here claims delivery. No push, no public mutation, no credentials,
+no external systems, no issue closure. No future-roadmap capability, no
+consumer-support claim, and no historical-retention semantics are asserted
+anywhere by this record.
