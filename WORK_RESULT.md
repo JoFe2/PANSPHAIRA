@@ -595,3 +595,144 @@ Unchanged: fresh independent review of this exact candidate, exact PR/Main CI,
 serial release of the public artifact, anonymous public readback, and the AC03
 public chain proof (NOT_PROVEN; the public evidence URL remains missing). All
 remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.
+
+## Independent re-verification (fresh current main, 2026-09-13) — SOURCE_ALREADY_PRESENT
+
+A fresh independent pass on this exact working tree (HEAD `45c2c77143a6e123e3d6dd43370dfd310dd50554`,
+on top of the native wire/head integration `66d42f8` and the reference base
+`a70b3ff9ca07d5061e8c6e22564d23b0cc97acf8`) found the XRA-PS-02 native
+wire/head integration **already implemented, registered, and locally proven**.
+No source was rebuilt. The verification below re-derives every claim from the
+bytes on disk (no reliance on prior records). Environment: node v24.19.0,
+npm 11.17.0, TypeScript 5.9.3, **docker ABSENT**.
+
+### SOURCE_ALREADY_PRESENT — exact paths (hash re-derived and matching)
+
+- `src/cks-12/kaleidosphere-candidate-quarantine.ts` sha256
+  `d39fbfc9f982c9bbe33567134f3b5a9d0eecaa1935f49e66815c8b5a1ef815a9` — native
+  surface present: `KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1` /
+  `PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1` (= the reconciled released pair
+  `545a3b44…` / `7f662672…`), `RECONCILED_RELEASED_HEADS_V1`,
+  `ADJUDICATION_CHAIN_STAGES` (the exact seven
+  `GENERATION→PROJECTION→INGESTION→SEMANTICS→ANALYSIS→CANDIDATE→ADJUDICATION`),
+  `createNativeAdjudicationContextV1`, `adjudicateNativeCandidateV1`,
+  `createNativePairedAdjudicationReceiptV1`, `verifyNativePairedAdjudicationReceiptV1`,
+  `fetchNativeProjectionV1`, `nativeTransportBytesV1`, `nativeProjectionDigestV1`,
+  `nativeCandidateDigestV1`.
+- `tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts` sha256
+  `f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0` (6 tests).
+- `tests/cks-12/kaleidosphere-candidate-quarantine.test.ts` sha256
+  `874bfe3e8e7a69bd6a31474c5ca1b8712437a5f8e54b3d51cb48bbfce4e7507f` (5 tests, flat, preserved).
+- `verification/pansphaira-kaleidosphere-analytics-slice-v1.json` sha256
+  `f72c163b560f8a270c5aa720d794a90b2c533e4033d9e5a6201bc94db1da6b2d` (scope
+  `LOCAL_SYNTHETIC_AND_LOCAL_VM_REAL_HTTP`).
+- Evidence fixtures (LOCAL_VM_REAL_HTTP loopback captures):
+  `tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json` sha256
+  `949632ef2b517b36ec8969700c9b54fd2a94d3b47751bdd070b319a76864ee4a`;
+  `tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json`
+  sha256 `645c238a2fbb762958dc2473414c2a85ab8feb104185b9f938ea374c0887dbff`.
+  The substitution capture is a genuine identical-input substitution: `resultSha256`
+  is IDENTICAL to the real capture (`b3027cef96da4262ec7a2a43bbdcea275a23e988aff0aab92f29745e4df81099`);
+  only the three head-binding fields differ (`bindings.kaleidosphereHead.commitOid/treeOid`,
+  `bindings.environmentSha256`) — the stale-head falsifier.
+
+### Registration (re-derived, all consistent)
+
+- Root `SHA256SUMS`: `sha256sum -c SHA256SUMS` → **all 1831 entries OK**; the four
+  closure files registered at their true sha256s (lines 977, 1123, 1124, 1824).
+- `release/public-files.manifest`: 1518 data lines; all four closure files present
+  (mode 0644). The builder count binding is the computed final count.
+- `verification/verification-dag-v2.json`: `graphVersion 49`, 57 nodes; node
+  `cks-12-closed-learning-loop-v1` registers the implementation + both tests as
+  `VALIDATOR` and the slice receipt as `DERIVED_EVIDENCE`, each at the file's true sha256.
+- `npm run integrity:refresh` → **net-zero** (0 changed files): the
+  DAG/SHA256SUMS/census registration is self-consistent and stable.
+
+### Test results (actual commands, this environment)
+
+- `npm run build` → exit 0 (TypeScript 5.9.3, clean).
+- `npm run xra-ps-02:test:compiled` (flat + native quarantine) → **11/11 pass, 0 fail**
+  (AC01 independent non-authoritative adjudication; AC02 five exact clean-room
+  outcomes via independent child processes; AC03 receipt VERIFIED + 6 tamper denials +
+  no-material denial + gate-failing-candidate refusal; AC04 before/after deep-equality;
+  wire service-down/substitution/malformed fail-closed; exotic-input zero-invocation denial).
+- `node --test dist/tests/verification-fabric-v2.test.js` → 32/32;
+  `dist/tests/verification-fabric.test.js` → 3/3;
+  `dist/tests/canonical-json-profile-inventory.test.js` → 35/35;
+  `dist/tests/contribution-intake-ledger.test.js` → 27/27;
+  `dist/tests/trust-compatibility-foundation-closure.test.js` → 9/9.
+- `npm run release-governance:test` (release-governance + public-product-spelling) → **93/93**;
+  `npm run release-governance:verify` → **RELEASE_GOVERNANCE_PASS**.
+- `node --test tools/video-production-reference/tests/slice.test.mjs
+  tools/video-production-reference/tests/closure.test.mjs` → 116/116.
+- Full `npm test` (pretest + test + posttest) → **722/729 pass, 7 fail**. All 7 failures
+  are `spawnSync docker ENOENT` (BLD-001-G6 ×2, AAS-037 ×2, AAS-036-6, AAS-035 ×2) in
+  `tests/builder-agent-runtime.test.mjs`, `tests/managed-skill-lifecycle-runtime.test.mjs`,
+  `tests/model-access-broker-runtime.test.mjs`, `tests/openclaw-gateway-state.test.mjs` —
+  **docker is not installed in this environment** and **none of those files is touched by
+  this change** (verified against `git diff a70b3ff..45c2c77`). These are pre-existing
+  environment limitations, not product defects of this candidate. (The docker tests were
+  re-run green in the docker-equipped root VM in the prior record: 34/34 + 2/2.)
+- Local public-release staging (local only, output discarded, NOT a public release):
+  `bash scripts/build-public-release.sh --output /tmp/ps344-staging/cm-product-increment-rc-20260913-vfy`
+  → exit 0; 1518 count binding held (no `UNMANIFESTED_SOURCE_FILE`); all four closure files
+  **PRESENT** in the staged public tree and byte-identical to the repo; staged tree
+  content self-consistent (`sha256sum -c` all OK, 1517 listed + 2 SHA256SUMS files that
+  cannot self-hash). The staged archive byte hash differs from the prior record solely due
+  to GNU tar version (metadata), not staged content.
+- `git diff --check` → clean.
+
+### AC binding (confirmed by reading the implementation, not just the tests)
+
+- **AC01** `adjudicateNativeCandidateV1` is fail-closed (strict gate order: envelope shape →
+  reconciled heads → closed candidate shape → byte digests vs bindings → transport provenance
+  vs the PAN-owned `buildKaleidosphereAnalyticsProjectionV1()` → independent
+  `deriveNativeAnalysisV1` re-derivation → head bindings → context → conflict → restriction);
+  every outcome carries `authority/effect/capabilityDelta/canonicalKnowledgeMutation = "NONE"`
+  and `kaleidoSphereServiceVerdictAuthoritative = false`.
+- **AC02** the five exact outcomes are produced; the restriction/conflict cases come only from
+  the independently sourced PAN adjudication context
+  (`provenance.source = "PANSPHAIRA_INDEPENDENT_ADJUDICATION"`, validated; foreign source or
+  stale canonical-Knowledge digest → `NATIVE_CANDIDATE_SCHEMA_DENIED`), never fabricated as v1
+  service output.
+- **AC03** `verifyNativePairedAdjudicationReceiptV1` re-runs the full adjudication and chain
+  from exact material and is fail-closed `DENIED`/`["NATIVE_RECEIPT_DENIED"]` without material or
+  on any tampered field; the receipt binds both reconciled released heads and the complete
+  seven-stage chain.
+- **AC04** `buildAuthoritativeAdjudicationInputs()` before/after is deep-equal and
+  `canonicalKnowledgeSha256` is invariant
+  (`d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a`).
+
+### Public evidence bound: honest terminal outcome (unchanged by this re-verification)
+
+- AC01 / AC02 / AC04: **PROVEN_LOCALLY** (genuine, fail-closed, on the real captured
+  `LOCAL_VM_REAL_HTTP` service output). AC03's **local** receipt property is VERIFIED; the
+  **public** chain proof (Root-QS, cross-repository CI/readback, serial release, anonymous
+  public readback) is **NOT_PROVEN** — public transport is absent (HTTP 404 remains missing)
+  and this environment forbids push / external systems / public mutation.
+- **#344 (XRA-PS-02) public-evidence-bound terminal outcome: WAIT / BLOCKED_EXTERNAL on the
+  public chain.** The controller-owned public gates — fresh independent review of this exact
+  candidate, exact PR/Main CI, serial release of the public artifact, and anonymous public
+  readback — all remain pending. `publicly_delivered` remains **false**. Nothing here claims
+  delivery.
+- **Epic #341: does NOT report PASS and is NOT closed.** The exact child readback shows #344
+  is not publicly delivered (public chain NOT_PROVEN), so the parent acceptance "every child
+  reaches a public evidence-bound terminal outcome" is not satisfied by a PASS for #344, and
+  "closes only after exact child readback" is not met. The epic remains open with #344 at
+  WAIT. (Sibling children #343/XRA-PS-01 and #151/XRA-KS-01 are recorded delivered/closed by
+  supplied owner-attested provenance; their public readback is not independently re-verified
+  from this clone.)
+- No push, no public mutation, no credentials, no external systems, no issue closure. The
+  delivery job controller owns the fresh repository-routed independent review, exact
+  PR/Main CI, release, and anonymous readback; this work never authors or approves those
+  receipts.
+
+### Unresolved gates (controller-owned; RELEASE_BLOCKERS, not FOLLOW_UPs) — unchanged
+
+1. Fresh independent Qwen review of this exact candidate.
+2. Exact PR/Main CI on the delivered head.
+3. Serial release of the public artifact for this head.
+4. Anonymous public readback (release + readback receipts).
+5. AC03 public chain proof (NOT_PROVEN; public evidence URL HTTP 404 / missing).
+
+All remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.
