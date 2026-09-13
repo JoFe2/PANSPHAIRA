@@ -139,6 +139,14 @@
       "fromSha256": "ba1a3a78527a0b5027e6d8d595149f29a8e48d27bb88004249cb6122977112df",
       "toSha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
       "reason": "Bind ambiguous reconciliation to the originally reserved authority decision or owner lease and preserve operation-key conflict precedence; admitted v1 and reviewed v2-v3 bytes remain immutable."
+    },
+    {
+      "migrationId": "XRA-PS-02-NATIVE-WIRE-INTEGRATE/INTEGRITY-GENERATOR/V13",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 13,
+      "fromSha256": "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4",
+      "toSha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640",
+      "reason": "Advance the Verification DAG to graph v49 and canonically bind the XRA-PS-02 native wire/head integration family (native paired adjudication receipt and loopback real-HTTP capture fixtures) to the existing CKS-12 closed-loop owner; admitted v1 and reviewed v2-v12 digests remain immutable."
     }
   ],
   "scanScope": {
@@ -181,15 +189,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 640,
+    "filesScanned": 641,
     "declarationSites": 36,
     "declarationFiles": 36,
     "importSites": 213,
     "importFiles": 212,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1828,
-    "ledgerUniquePaths": 1828
+    "ledgerEntries": 1831,
+    "ledgerUniquePaths": 1831
   },
   "profiles": [
     {
@@ -262,7 +270,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4"
+      "sha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -860,7 +868,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4",
+      "sha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640",
       "basis": "profile-version-migration"
     },
     {

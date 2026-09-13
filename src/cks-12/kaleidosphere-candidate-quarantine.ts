@@ -5,6 +5,7 @@ import { canonicalJson } from "../../packages/contracts/src/canonical-json.js";
 import {
   buildKaleidosphereAnalyticsProjectionV1,
   SOURCE_CONTRACT_SHA256,
+  type KaleidosphereAnalyticsProjectionV1,
 } from "../../packages/contracts/src/kaleidosphere-analytics-projection.js";
 
 export const KALEIDOSPHERE_CANDIDATE_QUARANTINE_SCHEMA_V1 = "pansphaira.xra-ps-02/candidate-adjudication/v1" as const;
@@ -539,4 +540,830 @@ export function verifyPairedAdjudicationReceiptV1(value: unknown): PairedReceipt
   } catch {
     return { outcome: "DENIED", reasonCodes: ["RECEIPT_DENIED"] };
   }
+}
+
+// ===== XRA-PS-02 native wire/head integration (reconciled released pair) =====
+//
+// The local flat synthetic candidate above and its bound heads
+// (24db4e92…/90c574e9…) are superseded, for the native scope, by the reconciled
+// released pair below. The independent PAN adjudicator here consumes the real
+// KaleidoSphere native authority-free service candidate (served over loopback
+// HTTP by the service at its exact released head) and re-derives everything it
+// can from the canonical transport bytes and PAN-owned authority: it never
+// trusts the service envelope, the KS verifier, or any service-side verdict.
+
+export const PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1 = "7f662672bfc45087342f23e5c589d43598f5c20d" as const;
+export const KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1 = "545a3b44ea88c96eded060c11c7c3a2afe0edff6" as const;
+/** Released KaleidoSphere service tree bound to the exact released head. */
+const KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1 = "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c" as const;
+/** Later byte-equivalent PANSPHAIRA head bound by the released sidecar; deliberately DISTINCT from the release commit. */
+const PANSPHAIRA_RECONCILED_HEAD_COMMIT_V1 = "988395110a9189d1b8cd4ee98184ed5c1d77a15d" as const;
+const PANSPHAIRA_RECONCILED_RELEASE_TAG_V1 = "2026_09_05_v1" as const;
+const PANSPHAIRA_RECONCILED_RELEASE_RECEIPT_SHA256_V1 = "bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6" as const;
+const NATIVE_SOURCE_FILE_IDENTITY_PATH_V1 = "tests/fixtures/cks-analytics/projection-v1.json" as const;
+const NATIVE_PROJECTION_CONTRACT_SHA256_V1 = "99e1ac62cfda3bef59ba310e00f7daa16d80b170ae5e7a7eaa3fff314d1a5d9a" as const;
+const NATIVE_ANALYSIS_CONTRACT_SHA256_V1 = "913c2599099e7324a17a6dcab6008b107e7869fc4ba840317c1534ee013302bd" as const;
+const NATIVE_RELEASE_SIDECAR_SHA256_V1 = "1b6f55dd5507ec6c8894d2b35377439ee206d832d4cf19d9e3dc687ab4a3bce4" as const;
+const NATIVE_ANALYSIS_ID_V1 = "pansphaira/native-edge-evidence-coverage-analysis" as const;
+
+export const NATIVE_CANDIDATE_SCHEMA_V1 = "kaleidosphere.pansphaira-analytics/native-authority-free-candidate/v1" as const;
+export const NATIVE_ADJUDICATION_SCHEMA_V1 = "pansphaira.xra-ps-02/native-candidate-adjudication/v1" as const;
+export const NATIVE_ADJUDICATION_CONTEXT_SCHEMA_V1 = "pansphaira.xra-ps-02/native-adjudication-context/v1" as const;
+export const NATIVE_RECEIPT_SCHEMA_V1 = "pansphaira.xra-ps-02/native-paired-receipt/v1" as const;
+export const NATIVE_ADJUDICATION_RECEIPT_ID_V1 = "pansphaira:xra-ps-02-native-paired-receipt-001" as const;
+
+export const RECONCILED_RELEASED_HEADS_V1: ReleasedHeadsV1 = freeze({
+  pansphaira: PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1,
+  kaleidoSphere: KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1,
+});
+
+const NATIVE_CANDIDATE_NONCLAIMS_V1 = Object.freeze([
+  "No autonomous promotion: this native candidate is state CANDIDATE and carries no promotion, mutation, execution, or publication authority.",
+  "No relation-truth or knowledge-effectiveness claim: the analysis emits structural node/edge/evidence coverage only; no relation truth or effectiveness is asserted.",
+  "No generic PANSPHAIRA domain in KaleidoSphere: the analysis is confined to the one closed native nodes/edges projection v1 shape.",
+  "No external effect: no push, publish, release, credential use, customer data access, or production-data claim is made or implied by this candidate.",
+]);
+
+/** Identity frame of the versioned native candidate that PAN adjudicates. */
+const NATIVE_CANDIDATE_FRAME_V1 = Object.freeze({
+  schemaVersion: NATIVE_CANDIDATE_SCHEMA_V1,
+  issue: "XRA-KS-01",
+  state: "CANDIDATE",
+  authority: { promote: false, mutate: false, execute: false, publish: false, capabilities: [], effects: [] },
+  nonclaims: [...NATIVE_CANDIDATE_NONCLAIMS_V1],
+});
+
+const NATIVE_EXPECTED_KALEIDOSPHERE_HEAD_V1 = Object.freeze({
+  commitOid: KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1,
+  treeOid: KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1,
+});
+
+const NATIVE_EXPECTED_PANSPHAIRA_HEAD_V1 = Object.freeze({
+  commitOid: PANSPHAIRA_RECONCILED_HEAD_COMMIT_V1,
+  releaseCommit: PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1,
+  releaseReceiptSha256: PANSPHAIRA_RECONCILED_RELEASE_RECEIPT_SHA256_V1,
+  releaseTag: PANSPHAIRA_RECONCILED_RELEASE_TAG_V1,
+  status: "RELEASED",
+});
+
+const NATIVE_CANDIDATE_KEYS_V1 = [
+  "analysis", "authority", "bindings", "claims", "coverage", "counterevidence",
+  "issue", "nonclaims", "resultSha256", "schemaVersion", "state",
+] as const;
+
+const NATIVE_ANALYSIS_KEYS_V1 = ["claims", "contractSha256", "coverage", "counterevidence", "resultSha256"] as const;
+
+export type NativeAdjudicationReasonCodeV1 =
+  | "NATIVE_CANDIDATE_SCHEMA_DENIED"
+  | "NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED"
+  | "NATIVE_EVIDENCE_ACCEPTED"
+  | "NATIVE_EVIDENCE_RESTRICTED_UNKNOWN"
+  | "NATIVE_FORGED_CANDIDATE_DENIED"
+  | "NATIVE_INDEPENDENT_PROVENANCE_DENIED"
+  | "NATIVE_STALE_HEAD_DENIED";
+
+/**
+ * Versioned, independently sourced PAN adjudication context. Native v1 service
+ * output freezes unknown=false and an empty counterevidence channel, so the
+ * restriction and conflict cases for AC02 are defined HERE, by PAN adjudication
+ * context, never fabricated as normal service output.
+ */
+export type NativeAdjudicationContextV1 = Readonly<{
+  contextId: string;
+  counterevidence: readonly CounterevidenceV1[];
+  provenance: Readonly<{
+    canonicalKnowledgeSha256: string;
+    source: "PANSPHAIRA_INDEPENDENT_ADJUDICATION";
+    sourceContractSha256: string;
+  }>;
+  schemaVersion: typeof NATIVE_ADJUDICATION_CONTEXT_SCHEMA_V1;
+  unknown: boolean;
+}>;
+
+export type NativeAdjudicationV1 = Readonly<{
+  adjudicationContextId: string;
+  authoritativeProjectionDigest: string;
+  authoritativeSourceContractSha256: string;
+  authority: "NONE";
+  canonicalKnowledgeAfterSha256: string;
+  canonicalKnowledgeBeforeSha256: string;
+  canonicalKnowledgeMutation: "NONE";
+  canonicalTransportSha256: string;
+  capabilityDelta: "NONE";
+  candidateDigest: string;
+  effect: "NONE";
+  kaleidoSphereServiceVerdictAuthoritative: false;
+  outcome: "ACCEPTED_BOUNDED" | "RESTRICTED" | "DENIED";
+  projectionBodyDigest: string;
+  rawArtifactSha256: string;
+  reasonCodes: readonly NativeAdjudicationReasonCodeV1[];
+  releasedHeads: ReleasedHeadsV1;
+  schemaVersion: typeof NATIVE_ADJUDICATION_SCHEMA_V1;
+}>;
+
+export type NativePairedAdjudicationReceiptV1 = Readonly<{
+  adjudication: NativeAdjudicationV1;
+  adjudicationDigest: string;
+  authority: "NONE";
+  candidate: unknown;
+  candidateDigest: string;
+  canonicalTransportSha256: string;
+  chain: readonly ChainStageV1[];
+  context: unknown;
+  effect: "NONE";
+  rawArtifactSha256: string;
+  receiptDigest: string;
+  receiptId: typeof NATIVE_ADJUDICATION_RECEIPT_ID_V1;
+  releasedHeads: ReleasedHeadsV1;
+  schemaVersion: typeof NATIVE_RECEIPT_SCHEMA_V1;
+}>;
+
+export type NativePairedReceiptVerificationV1 =
+  | Readonly<{
+    authority: "NONE";
+    chainStages: readonly (typeof ADJUDICATION_CHAIN_STAGES)[number][];
+    effect: "NONE";
+    outcome: "VERIFIED";
+    receiptDigest: string;
+    releasedHeads: ReleasedHeadsV1;
+  }>
+  | Readonly<{ outcome: "DENIED"; reasonCodes: readonly ["NATIVE_RECEIPT_DENIED"] }>;
+
+export type NativeServiceWireCodeV1 = "XRA_PS_02_NATIVE_SERVICE_UNAVAILABLE" | "XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED";
+
+export type NativeServiceResponseV1 =
+  | Readonly<{ candidate: unknown; issue: "XRA-KS-01"; requestSha256: string; status: "CANDIDATE" }>
+  | Readonly<{ candidate: null; code: string; issue: "XRA-KS-01"; ordinaryAnswer: null; requestSha256: string | null; successfulOrdinaryAnswer: false; status: "DENIED" }>
+  | Readonly<{ candidate: null; code: NativeServiceWireCodeV1; issue: "XRA-KS-01"; requestSha256: null; status: "UNAVAILABLE" }>;
+
+const isByteView = (value: unknown): value is Uint8Array => value instanceof Uint8Array;
+const digestBytes = (bytes: Uint8Array): string => createHash("sha256").update(bytes).digest("hex");
+
+export function createNativeAdjudicationContextV1(options: Readonly<{
+  contextId: string;
+  counterevidence?: readonly CounterevidenceV1[];
+  unknown?: boolean;
+}>): NativeAdjudicationContextV1 {
+  if (typeof options.contextId !== "string" || options.contextId.length === 0) throw new TypeError("XRA_PS_02_NATIVE_CONTEXT_INPUT_DENIED");
+  const body = {
+    contextId: options.contextId,
+    counterevidence: [...(options.counterevidence ?? [])],
+    provenance: {
+      canonicalKnowledgeSha256: CANONICAL_KNOWLEDGE_SHA256,
+      source: "PANSPHAIRA_INDEPENDENT_ADJUDICATION",
+      sourceContractSha256: SOURCE_CONTRACT_SHA256,
+    },
+    schemaVersion: NATIVE_ADJUDICATION_CONTEXT_SCHEMA_V1,
+    unknown: options.unknown ?? false,
+  } as const;
+  return freeze(body);
+}
+
+/** Canonical transport form of the raw released artifact (byte-identical to the service canonicalizer). */
+export function nativeTransportBytesV1(rawArtifactBytes: Uint8Array): Buffer {
+  if (!isByteView(rawArtifactBytes)) throw new TypeError("XRA_PS_02_NATIVE_ARTIFACT_INPUT_DENIED");
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(Buffer.from(rawArtifactBytes).toString("utf8"));
+  } catch {
+    throw new TypeError("XRA_PS_02_NATIVE_ARTIFACT_INVALID");
+  }
+  const snapshot = plainSnapshot(parsed);
+  if (snapshot === INVALID) throw new TypeError("XRA_PS_02_NATIVE_ARTIFACT_INVALID");
+  return Buffer.from(canonicalJson(snapshot), "utf8");
+}
+
+/** The PAN-side digest trio re-derived independently from the raw artifact bytes. */
+export function nativeProjectionDigestV1(rawArtifactBytes: Uint8Array): Readonly<{
+  canonicalTransportSha256: string;
+  projectionBodyDigest: string;
+  rawArtifactSha256: string;
+}> {
+  const transportBytes = nativeTransportBytesV1(rawArtifactBytes);
+  const body: PlainRecord = {};
+  for (const [key, value] of Object.entries(JSON.parse(transportBytes.toString("utf8")))) {
+    if (key !== "projectionDigest") body[key] = value;
+  }
+  return freeze({
+    canonicalTransportSha256: digestBytes(transportBytes),
+    projectionBodyDigest: digestBytes(Buffer.from(canonicalJson(body), "utf8")),
+    rawArtifactSha256: digestBytes(rawArtifactBytes),
+  });
+}
+
+/** PAN-side digest over the whole native candidate frame (independent of the service result digest). */
+export function nativeCandidateDigestV1(candidate: unknown): string {
+  const record = exactRecord(candidate, [...NATIVE_CANDIDATE_KEYS_V1]);
+  if (record === undefined) throw new TypeError("XRA_PS_02_NATIVE_CANDIDATE_INVALID");
+  const { resultSha256: _resultSha256, ...body } = record;
+  return digest(body);
+}
+
+const validNativeContextRecord = (value: unknown): boolean => {
+  const context = exactRecord(value, ["contextId", "counterevidence", "provenance", "schemaVersion", "unknown"]);
+  if (context === undefined || plainSnapshot(value) === INVALID) return false;
+  if (typeof context.contextId !== "string" || context.contextId.length === 0) return false;
+  if (context.schemaVersion !== NATIVE_ADJUDICATION_CONTEXT_SCHEMA_V1 || typeof context.unknown !== "boolean") return false;
+  if (!Array.isArray(context.counterevidence)) return false;
+  if (!context.counterevidence.every((entry) => {
+    const record = exactRecord(entry, ["evidenceId", "evidenceSha256", "reason"]);
+    return record !== undefined
+      && typeof record.evidenceId === "string"
+      && typeof record.evidenceSha256 === "string"
+      && HEX64.test(record.evidenceSha256)
+      && record.reason === "CONTRADICTS_OWNER_EVIDENCE";
+  })) return false;
+  const provenance = exactRecord(context.provenance, ["canonicalKnowledgeSha256", "source", "sourceContractSha256"]);
+  return provenance !== undefined
+    && provenance.source === "PANSPHAIRA_INDEPENDENT_ADJUDICATION"
+    && provenance.canonicalKnowledgeSha256 === CANONICAL_KNOWLEDGE_SHA256
+    && provenance.sourceContractSha256 === SOURCE_CONTRACT_SHA256;
+};
+
+const validNativeCandidateRecord = (value: unknown): boolean => {
+  const candidate = exactRecord(value, [...NATIVE_CANDIDATE_KEYS_V1]);
+  if (candidate === undefined || plainSnapshot(value) === INVALID) return false;
+  if (
+    typeof candidate.schemaVersion !== "string"
+    || typeof candidate.issue !== "string"
+    || typeof candidate.state !== "string"
+    || typeof candidate.resultSha256 !== "string"
+    || !HEX64.test(candidate.resultSha256)
+    || !Array.isArray(candidate.nonclaims)
+    || !candidate.nonclaims.every((entry) => typeof entry === "string")
+    || !Array.isArray(candidate.counterevidence)
+    || !candidate.counterevidence.every((entry) => {
+      const record = exactRecord(entry, ["check", "claim", "observed", "status"]);
+      return record !== undefined
+        && typeof record.claim === "string"
+        && typeof record.check === "string"
+        && typeof record.observed === "number"
+        && typeof record.status === "string";
+    })
+  ) return false;
+  const analysis = exactRecord(candidate.analysis, ["contractSha256", "id", "version"]);
+  if (analysis === undefined || !Object.values(analysis).every((entry) => typeof entry === "string" && entry.length > 0)) return false;
+  const claims = exactRecord(candidate.claims, ["computed", "observed"]);
+  if (claims === undefined) return false;
+  const computed = exactRecord(claims.computed, [
+    "counterevidenceTotal", "decisionNodeCount", "edgeCount", "evidenceCount",
+    "frozenReceiptsEstablishingEdge", "knowledgeNodeCount", "nodeCount", "unknownTotal",
+  ]);
+  if (computed === undefined || !Object.values(computed).every((entry) => typeof entry === "number" && Number.isInteger(entry) && entry >= 0)) return false;
+  const observed = exactRecord(claims.observed, [
+    "authority", "edgeRelation", "evidenceRoles", "nodeIds", "nodeKinds",
+    "nonclaimCount", "promotion", "relationTruth", "sourceContract", "sourceContractVersion",
+  ]);
+  if (
+    observed === undefined
+    || !Array.isArray(observed.nodeIds)
+    || !Array.isArray(observed.nodeKinds)
+    || !Array.isArray(observed.evidenceRoles)
+    || typeof observed.nonclaimCount !== "number"
+  ) return false;
+  const coverage = exactRecord(candidate.coverage, ["counterevidence", "edges", "evidence", "nodes", "source", "unknownChannel"]);
+  if (coverage === undefined || !Object.values(coverage).every((entry) => typeof entry === "string")) return false;
+  const bindings = exactRecord(candidate.bindings, [
+    "analysisContractSha256", "canonicalTransportSha256", "environmentSha256", "kaleidosphereHead",
+    "nativeProjectionContractSha256", "pansphairaHead", "projectionBodyDigest", "rawArtifactSha256", "releaseSidecarSha256",
+  ]);
+  if (bindings === undefined) return false;
+  for (const key of ["analysisContractSha256", "canonicalTransportSha256", "environmentSha256", "nativeProjectionContractSha256", "projectionBodyDigest", "rawArtifactSha256", "releaseSidecarSha256"]) {
+    if (typeof bindings[key] !== "string" || !HEX64.test(bindings[key])) return false;
+  }
+  const kaleidosphereHead = exactRecord(bindings.kaleidosphereHead, ["commitOid", "treeOid"]);
+  if (kaleidosphereHead === undefined || !HEAD40.test(String(kaleidosphereHead.commitOid)) || !HEAD40.test(String(kaleidosphereHead.treeOid))) return false;
+  const pansphairaHead = exactRecord(bindings.pansphairaHead, ["commitOid", "releaseCommit", "releaseReceiptSha256", "releaseTag", "sourceFileIdentity", "status"]);
+  if (
+    pansphairaHead === undefined
+    || !HEAD40.test(String(pansphairaHead.commitOid))
+    || !HEAD40.test(String(pansphairaHead.releaseCommit))
+    || typeof pansphairaHead.releaseReceiptSha256 !== "string"
+    || !HEX64.test(String(pansphairaHead.releaseReceiptSha256))
+    || typeof pansphairaHead.releaseTag !== "string"
+    || typeof pansphairaHead.status !== "string"
+  ) return false;
+  const sourceFileIdentity = exactRecord(pansphairaHead.sourceFileIdentity, ["path", "sha256"]);
+  if (sourceFileIdentity === undefined || typeof sourceFileIdentity.path !== "string" || !HEX64.test(String(sourceFileIdentity.sha256))) return false;
+  const authority = exactRecord(candidate.authority, ["capabilities", "effects", "execute", "mutate", "promote", "publish"]);
+  return authority !== undefined
+    && authority.execute === false
+    && authority.mutate === false
+    && authority.promote === false
+    && authority.publish === false
+    && Array.isArray(authority.capabilities)
+    && authority.capabilities.length === 0
+    && Array.isArray(authority.effects)
+    && authority.effects.length === 0;
+};
+
+const validNativeAdjudicationRecord = (value: unknown): boolean => {
+  const adjudication = exactRecord(value, [
+    "adjudicationContextId", "authoritativeProjectionDigest", "authoritativeSourceContractSha256", "authority",
+    "canonicalKnowledgeAfterSha256", "canonicalKnowledgeBeforeSha256", "canonicalKnowledgeMutation", "canonicalTransportSha256",
+    "capabilityDelta", "candidateDigest", "effect", "kaleidoSphereServiceVerdictAuthoritative", "outcome", "projectionBodyDigest",
+    "rawArtifactSha256", "reasonCodes", "releasedHeads", "schemaVersion",
+  ]);
+  if (adjudication === undefined || !Array.isArray(adjudication.reasonCodes)) return false;
+  return typeof adjudication.adjudicationContextId === "string"
+    && adjudication.schemaVersion === NATIVE_ADJUDICATION_SCHEMA_V1
+    && adjudication.authority === "NONE"
+    && adjudication.canonicalKnowledgeMutation === "NONE"
+    && adjudication.capabilityDelta === "NONE"
+    && adjudication.effect === "NONE"
+    && adjudication.kaleidoSphereServiceVerdictAuthoritative === false
+    && ["ACCEPTED_BOUNDED", "RESTRICTED", "DENIED"].includes(adjudication.outcome as string)
+    && typeof adjudication.candidateDigest === "string"
+    && (adjudication.candidateDigest === "" || HEX64.test(adjudication.candidateDigest))
+    && [
+      adjudication.authoritativeProjectionDigest,
+      adjudication.canonicalKnowledgeAfterSha256,
+      adjudication.canonicalKnowledgeBeforeSha256,
+      adjudication.canonicalTransportSha256,
+      adjudication.projectionBodyDigest,
+      adjudication.rawArtifactSha256,
+    ].every((entry) => typeof entry === "string" && HEX64.test(entry))
+    && validHeads(adjudication.releasedHeads)
+    && adjudication.reasonCodes.every((reason) => [
+      "NATIVE_CANDIDATE_SCHEMA_DENIED",
+      "NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED",
+      "NATIVE_EVIDENCE_ACCEPTED",
+      "NATIVE_EVIDENCE_RESTRICTED_UNKNOWN",
+      "NATIVE_FORGED_CANDIDATE_DENIED",
+      "NATIVE_INDEPENDENT_PROVENANCE_DENIED",
+      "NATIVE_STALE_HEAD_DENIED",
+    ].includes(reason as string));
+};
+
+const reconciledHeads = (heads: unknown): heads is ReleasedHeadsV1 => {
+  const record = exactRecord(heads, ["kaleidoSphere", "pansphaira"]);
+  return record !== undefined
+    && record.pansphaira === PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1
+    && record.kaleidoSphere === KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1;
+};
+
+/**
+ * Independent deterministic re-derivation of the native analysis from the
+ * PAN-owned projection. Mirrors the service's closed-shape analysis field for
+ * field; any divergence between this derivation and a candidate's claims,
+ * coverage, counterevidence, or result digest is a forgery.
+ */
+const deriveNativeAnalysisV1 = (projection: KaleidosphereAnalyticsProjectionV1): Readonly<{
+  claims: Readonly<{
+    computed: Readonly<{
+      counterevidenceTotal: number;
+      decisionNodeCount: number;
+      edgeCount: number;
+      evidenceCount: number;
+      frozenReceiptsEstablishingEdge: number;
+      knowledgeNodeCount: number;
+      nodeCount: number;
+      unknownTotal: number;
+    }>;
+    observed: Readonly<{
+      authority: string;
+      edgeRelation: string;
+      evidenceRoles: string[];
+      nodeIds: string[];
+      nodeKinds: string[];
+      nonclaimCount: number;
+      promotion: string;
+      relationTruth: string;
+      sourceContract: string;
+      sourceContractVersion: string;
+    }>;
+  }>;
+  coverage: Readonly<Record<string, "OBSERVED">>;
+  counterevidence: readonly Readonly<{ check: string; claim: string; observed: number; status: string }>[];
+  resultSha256: string;
+}> => {
+  const nodes = projection.nodes;
+  const edge = projection.edges[0];
+  if (edge === undefined) throw new TypeError("XRA_PS_02_NATIVE_PROJECTION_INVALID");
+  const unknownTotal = nodes.reduce((total, node) => total + (node.unknown ? 1 : 0), 0) + (edge.unknown ? 1 : 0);
+  const counterevidenceTotal = nodes.reduce((total, node) => total + node.counterevidence.length, 0) + edge.counterevidence.length;
+  const duplicateNodeIdentifiers = new Set(nodes.map((node) => node.id)).size !== nodes.length;
+  const computed = {
+    counterevidenceTotal,
+    decisionNodeCount: nodes.filter((node) => node.kind === "DECISION").length,
+    edgeCount: projection.edges.length,
+    evidenceCount: edge.evidence.length,
+    frozenReceiptsEstablishingEdge: edge.evidence.length,
+    knowledgeNodeCount: nodes.filter((node) => node.kind === "KNOWLEDGE").length,
+    nodeCount: nodes.length,
+    unknownTotal,
+  } as const;
+  const observed = {
+    authority: projection.authority,
+    edgeRelation: edge.relation,
+    evidenceRoles: edge.evidence.map((entry) => entry.evidenceRole),
+    nodeIds: nodes.map((node) => node.id),
+    nodeKinds: nodes.map((node) => node.kind),
+    nonclaimCount: projection.nonclaims.length,
+    promotion: projection.promotion,
+    relationTruth: projection.relationTruth,
+    sourceContract: projection.source.contract,
+    sourceContractVersion: projection.source.contractVersion,
+  } as const;
+  const coverage = {
+    counterevidence: "OBSERVED",
+    edges: "OBSERVED",
+    evidence: "OBSERVED",
+    nodes: "OBSERVED",
+    source: "OBSERVED",
+    unknownChannel: "OBSERVED",
+  } as const;
+  const counterevidence = [
+    { check: "frozen subject inventory and duplicate node identifiers", claim: "nodes", observed: computed.nodeCount, status: duplicateNodeIdentifiers ? "EVIDENCE_FOUND" : "NONE_FOUND" },
+    { check: "the single frozen purpose-bound relation", claim: "edges", observed: computed.edgeCount, status: edge.counterevidence.length > 0 ? "EVIDENCE_FOUND" : "NONE_FOUND" },
+    { check: "the edge established by its frozen source receipts", claim: "evidence", observed: computed.evidenceCount, status: computed.evidenceCount > 0 ? "NONE_FOUND" : "EVIDENCE_FOUND" },
+    { check: "native source binding to the pinned CKS proof input", claim: "source", observed: 1, status: "EVIDENCE_FOUND" },
+    { check: "unknown frozen to false on every node and edge", claim: "unknownChannel", observed: computed.unknownTotal, status: computed.unknownTotal === 0 ? "NONE_FOUND" : "EVIDENCE_FOUND" },
+    { check: "per-node and per-edge counterevidence arrays remain empty", claim: "counterevidence", observed: computed.counterevidenceTotal, status: computed.counterevidenceTotal === 0 ? "NONE_FOUND" : "EVIDENCE_FOUND" },
+  ] as const;
+  const body = { claims: { computed, observed }, coverage, counterevidence };
+  return {
+    claims: { computed, observed },
+    coverage,
+    counterevidence,
+    resultSha256: digest(body),
+  };
+};
+
+/**
+ * Independent PAN adjudication of a real native service candidate.
+ * Gate order: envelope shape -> reconciled envelope heads -> candidate closed
+ * shape -> byte digests vs bindings -> transport provenance vs the PAN-owned
+ * projection -> independent analysis re-derivation -> head bindings ->
+ * independently sourced context -> context conflict -> context restriction.
+ */
+export function adjudicateNativeCandidateV1(input: unknown): NativeAdjudicationV1 {
+  const authoritative = buildAuthoritativeAdjudicationInputs();
+  const fields = {
+    adjudicationContextId: "",
+    candidateDigest: "",
+    canonicalTransportSha256: "",
+    projectionBodyDigest: "",
+    rawArtifactSha256: "",
+  };
+  const outcome = (adjudicationOutcome: NativeAdjudicationV1["outcome"], code: NativeAdjudicationReasonCodeV1): NativeAdjudicationV1 => freeze({
+    adjudicationContextId: fields.adjudicationContextId,
+    authoritativeProjectionDigest: authoritative.projectionDigest,
+    authoritativeSourceContractSha256: authoritative.sourceContractSha256,
+    authority: "NONE",
+    canonicalKnowledgeAfterSha256: authoritative.canonicalKnowledgeSha256,
+    canonicalKnowledgeBeforeSha256: authoritative.canonicalKnowledgeSha256,
+    canonicalKnowledgeMutation: "NONE",
+    canonicalTransportSha256: fields.canonicalTransportSha256,
+    capabilityDelta: "NONE",
+    candidateDigest: fields.candidateDigest,
+    effect: "NONE",
+    kaleidoSphereServiceVerdictAuthoritative: false,
+    outcome: adjudicationOutcome,
+    projectionBodyDigest: fields.projectionBodyDigest,
+    rawArtifactSha256: fields.rawArtifactSha256,
+    reasonCodes: [code],
+    releasedHeads: { ...RECONCILED_RELEASED_HEADS_V1 },
+    schemaVersion: NATIVE_ADJUDICATION_SCHEMA_V1,
+  });
+
+  const envelope = exactRecord(input, ["canonicalTransportBytes", "candidate", "context", "rawArtifactBytes", "releasedHeads"]);
+  if (
+    envelope === undefined
+    || !isByteView(envelope.canonicalTransportBytes)
+    || !isByteView(envelope.rawArtifactBytes)
+    || !validHeads(envelope.releasedHeads)
+  ) return outcome("DENIED", "NATIVE_CANDIDATE_SCHEMA_DENIED");
+  if (!reconciledHeads(envelope.releasedHeads)) return outcome("DENIED", "NATIVE_STALE_HEAD_DENIED");
+
+  const candidate = exactRecord(envelope.candidate, [...NATIVE_CANDIDATE_KEYS_V1]);
+  if (candidate === undefined || plainSnapshot(envelope.candidate) === INVALID || !validNativeCandidateRecord(envelope.candidate)) {
+    return outcome("DENIED", "NATIVE_CANDIDATE_SCHEMA_DENIED");
+  }
+  try {
+    fields.candidateDigest = nativeCandidateDigestV1(envelope.candidate);
+  } catch {
+    return outcome("DENIED", "NATIVE_CANDIDATE_SCHEMA_DENIED");
+  }
+
+  let rawDigests: ReturnType<typeof nativeProjectionDigestV1>;
+  let transportBytes: Buffer;
+  try {
+    rawDigests = nativeProjectionDigestV1(envelope.rawArtifactBytes);
+    transportBytes = nativeTransportBytesV1(envelope.canonicalTransportBytes);
+  } catch {
+    return outcome("DENIED", "NATIVE_CANDIDATE_SCHEMA_DENIED");
+  }
+  fields.rawArtifactSha256 = rawDigests.rawArtifactSha256;
+  fields.canonicalTransportSha256 = rawDigests.canonicalTransportSha256;
+  fields.projectionBodyDigest = rawDigests.projectionBodyDigest;
+  // The provided transport bytes must be exactly the canonical form of the provided raw artifact.
+  if (digestBytes(transportBytes) !== rawDigests.canonicalTransportSha256) return outcome("DENIED", "NATIVE_FORGED_CANDIDATE_DENIED");
+
+  const bindings = candidate.bindings as PlainRecord;
+  if (
+    bindings.rawArtifactSha256 !== fields.rawArtifactSha256
+    || bindings.canonicalTransportSha256 !== fields.canonicalTransportSha256
+    || bindings.projectionBodyDigest !== fields.projectionBodyDigest
+    || bindings.nativeProjectionContractSha256 !== NATIVE_PROJECTION_CONTRACT_SHA256_V1
+    || bindings.analysisContractSha256 !== NATIVE_ANALYSIS_CONTRACT_SHA256_V1
+    || bindings.releaseSidecarSha256 !== NATIVE_RELEASE_SIDECAR_SHA256_V1
+  ) return outcome("DENIED", "NATIVE_FORGED_CANDIDATE_DENIED");
+
+  // Provenance: the canonical transport must be byte-equivalent (canonical form)
+  // to the projection PAN itself publishes; the KS sidecar/verifier is not trusted.
+  let parsedTransport: unknown;
+  try {
+    parsedTransport = JSON.parse(transportBytes.toString("utf8"));
+  } catch {
+    return outcome("DENIED", "NATIVE_INDEPENDENT_PROVENANCE_DENIED");
+  }
+  if (plainSnapshot(parsedTransport) === INVALID) return outcome("DENIED", "NATIVE_INDEPENDENT_PROVENANCE_DENIED");
+  const authoritativeProjection = buildKaleidosphereAnalyticsProjectionV1();
+  if (canonicalJson(parsedTransport) !== canonicalJson(authoritativeProjection)) return outcome("DENIED", "NATIVE_INDEPENDENT_PROVENANCE_DENIED");
+
+  // Independent re-derivation of the deterministic analysis, field for field.
+  const analysis = deriveNativeAnalysisV1(authoritativeProjection);
+  const expectedAnalysisRecord = {
+    contractSha256: NATIVE_ANALYSIS_CONTRACT_SHA256_V1,
+    id: NATIVE_ANALYSIS_ID_V1,
+    version: "v1",
+  } as const;
+  if (
+    canonicalJson(candidate.analysis) !== canonicalJson(expectedAnalysisRecord)
+    || canonicalJson(candidate.claims) !== canonicalJson(analysis.claims)
+    || canonicalJson(candidate.coverage) !== canonicalJson(analysis.coverage)
+    || canonicalJson(candidate.counterevidence) !== canonicalJson(analysis.counterevidence)
+    || candidate.resultSha256 !== analysis.resultSha256
+    || canonicalJson({
+      authority: candidate.authority,
+      issue: candidate.issue,
+      nonclaims: candidate.nonclaims,
+      state: candidate.state,
+      schemaVersion: candidate.schemaVersion,
+    }) !== canonicalJson(NATIVE_CANDIDATE_FRAME_V1)
+  ) return outcome("DENIED", "NATIVE_FORGED_CANDIDATE_DENIED");
+
+  // Head bindings must bind the reconciled released pair exactly.
+  const expectedPansphairaHead = {
+    ...NATIVE_EXPECTED_PANSPHAIRA_HEAD_V1,
+    sourceFileIdentity: { path: NATIVE_SOURCE_FILE_IDENTITY_PATH_V1, sha256: fields.rawArtifactSha256 },
+  };
+  if (
+    canonicalJson(bindings.kaleidosphereHead) !== canonicalJson(NATIVE_EXPECTED_KALEIDOSPHERE_HEAD_V1)
+    || canonicalJson(bindings.pansphairaHead) !== canonicalJson(expectedPansphairaHead)
+  ) return outcome("DENIED", "NATIVE_STALE_HEAD_DENIED");
+
+  if (!validNativeContextRecord(envelope.context)) return outcome("DENIED", "NATIVE_CANDIDATE_SCHEMA_DENIED");
+  const context = envelope.context as PlainRecord;
+  fields.adjudicationContextId = typeof context.contextId === "string" ? context.contextId : "";
+  if (Array.isArray(context.counterevidence) && context.counterevidence.length > 0) return outcome("DENIED", "NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED");
+  if (context.unknown === true) return outcome("RESTRICTED", "NATIVE_EVIDENCE_RESTRICTED_UNKNOWN");
+  return outcome("ACCEPTED_BOUNDED", "NATIVE_EVIDENCE_ACCEPTED");
+}
+
+const nativeChain = (
+  adjudication: NativeAdjudicationV1,
+  candidate: unknown,
+  context: unknown,
+  digests: Readonly<{ canonicalTransportSha256: string; projectionBodyDigest: string; rawArtifactSha256: string }>,
+): readonly ChainStageV1[] => {
+  const authoritative = buildAuthoritativeAdjudicationInputs();
+  const generation = digest({
+    schemaVersion: NATIVE_ADJUDICATION_SCHEMA_V1,
+    sourceContractSha256: authoritative.sourceContractSha256,
+    stage: "GENERATION",
+  });
+  const projection = digests.projectionBodyDigest;
+  const ingestion = digest({
+    canonicalTransportSha256: digests.canonicalTransportSha256,
+    rawArtifactSha256: digests.rawArtifactSha256,
+    schemaVersion: NATIVE_ADJUDICATION_SCHEMA_V1,
+    stage: "INGESTION",
+  });
+  const semantics = digest({
+    inputDigest: ingestion,
+    projectionBodyDigest: projection,
+    schemaVersion: NATIVE_ADJUDICATION_SCHEMA_V1,
+    stage: "SEMANTICS",
+  });
+  const analysis = digest({
+    candidateResultSha256: (candidate as PlainRecord).resultSha256,
+    contextId: (context as PlainRecord).contextId,
+    inputDigest: semantics,
+    schemaVersion: NATIVE_ADJUDICATION_SCHEMA_V1,
+    stage: "ANALYSIS",
+  });
+  return [
+    { stage: "GENERATION", digest: generation },
+    { stage: "PROJECTION", digest: projection },
+    { stage: "INGESTION", digest: ingestion },
+    { stage: "SEMANTICS", digest: semantics },
+    { stage: "ANALYSIS", digest: analysis },
+    { stage: "CANDIDATE", digest: nativeCandidateDigestV1(candidate) },
+    { stage: "ADJUDICATION", digest: digest(adjudication) },
+  ];
+};
+
+export function createNativePairedAdjudicationReceiptV1(input: Readonly<{
+  adjudication: NativeAdjudicationV1;
+  candidate: unknown;
+  canonicalTransportBytes: Uint8Array;
+  context: unknown;
+  rawArtifactBytes: Uint8Array;
+  releasedHeads: ReleasedHeadsV1;
+}>): NativePairedAdjudicationReceiptV1 {
+  if (!reconciledHeads(input.releasedHeads)) throw new TypeError("XRA_PS_02_NATIVE_RELEASED_HEAD_DENIED");
+  if (!validNativeCandidateRecord(input.candidate) || !validNativeContextRecord(input.context)) throw new TypeError("XRA_PS_02_NATIVE_RECEIPT_INPUT_DENIED");
+  let digests: ReturnType<typeof nativeProjectionDigestV1>;
+  try {
+    digests = nativeProjectionDigestV1(input.rawArtifactBytes);
+  } catch {
+    throw new TypeError("XRA_PS_02_NATIVE_RECEIPT_INPUT_DENIED");
+  }
+  const expected = adjudicateNativeCandidateV1({
+    canonicalTransportBytes: input.canonicalTransportBytes,
+    candidate: input.candidate,
+    context: input.context,
+    rawArtifactBytes: input.rawArtifactBytes,
+    releasedHeads: input.releasedHeads,
+  });
+  if (expected.outcome !== "ACCEPTED_BOUNDED" || canonicalJson(expected) !== canonicalJson(input.adjudication)) {
+    throw new TypeError("XRA_PS_02_NATIVE_RECEIPT_INPUT_DENIED");
+  }
+  const chain = nativeChain(input.adjudication, input.candidate, input.context, digests);
+  const body = {
+    adjudication: input.adjudication,
+    adjudicationDigest: digest(input.adjudication),
+    authority: "NONE",
+    candidate: input.candidate,
+    candidateDigest: nativeCandidateDigestV1(input.candidate),
+    canonicalTransportSha256: digests.canonicalTransportSha256,
+    chain,
+    context: input.context,
+    effect: "NONE",
+    rawArtifactSha256: digests.rawArtifactSha256,
+    receiptId: NATIVE_ADJUDICATION_RECEIPT_ID_V1,
+    releasedHeads: { ...input.releasedHeads },
+    schemaVersion: NATIVE_RECEIPT_SCHEMA_V1,
+  } as const;
+  return freeze({ ...body, receiptDigest: digest(body) });
+}
+
+const nativeReceiptDenied = (): NativePairedReceiptVerificationV1 => ({ outcome: "DENIED", reasonCodes: ["NATIVE_RECEIPT_DENIED"] });
+
+export function verifyNativePairedAdjudicationReceiptV1(
+  value: unknown,
+  material?: Readonly<{ canonicalTransportBytes: Uint8Array; rawArtifactBytes: Uint8Array }>,
+): NativePairedReceiptVerificationV1 {
+  const snapshot = plainSnapshot(value);
+  if (snapshot === INVALID || snapshot === null || typeof snapshot !== "object" || Array.isArray(snapshot)) return nativeReceiptDenied();
+  const receipt = snapshot as PlainRecord;
+  const keys = [
+    "adjudication", "adjudicationDigest", "authority", "candidate", "candidateDigest", "canonicalTransportSha256",
+    "chain", "context", "effect", "rawArtifactSha256", "receiptDigest", "receiptId", "releasedHeads", "schemaVersion",
+  ];
+  if (Reflect.ownKeys(receipt).length !== keys.length || Reflect.ownKeys(receipt).some((key) => typeof key !== "string" || !keys.includes(key))) return nativeReceiptDenied();
+  if (material === undefined || !isByteView(material.canonicalTransportBytes) || !isByteView(material.rawArtifactBytes)) return nativeReceiptDenied();
+  try {
+    if (
+      receipt.schemaVersion !== NATIVE_RECEIPT_SCHEMA_V1
+      || receipt.receiptId !== NATIVE_ADJUDICATION_RECEIPT_ID_V1
+      || receipt.authority !== "NONE"
+      || receipt.effect !== "NONE"
+      || typeof receipt.adjudicationDigest !== "string"
+      || !HEX64.test(receipt.adjudicationDigest)
+      || typeof receipt.candidateDigest !== "string"
+      || !HEX64.test(receipt.candidateDigest)
+      || typeof receipt.canonicalTransportSha256 !== "string"
+      || !HEX64.test(receipt.canonicalTransportSha256)
+      || typeof receipt.rawArtifactSha256 !== "string"
+      || !HEX64.test(receipt.rawArtifactSha256)
+      || typeof receipt.receiptDigest !== "string"
+      || !HEX64.test(receipt.receiptDigest)
+      || !validHeads(receipt.releasedHeads)
+      || !reconciledHeads(receipt.releasedHeads)
+      || !validNativeCandidateRecord(receipt.candidate)
+      || !validNativeContextRecord(receipt.context)
+      || !validNativeAdjudicationRecord(receipt.adjudication)
+    ) return nativeReceiptDenied();
+    let digests: ReturnType<typeof nativeProjectionDigestV1>;
+    try {
+      digests = nativeProjectionDigestV1(material.rawArtifactBytes);
+    } catch {
+      return nativeReceiptDenied();
+    }
+    if (
+      digestBytes(material.canonicalTransportBytes) !== digests.canonicalTransportSha256
+      || receipt.rawArtifactSha256 !== digests.rawArtifactSha256
+      || receipt.canonicalTransportSha256 !== digests.canonicalTransportSha256
+    ) return nativeReceiptDenied();
+    const expectedAdjudication = adjudicateNativeCandidateV1({
+      canonicalTransportBytes: material.canonicalTransportBytes,
+      candidate: receipt.candidate,
+      context: receipt.context,
+      rawArtifactBytes: material.rawArtifactBytes,
+      releasedHeads: receipt.releasedHeads,
+    });
+    if (
+      receipt.candidateDigest !== nativeCandidateDigestV1(receipt.candidate)
+      || receipt.adjudicationDigest !== digest(receipt.adjudication)
+      || canonicalJson(receipt.adjudication) !== canonicalJson(expectedAdjudication)
+    ) return nativeReceiptDenied();
+    const chain = receipt.chain;
+    if (!Array.isArray(chain) || chain.length !== ADJUDICATION_CHAIN_STAGES.length || chain.some((entry, index) => {
+      const stage = exactRecord(entry, ["digest", "stage"]);
+      return stage === undefined || stage.stage !== ADJUDICATION_CHAIN_STAGES[index] || typeof stage.digest !== "string" || !HEX64.test(stage.digest);
+    })) return nativeReceiptDenied();
+    if (!arraysEqual(chain, nativeChain(
+      receipt.adjudication as NativeAdjudicationV1,
+      receipt.candidate,
+      receipt.context,
+      { canonicalTransportSha256: digests.canonicalTransportSha256, projectionBodyDigest: digests.projectionBodyDigest, rawArtifactSha256: digests.rawArtifactSha256 },
+    ))) return nativeReceiptDenied();
+    const body: PlainRecord = { ...receipt };
+    delete body.receiptDigest;
+    if (receipt.receiptDigest !== digest(body)) return nativeReceiptDenied();
+    return {
+      authority: "NONE",
+      chainStages: [...ADJUDICATION_CHAIN_STAGES],
+      effect: "NONE",
+      outcome: "VERIFIED",
+      receiptDigest: receipt.receiptDigest as string,
+      releasedHeads: receipt.releasedHeads as ReleasedHeadsV1,
+    };
+  } catch {
+    return nativeReceiptDenied();
+  }
+}
+
+/**
+ * Loopback wire ingestor for the native projection endpoint. Fail-closed:
+ * transport failure, non-JSON bodies, and non-conformant envelopes are typed
+ * UNAVAILABLE/DENIED results — never coerced into a candidate. The wire is a
+ * pure ingestion surface; all authority remains with the PAN adjudicator.
+ */
+export async function fetchNativeProjectionV1(options: Readonly<{
+  canonicalTransportBytes: Uint8Array;
+  timeoutMs?: number;
+  url: string;
+}>): Promise<NativeServiceResponseV1> {
+  const unavailable = (code: NativeServiceWireCodeV1): NativeServiceResponseV1 => ({
+    candidate: null,
+    code,
+    issue: "XRA-KS-01",
+    requestSha256: null,
+    status: "UNAVAILABLE",
+  });
+  if (!isByteView(options.canonicalTransportBytes)) return unavailable("XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED");
+  let response: Response;
+  try {
+    response = await fetch(options.url, {
+      body: Buffer.from(options.canonicalTransportBytes),
+      headers: { "content-type": "application/octet-stream" },
+      method: "POST",
+      signal: AbortSignal.timeout(options.timeoutMs ?? 1500),
+    });
+  } catch {
+    return unavailable("XRA_PS_02_NATIVE_SERVICE_UNAVAILABLE");
+  }
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    return unavailable("XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED");
+  }
+  const envelope = exactRecord(body, ["candidate", "issue", "requestSha256", "status"]);
+  if (
+    envelope !== undefined
+    && envelope.status === "CANDIDATE"
+    && envelope.issue === "XRA-KS-01"
+    && typeof envelope.requestSha256 === "string"
+    && HEX64.test(envelope.requestSha256)
+    && validNativeCandidateRecord(envelope.candidate)
+  ) {
+    return { candidate: envelope.candidate, issue: "XRA-KS-01", requestSha256: envelope.requestSha256, status: "CANDIDATE" };
+  }
+  const denial = exactRecord(body, ["candidate", "code", "issue", "ordinaryAnswer", "requestSha256", "successfulOrdinaryAnswer", "status"]);
+  if (
+    denial !== undefined
+    && denial.status === "DENIED"
+    && denial.issue === "XRA-KS-01"
+    && denial.candidate === null
+    && denial.ordinaryAnswer === null
+    && denial.successfulOrdinaryAnswer === false
+    && typeof denial.code === "string"
+    && (typeof denial.requestSha256 === "string" || denial.requestSha256 === null)
+  ) {
+    return {
+      candidate: null,
+      code: denial.code,
+      issue: "XRA-KS-01",
+      ordinaryAnswer: null,
+      requestSha256: denial.requestSha256,
+      successfulOrdinaryAnswer: false,
+      status: "DENIED",
+    };
+  }
+  return unavailable("XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED");
 }

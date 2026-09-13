@@ -319,7 +319,7 @@ test("public release builder binds its exact file count to the manifest", () => 
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), count);
-  assert.equal(count, 1512);
+  assert.equal(count, 1514);
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
@@ -333,6 +333,48 @@ test("E-FND-1 exact-input closure bytes are explicitly repository-only", () => {
   for (const path of repositoryOnlyPaths) {
     assert.equal(manifest.filter((line) => line.startsWith(`${path}\t`)).length, 0, path);
     assert.ok(builder.includes(`    "${path}",`), `repository-only classification: ${path}`);
+  }
+});
+
+test("XRA-PS-02 independent adjudicator/proof closure is repository-only and canonically registered", () => {
+  const closurePaths = [
+    "src/cks-12/kaleidosphere-candidate-quarantine.ts",
+    "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
+    "tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts",
+    "verification/pansphaira-kaleidosphere-analytics-slice-v1.json",
+  ];
+  const manifest = readFileSync(join(ROOT, "release", "public-files.manifest"), "utf8").split("\n");
+  const builder = readFileSync(join(ROOT, "scripts", "build-public-release.sh"), "utf8");
+  for (const path of closurePaths) {
+    assert.equal(manifest.filter((line) => line.startsWith(`${path}\t`)).length, 0, `repository-only manifest exclusion: ${path}`);
+    assert.ok(builder.includes(`    "${path}",`), `repository-only classification: ${path}`);
+  }
+  // The exact public count is derived from the manifest itself and must bind
+  // the builder's count check; the four repository-only exceptions never
+  // change the public count.
+  const publicCount = manifest.filter((line) => line && !line.startsWith("#")).length;
+  const binding = builder.match(/^if count != (\d+):$/m);
+  assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
+  assert.equal(Number(binding[1]), publicCount, "builder count binding derives the actual manifest count");
+  // Every closure byte is registered in the root SHA256SUMS with its exact
+  // current digest, including the native adjudicator test.
+  const sums = readFileSync(join(ROOT, "SHA256SUMS"), "utf8").split("\n");
+  for (const path of closurePaths) {
+    const expected = `${digest(readFileSync(join(ROOT, path)))}  ./${path}`;
+    assert.equal(sums.filter((line) => line === expected).length, 1, `root SHA256SUMS registration: ${path}`);
+  }
+  // The complete closure (adjudicator implementation, both focused tests and
+  // the paired slice receipt) is registered as exactly one input with the
+  // correct role and digest on the CKS-12 closed-loop DAG owner.
+  const dag = JSON.parse(readFileSync(join(ROOT, "verification", "verification-dag-v2.json"), "utf8"));
+  const node = dag.nodes.find(({ id }) => id === "cks-12-closed-learning-loop-v1");
+  assert.ok(node, "CKS_12_DAG_NODE_MISSING");
+  const expectedRoles = new Map(closurePaths.map((path, index) => [path, index === 3 ? "DERIVED_EVIDENCE" : "VALIDATOR"]));
+  for (const [path, role] of expectedRoles) {
+    const inputs = node.inputs.filter((input) => input.path === path);
+    assert.equal(inputs.length, 1, `DAG path registration: ${path}`);
+    assert.equal(inputs[0].role, role, `DAG role: ${path}`);
+    assert.equal(inputs[0].sha256, digest(readFileSync(join(ROOT, path))), `DAG digest: ${path}`);
   }
 });
 

@@ -341,6 +341,8 @@ const cks12FocusedInputs = [
   ["src/cks-12/readonly-kaleidosphere-bridge.ts", "VALIDATOR"],
   ["tests/cks-12/readonly-kaleidosphere-bridge.test.ts", "VALIDATOR"],
   ["tests/fixtures/cks-12/edge-authority-v2.json", "FIXTURE"],
+  ["tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json", "DERIVED_EVIDENCE"],
+  ["tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json", "DERIVED_EVIDENCE"],
 ];
 for (const [inputPath, role] of cks12FocusedInputs) {
   const matches = cks12Node.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
@@ -614,7 +616,7 @@ cscl11Node.inputs = [
   ["verification/cscl-11-idempiere-holdout-verdict-overall-v1.json", "DERIVED_EVIDENCE"],
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 cscl11Node.ownedTests = ["npm run cscl11:test"];
-dag.graphVersion = 48;
+dag.graphVersion = 49;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
