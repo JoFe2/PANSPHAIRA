@@ -629,6 +629,7 @@ scripts/run-cks-12-local-integration.mjs	scripts/run-cks-12-local-integration.mj
 scripts/run-cks-12-promotion-dry-run.mjs	scripts/run-cks-12-promotion-dry-run.mjs	0644
 scripts/run-cks-12-readonly-bridge-dry-run.mjs	scripts/run-cks-12-readonly-bridge-dry-run.mjs	0644
 scripts/run-cks-12-story-step-check.mjs	scripts/run-cks-12-story-step-check.mjs	0644
+scripts/run-xra-ps-02-root-qs-replay.mjs	scripts/run-xra-ps-02-root-qs-replay.mjs	0644
 scripts/run-cks-router-dry-run.mjs	scripts/run-cks-router-dry-run.mjs	0755
 scripts/run-openclaw-m1.5-probes.mjs	scripts/run-openclaw-m1.5-probes.mjs	0755
 scripts/run-rks-01-comparative-pilot.mjs	scripts/run-rks-01-comparative-pilot.mjs	0644
@@ -818,6 +819,7 @@ tests/cks-12/falsification-report-validator.test.ts	tests/cks-12/falsification-r
 tests/cks-12/governed-promotion-lineage.test.ts	tests/cks-12/governed-promotion-lineage.test.ts	0644
 tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts	tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts	0644
 tests/cks-12/kaleidosphere-candidate-quarantine.test.ts	tests/cks-12/kaleidosphere-candidate-quarantine.test.ts	0644
+tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts	tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts	0644
 tests/cks-12/local-integration.test.ts	tests/cks-12/local-integration.test.ts	0644
 tests/cks-12/pattern-shadow-workflow.test.ts	tests/cks-12/pattern-shadow-workflow.test.ts	0644
 tests/cks-12/prerequisite-receipt-binder.test.ts	tests/cks-12/prerequisite-receipt-binder.test.ts	0644
@@ -1091,6 +1093,8 @@ tests/fixtures/cks-12/prerequisite-receipts-v1.json	tests/fixtures/cks-12/prereq
 tests/fixtures/cks-analytics/projection-v1.json	tests/fixtures/cks-analytics/projection-v1.json	0644
 tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json	tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json	0644
 tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json	tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json	0644
+tests/fixtures/cks-analytics/xra-ps-02-native-paired-receipt-v2.json	tests/fixtures/cks-analytics/xra-ps-02-native-paired-receipt-v2.json	0644
+tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json	tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json	0644
 tests/fixtures/cks-qualification/escalation-causes-v1.json	tests/fixtures/cks-qualification/escalation-causes-v1.json	0644
 tests/fixtures/cks-qualification/profile-binding-v1.json	tests/fixtures/cks-qualification/profile-binding-v1.json	0644
 tests/fixtures/cks-qualification/smallest-qualified-v1.json	tests/fixtures/cks-qualification/smallest-qualified-v1.json	0644
@@ -1512,6 +1516,7 @@ verification/incoming-invoice-ap05-receipt-manifest-v1.json	verification/incomin
 verification/incoming-invoice-ap06-proof-probe-v1.json	verification/incoming-invoice-ap06-proof-probe-v1.json	0644
 verification/incoming-invoice-erv-analytics-v1.json	verification/incoming-invoice-erv-analytics-v1.json	0644
 verification/pansphaira-kaleidosphere-analytics-slice-v1.json	verification/pansphaira-kaleidosphere-analytics-slice-v1.json	0644
+verification/pansphaira-kaleidosphere-analytics-slice-v2.json	verification/pansphaira-kaleidosphere-analytics-slice-v2.json	0644
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644
 verification/rks-01-falsification-report-v1.json	verification/rks-01-falsification-report-v1.json	0644
 verification/rks-01-source-capture-receipt-v1.json	verification/rks-01-source-capture-receipt-v1.json	0644

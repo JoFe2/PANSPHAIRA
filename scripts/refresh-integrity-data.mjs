@@ -343,6 +343,11 @@ const cks12FocusedInputs = [
   ["tests/fixtures/cks-12/edge-authority-v2.json", "FIXTURE"],
   ["tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json", "DERIVED_EVIDENCE"],
   ["tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json", "DERIVED_EVIDENCE"],
+  ["scripts/run-xra-ps-02-root-qs-replay.mjs", "VALIDATOR"],
+  ["tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts", "VALIDATOR"],
+  ["tests/fixtures/cks-analytics/xra-ps-02-native-paired-receipt-v2.json", "DERIVED_EVIDENCE"],
+  ["tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json", "DERIVED_EVIDENCE"],
+  ["verification/pansphaira-kaleidosphere-analytics-slice-v2.json", "DERIVED_EVIDENCE"],
 ];
 for (const [inputPath, role] of cks12FocusedInputs) {
   const matches = cks12Node.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
