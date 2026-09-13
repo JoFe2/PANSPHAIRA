@@ -595,3 +595,177 @@ Unchanged: fresh independent review of this exact candidate, exact PR/Main CI,
 serial release of the public artifact, anonymous public readback, and the AC03
 public chain proof (NOT_PROVEN; the public evidence URL remains missing). All
 remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.
+
+---
+
+# WORK_RESULT — PAR-PS-01 Producer Analytics Manifest (campaign node)
+
+**Status: ADMISSION GATE UNMET — dependency wait (WAIT_DEPENDENCY). No product
+work performed; NOT DELIVERED / NOT CLOSED.**
+
+## Task
+
+Execute issue #345 (campaign node PAR-PS-01, campaign
+PS-KS-AUTONOMOUS-CAMPAIGN-V1; parent #342) on exact Main head
+`45c2c77143a6e123e3d6dd43370dfd310dd50554` (clean; branch `main`; fresh source,
+no legacy candidate or state). The product scope is additive over this head:
+add `contracts/analytics/producer-manifest-v1.json` produced by a deterministic
+`scripts/build-producer-analytics-manifest.mjs` and covered by
+`tests/producer-analytics-manifest.test.ts`, describing only the concepts,
+fields, evidence, coverage, and semantics actually emitted by the delivered
+XRA-PS-02 paired slice (PANSPHAIRA #344). The admission gate is "XRA-PS-02
+paired slice delivered."
+
+## Admission gate revalidation on the current head (actual commands, actual
+observations)
+
+- `git rev-parse HEAD` → `45c2c77143a6e123e3d6dd43370dfd310dd50554`;
+  `git status --short` → clean; branch `main`; head subject `Register
+  XRA-PS-02 PAN adjudicator and proof closure in the public release`.
+- `verification/pansphaira-kaleidosphere-analytics-slice-v1.json` (the in-tree
+  hash-bound slice receipt at this head):
+  - `acceptance.XRA-PS-02-AC03.status` = **`NOT_PROVEN`** — local chainStages
+    complete, public chain unproven; its `nonclaim`: "XRA-KS-01/#151 admission,
+    both exact released-head readbacks, Root-QS, repository CI, and parent
+    closure are absent."
+  - `requiredNonclaims` include
+    `NO_EXTERNAL_RELEASE_OR_CROSS_REPOSITORY_CHAIN_PROOF` and
+    `NO_XRA_KS_01_ADMISSION_OR_EXACT_HEAD_CLOSURE`.
+  - `nativeScope.nonclaim`: "Local VM loopback success does not establish a
+    working public evidence URL (HTTP 404 remains missing); this receipt
+    asserts no public transport, admission, or closure."
+  - `scope` = `LOCAL_SYNTHETIC_AND_LOCAL_VM_REAL_HTTP` with
+    `reconciledReleasedHeads` pansphaira
+    `7f662672bfc45087342f23e5c589d43598f5c20d` / kaleidoSphere
+    `545a3b44ea88c96eded060c11c7c3a2afe0edff6` — the prior stale
+    `LOCAL_SYNTHETIC_ONLY` concern is resolved; this is a **delivery-completion
+    wait, not a stale-synthetic wait**.
+- `WORK_RESULT.md` (`66d42f8` and `45c2c77` sections): all controller-owned
+  gates — fresh independent review, exact PR/Main CI, serial release of the
+  public artifact, anonymous public readback, and the AC03 public chain proof —
+  remain **WAIT**; "`publicly_delivered` remains false".
+- No XRA-PS-02 Root-QS replay artifact exists in-tree (the `root-qs` artifacts
+  under `closure-audits/` and `docs/evidence/conveyor/` belong to other nodes);
+  no in-tree reference to parent #341 closure.
+- The slice CONTENT is in-tree and publicly registered at this head:
+  `release/public-files.manifest` line 673 (adjudicator
+  `src/cks-12/kaleidosphere-candidate-quarantine.ts`), lines 819–820 (both
+  focused tests), lines 1092–1093 (the two `LOCAL_VM_REAL_HTTP` capture
+  fixtures), line 1514 (the slice receipt itself); 1518 data lines; the
+  `scripts/build-public-release.sh` count binding is `1518`. The pending item
+  is the slice's **delivery**, not its content.
+- #344 is publicly closed as completed, but per the binding rules "never infer
+  proof completeness merely from DONE/closed" and "closed is not proof of
+  external artifacts", the closure label does not establish the AC03 public
+  chain or the public release/readback.
+
+**Verdict: the admission gate "XRA-PS-02 paired slice delivered" is unmet.**
+The controller-owned gates (fresh independent review, exact PR/Main CI, serial
+release, anonymous readback) are all WAIT and the XRA-PS-02-AC03 public chain
+(Root-QS replay over the seven-stage chain, both repositories' exact CI and
+anonymous readback, parent #341 closure) is absent from the tree and not
+supplied.
+
+## Why no product work was performed
+
+Deriving the manifest now would describe a slice whose public delivery is
+pending and would risk violating PAR-PS-01-AC01/AC02 if the slice changes
+during #344's delivery correction. All three target artifacts are ABSENT at
+this head (`contracts/analytics/` does not exist;
+`scripts/build-producer-analytics-manifest.mjs` absent;
+`tests/producer-analytics-manifest.test.ts` absent; zero `producer-manifest`
+references anywhere in-tree), so this is **not** `SOURCE_ALREADY_PRESENT` —
+the work is unstarted and correctly held.
+
+## Acceptance criteria mapping (node not admitted; nothing executed)
+
+- `PAR-PS-01-AC01` (generated-vs-runtime projection comparison): **NOT
+  EXECUTED** — admission gate unmet. Missing-input owner: the #344 (XRA-PS-02)
+  delivery owner — the Qwen two-repository lane owns implementation/evidence;
+  the controller owns serialized GitHub publication and readback.
+- `PAR-PS-01-AC02` (schema/diff tests): **NOT EXECUTED** — same missing input.
+- `PAR-PS-01-AC03` (two clean generation runs, byte-identical): **NOT
+  EXECUTED** — same missing input.
+
+The missing input is reported with its owner and a verifiable resume trigger,
+not as a product defect.
+
+## Verifiable resume trigger
+
+A current-head `verification/pansphaira-kaleidosphere-analytics-slice-v1.json`
+with `XRA-PS-02-AC03 != NOT_PROVEN` and a WORK_RESULT showing the
+controller-owned gates cleared (public release + readback receipts present,
+public evidence URL resolvable and not HTTP 404), with the in-tree slice
+receipt re-bound at the current head so that `publicly_delivered` is no longer
+false. Until then #345 remains dependency-held; revalidate immediately before
+launch.
+
+## Commands and results (this node; all local; no push, no public mutation)
+
+- `git rev-parse HEAD` → `45c2c77143a6e123e3d6dd43370dfd310dd50554`;
+  `git status --short` → (empty, clean)
+- `cat verification/pansphaira-kaleidosphere-analytics-slice-v1.json` → AC03
+  `NOT_PROVEN` (quoted above)
+- `ls contracts/analytics/` / `ls scripts/build-producer-analytics-manifest.mjs`
+  / `ls tests/producer-analytics-manifest.test.ts` → all ABSENT
+- `grep -rn "producer-manifest" . --exclude-dir=.git` → zero references
+- XRA-PS-02 Root-QS replay and #341 closure searches → absent
+- `npm ci --cache /tmp/npm-cache --no-audit --no-fund` → exit 0. Environment
+  note: `/home` is read-only for this user, so npm could not create its default
+  cache `/home/node/.npm`; the cache was redirected to `/tmp/npm-cache`.
+  Environment workaround only; no repository bytes affected.
+- `sha256sum --check SHA256SUMS` → exit 0 (all entries OK)
+- `npm run release-governance:verify` → `RELEASE_GOVERNANCE_PASS`, exit 0
+- `npm run release-governance:test` → 93/93 pass, exit 0
+- `npm run lint` (tsc --noEmit) → exit 0
+- `npm run supply-chain:verify` → `PASS`, exit 0
+- `npm test` (authoritative lifecycle: pretest + test + posttest):
+  - pretest: every batch green, 0 fail.
+  - test: 729 tests — **722 pass, 7 fail**. All seven failures are
+    `spawnSync docker ENOENT` in compose-config render tests: AAS-035 ×2,
+    AAS-036 ×1, AAS-037 ×2 in `tests/openclaw-agent-runtime.test.mjs` and
+    BLD-001-G6 ×2 in `tests/builder-agent-runtime.test.mjs`. Cause: the
+    `docker` CLI is not installed in this workspace container — an environment
+    gap, not a product defect. The in-tree `45c2c77` guest evidence (dedicated
+    VM, Docker 29.1.3) records the full suite 2257/2257 pass on this exact
+    tree.
+  - posttest: cscl11/09/10/08/07/02/03/04/05/06/01, rks02, rks01, cksm1,
+    **cks12:test:compiled (91 tests — the XRA-PS-02 focused suite), cks11,
+    cks10, cks09, cks08, cks07, cks05, cks04, cks03, cks02** all pass (0 fail);
+    `wiki:test:compiled` ran 68 tests — 67 pass, 1 fail (the same
+    `spawnSync docker ENOENT`, `tests/local-knowledge-wiki-container.test.mjs`),
+    which aborted the `&&` chain before the tail steps.
+  - The aborted tail steps, run individually (all exit 0): azpp 91/91, asf
+    66/66, ccp 108/108, cks-contracts 69/69,
+    update-controller-synthetic-evidence 42/42, **xra-ps-01 8/8, xra-ps-02
+    11/11**, evid-prov-01 26/26, status-truth-01 34/34,
+    external-video-service 6/6.
+- `git diff --exit-code` (CI step "Confirm tests did not modify tracked
+  files") → exit 0; working tree clean.
+
+The only unrun-locally items are the eight docker-dependent tests above
+(7 in the main batch + 1 in `wiki:test:compiled`); every other canonical
+check passed locally on this head.
+
+## Unresolved gates (controller-owned; all WAIT; carried from #344)
+
+Fresh independent review of the exact candidate, exact PR/Main CI, serial
+release of the public artifact, anonymous public readback, and the AC03 public
+chain proof (public PR/Main CI + release + readback; Root-QS replay over the
+seven-stage chain; both repositories' exact CI and anonymous readback; parent
+#341 closure). `publicly_delivered` remains false. Nothing here claims
+delivery.
+
+## Nonclaims
+
+No manifest, generator, or test was created or modified; no product bytes,
+release bytes, or governance artifact changed. No push, no public mutation, no
+credentials, no external systems, no issue closure. No future-roadmap
+capability, no consumer-support claim, and no historical-retention semantics
+are asserted anywhere by this record.
+
+## Local commit
+
+This record only. `WORK_RESULT.md` is a `repository_only_files` exclusion in
+`scripts/build-public-release.sh` (tracked; excluded from the public release;
+pinned by no manifest), so this commit affects no release content.
