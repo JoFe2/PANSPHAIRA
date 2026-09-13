@@ -319,7 +319,7 @@ test("public release builder binds its exact file count to the manifest", () => 
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), count);
-  assert.equal(count, 1514);
+  assert.equal(count, 1518);
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
@@ -336,7 +336,7 @@ test("E-FND-1 exact-input closure bytes are explicitly repository-only", () => {
   }
 });
 
-test("XRA-PS-02 independent adjudicator/proof closure is repository-only and canonically registered", () => {
+test("XRA-PS-02 independent adjudicator/proof closure is publicly registered and canonically bound", () => {
   const closurePaths = [
     "src/cks-12/kaleidosphere-candidate-quarantine.ts",
     "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
@@ -345,17 +345,22 @@ test("XRA-PS-02 independent adjudicator/proof closure is repository-only and can
   ];
   const manifest = readFileSync(join(ROOT, "release", "public-files.manifest"), "utf8").split("\n");
   const builder = readFileSync(join(ROOT, "scripts", "build-public-release.sh"), "utf8");
+  // The complete proof closure (adjudicator implementation, both focused
+  // tests and the paired slice receipt) is registered in the public manifest
+  // with an identity mapping and mode 0644; the builder no longer carries
+  // any of the four paths as a repository-only exception.
   for (const path of closurePaths) {
-    assert.equal(manifest.filter((line) => line.startsWith(`${path}\t`)).length, 0, `repository-only manifest exclusion: ${path}`);
-    assert.ok(builder.includes(`    "${path}",`), `repository-only classification: ${path}`);
+    assert.equal(manifest.filter((line) => line === `${path}\t${path}\t0644`).length, 1, `public manifest registration: ${path}`);
+    assert.ok(!builder.includes(`    "${path}",`), `repository-only exception reconciled: ${path}`);
   }
   // The exact public count is derived from the manifest itself and must bind
-  // the builder's count check; the four repository-only exceptions never
-  // change the public count.
+  // the builder's count check; the reconciled exceptions keep the builder,
+  // the governance tests and the manifest on one computed final count.
   const publicCount = manifest.filter((line) => line && !line.startsWith("#")).length;
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), publicCount, "builder count binding derives the actual manifest count");
+  assert.equal(publicCount, 1518, "reconciled public count is the actual final manifest count");
   // Every closure byte is registered in the root SHA256SUMS with its exact
   // current digest, including the native adjudicator test.
   const sums = readFileSync(join(ROOT, "SHA256SUMS"), "utf8").split("\n");
