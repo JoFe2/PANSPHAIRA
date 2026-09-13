@@ -468,3 +468,130 @@ exact PR/Main CI, serial release of the public artifact, anonymous public
 readback, and the AC03 public chain proof (NOT_PROVEN; public evidence URL
 remains HTTP 404 / missing). All remain WAIT. Nothing here claims delivery;
 `publicly_delivered` remains false.
+## Follow-up correction — PublicationRegistrationFailure (public registration; on top of 66d42f8)
+
+XRA-PS-02: the actual independent adjudicator/proof closure was tracked and
+hash-bound but excluded from the public release.
+`verification/pansphaira-kaleidosphere-analytics-slice-v1.json` was not
+registered in `release/public-files.manifest`, and all four closure paths were
+carried as `repository_only_files` exceptions in
+`scripts/build-public-release.sh`. Correction191 had restored the native test
+`SHA256SUMS` and verification-DAG registration only; the paired slice receipt
+(the canonical `review.artifact`) remained unregistered, and the review record
+had been misdirected at `release/public-files.manifest` instead of the slice
+receipt.
+
+### Defect (reproduced on 66d42f8 before any change)
+
+- Baseline staging build (`scripts/build-public-release.sh --output ...`)
+  exited 0 with deterministic `ARCHIVE_SHA256 e8cedd68…c2a8` and all four
+  closure files ABSENT from the staged public tree.
+- `tests/release-governance.test.mjs` (XRA-PS-02) and
+  `tests/verification-fabric-v2.test.ts` still bound the pre-registration
+  count (1514).
+
+### Correction (minimal, TDD, repository-native tooling, dependency order)
+
+1. `release/public-files.manifest`: +4 identity lines (mode 0644) registering
+   the complete proof closure — the adjudicator implementation
+   (`src/cks-12/kaleidosphere-candidate-quarantine.ts`), both focused tests
+   (`tests/cks-12/kaleidosphere-candidate-quarantine.test.ts` and
+   `tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts`), and the
+   paired slice receipt
+   (`verification/pansphaira-kaleidosphere-analytics-slice-v1.json`), i.e.
+   the restored `review.artifact`. 1514 → 1518 data lines.
+2. `scripts/build-public-release.sh`: the four `repository_only_files`
+   exceptions removed; the count binding now derives the actual final count
+   (`if count != 1518:`).
+3. `tests/release-governance.test.mjs`: XRA-PS-02 now asserts public manifest
+   registration of all four paths (identity mapping, mode 0644), builder
+   exception reconciliation, and that the builder count binding equals the
+   manifest's own line count (the computed final count, 1518).
+4. `tests/verification-fabric-v2.test.ts`: exact public count 1514 → 1518.
+5. `npm run integrity:refresh` (run after all edits, dependency order):
+   re-digested the five affected `repository-integrity` / `ap-05` pins
+   (manifest CONTRACT + DERIVED_EVIDENCE, builder SECURITY, governance test
+   VALIDATOR, verification-fabric test VALIDATOR); `graphVersion` 49 and all
+   57 nodes/roles otherwise unchanged; root `SHA256SUMS` rebuilt (1831 lines).
+   The tool itself is unchanged.
+
+### Preserved (unchanged by this correction)
+
+- Implementation semantics, legacy historical evidence, native
+  restricted/conflicting semantics; the exact reconciled released-head pair
+  identities (`7f662672…` PAN / `545a3b44…` KS); the `LOCAL_VM_REAL_HTTP`
+  scope and the `AC03 NOT_PROVEN` nonclaim. The four closure files are
+  **byte-identical to `66d42f8`** (verified: empty `git diff` vs HEAD for all
+  four).
+- The `review.artifact` is the paired slice receipt
+  (`verification/pansphaira-kaleidosphere-analytics-slice-v1.json`), now
+  publicly registered. It was not replaced with an unrelated capture or a
+  generic public file — in particular not with the manifest itself. No
+  manifest membership was waived. No CI or Root-QS success was invented. No
+  no-op KS release was added. No exclusions or skipped tests.
+
+### Test results (actual commands, this candidate)
+
+- `npm run release-governance:test` (release-governance +
+  public-product-spelling) → **93/93 pass**. RED before the manifest/builder
+  edits: `expected: 1518` and `public manifest registration:
+  src/cks-12/kaleidosphere-candidate-quarantine.ts (0 !== 1)`.
+- `node --test dist/tests/verification-fabric-v2.test.js` → **32/32 pass**.
+- `npm run xra-ps-02:test` (flat + native quarantine suites) → **11/11 pass**
+  (all five AC cases; service-down / substitution / malformed fail-closed).
+- `node --test dist/tests/canonical-json-profile-inventory.test.js` →
+  **35/35 pass**.
+- Post-fix staging build (`scripts/build-public-release.sh --output
+  /tmp/ps344-fixed/...`): exit 0, count binding 1518, all four closure files
+  PRESENT in the staged public tree; staged set equals the manifest
+  destinations (plus the staging-generated `SHA256SUMS`, verified with
+  `sha256sum -c`); `ARCHIVE_SHA256 10111abe0613920bb63a3dd903cd00206ffbdfaea3140c52764acea63124a11c`
+  (deterministic, re-verified with `sha256sum`).
+
+### Diff confinement
+
+`release/public-files.manifest` (+4 lines), `scripts/build-public-release.sh`
+(−4 exception lines, count binding), `tests/release-governance.test.mjs`,
+`tests/verification-fabric-v2.test.ts`, `verification/verification-dag-v2.json`
+(five re-digested pins), `SHA256SUMS` (rebuilt, 1831 lines). The four closure
+files and the repository-native tool are unchanged.
+
+### Independent guest verification (authorized root test VM, 2026-09-13)
+
+The exact retained dirty tree (plus the real `.git`) was streamed to the
+dedicated root guest and re-verified before execution: all seven edited files
+matched by sha256 (`GUEST_TREE_BYTES_MATCH`), `git rev-parse HEAD` =
+`66d42f810da866f8958d5f382aecd427a33acf47`, the same seven modified paths, and
+`HEAD^{tree}` = `fcabb91dbc5d2c468ad58c741bb90131f235aade`.
+
+- Guest environment: node v24.21.0, npm 11.19.0, Docker 29.1.3, GNU tar 1.35.
+- Full canonical suite (`npm test`, i.e. pretest + test + posttest):
+  **2257/2257 pass, 0 skipped, 0 fail, exit 0** — including the two
+  development-worker M1B tests and the supply-chain public-staging contract.
+  An initial guest run reported two `ADMISSION_BINDING_DENIED` failures in
+  `dist/tests/development-worker.test.js` because the first tree copy omitted
+  the `.git` directory that the controller's admission gate requires
+  (existence check only; no git invocation). After copying the real `.git`
+  and re-verifying all seven bytes, the full suite was re-run from scratch and
+  is fully green. This was an environment-copy artifact, not a product
+  defect; no product bytes changed.
+- Guest staging build (`scripts/build-public-release.sh --output ...`): exit
+  0. The staged tree is **content-identical to the local staged tree**: all
+  1519 files (1518 manifest destinations + staging-generated `SHA256SUMS`)
+  match file-by-file sha256 and mode (`CROSS_MACHINE_CONTENT_IDENTICAL`).
+  The archive byte hashes differ between machines solely because of GNU tar
+  1.34 (local) vs 1.35 (guest); staged content is identical.
+- Root `SHA256SUMS` re-verified read-only on this candidate: 1831/1831 entries
+  match working-tree digests; `verification/verification-dag-v2.json` pins
+  verified: 1015/1015 sha256 pins match, `graphVersion` 49, 57 nodes, with the
+  five re-digested pins being the only delta vs `66d42f8`.
+
+Preserved: `LOCAL_VM_REAL_HTTP` scope and the `AC03 NOT_PROVEN` nonclaim;
+nothing here claims delivery.
+
+### Unresolved gates (controller-owned; RELEASE_BLOCKERS, not FOLLOW_UPs)
+
+Unchanged: fresh independent review of this exact candidate, exact PR/Main CI,
+serial release of the public artifact, anonymous public readback, and the AC03
+public chain proof (NOT_PROVEN; the public evidence URL remains missing). All
+remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.

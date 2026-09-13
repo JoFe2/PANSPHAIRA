@@ -670,6 +670,7 @@ src/cks-12/empty-kb-acquisition-gate.ts	src/cks-12/empty-kb-acquisition-gate.ts	
 src/cks-12/experience-diversity-attribution.ts	src/cks-12/experience-diversity-attribution.ts	0644
 src/cks-12/falsification-report-validator.ts	src/cks-12/falsification-report-validator.ts	0644
 src/cks-12/governed-promotion-lineage.ts	src/cks-12/governed-promotion-lineage.ts	0644
+src/cks-12/kaleidosphere-candidate-quarantine.ts	src/cks-12/kaleidosphere-candidate-quarantine.ts	0644
 src/cks-12/pattern-shadow-workflow.ts	src/cks-12/pattern-shadow-workflow.ts	0644
 src/cks-12/prerequisite-receipt-binder.ts	src/cks-12/prerequisite-receipt-binder.ts	0644
 src/cks-12/readonly-kaleidosphere-bridge.ts	src/cks-12/readonly-kaleidosphere-bridge.ts	0644
@@ -815,6 +816,8 @@ tests/cks-12/empty-kb-acquisition-gate.test.ts	tests/cks-12/empty-kb-acquisition
 tests/cks-12/experience-diversity-attribution.test.ts	tests/cks-12/experience-diversity-attribution.test.ts	0644
 tests/cks-12/falsification-report-validator.test.ts	tests/cks-12/falsification-report-validator.test.ts	0644
 tests/cks-12/governed-promotion-lineage.test.ts	tests/cks-12/governed-promotion-lineage.test.ts	0644
+tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts	tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts	0644
+tests/cks-12/kaleidosphere-candidate-quarantine.test.ts	tests/cks-12/kaleidosphere-candidate-quarantine.test.ts	0644
 tests/cks-12/local-integration.test.ts	tests/cks-12/local-integration.test.ts	0644
 tests/cks-12/pattern-shadow-workflow.test.ts	tests/cks-12/pattern-shadow-workflow.test.ts	0644
 tests/cks-12/prerequisite-receipt-binder.test.ts	tests/cks-12/prerequisite-receipt-binder.test.ts	0644
@@ -1508,6 +1511,7 @@ verification/lkc-qual-01-m0-evidence-v1.json	verification/lkc-qual-01-m0-evidenc
 verification/incoming-invoice-ap05-receipt-manifest-v1.json	verification/incoming-invoice-ap05-receipt-manifest-v1.json	0644
 verification/incoming-invoice-ap06-proof-probe-v1.json	verification/incoming-invoice-ap06-proof-probe-v1.json	0644
 verification/incoming-invoice-erv-analytics-v1.json	verification/incoming-invoice-erv-analytics-v1.json	0644
+verification/pansphaira-kaleidosphere-analytics-slice-v1.json	verification/pansphaira-kaleidosphere-analytics-slice-v1.json	0644
 verification/rks-01-corpus-equivalence-receipt-v1.json	verification/rks-01-corpus-equivalence-receipt-v1.json	0644
 verification/rks-01-falsification-report-v1.json	verification/rks-01-falsification-report-v1.json	0644
 verification/rks-01-source-capture-receipt-v1.json	verification/rks-01-source-capture-receipt-v1.json	0644
