@@ -200,8 +200,8 @@
     "filesScanned": 643,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 213,
-    "importFiles": 212,
+    "importSites": 214,
+    "importFiles": 213,
     "reexportSites": 4,
     "similarShapeSites": 30,
     "ledgerEntries": 1836,
@@ -582,8 +582,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 44,
-      "importFiles": 43
+      "importSites": 45,
+      "importFiles": 44
     },
     {
       "owner": "usage-insights",

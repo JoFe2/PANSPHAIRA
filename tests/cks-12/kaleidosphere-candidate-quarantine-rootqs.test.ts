@@ -24,7 +24,8 @@ import {
   PANSPHAIRA_RECONCILED_RELEASE_TAG_V1,
   RECONCILED_RELEASED_HEADS_V1,
 } from "../../src/cks-12/kaleidosphere-candidate-quarantine.js";
-import { SOURCE_CONTRACT_SHA256 } from "../../packages/contracts/src/kaleidosphere-analytics-projection.js";
+import { SOURCE_CONTRACT_SHA256, buildKaleidosphereAnalyticsProjectionV1, kaleidosphereAnalyticsProjectionDigestV1 } from "../../packages/contracts/src/kaleidosphere-analytics-projection.js";
+import { canonicalJson } from "../../packages/contracts/src/canonical-json.js";
 
 const root = process.cwd();
 const fixture = (name: string): string => path.join(root, "tests/fixtures/cks-analytics", name);
@@ -230,4 +231,135 @@ test("NEGATIVE: tampering the receipt, the raw results, or the tested source fai
     "a forged receipt is internally consistent against its own forged source",
   );
   assert.equal(verifyNativePairedAdjudicationReceiptV2(forgedReceipt, v2Material).outcome, "DENIED", "a forged tested source is DENIED as the committed proof");
+});
+
+// --- AC03 generation-stage evidence: the transported projection artifact is generated
+// from the released producer AT EXECUTION TIME and its equality to the released raw
+// artifact and to the independently rebuilt projection is recorded. ---
+test("GREEN: the transported projection is generated from the released producer at execution time with recorded equality", () => {
+  const generated = rawResults.projectionGenerated;
+  assert.notEqual(generated, undefined, "raw results must record the execution-time projection generation");
+  assert.equal(generated.generatedAtRunTime, true, "the artifact must be generated at execution time, not re-read as the source of truth");
+  assert.equal(generated.producer, "buildKaleidosphereAnalyticsProjectionV1");
+  assert.equal(generated.producerFile, "packages/contracts/src/kaleidosphere-analytics-projection.ts");
+  const producerSha = digest(readFileSync(path.join(root, "packages/contracts/src/kaleidosphere-analytics-projection.ts")));
+  assert.equal(generated.producerSha256, producerSha, "the producer source bytes are bound");
+  assert.equal(generated.generatedRawArtifactSha256, digest(rawArtifactBytes), "the generated artifact equals the released raw artifact");
+  assert.equal(generated.equalsReleasedRawArtifact, true, "byte-equality to the released raw artifact is recorded");
+  // Re-derive the producer output locally from the same source and require the
+  // execution-time body digest to match the independently rebuilt projection.
+  const localBodyDigest = kaleidosphereAnalyticsProjectionDigestV1(buildKaleidosphereAnalyticsProjectionV1());
+  assert.equal(generated.generatedProjectionBodyDigest, localBodyDigest, "execution-time body digest matches the local producer re-derivation");
+  assert.equal(generated.equalsRebuiltProjection, true, "equality to the independently rebuilt projection is recorded");
+  assert.equal(generated.equalsCanonicalTransport, true, "equality to the canonical transport is recorded");
+  // The generation stage of the per-stage raw execution binding ties back to it.
+  const stage = rawResults.stageExecution.find((entry: Record<string, any>) => entry.stage === "GENERATION");
+  assert.equal(stage.executorSha256, generated.producerSha256, "GENERATION stage executor is the released producer");
+  assert.equal(stage.inputSha256, SOURCE_CONTRACT_SHA256, "GENERATION stage input is the frozen CKS proof-input contract");
+  assert.equal(stage.outputSha256, generated.generatedRawArtifactSha256, "GENERATION stage output is the generated artifact");
+});
+
+// --- AC03 per-stage RAW execution binding: every chain stage records raw execution
+// identities, commands, and input/output byte digests (not just derived digests). ---
+test("GREEN: all seven chain stages carry per-stage raw execution identities and commands", () => {
+  const stages = rawResults.stageExecution;
+  assert.deepEqual(stages.map((entry: Record<string, any>) => entry.stage), [...ADJUDICATION_CHAIN_STAGES], "stage order matches the seven-stage chain");
+  const HEX64 = /^[a-f0-9]{64}$/;
+  for (const entry of stages) {
+    assert.deepEqual(
+      Object.keys(entry).sort(),
+      ["command", "executor", "executorKind", "executorSha256", "inputSha256", "outputSha256", "stage"].sort(),
+      `stage ${entry.stage} carries the exact per-stage raw execution keys`,
+    );
+    assert.match(entry.executorSha256, HEX64, `stage ${entry.stage} executor bytes are bound`);
+    assert.match(entry.inputSha256, HEX64, `stage ${entry.stage} raw input bytes are bound`);
+    assert.match(entry.outputSha256, HEX64, `stage ${entry.stage} raw output bytes are bound`);
+    assert.equal(typeof entry.command, "string");
+    assert.ok(entry.command.length > 0, `stage ${entry.stage} command is recorded`);
+  }
+  const byStage = new Map<string, Record<string, any>>(stages.map((entry: Record<string, any>) => [entry.stage, entry] as [string, Record<string, any>]));
+  const stageEntry = (name: string): Record<string, any> => {
+    const entry = byStage.get(name);
+    if (entry === undefined) throw new Error(`stage ${name} missing from the per-stage raw execution binding`);
+    return entry;
+  };
+  // The KS service stages all execute inside the pinned service, bound by its bytes.
+  for (const stageName of ["INGESTION", "SEMANTICS", "ANALYSIS", "CANDIDATE"]) {
+    assert.equal(stageEntry(stageName).executorSha256, rawResults.service.serverSha256, `${stageName} executes in the pinned KS service`);
+  }
+  // PROJECTION binds the canonical transport produced from the raw artifact.
+  assert.equal(stageEntry("PROJECTION").inputSha256, rawResults.inputHeads.rawArtifactSha256);
+  assert.equal(stageEntry("PROJECTION").outputSha256, rawResults.inputHeads.canonicalTransportSha256);
+  // INGESTION is the real loopback POST of the canonical transport to the pinned service.
+  assert.equal(stageEntry("INGESTION").inputSha256, rawResults.inputHeads.canonicalTransportSha256);
+  assert.equal(stageEntry("INGESTION").outputSha256, rawResults.rawResponseSha256, "INGESTION output is the raw response bytes");
+  assert.ok(stageEntry("INGESTION").command.includes("native-projection"), "INGESTION command names the real endpoint");
+  assert.ok(stageEntry("INGESTION").command.includes("KS_ROOT="), "INGESTION command records the KS root");
+  // ADJUDICATION is the independent PAN verifier, bound by its source bytes.
+  assert.equal(stageEntry("ADJUDICATION").executorKind, "PAN_ADJUDICATOR");
+  assert.equal(stageEntry("ADJUDICATION").executorSha256, v2Receipt.testedSource.adjudicatorSha256, "ADJUDICATION executor is the tested PAN adjudicator");
+  assert.equal(stageEntry("ADJUDICATION").outputSha256, v2Receipt.baseAdjudicationDigest, "ADJUDICATION output is the base adjudication digest");
+  // The input to the ADJUDICATION stage re-derives from the bound material (canonical form).
+  const expectedAdjudicationInput = digest(Buffer.from(canonicalJson({
+    canonicalTransportSha256: rawResults.inputHeads.canonicalTransportSha256,
+    contextId: "pansphaira:xra-ps-02-native-context-001",
+    candidate: realCandidate,
+    rawArtifactSha256: rawResults.inputHeads.rawArtifactSha256,
+  }), "utf8"));
+  assert.equal(stageEntry("ADJUDICATION").inputSha256, expectedAdjudicationInput, "ADJUDICATION input re-derives from the bound transport + candidate");
+});
+
+// --- AC04 actual state comparison: before/after are real observations of the canonical
+// Knowledge pin bytes and the KS registry/sidecar file bytes, sampled BEFORE service
+// start (T0) and AFTER the five adjudications + wire falsifiers + mutation probe (T1),
+// with a real mutation-route falsifier recorded. ---
+test("GREEN: the before/after comparison is an actual state observation with a recorded mutation-route falsifier", () => {
+  const observations = rawResults.beforeAfterObservations;
+  assert.notEqual(observations, undefined, "raw results must record the before/after state observations");
+  const before = observations.before;
+  const after = observations.after;
+  assert.ok(String(before.sampledAt).includes("T0"), "before is sampled at T0 (before service start and before any adjudication)");
+  assert.ok(String(after.sampledAt).includes("T1"), "after is sampled at T1 (after the five outcomes, wire falsifiers, and mutation probe)");
+  // Canonical Knowledge pin re-read from the frozen fixture at BOTH sample points.
+  const pin = "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a";
+  assert.equal(before.state.canonicalKnowledge.knowledgeId, "CKS-12-KNOWLEDGE-001");
+  assert.equal(before.state.canonicalKnowledge.knowledgeSha256, pin, "T0 re-reads the canonical Knowledge pin bytes");
+  assert.equal(after.state.canonicalKnowledge.knowledgeSha256, pin, "T1 re-reads the canonical Knowledge pin bytes");
+  assert.equal(after.state.canonicalKnowledge.pinBytesSha256, before.state.canonicalKnowledge.pinBytesSha256, "pin bytes are unchanged between samples");
+  assert.equal(after.state.canonicalKnowledge.pinFixtureSha256, before.state.canonicalKnowledge.pinFixtureSha256, "pin fixture bytes are unchanged between samples");
+  // The flat release registry is HELD (no PAN authority granted) and the native sidecar is RELEASED.
+  assert.equal(before.state.flatReleaseRegistry.status, "HELD");
+  assert.equal(before.state.flatReleaseRegistry.releasedEntryCount, 0);
+  assert.equal(before.state.nativeReleaseSidecar.status, "RELEASED");
+  assert.equal(before.state.nativeReleaseSidecar.releasedEntryCount, 1);
+  // The registry/sidecar file bytes are re-read at both sample points and are unchanged.
+  assert.equal(after.state.flatReleaseRegistry.fileSha256, before.state.flatReleaseRegistry.fileSha256, "flat registry file bytes unchanged (no persistence)");
+  assert.equal(after.state.nativeReleaseSidecar.fileSha256, before.state.nativeReleaseSidecar.fileSha256, "native sidecar file bytes unchanged (no persistence)");
+  // The real mutation-route falsifier: the authority-free service refuses promotion.
+  assert.deepEqual(after.mutationProbe, {
+    label: "mutation",
+    route: "/v1/pansphaira-analytics/promote",
+    httpStatus: 400,
+    code: "XRA_KS01_ROUTE_DENIED",
+  }, "the mutation route is refused by the pinned service");
+  // The live candidate authority block observed at T1 is authority-free.
+  assert.equal(after.liveCandidateAuthority.mutate, false);
+  assert.equal(after.liveCandidateAuthority.promote, false);
+  assert.equal(after.liveCandidateAuthority.publish, false);
+  assert.equal(after.liveCandidateAuthority.execute, false);
+  assert.deepEqual(after.liveCandidateAuthority.capabilities, []);
+  assert.deepEqual(after.liveCandidateAuthority.effects, []);
+  // The derived before/after values remain the receipt-gated invariants.
+  assert.equal(before.authority, "NONE");
+  assert.equal(after.authority, "NONE");
+  assert.equal(before.effect, "NONE");
+  assert.equal(after.effect, "NONE");
+  assert.equal(after.capabilityDelta, "NONE");
+  // The service still reports the released native registry at T1 (still running at after-sample),
+  // while the flat registry remains HELD.
+  assert.deepEqual(after.headsNativeReleaseRegistry, rawResults.service.headsEndpoint.nativeReleaseRegistry);
+  assert.equal(after.headsReleaseRegistry.status, "HELD");
+  // Consistency: the receipt-gated before/after matches the observed pin.
+  assert.equal(v2Receipt.rootQsExecution.beforeAfter.canonicalKnowledgeBeforeSha256, before.state.canonicalKnowledge.knowledgeSha256);
+  assert.equal(v2Receipt.rootQsExecution.beforeAfter.canonicalKnowledgeAfterSha256, after.state.canonicalKnowledge.knowledgeSha256);
 });

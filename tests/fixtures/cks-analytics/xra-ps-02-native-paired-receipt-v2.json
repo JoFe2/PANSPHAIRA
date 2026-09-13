@@ -111,7 +111,7 @@
         ]
       }
     ],
-    "rawResultsDigest": "a29089e2077988ffdb20cd4626b5b1b25eeaa1c20dcab9410f511c54be506680",
+    "rawResultsDigest": "b556888f2d58fff6fb7c4f461203ae96896e28df398c5821716bdabc2f00ce06",
     "scope": "LOCAL_VM_REAL_HTTP",
     "transport": "loopback HTTP (127.0.0.1)"
   },
@@ -124,5 +124,5 @@
     "kaleidoSphereServerSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5"
   },
   "testedSourceDigest": "50abb6d8f8e582a2f231931d7c163399535959dbd7edfcc72873ebec2ed0e708",
-  "receiptDigest": "162f479a391a819f8395303a6cae07e0891ecc799b70bacdeded95858e4207f9"
+  "receiptDigest": "b6611773e856ec06d10e84973dd9d8a21e52cffa36e81aee07dc881d62ca9651"
 }
