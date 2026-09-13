@@ -37,9 +37,12 @@ function classify(path, line) {
   ) return "stable-xra-ps01-purpose-identifier";
   if (
     path === "src/cks-12/kaleidosphere-candidate-quarantine.ts"
+    || path === "scripts/run-xra-ps-02-root-qs-replay.mjs"
     || path === "verification/pansphaira-kaleidosphere-analytics-slice-v1.json"
+    || path === "verification/pansphaira-kaleidosphere-analytics-slice-v2.json"
     || path === "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json"
     || path === "tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json"
+    || path === "tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json"
   ) return "stable-xra-ps02-technical-identifier";
   if (
     path === "WORK_RESULT.md"

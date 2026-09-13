@@ -1,0 +1,128 @@
+{
+  "authority": "NONE",
+  "baseAdjudicationDigest": "12f10e019a0214e8e4bb453a85290538b9d86bc1eae17a239239573fef727b92",
+  "baseReceiptDigest": "d45085872866815e82f013c164b436d4169acbafee6d117c358adbc17bf33c6f",
+  "baseReceiptId": "pansphaira:xra-ps-02-native-paired-receipt-001",
+  "chain": [
+    {
+      "stage": "GENERATION",
+      "digest": "29357c2fdd3cb159a77ce4813e67d0ba9f7602a2a3b497c033822f8b9861b041"
+    },
+    {
+      "stage": "PROJECTION",
+      "digest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b"
+    },
+    {
+      "stage": "INGESTION",
+      "digest": "9ddd8c6a9b51a9bf8d6142346348b2d547c27dbdb2a516c5f59c1402591c4c08"
+    },
+    {
+      "stage": "SEMANTICS",
+      "digest": "e99f22d352b354ca8dc4d407bd4dca74cbf5d6cac0dc310bc3982fee42bb702b"
+    },
+    {
+      "stage": "ANALYSIS",
+      "digest": "30b69b3a7f8981f875267d3c544a86f9e60b1fd39e02b30c918d21594c9ed4ff"
+    },
+    {
+      "stage": "CANDIDATE",
+      "digest": "01f11083bbb58d2dc2367c29a335a784c04f92a63628f8ab8273112c3606e6d5"
+    },
+    {
+      "stage": "ADJUDICATION",
+      "digest": "12f10e019a0214e8e4bb453a85290538b9d86bc1eae17a239239573fef727b92"
+    }
+  ],
+  "effect": "NONE",
+  "inputHeads": {
+    "canonicalTransportSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+    "kaleidoSphereHeadCommit": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+    "kaleidoSphereHeadTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+    "pansphairaHeadCommit": "988395110a9189d1b8cd4ee98184ed5c1d77a15d",
+    "pansphairaReleaseCommit": "7f662672bfc45087342f23e5c589d43598f5c20d",
+    "pansphairaReleaseReceiptSha256": "bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6",
+    "pansphairaReleaseTag": "2026_09_05_v1",
+    "projectionDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+    "rawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+    "sourceContractSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44"
+  },
+  "inputHeadsDigest": "59b6aa5f1b97e1f73cad555f2a5764a0534750f188ee3564bc30681f12089fb8",
+  "receiptId": "pansphaira:xra-ps-02-native-paired-receipt-002",
+  "rootQsExecution": {
+    "beforeAfter": {
+      "authorityAfter": "NONE",
+      "authorityBefore": "NONE",
+      "capabilityDeltaAfter": "NONE",
+      "capabilityDeltaBefore": "NONE",
+      "canonicalKnowledgeAfterSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+      "canonicalKnowledgeBeforeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+      "effectAfter": "NONE",
+      "effectBefore": "NONE"
+    },
+    "command": "node scripts/run-xra-ps-02-root-qs-replay.mjs (PAN_ROOT=/tmp/pan KS_ROOT=/tmp/ks PORT=18877)",
+    "falsifiers": [
+      {
+        "label": "service-down",
+        "code": "XRA_PS_02_NATIVE_SERVICE_UNAVAILABLE"
+      },
+      {
+        "label": "substitution",
+        "code": "NATIVE_STALE_HEAD_DENIED"
+      },
+      {
+        "label": "malformed",
+        "code": "XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED"
+      }
+    ],
+    "outcomes": [
+      {
+        "case": "positive",
+        "outcome": "ACCEPTED_BOUNDED",
+        "reasonCodes": [
+          "NATIVE_EVIDENCE_ACCEPTED"
+        ]
+      },
+      {
+        "case": "restricted-unknown",
+        "outcome": "RESTRICTED",
+        "reasonCodes": [
+          "NATIVE_EVIDENCE_RESTRICTED_UNKNOWN"
+        ]
+      },
+      {
+        "case": "conflicting-counterevidence",
+        "outcome": "DENIED",
+        "reasonCodes": [
+          "NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED"
+        ]
+      },
+      {
+        "case": "forged-candidate",
+        "outcome": "DENIED",
+        "reasonCodes": [
+          "NATIVE_FORGED_CANDIDATE_DENIED"
+        ]
+      },
+      {
+        "case": "stale-head",
+        "outcome": "DENIED",
+        "reasonCodes": [
+          "NATIVE_STALE_HEAD_DENIED"
+        ]
+      }
+    ],
+    "rawResultsDigest": "b556888f2d58fff6fb7c4f461203ae96896e28df398c5821716bdabc2f00ce06",
+    "scope": "LOCAL_VM_REAL_HTTP",
+    "transport": "loopback HTTP (127.0.0.1)"
+  },
+  "schemaVersion": "pansphaira.xra-ps-02/native-paired-receipt/v2",
+  "testedSource": {
+    "adjudicatorSha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b",
+    "focusedNativeTestSha256": "f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0",
+    "kaleidoSphereHeadCommit": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+    "kaleidoSphereHeadTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+    "kaleidoSphereServerSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5"
+  },
+  "testedSourceDigest": "50abb6d8f8e582a2f231931d7c163399535959dbd7edfcc72873ebec2ed0e708",
+  "receiptDigest": "b6611773e856ec06d10e84973dd9d8a21e52cffa36e81aee07dc881d62ca9651"
+}

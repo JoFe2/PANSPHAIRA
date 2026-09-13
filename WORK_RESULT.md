@@ -736,3 +736,213 @@ npm 11.17.0, TypeScript 5.9.3, **docker ABSENT**.
 5. AC03 public chain proof (NOT_PROVEN; public evidence URL HTTP 404 / missing).
 
 All remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.
+
+## AC03 execution/evidence — real Root-QS paired chain + v2 successor receipt (fresh current main `d4dc2fa`, 2026-09-13)
+
+This node produces the missing **AC03 execution/evidence** for issue #344 on the fresh
+current-Main candidate. It adds the real Root-QS execution of the seven-stage chain in the
+dedicated root test VM, the raw Root-QS evidence, a **v2 successor paired receipt** that
+separately binds the immutable released **input heads** and the **tested PAN adjudicator
+source**, a v2 slice, and a focused RED/GREEN/NEGATIVE test — while preserving the released
+source-only history (the v1 receipt bytes, the two real-HTTP capture fixtures, all existing
+tests, the public registration and proofs).
+
+### What was insufficient (RED) and what this node adds
+
+The prior candidate (`d4dc2fa`) carried the v1 **source-local** base receipt
+(`pansphaira:xra-ps-02-native-paired-receipt-001`, digest `d45085872866815e…`). It binds the
+two reconciled released heads and the complete seven-stage chain, but it binds **no tested
+source and no live execution**: it cannot distinguish "we launched the real pinned KS service
+at the released head and its real response drove the independent PAN verifier" from "this
+source happens to produce this candidate". That is the "old source-local proof", and it is
+**structurally insufficient** for AC03 execution/evidence. This node supplies the AC03
+execution/evidence deliverable on top of it (additive; the v1 base is preserved by reference,
+never rewritten).
+
+### Deliverables (new/additive; v1 receipt bytes + historical captures untouched)
+
+| path | role | sha256 |
+| --- | --- | --- |
+| `scripts/run-xra-ps-02-root-qs-replay.mjs` | executable Root-QS replay runner: launches the pinned KS native-projection service, feeds its real response to the independent PAN verifier, drives the five outcomes + three falsifiers, emits raw Root-QS evidence | `895ed1bd9b637c6007b9aa0eb7de4e9879af0275fdb9c0e59e6c5ae7440474d8` |
+| `tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts` | focused RED/GREEN/NEGATIVE test (7 tests) binding the v2 receipt + raw Root-QS evidence | `00d7c3ef922fa05fd5494d861765b02793bb2f868ed5688f2b16353ce9a99f58` |
+| `tests/fixtures/cks-analytics/xra-ps-02-native-paired-receipt-v2.json` | **v2 successor paired receipt** (two-group binding) | `851fc4f553978a167dae42caaad4cef3ff77311db1d73186e699a2e1f14492cf` |
+| `tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json` | raw Root-QS execution evidence (real VM run) | `f4c8df82b92017eb07654b39e834cc87cd020f441543564ff1634b6068e0f94a` |
+| `verification/pansphaira-kaleidosphere-analytics-slice-v2.json` | v2 analytics slice (supersedes the v1 slice by reference; v1 preserved) | `b4abf58cdb1d1e7ac9dc25ceceef41226d79c84c2ca461253ac29dbae9e5aeaf` |
+
+All five are registered in `release/public-files.manifest`, `SHA256SUMS`, the release DAG
+(graphVersion 49), and the governance closure roles. The frozen v1 receipt
+(`xra-ps-02-native-paired-receipt-v1.json`, `d4508587…`) and the two real-HTTP capture
+fixtures (`xra-ps-02-native-service-capture-v1.json`,
+`xra-ps-02-native-service-substitution-capture-v1.json`) are preserved byte-for-byte.
+
+### The v2 successor receipt (two-group binding)
+
+- `schemaVersion` `pansphaira.xra-ps-02/native-paired-receipt/v2`; `receiptId`
+  `pansphaira:xra-ps-02-native-paired-receipt-002`; `receiptDigest`
+  `162f479a391a819f8395303a6cae07e0891ecc799b70bacdeded95858e4207f9`.
+- Preserves the v1 base by reference (additive, never rewritten): `baseReceiptId`
+  `pansphaira:xra-ps-02-native-paired-receipt-001`, `baseReceiptDigest`
+  `d45085872866815e82f013c164b436d4169acbafee6d117c358adbc17bf33c6f`,
+  `baseAdjudicationDigest` `12f10e019a0214e8e4bb453a85290538b9d86bc1eae17a239239573fef727b92`.
+- **Group 1 — released input heads** (`inputHeads`, `inputHeadsDigest`
+  `59b6aa5f1b97e1f73cad555f2a5764a0534750f188ee3564bc30681f12089fb8`) bind the immutable
+  released pair and the canonical transport:
+  - `pansphairaHeadCommit` `988395110a9189d1b8cd4ee98184ed5c1d77a15d`
+  - `pansphairaReleaseCommit` `7f662672bfc45087342f23e5c589d43598f5c20d`
+  - `pansphairaReleaseTag` `2026_09_05_v1`
+  - `pansphairaReleaseReceiptSha256` `bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6`
+  - `kaleidoSphereHeadCommit` `545a3b44ea88c96eded060c11c7c3a2afe0edff6`
+  - `kaleidoSphereHeadTree` `c0699e1b4cfdfaf3076928e644ba5da3e9b7798c`
+  - `canonicalTransportSha256` `91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c`
+  - `projectionDigest` `cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b`
+  - `rawArtifactSha256` `22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8`
+  - `sourceContractSha256` `d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44`
+- **Group 2 — tested PAN adjudicator source** (`testedSource`, `testedSourceDigest`
+  `50abb6d8f8e582a2f231931d7c163399535959dbd7edfcc72873ebec2ed0e708`) binds the exact source
+  and focused test that were executed, plus the exact pinned KS service identity:
+  - `adjudicatorSha256` `3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b`
+    = on-disk `src/cks-12/kaleidosphere-candidate-quarantine.ts` (re-derived and matched)
+  - `focusedNativeTestSha256` `f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0`
+    = on-disk `tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts`
+  - `kaleidoSphereServerSha256` `1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5`
+  - `kaleidoSphereHeadCommit` / `kaleidoSphereHeadTree` (same released head as group 1)
+
+  The two groups are separate objects with distinct digests (`inputHeadsDigest ≠
+  testedSourceDigest`), so the immutable released input heads and the tested source are bound
+  **independently**. The tested source is the additive v2 adjudicator source, deliberately
+  distinct from the pre-v2 released implementation the v1 slice bound.
+
+### Seven-stage chain + real Root-QS execution (raw Root-QS evidence)
+
+`tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json`
+(`pansphaira.xra-ps-02/native-root-qs-raw/v1`, issue #344):
+- **command** `node scripts/run-xra-ps-02-root-qs-replay.mjs (PAN_ROOT=/tmp/pan KS_ROOT=/tmp/ks PORT=18877)`;
+  **scope** `LOCAL_VM_REAL_HTTP`; **transport** `loopback HTTP (127.0.0.1)`; **runtime** node
+  `v24.21.0` (dedicated root test VM).
+- **real pinned KS service**: `healthz` `UP`, `serverSha256` `1ff0e747…` at the exact released
+  head (`545a3b44…` / `c0699e1b…`), `headsEndpoint.nativeReleaseRegistry.status` `RELEASED`.
+- **full runtime compatibility of the reconciled released pair**: the live service reproduces
+  the historical capture byte-for-byte (`liveCandidate.matchesHistoricalCapture` `true`,
+  `resultSha256` `b3027cef96da4262ec7a2a43bbdcea275a23e988aff0aab92f29745e4df81099`), and its
+  real response is fed to the existing independent PAN verifier, which re-derives the
+  deterministic analysis from the canonical transport bytes + PAN-owned projection and never
+  trusts the KS service envelope/verdict.
+- **chain** (bound at every stage with command/runtime/source identities, inputs and raw
+  outputs): GENERATION → PROJECTION → INGESTION → SEMANTICS → ANALYSIS → CANDIDATE →
+  ADJUDICATION.
+
+### Five paired outcomes + three real falsifiers (through the real paired chain)
+
+- **outcomes** (native v1 `unknown=false` / empty counterevidence; restriction/conflict derived
+  from explicit independently sourced PAN adjudication context):
+  - `ACCEPTED_BOUNDED` / `NATIVE_EVIDENCE_ACCEPTED` (positive)
+  - `RESTRICTED` / `NATIVE_EVIDENCE_RESTRICTED_UNKNOWN` (restricted-unknown)
+  - `DENIED` / `NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED` (conflicting-counterevidence)
+  - `DENIED` / `NATIVE_FORGED_CANDIDATE_DENIED` (forged-candidate)
+  - `DENIED` / `NATIVE_STALE_HEAD_DENIED` (stale-head)
+- **falsifiers** (real, in-VM): `service-down` / `XRA_PS_02_NATIVE_SERVICE_UNAVAILABLE`,
+  `substitution` / `NATIVE_STALE_HEAD_DENIED`, `malformed` / `XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED`.
+- **before/after (invariant)**: canonical Knowledge digest
+  `d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a` before === after;
+  authority `NONE`/`NONE`, capability delta `NONE`/`NONE`, effect `NONE`/`NONE`.
+
+### RED → GREEN → NEGATIVE (focused test, 7 tests)
+
+`tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts`:
+- **RED**: the v1 source-local base receipt binds no tested source and no live execution
+  (no `testedSource`/`testedSourceDigest`, no `rootQsExecution`/`inputHeads`/
+  `inputHeadsDigest`), is a different schema/identity from v2, and is fail-closed `DENIED`
+  (`["NATIVE_V2_RECEIPT_DENIED"]`) when checked as a v2 successor receipt.
+- **GREEN (×5)**: (1) the committed v2 receipt from actual execution verifies `VERIFIED` with
+  exact material (7-stage chain, authority/effect `NONE`); (2) the v2 receipt independently
+  binds the tested PAN adjudicator source, separately from the released input heads (on-disk
+  shas re-derived and matched; distinct group digests); (3) the five paired outcomes and three
+  real falsifiers are bound exactly (`scope` `LOCAL_VM_REAL_HTTP`); (4) canonical Knowledge,
+  authority, capability and effect are unchanged (before === after); (5) the real pinned KS
+  service reproduces the historical capture (full runtime compatibility).
+- **NEGATIVE**: tampering a released input head, the raw Root-QS results (flipped outcome),
+  a mismatched tested source, missing raw-results material, or a forged tested source (even
+  when internally self-consistent) all fail closed (`DENIED`) against the committed proof.
+
+### Census re-baseline (FND-PS-04) — additive V14 migration, no weakening
+
+The new artifacts and the generator change re-baselined the FND-PS-04 canonical-JSON census.
+Because the generator `scripts/refresh-integrity-data.mjs` is code-owned and pinned through a
+one-way immutable profile-version-migration chain, this is an **additive** migration, not an
+edit to any frozen digest:
+- generator digest moved `c45eef7d08a6…` →
+  `886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d` (V13 `toSha256` frozen at
+  `c45eef7d…`; V14 `toSha256` = current on-disk digest).
+- V14 migration appended to both the test's `PROFILE_VERSION_MIGRATIONS`
+  (`…/INTEGRITY-GENERATOR/V14`) and the artifact's `profileVersionMigrations` (the validator
+  compares every key+value of each migration to its code-owned entry; chain now `[2..14]`).
+- `filesScanned` 641 → **643**; ledger 1831 → **1836** (entries = unique = 1836, duplicate 0).
+- The two `c45eef7d…` byteObligation/profile `sha256` values for the generator entry →
+  `886b6e4c…`; census artifact digest now
+  `77c20fd8b10eb238358f4a4c444de2e178d59231dcf919d1cd1a841de8214766` (matches `SHA256SUMS`).
+
+### Count-binding fix (FND-XR-01)
+
+`tests/verification-fabric-v2.test.ts:299` still bound the pre-change public-file count `1518`
+while `release/public-files.manifest` is exactly **1523** data lines (2 `#` header lines +
+1523 source/destination/mode rows; the 5 new public files). Updated `1518` → `1523` — the same
+legitimate count-binding update the prior correction made (1514 → 1518). No test logic or
+governance assertion weakened.
+
+### Governance registration (additive; public count 1518 → 1523)
+
+- `release/public-files.manifest` +5 (now 1523 data lines).
+- `scripts/build-public-release.sh` public count → 1523 (the `count != 1523` guard).
+- `tests/release-governance.test.mjs` closure roles +5 (9 closure roles).
+- `tests/verification-fabric-v2.test.ts:299` → 1523.
+- `tests/public-product-spelling.test.mjs` +3 `stable-xra-ps02-technical-identifier` paths
+  (runner, v2 slice, v2 raw).
+- `verification/verification-dag-v2.json` `graphVersion` 49, +9 closure paths.
+- `SHA256SUMS` 1836 entries (was 1831); all 5 new artifacts + the census artifact re-verified
+  against on-disk sha256.
+
+### Test results (actual commands, this candidate, 2026-09-13)
+
+```
+npm run build                                                          -> exit 0 (tsc -p tsconfig.json)
+node --test dist/tests/cks-12/kaleidosphere-candidate-quarantine-native.test.js   -> tests 6  pass 6  fail 0
+node --test dist/tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.js   -> tests 7  pass 7  fail 0
+node --test dist/tests/canonical-json-profile-inventory.test.js                   -> tests 35 pass 35 fail 0
+node --test dist/tests/verification-fabric-v2.test.js                             -> tests 32 pass 32 fail 0
+node --test tests/release-governance.test.mjs                                       -> tests 88 pass 88 fail 0
+node --test tests/public-product-spelling.test.mjs                                  -> tests 5  pass 5  fail 0
+npm test   (full suite)                                                              -> tests 729 pass 722 fail 7
+```
+
+The 7 full-suite failures are exactly the pre-existing `spawnSync docker ENOENT` environmental
+failures (BLD-001-G6 ×2, AAS-037 ×2, AAS-036-6/8, AAS-035 ×2) — `docker` is absent on this host
+and none of those test files is touched by this change. The 8th failure from the earlier full
+run (FND-XR-01, `verification-fabric-v2` `1523 !== 1518`) is now **passing** after the
+count-binding fix, leaving exactly the 7 docker-ENOENT cases.
+
+### Nonclaims and fences (unchanged, all retained)
+
+- **Scope is `LOCAL_VM_REAL_HTTP`** over loopback HTTP (127.0.0.1) inside the dedicated root
+  test VM; the raw Root-QS evidence is **not public evidence, not public-closure evidence, and
+  not a working public evidence URL** (public transport absent; HTTP 404 remains missing).
+- **Frozen v1 constants untouched**; the v1 receipt bytes and the two real-HTTP capture fixtures
+  are preserved byte-for-byte (v2 supersedes by reference, never rewrites history).
+- **No no-op KS release**: the real pinned KS native-projection service was launched and its
+  real response drove the independent PAN verifier.
+- No push, no public mutation, no credentials, no external systems, no issue closure. The
+  delivery job controller owns the fresh repository-routed independent review, exact PR/Main
+  CI, serialized release, and anonymous public readback; this work never authors or approves
+  those receipts.
+
+### Unresolved gates (controller-owned; RELEASE_BLOCKERS, not FOLLOW_UPs)
+
+1. Fresh independent Qwen review of this exact candidate.
+2. Exact PR/Main CI on the delivered head.
+3. Serial release of the public artifact for this head.
+4. Anonymous public readback (release + readback receipts).
+5. AC03 public chain proof (**NOT_PROVEN**; public evidence URL HTTP 404 / missing).
+6. (Environmental, not a correctness gate on this candidate) 7 `spawnSync docker ENOENT`
+   full-suite failures — `docker` absent on this host; none of those test files is touched by
+   this change.
+
+All remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.

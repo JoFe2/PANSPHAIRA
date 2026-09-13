@@ -2588,6 +2588,11 @@
           "sha256": "2773dec237b08ee3bd092227c7bdabdb374f40a5389fd9e210cf8c0169495060"
         },
         {
+          "path": "scripts/run-xra-ps-02-root-qs-replay.mjs",
+          "role": "VALIDATOR",
+          "sha256": "49a006d88f8cc31729fba92f9213675da80b0eee5131f56ba47080255a75aef1"
+        },
+        {
           "path": "scripts/validate-cks-12-delivery-readback.mjs",
           "role": "VALIDATOR",
           "sha256": "bbbc46d983f94c3b97f0486063003388bb483e923a5f6b234cd0ae736ded62dc"
@@ -2625,7 +2630,7 @@
         {
           "path": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
           "role": "VALIDATOR",
-          "sha256": "d39fbfc9f982c9bbe33567134f3b5a9d0eecaa1935f49e66815c8b5a1ef815a9"
+          "sha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b"
         },
         {
           "path": "src/cks-12/pattern-shadow-workflow.ts",
@@ -2691,6 +2696,11 @@
           "path": "tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts",
           "role": "VALIDATOR",
           "sha256": "f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0"
+        },
+        {
+          "path": "tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "689c8dda3b3d54b24b7ec2446cadccf3474c5552c2ff48982e853be04bf79b80"
         },
         {
           "path": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
@@ -2793,6 +2803,16 @@
           "sha256": "9821418a25afadeb8afa990426b628a5d01fd248e38f1024dfc7a23c9bf46860"
         },
         {
+          "path": "tests/fixtures/cks-analytics/xra-ps-02-native-paired-receipt-v2.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "fddfc2011d604f1e95e039830b14d687180c428399b32e7f4c7ae13754f07b39"
+        },
+        {
+          "path": "tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f0dc3d040e8648336d4f1e2bf4fdefcc49444d9a9306e839ca2e021570f33cfe"
+        },
+        {
           "path": "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "949632ef2b517b36ec8969700c9b54fd2a94d3b47751bdd070b319a76864ee4a"
@@ -2876,6 +2896,11 @@
           "path": "verification/pansphaira-kaleidosphere-analytics-slice-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "f72c163b560f8a270c5aa720d794a90b2c533e4033d9e5a6201bc94db1da6b2d"
+        },
+        {
+          "path": "verification/pansphaira-kaleidosphere-analytics-slice-v2.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2d692d7f3540538c3498216c6d3e675ad18e46dbb894e7783a4b722a11be03d4"
         }
       ],
       "ownedTests": [
@@ -4751,7 +4776,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "b7d92a64da16a20320915ac91bba95d6b337f876c7abb632c405be079770451b"
+          "sha256": "2d3e82af271267c3e8eac8f71b63ae1dba2a4e0d4510b8984336af78c8666ab3"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4761,7 +4786,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "b7e042e3c1cea838fc991cf10bca6d1082c309351cff68f27539ad053c7dda2e"
+          "sha256": "8fc105312fc32a7616ad822bb529d638f28c2a191149abf888b25744f2ac6efe"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4781,7 +4806,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "83dbed4d3bb3a34294ff2636a4ed4dcfe2e6b6cfde166b261886bc9ce4051b0a"
+          "sha256": "d3a6ce46e990908eefe6906a422d2f8265a95b39d8ccec20567aeb118a706272"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4801,12 +4826,12 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e3051aef473bda7daf619a5d88b027815468f9c723bc1256dff64c1da7d6befa"
+          "sha256": "ff9431322060c1eb0afcb164762d6b20f550a89fa4a6efe048fc6d1b201892ad"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8835d8b392607a11e28209596143c3111c60f37cef5e848f34e45b048bcd64fd"
+          "sha256": "d3ca142f1f9d39867328a9141680542f7e816397a1dfe9249ea36faffd1e836e"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4816,7 +4841,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "e9614ff422f0abb83293d696f914720f4b9bcd90d440ab2012f8a42e1a55e436"
+          "sha256": "8b13a7fed995be0721ed804ca3dc5e8ce33f5ce49275b076448f59453b8ea82f"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5387,7 +5412,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "15f7c316bc635510e3dbea25e7b079bc134b52896849f04eeb1b6d2bfa5a221d"
+          "sha256": "acf013909928776e402228d80f9c2caa9429d2e564f8ce1d6d9209ba65264ccc"
         },
         {
           "path": "package-lock.json",
@@ -5747,7 +5772,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f34dc4fabff8b9d89cfef5ad951c7cdaf2be1ca776fbdffe992bddab0a0dcc31"
+          "sha256": "bcdc4057bb07beb2002bb9323030b07d141c703c1f3752e9457f59bb08a39a85"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6012,7 +6037,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "b7d92a64da16a20320915ac91bba95d6b337f876c7abb632c405be079770451b"
+          "sha256": "2d3e82af271267c3e8eac8f71b63ae1dba2a4e0d4510b8984336af78c8666ab3"
         }
       ],
       "ownedTests": [
