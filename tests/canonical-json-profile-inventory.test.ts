@@ -210,17 +210,17 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  filesScanned: 643,
+  filesScanned: 646,
   declarationSites: 36,
   declarationFiles: 36,
-  importSites: 214,
-  importFiles: 213,
+  importSites: 215,
+  importFiles: 214,
   reexportSites: 4,
   similarShapeSites: 30,
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1836, uniquePaths: 1836, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1840, uniquePaths: 1840, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 

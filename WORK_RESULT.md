@@ -596,6 +596,254 @@ serial release of the public artifact, anonymous public readback, and the AC03
 public chain proof (NOT_PROVEN; the public evidence URL remains missing). All
 remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.
 
+---
+
+# WORK_RESULT — PAR-PS-01 Producer Analytics Manifest (campaign node)
+
+**Status: ADMISSION GATE UNMET — dependency wait (WAIT_DEPENDENCY). No product
+work performed; NOT DELIVERED / NOT CLOSED.**
+
+## Task
+
+Execute issue #345 (campaign node PAR-PS-01, campaign
+PS-KS-AUTONOMOUS-CAMPAIGN-V1; parent #342) on exact Main head
+`45c2c77143a6e123e3d6dd43370dfd310dd50554` (clean; branch `main`; fresh source,
+no legacy candidate or state). The product scope is additive over this head:
+add `contracts/analytics/producer-manifest-v1.json` produced by a deterministic
+`scripts/build-producer-analytics-manifest.mjs` and covered by
+`tests/producer-analytics-manifest.test.ts`, describing only the concepts,
+fields, evidence, coverage, and semantics actually emitted by the delivered
+XRA-PS-02 paired slice (issue #344). The admission gate is "XRA-PS-02
+paired slice delivered."
+
+## Admission gate revalidation on the current head (actual commands, actual
+observations)
+
+- `git rev-parse HEAD` → `45c2c77143a6e123e3d6dd43370dfd310dd50554`;
+  `git status --short` → clean; branch `main`; head subject `Register
+  XRA-PS-02 PAN adjudicator and proof closure in the public release`.
+- `verification/pansphaira-kaleidosphere-analytics-slice-v1.json` (the in-tree
+  hash-bound slice receipt at this head):
+  - `acceptance.XRA-PS-02-AC03.status` = **`NOT_PROVEN`** — local chainStages
+    complete, public chain unproven; its `nonclaim`: "XRA-KS-01/#151 admission,
+    both exact released-head readbacks, Root-QS, repository CI, and parent
+    closure are absent."
+  - `requiredNonclaims` include
+    `NO_EXTERNAL_RELEASE_OR_CROSS_REPOSITORY_CHAIN_PROOF` and
+    `NO_XRA_KS_01_ADMISSION_OR_EXACT_HEAD_CLOSURE`.
+  - `nativeScope.nonclaim`: "Local VM loopback success does not establish a
+    working public evidence URL (HTTP 404 remains missing); this receipt
+    asserts no public transport, admission, or closure."
+  - `scope` = `LOCAL_SYNTHETIC_AND_LOCAL_VM_REAL_HTTP` with
+    `reconciledReleasedHeads` pansphaira
+    `7f662672bfc45087342f23e5c589d43598f5c20d` / kaleidoSphere
+    `545a3b44ea88c96eded060c11c7c3a2afe0edff6` — the prior stale
+    `LOCAL_SYNTHETIC_ONLY` concern is resolved; this is a **delivery-completion
+    wait, not a stale-synthetic wait**.
+- `WORK_RESULT.md` (`66d42f8` and `45c2c77` sections): all controller-owned
+  gates — fresh independent review, exact PR/Main CI, serial release of the
+  public artifact, anonymous public readback, and the AC03 public chain proof —
+  remain **WAIT**; "`publicly_delivered` remains false".
+- No XRA-PS-02 Root-QS replay artifact exists in-tree (the `root-qs` artifacts
+  under `closure-audits/` and `docs/evidence/conveyor/` belong to other nodes);
+  no in-tree reference to parent #341 closure.
+- The slice CONTENT is in-tree and publicly registered at this head:
+  `release/public-files.manifest` line 673 (adjudicator
+  `src/cks-12/kaleidosphere-candidate-quarantine.ts`), lines 819–820 (both
+  focused tests), lines 1092–1093 (the two `LOCAL_VM_REAL_HTTP` capture
+  fixtures), line 1514 (the slice receipt itself); 1518 data lines; the
+  `scripts/build-public-release.sh` count binding is `1518`. The pending item
+  is the slice's **delivery**, not its content.
+- #344 is publicly closed as completed, but per the binding rules "never infer
+  proof completeness merely from DONE/closed" and "closed is not proof of
+  external artifacts", the closure label does not establish the AC03 public
+  chain or the public release/readback.
+
+**Verdict: the admission gate "XRA-PS-02 paired slice delivered" is unmet.**
+The controller-owned gates (fresh independent review, exact PR/Main CI, serial
+release, anonymous readback) are all WAIT and the XRA-PS-02-AC03 public chain
+(Root-QS replay over the seven-stage chain, both repositories' exact CI and
+anonymous readback, parent #341 closure) is absent from the tree and not
+supplied.
+
+## Why no product work was performed
+
+Deriving the manifest now would describe a slice whose public delivery is
+pending and would risk violating PAR-PS-01-AC01/AC02 if the slice changes
+during #344's delivery correction. All three target artifacts are ABSENT at
+this head (`contracts/analytics/` does not exist;
+`scripts/build-producer-analytics-manifest.mjs` absent;
+`tests/producer-analytics-manifest.test.ts` absent; zero `producer-manifest`
+references anywhere in-tree), so this is **not** `SOURCE_ALREADY_PRESENT` —
+the work is unstarted and correctly held.
+
+## Acceptance criteria mapping (node not admitted; nothing executed)
+
+- `PAR-PS-01-AC01` (generated-vs-runtime projection comparison): **NOT
+  EXECUTED** — admission gate unmet. Missing-input owner: the #344 (XRA-PS-02)
+  delivery owner — the Qwen two-repository lane owns implementation/evidence;
+  the controller owns serialized GitHub publication and readback.
+- `PAR-PS-01-AC02` (schema/diff tests): **NOT EXECUTED** — same missing input.
+- `PAR-PS-01-AC03` (two clean generation runs, byte-identical): **NOT
+  EXECUTED** — same missing input.
+
+The missing input is reported with its owner and a verifiable resume trigger,
+not as a product defect.
+
+## Verifiable resume trigger
+
+A current-head `verification/pansphaira-kaleidosphere-analytics-slice-v1.json`
+with `XRA-PS-02-AC03 != NOT_PROVEN` and a WORK_RESULT showing the
+controller-owned gates cleared (public release + readback receipts present,
+public evidence URL resolvable and not HTTP 404), with the in-tree slice
+receipt re-bound at the current head so that `publicly_delivered` is no longer
+false. Until then #345 remains dependency-held; revalidate immediately before
+launch.
+
+## Commands and results (this node; all local; no push, no public mutation)
+
+- `git rev-parse HEAD` → `45c2c77143a6e123e3d6dd43370dfd310dd50554`;
+  `git status --short` → (empty, clean)
+- `cat verification/pansphaira-kaleidosphere-analytics-slice-v1.json` → AC03
+  `NOT_PROVEN` (quoted above)
+- `ls contracts/analytics/` / `ls scripts/build-producer-analytics-manifest.mjs`
+  / `ls tests/producer-analytics-manifest.test.ts` → all ABSENT
+- `grep -rn "producer-manifest" . --exclude-dir=.git` → zero references
+- XRA-PS-02 Root-QS replay and #341 closure searches → absent
+- `npm ci --cache /tmp/npm-cache --no-audit --no-fund` → exit 0. Environment
+  note: `/home` is read-only for this user, so npm could not create its default
+  cache `/home/node/.npm`; the cache was redirected to `/tmp/npm-cache`.
+  Environment workaround only; no repository bytes affected.
+- `sha256sum --check SHA256SUMS` → exit 0 (all entries OK)
+- `npm run release-governance:verify` → `RELEASE_GOVERNANCE_PASS`, exit 0
+- `npm run release-governance:test` → 93/93 pass, exit 0
+- `npm run lint` (tsc --noEmit) → exit 0
+- `npm run supply-chain:verify` → `PASS`, exit 0
+- `npm test` (authoritative lifecycle: pretest + test + posttest):
+  - pretest: every batch green, 0 fail.
+  - test: 729 tests — **722 pass, 7 fail**. All seven failures are
+    `spawnSync docker ENOENT` in compose-config render tests: AAS-035 ×2,
+    AAS-036 ×1, AAS-037 ×2 in `tests/openclaw-agent-runtime.test.mjs` and
+    BLD-001-G6 ×2 in `tests/builder-agent-runtime.test.mjs`. Cause: the
+    `docker` CLI is not installed in this workspace container — an environment
+    gap, not a product defect. The in-tree `45c2c77` guest evidence (dedicated
+    VM, Docker 29.1.3) records the full suite 2257/2257 pass on this exact
+    tree.
+  - posttest: cscl11/09/10/08/07/02/03/04/05/06/01, rks02, rks01, cksm1,
+    **cks12:test:compiled (91 tests — the XRA-PS-02 focused suite), cks11,
+    cks10, cks09, cks08, cks07, cks05, cks04, cks03, cks02** all pass (0 fail);
+    `wiki:test:compiled` ran 68 tests — 67 pass, 1 fail (the same
+    `spawnSync docker ENOENT`, `tests/local-knowledge-wiki-container.test.mjs`),
+    which aborted the `&&` chain before the tail steps.
+  - The aborted tail steps, run individually (all exit 0): azpp 91/91, asf
+    66/66, ccp 108/108, cks-contracts 69/69,
+    update-controller-synthetic-evidence 42/42, **xra-ps-01 8/8, xra-ps-02
+    11/11**, evid-prov-01 26/26, status-truth-01 34/34,
+    external-video-service 6/6.
+- `git diff --exit-code` (CI step "Confirm tests did not modify tracked
+  files") → exit 0; working tree clean.
+
+The only unrun-locally items are the eight docker-dependent tests above
+(7 in the main batch + 1 in `wiki:test:compiled`); every other canonical
+check passed locally on this head.
+
+## Unresolved gates (controller-owned; all WAIT; carried from #344)
+
+Fresh independent review of the exact candidate, exact PR/Main CI, serial
+release of the public artifact, anonymous public readback, and the AC03 public
+chain proof (public PR/Main CI + release + readback; Root-QS replay over the
+seven-stage chain; both repositories' exact CI and anonymous readback; parent
+#341 closure). `publicly_delivered` remains false. Nothing here claims
+delivery.
+
+## Nonclaims
+
+No manifest, generator, or test was created or modified; no product bytes,
+release bytes, or governance artifact changed. No push, no public mutation, no
+credentials, no external systems, no issue closure. No future-roadmap
+capability, no consumer-support claim, and no historical-retention semantics
+are asserted anywhere by this record.
+
+## Local commit
+
+This record only. `WORK_RESULT.md` is a `repository_only_files` exclusion in
+`scripts/build-public-release.sh` (tracked; excluded from the public release;
+pinned by no manifest), so this commit affects no release content.
+
+---
+
+# WORK_RESULT — PAR-PS-01 receipt correction (spelling-classification
+boundary; record bytes only)
+
+**Status: candidate record repair. Admission-gate verdict unchanged —
+ADMISSION GATE UNMET (WAIT_DEPENDENCY). NOT DELIVERED / NOT CLOSED.**
+
+## Defect found in the committed receipt (provenance boundary)
+
+The section above, committed at `707d269607931d5b1a2916bdae6e4d43d6bffec9`,
+records `npm run release-governance:test` as "93/93 pass, exit 0" and
+asserts "every other canonical check passed locally on this head". At that
+exact committed head the deterministic in-tree run yields **92/93, exit 1**:
+the record byte that commit introduced — the bare legacy all-caps product
+display token in the parenthetical issue reference at line 616 of this file
+— has no KEEP classification in the tracked gate
+`tests/public-product-spelling.test.mjs` ("every retained all-caps token
+has an explicit KEEP classification", assertion at line 142). Base
+`45c2c77143a6e123e3d6dd43370dfd310dd50554` has zero occurrences of that
+token in this file, so the commit's own diff introduced the failure and the
+committed receipt did not match the tested head.
+
+## Reproduction (exact head 707d269, before correction; actual output)
+
+- `git rev-parse HEAD` → `707d269607931d5b1a2916bdae6e4d43d6bffec9`
+- `npm run release-governance:test` → `# pass 92 / # fail 1`, exit 1.
+  Failing test: `every retained all-caps token has an explicit KEEP
+  classification`; unclassified entry
+  `WORK_RESULT.md:616:XRA-PS-02 paired slice (…) The admission gate is
+  "XRA-PS-02` (the bare legacy all-caps display token elided here so this
+  record itself stays inside the gate).
+
+## Correction (minimal; record bytes only)
+
+- Line 616 reworded: the parenthetical issue reference no longer carries
+  the bare legacy all-caps display token; it now reads `(issue #344)`,
+  matching the reference convention used by every other section of this
+  file (issue number + campaign node name).
+- No test bytes, contract bytes, manifest bytes, release bytes, or product
+  bytes changed: the diff shows `WORK_RESULT.md` only (the reworded line,
+  plus this appended correction record). The tracked gate
+  `tests/public-product-spelling.test.mjs` is preserved unchanged; no test,
+  public entry, or evidence was removed or reclassified.
+- `WORK_RESULT.md` is a `repository_only_files` exclusion in
+  `scripts/build-public-release.sh` and is absent from `SHA256SUMS` and
+  `release/public-files.manifest`; neither `scripts/verify-release-governance.mjs`
+  nor any `.github/workflows/` step reads it, so this correction affects no
+  release content and no other registered gate.
+
+## Re-validation (corrected tree; actual commands, actual observations)
+
+- `npm run release-governance:test` → 93/93 pass, 0 fail, exit 0 (run on
+  the corrected tree after the line rewording, before this record was
+  appended).
+- `sha256sum --check SHA256SUMS` → exit 0 (all 1831 entries OK).
+- `npm run release-governance:verify` → `RELEASE_GOVERNANCE_PASS`, exit 0.
+- `npm run release-governance:test` with this record appended (final
+  tree) → 93/93 pass, 0 fail, exit 0.
+- `git status --short` after the final run → only `WORK_RESULT.md`
+  modified (the reworded line plus this record); no other tracked bytes
+  touched.
+
+## Unchanged
+
+The admission-gate verdict of the section above is unchanged and remains in
+force: the XRA-PS-02 paired slice is not delivered (the in-tree slice
+receipt holds AC03 `NOT_PROVEN`; `publicly_delivered` remains false;
+controller-owned gates WAIT). No product work is performed or claimed;
+nothing here claims delivery. No push, no public mutation, no credentials,
+no external systems, no issue closure. No future-roadmap capability, no
+consumer-support claim, and no historical-retention semantics are asserted
+anywhere by this record.
+
 ## Independent re-verification (fresh current main, 2026-09-13) — SOURCE_ALREADY_PRESENT
 
 A fresh independent pass on this exact working tree (HEAD `45c2c77143a6e123e3d6dd43370dfd310dd50554`,
@@ -946,3 +1194,159 @@ count-binding fix, leaving exactly the 7 docker-ENOENT cases.
    this change.
 
 All remain WAIT. Nothing here claims delivery; `publicly_delivered` remains false.
+
+---
+
+# WORK_RESULT — PAR-PS-01 current-Main integration merge + minimal
+# correction (merge `3af6571`, correction head follows)
+
+**Status: candidate corrected at the merged head. NOT DELIVERED / NOT
+CLOSED. No public effects; `publicly_delivered` remains false.**
+
+## Blocker disposition
+
+The #345 blocker named a current-Main integration conflict over
+`SHA256SUMS`, `WORK_RESULT.md`, `scripts/build-public-release.sh`,
+`tests/public-product-spelling.test.mjs`, `tests/release-governance.test.mjs`,
+`tests/verification-fabric-v2.test.ts` and
+`verification/verification-dag-v2.json`, with the exact fetched Main commit
+`5ac6652296206cc604365f144cc7eb3559e7701e` already in the local object store.
+`git rev-parse FETCH_HEAD` returned that exact SHA before the merge; its
+commit is "XRA-PS-02 AC03 real Root-QS execution, actual before/after state,
+v2 successor receipt" (parent `d4dc2fa`). The local `main` branch was never
+assumed to be public Main; the fetched object is the merge input.
+
+## Merge (normal merge commit, prior commits preserved)
+
+Fetched Main `5ac6652` was merged INTO candidate head
+`8a0228e57da0c6b6f0ecefb8032f89837a390fac` with a normal merge commit
+`3af6571` — no rebase, reset, amend, or cherry-pick away any prior commit.
+Merge-base `45c2c77`; both inputs verified ancestors of the merge commit via
+`git merge-base --is-ancestor`. The merge produced exactly the seven
+conflicted files named in the blocker; `package.json` and
+`release/public-files.manifest` auto-merged cleanly and their unions were
+verified (both branches' script registrations and public entries retained).
+
+Union resolution at the merge commit:
+
+- Public manifest: base 1518 + candidate 4 + Main 5 = **1527** disjoint
+  entries; the exact count is bound to 1527 in
+  `scripts/build-public-release.sh`, `tests/verification-fabric-v2.test.ts`
+  and both `tests/release-governance.test.mjs` assertions. Main's
+  closureRoles proof-closure test (adjudicator, focused/native/Root-QS
+  tests, replay runner, both slice receipts, v2 fixtures) supersedes the
+  candidate's count-only change and is retained in full.
+- `tests/public-product-spelling.test.mjs`: union of both classification
+  additions — the candidate's `stable-par-ps01-technical-identifier` block
+  and Main's extended `stable-xra-ps02-technical-identifier` block plus the
+  `WORK_RESULT.md` `quoted-stable-technical-identifier` rule.
+- `verification/verification-dag-v2.json`: Main's graph v49 structure with
+  the five cks-12-focused inputs; every node input re-digested from the
+  merged tree bytes by `scripts/refresh-integrity-data.mjs`.
+- `SHA256SUMS`: regenerated over the union tree by the repository tool —
+  1840 entries, `sha256sum -c` clean.
+- Canonical census union binding (`verification/canonical-json-profile-inventory-v1.json`
+  + `tests/canonical-json-profile-inventory.test.ts`): the fresh mechanical
+  scan of the union tree reads filesScanned 646, importSites 215,
+  importFiles 214, ledger 1840, with a new consumer family (owner
+  `analytics`, 1 import site / 1 import file) for the candidate's new
+  `canonicalJson` consumer. The scanner is the single source of truth; the
+  values match the independent decomposition (base + candidate + Main
+  contributions), and the candidate's consumer is registered, not dropped.
+- `WORK_RESULT.md`: union of both branches' appended attempt-history
+  sections; nothing removed.
+
+## Head-bound red at the merge commit (`3af6571`)
+
+Main's adjudicator upgrade is additive (every v1 frozen constant is
+untouched), but it changed the adjudicator source bytes. The PAR-PS-01
+generator still bound the superseded v1 slice receipt, whose
+`implementationSha256` (`d39fbfc9…`) no longer matches the current source
+(`3712c9fc…` = the v2 receipt's attested sha). Focused run on the exact
+merge tree (`npm run build` then `node --test
+dist/tests/producer-analytics-manifest.test.js`): **1 pass / 5 fail**, all
+five with `SOURCE_IDENTITY_MISMATCH: adjudicator source bytes do not match
+the receipt-attested sha256`; the fail-closed generator negative passed.
+Every other focused gate was green on that exact merge tree: XRA-PS-02
+focused 21/21 (incl. the new Root-QS test), release-governance +
+public-spelling 93/93, verification-fabric-v2 32/32,
+canonical-json-profile-inventory 35/35, `sha256sum -c` 1840/1840.
+
+## Correction (minimal; delivered-slice rebind)
+
+The in-tree delivered slice at the merged head is the v2 successor receipt
+`verification/pansphaira-kaleidosphere-analytics-slice-v2.json`
+(schema `pansphaira.xra-ps-02/candidate-adjudication-verification/v2`,
+baseHead `d4dc2fa…`, `implementationSha256` `3712c9fc…`,
+`acceptance.XRA-PS-02-AC03.status` = `PROVEN_VIA_ROOT_QS_LOCAL_EXECUTION`),
+which explicitly supersedes the v1 receipt (its `supersedes` block carries
+the v1 path and sha). The v1 receipt bytes remain in-tree, preserved and
+superseded — not deleted. The generator's fail-closed identity check passes
+against it because it attests the current source bytes and the unchanged
+capture fixture.
+
+Changed bytes (this correction only):
+
+- `scripts/build-producer-analytics-manifest.mjs`: `sliceReceipt` source
+  rebound from the v1 to the v2 receipt path.
+- `tests/producer-analytics-manifest.test.ts`: `RECEIPT` constant rebound to
+  the v2 path; AC02 expectation updated from 2 gaps to 1 —
+  `PUBLIC_CHAIN_NOT_PROVEN` no longer derives because AC03 is no longer
+  `NOT_PROVEN`; `RELEASE_REGISTRY_HELD` remains the single explicit typed
+  gap (never collapsed to absent/zero).
+- `contracts/analytics/producer-manifest-v1.json`: regenerated by
+  `scripts/build-producer-analytics-manifest.mjs` — digest
+  `e426d65953a76bc97cee33372cf552b626bc2909699d5465e5e61f4324c996c8`;
+  `derivedFrom.sliceReceipt` binds the v2 path/schema/baseHead/sha.
+- `SHA256SUMS` (+ `verification/verification-dag-v2.json` where re-digested):
+  regenerated with `scripts/refresh-integrity-data.mjs` (1840 entries; a
+  second immediate run produces no further diff — idempotent on this head).
+
+## Head-bound green (correction head; all local; no push, no public mutation)
+
+- `npm run build` (tsc) — exit 0.
+- `node scripts/build-producer-analytics-manifest.mjs` twice — both runs
+  emit digest `e426d659…`; byte-identical (AC03 regeneration proof);
+  `--check` mode exits 0 against the checked-in bytes.
+- `node --test dist/tests/producer-analytics-manifest.test.js` — **6/6 pass**
+  (AC01 generated-vs-runtime projection match, AC02 head/profile digest
+  binding with the single explicit gap, AC03 byte-identical regeneration,
+  fail-closed verifier/generator negatives, nonclaims + authority NONE).
+- `npm run xra-ps-02:test` — 21/21 pass (incl. Root-QS).
+- `node --test tests/release-governance.test.mjs
+  tests/public-product-spelling.test.mjs` — 93/93 pass.
+- `node --test dist/tests/verification-fabric-v2.test.js` — 32/32 pass.
+- `node --test dist/tests/canonical-json-profile-inventory.test.js` — 35/35
+  pass.
+- `sha256sum -c SHA256SUMS` — 1840/1840 OK.
+- Ancestry: `git merge-base --is-ancestor 8a0228e… HEAD` and
+  `git merge-base --is-ancestor 5ac6652… HEAD` both succeed on the final
+  head; `git merge-tree` re-run against `5ac6652` reports no remaining
+  conflicts (Main is an ancestor of the final head).
+
+## Unchanged / preserved
+
+- All prior commits and attempt history (candidate chain
+  `8a0228e → 6e2624f → 707d269 → 45c2c77 → …` and Main chain
+  `5ac6652 → d4dc2fa → 45c2c77 → …`) are intact as parents of the merge
+  commit.
+- All frozen contracts and tests preserved; no test, public entry, or
+  evidence removed or reclassified to avoid conflicts.
+- The v1 slice receipt and its registration remain in-tree (superseded).
+
+## Residual gates (controller-owned; all WAIT; carried from issue #344)
+
+The v2 receipt's own nonclaims govern this record: the Root-QS local
+execution does not establish a working public evidence URL (HTTP 404
+remains missing), and it asserts no public transport, admission, or
+closure. Fresh independent review, exact PR/Main CI, serial public release,
+anonymous public readback, the AC03 public chain proof and parent closure
+remain controller-owned WAIT items on `JoFe2/PANSPHAIRA`. Nothing here
+claims delivery.
+
+## Nonclaims
+
+No future-roadmap capability, no consumer-support claim, and no
+historical-retention semantics are asserted anywhere by this record. No
+push, no public mutation, no credentials, no external systems, no issue
+closure.
