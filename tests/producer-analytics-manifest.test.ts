@@ -12,7 +12,7 @@ import {
 
 const RAW = "tests/fixtures/cks-analytics/projection-v1.json";
 const CAPTURE = "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json";
-const RECEIPT = "verification/pansphaira-kaleidosphere-analytics-slice-v1.json";
+const RECEIPT = "verification/pansphaira-kaleidosphere-analytics-slice-v2.json";
 const ADJUDICATOR = "src/cks-12/kaleidosphere-candidate-quarantine.ts";
 const MANIFEST = "contracts/analytics/producer-manifest-v1.json";
 
@@ -105,23 +105,11 @@ test("PAR-PS-01 AC02 binds producer head/profile digests and carries explicit ty
   assert.equal(manifest.producer.profile.sourceContractSha256, "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44");
 
   const gaps = manifest.gaps;
-  assert.equal(gaps.length, 2);
+  assert.equal(gaps.length, 1);
   const byId = new Map<string, any>(gaps.map((gap: { id: string }) => [gap.id, gap]));
   const held = byId.get("RELEASE_REGISTRY_HELD");
-  const notProven = byId.get("PUBLIC_CHAIN_NOT_PROVEN");
   assert.equal(held.state, "HELD");
   assert.deepEqual(held.observed, { status: "HELD", entryCount: 1, releasedEntryCount: 0, nativeReleaseRegistryStatus: "RELEASED" });
-  assert.equal(notProven.state, "NOT_PROVEN");
-  assert.equal(notProven.field, "acceptance.XRA-PS-02-AC03");
-  assert.deepEqual(notProven.observed.chainStages, [
-    "GENERATION",
-    "PROJECTION",
-    "INGESTION",
-    "SEMANTICS",
-    "ANALYSIS",
-    "CANDIDATE",
-    "ADJUDICATION",
-  ]);
   for (const gap of gaps) {
     // Every gap is explicitly typed within the closed vocabulary; missing is never
     // collapsed to an absent or zero value.

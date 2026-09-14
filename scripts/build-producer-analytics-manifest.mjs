@@ -7,7 +7,7 @@ const manifestPath = resolve(root, "contracts/analytics/producer-manifest-v1.jso
 const sources = [
   ["rawArtifact", "tests/fixtures/cks-analytics/projection-v1.json"],
   ["nativeServiceCapture", "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json"],
-  ["sliceReceipt", "verification/pansphaira-kaleidosphere-analytics-slice-v1.json"],
+  ["sliceReceipt", "verification/pansphaira-kaleidosphere-analytics-slice-v2.json"],
   ["adjudicatorSource", "src/cks-12/kaleidosphere-candidate-quarantine.ts"],
 ];
 const input = Object.fromEntries(sources.map(([key, localPath]) => [key, { path: localPath, bytes: Uint8Array.from(readFileSync(resolve(root, localPath))) }]));

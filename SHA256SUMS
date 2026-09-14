@@ -85,7 +85,7 @@ f148cae0e6212af25f33e2254e4e2c3f3f745b5eb2f3b433b47ed7709fab8c79  ./assets/suppo
 44368eb60663844968d6bb9122840585b895c19767cb0e9d0a3e0d7cfbeed394  ./benchmarks/adaptability-m0/records/adb-001-m0-local-20260804.json
 08133a2d926a74c987adffc7fab0590f96eb567762731581645ec0ec7f26619c  ./benchmarks/adaptability-m0/run.mjs
 9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0  ./closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json
-c6fc2cf9b2f0d85493d5a7c992b8459fae3b070128c9cb1f0381a2507dcc55b3  ./contracts/analytics/producer-manifest-v1.json
+99adfbe7705c95e9789c6be7579f69fb77d31089319906365da52b4ec8cdfd4d  ./contracts/analytics/producer-manifest-v1.json
 20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8  ./contracts/azure-power-platform/authoritative-readback-receipt.schema.json
 1b16e39a1941368fa6b9ad8595c2c0b4b8684ab8f1f3fd3e9c6cc83a32d02809  ./contracts/azure-power-platform/compatibility-migration.schema.json
 879ccfd12b668274c1336129c5c3c21093b012cbb2e46ff3fb106236ca98c48c  ./contracts/azure-power-platform/proposal-approval-execution.schema.json
@@ -890,7 +890,7 @@ e83a8152e66ebc161b0175622b9ecfc96f49737a5e167a91f430d82dd13b92d8  ./schemas/secu
 4748bb33f1915872746d5c28195445591e7621f0ef64fe10e2acd09f131fc1bc  ./scripts/adaptive-controller.mjs
 73ac82f4adf709f712329c40580cc94a29213642f5b07877799837d202a01b51  ./scripts/adaptive-delivery-status.mjs
 8346027ba325c587f3853e946e96f8b2b6e21afc58b55a095eb89ba0db961ec7  ./scripts/adaptive-evidence-gates.mjs
-2314d890386c49a65542c09c34ba010a65b462de6d0fb3099f1d951c221a38cb  ./scripts/build-producer-analytics-manifest.mjs
+3116744aa291675fccbcd9b49862a01ec154bda64b490239ebd5ac314d0d7745  ./scripts/build-producer-analytics-manifest.mjs
 d353fd66670c4b5381bc7d6362786a3636d9425fee30d076ec2bfdc9bd621af6  ./scripts/build-public-release.sh
 292ca7497e40869234c196eec327317cad01104e9c246f72ea9389e62931a51a  ./scripts/build-rks-01-pilot-corpora.mjs
 b7cb4e1f43374e0b586d56825460f03d18e93498d072a3eeb719fa0cadc0eb36  ./scripts/capture-cscl-11-source-locators.mjs
@@ -1631,7 +1631,7 @@ e9c6a95d47fbc5d3b061b17e1bc1fbd76d4a99e6f0cb908d156b7ae5c4ae750a  ./tests/poc-se
 045a4dc0ca671a8ddc4e7d4dbbb922ad3827d49123ebb58e665a82caca68f5f0  ./tests/poc-showcase-e2e.test.ts
 e1e4304dde40a18146d905885a7d7dc9646a8d22a7702a758ad0da50d1ee00e0  ./tests/poc-showcase.test.ts
 4bbdb6acb54291a49e12347f72a9b4b85241e28d639df56fc78c69f050103cc1  ./tests/power-platform-read-connector.test.ts
-3c6e998cf39b0c4fa53d7818ee7f66033f821b19202a50bd67489ffe6b5c663d  ./tests/producer-analytics-manifest.test.ts
+1f2739d725dedd9d816dfa5efd34860190b4a86c6260da593e7295e056e73085  ./tests/producer-analytics-manifest.test.ts
 dfe7338a6655c3a70f304f59c3a3e1e748ad62a8b78726eeb125db4e3f16332d  ./tests/protected-audit-timeline.test.ts
 e5b2cde18acec2a8ec57cb966657d7ec0a016143b69f950b8ab7f94bc416a2f7  ./tests/public-product-spelling.test.mjs
 6eaa7538ce3270ee87a1160c9f75b978c5794e62d9e56647c524521944bf2e31  ./tests/release-governance.test.mjs
