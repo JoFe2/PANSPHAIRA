@@ -37,9 +37,12 @@ function classify(path, line) {
   ) return "stable-xra-ps01-purpose-identifier";
   if (
     path === "src/cks-12/kaleidosphere-candidate-quarantine.ts"
+    || path === "scripts/run-xra-ps-02-root-qs-replay.mjs"
     || path === "verification/pansphaira-kaleidosphere-analytics-slice-v1.json"
+    || path === "verification/pansphaira-kaleidosphere-analytics-slice-v2.json"
     || path === "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json"
     || path === "tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json"
+    || path === "tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json"
   ) return "stable-xra-ps02-technical-identifier";
   if (
     path === "contracts/analytics/producer-manifest-v1.json"
@@ -47,6 +50,11 @@ function classify(path, line) {
     || path === "tests/producer-analytics-manifest.test.ts"
     || path === "scripts/build-producer-analytics-manifest.mjs"
   ) return "stable-par-ps01-technical-identifier";
+  if (
+    path === "WORK_RESULT.md"
+    && (line.includes(`${legacyDisplay}_RECONCILED_RELEASED_HEAD_V1`)
+      || line.includes(`${legacyDisplay}_INDEPENDENT_ADJUDICATION`))
+  ) return "quoted-stable-technical-identifier";
   if (path === "demo/manifests/network/local-egress-policy-v1.json") return "technical-fixture-identifier";
   if (path === "tests/fixtures/incoming-invoice/supplier-invoice-v1.txt") return "frozen-synthetic-fixture-display";
   if (path.startsWith("schemas/")) return "stable-schema";

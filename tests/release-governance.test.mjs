@@ -319,7 +319,7 @@ test("public release builder binds its exact file count to the manifest", () => 
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), count);
-  assert.equal(count, 1522);
+  assert.equal(count, 1527);
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
@@ -337,18 +337,25 @@ test("E-FND-1 exact-input closure bytes are explicitly repository-only", () => {
 });
 
 test("XRA-PS-02 independent adjudicator/proof closure is publicly registered and canonically bound", () => {
-  const closurePaths = [
-    "src/cks-12/kaleidosphere-candidate-quarantine.ts",
-    "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
-    "tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts",
-    "verification/pansphaira-kaleidosphere-analytics-slice-v1.json",
-  ];
+  const closureRoles = new Map([
+    ["src/cks-12/kaleidosphere-candidate-quarantine.ts", "VALIDATOR"],
+    ["tests/cks-12/kaleidosphere-candidate-quarantine.test.ts", "VALIDATOR"],
+    ["tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts", "VALIDATOR"],
+    ["verification/pansphaira-kaleidosphere-analytics-slice-v1.json", "DERIVED_EVIDENCE"],
+    ["scripts/run-xra-ps-02-root-qs-replay.mjs", "VALIDATOR"],
+    ["tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts", "VALIDATOR"],
+    ["tests/fixtures/cks-analytics/xra-ps-02-native-paired-receipt-v2.json", "DERIVED_EVIDENCE"],
+    ["tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json", "DERIVED_EVIDENCE"],
+    ["verification/pansphaira-kaleidosphere-analytics-slice-v2.json", "DERIVED_EVIDENCE"],
+  ]);
+  const closurePaths = [...closureRoles.keys()];
   const manifest = readFileSync(join(ROOT, "release", "public-files.manifest"), "utf8").split("\n");
   const builder = readFileSync(join(ROOT, "scripts", "build-public-release.sh"), "utf8");
-  // The complete proof closure (adjudicator implementation, both focused
-  // tests and the paired slice receipt) is registered in the public manifest
-  // with an identity mapping and mode 0644; the builder no longer carries
-  // any of the four paths as a repository-only exception.
+  // The complete proof closure (adjudicator implementation, the focused and
+  // Root-QS tests, the executable replay runner, the v2 successor receipt and
+  // raw execution evidence, and both slice receipts) is registered in the
+  // public manifest with an identity mapping and mode 0644; the builder
+  // carries none of these paths as a repository-only exception.
   for (const path of closurePaths) {
     assert.equal(manifest.filter((line) => line === `${path}\t${path}\t0644`).length, 1, `public manifest registration: ${path}`);
     assert.ok(!builder.includes(`    "${path}",`), `repository-only exception reconciled: ${path}`);
@@ -360,7 +367,7 @@ test("XRA-PS-02 independent adjudicator/proof closure is publicly registered and
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), publicCount, "builder count binding derives the actual manifest count");
-  assert.equal(publicCount, 1522, "reconciled public count is the actual final manifest count");
+  assert.equal(publicCount, 1527, "reconciled public count is the actual final manifest count");
   // Every closure byte is registered in the root SHA256SUMS with its exact
   // current digest, including the native adjudicator test.
   const sums = readFileSync(join(ROOT, "SHA256SUMS"), "utf8").split("\n");
@@ -368,13 +375,12 @@ test("XRA-PS-02 independent adjudicator/proof closure is publicly registered and
     const expected = `${digest(readFileSync(join(ROOT, path)))}  ./${path}`;
     assert.equal(sums.filter((line) => line === expected).length, 1, `root SHA256SUMS registration: ${path}`);
   }
-  // The complete closure (adjudicator implementation, both focused tests and
-  // the paired slice receipt) is registered as exactly one input with the
-  // correct role and digest on the CKS-12 closed-loop DAG owner.
+  // The complete closure is registered as exactly one input with the correct
+  // role and digest on the CKS-12 closed-loop DAG owner.
   const dag = JSON.parse(readFileSync(join(ROOT, "verification", "verification-dag-v2.json"), "utf8"));
   const node = dag.nodes.find(({ id }) => id === "cks-12-closed-learning-loop-v1");
   assert.ok(node, "CKS_12_DAG_NODE_MISSING");
-  const expectedRoles = new Map(closurePaths.map((path, index) => [path, index === 3 ? "DERIVED_EVIDENCE" : "VALIDATOR"]));
+  const expectedRoles = closureRoles;
   for (const [path, role] of expectedRoles) {
     const inputs = node.inputs.filter((input) => input.path === path);
     assert.equal(inputs.length, 1, `DAG path registration: ${path}`);

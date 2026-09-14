@@ -1,0 +1,319 @@
+{
+  "baseReceipt": {
+    "adjudicationDigest": "12f10e019a0214e8e4bb453a85290538b9d86bc1eae17a239239573fef727b92",
+    "receiptDigest": "d45085872866815e82f013c164b436d4169acbafee6d117c358adbc17bf33c6f",
+    "receiptId": "pansphaira:xra-ps-02-native-paired-receipt-001"
+  },
+  "beforeAfter": {
+    "authorityAfter": "NONE",
+    "authorityBefore": "NONE",
+    "capabilityDeltaAfter": "NONE",
+    "capabilityDeltaBefore": "NONE",
+    "canonicalKnowledgeAfterSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+    "canonicalKnowledgeBeforeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+    "effectAfter": "NONE",
+    "effectBefore": "NONE"
+  },
+  "beforeAfterObservations": {
+    "basis": "The canonical Knowledge pin bytes are re-read from the frozen CKS-12 edge-authority fixture and the KS flat release registry / native sidecar file bytes are re-read from the pinned KS root at BOTH sample points; authority is derived from the flat release registry (HELD / zero released entries = no PAN authority) and the live candidate authority block; effect is derived from the mutation-route refusal and the unchanged state bytes; the capability delta is derived from full-state equality across the two samples.",
+    "before": {
+      "sampledAt": "T0: before service start and before the five paired outcomes and all wire falsifiers",
+      "authority": "NONE",
+      "effect": "NONE",
+      "state": {
+        "canonicalKnowledge": {
+          "knowledgeId": "CKS-12-KNOWLEDGE-001",
+          "knowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+          "knowledgeVersion": "v1",
+          "pinBytesSha256": "5905ff39d475d31fa73fcdea3a854b494630e922539038ba61727fe236258d70",
+          "pinFixtureSha256": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f"
+        },
+        "flatReleaseRegistry": {
+          "fileSha256": "9e98350ff356aae4486ad210a7d2b486a0f4f61969adae23ac71d7a784d7942c",
+          "status": "HELD",
+          "releasedEntryCount": 0
+        },
+        "nativeReleaseSidecar": {
+          "fileSha256": "1b6f55dd5507ec6c8894d2b35377439ee206d832d4cf19d9e3dc687ab4a3bce4",
+          "status": "RELEASED",
+          "releasedEntryCount": 1
+        }
+      }
+    },
+    "after": {
+      "sampledAt": "T1: after the five paired outcomes, the three wire falsifiers, and the mutation probe (service still running)",
+      "authority": "NONE",
+      "capabilityDelta": "NONE",
+      "effect": "NONE",
+      "headsNativeReleaseRegistry": {
+        "status": "RELEASED",
+        "entryCount": 1,
+        "releasedEntryCount": 1
+      },
+      "headsReleaseRegistry": {
+        "status": "HELD",
+        "entryCount": 1,
+        "releasedEntryCount": 0
+      },
+      "liveCandidateAuthority": {
+        "promote": false,
+        "mutate": false,
+        "execute": false,
+        "publish": false,
+        "capabilities": [],
+        "effects": []
+      },
+      "mutationProbe": {
+        "label": "mutation",
+        "route": "/v1/pansphaira-analytics/promote",
+        "httpStatus": 400,
+        "code": "XRA_KS01_ROUTE_DENIED"
+      },
+      "state": {
+        "canonicalKnowledge": {
+          "knowledgeId": "CKS-12-KNOWLEDGE-001",
+          "knowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+          "knowledgeVersion": "v1",
+          "pinBytesSha256": "5905ff39d475d31fa73fcdea3a854b494630e922539038ba61727fe236258d70",
+          "pinFixtureSha256": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f"
+        },
+        "flatReleaseRegistry": {
+          "fileSha256": "9e98350ff356aae4486ad210a7d2b486a0f4f61969adae23ac71d7a784d7942c",
+          "status": "HELD",
+          "releasedEntryCount": 0
+        },
+        "nativeReleaseSidecar": {
+          "fileSha256": "1b6f55dd5507ec6c8894d2b35377439ee206d832d4cf19d9e3dc687ab4a3bce4",
+          "status": "RELEASED",
+          "releasedEntryCount": 1
+        }
+      }
+    }
+  },
+  "chain": [
+    {
+      "digest": "29357c2fdd3cb159a77ce4813e67d0ba9f7602a2a3b497c033822f8b9861b041",
+      "stage": "GENERATION"
+    },
+    {
+      "digest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+      "stage": "PROJECTION"
+    },
+    {
+      "digest": "9ddd8c6a9b51a9bf8d6142346348b2d547c27dbdb2a516c5f59c1402591c4c08",
+      "stage": "INGESTION"
+    },
+    {
+      "digest": "e99f22d352b354ca8dc4d407bd4dca74cbf5d6cac0dc310bc3982fee42bb702b",
+      "stage": "SEMANTICS"
+    },
+    {
+      "digest": "30b69b3a7f8981f875267d3c544a86f9e60b1fd39e02b30c918d21594c9ed4ff",
+      "stage": "ANALYSIS"
+    },
+    {
+      "digest": "01f11083bbb58d2dc2367c29a335a784c04f92a63628f8ab8273112c3606e6d5",
+      "stage": "CANDIDATE"
+    },
+    {
+      "digest": "12f10e019a0214e8e4bb453a85290538b9d86bc1eae17a239239573fef727b92",
+      "stage": "ADJUDICATION"
+    }
+  ],
+  "command": "node scripts/run-xra-ps-02-root-qs-replay.mjs (PAN_ROOT=/tmp/pan KS_ROOT=/tmp/ks PORT=18877)",
+  "executionEnvironment": {
+    "cwd": "/tmp/pan",
+    "nodeVersion": "v24.21.0",
+    "panSourceBinding": "testedSource binds the exact adjudicator and focused native test bytes that were executed; inputHeads binds the immutable released input heads separately"
+  },
+  "falsifiers": [
+    {
+      "label": "service-down",
+      "code": "XRA_PS_02_NATIVE_SERVICE_UNAVAILABLE"
+    },
+    {
+      "label": "substitution",
+      "code": "NATIVE_STALE_HEAD_DENIED"
+    },
+    {
+      "label": "malformed",
+      "code": "XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED"
+    }
+  ],
+  "inputHeads": {
+    "canonicalTransportSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+    "kaleidoSphereHeadCommit": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+    "kaleidoSphereHeadTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+    "pansphairaHeadCommit": "988395110a9189d1b8cd4ee98184ed5c1d77a15d",
+    "pansphairaReleaseCommit": "7f662672bfc45087342f23e5c589d43598f5c20d",
+    "pansphairaReleaseReceiptSha256": "bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6",
+    "pansphairaReleaseTag": "2026_09_05_v1",
+    "projectionDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+    "rawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+    "sourceContractSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44"
+  },
+  "issue": "PANSPHAIRA#344",
+  "liveCandidate": {
+    "environmentSha256": "19ecf10aaa0eb57cab941a45e9e90595f4a46454f86ab2bd4946768cee3d15d5",
+    "matchesHistoricalCapture": true,
+    "requestSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+    "resultSha256": "b3027cef96da4262ec7a2a43bbdcea275a23e988aff0aab92f29745e4df81099"
+  },
+  "nonclaim": "Captured live loopback HTTP outputs of the pinned KaleidoSphere native-projection service at the exact released head, replayed repository-rooted by the Root-QS runner inside the dedicated root test VM; not public evidence, not public-closure evidence, and not a working public evidence URL.",
+  "outcomes": [
+    {
+      "case": "positive",
+      "outcome": "ACCEPTED_BOUNDED",
+      "reasonCodes": [
+        "NATIVE_EVIDENCE_ACCEPTED"
+      ]
+    },
+    {
+      "case": "restricted-unknown",
+      "outcome": "RESTRICTED",
+      "reasonCodes": [
+        "NATIVE_EVIDENCE_RESTRICTED_UNKNOWN"
+      ]
+    },
+    {
+      "case": "conflicting-counterevidence",
+      "outcome": "DENIED",
+      "reasonCodes": [
+        "NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED"
+      ]
+    },
+    {
+      "case": "forged-candidate",
+      "outcome": "DENIED",
+      "reasonCodes": [
+        "NATIVE_FORGED_CANDIDATE_DENIED"
+      ]
+    },
+    {
+      "case": "stale-head",
+      "outcome": "DENIED",
+      "reasonCodes": [
+        "NATIVE_STALE_HEAD_DENIED"
+      ]
+    }
+  ],
+  "projectionGenerated": {
+    "generatedAtRunTime": true,
+    "producer": "buildKaleidosphereAnalyticsProjectionV1",
+    "producerFile": "packages/contracts/src/kaleidosphere-analytics-projection.ts",
+    "producerSha256": "2b99689c462c0b4165d967bd82d3d266f6de1c62000bb4f9f3320b257d6b69db",
+    "generatedRawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+    "equalsReleasedRawArtifact": true,
+    "generatedProjectionBodyDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+    "equalsRebuiltProjection": true,
+    "equalsCanonicalTransport": true
+  },
+  "rawResponseSha256": "5ac042b5ba94894adf9f87899509a505076239cd1892b960a0ecc8929f084c5b",
+  "runtime": {
+    "nodeVersion": "v24.21.0",
+    "scope": "LOCAL_VM_REAL_HTTP",
+    "transport": "loopback HTTP (127.0.0.1)"
+  },
+  "scope": "LOCAL_VM_REAL_HTTP",
+  "schemaVersion": "pansphaira.xra-ps-02/native-root-qs-raw/v1",
+  "service": {
+    "headsEndpoint": {
+      "issue": "XRA-KS-01",
+      "kaleidosphereHead": {
+        "commitOid": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+        "treeOid": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c"
+      },
+      "releaseRegistry": {
+        "status": "HELD",
+        "entryCount": 1,
+        "releasedEntryCount": 0
+      },
+      "nativeReleaseRegistry": {
+        "status": "RELEASED",
+        "entryCount": 1,
+        "releasedEntryCount": 1
+      }
+    },
+    "healthz": "UP",
+    "kaleidoSphereHeadCommit": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+    "kaleidoSphereHeadTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+    "serverSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5"
+  },
+  "stageExecution": [
+    {
+      "stage": "GENERATION",
+      "executor": "buildKaleidosphereAnalyticsProjectionV1",
+      "executorKind": "PAN_PRODUCER",
+      "executorSha256": "2b99689c462c0b4165d967bd82d3d266f6de1c62000bb4f9f3320b257d6b69db",
+      "command": "in-process released producer invocation (node v24.21.0, dist build of the tested PAN source)",
+      "inputSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44",
+      "outputSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8"
+    },
+    {
+      "stage": "PROJECTION",
+      "executor": "nativeTransportBytesV1",
+      "executorKind": "PAN_CANONICALIZER",
+      "executorSha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b",
+      "command": "in-process canonical transport binding (raw artifact bytes -> canonical transport bytes)",
+      "inputSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+      "outputSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c"
+    },
+    {
+      "stage": "INGESTION",
+      "executor": "ingestNativeProjection (KaleidoSphere pinned service)",
+      "executorKind": "KS_SERVICE",
+      "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+      "command": "node services/bi-agent/src/pansphaira-analytics/server.mjs (KS_ROOT=/tmp/ks) + POST http://127.0.0.1:18877/v1/pansphaira-analytics/native-projection",
+      "inputSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+      "outputSha256": "5ac042b5ba94894adf9f87899509a505076239cd1892b960a0ecc8929f084c5b"
+    },
+    {
+      "stage": "SEMANTICS",
+      "executor": "ingestNativeProjection semantic pass (KaleidoSphere pinned service)",
+      "executorKind": "KS_SERVICE",
+      "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+      "command": "deterministic semantic re-derivation from the canonical transport bytes inside the pinned service",
+      "inputSha256": "5ac042b5ba94894adf9f87899509a505076239cd1892b960a0ecc8929f084c5b",
+      "outputSha256": "628b2b6c84230e49020ba1146a6682eabd35291b016414bf9bacae0370a29760"
+    },
+    {
+      "stage": "ANALYSIS",
+      "executor": "ingestNativeProjection analysis pass (KaleidoSphere pinned service)",
+      "executorKind": "KS_SERVICE",
+      "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+      "command": "deterministic analysis re-derivation (claims.computed) inside the pinned service",
+      "inputSha256": "628b2b6c84230e49020ba1146a6682eabd35291b016414bf9bacae0370a29760",
+      "outputSha256": "50a23e50a3dae65d95f63dc71c650455b30cbcc660cd9ee996231c7b3a688509"
+    },
+    {
+      "stage": "CANDIDATE",
+      "executor": "ingestNativeProjection candidate assembly (KaleidoSphere pinned service)",
+      "executorKind": "KS_SERVICE",
+      "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+      "command": "authority-free candidate assembly inside the pinned service",
+      "inputSha256": "853197e9c38ac3f131660bf0a7ed64ae7700698225e7e208309a146909a7aef5",
+      "outputSha256": "9beaa828e3a1c1579b3429853213172e0884a631876d61f8bb4a7c201b1846a7"
+    },
+    {
+      "stage": "ADJUDICATION",
+      "executor": "adjudicateNativeCandidateV1 (independent PAN verifier)",
+      "executorKind": "PAN_ADJUDICATOR",
+      "executorSha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b",
+      "command": "in-process independent PAN adjudication of the real service candidate",
+      "inputSha256": "26a8e6e6393b1a5eac95460604f316b0ecd4b9b2c762bedd04af0c42cc8ea09b",
+      "outputSha256": "12f10e019a0214e8e4bb453a85290538b9d86bc1eae17a239239573fef727b92"
+    }
+  ],
+  "testedSource": {
+    "adjudicatorSha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b",
+    "focusedNativeTestSha256": "f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0",
+    "kaleidoSphereHeadCommit": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+    "kaleidoSphereHeadTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+    "kaleidoSphereServerSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5"
+  },
+  "transport": {
+    "canonicalTransportSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+    "rawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+    "transportByteLength": 2309
+  }
+}

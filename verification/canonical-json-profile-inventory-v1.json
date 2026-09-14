@@ -147,6 +147,14 @@
       "fromSha256": "c37787b6c0bb6b80df381c811c05310faafa229b4267cd2094574943ce6e0af4",
       "toSha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640",
       "reason": "Advance the Verification DAG to graph v49 and canonically bind the XRA-PS-02 native wire/head integration family (native paired adjudication receipt and loopback real-HTTP capture fixtures) to the existing CKS-12 closed-loop owner; admitted v1 and reviewed v2-v12 digests remain immutable."
+    },
+    {
+      "migrationId": "XRA-PS-02-NATIVE-ROOT-QS-EXECUTION/INTEGRITY-GENERATOR/V14",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 14,
+      "fromSha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640",
+      "toSha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d",
+      "reason": "Canonically bind the XRA-PS-02 native AC03 Root-QS execution-evidence family (executable Root-QS replay runner, focused Root-QS RED-GREEN-NEGATIVE test, v2 successor paired receipt, raw Root-QS execution evidence and v2 slice) to the existing CKS-12 closed-loop owner; admitted v1 and reviewed v2-v13 digests remain immutable."
     }
   ],
   "scanScope": {
@@ -189,15 +197,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 641,
+    "filesScanned": 646,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 213,
-    "importFiles": 212,
+    "importSites": 215,
+    "importFiles": 214,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1831,
-    "ledgerUniquePaths": 1831
+    "ledgerEntries": 1840,
+    "ledgerUniquePaths": 1840
   },
   "profiles": [
     {
@@ -270,7 +278,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640"
+      "sha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -513,6 +521,11 @@
   ],
   "consumerFamilies": [
     {
+      "owner": "analytics",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
       "owner": "cks",
       "importSites": 4,
       "importFiles": 4
@@ -574,8 +587,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 44,
-      "importFiles": 43
+      "importSites": 45,
+      "importFiles": 44
     },
     {
       "owner": "usage-insights",
@@ -868,7 +881,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640",
+      "sha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d",
       "basis": "profile-version-migration"
     },
     {
