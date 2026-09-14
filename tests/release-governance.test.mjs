@@ -319,7 +319,7 @@ test("public release builder binds its exact file count to the manifest", () => 
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), count);
-  assert.equal(count, 1518);
+  assert.equal(count, 1522);
   assert.doesNotMatch(builder, /if count\s*(?:>|>=|<|<=)\s*\d+/);
 });
 
@@ -360,7 +360,7 @@ test("XRA-PS-02 independent adjudicator/proof closure is publicly registered and
   const binding = builder.match(/^if count != (\d+):$/m);
   assert.ok(binding, "PUBLIC_MANIFEST_EXACT_COUNT_BINDING_MISSING");
   assert.equal(Number(binding[1]), publicCount, "builder count binding derives the actual manifest count");
-  assert.equal(publicCount, 1518, "reconciled public count is the actual final manifest count");
+  assert.equal(publicCount, 1522, "reconciled public count is the actual final manifest count");
   // Every closure byte is registered in the root SHA256SUMS with its exact
   // current digest, including the native adjudicator test.
   const sums = readFileSync(join(ROOT, "SHA256SUMS"), "utf8").split("\n");

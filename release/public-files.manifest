@@ -32,6 +32,7 @@ benchmarks/adaptability-m0/ai-blind/evaluate.mjs	benchmarks/adaptability-m0/ai-b
 benchmarks/adaptability-m0/ai-blind/participant-input.json	benchmarks/adaptability-m0/ai-blind/participant-input.json	0644
 benchmarks/adaptability-m0/records/adb-001-m0-local-20260804.json	benchmarks/adaptability-m0/records/adb-001-m0-local-20260804.json	0644
 benchmarks/adaptability-m0/run.mjs	benchmarks/adaptability-m0/run.mjs	0755
+contracts/analytics/producer-manifest-v1.json	contracts/analytics/producer-manifest-v1.json	0644
 contracts/azure-power-platform/authoritative-readback-receipt.schema.json	contracts/azure-power-platform/authoritative-readback-receipt.schema.json	0644
 contracts/azure-power-platform/compatibility-migration.schema.json	contracts/azure-power-platform/compatibility-migration.schema.json	0644
 contracts/azure-power-platform/proposal-approval-execution.schema.json	contracts/azure-power-platform/proposal-approval-execution.schema.json	0644
@@ -586,6 +587,7 @@ schemas/work-receipt-v1.schema.json	schemas/work-receipt-v1.schema.json	0644
 scripts/adaptive-controller.mjs	scripts/adaptive-controller.mjs	0755
 scripts/adaptive-delivery-status.mjs	scripts/adaptive-delivery-status.mjs	0755
 scripts/adaptive-evidence-gates.mjs	scripts/adaptive-evidence-gates.mjs	0755
+scripts/build-producer-analytics-manifest.mjs	scripts/build-producer-analytics-manifest.mjs	0644
 scripts/build-public-release.sh	scripts/build-public-release.sh	0755
 scripts/build-rks-01-pilot-corpora.mjs	scripts/build-rks-01-pilot-corpora.mjs	0644
 scripts/capture-cscl-11-source-locators.mjs	scripts/capture-cscl-11-source-locators.mjs	0644
@@ -662,6 +664,7 @@ security/openclaw-m1.4-evidence-v1.json	security/openclaw-m1.4-evidence-v1.json	
 security/openclaw-m1.5-evidence-index-v1.json	security/openclaw-m1.5-evidence-index-v1.json	0644
 security/secure-default-proof-evidence-v1.json	security/secure-default-proof-evidence-v1.json	0644
 security/secure-default-proof-v1.json	security/secure-default-proof-v1.json	0644
+src/analytics/producer-analytics-manifest.ts	src/analytics/producer-analytics-manifest.ts	0644
 src/cks-10/projection-envelope-guards.mjs	src/cks-10/projection-envelope-guards.mjs	0644
 src/cks-10/read-only-projection-publisher.mjs	src/cks-10/read-only-projection-publisher.mjs	0644
 src/cks-12/deterministic-function-cost-parity.ts	src/cks-12/deterministic-function-cost-parity.ts	0644
@@ -1316,6 +1319,7 @@ tests/poc-setup-compatibility-planner.test.ts	tests/poc-setup-compatibility-plan
 tests/poc-showcase-e2e.test.ts	tests/poc-showcase-e2e.test.ts	0644
 tests/poc-showcase.test.ts	tests/poc-showcase.test.ts	0644
 tests/power-platform-read-connector.test.ts	tests/power-platform-read-connector.test.ts	0644
+tests/producer-analytics-manifest.test.ts	tests/producer-analytics-manifest.test.ts	0644
 tests/protected-audit-timeline.test.ts	tests/protected-audit-timeline.test.ts	0644
 tests/public-product-spelling.test.mjs	tests/public-product-spelling.test.mjs	0644
 tests/release-governance.test.mjs	tests/release-governance.test.mjs	0644
