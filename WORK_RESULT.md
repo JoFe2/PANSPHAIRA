@@ -1,3 +1,16 @@
+# PR #424 serial reconciliation after #420
+
+The original PR head `599bbba847c753d52250a9d9e54a8a47ae74923c` is reconciled
+onto the verified #420 merge `ad6c90f730f95f8abe387d9929ed7d3dcd6a337e`.
+The independent supersession review found all original adjudicator functionality
+and seven original Root-QS tests retained in current main, with three stronger
+Root-QS tests and actual T0/T1 state observations added by the later integration
+`5ac6652296206cc604365f144cc7eb3559e7701e`.
+This reconciliation preserves that entire product tree and the #420 note below.
+Only this additional repository-local provenance note differs from the new main.
+No new runtime, cross-repository or product capability claim is introduced.
+Exact candidate/merge CI and release readback remain separate delivery gates.
+
 # PR #420 current-main reconciliation
 
 The original PR head `63f87df47a3390ccac030102b1e404a83f92975a` is reconciled
