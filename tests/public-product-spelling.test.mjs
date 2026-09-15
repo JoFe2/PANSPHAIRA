@@ -45,6 +45,12 @@ function classify(path, line) {
     || path === "tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json"
   ) return "stable-xra-ps02-technical-identifier";
   if (
+    path === "contracts/analytics/producer-manifest-v1.json"
+    || path === "src/analytics/producer-analytics-manifest.ts"
+    || path === "tests/producer-analytics-manifest.test.ts"
+    || path === "scripts/build-producer-analytics-manifest.mjs"
+  ) return "stable-par-ps01-technical-identifier";
+  if (
     path === "WORK_RESULT.md"
     && (line.includes(`${legacyDisplay}_RECONCILED_RELEASED_HEAD_V1`)
       || line.includes(`${legacyDisplay}_INDEPENDENT_ADJUDICATION`))
