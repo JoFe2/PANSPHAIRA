@@ -1,3 +1,15 @@
+# PR #420 current-main reconciliation
+
+The original PR head `63f87df47a3390ccac030102b1e404a83f92975a` is reconciled
+with main `a858b58c1a4d9712b8f96cde7ea2984cde9f88d6`. Its native implementation
+and tests are already present through the later integration `d4dc2faa431f22fd5d7247d47e622c6fd49f3fe8`.
+This reconciliation preserves the entire current-main product tree, including
+subsequent Root-QS evidence corrections and the producer analytics manifest.
+Only this repository-local integration note differs from that main tree.
+No new product capability, new cross-repository execution or issue closure is
+asserted. Historical result sections below retain their original time-local meaning.
+Exact candidate CI, merge-head CI and release readback remain delivery gates.
+
 # WORK_RESULT — XRA-PS-02 native wire/head integration (campaign node)
 
 **Status: local PanSphaira change complete. NOT DELIVERED / NOT CLOSED.** This is a
