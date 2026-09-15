@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "pansphaira.xra-ps-02/candidate-adjudication-verification/v2",
+  "issue": "PANSPHAIRA#344",
+  "baseHead": "d4dc2faa431f22fd5d7247d47e622c6fd49f3fe8",
+  "scope": "ROOT_QS_LOCAL_VM_REAL_HTTP",
+  "focusedCommand": "npm run xra-ps-02:test",
+  "implementation": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
+  "implementationSha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b",
+  "focusedTest": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
+  "focusedTestNative": "tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts",
+  "focusedTestNativeSha256": "f5d68f57b1dd4e7d9bff778822b6a001b61ff7a7477278eebefe18e1f4481ae0",
+  "focusedTestRootQs": "tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts",
+  "focusedTestRootQsSha256": "689c8dda3b3d54b24b7ec2446cadccf3474c5552c2ff48982e853be04bf79b80",
+  "gateReceipts": [
+    {
+      "command": "npm run build --silent",
+      "exitCode": 0,
+      "status": "PASS",
+      "provenance": "tsc -p tsconfig.json compiled the full project with no type errors, both locally and as the first step of the npm test lifecycle (pretest) in the dedicated root test VM recorded below."
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "PASS",
+      "provenance": {
+        "kind": "FULL_SUITE_ROOT_QS_LOCAL_VM",
+        "host": "qwen-test",
+        "environment": {
+          "os": "Ubuntu 24.04.4 LTS (dedicated Linux test VM, root)",
+          "node": "v24.21.0",
+          "npm": "11.19.0",
+          "docker": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2 (daemon inside the guest)",
+          "vcpus": 4
+        },
+        "cwd": "/tmp/pan",
+        "copyOrigin": "tar of the local /workspace working tree at parent head 599bbba847c753d52250a9d9e54a8a47ae74923c plus the uncommitted fix-forward, streamed via qwen-test including .git and chowned to root inside the guest",
+        "startUtc": "2026-09-13T16:15:19Z",
+        "endUtc": "2026-09-13T16:18:14Z",
+        "log": "/tmp/pan-full-test-runA.log",
+        "logSha256": "cdef091b312d046592e167d5cfc8c199c134b210682571fd56925a0a3fbd678b",
+        "logBytes": 235261,
+        "result": "Complete npm lifecycle (pretest, test, posttest) exited 0 with zero failures: main node --test 729/729, all 36 posttest suites passed, xra-ps-02 focused suites 20/20 and 21/21, and the census, release-governance, verification-DAG and maintenance-contract-freeze suites all green",
+        "note": "This full-suite run (run A) verified the tree immediately before this evidence-only gateReceipts provenance was added to this receipt; after this metadata update the identical full npm test was re-run on the final tree (run B) and also exited 0, with its log retained at /tmp/pan-full-test.log on the same host. Local VM success does not establish a working public evidence URL (HTTP 404 remains missing) and no public or repository CI is implied."
+      }
+    }
+  ],
+  "acceptance": {
+    "XRA-PS-02-AC01": {
+      "status": "PROVEN_LOCALLY",
+      "inheritedFrom": "pansphaira-kaleidosphere-analytics-slice-v1.json",
+      "assertions": [
+        "PANSPHAIRA rebuilds the existing owner projection and evidence before adjudication",
+        "the KaleidoSphere verdict is recorded but is not authoritative",
+        "malformed or exotic candidate objects are denied without invoking candidate traps",
+        "the native adjudicator re-derives the deterministic analysis from the canonical transport bytes and the PAN-owned projection and keeps the service verdict non-authoritative"
+      ]
+    },
+    "XRA-PS-02-AC02": {
+      "status": "PROVEN_LOCALLY",
+      "inheritedFrom": "pansphaira-kaleidosphere-analytics-slice-v1.json",
+      "cases": {
+        "positive": "ACCEPTED_BOUNDED",
+        "restricted-unknown": "RESTRICTED",
+        "conflicting-counterevidence": "DENIED",
+        "forged-candidate": "DENIED",
+        "stale-head": "DENIED"
+      },
+      "nativeScope": {
+        "positive": "ACCEPTED_BOUNDED",
+        "restricted-unknown": "RESTRICTED",
+        "conflicting-counterevidence": "DENIED",
+        "forged-candidate": "DENIED",
+        "stale-head": "DENIED"
+      },
+      "nativeScopeNote": "The native restriction and conflict cases come from the independently sourced PAN adjudication context; native v1 service output freezes unknown=false and an empty counterevidence channel, so those cases are never fabricated as normal service output."
+    },
+    "XRA-PS-02-AC03": {
+      "status": "PROVEN_VIA_ROOT_QS_LOCAL_EXECUTION",
+      "chainStages": [
+        "GENERATION",
+        "PROJECTION",
+        "INGESTION",
+        "SEMANTICS",
+        "ANALYSIS",
+        "CANDIDATE",
+        "ADJUDICATION"
+      ],
+      "rootQsExecution": {
+        "runner": "scripts/run-xra-ps-02-root-qs-replay.mjs",
+        "runnerSha256": "49a006d88f8cc31729fba92f9213675da80b0eee5131f56ba47080255a75aef1",
+        "command": "node scripts/run-xra-ps-02-root-qs-replay.mjs (PAN_ROOT=/tmp/pan KS_ROOT=/tmp/ks PORT=18877)",
+        "scope": "LOCAL_VM_REAL_HTTP",
+        "transport": "loopback HTTP (127.0.0.1)",
+        "nodeVersion": "v24.21.0",
+        "kaleidoSphereHeadCommit": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+        "kaleidoSphereHeadTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+        "kaleidoSphereServerSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+        "nativeReleaseRegistry": "RELEASED",
+        "matchesHistoricalCapture": true,
+        "outcomes": [
+          {
+            "case": "positive",
+            "outcome": "ACCEPTED_BOUNDED",
+            "reasonCodes": [
+              "NATIVE_EVIDENCE_ACCEPTED"
+            ]
+          },
+          {
+            "case": "restricted-unknown",
+            "outcome": "RESTRICTED",
+            "reasonCodes": [
+              "NATIVE_EVIDENCE_RESTRICTED_UNKNOWN"
+            ]
+          },
+          {
+            "case": "conflicting-counterevidence",
+            "outcome": "DENIED",
+            "reasonCodes": [
+              "NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED"
+            ]
+          },
+          {
+            "case": "forged-candidate",
+            "outcome": "DENIED",
+            "reasonCodes": [
+              "NATIVE_FORGED_CANDIDATE_DENIED"
+            ]
+          },
+          {
+            "case": "stale-head",
+            "outcome": "DENIED",
+            "reasonCodes": [
+              "NATIVE_STALE_HEAD_DENIED"
+            ]
+          }
+        ],
+        "falsifiers": [
+          {
+            "label": "service-down",
+            "code": "XRA_PS_02_NATIVE_SERVICE_UNAVAILABLE"
+          },
+          {
+            "label": "substitution",
+            "code": "NATIVE_STALE_HEAD_DENIED"
+          },
+          {
+            "label": "malformed",
+            "code": "XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED"
+          }
+        ],
+        "beforeAfter": {
+          "authorityBefore": "NONE",
+          "authorityAfter": "NONE",
+          "capabilityDeltaBefore": "NONE",
+          "capabilityDeltaAfter": "NONE",
+          "effectBefore": "NONE",
+          "effectAfter": "NONE",
+          "canonicalKnowledgeBeforeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+          "canonicalKnowledgeAfterSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a"
+        },
+        "projectionGenerated": {
+          "generatedAtRunTime": true,
+          "producer": "buildKaleidosphereAnalyticsProjectionV1",
+          "producerFile": "packages/contracts/src/kaleidosphere-analytics-projection.ts",
+          "producerSha256": "2b99689c462c0b4165d967bd82d3d266f6de1c62000bb4f9f3320b257d6b69db",
+          "generatedRawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+          "equalsReleasedRawArtifact": true,
+          "generatedProjectionBodyDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+          "equalsRebuiltProjection": true,
+          "equalsCanonicalTransport": true
+        },
+        "rawResponseSha256": "5ac042b5ba94894adf9f87899509a505076239cd1892b960a0ecc8929f084c5b",
+        "stageExecution": [
+          {
+            "stage": "GENERATION",
+            "executor": "buildKaleidosphereAnalyticsProjectionV1",
+            "executorKind": "PAN_PRODUCER",
+            "executorSha256": "2b99689c462c0b4165d967bd82d3d266f6de1c62000bb4f9f3320b257d6b69db",
+            "command": "in-process released producer invocation (node v24.21.0, dist build of the tested PAN source)",
+            "inputSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44",
+            "outputSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8"
+          },
+          {
+            "stage": "PROJECTION",
+            "executor": "nativeTransportBytesV1",
+            "executorKind": "PAN_CANONICALIZER",
+            "executorSha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b",
+            "command": "in-process canonical transport binding (raw artifact bytes -> canonical transport bytes)",
+            "inputSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+            "outputSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c"
+          },
+          {
+            "stage": "INGESTION",
+            "executor": "ingestNativeProjection (KaleidoSphere pinned service)",
+            "executorKind": "KS_SERVICE",
+            "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+            "command": "node services/bi-agent/src/pansphaira-analytics/server.mjs (KS_ROOT=/tmp/ks) + POST http://127.0.0.1:18877/v1/pansphaira-analytics/native-projection",
+            "inputSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+            "outputSha256": "5ac042b5ba94894adf9f87899509a505076239cd1892b960a0ecc8929f084c5b"
+          },
+          {
+            "stage": "SEMANTICS",
+            "executor": "ingestNativeProjection semantic pass (KaleidoSphere pinned service)",
+            "executorKind": "KS_SERVICE",
+            "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+            "command": "deterministic semantic re-derivation from the canonical transport bytes inside the pinned service",
+            "inputSha256": "5ac042b5ba94894adf9f87899509a505076239cd1892b960a0ecc8929f084c5b",
+            "outputSha256": "628b2b6c84230e49020ba1146a6682eabd35291b016414bf9bacae0370a29760"
+          },
+          {
+            "stage": "ANALYSIS",
+            "executor": "ingestNativeProjection analysis pass (KaleidoSphere pinned service)",
+            "executorKind": "KS_SERVICE",
+            "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+            "command": "deterministic analysis re-derivation (claims.computed) inside the pinned service",
+            "inputSha256": "628b2b6c84230e49020ba1146a6682eabd35291b016414bf9bacae0370a29760",
+            "outputSha256": "50a23e50a3dae65d95f63dc71c650455b30cbcc660cd9ee996231c7b3a688509"
+          },
+          {
+            "stage": "CANDIDATE",
+            "executor": "ingestNativeProjection candidate assembly (KaleidoSphere pinned service)",
+            "executorKind": "KS_SERVICE",
+            "executorSha256": "1ff0e7476269e93a8bc52d446e7fc408199a7181103a54e54a8bc16149c844e5",
+            "command": "authority-free candidate assembly inside the pinned service",
+            "inputSha256": "853197e9c38ac3f131660bf0a7ed64ae7700698225e7e208309a146909a7aef5",
+            "outputSha256": "9beaa828e3a1c1579b3429853213172e0884a631876d61f8bb4a7c201b1846a7"
+          },
+          {
+            "stage": "ADJUDICATION",
+            "executor": "adjudicateNativeCandidateV1 (independent PAN verifier)",
+            "executorKind": "PAN_ADJUDICATOR",
+            "executorSha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b",
+            "command": "in-process independent PAN adjudication of the real service candidate",
+            "inputSha256": "26a8e6e6393b1a5eac95460604f316b0ecd4b9b2c762bedd04af0c42cc8ea09b",
+            "outputSha256": "12f10e019a0214e8e4bb453a85290538b9d86bc1eae17a239239573fef727b92"
+          }
+        ],
+        "beforeAfterObservations": {
+          "basis": "The canonical Knowledge pin bytes are re-read from the frozen CKS-12 edge-authority fixture and the KS flat release registry / native sidecar file bytes are re-read from the pinned KS root at BOTH sample points; authority is derived from the flat release registry (HELD / zero released entries = no PAN authority) and the live candidate authority block; effect is derived from the mutation-route refusal and the unchanged state bytes; the capability delta is derived from full-state equality across the two samples.",
+          "before": {
+            "sampledAt": "T0: before service start and before the five paired outcomes and all wire falsifiers",
+            "authority": "NONE",
+            "effect": "NONE",
+            "state": {
+              "canonicalKnowledge": {
+                "knowledgeId": "CKS-12-KNOWLEDGE-001",
+                "knowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+                "knowledgeVersion": "v1",
+                "pinBytesSha256": "5905ff39d475d31fa73fcdea3a854b494630e922539038ba61727fe236258d70",
+                "pinFixtureSha256": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f"
+              },
+              "flatReleaseRegistry": {
+                "fileSha256": "9e98350ff356aae4486ad210a7d2b486a0f4f61969adae23ac71d7a784d7942c",
+                "status": "HELD",
+                "releasedEntryCount": 0
+              },
+              "nativeReleaseSidecar": {
+                "fileSha256": "1b6f55dd5507ec6c8894d2b35377439ee206d832d4cf19d9e3dc687ab4a3bce4",
+                "status": "RELEASED",
+                "releasedEntryCount": 1
+              }
+            }
+          },
+          "after": {
+            "sampledAt": "T1: after the five paired outcomes, the three wire falsifiers, and the mutation probe (service still running)",
+            "authority": "NONE",
+            "capabilityDelta": "NONE",
+            "effect": "NONE",
+            "headsNativeReleaseRegistry": {
+              "status": "RELEASED",
+              "entryCount": 1,
+              "releasedEntryCount": 1
+            },
+            "headsReleaseRegistry": {
+              "status": "HELD",
+              "entryCount": 1,
+              "releasedEntryCount": 0
+            },
+            "liveCandidateAuthority": {
+              "promote": false,
+              "mutate": false,
+              "execute": false,
+              "publish": false,
+              "capabilities": [],
+              "effects": []
+            },
+            "mutationProbe": {
+              "label": "mutation",
+              "route": "/v1/pansphaira-analytics/promote",
+              "httpStatus": 400,
+              "code": "XRA_KS01_ROUTE_DENIED"
+            },
+            "state": {
+              "canonicalKnowledge": {
+                "knowledgeId": "CKS-12-KNOWLEDGE-001",
+                "knowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+                "knowledgeVersion": "v1",
+                "pinBytesSha256": "5905ff39d475d31fa73fcdea3a854b494630e922539038ba61727fe236258d70",
+                "pinFixtureSha256": "b82a839ad803ade270018139b11eb890106d32056034a0d56817d5a8902d1f3f"
+              },
+              "flatReleaseRegistry": {
+                "fileSha256": "9e98350ff356aae4486ad210a7d2b486a0f4f61969adae23ac71d7a784d7942c",
+                "status": "HELD",
+                "releasedEntryCount": 0
+              },
+              "nativeReleaseSidecar": {
+                "fileSha256": "1b6f55dd5507ec6c8894d2b35377439ee206d832d4cf19d9e3dc687ab4a3bce4",
+                "status": "RELEASED",
+                "releasedEntryCount": 1
+              }
+            }
+          }
+        }
+      },
+      "successorReceipt": {
+        "receiptId": "pansphaira:xra-ps-02-native-paired-receipt-002",
+        "schemaVersion": "pansphaira.xra-ps-02/native-paired-receipt/v2",
+        "receiptSha256": "fddfc2011d604f1e95e039830b14d687180c428399b32e7f4c7ae13754f07b39",
+        "rawResultsSha256": "f0dc3d040e8648336d4f1e2bf4fdefcc49444d9a9306e839ca2e021570f33cfe",
+        "testedSourceDigest": "50abb6d8f8e582a2f231931d7c163399535959dbd7edfcc72873ebec2ed0e708",
+        "inputHeadsDigest": "59b6aa5f1b97e1f73cad555f2a5764a0534750f188ee3564bc30681f12089fb8",
+        "localVerification": "VERIFIED with exact material; fail-closed DENIED on any tampered field, on a mismatched tested source, on missing raw-results material, and on the v1 source-local receipt"
+      },
+      "localFinding": "The real pinned KaleidoSphere native-projection service at the exact released head (commit 545a3b44, tree c0699e1b) was launched inside the dedicated root test VM, its real loopback HTTP response was fed to the independent PAN verifier, and it reproduced the historical capture byte-for-byte (matchesHistoricalCapture). The transported projection artifact was generated from the released producer at execution time and its byte-equality to the released raw artifact and to the independently rebuilt projection is recorded. The complete seven-stage chain is bound per stage by raw execution identities, commands, and input/output byte digests in addition to the derived chain digests. The five paired outcomes, the real service-down/substitution/malformed wire falsifiers, and a real mutation-route falsifier (the authority-free service refuses /v1/pansphaira-analytics/promote with XRA_KS01_ROUTE_DENIED) were executed repository-rooted. The before/after comparison is an actual state observation: the canonical Knowledge pin bytes and the KS flat release registry / native sidecar file bytes were re-read at T0 (before service start and before any adjudication) and at T1 (after the five outcomes and all wire falsifiers), and authority, capability delta, and effect are derived from those observations rather than assumed. All of this is bound by the v2 successor paired receipt, which independently binds the immutable released input heads (inputHeadsDigest) and the tested PAN adjudicator source (testedSourceDigest) separately. The v1 source-local receipt is structurally insufficient: it binds no tested source and no live execution, and is fail-closed DENIED as a v2 successor receipt.",
+      "nonclaim": "This Root-QS local execution does not establish a working public evidence URL (HTTP 404 remains missing), and it is not repository CI, cross-repository readback, XRA-KS-01/#151 public admission, or parent-closure evidence; those remain the delivery job controller's domain."
+    },
+    "XRA-PS-02-AC04": {
+      "status": "PROVEN_LOCALLY",
+      "inheritedFrom": "pansphaira-kaleidosphere-analytics-slice-v1.json",
+      "beforeAfter": "canonical Knowledge pin bytes and authority, capability, and effect remain unchanged: observed as actual T0/T1 state samples (pin bytes re-read from the frozen fixture, KS registry/sidecar file bytes re-read from the pinned KS root at both points, flat registry HELD, mutation route refused with XRA_KS01_ROUTE_DENIED) before and after the five adjudications and all wire falsifiers on both the flat and the native surfaces",
+      "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a"
+    }
+  },
+  "nativeScope": {
+    "schemaVersion": "pansphaira.xra-ps-02/native-candidate-adjudication/v1",
+    "supersedes": {
+      "flatSyntheticCandidate": "the local flat synthetic candidate (v1 surface retained unchanged)",
+      "staleBoundHeads": [
+        "24db4e926385b006c9f2fbca3588adece72e7fb0",
+        "90c574e9a06cb752be06270395d44a31eabc44ae"
+      ]
+    },
+    "reconciledReleasedHeads": {
+      "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
+      "kaleidoSphere": "545a3b44ea88c96eded060c11c7c3a2afe0edff6"
+    },
+    "kaleidoSphereReleasedTree": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c",
+    "service": {
+      "repository": "KaleidoSphere",
+      "endpoint": "/v1/pansphaira-analytics/native-projection",
+      "transport": "loopback HTTP (127.0.0.1) inside the dedicated root test VM",
+      "scope": "LOCAL_VM_REAL_HTTP"
+    },
+    "pairedReceipt": {
+      "receiptId": "pansphaira:xra-ps-02-native-paired-receipt-001",
+      "schemaVersion": "pansphaira.xra-ps-02/native-paired-receipt/v1",
+      "chainStages": [
+        "GENERATION",
+        "PROJECTION",
+        "INGESTION",
+        "SEMANTICS",
+        "ANALYSIS",
+        "CANDIDATE",
+        "ADJUDICATION"
+      ],
+      "localVerification": "VERIFIED with exact material; fail-closed DENIED without material or on any tampered field"
+    },
+    "successorReceipt": {
+      "receiptId": "pansphaira:xra-ps-02-native-paired-receipt-002",
+      "schemaVersion": "pansphaira.xra-ps-02/native-paired-receipt/v2",
+      "bindsSeparately": [
+        "immutable released input heads (inputHeadsDigest)",
+        "tested PAN adjudicator source (testedSourceDigest)"
+      ],
+      "localVerification": "VERIFIED with exact material; fail-closed DENIED on any tamper or on the v1 source-local receipt"
+    },
+    "evidenceFixtures": [
+      {
+        "path": "tests/fixtures/cks-analytics/xra-ps-02-native-service-capture-v1.json",
+        "sha256": "949632ef2b517b36ec8969700c9b54fd2a94d3b47751bdd070b319a76864ee4a",
+        "scope": "LOCAL_VM_REAL_HTTP"
+      },
+      {
+        "path": "tests/fixtures/cks-analytics/xra-ps-02-native-service-substitution-capture-v1.json",
+        "sha256": "645c238a2fbb762958dc2473414c2a85ab8feb104185b9f938ea374c0887dbff",
+        "derivation": "identical-input-substitution",
+        "scope": "LOCAL_VM_REAL_HTTP"
+      },
+      {
+        "path": "tests/fixtures/cks-analytics/xra-ps-02-native-paired-receipt-v2.json",
+        "sha256": "fddfc2011d604f1e95e039830b14d687180c428399b32e7f4c7ae13754f07b39",
+        "derivation": "root-qs-execution",
+        "scope": "ROOT_QS_LOCAL_VM_REAL_HTTP"
+      },
+      {
+        "path": "tests/fixtures/cks-analytics/xra-ps-02-native-root-qs-raw-v2.json",
+        "sha256": "f0dc3d040e8648336d4f1e2bf4fdefcc49444d9a9306e839ca2e021570f33cfe",
+        "derivation": "root-qs-execution",
+        "scope": "ROOT_QS_LOCAL_VM_REAL_HTTP"
+      }
+    ],
+    "restrictionConflictSource": "Independently sourced PAN adjudication context (native context v1); the KS verifier and service output are never trusted as PAN authority.",
+    "nonclaim": "Local VM loopback and Root-QS success do not establish a working public evidence URL (HTTP 404 remains missing); this receipt asserts no public transport, admission, or closure."
+  },
+  "authoritativeInputs": {
+    "schemaVersion": "pansphaira.xra-ps-02/candidate-adjudication/v1",
+    "projectionDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+    "sourceContractSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44",
+    "canonicalKnowledgeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+    "releasedPansphairaHead": "24db4e926385b006c9f2fbca3588adece72e7fb0",
+    "kaleidoSphereReleasedHead": "90c574e9a06cb752be06270395d44a31eabc44ae"
+  },
+  "authorityState": {
+    "authority": "NONE",
+    "capabilityDelta": "NONE",
+    "effect": "NONE",
+    "canonicalKnowledgeMutation": "NONE"
+  },
+  "requiredNonclaims": [
+    "NO_CANDIDATE_PROMOTION",
+    "NO_PERSISTENCE_OR_HISTORY",
+    "NO_GLOBAL_TRUTH_OR_UTILITY_CLAIM",
+    "NO_PARITY_GENERALIZATION",
+    "NO_XRA_KS_01_ADMISSION_OR_EXACT_HEAD_CLOSURE",
+    "NO_EXTERNAL_RELEASE_OR_CROSS_REPOSITORY_CHAIN_PROOF",
+    "NO_PUBLIC_EVIDENCE_URL_OR_PARENT_CLOSURE"
+  ],
+  "integrityNote": "This successor slice records only its local, purpose-bound digests. SHA256SUMS and the CKS-12 verification-DAG input chain bind this implementation, the flat/native/Root-QS focused tests, the executable Root-QS replay runner, the v1 and v2 paired-receipt identities, the real-HTTP capture fixtures, the Root-QS raw results, and this receipt; no public transport, repository CI, cross-repository readback, release, or parent-closure evidence is asserted.",
+  "supersedes": {
+    "path": "verification/pansphaira-kaleidosphere-analytics-slice-v1.json",
+    "sha256": "f72c163b560f8a270c5aa720d794a90b2c533e4033d9e5a6201bc94db1da6b2d",
+    "note": "The v1 slice bytes and the v1 paired-receipt identity are preserved unchanged; this successor adds the Root-QS execution and the v2 successor paired receipt that XRA-PS-02-AC03 required. It is additive and re-derives nothing the v1 surface already proved."
+  }
+}

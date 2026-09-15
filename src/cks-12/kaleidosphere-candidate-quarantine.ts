@@ -555,11 +555,11 @@ export function verifyPairedAdjudicationReceiptV1(value: unknown): PairedReceipt
 export const PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1 = "7f662672bfc45087342f23e5c589d43598f5c20d" as const;
 export const KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1 = "545a3b44ea88c96eded060c11c7c3a2afe0edff6" as const;
 /** Released KaleidoSphere service tree bound to the exact released head. */
-const KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1 = "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c" as const;
+export const KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1 = "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c" as const;
 /** Later byte-equivalent PANSPHAIRA head bound by the released sidecar; deliberately DISTINCT from the release commit. */
-const PANSPHAIRA_RECONCILED_HEAD_COMMIT_V1 = "988395110a9189d1b8cd4ee98184ed5c1d77a15d" as const;
-const PANSPHAIRA_RECONCILED_RELEASE_TAG_V1 = "2026_09_05_v1" as const;
-const PANSPHAIRA_RECONCILED_RELEASE_RECEIPT_SHA256_V1 = "bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6" as const;
+export const PANSPHAIRA_RECONCILED_HEAD_COMMIT_V1 = "988395110a9189d1b8cd4ee98184ed5c1d77a15d" as const;
+export const PANSPHAIRA_RECONCILED_RELEASE_TAG_V1 = "2026_09_05_v1" as const;
+export const PANSPHAIRA_RECONCILED_RELEASE_RECEIPT_SHA256_V1 = "bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6" as const;
 const NATIVE_SOURCE_FILE_IDENTITY_PATH_V1 = "tests/fixtures/cks-analytics/projection-v1.json" as const;
 const NATIVE_PROJECTION_CONTRACT_SHA256_V1 = "99e1ac62cfda3bef59ba310e00f7daa16d80b170ae5e7a7eaa3fff314d1a5d9a" as const;
 const NATIVE_ANALYSIS_CONTRACT_SHA256_V1 = "913c2599099e7324a17a6dcab6008b107e7869fc4ba840317c1534ee013302bd" as const;
@@ -1366,4 +1366,345 @@ export async function fetchNativeProjectionV1(options: Readonly<{
     };
   }
   return unavailable("XRA_PS_02_NATIVE_WIRE_SHAPE_DENIED");
+}
+
+// ---------------------------------------------------------------------------
+// v2 successor paired receipt (additive; every v1 frozen constant is untouched).
+//
+// The v1 source-local paired receipt (NATIVE_ADJUDICATION_RECEIPT_ID_V1) binds
+// the reconciled released heads and the complete seven-stage chain, but it is a
+// source-local proof: it never independently binds the tested PAN adjudicator
+// source, and it is exercised against historical captures, not a live
+// repository-rooted Root-QS execution. That is the AC03 gap. The v2 successor
+// therefore separately and independently binds
+//   (1) the immutable released INPUT heads the seven-stage chain operates on,
+//   and
+//   (2) the tested PAN adjudicator SOURCE (adjudicator implementation + focused
+//       native test + pinned KS native-projection service server + node runtime),
+// pairs both with the live Root-QS execution evidence (the five paired outcomes,
+// the real service-down / substitution / malformed falsifiers, and the
+// before/after canonical-Knowledge / authority / capability / effect comparison),
+// and preserves the original v1 receipt identity and bytes by reference
+// (baseReceiptId + baseReceiptDigest + baseAdjudicationDigest).
+// ---------------------------------------------------------------------------
+
+export const NATIVE_RECEIPT_SCHEMA_V2 = "pansphaira.xra-ps-02/native-paired-receipt/v2" as const;
+export const NATIVE_ADJUDICATION_RECEIPT_ID_V2 = "pansphaira:xra-ps-02-native-paired-receipt-002" as const;
+
+/** Binding group 1: the immutable released INPUT heads the seven-stage chain operates on. */
+export type NativeInputHeadsV2 = Readonly<{
+  canonicalTransportSha256: string;
+  kaleidoSphereHeadCommit: typeof KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1;
+  kaleidoSphereHeadTree: typeof KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1;
+  pansphairaHeadCommit: typeof PANSPHAIRA_RECONCILED_HEAD_COMMIT_V1;
+  pansphairaReleaseCommit: typeof PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1;
+  pansphairaReleaseReceiptSha256: typeof PANSPHAIRA_RECONCILED_RELEASE_RECEIPT_SHA256_V1;
+  pansphairaReleaseTag: typeof PANSPHAIRA_RECONCILED_RELEASE_TAG_V1;
+  projectionDigest: string;
+  rawArtifactSha256: string;
+  sourceContractSha256: string;
+}>;
+
+/** Binding group 2: the tested PAN adjudicator SOURCE, bound separately from the input heads. Pure source/code identity (no runtime). */
+export type NativeTestedSourceV2 = Readonly<{
+  adjudicatorSha256: string;
+  focusedNativeTestSha256: string;
+  kaleidoSphereHeadCommit: typeof KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1;
+  kaleidoSphereHeadTree: typeof KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1;
+  kaleidoSphereServerSha256: string;
+}>;
+
+export type NativeRootQsOutcomeV2 = Readonly<{
+  case: string;
+  outcome: "ACCEPTED_BOUNDED" | "DENIED" | "RESTRICTED";
+  reasonCodes: readonly string[];
+}>;
+
+export type NativeRootQsBeforeAfterV2 = Readonly<{
+  authorityAfter: "NONE";
+  authorityBefore: "NONE";
+  capabilityDeltaAfter: "NONE";
+  capabilityDeltaBefore: "NONE";
+  canonicalKnowledgeAfterSha256: string;
+  canonicalKnowledgeBeforeSha256: string;
+  effectAfter: "NONE";
+  effectBefore: "NONE";
+}>;
+
+export type NativeRootQsExecutionV2 = Readonly<{
+  beforeAfter: NativeRootQsBeforeAfterV2;
+  command: string;
+  falsifiers: readonly Readonly<{ code: string; label: string }>[];
+  outcomes: readonly NativeRootQsOutcomeV2[];
+  rawResultsDigest: string;
+  scope: "LOCAL_VM_REAL_HTTP";
+  transport: "loopback HTTP (127.0.0.1)";
+}>;
+
+/** The live Root-QS execution summary before the raw-results digest is bound. */
+export type NativeRootQsExecutionSummaryV2 = Omit<NativeRootQsExecutionV2, "rawResultsDigest">;
+
+export type NativePairedAdjudicationReceiptV2 = Readonly<{
+  authority: "NONE";
+  baseAdjudicationDigest: string;
+  baseReceiptDigest: string;
+  baseReceiptId: typeof NATIVE_ADJUDICATION_RECEIPT_ID_V1;
+  chain: readonly ChainStageV1[];
+  effect: "NONE";
+  inputHeads: NativeInputHeadsV2;
+  inputHeadsDigest: string;
+  receiptDigest: string;
+  receiptId: typeof NATIVE_ADJUDICATION_RECEIPT_ID_V2;
+  rootQsExecution: NativeRootQsExecutionV2;
+  schemaVersion: typeof NATIVE_RECEIPT_SCHEMA_V2;
+  testedSource: NativeTestedSourceV2;
+  testedSourceDigest: string;
+}>;
+
+export type NativePairedReceiptVerificationV2 =
+  | Readonly<{
+    authority: "NONE";
+    chainStages: readonly (typeof ADJUDICATION_CHAIN_STAGES)[number][];
+    effect: "NONE";
+    inputHeads: NativeInputHeadsV2;
+    outcome: "VERIFIED";
+    receiptDigest: string;
+    testedSource: NativeTestedSourceV2;
+  }>
+  | Readonly<{ outcome: "DENIED"; reasonCodes: readonly ["NATIVE_V2_RECEIPT_DENIED"] }>;
+
+/** The five exact paired outcomes the live Root-QS chain must reproduce. */
+export const NATIVE_EXPECTED_OUTCOMES_V2: readonly NativeRootQsOutcomeV2[] = Object.freeze([
+  { case: "positive", outcome: "ACCEPTED_BOUNDED", reasonCodes: ["NATIVE_EVIDENCE_ACCEPTED"] },
+  { case: "restricted-unknown", outcome: "RESTRICTED", reasonCodes: ["NATIVE_EVIDENCE_RESTRICTED_UNKNOWN"] },
+  { case: "conflicting-counterevidence", outcome: "DENIED", reasonCodes: ["NATIVE_CONFLICTING_COUNTEREVIDENCE_DENIED"] },
+  { case: "forged-candidate", outcome: "DENIED", reasonCodes: ["NATIVE_FORGED_CANDIDATE_DENIED"] },
+  { case: "stale-head", outcome: "DENIED", reasonCodes: ["NATIVE_STALE_HEAD_DENIED"] },
+]);
+
+const NATIVE_V2_INPUT_HEADS_KEYS = [
+  "canonicalTransportSha256", "kaleidoSphereHeadCommit", "kaleidoSphereHeadTree", "pansphairaHeadCommit",
+  "pansphairaReleaseCommit", "pansphairaReleaseReceiptSha256", "pansphairaReleaseTag", "projectionDigest",
+  "rawArtifactSha256", "sourceContractSha256",
+] as const;
+const NATIVE_V2_TESTED_SOURCE_KEYS = [
+  "adjudicatorSha256", "focusedNativeTestSha256", "kaleidoSphereHeadCommit", "kaleidoSphereHeadTree",
+  "kaleidoSphereServerSha256",
+] as const;
+const NATIVE_V2_BEFORE_AFTER_KEYS = [
+  "authorityAfter", "authorityBefore", "capabilityDeltaAfter", "capabilityDeltaBefore",
+  "canonicalKnowledgeAfterSha256", "canonicalKnowledgeBeforeSha256", "effectAfter", "effectBefore",
+] as const;
+const NATIVE_V2_OUTCOME_KEYS = ["case", "outcome", "reasonCodes"] as const;
+const NATIVE_V2_FALSIFIER_KEYS = ["code", "label"] as const;
+const NATIVE_V2_EXECUTION_KEYS = ["beforeAfter", "command", "falsifiers", "outcomes", "rawResultsDigest", "scope", "transport"] as const;
+const NATIVE_V2_RECEIPT_KEYS: readonly string[] = [
+  "authority", "baseAdjudicationDigest", "baseReceiptDigest", "baseReceiptId", "chain", "effect",
+  "inputHeads", "inputHeadsDigest", "receiptDigest", "receiptId", "rootQsExecution", "schemaVersion",
+  "testedSource", "testedSourceDigest",
+];
+
+const v2IsHex64 = (value: unknown): value is string => typeof value === "string" && HEX64.test(value);
+const v2IsHead40 = (value: unknown): value is string => typeof value === "string" && HEAD40.test(value);
+
+const validNativeV2InputHeads = (value: unknown): value is NativeInputHeadsV2 => {
+  const record = exactRecord(value, [...NATIVE_V2_INPUT_HEADS_KEYS]);
+  if (record === undefined) return false;
+  return record.pansphairaReleaseCommit === PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1
+    && record.pansphairaHeadCommit === PANSPHAIRA_RECONCILED_HEAD_COMMIT_V1
+    && record.pansphairaReleaseTag === PANSPHAIRA_RECONCILED_RELEASE_TAG_V1
+    && record.pansphairaReleaseReceiptSha256 === PANSPHAIRA_RECONCILED_RELEASE_RECEIPT_SHA256_V1
+    && record.kaleidoSphereHeadCommit === KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1
+    && record.kaleidoSphereHeadTree === KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1
+    && v2IsHex64(record.canonicalTransportSha256)
+    && v2IsHex64(record.projectionDigest)
+    && v2IsHex64(record.rawArtifactSha256)
+    && v2IsHex64(record.sourceContractSha256);
+};
+
+const validNativeV2TestedSource = (value: unknown): value is NativeTestedSourceV2 => {
+  const record = exactRecord(value, [...NATIVE_V2_TESTED_SOURCE_KEYS]);
+  if (record === undefined) return false;
+  return v2IsHex64(record.adjudicatorSha256)
+    && v2IsHex64(record.focusedNativeTestSha256)
+    && v2IsHex64(record.kaleidoSphereServerSha256)
+    && record.kaleidoSphereHeadCommit === KALEIDOSPHERE_RECONCILED_RELEASED_HEAD_V1
+    && record.kaleidoSphereHeadTree === KALEIDOSPHERE_RECONCILED_RELEASED_TREE_V1;
+};
+
+const validNativeV2Chain = (value: unknown): boolean => {
+  if (!Array.isArray(value) || value.length !== ADJUDICATION_CHAIN_STAGES.length) return false;
+  return value.every((entry, index) => {
+    const stage = exactRecord(entry, ["digest", "stage"]);
+    return stage !== undefined && stage.stage === ADJUDICATION_CHAIN_STAGES[index] && typeof stage.digest === "string" && HEX64.test(stage.digest);
+  });
+};
+
+const validNativeV2BeforeAfter = (value: unknown): value is NativeRootQsBeforeAfterV2 => {
+  const record = exactRecord(value, [...NATIVE_V2_BEFORE_AFTER_KEYS]);
+  if (record === undefined) return false;
+  return record.authorityBefore === "NONE"
+    && record.authorityAfter === "NONE"
+    && record.capabilityDeltaBefore === "NONE"
+    && record.capabilityDeltaAfter === "NONE"
+    && record.effectBefore === "NONE"
+    && record.effectAfter === "NONE"
+    && v2IsHex64(record.canonicalKnowledgeBeforeSha256)
+    && record.canonicalKnowledgeBeforeSha256 === CANONICAL_KNOWLEDGE_SHA256
+    && record.canonicalKnowledgeAfterSha256 === record.canonicalKnowledgeBeforeSha256;
+};
+
+const validNativeV2Outcomes = (value: unknown): value is readonly NativeRootQsOutcomeV2[] => {
+  if (!Array.isArray(value) || value.length !== NATIVE_EXPECTED_OUTCOMES_V2.length) return false;
+  return value.every((entry) => {
+    const record = exactRecord(entry, [...NATIVE_V2_OUTCOME_KEYS]);
+    return record !== undefined
+      && typeof record.case === "string"
+      && (record.outcome === "ACCEPTED_BOUNDED" || record.outcome === "RESTRICTED" || record.outcome === "DENIED")
+      && Array.isArray(record.reasonCodes)
+      && record.reasonCodes.every((code) => typeof code === "string");
+  })
+    && arraysEqual(value, NATIVE_EXPECTED_OUTCOMES_V2);
+};
+
+const validNativeV2Falsifiers = (value: unknown): boolean => {
+  if (!Array.isArray(value) || value.length === 0) return false;
+  return value.every((entry) => {
+    const record = exactRecord(entry, [...NATIVE_V2_FALSIFIER_KEYS]);
+    return record !== undefined && typeof record.code === "string" && record.code.length > 0 && typeof record.label === "string" && record.label.length > 0;
+  });
+};
+
+const validNativeV2Execution = (value: unknown, rawResultsDigest: string): value is NativeRootQsExecutionV2 => {
+  const record = exactRecord(value, [...NATIVE_V2_EXECUTION_KEYS]);
+  if (record === undefined) return false;
+  return record.scope === "LOCAL_VM_REAL_HTTP"
+    && record.transport === "loopback HTTP (127.0.0.1)"
+    && typeof record.command === "string"
+    && record.command.length > 0
+    && v2IsHex64(record.rawResultsDigest)
+    && record.rawResultsDigest === rawResultsDigest
+    && validNativeV2BeforeAfter(record.beforeAfter)
+    && validNativeV2Outcomes(record.outcomes)
+    && validNativeV2Falsifiers(record.falsifiers);
+};
+
+/**
+ * Build the v2 successor paired receipt. Pairs the live Root-QS execution
+ * (bound by the raw-results digest) with the v1 base receipt and the two
+ * independent binding groups (released input heads, tested PAN source).
+ */
+export function createNativePairedAdjudicationReceiptV2(input: Readonly<{
+  baseReceipt: NativePairedAdjudicationReceiptV1;
+  inputHeads: NativeInputHeadsV2;
+  rawResults: unknown;
+  rootQsExecution: NativeRootQsExecutionSummaryV2;
+  testedSource: NativeTestedSourceV2;
+}>): NativePairedAdjudicationReceiptV2 {
+  if (!validNativeV2InputHeads(input.inputHeads)) throw new TypeError("XRA_PS_02_NATIVE_V2_INPUT_HEADS_DENIED");
+  if (!validNativeV2TestedSource(input.testedSource)) throw new TypeError("XRA_PS_02_NATIVE_V2_TESTED_SOURCE_DENIED");
+  if (!validNativeV2Chain(input.baseReceipt.chain)) throw new TypeError("XRA_PS_02_NATIVE_V2_BASE_CHAIN_DENIED");
+  if (input.baseReceipt.schemaVersion !== NATIVE_RECEIPT_SCHEMA_V1 || input.baseReceipt.receiptId !== NATIVE_ADJUDICATION_RECEIPT_ID_V1) {
+    throw new TypeError("XRA_PS_02_NATIVE_V2_BASE_RECEIPT_DENIED");
+  }
+  if (!v2IsHex64(input.baseReceipt.receiptDigest) || !v2IsHex64(input.baseReceipt.adjudicationDigest)) {
+    throw new TypeError("XRA_PS_02_NATIVE_V2_BASE_RECEIPT_DENIED");
+  }
+  const baseBody: PlainRecord = { ...input.baseReceipt };
+  delete baseBody.receiptDigest;
+  if (input.baseReceipt.receiptDigest !== digest(baseBody)) throw new TypeError("XRA_PS_02_NATIVE_V2_BASE_RECEIPT_DENIED");
+  const rawResultsDigest = digest(input.rawResults);
+  const summary = input.rootQsExecution;
+  if (
+    summary.scope !== "LOCAL_VM_REAL_HTTP"
+    || summary.transport !== "loopback HTTP (127.0.0.1)"
+    || typeof summary.command !== "string" || summary.command.length === 0
+    || !validNativeV2BeforeAfter(summary.beforeAfter)
+    || !validNativeV2Outcomes(summary.outcomes)
+    || !validNativeV2Falsifiers(summary.falsifiers)
+  ) throw new TypeError("XRA_PS_02_NATIVE_V2_EXECUTION_DENIED");
+  const rootQsExecution: NativeRootQsExecutionV2 = freeze({
+    beforeAfter: summary.beforeAfter,
+    command: summary.command,
+    falsifiers: summary.falsifiers,
+    outcomes: summary.outcomes,
+    rawResultsDigest,
+    scope: summary.scope,
+    transport: summary.transport,
+  });
+  const body = {
+    authority: "NONE",
+    baseAdjudicationDigest: input.baseReceipt.adjudicationDigest,
+    baseReceiptDigest: input.baseReceipt.receiptDigest,
+    baseReceiptId: input.baseReceipt.receiptId,
+    chain: input.baseReceipt.chain,
+    effect: "NONE",
+    inputHeads: { ...input.inputHeads },
+    inputHeadsDigest: digest(input.inputHeads),
+    receiptId: NATIVE_ADJUDICATION_RECEIPT_ID_V2,
+    rootQsExecution,
+    schemaVersion: NATIVE_RECEIPT_SCHEMA_V2,
+    testedSource: { ...input.testedSource },
+    testedSourceDigest: digest(input.testedSource),
+  } as const;
+  return freeze({ ...body, receiptDigest: digest(body) });
+}
+
+const nativeV2Denied = (): NativePairedReceiptVerificationV2 => ({ outcome: "DENIED", reasonCodes: ["NATIVE_V2_RECEIPT_DENIED"] });
+
+/**
+ * Fail-closed verification of the v2 successor paired receipt. Independently
+ * re-checks both binding groups (released input heads against the reconciled
+ * constants; tested source against the provided current source), the seven-stage
+ * chain, the live Root-QS execution binding (raw-results digest + five outcomes
+ * + falsifiers + before/after invariant), and the original v1 receipt reference.
+ */
+export function verifyNativePairedAdjudicationReceiptV2(
+  value: unknown,
+  material: Readonly<{ rawResults: unknown; testedSource: NativeTestedSourceV2 }>,
+): NativePairedReceiptVerificationV2 {
+  const snapshot = plainSnapshot(value);
+  if (snapshot === INVALID || snapshot === null || typeof snapshot !== "object" || Array.isArray(snapshot)) return nativeV2Denied();
+  const receipt = snapshot as PlainRecord;
+  if (Reflect.ownKeys(receipt).length !== NATIVE_V2_RECEIPT_KEYS.length || Reflect.ownKeys(receipt).some((key) => typeof key !== "string" || !NATIVE_V2_RECEIPT_KEYS.includes(key))) {
+    return nativeV2Denied();
+  }
+  if (!validNativeV2TestedSource(material.testedSource)) return nativeV2Denied();
+  try {
+    if (
+      receipt.schemaVersion !== NATIVE_RECEIPT_SCHEMA_V2
+      || receipt.receiptId !== NATIVE_ADJUDICATION_RECEIPT_ID_V2
+      || receipt.authority !== "NONE"
+      || receipt.effect !== "NONE"
+      || receipt.baseReceiptId !== NATIVE_ADJUDICATION_RECEIPT_ID_V1
+      || !v2IsHex64(receipt.baseAdjudicationDigest)
+      || !v2IsHex64(receipt.baseReceiptDigest)
+      || !validNativeV2InputHeads(receipt.inputHeads)
+      || !validNativeV2TestedSource(receipt.testedSource)
+      || !validNativeV2Chain(receipt.chain)
+      || typeof receipt.inputHeadsDigest !== "string"
+      || typeof receipt.testedSourceDigest !== "string"
+    ) return nativeV2Denied();
+    const rawResultsDigest = digest(material.rawResults);
+    if (
+      receipt.inputHeadsDigest !== digest(receipt.inputHeads)
+      || receipt.testedSourceDigest !== digest(receipt.testedSource)
+      || !arraysEqual(receipt.testedSource, material.testedSource)
+      || !validNativeV2Execution(receipt.rootQsExecution, rawResultsDigest)
+    ) return nativeV2Denied();
+    const body: PlainRecord = { ...receipt };
+    delete body.receiptDigest;
+    if (typeof receipt.receiptDigest !== "string" || !HEX64.test(receipt.receiptDigest) || receipt.receiptDigest !== digest(body)) return nativeV2Denied();
+    return {
+      authority: "NONE",
+      chainStages: [...ADJUDICATION_CHAIN_STAGES],
+      effect: "NONE",
+      inputHeads: receipt.inputHeads as NativeInputHeadsV2,
+      outcome: "VERIFIED",
+      receiptDigest: receipt.receiptDigest,
+      testedSource: receipt.testedSource as NativeTestedSourceV2,
+    };
+  } catch {
+    return nativeV2Denied();
+  }
 }
