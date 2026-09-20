@@ -645,7 +645,7 @@ if (!repositoryIntegrityNode.ownedTests.includes("npm run paired-analytics:test"
   repositoryIntegrityNode.ownedTests.push("npm run paired-analytics:test");
 }
 const pairedAnalyticsInvariants = [
-  "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent pair PASSes against independently reviewed scope; stale, substituted, unknown or re-digested mandatory-scope regressions fail closed, while unrelated optional gaps are reported.",
+  "The paired-analytics compatibility gate binds the exact PanSphaira producer manifest and the exact KaleidoSphere consumer support manifest; a consistent pair PASSes against independently reviewed scope; stale, substituted, unknown or re-digested mandatory-scope regressions fail closed, while unrelated optional gaps are reported.",
   "PAR-XR-01 static evidence makes no executed-head claim; separate pinned offline execution binds actual Git heads without production, customer, network service, publication or closure effects. Public AC04 closure remains pending.",
 ];
 for (const invariant of pairedAnalyticsInvariants) {

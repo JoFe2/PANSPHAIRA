@@ -2,7 +2,7 @@
  * PAR-XR-01 — Paired-Analytics compatibility gate: adversarial TDD suite.
  *
  * The gate (src/analytics/paired-analytics-parity.ts) is a pure, fail-closed
- * validator over the exact pair (PANSPHAIRA producer-analytics-manifest x
+ * validator over the exact pair (PanSphaira producer-analytics-manifest x
  * KaleidoSphere consumer-support-manifest). These tests drive it with REAL
  * bytes: the live producer manifest, a consumer manifest re-derived at the
  * producer's exact head (545a3b44) by the shipped KaleidoSphere generator,

@@ -4831,7 +4831,7 @@
         {
           "path": "src/analytics/paired-analytics-parity.ts",
           "role": "SOURCE",
-          "sha256": "03e5fbee9fa69a8245873e9599d862d6237c0862b3233e9831a64f9179664953"
+          "sha256": "2a5a7dd9a840a094face1c4ee3f0fee0a8a33a24ff1e482265fa52ff62181f3e"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
@@ -4866,7 +4866,7 @@
         {
           "path": "tests/paired-analytics-parity.test.ts",
           "role": "VALIDATOR",
-          "sha256": "fa32ffdaf630feb6f758df23d3f6a97cf6e1df272d59d4217e336812193de98b"
+          "sha256": "dd5e2bd1b383651d90363781a738f23867456ea4589eb92021778c8c23082687"
         },
         {
           "path": "tests/paired-analytics-runner.test.mjs",
@@ -4876,7 +4876,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e5b2cde18acec2a8ec57cb966657d7ec0a016143b69f950b8ab7f94bc416a2f7"
+          "sha256": "8205e3690da61bcbde30bae060494e4ab7a9f962511c9e20dc1586c2550ca685"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -4933,7 +4933,7 @@
         "A successful retained receipt binds exact commit/tree, image and Compose locks, fixtures, health, governed effect, authoritative readback, cleanup and zero owned residue.",
         "Failed health, fixture drift, missing readback, timeout, stale evidence, caller-authored PASS, hard-gate failure, overclaim and residual ownership fail closed.",
         "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation.",
-        "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent pair PASSes against independently reviewed scope; stale, substituted, unknown or re-digested mandatory-scope regressions fail closed, while unrelated optional gaps are reported.",
+        "The paired-analytics compatibility gate binds the exact PanSphaira producer manifest and the exact KaleidoSphere consumer support manifest; a consistent pair PASSes against independently reviewed scope; stale, substituted, unknown or re-digested mandatory-scope regressions fail closed, while unrelated optional gaps are reported.",
         "PAR-XR-01 static evidence makes no executed-head claim; separate pinned offline execution binds actual Git heads without production, customer, network service, publication or closure effects. Public AC04 closure remains pending."
       ],
       "riskClass": "CRITICAL",

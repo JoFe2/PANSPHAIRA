@@ -2,7 +2,7 @@
  * PAR-XR-01 — paired analytics compatibility gate (producer x consumer).
  *
  * This module is the *real* Paired-Analytics validator. It gates the exact
- * pair (PANSPHAIRA `producer-analytics-manifest` x KaleidoSphere
+ * pair (PanSphaira `producer-analytics-manifest` x KaleidoSphere
  * `consumer-support-manifest`) against a code-owned, head-bound pinned
  * expectation (the evidence artifact). It is dependency-free and pure: it
  * receives the two loaded manifest objects plus the pinned expectation and
