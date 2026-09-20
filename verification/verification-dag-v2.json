@@ -4689,6 +4689,11 @@
           "sha256": "58b7743dc986a6f4c9faf661ab9a774446f02bf3d215315578d041af0ca477e4"
         },
         {
+          "path": ".github/workflows/paired-analytics-parity.yml",
+          "role": "SECURITY",
+          "sha256": "98f017afecc79c38dddeb8907fe1992c92d04aea447d0948036158ad72040b8a"
+        },
+        {
           "path": ".github/workflows/release-public-readback.yml",
           "role": "SECURITY",
           "sha256": "ae4f1a874d88f9319c56b40b266b42c981f79a859754e8c65b636cddc968e568"
@@ -4697,6 +4702,16 @@
           "path": "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0"
+        },
+        {
+          "path": "contracts/analytics/paired-expectation-v1.json",
+          "role": "CONTRACT",
+          "sha256": "37f3986e6b809124ed6adc65d000c770f70000d62231eebc3aa1c88d60c2d926"
+        },
+        {
+          "path": "contracts/analytics/producer-manifest-v1.json",
+          "role": "CONTRACT",
+          "sha256": "99adfbe7705c95e9789c6be7579f69fb77d31089319906365da52b4ec8cdfd4d"
         },
         {
           "path": "CONTRIBUTING.md",
@@ -4776,7 +4791,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "221d5e654c6916462b1a0177a0df481aebf8e8a0ee14657a77797a81b02d4fe6"
+          "sha256": "bc5f77fc05c724cd38c7fecae55771f73953880c19a7098d7c5bc2aa4c85c35f"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4786,12 +4801,22 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d353fd66670c4b5381bc7d6362786a3636d9425fee30d076ec2bfdc9bd621af6"
+          "sha256": "4d3ef993bad838932ddc400586d248456a9ddaa4fed1dd79a9305e181b168600"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
           "role": "SECURITY",
           "sha256": "aad34f5f7380537f65c78f4f8f507235ba6a2adc7b1bde64f6c972de4f8e9e65"
+        },
+        {
+          "path": "scripts/paired-analytics-execution.mjs",
+          "role": "VALIDATOR",
+          "sha256": "0cd16675e6f5af09f5c8165344cd64d2daff57dbd79f15514cf9899137132f90"
+        },
+        {
+          "path": "scripts/run-paired-analytics-parity.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6de5fa257bb0de3adb0bdcd2438a7708b92879cbf3a7385848826a3c7f249abc"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4804,9 +4829,14 @@
           "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641"
         },
         {
+          "path": "src/analytics/paired-analytics-parity.ts",
+          "role": "SOURCE",
+          "sha256": "2a5a7dd9a840a094face1c4ee3f0fee0a8a33a24ff1e482265fa52ff62181f3e"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "43863f4b2dc5af59175ff42f6cc66189d9a2d5a3bde2ee00c3d2de1032513c00"
+          "sha256": "5a152349ffd82d2f50e12240ff9771c0e1dd572c221107c42621a9be8eee7ce9"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4819,19 +4849,39 @@
           "sha256": "082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3"
         },
         {
+          "path": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json",
+          "role": "FIXTURE",
+          "sha256": "f98a401c37d6422bde5b6379db5e49ff0c18aae599f1939de711fcb5d19ab6b4"
+        },
+        {
+          "path": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json",
+          "role": "FIXTURE",
+          "sha256": "98c7f8311bf244f804aeb23ff7cefefc3f521670468f72f4bb4a5170b2329ec9"
+        },
+        {
           "path": "tests/incoming-invoice-adaptive-ui.test.ts",
           "role": "VALIDATOR",
           "sha256": "9d8dcd5025fb8f2351eb4d5824123fbf7a1372af1370b614e936d52c6a3e520f"
         },
         {
+          "path": "tests/paired-analytics-parity.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "dd5e2bd1b383651d90363781a738f23867456ea4589eb92021778c8c23082687"
+        },
+        {
+          "path": "tests/paired-analytics-runner.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "3ad09ab6653bc3c2f261b46421a64d42018f19c6873641c790fde33d4adcc538"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e5b2cde18acec2a8ec57cb966657d7ec0a016143b69f950b8ab7f94bc416a2f7"
+          "sha256": "8205e3690da61bcbde30bae060494e4ab7a9f962511c9e20dc1586c2550ca685"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b738a415c6a55369d9a570c24eceb0ad461d52b6fd60ff3814806648e4299589"
+          "sha256": "d0570ef7f1cdc679cc9b2858ab0daa365ce44ac25631cd2a455ad6e3a4271566"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4841,12 +4891,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "0379ebd26fd6f4e87997640ce5d195b82cbeb1e96009d26c3367583b740bcfc0"
+          "sha256": "3b7643dd3af6abab26fe4758c630d17a07fac52fa88d4112ea47cf190d551e83"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
           "role": "CONTRACT",
           "sha256": "f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e"
+        },
+        {
+          "path": "verification/paired-analytics-compatibility-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3548c343e446524165550aae5705e357e059789404558670e71d9d73a3b82692"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
@@ -4859,7 +4914,8 @@
         "node --test tests/supply-chain-verifier.test.mjs",
         "node --test dist/tests/canonical-json-profile-inventory.test.js",
         "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js",
-        "node --test tests/demo-current-head-e2e*.test.mjs"
+        "node --test tests/demo-current-head-e2e*.test.mjs",
+        "npm run paired-analytics:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -4876,7 +4932,9 @@
         "Scheduled and release Docker E2E checks out one exact clean SHA, uses an isolated Compose namespace and remains absent from ordinary pull-request Docker work.",
         "A successful retained receipt binds exact commit/tree, image and Compose locks, fixtures, health, governed effect, authoritative readback, cleanup and zero owned residue.",
         "Failed health, fixture drift, missing readback, timeout, stale evidence, caller-authored PASS, hard-gate failure, overclaim and residual ownership fail closed.",
-        "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation."
+        "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation.",
+        "The paired-analytics compatibility gate binds the exact PanSphaira producer manifest and the exact KaleidoSphere consumer support manifest; a consistent pair PASSes against independently reviewed scope; stale, substituted, unknown or re-digested mandatory-scope regressions fail closed, while unrelated optional gaps are reported.",
+        "PAR-XR-01 static evidence makes no executed-head claim; separate pinned offline execution binds actual Git heads without production, customer, network service, publication or closure effects. Public AC04 closure remains pending."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false
@@ -5412,7 +5470,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "5cf18589f3cfe972086a56daf9b557bd38a8c37bc9186c85a54f699f443b2589"
+          "sha256": "ea1147d4b733cd03cc039e5b7af5fa54e97ad89db53ecbd222502ede1221abf9"
         },
         {
           "path": "package-lock.json",
@@ -5772,7 +5830,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "04bdf485324adf25de7a42ae7147530e3dc7026e5db500808a94bd2b91cc4acb"
+          "sha256": "5dad73406b521b0f6798351e648c6f824ec5f97e56637f2606e0248ba9f897c8"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6037,7 +6095,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "221d5e654c6916462b1a0177a0df481aebf8e8a0ee14657a77797a81b02d4fe6"
+          "sha256": "bc5f77fc05c724cd38c7fecae55771f73953880c19a7098d7c5bc2aa4c85c35f"
         }
       ],
       "ownedTests": [

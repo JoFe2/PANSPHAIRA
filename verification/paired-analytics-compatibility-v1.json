@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "pansphaira.paired-analytics/compatibility-evidence/v1",
+  "evidenceId": "pansphaira:par-xr-01-paired-analytics-compatibility-001",
+  "taskId": "PORTFOLIO-PAR-XR-01-PAIRED-ANALYTICS",
+  "status": "CURRENT",
+  "sourceClass": "REPOSITORY_ONLY",
+  "sourceInputs": [
+    {
+      "path": "contracts/analytics/producer-manifest-v1.json",
+      "role": "PRODUCER_MANIFEST"
+    },
+    {
+      "path": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json",
+      "role": "CONSUMER_MANIFEST"
+    },
+    {
+      "path": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json",
+      "role": "CONSUMER_MANIFEST_STALE"
+    }
+  ],
+  "pinned": {
+    "schemaVersion": "pansphaira.par-xr-01/paired-analytics-pinned/v1",
+    "producerRef": {
+      "manifestId": "pansphaira:par-ps-01-producer-analytics-manifest-001",
+      "issue": "PANSPHAIRA#345",
+      "schemaVersion": "pansphaira.par-ps-01/producer-analytics-manifest/v1",
+      "manifestSha256": "15e5bad4f349d7b099dfbb2581328d76b527e8dd9dee6406835e2b923f5ba926",
+      "manifestDigest": "e426d65953a76bc97cee33372cf552b626bc2909699d5465e5e61f4324c996c8",
+      "serviceHead": {
+        "commitOid": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+        "treeOid": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c"
+      },
+      "reconciledReleasedHeads": {
+        "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
+        "kaleidoSphere": "545a3b44ea88c96eded060c11c7c3a2afe0edff6"
+      }
+    },
+    "consumerRef": {
+      "issue": "PAR-KS-01",
+      "schemaVersion": "kaleidosphere.analytics/consumer-support-manifest/v1",
+      "manifestSha256": "07cfecff78dfab08a7eb08a1a1d9c8c2948545eb355e2582fa3529caa810f427",
+      "integrityDigest": "sha256:bca9ef4310c409ce03f277c5551f03959017cf13b591ef1f38ea04c6d3a9bfb3",
+      "kaleidosphereHead": {
+        "commitOid": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
+        "treeOid": "c0699e1b4cfdfaf3076928e644ba5da3e9b7798c"
+      },
+      "product": {
+        "id": "superset-bi-agent",
+        "version": "v0.18.1"
+      },
+      "contract": {
+        "id": "superset-bi-agent.external",
+        "version": "2.0.0"
+      },
+      "profileDigest": "sha256:203fab47d7f37110e6de37e71cd5d61f245baeb7ddcde17f3fa6b208c90d4378"
+    },
+    "declaredSourceHeads": {
+      "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
+      "kaleidoSphere": "545a3b44ea88c96eded060c11c7c3a2afe0edff6"
+    },
+    "promisedScope": {
+      "supportedActionIds": [
+        "bi.status.read",
+        "bi.discovery.run",
+        "bi.analysis.run",
+        "bi.graph.adaptive-v1.plan",
+        "bi.preview.create",
+        "bi.readback.read"
+      ],
+      "channelVersions": {
+        "projection": "superset-bi-agent.external/intent-request/v2",
+        "semantic": "superset-bi-agent.external/consumer-profile/v1",
+        "analysis": "superset-bi-agent.external/analysis-readback/v2",
+        "result": "superset-bi-agent.external/intent-result/v2",
+        "returnChannel": "superset-bi-agent.external/superset-readback/v2"
+      }
+    },
+    "knownOptionalGaps": [
+      {
+        "id": "RELEASE_REGISTRY_HELD",
+        "state": "HELD"
+      }
+    ],
+    "requiredComputed": {
+      "nodeCount": 2,
+      "knowledgeNodeCount": 1,
+      "decisionNodeCount": 1,
+      "edgeCount": 1,
+      "evidenceCount": 2,
+      "counterevidenceTotal": 0,
+      "unknownTotal": 0,
+      "counterevidenceEntryCount": 6,
+      "adjudicationOutcome": "ACCEPTED_BOUNDED"
+    }
+  },
+  "inputDigests": {
+    "producer": "e426d65953a76bc97cee33372cf552b626bc2909699d5465e5e61f4324c996c8",
+    "consumer": "sha256:bca9ef4310c409ce03f277c5551f03959017cf13b591ef1f38ea04c6d3a9bfb3"
+  },
+  "testedHeads": null,
+  "executionStatus": "PENDING_PINNED_EXECUTION",
+  "declaredSourceHeads": {
+    "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
+    "kaleidoSphere": "545a3b44ea88c96eded060c11c7c3a2afe0edff6"
+  },
+  "verdict": "PASS",
+  "reasonCodes": [],
+  "optionalGapReports": [
+    {
+      "id": "RELEASE_REGISTRY_HELD",
+      "state": "HELD",
+      "field": "service.releaseRegistry",
+      "note": "The KaleidoSphere general release registry is HELD with zero released entries; only the native release registry is RELEASED in the delivered slice."
+    }
+  ],
+  "adversarialCaseExpectations": [
+    {
+      "caseId": "PAR-XR-01-AC03-STALE-HEAD",
+      "input": {
+        "producer": "contracts/analytics/producer-manifest-v1.json",
+        "consumer": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json"
+      },
+      "expectedOutcome": "DENIED",
+      "observedOutcome": "DENIED",
+      "requiredReasonCode": "PAIRED_ANALYTICS_HEAD_MISMATCH_DENIED",
+      "observedReasonCodes": [
+        "PAIRED_ANALYTICS_CONSUMER_DIGEST_DENIED",
+        "PAIRED_ANALYTICS_CONSUMER_REF_DENIED",
+        "PAIRED_ANALYTICS_HEAD_MISMATCH_DENIED",
+        "PAIRED_ANALYTICS_UNKNOWN_PAIR_DENIED"
+      ]
+    }
+  ],
+  "claimBoundary": {
+    "exactTestedPairOnly": false,
+    "unknownPairsDenied": true,
+    "productionOrCustomerEffect": false,
+    "externalEffectPerformed": false
+  },
+  "nonClaims": [
+    "No production, customer, network service, publication or closure effect is performed.",
+    "This static result has no executed-head claim; pinned counterpart execution remains pending.",
+    "Final public closure remains separately governed and is not performed here."
+  ],
+  "evidenceDigest": "894a5b382f3d4b8080d1ae6c5bc2c3515ed6b27de7bd3df005d09bcb1d90f96d"
+}

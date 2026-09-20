@@ -13,6 +13,11 @@ function read(path) {
 }
 
 function classify(path, line) {
+  if (
+    (path === "contracts/analytics/paired-expectation-v1.json"
+      || path === "verification/paired-analytics-compatibility-v1.json")
+    && line.trim() === `"issue": "${legacyDisplay}#345",`
+  ) return "stable-par-xr01-source-issue-identifier";
   if (path.startsWith("closure-audits/")) return "closure-audit-provenance";
   if (path.startsWith("docs/evidence/conveyor/")) return "internal-conveyor-evidence";
   if (line.includes("PANSPHAIRA_CANONICAL_JSON_SHA256_V1")) return "stable-algorithm-identifier";
