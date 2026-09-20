@@ -214,6 +214,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "6498ba70c69bcbd1e99229427c42e7fe6cd510646a7e2e903a1ddcacb8fac12b",
     reason: "Bind independent paired expectations, runner regression tests and pinned offline counterpart execution to the existing integrity owner and canonical owned test; preserve admitted v1 and reviewed v2-v15 bytes.",
   }),
+  Object.freeze({
+    migrationId: "PAN346-PUBLIC-SPELLING/INTEGRITY-GENERATOR/V17",
+    path: "scripts/refresh-integrity-data.mjs",
+    profileVersion: 17,
+    fromSha256: "6498ba70c69bcbd1e99229427c42e7fe6cd510646a7e2e903a1ddcacb8fac12b",
+    toSha256: "eb2669cba01995248ad49296fa3424cfcbb7271f554a7824e3107ba259f01d62",
+    reason: "Bind the public PanSphaira spelling correction in the paired-analytics invariant; preserve admitted v1 and reviewed v2-v16 bytes.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -1012,7 +1020,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
