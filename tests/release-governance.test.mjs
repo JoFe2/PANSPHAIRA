@@ -523,6 +523,17 @@ test("README presents governed adaptability and evidence-driven improvement with
   assert.match(incomingInvoice, /AP-06-AC06/);
   assert.match(incomingInvoice, /AP-06-AC07/);
   assert.match(incomingInvoice, /not delivered/);
+  // PS378 DOC-AI-AC01: the current AP-03 capability label is a synthetic
+  // extraction scoring harness. No OCR / Document-AI model-quality claim
+  // remains in the proving-ground doc, and the separate real pilot is
+  // tracked under #378 (pinned runtime + sealed holdout + independent oracle).
+  assert.match(incomingInvoice, /AP-03 — Synthetic extraction scoring harness/);
+  assert.doesNotMatch(incomingInvoice, /AP-03 — Document-AI benchmark/);
+  assert.match(
+    incomingInvoice,
+    /does not execute OCR or Document-AI model\s+inference and makes no OCR or model-quality claim/,
+  );
+  assert.ok(incomingInvoice.includes("github.com/JoFe2/PANSPHAIRA/issues/378"), "PS378 real Document-AI pilot tracked under issue 378");
   // Replay and promotion gating on the new criteria.
   assert.match(incomingInvoice, /replays on Current Main/);
   assert.match(incomingInvoice, /dependency order/);
