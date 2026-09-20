@@ -26,7 +26,7 @@ workflow rule.
 ```text
 Source
 → Document
-→ Document-AI extraction
+→ Synthetic extraction scoring harness (real Document-AI pilot: #378)
 → Validation
 → Supplier / PO / Receipt / Invoice matching
 → Exception and evidence-citing advisor dialogue

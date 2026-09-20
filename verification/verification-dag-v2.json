@@ -4766,7 +4766,7 @@
         {
           "path": "README.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "b692456ee742328eb9d28f4fa8bd9d6a890bbf24e351af945f1b47ff858bd466"
+          "sha256": "0a38be0ac9bc0dc552a560c395dea68a977bcfdfa75216a926e4eb9637580e18"
         },
         {
           "path": "release/governance.json",
@@ -4831,7 +4831,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8fae85fc8f3f54520503da659b9716bf436c4e7f6ee55d376b3038face4500e3"
+          "sha256": "b738a415c6a55369d9a570c24eceb0ad461d52b6fd60ff3814806648e4299589"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
