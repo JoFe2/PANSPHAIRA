@@ -16,7 +16,6 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
-  derivePairedAnalyticsPinnedV1,
   pairedAnalyticsConsumerContentSha256,
   pairedAnalyticsProducerCoreSha256,
   verifyPairedAnalyticsParityV1,
@@ -41,13 +40,10 @@ const loadConsumerStale = (): any =>
 const clone = <T,>(value: T): T => structuredClone(value);
 
 /**
- * The pinned expectation for the ACCEPTED pair is derived from the real,
- * consistent (producer x head-bound consumer) pair using the exported
- * derivation helper. It is NOT trusted from a file: it is recomputed here and
- * in the CI runner. This proves the gate's accepted reference is reproducible
- * from the exact manifests rather than hand-authored.
+ * Reviewed expectation is independent of both submitted manifests.
+ * Rehashing inputs cannot silently redefine mandatory scope or semantics.
  */
-const makePinned = (): any => derivePairedAnalyticsPinnedV1(loadProducer(), loadConsumerHeadBound());
+const makePinned = (): any => JSON.parse(readFileSync(path.join(ROOT, "contracts/analytics/paired-expectation-v1.json"), "utf8"));
 
 test("PAR-XR-01 AC01: the exact head-bound pair validates PASS with a reproducible pinned reference", () => {
   const producer = loadProducer();
@@ -92,12 +88,12 @@ test("PAR-XR-01 AC01: the exact head-bound pair validates PASS with a reproducib
   const result = verifyPairedAnalyticsParityV1({ producerManifest: producer, consumerManifest: consumer, pinned });
   assert.equal(result.outcome, "PASS", JSON.stringify(result.reasonCodes));
   assert.deepEqual(result.reasonCodes, []);
-  // Claim boundary is bounded to the exact tested pair only.
-  assert.equal(result.claimBoundary.exactTestedPairOnly, true);
+  // A pure manifest verifier cannot claim to have executed a Git head.
+  assert.equal(result.claimBoundary.exactTestedPairOnly, false);
   assert.equal(result.claimBoundary.unknownPairsDenied, true);
   assert.equal(result.claimBoundary.productionOrCustomerEffect, false);
   assert.equal(result.claimBoundary.externalEffectPerformed, false);
-  assert.equal(result.testedHeads.kaleidoSphere, producer.producer.serviceHead.commitOid);
+  assert.equal(result.declaredSourceHeads.kaleidoSphere, producer.producer.serviceHead.commitOid);
 });
 
 test("PAR-XR-01 AC03: the stale baseline consumer (bound to a different head) is DENIED, not silently accepted", () => {

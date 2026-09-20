@@ -24,7 +24,7 @@
       "manifestId": "pansphaira:par-ps-01-producer-analytics-manifest-001",
       "issue": "PANSPHAIRA#345",
       "schemaVersion": "pansphaira.par-ps-01/producer-analytics-manifest/v1",
-      "manifestSha256": "e932268884ebc1b5c21344e04f8b5809fc38c61deb0b47dadea685d9b1fec178",
+      "manifestSha256": "15e5bad4f349d7b099dfbb2581328d76b527e8dd9dee6406835e2b923f5ba926",
       "manifestDigest": "e426d65953a76bc97cee33372cf552b626bc2909699d5465e5e61f4324c996c8",
       "serviceHead": {
         "commitOid": "545a3b44ea88c96eded060c11c7c3a2afe0edff6",
@@ -54,7 +54,7 @@
       },
       "profileDigest": "sha256:203fab47d7f37110e6de37e71cd5d61f245baeb7ddcde17f3fa6b208c90d4378"
     },
-    "exactTestedHeads": {
+    "declaredSourceHeads": {
       "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
       "kaleidoSphere": "545a3b44ea88c96eded060c11c7c3a2afe0edff6"
     },
@@ -93,7 +93,9 @@
       "adjudicationOutcome": "ACCEPTED_BOUNDED"
     }
   },
-  "testedHeads": {
+  "testedHeads": null,
+  "executionStatus": "PENDING_PINNED_EXECUTION",
+  "declaredSourceHeads": {
     "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
     "kaleidoSphere": "545a3b44ea88c96eded060c11c7c3a2afe0edff6"
   },
@@ -126,15 +128,15 @@
     }
   ],
   "claimBoundary": {
-    "exactTestedPairOnly": true,
+    "exactTestedPairOnly": false,
     "unknownPairsDenied": true,
     "productionOrCustomerEffect": false,
     "externalEffectPerformed": false
   },
   "nonClaims": [
-    "This gate is a static two-manifest integrity check; it performs no production, customer, external, publication or closure effect.",
-    "The accepted pair claim names only the exact tested KaleidoSphere and PanSphaira heads; no other pair is asserted compatible.",
+    "No production, customer, network service, publication or closure effect is performed.",
+    "This static result has no executed-head claim; pinned counterpart execution remains pending.",
     "Final public closure remains separately governed and is not performed here."
   ],
-  "evidenceDigest": "1363e51970602571cdb9ac10081424badd607b92b4a60b56b2a97037a7b0af0b"
+  "evidenceDigest": "aa5eb4758ea5e9930e2dcedb57044864ebc1469146d53a8dc75f4261f0943cf5"
 }

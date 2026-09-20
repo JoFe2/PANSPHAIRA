@@ -622,6 +622,9 @@ cscl11Node.inputs = [
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 cscl11Node.ownedTests = ["npm run cscl11:test"];
 const pairedAnalyticsInputs = [
+  ["contracts/analytics/paired-expectation-v1.json", "CONTRACT"],
+  ["scripts/paired-analytics-execution.mjs", "VALIDATOR"],
+  ["tests/paired-analytics-runner.test.mjs", "VALIDATOR"],
   ["contracts/analytics/producer-manifest-v1.json", "CONTRACT"],
   ["tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json", "FIXTURE"],
   ["tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json", "FIXTURE"],
@@ -638,9 +641,12 @@ for (const [inputPath, role] of pairedAnalyticsInputs) {
   }
   if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
 }
+if (!repositoryIntegrityNode.ownedTests.includes("npm run paired-analytics:test")) {
+  repositoryIntegrityNode.ownedTests.push("npm run paired-analytics:test");
+}
 const pairedAnalyticsInvariants = [
-  "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent head-bound pair PASSes and a stale, substituted, unknown or re-digested pair fails closed.",
-  "PAR-XR-01 is a repository-only static two-manifest integrity check; it performs no production, customer, external, publication or closure effect, and its accepted claim names only the exact tested heads.",
+  "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent pair PASSes against independently reviewed scope; stale, substituted, unknown or re-digested mandatory-scope regressions fail closed, while unrelated optional gaps are reported.",
+  "PAR-XR-01 static evidence makes no executed-head claim; separate pinned offline execution binds actual Git heads without production, customer, network service, publication or closure effects. Public AC04 closure remains pending.",
 ];
 for (const invariant of pairedAnalyticsInvariants) {
   if (!repositoryIntegrityNode.invariants.includes(invariant)) repositoryIntegrityNode.invariants.push(invariant);

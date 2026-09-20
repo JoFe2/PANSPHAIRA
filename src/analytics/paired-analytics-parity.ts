@@ -25,7 +25,7 @@
  * Digest model (re-derived here, never trusted from the input):
  *   - producer self-digest   = sha256(canonicalJson(producer minus manifestDigest))
  *   - consumer self-digest   = `sha256:` + sha256(canonicalJson(consumer minus integrity))
- *   - producer exact-ref pin = sha256(canonicalJson(producer minus gaps))
+ *   - producer exact-ref pin = sha256(canonicalJson(producer minus gaps and manifestDigest))
  *                              (identity + head + computed are pinned strictly;
  *                               the `gaps` disclosure inventory is handled by
  *                               the AC02 gap policy, so a new *optional* gap is
@@ -89,7 +89,7 @@ export interface PairedAnalyticsPinnedProducerV1 {
   readonly manifestId: string;
   readonly issue: string;
   readonly schemaVersion: string;
-  /** sha256(canonicalJson(producer minus gaps)) — exact content pin. */
+  /** sha256(canonicalJson(producer minus gaps and manifestDigest)) — exact content pin. */
   readonly manifestSha256: string;
   /** sha256(canonicalJson(producer minus manifestDigest)) self-digest. */
   readonly manifestDigest: string;
@@ -114,8 +114,8 @@ export interface PairedAnalyticsPinnedV1 {
   readonly schemaVersion: string;
   readonly producerRef: PairedAnalyticsPinnedProducerV1;
   readonly consumerRef: PairedAnalyticsPinnedConsumerV1;
-  /** The only heads the accepted pair claim may name. */
-  readonly exactTestedHeads: { readonly pansphaira: string; readonly kaleidoSphere: string };
+  /** Historical declared source refs, never execution provenance. */
+  readonly declaredSourceHeads: { readonly pansphaira: string; readonly kaleidoSphere: string };
   /** The promised consumer support surface the pair gates against. */
   readonly promisedScope: {
     readonly supportedActionIds: readonly string[];
@@ -161,7 +161,7 @@ export interface PairedAnalyticsParityResultV1 {
   readonly outcome: "PASS" | "DENIED";
   readonly reasonCodes: readonly string[];
   readonly optionalGapReports: readonly PairedAnalyticsOptionalGapReportV1[];
-  readonly testedHeads: { readonly pansphaira: string; readonly kaleidoSphere: string };
+  readonly declaredSourceHeads: { readonly pansphaira: string; readonly kaleidoSphere: string };
   readonly claimBoundary: PairedAnalyticsClaimBoundaryV1;
 }
 
@@ -175,13 +175,17 @@ function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
 }
 
+function immutableOid(value: unknown): boolean {
+  return typeof value === "string" && /^[a-f0-9]{40}$/.test(value);
+}
+
 function headMatches(head: unknown, expected: HeadBindingV1): boolean {
-  if (!isPlainObject(head)) return false;
+  if (!isPlainObject(head) || !immutableOid(head["commitOid"]) || !immutableOid(head["treeOid"])) return false;
   return asString(head["commitOid"]) === expected.commitOid && asString(head["treeOid"]) === expected.treeOid;
 }
 
 /**
- * Producer exact-ref pin: sha256(canonicalJson(producer minus gaps)). The
+ * Producer exact-ref pin: sha256(canonicalJson(producer minus gaps and manifestDigest)). The
  * `gaps` disclosure inventory is excluded because it is handled by the AC02
  * gap policy (a new *optional* gap is reported without blocking the promised
  * scope); identity, head and computed evidence are pinned strictly.
@@ -190,6 +194,7 @@ export function pairedAnalyticsProducerCoreSha256(producer: unknown): string {
   if (!isPlainObject(producer)) return bodyDigest(producer);
   const body: PlainObject = { ...producer };
   delete body["gaps"];
+  delete body["manifestDigest"];
   return bodyDigest(body);
 }
 
@@ -220,11 +225,11 @@ function finish(
   optionalGapReports: PairedAnalyticsOptionalGapReportV1[],
   pinned: PlainObject,
 ): PairedAnalyticsParityResultV1 {
-  const testedHeads: { pansphaira: string; kaleidoSphere: string } =
-    isPlainObject(pinned["exactTestedHeads"])
+  const declaredSourceHeads: { pansphaira: string; kaleidoSphere: string } =
+    isPlainObject(pinned["declaredSourceHeads"])
       ? {
-          pansphaira: asString((pinned["exactTestedHeads"] as PlainObject)["pansphaira"]) ?? "",
-          kaleidoSphere: asString((pinned["exactTestedHeads"] as PlainObject)["kaleidoSphere"]) ?? "",
+          pansphaira: asString((pinned["declaredSourceHeads"] as PlainObject)["pansphaira"]) ?? "",
+          kaleidoSphere: asString((pinned["declaredSourceHeads"] as PlainObject)["kaleidoSphere"]) ?? "",
         }
       : { pansphaira: "", kaleidoSphere: "" };
 
@@ -232,9 +237,9 @@ function finish(
     outcome: reasonCodes.size === 0 ? "PASS" : "DENIED",
     reasonCodes: [...reasonCodes].sort(),
     optionalGapReports,
-    testedHeads,
+    declaredSourceHeads,
     claimBoundary: {
-      exactTestedPairOnly: true,
+      exactTestedPairOnly: false,
       unknownPairsDenied: true,
       // The gate is a static two-manifest integrity check: it performs no
       // production, customer, external, publication or closure effect.
@@ -283,8 +288,7 @@ export function verifyPairedAnalyticsParityV1(input: PairedAnalyticsParityInputV
   const recordedProducerDigest = asString(producer["manifestDigest"]);
   if (
     recordedProducerDigest === null ||
-    recordedProducerDigest !== producerSelfDigest(producer) ||
-    recordedProducerDigest !== producerRef.manifestDigest
+    recordedProducerDigest !== producerSelfDigest(producer)
   ) {
     deny("PAIRED_ANALYTICS_PRODUCER_DIGEST_DENIED");
   }
@@ -313,7 +317,7 @@ export function verifyPairedAnalyticsParityV1(input: PairedAnalyticsParityInputV
   // --- AC03: exact head parity (stale / substituted / unknown) ------------------
   const producerServiceHead = isPlainObject(producer["producer"]) ? (producer["producer"] as PlainObject)["serviceHead"] : null;
   const consumerHead = isPlainObject(consumer["bindings"]) ? (consumer["bindings"] as PlainObject)["kaleidosphereHead"] : null;
-  const expectedKsHead = pinned.exactTestedHeads.kaleidoSphere;
+  const expectedKsHead = pinned.declaredSourceHeads.kaleidoSphere;
 
   // The producer must bind the exact tested KaleidoSphere head.
   if (!headMatches(producerServiceHead, producerRef.serviceHead) || producerRef.serviceHead.commitOid !== expectedKsHead) {
@@ -390,7 +394,9 @@ export function verifyPairedAnalyticsParityV1(input: PairedAnalyticsParityInputV
   }
 
   // --- AC02: producer gap policy (optional reported, unknown blocks) -----------
+  if (!Array.isArray(producer["gaps"])) deny("PAIRED_ANALYTICS_INPUT_MALFORMED");
   const gaps = Array.isArray(producer["gaps"]) ? (producer["gaps"] as unknown[]) : [];
+  const gapIds = new Set<string>();
   const knownOptional = new Set<string>(pinned.knownOptionalGaps.map((gap) => `${gap.id}\0${gap.state}`));
   for (const raw of gaps) {
     if (!isPlainObject(raw)) {
@@ -399,6 +405,19 @@ export function verifyPairedAnalyticsParityV1(input: PairedAnalyticsParityInputV
     }
     const id = asString(raw["id"]) ?? "";
     const state = asString(raw["state"]) ?? "";
+    const field = asString(raw["field"]) ?? "";
+    const keys = Object.keys(raw).sort().join(",");
+    if (!id || !field || !asString(raw["note"]) || !isPlainObject(raw["observed"]) ||
+        keys !== "field,id,note,observed,state" || gapIds.has(id)) {
+      deny("PAIRED_ANALYTICS_INPUT_MALFORMED");
+    }
+    gapIds.add(id);
+    if (pinned.promisedScope.supportedActionIds.includes(id) ||
+        (!pinned.knownOptionalGaps.some(gap => gap.id === id) &&
+          [...Object.keys(producer), ...Object.keys(consumer), ...Object.keys(pinned.promisedScope.channelVersions), ...pinned.promisedScope.supportedActionIds]
+            .some(required => field === required || field.startsWith(`${required}.`) || id === required))) {
+      deny("PAIRED_ANALYTICS_PROMISED_SCOPE_CHANGED_DENIED");
+    }
     if (!PAIRED_ANALYTICS_GAP_STATES_V1.includes(state)) {
       // A gap state outside the closed vocabulary is treated as unknown.
       deny("PAIRED_ANALYTICS_PROMISED_SCOPE_UNKNOWN_DENIED");
@@ -426,6 +445,12 @@ export function verifyPairedAnalyticsParityV1(input: PairedAnalyticsParityInputV
     // pair cannot certify.
     if (!knownOptional.has(`${id}\0${state}`)) {
       deny("PAIRED_ANALYTICS_PROMISED_SCOPE_UNKNOWN_DENIED");
+    }
+  }
+
+  for (const gap of pinned.knownOptionalGaps) {
+    if (!gaps.some(raw => isPlainObject(raw) && raw["id"] === gap.id && raw["state"] === gap.state)) {
+      deny("PAIRED_ANALYTICS_PROMISED_SCOPE_CHANGED_DENIED");
     }
   }
 
@@ -460,11 +485,9 @@ export function verifyPairedAnalyticsParityV1(input: PairedAnalyticsParityInputV
 }
 
 /**
- * Derive the code-owned pinned expectation from the exact, consistent
- * (producer x consumer) pair. The runner uses this to generate the evidence
- * artifact; the gate itself never calls it (it only consumes a pinned
- * expectation), so a hand-edited / stale / substituted pinned block cannot
- * silently pass.
+ * Candidate-pin utility only, NOT an acceptance authority. Neither production
+ * runner nor positive tests derive their expectation from submitted inputs.
+ * Pin changes require independent review and counterpart execution.
  */
 export function derivePairedAnalyticsPinnedV1(
   producer: unknown,
@@ -479,14 +502,14 @@ export function derivePairedAnalyticsPinnedV1(
     ? (producerObject["producer"] as PlainObject)
     : ({} as PlainObject);
   const producerServiceHead = producerProduct["serviceHead"];
-  if (!isPlainObject(producerServiceHead) || asString(producerServiceHead["commitOid"]) === null || asString(producerServiceHead["treeOid"]) === null) {
+  if (!isPlainObject(producerServiceHead) || !immutableOid(producerServiceHead["commitOid"]) || !immutableOid(producerServiceHead["treeOid"])) {
     throw new Error("DERIVE_PRODUCER_HEAD_INVALID");
   }
   const consumerBindings = isPlainObject(consumerObject["bindings"])
     ? (consumerObject["bindings"] as PlainObject)
     : ({} as PlainObject);
   const consumerHead = consumerBindings["kaleidosphereHead"];
-  if (!isPlainObject(consumerHead) || asString(consumerHead["commitOid"]) === null || asString(consumerHead["treeOid"]) === null) {
+  if (!isPlainObject(consumerHead) || !immutableOid(consumerHead["commitOid"]) || !immutableOid(consumerHead["treeOid"])) {
     throw new Error("DERIVE_CONSUMER_HEAD_INVALID");
   }
   // Head parity is a precondition for a *consistent* derivation: the producer
@@ -536,6 +559,9 @@ export function derivePairedAnalyticsPinnedV1(
   const num = (v: unknown): number => (typeof v === "number" && Number.isFinite(v) ? v : NaN);
   const adjudication = isPlainObject(producerObject["runtimeProjection"]) ? (producerObject["runtimeProjection"] as PlainObject)["adjudication"] : null;
   const reconciledRaw = isPlainObject(producerProduct["reconciledReleasedHeads"]) ? (producerProduct["reconciledReleasedHeads"] as PlainObject) : null;
+  if (!isPlainObject(reconciledRaw) || !immutableOid(reconciledRaw["pansphaira"]) || !immutableOid(reconciledRaw["kaleidoSphere"])) {
+    throw new Error("DERIVE_RELEASE_HEAD_INVALID");
+  }
   const requiredComputed = {
     nodeCount: num(computedRaw["nodeCount"]),
     knowledgeNodeCount: num(computedRaw["knowledgeNodeCount"]),
@@ -575,7 +601,7 @@ export function derivePairedAnalyticsPinnedV1(
       contract: { id: asString(consumerContract["id"]) as string, version: asString(consumerContract["version"]) as string },
       profileDigest: asString(consumerSection["profileDigest"]) ?? "",
     },
-    exactTestedHeads: {
+    declaredSourceHeads: {
       pansphaira: asString(isPlainObject(reconciledRaw) ? reconciledRaw["pansphaira"] : null) as string,
       kaleidoSphere: asString(consumerHead["commitOid"]) as string,
     },

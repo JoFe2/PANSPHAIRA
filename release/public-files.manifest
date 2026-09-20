@@ -1532,3 +1532,6 @@ scripts/run-paired-analytics-parity.mjs	scripts/run-paired-analytics-parity.mjs	
 tests/paired-analytics-parity.test.ts	tests/paired-analytics-parity.test.ts	0644
 tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json	tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json	0644
 tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json	tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json	0644
+contracts/analytics/paired-expectation-v1.json	contracts/analytics/paired-expectation-v1.json	0644
+scripts/paired-analytics-execution.mjs	scripts/paired-analytics-execution.mjs	0644
+tests/paired-analytics-runner.test.mjs	tests/paired-analytics-runner.test.mjs	0644

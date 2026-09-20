@@ -163,6 +163,14 @@
       "fromSha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d",
       "toSha256": "47882882a6682aa11852791c3e38ff83130bc30f70aa62ae5f7125d0ab0c11d0",
       "reason": "Canonically bind the PAR-XR-01 paired-analytics integrity family (paired-analytics parity gate source, adversarial TDD suite, executable parity runner, secure parity workflow, head-bound compatibility evidence and the two exact consumer-support fixtures) to the existing repository-integrity owner and extend the checksum ledger; admitted v1 and reviewed v2-v14 digests remain immutable."
+    },
+    {
+      "migrationId": "PAN346-INDEPENDENT-AUTHORITY/INTEGRITY-GENERATOR/V16",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 16,
+      "fromSha256": "47882882a6682aa11852791c3e38ff83130bc30f70aa62ae5f7125d0ab0c11d0",
+      "toSha256": "6498ba70c69bcbd1e99229427c42e7fe6cd510646a7e2e903a1ddcacb8fac12b",
+      "reason": "Bind independent paired expectations, runner regression tests and pinned offline counterpart execution to the existing integrity owner and canonical owned test; preserve admitted v1 and reviewed v2-v15 bytes."
     }
   ],
   "scanScope": {
@@ -205,15 +213,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 649,
+    "filesScanned": 651,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 218,
-    "importFiles": 217,
+    "importSites": 220,
+    "importFiles": 219,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1847,
-    "ledgerUniquePaths": 1847
+    "ledgerEntries": 1850,
+    "ledgerUniquePaths": 1850
   },
   "profiles": [
     {
@@ -286,7 +294,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "47882882a6682aa11852791c3e38ff83130bc30f70aa62ae5f7125d0ab0c11d0"
+      "sha256": "6498ba70c69bcbd1e99229427c42e7fe6cd510646a7e2e903a1ddcacb8fac12b"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -590,13 +598,13 @@
     },
     {
       "owner": "scripts",
-      "importSites": 11,
-      "importFiles": 11
+      "importSites": 12,
+      "importFiles": 12
     },
     {
       "owner": "tests",
-      "importSites": 46,
-      "importFiles": 45
+      "importSites": 47,
+      "importFiles": 46
     },
     {
       "owner": "usage-insights",
@@ -889,7 +897,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "47882882a6682aa11852791c3e38ff83130bc30f70aa62ae5f7125d0ab0c11d0",
+      "sha256": "6498ba70c69bcbd1e99229427c42e7fe6cd510646a7e2e903a1ddcacb8fac12b",
       "basis": "profile-version-migration"
     },
     {

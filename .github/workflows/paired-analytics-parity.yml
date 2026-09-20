@@ -2,7 +2,7 @@
 #
 # Secure, fail-closed CI: rebuilds, runs the adversarial TDD suite, re-derives
 # the head-bound evidence from the exact manifests and confirms it is
-# reproducible. No secrets, no external calls, no production/customer/publication
+# reproducible. Anonymous public fetch only; no secrets or production/customer/publication
 # or closure effect. The accepted pair claim is bounded to the exact tested
 # heads.
 name: Paired-Analytics Parity
@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 1
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -43,12 +45,38 @@ jobs:
         run: npm run build --silent
 
       - name: Run the adversarial paired-analytics parity suite
-        run: node --test dist/tests/paired-analytics-parity.test.js
+        run: npm run paired-analytics:test:compiled
 
       - name: Re-derive the head-bound evidence and confirm reproducibility
         run: |
           node scripts/run-paired-analytics-parity.mjs
           node scripts/run-paired-analytics-parity.mjs --check
+
+      - name: Fetch the immutable public counterpart without credentials
+        env:
+          GIT_TERMINAL_PROMPT: '0'
+        run: |
+          git init "$RUNNER_TEMP/paired-ks"
+          git -C "$RUNNER_TEMP/paired-ks" -c credential.helper= fetch --depth=1 https://github.com/JoFe2/KaleidoSphere.git 545a3b44ea88c96eded060c11c7c3a2afe0edff6
+          git -C "$RUNNER_TEMP/paired-ks" checkout --detach FETCH_HEAD
+
+      - name: Execute the pinned counterpart and bind actual Git heads
+        env:
+          EXPECTED_PAN_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          node scripts/run-paired-analytics-parity.mjs --counterpart "$RUNNER_TEMP/paired-ks" --pan-head "$EXPECTED_PAN_HEAD" --output "$RUNNER_TEMP/paired-analytics-execution.json"
+          (cd "$RUNNER_TEMP" && sha256sum paired-analytics-execution.json > paired-analytics-execution.sha256)
+          cat "$RUNNER_TEMP/paired-analytics-execution.json"
+
+      - name: Preserve exact-head execution evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: paired-analytics-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/paired-analytics-execution.json
+            ${{ runner.temp }}/paired-analytics-execution.sha256
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Confirm the suite and runner performed no tracked-file mutation
         run: git diff --exit-code

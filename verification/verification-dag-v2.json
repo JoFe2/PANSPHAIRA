@@ -4691,7 +4691,7 @@
         {
           "path": ".github/workflows/paired-analytics-parity.yml",
           "role": "SECURITY",
-          "sha256": "be9be2f8272c59e9026c03c7b86477cf69eabdc9b2c3a3e6e54b9ca406e28e3f"
+          "sha256": "98f017afecc79c38dddeb8907fe1992c92d04aea447d0948036158ad72040b8a"
         },
         {
           "path": ".github/workflows/release-public-readback.yml",
@@ -4702,6 +4702,11 @@
           "path": "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0"
+        },
+        {
+          "path": "contracts/analytics/paired-expectation-v1.json",
+          "role": "CONTRACT",
+          "sha256": "37f3986e6b809124ed6adc65d000c770f70000d62231eebc3aa1c88d60c2d926"
         },
         {
           "path": "contracts/analytics/producer-manifest-v1.json",
@@ -4786,7 +4791,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "a8b3c38bc1c1d35b5836a806ab51a03bc7d278450ad689f8961f938187359409"
+          "sha256": "bc5f77fc05c724cd38c7fecae55771f73953880c19a7098d7c5bc2aa4c85c35f"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4796,7 +4801,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "8c925a53f9924c3141a890c49d97ce21e5d7550fa60b5748a4ccdc9e04a8a0e6"
+          "sha256": "4d3ef993bad838932ddc400586d248456a9ddaa4fed1dd79a9305e181b168600"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4804,9 +4809,14 @@
           "sha256": "aad34f5f7380537f65c78f4f8f507235ba6a2adc7b1bde64f6c972de4f8e9e65"
         },
         {
+          "path": "scripts/paired-analytics-execution.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6baa34ee4f4a85c8861970e779aa57f4742e3cb91680304e091fce091be4147a"
+        },
+        {
           "path": "scripts/run-paired-analytics-parity.mjs",
           "role": "VALIDATOR",
-          "sha256": "eaac9c5c5762e963c1edaf0df97c6ccb444cb4a3b4c9358e9b767ea039bff6ce"
+          "sha256": "1af98d94278f305fe0a262a124cc48a59176e11a50ec6174034d63089cb19629"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4821,12 +4831,12 @@
         {
           "path": "src/analytics/paired-analytics-parity.ts",
           "role": "SOURCE",
-          "sha256": "6b0f9c11b7631e2b69a298a8d9ae7e742b1972ad9987e06250ea6365dec6db32"
+          "sha256": "03e5fbee9fa69a8245873e9599d862d6237c0862b3233e9831a64f9179664953"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "08707d0e310bce66200da63f70fe5f041fd0698b52bf131f50add7c43d40398f"
+          "sha256": "731dc725a67cd0ca68d78fa0c5ed1d6779d8cf51038ff15ad402a8f2defebe3b"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4856,7 +4866,12 @@
         {
           "path": "tests/paired-analytics-parity.test.ts",
           "role": "VALIDATOR",
-          "sha256": "206e89b669be899008ec4bb86094d252d7cd40190973f4e10cc0324c4f223d76"
+          "sha256": "fa32ffdaf630feb6f758df23d3f6a97cf6e1df272d59d4217e336812193de98b"
+        },
+        {
+          "path": "tests/paired-analytics-runner.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "aa5ef92d0af7ad4abe38b98036d17cb8036a1548ab0c53c2dd9ea912d75a2c86"
         },
         {
           "path": "tests/public-product-spelling.test.mjs",
@@ -4866,7 +4881,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5e8748ded5851e1be9d619430b876b262b419da88074abc89c0d4c8acd76d5db"
+          "sha256": "b4b093f740cf6e34b5f99642314efa1f0500ad75bd87576cee12fd46c179c4f8"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4876,7 +4891,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "7adb20d8df67b2562265396c5535d705f8895cc0d95dad82187b74df3775596a"
+          "sha256": "9cf6d91aec9a903157f0e49623c68c6cd4d62292121827528d5ce947d2c4d352"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -4886,7 +4901,7 @@
         {
           "path": "verification/paired-analytics-compatibility-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "414bef96c0dde0b1347ca6540bc4f3d2b13036e9ba1b260e586e508c197121ff"
+          "sha256": "23b3821803f0614b1345c6c3ebed6601b42bb1900ff267c6cdd84534bc4883e9"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
@@ -4899,7 +4914,8 @@
         "node --test tests/supply-chain-verifier.test.mjs",
         "node --test dist/tests/canonical-json-profile-inventory.test.js",
         "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js",
-        "node --test tests/demo-current-head-e2e*.test.mjs"
+        "node --test tests/demo-current-head-e2e*.test.mjs",
+        "npm run paired-analytics:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -4917,8 +4933,8 @@
         "A successful retained receipt binds exact commit/tree, image and Compose locks, fixtures, health, governed effect, authoritative readback, cleanup and zero owned residue.",
         "Failed health, fixture drift, missing readback, timeout, stale evidence, caller-authored PASS, hard-gate failure, overclaim and residual ownership fail closed.",
         "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation.",
-        "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent head-bound pair PASSes and a stale, substituted, unknown or re-digested pair fails closed.",
-        "PAR-XR-01 is a repository-only static two-manifest integrity check; it performs no production, customer, external, publication or closure effect, and its accepted claim names only the exact tested heads."
+        "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent pair PASSes against independently reviewed scope; stale, substituted, unknown or re-digested mandatory-scope regressions fail closed, while unrelated optional gaps are reported.",
+        "PAR-XR-01 static evidence makes no executed-head claim; separate pinned offline execution binds actual Git heads without production, customer, network service, publication or closure effects. Public AC04 closure remains pending."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false
@@ -5454,7 +5470,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "5cf18589f3cfe972086a56daf9b557bd38a8c37bc9186c85a54f699f443b2589"
+          "sha256": "405bd8727abe866f8de36f6a6490eb40343ecabef8eaa1570ff4d3e7ee957ea8"
         },
         {
           "path": "package-lock.json",
@@ -5814,7 +5830,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f9e0a452c247eee231420ae1951212e361a6436bc051e5d478e0228a1d67c868"
+          "sha256": "5dad73406b521b0f6798351e648c6f824ec5f97e56637f2606e0248ba9f897c8"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6079,7 +6095,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "a8b3c38bc1c1d35b5836a806ab51a03bc7d278450ad689f8961f938187359409"
+          "sha256": "bc5f77fc05c724cd38c7fecae55771f73953880c19a7098d7c5bc2aa4c85c35f"
         }
       ],
       "ownedTests": [
