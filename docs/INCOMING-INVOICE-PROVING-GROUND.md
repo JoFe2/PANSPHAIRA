@@ -26,7 +26,7 @@ workflow rule.
 ```text
 Source
 → Document
-→ Document-AI extraction
+→ Synthetic extraction scoring harness (real Document-AI pilot: #378)
 → Validation
 → Supplier / PO / Receipt / Invoice matching
 → Exception and evidence-citing advisor dialogue
@@ -94,9 +94,15 @@ Any of them fails the variant proof.
    Bind synthetic source bytes, provenance, document version, digest, metadata,
    and supplier-invoice identity; deny duplicate, tampered, unsupported, and
    ambiguous documents.
-3. **AP-03 — Document-AI benchmark**
-   Compare a deterministic baseline and model proposal against a frozen
-   synthetic holdout covering layouts, line items, taxes, totals, and failures.
+3. **AP-03 — Synthetic extraction scoring harness**
+   Compare a deterministic baseline and a bounded synthetic model proposal
+   against a frozen local-synthetic structured-text holdout covering layouts,
+   line items, taxes, totals, and failures. AP-03 is a deterministic synthetic
+   extraction scoring harness: it does not execute OCR or Document-AI model
+   inference and makes no OCR or model-quality claim. A separate real
+   Document-AI pilot (pinned model/OCR runtime, realistic sealed holdout,
+   independent oracle) is tracked under
+   [#378](https://github.com/JoFe2/PANSPHAIRA/issues/378) and remains open.
 4. **AP-04 — Validation, matching, and advisor**
    Keep supplier, purchase order, receipt, and invoice evidence distinct;
    version two-/three-way matching and tolerance variants; preserve exceptions

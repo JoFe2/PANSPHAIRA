@@ -92,6 +92,8 @@ The frozen [AP-06 proof probe](https://github.com/JoFe2/PANSPHAIRA/releases/tag/
 
 **[Explore the planned Source→Document AI→Matching→Advisor→UI→Receipt
 PoC](docs/INCOMING-INVOICE-PROVING-GROUND.md).**
+Current AP-03: synthetic extraction scoring harness. The
+[real OCR/Document-AI pilot remains separate](https://github.com/JoFe2/PANSPHAIRA/issues/378).
 
 ### Let AI agents ask better BI questions with KaleidoSphere
 
@@ -179,8 +181,7 @@ identity, prerequisites, optional subsystems, and cleanup details.
 - [Known Limitations](docs/KNOWN-LIMITATIONS.md)
 - [Repository documentation](docs/README.md)
 
-The root README introduces effects and routes every material claim to its
-inspectable evidence. Detailed proof pages own exhaustive versions, tests,
+The README links claims to evidence. Detailed proof pages own versions, tests,
 falsifiers, receipts, and nonclaims.
 
 The public repository provides an open-source proof-of-concept control plane
