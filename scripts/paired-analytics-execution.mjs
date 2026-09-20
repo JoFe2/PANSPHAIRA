@@ -9,12 +9,15 @@ function command(cwd, executable, args) {
 }
 function checkout(cwd, expected) {
   if (!/^[a-f0-9]{40}$/.test(expected)) throw new Error('PAIRED_EXECUTION_IMMUTABLE_OID_REQUIRED');
+  const worktreeRoot = command(cwd, 'git', ['rev-parse', '--show-toplevel']);
+  if (realpathSync(cwd) !== realpathSync(worktreeRoot)) throw new Error('PAIRED_EXECUTION_WORKTREE_ROOT_MISMATCH');
   const commitOid = command(cwd, 'git', ['rev-parse', '--verify', 'HEAD']);
   const treeOid = command(cwd, 'git', ['rev-parse', '--verify', 'HEAD^{tree}']);
   if (commitOid !== expected) throw new Error('PAIRED_EXECUTION_HEAD_MISMATCH');
   if (command(cwd, 'git', ['status', '--porcelain=v1', '--untracked-files=no'])) throw new Error('PAIRED_EXECUTION_DIRTY_CHECKOUT');
   return { commitOid, treeOid };
 }
+export { checkout as verifyPinnedCheckout };
 export function executePinnedPair({ root, counterpart, expectedPanHead, pinned, consumer }) {
   const ks = resolve(counterpart);
   const panHead = checkout(root, expectedPanHead);

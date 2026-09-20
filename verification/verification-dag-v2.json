@@ -4811,7 +4811,7 @@
         {
           "path": "scripts/paired-analytics-execution.mjs",
           "role": "VALIDATOR",
-          "sha256": "6baa34ee4f4a85c8861970e779aa57f4742e3cb91680304e091fce091be4147a"
+          "sha256": "0cd16675e6f5af09f5c8165344cd64d2daff57dbd79f15514cf9899137132f90"
         },
         {
           "path": "scripts/run-paired-analytics-parity.mjs",
@@ -4871,7 +4871,7 @@
         {
           "path": "tests/paired-analytics-runner.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "d7fe870cfeb3d6ba38a9a73f824db0fea56912ee99f9a8d455e5d4d926d96030"
+          "sha256": "3ad09ab6653bc3c2f261b46421a64d42018f19c6873641c790fde33d4adcc538"
         },
         {
           "path": "tests/public-product-spelling.test.mjs",
@@ -5470,7 +5470,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "405bd8727abe866f8de36f6a6490eb40343ecabef8eaa1570ff4d3e7ee957ea8"
+          "sha256": "ea1147d4b733cd03cc039e5b7af5fa54e97ad89db53ecbd222502ede1221abf9"
         },
         {
           "path": "package-lock.json",

@@ -104,6 +104,28 @@ test('execution rejects a different or dirty Git head before running counterpart
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('execution denies an untracked subdirectory posing as the pinned worktree root', async () => {
+  const { verifyPinnedCheckout } = await import('../scripts/paired-analytics-execution.mjs');
+  const dir = mkdtempSync(resolve(tmpdir(), 'paired-root-'));
+  const git = args => {
+    const result = spawnSync('git', args, { cwd: dir, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim();
+  };
+  try {
+    git(['init', '--quiet']);
+    writeFileSync(resolve(dir, 'tracked'), 'baseline');
+    git(['add', 'tracked']);
+    git(['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet', '-m', 'fixture']);
+    const head = git(['rev-parse', 'HEAD']);
+    const fake = resolve(dir, 'untracked-counterpart');
+    mkdirSync(fake);
+    writeFileSync(resolve(fake, 'fake-runtime.mjs'), 'throw new Error("must not execute")');
+    assert.equal(verifyPinnedCheckout(dir, head).commitOid, head);
+    assert.throws(() => verifyPinnedCheckout(fake, head), /WORKTREE_ROOT_MISMATCH/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('a floating declared PAN release head cannot establish a pin either', async () => {
   const { derivePairedAnalyticsPinnedV1 } = await import('../dist/src/analytics/paired-analytics-parity.js');
   const p = JSON.parse(readFileSync(resolve(root, producerPath)));

@@ -173,7 +173,7 @@
     "incoming-invoice-ap05-receipt-manifest:test:compiled": "node --test dist/tests/incoming-invoice-ap05-receipt-manifest.test.js",
     "producer-analytics-manifest:generate": "npm run build --silent && node scripts/build-producer-analytics-manifest.mjs",
     "producer-analytics-manifest:test": "npm run build --silent && node --test dist/tests/producer-analytics-manifest.test.js",
-    "paired-analytics:test": "npm run build --silent && npm run paired-analytics:test:compiled",
+    "paired-analytics:test": "npm run build --silent && node --test dist/tests/paired-analytics-parity.test.js tests/paired-analytics-runner.test.mjs && node scripts/run-paired-analytics-parity.mjs --check",
     "paired-analytics:test:compiled": "node --test dist/tests/paired-analytics-parity.test.js tests/paired-analytics-runner.test.mjs && node scripts/run-paired-analytics-parity.mjs --check",
     "producer-analytics-manifest:test:compiled": "node --test dist/tests/producer-analytics-manifest.test.js",
     "incoming-invoice-ap06-proof-probe:generate": "npm run build --silent && node scripts/generate-incoming-invoice-ap06-proof-probe.mjs",
