@@ -155,6 +155,14 @@
       "fromSha256": "c45eef7d08a69273146d264bb68c15a9f984767e51e8e11097e8106997216640",
       "toSha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d",
       "reason": "Canonically bind the XRA-PS-02 native AC03 Root-QS execution-evidence family (executable Root-QS replay runner, focused Root-QS RED-GREEN-NEGATIVE test, v2 successor paired receipt, raw Root-QS execution evidence and v2 slice) to the existing CKS-12 closed-loop owner; admitted v1 and reviewed v2-v13 digests remain immutable."
+    },
+    {
+      "migrationId": "PORTFOLIO-PAR-XR-01-PAIRED-ANALYTICS/INTEGRITY-GENERATOR/V15",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 15,
+      "fromSha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d",
+      "toSha256": "47882882a6682aa11852791c3e38ff83130bc30f70aa62ae5f7125d0ab0c11d0",
+      "reason": "Canonically bind the PAR-XR-01 paired-analytics integrity family (paired-analytics parity gate source, adversarial TDD suite, executable parity runner, secure parity workflow, head-bound compatibility evidence and the two exact consumer-support fixtures) to the existing repository-integrity owner and extend the checksum ledger; admitted v1 and reviewed v2-v14 digests remain immutable."
     }
   ],
   "scanScope": {
@@ -197,15 +205,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 646,
+    "filesScanned": 649,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 215,
-    "importFiles": 214,
+    "importSites": 218,
+    "importFiles": 217,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1840,
-    "ledgerUniquePaths": 1840
+    "ledgerEntries": 1847,
+    "ledgerUniquePaths": 1847
   },
   "profiles": [
     {
@@ -278,7 +286,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d"
+      "sha256": "47882882a6682aa11852791c3e38ff83130bc30f70aa62ae5f7125d0ab0c11d0"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -522,8 +530,8 @@
   "consumerFamilies": [
     {
       "owner": "analytics",
-      "importSites": 1,
-      "importFiles": 1
+      "importSites": 2,
+      "importFiles": 2
     },
     {
       "owner": "cks",
@@ -582,13 +590,13 @@
     },
     {
       "owner": "scripts",
-      "importSites": 10,
-      "importFiles": 10
+      "importSites": 11,
+      "importFiles": 11
     },
     {
       "owner": "tests",
-      "importSites": 45,
-      "importFiles": 44
+      "importSites": 46,
+      "importFiles": 45
     },
     {
       "owner": "usage-insights",
@@ -881,7 +889,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "886b6e4ce240405db56758064ba6ae00d6f31d9c9d365ef09c4d62fd7448165d",
+      "sha256": "47882882a6682aa11852791c3e38ff83130bc30f70aa62ae5f7125d0ab0c11d0",
       "basis": "profile-version-migration"
     },
     {

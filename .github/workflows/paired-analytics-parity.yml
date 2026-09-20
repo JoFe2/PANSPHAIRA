@@ -1,0 +1,54 @@
+# PAR-XR-01 — Paired-Analytics compatibility gate (producer x consumer).
+#
+# Secure, fail-closed CI: rebuilds, runs the adversarial TDD suite, re-derives
+# the head-bound evidence from the exact manifests and confirms it is
+# reproducible. No secrets, no external calls, no production/customer/publication
+# or closure effect. The accepted pair claim is bounded to the exact tested
+# heads.
+name: Paired-Analytics Parity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: paired-analytics-parity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  paired-analytics-parity:
+    name: Gate the exact paired-analytics compatibility pair
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.14.1
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Build
+        run: npm run build --silent
+
+      - name: Run the adversarial paired-analytics parity suite
+        run: node --test dist/tests/paired-analytics-parity.test.js
+
+      - name: Re-derive the head-bound evidence and confirm reproducibility
+        run: |
+          node scripts/run-paired-analytics-parity.mjs
+          node scripts/run-paired-analytics-parity.mjs --check
+
+      - name: Confirm the suite and runner performed no tracked-file mutation
+        run: git diff --exit-code

@@ -1527,3 +1527,8 @@ verification/rks-01-source-capture-receipt-v1.json	verification/rks-01-source-ca
 verification/rks-02-falsification-report-v1.json	verification/rks-02-falsification-report-v1.json	0644
 verification/verification-dag-v2.json	verification/verification-dag-v2.json	0644
 verification/wikimedia-m0-evidence-v1.json	verification/wikimedia-m0-evidence-v1.json	0644
+src/analytics/paired-analytics-parity.ts	src/analytics/paired-analytics-parity.ts	0644
+scripts/run-paired-analytics-parity.mjs	scripts/run-paired-analytics-parity.mjs	0644
+tests/paired-analytics-parity.test.ts	tests/paired-analytics-parity.test.ts	0644
+tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json	tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json	0644
+tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json	tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json	0644

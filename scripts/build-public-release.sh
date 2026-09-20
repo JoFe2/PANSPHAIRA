@@ -189,7 +189,7 @@ for line_number, raw in enumerate(manifest.read_text("utf-8").splitlines(), 1):
         raise SystemExit(f"PRIVILEGED_SOURCE_MODE:{line_number}")
     total_bytes += metadata.st_size
 
-if count != 1527:
+if count != 1532:
     raise SystemExit("MANIFEST_FILE_COUNT")
 if total_bytes > 100 * 1024 * 1024:
     raise SystemExit("MANIFEST_BYTE_LIMIT")
@@ -203,6 +203,7 @@ repository_only_files = {
     "tests/trust-compatibility-foundation-closure.test.ts",
     "tests/delivery-contract-template.test.mjs",
     "verification/external-bi-service-paired-compatibility-v1.json",
+    "verification/paired-analytics-compatibility-v1.json",
     "verification/ps391-temporal-focused-receipt-v1.json",
     "verification/trust-compatibility-foundation-closure-v1.json",
     "tests/fixtures/local-knowledge-wiki-container/credential-like.env",

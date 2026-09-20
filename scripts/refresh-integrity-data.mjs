@@ -621,6 +621,32 @@ cscl11Node.inputs = [
   ["verification/cscl-11-idempiere-holdout-verdict-overall-v1.json", "DERIVED_EVIDENCE"],
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 cscl11Node.ownedTests = ["npm run cscl11:test"];
+const pairedAnalyticsInputs = [
+  ["contracts/analytics/producer-manifest-v1.json", "CONTRACT"],
+  ["tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json", "FIXTURE"],
+  ["tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json", "FIXTURE"],
+  ["src/analytics/paired-analytics-parity.ts", "SOURCE"],
+  ["tests/paired-analytics-parity.test.ts", "VALIDATOR"],
+  ["scripts/run-paired-analytics-parity.mjs", "VALIDATOR"],
+  [".github/workflows/paired-analytics-parity.yml", "SECURITY"],
+  ["verification/paired-analytics-compatibility-v1.json", "DERIVED_EVIDENCE"],
+];
+for (const [inputPath, role] of pairedAnalyticsInputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) {
+    throw new Error(`PAR_XR_01_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  }
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+const pairedAnalyticsInvariants = [
+  "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent head-bound pair PASSes and a stale, substituted, unknown or re-digested pair fails closed.",
+  "PAR-XR-01 is a repository-only static two-manifest integrity check; it performs no production, customer, external, publication or closure effect, and its accepted claim names only the exact tested heads.",
+];
+for (const invariant of pairedAnalyticsInvariants) {
+  if (!repositoryIntegrityNode.invariants.includes(invariant)) repositoryIntegrityNode.invariants.push(invariant);
+}
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
 dag.graphVersion = 49;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
@@ -645,6 +671,13 @@ for (const relative of [
   "tests/trust-compatibility-foundation-closure.test.ts",
   "verification/external-bi-service-paired-compatibility-v1.json",
   "verification/trust-compatibility-foundation-closure-v1.json",
+  "src/analytics/paired-analytics-parity.ts",
+  "tests/paired-analytics-parity.test.ts",
+  "scripts/run-paired-analytics-parity.mjs",
+  ".github/workflows/paired-analytics-parity.yml",
+  "verification/paired-analytics-compatibility-v1.json",
+  "tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json",
+  "tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);

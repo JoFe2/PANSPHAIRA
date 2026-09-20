@@ -4689,6 +4689,11 @@
           "sha256": "58b7743dc986a6f4c9faf661ab9a774446f02bf3d215315578d041af0ca477e4"
         },
         {
+          "path": ".github/workflows/paired-analytics-parity.yml",
+          "role": "SECURITY",
+          "sha256": "be9be2f8272c59e9026c03c7b86477cf69eabdc9b2c3a3e6e54b9ca406e28e3f"
+        },
+        {
           "path": ".github/workflows/release-public-readback.yml",
           "role": "SECURITY",
           "sha256": "ae4f1a874d88f9319c56b40b266b42c981f79a859754e8c65b636cddc968e568"
@@ -4697,6 +4702,11 @@
           "path": "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0"
+        },
+        {
+          "path": "contracts/analytics/producer-manifest-v1.json",
+          "role": "CONTRACT",
+          "sha256": "99adfbe7705c95e9789c6be7579f69fb77d31089319906365da52b4ec8cdfd4d"
         },
         {
           "path": "CONTRIBUTING.md",
@@ -4776,7 +4786,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "221d5e654c6916462b1a0177a0df481aebf8e8a0ee14657a77797a81b02d4fe6"
+          "sha256": "a8b3c38bc1c1d35b5836a806ab51a03bc7d278450ad689f8961f938187359409"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4786,12 +4796,17 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d353fd66670c4b5381bc7d6362786a3636d9425fee30d076ec2bfdc9bd621af6"
+          "sha256": "8c925a53f9924c3141a890c49d97ce21e5d7550fa60b5748a4ccdc9e04a8a0e6"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
           "role": "SECURITY",
           "sha256": "aad34f5f7380537f65c78f4f8f507235ba6a2adc7b1bde64f6c972de4f8e9e65"
+        },
+        {
+          "path": "scripts/run-paired-analytics-parity.mjs",
+          "role": "VALIDATOR",
+          "sha256": "eaac9c5c5762e963c1edaf0df97c6ccb444cb4a3b4c9358e9b767ea039bff6ce"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4804,9 +4819,14 @@
           "sha256": "1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641"
         },
         {
+          "path": "src/analytics/paired-analytics-parity.ts",
+          "role": "SOURCE",
+          "sha256": "6b0f9c11b7631e2b69a298a8d9ae7e742b1972ad9987e06250ea6365dec6db32"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "43863f4b2dc5af59175ff42f6cc66189d9a2d5a3bde2ee00c3d2de1032513c00"
+          "sha256": "08707d0e310bce66200da63f70fe5f041fd0698b52bf131f50add7c43d40398f"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4819,9 +4839,24 @@
           "sha256": "082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3"
         },
         {
+          "path": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json",
+          "role": "FIXTURE",
+          "sha256": "f98a401c37d6422bde5b6379db5e49ff0c18aae599f1939de711fcb5d19ab6b4"
+        },
+        {
+          "path": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json",
+          "role": "FIXTURE",
+          "sha256": "98c7f8311bf244f804aeb23ff7cefefc3f521670468f72f4bb4a5170b2329ec9"
+        },
+        {
           "path": "tests/incoming-invoice-adaptive-ui.test.ts",
           "role": "VALIDATOR",
           "sha256": "9d8dcd5025fb8f2351eb4d5824123fbf7a1372af1370b614e936d52c6a3e520f"
+        },
+        {
+          "path": "tests/paired-analytics-parity.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "206e89b669be899008ec4bb86094d252d7cd40190973f4e10cc0324c4f223d76"
         },
         {
           "path": "tests/public-product-spelling.test.mjs",
@@ -4831,7 +4866,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "6eaa7538ce3270ee87a1160c9f75b978c5794e62d9e56647c524521944bf2e31"
+          "sha256": "5e8748ded5851e1be9d619430b876b262b419da88074abc89c0d4c8acd76d5db"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4841,12 +4876,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "0379ebd26fd6f4e87997640ce5d195b82cbeb1e96009d26c3367583b740bcfc0"
+          "sha256": "7adb20d8df67b2562265396c5535d705f8895cc0d95dad82187b74df3775596a"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
           "role": "CONTRACT",
           "sha256": "f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e"
+        },
+        {
+          "path": "verification/paired-analytics-compatibility-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "414bef96c0dde0b1347ca6540bc4f3d2b13036e9ba1b260e586e508c197121ff"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
@@ -4876,7 +4916,9 @@
         "Scheduled and release Docker E2E checks out one exact clean SHA, uses an isolated Compose namespace and remains absent from ordinary pull-request Docker work.",
         "A successful retained receipt binds exact commit/tree, image and Compose locks, fixtures, health, governed effect, authoritative readback, cleanup and zero owned residue.",
         "Failed health, fixture drift, missing readback, timeout, stale evidence, caller-authored PASS, hard-gate failure, overclaim and residual ownership fail closed.",
-        "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation."
+        "Final completion requires public CLOSED issue and authoritative unowned DONE Queue readback without granting credentials, productive effects or Authority mutation.",
+        "The paired-analytics compatibility gate binds the exact PANSPHAIRA producer manifest and the exact KaleidoSphere consumer support manifest; a consistent head-bound pair PASSes and a stale, substituted, unknown or re-digested pair fails closed.",
+        "PAR-XR-01 is a repository-only static two-manifest integrity check; it performs no production, customer, external, publication or closure effect, and its accepted claim names only the exact tested heads."
       ],
       "riskClass": "CRITICAL",
       "globalInvalidation": false
@@ -5772,7 +5814,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "04bdf485324adf25de7a42ae7147530e3dc7026e5db500808a94bd2b91cc4acb"
+          "sha256": "f9e0a452c247eee231420ae1951212e361a6436bc051e5d478e0228a1d67c868"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6037,7 +6079,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "221d5e654c6916462b1a0177a0df481aebf8e8a0ee14657a77797a81b02d4fe6"
+          "sha256": "a8b3c38bc1c1d35b5836a806ab51a03bc7d278450ad689f8961f938187359409"
         }
       ],
       "ownedTests": [
