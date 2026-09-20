@@ -93,6 +93,10 @@
       "adjudicationOutcome": "ACCEPTED_BOUNDED"
     }
   },
+  "inputDigests": {
+    "producer": "e426d65953a76bc97cee33372cf552b626bc2909699d5465e5e61f4324c996c8",
+    "consumer": "sha256:bca9ef4310c409ce03f277c5551f03959017cf13b591ef1f38ea04c6d3a9bfb3"
+  },
   "testedHeads": null,
   "executionStatus": "PENDING_PINNED_EXECUTION",
   "declaredSourceHeads": {
@@ -138,5 +142,5 @@
     "This static result has no executed-head claim; pinned counterpart execution remains pending.",
     "Final public closure remains separately governed and is not performed here."
   ],
-  "evidenceDigest": "aa5eb4758ea5e9930e2dcedb57044864ebc1469146d53a8dc75f4261f0943cf5"
+  "evidenceDigest": "894a5b382f3d4b8080d1ae6c5bc2c3515ed6b27de7bd3df005d09bcb1d90f96d"
 }

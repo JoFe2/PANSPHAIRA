@@ -4816,7 +4816,7 @@
         {
           "path": "scripts/run-paired-analytics-parity.mjs",
           "role": "VALIDATOR",
-          "sha256": "1af98d94278f305fe0a262a124cc48a59176e11a50ec6174034d63089cb19629"
+          "sha256": "6de5fa257bb0de3adb0bdcd2438a7708b92879cbf3a7385848826a3c7f249abc"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4871,7 +4871,7 @@
         {
           "path": "tests/paired-analytics-runner.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "aa5ef92d0af7ad4abe38b98036d17cb8036a1548ab0c53c2dd9ea912d75a2c86"
+          "sha256": "d7fe870cfeb3d6ba38a9a73f824db0fea56912ee99f9a8d455e5d4d926d96030"
         },
         {
           "path": "tests/public-product-spelling.test.mjs",
@@ -4901,7 +4901,7 @@
         {
           "path": "verification/paired-analytics-compatibility-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "23b3821803f0614b1345c6c3ebed6601b42bb1900ff267c6cdd84534bc4883e9"
+          "sha256": "3548c343e446524165550aae5705e357e059789404558670e71d9d73a3b82692"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",

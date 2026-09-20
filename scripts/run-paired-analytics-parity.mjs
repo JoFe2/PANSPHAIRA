@@ -119,6 +119,7 @@ const core = {
     { path: CONSUMER_STALE_PATH, role: "CONSUMER_MANIFEST_STALE" },
   ],
   pinned,
+  inputDigests: { producer: producer.manifestDigest, consumer: consumerHeadBound.integrity.digest },
   testedHeads: null,
   executionStatus: "PENDING_PINNED_EXECUTION",
   ...(execution ?? {}),
@@ -159,5 +160,5 @@ if (check) {
   }
 } else {
   writeFileSync(resolve(root, options["--output"] ?? EVIDENCE_PATH), serialized, execution ? { encoding: "utf8", flag: "wx" } : "utf8");
-  process.stdout.write(`${EVIDENCE_PATH}\n${evidence.evidenceDigest}\n`);
+  process.stdout.write(`${options["--output"] ?? EVIDENCE_PATH}\n${evidence.evidenceDigest}\n`);
 }

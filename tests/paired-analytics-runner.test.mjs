@@ -27,7 +27,7 @@ function probe(mutate, args = []) {
     writeFileSync(resolve(dir, producerPath), JSON.stringify(p));
     writeFileSync(resolve(dir, consumerPath), JSON.stringify(c));
     const result = spawnSync(process.execPath, [resolve(root, 'scripts/run-paired-analytics-parity.mjs'), ...args], { cwd: dir, encoding: 'utf8' });
-    return { ...result, evidence: JSON.parse(readFileSync(resolve(dir, 'verification/paired-analytics-compatibility-v1.json'))) };
+    return { ...result, producerDigest: p.manifestDigest, evidence: JSON.parse(readFileSync(resolve(dir, 'verification/paired-analytics-compatibility-v1.json'))) };
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 test('runner denies rehashed removal of a mandatory capability against independent authority', () => {
@@ -57,6 +57,7 @@ test('runner reports a newly added unrelated optional gap without repinning', ()
   const result = probe(p => p.gaps.push({ id: 'OPTIONAL_NEW', state: 'PENDING', field: 'optional.connector', note: 'Not promised by this pair', observed: {} }));
   assert.equal(result.status, 0, result.stderr);
   assert.ok(result.evidence.optionalGapReports.some(g => g.id === 'OPTIONAL_NEW'));
+  assert.equal(result.evidence.inputDigests?.producer, result.producerDigest);
 });
 
 for (const [name, mutate] of [
