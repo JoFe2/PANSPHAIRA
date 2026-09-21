@@ -6491,7 +6491,7 @@
         {
           "path": "packages/contracts/src/kundenauftrag-lieferzusage-v1.ts",
           "role": "CONTRACT",
-          "sha256": "b0ffcfd657e7254d13df1f8308d1f9dbdd5606e4cce64f10ab088f2c263df2a2"
+          "sha256": "45f7f39eb75b7b045ced97e9cca65a203e28bf40c98ac090f7c7df4571f8b61a"
         },
         {
           "path": "packages/contracts/src/sales-stock-journey-v1.ts",

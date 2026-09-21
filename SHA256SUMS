@@ -718,7 +718,7 @@ eedcd74a342563771646413e82c5cae8dcb8505ef5bfcb79de4f17a8b9c02b10  ./packages/con
 2b99689c462c0b4165d967bd82d3d266f6de1c62000bb4f9f3320b257d6b69db  ./packages/contracts/src/kaleidosphere-analytics-projection.ts
 e2ddaf15fae3636911a68247888883de5d80937e8cce98d9f42f80f7760db1aa  ./packages/contracts/src/knowledge-envelope.ts
 781d2a718e083de9a94b579308aad7cf29ad7943094482995442b56b72d20ac2  ./packages/contracts/src/knowledge-quality.ts
-b0ffcfd657e7254d13df1f8308d1f9dbdd5606e4cce64f10ab088f2c263df2a2  ./packages/contracts/src/kundenauftrag-lieferzusage-v1.ts
+45f7f39eb75b7b045ced97e9cca65a203e28bf40c98ac090f7c7df4571f8b61a  ./packages/contracts/src/kundenauftrag-lieferzusage-v1.ts
 83e85b6a287efbd8aa10ca1cf222d8801f2d8f7acc2cacb301fbc14d362eb5bc  ./packages/contracts/src/learning-routing-baseline.ts
 06716b26f31318ac2055de1646ac163944e869c79494d127139228633eea83da  ./packages/contracts/src/learning-routing-outcome.ts
 fb5a4a211f3bb8809225f19ca98e0a7d21fd57cb53ec724762b6bc6c98b1d252  ./packages/contracts/src/learning-routing-recommender.ts
@@ -1889,5 +1889,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-59b5da2682fdf0da0880666ffa835947b4093b8d5945a2e0c5ab565db0681555  ./verification/verification-dag-v2.json
+ab91738f77443f4868202600f53f657abf74141e5672e0a35e2f82dab6892875  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

@@ -411,4 +411,3 @@ export function verifyLieferzusageDigestV1(receipt: unknown): boolean {
   const core = Object.fromEntries(Object.entries(v).filter(([k]) => k !== "lieferzusageDigest"));
   return v.lieferzusageDigest === sha(core);
 }
-
