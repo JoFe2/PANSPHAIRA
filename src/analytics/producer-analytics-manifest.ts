@@ -7,6 +7,7 @@ import {
   RECONCILED_RELEASED_HEADS_V1,
   adjudicateNativeCandidateV1,
   adjudicateNativeForwardCandidateV1,
+  adjudicateNativeForwardPrCandidateV1,
   buildAuthoritativeAdjudicationInputs,
   createNativeAdjudicationContextV1,
   nativeCandidateDigestV1,
@@ -414,14 +415,25 @@ export function generateForwardProducerAnalyticsManifestV1(input: Readonly<{
   rawArtifactBytes: Uint8Array;
   candidate: unknown;
 }>): Readonly<{ manifest: Record<string, unknown>; serialized: string }> {
-  const adjudication = adjudicateNativeForwardCandidateV1({
+  return generateForwardProducerForProfile(input, false);
+}
+
+export function generateForwardPrProducerAnalyticsManifestV1(input: Readonly<{
+  rawArtifactBytes: Uint8Array; candidate: unknown;
+}>): Readonly<{ manifest: Record<string, unknown>; serialized: string }> {
+  return generateForwardProducerForProfile(input, true);
+}
+
+function generateForwardProducerForProfile(input: Readonly<{ rawArtifactBytes: Uint8Array; candidate: unknown }>, pr235: boolean) {
+  const adjudicate = pr235 ? adjudicateNativeForwardPrCandidateV1 : adjudicateNativeForwardCandidateV1;
+  const adjudication = adjudicate({
     rawArtifactBytes: input.rawArtifactBytes,
     canonicalTransportBytes: nativeTransportBytesV1(input.rawArtifactBytes),
     candidate: input.candidate,
     context: createNativeAdjudicationContextV1({ contextId: "pansphaira:forward-producer-001" }),
     qualifiedHeads: {
       pansphaira: RECONCILED_RELEASED_HEADS_V1.pansphaira,
-      kaleidoSphere: "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+      kaleidoSphere: pr235 ? "bb52b249feb5968eee286963989f98f3bb673996" : "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
     },
   });
   if (adjudication.outcome !== "ACCEPTED_BOUNDED") {

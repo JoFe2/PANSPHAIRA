@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 50,
+  "graphVersion": 51,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8c918d5190075ddc7f07d08b8b66057112d9d7408ebc05e6dfd8f437d7c41d29"
+          "sha256": "ebe43f696016ba00c17c6132ea97eab14c3f1355e07f719bc4012aae957a38bf"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -2630,7 +2630,7 @@
         {
           "path": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
           "role": "VALIDATOR",
-          "sha256": "bb07938a2dd60ec3d8b203a57bdc4a83c15f79e6134cdfed83c215c4138111b2"
+          "sha256": "1c5f721b7ee726b1ebc0ac3ea928e0f80bb8185314f3edd7e04fb24f1e5dfac7"
         },
         {
           "path": "src/cks-12/pattern-shadow-workflow.ts",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "5fdf11a63c5f55901f04ab92f5a344f6cf08779d3d7e7bb5e615679cc4563791"
+          "sha256": "fc264b14360549fe542b4b81c524186a2726dccf0ce9c0cfb2a5f844dbc2f914"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "09fd57c9070204fdcabb7c68a6bf57afdaf9b573a255ecec601fd95589bcb8bf"
+          "sha256": "6ba62a1bdccb335fd0520cc54a95497011f36cff2c1a93c974ecf8e5d7a0133f"
         }
       ],
       "ownedTests": [
@@ -4691,7 +4691,7 @@
         {
           "path": ".github/workflows/paired-analytics-parity.yml",
           "role": "SECURITY",
-          "sha256": "ec44fc5d22a009da0e40380812dbeeb3747508c703abf41aae9ab317922bb97e"
+          "sha256": "36cf9ee92f73216f69e450a76f320ab82c2735803cf4fbf2c0aa596be684eb57"
         },
         {
           "path": ".github/workflows/release-public-readback.yml",
@@ -4791,7 +4791,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "0389485c564032380c25f12c3244d026d34dd809af8a3e7496d2b7f061b8eabc"
+          "sha256": "c011716ffd2f04af551c84dc6a6cc5e5bccae64ae5dc02878f293f508148a78c"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4801,7 +4801,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "661e68d48371d6b49504efc3897ca8a0317c4057a76fcfb160c60d650f93d068"
+          "sha256": "d0a8b62ed86056ebcda9989425170fd3a584e0ea6213133e2fd8e24e7f227b44"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4816,7 +4816,7 @@
         {
           "path": "scripts/run-forward-paired-analytics.mjs",
           "role": "VALIDATOR",
-          "sha256": "c4f22f2587ad09cf33bd1753330aa72c85eef0d3215cc974478f271daabfde20"
+          "sha256": "e34a1b4b1214792750bf2ba7483c4ea9bda1d1d6379f2792a73aa54dd64b9de4"
         },
         {
           "path": "scripts/run-paired-analytics-parity.mjs",
@@ -4836,12 +4836,12 @@
         {
           "path": "src/analytics/paired-analytics-parity.ts",
           "role": "SOURCE",
-          "sha256": "bf5fe8639508b45db91ceeda18eb4bfbaf317630cca791a5a46eab528c63ab4d"
+          "sha256": "4844b37acb7f8f3e8b28152901a47a963abec302caf7d29b0aa205e53063980f"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f334ca7bc95f1be4e889b5dcbebc56b97bd6ccb6d6ca6d853f8d4da5c1a07314"
+          "sha256": "93da5443e32a3374bed904698baca5f4fb574b41541eee340e6bf9478f543dce"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4859,9 +4859,19 @@
           "sha256": "945b2db0690f6a279ddecb56d9bb4d677ea09a806357e93f0fe529d7ee3c1400"
         },
         {
+          "path": "tests/fixtures/cks-analytics/consumer-forward-pr235-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f6d0e543b2fa05d8327dbefa541e62582c5b09537615c6824789bc70d831fbf3"
+        },
+        {
           "path": "tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json",
           "role": "FIXTURE",
           "sha256": "e3417021fbec446c6619df7fc0c96a314ed7c414aaf43c0bc46b18c3b42c033b"
+        },
+        {
+          "path": "tests/fixtures/cks-analytics/native-forward-pr235-candidate-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9cfd1a5dc6e7cd1488d2d94cde14588b3a507dee59a018ae8edcdd178d038416"
         },
         {
           "path": "tests/fixtures/cks-analytics/native-v2-historical-source.json",
@@ -4881,12 +4891,12 @@
         {
           "path": "tests/forward-paired-analytics.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5b45d8e82691371fd51b6f8d63ad9c80725bb9a6d8961eb5d45dea99932235d3"
+          "sha256": "beeec220b3022f0cd8d02642dae94511ceafd861ee3b26d27d333c76197de541"
         },
         {
           "path": "tests/forward-paired-execution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "83824252353d6ae3d28f29d5ae1a587e10daaf4d91caad4de80c27214f75d445"
+          "sha256": "b52846d37ec374bb42d21e9451a1db727c61705f1c77f8025e4d1d64eb4d9ea4"
         },
         {
           "path": "tests/forward-producer-analytics.test.mjs",
@@ -4901,7 +4911,7 @@
         {
           "path": "tests/native-forward-qualification.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8b712c51448399f813ed19e3871934924d01207301665be34d79e1b4172ef98f"
+          "sha256": "11684919074248e154bedd11837cd6c4f15a23b150ef670df9ecc909b9f1db28"
         },
         {
           "path": "tests/paired-analytics-parity.test.ts",
@@ -4916,12 +4926,12 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0ceba826494451ee692c9ae3d1e82968316fb8251628191d33b6b7c34006cfc7"
+          "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
         },
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "9c5f9d478352798ba13dc5584f6096f3727369b0d9c91d3c2c6230d3e026475d"
+          "sha256": "b408273083bebf2a98d16fc2637f0af917447a729967c57c7a83dd7f49b2c75b"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4931,7 +4941,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "ac28cee2e1994168146e932cddf272e226bfbc478651583f284b1ca00ddf4385"
+          "sha256": "63a5e2b4630d4b5070325d3e10fc5546140a6e5c75cf6bcf0b1a234c22cea290"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -4942,6 +4952,31 @@
           "path": "verification/paired-analytics-compatibility-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "3548c343e446524165550aae5705e357e059789404558670e71d9d73a3b82692"
+        },
+        {
+          "path": "verification/paired-analytics-provider-evidence-v1/index.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "7598ca9c5407e33d381046240096d84e2a287c0887273e0750fc9bbb99ccd92a"
+        },
+        {
+          "path": "verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "84f866d836a193cd97514407822fbdbc10711df62e2ab82f4abdfff8047924b3"
+        },
+        {
+          "path": "verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.sha256",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "dbd7972396268d0c5cb5d458e824571e9c51e62e30e729f3741c82b624d01ca1"
+        },
+        {
+          "path": "verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9907d6bf46ee087a5894417a622e1e57a0ad0c18d31a01ab6d15f1b6e5b1eca7"
+        },
+        {
+          "path": "verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.sha256",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "bd7c2bd65b87ad56406a4d53e290019b702b9d05bfb2384bff565f0ce5ef31b5"
         },
         {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
@@ -5870,7 +5905,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "0edd0ec1299e0ec5bfa1532884adf2dee282433c0c354aac3a89da2804b2e30a"
+          "sha256": "bd8cb7e1bb093b857cd2dd20bfa73abde6bdd019272986d1eb3db5ab83dc4675"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6135,7 +6170,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "0389485c564032380c25f12c3244d026d34dd809af8a3e7496d2b7f061b8eabc"
+          "sha256": "c011716ffd2f04af551c84dc6a6cc5e5bccae64ae5dc02878f293f508148a78c"
         }
       ],
       "ownedTests": [

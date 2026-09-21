@@ -230,6 +230,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     "toSha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
     "reason": "Bind additive forward qualification, historical source archive, strict current-head runtime runner and negative probes to graph v50; preserve historical v1-v17 obligations and receipts."
 }),
+  Object.freeze({
+    "migrationId": "PAN346-PR235-PUBLIC-EVIDENCE/INTEGRITY-GENERATOR/V19",
+    "path": "scripts/refresh-integrity-data.mjs",
+    "profileVersion": 19,
+    "fromSha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
+    "toSha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a",
+    "reason": "Bind exact PR235 qualification and immutable historical provider evidence to graph v51; preserve historical v1-v18 obligations and receipts."
+}),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -252,7 +260,7 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1858, uniquePaths: 1858, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1865, uniquePaths: 1865, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1028,7 +1036,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;

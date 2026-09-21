@@ -8,7 +8,11 @@ import {pathToFileURL, fileURLToPath} from 'node:url';
 import {createServer} from 'node:net';
 import {createHash} from 'node:crypto';
 
-const KS_HEAD='792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f';
+export function forwardExecutionProfile(name='main') {
+  if(name==='main')return Object.freeze({name,head:'792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f',producer:'generateForwardProducerAnalyticsManifestV1',pair:'validateForwardAnalyticsPairV1'});
+  if(name==='pr235')return Object.freeze({name,head:'bb52b249feb5968eee286963989f98f3bb673996',producer:'generateForwardPrProducerAnalyticsManifestV1',pair:'validateForwardPrAnalyticsPairV1'});
+  throw new Error('FORWARD_EXECUTION_PROFILE_UNQUALIFIED');
+}
 const KS_TREE='759baccaa077d24f2f78c7e82d6fab801050bc63';
 const cleanEnv=()=>Object.fromEntries(Object.entries(process.env).filter(([key])=>! /TOKEN|SECRET|PASSWORD|API_KEY|CREDENTIAL/i.test(key)));
 const command=(cwd,exe,args)=>execFileSync(exe,args,{cwd,env:{...cleanEnv(),GIT_OPTIONAL_LOCKS:'0',GIT_TERMINAL_PROMPT:'0'},encoding:'utf8',timeout:120000,maxBuffer:16*1024*1024}).trim();
@@ -33,17 +37,17 @@ async function stop(child) {
     child.kill('SIGTERM');
   });
 }
-async function execute(root,ks,expectedPanHead) {
+async function execute(root,ks,expectedPanHead,profile) {
   verifyForwardEnvironment();
   const panHead=verifyForwardCheckout(root,expectedPanHead);
-  const ksHead=verifyForwardCheckout(ks,KS_HEAD);
+  const ksHead=verifyForwardCheckout(ks,profile.head);
   assert.equal(ksHead.treeOid,KS_TREE,'FORWARD_EXECUTION_TREE_MISMATCH');
   command(root,'npm',['run','build','--silent']);
   // Imports happen only after a fresh source build, in this dedicated process.
   const load=path=>import(pathToFileURL(resolve(root,path)).href);
   const {nativeTransportBytesV1}=await load('dist/src/cks-12/kaleidosphere-candidate-quarantine.js');
-  const {generateForwardProducerAnalyticsManifestV1}=await load('dist/src/analytics/producer-analytics-manifest.js');
-  const {validateForwardAnalyticsPairV1}=await load('dist/src/analytics/paired-analytics-parity.js');
+  const generateForwardProducerAnalyticsManifestV1=(await load('dist/src/analytics/producer-analytics-manifest.js'))[profile.producer];
+  const validateForwardAnalyticsPairV1=(await load('dist/src/analytics/paired-analytics-parity.js'))[profile.pair];
   const rawArtifactBytes=readFileSync(resolve(root,'tests/fixtures/cks-analytics/projection-v1.json'));
   const probe=createServer(); await new Promise(r=>probe.listen(0,'127.0.0.1',r));
   const port=probe.address().port; await new Promise(r=>probe.close(r));
@@ -81,20 +85,22 @@ async function execute(root,ks,expectedPanHead) {
     assert.equal(validateForwardAnalyticsPairV1({...pairInput,candidate:altered}).outcome,'DENIED');
     const tests={counterpart:command(ks,process.execPath,['--test','tests/consumer-support-manifest.test.mjs','tests/pansphaira-analytics-service.test.mjs']),producer:command(root,process.execPath,['--test','tests/forward-producer-analytics.test.mjs','tests/forward-paired-analytics.test.mjs','tests/forward-paired-execution.test.mjs'])};
     assert.deepEqual(verifyForwardCheckout(root,expectedPanHead),panHead);
-    assert.deepEqual(verifyForwardCheckout(ks,KS_HEAD),ksHead);
-    return {schemaVersion:'pansphaira/forward-pair-execution/v1',state:'PASS',testedHeads:{pansphaira:panHead,kaleidoSphere:ksHead},environment:{node:process.version,abi:process.versions.modules,platform:process.platform,arch:process.arch},sourceDigests:Object.fromEntries(['scripts/run-forward-paired-analytics.mjs','src/cks-12/kaleidosphere-candidate-quarantine.ts','src/analytics/producer-analytics-manifest.ts','src/analytics/paired-analytics-parity.ts'].map(f=>[f,sha(readFileSync(resolve(root,f)))])),capture,consumerManifest,producerManifest:producer.manifest,pair,tests,negative:['CONSUMER_SUBSTITUTION_DENIED','ENVIRONMENT_SUBSTITUTION_DENIED'],nonclaim:'Exact local process execution only; public CI, release and issue closure require independent provider readback.'};
+    assert.deepEqual(verifyForwardCheckout(ks,profile.head),ksHead);
+    return {schemaVersion:'pansphaira/forward-pair-execution/v1',state:'PASS',profile:profile.name,testedHeads:{pansphaira:panHead,kaleidoSphere:ksHead},environment:{node:process.version,abi:process.versions.modules,platform:process.platform,arch:process.arch},sourceDigests:Object.fromEntries(['scripts/run-forward-paired-analytics.mjs','src/cks-12/kaleidosphere-candidate-quarantine.ts','src/analytics/producer-analytics-manifest.ts','src/analytics/paired-analytics-parity.ts'].map(f=>[f,sha(readFileSync(resolve(root,f)))])),capture,consumerManifest,producerManifest:producer.manifest,pair,tests,negative:['CONSUMER_SUBSTITUTION_DENIED','ENVIRONMENT_SUBSTITUTION_DENIED'],nonclaim:'Exact local process execution only; public CI, release and issue closure require independent provider readback.'};
   } finally {await stop(child);}
 }
 async function main() {
   const args=process.argv.slice(2);const names=['--counterpart','--pan-head','--output'];
-  if(args.length!==6||names.some(n=>args.filter(a=>a===n).length!==1)||args.some((a,i)=>i%2===0&&!names.includes(a)))throw new Error('FORWARD_EXECUTION_ARGUMENTS_REQUIRED');
+  if(args.includes('--profile'))names.push('--profile');
+  if(args.length!==names.length*2||names.some(n=>args.filter(a=>a===n).length!==1)||args.some((a,i)=>i%2===0&&!names.includes(a)))throw new Error('FORWARD_EXECUTION_ARGUMENTS_REQUIRED');
   const option=n=>args[args.indexOf(n)+1];
   const root=realpathSync(resolve(fileURLToPath(import.meta.url),'../..'));
   const ks=realpathSync(resolve(option('--counterpart')));
   const output=resolve(option('--output'));
   const outputParent=realpathSync(resolve(output,'..'));
   for(const checkout of [root,ks]){const rel=relative(checkout,outputParent);if(rel===''||(rel!=='..'&&!rel.startsWith('../')&&!isAbsolute(rel)))throw new Error('FORWARD_RECEIPT_OUTSIDE_CHECKOUT_REQUIRED');}
-  const receipt=await execute(root,ks,option('--pan-head'));
+  const profile=forwardExecutionProfile(args.includes('--profile')?option('--profile'):'main');
+  const receipt=await execute(root,ks,option('--pan-head'),profile);
   writeFileSync(output,JSON.stringify(receipt,null,2)+'\n',{flag:'wx'});
   console.log(JSON.stringify({state:receipt.state,testedHeads:receipt.testedHeads}));
 }

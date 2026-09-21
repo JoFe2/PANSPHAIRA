@@ -1543,3 +1543,10 @@ tests/forward-paired-analytics.test.mjs	tests/forward-paired-analytics.test.mjs	
 tests/forward-paired-execution.test.mjs	tests/forward-paired-execution.test.mjs	0644
 tests/forward-producer-analytics.test.mjs	tests/forward-producer-analytics.test.mjs	0644
 tests/native-forward-qualification.test.mjs	tests/native-forward-qualification.test.mjs	0644
+tests/fixtures/cks-analytics/consumer-forward-pr235-v1.json	tests/fixtures/cks-analytics/consumer-forward-pr235-v1.json	0644
+tests/fixtures/cks-analytics/native-forward-pr235-candidate-v1.json	tests/fixtures/cks-analytics/native-forward-pr235-candidate-v1.json	0644
+verification/paired-analytics-provider-evidence-v1/index.json	verification/paired-analytics-provider-evidence-v1/index.json	0644
+verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.json	verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.json	0644
+verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.sha256	verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.sha256	0644
+verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.json	verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.json	0644
+verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.sha256	verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.sha256	0644

@@ -4,7 +4,13 @@ import {mkdtempSync, mkdirSync, writeFileSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
-import {verifyForwardCheckout, verifyForwardEnvironment} from '../scripts/run-forward-paired-analytics.mjs';
+import {verifyForwardCheckout, verifyForwardEnvironment, forwardExecutionProfile} from '../scripts/run-forward-paired-analytics.mjs';
+
+test('only code-owned Main and PR235 execution profiles are admitted',()=>{
+  assert.equal(forwardExecutionProfile('main').head,'792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f');
+  assert.equal(forwardExecutionProfile('pr235').head,'bb52b249feb5968eee286963989f98f3bb673996');
+  for(const bad of ['HEAD','main ', '__proto__', '792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f']) assert.throws(()=>forwardExecutionProfile(bad),/PROFILE_UNQUALIFIED/);
+});
 
 test('forward execution binds the actual root, exact head and clean sources', () => {
   const root=mkdtempSync(join(tmpdir(),'forward-checkout-'));

@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "9d14b5d91c5e17ccfe9fe29c912450354f9d61768577bdef3b7306431a57f7db"
+        "sha256": "93da5443e32a3374bed904698baca5f4fb574b41541eee340e6bf9478f543dce"
       }
     ]
   },
@@ -187,6 +187,14 @@
       "fromSha256": "eb2669cba01995248ad49296fa3424cfcbb7271f554a7824e3107ba259f01d62",
       "toSha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
       "reason": "Bind additive forward qualification, historical source archive, strict current-head runtime runner and negative probes to graph v50; preserve historical v1-v17 obligations and receipts."
+    },
+    {
+      "migrationId": "PAN346-PR235-PUBLIC-EVIDENCE/INTEGRITY-GENERATOR/V19",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 19,
+      "fromSha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
+      "toSha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a",
+      "reason": "Bind exact PR235 qualification and immutable historical provider evidence to graph v51; preserve historical v1-v18 obligations and receipts."
     }
   ],
   "scanScope": {
@@ -236,8 +244,8 @@
     "importFiles": 220,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1858,
-    "ledgerUniquePaths": 1858
+    "ledgerEntries": 1865,
+    "ledgerUniquePaths": 1865
   },
   "profiles": [
     {
@@ -310,7 +318,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694"
+      "sha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -913,7 +921,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
+      "sha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a",
       "basis": "profile-version-migration"
     },
     {

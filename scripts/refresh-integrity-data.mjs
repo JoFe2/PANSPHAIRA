@@ -622,6 +622,13 @@ cscl11Node.inputs = [
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 cscl11Node.ownedTests = ["npm run cscl11:test"];
 const pairedAnalyticsInputs = [
+  ["tests/fixtures/cks-analytics/consumer-forward-pr235-v1.json", "FIXTURE"],
+  ["tests/fixtures/cks-analytics/native-forward-pr235-candidate-v1.json", "FIXTURE"],
+  ["verification/paired-analytics-provider-evidence-v1/index.json", "DERIVED_EVIDENCE"],
+  ["verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.json", "DERIVED_EVIDENCE"],
+  ["verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.sha256", "DERIVED_EVIDENCE"],
+  ["verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.json", "DERIVED_EVIDENCE"],
+  ["verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.sha256", "DERIVED_EVIDENCE"],
   ["scripts/run-forward-paired-analytics.mjs", "VALIDATOR"],
   ["tests/fixtures/cks-analytics/consumer-forward-current-v1.json", "FIXTURE"],
   ["tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json", "FIXTURE"],
@@ -662,7 +669,7 @@ for (const invariant of pairedAnalyticsInvariants) {
 }
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 50;
+dag.graphVersion = 51;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
