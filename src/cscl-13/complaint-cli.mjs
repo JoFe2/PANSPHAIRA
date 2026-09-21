@@ -32,7 +32,8 @@ async function loadStore(path) {
 
 async function saveStore(path, refs) {
   const snapshot = refs.snapshot();
-  const payload = { schemaVersion: snapshot.schemaVersion, referenceSetId: snapshot.referenceSetId, entries: snapshot.entries };
+  const { snapshotDigest, ...persistable } = snapshot;
+  const payload = persistable;
   const bytes = `${canonicalJson(payload)}\n`;
   await mkdir(dirname(resolve(path)), { recursive: true });
   const tmp = `${path}.tmp`;
@@ -76,8 +77,11 @@ async function main() {
   if (command === "raise") {
     const [positionId, customerId, reason, quantityRaw, ...traceParts] = args;
     if (!positionId || !customerId || !reason || quantityRaw === undefined) throw new Error("USAGE: raise <positionId> <customerId> <reason> <quantity> <traceId>");
+    const quantityRawStr = String(quantityRaw);
+    if (!/^[0-9]+$/.test(quantityRawStr)) throw new Error("USAGE: raise <positionId> <customerId> <reason> <quantity> <traceId>");
     const quantity = Number(quantityRaw);
-    const traceId = traceParts.join(" ") || `trace-${Date.now()}`;
+    const traceId = traceParts.join(" ");
+    if (traceId.length === 0) throw new Error("USAGE: raise <positionId> <customerId> <reason> <quantity> <traceId> (traceId erlaubt keinen leeren/auto-generierten Wert)");
     const result = ledger.raise({ positionId, customerId, reason, quantity, traceId });
     if (result.outcome === "RAISED") await saveStore(storePath, ledger);
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

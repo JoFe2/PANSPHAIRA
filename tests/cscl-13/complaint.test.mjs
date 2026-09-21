@@ -119,3 +119,73 @@ test("missing production/charge data is optional and quality-defect complaints s
   const raised = ledger.raise({ positionId: "pos:dlv-001-2", customerId: "customer:zoo-001", reason: "QUALITY_DEFECT", quantity: 5, traceId: "trace-010" });
   assert.equal(raised.outcome, "RAISED");
 });
+test("B1 regression: cumulative claimed quantity across reasons cannot exceed delivered", () => {
+  const ledger = createComplaintLedger(refs());
+  const a = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "DAMAGED_GOODS", quantity: 7, traceId: "trace-b1a" });
+  assert.equal(a.outcome, "RAISED");
+  assert.equal(ledger.decide({ complaintId: a.complaintId, decision: "REPLACE", actorId: "actor:claims-01" }).outcome, "DECIDED");
+  // zweite überbuchende Erfassung (7+6 > 10) wird verweigert
+  assert.deepEqual(ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "QUALITY_DEFECT", quantity: 6, traceId: "trace-b1b" }), { outcome: "DENIED", code: "QUANTITY_EXCEEDS_DELIVERED" });
+  assert.deepEqual(ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "QUALITY_DEFECT", quantity: 4, traceId: "trace-b1c" }), { outcome: "DENIED", code: "QUANTITY_EXCEEDS_DELIVERED" });
+  // passende Restmenge (7+3 <= 10) bleibt zulässig
+  const fit = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "QUALITY_DEFECT", quantity: 3, traceId: "trace-b1d" });
+  assert.equal(fit.outcome, "RAISED");
+  assert.equal(ledger.evidence().complaints, 2);
+});
+
+test("B1 regression: REJECTED complaints do not consume replace quantity", () => {
+  const ledger = createComplaintLedger(refs());
+  const a = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "DAMAGED_GOODS", quantity: 7, traceId: "trace-b1e" });
+  const b = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "QUALITY_DEFECT", quantity: 3, traceId: "trace-b1f" });
+  ledger.decide({ complaintId: a.complaintId, decision: "REJECTED", actorId: "actor:claims-01" });
+  ledger.decide({ complaintId: b.complaintId, decision: "REPLACE", actorId: "actor:claims-01" });
+  // REJECTED (7) zählt nicht; nach REJECTED ist wieder Raum bis 10
+  const c = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "WRONG_ARTICLE", quantity: 7, traceId: "trace-b1g" });
+  assert.equal(c.outcome, "RAISED");
+});
+
+test("B2 regression: hydrated store rejects drifted reference content", () => {
+  const original = refs();
+  const ledger = createComplaintLedger(original);
+  const raised = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "DAMAGED_GOODS", quantity: 1, traceId: "trace-b2" });
+  ledger.decide({ complaintId: raised.complaintId, decision: "REPLACE", actorId: "actor:claims-01" });
+  const snap = ledger.snapshot();
+
+  // gleiche referenceSetId/position/customer, aber andere tenant/order/delivery/article/qty
+  const drifted = JSON.parse(JSON.stringify(original));
+  drifted.referenceSetId = original.referenceSetId;
+  drifted.tenantId = "tenant:other";
+  drifted.deliveries[0].orderId = "order:other-order";
+  drifted.deliveries[0].deliveryId = "delivery:other-delivery";
+  drifted.deliveries[0].positions[0].articleId = "article:zoo-102";
+  drifted.deliveries[0].positions[0].quantity = 99;
+
+  const revived = createComplaintLedger(drifted);
+  assert.throws(() => revived.hydrate(snap), /SNAPSHOT_REFERENCE_DRIFT|SNAPSHOT_MALFORMED/);
+});
+
+test("B3 regression: contradictory snapshot (decision null, history decided) is rejected", () => {
+  const ledger = createComplaintLedger(refs());
+  const raised = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "DAMAGED_GOODS", quantity: 1, traceId: "trace-b3" });
+  ledger.decide({ complaintId: raised.complaintId, decision: "REPLACE", actorId: "actor:claims-01" });
+  const snap = ledger.snapshot();
+  // decision auf null setzen, DECIDED-Verlauf bleibt -> Widerspruch
+  snap.entries[0].decision = null;
+  const revived = createComplaintLedger(refs());
+  assert.throws(() => revived.hydrate(snap), /SNAPSHOT_HISTORY_MISMATCH/);
+});
+
+test("B3 regression: empty history and rewritten complaintId are rejected", () => {
+  const ledger = createComplaintLedger(refs());
+  const raised = ledger.raise({ positionId: "pos:dlv-001-1", customerId: "customer:zoo-001", reason: "DAMAGED_GOODS", quantity: 1, traceId: "trace-b3b" });
+  ledger.decide({ complaintId: raised.complaintId, decision: "REPLACE", actorId: "actor:claims-01" });
+  const snap = ledger.snapshot();
+
+  const emptyHist = JSON.parse(JSON.stringify(snap));
+  emptyHist.entries[0].history = [];
+  assert.throws(() => createComplaintLedger(refs()).hydrate(emptyHist), /SNAPSHOT_HISTORY_MISMATCH/);
+
+  const wrongId = JSON.parse(JSON.stringify(snap));
+  wrongId.entries[0].complaint.complaintId = "complaint:00000000000000000000000000000000";
+  assert.throws(() => createComplaintLedger(refs()).hydrate(wrongId), /SNAPSHOT_COMPLAINT_ID_MISMATCH/);
+});

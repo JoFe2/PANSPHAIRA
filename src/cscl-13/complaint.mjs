@@ -65,6 +65,11 @@ export function validateDeliveryReferences(references) {
   return { outcome: "VALID" };
 }
 
+// Unveränderlicher Referenzinhalt wird an Tenant und referenceSetId gebunden: jede spätere
+// Abweichung (anderer Tenant, andere Lieferung/Position/Artikel/Menge) führt zu REFERENCE_DRIFT
+// und lässt den gespeicherten Vorgang nicht mehr als gültig erscheinen.
+const referencesDigest = (references) => sha({ schemaVersion: references.schemaVersion, referenceSetId: references.referenceSetId, tenantId: references.tenantId, lineage: references.lineage, articles: references.articles, deliveries: references.deliveries });
+
 export function createComplaintLedger(references) {
   const verdict = validateDeliveryReferences(references);
   if (verdict.outcome !== "VALID") {
@@ -85,6 +90,7 @@ export function createComplaintLedger(references) {
   }
 
   const complaints = new Map();
+  const refDigest = referencesDigest(references);
 
   const select = (request) => {
     if (!isRecord(request) || !exactKeys(request, ["positionId", "customerId"])
@@ -121,6 +127,17 @@ export function createComplaintLedger(references) {
     if (found.delivery.customerId !== request.customerId)
       return { outcome: "DENIED", code: "DELIVERY_REFERENCE_MISMATCH" };
     if (request.quantity > found.position.quantity)
+      return { outcome: "DENIED", code: "QUANTITY_EXCEEDS_DELIVERED" };
+
+    // B1: positionsbezogene Mengenregel. Mehrere Gründe dürfen dieselben Waren betreffen,
+    // dürfen aber keine zusätzliche Mengenberechtigung erzeugen. Kumulierte offene/bestätigte
+    // Menge (REJECTED zählt nicht zur beanstandeten Ersatzmenge) darf die gelieferte Menge nie
+    // übersteigen. Eine überbuchende zweite Erfassung wird hart verweigert.
+    const alreadyClaimed = [...complaints.values()]
+      .filter((entry) => entry.complaint.positionId === request.positionId)
+      .filter((entry) => entry.decision === null || entry.decision.decision !== "REJECTED")
+      .reduce((sum, entry) => sum + entry.complaint.claimedQuantity, 0);
+    if (alreadyClaimed + request.quantity > found.position.quantity)
       return { outcome: "DENIED", code: "QUANTITY_EXCEEDS_DELIVERED" };
 
     const fingerprint = sha({ customerId: request.customerId, positionId: request.positionId, reason: request.reason });
@@ -196,6 +213,8 @@ export function createComplaintLedger(references) {
   const snapshot = () => ({
     schemaVersion: RECEIPT_SCHEMA_V1,
     referenceSetId: references.referenceSetId,
+    tenantId: references.tenantId,
+    referencesDigest: refDigest,
     entries: [...complaints.values()].map((entry) => ({
       complaint: entry.complaint,
       decision: entry.decision,
@@ -205,33 +224,100 @@ export function createComplaintLedger(references) {
   });
 
   const hydrate = (snap) => {
-    if (!isRecord(snap) || snap.schemaVersion !== RECEIPT_SCHEMA_V1
-      || !isId(snap.referenceSetId) || snap.referenceSetId !== references.referenceSetId
-      || !Array.isArray(snap.entries)) throw new Error("SNAPSHOT_MALFORMED");
-    complaints.clear();
+    if (!isRecord(snap) || snap.schemaVersion !== RECEIPT_SCHEMA_V1 || !Array.isArray(snap.entries))
+      throw new Error("SNAPSHOT_MALFORMED");
+    if (!isId(snap.referenceSetId) || snap.referenceSetId !== references.referenceSetId
+      || !isId(snap.tenantId) || snap.tenantId !== references.tenantId
+      || typeof snap.referencesDigest !== "string" || snap.referencesDigest !== refDigest)
+      throw new Error("SNAPSHOT_REFERENCE_DRIFT");
+
+    const drank = [];
     for (const entry of snap.entries) {
-      if (!isRecord(entry) || !exactKeys(entry, ["complaint", "decision", "history"])
-        || !isRecord(entry.complaint) || !Array.isArray(entry.history)) throw new Error("SNAPSHOT_MALFORMED");
-      const raised = raise({
-        customerId: entry.complaint.customerId,
-        positionId: entry.complaint.positionId,
-        reason: entry.complaint.reason,
-        quantity: entry.complaint.claimedQuantity,
-        traceId: entry.complaint.traceId,
-        raisedAt: entry.complaint.raisedAt,
-      });
-      if (raised.outcome !== "RAISED") throw new Error(`SNAPSHOT_REPLAY_FAILED:${raised.code}`);
-      if (entry.decision !== null) {
-        if (!isRecord(entry.decision)) throw new Error("SNAPSHOT_MALFORMED");
-        const decided = decide({
-          complaintId: raised.complaintId,
-          decision: entry.decision.decision,
-          actorId: entry.decision.actorId,
-          at: entry.decision.at,
-        });
-        if (decided.outcome !== "DECIDED") throw new Error(`SNAPSHOT_REPLAY_FAILED:${decided.code}`);
-      }
+      drank.push(hydrateEntry(entry));
     }
+    complaints.clear();
+    for (const [complaintId, hydrated] of drank) complaints.set(complaintId, hydrated);
+  };
+
+  // B2/B3: ein Snapshot-Eintrag wird nicht blind über raise/decide rekonstruiert, sondern als
+  // verbindlicher Zustand geprüft. Beschwerde, Entscheidung und Ereignisverlauf müssen
+  // untereinander und gegen die unveränderlichen Referenzen konsistent sein; jede Abweichung
+  // (Drift, fehlende/überschüssige Historie, Identitätsänderung) wird hart abgelehnt.
+  const hydrateEntry = (entry) => {
+    if (!isRecord(entry) || !exactKeys(entry, ["complaint", "decision", "history"])
+      || !Array.isArray(entry.history)) throw new Error("SNAPSHOT_MALFORMED");
+
+    const complaint = entry.complaint;
+    if (!isRecord(complaint) || !exactKeys(complaint, [
+      "complaintId", "customerId", "positionId", "articleId", "orderId", "deliveryId",
+      "reason", "claimedQuantity", "deliveredQuantity", "unit", "raisedAt", "traceId", "fingerprint",
+    ])) throw new Error("SNAPSHOT_MALFORMED");
+
+    const found = positionIndex.get(complaint.positionId);
+    if (!found) throw new Error("SNAPSHOT_POSITION_NOT_FOUND");
+    if (!isId(complaint.complaintId) || !complaint.complaintId.startsWith("complaint:"))
+      throw new Error("SNAPSHOT_COMPLAINT_ID_MISMATCH");
+    if (!isId(complaint.customerId) || complaint.customerId !== found.delivery.customerId)
+      throw new Error("SNAPSHOT_REFERENCE_DRIFT");
+    if (!isId(complaint.positionId)
+      || complaint.articleId !== found.position.articleId
+      || complaint.orderId !== found.delivery.orderId
+      || complaint.deliveryId !== found.delivery.deliveryId
+      || complaint.unit !== found.position.unit
+      || !Number.isSafeInteger(complaint.deliveredQuantity) || complaint.deliveredQuantity !== found.position.quantity)
+      throw new Error("SNAPSHOT_REFERENCE_DRIFT");
+
+    // Identität/Fingerprint muss aus den gespeicherten fachlichen Feldern reproduzierbar sein;
+    // eine still umgeschriebene complaintId darf nicht übernommen werden.
+    const recomputedFingerprint = sha({ customerId: complaint.customerId, positionId: complaint.positionId, reason: complaint.reason });
+    if (!/^[a-f0-9]{64}$/.test(complaint.fingerprint) || complaint.fingerprint !== recomputedFingerprint)
+      throw new Error("SNAPSHOT_FINGERPRINT_MISMATCH");
+    if (complaint.complaintId !== `complaint:${recomputedFingerprint.slice(0, 32)}`)
+      throw new Error("SNAPSHOT_COMPLAINT_ID_MISMATCH");
+    if (!COMPLAINT_REASONS.has(complaint.reason)
+      || !Number.isSafeInteger(complaint.claimedQuantity) || complaint.claimedQuantity <= 0
+      || complaint.claimedQuantity > complaint.deliveredQuantity)
+      throw new Error("SNAPSHOT_MALFORMED");
+    if (typeof complaint.raisedAt !== "string" || Number.isNaN(Date.parse(complaint.raisedAt))
+      || typeof complaint.traceId !== "string" || complaint.traceId.length === 0)
+      throw new Error("SNAPSHOT_MALFORMED");
+
+    // Entscheidung: entweder null ODER vollständig und zum Verlauf konsistent.
+    let decision = entry.decision;
+    if (decision !== null) {
+      if (!isRecord(decision) || !exactKeys(decision, ["decision", "actorId", "at"])
+        || !RESOLUTION_DECISIONS.has(decision.decision)
+        || typeof decision.actorId !== "string" || decision.actorId.length === 0
+        || typeof decision.at !== "string" || Number.isNaN(Date.parse(decision.at)))
+        throw new Error("SNAPSHOT_MALFORMED");
+    }
+
+    // Verlauf: muss mit RAISED beginnen, und jede Entscheidung (oder deren Fehlen) muss exakt
+    // zum gespeicherten decision-Feld passen. Widersprüche (decision gesetzt ohne DECIDED-Eintrag,
+    // DECIDED-Eintrag ohne decision, leere/überschüssige Historie) werden abgelehnt statt normalisiert.
+    if (entry.history.length === 0) throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+    if (entry.history[0].kind !== "RAISED") throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+    const decidedEvents = entry.history.filter((h) => h.kind === "DECIDED");
+    const raisedEvents = entry.history.filter((h) => h.kind === "RAISED");
+    if (raisedEvents.length !== 1) throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+    for (const h of entry.history) {
+      if (!isRecord(h)) throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+      if (h.kind !== "RAISED" && h.kind !== "DECIDED") throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+    }
+    if (decision === null) {
+      if (decidedEvents.length !== 0) throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+    } else {
+      if (decidedEvents.length !== 1) throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+      const last = entry.history[entry.history.length - 1];
+      if (last.kind !== "DECIDED" || last.decision !== decision.decision || last.actorId !== decision.actorId || last.at !== decision.at)
+        throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+    }
+    const raisedEvent = entry.history[0];
+    if (raisedEvent.at !== complaint.raisedAt || raisedEvent.reason !== complaint.reason
+      || raisedEvent.claimedQuantity !== complaint.claimedQuantity || raisedEvent.traceId !== complaint.traceId)
+      throw new Error("SNAPSHOT_HISTORY_MISMATCH");
+
+    return [complaint.complaintId, { complaint, decision, history: entry.history.map((h) => ({ ...h })) }];
   };
 
   const evidence = () => ({
