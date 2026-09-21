@@ -106,7 +106,7 @@ test("#377 current-head Docker E2E is a focused repository-integrity obligation"
   const manifest = graph();
   const node = manifest.nodes.find(({ id }) => id === "repository-integrity");
   assert.ok(node);
-  assert.equal(manifest.graphVersion, 50);
+  assert.equal(manifest.graphVersion, 51);
   const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
     scripts: Record<string, string>;
   };
@@ -392,7 +392,7 @@ test("FND-PS-02 edge-evidence focused family is canonical and selects its owner 
 
 test("CSCL-11 serial holdout gate is a registered DAG node bound to the frozen reconciled pilot", () => {
   const manifest = graph();
-  assert.equal(manifest.graphVersion, 50);
+  assert.equal(manifest.graphVersion, 51);
   const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
     scripts: Record<string, string>;
   };
