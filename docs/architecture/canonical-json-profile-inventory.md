@@ -85,6 +85,20 @@ authoritative ownership declaration; its own change is graph-change
 fail-closed, while `package.json` remains covered by central toolchain
 invalidation. This adds no new process variant or runtime utility.
 
+## Module contribution integration refresh
+
+The module contribution registration adds three scanned `.mjs` files and five
+public manifest / checksum ledger paths. The current mechanical inventory now
+has **659 scanned files**, **1,870 ledger entries / unique paths** (no duplicates),
+and the release manifest retains an exact **1,555 public paths** gate. Canonical
+profile dimensions remain unchanged: 36 declaration sites/files, 221 import sites
+in 220 files, 4 re-export sites and 30 similar-shape sites.
+
+The immutable admitted-base commit, base-obligation fixture, historical digests
+and profile-version migration chain are unchanged. Only current census counts
+and derived integrity bindings advance. The table below records the earlier
+admitted census, not the current integration totals.
+
 ## Fresh census vs historical hints
 
 Historical lexical counts (81 declarations / 80 files; 172 import sites /

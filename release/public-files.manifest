@@ -1550,3 +1550,8 @@ verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution
 verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.sha256	verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.sha256	0644
 verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.json	verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.json	0644
 verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.sha256	verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.sha256	0644
+docs/MODULE-CONTRIBUTION.md	docs/MODULE-CONTRIBUTION.md	0644
+examples/module-contribution/modules.json	examples/module-contribution/modules.json	0644
+scripts/module-contribution.mjs	scripts/module-contribution.mjs	0644
+tests/module-contribution.test.mjs	tests/module-contribution.test.mjs	0644
+tests/module-contribution-workflow.test.mjs	tests/module-contribution-workflow.test.mjs	0644

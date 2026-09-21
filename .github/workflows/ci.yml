@@ -79,6 +79,35 @@ jobs:
       - name: Verify external video service boundary
         run: npm run external-video-service:test
 
+      - name: Derive scoped module graph, impact and release manifest
+        env:
+          MODULE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="module-contribution-output"
+          mkdir -p "$output"
+          node scripts/module-contribution.mjs check
+          node scripts/module-contribution.mjs graph > "$output/graph.json"
+          if test -n "$MODULE_BASE" && test "$MODULE_BASE" != 0000000000000000000000000000000000000000; then
+            node scripts/module-contribution.mjs impact --base "$MODULE_BASE" > "$output/impact.json"
+          else
+            printf '%s\n' '{"status":"NO_BASE","note":"No change-impact claim for this run"}' > "$output/impact.json"
+          fi
+          node scripts/module-contribution.mjs release > "$output/manifest.json"
+          node scripts/module-contribution.mjs verify --manifest "$output/manifest.json"
+          printf '%s\n' '### Module contribution automation' \
+            'Scoped graph, impact suggestions and byte-bound manifest are attached to this run.' \
+            'Coverage is declared, not repository-wide. Integrity is not semantic compatibility or release approval.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Retain generated module contribution views
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: module-contribution-${{ github.sha }}
+          path: module-contribution-output
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Confirm tests did not modify tracked files
         run: git diff --exit-code
 

@@ -6,12 +6,12 @@ and trademark boundaries.
 
 ## Fast path
 
-1. Choose an issue, or open a short one describing the problem and proposed
-   result.
+1. Choose a focused problem. Link an existing issue if applicable.
+   Small fixes do not require a preliminary issue.
 2. Fork the repository and create a branch.
 3. Make one focused change.
 4. Run the relevant checks.
-5. Open a pull request linked to the issue. Draft and independently useful
+5. Open a pull request describing the result and checks. Draft and independently useful
    partial pull requests are welcome.
 
 Commenting before implementation is optional and can help avoid duplicate
@@ -29,6 +29,17 @@ Public status labels have precise meanings:
 Security-critical issues may be marked `help wanted`, but are never beginner
 tasks. A `good first issue` label is reserved for independent, low-risk work
 whose dependencies are satisfied.
+
+## Module contributions
+
+Use `npm run module:new -- my-module` for a runnable template and
+`npm run module:check` for the contribution-tool checks. Describe a new semantic
+dependency once; internal fixes need no new manifest or graph paperwork.
+The existing CI derives a scoped dependency view, change-impact suggestions and
+a byte-bound release manifest. These are not automatic compatibility approvals.
+See [the short module guide](docs/MODULE-CONTRIBUTION.md) for the pilot scope,
+commands and focused module tests. Existing release/security gates remain intact;
+this adds no separate approval stage.
 
 ## Delivery-contract template
 
@@ -109,7 +120,8 @@ evidence, rollback or recovery, and explicit non-claims.
 Track the status chain as `planned` → `ready` → `in progress` →
 `locally validated` → `merged` → `released`. Record implementation steps and
 PDCA milestones as an issue checklist or material status comment, not per
-commit. A pull request links its issue and applicable evidence.
+commit. A pull request links an existing issue when applicable and relevant evidence.
+Small fixes may be tracked by their pull request alone.
 
 An implementation issue stays open until reviewed work is merged. A private or
 local branch does not close it. Release notes close the public delivery loop
@@ -154,7 +166,7 @@ is silently reclassified under the new taxonomy.
 
 ## Pull-request contract
 
-Summarize the smallest useful result, link its issue, list relevant validation
+Summarize the smallest useful result, link its issue if applicable, list relevant validation
 and negative probes, and describe authority, safety, compatibility, rollback,
 and known limitations. Keep unrelated cleanup out of the pull request.
 
