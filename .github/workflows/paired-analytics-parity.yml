@@ -82,7 +82,15 @@ jobs:
         run: git diff --exit-code
 
   forward-paired-execution:
-    name: Execute the qualified current-service pair
+    name: Execute the qualified service pair (${{ matrix.profile }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: main
+            head: 792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f
+          - profile: pr235
+            head: bb52b249feb5968eee286963989f98f3bb673996
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -104,18 +112,18 @@ jobs:
           GIT_TERMINAL_PROMPT: '0'
         run: |
           git init "$RUNNER_TEMP/forward-ks"
-          git -C "$RUNNER_TEMP/forward-ks" -c credential.helper= fetch --depth=1 https://github.com/JoFe2/KaleidoSphere.git 792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f
+          git -C "$RUNNER_TEMP/forward-ks" -c credential.helper= fetch --depth=1 https://github.com/JoFe2/KaleidoSphere.git ${{ matrix.head }}
           git -C "$RUNNER_TEMP/forward-ks" checkout --detach FETCH_HEAD
       - name: Rebuild and execute the actual loopback service and pair
         env:
           EXPECTED_PAN_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          node scripts/run-forward-paired-analytics.mjs --counterpart "$RUNNER_TEMP/forward-ks" --pan-head "$EXPECTED_PAN_HEAD" --output "$RUNNER_TEMP/forward-paired-execution.json"
+          node scripts/run-forward-paired-analytics.mjs --profile ${{ matrix.profile }} --counterpart "$RUNNER_TEMP/forward-ks" --pan-head "$EXPECTED_PAN_HEAD" --output "$RUNNER_TEMP/forward-paired-execution.json"
           (cd "$RUNNER_TEMP" && sha256sum forward-paired-execution.json > forward-paired-execution.sha256)
       - name: Preserve exact-head forward execution evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: forward-paired-${{ github.event.pull_request.head.sha || github.sha }}
+          name: forward-paired-${{ matrix.profile }}-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             ${{ runner.temp }}/forward-paired-execution.json
             ${{ runner.temp }}/forward-paired-execution.sha256

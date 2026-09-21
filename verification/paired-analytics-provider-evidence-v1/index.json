@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "pansphaira/paired-analytics-provider-evidence/v1",
+  "evidenceClass": "HISTORICAL_PROVIDER_EXECUTION",
+  "entries": [
+    {
+      "scope": "pr429-final",
+      "panHead": "9b0fe35dcc6c784f6e9ca8b453e04954ae9c9fbd",
+      "artifactId": 10618232943,
+      "runUrl": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/35551419249",
+      "receipt": "pr429-final/forward-paired-execution.json",
+      "sha256": "9907d6bf46ee087a5894417a622e1e57a0ad0c18d31a01ab6d15f1b6e5b1eca7"
+    },
+    {
+      "scope": "main",
+      "panHead": "c664674d4f974a41d0823e62f43610ec5636b368",
+      "artifactId": 10618762744,
+      "runUrl": "https://github.com/JoFe2/PANSPHAIRA/actions/runs/35552152573",
+      "receipt": "main/forward-paired-execution.json",
+      "sha256": "84f866d836a193cd97514407822fbdbc10711df62e2ab82f4abdfff8047924b3"
+    }
+  ],
+  "nonclaims": [
+    "Not evidence for a successor PAN head or the KS PR235 profile.",
+    "Repository publication does not re-execute these receipts.",
+    "No complete AC04, issue closure or production readiness claim.",
+    "Original Actions artifact downloads required authentication; anonymous source availability must be verified separately after publication."
+  ]
+}

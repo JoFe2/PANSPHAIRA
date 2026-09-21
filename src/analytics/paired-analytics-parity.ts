@@ -35,7 +35,7 @@
  *                               scope and is pinned strictly)
  */
 import { createHash } from "node:crypto";
-import { generateForwardProducerAnalyticsManifestV1 } from "./producer-analytics-manifest.js";
+import { generateForwardProducerAnalyticsManifestV1, generateForwardPrProducerAnalyticsManifestV1 } from "./producer-analytics-manifest.js";
 
 /**
  * Additive current-pair content qualification, NOT an execution attestation.
@@ -51,9 +51,18 @@ export function validateForwardAnalyticsPairV1(input: {
   consumerManifest: unknown;
 }): { outcome: "PASS" | "DENIED"; reasonCodes: string[];
      runtimeExecutionAttested: false; releaseOrPublicCiAttested: false } {
+  return validateForwardPairProfile(input, false);
+}
+
+export function validateForwardPrAnalyticsPairV1(input: Parameters<typeof validateForwardAnalyticsPairV1>[0]) {
+  return validateForwardPairProfile(input, true);
+}
+
+function validateForwardPairProfile(input: Parameters<typeof validateForwardAnalyticsPairV1>[0], pr235: boolean): ReturnType<typeof validateForwardAnalyticsPairV1> {
   const reasonCodes: string[] = [];
   try {
-    const regenerated = generateForwardProducerAnalyticsManifestV1({
+    const generate = pr235 ? generateForwardPrProducerAnalyticsManifestV1 : generateForwardProducerAnalyticsManifestV1;
+    const regenerated = generate({
       rawArtifactBytes: input.rawArtifactBytes, candidate: input.candidate,
     }).manifest;
     if (canonicalJson(regenerated) !== canonicalJson(input.producerManifest)) {
@@ -70,8 +79,9 @@ export function validateForwardAnalyticsPairV1(input: {
     }
     // Whole-content pin includes support, channels, config, immutable Git head,
     // self-digest and nonclaims. Rehashing a forgery cannot replace this pin.
-    if (bodyDigest(input.consumerManifest) !==
-        "f778a5fabee25fb8b697d616b93b5d8883f65b8d7b69cafaee95a7ee84263251") {
+    const consumerPin = pr235 ? "1072c0a4c4c7438fc60ac943feb1850566ab556ee46b34c0a9bf7cefdbe6e88e" :
+        "f778a5fabee25fb8b697d616b93b5d8883f65b8d7b69cafaee95a7ee84263251";
+    if (bodyDigest(input.consumerManifest) !== consumerPin) {
       reasonCodes.push("FORWARD_CONSUMER_SUBSTITUTION_DENIED");
     }
   } catch {

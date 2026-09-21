@@ -4,6 +4,30 @@ import test from 'node:test';
 import * as a from '../dist/src/cks-12/kaleidosphere-candidate-quarantine.js';
 const rawArtifactBytes=readFileSync('tests/fixtures/cks-analytics/projection-v1.json');
 const candidate=JSON.parse(readFileSync('tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json'));
+const prCandidate=JSON.parse(readFileSync('tests/fixtures/cks-analytics/native-forward-pr235-candidate-v1.json'));
+test('separate PR235 qualification accepts actual capture and preserves exact identity',()=>{
+ const value={...input(),candidate:prCandidate,qualifiedHeads:{...qualifiedHeads,kaleidoSphere:'bb52b249feb5968eee286963989f98f3bb673996'}};
+ assert.equal(typeof a.adjudicateNativeForwardPrCandidateV1,'function');
+ const result=a.adjudicateNativeForwardPrCandidateV1(value);
+ assert.equal(result.outcome,'ACCEPTED_BOUNDED');
+ assert.deepEqual(result.qualifiedHeads,value.qualifiedHeads);
+ assert.equal(a.adjudicateNativeForwardCandidateV1(value).outcome,'DENIED');
+ assert.equal(a.adjudicateNativeForwardPrCandidateV1(input()).outcome,'DENIED');
+ for(const mutate of [
+   x=>{x.candidate.bindings.environmentSha256='0'.repeat(64);},
+   x=>{x.candidate.bindings.kaleidosphereHead.commitOid='0'.repeat(40);},
+   x=>{x.candidate.bindings.kaleidosphereHead.treeOid='0'.repeat(40);},
+   x=>{x.candidate.claims.computed.nodeCount=99;},
+   x=>{x.candidate.authority.publish=true;},
+   x=>{x.qualifiedHeads.kaleidoSphere=qualifiedHeads.kaleidoSphere;},
+   x=>{x.profile='main';},
+ ]) {
+   const altered=structuredClone(value);mutate(altered);
+   assert.equal(a.adjudicateNativeForwardPrCandidateV1(altered).outcome,'DENIED');
+ }
+ assert.equal('releasedHeads' in result,false);
+ assert.equal(result.authority,'NONE');
+});
 const qualifiedHeads={pansphaira:'7f662672bfc45087342f23e5c589d43598f5c20d',kaleidoSphere:'792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f'};
 test('forward qualification denies environment substitution',()=>{
  const altered=input(); altered.candidate.bindings.environmentSha256='0'.repeat(64);

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
+import { createHash } from "node:crypto";
 
 const ROOT = new URL("../", import.meta.url);
 const legacyDisplay = ["PANS", "PHAIRA"].join("");
@@ -13,8 +14,19 @@ function read(path) {
 }
 
 function classify(path, line) {
+  const providerReceiptPins = {
+    "verification/paired-analytics-provider-evidence-v1/main/forward-paired-execution.json": "84f866d836a193cd97514407822fbdbc10711df62e2ab82f4abdfff8047924b3",
+    "verification/paired-analytics-provider-evidence-v1/pr429-final/forward-paired-execution.json": "9907d6bf46ee087a5894417a622e1e57a0ad0c18d31a01ab6d15f1b6e5b1eca7",
+  };
+  if (Object.hasOwn(providerReceiptPins, path)
+      && createHash("sha256").update(read(path)).digest("hex") === providerReceiptPins[path]
+      && (line.trim().startsWith('"counterpart": ')
+        || line.trim() === `"No generic ${legacyDisplay} domain in KaleidoSphere: the analysis is confined to the one closed native nodes/edges projection v1 shape.",`)) {
+    return "exact-digest-provider-capture-and-test-output";
+  }
   if (
-    path === "tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json"
+    (path === "tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json"
+      || path === "tests/fixtures/cks-analytics/native-forward-pr235-candidate-v1.json")
     && line.trim() === `"No generic ${legacyDisplay} domain in KaleidoSphere: the analysis is confined to the one closed native nodes/edges projection v1 shape.",`
   ) return "byte-preserved-native-service-capture";
   if (

@@ -1007,6 +1007,15 @@ export function adjudicateNativeCandidateV1(input: unknown): NativeAdjudicationV
  * Candidate bytes are never rewritten; all PAN content/provenance gates apply.
  */
 export function adjudicateNativeForwardCandidateV1(input: unknown) {
+  return adjudicateNativeForwardProfile(input, true);
+}
+
+/** Separate exact PR235 qualification; it does not admit other PR heads. */
+export function adjudicateNativeForwardPrCandidateV1(input: unknown) {
+  return adjudicateNativeForwardProfile(input, "pr235");
+}
+
+function adjudicateNativeForwardProfile(input: unknown, profile: true | "pr235") {
   const envelope = exactRecord(input, ["canonicalTransportBytes", "candidate", "context", "rawArtifactBytes", "qualifiedHeads"]);
   const result = adjudicateNativeCandidateForProfile(envelope === undefined ? undefined : {
     canonicalTransportBytes: envelope.canonicalTransportBytes,
@@ -1014,7 +1023,7 @@ export function adjudicateNativeForwardCandidateV1(input: unknown) {
     context: envelope.context,
     rawArtifactBytes: envelope.rawArtifactBytes,
     releasedHeads: envelope.qualifiedHeads,
-  }, true);
+  }, profile);
   const { releasedHeads, schemaVersion: _historicalSchema, ...evidence } = result;
   return freeze({ ...evidence, qualifiedHeads: releasedHeads, schemaVersion: "pansphaira/native-forward-qualification/v1" as const });
 }
@@ -1028,8 +1037,14 @@ const FORWARD_SERVICE_HEAD_V1 = freeze({
   treeOid: "759baccaa077d24f2f78c7e82d6fab801050bc63",
 });
 
-function adjudicateNativeCandidateForProfile(input: unknown, forward: boolean): NativeAdjudicationV1 {
-  const expectedHeads = forward ? FORWARD_QUALIFIED_HEADS_V1 : RECONCILED_RELEASED_HEADS_V1;
+const FORWARD_PR_HEAD_V1 = freeze({
+  commitOid: "bb52b249feb5968eee286963989f98f3bb673996",
+  treeOid: "759baccaa077d24f2f78c7e82d6fab801050bc63",
+});
+
+function adjudicateNativeCandidateForProfile(input: unknown, forward: boolean | "pr235"): NativeAdjudicationV1 {
+  const expectedServiceHead = forward === "pr235" ? FORWARD_PR_HEAD_V1 : FORWARD_SERVICE_HEAD_V1;
+  const expectedHeads = forward ? { ...FORWARD_QUALIFIED_HEADS_V1, kaleidoSphere: expectedServiceHead.commitOid } : RECONCILED_RELEASED_HEADS_V1;
   const authoritative = buildAuthoritativeAdjudicationInputs();
   const fields = {
     adjudicationContextId: "",
@@ -1145,7 +1160,7 @@ function adjudicateNativeCandidateForProfile(input: unknown, forward: boolean): 
     sourceFileIdentity: { path: NATIVE_SOURCE_FILE_IDENTITY_PATH_V1, sha256: fields.rawArtifactSha256 },
   };
   if (
-    canonicalJson(bindings.kaleidosphereHead) !== canonicalJson(forward ? FORWARD_SERVICE_HEAD_V1 : NATIVE_EXPECTED_KALEIDOSPHERE_HEAD_V1)
+    canonicalJson(bindings.kaleidosphereHead) !== canonicalJson(forward ? expectedServiceHead : NATIVE_EXPECTED_KALEIDOSPHERE_HEAD_V1)
     || canonicalJson(bindings.pansphairaHead) !== canonicalJson(expectedPansphairaHead)
   ) return outcome("DENIED", "NATIVE_STALE_HEAD_DENIED");
 

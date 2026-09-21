@@ -1,0 +1,1045 @@
+{
+  "schemaVersion": "pansphaira/forward-pair-execution/v1",
+  "state": "PASS",
+  "testedHeads": {
+    "pansphaira": {
+      "commitOid": "c664674d4f974a41d0823e62f43610ec5636b368",
+      "treeOid": "6ee5e539d5f77a6cc7136573ffbef4e18818ddee"
+    },
+    "kaleidoSphere": {
+      "commitOid": "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+      "treeOid": "759baccaa077d24f2f78c7e82d6fab801050bc63"
+    }
+  },
+  "environment": {
+    "node": "v24.19.0",
+    "abi": "137",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "sourceDigests": {
+    "scripts/run-forward-paired-analytics.mjs": "c4f22f2587ad09cf33bd1753330aa72c85eef0d3215cc974478f271daabfde20",
+    "src/cks-12/kaleidosphere-candidate-quarantine.ts": "bb07938a2dd60ec3d8b203a57bdc4a83c15f79e6134cdfed83c215c4138111b2",
+    "src/analytics/producer-analytics-manifest.ts": "f674bbc89a896bc01dfcc9583595880744437463996a558b73384e18499ed268",
+    "src/analytics/paired-analytics-parity.ts": "bf5fe8639508b45db91ceeda18eb4bfbaf317630cca791a5a46eab528c63ab4d"
+  },
+  "capture": {
+    "status": "CANDIDATE",
+    "issue": "XRA-KS-01",
+    "requestSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+    "candidate": {
+      "schemaVersion": "kaleidosphere.pansphaira-analytics/native-authority-free-candidate/v1",
+      "issue": "XRA-KS-01",
+      "state": "CANDIDATE",
+      "analysis": {
+        "id": "pansphaira/native-edge-evidence-coverage-analysis",
+        "version": "v1",
+        "contractSha256": "913c2599099e7324a17a6dcab6008b107e7869fc4ba840317c1534ee013302bd"
+      },
+      "claims": {
+        "observed": {
+          "nodeIds": [
+            "knowledge-001",
+            "decision-001"
+          ],
+          "nodeKinds": [
+            "KNOWLEDGE",
+            "DECISION"
+          ],
+          "edgeRelation": "KNOWLEDGE_USED_BY_DECISION",
+          "evidenceRoles": [
+            "KNOWLEDGE_QUALIFICATION",
+            "RELATION_ASSERTION"
+          ],
+          "sourceContract": "pansphaira.fnd-ps-02/owner-edge-evidence-inputs/v2",
+          "sourceContractVersion": "v2",
+          "authority": "NONE",
+          "promotion": "NOT_AUTHORIZED",
+          "relationTruth": "NOT_GRANTED",
+          "nonclaimCount": 6
+        },
+        "computed": {
+          "nodeCount": 2,
+          "edgeCount": 1,
+          "evidenceCount": 2,
+          "knowledgeNodeCount": 1,
+          "decisionNodeCount": 1,
+          "unknownTotal": 0,
+          "counterevidenceTotal": 0,
+          "frozenReceiptsEstablishingEdge": 2
+        }
+      },
+      "coverage": {
+        "nodes": "OBSERVED",
+        "edges": "OBSERVED",
+        "evidence": "OBSERVED",
+        "source": "OBSERVED",
+        "unknownChannel": "OBSERVED",
+        "counterevidence": "OBSERVED"
+      },
+      "counterevidence": [
+        {
+          "claim": "nodes",
+          "check": "frozen subject inventory and duplicate node identifiers",
+          "observed": 2,
+          "status": "NONE_FOUND"
+        },
+        {
+          "claim": "edges",
+          "check": "the single frozen purpose-bound relation",
+          "observed": 1,
+          "status": "NONE_FOUND"
+        },
+        {
+          "claim": "evidence",
+          "check": "the edge established by its frozen source receipts",
+          "observed": 2,
+          "status": "NONE_FOUND"
+        },
+        {
+          "claim": "source",
+          "check": "native source binding to the pinned CKS proof input",
+          "observed": 1,
+          "status": "EVIDENCE_FOUND"
+        },
+        {
+          "claim": "unknownChannel",
+          "check": "unknown frozen to false on every node and edge",
+          "observed": 0,
+          "status": "NONE_FOUND"
+        },
+        {
+          "claim": "counterevidence",
+          "check": "per-node and per-edge counterevidence arrays remain empty",
+          "observed": 0,
+          "status": "NONE_FOUND"
+        }
+      ],
+      "resultSha256": "b3027cef96da4262ec7a2a43bbdcea275a23e988aff0aab92f29745e4df81099",
+      "bindings": {
+        "kaleidosphereHead": {
+          "commitOid": "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+          "treeOid": "759baccaa077d24f2f78c7e82d6fab801050bc63"
+        },
+        "pansphairaHead": {
+          "status": "RELEASED",
+          "commitOid": "988395110a9189d1b8cd4ee98184ed5c1d77a15d",
+          "releaseTag": "2026_09_05_v1",
+          "releaseCommit": "7f662672bfc45087342f23e5c589d43598f5c20d",
+          "releaseReceiptSha256": "bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6",
+          "sourceFileIdentity": {
+            "path": "tests/fixtures/cks-analytics/projection-v1.json",
+            "sha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8"
+          }
+        },
+        "rawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+        "canonicalTransportSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+        "projectionBodyDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+        "nativeProjectionContractSha256": "99e1ac62cfda3bef59ba310e00f7daa16d80b170ae5e7a7eaa3fff314d1a5d9a",
+        "analysisContractSha256": "913c2599099e7324a17a6dcab6008b107e7869fc4ba840317c1534ee013302bd",
+        "releaseSidecarSha256": "1b6f55dd5507ec6c8894d2b35377439ee206d832d4cf19d9e3dc687ab4a3bce4",
+        "environmentSha256": "eee228014a53272b822c6b9872c2dc93dcb8a5ef62abae206e8ee32343990f05"
+      },
+      "authority": {
+        "promote": false,
+        "mutate": false,
+        "execute": false,
+        "publish": false,
+        "capabilities": [],
+        "effects": []
+      },
+      "nonclaims": [
+        "No autonomous promotion: this native candidate is state CANDIDATE and carries no promotion, mutation, execution, or publication authority.",
+        "No relation-truth or knowledge-effectiveness claim: the analysis emits structural node/edge/evidence coverage only; no relation truth or effectiveness is asserted.",
+        "No generic PANSPHAIRA domain in KaleidoSphere: the analysis is confined to the one closed native nodes/edges projection v1 shape.",
+        "No external effect: no push, publish, release, credential use, customer data access, or production-data claim is made or implied by this candidate."
+      ]
+    }
+  },
+  "consumerManifest": {
+    "schemaVersion": "kaleidosphere.analytics/consumer-support-manifest/v1",
+    "manifestVersion": "1.0.0",
+    "issue": "PAR-KS-01",
+    "consumer": {
+      "product": {
+        "id": "superset-bi-agent",
+        "version": "v0.18.1",
+        "component": "bi-agent-runtime"
+      },
+      "contract": {
+        "id": "superset-bi-agent.external",
+        "version": "2.0.0"
+      },
+      "profileSchema": "superset-bi-agent.external/consumer-profile/v1",
+      "profileDigest": "sha256:203fab47d7f37110e6de37e71cd5d61f245baeb7ddcde17f3fa6b208c90d4378"
+    },
+    "capabilityAttestationDigest": "sha256:7379d493c1dceeaa83a1266e420cb866efb2216c3b56c0d93212863c5b87bb8a",
+    "channels": {
+      "projection": {
+        "status": "SUPPORTED",
+        "version": "superset-bi-agent.external/intent-request/v2",
+        "reasonCode": null,
+        "evidence": {
+          "derivedFrom": "validateExternalIntentV2",
+          "readback": "acceptedRequest.schemaVersion",
+          "negativeProbe": "v1 denied EXTERNAL_BI_REQUEST_IDENTITY_DENIED"
+        }
+      },
+      "semantic": {
+        "status": "SUPPORTED",
+        "version": "superset-bi-agent.external/consumer-profile/v1",
+        "reasonCode": null,
+        "evidence": {
+          "derivedFrom": "externalBiConsumerProfileV1",
+          "readback": "profile.schemaVersion"
+        }
+      },
+      "analysis": {
+        "status": "SUPPORTED",
+        "version": "superset-bi-agent.external/analysis-readback/v2",
+        "reasonCode": null,
+        "evidence": {
+          "derivedFrom": "executeExternalIntentV2[analyze]",
+          "readback": "result.schemaVersion"
+        }
+      },
+      "result": {
+        "status": "SUPPORTED",
+        "version": "superset-bi-agent.external/intent-result/v2",
+        "reasonCode": null,
+        "evidence": {
+          "derivedFrom": "executeExternalIntentV2[status]",
+          "readback": "envelope.schemaVersion"
+        }
+      },
+      "returnChannel": {
+        "status": "SUPPORTED",
+        "version": "superset-bi-agent.external/superset-readback/v2",
+        "reasonCode": null,
+        "evidence": {
+          "derivedFrom": "executeExternalIntentV2[readback]",
+          "readback": "result.schemaVersion"
+        }
+      }
+    },
+    "support": {
+      "supported": [
+        {
+          "id": "bi.status.read",
+          "action": "status",
+          "authority": "read-only",
+          "status": "SUPPORTED",
+          "reasonCode": null
+        },
+        {
+          "id": "bi.discovery.run",
+          "action": "discovery",
+          "authority": "local-evidence-write",
+          "status": "SUPPORTED",
+          "reasonCode": null
+        },
+        {
+          "id": "bi.analysis.run",
+          "action": "analyze",
+          "authority": "source-read-only",
+          "status": "SUPPORTED",
+          "reasonCode": null
+        },
+        {
+          "id": "bi.graph.adaptive-v1.plan",
+          "action": "plan",
+          "authority": "proposal-only",
+          "status": "SUPPORTED",
+          "reasonCode": null
+        },
+        {
+          "id": "bi.preview.create",
+          "action": "preview",
+          "authority": "proposal-only",
+          "status": "SUPPORTED",
+          "reasonCode": null
+        },
+        {
+          "id": "bi.readback.read",
+          "action": "readback",
+          "authority": "read-only",
+          "status": "SUPPORTED",
+          "reasonCode": null
+        }
+      ],
+      "partial": [
+        {
+          "id": "superset.trusted-apply",
+          "action": "trusted-apply",
+          "authority": "trusted-approval-only",
+          "externalIntent": false,
+          "status": "PARTIAL",
+          "reasonCode": "EXTERNAL_INTENT_NOT_DISPATCHABLE"
+        },
+        {
+          "id": "superset.trusted-readback",
+          "action": "trusted-readback",
+          "authority": "trusted-approval-only",
+          "externalIntent": false,
+          "status": "PARTIAL",
+          "reasonCode": "EXTERNAL_INTENT_NOT_DISPATCHABLE"
+        },
+        {
+          "id": "superset.trusted-rollback",
+          "action": "trusted-rollback",
+          "authority": "trusted-approval-only",
+          "externalIntent": false,
+          "status": "PARTIAL",
+          "reasonCode": "EXTERNAL_INTENT_NOT_DISPATCHABLE"
+        }
+      ],
+      "unsupported": [
+        {
+          "surface": "sourceDatabaseCredentials",
+          "accepted": false,
+          "status": "UNSUPPORTED",
+          "reasonCode": "UNSUPPORTED_SOURCE_DATABASE_CREDENTIALS"
+        },
+        {
+          "surface": "freeSql",
+          "accepted": false,
+          "status": "UNSUPPORTED",
+          "reasonCode": "UNSUPPORTED_FREE_SQL"
+        },
+        {
+          "surface": "rawSourceRows",
+          "accepted": false,
+          "status": "UNSUPPORTED",
+          "reasonCode": "UNSUPPORTED_RAW_SOURCE_ROWS"
+        },
+        {
+          "surface": "modelMutation",
+          "accepted": false,
+          "status": "UNSUPPORTED",
+          "reasonCode": "UNSUPPORTED_MODEL_MUTATION"
+        },
+        {
+          "surface": "directSupersetMutationIntent",
+          "accepted": false,
+          "status": "UNSUPPORTED",
+          "reasonCode": "UNSUPPORTED_DIRECT_SUPERSET_MUTATION_INTENT"
+        }
+      ],
+      "unknown": [],
+      "reasonCodes": {
+        "partial": "EXTERNAL_INTENT_NOT_DISPATCHABLE",
+        "unknown": "NO_RESIDUAL_UNKNOWN_AT_HEAD",
+        "unsupported": [
+          "UNSUPPORTED_DIRECT_SUPERSET_MUTATION_INTENT",
+          "UNSUPPORTED_FREE_SQL",
+          "UNSUPPORTED_MODEL_MUTATION",
+          "UNSUPPORTED_RAW_SOURCE_ROWS",
+          "UNSUPPORTED_SOURCE_DATABASE_CREDENTIALS"
+        ]
+      }
+    },
+    "nonclaims": [
+      "No producer-truth claim: this manifest states only the consumer support surface derived from executable runtime behavior; it asserts nothing about any upstream producer, source system, or external release truth.",
+      "No broad analytics support: the manifest is scoped to the one external consumer profile (superset-bi-agent.external v2); it does not claim support for any analytics domain, projection profile, or capability beyond the runtime-derived set.",
+      "No manually asserted runtime capability: every supported/partial/unsupported fact, every reason code, and every channel version is derived from the live runtime (capability attestation, consumer profile, and intent dispatch); no capability is asserted by documentation, hand-edit, or caller input."
+    ],
+    "bindings": {
+      "kaleidosphereHead": {
+        "commitOid": "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+        "treeOid": "759baccaa077d24f2f78c7e82d6fab801050bc63"
+      },
+      "config": {
+        "canonicalJsonSha256": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec",
+        "contractVersion": "2.0.0",
+        "packageSha256": "826bcc27fa1a59514001b550a8d07c2fd129bf68089ddc98bdf626b2eb346145",
+        "productVersion": "v0.18.1"
+      }
+    },
+    "integrity": {
+      "algorithm": "sha256-canonical-json",
+      "digest": "sha256:d64a13ee5c0d6328141f3da4057306eb87e78e7fa3a3f9063dc1a5a16847c935"
+    }
+  },
+  "producerManifest": {
+    "schemaVersion": "pansphaira/forward-producer-analytics-manifest/v1",
+    "serviceHead": {
+      "commitOid": "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+      "treeOid": "759baccaa077d24f2f78c7e82d6fab801050bc63"
+    },
+    "projectionSourceHead": {
+      "status": "RELEASED",
+      "commitOid": "988395110a9189d1b8cd4ee98184ed5c1d77a15d",
+      "releaseTag": "2026_09_05_v1",
+      "releaseCommit": "7f662672bfc45087342f23e5c589d43598f5c20d",
+      "releaseReceiptSha256": "bd485d4525cfce9b843de54b2fb6e30e30e560857e6f06faa0f494f65dddb1c6",
+      "sourceFileIdentity": {
+        "path": "tests/fixtures/cks-analytics/projection-v1.json",
+        "sha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8"
+      }
+    },
+    "environmentSha256": "eee228014a53272b822c6b9872c2dc93dcb8a5ef62abae206e8ee32343990f05",
+    "rawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+    "candidateDigest": "d816435cb1fe294f70666f0e5a3027dd5ddd8f5cb19cd5fb5177a095e7102844",
+    "fieldSurface": [
+      {
+        "path": "candidate",
+        "kind": "object",
+        "digest": "90186b68862ff1f1597b2342cab98a8625e831c28f930557a16c2df7082cd4b3"
+      },
+      {
+        "path": "candidate.analysis",
+        "kind": "object",
+        "digest": "5aeef27fe7a9537d340f9e89e36be79147b1cbfa5c87331834bda9baf060796f"
+      },
+      {
+        "path": "candidate.analysis.contractSha256",
+        "kind": "string",
+        "digest": "2271b3de49a492a83cdfd674ef7d7102cd64eb97737592a04168edfd87cfdbfb"
+      },
+      {
+        "path": "candidate.analysis.id",
+        "kind": "string",
+        "digest": "e4492996313520c06fac9d29e984f1897ec64d9aac7f7813c96486ec0d85a8fb"
+      },
+      {
+        "path": "candidate.analysis.version",
+        "kind": "string",
+        "digest": "161078e42e8fef3ba4b9c984035baa2e431a50b31a18ac95614cc6820394af13"
+      },
+      {
+        "path": "candidate.authority",
+        "kind": "object",
+        "digest": "cc9b64e0681de4f9b0508a1f5ced25f24f2c3032c91ee00c5f3b13a4ecabfe31"
+      },
+      {
+        "path": "candidate.authority.capabilities",
+        "kind": "array",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "path": "candidate.authority.effects",
+        "kind": "array",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "path": "candidate.authority.execute",
+        "kind": "boolean",
+        "digest": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+      },
+      {
+        "path": "candidate.authority.mutate",
+        "kind": "boolean",
+        "digest": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+      },
+      {
+        "path": "candidate.authority.promote",
+        "kind": "boolean",
+        "digest": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+      },
+      {
+        "path": "candidate.authority.publish",
+        "kind": "boolean",
+        "digest": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+      },
+      {
+        "path": "candidate.bindings",
+        "kind": "object",
+        "digest": "371c2801db4c5cd83c0a0795d657ef9056a49f387d2b00e6bf80cc8274c813af"
+      },
+      {
+        "path": "candidate.bindings.analysisContractSha256",
+        "kind": "string",
+        "digest": "2271b3de49a492a83cdfd674ef7d7102cd64eb97737592a04168edfd87cfdbfb"
+      },
+      {
+        "path": "candidate.bindings.canonicalTransportSha256",
+        "kind": "string",
+        "digest": "667b8a3bcdb61a27853cc4707ac7ab905e1360f43920f05d7412d7a64beb0f01"
+      },
+      {
+        "path": "candidate.bindings.environmentSha256",
+        "kind": "string",
+        "digest": "4b27dffa45d89991e900a367ffdcf7460530b1fd1f5f26986398f15c3798fb06"
+      },
+      {
+        "path": "candidate.bindings.kaleidosphereHead",
+        "kind": "object",
+        "digest": "9280423a1023d5c743f1a05529a01b8780437b7dcd309e135f08819e8b1b686f"
+      },
+      {
+        "path": "candidate.bindings.kaleidosphereHead.commitOid",
+        "kind": "string",
+        "digest": "a25f29a844c3bbeecd63b838ac9eb07b92f88f799dfa1baedbd2e2716397d439"
+      },
+      {
+        "path": "candidate.bindings.kaleidosphereHead.treeOid",
+        "kind": "string",
+        "digest": "8229a51a660cc2656a028b549221b381f59e2a484f54f71ee0e7500b54240cb4"
+      },
+      {
+        "path": "candidate.bindings.nativeProjectionContractSha256",
+        "kind": "string",
+        "digest": "8204a0764c314ed4b8ed5e8da8f72724299eeecdb7bb84b37d33aafd0d49abd0"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead",
+        "kind": "object",
+        "digest": "96b580e468b06cd79adca881f27b21277d83c1628ca91208589f9f604e5ce94d"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.commitOid",
+        "kind": "string",
+        "digest": "506d33c5a86e850117be7e1f1a558b623e6edbff683987ffb7fafffe1aeb2850"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.releaseCommit",
+        "kind": "string",
+        "digest": "3ed984f1bae3a124d11fc0ab5c3614f0e37fb0070cf9310cf9ee3429ae90d836"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.releaseReceiptSha256",
+        "kind": "string",
+        "digest": "ef8113c4c30df2f5ffe76cb427fd0d2ffccdbf789c30d2d4bf1749f817b19d38"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.releaseTag",
+        "kind": "string",
+        "digest": "618d6183ff064ce17c42ab532dc49ff1e82942fb58b2d8cbbd9b6f1d55b27921"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.sourceFileIdentity",
+        "kind": "object",
+        "digest": "f3c36a4edf19cc0c7a4ecd2baa00fd5b8c0b24e100630fb65ddac24d29d0f2cd"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.sourceFileIdentity.path",
+        "kind": "string",
+        "digest": "f2701d11be15b902ef025336c6e83d90bcf952d9201f1eef4e33d3b4522a8e9f"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.sourceFileIdentity.sha256",
+        "kind": "string",
+        "digest": "eacb623703b8ef3a63fc404de6d4b073b3f88306f927b99d2a64c6fee51592c0"
+      },
+      {
+        "path": "candidate.bindings.pansphairaHead.status",
+        "kind": "string",
+        "digest": "4444ad6b228f0b76880d2b41460a3325bdab999222f95f3d6a81a5ec8c5c46d6"
+      },
+      {
+        "path": "candidate.bindings.projectionBodyDigest",
+        "kind": "string",
+        "digest": "fe9792eed4209fadb5dda55ff57af4c50dd1d737e4ecbe8bd3658f8d58f3cffb"
+      },
+      {
+        "path": "candidate.bindings.rawArtifactSha256",
+        "kind": "string",
+        "digest": "eacb623703b8ef3a63fc404de6d4b073b3f88306f927b99d2a64c6fee51592c0"
+      },
+      {
+        "path": "candidate.bindings.releaseSidecarSha256",
+        "kind": "string",
+        "digest": "7f0dbfed72a82d231a31d5adcf012bf6aa917165ee93bf75e7021b35c45b13e5"
+      },
+      {
+        "path": "candidate.claims",
+        "kind": "object",
+        "digest": "a9246015765f87702cc3d76f456e50744e2cc33a08340add393b6c55eefd1249"
+      },
+      {
+        "path": "candidate.claims.computed",
+        "kind": "object",
+        "digest": "50a23e50a3dae65d95f63dc71c650455b30cbcc660cd9ee996231c7b3a688509"
+      },
+      {
+        "path": "candidate.claims.computed.counterevidenceTotal",
+        "kind": "number",
+        "digest": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+      },
+      {
+        "path": "candidate.claims.computed.decisionNodeCount",
+        "kind": "number",
+        "digest": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+      },
+      {
+        "path": "candidate.claims.computed.edgeCount",
+        "kind": "number",
+        "digest": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+      },
+      {
+        "path": "candidate.claims.computed.evidenceCount",
+        "kind": "number",
+        "digest": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+      },
+      {
+        "path": "candidate.claims.computed.frozenReceiptsEstablishingEdge",
+        "kind": "number",
+        "digest": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+      },
+      {
+        "path": "candidate.claims.computed.knowledgeNodeCount",
+        "kind": "number",
+        "digest": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+      },
+      {
+        "path": "candidate.claims.computed.nodeCount",
+        "kind": "number",
+        "digest": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+      },
+      {
+        "path": "candidate.claims.computed.unknownTotal",
+        "kind": "number",
+        "digest": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+      },
+      {
+        "path": "candidate.claims.observed",
+        "kind": "object",
+        "digest": "628b2b6c84230e49020ba1146a6682eabd35291b016414bf9bacae0370a29760"
+      },
+      {
+        "path": "candidate.claims.observed.authority",
+        "kind": "string",
+        "digest": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+      },
+      {
+        "path": "candidate.claims.observed.edgeRelation",
+        "kind": "string",
+        "digest": "f81c76bc02a3362e7d625b83635417d46dbfe7538a0430380fb3119dac11a305"
+      },
+      {
+        "path": "candidate.claims.observed.evidenceRoles",
+        "kind": "array",
+        "digest": "2e1776444966af63736d62c082402071660d8292031359412f58d68c7e786970"
+      },
+      {
+        "path": "candidate.claims.observed.evidenceRoles[0]",
+        "kind": "string",
+        "digest": "21966d490f95460991fb4d4a24e6033681e5e9053b41d7d27eb9f56fc818a1b3"
+      },
+      {
+        "path": "candidate.claims.observed.evidenceRoles[1]",
+        "kind": "string",
+        "digest": "cac57355d827560ffbf93862841d73770c5a9c3e467ec0592715b88829c4138d"
+      },
+      {
+        "path": "candidate.claims.observed.nodeIds",
+        "kind": "array",
+        "digest": "61daa0a0f7091fd5839b4c4e26c4b74101f93e5c6ef0c8ece0f4d9cc5af56415"
+      },
+      {
+        "path": "candidate.claims.observed.nodeIds[0]",
+        "kind": "string",
+        "digest": "d5d47a808e72ab89ec459a2a902550e0d79959a058368b750874d72a32dadee3"
+      },
+      {
+        "path": "candidate.claims.observed.nodeIds[1]",
+        "kind": "string",
+        "digest": "2d3dab796160dd011ca0cda56c2071c668fe3b508c2c7c72d0735b5cd10ac8fb"
+      },
+      {
+        "path": "candidate.claims.observed.nodeKinds",
+        "kind": "array",
+        "digest": "0e6b9ce55ee7806595d6bd4bf42deec4b119b3df384a973353b2548d20c10699"
+      },
+      {
+        "path": "candidate.claims.observed.nodeKinds[0]",
+        "kind": "string",
+        "digest": "c4f8ea802535cf1048aaa330612cca87ef08bffc825ea365239857a21a07b4bf"
+      },
+      {
+        "path": "candidate.claims.observed.nodeKinds[1]",
+        "kind": "string",
+        "digest": "01f6501ce26cff4acf33bf10257bb9fd254b82bfb6a48d66ddc563aae10e2810"
+      },
+      {
+        "path": "candidate.claims.observed.nonclaimCount",
+        "kind": "number",
+        "digest": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683"
+      },
+      {
+        "path": "candidate.claims.observed.promotion",
+        "kind": "string",
+        "digest": "6d20223414021290fd141eec58cb57ffbfa030481153038acac8cf38be7271a4"
+      },
+      {
+        "path": "candidate.claims.observed.relationTruth",
+        "kind": "string",
+        "digest": "a47261447e0a79dc6f36399e10deb0726dc8475306cc981050cd5d2606984a44"
+      },
+      {
+        "path": "candidate.claims.observed.sourceContract",
+        "kind": "string",
+        "digest": "5b5a80bbf470452e82e29a27ed8ed4f74ac93369f0e99753be7a2dcd0ed54b8d"
+      },
+      {
+        "path": "candidate.claims.observed.sourceContractVersion",
+        "kind": "string",
+        "digest": "576506f61f53440f1edd95d28631a17e26f50d613eef2943a030220b66c5f5b3"
+      },
+      {
+        "path": "candidate.counterevidence",
+        "kind": "array",
+        "digest": "2a85b041988e8200ce6966c5daf3a50acc2205e9dde3c33ee87e49967fe8c88d"
+      },
+      {
+        "path": "candidate.counterevidence[0]",
+        "kind": "object",
+        "digest": "bfff69c0e5a858f04eb6048e89afa9edadf5be48d9a553ff66d511c5b271fc8d"
+      },
+      {
+        "path": "candidate.counterevidence[0].check",
+        "kind": "string",
+        "digest": "fb4af002287ee9c70deea50d77e430301f145a19fb06d95c29e039cea4223a21"
+      },
+      {
+        "path": "candidate.counterevidence[0].claim",
+        "kind": "string",
+        "digest": "bbef1c19933039e17b86c861eac2bc37e24adee1503595cc2ec8f6afd1ae3adb"
+      },
+      {
+        "path": "candidate.counterevidence[0].observed",
+        "kind": "number",
+        "digest": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+      },
+      {
+        "path": "candidate.counterevidence[0].status",
+        "kind": "string",
+        "digest": "a2caa5755a344c7a0862fdbf0ff52e3208b0f7db71fab293f8710cca8136af1a"
+      },
+      {
+        "path": "candidate.counterevidence[1]",
+        "kind": "object",
+        "digest": "0f3f659e75476d1840ee2b8098369a7713d4c30b6d285dee8b5966cb1562a7ec"
+      },
+      {
+        "path": "candidate.counterevidence[1].check",
+        "kind": "string",
+        "digest": "7b9cb0b7905f89881ad25f9c4df560a55b05019beac8b47dec9f506af9e7bdcb"
+      },
+      {
+        "path": "candidate.counterevidence[1].claim",
+        "kind": "string",
+        "digest": "9038fe2efd24823606c72ae75a7af57041b47936d23006887b3761a6e5bd7587"
+      },
+      {
+        "path": "candidate.counterevidence[1].observed",
+        "kind": "number",
+        "digest": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+      },
+      {
+        "path": "candidate.counterevidence[1].status",
+        "kind": "string",
+        "digest": "a2caa5755a344c7a0862fdbf0ff52e3208b0f7db71fab293f8710cca8136af1a"
+      },
+      {
+        "path": "candidate.counterevidence[2]",
+        "kind": "object",
+        "digest": "c96750dc23d772b4296cd61412b2457c8f087e677097ae9788ba99580f650f12"
+      },
+      {
+        "path": "candidate.counterevidence[2].check",
+        "kind": "string",
+        "digest": "d66ad1d3de856df8bce28162d3aa9be4d8e9eae3f79f013aa8bc6e33bf3b5496"
+      },
+      {
+        "path": "candidate.counterevidence[2].claim",
+        "kind": "string",
+        "digest": "edecec53ab11f560816e75a17681eb83886beace01d7fb927d99707d3d031aac"
+      },
+      {
+        "path": "candidate.counterevidence[2].observed",
+        "kind": "number",
+        "digest": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+      },
+      {
+        "path": "candidate.counterevidence[2].status",
+        "kind": "string",
+        "digest": "a2caa5755a344c7a0862fdbf0ff52e3208b0f7db71fab293f8710cca8136af1a"
+      },
+      {
+        "path": "candidate.counterevidence[3]",
+        "kind": "object",
+        "digest": "72364ca02bcdfd7ece1f749b0769e8b0fe8c756eebaab039ba2a9406862a8fb5"
+      },
+      {
+        "path": "candidate.counterevidence[3].check",
+        "kind": "string",
+        "digest": "e1f31dadcf88388659a7851c1b2c227f305eaf7485d0923169badef53094d935"
+      },
+      {
+        "path": "candidate.counterevidence[3].claim",
+        "kind": "string",
+        "digest": "073171f7f5e1438ae632cb252bda87d19e1bfab1a0ba309e91bdd645886f24ea"
+      },
+      {
+        "path": "candidate.counterevidence[3].observed",
+        "kind": "number",
+        "digest": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+      },
+      {
+        "path": "candidate.counterevidence[3].status",
+        "kind": "string",
+        "digest": "40f1f7848a71d72cf9730660f48d2bbacf3ed66e6c0148c1e68eeae30b634887"
+      },
+      {
+        "path": "candidate.counterevidence[4]",
+        "kind": "object",
+        "digest": "bf93aae39d1ec0c5bac91b68b448322d51af62aa795b97b470c04d6f3d530763"
+      },
+      {
+        "path": "candidate.counterevidence[4].check",
+        "kind": "string",
+        "digest": "9737a9b4ee6d0a5327b30ecb73caf16d235c55448ac19f4b66235cb8b86d05b3"
+      },
+      {
+        "path": "candidate.counterevidence[4].claim",
+        "kind": "string",
+        "digest": "4a87a7d089e788a14278928ab4facda900e1e1f9dc3f76811ccb7438c629f239"
+      },
+      {
+        "path": "candidate.counterevidence[4].observed",
+        "kind": "number",
+        "digest": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+      },
+      {
+        "path": "candidate.counterevidence[4].status",
+        "kind": "string",
+        "digest": "a2caa5755a344c7a0862fdbf0ff52e3208b0f7db71fab293f8710cca8136af1a"
+      },
+      {
+        "path": "candidate.counterevidence[5]",
+        "kind": "object",
+        "digest": "483fdd0a251d90ea9d02414a73f923cb95cbbff4b704ba52d4d6ddc18976451f"
+      },
+      {
+        "path": "candidate.counterevidence[5].check",
+        "kind": "string",
+        "digest": "8101a7b69ffa607dbeeb58c03b97cfedb21d3baede31cef5e9952bea6397cff1"
+      },
+      {
+        "path": "candidate.counterevidence[5].claim",
+        "kind": "string",
+        "digest": "a0dbeec4aee02e8dbf5264b32a695530043415155cf94ea37ecf2555ea376653"
+      },
+      {
+        "path": "candidate.counterevidence[5].observed",
+        "kind": "number",
+        "digest": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+      },
+      {
+        "path": "candidate.counterevidence[5].status",
+        "kind": "string",
+        "digest": "a2caa5755a344c7a0862fdbf0ff52e3208b0f7db71fab293f8710cca8136af1a"
+      },
+      {
+        "path": "candidate.coverage",
+        "kind": "object",
+        "digest": "a48c6280eff849f60c7741cf54a0b4552d43f3360c0e2f7affe186be19194aa8"
+      },
+      {
+        "path": "candidate.coverage.counterevidence",
+        "kind": "string",
+        "digest": "827761a810e70fe2741d3562eb2ad45028f503e043d8cda7edf26a06d726b638"
+      },
+      {
+        "path": "candidate.coverage.edges",
+        "kind": "string",
+        "digest": "827761a810e70fe2741d3562eb2ad45028f503e043d8cda7edf26a06d726b638"
+      },
+      {
+        "path": "candidate.coverage.evidence",
+        "kind": "string",
+        "digest": "827761a810e70fe2741d3562eb2ad45028f503e043d8cda7edf26a06d726b638"
+      },
+      {
+        "path": "candidate.coverage.nodes",
+        "kind": "string",
+        "digest": "827761a810e70fe2741d3562eb2ad45028f503e043d8cda7edf26a06d726b638"
+      },
+      {
+        "path": "candidate.coverage.source",
+        "kind": "string",
+        "digest": "827761a810e70fe2741d3562eb2ad45028f503e043d8cda7edf26a06d726b638"
+      },
+      {
+        "path": "candidate.coverage.unknownChannel",
+        "kind": "string",
+        "digest": "827761a810e70fe2741d3562eb2ad45028f503e043d8cda7edf26a06d726b638"
+      },
+      {
+        "path": "candidate.issue",
+        "kind": "string",
+        "digest": "f2ca0d3dfd06970948c649021f3fab1cb45869cace3ec73ddb10c10dc003e8cc"
+      },
+      {
+        "path": "candidate.nonclaims",
+        "kind": "array",
+        "digest": "ddee399424b450ad5644d896c60e2b9b44c864fc2f2ccac9e5cd1bc3ab322c77"
+      },
+      {
+        "path": "candidate.nonclaims[0]",
+        "kind": "string",
+        "digest": "8992ab07dd45facb892ec1752946afd0f41691c8f32294917d3f7596282b28dc"
+      },
+      {
+        "path": "candidate.nonclaims[1]",
+        "kind": "string",
+        "digest": "e424d81799d3c06bb7682781e2650e40ce6bd44e02fe950c861503542e320157"
+      },
+      {
+        "path": "candidate.nonclaims[2]",
+        "kind": "string",
+        "digest": "261c3734fc605ba66ec466d6256cc2abe1e494ef768ecdc5a301f6db942d839b"
+      },
+      {
+        "path": "candidate.nonclaims[3]",
+        "kind": "string",
+        "digest": "dc3e6cd45d8fbf7f76ff28f5eb5e4b0fbf0f7885170e146abe8b884e7b3243dc"
+      },
+      {
+        "path": "candidate.resultSha256",
+        "kind": "string",
+        "digest": "294fcfdce5c6cb3db62bd9dd6c8c131ce060a623457ec64895799c45ba0a5e6d"
+      },
+      {
+        "path": "candidate.schemaVersion",
+        "kind": "string",
+        "digest": "93c0e50acd0950d48fd9b2730b60aa09443bf14120b97aad8b5bef7f50dcf862"
+      },
+      {
+        "path": "candidate.state",
+        "kind": "string",
+        "digest": "33972333688062169484f2285bf1681a509585a96d96f7999a94c13fa55be40d"
+      }
+    ],
+    "fieldSurfaceDigest": "6d476447875a1281da2c71b35b463604c5a3d1eb98b3b4dbcaf5f2f73467f551",
+    "evidence": {
+      "observed": {
+        "nodeIds": [
+          "knowledge-001",
+          "decision-001"
+        ],
+        "nodeKinds": [
+          "KNOWLEDGE",
+          "DECISION"
+        ],
+        "edgeRelation": "KNOWLEDGE_USED_BY_DECISION",
+        "evidenceRoles": [
+          "KNOWLEDGE_QUALIFICATION",
+          "RELATION_ASSERTION"
+        ],
+        "sourceContract": "pansphaira.fnd-ps-02/owner-edge-evidence-inputs/v2",
+        "sourceContractVersion": "v2",
+        "authority": "NONE",
+        "promotion": "NOT_AUTHORIZED",
+        "relationTruth": "NOT_GRANTED",
+        "nonclaimCount": 6
+      },
+      "computed": {
+        "nodeCount": 2,
+        "edgeCount": 1,
+        "evidenceCount": 2,
+        "knowledgeNodeCount": 1,
+        "decisionNodeCount": 1,
+        "unknownTotal": 0,
+        "counterevidenceTotal": 0,
+        "frozenReceiptsEstablishingEdge": 2
+      }
+    },
+    "coverage": {
+      "nodes": "OBSERVED",
+      "edges": "OBSERVED",
+      "evidence": "OBSERVED",
+      "source": "OBSERVED",
+      "unknownChannel": "OBSERVED",
+      "counterevidence": "OBSERVED"
+    },
+    "counterevidence": [
+      {
+        "claim": "nodes",
+        "check": "frozen subject inventory and duplicate node identifiers",
+        "observed": 2,
+        "status": "NONE_FOUND"
+      },
+      {
+        "claim": "edges",
+        "check": "the single frozen purpose-bound relation",
+        "observed": 1,
+        "status": "NONE_FOUND"
+      },
+      {
+        "claim": "evidence",
+        "check": "the edge established by its frozen source receipts",
+        "observed": 2,
+        "status": "NONE_FOUND"
+      },
+      {
+        "claim": "source",
+        "check": "native source binding to the pinned CKS proof input",
+        "observed": 1,
+        "status": "EVIDENCE_FOUND"
+      },
+      {
+        "claim": "unknownChannel",
+        "check": "unknown frozen to false on every node and edge",
+        "observed": 0,
+        "status": "NONE_FOUND"
+      },
+      {
+        "claim": "counterevidence",
+        "check": "per-node and per-edge counterevidence arrays remain empty",
+        "observed": 0,
+        "status": "NONE_FOUND"
+      }
+    ],
+    "adjudication": {
+      "adjudicationContextId": "pansphaira:forward-producer-001",
+      "authoritativeProjectionDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+      "authoritativeSourceContractSha256": "d2995f7e8ed46031902d09a5138202a489834d4a018646c50920a482bbf7da44",
+      "authority": "NONE",
+      "canonicalKnowledgeAfterSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+      "canonicalKnowledgeBeforeSha256": "d756437db8c991ee78ea7a9fcc7a9d4749daf8eebda51d5ba31fcc53e1b1242a",
+      "canonicalKnowledgeMutation": "NONE",
+      "canonicalTransportSha256": "91c26eb69860767ec2898a48676caaeb52c808de284bb0fbfbe8a986d30ad19c",
+      "capabilityDelta": "NONE",
+      "candidateDigest": "d816435cb1fe294f70666f0e5a3027dd5ddd8f5cb19cd5fb5177a095e7102844",
+      "effect": "NONE",
+      "kaleidoSphereServiceVerdictAuthoritative": false,
+      "outcome": "ACCEPTED_BOUNDED",
+      "projectionBodyDigest": "cc5f6cc9591ccf4b6b3c4b9f954aa9da09695b784d7abaa585c082aea195ef1b",
+      "rawArtifactSha256": "22f34bf33874a42cde5a5a23a2242935e8b2b145aa8e2364a5aef26b8ec3e6e8",
+      "reasonCodes": [
+        "NATIVE_EVIDENCE_ACCEPTED"
+      ],
+      "qualifiedHeads": {
+        "pansphaira": "7f662672bfc45087342f23e5c589d43598f5c20d",
+        "kaleidoSphere": "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f"
+      },
+      "schemaVersion": "pansphaira/native-forward-qualification/v1"
+    },
+    "authority": "NONE",
+    "nonclaims": [
+      "NO_RUNTIME_EXECUTION_ATTESTATION",
+      "NO_RELEASE_OR_PUBLIC_CI_CLAIM",
+      "NO_FUTURE_ROADMAP_CAPABILITY",
+      "NO_CONSUMER_SUPPORT_CLAIM",
+      "NO_HISTORICAL_RETENTION_SEMANTICS"
+    ],
+    "manifestDigest": "cedf64c11a3d00eb77688699109ae7efb6d96d3aa9dd913490c06706fcc7fb0d"
+  },
+  "pair": {
+    "outcome": "PASS",
+    "reasonCodes": [],
+    "runtimeExecutionAttested": false,
+    "releaseOrPublicCiAttested": false
+  },
+  "tests": {
+    "counterpart": "✔ AC01 manifest carries the exact schema identity and nonclaims (4.486048ms)\n✔ AC01 channel versions equal the live service capability/readback (2.729123ms)\n✔ AC01 manifest binds the live capability attestation + consumer profile (1.739083ms)\n✔ AC01 fresh manifest verifies VERIFIED against the live runtime (2.240454ms)\n✔ AC01 committed baseline is faithful to the live runtime and verifies (2.688367ms)\n✔ AC02 PARTIAL is first-class and profile-specific (1.08678ms)\n✔ AC02 UNSUPPORTED is first-class, profile-specific, never supported:false/empty/omitted (1.211322ms)\n✔ AC02 UNKNOWN is a first-class category (present, empty at this head) (0.972748ms)\n✔ AC02 negative runtime matrix: the runtime actually denies each unsupported surface (1.931049ms)\n✔ AC02 negative matrix: a tampered support partition is denied with a specific code (7.630122ms)\n✔ AC03 repeat generation is deterministic on the same head (2.495228ms)\n✔ AC03 the committed baseline is byte-reproducible at its recorded head (0.81762ms)\n✔ AC03 the manifest never carries a digest of itself (0.946539ms)\n✔ AC03 a stale head is denied (2.917863ms)\n✔ AC03 a substituted runtime attestation is denied (1.590716ms)\n✔ AC03 a substituted consumer profile is denied (1.518743ms)\n✔ AC03 a substituted channel version is denied (1.731368ms)\n✔ AC03 a substituted runtime config is denied (1.162992ms)\n✔ AC03 a corrupted manifest (integrity mismatch) is denied (0.811719ms)\n✔ AC01: the service boundary is a real local process with no PANSPHAIRA import and no dryRun bridge (160.604548ms)\n✔ AC02: one predeclared analysis yields a deterministic authority-free candidate with EXACT oracle readback (12.854334ms)\n✔ AC03: forged edge, substituted projection, missing evidence, UNKNOWN collapse, and unsupported profile fail closed (16.405223ms)\n✔ AC03: timeout fails closed at the service boundary without mutating inputs (1101.183786ms)\n✔ AC04: the candidate binds exact heads, contracts, input, result, and environment; every substitution is denied (15.979435ms)\n✔ clean-room runner: deterministic evidence, EXACT oracle readback, real registry HELD (133.249788ms)\n✔ NATIVE-AC01: the native boundary is a real local service process that ingests the exact released native projection; no PANSPHAIRA import and no dryRun bridge (109.073684ms)\n✔ NATIVE-AC02: one predeclared native edge-evidence analysis yields a deterministic authority-free candidate with EXACT oracle readback (11.892917ms)\n✔ NATIVE-AC03: forged edge, substituted projection, missing evidence, UNKNOWN collapse, unsupported profile, re-digested forgery, and authority widening fail closed (24.294851ms)\n✔ NATIVE-AC03: timeout fails closed at the native service boundary without mutating inputs (1093.036408ms)\n✔ NATIVE-AC04: the native candidate binds exact heads, contracts, input, result, sidecar, and environment; every substitution is denied (20.460154ms)\n✔ NATIVE-AC04: the actual loopback-returned candidate binds the complete deterministic result to the independently pinned projection and predeclared analysis; re-digested result substitutions are denied (106.95384ms)\n✔ NATIVE-AC05: versioned source-only provenance distinguishes the actual receipt SHA256 from the named release commit and denies trusted-source substitution (100.511569ms)\n✔ native clean-room runner: deterministic native evidence, EXACT oracle, synthetic sidecar pin, relational registry still HELD (130.831489ms)\nℹ tests 33\nℹ suites 0\nℹ pass 33\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 3146.346826",
+    "producer": "✔ forward pair validates separate current content without claiming execution or release (29.856303ms)\n✔ forward pair denies producer (8.693659ms)\n✔ forward pair denies capture (6.84467ms)\n✔ forward pair denies environment (6.600796ms)\n✔ forward pair denies projection (5.040944ms)\n✔ forward pair denies consumer head (10.733178ms)\n✔ forward pair denies consumer supported scope (9.83233ms)\n✔ forward pair denies consumer channel (8.078207ms)\n✔ forward pair denies consumer rehashed substitution (5.647089ms)\n✔ forward pair denies malformed (5.79683ms)\n✔ forward execution binds the actual root, exact head and clean sources (91.188187ms)\n✔ forward CLI rejects dot-dot-prefixed receipt directories in either checkout (127.617684ms)\n✔ forward execution refuses unqualified Node, ABI, OS and architecture (0.47013ms)\n✔ forward producer denies head substitution (6.093675ms)\n✔ forward producer denies environment substitution (1.901849ms)\n✔ forward producer denies computed claims substitution (3.948102ms)\n✔ forward producer denies authority substitution (1.247555ms)\n✔ forward producer denies raw projection substitution (1.598471ms)\n✔ forward producer denies historical capture substitution (3.270801ms)\n✔ forward producer deterministically derives current observed surface without historical receipt or release claim (28.887471ms)\nℹ tests 20\nℹ suites 0\nℹ pass 20\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 294.749055"
+  },
+  "negative": [
+    "CONSUMER_SUBSTITUTION_DENIED",
+    "ENVIRONMENT_SUBSTITUTION_DENIED"
+  ],
+  "nonclaim": "Exact local process execution only; public CI, release and issue closure require independent provider readback."
+}
