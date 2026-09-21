@@ -4931,7 +4931,7 @@
         {
           "path": "tests/module-contribution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "7a3360c4a444e0f63fd40fafe7b0572ea7edaf1be27cf697c3051d386b9a8cf2"
+          "sha256": "5266f93c4a805b9be29e1e1528b6c4f16cd8a8cbfdaa1ea17eb0aa000a53161e"
         },
         {
           "path": "tests/native-forward-qualification.test.mjs",
