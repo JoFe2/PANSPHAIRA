@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "af1a72136f8b627bc443af142c9fb0a82e01cbfd6425e6857959b6b6283aa8d8"
+        "sha256": "6e81fc0ab7fa1e2257af1b5e81d456e2e95459f97f6ab48ac263a5b4925d48b1"
       }
     ]
   },

@@ -260,7 +260,7 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1870, uniquePaths: 1870, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1875, uniquePaths: 1875, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
