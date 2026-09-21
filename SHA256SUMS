@@ -285,7 +285,7 @@ c26fc3b2689d7cf600a5481ad626d7e8c38b04ddbf98eefbff8193191ad29d89  ./docs/LEARNIN
 906f4c19a4744d20eaea70c28e3911c0bb1613ea447ffb8e0624bba99593c9a6  ./docs/LOCAL-FILE-KNOWLEDGE-CORPUS.md
 3bddcfbb41f8129af0c08379b88d468fa632dd71f9824dc0769002802b95cb8d  ./docs/LOCAL-KNOWLEDGE-KIWIX-ZIM-ASSESSMENT.md
 d6a904ab5a9fd664bc275df68169ea960a0887bb556172aebd3bd265487724f0  ./docs/LOCAL-KNOWLEDGE-WIKIMEDIA-PILOT.md
-0006633c0e69de7fd57a434459b059ffd801bf6fbc160f5e72823b4c3d92031f  ./docs/MODULE-CONTRIBUTION.md
+f637db8b8a38a196c0a541e4b794cfcd8b9067e650d9fb7edc5a22bced9ae058  ./docs/MODULE-CONTRIBUTION.md
 cc7a1043bcb5b724ee9ec677771fa063121f52dc9333fedc962f089d455b7271  ./docs/OPENCLAW-BOUNDED-STATE-OPERATOR-GUIDE.md
 0ba088ce92c88c523f0d67c5f978986ca049d23ff35ca3040dd2b72066796f2f  ./docs/OPERATING-FIELD-GUIDE.md
 78539b84c40131704150bc1da07f409f1b1ed65dd9217e148b7ca81ecd124d9e  ./docs/OPERATION-EVENT-QUALITY-CONTRACT.md
@@ -919,7 +919,7 @@ aad34f5f7380537f65c78f4f8f507235ba6a2adc7b1bde64f6c972de4f8e9e65  ./scripts/demo
 9bffc93f7a0da2e1602f10525c2b89ee0fd2e011ae9f6803ae23d8c1a2c2b9bc  ./scripts/generate-incoming-invoice-erv-analytics.mjs
 abab50a97cf7113e2cad4125992fb3178a67877f573e974b128f2494ef1883b8  ./scripts/learning-routing-baseline.mjs
 6c2112afe0ceba5207af821becbd72aef1f8e8af94fdec590e485bf3ddb319a2  ./scripts/measure-node-pure-compute.mjs
-1064f5a7a99cf05e6524035028c2a8daced4786ab699cc75bf70054a72106111  ./scripts/module-contribution.mjs
+c10cf7a507645ea073c9f4befbc00c0d79ecc7e8400553564fc5b4ba38a7032b  ./scripts/module-contribution.mjs
 0cd16675e6f5af09f5c8165344cd64d2daff57dbd79f15514cf9899137132f90  ./scripts/paired-analytics-execution.mjs
 7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a  ./scripts/refresh-integrity-data.mjs
 8cef62545a40571ea167393b82695292e1d0c94dd21a4bd1d6759ae3a18017e8  ./scripts/render-asf-public-readback.mjs
@@ -1641,7 +1641,7 @@ e2c0fa21234a8712c27ab9da883e44b14532b7d58046d470f161e04216ce9ae4  ./tests/mediaw
 c4c2492f936df0923d79480a6fb89cb7bb1a1cab3cf1f3c2555b7eeb3c1f4b3d  ./tests/model-access-broker-runtime.test.mjs
 26f60c15cb8153beab29395efbdf225fd12745a8f2d5f61e67f3ae63b9fb2130  ./tests/model-access-broker.test.ts
 6d2668d7a1c3b4f1ea5e61089fae9d929c990c413ced0f5b5677352e0f0190e1  ./tests/module-contribution-workflow.test.mjs
-5f28baba42fac7d703241719f43179fde6f8d6e4a7957178c3510044027a770e  ./tests/module-contribution.test.mjs
+7a3360c4a444e0f63fd40fafe7b0572ea7edaf1be27cf697c3051d386b9a8cf2  ./tests/module-contribution.test.mjs
 11684919074248e154bedd11837cd6c4f15a23b150ef670df9ecc909b9f1db28  ./tests/native-forward-qualification.test.mjs
 9a169c1157b7a27919f100905a686e01e6e9e3cf4d05690d62c97b8b915a1c24  ./tests/openclaw-agent-runtime-lock.test.mjs
 2febc29725e6846a0212746fb317f0e5c43e755a07d5e0209b14dc77e54f243f  ./tests/openclaw-agent-runtime.test.mjs
@@ -1871,5 +1871,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-894e2cca476e446627b245396771b67bd8bb684f53e01386d71e1e2324ea0831  ./verification/verification-dag-v2.json
+a26b69d9e5877cecf6f7aaa28acda73490134707cf057e29c116bbddc31bca5f  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
