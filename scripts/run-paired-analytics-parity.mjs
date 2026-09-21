@@ -22,7 +22,7 @@ import {
   verifyPairedAnalyticsParityV1,
 } from "../dist/src/analytics/paired-analytics-parity.js";
 
-import { generateProducerAnalyticsManifestV1 } from "../dist/src/analytics/producer-analytics-manifest.js";
+import { generateProducerAnalyticsManifestV1, historicalProducerAdjudicatorSourceV1 } from "../dist/src/analytics/producer-analytics-manifest.js";
 const root = process.cwd();
 const sha256 = (value) => createHash("sha256").update(value, "utf8").digest("hex");
 
@@ -49,7 +49,9 @@ const sources = [
   ["adjudicatorSource", "src/cks-12/kaleidosphere-candidate-quarantine.ts"],
 ];
 const generated = generateProducerAnalyticsManifestV1(Object.fromEntries(sources.map(([key, path]) =>
-  [key, { path, bytes: Uint8Array.from(readFileSync(resolve(root, path))) }]))).manifest;
+  [key, key === "adjudicatorSource"
+    ? historicalProducerAdjudicatorSourceV1(readFileSync(resolve(root, "tests/fixtures/cks-analytics/native-v2-historical-source.json")))
+    : { path, bytes: Uint8Array.from(readFileSync(resolve(root, path))) }]))).manifest;
 if (pairedAnalyticsProducerCoreSha256(generated) !== pinned.producerRef.manifestSha256 ||
     canonicalJson(pinned.promisedScope) !== canonicalJson(PAIRED_ANALYTICS_PROMISED_SCOPE_V1)) {
   throw new Error("PAIRED_ANALYTICS_TRUSTED_EXPECTATION_DENIED");

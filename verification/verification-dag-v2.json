@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 49,
+  "graphVersion": 50,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "0c06362a30736a2cd90ccede2ac5b4725ff32b9e14881509ad119366f63a11b8"
+          "sha256": "8c918d5190075ddc7f07d08b8b66057112d9d7408ebc05e6dfd8f437d7c41d29"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -2630,7 +2630,7 @@
         {
           "path": "src/cks-12/kaleidosphere-candidate-quarantine.ts",
           "role": "VALIDATOR",
-          "sha256": "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b"
+          "sha256": "bb07938a2dd60ec3d8b203a57bdc4a83c15f79e6134cdfed83c215c4138111b2"
         },
         {
           "path": "src/cks-12/pattern-shadow-workflow.ts",
@@ -2700,7 +2700,7 @@
         {
           "path": "tests/cks-12/kaleidosphere-candidate-quarantine-rootqs.test.ts",
           "role": "VALIDATOR",
-          "sha256": "689c8dda3b3d54b24b7ec2446cadccf3474c5552c2ff48982e853be04bf79b80"
+          "sha256": "35365a67c9d76300046ae17ac14b24d1eef6079ea88f84aaa4cd408dd0a5b740"
         },
         {
           "path": "tests/cks-12/kaleidosphere-candidate-quarantine.test.ts",
@@ -4691,7 +4691,7 @@
         {
           "path": ".github/workflows/paired-analytics-parity.yml",
           "role": "SECURITY",
-          "sha256": "98f017afecc79c38dddeb8907fe1992c92d04aea447d0948036158ad72040b8a"
+          "sha256": "ec44fc5d22a009da0e40380812dbeeb3747508c703abf41aae9ab317922bb97e"
         },
         {
           "path": ".github/workflows/release-public-readback.yml",
@@ -4791,7 +4791,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "bc5f77fc05c724cd38c7fecae55771f73953880c19a7098d7c5bc2aa4c85c35f"
+          "sha256": "0389485c564032380c25f12c3244d026d34dd809af8a3e7496d2b7f061b8eabc"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4801,7 +4801,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "4d3ef993bad838932ddc400586d248456a9ddaa4fed1dd79a9305e181b168600"
+          "sha256": "661e68d48371d6b49504efc3897ca8a0317c4057a76fcfb160c60d650f93d068"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4814,9 +4814,14 @@
           "sha256": "0cd16675e6f5af09f5c8165344cd64d2daff57dbd79f15514cf9899137132f90"
         },
         {
+          "path": "scripts/run-forward-paired-analytics.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c4f22f2587ad09cf33bd1753330aa72c85eef0d3215cc974478f271daabfde20"
+        },
+        {
           "path": "scripts/run-paired-analytics-parity.mjs",
           "role": "VALIDATOR",
-          "sha256": "6de5fa257bb0de3adb0bdcd2438a7708b92879cbf3a7385848826a3c7f249abc"
+          "sha256": "9e1754efb13d8ede94be53296c674c9b8e06d72f91a17becbd15fe040f644ce7"
         },
         {
           "path": "scripts/verify-release-governance.mjs",
@@ -4831,12 +4836,12 @@
         {
           "path": "src/analytics/paired-analytics-parity.ts",
           "role": "SOURCE",
-          "sha256": "2a5a7dd9a840a094face1c4ee3f0fee0a8a33a24ff1e482265fa52ff62181f3e"
+          "sha256": "bf5fe8639508b45db91ceeda18eb4bfbaf317630cca791a5a46eab528c63ab4d"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5a152349ffd82d2f50e12240ff9771c0e1dd572c221107c42621a9be8eee7ce9"
+          "sha256": "f334ca7bc95f1be4e889b5dcbebc56b97bd6ccb6d6ca6d853f8d4da5c1a07314"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4849,6 +4854,21 @@
           "sha256": "082347cae97e5eedfc45671cc5ab068790898b336b52f4befef0ed76c3e58ac3"
         },
         {
+          "path": "tests/fixtures/cks-analytics/consumer-forward-current-v1.json",
+          "role": "FIXTURE",
+          "sha256": "945b2db0690f6a279ddecb56d9bb4d677ea09a806357e93f0fe529d7ee3c1400"
+        },
+        {
+          "path": "tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json",
+          "role": "FIXTURE",
+          "sha256": "e3417021fbec446c6619df7fc0c96a314ed7c414aaf43c0bc46b18c3b42c033b"
+        },
+        {
+          "path": "tests/fixtures/cks-analytics/native-v2-historical-source.json",
+          "role": "FIXTURE",
+          "sha256": "cdc42e86e741586ccdb6dab1a911edbceb872816cdead0ae8c26224734fad2b6"
+        },
+        {
           "path": "tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json",
           "role": "FIXTURE",
           "sha256": "f98a401c37d6422bde5b6379db5e49ff0c18aae599f1939de711fcb5d19ab6b4"
@@ -4859,9 +4879,29 @@
           "sha256": "98c7f8311bf244f804aeb23ff7cefefc3f521670468f72f4bb4a5170b2329ec9"
         },
         {
+          "path": "tests/forward-paired-analytics.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5b45d8e82691371fd51b6f8d63ad9c80725bb9a6d8961eb5d45dea99932235d3"
+        },
+        {
+          "path": "tests/forward-paired-execution.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "83824252353d6ae3d28f29d5ae1a587e10daaf4d91caad4de80c27214f75d445"
+        },
+        {
+          "path": "tests/forward-producer-analytics.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "993aaa63fe5461e234a2ef39a1fa9aae49bf9968499f5791199b36c6ea3b77e0"
+        },
+        {
           "path": "tests/incoming-invoice-adaptive-ui.test.ts",
           "role": "VALIDATOR",
           "sha256": "9d8dcd5025fb8f2351eb4d5824123fbf7a1372af1370b614e936d52c6a3e520f"
+        },
+        {
+          "path": "tests/native-forward-qualification.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "8b712c51448399f813ed19e3871934924d01207301665be34d79e1b4172ef98f"
         },
         {
           "path": "tests/paired-analytics-parity.test.ts",
@@ -4881,7 +4921,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "d0570ef7f1cdc679cc9b2858ab0daa365ce44ac25631cd2a455ad6e3a4271566"
+          "sha256": "9c5f9d478352798ba13dc5584f6096f3727369b0d9c91d3c2c6230d3e026475d"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4891,7 +4931,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "3b7643dd3af6abab26fe4758c630d17a07fac52fa88d4112ea47cf190d551e83"
+          "sha256": "ac28cee2e1994168146e932cddf272e226bfbc478651583f284b1ca00ddf4385"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5470,7 +5510,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "ea1147d4b733cd03cc039e5b7af5fa54e97ad89db53ecbd222502ede1221abf9"
+          "sha256": "8660cc04441e0b666d1070dd23665a81a2a83b13cc48cd80f98a820419becb7c"
         },
         {
           "path": "package-lock.json",
@@ -5830,7 +5870,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5dad73406b521b0f6798351e648c6f824ec5f97e56637f2606e0248ba9f897c8"
+          "sha256": "0edd0ec1299e0ec5bfa1532884adf2dee282433c0c354aac3a89da2804b2e30a"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6095,7 +6135,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "bc5f77fc05c724cd38c7fecae55771f73953880c19a7098d7c5bc2aa4c85c35f"
+          "sha256": "0389485c564032380c25f12c3244d026d34dd809af8a3e7496d2b7f061b8eabc"
         }
       ],
       "ownedTests": [

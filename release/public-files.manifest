@@ -1535,3 +1535,11 @@ tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json	tests
 contracts/analytics/paired-expectation-v1.json	contracts/analytics/paired-expectation-v1.json	0644
 scripts/paired-analytics-execution.mjs	scripts/paired-analytics-execution.mjs	0644
 tests/paired-analytics-runner.test.mjs	tests/paired-analytics-runner.test.mjs	0644
+scripts/run-forward-paired-analytics.mjs	scripts/run-forward-paired-analytics.mjs	0644
+tests/fixtures/cks-analytics/consumer-forward-current-v1.json	tests/fixtures/cks-analytics/consumer-forward-current-v1.json	0644
+tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json	tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json	0644
+tests/fixtures/cks-analytics/native-v2-historical-source.json	tests/fixtures/cks-analytics/native-v2-historical-source.json	0644
+tests/forward-paired-analytics.test.mjs	tests/forward-paired-analytics.test.mjs	0644
+tests/forward-paired-execution.test.mjs	tests/forward-paired-execution.test.mjs	0644
+tests/forward-producer-analytics.test.mjs	tests/forward-producer-analytics.test.mjs	0644
+tests/native-forward-qualification.test.mjs	tests/native-forward-qualification.test.mjs	0644

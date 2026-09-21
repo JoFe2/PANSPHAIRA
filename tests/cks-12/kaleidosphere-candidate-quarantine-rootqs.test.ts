@@ -106,7 +106,17 @@ test("GREEN: the v2 successor receipt from actual execution verifies with exact 
 test("GREEN: the v2 receipt independently binds the tested PAN adjudicator source, separately from the released input heads", () => {
   // Tested-source binding (group 2): the exact adjudicator source and focused
   // native test that were executed, plus the exact pinned KS service identity.
-  const adjudicatorSha = digest(readFileSync(path.join(root, "src/cks-12/kaleidosphere-candidate-quarantine.ts")));
+  // The immutable v2 receipt proves historical execution, not a later source revision.
+  // Carry the exact historical bytes so shallow/release checkouts need no Git history.
+  const archive = JSON.parse(readFileSync(fixture("native-v2-historical-source.json"), "utf8"));
+  assert.equal(archive.schemaVersion, "pansphaira/historical-source-archive/v1");
+  assert.equal(archive.sourceCommit, "28b993b721a61ca98fc66a0c9e3dd40b86b9cb30");
+  assert.equal(archive.sourcePath, "src/cks-12/kaleidosphere-candidate-quarantine.ts");
+  const adjudicatorSha = digest(Buffer.from(archive.sourceUtf8, "utf8"));
+  assert.equal(adjudicatorSha, "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b");
+  assert.equal(archive.sha256, adjudicatorSha);
+  assert.notEqual(adjudicatorSha, digest(readFileSync(path.join(root, archive.sourcePath))),
+    "historical v2 execution must not be represented as current-source execution");
   const focusedTestSha = digest(readFileSync(path.join(root, "tests/cks-12/kaleidosphere-candidate-quarantine-native.test.ts")));
   assert.deepEqual(v2Receipt.testedSource, {
     adjudicatorSha256: adjudicatorSha,

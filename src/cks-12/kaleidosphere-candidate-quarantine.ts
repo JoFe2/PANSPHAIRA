@@ -998,6 +998,38 @@ const deriveNativeAnalysisV1 = (projection: KaleidosphereAnalyticsProjectionV1):
  * independently sourced context -> context conflict -> context restriction.
  */
 export function adjudicateNativeCandidateV1(input: unknown): NativeAdjudicationV1 {
+  return adjudicateNativeCandidateForProfile(input, false);
+}
+
+/**
+ * Additive, code-owned qualification of the measured current service identity.
+ * This is NOT a released-pair receipt and does not admit caller-selected heads.
+ * Candidate bytes are never rewritten; all PAN content/provenance gates apply.
+ */
+export function adjudicateNativeForwardCandidateV1(input: unknown) {
+  const envelope = exactRecord(input, ["canonicalTransportBytes", "candidate", "context", "rawArtifactBytes", "qualifiedHeads"]);
+  const result = adjudicateNativeCandidateForProfile(envelope === undefined ? undefined : {
+    canonicalTransportBytes: envelope.canonicalTransportBytes,
+    candidate: envelope.candidate,
+    context: envelope.context,
+    rawArtifactBytes: envelope.rawArtifactBytes,
+    releasedHeads: envelope.qualifiedHeads,
+  }, true);
+  const { releasedHeads, schemaVersion: _historicalSchema, ...evidence } = result;
+  return freeze({ ...evidence, qualifiedHeads: releasedHeads, schemaVersion: "pansphaira/native-forward-qualification/v1" as const });
+}
+
+const FORWARD_QUALIFIED_HEADS_V1: ReleasedHeadsV1 = freeze({
+  pansphaira: PANSPHAIRA_RECONCILED_RELEASED_HEAD_V1,
+  kaleidoSphere: "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+});
+const FORWARD_SERVICE_HEAD_V1 = freeze({
+  commitOid: "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+  treeOid: "759baccaa077d24f2f78c7e82d6fab801050bc63",
+});
+
+function adjudicateNativeCandidateForProfile(input: unknown, forward: boolean): NativeAdjudicationV1 {
+  const expectedHeads = forward ? FORWARD_QUALIFIED_HEADS_V1 : RECONCILED_RELEASED_HEADS_V1;
   const authoritative = buildAuthoritativeAdjudicationInputs();
   const fields = {
     adjudicationContextId: "",
@@ -1023,7 +1055,7 @@ export function adjudicateNativeCandidateV1(input: unknown): NativeAdjudicationV
     projectionBodyDigest: fields.projectionBodyDigest,
     rawArtifactSha256: fields.rawArtifactSha256,
     reasonCodes: [code],
-    releasedHeads: { ...RECONCILED_RELEASED_HEADS_V1 },
+    releasedHeads: { ...expectedHeads },
     schemaVersion: NATIVE_ADJUDICATION_SCHEMA_V1,
   });
 
@@ -1034,7 +1066,7 @@ export function adjudicateNativeCandidateV1(input: unknown): NativeAdjudicationV
     || !isByteView(envelope.rawArtifactBytes)
     || !validHeads(envelope.releasedHeads)
   ) return outcome("DENIED", "NATIVE_CANDIDATE_SCHEMA_DENIED");
-  if (!reconciledHeads(envelope.releasedHeads)) return outcome("DENIED", "NATIVE_STALE_HEAD_DENIED");
+  if (canonicalJson(envelope.releasedHeads) !== canonicalJson(expectedHeads)) return outcome("DENIED", "NATIVE_STALE_HEAD_DENIED");
 
   const candidate = exactRecord(envelope.candidate, [...NATIVE_CANDIDATE_KEYS_V1]);
   if (candidate === undefined || plainSnapshot(envelope.candidate) === INVALID || !validNativeCandidateRecord(envelope.candidate)) {
@@ -1061,6 +1093,9 @@ export function adjudicateNativeCandidateV1(input: unknown): NativeAdjudicationV
   if (digestBytes(transportBytes) !== rawDigests.canonicalTransportSha256) return outcome("DENIED", "NATIVE_FORGED_CANDIDATE_DENIED");
 
   const bindings = candidate.bindings as PlainRecord;
+  if (forward && bindings.environmentSha256 !== "eee228014a53272b822c6b9872c2dc93dcb8a5ef62abae206e8ee32343990f05") {
+    return outcome("DENIED", "NATIVE_FORGED_CANDIDATE_DENIED");
+  }
   if (
     bindings.rawArtifactSha256 !== fields.rawArtifactSha256
     || bindings.canonicalTransportSha256 !== fields.canonicalTransportSha256
@@ -1110,7 +1145,7 @@ export function adjudicateNativeCandidateV1(input: unknown): NativeAdjudicationV
     sourceFileIdentity: { path: NATIVE_SOURCE_FILE_IDENTITY_PATH_V1, sha256: fields.rawArtifactSha256 },
   };
   if (
-    canonicalJson(bindings.kaleidosphereHead) !== canonicalJson(NATIVE_EXPECTED_KALEIDOSPHERE_HEAD_V1)
+    canonicalJson(bindings.kaleidosphereHead) !== canonicalJson(forward ? FORWARD_SERVICE_HEAD_V1 : NATIVE_EXPECTED_KALEIDOSPHERE_HEAD_V1)
     || canonicalJson(bindings.pansphairaHead) !== canonicalJson(expectedPansphairaHead)
   ) return outcome("DENIED", "NATIVE_STALE_HEAD_DENIED");
 

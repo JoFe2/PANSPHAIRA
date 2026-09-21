@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -6,6 +7,7 @@ import {
   PRODUCER_ANALYTICS_GAP_STATES_V1,
   PRODUCER_ANALYTICS_PRODUCT_NONCLAIMS_V1,
   generateProducerAnalyticsManifestV1,
+  historicalProducerAdjudicatorSourceV1,
   verifyProducerAnalyticsManifestV1,
   type ProducerAnalyticsManifestInputV1,
 } from "../src/analytics/producer-analytics-manifest.js";
@@ -24,9 +26,23 @@ function input(): ProducerAnalyticsManifestInputV1 {
     rawArtifact: { path: RAW, bytes: bytes(RAW) },
     nativeServiceCapture: { path: CAPTURE, bytes: bytes(CAPTURE) },
     sliceReceipt: { path: RECEIPT, bytes: bytes(RECEIPT) },
-    adjudicatorSource: { path: ADJUDICATOR, bytes: bytes(ADJUDICATOR) },
+    adjudicatorSource: historicalProducerAdjudicatorSourceV1(bytes("tests/fixtures/cks-analytics/native-v2-historical-source.json")),
   };
 }
+test("historical producer source rejects relabeling and rehashed substitution", () => {
+  const original = JSON.parse(readFileSync("tests/fixtures/cks-analytics/native-v2-historical-source.json", "utf8"));
+  for (const altered of [
+    { ...original, sourceCommit: "0".repeat(40) },
+    { ...original, sourcePath: "other.ts" },
+    { ...original, sourceUtf8: original.sourceUtf8 + "\n", sha256: "0".repeat(64) },
+    { ...original, schemaVersion: "other" },
+    { ...original, sourceUtf8: original.sourceUtf8 + "\n", sha256: createHash("sha256").update(original.sourceUtf8 + "\n").digest("hex") },
+  ]) {
+    assert.throws(() => historicalProducerAdjudicatorSourceV1(Buffer.from(JSON.stringify(altered))), /HISTORICAL_SOURCE_DENIED/);
+  }
+  assert.notDeepEqual(input().adjudicatorSource.bytes, bytes(ADJUDICATOR));
+});
+
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
