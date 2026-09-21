@@ -4761,7 +4761,7 @@
         {
           "path": "docs/MODULE-CONTRIBUTION.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "0006633c0e69de7fd57a434459b059ffd801bf6fbc160f5e72823b4c3d92031f"
+          "sha256": "f637db8b8a38a196c0a541e4b794cfcd8b9067e650d9fb7edc5a22bced9ae058"
         },
         {
           "path": "docs/QUICKSTART.md",
@@ -4821,7 +4821,7 @@
         {
           "path": "scripts/module-contribution.mjs",
           "role": "VALIDATOR",
-          "sha256": "1064f5a7a99cf05e6524035028c2a8daced4786ab699cc75bf70054a72106111"
+          "sha256": "c10cf7a507645ea073c9f4befbc00c0d79ecc7e8400553564fc5b4ba38a7032b"
         },
         {
           "path": "scripts/paired-analytics-execution.mjs",
@@ -4931,7 +4931,7 @@
         {
           "path": "tests/module-contribution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5f28baba42fac7d703241719f43179fde6f8d6e4a7957178c3510044027a770e"
+          "sha256": "7a3360c4a444e0f63fd40fafe7b0572ea7edaf1be27cf697c3051d386b9a8cf2"
         },
         {
           "path": "tests/native-forward-qualification.test.mjs",
