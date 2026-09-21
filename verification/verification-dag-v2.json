@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "f25109225aaf17eb3aaa6052a4bb726c1711d8b0964d6223b161992b476def69"
+          "sha256": "5fdf11a63c5f55901f04ab92f5a344f6cf08779d3d7e7bb5e615679cc4563791"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "952b0530461fb0166608abc1632cd64e3a6180f788e349c48f0c63a07041f27a"
+          "sha256": "09fd57c9070204fdcabb7c68a6bf57afdaf9b573a255ecec601fd95589bcb8bf"
         }
       ],
       "ownedTests": [
