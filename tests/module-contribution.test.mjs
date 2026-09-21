@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync, symlinkSync } from 'node:fs';
@@ -16,6 +17,90 @@ function fixture(t) {
  put(root,'examples/module-contribution/modules.json',{schemaVersion:1,modules});git(root,'add','.');git(root,'commit','-qm','initial');return {root,modules};
 }
 function json(result) {assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout);}
+function catalog(root, modules) {put(root,'examples/module-contribution/modules.json',{schemaVersion:1,modules});}
+test('optional growth relations are explicit intent, not resolved dependencies',t=>{
+ const {root,modules}=fixture(t);
+ modules[0].extensionRequests=[{reference:'proposal:future',requirement:'required',capability:'Export a profile'}];
+ modules[2].variant={name:'compact',base:{id:'a',version:'1'}};
+ catalog(root,modules);
+ const graph=json(run(root,'graph'));
+ assert.deepEqual(graph.relations,[{from:'a',kind:'extension-request',reference:'proposal:future',requirement:'required',capability:'Export a profile'},{from:'c',kind:'variant',name:'compact',to:'a',version:'1'}]);
+ assert.equal(graph.edges.length,2);
+ git(root,'add','.');git(root,'commit','-qm','relations');
+ put(root,'a/contract.json',{changed:true});
+ assert.deepEqual(json(run(root,'impact','--base','HEAD')).affected,['a','b']);
+});
+test('malformed growth relations fail closed',t=>{
+ const {root,modules}=fixture(t);
+ for(const request of [null,{},[{reference:'x',requirement:'sometimes',capability:'intent'}],[{reference:'x',requirement:'optional',capability:''}],[{reference:'x',requirement:'optional',capability:'intent',kind:'semantic'}],[{reference:'x\nclick',requirement:'required',capability:'intent'}]]){
+  modules[0].extensionRequests=request;catalog(root,modules);assert.notEqual(run(root,'check').status,0,JSON.stringify(request));
+ }
+ delete modules[0].extensionRequests;
+ for(const variant of [null,{}, {name:'v',base:{id:'missing',version:'1'}},{name:'v',base:{id:'b',version:'2'}},{name:'v',base:{id:'a',version:'1'}},{name:'',base:{id:'b',version:'1'}}]){
+  modules[0].variant=variant;catalog(root,modules);assert.notEqual(run(root,'check').status,0,JSON.stringify(variant));
+ }
+});
+test('Mermaid graph uses generated identifiers and escaped labels deterministically',t=>{
+ const {root,modules}=fixture(t);
+ modules[0].extensionRequests=[{reference:'https://example.invalid/?x="<>&',requirement:'optional',capability:'export [safe]'}];
+ modules[2].variant={name:'small "view"',base:{id:'a',version:'1'}};
+ catalog(root,modules);
+ const r=run(root,'graph','--format','mermaid');assert.equal(r.status,0,r.stderr);
+ assert.match(r.stdout,/^flowchart LR\n/);assert.match(r.stdout,/m1 -->\|"depends on 1"\| m0/);
+ assert.match(r.stdout,/#34;#60;#62;#38;/);assert.match(r.stdout,/extension request optional/);assert.match(r.stdout,/variant small #34;view#34;/);
+ assert.doesNotMatch(r.stdout,/https:\/\//);assert.equal(r.stdout,run(root,'graph','--format','mermaid').stdout);
+ assert.notEqual(run(root,'graph','--format','html').status,0);
+});
+test('release comparison uses bound snapshots for own and direct contract impact',t=>{
+ const {root,modules}=fixture(t);
+ const before=json(run(root,'release'));put(root,'before.json',before);
+ put(root,'a/source.mjs','changed');put(root,'after.json',json(run(root,'release')));
+ let result=json(run(root,'compare','--before','before.json','--after','after.json'));
+ assert.deepEqual(result.changedModules,['a']);assert.deepEqual(result.affected,['a']);assert.equal(result.advisory,true);
+ put(root,'a/contract.json',{changed:true});put(root,'after.json',json(run(root,'release')));
+ rmSync(join(root,'a'),{recursive:true});rmSync(join(root,'examples'),{recursive:true});
+ result=json(run(root,'compare','--before','before.json','--after','after.json'));
+ assert.deepEqual(result.affected,['a','b']);assert.deepEqual(result.tests,['a/test.mjs','b/test.mjs']);
+ assert.match(result.notice,/not authentication/);assert.match(result.notice,/no tests executed/);
+ assert.equal(run(root,'compare','--before','before.json','--after','after.json').stdout,run(root,'compare','--before','before.json','--after','after.json').stdout);
+});
+function stable(v) {return Array.isArray(v)?`[${v.map(stable).join(',')}]`:v&&typeof v==='object'?`{${Object.keys(v).sort().map(k=>`${JSON.stringify(k)}:${stable(v[k])}`).join(',')}}`:JSON.stringify(v);}
+const digest=v=>createHash('sha256').update(v).digest('hex');
+function rehash(m) {const {sha256,...payload}=m;m.sha256=digest(stable(payload));return m;}
+test('comparison rejects unsupported, malformed and rehashed inconsistent snapshots',t=>{
+ const {root}=fixture(t);const original=json(run(root,'release'));put(root,'before.json',original);
+ const changes=[
+  m=>m.schemaVersion=1, m=>m.schemaVersion=99, m=>m.sourceCommit='not-a-commit',
+  m=>m.files[0].sha256='bad', m=>m.files[0].sha256=['0'.repeat(64)], m=>m.files.push(m.files[0]), m=>m.files.shift(),
+  m=>m.files[0].path='../escape', m=>m.files.push({path:'unowned',sha256:'0'.repeat(64)}),
+  m=>m.modules[0].version='invented', m=>m.modules[0].files.tests=[],
+  m=>m.descriptorContent+=' ', m=>m.modules.push(m.modules[0]), m=>m.descriptor='missing.json',
+ ];
+ for(const change of changes){const m=structuredClone(original);change(m);rehash(m);put(root,'after.json',m);assert.notEqual(run(root,'compare','--before','before.json','--after','after.json').status,0,String(change));}
+ const m=structuredClone(original);m.files[0].sha256='0'.repeat(64);put(root,'after.json',m);
+ assert.notEqual(run(root,'compare','--before','before.json','--after','after.json').status,0);
+ // An internally consistent rewritten source hash cannot establish provenance.
+ const consistent=structuredClone(original);consistent.files.find(f=>f.path==='a/source.mjs').sha256='0'.repeat(64);rehash(consistent);put(root,'after.json',consistent);
+ const result=json(run(root,'compare','--before','before.json','--after','after.json'));assert.match(result.notice,/not authentication/);assert.deepEqual(result.changedModules,['a']);
+});
+test('comparison treats added source files as internal and accepts empty declared directories',t=>{
+ const {root,modules}=fixture(t);modules[0].sources=['a/src'];modules[0].profiles=['a/empty'];
+ mkdirSync(join(root,'a/empty'));put(root,'a/src/one.mjs','one');catalog(root,modules);
+ put(root,'before.json',json(run(root,'release')));put(root,'a/src/two.mjs','two');put(root,'after.json',json(run(root,'release')));
+ const result=json(run(root,'compare','--before','before.json','--after','after.json'));assert.deepEqual(result.affected,['a']);
+});
+test('comparison retains removed module consumers and old tests without executing them',t=>{
+ const {root,modules}=fixture(t);put(root,'before.json',json(run(root,'release')));
+ modules.splice(0,1);modules[0].dependencies={};catalog(root,modules);put(root,'after.json',json(run(root,'release')));
+ const result=json(run(root,'compare','--before','before.json','--after','after.json'));
+ assert.deepEqual(result.changedModules,['a','b']);assert.deepEqual(result.affected,['a','b','c']);assert.ok(result.tests.includes('a/test.mjs'));
+});
+test('current two-module pilot exports readable graph and self-compares independently of checkout',t=>{
+ const {root}=fixture(t);const repo=resolve(import.meta.dirname,'..');
+ const release=json(run(repo,'release'));assert.equal(release.modules.length,2);put(root,'pilot.json',release);
+ const result=json(run(root,'compare','--before','pilot.json','--after','pilot.json'));assert.deepEqual(result.changedModules,[]);assert.deepEqual(result.tests,[]);
+ const graph=run(repo,'graph','--format','mermaid');assert.equal(graph.status,0,graph.stderr);assert.match(graph.stdout,/cscl-protocol/);assert.match(graph.stdout,/cscl-odoo-profile/);
+});
 test('check validates explicit modules and graph is deterministic',t=>{const {root}=fixture(t);assert.equal(json(run(root,'check')).modules,3);const a=run(root,'graph');assert.deepEqual(json(a).edges,[{from:'b',to:'a',version:'1',kind:'semantic'},{from:'c',to:'b',version:'1',kind:'semantic'}]);assert.equal(a.stdout,run(root,'graph').stdout);});
 
 test('impact selects own tests for internals and only direct consumers for contracts',t=>{const {root}=fixture(t);put(root,'a/source.mjs','changed');let r=json(run(root,'impact','--base','HEAD'));assert.deepEqual(r.tests,['a/test.mjs']);put(root,'a/contract.json',{changed:true});r=json(run(root,'impact','--base','HEAD'));assert.deepEqual(r.tests,['a/test.mjs','b/test.mjs']);assert.equal(r.advisory,true);});

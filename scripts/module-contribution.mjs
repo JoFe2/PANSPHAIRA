@@ -48,7 +48,39 @@ function load(view, descriptor, advisory = false) {
  }).sort((a,b)=>a.id.localeCompare(b.id));
  if(new Set(modules.map(m=>m.id)).size!==modules.length)fail('Duplicate module id');
  const edges=[];for(const m of modules)for(const [to,version] of Object.entries(m.dependencies)){const target=modules.find(n=>n.id===to);if(!advisory&&!target)fail(`Missing dependency: ${to}`);if(!advisory&&target.version!==version)fail(`Version mismatch: ${to}`);edges.push({from:m.id,to,version,kind:'semantic'});}
- return {schemaVersion:1,coverage:'Explicit semantic modules only; no import inference or transitive test selection.',modules,edges:edges.sort((a,b)=>canonical(a).localeCompare(canonical(b)))};
+ const relations=[];
+ for(const m of modules){
+  const text=v=>typeof v==='string'&&v.trim().length>0&&!/[\u0000-\u001f\u007f]/.test(v);
+  const fields=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).sort().join(',')===[...keys].sort().join(',');
+  if('extensionRequests' in m){
+   if(!Array.isArray(m.extensionRequests))fail('Invalid extension requests');
+   for(const r of m.extensionRequests){
+    if(!fields(r,['reference','requirement','capability'])||!text(r.reference)||!text(r.capability)||!['required','optional'].includes(r.requirement))fail('Invalid extension request');
+    relations.push({from:m.id,kind:'extension-request',...r});
+   }
+  }
+  if('variant' in m){
+   const v=m.variant;
+   if(!fields(v,['name','base'])||!text(v.name)||!fields(v.base,['id','version'])||!text(v.base.version)||!/^[a-z][a-z0-9-]*$/.test(v.base.id)||v.base.id===m.id)fail('Invalid variant');
+   const base=modules.find(n=>n.id===v.base.id);
+   if(!advisory&&(!base||base.version!==v.base.version))fail('Missing or mismatched variant base');
+   relations.push({from:m.id,kind:'variant',name:v.name,to:v.base.id,version:v.base.version});
+  }
+ }
+ return {relations:relations.sort((a,b)=>canonical(a).localeCompare(canonical(b))),schemaVersion:1,coverage:'Explicit semantic modules only; no import inference or transitive test selection.',modules,edges:edges.sort((a,b)=>canonical(a).localeCompare(canonical(b)))};
+}
+function mermaid(graph) {
+ // Encode punctuation, including quotes, HTML and Mermaid syntax; no links/directives.
+ const label=value=>[...String(value)].map(c=>/[a-zA-Z0-9 .:-]/.test(c)?c:`#${c.codePointAt(0)};`).join('');
+ const ids=new Map(graph.modules.map((m,i)=>[m.id,`m${i}`]));
+ const lines=['flowchart LR','  %% Semantic declarations only; not compatibility or test evidence.'];
+ for(const m of graph.modules)lines.push(`  ${ids.get(m.id)}["${label(`${m.id} @ ${m.version}`)}"]`);
+ for(const e of graph.edges)lines.push(`  ${ids.get(e.from)} -->|"${label(`depends on ${e.version}`)}"| ${ids.get(e.to)}`);
+ graph.relations.forEach((r,i)=>{
+  if(r.kind==='variant')lines.push(`  ${ids.get(r.from)} -.->|"${label(`variant ${r.name} of ${r.version}`)}"| ${ids.get(r.to)}`);
+  else {lines.push(`  r${i}["${label(`${r.reference}: ${r.capability}`)}"]`);lines.push(`  ${ids.get(r.from)} -.->|"extension request ${r.requirement}"| r${i}`);}
+ });
+ return lines.join('\n');
 }
 function git(root, ...args) { return execFileSync('git', args, {cwd:root,encoding:'utf8',maxBuffer:32*1024*1024}); }
 function snapshot(root, commit) {
@@ -78,8 +110,43 @@ function impact(root, descriptor, base) {
 function release(root, descriptor) {
  const view=disk(root), graph=load(view,descriptor);
  const paths=sorted([descriptor,...graph.modules.flatMap(m=>Object.values(m.files).flat())]);
- const payload={schemaVersion:1,sourceCommit:git(root,'rev-parse','HEAD').trim(),descriptor,coverage:graph.coverage,modules:graph.modules.map(m=>({id:m.id,version:m.version,dependencies:m.dependencies})),files:paths.map(path=>({path,sha256:hash(view.read(path))}))};
+ const payload={schemaVersion:2,sourceCommit:git(root,'rev-parse','HEAD').trim(),descriptor,descriptorContent:view.read(descriptor).toString('utf8'),coverage:graph.coverage,modules:graph.modules,files:paths.map(path=>({path,sha256:hash(view.read(path))}))};
  return {...payload,sha256:hash(canonical(payload))};
+}
+function validateSnapshot(manifest) {
+ if(!manifest||manifest.schemaVersion!==2)fail('Unsupported release schema; comparison requires version 2 ownership snapshots');
+ const {sha256,...payload}=manifest;
+ if(!/^[a-f0-9]{64}$/.test(sha256)||sha256!==hash(canonical(payload)))fail('Release digest mismatch');
+ if(!/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(manifest.sourceCommit)||typeof manifest.descriptorContent!=='string'||!Array.isArray(manifest.files)||!Array.isArray(manifest.modules))fail('Invalid release snapshot');
+ safe(manifest.descriptor);
+ const inventory=new Map();
+ for(const f of manifest.files){
+  if(!f||Object.keys(f).sort().join(',')!=='path,sha256'||typeof f.sha256!=='string'||!/^[a-f0-9]{64}$/.test(f.sha256))fail('Invalid file digest');
+  safe(f.path);if(inventory.has(f.path))fail('Duplicate inventory path');inventory.set(f.path,f.sha256);
+ }
+ if(inventory.get(manifest.descriptor)!==hash(manifest.descriptorContent))fail('Descriptor digest mismatch');
+ // Re-expand declarations against the bound inventory, never today's checkout.
+ const view={read:path=>{if(path!==manifest.descriptor)fail('Unexpected snapshot read');return manifest.descriptorContent;},files(path){safe(path);const paths=[...inventory.keys()].filter(p=>p===path||p.startsWith(`${path}/`));return paths.sort();}};
+ const graph=load(view,manifest.descriptor);
+ const expected=sorted([manifest.descriptor,...graph.modules.flatMap(m=>Object.values(m.files).flat())]);
+ if(canonical(expected)!==canonical(manifest.files.map(f=>f.path))||canonical(graph.modules)!==canonical(manifest.modules)||graph.coverage!==manifest.coverage)fail('Snapshot inventory or module facts mismatch');
+ return manifest;
+}
+function compare(root, beforePath, afterPath) {
+ const view=disk(root);
+ const before=validateSnapshot(JSON.parse(view.read(safe(beforePath)))),after=validateSnapshot(JSON.parse(view.read(safe(afterPath))));
+ const oldFiles=new Map(before.files.map(f=>[f.path,f.sha256])),newFiles=new Map(after.files.map(f=>[f.path,f.sha256]));
+ const changed=sorted([...oldFiles.keys(),...newFiles.keys()]).filter(p=>oldFiles.get(p)!==newFiles.get(p));
+ const own=new Set(),contract=new Set();
+ for(const m of [...before.modules,...after.modules]){
+  const old=before.modules.find(n=>n.id===m.id),now=after.modules.find(n=>n.id===m.id);
+  const metadataChanged=!old||!now||canonical({...old,files:undefined})!==canonical({...now,files:undefined});
+  if(metadataChanged||Object.values(m.files).flat().some(p=>changed.includes(p)))own.add(m.id);
+  if(metadataChanged||[...m.files.contracts,...m.files.profiles].some(p=>changed.includes(p)))contract.add(m.id);
+ }
+ const affected=new Set(own);
+ for(const m of [...before.modules,...after.modules])if(Object.keys(m.dependencies).some(id=>contract.has(id)))affected.add(m.id);
+ return {advisory:true,before:before.sha256,after:after.sha256,changed,changedModules:sorted(own),affected:sorted(affected),tests:sorted([...before.modules,...after.modules].filter(m=>affected.has(m.id)).flatMap(m=>m.files.tests)),notice:'Snapshot consistency only, not authentication; no tests executed. Direct semantic consumers only; no transitive or runtime resolution.'};
 }
 function verify(root, path, descriptor) {
  const manifest=JSON.parse(disk(root).read(safe(path)));
@@ -115,8 +182,10 @@ function main() {
   }
   return {...plan,advisory:false,executed:plan.tests.length>0,notice:'Only declared selected tests executed; unmapped changes require separate checks.'};
  }
+ if(command==='compare'&&args.length===4&&args[0]==='--before'&&args[2]==='--after')return compare(root,args[1],args[3]);
  if(command==='impact'&&args.length===2&&args[0]==='--base')return impact(root,descriptor,args[1]);
  if(command==='verify'&&args.length===2&&args[0]==='--manifest')return verify(root,args[1],descriptor);
+ if(command==='graph'&&args.length===2&&args[0]==='--format'&&args[1]==='mermaid')return mermaid(load(view,descriptor));
  if(args.length)fail('Unexpected arguments');
  if(command==='release')return release(root,descriptor);
  const graph=load(view,descriptor);
@@ -124,4 +193,4 @@ function main() {
  if(command==='graph')return {...graph,npm:npmGraph(view)};
  fail('Usage: module-contribution.mjs check|graph');
 }
-try {console.log(canonical(main()));}catch(error){console.error(`module-contribution: ${error.message}`);process.exitCode=1;}
+try {const result=main();console.log(typeof result==='string'?result:canonical(result));}catch(error){console.error(`module-contribution: ${error.message}`);process.exitCode=1;}
