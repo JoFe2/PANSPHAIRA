@@ -34,6 +34,24 @@
       "dependencies": {
         "cscl-protocol": "1"
       }
+    },
+    {
+      "id": "cscl-13-pan437-neighbor",
+      "version": "1",
+      "sources": [
+        "src/cscl-13"
+      ],
+      "contracts": [
+        "contracts/cscl-13"
+      ],
+      "profiles": [
+        "tests/fixtures/cscl-13"
+      ],
+      "tests": [
+        "tests/cscl-13/complaint.test.mjs",
+        "tests/cscl-13/pan437-neighbor.test.mjs"
+      ],
+      "dependencies": {}
     }
   ]
 }

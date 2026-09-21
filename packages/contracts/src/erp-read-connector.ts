@@ -30,6 +30,15 @@ export interface ErpReadConnectorContractV1 {
 export interface ErpSupportedExportV1 { readonly schemaVersion: typeof ERP_READ_SOURCE_SCHEMA_V1; readonly exportId: string; readonly tenantId: string; readonly generatedAt: string; readonly expiresAt: string; readonly lineage: { readonly sourceSystem: "SYNTHETIC_ERP"; readonly sourceDatasetId: string; readonly extractionMode: "SUPPORTED_EXPORT"; readonly sourceDigest: string; }; readonly batches: readonly { readonly batchId: string; readonly entity: ErpEntityV1; readonly sequence: number; readonly complete: boolean; readonly records: readonly ErpSourceRecordV1[]; }[]; }
 export interface ErpReadRequestV1 { readonly operation: "LIST_CUSTOMERS" | "LIST_ORDERS" | "LIST_INVOICES" | "READ_SOURCE_FACTS"; readonly entity?: ErpEntityV1; readonly tenantId: string; readonly principalId: string; readonly scopes: readonly string[]; readonly credentialPresent: boolean; readonly fields: readonly string[]; readonly pageSize: number; readonly cursor?: string; }
 export type ErpReadResultV1 = { readonly outcome: "DENIED"; readonly code: ErpReadDenialCodeV1 } | { readonly outcome: "READ"; readonly entity: ErpEntityV1; readonly records: readonly ErpRecordV1[]; readonly metadata: { readonly tenantId: string; readonly trust: "LOCAL_SYNTHETIC"; readonly principalId: string; readonly scope: typeof ERP_READ_SCOPE_V1; readonly exportId: string; readonly generatedAt: string; readonly expiresAt: string; readonly sourceDatasetId: string; readonly sourceDigest: string; readonly batchIds: readonly string[]; readonly recordMetadata: readonly ErpSourceRecordV1["recordMetadata"][]; readonly recordCount: number; readonly pageSize: number; readonly nextCursor: string | null; }; readonly readbackDigest: string; };
+export type ErpOrderSourceReadDenialCodeV1 = ErpReadDenialCodeV1 | "SOURCE_LABEL_DENIED" | "SOURCE_BYTES_MALFORMED";
+export type ErpOrderReadResultV1 =
+  | { readonly outcome: "DENIED"; readonly code: ErpOrderSourceReadDenialCodeV1 }
+  | { readonly outcome: "READ"; readonly entity: "orders"; readonly records: readonly ErpOrderV1[]; readonly metadata: {
+    readonly tenantId: string; readonly trust: "LOCAL_SYNTHETIC"; readonly principalId: string; readonly scope: typeof ERP_READ_SCOPE_V1;
+    readonly exportId: string; readonly generatedAt: string; readonly expiresAt: string; readonly sourceDatasetId: string; readonly sourceDigest: string;
+    readonly sourceBytesSha256: string; readonly batchIds: readonly string[]; readonly recordMetadata: readonly ErpSourceRecordV1["recordMetadata"][];
+    readonly recordCount: number; readonly pageSize: number; readonly nextCursor: null;
+  }; readonly readbackDigest: string; };
 
 const CONTRACT_CONTENT = { schemaVersion: ERP_READ_CONNECTOR_SCHEMA_V1, contractVersion: "1.0.0", connectorId: "connector:synthetic-erp-bi-v1", defaultEnabled: false, adapter: "SUPPORTED_EXPORT_API_SHAPED", evidenceClass: "LOCAL_SYNTHETIC", tenantId: "tenant:synthetic-zoo", identity: { principalId: "principal:bi-m1-reader", scopes: [ERP_READ_SCOPE_V1], credentialSource: "EXPLICIT_REFERENCE_ONLY" }, operations: ["LIST_CUSTOMERS", "LIST_ORDERS", "LIST_INVOICES", "READ_SOURCE_FACTS"], fields: { customers: ["customerId", "customerStatus"], orders: ["orderId", "customerId", "orderStatus", "orderDate", "totalMinor", "currency"], invoices: ["invoiceId", "orderId", "customerId", "invoiceStatus", "issueDate", "dueDate", "totalMinor", "currency"] }, policy: { maxPageSize: 2, maxAgeSeconds: 3600, writesAllowed: false, approvalsAllowed: false, adminAllowed: false, broadDatabaseAccessAllowed: false, unknownFieldsAllowed: false } } as const;
 const sha = (value: unknown) => createHash("sha256").update(canonicalJson(value)).digest("hex");
@@ -85,4 +94,74 @@ export function createErpReadAdapterV1({ contract, source, enabled, now }: { con
     const records = page.map((entry) => entry.facts); const metadata = { tenantId: typedSource.tenantId, trust: "LOCAL_SYNTHETIC" as const, principalId: contract.identity.principalId, scope: ERP_READ_SCOPE_V1, exportId: typedSource.exportId, generatedAt: typedSource.generatedAt, expiresAt: typedSource.expiresAt, sourceDatasetId: typedSource.lineage.sourceDatasetId, sourceDigest: typedSource.lineage.sourceDigest, batchIds: batches.map((batch) => batch.batchId), recordMetadata: page.map((entry) => entry.recordMetadata), recordCount: page.length, pageSize: request.pageSize as number, nextCursor };
     return { outcome: "READ", entity: typedEntity, records: structuredClone(records), metadata: structuredClone(metadata), readbackDigest: sha({ entity: typedEntity, records, metadata }) };
   };
+}
+
+
+const ERP_ORDER_SOURCE_LABEL_V1 = "LOCAL_SYNTHETIC_ERP_ORDER_SOURCE_V1" as const;
+const bytesSha256 = (bytes: Uint8Array): string => createHash("sha256").update(bytes).digest("hex");
+
+function decodeJsonBytesV1(value: string | Uint8Array): { readonly bytes: Uint8Array; readonly json: unknown } | null {
+  try {
+    const bytes = typeof value === "string" ? new TextEncoder().encode(value) : new Uint8Array(value);
+    const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    return { bytes, json: JSON.parse(text) as unknown };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Narrow PAN437 consumer entry point. It runs the existing ERP read adapter
+ * against labelled source bytes, including source-digest, tenant, freshness
+ * and pagination checks. It never derives delivery facts from an order result.
+ */
+export function readErpOrdersFromLabelledSourceBytesV1({
+  contract,
+  sourceBytes,
+  sourceLabel,
+  enabled,
+  now,
+}: {
+  readonly contract: unknown;
+  readonly sourceBytes: string | Uint8Array;
+  readonly sourceLabel: string;
+  readonly enabled: boolean;
+  readonly now: string;
+}): ErpOrderReadResultV1 {
+  if (sourceLabel !== ERP_ORDER_SOURCE_LABEL_V1) return { outcome: "DENIED", code: "SOURCE_LABEL_DENIED" };
+  const decoded = decodeJsonBytesV1(sourceBytes);
+  if (decoded === null) return { outcome: "DENIED", code: "SOURCE_BYTES_MALFORMED" };
+  const read = createErpReadAdapterV1({ contract, source: decoded.json, enabled, now });
+  const firstRequest: ErpReadRequestV1 = {
+    operation: "LIST_ORDERS", entity: "orders", tenantId: "tenant:synthetic-zoo",
+    principalId: "principal:bi-m1-reader", scopes: [ERP_READ_SCOPE_V1], credentialPresent: true,
+    fields: ["orderId", "customerId", "orderStatus", "orderDate", "totalMinor", "currency"], pageSize: 2,
+  };
+  const pages: Extract<ErpReadResultV1, { readonly outcome: "READ" }>[] = [];
+  let request = firstRequest;
+  for (let pageNumber = 0; pageNumber < 100; pageNumber += 1) {
+    const result = read(request);
+    if (result.outcome === "DENIED") return result;
+    if (result.entity !== "orders") return { outcome: "DENIED", code: "SOURCE_MALFORMED" };
+    pages.push(result);
+    if (result.metadata.nextCursor === null) break;
+    request = { ...firstRequest, cursor: result.metadata.nextCursor };
+    if (pageNumber === 99) return { outcome: "DENIED", code: "SOURCE_MALFORMED" };
+  }
+  const first = pages[0];
+  if (first === undefined || pages.some((page) => page.metadata.sourceDigest !== first.metadata.sourceDigest
+    || page.metadata.tenantId !== first.metadata.tenantId || page.metadata.exportId !== first.metadata.exportId)) {
+    return { outcome: "DENIED", code: "SOURCE_MALFORMED" };
+  }
+  const records = pages.flatMap((page) => page.records) as readonly ErpOrderV1[];
+  const metadata = {
+    ...first.metadata,
+    sourceBytesSha256: bytesSha256(decoded.bytes),
+    batchIds: [...new Set(pages.flatMap((page) => page.metadata.batchIds))],
+    recordMetadata: pages.flatMap((page) => page.metadata.recordMetadata),
+    recordCount: records.length,
+    pageSize: first.metadata.pageSize,
+    nextCursor: null,
+  } as const;
+  return { outcome: "READ", entity: "orders", records: structuredClone(records), metadata, readbackDigest: sha({ entity: "orders", records, metadata }) };
 }

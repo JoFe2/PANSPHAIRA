@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "6e81fc0ab7fa1e2257af1b5e81d456e2e95459f97f6ab48ac263a5b4925d48b1"
+        "sha256": "dc614d338c484731afc9cb87216ca968287d22da875022468e67d4f566ecdb4a"
       }
     ]
   },
@@ -195,6 +195,14 @@
       "fromSha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
       "toSha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a",
       "reason": "Bind exact PR235 qualification and immutable historical provider evidence to graph v51; preserve historical v1-v18 obligations and receipts."
+    },
+    {
+      "migrationId": "PAN437-CURRENT-MAIN-INTEGRATION/INTEGRITY-GENERATOR/V20",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 20,
+      "fromSha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a",
+      "toSha256": "703189c79599fc298e8200c5937b9389b5a707b851a7503912bd93714d612419",
+      "reason": "Advance the verification DAG to graph v52 and canonically bind the bounded PAN437 current-Main neighbor integration while preserving the imported corrected ERP order-reader connection and all prior obligations."
     }
   ],
   "scanScope": {
@@ -237,15 +245,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 662,
+    "filesScanned": 664,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 222,
-    "importFiles": 221,
+    "importSites": 224,
+    "importFiles": 223,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1875,
-    "ledgerUniquePaths": 1875
+    "ledgerEntries": 1880,
+    "ledgerUniquePaths": 1880
   },
   "profiles": [
     {
@@ -318,7 +326,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a"
+      "sha256": "703189c79599fc298e8200c5937b9389b5a707b851a7503912bd93714d612419"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -640,8 +648,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 48,
-      "importFiles": 47
+      "importSites": 49,
+      "importFiles": 48
     },
     {
       "owner": "video-production-reference",
@@ -650,8 +658,8 @@
     },
     {
       "owner": "cscl-13",
-      "importSites": 1,
-      "importFiles": 1
+      "importSites": 2,
+      "importFiles": 2
     }
   ],
   "similarShape": [
@@ -934,7 +942,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "7faf3040b4f835b44123aeaafcd6ab8a3c6cf64ae195a15303b20a70c700030a",
+      "sha256": "703189c79599fc298e8200c5937b9389b5a707b851a7503912bd93714d612419",
       "basis": "profile-version-migration"
     },
     {

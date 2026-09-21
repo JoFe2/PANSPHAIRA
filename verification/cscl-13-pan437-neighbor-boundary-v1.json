@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "pansphaira.verification/cscl-13-pan437-neighbor-boundary/v1",
+  "status": "LOCAL_SYNTHETIC_ORDER_BINDING_IMPLEMENTED",
+  "module": "src/cscl-13/pan437-neighbor.mjs",
+  "reusedModules": [
+    {
+      "path": "src/cscl-13/complaint.mjs",
+      "role": "COMPLAINT_CORE"
+    },
+    {
+      "path": "packages/contracts/src/erp-read-connector.ts",
+      "role": "ORDER_READ_SOURCE"
+    },
+    {
+      "path": "packages/contracts/src/erp-order-capability-cell.ts",
+      "role": "ORDER_CAPABILITY_NOT_DELIVERY"
+    }
+  ],
+  "actualAvailableOutput": {
+    "contract": "chimpmaera.connector/erp-read/v1",
+    "entities": [
+      "customers",
+      "orders",
+      "invoices"
+    ],
+    "orderFields": [
+      "orderId",
+      "customerId",
+      "orderStatus",
+      "orderDate",
+      "totalMinor",
+      "currency"
+    ],
+    "deliveryFieldsAvailable": []
+  },
+  "adapterDenial": "DELIVERY_POSITION_OUTPUT_REQUIRED",
+  "missingContract": "contracts/cscl-13/pan437-neighbor-v1.schema.json",
+  "positiveDeliveryAcceptance": "NOT_CLAIMED",
+  "publicWrites": false,
+  "parentReviewAndDeliveryOwner": "Hermes/Supervisor e2e345eb187a",
+  "actualOrderBinding": {
+    "entryPoint": "src/cscl-13/complaint-cli.mjs",
+    "reader": "readErpOrdersFromLabelledSourceBytesV1",
+    "sourceLabel": "LOCAL_SYNTHETIC_ERP_ORDER_SOURCE_V1",
+    "sourceBytes": "tests/fixtures/erp-read/supported-export-v1.json",
+    "orderContract": "tests/fixtures/erp-read/contract-v1.json",
+    "deliveryReferences": "tests/fixtures/cscl-13/delivery-references-v1.json",
+    "checks": [
+      "tenant",
+      "orderId",
+      "customerId",
+      "matching sourceDigest",
+      "sourceBytesSha256",
+      "reference content digest"
+    ]
+  },
+  "deliveryReferenceBoundary": {
+    "sourceSystem": "SYNTHETIC_DELIVERY",
+    "proves": "explicit fixture delivery/article/position facts only",
+    "notDerivedFrom": [
+      "orderStatus",
+      "invoiceStatus",
+      "stock promise",
+      "trust label",
+      "caller-supplied digest"
+    ]
+  },
+  "retainedCandidateDenial": "ORDER_READ_BINDING_REQUIRED",
+  "acceptance": {
+    "positive": "separate CLI select/raise/decide/read calls bind actual order read and explicit references",
+    "negative": [
+      "wrong order/customer",
+      "changed order source",
+      "changed delivery content",
+      "invalid label",
+      "invalid quantity",
+      "repeated decision"
+    ],
+    "mutationRule": "denied before persisted mutation"
+  }
+}

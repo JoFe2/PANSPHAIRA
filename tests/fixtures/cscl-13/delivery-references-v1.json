@@ -6,7 +6,7 @@
     "sourceSystem": "SYNTHETIC_DELIVERY",
     "sourceDatasetId": "dataset:zoo-delivery-m1",
     "extractionMode": "SUPPORTED_EXPORT",
-    "sourceDigest": "__PLACEHOLDER__"
+    "sourceDigest": "01b2e51e8953a24d37462db2b6205e41e03faf6522fbf017338bf495f5007044"
   },
   "articles": [
     { "articleId": "article:zoo-101", "articleName": "Mountain Habitat Panel", "unit": "EACH" },
