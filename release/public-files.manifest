@@ -1555,3 +1555,8 @@ examples/module-contribution/modules.json	examples/module-contribution/modules.j
 scripts/module-contribution.mjs	scripts/module-contribution.mjs	0644
 tests/module-contribution.test.mjs	tests/module-contribution.test.mjs	0644
 tests/module-contribution-workflow.test.mjs	tests/module-contribution-workflow.test.mjs	0644
+contracts/cscl-13/complaint-decision-v1.schema.json	contracts/cscl-13/complaint-decision-v1.schema.json	0644
+src/cscl-13/complaint-cli.mjs	src/cscl-13/complaint-cli.mjs	0644
+src/cscl-13/complaint.mjs	src/cscl-13/complaint.mjs	0644
+tests/cscl-13/complaint.test.mjs	tests/cscl-13/complaint.test.mjs	0644
+tests/fixtures/cscl-13/delivery-references-v1.json	tests/fixtures/cscl-13/delivery-references-v1.json	0644

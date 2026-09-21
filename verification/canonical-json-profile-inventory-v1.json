@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "07d4d5c4a9ff6e3c73b2774d80032567a8289ef628b181d8ed20faf58e4deb6a"
+        "sha256": "af1a72136f8b627bc443af142c9fb0a82e01cbfd6425e6857959b6b6283aa8d8"
       }
     ]
   },
@@ -237,15 +237,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 659,
-    "declarationSites": 36,
-    "declarationFiles": 36,
-    "importSites": 221,
-    "importFiles": 220,
+    "filesScanned": 662,
+    "declarationSites": 37,
+    "declarationFiles": 37,
+    "importSites": 222,
+    "importFiles": 221,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1870,
-    "ledgerUniquePaths": 1870
+    "ledgerEntries": 1875,
+    "ledgerUniquePaths": 1875
   },
   "profiles": [
     {
@@ -535,6 +535,14 @@
       "owner": "video-production-reference",
       "pinned": true,
       "sha256": "a1abaca9ff5e319e082de36dd7d42c02889d223aec8c5132139599d34a7d6977"
+    },
+    {
+      "file": "src/cscl-13/complaint.mjs",
+      "line": 13,
+      "classification": "implementation",
+      "owner": "cscl-13",
+      "pinned": false,
+      "sha256": null
     }
   ],
   "reexports": [
@@ -639,6 +647,11 @@
       "owner": "video-production-reference",
       "importSites": 2,
       "importFiles": 2
+    },
+    {
+      "owner": "cscl-13",
+      "importSites": 1,
+      "importFiles": 1
     }
   ],
   "similarShape": [

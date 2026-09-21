@@ -4801,7 +4801,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "cf0597f348ac1e84b3a7c374669340db427a012a9b332c80bf99a0ebd487d5c6"
+          "sha256": "a5e2f424c16bedbbcf32d2af505fb62340abe30f39958e3f0b5590d0ccb186a6"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4856,7 +4856,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "07d4d5c4a9ff6e3c73b2774d80032567a8289ef628b181d8ed20faf58e4deb6a"
+          "sha256": "af1a72136f8b627bc443af142c9fb0a82e01cbfd6425e6857959b6b6283aa8d8"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4966,7 +4966,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "9de59d6f13e0390159ca4bcd37cfcc0f96d3f7b8504cabcc52d864054535d2a9"
+          "sha256": "224ab8366dcc1ae378ebe92397fd6ee75adb27bf940303afd3ffd78c3bf30bb0"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5571,7 +5571,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "cb3239643bf27891412004349a2b780831c982f600dbbbd26d2135f8b92f1db1"
+          "sha256": "fc9f3ef1941943adf8a050f2a1637868cdce963b0ba263349392e39307acd775"
         },
         {
           "path": "package-lock.json",
@@ -6196,7 +6196,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "cf0597f348ac1e84b3a7c374669340db427a012a9b332c80bf99a0ebd487d5c6"
+          "sha256": "a5e2f424c16bedbbcf32d2af505fb62340abe30f39958e3f0b5590d0ccb186a6"
         }
       ],
       "ownedTests": [
