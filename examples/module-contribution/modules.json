@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "modules": [
+    {
+      "id": "cscl-protocol",
+      "version": "1",
+      "sources": [
+        "src/cscl-01"
+      ],
+      "contracts": [
+        "contracts/cscl-01"
+      ],
+      "profiles": [
+        "tests/fixtures/cscl-01"
+      ],
+      "tests": [
+        "tests/cscl-01/protocol.test.mjs"
+      ],
+      "dependencies": {}
+    },
+    {
+      "id": "cscl-odoo-profile",
+      "version": "1",
+      "sources": [
+        "src/cscl-02"
+      ],
+      "contracts": [],
+      "profiles": [
+        "tests/fixtures/cscl-02"
+      ],
+      "tests": [
+        "tests/cscl-02/odoo-profile.test.mjs"
+      ],
+      "dependencies": {
+        "cscl-protocol": "1"
+      }
+    }
+  ]
+}

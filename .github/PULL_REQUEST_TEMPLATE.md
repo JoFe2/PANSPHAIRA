@@ -1,6 +1,6 @@
 ## Result
 
-What focused problem does this pull request improve? Link the issue.
+What changes and why? Link an existing issue if applicable; small fixes need no preliminary issue.
 
 ## Relevant evidence
 
@@ -13,7 +13,7 @@ State any change to authority, effects, network access, credentials, data handli
 ## Checklist
 
 - [ ] The change is focused; a draft or safe partial contribution is acceptable.
-- [ ] I linked the issue and stated the current result honestly.
+- [ ] I stated the result and checks honestly; compatibility changes are explained if applicable.
 - [ ] I added no credentials, personal data, private prompts, local paths or non-public artifacts.
 - [ ] Fork PRs require no production credentials.
 - [ ] I preserved fail-closed authority and evidence boundaries, or explained every deliberate change.
