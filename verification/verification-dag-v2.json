@@ -6496,7 +6496,7 @@
         {
           "path": "packages/contracts/src/sales-stock-journey-v1.ts",
           "role": "CONTRACT",
-          "sha256": "ccc96bd6571e8dd05952443a0b9497ac1990e53023e5f6ad4a95fea5bbc9e23a"
+          "sha256": "88d178e709aff8931df2c02ed95e0159f2a40eddc325a524cb224684b15f83a4"
         },
         {
           "path": "src/sales-stock/cli.mjs",
@@ -6526,7 +6526,7 @@
         {
           "path": "tests/sales-stock-journey-v1.test.ts",
           "role": "VALIDATOR",
-          "sha256": "902ffb5a9ae0789edf39320c39a1da7a9e72edf6bef367e7c211ba620aae6536"
+          "sha256": "3e74301a464e9c68673e4b40644bd02c696fc48369437bf7b61bf31863fb306c"
         },
         {
           "path": "verification/pan435-436-sales-stock-journey-v1.json",
