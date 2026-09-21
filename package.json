@@ -185,7 +185,8 @@
     "incoming-invoice-ap06-proof-probe:test": "npm run build --silent && node --test dist/tests/incoming-invoice-ap06-proof-probe.test.js",
     "incoming-invoice-ap06-proof-probe:test:compiled": "node --test dist/tests/incoming-invoice-ap06-proof-probe.test.js",
     "incoming-invoice-erv-analytics:generate": "npm run build --silent && node scripts/generate-incoming-invoice-erv-analytics.mjs",
-    "incoming-invoice-erv-analytics:test": "npm run build --silent && node --test dist/tests/incoming-invoice-erv-analytics.test.js"
+    "incoming-invoice-erv-analytics:test": "npm run build --silent && node --test dist/tests/incoming-invoice-erv-analytics.test.js",
+    "cscl13:test": "node --test tests/cscl-13/complaint.test.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0",

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "pansphaira.cscl13/delivery-references/v1",
+  "referenceSetId": "reference:complaint-delivery-v1",
+  "tenantId": "tenant:synthetic-zoo",
+  "lineage": {
+    "sourceSystem": "SYNTHETIC_DELIVERY",
+    "sourceDatasetId": "dataset:zoo-delivery-m1",
+    "extractionMode": "SUPPORTED_EXPORT",
+    "sourceDigest": "__PLACEHOLDER__"
+  },
+  "articles": [
+    { "articleId": "article:zoo-101", "articleName": "Mountain Habitat Panel", "unit": "EACH" },
+    { "articleId": "article:zoo-102", "articleName": "Aquarium Filtration Pump", "unit": "EACH" },
+    { "articleId": "article:zoo-103", "articleName": "Feed Pellet Sack 25kg", "unit": "KG" }
+  ],
+  "deliveries": [
+    {
+      "deliveryId": "delivery:zoo-dlv-001",
+      "orderId": "order:synthetic-001",
+      "customerId": "customer:zoo-001",
+      "deliveredAt": "2026-08-10T08:00:00Z",
+      "positions": [
+        { "positionId": "pos:dlv-001-1", "articleId": "article:zoo-101", "quantity": 10, "unit": "EACH" },
+        { "positionId": "pos:dlv-001-2", "articleId": "article:zoo-103", "quantity": 40, "unit": "KG" }
+      ]
+    },
+    {
+      "deliveryId": "delivery:zoo-dlv-002",
+      "orderId": "order:synthetic-002",
+      "customerId": "customer:zoo-002",
+      "deliveredAt": "2026-08-11T09:30:00Z",
+      "positions": [
+        { "positionId": "pos:dlv-002-1", "articleId": "article:zoo-102", "quantity": 3, "unit": "EACH" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pansphaira.cscl13/complaint-decision/v1",
+  "title": "Complaint handling decision",
+  "description": "A local, non-ERP-writing complaint decision: a partial quantity of a delivered order position is challenged with a reason, and a resolution decision (replace, credit-note request, or rejected) is recorded with an actor and timeline. References customer, article, order and delivery from the existing synthetic delivery reference set.",
+  "type": "object",
+  "required": ["schemaVersion", "complaintId", "reason", "claimedQuantity", "deliveredQuantity", "unit", "decision", "actorId", "history"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.cscl13/complaint-decision/v1" },
+    "complaintId": { "type": "string", "pattern": "^complaint:[a-f0-9]{32}$" },
+    "reason": { "enum": ["QUANTITY_SHORTAGE", "DAMAGED_GOODS", "WRONG_ARTICLE", "QUALITY_DEFECT"] },
+    "claimedQuantity": { "type": "integer", "minimum": 1 },
+    "deliveredQuantity": { "type": "integer", "minimum": 1 },
+    "unit": { "enum": ["EACH", "KG"] },
+    "decision": { "enum": ["REPLACE", "CREDIT_NOTE_REQUEST", "REJECTED"] },
+    "actorId": { "type": "string", "minLength": 1 },
+    "history": { "type": "array", "items": { "type": "object" } }
+  }
+}
