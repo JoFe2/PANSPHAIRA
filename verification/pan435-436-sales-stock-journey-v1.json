@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "pansphaira.verification/pan435-436-sales-stock-journey/v1",
+  "verificationId": "pan435-436-sales-stock-journey-v1",
+  "source": "LOCAL_SYNTHETIC_LABELLED",
+  "ownedCommands": [
+    "npm run sales-stock:journey",
+    "node --test dist/tests/sales-stock-journey-v1.test.js",
+    "node --test tests/sales-stock-journey-cli.test.mjs"
+  ],
+  "positiveAssertions": [
+    "M1 receipt increases the mapped M3 position from 20 to 70",
+    "M2 issues a delivery proposal for 60 against 70 available",
+    "M2 reservation is retained in M3 lineage with the request Beleg",
+    "M3 freshness-bound replenishment proposes 40 at 10 available versus threshold 20"
+  ],
+  "negativeAssertions": [
+    "zero receipt quantity is denied closed",
+    "requesting 80 against 70 yields KLARUNG_ERFORDERLICH",
+    "reservation of 71 is denied and does not emit a partial state",
+    "stale retained origin denies replenishment"
+  ],
+  "nonClaims": [
+    "No provider or runtime change",
+    "No public or durable external write",
+    "Replenishment is a proposal, not a purchase order"
+  ],
+  "files": [
+    "contracts/sales-stock-journey-v1.schema.json",
+    "docs/architecture/pan435-436-sales-stock-journey-v1.md",
+    "packages/contracts/src/beschaffung-wareneingang-v1.ts",
+    "packages/contracts/src/bestand-nachschub-v1.ts",
+    "packages/contracts/src/kundenauftrag-lieferzusage-v1.ts",
+    "packages/contracts/src/sales-stock-journey-v1.ts",
+    "src/sales-stock/cli.mjs",
+    "tests/sales-stock-journey-v1.test.ts",
+    "tests/sales-stock-journey-cli.test.mjs"
+  ]
+}
