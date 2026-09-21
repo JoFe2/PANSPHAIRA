@@ -4916,7 +4916,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8205e3690da61bcbde30bae060494e4ab7a9f962511c9e20dc1586c2550ca685"
+          "sha256": "0ceba826494451ee692c9ae3d1e82968316fb8251628191d33b6b7c34006cfc7"
         },
         {
           "path": "tests/release-governance.test.mjs",
