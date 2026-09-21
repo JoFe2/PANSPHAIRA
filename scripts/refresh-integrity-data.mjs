@@ -622,6 +622,15 @@ cscl11Node.inputs = [
 ].map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
 cscl11Node.ownedTests = ["npm run cscl11:test"];
 const pairedAnalyticsInputs = [
+  ["scripts/run-forward-paired-analytics.mjs", "VALIDATOR"],
+  ["tests/fixtures/cks-analytics/consumer-forward-current-v1.json", "FIXTURE"],
+  ["tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json", "FIXTURE"],
+  ["tests/fixtures/cks-analytics/native-v2-historical-source.json", "FIXTURE"],
+  ["tests/forward-paired-analytics.test.mjs", "VALIDATOR"],
+  ["tests/forward-paired-execution.test.mjs", "VALIDATOR"],
+  ["tests/forward-producer-analytics.test.mjs", "VALIDATOR"],
+  ["tests/native-forward-qualification.test.mjs", "VALIDATOR"],
+
   ["contracts/analytics/paired-expectation-v1.json", "CONTRACT"],
   ["scripts/paired-analytics-execution.mjs", "VALIDATOR"],
   ["tests/paired-analytics-runner.test.mjs", "VALIDATOR"],
@@ -653,7 +662,7 @@ for (const invariant of pairedAnalyticsInvariants) {
 }
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 49;
+dag.graphVersion = 50;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -669,6 +678,14 @@ for (const line of readFileSync(path.join(root, "release/public-files.manifest")
   if (line && !line.startsWith("#")) entries.set(line.split("\t")[0], null);
 }
 for (const relative of [
+  "scripts/run-forward-paired-analytics.mjs",
+  "tests/fixtures/cks-analytics/consumer-forward-current-v1.json",
+  "tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json",
+  "tests/fixtures/cks-analytics/native-v2-historical-source.json",
+  "tests/forward-paired-analytics.test.mjs",
+  "tests/forward-paired-execution.test.mjs",
+  "tests/forward-producer-analytics.test.mjs",
+  "tests/native-forward-qualification.test.mjs",
   "scripts/refresh-integrity-data.mjs",
   ".github/workflows/demo-current-head-e2e.yml",
   "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",

@@ -179,6 +179,14 @@
       "fromSha256": "6498ba70c69bcbd1e99229427c42e7fe6cd510646a7e2e903a1ddcacb8fac12b",
       "toSha256": "eb2669cba01995248ad49296fa3424cfcbb7271f554a7824e3107ba259f01d62",
       "reason": "Bind the public PanSphaira spelling correction in the paired-analytics invariant; preserve admitted v1 and reviewed v2-v16 bytes."
+    },
+    {
+      "migrationId": "PAN346-FORWARD-QUALIFICATION/INTEGRITY-GENERATOR/V18",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 18,
+      "fromSha256": "eb2669cba01995248ad49296fa3424cfcbb7271f554a7824e3107ba259f01d62",
+      "toSha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
+      "reason": "Bind additive forward qualification, historical source archive, strict current-head runtime runner and negative probes to graph v50; preserve historical v1-v17 obligations and receipts."
     }
   ],
   "scanScope": {
@@ -221,15 +229,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 651,
+    "filesScanned": 656,
     "declarationSites": 36,
     "declarationFiles": 36,
-    "importSites": 220,
-    "importFiles": 219,
+    "importSites": 221,
+    "importFiles": 220,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1850,
-    "ledgerUniquePaths": 1850
+    "ledgerEntries": 1858,
+    "ledgerUniquePaths": 1858
   },
   "profiles": [
     {
@@ -302,7 +310,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "eb2669cba01995248ad49296fa3424cfcbb7271f554a7824e3107ba259f01d62"
+      "sha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -545,19 +553,14 @@
   ],
   "consumerFamilies": [
     {
-      "owner": "analytics",
-      "importSites": 2,
-      "importFiles": 2
+      "owner": "demo",
+      "importSites": 9,
+      "importFiles": 9
     },
     {
       "owner": "cks",
       "importSites": 4,
       "importFiles": 4
-    },
-    {
-      "owner": "cks-12",
-      "importSites": 1,
-      "importFiles": 1
     },
     {
       "owner": "competence-runtime",
@@ -568,16 +571,6 @@
       "owner": "contracts",
       "importSites": 131,
       "importFiles": 131
-    },
-    {
-      "owner": "cscl-03",
-      "importSites": 1,
-      "importFiles": 1
-    },
-    {
-      "owner": "demo",
-      "importSites": 9,
-      "importFiles": 9
     },
     {
       "owner": "dev-worker",
@@ -595,6 +588,31 @@
       "importFiles": 1
     },
     {
+      "owner": "usage-insights",
+      "importSites": 2,
+      "importFiles": 2
+    },
+    {
+      "owner": "scripts",
+      "importSites": 12,
+      "importFiles": 12
+    },
+    {
+      "owner": "analytics",
+      "importSites": 2,
+      "importFiles": 2
+    },
+    {
+      "owner": "cks-12",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
+      "owner": "cscl-03",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
       "owner": "rks-01",
       "importSites": 2,
       "importFiles": 2
@@ -605,19 +623,9 @@
       "importFiles": 1
     },
     {
-      "owner": "scripts",
-      "importSites": 12,
-      "importFiles": 12
-    },
-    {
       "owner": "tests",
-      "importSites": 47,
-      "importFiles": 46
-    },
-    {
-      "owner": "usage-insights",
-      "importSites": 2,
-      "importFiles": 2
+      "importSites": 48,
+      "importFiles": 47
     },
     {
       "owner": "video-production-reference",
@@ -905,7 +913,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "eb2669cba01995248ad49296fa3424cfcbb7271f554a7824e3107ba259f01d62",
+      "sha256": "a9c449c0071e5f15134491a1672970a203487f491260947e11fad3d577778694",
       "basis": "profile-version-migration"
     },
     {

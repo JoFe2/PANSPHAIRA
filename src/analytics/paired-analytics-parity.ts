@@ -35,6 +35,52 @@
  *                               scope and is pinned strictly)
  */
 import { createHash } from "node:crypto";
+import { generateForwardProducerAnalyticsManifestV1 } from "./producer-analytics-manifest.js";
+
+/**
+ * Additive current-pair content qualification, NOT an execution attestation.
+ * The consumer pin was independently generated twice from the exact KS
+ * runtime checkout and compared against its historical support surface.
+ * The fixed count contract comes from PAR-XR-01, not the submitted candidate.
+ * No caller-supplied expectations, heads, receipts or allowlists are accepted.
+ */
+export function validateForwardAnalyticsPairV1(input: {
+  rawArtifactBytes: Uint8Array;
+  candidate: unknown;
+  producerManifest: unknown;
+  consumerManifest: unknown;
+}): { outcome: "PASS" | "DENIED"; reasonCodes: string[];
+     runtimeExecutionAttested: false; releaseOrPublicCiAttested: false } {
+  const reasonCodes: string[] = [];
+  try {
+    const regenerated = generateForwardProducerAnalyticsManifestV1({
+      rawArtifactBytes: input.rawArtifactBytes, candidate: input.candidate,
+    }).manifest;
+    if (canonicalJson(regenerated) !== canonicalJson(input.producerManifest)) {
+      reasonCodes.push("FORWARD_PRODUCER_SUBSTITUTION_DENIED");
+    }
+    const expectedComputed = {
+      nodeCount: 2, edgeCount: 1, evidenceCount: 2,
+      knowledgeNodeCount: 1, decisionNodeCount: 1,
+      unknownTotal: 0, counterevidenceTotal: 0, frozenReceiptsEstablishingEdge: 2,
+    };
+    if (!isPlainObject(regenerated.evidence) ||
+        canonicalJson(regenerated.evidence["computed"]) !== canonicalJson(expectedComputed)) {
+      reasonCodes.push("FORWARD_FIXED_COMPUTATION_DENIED");
+    }
+    // Whole-content pin includes support, channels, config, immutable Git head,
+    // self-digest and nonclaims. Rehashing a forgery cannot replace this pin.
+    if (bodyDigest(input.consumerManifest) !==
+        "f778a5fabee25fb8b697d616b93b5d8883f65b8d7b69cafaee95a7ee84263251") {
+      reasonCodes.push("FORWARD_CONSUMER_SUBSTITUTION_DENIED");
+    }
+  } catch {
+    reasonCodes.push("FORWARD_INPUT_OR_ADJUDICATION_DENIED");
+  }
+  return { outcome: reasonCodes.length === 0 ? "PASS" : "DENIED", reasonCodes,
+    runtimeExecutionAttested: false, releaseOrPublicCiAttested: false };
+}
+
 import { canonicalJson } from "../../packages/contracts/src/canonical-json.js";
 
 const sha256Hex = (value: string): string =>

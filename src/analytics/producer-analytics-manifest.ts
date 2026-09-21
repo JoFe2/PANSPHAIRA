@@ -6,6 +6,7 @@ import {
   NATIVE_CANDIDATE_SCHEMA_V1,
   RECONCILED_RELEASED_HEADS_V1,
   adjudicateNativeCandidateV1,
+  adjudicateNativeForwardCandidateV1,
   buildAuthoritativeAdjudicationInputs,
   createNativeAdjudicationContextV1,
   nativeCandidateDigestV1,
@@ -170,6 +171,20 @@ function assertGapState(state: unknown): asserts state is GapStateV1 {
   if (typeof state !== "string" || !(PRODUCER_ANALYTICS_GAP_STATES_V1 as readonly string[]).includes(state)) {
     throw new ProducerAnalyticsManifestError("UNOBSERVED_FIELD", `gap state "${String(state)}" is not in the closed vocabulary`);
   }
+}
+
+/** Historical evidence bytes only; this does not attest current-source execution. */
+export function historicalProducerAdjudicatorSourceV1(archiveBytes: Uint8Array): { path: string; bytes: Uint8Array } {
+  const archive = JSON.parse(Buffer.from(archiveBytes).toString("utf8"));
+  const expected = "3712c9fc41b7704aabfa04db1b0e76398e44d3b520694a7aac475c12e02a4d5b";
+  if (archive?.schemaVersion !== "pansphaira/historical-source-archive/v1" ||
+      archive.sourceCommit !== "28b993b721a61ca98fc66a0c9e3dd40b86b9cb30" ||
+      archive.sourcePath !== "src/cks-12/kaleidosphere-candidate-quarantine.ts" ||
+      typeof archive.sourceUtf8 !== "string" || archive.sha256 !== expected ||
+      sha256Hex(Buffer.from(archive.sourceUtf8, "utf8")) !== expected) {
+    throw new Error("HISTORICAL_SOURCE_DENIED");
+  }
+  return { path: archive.sourcePath, bytes: Uint8Array.from(Buffer.from(archive.sourceUtf8, "utf8")) };
 }
 
 export function generateProducerAnalyticsManifestV1(
@@ -391,6 +406,46 @@ export function generateProducerAnalyticsManifestV1(
   };
 
   const manifest: Record<string, unknown> = { ...manifestBody, manifestDigest: digest(manifestBody) };
+  return { manifest, serialized: `${canonicalJson(manifest)}\n` };
+}
+
+/** Current candidate derivation only: execution provenance belongs to the external paired runner. */
+export function generateForwardProducerAnalyticsManifestV1(input: Readonly<{
+  rawArtifactBytes: Uint8Array;
+  candidate: unknown;
+}>): Readonly<{ manifest: Record<string, unknown>; serialized: string }> {
+  const adjudication = adjudicateNativeForwardCandidateV1({
+    rawArtifactBytes: input.rawArtifactBytes,
+    canonicalTransportBytes: nativeTransportBytesV1(input.rawArtifactBytes),
+    candidate: input.candidate,
+    context: createNativeAdjudicationContextV1({ contextId: "pansphaira:forward-producer-001" }),
+    qualifiedHeads: {
+      pansphaira: RECONCILED_RELEASED_HEADS_V1.pansphaira,
+      kaleidoSphere: "792e5e38cd4fb612ee034b3edc62aa8b4f58fe0f",
+    },
+  });
+  if (adjudication.outcome !== "ACCEPTED_BOUNDED") {
+    throw new ProducerAnalyticsManifestError("ADJUDICATION_DENIED", "forward candidate failed independent content and identity qualification");
+  }
+  const candidate = input.candidate;
+  const surface = fieldSurface(candidate, "candidate");
+  const body = {
+    schemaVersion: "pansphaira/forward-producer-analytics-manifest/v1",
+    serviceHead: field(candidate, "bindings.kaleidosphereHead", "candidate"),
+    projectionSourceHead: field(candidate, "bindings.pansphairaHead", "candidate"),
+    environmentSha256: field(candidate, "bindings.environmentSha256", "candidate"),
+    rawArtifactSha256: sha256Hex(input.rawArtifactBytes),
+    candidateDigest: nativeCandidateDigestV1(candidate),
+    fieldSurface: surface,
+    fieldSurfaceDigest: digest(surface),
+    evidence: field(candidate, "claims", "candidate"),
+    coverage: field(candidate, "coverage", "candidate"),
+    counterevidence: field(candidate, "counterevidence", "candidate"),
+    adjudication,
+    authority: "NONE",
+    nonclaims: ["NO_RUNTIME_EXECUTION_ATTESTATION", "NO_RELEASE_OR_PUBLIC_CI_CLAIM", ...PRODUCER_ANALYTICS_PRODUCT_NONCLAIMS_V1],
+  };
+  const manifest = { ...body, manifestDigest: digest(body) };
   return { manifest, serialized: `${canonicalJson(manifest)}\n` };
 }
 

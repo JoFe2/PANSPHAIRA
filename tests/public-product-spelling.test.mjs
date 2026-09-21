@@ -14,6 +14,14 @@ function read(path) {
 
 function classify(path, line) {
   if (
+    path === "tests/fixtures/cks-analytics/native-forward-current-candidate-v1.json"
+    && line.trim() === `"No generic ${legacyDisplay} domain in KaleidoSphere: the analysis is confined to the one closed native nodes/edges projection v1 shape.",`
+  ) return "byte-preserved-native-service-capture";
+  if (
+    path === "tests/fixtures/cks-analytics/native-v2-historical-source.json"
+    && line.trim().startsWith('"sourceUtf8": ')
+  ) return "digest-bound-historical-adjudicator-source";
+  if (
     (path === "contracts/analytics/paired-expectation-v1.json"
       || path === "verification/paired-analytics-compatibility-v1.json")
     && line.trim() === `"issue": "${legacyDisplay}#345",`
