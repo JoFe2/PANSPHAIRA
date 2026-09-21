@@ -43,5 +43,6 @@ test("stale retained stock evidence denies replenishment", () => {
   assert.equal(result.outcome, "DENIED");
   if (result.outcome !== "DENIED") return;
   assert.equal(result.stage, "NACHSCHUB");
+  assert.equal(result.code, "BESTANDSFRISCHHEIT_VERALTET");
   assert.match(result.detail, /stale/i);
 });

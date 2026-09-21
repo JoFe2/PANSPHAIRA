@@ -9,6 +9,7 @@ import {
   bestandAenderungAnwendenV1,
   bestandslageBerechnenV1,
   nachschubEntscheidenFrischeV1,
+  verifyBestandslageDigestV1,
   wareneingangZuBestandsaenderungV1,
   type ArtikelIdentitaetsAdapterV1,
   type BestandsFrischePolitikV1,
@@ -146,14 +147,14 @@ const NON_CLAIMS = [
   "The replenishment result is a nonbinding proposal; no procurement or provider write is performed.",
 ] as const;
 
-function denied(stage: string, value: unknown): SalesStockJourneyDeniedV1 {
+function denied(stage: string, value: unknown, codeOverride?: string): SalesStockJourneyDeniedV1 {
   const result = value as { readonly code?: unknown; readonly detail?: unknown };
   return {
     schemaVersion: SALES_STOCK_JOURNEY_SCHEMA_V1,
     source: SALES_STOCK_JOURNEY_SOURCE_V1,
     outcome: "DENIED",
     stage,
-    code: typeof result.code === "string" ? result.code : "STAGE_DENIED",
+    code: codeOverride ?? (typeof result.code === "string" ? result.code : "STAGE_DENIED"),
     detail: typeof result.detail === "string" ? result.detail : `Stage ${stage} did not produce a closed result.`,
   };
 }
@@ -238,6 +239,7 @@ export function runSalesStockJourneyV1(input: unknown = DEFAULT_SALES_STOCK_JOUR
 
   const receivedStock = bestandAenderungAnwendenV1(initialStock.lage, mapped.aenderung, []);
   if (receivedStock.outcome !== "GEAENDERT") return denied("BESTAND_RECEIPT", receivedStock);
+  if (!verifyBestandslageDigestV1(receivedStock.lage.lage)) return denied("BESTAND_RECEIPT", { code: "BESTAND_DIGEST_READBACK_FAILED", detail: "the receipt state failed its digest readback." });
 
   const catalogue = syntheticCapabilityCatalogueV1();
   const profiles = syntheticErpOrderProfilesV1(catalogue);
@@ -282,6 +284,7 @@ export function runSalesStockJourneyV1(input: unknown = DEFAULT_SALES_STOCK_JOUR
   };
   const reservedStock = bestandAenderungAnwendenV1(receivedStock.lage.lage, reservation, receivedStock.lage.appliedAenderungsIds);
   if (reservedStock.outcome !== "GEAENDERT") return denied("BESTAND_RESERVATION", reservedStock);
+  if (!verifyBestandslageDigestV1(reservedStock.lage.lage)) return denied("BESTAND_RESERVATION", { code: "BESTAND_DIGEST_READBACK_FAILED", detail: "the reservation state failed its digest readback." });
 
   const replenishment = nachschubEntscheidenFrischeV1(reservedStock.lage.lage, {
     anforderungsId: "nachschub:sales-stock-001",
@@ -297,9 +300,9 @@ export function runSalesStockJourneyV1(input: unknown = DEFAULT_SALES_STOCK_JOUR
     maximalerAlterSekunden: 86_400,
     entscheidungsZeitpunkt: value.decisionAt,
   } satisfies BestandsFrischePolitikV1);
-  if (replenishment.outcome === "DENIED" || replenishment.outcome === "BESTANDSFRISCHHEIT_UNBEWEIST" || replenishment.outcome === "BESTANDSFRISCHHEIT_VERALTET") {
-    return denied("NACHSCHUB", replenishment);
-  }
+  if (replenishment.outcome === "DENIED") return denied("NACHSCHUB", replenishment);
+  if (replenishment.outcome === "BESTANDSFRISCHHEIT_UNBEWEIST") return denied("NACHSCHUB", replenishment, "BESTANDSFRISCHHEIT_UNBEWEIST");
+  if (replenishment.outcome === "BESTANDSFRISCHHEIT_VERALTET") return denied("NACHSCHUB", replenishment, "BESTANDSFRISCHHEIT_VERALTET");
 
   return {
     schemaVersion: SALES_STOCK_JOURNEY_SCHEMA_V1,
