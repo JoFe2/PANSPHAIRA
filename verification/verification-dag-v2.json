@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 51,
+  "graphVersion": 52,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "ebe43f696016ba00c17c6132ea97eab14c3f1355e07f719bc4012aae957a38bf"
+          "sha256": "a8bd57d3cfd24e01381db702a98c83761d6dfe44f2260fd0804821a8f750bd03"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "fc264b14360549fe542b4b81c524186a2726dccf0ce9c0cfb2a5f844dbc2f914"
+          "sha256": "0643df1343ffaeae296b33dca3a5eac8dbd41ce56e5a2185ef914b540440c38e"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "6ba62a1bdccb335fd0520cc54a95497011f36cff2c1a93c974ecf8e5d7a0133f"
+          "sha256": "c094ce9ba0e4d33b91207f4fb4ecf6375e1b08ead0ce077fe9bdc5bcd66fe7eb"
         }
       ],
       "ownedTests": [
@@ -4781,7 +4781,7 @@
         {
           "path": "examples/module-contribution/modules.json",
           "role": "CONTRACT",
-          "sha256": "07f062ad84c37fb060557a1072c58bf996a69b4b54507f8afbfcb041fc2a174f"
+          "sha256": "2b6e61bf7bc4a9694bf1f4ff6e005967be1f6eb4f9cdc5cefc7604933b68040f"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
@@ -4801,7 +4801,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "a5e2f424c16bedbbcf32d2af505fb62340abe30f39958e3f0b5590d0ccb186a6"
+          "sha256": "5591dbe78a70dd0b71298bfeb355340aecad0f851393c9f4ef3ca9dab68ae19b"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4811,7 +4811,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "1116a18e454e4fbe94bfcf2a845f4fec75b9828ab4d813de6ae376d57ac6f7fb"
+          "sha256": "2aef3411c36684178efee9b3a0ef123a58e83d1cda6da111bd508f53af9650cb"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4856,7 +4856,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "6e81fc0ab7fa1e2257af1b5e81d456e2e95459f97f6ab48ac263a5b4925d48b1"
+          "sha256": "aa4db9e167418bf52a67d07570d8cc41550c5191600389e0cc76cb1dbbd5d5e3"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4931,7 +4931,7 @@
         {
           "path": "tests/module-contribution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "7a3360c4a444e0f63fd40fafe7b0572ea7edaf1be27cf697c3051d386b9a8cf2"
+          "sha256": "5266f93c4a805b9be29e1e1528b6c4f16cd8a8cbfdaa1ea17eb0aa000a53161e"
         },
         {
           "path": "tests/native-forward-qualification.test.mjs",
@@ -4956,7 +4956,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "9acf27c3983e428458b3fe425c111ce744b7ba5dda65e498b342ca673c8dbcd0"
+          "sha256": "37e964948f00efd99cfd20519dbb191388b3550c59017856a773aa971bdc2e98"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4966,7 +4966,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "bdc9b038a88aa7ac54527b1f74c6dff634980a60a36437b0a9fc8744eb5d4c68"
+          "sha256": "c194f9aecdb24196075c1400327ae0776fc36a21ed7d8e87e0f0d5911a639444"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5571,7 +5571,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "fc9f3ef1941943adf8a050f2a1637868cdce963b0ba263349392e39307acd775"
+          "sha256": "4a6916b3eaf74051b9ebc082b5457038497552780a687d303f0d10f3faa7fe1d"
         },
         {
           "path": "package-lock.json",
@@ -5931,7 +5931,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "4f37f0ad13f32ad7484fe778e04dfd544ba6e7ef9012014af8d21c0162744d71"
+          "sha256": "1a63edabd32d8f91a918dfdc598b6131ff9152b611820088fce0d3addcf81604"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6196,7 +6196,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "a5e2f424c16bedbbcf32d2af505fb62340abe30f39958e3f0b5590d0ccb186a6"
+          "sha256": "5591dbe78a70dd0b71298bfeb355340aecad0f851393c9f4ef3ca9dab68ae19b"
         }
       ],
       "ownedTests": [
@@ -6364,6 +6364,95 @@
         "The exact official iDempiere bytes at the pinned immutable commit 731515dcdd5278b843db33b9d3109d155b881951 are bound: 16-file capture receipt with per-file sha256/byteLength, GPL-2.0-or-later license bytes and committed locator evidence (HTTP 200 plus whole-file digest match for all 16 rawUrls); any dead, drifted or digest-mismatched locator fails the source gate closed.",
         "All 36 holdout source facts, 36 evidence cells and the complete party/product/sales denominators replay deterministically from the frozen bytes; the empty party and sales frozen cores are reported as FALSIFIED_WITH_EVIDENCE narrowing, never patched.",
         "No holdout tuning, no universal-ERP-compatibility claim and no Authority, promotion or execution grant; the overall GO / NARROW_GO / FALSIFIED_WITH_EVIDENCE verdict derives only from the frozen protocol functions and the six governance gates."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "cscl-13-pan437-neighbor-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "contracts/cscl-13/complaint-decision-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "397f0328f1afd7c62ba9d958113058ed7bffb884b5072b638ff16a44595d1174"
+        },
+        {
+          "path": "contracts/cscl-13/pan437-neighbor-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "519d66c79d257bdd157666fa98809d789cd3bc45e3fbfe402f63ccbb210eed06"
+        },
+        {
+          "path": "docs/architecture/pan437-neighbor-composition-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "87fd5c8464e74c57cb21f3b49d7224848368ec00111c8e07e5393e63a9750e56"
+        },
+        {
+          "path": "packages/contracts/src/erp-read-connector.ts",
+          "role": "CONTRACT",
+          "sha256": "e8383e52a767bcf5b946fe6bf6e9446d0886bfe37f37c5edcc86f7f054ec5c34"
+        },
+        {
+          "path": "src/cscl-13/complaint-cli.mjs",
+          "role": "SOURCE",
+          "sha256": "3692eb7977f35c791bbe0cb1b7fd9bd46827a195b927df8367d676f14cd5cc1f"
+        },
+        {
+          "path": "src/cscl-13/complaint.mjs",
+          "role": "SOURCE",
+          "sha256": "1cc2589ac63743fa1104defdb1bc3beb66145308f917232e12d45d224beae52b"
+        },
+        {
+          "path": "src/cscl-13/pan437-neighbor.mjs",
+          "role": "VALIDATOR",
+          "sha256": "4878fce07c0935fd093bed94fb1b4e977789234d7bd13edd9a974a1f2dcd2d34"
+        },
+        {
+          "path": "tests/cscl-13/complaint.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "5e4ecc73f6d959becca5a9733c43906a79e79fdda264e955f3a5096f7aef098b"
+        },
+        {
+          "path": "tests/cscl-13/pan437-neighbor.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6c639fb0691275559806a9b72fc565e678d9fc2ccac0c978f4426721dd819625"
+        },
+        {
+          "path": "tests/erp-read-connector.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "6dc00ffa1982e4833d0b7cd837ed77974a50c1c82a5ea662e76f43d5089dbe16"
+        },
+        {
+          "path": "tests/fixtures/cscl-13/delivery-references-v1.json",
+          "role": "FIXTURE",
+          "sha256": "b59178b95ff5dff660af45e10f3adea7f5126a433505b1674f7368f18b979110"
+        },
+        {
+          "path": "tests/fixtures/erp-read/contract-v1.json",
+          "role": "FIXTURE",
+          "sha256": "905c53b122a0dbd7c6b07fa5960bb04adc0523f9097587a3219e496cf8737d4f"
+        },
+        {
+          "path": "tests/fixtures/erp-read/supported-export-v1.json",
+          "role": "FIXTURE",
+          "sha256": "85194ec545b4f1e2e690b4353c6d97d1753bb6043171c00f55ca894fc6669278"
+        },
+        {
+          "path": "verification/cscl-13-pan437-neighbor-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4fe375022725470c9138ca29b582fb5048ed29ded16633125bb5220b4b22e6c1"
+        }
+      ],
+      "ownedTests": [
+        "npm run cscl13:test",
+        "npm run erp-read:test"
+      ],
+      "invariants": [
+        "The existing complaint ledger and CLI remain the only complaint user path; no purchasing, ERP mutation, approval or public-write authority is added.",
+        "The existing ERP reader executes on an exact labelled local-synthetic source and proves only order/customer identity, source provenance and reader readback.",
+        "Independently supplied delivery references remain explicit SYNTHETIC_DELIVERY facts; matching order/customer identity and source digest are required before complaint composition.",
+        "Order status, invoice state, stock promises, trust labels and caller-supplied delivery-shaped objects never manufacture delivery facts.",
+        "Source, reference, quantity and decision drift fail closed before persisted mutation; real-world delivery and provider interoperability remain unclaimed."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

@@ -669,7 +669,7 @@ for (const invariant of pairedAnalyticsInvariants) {
 }
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 51;
+dag.graphVersion = 52;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

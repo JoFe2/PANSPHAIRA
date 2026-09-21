@@ -95,9 +95,9 @@ test('comparison retains removed module consumers and old tests without executin
  const result=json(run(root,'compare','--before','before.json','--after','after.json'));
  assert.deepEqual(result.changedModules,['a','b']);assert.deepEqual(result.affected,['a','b','c']);assert.ok(result.tests.includes('a/test.mjs'));
 });
-test('current two-module pilot exports readable graph and self-compares independently of checkout',t=>{
+test('current module catalog exports readable graph and self-compares independently of checkout',t=>{
  const {root}=fixture(t);const repo=resolve(import.meta.dirname,'..');
- const release=json(run(repo,'release'));assert.equal(release.modules.length,2);put(root,'pilot.json',release);
+ const release=json(run(repo,'release'));assert.equal(release.modules.length,3);put(root,'pilot.json',release);
  const result=json(run(root,'compare','--before','pilot.json','--after','pilot.json'));assert.deepEqual(result.changedModules,[]);assert.deepEqual(result.tests,[]);
  const graph=run(repo,'graph','--format','mermaid');assert.equal(graph.status,0,graph.stderr);assert.match(graph.stdout,/cscl-protocol/);assert.match(graph.stdout,/cscl-odoo-profile/);
 });

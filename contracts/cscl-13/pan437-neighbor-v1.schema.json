@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/contracts/cscl-13/pan437-neighbor-v1.schema.json",
+  "title": "PAN437 delivery-position hand-off",
+  "description": "Smallest proposed contract for a future actual delivery module. It is not a delivery confirmation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "source", "delivery", "position", "nonClaims"],
+  "properties": {
+    "schemaVersion": {"const": "pansphaira.cscl13/delivery-position-input/v1"},
+    "status": {"const": "READ_DELIVERY_POSITION"},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["moduleId", "moduleVersion", "outcome", "trust", "sourceDigest", "readbackDigest"],
+      "properties": {
+        "moduleId": {"type": "string", "minLength": 1},
+        "moduleVersion": {"type": "string", "minLength": 1},
+        "outcome": {"const": "READ"},
+        "trust": {"enum": ["LOCAL_SYNTHETIC", "PROVIDER_ATTESTED"]},
+        "sourceDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "readbackDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "delivery": {
+      "type": "object", "additionalProperties": false,
+      "required": ["deliveryId", "orderId", "customerId", "deliveredAt"],
+      "properties": {
+        "deliveryId": {"type": "string", "minLength": 1},
+        "orderId": {"type": "string", "minLength": 1},
+        "customerId": {"type": "string", "minLength": 1},
+        "deliveredAt": {"type": "string", "format": "date-time"}
+      }
+    },
+    "position": {
+      "type": "object", "additionalProperties": false,
+      "required": ["positionId", "articleId", "articleName", "quantity", "unit"],
+      "properties": {
+        "positionId": {"type": "string", "minLength": 1},
+        "articleId": {"type": "string", "minLength": 1},
+        "articleName": {"type": "string", "minLength": 1},
+        "quantity": {"type": "integer", "minimum": 1},
+        "unit": {"enum": ["EACH", "KG"]}
+      }
+    },
+    "nonClaims": {"type": "array", "minItems": 3, "items": {"type": "string"}}
+  }
+}

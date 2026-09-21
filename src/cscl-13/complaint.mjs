@@ -29,7 +29,11 @@ export function validateDeliveryReferences(references) {
   if (references.schemaVersion !== "pansphaira.cscl13/delivery-references/v1")
     return { outcome: "MALFORMED", code: "REFERENCE_SCHEMA_MISMATCH" };
   if (!isId(references.referenceSetId) || !isId(references.tenantId)) return { outcome: "MALFORMED", code: "REFERENCE_SCHEMA_MISMATCH" };
-  if (!exactKeys(references.lineage, ["sourceSystem", "sourceDatasetId", "extractionMode", "sourceDigest"]))
+  if (!exactKeys(references.lineage, ["sourceSystem", "sourceDatasetId", "extractionMode", "sourceDigest"])
+    || references.lineage.sourceSystem !== "SYNTHETIC_DELIVERY"
+    || !isId(references.lineage.sourceDatasetId)
+    || references.lineage.extractionMode !== "SUPPORTED_EXPORT"
+    || typeof references.lineage.sourceDigest !== "string" || !/^[a-f0-9]{64}$/.test(references.lineage.sourceDigest))
     return { outcome: "MALFORMED", code: "REFERENCE_SCHEMA_MISMATCH" };
   if (!Array.isArray(references.articles) || !Array.isArray(references.deliveries)) return { outcome: "MALFORMED", code: "REFERENCE_SCHEMA_MISMATCH" };
 
@@ -70,7 +74,7 @@ export function validateDeliveryReferences(references) {
 // und lässt den gespeicherten Vorgang nicht mehr als gültig erscheinen.
 const referencesDigest = (references) => sha({ schemaVersion: references.schemaVersion, referenceSetId: references.referenceSetId, tenantId: references.tenantId, lineage: references.lineage, articles: references.articles, deliveries: references.deliveries });
 
-export function createComplaintLedger(references) {
+export function createComplaintLedger(references, options = {}) {
   const verdict = validateDeliveryReferences(references);
   if (verdict.outcome !== "VALID") {
     const denied = () => ({ outcome: "DENIED", code: verdict.code });
@@ -91,6 +95,11 @@ export function createComplaintLedger(references) {
 
   const complaints = new Map();
   const refDigest = referencesDigest(references);
+  const orderBindingDigest = options.orderBinding?.bindingDigest ?? null;
+  if (orderBindingDigest !== null && (typeof orderBindingDigest !== "string" || !/^[a-f0-9]{64}$/.test(orderBindingDigest))) {
+    const denied = () => ({ outcome: "DENIED", code: "ORDER_BINDING_MALFORMED" });
+    return { select: denied, raise: denied, decide: denied, readback: denied, history: () => [], evidence: () => ({ reference: { outcome: "MALFORMED", code: "ORDER_BINDING_MALFORMED" }, complaints: 0, decisions: 0, complaintIds: [] }), hydrate: () => { throw new Error("ORDER_BINDING_MALFORMED"); }, snapshot: () => { throw new Error("ORDER_BINDING_MALFORMED"); } };
+  }
 
   const select = (request) => {
     if (!isRecord(request) || !exactKeys(request, ["positionId", "customerId"])
@@ -215,6 +224,7 @@ export function createComplaintLedger(references) {
     referenceSetId: references.referenceSetId,
     tenantId: references.tenantId,
     referencesDigest: refDigest,
+    orderBindingDigest,
     entries: [...complaints.values()].map((entry) => ({
       complaint: entry.complaint,
       decision: entry.decision,
@@ -230,6 +240,7 @@ export function createComplaintLedger(references) {
       || !isId(snap.tenantId) || snap.tenantId !== references.tenantId
       || typeof snap.referencesDigest !== "string" || snap.referencesDigest !== refDigest)
       throw new Error("SNAPSHOT_REFERENCE_DRIFT");
+    if (snap.orderBindingDigest !== orderBindingDigest) throw new Error("SNAPSHOT_ORDER_BINDING_DRIFT");
 
     const drank = [];
     for (const entry of snap.entries) {
@@ -322,6 +333,7 @@ export function createComplaintLedger(references) {
 
   const evidence = () => ({
     reference: { outcome: "VALID", referenceSetId: references.referenceSetId, deliveries: references.deliveries.length, positions: positionIndex.size },
+    orderBinding: orderBindingDigest === null ? { outcome: "NOT_BOUND" } : { outcome: "BOUND", bindingDigest: orderBindingDigest },
     complaints: complaints.size,
     decisions: [...complaints.values()].filter((entry) => entry.decision !== null).length,
     complaintIds: [...complaints.keys()].sort(),
