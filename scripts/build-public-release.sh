@@ -226,6 +226,7 @@ repository_only_files = {
     "docs/development/cscl-05-tryton-source-native-profile-v1.md",
     "docs/development/cscl-06-apache-ofbiz-profile-v1.md",
     "tests/fixtures/cscl-07/expected-matrix-v1.json",
+    ".npmrc",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",
@@ -247,6 +248,9 @@ repository_only_prefixes = (
     "tests/fixtures/cscl-03/source-snapshots/",
     "tests/fixtures/cscl-05/artifacts/",
     "tests/fixtures/cscl-05/sources/",
+    "packages/knowledge-solution/",
+    "tests/knowledge-solution/",
+    ".kts-pg-data/",
 )
 for candidate in root.rglob("*"):
     relative = candidate.relative_to(root).as_posix()

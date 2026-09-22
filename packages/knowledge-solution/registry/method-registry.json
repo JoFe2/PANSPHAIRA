@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "pansphaira.kts/method-registry/v1",
+  "registryId": "registry:invoice-methods-v1",
+  "specs": [
+    {
+      "path": "specs/margin-threshold.spec.json",
+      "methodId": "method:margin-threshold-v1",
+      "specDigest": "0073532098a4280469fa3fddcee9dd704fbd605e8924a69ec977aa9de980953d"
+    },
+    {
+      "path": "specs/invoice-total.spec.json",
+      "methodId": "method:invoice-total-v1",
+      "specDigest": "2da88d3aa42bdcae6af8cfbcfa84d991a47b86a98d4ded1a5fefd2ae622e4ebd"
+    }
+  ]
+}

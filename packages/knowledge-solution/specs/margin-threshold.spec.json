@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "pansphaira.kts/method-spec/v1",
+  "methodId": "method:margin-threshold-v1",
+  "familyId": "family:invoice-margin-v1",
+  "title": "Markenfaktura-Grenzwert-Pruefung",
+  "meaning": "Flaggt Rechnungen, deren Gesamtwert den vom Nutzer bestaetigten Mindestgrenzwert in EUR unterschreitet; jede Entscheidung folgt der frorisierten, deterministischen Regel (kein Modell).",
+  "supportedOutcomes": [
+    "FLAG_RECORDS"
+  ],
+  "inputs": [
+    {
+      "inputId": "input:invoice-records-v1",
+      "meaning": "Abgerechnete Rechnungen des Datenkontexts (lokal, synthetisch): Kennung, Gesamtwert und Faelligkeitsdatum",
+      "kind": "record-set",
+      "unit": null,
+      "unitAliases": [],
+      "requiredFields": [
+        {
+          "field": "invoiceId",
+          "nullable": false,
+          "meaningKey": "INVOICE_ID"
+        },
+        {
+          "field": "orderId",
+          "nullable": false,
+          "meaningKey": "ORDER_ID"
+        },
+        {
+          "field": "customerId",
+          "nullable": true,
+          "meaningKey": "CUSTOMER_ID"
+        },
+        {
+          "field": "totalMinor",
+          "nullable": false,
+          "meaningKey": "INVOICE_TOTAL_GROSS"
+        },
+        {
+          "field": "currency",
+          "nullable": false,
+          "meaningKey": "CURRENCY_CODE"
+        },
+        {
+          "field": "dueDate",
+          "nullable": false,
+          "meaningKey": "DUE_DATE"
+        }
+      ],
+      "fieldAliases": [
+        {
+          "sourceField": "rechnung_nr",
+          "specField": "invoiceId",
+          "factor": null
+        },
+        {
+          "sourceField": "rechnung",
+          "specField": "invoiceId",
+          "factor": null
+        },
+        {
+          "sourceField": "bestellung_nr",
+          "specField": "orderId",
+          "factor": null
+        },
+        {
+          "sourceField": "bestellung",
+          "specField": "orderId",
+          "factor": null
+        },
+        {
+          "sourceField": "kunden_nr",
+          "specField": "customerId",
+          "factor": null
+        },
+        {
+          "sourceField": "kunde",
+          "specField": "customerId",
+          "factor": null
+        },
+        {
+          "sourceField": "betrag_eur",
+          "specField": "totalMinor",
+          "factor": 100
+        },
+        {
+          "sourceField": "waehrung",
+          "specField": "currency",
+          "factor": null
+        },
+        {
+          "sourceField": "waehrungs_code",
+          "specField": "currency",
+          "factor": null
+        },
+        {
+          "sourceField": "faellig",
+          "specField": "dueDate",
+          "factor": null
+        },
+        {
+          "sourceField": "faellig_am",
+          "specField": "dueDate",
+          "factor": null
+        },
+        {
+          "sourceField": "betrag",
+          "specField": "totalMinor",
+          "factor": 100
+        },
+        {
+          "sourceField": "rechnungsbetrag_cent",
+          "specField": "totalMinor",
+          "factor": 1
+        },
+        {
+          "sourceField": "invoiceId",
+          "specField": "invoiceId",
+          "factor": null
+        },
+        {
+          "sourceField": "orderId",
+          "specField": "orderId",
+          "factor": null
+        },
+        {
+          "sourceField": "customerId",
+          "specField": "customerId",
+          "factor": null
+        },
+        {
+          "sourceField": "currency",
+          "specField": "currency",
+          "factor": null
+        },
+        {
+          "sourceField": "dueDate",
+          "specField": "dueDate",
+          "factor": null
+        }
+      ]
+    },
+    {
+      "inputId": "input:margin-floor-v1",
+      "meaning": "Vom Nutzer bestaetigter Mindestgrenzwert (Kanaelwaehrung EUR)",
+      "kind": "number",
+      "unit": "eur",
+      "unitAliases": [
+        {
+          "alias": "eur",
+          "factorToCanonical": 1
+        },
+        {
+          "alias": "cent",
+          "factorToCanonical": 0.01
+        }
+      ],
+      "requiredFields": [],
+      "fieldAliases": []
+    }
+  ],
+  "outputs": [
+    {
+      "outputId": "output:flagged-invoices-v1",
+      "meaning": "Markierte Rechnungen unterhalb des Grenzwerts mit geschlossenen Grundcodes"
+    }
+  ],
+  "preconditions": [
+    "Der Datenkontext liefert Rechnungen mit Kennung, Gesamtwert (ganzzahlige Nebeneinheiten EUR) und Faelligkeitsdatum",
+    "Der Grenzwert ist vor der Ausfuhrung vom Nutzer bestaetigt (UserDecision, digestgebunden)"
+  ],
+  "knowledgeRefs": [
+    {
+      "ref": "knowledge:margin-rules-v1",
+      "kind": "REQUIRED",
+      "staleAfterMs": 31536000000
+    },
+    {
+      "ref": "knowledge:margin-example-v1",
+      "kind": "SUPPORTING",
+      "staleAfterMs": 31536000000
+    }
+  ],
+  "version": "1.0.0",
+  "specDigest": "0073532098a4280469fa3fddcee9dd704fbd605e8924a69ec977aa9de980953d"
+}

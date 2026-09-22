@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "dc614d338c484731afc9cb87216ca968287d22da875022468e67d4f566ecdb4a"
+        "sha256": "349a5cffb61232e63c98445d450f1e3f2c6dd958be98dec4289a0c01da3fb0d7"
       }
     ]
   },
@@ -253,11 +253,11 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 682,
+    "filesScanned": 696,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 234,
-    "importFiles": 233,
+    "importSites": 243,
+    "importFiles": 242,
     "reexportSites": 4,
     "similarShapeSites": 30,
     "ledgerEntries": 1914,
@@ -635,6 +635,11 @@
       "importFiles": 1
     },
     {
+      "owner": "knowledge-solution",
+      "importSites": 6,
+      "importFiles": 6
+    },
+    {
       "owner": "local-knowledge",
       "importSites": 1,
       "importFiles": 1
@@ -661,8 +666,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 52,
-      "importFiles": 51
+      "importSites": 55,
+      "importFiles": 54
     },
     {
       "owner": "usage-insights",

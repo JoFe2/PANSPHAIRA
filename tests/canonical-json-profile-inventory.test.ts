@@ -266,12 +266,19 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-
-  filesScanned: 682,
+  // 2026-09-22 PAN432 KTS publication integration: ordinary integrity migration
+  // on a fresh mechanical scan of the tree with the retained corrected
+  // knowledge-solution candidate (F1/F2/F4/F5 per KTS-C26-REVIEW.md) grafted
+  // onto fresh Main. +14 scanned files (packages/knowledge-solution sources,
+  // specs, profiles, registry, corpus, contexts + tests/knowledge-solution
+  // kts01-kts06), +9 canonicalJson import sites/files (6 src + 2 test files
+  // importing the admitted contracts implementation). No new canonicalJson
+  // declaration, re-export or similar-shape site. Fresh scan is the ground truth.
+  filesScanned: 696,
   declarationSites: 37,
   declarationFiles: 37,
-  importSites: 234,
-  importFiles: 233,
+  importSites: 243,
+  importFiles: 242,
 
   reexportSites: 4,
   similarShapeSites: 30,

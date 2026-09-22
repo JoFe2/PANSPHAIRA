@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "pansphaira.kts/context-descriptor/v1",
+  "contextId": "context:invoices-usd",
+  "sourceFormat": "csv",
+  "description": "US-Export (synthetisch): Betraege in USD Cent; die Methode arbeitet nur in EUR und umrechnet nicht",
+  "fields": [
+    {
+      "field": "rechnung",
+      "meaning": "Rechnungsnummer",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "INVOICE_ID"
+    },
+    {
+      "field": "bestellung",
+      "meaning": "Bestellnummer",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "ORDER_ID"
+    },
+    {
+      "field": "kunde",
+      "meaning": "Kundennummer",
+      "kind": "string",
+      "unit": null,
+      "nullable": true,
+      "meaningKey": "CUSTOMER_ID"
+    },
+    {
+      "field": "betrag",
+      "meaning": "Rechnungsbetrag in US-Dollar Cent (Nebeneinheiten USD)",
+      "kind": "number",
+      "unit": "usd",
+      "nullable": false,
+      "meaningKey": "INVOICE_TOTAL_GROSS"
+    },
+    {
+      "field": "waehrung",
+      "meaning": "Waehrungscode",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "CURRENCY_CODE"
+    },
+    {
+      "field": "faellig_am",
+      "meaning": "Faelligkeitsdatum",
+      "kind": "date",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "DUE_DATE"
+    },
+    {
+      "field": "grenzwert_eur",
+      "meaning": "Mindestgrenzwert pro Rechnung in US-Dollar Cent",
+      "kind": "number",
+      "unit": "usd",
+      "nullable": false
+    }
+  ],
+  "floorField": "grenzwert_eur",
+  "descriptorDigest": "c2a1f35e3d96b0b391e04d27a708eb075075f8ea14a93e67007237596d072040"
+}

@@ -192,14 +192,24 @@
     "sales-stock:journey": "npm run build --silent && node src/sales-stock/cli.mjs run",
     "sales-stock:journey:test": "npm run build --silent && node --test dist/tests/beschaffung-wareneingang-v1.test.js dist/tests/bestand-nachschub-v1.test.js dist/tests/kundenauftrag-lieferzusage-v1.test.js dist/tests/sales-stock-journey-v1.test.js tests/sales-stock-journey-cli.test.mjs",
     "procurement-434:test": "npm run build --silent && node --test dist/tests/rechnungsabgleich-match-v1.test.js dist/tests/rechnungsabgleich-v1.test.js",
-    "procurement-434:test:compiled": "node --test dist/tests/rechnungsabgleich-match-v1.test.js dist/tests/rechnungsabgleich-v1.test.js"
+    "procurement-434:test:compiled": "node --test dist/tests/rechnungsabgleich-match-v1.test.js dist/tests/rechnungsabgleich-v1.test.js",
+    "kts01:test": "npm run build --silent && node --test dist/tests/knowledge-solution/kts01-method-library.test.js",
+    "kts02:test": "npm run build --silent && node --test dist/tests/knowledge-solution/kts02-guided-adaptation.test.js",
+    "kts03:test": "npm run build --silent && node --test dist/tests/knowledge-solution/kts03-postgres-adapter.test.js",
+    "kts04:test": "npm run build --silent && node --test dist/tests/knowledge-solution/kts04-integrated-user-path.test.js",
+    "kts:test": "npm run kts01:test && npm run kts02:test && npm run kts03:test && npm run kts04:test && npm run kts05:test",
+    "kts:all": "npm run build --silent && node --test --test-concurrency=1 dist/tests/knowledge-solution/kts01-method-library.test.js dist/tests/knowledge-solution/kts02-guided-adaptation.test.js dist/tests/knowledge-solution/kts03-postgres-adapter.test.js dist/tests/knowledge-solution/kts04-integrated-user-path.test.js dist/tests/knowledge-solution/kts05-followup-regressions.test.js",
+    "kts05:test": "npm run build --silent && node --test --test-concurrency=1 dist/tests/knowledge-solution/kts05-followup-regressions.test.js"
   },
   "dependencies": {
     "ajv": "8.20.0",
-    "ajv-formats": "3.0.1"
+    "ajv-formats": "3.0.1",
+    "pg": "8.16.3"
   },
   "devDependencies": {
     "@types/node": "24.10.1",
+    "@types/pg": "8.15.1",
+    "embedded-postgres": "18.4.0-beta.17",
     "typescript": "5.9.3",
     "vitepress": "1.6.4",
     "yaml": "^2.9.0"

@@ -1,0 +1,4 @@
+rechnung_nr,bestellung_nr,kunden_nr,betrag_eur,waehrung,faellig,grenzwert_eur
+rechnung:101,bestellung:101,kunde:101,29.99,EUR,2026-08-05,30.00
+rechnung:102,bestellung:102,kunde:102,30.00,EUR,2026-08-20,30.00
+rechnung:103,bestellung:103,,25.00,EUR,2026-09-10,30.00
