@@ -2,7 +2,7 @@
   "tupleLedger": {
     "schemaVersion": "pansphaira.power-platform/readonly-tuple-ledger/v1",
     "environmentClass": "LOCAL_SYNTHETIC_REPOSITORY_ONLY",
-    "openApiSchemaSha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68",
+    "openApiSchemaSha256": "c3aebd5f771216b4a2ce525a19d96b87dfce98cd68f6ace00d22f13e2f2d4593",
     "policyGeneration": null,
     "policyDigest": "c0670df5ef0d91635316b52f66cc65123792b857c328d24e21daf98a0adf2b89",
     "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT",

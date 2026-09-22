@@ -13,10 +13,10 @@
   },
   "openApiBinding": {
     "documentPath": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
-    "documentSha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287",
-    "documentDigest": "67c6e32cd4c9c995c06033b6a4c6a4f0ec621b3c11706ee6af83ba1c794763ee",
+    "documentSha256": "fe291f7e72701c53275d99da1369c5be310ed839cb722c1373e24f801bcdb631",
+    "documentDigest": "55b36cd053c2b011ba867c0c506fc12b35d7e2c91d90d939882f34f0b0b220e8",
     "schemaPath": "contracts/azure-power-platform/readonly-connector.schema.json",
-    "schemaSha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+    "schemaSha256": "c3aebd5f771216b4a2ce525a19d96b87dfce98cd68f6ace00d22f13e2f2d4593"
   },
   "identityBinding": {
     "schemaVersion": "chimpmaera.identity/azure-profile/v1",

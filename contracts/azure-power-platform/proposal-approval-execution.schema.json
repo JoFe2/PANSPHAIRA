@@ -436,8 +436,8 @@
           "method": "REVERT_CONTAINING_COMMIT_THROUGH_NORMAL_REPOSITORY_REVIEW"
         },
         "evidenceRefs": [
-          { "id": "readonly-openapi", "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml", "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287" },
-          { "id": "readonly-openapi-schema", "path": "contracts/azure-power-platform/readonly-connector.schema.json", "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68" },
+          { "id": "readonly-openapi", "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml", "sha256": "fe291f7e72701c53275d99da1369c5be310ed839cb722c1373e24f801bcdb631" },
+          { "id": "readonly-openapi-schema", "path": "contracts/azure-power-platform/readonly-connector.schema.json", "sha256": "c3aebd5f771216b4a2ce525a19d96b87dfce98cd68f6ace00d22f13e2f2d4593" },
           { "id": "bound-readback-receipt", "path": "contracts/azure-power-platform/authoritative-readback-receipt.schema.json", "sha256": "20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8" },
           { "id": "reset-uninstall-plan", "path": "docs/development/azure-power-platform/reset-uninstall-plan.schema.json", "sha256": "47c764598a305367e677f5608a78dd36b501ce203f27b5699508977015cabf33" },
           { "id": "proposal-approval-test", "path": "tests/azure-power-platform/proposal-approval-execution.test.mjs", "sha256": "cec6301cd422218845f0a42c1445051c1dced8df43c51ed1dacf9f1bdb91810b" },

@@ -117,7 +117,7 @@
           "id": "pansphaira.readonly-canvas-workbench",
           "version": "1.0.0",
           "manifestSha256": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9",
-          "bindingSha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3"
+          "bindingSha256": "007241ade3d20c1227fe3dc202eb95706c79a0ea6e79bb2cce15e92e2b3f17b9"
         },
         "policyGeneration": null,
         "rollbackTarget": "EXACT_LKG_FULL_TUPLE_DIGEST_FROM_INDEPENDENT_TRUSTED_CONTEXT"
@@ -251,7 +251,7 @@
                 "id": { "const": "pansphaira.readonly-canvas-workbench" },
                 "version": { "const": "1.0.0" },
                 "manifestSha256": { "const": "6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9" },
-                "bindingSha256": { "const": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3" }
+                "bindingSha256": { "const": "007241ade3d20c1227fe3dc202eb95706c79a0ea6e79bb2cce15e92e2b3f17b9" }
               }
             },
             "policyGeneration": { "const": null },

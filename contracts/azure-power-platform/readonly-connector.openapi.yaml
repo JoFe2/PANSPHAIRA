@@ -772,9 +772,9 @@
     },
     "openApiSchemaBinding": {
       "sourcePath": "contracts/azure-power-platform/readonly-connector.schema.json",
-      "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+      "sha256": "c3aebd5f771216b4a2ce525a19d96b87dfce98cd68f6ace00d22f13e2f2d4593"
     },
-    "documentDigest": "67c6e32cd4c9c995c06033b6a4c6a4f0ec621b3c11706ee6af83ba1c794763ee",
+    "documentDigest": "55b36cd053c2b011ba867c0c506fc12b35d7e2c91d90d939882f34f0b0b220e8",
     "connectorContractBinding": {
       "schemaVersion": "chimpmaera.connector/power-platform-read/v1",
       "contractVersion": "1.0.0",
@@ -809,7 +809,7 @@
     },
     "gatewayBinding": {
       "source": "packages/contracts/src/capability-catalogue.ts",
-      "sourceSha256": "9d24442a94c2cfcf9c305732a60ceadf286200a2eae26b6dabd157769a223f54",
+      "sourceSha256": "e2d6acca17d7eb938124c31282f6e6aefd9f7e9b65117722a452170967ec835e",
       "catalogueSchemaVersion": "chimpmaera.security/capability-catalogue/v1",
       "catalogueId": "chimpmaera.local/synthetic-actions",
       "catalogueVersion": "1.0.0",

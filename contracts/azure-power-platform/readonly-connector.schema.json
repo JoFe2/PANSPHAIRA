@@ -685,7 +685,7 @@
         "gatewayBinding": {
           "const": {
             "source": "packages/contracts/src/capability-catalogue.ts",
-            "sourceSha256": "9d24442a94c2cfcf9c305732a60ceadf286200a2eae26b6dabd157769a223f54",
+            "sourceSha256": "e2d6acca17d7eb938124c31282f6e6aefd9f7e9b65117722a452170967ec835e",
             "catalogueSchemaVersion": "chimpmaera.security/capability-catalogue/v1",
             "catalogueId": "chimpmaera.local/synthetic-actions",
             "catalogueVersion": "1.0.0",

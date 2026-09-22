@@ -244,17 +244,17 @@
         {
           "path": "contracts/azure-power-platform/proposal-approval-execution.schema.json",
           "role": "SCHEMA",
-          "sha256": "879ccfd12b668274c1336129c5c3c21093b012cbb2e46ff3fb106236ca98c48c"
+          "sha256": "a0c51c909baad3538a63cb4a5e292bd6869d1ca258075d30910e609a30485691"
         },
         {
           "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
           "role": "SCHEMA",
-          "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287"
+          "sha256": "fe291f7e72701c53275d99da1369c5be310ed839cb722c1373e24f801bcdb631"
         },
         {
           "path": "contracts/azure-power-platform/readonly-connector.schema.json",
           "role": "SCHEMA",
-          "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+          "sha256": "c3aebd5f771216b4a2ce525a19d96b87dfce98cd68f6ace00d22f13e2f2d4593"
         },
         {
           "path": "contracts/azure-power-platform/readonly-denial-matrix.schema.json",
@@ -274,7 +274,7 @@
         {
           "path": "docs/development/azure-power-platform/azpp-m1-tuple-ledger.schema.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "ecc734ebd41750cb9cabdfa64b3120114e69b9754797839b076522d71425c7ef"
+          "sha256": "7f9752e1eab0175d6b41d418ab27a140699b8a2e3c641fa29d8b24631c391342"
         },
         {
           "path": "docs/development/azure-power-platform/enterprise-profile-evidence.schema.json",
@@ -304,12 +304,12 @@
         {
           "path": "docs/development/azure-power-platform/sandbox-preflight-packet.schema.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "caa14fe2190ff191977941da666bd17d5d190333498443ab89d99d2f4bbcac17"
+          "sha256": "9f717dda14618a126e62e16ddca37d2228c4f8d3b537fd9b592d0c669cc0ad97"
         },
         {
           "path": "power-platform/readonly-canvas-workbench/connector-binding.json",
           "role": "CONTRACT",
-          "sha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3"
+          "sha256": "007241ade3d20c1227fe3dc202eb95706c79a0ea6e79bb2cce15e92e2b3f17b9"
         },
         {
           "path": "power-platform/readonly-canvas-workbench/manifest.json",
@@ -329,7 +329,7 @@
         {
           "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "ce9a873cf40afc9a7b4df146e9f905129720461ba9487cb0f6d8268d49f6979c"
+          "sha256": "6119b6c565848f49eeea22b8c4ff3859c7e6a807afbd785a22151635db233751"
         },
         {
           "path": "tests/azure-power-platform/canvas-package.test.mjs",
@@ -384,7 +384,7 @@
         {
           "path": "tests/azure-power-platform/reset-uninstall.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "4cf0ae163ea5fb3f9788301e6a570396fc5ec64cf9ba80f9706383e5d20c823c"
+          "sha256": "3b47c7350be1e8fc206510b493eb71f77f4db2f3e1d505398bdc609df9520ab7"
         },
         {
           "path": "tests/azure-power-platform/sandbox-preflight.test.mjs",
@@ -534,7 +534,7 @@
         {
           "path": "tests/fixtures/azure-power-platform/readonly-openapi-valid.json",
           "role": "FIXTURE",
-          "sha256": "d2072dbe786b83d2450f9c90519c4cebf696d72064f27a68dd63cd3f420a8b67"
+          "sha256": "e721ee85d865550800ec413928d1dc88ae965b5356196a33cb13a5799e6f29dc"
         },
         {
           "path": "tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json",
@@ -559,7 +559,7 @@
         {
           "path": "tests/fixtures/azure-power-platform/zero-residue.json",
           "role": "FIXTURE",
-          "sha256": "fe7ee77ca555daa0f779dd33200f04803400bec78dcc30c7871c8a9439456ac0"
+          "sha256": "7a142671c45da4969ba1f31aa67437ca924452be44a06e8e9cc3c81cd751658e"
         },
         {
           "path": "tools/azure-power-platform/render-public-readback.mjs",
@@ -579,7 +579,7 @@
         {
           "path": "tools/azure-power-platform/validate-canvas-package.mjs",
           "role": "VALIDATOR",
-          "sha256": "3dce9e255f52d7712861701a3f027314044c7dae3329f10499e156ea9e37c965"
+          "sha256": "b00809d1990e2ed90f9c270625fbf1242b3c43631105ae768c8abfb6b8982aab"
         },
         {
           "path": "tools/azure-power-platform/validate-compatibility-migration.mjs",
@@ -614,7 +614,7 @@
         {
           "path": "tools/azure-power-platform/verify-zero-residue.mjs",
           "role": "VALIDATOR",
-          "sha256": "7a1e55e3ef4b1b9a39b995f62d7c66f30759e41045155b53b08ab68d317ca535"
+          "sha256": "c1443ca54f7624e9ef9052b18e76cf6492dcf0fe8d32fafdc3787c76eec13e92"
         }
       ],
       "ownedTests": [

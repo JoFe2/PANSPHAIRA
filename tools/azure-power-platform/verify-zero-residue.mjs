@@ -15,7 +15,7 @@ const PACKAGE = {
   manifestPath: 'power-platform/readonly-canvas-workbench/manifest.json',
   manifestSha256: '6ebad932d63f541b17d365f130cc2207d9326baeaa91c521a95685a9c9a143a9',
   bindingPath: 'power-platform/readonly-canvas-workbench/connector-binding.json',
-  bindingSha256: '051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3',
+  bindingSha256: '007241ade3d20c1227fe3dc202eb95706c79a0ea6e79bb2cce15e92e2b3f17b9',
 };
 const RESOURCE_CLASSES = Object.freeze([
   'SYNTHETIC_CANVAS_PACKAGE',
@@ -41,11 +41,11 @@ const EXACT_TUPLE = {
   lkgTupleDigest: '5555555555555555555555555555555555555555555555555555555555555555',
 };
 const EXACT_EVIDENCE = {
-  'contracts/azure-power-platform/readonly-connector.openapi.yaml': '20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287',
+  'contracts/azure-power-platform/readonly-connector.openapi.yaml': 'fe291f7e72701c53275d99da1369c5be310ed839cb722c1373e24f801bcdb631',
   'contracts/azure-power-platform/authoritative-readback-receipt.schema.json': '20d7a20a812857a6bd79d3c324bd2a5c9f40cd995a865f4857e3b7224a2a37f8',
   'power-platform/readonly-canvas-workbench/manifest.json': PACKAGE.manifestSha256,
   'power-platform/readonly-canvas-workbench/connector-binding.json': PACKAGE.bindingSha256,
-  'tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs': 'ce9a873cf40afc9a7b4df146e9f905129720461ba9487cb0f6d8268d49f6979c',
+  'tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs': '6119b6c565848f49eeea22b8c4ff3859c7e6a807afbd785a22151635db233751',
   'tests/azure-power-platform/authoritative-readback-receipt.test.mjs': '3542b9c5b578d37b4562f8f5f5cb4808aef666e721f5f0358a99e81e1a80dd58',
 };
 
