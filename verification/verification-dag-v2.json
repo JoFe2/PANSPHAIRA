@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 55,
+  "graphVersion": 56,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "04f1528bf81858ac2d97479c04540dd5086606211379cc250f0e722420a6222a"
+          "sha256": "8c6ac1bc6ddc834dac46e0548ad6a8df7857f99b804214e612744beefdf33dbe"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3657,7 +3657,7 @@
         {
           "path": "docs/EXTERNAL-BI-SERVICE.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "18c98a410edd205f4e677f63853c4e824de1ca752dc6624da383879a46e76c0d"
+          "sha256": "0acab93aad3d62c74b88e0a44fb07387dcbd26bc889f7ab8d7d13a9171e9322a"
         },
         {
           "path": "verification/external-bi-service-paired-compatibility-v1.json",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "e38a2cf0f6535ebd545e96b89be2474c225015909189ab1d08c54724f6d506eb"
+          "sha256": "b6b8c0d88256d58b599d3406a6a0a95b01aa8bee3966f6b93348191423506560"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "213a432eae5706889c623fbe1aac0ba597d66278d81fc0143cad0d94f728538f"
+          "sha256": "e52b74fba14ac76b12c729734009d370a8c0144db4f08199c0f26c712821c7e2"
         }
       ],
       "ownedTests": [
@@ -4744,6 +4744,11 @@
           "sha256": "ca2f72b3d7a4028c8dd2ca9b7d2a4c1afe7b12e861d977db510920e305099074"
         },
         {
+          "path": "docs/architecture/ks238-order-source-handoff-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e"
+        },
+        {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
@@ -4791,7 +4796,7 @@
         {
           "path": "examples/module-contribution/modules.json",
           "role": "CONTRACT",
-          "sha256": "4ff4ea974dbe732e44e8acc6a55503dd493601e150b2283396f767e1ecefd3b9"
+          "sha256": "68e663e8d81f6dd41023c526c834747a71e8fe093e387e6f0515586c345c76f4"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
@@ -4816,17 +4821,22 @@
         {
           "path": "release/governance.json",
           "role": "CONTRACT",
-          "sha256": "2b6c8746a98d6a1103d0cd8740af797ce44819fc13fd9f9233430e70504cbda7"
+          "sha256": "7e0ad52077d0cb3973cc02b669325ea083092c069dc95f813be16bf2dd8b9e82"
         },
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "21df75b4e00f85e18f61721b57b09f74c00696f4ac6dbd195240b46876ceb280"
+          "sha256": "a5a17c50e5ca251ec4bb3a4656b2df74a0f9d5d9d90b4b7d0a12910e72554a3a"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
           "role": "SCHEMA",
           "sha256": "5d4f7271a2a4cc67d6e6be2f75cc668f8b4dcefa45371c0172eab3d09943d994"
+        },
+        {
+          "path": "schemas/contracts/ks238-order-source-handoff-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "68b38a977a5b6d1995eabecec33d4a49ce10c67264faae544375ded15843b864"
         },
         {
           "path": "schemas/contracts/pan441-employee-profile-v1.schema.json",
@@ -4836,7 +4846,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "1c15d76a80dd59734750b65ce8004184366ae88a0bcdc7333e734e6983360beb"
+          "sha256": "f98ed8b06334c19394f80e2b42341486841c8c63299acb2c8c2dcce40f489658"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4879,6 +4889,11 @@
           "sha256": "4844b37acb7f8f3e8b28152901a47a963abec302caf7d29b0aa205e53063980f"
         },
         {
+          "path": "src/ks238/order-source-handoff.mjs",
+          "role": "SOURCE",
+          "sha256": "a9b3e0d28133c0f2a2aa2a1b7a630693a50aea993814993c23e3d4c573d2b917"
+        },
+        {
           "path": "src/pan433/domain-mapping-cli.mjs",
           "role": "SOURCE",
           "sha256": "e2d5fba3fdd8ce038e1e3a4be7588112c3897e0a63dd7cf9f62b1eba42eb2303"
@@ -4886,7 +4901,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "33ea536204f67e9d5c2c351b09e9aeb1d5783f5a4608f81aae6eaa2673b1951b"
+          "sha256": "1558ef446b2c322b7f60806fc291c094fb1331d64521a2c73adc2b82b97e1b6a"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4964,6 +4979,11 @@
           "sha256": "9d8dcd5025fb8f2351eb4d5824123fbf7a1372af1370b614e936d52c6a3e520f"
         },
         {
+          "path": "tests/ks238/order-source-handoff.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "63ede863b3a7caf2e9760143364a68118101ede91ad89712a1f31d6fe863a197"
+        },
+        {
           "path": "tests/module-contribution-workflow.test.mjs",
           "role": "VALIDATOR",
           "sha256": "6d2668d7a1c3b4f1ea5e61089fae9d929c990c413ced0f5b5677352e0f0190e1"
@@ -4971,7 +4991,7 @@
         {
           "path": "tests/module-contribution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f949dcc7623aec18c1ec297cf53b0bcde272b6b7c717bdd14b75b30057c66254"
+          "sha256": "25178917d5d172d749f56a8605cb6044bdc2be195c42c5f44a09a9ec1a47500d"
         },
         {
           "path": "tests/native-forward-qualification.test.mjs",
@@ -5006,7 +5026,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8ea84e64fed30ce34e847fab06f8efac98daa61e2b7935bfa163c29930fa6ad6"
+          "sha256": "db57a725ca40730f70ae3cc243d0383c6d8d06bcb64ab9abbaffc0c09ad6ad41"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -5016,12 +5036,17 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "990796a4af4f8bde8012a69efe59667df451dfbfc02e45da5ea28e058a423156"
+          "sha256": "b66d91b3c3c809d75b26bd9b1b4746e0b4302b095cffce47751f21ebe8f6cb7d"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
           "role": "CONTRACT",
           "sha256": "f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e"
+        },
+        {
+          "path": "verification/ks238-order-source-handoff-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "afd8bf34603827b4e8a537dcb05f500aa5ab8ba510d6e95cf7a5946f006f2899"
         },
         {
           "path": "verification/paired-analytics-compatibility-v1.json",
@@ -5068,7 +5093,8 @@
         "npm run paired-analytics:test",
         "npm run module:check",
         "npm run pan433:mapping:test",
-        "npm run pan441:test"
+        "npm run pan441:test",
+        "npm run ks238:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5623,7 +5649,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "ba78fd4a3a02d222e511f4d3216c500e1cb634943d0331bdb18f25b2609855fc"
+          "sha256": "bd6d947c1965448f4a7e4f6d701e86f9e6bc6b04218293bec20958c4fa191163"
         },
         {
           "path": "package-lock.json",
@@ -5983,7 +6009,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8884b622a7d7c8bbc5d97d9b80bb36e93f2cd2c8c41649ca116d0db84726a38d"
+          "sha256": "4bf88509f49eec80d521ef6175311b1e61ee41741166a8bfb275886eb0d6b54d"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6248,7 +6274,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "21df75b4e00f85e18f61721b57b09f74c00696f4ac6dbd195240b46876ceb280"
+          "sha256": "a5a17c50e5ca251ec4bb3a4656b2df74a0f9d5d9d90b4b7d0a12910e72554a3a"
         }
       ],
       "ownedTests": [
@@ -6606,7 +6632,7 @@
         {
           "path": "examples/module-contribution/modules.json",
           "role": "CONTRACT",
-          "sha256": "4ff4ea974dbe732e44e8acc6a55503dd493601e150b2283396f767e1ecefd3b9"
+          "sha256": "68e663e8d81f6dd41023c526c834747a71e8fe093e387e6f0515586c345c76f4"
         },
         {
           "path": "packages/contracts/src/pan433-domain-mapping-v1.ts",
@@ -6681,6 +6707,47 @@
         "The profile, catalogue, integration and governed-skill digests remain bound; replacement remains denied until independent readback, with no runtime storage or provider authority."
       ],
       "riskClass": "CRITICAL",
+      "globalInvalidation": false
+    },
+    {
+      "id": "ks238-order-source-handoff-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/architecture/ks238-order-source-handoff-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e"
+        },
+        {
+          "path": "schemas/contracts/ks238-order-source-handoff-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "68b38a977a5b6d1995eabecec33d4a49ce10c67264faae544375ded15843b864"
+        },
+        {
+          "path": "src/ks238/order-source-handoff.mjs",
+          "role": "SOURCE",
+          "sha256": "a9b3e0d28133c0f2a2aa2a1b7a630693a50aea993814993c23e3d4c573d2b917"
+        },
+        {
+          "path": "tests/ks238/order-source-handoff.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "63ede863b3a7caf2e9760143364a68118101ede91ad89712a1f31d6fe863a197"
+        },
+        {
+          "path": "verification/ks238-order-source-handoff-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "afd8bf34603827b4e8a537dcb05f500aa5ab8ba510d6e95cf7a5946f006f2899"
+        }
+      ],
+      "ownedTests": [
+        "npm run ks238:test"
+      ],
+      "invariants": [
+        "KS238 is a read-only thin composition over the released ERP order and customer readers; no second order module, write, approval, provider, runtime or public-write authority is granted.",
+        "The bounded handoff exposes only evidenced order/customer/status/quantity-unit/period facts; net revenue is never inferred from order status or ordered quantity and absent currency, amount, history and delivery facts remain unavailable.",
+        "The released reader executes on the exact labelled LOCAL_SYNTHETIC source; source bindings and content digests survive serialization without caller-resealed substitutions being treated as approval."
+      ],
+      "riskClass": "HIGH",
       "globalInvalidation": false
     }
   ]

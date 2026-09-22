@@ -1296,7 +1296,7 @@
       "tests/fixtures/external-bi-service-v2-clean-room.json"
     ],
     "nonClaims": [
-      "No deployment, runtime activation, production/customer data access, external database access, credential onboarding, mutation, publish/apply authority, Superset administration, Casuvia access or compatibility beyond exact SBA v0.8.0 and contract 2.0.0 is claimed."
+      "No deployment, runtime activation, production/customer data access, external database access, credential onboarding, mutation, publish/apply authority, Superset administration or compatibility beyond exact SBA v0.8.0 and contract 2.0.0 is claimed."
     ],
     "traceability": {
       "issues": [],

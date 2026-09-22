@@ -737,7 +737,42 @@ for (const [inputPath, role] of pan433Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan433:mapping:test")) repositoryIntegrityNode.ownedTests.push("npm run pan433:mapping:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 55;
+const ks238Inputs = [
+  ["docs/architecture/ks238-order-source-handoff-v1.md", "DERIVED_EVIDENCE"],
+  ["schemas/contracts/ks238-order-source-handoff-v1.schema.json", "SCHEMA"],
+  ["src/ks238/order-source-handoff.mjs", "SOURCE"],
+  ["tests/ks238/order-source-handoff.test.mjs", "VALIDATOR"],
+  ["verification/ks238-order-source-handoff-boundary-v1.json", "DERIVED_EVIDENCE"],
+];
+let ks238Node = dag.nodes.find(({ id }) => id === "ks238-order-source-handoff-v1");
+if (ks238Node === undefined) {
+  ks238Node = {
+    id: "ks238-order-source-handoff-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run ks238:test"],
+    invariants: [
+      "KS238 is a read-only thin composition over the released ERP order and customer readers; no second order module, write, approval, provider, runtime or public-write authority is granted.",
+      "The bounded handoff exposes only evidenced order/customer/status/quantity-unit/period facts; net revenue is never inferred from order status or ordered quantity and absent currency, amount, history and delivery facts remain unavailable.",
+      "The released reader executes on the exact labelled LOCAL_SYNTHETIC source; source bindings and content digests survive serialization without caller-resealed substitutions being treated as approval.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(ks238Node);
+}
+ks238Node.dependsOn = [];
+ks238Node.inputs = ks238Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+ks238Node.ownedTests = ["npm run ks238:test"];
+for (const [inputPath, role] of ks238Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`KS238_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run ks238:test")) repositoryIntegrityNode.ownedTests.push("npm run ks238:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
+dag.graphVersion = 56;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

@@ -92,5 +92,4 @@ KaleidoSphere lifecycle remains independently controlled by its own release
 checkout.
 
 Non-claims: no deployment, runtime activation, production/customer access,
-credential onboarding, database write-back, Superset administration, Casuvia
-access, or proof beyond the exact released SBA v0.8.0/contract 2.0.0 pair.
+credential onboarding, database write-back, Superset administration or proof beyond the exact released SBA v0.8.0/contract 2.0.0 pair.

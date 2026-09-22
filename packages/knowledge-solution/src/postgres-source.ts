@@ -258,8 +258,13 @@ const isQueryableClient = async (client: Client, timeoutMs: number): Promise<boo
  * that the actual client executes as exactly the probed role
  * (`SELECT current_user`); any other identity is rejected.
  */
-const verifyClientRoleV1 = async (client: Client, conn: PostgresConnectionArgsV1): Promise<void> => {
-  const row = (await runReadOnlyQueryV1<{ current_user: string }>(client, "SELECT current_user"))[0];
+const verifyClientRoleV1 = async (client: Client, conn: PostgresConnectionArgsV1, timeoutMs = 10_000): Promise<void> => {
+  // F5 (canonical-completion): the role verify is a WIRE query and, like the
+  // read itself, must be BOUNDED on the client side — the server-enforced
+  // statement_timeout is not in force yet at this point. A connection that
+  // completes the handshake then wedges (half-open / stalled-fsync) must not
+  // leave this await pending forever (the actual canonical-completion stall).
+  const row = (await runReadOnlyQueryV1<{ current_user: string }>(client, "SELECT current_user", timeoutMs))[0];
   const user = row?.current_user ?? "";
   if (user !== conn.user) {
     throw new PostgresReadDenied("PG_CONNECTION_FAILED",
@@ -278,7 +283,7 @@ export async function ensurePostgresClientConnectedV1(client: Client, conn: Post
   try {
     await withTimeout(client.connect(), timeoutMs, "adapter connect");
     // F5 (Restbefund): the used client must be the probed identity.
-    await verifyClientRoleV1(client, conn);
+    await verifyClientRoleV1(client, conn, timeoutMs);
     return { client, owned: true };
   } catch (error) {
     // 3) "Client has already been connected" (also: "cannot reuse a
@@ -292,7 +297,7 @@ export async function ensurePostgresClientConnectedV1(client: Client, conn: Post
         // F5 (Restbefund): the OPEN client must still be the probed role —
         // an admin client handed in for a read-only credential is not the
         // verified connection and is rejected (role binding).
-        await verifyClientRoleV1(client, conn);
+        await verifyClientRoleV1(client, conn, timeoutMs);
         return { client, owned: false };
       }
       // ENDED (or otherwise not queryable) client: no usable connection
@@ -323,17 +328,27 @@ export async function ensurePostgresClientConnectedV1(client: Client, conn: Post
  * server.
  */
 const PG_SESSION_SETTING_V1 = /^(?:statement_timeout|lock_timeout) = (\d+)$/;
-export function runSessionSettingV1(client: Client, setting: string): Promise<void> {
+export function runSessionSettingV1(client: Client, setting: string, queryTimeoutMs?: number): Promise<void> {
   const normalized = setting.replace(/\s+/g, " ").trim();
   const match = PG_SESSION_SETTING_V1.exec(normalized);
   if (match === null || match[1] === undefined || Number(match[1]) < 1 || Number(match[1]) > 60_000) {
     throw new PostgresReadDenied("PG_QUERY_NOT_ALLOWED", `session setting not closed: ${JSON.stringify(normalized)}`);
   }
-  return client
-    .query(`SET ${normalized}`)
+  // F5 (canonical-completion): the SET that establishes the server-enforced
+  // bound is itself a wire query and must be bounded on the client side; a
+  // wedged connection must not hang the session setup.
+  const bound = typeof queryTimeoutMs === "number" && Number.isFinite(queryTimeoutMs) && queryTimeoutMs > 0
+    ? { text: `SET ${normalized}`, query_timeout: Math.floor(queryTimeoutMs) }
+    : `SET ${normalized}`;
+  return (client as unknown as { query: (config: unknown) => Promise<unknown> })
+    .query(bound as never)
     .then(() => undefined)
     .catch((err: unknown) => {
-      throw new PostgresReadDenied("PG_QUERY_NOT_ALLOWED", String(err));
+      const code = (err as { code?: string })?.code;
+      const message = err instanceof Error ? err.message : String(err);
+      if (code === "28000" || code === "08006" || code === "08001" || code === "08003" || code === "08004") throw new PostgresReadDenied("PG_CONNECTION_FAILED", message);
+      if (code === "57014" || code === "55P03" || message === "Query read timeout") throw new PostgresReadDenied("PG_QUERY_TIMED_OUT", message);
+      throw new PostgresReadDenied("PG_QUERY_NOT_ALLOWED", message);
     });
 }
 
@@ -401,22 +416,33 @@ export async function readMarginContextFromPostgresV1(args: {
   // whose connection point is unreachable is rejected immediately and within
   // a bound — no hanging query.
   const { client, owned } = await ensurePostgresClientConnectedV1(args.client, conn);
+  // F5 (canonical-completion): EVERY wire query in the read phase is bounded
+  // on the client side (the server remains the authority). The caller can
+  // tighten the bound (args.queryTimeoutMs); otherwise the bound is the
+  // statement limit itself. This closes the actual canonical-completion
+  // stall: a connection that completes the handshake then wedges now rejects
+  // within the bound (PG_QUERY_TIMED_OUT / PG_CONNECTION_FAILED) instead of
+  // leaving the read pending forever (0 CPU, idle sockets, no output).
+  const readBoundMs = (typeof args.queryTimeoutMs === "number" && Number.isFinite(args.queryTimeoutMs) && args.queryTimeoutMs > 0
+    ? Math.min(args.queryTimeoutMs, PG_READ_STATEMENT_TIMEOUT_MS_V1)
+    : PG_READ_STATEMENT_TIMEOUT_MS_V1);
   try {
     // F5 (Restbefund): the ACTUAL read is enforced by the server on the
     // ACTUAL client (session statement/lock limits) — a client-side
     // timer alone left the real query unbounded (review: a SELECT held on
     // a locked table stayed undecided past 10s). The closed settings are
-    // issued ONLY through the session-setting gate above.
-    await runSessionSettingV1(client, `statement_timeout = ${PG_READ_STATEMENT_TIMEOUT_MS_V1}`);
-    await runSessionSettingV1(client, `lock_timeout = ${PG_READ_LOCK_TIMEOUT_MS_V1}`);
-    const rows = await readMarginRowsV1(client, args.queryTimeoutMs);
+    // issued ONLY through the session-setting gate above — and each SET is
+    // itself client-side bounded (they are wire queries too).
+    await runSessionSettingV1(client, `statement_timeout = ${PG_READ_STATEMENT_TIMEOUT_MS_V1}`, readBoundMs);
+    await runSessionSettingV1(client, `lock_timeout = ${PG_READ_LOCK_TIMEOUT_MS_V1}`, readBoundMs);
+    const rows = await readMarginRowsV1(client, readBoundMs);
     const pack = buildContextPackV1(rows, schema);
-    const readback = await buildReadbackV1(client, conn, rows.length, pack, args.queryTimeoutMs);
+    const readback = await buildReadbackV1(client, conn, rows.length, pack, readBoundMs);
     return { pack, readback };
   } finally {
     // F5 (Korrektur 0430): the adapter closes the client IT connected on
     // EVERY path (success and error), within a bound and residual-free.
-    if (owned) await closeOwnedClientV1(client);
+    if (owned) await closeOwnedClientV1(client, readBoundMs);
   }
 }
 
