@@ -17,7 +17,10 @@
     "zero receipt quantity is denied closed",
     "requesting 80 against 70 yields KLARUNG_ERFORDERLICH",
     "reservation of 71 is denied and does not emit a partial state",
-    "stale retained origin denies replenishment"
+    "stale retained origin produces VERFUEGBARKEIT_VERALTET clarification, never a promise",
+    "receipt after decision is rejected by JOURNEY_TIMESTAMP_ORDER_INVALID",
+    "reservation quantity 1 is rejected as RESERVATION_QUANTITY_MISMATCH",
+    "success, clarification, and denial readbacks validate against the published schema"
   ],
   "nonClaims": [
     "No provider or runtime change",
@@ -32,7 +35,11 @@
     "packages/contracts/src/kundenauftrag-lieferzusage-v1.ts",
     "packages/contracts/src/sales-stock-journey-v1.ts",
     "src/sales-stock/cli.mjs",
+    "tests/beschaffung-wareneingang-v1.test.ts",
+    "tests/bestand-nachschub-v1.test.ts",
+    "tests/kundenauftrag-lieferzusage-v1.test.ts",
     "tests/sales-stock-journey-v1.test.ts",
-    "tests/sales-stock-journey-cli.test.mjs"
+    "tests/sales-stock-journey-cli.test.mjs",
+    "verification/pan435-436-sales-stock-journey-v1.json"
   ]
 }

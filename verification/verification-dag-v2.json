@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 52,
+  "graphVersion": 53,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a8bd57d3cfd24e01381db702a98c83761d6dfe44f2260fd0804821a8f750bd03"
+          "sha256": "b9ce22e41c294e9ef23b62c21a85e0bec979364b820afcdf239acf65912169ca"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "0643df1343ffaeae296b33dca3a5eac8dbd41ce56e5a2185ef914b540440c38e"
+          "sha256": "ea3fa3ee314ebd743a3b7fe241be466ca5a6434be610e58788925fb533d04104"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "c094ce9ba0e4d33b91207f4fb4ecf6375e1b08ead0ce077fe9bdc5bcd66fe7eb"
+          "sha256": "c1808b7782c4a7bd80a78ba2eb57b7c895616d2e1bdabe35f4fbedc4cb955795"
         }
       ],
       "ownedTests": [
@@ -4811,7 +4811,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "f9c9da57de578453b089cdda36ee4de7828789a75b130d0d9edadaaa38fbd189"
+          "sha256": "74bfe96528fc2b64a0a54caf77407c04d699ac3d36b47c24f2e9316438696b86"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4856,7 +4856,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d2b022941d844e0d1ab4f540f71bbc5981c207f61ad9a73f2a941cf3669e324c"
+          "sha256": "189a3bc42a8a332a239fe14586d38ac2acde41cd36ffa2ef0062e870bc7ebc09"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4966,7 +4966,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "f10bf6679798e1ae969b510089189b6d727390487d0753b5f0a7e69ea67be5c8"
+          "sha256": "6b3b174196ab10f3fafc2cff6730fd0aa8d6cd2b95d3e6b71efbf6f060a2cc79"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5571,12 +5571,12 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "bee64a5d2067ee21d00785b0ff0eee4d87bb8393aaea6cccee56910f35bc029a"
+          "sha256": "76d8f82f78b56494f5364c6d406403816da444e20e035c2eaa5dcda7571dc543"
         },
         {
           "path": "package-lock.json",
           "role": "TOOLCHAIN",
-          "sha256": "6abaac85f64cecc6b088652a8d8e8a30448cb767403870812d44467a8e10b75f"
+          "sha256": "75ae0a0fa354b79287ff06048244b216dfe203181d509e2f09d9b9d1b07607ae"
         },
         {
           "path": "tsconfig.json",
@@ -5931,7 +5931,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "1a63edabd32d8f91a918dfdc598b6131ff9152b611820088fce0d3addcf81604"
+          "sha256": "6b087ab9a4d7498769aefecc6ef60574c5660a7d702b76f076d3d6c42e7accbe"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6466,12 +6466,12 @@
         {
           "path": "contracts/sales-stock-journey-v1.schema.json",
           "role": "SCHEMA",
-          "sha256": "b938157216ed841c5dc5d49881eb66a95b2649fb6ae02833307d6095f58b7ca4"
+          "sha256": "d2fcb74b6d73bb8a734837e64d8acba7c8bd9510819b83b0ed18ad7aad2fd914"
         },
         {
           "path": "docs/architecture/pan435-436-sales-stock-journey-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "2b2aea477ec591898c655125b25b5e126bcad84cfa6ec36a39c28e25f403c61f"
+          "sha256": "3517d689b5d069711f2b18b7b51d80a2cfc1f12685f3b683543729b4afec1d9a"
         },
         {
           "path": "packages/contracts/src/beschaffung-wareneingang-v1.ts",
@@ -6484,19 +6484,14 @@
           "sha256": "ac42f06a963731ed8f5a9da83fe3de319794d1ee8d2dd7a92c3af5bc1ca8b7bf"
         },
         {
-          "path": "packages/contracts/src/erp-order-capability-cell.ts",
-          "role": "CONTRACT",
-          "sha256": "a13750c0abeaae4fe9f2ce9580021d22f86eb9550f19ad7e104119a7603f2ea1"
-        },
-        {
           "path": "packages/contracts/src/kundenauftrag-lieferzusage-v1.ts",
           "role": "CONTRACT",
-          "sha256": "45f7f39eb75b7b045ced97e9cca65a203e28bf40c98ac090f7c7df4571f8b61a"
+          "sha256": "196aae1ad888fc62eed247b1b2e5c7f636f5febdccda38859d5c9bb7e1b5b461"
         },
         {
           "path": "packages/contracts/src/sales-stock-journey-v1.ts",
           "role": "CONTRACT",
-          "sha256": "88d178e709aff8931df2c02ed95e0159f2a40eddc325a524cb224684b15f83a4"
+          "sha256": "1a583a8f1caf9e73ac87d001c7687c628536ac7799fc4cafd079380e86a862f3"
         },
         {
           "path": "src/sales-stock/cli.mjs",
@@ -6521,17 +6516,17 @@
         {
           "path": "tests/sales-stock-journey-cli.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "4f42ff67ebd97a2f15574c3fc96fa20997f5082dd8d121a848017eae9f92bd6a"
+          "sha256": "a89c8dbc6a2a9d288c0ed1a81461692c3229f5d2e9748e58c1be33ea24ba8568"
         },
         {
           "path": "tests/sales-stock-journey-v1.test.ts",
           "role": "VALIDATOR",
-          "sha256": "3e74301a464e9c68673e4b40644bd02c696fc48369437bf7b61bf31863fb306c"
+          "sha256": "6f335ca58d2f95ad0a677607e0ffd10d4106da717c40838465e4bf7b49edbbcd"
         },
         {
           "path": "verification/pan435-436-sales-stock-journey-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "8d06f48857320d5747e8aa590f928ef5eb62e58b1a1ecfb2a4f393d77b4e3e56"
+          "sha256": "2ae4c1e6f10f43bea2a1ef4928fd7d5e2f1b696a061a38c67a9d0f60dd3e79e9"
         }
       ],
       "ownedTests": [

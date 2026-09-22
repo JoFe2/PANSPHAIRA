@@ -196,6 +196,8 @@ if total_bytes > 100 * 1024 * 1024:
 
 expected = set(destinations)
 repository_only_files = {
+    "HANDOFF.md",
+    "TASKS.md",
     ".github/FUNDING.yml",
     ".github/workflows/daily-poc-candidate.yml",
     "SHA256SUMS",

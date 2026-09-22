@@ -71,8 +71,13 @@ export type KundenauftragVerfuegbarkeitEvidenzV1 =
   | KundenauftragVerfuegbarkeitV1
   | Readonly<{ readonly quelle: "UNBEWEIST" }>;
 
+/** A one-day closed horizon keeps the existing one-day synthetic acceptance current. */
+export const KUNDENAUFTRAG_VERFUEGBARKEIT_MAX_ALTER_TAGE_V1 = 1 as const;
+
 export const KUNDENAUFTRAG_KLAERUNG_GRUND_CODE_V1 = [
   "VERFUEGBARKEIT_UNBEWEIST",
+  "VERFUEGBARKEIT_VERALTET",
+  "VERFUEGBARKEIT_ZUKUNFT",
   "ENGPASS_MENGE_OBER_VERFUEGBAR",
   "LIEFERFRIST_IN_VERGANGENHEIT",
   "LIEFERFRIST_UNREAL",
@@ -358,6 +363,22 @@ export function executeKundenauftragAsLieferzusageV1(
   //    never a promise-shaped success.
   if (b.verfuegbarkeit.quelle === "UNBEWEIST") {
     return { outcome: "KLARUNG", klarung: klarungV1(b, "VERFUEGBARKEIT_UNBEWEIST", "no closed availability evidence (UNBEWEIST); availability is declared, not inferred.") };
+  }
+  // The sales boundary owns freshness too. A syntactically valid stock date
+  // is not current merely because it has enough units. The one-day horizon is
+  // deliberately the same closed synthetic acceptance used by the connected
+  // journey, and the future case fails closed before any cell execution.
+  const observedMs = Date.parse(`${b.verfuegbarkeit.beobachtetAm}T00:00:00Z`);
+  const decisionMs = Date.parse(`${b.zeitbasis}T00:00:00Z`);
+  const ageDays = (decisionMs - observedMs) / 86_400_000;
+  if (!Number.isFinite(observedMs) || !Number.isFinite(decisionMs)) {
+    return { outcome: "DENIED", code: "KUNDENAUFTRAG_VERFUEGBARKEIT_NOT_CLOSED", detail: "availability freshness could not be evaluated from the closed date evidence." };
+  }
+  if (ageDays < 0) {
+    return { outcome: "KLARUNG", klarung: klarungV1(b, "VERFUEGBARKEIT_ZUKUNFT", `availability observed ${b.verfuegbarkeit.beobachtetAm} is after the decision basis ${b.zeitbasis}; future stock cannot support a promise.`) };
+  }
+  if (ageDays > KUNDENAUFTRAG_VERFUEGBARKEIT_MAX_ALTER_TAGE_V1) {
+    return { outcome: "KLARUNG", klarung: klarungV1(b, "VERFUEGBARKEIT_VERALTET", `availability observed ${b.verfuegbarkeit.beobachtetAm} is ${ageDays} days old, beyond the closed ${KUNDENAUFTRAG_VERFUEGBARKEIT_MAX_ALTER_TAGE_V1}-day sales horizon.`) };
   }
   const verfuegbar = verfuegbarVonStock(b.verfuegbarkeit.bestandsposition);
   // 3. shortage: available below the requested menge is a clarification.

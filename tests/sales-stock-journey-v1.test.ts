@@ -1,5 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import Ajv2020 from "ajv/dist/2020.js";
 import {
   DEFAULT_SALES_STOCK_JOURNEY_INPUT_V1,
   runSalesStockJourneyV1,
@@ -38,11 +40,42 @@ test("reservation over available stock is denied without a partial state", () =>
   assert.equal(result.code, "AENDERUNG_INSUFFICIENT_AVAILABLE");
 });
 
-test("stale retained stock evidence denies replenishment", () => {
+test("stale retained stock evidence cannot cross the sales promise boundary", () => {
   const result = runSalesStockNegativeProbeV1("stale-observation");
+  assert.equal(result.outcome, "CONNECTED_SALES_STOCK_CLARIFICATION");
+  if (result.outcome !== "CONNECTED_SALES_STOCK_CLARIFICATION") return;
+  assert.equal(result.stage, "LIEFERPROPOSAL");
+  assert.equal(result.clarification.grundCode, "VERFUEGBARKEIT_VERALTET");
+  assert.match(result.clarification.detail, /old|horizon/i);
+});
+
+test("a receipt after the sales decision is rejected before stock can support a promise", () => {
+  const result = runSalesStockJourneyV1({
+    ...DEFAULT_SALES_STOCK_JOURNEY_INPUT_V1,
+    receiptAt: "2026-09-21T13:00:00Z",
+  });
   assert.equal(result.outcome, "DENIED");
   if (result.outcome !== "DENIED") return;
-  assert.equal(result.stage, "NACHSCHUB");
-  assert.equal(result.code, "BESTANDSFRISCHHEIT_VERALTET");
-  assert.match(result.detail, /stale/i);
+  assert.equal(result.stage, "INPUT");
+  assert.equal(result.code, "JOURNEY_TIMESTAMP_ORDER_INVALID");
+});
+
+test("reservation quantity is bound to the accepted sales quantity", () => {
+  const result = runSalesStockJourneyV1({ ...DEFAULT_SALES_STOCK_JOURNEY_INPUT_V1, reservationQuantity: 1 });
+  assert.equal(result.outcome, "DENIED");
+  if (result.outcome !== "DENIED") return;
+  assert.equal(result.stage, "BESTAND_RESERVATION");
+  assert.equal(result.code, "RESERVATION_QUANTITY_MISMATCH");
+});
+
+
+test("success, clarification, and denial readbacks all satisfy the published journey schema", () => {
+  const schema = JSON.parse(readFileSync("contracts/sales-stock-journey-v1.schema.json", "utf8"));
+  const validate = new Ajv2020({ allErrors: true, strict: true }).compile(schema);
+  const results = [
+    runSalesStockJourneyV1(),
+    runSalesStockJourneyV1({ ...DEFAULT_SALES_STOCK_JOURNEY_INPUT_V1, requestedQuantity: 80 }),
+    runSalesStockJourneyV1({ ...DEFAULT_SALES_STOCK_JOURNEY_INPUT_V1, receiptAt: "2026-09-21T13:00:00Z" }),
+  ];
+  for (const result of results) assert.equal(validate(result), true, JSON.stringify(validate.errors));
 });

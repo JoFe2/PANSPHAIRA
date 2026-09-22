@@ -159,15 +159,26 @@ function denied(stage: string, value: unknown, codeOverride?: string): SalesStoc
   };
 }
 
+function closedDateTime(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(value)) return false;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) && new Date(parsed).toISOString().replace(".000Z", "Z") === value;
+}
+
 function inputClosed(input: unknown): input is SalesStockJourneyInputV1 {
   if (input === null || typeof input !== "object") return false;
   const value = input as Record<string, unknown>;
   const integers = ["receiptQuantity", "requestedQuantity", "reservationQuantity", "replenishmentThreshold", "replenishmentQuantity"];
   if (integers.some((key) => !Number.isSafeInteger(value[key]) || (value[key] as number) < 1)) return false;
   const dates = ["observedAt", "receiptAt", "decisionAt"];
-  if (dates.some((key) => typeof value[key] !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(value[key] as string))) return false;
+  if (dates.some((key) => !closedDateTime(value[key]))) return false;
   if (typeof value.promisedDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.promisedDate)) return false;
   return true;
+}
+
+function reservedStockQuantity(lage: BestandslageV1): number {
+  const position = lage.positions.find(({ artikelId, lagerortId }) => artikelId === IDENTITY.m3ArtikelId && lagerortId === IDENTITY.m3LagerortId);
+  return position === undefined ? 0 : position.physisch - position.reserviert;
 }
 
 function stockEvidence(input: SalesStockJourneyInputV1, physical: number, reserved: number) {
@@ -190,6 +201,15 @@ function stockEvidence(input: SalesStockJourneyInputV1, physical: number, reserv
 export function runSalesStockJourneyV1(input: unknown = DEFAULT_SALES_STOCK_JOURNEY_INPUT_V1): SalesStockJourneyResultV1 {
   if (!inputClosed(input)) return denied("INPUT", { code: "JOURNEY_INPUT_NOT_CLOSED", detail: "Journey quantities must be positive safe integers and timestamps/dates must use closed ISO forms." });
   const value = input;
+  const observedMs = Date.parse(value.observedAt);
+  const receiptMs = Date.parse(value.receiptAt);
+  const decisionMs = Date.parse(value.decisionAt);
+  if (!(observedMs <= receiptMs && receiptMs <= decisionMs)) {
+    return denied("INPUT", {
+      code: "JOURNEY_TIMESTAMP_ORDER_INVALID",
+      detail: `Stock observation, receipt and decision must be ordered observedAt <= receiptAt <= decisionAt; received ${value.observedAt} <= ${value.receiptAt} <= ${value.decisionAt}.`,
+    });
+  }
   const orderResult = bestellungsentwurfBildenV1({
     bestellungId: "bestellung:sales-stock-001",
     lieferantId: "lieferant:synthetic-001",
@@ -266,6 +286,22 @@ export function runSalesStockJourneyV1(input: unknown = DEFAULT_SALES_STOCK_JOUR
     };
   }
 
+  const availableForReservation = reservedStockQuantity(receivedStock.lage.lage);
+  if (value.reservationQuantity !== proposal.receipt.entscheidung.menge) {
+    // Preserve the original insufficient-stock terminal for an over-available
+    // negative probe, but never let any mismatched quantity become a success.
+    if (value.reservationQuantity > availableForReservation) {
+      return denied("BESTAND_RESERVATION", {
+        code: "AENDERUNG_INSUFFICIENT_AVAILABLE",
+        detail: `RESERVIERUNG ${value.reservationQuantity} exceeds verfuegbar ${availableForReservation}; the requested reservation is both mismatched and unavailable.`,
+      });
+    }
+    return denied("BESTAND_RESERVATION", {
+      code: "RESERVATION_QUANTITY_MISMATCH",
+      detail: `reservationQuantity ${value.reservationQuantity} does not equal the accepted sales quantity ${proposal.receipt.entscheidung.menge}; a connected success cannot be under- or over-reserved.`,
+    });
+  }
+
   const reservation: BestandAenderungV1 = {
     schemaVersion: "cm.fachprofil/bestand-aenderung/v1",
     aenderungsId: "aenderung:bestand-kundenauftrag-sales-stock-001",
@@ -273,7 +309,7 @@ export function runSalesStockJourneyV1(input: unknown = DEFAULT_SALES_STOCK_JOUR
     lagerortId: IDENTITY.m3LagerortId,
     einheit: BESTAND_UNIT_V1,
     art: "RESERVIERUNG",
-    menge: value.reservationQuantity,
+    menge: proposal.receipt.entscheidung.menge,
     zeitstempel: value.decisionAt,
     beleg: {
       belegId: "request:erp-cell-sales-stock-001",

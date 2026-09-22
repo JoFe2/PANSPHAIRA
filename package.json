@@ -28,7 +28,8 @@
   },
   "packageManager": "npm@11.16.0",
   "overrides": {
-    "vite": "6.4.3"
+    "vite": "6.4.3",
+    "nanoid": "3.3.18"
   },
   "scripts": {
     "module:check": "node --test tests/module-contribution.test.mjs tests/module-contribution-workflow.test.mjs && node scripts/module-contribution.mjs check",
@@ -188,7 +189,7 @@
     "incoming-invoice-erv-analytics:test": "npm run build --silent && node --test dist/tests/incoming-invoice-erv-analytics.test.js",
     "cscl13:test:compiled": "node --test tests/cscl-13/complaint.test.mjs tests/cscl-13/pan437-neighbor.test.mjs",
     "cscl13:test": "npm run build --silent && node --test tests/cscl-13/complaint.test.mjs tests/cscl-13/pan437-neighbor.test.mjs",
-    "sales-stock:journey": "npm run build --silent && node src/sales-stock/cli.mjs",
+    "sales-stock:journey": "npm run build --silent && node src/sales-stock/cli.mjs run",
     "sales-stock:journey:test": "npm run build --silent && node --test dist/tests/beschaffung-wareneingang-v1.test.js dist/tests/bestand-nachschub-v1.test.js dist/tests/kundenauftrag-lieferzusage-v1.test.js dist/tests/sales-stock-journey-v1.test.js tests/sales-stock-journey-cli.test.mjs"
   },
   "dependencies": {
