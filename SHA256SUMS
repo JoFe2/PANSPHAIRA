@@ -4,7 +4,7 @@ be11d10c855ee8c64ac199042dbe0aa3b86954c992a047e74faad0d56b185cf5  ./.github/ISSU
 b26d1df4ca91d7d4265db817d2fd528f76b595e5c6a7d2fe6b28401fa1a7df6a  ./.github/ISSUE_TEMPLATE/delivery-contract.yml
 bc9b83b752e2d2196cf1a3b0aba43e12ab7f3485cfbdc96d2c072f92b59356a4  ./.github/ISSUE_TEMPLATE/feature-request.yml
 2376a43579a9c039f01df6fd0b5bcc058070b96f4f49e756b80f8005c5ebd9f3  ./.github/PULL_REQUEST_TEMPLATE.md
-9abc98248b1fc96849c0c440c2967b5c8fbca78f2288077d621b0e00ab0b8d9c  ./.github/workflows/ci.yml
+1cae4db625f04fea4f8d743a38be09217ec5646886dbb30b1ac1421e78b26529  ./.github/workflows/ci.yml
 3cb93d13f4a3ed8f4666fbd68d033aa5446d473ddd35a39b12fad8e57e29b00a  ./.github/workflows/daily-poc-candidate.yml
 58b7743dc986a6f4c9faf661ab9a774446f02bf3d215315578d041af0ca477e4  ./.github/workflows/demo-current-head-e2e.yml
 9d4ce3ce2b2ceeb992b6f31ebfd9e7e0fbcd8ff5b4e9b40c1888c11c71be55cf  ./.github/workflows/docs-pages.yml
@@ -1949,5 +1949,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-66589c5a47a80125d1dbb3c45caa45726bc41c5fa731c7bc02f773d118c4e5ec  ./verification/verification-dag-v2.json
+37042e4a15a7732e117bf10b2b345331999627f267f1a7ce780b5c7e724d85a6  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
