@@ -94,6 +94,24 @@
       "dependencies": {
         "procurement-invoice-matching": "1"
       }
+    },
+    {
+      "id": "pan433-domain-mapping",
+      "version": "1",
+      "sources": [
+        "packages/contracts/src/pan433-domain-mapping-v1.ts",
+        "src/pan433"
+      ],
+      "contracts": [],
+      "profiles": [
+        "tests/fixtures/pan433"
+      ],
+      "tests": [
+        "tests/pan433/domain-mapping.test.mjs"
+      ],
+      "dependencies": {
+        "procurement-invoice-matching": "1"
+      }
     }
   ]
 }

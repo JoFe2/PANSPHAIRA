@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "pan433.storage/invoice-document/v2",
+  "sourceSystem": "PAN433_ALTERNATE_SYNTHETIC",
+  "sourceDatasetId": "dataset:pan433-alternate-001",
+  "sourceDigest": "103fb1e5d74628b38d25fec635b07ab516391554e59d40bcaf3f0ed2def0297e",
+  "documents": [
+    {
+      "documentId": "doc:pan433-001",
+      "changedAt": "2026-09-10T07:55:00Z",
+      "commercial": {
+        "number": "invoice:synthetic-101",
+        "orderRef": "order:synthetic-101",
+        "customerRef": "customer:zoo-001"
+      },
+      "lifecycle": {
+        "state": "OPEN",
+        "issuedOn": "2026-09-02",
+        "payBy": "2026-09-16"
+      },
+      "money": {
+        "grossMinor": 2400,
+        "currencyCode": "EUR"
+      }
+    }
+  ]
+}

@@ -1599,3 +1599,8 @@ tests/fixtures/procurement-434/po-identity-mapping-v1.json	tests/fixtures/procur
 tests/procurement-434/rechnungsabgleich-path.test.mjs	tests/procurement-434/rechnungsabgleich-path.test.mjs	0644
 tests/rechnungsabgleich-match-v1.test.ts	tests/rechnungsabgleich-match-v1.test.ts	0644
 tests/rechnungsabgleich-v1.test.ts	tests/rechnungsabgleich-v1.test.ts	0644
+packages/contracts/src/pan433-domain-mapping-v1.ts	packages/contracts/src/pan433-domain-mapping-v1.ts	0644
+src/pan433/domain-mapping-cli.mjs	src/pan433/domain-mapping-cli.mjs	0644
+tests/fixtures/pan433/alternate-invoice-document-v2.json	tests/fixtures/pan433/alternate-invoice-document-v2.json	0644
+tests/fixtures/pan433/default-invoice-row-v1.json	tests/fixtures/pan433/default-invoice-row-v1.json	0644
+tests/pan433/domain-mapping.test.mjs	tests/pan433/domain-mapping.test.mjs	0644

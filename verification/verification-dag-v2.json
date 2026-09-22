@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 53,
+  "graphVersion": 54,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "b9ce22e41c294e9ef23b62c21a85e0bec979364b820afcdf239acf65912169ca"
+          "sha256": "6ff911079a03cce40b34844786880237b4f07055f4da4766461ed609e3b36c6d"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "ea3fa3ee314ebd743a3b7fe241be466ca5a6434be610e58788925fb533d04104"
+          "sha256": "6caa7c952bf59187e0f190b3ceca30b97ee73b85156ecc063ad1831d4c186bbe"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "c1808b7782c4a7bd80a78ba2eb57b7c895616d2e1bdabe35f4fbedc4cb955795"
+          "sha256": "a371afc688e439af6de7691310a88c3b036a20dce53ccf8acd9e044223d3864f"
         }
       ],
       "ownedTests": [
@@ -4029,7 +4029,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "f7b16d3111a1deddeae4f99519a86b5f61703b482a3f6a2a8049964b9edfe3b1"
+          "sha256": "cbf19e5172de3fb79371de44afa6165853e60857f75c75d310cdd66a7dde0456"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -4749,6 +4749,11 @@
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
         },
         {
+          "path": "docs/development/pan433-domain-mapping-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f06091367ebc02ad5916225cf9fc6a9829c9e5ed7e5365b7665a064d889188fb"
+        },
+        {
           "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "8ee060c3f158810c93e097e83ab55297c0d976b92c0392fdd290d6d33a88b7bd"
@@ -4761,7 +4766,7 @@
         {
           "path": "docs/MODULE-CONTRIBUTION.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "279f69c5f711f980f40b744723e85ad810b1f087403e3e84e6341ec492face17"
+          "sha256": "73a5b5743f1f1477f5677fef480ba7f2020ddf7eb62258941ba78f9600c6e87d"
         },
         {
           "path": "docs/QUICKSTART.md",
@@ -4781,12 +4786,17 @@
         {
           "path": "examples/module-contribution/modules.json",
           "role": "CONTRACT",
-          "sha256": "17888d0f9dfa7d441b08713442366abd526e68eb228649d875ff996870955073"
+          "sha256": "4ff4ea974dbe732e44e8acc6a55503dd493601e150b2283396f767e1ecefd3b9"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
           "role": "CONTRACT",
           "sha256": "e60fb079364bc48d12629825531299bc7abd9986c5299067e450e7577ef75b1f"
+        },
+        {
+          "path": "packages/contracts/src/pan433-domain-mapping-v1.ts",
+          "role": "CONTRACT",
+          "sha256": "e94898b9e55e235663ca052a6eba0d2ff6c7104cc6bb9b42bcb31459f3b99cfb"
         },
         {
           "path": "README.md",
@@ -4801,7 +4811,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "0398fc5e420411ccc6f7cfdf11d98e5654a90dafe91a532a8fb9f99e14bb372d"
+          "sha256": "0b33316b0d7eddee362150ba8a632f392873e3b32d50ee130564d4465b29434d"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4811,7 +4821,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d5d25336032dba22195020f49d040d2d37534165660d862a417d136fb7107463"
+          "sha256": "7eb30bfb9ef7dacc13643eaefef652de9a327aa1de5fa9658d92a8de03cb2ec5"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4854,9 +4864,14 @@
           "sha256": "4844b37acb7f8f3e8b28152901a47a963abec302caf7d29b0aa205e53063980f"
         },
         {
+          "path": "src/pan433/domain-mapping-cli.mjs",
+          "role": "SOURCE",
+          "sha256": "e2d5fba3fdd8ce038e1e3a4be7588112c3897e0a63dd7cf9f62b1eba42eb2303"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "9a727c0c15a8f11bb47ffb5756c997db5a826d76bd64f7823eb747b21874cb2a"
+          "sha256": "d51afff283db0aa4b6151df81b9027adb44b897cdd4d1bfb1571e2f877a7bf0e"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4904,6 +4919,16 @@
           "sha256": "98c7f8311bf244f804aeb23ff7cefefc3f521670468f72f4bb4a5170b2329ec9"
         },
         {
+          "path": "tests/fixtures/pan433/alternate-invoice-document-v2.json",
+          "role": "FIXTURE",
+          "sha256": "9b132aef2e4b3d168ab1009ff0eccb5436291f7564e0568f3d16614ea24f6ff9"
+        },
+        {
+          "path": "tests/fixtures/pan433/default-invoice-row-v1.json",
+          "role": "FIXTURE",
+          "sha256": "68c8a0c453d83de89716277ade2cbc3d1e2a5f6eacf01155c290a0900e96d2f0"
+        },
+        {
           "path": "tests/forward-paired-analytics.test.mjs",
           "role": "VALIDATOR",
           "sha256": "beeec220b3022f0cd8d02642dae94511ceafd861ee3b26d27d333c76197de541"
@@ -4931,7 +4956,7 @@
         {
           "path": "tests/module-contribution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "ab1a603c567646690ac94277b8ead10a6554f91e64ff0d2defcd7de6868e1891"
+          "sha256": "f949dcc7623aec18c1ec297cf53b0bcde272b6b7c717bdd14b75b30057c66254"
         },
         {
           "path": "tests/native-forward-qualification.test.mjs",
@@ -4949,6 +4974,11 @@
           "sha256": "3ad09ab6653bc3c2f261b46421a64d42018f19c6873641c790fde33d4adcc538"
         },
         {
+          "path": "tests/pan433/domain-mapping.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "773db50b738d0fa6e7a446ed39a8799806429d5c6804ed05e3d45c1c91455323"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
           "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
@@ -4956,7 +4986,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "015724b63e2509e67ca48ce00aa9171028dab5affa33a0dc817082548e65fec9"
+          "sha256": "c2d9e84bfe7feb317da4194837930a9a1ad05915946c2ede9b8810f6b115f9b2"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4966,7 +4996,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "b6576ec5d56a029888c83876bcb626bbd605503960784eac798c803f34967df1"
+          "sha256": "a300fa53f18c39f15afcae9edcf90b9d32702ee4151029fdf22e3461581dc4e9"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5016,7 +5046,8 @@
         "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js",
         "node --test tests/demo-current-head-e2e*.test.mjs",
         "npm run paired-analytics:test",
-        "npm run module:check"
+        "npm run module:check",
+        "npm run pan433:mapping:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5571,7 +5602,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "e91486cff0c5377a7aa91e741ba899b6eb316cbd445640c37a9382ebaec054b7"
+          "sha256": "a2c106b8d0b76fdf75987818024c055c9bf15a82e7b58a71782b5dbe1bfecfc3"
         },
         {
           "path": "package-lock.json",
@@ -5931,7 +5962,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "afbc462f6a1728718accd4f8b90166deb50e41eaa8693309d0c4b753a92a5e55"
+          "sha256": "d629a03d2eb6584732036ab80acb7dd032f2dda76c862ec34383faff6a2324fa"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6196,7 +6227,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "0398fc5e420411ccc6f7cfdf11d98e5654a90dafe91a532a8fb9f99e14bb372d"
+          "sha256": "0b33316b0d7eddee362150ba8a632f392873e3b32d50ee130564d4465b29434d"
         }
       ],
       "ownedTests": [
@@ -6538,6 +6569,57 @@
         "M1 receipt quantity reaches M3 only through the explicit identity/unit adapter and retained source-bound lineage.",
         "M2 availability is evidence-bound; shortage is clarification, and successful M2 proposal is followed by a source-bound M3 reservation.",
         "M3 replenishment is freshness-bound and nonbinding; stale or unknown origin never silently produces a threshold decision."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan433-domain-mapping-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/development/pan433-domain-mapping-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "f06091367ebc02ad5916225cf9fc6a9829c9e5ed7e5365b7665a064d889188fb"
+        },
+        {
+          "path": "examples/module-contribution/modules.json",
+          "role": "CONTRACT",
+          "sha256": "4ff4ea974dbe732e44e8acc6a55503dd493601e150b2283396f767e1ecefd3b9"
+        },
+        {
+          "path": "packages/contracts/src/pan433-domain-mapping-v1.ts",
+          "role": "CONTRACT",
+          "sha256": "e94898b9e55e235663ca052a6eba0d2ff6c7104cc6bb9b42bcb31459f3b99cfb"
+        },
+        {
+          "path": "src/pan433/domain-mapping-cli.mjs",
+          "role": "SOURCE",
+          "sha256": "e2d5fba3fdd8ce038e1e3a4be7588112c3897e0a63dd7cf9f62b1eba42eb2303"
+        },
+        {
+          "path": "tests/fixtures/pan433/alternate-invoice-document-v2.json",
+          "role": "FIXTURE",
+          "sha256": "9b132aef2e4b3d168ab1009ff0eccb5436291f7564e0568f3d16614ea24f6ff9"
+        },
+        {
+          "path": "tests/fixtures/pan433/default-invoice-row-v1.json",
+          "role": "FIXTURE",
+          "sha256": "68c8a0c453d83de89716277ade2cbc3d1e2a5f6eacf01155c290a0900e96d2f0"
+        },
+        {
+          "path": "tests/pan433/domain-mapping.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "773db50b738d0fa6e7a446ed39a8799806429d5c6804ed05e3d45c1c91455323"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan433:mapping:test"
+      ],
+      "invariants": [
+        "PAN433 is a read-only thin boundary with two explicit versioned storage profiles and one shared released invoice fact consumer.",
+        "The alternate profile is code-owned and approved only in this bounded PAN433 surface; caller-rehashed profiles, unsupported versions, tampered sources, unknown fields and ambiguous records fail closed.",
+        "Synthetic source authority, currency, identity and the released core's declared quantity loss remain explicit; no ERP interoperability, provider, runtime, controller or write authority is claimed."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

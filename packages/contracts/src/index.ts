@@ -149,3 +149,4 @@ export * from "./kundenauftrag-lieferzusage-v1.js";
 export * from "./rechnungsabgleich-v1.js";
 export * from "./rechnungsabgleich-match-v1.js";
 export * from "./sales-stock-journey-v1.js";
+export * from "./pan433-domain-mapping-v1.js";
