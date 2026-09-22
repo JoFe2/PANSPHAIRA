@@ -197,9 +197,10 @@
     "kts02:test": "npm run build --silent && node --test dist/tests/knowledge-solution/kts02-guided-adaptation.test.js",
     "kts03:test": "npm run build --silent && node --test dist/tests/knowledge-solution/kts03-postgres-adapter.test.js",
     "kts04:test": "npm run build --silent && node --test dist/tests/knowledge-solution/kts04-integrated-user-path.test.js",
-    "kts:test": "npm run kts01:test && npm run kts02:test && npm run kts03:test && npm run kts04:test && npm run kts05:test",
-    "kts:all": "npm run build --silent && node --test --test-concurrency=1 dist/tests/knowledge-solution/kts01-method-library.test.js dist/tests/knowledge-solution/kts02-guided-adaptation.test.js dist/tests/knowledge-solution/kts03-postgres-adapter.test.js dist/tests/knowledge-solution/kts04-integrated-user-path.test.js dist/tests/knowledge-solution/kts05-followup-regressions.test.js",
-    "kts05:test": "npm run build --silent && node --test --test-concurrency=1 dist/tests/knowledge-solution/kts05-followup-regressions.test.js"
+    "kts:test": "npm run kts01:test && npm run kts02:test && npm run kts03:test && npm run kts04:test && npm run kts05:test && npm run kts06:test",
+    "kts:all": "npm run build --silent && node --test --test-concurrency=1 dist/tests/knowledge-solution/kts01-method-library.test.js dist/tests/knowledge-solution/kts02-guided-adaptation.test.js dist/tests/knowledge-solution/kts03-postgres-adapter.test.js dist/tests/knowledge-solution/kts04-integrated-user-path.test.js dist/tests/knowledge-solution/kts05-followup-regressions.test.js dist/tests/knowledge-solution/kts06-residual-regressions.test.js",
+    "kts05:test": "npm run build --silent && node --test --test-concurrency=1 dist/tests/knowledge-solution/kts05-followup-regressions.test.js",
+    "kts06:test": "npm run build --silent && node --test --test-concurrency=1 dist/tests/knowledge-solution/kts06-residual-regressions.test.js"
   },
   "dependencies": {
     "ajv": "8.20.0",

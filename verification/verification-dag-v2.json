@@ -4811,7 +4811,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d5d25336032dba22195020f49d040d2d37534165660d862a417d136fb7107463"
+          "sha256": "6509054e4f242f89312d7ff70f15ac665d00f2afaadc38d0bcf03b9aeccb8287"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4856,7 +4856,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "9a727c0c15a8f11bb47ffb5756c997db5a826d76bd64f7823eb747b21874cb2a"
+          "sha256": "349a5cffb61232e63c98445d450f1e3f2c6dd958be98dec4289a0c01da3fb0d7"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4966,7 +4966,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "b6576ec5d56a029888c83876bcb626bbd605503960784eac798c803f34967df1"
+          "sha256": "d2ac231d2e147ef29a1d2dbb917ef2e332fa0b5a044179394edc75dbc04685b4"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5571,12 +5571,12 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "e91486cff0c5377a7aa91e741ba899b6eb316cbd445640c37a9382ebaec054b7"
+          "sha256": "c5bdcf0c6f3a94d69d8d1f310b1ee6ec2cea22931041a1ece70d0b2a0100ba05"
         },
         {
           "path": "package-lock.json",
           "role": "TOOLCHAIN",
-          "sha256": "75ae0a0fa354b79287ff06048244b216dfe203181d509e2f09d9b9d1b07607ae"
+          "sha256": "878861fca6e25f0ee8a72be0920941283fcc1ccc5aa9a9a20a354930f55323d3"
         },
         {
           "path": "tsconfig.json",

@@ -10,7 +10,7 @@ bc9b83b752e2d2196cf1a3b0aba43e12ab7f3485cfbdc96d2c072f92b59356a4  ./.github/ISSU
 9d4ce3ce2b2ceeb992b6f31ebfd9e7e0fbcd8ff5b4e9b40c1888c11c71be55cf  ./.github/workflows/docs-pages.yml
 36cf9ee92f73216f69e450a76f320ab82c2735803cf4fbf2c0aa596be684eb57  ./.github/workflows/paired-analytics-parity.yml
 ae4f1a874d88f9319c56b40b266b42c981f79a859754e8c65b636cddc968e568  ./.github/workflows/release-public-readback.yml
-3f9f74e0d1a730816b6ff8297ab6e29ae4da0107fbec40a0e1ba5409be6f3f9d  ./.gitignore
+f9253ca9004ed97597d41a249b152f976e2e0b6a7481cffff4249c9f9237731d  ./.gitignore
 dc3947ffc90697888a5a17a24186b1034571ecba327686841f0227ebc2645b1a  ./CITATION.cff
 1ea7ed01e8c48030ca70c3ae0ec56e05a1ac45a854fc39b662f4aa71d499225f  ./CODE_OF_CONDUCT.md
 4e9748812c042ce23446ce220f97c6771d165bf032d4231ed5f2f0a967c58b2b  ./CONTRIBUTING.md
@@ -21,7 +21,7 @@ d450ed03544412c411173e098a89976228d98f9a76634b0ec09e19134382ef74  ./NOTICE
 0a38be0ac9bc0dc552a560c395dea68a977bcfdfa75216a926e4eb9637580e18  ./README.md
 c544769f111fe1df5e69c339acbb571ce65df1739009b543c12c27b9e8763845  ./SECURITY.md
 0e0e96fac3ab8987078d9e0f0ceae4f438b7a324f925b08b2d5cfee71a0b7c51  ./SUPPORT.md
-71b5aae0d4cbc344a2d916faaa7b763aa34f5cea32e9a4466bb21fd0e3bd9f17  ./THIRD_PARTY_NOTICES.md
+e4fedc6b637baf6fe87fa6b58c1fdc08653299967b3b8b22b7e8c85acfa6d774  ./THIRD_PARTY_NOTICES.md
 b4bee53218ad05edba3d866f715d8519e683802224c14a5f41cdd74a16d4fb88  ./WITHDRAWAL.md
 79e4ef955e4ade12ca343fe9f83fde2651c098d1a80d3c87bc08f9c8bd5af6a9  ./archive/cm-bi-legacy-v1/README.md
 75b067e6d66f6e16ad85a8f7d7cb5aa8711e4e9741c001142f7dfa015124c397  ./archive/cm-bi-legacy-v1/SHA256SUMS
@@ -604,8 +604,8 @@ c06991184e1892993c1792f692927aff168061d40c60c3ba02eb6d43800d2202  ./examples/dai
 17888d0f9dfa7d441b08713442366abd526e68eb228649d875ff996870955073  ./examples/module-contribution/modules.json
 ea8d5f564acdae86b6ce054c7fc5dcb0dead50e85c74982d0644a9493879217b  ./examples/poc-release/showcase-v1.json
 01f41d094b67c04b73c86e0677f176b8aa75f5103a967ab9d6bacf5ac6be0fa5  ./examples/poc-setup-planner/catalog-v1.json
-75ae0a0fa354b79287ff06048244b216dfe203181d509e2f09d9b9d1b07607ae  ./package-lock.json
-e91486cff0c5377a7aa91e741ba899b6eb316cbd445640c37a9382ebaec054b7  ./package.json
+878861fca6e25f0ee8a72be0920941283fcc1ccc5aa9a9a20a354930f55323d3  ./package-lock.json
+c5bdcf0c6f3a94d69d8d1f310b1ee6ec2cea22931041a1ece70d0b2a0100ba05  ./package.json
 72b5f28175673cbc8328d9005a849b8409dadb58a8dce61153c049bd7a46a1c1  ./packages/cks/src/applicability-aware-retrieval-indexed.ts
 187c4a5f5f5c78afe92d737e84aa08061b1cad64ecfb6e14ee84ac6db4398c78  ./packages/cks/src/applicability-aware-retrieval.ts
 b2da58dde3e00766d6c54d52b877b4c32e812382f378d76058993a799563e5f2  ./packages/cks/src/shadow-experience-ablation.ts
@@ -907,7 +907,7 @@ e83a8152e66ebc161b0175622b9ecfc96f49737a5e167a91f430d82dd13b92d8  ./schemas/secu
 73ac82f4adf709f712329c40580cc94a29213642f5b07877799837d202a01b51  ./scripts/adaptive-delivery-status.mjs
 8346027ba325c587f3853e946e96f8b2b6e21afc58b55a095eb89ba0db961ec7  ./scripts/adaptive-evidence-gates.mjs
 06138a5dce89b0b191eac0c494f4675eca0311de593e8063575820e16e40c953  ./scripts/build-producer-analytics-manifest.mjs
-d5d25336032dba22195020f49d040d2d37534165660d862a417d136fb7107463  ./scripts/build-public-release.sh
+6509054e4f242f89312d7ff70f15ac665d00f2afaadc38d0bcf03b9aeccb8287  ./scripts/build-public-release.sh
 292ca7497e40869234c196eec327317cad01104e9c246f72ea9389e62931a51a  ./scripts/build-rks-01-pilot-corpora.mjs
 b7cb4e1f43374e0b586d56825460f03d18e93498d072a3eeb719fa0cadc0eb36  ./scripts/capture-cscl-11-source-locators.mjs
 e861dae3f7159536cc8c6bc389b4c93dc5b9c9d456f0cc876ec8b8831bf9c992  ./scripts/capture-rks-01-sources.mjs
@@ -1083,7 +1083,7 @@ d7460b81e2855d881f6f1a2836ce0a16eb3235497289d097cb122c2e15cf988c  ./tests/builde
 2861051684d67a61ad62e484a2178cacf300af620bf369541909e8e6e5398028  ./tests/builder-integration-plan.test.ts
 4c2de11b24976709c3571306546d5c458a25bc86f62177a2c361cd5645c9e759  ./tests/builder-quality-evidence.test.ts
 8875de9745ef77b5ea182208d68aa0c47905e288b3fd5b865d4018c4b5c04b06  ./tests/builder-reuse-conformance.test.mjs
-9a727c0c15a8f11bb47ffb5756c997db5a826d76bd64f7823eb747b21874cb2a  ./tests/canonical-json-profile-inventory.test.ts
+349a5cffb61232e63c98445d450f1e3f2c6dd958be98dec4289a0c01da3fb0d7  ./tests/canonical-json-profile-inventory.test.ts
 929ab3a426ed99e3aaadf00b0a8ffe6866503bdaadebbd348995a871b63f2ed2  ./tests/canonical-json-runtime-parity.test.mjs
 3fb6871824cc52620fd580e386a98bcc12dcf5a8f395ebdb08e8fa115f1ca5cc  ./tests/capability-catalogue.test.ts
 2697dc2108511a992917837d0eebf0c52beb34298c74eb9b9b1e24abd6141281  ./tests/ccp-admission-gate.test.ts
@@ -1794,7 +1794,7 @@ f86763bdd1a23123a244541d87254c46a512fb5941ac15859ec0923add825838  ./tsconfig.jso
 b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification/awi-03-knowledge-envelope-evidence-v1.json
 40b6a9bbe263b9cd67ef034dec0eb87c350aa1587904e385a2acb1072b3e0bc3  ./verification/bi-002-crm-read-connector-evidence-v1.json
 93f42b3e9e78b32cc1e1193e3f7a7ef59ca7ccd2e4116bd184d22d504987d46a  ./verification/bi-003-erp-read-connector-evidence-v1.json
-b6576ec5d56a029888c83876bcb626bbd605503960784eac798c803f34967df1  ./verification/canonical-json-profile-inventory-v1.json
+d2ac231d2e147ef29a1d2dbb917ef2e332fa0b5a044179394edc75dbc04685b4  ./verification/canonical-json-profile-inventory-v1.json
 1e25b300491c6eeabe7f4a88c3358b59651dbd0e474ff1e8ce4a11fa18c52da3  ./verification/cks-03-public-manifests-v1.json
 81ab161fc2f4cd38ca0cc0f40d8c289f5d37b036fd4aef7a31e16ef47bf72e05  ./verification/cks-04-baseline-manifest-template-v1.json
 5e83eb24a343b7d29c0c0e99f54c26855b645b99f63df03acfd598d75222928c  ./verification/cks-04-no-finetune-baseline-evidence-v1.json
@@ -1910,5 +1910,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-b4145cbe18f926e5706156b89cdddde7d9387ce8b1234c099f5893912a19cde6  ./verification/verification-dag-v2.json
+b0c7518d0d3d9f178d1656c347cbf561aae6af0554826892d63d30ed59a3c80b  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
