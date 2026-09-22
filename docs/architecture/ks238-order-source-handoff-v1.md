@@ -62,15 +62,15 @@ contract, survive serialization, and are returned on rebind.
 
 ## Authority boundary (no caller-rehashed facts)
 
-`verifyOrderSourceRead` and the customer-page verification are **internal,
-non-authoritative projections**: they verify shape and the
+`verifyOrderSourceRead` and the customer-page verification are **non-authoritative
+projection checks** (the order verifier is exported): they verify shape and the
 caller-recomputable readback hash of caller-owned results, but verification of
 a caller-rehashed projection is never approval. A forged record set that
 merely re-proves its own readback hash cannot re-establish the source identity.
 
-Approval exists only where the released readers are **executed by the handoff
-itself** against independently selected source bytes, the released read
-contract, and the decision time:
+Source consistency is established where the released readers are **executed by
+the handoff itself** against independently selected source bytes, the released
+read contract, and the decision time; selection authority remains external:
 
 - `createKs238OrderSourceHandoff({ contract, sourceBytes, sourceLabel, enabled,
   now })` owns the actual reader execution (including the cursor drain).
@@ -97,21 +97,23 @@ Consequences (all covered by focused negatives with exact denial codes):
 
 ## Source binding and serialization
 
-`adaptOrderSourceToSalesAnalysis()` re-verifies and re-digests both actual
-reader results; it never accepts a caller-supplied digest or label as approval.
-The content binding (`tenantId`, `sourceDigest`, `sourceBytesSha256`,
-`readbackDigest`, `customerSourceDigest`) is derived from the records plus the
-reader metadata, not from any caller field.
+`adaptOrderSourceToSalesAnalysis()` re-verifies and re-digests caller-owned
+reader-result records and metadata. Its content binding (`tenantId`,
+`sourceDigest`, `sourceBytesSha256`, `readbackDigest`, `customerSourceDigest`)
+is a consistency projection, not independent evidence or approval.
 
-`rebindSerializedOrderSource()` proves the binding survives serialization: a
-downstream analysis carries the `binding` + `bindingDigest` (the binding now
-embeds the closed `unsupportedFacts` contract) together with the independently
-retained source identity, and on receipt it is re-derived from the actual
-reader execution. A caller that reseals or substitutes the source, the
-binding, or the digests fails closed with the exact denial code above — the
-re-bound result is only approval when the reader-derived binding matches
-exactly, and the rebind returns the same explicit unsupported/missing
-semantics (equality asserted across the round-trip, not just status counts).
+`rebindSerializedOrderSource()` checks the transported `binding` +
+`bindingDigest`, including the embedded closed `unsupportedFacts` contract,
+against a fresh reader execution. The receiving integration must retain the
+selected source bytes/hash, contract and decision time independently of the
+transported payload. With that anchor unchanged, substituted records or bindings
+are denied and unsupported/missing semantics survive the round-trip.
+
+This helper does not establish who may select or replace the trusted inputs.
+A caller able to replace both the retained inputs and the payload can select a
+new internally consistent source; the helper alone cannot detect that authority
+violation. Downstream integration owns retention and authorization of that anchor.
+A successful `REBOUND` is source consistency, never production or publication approval.
 
 ## Public entry point
 

@@ -4746,7 +4746,7 @@
         {
           "path": "docs/architecture/ks238-order-source-handoff-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "670d255e3f2b608031d88e444a5f704faa479e75e8c03f09878d023144d8bec8"
+          "sha256": "d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e"
         },
         {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
@@ -6716,7 +6716,7 @@
         {
           "path": "docs/architecture/ks238-order-source-handoff-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "670d255e3f2b608031d88e444a5f704faa479e75e8c03f09878d023144d8bec8"
+          "sha256": "d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e"
         },
         {
           "path": "schemas/contracts/ks238-order-source-handoff-v1.schema.json",

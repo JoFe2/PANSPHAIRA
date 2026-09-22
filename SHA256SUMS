@@ -325,7 +325,7 @@ ca2f72b3d7a4028c8dd2ca9b7d2a4c1afe7b12e861d977db510920e305099074  ./docs/archite
 ab892473a3c1b3ea7442876ac093a91fd123df5e32c74a86189b9cebfb8b00f8  ./docs/architecture/cscl-08-party-mapping-application-guide-v1.md
 4ec1240149ba3e5a0716cad00ddb4d471f6dd456ebb04d806c0c7fa6db06872c  ./docs/architecture/cscl-09-product-mapping-application-guide-v1.md
 f547a7eabbdd9766816136016815aac20ce06d6fc40328df2c3dd70510cec36e  ./docs/architecture/cscl-10-sales-mapping-application-guide-v1.md
-670d255e3f2b608031d88e444a5f704faa479e75e8c03f09878d023144d8bec8  ./docs/architecture/ks238-order-source-handoff-v1.md
+d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e  ./docs/architecture/ks238-order-source-handoff-v1.md
 3517d689b5d069711f2b18b7b51d80a2cfc1f12685f3b683543729b4afec1d9a  ./docs/architecture/pan435-436-sales-stock-journey-v1.md
 87fd5c8464e74c57cb21f3b49d7224848368ec00111c8e07e5393e63a9750e56  ./docs/architecture/pan437-neighbor-composition-v1.md
 cbf1ed6a03e936dd74b4cd66d9328a2318999212eb63c589934202a652b815c0  ./docs/architecture/rks-01-real-source-utility-result-v1.md
@@ -1958,5 +1958,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-c4327fcec063ac8760d8a8fafab5947359d1bf6b4b4fefbc0bf155ce5e602649  ./verification/verification-dag-v2.json
+3f9a23f670aee3d6a2c2421a8a0e59e15194e05cb1b18168f9427cd648b53211  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
