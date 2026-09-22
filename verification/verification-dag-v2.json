@@ -4751,7 +4751,7 @@
         {
           "path": "docs/development/pan433-domain-mapping-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "73231a05b3fe9306624e108dd51bbcfeaaac1c086565cd53092d2212748a9e3c"
+          "sha256": "f06091367ebc02ad5916225cf9fc6a9829c9e5ed7e5365b7665a064d889188fb"
         },
         {
           "path": "docs/INCOMING-INVOICE-APPLICATION-GUIDE.md",
@@ -6580,7 +6580,7 @@
         {
           "path": "docs/development/pan433-domain-mapping-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "73231a05b3fe9306624e108dd51bbcfeaaac1c086565cd53092d2212748a9e3c"
+          "sha256": "f06091367ebc02ad5916225cf9fc6a9829c9e5ed7e5365b7665a064d889188fb"
         },
         {
           "path": "examples/module-contribution/modules.json",

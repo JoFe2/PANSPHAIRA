@@ -439,7 +439,7 @@ f0f24ff22e907c010a7f943756617a14f24065415fa15bbdae86ae3bdc3ac6c8  ./docs/develop
 b595fcfc18b5348fbfddd65edc081293392b7e0669b037235e5a17536b21d70f  ./docs/development/openclaw-m1.4-issue-7-pdca.md
 0062590cfb4840c2de3e9f3b6c9de08b749b5078e1bc26b0159d9005078bc635  ./docs/development/openclaw-m1.5-issue-8-pdca.md
 1e700f4d852be33202991d7cb64780f6a966c1d0a75cdce0e4162eaecde92b34  ./docs/development/pan-link-01-owner-pages-worker-cutover-audit.md
-73231a05b3fe9306624e108dd51bbcfeaaac1c086565cd53092d2212748a9e3c  ./docs/development/pan433-domain-mapping-v1.md
+f06091367ebc02ad5916225cf9fc6a9829c9e5ed7e5365b7665a064d889188fb  ./docs/development/pan433-domain-mapping-v1.md
 bbf9260e76397248e3e97a7cca6417726b1bfc2e024d97066653f4a546388e19  ./docs/development/ppread-001-authority-free-power-platform-read-connector-pdca.md
 40d13e67bf302396ea7ae7004ed921e3534095dc1259a16347c2f321e2611a50  ./docs/development/readme-public-truth-discoverability-release-handoff.md
 a6abfc32cd47c49c3b89c5fe6a3e555e9919382a2a30bdf4009f1356fc6d40b9  ./docs/development/rel-daily-001-pdca.md
@@ -1916,5 +1916,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-5c5c7f4e6b5e906a5242d86720fafcd7e3a83ae0650ec98766d638f68f951b1a  ./verification/verification-dag-v2.json
+e10e9b83d6d1901c5eac6ded51e520d575a4f5aaccc1b2c4be77a1f2e529ca19  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
