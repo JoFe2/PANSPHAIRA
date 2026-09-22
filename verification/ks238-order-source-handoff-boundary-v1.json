@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "pansphaira.verification/ks238-order-source-handoff-boundary/v1",
+  "status": "LOCAL_SYNTHETIC_ORDER_SOURCE_HANDOFF_IMPLEMENTED",
+  "module": "src/ks238/order-source-handoff.mjs",
+  "consumerContract": "schemas/contracts/ks238-order-source-handoff-v1.schema.json",
+  "reusedModules": [
+    {
+      "path": "packages/contracts/src/erp-read-connector.ts",
+      "role": "ORDER_AND_CUSTOMER_READ_SOURCE"
+    },
+    {
+      "path": "packages/contracts/src/erp-order-capability-cell.ts",
+      "role": "ORDER_QUANTITY_UNIT_SEMANTICS"
+    },
+    {
+      "path": "packages/contracts/src/kundenauftrag-lieferzusage-v1.ts",
+      "role": "SALES_STOCK_ORDER_CELL_CONTEXT"
+    }
+  ],
+  "actualAvailableOutput": {
+    "contract": "chimpmaera.connector/erp-read/v1",
+    "trust": "LOCAL_SYNTHETIC",
+    "entities": [
+      "customers",
+      "orders",
+      "invoices"
+    ],
+    "orderReaderFields": [
+      "orderId",
+      "customerId",
+      "orderStatus",
+      "orderDate",
+      "totalMinor",
+      "currency"
+    ],
+    "customerReaderFields": [
+      "customerId",
+      "customerStatus"
+    ],
+    "handoffExposesOnly": [
+      "order.orderId",
+      "order.customerId",
+      "order.orderStatus",
+      "order.period",
+      "order.quantityUnit",
+      "customerStatus",
+      "statusCounts"
+    ],
+    "handoffWithholds": [
+      "totalMinor",
+      "currency",
+      "netRevenue",
+      "orderedQuantity",
+      "deliveryFacts",
+      "history.previousStates"
+    ]
+  },
+  "adapterWithholding": "REVENUE_AND_HISTORY_UNAVAILABLE",
+  "revenueBoundary": {
+    "sourceSystem": "SYNTHETIC_ERP_ORDER_EXPORT",
+    "proves": "bounded order/customer/status/quantity-unit/period facts from the actual released reader",
+    "notDerivedFrom": [
+      "orderStatus",
+      "totalMinor",
+      "currency",
+      "stock promise",
+      "trust label",
+      "caller-supplied digest",
+      "caller-resealed source"
+    ],
+    "rule": "net revenue must never be inferred from order status or ordered quantity; absent currency/amount/history/delivery facts remain unavailable"
+  },
+  "publicWrites": false,
+  "parentReviewAndDeliveryOwner": "Hermes/Supervisor e2e345eb187a",
+  "actualOrderBinding": {
+    "entryPoint": "src/ks238/order-source-handoff.mjs",
+    "reader": "readErpOrdersFromLabelledSourceBytesV1",
+    "customerReader": "createErpReadAdapterV1 LIST_CUSTOMERS",
+    "sourceLabel": "LOCAL_SYNTHETIC_ERP_ORDER_SOURCE_V1",
+    "sourceBytes": "tests/fixtures/erp-read/supported-export-v1.json",
+    "orderContract": "tests/fixtures/erp-read/contract-v1.json",
+    "sourceDigest": "01b2e51e8953a24d37462db2b6205e41e03faf6522fbf017338bf495f5007044",
+    "checks": [
+      "tenant",
+      "orderId",
+      "customerId",
+      "matching sourceDigest",
+      "sourceBytesSha256",
+      "reader readbackDigest",
+      "serialized binding digest"
+    ]
+  },
+  "serializationBoundary": {
+    "survives": "JSON round-trip of the binding plus its digest against fresh reader results",
+    "denies": [
+      "caller-resealed substituted source (SERIALIZED_BINDING_MISMATCH)",
+      "tampered serialized binding digest (SERIALIZED_BINDING_MISMATCH)",
+      "unverified or non-READ reader results (ORDER_SOURCE_READ_UNVERIFIED)",
+      "wrong-tenant customer reader"
+    ]
+  },
+  "acceptance": {
+    "positive": "the actual released order reader composes into bounded supported order/customer/status/quantity-unit/period facts with independently expected values",
+    "negative": [
+      "wrong order customer identity",
+      "caller-resealed source substitution",
+      "invented quantity field",
+      "changed amount value (readback mismatch)",
+      "wrong source label",
+      "disabled connector",
+      "stale decision time",
+      "malformed contract or bytes",
+      "added netRevenue fact (schema rejected)",
+      "tampered serialized binding digest",
+      "wrong-tenant customer reader"
+    ],
+    "mutationRule": "denied before any persisted mutation; no revenue is ever inferred"
+  },
+  "nonClaims": [
+    "No production ERP qualification or complete KS238 capability is claimed.",
+    "No order-management, write, approval, network, provider, runtime, publication or public-write authority is granted.",
+    "The KS guided question/source/period CLI remains owned by Flash and is not duplicated here.",
+    "Unsupported revenue/order-intake aggregates remain explicit and unavailable."
+  ]
+}
