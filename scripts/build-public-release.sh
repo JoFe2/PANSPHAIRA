@@ -189,7 +189,7 @@ for line_number, raw in enumerate(manifest.read_text("utf-8").splitlines(), 1):
         raise SystemExit(f"PRIVILEGED_SOURCE_MODE:{line_number}")
     total_bytes += metadata.st_size
 
-if count != 1599:
+if count != 1632:
     raise SystemExit("MANIFEST_FILE_COUNT")
 if total_bytes > 100 * 1024 * 1024:
     raise SystemExit("MANIFEST_BYTE_LIMIT")
@@ -248,8 +248,6 @@ repository_only_prefixes = (
     "tests/fixtures/cscl-03/source-snapshots/",
     "tests/fixtures/cscl-05/artifacts/",
     "tests/fixtures/cscl-05/sources/",
-    "packages/knowledge-solution/",
-    "tests/knowledge-solution/",
     ".kts-pg-data/",
 )
 for candidate in root.rglob("*"):

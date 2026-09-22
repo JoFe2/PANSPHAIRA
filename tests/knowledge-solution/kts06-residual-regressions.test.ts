@@ -53,6 +53,8 @@ import {
 } from "../../packages/knowledge-solution/src/guided-path.js";
 import { runUserPathV1 } from "../../packages/knowledge-solution/src/user-path.js";
 import {
+  PG_ADMIN_PASSWORD,
+  PG_ADMIN_USER,
   PG_DATABASE,
   PG_PORT,
   PG_RO_PASSWORD,
@@ -469,7 +471,7 @@ test("F5-residual: a caller client executing as a DIFFERENT role (admin) is reje
   // reported user=kts (not kts_ro). The adapter must reject it.
   const harness: PgHarness = await startRealPostgres(DATA_DIR);
   try {
-    const adminClient = new Client({ host: "127.0.0.1", port: PG_PORT, database: PG_DATABASE, user: "kts", password: "kts-local-test-only" });
+    const adminClient = new Client({ host: "127.0.0.1", port: PG_PORT, database: PG_DATABASE, user: PG_ADMIN_USER, password: PG_ADMIN_PASSWORD });
     await adminClient.connect(); // caller-owned, OPEN — but the WRONG role
     await assert.rejects(
       readMarginContextFromPostgresV1({
@@ -543,7 +545,7 @@ test("F5-residual: a SELECT held on a locked table is canceled by the SERVER aft
   // now carries a server-enforced statement/lock limit.
   const harness: PgHarness = await startRealPostgres(DATA_DIR);
   try {
-    const locker = new Client({ host: "127.0.0.1", port: PG_PORT, database: PG_DATABASE, user: "kts", password: "kts-local-test-only" });
+    const locker = new Client({ host: "127.0.0.1", port: PG_PORT, database: PG_DATABASE, user: PG_ADMIN_USER, password: PG_ADMIN_PASSWORD });
     await locker.connect();
     await locker.query("BEGIN");
     await locker.query("LOCK TABLE kts_invoices IN ACCESS EXCLUSIVE MODE");

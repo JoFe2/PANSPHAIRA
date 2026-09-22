@@ -285,7 +285,11 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1914, uniquePaths: 1914, duplicatePaths: 0 } as const;
+// 2026-09-22 PAN432 A6 correction: the public KTS implementation, its six test
+  // suites, USER-PATH documentation and the .npmrc registry are registered in the
+  // public manifest; the manifest-driven refresh grows the checksum ledger 1914 -> 1947.
+
+const EXPECTED_LEDGER = { entries: 1947, uniquePaths: 1947, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 

@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "349a5cffb61232e63c98445d450f1e3f2c6dd958be98dec4289a0c01da3fb0d7"
+        "sha256": "e53c5714c31229562ef4e7212dce0d3202e209634ecd186259920120795360c5"
       }
     ]
   },
@@ -260,8 +260,8 @@
     "importFiles": 242,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1914,
-    "ledgerUniquePaths": 1914
+    "ledgerEntries": 1947,
+    "ledgerUniquePaths": 1947
   },
   "profiles": [
     {
