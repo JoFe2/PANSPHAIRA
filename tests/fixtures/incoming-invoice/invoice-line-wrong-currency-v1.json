@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "cm.fachprofil/rechnungszeile/v1",
+  "invoiceId": "invoice:synthetic-101",
+  "supplierId": "SYN-SUP-001",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "einheit": "STK",
+  "waehrung": "USD",
+  "menge": 100,
+  "amountMinor": 2400,
+  "contentSha256": "dc00c9a707caac0882ee58ea576a7257bd6603ef5055183a3bd26d80c1d486d8",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/invoice-line-wrong-currency-v1.json#invoice:synthetic-101",
+    "generator": "M1_RECHNUNGSZEILE_V1",
+    "attestedBy": "supplier-invoice-line-evidence",
+    "attestationNote": "Synthetic substitution counter-example (LOCAL_SYNTHETIC_FIXTURE): the same invoice document in a DIFFERENT closed currency (USD, not the bound position's EUR). Admitted by the code-owned approved-source manifest so the closed currency gate (MATCH_INVOICE_LINE_CURRENCY_MISMATCH) is exercised in isolation from source admission; the amount dimension is unresolved in a different currency. Self-sealed; synthetic; no production, booking or live-ERP claim."
+  }
+}

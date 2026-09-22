@@ -253,15 +253,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 674,
+    "filesScanned": 682,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 227,
-    "importFiles": 226,
+    "importSites": 234,
+    "importFiles": 233,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1893,
-    "ledgerUniquePaths": 1893
+    "ledgerEntries": 1914,
+    "ledgerUniquePaths": 1914
   },
   "profiles": [
     {
@@ -585,14 +585,19 @@
   ],
   "consumerFamilies": [
     {
-      "owner": "demo",
-      "importSites": 9,
-      "importFiles": 9
+      "owner": "analytics",
+      "importSites": 2,
+      "importFiles": 2
     },
     {
       "owner": "cks",
       "importSites": 4,
       "importFiles": 4
+    },
+    {
+      "owner": "cks-12",
+      "importSites": 1,
+      "importFiles": 1
     },
     {
       "owner": "competence-runtime",
@@ -601,8 +606,23 @@
     },
     {
       "owner": "contracts",
-      "importSites": 134,
-      "importFiles": 134
+      "importSites": 137,
+      "importFiles": 137
+    },
+    {
+      "owner": "cscl-03",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
+      "owner": "cscl-13",
+      "importSites": 2,
+      "importFiles": 2
+    },
+    {
+      "owner": "demo",
+      "importSites": 9,
+      "importFiles": 9
     },
     {
       "owner": "dev-worker",
@@ -620,27 +640,7 @@
       "importFiles": 1
     },
     {
-      "owner": "usage-insights",
-      "importSites": 2,
-      "importFiles": 2
-    },
-    {
-      "owner": "scripts",
-      "importSites": 12,
-      "importFiles": 12
-    },
-    {
-      "owner": "analytics",
-      "importSites": 2,
-      "importFiles": 2
-    },
-    {
-      "owner": "cks-12",
-      "importSites": 1,
-      "importFiles": 1
-    },
-    {
-      "owner": "cscl-03",
+      "owner": "procurement-434",
       "importSites": 1,
       "importFiles": 1
     },
@@ -655,17 +655,22 @@
       "importFiles": 1
     },
     {
-      "owner": "tests",
-      "importSites": 49,
-      "importFiles": 48
+      "owner": "scripts",
+      "importSites": 12,
+      "importFiles": 12
     },
     {
-      "owner": "video-production-reference",
+      "owner": "tests",
+      "importSites": 52,
+      "importFiles": 51
+    },
+    {
+      "owner": "usage-insights",
       "importSites": 2,
       "importFiles": 2
     },
     {
-      "owner": "cscl-13",
+      "owner": "video-production-reference",
       "importSites": 2,
       "importFiles": 2
     }

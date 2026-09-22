@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "cm.fachprofil/wareneingang-beleg/v1",
+  "referenceId": "RCV-VAL-2026-0002",
+  "referenceKind": "RECEIPT",
+  "belegId": "beleg:wg-eink-001-2450",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "supplierId": "SYN-SUP-001",
+  "einheit": "STK",
+  "waehrung": "EUR",
+  "matchAmountMinor": 2450,
+  "contentSha256": "af2ded69496557adee26b71efe99b7c638769c494ccae3eb126ddbf6b2275d19",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/receipt-valuation-2450-v1.json#RCV-VAL-2026-0002",
+    "generator": "M1_WARENEINGANG_BELEG_V1",
+    "attestedBy": "warehouse-receipt-evidence",
+    "attestationNote": "Independent goods-receipt valuation (2450 minor), DISTINCT from the frozen PO amount (2400): proves the RECEIPT amount flows from this attested reference, not from the PO."
+  }
+}

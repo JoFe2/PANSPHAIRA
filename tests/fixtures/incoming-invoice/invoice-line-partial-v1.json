@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "cm.fachprofil/rechnungszeile/v1",
+  "invoiceId": "invoice:synthetic-101",
+  "supplierId": "SYN-SUP-001",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "einheit": "STK",
+  "waehrung": "EUR",
+  "menge": 1,
+  "amountMinor": 2400,
+  "contentSha256": "54b29945e0193c312deafbc4b7dad9bd251ec4d4a0488ac48bfb701b1ef69e81",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/invoice-line-partial-v1.json#invoice:synthetic-101",
+    "generator": "M1_RECHNUNGSZEILE_V1",
+    "attestedBy": "supplier-invoice-line-evidence",
+    "attestationNote": "Synthetic purchase-side supplier invoice line (LOCAL_SYNTHETIC_FIXTURE) for the legitimate PARTIAL-invoice counter-example: it invoices 1 of the frozen PO-2026-0001 source quantity 2 (amount 2400 EUR minor unchanged, the full invoice amount is carried for the closed cross-check against the real erp-read reader fact). A partial invoice is never a MATCHED decision: it is an explicit UNRESOLVED_PARTIAL_INVOICE with the remaining quantity (1) stated. The content seal is a self-delivered digest and is NOT an authentication grant by itself; admission is additionally gated by the code-owned approved-source manifest. Synthetic; no production, booking or live-ERP claim."
+  }
+}
