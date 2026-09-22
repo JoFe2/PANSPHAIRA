@@ -112,6 +112,19 @@
       "dependencies": {
         "procurement-invoice-matching": "1"
       }
+    },
+    {
+      "id": "ks238-order-source-handoff",
+      "version": "1",
+      "sources": [
+        "src/ks238"
+      ],
+      "contracts": [],
+      "profiles": [],
+      "tests": [
+        "tests/ks238/order-source-handoff.test.mjs"
+      ],
+      "dependencies": {}
     }
   ]
 }

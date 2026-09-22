@@ -1641,3 +1641,8 @@ docs/PAN441-EMPLOYEE-PROFILE.md	docs/PAN441-EMPLOYEE-PROFILE.md	0644
 packages/contracts/src/pan441-employee-profile.ts	packages/contracts/src/pan441-employee-profile.ts	0644
 schemas/contracts/pan441-employee-profile-v1.schema.json	schemas/contracts/pan441-employee-profile-v1.schema.json	0644
 tests/pan441-employee-profile.test.ts	tests/pan441-employee-profile.test.ts	0644
+docs/architecture/ks238-order-source-handoff-v1.md	docs/architecture/ks238-order-source-handoff-v1.md	0644
+schemas/contracts/ks238-order-source-handoff-v1.schema.json	schemas/contracts/ks238-order-source-handoff-v1.schema.json	0644
+src/ks238/order-source-handoff.mjs	src/ks238/order-source-handoff.mjs	0644
+tests/ks238/order-source-handoff.test.mjs	tests/ks238/order-source-handoff.test.mjs	0644
+verification/ks238-order-source-handoff-boundary-v1.json	verification/ks238-order-source-handoff-boundary-v1.json	0644
