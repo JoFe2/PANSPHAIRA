@@ -737,7 +737,12 @@ test("F5-0430: adapter-owned probe of a blackhole endpoint (accepts TCP, silent)
   // connect is still pending. The adapter's probe client is exactly such a
   // client here — the adapter must reject within its bound AND clean the
   // probe's socket (residual-free), or the process would never exit.
-  const server = createServer((socket) => { socket.pause(); }); // accepts, never answers
+  const sockets = new Set<import("node:net").Socket>();
+  const server = createServer((socket) => {
+    sockets.add(socket);
+    socket.on("close", () => sockets.delete(socket));
+    socket.pause();
+  }); // accepts, never answers
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   const address = server.address();
   assert.ok(address !== null && typeof address === "object");
@@ -755,16 +760,18 @@ test("F5-0430: adapter-owned probe of a blackhole endpoint (accepts TCP, silent)
     );
     assert.ok(Date.now() - started < 12_000, "the rejection must be bounded (no hanging probe end())");
   } finally {
-    (server as unknown as { closeAllConnections?: () => void }).closeAllConnections?.();
-    for (const socket of (server as unknown as { connections?: Set<unknown> }).connections ?? new Set()) {
-      (socket as { destroy?: () => void }).destroy?.();
-    }
+    for (const socket of sockets) socket.destroy();
     await new Promise<void>((resolve) => server.close(() => resolve()));
   }
 });
 
 test("F5-0430: a HANGING endpoint (accepts TCP, never speaks the wire) is rejected within a bound — no hang", async () => {
-  const server = createServer((socket) => { socket.pause(); }); // accepts, never answers
+  const sockets = new Set<import("node:net").Socket>();
+  const server = createServer((socket) => {
+    sockets.add(socket);
+    socket.on("close", () => sockets.delete(socket));
+    socket.pause();
+  }); // accepts, never answers
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   const address = server.address();
   assert.ok(address !== null && typeof address === "object");
@@ -782,10 +789,110 @@ test("F5-0430: a HANGING endpoint (accepts TCP, never speaks the wire) is reject
     );
     assert.ok(Date.now() - started < 12_000, "the rejection must be bounded (no hanging query)");
   } finally {
-    (server as unknown as { closeAllConnections?: () => void }).closeAllConnections?.();
-    for (const socket of (server as unknown as { connections?: Set<unknown> }).connections ?? new Set()) {
-      (socket as { destroy?: () => void }).destroy?.();
-    }
+    for (const socket of sockets) socket.destroy();
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  }
+});
+
+/* ================================================================== */
+/* Canonical-completion stall regression (RED -> GREEN)               */
+/* ==================================================================
+ * Synthetic regression motivated by a canonical stall (parent symptom: PG initialised
+ * on 54431, "kts + two kts_ro connections idle; no CPU; no output >10 min")
+ * models a connection that COMPLETES the startup handshake and then WEDGES
+ * (half-open / stalled-fsync — the slow-fsync condition the harness itself
+ * documents): the probe connect resolves, the handed client connects, and the
+ * FIRST read-phase wire query (the role verify `SELECT current_user`) is
+ * issued with NO client-side bound before the server-enforced
+ * statement_timeout is in force -> the await never settles -> the canonical
+ * leg hangs indefinitely (node --test has no per-test timeout).
+ *
+ * The existing F5 tests cover (a) a dead endpoint (connect refused) and
+ * (b) a blackhole (accepts TCP, never speaks the wire => the PROBE connect
+ * times out). They do NOT cover (c) handshake COMPLETES then the next query
+ * wedges — the read phase. This regression pins that exact case:
+ *   - a minimal fake PG resolves the startup handshake (AuthOk +
+ *     ParameterStatus + BackendKeyData + ReadyForQuery) for BOTH the adapter
+ *     probe client AND the handed client, then goes SILENT on the next
+ *     query — wedged-after-handshake;
+ *   - readMarginContextFromPostgresV1 (fresh client, NO queryTimeoutMs —
+ *     exactly how the F5 fresh-client test calls it) must REJECT within a
+ *     bound with the closed code PG_QUERY_TIMED_OUT (the read exceeded its
+ *     bound), never a receipt;
+ *   - residual-free: the adapter destroys BOTH wedged client sockets (the
+ *     server-side sockets close) so the process can exit.
+ *
+ * RED on the unchanged baseline: this call is PENDING at the role verify
+ * forever (0 CPU, idle socket, no output) — the actual stall (retained as
+ * an independent timeout observation, not proof of the original stall cause). GREEN on
+ * the corrected adapter: bounded PG_QUERY_TIMED_OUT rejection + cleaned
+ * sockets.
+ */
+const pgI32 = (n: number): Buffer => { const b = Buffer.allocUnsafe(4); b.writeUInt32BE(n >>> 0, 0); return b; };
+const pgMsg = (code: number, payload: Buffer): Buffer =>
+  Buffer.concat([Buffer.from([code]), pgI32(4 + payload.length), payload]);
+const pgCstring = (value: string): Buffer => Buffer.concat([Buffer.from(value, "utf8"), Buffer.from([0])]);
+/** Minimal fake PG handshake: AuthOk + ParameterStatus + BackendKeyData +
+ *  ReadyForQuery("I") — just enough to RESOLVE `client.connect()`. */
+const pgHandshake = (): Buffer =>
+  Buffer.concat([
+    pgMsg(0x52, pgI32(0)), // R AuthenticationOk
+    pgMsg(0x53, Buffer.concat([pgCstring("server_version"), pgCstring("18.4")])),
+    pgMsg(0x53, Buffer.concat([pgCstring("client_encoding"), pgCstring("UTF8")])),
+    pgMsg(0x4b, Buffer.concat([pgI32(0x00001234), pgI32(0x0000abcd)])), // K BackendKeyData
+    pgMsg(0x5a, Buffer.from([0x49])), // Z ReadyForQuery "I"
+  ]);
+
+test("F5-canonical: a wedged-after-handshake endpoint is rejected within a bound (PG_QUERY_TIMED_OUT) — no stall, residual-free", async () => {
+  const sockets = new Set<import("node:net").Socket>();
+  const server = createServer((socket) => {
+    sockets.add(socket);
+    socket.on("close", () => { sockets.delete(socket); });
+    socket.on("error", () => { /* half-open: the client destroys mid-handshake */ });
+    let handshaken = false;
+    socket.on("data", (buf) => {
+      // The startup message arrives first: resolve the handshake (both the
+      // adapter probe client and the handed client complete connect()).
+      if (!handshaken) { handshaken = true; socket.write(pgHandshake()); return; }
+      // Any further message (a query Q, a SET, a Terminal 'X') is left
+      // unanswered on purpose — the connection is now wedged.
+      void buf;
+    });
+  });
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const address = server.address();
+  assert.ok(address !== null && typeof address === "object");
+  const port = (address as { port: number }).port;
+  try {
+    const fresh = new Client({ host: "127.0.0.1", port, database: PG_DATABASE, user: PG_RO_USER, password: PG_RO_PASSWORD });
+    const started = Date.now();
+    await assert.rejects(
+      readMarginContextFromPostgresV1({
+        conn: { host: "127.0.0.1", port, database: PG_DATABASE, user: PG_RO_USER, password: PG_RO_PASSWORD },
+        schema: PG_SCHEMA,
+        client: fresh,
+        // NO queryTimeoutMs — exactly how the F5 fresh-client test drives
+        // the adapter (the canonical stall case).
+      }),
+      (error: unknown) =>
+        error instanceof PostgresReadDenied && (error as PostgresReadDenied).code === "PG_QUERY_TIMED_OUT",
+    );
+    const elapsed = Date.now() - started;
+    // Bounded: the rejection must settle within the connect/verify bound
+    // (10 s) plus margin — NEVER pending (the actual canonical stall hung
+    // indefinitely at the role verify).
+    assert.ok(elapsed < 15_000, `the rejection must be bounded (elapsed=${elapsed}ms; the baseline stall was unbounded)`);
+    // Residual-free: the adapter must have destroyed BOTH adapter-owned
+    // wedged sockets (probe + main client), so the server-side sockets close
+    // and the process can exit. Bounded grace — never a hang.
+    await new Promise<void>((resolve) => {
+      const t = setInterval(() => { if (sockets.size === 0) { clearInterval(t); resolve(); } }, 50);
+      const hard = setTimeout(() => { clearInterval(t); resolve(); }, 5_000);
+      t.unref?.(); hard.unref?.();
+    });
+    assert.equal(sockets.size, 0, "both wedged client sockets must be destroyed (residual-free, no lingering handle)");
+  } finally {
+    for (const socket of sockets) socket.destroy();
     await new Promise<void>((resolve) => server.close(() => resolve()));
   }
 });
