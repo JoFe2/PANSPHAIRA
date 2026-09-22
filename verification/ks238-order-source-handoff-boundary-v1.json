@@ -42,7 +42,7 @@
       "order.customerId",
       "order.orderStatus",
       "order.period",
-      "order.quantityUnit",
+      "order.quantityUnit (closed object {quantity: UNAVAILABLE, unit: UNAVAILABLE}; a unitless reader result never becomes a per-order EACH fact)",
       "customerStatus",
       "statusCounts"
     ],
@@ -51,9 +51,11 @@
       "currency",
       "netRevenue",
       "orderedQuantity",
+      "quantityUnit (per-order unit/quantity: UNAVAILABLE for this reader; the erp-order-capability-cell vocabulary ERP_ORDER_CREATE_DISCRETE_UNITS_V1/DISCRETE_UNITS/EACH is retained only as explicitly non-evidentiary capability metadata)",
       "deliveryFacts",
       "history.previousStates"
-    ]
+    ],
+    "customerReader": "createErpReadAdapterV1 LIST_CUSTOMERS, drained to completion across pages by its own cursor (bounded page ceiling, per-page readback re-verification, consistent page identity, no repeated page content)"
   },
   "adapterWithholding": "REVENUE_AND_HISTORY_UNAVAILABLE",
   "revenueBoundary": {
@@ -66,7 +68,8 @@
       "stock promise",
       "trust label",
       "caller-supplied digest",
-      "caller-resealed source"
+      "caller-resealed source",
+      "caller-rehashed reader results (raw rehashed records are never authority at the rebind boundary)"
     ],
     "rule": "net revenue must never be inferred from order status or ordered quantity; absent currency/amount/history/delivery facts remain unavailable"
   },
@@ -87,39 +90,61 @@
       "matching sourceDigest",
       "sourceBytesSha256",
       "reader readbackDigest",
-      "serialized binding digest"
+      "serialized binding digest",
+      "retained source identity outside the substituted payload (sourceLabel, sourceBytes, sourceBytesSha256, contract, now)",
+      "customer cursor drain to completion with bounded page identity checks"
     ]
   },
   "serializationBoundary": {
-    "survives": "JSON round-trip of the binding plus its digest against fresh reader results",
+    "carried": "the binding (which embeds the closed unsupportedFacts contract) plus its digest, together with the independently retained identity: sourceLabel, sourceBytes, sourceBytesSha256, the released contract and the decision time",
+    "survives": "JSON round-trip of the binding plus its digest, re-derived by re-executing the actual released readers against the retained identity; the explicit unsupported/missing semantics are returned on rebind (equality asserted, not just status counts)",
     "denies": [
-      "caller-resealed substituted source (SERIALIZED_BINDING_MISMATCH)",
-      "tampered serialized binding digest (SERIALIZED_BINDING_MISMATCH)",
+      "caller-rehashed forged reader result carried as a binding against the retained source (SERIALIZED_BINDING_MISMATCH)",
+      "ressealed substituted source plus its matching new binding (source-plus-binding substitution; SERIALIZED_BINDING_MISMATCH)",
+      "retained sourceBytesSha256 that does not match the carried source bytes (SOURCE_BYTES_MISMATCH)",
+      "missing rebind identity (REBIND_INPUT_REQUIRED)",
+      "tampered serialized binding or digest (SERIALIZED_BINDING_MISMATCH)",
       "unverified or non-READ reader results (ORDER_SOURCE_READ_UNVERIFIED)",
-      "wrong-tenant customer reader"
+      "customer page identity drift within the drain (CUSTOMER_PAGE_IDENTITY_MISMATCH)",
+      "an undrained customer source still carrying a nextCursor (CUSTOMER_SOURCE_PAGINATION_UNRESOLVED)",
+      "wrong-tenant customer reader (CUSTOMER_SOURCE_READBACK_MISMATCH)"
     ]
   },
   "acceptance": {
-    "positive": "the actual released order reader composes into bounded supported order/customer/status/quantity-unit/period facts with independently expected values",
+    "positive": "the actual released order reader composes into bounded supported order/customer/status/period facts with independently expected values; the customer reader is drained across pages and a third customer on page two is joined (never UNAVAILABLE); per-order quantity and unit are UNAVAILABLE, never EACH",
     "negative": [
       "wrong order customer identity",
-      "caller-resealed source substitution",
-      "invented quantity field",
-      "changed amount value (readback mismatch)",
+      "caller-rehashed forged reader result (non-authoritative)",
+      "ressealed source plus matching binding substitution",
+      "tampered retained sourceBytesSha256 (SOURCE_BYTES_MISMATCH)",
+      "missing rebind identity (REBIND_INPUT_REQUIRED)",
+      "invented quantity field (SOURCE_MALFORMED)",
+      "added wrong unit KG (SOURCE_MALFORMED)",
+      "unitless reader result must not become a per-order EACH fact (quantityUnit stays UNAVAILABLE/UNAVAILABLE)",
+      "unsupported order status (SOURCE_MALFORMED)",
+      "wrong tenant (TENANT_MISMATCH)",
       "wrong source label",
       "disabled connector",
       "stale decision time",
       "malformed contract or bytes",
       "added netRevenue fact (schema rejected)",
+      "missing embedded unsupportedFacts contract (schema rejected)",
       "tampered serialized binding digest",
       "wrong-tenant customer reader"
     ],
-    "mutationRule": "denied before any persisted mutation; no revenue is ever inferred"
+    "mutationRule": "denied before any persisted mutation; no revenue is ever inferred; raw caller-rehashed reader facts are never authority"
   },
   "nonClaims": [
     "No production ERP qualification or complete KS238 capability is claimed.",
     "No order-management, write, approval, network, provider, runtime, publication or public-write authority is granted.",
     "The KS guided question/source/period CLI remains owned by Flash and is not duplicated here.",
-    "Unsupported revenue/order-intake aggregates remain explicit and unavailable."
-  ]
+    "Unsupported revenue/order-intake aggregates remain explicit and unavailable.",
+    "Per-order quantity and unit are not evidenced by the selected source or the released reader and remain UNAVAILABLE; the capability-cell vocabulary is non-evidentiary here."
+  ],
+  "authorityBoundary": {
+    "rawReaderResults": "NON_AUTHORITY: verifyOrderSourceRead and the customer-page verification are internal, non-authoritative projections over caller-owned results (shape + caller-recomputable readback hash); a caller-rehashed projection is never approval",
+    "approval": "only where the released readers are executed by the handoff itself against independently selected source bytes, released read contract and decision time",
+    "rebindContract": "rebindSerializedOrderSource({sourceLabel, sourceBytes, sourceBytesSha256, contract, now, binding, bindingDigest}) accepts no caller-owned reader results; it re-executes the released readers against the identity retained outside the substituted payload",
+    "drain": "the customer reader is drained to completion by cursor before joining; an unread page is never labelled a missing customer fact"
+  }
 }

@@ -2,20 +2,20 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pansphaira.local/schemas/contracts/ks238-order-source-handoff-v1.schema.json",
   "title": "KS238 PAN order/source handoff binding",
-  "description": "Read-only, content-bound order/source handoff to the KS238 sales analysis. It exposes only evidenced order/customer/status/quantity-unit/period facts and explicit unsupported/missing semantics. It is not a revenue, delivery, historical order-book or order-management authority, and it never infers net revenue from order status or ordered quantity.",
+  "description": "Read-only, content-bound order/source handoff to the KS238 sales analysis. It exposes only evidenced order/customer/status/period facts and explicit unsupported/missing semantics. Per-order quantity and unit are UNAVAILABLE for this reader (the selected source and the released reader expose no quantity or unit); a unitless reader result never becomes a per-order EACH fact. It is not a revenue, delivery, historical order-book or order-management authority, and it never infers net revenue from order status or ordered quantity. The explicit unsupported/missing contract is embedded and digest-bound so it survives serialization and is returned on rebind.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "consumerContract", "trust", "supportedFacts", "contentBinding", "supported"],
+  "required": ["schemaVersion", "consumerContract", "trust", "supportedFacts", "contentBinding", "supported", "unsupportedFacts"],
   "properties": {
     "schemaVersion": { "const": "pansphaira.ks238/order-source-handoff/v1" },
     "consumerContract": { "const": "ks238.sales-analysis.order-source/v1" },
     "trust": { "const": "LOCAL_SYNTHETIC" },
     "supportedFacts": {
       "type": "array",
-      "minItems": 5,
-      "maxItems": 5,
+      "minItems": 4,
+      "maxItems": 4,
       "uniqueItems": true,
-      "items": { "enum": ["orderIdentity", "customerIdentity", "orderStatus", "orderPeriod", "quantityUnit"] }
+      "items": { "enum": ["orderIdentity", "customerIdentity", "orderStatus", "orderPeriod"] }
     },
     "contentBinding": {
       "type": "object",
@@ -62,11 +62,10 @@
                   "quantityUnit": {
                     "type": "object",
                     "additionalProperties": false,
-                    "required": ["semantics", "quantityMeaning", "unit"],
+                    "required": ["quantity", "unit"],
                     "properties": {
-                      "semantics": { "const": "ERP_ORDER_CREATE_DISCRETE_UNITS_V1" },
-                      "quantityMeaning": { "const": "DISCRETE_UNITS" },
-                      "unit": { "const": "EACH" }
+                      "quantity": { "const": "UNAVAILABLE" },
+                      "unit": { "const": "UNAVAILABLE" }
                     }
                   }
                 }
@@ -79,6 +78,35 @@
           "type": "object",
           "additionalProperties": { "type": "integer", "minimum": 1 },
           "propertyNames": { "enum": ["OPEN", "FULFILLED", "CANCELLED"] }
+        }
+      }
+    },
+    "unsupportedFacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "facts", "missingFields", "nonClaims"],
+      "properties": {
+        "code": { "const": "REVENUE_AND_HISTORY_UNAVAILABLE" },
+        "facts": {
+          "type": "array",
+          "minItems": 9,
+          "maxItems": 9,
+          "uniqueItems": true,
+          "items": { "enum": ["netRevenue", "orderedQuantity", "quantityUnit", "amount", "currencyValue", "deliveryFacts", "historicalOrderBook", "orderIntake", "creditsCancellationsNetting"] }
+        },
+        "missingFields": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "uniqueItems": true,
+          "items": { "enum": ["amount.currencyValue", "amount.netRevenue", "quantity.orderedQuantity", "quantity.unit", "delivery.deliveryId", "delivery.deliveredAt", "history.previousStates"] }
+        },
+        "nonClaims": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
         }
       }
     }

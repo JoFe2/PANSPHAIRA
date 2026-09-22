@@ -9,15 +9,37 @@
 // existing PAN order-reader results:
 //   - readErpOrdersFromLabelledSourceBytesV1 (contract
 //     chimpmaera.connector/erp-read/v1, LOCAL_SYNTHETIC trust)
-//   - createErpReadAdapterV1 LIST_CUSTOMERS for customer status
-//   - ERP_ORDER_SEMANTICS_V1 discrete-unit quantity semantics
+//   - createErpReadAdapterV1 LIST_CUSTOMERS, drained across pages by its own
+//     cursor with bounded page identity checks
+//   - the ERP_ORDER_SEMANTICS_V1 vocabulary of the erp-order-capability-cell,
+//     retained ONLY as explicitly non-evidentiary capability metadata for
+//     this reader (see KS238_SEMANTICS_V1 / KS238_QUANTITY_UNAVAILABLE_V1)
 //
-// It exposes ONLY evidenced order/customer/status/quantity/unit/period facts
-// and explicit unsupported/missing semantics to the downstream sales analysis:
+// Authority model:
+//   - The public entry point executes the released readers itself against the
+//     labelled source bytes, the released read contract, and the decision
+//     time. It never accepts caller-owned read results or caller-owned
+//     bindings as authority.
+//   - A serialized consumer carries exactly: the serialized binding +
+//     bindingDigest, the source label, the source bytes, the source bytes
+//     sha256, the released read contract, and the decision time. Rebinding
+//     re-executes the released readers against THOSE independently selected
+//     bytes/contract/time — the identity retained outside the substituted
+//     payload — and requires the freshly derived binding to match the carried
+//     one exactly. Raw caller-rehashed reader facts are not accepted at this
+//     boundary at all.
+//
+// It exposes ONLY evidenced order/customer/status/period facts and explicit
+// unsupported/missing semantics to the downstream sales analysis:
 //   - net revenue is NEVER inferred from order status or ordered quantity;
-//   - absent currency/amount/history/delivery facts remain unavailable;
-//   - source bindings and content digests survive serialization without
-//     caller-resealed substitutions being treated as approval.
+//   - ordered quantity and its unit are UNAVAILABLE for this reader: the
+//     selected order source and the released reader expose no per-order
+//     quantity or unit, and a unitless reader result never becomes a
+//     per-order EACH fact;
+//   - absent currency/amount/history/delivery facts remain unavailable, and
+//     the explicit unsupported/missing semantics are part of the binding, so
+//     they are digest-bound to the consumer contract, survive serialization
+//     and are returned on rebind.
 //
 // This is a local synthetic source handoff, not production ERP qualification
 // or a complete KS238 capability. It grants no order-management, write,
@@ -38,20 +60,26 @@ export const KS238_SOURCE_LABEL_V1 = "LOCAL_SYNTHETIC_ERP_ORDER_SOURCE_V1";
 export const KS238_SOURCE_MODULE_ID_V1 = "connector:synthetic-erp-bi-v1";
 export const KS238_SOURCE_CONTRACT_V1 = "chimpmaera.connector/erp-read/v1";
 export const KS238_PERIOD_GRANULARITY_V1 = "CALENDAR_MONTH";
+// Retained vocabulary of the erp-order-capability-cell. For THIS reader the
+// selected source and the released reader expose no quantity and no unit, so
+// this is non-evidentiary capability metadata only; it is never emitted as a
+// per-order unit fact (see KS238_QUANTITY_UNAVAILABLE_V1).
 export const KS238_SEMANTICS_V1 = ERP_ORDER_SEMANTICS_V1;
 export const KS238_QUANTITY_MEANING_V1 = "DISCRETE_UNITS";
 export const KS238_QUANTITY_UNIT_V1 = "EACH";
+// Per-order quantity and unit are explicitly unavailable for this reader.
+export const KS238_QUANTITY_UNAVAILABLE_V1 = { quantity: "UNAVAILABLE", unit: "UNAVAILABLE" };
 
 export const KS238_SUPPORTED_FACTS_V1 = [
   "orderIdentity",
   "customerIdentity",
   "orderStatus",
   "orderPeriod",
-  "quantityUnit",
 ];
 export const KS238_UNSUPPORTED_FACTS_V1 = [
   "netRevenue",
   "orderedQuantity",
+  "quantityUnit",
   "amount",
   "currencyValue",
   "deliveryFacts",
@@ -63,10 +91,36 @@ export const KS238_MISSING_FIELDS_V1 = [
   "amount.currencyValue",
   "amount.netRevenue",
   "quantity.orderedQuantity",
+  "quantity.unit",
   "delivery.deliveryId",
   "delivery.deliveredAt",
   "history.previousStates",
 ];
+
+// Bounded cursor drain for the customer reader: hard ceiling on pages. The
+// released reader itself denies a replayed cursor (CURSOR_REPLAYED); the
+// per-page record-digest check below additionally fails closed on any
+// duplicated page content within one drain.
+const KS238_CUSTOMER_MAX_PAGES_V1 = 128;
+
+// The released reader proves a closed customer status vocabulary.
+const CUSTOMER_STATUS = new Set(["ACTIVE", "ON_HOLD"]);
+
+// Explicit, closed missing/unsupported semantics. This object is embedded in
+// the binding so it is digest-bound to the consumer contract and returned on
+// rebind; it is never re-invented, dropped or widened at the serialization
+// boundary.
+const KS238_UNSUPPORTED_CONTRACT_V1 = {
+  code: "REVENUE_AND_HISTORY_UNAVAILABLE",
+  facts: [...KS238_UNSUPPORTED_FACTS_V1],
+  missingFields: [...KS238_MISSING_FIELDS_V1],
+  nonClaims: [
+    "netRevenue is never inferred from orderStatus, ordered quantity, or totalMinor",
+    "orderedQuantity and quantity unit are never inferred; the selected order source and the released reader expose no per-order quantity or unit (quantityUnit is UNAVAILABLE)",
+    "currency/amount value is never inferred from the totalMinor field; no monetary conversion is performed",
+    "delivery, historical order-book and order-intake facts remain unavailable",
+  ],
+};
 
 const isRecord = (value) =>
   value !== null && typeof value === "object" && !Array.isArray(value)
@@ -82,13 +136,16 @@ const bytesSha = (value) =>
 
 // The order-status vocabulary the released reader proves (exact, closed).
 const ORDER_STATUS = new Set(["OPEN", "FULFILLED", "CANCELLED"]);
-const CUSTOMER_STATUS = new Set(["ACTIVE", "ON_HOLD"]);
 
 /**
  * Verify an actual `orders` reader result (readErpOrdersFromLabelledSourceBytesV1
- * READ shape) and return its content binding. The content binding is derived
- * from the records + reader metadata, NOT from any caller-supplied digest, so a
- * caller cannot re-seal a substitution and have it treated as approval.
+ * READ shape) and return its content binding. This is an INTERNAL,
+ * non-authoritative projection: it verifies the shape and the
+ * caller-recomputable readback hash, but the records and metadata are
+ * caller-owned here. A result returned by this verifier is NEVER approval —
+ * approval exists only where the released reader was executed by the handoff
+ * itself against independently selected source bytes
+ * (createKs238OrderSourceHandoff / rebindSerializedOrderSource).
  */
 export function verifyOrderSourceRead(result) {
   if (!isRecord(result) || result.outcome !== "READ" || result.entity !== "orders"
@@ -140,35 +197,89 @@ export function verifyOrderSourceRead(result) {
   };
 }
 
-/** Verify an actual `customers` reader result (LIST_CUSTOMERS READ shape). */
-function verifyCustomerRead(result) {
-  if (!isRecord(result) || result.outcome !== "READ" || result.entity !== "customers"
-    || !Array.isArray(result.records) || !isRecord(result.metadata)
-    || result.metadata.trust !== "LOCAL_SYNTHETIC"
-    || !closedId(result.metadata.tenantId)
-    || !sha256Hex(result.metadata.sourceDigest)
-    || !sha256Hex(result.readbackDigest)) {
+/**
+ * Verify an array of actual `customers` reader pages (LIST_CUSTOMERS READ
+ * results drained by cursor). Every page is re-verified: the closed record
+ * shape, the page's own readback digest, and a consistent page identity
+ * (tenant, source digest, export, principal, scope) across the drain. No
+ * customer may appear twice and no page content may repeat. This is an
+ * INTERNAL, non-authoritative projection like verifyOrderSourceRead: the
+ * pages are caller-owned here and verification alone is never approval.
+ */
+function verifyCustomerPages(pages) {
+  if (!Array.isArray(pages) || pages.length === 0
+    || pages.length > KS238_CUSTOMER_MAX_PAGES_V1) {
     return { ok: false, code: "CUSTOMER_SOURCE_READ_UNVERIFIED" };
   }
   const customers = new Map();
-  for (const record of result.records) {
-    if (!exactKeys(record, ["customerId", "customerStatus"])
-      || !closedId(record.customerId)
-      || !CUSTOMER_STATUS.has(record.customerStatus)) {
-      return { ok: false, code: "CUSTOMER_SOURCE_FACT_MALFORMED" };
+  const seenRecordDigests = new Set();
+  for (const [index, result] of pages.entries()) {
+    if (!isRecord(result) || result.outcome !== "READ" || result.entity !== "customers"
+      || !Array.isArray(result.records) || !isRecord(result.metadata)
+      || result.metadata.trust !== "LOCAL_SYNTHETIC"
+      || !closedId(result.metadata.tenantId)
+      || !sha256Hex(result.metadata.sourceDigest)
+      || !sha256Hex(result.readbackDigest)) {
+      return { ok: false, code: "CUSTOMER_SOURCE_READ_UNVERIFIED" };
     }
-    if (customers.has(record.customerId)) return { ok: false, code: "CUSTOMER_ID_AMBIGUOUS" };
-    customers.set(record.customerId, record);
+    if (index > 0) {
+      const first = pages[0];
+      if (result.metadata.tenantId !== first.metadata.tenantId
+        || result.metadata.sourceDigest !== first.metadata.sourceDigest
+        || result.metadata.exportId !== first.metadata.exportId
+        || result.metadata.principalId !== first.metadata.principalId
+        || result.metadata.scope !== first.metadata.scope) {
+        return { ok: false, code: "CUSTOMER_PAGE_IDENTITY_MISMATCH" };
+      }
+    }
+    for (const record of result.records) {
+      if (!exactKeys(record, ["customerId", "customerStatus"])
+        || !closedId(record.customerId)
+        || !CUSTOMER_STATUS.has(record.customerStatus)) {
+        return { ok: false, code: "CUSTOMER_SOURCE_FACT_MALFORMED" };
+      }
+      if (customers.has(record.customerId)) return { ok: false, code: "CUSTOMER_ID_AMBIGUOUS" };
+      const recordDigest = sha({ entity: "customers", record, metadata: result.metadata });
+      if (seenRecordDigests.has(recordDigest)) return { ok: false, code: "CUSTOMER_PAGE_REPEATED" };
+      seenRecordDigests.add(recordDigest);
+      customers.set(record.customerId, record);
+    }
+    const readerReadback = sha({ entity: "customers", records: result.records, metadata: result.metadata });
+    if (readerReadback !== result.readbackDigest) {
+      return { ok: false, code: "CUSTOMER_SOURCE_READBACK_MISMATCH" };
+    }
   }
-  const readerReadback = sha({
-    entity: "customers",
-    records: result.records,
-    metadata: result.metadata,
-  });
-  if (readerReadback !== result.readbackDigest) {
-    return { ok: false, code: "CUSTOMER_SOURCE_READBACK_MISMATCH" };
+  return { ok: true, code: "OK", customers, sourceDigest: pages[0].metadata.sourceDigest };
+}
+
+/** Legacy single-page customer verification (retained internal surface). */
+function verifyCustomerRead(result) {
+  return verifyCustomerPages([result]);
+}
+
+/**
+ * Execute the ACTUAL customer reader (createErpReadAdapterV1 LIST_CUSTOMERS)
+ * and drain it to completion via its own cursor. Bounded: at most
+ * KS238_CUSTOMER_MAX_PAGES_V1 pages; a drain that is still paged at the
+ * ceiling, or a cursor the released reader refuses (CURSOR_REPLAYED /
+ * CURSOR_STALE), denies the read instead of silently truncating it. The
+ * released reader is consumed exactly once per page, so its own replay guard
+ * remains intact.
+ */
+function drainCustomerReader({ read, baseRequest }) {
+  const pages = [];
+  let cursor = null;
+  for (let page = 0; page < KS238_CUSTOMER_MAX_PAGES_V1; page += 1) {
+    const result = read(cursor === null ? { ...baseRequest } : { ...baseRequest, cursor });
+    if (result.outcome !== "READ") return { ok: false, code: result.code };
+    pages.push(result);
+    cursor = result.metadata.nextCursor;
+    if (cursor === null) break;
   }
-  return { ok: true, code: "OK", customers, sourceDigest: result.metadata.sourceDigest };
+  if (cursor !== null) return { ok: false, code: "CUSTOMER_SOURCE_PAGINATION_UNRESOLVED" };
+  const check = verifyCustomerPages(pages);
+  if (!check.ok) return check;
+  return { ok: true, code: "OK", pages, customers: check.customers, sourceDigest: check.sourceDigest };
 }
 
 function periodOf(orderDate) {
@@ -180,17 +291,17 @@ function periodOf(orderDate) {
 /**
  * Compose the read-only order/source handoff from ACTUAL reader results.
  * `orderRead` is the result of readErpOrdersFromLabelledSourceBytesV1 and
- * `customerRead` the result of the existing LIST_CUSTOMERS adapter. Neither is
- * accepted on a caller label or digest: both are re-verified and re-digested
- * here, so serialization and re-binding survive without treating a
- * caller-resealed substitution as approval.
+ * `customerRead` the drained LIST_CUSTOMERS pages of the existing customer
+ * adapter. Neither is accepted on a caller label or digest: both are
+ * re-verified and re-digested here, so serialization and re-binding survive
+ * without treating a caller-resealed substitution as approval.
  */
 export function adaptOrderSourceToSalesAnalysis({ orderRead, customerRead }) {
   const orderCheck = verifyOrderSourceRead(orderRead);
   if (!orderCheck.ok) return { outcome: "DENIED", code: orderCheck.code };
-  const customerCheck = verifyCustomerRead(customerRead);
+  const customerCheck = verifyCustomerPages(customerRead);
   if (!customerCheck.ok) return { outcome: "DENIED", code: customerCheck.code };
-  if (orderCheck.contentBinding.tenantId !== customerRead.metadata.tenantId) {
+  if (orderCheck.contentBinding.tenantId !== customerRead[0].metadata.tenantId) {
     return { outcome: "DENIED", code: "ORDER_CUSTOMER_TENANT_MISMATCH" };
   }
   if (customerCheck.sourceDigest !== orderCheck.contentBinding.sourceDigest) {
@@ -201,30 +312,14 @@ export function adaptOrderSourceToSalesAnalysis({ orderRead, customerRead }) {
   for (const record of orderRead.records) {
     const customer = customers.get(record.customerId);
     if (customer === undefined) {
-      // The customer referenced by an order is not evidenced by the customer
-      // reader. This is an explicit missing fact, never inferred.
-      orders.push({
-        order: {
-          orderId: record.orderId,
-          customerId: record.customerId,
-          orderStatus: record.orderStatus,
-          period: periodOf(record.orderDate),
-          quantityUnit: { semantics: KS238_SEMANTICS_V1, quantityMeaning: KS238_QUANTITY_MEANING_V1, unit: KS238_QUANTITY_UNIT_V1 },
-        },
-        customerStatus: "UNAVAILABLE",
-      });
+      // The customer referenced by an order is not evidenced by the drained
+      // customer reader. This is an explicit missing fact, never inferred —
+      // and never a page that was left unread, because the drain refuses to
+      // stop before the cursor is exhausted.
+      orders.push(makeOrderFact(record, "UNAVAILABLE"));
       continue;
     }
-    orders.push({
-      order: {
-        orderId: record.orderId,
-        customerId: record.customerId,
-        orderStatus: record.orderStatus,
-        period: periodOf(record.orderDate),
-        quantityUnit: { semantics: KS238_SEMANTICS_V1, quantityMeaning: KS238_QUANTITY_MEANING_V1, unit: KS238_QUANTITY_UNIT_V1 },
-      },
-      customerStatus: customer.customerStatus,
-    });
+    orders.push(makeOrderFact(record, customer.customerStatus));
   }
   const contentBinding = {
     ...orderCheck.contentBinding,
@@ -243,6 +338,7 @@ export function adaptOrderSourceToSalesAnalysis({ orderRead, customerRead }) {
     supportedFacts: [...KS238_SUPPORTED_FACTS_V1],
     contentBinding,
     supported,
+    unsupportedFacts: cloneUnsupportedContract(),
   };
   return {
     outcome: "ADAPTED",
@@ -251,17 +347,32 @@ export function adaptOrderSourceToSalesAnalysis({ orderRead, customerRead }) {
     supported,
     binding,
     bindingDigest: sha(binding),
-    unsupportedFacts: {
-      code: "REVENUE_AND_HISTORY_UNAVAILABLE",
-      facts: [...KS238_UNSUPPORTED_FACTS_V1],
-      missingFields: [...KS238_MISSING_FIELDS_V1],
-      nonClaims: [
-        "netRevenue is never inferred from orderStatus, ordered quantity, or totalMinor",
-        "orderedQuantity is never inferred; the order reader exposes no position quantity",
-        "currency/amount value is never inferred from the totalMinor field; no monetary conversion is performed",
-        "delivery, historical order-book and order-intake facts remain unavailable",
-      ],
+    unsupportedFacts: binding.unsupportedFacts,
+  };
+}
+
+function makeOrderFact(record, customerStatus) {
+  return {
+    order: {
+      orderId: record.orderId,
+      customerId: record.customerId,
+      orderStatus: record.orderStatus,
+      period: periodOf(record.orderDate),
+      // The selected source and the released reader expose no per-order
+      // quantity or unit. A unitless reader result never becomes a per-order
+      // EACH fact; the capability-cell vocabulary is non-evidentiary here.
+      quantityUnit: { ...KS238_QUANTITY_UNAVAILABLE_V1 },
     },
+    customerStatus,
+  };
+}
+
+function cloneUnsupportedContract() {
+  return {
+    code: KS238_UNSUPPORTED_CONTRACT_V1.code,
+    facts: [...KS238_UNSUPPORTED_CONTRACT_V1.facts],
+    missingFields: [...KS238_UNSUPPORTED_CONTRACT_V1.missingFields],
+    nonClaims: [...KS238_UNSUPPORTED_CONTRACT_V1.nonClaims],
   };
 }
 
@@ -275,15 +386,54 @@ function countBy(entries, keyOf) {
 }
 
 /**
- * Mandatory content-bound re-binding after serialization. A consumer may carry
- * the `binding` + `bindingDigest` in a serialized form; on the receiving side
- * this re-verifies the actual order/customer reader results, re-derives the
- * content binding, and requires an exact match. A caller that reseals or
- * substitutes the digests (or the reader results) fails closed — the re-bound
- * result is only the approval when the reader-derived binding matches.
+ * Mandatory content-bound re-binding after serialization. The consumer
+ * carries exactly: the serialized binding + bindingDigest, the source label,
+ * the source bytes, the source bytes sha256, the released read contract, and
+ * the decision time. The released readers are re-executed against THOSE
+ * independently selected bytes/contract/time — the identity retained outside
+ * the substituted payload — and the freshly derived binding must match the
+ * carried one exactly. Raw caller-rehashed reader results are not accepted
+ * here at all: a rehashed record that merely re-proves its own readback hash
+ * cannot re-establish the source identity.
  */
-export function rebindSerializedOrderSource({ orderRead, customerRead, binding, bindingDigest }) {
-  const fresh = adaptOrderSourceToSalesAnalysis({ orderRead, customerRead });
+export function rebindSerializedOrderSource({
+  sourceLabel = KS238_SOURCE_LABEL_V1,
+  sourceBytes,
+  sourceBytesSha256,
+  contract,
+  now,
+  binding,
+  bindingDigest,
+} = {}) {
+  if (typeof sourceLabel !== "string" || sourceBytes === undefined || contract === undefined
+    || typeof now !== "string" || typeof sourceBytesSha256 !== "string") {
+    return { outcome: "DENIED", code: "REBIND_INPUT_REQUIRED" };
+  }
+  if (!sha256Hex(sourceBytesSha256) || bytesSha(sourceBytes) !== sourceBytesSha256) {
+    return { outcome: "DENIED", code: "SOURCE_BYTES_MISMATCH" };
+  }
+  if (!verifyErpReadConnectorContractV1(contract)) {
+    return { outcome: "DENIED", code: "ORDER_SOURCE_CONTRACT_MALFORMED" };
+  }
+  const orderRead = readErpOrdersFromLabelledSourceBytesV1({
+    contract, sourceBytes, sourceLabel, enabled: true, now,
+  });
+  if (orderRead.outcome !== "READ") return { outcome: "DENIED", code: orderRead.code };
+  const source = decodeSourceBytes(sourceBytes);
+  if (source === null) return { outcome: "DENIED", code: "SOURCE_BYTES_MALFORMED" };
+  const read = createErpReadAdapterV1({ contract, source, enabled: true, now });
+  const baseRequest = {
+    operation: "LIST_CUSTOMERS",
+    tenantId: contract.tenantId,
+    principalId: contract.identity.principalId,
+    scopes: contract.identity.scopes,
+    credentialPresent: true,
+    fields: contract.fields.customers,
+    pageSize: contract.policy.maxPageSize,
+  };
+  const drained = drainCustomerReader({ read, baseRequest });
+  if (!drained.ok) return { outcome: "DENIED", code: drained.code };
+  const fresh = adaptOrderSourceToSalesAnalysis({ orderRead, customerRead: drained.pages });
   if (fresh.outcome !== "ADAPTED") return { outcome: "DENIED", code: fresh.code };
   if (!isRecord(binding) || !sha256Hex(bindingDigest)) {
     return { outcome: "DENIED", code: "SERIALIZED_BINDING_MALFORMED" };
@@ -294,14 +444,22 @@ export function rebindSerializedOrderSource({ orderRead, customerRead, binding, 
   if (fresh.bindingDigest !== sha(binding)) {
     return { outcome: "DENIED", code: "SERIALIZED_BINDING_MISMATCH" };
   }
-  return { outcome: "REBOUND", code: "OK", binding, bindingDigest: fresh.bindingDigest, supported: fresh.supported };
+  return {
+    outcome: "REBOUND",
+    code: "OK",
+    binding,
+    bindingDigest: fresh.bindingDigest,
+    supported: fresh.supported,
+    unsupportedFacts: fresh.unsupportedFacts,
+  };
 }
 
 /**
  * Public read-only entry point. It owns the actual reader execution: callers
  * provide only the labelled source bytes, the released read contract, and the
  * decision time; a caller-supplied read-result object is never accepted as
- * handoff authority.
+ * handoff authority. The customer reader is drained across pages by its own
+ * cursor before joining.
  */
 export function createKs238OrderSourceHandoff({
   contract,
@@ -326,7 +484,7 @@ export function createKs238OrderSourceHandoff({
   const source = decodeSourceBytes(sourceBytes);
   if (source === null) return { outcome: "DENIED", code: "SOURCE_BYTES_MALFORMED" };
   const read = createErpReadAdapterV1({ contract, source, enabled, now });
-  const customerRead = read({
+  const baseRequest = {
     operation: "LIST_CUSTOMERS",
     tenantId: contract.tenantId,
     principalId: contract.identity.principalId,
@@ -334,9 +492,10 @@ export function createKs238OrderSourceHandoff({
     credentialPresent: true,
     fields: contract.fields.customers,
     pageSize: contract.policy.maxPageSize,
-  });
-  if (customerRead.outcome !== "READ") return { outcome: "DENIED", code: customerRead.code };
-  return adaptOrderSourceToSalesAnalysis({ orderRead, customerRead });
+  };
+  const drained = drainCustomerReader({ read, baseRequest });
+  if (!drained.ok) return { outcome: "DENIED", code: drained.code };
+  return adaptOrderSourceToSalesAnalysis({ orderRead, customerRead: drained.pages });
 }
 
 function decodeSourceBytes(sourceBytes) {

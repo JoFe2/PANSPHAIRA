@@ -325,7 +325,7 @@ ca2f72b3d7a4028c8dd2ca9b7d2a4c1afe7b12e861d977db510920e305099074  ./docs/archite
 ab892473a3c1b3ea7442876ac093a91fd123df5e32c74a86189b9cebfb8b00f8  ./docs/architecture/cscl-08-party-mapping-application-guide-v1.md
 4ec1240149ba3e5a0716cad00ddb4d471f6dd456ebb04d806c0c7fa6db06872c  ./docs/architecture/cscl-09-product-mapping-application-guide-v1.md
 f547a7eabbdd9766816136016815aac20ce06d6fc40328df2c3dd70510cec36e  ./docs/architecture/cscl-10-sales-mapping-application-guide-v1.md
-5c3d37b5bf4d6b30ef91f605f3209c9e9b73b2e184175cf4232b29c2203a7696  ./docs/architecture/ks238-order-source-handoff-v1.md
+670d255e3f2b608031d88e444a5f704faa479e75e8c03f09878d023144d8bec8  ./docs/architecture/ks238-order-source-handoff-v1.md
 3517d689b5d069711f2b18b7b51d80a2cfc1f12685f3b683543729b4afec1d9a  ./docs/architecture/pan435-436-sales-stock-journey-v1.md
 87fd5c8464e74c57cb21f3b49d7224848368ec00111c8e07e5393e63a9750e56  ./docs/architecture/pan437-neighbor-composition-v1.md
 cbf1ed6a03e936dd74b4cd66d9328a2318999212eb63c589934202a652b815c0  ./docs/architecture/rks-01-real-source-utility-result-v1.md
@@ -891,7 +891,7 @@ e442f491bcbde525603b8bf9d4153758af93889138aedcbf64e0ced8ff6940af  ./schemas/cont
 731349165a14d5de6526560ff8e35348241868f192b56d8c290990527e4d5494  ./schemas/contracts/knowledge-contribution-envelope-v1.schema.json
 914a02fa0016ec9b47be075fb3d53126955d4255956932b7a49c33589867cb31  ./schemas/contracts/knowledge-envelope-v1.schema.json
 55a20170e7269124abd86117a06dba3f7f28dd229e3f5c5b8437b7582e4e3b28  ./schemas/contracts/knowledge-taxonomy-v1.schema.json
-be3fa2da238c1fedaebe7c2710bc049e97eb756254a1a56735bda22765436add  ./schemas/contracts/ks238-order-source-handoff-v1.schema.json
+68b38a977a5b6d1995eabecec33d4a49ce10c67264faae544375ded15843b864  ./schemas/contracts/ks238-order-source-handoff-v1.schema.json
 287ec272a403ebec4cdc29d36c83a52ccbca39f044864df0ef181a1d7e1b7fea  ./schemas/contracts/local-file-corpus-profile-v1.schema.json
 3f99986a9dcdf3970d445869cc8f35c9dd66350743d8c0ddf2d4ef6f1c7738fd  ./schemas/contracts/maintenance-compatibility-profile-v1.schema.json
 096c266be1f952ba2ad9b21cf3f94ef8c29e3866a3ed40b643e410da1b63bac8  ./schemas/contracts/maintenance-doctor-report-v1.schema.json
@@ -1062,7 +1062,7 @@ cd45da6e602ebbe5043e56169e0b638aa997516f246a70290c4cc875486228f0  ./src/cscl-11/
 3692eb7977f35c791bbe0cb1b7fd9bd46827a195b927df8367d676f14cd5cc1f  ./src/cscl-13/complaint-cli.mjs
 1cc2589ac63743fa1104defdb1bc3beb66145308f917232e12d45d224beae52b  ./src/cscl-13/complaint.mjs
 4878fce07c0935fd093bed94fb1b4e977789234d7bd13edd9a974a1f2dcd2d34  ./src/cscl-13/pan437-neighbor.mjs
-45699d777d5f62f2ffd0901969533d63ba6dce99f4795d959f1e928720852a6a  ./src/ks238/order-source-handoff.mjs
+a9b3e0d28133c0f2a2aa2a1b7a630693a50aea993814993c23e3d4c573d2b917  ./src/ks238/order-source-handoff.mjs
 e2d5fba3fdd8ce038e1e3a4be7588112c3897e0a63dd7cf9f62b1eba42eb2303  ./src/pan433/domain-mapping-cli.mjs
 7b7223be8985556c537e1461dfc8905a990844a69929e11d8c5dfd76d31f017f  ./src/procurement-434/rechnungsabgleich-path-cli.mjs
 3c16a8087edec0848adea783492c16253c0718c239d793bf15ca9b8e3e23f0d3  ./src/procurement-434/rechnungsabgleich-path.mjs
@@ -1699,7 +1699,7 @@ b9354762dc2fdea40006e2dc31ff14da5bd78abbe5b8df238d8ce5e02aae0fee  ./tests/knowle
 68b56107f10a67fdcc261bf23b5e48e9da7cccc00ef8474398110491c3f5f3b7  ./tests/knowledge-solution/kts04-integrated-user-path.test.ts
 5de3d99e812f0c967b1fd5ed130a63a12d79accfd446afb0403f78a041027c1c  ./tests/knowledge-solution/kts05-followup-regressions.test.ts
 6045ee232a7d121599f57e8accfce9317c74f6f31f57adfed6952f0a8e5fb5b8  ./tests/knowledge-solution/kts06-residual-regressions.test.ts
-3171023b1b5f09f65e5d2ffc5b20289fcb338dbd3982c90fd446e3c3074675b0  ./tests/ks238/order-source-handoff.test.mjs
+63ede863b3a7caf2e9760143364a68118101ede91ad89712a1f31d6fe863a197  ./tests/ks238/order-source-handoff.test.mjs
 3842568ca1d443d07c30c5da78af819c95033099bda93cce8ee96bd271115996  ./tests/kundenauftrag-lieferzusage-v1.test.ts
 ea4438843130640f8aebd594a181735ca2fbaec7f3891cba542e9118eb58e4e0  ./tests/learning-routing-baseline.test.ts
 9530801dd2ee2735e4028a499f7c673752395d428838f0d842bf06071f2992f0  ./tests/learning-routing-outcome.test.ts
@@ -1942,7 +1942,7 @@ f92817f212c503e4e68449cecdb9709abee6ad19c4feff1d2e4962dcc3940d5e  ./verification
 183d4fb117b9e5996b61f740d89fcf8b47d92fdb911f7567d94dc190f58b7194  ./verification/incoming-invoice-ap06-proof-probe-v1.json
 3d50dd9c157e72eab46807810f63d82d6b44bd15b1887b54fa529976fd9ee71d  ./verification/incoming-invoice-erv-analytics-v1.json
 d43b38be4695e0e5c70e3a8e0ebd2a55b527974d7d9721cc43d94ee248245432  ./verification/intake-001-evidence-v1.json
-9d4e49703895aaf917dbfe94f9513feeee0a33e42ad8af5aa5abdd4ea112399b  ./verification/ks238-order-source-handoff-boundary-v1.json
+afd8bf34603827b4e8a537dcb05f500aa5ab8ba510d6e95cf7a5946f006f2899  ./verification/ks238-order-source-handoff-boundary-v1.json
 e2fa73eb5312982af288d29df015b0dc3e010f3fdba6405ce3b464b4ccece660  ./verification/lkc-qual-01-m0-evidence-v1.json
 3548c343e446524165550aae5705e357e059789404558670e71d9d73a3b82692  ./verification/paired-analytics-compatibility-v1.json
 7598ca9c5407e33d381046240096d84e2a287c0887273e0750fc9bbb99ccd92a  ./verification/paired-analytics-provider-evidence-v1/index.json
@@ -1958,5 +1958,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-78d71b4478ac5b94b7f6417de32808e3f2c9af2f015893379f3e3d692a5a2d6f  ./verification/verification-dag-v2.json
+c4327fcec063ac8760d8a8fafab5947359d1bf6b4b4fefbc0bf155ce5e602649  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
