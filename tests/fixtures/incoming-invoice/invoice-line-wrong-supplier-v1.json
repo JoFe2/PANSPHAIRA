@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "cm.fachprofil/rechnungszeile/v1",
+  "invoiceId": "invoice:synthetic-101",
+  "supplierId": "lieferant:unknown-999",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "einheit": "STK",
+  "waehrung": "EUR",
+  "menge": 100,
+  "amountMinor": 2400,
+  "contentSha256": "34f3262e505b5d44cd0018c5d9c200d257969075a7bc26e7cac2e77ddfa31e3e",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/invoice-line-wrong-supplier-v1.json#invoice:synthetic-101",
+    "generator": "M1_RECHNUNGSZEILE_V1",
+    "attestedBy": "supplier-invoice-line-evidence",
+    "attestationNote": "Synthetic substitution counter-example (LOCAL_SYNTHETIC_FIXTURE): the same invoice document claiming a DIFFERENT supplier (lieferant:unknown-999, does not close to the frozen PO/supplier identity SYN-SUP-001). Admitted by the code-owned approved-source manifest so the closed supplier gate (MATCH_INVOICE_LINE_SUPPLIER_NOT_CLOSED) is exercised in isolation from source admission; the supplier is never word-mapped or reconstructed. Self-sealed; synthetic; no production, booking or live-ERP claim."
+  }
+}

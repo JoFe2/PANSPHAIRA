@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "cm.fachprofil/rechnungszeile/v1",
+  "invoiceId": "invoice:synthetic-101",
+  "supplierId": "SYN-SUP-001",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "einheit": "KG",
+  "waehrung": "EUR",
+  "menge": 100,
+  "amountMinor": 2400,
+  "contentSha256": "f9131c5e99a9668cb783fe97ac5afee8092df2ec2bb5e2a0b8f8845df2ad9317",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/invoice-line-wrong-unit-v1.json#invoice:synthetic-101",
+    "generator": "M1_RECHNUNGSZEILE_V1",
+    "attestedBy": "supplier-invoice-line-evidence",
+    "attestationNote": "Synthetic substitution counter-example (LOCAL_SYNTHETIC_FIXTURE): the same invoice document in a DIFFERENT closed unit (KG, not the bound position's STK). Admitted by the code-owned approved-source manifest so the closed unit gate (MATCH_INVOICE_LINE_UNIT_MISMATCH) is exercised in isolation from source admission; quantities are only comparable in the same closed unit. Self-sealed; synthetic; no production, booking or live-ERP claim."
+  }
+}

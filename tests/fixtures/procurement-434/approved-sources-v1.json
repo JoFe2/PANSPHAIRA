@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "cm.proc434/procurement-434-approved-sources/v1",
+  "ap04Pack": {
+    "sha256": "136bbdfcb61bf48ab0043d828dbf797e9b9156f58d284cc7f9b921da59040845",
+    "canonicalSha256": "899d8dfc44be526011c35ad5aba4c2cb89bca433f1520e61fe05268d4816ad20"
+  },
+  "sources": [
+    {
+      "locator": "tests/fixtures/incoming-invoice/invoice-line-v1.json#invoice:synthetic-101",
+      "generator": "M1_RECHNUNGSZEILE_V1",
+      "attestedBy": "supplier-invoice-line-evidence",
+      "contentSha256": "1c195923de5b594d974194a13a7facb8b9e75efa9c343efba2c7e1b045271985"
+    },
+    {
+      "locator": "tests/fixtures/incoming-invoice/invoice-line-partial-v1.json#invoice:synthetic-101",
+      "generator": "M1_RECHNUNGSZEILE_V1",
+      "attestedBy": "supplier-invoice-line-evidence",
+      "contentSha256": "54b29945e0193c312deafbc4b7dad9bd251ec4d4a0488ac48bfb701b1ef69e81"
+    },
+    {
+      "locator": "tests/fixtures/incoming-invoice/invoice-line-over-v1.json#invoice:synthetic-101",
+      "generator": "M1_RECHNUNGSZEILE_V1",
+      "attestedBy": "supplier-invoice-line-evidence",
+      "contentSha256": "85111eb17d8ad00d42e9d75f67d89195d2069071e38fcd0bb6418c29546f8a10"
+    },
+    {
+      "locator": "tests/fixtures/incoming-invoice/receipt-valuation-v1.json#RCV-VAL-2026-0001",
+      "generator": "M1_WARENEINGANG_BELEG_V1",
+      "attestedBy": "warehouse-receipt-evidence",
+      "contentSha256": "b0fe8a5af086e32dd531d2f83247be8d579c17cfa72307c4ed9addb52cae8b72"
+    },
+    {
+      "locator": "tests/fixtures/incoming-invoice/receipt-valuation-2450-v1.json#RCV-VAL-2026-0002",
+      "generator": "M1_WARENEINGANG_BELEG_V1",
+      "attestedBy": "warehouse-receipt-evidence",
+      "contentSha256": "af2ded69496557adee26b71efe99b7c638769c494ccae3eb126ddbf6b2275d19"
+    },
+    {
+      "locator": "tests/fixtures/procurement-434/po-identity-mapping-v1.json#PO-2026-0001",
+      "generator": "PROC434_PO_IDENTITY_MAPPING_V1",
+      "attestedBy": "procurement-relation-evidence",
+      "contentSha256": "56e6d10e9cbe3a72337e5b5c9e433be9f0de26fc67fd0229a6140fbae6d5f94c"
+    },
+    {
+      "locator": "tests/fixtures/incoming-invoice/invoice-line-wrong-supplier-v1.json#invoice:synthetic-101",
+      "generator": "M1_RECHNUNGSZEILE_V1",
+      "attestedBy": "supplier-invoice-line-evidence",
+      "contentSha256": "34f3262e505b5d44cd0018c5d9c200d257969075a7bc26e7cac2e77ddfa31e3e"
+    },
+    {
+      "locator": "tests/fixtures/incoming-invoice/invoice-line-wrong-unit-v1.json#invoice:synthetic-101",
+      "generator": "M1_RECHNUNGSZEILE_V1",
+      "attestedBy": "supplier-invoice-line-evidence",
+      "contentSha256": "f9131c5e99a9668cb783fe97ac5afee8092df2ec2bb5e2a0b8f8845df2ad9317"
+    },
+    {
+      "locator": "tests/fixtures/incoming-invoice/invoice-line-wrong-currency-v1.json#invoice:synthetic-101",
+      "generator": "M1_RECHNUNGSZEILE_V1",
+      "attestedBy": "supplier-invoice-line-evidence",
+      "contentSha256": "dc00c9a707caac0882ee58ea576a7257bd6603ef5055183a3bd26d80c1d486d8"
+    }
+  ],
+  "nonclaims": [
+    "NO_CUSTOMER_DATA_EVALUATED",
+    "NO_EXTERNAL_PROVIDER_EVALUATED",
+    "NO_LIVE_ERP_SYSTEM_CLAIM",
+    "SELF_DIGEST_IS_NOT_AUTHENTICATION: admission additionally requires this independently retained identity and content binding, not a digest carried alongside mutable content",
+    "ADMISSION_IS_NOT_AUTHENTICATION: retained fixture identity/content binding, not a content-correctness claim — the closed supplier/unit/order gates still verify the content"
+  ]
+}

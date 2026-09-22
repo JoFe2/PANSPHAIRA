@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "cm.fachprofil/rechnungszeile/v1",
+  "invoiceId": "invoice:synthetic-101",
+  "supplierId": "SYN-SUP-001",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "einheit": "STK",
+  "waehrung": "EUR",
+  "menge": 4,
+  "amountMinor": 2400,
+  "contentSha256": "85111eb17d8ad00d42e9d75f67d89195d2069071e38fcd0bb6418c29546f8a10",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/invoice-line-over-v1.json#invoice:synthetic-101",
+    "generator": "M1_RECHNUNGSZEILE_V1",
+    "attestedBy": "supplier-invoice-line-evidence",
+    "attestationNote": "Synthetic purchase-side supplier invoice line (LOCAL_SYNTHETIC_FIXTURE) for the OVER-invoicing counter-example: it invoices 4 against the frozen PO-2026-0001 source quantity 2 (amount 2400 EUR minor unchanged, carried for the closed cross-check against the real erp-read reader fact). Over-invoicing (invoiced > ordered/accepted) is DENIED and can never read as a matched decision. The content seal is a self-delivered digest and is NOT an authentication grant by itself; admission is additionally gated by the code-owned approved-source manifest. Synthetic; no production, booking or live-ERP claim."
+  }
+}

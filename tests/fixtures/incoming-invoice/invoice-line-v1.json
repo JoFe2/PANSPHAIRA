@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "cm.fachprofil/rechnungszeile/v1",
+  "invoiceId": "invoice:synthetic-101",
+  "supplierId": "SYN-SUP-001",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "einheit": "STK",
+  "waehrung": "EUR",
+  "menge": 2,
+  "amountMinor": 2400,
+  "contentSha256": "1c195923de5b594d974194a13a7facb8b9e75efa9c343efba2c7e1b045271985",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/invoice-line-v1.json#invoice:synthetic-101",
+    "generator": "M1_RECHNUNGSZEILE_V1",
+    "attestedBy": "supplier-invoice-line-evidence",
+    "attestationNote": "Synthetic purchase-side supplier invoice line (LOCAL_SYNTHETIC_FIXTURE) supplying the two M0-declared invoice-side losses for the decisive three-way match: the invoice's own supplierId (SYN-SUP-001, closes to the frozen PO/supplier identity) and its line menge/einheit (2 STK, coherent with the frozen PO-2026-0001 source quantity 2, the bound position's ordered quantity and the accepted goods receipt). The amount (2400 EUR minor) is carried for the closed cross-check but is NOT the authoritative invoice amount - the authoritative amount stays the real erp-read reader fact (invoice:synthetic-101 totalMinor, source-bound via the owned reader boundary), so this line cannot re-label the amount. The content seal is a self-delivered digest and is NOT an authentication grant by itself: the supplier/unit/invoice/order/position must close to the source-bound PO/supplier and reader fact, the amount must equal the reader fact, the line quantity must reconcile against the frozen PO source quantity and the accepted receipt (no over-invoicing, no identity-only quantity reconciliation), before the decisive match is assembled. Admission is additionally gated by the code-owned approved-source manifest (cm.proc434/procurement-434-approved-sources/v1) whose entire content is bound to a code-owned expected canonical digest, not by the self-hash alone. Synthetic; no production, booking or live-ERP claim."
+  }
+}

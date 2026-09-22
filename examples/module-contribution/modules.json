@@ -52,6 +52,48 @@
         "tests/cscl-13/pan437-neighbor.test.mjs"
       ],
       "dependencies": {}
+    },
+    {
+      "id": "procurement-invoice-matching",
+      "version": "1",
+      "sources": [
+        "packages/contracts/src/fachprofil-mapping-v1.ts",
+        "packages/contracts/src/beschaffung-wareneingang-v1.ts",
+        "packages/contracts/src/rechnungsabgleich-v1.ts",
+        "packages/contracts/src/rechnungsabgleich-match-v1.ts"
+      ],
+      "contracts": [],
+      "profiles": [
+        "tests/fixtures/incoming-invoice/ap-04-erv-cases-v1.json",
+        "tests/fixtures/incoming-invoice/invoice-line-v1.json",
+        "tests/fixtures/incoming-invoice/receipt-valuation-v1.json",
+        "tests/fixtures/incoming-invoice/receipt-valuation-2450-v1.json",
+        "tests/fixtures/incoming-invoice/receipt-valuation-unknown-supplier-v1.json",
+        "tests/fixtures/incoming-invoice/receipt-valuation-po-identity-v1.json",
+        "tests/fixtures/erp-read/matched-export-v1.json"
+      ],
+      "tests": [
+        "tests/rechnungsabgleich-v1.test.ts",
+        "tests/rechnungsabgleich-match-v1.test.ts"
+      ],
+      "dependencies": {}
+    },
+    {
+      "id": "procurement-normal-path",
+      "version": "1",
+      "sources": [
+        "src/procurement-434"
+      ],
+      "contracts": [],
+      "profiles": [
+        "tests/fixtures/incoming-invoice/invoice-line-v1.json"
+      ],
+      "tests": [
+        "tests/procurement-434/rechnungsabgleich-path.test.mjs"
+      ],
+      "dependencies": {
+        "procurement-invoice-matching": "1"
+      }
     }
   ]
 }

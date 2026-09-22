@@ -109,6 +109,8 @@ source and descriptor let maintainers regenerate them for an historical checkout
 
 The catalog covers only the existing CSCL-01 protocol and CSCL-02 Odoo profile. CSCL-02 tests validate emitted profiles against CSCL-01 source-fact, evidence-cell, and system-profile schemas, establishing the explicit direct semantic dependency. The sources, contracts, profile fixtures, and tests are real existing repository files, not generated business implementations.
 
+The catalog also scopes the two PROC434 procurement building blocks. `procurement-invoice-matching` v1 owns the M1 Fachprofil contracts (`fachprofil-mapping-v1`, `beschaffung-wareneingang-v1`, `rechnungsabgleich-v1`) and the decisive three-way purchase match (`rechnungsabgleich-match-v1`), tested against the frozen AP-04 ERV pack and the sealed receipt-valuation and purchase-side invoice-line fixtures. `procurement-normal-path` v1 owns the documented executable entry point (`src/procurement-434/`) and depends on `procurement-invoice-matching` v1. These are real, existing repository files and a bounded scoped capture, not a repository-wide migration.
+
 Run their focused tests explicitly:
 
 ```sh

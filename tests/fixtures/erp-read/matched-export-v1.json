@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "chimpmaera.connector/erp-supported-export/v1",
+  "exportId": "export:erp-m1-matched-002",
+  "tenantId": "tenant:synthetic-zoo",
+  "generatedAt": "2026-09-10T08:00:00Z",
+  "expiresAt": "2026-09-10T09:00:00Z",
+  "batches": [
+    {
+      "batchId": "batch:erp-invoices-002",
+      "entity": "invoices",
+      "sequence": 1,
+      "complete": true,
+      "records": [
+        {
+          "recordMetadata": {
+            "sourceRecordId": "erp-record:invoice-101",
+            "sourceUpdatedAt": "2026-09-10T07:50:00Z",
+            "lineageSequence": 1
+          },
+          "facts": {
+            "invoiceId": "invoice:synthetic-101",
+            "orderId": "order:synthetic-101",
+            "customerId": "customer:zoo-001",
+            "invoiceStatus": "OPEN",
+            "issueDate": "2026-09-02",
+            "dueDate": "2026-09-16",
+            "totalMinor": 2400,
+            "currency": "EUR"
+          }
+        },
+        {
+          "recordMetadata": {
+            "sourceRecordId": "erp-record:invoice-102",
+            "sourceUpdatedAt": "2026-09-10T07:51:00Z",
+            "lineageSequence": 2
+          },
+          "facts": {
+            "invoiceId": "invoice:synthetic-102",
+            "orderId": "order:synthetic-102",
+            "customerId": "customer:zoo-002",
+            "invoiceStatus": "OPEN",
+            "issueDate": "2026-09-03",
+            "dueDate": "2026-09-17",
+            "totalMinor": 2500,
+            "currency": "EUR"
+          }
+        }
+      ]
+    }
+  ],
+  "lineage": {
+    "sourceSystem": "SYNTHETIC_ERP",
+    "sourceDatasetId": "dataset:zoo-bi-m1-matched",
+    "extractionMode": "SUPPORTED_EXPORT",
+    "sourceDigest": "8f2fbaf91c045507c6e6da79a9110dd85a46627b8b0a052f2d0d9786257666ed"
+  }
+}

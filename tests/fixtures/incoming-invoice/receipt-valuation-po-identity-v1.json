@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "cm.fachprofil/wareneingang-beleg/v1",
+  "referenceId": "PO-2026-0001",
+  "referenceKind": "RECEIPT",
+  "belegId": "beleg:wg-eink-001",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "supplierId": "SYN-SUP-001",
+  "einheit": "STK",
+  "waehrung": "EUR",
+  "matchAmountMinor": 2400,
+  "contentSha256": "f13cc5a8b35e69813bea2b429d941ae745db5bb829313fd870e29079b5f5e057",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/receipt-valuation-po-identity-v1.json#PO-2026-0001",
+    "generator": "M1_WARENEINGANG_BELEG_V1",
+    "attestedBy": "warehouse-receipt-evidence",
+    "attestationNote": "Negative: referenceId deliberately equals the PO referenceId; a receipt valuation must be a SEPARATE reference from the PO."
+  }
+}

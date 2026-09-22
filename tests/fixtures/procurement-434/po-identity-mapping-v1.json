@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "cm.proc434/po-identity-mapping/v1",
+  "poReferenceId": "PO-2026-0001",
+  "supplierClosedIdentity": "SYN-SUP-001",
+  "localSupplierId": "lieferant:metall-001",
+  "localBestellungId": "bestellung:eink-001",
+  "localPositionId": "position:eink-001-01",
+  "localArtikelId": "EINK-ART-001",
+  "contentSha256": "56e6d10e9cbe3a72337e5b5c9e433be9f0de26fc67fd0229a6140fbae6d5f94c",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/procurement-434/po-identity-mapping-v1.json#PO-2026-0001",
+    "generator": "PROC434_PO_IDENTITY_MAPPING_V1",
+    "attestedBy": "procurement-relation-evidence",
+    "attestationNote": "Explicit purchase-side relation mapping (LOCAL_SYNTHETIC_FIXTURE) that binds the local Bestellentwurf's draft identities (supplier lieferant:metall-001, order bestellung:eink-001, position position:eink-001-01, article EINK-ART-001) to the closed PO evidence (PO-2026-0001, supplier-closed identity SYN-SUP-001). This is the closed identity link between the DRAFT order and the PO purchase evidence: it maps the closed identities only (never a word-map of an open supplier and never a quantity/amount source), so the quantity reconciliation compares the bound order position, the accepted receipt and the actual invoice line over a coherent closed order identity. The content seal is a self-delivered digest and is NOT an authentication grant by itself; admission additionally requires the code-owned approved-source manifest (cm.proc434/procurement-434-approved-sources/v1). Synthetic; no production, booking or live-ERP claim."
+  }
+}

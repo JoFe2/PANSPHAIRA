@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "cm.fachprofil/wareneingang-beleg/v1",
+  "referenceId": "RCV-VAL-2026-0001",
+  "referenceKind": "RECEIPT",
+  "belegId": "beleg:wg-eink-001",
+  "bestellungId": "bestellung:eink-001",
+  "positionId": "position:eink-001-01",
+  "supplierId": "SYN-SUP-001",
+  "einheit": "STK",
+  "waehrung": "EUR",
+  "matchAmountMinor": 2400,
+  "contentSha256": "b0fe8a5af086e32dd531d2f83247be8d579c17cfa72307c4ed9addb52cae8b72",
+  "evidence": {
+    "sourceKind": "LOCAL_SYNTHETIC_FIXTURE",
+    "locator": "tests/fixtures/incoming-invoice/receipt-valuation-v1.json#RCV-VAL-2026-0001",
+    "generator": "M1_WARENEINGANG_BELEG_V1",
+    "attestedBy": "warehouse-receipt-evidence",
+    "attestationNote": "Independent goods-receipt valuation attested by the warehouse receipt (beleg), DISTINCT from the frozen PO amount. Bound by closed order/position/supplier/unit identity and its own content seal; NOT copied from the PO and NOT the erp-read invoice."
+  }
+}
