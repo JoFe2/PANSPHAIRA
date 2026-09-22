@@ -4,22 +4,46 @@
   "title": "ChimpMaera closed inactive capability catalogue v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "catalogueId", "version", "digest", "activationDefault", "actions"],
+  "required": [
+    "schemaVersion",
+    "catalogueId",
+    "version",
+    "digest",
+    "activationDefault",
+    "actions"
+  ],
   "properties": {
-    "schemaVersion": { "const": "chimpmaera.security/capability-catalogue/v1" },
-    "catalogueId": { "const": "chimpmaera.local/synthetic-actions" },
-    "version": { "const": "1.0.0" },
-    "digest": { "const": "bb0060a254f450684bd17f6559d267d6f02d225c4c4d37479c3010c60d1b8427" },
-    "activationDefault": { "const": "INACTIVE" },
+    "schemaVersion": {
+      "const": "chimpmaera.security/capability-catalogue/v1"
+    },
+    "catalogueId": {
+      "const": "chimpmaera.local/synthetic-actions"
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "digest": {
+      "const": "beaffca5dcbb42bcc69c1fa01344bd33cb6f4bc7ee16deacaf561eb8da6876e9"
+    },
+    "activationDefault": {
+      "const": "INACTIVE"
+    },
     "actions": {
       "type": "array",
       "prefixItems": [
-        { "$ref": "#/$defs/crmAction" },
-        { "$ref": "#/$defs/erpAction" }
+        {
+          "$ref": "#/$defs/crmAction"
+        },
+        {
+          "$ref": "#/$defs/erpAction"
+        },
+        {
+          "$ref": "#/$defs/employeeAction"
+        }
       ],
       "items": false,
-      "minItems": 2,
-      "maxItems": 2
+      "minItems": 3,
+      "maxItems": 3
     }
   },
   "$defs": {
@@ -27,23 +51,54 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "schemaVersion", "actionId", "version", "digest", "resource", "requestSchema",
-        "responseSchema", "resourceBounds", "evidenceContract", "limitations", "activationState"
+        "schemaVersion",
+        "actionId",
+        "version",
+        "digest",
+        "resource",
+        "requestSchema",
+        "responseSchema",
+        "resourceBounds",
+        "evidenceContract",
+        "limitations",
+        "activationState"
       ],
       "properties": {
-        "schemaVersion": { "const": "chimpmaera.security/capability-action/v1" },
-        "actionId": { "const": "crm.contact.create" },
-        "version": { "const": "1.0.0" },
-        "digest": { "const": "8a032b1057fcd5c10497877cbb53ceadbd9f76fba899c630855ed5019045c24a" },
-        "resource": { "const": "synthetic.crm.contact" },
+        "schemaVersion": {
+          "const": "chimpmaera.security/capability-action/v1"
+        },
+        "actionId": {
+          "const": "crm.contact.create"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "digest": {
+          "const": "8a032b1057fcd5c10497877cbb53ceadbd9f76fba899c630855ed5019045c24a"
+        },
+        "resource": {
+          "const": "synthetic.crm.contact"
+        },
         "requestSchema": {
           "const": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["email", "name"],
+            "required": [
+              "email",
+              "name"
+            ],
             "properties": {
-              "email": { "type": "string", "minLength": 3, "maxLength": 120, "pattern": "^[^@\\s]+@example\\.test$" },
-              "name": { "type": "string", "minLength": 1, "maxLength": 80 }
+              "email": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 120,
+                "pattern": "^[^@\\s]+@example\\.test$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              }
             }
           }
         },
@@ -51,37 +106,83 @@
           "const": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["contactId"],
-            "properties": { "contactId": { "type": "string", "pattern": "^synthetic-contact-[0-9]{3}$" } }
+            "required": [
+              "contactId"
+            ],
+            "properties": {
+              "contactId": {
+                "type": "string",
+                "pattern": "^synthetic-contact-[0-9]{3}$"
+              }
+            }
           }
         },
-        "resourceBounds": { "$ref": "#/$defs/resourceBounds" },
-        "evidenceContract": { "$ref": "#/$defs/evidenceContract" },
-        "limitations": { "$ref": "#/$defs/limitations" },
-        "activationState": { "const": "INACTIVE" }
+        "resourceBounds": {
+          "$ref": "#/$defs/resourceBounds"
+        },
+        "evidenceContract": {
+          "$ref": "#/$defs/evidenceContract"
+        },
+        "limitations": {
+          "$ref": "#/$defs/limitations"
+        },
+        "activationState": {
+          "const": "INACTIVE"
+        }
       }
     },
     "erpAction": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "schemaVersion", "actionId", "version", "digest", "resource", "requestSchema",
-        "responseSchema", "resourceBounds", "evidenceContract", "limitations", "activationState"
+        "schemaVersion",
+        "actionId",
+        "version",
+        "digest",
+        "resource",
+        "requestSchema",
+        "responseSchema",
+        "resourceBounds",
+        "evidenceContract",
+        "limitations",
+        "activationState"
       ],
       "properties": {
-        "schemaVersion": { "const": "chimpmaera.security/capability-action/v1" },
-        "actionId": { "const": "erp.order.create" },
-        "version": { "const": "1.0.0" },
-        "digest": { "const": "a20f5c9b60cbb9af1d098ae31c5f3e46e37722c6a9548b9f25b331c0287b98ab" },
-        "resource": { "const": "synthetic.erp.order" },
+        "schemaVersion": {
+          "const": "chimpmaera.security/capability-action/v1"
+        },
+        "actionId": {
+          "const": "erp.order.create"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "digest": {
+          "const": "a20f5c9b60cbb9af1d098ae31c5f3e46e37722c6a9548b9f25b331c0287b98ab"
+        },
+        "resource": {
+          "const": "synthetic.erp.order"
+        },
         "requestSchema": {
           "const": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["quantity", "sku"],
+            "required": [
+              "quantity",
+              "sku"
+            ],
             "properties": {
-              "quantity": { "type": "integer", "minimum": 1, "maximum": 100 },
-              "sku": { "type": "string", "minLength": 3, "maxLength": 32, "pattern": "^SYN-[A-Z0-9-]+$" }
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "sku": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 32,
+                "pattern": "^SYN-[A-Z0-9-]+$"
+              }
             }
           }
         },
@@ -89,14 +190,29 @@
           "const": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["orderId"],
-            "properties": { "orderId": { "type": "string", "pattern": "^synthetic-order-[0-9]{3}$" } }
+            "required": [
+              "orderId"
+            ],
+            "properties": {
+              "orderId": {
+                "type": "string",
+                "pattern": "^synthetic-order-[0-9]{3}$"
+              }
+            }
           }
         },
-        "resourceBounds": { "$ref": "#/$defs/resourceBounds" },
-        "evidenceContract": { "$ref": "#/$defs/evidenceContract" },
-        "limitations": { "$ref": "#/$defs/limitations" },
-        "activationState": { "const": "INACTIVE" }
+        "resourceBounds": {
+          "$ref": "#/$defs/resourceBounds"
+        },
+        "evidenceContract": {
+          "$ref": "#/$defs/evidenceContract"
+        },
+        "limitations": {
+          "$ref": "#/$defs/limitations"
+        },
+        "activationState": {
+          "const": "INACTIVE"
+        }
       }
     },
     "resourceBounds": {
@@ -110,7 +226,9 @@
     "evidenceContract": {
       "const": {
         "required": true,
-        "allowedSinkTypes": ["SYNTHETIC_MEMORY"],
+        "allowedSinkTypes": [
+          "SYNTHETIC_MEMORY"
+        ],
         "receiptSchemaVersion": "chimpmaera.security/capability-broker-receipt/v1",
         "correlationMode": "SHA256_SANITIZED"
       }
@@ -123,6 +241,85 @@
         "SYNCHRONOUS_PREPARE_BOUND_ONLY_NO_CANCELLATION",
         "IN_MEMORY_REPLAY_RESERVATION_ONLY"
       ]
+    },
+    "employeeAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "actionId",
+        "version",
+        "digest",
+        "resource",
+        "requestSchema",
+        "responseSchema",
+        "resourceBounds",
+        "evidenceContract",
+        "limitations",
+        "activationState"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "chimpmaera.security/capability-action/v1"
+        },
+        "actionId": {
+          "const": "employee.directory.read_own"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "digest": {
+          "const": "f59d5f790edb731e24a363e1cb8a4ef46fccb006ff4749cffb3d276f9212609e"
+        },
+        "resource": {
+          "const": "employee.directory.own"
+        },
+        "requestSchema": {
+          "const": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "userId"
+            ],
+            "properties": {
+              "userId": {
+                "type": "string",
+                "minLength": 6,
+                "maxLength": 80,
+                "pattern": "^user:[a-z0-9-]+$"
+              }
+            }
+          }
+        },
+        "responseSchema": {
+          "const": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "displayName"
+            ],
+            "properties": {
+              "displayName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "resourceBounds": {
+          "$ref": "#/$defs/resourceBounds"
+        },
+        "evidenceContract": {
+          "$ref": "#/$defs/evidenceContract"
+        },
+        "limitations": {
+          "$ref": "#/$defs/limitations"
+        },
+        "activationState": {
+          "const": "INACTIVE"
+        }
+      }
     }
   }
 }

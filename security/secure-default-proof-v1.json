@@ -104,12 +104,12 @@
     {
       "path": "packages/contracts/src/capability-catalogue.ts",
       "role": "IMPLEMENTATION",
-      "sha256": "9d24442a94c2cfcf9c305732a60ceadf286200a2eae26b6dabd157769a223f54"
+      "sha256": "e2d6acca17d7eb938124c31282f6e6aefd9f7e9b65117722a452170967ec835e"
     },
     {
       "path": "tests/capability-catalogue.test.ts",
       "role": "TEST",
-      "sha256": "3fb6871824cc52620fd580e386a98bcc12dcf5a8f395ebdb08e8fa115f1ca5cc"
+      "sha256": "3276f78d38bd88ad67b0f3c0468865b72784fd255aed778c6d5cf1ee8fdd4f5a"
     },
     {
       "path": "tests/demo-enforcement-gate.test.mjs",
@@ -174,7 +174,7 @@
     {
       "path": "demo/manifests/supply-chain/openclaw-agent-runtime-lock-v1.json",
       "role": "IMPLEMENTATION",
-      "sha256": "d303bfa7662cd0d50d717d03a4cfdfaec856e0a1a140c910e7ce077535d32377"
+      "sha256": "9dc34de66cca19d53ab7bc82a1b4cd1a38e1f49e128e89bb714371a22c276c54"
     },
     {
       "path": "scripts/verify-openclaw-agent-runtime-lock.mjs",

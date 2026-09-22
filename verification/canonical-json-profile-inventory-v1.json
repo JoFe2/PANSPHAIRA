@@ -219,6 +219,14 @@
       "fromSha256": "2d18296970298faf861f07e0cf5a89762e95d8fd7d72c6ea712118c49fe2d2b8",
       "toSha256": "9fd0b4d9c7888a2509a4fa14d519685068ce5b11c3187dfcfc890828cb2f5b79",
       "reason": "Advance verification DAG to graph v54 and bind the bounded PAN433 domain convention plus default/alternate mapping acceptance to its explicit local owner; preserve all prior immutable obligations."
+    },
+    {
+      "migrationId": "PAN441-EMPLOYEE-READONLY/INTEGRITY-GENERATOR/V23",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 23,
+      "fromSha256": "9fd0b4d9c7888a2509a4fa14d519685068ce5b11c3187dfcfc890828cb2f5b79",
+      "toSha256": "488fc3363b4d1cddd9d2c3ecedcbf1d465c02a3d825856858971eca0121d2c64",
+      "reason": "Advance verification DAG to graph v55 and bind the bounded PAN441 read-only employee-agent profile, focused denials and public registration to its explicit local owner; preserve all prior immutable obligations."
     }
   ],
   "scanScope": {
@@ -261,15 +269,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 699,
+    "filesScanned": 701,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 245,
-    "importFiles": 244,
+    "importSites": 246,
+    "importFiles": 245,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1953,
-    "ledgerUniquePaths": 1953
+    "ledgerEntries": 1957,
+    "ledgerUniquePaths": 1957
   },
   "profiles": [
     {
@@ -342,7 +350,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "9fd0b4d9c7888a2509a4fa14d519685068ce5b11c3187dfcfc890828cb2f5b79"
+      "sha256": "488fc3363b4d1cddd9d2c3ecedcbf1d465c02a3d825856858971eca0121d2c64"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -614,8 +622,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 138,
-      "importFiles": 138
+      "importSites": 139,
+      "importFiles": 139
     },
     {
       "owner": "cscl-03",
@@ -968,7 +976,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "9fd0b4d9c7888a2509a4fa14d519685068ce5b11c3187dfcfc890828cb2f5b79",
+      "sha256": "488fc3363b4d1cddd9d2c3ecedcbf1d465c02a3d825856858971eca0121d2c64",
       "basis": "profile-version-migration"
     },
     {

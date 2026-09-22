@@ -667,6 +667,40 @@ const pairedAnalyticsInvariants = [
 for (const invariant of pairedAnalyticsInvariants) {
   if (!repositoryIntegrityNode.invariants.includes(invariant)) repositoryIntegrityNode.invariants.push(invariant);
 }
+const pan441Inputs = [
+  ["docs/PAN441-EMPLOYEE-PROFILE.md", "DERIVED_EVIDENCE"],
+  ["packages/contracts/src/pan441-employee-profile.ts", "CONTRACT"],
+  ["schemas/contracts/pan441-employee-profile-v1.schema.json", "SCHEMA"],
+  ["tests/pan441-employee-profile.test.ts", "VALIDATOR"],
+];
+let pan441Node = dag.nodes.find(({ id }) => id === "pan441-employee-profile-v1");
+if (pan441Node === undefined) {
+  pan441Node = {
+    id: "pan441-employee-profile-v1",
+    dependsOn: ["integration-profile-v1"],
+    inputs: [],
+    ownedTests: ["npm run pan441:test"],
+    invariants: [
+      "Only the independently held released profile and own requesting-user capability identity can authorize a local synthetic employee read.",
+      "Other-user targets, missing identity or permission, unavailable capabilities, write-shaped operations and critical identity fields fail closed.",
+      "The profile, catalogue, integration and governed-skill digests remain bound; replacement remains denied until independent readback, with no runtime storage or provider authority.",
+    ],
+    riskClass: "CRITICAL",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan441Node);
+}
+pan441Node.dependsOn = ["integration-profile-v1"];
+pan441Node.inputs = pan441Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan441Node.ownedTests = ["npm run pan441:test"];
+for (const [inputPath, role] of pan441Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN441_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan441:test")) repositoryIntegrityNode.ownedTests.push("npm run pan441:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
 const pan433Inputs = [
   ["docs/development/pan433-domain-mapping-v1.md", "DERIVED_EVIDENCE"],
   ["examples/module-contribution/modules.json", "CONTRACT"],
@@ -703,7 +737,7 @@ for (const [inputPath, role] of pan433Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan433:mapping:test")) repositoryIntegrityNode.ownedTests.push("npm run pan433:mapping:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 54;
+dag.graphVersion = 55;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
