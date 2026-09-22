@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "pansphaira.kts/method-spec/v1",
+  "methodId": "method:invoice-total-v1",
+  "familyId": "family:invoice-total-v1",
+  "title": "Rechnungssummen-Summenbildung (Referenz)",
+  "meaning": "Summiert Gesamtbetraege aller Rechnungen eines Kontexts; Referenzmethode, die die Auswahl zu einem anderen Ziel (COMPUTE_TOTAL) demonstriert.",
+  "supportedOutcomes": [
+    "COMPUTE_TOTAL"
+  ],
+  "inputs": [
+    {
+      "inputId": "input:invoice-records-v1",
+      "meaning": "Rechnungen des Datenkontexts",
+      "kind": "record-set",
+      "unit": null,
+      "unitAliases": [],
+      "requiredFields": [
+        {
+          "field": "invoiceId",
+          "nullable": false
+        },
+        {
+          "field": "totalMinor",
+          "nullable": false
+        }
+      ],
+      "fieldAliases": [
+        {
+          "sourceField": "rechnung_nr",
+          "specField": "invoiceId",
+          "factor": null
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "outputId": "output:invoice-total-v1",
+      "meaning": "Summe der Gesamtbetraege in Nebeneinheiten"
+    }
+  ],
+  "preconditions": [
+    "Der Datenkontext liefert Rechnungen mit Kennung und Gesamtwert"
+  ],
+  "knowledgeRefs": [
+    {
+      "ref": "knowledge:invoice-total-rules-v1",
+      "kind": "REQUIRED",
+      "staleAfterMs": 31536000000
+    }
+  ],
+  "version": "0.1.0",
+  "specDigest": "2da88d3aa42bdcae6af8cfbcfa84d991a47b86a98d4ded1a5fefd2ae622e4ebd"
+}

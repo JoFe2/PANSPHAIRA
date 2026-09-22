@@ -275,18 +275,18 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  */
 const EXPECTED_COUNTS = {
 
-  filesScanned: 685,
+  filesScanned: 699,
   declarationSites: 37,
   declarationFiles: 37,
-  importSites: 236,
-  importFiles: 235,
+  importSites: 245,
+  importFiles: 244,
 
   reexportSites: 4,
   similarShapeSites: 30,
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1920, uniquePaths: 1920, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1953, uniquePaths: 1953, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 

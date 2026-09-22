@@ -1,0 +1,4 @@
+rechnung,bestellung,kunde,betrag,waehrung,faellig_am,grenzwert_eur
+rechnung:201,bestellung:201,kunde:201,2999,USD,2026-08-02,3000
+rechnung:202,bestellung:202,kunde:202,3000,USD,2026-08-18,3000
+rechnung:203,bestellung:203,kunde:203,12000,USD,2026-09-05,3000

@@ -1,0 +1,4 @@
+invoiceId,orderId,customerId,rechnungsbetrag_cent,currency,dueDate,grenzwert_eur
+rechnung:001,bestellung:001,kunde:001,2999,EUR,2026-08-01,3000
+rechnung:002,bestellung:002,kunde:002,3000,EUR,2026-08-15,3000
+rechnung:003,bestellung:003,kunde:003,12000,EUR,2026-09-01,3000

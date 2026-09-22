@@ -14,3 +14,4 @@ __pycache__/
 .env.*
 !.env.example
 demo/bi-foundation/config.local.json
+.kts-pg-data/
