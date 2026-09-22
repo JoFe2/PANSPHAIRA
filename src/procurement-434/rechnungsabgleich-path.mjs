@@ -131,12 +131,12 @@ export function runProc434ReaderV1(readerContract, readerExport, now) {
  * amount core under the verified frozen AP-04 pack). Returns the closed
  * decisive-match outcome. This is the ACTUAL invoice match.
  */
-export function runProc434DecisiveMatchV1({ fixtures, entwurf, ledger, readback, reader }) {
+export function buildProc434DecisiveMatchInputV1({ fixtures, entwurf, ledger, readback, reader }) {
   const frozen = fixtures.pack.cases.find((c) => c.caseId === "two-way-matched-strict");
-  if (!frozen) return { outcome: "DENIED", code: "PROC434_FROZEN_CASE_MISSING", detail: "the frozen AP-04 two-way-matched-strict case is missing" };
+  if (!frozen) return null;
   const supplierReference = frozen.references.find((r) => r.body.referenceKind === "SUPPLIER");
   const poReference = frozen.references.find((r) => r.body.referenceKind === "PURCHASE_ORDER");
-  const input = {
+  return {
     erpReadSource: fixtures.readerExport,
     erpReadContract: fixtures.readerContract,
     erpReadNow: PROC434_READ_NOW_V1,
@@ -153,6 +153,11 @@ export function runProc434DecisiveMatchV1({ fixtures, entwurf, ledger, readback,
     poIdentityMapping: fixtures.poIdentityMapping,
     approvedSources: fixtures.approvedSources,
   };
+}
+
+export function runProc434DecisiveMatchV1({ fixtures, entwurf, ledger, readback, reader }) {
+  const input = buildProc434DecisiveMatchInputV1({ fixtures, entwurf, ledger, readback, reader });
+  if (input === null) return { outcome: "DENIED", code: "PROC434_FROZEN_CASE_MISSING", detail: "the frozen AP-04 two-way-matched-strict case is missing" };
   return rechnungsabgleichMatchZusammensetzenV1(input, fixtures.pack);
 }
 

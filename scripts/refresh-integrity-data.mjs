@@ -667,9 +667,43 @@ const pairedAnalyticsInvariants = [
 for (const invariant of pairedAnalyticsInvariants) {
   if (!repositoryIntegrityNode.invariants.includes(invariant)) repositoryIntegrityNode.invariants.push(invariant);
 }
+const pan433Inputs = [
+  ["docs/development/pan433-domain-mapping-v1.md", "DERIVED_EVIDENCE"],
+  ["examples/module-contribution/modules.json", "CONTRACT"],
+  ["packages/contracts/src/pan433-domain-mapping-v1.ts", "CONTRACT"],
+  ["src/pan433/domain-mapping-cli.mjs", "SOURCE"],
+  ["tests/fixtures/pan433/alternate-invoice-document-v2.json", "FIXTURE"],
+  ["tests/fixtures/pan433/default-invoice-row-v1.json", "FIXTURE"],
+  ["tests/pan433/domain-mapping.test.mjs", "VALIDATOR"],
+];
+let pan433Node = dag.nodes.find(({ id }) => id === "pan433-domain-mapping-v1");
+if (pan433Node === undefined) {
+  pan433Node = {
+    id: "pan433-domain-mapping-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run pan433:mapping:test"],
+    invariants: [
+      "PAN433 is a read-only thin boundary with two explicit versioned storage profiles and one shared released invoice fact consumer.",
+      "The alternate profile is code-owned and approved only in this bounded PAN433 surface; caller-rehashed profiles, unsupported versions, tampered sources, unknown fields and ambiguous records fail closed.",
+      "Synthetic source authority, currency, identity and the released core's declared quantity loss remain explicit; no ERP interoperability, provider, runtime, controller or write authority is claimed.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan433Node);
+}
+pan433Node.inputs = pan433Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan433Node.ownedTests = ["npm run pan433:mapping:test"];
+for (const [inputPath, role] of pan433Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN433_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan433:mapping:test")) repositoryIntegrityNode.ownedTests.push("npm run pan433:mapping:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 53;
+dag.graphVersion = 54;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -708,6 +742,13 @@ for (const relative of [
   "verification/paired-analytics-compatibility-v1.json",
   "tests/fixtures/paired-analytics/consumer-support-manifest-v1-545a3b44.json",
   "tests/fixtures/paired-analytics/consumer-support-manifest-v1-995cd4dd.json",
+  "docs/development/pan433-domain-mapping-v1.md",
+  "examples/module-contribution/modules.json",
+  "packages/contracts/src/pan433-domain-mapping-v1.ts",
+  "src/pan433/domain-mapping-cli.mjs",
+  "tests/fixtures/pan433/alternate-invoice-document-v2.json",
+  "tests/fixtures/pan433/default-invoice-row-v1.json",
+  "tests/pan433/domain-mapping.test.mjs",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);

@@ -111,6 +111,8 @@ The catalog covers only the existing CSCL-01 protocol and CSCL-02 Odoo profile. 
 
 The catalog also scopes the two PROC434 procurement building blocks. `procurement-invoice-matching` v1 owns the M1 Fachprofil contracts (`fachprofil-mapping-v1`, `beschaffung-wareneingang-v1`, `rechnungsabgleich-v1`) and the decisive three-way purchase match (`rechnungsabgleich-match-v1`), tested against the frozen AP-04 ERV pack and the sealed receipt-valuation and purchase-side invoice-line fixtures. `procurement-normal-path` v1 owns the documented executable entry point (`src/procurement-434/`) and depends on `procurement-invoice-matching` v1. These are real, existing repository files and a bounded scoped capture, not a repository-wide migration.
 
+The catalog also scopes the PAN433 domain-mapping acceptance. `pan433-domain-mapping` v1 owns the bounded default and alternate storage adapters, their synthetic source profiles, and the executable entry-point test; it depends on `procurement-invoice-matching` v1 only to reuse the released M0 invoice fact consumer. The alternate profile is an explicit code-owned identity, not a caller-minted extension of `fachprofil-mapping-v1`.
+
 Run their focused tests explicitly:
 
 ```sh

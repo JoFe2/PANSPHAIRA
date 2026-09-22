@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "pan433.storage/invoice-row/v1",
+  "sourceSystem": "PAN433_DEFAULT_SYNTHETIC",
+  "sourceDatasetId": "dataset:pan433-default-001",
+  "sourceDigest": "7a0234469ce543c88f5ebe499bbef6c34d20e96ca751ff7cf68eda2b260c108f",
+  "batches": [
+    {
+      "records": [
+        {
+          "recordId": "row:pan433-001",
+          "updatedAt": "2026-09-10T07:50:00Z",
+          "invoice": {
+            "invoiceId": "invoice:synthetic-101",
+            "orderId": "order:synthetic-101",
+            "customerId": "customer:zoo-001",
+            "invoiceStatus": "OPEN",
+            "issueDate": "2026-09-02",
+            "dueDate": "2026-09-16",
+            "totalMinor": 2400,
+            "currency": "EUR"
+          }
+        }
+      ]
+    }
+  ]
+}
