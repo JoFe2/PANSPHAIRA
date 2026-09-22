@@ -15,6 +15,16 @@ includes these direct dependencies and selected transitive components:
 | `@types/node` | 24.10.1 | MIT |
 | `typescript` | 5.9.3 | Apache-2.0 |
 | `undici-types` | 7.16.0 | MIT |
+| `pg` | 8.16.3 | MIT |
+| `@types/pg` | 8.15.1 | MIT |
+| `embedded-postgres` | 18.4.0-beta.17 | MIT |
+| `@embedded-postgres/linux-x64` | 18.4.0-beta.17 | MIT |
+| `pg-connection-string` | 2.14.0 | MIT |
+| `pg-pool` | 3.14.0 | MIT |
+| `pg-protocol` | 1.16.0 | MIT |
+| `pg-types` | 4.1.0 | MIT |
+| `pgpass` | 1.0.5 | MIT |
+| `async-exit-hook` | 2.0.1 | MIT |
 
 The playable demo references pinned container images for Node.js, MariaDB,
 EspoCRM and Dolibarr. The optional video reference image installs Debian

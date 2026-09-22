@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "pansphaira.kts/context-descriptor/v1",
+  "contextId": "context:invoices-eur-cent",
+  "sourceFormat": "csv",
+  "description": "Lokale Rechnungsauszuege (synthetisch): Betraege in Cent, Kennungen im Systemformat",
+  "fields": [
+    {
+      "field": "invoiceId",
+      "meaning": "Rechnungskennung",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "INVOICE_ID"
+    },
+    {
+      "field": "orderId",
+      "meaning": "Bestellkennung",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "ORDER_ID"
+    },
+    {
+      "field": "customerId",
+      "meaning": "Kundenkennung",
+      "kind": "string",
+      "unit": null,
+      "nullable": true,
+      "meaningKey": "CUSTOMER_ID"
+    },
+    {
+      "field": "rechnungsbetrag_cent",
+      "meaning": "Gesamtwert der Rechnung in Cent (Nebeneinheiten EUR)",
+      "kind": "number",
+      "unit": "cent",
+      "nullable": false,
+      "meaningKey": "INVOICE_TOTAL_GROSS"
+    },
+    {
+      "field": "currency",
+      "meaning": "Waehrungscode der Rechnung",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "CURRENCY_CODE"
+    },
+    {
+      "field": "dueDate",
+      "meaning": "Faelligkeitsdatum der Rechnung",
+      "kind": "date",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "DUE_DATE"
+    },
+    {
+      "field": "grenzwert_eur",
+      "meaning": "Mindestgrenzwert pro Rechnung in Cent (Nebeneinheiten EUR)",
+      "kind": "number",
+      "unit": "cent",
+      "nullable": false
+    }
+  ],
+  "floorField": "grenzwert_eur",
+  "descriptorDigest": "e0ff29c2ea2b7d70b29884c04410422749dd6c17a410ce6f7cb8e4d21c6decde"
+}

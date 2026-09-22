@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "chimpmaera.knowledge/local-file-corpus-profile/v1",
+  "enabled": true,
+  "corpusId": "corpus:margin-knowledge-v1",
+  "editionId": "edition:margin-knowledge-2026-09-21",
+  "priorEditionId": "edition:margin-knowledge-2026-09-20",
+  "observedAtMs": 1789950155527,
+  "files": [
+    {
+      "path": "methods/margin-rules-legacy.md",
+      "expectedContentDigest": "9f529712ff51a320a691759c8fab2699f7a916e136f99f26a88c37cb48d7984e",
+      "licence": "CC0-1.0",
+      "permittedUses": [
+        "CURATED_READ"
+      ],
+      "sharedSourceIds": [
+        "source:margin-method-team"
+      ]
+    },
+    {
+      "path": "methods/margin-rules.md",
+      "expectedContentDigest": "219e7f52d3d78d20f6d8ab01e6647516de56421139a18d66f88a9aa592082f30",
+      "licence": "CC0-1.0",
+      "permittedUses": [
+        "CURATED_READ"
+      ],
+      "sharedSourceIds": [
+        "source:margin-method-team"
+      ]
+    },
+    {
+      "path": "methods/margin-worked-example.md",
+      "expectedContentDigest": "85e82ea0a7be5f1c29737bad7a7029b8c86cad58922fab4054127188ca9e4c7c",
+      "licence": "CC0-1.0",
+      "permittedUses": [
+        "CURATED_READ"
+      ],
+      "sharedSourceIds": [
+        "source:margin-method-team"
+      ]
+    },
+    {
+      "path": "methods/invoice-total-rules.md",
+      "expectedContentDigest": "403b511fdda4ae8244d4ada264b7f08af01a4d428ff342ca6f332953f79c0694",
+      "licence": "CC0-1.0",
+      "permittedUses": [
+        "CURATED_READ"
+      ],
+      "sharedSourceIds": [
+        "source:margin-method-team"
+      ]
+    }
+  ],
+  "conflicts": []
+}

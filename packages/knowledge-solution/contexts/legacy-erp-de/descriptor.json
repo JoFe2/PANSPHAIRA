@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "pansphaira.kts/context-descriptor/v1",
+  "contextId": "context:legacy-erp-de",
+  "sourceFormat": "csv-de",
+  "description": "Altes ERP-Exportformat (synthetisch): deutsche Feldnamen, Betraege in Euro-Hauptbetrags, Kunde teils un gepflegt",
+  "fields": [
+    {
+      "field": "rechnung_nr",
+      "meaning": "Rechnungsnummer",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "INVOICE_ID"
+    },
+    {
+      "field": "bestellung_nr",
+      "meaning": "Bestellnummer",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "ORDER_ID"
+    },
+    {
+      "field": "kunden_nr",
+      "meaning": "Kundennummer",
+      "kind": "string",
+      "unit": null,
+      "nullable": true,
+      "meaningKey": "CUSTOMER_ID"
+    },
+    {
+      "field": "betrag_eur",
+      "meaning": "Rechnungsbetrag in Euro (Hauptwahrung)",
+      "kind": "number",
+      "unit": "eur",
+      "nullable": false,
+      "meaningKey": "INVOICE_TOTAL_GROSS"
+    },
+    {
+      "field": "waehrung",
+      "meaning": "Waehrungscode",
+      "kind": "string",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "CURRENCY_CODE"
+    },
+    {
+      "field": "faellig",
+      "meaning": "Faelligkeitsdatum",
+      "kind": "date",
+      "unit": null,
+      "nullable": false,
+      "meaningKey": "DUE_DATE"
+    },
+    {
+      "field": "grenzwert_eur",
+      "meaning": "Mindestgrenzwert pro Rechnung in Euro",
+      "kind": "number",
+      "unit": "eur",
+      "nullable": false
+    }
+  ],
+  "floorField": "grenzwert_eur",
+  "descriptorDigest": "a78020ba6c7339b8a6d5e382c8c35c5eb1c6a69a841adedf9df4b132cfa22f5f"
+}
