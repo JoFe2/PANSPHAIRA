@@ -107,11 +107,12 @@ function gateway(
 
 test("AAS-012 catalogue is finite, strict, digest-bound and inactive by default", () => {
   const catalogue = verifyCapabilityCatalogueV1(syntheticCapabilityCatalogueV1());
-  assert.equal(catalogue.actions.length, 2);
+  assert.equal(catalogue.actions.length, 3);
   assert.match(catalogue.digest, /^[a-f0-9]{64}$/);
   assert.deepEqual(catalogue.actions.map(({ actionId }) => actionId), [
     "crm.contact.create",
     "erp.order.create",
+    "employee.directory.read_own",
   ]);
   for (const action of catalogue.actions) {
     assert.equal(action.version, "1.0.0");

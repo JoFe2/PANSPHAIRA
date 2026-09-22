@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 54,
+  "graphVersion": 55,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -244,17 +244,17 @@
         {
           "path": "contracts/azure-power-platform/proposal-approval-execution.schema.json",
           "role": "SCHEMA",
-          "sha256": "879ccfd12b668274c1336129c5c3c21093b012cbb2e46ff3fb106236ca98c48c"
+          "sha256": "a0c51c909baad3538a63cb4a5e292bd6869d1ca258075d30910e609a30485691"
         },
         {
           "path": "contracts/azure-power-platform/readonly-connector.openapi.yaml",
           "role": "SCHEMA",
-          "sha256": "20b5505962cf08ed813002f2a210f2db9fcfed37f374d4959baa912cf2d56287"
+          "sha256": "fe291f7e72701c53275d99da1369c5be310ed839cb722c1373e24f801bcdb631"
         },
         {
           "path": "contracts/azure-power-platform/readonly-connector.schema.json",
           "role": "SCHEMA",
-          "sha256": "63ea35b70d7fb07a002a169e66ffa831c87008254684525afe583a171555da68"
+          "sha256": "c3aebd5f771216b4a2ce525a19d96b87dfce98cd68f6ace00d22f13e2f2d4593"
         },
         {
           "path": "contracts/azure-power-platform/readonly-denial-matrix.schema.json",
@@ -274,7 +274,7 @@
         {
           "path": "docs/development/azure-power-platform/azpp-m1-tuple-ledger.schema.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "ecc734ebd41750cb9cabdfa64b3120114e69b9754797839b076522d71425c7ef"
+          "sha256": "7f9752e1eab0175d6b41d418ab27a140699b8a2e3c641fa29d8b24631c391342"
         },
         {
           "path": "docs/development/azure-power-platform/enterprise-profile-evidence.schema.json",
@@ -304,12 +304,12 @@
         {
           "path": "docs/development/azure-power-platform/sandbox-preflight-packet.schema.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "caa14fe2190ff191977941da666bd17d5d190333498443ab89d99d2f4bbcac17"
+          "sha256": "9f717dda14618a126e62e16ddca37d2228c4f8d3b537fd9b592d0c669cc0ad97"
         },
         {
           "path": "power-platform/readonly-canvas-workbench/connector-binding.json",
           "role": "CONTRACT",
-          "sha256": "051eefbc6f97145a96c24f0d3629861c1b60b932a6d00db6503c059457126cc3"
+          "sha256": "007241ade3d20c1227fe3dc202eb95706c79a0ea6e79bb2cce15e92e2b3f17b9"
         },
         {
           "path": "power-platform/readonly-canvas-workbench/manifest.json",
@@ -329,7 +329,7 @@
         {
           "path": "tests/azure-power-platform/azpp-m1-tuple-ledger.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "ce9a873cf40afc9a7b4df146e9f905129720461ba9487cb0f6d8268d49f6979c"
+          "sha256": "6119b6c565848f49eeea22b8c4ff3859c7e6a807afbd785a22151635db233751"
         },
         {
           "path": "tests/azure-power-platform/canvas-package.test.mjs",
@@ -384,7 +384,7 @@
         {
           "path": "tests/azure-power-platform/reset-uninstall.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "4cf0ae163ea5fb3f9788301e6a570396fc5ec64cf9ba80f9706383e5d20c823c"
+          "sha256": "3b47c7350be1e8fc206510b493eb71f77f4db2f3e1d505398bdc609df9520ab7"
         },
         {
           "path": "tests/azure-power-platform/sandbox-preflight.test.mjs",
@@ -534,7 +534,7 @@
         {
           "path": "tests/fixtures/azure-power-platform/readonly-openapi-valid.json",
           "role": "FIXTURE",
-          "sha256": "d2072dbe786b83d2450f9c90519c4cebf696d72064f27a68dd63cd3f420a8b67"
+          "sha256": "e721ee85d865550800ec413928d1dc88ae965b5356196a33cb13a5799e6f29dc"
         },
         {
           "path": "tests/fixtures/azure-power-platform/sandbox-preflight-authorized.json",
@@ -559,7 +559,7 @@
         {
           "path": "tests/fixtures/azure-power-platform/zero-residue.json",
           "role": "FIXTURE",
-          "sha256": "fe7ee77ca555daa0f779dd33200f04803400bec78dcc30c7871c8a9439456ac0"
+          "sha256": "7a142671c45da4969ba1f31aa67437ca924452be44a06e8e9cc3c81cd751658e"
         },
         {
           "path": "tools/azure-power-platform/render-public-readback.mjs",
@@ -579,7 +579,7 @@
         {
           "path": "tools/azure-power-platform/validate-canvas-package.mjs",
           "role": "VALIDATOR",
-          "sha256": "3dce9e255f52d7712861701a3f027314044c7dae3329f10499e156ea9e37c965"
+          "sha256": "b00809d1990e2ed90f9c270625fbf1242b3c43631105ae768c8abfb6b8982aab"
         },
         {
           "path": "tools/azure-power-platform/validate-compatibility-migration.mjs",
@@ -614,7 +614,7 @@
         {
           "path": "tools/azure-power-platform/verify-zero-residue.mjs",
           "role": "VALIDATOR",
-          "sha256": "7a1e55e3ef4b1b9a39b995f62d7c66f30759e41045155b53b08ab68d317ca535"
+          "sha256": "c1443ca54f7624e9ef9052b18e76cf6492dcf0fe8d32fafdc3787c76eec13e92"
         }
       ],
       "ownedTests": [
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "6ff911079a03cce40b34844786880237b4f07055f4da4766461ed609e3b36c6d"
+          "sha256": "04f1528bf81858ac2d97479c04540dd5086606211379cc250f0e722420a6222a"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "6caa7c952bf59187e0f190b3ceca30b97ee73b85156ecc063ad1831d4c186bbe"
+          "sha256": "e38a2cf0f6535ebd545e96b89be2474c225015909189ab1d08c54724f6d506eb"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "a371afc688e439af6de7691310a88c3b036a20dce53ccf8acd9e044223d3864f"
+          "sha256": "213a432eae5706889c623fbe1aac0ba597d66278d81fc0143cad0d94f728538f"
         }
       ],
       "ownedTests": [
@@ -4029,7 +4029,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "cbf19e5172de3fb79371de44afa6165853e60857f75c75d310cdd66a7dde0456"
+          "sha256": "7925becfa56d7188bdccfe8c915b4f81a88814a14ef7f7e2ad0958eab7736929"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -4464,7 +4464,7 @@
         {
           "path": "demo/manifests/supply-chain/openclaw-agent-runtime-lock-v1.json",
           "role": "CONTRACT",
-          "sha256": "d303bfa7662cd0d50d717d03a4cfdfaec856e0a1a140c910e7ce077535d32377"
+          "sha256": "9dc34de66cca19d53ab7bc82a1b4cd1a38e1f49e128e89bb714371a22c276c54"
         },
         {
           "path": "scripts/verify-openclaw-agent-runtime-lock.mjs",
@@ -4539,7 +4539,7 @@
         {
           "path": "packages/contracts/src/capability-catalogue.ts",
           "role": "CONTRACT",
-          "sha256": "9d24442a94c2cfcf9c305732a60ceadf286200a2eae26b6dabd157769a223f54"
+          "sha256": "e2d6acca17d7eb938124c31282f6e6aefd9f7e9b65117722a452170967ec835e"
         },
         {
           "path": "packages/contracts/src/canonical-json.ts",
@@ -4554,7 +4554,7 @@
         {
           "path": "tests/capability-catalogue.test.ts",
           "role": "VALIDATOR",
-          "sha256": "3fb6871824cc52620fd580e386a98bcc12dcf5a8f395ebdb08e8fa115f1ca5cc"
+          "sha256": "3276f78d38bd88ad67b0f3c0468865b72784fd255aed778c6d5cf1ee8fdd4f5a"
         },
         {
           "path": "tests/canonical-json-runtime-parity.test.mjs",
@@ -4769,6 +4769,11 @@
           "sha256": "73a5b5743f1f1477f5677fef480ba7f2020ddf7eb62258941ba78f9600c6e87d"
         },
         {
+          "path": "docs/PAN441-EMPLOYEE-PROFILE.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2e457e840f3e3f075b55d590bd8efdd359527791be6978e810a0e4e7c22a20ff"
+        },
+        {
           "path": "docs/QUICKSTART.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "b7bf3799004d82528d79accf4e7157507a953af5eb4b42561aa406ba7ff6723b"
@@ -4799,6 +4804,11 @@
           "sha256": "e94898b9e55e235663ca052a6eba0d2ff6c7104cc6bb9b42bcb31459f3b99cfb"
         },
         {
+          "path": "packages/contracts/src/pan441-employee-profile.ts",
+          "role": "CONTRACT",
+          "sha256": "9c38bf0f2b457f2b6a33176c431515c1f1cae325591d550f05ae67b7a890197e"
+        },
+        {
           "path": "README.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "0a38be0ac9bc0dc552a560c395dea68a977bcfdfa75216a926e4eb9637580e18"
@@ -4811,7 +4821,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "4cdbafd58a715bf9114cfca7151550f2eae7a498c77d804977133afa2fffd811"
+          "sha256": "21df75b4e00f85e18f61721b57b09f74c00696f4ac6dbd195240b46876ceb280"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4819,9 +4829,14 @@
           "sha256": "5d4f7271a2a4cc67d6e6be2f75cc668f8b4dcefa45371c0172eab3d09943d994"
         },
         {
+          "path": "schemas/contracts/pan441-employee-profile-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "3c22b63ae135a1ba1e179baadc50a8894c1545183f2996d443eb3ccf4a9290a1"
+        },
+        {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "efa758bd34c2e4beeb21d1acd38282c143bd5872d852d65b7b968afaee38ebff"
+          "sha256": "1c15d76a80dd59734750b65ce8004184366ae88a0bcdc7333e734e6983360beb"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4871,7 +4886,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "cf43c7b9c04b27c7ac111d349dc03dcff0bbeeb13ac7f77d744abbd5f99ad0e0"
+          "sha256": "33ea536204f67e9d5c2c351b09e9aeb1d5783f5a4608f81aae6eaa2673b1951b"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4979,6 +4994,11 @@
           "sha256": "773db50b738d0fa6e7a446ed39a8799806429d5c6804ed05e3d45c1c91455323"
         },
         {
+          "path": "tests/pan441-employee-profile.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "2e77fcc83b3070d67af2f1bd38870c66557fd1d15f2fd392fcc48319bdc6743d"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
           "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
@@ -4986,7 +5006,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e5c55f5d39c4610e41687e274bd34a375a84332b336d465cc177ee036b3e45d1"
+          "sha256": "8ea84e64fed30ce34e847fab06f8efac98daa61e2b7935bfa163c29930fa6ad6"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4996,7 +5016,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "7132cffa85e56d0ca3c79bc3c29516b6e6af4e4e2c973a43a63029b0c3f31bb5"
+          "sha256": "990796a4af4f8bde8012a69efe59667df451dfbfc02e45da5ea28e058a423156"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5047,7 +5067,8 @@
         "node --test tests/demo-current-head-e2e*.test.mjs",
         "npm run paired-analytics:test",
         "npm run module:check",
-        "npm run pan433:mapping:test"
+        "npm run pan433:mapping:test",
+        "npm run pan441:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5556,7 +5577,7 @@
         {
           "path": "security/secure-default-proof-v1.json",
           "role": "CONTRACT",
-          "sha256": "58512d133416f7b6a1c8f2b8c7c24937cb73b197f892cd5237256928c649b55c"
+          "sha256": "c4045a584015b7847ec5fa2c75902d0d729d861d9fd45d9c757c9eedc4664229"
         },
         {
           "path": "schemas/security/secure-default-proof-v1.schema.json",
@@ -5566,7 +5587,7 @@
         {
           "path": "security/secure-default-proof-evidence-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "238b584d3be19b38a5824f773977ec8dec91377c6f808904d452ccf61e4790b8"
+          "sha256": "a88b03b2c416018d611dc8792cbf778bec5559cc884c95ef78c8f1d95e0ea891"
         },
         {
           "path": "scripts/verify-secure-default-proof.mjs",
@@ -5602,7 +5623,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "5e227ee805d43b139998532f678e89eb1eae5f2157c49263edcadefc85ed4d21"
+          "sha256": "ba78fd4a3a02d222e511f4d3216c500e1cb634943d0331bdb18f25b2609855fc"
         },
         {
           "path": "package-lock.json",
@@ -5962,7 +5983,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "924855eb030a751d198cb8d224d4ac6017fd1603cbcfc5c6b0602119c74c6ef0"
+          "sha256": "8884b622a7d7c8bbc5d97d9b80bb36e93f2cd2c8c41649ca116d0db84726a38d"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6227,7 +6248,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "4cdbafd58a715bf9114cfca7151550f2eae7a498c77d804977133afa2fffd811"
+          "sha256": "21df75b4e00f85e18f61721b57b09f74c00696f4ac6dbd195240b46876ceb280"
         }
       ],
       "ownedTests": [
@@ -6622,6 +6643,44 @@
         "Synthetic source authority, currency, identity and the released core's declared quantity loss remain explicit; no ERP interoperability, provider, runtime, controller or write authority is claimed."
       ],
       "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan441-employee-profile-v1",
+      "dependsOn": [
+        "integration-profile-v1"
+      ],
+      "inputs": [
+        {
+          "path": "docs/PAN441-EMPLOYEE-PROFILE.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2e457e840f3e3f075b55d590bd8efdd359527791be6978e810a0e4e7c22a20ff"
+        },
+        {
+          "path": "packages/contracts/src/pan441-employee-profile.ts",
+          "role": "CONTRACT",
+          "sha256": "9c38bf0f2b457f2b6a33176c431515c1f1cae325591d550f05ae67b7a890197e"
+        },
+        {
+          "path": "schemas/contracts/pan441-employee-profile-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "3c22b63ae135a1ba1e179baadc50a8894c1545183f2996d443eb3ccf4a9290a1"
+        },
+        {
+          "path": "tests/pan441-employee-profile.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "2e77fcc83b3070d67af2f1bd38870c66557fd1d15f2fd392fcc48319bdc6743d"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan441:test"
+      ],
+      "invariants": [
+        "Only the independently held released profile and own requesting-user capability identity can authorize a local synthetic employee read.",
+        "Other-user targets, missing identity or permission, unavailable capabilities, write-shaped operations and critical identity fields fail closed.",
+        "The profile, catalogue, integration and governed-skill digests remain bound; replacement remains denied until independent readback, with no runtime storage or provider authority."
+      ],
+      "riskClass": "CRITICAL",
       "globalInvalidation": false
     }
   ]

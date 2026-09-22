@@ -113,7 +113,7 @@
       "demo/openclaw-agent/workspace/USER.md": "3a1be93b3ab6c5a36a34a7f1ee1433642fa55c2e29340142d784d85f2f9d96e7",
       "demo/openclaw-agent/workspace/openclaw-workspace-state.json": "c5c00120ca505ef6a7d60a56a2f43c67804a49bc79779fc9fba3a3ee5923f590",
       "packages/contracts/src/canonical-json.js": "e0ab8804532a55b161407e59167cf3027ebceb7df72a4d1dd1a485b1db4400ec",
-      "packages/contracts/src/capability-catalogue.ts": "9d24442a94c2cfcf9c305732a60ceadf286200a2eae26b6dabd157769a223f54",
+      "packages/contracts/src/capability-catalogue.ts": "e2d6acca17d7eb938124c31282f6e6aefd9f7e9b65117722a452170967ec835e",
       "scripts/verify-openclaw-agent-runtime-lock.mjs": "acfeeeac150ab65150d3f6eb465c70bca2324d056b8790f25b8a7c9f2c6377d7"
     }
   },

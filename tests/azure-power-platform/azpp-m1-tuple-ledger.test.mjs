@@ -18,7 +18,7 @@ const privateEvidenceIdentifier = /(?:tenant|subscription|credential|identity|ho
 const absoluteOrHostedReference = /^(?:(?:[a-z][a-z0-9+.-]*:)?\/\/|\/|[A-Za-z]:[\\/]|\\\\)/i;
 const expectedPolicyGeneration = 7;
 const predecessorSchemaDigest = "6db105c03ad1d0fac78e6c53ac9259d5cbad69197b20dd92f5a5188572f13db2";
-const expectedIntegratedSchemaDigest = "ecc734ebd41750cb9cabdfa64b3120114e69b9754797839b076522d71425c7ef";
+const expectedIntegratedSchemaDigest = "7f9752e1eab0175d6b41d418ab27a140699b8a2e3c641fa29d8b24631c391342";
 const expectedPins = {
   component: {
     id: "power-platform-read-connector",
@@ -35,7 +35,7 @@ const expectedPins = {
     digest: "3333333333333333333333333333333333333333333333333333333333333333",
   },
   evidenceBundleDigest: "4444444444444444444444444444444444444444444444444444444444444444",
-  tupleDigest: "c34dc875edbedded27aee37def1644b433a50654269552703223cf0b1d4d3e4d",
+  tupleDigest: "bbd2c0f213ebc8eeb67d3d0338c3bcdfb4d9c8e97882d7eb08fbad368f0110b2",
   lkgTupleDigest: "5555555555555555555555555555555555555555555555555555555555555555",
   publicLinks: {
     planningArtifact: {

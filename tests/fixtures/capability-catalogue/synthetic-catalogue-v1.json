@@ -12,22 +12,48 @@
       "requestSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["email", "name"],
+        "required": [
+          "email",
+          "name"
+        ],
         "properties": {
-          "email": { "type": "string", "minLength": 3, "maxLength": 120, "pattern": "^[^@\\s]+@example\\.test$" },
-          "name": { "type": "string", "minLength": 1, "maxLength": 80 }
+          "email": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120,
+            "pattern": "^[^@\\s]+@example\\.test$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
         }
       },
       "responseSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["contactId"],
-        "properties": { "contactId": { "type": "string", "pattern": "^synthetic-contact-[0-9]{3}$" } }
+        "required": [
+          "contactId"
+        ],
+        "properties": {
+          "contactId": {
+            "type": "string",
+            "pattern": "^synthetic-contact-[0-9]{3}$"
+          }
+        }
       },
-      "resourceBounds": { "maxRequestBytes": 512, "maxResponseBytes": 512, "maxExecutionMs": 1000, "maxInvocations": 1 },
+      "resourceBounds": {
+        "maxRequestBytes": 512,
+        "maxResponseBytes": 512,
+        "maxExecutionMs": 1000,
+        "maxInvocations": 1
+      },
       "evidenceContract": {
         "required": true,
-        "allowedSinkTypes": ["SYNTHETIC_MEMORY"],
+        "allowedSinkTypes": [
+          "SYNTHETIC_MEMORY"
+        ],
         "receiptSchemaVersion": "chimpmaera.security/capability-broker-receipt/v1",
         "correlationMode": "SHA256_SANITIZED"
       },
@@ -49,22 +75,48 @@
       "requestSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["quantity", "sku"],
+        "required": [
+          "quantity",
+          "sku"
+        ],
         "properties": {
-          "quantity": { "type": "integer", "minimum": 1, "maximum": 100 },
-          "sku": { "type": "string", "minLength": 3, "maxLength": 32, "pattern": "^SYN-[A-Z0-9-]+$" }
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "sku": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 32,
+            "pattern": "^SYN-[A-Z0-9-]+$"
+          }
         }
       },
       "responseSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["orderId"],
-        "properties": { "orderId": { "type": "string", "pattern": "^synthetic-order-[0-9]{3}$" } }
+        "required": [
+          "orderId"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "pattern": "^synthetic-order-[0-9]{3}$"
+          }
+        }
       },
-      "resourceBounds": { "maxRequestBytes": 512, "maxResponseBytes": 512, "maxExecutionMs": 1000, "maxInvocations": 1 },
+      "resourceBounds": {
+        "maxRequestBytes": 512,
+        "maxResponseBytes": 512,
+        "maxExecutionMs": 1000,
+        "maxInvocations": 1
+      },
       "evidenceContract": {
         "required": true,
-        "allowedSinkTypes": ["SYNTHETIC_MEMORY"],
+        "allowedSinkTypes": [
+          "SYNTHETIC_MEMORY"
+        ],
         "receiptSchemaVersion": "chimpmaera.security/capability-broker-receipt/v1",
         "correlationMode": "SHA256_SANITIZED"
       },
@@ -77,7 +129,65 @@
       ],
       "activationState": "INACTIVE",
       "digest": "a20f5c9b60cbb9af1d098ae31c5f3e46e37722c6a9548b9f25b331c0287b98ab"
+    },
+    {
+      "schemaVersion": "chimpmaera.security/capability-action/v1",
+      "actionId": "employee.directory.read_own",
+      "version": "1.0.0",
+      "resource": "employee.directory.own",
+      "requestSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 80,
+            "pattern": "^user:[a-z0-9-]+$"
+          }
+        }
+      },
+      "responseSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "displayName"
+        ],
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        }
+      },
+      "resourceBounds": {
+        "maxRequestBytes": 512,
+        "maxResponseBytes": 512,
+        "maxExecutionMs": 1000,
+        "maxInvocations": 1
+      },
+      "evidenceContract": {
+        "required": true,
+        "allowedSinkTypes": [
+          "SYNTHETIC_MEMORY"
+        ],
+        "receiptSchemaVersion": "chimpmaera.security/capability-broker-receipt/v1",
+        "correlationMode": "SHA256_SANITIZED"
+      },
+      "limitations": [
+        "LOCAL_SYNTHETIC_VALIDATION_ONLY",
+        "NO_LIVE_PROVIDER_OR_CREDENTIAL_USE",
+        "CATALOGUE_ADMISSION_DOES_NOT_ESTABLISH_SAFETY",
+        "SYNCHRONOUS_PREPARE_BOUND_ONLY_NO_CANCELLATION",
+        "IN_MEMORY_REPLAY_RESERVATION_ONLY"
+      ],
+      "activationState": "INACTIVE",
+      "digest": "f59d5f790edb731e24a363e1cb8a4ef46fccb006ff4749cffb3d276f9212609e"
     }
   ],
-  "digest": "bb0060a254f450684bd17f6559d267d6f02d225c4c4d37479c3010c60d1b8427"
+  "digest": "beaffca5dcbb42bcc69c1fa01344bd33cb6f4bc7ee16deacaf561eb8da6876e9"
 }

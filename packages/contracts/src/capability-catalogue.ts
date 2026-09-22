@@ -19,8 +19,8 @@ export const SYNTHETIC_CAPABILITY_CATALOGUE_ID =
   "chimpmaera.local/synthetic-actions" as const;
 export const SYNTHETIC_CAPABILITY_CATALOGUE_VERSION = "1.0.0" as const;
 
-export type CapabilityActionIdV1 = "crm.contact.create" | "erp.order.create";
-export type CapabilityResourceV1 = "synthetic.crm.contact" | "synthetic.erp.order";
+export type CapabilityActionIdV1 = "crm.contact.create" | "erp.order.create" | "employee.directory.read_own";
+export type CapabilityResourceV1 = "synthetic.crm.contact" | "synthetic.erp.order" | "employee.directory.own";
 
 export type StrictJsonSchemaV1 = Readonly<{
   type: "object";
@@ -217,7 +217,7 @@ export type CapabilityReplayStoreV1 = Map<string, CapabilityReplayStateV1>;
 
 type RecordValue = Record<string, unknown>;
 
-const ACTION_IDS = ["crm.contact.create", "erp.order.create"] as const;
+const ACTION_IDS = ["crm.contact.create", "erp.order.create", "employee.directory.read_own"] as const;
 const CATALOGUE_KEYS = [
   "actions", "activationDefault", "catalogueId", "digest", "schemaVersion", "version",
 ] as const;
@@ -297,6 +297,18 @@ const ERP_RESPONSE_SCHEMA: StrictJsonSchemaV1 = {
   required: ["orderId"],
   properties: { orderId: { type: "string", pattern: "^synthetic-order-[0-9]{3}$" } },
 };
+const EMPLOYEE_DIRECTORY_REQUEST_SCHEMA: StrictJsonSchemaV1 = {
+  type: "object",
+  additionalProperties: false,
+  required: ["userId"],
+  properties: { userId: { type: "string", minLength: 6, maxLength: 80, pattern: "^user:[a-z0-9-]+$" } },
+};
+const EMPLOYEE_DIRECTORY_RESPONSE_SCHEMA: StrictJsonSchemaV1 = {
+  type: "object",
+  additionalProperties: false,
+  required: ["displayName"],
+  properties: { displayName: { type: "string", minLength: 1, maxLength: 80 } },
+};
 
 const ACTION_SPEC: Readonly<Record<CapabilityActionIdV1, Readonly<{
   resource: CapabilityResourceV1;
@@ -312,6 +324,11 @@ const ACTION_SPEC: Readonly<Record<CapabilityActionIdV1, Readonly<{
     resource: "synthetic.erp.order",
     requestSchema: ERP_REQUEST_SCHEMA,
     responseSchema: ERP_RESPONSE_SCHEMA,
+  },
+  "employee.directory.read_own": {
+    resource: "employee.directory.own",
+    requestSchema: EMPLOYEE_DIRECTORY_REQUEST_SCHEMA,
+    responseSchema: EMPLOYEE_DIRECTORY_RESPONSE_SCHEMA,
   },
 };
 
@@ -963,7 +980,9 @@ export function syntheticCapabilityExecutionRequestV1(
     evidenceSink: { type: "SYNTHETIC_MEMORY", sinkId: "evidence:synthetic-memory" },
     request: actionId === "crm.contact.create"
       ? { email: "alex@example.test", name: "Alex Example" }
-      : { quantity: 2, sku: "SYN-ZOO-001" },
+      : actionId === "erp.order.create"
+        ? { quantity: 2, sku: "SYN-ZOO-001" }
+        : { userId: "user:synthetic-operator" },
   };
 }
 

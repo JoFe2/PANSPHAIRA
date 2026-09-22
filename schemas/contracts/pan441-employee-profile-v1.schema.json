@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pan-sphaira.local/schemas/pan441-employee-profile-v1.schema.json",
+  "title": "PAN441 bounded read-only employee-agent profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "version",
+    "tenant",
+    "authorityProfile",
+    "integrationProfile",
+    "catalogue",
+    "capability",
+    "allowedFields",
+    "deniedCriticalIdentityFields",
+    "deniedOperations",
+    "skill",
+    "lifecycle",
+    "claimBoundary",
+    "profileDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pan441.security/employee-agent-profile/v1"
+    },
+    "profileId": {
+      "const": "profile:pan441-employee-assistant-read-only"
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "tenant": {
+      "const": "tenant:panskys-zoo"
+    },
+    "authorityProfile": {
+      "const": "SAFE_GUIDED"
+    },
+    "integrationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profileId",
+        "profileDigest"
+      ],
+      "properties": {
+        "profileId": {
+          "const": "integration:power-apps-read-only"
+        },
+        "profileDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "catalogue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogueId",
+        "version",
+        "catalogueDigest",
+        "activationDefault"
+      ],
+      "properties": {
+        "catalogueId": {
+          "const": "chimpmaera.local/synthetic-actions"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "activationDefault": {
+          "const": "INACTIVE"
+        },
+        "catalogueDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capabilityId",
+        "version",
+        "action",
+        "resource",
+        "effect",
+        "purpose",
+        "scope",
+        "catalogueActionDigest",
+        "digest"
+      ],
+      "properties": {
+        "capabilityId": {
+          "const": "capability:employee.directory.read.own"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "action": {
+          "const": "employee.directory.read_own"
+        },
+        "resource": {
+          "const": "employee.directory.own"
+        },
+        "effect": {
+          "const": "READ"
+        },
+        "purpose": {
+          "const": "employee.business.help"
+        },
+        "scope": {
+          "const": "OWN_REQUESTING_USER"
+        },
+        "catalogueActionDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "allowedFields": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "displayName",
+          "department",
+          "jobTitle",
+          "employeeAlias"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "deniedCriticalIdentityFields": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "nationalId",
+          "dateOfBirth",
+          "homeAddress",
+          "personalEmail",
+          "personalPhone",
+          "bankAccount",
+          "identityDocument",
+          "credentials"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "deniedOperations": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "employee.directory.write",
+          "employee.directory.create",
+          "employee.directory.update",
+          "employee.directory.delete",
+          "employee.directory.export"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skillId",
+        "version",
+        "packageDigest"
+      ],
+      "properties": {
+        "skillId": {
+          "const": "skill:employee-business-help"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "packageDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storage",
+        "migration",
+        "rollback"
+      ],
+      "properties": {
+        "storage": {
+          "const": "NO_RUNTIME_STORAGE"
+        },
+        "migration": {
+          "const": "PRESERVE_OLD_READER_UNTIL_REPLACEMENT_READBACK"
+        },
+        "rollback": {
+          "const": "DENY_UNTIL_FIXED_PROFILE_READBACK"
+        }
+      }
+    },
+    "claimBoundary": {
+      "const": "LOCAL_SYNTHETIC_OWN_SCOPE_READ_ONLY_NO_PROVIDER_NO_CREDENTIAL_NO_WRITE"
+    },
+    "profileDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

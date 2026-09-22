@@ -48,7 +48,7 @@ test('synthetic owned inventory resets to exact LKG and has zero owned residue',
   const result = await verifyZeroResidue(await loadFixture(fixturePath));
   assert.equal(result.ok, true);
   assert.equal(result.reasonCode, 'ZERO_OWNED_RESIDUE_VERIFIED');
-  assert.equal(result.postTupleDigest, '56db83a16d1910f1eefca3000997df95cfb8696fdb45b399baf1a62b6ab1da79');
+  assert.equal(result.postTupleDigest, 'c298c98294a1886a450ce636af6b2706822e33bbf9f18025266c1bdab4b145a9');
 });
 
 test('no-import state is idempotently recognized as clean', async () => {

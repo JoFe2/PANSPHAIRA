@@ -18,11 +18,11 @@ export type EffectiveRightsOperandKindV1 =
   typeof EFFECTIVE_RIGHTS_OPERAND_KINDS_V1[number];
 export type EffectiveRightsOutcomeV1 = "ALLOW" | "ESCALATE" | "DENY";
 
-const ACTIONS = ["crm.contact.create", "erp.order.create"] as const;
-const RESOURCES = ["dolibarr.order", "espocrm.contact"] as const;
-const FIELDS = ["email", "name", "quantity", "sku"] as const;
-const PURPOSES = ["owner.review", "synthetic.demo"] as const;
-const EFFECTS = ["CREATE"] as const;
+const ACTIONS = ["crm.contact.create", "erp.order.create", "employee.directory.read_own"] as const;
+const RESOURCES = ["dolibarr.order", "espocrm.contact", "employee.directory.own"] as const;
+const FIELDS = ["email", "name", "quantity", "sku", "displayName", "department", "jobTitle", "employeeAlias"] as const;
+const PURPOSES = ["owner.review", "synthetic.demo", "employee.business.help"] as const;
+const EFFECTS = ["CREATE", "READ"] as const;
 
 export type EffectiveRightsScopeV1 = Readonly<{
   actions: readonly string[];
