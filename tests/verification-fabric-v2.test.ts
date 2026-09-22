@@ -106,7 +106,7 @@ test("#377 current-head Docker E2E is a focused repository-integrity obligation"
   const manifest = graph();
   const node = manifest.nodes.find(({ id }) => id === "repository-integrity");
   assert.ok(node);
-  assert.equal(manifest.graphVersion, 52);
+  assert.equal(manifest.graphVersion, 53);
   const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
     scripts: Record<string, string>;
   };
@@ -159,7 +159,7 @@ test("contract and cross-contract changes invalidate downstream dependants", () 
   ]) {
     const result = plan([changed]);
     assert.equal(result.mode, "IMPACTED_SHADOW");
-    assert.deepEqual(result.selectedNodes, ["awi-plugin-01-knowledge-harvest-v1", "azpp-m1-repository-synthetic-v1", "cap-cell-erp-01", "cks-02-local-knowledge-fabric-closure-v1", "cks-03-fresh-synthetic-qualification-v1", "cks-04-no-finetune-runtime-baseline-v1", "cks-05-comparative-falsification-v1", "cks-07-empty-kb-sufficiency-v1", "cks-08-usage-lineage-attribution-v1", "cks-09-task-pattern-proof-v1", "cks-10-readonly-analytics-bridge-v1", "cks-11-governed-workflow-function-v1", "cks-12-closed-learning-loop-v1", "cks-m1-parent-closure-v1", "cscl-01-cross-system-protocol-freeze-v1", "cscl-02-odoo-source-native-profile-v1", "cscl-03-erpnext-source-native-profile-v1", "cscl-04-dolibarr-source-native-profile-v1", "cscl-05-tryton-source-native-profile-v1", "cscl-06-ofbiz-source-native-profile-v1", "cscl-07-cross-system-semantic-matrix-v1", "cscl-08-party-candidate-v1", "cscl-09-product-candidate-v1", "cscl-10-sales-candidate-v1", "cscl-11-idempiere-serial-holdout-gate-v1", "etl-01-extension-assurance-profile-v1", "etl-02-external-plugin-preflight-v1", "external-bi-service-v2", "intake-001-issue-candidate-v1", "integration-profile-v1", "know-media-m1-audience-learning-v1", "learning-routing-foundation", "lkc-wiki-01-governed-local-edition-v1", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "rks-01-real-source-protocol-falsification-v1", "rks-02-core-small-vs-raw-falsification-v1", "secure-default-proof", "vf-contract-v1", "vf-m2-adaptive-evidence-gates-v1", "vf-shadow-v2"]);
+    assert.deepEqual(result.selectedNodes, ["awi-plugin-01-knowledge-harvest-v1", "azpp-m1-repository-synthetic-v1", "cap-cell-erp-01", "cks-02-local-knowledge-fabric-closure-v1", "cks-03-fresh-synthetic-qualification-v1", "cks-04-no-finetune-runtime-baseline-v1", "cks-05-comparative-falsification-v1", "cks-07-empty-kb-sufficiency-v1", "cks-08-usage-lineage-attribution-v1", "cks-09-task-pattern-proof-v1", "cks-10-readonly-analytics-bridge-v1", "cks-11-governed-workflow-function-v1", "cks-12-closed-learning-loop-v1", "cks-m1-parent-closure-v1", "cscl-01-cross-system-protocol-freeze-v1", "cscl-02-odoo-source-native-profile-v1", "cscl-03-erpnext-source-native-profile-v1", "cscl-04-dolibarr-source-native-profile-v1", "cscl-05-tryton-source-native-profile-v1", "cscl-06-ofbiz-source-native-profile-v1", "cscl-07-cross-system-semantic-matrix-v1", "cscl-08-party-candidate-v1", "cscl-09-product-candidate-v1", "cscl-10-sales-candidate-v1", "cscl-11-idempiere-serial-holdout-gate-v1", "etl-01-extension-assurance-profile-v1", "etl-02-external-plugin-preflight-v1", "external-bi-service-v2", "intake-001-issue-candidate-v1", "integration-profile-v1", "know-media-m1-audience-learning-v1", "learning-routing-foundation", "lkc-wiki-01-governed-local-edition-v1", "openclaw-m1-4", "openclaw-m1-5", "pan435-436-sales-stock-journey-v1", "repository-integrity", "rks-01-real-source-protocol-falsification-v1", "rks-02-core-small-vs-raw-falsification-v1", "secure-default-proof", "vf-contract-v1", "vf-m2-adaptive-evidence-gates-v1", "vf-shadow-v2"]);
   }
 });
 
@@ -197,15 +197,15 @@ test("learning-routing changes select the complete foundation and downstream int
 test("integration profile changes select the bounded owner and downstream integrity gates", () => {
   const result = plan(["packages/contracts/src/integration-profile.ts"]);
   assert.equal(result.mode, "IMPACTED_SHADOW");
-  assert.deepEqual(result.selectedNodes, ["cap-cell-erp-01", "integration-profile-v1", "openclaw-m1-4", "openclaw-m1-5", "repository-integrity", "secure-default-proof"]);
+  assert.deepEqual(result.selectedNodes, ["cap-cell-erp-01", "integration-profile-v1", "openclaw-m1-4", "openclaw-m1-5", "pan435-436-sales-stock-journey-v1", "repository-integrity", "secure-default-proof"]);
   assert.ok(result.selectedTests.includes("npm run integration-profile:test"));
 });
 
 test("ERP capability-cell changes select the bounded owner and exact focused suite", () => {
   const result = plan(["packages/contracts/src/erp-order-capability-cell.ts"]);
   assert.equal(result.mode, "IMPACTED_SHADOW");
-  assert.deepEqual(result.selectedNodes, ["cap-cell-erp-01"]);
-  assert.deepEqual(result.selectedTests, ["npm run erp-order-cell:test"]);
+  assert.deepEqual(result.selectedNodes, ["cap-cell-erp-01", "pan435-436-sales-stock-journey-v1"]);
+  assert.deepEqual(result.selectedTests, ["npm run erp-order-cell:test", "npm run sales-stock:journey", "npm run sales-stock:journey:test"]);
 });
 
 test("AP-01 blueprint changes select its owner and dependent AP-02/AP-03 slices", () => {
@@ -296,7 +296,7 @@ test("FND-XR-01 paired external-BI family is canonical, acceptance-mapped and pr
   ]) {
     assert.equal(publicPaths.has(publicPath), true, `public external-BI byte: ${publicPath}`);
   }
-  assert.equal(publicManifestPaths.length, 1565, "current release controls retain their exact public count");
+  assert.equal(publicManifestPaths.length, 1578, "current release controls retain their exact public count");
   assert.equal(publicPaths.size, publicManifestPaths.length, "public manifest paths remain unique");
   assert.equal(publicPaths.has(evidencePath), false, "pre-closure paired evidence remains repository-only");
 
@@ -392,7 +392,7 @@ test("FND-PS-02 edge-evidence focused family is canonical and selects its owner 
 
 test("CSCL-11 serial holdout gate is a registered DAG node bound to the frozen reconciled pilot", () => {
   const manifest = graph();
-  assert.equal(manifest.graphVersion, 52);
+  assert.equal(manifest.graphVersion, 53);
   const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
     scripts: Record<string, string>;
   };

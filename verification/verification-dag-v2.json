@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 52,
+  "graphVersion": 53,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a8bd57d3cfd24e01381db702a98c83761d6dfe44f2260fd0804821a8f750bd03"
+          "sha256": "b9ce22e41c294e9ef23b62c21a85e0bec979364b820afcdf239acf65912169ca"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "0643df1343ffaeae296b33dca3a5eac8dbd41ce56e5a2185ef914b540440c38e"
+          "sha256": "ea3fa3ee314ebd743a3b7fe241be466ca5a6434be610e58788925fb533d04104"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "c094ce9ba0e4d33b91207f4fb4ecf6375e1b08ead0ce077fe9bdc5bcd66fe7eb"
+          "sha256": "c1808b7782c4a7bd80a78ba2eb57b7c895616d2e1bdabe35f4fbedc4cb955795"
         }
       ],
       "ownedTests": [
@@ -4029,7 +4029,7 @@
         {
           "path": "packages/contracts/src/index.ts",
           "role": "CONTRACT",
-          "sha256": "abb2a688eecd934c359c85d12be66cc57f220c57186da7191ec668f1daf2c161"
+          "sha256": "4f861eedeafeda410222ea48ffcb023a9714b61a91c49070d5f7f899ee9641ee"
         },
         {
           "path": "packages/contracts/src/signal-release-intake.ts",
@@ -4801,7 +4801,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "CONTRACT",
-          "sha256": "5591dbe78a70dd0b71298bfeb355340aecad0f851393c9f4ef3ca9dab68ae19b"
+          "sha256": "0ed783bef3e6f7a23748c39796fbe814688307a2e72a6584d1739decee585b0f"
         },
         {
           "path": "schemas/contracts/incoming-invoice-adaptive-ui-v1.schema.json",
@@ -4811,7 +4811,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "2aef3411c36684178efee9b3a0ef123a58e83d1cda6da111bd508f53af9650cb"
+          "sha256": "74bfe96528fc2b64a0a54caf77407c04d699ac3d36b47c24f2e9316438696b86"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4856,7 +4856,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "aa4db9e167418bf52a67d07570d8cc41550c5191600389e0cc76cb1dbbd5d5e3"
+          "sha256": "189a3bc42a8a332a239fe14586d38ac2acde41cd36ffa2ef0062e870bc7ebc09"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4956,7 +4956,7 @@
         {
           "path": "tests/release-governance.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "37e964948f00efd99cfd20519dbb191388b3550c59017856a773aa971bdc2e98"
+          "sha256": "80175c4d340a76ef3c13ac208d96b40fca8d4ded3501873650967d6fc9fca21c"
         },
         {
           "path": "tests/trust-compatibility-foundation-closure.test.ts",
@@ -4966,7 +4966,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "c194f9aecdb24196075c1400327ae0776fc36a21ed7d8e87e0f0d5911a639444"
+          "sha256": "6b3b174196ab10f3fafc2cff6730fd0aa8d6cd2b95d3e6b71efbf6f060a2cc79"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5571,12 +5571,12 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "4a6916b3eaf74051b9ebc082b5457038497552780a687d303f0d10f3faa7fe1d"
+          "sha256": "76d8f82f78b56494f5364c6d406403816da444e20e035c2eaa5dcda7571dc543"
         },
         {
           "path": "package-lock.json",
           "role": "TOOLCHAIN",
-          "sha256": "6abaac85f64cecc6b088652a8d8e8a30448cb767403870812d44467a8e10b75f"
+          "sha256": "75ae0a0fa354b79287ff06048244b216dfe203181d509e2f09d9b9d1b07607ae"
         },
         {
           "path": "tsconfig.json",
@@ -5931,7 +5931,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "1a63edabd32d8f91a918dfdc598b6131ff9152b611820088fce0d3addcf81604"
+          "sha256": "6b087ab9a4d7498769aefecc6ef60574c5660a7d702b76f076d3d6c42e7accbe"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6196,7 +6196,7 @@
         {
           "path": "release/public-files.manifest",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "5591dbe78a70dd0b71298bfeb355340aecad0f851393c9f4ef3ca9dab68ae19b"
+          "sha256": "0ed783bef3e6f7a23748c39796fbe814688307a2e72a6584d1739decee585b0f"
         }
       ],
       "ownedTests": [
@@ -6453,6 +6453,91 @@
         "Independently supplied delivery references remain explicit SYNTHETIC_DELIVERY facts; matching order/customer identity and source digest are required before complaint composition.",
         "Order status, invoice state, stock promises, trust labels and caller-supplied delivery-shaped objects never manufacture delivery facts.",
         "Source, reference, quantity and decision drift fail closed before persisted mutation; real-world delivery and provider interoperability remain unclaimed."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan435-436-sales-stock-journey-v1",
+      "dependsOn": [
+        "cap-cell-erp-01"
+      ],
+      "inputs": [
+        {
+          "path": "contracts/sales-stock-journey-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "d2fcb74b6d73bb8a734837e64d8acba7c8bd9510819b83b0ed18ad7aad2fd914"
+        },
+        {
+          "path": "docs/architecture/pan435-436-sales-stock-journey-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3517d689b5d069711f2b18b7b51d80a2cfc1f12685f3b683543729b4afec1d9a"
+        },
+        {
+          "path": "packages/contracts/src/beschaffung-wareneingang-v1.ts",
+          "role": "CONTRACT",
+          "sha256": "ce5c64ce53bd8fa55658c7116cb99f6c136873b9bcfd9c133a5b16a0a71ac21c"
+        },
+        {
+          "path": "packages/contracts/src/bestand-nachschub-v1.ts",
+          "role": "CONTRACT",
+          "sha256": "ac42f06a963731ed8f5a9da83fe3de319794d1ee8d2dd7a92c3af5bc1ca8b7bf"
+        },
+        {
+          "path": "packages/contracts/src/kundenauftrag-lieferzusage-v1.ts",
+          "role": "CONTRACT",
+          "sha256": "196aae1ad888fc62eed247b1b2e5c7f636f5febdccda38859d5c9bb7e1b5b461"
+        },
+        {
+          "path": "packages/contracts/src/sales-stock-journey-v1.ts",
+          "role": "CONTRACT",
+          "sha256": "1a583a8f1caf9e73ac87d001c7687c628536ac7799fc4cafd079380e86a862f3"
+        },
+        {
+          "path": "src/sales-stock/cli.mjs",
+          "role": "SOURCE",
+          "sha256": "3144ce90440d3e861afe4979f2d38946d852fdc8d33f481445bada4a74a14294"
+        },
+        {
+          "path": "tests/beschaffung-wareneingang-v1.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "96730cd01032ef6e2dd736a34117b0f7fe915ddd86647c3401e35179221fdfbf"
+        },
+        {
+          "path": "tests/bestand-nachschub-v1.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "6e7030d83c3a03d4d9c4e4ff49d028b2fd37557f7d1e61de1d9c830e1fb566e2"
+        },
+        {
+          "path": "tests/kundenauftrag-lieferzusage-v1.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "3842568ca1d443d07c30c5da78af819c95033099bda93cce8ee96bd271115996"
+        },
+        {
+          "path": "tests/sales-stock-journey-cli.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "a89c8dbc6a2a9d288c0ed1a81461692c3229f5d2e9748e58c1be33ea24ba8568"
+        },
+        {
+          "path": "tests/sales-stock-journey-v1.test.ts",
+          "role": "VALIDATOR",
+          "sha256": "6f335ca58d2f95ad0a677607e0ffd10d4106da717c40838465e4bf7b49edbbcd"
+        },
+        {
+          "path": "verification/pan435-436-sales-stock-journey-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2ae4c1e6f10f43bea2a1ef4928fd7d5e2f1b696a061a38c67a9d0f60dd3e79e9"
+        }
+      ],
+      "ownedTests": [
+        "npm run sales-stock:journey:test",
+        "npm run sales-stock:journey"
+      ],
+      "invariants": [
+        "The journey is LOCAL_SYNTHETIC_LABELLED and performs no provider, runtime, notification, procurement, public, or durable external write.",
+        "M1 receipt quantity reaches M3 only through the explicit identity/unit adapter and retained source-bound lineage.",
+        "M2 availability is evidence-bound; shortage is clarification, and successful M2 proposal is followed by a source-bound M3 reservation.",
+        "M3 replenishment is freshness-bound and nonbinding; stale or unknown origin never silently produces a threshold decision."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

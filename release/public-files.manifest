@@ -1565,3 +1565,16 @@ docs/architecture/pan437-neighbor-composition-v1.md	docs/architecture/pan437-nei
 src/cscl-13/pan437-neighbor.mjs	src/cscl-13/pan437-neighbor.mjs	0644
 tests/cscl-13/pan437-neighbor.test.mjs	tests/cscl-13/pan437-neighbor.test.mjs	0644
 verification/cscl-13-pan437-neighbor-boundary-v1.json	verification/cscl-13-pan437-neighbor-boundary-v1.json	0644
+contracts/sales-stock-journey-v1.schema.json	contracts/sales-stock-journey-v1.schema.json	0644
+docs/architecture/pan435-436-sales-stock-journey-v1.md	docs/architecture/pan435-436-sales-stock-journey-v1.md	0644
+packages/contracts/src/beschaffung-wareneingang-v1.ts	packages/contracts/src/beschaffung-wareneingang-v1.ts	0644
+packages/contracts/src/bestand-nachschub-v1.ts	packages/contracts/src/bestand-nachschub-v1.ts	0644
+packages/contracts/src/kundenauftrag-lieferzusage-v1.ts	packages/contracts/src/kundenauftrag-lieferzusage-v1.ts	0644
+packages/contracts/src/sales-stock-journey-v1.ts	packages/contracts/src/sales-stock-journey-v1.ts	0644
+src/sales-stock/cli.mjs	src/sales-stock/cli.mjs	0644
+tests/beschaffung-wareneingang-v1.test.ts	tests/beschaffung-wareneingang-v1.test.ts	0644
+tests/bestand-nachschub-v1.test.ts	tests/bestand-nachschub-v1.test.ts	0644
+tests/kundenauftrag-lieferzusage-v1.test.ts	tests/kundenauftrag-lieferzusage-v1.test.ts	0644
+tests/sales-stock-journey-cli.test.mjs	tests/sales-stock-journey-cli.test.mjs	0644
+tests/sales-stock-journey-v1.test.ts	tests/sales-stock-journey-v1.test.ts	0644
+verification/pan435-436-sales-stock-journey-v1.json	verification/pan435-436-sales-stock-journey-v1.json	0644

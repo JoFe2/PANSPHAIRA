@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/contracts/sales-stock-journey-v1.schema.json",
+  "title": "PAN435-436 connected local sales stock journey v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "source",
+    "outcome"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "cm.journey/sales-stock-local/v1"
+    },
+    "source": {
+      "const": "LOCAL_SYNTHETIC_LABELLED"
+    },
+    "outcome": {
+      "enum": [
+        "CONNECTED_SALES_STOCK_JOURNEY",
+        "CONNECTED_SALES_STOCK_CLARIFICATION",
+        "DENIED"
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "m1ArtikelId",
+        "m3ArtikelId",
+        "m3LagerortId",
+        "m2ArtikelId",
+        "einheit",
+        "adapterId"
+      ],
+      "properties": {
+        "m1ArtikelId": {
+          "const": "EINK-ART-001"
+        },
+        "m3ArtikelId": {
+          "const": "SYN-ART-001"
+        },
+        "m3LagerortId": {
+          "const": "LAGER-01"
+        },
+        "m2ArtikelId": {
+          "const": "SYN-CELL-ERP-01"
+        },
+        "einheit": {
+          "const": "STK"
+        },
+        "adapterId": {
+          "const": "adapter:m1-eink-001-to-m3-syn-art-001-to-m2-cell-001"
+        }
+      }
+    },
+    "stages": {
+      "type": "object"
+    },
+    "clarification": {
+      "type": "object"
+    },
+    "stage": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "detail": {
+      "type": "string"
+    },
+    "nonClaims": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "CONNECTED_SALES_STOCK_JOURNEY"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "identity",
+          "stages",
+          "nonClaims"
+        ],
+        "properties": {
+          "identity": {},
+          "stages": {},
+          "nonClaims": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "CONNECTED_SALES_STOCK_CLARIFICATION"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "identity",
+          "stage",
+          "clarification",
+          "nonClaims"
+        ],
+        "properties": {
+          "identity": {},
+          "stage": {},
+          "clarification": {},
+          "nonClaims": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "DENIED"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "stage",
+          "code",
+          "detail"
+        ],
+        "properties": {
+          "stage": {},
+          "code": {},
+          "detail": {}
+        }
+      }
+    }
+  ]
+}
