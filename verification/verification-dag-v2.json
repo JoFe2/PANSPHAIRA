@@ -3657,7 +3657,7 @@
         {
           "path": "docs/EXTERNAL-BI-SERVICE.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "18c98a410edd205f4e677f63853c4e824de1ca752dc6624da383879a46e76c0d"
+          "sha256": "0acab93aad3d62c74b88e0a44fb07387dcbd26bc889f7ab8d7d13a9171e9322a"
         },
         {
           "path": "verification/external-bi-service-paired-compatibility-v1.json",
@@ -4821,7 +4821,7 @@
         {
           "path": "release/governance.json",
           "role": "CONTRACT",
-          "sha256": "2b6c8746a98d6a1103d0cd8740af797ce44819fc13fd9f9233430e70504cbda7"
+          "sha256": "7e0ad52077d0cb3973cc02b669325ea083092c069dc95f813be16bf2dd8b9e82"
         },
         {
           "path": "release/public-files.manifest",
