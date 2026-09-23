@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "pansphaira.pan468/impact-selection-boundary/v1",
+  "trust": "LOCAL_SYNTHETIC",
+  "generatedFrom": "driving the real impact/compare entry points of scripts/module-contribution.mjs on synthetic git fixtures",
+  "nonClaims": [
+    "No public writes; no unmeasured pipeline speedup claimed; synthetic git fixtures only."
+  ],
+  "checks": {
+    "ac01_contractChange": {
+      "advisory": true,
+      "affected": [
+        "a",
+        "b"
+      ],
+      "base": "81b41ca3401ded2733beb2e9b3fc31fe705a614d",
+      "changed": [
+        "a/contract.json"
+      ],
+      "coverage": "Explicit semantic modules only; no import inference or transitive test selection.",
+      "diagnostics": {
+        "gitCommands": 4,
+        "gitContentReads": 1
+      },
+      "missingTests": [],
+      "tests": [
+        "a/test.mjs",
+        "b/test.mjs"
+      ],
+      "unmapped": []
+    },
+    "ac01_noChange": {
+      "advisory": true,
+      "affected": [],
+      "base": "81b41ca3401ded2733beb2e9b3fc31fe705a614d",
+      "changed": [],
+      "coverage": "Explicit semantic modules only; no import inference or transitive test selection.",
+      "diagnostics": {
+        "gitCommands": 4,
+        "gitContentReads": 1
+      },
+      "missingTests": [],
+      "tests": [],
+      "unmapped": []
+    },
+    "ac01_profileChange": {
+      "advisory": true,
+      "affected": [
+        "a"
+      ],
+      "base": "81b41ca3401ded2733beb2e9b3fc31fe705a614d",
+      "changed": [
+        "a/profiles/fixture-v1.json"
+      ],
+      "coverage": "Explicit semantic modules only; no import inference or transitive test selection.",
+      "diagnostics": {
+        "gitCommands": 4,
+        "gitContentReads": 1
+      },
+      "missingTests": [],
+      "tests": [
+        "a/test.mjs"
+      ],
+      "unmapped": []
+    },
+    "ac03_compare": {
+      "advisory": true,
+      "affected": [
+        "a"
+      ],
+      "after": "a27b56980ad64b605899010f66fdff945a176f5209d08d876cce85c309356b33",
+      "before": "9c8f24d1ebf4c9077cea4bcec1cc16fe5ced7cc96b21c1e58f7a8bf23c711eeb",
+      "changed": [
+        "a/source.mjs"
+      ],
+      "changedModules": [
+        "a"
+      ],
+      "diagnostics": {
+        "gitCommands": 0,
+        "gitContentReads": 0
+      },
+      "notice": "Snapshot consistency only, not authentication; no tests executed. Direct semantic consumers only; no transitive or runtime resolution.",
+      "tests": [
+        "a/test.mjs"
+      ]
+    }
+  },
+  "artifactDigest": "b3c6341d460e3f45cff9512d335c1d64ce8f0c2ed0da35a7a3a0d3f9c194c5cf"
+}

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 57,
+  "graphVersion": 58,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "396ff69cc3f3b5c1fed542390e6d4895f93a65b870d391c33c8b3caf36f03f9e"
+          "sha256": "4f7c388dff60110fb9dcfd604e74f43a8457a739e9d85a9e9ff7258df00acb9f"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "c443a01d096c25e215c1b0ce3f031e778767dc8ad3e3a207099db9fb9e5d5ee4"
+          "sha256": "b15f6723098f3e83c3bda9fb19a4abfe5cfed01c5004f2071556a2d875598895"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "02f1be276ca9ef499e3a31596ffcdc4899d5fef74c2b73a04b9799e8cec6ec36"
+          "sha256": "fccc6e16016595c4f19962656ccd6cf5650b8c95eea88c5c29f441bd2719696f"
         }
       ],
       "ownedTests": [
@@ -4754,6 +4754,11 @@
           "sha256": "31e39d11cc0722fbe24e3b490a4e3776a6f27e61e69121f77670817b874e7a7c"
         },
         {
+          "path": "docs/architecture/pan468-impact-selection-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0c95fdf922e6b4ec3a6036005c2f9263462d6939775d36bff4bc9484b32e37a6"
+        },
+        {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
@@ -4856,7 +4861,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "9c441db575ab6b185dbbbc248d19519f5d0a126e300be12448a94d48273463b5"
+          "sha256": "86925347a4e7f4e1d8611a9fa47669f82d23c457bb72aa16a44248542ee31ee7"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4866,7 +4871,7 @@
         {
           "path": "scripts/module-contribution.mjs",
           "role": "VALIDATOR",
-          "sha256": "c10cf7a507645ea073c9f4befbc00c0d79ecc7e8400553564fc5b4ba38a7032b"
+          "sha256": "1f671c0dbbffc2e8d92138f7607462286179d8f5f29f1176baf12c4111066b0a"
         },
         {
           "path": "scripts/paired-analytics-execution.mjs",
@@ -4916,7 +4921,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "13ea08d0945bd85a09ac405435010b0d6dfd81c03878200aa6d8a0c1986542c9"
+          "sha256": "f87a8bccb24fc0abb2365b48b6d42428f2b8896d7112fea382989524b0a6cbe8"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -5039,6 +5044,11 @@
           "sha256": "fc9f4ff20ac8e85803b7998c8fa0777c9d511cbef78c27c03097b1e117a9d162"
         },
         {
+          "path": "tests/pan468/pan468-impact-selection.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "24c2851f0ae54f86fd9c8af090a2ea54e70c81098b9042d0e924303862615c46"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
           "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
@@ -5056,7 +5066,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "930c8e6bf93d9c9ecf16900899a9c38384561caae217a5a89844cacbd0792b6a"
+          "sha256": "7835cf7d4bfc7b2fc99fd4c78db805853da6ef4d07520f026e50850f3ee09047"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5104,6 +5114,11 @@
           "sha256": "86c23c2b7190f4f52e692c10a0496ce6fbab572556a65f128cd6c7b2d931b8fb"
         },
         {
+          "path": "verification/pan468-impact-selection-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "261ea70de20d943e7da5042b5d8a1a258e16a27076e6cd886b255221da5579b8"
+        },
+        {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9"
@@ -5120,7 +5135,8 @@
         "npm run pan433:mapping:test",
         "npm run pan441:test",
         "npm run ks238:test",
-        "npm run pan442:test"
+        "npm run pan442:test",
+        "npm run pan468:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5675,7 +5691,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "c2c2bc32c74266281d711537dff2e497ff450885953cd2b4b0ea1729fa33210c"
+          "sha256": "b55b4e1ce0f7fb37b65c4ffca6206cffbd21975981e10767fb6a0262c7073c43"
         },
         {
           "path": "package-lock.json",
@@ -6035,7 +6051,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f35a2d967ec7bd234c05450257fd831297bf3fde5aaa229630cb46fa28d0fe2c"
+          "sha256": "264b8e4f92d426f7107bf5baadcd613f80e9027c61b2091c28b5238347608409"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6814,6 +6830,47 @@
         "A synthetic trusted task source retained outside caller-controlled payloads binds object, purpose, tenant, user, run identity, object version, amount/currency limits and expiry; a caller-selected source plus caller-selected digest is not an authority root.",
         "Opaque handles are server-issued, opaque to the caller and single-use; the resolver re-derives every trusted binding from the immutable issuer store, so caller-side runtime mutation, handle-field edits and guessed/unknown handles cannot change the accepted binding.",
         "The positive entry point composes the accepted Order seam (OWNER_ESCALATION decision, owner approval, owner-escalation lease execution with mutation reservation) and retains the observed result separately; fail-closed use-time checks deny with exact codes and failed stages before any effect, read or output."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan468-impact-selection-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/architecture/pan468-impact-selection-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "0c95fdf922e6b4ec3a6036005c2f9263462d6939775d36bff4bc9484b32e37a6"
+        },
+        {
+          "path": "scripts/module-contribution.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1f671c0dbbffc2e8d92138f7607462286179d8f5f29f1176baf12c4111066b0a"
+        },
+        {
+          "path": "tests/module-contribution.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "66e389e0733e6b971d230e0fc25aec454bbbe422e5354131d1e7ff68ffdf8399"
+        },
+        {
+          "path": "tests/pan468/pan468-impact-selection.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "24c2851f0ae54f86fd9c8af090a2ea54e70c81098b9042d0e924303862615c46"
+        },
+        {
+          "path": "verification/pan468-impact-selection-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "261ea70de20d943e7da5042b5d8a1a258e16a27076e6cd886b255221da5579b8"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan468:test"
+      ],
+      "invariants": [
+        "PAN468 corrects the module-contribution impact/compare consumer classification and bounds its historical path-scan work; no new CI, no new publishing authority and no replacement of the canonical full-suite CI is introduced.",
+        "A shared semantic contract is classified as a contract only when it is a declared contract path; internal profile/test-fixture files never select consumers, so a contract change pulls in direct consumers and a contract-unchanged change selects only the owner.",
+        "Historical path enumeration relies on tree modes (ls-tree --full-tree) and performs no per-file content read; a content read occurs only when a file's contents are genuinely required (the descriptor or an explicitly requested file). Symlink (120000) historical objects are excluded from enumeration and denied on read; traversal and unsafe paths fail closed."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

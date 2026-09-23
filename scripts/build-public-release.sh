@@ -235,6 +235,15 @@ repository_only_files = {
     "schemas/contracts/pan442-bound-task-handle-v1.schema.json",
     "docs/architecture/pan442-bound-task-handle-v1.md",
     "verification/pan442-bound-task-handle-boundary-v1.json",
+    # PAN468 module-contribution impact selection — repository-only
+    # (corrects the impact/compare consumer classification and bounds the
+    # historical path-scan work; delivered via the SOURCE_EVIDENCE_ONLY real
+    # GitHub source archive, not the runnable product-increment file set).
+    # Declared here so the fail-closed completeness gate classifies them; they
+    # are NOT added to release/public-files.manifest.
+    "tests/pan468/pan468-impact-selection.test.mjs",
+    "docs/architecture/pan468-impact-selection-v1.md",
+    "verification/pan468-impact-selection-boundary-v1.json",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",

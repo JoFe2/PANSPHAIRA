@@ -82,11 +82,20 @@ function mermaid(graph) {
  });
  return lines.join('\n');
 }
-function git(root, ...args) { return execFileSync('git', args, {cwd:root,encoding:'utf8',maxBuffer:32*1024*1024}); }
+const telemetry = { gitCommands: 0, gitContentReads: 0 };
+const resetTelemetry = () => { telemetry.gitCommands = 0; telemetry.gitContentReads = 0; };
+function git(root, ...args) { telemetry.gitCommands++; return execFileSync('git', args, {cwd:root,encoding:'utf8',maxBuffer:32*1024*1024}); }
 function snapshot(root, commit) {
  const entries=git(root,'ls-tree','-rz','--full-tree',commit).split('\0').filter(Boolean).map(row=>{const [meta,path]=row.split('\t');return {path,mode:meta.split(' ')[0]};});
- const paths=entries.map(e=>e.path);
- return {exists:path=>paths.includes(safe(path)), read(path){safe(path);const e=entries.find(e=>e.path===path);if(!e||!['100644','100755'].includes(e.mode))fail(`Missing or unsafe historical path: ${path}`);return execFileSync('git',['show',`${commit}:${path}`],{cwd:root,maxBuffer:32*1024*1024});},files(path){safe(path);return paths.filter(p=>p===path||p.startsWith(`${path}/`)).map(p=>{this.read(p);return p;});}};
+ // ls-tree --full-tree lists blob (regular-file) entries only, so a path's
+ // regular-file safety is known from its tree mode: enumerating historical
+ // paths needs no `git show` content read. A content read is genuinely
+ // required only by read() (the descriptor and any explicitly requested file).
+ // Symlink (120000) and gitlink (160000) historical objects are excluded from
+ // enumeration and still denied on read.
+ const safeModes=['100644','100755'];
+ const paths=entries.filter(e=>safeModes.includes(e.mode)).map(e=>e.path);
+ return {exists:path=>paths.includes(safe(path)), read(path){safe(path);const e=entries.find(e=>e.path===path);if(!e||!safeModes.includes(e.mode))fail(`Missing or unsafe historical path: ${path}`);telemetry.gitContentReads++;return execFileSync('git',['show',`${commit}:${path}`],{cwd:root,maxBuffer:32*1024*1024});},files(path){const base=safe(path);return paths.filter(p=>p===base||p.startsWith(`${base}/`));}};
 }
 function impact(root, descriptor, base) {
  const commit=git(root,'rev-parse','--verify','--end-of-options',`${base}^{commit}`).trim();
@@ -101,11 +110,11 @@ function impact(root, descriptor, base) {
   const previous=old.modules.find(n=>n.id===m.id),next=now.modules.find(n=>n.id===m.id);
   const descriptorChanged=!previous||!next||canonical({...previous,files:undefined})!==canonical({...next,files:undefined});
   if(descriptorChanged||Object.values(m.files).flat().some(p=>changed.includes(p)))own.add(m.id);
-  if(descriptorChanged||[...m.files.contracts,...m.files.profiles].some(p=>changed.includes(p)))contract.add(m.id);
+  if(descriptorChanged||m.files.contracts.some(p=>changed.includes(p)))contract.add(m.id);
  }
  const affected=new Set(own);for(const e of [...old.edges,...now.edges])if(contract.has(e.to))affected.add(e.from);
  const candidates=sorted([...old.modules,...now.modules].filter(m=>affected.has(m.id)).flatMap(m=>m.files.tests));
- return {advisory:true,base:commit,changed,affected:sorted(affected),tests:candidates.filter(p=>current.exists(p)),missingTests:candidates.filter(p=>!current.exists(p)),unmapped:changed.filter(p=>p!==descriptor&&![...old.modules,...now.modules].some(m=>Object.values(m.files).flat().includes(p))),coverage:now.coverage||old.coverage};
+ return {advisory:true,base:commit,changed,affected:sorted(affected),tests:candidates.filter(p=>current.exists(p)),missingTests:candidates.filter(p=>!current.exists(p)),unmapped:changed.filter(p=>p!==descriptor&&![...old.modules,...now.modules].some(m=>Object.values(m.files).flat().includes(p))),coverage:now.coverage||old.coverage,diagnostics:{gitCommands:telemetry.gitCommands,gitContentReads:telemetry.gitContentReads}};
 }
 function release(root, descriptor) {
  const view=disk(root), graph=load(view,descriptor);
@@ -142,11 +151,11 @@ function compare(root, beforePath, afterPath) {
   const old=before.modules.find(n=>n.id===m.id),now=after.modules.find(n=>n.id===m.id);
   const metadataChanged=!old||!now||canonical({...old,files:undefined})!==canonical({...now,files:undefined});
   if(metadataChanged||Object.values(m.files).flat().some(p=>changed.includes(p)))own.add(m.id);
-  if(metadataChanged||[...m.files.contracts,...m.files.profiles].some(p=>changed.includes(p)))contract.add(m.id);
+  if(metadataChanged||m.files.contracts.some(p=>changed.includes(p)))contract.add(m.id);
  }
  const affected=new Set(own);
  for(const m of [...before.modules,...after.modules])if(Object.keys(m.dependencies).some(id=>contract.has(id)))affected.add(m.id);
- return {advisory:true,before:before.sha256,after:after.sha256,changed,changedModules:sorted(own),affected:sorted(affected),tests:sorted([...before.modules,...after.modules].filter(m=>affected.has(m.id)).flatMap(m=>m.files.tests)),notice:'Snapshot consistency only, not authentication; no tests executed. Direct semantic consumers only; no transitive or runtime resolution.'};
+ return {advisory:true,before:before.sha256,after:after.sha256,changed,changedModules:sorted(own),affected:sorted(affected),tests:sorted([...before.modules,...after.modules].filter(m=>affected.has(m.id)).flatMap(m=>m.files.tests)),notice:'Snapshot consistency only, not authentication; no tests executed. Direct semantic consumers only; no transitive or runtime resolution.',diagnostics:{gitCommands:telemetry.gitCommands,gitContentReads:telemetry.gitContentReads}};
 }
 function verify(root, path, descriptor) {
  const manifest=JSON.parse(disk(root).read(safe(path)));
@@ -165,6 +174,7 @@ function scaffold(root, slug) {
  return {directory:dir,template:true,next:`node --test ${dir}/test.mjs`,check:`node scripts/module-contribution.mjs check --descriptor ${dir}/modules.json`};
 }
 function main() {
+ resetTelemetry();
  const args=process.argv.slice(2);const command=args.shift();let descriptor=DEFAULT;const root=realpathSync(process.cwd());const view=disk(root);
  const index=args.indexOf('--descriptor');if(index>=0){if(!args[index+1])fail('Missing descriptor');descriptor=safe(args[index+1]);args.splice(index,2);}
  if(command==='scaffold'&&args.length===1)return scaffold(root,args[0]);

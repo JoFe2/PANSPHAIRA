@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "cf43c7b9c04b27c7ac111d349dc03dcff0bbeeb13ac7f77d744abbd5f99ad0e0"
+        "sha256": "f87a8bccb24fc0abb2365b48b6d42428f2b8896d7112fea382989524b0a6cbe8"
       }
     ]
   },
@@ -259,6 +259,14 @@
       "fromSha256": "81d565c053a1da1009327378d51908bb331c2b23f9a4e8af3a0e3c354fa2b8b1",
       "toSha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
       "reason": "Advance verification DAG to graph v57 and bind the bounded PAN442 local bound business task and opaque tool handle journey over the accepted demo Order seam (owner-escalation decision, owner approval, owner-escalation lease execution with mutation reservation), its exact fail-closed negatives and repository-only registration to its explicit local owner; preserve all prior immutable obligations."
+    },
+    {
+      "migrationId": "PAN468-IMPACT-SELECTION/INTEGRITY-GENERATOR/V26",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 26,
+      "fromSha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
+      "toSha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
+      "reason": "Advance verification DAG to graph v58 and bind the bounded PAN468 targeted impact selection and bounded historical path-scan work (contract-consumer classification, tree-mode enumeration without per-file content reads, diagnostics) to its explicit local owner; preserve all prior immutable obligations."
     }
   ],
   "scanScope": {
@@ -301,15 +309,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 705,
+    "filesScanned": 706,
     "declarationSites": 37,
     "declarationFiles": 37,
     "importSites": 247,
     "importFiles": 246,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1967,
-    "ledgerUniquePaths": 1967
+    "ledgerEntries": 1970,
+    "ledgerUniquePaths": 1970
   },
   "profiles": [
     {
@@ -382,7 +390,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a"
+      "sha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1008,7 +1016,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
+      "sha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
       "basis": "profile-version-migration"
     },
     {

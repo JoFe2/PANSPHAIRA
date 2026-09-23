@@ -808,7 +808,42 @@ for (const [inputPath, role] of pan442Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan442:test")) repositoryIntegrityNode.ownedTests.push("npm run pan442:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 57;
+const pan468Inputs = [
+  ["docs/architecture/pan468-impact-selection-v1.md", "DERIVED_EVIDENCE"],
+  ["scripts/module-contribution.mjs", "VALIDATOR"],
+  ["tests/module-contribution.test.mjs", "VALIDATOR"],
+  ["tests/pan468/pan468-impact-selection.test.mjs", "VALIDATOR"],
+  ["verification/pan468-impact-selection-boundary-v1.json", "DERIVED_EVIDENCE"],
+];
+let pan468Node = dag.nodes.find(({ id }) => id === "pan468-impact-selection-v1");
+if (pan468Node === undefined) {
+  pan468Node = {
+    id: "pan468-impact-selection-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run pan468:test"],
+    invariants: [
+      "PAN468 corrects the module-contribution impact/compare consumer classification and bounds its historical path-scan work; no new CI, no new publishing authority and no replacement of the canonical full-suite CI is introduced.",
+      "A shared semantic contract is classified as a contract only when it is a declared contract path; internal profile/test-fixture files never select consumers, so a contract change pulls in direct consumers and a contract-unchanged change selects only the owner.",
+      "Historical path enumeration relies on tree modes (ls-tree --full-tree) and performs no per-file content read; a content read occurs only when a file's contents are genuinely required (the descriptor or an explicitly requested file). Symlink (120000) historical objects are excluded from enumeration and denied on read; traversal and unsafe paths fail closed.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan468Node);
+}
+pan468Node.dependsOn = [];
+pan468Node.inputs = pan468Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan468Node.ownedTests = ["npm run pan468:test"];
+for (const [inputPath, role] of pan468Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN468_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan468:test")) repositoryIntegrityNode.ownedTests.push("npm run pan468:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
+dag.graphVersion = 58;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -859,6 +894,9 @@ for (const relative of [
   "src/pan442/bound-task-handle.mjs",
   "tests/pan442/bound-task-handle.test.mjs",
   "verification/pan442-bound-task-handle-boundary-v1.json",
+  "docs/architecture/pan468-impact-selection-v1.md",
+  "tests/pan468/pan468-impact-selection.test.mjs",
+  "verification/pan468-impact-selection-boundary-v1.json",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);
