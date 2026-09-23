@@ -69,7 +69,7 @@
     {
       "path": "demo/runtime/enforcement-gate.mjs",
       "role": "IMPLEMENTATION",
-      "sha256": "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c"
+      "sha256": "d64714242f7517f15f4bc985534a82569adfca7fabaa2207e6f937ec67b5b64b"
     },
     {
       "path": "demo/seed-and-flow.sh",

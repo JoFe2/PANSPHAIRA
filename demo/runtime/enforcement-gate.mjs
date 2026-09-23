@@ -817,7 +817,21 @@ export class DemoMutationGate {
     };
     reservation.status = "APPLIED";
     reservation.recovery = "NONE";
-    this.persist();
+    try {
+      this.persist();
+    } catch (persistError) {
+      // A final persistence failure must not leave a live in-memory APPLIED
+      // claim or an undurable receipt. Roll the in-memory effect record and
+      // reservation back to the recoverable ambiguous state before rethrowing.
+      // execute()'s catch does NOT re-persist here: on the reconciliation path
+      // `reserved` remains false, so markAmbiguous is not called and the PRIOR
+      // durable AMBIGUOUS/RECONCILE bytes are retained (not re-written). A
+      // restart reconciles from that retained state without a duplicate POST.
+      delete this.state.effects[operationKey];
+      reservation.status = "AMBIGUOUS";
+      reservation.recovery = "RECONCILE";
+      throw persistError;
+    }
     return {
       status: "PASS",
       replayed: true,
@@ -1052,7 +1066,23 @@ export class DemoMutationGate {
         receipt,
       };
       this.state.reservations[operationKey].status = "APPLIED";
-      this.persist();
+      try {
+        this.persist();
+      } catch (persistError) {
+        // A final persistence failure must not leave a live in-memory APPLIED
+        // claim or an undurable receipt. Roll the in-memory effect record and
+        // reservation back to the recoverable ambiguous state before rethrowing;
+        // execute()'s catch then persists that convergence via markAmbiguous
+        // (`reserved` is true on the initial-execution path). If that recovery
+        // persist ALSO fails (persistent storage failure), the durable bytes
+        // retain the prior EXECUTING reservation while live memory holds
+        // AMBIGUOUS; memory and bytes converge once storage recovers and a
+        // later persist succeeds. Do not claim immediate byte convergence.
+        delete this.state.effects[operationKey];
+        this.state.reservations[operationKey].status = "AMBIGUOUS";
+        this.state.reservations[operationKey].recovery = "RECONCILE";
+        throw persistError;
+      }
       return {
         status: "PASS",
         replayed: false,

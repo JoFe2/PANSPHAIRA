@@ -1,0 +1,568 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/schemas/contracts/pan442-bound-task-handle-v1.schema.json",
+  "title": "PAN442 local bound business task and opaque tool handle contract v1",
+  "description": "Additive versioned contract for one bounded synthetic Order business task whose ordinary caller uses server-issued opaque handles instead of assembling authority payloads. A synthetic trusted task source, retained outside caller-controlled payloads, binds object, purpose, tenant, user, run identity, object version, amount/currency limits and expiry. The server-side issuer/resolver retains the authoritative immutable bindings; a caller-selected source plus caller-selected digest is NOT an authority root. The positive entry point composes the accepted demo Order seam (AdminAiPoc OWNER_ESCALATION decision, ApprovalWorkbench owner approval, DemoMutationGate owner-escalation lease execution and mutation reservation); nothing is bypassed. Fail-closed use-time checks deny with the exact codes below, at the stated failed stage, before any effect, read or output. The synthetic trusted issuer/principal is clearly labelled LOCAL_SYNTHETIC and is not a live identity-provider claim; model text cannot grant approval. This contract is additive: it references, and does not modify, the existing public repository definitions named under reuse.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "case",
+    "trust",
+    "reuse",
+    "binding",
+    "handle",
+    "operationInput",
+    "denials",
+    "positiveEntry",
+    "limits"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pansphaira.contract/bound-task-handle/v1"
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "summary",
+        "entity"
+      ],
+      "properties": {
+        "id": {
+          "const": "pan442-bound-order-create"
+        },
+        "summary": {
+          "const": "Create one synthetic Dolibarr sales order if absent, through the accepted demo Order seam, under a single-use server-issued opaque handle."
+        },
+        "entity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "tenant",
+            "entity",
+            "operation",
+            "refClient",
+            "customerId",
+            "orderDateEpoch"
+          ],
+          "properties": {
+            "provider": {
+              "const": "dolibarr"
+            },
+            "tenant": {
+              "const": "panskys-zoo-demo"
+            },
+            "entity": {
+              "const": "Order"
+            },
+            "operation": {
+              "const": "CREATE_IF_ABSENT"
+            },
+            "refClient": {
+              "const": "CM-ADMIN-AI-ESCALATION-001"
+            },
+            "customerId": {
+              "const": 7
+            },
+            "orderDateEpoch": {
+              "const": 1767225600
+            }
+          }
+        }
+      }
+    },
+    "trust": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "identityProviderClaim",
+        "modelTextGrantsApproval"
+      ],
+      "properties": {
+        "label": {
+          "const": "LOCAL_SYNTHETIC"
+        },
+        "identityProviderClaim": {
+          "const": false
+        },
+        "modelTextGrantsApproval": {
+          "const": false
+        }
+      }
+    },
+    "reuse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "orderSeam",
+        "decisionSchema",
+        "requestSchema",
+        "businessDiffSchema",
+        "approvalSnapshotSchema",
+        "authorityKind",
+        "policyManifest",
+        "mutationGate",
+        "requester",
+        "purpose",
+        "budget"
+      ],
+      "properties": {
+        "orderSeam": {
+          "const": "demo/runtime/admin-ai-poc.mjs + demo/runtime/approval-workbench.mjs + demo/runtime/enforcement-gate.mjs (DemoMutationGate owner-escalation lease path, canonical Order action of the AAS-016-2 positive path)"
+        },
+        "decisionSchema": {
+          "const": "chimpmaera.demo/admin-ai-decision/v4"
+        },
+        "requestSchema": {
+          "const": "chimpmaera.demo/admin-ai-request/v1"
+        },
+        "businessDiffSchema": {
+          "const": "chimpmaera.demo/business-diff/v2"
+        },
+        "approvalSnapshotSchema": {
+          "const": "chimpmaera.demo/authoritative-approval-snapshot/v1"
+        },
+        "authorityKind": {
+          "const": "OWNER_ESCALATION_LEASE_HMAC_V1"
+        },
+        "policyManifest": {
+          "const": "demo/manifests/authority/admin-ai-poc-policy-v1.json"
+        },
+        "mutationGate": {
+          "const": "demo/runtime/enforcement-gate.mjs#DemoMutationGate"
+        },
+        "requester": {
+          "const": "requester:local-demo"
+        },
+        "purpose": {
+          "const": "CREATE_SYNTHETIC_SALES_ORDER"
+        },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "currency",
+            "upperBound"
+          ],
+          "properties": {
+            "currency": {
+              "const": "EUR"
+            },
+            "upperBound": {
+              "const": "0.00"
+            }
+          }
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "taskRef",
+        "runId",
+        "tenant",
+        "user",
+        "object",
+        "objectVersion",
+        "purpose",
+        "amountLimitMinor",
+        "currency",
+        "issuedAtMs",
+        "expiresAtMs",
+        "sourceDigest",
+        "principalDigest",
+        "secretFingerprint",
+        "handleDigest"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.contract/bound-task-handle-binding/v1"
+        },
+        "taskRef": {
+          "type": "string",
+          "minLength": 8
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 8
+        },
+        "tenant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "user": {
+          "type": "string",
+          "minLength": 1
+        },
+        "object": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "entity",
+            "operation",
+            "refClient",
+            "customerId",
+            "orderDateEpoch"
+          ],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1
+            },
+            "entity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "operation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "refClient": {
+              "type": "string",
+              "minLength": 1
+            },
+            "customerId": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "orderDateEpoch": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "objectVersion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "amountLimitMinor": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "issuedAtMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expiresAtMs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sourceDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "principalDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "secretFingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "handleDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "handle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "encoding",
+        "structure",
+        "signature",
+        "opaqueToCaller",
+        "singleUse"
+      ],
+      "properties": {
+        "encoding": {
+          "const": "base64url(canonicalJson({v:1, d:handleDigest, s:signature}))"
+        },
+        "structure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "v",
+            "d",
+            "s"
+          ],
+          "properties": {
+            "v": {
+              "const": 1
+            },
+            "d": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "s": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        "signature": {
+          "const": "sha256(issuerSecret || handleDigest); handleDigest = sha256(canonicalJson(binding))"
+        },
+        "opaqueToCaller": {
+          "const": true
+        },
+        "singleUse": {
+          "const": true
+        }
+      }
+    },
+    "operationInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tenant",
+        "user",
+        "runId",
+        "objectVersion",
+        "declaredAmountMinor",
+        "currency",
+        "object"
+      ],
+      "properties": {
+        "tenant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "user": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 8
+        },
+        "objectVersion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "declaredAmountMinor": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "object": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "entity",
+            "operation",
+            "refClient",
+            "customerId",
+            "orderDateEpoch"
+          ],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1
+            },
+            "entity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "operation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "refClient": {
+              "type": "string",
+              "minLength": 1
+            },
+            "customerId": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "orderDateEpoch": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      },
+      "description": "Exact key set: the caller supplies only the opaque handle and this allowed operation input. Any caller-supplied trusted-source, binding or digest field is rejected before comparison; it is not an authority root."
+    },
+    "denials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "BTH_HANDLE_INVALID_DENIED",
+        "BTH_HANDLE_UNKNOWN_DENIED",
+        "BTH_HANDLE_TAMPERED_DENIED",
+        "BTH_HANDLE_EXPIRED_DENIED",
+        "BTH_HANDLE_REPLAY_DENIED",
+        "BTH_TENANT_MISMATCH_DENIED",
+        "BTH_PRINCIPAL_MISMATCH_DENIED",
+        "BTH_RUN_MISMATCH_DENIED",
+        "BTH_OBJECT_MISMATCH_DENIED",
+        "BTH_VERSION_MISMATCH_DENIED",
+        "BTH_AMOUNT_LIMIT_DENIED",
+        "BTH_CURRENCY_MISMATCH_DENIED",
+        "BTH_BINDING_UNSUPPORTED_DENIED",
+        "BTH_BINDING_DIGEST_MISMATCH_DENIED",
+        "BTH_COMPOSE_FAILED",
+        "BTH_EXECUTE_FAILED",
+        "BTH_OPERATION_INVALID_DENIED"
+      ],
+      "properties": {
+        "BTH_HANDLE_INVALID_DENIED": {
+          "const": "failed stage HANDLE_INVALID: handle is not a well-formed v1 token"
+        },
+        "BTH_HANDLE_UNKNOWN_DENIED": {
+          "const": "failed stage LOOKUP: well-formed handle digest was never issued"
+        },
+        "BTH_HANDLE_TAMPERED_DENIED": {
+          "const": "failed stage SIGNATURE: token signature does not re-derive from the trusted store"
+        },
+        "BTH_HANDLE_EXPIRED_DENIED": {
+          "const": "failed stage EXPIRY: now >= expiresAtMs"
+        },
+        "BTH_HANDLE_REPLAY_DENIED": {
+          "const": "failed stage EXECUTE: single-use handle already consumed"
+        },
+        "BTH_TENANT_MISMATCH_DENIED": {
+          "const": "failed stage TENANT: operation tenant differs from the bound tenant"
+        },
+        "BTH_PRINCIPAL_MISMATCH_DENIED": {
+          "const": "failed stage PRINCIPAL: operation user differs from the bound user"
+        },
+        "BTH_RUN_MISMATCH_DENIED": {
+          "const": "failed stage RUN: operation run identity differs from the bound run"
+        },
+        "BTH_OBJECT_MISMATCH_DENIED": {
+          "const": "failed stage OBJECT: provider/entity/operation/refClient/customerId/orderDateEpoch differ from the bound object"
+        },
+        "BTH_VERSION_MISMATCH_DENIED": {
+          "const": "failed stage VERSION: objectVersion differs from the bound object version"
+        },
+        "BTH_AMOUNT_LIMIT_DENIED": {
+          "const": "failed stage LIMITS: declared amount exceeds the bound amount limit"
+        },
+        "BTH_CURRENCY_MISMATCH_DENIED": {
+          "const": "failed stage LIMITS: currency differs from the bound currency"
+        },
+        "BTH_BINDING_UNSUPPORTED_DENIED": {
+          "const": "failed stage SUPPORTED: the bound task business scope is not the single fixture the accepted Order seam executes"
+        },
+        "BTH_BINDING_DIGEST_MISMATCH_DENIED": {
+          "const": "failed stage SIGNATURE: the stored binding digest does not re-derive to the signed handle digest"
+        },
+        "BTH_COMPOSE_FAILED": {
+          "const": "failed stage COMPOSE: the accepted Order seam did not reach a fresh owner approval"
+        },
+        "BTH_EXECUTE_FAILED": {
+          "const": "failed stage EXECUTE: the gate did not PASS"
+        },
+        "BTH_OPERATION_INVALID_DENIED": {
+          "const": "failed stage OPERATION: operation input deviates from the exact key set"
+        }
+      },
+      "description": "Every denial is raised before any provider mutation, provider read or business output, at the stated failed stage, with exactly one effect and zero reads on the negative paths."
+    },
+    "positiveEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entryPoint",
+        "composition",
+        "observedResult"
+      ],
+      "properties": {
+        "entryPoint": {
+          "const": "useBoundTaskHandle in src/pan442/bound-task-handle.mjs"
+        },
+        "composition": {
+          "const": "resolve -> staged use-time checks -> AdminAiPoc.decide (SYNTHETIC_DOLIBARR_ORDER_CREATE, OWNER_ESCALATION) -> ApprovalWorkbench.register + decide(APPROVE) -> DemoMutationGate.execute (owner-escalation lease, single use) -> separately retained observed result"
+        },
+        "observedResult": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stage",
+            "status",
+            "approvedOwnerActor",
+            "leaseId",
+            "receiptDigest",
+            "businessDiffDigest",
+            "snapshotDigest"
+          ],
+          "properties": {
+            "stage": {
+              "const": "EXECUTE"
+            },
+            "status": {
+              "const": "PASS"
+            },
+            "approvedOwnerActor": {
+              "const": "owner:local-demo"
+            },
+            "leaseId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "receiptDigest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "businessDiffDigest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "snapshotDigest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "liveAuthentication",
+        "globalExactlyOnce",
+        "publicWrites",
+        "realProviders"
+      ],
+      "properties": {
+        "liveAuthentication": {
+          "const": false
+        },
+        "globalExactlyOnce": {
+          "const": false
+        },
+        "publicWrites": {
+          "const": false
+        },
+        "realProviders": {
+          "const": false
+        }
+      },
+      "description": "Explicit scope limits: this contract is a synthetic local bound task, not live authentication and not a global exactly-once guarantee."
+    }
+  }
+}

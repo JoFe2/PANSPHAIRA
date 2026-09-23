@@ -125,6 +125,19 @@
         "tests/ks238/order-source-handoff.test.mjs"
       ],
       "dependencies": {}
+    },
+    {
+      "id": "pan442-bound-task-handles",
+      "version": "1",
+      "sources": [
+        "src/pan442"
+      ],
+      "contracts": [],
+      "profiles": [],
+      "tests": [
+        "tests/pan442/bound-task-handle.test.mjs"
+      ],
+      "dependencies": {}
     }
   ]
 }
