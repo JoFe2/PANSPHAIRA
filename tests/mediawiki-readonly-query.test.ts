@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, rmSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 import {
   MEDIAWIKI_READONLY_QUERY_BOUNDARY_V1,
@@ -103,7 +105,7 @@ test("PSAI107 read-only query returns exact stored passages and complete citatio
 
 test("PSAI107 active lifecycle and mounted-dump query paths remain fully offline", () => {
   const edition = importMediaWikiMiniDumpEditionV1(fixtureRoot, profile);
-  const lifecycleRoot = `/tmp/psai107-query-lifecycle-${process.pid}`;
+  const lifecycleRoot = path.join(os.tmpdir(), `psai107-query-lifecycle-${process.pid}`);
   rmSync(lifecycleRoot, { recursive: true, force: true });
   mkdirSync(lifecycleRoot);
   try {
@@ -187,7 +189,7 @@ test("PSAI107 receipt and source gates fail closed for mutation, collapse, stale
 test("PSAI107 failed activation cannot expose a non-active edition through the lifecycle query", () => {
   const initial = importMediaWikiMiniDumpEditionV1(fixtureRoot, profile);
   const next = changedEdition();
-  const lifecycleRoot = `/tmp/psai107-query-not-active-${process.pid}`;
+  const lifecycleRoot = path.join(os.tmpdir(), `psai107-query-not-active-${process.pid}`);
   rmSync(lifecycleRoot, { recursive: true, force: true });
   mkdirSync(lifecycleRoot);
   try {

@@ -4421,7 +4421,7 @@
         {
           "path": "tests/mediawiki-readonly-query.test.ts",
           "role": "VALIDATOR",
-          "sha256": "92cbc6864a5c33915a18959ea526a557755fd548ac6e71ad766271cfc9f2d5a3"
+          "sha256": "8a2615170ef1aa71a634c0d95c0a0398427c4df8ba3696bb6437de099270d340"
         },
         {
           "path": "tests/mediawiki-xml-local-adapter.test.ts",
