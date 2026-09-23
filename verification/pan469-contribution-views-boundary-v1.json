@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "pansphaira.pan469/contribution-views-boundary/v1",
+  "trust": "LOCAL_SYNTHETIC",
+  "generatedFrom": "driving the real src/pan469/contribution-views.mjs entry points and the real module-contribution CLI (module:new/check/graph/release) on synthetic git fixtures",
+  "nonClaims": [
+    "No public writes; one-family pilot only; synthetic contributors, no real identities.",
+    "No separate contribution platform; no thousands-of-contributions-per-day claim; no wall-clock timing measured."
+  ],
+  "checks": {
+    "ac01_tenContributions": {
+      "acceptedRecordCount": 10,
+      "recordIds": [
+        "cv-base",
+        "cv-pv-pilot-beta",
+        "cv-pv-pilot-gamma",
+        "cv-pv-pilot-delta",
+        "cv-pv-pilot-epsilon",
+        "cv-pv-pilot-zeta",
+        "cv-pv-pilot-eta",
+        "cv-pv-pilot-theta",
+        "cv-pv-pilot-iota",
+        "cv-pv-pilot-kappa"
+      ],
+      "recordSeals": {
+        "cv-base": "1d568738308c863bd250e1b1ca0d5f5324b0952e6d6644152a00bfbcd11239a6",
+        "cv-pv-pilot-beta": "1e2a35a33a9d3c88c57d30dfdcc00c0064f0dc3ea802694c3f8240b1ae165d9e",
+        "cv-pv-pilot-gamma": "3772f1217b1420288899432ba7c53518536bcd6df56a9ed83ff9c7be8fafd39e",
+        "cv-pv-pilot-delta": "d6c75925dcaa0a4734cda1764e76508b4c8ac093ba2c2fb219ec09f80e34a59d",
+        "cv-pv-pilot-epsilon": "c78ee2caec1816d4370f44d8a5f73e7aacfe6157599758ba2ece23d07788ae9d",
+        "cv-pv-pilot-zeta": "e1489adb9956ec7cfe440c7a5532e7e498a550ba80df8783cc674de29537b70b",
+        "cv-pv-pilot-eta": "1f1385c190b5039cd242e98c9deddac33d9b75e2ca1353b00dcd402a683b3c15",
+        "cv-pv-pilot-theta": "39af3673f64c558868d786019191603fb6be05c3f3392e0813f1178ad086dcb2",
+        "cv-pv-pilot-iota": "c9c65c9300d723fde0981d5386bbb34f46583f3da0a35786025c2e65fa56aec0",
+        "cv-pv-pilot-kappa": "752d20b371de67eb8a1d62273868862d859cec69473841a3f982a19fde82d216"
+      },
+      "realCli": {
+        "module:check": {
+          "coverage": "Explicit semantic modules only; no import inference or transitive test selection.",
+          "modules": 10,
+          "valid": true
+        },
+        "module:graph": {
+          "modules": 10,
+          "edges": 0,
+          "relations": 0
+        },
+        "module:release": {
+          "fileCount": 31,
+          "sha256": "375204fc5aab49359f586d3d3b470acb8a6737287649f51954990cdb874cc3ae"
+        }
+      }
+    },
+    "ac01_duplicate": {
+      "code": "CONTRIBUTION_DUPLICATE",
+      "denied": true
+    },
+    "ac01_idConflict": {
+      "code": "CONTRIBUTION_RECORD_SCHEMA_INVALID",
+      "denied": true
+    },
+    "ac01_malformed": {
+      "code": "CONTRIBUTION_RECORD_ID_INVALID",
+      "denied": true
+    },
+    "ac02_byteIdentical": {
+      "viewA": "ae7ec72aa9d7ec50f18959fb0e29c1863d9a281d05130863488bf86394ca35ce",
+      "viewB": "ae7ec72aa9d7ec50f18959fb0e29c1863d9a281d05130863488bf86394ca35ce",
+      "identical": true,
+      "integrationOwner": "single-integration-owner-derived-view",
+      "recordCount": 10
+    },
+    "ac02_drift": {
+      "code": "SHARED_VIEW_DRIFT",
+      "valid": false,
+      "expectedViewSha256": "ae7ec72aa9d7ec50f18959fb0e29c1863d9a281d05130863488bf86394ca35ce",
+      "observedViewSha256": "b77c5bd0bc24b17386fcdc30c8c19d4f65ab797684eedfd70404575751abffd4"
+    },
+    "ac02_empty": {
+      "code": "SHARED_VIEW_EMPTY",
+      "denied": true
+    },
+    "ac03_measurement": {
+      "contributorSteps": 10,
+      "duplicateCount": 1,
+      "conflictCount": 0,
+      "activeIntegrationWork": {
+        "generatedView": {
+          "derivations": 1
+        },
+        "existingPath": {
+          "descriptorEdits": 10,
+          "descriptorChecks": 10
+        }
+      },
+      "timing": {
+        "contributor": "unknown",
+        "integration": "unknown"
+      },
+      "reportSha256": "9df7646df88a9473623755eab049923e4e6a0ec34e325deba6475a668d84443e"
+    },
+    "ac03_nonInteger": {
+      "code": "CONTRIBUTOR_MEASUREMENT_NON_INTEGER",
+      "denied": true
+    }
+  },
+  "artifactDigest": "d6da878301aac82ac4e8a01401d5b11aa7d0497274ffe3520c60d5e58f9d2e2b"
+}

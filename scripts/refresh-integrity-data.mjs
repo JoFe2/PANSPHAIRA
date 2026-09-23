@@ -843,7 +843,43 @@ for (const [inputPath, role] of pan468Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan468:test")) repositoryIntegrityNode.ownedTests.push("npm run pan468:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 58;
+const pan469Inputs = [
+  ["docs/architecture/pan469-contribution-views-v1.md", "DERIVED_EVIDENCE"],
+  ["scripts/module-contribution.mjs", "VALIDATOR"],
+  ["src/pan469/contribution-views.mjs", "SOURCE"],
+  ["tests/pan469/pan469-contribution-views.test.mjs", "VALIDATOR"],
+  ["verification/pan469-contribution-views-boundary-v1.json", "DERIVED_EVIDENCE"],
+];
+let pan469Node = dag.nodes.find(({ id }) => id === "pan469-contribution-views-v1");
+if (pan469Node === undefined) {
+  pan469Node = {
+    id: "pan469-contribution-views-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run pan469:test"],
+    invariants: [
+      "PAN469 pilots one module family with independent contribution records and a deterministic generated shared view instead of many contributors editing one shared list; no new CI, no new publishing authority and no replacement of the canonical full-suite CI is introduced.",
+      "Each contribution record is individually sealed and preserved; a re-submitted identical record is refused (CONTRIBUTION_DUPLICATE), the same id with different content is refused (CONTRIBUTION_ID_CONFLICT) and a malformed record is refused with its exact code, so no individual record is merged away or lost by the shared view.",
+      "The shared view derives from the SET of accepted records (sorted by id, canonical-encoded): differently ordered input reproduces byte-identical output, the view has one integration owner (contributors never edit the shared list), a hand-edited view is refused (SHARED_VIEW_DRIFT) and the empty set is refused (SHARED_VIEW_EMPTY).",
+      "Contributor steps, conflict/correction counts and active integration work are measured against the existing shared-list path on the same input with integer counts; no wall-clock timing is inferred (missing timing stays unknown) and the same applicable acceptance applies to both paths.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan469Node);
+}
+pan469Node.dependsOn = [];
+pan469Node.inputs = pan469Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan469Node.ownedTests = ["npm run pan469:test"];
+for (const [inputPath, role] of pan469Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN469_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan469:test")) repositoryIntegrityNode.ownedTests.push("npm run pan469:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
+dag.graphVersion = 59;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -897,6 +933,10 @@ for (const relative of [
   "docs/architecture/pan468-impact-selection-v1.md",
   "tests/pan468/pan468-impact-selection.test.mjs",
   "verification/pan468-impact-selection-boundary-v1.json",
+  "docs/architecture/pan469-contribution-views-v1.md",
+  "src/pan469/contribution-views.mjs",
+  "tests/pan469/pan469-contribution-views.test.mjs",
+  "verification/pan469-contribution-views-boundary-v1.json",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);

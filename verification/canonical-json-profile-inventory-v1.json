@@ -267,6 +267,14 @@
       "fromSha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
       "toSha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
       "reason": "Advance verification DAG to graph v58 and bind the bounded PAN468 targeted impact selection and bounded historical path-scan work (contract-consumer classification, tree-mode enumeration without per-file content reads, diagnostics) to its explicit local owner; preserve all prior immutable obligations."
+    },
+    {
+      "migrationId": "PAN469-CONTRIBUTION-VIEWS/INTEGRITY-GENERATOR/V27",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 27,
+      "fromSha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
+      "toSha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12",
+      "reason": "Advance verification DAG to graph v59 and bind the bounded PAN469 one-family contribution-records pilot (sealed individual records, order-independent byte-identical generated shared view with a single integration owner, drift refusal and integer contributor/work measurement against the existing path) to its explicit local owner; preserve all prior immutable obligations."
     }
   ],
   "scanScope": {
@@ -309,15 +317,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 706,
+    "filesScanned": 708,
     "declarationSites": 37,
     "declarationFiles": 37,
     "importSites": 247,
     "importFiles": 246,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1970,
-    "ledgerUniquePaths": 1970
+    "ledgerEntries": 1974,
+    "ledgerUniquePaths": 1974
   },
   "profiles": [
     {
@@ -390,7 +398,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e"
+      "sha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1016,7 +1024,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
+      "sha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12",
       "basis": "profile-version-migration"
     },
     {

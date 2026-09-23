@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 58,
+  "graphVersion": 59,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "4f7c388dff60110fb9dcfd604e74f43a8457a739e9d85a9e9ff7258df00acb9f"
+          "sha256": "c4557f3e48ee39e104b81d0a5d63fc9a6c20b20c55f366afad0b1ac6972a1d6f"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "b15f6723098f3e83c3bda9fb19a4abfe5cfed01c5004f2071556a2d875598895"
+          "sha256": "ef4c7b3dd8599751324257cb994d3ee84dfbb680822776018674d7fc80576973"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "fccc6e16016595c4f19962656ccd6cf5650b8c95eea88c5c29f441bd2719696f"
+          "sha256": "ae0763adbf0a0b535787bb708794bd0824d3c9b9ad22487da4a7399c8ba1bf4c"
         }
       ],
       "ownedTests": [
@@ -4759,6 +4759,11 @@
           "sha256": "0c95fdf922e6b4ec3a6036005c2f9263462d6939775d36bff4bc9484b32e37a6"
         },
         {
+          "path": "docs/architecture/pan469-contribution-views-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b66257f1fb3f7365d7f258bf3e427f900744eb66f77336cb6d7a01bbd930edfe"
+        },
+        {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
@@ -4861,7 +4866,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "86925347a4e7f4e1d8611a9fa47669f82d23c457bb72aa16a44248542ee31ee7"
+          "sha256": "8414feac15bba7752dd47ce2e653962f8f9bd28a07b52469ba3eda5b3fdcc4ff"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4919,9 +4924,14 @@
           "sha256": "8b284d5a0b635b9362b95d041d6485a22d3f4fb898cd4e25b911ae585ec0f4f1"
         },
         {
+          "path": "src/pan469/contribution-views.mjs",
+          "role": "SOURCE",
+          "sha256": "893cbaba3a7f16b7a21ec4a1d33e5d9325535e394d43d0ab5d7e67a76f2cac02"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "f87a8bccb24fc0abb2365b48b6d42428f2b8896d7112fea382989524b0a6cbe8"
+          "sha256": "0b43632e939c28292f4a1392998bce84d87dbbf3ceb792893cc3fc306c56df45"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -5049,6 +5059,11 @@
           "sha256": "24c2851f0ae54f86fd9c8af090a2ea54e70c81098b9042d0e924303862615c46"
         },
         {
+          "path": "tests/pan469/pan469-contribution-views.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9fd1dec9a344b20b57de1828a341860399f90a689e61a20baccb23fb402ec232"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
           "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
@@ -5066,7 +5081,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "7835cf7d4bfc7b2fc99fd4c78db805853da6ef4d07520f026e50850f3ee09047"
+          "sha256": "4d2fd73e7662f94c8c88203cf6f85f4998139b356e414d7af4da4ba0ba719b5b"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5119,6 +5134,11 @@
           "sha256": "261ea70de20d943e7da5042b5d8a1a258e16a27076e6cd886b255221da5579b8"
         },
         {
+          "path": "verification/pan469-contribution-views-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "92574ce4ad690173e4d3cb68c6cec9ab3dc9c8edb74353d17c935fd9201954e7"
+        },
+        {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9"
@@ -5136,7 +5156,8 @@
         "npm run pan441:test",
         "npm run ks238:test",
         "npm run pan442:test",
-        "npm run pan468:test"
+        "npm run pan468:test",
+        "npm run pan469:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5691,7 +5712,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "b55b4e1ce0f7fb37b65c4ffca6206cffbd21975981e10767fb6a0262c7073c43"
+          "sha256": "304c03e4bff9f8fa3dfa5eb2d83c45088fc1ac98ff15d00a5812876c08e2386e"
         },
         {
           "path": "package-lock.json",
@@ -6051,7 +6072,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "264b8e4f92d426f7107bf5baadcd613f80e9027c61b2091c28b5238347608409"
+          "sha256": "d7a441c1bcff96ff1a30a31df3deb232708a78de9660d7dd522b6e9a94ac17e2"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6871,6 +6892,48 @@
         "PAN468 corrects the module-contribution impact/compare consumer classification and bounds its historical path-scan work; no new CI, no new publishing authority and no replacement of the canonical full-suite CI is introduced.",
         "A shared semantic contract is classified as a contract only when it is a declared contract path; internal profile/test-fixture files never select consumers, so a contract change pulls in direct consumers and a contract-unchanged change selects only the owner.",
         "Historical path enumeration relies on tree modes (ls-tree --full-tree) and performs no per-file content read; a content read occurs only when a file's contents are genuinely required (the descriptor or an explicitly requested file). Symlink (120000) historical objects are excluded from enumeration and denied on read; traversal and unsafe paths fail closed."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan469-contribution-views-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/architecture/pan469-contribution-views-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "b66257f1fb3f7365d7f258bf3e427f900744eb66f77336cb6d7a01bbd930edfe"
+        },
+        {
+          "path": "scripts/module-contribution.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1f671c0dbbffc2e8d92138f7607462286179d8f5f29f1176baf12c4111066b0a"
+        },
+        {
+          "path": "src/pan469/contribution-views.mjs",
+          "role": "SOURCE",
+          "sha256": "893cbaba3a7f16b7a21ec4a1d33e5d9325535e394d43d0ab5d7e67a76f2cac02"
+        },
+        {
+          "path": "tests/pan469/pan469-contribution-views.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9fd1dec9a344b20b57de1828a341860399f90a689e61a20baccb23fb402ec232"
+        },
+        {
+          "path": "verification/pan469-contribution-views-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "92574ce4ad690173e4d3cb68c6cec9ab3dc9c8edb74353d17c935fd9201954e7"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan469:test"
+      ],
+      "invariants": [
+        "PAN469 pilots one module family with independent contribution records and a deterministic generated shared view instead of many contributors editing one shared list; no new CI, no new publishing authority and no replacement of the canonical full-suite CI is introduced.",
+        "Each contribution record is individually sealed and preserved; a re-submitted identical record is refused (CONTRIBUTION_DUPLICATE), the same id with different content is refused (CONTRIBUTION_ID_CONFLICT) and a malformed record is refused with its exact code, so no individual record is merged away or lost by the shared view.",
+        "The shared view derives from the SET of accepted records (sorted by id, canonical-encoded): differently ordered input reproduces byte-identical output, the view has one integration owner (contributors never edit the shared list), a hand-edited view is refused (SHARED_VIEW_DRIFT) and the empty set is refused (SHARED_VIEW_EMPTY).",
+        "Contributor steps, conflict/correction counts and active integration work are measured against the existing shared-list path on the same input with integer counts; no wall-clock timing is inferred (missing timing stays unknown) and the same applicable acceptance applies to both paths."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

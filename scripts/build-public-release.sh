@@ -244,6 +244,17 @@ repository_only_files = {
     "tests/pan468/pan468-impact-selection.test.mjs",
     "docs/architecture/pan468-impact-selection-v1.md",
     "verification/pan468-impact-selection-boundary-v1.json",
+    # PAN469 contribution views — repository-only
+    # (one-family pilot of independent contribution records and a
+    # deterministic generated shared view with a single integration owner;
+    # delivered via the SOURCE_EVIDENCE_ONLY real GitHub source archive, not
+    # the runnable product-increment file set). Declared here so the
+    # fail-closed completeness gate classifies them; they are NOT added to
+    # release/public-files.manifest.
+    "src/pan469/contribution-views.mjs",
+    "tests/pan469/pan469-contribution-views.test.mjs",
+    "docs/architecture/pan469-contribution-views-v1.md",
+    "verification/pan469-contribution-views-boundary-v1.json",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",
