@@ -528,9 +528,18 @@ test("positive: a successful mutation persists a durable APPLIED effect receipt"
 // target `${receiptPath}.tmp`) on the FINAL durable write. `on` is a getter the
 // test flips true once the operation reaches that final persist (set inside
 // readback for the initial-execution site, inside reconcile for the
-// reconciliation site). persistent=true keeps every persist after arming failed;
-// otherwise the fault is one-shot and the temp path is cleared so a subsequent
-// recovery persist (markAmbiguous) succeeds.
+// reconciliation site). persistent=true keeps the obstruction re-created/retained
+// per persist so every persist after arming fails; otherwise the fault is one-shot
+// and the obstruction is removed in a finally so a subsequent recovery persist
+// (markAmbiguous) succeeds.
+//
+// MECHANISM: the real bound persist (`real`) IS invoked against the obstructing
+// directory, so the OS `open(2)` supplies the EISDIR — it is never hand-constructed.
+// The returned error therefore carries the OS-provided `syscall === "open"` and
+// `path === tempPath` (not platform-specific invented errno). A code-only,
+// hand-constructed error (the cc173e2 defect) carries neither, so the
+// `assertRejectsIsRealEisdir` guards below REJECT it and thereby prevent this
+// substitution from regressing.
 function injectEisdirFinalPersist(gateValue, { on, persistent = false }) {
   const tempPath = `${gateValue.receiptPath}.tmp`;
   const real = gateValue.persist.bind(gateValue);
@@ -541,15 +550,26 @@ function injectEisdirFinalPersist(gateValue, { on, persistent = false }) {
       fired = true;
       rmSync(tempPath, { recursive: true, force: true });
       mkdirSync(tempPath);
-      const error = new Error(`EISDIR: illegal operation on a directory, write '${tempPath}'`);
-      error.code = "EISDIR";
-      error.errno = -21;
-      throw error;
+      try {
+        return real();
+      } finally {
+        if (!persistent) rmSync(tempPath, { recursive: true, force: true });
+      }
     }
     rmSync(tempPath, { recursive: true, force: true });
     return real();
   };
   return { tempPath, clear: () => rmSync(tempPath, { recursive: true, force: true }) };
+}
+
+// Regression guard: REJECT a hand-constructed code-only error (the cc173e2
+// defect). A real Node syscall EISDIR carries `syscall === "open"` and
+// `path === <exact temp path>`; a fabricated error has neither. This is the
+// assertion that would have caught the substitution.
+function assertRejectsIsRealEisdir(err, tempPath) {
+  assert.equal(err.code, "EISDIR", "expected code EISDIR");
+  assert.equal(err.syscall, "open", `expected OS syscall "open", got ${JSON.stringify(err.syscall)} (hand-constructed error?)`);
+  assert.equal(err.path, tempPath, `expected OS path === ${tempPath}, got ${JSON.stringify(err.path)} (hand-constructed error?)`);
 }
 
 const GATE_MODULE_URL = fileURLToPath(new URL("../demo/runtime/enforcement-gate.mjs", import.meta.url));
@@ -575,7 +595,10 @@ test("initial-execution final-persist EISDIR (one-shot): converges memory and du
   const injected = injectEisdirFinalPersist(gateValue, { on: () => on, persistent: false });
   const action = installerAction("installer:isp-initial-001");
   const envelope = installerEnvelope(gateValue, action);
-  await assert.rejects(gateValue.execute(request(), envelope), { code: "EISDIR", message: /EISDIR/ });
+  await assert.rejects(gateValue.execute(request(), envelope), (err) => {
+    assertRejectsIsRealEisdir(err, injected.tempPath);
+    return /EISDIR/.test(err.message);
+  });
   // Exact rejection is the real EISDIR, not an unrelated setup error.
   assert.equal(mutations, 1);
   // Absent phantom receipt: no live APPLIED effect, no durable APPLIED reservation.
@@ -613,7 +636,10 @@ test("initial-execution final-persist EISDIR: retry on the exact failed live gat
   const injected = injectEisdirFinalPersist(gateValue, { on: () => on, persistent: false });
   const action = installerAction("installer:isp-retry-001");
   const envelope = installerEnvelope(gateValue, action);
-  await assert.rejects(gateValue.execute(request(), envelope), { code: "EISDIR" });
+  await assert.rejects(gateValue.execute(request(), envelope), (err) => {
+    assertRejectsIsRealEisdir(err, injected.tempPath);
+    return true;
+  });
   // Retry on the SAME failed live gate object (not a newly constructed one).
   on = false;
   const recovered = await gateValue.execute(request(), envelope);
@@ -647,7 +673,10 @@ test("initial-execution final-persist EISDIR: a fresh Node child restart from re
   const injected = injectEisdirFinalPersist(gateValue, { on: () => on, persistent: false });
   const action = installerAction("installer:isp-child-001");
   const envelope = installerEnvelope(gateValue, action);
-  await assert.rejects(gateValue.execute(request(), envelope), { code: "EISDIR" });
+  await assert.rejects(gateValue.execute(request(), envelope), (err) => {
+    assertRejectsIsRealEisdir(err, injected.tempPath);
+    return true;
+  });
   injected.clear();
   const retained = JSON.parse(readFileSync(receiptPath, "utf8"));
   assert.equal(retained.reservations[action.replayKey].status, "AMBIGUOUS");
@@ -730,7 +759,10 @@ test("reconciliation final-persist EISDIR (one-shot): no phantom receipt, prior 
   // AMBIGUOUS is retained (execute() catch does not re-persist here: reserved
   // stays false on the reconciliation path).
   on = false;
-  await assert.rejects(gateValue.execute(request(), envelope), { code: "EISDIR" });
+  await assert.rejects(gateValue.execute(request(), envelope), (err) => {
+    assertRejectsIsRealEisdir(err, injected.tempPath);
+    return true;
+  });
   assert.equal(mutations, 1);
   assert.equal(reconciliations, 1);
   assert.equal(gateValue.state.effects[action.replayKey], undefined);
@@ -775,7 +807,10 @@ test("persistent storage failure at the initial final persist: no phantom receip
   const injected = injectEisdirFinalPersist(gateValue, { on: () => on, persistent: true });
   const action = installerAction("installer:isp-persistent-001");
   const envelope = installerEnvelope(gateValue, action);
-  await assert.rejects(gateValue.execute(request(), envelope), { code: "EISDIR" });
+  await assert.rejects(gateValue.execute(request(), envelope), (err) => {
+    assertRejectsIsRealEisdir(err, injected.tempPath);
+    return true;
+  });
   assert.equal(mutations, 1);
   assert.equal(gateValue.state.effects[action.replayKey], undefined);
   assert.equal(gateValue.state.reservations[action.replayKey].status, "AMBIGUOUS");
