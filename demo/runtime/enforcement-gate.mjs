@@ -817,7 +817,18 @@ export class DemoMutationGate {
     };
     reservation.status = "APPLIED";
     reservation.recovery = "NONE";
-    this.persist();
+    try {
+      this.persist();
+    } catch (persistError) {
+      // A final persistence failure must not leave a live in-memory APPLIED
+      // claim or an undurable receipt. Roll the in-memory effect record and
+      // reservation back to the recoverable ambiguous state; execute()'s catch
+      // persists that convergence (markAmbiguous) and rethrows.
+      delete this.state.effects[operationKey];
+      reservation.status = "AMBIGUOUS";
+      reservation.recovery = "RECONCILE";
+      throw persistError;
+    }
     return {
       status: "PASS",
       replayed: true,
@@ -1052,7 +1063,18 @@ export class DemoMutationGate {
         receipt,
       };
       this.state.reservations[operationKey].status = "APPLIED";
-      this.persist();
+      try {
+        this.persist();
+      } catch (persistError) {
+        // A final persistence failure must not leave a live in-memory APPLIED
+        // claim or an undurable receipt. Roll the in-memory effect record and
+        // reservation back to the recoverable ambiguous state; execute()'s
+        // catch persists that convergence (markAmbiguous) and rethrows.
+        delete this.state.effects[operationKey];
+        this.state.reservations[operationKey].status = "AMBIGUOUS";
+        this.state.reservations[operationKey].recovery = "RECONCILE";
+        throw persistError;
+      }
       return {
         status: "PASS",
         replayed: false,

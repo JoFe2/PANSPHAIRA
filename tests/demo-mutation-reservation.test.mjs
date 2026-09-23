@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -411,4 +411,105 @@ test("HTTP provider forwards the operation abort signal and has a finite fallbac
   assert.equal(result.id, "effect-1");
   assert.equal(receivedSignal, controller.signal);
   assert.equal(typeof receivedSignal.addEventListener, "function");
+});
+
+test("final persistence failure converges memory and durable bytes to AMBIGUOUS, and restart reconciles without a duplicate POST", async () => {
+  const root = mkdtempSync(join(tmpdir(), "cm-reservation-finalpersist-"));
+  const receiptPath = join(root, "effects.json");
+  let mutations = 0;
+  let injectFinalPersist = false;
+  const gateValue = gate({
+    root,
+    provider: {
+      async mutate() {
+        mutations += 1;
+        return { id: "effect-1" };
+      },
+      async readback(action) {
+        // Arm the one-shot fault: the readback completes, so the very next
+        // persist() is the FINAL durable write of the APPLIED state.
+        injectFinalPersist = true;
+        return validReadback(action);
+      },
+    },
+  });
+  const realPersist = gateValue.persist.bind(gateValue);
+  // Inject the narrow fault at the FINAL persistence step only: the mutation
+  // and readback both succeed, then that single durable write fails. The
+  // recovery persist (markAmbiguous) succeeds so the convergence is durable.
+  gateValue.persist = () => {
+    if (injectFinalPersist) {
+      injectFinalPersist = false;
+      throw new Error("PERSISTENCE_FAILURE_INJECTED");
+    }
+    return realPersist();
+  };
+  const action = installerAction("installer:finalpersist-001");
+  const envelope = installerEnvelope(gateValue, action);
+  await assert.rejects(
+    gateValue.execute(request(), envelope),
+    /PERSISTENCE_FAILURE_INJECTED/,
+  );
+  // Convergence: the live process must NOT keep a phantom APPLIED effect.
+  assert.equal(mutations, 1);
+  assert.equal(gateValue.state.effects[action.replayKey], undefined);
+  assert.equal(gateValue.state.reservations[action.replayKey].status, "AMBIGUOUS");
+  assert.equal(gateValue.state.reservations[action.replayKey].recovery, "RECONCILE");
+  // The durable bytes must carry the same convergence (persisted by the
+  // execute() catch via markAmbiguous), not an APPLIED reservation.
+  const durable = JSON.parse(readFileSync(receiptPath, "utf8"));
+  assert.equal(durable.effects[action.replayKey], undefined);
+  assert.equal(durable.reservations[action.replayKey].status, "AMBIGUOUS");
+  assert.equal(durable.reservations[action.replayKey].recovery, "RECONCILE");
+
+  // Restart: a new gate recovers the ambiguous reservation and reconciles
+  // without re-POSTing; the recovered receipt is then durable and positive.
+  let retryMutations = 0;
+  const restarted = gate({
+    root,
+    provider: {
+      async mutate() {
+        retryMutations += 1;
+        return { id: "duplicate" };
+      },
+      async reconcile(retryAction) {
+        return {
+          providerResult: { id: "effect-1" },
+          readback: validReadback(retryAction),
+        };
+      },
+    },
+  });
+  const recovered = await restarted.execute(request(), envelope);
+  assert.equal(mutations, 1);
+  assert.equal(retryMutations, 0);
+  assert.equal(recovered.replayState, "RECONCILE_NO_DUPLICATE");
+  assert.equal(restarted.state.reservations[action.replayKey].status, "APPLIED");
+  const durableAfter = JSON.parse(readFileSync(receiptPath, "utf8"));
+  assert.equal(durableAfter.reservations[action.replayKey].status, "APPLIED");
+  assert.notEqual(durableAfter.effects[action.replayKey], undefined);
+});
+
+test("positive: a successful mutation persists a durable APPLIED effect receipt", async () => {
+  const root = mkdtempSync(join(tmpdir(), "cm-reservation-positive-"));
+  const receiptPath = join(root, "effects.json");
+  const gateValue = gate({
+    root,
+    provider: {
+      async mutate() {
+        return { id: "effect-1" };
+      },
+      async readback(action) {
+        return validReadback(action);
+      },
+    },
+  });
+  const action = installerAction("installer:positive-001");
+  const result = await gateValue.execute(request(), installerEnvelope(gateValue, action));
+  assert.equal(result.status, "PASS");
+  assert.equal(result.replayed, false);
+  const durable = JSON.parse(readFileSync(receiptPath, "utf8"));
+  assert.equal(durable.reservations[action.replayKey].status, "APPLIED");
+  assert.notEqual(durable.effects[action.replayKey], undefined);
+  assert.deepEqual(durable.effects[action.replayKey].providerResult, { id: "effect-1" });
 });

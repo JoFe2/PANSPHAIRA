@@ -183,6 +183,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     reason: "Bind ambiguous reconciliation to the originally reserved authority decision or owner lease and preserve operation-key conflict precedence; admitted v1 and reviewed v2-v3 bytes remain immutable.",
   }),
   Object.freeze({
+    migrationId: "P0-PS393-AUD-03/AMBIGUOUS-PERSISTENCE-CONVERGENCE/V5",
+    path: "demo/runtime/enforcement-gate.mjs",
+    profileVersion: 5,
+    fromSha256: "7ad2dc71454daf4465a7bcda01341deefd03c31cc84d45c08ed77437fee8fa0c",
+    toSha256: "7bef8ac531309c14e1bb768e87b7bcff18b1a9bf72a044d0f979bdbb7d8ad576",
+    reason: "Converge in-memory and durable operation state on a final-persist failure after an ambiguous adapter outcome: roll the transient effect record and reservation back to the recoverable ambiguous/reconcile state, persist that convergence before rethrowing, so a restart reconciles to the same receipt instead of a phantom applied state; admitted v1 and reviewed v2-v4 gate bytes remain immutable.",
+  }),
+  Object.freeze({
     migrationId: "XRA-PS-02-NATIVE-WIRE-INTEGRATE/INTEGRITY-GENERATOR/V13",
     path: "scripts/refresh-integrity-data.mjs",
     profileVersion: 13,
