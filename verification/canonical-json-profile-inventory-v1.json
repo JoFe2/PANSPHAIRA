@@ -251,6 +251,14 @@
       "fromSha256": "488fc3363b4d1cddd9d2c3ecedcbf1d465c02a3d825856858971eca0121d2c64",
       "toSha256": "81d565c053a1da1009327378d51908bb331c2b23f9a4e8af3a0e3c354fa2b8b1",
       "reason": "Advance verification DAG to graph v56 and bind the bounded KS238 read-only order/source handoff over the released ERP order and customer readers, its negative tests and public registration to its explicit local owner; preserve all prior immutable obligations."
+    },
+    {
+      "migrationId": "PAN442-BOUND-TASK-HANDLES/INTEGRITY-GENERATOR/V25",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 25,
+      "fromSha256": "81d565c053a1da1009327378d51908bb331c2b23f9a4e8af3a0e3c354fa2b8b1",
+      "toSha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
+      "reason": "Advance verification DAG to graph v57 and bind the bounded PAN442 local bound business task and opaque tool handle journey over the accepted demo Order seam (owner-escalation decision, owner approval, owner-escalation lease execution with mutation reservation), its exact fail-closed negatives and repository-only registration to its explicit local owner; preserve all prior immutable obligations."
     }
   ],
   "scanScope": {
@@ -293,15 +301,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 703,
+    "filesScanned": 705,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 246,
-    "importFiles": 245,
+    "importSites": 247,
+    "importFiles": 246,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1962,
-    "ledgerUniquePaths": 1962
+    "ledgerEntries": 1967,
+    "ledgerUniquePaths": 1967
   },
   "profiles": [
     {
@@ -374,7 +382,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "81d565c053a1da1009327378d51908bb331c2b23f9a4e8af3a0e3c354fa2b8b1"
+      "sha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -706,8 +714,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 56,
-      "importFiles": 55
+      "importSites": 57,
+      "importFiles": 56
     },
     {
       "owner": "usage-insights",
@@ -1000,7 +1008,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "81d565c053a1da1009327378d51908bb331c2b23f9a4e8af3a0e3c354fa2b8b1",
+      "sha256": "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
       "basis": "profile-version-migration"
     },
     {

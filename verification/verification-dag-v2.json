@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 56,
+  "graphVersion": 57,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "8c6ac1bc6ddc834dac46e0548ad6a8df7857f99b804214e612744beefdf33dbe"
+          "sha256": "396ff69cc3f3b5c1fed542390e6d4895f93a65b870d391c33c8b3caf36f03f9e"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -4749,6 +4749,11 @@
           "sha256": "d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e"
         },
         {
+          "path": "docs/architecture/pan442-bound-task-handle-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "31e39d11cc0722fbe24e3b490a4e3776a6f27e61e69121f77670817b874e7a7c"
+        },
+        {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
@@ -4796,7 +4801,7 @@
         {
           "path": "examples/module-contribution/modules.json",
           "role": "CONTRACT",
-          "sha256": "68e663e8d81f6dd41023c526c834747a71e8fe093e387e6f0515586c345c76f4"
+          "sha256": "0c35e63c364fb0f5b18653f0d256aa1e25835a79bae8e616d448bdbf3488e411"
         },
         {
           "path": "packages/contracts/src/incoming-invoice-adaptive-ui.ts",
@@ -4842,6 +4847,11 @@
           "path": "schemas/contracts/pan441-employee-profile-v1.schema.json",
           "role": "SCHEMA",
           "sha256": "3c22b63ae135a1ba1e179baadc50a8894c1545183f2996d443eb3ccf4a9290a1"
+        },
+        {
+          "path": "schemas/contracts/pan442-bound-task-handle-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "2d932635c20a0ae08ddf249eb157577bcfdfb72a3755f2721cfc2f9c7d58b575"
         },
         {
           "path": "scripts/build-public-release.sh",
@@ -4899,9 +4909,14 @@
           "sha256": "e2d5fba3fdd8ce038e1e3a4be7588112c3897e0a63dd7cf9f62b1eba42eb2303"
         },
         {
+          "path": "src/pan442/bound-task-handle.mjs",
+          "role": "SOURCE",
+          "sha256": "8b284d5a0b635b9362b95d041d6485a22d3f4fb898cd4e25b911ae585ec0f4f1"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a84b18a3f5bec8a1b719e3e11031351cb00d274f85c55f5c4354c042cabffe6b"
+          "sha256": "13ea08d0945bd85a09ac405435010b0d6dfd81c03878200aa6d8a0c1986542c9"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4991,7 +5006,7 @@
         {
           "path": "tests/module-contribution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "25178917d5d172d749f56a8605cb6044bdc2be195c42c5f44a09a9ec1a47500d"
+          "sha256": "66e389e0733e6b971d230e0fc25aec454bbbe422e5354131d1e7ff68ffdf8399"
         },
         {
           "path": "tests/native-forward-qualification.test.mjs",
@@ -5019,6 +5034,11 @@
           "sha256": "2e77fcc83b3070d67af2f1bd38870c66557fd1d15f2fd392fcc48319bdc6743d"
         },
         {
+          "path": "tests/pan442/bound-task-handle.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "fc9f4ff20ac8e85803b7998c8fa0777c9d511cbef78c27c03097b1e117a9d162"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
           "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
@@ -5036,7 +5056,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "0d3e5ec971eac85f6e6536edd251029b212b559312bfbfa7f86c0ed8c552ac63"
+          "sha256": "930c8e6bf93d9c9ecf16900899a9c38384561caae217a5a89844cacbd0792b6a"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5079,6 +5099,11 @@
           "sha256": "bd7c2bd65b87ad56406a4d53e290019b702b9d05bfb2384bff565f0ce5ef31b5"
         },
         {
+          "path": "verification/pan442-bound-task-handle-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "86c23c2b7190f4f52e692c10a0496ce6fbab572556a65f128cd6c7b2d931b8fb"
+        },
+        {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9"
@@ -5094,7 +5119,8 @@
         "npm run module:check",
         "npm run pan433:mapping:test",
         "npm run pan441:test",
-        "npm run ks238:test"
+        "npm run ks238:test",
+        "npm run pan442:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5649,7 +5675,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "bd6d947c1965448f4a7e4f6d701e86f9e6bc6b04218293bec20958c4fa191163"
+          "sha256": "c2c2bc32c74266281d711537dff2e497ff450885953cd2b4b0ea1729fa33210c"
         },
         {
           "path": "package-lock.json",
@@ -6009,7 +6035,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "4bf88509f49eec80d521ef6175311b1e61ee41741166a8bfb275886eb0d6b54d"
+          "sha256": "f35a2d967ec7bd234c05450257fd831297bf3fde5aaa229630cb46fa28d0fe2c"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6632,7 +6658,7 @@
         {
           "path": "examples/module-contribution/modules.json",
           "role": "CONTRACT",
-          "sha256": "68e663e8d81f6dd41023c526c834747a71e8fe093e387e6f0515586c345c76f4"
+          "sha256": "0c35e63c364fb0f5b18653f0d256aa1e25835a79bae8e616d448bdbf3488e411"
         },
         {
           "path": "packages/contracts/src/pan433-domain-mapping-v1.ts",
@@ -6746,6 +6772,48 @@
         "KS238 is a read-only thin composition over the released ERP order and customer readers; no second order module, write, approval, provider, runtime or public-write authority is granted.",
         "The bounded handoff exposes only evidenced order/customer/status/quantity-unit/period facts; net revenue is never inferred from order status or ordered quantity and absent currency, amount, history and delivery facts remain unavailable.",
         "The released reader executes on the exact labelled LOCAL_SYNTHETIC source; source bindings and content digests survive serialization without caller-resealed substitutions being treated as approval."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan442-bound-task-handles-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/architecture/pan442-bound-task-handle-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "31e39d11cc0722fbe24e3b490a4e3776a6f27e61e69121f77670817b874e7a7c"
+        },
+        {
+          "path": "schemas/contracts/pan442-bound-task-handle-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "2d932635c20a0ae08ddf249eb157577bcfdfb72a3755f2721cfc2f9c7d58b575"
+        },
+        {
+          "path": "src/pan442/bound-task-handle.mjs",
+          "role": "SOURCE",
+          "sha256": "8b284d5a0b635b9362b95d041d6485a22d3f4fb898cd4e25b911ae585ec0f4f1"
+        },
+        {
+          "path": "tests/pan442/bound-task-handle.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "fc9f4ff20ac8e85803b7998c8fa0777c9d511cbef78c27c03097b1e117a9d162"
+        },
+        {
+          "path": "verification/pan442-bound-task-handle-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "86c23c2b7190f4f52e692c10a0496ce6fbab572556a65f128cd6c7b2d931b8fb"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan442:test"
+      ],
+      "invariants": [
+        "PAN442 is a bounded local bound business task and opaque tool handle journey over the accepted demo Order seam; no second gateway, scheduler, journal platform, identity provider, policy, approval or lease mechanism is introduced.",
+        "A synthetic trusted task source retained outside caller-controlled payloads binds object, purpose, tenant, user, run identity, object version, amount/currency limits and expiry; a caller-selected source plus caller-selected digest is not an authority root.",
+        "Opaque handles are server-issued, opaque to the caller and single-use; the resolver re-derives every trusted binding from the immutable issuer store, so caller-side runtime mutation, handle-field edits and guessed/unknown handles cannot change the accepted binding.",
+        "The positive entry point composes the accepted Order seam (OWNER_ESCALATION decision, owner approval, owner-escalation lease execution with mutation reservation) and retains the observed result separately; fail-closed use-time checks deny with exact codes and failed stages before any effect, read or output."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

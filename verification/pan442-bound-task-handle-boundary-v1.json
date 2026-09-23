@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "pansphaira.verification/pan442-bound-task-handle-boundary/v1",
+  "status": "LOCAL_SYNTHETIC_BOUND_TASK_IMPLEMENTED",
+  "module": "src/pan442/bound-task-handle.mjs",
+  "consumerContract": "schemas/contracts/pan442-bound-task-handle-v1.schema.json",
+  "reusedModules": [
+    {
+      "path": "demo/runtime/admin-ai-poc.mjs",
+      "role": "SYNTHETIC_DOLIBARR_ORDER_CREATE_DECISION_OWNER_ESCALATION"
+    },
+    {
+      "path": "demo/runtime/approval-workbench.mjs",
+      "role": "OWNER_APPROVAL_AND_ESCALATION_LEASE_ISSUE"
+    },
+    {
+      "path": "demo/runtime/enforcement-gate.mjs",
+      "role": "OWNER_ESCALATION_LEASE_EXECUTION_MUTATION_RESERVATION"
+    },
+    {
+      "path": "demo/runtime/authoritative-approval-snapshot.mjs",
+      "role": "AUTHORITATIVE_APPROVAL_SNAPSHOT_AND_BUSINESS_DIFF"
+    },
+    {
+      "path": "demo/manifests/authority/admin-ai-poc-policy-v1.json",
+      "role": "PINNED_POLICY_BYTES_AND_DIGEST"
+    }
+  ],
+  "trustedSource": {
+    "kind": "SYNTHETIC_TRUSTED_TASK_SOURCE_V1",
+    "trustLabel": "LOCAL_SYNTHETIC",
+    "identityProviderClaim": false,
+    "modelTextGrantsApproval": false,
+    "retainedOutsideCallerPayloads": true,
+    "binds": [
+      "object (provider, entity, operation, refClient, customerId, orderDateEpoch)",
+      "objectVersion",
+      "purpose",
+      "tenant",
+      "user",
+      "runId",
+      "amountLimitMinor",
+      "currency",
+      "issuedAtMs",
+      "expiresAtMs",
+      "sourceDigest",
+      "principalDigest"
+    ]
+  },
+  "handle": {
+    "encoding": "base64url(canonicalJson({v:1, d:handleDigest, s:signature}))",
+    "handleDigest": "sha256(canonicalJson(binding))",
+    "signature": "sha256(issuerSecret || handleDigest)",
+    "opaqueToCaller": true,
+    "singleUse": true
+  },
+  "positiveEntry": {
+    "entryPoint": "useBoundTaskHandle",
+    "seam": [
+      "AdminAiPoc.decide -> SYNTHETIC_DOLIBARR_ORDER_CREATE -> OWNER_ESCALATION",
+      "ApprovalWorkbench.register + decide(APPROVE) by owner:local-demo",
+      "DemoMutationGate.execute under OWNER_ESCALATION_LEASE_HMAC_V1 (single use, reservation, semantic readback)"
+    ],
+    "bypassesApprovalLeasePolicy": false,
+    "observedResultRetainedSeparately": true
+  },
+  "canonicalOrderBinding": {
+    "scope": {
+      "provider": "dolibarr",
+      "tenant": "panskys-zoo-demo",
+      "entity": "Order",
+      "operation": "CREATE_IF_ABSENT"
+    },
+    "payload": {
+      "method": "POST",
+      "path": "/orders",
+      "body": {
+        "ref_client": "CM-ADMIN-AI-ESCALATION-001",
+        "socid": 7,
+        "date": 1767225600
+      }
+    },
+    "requester": "requester:local-demo",
+    "purpose": "CREATE_SYNTHETIC_SALES_ORDER",
+    "budget": {
+      "currency": "EUR",
+      "upperBound": "0.00"
+    }
+  },
+  "denialMatrix": {
+    "BTH_OPERATION_INVALID_DENIED": "OPERATION",
+    "BTH_HANDLE_INVALID_DENIED": "HANDLE_INVALID",
+    "BTH_HANDLE_UNKNOWN_DENIED": "LOOKUP",
+    "BTH_HANDLE_TAMPERED_DENIED": "SIGNATURE",
+    "BTH_HANDLE_EXPIRED_DENIED": "EXPIRY",
+    "BTH_TENANT_MISMATCH_DENIED": "TENANT",
+    "BTH_PRINCIPAL_MISMATCH_DENIED": "PRINCIPAL",
+    "BTH_RUN_MISMATCH_DENIED": "RUN",
+    "BTH_OBJECT_MISMATCH_DENIED": "OBJECT",
+    "BTH_VERSION_MISMATCH_DENIED": "VERSION",
+    "BTH_AMOUNT_LIMIT_DENIED": "LIMITS",
+    "BTH_CURRENCY_MISMATCH_DENIED": "LIMITS",
+    "BTH_COMPOSE_FAILED": "COMPOSE",
+    "BTH_EXECUTE_FAILED": "EXECUTE",
+    "BTH_HANDLE_REPLAY_DENIED": "EXECUTE"
+  },
+  "negativeInvariants": [
+    "Every denial occurs before any provider mutation, provider read or business output.",
+    "Runtime mutation of caller objects, source-plus-digest substitution, handle-field edits and guessed/unknown handles cannot change the accepted binding.",
+    "The original approved identity (owner:local-demo) is pinned independently in the separately retained observed result."
+  ],
+  "publicWrites": false,
+  "realProviders": false,
+  "parentReviewAndDeliveryOwner": "Hermes/Supervisor e2e345eb187a",
+  "contractAcceptanceOwner": "Hermes/Supervisor e2e345eb187a",
+  "repositoryOnly": true
+}

@@ -36,6 +36,8 @@ export const BTH_ERROR = Object.freeze({
   TASK_REF_UNKNOWN: "BTH_TASK_REF_UNKNOWN_DENIED",
   TRUSTED_SOURCE_DIGEST_MISMATCH: "BTH_TRUSTED_SOURCE_DIGEST_MISMATCH_DENIED",
   HANDLE_REISSUED: "BTH_HANDLE_REISSUED_DENIED",
+  BINDING_UNSUPPORTED: "BTH_BINDING_UNSUPPORTED_DENIED",
+  BINDING_DIGEST_MISMATCH: "BTH_BINDING_DIGEST_MISMATCH_DENIED",
 });
 
 const OPERATION_KEYS = Object.freeze([
@@ -67,6 +69,7 @@ const STAGES = Object.freeze([
   "OBJECT",
   "VERSION",
   "LIMITS",
+  "SUPPORTED",
   "COMPOSE",
   "EXECUTE",
 ]);
@@ -184,6 +187,7 @@ function trustedSourceDigest(taskSource) {
  * never derived from caller payloads afterwards.
  */
 export class BoundTaskHandleIssuer {
+  #taskIndex;
   constructor({ taskSource, secret, now }) {
     if (
       !isRecord(taskSource)
@@ -198,6 +202,13 @@ export class BoundTaskHandleIssuer {
     this.secret = secret;
     this.secretFingerprint = sha256(`bth-secret-fingerprint:v1:${secret}`);
     this.taskSource = deepFreeze(taskSource);
+    // F2: the authoritative lookup is a PRIVATE index built only from the
+    // digest-attested `tasks` array. The public `byTaskRef` Map on the source
+    // is NOT read as authority: it is digest-excluded, mutable and would
+    // otherwise let a caller swap an unattested task into an issued binding.
+    this.#taskIndex = new Map(
+      deepFreeze(taskSource).tasks.map((task) => [task.taskRef, task]),
+    );
     this.store = new Map();
     this.observations = [];
     Object.freeze(this);
@@ -205,11 +216,14 @@ export class BoundTaskHandleIssuer {
 
   createHandle({ taskRef }) {
     if (typeof taskRef !== "string") fail("BTH_TRUSTED_SOURCE_INVALID_DENIED", "COMPOSE");
-    const task = this.taskSource.byTaskRef.get(taskRef);
-    if (task === undefined) fail(BTH_ERROR.TASK_REF_UNKNOWN, "COMPOSE");
     if (trustedSourceDigest(this.taskSource) !== this.taskSource.sourceDigest) {
       fail(BTH_ERROR.TRUSTED_SOURCE_DIGEST_MISMATCH, "COMPOSE");
     }
+    // F2: read the task from the private, digest-attested index. A `.set()` on
+    // the public `byTaskRef` map cannot substitute the task the binding is
+    // derived from, because that map is never consulted here.
+    const task = this.#taskIndex.get(taskRef);
+    if (task === undefined) fail(BTH_ERROR.TASK_REF_UNKNOWN, "COMPOSE");
     const issuedAtMs = this.now();
     const binding = {
       schemaVersion: BTH_BINDING_SCHEMA,
@@ -408,6 +422,15 @@ export class BoundTaskHandleResolver {
     const expectedSignature = sha256(this.issuer.secret + parsed.d);
     if (expectedSignature !== parsed.s) fail(BTH_ERROR.HANDLE_TAMPERED, "SIGNATURE");
     const binding = entry.binding;
+    // F3: recompute the canonical digest of the stored binding (excluding its
+    // own handleDigest field) and require it to equal the signed handle
+    // digest. Replacing the stored binding or its wrapper therefore changes the
+    // recomputed digest and fails closed before any field comparison, snapshot
+    // or effect, even though the handle signature still validates.
+    const { handleDigest: _unused, ...bindingContent } = binding;
+    if (sha256(canonicalJson(bindingContent)) !== parsed.d) {
+      fail(BTH_ERROR.BINDING_DIGEST_MISMATCH, "SIGNATURE");
+    }
     if (this.now() >= binding.expiresAtMs) fail(BTH_ERROR.HANDLE_EXPIRED, "EXPIRY");
     if (operationInput.tenant !== binding.tenant) {
       fail(BTH_ERROR.TENANT_MISMATCH, "TENANT");
@@ -438,6 +461,25 @@ export class BoundTaskHandleResolver {
       || operationInput.declaredAmountMinor < 0
       || operationInput.declaredAmountMinor > binding.amountLimitMinor
     ) fail(BTH_ERROR.AMOUNT_LIMIT, "LIMITS");
+    // F1: this adapter is explicitly SINGLE-FIXTURE. The accepted demo Order
+    // seam executes the fixed synthetic Order described by
+    // SUPPORTED_ORDER_BINDING. A bound task whose business scope differs is
+    // denied at the SUPPORTED stage, before any snapshot, approval, lease or
+    // provider effect, so the executed Order can never be unrelated to the
+    // resolved task.
+    const b = binding;
+    const sup = SUPPORTED_ORDER_BINDING;
+    if (
+      b.tenant !== sup.tenant
+      || b.object.provider !== sup.provider
+      || b.object.entity !== sup.entity
+      || b.object.operation !== sup.operation
+      || b.object.refClient !== sup.refClient
+      || b.object.customerId !== sup.customerId
+      || b.object.orderDateEpoch !== sup.orderDateEpoch
+      || b.purpose !== sup.purpose
+      || b.currency !== sup.currency
+    ) fail(BTH_ERROR.BINDING_UNSUPPORTED, "SUPPORTED");
     return binding;
   }
 
@@ -454,6 +496,7 @@ export class BoundTaskHandleResolver {
       OBJECT: BTH_ERROR.OBJECT_MISMATCH,
       VERSION: BTH_ERROR.VERSION_MISMATCH,
       LIMITS: BTH_ERROR.AMOUNT_LIMIT,
+      SUPPORTED: BTH_ERROR.BINDING_UNSUPPORTED,
       COMPOSE: BTH_ERROR.COMPOSE_FAILED,
       EXECUTE: BTH_ERROR.EXECUTE_FAILED,
     };
@@ -511,5 +554,25 @@ export async function useBoundTaskHandle({ issuer, handle, operationInput, opera
     observed,
   };
 }
+
+/**
+ * The complete business scope the accepted demo Order seam (AdminAiPoc
+ * SYNTHETIC_DOLIBARR_ORDER_CREATE -> the fixed synthetic Order) actually
+ * executes. This adapter is explicitly SINGLE-FIXTURE: a bound task whose
+ * scope differs from this is denied at the SUPPORTED stage before any
+ * snapshot, approval, lease or provider effect, so the executed Order can
+ * never be unrelated to the resolved task (F1).
+ */
+export const SUPPORTED_ORDER_BINDING = Object.freeze({
+  tenant: "panskys-zoo-demo",
+  provider: "dolibarr",
+  entity: "Order",
+  operation: "CREATE_IF_ABSENT",
+  refClient: "CM-ADMIN-AI-ESCALATION-001",
+  customerId: 7,
+  orderDateEpoch: 1767225600,
+  purpose: "CREATE_SYNTHETIC_SALES_ORDER",
+  currency: "EUR",
+});
 
 export const BTH_STAGES = STAGES;

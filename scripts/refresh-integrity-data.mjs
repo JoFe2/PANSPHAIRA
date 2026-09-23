@@ -772,7 +772,43 @@ for (const [inputPath, role] of ks238Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run ks238:test")) repositoryIntegrityNode.ownedTests.push("npm run ks238:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 56;
+const pan442Inputs = [
+  ["docs/architecture/pan442-bound-task-handle-v1.md", "DERIVED_EVIDENCE"],
+  ["schemas/contracts/pan442-bound-task-handle-v1.schema.json", "SCHEMA"],
+  ["src/pan442/bound-task-handle.mjs", "SOURCE"],
+  ["tests/pan442/bound-task-handle.test.mjs", "VALIDATOR"],
+  ["verification/pan442-bound-task-handle-boundary-v1.json", "DERIVED_EVIDENCE"],
+];
+let pan442Node = dag.nodes.find(({ id }) => id === "pan442-bound-task-handles-v1");
+if (pan442Node === undefined) {
+  pan442Node = {
+    id: "pan442-bound-task-handles-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run pan442:test"],
+    invariants: [
+      "PAN442 is a bounded local bound business task and opaque tool handle journey over the accepted demo Order seam; no second gateway, scheduler, journal platform, identity provider, policy, approval or lease mechanism is introduced.",
+      "A synthetic trusted task source retained outside caller-controlled payloads binds object, purpose, tenant, user, run identity, object version, amount/currency limits and expiry; a caller-selected source plus caller-selected digest is not an authority root.",
+      "Opaque handles are server-issued, opaque to the caller and single-use; the resolver re-derives every trusted binding from the immutable issuer store, so caller-side runtime mutation, handle-field edits and guessed/unknown handles cannot change the accepted binding.",
+      "The positive entry point composes the accepted Order seam (OWNER_ESCALATION decision, owner approval, owner-escalation lease execution with mutation reservation) and retains the observed result separately; fail-closed use-time checks deny with exact codes and failed stages before any effect, read or output.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan442Node);
+}
+pan442Node.dependsOn = [];
+pan442Node.inputs = pan442Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan442Node.ownedTests = ["npm run pan442:test"];
+for (const [inputPath, role] of pan442Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN442_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan442:test")) repositoryIntegrityNode.ownedTests.push("npm run pan442:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
+dag.graphVersion = 57;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -818,6 +854,11 @@ for (const relative of [
   "tests/fixtures/pan433/alternate-invoice-document-v2.json",
   "tests/fixtures/pan433/default-invoice-row-v1.json",
   "tests/pan433/domain-mapping.test.mjs",
+  "docs/architecture/pan442-bound-task-handle-v1.md",
+  "schemas/contracts/pan442-bound-task-handle-v1.schema.json",
+  "src/pan442/bound-task-handle.mjs",
+  "tests/pan442/bound-task-handle.test.mjs",
+  "verification/pan442-bound-task-handle-boundary-v1.json",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);

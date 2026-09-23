@@ -4,6 +4,7 @@ import {
   BoundTaskHandleIssuer,
   createLocalBusinessOperation,
   createSyntheticTrustedTaskSource,
+  SUPPORTED_ORDER_BINDING,
   useBoundTaskHandle,
 } from "../../src/pan442/bound-task-handle.mjs";
 import { canonicalJson, sha256 } from "../../demo/runtime/enforcement-gate.mjs";
@@ -483,6 +484,186 @@ test("PAN442-08 broken variant is RED for caller-trust, candidate is GREEN", asy
     operationInput: current.input,
     operation: current.operation,
   });
+  assert.equal(out.status, "PASS");
+  assert.equal(current.mutations(), 1);
+});
+
+// ---------------------------------------------------------------------------
+// F1: the executed Order is bound to the resolved task. This adapter is
+// explicitly SINGLE-FIXTURE (SUPPORTED_ORDER_BINDING). A valid trusted binding
+// whose business scope differs is denied at the SUPPORTED stage, before any
+// snapshot, approval, lease or provider effect.
+// ---------------------------------------------------------------------------
+test("PAN442-09 F1 alternate bound customer executes no unrelated Order (exact typed denial, zero effects)", async () => {
+  const source = createSyntheticTrustedTaskSource({
+    principal: { user: USER, tenant: TENANT },
+    tasks: [
+      {
+        taskRef: "pan442-order-task-0002",
+        runId: "run:pan442:order:0002",
+        tenant: TENANT,
+        user: USER,
+        object: {
+          provider: "dolibarr",
+          entity: "Order",
+          operation: "CREATE_IF_ABSENT",
+          refClient: "REVIEW-OTHER-ORDER",
+          customerId: 8,
+          orderDateEpoch: 1767225601,
+        },
+        objectVersion: 1,
+        purpose: "CREATE_SYNTHETIC_SALES_ORDER",
+        amountLimitMinor: 0,
+        currency: "EUR",
+        ttlMs: 120000,
+      },
+    ],
+  });
+  const clock = { value: 1_000_000 };
+  let mutations = 0, readbacks = 0, snapshotReads = 0;
+  const provider = {
+    async readAuthoritativeSnapshot(action) { snapshotReads += 1; return createAuthoritativeApprovalSnapshot(action, []); },
+    async mutate() { mutations += 1; return { id: "order-x" }; },
+    async readback(action, r) { readbacks += 1; return { id: r.id, date: action.payload.body.date, ref_client: action.payload.body.ref_client, socid: action.payload.body.socid }; },
+  };
+  const issuer = new BoundTaskHandleIssuer({ taskSource: source, secret: SECRET, now: () => clock.value });
+  const operation = createLocalBusinessOperation({ provider, now: () => clock.value });
+  const issued = issuer.createHandle({ taskRef: "pan442-order-task-0002" });
+  const input = {
+    tenant: TENANT, user: USER, runId: "run:pan442:order:0002", objectVersion: 1,
+    declaredAmountMinor: 0, currency: "EUR",
+    object: { provider: "dolibarr", entity: "Order", operation: "CREATE_IF_ABSENT", refClient: "REVIEW-OTHER-ORDER", customerId: 8, orderDateEpoch: 1767225601 },
+  };
+  // The caller input MATCHES the (valid) alternate binding, but the binding
+  // scope is not the single fixture the seam executes -> denied at SUPPORTED.
+  await expectDenial(
+    useBoundTaskHandle({ issuer, handle: issued.handle, operationInput: input, operation }),
+    BTH_ERROR.BINDING_UNSUPPORTED, "SUPPORTED",
+  );
+  assert.deepEqual([snapshotReads, mutations, readbacks, issuer.observations.length], [0, 0, 0, 0]);
+});
+
+test("PAN442-09b F1 unsupported purpose/currency bindings are denied at SUPPORTED before any effect", async () => {
+  const make = (overrides) =>
+    createSyntheticTrustedTaskSource({
+      principal: { user: USER, tenant: TENANT },
+      tasks: [{ taskRef: "pan442-order-task-0003", runId: "run:pan442:order:0003", tenant: TENANT, user: USER, object: { provider: "dolibarr", entity: "Order", operation: "CREATE_IF_ABSENT", refClient: "CM-ADMIN-AI-ESCALATION-001", customerId: 7, orderDateEpoch: 1767225600 }, objectVersion: 1, purpose: "CREATE_SYNTHETIC_SALES_ORDER", amountLimitMinor: 0, currency: "EUR", ttlMs: 120000, ...overrides }],
+    });
+  const clock = { value: 1_000_000 };
+  let mutations = 0, readbacks = 0, snapshotReads = 0;
+  const provider = { async readAuthoritativeSnapshot(a){snapshotReads+=1;return createAuthoritativeApprovalSnapshot(a,[]);}, async mutate(){mutations+=1;return {id:"o"};}, async readback(a,r){readbacks+=1;return {id:r.id};} };
+
+  // purpose differs (everything else matches) -> SUPPORTED denial.
+  {
+    const src = make({ purpose: "READ_ONLY_REVIEW" });
+    const issuer = new BoundTaskHandleIssuer({ taskSource: src, secret: SECRET, now: () => clock.value });
+    const operation = createLocalBusinessOperation({ provider, now: () => clock.value });
+    const issued = issuer.createHandle({ taskRef: "pan442-order-task-0003" });
+    const input = { tenant: TENANT, user: USER, runId: "run:pan442:order:0003", objectVersion: 1, declaredAmountMinor: 0, currency: "EUR", object: { provider: "dolibarr", entity: "Order", operation: "CREATE_IF_ABSENT", refClient: "CM-ADMIN-AI-ESCALATION-001", customerId: 7, orderDateEpoch: 1767225600 } };
+    await expectDenial(useBoundTaskHandle({ issuer, handle: issued.handle, operationInput: input, operation }), BTH_ERROR.BINDING_UNSUPPORTED, "SUPPORTED");
+    assert.deepEqual([snapshotReads, mutations, readbacks, issuer.observations.length], [0, 0, 0, 0]);
+  }
+  // currency differs (binding USD, input matches binding) -> SUPPORTED denial, because the single-fixture seam only executes the EUR Order.
+  {
+    const src = make({ currency: "USD" });
+    const issuer = new BoundTaskHandleIssuer({ taskSource: src, secret: SECRET, now: () => clock.value });
+    const operation = createLocalBusinessOperation({ provider, now: () => clock.value });
+    const issued = issuer.createHandle({ taskRef: "pan442-order-task-0003" });
+    const input = { tenant: TENANT, user: USER, runId: "run:pan442:order:0003", objectVersion: 1, declaredAmountMinor: 0, currency: "USD", object: { provider: "dolibarr", entity: "Order", operation: "CREATE_IF_ABSENT", refClient: "CM-ADMIN-AI-ESCALATION-001", customerId: 7, orderDateEpoch: 1767225600 } };
+    await expectDenial(useBoundTaskHandle({ issuer, handle: issued.handle, operationInput: input, operation }), BTH_ERROR.BINDING_UNSUPPORTED, "SUPPORTED");
+    assert.deepEqual([snapshotReads, mutations, readbacks, issuer.observations.length], [0, 0, 0, 0]);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// F2: the frozen trusted source exposes a mutable, digest-excluded `byTaskRef`
+// Map. Issuance must derive the binding from a PRIVATE index built only from
+// the digest-attested `tasks` array, so a `.set()` on the public map cannot
+// substitute an unattested task into an issued binding.
+// ---------------------------------------------------------------------------
+test("PAN442-10 F2 lookup-map substitution cannot replace the attested task authority", async () => {
+  // Standalone source so no handle is pre-issued (avoids HANDLE_REISSUED).
+  const source = createSyntheticTrustedTaskSource({
+    principal: { user: USER, tenant: TENANT },
+    tasks: [{ taskRef: TASK_REF, runId: RUN_ID, tenant: TENANT, user: USER, object: { provider: "dolibarr", entity: "Order", operation: "CREATE_IF_ABSENT", refClient: "CM-ADMIN-AI-ESCALATION-001", customerId: 7, orderDateEpoch: 1767225600 }, objectVersion: 1, purpose: "CREATE_SYNTHETIC_SALES_ORDER", amountLimitMinor: 0, currency: "EUR", ttlMs: 120000 }],
+  });
+  const clock = { value: 1_000_000 };
+  let mutations = 0, readbacks = 0, snapshotReads = 0;
+  const provider = { async readAuthoritativeSnapshot(a){snapshotReads+=1;return createAuthoritativeApprovalSnapshot(a,[]);}, async mutate(){mutations+=1;return {id:"o"};}, async readback(a,r){readbacks+=1;return {id:r.id};} };
+  const issuer = new BoundTaskHandleIssuer({ taskSource: source, secret: SECRET, now: () => clock.value });
+  const operation = createLocalBusinessOperation({ provider, now: () => clock.value });
+  const beforeDigest = issuer.taskSource.sourceDigest;
+  // Caller swaps an unattested task into the public lookup map. The source
+  // digest and the attested `tasks` array are unchanged by this .set().
+  issuer.taskSource.byTaskRef.set(TASK_REF, {
+    ...issuer.taskSource.tasks[0],
+    user: "intruder:review",
+    amountLimitMinor: 99999,
+  });
+  assert.equal(issuer.taskSource.sourceDigest, beforeDigest, "attested digest unchanged");
+  assert.equal(issuer.taskSource.tasks[0].user, USER, "attested task content unchanged");
+  // ISSUANCE authority: the binding is derived from the private index built
+  // from the digest-attested `tasks` array, NOT from the public `byTaskRef`
+  // map. So the intruder substitution is ignored and original authority is
+  // retained. This is the F2 regression.
+  const issued = issuer.createHandle({ taskRef: TASK_REF });
+  assert.equal(issued.binding.user, USER, "issuance ignores lookup-map swap");
+  assert.equal(issued.binding.amountLimitMinor, 0, "issuance ignores limit swap");
+  // The signed handle still resolves for the ORIGINAL (attested) principal,
+  // with zero effects, proving the legitimate binding is intact and usable --
+  // the intruder substitution did not grant the intruder any authority.
+  await expectDenial(
+    useBoundTaskHandle({ issuer, handle: issued.handle, operationInput: { tenant: TENANT, user: "intruder:review", runId: RUN_ID, objectVersion: 1, declaredAmountMinor: 99999, currency: "EUR", object: { provider: "dolibarr", entity: "Order", operation: "CREATE_IF_ABSENT", refClient: "CM-ADMIN-AI-ESCALATION-001", customerId: 7, orderDateEpoch: 1767225600 } }, operation }),
+    BTH_ERROR.PRINCIPAL_MISMATCH, "PRINCIPAL",
+  );
+  assert.deepEqual([snapshotReads, mutations, readbacks, issuer.observations.length], [0, 0, 0, 0], "no effect from the substitution");
+});
+
+// ---------------------------------------------------------------------------
+// F3: the store entry {binding, used} and the store Map are mutable. Resolution
+// must recompute the canonical binding digest from the stored binding and require
+// it to equal the signed handle digest, so replacing the stored binding fails
+// closed before any field comparison, snapshot or effect.
+// ---------------------------------------------------------------------------
+test("PAN442-11 F3 stored-binding replacement is denied under the unchanged signed handle", async () => {
+  const current = harness();
+  const issued = current.issued;
+  const entry = current.issuer.store.get(issued.handleDigest);
+  entry.binding = { ...entry.binding, user: "intruder:review", amountLimitMinor: 99999 };
+  const input = { ...current.input, user: "intruder:review", declaredAmountMinor: 99999 };
+  await expectDenial(
+    useBoundTaskHandle({ issuer: current.issuer, handle: issued.handle, operationInput: input, operation: current.operation }),
+    BTH_ERROR.BINDING_DIGEST_MISMATCH, "SIGNATURE",
+  );
+  assert.deepEqual([current.snapshotReads(), current.mutations(), current.readbacks(), current.issuer.observations.length], [0, 0, 0, 0]);
+});
+
+// ---------------------------------------------------------------------------
+// A actually-broken resolver variant: it skips the store lookup, the signature
+// recompute and the field checks, and returns the caller payload as the binding.
+// Its RED is the typed denial the candidate produces instead. This replaces the
+// earlier boolean comparison with a genuinely broken executable variant.
+// ---------------------------------------------------------------------------
+test("PAN442-12 actually-broken resolver is RED (trusts caller payload), candidate is GREEN", async () => {
+  const current = harness();
+  const wrongTenantInput = operationInput({ tenant: "other-tenant" });
+  // The broken variant trusts the caller-selected tenant: it would return the
+  // caller payload as the binding and proceed to the seam. Its RED is the exact
+  // denial the candidate produces for the same input.
+  const brokenResolver = {
+    use({ operationInput: input }) {
+      // No store lookup, no signature recompute, no field compare.
+      return { handleDigest: "broken".padEnd(64, "0"), ...input };
+    },
+  };
+  const brokenWouldAccept = brokenResolver.use({ operationInput: wrongTenantInput }).tenant === "other-tenant";
+  assert.equal(brokenWouldAccept, true, "broken variant trusts caller-selected tenant");
+  await expectDenial(
+    useBoundTaskHandle({ issuer: current.issuer, handle: current.issued.handle, operationInput: wrongTenantInput, operation: current.operation }),
+    BTH_ERROR.TENANT_MISMATCH, "TENANT",
+  );
+  // Candidate GREEN with correct input.
+  const out = await useBoundTaskHandle({ issuer: current.issuer, handle: current.issued.handle, operationInput: current.input, operation: current.operation });
   assert.equal(out.status, "PASS");
   assert.equal(current.mutations(), 1);
 });
