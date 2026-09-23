@@ -226,6 +226,15 @@ repository_only_files = {
     "docs/development/cscl-05-tryton-source-native-profile-v1.md",
     "docs/development/cscl-06-apache-ofbiz-profile-v1.md",
     "tests/fixtures/cscl-07/expected-matrix-v1.json",
+    # PAN442/452 bound business task & opaque tool handle capability — repository-only
+    # (delivered via the SOURCE_EVIDENCE_ONLY real GitHub source archive, not the
+    # runnable product-increment file set). Declared here so the fail-closed
+    # completeness gate classifies them; they are NOT added to release/public-files.manifest.
+    "src/pan442/bound-task-handle.mjs",
+    "tests/pan442/bound-task-handle.test.mjs",
+    "schemas/contracts/pan442-bound-task-handle-v1.schema.json",
+    "docs/architecture/pan442-bound-task-handle-v1.md",
+    "verification/pan442-bound-task-handle-boundary-v1.json",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",
