@@ -191,6 +191,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     reason: "Converge in-memory and durable operation state on a final-persist failure after an ambiguous adapter outcome: roll the transient effect record and reservation back to the recoverable ambiguous/reconcile state, persist that convergence before rethrowing, so a restart reconciles to the same receipt instead of a phantom applied state; admitted v1 and reviewed v2-v4 gate bytes remain immutable.",
   }),
   Object.freeze({
+    migrationId: "P0-PS393-AUD-03/FINAL-PERSIST-REGRESSION-FOLLOWTHROUGH/V6",
+    path: "demo/runtime/enforcement-gate.mjs",
+    profileVersion: 6,
+    fromSha256: "7bef8ac531309c14e1bb768e87b7bcff18b1a9bf72a044d0f979bdbb7d8ad576",
+    toSha256: "d64714242f7517f15f4bc985534a82569adfca7fabaa2207e6f937ec67b5b64b",
+    reason: "Correct the inaccurate final-persist convergence comments at both demo mutation-gate persistence sites (the reconciliation site's execute() catch does not re-run markAmbiguous because reserved remains false, and a persistent initial/recovery persist failure lets live AMBIGUOUS coexist with retained durable EXECUTING until storage recovers) and bind the new bounded canonical regression tests for both final-persist sites (real EISDIR at the store temp-file boundary, exact failed-gate retry, fresh Node child restart, persistent storage failure, and unavailable reconciliation); admitted v1 and reviewed v2-v5 gate bytes remain immutable.",
+  }),
+  Object.freeze({
     migrationId: "XRA-PS-02-NATIVE-WIRE-INTEGRATE/INTEGRITY-GENERATOR/V13",
     path: "scripts/refresh-integrity-data.mjs",
     profileVersion: 13,
