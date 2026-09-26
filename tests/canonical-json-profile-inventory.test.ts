@@ -302,6 +302,22 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
     toSha256: "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
     reason: "Advance verification DAG to graph v57 and bind the bounded PAN442 local bound business task and opaque tool handle journey over the accepted demo Order seam (owner-escalation decision, owner approval, owner-escalation lease execution with mutation reservation), its exact fail-closed negatives and repository-only registration to its explicit local owner; preserve all prior immutable obligations.",
   }),
+  Object.freeze({
+    migrationId: "PAN468-IMPACT-SELECTION/INTEGRITY-GENERATOR/V26",
+    path: "scripts/refresh-integrity-data.mjs",
+    profileVersion: 26,
+    fromSha256: "4a4d5b6732e576628e2e0c658d7d2ebeb12e29246dedeb8dcafd569da32e090a",
+    toSha256: "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
+    reason: "Advance verification DAG to graph v58 and bind the bounded PAN468 targeted impact selection and bounded historical path-scan work (contract-consumer classification, tree-mode enumeration without per-file content reads, diagnostics) to its explicit local owner; preserve all prior immutable obligations.",
+  }),
+  Object.freeze({
+    migrationId: "PAN469-CONTRIBUTION-VIEWS/INTEGRITY-GENERATOR/V27",
+    path: "scripts/refresh-integrity-data.mjs",
+    profileVersion: 27,
+    fromSha256: "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
+    toSha256: "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12",
+    reason: "Advance verification DAG to graph v59 and bind the bounded PAN469 one-family contribution-records pilot (sealed individual records, order-independent byte-identical generated shared view with a single integration owner, drift refusal and integer contributor/work measurement against the existing path) to its explicit local owner; preserve all prior immutable obligations.",
+  }),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -315,7 +331,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  */
 const EXPECTED_COUNTS = {
 
-  filesScanned: 705,
+  filesScanned: 708,
   declarationSites: 37,
   declarationFiles: 37,
   importSites: 247,
@@ -326,7 +342,7 @@ const EXPECTED_COUNTS = {
   byteObligations: 21,
   pinnedProfileFiles: 13,
 } as const;
-const EXPECTED_LEDGER = { entries: 1967, uniquePaths: 1967, duplicatePaths: 0 } as const;
+const EXPECTED_LEDGER = { entries: 1974, uniquePaths: 1974, duplicatePaths: 0 } as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1102,7 +1118,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
