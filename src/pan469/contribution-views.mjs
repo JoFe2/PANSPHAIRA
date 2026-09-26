@@ -204,6 +204,7 @@ export function deriveSharedView(records, { family } = {}) {
   const recordDigests = {};
   for (const r of sorted) {
     if (r.family !== family) fail(DENIALS.RECORD_FAMILY_INVALID, `record ${r.id} family ${r.family} != view family ${family}`);
+    if (Object.hasOwn(recordDigests, r.id)) fail(DENIALS.RECORD_ID_CONFLICT, `duplicate id ${r.id} in view input`);
     recordDigests[r.id] = r.recordSha256;
   }
   const manifest = {
@@ -255,7 +256,7 @@ export function detectViewDrift(onDiskView, records, { family }) {
   const { viewSha256: _o, ...observedBody } = onDiskView;
   const expectedViewSha256 = sha256hex(canonical(expectedBody));
   const observedViewSha256 = sha256hex(canonical(observedBody));
-  if (observedViewSha256 !== expectedViewSha256) {
+  if (observedViewSha256 !== expectedViewSha256 || onDiskView.viewSha256 !== observedViewSha256) {
     return {
       valid: false,
       code: DENIALS.VIEW_DRIFT,
@@ -290,7 +291,7 @@ export function measureContributorSteps({ records, denials = [], derivations, ex
     contributorSteps,
     duplicateCount: duplicates,
     conflictCount: conflicts,
-    correctionCount: conflicts, // a conflicting id is corrected by resubmitting the corrected record under the same id
+    correctionCount: 0, // a denied conflict is not a correction; no corrected resubmission was observed in this batch
     malformedCount: malformed,
     activeIntegrationWork: {
       // Generated-view path: one integration owner, one derivation per
@@ -302,7 +303,7 @@ export function measureContributorSteps({ records, denials = [], derivations, ex
       existingPath: { descriptorEdits: count(existingDescriptorEdits), descriptorChecks: count(existingDescriptorChecks) },
     },
     timing: { contributor: 'unknown', integration: 'unknown' }, // no wall-clock is measured or inferred
-    sameApplicableAcceptance: true, // the same AC acceptance applies to both paths
+    sameApplicableAcceptance: 'REQUIRES_CANONICAL_GATES', // a local measurement cannot certify repository acceptance
     nonRetrospective: true,
   };
 }

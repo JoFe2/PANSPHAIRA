@@ -17,8 +17,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync, execFileSync } from 'node:child_process';
 
-const CLI = '/workspace/psai-ks-source-handoff/contribution-views/PANSPHAIRA/scripts/module-contribution.mjs';
-const MOD = await import('/workspace/psai-ks-source-handoff/contribution-views/PANSPHAIRA/src/pan469/contribution-views.mjs');
+const CLI = new URL('../../scripts/module-contribution.mjs', import.meta.url).pathname;
+const MOD = await import(new URL('../../src/pan469/contribution-views.mjs', import.meta.url));
 
 const git = (root, ...a) => execFileSync('git', a, { cwd: root, encoding: 'utf8' });
 const run = (root, ...a) => spawnSync(process.execPath, [CLI, ...a], { cwd: root, encoding: 'utf8' });
@@ -207,6 +207,15 @@ test('AC02 drift negative: a hand-edited shared view is refused against the deri
   assert.notEqual(drift.observedViewSha256, drift.expectedViewSha256);
 });
 
+test('AC02 digest and duplicate-ID negatives: resealed fields and repeated IDs cannot mask drift', () => {
+  const input = { id: 'pv-01', family: FAMILY, version: '1', moduleSlug: 'pv-01', changeSummary: 'first', author: 'synthetic' };
+  const first = MOD.newContributionRecord(input);
+  const second = MOD.newContributionRecord({ ...input, changeSummary: 'different' });
+  assert.throws(() => MOD.deriveSharedView([first, second], { family: FAMILY }), { code: MOD.DENIALS.RECORD_ID_CONFLICT });
+  const view = MOD.deriveSharedView([first], { family: FAMILY });
+  assert.equal(MOD.detectViewDrift({ ...view, viewSha256: '0'.repeat(64) }, [first], { family: FAMILY }).code, MOD.DENIALS.VIEW_DRIFT);
+});
+
 test('AC02 empty negative: a view cannot be derived from zero records', (t) => {
   const root = repo(t);
   let threw = null;
@@ -242,7 +251,7 @@ test('AC03 positive: contributor steps and integration work are measured against
   assert.equal(measurement.timing.contributor, 'unknown', 'contributor timing stays unknown');
   assert.equal(measurement.timing.integration, 'unknown', 'integration timing stays unknown');
   // Same applicable acceptance is retained.
-  assert.equal(measurement.sameApplicableAcceptance, true);
+  assert.equal(measurement.sameApplicableAcceptance, 'REQUIRES_CANONICAL_GATES');
   // The report is a derivation from the accepted set + measurement.
   const report = MOD.generateMeasurementReport({ measurement, accepted: proc.accepted, family: FAMILY });
   assert.equal(report.acceptedRecordCount, 10);
@@ -266,7 +275,7 @@ test('AC03 conflict/correction counts are attributed to the measured denials', (
     existingDescriptorChecks: 2,
   });
   assert.equal(measurement.conflictCount, 1, 'one conflict counted');
-  assert.equal(measurement.correctionCount, 1, 'one correction counted (conflicting id corrected by resubmission)');
+  assert.equal(measurement.correctionCount, 0, 'a denied conflict is not a corrected resubmission');
   assert.equal(measurement.duplicateCount, 1, 'one duplicate counted');
 });
 

@@ -40,7 +40,8 @@ integration owner**.
    contributor steps, duplicate/conflict/correction counts and active
    integration work against the existing shared-list path on the same input.
    Counts are integers; no wall-clock timing is inferred — missing timing
-   stays `unknown`. Non-integer or negative counts are refused
+   stays `unknown`. A refused conflict is not counted as a completed correction;
+   canonical acceptance remains a separate gate, not a true flag in this report. Non-integer or negative counts are refused
    (`CONTRIBUTOR_MEASUREMENT_NON_INTEGER`). The same applicable acceptance
    applies to both paths.
 

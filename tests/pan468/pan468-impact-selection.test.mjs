@@ -11,7 +11,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync, execFileSync } from 'node:child_process';
 
-const CLI = '/workspace/psai-ks-source-handoff/impact-selection/PANSPHAIRA/scripts/module-contribution.mjs';
+const REPO = new URL('../../', import.meta.url).pathname;
+const CLI = new URL('../../scripts/module-contribution.mjs', import.meta.url).pathname;
 
 const sha = (s) => createHash('sha256').update(s).digest('hex');
 const put = (root, p, v) => { mkdirSync(join(root, p, '..'), { recursive: true }); writeFileSync(join(root, p), typeof v === 'string' ? v : JSON.stringify(v, null, 2)); };
@@ -128,7 +129,9 @@ test('AC02 traversal negative: a descriptor declaring a ../ path is denied befor
 test('AC03 same fixed fixture: new impact uses one content read; old enumeration-style baseline would use one per declared file', (t) => {
   const { root } = fixture(t);
   put(root, 'a/source.mjs', 'export const value=9;');
+  const startNew = process.hrtime.bigint();
   const newPlan = json(run(root, 'impact', '--base', 'HEAD'));
+  const elapsedNewMs = Number(process.hrtime.bigint() - startNew) / 1e6;
 
   // Independent reconstruction of the OLD enumeration cost on the SAME fixture:
   // the old snapshot().files() called `git show` once per declared path
@@ -137,6 +140,13 @@ test('AC03 same fixed fixture: new impact uses one content read; old enumeration
   const baseObligations = 1; // descriptor read
   const declared = ['a/source.mjs', 'a/contract.json', 'a/profiles', 'a/test.mjs', 'b/source.mjs', 'b/test.mjs'];
   const oldContentReads = baseObligations + declared.length;
+  const oldPaths = ['examples/module-contribution/modules.json', 'a/source.mjs', 'a/contract.json', 'a/profiles/fixture-v1.json', 'a/test.mjs', 'b/source.mjs', 'b/test.mjs'];
+  const startOld = process.hrtime.bigint();
+  for (const path of oldPaths) git(root, 'show', `${commit}:${path}`);
+  const elapsedOldMs = Number(process.hrtime.bigint() - startOld) / 1e6;
+  assert.equal(oldPaths.length, oldContentReads);
+  assert.ok(elapsedOldMs >= 0 && elapsedNewMs >= 0);
+  t.diagnostic(`fixed fixture, measured work: new impact gitCommands=${newPlan.diagnostics.gitCommands} contentReads=${newPlan.diagnostics.gitContentReads} elapsedMs=${elapsedNewMs.toFixed(3)}; historical content-read component commands=${oldPaths.length} elapsedMs=${elapsedOldMs.toFixed(3)} (not comparable full-pipeline speedup)`);
 
   assert.equal(newPlan.diagnostics.gitContentReads, 1);
   assert.ok(newPlan.diagnostics.gitContentReads < oldContentReads, 'new implementation reads strictly fewer git objects on the same fixed fixture');
@@ -146,8 +156,8 @@ test('AC03 same fixed fixture: new impact uses one content read; old enumeration
   // unmeasured pipeline speedup is claimed — this is a per-operation content-read
   // reduction on a fixed fixture, measured here.
   const authoritative = spawnSync('npm', ['run', 'module:check', '--silent'], {
-    cwd: '/workspace/psai-ks-source-handoff/impact-selection/PANSPHAIRA', encoding: 'utf8',
-    env: { ...process.env, TMPDIR: '/workspace/psai-ks-source-handoff/impact-selection/.tmp-backing' },
+    cwd: REPO, encoding: 'utf8',
+    env: { ...process.env },
   });
   assert.equal(authoritative.status, 0, authoritative.stderr);
 });

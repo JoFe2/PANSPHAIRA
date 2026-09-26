@@ -330,7 +330,7 @@ d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e  ./docs/archite
 87fd5c8464e74c57cb21f3b49d7224848368ec00111c8e07e5393e63a9750e56  ./docs/architecture/pan437-neighbor-composition-v1.md
 31e39d11cc0722fbe24e3b490a4e3776a6f27e61e69121f77670817b874e7a7c  ./docs/architecture/pan442-bound-task-handle-v1.md
 0c95fdf922e6b4ec3a6036005c2f9263462d6939775d36bff4bc9484b32e37a6  ./docs/architecture/pan468-impact-selection-v1.md
-b66257f1fb3f7365d7f258bf3e427f900744eb66f77336cb6d7a01bbd930edfe  ./docs/architecture/pan469-contribution-views-v1.md
+5fb325a027879610d8c0d022e9e6d3da1444d6b74522d8707ec41d5abb50f5b2  ./docs/architecture/pan469-contribution-views-v1.md
 cbf1ed6a03e936dd74b4cd66d9328a2318999212eb63c589934202a652b815c0  ./docs/architecture/rks-01-real-source-utility-result-v1.md
 8c5df07f13c5fb706d45ebac88e616244d2122548099b7c7fd107df8117924a8  ./docs/architecture/rks-01-source-governance-v1.md
 bdf3fbfa63b2f549fa827a5a81eaa3876a7c813b02368c7441c62f37bac2ffd2  ./docs/architecture/rks-02-core-small-vs-raw-result-v1.md
@@ -1069,7 +1069,7 @@ cd45da6e602ebbe5043e56169e0b638aa997516f246a70290c4cc875486228f0  ./src/cscl-11/
 a9b3e0d28133c0f2a2aa2a1b7a630693a50aea993814993c23e3d4c573d2b917  ./src/ks238/order-source-handoff.mjs
 e2d5fba3fdd8ce038e1e3a4be7588112c3897e0a63dd7cf9f62b1eba42eb2303  ./src/pan433/domain-mapping-cli.mjs
 8b284d5a0b635b9362b95d041d6485a22d3f4fb898cd4e25b911ae585ec0f4f1  ./src/pan442/bound-task-handle.mjs
-893cbaba3a7f16b7a21ec4a1d33e5d9325535e394d43d0ab5d7e67a76f2cac02  ./src/pan469/contribution-views.mjs
+a99c14d9a66d771f880c9a7b47436af411522b45c75873afa456c53f5dbc2f0f  ./src/pan469/contribution-views.mjs
 7b7223be8985556c537e1461dfc8905a990844a69929e11d8c5dfd76d31f017f  ./src/procurement-434/rechnungsabgleich-path-cli.mjs
 3c16a8087edec0848adea783492c16253c0718c239d793bf15ca9b8e3e23f0d3  ./src/procurement-434/rechnungsabgleich-path.mjs
 49f7bdad8961ea972ed4fe24b4b00237f0a89a710e60d4089f10119d4d40b346  ./src/rks-01/application-guide-projector.mjs
@@ -1739,8 +1739,8 @@ dd5e2bd1b383651d90363781a738f23867456ea4589eb92021778c8c23082687  ./tests/paired
 773db50b738d0fa6e7a446ed39a8799806429d5c6804ed05e3d45c1c91455323  ./tests/pan433/domain-mapping.test.mjs
 2e77fcc83b3070d67af2f1bd38870c66557fd1d15f2fd392fcc48319bdc6743d  ./tests/pan441-employee-profile.test.ts
 fc9f4ff20ac8e85803b7998c8fa0777c9d511cbef78c27c03097b1e117a9d162  ./tests/pan442/bound-task-handle.test.mjs
-24c2851f0ae54f86fd9c8af090a2ea54e70c81098b9042d0e924303862615c46  ./tests/pan468/pan468-impact-selection.test.mjs
-9fd1dec9a344b20b57de1828a341860399f90a689e61a20baccb23fb402ec232  ./tests/pan469/pan469-contribution-views.test.mjs
+225adc4679349fe2b7b83c221f9b6c104f8d577f3d110373ffbe4291af4a61d1  ./tests/pan468/pan468-impact-selection.test.mjs
+88e9afa49dbc930c76fb81117889f9b57acbbe08eaf20928f624f1ec15ea96de  ./tests/pan469/pan469-contribution-views.test.mjs
 1c9790aaaed92a9e9b04fea467b095cca7dee07e68cb6abc2332b93eb1a563d4  ./tests/plugin-knowledge-harvest.test.ts
 5651518a8d3931369e02b50f26364518128b6c2973d4771473f7dee109a55cac  ./tests/poc-early-admin-ai-setup.test.ts
 65c3b1dcc45b7eaedae4251b77a35ba97369e023611cde4b6e523ca3cae186ca  ./tests/poc-guided-demo-bootstrap.test.ts
@@ -1970,5 +1970,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-0446ebca0f74b8a310ed37d9fadf179f41dd75bec38cfd4ad94e86e4d98fc5d7  ./verification/verification-dag-v2.json
+e3662c5c32579711e73188eac63d8b1328b5f20c79743a53d911be9040133673  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

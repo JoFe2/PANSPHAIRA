@@ -4761,7 +4761,7 @@
         {
           "path": "docs/architecture/pan469-contribution-views-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "b66257f1fb3f7365d7f258bf3e427f900744eb66f77336cb6d7a01bbd930edfe"
+          "sha256": "5fb325a027879610d8c0d022e9e6d3da1444d6b74522d8707ec41d5abb50f5b2"
         },
         {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
@@ -4926,7 +4926,7 @@
         {
           "path": "src/pan469/contribution-views.mjs",
           "role": "SOURCE",
-          "sha256": "893cbaba3a7f16b7a21ec4a1d33e5d9325535e394d43d0ab5d7e67a76f2cac02"
+          "sha256": "a99c14d9a66d771f880c9a7b47436af411522b45c75873afa456c53f5dbc2f0f"
         },
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
@@ -5056,12 +5056,12 @@
         {
           "path": "tests/pan468/pan468-impact-selection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "24c2851f0ae54f86fd9c8af090a2ea54e70c81098b9042d0e924303862615c46"
+          "sha256": "225adc4679349fe2b7b83c221f9b6c104f8d577f3d110373ffbe4291af4a61d1"
         },
         {
           "path": "tests/pan469/pan469-contribution-views.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "9fd1dec9a344b20b57de1828a341860399f90a689e61a20baccb23fb402ec232"
+          "sha256": "88e9afa49dbc930c76fb81117889f9b57acbbe08eaf20928f624f1ec15ea96de"
         },
         {
           "path": "tests/public-product-spelling.test.mjs",
@@ -6877,7 +6877,7 @@
         {
           "path": "tests/pan468/pan468-impact-selection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "24c2851f0ae54f86fd9c8af090a2ea54e70c81098b9042d0e924303862615c46"
+          "sha256": "225adc4679349fe2b7b83c221f9b6c104f8d577f3d110373ffbe4291af4a61d1"
         },
         {
           "path": "verification/pan468-impact-selection-boundary-v1.json",
@@ -6903,7 +6903,7 @@
         {
           "path": "docs/architecture/pan469-contribution-views-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "b66257f1fb3f7365d7f258bf3e427f900744eb66f77336cb6d7a01bbd930edfe"
+          "sha256": "5fb325a027879610d8c0d022e9e6d3da1444d6b74522d8707ec41d5abb50f5b2"
         },
         {
           "path": "scripts/module-contribution.mjs",
@@ -6913,12 +6913,12 @@
         {
           "path": "src/pan469/contribution-views.mjs",
           "role": "SOURCE",
-          "sha256": "893cbaba3a7f16b7a21ec4a1d33e5d9325535e394d43d0ab5d7e67a76f2cac02"
+          "sha256": "a99c14d9a66d771f880c9a7b47436af411522b45c75873afa456c53f5dbc2f0f"
         },
         {
           "path": "tests/pan469/pan469-contribution-views.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "9fd1dec9a344b20b57de1828a341860399f90a689e61a20baccb23fb402ec232"
+          "sha256": "88e9afa49dbc930c76fb81117889f9b57acbbe08eaf20928f624f1ec15ea96de"
         },
         {
           "path": "verification/pan469-contribution-views-boundary-v1.json",
