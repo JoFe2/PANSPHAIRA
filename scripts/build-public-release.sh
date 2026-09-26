@@ -255,6 +255,18 @@ repository_only_files = {
     "tests/pan469/pan469-contribution-views.test.mjs",
     "docs/architecture/pan469-contribution-views-v1.md",
     "verification/pan469-contribution-views-boundary-v1.json",
+    # PAN470 complete worker handoff + measurable finalization effort — repository-only
+    # (handoff completeness + exact per-phase effort measurement over the released
+    # development-worker entry points and the existing work-order/receipt surfaces, with
+    # synthetic fixtures; delivered via the SOURCE_EVIDENCE_ONLY real GitHub source archive,
+    # not the runnable product-increment file set). Declared here so the fail-closed
+    # completeness gate classifies them; they are NOT added to release/public-files.manifest.
+    "src/pan470/handoff-effort.mjs",
+    "tests/pan470/handoff-effort.test.mjs",
+    "schemas/contracts/pan470-handoff-effort-v1.schema.json",
+    "docs/architecture/pan470-handoff-effort.md",
+    "verification/pan470-handoff-effort-boundary-v1.json",
+    "tests/fixtures/pan470/evidence-selfcheck-v1.txt",
 }
 repository_only_prefixes = (
     "archive/cm-bi-legacy-v1/",

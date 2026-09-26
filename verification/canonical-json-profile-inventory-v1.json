@@ -275,6 +275,14 @@
       "fromSha256": "b9a60ac7d3b0c6431b5b8c5c3341dd646e18142a3a7f20f8c27b743189c8605e",
       "toSha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12",
       "reason": "Advance verification DAG to graph v59 and bind the bounded PAN469 one-family contribution-records pilot (sealed individual records, order-independent byte-identical generated shared view with a single integration owner, drift refusal and integer contributor/work measurement against the existing path) to its explicit local owner; preserve all prior immutable obligations."
+    },
+    {
+      "migrationId": "PAN470-HANDOFF-EFFORT/INTEGRITY-GENERATOR/V28",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 28,
+      "fromSha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12",
+      "toSha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a",
+      "reason": "Advance graph to v60 and bind the bounded PAN470 handoff-effort slice while preserving all prior byte obligations."
     }
   ],
   "scanScope": {
@@ -317,15 +325,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 708,
+    "filesScanned": 710,
     "declarationSites": 37,
     "declarationFiles": 37,
     "importSites": 247,
     "importFiles": 246,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1974,
-    "ledgerUniquePaths": 1974
+    "ledgerEntries": 1980,
+    "ledgerUniquePaths": 1980
   },
   "profiles": [
     {
@@ -398,7 +406,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12"
+      "sha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1024,7 +1032,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12",
+      "sha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a",
       "basis": "profile-version-migration"
     },
     {

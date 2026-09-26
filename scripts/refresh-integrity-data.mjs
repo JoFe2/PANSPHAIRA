@@ -879,7 +879,43 @@ for (const [inputPath, role] of pan469Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan469:test")) repositoryIntegrityNode.ownedTests.push("npm run pan469:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 59;
+const pan470Inputs = [
+  ["docs/architecture/pan470-handoff-effort.md", "DERIVED_EVIDENCE"],
+  ["schemas/contracts/pan470-handoff-effort-v1.schema.json", "SCHEMA"],
+  ["src/pan470/handoff-effort.mjs", "SOURCE"],
+  ["tests/fixtures/pan470/evidence-selfcheck-v1.txt", "DERIVED_EVIDENCE"],
+  ["tests/pan470/handoff-effort.test.mjs", "VALIDATOR"],
+  ["verification/pan470-handoff-effort-boundary-v1.json", "DERIVED_EVIDENCE"],
+];
+let pan470Node = dag.nodes.find(({ id }) => id === "pan470-handoff-effort-v1");
+if (pan470Node === undefined) {
+  pan470Node = {
+    id: "pan470-handoff-effort-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run pan470:test"],
+    invariants: [
+      "PAN470 composes a complete worker handoff from the existing work-order and receipt surfaces by driving the released development-worker entry points (runSyntheticDevelopmentWorker + validateReceiptDigest); a malformed or stale receipt (digest mismatch, missing or stale evidence bytes, overlapping AC ids) never implies completion.",
+      "Finalization effort is recorded as exact per-phase intervals (IMPLEMENTATION, SELF_CHECK, REVIEW, CORRECTION, FINALIZATION), kept strictly separate from CI wait, idle and unknown, and aggregated by accepted deliverable and by model/harness; no effort percentage is inferred from tokens, commit counts or overlapping wall time.",
+      "Existing mandatory gates are retained and reused; unchanged exact-byte evidence is reused and any byte change is refused; bounded correction findings are passed back with a failing reproducer; synthetic local evidence only, no production/customer/host data and no credentials.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan470Node);
+}
+pan470Node.dependsOn = [];
+pan470Node.inputs = pan470Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan470Node.ownedTests = ["npm run pan470:test"];
+for (const [inputPath, role] of pan470Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN470_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan470:test")) repositoryIntegrityNode.ownedTests.push("npm run pan470:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
+dag.graphVersion = 60;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -937,6 +973,12 @@ for (const relative of [
   "src/pan469/contribution-views.mjs",
   "tests/pan469/pan469-contribution-views.test.mjs",
   "verification/pan469-contribution-views-boundary-v1.json",
+  "docs/architecture/pan470-handoff-effort.md",
+  "schemas/contracts/pan470-handoff-effort-v1.schema.json",
+  "src/pan470/handoff-effort.mjs",
+  "tests/fixtures/pan470/evidence-selfcheck-v1.txt",
+  "tests/pan470/handoff-effort.test.mjs",
+  "verification/pan470-handoff-effort-boundary-v1.json",
 ]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);
