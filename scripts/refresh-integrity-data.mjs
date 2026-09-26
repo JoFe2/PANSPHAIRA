@@ -915,7 +915,43 @@ for (const [inputPath, role] of pan470Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan470:test")) repositoryIntegrityNode.ownedTests.push("npm run pan470:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 60;
+const pan471Inputs = [
+  ["docs/architecture/pan471-capability-inventory-v1.md", "DERIVED_EVIDENCE"],
+  ["schemas/contracts/pan471-capability-inventory-v1.schema.json", "SCHEMA"],
+  ["src/pan471/capability-inventory.mjs", "SOURCE"],
+  ["tests/fixtures/pan471/expected-capabilities-v1.json", "DERIVED_EVIDENCE"],
+  ["tests/pan471/capability-inventory.test.mjs", "VALIDATOR"],
+  ["verification/pan471-capability-inventory-boundary-v1.json", "DERIVED_EVIDENCE"],
+];
+let pan471Node = dag.nodes.find(({ id }) => id === "pan471-capability-inventory-v1");
+if (pan471Node === undefined) {
+  pan471Node = {
+    id: "pan471-capability-inventory-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run pan471:test"],
+    invariants: [
+      "PAN471 is a bounded read-only capability inventory composed from the accepted bounded order/customer handoff and the released capability/module contracts; no capability is activated, executed, written or mutated.",
+      "Missing quantity, unit, amount and business rule remain UNAVAILABLE (never inferred); observations, inferred relations and confirmed decisions remain separate; denied visibility (NOT_COVERED/DENIED) is retained, not deleted, and is not complete coverage.",
+      "The inventory is bound to a source identity and tenant; a wrong tenant (TENANT_MISMATCH) and a substituted source (SERIALIZED_BINDING_MISMATCH) fail closed before any fact is emitted; synthetic local evidence only, no production/customer/host data and no credentials.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan471Node);
+}
+pan471Node.dependsOn = [];
+pan471Node.inputs = pan471Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan471Node.ownedTests = ["npm run pan471:test"];
+for (const [inputPath, role] of pan471Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN471_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan471:test")) repositoryIntegrityNode.ownedTests.push("npm run pan471:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
+dag.graphVersion = 61;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -940,6 +976,12 @@ for (const relative of [
   "tests/forward-producer-analytics.test.mjs",
   "tests/native-forward-qualification.test.mjs",
   "scripts/refresh-integrity-data.mjs",
+  "docs/architecture/pan471-capability-inventory-v1.md",
+  "schemas/contracts/pan471-capability-inventory-v1.schema.json",
+  "src/pan471/capability-inventory.mjs",
+  "tests/fixtures/pan471/expected-capabilities-v1.json",
+  "tests/pan471/capability-inventory.test.mjs",
+  "verification/pan471-capability-inventory-boundary-v1.json",
   ".github/workflows/demo-current-head-e2e.yml",
   "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
   "docs/development/cap-cell-erp-01-pdca.md",

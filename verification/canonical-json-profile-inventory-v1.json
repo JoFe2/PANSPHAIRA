@@ -283,6 +283,14 @@
       "fromSha256": "d7c2c376c62bb4a5a8155264c0c432446c99ec87f0786b6666367965f1873c12",
       "toSha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a",
       "reason": "Advance graph to v60 and bind the bounded PAN470 handoff-effort slice while preserving all prior byte obligations."
+    },
+    {
+      "migrationId": "PAN471-CAPABILITY-INVENTORY/INTEGRITY-GENERATOR/V29",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 29,
+      "fromSha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a",
+      "toSha256": "7e56b7ff64262a6cf55b0812c1a59094b16df9144aeaa73b1c093f1b19e49baf",
+      "reason": "Advance graph to v61 and bind the bounded PAN471 inventory on current Main while retaining historical obligations."
     }
   ],
   "scanScope": {
@@ -325,15 +333,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 710,
+    "filesScanned": 712,
     "declarationSites": 37,
     "declarationFiles": 37,
     "importSites": 247,
     "importFiles": 246,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1980,
-    "ledgerUniquePaths": 1980
+    "ledgerEntries": 1986,
+    "ledgerUniquePaths": 1986
   },
   "profiles": [
     {
@@ -406,7 +414,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a"
+      "sha256": "7e56b7ff64262a6cf55b0812c1a59094b16df9144aeaa73b1c093f1b19e49baf"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1032,7 +1040,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a",
+      "sha256": "7e56b7ff64262a6cf55b0812c1a59094b16df9144aeaa73b1c093f1b19e49baf",
       "basis": "profile-version-migration"
     },
     {

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "pansphaira.pan471/expected-capabilities/v1",
+  "description": "Independently expected read-only capability facts for the bounded synthetic ERP order source (asserted against, NOT derived from the adapter).",
+  "capabilityCount": 5,
+  "capabilities": [
+    {
+      "id": "cap:order-source-read-v1",
+      "kind": "ORDER_SOURCE_READ",
+      "availability": "AVAILABLE",
+      "ownership": "RELEASED_READER",
+      "observationCount": 3,
+      "inferredRelationCount": 1,
+      "confirmedDecisionCount": 3,
+      "openQuestionCount": 1
+    },
+    {
+      "id": "cap:customer-source-read-v1",
+      "kind": "CUSTOMER_SOURCE_READ",
+      "availability": "AVAILABLE",
+      "ownership": "RELEASED_READER",
+      "observationCount": 3,
+      "inferredRelationCount": 1,
+      "confirmedDecisionCount": 1,
+      "openQuestionCount": 1
+    },
+    {
+      "id": "cap:erp-order-create-v1",
+      "kind": "ERP_ORDER_CREATE",
+      "availability": "UNAVAILABLE",
+      "ownership": "CAPABILITY_CELL",
+      "observationCount": 0,
+      "inferredRelationCount": 1,
+      "confirmedDecisionCount": 1,
+      "openQuestionCount": 1
+    },
+    {
+      "id": "cap:crm-contact-create-v1",
+      "kind": "CRM_CONTACT_CREATE",
+      "availability": "NOT_COVERED",
+      "ownership": "CAPABILITY_CATALOGUE",
+      "observationCount": 0,
+      "inferredRelationCount": 0,
+      "confirmedDecisionCount": 1,
+      "openQuestionCount": 1
+    },
+    {
+      "id": "cap:employee-directory-read-own-v1",
+      "kind": "EMPLOYEE_DIRECTORY_READ_OWN",
+      "availability": "NOT_COVERED",
+      "ownership": "CAPABILITY_CATALOGUE",
+      "observationCount": 0,
+      "inferredRelationCount": 0,
+      "confirmedDecisionCount": 1,
+      "openQuestionCount": 1
+    }
+  ],
+  "statusCounts": {
+    "FULFILLED": 1,
+    "OPEN": 2
+  },
+  "unsupportedFacts": [
+    "netRevenue",
+    "orderedQuantity",
+    "quantityUnit",
+    "amount",
+    "currencyValue",
+    "deliveryFacts",
+    "historicalOrderBook",
+    "orderIntake",
+    "creditsCancellationsNetting"
+  ],
+  "missingFields": [
+    "amount.currencyValue",
+    "amount.netRevenue",
+    "quantity.orderedQuantity",
+    "quantity.unit",
+    "delivery.deliveryId",
+    "delivery.deliveredAt",
+    "history.previousStates"
+  ],
+  "openQuestionKinds": [
+    "MISSING_QUANTITY_UNIT",
+    "TENANT_BINDING",
+    "MISSING_QUANTITY_UNIT",
+    "MISSING_BUSINESS_RULE",
+    "MISSING_BUSINESS_RULE"
+  ]
+}

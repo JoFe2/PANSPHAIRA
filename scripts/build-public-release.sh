@@ -255,6 +255,13 @@ repository_only_files = {
     "tests/pan469/pan469-contribution-views.test.mjs",
     "docs/architecture/pan469-contribution-views-v1.md",
     "verification/pan469-contribution-views-boundary-v1.json",
+    # PAN471 bounded read-only capability inventory — repository-only source evidence.
+    "docs/architecture/pan471-capability-inventory-v1.md",
+    "schemas/contracts/pan471-capability-inventory-v1.schema.json",
+    "src/pan471/capability-inventory.mjs",
+    "tests/fixtures/pan471/expected-capabilities-v1.json",
+    "tests/pan471/capability-inventory.test.mjs",
+    "verification/pan471-capability-inventory-boundary-v1.json",
     # PAN470 complete worker handoff + measurable finalization effort — repository-only
     # (handoff completeness + exact per-phase effort measurement over the released
     # development-worker entry points and the existing work-order/receipt surfaces, with
