@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 59,
+  "graphVersion": 60,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "c4557f3e48ee39e104b81d0a5d63fc9a6c20b20c55f366afad0b1ac6972a1d6f"
+          "sha256": "d6ffd5b7a4eaca2f4d4c0fd8e5063266f64f79810307d26c750c754f46b47de9"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "ae0763adbf0a0b535787bb708794bd0824d3c9b9ad22487da4a7399c8ba1bf4c"
+          "sha256": "ba445423e5144c6981fc312595abfef9130912f64b01b68d72eae8f98818708a"
         }
       ],
       "ownedTests": [
@@ -4764,6 +4764,11 @@
           "sha256": "5fb325a027879610d8c0d022e9e6d3da1444d6b74522d8707ec41d5abb50f5b2"
         },
         {
+          "path": "docs/architecture/pan470-handoff-effort.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8b7d3e4034d4faa87bb168012b808156a59c171a390bd94925d2581ad16f5515"
+        },
+        {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
@@ -4864,9 +4869,14 @@
           "sha256": "2d932635c20a0ae08ddf249eb157577bcfdfb72a3755f2721cfc2f9c7d58b575"
         },
         {
+          "path": "schemas/contracts/pan470-handoff-effort-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "234aaaec1ca16f5a9d9944d44a6fe2201e91f105a66c45dbe12ebbdd4e31293c"
+        },
+        {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "8414feac15bba7752dd47ce2e653962f8f9bd28a07b52469ba3eda5b3fdcc4ff"
+          "sha256": "05e5908e86f835c11dc71c9bd511e6e53e6970155964e7a4fdc885ad8c9f26ce"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4929,9 +4939,14 @@
           "sha256": "a99c14d9a66d771f880c9a7b47436af411522b45c75873afa456c53f5dbc2f0f"
         },
         {
+          "path": "src/pan470/handoff-effort.mjs",
+          "role": "SOURCE",
+          "sha256": "4986fa3de86fb4963c1cb191ba65f181aa7dab4e3af4222068cc2df17d3b7f40"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "0b43632e939c28292f4a1392998bce84d87dbbf3ceb792893cc3fc306c56df45"
+          "sha256": "2528f112c3ee7be3131fee4774a23fb1601efdf329dc8377bdabb35424a99fbf"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -4987,6 +5002,11 @@
           "path": "tests/fixtures/pan433/default-invoice-row-v1.json",
           "role": "FIXTURE",
           "sha256": "68c8a0c453d83de89716277ade2cbc3d1e2a5f6eacf01155c290a0900e96d2f0"
+        },
+        {
+          "path": "tests/fixtures/pan470/evidence-selfcheck-v1.txt",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "eda7bcb4baf93aab7f262f8442b17678bfeb7ec17b46296ce9844da1f58b3d91"
         },
         {
           "path": "tests/forward-paired-analytics.test.mjs",
@@ -5064,6 +5084,11 @@
           "sha256": "88e9afa49dbc930c76fb81117889f9b57acbbe08eaf20928f624f1ec15ea96de"
         },
         {
+          "path": "tests/pan470/handoff-effort.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "efdca64f15650f5785d78f190fa9a65d926d3d42efa6cea74b76e1818fb985cb"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
           "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
@@ -5081,7 +5106,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "4d2fd73e7662f94c8c88203cf6f85f4998139b356e414d7af4da4ba0ba719b5b"
+          "sha256": "4e96e3b728dcccf7d1b6328eac317a6d3297078525f32969780d74ca8ab334a4"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5139,6 +5164,11 @@
           "sha256": "92574ce4ad690173e4d3cb68c6cec9ab3dc9c8edb74353d17c935fd9201954e7"
         },
         {
+          "path": "verification/pan470-handoff-effort-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ffae2c6c537cb2baf590bc90cdcc4fe174f80e6990a05a38699ff11b4f1d3001"
+        },
+        {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9"
@@ -5157,7 +5187,8 @@
         "npm run ks238:test",
         "npm run pan442:test",
         "npm run pan468:test",
-        "npm run pan469:test"
+        "npm run pan469:test",
+        "npm run pan470:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5712,7 +5743,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "304c03e4bff9f8fa3dfa5eb2d83c45088fc1ac98ff15d00a5812876c08e2386e"
+          "sha256": "f471459c0f4363b5c0e216f8909d1c8dad790e4e30ba41786d1b61d7f994e27b"
         },
         {
           "path": "package-lock.json",
@@ -6072,7 +6103,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d7a441c1bcff96ff1a30a31df3deb232708a78de9660d7dd522b6e9a94ac17e2"
+          "sha256": "fe2d5157e5268e78fc4ec647002b62d31ac9a3d82f4e9ba716ca31a70684048f"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -6934,6 +6965,52 @@
         "Each contribution record is individually sealed and preserved; a re-submitted identical record is refused (CONTRIBUTION_DUPLICATE), the same id with different content is refused (CONTRIBUTION_ID_CONFLICT) and a malformed record is refused with its exact code, so no individual record is merged away or lost by the shared view.",
         "The shared view derives from the SET of accepted records (sorted by id, canonical-encoded): differently ordered input reproduces byte-identical output, the view has one integration owner (contributors never edit the shared list), a hand-edited view is refused (SHARED_VIEW_DRIFT) and the empty set is refused (SHARED_VIEW_EMPTY).",
         "Contributor steps, conflict/correction counts and active integration work are measured against the existing shared-list path on the same input with integer counts; no wall-clock timing is inferred (missing timing stays unknown) and the same applicable acceptance applies to both paths."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan470-handoff-effort-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/architecture/pan470-handoff-effort.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "8b7d3e4034d4faa87bb168012b808156a59c171a390bd94925d2581ad16f5515"
+        },
+        {
+          "path": "schemas/contracts/pan470-handoff-effort-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "234aaaec1ca16f5a9d9944d44a6fe2201e91f105a66c45dbe12ebbdd4e31293c"
+        },
+        {
+          "path": "src/pan470/handoff-effort.mjs",
+          "role": "SOURCE",
+          "sha256": "4986fa3de86fb4963c1cb191ba65f181aa7dab4e3af4222068cc2df17d3b7f40"
+        },
+        {
+          "path": "tests/fixtures/pan470/evidence-selfcheck-v1.txt",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "eda7bcb4baf93aab7f262f8442b17678bfeb7ec17b46296ce9844da1f58b3d91"
+        },
+        {
+          "path": "tests/pan470/handoff-effort.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "efdca64f15650f5785d78f190fa9a65d926d3d42efa6cea74b76e1818fb985cb"
+        },
+        {
+          "path": "verification/pan470-handoff-effort-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "ffae2c6c537cb2baf590bc90cdcc4fe174f80e6990a05a38699ff11b4f1d3001"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan470:test"
+      ],
+      "invariants": [
+        "PAN470 composes a complete worker handoff from the existing work-order and receipt surfaces by driving the released development-worker entry points (runSyntheticDevelopmentWorker + validateReceiptDigest); a malformed or stale receipt (digest mismatch, missing or stale evidence bytes, overlapping AC ids) never implies completion.",
+        "Finalization effort is recorded as exact per-phase intervals (IMPLEMENTATION, SELF_CHECK, REVIEW, CORRECTION, FINALIZATION), kept strictly separate from CI wait, idle and unknown, and aggregated by accepted deliverable and by model/harness; no effort percentage is inferred from tokens, commit counts or overlapping wall time.",
+        "Existing mandatory gates are retained and reused; unchanged exact-byte evidence is reused and any byte change is refused; bounded correction findings are passed back with a failing reproducer; synthetic local evidence only, no production/customer/host data and no credentials."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false

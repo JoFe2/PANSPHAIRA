@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "pansphaira.pan470/handoff-effort-boundary/v1",
+  "generatedAt": "2026-09-23T14:19:44.413Z",
+  "synthetic": true,
+  "releasedEntryPoints": {
+    "runSyntheticDevelopmentWorker": "function",
+    "validateReceiptDigest": "function"
+  },
+  "positive": {
+    "baseReceiptOutcome": "SUCCEEDED",
+    "baseReceiptDigestValid": true,
+    "handoffValid": true,
+    "handoffDigest": "e60dec91689acdc8c2105a2df1240f903113c6031c5cc7349b1eadd433004ca2",
+    "activeTotalMs": 3000,
+    "passive": {
+      "CI_WAIT": 9000,
+      "IDLE": 0,
+      "UNKNOWN": 100
+    }
+  },
+  "negatives": [
+    {
+      "label": "tampered receipt -> digest mismatch",
+      "denied": true,
+      "code": "HANDBOFF_RECEIPT_DIGEST_MISMATCH"
+    },
+    {
+      "label": "empty completed AC",
+      "denied": true,
+      "code": "HANDBOFF_AC_EMPTY"
+    },
+    {
+      "label": "overlapping active interval",
+      "denied": true,
+      "code": "EFFORT_INTERVAL_OVERLAP"
+    },
+    {
+      "label": "missing evidence file",
+      "denied": true,
+      "code": "HANDBOFF_EVIDENCE_MISSING"
+    }
+  ],
+  "effortReport": {
+    "activeTotalMs": 3000,
+    "byDeliverable": {
+      "D1": 3000
+    },
+    "passiveTotals": {
+      "CI_WAIT": 9000,
+      "IDLE": 0,
+      "UNKNOWN": 100
+    }
+  },
+  "nonClaims": 20,
+  "boundary": "helper drives real released entry points (runSyntheticDevelopmentWorker + validateReceiptDigest) and real on-disk evidence bytes; no mock of affected entry points; synthetic local evidence only."
+}
