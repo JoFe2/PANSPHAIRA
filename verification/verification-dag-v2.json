@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "ef4c7b3dd8599751324257cb994d3ee84dfbb680822776018674d7fc80576973"
+          "sha256": "650b4cdf5be0645ba3c2549d402193c19dc84e8817bffd1749efca71d079f8c8"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
