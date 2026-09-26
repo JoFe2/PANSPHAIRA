@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/schemas/contracts/pan471-capability-inventory-v1.schema.json",
+  "title": "PAN471 read-only capability inventory",
+  "description": "Read-only, content-bound inventory of capabilities, ownership and missing semantics composed from the bounded order/customer handoff and the capability/module contracts. It drives the actual released entry points (createKs238OrderSourceHandoff + released catalogue / capability-cell projections). Missing quantity, unit, amount and business rule remain UNAVAILABLE (never inferred); observations, inferred relations and confirmed decisions are kept separate; denied visibility (NOT_COVERED/DENIED) is retained, not deleted, and is not complete coverage. Bound to a source identity and tenant; a wrong tenant or a substituted source is refused. No capability activation, execution, write, mutation or rollback.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "consumerContract", "trust", "outcome", "code", "binding", "bindingDigest", "capabilities", "openQuestions", "dependencies", "unsupportedFacts", "missingFields", "evidencePlanes", "nonClaims"],
+  "properties": {
+    "schemaVersion": { "const": "pansphaira.pan471/capability-inventory/v1" },
+    "consumerContract": { "const": "pan471.capability-inventory/v1" },
+    "trust": { "const": "LOCAL_SYNTHETIC" },
+    "outcome": { "enum": ["INVENTORIED", "DENIED"] },
+    "code": { "type": "string" },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "consumerContract", "trust", "tenantId", "catalogue", "orderSource", "sourceIdentity"],
+      "properties": {
+        "schemaVersion": { "const": "pansphaira.pan471/capability-inventory/v1" },
+        "consumerContract": { "const": "pan471.capability-inventory/v1" },
+        "trust": { "const": "LOCAL_SYNTHETIC" },
+        "tenantId": { "$ref": "#/$defs/closedString" },
+        "catalogue": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["catalogueId", "version", "catalogueDigest", "entries"],
+          "properties": {
+            "catalogueId": { "$ref": "#/$defs/closedString" },
+            "version": { "$ref": "#/$defs/closedString" },
+            "catalogueDigest": { "$ref": "#/$defs/sha256" },
+            "entries": { "type": "array" }
+          }
+        },
+        "orderSource": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourceLabel", "sourceBytesSha256", "sourceDigest", "schemaVersion", "consumerContract", "supportedFacts"],
+          "properties": {
+            "sourceLabel": { "$ref": "#/$defs/closedString" },
+            "sourceBytesSha256": { "$ref": "#/$defs/sha256" },
+            "sourceDigest": { "$ref": "#/$defs/closedString" },
+            "schemaVersion": { "$ref": "#/$defs/closedString" },
+            "consumerContract": { "$ref": "#/$defs/closedString" },
+            "supportedFacts": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "sourceIdentity": { "$ref": "#/$defs/sourceIdentity" }
+      }
+    },
+    "bindingDigest": { "$ref": "#/$defs/sha256" },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/capability" }
+    },
+    "openQuestions": { "type": "array", "items": { "$ref": "#/$defs/openQuestion" } },
+    "dependencies": { "type": "array", "items": { "$ref": "#/$defs/closedString" } },
+    "unsupportedFacts": { "type": "array", "items": { "type": "string" } },
+    "missingFields": { "type": "array", "items": { "type": "string" } },
+    "evidencePlanes": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "enum": ["OBSERVATION", "INFERRED_RELATION", "CONFIRMED_DECISION"] }
+    },
+    "nonClaims": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "closedString": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "sourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceLabel", "sourceBytesSha256"],
+      "properties": {
+        "sourceLabel": { "$ref": "#/$defs/closedString" },
+        "sourceBytesSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "name", "availability", "ownership", "semantics", "evidence", "dependencies", "openQuestions", "nonClaims"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^cap:" },
+        "kind": { "enum": ["ORDER_SOURCE_READ", "CUSTOMER_SOURCE_READ", "ERP_ORDER_CREATE", "CRM_CONTACT_CREATE", "EMPLOYEE_DIRECTORY_READ_OWN"] },
+        "name": { "$ref": "#/$defs/closedString" },
+        "availability": { "enum": ["AVAILABLE", "UNAVAILABLE", "DENIED", "NOT_COVERED"] },
+        "ownership": { "enum": ["RELEASED_CONTRACT", "RELEASED_READER", "CAPABILITY_CATALOGUE", "CAPABILITY_CELL", "HANDOFF"] },
+        "semantics": { "$ref": "#/$defs/closedString" },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["observations", "inferredRelations", "confirmedDecisions"],
+          "properties": {
+            "observations": { "type": "array" },
+            "inferredRelations": { "type": "array" },
+            "confirmedDecisions": { "type": "array" }
+          }
+        },
+        "dependencies": { "type": "array", "items": { "$ref": "#/$defs/closedString" } },
+        "openQuestions": { "type": "array", "items": { "$ref": "#/$defs/openQuestion" } },
+        "nonClaims": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "openQuestion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["questionId", "kind", "text", "owner"],
+      "properties": {
+        "questionId": { "type": "string", "pattern": "^oq:" },
+        "kind": { "enum": ["MISSING_BUSINESS_RULE", "MISSING_QUANTITY_UNIT", "MISSING_AMOUNT_VALUE", "MISSING_DELIVERY_FACTS", "MISSING_CUSTOMER_EVIDENCE", "TENANT_BINDING", "SOURCE_IDENTITY"] },
+        "text": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

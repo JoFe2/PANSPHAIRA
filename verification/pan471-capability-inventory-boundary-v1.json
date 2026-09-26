@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "pansphaira.pan471/capability-inventory-boundary/v1",
+  "generatedBy": "src/pan471/capability-inventory.mjs (real entry points: createPan471CapabilityInventory / rebindPan471Inventory)",
+  "generatedAt": "2026-08-10T08:30:00Z",
+  "trust": "LOCAL_SYNTHETIC",
+  "positive": {
+    "outcome": "INVENTORIED",
+    "code": "OK",
+    "binding": {
+      "schemaVersion": "pansphaira.pan471/capability-inventory/v1",
+      "consumerContract": "pan471.capability-inventory/v1",
+      "trust": "LOCAL_SYNTHETIC",
+      "tenantId": "tenant:synthetic-zoo",
+      "catalogue": {
+        "catalogueId": "chimpmaera.local/synthetic-actions",
+        "version": "1.0.0",
+        "catalogueDigest": "beaffca5dcbb42bcc69c1fa01344bd33cb6f4bc7ee16deacaf561eb8da6876e9",
+        "entries": [
+          {
+            "actionId": "crm.contact.create",
+            "version": "1.0.0",
+            "digest": "8a032b1057fcd5c10497877cbb53ceadbd9f76fba899c630855ed5019045c24a",
+            "activationState": "INACTIVE"
+          },
+          {
+            "actionId": "erp.order.create",
+            "version": "1.0.0",
+            "digest": "a20f5c9b60cbb9af1d098ae31c5f3e46e37722c6a9548b9f25b331c0287b98ab",
+            "activationState": "INACTIVE"
+          },
+          {
+            "actionId": "employee.directory.read_own",
+            "version": "1.0.0",
+            "digest": "f59d5f790edb731e24a363e1cb8a4ef46fccb006ff4749cffb3d276f9212609e",
+            "activationState": "INACTIVE"
+          }
+        ]
+      },
+      "orderSource": {
+        "sourceLabel": "LOCAL_SYNTHETIC_ERP_ORDER_SOURCE_V1",
+        "sourceBytesSha256": "85194ec545b4f1e2e690b4353c6d97d1753bb6043171c00f55ca894fc6669278",
+        "sourceDigest": "01b2e51e8953a24d37462db2b6205e41e03faf6522fbf017338bf495f5007044",
+        "schemaVersion": "pansphaira.ks238/order-source-handoff/v1",
+        "consumerContract": "ks238.sales-analysis.order-source/v1",
+        "supportedFacts": [
+          "orderIdentity",
+          "customerIdentity",
+          "orderStatus",
+          "orderPeriod"
+        ]
+      },
+      "sourceIdentity": {
+        "sourceLabel": "LOCAL_SYNTHETIC_ERP_ORDER_SOURCE_V1",
+        "sourceBytesSha256": "85194ec545b4f1e2e690b4353c6d97d1753bb6043171c00f55ca894fc6669278"
+      }
+    },
+    "bindingDigest": "0421a7e95ec0499f1a22467d5f319ed00c9c163e3e77f6af329a754d7803c758",
+    "capabilities": [
+      {
+        "id": "cap:order-source-read-v1",
+        "kind": "ORDER_SOURCE_READ",
+        "availability": "AVAILABLE",
+        "ownership": "RELEASED_READER",
+        "observationCount": 3,
+        "inferredRelationCount": 1,
+        "confirmedDecisionCount": 3,
+        "openQuestionCount": 1,
+        "dependencyCount": 2
+      },
+      {
+        "id": "cap:customer-source-read-v1",
+        "kind": "CUSTOMER_SOURCE_READ",
+        "availability": "AVAILABLE",
+        "ownership": "RELEASED_READER",
+        "observationCount": 3,
+        "inferredRelationCount": 1,
+        "confirmedDecisionCount": 1,
+        "openQuestionCount": 1,
+        "dependencyCount": 2
+      },
+      {
+        "id": "cap:erp-order-create-v1",
+        "kind": "ERP_ORDER_CREATE",
+        "availability": "UNAVAILABLE",
+        "ownership": "CAPABILITY_CELL",
+        "observationCount": 0,
+        "inferredRelationCount": 1,
+        "confirmedDecisionCount": 1,
+        "openQuestionCount": 1,
+        "dependencyCount": 2
+      },
+      {
+        "id": "cap:crm-contact-create-v1",
+        "kind": "CRM_CONTACT_CREATE",
+        "availability": "NOT_COVERED",
+        "ownership": "CAPABILITY_CATALOGUE",
+        "observationCount": 0,
+        "inferredRelationCount": 0,
+        "confirmedDecisionCount": 1,
+        "openQuestionCount": 1,
+        "dependencyCount": 1
+      },
+      {
+        "id": "cap:employee-directory-read-own-v1",
+        "kind": "EMPLOYEE_DIRECTORY_READ_OWN",
+        "availability": "NOT_COVERED",
+        "ownership": "CAPABILITY_CATALOGUE",
+        "observationCount": 0,
+        "inferredRelationCount": 0,
+        "confirmedDecisionCount": 1,
+        "openQuestionCount": 1,
+        "dependencyCount": 1
+      }
+    ],
+    "openQuestionKinds": [
+      "MISSING_QUANTITY_UNIT",
+      "TENANT_BINDING",
+      "MISSING_QUANTITY_UNIT",
+      "MISSING_BUSINESS_RULE",
+      "MISSING_BUSINESS_RULE"
+    ],
+    "unsupportedFacts": [
+      "netRevenue",
+      "orderedQuantity",
+      "quantityUnit",
+      "amount",
+      "currencyValue",
+      "deliveryFacts",
+      "historicalOrderBook",
+      "orderIntake",
+      "creditsCancellationsNetting"
+    ],
+    "missingFields": [
+      "amount.currencyValue",
+      "amount.netRevenue",
+      "quantity.orderedQuantity",
+      "quantity.unit",
+      "delivery.deliveryId",
+      "delivery.deliveredAt",
+      "history.previousStates"
+    ]
+  },
+  "antiSubstitution": {
+    "sameSource": {
+      "outcome": "REBOUND",
+      "code": "OK",
+      "digestRetained": true
+    },
+    "substitutedSource": {
+      "outcome": "DENIED",
+      "code": "SERIALIZED_BINDING_MISMATCH"
+    }
+  },
+  "negatives": {
+    "wrongTenant": {
+      "outcome": "DENIED",
+      "code": "TENANT_MISMATCH"
+    },
+    "noInput": {
+      "outcome": "DENIED",
+      "code": "CAPABILITY_INVENTORY_INPUT_REQUIRED"
+    },
+    "badContract": {
+      "outcome": "DENIED",
+      "code": "ORDER_SOURCE_CONTRACT_MALFORMED"
+    },
+    "tamperedBytes": {
+      "outcome": "DENIED",
+      "code": "SOURCE_MALFORMED"
+    },
+    "wrongLabel": {
+      "outcome": "DENIED",
+      "code": "SOURCE_LABEL_DENIED"
+    },
+    "badCatalogue": {
+      "outcome": "DENIED",
+      "code": "CAPABILITY_CELL_PROFILE_MALFORMED"
+    }
+  },
+  "nonClaims": [
+    "Read-only inventory: no capability activation, execution, write, mutation or rollback.",
+    "Missing quantity, unit, amount and business rule remain UNAVAILABLE (never inferred).",
+    "Observations, inferred relations and confirmed decisions are kept separate.",
+    "NOT_COVERED / DENIED capabilities are retained (denied visibility is not deletion) and do not imply complete coverage.",
+    "Synthetic local evidence only: no production/customer/host data, no credentials, no real external effects."
+  ]
+}

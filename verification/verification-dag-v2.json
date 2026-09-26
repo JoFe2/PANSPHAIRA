@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 60,
+  "graphVersion": 61,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d6ffd5b7a4eaca2f4d4c0fd8e5063266f64f79810307d26c750c754f46b47de9"
+          "sha256": "62f10bf69b9a57f45b569306de2af34f76666186c986bf5a1b59ee05f329a13b"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "650b4cdf5be0645ba3c2549d402193c19dc84e8817bffd1749efca71d079f8c8"
+          "sha256": "d0d04e7712cc4f48b8c6326fc2db4feb7cb805a60f285509bd83f7eb87da17f4"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "ba445423e5144c6981fc312595abfef9130912f64b01b68d72eae8f98818708a"
+          "sha256": "d0e9c941610f83f2dc512a8783c7045958f2965cfdcaec025b5a8537c0d67191"
         }
       ],
       "ownedTests": [
@@ -4769,6 +4769,11 @@
           "sha256": "8b7d3e4034d4faa87bb168012b808156a59c171a390bd94925d2581ad16f5515"
         },
         {
+          "path": "docs/architecture/pan471-capability-inventory-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "918555692322894a73466075b38d790182db1e044e6a38b7d45887be90f89b82"
+        },
+        {
           "path": "docs/DEMO-CURRENT-HEAD-E2E.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "e1d1c42aa6639ab2733111cfa3c43f50bb656b49d176e2827bd5239e95ec339e"
@@ -4874,9 +4879,14 @@
           "sha256": "234aaaec1ca16f5a9d9944d44a6fe2201e91f105a66c45dbe12ebbdd4e31293c"
         },
         {
+          "path": "schemas/contracts/pan471-capability-inventory-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "bf7a84ed6dc7237a34fadd5a0e0acdc5f1aea78069deba17903803a25bc789e4"
+        },
+        {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "05e5908e86f835c11dc71c9bd511e6e53e6970155964e7a4fdc885ad8c9f26ce"
+          "sha256": "7acd75be8f28c2ab8663c1232566c1922a6a771d0d474efe5bfc9dcaf349336d"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4944,9 +4954,14 @@
           "sha256": "4986fa3de86fb4963c1cb191ba65f181aa7dab4e3af4222068cc2df17d3b7f40"
         },
         {
+          "path": "src/pan471/capability-inventory.mjs",
+          "role": "SOURCE",
+          "sha256": "7eeab48ef9a74f498e6e4fdc83095745a467f595120688691400f602f2cc975f"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "2528f112c3ee7be3131fee4774a23fb1601efdf329dc8377bdabb35424a99fbf"
+          "sha256": "88e51690f21d9069796764e6bf852663515e546ac27683920c83ce191870d572"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -5007,6 +5022,11 @@
           "path": "tests/fixtures/pan470/evidence-selfcheck-v1.txt",
           "role": "DERIVED_EVIDENCE",
           "sha256": "eda7bcb4baf93aab7f262f8442b17678bfeb7ec17b46296ce9844da1f58b3d91"
+        },
+        {
+          "path": "tests/fixtures/pan471/expected-capabilities-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3f7117098934e0939c41300ce941897ccbbfae94102c8b1b535148ac77737f74"
         },
         {
           "path": "tests/forward-paired-analytics.test.mjs",
@@ -5089,6 +5109,11 @@
           "sha256": "efdca64f15650f5785d78f190fa9a65d926d3d42efa6cea74b76e1818fb985cb"
         },
         {
+          "path": "tests/pan471/capability-inventory.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c0c01042f5027e6b7c301646c87b7e2b69194b60225395f03b66005116b2bce8"
+        },
+        {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
           "sha256": "bac767708448ec04a3abfb050b1bb90ac1d9145a69a7a4cb8747b6ceaa7d7da8"
@@ -5106,7 +5131,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "4e96e3b728dcccf7d1b6328eac317a6d3297078525f32969780d74ca8ab334a4"
+          "sha256": "0b25813bf4fa392ec4e4886159af68433e7c8827d620ded226f538e595620fd9"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5169,6 +5194,11 @@
           "sha256": "ffae2c6c537cb2baf590bc90cdcc4fe174f80e6990a05a38699ff11b4f1d3001"
         },
         {
+          "path": "verification/pan471-capability-inventory-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9dc0d8e226f74597efb9c473e146ab8157c7c8e88df6c70ff1aeb93dffb431d5"
+        },
+        {
           "path": "verification/trust-compatibility-foundation-closure-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9"
@@ -5188,7 +5218,8 @@
         "npm run pan442:test",
         "npm run pan468:test",
         "npm run pan469:test",
-        "npm run pan470:test"
+        "npm run pan470:test",
+        "npm run pan471:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5743,7 +5774,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "f471459c0f4363b5c0e216f8909d1c8dad790e4e30ba41786d1b61d7f994e27b"
+          "sha256": "81f5008dafbd2de2e6a5429fc3c0058b5abf742ec8bbb8d8b97fa9f082297c4d"
         },
         {
           "path": "package-lock.json",
@@ -6103,7 +6134,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "fe2d5157e5268e78fc4ec647002b62d31ac9a3d82f4e9ba716ca31a70684048f"
+          "sha256": "ea9369f629db2030ce9b0762d720544104239f4447a390a6b3799e3dde8e5fc6"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -7011,6 +7042,52 @@
         "PAN470 composes a complete worker handoff from the existing work-order and receipt surfaces by driving the released development-worker entry points (runSyntheticDevelopmentWorker + validateReceiptDigest); a malformed or stale receipt (digest mismatch, missing or stale evidence bytes, overlapping AC ids) never implies completion.",
         "Finalization effort is recorded as exact per-phase intervals (IMPLEMENTATION, SELF_CHECK, REVIEW, CORRECTION, FINALIZATION), kept strictly separate from CI wait, idle and unknown, and aggregated by accepted deliverable and by model/harness; no effort percentage is inferred from tokens, commit counts or overlapping wall time.",
         "Existing mandatory gates are retained and reused; unchanged exact-byte evidence is reused and any byte change is refused; bounded correction findings are passed back with a failing reproducer; synthetic local evidence only, no production/customer/host data and no credentials."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan471-capability-inventory-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/architecture/pan471-capability-inventory-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "918555692322894a73466075b38d790182db1e044e6a38b7d45887be90f89b82"
+        },
+        {
+          "path": "schemas/contracts/pan471-capability-inventory-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "bf7a84ed6dc7237a34fadd5a0e0acdc5f1aea78069deba17903803a25bc789e4"
+        },
+        {
+          "path": "src/pan471/capability-inventory.mjs",
+          "role": "SOURCE",
+          "sha256": "7eeab48ef9a74f498e6e4fdc83095745a467f595120688691400f602f2cc975f"
+        },
+        {
+          "path": "tests/fixtures/pan471/expected-capabilities-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "3f7117098934e0939c41300ce941897ccbbfae94102c8b1b535148ac77737f74"
+        },
+        {
+          "path": "tests/pan471/capability-inventory.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "c0c01042f5027e6b7c301646c87b7e2b69194b60225395f03b66005116b2bce8"
+        },
+        {
+          "path": "verification/pan471-capability-inventory-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "9dc0d8e226f74597efb9c473e146ab8157c7c8e88df6c70ff1aeb93dffb431d5"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan471:test"
+      ],
+      "invariants": [
+        "PAN471 is a bounded read-only capability inventory composed from the accepted bounded order/customer handoff and the released capability/module contracts; no capability is activated, executed, written or mutated.",
+        "Missing quantity, unit, amount and business rule remain UNAVAILABLE (never inferred); observations, inferred relations and confirmed decisions remain separate; denied visibility (NOT_COVERED/DENIED) is retained, not deleted, and is not complete coverage.",
+        "The inventory is bound to a source identity and tenant; a wrong tenant (TENANT_MISMATCH) and a substituted source (SERIALIZED_BINDING_MISMATCH) fail closed before any fact is emitted; synthetic local evidence only, no production/customer/host data and no credentials."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
