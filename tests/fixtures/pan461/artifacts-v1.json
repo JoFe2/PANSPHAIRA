@@ -1,0 +1,14 @@
+[
+  {
+    "artifactId": "art:src-arch",
+    "role": "SOURCE_ARCHIVE",
+    "sourceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observedImageDigest": null
+  },
+  {
+    "artifactId": "art:img-target",
+    "role": "IMAGE",
+    "sourceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observedImageDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+]

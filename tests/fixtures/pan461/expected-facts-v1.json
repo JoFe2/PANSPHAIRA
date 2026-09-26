@@ -1,0 +1,28 @@
+{
+  "IMG": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "SCHEMA": "1111111111111111111111111111111111111111111111111111111111111111",
+  "CFG": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "CONTENT": "2222222222222222222222222222222222222222222222222222222222222222",
+  "lifecycle": {
+    "running": "RUNNING",
+    "stopped": "STOPPED",
+    "sleeping": "SLEEPING",
+    "modified": "LOCALLY_MODIFIED",
+    "partial": "PARTIALLY_INSTALLED",
+    "unknown": "UNKNOWN",
+    "configDrift": "PARTIALLY_INSTALLED"
+  },
+  "generationValidity": {
+    "image": "MATCHED",
+    "schema": "MATCHED",
+    "configuration": "MATCHED",
+    "content": "MATCHED",
+    "process": "UNAVAILABLE"
+  },
+  "installableTargets": [
+    "art:img-target"
+  ],
+  "sourceOnlyArtifacts": [
+    "art:src-arch"
+  ]
+}

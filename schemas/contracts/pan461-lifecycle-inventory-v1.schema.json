@@ -1,0 +1,743 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pansphaira.local/schemas/contracts/pan461-lifecycle-inventory-v1.schema.json",
+  "title": "PAN461 read-only installation lifecycle inventory",
+  "description": "Read-only, content-bound inventory for one declared local Linux installation. It distinguishes declared release metadata from observed image, schema, configuration, content and process generations; identifies every owned persistent store, required configuration and key reference without exporting secret values (closed reference + REDACTED marker only); and binds installation identity, source/target artifacts and observation validity to a canonical binding digest. A source-only SOURCE_ARCHIVE is never an installable target. An unavailable decisive probe remains UNKNOWN, never an inferred version. No productive host discovery, installation, update, migration, write or public-write authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "outcome",
+    "lifecycleState",
+    "observationValidity",
+    "generations",
+    "installableTargets",
+    "sourceOnlyArtifacts",
+    "persistentStores",
+    "keyRefs",
+    "uncoveredState",
+    "bindingDigest",
+    "code",
+    "lifecycleReason",
+    "configRefs",
+    "artifacts",
+    "binding"
+  ],
+  "properties": {
+    "outcome": {
+      "const": "INVENTORIED"
+    },
+    "lifecycleState": {
+      "enum": [
+        "RUNNING",
+        "STOPPED",
+        "PARTIALLY_INSTALLED",
+        "LOCALLY_MODIFIED",
+        "SLEEPING",
+        "UNKNOWN"
+      ]
+    },
+    "lifecycleReason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observationValidity": {
+      "enum": [
+        "VALID",
+        "DEGRADED"
+      ]
+    },
+    "generations": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "axis",
+          "declared",
+          "observed",
+          "validity"
+        ],
+        "properties": {
+          "axis": {
+            "enum": [
+              "image",
+              "schema",
+              "configuration",
+              "content",
+              "process"
+            ]
+          },
+          "declared": {
+            "$ref": "#/$defs/generationValue"
+          },
+          "observed": {
+            "$ref": "#/$defs/generationValue"
+          },
+          "validity": {
+            "enum": [
+              "MATCHED",
+              "DRIFTED",
+              "UNAVAILABLE"
+            ]
+          }
+        }
+      }
+    },
+    "installableTargets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^art:"
+      }
+    },
+    "sourceOnlyArtifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^art:"
+      }
+    },
+    "persistentStores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "storeId",
+          "kind",
+          "path",
+          "observedDigest",
+          "hasSecretRef",
+          "secretRef",
+          "secretValue",
+          "secretExported"
+        ],
+        "properties": {
+          "storeId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "DATABASE",
+              "FILE",
+              "SCHEMA",
+              "CACHE"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observedDigest": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            ]
+          },
+          "hasSecretRef": {
+            "type": "boolean"
+          },
+          "secretRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "secretValue": {
+            "const": "REDACTED"
+          },
+          "secretExported": {
+            "const": false
+          }
+        }
+      }
+    },
+    "configRefs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "refId",
+          "role",
+          "path",
+          "required",
+          "secretValue",
+          "secretExported"
+        ],
+        "properties": {
+          "refId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "CONFIG",
+              "CREDENTIAL",
+              "CERTIFICATE",
+              "OTHER"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "hasSecretRef": {
+            "type": "boolean"
+          },
+          "secretValue": {
+            "const": "REDACTED"
+          },
+          "secretExported": {
+            "const": false
+          }
+        }
+      }
+    },
+    "keyRefs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "refId",
+          "role",
+          "path",
+          "required",
+          "hasSecretRef",
+          "secretValue",
+          "secretExported"
+        ],
+        "properties": {
+          "refId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "CONFIG",
+              "CREDENTIAL",
+              "CERTIFICATE"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "hasSecretRef": {
+            "type": "boolean"
+          },
+          "secretValue": {
+            "const": "REDACTED"
+          },
+          "secretExported": {
+            "const": false
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifactId",
+          "role",
+          "sourceDigest",
+          "observedImageDigest",
+          "installable",
+          "sourceOnly"
+        ],
+        "properties": {
+          "artifactId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "SOURCE_ARCHIVE",
+              "IMAGE",
+              "CONFIG_BUNDLE"
+            ]
+          },
+          "sourceDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "observedImageDigest": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            ]
+          },
+          "installable": {
+            "type": "boolean"
+          },
+          "sourceOnly": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "uncoveredState": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "bindingDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "code": {
+      "const": "OK"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "consumerContract",
+        "trust",
+        "lifecycleState",
+        "lifecycleReason",
+        "observationValidity",
+        "generations",
+        "persistentStores",
+        "configRefs",
+        "keyRefs",
+        "artifacts",
+        "installableTargets",
+        "sourceOnlyArtifacts",
+        "uncoveredState",
+        "now",
+        "installationIdentity",
+        "declaredRelease"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pansphaira.pan461/lifecycle-inventory/v1"
+        },
+        "consumerContract": {
+          "const": "pan461.installation.lifecycle-inventory/v1"
+        },
+        "trust": {
+          "const": "LOCAL_SYNTHETIC"
+        },
+        "lifecycleState": {
+          "enum": [
+            "RUNNING",
+            "STOPPED",
+            "PARTIALLY_INSTALLED",
+            "LOCALLY_MODIFIED",
+            "SLEEPING",
+            "UNKNOWN"
+          ]
+        },
+        "lifecycleReason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observationValidity": {
+          "enum": [
+            "VALID",
+            "DEGRADED"
+          ]
+        },
+        "generations": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "axis",
+              "declared",
+              "observed",
+              "validity"
+            ],
+            "properties": {
+              "axis": {
+                "enum": [
+                  "image",
+                  "schema",
+                  "configuration",
+                  "content",
+                  "process"
+                ]
+              },
+              "declared": {
+                "$ref": "#/$defs/generationValue"
+              },
+              "observed": {
+                "$ref": "#/$defs/generationValue"
+              },
+              "validity": {
+                "enum": [
+                  "MATCHED",
+                  "DRIFTED",
+                  "UNAVAILABLE"
+                ]
+              }
+            }
+          }
+        },
+        "persistentStores": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "storeId",
+              "kind",
+              "path",
+              "observedDigest",
+              "hasSecretRef",
+              "secretRef",
+              "secretValue",
+              "secretExported"
+            ],
+            "properties": {
+              "storeId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "DATABASE",
+                  "FILE",
+                  "SCHEMA",
+                  "CACHE"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observedDigest": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                ]
+              },
+              "hasSecretRef": {
+                "type": "boolean"
+              },
+              "secretRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "secretValue": {
+                "const": "REDACTED"
+              },
+              "secretExported": {
+                "const": false
+              }
+            }
+          }
+        },
+        "configRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "refId",
+              "role",
+              "path",
+              "required",
+              "secretValue",
+              "secretExported"
+            ],
+            "properties": {
+              "refId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "enum": [
+                  "CONFIG",
+                  "CREDENTIAL",
+                  "CERTIFICATE",
+                  "OTHER"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "hasSecretRef": {
+                "type": "boolean"
+              },
+              "secretValue": {
+                "const": "REDACTED"
+              },
+              "secretExported": {
+                "const": false
+              }
+            }
+          }
+        },
+        "keyRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "refId",
+              "role",
+              "path",
+              "required",
+              "hasSecretRef",
+              "secretValue",
+              "secretExported"
+            ],
+            "properties": {
+              "refId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "enum": [
+                  "CONFIG",
+                  "CREDENTIAL",
+                  "CERTIFICATE"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "hasSecretRef": {
+                "type": "boolean"
+              },
+              "secretValue": {
+                "const": "REDACTED"
+              },
+              "secretExported": {
+                "const": false
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "artifactId",
+              "role",
+              "sourceDigest",
+              "observedImageDigest",
+              "installable",
+              "sourceOnly"
+            ],
+            "properties": {
+              "artifactId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "enum": [
+                  "SOURCE_ARCHIVE",
+                  "IMAGE",
+                  "CONFIG_BUNDLE"
+                ]
+              },
+              "sourceDigest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "observedImageDigest": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                ]
+              },
+              "installable": {
+                "type": "boolean"
+              },
+              "sourceOnly": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "installableTargets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^art:"
+          }
+        },
+        "sourceOnlyArtifacts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^art:"
+          }
+        },
+        "uncoveredState": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "now": {
+          "type": "string"
+        },
+        "installationIdentity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "releaseId",
+            "declaredImageDigest",
+            "declaredLockDigest",
+            "observedImageDigest",
+            "composeVersion"
+          ],
+          "properties": {
+            "releaseId": {
+              "type": "string"
+            },
+            "declaredImageDigest": {
+              "type": "string"
+            },
+            "declaredLockDigest": {
+              "type": "string"
+            },
+            "observedImageDigest": {
+              "type": "string"
+            },
+            "composeVersion": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "declaredRelease": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "releaseId",
+            "lockDigest",
+            "versionAxes"
+          ],
+          "properties": {
+            "releaseId": {
+              "type": "string"
+            },
+            "lockDigest": {
+              "type": "string"
+            },
+            "versionAxes": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "controlPlane",
+                "dataModel",
+                "evidence"
+              ],
+              "properties": {
+                "controlPlane": {
+                  "type": "string"
+                },
+                "dataModel": {
+                  "type": "string"
+                },
+                "evidence": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "generationValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "value"
+      ],
+      "properties": {
+        "source": {
+          "enum": [
+            "DECLARED",
+            "OBSERVED"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

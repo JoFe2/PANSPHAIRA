@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "pansphaira.pan461/declared-release/v1",
+  "releaseId": "1.2.3",
+  "components": [
+    {
+      "componentId": "core:engine",
+      "version": "1.2.3",
+      "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  ],
+  "versionAxes": {
+    "controlPlane": "v1",
+    "dataModel": "v2",
+    "evidence": "v1"
+  },
+  "authorityProfile": {
+    "profileId": "profile:safe-guided",
+    "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "imageDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "schemaDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+  "configDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "contentDigest": "2222222222222222222222222222222222222222222222222222222222222222"
+}

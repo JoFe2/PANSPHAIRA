@@ -1,0 +1,20 @@
+[
+  {
+    "refId": "key:cfg-main",
+    "role": "CONFIG",
+    "path": "/etc/psai/config.yaml",
+    "required": true
+  },
+  {
+    "refId": "key:db-cred",
+    "role": "CREDENTIAL",
+    "path": "/run/secrets/db",
+    "required": true
+  },
+  {
+    "refId": "key:tls-cert",
+    "role": "CERTIFICATE",
+    "path": "/etc/psai/tls.crt",
+    "required": false
+  }
+]

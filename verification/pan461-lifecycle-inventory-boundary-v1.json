@@ -1,0 +1,235 @@
+{
+  "schemaVersion": "pansphaira.pan461/lifecycle-inventory-boundary/v1",
+  "status": "LOCAL_SYNTHETIC_LIFECYCLE_INVENTORY_IMPLEMENTED",
+  "module": "src/pan461/lifecycle-inventory.mjs",
+  "consumerContract": "pan461.installation.lifecycle-inventory/v1",
+  "reusedModules": [
+    {
+      "path": "packages/contracts/src/update-doctor.ts",
+      "role": "RELEASedReader+DOCTOR_CONTRACT_DIGEST"
+    },
+    {
+      "path": "dist/packages/contracts/src/index.js",
+      "role": "RELEASED_CANONICAL_JSON_AND_DOCTOR_OPS"
+    }
+  ],
+  "entryPoint": {
+    "create": "createPan461LifecycleInventory({declaredRelease, observed, persistentStores, keyRefs, artifacts, now})",
+    "rebind": "rebindPan461Inventory({declaredRelease, observed, observedSha256, persistentStores, keyRefs, artifacts, now, binding, bindingDigest})"
+  },
+  "reusedReadonlyObserver": "adaptComposeDoctorObservationV1 + updateDoctorContractDigest + canonicalJson (released)",
+  "actualAvailableOutput": {
+    "outcome": "INVENTORIED",
+    "lifecycleState": "RUNNING",
+    "lifecycleReason": "image, runtime and configuration generations matched the declared release",
+    "observationValidity": "VALID",
+    "generations": [
+      {
+        "axis": "image",
+        "declared": {
+          "source": "DECLARED",
+          "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "observed": {
+          "source": "OBSERVED",
+          "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "validity": "MATCHED"
+      },
+      {
+        "axis": "schema",
+        "declared": {
+          "source": "DECLARED",
+          "value": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "observed": {
+          "source": "OBSERVED",
+          "value": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "validity": "MATCHED"
+      },
+      {
+        "axis": "configuration",
+        "declared": {
+          "source": "DECLARED",
+          "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "observed": {
+          "source": "OBSERVED",
+          "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "validity": "MATCHED"
+      },
+      {
+        "axis": "content",
+        "declared": {
+          "source": "DECLARED",
+          "value": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "observed": {
+          "source": "OBSERVED",
+          "value": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "validity": "MATCHED"
+      },
+      {
+        "axis": "process",
+        "declared": {
+          "source": "DECLARED",
+          "value": null
+        },
+        "observed": {
+          "source": "OBSERVED",
+          "value": "3b2e6c374808989f7d86d9cc2af5973d172dc75096b6a31bcc0d8925de275733"
+        },
+        "validity": "UNAVAILABLE"
+      }
+    ],
+    "installableTargets": [
+      "art:img-target"
+    ],
+    "sourceOnlyArtifacts": [
+      "art:src-arch"
+    ],
+    "persistentStores": [
+      {
+        "storeId": "store:db-store",
+        "kind": "DATABASE",
+        "path": "/data/db",
+        "observedDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "hasSecretRef": true,
+        "secretRef": "/run/secrets/db",
+        "secretValue": "REDACTED",
+        "secretExported": false
+      },
+      {
+        "storeId": "store:sc-store",
+        "kind": "SCHEMA",
+        "path": "/data/schema",
+        "observedDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "hasSecretRef": false,
+        "secretRef": null,
+        "secretValue": "REDACTED",
+        "secretExported": false
+      }
+    ],
+    "keyRefs": [
+      {
+        "refId": "key:cfg-main",
+        "role": "CONFIG",
+        "path": "/etc/psai/config.yaml",
+        "required": true,
+        "hasSecretRef": false,
+        "secretValue": "REDACTED",
+        "secretExported": false
+      },
+      {
+        "refId": "key:db-cred",
+        "role": "CREDENTIAL",
+        "path": "/run/secrets/db",
+        "required": true,
+        "hasSecretRef": true,
+        "secretValue": "REDACTED",
+        "secretExported": false
+      },
+      {
+        "refId": "key:tls-cert",
+        "role": "CERTIFICATE",
+        "path": "/etc/psai/tls.crt",
+        "required": false,
+        "hasSecretRef": false,
+        "secretValue": "REDACTED",
+        "secretExported": false
+      }
+    ],
+    "configRefs": [],
+    "uncoveredState": [
+      "config:key:cfg-main:required-not-observed"
+    ],
+    "bindingDigest": "ae521f9818252886eab118745cd70f350acea45928dfb6af4caeea94569dff7c"
+  },
+  "lifecycleStatesRecorded": {
+    "observed-running-v1.json": "RUNNING",
+    "observed-stopped-v1.json": "STOPPED",
+    "observed-partial-v1.json": "PARTIALLY_INSTALLED",
+    "observed-modified-v1.json": "LOCALLY_MODIFIED",
+    "observed-sleeping-v1.json": "SLEEPING",
+    "observed-unknown-v1.json": "UNKNOWN"
+  },
+  "actualRebind": {
+    "outcome": "REBOUND",
+    "bindingDigestRetained": true,
+    "rebindDigest": "ae521f9818252886eab118745cd70f350acea45928dfb6af4caeea94569dff7c"
+  },
+  "secretBoundary": {
+    "rule": "Secret VALUES are never exported; only a closed reference (path + REDACTED marker) appears. The observed snapshot is closed: non-reference fields are rejected at the parse boundary before any secret value could be surfaced.",
+    "secretValueAlways": "REDACTED",
+    "storesWithSecretRef": [
+      "/run/secrets/db"
+    ],
+    "keyRefsWithSecretRef": [
+      "/run/secrets/db"
+    ]
+  },
+  "artifactClassification": {
+    "rule": "A source-only SOURCE_ARCHIVE is never presented as an installable target. Only an artifact whose observed image digest equals its source digest and whose role permits installation is installable.",
+    "installable": [
+      "art:img-target"
+    ],
+    "sourceOnly": [
+      "art:src-arch"
+    ],
+    "sourceOnlyAlone": {
+      "outcome": "INVENTORIED",
+      "installableTargets": [],
+      "code": "OK"
+    }
+  },
+  "exactDenials": {
+    "resealedSubstitutedSnapshotCarriedAgainstOldBinding": {
+      "outcome": "DENIED",
+      "code": "SERIALIZED_BINDING_MISMATCH"
+    },
+    "wrongRetainedObservedSha": {
+      "outcome": "DENIED",
+      "code": "OBSERVED_BYTES_MISMATCH"
+    },
+    "missingRebindObserved": {
+      "outcome": "DENIED",
+      "code": "REBIND_INPUT_REQUIRED"
+    },
+    "callerRehashedDeclaredLockDigest": {
+      "outcome": "DENIED",
+      "code": "DECLARED_RELEASE_MALFORMED"
+    }
+  },
+  "withholdings": [
+    "An unavailable decisive probe remains UNKNOWN (never an inferred version)",
+    "A secret VALUE is never exported; only a closed reference + REDACTED marker appear",
+    "A source-only SOURCE_ARCHIVE is never an installable target",
+    "A resealed substituted observed snapshot carried against an old binding is refused",
+    "A caller-rehashed declared lock digest is not an accepted installation identity"
+  ],
+  "publicWrites": false,
+  "productiveHostDiscovery": false,
+  "network": false,
+  "docker": false,
+  "fixtures": [
+    "tests/fixtures/pan461/declared-release-content-v1.json",
+    "tests/fixtures/pan461/stores-v1.json",
+    "tests/fixtures/pan461/key-refs-v1.json",
+    "tests/fixtures/pan461/artifacts-v1.json",
+    "tests/fixtures/pan461/observed-running-v1.json",
+    "tests/fixtures/pan461/observed-stopped-v1.json",
+    "tests/fixtures/pan461/observed-partial-v1.json",
+    "tests/fixtures/pan461/observed-modified-v1.json",
+    "tests/fixtures/pan461/observed-sleeping-v1.json",
+    "tests/fixtures/pan461/observed-unknown-v1.json",
+    "tests/fixtures/pan461/expected-facts-v1.json"
+  ],
+  "nonClaims": [
+    "Read-only synthetic inventory only; no productive host discovery, installation, update, migration, write or public-write authority",
+    "Not production readiness or a support commitment; one declared local Linux installation, synthetic fixtures only",
+    "Synthetic evidence cannot satisfy human-only or real-environment evidence; those remain separately held"
+  ]
+}
