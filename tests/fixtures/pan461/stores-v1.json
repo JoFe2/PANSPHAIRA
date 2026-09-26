@@ -1,0 +1,16 @@
+[
+  {
+    "storeId": "store:db-store",
+    "kind": "DATABASE",
+    "path": "/data/db",
+    "observedDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "secretRef": "/run/secrets/db"
+  },
+  {
+    "storeId": "store:sc-store",
+    "kind": "SCHEMA",
+    "path": "/data/schema",
+    "observedDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "secretRef": null
+  }
+]

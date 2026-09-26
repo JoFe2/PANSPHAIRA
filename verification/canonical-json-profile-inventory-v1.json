@@ -291,6 +291,14 @@
       "fromSha256": "ffb3e3ef8286456f91608cbf258e145f65785a6f36ce98c2a948545413b3693a",
       "toSha256": "7e56b7ff64262a6cf55b0812c1a59094b16df9144aeaa73b1c093f1b19e49baf",
       "reason": "Advance graph to v61 and bind the bounded PAN471 inventory on current Main while retaining historical obligations."
+    },
+    {
+      "migrationId": "PAN461-LIFECYCLE-INVENTORY/INTEGRITY-GENERATOR/V30",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 30,
+      "fromSha256": "7e56b7ff64262a6cf55b0812c1a59094b16df9144aeaa73b1c093f1b19e49baf",
+      "toSha256": "6b2a3cde7fc265a27ba9d8fd455575f647d9b778699bc723ec2372f62ea7eff1",
+      "reason": "Advance graph to v62 and bind the bounded PAN461 inventory with corrected schema and unproven process generation while retaining historical obligations."
     }
   ],
   "scanScope": {
@@ -333,15 +341,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 712,
+    "filesScanned": 714,
     "declarationSites": 37,
     "declarationFiles": 37,
     "importSites": 247,
     "importFiles": 246,
     "reexportSites": 4,
     "similarShapeSites": 30,
-    "ledgerEntries": 1986,
-    "ledgerUniquePaths": 1986
+    "ledgerEntries": 2003,
+    "ledgerUniquePaths": 2003
   },
   "profiles": [
     {
@@ -414,7 +422,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "7e56b7ff64262a6cf55b0812c1a59094b16df9144aeaa73b1c093f1b19e49baf"
+      "sha256": "6b2a3cde7fc265a27ba9d8fd455575f647d9b778699bc723ec2372f62ea7eff1"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1040,7 +1048,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "7e56b7ff64262a6cf55b0812c1a59094b16df9144aeaa73b1c093f1b19e49baf",
+      "sha256": "6b2a3cde7fc265a27ba9d8fd455575f647d9b778699bc723ec2372f62ea7eff1",
       "basis": "profile-version-migration"
     },
     {

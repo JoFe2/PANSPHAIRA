@@ -951,7 +951,55 @@ for (const [inputPath, role] of pan471Inputs) {
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan471:test")) repositoryIntegrityNode.ownedTests.push("npm run pan471:test");
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
-dag.graphVersion = 61;
+const pan461Inputs = [
+  ["docs/architecture/pan461-lifecycle-inventory-v1.md", "DERIVED_EVIDENCE"],
+  ["schemas/contracts/pan461-lifecycle-inventory-v1.schema.json", "SCHEMA"],
+  ["src/pan461/lifecycle-inventory.mjs", "SOURCE"],
+  ["tests/pan461/lifecycle-inventory.test.mjs", "VALIDATOR"],
+  ["verification/pan461-lifecycle-inventory-boundary-v1.json", "DERIVED_EVIDENCE"],
+  ["tests/fixtures/pan461/artifacts-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/declared-release-content-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/expected-facts-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/key-refs-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/observed-config-drift-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/observed-modified-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/observed-partial-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/observed-running-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/observed-sleeping-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/observed-stopped-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/observed-unknown-v1.json", "FIXTURE"],
+  ["tests/fixtures/pan461/stores-v1.json", "FIXTURE"],
+];
+let pan461Node = dag.nodes.find(({ id }) => id === "pan461-lifecycle-inventory-v1");
+if (pan461Node === undefined) {
+  pan461Node = {
+    id: "pan461-lifecycle-inventory-v1",
+    dependsOn: [],
+    inputs: [],
+    ownedTests: ["npm run pan461:test"],
+    invariants: [
+      "PAN461 is a read-only local installation lifecycle inventory over the released doctor/observer contracts for one declared local Linux installation; no second installer, updater, runtime, provider, write or productive host-discovery platform is introduced.",
+      "Declared release metadata is distinguished from observed image, schema, configuration, content and process generations via a closed {declared, observed, validity} triple per axis; an unavailable decisive probe remains UNKNOWN, never an inferred version.",
+      "Every owned persistent store, required configuration and key reference is listed with a closed secret reference and a REDACTED marker only; secret values are never exported and uncovered required state is listed explicitly, never dropped or guessed.",
+      "Installation identity is re-digested by the released updateDoctorContractDigest (a caller-rehashed lock digest is not an identity); a source-only SOURCE_ARCHIVE is never an installable target; the observation binds to a canonical digest that rebindPan461Inventory re-derives from the retained identity, so resealed substituted snapshots and wrong retained shas are denied.",
+    ],
+    riskClass: "HIGH",
+    globalInvalidation: false,
+  };
+  dag.nodes.push(pan461Node);
+}
+pan461Node.dependsOn = [];
+pan461Node.inputs = pan461Inputs.map(([inputPath, role]) => ({ path: inputPath, role, sha256: digest(inputPath) }));
+pan461Node.ownedTests = ["npm run pan461:test"];
+for (const [inputPath, role] of pan461Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: candidatePath }) => candidatePath === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) throw new Error(`PAN461_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+if (!repositoryIntegrityNode.ownedTests.includes("npm run pan461:test")) repositoryIntegrityNode.ownedTests.push("npm run pan461:test");
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
+
+dag.graphVersion = 62;
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }
@@ -976,6 +1024,23 @@ for (const relative of [
   "tests/forward-producer-analytics.test.mjs",
   "tests/native-forward-qualification.test.mjs",
   "scripts/refresh-integrity-data.mjs",
+  "docs/architecture/pan461-lifecycle-inventory-v1.md",
+  "schemas/contracts/pan461-lifecycle-inventory-v1.schema.json",
+  "src/pan461/lifecycle-inventory.mjs",
+  "tests/pan461/lifecycle-inventory.test.mjs",
+  "verification/pan461-lifecycle-inventory-boundary-v1.json",
+  "tests/fixtures/pan461/artifacts-v1.json",
+  "tests/fixtures/pan461/declared-release-content-v1.json",
+  "tests/fixtures/pan461/expected-facts-v1.json",
+  "tests/fixtures/pan461/key-refs-v1.json",
+  "tests/fixtures/pan461/observed-config-drift-v1.json",
+  "tests/fixtures/pan461/observed-modified-v1.json",
+  "tests/fixtures/pan461/observed-partial-v1.json",
+  "tests/fixtures/pan461/observed-running-v1.json",
+  "tests/fixtures/pan461/observed-sleeping-v1.json",
+  "tests/fixtures/pan461/observed-stopped-v1.json",
+  "tests/fixtures/pan461/observed-unknown-v1.json",
+  "tests/fixtures/pan461/stores-v1.json",
   "docs/architecture/pan471-capability-inventory-v1.md",
   "schemas/contracts/pan471-capability-inventory-v1.schema.json",
   "src/pan471/capability-inventory.mjs",

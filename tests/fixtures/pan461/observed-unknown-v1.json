@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "chimpmaera.doctor/compose-observation/v1",
+  "source": "LOCAL_COMPOSE_SNAPSHOT",
+  "readOnly": true,
+  "mutationCount": 0,
+  "observedLockDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "composeVersion": null,
+  "expectedConfigDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "observedConfigDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "services": [
+    {
+      "serviceId": "api",
+      "state": "RUNNING",
+      "health": "HEALTHY"
+    }
+  ]
+}

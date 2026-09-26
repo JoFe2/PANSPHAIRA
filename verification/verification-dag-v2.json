@@ -1,7 +1,7 @@
 {
   "schemaVersion": "chimpmaera.verification/evidence-dag/v2",
   "graphId": "verification-fabric-shadow",
-  "graphVersion": 61,
+  "graphVersion": 62,
   "environment": {
     "node": "24.14.1",
     "os": "linux",
@@ -688,7 +688,7 @@
         {
           "path": "tests/contribution-intake-ledger.test.ts",
           "role": "VALIDATOR",
-          "sha256": "62f10bf69b9a57f45b569306de2af34f76666186c986bf5a1b59ee05f329a13b"
+          "sha256": "548e3a5a01bc3ca35c1d5cfce57ce08946da2983eef219a1889ee2b20b6f46c9"
         },
         {
           "path": "docs/development/ccp-m1-intake-ledger-slice-pdca.md",
@@ -3829,7 +3829,7 @@
         {
           "path": "tools/video-production-reference/SHA256SUMS",
           "role": "CONTRACT",
-          "sha256": "d0d04e7712cc4f48b8c6326fc2db4feb7cb805a60f285509bd83f7eb87da17f4"
+          "sha256": "ed5e62df14826ed1c6015df3c8de2ff52705e58399e62f32314679c4107fecff"
         },
         {
           "path": "tools/video-production-reference/assets/synthetic/frame-s01.png",
@@ -4004,7 +4004,7 @@
         {
           "path": "tools/video-production-reference/tests/slice.test.mjs",
           "role": "SECURITY",
-          "sha256": "d0e9c941610f83f2dc512a8783c7045958f2965cfdcaec025b5a8537c0d67191"
+          "sha256": "a6e4d73c78b88a739989f88ed1f99679988b13e479b1b698ea6915a2b1b48d05"
         }
       ],
       "ownedTests": [
@@ -4754,6 +4754,11 @@
           "sha256": "31e39d11cc0722fbe24e3b490a4e3776a6f27e61e69121f77670817b874e7a7c"
         },
         {
+          "path": "docs/architecture/pan461-lifecycle-inventory-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "45603ecfc4e4909e1370157b11b50aef94a917cb8547fd0330e52e2b043ace2a"
+        },
+        {
           "path": "docs/architecture/pan468-impact-selection-v1.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "0c95fdf922e6b4ec3a6036005c2f9263462d6939775d36bff4bc9484b32e37a6"
@@ -4874,6 +4879,11 @@
           "sha256": "2d932635c20a0ae08ddf249eb157577bcfdfb72a3755f2721cfc2f9c7d58b575"
         },
         {
+          "path": "schemas/contracts/pan461-lifecycle-inventory-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "a6d5ff5d603912d643de652b65bc033cecd1860ded05bdfe78b8df3606a5a6b9"
+        },
+        {
           "path": "schemas/contracts/pan470-handoff-effort-v1.schema.json",
           "role": "SCHEMA",
           "sha256": "234aaaec1ca16f5a9d9944d44a6fe2201e91f105a66c45dbe12ebbdd4e31293c"
@@ -4886,7 +4896,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "7acd75be8f28c2ab8663c1232566c1922a6a771d0d474efe5bfc9dcaf349336d"
+          "sha256": "11ad63f484e6351506364e6b6cdf99129a6fd4bf9e8afcc1d30d3fdea52383a4"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4944,6 +4954,11 @@
           "sha256": "8b284d5a0b635b9362b95d041d6485a22d3f4fb898cd4e25b911ae585ec0f4f1"
         },
         {
+          "path": "src/pan461/lifecycle-inventory.mjs",
+          "role": "SOURCE",
+          "sha256": "8e341e1f928186a7d36aaaa87fde334b98ed2a6016d6853d56f413a6d09a52a5"
+        },
+        {
           "path": "src/pan469/contribution-views.mjs",
           "role": "SOURCE",
           "sha256": "a99c14d9a66d771f880c9a7b47436af411522b45c75873afa456c53f5dbc2f0f"
@@ -4961,7 +4976,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "88e51690f21d9069796764e6bf852663515e546ac27683920c83ce191870d572"
+          "sha256": "9be50c07c28280032df63620ad78b0d7982c9c2c766f67dde29bde190e30829c"
         },
         {
           "path": "tests/demo-current-head-e2e.test.mjs",
@@ -5017,6 +5032,66 @@
           "path": "tests/fixtures/pan433/default-invoice-row-v1.json",
           "role": "FIXTURE",
           "sha256": "68c8a0c453d83de89716277ade2cbc3d1e2a5f6eacf01155c290a0900e96d2f0"
+        },
+        {
+          "path": "tests/fixtures/pan461/artifacts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "0399556178156f2f249aabd5d3e3ce1ed10d0a426c171b6020ee1e4f9eb62c35"
+        },
+        {
+          "path": "tests/fixtures/pan461/declared-release-content-v1.json",
+          "role": "FIXTURE",
+          "sha256": "54b821fe1716d2515a30959e9825e5b67ab498557aeb2e9c01f1e8472d64bd72"
+        },
+        {
+          "path": "tests/fixtures/pan461/expected-facts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9d24e2d5113af8cf9b89fc52c8b04a98578ddcaa683e4b9a2e3bb36fbdfd7867"
+        },
+        {
+          "path": "tests/fixtures/pan461/key-refs-v1.json",
+          "role": "FIXTURE",
+          "sha256": "425b43bc34fb6d46af72527ea21798411247f13054fa131e60f7e1bf9eebdea4"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-config-drift-v1.json",
+          "role": "FIXTURE",
+          "sha256": "815358c446ca0098941c5d59388b67cb35d86123ced7401e27207b93b3b23338"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-modified-v1.json",
+          "role": "FIXTURE",
+          "sha256": "4b9b4d6c612e767a4b389ade9a1972d164ff5ba9770db671f0c60e6db5b8c242"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-partial-v1.json",
+          "role": "FIXTURE",
+          "sha256": "fdcc1d12ea33c401c43eaf9c7e3a5c9d879f0aa53dd83387f28d9115960bfe49"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-running-v1.json",
+          "role": "FIXTURE",
+          "sha256": "bfccde0a5a8e0fb69b43323a45f5ecd8eff69a516083c878cad7368943174727"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-sleeping-v1.json",
+          "role": "FIXTURE",
+          "sha256": "71057ef2b43fa420ed65cd6e6b4bea937283af7798a959196518ff79965be5c9"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-stopped-v1.json",
+          "role": "FIXTURE",
+          "sha256": "41b74dd37d2092b2fd71667ddd2aa18dd302a90d7ede51ab7fb968a2a9efc50c"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-unknown-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9b9c7bd06b8294d41156d795d17669c6e3384ebb21d7cd0a204d51de0ff2776b"
+        },
+        {
+          "path": "tests/fixtures/pan461/stores-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f629e35b2d0f7f8437481a0b1d358707d208c421e11dda4562d198a293811aac"
         },
         {
           "path": "tests/fixtures/pan470/evidence-selfcheck-v1.txt",
@@ -5094,6 +5169,11 @@
           "sha256": "fc9f4ff20ac8e85803b7998c8fa0777c9d511cbef78c27c03097b1e117a9d162"
         },
         {
+          "path": "tests/pan461/lifecycle-inventory.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "2b24ab68ec90fbfb9cdfb3cf5f669dfa9c26a64c3d7b8e58ab42bcb599540c08"
+        },
+        {
           "path": "tests/pan468/pan468-impact-selection.test.mjs",
           "role": "VALIDATOR",
           "sha256": "225adc4679349fe2b7b83c221f9b6c104f8d577f3d110373ffbe4291af4a61d1"
@@ -5131,7 +5211,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "0b25813bf4fa392ec4e4886159af68433e7c8827d620ded226f538e595620fd9"
+          "sha256": "8ec1956ac9e060fea24dfd8afb4c725cef5c4f3b1a8439f6700016c4cf278e5e"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5179,6 +5259,11 @@
           "sha256": "86c23c2b7190f4f52e692c10a0496ce6fbab572556a65f128cd6c7b2d931b8fb"
         },
         {
+          "path": "verification/pan461-lifecycle-inventory-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "7275f0563eb89176a52c86ff525f99bdce7950f60280dfc56c184b12e75cbcb5"
+        },
+        {
           "path": "verification/pan468-impact-selection-boundary-v1.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "261ea70de20d943e7da5042b5d8a1a258e16a27076e6cd886b255221da5579b8"
@@ -5219,7 +5304,8 @@
         "npm run pan468:test",
         "npm run pan469:test",
         "npm run pan470:test",
-        "npm run pan471:test"
+        "npm run pan471:test",
+        "npm run pan461:test"
       ],
       "invariants": [
         "Public staging is manifest closed and secret/privacy scanned.",
@@ -5774,7 +5860,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "81f5008dafbd2de2e6a5429fc3c0058b5abf742ec8bbb8d8b97fa9f082297c4d"
+          "sha256": "91ce47db813b69cbc1f373aee11b4940cdb321b913d4901b6e434166fdf42b07"
         },
         {
           "path": "package-lock.json",
@@ -6134,7 +6220,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "ea9369f629db2030ce9b0762d720544104239f4447a390a6b3799e3dde8e5fc6"
+          "sha256": "d073c6ff25314bd529eef7755c1773d164d8829a18cc52474c0634c0367d3da8"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -7088,6 +7174,108 @@
         "PAN471 is a bounded read-only capability inventory composed from the accepted bounded order/customer handoff and the released capability/module contracts; no capability is activated, executed, written or mutated.",
         "Missing quantity, unit, amount and business rule remain UNAVAILABLE (never inferred); observations, inferred relations and confirmed decisions remain separate; denied visibility (NOT_COVERED/DENIED) is retained, not deleted, and is not complete coverage.",
         "The inventory is bound to a source identity and tenant; a wrong tenant (TENANT_MISMATCH) and a substituted source (SERIALIZED_BINDING_MISMATCH) fail closed before any fact is emitted; synthetic local evidence only, no production/customer/host data and no credentials."
+      ],
+      "riskClass": "HIGH",
+      "globalInvalidation": false
+    },
+    {
+      "id": "pan461-lifecycle-inventory-v1",
+      "dependsOn": [],
+      "inputs": [
+        {
+          "path": "docs/architecture/pan461-lifecycle-inventory-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "45603ecfc4e4909e1370157b11b50aef94a917cb8547fd0330e52e2b043ace2a"
+        },
+        {
+          "path": "schemas/contracts/pan461-lifecycle-inventory-v1.schema.json",
+          "role": "SCHEMA",
+          "sha256": "a6d5ff5d603912d643de652b65bc033cecd1860ded05bdfe78b8df3606a5a6b9"
+        },
+        {
+          "path": "src/pan461/lifecycle-inventory.mjs",
+          "role": "SOURCE",
+          "sha256": "8e341e1f928186a7d36aaaa87fde334b98ed2a6016d6853d56f413a6d09a52a5"
+        },
+        {
+          "path": "tests/pan461/lifecycle-inventory.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "2b24ab68ec90fbfb9cdfb3cf5f669dfa9c26a64c3d7b8e58ab42bcb599540c08"
+        },
+        {
+          "path": "verification/pan461-lifecycle-inventory-boundary-v1.json",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "7275f0563eb89176a52c86ff525f99bdce7950f60280dfc56c184b12e75cbcb5"
+        },
+        {
+          "path": "tests/fixtures/pan461/artifacts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "0399556178156f2f249aabd5d3e3ce1ed10d0a426c171b6020ee1e4f9eb62c35"
+        },
+        {
+          "path": "tests/fixtures/pan461/declared-release-content-v1.json",
+          "role": "FIXTURE",
+          "sha256": "54b821fe1716d2515a30959e9825e5b67ab498557aeb2e9c01f1e8472d64bd72"
+        },
+        {
+          "path": "tests/fixtures/pan461/expected-facts-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9d24e2d5113af8cf9b89fc52c8b04a98578ddcaa683e4b9a2e3bb36fbdfd7867"
+        },
+        {
+          "path": "tests/fixtures/pan461/key-refs-v1.json",
+          "role": "FIXTURE",
+          "sha256": "425b43bc34fb6d46af72527ea21798411247f13054fa131e60f7e1bf9eebdea4"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-config-drift-v1.json",
+          "role": "FIXTURE",
+          "sha256": "815358c446ca0098941c5d59388b67cb35d86123ced7401e27207b93b3b23338"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-modified-v1.json",
+          "role": "FIXTURE",
+          "sha256": "4b9b4d6c612e767a4b389ade9a1972d164ff5ba9770db671f0c60e6db5b8c242"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-partial-v1.json",
+          "role": "FIXTURE",
+          "sha256": "fdcc1d12ea33c401c43eaf9c7e3a5c9d879f0aa53dd83387f28d9115960bfe49"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-running-v1.json",
+          "role": "FIXTURE",
+          "sha256": "bfccde0a5a8e0fb69b43323a45f5ecd8eff69a516083c878cad7368943174727"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-sleeping-v1.json",
+          "role": "FIXTURE",
+          "sha256": "71057ef2b43fa420ed65cd6e6b4bea937283af7798a959196518ff79965be5c9"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-stopped-v1.json",
+          "role": "FIXTURE",
+          "sha256": "41b74dd37d2092b2fd71667ddd2aa18dd302a90d7ede51ab7fb968a2a9efc50c"
+        },
+        {
+          "path": "tests/fixtures/pan461/observed-unknown-v1.json",
+          "role": "FIXTURE",
+          "sha256": "9b9c7bd06b8294d41156d795d17669c6e3384ebb21d7cd0a204d51de0ff2776b"
+        },
+        {
+          "path": "tests/fixtures/pan461/stores-v1.json",
+          "role": "FIXTURE",
+          "sha256": "f629e35b2d0f7f8437481a0b1d358707d208c421e11dda4562d198a293811aac"
+        }
+      ],
+      "ownedTests": [
+        "npm run pan461:test"
+      ],
+      "invariants": [
+        "PAN461 is a read-only local installation lifecycle inventory over the released doctor/observer contracts for one declared local Linux installation; no second installer, updater, runtime, provider, write or productive host-discovery platform is introduced.",
+        "Declared release metadata is distinguished from observed image, schema, configuration, content and process generations via a closed {declared, observed, validity} triple per axis; an unavailable decisive probe remains UNKNOWN, never an inferred version.",
+        "Every owned persistent store, required configuration and key reference is listed with a closed secret reference and a REDACTED marker only; secret values are never exported and uncovered required state is listed explicitly, never dropped or guessed.",
+        "Installation identity is re-digested by the released updateDoctorContractDigest (a caller-rehashed lock digest is not an identity); a source-only SOURCE_ARCHIVE is never an installable target; the observation binds to a canonical digest that rebindPan461Inventory re-derives from the retained identity, so resealed substituted snapshots and wrong retained shas are denied."
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false
