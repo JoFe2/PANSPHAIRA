@@ -10622,7 +10622,7 @@
         {
           "path": "docs/architecture/pan549-workspace-analysis-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "d9f142154a9684591abc1f73e7ab5c52634565e043cd731321cd5085ab5d52e1"
+          "sha256": "42df6cea4df7f2f39d07631fb678172d0e6fa4a788e404a87f918bf7c04278c6"
         },
         {
           "path": "packages/browser-workspace/src/analysis-v1.css",

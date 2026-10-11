@@ -217,3 +217,40 @@ release workflow and explicit original closure are required. An actual KS
 consumer integration is NOT_RUN here and is owned by KS303, not made a
 prerequisite for standalone PAN delivery. Voice, widget, whole foreign epics
 and Main preapproval are not waiting gates.
+
+
+## Existing KS303 composition follow-up: unchanged byte and source boundaries
+
+The same retained KS303 read companion is composed with the original compiled
+workspace app, not with the sum of the four independent optional entry scripts.
+The original compiler, locked dependencies, minification flags, CSP,
+131072-byte maximum and native 60000ms session lease remain unchanged.
+
+The producer stores236 exact existing string values in one frozen static tuple
+in the already admitted pure leaf `browser-shell-plugin-v1.ts` contract. Fixed
+integer-index reads replace943 previous literals in23 existing TypeScript files.
+There is no evaluation, decompression, dynamic loader or computed authority.
+The original runtime AST, functions and guards are identical after static value
+expansion; existing export and resolved call boundaries are unchanged, without
+claiming identical inference for every internal TypeScript expression.
+
+Reproduce with the original `node scripts/build-pan541-browser.mjs`. The app is
+125535 bytes, SHA256
+`a370195969de260fc8d46ba245ed521f9fd393f0e0a32ac6ccfc1c116afa1b45`.
+The unchanged5486-byte companion is SHA256
+`5e63b2cf949e75da951ea6a93a0a180f930e0627f9dbd1e2aa84db2e5aa872f1`.
+Their exact concatenation is131021 bytes,51 bytes below the original maximum;
+this does not admit arbitrary addon bytes or waive any individual script cap.
+The fixed canonical PAN541 registry tests protect the budget, immutable exact
+values and data-only tuple shape. The original native context tests import the
+original-tsc compiled context owner so normal `.js` dependencies resolve;
+their rights, tenant, session, expiry and late-read assertions are unchanged.
+
+Byte fit and producer regression are not full KS consumer acceptance. Select
+the exact released commit/tree and reproduce its immutable producer bytes;
+the same KS owner must retain the original unchanged complete consumer
+regression, including current source, lifecycle, logout, expiry and13AC.
+PAN does not change or approve the companion, source rights or KS test owner.
+The original standalone PAN549 delivery remains delivered; this is only its
+existing composition follow-up, not a whole-issue reopening. Genuine model
+qualification and whole-portfolio completion remain separate and unclaimed.
