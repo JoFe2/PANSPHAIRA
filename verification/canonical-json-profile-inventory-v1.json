@@ -739,6 +739,14 @@
       "fromSha256": "cb97087599d9273baea78f7de451f735da02b09ff43109e127c5984530972d92",
       "toSha256": "5c20f40d77bc3980dac5a772321828f8128038d303c3674c159fd0af087fe3fe",
       "reason": "Keep graph98/all103 existing owners, scanner/validator/immutable21 base obligations/13 pinned profiles/all historical migrations/legacy1792 manifest and every original hard gate. Add exactly twelve source-only native Knowledge/Capability contract/UI/source/preflight/canonical-browser/test/document members to existing541 shell owner, not a new graph or pipeline. Reuse original KnowledgeQuality/HMI/Codex cores and concrete additive548 protected context/selection; readonly projection uses PUBLIC_SYNTHETIC retained sources only. No second knowledge store, task/model/controller, activation, public runnable payload, paid inference, production source, audio, global configuration or KS write. Original source-only bounded release qualification remains required; registration is not review/CI/merge/release/547 closure or original548565575 genuine-model/KS-consumer/whole-portfolio acceptance."
+    },
+    {
+      "migrationId": "PAN550-EXISTING-NATIVE-ADMIN-APPROVAL-CONTEXT/INTEGRITY-GENERATOR/V82",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 82,
+      "fromSha256": "5c20f40d77bc3980dac5a772321828f8128038d303c3674c159fd0af087fe3fe",
+      "toSha256": "9602b8f35a20b033025b14b7767e9f46bf318ec636f5c9fa5e6b25dd80957466",
+      "reason": "Keep graph98/all103 existing owners, scanner/validator/all historical migrations, immutable21 base obligations/13 pinned profiles, legacy1792 manifest and every original hard gate. Add exactly fifteen source-only native Administration/Approval/shared548-563-context contracts, UI, existing-core adapters, fixed canonical/direct-consumer tests and documentation to existing541 owner. Reuse protected session, setup coordinator, ApprovalWorkbench/EnforcementGate and owned453 recovery; no second store/engine/panel, caller rights, new credentials/provider/harness, paid inference, production effects, audio or KS writes. Source registration is not independent review, CI, merge, release, original550 closure, genuine548565575 model acceptance, KS consumer/receiveACK or whole-portfolio completion."
     }
   ],
   "scanScope": {
@@ -781,15 +789,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1141,
+    "filesScanned": 1154,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 312,
-    "importFiles": 311,
+    "importSites": 313,
+    "importFiles": 312,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2649,
-    "ledgerUniquePaths": 2649
+    "ledgerEntries": 2664,
+    "ledgerUniquePaths": 2664
   },
   "profiles": [
     {
@@ -862,7 +870,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "5c20f40d77bc3980dac5a772321828f8128038d303c3674c159fd0af087fe3fe"
+      "sha256": "9602b8f35a20b033025b14b7767e9f46bf318ec636f5c9fa5e6b25dd80957466"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1318,6 +1326,11 @@
       "importFiles": 1
     },
     {
+      "owner": "pan550",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
       "owner": "pan563",
       "importSites": 1,
       "importFiles": 1
@@ -1648,7 +1661,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "5c20f40d77bc3980dac5a772321828f8128038d303c3674c159fd0af087fe3fe",
+      "sha256": "9602b8f35a20b033025b14b7767e9f46bf318ec636f5c9fa5e6b25dd80957466",
       "basis": "profile-version-migration"
     },
     {

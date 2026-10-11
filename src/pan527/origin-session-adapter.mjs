@@ -1,10 +1,11 @@
+import {isNativeWorkspaceAdministrationV1}from '../pan550/native-administration.mjs';
 import {isNativeWorkspaceKnowledgeV1} from '../pan547/native-knowledge.mjs';
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { constants, closeSync, fstatSync, lstatSync, openSync, readFileSync, realpathSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { createServer as createHttpsServer } from "node:https";
 import Ajv2020 from "ajv/dist/2020.js";
-import { buildPocGuidedDemoSetupPlanV1, expectedPocGuidedDemoTemplatesV1 } from "../../dist/packages/contracts/src/index.js";
+import { buildPocGuidedDemoSetupPlanV1, expectedPocGuidedDemoTemplatesV1, verifyPocEarlyAdminStatusV1 } from "../../dist/packages/contracts/src/index.js";
 import { PocEarlyAdminCoordinatorV1, createPocEarlyAdminDashboardServerV1 } from "../../dist/packages/setup-coordinator/src/index.js";
 import { canonicalJson } from "../../dist/packages/contracts/src/canonical-json.js";
 import { validateBrowserProfileReadV1, validateBrowserProfileWriteV1 } from "../../dist/packages/contracts/src/browser-profile-v1.js";
@@ -291,6 +292,21 @@ export function protectedGuidedOwnerContextV1(gateway, options) {
   return Object.freeze({ identity: product.identity, productRoot: product.productRoot });
 }
 
+const administrationSources=new WeakMap();
+export function isProtectedWorkspaceAdministrationSourceV1(source,binding){const b=administrationSources.get(source);return !!b&&b.identityDigest===binding.identityDigest&&b.tenantId===binding.tenantId;}
+// Private actual product coordinator only. No HTTP role/profile grants, second
+// setup store, synthetic replacement receipt or controller around the engine.
+export function createProtectedWorkspaceAdministrationSourceV1(gateway,options){
+ exactData(options,['optIn','tenantId','identityDigest','origin'],'ADMIN_SOURCE_OWNER_DENIED');const product=ownedProductIngresses.get(gateway)?.get(options.tenantId);
+ if(options.optIn!==true||!product?.workspaceDocument||product.sessions.origin!==options.origin||product.sessions.binding.identityDigest!==options.identityDigest)throw Error('ADMIN_SOURCE_OWNER_DENIED');const workspace=product.workspaceDocument;let closed=false;
+ function scope(principal){if(closed||product.workspaceDocument!==workspace)throw Error('ADMIN_ATTACHMENT_RETIRED');const b=product.sessions.binding;if(!principal||principal.role!=='reviewer'||principal.tenantId!==b.tenantId||principal.instanceId!==b.instanceId||principal.generation!==b.generation)throw Error('ADMIN_ROLE_DENIED');}
+ const source=Object.freeze({read(principal){scope(principal);const actual=verifyPocEarlyAdminStatusV1(JSON.parse(readFileSync(join(product.productRoot,product.setupPlan.storage.ownedStateRoot,'dashboard-status.json'),'utf8')));if(actual.statusDigest!==product.coordinator.status().statusDigest)throw Error('ADMIN_SOURCE_STALE');return actual;},command(principal,operation){scope(principal);const status=product.coordinator.status();if(operation==='RUN_SYNTHETIC_SETUP'){if(status.progress.completedStages!==1)throw Error('ADMIN_SOURCE_STALE');return product.coordinator.runSyntheticSetup();}if(operation==='RESUME')return product.coordinator.resume();throw Error('ADMIN_SCHEMA_DENIED');},close(){closed=true;administrationSources.delete(source);}});administrationSources.set(source,product.sessions.binding);return source;
+}
+export function mountProtectedWorkspaceAdministrationV1(gateway,options){
+ exactData(options,['optIn','tenantId','identityDigest','origin','owner','script'],'ADMIN_SOURCE_OWNER_DENIED');const product=ownedProductIngresses.get(gateway)?.get(options.tenantId);
+ if(options.optIn!==true||!product?.workspaceDocument||!product.workspaceContextSelection||product.workspaceAdministration||product.sessions.origin!==options.origin||product.sessions.binding.identityDigest!==options.identityDigest||!isNativeWorkspaceAdministrationV1(options.owner,product.sessions.binding)||typeof options.script!=='string'||!options.script.length||Buffer.byteLength(options.script)>131072)throw Error('ADMIN_SOURCE_OWNER_DENIED');const attachment=Object.freeze({owner:options.owner,script:options.script});product.workspaceAdministration=attachment;return Object.freeze({close(){if(product.workspaceAdministration===attachment){delete product.workspaceAdministration;attachment.owner.close();}}});
+}
+
 export function protectedWorkspaceSetupStatusV1(gateway, options) {
   exactData(options, ["tenantId", "identityDigest", "origin"], "CONTEXT_NATIVE_OWNER_DENIED");
   const product = ownedProductIngresses.get(gateway)?.get(options.tenantId);
@@ -424,10 +440,10 @@ export function createOptionalHttpsProductIngressV1(options) {
         || (request.headers["sec-fetch-site"] !== undefined && !["same-origin", "none"].includes(request.headers["sec-fetch-site"]))) return reply(response, 403, "HOSTED_ORIGIN_DENIED");
       const rawPath = (request.url ?? "").split("?")[0];
       if ((request.url ?? "").includes("?") && !/\/workspace\/erv$/.test(rawPath)) return reply(response, 404, "HOSTED_ROUTE_DENIED");
-      const match = /^\/t\/([a-z0-9][a-z0-9-]{0,63})(\/api\/(?:status|effective-rights|ask)|\/guided(?:\/app\.js|\/style\.css|\/status|\/command)?|\/workspace(?:\/app\.js|\/style\.css|\/context|\/knowledge\/(?:app\.js|read)|\/model-connection(?:\/(?:app\.js|select|probe|consent))?|\/context-selection(?:\/(?:tab|verify|retire))?|\/module-view(?:\/(?:app\.js|catalog|data|preview|undo-preview|confirm|cancel))?|\/invoice-navigation\/(?:app\.js|search|request|read|ack)|\/agent-run\/(?:app\.js|plan|start|read)|\/erv-human\/(?:app\.js|read|decide|reconcile)|\/erv|\/logout|\/profile|\/configuration|\/analysis|\/notifications(?:\/(?:open|read|reconcile|preferences))?)?)?$/.exec(rawPath);
+      const match = /^\/t\/([a-z0-9][a-z0-9-]{0,63})(\/api\/(?:status|effective-rights|ask)|\/guided(?:\/app\.js|\/style\.css|\/status|\/command)?|\/workspace(?:\/app\.js|\/style\.css|\/context|\/knowledge\/(?:app\.js|read)|\/administration\/(?:app\.js|read|approval)|\/model-connection(?:\/(?:app\.js|select|probe|consent))?|\/context-selection(?:\/(?:tab|verify|retire))?|\/module-view(?:\/(?:app\.js|catalog|data|preview|undo-preview|confirm|cancel))?|\/invoice-navigation\/(?:app\.js|search|request|read|ack)|\/agent-run\/(?:app\.js|plan|start|read)|\/erv-human\/(?:app\.js|read|decide|reconcile)|\/erv|\/logout|\/profile|\/configuration|\/analysis|\/notifications(?:\/(?:open|read|reconcile|preferences))?)?)?$/.exec(rawPath);
       if (!match || !["GET", "POST"].includes(request.method)
         || (match[2]?.startsWith('/workspace/model-connection') && (request.method==='POST') !== ['/workspace/model-connection/select','/workspace/model-connection/probe','/workspace/model-connection/consent'].includes(match[2]))
-        || (!match[2]?.startsWith('/workspace/model-connection') && !["/workspace/profile", "/workspace/configuration", "/workspace/context-selection"].includes(match[2]) && (request.method === "POST") !== ["/workspace/knowledge/read", "/api/ask", "/guided/command", "/workspace/logout", "/workspace/analysis", "/workspace/notifications/open", "/workspace/notifications/read", "/workspace/notifications/reconcile", "/workspace/notifications/preferences", "/workspace/context-selection/tab", "/workspace/context-selection/verify", "/workspace/context-selection/retire", "/workspace/module-view/catalog", "/workspace/module-view/data", "/workspace/module-view/preview", "/workspace/module-view/undo-preview", "/workspace/module-view/confirm", "/workspace/module-view/cancel", "/workspace/invoice-navigation/search", "/workspace/invoice-navigation/request", "/workspace/invoice-navigation/read", "/workspace/invoice-navigation/ack", "/workspace/agent-run/plan", "/workspace/agent-run/start", "/workspace/erv-human/read", "/workspace/erv-human/decide", "/workspace/erv-human/reconcile"].includes(match[2]))) return reply(response, 404, "HOSTED_ROUTE_DENIED");
+        || (!match[2]?.startsWith('/workspace/model-connection') && !["/workspace/profile", "/workspace/configuration", "/workspace/context-selection"].includes(match[2]) && (request.method === "POST") !== ["/workspace/administration/read", "/workspace/administration/approval", "/workspace/knowledge/read", "/api/ask", "/guided/command", "/workspace/logout", "/workspace/analysis", "/workspace/notifications/open", "/workspace/notifications/read", "/workspace/notifications/reconcile", "/workspace/notifications/preferences", "/workspace/context-selection/tab", "/workspace/context-selection/verify", "/workspace/context-selection/retire", "/workspace/module-view/catalog", "/workspace/module-view/data", "/workspace/module-view/preview", "/workspace/module-view/undo-preview", "/workspace/module-view/confirm", "/workspace/module-view/cancel", "/workspace/invoice-navigation/search", "/workspace/invoice-navigation/request", "/workspace/invoice-navigation/read", "/workspace/invoice-navigation/ack", "/workspace/agent-run/plan", "/workspace/agent-run/start", "/workspace/erv-human/read", "/workspace/erv-human/decide", "/workspace/erv-human/reconcile"].includes(match[2]))) return reply(response, 404, "HOSTED_ROUTE_DENIED");
       const product = products.get(match[1]); if (!product) return reply(response, 401, "HOSTED_SESSION_DENIED");
       product.sessions.authenticate(request.headers);
       if (match[2]?.startsWith("/workspace")) {
@@ -466,6 +482,13 @@ export function createOptionalHttpsProductIngressV1(options) {
           check();const operation=match[2].slice('/workspace/invoice-navigation/'.length).toUpperCase(),input=validateWorkspaceNavigationInputV1(operation,body);
           const result=attachment.owner[operation==='ACK'?'acknowledge':operation.toLowerCase()](request.headers,input);check();
           const value=validateWorkspaceNavigationResultV1(operation,result);check();response.writeHead(200,{'content-type':'application/json; charset=utf-8'});response.end(JSON.stringify(value)+'\n');return;
+        }
+        if(match[2]?.startsWith('/workspace/administration/')){
+          const workspace=product.workspaceDocument,context=product.workspaceContextSelection,attachment=product.workspaceAdministration;if(!attachment||!context)return reply(response,404,'HOSTED_ROUTE_DENIED');
+          const check=()=>{product.sessions.authenticate(request.headers);if(workspace!==product.workspaceDocument||context!==product.workspaceContextSelection||attachment!==product.workspaceAdministration)throw Error('ADMIN_ATTACHMENT_RETIRED');};check();
+          if(match[2]==='/workspace/administration/app.js'){if(request.headers['transfer-encoding']!==undefined||request.headers['content-length']!==undefined&&request.headers['content-length']!=='0')return reply(response,400,'HOSTED_BODY_DENIED');response.writeHead(200,{'content-type':'text/javascript; charset=utf-8'});response.end(attachment.script);return;}
+          if(request.headers.origin!==origin)return reply(response,403,'HOSTED_CSRF_DENIED');if(request.headers['content-type']!=='application/json'||request.headers['content-encoding']!==undefined)return reply(response,400,'HOSTED_BODY_DENIED');
+          const chunks=[];let bytes=0;for await(const part of request){bytes+=part.length;if(bytes>4096)return reply(response,413,'HOSTED_BODY_DENIED');chunks.push(part);}let body;try{body=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{return reply(response,400,'HOSTED_BODY_DENIED');}check();const result=match[2]==="/workspace/administration/approval"?await attachment.owner.approval(request.headers,body):attachment.owner.call(request.headers,body);check();response.writeHead(200,{'content-type':'application/json; charset=utf-8'});response.end(JSON.stringify(result)+'\n');return;
         }
         if(match[2]?.startsWith("/workspace/agent-run/")){
           const workspace=product.workspaceDocument,contextOwner=product.workspaceContextSelection,attachment=product.workspaceAgentRun;
@@ -724,6 +747,9 @@ export function createOptionalHttpsProductIngressV1(options) {
     } catch (error) {
       if (response.headersSent) { response.destroy(); return; }
       const code = error instanceof Error ? error.message : "HOSTED_AUTH_UNAVAILABLE";
+      if(['ADMIN_SCHEMA_DENIED','ADMIN_SOURCE_OWNER_DENIED'].includes(code))return reply(response,400,code);
+      if(['ADMIN_SOURCE_STALE','ADMIN_ATTACHMENT_RETIRED'].includes(code))return reply(response,409,code);
+      if(['ADMIN_ROLE_DENIED','ADMIN_CONTEXT_DENIED'].includes(code))return reply(response,403,code);
       if(['KNOWLEDGE_SCHEMA_DENIED','KNOWLEDGE_SELECTOR_DENIED'].includes(code))return reply(response,400,code);
       if(['KNOWLEDGE_GENERATION_STALE','KNOWLEDGE_CONTEXT_STALE','KNOWLEDGE_ATTACHMENT_RETIRED'].includes(code))return reply(response,409,code);
       if(['KNOWLEDGE_CONTEXT_DENIED','KNOWLEDGE_SOURCE_RIGHTS_DENIED'].includes(code))return reply(response,403,code);
@@ -758,6 +784,8 @@ export function createOptionalHttpsProductIngressV1(options) {
       else if(['NAV_TARGET_UNKNOWN_DENIED','NAV_REQUEST_UNKNOWN_DENIED'].includes(code))reply(response,404,code);
       else if(code==='NAV_NATIVE_ROUTE_DENIED')reply(response,403,code);
       else if(['NAV_TARGET_CAPACITY_DENIED','NAV_REQUEST_CAPACITY_DENIED'].includes(code))reply(response,429,code);
+      else if(['ADMIN_APPROVAL_ROLE_DENIED'].includes(code))reply(response,403,code);
+      else if(['ADMIN_APPROVAL_SOURCE_STALE','ADMIN_APPROVAL_NO_RETRY','ADMIN_APPROVAL_RECOVERY_DENIED','ADMIN_APPROVAL_PERSISTENCE_STALE','ADMIN_APPROVAL_BUSY','APPROVAL_SNAPSHOT_STALE_DENIED','OWNER_DECISION_ALREADY_FINAL_DENIED','AUTHORITY_LEASE_EXPIRED_DENIED'].includes(code))reply(response,409,code);
       else if (code === 'AGENT_INPUT_DENIED') reply(response,400,code);
       else if (code === 'AGENT_CONTEXT_DENIED' || code === 'AGENT_REAL_ROUTE_NOT_BOUND_DENIED') reply(response,403,code);
       else if (['AGENT_PLAN_STALE_DENIED','AGENT_PLAN_UNKNOWN_DENIED','AGENT_PLAN_CONSUMED_DENIED','AGENT_SELECTION_CLARIFY_REQUIRED','AGENT_ATTACHMENT_RETIRED','AGENT_OWNER_CLOSED'].includes(code)) reply(response,409,code);
@@ -776,7 +804,7 @@ export function createOptionalHttpsProductIngressV1(options) {
     const sessions = createProtectedSessionAdapterV1({ optIn: true, origin, identity: spec.identity, stateRoot: spec.stateRoot });
     const coordinator = new PocEarlyAdminCoordinatorV1(plan, spec.productRoot, { resume: true });
     const nativeServer = createPocEarlyAdminDashboardServerV1(coordinator);
-    products.set(spec.identity.tenantId, { sessions, coordinator, identity: spec.identity, productRoot: spec.productRoot, handler: nativeServer.listeners("request")[0] });
+    products.set(spec.identity.tenantId, { sessions, coordinator, setupPlan: plan, identity: spec.identity, productRoot: spec.productRoot, handler: nativeServer.listeners("request")[0] });
   }
   server.maxHeadersCount = 32; server.requestTimeout = 5000; server.headersTimeout = 5000; server.keepAliveTimeout = 1000;
   server.on("upgrade", (_request, socket) => socket.end("HTTP/1.1 403 Forbidden\r\nConnection: close\r\nContent-Length: 0\r\n\r\n"));

@@ -11,6 +11,9 @@ export const setupPluginV1: BrowserShellPluginV1 = {
     { id: browserWorkspaceStringValuesV1[76] as string, kind: "ROUTE", slot: browserWorkspaceStringValuesV1[56], factoryId: null, routeId: browserWorkspaceStringValuesV1[76] as string, path: "/workspace/setup", label: browserWorkspaceStringValuesV1[46] as string },
     { id: browserWorkspaceStringValuesV1[186] as string, kind: browserWorkspaceStringValuesV1[12], slot: browserWorkspaceStringValuesV1[37], factoryId: browserWorkspaceStringValuesV1[186] as string, routeId: browserWorkspaceStringValuesV1[76] as string, path: null, label: browserWorkspaceStringValuesV1[46] as string },
     { id: browserWorkspaceStringValuesV1[112] as string, kind: "VIEW", slot: browserWorkspaceStringValuesV1[17], factoryId: browserWorkspaceStringValuesV1[112] as string, routeId: browserWorkspaceStringValuesV1[76] as string, path: null, label: browserWorkspaceStringValuesV1[46] as string },
+    {id:'pan.setup.administration.route',kind:'ROUTE',slot:'shell.routes',factoryId:null,routeId:'pan.setup.administration.route',path:'/workspace/administration',label:'Administration — geschützt'},
+    {id:'pan.setup.administration.navigation',kind:'NAVIGATION',slot:'shell.navigation',factoryId:'pan.setup.administration.navigation',routeId:'pan.setup.administration.route',path:null,label:'Administration — geschützt'},
+    {id:'pan.setup.administration.view',kind:'VIEW',slot:'shell.main',factoryId:'pan.setup.administration.view',routeId:'pan.setup.administration.route',path:null,label:'Administration — geschützt'},
   ],
 };
 export function createSetupViewV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<HTMLElement> {
