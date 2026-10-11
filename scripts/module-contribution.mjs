@@ -173,6 +173,22 @@ function scaffold(root, slug) {
  const dir=`${parent}/${slug}`;mkdirSync(join(root,dir)); // exclusive directory: no overwrite
  const files={'source.mjs':'// Runnable template, not a business product.\nexport const greet = name => `Hello, ${name}`;\n','test.mjs':"import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { greet } from './source.mjs';\ntest('template greeting',()=>assert.equal(greet('world'),'Hello, world'));\n",'contract.json':JSON.stringify({input:'name: string',output:'greeting: string',template:true})};
  files['modules.json']=JSON.stringify({schemaVersion:1,modules:[{id:slug,version:'1',sources:[`${dir}/source.mjs`],contracts:[`${dir}/contract.json`],profiles:[],tests:[`${dir}/test.mjs`],dependencies:{}}]},null,2)+'\n';
+ files['README.md']=`# ${slug}: runnable template, not UI or product acceptance
+
+UI applicability: N/A — non-UI greeting only. Replace this reason if UI behavior is added.
+Use the existing [module guide](../../../docs/MODULE-CONTRIBUTION.md), not a separate standards book.
+
+- User task/input/consequence; exact provider/direct consumer, types/runtime contract and persistence target: fill for actual UI work.
+- Browser → backend → persisted target readback: observe actual entry/request/frontend binding and reopen the required target; API success alone is not browser PASS.
+- Keep proposal, decision, authority and effect separate; show proposal business before/after and consequences before approval.
+- Validate current tenant/session/scope/revision at the server; exercise denied/stale/expired/unknown without false success or blind effect retry. Preserve shell/plugin/context and lifecycle cleanup.
+- Desktop and 390 px: positive page/control bounds, necessary table-local scroll, real screenshots; actually inspect clipping, readability, overlap and affected long text/focus/keyboard/zoom/empty/loading/error states.
+- Bind exact commit/build, viewport, data/context revision and state, with applicable design reference/version and relevant departures; concept images are not responsive baselines.
+- One representative attached-module journey plus direct negative/consumer cases; register in existing canonical CI under pinned tools and synthetic data. Existing #537/#538 own their bug regressions. NOT_RUN is not PASS.
+- Record actual focused independent review, exact-candidate checks, merge/release/anonymous readback; N/A needs a concrete reason. A greeting test or unseen saved image is not UI acceptance.
+
+Template only; do not declare these UI checks executed or the module integrated from scaffold generation.
+`;
  for(const [path,bytes] of Object.entries(files))writeFileSync(join(root,dir,path),bytes,{flag:'wx'});
  return {directory:dir,template:true,next:`node --test ${dir}/test.mjs`,check:`node scripts/module-contribution.mjs check --descriptor ${dir}/modules.json`};
 }

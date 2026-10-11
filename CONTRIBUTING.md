@@ -112,6 +112,50 @@ schemas, loopback defaults, minimal audit data, and ownership-scoped cleanup.
 
 ## Progress and review
 
+### UI-QUALITY-01: conditional browser and visual evidence
+
+For a new or changed UI, apply these rules in the existing module guide and PR
+checklist; do not create a separate standards book or approval hierarchy.
+State the user task, input and consequence, the exact contract/renderer and
+provider/direct consumer, and whether persistent state changes. UI applicability
+is based on changed behavior, not a documentation-only label. A non-UI change
+may use N/A with a concrete reason; an added template is not UI acceptance.
+
+- Browser → backend → persisted target readback: exercise the actual product
+  entry, observe its request and frontend binding, validate the backend contract,
+  and reopen the required target. A separate API success is not browser success.
+- Keep proposal, decision, authority and effect distinct. Source the business
+  before/after Diff from the proposal, and show consequences before approval.
+- Enforce current tenant, session, scope and revision at the server. Exercise
+  directly affected denied, stale, expired and unknown outcomes; no false success
+  or blind mutation retry. Layout and notifications do not grant rights.
+- Capture Desktop and 390 px with positive document/control dimensions; keep
+  necessary domain tables locally scrollable. Include affected long German text,
+  keyboard/focus, zoom, empty/loading/error/denied and panel states, not every
+  possible module combination. Save real rendered images and actually inspect
+  clipping, overlap, hierarchy, readability and spacing. A dimension-only test
+  or an unseen screenshot is not visual acceptance.
+- Bind evidence to exact commit/build, viewport, data/context revision and state.
+  Name the applicable design reference and version; explain relevant departures.
+  Concept images are design references, not responsive pixel baselines or proof
+  of capabilities. Reuse unchanged valid whole-image evidence in its actual scope.
+- Preserve shell/plugin/context boundaries, cleanup and unaffected modules on
+  plugin failure. Run one representative journey and directly affected negative
+  and consumer cases under the pinned toolchain with synthetic data. NOT_RUN is
+  not PASS; registration and source checks are not executed product evidence.
+
+The existing `npm run pan537:test` family owns the actual UI-01 proposal-Diff
+regression (#537) and direct UI-02 390-px setup regression (#538). It runs in the
+canonical `npm test` pretest, reached by existing CI's `proof:secure-default`;
+`npm run pan528:test` remains the guided-journey owner. Do not create another bug
+owner, substitute a mock provider, skip a mandatory case, or change integrity,
+privacy, security or release/readback gates. Existing #545 owns these quality
+rules/registration, not runtime features or total M1 acceptance.
+
+Record infrastructure failure separately with the exact failed step and resume
+condition; continue independent work. Focussed independent review and existing
+exact-candidate CI, merge, classified release and anonymous readback still apply.
+
 Use one public issue for each clear, adoptable delivery slice or epic; do not
 mirror every internal microtask. Each issue records scope, non-scope,
 dependencies, measurable acceptance criteria, negative probes, required
