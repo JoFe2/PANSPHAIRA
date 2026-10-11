@@ -6,6 +6,8 @@ import {runtimeIdentityDigestV1,validateRuntimeIdentityV1} from '../pan526/runti
 import {setupPluginV1} from '../../dist/packages/browser-workspace/src/plugin-setup-v1.js';
 import {ervPluginV1} from '../../dist/packages/browser-workspace/src/plugin-erv-v1.js';
 import {knowledgePluginV1} from '../../dist/packages/browser-workspace/src/plugin-knowledge-v1.js';
+import {configurationDraftPluginV1}from '../../dist/packages/browser-workspace/src/plugin-configuration-draft-v1.js';
+import {isAgentConfigurationDraftStoreV1}from '../pan563/draft-store.mjs';
 import {isNativeWorkspaceKnowledgeSourceV1} from '../pan547/native-knowledge-source.mjs';
 import {validateBrowserShellPluginV1} from '../../dist/packages/contracts/src/browser-shell-plugin-v1.js';
 import {validateBrowserProfileReadV1} from '../../dist/packages/contracts/src/browser-profile-v1.js';
@@ -18,15 +20,16 @@ function same(a,b){return JSON.stringify(a)===JSON.stringify(b);}
 function equalSecret(a,b){return typeof a==='string'&&typeof b==='string'&&a.length===b.length&&timingSafeEqual(Buffer.from(a),Buffer.from(b));}
 // Projection of the EXISTING code-owned Setup/ERV plugin descriptors. There is
 // no second plugin installer, HTTP catalog registration, taskstore or ledger.
-const nativeFactoryIds=new Set(['pan.setup.navigation','pan.setup.view','pan.erv.navigation','pan.erv.view','pan.erv.information','pan.erv.action','pan.knowledge.navigation','pan.knowledge.view','pan.knowledge.context']);
-function registered(moduleId,viewId,knowledgeSource){const source=moduleId==='pan.setup'?setupPluginV1:moduleId==='pan.erv'?ervPluginV1:moduleId==='pan.knowledge'&&knowledgeSource?knowledgePluginV1:null;if(!source)throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const result=validateBrowserShellPluginV1(source,nativeFactoryIds);if(result.outcome!=='DESCRIPTOR_VALID')throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const p=result.descriptor;if(!p.enabled||p.needs.dependencies.length!==0||!p.contributions.some(x=>x.kind==='VIEW'&&x.id===viewId))throw new Error('CONTEXT_NATIVE_VIEW_DENIED');return p;}
+const nativeFactoryIds=new Set(['pan.setup.navigation','pan.setup.view','pan.setup.administration.navigation','pan.setup.administration.view','pan.erv.navigation','pan.erv.view','pan.erv.information','pan.erv.action','pan.knowledge.navigation','pan.knowledge.view','pan.knowledge.context','pan.configuration.navigation','pan.configuration.view']);
+function registered(moduleId,viewId,knowledgeSource,configurationDrafts){const source=moduleId==='pan.setup'?setupPluginV1:moduleId==='pan.erv'?ervPluginV1:moduleId==='pan.knowledge'&&knowledgeSource?knowledgePluginV1:moduleId==='pan.configuration'&&configurationDrafts?configurationDraftPluginV1:null;if(!source)throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const result=validateBrowserShellPluginV1(source,nativeFactoryIds);if(result.outcome!=='DESCRIPTOR_VALID')throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const p=result.descriptor;if(!p.enabled||p.needs.dependencies.length!==0||!p.contributions.some(x=>x.kind==='VIEW'&&x.id===viewId))throw new Error('CONTEXT_NATIVE_VIEW_DENIED');return p;}
 export function createNativeWorkspaceContextSelectionV1(options){
- const extra=options&&Object.hasOwn(options,'moduleViewStore'),knowledge=options&&Object.hasOwn(options,'knowledgeSource');
- exact(options,['sessions','identity','nativeReader','readSetup','readProfile',...(extra?['moduleViewStore']:[]),...(knowledge?['knowledgeSource']:[])],'CONTEXT_NATIVE_OWNER_DENIED');
+ const extra=options&&Object.hasOwn(options,'moduleViewStore'),knowledge=options&&Object.hasOwn(options,'knowledgeSource'),configuration=options&&Object.hasOwn(options,'configurationDrafts');
+ exact(options,['sessions','identity','nativeReader','readSetup','readProfile',...(extra?['moduleViewStore']:[]),...(knowledge?['knowledgeSource']:[]),...(configuration?['configurationDrafts']:[])],'CONTEXT_NATIVE_OWNER_DENIED');
  const {sessions,nativeReader,readSetup,readProfile}=options,identity=validateRuntimeIdentityV1(options.identity);
- const moduleViewStore=extra?options.moduleViewStore:null,knowledgeSource=knowledge?options.knowledgeSource:null;
+ const moduleViewStore=extra?options.moduleViewStore:null,knowledgeSource=knowledge?options.knowledgeSource:null,configurationDrafts=configuration?options.configurationDrafts:null;
+ if(configuration&&!isAgentConfigurationDraftStoreV1(configurationDrafts,sessions.binding))throw Error('CONTEXT_NATIVE_OWNER_DENIED');
  if(knowledge&&!isNativeWorkspaceKnowledgeSourceV1(knowledgeSource,identity.tenantId))throw Error('CONTEXT_NATIVE_OWNER_DENIED');
- const catalogDigest=profile=>hash(JSON.stringify(knowledgeSource?[setupPluginV1,ervPluginV1,knowledgePluginV1,knowledgeSource.generationDigest,profile.catalog]:[setupPluginV1,ervPluginV1,profile.catalog]));
+ const catalogDigest=profile=>hash(JSON.stringify([setupPluginV1,ervPluginV1,...(knowledgeSource?[knowledgePluginV1,knowledgeSource.generationDigest]:[]),...(configurationDrafts?[configurationDraftPluginV1]:[]),profile.catalog]));
  if(extra&&!isWorkspaceModuleViewStoreV1(moduleViewStore))throw new Error('CONTEXT_NATIVE_OWNER_DENIED');
  if(!isProtectedSessionAdapterV1(sessions,identity?.tenantId)||!isNativeErvReadAdapterV1(nativeReader,identity.tenantId)||typeof readSetup!=='function'||typeof readProfile!=='function'||sessions.binding.instanceId!==identity.instanceId||sessions.binding.generation!==identity.generation)throw new Error('CONTEXT_NATIVE_OWNER_DENIED');
  if(runtimeIdentityDigestV1(identity)!==sessions.binding.identityDigest)throw new Error('CONTEXT_NATIVE_OWNER_DENIED');
@@ -40,8 +43,9 @@ export function createNativeWorkspaceContextSelectionV1(options){
   if(!['reader','reviewer'].includes(principal.role)||principal.tenantId!==identity.tenantId||principal.instanceId!==identity.instanceId||principal.generation!==identity.generation||identity.authorityProfile!=='SAFE_GUIDED'||!identity.effectiveRights.includes('demo.status.read'))throw new Error('CONTEXT_NATIVE_RIGHTS_DENIED');
   return {principal,sessionId};
  }
+ const hostBasisDigest=(setupBytes,draft)=>hash(draft?JSON.stringify({setup:setupBytes,draft}):setupBytes);
  function state(a,tab,target=tab){
-  registered(target.moduleId,target.viewId,knowledgeSource);
+  registered(target.moduleId,target.viewId,knowledgeSource,configurationDrafts);
   // Owner-local sequence fences nested observations on ANY tab, before the
   // first native callback. It is not a public revision axis or authority grant.
   nativeReadSequence=next(nativeReadSequence);const capturedReadSequence=nativeReadSequence;
@@ -52,7 +56,8 @@ export function createNativeWorkspaceContextSelectionV1(options){
   const stableTab=()=>{const fresh=authorize(a.headers??{});if(nativeReadSequence!==capturedReadSequence||fresh.sessionId!==a.sessionId||fresh.principal.subjectId!==a.principal.subjectId||fresh.principal.role!==a.principal.role||keys.some((key,i)=>tab[key]!==before[i]))throw new Error('CONTEXT_REVISION_STALE');if(clock()>=tab.expiresAtMs)throw new Error('CONTEXT_LEASE_EXPIRED');};
   const setupBytes=JSON.stringify(readSetup(a.principal));let setup;try{setup=JSON.parse(setupBytes);}catch{throw new Error('CONTEXT_NATIVE_RIGHTS_DENIED');}stableTab();
   if(setup?.apiVersion!=='chimpmaera.dev/poc-early-admin-status/v1'||setup.kind!=='PocEarlyAdminStatus'||setup.authority?.profile?.profileId!=='SAFE_GUIDED'||!Array.isArray(setup.stages)||setup.stages.length>16)throw new Error('CONTEXT_NATIVE_RIGHTS_DENIED');
-  const digest=hash(setupBytes);if(hostDigest!==null&&hostDigest!==digest)hostRevision=next(hostRevision);hostDigest=digest;const capturedHostRevision=hostRevision;
+  const nativeDraft=configurationDrafts?configurationDrafts.read(a.principal):null;stableTab();
+  const digest=hostBasisDigest(setupBytes,nativeDraft);if(hostDigest!==null&&hostDigest!==digest)hostRevision=next(hostRevision);hostDigest=digest;const capturedHostRevision=hostRevision;
   const profile=validateBrowserProfileReadV1(readProfile(a.principal)),main=profile.catalog.find(x=>x.id==='shell.main');
   stableTab();
   const personalModuleView=moduleViewStore===null?null:moduleViewStore.read(a.principal);
@@ -62,7 +67,8 @@ export function createNativeWorkspaceContextSelectionV1(options){
   if(main?.state!=='AVAILABLE'||!profile.effectiveItems.some(x=>x.id==='shell.main'&&x.visible))throw new Error('CONTEXT_NATIVE_VIEW_DENIED');
   const catalog=catalogDigest(profile);
   let primaryObject=null,selections=[];
-  if(target.moduleId==='pan.knowledge'){
+  if(target.moduleId==='pan.configuration'){if(target.primaryObjectId!==null||!nativeDraft)throw Error('CONTEXT_NATIVE_OBJECT_DENIED');const nativeFieldIds=['context.locale','context.timezone','goal.purpose','goal.agentName','goal.useCase','runtime.templateId','model.reference','model.connection','model.requirements','budget.modelUnits','persistence.mode','modules.selection'];selections=nativeFieldIds.map(field=>({elementId:'pan.configuration.field',rowId:field,label:'Konfigurationsparameter: '+nativeDraft.definitions[field].label}));
+  }else if(target.moduleId==='pan.knowledge'){
    if(target.primaryObjectId!==null)throw Error('CONTEXT_NATIVE_OBJECT_DENIED');
    selections=knowledgeSource.read(a.principal).map(e=>({elementId:'pan.knowledge.entry',rowId:e.selector,label:e.label}));
   }else if(target.moduleId==='pan.setup'){
@@ -111,7 +117,8 @@ export function createNativeWorkspaceContextSelectionV1(options){
    const stable=()=>{const{a,tab}=tabFor(headers);if(tab!==originalTab||tab.context!==current||tab.epoch!==current.binding.epoch)throw new Error('CONTEXT_REVISION_STALE');if(clock()>=current.lease.expiresAtMs)throw new Error('CONTEXT_LEASE_EXPIRED');return a;};
    stable();return before=>{
     const a=stable();if(before.invoiceId!==leading.invoiceId||before.nativeRevision!==leading.revision||before.basisDigest!==leading.basisDigest)throw new Error('CONTEXT_NATIVE_OBJECT_DENIED');
-    if(hash(JSON.stringify(readSetup(a.principal)))!==capturedHostDigest||hostRevision!==current.revisions.hostRevision)throw new Error('CONTEXT_REVISION_STALE');
+    const setupBytes=JSON.stringify(readSetup(a.principal)),nativeDraft=configurationDrafts?configurationDrafts.read(a.principal):null;stable();
+    if(hostBasisDigest(setupBytes,nativeDraft)!==capturedHostDigest||hostRevision!==current.revisions.hostRevision)throw new Error('CONTEXT_REVISION_STALE');
     const profile=validateBrowserProfileReadV1(readProfile(a.principal)),main=profile.catalog.find(x=>x.id==='shell.main'),personalRevision=moduleViewStore?.read(a.principal).revision??0;
     if(main?.state!=='AVAILABLE'||!profile.effectiveItems.some(x=>x.id==='shell.main'&&x.visible)||profile.revision+1+personalRevision!==current.revisions.viewRevision||catalogDigest(profile)!==originalTab.catalogDigest)throw new Error('CONTEXT_REVISION_STALE');stable();
    };

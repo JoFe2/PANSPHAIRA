@@ -3167,6 +3167,68 @@ pan541Node.ownedTests.push("npm run pan565:test");
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan565:test")) repositoryIntegrityNode.ownedTests.push("npm run pan565:test");
 
 // PAN547 additive native Knowledge/preflight; original bounded ownership/gates.
+const pan550Inputs = [
+  [
+    "docs/architecture/native-administration-approval-browser-v1.md",
+    "DERIVED_EVIDENCE"
+  ],
+  [
+    "packages/contracts/src/workspace-administration-v1.ts",
+    "CONTRACT"
+  ],
+  [
+    "packages/contracts/src/workspace-administration-approval-v1.ts",
+    "CONTRACT"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-administration-v1.ts",
+    "SOURCE"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-administration-v1.css",
+    "SOURCE"
+  ],
+  [
+    "src/pan550/native-administration.mjs",
+    "SECURITY"
+  ],
+  [
+    "src/pan550/native-approval-source.mjs",
+    "SECURITY"
+  ],
+  [
+    "scripts/run-pan550-native-administration-tests.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan550/native-administration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan550/native-approval.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan550/browser-fixture.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan550/browser-administration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan550/browser-approval.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan550/registration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan550/native-coupled-context.test.mjs",
+    "VALIDATOR"
+  ]
+];
 const pan547Inputs = [
   [
     "docs/architecture/native-knowledge-capability-browser-v1.md",
@@ -3220,6 +3282,9 @@ const pan547Inputs = [
 pan541Node.inputs.push(...pan547Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)})));
 pan541Node.ownedTests.push('npm run pan547:test');
 if (!repositoryIntegrityNode.ownedTests.includes('npm run pan547:test')) repositoryIntegrityNode.ownedTests.push('npm run pan547:test');
+pan541Node.inputs.push(...pan550Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)})));
+pan541Node.ownedTests.push('npm run pan550:test');
+if (!repositoryIntegrityNode.ownedTests.includes('npm run pan550:test')) repositoryIntegrityNode.ownedTests.push('npm run pan550:test');
 
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
@@ -3253,6 +3318,7 @@ for (const line of readFileSync(path.join(root, "release/public-files.manifest")
 }
 for (const [inputPath] of pan463Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan547Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan550Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan464Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan465Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan466Inputs) entries.set(inputPath, null);

@@ -314,6 +314,8 @@ function boundTaskIdentityDigest(binding) {
  * This is the real business seam; nothing here bypasses approval, lease,
  * policy or reservation semantics.
  */
+const ownedBusinessOperationOwners=new WeakSet();
+export function isOwnedSyntheticBusinessOperationV1(value){return ownedBusinessOperationOwners.has(value);}
 export function createLocalBusinessOperation({ provider, now, root }) {
   const dir = root ?? mkdtempSync(join(tmpdir(), "cm-pan442-"));
   const apiToken = "a".repeat(48);
@@ -406,7 +408,7 @@ export function createLocalBusinessOperation({ provider, now, root }) {
  * issuer store; caller-supplied source, digest or binding fields are rejected
  * by the exact-key check before any comparison.
  */
-export function createOwnedSyntheticBusinessOperation({ provider, now, root }) {
+export function createOwnedSyntheticBusinessOperation({ provider, now, root, explicitOwnerApproval=false }) {
   if (typeof root !== "string" || !root.split(/[\\/]+/).includes("pan453-owned-v2"))
     throw new Error("JOURNAL_OWNED_NAMESPACE_REQUIRED_DENIED");
   const dir = root ?? mkdtempSync(join(tmpdir(), "cm-pan442-"));
@@ -425,6 +427,9 @@ export function createOwnedSyntheticBusinessOperation({ provider, now, root }) {
     policyGeneration: 1,
   };
   let runtime;
+  let currentOwnerGuard=null;
+  const guardedProvider={};
+  for(const method of ['readAuthoritativeSnapshot','mutate','readback','reconcile'])if(typeof provider[method]==='function')guardedProvider[method]=async(...args)=>{currentOwnerGuard?.();const value=await provider[method](...args);currentOwnerGuard?.();return value;};
   function freshRuntime(journalOwner) {
     const gate = new DemoMutationGate({
       apiToken,
@@ -433,7 +438,7 @@ export function createOwnedSyntheticBusinessOperation({ provider, now, root }) {
       expectedOrigin,
       receiptPath: join(dir, "effects.json"),
       journalOwner,
-      provider,
+      provider:explicitOwnerApproval?guardedProvider:provider,
       adminAiPolicyDigest: policyDigest,
       now,
       authorityContext,
@@ -447,8 +452,8 @@ export function createOwnedSyntheticBusinessOperation({ provider, now, root }) {
     const workbench = new ApprovalWorkbench({
       receiptPath: join(dir, "approvals.json"),
       journalOwner,
-      issueAuthority: (fields) => gate.ownerAuthority(fields),
-      readAuthoritativeSnapshot: (action) => provider.readAuthoritativeSnapshot(action),
+      issueAuthority: (fields) => {currentOwnerGuard?.();return gate.ownerAuthority(fields);},
+      readAuthoritativeSnapshot: (action) => (explicitOwnerApproval?guardedProvider:provider).readAuthoritativeSnapshot(action),
       now,
       leaseTtlMs: 30_000,
       policyDigest,
@@ -567,9 +572,12 @@ export function createOwnedSyntheticBusinessOperation({ provider, now, root }) {
       owner.release();
     }
   }
-  return { execute, get gate() { return runtime?.gate; },
-    get workbench() { return runtime?.workbench; },
-    get poc() { return runtime?.poc; }, dir };
+  // Thin explicit UI consumption of the SAME owned453 authority/recovery
+  // kernels. Only a current native owner operation may use this seam.
+  async function withCurrentOwnerGuard(check,operation){if(typeof check!=='function'||currentOwnerGuard!==null)throw Error('ADMIN_APPROVAL_BUSY');check();const owner=acquireLocalJournalOwner(dir);currentOwnerGuard=check;try{runtime=freshRuntime(owner.token);const value=await operation();check();return value;}finally{currentOwnerGuard=null;owner.release();}}
+  async function executeApproved(decisionDigest){if(!currentOwnerGuard)throw Error('ADMIN_APPROVAL_OWNER_DENIED');currentOwnerGuard();const proposal=runtime.workbench.state.proposals[decisionDigest],decision=runtime.workbench.readDecision(decisionDigest);if(!proposal||decision.receipt.ownerDecision!=='APPROVE'||!decision.authority)throw Error('ADMIN_APPROVAL_NOT_GRANTED');return runtime.gate.execute(localRequest,{action:proposal.action,actionDigest:proposal.actionDigest,businessDiff:proposal.businessDiff,businessDiffDigest:proposal.businessDiffDigest,authority:decision.authority});}
+  if(explicitOwnerApproval){const initialOwner=acquireLocalJournalOwner(dir);try{runtime=freshRuntime(initialOwner.token);}finally{initialOwner.release();}}
+  const operation={execute,get gate(){return runtime?.gate;},get workbench(){return runtime?.workbench;},get poc(){return runtime?.poc;},dir,withCurrentOwnerGuard,executeApproved};if(explicitOwnerApproval)ownedBusinessOperationOwners.add(operation);return operation;
 }
 
 /**

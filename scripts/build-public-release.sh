@@ -744,6 +744,23 @@ repository_only_files = {
     "tests/pan546/native-profile-reservation-probe.mjs",
     "tests/pan546/native-human-reservation-probe.mjs",
 
+    # PAN550 additive protected Administration/Approval/shared-context source-only inputs.
+    "docs/architecture/native-administration-approval-browser-v1.md",
+    "packages/contracts/src/workspace-administration-v1.ts",
+    "packages/contracts/src/workspace-administration-approval-v1.ts",
+    "packages/browser-workspace/src/workspace-administration-v1.ts",
+    "packages/browser-workspace/src/workspace-administration-v1.css",
+    "src/pan550/native-administration.mjs",
+    "src/pan550/native-approval-source.mjs",
+    "scripts/run-pan550-native-administration-tests.mjs",
+    "tests/pan550/native-administration.test.mjs",
+    "tests/pan550/native-approval.test.mjs",
+    "tests/pan550/native-coupled-context.test.mjs",
+    "tests/pan550/browser-fixture.mjs",
+    "tests/pan550/browser-administration.test.mjs",
+    "tests/pan550/browser-approval.test.mjs",
+    "tests/pan550/registration.test.mjs",
+
     # PAN547 additive native Knowledge/preflight source-only inputs.
     "docs/architecture/native-knowledge-capability-browser-v1.md",
     "packages/contracts/src/workspace-knowledge-v1.ts",

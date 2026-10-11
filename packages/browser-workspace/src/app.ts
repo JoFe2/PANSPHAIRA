@@ -84,6 +84,7 @@ async function start() {
   } });
   const contextSelection = document.body.dataset.ownerContextSelection === "true"
     ? createWorkspaceContextSelectionV1({ root: element("shell.context-selection"), base, context: owner.context, signal: lifetime.signal }) : null;
+  if(document.body.dataset.ownerAdministration==='true'&&document.body.dataset.ownerAgentRuns!=='true'&&contextSelection)void import(base+'/workspace/administration/app.js').then(module=>{if(!lifetime.signal.aborted)module.mountWorkspaceAdministrationManualPanelV1({container:canvas,context:contextSelection,signal:lifetime.signal});}).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Gemeinsames Manuellpanel nicht verfügbar; Einrichtung, Fachnavigation und Abmelden bleiben unabhängig.'));});
   let moduleViewEditor: ReturnType<typeof createWorkspaceModuleViewEditorV1> | null = null;
   // Optional editor transport never gates the shared registry, navigation or logout.
   const moduleViewReady = document.body.dataset.ownerModuleViews === "true" && contextSelection
@@ -111,7 +112,7 @@ async function start() {
   const diagnostic = document.body.dataset.ownerDiagnosticPlugins === "true" ? diagnosticPluginsV1() : null;
   const configurationEnabled = document.body.dataset.ownerConfigurationDrafts === "true";
   const analysisEnabled = document.body.dataset.ownerAnalysisReader === "true";
-  const plugins = [setupPluginV1, ervPluginV1]; if (analysisEnabled) plugins.push(analysisPluginV1); if(document.body.dataset.ownerKnowledgeExplorer==="true"&&contextSelection)plugins.push(knowledgePluginV1); if (configurationEnabled) plugins.push(configurationDraftPluginV1); if (diagnostic) plugins.push(diagnostic.broken, diagnostic.disabled, diagnostic.missing);
+  const plugins = [document.body.dataset.ownerAdministration==="true"?setupPluginV1:{...setupPluginV1,contributions:setupPluginV1.contributions.filter(c=>!c.id.startsWith("pan.setup.administration."))}, ervPluginV1]; if (analysisEnabled) plugins.push(analysisPluginV1); if(document.body.dataset.ownerKnowledgeExplorer==="true"&&contextSelection)plugins.push(knowledgePluginV1); if (configurationEnabled) plugins.push(configurationDraftPluginV1); if (diagnostic) plugins.push(diagnostic.broken, diagnostic.disabled, diagnostic.missing);
   const diagnosticStates: string[] = [];
   function showStates(message: string) {
     widget.replaceChildren(text("p", message));
@@ -121,6 +122,7 @@ async function start() {
     [browserWorkspaceStringValuesV1[112] as string, createSetupViewV1(api)], [browserWorkspaceStringValuesV1[30] as string, createErvViewV1(api)], [browserWorkspaceStringValuesV1[13] as string, createErvPanelV1(api)], [browserWorkspaceStringValuesV1[75] as string, createErvActionV1(api)],
   ]);
   if(document.body.dataset.ownerKnowledgeExplorer==="true"&&contextSelection){for(const kind of ["VIEW","PANEL"] as const){factories.set(kind==="VIEW"?"pan.knowledge.view":"pan.knowledge.context",{kind,async render({target,signal}){target.append(text("p","Wissensexplorer wird geladen …"));const module=await import(base+"/workspace/knowledge/app.js");if(!signal.aborted&&target.isConnected)module[kind==="VIEW"?"renderWorkspaceKnowledgeViewV1":"renderWorkspaceKnowledgePanelV1"]({target,signal,context:contextSelection,profile:()=>profileEditor,selected:()=>link?.path,renderPanel});}});}}
+  if(document.body.dataset.ownerAdministration==='true'&&contextSelection)factories.set('pan.setup.administration.view',{kind:'VIEW',async render({target,signal}){target.append(text('p','Geschützte Administration wird geladen …'));const module=await import(base+'/workspace/administration/app.js');if(!signal.aborted&&target.isConnected)module.renderWorkspaceAdministrationV1({target,signal,context:contextSelection});}});
   if (diagnostic) for (const p of [diagnostic.broken, diagnostic.disabled, diagnostic.missing, diagnostic.incompatible]) factories.set(p.id + ".view", diagnosticFailingViewV1);
   if (configurationEnabled) factories.set(browserWorkspaceStringValuesV1[110] as string, createConfigurationDraftViewV1(owner.context,draft=>{draftOwners.add(draft);return()=>draftOwners.delete(draft);}));
   if (analysisEnabled) factories.set(browserWorkspaceStringValuesV1[109] as string, createAnalysisViewV1({ base, context: owner.context, selected: () => link }));
@@ -182,6 +184,8 @@ async function start() {
       }
       return;
     }
+    document.body.dataset.administrationActive=String(document.body.dataset.ownerAdministration==='true'&&selected.path==='/workspace/administration');
+    if(document.body.dataset.ownerAdministration==='true'){const heading=document.querySelector('header strong'),description=document.querySelector('header p');if(heading)heading.textContent='PanSphaira';if(description)description.textContent=selected.path==='/workspace/administration'?'Geschützte Einrichtung, Freigaben und Wiederaufnahme':'Gemeinsamer Arbeitsplatz · native Fachansichten';}
     link = selected;
     targetTransition=!!native;try{owner.switchContext({ ...current, objectId: selected.path === browserWorkspaceStringValuesV1[42] ? selected.objectId ?? browserWorkspaceStringValuesV1[94] : selected.path === browserWorkspaceStringValuesV1[89] ? selected.objectId ?? "analysis:common-trade-01:stock" : null, revision: current.revision + 1 });}finally{targetTransition=false;}disposal();
     const activation = captureActivation(invocation); if (!activation.live()) return;
@@ -192,7 +196,7 @@ async function start() {
       const rendered = await registry.render(c.id, nav); if (!activation.live() || rendered.outcome === browserWorkspaceStringValuesV1[120]) return;
     }
     const plugin = plugins.find(p => p.contributions.some(c => c.kind === "ROUTE" && c.path === selected.path));
-    const view = plugin?.contributions.find(c => c.kind === "VIEW"); if (!view) throw new Error("WORKSPACE_VIEW_MISSING");
+    const route=plugin?.contributions.find(c=>c.kind==="ROUTE"&&c.path===selected.path);const view = plugin?.contributions.find(c => c.kind === "VIEW" && c.routeId===route?.id); if (!view) throw new Error("WORKSPACE_VIEW_MISSING");
     const nativeContextEpoch = activation.nativeContextEpoch;
     const target = document.createElement(browserWorkspaceStringValuesV1[10]); main.append(target); const result = await registry.render(view.id, target);
     if (!activation.live()) return;
