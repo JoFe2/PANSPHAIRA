@@ -53,4 +53,12 @@ export function createNativeErvReadAdapterV1(options) {
   });
   owned.set(reader, tenantId); return reader;
 }
+// Cold bootstrap has no invoice source yet. This is the same reader owner
+// presenting explicit unavailability, never synthetic invoice results or new
+// business authority. Setup/configuration need no invoice prerequisite.
+export function createUnconfiguredNativeErvReadAdapterV1(tenantId) {
+  if(typeof tenantId!=='string'||!/^[a-z0-9][a-z0-9-]{0,63}$/.test(tenantId))throw new Error('ERV_NATIVE_OWNER_BINDING_DENIED');
+  const unavailable=()=>{throw new Error('ERV_NATIVE_SOURCE_NOT_CONFIGURED');};
+  const reader=Object.freeze({read:unavailable,search:unavailable});owned.set(reader,tenantId);return reader;
+}
 export const isNativeErvReadAdapterV1 = (reader, tenantId) => typeof tenantId === "string" && owned.has(reader) && owned.get(reader) === tenantId;
