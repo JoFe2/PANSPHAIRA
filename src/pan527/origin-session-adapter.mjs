@@ -43,6 +43,14 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 let routeBindingValidator;
 const ownedProductIngresses = new WeakMap();
 const ownedSessionRevocations = new WeakMap();
+// Additive first-possession seam: only a real existing session owner can expose
+// it, and its atomic state shares that owner's authenticated session envelope.
+const ownedFirstPossessionFactories = new WeakMap();
+export function createProtectedFirstPossessionV1(sessions, options) {
+  const factory = ownedFirstPossessionFactories.get(sessions);
+  if (!factory) throw new Error('HOSTED_BOOTSTRAP_OWNER_DENIED');
+  return factory(options);
+}
 // Code-owner composition marker; a serialized role/binding or copied facade
 // is not a protected session owner. Read-only counterpart adapters stay read-only.
 export function isProtectedSessionAdapterV1(adapter, tenantId) {
@@ -151,11 +159,19 @@ function createOwnerSessionStoreV1(origin, identity, root, binding, cookieName, 
     try {
       const item = JSON.parse(privateBytes(storePath).toString("utf8"));
       exactData(item, ["payload", "mac"], "HOSTED_AUTH_UNAVAILABLE");
-      exactData(item.payload, ["schemaVersion", "sessions"], "HOSTED_AUTH_UNAVAILABLE");
+      exactData(item.payload, ["schemaVersion", "sessions", ...(Object.hasOwn(item.payload, "firstPossession") ? ["firstPossession"] : []), ...(Object.hasOwn(item.payload, "initialization") ? ["initialization"] : []), ...(Object.hasOwn(item.payload, "resumeProof") ? ["resumeProof"] : [])], "HOSTED_AUTH_UNAVAILABLE");
       if (item.payload.schemaVersion !== "pansphaira.hosted-session/store/v1" || !/^[a-f0-9]{64}$/.test(item.mac)) throw new Error("HOSTED_AUTH_UNAVAILABLE");
       const actual = createHmac("sha256", key()).update(canonicalJson(item.payload)).digest();
       if (!timingSafeEqual(actual, Buffer.from(item.mac, "hex")) || !item.payload.sessions
         || Object.getPrototypeOf(item.payload.sessions) !== Object.prototype || Object.keys(item.payload.sessions).length > 256) throw new Error("HOSTED_AUTH_UNAVAILABLE");
+      if (Object.hasOwn(item.payload, "initialization")) {
+        const mark = item.payload.initialization;
+        exactData(mark, ["schemaVersion", "binding", "subjectId", "initializedAtMs"], "HOSTED_AUTH_UNAVAILABLE");
+        if (mark.schemaVersion !== "pansphaira.hosted-session/initialization/v1"
+          || typeof mark.subjectId !== "string" || !/^[a-z0-9][a-z0-9:_-]{0,79}$/.test(mark.subjectId)
+          || !Number.isSafeInteger(mark.initializedAtMs) || mark.initializedAtMs < 1
+          || canonicalJson(mark.binding) !== canonicalJson(binding)) throw new Error("HOSTED_AUTH_UNAVAILABLE");
+      }
       return item.payload;
     } catch { throw new Error("HOSTED_AUTH_UNAVAILABLE"); }
   }
@@ -173,6 +189,9 @@ function createOwnerSessionStoreV1(origin, identity, root, binding, cookieName, 
       const token = randomBytes(32).toString("hex");
       const csrf = readOnlyRoute ? randomBytes(32).toString("hex") : createHmac("sha256", key()).update("workspace-csrf-v1:" + token).digest("hex");
       payload.sessions[hash(token)] = { binding, ...principal, issuedAtMs: now, csrfDigest: hash(csrf) };
+      // Any real owner fallback issuance initializes permanently too; logout
+      // and expired-session pruning must never reopen first possession.
+      if (!readOnlyRoute) payload.initialization ??= { schemaVersion: "pansphaira.hosted-session/initialization/v1", binding, subjectId: principal.subjectId, initializedAtMs: now };
       atomicPrivate(storePath, envelope(payload));
       const cookieHeader = cookieName + "=" + token;
       return Object.freeze({ cookieHeader, csrf, setCookie: cookieHeader + "; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=" + Math.max(1, Math.floor((principal.expiresAtMs - now) / 1000)) });
@@ -229,13 +248,147 @@ function createOwnerSessionStoreV1(origin, identity, root, binding, cookieName, 
     const pair = headers.cookie.split(";").map(v => v.trim()).find(v => v.startsWith(cookieName + "="));
     privateRoot(root); const lockPath = join(root, "session-write.lock"); const fd = openSync(lockPath, "wx", 0o600);
     try {
-      authenticate(headers);
-      const payload = load(); delete payload.sessions[hash(pair.slice(cookieName.length + 1))];
+      const principal = authenticate(headers);
+      const payload = load();
+      // Migrate a genuinely authenticated pre-extension legacy session in the
+      // same atomic revocation, before removing the last persisted session.
+      payload.initialization ??= { schemaVersion: "pansphaira.hosted-session/initialization/v1", binding, subjectId: principal.subjectId, initializedAtMs: Date.now() };
+      delete payload.sessions[hash(pair.slice(cookieName.length + 1))];
       atomicPrivate(storePath, envelope(payload));
     } finally { closeSync(fd); unlinkSync(lockPath); }
   }
+  function createFirstPossession(options) {
+    const code = 'HOSTED_BOOTSTRAP_OWNER_DENIED';
+    exactData(options, ['optIn', 'subjectId', 'proofTtlMs', 'sessionTtlMs'], code);
+    if (readOnlyRoute || options.optIn !== true || typeof options.subjectId !== 'string'
+      || !/^[a-z0-9][a-z0-9:_-]{0,79}$/.test(options.subjectId)
+      || !Number.isSafeInteger(options.proofTtlMs) || options.proofTtlMs < 1 || options.proofTtlMs > 60000
+      || !Number.isSafeInteger(options.sessionTtlMs) || options.sessionTtlMs < 1 || options.sessionTtlMs > 1800000) throw new Error(code);
+    const owner = Object.freeze({ ...options });
+    function current(payload) {
+      if (!Object.hasOwn(payload, 'firstPossession')) return null;
+      const row = payload.firstPossession;
+      exactData(row, ['schemaVersion', 'binding', 'subjectId', 'state', 'proofDigest', 'issuedAtMs', 'expiresAtMs', 'initializedAtMs'], 'HOSTED_AUTH_UNAVAILABLE');
+      if (row.schemaVersion !== 'pansphaira.hosted-session/first-possession/v1'
+        || !['PROOF_PENDING', 'INITIALIZED'].includes(row.state)
+        || typeof row.subjectId !== 'string' || !/^[a-z0-9][a-z0-9:_-]{0,79}$/.test(row.subjectId)
+        || !/^[a-f0-9]{64}$/.test(row.proofDigest)
+        || !Number.isSafeInteger(row.issuedAtMs) || !Number.isSafeInteger(row.expiresAtMs)
+        || row.expiresAtMs <= row.issuedAtMs || row.expiresAtMs > row.issuedAtMs + 60000
+        || (row.state === 'PROOF_PENDING' ? row.initializedAtMs !== null
+          : !Number.isSafeInteger(row.initializedAtMs) || row.initializedAtMs < row.issuedAtMs || row.initializedAtMs >= row.expiresAtMs)) throw new Error('HOSTED_AUTH_UNAVAILABLE');
+      if (canonicalJson(row.binding) !== canonicalJson(binding)) throw new Error('HOSTED_BOOTSTRAP_INSTANCE_DENIED');
+      if (row.subjectId !== owner.subjectId) throw new Error(code);
+      return row;
+    }
+    function locked(fn) {
+      privateRoot(root); let fd;
+      const lockPath = join(root, 'session-write.lock');
+      try { fd = openSync(lockPath, 'wx', 0o600); }
+      catch (error) { if (error.code === 'EEXIST') throw new Error('HOSTED_BOOTSTRAP_BUSY'); throw error; }
+      try { return fn(load()); } finally { closeSync(fd); unlinkSync(lockPath); }
+    }
+    function read() {
+      const payload = load(), row = current(payload);
+      if (!row) return Object.freeze({ schemaVersion: 'pansphaira.hosted-session/first-possession-read/v1', state: payload.initialization || Object.keys(payload.sessions).length ? 'INITIALIZED' : 'UNINITIALIZED', binding, initializedAtMs: payload.initialization?.initializedAtMs ?? null });
+      return Object.freeze({ schemaVersion: 'pansphaira.hosted-session/first-possession-read/v1', state: payload.initialization ? 'INITIALIZED' : row.state === 'PROOF_PENDING' && row.expiresAtMs <= Date.now() ? 'PROOF_EXPIRED' : row.state, binding, subjectId: row.subjectId, expiresAtMs: row.expiresAtMs, initializedAtMs: payload.initialization?.initializedAtMs ?? row.initializedAtMs });
+    }
+    function issue() {
+      return locked(payload => {
+        const row = current(payload), now = Date.now();
+        if (row?.state === 'INITIALIZED' || payload.initialization || Object.keys(payload.sessions).length) throw new Error('HOSTED_BOOTSTRAP_ALREADY_INITIALIZED');
+        if (row && row.expiresAtMs > now) throw new Error('HOSTED_BOOTSTRAP_PROOF_PENDING');
+        const proof = randomBytes(32).toString('hex');
+        payload.firstPossession = { schemaVersion: 'pansphaira.hosted-session/first-possession/v1', binding, subjectId: owner.subjectId, state: 'PROOF_PENDING', proofDigest: hash(proof), issuedAtMs: now, expiresAtMs: now + owner.proofTtlMs, initializedAtMs: null };
+        atomicPrivate(storePath, envelope(payload));
+        // Private owner return only; never a URL, persisted raw proof or public read.
+        return Object.freeze({ proof, instanceId: binding.instanceId, identityDigest: binding.identityDigest, expiresAtMs: payload.firstPossession.expiresAtMs });
+      });
+    }
+    function redeem(headers, body) {
+      denyHeaderAuthority(headers);
+      if (headers.origin !== origin) throw new Error('HOSTED_BOOTSTRAP_ORIGIN_DENIED');
+      exactData(body, ['proof', 'instanceId', 'identityDigest'], 'HOSTED_BOOTSTRAP_SCHEMA_DENIED');
+      if (body.instanceId !== binding.instanceId || body.identityDigest !== binding.identityDigest) throw new Error('HOSTED_BOOTSTRAP_INSTANCE_DENIED');
+      if (typeof body.proof !== 'string' || !/^[a-f0-9]{64}$/.test(body.proof)) throw new Error('HOSTED_BOOTSTRAP_PROOF_DENIED');
+      return locked(payload => {
+        const row = current(payload), now = Date.now();
+        if (row?.state === 'INITIALIZED' || payload.initialization || Object.keys(payload.sessions).length) throw new Error('HOSTED_BOOTSTRAP_ALREADY_INITIALIZED');
+        if (!row || row.issuedAtMs > now || row.expiresAtMs <= now) throw new Error('HOSTED_BOOTSTRAP_PROOF_EXPIRED');
+        if (!timingSafeEqual(Buffer.from(row.proofDigest, 'hex'), Buffer.from(hash(body.proof), 'hex'))) throw new Error('HOSTED_BOOTSTRAP_PROOF_DENIED');
+        const token = randomBytes(32).toString('hex');
+        const csrf = createHmac('sha256', key()).update('workspace-csrf-v1:' + token).digest('hex');
+        const expiresAtMs = now + owner.sessionTtlMs;
+        payload.sessions[hash(token)] = { binding, subjectId: owner.subjectId, role: 'reviewer', expiresAtMs, issuedAtMs: now, csrfDigest: hash(csrf) };
+        payload.firstPossession = { ...row, state: 'INITIALIZED', initializedAtMs: now };
+        payload.initialization = { schemaVersion: 'pansphaira.hosted-session/initialization/v1', binding, subjectId: owner.subjectId, initializedAtMs: now };
+        // One existing authenticated store write: no separate token consume,
+        // initialized marker or second session ledger can race this exchange.
+        atomicPrivate(storePath, envelope(payload));
+        const cookieHeader = cookieName + '=' + token;
+        return Object.freeze({ cookieHeader, csrf, setCookie: cookieHeader + '; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=' + Math.max(1, Math.floor(owner.sessionTtlMs / 1000)) });
+      });
+    }
+    function initialized(payload) {
+      const mark = payload.initialization;
+      if (!mark) throw new Error('HOSTED_BOOTSTRAP_RESUME_NOT_INITIALIZED');
+      if (mark.subjectId !== owner.subjectId || canonicalJson(mark.binding) !== canonicalJson(binding)) throw new Error('HOSTED_BOOTSTRAP_OWNER_DENIED');
+      return mark;
+    }
+    function resumeRow(payload) {
+      if (!Object.hasOwn(payload, 'resumeProof')) return null;
+      const row=payload.resumeProof;
+      exactData(row,['schemaVersion','binding','subjectId','state','proofDigest','issuedAtMs','expiresAtMs','consumedAtMs'],'HOSTED_AUTH_UNAVAILABLE');
+      if(row.schemaVersion!=='pansphaira.hosted-session/resume-proof/v1'||!['PENDING','USED'].includes(row.state)
+        ||typeof row.subjectId!=='string'||!/^[a-f0-9]{64}$/.test(row.proofDigest)
+        ||!Number.isSafeInteger(row.issuedAtMs)||!Number.isSafeInteger(row.expiresAtMs)
+        ||row.expiresAtMs<=row.issuedAtMs||row.expiresAtMs>row.issuedAtMs+60000
+        ||(row.state==='PENDING'?row.consumedAtMs!==null:!Number.isSafeInteger(row.consumedAtMs)||row.consumedAtMs<row.issuedAtMs||row.consumedAtMs>=row.expiresAtMs))throw new Error('HOSTED_AUTH_UNAVAILABLE');
+      if(row.subjectId!==owner.subjectId||canonicalJson(row.binding)!==canonicalJson(binding))throw new Error('HOSTED_BOOTSTRAP_OWNER_DENIED');
+      return row;
+    }
+    function issueResume() {
+      return locked(payload=>{
+        initialized(payload);const prior=resumeRow(payload),now=Date.now();
+        if(prior?.state==='PENDING'&&prior.expiresAtMs>now)throw new Error('HOSTED_BOOTSTRAP_PROOF_PENDING');
+        const proof=randomBytes(32).toString('hex');
+        payload.resumeProof={schemaVersion:'pansphaira.hosted-session/resume-proof/v1',binding,subjectId:owner.subjectId,state:'PENDING',proofDigest:hash(proof),issuedAtMs:now,expiresAtMs:now+owner.proofTtlMs,consumedAtMs:null};
+        atomicPrivate(storePath,envelope(payload));
+        return Object.freeze({proof,instanceId:binding.instanceId,identityDigest:binding.identityDigest,expiresAtMs:payload.resumeProof.expiresAtMs});
+      });
+    }
+    function redeemResume(headers,body) {
+      denyHeaderAuthority(headers);if(headers.origin!==origin)throw new Error('HOSTED_BOOTSTRAP_ORIGIN_DENIED');
+      exactData(body,['proof','instanceId','identityDigest'],'HOSTED_BOOTSTRAP_SCHEMA_DENIED');
+      if(body.instanceId!==binding.instanceId||body.identityDigest!==binding.identityDigest)throw new Error('HOSTED_BOOTSTRAP_INSTANCE_DENIED');
+      if(typeof body.proof!=='string'||!/^[a-f0-9]{64}$/.test(body.proof))throw new Error('HOSTED_BOOTSTRAP_PROOF_DENIED');
+      return locked(payload=>{
+        initialized(payload);const row=resumeRow(payload),now=Date.now();
+        if(row?.state==='USED')throw new Error('HOSTED_BOOTSTRAP_RESUME_CONSUMED');
+        if(!row||row.issuedAtMs>now||row.expiresAtMs<=now)throw new Error('HOSTED_BOOTSTRAP_PROOF_EXPIRED');
+        if(!timingSafeEqual(Buffer.from(row.proofDigest,'hex'),Buffer.from(hash(body.proof),'hex')))throw new Error('HOSTED_BOOTSTRAP_PROOF_DENIED');
+        for(const[digest,session]of Object.entries(payload.sessions))if(session.expiresAtMs<=now)delete payload.sessions[digest];
+        if(Object.keys(payload.sessions).length>=256)throw new Error('HOSTED_SESSION_CAPACITY_DENIED');
+        const token=randomBytes(32).toString('hex'),csrf=createHmac('sha256',key()).update('workspace-csrf-v1:'+token).digest('hex');
+        payload.sessions[hash(token)]={binding,subjectId:owner.subjectId,role:'reviewer',expiresAtMs:now+owner.sessionTtlMs,issuedAtMs:now,csrfDigest:hash(csrf)};
+        payload.resumeProof={...row,state:'USED',consumedAtMs:now};
+        atomicPrivate(storePath,envelope(payload));
+        const cookieHeader=cookieName+'='+token;
+        return Object.freeze({cookieHeader,csrf,setCookie:cookieHeader+'; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age='+Math.max(1,Math.floor(owner.sessionTtlMs/1000))});
+      });
+    }
+    function retainInitializedOwner() {
+      return locked(payload=>{
+        if(!payload.initialization){payload.initialization={schemaVersion:'pansphaira.hosted-session/initialization/v1',binding,subjectId:owner.subjectId,initializedAtMs:Date.now()};atomicPrivate(storePath,envelope(payload));}
+        return read();
+      });
+    }
+    current(load()); return Object.freeze({ read, issue, redeem, issueResume, redeemResume, retainInitializedOwner });
+  }
   const adapter = Object.freeze({ origin, binding, issueOwnerSession, authenticate, responseCookie, ...(readOnlyRoute ? { authorizeReadOperation: authorizeCsrf } : { authorizeMutation: authorizeCsrf, workspaceMutationCsrf }) });
-  ownedSessionRevocations.set(adapter, logoutAuthenticatedSession); return adapter;
+  ownedSessionRevocations.set(adapter, logoutAuthenticatedSession);
+  if (!readOnlyRoute) ownedFirstPossessionFactories.set(adapter, createFirstPossession);
+  return adapter;
 }
 
 import {isNativeWorkspaceAgentRunV1} from '../pan548/native-agent-run.mjs';
@@ -404,6 +557,24 @@ export function mountProtectedWorkspaceKnowledgeV1(gateway,options){
  return Object.freeze({close(){if(product.workspaceKnowledge===attachment)delete product.workspaceKnowledge;options.owner.close();}});
 }
 
+import {validateWorkspaceBootstrapClaimV1,validateWorkspaceBootstrapReadV1,validateWorkspaceBootstrapClaimResultV1} from '../../dist/packages/contracts/src/workspace-bootstrap-v1.js';
+// Explicit code-owner attachment on the existing protected product/session
+// ingress. Public routes can exchange a grant but can never issue one.
+export function mountProtectedWorkspaceBootstrapV1(gateway,options) {
+  exactData(options,['optIn','tenantId','origin','identityDigest','subjectId','proofTtlMs','sessionTtlMs','html','script','style'],'HOSTED_BOOTSTRAP_OWNER_DENIED');
+  const product=ownedProductIngresses.get(gateway)?.get(options.tenantId);
+  if(options.optIn!==true||!product?.workspaceDocument||!product.workspaceAdministration||!product.workspaceContextSelection||product.workspaceBootstrap
+    ||options.origin!==product.sessions.origin||options.identityDigest!==product.sessions.binding.identityDigest
+    ||[options.html,options.script,options.style].some(value=>typeof value!=='string'||!value.length||Buffer.byteLength(value)>131072))throw new Error('HOSTED_BOOTSTRAP_OWNER_DENIED');
+  const owner=createProtectedFirstPossessionV1(product.sessions,{optIn:true,subjectId:options.subjectId,proofTtlMs:options.proofTtlMs,sessionTtlMs:options.sessionTtlMs});
+  // Actual persisted existing setup progress is another authoritative legacy
+  // initialization observation, not a user/profile field or new identity store.
+  if(product.coordinator.status().progress.completedStages>1)owner.retainInitializedOwner();
+  const attachment=Object.freeze({owner,html:options.html,script:options.script,style:options.style});product.workspaceBootstrap=attachment;
+  const check=()=>{if(product.workspaceBootstrap!==attachment)throw new Error('HOSTED_BOOTSTRAP_ATTACHMENT_RETIRED');};
+  return Object.freeze({issueFirst(){check();return owner.issue();},issueResume(){check();return owner.issueResume();},read(){check();return owner.read();},close(){if(product.workspaceBootstrap===attachment)delete product.workspaceBootstrap;}});
+}
+
 // This optional local test ingress neither implements OIDC nor creates a portal.
 export function createOptionalHttpsProductIngressV1(options) {
   if (!options || Object.getOwnPropertyDescriptor(options, "optIn")?.value !== true) throw new Error("HOSTED_OPT_IN_REQUIRED");
@@ -440,12 +611,46 @@ export function createOptionalHttpsProductIngressV1(options) {
         || (request.headers["sec-fetch-site"] !== undefined && !["same-origin", "none"].includes(request.headers["sec-fetch-site"]))) return reply(response, 403, "HOSTED_ORIGIN_DENIED");
       const rawPath = (request.url ?? "").split("?")[0];
       if ((request.url ?? "").includes("?") && !/\/workspace\/erv$/.test(rawPath)) return reply(response, 404, "HOSTED_ROUTE_DENIED");
+      const bootstrapMatch=/^\/t\/([a-z0-9][a-z0-9-]{0,63})\/bootstrap(?:\/(app\.js|style\.css|status|claim|resume))?$/.exec(rawPath);
+      if(bootstrapMatch) {
+        const product=products.get(bootstrapMatch[1]),attachment=product?.workspaceBootstrap,suffix=bootstrapMatch[2]??'';
+        if(!attachment||!['GET','POST'].includes(request.method)||((request.method==='POST')!==['claim','resume'].includes(suffix)))return reply(response,404,'HOSTED_ROUTE_DENIED');
+        const check=()=>{if(product.workspaceBootstrap!==attachment||!product.workspaceDocument||!product.workspaceAdministration||!product.workspaceContextSelection)throw new Error('HOSTED_BOOTSTRAP_ATTACHMENT_RETIRED');};check();
+        const b=product.sessions.binding,binding={origin:b.origin,tenantId:b.tenantId,instanceId:b.instanceId,generation:b.generation,identityDigest:b.identityDigest},workspacePath='/t/'+b.tenantId+'/workspace';
+        if(request.method==='GET') {
+          if(request.headers['transfer-encoding']!==undefined||request.headers['content-length']!==undefined&&request.headers['content-length']!=='0')return reply(response,400,'HOSTED_BODY_DENIED');
+          if(suffix==='status'){
+            const state=attachment.owner.read();let sessionState='NOT_AUTHENTICATED';
+            if(request.headers.cookie!==undefined){try{product.sessions.authenticate(request.headers);sessionState='CURRENT';}catch(error){if(error.message!=='HOSTED_SESSION_DENIED')throw error;}}
+            const result=validateWorkspaceBootstrapReadV1({schemaVersion:'pansphaira.workspace-bootstrap/read/v1',binding,state:state.state,sessionState,initializedAtMs:state.initializedAtMs??null,workspacePath});
+            check();response.writeHead(200,{'content-type':'application/json; charset=utf-8'});response.end(JSON.stringify(result)+'\n');return;
+          }
+          response.setHeader('content-security-policy',"default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+          response.writeHead(200,{'content-type':suffix==='app.js'?'text/javascript; charset=utf-8':suffix==='style.css'?'text/css; charset=utf-8':'text/html; charset=utf-8'});response.end(suffix==='app.js'?attachment.script:suffix==='style.css'?attachment.style:attachment.html);return;
+        }
+        if(request.headers.origin!==origin)return reply(response,403,'HOSTED_CSRF_DENIED');
+        if(request.headers['content-type']!=='application/json'||request.headers['content-encoding']!==undefined)return reply(response,400,'HOSTED_BODY_DENIED');
+        const chunks=[];let bytes=0;for await(const chunk of request){bytes+=chunk.length;if(bytes>2048)return reply(response,413,'HOSTED_BODY_DENIED');chunks.push(chunk);}
+        let input;try{input=validateWorkspaceBootstrapClaimV1(JSON.parse(Buffer.concat(chunks).toString('utf8')));}catch{return reply(response,400,'BOOTSTRAP_CONTRACT_DENIED');}
+        check();if(input.purpose!==(suffix==='claim'?'FIRST_OWNER':'RESUME'))return reply(response,400,'BOOTSTRAP_CONTRACT_DENIED');
+        const native={proof:input.proof,instanceId:input.instanceId,identityDigest:input.identityDigest};
+        const issued=suffix==='claim'?attachment.owner.redeem(request.headers,native):attachment.owner.redeemResume(request.headers,native);
+        check();product.sessions.authenticate({cookie:issued.cookieHeader});
+        const result=validateWorkspaceBootstrapClaimResultV1({schemaVersion:'pansphaira.workspace-bootstrap/claim-result/v1',outcome:'SESSION_BOUND',purpose:input.purpose,binding,workspacePath});
+        response.setHeader('set-cookie',issued.setCookie);response.writeHead(200,{'content-type':'application/json; charset=utf-8'});response.end(JSON.stringify(result)+'\n');return;
+      }
       const match = /^\/t\/([a-z0-9][a-z0-9-]{0,63})(\/api\/(?:status|effective-rights|ask)|\/guided(?:\/app\.js|\/style\.css|\/status|\/command)?|\/workspace(?:\/app\.js|\/style\.css|\/context|\/knowledge\/(?:app\.js|read)|\/administration\/(?:app\.js|read|approval)|\/model-connection(?:\/(?:app\.js|select|probe|consent))?|\/context-selection(?:\/(?:tab|verify|retire))?|\/module-view(?:\/(?:app\.js|catalog|data|preview|undo-preview|confirm|cancel))?|\/invoice-navigation\/(?:app\.js|search|request|read|ack)|\/agent-run\/(?:app\.js|plan|start|read)|\/erv-human\/(?:app\.js|read|decide|reconcile)|\/erv|\/logout|\/profile|\/configuration|\/analysis|\/notifications(?:\/(?:open|read|reconcile|preferences))?)?)?$/.exec(rawPath);
       if (!match || !["GET", "POST"].includes(request.method)
         || (match[2]?.startsWith('/workspace/model-connection') && (request.method==='POST') !== ['/workspace/model-connection/select','/workspace/model-connection/probe','/workspace/model-connection/consent'].includes(match[2]))
         || (!match[2]?.startsWith('/workspace/model-connection') && !["/workspace/profile", "/workspace/configuration", "/workspace/context-selection"].includes(match[2]) && (request.method === "POST") !== ["/workspace/administration/read", "/workspace/administration/approval", "/workspace/knowledge/read", "/api/ask", "/guided/command", "/workspace/logout", "/workspace/analysis", "/workspace/notifications/open", "/workspace/notifications/read", "/workspace/notifications/reconcile", "/workspace/notifications/preferences", "/workspace/context-selection/tab", "/workspace/context-selection/verify", "/workspace/context-selection/retire", "/workspace/module-view/catalog", "/workspace/module-view/data", "/workspace/module-view/preview", "/workspace/module-view/undo-preview", "/workspace/module-view/confirm", "/workspace/module-view/cancel", "/workspace/invoice-navigation/search", "/workspace/invoice-navigation/request", "/workspace/invoice-navigation/read", "/workspace/invoice-navigation/ack", "/workspace/agent-run/plan", "/workspace/agent-run/start", "/workspace/erv-human/read", "/workspace/erv-human/decide", "/workspace/erv-human/reconcile"].includes(match[2]))) return reply(response, 404, "HOSTED_ROUTE_DENIED");
       const product = products.get(match[1]); if (!product) return reply(response, 401, "HOSTED_SESSION_DENIED");
-      product.sessions.authenticate(request.headers);
+      try { product.sessions.authenticate(request.headers); }
+      catch(error) {
+        if(error.message==='HOSTED_SESSION_DENIED'&&product.workspaceBootstrap&&request.method==='GET'&&match[2]==='/workspace'&&request.headers.accept?.includes('text/html')){
+          response.writeHead(303,{location:'/t/'+match[1]+'/bootstrap'});response.end();return;
+        }
+        throw error;
+      }
       if (match[2]?.startsWith("/workspace")) {
         if (!product.workspaceDocument) return reply(response, 404, "HOSTED_ROUTE_DENIED");
         if(match[2]?.startsWith('/workspace/knowledge/')){
@@ -767,6 +972,10 @@ export function createOptionalHttpsProductIngressV1(options) {
       else if (code === "CONFIGURATION_POLICY_CHANGED_REJECT_REQUIRES_RECONFIRMATION") reply(response, 409, code);
       else if (code === "GUIDED_COMMAND_DENIED") reply(response, 400, code);
       else if (["GUIDED_RETRY_CONFLICT_DENIED", "GUIDED_STARTER_NOT_IDLE_DENIED", "GUIDED_OUTCOME_UNKNOWN_RETAINED", "GUIDED_OWNER_CLOSED"].includes(code)) reply(response, 409, code);
+      else if (['HOSTED_BOOTSTRAP_ALREADY_INITIALIZED','HOSTED_BOOTSTRAP_PROOF_PENDING','HOSTED_BOOTSTRAP_BUSY','HOSTED_BOOTSTRAP_RESUME_CONSUMED','HOSTED_BOOTSTRAP_ATTACHMENT_RETIRED'].includes(code)) reply(response,409,code);
+      else if (code==='HOSTED_BOOTSTRAP_PROOF_EXPIRED') reply(response,410,code);
+      else if (['HOSTED_BOOTSTRAP_OWNER_DENIED','HOSTED_BOOTSTRAP_ORIGIN_DENIED','HOSTED_BOOTSTRAP_INSTANCE_DENIED','HOSTED_BOOTSTRAP_PROOF_DENIED','HOSTED_BOOTSTRAP_RESUME_NOT_INITIALIZED'].includes(code)) reply(response,403,code);
+      else if (code==='HOSTED_BOOTSTRAP_SCHEMA_DENIED'||code==='BOOTSTRAP_CONTRACT_DENIED') reply(response,400,code);
       else if (code === "HOSTED_SESSION_DENIED") reply(response, 401, code);
       else if (["PROFILE_SCHEMA_DENIED", "PROFILE_CONTRIBUTION_DENIED"].includes(code)) reply(response, 400, code);
       else if (code === "PROFILE_REVISION_CONFLICT") reply(response, 409, code);

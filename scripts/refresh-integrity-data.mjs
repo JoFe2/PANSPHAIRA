@@ -3285,6 +3285,92 @@ if (!repositoryIntegrityNode.ownedTests.includes('npm run pan547:test')) reposit
 pan541Node.inputs.push(...pan550Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)})));
 pan541Node.ownedTests.push('npm run pan550:test');
 if (!repositoryIntegrityNode.ownedTests.includes('npm run pan550:test')) repositoryIntegrityNode.ownedTests.push('npm run pan550:test');
+// PAN562 additive first-possession/resume, existing527 security and541 UI owners.
+const pan562Inputs=[
+  [
+    "docs/architecture/protected-browser-bootstrap-resume-v1.md",
+    "DERIVED_EVIDENCE",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-bootstrap-v1.css",
+    "SOURCE",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-bootstrap-v1.html",
+    "SOURCE",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-bootstrap-v1.ts",
+    "SOURCE",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "packages/contracts/src/workspace-bootstrap-v1.ts",
+    "CONTRACT",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "scripts/bootstrap-browser-first-owner-v1.mjs",
+    "SECURITY",
+    "pan527-origin-session-v1"
+  ],
+  [
+    "scripts/run-pan562-browser-bootstrap-tests.mjs",
+    "VALIDATOR",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "src/pan562/native-browser-bootstrap.mjs",
+    "SECURITY",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "tests/pan562/bootstrap-contract.test.mjs",
+    "VALIDATOR",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "tests/pan562/bootstrap-fixture.mjs",
+    "VALIDATOR",
+    "pan527-origin-session-v1"
+  ],
+  [
+    "tests/pan562/bootstrap-ingress-native.test.mjs",
+    "VALIDATOR",
+    "pan527-origin-session-v1"
+  ],
+  [
+    "tests/pan562/browser-bootstrap.test.mjs",
+    "VALIDATOR",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "tests/pan562/browser-process-fixture.mjs",
+    "VALIDATOR",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "tests/pan562/first-possession-claim-child.mjs",
+    "VALIDATOR",
+    "pan527-origin-session-v1"
+  ],
+  [
+    "tests/pan562/first-possession-native.test.mjs",
+    "VALIDATOR",
+    "pan527-origin-session-v1"
+  ],
+  [
+    "tests/pan562/registration.test.mjs",
+    "VALIDATOR",
+    "pan541-shared-browser-shell-v1"
+  ]
+];
+for(const[inputPath,role,ownerId]of pan562Inputs){const owner=dag.nodes.find(node=>node.id===ownerId);if(!owner)throw Error('PAN562_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});if(!owner.ownedTests.includes('npm run pan562:test'))owner.ownedTests.push('npm run pan562:test');}
+if(!repositoryIntegrityNode.ownedTests.includes('npm run pan562:test'))repositoryIntegrityNode.ownedTests.push('npm run pan562:test');
+
 
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
@@ -3319,6 +3405,7 @@ for (const line of readFileSync(path.join(root, "release/public-files.manifest")
 for (const [inputPath] of pan463Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan547Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan550Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan562Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan464Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan465Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan466Inputs) entries.set(inputPath, null);
