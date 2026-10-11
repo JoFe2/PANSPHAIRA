@@ -79,3 +79,47 @@ test("PUI-01-AC04 stale rejected render after module change is discarded instead
   assert.deepEqual(faults, []);
   registry.close(); assert.equal(disposed, 1);
 });
+
+// Producer-only regression for the existing PAN549 -> KS303 v39 composition.
+// This is not the unchanged KS consumer's functional or original13AC acceptance.
+test("PAN549 composition: original locked app leaves the pinned5486-byte addon inside131072", async () => {
+  const {readFileSync} = await import("node:fs");
+  const app = readFileSync("dist/browser-workspace/app.js");
+  assert.ok(app.length + 5486 <= 131072, "PAN549_ORIGINAL_COMPOSITION_BOUND_EXCEEDED:" + app.length);
+});
+
+test("PAN549 composition: the shared tuple is exact immutable existing string data, not executable decoding", async () => {
+  const {browserWorkspaceStringValuesV1: values} = await import("../../dist/packages/contracts/src/browser-shell-plugin-v1.js");
+  const {createHash} = await import("node:crypto");
+  assert.equal(values.length, 236);
+  assert.ok(values.every(value => typeof value === "string"));
+  assert.equal(new Set(values).size, values.length);
+  assert.equal(createHash("sha256").update(JSON.stringify(values)).digest("hex"), "a972f1fb4c57e285649fcc2d56e82ddf1b3284684ae2c7470ded5f7315213749");
+  assert.ok(Object.isFrozen(values));
+  const original = values[0];
+  assert.throws(() => { values[0] = "MUTATED_AUTHORITY"; }, TypeError);
+  assert.throws(() => { values.push("EXTRA_CAPABILITY"); }, TypeError);
+  assert.equal(values[0], original);
+  assert.equal(values[values.length], undefined);
+});
+
+test("PAN549 composition: shared constants add no evaluator or mutable value loader", async () => {
+  const {readFileSync} = await import("node:fs");
+  const ts = (await import("typescript")).default;
+  const source = ts.createSourceFile("tuple.ts", readFileSync("packages/contracts/src/browser-shell-plugin-v1.ts", "utf8"), ts.ScriptTarget.Latest, true);
+  const statements = source.statements.filter(statement => ts.isVariableStatement(statement) && statement.declarationList.declarations.some(declaration => declaration.name.getText(source) === "browserWorkspaceStringValuesV1"));
+  assert.equal(statements.length, 1);
+  const statement = statements[0];
+  assert.ok(ts.isVariableStatement(statement));
+  assert.ok(statement.declarationList.flags & ts.NodeFlags.Const);
+  const init = statement.declarationList.declarations[0].initializer;
+  assert.ok(ts.isCallExpression(init));
+  assert.equal(init.expression.getText(source), "Object.freeze");
+  assert.equal(init.arguments.length, 1);
+  const argument = init.arguments[0];
+  assert.ok(ts.isAsExpression(argument));
+  assert.equal(argument.type.getText(source), "const");
+  assert.ok(ts.isArrayLiteralExpression(argument.expression));
+  assert.equal(argument.expression.elements.length, 236);
+  assert.ok(argument.expression.elements.every(ts.isStringLiteral));
+});

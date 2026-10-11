@@ -1,3 +1,4 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import { createExtendedBrowserContextOwnerV1 } from "../../browser-shell/src/extended-context-owner-v1.js";
 import type { BrowserContextV1 } from "../../browser-shell/src/context-owner-v1.js";
 import { validateWorkspaceContextTabBootstrapV1, validateWorkspaceContextSnapshotV1, validateWorkspaceContextReadbackV1, verifyWorkspaceContextBindingV1,
@@ -29,8 +30,8 @@ export function createWorkspaceContextSelectionV1(options: {
   let owner: ReturnType<typeof createExtendedBrowserContextOwnerV1> | null = null;
   let controls = new Map<string, HTMLButtonElement>(), fieldset: HTMLFieldSetElement | null = null;
   const heading = text("h2", "Aktueller nativer Seitenkontext"), scope = text("p", ""), status = text("p", "");
-  heading.id = "shell.context-selection.heading"; status.setAttribute("role", "status");
-  function open() { if (closed || options.signal.aborted) throw new Error("CONTEXT_OWNER_CLOSED"); }
+  heading.id = "shell.context-selection.heading"; status.setAttribute("role", browserWorkspaceStringValuesV1[22] as string);
+  function open() { if (closed || options.signal.aborted) throw new Error(browserWorkspaceStringValuesV1[65]); }
   function localLive(c: WorkspaceContextReadbackV1, capturedEpoch: number) {
     const session = options.context();
     return !closed && !options.signal.aborted && epoch === capturedEpoch && current?.context.contextHandle === c.contextHandle
@@ -42,7 +43,7 @@ export function createWorkspaceContextSelectionV1(options: {
     // Native disabled buttons lose keyboard focus in Chromium. Keep focus and
     // announce temporary unavailability; select() rejects repeated activation
     // while this context operation is pending, without dispatching again.
-    status.textContent = message; for (const b of controls.values()) b.setAttribute("aria-disabled", "true");
+    status.textContent = message; for (const b of controls.values()) b.setAttribute(browserWorkspaceStringValuesV1[131] as string, "true");
   }
   function invalidate() {
     lifetime = Object.freeze({});
@@ -57,9 +58,9 @@ export function createWorkspaceContextSelectionV1(options: {
     open();
     const headers: Record<string, string> = { "x-pan548-session": initial.sessionId };
     if (proof !== null && tabId !== null) { headers["x-pan548-tab"] = proof; headers["x-pan548-tab-id"] = tabId; }
-    if (body !== undefined) headers["content-type"] = "application/json";
+    if (body !== undefined) headers[browserWorkspaceStringValuesV1[141]] = browserWorkspaceStringValuesV1[31] as string;
     const requestSignal = AbortSignal.any([options.signal, ...(signal ? [signal] : []), AbortSignal.timeout(5000)]);
-    const response = await fetch(base + "/workspace/context-selection" + suffix, { credentials: "same-origin", cache: "no-store", headers,
+    const response = await fetch(base + "/workspace/context-selection" + suffix, { credentials: browserWorkspaceStringValuesV1[6], cache: browserWorkspaceStringValuesV1[7], headers,
       ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: requestSignal });
     if (response.status !== 200) throw new Error("CONTEXT_SERVER_RESPONSE_DENIED");
     return response.json() as Promise<unknown>;
@@ -85,7 +86,7 @@ export function createWorkspaceContextSelectionV1(options: {
     const result = queue.then(operation); queue = result.catch(() => {}); return result;
   }
   async function verify(c: WorkspaceContextReadbackV1, signal?: AbortSignal) {
-    const value = validateWorkspaceContextReadbackV1(await request("/verify", { schemaVersion: "pansphaira.workspace-context/verify/v1", tabId: c.binding.tabId, contextHandle: c.contextHandle }, signal));
+    const value = validateWorkspaceContextReadbackV1(await request("/verify", { schemaVersion: browserWorkspaceStringValuesV1[78], tabId: c.binding.tabId, contextHandle: c.contextHandle }, signal));
     check(value); verifyWorkspaceContextBindingV1(value, c.binding);
     if (JSON.stringify(value) !== JSON.stringify(c)) throw new Error("CONTEXT_VERIFICATION_DRIFT");
   }
@@ -95,26 +96,26 @@ export function createWorkspaceContextSelectionV1(options: {
     const previous = owner;
     owner = createExtendedBrowserContextOwnerV1({ initialContext: snapshot.context, isContextLive: c => localLive(c, capturedEpoch) }); previous?.close();
     const c = snapshot.context;
-    root.hidden = false; root.dataset.state = "CURRENT_CONTEXT"; root.dataset.module = c.moduleId; root.dataset.selection = c.selection?.elementId ?? "";
-    scope.textContent = "Serverbestätigt: " + c.binding.tenantId + " · " + c.binding.subjectId + " · " + (c.moduleId === "pan.setup" ? "Einrichtung" : "Eingangsrechnungsprüfung")
+    root.hidden = false; root.dataset.state = browserWorkspaceStringValuesV1[98]; root.dataset.module = c.moduleId; root.dataset.selection = c.selection?.elementId ?? "";
+    scope.textContent = "Serverbestätigt: " + c.binding.tenantId + " · " + c.binding.subjectId + " · " + (c.moduleId === browserWorkspaceStringValuesV1[111] ? "Einrichtung" : browserWorkspaceStringValuesV1[67])
       + " · " + (c.primaryObject ? "Vorgang " + c.primaryObject.objectId + ", Fachversion " + c.primaryObject.revision : "kein primäres Fachobjekt") + ". Nur lesen; keine neue Ausführungsfreigabe.";
     status.textContent = c.selection ? "Serverbestätigte semantische Auswahl: " + snapshot.selections.find(s => s.elementId === c.selection!.elementId && s.rowId === c.selection!.rowId)!.label + "."
       : "Keine semantische Auswahl. Tastatur oder Schaltfläche wählt ausschließlich eine aktuell registrierte native Referenz.";
     const keys = snapshot.selections.map(s => JSON.stringify({ elementId: s.elementId, rowId: s.rowId }));
     if (!fieldset || JSON.stringify([...controls.keys()]) !== JSON.stringify(keys)) {
-      controls = new Map(); fieldset?.remove(); fieldset = document.createElement("fieldset"); fieldset.append(text("legend", "Semantische Auswahl — nur native Referenzen"));
+      controls = new Map(); fieldset?.remove(); fieldset = document.createElement(browserWorkspaceStringValuesV1[103]); fieldset.append(text(browserWorkspaceStringValuesV1[105] as string, "Semantische Auswahl — nur native Referenzen"));
       for (const entry of snapshot.selections) {
-        const b = text("button", "Kontextauswahl: " + entry.label) as HTMLButtonElement; b.type = "button";
+        const b = text(browserWorkspaceStringValuesV1[1] as string, "Kontextauswahl: " + entry.label) as HTMLButtonElement; b.type = browserWorkspaceStringValuesV1[1];
         b.addEventListener("click", () => { void select(entry, capturedEpoch); }, { signal: options.signal });
         controls.set(JSON.stringify({ elementId: entry.elementId, rowId: entry.rowId }), b); fieldset.append(b);
       }
       root.replaceChildren(heading, scope, status, fieldset);
     }
-    for (const [key, b] of controls) { b.disabled = false; b.removeAttribute("aria-disabled"); b.setAttribute("aria-pressed", String(c.selection !== null && key === JSON.stringify(c.selection))); }
+    for (const [key, b] of controls) { b.disabled = false; b.removeAttribute(browserWorkspaceStringValuesV1[131] as string); b.setAttribute(browserWorkspaceStringValuesV1[134] as string, String(c.selection !== null && key === JSON.stringify(c.selection))); }
     emit();
   }
   async function select(entry: WorkspaceContextSelectionEntryV1, capturedEpoch: number) {
-    const issued = owner, snapshot = current; if (!issued || !snapshot || capturedEpoch !== epoch || closed || root.dataset.state !== "CURRENT_CONTEXT") return;
+    const issued = owner, snapshot = current; if (!issued || !snapshot || capturedEpoch !== epoch || closed || root.dataset.state !== browserWorkspaceStringValuesV1[98]) return;
     // Local lifecycle membership only; the native server still resolves authority.
     if (!snapshot.selections.some(s => s.elementId === entry.elementId && s.rowId === entry.rowId)) return;
     const capturedLifetime = lifetime;
@@ -126,13 +127,13 @@ export function createWorkspaceContextSelectionV1(options: {
         const result = await issued.run("read", async (c, signal) => {
           await verify(c, signal);
           if (!live()) throw new Error("CONTEXT_SELECTION_RETIRED");
-          const updated = validateWorkspaceContextSnapshotV1(await request("", { schemaVersion: "pansphaira.workspace-context/claim/v1", tabId: c.binding.tabId,
+          const updated = validateWorkspaceContextSnapshotV1(await request("", { schemaVersion: browserWorkspaceStringValuesV1[77], tabId: c.binding.tabId,
             moduleId: c.moduleId, viewId: c.viewId, primaryObjectId: c.primaryObject?.objectId ?? null, expected: { ...c.revisions, epoch: c.binding.epoch },
             selection: { elementId: entry.elementId, rowId: entry.rowId } }, signal));
           await verify(updated.context, signal); return updated;
         });
         if (!live()) return;
-        if (result.outcome === "CURRENT_CONTEXT_RESPONSE") show(result.value, capturedEpoch); else failure();
+        if (result.outcome === browserWorkspaceStringValuesV1[147]) show(result.value, capturedEpoch); else failure();
       });
     } catch { if (live()) failure(); }
   }
@@ -140,7 +141,7 @@ export function createWorkspaceContextSelectionV1(options: {
     if (closed) return epoch;
     epoch++; const old = current?.context; invalidate();
     pending("Kontextwechsel: Alte Auswahl und ausstehende Antworten werden verworfen …", true);
-    if (old && remote) void serialized(async () => { try { await request("/retire", { schemaVersion: "pansphaira.workspace-context/verify/v1", tabId: old.binding.tabId, contextHandle: old.contextHandle }); } catch { /* No false retirement success or blind replay; subsequent binding revalidates. */ } });
+    if (old && remote) void serialized(async () => { try { await request("/retire", { schemaVersion: browserWorkspaceStringValuesV1[78], tabId: old.binding.tabId, contextHandle: old.contextHandle }); } catch { /* No false retirement success or blind replay; subsequent binding revalidates. */ } });
     return epoch;
   }
   const api = Object.freeze({
@@ -150,10 +151,10 @@ export function createWorkspaceContextSelectionV1(options: {
     beginTarget() { return retire(false); },
     current() { return current?.context ?? null; },
     async selectModuleViewInstance(instanceId: string): Promise<boolean> {
-      const entry = current?.selections.find(e => e.elementId === "pan.erv.module-card" && e.rowId === instanceId);
+      const entry = current?.selections.find(e => e.elementId === browserWorkspaceStringValuesV1[184] && e.rowId === instanceId);
       if (!entry || closed) return false;
       await select(entry, epoch);
-      return current?.context.selection?.elementId === entry.elementId && current?.context.selection?.rowId === entry.rowId && root.dataset.state === "CURRENT_CONTEXT";
+      return current?.context.selection?.elementId === entry.elementId && current?.context.selection?.rowId === entry.rowId && root.dataset.state === browserWorkspaceStringValuesV1[98];
     },
     subscribe(listener: (context: WorkspaceContextReadbackV1 | null) => void) {
       open(); subscribers.add(listener); listener(current?.context ?? null);
@@ -162,36 +163,36 @@ export function createWorkspaceContextSelectionV1(options: {
     // Trusted shell composition only: callers never receive the session/tab
     // proof, choose a free URL, replace context or create mutation authority.
     async moduleViewRequest(operation: WorkspaceModuleViewRequestV1, payload?: Readonly<Record<string, unknown>>, csrfProof?: string): Promise<WorkspaceModuleViewResponseV1> {
-      const suffixes: Readonly<Record<WorkspaceModuleViewRequestV1, string>> = { READ: "", CATALOG: "/catalog", DATA: "/data", PREVIEW: "/preview", UNDO_PREVIEW: "/undo-preview", CONFIRM: "/confirm", CANCEL: "/cancel", HUMAN_READ: "/read", HUMAN_DECIDE: "/decide", HUMAN_RECONCILE: "/reconcile", AGENT_PLAN: "/plan", AGENT_START: "/start", AGENT_READ: "/read", NAV_SEARCH: "/search", NAV_REQUEST: "/request", NAV_READ: "/read", NAV_ACK: "/ack" };
-      if (!Object.hasOwn(suffixes, operation) || !current || !proof || !tabId || closed) return { outcome: "MODULE_VIEW_DENIED", error: "CURRENT_NATIVE_CONTEXT_REQUIRED" };
-      if (payload && (Object.getPrototypeOf(payload) !== Object.prototype || Reflect.ownKeys(payload).some(k => typeof k !== "string" || k === "context") || Object.values(Object.getOwnPropertyDescriptors(payload)).some(d => !d.enumerable || !("value" in d)))) return { outcome: "MODULE_VIEW_DENIED", error: "MODULE_VIEW_PAYLOAD_DENIED" };
+      const suffixes: Readonly<Record<WorkspaceModuleViewRequestV1, string>> = { READ: "", CATALOG: "/catalog", DATA: "/data", PREVIEW: "/preview", UNDO_PREVIEW: "/undo-preview", CONFIRM: "/confirm", CANCEL: "/cancel", HUMAN_READ: "/read", HUMAN_DECIDE: "/decide", HUMAN_RECONCILE: browserWorkspaceStringValuesV1[122] as string, AGENT_PLAN: "/plan", AGENT_START: "/start", AGENT_READ: "/read", NAV_SEARCH: "/search", NAV_REQUEST: "/request", NAV_READ: "/read", NAV_ACK: "/ack" };
+      if (!Object.hasOwn(suffixes, operation) || !current || !proof || !tabId || closed) return { outcome: browserWorkspaceStringValuesV1[47], error: "CURRENT_NATIVE_CONTEXT_REQUIRED" };
+      if (payload && (Object.getPrototypeOf(payload) !== Object.prototype || Reflect.ownKeys(payload).some(k => typeof k !== "string" || k === browserWorkspaceStringValuesV1[64]) || Object.values(Object.getOwnPropertyDescriptors(payload)).some(d => !d.enumerable || !("value" in d)))) return { outcome: browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_PAYLOAD_DENIED" };
       const captured = current, capturedEpoch = epoch, capturedLifetime = lifetime;
       const live = () => !closed && epoch === capturedEpoch && lifetime === capturedLifetime && current === captured && localLive(captured.context, capturedEpoch);
       return serialized(async (): Promise<WorkspaceModuleViewResponseV1> => {
         let writeSent = false;
         try {
-          if (!live()) return { outcome: "STALE_MODULE_VIEW_RESPONSE", error: "MODULE_VIEW_CONTEXT_RETIRED" };
+          if (!live()) return { outcome: browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string };
           await verify(captured.context);
-          if (!live()) return { outcome: "STALE_MODULE_VIEW_RESPONSE", error: "MODULE_VIEW_CONTEXT_RETIRED" };
-          const verification = { schemaVersion: "pansphaira.workspace-context/verify/v1", tabId: captured.context.binding.tabId, contextHandle: captured.context.contextHandle };
+          if (!live()) return { outcome: browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string };
+          const verification = { schemaVersion: browserWorkspaceStringValuesV1[78], tabId: captured.context.binding.tabId, contextHandle: captured.context.contextHandle };
           const headers: Record<string, string> = { "x-pan548-session": initial.sessionId, "x-pan548-tab": proof!, "x-pan548-tab-id": tabId!, "x-pan546-context": captured.context.contextHandle };
-          if (operation === "HUMAN_DECIDE" && csrfProof !== undefined) headers["x-pan527-csrf"] = csrfProof;
-          if (operation === "AGENT_READ") { if (typeof payload?.runId !== "string" || !/^operation:ui-[a-f0-9]{48}$/.test(payload.runId)) throw Error("AGENT_RUN_ID_DENIED"); headers["x-pan548-run"] = payload.runId; }
-          const body = operation === "READ" || operation === "AGENT_READ" ? undefined : operation === "CATALOG" ? verification : { ...payload, context: verification };
-          if (body !== undefined) headers["content-type"] = "application/json";
-          writeSent = operation === "CONFIRM" || operation === "HUMAN_DECIDE" || operation === "AGENT_START";
-          const response = await fetch(base + (operation.startsWith("NAV_") ? "/workspace/invoice-navigation" : operation.startsWith("AGENT_") ? "/workspace/agent-run" : operation.startsWith("HUMAN_") ? "/workspace/erv-human" : "/workspace/module-view") + suffixes[operation], { credentials: "same-origin", cache: "no-store", headers, ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.any([options.signal, AbortSignal.timeout(5000)]) });
-          if (!live()) return { outcome: writeSent ? "MODULE_VIEW_WRITE_OUTCOME_UNKNOWN" : "STALE_MODULE_VIEW_RESPONSE", error: "MODULE_VIEW_CONTEXT_RETIRED" };
-          if (response.status !== 200) return { outcome: "MODULE_VIEW_DENIED", error: "MODULE_VIEW_SERVER_DENIED_" + response.status };
+          if (operation === browserWorkspaceStringValuesV1[168] && csrfProof !== undefined) headers["x-pan527-csrf"] = csrfProof;
+          if (operation === browserWorkspaceStringValuesV1[127]) { if (typeof payload?.runId !== "string" || !/^operation:ui-[a-f0-9]{48}$/.test(payload.runId)) throw Error("AGENT_RUN_ID_DENIED"); headers["x-pan548-run"] = payload.runId; }
+          const body = operation === "READ" || operation === browserWorkspaceStringValuesV1[127] ? undefined : operation === browserWorkspaceStringValuesV1[62] ? verification : { ...payload, context: verification };
+          if (body !== undefined) headers[browserWorkspaceStringValuesV1[141]] = browserWorkspaceStringValuesV1[31] as string;
+          writeSent = operation === browserWorkspaceStringValuesV1[63] || operation === browserWorkspaceStringValuesV1[168] || operation === "AGENT_START";
+          const response = await fetch(base + (operation.startsWith("NAV_") ? "/workspace/invoice-navigation" : operation.startsWith("AGENT_") ? "/workspace/agent-run" : operation.startsWith("HUMAN_") ? "/workspace/erv-human" : "/workspace/module-view") + suffixes[operation], { credentials: browserWorkspaceStringValuesV1[6], cache: browserWorkspaceStringValuesV1[7], headers, ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.any([options.signal, AbortSignal.timeout(5000)]) });
+          if (!live()) return { outcome: writeSent ? browserWorkspaceStringValuesV1[107] : browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string };
+          if (response.status !== 200) return { outcome: browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_SERVER_DENIED_" + response.status };
           const value: unknown = await response.json();
-          if (!live()) return { outcome: writeSent ? "MODULE_VIEW_WRITE_OUTCOME_UNKNOWN" : "STALE_MODULE_VIEW_RESPONSE", error: "MODULE_VIEW_CONTEXT_RETIRED" };
+          if (!live()) return { outcome: writeSent ? browserWorkspaceStringValuesV1[107] : browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string };
           // A successful CAS deliberately invalidates the prior view revision.
           // It is only a write receipt: the consumer must refresh and GET the
           // authoritative target separately, never replay CONFIRM automatically.
-          if (!writeSent) { await verify(captured.context); if (!live()) return { outcome: "STALE_MODULE_VIEW_RESPONSE", error: "MODULE_VIEW_CONTEXT_RETIRED" }; }
-          return { outcome: "CURRENT_MODULE_VIEW_RESPONSE", value, context: captured.context };
+          if (!writeSent) { await verify(captured.context); if (!live()) return { outcome: browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string }; }
+          return { outcome: browserWorkspaceStringValuesV1[148], value, context: captured.context };
         } catch {
-          return { outcome: writeSent ? "MODULE_VIEW_WRITE_OUTCOME_UNKNOWN" : "MODULE_VIEW_DENIED", error: "MODULE_VIEW_RESPONSE_NOT_CONFIRMED" };
+          return { outcome: writeSent ? browserWorkspaceStringValuesV1[107] : browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_RESPONSE_NOT_CONFIRMED" };
         }
       });
     },
@@ -216,7 +217,7 @@ export function createWorkspaceContextSelectionV1(options: {
     async bind(value: { readonly moduleId: string; readonly viewId: string; readonly primaryObjectId: string | null; readonly domainRevision: number | null; readonly localEpoch: number }) {
       const capturedEpoch = value.localEpoch;
       if (closed || capturedEpoch !== epoch) return;
-      if (!["pan.setup", "pan.erv"].includes(value.moduleId)) { failure(); return; }
+      if (![browserWorkspaceStringValuesV1[111] as string, browserWorkspaceStringValuesV1[15] as string].includes(value.moduleId)) { failure(); return; }
       // Replacement within the same navigation epoch owns a distinct lifetime.
       // Retained controls and queued outcomes cannot clear its successor.
       invalidate(); pending("Nativen Seitenkontext prüfen …", true);
@@ -229,7 +230,7 @@ export function createWorkspaceContextSelectionV1(options: {
             await boot(controller.signal); if (!live()) return;
             const fresh = validateWorkspaceContextSnapshotV1(await request("", undefined, controller.signal)); check(fresh.context);
             if (!live()) return;
-            const updated = validateWorkspaceContextSnapshotV1(await request("", { schemaVersion: "pansphaira.workspace-context/claim/v1", tabId: fresh.context.binding.tabId,
+            const updated = validateWorkspaceContextSnapshotV1(await request("", { schemaVersion: browserWorkspaceStringValuesV1[77], tabId: fresh.context.binding.tabId,
               moduleId: value.moduleId, viewId: value.viewId, primaryObjectId: value.primaryObjectId,
               expected: { ...fresh.context.revisions, domainRevision: value.domainRevision, epoch: fresh.context.binding.epoch }, selection: null }, controller.signal));
             check(updated.context);
@@ -241,7 +242,7 @@ export function createWorkspaceContextSelectionV1(options: {
         });
       } catch { if (live()) failure(); }
     },
-    close() { if (closed) return; closed = true; epoch++; invalidate(); current = null; emit(); subscribers.clear(); proof = null; tabId = null; controls.clear(); root.replaceChildren(); root.hidden = true; root.dataset.state = "CONTEXT_OWNER_CLOSED"; root.dataset.module = ""; root.dataset.selection = ""; },
+    close() { if (closed) return; closed = true; epoch++; invalidate(); current = null; emit(); subscribers.clear(); proof = null; tabId = null; controls.clear(); root.replaceChildren(); root.hidden = true; root.dataset.state = browserWorkspaceStringValuesV1[65]; root.dataset.module = ""; root.dataset.selection = ""; },
   });
   options.signal.addEventListener("abort", api.close, { once: true });
   return api;

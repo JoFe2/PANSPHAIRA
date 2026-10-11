@@ -1,3 +1,4 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import type { BrowserShellPluginV1 } from "../../contracts/src/browser-shell-plugin-v1.js";
 import type { BrowserShellFactoryV1 } from "../../browser-shell/src/registry-v1.js";
 import type { AgentConfigurationReadbackV1, AgentConfigurationFieldV1, AgentConfigurationValueV1 } from "../../contracts/src/agent-configuration-draft-v1.js";
@@ -5,22 +6,22 @@ import type { BrowserContextV1 } from "../../browser-shell/src/context-owner-v1.
 import { text } from "./api-v1.js";
 import type {WorkspaceDirtyDraftV1} from './workspace-dirty-draft-v1.js';
 export const configurationDraftPluginV1: BrowserShellPluginV1 = {
-  schemaVersion:"pansphaira.browser-plugin/v1",id:"pan.configuration",version:"1.0.0",shellVersion:"1.0.0",enabled:true,
-  trustBoundary:"TRUSTED_IN_PROCESS_CODE_OWNED_FACTORIES",
-  needs:{data:["agent.configuration.draft"],context:["tenantId","sessionId"],rights:["demo.status.read"],dependencies:[]},
+  schemaVersion:browserWorkspaceStringValuesV1[52],id:"pan.configuration",version:"1.0.0",shellVersion:"1.0.0",enabled:true,
+  trustBoundary:browserWorkspaceStringValuesV1[39],
+  needs:{data:["agent.configuration.draft"],context:[browserWorkspaceStringValuesV1[8],browserWorkspaceStringValuesV1[16]],rights:[browserWorkspaceStringValuesV1[150] as string],dependencies:[]},
   contributions:[
-    {id:"pan.configuration.route",kind:"ROUTE",slot:"shell.routes",factoryId:null,routeId:"pan.configuration.route",path:"/workspace/configuration",label:"Agentenkonfiguration — Entwurf"},
-    {id:"pan.configuration.navigation",kind:"NAVIGATION",slot:"shell.navigation",factoryId:"pan.configuration.navigation",routeId:"pan.configuration.route",path:null,label:"Agentenkonfiguration — Entwurf"},
-    {id:"pan.configuration.view",kind:"VIEW",slot:"shell.main",factoryId:"pan.configuration.view",routeId:"pan.configuration.route",path:null,label:"Agentenkonfiguration — Entwurf"},
+    {id:browserWorkspaceStringValuesV1[74] as string,kind:"ROUTE",slot:browserWorkspaceStringValuesV1[56],factoryId:null,routeId:browserWorkspaceStringValuesV1[74] as string,path:browserWorkspaceStringValuesV1[123] as string,label:browserWorkspaceStringValuesV1[91] as string},
+    {id:browserWorkspaceStringValuesV1[183] as string,kind:browserWorkspaceStringValuesV1[12],slot:browserWorkspaceStringValuesV1[37],factoryId:browserWorkspaceStringValuesV1[183] as string,routeId:browserWorkspaceStringValuesV1[74] as string,path:null,label:browserWorkspaceStringValuesV1[91] as string},
+    {id:browserWorkspaceStringValuesV1[110] as string,kind:"VIEW",slot:browserWorkspaceStringValuesV1[17],factoryId:browserWorkspaceStringValuesV1[110] as string,routeId:browserWorkspaceStringValuesV1[74] as string,path:null,label:browserWorkspaceStringValuesV1[91] as string},
   ],
 };
 type Readback = AgentConfigurationReadbackV1;
 const groupLabels:Record<string,string>={context:"Kontext",goal:"Aufgabe und Profil",runtime:"Runtime",model:"Modell",access:"Zugang und Prüfstatus",data:"Daten",tools:"Werkzeuge",work:"Arbeitsregeln",budget:"Budgets",persistence:"Gedächtnis und Nachweise",modules:"Optionale Fachmodule"};
 const valueLabels:Record<string,string>={"de-DE":"Deutsch","en-GB":"Englisch","employee.business.help":"Begrenzte Unterstützung bei der Arbeit","employee.directory.summary":"Eigenes Mitarbeiterverzeichnis zusammenfassen",
-  "employee-own-directory/v1":"Eigenes Mitarbeiterverzeichnis","pan441-pan529/v1":"Geprüfter Profil-/Runtimeadapter v1","OWNER_BOUND_LOCAL":"Eigener geschützter lokaler Dienst",
+  "employee-own-directory/v1":browserWorkspaceStringValuesV1[154] as string,"pan441-pan529/v1":"Geprüfter Profil-/Runtimeadapter v1","OWNER_BOUND_LOCAL":"Eigener geschützter lokaler Dienst",
   "capability:employee.directory.read.own":"Eigenes Mitarbeiterverzeichnis lesen","synthetic-bounded/v1":"Nur synthetische lokale Referenz — kein echter KI-Agent","NONE":"Nicht ausgewählt",
   "SYNTHETIC_LOCAL_NO_PROVIDER":"Lokale Synthetik, kein Modellanbieter","BOUNDED_SYNTHETIC_READ":"Begrenzte synthetische Leseprobe","NO_CREDENTIAL":"Kein Zugangsmittel erforderlich","NOT_RUN":"Nicht ausgeführt",
-  "employee.directory.own":"Eigenes Mitarbeiterverzeichnis","OWN_REQUESTING_USER":"Nur anfragender Nutzer","READ":"Lesen","READ_ONLY":"Nur lesen","NO_EFFECT_AUTHORIZATION":"Keine Wirkung durch diesen Entwurf autorisiert",
+  "employee.directory.own":browserWorkspaceStringValuesV1[154] as string,"OWN_REQUESTING_USER":"Nur anfragender Nutzer","READ":"Lesen","READ_ONLY":"Nur lesen","NO_EFFECT_AUTHORIZATION":"Keine Wirkung durch diesen Entwurf autorisiert",
   "DRAFT_ONLY":"Nur Konfigurationsentwurf","UNTIL_OWNER_DELETION":"Bis zur ausdrücklichen Owner-Löschung","NO_SECRETS_NO_BUSINESS_PAYLOADS":"Keine Secrets oder fachlichen Nutzdaten",
   "OWN_SCOPED_DRAFT_ONLY":"Nur eigener Konfigurationsentwurf","AUTHENTICATED_USER_TENANT_INSTANCE":"Getrennt nach Nutzer, Mandant und Instanz",
   displayName:"Anzeigename",department:"Abteilung",jobTitle:"Berufsbezeichnung",employeeAlias:"Mitarbeiteralias"};
@@ -38,23 +39,23 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
     signal.addEventListener('abort',()=>unregister?.(),{once:true});
     const heading=text("h1","Versionierter Agentenkonfigurationsentwurf");
     const note=text("p","Nur erlaubte Konfiguration wird dauerhaft gespeichert. Keine Aktivierung, keine Rechtevergabe, keine fachlichen Änderungen und kein kostenpflichtiger Modellaufruf.");
-    const status=text("p","");status.className="read-state";status.setAttribute("role","status");status.setAttribute("aria-live","polite");
+    const status=text("p","");status.className=browserWorkspaceStringValuesV1[203] as string;status.setAttribute("role",browserWorkspaceStringValuesV1[22] as string);status.setAttribute(browserWorkspaceStringValuesV1[133] as string,browserWorkspaceStringValuesV1[197] as string);
     const body=text("div","");const editor=text("div","");editor.className="configuration-editor";
-    const reload=text("button","Aktuellen Entwurf neu laden") as HTMLButtonElement;reload.type="button";
-    const noAi=text("button","Ohne KI fortfahren") as HTMLButtonElement;noAi.type="button";
-    noAi.addEventListener("click",()=>{void save("model.reference","NONE","CONFIRM");},{signal});
+    const reload=text(browserWorkspaceStringValuesV1[1] as string,"Aktuellen Entwurf neu laden") as HTMLButtonElement;reload.type=browserWorkspaceStringValuesV1[1];
+    const noAi=text(browserWorkspaceStringValuesV1[1] as string,"Ohne KI fortfahren") as HTMLButtonElement;noAi.type=browserWorkspaceStringValuesV1[1];
+    noAi.addEventListener("click",()=>{void save(browserWorkspaceStringValuesV1[72],"NONE",browserWorkspaceStringValuesV1[63]);},{signal});
     target.append(heading,note,status,reload,noAi,editor,body);
     function active(){return !signal.aborted && context().sessionId === captured.sessionId && context().tenantId === captured.tenantId;}
     function state(outcome:string,message:string){if(active()){target.dataset.outcome=outcome;status.textContent=message;}}
-    function controls(disabled:boolean){for(const node of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))node.disabled=disabled || (needsReconciliation && node !== reload);noAi.disabled=disabled || needsReconciliation || !current || current.draft.fields["model.reference"].value === "NONE";}
+    function controls(disabled:boolean){for(const node of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))node.disabled=disabled || (needsReconciliation && node !== reload);noAi.disabled=disabled || needsReconciliation || !current || current.draft.fields[browserWorkspaceStringValuesV1[72]].value === "NONE";}
     async function request(method:"GET"|"POST",payload?:unknown) {
-      const fresh=await fetch(base+"/workspace/context",{credentials:"same-origin",cache:"no-store",signal});
+      const fresh=await fetch(base+browserWorkspaceStringValuesV1[18],{credentials:browserWorkspaceStringValuesV1[6],cache:browserWorkspaceStringValuesV1[7],signal});
       const binding=fresh.status === 200 ? await fresh.json() as BrowserContextV1 : null;
       if(!active() || binding?.sessionId !== captured.sessionId || binding.tenantId !== captured.tenantId) return {status:401,value:null};
-      const response=await fetch(base+"/workspace/configuration",{method,credentials:"same-origin",cache:"no-store",signal,
-        ...(method === "POST" ? {headers:{"content-type":"application/json","x-pan563-context":captured.sessionId},body:JSON.stringify(payload)} : {})});
+      const response=await fetch(base+browserWorkspaceStringValuesV1[123],{method,credentials:browserWorkspaceStringValuesV1[6],cache:browserWorkspaceStringValuesV1[7],signal,
+        ...(method === "POST" ? {headers:{"content-type":browserWorkspaceStringValuesV1[31] as string,"x-pan563-context":captured.sessionId},body:JSON.stringify(payload)} : {})});
       const value=await response.json() as Readback & {error?:string};
-      const after=await fetch(base+"/workspace/context",{credentials:"same-origin",cache:"no-store",signal});
+      const after=await fetch(base+browserWorkspaceStringValuesV1[18],{credentials:browserWorkspaceStringValuesV1[6],cache:browserWorkspaceStringValuesV1[7],signal});
       const afterBinding=after.status === 200 ? await after.json() as BrowserContextV1 : null;
       if(!active() || afterBinding?.sessionId !== captured.sessionId) return {status:401,value:null};
       return {status:response.status,value};
@@ -68,14 +69,14 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
     }
     function failure(code:number,error?:string) {
       if ([401,403].includes(code)) { current=null;body.replaceChildren();editor.replaceChildren(); }
-      state(code === 409 ? "CONFLICT" : [401,403].includes(code) ? "DENIED" : "ERROR",
+      state(code === 409 ? browserWorkspaceStringValuesV1[96] as string : [401,403].includes(code) ? browserWorkspaceStringValuesV1[2] as string : "ERROR",
         code === 409 && error === "CONFIGURATION_POLICY_CHANGED_REJECT_REQUIRES_RECONFIRMATION" ? "Profil oder Runtimevorlage ist nicht mehr kompatibel. Der ursprüngliche Entwurf bleibt erhalten; eine geprüfte Migration oder erneute Bestätigung durch den zuständigen Owner ist erforderlich."
         : code === 409 ? "Revisionskonflikt: Ein anderer Tab hat den Entwurf geändert. Ihre Eingabe wurde nicht überschrieben. Aktuellen Entwurf ausdrücklich neu laden und prüfen."
         : [401,403].includes(code) ? "Zugriff verweigert: Die aktuelle Session oder Kontextbindung ist nicht mehr gültig. Es wurde kein erfolgreicher Speichervorgang bestätigt."
         : "Konfigurationsbackend nicht verfügbar oder Eingabe abgelehnt. Kein erfolgreicher Speichernachweis. "+(error??""));
     }
     async function save(field:AgentConfigurationFieldV1,value:AgentConfigurationValueV1|null,confirmation:"CONFIRM"|"UNKNOWN") {
-      if(!current || busy || needsReconciliation || !active())return;busy=true;saveInFlight=true;controls(true);state("SAVING","Entwurf wird mit erwarteter Revision gespeichert und anschließend erneut gelesen …");
+      if(!current || busy || needsReconciliation || !active())return;busy=true;saveInFlight=true;controls(true);state(browserWorkspaceStringValuesV1[211] as string,"Entwurf wird mit erwarteter Revision gespeichert und anschließend erneut gelesen …");
       try {
         const result=await request("POST",{schemaVersion:"pansphaira.agent-configuration/answers/v1",expectedRevision:current.revision,answers:[{field,value,confirmation}]});
         if(!active())return;
@@ -84,8 +85,8 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
         const readback=await request("GET");if(!active())return;
         if(readback.status !== 200 || !accepted(readback.value) || readback.value.revision !== result.value.revision || JSON.stringify(readback.value.draft) !== JSON.stringify(result.value.draft)) throw new Error("Persistierter Zielreadback stimmt nicht überein");
         current=readback.value;dirty=false;show();state("PERSISTED","Entwurf gespeichert und identisch vom zuständigen Backend erneut gelesen. Revision "+current.revision+".");
-        editor.querySelector<HTMLElement>("select,input,button")?.focus();
-      } catch(e){if(active()){needsReconciliation=true;state("OUTCOME_UNKNOWN","Speicherausgang unklar: Der Server kann den Entwurf bereits gespeichert haben. Keine automatische Wiederholung. Vor weiteren Änderungen den aktuellen Entwurf ausdrücklich neu laden und abgleichen. "+(e instanceof Error?e.message:"Unbekannter Backendfehler"));}}
+        editor.querySelector<HTMLElement>(browserWorkspaceStringValuesV1[212] as string)?.focus();
+      } catch(e){if(active()){needsReconciliation=true;state(browserWorkspaceStringValuesV1[51] as string,"Speicherausgang unklar: Der Server kann den Entwurf bereits gespeichert haben. Keine automatische Wiederholung. Vor weiteren Änderungen den aktuellen Entwurf ausdrücklich neu laden und abgleichen. "+(e instanceof Error?e.message:browserWorkspaceStringValuesV1[230]));}}
       finally{busy=false;saveInFlight=false;if(active())controls(false);}
     }
     function edit(field:AgentConfigurationFieldV1,question=false) {
@@ -96,24 +97,24 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
       const detail=text("p",definition.help["de-DE"]+" "+(question ? "Nur diese notwendige Antwort ist aktuell ungelöst. Herkunft und Bestätigung setzt der Server, nicht der Browser." : "Eine Änderung macht nur abhängige Antworten und Prüfungen ungültig."));
       let readValue:()=>AgentConfigurationValueV1|null;
       if(definition.type === "SET") {
-        const fieldset=document.createElement("fieldset");fieldset.append(text("legend",definition.label));
+        const fieldset=document.createElement(browserWorkspaceStringValuesV1[103]);fieldset.append(text(browserWorkspaceStringValuesV1[105] as string,definition.label));
         const inputs:HTMLInputElement[]=[];
-        for(const value of definition.allowedValues){const label=document.createElement("label");const input=document.createElement("input");input.type="checkbox";input.value=String(value);input.checked=Array.isArray(existing.value)&&existing.value.includes(String(value));inputs.push(input);label.append(input,document.createTextNode(displayValue(value)));fieldset.append(label);}
+        for(const value of definition.allowedValues){const label=document.createElement("label");const input=document.createElement("input");input.type=browserWorkspaceStringValuesV1[44] as string;input.value=String(value);input.checked=Array.isArray(existing.value)&&existing.value.includes(String(value));inputs.push(input);label.append(input,document.createTextNode(displayValue(value)));fieldset.append(label);}
         form.append(fieldset);readValue=()=>inputs.filter(i=>i.checked).map(i=>i.value);
       } else if(definition.type === "INTEGER") {
         const label=document.createElement("label");label.textContent=definition.label;const input=document.createElement("input");input.type="number";input.min=String(definition.allowedValues[0]);input.max=String(definition.allowedValues[1]);input.step="1";input.required=true;input.value=typeof existing.value === "number" ? String(existing.value) : "";label.append(input);form.append(label);readValue=()=>Number(input.value);
       } else {
-        const label=document.createElement("label");label.textContent=definition.label;const select=document.createElement("select");select.required=true;
-        const empty=document.createElement("option");empty.value="";empty.textContent="Bitte ausdrücklich auswählen — kein stiller Default";select.append(empty);
-        for(const value of definition.allowedValues){const option=document.createElement("option");option.value=JSON.stringify(value);option.textContent=value === null ? "Keine Secretreferenz erforderlich" : displayValue(value);select.append(option);}
-        if(existing.confirmation !== "UNKNOWN" && existing.confirmation !== "CONTRADICTED") select.value=JSON.stringify(existing.value);
+        const label=document.createElement("label");label.textContent=definition.label;const select=document.createElement(browserWorkspaceStringValuesV1[55]);select.required=true;
+        const empty=document.createElement(browserWorkspaceStringValuesV1[36]);empty.value="";empty.textContent="Bitte ausdrücklich auswählen — kein stiller Default";select.append(empty);
+        for(const value of definition.allowedValues){const option=document.createElement(browserWorkspaceStringValuesV1[36]);option.value=JSON.stringify(value);option.textContent=value === null ? "Keine Secretreferenz erforderlich" : displayValue(value);select.append(option);}
+        if(existing.confirmation !== browserWorkspaceStringValuesV1[23] && existing.confirmation !== "CONTRADICTED") select.value=JSON.stringify(existing.value);
         select.id="configuration-value";label.htmlFor=select.id;form.append(label,select);readValue=()=>JSON.parse(select.value) as AgentConfigurationValueV1|null;
       }
-      form.addEventListener('input',()=>{dirty=true;},{signal});form.addEventListener('change',()=>{dirty=true;},{signal});
-      const submit=text("button","Bestätigen und Entwurf speichern") as HTMLButtonElement;submit.type="submit";
-      const unknown=text("button","Als unbekannt speichern") as HTMLButtonElement;unknown.type="button";
-      form.append(submit,unknown);form.addEventListener("submit",e=>{e.preventDefault();void save(field,readValue(),"CONFIRM");},{signal});
-      unknown.addEventListener("click",()=>{void save(field,null,"UNKNOWN");},{signal});editor.append(title,detail,form);
+      form.addEventListener('input',()=>{dirty=true;},{signal});form.addEventListener(browserWorkspaceStringValuesV1[33],()=>{dirty=true;},{signal});
+      const submit=text(browserWorkspaceStringValuesV1[1] as string,"Bestätigen und Entwurf speichern") as HTMLButtonElement;submit.type=browserWorkspaceStringValuesV1[223];
+      const unknown=text(browserWorkspaceStringValuesV1[1] as string,"Als unbekannt speichern") as HTMLButtonElement;unknown.type=browserWorkspaceStringValuesV1[1];
+      form.append(submit,unknown);form.addEventListener(browserWorkspaceStringValuesV1[223],e=>{e.preventDefault();void save(field,readValue(),browserWorkspaceStringValuesV1[63]);},{signal});
+      unknown.addEventListener("click",()=>{void save(field,null,browserWorkspaceStringValuesV1[23]);},{signal});editor.append(title,detail,form);
     }
     function show() {
       if(!current)return;body.replaceChildren();editor.replaceChildren();
@@ -123,24 +124,24 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
       for(const field of Object.keys(current.definitions) as AgentConfigurationFieldV1[]) {
         const f=current.draft.fields[field];const d=current.definitions[field];const li=document.createElement("li");
         let list=groups.get(d.group);
-        if(!list){const section=document.createElement("details");section.className="configuration-group";section.open=["context","goal"].includes(d.group);section.append(text("summary",groupLabels[d.group]??d.group));list=document.createElement("ul");list.className="configuration-parameters";section.append(list);body.append(section);groups.set(d.group,list);}
+        if(!list){const section=document.createElement(browserWorkspaceStringValuesV1[151]);section.className="configuration-group";section.open=[browserWorkspaceStringValuesV1[64] as string,"goal"].includes(d.group);section.append(text(browserWorkspaceStringValuesV1[225] as string,groupLabels[d.group]??d.group));list=document.createElement("ul");list.className="configuration-parameters";section.append(list);body.append(section);groups.set(d.group,list);}
         const source=f.source === "PROFILE_TEMPLATE" ? "Geprüftes Profil / Runtimevorlage" : f.source === "SESSION_USER" ? "Antwort des angemeldeten Nutzers" : "Noch ungeklärt";
         const confirmation={CONFIRMED:"Bestätigt",UNKNOWN:"Unbekannt",STALE:"Erneut bestätigen",CONTRADICTED:"Widersprüchlich"}[f.confirmation];
         const validation={CURRENT:"Aktuell",UNKNOWN:"Offen",STALE:"Erneut prüfen"}[f.validation.status];
-        const applicable=d.requiredWhen !== "SYNTHETIC_MODEL" || current.draft.fields["model.reference"].value === "synthetic-bounded/v1";
+        const applicable=d.requiredWhen !== "SYNTHETIC_MODEL" || current.draft.fields[browserWorkspaceStringValuesV1[72]].value === "synthetic-bounded/v1";
         li.append(text("strong",d.label),text("p",applicable ? displayValue(f.value) : "Ohne Modell nicht anwendbar — ursprünglicher Wert bleibt im Entwurf erhalten"),text("p","Quelle: "+source+" · "+confirmation+" · Prüfung: "+validation));
-        const technical=document.createElement("details");technical.append(text("summary","Technische Details"),text("pre",JSON.stringify({field,definition:d,state:f},null,2)));li.append(technical);
-        const button=text("button","Bearbeiten: "+d.label) as HTMLButtonElement;button.type="button";button.addEventListener("click",()=>{edit(field);editor.querySelector<HTMLElement>("select,input,button")?.focus();},{signal});li.append(button);list.append(li);
+        const technical=document.createElement(browserWorkspaceStringValuesV1[151]);technical.append(text(browserWorkspaceStringValuesV1[225] as string,"Technische Details"),text("pre",JSON.stringify({field,definition:d,state:f},null,2)));li.append(technical);
+        const button=text(browserWorkspaceStringValuesV1[1] as string,"Bearbeiten: "+d.label) as HTMLButtonElement;button.type=browserWorkspaceStringValuesV1[1];button.addEventListener("click",()=>{edit(field);editor.querySelector<HTMLElement>(browserWorkspaceStringValuesV1[212] as string)?.focus();},{signal});li.append(button);list.append(li);
       }
-      noAi.disabled=current.draft.fields["model.reference"].value === "NONE";
+      noAi.disabled=current.draft.fields[browserWorkspaceStringValuesV1[72]].value === "NONE";
       if(current.questions.length)edit(current.questions[0]!.field,true);
       else editor.append(text("h2","Keine fehlenden Pflichtfragen"),text("p","Die bestätigte normalisierte Konfiguration ist vollständig. Konfigurationsdigest: "+current.configurationDigest));
     }
     async function load() {
-      if(busy)return;busy=true;controls(true);state("LOADING","Versionierter Entwurf wird vom zuständigen Backend gelesen …");
+      if(busy)return;busy=true;controls(true);state(browserWorkspaceStringValuesV1[26] as string,"Versionierter Entwurf wird vom zuständigen Backend gelesen …");
       try{const result=await request("GET");if(!active())return;if(result.status !== 200){failure(result.status,result.value?.error);return;}if(!accepted(result.value))throw new Error("Ungültiger Backendvertrag");
-        current=result.value;needsReconciliation=false;dirty=false;show();state(current.persisted?"READBACK_RECEIVED":"EMPTY",current.persisted?"Gespeicherten Entwurf gelesen. Revision "+current.revision+".":"Noch kein gespeicherter Entwurf. Geprüftes begrenztes Profil ist vorbelegt; ungelöste Pflichtwerte bleiben ausdrücklich unbekannt.");
-      }catch(e){if(active())failure(503,e instanceof Error?e.message:"Unbekannter Backendfehler");}finally{busy=false;if(active())controls(false);}
+        current=result.value;needsReconciliation=false;dirty=false;show();state(current.persisted?browserWorkspaceStringValuesV1[20] as string:"EMPTY",current.persisted?"Gespeicherten Entwurf gelesen. Revision "+current.revision+".":"Noch kein gespeicherter Entwurf. Geprüftes begrenztes Profil ist vorbelegt; ungelöste Pflichtwerte bleiben ausdrücklich unbekannt.");
+      }catch(e){if(active())failure(503,e instanceof Error?e.message:browserWorkspaceStringValuesV1[230]);}finally{busy=false;if(active())controls(false);}
     }
     reload.addEventListener("click",()=>{void load();},{signal});await load();
   }};

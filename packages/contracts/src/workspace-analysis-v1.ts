@@ -1,3 +1,4 @@
+import {browserWorkspaceStringValuesV1} from "./browser-shell-plugin-v1.js";
 // Browser-safe closed read/result profile; these facts grant no execution rights.
 import {canonicalJson} from './canonical-json.js';
 export const WORKSPACE_ANALYSIS_READ_V1='pansphaira.workspace-analysis/read/v1' as const;
@@ -26,8 +27,8 @@ function record(value:unknown,keys:readonly string[]):Record<string,unknown>{
 }
 function array(value:unknown,max:number):readonly unknown[]{
  if(!Array.isArray(value)||Object.getPrototypeOf(value)!==Array.prototype)return denied();
- const ds=Object.getOwnPropertyDescriptors(value),size=Object.getOwnPropertyDescriptor(value,'length')?.value;
- if(!Number.isSafeInteger(size)||size<0||size>max||Reflect.ownKeys(ds).length!==size+1||Reflect.ownKeys(ds).some(k=>typeof k!=='string'||(k!=='length'&&(!/^(0|[1-9][0-9]*)$/.test(k)||Number(k)>=size)))||Object.entries(ds).some(([k,d])=>k!=='length'&&(!d.enumerable||!('value' in d))))return denied();
+ const ds=Object.getOwnPropertyDescriptors(value),size=Object.getOwnPropertyDescriptor(value,browserWorkspaceStringValuesV1[11])?.value;
+ if(!Number.isSafeInteger(size)||size<0||size>max||Reflect.ownKeys(ds).length!==size+1||Reflect.ownKeys(ds).some(k=>typeof k!=='string'||(k!==browserWorkspaceStringValuesV1[11]&&(!/^(0|[1-9][0-9]*)$/.test(k)||Number(k)>=size)))||Object.entries(ds).some(([k,d])=>k!==browserWorkspaceStringValuesV1[11]&&(!d.enumerable||!('value' in d))))return denied();
  return value;
 }
 const integer=(v:unknown):boolean=>Number.isSafeInteger(v)&&(v as number)>=0;
@@ -44,41 +45,41 @@ function instant(v:unknown):boolean{
 function freeze<T>(v:T):T{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 const clone=<T>(v:unknown):T=>freeze(structuredClone(v)) as T;
 function binding(value:unknown):WorkspaceAnalysisBindingV1{
- const b=record(value,['origin','tenantId','instanceId','generation','identityDigest']);
+ const b=record(value,['origin',browserWorkspaceStringValuesV1[8] as string,browserWorkspaceStringValuesV1[104] as string,'generation','identityDigest']);
  if(typeof b.origin!=='string'||!/^https:\/\/[a-z0-9.-]+(?::[1-9][0-9]{0,4})?$/.test(b.origin)||typeof b.tenantId!=='string'||!/^[a-z0-9][a-z0-9-]{0,63}$/.test(b.tenantId)||typeof b.instanceId!=='string'||!/^[a-z0-9][a-z0-9:_-]{0,127}$/.test(b.instanceId)||!integer(b.generation)||b.generation===0||!hex(b.identityDigest))return denied();
  return clone(value);
 }
 export function validateWorkspaceAnalysisReadV1(value:unknown):WorkspaceAnalysisReadV1{
- const s=record(value,['schemaVersion','objectId','expectedNativeRevision','expectedResultRevision','asOf']);
+ const s=record(value,[browserWorkspaceStringValuesV1[0] as string,browserWorkspaceStringValuesV1[5] as string,'expectedNativeRevision','expectedResultRevision','asOf']);
  if(s.schemaVersion!==WORKSPACE_ANALYSIS_READ_V1||s.objectId!==WORKSPACE_ANALYSIS_STOCK_OBJECT_V1||(s.expectedNativeRevision!==null&&!integer(s.expectedNativeRevision))||(s.expectedResultRevision!==null&&!hex(s.expectedResultRevision))||!instant(s.asOf))return denied();
  return clone(value);
 }
 const grain={sourceId:'SYN-COMMON',tenantId:'SYN-TENANT-01',entityId:'SYN-ENTITY-01',orderId:'SO-01',lineId:'1',articleId:'ARTICLE-A',warehouseId:'WH-01',currency:'EUR',unit:'STK'} as const;
 const labels={physical:'Physischer Bestand',reserved:'Reservierter Bestand',quarantined:'Gesperrter Bestand',free:'Frei verfügbarer Bestand',stockRunwayDays:'Bestandsreichweite',stockValueMinor:'Qualifizierter Bestandswert'} as const;
 export function validateWorkspaceAnalysisResultV1(value:unknown,expectedBinding:WorkspaceAnalysisBindingV1):WorkspaceAnalysisStockResultV1{
- const r=record(value,['schemaVersion','objectId','resultRevision','binding','source','rows','cohort','availability','proposalOnly','effectsProduced','executionAuthorityGranted','consentChanged','transportEnabled']);
+ const r=record(value,[browserWorkspaceStringValuesV1[0] as string,browserWorkspaceStringValuesV1[5] as string,browserWorkspaceStringValuesV1[209] as string,browserWorkspaceStringValuesV1[24] as string,browserWorkspaceStringValuesV1[86] as string,'rows','cohort','availability','proposalOnly',browserWorkspaceStringValuesV1[153] as string,browserWorkspaceStringValuesV1[19] as string,'consentChanged','transportEnabled']);
  const actual=binding(r.binding),expected=binding(expectedBinding);
  if(Object.keys(expected).some(k=>actual[k as keyof WorkspaceAnalysisBindingV1]!==expected[k as keyof WorkspaceAnalysisBindingV1])||r.schemaVersion!==WORKSPACE_ANALYSIS_RESULT_V1||r.objectId!==WORKSPACE_ANALYSIS_STOCK_OBJECT_V1||!hex(r.resultRevision)||r.proposalOnly!==false||r.effectsProduced!==false||r.executionAuthorityGranted!==false||r.consentChanged!==false||r.transportEnabled!==false)return denied();
- const s=record(r.source,['entrypoint','schemaVersion','profile','projectionDigest','snapshot','grain','coverage']);
+ const s=record(r.source,[browserWorkspaceStringValuesV1[157] as string,browserWorkspaceStringValuesV1[0] as string,browserWorkspaceStringValuesV1[117] as string,'projectionDigest',browserWorkspaceStringValuesV1[219] as string,'grain','coverage']);
  if(s.entrypoint!=='src/pan515/trade-state.mjs#readPan515TradeState'||s.schemaVersion!=='pansphaira.pan520/projection-snapshot/v1'||s.profile!=='STOCK'||!hex(s.projectionDigest)||!token(s.coverage))return denied();
  const snap=record(s.snapshot,['asOf','nativeRevision','bindingDigest','nativeEventSetDigest']),g=record(s.grain,Object.keys(grain));
  if(!instant(snap.asOf)||!integer(snap.nativeRevision)||!hex(snap.bindingDigest)||!hex(snap.nativeEventSetDigest)||Object.keys(grain).some(k=>g[k]!==grain[k as keyof typeof grain]))return denied();
  const rows=array(r.rows,6);if(rows.length!==6)return denied();
  rows.forEach((value,index)=>{
-  const row=record(value,['key','label','state','value','unit','reason','basis']),key=Object.keys(labels)[index] as WorkspaceAnalysisStockKeyV1;
-  if(row.key!==key||row.label!==labels[key]||row.unit!==(key==='stockRunwayDays'?'DAYS':key==='stockValueMinor'?'EUR_MINOR':'STK'))return denied();
+  const row=record(value,['key','label','state','value','unit',browserWorkspaceStringValuesV1[83] as string,'basis']),key=Object.keys(labels)[index] as WorkspaceAnalysisStockKeyV1;
+  if(row.key!==key||row.label!==labels[key]||row.unit!==(key===browserWorkspaceStringValuesV1[221]?'DAYS':key==='stockValueMinor'?'EUR_MINOR':'STK'))return denied();
   if(index<4){if(row.state!=='KNOWN'||!integer(row.value)||row.reason!==null||row.basis!=='ACTUAL_NATIVE_PAN515_EVENT_STOCK_READBACK')return denied();}
-  else if(row.state!=='UNAVAILABLE'||row.value!==null||row.basis!==null||row.reason!==(key==='stockRunwayDays'?'MISSING_NATIVE_CONSUMPTION_HISTORY':'MISSING_QUALIFIED_VALUATION_PROFILE'))return denied();
+  else if(row.state!==browserWorkspaceStringValuesV1[40]||row.value!==null||row.basis!==null||row.reason!==(key===browserWorkspaceStringValuesV1[221]?'MISSING_NATIVE_CONSUMPTION_HISTORY':'MISSING_QUALIFIED_VALUATION_PROFILE'))return denied();
  });
  if(r.availability!=='PARTIAL')return denied();
  if(r.cohort!==null){
-  const cohort=record(r.cohort,['entrypoint','populationDenominator','denominatorState','report']);
-  if(cohort.entrypoint!=='packages/usage-insights/src/index.ts#UsageInsightsLocalServiceV1.localReport'||cohort.populationDenominator!==null||cohort.denominatorState!=='UNKNOWN')return denied();
-  const report=record(cohort.report,['schemaVersion','cohortLabel','coverageLabel','coverageNonclaims','smallCellPolicy','minCellSize','publicationState','installationsSeen','suppressionReason','metrics','generatedAtMs','reportDigest']);
+  const cohort=record(r.cohort,[browserWorkspaceStringValuesV1[157] as string,'populationDenominator','denominatorState','report']);
+  if(cohort.entrypoint!=='packages/usage-insights/src/index.ts#UsageInsightsLocalServiceV1.localReport'||cohort.populationDenominator!==null||cohort.denominatorState!==browserWorkspaceStringValuesV1[23])return denied();
+  const report=record(cohort.report,[browserWorkspaceStringValuesV1[0] as string,'cohortLabel','coverageLabel','coverageNonclaims','smallCellPolicy','minCellSize','publicationState','installationsSeen','suppressionReason','metrics','generatedAtMs',browserWorkspaceStringValuesV1[208] as string]);
   const nonclaims=array(report.coverageNonclaims,2);
   if(report.schemaVersion!=='chimpmaera.usage-insights/report/v1'||report.cohortLabel!=='EXPLICIT_OPT_IN_ONLY'||report.coverageLabel!=='PARTIAL_NON_REPRESENTATIVE_COHORT'||nonclaims.length!==2||nonclaims[0]!=='DOES_NOT_REPRESENT_ALL_INSTALLATIONS'||nonclaims[1]!=='NO_PRODUCTION_OR_ADOPTION_CLAIM'||report.smallCellPolicy!=='ALL_OR_NOTHING_DISTINCT_INSTALLATIONS_THRESHOLD_5'||report.minCellSize!==5||!integer(report.generatedAtMs)||!hex(report.reportDigest)||report.metrics!==null)return denied();
   if(report.publicationState==='EMPTY'){if(report.installationsSeen!==0||report.suppressionReason!==null)return denied();}
-  else if(report.publicationState==='SUPPRESSED'){if(report.installationsSeen!==null||report.suppressionReason!=='ONE_OR_MORE_COHORTS_BELOW_THRESHOLD')return denied();}
+  else if(report.publicationState===browserWorkspaceStringValuesV1[226]){if(report.installationsSeen!==null||report.suppressionReason!=='ONE_OR_MORE_COHORTS_BELOW_THRESHOLD')return denied();}
   else return denied();
  }
  return clone(value);
@@ -87,7 +88,7 @@ export function validateWorkspaceAnalysisResultV1(value:unknown,expectedBinding:
 // Unkeyed byte integrity, never provenance or an authentication/rights grant.
 async function digestWithout(value:Record<string,unknown>,key:string):Promise<string>{
  const unsigned=Object.fromEntries(Object.entries(value).filter(([k])=>k!==key));
- const bytes=await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonicalJson(unsigned)));
+ const bytes=await globalThis.crypto.subtle.digest(browserWorkspaceStringValuesV1[214],new TextEncoder().encode(canonicalJson(unsigned)));
  return Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');
 }
 export async function verifyWorkspaceAnalysisReadResultV1(value:unknown,expectedBinding:WorkspaceAnalysisBindingV1,selector:unknown):Promise<WorkspaceAnalysisStockResultV1>{
@@ -102,7 +103,7 @@ export async function verifyWorkspaceAnalysisReadResultV1(value:unknown,expected
 
 export async function verifyWorkspaceAnalysisResultIntegrityV1(value:unknown,expectedBinding:WorkspaceAnalysisBindingV1):Promise<WorkspaceAnalysisStockResultV1>{
  const result=validateWorkspaceAnalysisResultV1(value,expectedBinding);
- if(await digestWithout(result as unknown as Record<string,unknown>,'resultRevision')!==result.resultRevision)return denied();
- if(result.cohort&&await digestWithout(result.cohort.report as unknown as Record<string,unknown>,'reportDigest')!==result.cohort.report.reportDigest)return denied();
+ if(await digestWithout(result as unknown as Record<string,unknown>,browserWorkspaceStringValuesV1[209] as string)!==result.resultRevision)return denied();
+ if(result.cohort&&await digestWithout(result.cohort.report as unknown as Record<string,unknown>,browserWorkspaceStringValuesV1[208] as string)!==result.cohort.report.reportDigest)return denied();
  return result;
 }
