@@ -1,3 +1,4 @@
+import {isNativeWorkspaceKnowledgeV1} from '../pan547/native-knowledge.mjs';
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { constants, closeSync, fstatSync, lstatSync, openSync, readFileSync, realpathSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve } from "node:path";
@@ -369,12 +370,22 @@ export function mountProtectedWorkspaceContextSelectionV1(gateway, options) {
 // Additive closed personal module-view/read catalog on this SAME native ingress.
 // No route installer, free URL/query, business writer or replacement context.
 export function mountProtectedWorkspaceModuleViewsV1(gateway, options) {
-  exactData(options, ["optIn", "tenantId", "identityDigest", "origin", "adapterVersion", "dataCatalog", "viewOwner"], "VIEW_NATIVE_OWNER_DENIED");
+  const scriptDescriptor=options&&Object.getOwnPropertyDescriptor(options,"script");
+  exactData(options, ["optIn", "tenantId", "identityDigest", "origin", "adapterVersion", "dataCatalog", "viewOwner",...(scriptDescriptor?["script"]:[])], "VIEW_NATIVE_OWNER_DENIED");
+  if(scriptDescriptor&&(typeof scriptDescriptor.value!=="string"||!scriptDescriptor.value.length||Buffer.byteLength(scriptDescriptor.value)>131072))throw Error("VIEW_NATIVE_OWNER_DENIED");
   const product = ownedProductIngresses.get(gateway)?.get(options.tenantId);
   if (options.optIn !== true || !product?.workspaceDocument || !product.workspaceContextSelection || product.workspaceModuleViews || options.origin !== product.sessions.origin || options.identityDigest !== product.sessions.binding.identityDigest || options.adapterVersion !== "pan546-native-personal-view/v1" || !isNativeWorkspaceDataCatalogV1(options.dataCatalog, product.sessions.binding, product.workspaceContextSelection) || !isNativeWorkspaceViewOwnerV1(options.viewOwner, product.sessions.binding, product.workspaceContextSelection)) throw new Error("VIEW_NATIVE_OWNER_DENIED");
-  const attachment = Object.freeze({ dataCatalog: options.dataCatalog, viewOwner: options.viewOwner });
+  const attachment = Object.freeze({ dataCatalog: options.dataCatalog, viewOwner: options.viewOwner,script:scriptDescriptor?.value??null });
   product.workspaceModuleViews = attachment;
   return Object.freeze({ close() { if (product.workspaceModuleViews === attachment) delete product.workspaceModuleViews; } });
+}
+
+export function mountProtectedWorkspaceKnowledgeV1(gateway,options){
+ exactData(options,['optIn','tenantId','identityDigest','origin','owner','script'],'KNOWLEDGE_NATIVE_OWNER_DENIED');
+ const product=ownedProductIngresses.get(gateway)?.get(options.tenantId);
+ if(options.optIn!==true||!product?.workspaceDocument||!product.workspaceContextSelection||product.workspaceKnowledge||options.origin!==product.sessions.origin||options.identityDigest!==product.sessions.binding.identityDigest||!isNativeWorkspaceKnowledgeV1(options.owner,product.sessions.binding,product.workspaceContextSelection)||typeof options.script!=='string'||Buffer.byteLength(options.script)>131072)throw Error('KNOWLEDGE_NATIVE_OWNER_DENIED');
+ const attachment=Object.freeze({owner:options.owner,script:options.script});product.workspaceKnowledge=attachment;
+ return Object.freeze({close(){if(product.workspaceKnowledge===attachment)delete product.workspaceKnowledge;options.owner.close();}});
 }
 
 // This optional local test ingress neither implements OIDC nor creates a portal.
@@ -413,14 +424,23 @@ export function createOptionalHttpsProductIngressV1(options) {
         || (request.headers["sec-fetch-site"] !== undefined && !["same-origin", "none"].includes(request.headers["sec-fetch-site"]))) return reply(response, 403, "HOSTED_ORIGIN_DENIED");
       const rawPath = (request.url ?? "").split("?")[0];
       if ((request.url ?? "").includes("?") && !/\/workspace\/erv$/.test(rawPath)) return reply(response, 404, "HOSTED_ROUTE_DENIED");
-      const match = /^\/t\/([a-z0-9][a-z0-9-]{0,63})(\/api\/(?:status|effective-rights|ask)|\/guided(?:\/app\.js|\/style\.css|\/status|\/command)?|\/workspace(?:\/app\.js|\/style\.css|\/context|\/model-connection(?:\/(?:app\.js|select|probe|consent))?|\/context-selection(?:\/(?:tab|verify|retire))?|\/module-view(?:\/(?:catalog|data|preview|undo-preview|confirm|cancel))?|\/invoice-navigation\/(?:app\.js|search|request|read|ack)|\/agent-run\/(?:app\.js|plan|start|read)|\/erv-human\/(?:app\.js|read|decide|reconcile)|\/erv|\/logout|\/profile|\/configuration|\/analysis|\/notifications(?:\/(?:open|read|reconcile|preferences))?)?)?$/.exec(rawPath);
+      const match = /^\/t\/([a-z0-9][a-z0-9-]{0,63})(\/api\/(?:status|effective-rights|ask)|\/guided(?:\/app\.js|\/style\.css|\/status|\/command)?|\/workspace(?:\/app\.js|\/style\.css|\/context|\/knowledge\/(?:app\.js|read)|\/model-connection(?:\/(?:app\.js|select|probe|consent))?|\/context-selection(?:\/(?:tab|verify|retire))?|\/module-view(?:\/(?:app\.js|catalog|data|preview|undo-preview|confirm|cancel))?|\/invoice-navigation\/(?:app\.js|search|request|read|ack)|\/agent-run\/(?:app\.js|plan|start|read)|\/erv-human\/(?:app\.js|read|decide|reconcile)|\/erv|\/logout|\/profile|\/configuration|\/analysis|\/notifications(?:\/(?:open|read|reconcile|preferences))?)?)?$/.exec(rawPath);
       if (!match || !["GET", "POST"].includes(request.method)
         || (match[2]?.startsWith('/workspace/model-connection') && (request.method==='POST') !== ['/workspace/model-connection/select','/workspace/model-connection/probe','/workspace/model-connection/consent'].includes(match[2]))
-        || (!match[2]?.startsWith('/workspace/model-connection') && !["/workspace/profile", "/workspace/configuration", "/workspace/context-selection"].includes(match[2]) && (request.method === "POST") !== ["/api/ask", "/guided/command", "/workspace/logout", "/workspace/analysis", "/workspace/notifications/open", "/workspace/notifications/read", "/workspace/notifications/reconcile", "/workspace/notifications/preferences", "/workspace/context-selection/tab", "/workspace/context-selection/verify", "/workspace/context-selection/retire", "/workspace/module-view/catalog", "/workspace/module-view/data", "/workspace/module-view/preview", "/workspace/module-view/undo-preview", "/workspace/module-view/confirm", "/workspace/module-view/cancel", "/workspace/invoice-navigation/search", "/workspace/invoice-navigation/request", "/workspace/invoice-navigation/read", "/workspace/invoice-navigation/ack", "/workspace/agent-run/plan", "/workspace/agent-run/start", "/workspace/erv-human/read", "/workspace/erv-human/decide", "/workspace/erv-human/reconcile"].includes(match[2]))) return reply(response, 404, "HOSTED_ROUTE_DENIED");
+        || (!match[2]?.startsWith('/workspace/model-connection') && !["/workspace/profile", "/workspace/configuration", "/workspace/context-selection"].includes(match[2]) && (request.method === "POST") !== ["/workspace/knowledge/read", "/api/ask", "/guided/command", "/workspace/logout", "/workspace/analysis", "/workspace/notifications/open", "/workspace/notifications/read", "/workspace/notifications/reconcile", "/workspace/notifications/preferences", "/workspace/context-selection/tab", "/workspace/context-selection/verify", "/workspace/context-selection/retire", "/workspace/module-view/catalog", "/workspace/module-view/data", "/workspace/module-view/preview", "/workspace/module-view/undo-preview", "/workspace/module-view/confirm", "/workspace/module-view/cancel", "/workspace/invoice-navigation/search", "/workspace/invoice-navigation/request", "/workspace/invoice-navigation/read", "/workspace/invoice-navigation/ack", "/workspace/agent-run/plan", "/workspace/agent-run/start", "/workspace/erv-human/read", "/workspace/erv-human/decide", "/workspace/erv-human/reconcile"].includes(match[2]))) return reply(response, 404, "HOSTED_ROUTE_DENIED");
       const product = products.get(match[1]); if (!product) return reply(response, 401, "HOSTED_SESSION_DENIED");
       product.sessions.authenticate(request.headers);
       if (match[2]?.startsWith("/workspace")) {
         if (!product.workspaceDocument) return reply(response, 404, "HOSTED_ROUTE_DENIED");
+        if(match[2]?.startsWith('/workspace/knowledge/')){
+          const workspace=product.workspaceDocument,contextOwner=product.workspaceContextSelection,attachment=product.workspaceKnowledge;
+          if(!attachment||!contextOwner)return reply(response,404,'HOSTED_ROUTE_DENIED');
+          const check=()=>{product.sessions.authenticate(request.headers);if(workspace!==product.workspaceDocument||attachment!==product.workspaceKnowledge||contextOwner!==product.workspaceContextSelection)throw Error('KNOWLEDGE_ATTACHMENT_RETIRED');};check();
+          if(match[2]==='/workspace/knowledge/app.js'){if(request.headers['transfer-encoding']!==undefined||request.headers['content-length']!==undefined&&request.headers['content-length']!=='0')return reply(response,400,'HOSTED_BODY_DENIED');response.writeHead(200,{'content-type':'text/javascript; charset=utf-8'});response.end(attachment.script);return;}
+          if(request.headers.origin!==origin)return reply(response,403,'HOSTED_CSRF_DENIED');if(request.headers['content-type']!=='application/json'||request.headers['content-encoding']!==undefined)return reply(response,400,'HOSTED_BODY_DENIED');
+          const chunks=[];let bytes=0;for await(const chunk of request){bytes+=chunk.length;if(bytes>4096)return reply(response,413,'HOSTED_BODY_DENIED');chunks.push(chunk);}let body;try{body=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{return reply(response,400,'HOSTED_BODY_DENIED');}
+          check();const result=attachment.owner.call(request.headers,body);check();response.writeHead(200,{'content-type':'application/json; charset=utf-8'});response.end(JSON.stringify(result)+'\n');return;
+        }
         if(match[2]?.startsWith('/workspace/model-connection')){
           const workspace=product.workspaceDocument,attachment=product.workspaceModelConnection;
           if(!attachment)return reply(response,404,'HOSTED_ROUTE_DENIED');
@@ -479,6 +499,7 @@ export function createOptionalHttpsProductIngressV1(options) {
           check(); let result;
           if (request.method === "GET") {
             if ((request.headers["content-length"] !== undefined && request.headers["content-length"] !== "0") || request.headers["transfer-encoding"] !== undefined) return reply(response, 400, "HOSTED_BODY_DENIED");
+            if(match[2]==="/workspace/module-view/app.js"){if(attachment.script===null)return reply(response,404,"HOSTED_ROUTE_DENIED");check();response.writeHead(200,{"content-type":"text/javascript; charset=utf-8"});response.end(attachment.script);return;}
             result = attachment.viewOwner.read(request.headers, { schemaVersion: "pansphaira.workspace-context/verify/v1", tabId: request.headers["x-pan548-tab-id"], contextHandle: request.headers["x-pan546-context"] });
           } else {
             if (request.headers.origin !== origin) return reply(response, 403, "HOSTED_CSRF_DENIED");
@@ -703,6 +724,9 @@ export function createOptionalHttpsProductIngressV1(options) {
     } catch (error) {
       if (response.headersSent) { response.destroy(); return; }
       const code = error instanceof Error ? error.message : "HOSTED_AUTH_UNAVAILABLE";
+      if(['KNOWLEDGE_SCHEMA_DENIED','KNOWLEDGE_SELECTOR_DENIED'].includes(code))return reply(response,400,code);
+      if(['KNOWLEDGE_GENERATION_STALE','KNOWLEDGE_CONTEXT_STALE','KNOWLEDGE_ATTACHMENT_RETIRED'].includes(code))return reply(response,409,code);
+      if(['KNOWLEDGE_CONTEXT_DENIED','KNOWLEDGE_SOURCE_RIGHTS_DENIED'].includes(code))return reply(response,403,code);
       if(code.startsWith('MODEL_CONNECTION_')){const status=['MODEL_CONNECTION_SCOPE_DENIED','MODEL_CONNECTION_PRODUCT_CONSENT_DENIED'].includes(code)?403:['MODEL_CONNECTION_REVISION_CONFLICT','MODEL_CONNECTION_STALE_DENIED','MODEL_CONNECTION_BUSY','MODEL_CONNECTION_UNKNOWN_USAGE_RETAINED','MODEL_CONNECTION_OWNER_CLOSED'].includes(code)?409:['MODEL_CONNECTION_CAPACITY_DENIED','MODEL_CONNECTION_LIMIT_DENIED'].includes(code)?429:400;return reply(response,status,code);}
       if (["HOSTED_HEADER_AUTHORITY_DENIED", "HOSTED_ROLE_DENIED", "HOSTED_CSRF_DENIED", "GUIDED_BOUND_PRINCIPAL_DENIED"].includes(code)) reply(response, 403, code);
       else if (["NOTIFICATION_NATIVE_ROLE_DENIED", "ERV_HUMAN_NATIVE_ROLE_REQUIRED_DENIED", "ERV_HUMAN_NATIVE_ROLE_DENIED", "HUMAN_WORKSPACE_SCOPE_DENIED", "NOTIFICATION_ORIGIN_DENIED"].includes(code)) reply(response, 403, code);

@@ -3166,6 +3166,61 @@ pan541Node.inputs.push(...pan565Inputs.map(([inputPath, role]) => ({path: inputP
 pan541Node.ownedTests.push("npm run pan565:test");
 if (!repositoryIntegrityNode.ownedTests.includes("npm run pan565:test")) repositoryIntegrityNode.ownedTests.push("npm run pan565:test");
 
+// PAN547 additive native Knowledge/preflight; original bounded ownership/gates.
+const pan547Inputs = [
+  [
+    "docs/architecture/native-knowledge-capability-browser-v1.md",
+    "DERIVED_EVIDENCE"
+  ],
+  [
+    "packages/contracts/src/workspace-knowledge-v1.ts",
+    "CONTRACT"
+  ],
+  [
+    "packages/browser-workspace/src/plugin-knowledge-v1.ts",
+    "SOURCE"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-knowledge-v1.ts",
+    "SOURCE"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-knowledge-v1.css",
+    "SOURCE"
+  ],
+  [
+    "src/pan547/native-knowledge-source.mjs",
+    "SECURITY"
+  ],
+  [
+    "src/pan547/native-knowledge.mjs",
+    "SECURITY"
+  ],
+  [
+    "scripts/run-pan547-knowledge-tests.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan547/native-knowledge.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan547/browser-knowledge.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan547/registration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan547/browser-fixture.mjs",
+    "VALIDATOR"
+  ]
+];
+pan541Node.inputs.push(...pan547Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)})));
+pan541Node.ownedTests.push('npm run pan547:test');
+if (!repositoryIntegrityNode.ownedTests.includes('npm run pan547:test')) repositoryIntegrityNode.ownedTests.push('npm run pan547:test');
+
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
 // not be duplicated on the integration owner. The integration owner keeps
@@ -3197,6 +3252,7 @@ for (const line of readFileSync(path.join(root, "release/public-files.manifest")
   if (line && !line.startsWith("#")) entries.set(line.split("\t")[0], null);
 }
 for (const [inputPath] of pan463Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan547Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan464Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan465Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan466Inputs) entries.set(inputPath, null);
