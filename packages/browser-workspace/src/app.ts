@@ -11,9 +11,10 @@ import { text, type WorkspaceViewApiV1 } from "./api-v1.js";
 import { createWorkspaceProfileEditorV1 } from "./profile-editor-v1.js";
 import type { BrowserProfileReadV1 } from "../../contracts/src/browser-profile-v1.js";
 import { createWorkspaceNotificationsV1 } from "./notifications-v1.js";
+import {knowledgePluginV1} from "./plugin-knowledge-v1.js";
 import { analysisPluginV1, createAnalysisViewV1 } from "./plugin-analysis-v1.js";
 import { createWorkspaceContextSelectionV1 } from "./context-selection-v1.js";
-import { createWorkspaceModuleViewEditorV1 } from "./module-view-editor-v1.js";
+import type { createWorkspaceModuleViewEditorV1 } from "./module-view-editor-v1.js";
 import type {WorkspaceDirtyDraftV1,WorkspaceNavigationDriverV1} from './workspace-dirty-draft-v1.js';
 import type {WorkspaceNavigationNativeReadbackV1} from '../../contracts/src/workspace-invoice-navigation-v1.js';
 import type {WorkspaceNativeNavigationFrameV1} from './workspace-invoice-navigation-v1.js';
@@ -33,10 +34,11 @@ async function start() {
   async function renderPanel() {
     const epoch = ++panelEpoch;
     const visible = presentation?.effectiveItems.some(i => i.id === browserWorkspaceStringValuesV1[13] && i.visible);
-    if (!visible || !invoice) { panel.hidden = true; panel.replaceChildren(); return; }
+    const knowledge=link?.path==="/workspace/knowledge"&&document.body.dataset.ownerKnowledgeExplorer==="true";
+    if (!visible || (!invoice&&!knowledge)) { panel.hidden = true; panel.replaceChildren(); return; }
     panel.hidden = false;
-    const result = await registry.render(browserWorkspaceStringValuesV1[13] as string, panel);
-    if (epoch !== panelEpoch || !invoice) return;
+    const result = await registry.render(knowledge?"pan.knowledge.context":browserWorkspaceStringValuesV1[13] as string, panel);
+    if (epoch !== panelEpoch || (!invoice&&!knowledge)) return;
     if (result.outcome !== browserWorkspaceStringValuesV1[118]) { panel.hidden = true; panel.replaceChildren(); }
   }
   function applyPresentation(value: BrowserProfileReadV1) {
@@ -46,7 +48,7 @@ async function start() {
       const item = value.effectiveItems.find(i => i.id === id);
       node.classList.remove("profile-compact", "profile-regular", "profile-large");
       if (item) node.classList.add("profile-" + item.size);
-      node.hidden = !item?.visible || (id === browserWorkspaceStringValuesV1[13] && !invoice);
+      node.hidden = !item?.visible || (id === browserWorkspaceStringValuesV1[13] && !invoice && link?.path!=="/workspace/knowledge");
     }
     // MAIN is the stable native analysis attachment. Reorder the other cards
     // around it, and do not manufacture removal/reinsert records for an
@@ -82,13 +84,19 @@ async function start() {
   } });
   const contextSelection = document.body.dataset.ownerContextSelection === "true"
     ? createWorkspaceContextSelectionV1({ root: element("shell.context-selection"), base, context: owner.context, signal: lifetime.signal }) : null;
-  const moduleViewEditor = document.body.dataset.ownerModuleViews === "true" && contextSelection
-    ? createWorkspaceModuleViewEditorV1({ main, context: contextSelection, signal: lifetime.signal }) : null;
-  if (document.body.dataset.ownerAgentRuns === "true" && contextSelection && moduleViewEditor) void import(base+"/workspace/agent-run/app.js")
-    .then(module=>{if(!lifetime.signal.aborted)module.createWorkspaceAgentPanelV1({container:canvas,context:contextSelection,editor:moduleViewEditor,signal:lifetime.signal});})
-    .catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Auftragspanel nicht verfügbar. Kein Lauf bestätigt; Fachnavigation, Profile und Abmelden bleiben unabhängig.'));});
+  let moduleViewEditor: ReturnType<typeof createWorkspaceModuleViewEditorV1> | null = null;
+  // Optional editor transport never gates the shared registry, navigation or logout.
+  const moduleViewReady = document.body.dataset.ownerModuleViews === "true" && contextSelection
+    ? import(base+"/workspace/module-view/app.js").then(module=>{
+      if(lifetime.signal.aborted)return null;
+      const editor=module.createWorkspaceModuleViewEditorV1({main,context:contextSelection,signal:lifetime.signal});moduleViewEditor=editor;
+      if(document.body.dataset.ownerAgentRuns==="true")void import(base+"/workspace/agent-run/app.js")
+        .then(module=>{if(!lifetime.signal.aborted)module.createWorkspaceAgentPanelV1({container:canvas,context:contextSelection,editor,signal:lifetime.signal});})
+        .catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Auftragspanel nicht verfügbar. Kein Lauf bestätigt; Fachnavigation, Profile und Abmelden bleiben unabhängig.'));});
+      return editor;
+    }).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text("p","Persönliche Modulansicht nicht verfügbar. Kein gespeicherter Effekt oder Auftrag bestätigt; andere Module und Abmelden bleiben unabhängig."));return null;}) : Promise.resolve(null);
   if (document.body.dataset.ownerHumanDecisions === "true" && contextSelection) void import(base+"/workspace/erv-human/app.js")
-    .then(module=>{if(!lifetime.signal.aborted)module.createWorkspaceErvHumanV1({main,context:contextSelection,signal:lifetime.signal,refreshNativeSources:()=>moduleViewEditor?.refreshNativeSources()??Promise.resolve(true)});})
+    .then(module=>{if(!lifetime.signal.aborted)module.createWorkspaceErvHumanV1({main,context:contextSelection,signal:lifetime.signal,refreshNativeSources:()=>moduleViewEditor?.refreshNativeSources()??Promise.resolve(false)});})
     .catch(()=>{if(!lifetime.signal.aborted)main.append(text('p','Native Human-Browserkontrollen nicht verfügbar. Keine Fachentscheidung bestätigt; andere Module und Abmelden bleiben unabhängig.'));});
   let registry: ReturnType<typeof createBrowserShellRegistryV1<HTMLElement>>;
   const api: WorkspaceViewApiV1 = Object.freeze({ context: owner.context, read: owner.read, invoice: () => invoice,
@@ -103,7 +111,7 @@ async function start() {
   const diagnostic = document.body.dataset.ownerDiagnosticPlugins === "true" ? diagnosticPluginsV1() : null;
   const configurationEnabled = document.body.dataset.ownerConfigurationDrafts === "true";
   const analysisEnabled = document.body.dataset.ownerAnalysisReader === "true";
-  const plugins = [setupPluginV1, ervPluginV1]; if (analysisEnabled) plugins.push(analysisPluginV1); if (configurationEnabled) plugins.push(configurationDraftPluginV1); if (diagnostic) plugins.push(diagnostic.broken, diagnostic.disabled, diagnostic.missing);
+  const plugins = [setupPluginV1, ervPluginV1]; if (analysisEnabled) plugins.push(analysisPluginV1); if(document.body.dataset.ownerKnowledgeExplorer==="true"&&contextSelection)plugins.push(knowledgePluginV1); if (configurationEnabled) plugins.push(configurationDraftPluginV1); if (diagnostic) plugins.push(diagnostic.broken, diagnostic.disabled, diagnostic.missing);
   const diagnosticStates: string[] = [];
   function showStates(message: string) {
     widget.replaceChildren(text("p", message));
@@ -112,6 +120,7 @@ async function start() {
   const factories = new Map<string, BrowserShellFactoryV1<HTMLElement>>([
     [browserWorkspaceStringValuesV1[112] as string, createSetupViewV1(api)], [browserWorkspaceStringValuesV1[30] as string, createErvViewV1(api)], [browserWorkspaceStringValuesV1[13] as string, createErvPanelV1(api)], [browserWorkspaceStringValuesV1[75] as string, createErvActionV1(api)],
   ]);
+  if(document.body.dataset.ownerKnowledgeExplorer==="true"&&contextSelection){for(const kind of ["VIEW","PANEL"] as const){factories.set(kind==="VIEW"?"pan.knowledge.view":"pan.knowledge.context",{kind,async render({target,signal}){target.append(text("p","Wissensexplorer wird geladen …"));const module=await import(base+"/workspace/knowledge/app.js");if(!signal.aborted&&target.isConnected)module[kind==="VIEW"?"renderWorkspaceKnowledgeViewV1":"renderWorkspaceKnowledgePanelV1"]({target,signal,context:contextSelection,profile:()=>profileEditor,selected:()=>link?.path,renderPanel});}});}}
   if (diagnostic) for (const p of [diagnostic.broken, diagnostic.disabled, diagnostic.missing, diagnostic.incompatible]) factories.set(p.id + ".view", diagnosticFailingViewV1);
   if (configurationEnabled) factories.set(browserWorkspaceStringValuesV1[110] as string, createConfigurationDraftViewV1(owner.context,draft=>{draftOwners.add(draft);return()=>draftOwners.delete(draft);}));
   if (analysisEnabled) factories.set(browserWorkspaceStringValuesV1[109] as string, createAnalysisViewV1({ base, context: owner.context, selected: () => link }));
@@ -221,6 +230,7 @@ async function start() {
   });
   await activate();
   profileEditor = await profileReady;
+  await moduleViewReady; if(lifetime.signal.aborted)return;
   if(document.body.dataset.ownerInvoiceNavigation==='true'&&contextSelection&&moduleViewEditor){try{const module=await import(base+'/workspace/invoice-navigation/app.js');if(lifetime.signal.aborted)return;navigation=module.createWorkspaceInvoiceNavigationV1({container:canvas,context:contextSelection,signal:lifetime.signal,drafts:draftOwners,editor:moduleViewEditor,profile:profileEditor,shellContext:owner.context,registry,activate});}catch{canvas.append(text('p','Suche nicht verfügbar.'));}}
 }
 void start().catch(() => { const main = element(browserWorkspaceStringValuesV1[17] as string); main.replaceChildren(text("h1", "Arbeitsplatz nicht verfügbar"), text("p", "Keine gültige aktuelle Session oder kein gültiges Frontendbinding. Es wurde kein fachlicher Erfolg bestätigt.")); });

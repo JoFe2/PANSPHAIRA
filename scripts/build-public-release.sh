@@ -744,6 +744,20 @@ repository_only_files = {
     "tests/pan546/native-profile-reservation-probe.mjs",
     "tests/pan546/native-human-reservation-probe.mjs",
 
+    # PAN547 additive native Knowledge/preflight source-only inputs.
+    "docs/architecture/native-knowledge-capability-browser-v1.md",
+    "packages/contracts/src/workspace-knowledge-v1.ts",
+    "packages/browser-workspace/src/plugin-knowledge-v1.ts",
+    "packages/browser-workspace/src/workspace-knowledge-v1.ts",
+    "packages/browser-workspace/src/workspace-knowledge-v1.css",
+    "src/pan547/native-knowledge-source.mjs",
+    "src/pan547/native-knowledge.mjs",
+    "scripts/run-pan547-knowledge-tests.mjs",
+    "tests/pan547/native-knowledge.test.mjs",
+    "tests/pan547/browser-knowledge.test.mjs",
+    "tests/pan547/registration.test.mjs",
+    "tests/pan547/browser-fixture.mjs",
+
     # PAN565 smallest existing connection: source-only, no new credentialstore,
     # controller, provider activation or runnable payload classification.
     "docs/architecture/workspace-model-connection-v1.md",

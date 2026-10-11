@@ -5,6 +5,8 @@ import {isWorkspaceModuleViewStoreV1,sameWorkspaceModuleViewStoreV1} from '../pa
 import {runtimeIdentityDigestV1,validateRuntimeIdentityV1} from '../pan526/runtime-contract.mjs';
 import {setupPluginV1} from '../../dist/packages/browser-workspace/src/plugin-setup-v1.js';
 import {ervPluginV1} from '../../dist/packages/browser-workspace/src/plugin-erv-v1.js';
+import {knowledgePluginV1} from '../../dist/packages/browser-workspace/src/plugin-knowledge-v1.js';
+import {isNativeWorkspaceKnowledgeSourceV1} from '../pan547/native-knowledge-source.mjs';
 import {validateBrowserShellPluginV1} from '../../dist/packages/contracts/src/browser-shell-plugin-v1.js';
 import {validateBrowserProfileReadV1} from '../../dist/packages/contracts/src/browser-profile-v1.js';
 import {validateWorkspaceContextClaimV1,validateWorkspaceContextReadbackV1,validateWorkspaceContextSnapshotV1,validateWorkspaceContextVerifyV1} from '../../dist/packages/contracts/src/workspace-context-selection-v1.js';
@@ -16,13 +18,15 @@ function same(a,b){return JSON.stringify(a)===JSON.stringify(b);}
 function equalSecret(a,b){return typeof a==='string'&&typeof b==='string'&&a.length===b.length&&timingSafeEqual(Buffer.from(a),Buffer.from(b));}
 // Projection of the EXISTING code-owned Setup/ERV plugin descriptors. There is
 // no second plugin installer, HTTP catalog registration, taskstore or ledger.
-const nativeFactoryIds=new Set(['pan.setup.navigation','pan.setup.view','pan.erv.navigation','pan.erv.view','pan.erv.information','pan.erv.action']);
-function registered(moduleId,viewId){const source=moduleId==='pan.setup'?setupPluginV1:moduleId==='pan.erv'?ervPluginV1:null;if(!source)throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const result=validateBrowserShellPluginV1(source,nativeFactoryIds);if(result.outcome!=='DESCRIPTOR_VALID')throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const p=result.descriptor;if(!p.enabled||p.needs.dependencies.length!==0||!p.contributions.some(x=>x.kind==='VIEW'&&x.id===viewId))throw new Error('CONTEXT_NATIVE_VIEW_DENIED');return p;}
+const nativeFactoryIds=new Set(['pan.setup.navigation','pan.setup.view','pan.erv.navigation','pan.erv.view','pan.erv.information','pan.erv.action','pan.knowledge.navigation','pan.knowledge.view','pan.knowledge.context']);
+function registered(moduleId,viewId,knowledgeSource){const source=moduleId==='pan.setup'?setupPluginV1:moduleId==='pan.erv'?ervPluginV1:moduleId==='pan.knowledge'&&knowledgeSource?knowledgePluginV1:null;if(!source)throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const result=validateBrowserShellPluginV1(source,nativeFactoryIds);if(result.outcome!=='DESCRIPTOR_VALID')throw new Error('CONTEXT_NATIVE_VIEW_DENIED');const p=result.descriptor;if(!p.enabled||p.needs.dependencies.length!==0||!p.contributions.some(x=>x.kind==='VIEW'&&x.id===viewId))throw new Error('CONTEXT_NATIVE_VIEW_DENIED');return p;}
 export function createNativeWorkspaceContextSelectionV1(options){
- const extra=options&&Object.hasOwn(options,'moduleViewStore');
- exact(options,['sessions','identity','nativeReader','readSetup','readProfile',...(extra?['moduleViewStore']:[])],'CONTEXT_NATIVE_OWNER_DENIED');
+ const extra=options&&Object.hasOwn(options,'moduleViewStore'),knowledge=options&&Object.hasOwn(options,'knowledgeSource');
+ exact(options,['sessions','identity','nativeReader','readSetup','readProfile',...(extra?['moduleViewStore']:[]),...(knowledge?['knowledgeSource']:[])],'CONTEXT_NATIVE_OWNER_DENIED');
  const {sessions,nativeReader,readSetup,readProfile}=options,identity=validateRuntimeIdentityV1(options.identity);
- const moduleViewStore=extra?options.moduleViewStore:null;
+ const moduleViewStore=extra?options.moduleViewStore:null,knowledgeSource=knowledge?options.knowledgeSource:null;
+ if(knowledge&&!isNativeWorkspaceKnowledgeSourceV1(knowledgeSource,identity.tenantId))throw Error('CONTEXT_NATIVE_OWNER_DENIED');
+ const catalogDigest=profile=>hash(JSON.stringify(knowledgeSource?[setupPluginV1,ervPluginV1,knowledgePluginV1,knowledgeSource.generationDigest,profile.catalog]:[setupPluginV1,ervPluginV1,profile.catalog]));
  if(extra&&!isWorkspaceModuleViewStoreV1(moduleViewStore))throw new Error('CONTEXT_NATIVE_OWNER_DENIED');
  if(!isProtectedSessionAdapterV1(sessions,identity?.tenantId)||!isNativeErvReadAdapterV1(nativeReader,identity.tenantId)||typeof readSetup!=='function'||typeof readProfile!=='function'||sessions.binding.instanceId!==identity.instanceId||sessions.binding.generation!==identity.generation)throw new Error('CONTEXT_NATIVE_OWNER_DENIED');
  if(runtimeIdentityDigestV1(identity)!==sessions.binding.identityDigest)throw new Error('CONTEXT_NATIVE_OWNER_DENIED');
@@ -37,7 +41,7 @@ export function createNativeWorkspaceContextSelectionV1(options){
   return {principal,sessionId};
  }
  function state(a,tab,target=tab){
-  registered(target.moduleId,target.viewId);
+  registered(target.moduleId,target.viewId,knowledgeSource);
   // Owner-local sequence fences nested observations on ANY tab, before the
   // first native callback. It is not a public revision axis or authority grant.
   nativeReadSequence=next(nativeReadSequence);const capturedReadSequence=nativeReadSequence;
@@ -56,9 +60,12 @@ export function createNativeWorkspaceContextSelectionV1(options){
   stableTab();
   if(!Number.isSafeInteger(personalModuleRevision)||personalModuleRevision<0||!Number.isSafeInteger(profile.revision+1+personalModuleRevision))throw new Error('CONTEXT_REVISION_LIMIT');
   if(main?.state!=='AVAILABLE'||!profile.effectiveItems.some(x=>x.id==='shell.main'&&x.visible))throw new Error('CONTEXT_NATIVE_VIEW_DENIED');
-  const catalog=hash(JSON.stringify([setupPluginV1,ervPluginV1,profile.catalog]));
+  const catalog=catalogDigest(profile);
   let primaryObject=null,selections=[];
-  if(target.moduleId==='pan.setup'){
+  if(target.moduleId==='pan.knowledge'){
+   if(target.primaryObjectId!==null)throw Error('CONTEXT_NATIVE_OBJECT_DENIED');
+   selections=knowledgeSource.read(a.principal).map(e=>({elementId:'pan.knowledge.entry',rowId:e.selector,label:e.label}));
+  }else if(target.moduleId==='pan.setup'){
    if(target.primaryObjectId!==null)throw new Error('CONTEXT_NATIVE_OBJECT_DENIED');
    selections=[{elementId:'pan.setup.progress',rowId:null,label:'Abgeschlossene Einrichtungsstufen'},{elementId:'pan.setup.health',rowId:null,label:'Aktueller Health-Zustand'},...setup.stages.map(s=>({elementId:'pan.setup.stage',rowId:s.stageId,label:'Einrichtungsstufe: '+s.label}))];
   }else if(target.primaryObjectId!==null){
@@ -106,15 +113,16 @@ export function createNativeWorkspaceContextSelectionV1(options){
     const a=stable();if(before.invoiceId!==leading.invoiceId||before.nativeRevision!==leading.revision||before.basisDigest!==leading.basisDigest)throw new Error('CONTEXT_NATIVE_OBJECT_DENIED');
     if(hash(JSON.stringify(readSetup(a.principal)))!==capturedHostDigest||hostRevision!==current.revisions.hostRevision)throw new Error('CONTEXT_REVISION_STALE');
     const profile=validateBrowserProfileReadV1(readProfile(a.principal)),main=profile.catalog.find(x=>x.id==='shell.main'),personalRevision=moduleViewStore?.read(a.principal).revision??0;
-    if(main?.state!=='AVAILABLE'||!profile.effectiveItems.some(x=>x.id==='shell.main'&&x.visible)||profile.revision+1+personalRevision!==current.revisions.viewRevision||hash(JSON.stringify([setupPluginV1,ervPluginV1,profile.catalog]))!==originalTab.catalogDigest)throw new Error('CONTEXT_REVISION_STALE');stable();
+    if(main?.state!=='AVAILABLE'||!profile.effectiveItems.some(x=>x.id==='shell.main'&&x.visible)||profile.revision+1+personalRevision!==current.revisions.viewRevision||catalogDigest(profile)!==originalTab.catalogDigest)throw new Error('CONTEXT_REVISION_STALE');stable();
    };
   },
   retire(headers,value){const{tab}=tabFor(headers),v=validateWorkspaceContextVerifyV1(value);if(v.tabId!==tab.id)throw new Error('CONTEXT_TAB_DENIED');if(!tab.context||!equalSecret(v.contextHandle,tab.context.contextHandle))throw new Error('CONTEXT_REVISION_STALE');tab.epoch=next(tab.epoch);tab.selectionRevision=next(tab.selectionRevision);tab.context=null;tab.selection=null;return {outcome:'CONTEXT_RETIRED',executionAuthorityGranted:false,effectsProduced:false};},
   close(){if(closed)return;closed=true;tabs.clear();},
- });owned.set(owner,{binding:sessions.binding,moduleViewStore,nativeReader});return owner;
+ });owned.set(owner,{binding:sessions.binding,moduleViewStore,nativeReader,knowledgeSource});return owner;
 }
 export const isNativeWorkspaceContextSelectionV1=(owner,binding)=>owned.has(owner)&&same(owned.get(owner).binding,binding);
 // Owner-local composition fence only. A second authentic reader for the same
 // tenant is not proof of the leading source captured by this context owner.
 export const isNativeWorkspaceReaderContextSelectionV1=(owner,binding,reader)=>isNativeWorkspaceContextSelectionV1(owner,binding)&&owned.get(owner).nativeReader===reader;
 export const isNativeWorkspaceModuleViewContextSelectionV1=(owner,binding,store)=>isNativeWorkspaceContextSelectionV1(owner,binding)&&sameWorkspaceModuleViewStoreV1(owned.get(owner).moduleViewStore,store);
+export const isNativeWorkspaceKnowledgeContextSelectionV1=(owner,binding,source)=>isNativeWorkspaceContextSelectionV1(owner,binding)&&owned.get(owner).knowledgeSource===source;

@@ -5,7 +5,7 @@ import { validateWorkspaceContextTabBootstrapV1, validateWorkspaceContextSnapsho
   type WorkspaceContextSnapshotV1, type WorkspaceContextReadbackV1, type WorkspaceContextSelectionEntryV1 } from "../../contracts/src/workspace-context-selection-v1.js";
 import { text } from "./api-v1.js";
 
-export type WorkspaceModuleViewRequestV1 = "READ" | "CATALOG" | "DATA" | "PREVIEW" | "UNDO_PREVIEW" | "CONFIRM" | "CANCEL" | "HUMAN_READ" | "HUMAN_DECIDE" | "HUMAN_RECONCILE" | "AGENT_PLAN" | "AGENT_START" | "AGENT_READ" | "NAV_SEARCH" | "NAV_REQUEST" | "NAV_READ" | "NAV_ACK";
+export type WorkspaceModuleViewRequestV1 = "READ" | "CATALOG" | "DATA" | "PREVIEW" | "UNDO_PREVIEW" | "CONFIRM" | "CANCEL" | "HUMAN_READ" | "HUMAN_DECIDE" | "HUMAN_RECONCILE" | "AGENT_PLAN" | "AGENT_START" | "AGENT_READ" | "NAV_SEARCH" | "NAV_REQUEST" | "NAV_READ" | "NAV_ACK" | "KNOWLEDGE_READ" | "KNOWLEDGE_PREFLIGHT";
 export type WorkspaceModuleViewResponseV1 =
   { readonly outcome: "CURRENT_MODULE_VIEW_RESPONSE"; readonly value: unknown; readonly context: WorkspaceContextReadbackV1 }
   | { readonly outcome: "STALE_MODULE_VIEW_RESPONSE" | "MODULE_VIEW_DENIED" | "MODULE_VIEW_WRITE_OUTCOME_UNKNOWN"; readonly error: string };
@@ -97,7 +97,7 @@ export function createWorkspaceContextSelectionV1(options: {
     owner = createExtendedBrowserContextOwnerV1({ initialContext: snapshot.context, isContextLive: c => localLive(c, capturedEpoch) }); previous?.close();
     const c = snapshot.context;
     root.hidden = false; root.dataset.state = browserWorkspaceStringValuesV1[98]; root.dataset.module = c.moduleId; root.dataset.selection = c.selection?.elementId ?? "";
-    scope.textContent = "Serverbestätigt: " + c.binding.tenantId + " · " + c.binding.subjectId + " · " + (c.moduleId === browserWorkspaceStringValuesV1[111] ? "Einrichtung" : browserWorkspaceStringValuesV1[67])
+    scope.textContent = "Serverbestätigt: " + c.binding.tenantId + " · " + c.binding.subjectId + " · " + (c.moduleId === "pan.knowledge" ? "Wissensexplorer" : c.moduleId === browserWorkspaceStringValuesV1[111] ? "Einrichtung" : browserWorkspaceStringValuesV1[67])
       + " · " + (c.primaryObject ? "Vorgang " + c.primaryObject.objectId + ", Fachversion " + c.primaryObject.revision : "kein primäres Fachobjekt") + ". Nur lesen; keine neue Ausführungsfreigabe.";
     status.textContent = c.selection ? "Serverbestätigte semantische Auswahl: " + snapshot.selections.find(s => s.elementId === c.selection!.elementId && s.rowId === c.selection!.rowId)!.label + "."
       : "Keine semantische Auswahl. Tastatur oder Schaltfläche wählt ausschließlich eine aktuell registrierte native Referenz.";
@@ -156,6 +156,7 @@ export function createWorkspaceContextSelectionV1(options: {
       await select(entry, epoch);
       return current?.context.selection?.elementId === entry.elementId && current?.context.selection?.rowId === entry.rowId && root.dataset.state === browserWorkspaceStringValuesV1[98];
     },
+    async selectKnowledge(selector:string):Promise<boolean>{const entry=current?.selections.find(e=>e.elementId==='pan.knowledge.entry'&&e.rowId===selector);if(!entry||closed)return false;await select(entry,epoch);return current?.context.selection?.rowId===selector&&root.dataset.state==='CURRENT_CONTEXT';},
     subscribe(listener: (context: WorkspaceContextReadbackV1 | null) => void) {
       open(); subscribers.add(listener); listener(current?.context ?? null);
       return () => { subscribers.delete(listener); };
@@ -163,7 +164,7 @@ export function createWorkspaceContextSelectionV1(options: {
     // Trusted shell composition only: callers never receive the session/tab
     // proof, choose a free URL, replace context or create mutation authority.
     async moduleViewRequest(operation: WorkspaceModuleViewRequestV1, payload?: Readonly<Record<string, unknown>>, csrfProof?: string): Promise<WorkspaceModuleViewResponseV1> {
-      const suffixes: Readonly<Record<WorkspaceModuleViewRequestV1, string>> = { READ: "", CATALOG: "/catalog", DATA: "/data", PREVIEW: "/preview", UNDO_PREVIEW: "/undo-preview", CONFIRM: "/confirm", CANCEL: "/cancel", HUMAN_READ: "/read", HUMAN_DECIDE: "/decide", HUMAN_RECONCILE: browserWorkspaceStringValuesV1[122] as string, AGENT_PLAN: "/plan", AGENT_START: "/start", AGENT_READ: "/read", NAV_SEARCH: "/search", NAV_REQUEST: "/request", NAV_READ: "/read", NAV_ACK: "/ack" };
+      const suffixes: Readonly<Record<WorkspaceModuleViewRequestV1, string>> = { READ: "", CATALOG: "/catalog", DATA: "/data", PREVIEW: "/preview", UNDO_PREVIEW: "/undo-preview", CONFIRM: "/confirm", CANCEL: "/cancel", HUMAN_READ: "/read", HUMAN_DECIDE: "/decide", HUMAN_RECONCILE: browserWorkspaceStringValuesV1[122] as string, AGENT_PLAN: "/plan", AGENT_START: "/start", AGENT_READ: "/read", NAV_SEARCH: "/search", NAV_REQUEST: "/request", NAV_READ: "/read", NAV_ACK: "/ack", KNOWLEDGE_READ:"/read", KNOWLEDGE_PREFLIGHT:"/read" };
       if (!Object.hasOwn(suffixes, operation) || !current || !proof || !tabId || closed) return { outcome: browserWorkspaceStringValuesV1[47], error: "CURRENT_NATIVE_CONTEXT_REQUIRED" };
       if (payload && (Object.getPrototypeOf(payload) !== Object.prototype || Reflect.ownKeys(payload).some(k => typeof k !== "string" || k === browserWorkspaceStringValuesV1[64]) || Object.values(Object.getOwnPropertyDescriptors(payload)).some(d => !d.enumerable || !("value" in d)))) return { outcome: browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_PAYLOAD_DENIED" };
       const captured = current, capturedEpoch = epoch, capturedLifetime = lifetime;
@@ -181,7 +182,7 @@ export function createWorkspaceContextSelectionV1(options: {
           const body = operation === "READ" || operation === browserWorkspaceStringValuesV1[127] ? undefined : operation === browserWorkspaceStringValuesV1[62] ? verification : { ...payload, context: verification };
           if (body !== undefined) headers[browserWorkspaceStringValuesV1[141]] = browserWorkspaceStringValuesV1[31] as string;
           writeSent = operation === browserWorkspaceStringValuesV1[63] || operation === browserWorkspaceStringValuesV1[168] || operation === "AGENT_START";
-          const response = await fetch(base + (operation.startsWith("NAV_") ? "/workspace/invoice-navigation" : operation.startsWith("AGENT_") ? "/workspace/agent-run" : operation.startsWith("HUMAN_") ? "/workspace/erv-human" : "/workspace/module-view") + suffixes[operation], { credentials: browserWorkspaceStringValuesV1[6], cache: browserWorkspaceStringValuesV1[7], headers, ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.any([options.signal, AbortSignal.timeout(5000)]) });
+          const response = await fetch(base + (operation.startsWith("KNOWLEDGE_") ? "/workspace/knowledge" : operation.startsWith("NAV_") ? "/workspace/invoice-navigation" : operation.startsWith("AGENT_") ? "/workspace/agent-run" : operation.startsWith("HUMAN_") ? "/workspace/erv-human" : "/workspace/module-view") + suffixes[operation], { credentials: browserWorkspaceStringValuesV1[6], cache: browserWorkspaceStringValuesV1[7], headers, ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.any([options.signal, AbortSignal.timeout(5000)]) });
           if (!live()) return { outcome: writeSent ? browserWorkspaceStringValuesV1[107] : browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string };
           if (response.status !== 200) return { outcome: browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_SERVER_DENIED_" + response.status };
           const value: unknown = await response.json();
@@ -217,7 +218,7 @@ export function createWorkspaceContextSelectionV1(options: {
     async bind(value: { readonly moduleId: string; readonly viewId: string; readonly primaryObjectId: string | null; readonly domainRevision: number | null; readonly localEpoch: number }) {
       const capturedEpoch = value.localEpoch;
       if (closed || capturedEpoch !== epoch) return;
-      if (![browserWorkspaceStringValuesV1[111] as string, browserWorkspaceStringValuesV1[15] as string].includes(value.moduleId)) { failure(); return; }
+      if (![browserWorkspaceStringValuesV1[111] as string, browserWorkspaceStringValuesV1[15] as string, "pan.knowledge"].includes(value.moduleId)) { failure(); return; }
       // Replacement within the same navigation epoch owns a distinct lifetime.
       // Retained controls and queued outcomes cannot clear its successor.
       invalidate(); pending("Nativen Seitenkontext prüfen …", true);
