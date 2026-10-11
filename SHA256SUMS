@@ -3,7 +3,7 @@ be11d10c855ee8c64ac199042dbe0aa3b86954c992a047e74faad0d56b185cf5  ./.github/ISSU
 007378504145fcb44cfbca420728f7c2a094576a1209dbf7603033de4d8da97f  ./.github/ISSUE_TEMPLATE/config.yml
 b26d1df4ca91d7d4265db817d2fd528f76b595e5c6a7d2fe6b28401fa1a7df6a  ./.github/ISSUE_TEMPLATE/delivery-contract.yml
 bc9b83b752e2d2196cf1a3b0aba43e12ab7f3485cfbdc96d2c072f92b59356a4  ./.github/ISSUE_TEMPLATE/feature-request.yml
-2376a43579a9c039f01df6fd0b5bcc058070b96f4f49e756b80f8005c5ebd9f3  ./.github/PULL_REQUEST_TEMPLATE.md
+8d4dc55523a85a46a7b50f53c53995e44b495f126dbe797e0216050239b4b8f7  ./.github/PULL_REQUEST_TEMPLATE.md
 36ead7027c887bccc4ff9cf82a0ed327f1c75c94b2289e7e5e81d1833fb442f6  ./.github/workflows/ci.yml
 3cb93d13f4a3ed8f4666fbd68d033aa5446d473ddd35a39b12fad8e57e29b00a  ./.github/workflows/daily-poc-candidate.yml
 58b7743dc986a6f4c9faf661ab9a774446f02bf3d215315578d041af0ca477e4  ./.github/workflows/demo-current-head-e2e.yml
@@ -16,7 +16,7 @@ f9253ca9004ed97597d41a249b152f976e2e0b6a7481cffff4249c9f9237731d  ./.gitignore
 e47ee28d8ef4e72d0656228b5dc75ec21d0b7fe0a638f01bb2fa0d96462bbf71  ./.npmrc
 dc3947ffc90697888a5a17a24186b1034571ecba327686841f0227ebc2645b1a  ./CITATION.cff
 1ea7ed01e8c48030ca70c3ae0ec56e05a1ac45a854fc39b662f4aa71d499225f  ./CODE_OF_CONDUCT.md
-4e9748812c042ce23446ce220f97c6771d165bf032d4231ed5f2f0a967c58b2b  ./CONTRIBUTING.md
+02814d946a2574c577cb144ac4cd5d016cfff5460ccb45c8b5aa88879fb9c036  ./CONTRIBUTING.md
 9ed8fd6143a87d489c618aaffcea5e5000fc372ae86ca9d3e45e7b7c32be658e  ./DCO
 cfefa4f51ae1c7475eed2837575689883d5cac58ad489e18add68da5c646df8a  ./GOVERNANCE.md
 835083c307550077500f6817fa1d3ecbcb5f559d41029ff34f2ccacf5c3bbe07  ./LICENSE
@@ -318,7 +318,7 @@ c26fc3b2689d7cf600a5481ad626d7e8c38b04ddbf98eefbff8193191ad29d89  ./docs/LEARNIN
 906f4c19a4744d20eaea70c28e3911c0bb1613ea447ffb8e0624bba99593c9a6  ./docs/LOCAL-FILE-KNOWLEDGE-CORPUS.md
 3bddcfbb41f8129af0c08379b88d468fa632dd71f9824dc0769002802b95cb8d  ./docs/LOCAL-KNOWLEDGE-KIWIX-ZIM-ASSESSMENT.md
 d6a904ab5a9fd664bc275df68169ea960a0887bb556172aebd3bd265487724f0  ./docs/LOCAL-KNOWLEDGE-WIKIMEDIA-PILOT.md
-73a5b5743f1f1477f5677fef480ba7f2020ddf7eb62258941ba78f9600c6e87d  ./docs/MODULE-CONTRIBUTION.md
+fed1abc3108abb53cfe17c3fd6837150f6e2c35b7cc9c6dff62a546c3c6b3732  ./docs/MODULE-CONTRIBUTION.md
 cc7a1043bcb5b724ee9ec677771fa063121f52dc9333fedc962f089d455b7271  ./docs/OPENCLAW-BOUNDED-STATE-OPERATOR-GUIDE.md
 0ba088ce92c88c523f0d67c5f978986ca049d23ff35ca3040dd2b72066796f2f  ./docs/OPERATING-FIELD-GUIDE.md
 78539b84c40131704150bc1da07f409f1b1ed65dd9217e148b7ca81ecd124d9e  ./docs/OPERATION-EVENT-QUALITY-CONTRACT.md
@@ -1163,7 +1163,7 @@ d45f133d7b467c3b083e8586c43931263e9e6988b972d31ed5effeb643ca1c43  ./scripts/eval
 9bffc93f7a0da2e1602f10525c2b89ee0fd2e011ae9f6803ae23d8c1a2c2b9bc  ./scripts/generate-incoming-invoice-erv-analytics.mjs
 abab50a97cf7113e2cad4125992fb3178a67877f573e974b128f2494ef1883b8  ./scripts/learning-routing-baseline.mjs
 6c2112afe0ceba5207af821becbd72aef1f8e8af94fdec590e485bf3ddb319a2  ./scripts/measure-node-pure-compute.mjs
-b79d4639da9affc0cd17f1ab013236735bbf2fc0d80788dea72a34c0c464d74e  ./scripts/module-contribution.mjs
+c784dcf39a1104c398ee41ce56e3940b7dbb445977043eb37283b8296c6cdb5a  ./scripts/module-contribution.mjs
 bcc1e7337f6a5ea32e73c146224b5f51b079b673e27cee5126321cbd15f8435a  ./scripts/offline-artifact.py
 50d945f6b04e5b23854b590da130612ba07e963681a41c05b2d97ce132d4dcb8  ./scripts/offline-native-profile.py
 69204465dde7caa869075ee9178e92e0c2f26f9ec6b4b3b8be63c471e69e77bb  ./scripts/offline-rescue.py
@@ -2116,8 +2116,8 @@ e2c0fa21234a8712c27ab9da883e44b14532b7d58046d470f161e04216ce9ae4  ./tests/mediaw
 5ed6fb2caddb5f9fd3fed007acf661050adf3d457f03c0b73fe3461ab61b960b  ./tests/mediawiki-xml-local-adapter.test.ts
 c4c2492f936df0923d79480a6fb89cb7bb1a1cab3cf1f3c2555b7eeb3c1f4b3d  ./tests/model-access-broker-runtime.test.mjs
 f965b79edbfd36085708ba5d4e40533747855505a1aee63109ba2e89891da952  ./tests/model-access-broker.test.ts
-6d2668d7a1c3b4f1ea5e61089fae9d929c990c413ced0f5b5677352e0f0190e1  ./tests/module-contribution-workflow.test.mjs
-66e389e0733e6b971d230e0fc25aec454bbbe422e5354131d1e7ff68ffdf8399  ./tests/module-contribution.test.mjs
+ff4113473e734662ed33f9737ace35151a37d3b82588dec3b0b804f8e8c80801  ./tests/module-contribution-workflow.test.mjs
+8ef954ffa661d55af8e980f8e02c838fd100da84b11e0904c0654bba493f521c  ./tests/module-contribution.test.mjs
 11684919074248e154bedd11837cd6c4f15a23b150ef670df9ecc909b9f1db28  ./tests/native-forward-qualification.test.mjs
 9a169c1157b7a27919f100905a686e01e6e9e3cf4d05690d62c97b8b915a1c24  ./tests/openclaw-agent-runtime-lock.test.mjs
 2febc29725e6846a0212746fb317f0e5c43e755a07d5e0209b14dc77e54f243f  ./tests/openclaw-agent-runtime.test.mjs
@@ -2633,5 +2633,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-22c90dbe16e76005aae418f052643752102564bad6ee1f9e8c2dfff4d4169a78  ./verification/verification-dag-v2.json
+d412af220c34795dc5632c773356d3dd3f870e62d52274497a1c09128c619b66  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

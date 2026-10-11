@@ -4751,7 +4751,7 @@
         {
           "path": "CONTRIBUTING.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "4e9748812c042ce23446ce220f97c6771d165bf032d4231ed5f2f0a967c58b2b"
+          "sha256": "02814d946a2574c577cb144ac4cd5d016cfff5460ccb45c8b5aa88879fb9c036"
         },
         {
           "path": "demo/install.sh",
@@ -4866,7 +4866,7 @@
         {
           "path": "docs/MODULE-CONTRIBUTION.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "73a5b5743f1f1477f5677fef480ba7f2020ddf7eb62258941ba78f9600c6e87d"
+          "sha256": "fed1abc3108abb53cfe17c3fd6837150f6e2c35b7cc9c6dff62a546c3c6b3732"
         },
         {
           "path": "docs/QUICKSTART.md",
@@ -5041,7 +5041,7 @@
         {
           "path": "tests/module-contribution-workflow.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "6d2668d7a1c3b4f1ea5e61089fae9d929c990c413ced0f5b5677352e0f0190e1"
+          "sha256": "ff4113473e734662ed33f9737ace35151a37d3b82588dec3b0b804f8e8c80801"
         },
         {
           "path": "tests/native-forward-qualification.test.mjs",
@@ -6906,12 +6906,12 @@
         {
           "path": "scripts/module-contribution.mjs",
           "role": "VALIDATOR",
-          "sha256": "b79d4639da9affc0cd17f1ab013236735bbf2fc0d80788dea72a34c0c464d74e"
+          "sha256": "c784dcf39a1104c398ee41ce56e3940b7dbb445977043eb37283b8296c6cdb5a"
         },
         {
           "path": "tests/module-contribution.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "66e389e0733e6b971d230e0fc25aec454bbbe422e5354131d1e7ff68ffdf8399"
+          "sha256": "8ef954ffa661d55af8e980f8e02c838fd100da84b11e0904c0654bba493f521c"
         },
         {
           "path": "tests/pan468/pan468-impact-selection.test.mjs",
@@ -6947,7 +6947,7 @@
         {
           "path": "scripts/module-contribution.mjs",
           "role": "VALIDATOR",
-          "sha256": "b79d4639da9affc0cd17f1ab013236735bbf2fc0d80788dea72a34c0c464d74e"
+          "sha256": "c784dcf39a1104c398ee41ce56e3940b7dbb445977043eb37283b8296c6cdb5a"
         },
         {
           "path": "src/pan469/contribution-views.mjs",

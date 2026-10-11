@@ -111,6 +111,24 @@ test('invalid paths and symlinks are denied',t=>{const {root,modules}=fixture(t)
 
 test('scaffold creates runnable template without overwrite or traversal',t=>{const {root}=fixture(t);const result=json(run(root,'scaffold','sample'));assert.match(result.next,/node --test/);const r=spawnSync(process.execPath,['--test','examples/module-contribution/sample/test.mjs'],{cwd:root,encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.notEqual(run(root,'scaffold','sample').status,0);assert.notEqual(run(root,'scaffold','../escape').status,0);assert.equal(json(run(root,'check','--descriptor','examples/module-contribution/sample/modules.json')).modules,1);});
 
+test('UI-QUALITY-01 scaffold includes conditional UI evidence without inventing a UI product',t=>{
+ const {root}=fixture(t);const result=json(run(root,'scaffold','quality-sample'));
+ const guide=readFileSync(join(root,result.directory,'README.md'),'utf8');
+ assert.match(guide,/UI applicability/);assert.match(guide,/non-UI greeting only/);
+ assert.match(guide,/Browser.*backend.*persisted target readback/);
+ assert.match(guide,/proposal.*decision.*authority.*effect/);
+ assert.match(guide,/before.*after.*before approval/);
+ assert.match(guide,/tenant.*session.*scope.*revision/);
+ assert.match(guide,/denied.*stale.*expired.*unknown/);
+ assert.match(guide,/Desktop.*390 px/);assert.match(guide,/actually inspect/);
+ assert.match(guide,/commit.*build.*viewport.*data.*context.*state/);
+ assert.match(guide,/design reference.*version/);
+ assert.match(guide,/N\/A.*reason/);assert.match(guide,/not.*UI.*acceptance/i);
+ assert.equal(result.template,true);assert.deepEqual(JSON.parse(readFileSync(join(root,result.directory,'contract.json'),'utf8')),{input:'name: string',output:'greeting: string',template:true});
+ assert.equal(spawnSync(process.execPath,['--test',`${result.directory}/test.mjs`],{cwd:root,encoding:'utf8'}).status,0);
+ assert.notEqual(run(root,'scaffold','quality-sample').status,0);
+});
+
 test('impact retains ownership when a declared directory becomes empty',t=>{const {root,modules}=fixture(t);modules[0].sources=['a/src'];modules[0].tests=['a/tests'];put(root,'a/src/value.mjs','export const value=1;');put(root,'a/tests/value.mjs',"import test from 'node:test'; test('value',()=>{});");put(root,'examples/module-contribution/modules.json',{schemaVersion:1,modules});git(root,'add','.');git(root,'commit','-qm','directory ownership');rmSync(join(root,'a/src/value.mjs'));let plan=json(run(root,'impact','--base','HEAD'));assert.deepEqual(plan.affected,['a']);assert.deepEqual(plan.tests,['a/tests/value.mjs']);assert.notEqual(run(root,'check').status,0);rmSync(join(root,'a/tests/value.mjs'));plan=json(run(root,'impact','--base','HEAD'));assert.deepEqual(plan.missingTests,['a/tests/value.mjs']);assert.notEqual(run(root,'release').status,0);});
 
 test('test command runs selected checks and propagates real failures',t=>{const {root}=fixture(t);put(root,'a/source.mjs','changed');let result=json(run(root,'test','--base','HEAD'));assert.deepEqual(result.tests,['a/test.mjs']);assert.equal(result.executed,true);put(root,'a/test.mjs',"import test from 'node:test'; test('broken',()=>{throw new Error('expected negative');});");assert.notEqual(run(root,'test','--base','HEAD').status,0);});

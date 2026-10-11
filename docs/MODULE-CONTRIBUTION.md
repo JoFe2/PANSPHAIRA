@@ -42,6 +42,44 @@ Declare semantic ownership, contract/profile boundaries, focused test files, and
 
 `graph` additionally reads root `package.json` workspaces (literal directories or `parent/*`) and declared local dependencies/devDependencies/peerDependencies/optionalDependencies. These npm edges preserve declared ranges; no range resolution, import analysis, semantic-test mapping, or external package inventory is claimed. Unsupported workspace patterns fail rather than silently inventing coverage. This repository currently has no root npm workspaces, which is reported explicitly.
 
+## UI-QUALITY-01: fill the existing module/PR contract
+
+The scaffold also writes a short `README.md` checklist, linking this guide. The
+greeting remains a non-UI template, not an attached UI module or product proof.
+For UI work, fill the user task/input/consequence, exact contract/renderer,
+provider and direct consumer, persistence target, and current permission/revision
+boundary. Identify UI applicability; N/A requires a reason, not a file-extension
+or documentation-only exemption.
+
+- Browser → backend → persisted target readback must be one observed product
+  path. Use versioned types and runtime validation; keep proposal, decision,
+  authority and effect separate. Read proposal business before/after and present
+  it before approval, not from decision or a later result.
+- Check tenant/session/scope/revision server-side and directly affected denied,
+  stale, expired and unknown cases. Retain shell/plugin/context and lifecycle
+  cleanup; UI arrangement never creates authority or permits blind effect retry.
+- Desktop and 390 px need positive page/control dimensions and real screenshots;
+  actually inspect them. Check affected long German labels, keyboard/focus, zoom,
+  empty/loading/error/denied and panel states. Necessary tables may scroll locally.
+  Bind exact commit/build, viewport, data/context revision and state, plus the
+  design reference and version; explain material hierarchy/readability/spacing
+  departures. Concept images are not a responsive pixel baseline. A saved unseen
+  screenshot, masked overflow or zero-width control does not qualify.
+- Run one representative attached-module journey with direct negative/consumer
+  cases and synthetic data under the pinned tools, not every combination or a
+  new human study. Existing #537 owns UI-01 proposal-Diff; #538 owns UI-02 setup
+  overflow; #528 owns the guided journey. #545 owns shared rules/registration.
+
+Canonical registration is already `npm test` → `pretest` → `npm run pan537:test`
+(both #537/#538 real native browser families), invoked once by existing CI's
+`npm run proof:secure-default`. The separate bounded `demo-current-head-e2e`
+installer/readback/purge contract remains distinct; its PASS is not a replacement
+for browser/visual acceptance. Registration, graph/check and template greeting
+tests are structural/tooling evidence only. NOT_RUN is not PASS. Reuse unchanged
+valid review/whole-image evidence within scope; changed surfaces get focussed
+independent review and existing CI/integrity, merge/release/anonymous-readback
+checks. Keep a precise infrastructure hold rather than minting product success.
+
 ## Optional growth relations
 
 Descriptor schema 1 remains supported unchanged. A module may add either or both
