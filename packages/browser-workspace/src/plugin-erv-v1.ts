@@ -1,44 +1,45 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import { validateBrowserErvReadV1 } from "../../contracts/src/browser-erv-read-v1.js";
 import type { BrowserShellPluginV1 } from "../../contracts/src/browser-shell-plugin-v1.js";
 import type { BrowserShellFactoryV1 } from "../../browser-shell/src/registry-v1.js";
 import { text, facts, readState, deniedMessage, type WorkspaceViewApiV1 } from "./api-v1.js";
 export const ervPluginV1: BrowserShellPluginV1 = {
-  schemaVersion: "pansphaira.browser-plugin/v1", id: "pan.erv", version: "1.0.0", shellVersion: "1.0.0", enabled: true,
-  trustBoundary: "TRUSTED_IN_PROCESS_CODE_OWNED_FACTORIES",
-  needs: { data: ["erv.read"], context: ["tenantId", "sessionId", "objectId", "revision"], rights: ["erv.read"], dependencies: [] },
+  schemaVersion: browserWorkspaceStringValuesV1[52], id: browserWorkspaceStringValuesV1[15] as string, version: "1.0.0", shellVersion: "1.0.0", enabled: true,
+  trustBoundary: browserWorkspaceStringValuesV1[39],
+  needs: { data: [browserWorkspaceStringValuesV1[160] as string], context: [browserWorkspaceStringValuesV1[8], browserWorkspaceStringValuesV1[16], browserWorkspaceStringValuesV1[5], browserWorkspaceStringValuesV1[3]], rights: [browserWorkspaceStringValuesV1[160] as string], dependencies: [] },
   contributions: [
-    { id: "pan.erv.route", kind: "ROUTE", slot: "shell.routes", factoryId: null, routeId: "pan.erv.route", path: "/workspace/erv", label: "Eingangsrechnungsprüfung — nur lesen" },
-    { id: "pan.erv.navigation", kind: "NAVIGATION", slot: "shell.navigation", factoryId: "pan.erv.navigation", routeId: "pan.erv.route", path: null, label: "Eingangsrechnungsprüfung — nur lesen" },
-    { id: "pan.erv.view", kind: "VIEW", slot: "shell.main", factoryId: "pan.erv.view", routeId: "pan.erv.route", path: null, label: "Eingangsrechnungsprüfung" },
-    { id: "pan.erv.information", kind: "PANEL", slot: "shell.panels", factoryId: "pan.erv.information", routeId: "pan.erv.route", path: null, label: "Informationen zum aktuellen Rechnungsvorgang" },
-    { id: "pan.erv.action", kind: "ACTION", slot: "shell.actions", factoryId: "pan.erv.action", routeId: "pan.erv.route", path: null, label: "Informationspanel öffnen" },
+    { id: browserWorkspaceStringValuesV1[29] as string, kind: "ROUTE", slot: browserWorkspaceStringValuesV1[56], factoryId: null, routeId: browserWorkspaceStringValuesV1[29] as string, path: browserWorkspaceStringValuesV1[42] as string, label: browserWorkspaceStringValuesV1[155] as string },
+    { id: browserWorkspaceStringValuesV1[185] as string, kind: browserWorkspaceStringValuesV1[12], slot: browserWorkspaceStringValuesV1[37], factoryId: browserWorkspaceStringValuesV1[185] as string, routeId: browserWorkspaceStringValuesV1[29] as string, path: null, label: browserWorkspaceStringValuesV1[155] as string },
+    { id: browserWorkspaceStringValuesV1[30] as string, kind: "VIEW", slot: browserWorkspaceStringValuesV1[17], factoryId: browserWorkspaceStringValuesV1[30] as string, routeId: browserWorkspaceStringValuesV1[29] as string, path: null, label: browserWorkspaceStringValuesV1[67] as string },
+    { id: browserWorkspaceStringValuesV1[13] as string, kind: "PANEL", slot: browserWorkspaceStringValuesV1[218], factoryId: browserWorkspaceStringValuesV1[13] as string, routeId: browserWorkspaceStringValuesV1[29], path: null, label: browserWorkspaceStringValuesV1[170] as string },
+    { id: browserWorkspaceStringValuesV1[75] as string, kind: browserWorkspaceStringValuesV1[126], slot: browserWorkspaceStringValuesV1[215], factoryId: browserWorkspaceStringValuesV1[75] as string, routeId: browserWorkspaceStringValuesV1[29], path: null, label: "Informationspanel öffnen" },
   ],
 };
 const euros = (value: number) => (value / 100).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " EUR";
 export function createErvViewV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<HTMLElement> {
   return { kind: "VIEW", async render({ target, signal }) {
-    target.append(text("h1", "Eingangsrechnungsprüfung")); readState(target, "erv", "LOADING", "Fachlicher Readback aus dem führenden nativen Speicher wird geladen …");
+    target.append(text("h1", browserWorkspaceStringValuesV1[67] as string)); readState(target, "erv", browserWorkspaceStringValuesV1[26] as string, "Fachlicher Readback aus dem führenden nativen Speicher wird geladen …");
     const response = await api.read(); if (signal.aborted) return;
-    target.replaceChildren(text("h1", "Eingangsrechnungsprüfung"));
-    if (response.outcome !== "READBACK_RECEIVED") { readState(target, "erv", response.outcome, deniedMessage(response.outcome)); return; }
+    target.replaceChildren(text("h1", browserWorkspaceStringValuesV1[67] as string));
+    if (response.outcome !== browserWorkspaceStringValuesV1[20]) { readState(target, "erv", response.outcome, deniedMessage(response.outcome)); return; }
     const value = validateBrowserErvReadV1(response.value);
     if (value.tenantId !== api.context().tenantId || value.invoiceId !== api.context().objectId) throw new Error("ERV_CURRENT_CONTEXT_DENIED");
     api.rememberInvoice(value);
-    readState(target, "erv", "READBACK_RECEIVED", "Echter fachlicher Readback empfangen — nur lesen, keine Buchung und kein Zahlungsauftrag.");
-    facts(target, [["Rechnung / Vorgang", value.invoiceId], ["Native Objektversion", String(value.revision)], ["Rechnungsbetrag", euros(value.invoiceAmountMinor)], ["Erwarteter Betrag", euros(value.expectedAmountMinor)], ["Abweichung", euros(value.varianceMinor)], ["Bestellt / angenommen / berechnet", [value.orderedQuantity, value.acceptedQuantity, value.invoicedQuantity].join(" / ")], ["Entscheidung des vorhandenen Prüfers", value.decisionOutcome], ["Fachlicher Status", value.status]]);
+    readState(target, "erv", browserWorkspaceStringValuesV1[20] as string, "Echter fachlicher Readback empfangen — nur lesen, keine Buchung und kein Zahlungsauftrag.");
+    facts(target, [["Rechnung / Vorgang", value.invoiceId], ["Native Objektversion", String(value.revision)], [browserWorkspaceStringValuesV1[206] as string, euros(value.invoiceAmountMinor)], [browserWorkspaceStringValuesV1[161] as string, euros(value.expectedAmountMinor)], [browserWorkspaceStringValuesV1[124] as string, euros(value.varianceMinor)], ["Bestellt / angenommen / berechnet", [value.orderedQuantity, value.acceptedQuantity, value.invoicedQuantity].join(" / ")], ["Entscheidung des vorhandenen Prüfers", value.decisionOutcome], ["Fachlicher Status", value.status]]);
     target.append(text("p", "Lokaler synthetischer Fall im vorhandenen führenden SQLite-Ziel. Diese Anzeige ersetzt keine externe Fiskal-/Archiv-/FiBuqualifikation und gewährt keine Buchungs- oder Zahlungsrechte."));
   } };
 }
 export function createErvPanelV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<HTMLElement> {
   return { kind: "PANEL", render({ target }) {
     const value = api.invoice(); if (!value || value.invoiceId !== api.context().objectId || value.tenantId !== api.context().tenantId) throw new Error("ERV_PANEL_CURRENT_CONTEXT_DENIED");
-    target.replaceChildren(text("h2", "Informationen zum aktuellen Rechnungsvorgang"));
+    target.replaceChildren(text("h2", browserWorkspaceStringValuesV1[170] as string));
     facts(target, [["Vorgang", value.invoiceId], ["Objektversion", String(value.revision)], ["Führender Speicher", value.leadingStore], ["Bestätigungsdigest", value.confirmationDigest], ["Quellbelegdigest", value.invoiceSourceSha256]]);
   } };
 }
 export function createErvActionV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<HTMLElement> {
-  return { kind: "ACTION", render({ target, signal }) {
-    const button = text("button", "Informationspanel zum aktuellen Vorgang öffnen") as HTMLButtonElement;
-    button.type = "button"; button.addEventListener("click", () => api.openInvoicePanel(), { signal }); target.append(button);
+  return { kind: browserWorkspaceStringValuesV1[126], render({ target, signal }) {
+    const button = text(browserWorkspaceStringValuesV1[1] as string, "Informationspanel zum aktuellen Vorgang öffnen") as HTMLButtonElement;
+    button.type = browserWorkspaceStringValuesV1[1]; button.addEventListener("click", () => api.openInvoicePanel(), { signal }); target.append(button);
   } };
 }

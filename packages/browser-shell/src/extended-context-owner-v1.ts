@@ -1,3 +1,4 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import { validateWorkspaceContextReadbackV1, type WorkspaceContextReadbackV1 } from "../../contracts/src/workspace-context-selection-v1.js";
 
 export type WorkspaceContextPhaseV1 = "read" | "stt" | "model" | "render" | "preview";
@@ -20,7 +21,7 @@ export function createExtendedBrowserContextOwnerV1(options: {
   const initialBinding = current.binding;
   let sequence = 0, closed = false;
   const pending = new Set<AbortController>(), disposals = new Map<() => void, object>();
-  function open() { if (closed) throw new Error("CONTEXT_OWNER_CLOSED"); }
+  function open() { if (closed) throw new Error(browserWorkspaceStringValuesV1[65]); }
   function retire() {
     const controllers = [...pending]; pending.clear();
     const owned = [...disposals.keys()]; disposals.clear();
@@ -47,7 +48,7 @@ export function createExtendedBrowserContextOwnerV1(options: {
   return Object.freeze({
     context() { open(); return current; },
     onDispose(dispose: () => void) {
-      open(); if (typeof dispose !== "function" || disposals.size >= 64) throw new Error("CONTEXT_DISPOSAL_DENIED");
+      open(); if (typeof dispose !== "function" || disposals.size >= 64) throw new Error(browserWorkspaceStringValuesV1[143]);
       const registration = disposals.get(dispose) ?? Object.freeze({});
       disposals.set(dispose, registration);
       // A stale lifetime unregister cannot remove a newer same-callback owner.
@@ -64,15 +65,15 @@ export function createExtendedBrowserContextOwnerV1(options: {
     },
     run<T>(phase: WorkspaceContextPhaseV1, operation: (context: WorkspaceContextReadbackV1, signal: AbortSignal) => T | Promise<T>): Promise<WorkspaceContextResponseV1<T>> {
       open(); if (!phases.includes(phase) || typeof operation !== "function") throw new Error("CONTEXT_PHASE_DENIED");
-      if (pending.size >= 8) throw new Error("CONTEXT_PENDING_LIMIT");
+      if (pending.size >= 8) throw new Error(browserWorkspaceStringValuesV1[144]);
       const captured = current, issuedSequence = sequence, controller = new AbortController(); pending.add(controller);
-      const stale = (): WorkspaceContextResponseV1<T> => Object.freeze({ outcome: "STALE_CONTEXT", phase, value: null });
+      const stale = (): WorkspaceContextResponseV1<T> => Object.freeze({ outcome: browserWorkspaceStringValuesV1[38], phase, value: null });
       return (async () => {
         try {
           if (!admitted(captured, issuedSequence) || controller.signal.aborted) return stale();
           const value = await operation(captured, controller.signal);
           if (!admitted(captured, issuedSequence) || controller.signal.aborted) return stale();
-          return Object.freeze({ outcome: "CURRENT_CONTEXT_RESPONSE", phase, context: captured, value });
+          return Object.freeze({ outcome: browserWorkspaceStringValuesV1[147], phase, context: captured, value });
         } catch {
           return !admitted(captured, issuedSequence) || controller.signal.aborted ? stale()
             : Object.freeze({ outcome: "OPERATION_FAILED", phase, value: null });

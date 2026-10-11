@@ -1,14 +1,15 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import type { BrowserShellPluginV1 } from "../../contracts/src/browser-shell-plugin-v1.js";
 import type { BrowserShellFactoryV1 } from "../../browser-shell/src/registry-v1.js";
 // Explicit owner-only diagnostic profile. Never enabled by a route/query/role,
 // never imports runtime code and never contacts a business backend.
 function descriptor(id: string, suffix: string, label: string): BrowserShellPluginV1 {
-  return { schemaVersion: "pansphaira.browser-plugin/v1", id, version: "1.0.0", shellVersion: "1.0.0", enabled: true,
-    trustBoundary: "TRUSTED_IN_PROCESS_CODE_OWNED_FACTORIES", needs: { data: [], context: [], rights: [], dependencies: [] },
+  return { schemaVersion: browserWorkspaceStringValuesV1[52], id, version: "1.0.0", shellVersion: "1.0.0", enabled: true,
+    trustBoundary: browserWorkspaceStringValuesV1[39], needs: { data: [], context: [], rights: [], dependencies: [] },
     contributions: [
-      { id: id + ".route", kind: "ROUTE", slot: "shell.routes", factoryId: null, routeId: id + ".route", path: "/workspace/" + suffix, label },
-      { id: id + ".navigation", kind: "NAVIGATION", slot: "shell.navigation", factoryId: id + ".navigation", routeId: id + ".route", path: null, label },
-      { id: id + ".view", kind: "VIEW", slot: "shell.main", factoryId: id + ".view", routeId: id + ".route", path: null, label },
+      { id: id + browserWorkspaceStringValuesV1[60], kind: "ROUTE", slot: browserWorkspaceStringValuesV1[56], factoryId: null, routeId: id + browserWorkspaceStringValuesV1[60], path: "/workspace/" + suffix, label },
+      { id: id + browserWorkspaceStringValuesV1[121], kind: browserWorkspaceStringValuesV1[12], slot: browserWorkspaceStringValuesV1[37], factoryId: id + browserWorkspaceStringValuesV1[121], routeId: id + browserWorkspaceStringValuesV1[60], path: null, label },
+      { id: id + ".view", kind: "VIEW", slot: browserWorkspaceStringValuesV1[17], factoryId: id + ".view", routeId: id + browserWorkspaceStringValuesV1[60], path: null, label },
     ],
   };
 }

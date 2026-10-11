@@ -1,3 +1,4 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 // Shell-local lifetime and context binding. Backend authentication/effective
 // rights stay server-owned; sessionId here is an identity binding, not a token.
 export interface BrowserContextV1 {
@@ -16,17 +17,17 @@ export type BrowserContextReadV1 =
   | { readonly outcome: "STALE_CONTEXT" | "DENIED" | "BACKEND_UNAVAILABLE"; readonly value: null };
 
 function checkedContext(value: unknown): BrowserContextV1 {
-  if (value === null || typeof value !== "object" || Object.getPrototypeOf(value) !== Object.prototype) throw new Error("CONTEXT_BINDING_DENIED");
+  if (value === null || typeof value !== "object" || Object.getPrototypeOf(value) !== Object.prototype) throw new Error(browserWorkspaceStringValuesV1[97]);
   const descriptors = Object.getOwnPropertyDescriptors(value);
-  const keys = ["schemaVersion", "tenantId", "sessionId", "objectId", "revision"];
+  const keys = [browserWorkspaceStringValuesV1[0] as string, browserWorkspaceStringValuesV1[8] as string, browserWorkspaceStringValuesV1[16] as string, browserWorkspaceStringValuesV1[5] as string, browserWorkspaceStringValuesV1[3] as string];
   if (Reflect.ownKeys(descriptors).length !== keys.length
     || Reflect.ownKeys(descriptors).some(key => typeof key !== "string" || !keys.includes(key))
-    || Object.values(descriptors).some(d => !d.enumerable || !("value" in d))) throw new Error("CONTEXT_BINDING_DENIED");
+    || Object.values(descriptors).some(d => !d.enumerable || !("value" in d))) throw new Error(browserWorkspaceStringValuesV1[97]);
   const v = value as Record<string, unknown>;
   const id = (x: unknown) => typeof x === "string" && /^[A-Za-z0-9][A-Za-z0-9._:-]{1,95}$/.test(x);
-  if (v.schemaVersion !== "pansphaira.browser-context/v1" || !id(v.tenantId) || !id(v.sessionId)
-    || !(v.objectId === null || id(v.objectId)) || !Number.isSafeInteger(v.revision) || (v.revision as number) < 1) throw new Error("CONTEXT_BINDING_DENIED");
-  return Object.freeze({ schemaVersion: "pansphaira.browser-context/v1", tenantId: v.tenantId as string,
+  if (v.schemaVersion !== browserWorkspaceStringValuesV1[188] || !id(v.tenantId) || !id(v.sessionId)
+    || !(v.objectId === null || id(v.objectId)) || !Number.isSafeInteger(v.revision) || (v.revision as number) < 1) throw new Error(browserWorkspaceStringValuesV1[97]);
+  return Object.freeze({ schemaVersion: browserWorkspaceStringValuesV1[188], tenantId: v.tenantId as string,
     sessionId: v.sessionId as string, objectId: v.objectId as string | null, revision: v.revision as number });
 }
 
@@ -38,7 +39,7 @@ export function createBrowserContextOwnerV1(options: {
   let current = checkedContext(options.initialContext);
   let epoch = 0; let closed = false;
   const pending = new Set<AbortController>(); const disposals = new Map<() => void, object>();
-  function ensureOpen() { if (closed) throw new Error("CONTEXT_OWNER_CLOSED"); }
+  function ensureOpen() { if (closed) throw new Error(browserWorkspaceStringValuesV1[65]); }
   function retire() {
     const controllers = [...pending]; pending.clear();
     const owned = [...disposals.keys()]; disposals.clear();
@@ -53,7 +54,7 @@ export function createBrowserContextOwnerV1(options: {
     context() { return current; },
     onDispose(dispose: () => void) {
       ensureOpen();
-      if (typeof dispose !== "function" || disposals.size >= 64) throw new Error("CONTEXT_DISPOSAL_DENIED");
+      if (typeof dispose !== "function" || disposals.size >= 64) throw new Error(browserWorkspaceStringValuesV1[143]);
       // Preserve per-lifetime callback deduplication, but a retired unregister
       // closure must never delete the same callback registered for a new life.
       const registration = disposals.get(dispose) ?? Object.freeze({});
@@ -70,24 +71,24 @@ export function createBrowserContextOwnerV1(options: {
     },
     async read(): Promise<BrowserContextReadV1> {
       ensureOpen();
-      if (pending.size >= 8) throw new Error("CONTEXT_PENDING_LIMIT");
+      if (pending.size >= 8) throw new Error(browserWorkspaceStringValuesV1[144]);
       const requestEpoch = epoch; const binding = current; const controller = new AbortController();
       pending.add(controller);
       try {
         const response = await options.readBackend(binding, controller.signal);
-        if (closed || controller.signal.aborted || requestEpoch !== epoch) return { outcome: "STALE_CONTEXT", value: null };
+        if (closed || controller.signal.aborted || requestEpoch !== epoch) return { outcome: browserWorkspaceStringValuesV1[38], value: null };
         // The adapter is trusted, but lazy status/value access can reenter the
         // owner. Sample each field once and check lifetime after each access.
         const status = response.status;
-        if (closed || controller.signal.aborted || requestEpoch !== epoch) return { outcome: "STALE_CONTEXT", value: null };
-        if (status === 401 || status === 403) return { outcome: "DENIED", value: null };
-        if (status !== 200) return { outcome: "BACKEND_UNAVAILABLE", value: null };
+        if (closed || controller.signal.aborted || requestEpoch !== epoch) return { outcome: browserWorkspaceStringValuesV1[38], value: null };
+        if (status === 401 || status === 403) return { outcome: browserWorkspaceStringValuesV1[2], value: null };
+        if (status !== 200) return { outcome: browserWorkspaceStringValuesV1[137], value: null };
         const value = response.value;
-        if (closed || controller.signal.aborted || requestEpoch !== epoch) return { outcome: "STALE_CONTEXT", value: null };
+        if (closed || controller.signal.aborted || requestEpoch !== epoch) return { outcome: browserWorkspaceStringValuesV1[38], value: null };
         // Receiving JSON is not Ready, mutation completion, permission or a proposal apply.
-        return { outcome: "READBACK_RECEIVED", context: binding, value, grantedRights: Object.freeze([]) };
+        return { outcome: browserWorkspaceStringValuesV1[20], context: binding, value, grantedRights: Object.freeze([]) };
       } catch {
-        return { outcome: closed || controller.signal.aborted || requestEpoch !== epoch ? "STALE_CONTEXT" : "BACKEND_UNAVAILABLE", value: null };
+        return { outcome: closed || controller.signal.aborted || requestEpoch !== epoch ? browserWorkspaceStringValuesV1[38] : browserWorkspaceStringValuesV1[137], value: null };
       } finally { pending.delete(controller); }
     },
     close() { if (closed) return; closed = true; epoch++; return retire(); },

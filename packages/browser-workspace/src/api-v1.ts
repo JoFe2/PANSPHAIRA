@@ -1,3 +1,4 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import type { BrowserContextV1, BrowserContextReadV1 } from "../../browser-shell/src/context-owner-v1.js";
 import type { BrowserErvReadV1 } from "../../contracts/src/browser-erv-read-v1.js";
 export interface WorkspaceViewApiV1 {
@@ -17,10 +18,10 @@ export function facts(target: HTMLElement, pairs: readonly (readonly [string, st
 }
 export function readState(target: HTMLElement, backend: string, outcome: string, message: string) {
   target.dataset.backend = backend; target.dataset.outcome = outcome;
-  const status = text("p", message); status.className = "read-state"; status.setAttribute("role", "status"); target.append(status);
+  const status = text("p", message); status.className = browserWorkspaceStringValuesV1[203] as string; status.setAttribute("role", browserWorkspaceStringValuesV1[22] as string); target.append(status);
 }
 export function deniedMessage(outcome: string): string {
-  return outcome === "DENIED" ? "Zugriff verweigert: aktuelle Session, Tenant oder Objektbindung prüfen."
-    : outcome === "STALE_CONTEXT" ? "Kontext gewechselt: alte Antwort verworfen."
+  return outcome === browserWorkspaceStringValuesV1[2] ? "Zugriff verweigert: aktuelle Session, Tenant oder Objektbindung prüfen."
+    : outcome === browserWorkspaceStringValuesV1[38] ? "Kontext gewechselt: alte Antwort verworfen."
     : "Backend nicht verfügbar oder Vorgang veraltet. Kein erfolgreicher fachlicher Readback.";
 }

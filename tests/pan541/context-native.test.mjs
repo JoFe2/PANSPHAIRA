@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { nativeFixture527, request527 } from "../pan527/helpers.mjs";
 
 let shell;
-try { shell = await import("../../packages/browser-shell/src/context-owner-v1.ts"); }
+try { shell = await import("../../dist/packages/browser-shell/src/context-owner-v1.js"); }
 catch (error) { if (error.code !== "ERR_MODULE_NOT_FOUND") throw error; }
 
 const context = (tenantId, sessionId) => ({ schemaVersion: "pansphaira.browser-context/v1", tenantId, sessionId, objectId: null, revision: 1 });

@@ -1,3 +1,4 @@
+import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import {
   validateBrowserShellPluginV1,
   type BrowserContributionKindV1,
@@ -50,13 +51,13 @@ export function createBrowserShellRegistryV1<Target>(options: {
     function visit(id: string): State {
       const known = memo.get(id); if (known) return known;
       const plugin = plugins.get(id);
-      if (!plugin) return "DENIED";
-      if (!plugin.enabled) return "DISABLED";
-      if (visiting.has(id)) return "MISSING_DEPENDENCY";
+      if (!plugin) return browserWorkspaceStringValuesV1[2];
+      if (!plugin.enabled) return browserWorkspaceStringValuesV1[152];
+      if (visiting.has(id)) return browserWorkspaceStringValuesV1[106];
       visiting.add(id);
-      let state: State = "REGISTERED";
+      let state: State = browserWorkspaceStringValuesV1[21];
       for (const dependency of plugin.needs.dependencies) {
-        if (plugins.get(dependency.id)?.version !== dependency.version || visit(dependency.id) !== "REGISTERED") { state = "MISSING_DEPENDENCY"; break; }
+        if (plugins.get(dependency.id)?.version !== dependency.version || visit(dependency.id) !== browserWorkspaceStringValuesV1[21]) { state = browserWorkspaceStringValuesV1[106]; break; }
       }
       visiting.delete(id); memo.set(id, state); return state;
     }
@@ -67,16 +68,16 @@ export function createBrowserShellRegistryV1<Target>(options: {
     register(value: unknown) {
       ensureOpen();
       const checked = validateBrowserShellPluginV1(value, new Set(factories.keys()));
-      if (checked.outcome === "DENIED") { fault("unknown", "DENIED", checked.reason); return checked; }
+      if (checked.outcome === browserWorkspaceStringValuesV1[2]) { fault(browserWorkspaceStringValuesV1[58] as string, browserWorkspaceStringValuesV1[2], checked.reason); return checked; }
       const descriptor = checked.descriptor;
       if (descriptor.contributions.some(c => c.kind !== "ROUTE" && factories.get(c.factoryId)?.kind !== c.kind)) {
-        fault(descriptor.id, "DENIED", "FACTORY_KIND_BINDING_DENIED");
-        return { outcome: "DENIED" as const, reason: "FACTORY_KIND_BINDING_DENIED" };
+        fault(descriptor.id, browserWorkspaceStringValuesV1[2], browserWorkspaceStringValuesV1[163] as string);
+        return { outcome: "DENIED" as const, reason: browserWorkspaceStringValuesV1[163] as string };
       }
       const existing = [...plugins.values()].flatMap(p => p.contributions);
       if (plugins.has(descriptor.id) || plugins.size >= 64 || descriptor.contributions.some(c => existing.some(e => e.id === c.id || (c.path !== null && e.path === c.path)))) {
-        fault(descriptor.id, "DENIED", "GLOBAL_ID_OR_ROUTE_CONFLICT");
-        return { outcome: "DENIED" as const, reason: "GLOBAL_ID_OR_ROUTE_CONFLICT" };
+        fault(descriptor.id, browserWorkspaceStringValuesV1[2], browserWorkspaceStringValuesV1[166] as string);
+        return { outcome: "DENIED" as const, reason: browserWorkspaceStringValuesV1[166] as string };
       }
       plugins.set(descriptor.id, descriptor);
       return Object.freeze({ ...status(descriptor.id), grantedRights: Object.freeze([]) });
@@ -90,7 +91,7 @@ export function createBrowserShellRegistryV1<Target>(options: {
       const plugin = [...plugins.values()].find(p => p.contributions.some(c => c.id === contributionId));
       const contribution = plugin?.contributions.find(c => c.id === contributionId);
       if (!plugin || !contribution || contribution.kind === "ROUTE") return { outcome: "DENIED" as const, reason: "UNKNOWN_RENDERABLE_ID" };
-      const admitted = status(plugin.id); if (admitted.outcome !== "REGISTERED") return admitted;
+      const admitted = status(plugin.id); if (admitted.outcome !== browserWorkspaceStringValuesV1[21]) return admitted;
       const factory = factories.get(contribution.factoryId);
       if (!factory) return { outcome: "DENIED" as const, reason: "FACTORY_NOT_OWNED" };
       const cell = contribution.kind === "VIEW" ? contribution.slot : contribution.id;
