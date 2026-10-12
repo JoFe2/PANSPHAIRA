@@ -36,7 +36,7 @@ test('optional origin/session surface has one additive source owner and real bro
       assert.ok(plan.reasons.includes('CENTRAL_INPUT_CHANGED'));
     } else {
     assert.deepEqual(plan.selectedNodes, [owner.id, 'pan528-guided-native-browser-v1', "pan541-shared-browser-shell-v1", "pan542-native-erv-human-v1", "pan544-native-notifications-v1", "pan548-authentic-context-selection-v1", "pan549-native-analysis-result-v1", "pan563-configuration-draft-v1"]);
-    assert.deepEqual(plan.selectedTests, ['npm run pan527:test', 'npm run pan528:test', "npm run pan541:test", "npm run pan542:test", "npm run pan543:test", "npm run pan544:test", "npm run pan546:test", "npm run pan547:test", "npm run pan548:test", "npm run pan549:test", "npm run pan550:test", "npm run pan562:test", "npm run pan563:test", "npm run pan564:test", "npm run pan565:test"]);
+    assert.deepEqual(plan.selectedTests, ['npm run pan527:test', 'npm run pan528:test', "npm run pan541:test", "npm run pan542:test", "npm run pan543:test", "npm run pan544:test", "npm run pan546:test", "npm run pan547:test", "npm run pan548:test", "npm run pan549:test", "npm run pan550:test", "npm run pan562:test", "npm run pan563:test", "npm run pan564:test", "npm run pan565:test", "npm run pan566:test"]);
     }
     assert.deepEqual(plan.hardGates, [...graph.hardGates].sort((a,b) => a.localeCompare(b,'en')));
   }

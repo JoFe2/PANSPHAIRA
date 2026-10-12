@@ -11,7 +11,7 @@ test("PAN528 full native browser journey is registered once with existing transp
   assert.equal(nodes.length, 1, "PAN528_AUTHORITATIVE_SOURCE_REGISTRATION_REQUIRED");
   assert.equal(graph.graphVersion, 98); const owner = nodes[0];
   assert.deepEqual(owner.dependsOn, ["pan515-native-trade-state-v1", "pan527-origin-session-v1", "pan529-runtime-budget-v1"]);
-  assert.deepEqual(owner.ownedTests, ["npm run pan528:test"]); assert.equal(owner.riskClass, "HIGH"); assert.equal(owner.globalInvalidation, false);
+  assert.deepEqual(owner.ownedTests, ["npm run pan528:test", "npm run pan566:test"]); assert.equal(owner.riskClass, "HIGH"); assert.equal(owner.globalInvalidation, false);
   assert.deepEqual(graph.hardGates, ["npm run lint", "npm run release-governance:verify", "npm run supply-chain:verify", "sha256sum -c SHA256SUMS", "./scripts/build-public-release.sh --output <isolated-absolute-path>"]);
   const inputPaths = owner.inputs.map(input => input.path);
   for (const path of ["src/pan528/app.js", "src/pan528/native-journey-controller.mjs", "src/pan528/starter-worker.mjs", "src/pan528/owned-leading-resources.mjs", "tests/pan528/wrong-business-value-browser.test.mjs", "tests/pan528/native-process-restart.test.mjs", "scripts/run-pan528-guided-browser-tests.mjs", "docs/architecture/pan528-guided-browser-v1.md", "verification/pan528-guided-browser-boundary-v1.json"]) assert.ok(inputPaths.includes(path), path);
@@ -24,7 +24,7 @@ test("PAN528 full native browser journey is registered once with existing transp
     assert.equal(manifest.has(input.path), false, "Source-only optional journey must not silently change the legacy runnable payload");
     assert.ok(builder.includes(JSON.stringify(input.path)), input.path);
     const plan = buildVerificationImpactPlanV2({ graph, graphPath: "verification/verification-dag-v2.json", baseSha: "1".repeat(40), headSha: "2".repeat(40), changedPaths: [input.path], observedInputDigests });
-    assert.deepEqual(plan.selectedNodes, [owner.id]); assert.deepEqual(plan.selectedTests, ["npm run pan528:test"]);
+    assert.deepEqual(plan.selectedNodes, [owner.id]); assert.deepEqual(plan.selectedTests, ["npm run pan528:test", "npm run pan566:test"]);
     assert.deepEqual(plan.hardGates, [...graph.hardGates].sort((a, b) => a.localeCompare(b, "en")));
   }
   const pkg = load("package.json"); assert.equal(pkg.scripts["pan528:test"], 'TMPDIR="${TMPDIR:-${RUNNER_TEMP:?PAN528_OWNED_SCRATCH_REQUIRED}}" node scripts/run-pan528-guided-browser-tests.mjs');

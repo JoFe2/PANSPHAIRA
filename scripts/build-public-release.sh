@@ -648,6 +648,20 @@ repository_only_files = {
     "tests/pan564/browser-visual-and-negatives.test.mjs",
     "tests/pan564/registration.test.mjs",
 
+    # PAN566 source-only existing528 journal/563 confirmed plan and first reference result.
+    "src/pan528/configuration-application.mjs",
+    "packages/browser-workspace/src/configuration-application-v1.ts",
+    "packages/contracts/src/configuration-application-v1.ts",
+    "docs/architecture/confirmed-configuration-native-first-result-v1.md",
+    "scripts/run-pan566-confirmed-configuration-application-tests.mjs",
+    "tests/pan566/browser-application.test.mjs",
+    "tests/pan566/browser-application-flow.test.mjs",
+    "tests/pan566/browser-application-negatives.test.mjs",
+    "tests/pan566/native-application.test.mjs",
+    "tests/pan566/contract.test.mjs",
+    "tests/pan566/registration.test.mjs",
+    "tests/pan566/helpers.mjs",
+
     # PAN542 bounded native human backend: source-only, no legacy payload/rights change.
     "docs/architecture/erv-human-native-backend-v1.md",
     "scripts/run-pan542-native-human-tests.mjs",

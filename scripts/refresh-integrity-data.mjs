@@ -3398,6 +3398,72 @@ if(!pan563Node.ownedTests.includes('npm run pan564:test'))pan563Node.ownedTests.
 if(!repositoryIntegrityNode.ownedTests.includes('npm run pan564:test'))repositoryIntegrityNode.ownedTests.push('npm run pan564:test');
 
 
+// PAN566 is an attachment of existing528 journal and563 draft, not a new owner.
+const pan566Inputs=[
+  [
+    "src/pan528/configuration-application.mjs",
+    "SOURCE",
+    "pan528-guided-native-browser-v1"
+  ],
+  [
+    "packages/browser-workspace/src/configuration-application-v1.ts",
+    "SOURCE",
+    "pan541-shared-browser-shell-v1"
+  ],
+  [
+    "packages/contracts/src/configuration-application-v1.ts",
+    "SOURCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "docs/architecture/confirmed-configuration-native-first-result-v1.md",
+    "DERIVED_EVIDENCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "scripts/run-pan566-confirmed-configuration-application-tests.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan566/browser-application.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan566/browser-application-flow.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan566/browser-application-negatives.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan566/native-application.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan566/contract.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan566/registration.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan566/helpers.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ]
+];
+for(const[inputPath,role,ownerId]of pan566Inputs){const owner=dag.nodes.find(node=>node.id===ownerId);if(!owner)throw Error('PAN566_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});if(!owner.ownedTests.includes('npm run pan566:test'))owner.ownedTests.push('npm run pan566:test');}
+if(!repositoryIntegrityNode.ownedTests.includes('npm run pan566:test'))repositoryIntegrityNode.ownedTests.push('npm run pan566:test');
+
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
 // not be duplicated on the integration owner. The integration owner keeps
@@ -3462,6 +3528,7 @@ for (const [inputPath] of pan541Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan543Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan563Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan564Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan566Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan542Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan544Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan549Inputs) entries.set(inputPath, null);

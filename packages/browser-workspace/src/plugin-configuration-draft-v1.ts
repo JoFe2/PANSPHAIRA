@@ -4,6 +4,8 @@ import type { BrowserShellFactoryV1 } from "../../browser-shell/src/registry-v1.
 import type { AgentConfigurationReadbackV1, AgentConfigurationFieldV1, AgentConfigurationValueV1 } from "../../contracts/src/agent-configuration-draft-v1.js";
 import type { BrowserContextV1 } from "../../browser-shell/src/context-owner-v1.js";
 import { text } from "./api-v1.js";
+import {createConfigurationApplicationViewV1} from "./configuration-application-v1.js";
+import type {createWorkspaceContextSelectionV1} from "./context-selection-v1.js";
 import type {WorkspaceDirtyDraftV1} from './workspace-dirty-draft-v1.js';
 export const configurationDraftPluginV1: BrowserShellPluginV1 = {
   schemaVersion:browserWorkspaceStringValuesV1[52],id:"pan.configuration",version:"1.0.0",shellVersion:"1.0.0",enabled:true,
@@ -30,14 +32,15 @@ function displayValue(value:AgentConfigurationValueV1|null):string {
   if(Array.isArray(value))return value.map(v=>displayValue(v)).join(", ");
   return valueLabels[String(value)] ?? (String(value).startsWith("bounded-") ? "Geprüfte begrenzte Runtimevorlage" : String(value));
 }
-export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,registerDraft?:(draft:WorkspaceDirtyDraftV1)=>()=>void): BrowserShellFactoryV1<HTMLElement> {
+export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,registerDraft?:(draft:WorkspaceDirtyDraftV1)=>()=>void,applicationContext?:ReturnType<typeof createWorkspaceContextSelectionV1>|null): BrowserShellFactoryV1<HTMLElement> {
  return {kind:"VIEW",async render({target,signal}){
   target.classList.add("configuration-draft");target.dataset.backend="configuration";
   const captured=context(),base="/t/"+captured.tenantId;
   // One accepted native readback, never a second conversational draft/store.
   let current:Readback|null=null,busy=false,saveInFlight=false,needsReconciliation=false,dirty=false;
+  let applicationUI:ReturnType<typeof createConfigurationApplicationViewV1>|null=null;
   let step="configuration",presentation:"form"|"conversation"="form",editing:AgentConfigurationFieldV1|null=null;
-  const unregister=registerDraft?.({id:'AGENT_CONFIGURATION',label:'Konfiguration',isDirty:()=>active()&&(dirty||saveInFlight||needsReconciliation),async discardForNavigation(){if(!active()||busy||needsReconciliation)return false;dirty=false;show();return true;}});
+  const unregister=registerDraft?.({id:'AGENT_CONFIGURATION',label:'Konfiguration',isDirty:()=>active()&&(dirty||saveInFlight||needsReconciliation||!!applicationUI?.uncertain()),async discardForNavigation(){if(!active()||busy||needsReconciliation||applicationUI?.uncertain())return false;dirty=false;show();return true;}});
   signal.addEventListener('abort',()=>unregister?.(),{once:true});
   const heading=text("h1","Versionierter Agentenkonfigurationsentwurf"),note=text("p","Einrichtung im gemeinsamen Arbeitsplatz. Nur erlaubte Konfiguration speichern: keine Aktivierung, Rechtevergabe, fachliche Wirkung oder kostenpflichtiger Modellaufruf.");
   const status=text("p","");status.className=browserWorkspaceStringValuesV1[203] as string;status.setAttribute("role","status");status.setAttribute("aria-live","polite");status.tabIndex=-1;
@@ -54,6 +57,7 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
   const presentationNote=text("p","");
   const connection=button("Vorhandenen Verbindungsstatus anzeigen");connection.addEventListener("click",()=>{if(!active()||busy)return;const open=document.querySelector<HTMLButtonElement>('[id="shell.model-connection"] > button');if(open){if(open.getAttribute('aria-expanded')!=='true')open.click();open.scrollIntoView({block:'center'});open.focus();}else state("MODEL_NOT_CONFIGURED","Der bestehende Verbindungsdialog ist für diese Instanz nicht eingebunden. Ohne KI vollständig einrichten; keine Verbindung oder Inferenz angenommen.");},{signal});
   const result=text("section","");result.dataset.configurationResult="";
+  if(applicationContext&&document.body.dataset.ownerConfigurationApplication==='true')applicationUI=createConfigurationApplicationViewV1({base,context:applicationContext,signal,draft:()=>current,live:()=>active()&&!dirty&&!busy&&!needsReconciliation});
   const summary=text("aside","");summary.className="configuration-summary";summary.dataset.configurationSummary="";summary.tabIndex=-1;summary.setAttribute("aria-label","Entwurfszusammenfassung");
   conversation.addEventListener("click",()=>{if(!active()||busy||needsReconciliation)return;step="configuration";presentation="conversation";showPresentation();},{signal});
   formView.addEventListener("click",()=>{if(!active()||busy||needsReconciliation)return;step="configuration";presentation="form";showPresentation();},{signal});
@@ -65,7 +69,7 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
   function button(label:string){const b=text("button",label)as HTMLButtonElement;b.type="button";return b;}
   function active(){return !signal.aborted&&context().sessionId===captured.sessionId&&context().tenantId===captured.tenantId;}
   function state(outcome:string,message:string){if(active()){target.dataset.outcome=outcome;status.textContent=message;}}
-  function controls(disabled:boolean){for(const n of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))n.disabled=disabled||(needsReconciliation&&n!==reload);ai.disabled=true;noAi.disabled=disabled||needsReconciliation||!current||current.draft.fields['model.reference'].value==="NONE";}
+  function controls(disabled:boolean){for(const n of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))if(!n.closest(".configuration-application"))n.disabled=disabled||(needsReconciliation&&n!==reload);applicationUI?.updateControls();ai.disabled=true;noAi.disabled=disabled||needsReconciliation||!current||current.draft.fields['model.reference'].value==="NONE";}
   function showPresentation(){
    target.dataset.configurationState=step;target.dataset.configurationPresentation=presentation;
    for(const b of steps.querySelectorAll<HTMLButtonElement>("button")){if(b.dataset.step===step)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");}
@@ -133,7 +137,7 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
    if(!current)return;body.replaceChildren();editor.replaceChildren();summary.replaceChildren();result.replaceChildren();editing=null;
    summary.append(text("h2","Entwurfszusammenfassung"),text("p","Profil: "+current.profileId+" · Revision "+current.revision),text("p","Ziel: "+displayValue(current.draft.fields['goal.purpose'].value)),text("p","Modell: "+displayValue(current.draft.fields['model.reference'].value)),text("p","Speicherstand: "+(current.persisted?"unabhängig gelesen":"noch nicht gespeichert")+" · Offene Pflichtwerte: "+current.unresolvedFields.length),text("p","Keine Aktivierung oder fachliche Wirkung autorisiert."));
    result.append(text("h2","Plan und Ergebnis — noch keine Aktivierung"),text("p",current.outcome==="RESOLVED"?"Die bestätigte normalisierte Konfiguration ist vollständig. Sie wurde gespeichert oder vom zuständigen Owner gelesen; keine Ausführung freigegeben.":"Plan noch unvollständig. "+current.unresolvedFields.length+" Pflichtwerte sind offen; nur eine serverseitig bestätigte vollständige Konfiguration kann als Entwurfsergebnis gelten."));
-   const resultDetails=document.createElement("details");resultDetails.append(text("summary","Technische Details"),text("pre",JSON.stringify({configurationDigest:current.configurationDigest,revision:current.revision,activationAuthorized:current.activationAuthorized},null,2)));result.append(resultDetails);
+   const resultDetails=document.createElement("details");resultDetails.append(text("summary","Technische Details"),text("pre",JSON.stringify({configurationDigest:current.configurationDigest,revision:current.revision,activationAuthorized:current.activationAuthorized},null,2)));result.append(resultDetails);if(applicationUI){applicationUI.reset();result.append(applicationUI.root);}
    body.append(text("h2","Aktuelle Parameter und Herkunft"),text("p","Profil: "+current.profileId+" · Schema v1 · Adapter pan441-pan529/v1 · Revision "+current.revision));
    const groups=new Map<string,HTMLUListElement>();for(const field of Object.keys(current.definitions)as AgentConfigurationFieldV1[]){const f=current.draft.fields[field],d=current.definitions[field],li=document.createElement("li");let list=groups.get(d.group);if(!list){const section=document.createElement("details");section.className="configuration-group";section.dataset.configurationGroup=d.group;section.open=["context","goal"].includes(d.group);section.append(text("summary",groupLabels[d.group]??d.group));list=document.createElement("ul");list.className="configuration-parameters";section.append(list);body.append(section);groups.set(d.group,list);}
     const confirmation={CONFIRMED:"Bestätigt",UNKNOWN:"Unbekannt",STALE:"Erneut bestätigen",CONTRADICTED:"Widersprüchlich"}[f.confirmation],validation={CURRENT:"Aktuell",UNKNOWN:"Offen",STALE:"Erneut prüfen"}[f.validation.status];const applicable=d.requiredWhen!=="SYNTHETIC_MODEL"||current.draft.fields['model.reference'].value==="synthetic-bounded/v1";
