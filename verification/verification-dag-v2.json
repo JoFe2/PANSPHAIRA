@@ -10781,7 +10781,7 @@
         {
           "path": "packages/browser-workspace/src/configuration-draft-view-v1.ts",
           "role": "SOURCE",
-          "sha256": "386d7b5d61089852f7195079667677b8af289859fb156027fa80af2c9a81d89e"
+          "sha256": "3d69d7981efee20f4a8b1d5abd65fe7f2340735ea7166ec41879c86d268c9ee4"
         },
         {
           "path": "packages/browser-workspace/src/configuration-transfer-v1.ts",

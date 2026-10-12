@@ -75,6 +75,9 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
    conversation.setAttribute("aria-pressed",String(presentation==="conversation"));formView.setAttribute("aria-pressed",String(presentation==="form"));
    presentationNote.textContent=presentation==="conversation"?"Modellloses Konfigurationsgespräch: strukturierte Frage des bestehenden Entwurfsowners, keine KI-Antwort und kein Modellaufruf. Die bestätigte Antwort wird aus demselben nativen Entwurf gelesen.":"Formularansicht desselben geschützten Entwurfs. Ansichtswechsel speichern oder aktivieren nichts.";
    presentationControls.hidden=step!=="configuration";presentationNote.hidden=step!=="configuration";editor.hidden=step!=="configuration";connection.hidden=step!=="model";result.hidden=step!=="result";
+   // Transfer is a separate result-step projection, not a free-text conversation input.
+   // Keep the same ephemeral node/owner/flight guard when detached; no new authority.
+   if(transferUI){if(step==="result")result.append(transferUI.root);else transferUI.root.remove();}
    body.hidden=step==="entry"||step==="result"||step==="configuration"&&presentation==="conversation";
    for(const group of body.querySelectorAll<HTMLElement>('[data-configuration-group]'))group.hidden=step==="profile"?!["context","goal","runtime"].includes(group.dataset.configurationGroup!):step==="model"?!["model","access"].includes(group.dataset.configurationGroup!):false;
   }
