@@ -779,6 +779,14 @@
       "fromSha256": "997e77f838b0e21e0fe4a18ad39bc25b24d06bbf2dd30ba45e0d0f0b0cfc5d75",
       "toSha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab",
       "reason": "Append exactly13 draft-specific source-only typed transfer/editor/fixed6file/browser/native/registration/document/helper inputs and one canonical test entry on existing563/541/528 owners. Preserve graph98/all103/128input bound, every old test/negative/scanner/validator/immutable21 base byte obligations/13 profiles/historical migration chain/legacy1792/hard gates/native60000/CI30min. Reuse original SQLiteCAS/draft and528 journal/qualified distinct LKG; untrusted VALUE/UNKNOWN intent only, no source identity/secrets/proof/history/memory/activation or new state/authority/engine/credential/model/cost/audio/production/KS rights. Registration is not model/M1/DUI17/whole-PAN or CI/release/closure acceptance."
+    },
+    {
+      "migrationId": "PAN568-EXISTING-REGISTERED-GOAL-QUESTION-CONTRIBUTIONS/INTEGRITY-GENERATOR/V87",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 87,
+      "fromSha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab",
+      "toSha256": "46ed57dee40c284ff77906dcc6f18b89fe5afd8c4d9f4ac261676aafe3077596",
+      "reason": "Append exactly seven source-only code-owned goal contribution/view/fixed3file runner/native-browser-registration/doc inputs and current test entry on existing563/541 ownership. Preserve graph98/all103/max128, all prior tests/hard gates, immutable21 base byte obligations/13 profiles/historical migrations/scanner/validator and legacy1792. Native365 questions and441 validation reuse the same563 SQL row/revision/CAS; no second registry, state, policy, model or execution authority. Product5000/8000/native60000 and current bounded CI45 remain unchanged; historical V86 CI30 wording stays historical. Registration is not canonicalCI/merge/release/closure/model/cost/private/audio/production/KS/WholePAN500 acceptance."
     }
   ],
   "scanScope": {
@@ -821,15 +829,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1194,
+    "filesScanned": 1200,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 315,
-    "importFiles": 314,
+    "importSites": 316,
+    "importFiles": 315,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2710,
-    "ledgerUniquePaths": 2710
+    "ledgerEntries": 2717,
+    "ledgerUniquePaths": 2717
   },
   "profiles": [
     {
@@ -902,7 +910,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab"
+      "sha256": "46ed57dee40c284ff77906dcc6f18b89fe5afd8c4d9f4ac261676aafe3077596"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1364,8 +1372,8 @@
     },
     {
       "owner": "pan563",
-      "importSites": 1,
-      "importFiles": 1
+      "importSites": 2,
+      "importFiles": 2
     },
     {
       "owner": "pan565",
@@ -1693,7 +1701,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab",
+      "sha256": "46ed57dee40c284ff77906dcc6f18b89fe5afd8c4d9f4ac261676aafe3077596",
       "basis": "profile-version-migration"
     },
     {
