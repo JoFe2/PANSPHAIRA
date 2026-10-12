@@ -31,118 +31,121 @@ function displayValue(value:AgentConfigurationValueV1|null):string {
   return valueLabels[String(value)] ?? (String(value).startsWith("bounded-") ? "Geprüfte begrenzte Runtimevorlage" : String(value));
 }
 export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,registerDraft?:(draft:WorkspaceDirtyDraftV1)=>()=>void): BrowserShellFactoryV1<HTMLElement> {
-  return {kind:"VIEW",async render({target,signal}) {
-    target.classList.add("configuration-draft"); target.dataset.backend="configuration";
-    const captured=context(); const base="/t/"+captured.tenantId;
-    let current:Readback|null=null; let busy=false;let saveInFlight=false;let needsReconciliation=false;let dirty=false;
-    const unregister=registerDraft?.({id:'AGENT_CONFIGURATION',label:'Konfiguration',isDirty:()=>active()&&(dirty||saveInFlight||needsReconciliation),async discardForNavigation(){if(!active()||busy||needsReconciliation)return false;dirty=false;show();return true;}});
-    signal.addEventListener('abort',()=>unregister?.(),{once:true});
-    const heading=text("h1","Versionierter Agentenkonfigurationsentwurf");
-    const note=text("p","Nur erlaubte Konfiguration wird dauerhaft gespeichert. Keine Aktivierung, keine Rechtevergabe, keine fachlichen Änderungen und kein kostenpflichtiger Modellaufruf.");
-    const status=text("p","");status.className=browserWorkspaceStringValuesV1[203] as string;status.setAttribute("role",browserWorkspaceStringValuesV1[22] as string);status.setAttribute(browserWorkspaceStringValuesV1[133] as string,browserWorkspaceStringValuesV1[197] as string);
-    const body=text("div","");const editor=text("div","");editor.className="configuration-editor";
-    const reload=text(browserWorkspaceStringValuesV1[1] as string,"Aktuellen Entwurf neu laden") as HTMLButtonElement;reload.type=browserWorkspaceStringValuesV1[1];
-    const noAi=text(browserWorkspaceStringValuesV1[1] as string,"Ohne KI fortfahren") as HTMLButtonElement;noAi.type=browserWorkspaceStringValuesV1[1];
-    noAi.addEventListener("click",()=>{void save(browserWorkspaceStringValuesV1[72],"NONE",browserWorkspaceStringValuesV1[63]);},{signal});
-    target.append(heading,note,status,reload,noAi,editor,body);
-    function active(){return !signal.aborted && context().sessionId === captured.sessionId && context().tenantId === captured.tenantId;}
-    function state(outcome:string,message:string){if(active()){target.dataset.outcome=outcome;status.textContent=message;}}
-    function controls(disabled:boolean){for(const node of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))node.disabled=disabled || (needsReconciliation && node !== reload);noAi.disabled=disabled || needsReconciliation || !current || current.draft.fields[browserWorkspaceStringValuesV1[72]].value === "NONE";}
-    async function request(method:"GET"|"POST",payload?:unknown) {
-      const fresh=await fetch(base+browserWorkspaceStringValuesV1[18],{credentials:browserWorkspaceStringValuesV1[6],cache:browserWorkspaceStringValuesV1[7],signal});
-      const binding=fresh.status === 200 ? await fresh.json() as BrowserContextV1 : null;
-      if(!active() || binding?.sessionId !== captured.sessionId || binding.tenantId !== captured.tenantId) return {status:401,value:null};
-      const response=await fetch(base+browserWorkspaceStringValuesV1[123],{method,credentials:browserWorkspaceStringValuesV1[6],cache:browserWorkspaceStringValuesV1[7],signal,
-        ...(method === "POST" ? {headers:{"content-type":browserWorkspaceStringValuesV1[31] as string,"x-pan563-context":captured.sessionId},body:JSON.stringify(payload)} : {})});
-      const value=await response.json() as Readback & {error?:string};
-      const after=await fetch(base+browserWorkspaceStringValuesV1[18],{credentials:browserWorkspaceStringValuesV1[6],cache:browserWorkspaceStringValuesV1[7],signal});
-      const afterBinding=after.status === 200 ? await after.json() as BrowserContextV1 : null;
-      if(!active() || afterBinding?.sessionId !== captured.sessionId) return {status:401,value:null};
-      return {status:response.status,value};
-    }
-    function accepted(value:Readback|null): value is Readback {
-      return !!value && value.schemaVersion === "pansphaira.agent-configuration/readback/v1" && value.activationAuthorized === false
-        && Number.isSafeInteger(value.revision) && value.revision >= 0 && value.draft?.schemaVersion === "pansphaira.agent-configuration/draft/v1"
-        && value.draft.adapterVersion === "pan441-pan529/v1" && value.draft.policyDigest === value.policyDigest && Array.isArray(value.questions)
-        && value.authorityContext?.source === "PROTECTED_BACKEND" && value.authorityContext.tenantId === captured.tenantId && value.authorityContext.executionAuthorityGranted === false
-        && !!value.definitions && Object.values(value.definitions).every(d=>d.schemaVersion === "pansphaira.agent-configuration/field/v1" && d.version === "1.0.0");
-    }
-    function failure(code:number,error?:string) {
-      if ([401,403].includes(code)) { current=null;body.replaceChildren();editor.replaceChildren(); }
-      state(code === 409 ? browserWorkspaceStringValuesV1[96] as string : [401,403].includes(code) ? browserWorkspaceStringValuesV1[2] as string : "ERROR",
-        code === 409 && error === "CONFIGURATION_POLICY_CHANGED_REJECT_REQUIRES_RECONFIRMATION" ? "Profil oder Runtimevorlage ist nicht mehr kompatibel. Der ursprüngliche Entwurf bleibt erhalten; eine geprüfte Migration oder erneute Bestätigung durch den zuständigen Owner ist erforderlich."
-        : code === 409 ? "Revisionskonflikt: Ein anderer Tab hat den Entwurf geändert. Ihre Eingabe wurde nicht überschrieben. Aktuellen Entwurf ausdrücklich neu laden und prüfen."
-        : [401,403].includes(code) ? "Zugriff verweigert: Die aktuelle Session oder Kontextbindung ist nicht mehr gültig. Es wurde kein erfolgreicher Speichervorgang bestätigt."
-        : "Konfigurationsbackend nicht verfügbar oder Eingabe abgelehnt. Kein erfolgreicher Speichernachweis. "+(error??""));
-    }
-    async function save(field:AgentConfigurationFieldV1,value:AgentConfigurationValueV1|null,confirmation:"CONFIRM"|"UNKNOWN") {
-      if(!current || busy || needsReconciliation || !active())return;busy=true;saveInFlight=true;controls(true);state(browserWorkspaceStringValuesV1[211] as string,"Entwurf wird mit erwarteter Revision gespeichert und anschließend erneut gelesen …");
-      try {
-        const result=await request("POST",{schemaVersion:"pansphaira.agent-configuration/answers/v1",expectedRevision:current.revision,answers:[{field,value,confirmation}]});
-        if(!active())return;
-        if(result.status !== 200){failure(result.status,result.value?.error);return;}
-        if(!accepted(result.value))throw new Error("Ungültiger Zielreadback");
-        const readback=await request("GET");if(!active())return;
-        if(readback.status !== 200 || !accepted(readback.value) || readback.value.revision !== result.value.revision || JSON.stringify(readback.value.draft) !== JSON.stringify(result.value.draft)) throw new Error("Persistierter Zielreadback stimmt nicht überein");
-        current=readback.value;dirty=false;show();state("PERSISTED","Entwurf gespeichert und identisch vom zuständigen Backend erneut gelesen. Revision "+current.revision+".");
-        editor.querySelector<HTMLElement>(browserWorkspaceStringValuesV1[212] as string)?.focus();
-      } catch(e){if(active()){needsReconciliation=true;state(browserWorkspaceStringValuesV1[51] as string,"Speicherausgang unklar: Der Server kann den Entwurf bereits gespeichert haben. Keine automatische Wiederholung. Vor weiteren Änderungen den aktuellen Entwurf ausdrücklich neu laden und abgleichen. "+(e instanceof Error?e.message:browserWorkspaceStringValuesV1[230]));}}
-      finally{busy=false;saveInFlight=false;if(active())controls(false);}
-    }
-    function edit(field:AgentConfigurationFieldV1,question=false) {
-      if(!current)return;editor.replaceChildren();
-      const definition=current.definitions[field];const existing=current.draft.fields[field];
-      const title=text("h2",definition.label);title.id="configuration-question";
-      const form=document.createElement("form");form.setAttribute("aria-labelledby",title.id);
-      const detail=text("p",definition.help["de-DE"]+" "+(question ? "Nur diese notwendige Antwort ist aktuell ungelöst. Herkunft und Bestätigung setzt der Server, nicht der Browser." : "Eine Änderung macht nur abhängige Antworten und Prüfungen ungültig."));
-      let readValue:()=>AgentConfigurationValueV1|null;
-      if(definition.type === "SET") {
-        const fieldset=document.createElement(browserWorkspaceStringValuesV1[103]);fieldset.append(text(browserWorkspaceStringValuesV1[105] as string,definition.label));
-        const inputs:HTMLInputElement[]=[];
-        for(const value of definition.allowedValues){const label=document.createElement("label");const input=document.createElement("input");input.type=browserWorkspaceStringValuesV1[44] as string;input.value=String(value);input.checked=Array.isArray(existing.value)&&existing.value.includes(String(value));inputs.push(input);label.append(input,document.createTextNode(displayValue(value)));fieldset.append(label);}
-        form.append(fieldset);readValue=()=>inputs.filter(i=>i.checked).map(i=>i.value);
-      } else if(definition.type === "INTEGER") {
-        const label=document.createElement("label");label.textContent=definition.label;const input=document.createElement("input");input.type="number";input.min=String(definition.allowedValues[0]);input.max=String(definition.allowedValues[1]);input.step="1";input.required=true;input.value=typeof existing.value === "number" ? String(existing.value) : "";label.append(input);form.append(label);readValue=()=>Number(input.value);
-      } else {
-        const label=document.createElement("label");label.textContent=definition.label;const select=document.createElement(browserWorkspaceStringValuesV1[55]);select.required=true;
-        const empty=document.createElement(browserWorkspaceStringValuesV1[36]);empty.value="";empty.textContent="Bitte ausdrücklich auswählen — kein stiller Default";select.append(empty);
-        for(const value of definition.allowedValues){const option=document.createElement(browserWorkspaceStringValuesV1[36]);option.value=JSON.stringify(value);option.textContent=value === null ? "Keine Secretreferenz erforderlich" : displayValue(value);select.append(option);}
-        if(existing.confirmation !== browserWorkspaceStringValuesV1[23] && existing.confirmation !== "CONTRADICTED") select.value=JSON.stringify(existing.value);
-        select.id="configuration-value";label.htmlFor=select.id;form.append(label,select);readValue=()=>JSON.parse(select.value) as AgentConfigurationValueV1|null;
-      }
-      form.addEventListener('input',()=>{dirty=true;},{signal});form.addEventListener(browserWorkspaceStringValuesV1[33],()=>{dirty=true;},{signal});
-      const submit=text(browserWorkspaceStringValuesV1[1] as string,"Bestätigen und Entwurf speichern") as HTMLButtonElement;submit.type=browserWorkspaceStringValuesV1[223];
-      const unknown=text(browserWorkspaceStringValuesV1[1] as string,"Als unbekannt speichern") as HTMLButtonElement;unknown.type=browserWorkspaceStringValuesV1[1];
-      form.append(submit,unknown);form.addEventListener(browserWorkspaceStringValuesV1[223],e=>{e.preventDefault();void save(field,readValue(),browserWorkspaceStringValuesV1[63]);},{signal});
-      unknown.addEventListener("click",()=>{void save(field,null,browserWorkspaceStringValuesV1[23]);},{signal});editor.append(title,detail,form);
-    }
-    function show() {
-      if(!current)return;body.replaceChildren();editor.replaceChildren();
-      body.append(text("h2","Aktuelle Parameter und Herkunft"),text("p","Profil: "+current.profileId+" · Schema v1 · Adapter pan441-pan529/v1 · Revision "+current.revision));
-      body.append(text("p","Identität aus dem geschützten Backend: Mandant "+current.authorityContext.tenantId+", Instanz "+current.authorityContext.instanceId+", Nutzer "+current.authorityContext.subjectId+". Identität und Rechte sind keine bearbeitbaren Parameter."));
-      const groups=new Map<string,HTMLUListElement>();
-      for(const field of Object.keys(current.definitions) as AgentConfigurationFieldV1[]) {
-        const f=current.draft.fields[field];const d=current.definitions[field];const li=document.createElement("li");
-        let list=groups.get(d.group);
-        if(!list){const section=document.createElement(browserWorkspaceStringValuesV1[151]);section.className="configuration-group";section.open=[browserWorkspaceStringValuesV1[64] as string,"goal"].includes(d.group);section.append(text(browserWorkspaceStringValuesV1[225] as string,groupLabels[d.group]??d.group));list=document.createElement("ul");list.className="configuration-parameters";section.append(list);body.append(section);groups.set(d.group,list);}
-        const source=f.source === "PROFILE_TEMPLATE" ? "Geprüftes Profil / Runtimevorlage" : f.source === "SESSION_USER" ? "Antwort des angemeldeten Nutzers" : "Noch ungeklärt";
-        const confirmation={CONFIRMED:"Bestätigt",UNKNOWN:"Unbekannt",STALE:"Erneut bestätigen",CONTRADICTED:"Widersprüchlich"}[f.confirmation];
-        const validation={CURRENT:"Aktuell",UNKNOWN:"Offen",STALE:"Erneut prüfen"}[f.validation.status];
-        const applicable=d.requiredWhen !== "SYNTHETIC_MODEL" || current.draft.fields[browserWorkspaceStringValuesV1[72]].value === "synthetic-bounded/v1";
-        li.append(text("strong",d.label),text("p",applicable ? displayValue(f.value) : "Ohne Modell nicht anwendbar — ursprünglicher Wert bleibt im Entwurf erhalten"),text("p","Quelle: "+source+" · "+confirmation+" · Prüfung: "+validation));
-        const technical=document.createElement(browserWorkspaceStringValuesV1[151]);technical.append(text(browserWorkspaceStringValuesV1[225] as string,"Technische Details"),text("pre",JSON.stringify({field,definition:d,state:f},null,2)));li.append(technical);
-        const button=text(browserWorkspaceStringValuesV1[1] as string,"Bearbeiten: "+d.label) as HTMLButtonElement;button.type=browserWorkspaceStringValuesV1[1];button.addEventListener("click",()=>{edit(field);editor.querySelector<HTMLElement>(browserWorkspaceStringValuesV1[212] as string)?.focus();},{signal});li.append(button);list.append(li);
-      }
-      noAi.disabled=current.draft.fields[browserWorkspaceStringValuesV1[72]].value === "NONE";
-      if(current.questions.length)edit(current.questions[0]!.field,true);
-      else editor.append(text("h2","Keine fehlenden Pflichtfragen"),text("p","Die bestätigte normalisierte Konfiguration ist vollständig. Konfigurationsdigest: "+current.configurationDigest));
-    }
-    async function load() {
-      if(busy)return;busy=true;controls(true);state(browserWorkspaceStringValuesV1[26] as string,"Versionierter Entwurf wird vom zuständigen Backend gelesen …");
-      try{const result=await request("GET");if(!active())return;if(result.status !== 200){failure(result.status,result.value?.error);return;}if(!accepted(result.value))throw new Error("Ungültiger Backendvertrag");
-        current=result.value;needsReconciliation=false;dirty=false;show();state(current.persisted?browserWorkspaceStringValuesV1[20] as string:"EMPTY",current.persisted?"Gespeicherten Entwurf gelesen. Revision "+current.revision+".":"Noch kein gespeicherter Entwurf. Geprüftes begrenztes Profil ist vorbelegt; ungelöste Pflichtwerte bleiben ausdrücklich unbekannt.");
-      }catch(e){if(active())failure(503,e instanceof Error?e.message:browserWorkspaceStringValuesV1[230]);}finally{busy=false;if(active())controls(false);}
-    }
-    reload.addEventListener("click",()=>{void load();},{signal});await load();
-  }};
+ return {kind:"VIEW",async render({target,signal}){
+  target.classList.add("configuration-draft");target.dataset.backend="configuration";
+  const captured=context(),base="/t/"+captured.tenantId;
+  // One accepted native readback, never a second conversational draft/store.
+  let current:Readback|null=null,busy=false,saveInFlight=false,needsReconciliation=false,dirty=false;
+  let step="configuration",presentation:"form"|"conversation"="form",editing:AgentConfigurationFieldV1|null=null;
+  const unregister=registerDraft?.({id:'AGENT_CONFIGURATION',label:'Konfiguration',isDirty:()=>active()&&(dirty||saveInFlight||needsReconciliation),async discardForNavigation(){if(!active()||busy||needsReconciliation)return false;dirty=false;show();return true;}});
+  signal.addEventListener('abort',()=>unregister?.(),{once:true});
+  const heading=text("h1","Versionierter Agentenkonfigurationsentwurf"),note=text("p","Einrichtung im gemeinsamen Arbeitsplatz. Nur erlaubte Konfiguration speichern: keine Aktivierung, Rechtevergabe, fachliche Wirkung oder kostenpflichtiger Modellaufruf.");
+  const status=text("p","");status.className=browserWorkspaceStringValuesV1[203] as string;status.setAttribute("role","status");status.setAttribute("aria-live","polite");status.tabIndex=-1;
+  const reload=button("Aktuellen Entwurf neu laden"),noAi=button("Ohne KI fortfahren"),summaryLink=button("Entwurfszusammenfassung anzeigen");
+  const layout=text("div","");layout.className="configuration-layout";
+  const steps=document.createElement("nav");steps.className="configuration-steps";steps.dataset.configurationSteps="";steps.setAttribute("aria-label","Einrichtungsschritte");
+  const stepLabels:Record<string,string>={entry:"Einstieg",profile:"Profil",model:"Modellverbindung",configuration:"Konfigurationsgespräch",result:"Plan und Ergebnis"};
+  for(const[key,label]of Object.entries(stepLabels)){const b=button(label);b.dataset.step=key;b.addEventListener("click",()=>{if(!active()||busy||needsReconciliation)return;step=key;showPresentation();introHeading.focus();},{signal});steps.append(b);}
+  const work=text("section","");work.className="configuration-work";
+  const introHeading=text("h2","");introHeading.tabIndex=-1;const intro=text("p","");intro.dataset.configurationIntroduction="";
+  const body=text("div","");body.className="configuration-fields";const editor=text("div","");editor.className="configuration-editor";
+  const presentationControls=text("div","");presentationControls.className="configuration-presentation-controls";
+  const conversation=button("Konfigurationsgespräch — modelllos"),formView=button("Formular — derselbe Entwurf"),ai=button("KI-Modus — nicht verfügbar");ai.dataset.configurationAi="UNAVAILABLE";ai.disabled=true;
+  const presentationNote=text("p","");
+  const connection=button("Vorhandenen Verbindungsstatus anzeigen");connection.addEventListener("click",()=>{if(!active()||busy)return;const open=document.querySelector<HTMLButtonElement>('[id="shell.model-connection"] > button');if(open){if(open.getAttribute('aria-expanded')!=='true')open.click();open.scrollIntoView({block:'center'});open.focus();}else state("MODEL_NOT_CONFIGURED","Der bestehende Verbindungsdialog ist für diese Instanz nicht eingebunden. Ohne KI vollständig einrichten; keine Verbindung oder Inferenz angenommen.");},{signal});
+  const result=text("section","");result.dataset.configurationResult="";
+  const summary=text("aside","");summary.className="configuration-summary";summary.dataset.configurationSummary="";summary.tabIndex=-1;summary.setAttribute("aria-label","Entwurfszusammenfassung");
+  conversation.addEventListener("click",()=>{if(!active()||busy||needsReconciliation)return;step="configuration";presentation="conversation";showPresentation();},{signal});
+  formView.addEventListener("click",()=>{if(!active()||busy||needsReconciliation)return;step="configuration";presentation="form";showPresentation();},{signal});
+  noAi.addEventListener("click",()=>{if(dirty){state("UNCONFIRMED_INPUT","Ihre noch unbestätigte Eingabe bleibt erhalten. Erst diese Frage bestätigen oder ausdrücklich verwerfen; kein Modellwechsel gespeichert.");editor.querySelector<HTMLElement>('input,select')?.focus();return;}void save("model.reference","NONE","CONFIRM");},{signal});
+  summaryLink.addEventListener("click",()=>{summary.scrollIntoView({block:"start"});summary.focus();},{signal});
+  presentationControls.append(conversation,formView,ai);
+  work.append(introHeading,intro,connection,presentationControls,presentationNote,editor,body,result);layout.append(steps,work,summary);
+  const actions=text("div","");actions.className="configuration-actions";actions.append(reload,noAi,summaryLink);target.append(heading,note,status,actions,layout);showPresentation();
+  function button(label:string){const b=text("button",label)as HTMLButtonElement;b.type="button";return b;}
+  function active(){return !signal.aborted&&context().sessionId===captured.sessionId&&context().tenantId===captured.tenantId;}
+  function state(outcome:string,message:string){if(active()){target.dataset.outcome=outcome;status.textContent=message;}}
+  function controls(disabled:boolean){for(const n of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))n.disabled=disabled||(needsReconciliation&&n!==reload);ai.disabled=true;noAi.disabled=disabled||needsReconciliation||!current||current.draft.fields['model.reference'].value==="NONE";}
+  function showPresentation(){
+   target.dataset.configurationState=step;target.dataset.configurationPresentation=presentation;
+   for(const b of steps.querySelectorAll<HTMLButtonElement>("button")){if(b.dataset.step===step)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");}
+   introHeading.textContent=stepLabels[step]!;
+   intro.textContent=step==="entry"?"Ein geschützter Arbeitsplatz, ein Entwurf. Die folgenden Schritte verwenden dieselbe bestätigte Quelle; Zurückgehen speichert nichts und verliert Ihre offene Eingabe nicht."
+    :step==="profile"?"Profil und Grenzen kommen vom bestehenden geprüften Adapter. Die folgenden Werte sind Entwurfsparameter, keine editierbaren Identitäten oder neuen Zugangsrechte."
+    :step==="model"?"Modelllos nutzbar. Eine synthetische Referenz ist keine echte KI-Verbindung. Produktanbieter, Zugriff und Kostenfreigabe sind hier nicht qualifiziert; kein automatischer Aufruf und kein Langzeittoken im Browser."
+    :step==="result"?"Plan und Ergebnis beruhen ausschließlich auf dem zuletzt unabhängig gelesenen Entwurf. Ein vollständiger Entwurf aktiviert keinen Agenten und bestätigt keine fachliche Wirkung."
+    :"Eine notwendige Frage nach der anderen oder dieselben Felder als Formular bearbeiten. Erst ausdrücklich bestätigen, danach unabhängig vom zuständigen Backend erneut lesen.";
+   conversation.setAttribute("aria-pressed",String(presentation==="conversation"));formView.setAttribute("aria-pressed",String(presentation==="form"));
+   presentationNote.textContent=presentation==="conversation"?"Modellloses Konfigurationsgespräch: strukturierte Frage des bestehenden Entwurfsowners, keine KI-Antwort und kein Modellaufruf. Die bestätigte Antwort wird aus demselben nativen Entwurf gelesen.":"Formularansicht desselben geschützten Entwurfs. Ansichtswechsel speichern oder aktivieren nichts.";
+   presentationControls.hidden=step!=="configuration";presentationNote.hidden=step!=="configuration";editor.hidden=step!=="configuration";connection.hidden=step!=="model";result.hidden=step!=="result";
+   body.hidden=step==="entry"||step==="result"||step==="configuration"&&presentation==="conversation";
+   for(const group of body.querySelectorAll<HTMLElement>('[data-configuration-group]'))group.hidden=step==="profile"?!["context","goal","runtime"].includes(group.dataset.configurationGroup!):step==="model"?!["model","access"].includes(group.dataset.configurationGroup!):false;
+  }
+  async function request(method:"GET"|"POST",payload?:unknown){
+   const fresh=await fetch(base+browserWorkspaceStringValuesV1[18],{credentials:"same-origin",cache:"no-store",signal});const binding=fresh.status===200?await fresh.json()as BrowserContextV1:null;
+   if(!active()||binding?.sessionId!==captured.sessionId||binding.tenantId!==captured.tenantId)return{status:401,value:null};
+   const response=await fetch(base+browserWorkspaceStringValuesV1[123],{method,credentials:"same-origin",cache:"no-store",signal,...(method==="POST"?{headers:{"content-type":"application/json","x-pan563-context":captured.sessionId},body:JSON.stringify(payload)}:{})});const value=await response.json()as Readback&{error?:string};
+   const after=await fetch(base+browserWorkspaceStringValuesV1[18],{credentials:"same-origin",cache:"no-store",signal});const afterBinding=after.status===200?await after.json()as BrowserContextV1:null;
+   if(!active()||afterBinding?.sessionId!==captured.sessionId||afterBinding.tenantId!==captured.tenantId)return{status:401,value:null};return{status:response.status,value};
+  }
+  function accepted(value:Readback|null):value is Readback{
+   return !!value&&value.schemaVersion==="pansphaira.agent-configuration/readback/v1"&&value.activationAuthorized===false&&Number.isSafeInteger(value.revision)&&value.revision>=0&&value.draft?.schemaVersion==="pansphaira.agent-configuration/draft/v1"
+    &&value.draft.adapterVersion==="pan441-pan529/v1"&&value.draft.policyDigest===value.policyDigest&&Array.isArray(value.questions)&&Array.isArray(value.unresolvedFields)
+    &&value.authorityContext?.source==="PROTECTED_BACKEND"&&value.authorityContext.tenantId===captured.tenantId&&value.authorityContext.executionAuthorityGranted===false&&value.authorityContext.draftSaveAllowed===true
+    &&!!value.definitions&&Object.values(value.definitions).every(d=>d.schemaVersion==="pansphaira.agent-configuration/field/v1"&&d.version==="1.0.0")
+    &&JSON.stringify(Object.keys(value.definitions).sort())===JSON.stringify(Object.keys(value.draft.fields).sort());
+  }
+  function failure(code:number,error?:string){
+   if([401,403].includes(code)){current=null;body.replaceChildren();editor.replaceChildren();summary.replaceChildren();result.replaceChildren();editing=null;}
+   if(code===409)needsReconciliation=true;
+   state(code===409?"CONFLICT":[401,403].includes(code)?"DENIED":"ERROR",code===409&&error==="CONFIGURATION_POLICY_CHANGED_REJECT_REQUIRES_RECONFIRMATION"?"Profil oder Runtimevorlage nicht mehr kompatibel. Ursprünglicher Entwurf bleibt erhalten; geprüfte Migration oder erneute Owner-Bestätigung erforderlich.":code===409?"Revisionskonflikt: Ein anderer Tab hat den Entwurf geändert. Eingabe nicht überschrieben. Aktuellen Entwurf ausdrücklich neu laden und prüfen.":[401,403].includes(code)?"Zugriff verweigert: Session oder Kontextbindung nicht mehr gültig. Kein erfolgreicher Speichervorgang bestätigt.":"Konfigurationsbackend nicht verfügbar oder Eingabe abgelehnt. Kein erfolgreicher Speichernachweis. "+(error??""));
+   if(active()){step="configuration";showPresentation();status.focus();editor.querySelector<HTMLElement>('input,select')?.focus();}
+  }
+  async function save(field:AgentConfigurationFieldV1,value:AgentConfigurationValueV1|null,confirmation:"CONFIRM"|"UNKNOWN"){
+   if(!current||busy||needsReconciliation||!active())return;busy=true;saveInFlight=true;controls(true);state("SAVING","Entwurf wird mit erwarteter Revision gespeichert und anschließend erneut gelesen …");
+   try{const result=await request("POST",{schemaVersion:"pansphaira.agent-configuration/answers/v1",expectedRevision:current.revision,answers:[{field,value,confirmation}]});if(!active())return;
+    if(result.status>=500)throw Error("Serverantwort bestätigt den Speicherausgang nicht");if(result.status!==200){failure(result.status,result.value?.error);return;}if(!accepted(result.value))throw Error("Ungültiger Zielreadback");
+    const readback=await request("GET");if(!active())return;if(readback.status!==200||!accepted(readback.value)||readback.value.revision!==result.value.revision||JSON.stringify(readback.value.draft)!==JSON.stringify(result.value.draft))throw Error("Persistierter Zielreadback stimmt nicht überein");
+    current=readback.value;dirty=false;editing=null;show();state("PERSISTED","Entwurf gespeichert und identisch vom zuständigen Backend erneut gelesen. Revision "+current.revision+".");editor.querySelector<HTMLElement>('input,select')?.focus();
+   }catch(e){if(active()){needsReconciliation=true;state(browserWorkspaceStringValuesV1[51] as string,"Speicherausgang unklar: Server kann bereits gespeichert haben. Keine automatische Wiederholung. Aktuellen Entwurf ausdrücklich neu laden und abgleichen. "+(e instanceof Error?e.message:""));status.focus();}}
+   finally{busy=false;saveInFlight=false;if(active()){controls(false);if(target.dataset.outcome==="ERROR")editor.querySelector<HTMLElement>('input:not(:disabled),select:not(:disabled)')?.focus();}}
+  }
+  function provenance(field:AgentConfigurationFieldV1){const f=current!.draft.fields[field];return f.source==="PROFILE_TEMPLATE"?"Geprüftes Profil / Runtimevorlage":f.source==="SESSION_USER"?"Antwort des angemeldeten Nutzers":"Noch ungeklärt";}
+  function edit(field:AgentConfigurationFieldV1,question=false){
+   if(!current)return;if(dirty){state("UNCONFIRMED_INPUT","Ihre noch unbestätigte Eingabe bleibt erhalten. Erst bestätigen oder ausdrücklich verwerfen; keine Antwort durch eine andere Karte ersetzt.");editor.querySelector<HTMLElement>('input,select')?.focus();return;}
+   step="configuration";editing=field;editor.replaceChildren();showPresentation();
+   const d=current.definitions[field],existing=current.draft.fields[field],q=current.questions.find(q=>q.field===field);
+   const title=text("h2",d.label);title.id="configuration-question";
+   const why=text("p","Warum diese Frage: "+(q?.reason==="DEPENDENCY_CHANGED"?"Eine bestätigte Abhängigkeit wurde geändert; erneut prüfen.":q?.reason==="CONTRADICTION"?"Widersprüchliche Antworten brauchen eine ausdrückliche Klärung.":q?"Der notwendige Wert ist noch unbekannt oder ungeklärt.":"Dieses bestätigte Feld wird ausdrücklich bearbeitet; abhängige Antworten werden vom Server neu geprüft."));why.dataset.questionReason="";
+   const source=text("p","Quelle des Vorschlags: "+provenance(field)+". Bearbeitbar als Entwurfswert innerhalb der angezeigten zulässigen Auswahl. Grenzen kommen ausschließlich vom bestehenden Adapter; Herkunft und Bestätigung setzt der Server.");source.dataset.questionSource="";
+   const detail=text("p",d.help["de-DE"]+(question?" Nur diese notwendige Antwort ist aktuell ungelöst.":" Eine Änderung macht nur abhängige Antworten und Prüfungen ungültig."));
+   const form=document.createElement("form");form.setAttribute("aria-labelledby",title.id);let readValue:()=>AgentConfigurationValueV1|null;
+   if(d.type==="SET"){const set=document.createElement("fieldset");set.append(text("legend",d.label));const inputs:HTMLInputElement[]=[];for(const value of d.allowedValues){const label=document.createElement("label"),input=document.createElement("input");input.type="checkbox";input.value=String(value);input.checked=Array.isArray(existing.value)&&existing.value.includes(String(value));inputs.push(input);label.append(input,document.createTextNode(displayValue(value)));set.append(label);}form.append(set);readValue=()=>inputs.filter(i=>i.checked).map(i=>i.value);}
+   else if(d.type==="INTEGER"){const label=text("label",d.label),input=document.createElement("input");input.type="number";input.min=String(d.allowedValues[0]);input.max=String(d.allowedValues[1]);input.step="1";input.required=true;input.value=typeof existing.value==="number"?String(existing.value):"";label.append(input);form.append(label);readValue=()=>Number(input.value);}
+   else{const label=text("label",d.label),select=document.createElement("select");select.required=true;const empty=document.createElement("option");empty.value="";empty.textContent="Bitte ausdrücklich auswählen — kein stiller Default";select.append(empty);for(const value of d.allowedValues){const option=document.createElement("option");option.value=JSON.stringify(value);option.textContent=value===null?"Keine Secretreferenz erforderlich":displayValue(value);select.append(option);}if(existing.confirmation!=="UNKNOWN"&&existing.confirmation!=="CONTRADICTED")select.value=JSON.stringify(existing.value);select.id="configuration-value";label.setAttribute("for",select.id);form.append(label,select);readValue=()=>JSON.parse(select.value)as AgentConfigurationValueV1|null;}
+   form.addEventListener("input",()=>{dirty=true;},{signal});form.addEventListener("change",()=>{dirty=true;},{signal});
+   const submit=button("Bestätigen und Entwurf speichern");submit.type="submit";const unknown=button("Als unbekannt speichern"),later=button("Später beantworten — Eingabe behalten");
+   form.append(submit,unknown,later);form.addEventListener("submit",e=>{e.preventDefault();if(busy||needsReconciliation)return;try{if(!form.checkValidity())throw Error("Bitte einen zulässigen Wert ausdrücklich auswählen.");const value=readValue();if(Array.isArray(value)&&value.length===0)throw Error("Mindestens einen zulässigen Wert auswählen.");void save(field,value,"CONFIRM");}catch{state("VALIDATION_ERROR","Eingabe für „"+d.label+"“ unvollständig oder ungültig. Kein Request gespeichert; die betroffene Karte bleibt erhalten.");const input=form.querySelector<HTMLElement>('input,select');input?.setAttribute('aria-invalid','true');input?.focus();}},{signal});
+   unknown.addEventListener("click",()=>{void save(field,null,"UNKNOWN");},{signal});later.addEventListener("click",()=>{state("DEFERRED","Diese Frage bleibt ausdrücklich offen. Eingabe erhalten; nichts gespeichert oder still als bestätigt angenommen.");form.querySelector<HTMLElement>('input,select')?.focus();},{signal});
+   editor.append(title,why,source,detail,form);
+  }
+  function show(){
+   if(!current)return;body.replaceChildren();editor.replaceChildren();summary.replaceChildren();result.replaceChildren();editing=null;
+   summary.append(text("h2","Entwurfszusammenfassung"),text("p","Profil: "+current.profileId+" · Revision "+current.revision),text("p","Ziel: "+displayValue(current.draft.fields['goal.purpose'].value)),text("p","Modell: "+displayValue(current.draft.fields['model.reference'].value)),text("p","Speicherstand: "+(current.persisted?"unabhängig gelesen":"noch nicht gespeichert")+" · Offene Pflichtwerte: "+current.unresolvedFields.length),text("p","Keine Aktivierung oder fachliche Wirkung autorisiert."));
+   result.append(text("h2","Plan und Ergebnis — noch keine Aktivierung"),text("p",current.outcome==="RESOLVED"?"Die bestätigte normalisierte Konfiguration ist vollständig. Sie wurde gespeichert oder vom zuständigen Owner gelesen; keine Ausführung freigegeben.":"Plan noch unvollständig. "+current.unresolvedFields.length+" Pflichtwerte sind offen; nur eine serverseitig bestätigte vollständige Konfiguration kann als Entwurfsergebnis gelten."));
+   const resultDetails=document.createElement("details");resultDetails.append(text("summary","Technische Details"),text("pre",JSON.stringify({configurationDigest:current.configurationDigest,revision:current.revision,activationAuthorized:current.activationAuthorized},null,2)));result.append(resultDetails);
+   body.append(text("h2","Aktuelle Parameter und Herkunft"),text("p","Profil: "+current.profileId+" · Schema v1 · Adapter pan441-pan529/v1 · Revision "+current.revision));
+   const groups=new Map<string,HTMLUListElement>();for(const field of Object.keys(current.definitions)as AgentConfigurationFieldV1[]){const f=current.draft.fields[field],d=current.definitions[field],li=document.createElement("li");let list=groups.get(d.group);if(!list){const section=document.createElement("details");section.className="configuration-group";section.dataset.configurationGroup=d.group;section.open=["context","goal"].includes(d.group);section.append(text("summary",groupLabels[d.group]??d.group));list=document.createElement("ul");list.className="configuration-parameters";section.append(list);body.append(section);groups.set(d.group,list);}
+    const confirmation={CONFIRMED:"Bestätigt",UNKNOWN:"Unbekannt",STALE:"Erneut bestätigen",CONTRADICTED:"Widersprüchlich"}[f.confirmation],validation={CURRENT:"Aktuell",UNKNOWN:"Offen",STALE:"Erneut prüfen"}[f.validation.status];const applicable=d.requiredWhen!=="SYNTHETIC_MODEL"||current.draft.fields['model.reference'].value==="synthetic-bounded/v1";
+    li.append(text("strong",d.label),text("p",applicable?displayValue(f.value):"Ohne Modell nicht anwendbar — ursprünglicher Wert bleibt im Entwurf erhalten"),text("p","Quelle: "+provenance(field)+" · "+confirmation+" · Prüfung: "+validation));const technical=document.createElement("details");technical.append(text("summary","Technische Details"),text("pre",JSON.stringify({field,definition:d,state:f},null,2)));li.append(technical);
+    const b=button("Bearbeiten: "+d.label);b.addEventListener("click",()=>{edit(field);editor.querySelector<HTMLElement>('input,select')?.focus();},{signal});li.append(b);list.append(li);
+   }
+   if(current.questions.length)edit(current.questions[0]!.field,true);else editor.append(text("h2","Keine fehlenden Pflichtfragen"),text("p","Die bestätigte normalisierte Konfiguration ist vollständig. Konfigurationsdigest: "+current.configurationDigest));showPresentation();
+  }
+  async function load(){
+   if(busy)return;busy=true;controls(true);state("LOADING","Versionierter Entwurf wird vom zuständigen Backend gelesen …");
+   try{const result=await request("GET");if(!active())return;if(result.status!==200){failure(result.status,result.value?.error);return;}if(!accepted(result.value))throw Error("Ungültiger Backendvertrag");current=result.value;needsReconciliation=false;dirty=false;show();state(current.persisted?"READBACK_RECEIVED":"EMPTY",current.persisted?"Gespeicherten Entwurf gelesen. Revision "+current.revision+".":"Noch kein gespeicherter Entwurf. Geprüftes begrenztes Profil vorbelegt; ungelöste Pflichtwerte bleiben ausdrücklich unbekannt.");}catch(e){if(active())failure(503,e instanceof Error?e.message:"");}finally{busy=false;if(active())controls(false);}
+  }
+  reload.addEventListener("click",()=>{if(dirty&&!needsReconciliation){state("UNCONFIRMED_INPUT","Offene Eingabe erhalten. Erst bestätigen oder ausdrücklich verwerfen; aktueller Entwurf nicht über eine offene Antwort geladen.");return;}void load();},{signal});await load();
+ }};
 }

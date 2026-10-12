@@ -12,3 +12,18 @@
 .configuration-draft .configuration-group > summary { cursor: pointer; padding: .75rem; font-weight: 700; min-height: 44px; }
 .configuration-draft pre { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
 .configuration-draft [data-outcome="CONFLICT"], .configuration-draft [data-outcome="DENIED"] { border-color: #a63829; }
+.configuration-draft [hidden] { display: none !important; }
+.configuration-draft, .configuration-draft * { box-sizing: border-box; }
+.configuration-draft { min-width: 0; overflow-wrap: anywhere; }
+.configuration-draft .configuration-actions, .configuration-draft .configuration-presentation-controls { display: flex; flex-wrap: wrap; gap: .6rem; margin-block: 1rem; }
+.configuration-draft .configuration-layout { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,18rem),1fr)); gap: 1rem; align-items: start; }
+.configuration-draft .configuration-steps, .configuration-draft .configuration-work, .configuration-draft .configuration-summary { min-width: 0; padding: 1rem; border: 1px solid #cbd6de; border-radius: .65rem; background: #fff; color: #182b3a; }
+.configuration-draft .configuration-steps { display: grid; gap: .6rem; padding: .6rem; }
+.configuration-draft button { box-sizing: border-box; white-space: normal; overflow-wrap: anywhere; min-width: 0; min-height: 44px; }
+.configuration-draft .configuration-steps button { width: 100%; text-align: left; }
+.configuration-draft button[aria-current="step"], .configuration-draft button[aria-pressed="true"] { border: 2px solid #286092; background: #eaf3fb; color: #102d48; }
+.configuration-draft .configuration-editor { margin-top: 1rem; }
+.configuration-draft .configuration-summary { background: #f4f8fc; }
+.configuration-draft .configuration-summary h2, .configuration-draft .configuration-work h2 { margin-top: 0; }
+.configuration-draft :focus-visible { outline: 3px solid #286092; outline-offset: 3px; }
+@media (max-width: 700px) { .configuration-draft .configuration-layout { grid-template-columns: minmax(0,1fr); } .configuration-draft .configuration-steps { grid-template-columns: minmax(0,1fr); } .configuration-draft .configuration-actions > button, .configuration-draft .configuration-presentation-controls > button { width: 100%; } }

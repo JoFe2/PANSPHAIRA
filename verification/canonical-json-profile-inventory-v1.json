@@ -755,7 +755,15 @@
     "fromSha256": "9602b8f35a20b033025b14b7767e9f46bf318ec636f5c9fa5e6b25dd80957466",
     "toSha256": "741de6b63dbba9a9a5930e645c991304cfeedee77ad5c63c600c1f4adb349c3e",
     "reason": "Add exactly sixteen source-only protected native bootstrap/resume/CLI,versioned closed DTO,real native4-process/TLS/browser/restart tests and documentation to existing527/541 ownership without exceeding128 inputs. Keep graph98/all103,21 byteobligations/13 profiles/history/scanner/validator/negative/gates and legacy1792 unchanged. Same existingMAC/session envelope/atomiclock/CSRF and550563 owners; no identity/credential infrastructure, grants fromUI/profile, provider/model/audio/cost/production/KS rights. Registration is not independent review/CI/release/original closure/wholeportfolio completion."
-  }
+  },
+{
+  "migrationId": "PAN564-EXISTING-DRAFT-MODEL-FREE-CONVERSATION-FORM/INTEGRITY-GENERATOR/V84",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 84,
+  "fromSha256": "741de6b63dbba9a9a5930e645c991304cfeedee77ad5c63c600c1f4adb349c3e",
+  "toSha256": "287e3d7ad682c47c0abdaa8d4cb22309415a9b06105c7670e219939bdc455b62",
+  "reason": "Add exactly five source-only fixed browser/registration/entry/document inputs to the existing563 native draft owner; keep graph98/all103 and bounded128 inputs, all old tests and canonical gates, immutable21 obligations/13 profiles/history/scanner/validator/legacy1792. Conversation and form share one accepted native readback/CAS/question source in the existing541550548 shell, with no second state/controller/model/credential authority. Registration is not independent review, CI, release, original closure, real565575548 model/KS/wholeportfolio acceptance."
+}
 ],
   "scanScope": {
     "roots": [
@@ -797,15 +805,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-  "filesScanned": 1167,
+  "filesScanned": 1171,
   "declarationSites": 37,
   "declarationFiles": 37,
   "importSites": 313,
   "importFiles": 312,
   "reexportSites": 7,
   "similarShapeSites": 30,
-  "ledgerEntries": 2680,
-  "ledgerUniquePaths": 2680
+  "ledgerEntries": 2685,
+  "ledgerUniquePaths": 2685
 },
   "profiles": [
     {
@@ -878,7 +886,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "741de6b63dbba9a9a5930e645c991304cfeedee77ad5c63c600c1f4adb349c3e"
+      "sha256": "287e3d7ad682c47c0abdaa8d4cb22309415a9b06105c7670e219939bdc455b62"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1669,7 +1677,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "741de6b63dbba9a9a5930e645c991304cfeedee77ad5c63c600c1f4adb349c3e",
+      "sha256": "287e3d7ad682c47c0abdaa8d4cb22309415a9b06105c7670e219939bdc455b62",
       "basis": "profile-version-migration"
     },
     {

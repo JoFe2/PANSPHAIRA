@@ -27,7 +27,7 @@ test("PAN541 shared browser/typed shell has exactly one additive owner, native d
       assert.deepEqual(plan.selectedNodes, graph.nodes.map(n => n.id).sort((a,b) => a.localeCompare(b,"en")));
       assert.deepEqual(plan.selectedTests, [...new Set(graph.nodes.flatMap(n => n.ownedTests))].sort((a,b) => a.localeCompare(b,"en")));
     } else {
-      assert.deepEqual(plan.selectedNodes, [owner.id, "pan544-native-notifications-v1", "pan548-authentic-context-selection-v1", "pan549-native-analysis-result-v1", "pan563-configuration-draft-v1"]); assert.deepEqual(plan.selectedTests, ["npm run pan541:test", "npm run pan543:test", "npm run pan544:test", "npm run pan546:test", "npm run pan547:test", "npm run pan548:test", "npm run pan549:test", "npm run pan550:test", "npm run pan562:test", "npm run pan563:test", "npm run pan565:test"]);
+      assert.deepEqual(plan.selectedNodes, [owner.id, "pan544-native-notifications-v1", "pan548-authentic-context-selection-v1", "pan549-native-analysis-result-v1", "pan563-configuration-draft-v1"]); assert.deepEqual(plan.selectedTests, ["npm run pan541:test", "npm run pan543:test", "npm run pan544:test", "npm run pan546:test", "npm run pan547:test", "npm run pan548:test", "npm run pan549:test", "npm run pan550:test", "npm run pan562:test", "npm run pan563:test", "npm run pan564:test", "npm run pan565:test"]);
     }
   }
   assert.equal(graph.nodes.find(n => n.id === "repository-integrity").ownedTests.filter(t => t === "npm run pan541:test").length, 1);
