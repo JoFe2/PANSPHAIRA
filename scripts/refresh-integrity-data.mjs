@@ -3463,6 +3463,78 @@ const pan566Inputs=[
 ];
 for(const[inputPath,role,ownerId]of pan566Inputs){const owner=dag.nodes.find(node=>node.id===ownerId);if(!owner)throw Error('PAN566_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});if(!owner.ownedTests.includes('npm run pan566:test'))owner.ownedTests.push('npm run pan566:test');}
 if(!repositoryIntegrityNode.ownedTests.includes('npm run pan566:test'))repositoryIntegrityNode.ownedTests.push('npm run pan566:test');
+// PAN569 original B3: additive configuration intent on existing owners only.
+const pan569Inputs=[
+  [
+    "packages/contracts/src/agent-configuration-transfer-v1.ts",
+    "SOURCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "packages/browser-workspace/src/configuration-draft-view-v1.ts",
+    "SOURCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "packages/browser-workspace/src/configuration-transfer-v1.ts",
+    "SOURCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "docs/architecture/existing-configuration-change-recovery-redacted-transfer-v1.md",
+    "DERIVED_EVIDENCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "scripts/run-pan569-existing-change-recovery-tests.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/browser-transfer.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/browser-journeys.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/browser-safety.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/native-transfer.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/transfer-contract.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/registration.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/helpers.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan569/isolated-browser-fixture.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ]
+];
+for(const[inputPath,role,ownerId]of pan569Inputs){const owner=dag.nodes.find(node=>node.id===ownerId);if(!owner)throw Error('PAN569_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});}
+for(const id of ['pan563-configuration-draft-v1','pan541-shared-browser-shell-v1','pan528-guided-native-browser-v1']){const owner=dag.nodes.find(n=>n.id===id);if(!owner.ownedTests.includes('npm run pan569:test'))owner.ownedTests.push('npm run pan569:test');}
+if(!repositoryIntegrityNode.ownedTests.includes('npm run pan569:test'))repositoryIntegrityNode.ownedTests.push('npm run pan569:test');
+
 
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
@@ -3529,6 +3601,7 @@ for (const [inputPath] of pan543Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan563Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan564Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan566Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan569Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan542Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan544Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan549Inputs) entries.set(inputPath, null);

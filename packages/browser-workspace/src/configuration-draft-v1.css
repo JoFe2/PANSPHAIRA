@@ -35,3 +35,9 @@
 /* Keep shell/workspace queries; the application view has no profile-card facts.
    Avoid the independently reproduced third nested inline-size invalidation. */
 .profile-canvas > main:has([data-configuration-application]){container-type:normal}
+
+.configuration-transfer{min-width:0;overflow-wrap:anywhere;margin-top:1.25rem;padding:1rem;border:1px solid #cbd5e1;border-radius:.6rem;background:#f4f8fc}
+.configuration-transfer textarea{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;min-height:7rem;margin:.5rem 0 1rem;padding:.6rem;font:inherit;resize:vertical}
+.configuration-transfer pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
+/* Actual narrow/zoomed configuration surface: avoid stacked rem-padding. */
+@media(max-width:700px){.configuration-draft .configuration-work,.configuration-draft .configuration-summary{padding:.35rem}.configuration-transfer{padding:.35rem}.configuration-transfer h2{font-size:1.15rem;line-height:1.35;hyphens:auto}.configuration-transfer .configuration-actions{gap:.35rem}.configuration-transfer button{padding:.4rem;hyphens:auto}}

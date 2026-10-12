@@ -661,6 +661,20 @@ repository_only_files = {
     "tests/pan566/contract.test.mjs",
     "tests/pan566/registration.test.mjs",
     "tests/pan566/helpers.mjs",
+    # PAN569 original B3: existing configuration owner only; source evidence, no activation.
+    "packages/contracts/src/agent-configuration-transfer-v1.ts",
+    "packages/browser-workspace/src/configuration-draft-view-v1.ts",
+    "packages/browser-workspace/src/configuration-transfer-v1.ts",
+    "docs/architecture/existing-configuration-change-recovery-redacted-transfer-v1.md",
+    "scripts/run-pan569-existing-change-recovery-tests.mjs",
+    "tests/pan569/browser-transfer.test.mjs",
+    "tests/pan569/browser-journeys.test.mjs",
+    "tests/pan569/browser-safety.test.mjs",
+    "tests/pan569/native-transfer.test.mjs",
+    "tests/pan569/transfer-contract.test.mjs",
+    "tests/pan569/registration.test.mjs",
+    "tests/pan569/helpers.mjs",
+    "tests/pan569/isolated-browser-fixture.mjs",
 
     # PAN542 bounded native human backend: source-only, no legacy payload/rights change.
     "docs/architecture/erv-human-native-backend-v1.md",

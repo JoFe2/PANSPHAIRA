@@ -1,6 +1,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { constants, openSync, closeSync, lstatSync, realpathSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
+import { exportAgentConfigurationTransferV1,importAgentConfigurationTransferV1,validateAgentConfigurationTransferCommandV1 } from '../../dist/packages/contracts/src/agent-configuration-transfer-v1.js';
 import { canonicalJson } from '../../dist/packages/contracts/src/canonical-json.js';
 import { bindRuntimeTemplateV1 } from '../pan529/runtime-template-contract.mjs';
 import {
@@ -48,16 +49,13 @@ export function createAgentConfigurationDraftStoreV1(options) {
         tenantId:key[0],subjectId:key[1],instanceId:key[2],generation:binding.generation,authenticatedRole:principal.role,draftSaveAllowed:true,executionAuthorityGranted:false}),
       adapterVersion:policy.adapterVersion,policyDigest:policy.policyDigest,supportedVersions:policy.supportedVersions,definitions:policy.fields,draft,...evaluateAgentConfigurationDraftV1(draft,policy),activationAuthorized:false});
   }
-  const store=Object.freeze({
-    read(principal) {return readKey(scope(principal),principal);},
-    save(command,principal) {
-      const key=scope(principal); const input=validateAgentConfigurationAnswersV1(command,policy);
+  function persist(principal,input,reduce) {const key=scope(principal);
       db.exec('BEGIN IMMEDIATE');
       try {
         const current=readKey(key,principal);
         if(input.expectedRevision !== current.revision) throw new Error('CONFIGURATION_REVISION_CONFLICT');
         if(current.revision >= Number.MAX_SAFE_INTEGER) throw new Error('CONFIGURATION_REVISION_EXHAUSTED');
-        const next=applyAgentConfigurationAnswersV1(current.draft,input,policy);
+        const next=reduce(current.draft);
         if(current.persisted && canonicalJson(next) === canonicalJson(current.draft)) {db.exec('COMMIT');return current;}
         if(!current.persisted) db.prepare('INSERT INTO agent_configuration_drafts_v1 VALUES (?,?,?,?,?,?)').run(...key,1,canonicalJson(next));
         else {
@@ -66,7 +64,11 @@ export function createAgentConfigurationDraftStoreV1(options) {
         }
         db.exec('COMMIT'); return readKey(key,principal);
       } catch(error) {if(db.isTransaction) db.exec('ROLLBACK');throw error;}
-    },
+  }
+  const store=Object.freeze({
+    read(principal) {return readKey(scope(principal),principal);},
+    save(command,principal) {const input=validateAgentConfigurationAnswersV1(command,policy);return persist(principal,input,draft=>applyAgentConfigurationAnswersV1(draft,input,policy));},
+    transfer(principal,command=null) {const key=scope(principal);if(command===null)return exportAgentConfigurationTransferV1(readKey(key,principal).draft,policy);const input=validateAgentConfigurationTransferCommandV1(command,policy);if(input.operation==='IMPORT')return persist(principal,input,()=>importAgentConfigurationTransferV1(input.envelope,policy));const current=readKey(key,principal);if(input.expectedRevision!==current.revision)throw Error('CONFIGURATION_REVISION_CONFLICT');importAgentConfigurationTransferV1(input.envelope,policy);return {schemaVersion:'pansphaira.agent-configuration/transfer-inspection/v1',expectedRevision:current.revision,references:input.envelope.references,untrusted:true,activationAuthorized:false,fieldsRequiringConfirmation:input.envelope.values.filter(v=>v.intent==='VALUE').map(v=>v.field),changedFields:input.envelope.values.filter(v=>canonicalJson(v.value)!==canonicalJson(current.draft.fields[v.field].value)).map(v=>v.field),recipientPolicyDigest:policy.policyDigest};},
     close(){if(!closed){db.close();closed=true;owned.delete(store);}},
   });
   owned.set(store,{tenantId:binding.tenantId,instanceId:binding.instanceId,generation:binding.generation});return store;
