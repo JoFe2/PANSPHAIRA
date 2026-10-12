@@ -22,7 +22,10 @@ jobs:
     # PAN576 requires real Landlock ABI8/TSYNC; do not downgrade or skip it.
     # This existing x64 hosted image has Linux7; latest still selects 24.04.
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    # The complete pretest/test/posttest, focused proof, setup and required tail
+    # share this bounded scheduling envelope. Product/security deadlines stay
+    # unchanged; the previously qualified proof alone took 1660 seconds.
+    timeout-minutes: 45
 
     steps:
       - name: Check out repository
@@ -106,8 +109,29 @@ jobs:
 
       # Includes the authoritative npm test lifecycle (pretest + test + posttest)
       # in the proof's sanitized child environment; do not run it a second time.
+      - name: Record authoritative proof phase start
+        id: proof_clock
+        run: |
+          epoch="$(date +%s)"
+          printf 'epoch=%s\n' "$epoch" >> "$GITHUB_OUTPUT"
+          printf 'CI_PHASE SAFE_GUIDED start_epoch=%s budget_minutes=45\n' "$epoch"
+
       - name: Run SAFE_GUIDED secure-default proof and full project suite
+        id: secure_default
         run: npm run proof:secure-default
+
+      - name: Report authoritative proof phase duration and outcome
+        if: always()
+        env:
+          CM_PROOF_STARTED_EPOCH: ${{ steps.proof_clock.outputs.epoch }}
+          CM_PROOF_OUTCOME: ${{ steps.secure_default.outcome }}
+        run: |
+          if test -z "$CM_PROOF_STARTED_EPOCH"; then
+            printf 'CI_PHASE SAFE_GUIDED not_started outcome=%s\n' "$CM_PROOF_OUTCOME"
+            exit 0
+          fi
+          elapsed=$(( $(date +%s) - CM_PROOF_STARTED_EPOCH ))
+          printf 'CI_PHASE SAFE_GUIDED elapsed_seconds=%s outcome=%s\n' "$elapsed" "$CM_PROOF_OUTCOME"
 
       - name: Verify external video service boundary
         run: npm run external-video-service:test
