@@ -3370,6 +3370,32 @@ const pan562Inputs=[
 ];
 for(const[inputPath,role,ownerId]of pan562Inputs){const owner=dag.nodes.find(node=>node.id===ownerId);if(!owner)throw Error('PAN562_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});if(!owner.ownedTests.includes('npm run pan562:test'))owner.ownedTests.push('npm run pan562:test');}
 if(!repositoryIntegrityNode.ownedTests.includes('npm run pan562:test'))repositoryIntegrityNode.ownedTests.push('npm run pan562:test');
+// PAN564 is presentation over the existing563 native draft, not a new owner.
+const pan564Inputs=[
+  [
+    "docs/architecture/model-free-configuration-conversation-form-v1.md",
+    "DERIVED_EVIDENCE"
+  ],
+  [
+    "scripts/run-pan564-model-free-configuration-tests.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan564/browser-conversation-form.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan564/browser-visual-and-negatives.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan564/registration.test.mjs",
+    "VALIDATOR"
+  ]
+];
+for(const[inputPath,role]of pan564Inputs)pan563Node.inputs.push({path:inputPath,role,sha256:digest(inputPath)});
+if(!pan563Node.ownedTests.includes('npm run pan564:test'))pan563Node.ownedTests.push('npm run pan564:test');
+if(!repositoryIntegrityNode.ownedTests.includes('npm run pan564:test'))repositoryIntegrityNode.ownedTests.push('npm run pan564:test');
 
 
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
@@ -3435,6 +3461,7 @@ for (const [inputPath] of pan537Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan541Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan543Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan563Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan564Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan542Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan544Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan549Inputs) entries.set(inputPath, null);

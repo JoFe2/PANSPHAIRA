@@ -641,6 +641,13 @@ repository_only_files = {
     "tests/pan563/zoom-extension/manifest.json",
     "tests/pan563/zoom-extension/worker.js",
 
+    # PAN564 source-only model-free conversation/form on the existing563 draft.
+    "docs/architecture/model-free-configuration-conversation-form-v1.md",
+    "scripts/run-pan564-model-free-configuration-tests.mjs",
+    "tests/pan564/browser-conversation-form.test.mjs",
+    "tests/pan564/browser-visual-and-negatives.test.mjs",
+    "tests/pan564/registration.test.mjs",
+
     # PAN542 bounded native human backend: source-only, no legacy payload/rights change.
     "docs/architecture/erv-human-native-backend-v1.md",
     "scripts/run-pan542-native-human-tests.mjs",
