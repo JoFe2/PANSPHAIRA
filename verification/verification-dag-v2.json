@@ -10549,7 +10549,7 @@
         {
           "path": "packages/browser-workspace/src/configuration-application-v1.ts",
           "role": "SOURCE",
-          "sha256": "dfafefab48c3a990cf93fb5f3e86b972bc409493be2886452e0e72919bd85a35"
+          "sha256": "f19dae942e57db3e5c5ee315ac916340af64e752f199fa55ec16f8349955fc8b"
         }
       ],
       "ownedTests": [

@@ -762,7 +762,7 @@ e1073a5c5f79329c3181057079fdc879eb84e7b690c179488f925ea98953a5e8  ./packages/bro
 e7d68a928312f3ae8d7261518da183d5cd2e3db6928a6ef0dd36466676aad946  ./packages/browser-workspace/src/analysis-v1.css
 39a5c092fe7dfc35b4ba30d1785505b801f1a2bd50e82581c233c8766349f544  ./packages/browser-workspace/src/api-v1.ts
 3ae8eb926923df4da147e1ba94538c4c366f7b4ca95d6a7ef165f37a6d77bdcc  ./packages/browser-workspace/src/app.ts
-dfafefab48c3a990cf93fb5f3e86b972bc409493be2886452e0e72919bd85a35  ./packages/browser-workspace/src/configuration-application-v1.ts
+f19dae942e57db3e5c5ee315ac916340af64e752f199fa55ec16f8349955fc8b  ./packages/browser-workspace/src/configuration-application-v1.ts
 1c23b0e010e72a8c4008ed3fadd340be649ec477e292c848626f9167709f1f4f  ./packages/browser-workspace/src/configuration-draft-v1.css
 0dbc38a857bbb1c4f6334151e04725e780fa57ff469b16d5c059adadd01ad479  ./packages/browser-workspace/src/context-selection-v1.ts
 130a79c6ffa2a58761a2349f502c3b677df983c436c667f34880197be3e906bb  ./packages/browser-workspace/src/erv-human-v1.ts
@@ -2693,5 +2693,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-febadeb8dec1edf73169b0c69bccf7e7f0f81d5f5fd849f5dc2f09d1d7f902b0  ./verification/verification-dag-v2.json
+4d3f001aa7f2f39bc493878e2fd652627f6f7530d302a281f92dbe1a571d6abe  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
