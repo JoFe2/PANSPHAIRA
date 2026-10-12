@@ -10733,7 +10733,7 @@
         {
           "path": "scripts/run-pan566-confirmed-configuration-application-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "c8a3b5fbac90342fc63206223f5c42590d7ff3d95d6145da764815eb353f03d6"
+          "sha256": "0dbefa655e01f8c6b2287d412dafeb698c0e5dc2f279fff14786745167c69f14"
         },
         {
           "path": "tests/pan566/browser-application.test.mjs",

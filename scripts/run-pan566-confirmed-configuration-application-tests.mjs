@@ -38,7 +38,7 @@ try{
   if(!env.PAN562_BROWSER_EVIDENCE){env.PAN562_BROWSER_EVIDENCE=mkdtempSync(join(env.TMPDIR,'pan566-browser-evidence-'));process.stdout.write('PAN562_BROWSER_EVIDENCE_DIR='+env.PAN562_BROWSER_EVIDENCE+'\n');}
 
   env.PAN527_BROWSER_MODULE=env.PAN527_BROWSER_MODULE||import.meta.resolve('playwright');env.PAN527_CERTUTIL=env.PAN527_CERTUTIL||'certutil';
-  for(const argv of [['node_modules/typescript/bin/tsc','-p','tsconfig.json'],['scripts/build-pan541-browser.mjs'],['--test','--test-concurrency=1','--test-reporter=tap',...files]]){
+  for(const argv of [['node_modules/typescript/bin/tsc','-p','tsconfig.json'],['scripts/build-pan541-browser.mjs'],['--test','--test-concurrency=3','--test-reporter=tap',...files]]){
    const run=spawnSync(process.execPath,argv,{env,stdio:'inherit'});if(run.error||run.signal||run.status===null)throw new Error('PAN566_TEST_PROCESS_INTERRUPTED');if(run.status!==0){process.exitCode=run.status;break;}
   }
  }
