@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "a7cf6a13c5b87f6ad5133d386be6b72bc3fae5d6be6bd459672f2a911c20775d"
+        "sha256": "13c1ca1b5db37f49bf072f9a2f498d7e584daba5cf23579d3334bc1bd5356206"
       }
     ]
   },
@@ -771,6 +771,14 @@
       "fromSha256": "287e3d7ad682c47c0abdaa8d4cb22309415a9b06105c7670e219939bdc455b62",
       "toSha256": "997e77f838b0e21e0fe4a18ad39bc25b24d06bbf2dd30ba45e0d0f0b0cfc5d75",
       "reason": "Add exactly12 source-only native attachment/versioned DTO/browser projection/fixed6file test entry/registration/document/helper inputs on existing528563541 owners. Retain graph98/all103/max128, all old entries/hardgates, original21 byte obligations/13 profiles/immutable migration history/scanner/validator/negative tests/legacy1792. Reuse563 draft and528 journal/529 plan/owned child/current548 context with native once-only synthetic515 reference result; no second state/authority/engine/provider/credential store, production/model/cost/audio/KS grant or inference. This additive registration is not independent review/CI/release/original closure/WholePAN500 acceptance."
+    },
+    {
+      "migrationId": "PAN569-EXISTING-CHANGE-RECOVERY-REDACTED-TRANSFER/INTEGRITY-GENERATOR/V86",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 86,
+      "fromSha256": "997e77f838b0e21e0fe4a18ad39bc25b24d06bbf2dd30ba45e0d0f0b0cfc5d75",
+      "toSha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab",
+      "reason": "Append exactly13 draft-specific source-only typed transfer/editor/fixed6file/browser/native/registration/document/helper inputs and one canonical test entry on existing563/541/528 owners. Preserve graph98/all103/128input bound, every old test/negative/scanner/validator/immutable21 base byte obligations/13 profiles/historical migration chain/legacy1792/hard gates/native60000/CI30min. Reuse original SQLiteCAS/draft and528 journal/qualified distinct LKG; untrusted VALUE/UNKNOWN intent only, no source identity/secrets/proof/history/memory/activation or new state/authority/engine/credential/model/cost/audio/production/KS rights. Registration is not model/M1/DUI17/whole-PAN or CI/release/closure acceptance."
     }
   ],
   "scanScope": {
@@ -813,15 +821,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1182,
+    "filesScanned": 1194,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 314,
-    "importFiles": 313,
+    "importSites": 315,
+    "importFiles": 314,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2697,
-    "ledgerUniquePaths": 2697
+    "ledgerEntries": 2710,
+    "ledgerUniquePaths": 2710
   },
   "profiles": [
     {
@@ -894,7 +902,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "997e77f838b0e21e0fe4a18ad39bc25b24d06bbf2dd30ba45e0d0f0b0cfc5d75"
+      "sha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1181,8 +1189,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 143,
-      "importFiles": 143
+      "importSites": 144,
+      "importFiles": 144
     },
     {
       "owner": "cscl-03",
@@ -1685,7 +1693,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "997e77f838b0e21e0fe4a18ad39bc25b24d06bbf2dd30ba45e0d0f0b0cfc5d75",
+      "sha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab",
       "basis": "profile-version-migration"
     },
     {
