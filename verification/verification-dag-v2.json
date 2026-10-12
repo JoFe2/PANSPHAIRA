@@ -10771,7 +10771,7 @@
         {
           "path": "tests/pan566/helpers.mjs",
           "role": "VALIDATOR",
-          "sha256": "03526ce7882d9fe24c88013ec4573b2775cb129b08b3a5bf7c90d794c433b1ee"
+          "sha256": "0ccf30791355ba77e708e93f32c8612eccf6d0d31e2c9d378e8d32a08036b249"
         },
         {
           "path": "packages/contracts/src/agent-configuration-transfer-v1.ts",
