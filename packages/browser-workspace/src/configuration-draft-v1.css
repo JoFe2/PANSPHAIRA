@@ -41,3 +41,8 @@
 .configuration-transfer pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
 /* Actual narrow/zoomed configuration surface: avoid stacked rem-padding. */
 @media(max-width:700px){.configuration-draft .configuration-work,.configuration-draft .configuration-summary{padding:.35rem}.configuration-transfer{padding:.35rem}.configuration-transfer h2{font-size:1.15rem;line-height:1.35;hyphens:auto}.configuration-transfer .configuration-actions{gap:.35rem}.configuration-transfer button{padding:.4rem;hyphens:auto}}
+
+.configuration-goals { min-width: 0; border: 1px solid #ccd7e3; border-radius: .5rem; padding: .75rem; margin-block: .75rem; background: #f4f8fc; }
+.configuration-goals button, .configuration-goals select { max-width: 100%; white-space: normal; overflow-wrap: anywhere; margin-block: .25rem; }
+.configuration-goals form, .configuration-goals fieldset, .configuration-goals div { min-width: 0; }
+.configuration-goals pre { white-space: pre-wrap; overflow-wrap: anywhere; }

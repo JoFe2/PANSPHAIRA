@@ -3536,6 +3536,48 @@ for(const id of ['pan563-configuration-draft-v1','pan541-shared-browser-shell-v1
 if(!repositoryIntegrityNode.ownedTests.includes('npm run pan569:test'))repositoryIntegrityNode.ownedTests.push('npm run pan569:test');
 
 
+// PAN568 additive native module goals; existing graph98/all103 topology unchanged.
+const pan568Inputs=[
+  [
+    "src/pan563/goal-contributions.mjs",
+    "SOURCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "packages/browser-workspace/src/configuration-goals-v1.ts",
+    "SOURCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "scripts/run-pan568-registered-goal-contribution-tests.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan568/native-goal-draft.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan568/browser-goals.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan568/registration.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "docs/architecture/registered-goal-question-contributions-v1.md",
+    "DERIVED_EVIDENCE",
+    "pan563-configuration-draft-v1"
+  ]
+];
+for(const[inputPath,role,ownerId]of pan568Inputs){const owner=dag.nodes.find(n=>n.id===ownerId);if(!owner)throw Error('PAN568_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});}
+for(const id of ['pan563-configuration-draft-v1','pan541-shared-browser-shell-v1']){const owner=dag.nodes.find(n=>n.id===id);if(!owner.ownedTests.includes('npm run pan568:test'))owner.ownedTests.push('npm run pan568:test');}
+if(!repositoryIntegrityNode.ownedTests.includes('npm run pan568:test'))repositoryIntegrityNode.ownedTests.push('npm run pan568:test');
+
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
 // not be duplicated on the integration owner. The integration owner keeps
@@ -3602,6 +3644,7 @@ for (const [inputPath] of pan563Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan564Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan566Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan569Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan568Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan542Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan544Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan549Inputs) entries.set(inputPath, null);

@@ -5,6 +5,7 @@ import type { AgentConfigurationReadbackV1, AgentConfigurationFieldV1, AgentConf
 import type { BrowserContextV1 } from "../../browser-shell/src/context-owner-v1.js";
 import { text } from "./api-v1.js";
 import {createConfigurationTransferViewV1} from './configuration-transfer-v1.js';
+import {createConfigurationGoalViewV1} from './configuration-goals-v1.js';
 import {createConfigurationApplicationViewV1} from "./configuration-application-v1.js";
 import type {createWorkspaceContextSelectionV1} from "./context-selection-v1.js";
 import type {WorkspaceDirtyDraftV1} from './workspace-dirty-draft-v1.js';
@@ -28,11 +29,12 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
   target.classList.add("configuration-draft");target.dataset.backend="configuration";
   const captured=context(),base="/t/"+captured.tenantId;
   // One accepted native readback, never a second conversational draft/store.
-  let current:Readback|null=null,busy=false,transferInFlight=false,saveInFlight=false,needsReconciliation=false,dirty=false;
+  let current:Readback|null=null,busy=false,transferInFlight=false,goalInFlight=false,saveInFlight=false,needsReconciliation=false,dirty=false;
   let applicationUI:ReturnType<typeof createConfigurationApplicationViewV1>|null=null;
   let transferUI:ReturnType<typeof createConfigurationTransferViewV1>|null=null;
+  let goalUI:ReturnType<typeof createConfigurationGoalViewV1>|null=null;
   let step="configuration",presentation:"form"|"conversation"="form",editing:AgentConfigurationFieldV1|null=null;
-  const unregister=registerDraft?.({id:'AGENT_CONFIGURATION',label:'Konfiguration',isDirty:()=>active()&&(dirty||saveInFlight||needsReconciliation||!!applicationUI?.uncertain()||!!transferUI?.uncertain()),async discardForNavigation(){if(!active()||busy||transferInFlight||needsReconciliation||applicationUI?.uncertain()||transferUI?.uncertain())return false;dirty=false;show();return true;}});
+  const unregister=registerDraft?.({id:'AGENT_CONFIGURATION',label:'Konfiguration',isDirty:()=>active()&&(dirty||saveInFlight||needsReconciliation||!!goalUI?.isDirty()||!!applicationUI?.uncertain()||!!transferUI?.uncertain()),async discardForNavigation(){if(!active()||busy||transferInFlight||goalInFlight||needsReconciliation||applicationUI?.uncertain()||transferUI?.uncertain())return false;if(goalUI&&!goalUI.discard())return false;dirty=false;show();return true;}});
   signal.addEventListener('abort',()=>unregister?.(),{once:true});
   const heading=text("h1","Versionierter Agentenkonfigurationsentwurf"),note=text("p","Einrichtung im gemeinsamen Arbeitsplatz. Nur erlaubte Konfiguration speichern: keine Aktivierung, Rechtevergabe, fachliche Wirkung oder kostenpflichtiger Modellaufruf.");
   const status=text("p","");status.className=browserWorkspaceStringValuesV1[203] as string;status.setAttribute("role","status");status.setAttribute("aria-live","polite");status.tabIndex=-1;
@@ -40,29 +42,30 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
   const layout=text("div","");layout.className="configuration-layout";
   const steps=document.createElement("nav");steps.className="configuration-steps";steps.dataset.configurationSteps="";steps.setAttribute("aria-label","Einrichtungsschritte");
   const stepLabels:Record<string,string>={entry:"Einstieg",profile:"Profil",model:"Modellverbindung",configuration:"Konfigurationsgespräch",result:"Plan und Ergebnis"};
-  for(const[key,label]of Object.entries(stepLabels)){const b=button(label);b.dataset.step=key;b.addEventListener("click",()=>{if(!active()||busy||transferInFlight||needsReconciliation)return;step=key;showPresentation();introHeading.focus();},{signal});steps.append(b);}
+  for(const[key,label]of Object.entries(stepLabels)){const b=button(label);b.dataset.step=key;b.addEventListener("click",()=>{if(!active()||busy||transferInFlight||goalInFlight||needsReconciliation)return;step=key;showPresentation();introHeading.focus();},{signal});steps.append(b);}
   const work=text("section","");work.className="configuration-work";
   const introHeading=text("h2","");introHeading.tabIndex=-1;const intro=text("p","");intro.dataset.configurationIntroduction="";
   const body=text("div","");body.className="configuration-fields";const editor=text("div","");editor.className="configuration-editor";
   const presentationControls=text("div","");presentationControls.className="configuration-presentation-controls";
   const conversation=button("Konfigurationsgespräch — modelllos"),formView=button("Formular — derselbe Entwurf"),ai=button("KI-Modus — nicht verfügbar");ai.dataset.configurationAi="UNAVAILABLE";ai.disabled=true;
   const presentationNote=text("p","");
-  const connection=button("Vorhandenen Verbindungsstatus anzeigen");connection.addEventListener("click",()=>{if(!active()||busy||transferInFlight)return;const open=document.querySelector<HTMLButtonElement>('[id="shell.model-connection"] > button');if(open){if(open.getAttribute('aria-expanded')!=='true')open.click();open.scrollIntoView({block:'center'});open.focus();}else state("MODEL_NOT_CONFIGURED","Der bestehende Verbindungsdialog ist für diese Instanz nicht eingebunden. Ohne KI vollständig einrichten; keine Verbindung oder Inferenz angenommen.");},{signal});
+  const connection=button("Vorhandenen Verbindungsstatus anzeigen");connection.addEventListener("click",()=>{if(!active()||busy||transferInFlight||goalInFlight)return;const open=document.querySelector<HTMLButtonElement>('[id="shell.model-connection"] > button');if(open){if(open.getAttribute('aria-expanded')!=='true')open.click();open.scrollIntoView({block:'center'});open.focus();}else state("MODEL_NOT_CONFIGURED","Der bestehende Verbindungsdialog ist für diese Instanz nicht eingebunden. Ohne KI vollständig einrichten; keine Verbindung oder Inferenz angenommen.");},{signal});
   const result=text("section","");result.dataset.configurationResult="";
-  if(applicationContext&&document.body.dataset.ownerConfigurationApplication==='true')applicationUI=createConfigurationApplicationViewV1({base,context:applicationContext,signal,draft:()=>current,live:()=>active()&&!dirty&&!busy&&!needsReconciliation&&!transferInFlight});
+  if(applicationContext&&document.body.dataset.ownerConfigurationApplication==='true')applicationUI=createConfigurationApplicationViewV1({base,context:applicationContext,signal,draft:()=>current,live:()=>active()&&!dirty&&!busy&&!needsReconciliation&&!transferInFlight&&!goalInFlight});
   transferUI=createConfigurationTransferViewV1({signal,current:()=>current,live:()=>active()&&!busy&&!dirty&&!needsReconciliation&&!applicationUI?.uncertain(),alive:active,request,accept:accepted,imported(value){current=value;dirty=false;editing=null;show();step='result';showPresentation();state('IMPORTED','Untrusted Entwurf unabhängig gespeichert und gelesen. Neue Bestätigung erforderlich; letzte qualifizierte Bindung bleibt getrennt.');},unknown(){needsReconciliation=true;state('UNKNOWN','Importausgang unklar; ausdrücklich vom bestehenden Backend neu lesen, keine automatische Wiederholung.');},denied:failure,busy(value){transferInFlight=value;controls(value||busy);}});
+  if(document.body.dataset.ownerConfigurationGoals==='true')goalUI=createConfigurationGoalViewV1({signal,alive:active,live:()=>active()&&!dirty&&!busy&&!transferInFlight&&!needsReconciliation&&!applicationUI?.uncertain()&&!transferUI?.uncertain(),request,busy(value){goalInFlight=value;controls(busy||transferInFlight||goalInFlight);},unknown(){needsReconciliation=true;state('UNKNOWN','Zielantwort-Speicherausgang unklar. Nicht automatisch wiederholen; aktuellen Entwurf und Zielbeitrag ausdrücklich neu lesen.');},denied:failure,async reconcileLegacy(expectedRevision){const read=await request('GET');if(!active()||read.status!==200||!accepted(read.value)||read.value.revision!==expectedRevision)return false;current=read.value;dirty=false;const priorStep=step;show();step=priorStep;showPresentation();return true;}});
   const summary=text("aside","");summary.className="configuration-summary";summary.dataset.configurationSummary="";summary.tabIndex=-1;summary.setAttribute("aria-label","Entwurfszusammenfassung");
-  conversation.addEventListener("click",()=>{if(!active()||busy||transferInFlight||needsReconciliation)return;step="configuration";presentation="conversation";showPresentation();},{signal});
-  formView.addEventListener("click",()=>{if(!active()||busy||transferInFlight||needsReconciliation)return;step="configuration";presentation="form";showPresentation();},{signal});
+  conversation.addEventListener("click",()=>{if(!active()||busy||transferInFlight||goalInFlight||needsReconciliation)return;step="configuration";presentation="conversation";showPresentation();},{signal});
+  formView.addEventListener("click",()=>{if(!active()||busy||transferInFlight||goalInFlight||needsReconciliation)return;step="configuration";presentation="form";showPresentation();},{signal});
   noAi.addEventListener("click",()=>{if(dirty){state("UNCONFIRMED_INPUT","Ihre noch unbestätigte Eingabe bleibt erhalten. Erst diese Frage bestätigen oder ausdrücklich verwerfen; kein Modellwechsel gespeichert.");editor.querySelector<HTMLElement>('input,select')?.focus();return;}void save("model.reference","NONE","CONFIRM");},{signal});
   summaryLink.addEventListener("click",()=>{summary.scrollIntoView({block:"start"});summary.focus();},{signal});
   presentationControls.append(conversation,formView,ai);
-  work.append(introHeading,intro,connection,presentationControls,presentationNote,editor,body,result);layout.append(steps,work,summary);
+  work.append(introHeading,intro,...(goalUI?[goalUI.root]:[]),connection,presentationControls,presentationNote,editor,body,result);layout.append(steps,work,summary);
   const actions=text("div","");actions.className="configuration-actions";actions.append(reload,noAi,summaryLink);target.append(heading,note,status,actions,layout);showPresentation();
   function button(label:string){const b=text("button",label)as HTMLButtonElement;b.type="button";return b;}
   function active(){return !signal.aborted&&context().sessionId===captured.sessionId&&context().tenantId===captured.tenantId;}
   function state(outcome:string,message:string){if(active()){target.dataset.outcome=outcome;status.textContent=message;}}
-  function controls(disabled:boolean){disabled=disabled||transferInFlight;for(const n of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))if(!n.closest(".configuration-application,.configuration-transfer"))n.disabled=disabled||(needsReconciliation&&n!==reload);applicationUI?.updateControls();transferUI?.controls();ai.disabled=true;noAi.disabled=disabled||needsReconciliation||!current||(current.draft.fields['model.reference'].value==="NONE"&&current.draft.fields['model.reference'].confirmation==='CONFIRMED');}
+  function controls(disabled:boolean){disabled=disabled||transferInFlight||goalInFlight;for(const n of target.querySelectorAll<HTMLButtonElement|HTMLInputElement|HTMLSelectElement>("button,input,select"))if(!n.closest(".configuration-application,.configuration-transfer,.configuration-goals"))n.disabled=disabled||(needsReconciliation&&n!==reload);applicationUI?.updateControls();transferUI?.controls();goalUI?.controls();ai.disabled=true;noAi.disabled=disabled||needsReconciliation||!current||(current.draft.fields['model.reference'].value==="NONE"&&current.draft.fields['model.reference'].confirmation==='CONFIRMED');}
   function showPresentation(){
    target.dataset.configurationState=step;target.dataset.configurationPresentation=presentation;
    for(const b of steps.querySelectorAll<HTMLButtonElement>("button")){if(b.dataset.step===step)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");}
@@ -78,6 +81,7 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
    // Transfer is a separate result-step projection, not a free-text conversation input.
    // Keep the same ephemeral node/owner/flight guard when detached; no new authority.
    if(transferUI){if(step==="result")result.append(transferUI.root);else transferUI.root.remove();}
+   if(goalUI)goalUI.root.hidden=step!=="profile";
    body.hidden=step==="entry"||step==="result"||step==="configuration"&&presentation==="conversation";
    for(const group of body.querySelectorAll<HTMLElement>('[data-configuration-group]'))group.hidden=step==="profile"?!["context","goal","runtime"].includes(group.dataset.configurationGroup!):step==="model"?!["model","access"].includes(group.dataset.configurationGroup!):false;
   }
@@ -96,13 +100,13 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
     &&JSON.stringify(Object.keys(value.definitions).sort())===JSON.stringify(Object.keys(value.draft.fields).sort());
   }
   function failure(code:number,error?:string){
-   if([401,403].includes(code)){current=null;body.replaceChildren();editor.replaceChildren();summary.replaceChildren();result.replaceChildren();editing=null;}
+   if([401,403].includes(code)){current=null;goalUI?.clear();body.replaceChildren();editor.replaceChildren();summary.replaceChildren();result.replaceChildren();editing=null;}
    if(code===409)needsReconciliation=true;
    state(code===409?"CONFLICT":[401,403].includes(code)?"DENIED":"ERROR",code===409&&error==="CONFIGURATION_POLICY_CHANGED_REJECT_REQUIRES_RECONFIRMATION"?"Profil oder Runtimevorlage nicht mehr kompatibel. Ursprünglicher Entwurf bleibt erhalten; geprüfte Migration oder erneute Owner-Bestätigung erforderlich.":code===409?"Revisionskonflikt: Ein anderer Tab hat den Entwurf geändert. Eingabe nicht überschrieben. Aktuellen Entwurf ausdrücklich neu laden und prüfen.":[401,403].includes(code)?"Zugriff verweigert: Session oder Kontextbindung nicht mehr gültig. Kein erfolgreicher Speichervorgang bestätigt.":"Konfigurationsbackend nicht verfügbar oder Eingabe abgelehnt. Kein erfolgreicher Speichernachweis. "+(error??""));
    if(active()){step="configuration";showPresentation();status.focus();editor.querySelector<HTMLElement>('input,select')?.focus();}
   }
   async function save(field:AgentConfigurationFieldV1,value:AgentConfigurationValueV1|null,confirmation:"CONFIRM"|"UNKNOWN"){
-   if(!current||busy||transferInFlight||needsReconciliation||!active())return;busy=true;saveInFlight=true;controls(true);state("SAVING","Entwurf wird mit erwarteter Revision gespeichert und anschließend erneut gelesen …");
+   if(!current||busy||transferInFlight||goalInFlight||needsReconciliation||!active())return;busy=true;saveInFlight=true;controls(true);state("SAVING","Entwurf wird mit erwarteter Revision gespeichert und anschließend erneut gelesen …");
    try{const result=await request("POST",{schemaVersion:"pansphaira.agent-configuration/answers/v1",expectedRevision:current.revision,answers:[{field,value,confirmation}]});if(!active())return;
     if(result.status>=500)throw Error("Serverantwort bestätigt den Speicherausgang nicht");if(result.status!==200){failure(result.status,result.value?.error);return;}if(!accepted(result.value))throw Error("Ungültiger Zielreadback");
     const readback=await request("GET");if(!active())return;if(readback.status!==200||!accepted(readback.value)||readback.value.revision!==result.value.revision||JSON.stringify(readback.value.draft)!==JSON.stringify(result.value.draft))throw Error("Persistierter Zielreadback stimmt nicht überein");
@@ -125,7 +129,7 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
    else{const label=text("label",d.label),select=document.createElement("select");select.required=true;const empty=document.createElement("option");empty.value="";empty.textContent="Bitte ausdrücklich auswählen — kein stiller Default";select.append(empty);for(const value of d.allowedValues){const option=document.createElement("option");option.value=JSON.stringify(value);option.textContent=value===null?"Keine Secretreferenz erforderlich":displayValue(value);select.append(option);}if(existing.confirmation!=="UNKNOWN"&&existing.confirmation!=="CONTRADICTED")select.value=JSON.stringify(existing.value);select.id="configuration-value";label.setAttribute("for",select.id);form.append(label,select);readValue=()=>JSON.parse(select.value)as AgentConfigurationValueV1|null;}
    form.addEventListener("input",()=>{dirty=true;},{signal});form.addEventListener("change",()=>{dirty=true;},{signal});
    const submit=button("Bestätigen und Entwurf speichern");submit.type="submit";const unknown=button("Als unbekannt speichern"),later=button("Später beantworten — Eingabe behalten");
-   form.append(submit,unknown,later);form.addEventListener("submit",e=>{e.preventDefault();if(busy||transferInFlight||needsReconciliation)return;try{if(!form.checkValidity())throw Error("Bitte einen zulässigen Wert ausdrücklich auswählen.");const value=readValue();if(Array.isArray(value)&&value.length===0)throw Error("Mindestens einen zulässigen Wert auswählen.");void save(field,value,"CONFIRM");}catch{state("VALIDATION_ERROR","Eingabe für „"+d.label+"“ unvollständig oder ungültig. Kein Request gespeichert; die betroffene Karte bleibt erhalten.");const input=form.querySelector<HTMLElement>('input,select');input?.setAttribute('aria-invalid','true');input?.focus();}},{signal});
+   form.append(submit,unknown,later);form.addEventListener("submit",e=>{e.preventDefault();if(busy||transferInFlight||goalInFlight||needsReconciliation)return;try{if(!form.checkValidity())throw Error("Bitte einen zulässigen Wert ausdrücklich auswählen.");const value=readValue();if(Array.isArray(value)&&value.length===0)throw Error("Mindestens einen zulässigen Wert auswählen.");void save(field,value,"CONFIRM");}catch{state("VALIDATION_ERROR","Eingabe für „"+d.label+"“ unvollständig oder ungültig. Kein Request gespeichert; die betroffene Karte bleibt erhalten.");const input=form.querySelector<HTMLElement>('input,select');input?.setAttribute('aria-invalid','true');input?.focus();}},{signal});
    unknown.addEventListener("click",()=>{void save(field,null,"UNKNOWN");},{signal});later.addEventListener("click",()=>{state("DEFERRED","Diese Frage bleibt ausdrücklich offen. Eingabe erhalten; nichts gespeichert oder still als bestätigt angenommen.");form.querySelector<HTMLElement>('input,select')?.focus();},{signal});
    editor.append(title,why,source,detail,form);
   }
@@ -143,9 +147,9 @@ export function createConfigurationDraftViewV1(context:()=>BrowserContextV1,regi
    if(current.questions.length)edit(current.questions[0]!.field,true);else editor.append(text("h2","Keine fehlenden Pflichtfragen"),text("p","Die bestätigte normalisierte Konfiguration ist vollständig. Konfigurationsdigest: "+current.configurationDigest));showPresentation();
   }
   async function load(){
-   if(busy||transferInFlight)return;busy=true;controls(true);state("LOADING","Versionierter Entwurf wird vom zuständigen Backend gelesen …");
-   try{const result=await request("GET");if(!active())return;if(result.status!==200){failure(result.status,result.value?.error);return;}if(!accepted(result.value))throw Error("Ungültiger Backendvertrag");current=result.value;needsReconciliation=false;dirty=false;show();state(current.persisted?"READBACK_RECEIVED":"EMPTY",current.persisted?"Gespeicherten Entwurf gelesen. Revision "+current.revision+".":"Noch kein gespeicherter Entwurf. Geprüftes begrenztes Profil vorbelegt; ungelöste Pflichtwerte bleiben ausdrücklich unbekannt.");}catch(e){if(active())failure(503,e instanceof Error?e.message:"");}finally{busy=false;if(active())controls(false);}
+   if(busy||transferInFlight||goalInFlight)return;busy=true;controls(true);state("LOADING","Versionierter Entwurf wird vom zuständigen Backend gelesen …");
+   try{const result=await request("GET");if(!active())return;if(result.status!==200){failure(result.status,result.value?.error);return;}if(!accepted(result.value))throw Error("Ungültiger Backendvertrag");current=result.value;needsReconciliation=false;dirty=false;show();state(current.persisted?"READBACK_RECEIVED":"EMPTY",current.persisted?"Gespeicherten Entwurf gelesen. Revision "+current.revision+".":"Noch kein gespeicherter Entwurf. Geprüftes begrenztes Profil vorbelegt; ungelöste Pflichtwerte bleiben ausdrücklich unbekannt.");if(goalUI)await goalUI.load();}catch(e){if(active())failure(503,e instanceof Error?e.message:"");}finally{busy=false;if(active())controls(false);}
   }
-  reload.addEventListener("click",()=>{if(dirty&&!needsReconciliation){state("UNCONFIRMED_INPUT","Offene Eingabe erhalten. Erst bestätigen oder ausdrücklich verwerfen; aktueller Entwurf nicht über eine offene Antwort geladen.");return;}void load();},{signal});await load();
+  reload.addEventListener("click",()=>{if((dirty||goalUI?.isDirty())&&!needsReconciliation){state("UNCONFIRMED_INPUT","Offene Eingabe erhalten. Erst bestätigen oder ausdrücklich verwerfen; aktueller Entwurf nicht über eine offene Antwort geladen.");return;}void load();},{signal});await load();
  }};
 }

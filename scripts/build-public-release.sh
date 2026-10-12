@@ -676,6 +676,15 @@ repository_only_files = {
     "tests/pan569/helpers.mjs",
     "tests/pan569/isolated-browser-fixture.mjs",
 
+    # PAN568 versioned goals on the existing563 owner, source evidence only.
+    "src/pan563/goal-contributions.mjs",
+    "packages/browser-workspace/src/configuration-goals-v1.ts",
+    "scripts/run-pan568-registered-goal-contribution-tests.mjs",
+    "tests/pan568/native-goal-draft.test.mjs",
+    "tests/pan568/browser-goals.test.mjs",
+    "tests/pan568/registration.test.mjs",
+    "docs/architecture/registered-goal-question-contributions-v1.md",
+
     # PAN542 bounded native human backend: source-only, no legacy payload/rights change.
     "docs/architecture/erv-human-native-backend-v1.md",
     "scripts/run-pan542-native-human-tests.mjs",
