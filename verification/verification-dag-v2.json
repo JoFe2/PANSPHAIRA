@@ -10806,7 +10806,7 @@
         {
           "path": "tests/pan569/browser-journeys.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "c19bb7259ec27d8c4db1ab9f16d8f3aa1b6c795eced9bb51459371e46ce7adbf"
+          "sha256": "299dfa12ceac621cacc73fd3acc76f2daa1c6d9661652cfd4095f78383311bed"
         },
         {
           "path": "tests/pan569/browser-safety.test.mjs",
