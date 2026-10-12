@@ -9,6 +9,8 @@ import { bindRuntimeTemplateV1 } from "../pan529/runtime-template-contract.mjs";
 import { createResourceBudgetStoreV1 } from "../../demo/runtime/atomic-resource-budget.mjs";
 import { readPan515TradeState } from "../pan515/trade-state.mjs";
 import { observeGuidedNativeProcessV1 } from "./runtime-observation.mjs";
+import {isAgentConfigurationDraftStoreV1} from "../pan563/draft-store.mjs";
+import {bindNativeConfigurationApplicationV1} from "./configuration-application.mjs";
 import { captureGuidedLeadingResourcesV1, assertGuidedLeadingResourcesV1, removeGuidedLeadingResourcesV1 } from "./owned-leading-resources.mjs";
 const digest = value => createHash("sha256").update(canonicalJson(value)).digest("hex");
 const copy = value => JSON.parse(canonicalJson(value));
@@ -55,7 +57,7 @@ export function createGuidedNativeOwnerV1(options) {
   if (!existsSync(journalPath)) atomic(journalPath, { schemaVersion: "pansphaira.guided-native/journal/v1", binding, invocationNonce: marker.nonce, status: "IDLE", operationId: null, requestDigest: null, childCompleted: true, abortRequested: false, resetOperationId: null, result: null, leadingIdentity: null });
   function state() {
     assertOwned(); const value = json(journalPath);
-    closed(value, ["schemaVersion", "binding", "invocationNonce", "status", "operationId", "requestDigest", "childCompleted", "abortRequested", "resetOperationId", "result", "leadingIdentity"]);
+    closed(value, ["schemaVersion", "binding", "invocationNonce", "status", "operationId", "requestDigest", "childCompleted", "abortRequested", "resetOperationId", "result", "leadingIdentity", ...(Object.hasOwn(value,"configurationApplication")?["configurationApplication"]:[])]);
     if (value.schemaVersion !== "pansphaira.guided-native/journal/v1" || canonicalJson(value.binding) !== canonicalJson(binding) || value.invocationNonce !== marker.nonce || !["IDLE", "OUTCOME_UNKNOWN", "SUCCEEDED", "FAILED"].includes(value.status) || typeof value.childCompleted !== "boolean" || typeof value.abortRequested !== "boolean") throw new Error("GUIDED_PERSISTED_STATE_DENIED");
     return value;
   }
@@ -165,5 +167,6 @@ export function createGuidedNativeOwnerV1(options) {
       rmdirSync(join(parent.anchor, "pan528-guided-native"));
     } finally { for (const fd of handles.reverse()) closeSync(fd); }
   };
-  return Object.freeze({ client: Object.freeze({ command, readback }), owner: Object.freeze({ leadingRoot, close, suspend, cleanup, async waitForChildCompletion() { if (completion) await completion; } }) });
+  let applicationSource=null;
+  return Object.freeze({ client: Object.freeze({ command, readback }), owner: Object.freeze({ leadingRoot, close, suspend, cleanup, configurationApplication(drafts){if(isClosed||applicationSource||!isAgentConfigurationDraftStoreV1(drafts,binding))throw Error("APPLICATION_OWNER_DENIED");applicationSource=bindNativeConfigurationApplicationV1({identity,template,drafts,state,write:value=>{if(isClosed)throw Error("APPLICATION_OWNER_CLOSED");assertOwned();atomic(journalPath,value);},native:{command,readback},leading:()=>readPan515TradeState({root:leadingRoot}),checkOwned:()=>{if(isClosed)throw Error("APPLICATION_OWNER_CLOSED");assertOwned();}});return applicationSource;}, async waitForChildCompletion() { if (completion) await completion; } }) });
 }

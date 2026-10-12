@@ -27,3 +27,11 @@
 .configuration-draft .configuration-summary h2, .configuration-draft .configuration-work h2 { margin-top: 0; }
 .configuration-draft :focus-visible { outline: 3px solid #286092; outline-offset: 3px; }
 @media (max-width: 700px) { .configuration-draft .configuration-layout { grid-template-columns: minmax(0,1fr); } .configuration-draft .configuration-steps { grid-template-columns: minmax(0,1fr); } .configuration-draft .configuration-actions > button, .configuration-draft .configuration-presentation-controls > button { width: 100%; } }
+
+.configuration-application{min-width:0;overflow-wrap:anywhere}.configuration-application-diff{width:100%;table-layout:fixed;border-collapse:collapse}.configuration-application-diff th,.configuration-application-diff td{padding:.6rem;vertical-align:top;text-align:left;border:1px solid #cbd5e1;overflow-wrap:anywhere}.configuration-application-diff caption{text-align:left;font-weight:650;padding:.6rem 0}.configuration-application a{overflow-wrap:anywhere}
+
+.configuration-application-status{min-height:3em;line-height:1.5;white-space:normal;overflow-wrap:anywhere}
+
+/* Keep shell/workspace queries; the application view has no profile-card facts.
+   Avoid the independently reproduced third nested inline-size invalidation. */
+.profile-canvas > main:has([data-configuration-application]){container-type:normal}
