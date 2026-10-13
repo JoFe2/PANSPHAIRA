@@ -677,6 +677,23 @@ repository_only_files = {
     "tests/pan569/isolated-browser-fixture.mjs",
 
 
+    # PAN604 one existing native readonly source, no prebuilt/production/model rights.
+    "packages/contracts/src/workspace-readonly-events-v1.ts",
+    "packages/browser-workspace/src/workspace-readonly-events-v1.ts",
+    "packages/browser-workspace/src/workspace-readonly-events-v1.css",
+    "scripts/run-pan604-native-readonly-event-tests.mjs",
+    "tests/pan604/browser-readonly-events.test.mjs",
+    "tests/pan604/native-event-bounds.test.mjs",
+    "tests/pan604/native-event-contract.test.mjs",
+    "tests/pan604/native-event-process-restart.test.mjs",
+    "tests/pan604/native-event-protocol.test.mjs",
+    "tests/pan604/native-event-transport.test.mjs",
+    "tests/pan604/readonly-event-source.test.mjs",
+    "tests/pan604/registration.test.mjs",
+    "tests/pan604/native-event-process-probe.mjs",
+    "docs/architecture/native-readonly-event-projection-v1.md",
+    "src/pan548/native-readonly-event-projection-v1.mjs",
+
     # PAN607 existing548 context/outbox/checkpoint contract, source evidence only.
     "docs/architecture/native-context-checkpoint-projection-v1.md",
     "packages/browser-workspace/src/workspace-context-projection-v1.css",

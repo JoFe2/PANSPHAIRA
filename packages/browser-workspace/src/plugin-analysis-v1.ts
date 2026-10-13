@@ -4,7 +4,7 @@ import type {BrowserShellFactoryV1} from '../../browser-shell/src/registry-v1.js
 import type {BrowserContextV1} from '../../browser-shell/src/context-owner-v1.js';
 import type {BrowserDeepLinkV1} from '../../browser-shell/src/deep-link-v1.js';
 import {validateWorkspaceAnalysisReadV1,verifyWorkspaceAnalysisReadResultV1,type WorkspaceAnalysisBindingV1,type WorkspaceAnalysisReadV1} from '../../contracts/src/workspace-analysis-v1.js';
-import {text,facts,readState} from './api-v1.js';
+import {text,facts,readState,createWorkspaceReadonlyTableV1} from './api-v1.js';
 
 type AnalysisTransactionV1={current:()=>boolean;retire:()=>void};
 const targetOwners=new WeakMap<HTMLElement,AnalysisTransactionV1>();
@@ -56,13 +56,9 @@ function commitAnalysisResultV1(target:HTMLElement,result:Awaited<ReturnType<typ
  target.replaceChildren(text('h1',browserWorkspaceStringValuesV1[70] as string));
  readState(target,browserWorkspaceStringValuesV1[92] as string,browserWorkspaceStringValuesV1[20] as string,'Echter nativer Readback empfangen — ausschließlich lesen, keine angewendete Änderung.');
  facts(target,[['Verfügbarkeit',result.availability],['Quelladapter',result.source.entrypoint],['Quellvertrag',result.source.schemaVersion],['Ergebnisrevision',result.resultRevision],['Native Quellrevision',String(result.source.snapshot.nativeRevision)],['Cutoff',result.source.snapshot.asOf??'Aktueller nativer Stand — kein historischer Cutoff'],['Quellscope / Grain',Object.entries(result.source.grain).map(([k,v])=>k+'='+v).join(' · ')],['Quellabdeckung',result.source.coverage]]);
- const scroll=text('div','');scroll.className='analysis-table-scroll';scroll.tabIndex=0;scroll.setAttribute('role','region');scroll.setAttribute(browserWorkspaceStringValuesV1[32] as string,'Bestandswerte — Tabelle lokal horizontal scrollbar');
- const table=document.createElement('table');table.append(text('caption','Bestandswerte aus demselben nativen Ergebnis'));
- const head=document.createElement('thead'),titles=document.createElement('tr');for(const label of ['Fachwert','Verfügbarkeitszustand','Wert','Einheit','Basis oder fehlende Quelle']){const cell=text('th',label);cell.setAttribute('scope','col');titles.append(cell);}head.append(titles);table.append(head);
- const body=document.createElement('tbody');for(const row of result.rows){
-  const tr=document.createElement('tr');tr.dataset.analysisKey=row.key;const label=text('th',row.label);label.setAttribute('scope','row');tr.append(label,text('td',row.state));
-  const cell=text('td',row.state==='KNOWN'?String(row.value):'Nicht verfügbar');cell.setAttribute('data-analysis-value','');tr.append(cell,text('td',row.unit),text('td',row.basis??row.reason));body.append(tr);
- }table.append(body);scroll.append(table);target.append(scroll);
+ const table=createWorkspaceReadonlyTableV1(target,'Bestandswerte aus demselben nativen Ergebnis',['Fachwert','Verfügbarkeitszustand','Wert','Einheit','Basis oder fehlende Quelle']);
+ table.scroll.setAttribute('aria-label','Bestandswerte — Tabelle lokal horizontal scrollbar');
+ table.setRows(result.rows.map(row=>({key:row.key,cells:[row.label,row.state,row.state==='KNOWN'?String(row.value):'Nicht verfügbar',row.unit,row.basis??row.reason]})));
  target.append(text('p','PARTIAL bedeutet hier: Bestandsreichweite und qualifizierter Wert fehlen in der vorhandenen Quelle. Fehlende Werte sind keine Null. Keine vollständige Unternehmens- oder Adoptionsstatistik; kein Vorschlag und kein fachlicher Effekt. Consent und Transport bleiben unverändert.'));
  if(result.cohort){
   const cohort=text(browserWorkspaceStringValuesV1[10] as string,'');cohort.dataset.analysisCohort=result.cohort.report.publicationState;cohort.append(text('h2','Separater lokaler Usage-Insights-Snapshot'));
