@@ -25,10 +25,11 @@ export function nativeUiContextTaskCoreV1(row){
  if(canonicalJson(constraints)!==canonicalJson(fixedConstraints))throw Error('CONTEXT_JOURNAL_NO_SEND_DENIED');
  return {taskId:row.command_id,requestDigest:row.request_digest,argumentDigest:digest(JSON.parse(argumentBytes)),argumentBytes,capability,scope,expiresAtMs,constraints:{...fixedConstraints},resourceRefs};
 }
-export function createNativeUiContextJournalV1({db,transaction,binding,principal,readRow}){
+export function createNativeUiContextJournalV1({db,transaction,binding,principal,readRow,bootEpoch}){
  db.exec(`CREATE TABLE IF NOT EXISTS workspace_ui_context_scope_v1(principal_digest TEXT PRIMARY KEY,privacy_epoch INTEGER NOT NULL CHECK(privacy_epoch>0),provider_epoch INTEGER NOT NULL CHECK(provider_epoch>0),revoked INTEGER NOT NULL CHECK(revoked IN(0,1))) STRICT;
  CREATE TABLE IF NOT EXISTS workspace_ui_context_outbox_v1(principal_digest TEXT NOT NULL,seq INTEGER NOT NULL,event_key TEXT NOT NULL,task_id TEXT NOT NULL,task_revision INTEGER NOT NULL,kind TEXT NOT NULL,privacy_epoch INTEGER NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,PRIMARY KEY(principal_digest,seq),UNIQUE(principal_digest,event_key)) STRICT;
  CREATE TABLE IF NOT EXISTS workspace_ui_context_projection_v1(principal_digest TEXT NOT NULL,seq INTEGER NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,PRIMARY KEY(principal_digest,seq)) STRICT;
+ CREATE TABLE IF NOT EXISTS workspace_ui_context_event_clock_v1(principal_digest TEXT NOT NULL,seq INTEGER NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,PRIMARY KEY(principal_digest,seq)) STRICT;
  CREATE TABLE IF NOT EXISTS workspace_ui_context_proofs_v1(proof_id TEXT PRIMARY KEY,principal_digest TEXT NOT NULL,task_id TEXT NOT NULL,kind TEXT NOT NULL,argument_digest TEXT NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,UNIQUE(principal_digest,task_id,kind)) STRICT;`);
  const nativeKey=db.prepare('SELECT completion_key FROM settings WHERE id=1').get().completion_key;
  const sign=(domain,bytes)=>createHmac('sha256',nativeKey).update('pan548.context/v1\0'+domain+'\0'+canonicalJson(binding)+'\0'+bytes).digest('hex');
@@ -47,7 +48,11 @@ export function createNativeUiContextJournalV1({db,transaction,binding,principal
   const payload={requestDigest:task.requestDigest,argumentDigest:task.argumentDigest,capability:task.capability,constraints:task.constraints,resourceRefs:task.resourceRefs,state:row.state,resultDigest:row.result_json===null?null:digest(JSON.parse(row.result_json)),proofRef};
   const intent=kind==='INTENT_ACCEPTED'?null:db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,row.command_id),eventEpoch=intent?verifiedEnvelope(intent,'event').privacyEpoch:s.privacy_epoch;
   const e={schemaVersion:'pansphaira.workspace-context/event/v1',seq:old.head.seq+1,eventKey:key,taskId:row.command_id,taskRevision:row.revision,kind,principalDigest:a.digest,privacyEpoch:eventEpoch,previousDigest:old.head.digest,payload},bytes=canonicalJson(e),signature=sign('event',bytes);
-  db.prepare('INSERT INTO workspace_ui_context_outbox_v1 VALUES(?,?,?,?,?,?,?,?,?)').run(a.digest,e.seq,key,e.taskId,e.taskRevision,kind,eventEpoch,bytes,signature);db.prepare('INSERT INTO workspace_ui_context_projection_v1 VALUES(?,?,?,?)').run(a.digest,e.seq,bytes,signature);return e;
+  // Additive clock sidecar of THIS producer append in the SAME owner transaction.
+  // Legacy events are never backfilled from polling/restart wallclock.
+  const sourceTimeMs=Date.now();if(!Number.isSafeInteger(sourceTimeMs)||sourceTimeMs<0||!Number.isSafeInteger(bootEpoch)||bootEpoch<1)throw Error('EVENT_SOURCE_CLOCK_OWNER_DENIED');
+  const clockBytes=canonicalJson({schemaVersion:'pansphaira.workspace-event-projection/source-clock/v1',principalDigest:a.digest,sequence:e.seq,eventDigest:digest(e),sourceBootEpoch:bootEpoch,sourceTimeMs,unit:'COUNT'});
+  db.prepare('INSERT INTO workspace_ui_context_outbox_v1 VALUES(?,?,?,?,?,?,?,?,?)').run(a.digest,e.seq,key,e.taskId,e.taskRevision,kind,eventEpoch,bytes,signature);db.prepare('INSERT INTO workspace_ui_context_projection_v1 VALUES(?,?,?,?)').run(a.digest,e.seq,bytes,signature);db.prepare('INSERT INTO workspace_ui_context_event_clock_v1 VALUES(?,?,?,?)').run(a.digest,e.seq,clockBytes,sign('event-clock',clockBytes));return e;
  }
  function origin(a,row){const intent=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,row.command_id);if(!intent)throw Error('CONTEXT_OWNER_INTENT_REQUIRED');const e=verifiedEnvelope(intent,'event'),core=nativeUiContextTaskCoreV1(row);if(e.privacyEpoch!==intent.privacy_epoch)throw Error('CONTEXT_OWNER_PRIVACY_EPOCH_BYTES_CONFLICT');if(e.payload.requestDigest!==core.requestDigest||e.payload.argumentDigest!==core.argumentDigest||canonicalJson(e.payload.constraints)!==canonicalJson(core.constraints)||canonicalJson(e.payload.resourceRefs)!==canonicalJson(core.resourceRefs))throw Error('CONTEXT_OWNER_INTENT_BYTES_CONFLICT');
   if(row.state==='COMPLETED'){const final=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_COMPLETED' ORDER BY seq DESC LIMIT 1").get(a.digest,row.command_id);if(!final)throw Error('CONTEXT_COMPLETION_OUTBOX_REQUIRED');const completed=verifiedEnvelope(final,'event');if(completed.taskRevision!==row.revision||completed.payload.state!==row.state||completed.payload.resultDigest!==(row.result_json===null?null:digest(JSON.parse(row.result_json))))throw Error('CONTEXT_OWNER_RESULT_BYTES_CONFLICT');}
@@ -59,6 +64,11 @@ function boundProof(a,row,ref){const core=origin(a,row),p=proofFor(a,ref);
  }
  const journal=Object.freeze({
   actor,stream,origin,
+  sourceClock(a,e){
+   const row=db.prepare('SELECT * FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').get(a.digest,e.seq);if(!row)return null;
+   if(typeof row.bytes!=='string'||sign('event-clock',row.bytes)!==row.signature)throw Error('EVENT_SOURCE_CLOCK_SIGNATURE_DENIED');
+   const clock=JSON.parse(row.bytes);if(clock.schemaVersion!=='pansphaira.workspace-event-projection/source-clock/v1'||clock.principalDigest!==a.digest||clock.sequence!==e.seq||clock.eventDigest!==digest(e)||clock.unit!=='COUNT'||!Number.isSafeInteger(clock.sourceTimeMs)||clock.sourceTimeMs<0||!Number.isSafeInteger(clock.sourceBootEpoch)||clock.sourceBootEpoch<1||clock.sourceBootEpoch>bootEpoch)throw Error('EVENT_SOURCE_CLOCK_BYTES_DENIED');return freeze(clock);
+  },
   sealProjection(bytes){if(typeof bytes!=='string')throw Error('CONTEXT_PROJECTION_BYTES_DENIED');return sign('projection',bytes);},
   verifyProjection(bytes,signature){if(typeof bytes!=='string'||sign('projection',bytes)!==signature)throw Error('CONTEXT_OWNER_PROJECTION_SIGNATURE_DENIED');return JSON.parse(bytes);},
   accepted(headers,taskId){const a=actor(headers),row=rowFor(a,taskId);return append(a,row,'INTENT_ACCEPTED');},

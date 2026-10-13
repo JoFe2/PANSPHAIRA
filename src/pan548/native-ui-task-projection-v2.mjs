@@ -35,7 +35,7 @@ export function createNativeWorkspaceUiTaskProjectionV2(options){
   original(headers,id){const a=principal(headers),row=readRow(id);if(!row||row.principal_digest!==a.digest)throw Error('UI_TASK_SCOPE_DENIED');return Object.freeze({command:JSON.parse(row.original_command),requestDigest:row.request_digest,readback:project(row)});},
   close(){if(closed)return;closed=true;owned.delete(owner);ledger.close();},
  });
- const contextJournal=createNativeUiContextJournalV1({db,transaction,binding:sessions.binding,principal,readRow});
+ const contextJournal=createNativeUiContextJournalV1({db,transaction,binding:sessions.binding,principal,readRow,bootEpoch});
  owned.set(owner,{binding:sessions.binding,sessions,ledger,db,transaction,bootEpoch,principal,readRow,project,contextJournal,closed:()=>closed});return owner;
 }
 export function nativeWorkspaceUiTaskOwnerConnectionV2(owner,binding){

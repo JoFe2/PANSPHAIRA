@@ -41,7 +41,7 @@ test('PUI-08 registration: selection, skip and missing owned scratch deny before
 });
 test('PUI-08 registration: additive owner reuses actual native projection, existing cohort and shared shell without old owner or gate removal',()=>{
  const graph=JSON.parse(readFileSync('verification/verification-dag-v2.json','utf8')),owners=graph.nodes.filter(n=>n.id==='pan549-native-analysis-result-v1');assert.equal(owners.length,1,'PAN549_DERIVED_DAG_OWNER_MISSING');const owner=owners[0];
- assert.deepEqual(owner.dependsOn,['awi-insights-1-usage-insights-v1','pan520-native-projections-v1','pan541-shared-browser-shell-v1']);assert.deepEqual(owner.ownedTests,['npm run pan549:test']);assert.equal(owner.riskClass,'HIGH');assert.equal(owner.globalInvalidation,false);assert.deepEqual(owner.inputs.map(({path,role})=>[path,role]),expected);
+ assert.deepEqual(owner.dependsOn,['awi-insights-1-usage-insights-v1','pan520-native-projections-v1','pan541-shared-browser-shell-v1']);assert.deepEqual(owner.ownedTests,['npm run pan549:test','npm run pan604:test']);assert.equal(owner.riskClass,'HIGH');assert.equal(owner.globalInvalidation,false);assert.deepEqual(owner.inputs.map(({path,role})=>[path,role]),expected);
  for(const [path] of expected)assert.deepEqual(graph.nodes.filter(n=>n.inputs.some(i=>i.path===path)).map(n=>n.id),[owner.id]);
  assert.deepEqual(graph.hardGates,['npm run lint','npm run release-governance:verify','npm run supply-chain:verify','sha256sum -c SHA256SUMS','./scripts/build-public-release.sh --output <isolated-absolute-path>']);assert.equal(graph.nodes.find(n=>n.id==='repository-integrity').ownedTests.filter(t=>t==='npm run pan549:test').length,1);
 });
