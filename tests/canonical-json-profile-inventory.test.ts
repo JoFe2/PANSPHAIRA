@@ -859,6 +859,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
   "toSha256": "65b765f0a4c45d8ae6f5411264429972cf01c24b679a99b1380cef494895aa46",
   "reason": "Append exactly fifteen source-only existing548 authenticated signed readonly source/shared typed projection/548549597 canvas-status-facts-table/fixed8file native-browser registration/process/doc members. Existing548 retains one task/session/outbox owner and same transaction; original producer clock sidecar is metadata, not another event/source/policy engine or worker/pipeline. Graph102/all107/max128 inputs/64 owned tests, every original security/authority case and product deadline, immutable21 byte obligations/13 profiles, full old migrations and legacy1792 retained. Authorized source snapshot/deltas/minmax/gap/UNKNOWN/retained STALE/restart and actual TLS/Browser are model-free; they grant no delivery/control/save/sharedpublish/business/model/cost/audio/private/productive/KS rights. Registration is not protected CanonicalCI/merge/release/archive/publicclosure/physical/nativezoom/WholePAN500 acceptance."
 }),
+  Object.freeze({
+  "migrationId": "PAN602-EXISTING-OWN-SYNTHETIC-NATIVE-MAILLOCAL/INTEGRITY-GENERATOR/V92",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 92,
+  "fromSha256": "65b765f0a4c45d8ae6f5411264429972cf01c24b679a99b1380cef494895aa46",
+  "toSha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b",
+  "reason": "Append exactly13 source-only native own-synthetic message reader/local-draft typed contract/shared browser/fixed6file native-TLS-browser-process-registration/document members on existing548 session/context/SQLite/signer and541527 shell ownership. Graph103/all108/max128 inputs/64 own tests, every prior case and required gate, immutable21 base obligations/13 profiles/full old migrations/unchanged scanner and legacy1792 retained. One deterministic local untrusted profile binds original account/thread/message revision/recipients/attachments and independent source/draft/delete-reference confirmation; native no-send/no-external-draft/no-model/private-mail constraints and current role/CSRF/context/signed own-row/revision/privacy/retention fences remain. Stale source denies protected preview/preparation, not authorized own-draft erasure. No second generic state/policy/task engine, new agent/voice infrastructure, microphone/private mailbox/cloud/model cost/external account/send/KS rights or global runtime changes. Registration is not frozen canonicalCI/protected merge/release/anonymous closure/physical/model/WholePAN500 acceptance."
+}),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -871,17 +879,17 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1246,
+  "filesScanned": 1257,
   "declarationSites": 37,
   "declarationFiles": 37,
-  "importSites": 331,
-  "importFiles": 330,
+  "importSites": 334,
+  "importFiles": 333,
   "reexportSites": 7,
   "similarShapeSites": 30,
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries": 2771, "uniquePaths": 2771, "duplicatePaths": 0} as const;
+const EXPECTED_LEDGER = {"entries": 2784, "uniquePaths": 2784, "duplicatePaths": 0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1664,7 +1672,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91,92]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
