@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "e7f929639f6e3dc2b8f0b333b04279afed0b305396b7d08c9ace0072cc0449fd"
+        "sha256": "cc1f2ef363e0516ca0260a6e28db617c7e21d9e193b0b02dcd7621349fe0ef11"
       }
     ]
   },
@@ -803,6 +803,14 @@
       "fromSha256": "937ca688a0185ce04717415b26837a45c20603b014ddfa86961c19c9b5e1e6fd",
       "toSha256": "5dae062e63db426d7d1bb1646645229a173f1ed3834602d712a8e55e0a7d10f9",
       "reason": "Append exactly twelve source-only final-text/native invocation/admission/independent executor/shared contract/existing browser canvas/fixed4file registered26/doc members. Existing548 remains context/task owner on same native ledger;546 preview validator and597 registered Surface/Delivery own actual effects. Graph100/all105/max128/input and64 own-test bounds, every old case/guard/hard gate, immutable21 base obligations/13 profiles, complete historical migrations and legacy1792 retained. Fixed final-text whole grammar and actual selected native member/request/set/argument/policy/principal/purpose/local-only/no-send/lease binding grant no personal-save/shared-publish/mail/externalDraft/business/model/training/cost/audio/private/production/KS authority. Product5000/8000/60000 and existingCI45 unchanged. Registration is not canonicalCI/protected merge/release/archive/closure/model/physical/WholePAN500 acceptance."
+    },
+    {
+      "migrationId": "PAN607-EXISTING-MODEL-FREE-NATIVE-CONTEXT-CHECKPOINT/INTEGRITY-GENERATOR/V90",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 90,
+      "fromSha256": "5dae062e63db426d7d1bb1646645229a173f1ed3834602d712a8e55e0a7d10f9",
+      "toSha256": "80050ebc909ecf8a4cf3482098a6bed39cc29ba1da235e20fde79d4d990c3a17",
+      "reason": "Append exactly fifteen source-only existing548 native context/journal/checkpoint/sealed bytes/shared typed/browser/fixed5file registered33/real process fixture/probe/doc members. Retain same548 task/session state/revision/lease/budget/cancel,546 candidate and597 Surface/native target ownership; new bounded607 verification leaf is not second task/policy/source engine or worker/pipeline. Graph101/all106/max128/input and64own-test, every original case/security/deadline/hardgate, immutable21 byte obligations/13 profiles, complete old migrations and legacy1792 retained. Model-free actual localTLS PREPARED/INCLUDED_IN_PROMPT/RESULT_CHECKED not actual Main/575/612 integration. Purpose/privacyepoch/retention/revoke/no-send/UNKNOWN/resource scope grant no save/shared publish/business/model/cost/audio/private/production/KS authority. Product5000/8000/60000 and CI45 unchanged. Registration is not frozen review/CanonicalCI/protected merge/release/archive/closure/WholePAN500 acceptance."
     }
   ],
   "scanScope": {
@@ -845,15 +853,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1220,
+    "filesScanned": 1233,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 321,
-    "importFiles": 320,
+    "importSites": 327,
+    "importFiles": 326,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2741,
-    "ledgerUniquePaths": 2741
+    "ledgerEntries": 2756,
+    "ledgerUniquePaths": 2756
   },
   "profiles": [
     {
@@ -926,7 +934,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "5dae062e63db426d7d1bb1646645229a173f1ed3834602d712a8e55e0a7d10f9"
+      "sha256": "80050ebc909ecf8a4cf3482098a6bed39cc29ba1da235e20fde79d4d990c3a17"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1213,8 +1221,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 146,
-      "importFiles": 146
+      "importSites": 147,
+      "importFiles": 147
     },
     {
       "owner": "cscl-03",
@@ -1373,8 +1381,8 @@
     },
     {
       "owner": "pan548",
-      "importSites": 3,
-      "importFiles": 3
+      "importSites": 6,
+      "importFiles": 6
     },
     {
       "owner": "pan549",
@@ -1428,8 +1436,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 70,
-      "importFiles": 69
+      "importSites": 72,
+      "importFiles": 71
     },
     {
       "owner": "usage-insights",
@@ -1722,7 +1730,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "5dae062e63db426d7d1bb1646645229a173f1ed3834602d712a8e55e0a7d10f9",
+      "sha256": "80050ebc909ecf8a4cf3482098a6bed39cc29ba1da235e20fde79d4d990c3a17",
       "basis": "profile-version-migration"
     },
     {

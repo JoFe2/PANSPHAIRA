@@ -677,6 +677,23 @@ repository_only_files = {
     "tests/pan569/isolated-browser-fixture.mjs",
 
 
+    # PAN607 existing548 context/outbox/checkpoint contract, source evidence only.
+    "docs/architecture/native-context-checkpoint-projection-v1.md",
+    "packages/browser-workspace/src/workspace-context-projection-v1.css",
+    "packages/browser-workspace/src/workspace-context-projection-v1.ts",
+    "packages/contracts/src/workspace-context-projection-v1.ts",
+    "scripts/run-pan607-native-context-tests.mjs",
+    "src/pan548/native-context-checkpoints-v1.mjs",
+    "src/pan548/native-context-journal-v1.mjs",
+    "src/pan548/native-context-projection-v1.mjs",
+    "tests/pan607/browser-context-projection.test.mjs",
+    "tests/pan607/native-checkpoints.test.mjs",
+    "tests/pan607/native-context-projection.test.mjs",
+    "tests/pan607/native-fixture.mjs",
+    "tests/pan607/native-process-probe.mjs",
+    "tests/pan607/native-process-restart.test.mjs",
+    "tests/pan607/registration.test.mjs",
+
     # PAN608 model-free typed invocation; existing548/546/597 consumer only.
     "src/pan548/model-free-final-text-v1.mjs",
     "src/pan548/native-model-free-invocations-v1.mjs",
