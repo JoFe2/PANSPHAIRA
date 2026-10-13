@@ -3578,6 +3578,61 @@ for(const[inputPath,role,ownerId]of pan568Inputs){const owner=dag.nodes.find(n=>
 for(const id of ['pan563-configuration-draft-v1','pan541-shared-browser-shell-v1']){const owner=dag.nodes.find(n=>n.id===id);if(!owner.ownedTests.includes('npm run pan568:test'))owner.ownedTests.push('npm run pan568:test');}
 if(!repositoryIntegrityNode.ownedTests.includes('npm run pan568:test'))repositoryIntegrityNode.ownedTests.push('npm run pan568:test');
 
+// PAN597 additive delivery/read-contract verification, not a new product pipeline.
+const pan597Inputs=[
+  [
+    "packages/contracts/src/workspace-surface-v2.ts",
+    "CONTRACT"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-surfaces-v2.ts",
+    "SOURCE"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-surfaces-v2.css",
+    "SOURCE"
+  ],
+  [
+    "src/pan546/native-surface-projection-v2.mjs",
+    "SOURCE"
+  ],
+  [
+    "src/pan597/native-surfaces-v2.mjs",
+    "SOURCE"
+  ],
+  [
+    "scripts/run-pan597-native-surface-tests.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan597/native-surfaces.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan597/browser-surfaces.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan597/process-restart.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan597/registration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "docs/architecture/native-authenticated-browser-surfaces-v2.md",
+    "DERIVED_EVIDENCE"
+  ]
+];
+const task548=dag.nodes.find(n=>n.id==='pan548-authentic-context-selection-v1');if(!task548)throw Error('PAN597_TASK_OWNER_MISSING');
+task548.inputs.push({path:'src/pan548/native-ui-task-projection-v2.mjs',role:'SOURCE',sha256:digest('src/pan548/native-ui-task-projection-v2.mjs')});if(!task548.ownedTests.includes('npm run pan597:test'))task548.ownedTests.push('npm run pan597:test');
+let surface597=dag.nodes.find(n=>n.id==='pan597-native-browser-surfaces-v2');if(!surface597){surface597={id:'pan597-native-browser-surfaces-v2',dependsOn:['pan548-authentic-context-selection-v1','pan549-native-analysis-result-v1'],inputs:[],ownedTests:[],invariants:['PAN548 owns the durable task row on the same native ledger connection/transaction; PAN597 owns Surface and Delivery only.','Original authenticated canonical command bytes, source/target scopes and exact native revisions/epochs/local generation/expiry/Pin/Dirty fence DOM; failed Revoke retains a local Stop and lost permit uses explicit versioned native V1 recovery.','Distinct native document/analysis/monitor reads and client DOM receipts are not model, physical pixel/device, business, private-source, audio/cost/production or KS acceptance.'],riskClass:'HIGH',globalInvalidation:false};dag.nodes.push(surface597);}
+surface597.inputs=pan597Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)}));surface597.ownedTests=['npm run pan597:test'];
+// Existing integration owner already owns64 tests: retain every old test and
+// its unchanged hard64 bound; the new597/548 nodes own the added fixed entry.
+repositoryIntegrityNode.ownedTests=repositoryIntegrityNode.ownedTests.filter(t=>t!=='npm run pan597:test');dag.graphVersion=99;
+
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
 // not be duplicated on the integration owner. The integration owner keeps
@@ -3645,6 +3700,8 @@ for (const [inputPath] of pan564Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan566Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan569Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan568Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan597Inputs) entries.set(inputPath,null);
+entries.set('src/pan548/native-ui-task-projection-v2.mjs',null);
 for (const [inputPath] of pan542Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan544Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan549Inputs) entries.set(inputPath, null);

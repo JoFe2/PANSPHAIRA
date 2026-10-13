@@ -11,7 +11,7 @@ import {createNativeErvReadAdapterV1} from '../../src/pan541/native-erv-read-ada
 import {enableWorkspaceBrowserV1} from '../../src/pan541/workspace-browser.mjs';
 import {UsageInsightsLocalServiceV1} from '../../dist/packages/usage-insights/src/index.js';
 export const cutoff549='2026-06-30T23:59:59+02:00';
-export async function browserFixture549({cohort='SUPPRESSED',analysis=true,diagnostic=false}={}){
+export async function browserFixture549({cohort='SUPPRESSED',analysis=true,diagnostic=false,surfaces=false}={}){
  const tls=await nativeFixture527();let native,workspace;
  try{
   native=await financeFixture();const history=JSON.stringify(nativeRows(native.root,'SELECT revision,command,event FROM pan515_events ORDER BY revision'));
@@ -19,7 +19,7 @@ export async function browserFixture549({cohort='SUPPRESSED',analysis=true,diagn
   if(cohort==='SUPPRESSED'){usage.grant('basic');assert.equal(usage.record({capabilityId:'capability.gateway',lifecycleOutcome:'INSTALL_STARTED'}).outcome,'ACCEPTED');}
   else assert.ok(cohort==='EMPTY'||cohort===null);
   const sessions=tls.gateway.sessionAdapter('tenant-a');const reader=createNativeAnalysisReadAdapterV1({optIn:true,root:native.root,sessions,...(cohort===null?{}:{usageInsightsStore:store})});
-  const mount=()=>enableWorkspaceBrowserV1({optIn:true,gateway:tls.gateway,tenantId:'tenant-a',origin:tls.origin,nativeReader:createNativeErvReadAdapterV1({tenantId:'tenant-a',root:native.root}),diagnosticPlugins:diagnostic,...(analysis?{analysisReader:reader}:{})});workspace=mount();
+  const mount=()=>enableWorkspaceBrowserV1({optIn:true,gateway:tls.gateway,tenantId:'tenant-a',origin:tls.origin,nativeReader:createNativeErvReadAdapterV1({tenantId:'tenant-a',root:native.root}),diagnosticPlugins:diagnostic,...(surfaces?{contextSelection:true,surfaces:true}:{}),...(analysis?{analysisReader:reader}:{})});workspace=mount();
   function issue(role='reader',duration=300000){return sessions.issueOwnerSession({subjectId:'synthetic:analysis-browser-'+role,role,expiresAtMs:Date.now()+duration});}
   return {tls,native,sessions,reader,usage,history,issue,unmount(){workspace.close();},mount(){workspace=mount();},unchanged(){assert.equal(JSON.stringify(nativeRows(native.root,'SELECT revision,command,event FROM pan515_events ORDER BY revision')),history);assert.equal(usage.consentStatus().networkMode,'OFF');},async close(){workspace?.close();native?.close();await tls.close();}};
  }catch(e){workspace?.close();native?.close();await tls.close();throw e;}

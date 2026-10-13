@@ -787,6 +787,14 @@
       "fromSha256": "242b48464f8e3a2fadf6af8c80600152274b1730815ad4a91d416663729acaab",
       "toSha256": "46ed57dee40c284ff77906dcc6f18b89fe5afd8c4d9f4ac261676aafe3077596",
       "reason": "Append exactly seven source-only code-owned goal contribution/view/fixed3file runner/native-browser-registration/doc inputs and current test entry on existing563/541 ownership. Preserve graph98/all103/max128, all prior tests/hard gates, immutable21 base byte obligations/13 profiles/historical migrations/scanner/validator and legacy1792. Native365 questions and441 validation reuse the same563 SQL row/revision/CAS; no second registry, state, policy, model or execution authority. Product5000/8000/native60000 and current bounded CI45 remain unchanged; historical V86 CI30 wording stays historical. Registration is not canonicalCI/merge/release/closure/model/cost/private/audio/production/KS/WholePAN500 acceptance."
+    },
+    {
+      "migrationId": "PAN597-EXISTING-AUTHENTICATED-NATIVE-BROWSER-SURFACES/INTEGRITY-GENERATOR/V88",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 88,
+      "fromSha256": "46ed57dee40c284ff77906dcc6f18b89fe5afd8c4d9f4ac261676aafe3077596",
+      "toSha256": "937ca688a0185ce04717415b26837a45c20603b014ddfa86961c19c9b5e1e6fd",
+      "reason": "Append exactly twelve source-only versioned read-contract/Surface/Delivery/fixed4file native-browser-registration/doc members. Existing548 remains task/context owner on same453 native ledger/transaction; new bounded597 verification node owns only Surface/Delivery/read-contract scope. Graph99/all104/max128; preserve every prior owner input/test/hard gate, immutable21 obligations/13 pinned profiles, historical migration chain, unchanged scanner/negative semantics and legacy1792. No new tasktruth/registry/controller/pipeline/model/cost/audio/private-source/production/KS authority. Original5000/8000/60000 and CI45 unchanged. Registration is not canonicalCI/merge/release/closure/real model/WholePAN500 acceptance."
     }
   ],
   "scanScope": {
@@ -829,15 +837,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1200,
+    "filesScanned": 1210,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 316,
-    "importFiles": 315,
+    "importSites": 319,
+    "importFiles": 318,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2717,
-    "ledgerUniquePaths": 2717
+    "ledgerEntries": 2729,
+    "ledgerUniquePaths": 2729
   },
   "profiles": [
     {
@@ -910,7 +918,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "46ed57dee40c284ff77906dcc6f18b89fe5afd8c4d9f4ac261676aafe3077596"
+      "sha256": "937ca688a0185ce04717415b26837a45c20603b014ddfa86961c19c9b5e1e6fd"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1197,8 +1205,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 144,
-      "importFiles": 144
+      "importSites": 145,
+      "importFiles": 145
     },
     {
       "owner": "cscl-03",
@@ -1357,8 +1365,8 @@
     },
     {
       "owner": "pan548",
-      "importSites": 1,
-      "importFiles": 1
+      "importSites": 2,
+      "importFiles": 2
     },
     {
       "owner": "pan549",
@@ -1384,6 +1392,11 @@
       "owner": "pan575",
       "importSites": 2,
       "importFiles": 2
+    },
+    {
+      "owner": "pan597",
+      "importSites": 1,
+      "importFiles": 1
     },
     {
       "owner": "procurement-434",
@@ -1701,7 +1714,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "46ed57dee40c284ff77906dcc6f18b89fe5afd8c4d9f4ac261676aafe3077596",
+      "sha256": "937ca688a0185ce04717415b26837a45c20603b014ddfa86961c19c9b5e1e6fd",
       "basis": "profile-version-migration"
     },
     {
