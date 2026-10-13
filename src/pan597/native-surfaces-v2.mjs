@@ -90,6 +90,24 @@ export function createNativeWorkspaceSurfacesV2(options){
   read(headers,value){const c=uiTaskClosedV2(value,['schemaVersion','commandId']);if(c.schemaVersion!=='pansphaira.workspace-surface/read/v2')throw Error('SURFACE_INPUT_DENIED');actor(headers);tasks.read(headers,c.commandId);const row=delivery(c.commandId);if(!row)return missingDelivery(headers,c.commandId);return readback(headers,row);},
   revoke(headers,value){const c=uiTaskClosedV2(value,['schemaVersion']);if(c.schemaVersion!=='pansphaira.workspace-surface/revoke/v2')throw Error('SURFACE_INPUT_DENIED');const a=actor(headers);transaction(()=>{actor(headers);db.prepare('UPDATE workspace_surfaces_v2 SET revoked=1,local_generation=local_generation+1 WHERE surface_id=?').run(a.row.surface_id);db.prepare("UPDATE workspace_surface_outbox_v2 SET status='REVOKED' WHERE (target_id=? OR source_id=?) AND status<>'RENDERED'").run(a.row.surface_id,a.row.surface_id);db.prepare("UPDATE workspace_ui_tasks_v2 SET state='REVOKED',revision=revision+1 WHERE command_id IN(SELECT command_id FROM workspace_surface_outbox_v2 WHERE (target_id=? OR source_id=?) AND status='REVOKED') AND state<>'COMPLETED'").run(a.row.surface_id,a.row.surface_id);});return {schemaVersion:'pansphaira.workspace-surface/revoke-readback/v2',outcome:'REVOKED',...noEffects};},
   close(){if(closed)return;closed=true;owned.delete(owner);},
- });owned.set(owner,{binding:sessions.binding,contextSelection});return owner;
+ });
+ // Code-only same-owner snapshot/validation for PAN548 invocation admission.
+ // This is not another surface registry or an HTTP capability/grant method.
+ const invocation=Object.freeze({
+  snapshot(headers){
+   const a=actor(headers);livePeer(headers,a.row);
+   if(a.row.pinned||a.row.dirty)throw Error('SURFACE_INVOCATION_SOURCE_FENCED');
+   const targets=[];
+   for(const r of db.prepare('SELECT * FROM workspace_surfaces_v2 WHERE principal_digest=? AND session_id=? AND surface_id<>?').all(a.digest,a.binding.sessionId,a.row.surface_id)){
+    if(r.pinned||r.dirty||r.revoked||r.boot_epoch!==t.bootEpoch)continue;
+    try{const binding=livePeer(headers,r);targets.push({surface:publicSurface(r),binding});}
+    catch(error){if(!['SURFACE_STALE_DENIED','SURFACE_CONTEXT_STALE_DENIED','SURFACE_VIEW_REVISION_STALE','CONTEXT_SURFACE_PEER_DENIED','CONTEXT_LEASE_EXPIRED','CONTEXT_REVISION_STALE','CONTEXT_NATIVE_VIEW_DENIED'].includes(error.message))throw error;}
+   }
+   return {binding:a.binding,source:publicSurface(a.row),targets,catalog:reader.catalog(headers,a.binding)};
+  },
+  validateDisplay(headers,value){const a=actor(headers);if(value.sourceSurfaceId!==a.row.surface_id||value.sourceSurfaceId===value.targetSurfaceId)throw Error('SURFACE_TARGET_DENIED');guard(headers,{command_id:value.commandId,original_command:canonicalJson(value),source_id:value.sourceSurfaceId,target_id:value.targetSurfaceId,boot_epoch:t.bootEpoch});reader.read(headers,{routeId:value.routeId,objectId:value.objectId,expectedRevision:value.expectedRevision},a.binding);return true;},
+ });
+ owned.set(owner,{binding:sessions.binding,contextSelection,invocation});return owner;
 }
+export function nativeWorkspaceSurfaceInvocationConnectionV1(owner,binding,contextSelection){if(!isNativeWorkspaceSurfacesV2(owner,binding,contextSelection))throw Error('SURFACE_INVOCATION_OWNER_DENIED');return owned.get(owner).invocation;}
 export const isNativeWorkspaceSurfacesV2=(owner,binding,context)=>owned.has(owner)&&canonicalJson(owned.get(owner).binding)===canonicalJson(binding)&&owned.get(owner).contextSelection===context;
