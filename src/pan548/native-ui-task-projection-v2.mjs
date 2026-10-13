@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {isProtectedSessionAdapterV1} from '../pan527/origin-session-adapter.mjs';
 import {createResourceBudgetStoreV1,resourceBudgetOwnerConnectionV2} from '../../demo/runtime/atomic-resource-budget.mjs';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
+import {createNativeUiContextJournalV1} from './native-context-journal-v1.mjs';
 const owned=new WeakMap();
 export const uiTaskDigestV2=value=>createHash('sha256').update(canonicalJson(value)).digest('hex');
 export function uiTaskClosedV2(value,keys,code='UI_TASK_INPUT_DENIED'){
@@ -27,14 +28,15 @@ export function createNativeWorkspaceUiTaskProjectionV2(options){
  const bootEpoch=transaction(()=>{db.prepare('INSERT OR IGNORE INTO workspace_ui_task_settings_v2 VALUES(1,1)').run();const n=db.prepare('SELECT boot_epoch FROM workspace_ui_task_settings_v2 WHERE id=1').get().boot_epoch;if(!Number.isSafeInteger(n)||n>=Number.MAX_SAFE_INTEGER)throw Error('UI_TASK_EPOCH_LIMIT');db.prepare('UPDATE workspace_ui_task_settings_v2 SET boot_epoch=? WHERE id=1').run(n+1);return n+1;});
  let closed=false;
  function principal(headers){if(closed)throw Error('UI_TASK_OWNER_CLOSED');if(db.prepare('SELECT boot_epoch FROM workspace_ui_task_settings_v2 WHERE id=1').get()?.boot_epoch!==bootEpoch)throw Error('UI_TASK_OWNER_REPLACED');const p=sessions.authenticate(headers);if(headers.origin!==undefined&&headers.origin!==sessions.origin)throw Error('HOSTED_CSRF_DENIED');return {p,digest:uiTaskDigestV2({tenantId:p.tenantId,subjectId:p.subjectId,instanceId:p.instanceId,generation:p.generation,role:p.role})};}
- function readRow(id){if(typeof id!=='string'||!/^(?:display|invocation):[a-f0-9]{32}$/.test(id))throw Error('UI_TASK_ID_DENIED');return db.prepare('SELECT * FROM workspace_ui_tasks_v2 WHERE command_id=?').get(id);}
+ function readRow(id){if(typeof id!=='string'||!/^(?:display|invocation|checkpoint):[a-f0-9]{32}$/.test(id))throw Error('UI_TASK_ID_DENIED');return db.prepare('SELECT * FROM workspace_ui_tasks_v2 WHERE command_id=?').get(id);}
  function project(row){if(!row)throw Error('UI_TASK_UNKNOWN_DENIED');return Object.freeze({schemaVersion:'pansphaira.workspace-ui-task/readback/v2',commandId:row.command_id,requestDigest:row.request_digest,state:row.state,revision:row.revision,result:row.result_json===null?null:JSON.parse(row.result_json),model:'NOT_RUN',businessEffectProduced:false,personalViewPersistenceProduced:false,executionAuthorityGranted:false});}
  const owner=Object.freeze({
   read(headers,id){const a=principal(headers),row=readRow(id);if(!row||row.principal_digest!==a.digest)throw Error('UI_TASK_SCOPE_DENIED');return project(row);},
   original(headers,id){const a=principal(headers),row=readRow(id);if(!row||row.principal_digest!==a.digest)throw Error('UI_TASK_SCOPE_DENIED');return Object.freeze({command:JSON.parse(row.original_command),requestDigest:row.request_digest,readback:project(row)});},
   close(){if(closed)return;closed=true;owned.delete(owner);ledger.close();},
  });
- owned.set(owner,{binding:sessions.binding,sessions,ledger,db,transaction,bootEpoch,principal,readRow,project,closed:()=>closed});return owner;
+ const contextJournal=createNativeUiContextJournalV1({db,transaction,binding:sessions.binding,principal,readRow});
+ owned.set(owner,{binding:sessions.binding,sessions,ledger,db,transaction,bootEpoch,principal,readRow,project,contextJournal,closed:()=>closed});return owner;
 }
 export function nativeWorkspaceUiTaskOwnerConnectionV2(owner,binding){
  const entry=owned.get(owner);if(!entry||entry.closed()||canonicalJson(entry.binding)!==canonicalJson(binding))throw Error('UI_TASK_OWNER_DENIED');

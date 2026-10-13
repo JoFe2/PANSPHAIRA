@@ -77,6 +77,16 @@ export function createNativeWorkspaceViewOwnerV1(options){
    }finally{store.cancelReservation(reservation);}
   },
   close(){closed=true;candidates.clear();},
- });owned.set(owner,{binding:sessions.binding,contextSelection});return owner;
+ });
+ // Separate, code-only reader of this owner's issued candidate and actual
+ // before/after native view. A caller label/digest is not a target proof.
+ const contextProof=Object.freeze({verifyPreview(headers,argumentsBytes,preview){
+  if(closed)throw Error('VIEW_OWNER_CLOSED');const command=JSON.parse(argumentsBytes);exact(command,['schemaVersion','context','delta'],'VIEW_CONTEXT_ARGUMENT_BYTES_DENIED');
+  const a=leading(headers,command.context),issued=candidates.get(preview?.candidateHandle);if(!issued||issued.expiresAtMs<=Date.now())throw Error('VIEW_CONTEXT_CANDIDATE_DENIED');
+  const before=store.read(a.principal),after=reduceWorkspaceModuleViewV1(before.view,command.delta,nativeWorkspaceViewFieldsV1);
+  if(issued.core.contextHandle!==a.context.contextHandle||JSON.stringify(issued.core.binding)!==JSON.stringify(a.context.binding)||issued.core.expectedRevision!==before.revision||issued.core.beforeDigest!==before.viewDigest||issued.core.afterDigest!==hash(after)||issued.candidateDigest!==preview.candidateDigest||hash(issued.core.afterView)!==preview.afterDigest)throw Error('VIEW_CONTEXT_TARGET_BYTES_DENIED');
+  return frozen({issuer:'PAN546_NATIVE_CANDIDATE_OWNER',scope:issued.core.binding,sourceDigest:issued.core.sourceDigest,resultRevision:before.revision,beforeDigest:before.viewDigest,afterDigest:issued.core.afterDigest,candidateDigest:issued.candidateDigest,validationEffect:true,clientReportedDomCommit:false,personalViewPersistenceProduced:false,businessEffectProduced:false});
+ }});owned.set(owner,{binding:sessions.binding,contextSelection,contextProof});return owner;
 }
 export const isNativeWorkspaceViewOwnerV1=(owner,binding,contextSelection)=>owned.has(owner)&&JSON.stringify(owned.get(owner).binding)===JSON.stringify(binding)&&(contextSelection===undefined||owned.get(owner).contextSelection===contextSelection);
+export function nativeWorkspaceViewContextProofConnectionV1(owner,binding,contextSelection){if(!isNativeWorkspaceViewOwnerV1(owner,binding,contextSelection))throw Error('VIEW_CONTEXT_OWNER_DENIED');return owned.get(owner).contextProof;}

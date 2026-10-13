@@ -23,7 +23,7 @@ export function createWorkspaceContextSelectionV1(options: {
   let bootstrap: { readonly token: object; readonly signal: AbortSignal; readonly promise: Promise<void>; ready: boolean } | null = null;
   let queue: Promise<unknown> = Promise.resolve();
   let current: WorkspaceContextSnapshotV1 | null = null;
-  let surfaceModeV2=false;
+  let surfaceModeV2=false;let contextProjectionCsrf:string|null=null;
   const subscribers = new Set<(context: WorkspaceContextReadbackV1 | null) => void>();
   function emit() { for (const listener of subscribers) { try { listener(current?.context ?? null); } catch { /* Presentation callbacks never own context authorization. */ } } }
   let bindingRequest: AbortController | null = null;
@@ -147,6 +147,11 @@ export function createWorkspaceContextSelectionV1(options: {
   }
   const api = Object.freeze({
     epoch() { return epoch; }, retire,
+    async contextProjectionTransportV1(operation:string,payload:unknown):Promise<unknown>{
+      if(!['snapshot','prepare','request','result','reconcile','proof','audit','correction','revoke','session','read'].includes(operation))throw Error('CONTEXT_PROJECTION_OPERATION_DENIED');open();await boot(options.signal);open();if(!proof||!tabId)throw Error('CURRENT_NATIVE_TAB_REQUIRED');const binding=options.context();if(binding.sessionId!==initial.sessionId||binding.tenantId!==initial.tenantId)throw Error('CONTEXT_PROJECTION_BROWSER_SCOPE_DENIED');
+      const send=async(op:string,value:unknown)=>{const headers:Record<string,string>={'content-type':'application/json','x-pan548-session':initial.sessionId,'x-pan548-tab':proof!,'x-pan548-tab-id':tabId!,...(contextProjectionCsrf?{'x-pan527-csrf':contextProjectionCsrf}:{})};const body=op==='request'?(typeof value==='string'?value:(()=>{throw Error('CONTEXT_PROJECTION_RAW_REQUEST_BYTES_REQUIRED');})()):JSON.stringify(value);const response=await fetch(base+'/workspace/context-projection/'+op,{method:'POST',headers,credentials:'same-origin',cache:'no-store',body,signal:AbortSignal.any([options.signal,AbortSignal.timeout(5000)])});open();if(response.status!==200)throw Error('CONTEXT_PROJECTION_SERVER_DENIED_'+response.status);const result=await response.json() as Record<string,unknown>;if(op==='snapshot'&&typeof result.mutationCsrf==='string'&&/^[a-f0-9]{64}$/.test(result.mutationCsrf))contextProjectionCsrf=result.mutationCsrf;return result;};
+      if(!['snapshot','proof','audit','read'].includes(operation)&&!contextProjectionCsrf){await send('snapshot',{schemaVersion:'pansphaira.workspace-context-projection/snapshot-request/v1',audience:'MAIN_CONTRACT'});if(!contextProjectionCsrf)throw Error('CONTEXT_PROJECTION_REVIEWER_CSRF_REQUIRED');}return send(operation,payload);
+    },
     async surfaceTransportV2(operation:string,payload:unknown,capability?:Readonly<{surfaceId:string;surfaceProof:string}>):Promise<unknown>{
       if(!['register','list','catalog','state','accept','events','load','before-dom','ack','read','revoke'].includes(operation))throw Error('SURFACE_OPERATION_DENIED');open();await boot(options.signal);open();if(!proof||!tabId)throw Error('CURRENT_NATIVE_TAB_REQUIRED');const binding=options.context();if(binding.sessionId!==initial.sessionId||binding.tenantId!==initial.tenantId)throw Error('SURFACE_BROWSER_SCOPE_DENIED');
       const headers:Record<string,string>={'content-type':'application/json','x-pan548-session':initial.sessionId,'x-pan548-tab':proof,'x-pan548-tab-id':tabId,...(capability?{'x-pan597-surface':capability.surfaceId,'x-pan597-proof':capability.surfaceProof}:{})};const response=await fetch(base+'/workspace/surfaces/'+operation,{method:'POST',headers,credentials:'same-origin',cache:'no-store',body:JSON.stringify(payload),signal:AbortSignal.any([options.signal,AbortSignal.timeout(5000)])});open();if(response.status!==200)throw Error('SURFACE_SERVER_DENIED_'+response.status);return response.json();

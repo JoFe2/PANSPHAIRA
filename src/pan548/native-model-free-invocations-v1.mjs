@@ -4,7 +4,7 @@ import {createHash,randomBytes,timingSafeEqual} from 'node:crypto';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
 import {isNativeWorkspaceContextSelectionV1} from './native-context-selection.mjs';
 import {nativeWorkspaceUiTaskOwnerConnectionV2,uiTaskClosedV2,uiTaskDigestV2} from './native-ui-task-projection-v2.mjs';
-import {isNativeWorkspaceViewOwnerV1} from '../pan546/native-view-owner.mjs';
+import {isNativeWorkspaceViewOwnerV1,nativeWorkspaceViewContextProofConnectionV1} from '../pan546/native-view-owner.mjs';
 import {nativeWorkspaceSurfaceInvocationConnectionV1} from '../pan597/native-surfaces-v2.mjs';
 import {parseModelFreeFinalTextV1} from './model-free-final-text-v1.mjs';
 import {executeNativeWorkspaceInvocationV1} from './native-invocation-executor-v1.mjs';
@@ -107,11 +107,15 @@ export function createNativeWorkspaceInvocationsV1(options){
    const {s,member}=admission;validateSelection(s,c);revalidate(headers,s,member);
    if(t.readRow(c.invocationId))throw Error('INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK');
    const original={schemaVersion:'pansphaira.workspace-invocation/effect-command/v1',invocationId:c.invocationId,request:s.request,set:{...s.core,setDigest:s.setDigest},candidate:member};
-   t.transaction(()=>{revalidate(headers,s,member);if(t.readRow(c.invocationId))throw Error('INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK');if(t.db.prepare('SELECT count(*) n FROM workspace_ui_tasks_v2').get().n>=128)throw Error('INVOCATION_TASK_CAPACITY_DENIED');t.db.prepare("INSERT INTO workspace_ui_tasks_v2 VALUES(?,?,?,?,'ACCEPTED',1,NULL)").run(c.invocationId,uiTaskDigestV2(original),canonicalJson(original),a.digest);});
+   t.transaction(()=>{revalidate(headers,s,member);if(t.readRow(c.invocationId))throw Error('INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK');if(t.db.prepare('SELECT count(*) n FROM workspace_ui_tasks_v2').get().n>=128)throw Error('INVOCATION_TASK_CAPACITY_DENIED');t.db.prepare("INSERT INTO workspace_ui_tasks_v2 VALUES(?,?,?,?,'ACCEPTED',1,NULL)").run(c.invocationId,uiTaskDigestV2(original),canonicalJson(original),a.digest);t.contextJournal.accepted(headers,c.invocationId);});
    return {s,member,invocationId:c.invocationId};
   },
   revalidate(headers,effect){return revalidate(headers,effect.s,effect.member);},
-  finish(headers,effect,result){leading(headers);t.transaction(()=>{leading(headers);t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='COMPLETED',revision=revision+1,result_json=? WHERE command_id=? AND state='ACCEPTED'").run(canonicalJson(result),effect.invocationId);});return freeze({schemaVersion:'pansphaira.workspace-invocation/effect-readback/v1',invocationId:effect.invocationId,capability:effect.member.capability,expiresAtMs:effect.member.expiresAtMs,result,task:tasks.read(headers,effect.invocationId),...noEffects});},
+  finish(headers,effect,result){leading(headers);t.transaction(()=>{leading(headers);let proof=null;
+   if(effect.member.capability===capabilities[0]){const evidence=nativeWorkspaceViewContextProofConnectionV1(viewOwner,sessions.binding,contextSelection).verifyPreview(headers,effect.member.argumentBytes,result.preview);proof=t.contextJournal.issueTargetProof(headers,effect.invocationId,'PAN546_PREVIEW_VALIDATED',evidence);t.contextJournal.record(headers,effect.invocationId,'PROPOSAL_VALIDATED',proof.proofId);}
+   else proof=t.contextJournal.bestProof(headers,JSON.parse(effect.member.argumentBytes).commandId);
+   if(!proof)throw Error('INVOCATION_CONTEXT_NATIVE_TARGET_PROOF_REQUIRED');
+   t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='COMPLETED',revision=revision+1,result_json=? WHERE command_id=? AND state='ACCEPTED'").run(canonicalJson(result),effect.invocationId);t.contextJournal.record(headers,effect.invocationId,'INTENT_COMPLETED',proof.proofId);});return freeze({schemaVersion:'pansphaira.workspace-invocation/effect-readback/v1',invocationId:effect.invocationId,capability:effect.member.capability,expiresAtMs:effect.member.expiresAtMs,result,task:tasks.read(headers,effect.invocationId),...noEffects});},
   failed(effect){t.transaction(()=>t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='OUTCOME_UNCONFIRMED',revision=revision+1 WHERE command_id=? AND state='ACCEPTED'").run(effect.invocationId));},
  });
  owned.set(owner,{binding:sessions.binding,contextSelection,connection});return owner;
