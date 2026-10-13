@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "cc1f2ef363e0516ca0260a6e28db617c7e21d9e193b0b02dcd7621349fe0ef11"
+        "sha256": "eaf0200967fe2c1c940321f28076ba9bf046cd5c7ed0c3e7dfb7c44932bd29b6"
       }
     ]
   },
@@ -819,6 +819,14 @@
       "fromSha256": "80050ebc909ecf8a4cf3482098a6bed39cc29ba1da235e20fde79d4d990c3a17",
       "toSha256": "65b765f0a4c45d8ae6f5411264429972cf01c24b679a99b1380cef494895aa46",
       "reason": "Append exactly fifteen source-only existing548 authenticated signed readonly source/shared typed projection/548549597 canvas-status-facts-table/fixed8file native-browser registration/process/doc members. Existing548 retains one task/session/outbox owner and same transaction; original producer clock sidecar is metadata, not another event/source/policy engine or worker/pipeline. Graph102/all107/max128 inputs/64 owned tests, every original security/authority case and product deadline, immutable21 byte obligations/13 profiles, full old migrations and legacy1792 retained. Authorized source snapshot/deltas/minmax/gap/UNKNOWN/retained STALE/restart and actual TLS/Browser are model-free; they grant no delivery/control/save/sharedpublish/business/model/cost/audio/private/productive/KS rights. Registration is not protected CanonicalCI/merge/release/archive/publicclosure/physical/nativezoom/WholePAN500 acceptance."
+    },
+    {
+      "migrationId": "PAN602-EXISTING-OWN-SYNTHETIC-NATIVE-MAILLOCAL/INTEGRITY-GENERATOR/V92",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 92,
+      "fromSha256": "65b765f0a4c45d8ae6f5411264429972cf01c24b679a99b1380cef494895aa46",
+      "toSha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b",
+      "reason": "Append exactly13 source-only native own-synthetic message reader/local-draft typed contract/shared browser/fixed6file native-TLS-browser-process-registration/document members on existing548 session/context/SQLite/signer and541527 shell ownership. Graph103/all108/max128 inputs/64 own tests, every prior case and required gate, immutable21 base obligations/13 profiles/full old migrations/unchanged scanner and legacy1792 retained. One deterministic local untrusted profile binds original account/thread/message revision/recipients/attachments and independent source/draft/delete-reference confirmation; native no-send/no-external-draft/no-model/private-mail constraints and current role/CSRF/context/signed own-row/revision/privacy/retention fences remain. Stale source denies protected preview/preparation, not authorized own-draft erasure. No second generic state/policy/task engine, new agent/voice infrastructure, microphone/private mailbox/cloud/model cost/external account/send/KS rights or global runtime changes. Registration is not frozen canonicalCI/protected merge/release/anonymous closure/physical/model/WholePAN500 acceptance."
     }
   ],
   "scanScope": {
@@ -861,15 +869,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1246,
+    "filesScanned": 1257,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 331,
-    "importFiles": 330,
+    "importSites": 334,
+    "importFiles": 333,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2771,
-    "ledgerUniquePaths": 2771
+    "ledgerEntries": 2784,
+    "ledgerUniquePaths": 2784
   },
   "profiles": [
     {
@@ -942,7 +950,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "65b765f0a4c45d8ae6f5411264429972cf01c24b679a99b1380cef494895aa46"
+      "sha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1229,8 +1237,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 148,
-      "importFiles": 148
+      "importSites": 149,
+      "importFiles": 149
     },
     {
       "owner": "cscl-03",
@@ -1389,8 +1397,8 @@
     },
     {
       "owner": "pan548",
-      "importSites": 7,
-      "importFiles": 7
+      "importSites": 8,
+      "importFiles": 8
     },
     {
       "owner": "pan549",
@@ -1444,8 +1452,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 74,
-      "importFiles": 73
+      "importSites": 75,
+      "importFiles": 74
     },
     {
       "owner": "usage-insights",
@@ -1738,7 +1746,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "65b765f0a4c45d8ae6f5411264429972cf01c24b679a99b1380cef494895aa46",
+      "sha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b",
       "basis": "profile-version-migration"
     },
     {

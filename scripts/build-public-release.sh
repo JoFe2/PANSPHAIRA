@@ -677,6 +677,21 @@ repository_only_files = {
     "tests/pan569/isolated-browser-fixture.mjs",
 
 
+    # PAN602 one own-synthetic native read/local-draft profile, no account/send/model rights.
+    "src/pan548/native-mail-local-v1.mjs",
+    "packages/contracts/src/workspace-mail-local-v1.ts",
+    "packages/browser-workspace/src/workspace-mail-local-v1.ts",
+    "packages/browser-workspace/src/workspace-mail-local-v1.css",
+    "scripts/run-pan602-native-mail-local-tests.mjs",
+    "tests/pan602/browser-mail-local.test.mjs",
+    "tests/pan602/native-mail-bounds.test.mjs",
+    "tests/pan602/native-mail-local.test.mjs",
+    "tests/pan602/native-mail-process-restart.test.mjs",
+    "tests/pan602/native-mail-transport.test.mjs",
+    "tests/pan602/registration.test.mjs",
+    "tests/pan602/native-mail-process-probe.mjs",
+    "docs/architecture/native-mail-local-v1.md",
+
     # PAN604 one existing native readonly source, no prebuilt/production/model rights.
     "packages/contracts/src/workspace-readonly-events-v1.ts",
     "packages/browser-workspace/src/workspace-readonly-events-v1.ts",

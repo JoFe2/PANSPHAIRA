@@ -23,7 +23,7 @@ export function createWorkspaceContextSelectionV1(options: {
   let bootstrap: { readonly token: object; readonly signal: AbortSignal; readonly promise: Promise<void>; ready: boolean } | null = null;
   let queue: Promise<unknown> = Promise.resolve();
   let current: WorkspaceContextSnapshotV1 | null = null;
-  let surfaceModeV2=false;let contextProjectionCsrf:string|null=null;
+  let surfaceModeV2=false;let contextProjectionCsrf:string|null=null;let mailLocalCsrf:string|null=null;
   const subscribers = new Set<(context: WorkspaceContextReadbackV1 | null) => void>();
   function emit() { for (const listener of subscribers) { try { listener(current?.context ?? null); } catch { /* Presentation callbacks never own context authorization. */ } } }
   let bindingRequest: AbortController | null = null;
@@ -147,6 +147,10 @@ export function createWorkspaceContextSelectionV1(options: {
   }
   const api = Object.freeze({
     epoch() { return epoch; }, retire,
+    async mailLocalTransportV1(operation:'source'|'confirm-source'|'prepare'|'draft'|'current'|'confirm-draft'|'confirm-delete'|'delete',payload:Readonly<Record<string,unknown>>,signal:AbortSignal):Promise<unknown>{
+      open();await boot(options.signal);open();const captured=current?.context;if(!proof||!tabId||!captured||!['source','confirm-source','prepare','draft','current','confirm-draft','confirm-delete','delete'].includes(operation))throw Error('MAILLOCAL_NATIVE_CONTEXT_REQUIRED');const binding=options.context();if(binding.sessionId!==initial.sessionId||binding.tenantId!==initial.tenantId)throw Error('MAILLOCAL_SERVER_DENIED_403');await verify(captured,signal);open();if(current?.context.contextHandle!==captured.contextHandle)throw Error('MAILLOCAL_NATIVE_CONTEXT_STALE');
+      const headers:Record<string,string>={'content-type':'application/json','x-pan548-session':initial.sessionId,'x-pan548-tab':proof,'x-pan548-tab-id':tabId,...(mailLocalCsrf?{'x-pan527-csrf':mailLocalCsrf}:{})};const context={schemaVersion:'pansphaira.workspace-context/verify/v1',tabId:captured.binding.tabId,contextHandle:captured.contextHandle};const response=await fetch(base+'/workspace/mail-local/'+operation,{method:'POST',credentials:'same-origin',cache:'no-store',headers,body:JSON.stringify({...payload,context}),signal:AbortSignal.any([options.signal,signal,AbortSignal.timeout(5000)])});open();if(response.status!==200)throw Error('MAILLOCAL_SERVER_DENIED_'+response.status);const value=await response.json() as Record<string,unknown>;if(operation==='source'||operation==='current'){if(typeof value.mutationCsrf==='string'&&/^[a-f0-9]{64}$/.test(value.mutationCsrf))mailLocalCsrf=value.mutationCsrf;else mailLocalCsrf=null;delete value.mutationCsrf;}return value;
+    },
     async readonlyEventsTransportV1(operation:'snapshot'|'delta',payload:unknown,signal:AbortSignal):Promise<unknown>{
       open();await boot(options.signal);open();if(!proof||!tabId||!current||!['snapshot','delta'].includes(operation))throw Error('EVENT_UI_NATIVE_CONTEXT_REQUIRED');const binding=options.context();if(binding.sessionId!==initial.sessionId||binding.tenantId!==initial.tenantId)throw Error('EVENT_UI_SCOPE_REVOKED');
       const response=await fetch(base+'/workspace/readonly-events/'+operation,{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'content-type':'application/json','x-pan548-session':initial.sessionId,'x-pan548-tab':proof,'x-pan548-tab-id':tabId},body:JSON.stringify(payload),signal:AbortSignal.any([options.signal,signal,AbortSignal.timeout(5000)])});open();if(response.status!==200)throw Error(response.status===401||response.status===403?'EVENT_UI_SCOPE_REVOKED':response.status===409?'EVENT_UI_RESYNC_REQUIRED':'EVENT_UI_SOURCE_DISCONNECTED');return response.json();
