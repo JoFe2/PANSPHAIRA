@@ -3631,7 +3631,55 @@ let surface597=dag.nodes.find(n=>n.id==='pan597-native-browser-surfaces-v2');if(
 surface597.inputs=pan597Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)}));surface597.ownedTests=['npm run pan597:test'];
 // Existing integration owner already owns64 tests: retain every old test and
 // its unchanged hard64 bound; the new597/548 nodes own the added fixed entry.
-repositoryIntegrityNode.ownedTests=repositoryIntegrityNode.ownedTests.filter(t=>t!=='npm run pan597:test');dag.graphVersion=99;
+repositoryIntegrityNode.ownedTests=repositoryIntegrityNode.ownedTests.filter(t=>t!=='npm run pan597:test'&&t!=='npm run pan608:test');
+// PAN608 consumes existing548/546/597 authority; one new bounded consumer leaf.
+const pan608Inputs=[
+  [
+    "packages/contracts/src/workspace-invocation-v1.ts",
+    "CONTRACT"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-invocations-v1.ts",
+    "SOURCE"
+  ],
+  [
+    "packages/browser-workspace/src/workspace-invocations-v1.css",
+    "SOURCE"
+  ],
+  [
+    "scripts/run-pan608-native-invocation-tests.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan608/final-text-grammar.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan608/native-invocations.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan608/browser-invocations.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan608/registration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "docs/architecture/model-free-native-invocations-v1.md",
+    "DERIVED_EVIDENCE"
+  ]
+];
+const pan608NativeInputs=[
+  "src/pan548/model-free-final-text-v1.mjs",
+  "src/pan548/native-model-free-invocations-v1.mjs",
+  "src/pan548/native-invocation-executor-v1.mjs"
+];
+for(const inputPath of pan608NativeInputs)if(!task548.inputs.some(i=>i.path===inputPath))task548.inputs.push({path:inputPath,role:'SOURCE',sha256:digest(inputPath)});
+for(const n of[task548,surface597])if(!n.ownedTests.includes('npm run pan608:test'))n.ownedTests.push('npm run pan608:test');
+let invocation608=dag.nodes.find(n=>n.id==='pan608-model-free-invocations-v1');if(!invocation608){invocation608={id:'pan608-model-free-invocations-v1',dependsOn:['pan548-authentic-context-selection-v1','pan597-native-browser-surfaces-v2'],inputs:[],ownedTests:[],invariants:['Whole final typed text and actual native card/document/target membership build complete owner-issued candidates; no ID, arguments, authority or model provider is invented.','Request/set/argument/policy digests, current registered capability/principal/purpose/constraints/lease and source-target revisions/generation are revalidated independently immediately before one native effect attempt on the existing548 ledger.','No-send/local-only grants no send, personal save, shared publish, business, model/cost/audio/private/production or KS authority; native validated preview, actual DOM render, explicit profile-CAS/readback and restored Undo remain distinct.','Local discard/stop require no router/provider/network; lost replies/restart/offline Undo preserve original markers and never auto-replay or claim rollback of foreign effects.'],riskClass:'HIGH',globalInvalidation:false};dag.nodes.push(invocation608);}
+invocation608.inputs=pan608Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)}));invocation608.ownedTests=['npm run pan608:test'];dag.graphVersion=100;
 
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
@@ -3701,6 +3749,8 @@ for (const [inputPath] of pan566Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan569Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan568Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan597Inputs) entries.set(inputPath,null);
+for (const [inputPath] of pan608Inputs) entries.set(inputPath,null);
+for (const inputPath of pan608NativeInputs) entries.set(inputPath,null);
 entries.set('src/pan548/native-ui-task-projection-v2.mjs',null);
 for (const [inputPath] of pan542Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan544Inputs) entries.set(inputPath, null);

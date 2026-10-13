@@ -835,6 +835,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
   "toSha256": "937ca688a0185ce04717415b26837a45c20603b014ddfa86961c19c9b5e1e6fd",
   "reason": "Append exactly twelve source-only versioned read-contract/Surface/Delivery/fixed4file native-browser-registration/doc members. Existing548 remains task/context owner on same453 native ledger/transaction; new bounded597 verification node owns only Surface/Delivery/read-contract scope. Graph99/all104/max128; preserve every prior owner input/test/hard gate, immutable21 obligations/13 pinned profiles, historical migration chain, unchanged scanner/negative semantics and legacy1792. No new tasktruth/registry/controller/pipeline/model/cost/audio/private-source/production/KS authority. Original5000/8000/60000 and CI45 unchanged. Registration is not canonicalCI/merge/release/closure/real model/WholePAN500 acceptance."
 }),
+  Object.freeze({
+  "migrationId": "PAN608-EXISTING-MODEL-FREE-NATIVE-INVOCATION/INTEGRITY-GENERATOR/V89",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 89,
+  "fromSha256": "937ca688a0185ce04717415b26837a45c20603b014ddfa86961c19c9b5e1e6fd",
+  "toSha256": "5dae062e63db426d7d1bb1646645229a173f1ed3834602d712a8e55e0a7d10f9",
+  "reason": "Append exactly twelve source-only final-text/native invocation/admission/independent executor/shared contract/existing browser canvas/fixed4file registered26/doc members. Existing548 remains context/task owner on same native ledger;546 preview validator and597 registered Surface/Delivery own actual effects. Graph100/all105/max128/input and64 own-test bounds, every old case/guard/hard gate, immutable21 base obligations/13 profiles, complete historical migrations and legacy1792 retained. Fixed final-text whole grammar and actual selected native member/request/set/argument/policy/principal/purpose/local-only/no-send/lease binding grant no personal-save/shared-publish/mail/externalDraft/business/model/training/cost/audio/private/production/KS authority. Product5000/8000/60000 and existingCI45 unchanged. Registration is not canonicalCI/protected merge/release/archive/closure/model/physical/WholePAN500 acceptance."
+}),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -847,17 +855,17 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1210,
+  "filesScanned": 1220,
   "declarationSites": 37,
   "declarationFiles": 37,
-  "importSites": 319,
-  "importFiles": 318,
+  "importSites": 321,
+  "importFiles": 320,
   "reexportSites": 7,
   "similarShapeSites": 30,
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries": 2729, "uniquePaths": 2729, "duplicatePaths": 0} as const;
+const EXPECTED_LEDGER = {"entries": 2741, "uniquePaths": 2741, "duplicatePaths": 0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1640,7 +1648,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;

@@ -28,7 +28,7 @@ async function start() {
   let presentation: BrowserProfileReadV1 | null = null; let panelEpoch = 0;
   let notifications: ReturnType<typeof createWorkspaceNotificationsV1> | null = null;
   let navigation:WorkspaceNavigationDriverV1|null=null,targetTransition=false,acceptedHash=location.hash||browserWorkspaceStringValuesV1[90] as string;
-  let surfacesV2:{invalidate:()=>void}|null=null;
+  let surfacesV2:ReturnType<typeof import('./workspace-surfaces-v2.js').createWorkspaceSurfacesV2>|null=null;
   const draftOwners=new Set<WorkspaceDirtyDraftV1>();
   const canvas = element("profile.canvas"); const boundary = element(browserWorkspaceStringValuesV1[113] as string);
   const cards = new Map([[browserWorkspaceStringValuesV1[17] as string, main], [browserWorkspaceStringValuesV1[119] as string, widget], [browserWorkspaceStringValuesV1[113] as string, boundary], [browserWorkspaceStringValuesV1[13] as string, panel]]);
@@ -243,6 +243,7 @@ async function start() {
     const source=text('pre',JSON.stringify(projection.source,null,2));source.className='surface-source';const content=text('pre',JSON.stringify(projection.data,null,2));content.className='surface-content';frame.append(text('h2','Führende Quellenreferenz'),source,text('h2','Tatsächlicher nativer Browserread'),content,text('p','Nur lesen. Dokument ist eine native Rechnungsreferenz, kein Original-PDF oder DMS. Physische Pixelsicht und Fachwirkung sind nicht bestätigt.'));
     main.hidden=false;main.replaceChildren(frame);main.dataset.surfaceObjectId=projection.objectId;main.dataset.surfaceProjectionDigest=projection.projectionDigest;document.body.dataset.nativeRevision=String(projection.dataRevision);
   }});}catch{canvas.append(text('p','Surfaceanzeige nicht verbunden. Fachnavigation und Abmelden bleiben unabhängig.'));}}
+  if(document.body.dataset.ownerInvocationsV1==='true'&&contextSelection&&moduleViewEditor&&surfacesV2){try{const module=await import(base+'/workspace/invocations/app.js');if(!lifetime.signal.aborted)module.createWorkspaceInvocationsV1({container:canvas,context:contextSelection,editor:moduleViewEditor,surfaces:surfacesV2,signal:lifetime.signal});}catch{canvas.append(text('p','Modellfreier Schnellauftrag nicht verbunden; native Fachnavigation bleibt unabhängig.'));}}
   if(document.body.dataset.ownerInvoiceNavigation==='true'&&contextSelection&&moduleViewEditor){try{const module=await import(base+'/workspace/invoice-navigation/app.js');if(lifetime.signal.aborted)return;navigation=module.createWorkspaceInvoiceNavigationV1({container:canvas,context:contextSelection,signal:lifetime.signal,drafts:draftOwners,editor:moduleViewEditor,profile:profileEditor,shellContext:owner.context,registry,activate});}catch{canvas.append(text('p','Suche nicht verfügbar.'));}}
 }
 void start().catch(() => { const main = element(browserWorkspaceStringValuesV1[17] as string); main.replaceChildren(text("h1", "Arbeitsplatz nicht verfügbar"), text("p", "Keine gültige aktuelle Session oder kein gültiges Frontendbinding. Es wurde kein fachlicher Erfolg bestätigt.")); });

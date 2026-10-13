@@ -676,6 +676,21 @@ repository_only_files = {
     "tests/pan569/helpers.mjs",
     "tests/pan569/isolated-browser-fixture.mjs",
 
+
+    # PAN608 model-free typed invocation; existing548/546/597 consumer only.
+    "src/pan548/model-free-final-text-v1.mjs",
+    "src/pan548/native-model-free-invocations-v1.mjs",
+    "src/pan548/native-invocation-executor-v1.mjs",
+    "packages/contracts/src/workspace-invocation-v1.ts",
+    "packages/browser-workspace/src/workspace-invocations-v1.ts",
+    "packages/browser-workspace/src/workspace-invocations-v1.css",
+    "scripts/run-pan608-native-invocation-tests.mjs",
+    "tests/pan608/final-text-grammar.test.mjs",
+    "tests/pan608/native-invocations.test.mjs",
+    "tests/pan608/browser-invocations.test.mjs",
+    "tests/pan608/registration.test.mjs",
+    "docs/architecture/model-free-native-invocations-v1.md",
+
     # PAN597 model-free versioned native Surface/Delivery, source evidence only.
     "src/pan548/native-ui-task-projection-v2.mjs",
     "packages/contracts/src/workspace-surface-v2.ts",
