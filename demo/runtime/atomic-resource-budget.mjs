@@ -13,6 +13,14 @@ const denied = "RESOURCE_BUDGET_INPUT_DENIED";
 const closed = (value, keys) => readCcpClosedObjectV1(value, keys, new WeakSet(), denied);
 const unsigned = (value) => assertCcpSafeUnsignedIntegerV1(value, denied);
 const operationPattern = /^operation:[a-z0-9][a-z0-9._-]{2,63}$/;
+// Code-owner attachment to the SAME native ledger connection. Never serialized
+// to a model/browser; an unowned or copied store cannot acquire this capability.
+const ownerConnectionsV2 = new WeakMap();
+export function resourceBudgetOwnerConnectionV2(store) {
+  const connection = ownerConnectionsV2.get(store);
+  if (!connection || connection.closed()) ccpStrictDenyV1("RESOURCE_BUDGET_OWNER_ATTACHMENT_DENIED");
+  return connection;
+}
 
 /** Owner-opened native persistence. Never expose the options or store to agents. */
 export function createResourceBudgetStoreV1(value) {
@@ -159,5 +167,11 @@ export function createResourceBudgetStoreV1(value) {
       return read(validated.operationId);
     });
   };
-  return Object.freeze({ reserve, read, snapshot, markUnknownUsage, ownerCompletionEvidence, settle, close: () => db.close() });
+  let storeClosedV2 = false;
+  const store = Object.freeze({ reserve, read, snapshot, markUnknownUsage, ownerCompletionEvidence, settle, close: () => {
+    if (storeClosedV2) return;
+    storeClosedV2 = true; ownerConnectionsV2.delete(store); db.close();
+  } });
+  ownerConnectionsV2.set(store, Object.freeze({ db, transaction, closed: () => storeClosedV2 }));
+  return store;
 }

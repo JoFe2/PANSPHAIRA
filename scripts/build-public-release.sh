@@ -676,6 +676,20 @@ repository_only_files = {
     "tests/pan569/helpers.mjs",
     "tests/pan569/isolated-browser-fixture.mjs",
 
+    # PAN597 model-free versioned native Surface/Delivery, source evidence only.
+    "src/pan548/native-ui-task-projection-v2.mjs",
+    "packages/contracts/src/workspace-surface-v2.ts",
+    "packages/browser-workspace/src/workspace-surfaces-v2.ts",
+    "packages/browser-workspace/src/workspace-surfaces-v2.css",
+    "src/pan546/native-surface-projection-v2.mjs",
+    "src/pan597/native-surfaces-v2.mjs",
+    "scripts/run-pan597-native-surface-tests.mjs",
+    "tests/pan597/native-surfaces.test.mjs",
+    "tests/pan597/browser-surfaces.test.mjs",
+    "tests/pan597/process-restart.test.mjs",
+    "tests/pan597/registration.test.mjs",
+    "docs/architecture/native-authenticated-browser-surfaces-v2.md",
+
     # PAN568 versioned goals on the existing563 owner, source evidence only.
     "src/pan563/goal-contributions.mjs",
     "packages/browser-workspace/src/configuration-goals-v1.ts",
