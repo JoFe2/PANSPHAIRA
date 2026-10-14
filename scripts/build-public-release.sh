@@ -214,7 +214,8 @@ repository_only_files = {
     "src/pan471/composition-execution.mjs",
     "tests/pan471/composition-execution.test.mjs",
     "docs/architecture/pan576-isolated-composition-execution-v1.md",
-    # PAN572 uninstall regression is repository source, not a runnable payload entry.
+    # Installer entry and uninstall regressions are source, not runnable payload entries.
+    "tests/demo-current-head-e2e-entry.test.mjs",
     "tests/demo-current-head-e2e-uninstall.test.mjs",
     "HANDOFF.md",
     "TASKS.md",

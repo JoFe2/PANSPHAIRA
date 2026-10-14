@@ -185,7 +185,7 @@ done
   fail "existing install has different selections; run demo/uninstall.sh --purge first"
 journal_phase_complete "$(journal_sha_text "$selection:owned-state-v1")"
 
-journal_phase_start runtime_image_materialization "$(journal_sha_text "$(
+runtime_source_sha256="$(
   {
     sha256sum "$root/package.json" "$root/package-lock.json"
     find "$root/packages" -type f -name '*.ts' -print0 |
@@ -205,7 +205,8 @@ journal_phase_start runtime_image_materialization "$(journal_sha_text "$(
     find "$root/demo/manifests" -type f -name '*.json' -print0 |
       sort -z | xargs -0 sha256sum
   } | sha256sum | cut -d' ' -f1
-)")"
+)"
+journal_phase_start runtime_image_materialization "$(journal_sha_text "$runtime_source_sha256")"
 run_owner_label_args=()
 if [ -n "$run_owner" ]; then
   run_owner_label_args=(--label "io.chimpmaera.demo.run-owner=$run_owner")
@@ -264,8 +265,8 @@ mv -f "$public_config_tmp" "$state/public/config.json"
 journal_phase_complete "$(journal_sha_text "$(journal_file_sha "$config"):$(journal_file_sha "$state/public/config.json")")"
 
 journal_phase_start service_convergence "$(journal_sha_text "$selection:$chimp_image:$(journal_file_sha "$root/demo/compose.yaml")")"
-docker compose --env-file "$config" -f "$root/demo/compose.yaml" up -d --wait
-journal_phase_complete "$(docker compose --env-file "$config" -f "$root/demo/compose.yaml" ps --format json | jq -sc 'sort_by(.Service)|map({service:.Service,state:.State,health:.Health})' | sha256sum | cut -d' ' -f1)"
+docker compose --project-name "$project" --env-file "$config" -f "$root/demo/compose.yaml" up -d --wait
+journal_phase_complete "$(docker compose --project-name "$project" --env-file "$config" -f "$root/demo/compose.yaml" ps --format json | jq -sc 'sort_by(.Service)|map({service:.Service,state:.State,health:.Health})' | sha256sum | cut -d' ' -f1)"
 
 journal_phase_start provider_bootstrap_auth "$(journal_sha_text "$selection:$(journal_file_sha "$root/demo/provider-bootstrap.sh")")"
 "$root/demo/provider-bootstrap.sh" "$state/public/provider-bootstrap.json"
@@ -297,10 +298,21 @@ duration_ms="$(( $(journal_mono_ms) - CM_RUN_STARTED_MONO_MS ))"
 
 printf '\nPanSphaira demo is READY_VERIFIED for this selected run in %dms.\n' "$duration_ms"
 printf 'This verifies only the selected local demo run; publication remains a separate owner-controlled action.\n'
-printf '  PanSphaira: http://127.0.0.1:7780\n'
+printf 'READINESS_SOURCE: LOCAL_BUILD_INPUT_DIGEST %s\n' "$runtime_source_sha256"
+printf 'READINESS_BUILD: IMAGE_OBSERVED %s\n' "$chimp_image"
+printf 'READINESS_SERVICE: SELECTED_SEMANTIC_READBACK_COMPLETE %s\n' "$readback_digest"
+printf 'READINESS_MODEL: NOT_RUN (no real model or inference proof is executed by this installer)\n'
+printf 'READINESS_TOOLS: NATIVE_PROVIDER_BOOTSTRAP_COMPLETE %s; MODEL_TOOL_COMPOSITION_NOT_RUN\n' "$provider_bootstrap_digest"
+if [ "$seed" = yes ]; then
+  printf 'READINESS_BUSINESS: SYNTHETIC_GOVERNED_FLOW_READBACK_COMPLETE %s\n' "$seed_flow_digest"
+else
+  printf 'READINESS_BUSINESS: NOT_APPLICABLE_SEED_DISABLED %s\n' "$seed_flow_digest"
+fi
+printf 'DISABLED_SERVICES: DMS=off (no active URL)\n'
+printf '  PanSphaira: http://%s\n' "$chimp_port"
 printf '  Control token for guided actions: .chimpmaera-demo/secrets/chimp-api-token\n'
-printf '  EspoCRM:    http://127.0.0.1:7781 (admin; password in .chimpmaera-demo/secrets/espo-admin)\n'
-printf '  Dolibarr:   http://127.0.0.1:7782 (admin; password in .chimpmaera-demo/secrets/doli-admin)\n'
+printf '  EspoCRM:    http://%s (admin; password in .chimpmaera-demo/secrets/espo-admin)\n' "$espo_port"
+printf '  Dolibarr:   http://%s (admin; password in .chimpmaera-demo/secrets/doli-admin)\n' "$doli_port"
 printf '  Readback:   %s\n' "$state/readback.json"
 printf '  Journal:    %s\n' "$CM_RUN_DIR/summary.json"
-printf '  Cleanup:    ./demo/uninstall.sh --purge\n'
+printf '  Cleanup (stop, retains data): ./demo/uninstall.sh\n'

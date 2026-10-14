@@ -835,6 +835,14 @@
       "fromSha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b",
       "toSha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a",
       "reason": "Append exactly eight source-only derivative native rules/context adapter, fixed native/TLS/browser/registration entry/fixture/document members. Preserve existing548546597607608 owners, original budget/security/time/authority gates, one signed task/context store and original targets; no second engine, new pipeline, provider, paid model, microphone, private mail, production, send or KS rights. Graph104/all109 and existing128-input/64-test limits, immutable21 base obligations/13 pinned profiles/all historical migrations/unchanged scanner/legacy1792 retain exact semantics. Actual two independently resolved native targets enter same existing checkpoint transaction and opt-in protected browser path. MODEL_FREE_RULES_CONTEXT_VERTICAL is original612AC06 partial delivery, not genuine575 Main-model/voice acceptance or original612/Goal500 closure."
+    },
+    {
+      "migrationId": "PAN573-RETAINED-INSTALLER-ENTRY/INTEGRITY-GENERATOR/V94",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 94,
+      "fromSha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a",
+      "toSha256": "262fd5e2ad8da65a9f09ac3acff3065235891aa02cbf23ae556a43430b1f4ef0",
+      "reason": "Register exactly one retained installer-entry interaction/renderer/document test in the existing repository-integrity input and checksum seed. Retain graph104/all109, existing owners/tests/hard gates, immutable21 base byte obligations/13 profiles, all historical migration bytes and unchanged scanner/validator/legacy1792. Actual measured census1265/ledger2793 follows one added test file; no second installer, onboarding surface, owner, engine or pipeline, model/audio/private/production/cloud/KS rights. Source-native custom-port identity and independent readiness are separately executed; registration is not CI/release/closure or turnkey installation."
     }
   ],
   "scanScope": {
@@ -877,15 +885,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1264,
+    "filesScanned": 1265,
     "declarationSites": 37,
     "declarationFiles": 37,
     "importSites": 335,
     "importFiles": 334,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2792,
-    "ledgerUniquePaths": 2792
+    "ledgerEntries": 2793,
+    "ledgerUniquePaths": 2793
   },
   "profiles": [
     {
@@ -958,7 +966,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a"
+      "sha256": "262fd5e2ad8da65a9f09ac3acff3065235891aa02cbf23ae556a43430b1f4ef0"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1754,7 +1762,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a",
+      "sha256": "262fd5e2ad8da65a9f09ac3acff3065235891aa02cbf23ae556a43430b1f4ef0",
       "basis": "profile-version-migration"
     },
     {

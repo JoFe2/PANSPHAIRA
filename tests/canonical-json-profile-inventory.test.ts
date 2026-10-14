@@ -875,6 +875,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
   "toSha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a",
   "reason": "Append exactly eight source-only derivative native rules/context adapter, fixed native/TLS/browser/registration entry/fixture/document members. Preserve existing548546597607608 owners, original budget/security/time/authority gates, one signed task/context store and original targets; no second engine, new pipeline, provider, paid model, microphone, private mail, production, send or KS rights. Graph104/all109 and existing128-input/64-test limits, immutable21 base obligations/13 pinned profiles/all historical migrations/unchanged scanner/legacy1792 retain exact semantics. Actual two independently resolved native targets enter same existing checkpoint transaction and opt-in protected browser path. MODEL_FREE_RULES_CONTEXT_VERTICAL is original612AC06 partial delivery, not genuine575 Main-model/voice acceptance or original612/Goal500 closure."
 }),
+  Object.freeze({
+  "migrationId": "PAN573-RETAINED-INSTALLER-ENTRY/INTEGRITY-GENERATOR/V94",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 94,
+  "fromSha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a",
+  "toSha256": "262fd5e2ad8da65a9f09ac3acff3065235891aa02cbf23ae556a43430b1f4ef0",
+  "reason": "Register exactly one retained installer-entry interaction/renderer/document test in the existing repository-integrity input and checksum seed. Retain graph104/all109, existing owners/tests/hard gates, immutable21 base byte obligations/13 profiles, all historical migration bytes and unchanged scanner/validator/legacy1792. Actual measured census1265/ledger2793 follows one added test file; no second installer, onboarding surface, owner, engine or pipeline, model/audio/private/production/cloud/KS rights. Source-native custom-port identity and independent readiness are separately executed; registration is not CI/release/closure or turnkey installation."
+}),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -887,7 +895,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1264,
+  "filesScanned": 1265,
   "declarationSites": 37,
   "declarationFiles": 37,
   "importSites": 335,
@@ -897,7 +905,7 @@ const EXPECTED_COUNTS = {
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2792,"uniquePaths":2792,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2793,"uniquePaths":2793,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1680,7 +1688,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91,92,93]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91,92,93,94]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
