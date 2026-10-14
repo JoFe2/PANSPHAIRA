@@ -28,6 +28,18 @@ const manifestSuccessor = Object.freeze({
   additiveRow: 'demo/runtime/atomic-resource-budget.mjs\tdemo/runtime/atomic-resource-budget.mjs\t0644\n',
 });
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
+// PAN573 changes only effective installer entry/readiness and configured origins.
+// Preserve the historical pins above; admit only the separately reviewed exact
+// current installer/Compose bytes, backed by native custom-port/identity proof.
+const installerEntrySuccessors = Object.freeze({
+  'demo/install.sh': 'c5d9e05b1932092c458ebb4b8c9c7198dd2adc7ac54b286bab430a6d742ea8e6',
+  'demo/compose.yaml': 'b41d3a0e318b5e7b190c7e188ebbad58e5fa6e710fe5cfc2be0f5edf8aca1882',
+});
+function assertReviewedInstallerEntrySuccessor(path, bytes) {
+  assert.ok(Object.hasOwn(installerEntrySuccessors, path), 'Only an exact checked installer entry path is admitted');
+  assert.equal(digest(bytes), installerEntrySuccessors[path], 'Only the exact checked installer entry successor is admitted');
+}
+
 // PAN572 repairs destructive argument dispatch and validates ownership before
 // teardown. Keep the historical pin, all other legacy bytes and actual HTTP
 // assertions unchanged; this exact self-checked safety delta has separate new
@@ -57,7 +69,15 @@ test('AC4 legacy loopback selfhosting remains real HTTP without opting into host
     const bytes = readFileSync(p);
     if (p === manifestSuccessor.path) assertReviewedManifestSuccessor(bytes);
     else if (p === uninstallSafetySuccessor.path) assertReviewedUninstallSafetySuccessor(bytes);
+    else if (Object.hasOwn(installerEntrySuccessors, p)) assertReviewedInstallerEntrySuccessor(p, bytes);
     else assert.equal(digest(bytes), expected, p);
+  }
+  for (const p of Object.keys(installerEntrySuccessors)) {
+    const bytes = readFileSync(p);
+    assert.throws(() => assertReviewedInstallerEntrySuccessor(p, Buffer.concat([bytes, Buffer.from('\n')])), /Only the exact checked installer entry successor is admitted/);
+    const neighbor = p === 'demo/install.sh' ? 'demo/compose.yaml' : 'demo/install.sh';
+    assert.throws(() => assertReviewedInstallerEntrySuccessor(p, readFileSync(neighbor)), /Only the exact checked installer entry successor is admitted/);
+    assert.throws(() => assertReviewedInstallerEntrySuccessor(p + '.neighbor', bytes), /Only an exact checked installer entry path is admitted/);
   }
   const uninstallBytes = readFileSync(uninstallSafetySuccessor.path);
   for (const mutation of [

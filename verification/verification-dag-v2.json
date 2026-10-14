@@ -9089,7 +9089,7 @@
         {
           "path": "tests/pan527/local-compatibility.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "fabe64b9d9b1e21595388a7c546480a5cd3eaa08d82e181625a1ca26fdbdac59"
+          "sha256": "2b8fa58e5f3e12652679309a9f485773ba60d1dd18a527e9d5695f111b365f3f"
         },
         {
           "path": "tests/pan527/native-https-ingress.test.mjs",
