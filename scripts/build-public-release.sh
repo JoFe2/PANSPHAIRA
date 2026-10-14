@@ -214,6 +214,10 @@ repository_only_files = {
     "src/pan471/composition-execution.mjs",
     "tests/pan471/composition-execution.test.mjs",
     "docs/architecture/pan576-isolated-composition-execution-v1.md",
+    # Original615 additive reference/test/guide are source, never new runnable members.
+    "benchmarks/adaptability-m0/ai-blind/semantic-expectation-v1.json",
+    "tests/adaptability-ai-blind-semantic-grade.test.mjs",
+    "docs/architecture/adaptability-ai-blind-semantic-grade-v1.md",
     # Installer entry and uninstall regressions are source, not runnable payload entries.
     "tests/demo-current-head-e2e-entry.test.mjs",
     "tests/demo-current-head-e2e-uninstall.test.mjs",

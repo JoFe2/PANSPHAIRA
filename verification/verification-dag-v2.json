@@ -4699,6 +4699,21 @@
           "sha256": "ae4f1a874d88f9319c56b40b266b42c981f79a859754e8c65b636cddc968e568"
         },
         {
+          "path": "benchmarks/adaptability-m0/ai-blind/evaluate.mjs",
+          "role": "VALIDATOR",
+          "sha256": "4fdacfef2fd5be8e5031af0a209c2776bfb9a98aee3ba49e85e7f2cb84a2893f"
+        },
+        {
+          "path": "benchmarks/adaptability-m0/ai-blind/participant-input.json",
+          "role": "CONTRACT",
+          "sha256": "d33de757c0aebab7da57fa9fb7c56a2735af66e9cde3253f6c3d41e082ee2e88"
+        },
+        {
+          "path": "benchmarks/adaptability-m0/ai-blind/semantic-expectation-v1.json",
+          "role": "CONTRACT",
+          "sha256": "8e7293cb0687d98282ae3b94b20747d61df6cff94ce4a97ca5cb7c8fa707da17"
+        },
+        {
           "path": "closure-audits/AUDIT-CORRECTION-377-ROOT-QS/implementation-evidence.json",
           "role": "DERIVED_EVIDENCE",
           "sha256": "9047d663d9adc264ad1266525ddcd6a353f067fc2cca9baa2e09d264e0ddebe0"
@@ -4777,6 +4792,11 @@
           "path": "docs/.vitepress/config.mts",
           "role": "SOURCE",
           "sha256": "820ba32f8c0b5c801b8581c5e923425c2002798cb70b7c091692573b326e1727"
+        },
+        {
+          "path": "docs/architecture/adaptability-ai-blind-semantic-grade-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "6923bd9d00677274fbd5180527b9f8f8da154001f119b669a6c569115f4b9128"
         },
         {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
@@ -4906,7 +4926,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "4ac9965d199d620a7830ca563668e38d5a6ca20c8461f72917c5ade544e284be"
+          "sha256": "a9b6b54e415a649a9bf73f348f3ba73b26eb19986f595b00a5c971cc00ca8bb1"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4964,9 +4984,14 @@
           "sha256": "a5db27da0747fae1badb9a035ca8b4e380f8ebc8f0ab4ed8fc54fd5fe49f863a"
         },
         {
+          "path": "tests/adaptability-ai-blind-semantic-grade.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "a980a4ce4127df573fef88b1001065c55143b7f00be04dbeec0fd3839142560e"
+        },
+        {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "7dcc423d68084ae4a1de463a4c9ae96854e6c23b3dd378d8d9fb103e099473fd"
+          "sha256": "f198f920c17ad044f5b7623629386f30cb70c2f73edc18ff03561b8f5426e443"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5091,7 +5116,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "7d044993adc0a1febad1b9fe40936a7c81756b3ae488dff5385d04c5aa51c1c8"
+          "sha256": "263903b15c6c188ba31c2f7cef977b19ef9e19e42e8fb9b3ed794243ccdd599f"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5136,7 +5161,7 @@
       ],
       "ownedTests": [
         "npm run release-governance:test",
-        "node --test tests/supply-chain-verifier.test.mjs",
+        "node --test tests/supply-chain-verifier.test.mjs tests/adaptability-benchmark-m0.test.mjs tests/adaptability-ai-blind-semantic-grade.test.mjs",
         "node --test dist/tests/canonical-json-profile-inventory.test.js",
         "npm run build --silent && node --test dist/tests/trust-compatibility-foundation-closure.test.js",
         "node --test tests/demo-current-head-e2e*.test.mjs",
@@ -5753,7 +5778,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "707f5022cff4b650c5b2e64f0299b692cdffd93dbcf555cffd7b9534a7f43eef"
+          "sha256": "eb7d31949312332f883be146d729f5422e2ad937e605e80ee2120ac15021a7b4"
         },
         {
           "path": "package-lock.json",
@@ -6113,7 +6138,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d62adc9ddc3076bc858e80992490e2e5a90a35dc143ae094b767247052d2478a"
+          "sha256": "02cbf0f1ba932af97bd982b6321d4cc9bb74005ad58ab2c0ca724e05b9cdd190"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",

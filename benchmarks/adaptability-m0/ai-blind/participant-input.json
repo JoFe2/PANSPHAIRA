@@ -15,13 +15,35 @@
     "systemId": "unknown-lighting-002",
     "systemType": "unknown.warehouse-lighting",
     "dataClassification": "SYNTHETIC",
-    "initialState": {"illuminanceLux": 410, "brightnessPct": 55},
+    "initialState": {
+      "illuminanceLux": 410,
+      "brightnessPct": 55
+    },
     "operations": [
-      {"capabilityId": "zone.illuminance.read", "effectClass": "READ_ONLY", "adapterKind": "READ_FIELD"},
-      {"capabilityId": "zone.brightness.update", "effectClass": "REVERSIBLE_WRITE", "adapterKind": "REVERSIBLE_WRITE_FIELD", "recovery": "RESTORE_PRIOR_VALUE"}
+      {
+        "capabilityId": "zone.illuminance.read",
+        "effectClass": "READ_ONLY",
+        "adapterKind": "READ_FIELD"
+      },
+      {
+        "capabilityId": "zone.brightness.update",
+        "effectClass": "REVERSIBLE_WRITE",
+        "adapterKind": "REVERSIBLE_WRITE_FIELD",
+        "recovery": "RESTORE_PRIOR_VALUE"
+      }
     ]
   },
   "allowedParticipantEdit": "candidate/runtime-contract-provider-b.json",
-  "requiredEvidence": ["schema-validation", "unchanged-core-digest", "unchanged-consumer-digest", "readback", "retry-same-receipt", "rollback", "zero-drift", "zero-residue"],
-  "claimBoundary": "LOCAL_SYNTHETIC_AI_BLIND_INPUT_ONLY_NO_RESULT_OR_SPEED_CLAIM"
+  "requiredEvidence": [
+    "schema-validation",
+    "unchanged-core-digest",
+    "unchanged-consumer-digest",
+    "readback",
+    "retry-same-receipt",
+    "rollback",
+    "zero-drift",
+    "zero-residue"
+  ],
+  "claimBoundary": "LOCAL_SYNTHETIC_AI_BLIND_INPUT_ONLY_NO_RESULT_OR_SPEED_CLAIM",
+  "semanticExpectationJson": "{\n  \"schemaVersion\": \"chimpmaera.adaptability-semantic-expectation/v1\",\n  \"caseId\": \"FP-GRADE-ZONE12-LUX410-BRIGHTNESS65-V1\",\n  \"scope\": \"PUBLIC_CODE_OWNED_SYNTHETIC_REFERENCE_NOT_CANDIDATE_ASSERTION_OR_BLIND_HOLDOUT\",\n  \"target\": {\n    \"tenant\": \"synthetic-warehouse\",\n    \"systemId\": \"unknown-lighting-002\",\n    \"systemType\": \"unknown.warehouse-lighting\",\n    \"entity\": \"zone-12\",\n    \"initialState\": { \"illuminanceLux\": 410, \"brightnessPct\": 55 }\n  },\n  \"read\": {\n    \"operationId\": \"zone.illuminance.read\",\n    \"field\": \"illuminanceLux\",\n    \"unit\": \"lux\",\n    \"unitAliases\": [\"lux\", \"lx\"],\n    \"value\": 410,\n    \"permittedTargetEffects\": []\n  },\n  \"write\": {\n    \"operationId\": \"zone.brightness.update\",\n    \"field\": \"brightnessPct\",\n    \"unit\": \"percent\",\n    \"unitAliases\": [\"percent\", \"pct\", \"%\"],\n    \"payloadValue\": 65,\n    \"priorValue\": 55,\n    \"expectedAppliedState\": { \"illuminanceLux\": 410, \"brightnessPct\": 65 },\n    \"expectedRestoredState\": { \"illuminanceLux\": 410, \"brightnessPct\": 55 },\n    \"permittedTargetEffects\": [\"TEMPORARY_BRIGHTNESS_PCT_65\", \"RESTORE_PRIOR_BRIGHTNESS_PCT_55\"]\n  },\n  \"payloadPolicy\": \"ENTITY_AND_VALUE_FROM_SELECTED_ADAPTER_FIELDS_MUST_MATCH_REFERENCE; FIELD_NAMES_AND_REQUEST_IDS_ARE_NOT_THE_ORACLE\",\n  \"unitPolicy\": \"NAMED_STATE_FIELD_HAS_REFERENCE_UNIT; ABSENT_DECLARATION_IS_LEGACY_IMPLICIT_UNIT; EXPLICIT_UNIT_MUST_BE_AN_EXACT_ALLOWED_ALIAS_NO_CONVERSION_INFERRED\",\n  \"effectPolicy\": \"OBSERVE_ACTUAL_PERSISTED_STATE_TRANSITIONS_BEFORE_ROLLBACK_AND_RESET; NO_UNDECLARED_FIELD_TENANT_ENTITY_OR_EXTRA_EFFECT\",\n  \"nonClaims\": [\n    \"NO_REAL_MODEL_OR_AI_BLIND_PARTICIPANT_EXECUTION\",\n    \"NO_PHYSICAL_LIGHTING_SENSOR_OR_PRODUCTION_EFFECT\",\n    \"NO_UNIVERSAL_UNIT_CONVERSION_OR_MAPPING_EQUIVALENCE\",\n    \"NO_NEW_RUNTIME_AUTHORITY_OR_CHANGE_TO_HISTORICAL_487_HOLDOUT\"\n  ]\n}\n"
 }

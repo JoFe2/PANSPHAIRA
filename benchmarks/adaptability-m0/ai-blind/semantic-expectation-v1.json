@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "chimpmaera.adaptability-semantic-expectation/v1",
+  "caseId": "FP-GRADE-ZONE12-LUX410-BRIGHTNESS65-V1",
+  "scope": "PUBLIC_CODE_OWNED_SYNTHETIC_REFERENCE_NOT_CANDIDATE_ASSERTION_OR_BLIND_HOLDOUT",
+  "target": {
+    "tenant": "synthetic-warehouse",
+    "systemId": "unknown-lighting-002",
+    "systemType": "unknown.warehouse-lighting",
+    "entity": "zone-12",
+    "initialState": { "illuminanceLux": 410, "brightnessPct": 55 }
+  },
+  "read": {
+    "operationId": "zone.illuminance.read",
+    "field": "illuminanceLux",
+    "unit": "lux",
+    "unitAliases": ["lux", "lx"],
+    "value": 410,
+    "permittedTargetEffects": []
+  },
+  "write": {
+    "operationId": "zone.brightness.update",
+    "field": "brightnessPct",
+    "unit": "percent",
+    "unitAliases": ["percent", "pct", "%"],
+    "payloadValue": 65,
+    "priorValue": 55,
+    "expectedAppliedState": { "illuminanceLux": 410, "brightnessPct": 65 },
+    "expectedRestoredState": { "illuminanceLux": 410, "brightnessPct": 55 },
+    "permittedTargetEffects": ["TEMPORARY_BRIGHTNESS_PCT_65", "RESTORE_PRIOR_BRIGHTNESS_PCT_55"]
+  },
+  "payloadPolicy": "ENTITY_AND_VALUE_FROM_SELECTED_ADAPTER_FIELDS_MUST_MATCH_REFERENCE; FIELD_NAMES_AND_REQUEST_IDS_ARE_NOT_THE_ORACLE",
+  "unitPolicy": "NAMED_STATE_FIELD_HAS_REFERENCE_UNIT; ABSENT_DECLARATION_IS_LEGACY_IMPLICIT_UNIT; EXPLICIT_UNIT_MUST_BE_AN_EXACT_ALLOWED_ALIAS_NO_CONVERSION_INFERRED",
+  "effectPolicy": "OBSERVE_ACTUAL_PERSISTED_STATE_TRANSITIONS_BEFORE_ROLLBACK_AND_RESET; NO_UNDECLARED_FIELD_TENANT_ENTITY_OR_EXTRA_EFFECT",
+  "nonClaims": [
+    "NO_REAL_MODEL_OR_AI_BLIND_PARTICIPANT_EXECUTION",
+    "NO_PHYSICAL_LIGHTING_SENSOR_OR_PRODUCTION_EFFECT",
+    "NO_UNIVERSAL_UNIT_CONVERSION_OR_MAPPING_EQUIVALENCE",
+    "NO_NEW_RUNTIME_AUTHORITY_OR_CHANGE_TO_HISTORICAL_487_HOLDOUT"
+  ]
+}
