@@ -70,6 +70,109 @@ The script creates one additional fictional Dolibarr order, proves a rejected
 proposal cannot act, proves an approved lease acts once, rejects replay, and
 writes digest-only evidence under `.chimpmaera-demo/public/`.
 
+## Effective entry and evidence handoff
+
+Docker daemon access is an administrator prerequisite: the existing operator
+must authorize image builds and only the synthetic installation's containers,
+volumes and eight project-isolated network allocations. Having source files does
+not supply these rights or address capacity. Do not change daemon address pools,
+prune foreign resources, add users to privileged groups or repair global harness
+configuration to make an installation pass. A failed convergence or readback is
+not a successful start.
+
+Use unique explicit loopback bindings when the defaults are unavailable:
+
+```sh
+CM_CHIMP_PORT=127.0.0.1:43730 \
+CM_ESPO_PORT=127.0.0.1:43731 \
+CM_DOLI_PORT=127.0.0.1:43732 \
+./demo/install.sh
+```
+
+These are example ports, not a claim that they are free or native-tested on the
+current machine. The active URLs, vendor public origins and runtime health Host
+use the selected bindings. An unchanged rerun retains the bindings stored in
+`.chimpmaera-demo/config.env`; an explicit valid override replaces them. Invalid,
+non-loopback, duplicated or credential-bearing address inputs are denied. A
+failed port allocation does not print successful active addresses. DMS stays
+`off`, has no active URL and is not an installed Paperless service. Do not put
+credentials, tokens or passwords in URLs.
+
+The six `READINESS_*` rows keep distinct proof classes:
+
+- `SOURCE` records the local image-build input digest, not a qualified source
+  commit or complete release tree identity. Its file names are invocation-local.
+- `BUILD` records the observed immutable image returned after the image build.
+- `SERVICE` records completion of the selected semantic native readback.
+- `READINESS_MODEL` stays `NOT_RUN`: this installer executes no real model proof.
+- `TOOLS` records the native provider bootstrap, not LLM/tool composition.
+- `BUSINESS` records the selected synthetic governed flow, or
+  `NOT_APPLICABLE_SEED_DISABLED` when seeding is disabled.
+
+`NOT_RUN` model evidence neither upgrades the local run to global readiness nor
+invalidates independently measured build or native service evidence. A
+`SOURCE_EVIDENCE_ONLY` release is source evidence, not a ready installation.
+The selected run still requires the real build, actual configured services,
+authenticated provider readback and the selected synthetic business checks.
+
+For a tested-identity handoff, retain the actual clean source commit and tree,
+qualified release tag when applicable, observed image identity, configured
+project/run ownership, all three effective bindings, redacted installer stdout,
+the per-run journal and authoritative `.chimpmaera-demo/readback.json`.
+Independently reach each printed active URL and bind its response to the claimed
+native service and project. Do not label an unavailable native run as measured:
+keep native proof `NOT_RUN` and its precise owning-host capacity/access trigger.
+Never substitute the local build-input digest, a branch name or HTTP 200 alone
+for that tested identity and service proof.
+
+### Retained entry native observation — 2026-10-14
+
+The previously capacity-held entry candidate was reconciled in its retained
+checkout onto released Main `b32682297cc09fdf059ee7fd1e93ed0809a05158`.
+Its four retained feature files were byte-preserved in development tree
+`0c78c7536af9d879d53a73e2850f5212d2a5c835`. There was no changed-source
+commit at this development-run boundary; these are not frozen release results.
+The complete 3,053-file staged source export ran the actual unmodified
+installer, not Fake Docker or substituted bootstrap scripts.
+
+Eight simultaneous default-IPAM network allocations and three concurrent
+loopback bindings were actually observed and their exact owned probe networks
+removed. The subsequent isolated SAFE_GUIDED seeded installer exited zero in
+105,262 ms. Each emitted address was independently joined to its observed
+project container, pinned image, loopback port and authenticated native service:
+
+- PanSphaira: `http://127.0.0.1:49789`, native status and SAFE_GUIDED identity;
+- EspoCRM: `http://127.0.0.1:35681`, native authenticated admin and version 9.1.9;
+- Dolibarr: `http://127.0.0.1:42899`, native authenticated status and version 22.0.3.
+
+The observed built runtime image was
+`sha256:cc8c46cba7c58aa976f22a1704a19da0a7c52720ef965cb3490a917b64345914`.
+A real warm installer retained those persisted ports and project despite an
+ambient independent Compose name. An occupied owned loopback port caused a
+real nonzero convergence exit, no successful active-address output, and no
+change to the independent synthetic HTTP control. Existing safe stop retained
+all five owned volumes; the qualified run/image/project-bound purge then left
+zero owned containers, networks, volumes or images and preserved the foreign
+baseline. Those addresses are measured historical bindings, not reserved ports
+or a claim that a later machine will have them available.
+
+The six readiness rows were observed separately: local build inputs, built
+image, semantic native services, model `NOT_RUN`, native provider bootstrap
+with model/tool composition `NOT_RUN`, and the selected synthetic governed
+business flow. Disabled DMS had no URL. The earlier twelve mock-interaction
+checks remain only interaction/rendering/document evidence. This development
+observation is not exact-head canonical CI, frozen original acceptance, a
+finished source-only installation or full issue closure; the normal required
+review, qualification, release and anonymous exact readback remain separate.
+
+Existing browser-first owner #562 receives this exact bounded tested identity,
+readiness distinction and secret-file references, never raw secrets or new
+inferred rights.
+There is no additional setup UI or separate browser-first owner here. For safe
+interruption, run `./demo/uninstall.sh` to stop the configured installation while
+retaining data. See the exact-owned purge checks below; ordinary interactive
+installation does not acquire destructive custody merely by printing a command.
+
 ## Local runtime state
 
 The installer generates random local demo secrets and state under

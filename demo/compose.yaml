@@ -26,7 +26,7 @@ services:
     cap_drop: [ALL]
     security_opt: ["no-new-privileges:true"]
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/status',{headers:{host:'127.0.0.1:7780'}}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/status',{headers:{host:'${CM_CHIMP_PORT}'}}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
       interval: 3s
       timeout: 2s
       retries: 20
@@ -58,7 +58,7 @@ services:
       ESPOCRM_DATABASE_PASSWORD_FILE: /run/secrets/db
       ESPOCRM_ADMIN_USERNAME: admin
       ESPOCRM_ADMIN_PASSWORD_FILE: /run/secrets/admin
-      ESPOCRM_SITE_URL: http://127.0.0.1:7781
+      ESPOCRM_SITE_URL: http://${CM_ESPO_PORT}
       ESPOCRM_LANGUAGE: en_US
       ESPOCRM_TIME_ZONE: Europe/Berlin
     secrets:
@@ -100,7 +100,7 @@ services:
       DOLI_DB_PASSWORD_FILE: /run/secrets/db
       DOLI_ADMIN_LOGIN: admin
       DOLI_ADMIN_PASSWORD_FILE: /run/secrets/admin
-      DOLI_URL_ROOT: http://127.0.0.1:7782
+      DOLI_URL_ROOT: http://${CM_DOLI_PORT}
       DOLI_PROD: "1"
       DOLI_COMPANY_NAME: PanSphaira Synthetic Demo GmbH
       DOLI_COMPANY_COUNTRYCODE: DE

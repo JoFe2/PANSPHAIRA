@@ -4756,7 +4756,7 @@
         {
           "path": "demo/install.sh",
           "role": "SECURITY",
-          "sha256": "747a975556b3755404e98c7e60705906071a0a6c17dc42b6be2a90e407428984"
+          "sha256": "c5d9e05b1932092c458ebb4b8c9c7198dd2adc7ac54b286bab430a6d742ea8e6"
         },
         {
           "path": "demo/manifests/supply-chain/artifact-lock-v1.json",
@@ -4766,7 +4766,7 @@
         {
           "path": "demo/README.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "6abcdce4ac4a33366d5575e56af89f51296191c148e91d9d08ea347aa613218c"
+          "sha256": "ede7b611b38f012afcb26a7fdeb0ada7d4aab26e5868297f9be14487a4adffcc"
         },
         {
           "path": "demo/uninstall.sh",
@@ -4906,7 +4906,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "c86f76d06c332fe39fb3bcb875031f4cce39401fd0798e6ff14b1aa82798d605"
+          "sha256": "4ac9965d199d620a7830ca563668e38d5a6ca20c8461f72917c5ade544e284be"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4966,7 +4966,12 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "450c4386ebdc936388869aaa5c0adef07c44c90578afd6885f7626bff8a7cb99"
+          "sha256": "7dcc423d68084ae4a1de463a4c9ae96854e6c23b3dd378d8d9fb103e099473fd"
+        },
+        {
+          "path": "tests/demo-current-head-e2e-entry.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "9a1b6fc0d794d4ed564c484d4ca6f27ee17513ddf2256b7e3bbb9986853c1659"
         },
         {
           "path": "tests/demo-current-head-e2e-uninstall.test.mjs",
@@ -5086,7 +5091,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "ab484d2d243a01ae3b98f697caf65d4f31d68ca9a661073cab1fccef44db39a5"
+          "sha256": "7d044993adc0a1febad1b9fe40936a7c81756b3ae488dff5385d04c5aa51c1c8"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5748,7 +5753,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "19e2ed25eacbda8d3ea251a9735d87df08f0b967ace5357f81e62fc203d13c27"
+          "sha256": "707f5022cff4b650c5b2e64f0299b692cdffd93dbcf555cffd7b9534a7f43eef"
         },
         {
           "path": "package-lock.json",
