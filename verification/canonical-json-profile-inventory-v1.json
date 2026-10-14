@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "eaf0200967fe2c1c940321f28076ba9bf046cd5c7ed0c3e7dfb7c44932bd29b6"
+        "sha256": "450c4386ebdc936388869aaa5c0adef07c44c90578afd6885f7626bff8a7cb99"
       }
     ]
   },
@@ -827,6 +827,14 @@
       "fromSha256": "65b765f0a4c45d8ae6f5411264429972cf01c24b679a99b1380cef494895aa46",
       "toSha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b",
       "reason": "Append exactly13 source-only native own-synthetic message reader/local-draft typed contract/shared browser/fixed6file native-TLS-browser-process-registration/document members on existing548 session/context/SQLite/signer and541527 shell ownership. Graph103/all108/max128 inputs/64 own tests, every prior case and required gate, immutable21 base obligations/13 profiles/full old migrations/unchanged scanner and legacy1792 retained. One deterministic local untrusted profile binds original account/thread/message revision/recipients/attachments and independent source/draft/delete-reference confirmation; native no-send/no-external-draft/no-model/private-mail constraints and current role/CSRF/context/signed own-row/revision/privacy/retention fences remain. Stale source denies protected preview/preparation, not authorized own-draft erasure. No second generic state/policy/task engine, new agent/voice infrastructure, microphone/private mailbox/cloud/model cost/external account/send/KS rights or global runtime changes. Registration is not frozen canonicalCI/protected merge/release/anonymous closure/physical/model/WholePAN500 acceptance."
+    },
+    {
+      "migrationId": "PAN612-EXISTING-MODEL-FREE-RULES-CONTEXT-VERTICAL/INTEGRITY-GENERATOR/V93",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 93,
+      "fromSha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b",
+      "toSha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a",
+      "reason": "Append exactly eight source-only derivative native rules/context adapter, fixed native/TLS/browser/registration entry/fixture/document members. Preserve existing548546597607608 owners, original budget/security/time/authority gates, one signed task/context store and original targets; no second engine, new pipeline, provider, paid model, microphone, private mail, production, send or KS rights. Graph104/all109 and existing128-input/64-test limits, immutable21 base obligations/13 pinned profiles/all historical migrations/unchanged scanner/legacy1792 retain exact semantics. Actual two independently resolved native targets enter same existing checkpoint transaction and opt-in protected browser path. MODEL_FREE_RULES_CONTEXT_VERTICAL is original612AC06 partial delivery, not genuine575 Main-model/voice acceptance or original612/Goal500 closure."
     }
   ],
   "scanScope": {
@@ -869,15 +877,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1257,
+    "filesScanned": 1264,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 334,
-    "importFiles": 333,
+    "importSites": 335,
+    "importFiles": 334,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2784,
-    "ledgerUniquePaths": 2784
+    "ledgerEntries": 2792,
+    "ledgerUniquePaths": 2792
   },
   "profiles": [
     {
@@ -950,7 +958,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b"
+      "sha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1397,8 +1405,8 @@
     },
     {
       "owner": "pan548",
-      "importSites": 8,
-      "importFiles": 8
+      "importSites": 9,
+      "importFiles": 9
     },
     {
       "owner": "pan549",
@@ -1746,7 +1754,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "5d640778a2d9743678f36ffa2e0ddc1f8172edf728b1ad79edb42a8e657f261b",
+      "sha256": "f589b35d1972f67a75d483e108a01e7d6735255230873d536c612e282f0ca41a",
       "basis": "profile-version-migration"
     },
     {
