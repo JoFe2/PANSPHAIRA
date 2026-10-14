@@ -8568,7 +8568,7 @@
         {
           "path": "tests/pan515/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0d2b248914ac290c0fa5a3a4f987bcf23ca163dcecadf2d40da263bcaab27349"
+          "sha256": "51dd89155f8ea7f1e43abc9e8400aa93c966e0f6967e55dd76594e643807f806"
         },
         {
           "path": "docs/architecture/pan515-native-trade-state-v1.md",
@@ -8634,7 +8634,7 @@
         {
           "path": "tests/procurement-434/procurement-registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f8d517cf0a41b806896fcd10c068984f4d25020b9beb75aa01ca798678063142"
+          "sha256": "10c55cf572724593fe2c939eb2942667599a94b8f4e2df560766490ac25e9e1d"
         },
         {
           "path": "docs/architecture/pan516-native-procurement-v1.md",
@@ -8690,7 +8690,7 @@
         {
           "path": "tests/pan517/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f62deb3bc5ba26aef6348329512f64d039ba57995d169660083c3d1ac707127e"
+          "sha256": "72478333cd9cb438b5682ec0fc7b147ba944f73e9da5c663acb98dced09125d8"
         },
         {
           "path": "docs/architecture/pan517-native-fulfilment-v1.md",
@@ -8807,7 +8807,7 @@
         {
           "path": "tests/pan520/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5e5d5cd491e72c53b2ce1a248f0edd57b8e1e1f6ea8b420ff7cba208b4caf201"
+          "sha256": "f8c2452a66c2c554f6e20493bda9634a6da415b25895db06d0fea70f6547bce1"
         },
         {
           "path": "docs/architecture/pan520-native-projections-v1.md",
@@ -8969,7 +8969,7 @@
         {
           "path": "tests/pan526/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "2bc31d482264162ad0728eb9eaab4ce51609b351b1fe812a6899975dbb81f8ac"
+          "sha256": "b14983ae4ea9966c7f3fa146afe30bae6bd51c19f068ea84c79dbb14aa39e3bd"
         },
         {
           "path": "docs/architecture/pan526-runtime-identity-development-v1.md",
@@ -10086,7 +10086,7 @@
         {
           "path": "scripts/refresh-pan543-integrity.mjs",
           "role": "SOURCE",
-          "sha256": "a4d1344222c2ca1a860b270c205d911a3dc3968ad97458d9b2f08407c451de36"
+          "sha256": "c5d73abab0dab045ad5507e6f9a2314b69c3ac1b53deda31306f470b37b1e240"
         },
         {
           "path": "src/pan543/profile-store.mjs",
@@ -10116,7 +10116,7 @@
         {
           "path": "tests/pan543/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1f79f6bc4d77109f49264a4aca0b478df2fbcb0df78a14dcbac293d3d9f9ae81"
+          "sha256": "c193f511fafce3411601d015d180b36e7665f0f2c98b3577b240fe54a5b3952c"
         },
         {
           "path": "tests/pan543/transport.test.mjs",
