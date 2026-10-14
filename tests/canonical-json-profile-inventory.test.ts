@@ -883,6 +883,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
   "toSha256": "262fd5e2ad8da65a9f09ac3acff3065235891aa02cbf23ae556a43430b1f4ef0",
   "reason": "Register exactly one retained installer-entry interaction/renderer/document test in the existing repository-integrity input and checksum seed. Retain graph104/all109, existing owners/tests/hard gates, immutable21 base byte obligations/13 profiles, all historical migration bytes and unchanged scanner/validator/legacy1792. Actual measured census1265/ledger2793 follows one added test file; no second installer, onboarding surface, owner, engine or pipeline, model/audio/private/production/cloud/KS rights. Source-native custom-port identity and independent readiness are separately executed; registration is not CI/release/closure or turnkey installation."
 }),
+  Object.freeze({
+  "migrationId": "PAN615-BOUNDED-ADB-SEMANTIC-CHECKER/INTEGRITY-GENERATOR/V95",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 95,
+  "fromSha256": "262fd5e2ad8da65a9f09ac3acff3065235891aa02cbf23ae556a43430b1f4ef0",
+  "toSha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9",
+  "reason": "Register the bounded public ADB semantic checker, independent field-unit-value-payload-effect reference, actual state-transition regression and exact source guide on the existing repository-integrity owner. Actual unchanged scanner observes files1266 and ledger2796. Preserve all historical migrations, immutable21 obligations/13 profiles, graph104/all109, original tests/security/deadlines and legacy1792 runnable members; no new DAG node, policy engine, worker, pipeline, model/audio/private/cloud/production/KS authority. Original487 CSCL11 mapping holdout and historical ADB PASS observations remain unchanged. Local synthetic checker success is not a real AI-blind participant/model result or full factory epic acceptance."
+}),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -895,7 +903,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1265,
+  "filesScanned": 1266,
   "declarationSites": 37,
   "declarationFiles": 37,
   "importSites": 335,
@@ -905,7 +913,7 @@ const EXPECTED_COUNTS = {
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2793,"uniquePaths":2793,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2796,"uniquePaths":2796,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1688,7 +1696,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91,92,93,94]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91,92,93,94,95]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;

@@ -172,6 +172,32 @@ if (repositoryIntegrityNode === undefined) throw new Error("REPOSITORY_INTEGRITY
 if (!repositoryIntegrityNode.dependsOn.includes(extensionAssuranceNode.id)) {
   repositoryIntegrityNode.dependsOn.push(extensionAssuranceNode.id);
 }
+// Original615 reuses the existing repository-integrity owner, no new DAG node.
+const pan615Inputs = [
+  ["benchmarks/adaptability-m0/ai-blind/evaluate.mjs", "VALIDATOR"],
+  ["benchmarks/adaptability-m0/ai-blind/participant-input.json", "CONTRACT"],
+  ["benchmarks/adaptability-m0/ai-blind/semantic-expectation-v1.json", "CONTRACT"],
+  ["tests/adaptability-ai-blind-semantic-grade.test.mjs", "VALIDATOR"],
+  ["docs/architecture/adaptability-ai-blind-semantic-grade-v1.md", "DERIVED_EVIDENCE"],
+];
+for (const [inputPath, role] of pan615Inputs) {
+  const matches = repositoryIntegrityNode.inputs.filter(({ path: p }) => p === inputPath);
+  if (matches.length > 1 || (matches.length === 1 && matches[0].role !== role)) {
+    throw new Error(`PAN615_INTEGRITY_OWNERSHIP_DENIED:${inputPath}`);
+  }
+  if (matches.length === 0) repositoryIntegrityNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+}
+const pan615SeparateUnpublishedTest = "node --test tests/adaptability-benchmark-m0.test.mjs tests/adaptability-ai-blind-semantic-grade.test.mjs";
+const pan615BaseIntegrityTest = "node --test tests/supply-chain-verifier.test.mjs";
+const pan615CombinedIntegrityTest = `${pan615BaseIntegrityTest} tests/adaptability-benchmark-m0.test.mjs tests/adaptability-ai-blind-semantic-grade.test.mjs`;
+// Retain all original cases and max64 owner commands: extend one existing
+// integrity command instead of adding an inadmissible sixty-fifth element.
+repositoryIntegrityNode.ownedTests = repositoryIntegrityNode.ownedTests
+  .filter((command) => command !== pan615SeparateUnpublishedTest)
+  .map((command) => command === pan615BaseIntegrityTest ? pan615CombinedIntegrityTest : command);
+if (!repositoryIntegrityNode.ownedTests.includes(pan615CombinedIntegrityTest)) {
+  throw new Error("PAN615_EXISTING_INTEGRITY_COMMAND_REQUIRED");
+}
 const externalPluginInputs = [
   ["packages/contracts/src/external-plugin-preflight.ts", "SECURITY"],
   ["schemas/contracts/external-plugin-preflight-v1.schema.json", "SCHEMA"],
@@ -3749,6 +3775,7 @@ for(const[inputPath]of[...pan607NativeInputs,...pan607Inputs])entries.set(inputP
 for(const[inputPath]of[...pan604NativeInputs,...pan604Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan602NativeInputs,...pan602Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan612NativeInputs,...pan612Inputs])entries.set(inputPath,null);
+for (const [inputPath] of pan615Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan463Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan547Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan550Inputs) entries.set(inputPath, null);
