@@ -10,10 +10,10 @@ test('optional origin/session surface has one additive source owner and real bro
   const graph = load('verification/verification-dag-v2.json');
   const owners = graph.nodes.filter(n => n.id === 'pan527-origin-session-v1');
   assert.equal(owners.length, 1, 'new optional executable surface must be registered, not merely published');
-  assert.equal(graph.graphVersion,103);
+  assert.equal(graph.graphVersion,104);
   const owner = owners[0];
   assert.deepEqual(owner.dependsOn, ['pan526-portable-runtime-v1']);
-  assert.deepEqual(owner.ownedTests, ['npm run pan527:test', 'npm run pan562:test', "npm run pan607:test",'npm run pan604:test', "npm run pan602:test"]);
+  assert.deepEqual(owner.ownedTests, ["npm run pan527:test", "npm run pan562:test", "npm run pan607:test", "npm run pan604:test", "npm run pan602:test", "npm run pan612:test"]);
   assert.equal(owner.riskClass, 'HIGH'); assert.equal(owner.globalInvalidation, false);
   assert.deepEqual(graph.hardGates, ['npm run lint', 'npm run release-governance:verify', 'npm run supply-chain:verify', 'sha256sum -c SHA256SUMS', './scripts/build-public-release.sh --output <isolated-absolute-path>']);
   const paths = owner.inputs.map(i => i.path);
@@ -35,8 +35,8 @@ test('optional origin/session surface has one additive source owner and real bro
       assert.deepEqual(plan.selectedTests, [...new Set(graph.nodes.flatMap(n=>n.ownedTests))].sort((a,b)=>a.localeCompare(b,'en')));
       assert.ok(plan.reasons.includes('CENTRAL_INPUT_CHANGED'));
     } else {
-    assert.deepEqual(plan.selectedNodes, [owner.id, 'pan528-guided-native-browser-v1', "pan541-shared-browser-shell-v1", "pan542-native-erv-human-v1", "pan544-native-notifications-v1", "pan548-authentic-context-selection-v1", "pan549-native-analysis-result-v1", "pan563-configuration-draft-v1", "pan597-native-browser-surfaces-v2", "pan602-native-mail-local-v1", "pan604-native-readonly-events-v1", "pan607-native-context-checkpoint-projection-v1", "pan608-model-free-invocations-v1"]);
-    assert.deepEqual(plan.selectedTests, ['npm run pan527:test', 'npm run pan528:test', "npm run pan541:test", "npm run pan542:test", "npm run pan543:test", "npm run pan544:test", "npm run pan546:test", "npm run pan547:test", "npm run pan548:test", "npm run pan549:test", "npm run pan550:test", "npm run pan562:test", "npm run pan563:test", "npm run pan564:test", "npm run pan565:test", "npm run pan566:test", "npm run pan568:test", "npm run pan569:test", "npm run pan597:test", "npm run pan602:test", "npm run pan604:test", "npm run pan607:test", "npm run pan608:test"]);
+    assert.deepEqual(plan.selectedNodes, [owner.id, 'pan528-guided-native-browser-v1', "pan541-shared-browser-shell-v1", "pan542-native-erv-human-v1", "pan544-native-notifications-v1", "pan548-authentic-context-selection-v1", "pan549-native-analysis-result-v1", "pan563-configuration-draft-v1", "pan597-native-browser-surfaces-v2", "pan602-native-mail-local-v1", "pan604-native-readonly-events-v1", "pan607-native-context-checkpoint-projection-v1", "pan608-model-free-invocations-v1", "pan612-model-free-rules-context-vertical-v1"]);
+    assert.deepEqual(plan.selectedTests, ["npm run pan527:test", "npm run pan528:test", "npm run pan541:test", "npm run pan542:test", "npm run pan543:test", "npm run pan544:test", "npm run pan546:test", "npm run pan547:test", "npm run pan548:test", "npm run pan549:test", "npm run pan550:test", "npm run pan562:test", "npm run pan563:test", "npm run pan564:test", "npm run pan565:test", "npm run pan566:test", "npm run pan568:test", "npm run pan569:test", "npm run pan597:test", "npm run pan602:test", "npm run pan604:test", "npm run pan607:test", "npm run pan608:test", "npm run pan612:test"]);
     }
     assert.deepEqual(plan.hardGates, [...graph.hardGates].sort((a,b) => a.localeCompare(b,'en')));
   }

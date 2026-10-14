@@ -677,6 +677,16 @@ repository_only_files = {
     "tests/pan569/isolated-browser-fixture.mjs",
 
 
+    # PAN612 explicitly permitted model-free rules/context vertical; genuine Main criteria remain OPEN.
+    "src/pan548/native-rules-vertical-v1.mjs",
+    "scripts/run-pan612-native-rules-vertical-tests.mjs",
+    "tests/pan612/browser-rules-vertical.test.mjs",
+    "tests/pan612/native-rules-vertical.test.mjs",
+    "tests/pan612/native-rules-transport.test.mjs",
+    "tests/pan612/registration.test.mjs",
+    "tests/pan612/native-rules-fixture.mjs",
+    "docs/architecture/native-rules-context-vertical-v1.md",
+
     # PAN602 one own-synthetic native read/local-draft profile, no account/send/model rights.
     "src/pan548/native-mail-local-v1.mjs",
     "packages/contracts/src/workspace-mail-local-v1.ts",
