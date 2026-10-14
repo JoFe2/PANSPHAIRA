@@ -10,3 +10,32 @@ test('612 closed native request/factory data never reads accessors or accepts ad
 
 test('612 B1 actual same-principal historical pair from other source tab/session/object is denied atomically, never current vertical qualification',async()=>{const x=await fixture();try{const ids=await actualTargets(x),o=owner(x),{nativeWorkspaceUiTaskOwnerConnectionV2}=await import('../../src/pan548/native-ui-task-projection-v2.mjs'),{db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);const state=()=>JSON.stringify(['workspace_ui_tasks_v2','workspace_ui_context_checkpoints_v1','workspace_ui_context_outbox_v1','workspace_ui_context_cursors_v1'].map(name=>db.prepare('SELECT * FROM '+name+' ORDER BY rowid').all().map(r=>({...r}))));for(const next of [x.f.tab(x.tab.headers),x.f.tab(x.f.issue())]){const before=state();assert.throws(()=>o.prepare(next.headers,{...request(x,ids),context:x.f.verification(next)}),/RULES_VERTICAL_SOURCE_SESSION_TAB_OBJECT_SCOPE_DENIED/);assert.equal(state(),before);}const fresh=x.f.fresh(x.tab),invoice=x.f.reader.read({tenantId:'tenant-a',objectId:'AP-PAN516-PARTIAL-01',expectedRevision:null});x.tab.context=x.f.context.claim(x.tab.headers,{schemaVersion:'pansphaira.workspace-context/claim/v1',tabId:fresh.binding.tabId,moduleId:'pan.erv',viewId:'pan.erv.view',primaryObjectId:invoice.invoiceId,selection:null,expected:{...fresh.revisions,domainRevision:invoice.revision,epoch:fresh.binding.epoch}}).context;const before=state();assert.throws(()=>o.prepare(x.tab.headers,request(x,ids)),/RULES_VERTICAL_SOURCE_SESSION_TAB_OBJECT_SCOPE_DENIED/);assert.equal(state(),before);const history=x.snapshot();assert.ok(history.tasks.some(t=>t.taskId===ids.documentTaskId&&t.state==='COMPLETED'));assert.ok(history.tasks.some(t=>t.taskId===ids.previewTaskId&&t.state==='COMPLETED'));assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0);}finally{await x.close();}});
 test('612 B1 harmless same-source selection/context-handle change does not invalidate current object pair or redispatch completed targets',async()=>{const x=await fixture();try{const ids=await actualTargets(x),before=x.f.fresh(x.tab),oldHandle=before.contextHandle;x.tab.context=x.f.context.claim(x.tab.headers,{schemaVersion:'pansphaira.workspace-context/claim/v1',tabId:before.binding.tabId,moduleId:'pan.erv',viewId:'pan.erv.view',primaryObjectId:before.primaryObject.objectId,selection:null,expected:{...before.revisions,epoch:before.binding.epoch}}).context;assert.notEqual(x.tab.context.contextHandle,oldHandle);const v=owner(x).prepare(x.tab.headers,request(x,ids));assert.equal(v.phase,'CONTRACT_PREPARED');assert.equal(v.targetEffectsRedispatched,false);assert.equal(v.targetTasks.every(t=>t.sourceBinding.sessionId===x.tab.context.binding.sessionId&&t.sourceBinding.tabId===x.tab.context.binding.tabId&&t.objectId===x.tab.context.primaryObject.objectId),true);assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0);}finally{await x.close();}});
+
+// Retained optional F1: qualify the existing same-owner transaction's failure paths.
+async function retainedNativeState612(x){
+ const {nativeWorkspaceUiTaskOwnerConnectionV2}=await import('../../src/pan548/native-ui-task-projection-v2.mjs');
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const tables=db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'workspace_ui_%' ORDER BY name").all().map(r=>r.name);
+ return {db,tables,bytes:()=>JSON.stringify(tables.map(name=>[name,db.prepare('SELECT * FROM '+name+' ORDER BY rowid').all().map(r=>({...r}))]))};
+}
+test('612 F1 throwing host-native validation hook leaves every existing owner/task/checkpoint/outbox/cursor table unchanged',async()=>{
+ const x=await fixture();try{
+  const ids=await actualTargets(x),state=await retainedNativeState612(x),before=state.bytes(),profile=x.f.store.read(x.f.sessions.authenticate(x.tab.headers));
+  const {nativeWorkspaceContextRuleTargetsConnectionV1}=await import('../../src/pan548/native-context-projection-v1.mjs');
+  const c=nativeWorkspaceContextRuleTargetsConnectionV1(x.projection,x.f.sessions.binding,x.f.context,x.tasks);let calls=0;
+  assert.throws(()=>c.prepare(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/prepare/v1',audience:'MAIN_CONTRACT',context:x.f.verification(x.tab),boundary:'TURN',previousRequestId:null,cursor:x.snapshot().confirmedCursor},(snap,current)=>{
+   calls++;assert.equal(snap.model,'NOT_RUN');assert.equal(snap.constraints.noSend,true);assert.equal(current.binding.tabId,x.tab.context.binding.tabId);throw Error('TEST612_HOST_NATIVE_VALIDATOR_THROW');
+  }),/TEST612_HOST_NATIVE_VALIDATOR_THROW/);
+  assert.equal(calls,1);assert.equal(state.bytes(),before);assert.deepEqual(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)),profile);
+  const valid=owner(x).prepare(x.tab.headers,request(x,ids));assert.equal(valid.phase,'CONTRACT_PREPARED');assert.equal(valid.targetEffectsRedispatched,false);assert.equal(valid.realModelAcceptance,false);
+ }finally{await x.close();}
+});
+test('612 F1 valid first document proof with invalid second target phase leaves native leading state unchanged and current valid pair usable',async()=>{
+ const x=await fixture();try{
+  const ids=await actualTargets(x),state=await retainedNativeState612(x),o=owner(x),before=state.bytes();
+  assert.throws(()=>o.prepare(x.tab.headers,request(x,{documentTaskId:ids.documentTaskId,previewTaskId:ids.documentInvocationId})),/RULES_VERTICAL_TARGET_PHASE_OR_SCOPE_DENIED/);
+  assert.equal(state.bytes(),before);assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0);
+  const valid=o.prepare(x.tab.headers,request(x,ids));assert.equal(valid.phase,'CONTRACT_PREPARED');assert.deepEqual(valid.targetTasks.map(t=>t.taskId),[ids.documentTaskId,ids.previewTaskId]);assert.equal(valid.targetEffectsRedispatched,false);assert.equal(valid.constraints.noSend,true);
+ }finally{await x.close();}
+});
+

@@ -11468,7 +11468,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-context-projection-v1.ts",
           "role": "SOURCE",
-          "sha256": "ad78f38a93b8cc584142b2b7f47bdaf3c66a17a1c066077be511e9e723b0ebc5"
+          "sha256": "894a7d94fee19ec208928ecab1b14e3450d5fbb70b604074adfca8b5e876f2c3"
         },
         {
           "path": "packages/browser-workspace/src/workspace-context-projection-v1.css",
@@ -11720,12 +11720,12 @@
         {
           "path": "tests/pan612/browser-rules-vertical.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b0d31f9a4e5771815fb9e003e88553661b10a80ae4eed96bbc20511516de158d"
+          "sha256": "1ef2281c1eadec9fe2628697429ea04742255d17bc9e045dbacd2f325822de55"
         },
         {
           "path": "tests/pan612/native-rules-vertical.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "6f6fe576530d8119b7155e6297b5f82267a28ca8152fa0235608dc01d4dd299b"
+          "sha256": "9d54b9e98779fc1d3b2913e7ddc6a0096a786a6f28456f1eaa8a56c4d26fe43a"
         },
         {
           "path": "tests/pan612/native-rules-transport.test.mjs",
@@ -11745,7 +11745,7 @@
         {
           "path": "docs/architecture/native-rules-context-vertical-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "c1cbd16e65e47bc1bbf5618d1f1f1a94a60dfd5b8ebdca9a7078a0f582fc6d5b"
+          "sha256": "290cface592120536adab7aa0584e392cb5cdd98dfacb69c531b9a3b26698cb5"
         }
       ],
       "ownedTests": [
