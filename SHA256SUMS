@@ -374,7 +374,7 @@ be84541e4df3e4475883a459889098f42f8f7fb7b7ae7142aa3a759612aed161  ./docs/archite
 e6a0bcec6b592ef65bfca0ed3340f315bbcc2b1c1b1d3639ebc344ca6bbc2ad9  ./docs/architecture/native-mail-local-v1.md
 4618fc2c23811ba1774cacb3253c60b2e1e198c1872b5e97c4746030d5d0d365  ./docs/architecture/native-module-view-human-browser-v1.md
 51c8c9180e67cfabe44dac1177546ecd7306187ffffbb43cb99a53dae908456c  ./docs/architecture/native-readonly-event-projection-v1.md
-c1cbd16e65e47bc1bbf5618d1f1f1a94a60dfd5b8ebdca9a7078a0f582fc6d5b  ./docs/architecture/native-rules-context-vertical-v1.md
+290cface592120536adab7aa0584e392cb5cdd98dfacb69c531b9a3b26698cb5  ./docs/architecture/native-rules-context-vertical-v1.md
 2121ccd527d77a98f7402465f6e3aeb3df0ddb3910310306556b7dbaf6b2e297  ./docs/architecture/native-workspace-notifications-v1.md
 83789f40314ab7b474da04b93790abf5e85e4946aa78eb83fd7ff30d244e649b  ./docs/architecture/pan346-current-head-source-qualification.md
 a87c62257b7a093f4c204bd5eaa815eb3c111426bde417ca89d5dd08aacf71da  ./docs/architecture/pan360-original-erv-execution-v1.md
@@ -796,7 +796,7 @@ ea92ee7b785b6863e5f0794c0419593fbd603186eea2fbb96737d381a950ac58  ./packages/bro
 5c5475084e22d2fdd8d40910d5951682c6301eaa5dab8afbb8a1bb725d69d8c8  ./packages/browser-workspace/src/workspace-bootstrap-v1.html
 46cd7df3495fc3c6f927c19c8e023258a1b119bf9693dc856e7da1e1c4f1a2c7  ./packages/browser-workspace/src/workspace-bootstrap-v1.ts
 5855d0caa2585aa90d33668f830bef315efe2eba6419d387b36f9922233e251c  ./packages/browser-workspace/src/workspace-context-projection-v1.css
-ad78f38a93b8cc584142b2b7f47bdaf3c66a17a1c066077be511e9e723b0ebc5  ./packages/browser-workspace/src/workspace-context-projection-v1.ts
+894a7d94fee19ec208928ecab1b14e3450d5fbb70b604074adfca8b5e876f2c3  ./packages/browser-workspace/src/workspace-context-projection-v1.ts
 0834afe3f3ede90f6c09ff87b176ed351fc4598c17e8437f6f35c67b44f01ae5  ./packages/browser-workspace/src/workspace-dirty-draft-v1.ts
 66a550cc6bf1ad81d953b6379fbfb56751e5b766f4648e798d93621e405cac9e  ./packages/browser-workspace/src/workspace-invocations-v1.css
 182f894e14d6047259553ac72fa2ce96d9760f89501faa25be0645dabea3b3a8  ./packages/browser-workspace/src/workspace-invocations-v1.ts
@@ -2528,10 +2528,10 @@ dacdd67ae63880fe0da7c0949a0daaeaf81000ce251a32057b08cc382fe4a87a  ./tests/pan607
 e3019c0f01507fc13538b303526420d17bbe2fb718d29bbdb69ae567b7458d89  ./tests/pan608/final-text-grammar.test.mjs
 3599f7742450ed802a709504e35d2dff3e166aebafda57012493dd0217f732b8  ./tests/pan608/native-invocations.test.mjs
 56f66bb739ded34041aaa70f3e33e7163d3b6c3faa73fdeca6cac86032d993ff  ./tests/pan608/registration.test.mjs
-b0d31f9a4e5771815fb9e003e88553661b10a80ae4eed96bbc20511516de158d  ./tests/pan612/browser-rules-vertical.test.mjs
+1ef2281c1eadec9fe2628697429ea04742255d17bc9e045dbacd2f325822de55  ./tests/pan612/browser-rules-vertical.test.mjs
 77cb7173a633c7eca31c6c7fe267bc265c24ed70afac446ee02f78d0faaad852  ./tests/pan612/native-rules-fixture.mjs
 2df9f2890bdabd69ad27894757e44c38fbea515f77449b372cbac0f1aeb2c456  ./tests/pan612/native-rules-transport.test.mjs
-6f6fe576530d8119b7155e6297b5f82267a28ca8152fa0235608dc01d4dd299b  ./tests/pan612/native-rules-vertical.test.mjs
+9d54b9e98779fc1d3b2913e7ddc6a0096a786a6f28456f1eaa8a56c4d26fe43a  ./tests/pan612/native-rules-vertical.test.mjs
 dc53394b1b644081288c2536a5c918673bc80078c06f356711c1558335926e2b  ./tests/pan612/registration.test.mjs
 1c9790aaaed92a9e9b04fea467b095cca7dee07e68cb6abc2332b93eb1a563d4  ./tests/plugin-knowledge-harvest.test.ts
 5651518a8d3931369e02b50f26364518128b6c2973d4771473f7dee109a55cac  ./tests/poc-early-admin-ai-setup.test.ts
@@ -2788,5 +2788,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-ab9f493e46f92a19e8ba7f13e04b8e1ab37b124a0e0886aefe709e20c727c300  ./verification/verification-dag-v2.json
+e819eaeb87951283220a5de6b010113791d3db330739fa4519aefc4ec61f0654  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
