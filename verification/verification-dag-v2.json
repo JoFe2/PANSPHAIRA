@@ -11193,7 +11193,7 @@
         {
           "path": "tests/pan548/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "7d9258de9bf7a9e621c64d273c864043dd4323ccdf857dae575b771bdfefe953"
+          "sha256": "051b8f377b56d2f5aa351c0d9d76e4051f094335278d0168ee5b2c6920fca91a"
         },
         {
           "path": "docs/architecture/workspace-agent-panel-v1.md",

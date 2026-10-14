@@ -2426,7 +2426,7 @@ ca02796f18e6e5be89408b00df9acf4338720113b3d33ced2c88755514cd9801  ./tests/pan546
 2773aba4d302c8c1ece891df46706eb8ed553f5c06b541403379545f75bac80c  ./tests/pan548/native-context.test.mjs
 cf15d3a99223807224a533fee64f218f08ab818fe1151a527120820542a6de41  ./tests/pan548/native-expiry.test.mjs
 6c5587a49a0c2711dcd19e1ce51b232f16dc64bb1530f493459b1463484fcf1f  ./tests/pan548/native-reentrant.test.mjs
-7d9258de9bf7a9e621c64d273c864043dd4323ccdf857dae575b771bdfefe953  ./tests/pan548/registration.test.mjs
+051b8f377b56d2f5aa351c0d9d76e4051f094335278d0168ee5b2c6920fca91a  ./tests/pan548/registration.test.mjs
 33e068b5f322552e43a52f1a7bc339973594534f3dac9cd188d032dccf1ce7da  ./tests/pan549/browser-analysis.test.mjs
 4857bd4b4d3eef45a37d280826a1eb5620093904d6729cf30c386a50afe6b0bd  ./tests/pan549/browser-fixture.mjs
 9bae7775fe4fb4a5e48b5cea2bbc96620151a82833643319996a6c6e81eb6de6  ./tests/pan549/browser-lifecycle-analysis.test.mjs
@@ -2788,5 +2788,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-e8e05d141d7dc0bf437dcd884d67419538a71e5cfa92af0d9e16a11fbe3ec57b  ./verification/verification-dag-v2.json
+ab9f493e46f92a19e8ba7f13e04b8e1ab37b124a0e0886aefe709e20c727c300  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
