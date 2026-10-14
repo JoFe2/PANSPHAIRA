@@ -891,6 +891,14 @@ const PROFILE_VERSION_MIGRATIONS: readonly Readonly<ProfileVersionMigration>[] =
   "toSha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9",
   "reason": "Register the bounded public ADB semantic checker, independent field-unit-value-payload-effect reference, actual state-transition regression and exact source guide on the existing repository-integrity owner. Actual unchanged scanner observes files1266 and ledger2796. Preserve all historical migrations, immutable21 obligations/13 profiles, graph104/all109, original tests/security/deadlines and legacy1792 runnable members; no new DAG node, policy engine, worker, pipeline, model/audio/private/cloud/production/KS authority. Original487 CSCL11 mapping holdout and historical ADB PASS observations remain unchanged. Local synthetic checker success is not a real AI-blind participant/model result or full factory epic acceptance."
 }),
+  Object.freeze({
+  "migrationId": "PAN616-EXISTING-CONFIRMED-ERV-VARIANTS/INTEGRITY-GENERATOR/V96",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 96,
+  "fromSha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9",
+  "toSha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52",
+  "reason": "Register exactly five source-only bounded ERV contribution/reference/native-application/browser-test members on the existing563/568,528/566 and541/527 ownership; closed six-file568 entry retains every original case. Actual unchanged mechanical scanner: files1270/import-sites336/import-files335/ledger2801. Preserve graph104/all109, 128-input/64-command bounds, immutable21 admitted-base obligations/13 pinned profiles, complete earlier migrations, scanner/validator/negative semantics, product time/security limits and closed legacy1792. Existing amount kernel, same A2 row/revision/CAS and same A5 journal bind explicit percentages/units/denominator/direction/operator/separate threshold and independent own public reference facts. Real TLS/Chromium/546 projection reads that isolated synthetic reference, not the active invoice. No second registry/store/policy/task engine, pipeline/worker, model/audio/private/cloud/production/KS rights. Registration is not frozen review, protected CI/merge/release/archive/original closure or WholeGoal acceptance."
+}),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -903,17 +911,17 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1266,
+  "filesScanned": 1270,
   "declarationSites": 37,
   "declarationFiles": 37,
-  "importSites": 335,
-  "importFiles": 334,
+  "importSites": 336,
+  "importFiles": 335,
   "reexportSites": 7,
   "similarShapeSites": 30,
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2796,"uniquePaths":2796,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2801,"uniquePaths":2801,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1696,7 +1704,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91,92,93,94,95]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,84,85,86,87,88,89,90,91,92,93,94,95,96]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;

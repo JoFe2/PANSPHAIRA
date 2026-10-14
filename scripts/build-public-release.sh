@@ -770,6 +770,11 @@ repository_only_files = {
     "docs/architecture/native-authenticated-browser-surfaces-v2.md",
 
     # PAN568 versioned goals on the existing563 owner, source evidence only.
+    "contracts/trade/pan616-erv-reference-v1.json",
+    "tests/pan568/erv-application.test.mjs",
+    "tests/pan568/browser-erv-variants.test.mjs",
+    "src/pan563/erv-variants.mjs",
+    "tests/pan568/erv-variants.test.mjs",
     "src/pan563/goal-contributions.mjs",
     "packages/browser-workspace/src/configuration-goals-v1.ts",
     "scripts/run-pan568-registered-goal-contribution-tests.mjs",
