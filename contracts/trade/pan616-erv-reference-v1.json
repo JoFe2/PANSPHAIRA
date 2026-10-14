@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "pansphaira.erv/configured-own-reference/v1",
+  "caseId": "OWNED-ERV-INVOICE-10000-PO-RECEIPT-9850-V1",
+  "scope": "PUBLIC_OWN_SYNTHETIC_REFERENCE_NOT_ACTIVE_INVOICE",
+  "revision": 1,
+  "references": [
+    {"referenceKind": "SUPPLIER", "referenceId": "SUP-OWN616", "supplierId": "SYN616", "amountMinor": 0, "quantity": 0, "unit": "PC", "currency": "EUR"},
+    {"referenceKind": "INVOICE", "referenceId": "INV-OWN616", "supplierId": "SYN616", "amountMinor": 10000, "quantity": 2, "unit": "PC", "currency": "EUR"},
+    {"referenceKind": "PURCHASE_ORDER", "referenceId": "PO-OWN616", "supplierId": "SYN616", "amountMinor": 9850, "quantity": 2, "unit": "PC", "currency": "EUR"},
+    {"referenceKind": "RECEIPT", "referenceId": "RC-OWN616", "supplierId": "SYN616", "amountMinor": 9850, "quantity": 2, "unit": "PC", "currency": "EUR"}
+  ]
+}

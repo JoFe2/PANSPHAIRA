@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "450c4386ebdc936388869aaa5c0adef07c44c90578afd6885f7626bff8a7cb99"
+        "sha256": "c5d57f5825574b84f718fdb81ce68472264aea09506a260cd0dc435eafa294fb"
       }
     ]
   },
@@ -851,6 +851,14 @@
       "fromSha256": "262fd5e2ad8da65a9f09ac3acff3065235891aa02cbf23ae556a43430b1f4ef0",
       "toSha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9",
       "reason": "Register the bounded public ADB semantic checker, independent field-unit-value-payload-effect reference, actual state-transition regression and exact source guide on the existing repository-integrity owner. Actual unchanged scanner observes files1266 and ledger2796. Preserve all historical migrations, immutable21 obligations/13 profiles, graph104/all109, original tests/security/deadlines and legacy1792 runnable members; no new DAG node, policy engine, worker, pipeline, model/audio/private/cloud/production/KS authority. Original487 CSCL11 mapping holdout and historical ADB PASS observations remain unchanged. Local synthetic checker success is not a real AI-blind participant/model result or full factory epic acceptance."
+    },
+    {
+      "migrationId": "PAN616-EXISTING-CONFIRMED-ERV-VARIANTS/INTEGRITY-GENERATOR/V96",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 96,
+      "fromSha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9",
+      "toSha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52",
+      "reason": "Register exactly five source-only bounded ERV contribution/reference/native-application/browser-test members on the existing563/568,528/566 and541/527 ownership; closed six-file568 entry retains every original case. Actual unchanged mechanical scanner: files1270/import-sites336/import-files335/ledger2801. Preserve graph104/all109, 128-input/64-command bounds, immutable21 admitted-base obligations/13 pinned profiles, complete earlier migrations, scanner/validator/negative semantics, product time/security limits and closed legacy1792. Existing amount kernel, same A2 row/revision/CAS and same A5 journal bind explicit percentages/units/denominator/direction/operator/separate threshold and independent own public reference facts. Real TLS/Chromium/546 projection reads that isolated synthetic reference, not the active invoice. No second registry/store/policy/task engine, pipeline/worker, model/audio/private/cloud/production/KS rights. Registration is not frozen review, protected CI/merge/release/archive/original closure or WholeGoal acceptance."
     }
   ],
   "scanScope": {
@@ -893,15 +901,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1266,
+    "filesScanned": 1270,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 335,
-    "importFiles": 334,
+    "importSites": 336,
+    "importFiles": 335,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2796,
-    "ledgerUniquePaths": 2796
+    "ledgerEntries": 2801,
+    "ledgerUniquePaths": 2801
   },
   "profiles": [
     {
@@ -974,7 +982,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9"
+      "sha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1436,8 +1444,8 @@
     },
     {
       "owner": "pan563",
-      "importSites": 2,
-      "importFiles": 2
+      "importSites": 3,
+      "importFiles": 3
     },
     {
       "owner": "pan565",
@@ -1770,7 +1778,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9",
+      "sha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52",
       "basis": "profile-version-migration"
     },
     {

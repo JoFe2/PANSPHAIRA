@@ -3565,6 +3565,11 @@ if(!repositoryIntegrityNode.ownedTests.includes('npm run pan569:test'))repositor
 
 // PAN568 additive native module goals; existing graph98/all103 topology unchanged.
 const pan568Inputs=[
+  ["contracts/trade/pan616-erv-reference-v1.json", "FIXTURE", "pan563-configuration-draft-v1"],
+  ["tests/pan568/erv-application.test.mjs", "VALIDATOR", "pan563-configuration-draft-v1"],
+  ["tests/pan568/browser-erv-variants.test.mjs", "VALIDATOR", "pan563-configuration-draft-v1"],
+  ["src/pan563/erv-variants.mjs", "SOURCE", "pan563-configuration-draft-v1"],
+  ["tests/pan568/erv-variants.test.mjs", "VALIDATOR", "pan563-configuration-draft-v1"],
   [
     "src/pan563/goal-contributions.mjs",
     "SOURCE",

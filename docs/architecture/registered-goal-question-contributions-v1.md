@@ -63,3 +63,34 @@ remain unchanged. This issue does not close those originals or WholePAN500Goal.
 
 FOLLOW_UP (nonblocking): existing outer read-flight convenience; owner PAN568,
 verify delayed-read/recovery after the initial functional delivery. No new gate.
+
+## Additive Original616 candidate — bounded configured ERV
+
+The original two contributions and historical PAN360/AP04 frozen fixtures remain
+unchanged. The same A2 owner also registers erv-invoice-validate/v1,
+erv-three-way-1pct/v1 and erv-three-way-2pct/v1. These execute the existing amount
+matcher through an explicitly code-owned bounded runtime selector, not a forged
+frozen-pack compilation/digest or a second registry. Invoice-only checks limited
+fields, supplier relation, quantity, unit/currency and returns
+VALIDATED_NOT_MATCHED; it is not fiscal, archival, payment or external validation.
+
+All amounts are EUR_MINOR. The percentage denominator is the invoice amount;
+absolute max-minus-min of invoice/PO/receipt is accepted at LESS_OR_EQUAL, with
+ROUND_HALF_UP_MINOR. An explicit separate approval threshold uses invoice amount
+STRICTLY_GREATER; 0 disables only that additional threshold, never grants rights.
+UNKNOWN, DECLINE and contradictory answers retain questions and no configuration.
+Provider source bytes, current policy, principal/instance and all contributions
+bind the existing row/revision/CAS. The proposal's nativeOperations remain empty.
+
+The existing566 confirmed plan/application owns the subsequent binding. Its only
+new reference is contracts/trade/pan616-erv-reference-v1.json: a public owned
+synthetic invoice10000 and PO/receipt9850, not the selected active invoice.
+Independent raw-document integer arithmetic yields one-percent CONFLICT versus
+two-percent MATCHED; separate thresholds do not change the matching decision.
+The same protected lazy editor supplies an explicitly separate read-only panel
+inside the existing546 ERV view. Re-read and actual service restart preserve the
+existing528 journal and563 draft; no extra store, task/model/booking dispatch,
+personal-view persistence, source privilege or general policy engine is added.
+Only READ is allowed from ERV context; prepare/confirm/apply remain configuration
+context operations with current reviewer/authentication checks. Original616 is
+not delivered until its own four criteria and all required delivery gates pass.

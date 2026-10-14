@@ -22,3 +22,34 @@ Use the existing supported Linux x86_64 Node24.14.1/npm11.16.0, a trusted Node/n
 The UI uses the existing Notebook light-card workspace and native step/work/summary hierarchy. Whole Desktop/390px plan/diff/first-result and targeted empty/error/expiry/offline/keyboard/CSS200 views bind source, compiled bytes, context and viewport. Native browser200 proof remains separate from CSS-layout200. No crops, full-page downscale, fake capability, blanket image re-audit, pixelbaseline, Human study or design approval is asserted. JSON/digests are only folded technical details; business labels, source/limits, before/after and honest runtime outcomes are primary.
 
 Compiler/options/CSP, native lease60000ms, per-asset/composite131072, original closed1792 legacy manifest, existing module/scanner/validator/negative hardgates and prior frozen migrations remain unchanged. Only affected direct consumers and exact additive registry/integrity metadata are requalified. One independent focused review and concrete fixes, then required exact Source/Main CI/raw/WholeCanonical, protected merge, fresh anonymous source build/native tests and mandatory public released-tree event/readback precede original CLOSED/completed. Earlier562564550547 deliveries, externally held KS and paused work are not restarted. WholePAN500GoalOPEN.
+
+## Additive Original616 bounded ERV application candidate
+
+The same prepared/confirmed/apply/reconcile state machine and528 owner journal
+also bind the three registered563/568 ERV profiles. The exact selected goal row
+revision, provider code/current-principal binding, normalized domain diff,
+instance/tenant/subject/context and60000ms expiry are checked before application.
+Only the current protected reviewer can separately approve the fixed own public
+synthetic reference; a goal draft or a copied digest never grants this operation.
+
+The new branch performs an in-process bounded call to the existing ERV core,
+not RUN_STARTER, a child, a booking or a model. The existing candidate journal
+stores the observed reference facts/result, still unqualified until explicit
+reconciliation. Fresh raw public reference documents supply independent exact
+integer Sollvalues, checked against the persisted facts and plan/source binding.
+The original515 branch, budget/child/unknown custody and employee441 restriction
+remain unchanged. Duplicate apply is refused; lost responses require explicit
+read/reconciliation. Expired/stale/revoked authorization cannot apply. ERV has no
+running child to abort and no implicit binding rollback: select/reconfirm the
+required earlier profile through the same explicit plan instead.
+
+The protected editor renders profile/percentage/domain semantics, separate
+approval threshold and actual before/after diff. A read-only projection in the
+existing546 ERV view reads the same566 endpoint/journal; only READ is accepted
+in ERV context. The labelled INV-OWN616 own reference is not the active invoice,
+a personal view setting, a customer document or external fiscal validation.
+Active-invoice unavailability remains visible and is not converted into a PASS.
+Actual TLS/Chromium checks exercise one/two-percent distinct results, independent
+reload/service restart and real server logout/revoked-token replay refusal.
+The source remains a candidate until its own review and required delivery gates;
+this extension never reopens or redelivers original566 or573/615/653654.
