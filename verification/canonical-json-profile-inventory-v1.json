@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "c5d57f5825574b84f718fdb81ce68472264aea09506a260cd0dc435eafa294fb"
+        "sha256": "4bf267becf626b573b165341a60fbc7c41df0790ba198025176e51b67b3f3160"
       }
     ]
   },
@@ -859,6 +859,14 @@
       "fromSha256": "09c3277725e7ade9e5148d28031c9d6a5e064114663df55921cc4d482ad7d4f9",
       "toSha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52",
       "reason": "Register exactly five source-only bounded ERV contribution/reference/native-application/browser-test members on the existing563/568,528/566 and541/527 ownership; closed six-file568 entry retains every original case. Actual unchanged mechanical scanner: files1270/import-sites336/import-files335/ledger2801. Preserve graph104/all109, 128-input/64-command bounds, immutable21 admitted-base obligations/13 pinned profiles, complete earlier migrations, scanner/validator/negative semantics, product time/security limits and closed legacy1792. Existing amount kernel, same A2 row/revision/CAS and same A5 journal bind explicit percentages/units/denominator/direction/operator/separate threshold and independent own public reference facts. Real TLS/Chromium/546 projection reads that isolated synthetic reference, not the active invoice. No second registry/store/policy/task engine, pipeline/worker, model/audio/private/cloud/production/KS rights. Registration is not frozen review, protected CI/merge/release/archive/original closure or WholeGoal acceptance."
+    },
+    {
+      "migrationId": "PAN605-LIMITED-INDEPENDENT-BROWSER-PAIR/INTEGRITY-GENERATOR/V97",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 97,
+      "fromSha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52",
+      "toSha256": "698906c1f4e18908cc66a319414209a677d5e6c69b5d99def438615e5961b096",
+      "reason": "Register the five already-reviewed source-only limited605 native browser-pair contract/UI/native-browser test members on existing597 SURF and548 ledger ownership. Actual unchanged scanner observes files1275/import-sites338/import-files337/ledger2806. Retain graph104/all109,128-input/64-command bounds, immutable21 admitted byte obligations/13 profiles, every prior migration, unchanged scanner/validator/negative cases, legacy1792 and all product security/time/authority gates. Pairing grants no field/data-class/projection/display/business/model/audio/device authority; neither whole605 nor606 closure is inferred."
     }
   ],
   "scanScope": {
@@ -901,15 +909,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1270,
+    "filesScanned": 1275,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 336,
-    "importFiles": 335,
+    "importSites": 338,
+    "importFiles": 337,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2801,
-    "ledgerUniquePaths": 2801
+    "ledgerEntries": 2806,
+    "ledgerUniquePaths": 2806
   },
   "profiles": [
     {
@@ -982,7 +990,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52"
+      "sha256": "698906c1f4e18908cc66a319414209a677d5e6c69b5d99def438615e5961b096"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1269,8 +1277,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 149,
-      "importFiles": 149
+      "importSites": 150,
+      "importFiles": 150
     },
     {
       "owner": "cscl-03",
@@ -1459,8 +1467,8 @@
     },
     {
       "owner": "pan597",
-      "importSites": 1,
-      "importFiles": 1
+      "importSites": 2,
+      "importFiles": 2
     },
     {
       "owner": "procurement-434",
@@ -1778,7 +1786,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52",
+      "sha256": "698906c1f4e18908cc66a319414209a677d5e6c69b5d99def438615e5961b096",
       "basis": "profile-version-migration"
     },
     {

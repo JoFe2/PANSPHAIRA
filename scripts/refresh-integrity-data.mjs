@@ -3612,6 +3612,11 @@ if(!repositoryIntegrityNode.ownedTests.includes('npm run pan568:test'))repositor
 
 // PAN597 additive delivery/read-contract verification, not a new product pipeline.
 const pan597Inputs=[
+  ["tests/pan597/browser-pairing.test.mjs", "VALIDATOR"],
+  ["packages/contracts/src/workspace-browser-pairing-v1.ts", "CONTRACT"],
+  ["packages/browser-workspace/src/workspace-browser-pairing-v1.ts", "SOURCE"],
+  ["src/pan597/native-browser-pairing-v1.mjs", "SOURCE"],
+  ["tests/pan597/native-browser-pairing.test.mjs", "VALIDATOR"],
   [
     "packages/contracts/src/workspace-surface-v2.ts",
     "CONTRACT"

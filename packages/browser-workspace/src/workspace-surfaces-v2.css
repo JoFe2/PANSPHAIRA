@@ -9,3 +9,14 @@
 .surface-source,.surface-content{max-width:100%;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;background:#f3f6f8;border:1px solid #cbd6de;border-radius:.4rem;padding:.75rem;font: .9rem/1.6 ui-monospace,monospace;}
 @container workspace (min-width:56rem){.surface-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}.workspace-surfaces{grid-column:1/-1;}}
 @container workspace (max-width:20rem){.workspace-surfaces{padding:.5rem;border-left-width:2px;}.surface-source,.surface-content{padding:.5rem;}}
+/* Browser-pair handshake follows existing SURF contrast/focus/width rules. */
+.surface-browser-pairing{margin-top:1rem;padding-top:1rem;border-top:1px solid #cbd6de;min-width:0;}
+.surface-browser-pairing h3{margin-top:0;}
+.surface-pair-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:.65rem;min-width:0;}
+.surface-pair-controls button,.surface-pair-controls input{box-sizing:border-box;min-width:0;max-width:100%;width:100%;min-height:44px;font:inherit;}
+.surface-pair-controls input{padding:.65rem;border:1px solid #587b91;border-radius:.4rem;color:#173b51;background:#fff;}
+.surface-pair-controls input[readonly]{font-family:ui-monospace,monospace;background:#f3f6f8;}
+.surface-pair-details{overflow-wrap:anywhere;word-break:break-word;max-width:100%;}
+.surface-pair-controls :focus-visible{outline:3px solid #235b8a;outline-offset:3px;}
+@container workspace (min-width:56rem){.surface-pair-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}}
+

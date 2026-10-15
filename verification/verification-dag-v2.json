@@ -4926,7 +4926,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "6c83b3073abaf8640afb58d11e8ae5dfb971ac67bb2b0ee24565eb33df638da2"
+          "sha256": "93603291367ad2827afb2aa9132984906cc8dd828d2d13df97bac7f24c56335f"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4991,7 +4991,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "c5d57f5825574b84f718fdb81ce68472264aea09506a260cd0dc435eafa294fb"
+          "sha256": "4bf267becf626b573b165341a60fbc7c41df0790ba198025176e51b67b3f3160"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5116,7 +5116,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "4ee85ad2620626c864638b3bddfbd89095c5692f168b3a02914af0cdc2711c9a"
+          "sha256": "f09d27ea5a06b18af49b36de74ae909e6beceab7e7b73dda01800204ad79d200"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -9074,7 +9074,7 @@
         {
           "path": "src/pan527/origin-session-adapter.mjs",
           "role": "SOURCE",
-          "sha256": "e2ceeba0802908280e71c5f4da1da460a03879a2052f94a56d0505b1c1006669"
+          "sha256": "49c98367d23e917fe90889e87b73449f4228355f98642d28f06764613d7307c1"
         },
         {
           "path": "scripts/run-pan527-origin-session-tests.mjs",
@@ -11203,7 +11203,7 @@
         {
           "path": "packages/browser-workspace/src/context-selection-v1.ts",
           "role": "SOURCE",
-          "sha256": "dab71da2518010d519dc2bf4c644468302215950c872afc5cb47245d5f933eb7"
+          "sha256": "ab7cfaf82328eb8e3db48517c880069fc4f2edd4e23377ef2884be66fe02c30d"
         },
         {
           "path": "packages/contracts/src/workspace-context-selection-v1.ts",
@@ -11371,6 +11371,31 @@
       ],
       "inputs": [
         {
+          "path": "tests/pan597/browser-pairing.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "14495e9f2595ce44f1d3a8c2de518caa59fbf29320c1297ed6217977cd642373"
+        },
+        {
+          "path": "packages/contracts/src/workspace-browser-pairing-v1.ts",
+          "role": "CONTRACT",
+          "sha256": "5f70cb439acb4061b5e38b3fbdda67940456722311ff1715e9bdb477c441d583"
+        },
+        {
+          "path": "packages/browser-workspace/src/workspace-browser-pairing-v1.ts",
+          "role": "SOURCE",
+          "sha256": "4a9957d4044a463d16c010bc0f9c7d9407d6b68a57e7f268fc83a4d1acfecdef"
+        },
+        {
+          "path": "src/pan597/native-browser-pairing-v1.mjs",
+          "role": "SOURCE",
+          "sha256": "547e1efffd760bf3cc956918b1f7b876273a523493c58eee2354af802f5368fd"
+        },
+        {
+          "path": "tests/pan597/native-browser-pairing.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "94104f725fef2fedd59896a26ca9d088dd3f168cbf4ca3a1c7383b5277c61b9f"
+        },
+        {
           "path": "packages/contracts/src/workspace-surface-v2.ts",
           "role": "CONTRACT",
           "sha256": "38e8baa4ea7e05bca86a25026fc302c4a826d0b9a683de63ef7fded196bee803"
@@ -11378,12 +11403,12 @@
         {
           "path": "packages/browser-workspace/src/workspace-surfaces-v2.ts",
           "role": "SOURCE",
-          "sha256": "2e942b41df1fbd27862f92046a993b18f6e9e7a1b7de14f8c42157418d52448d"
+          "sha256": "cea3795e093319ffd1c280f1de1e79ae326b1102ae89bfadafcf9de6854d9c03"
         },
         {
           "path": "packages/browser-workspace/src/workspace-surfaces-v2.css",
           "role": "SOURCE",
-          "sha256": "be35fc6d3cf6283b87970980f5b6145bc6f5590b42eeeaa80ead8d38bf1acd53"
+          "sha256": "a32e5848eccc41aabc0b5f061637f820de40bdd85ca1bb7cb3dcd74c6309103a"
         },
         {
           "path": "src/pan546/native-surface-projection-v2.mjs",
@@ -11393,12 +11418,12 @@
         {
           "path": "src/pan597/native-surfaces-v2.mjs",
           "role": "SOURCE",
-          "sha256": "f0f9f0fa545c342ea6d5986f6b6a9ac4b0ee154f2e6ac38df0716f4f3e13da4f"
+          "sha256": "2afc6bef511302a4a48680224ac42e676a99aedc8d2ec4d375a77e24472efacf"
         },
         {
           "path": "scripts/run-pan597-native-surface-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "c0ff8f01c9fb3ed204cb0bdeb4b5f7db4de0e8fe8a6c49c8c184e98c8676e369"
+          "sha256": "1ee9465b311e2129c1da69905c2ede9d95b8b6835a7f281047f40aea6a526b90"
         },
         {
           "path": "tests/pan597/native-surfaces.test.mjs",
@@ -11418,12 +11443,12 @@
         {
           "path": "tests/pan597/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f98e888155dbcf0dea79aa16eeb1ad0efb6ff7b155600430a560f6c00525e697"
+          "sha256": "96100301119f76c6fbb5b6f0caac99e3373179d43cfc7bf6492a1ad59d4a4748"
         },
         {
           "path": "docs/architecture/native-authenticated-browser-surfaces-v2.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "a3fd66890f654f3326fa853b119adfd7adde87f92c6079979c6c2ac703e12e02"
+          "sha256": "c10c5e0aabab52025e8c31e6e486c8d0d7bb09a79cd7d097fbd84557f1cf96d1"
         }
       ],
       "ownedTests": [
