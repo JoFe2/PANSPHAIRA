@@ -36,7 +36,7 @@ test("PUI-01-AC03 actual shared-browser navigation reads both native Setup/ERV b
     assert.equal(await page.evaluate(() => window.isSecureContext), true); assert.equal(await page.evaluate(() => document.cookie), "");
     await page.screenshot({ path: join(process.env.PAN541_BROWSER_EVIDENCE, "desktop-setup.png"), fullPage: true });
     await page.getByRole("button", { name: "Eingangsrechnungsprüfung — nur lesen", exact: true }).click();
-    await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor();
+    await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor({state:'attached'});
     assert.ok(requests.some(r => r.path === "/t/tenant-a/workspace/erv"));
     assert.match(await page.locator("main").innerText(), /AP-PAN516-MATCHED-01/);
     assert.match(await page.locator("main").innerText(), /600,00/);

@@ -1,6 +1,27 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Gemeinsamer Arbeitsplatz</title><link rel="stylesheet" href="workspace/style.css"><script type="module" src="workspace/app.js"></script></head>
-<body><a class="skip-link" href="#shell.main">Zum Arbeitsbereich</a><header><div><strong>Gemeinsamer Arbeitsplatz</strong><p>Einrichtung und Eingangsrechnungsprüfung — lesender synthetischer Anschluss</p></div><button id="shell.logout" type="button">Abmelden</button></header>
-<div class="shell-layout"><nav id="shell.navigation" aria-label="Arbeitsbereiche"></nav><div class="workspace"><section id="shell.notifications" hidden aria-label="Persönliche Hinweise und Benachrichtigungen"></section><section id="profile.controls" aria-label="Persönliches Darstellungsprofil"></section><div id="profile.canvas" class="profile-canvas"><section id="shell.widgets" role="status">Geschützter Arbeitsplatz wird geladen …</section><section id="pan.workspace.boundary" aria-label="Darstellungsgrenze"><h2>Darstellungsgrenze</h2><p>Reihenfolge, Sichtbarkeit und Größe sind persönliche Darstellung. Fachwerte und aktuelle Rechte bleiben beim Backend; ausgeblendete Panels erteilen keine Authority.</p></section><main id="shell.main" tabindex="-1" aria-live="polite"></main><aside id="shell.panels" tabindex="-1" hidden aria-label="Informationen zum Vorgang"></aside></div><section id="shell.actions" aria-label="Vorgangsaktionen"></section></div></div>
-<section id="shell.context-selection" hidden aria-labelledby="shell.context-selection.heading"></section>
-<footer>Trusted-in-process: ausschließlich codeeigene Factories. Keine Sandbox für unvertrauenswürdigen Code, keine externe Plugininstallation und keine Rechte aus Layout oder Pluginmetadaten.</footer></body></html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PanSphaira · Arbeitsplatz</title><link rel="stylesheet" href="workspace/style.css"><script type="module" src="workspace/app.js"></script></head>
+<body><a class="skip-link" href="#shell.main">Zum Arbeitsbereich</a>
+<header class="product-header"><div class="product-brand"><span class="product-mark" aria-hidden="true"><svg role="img" aria-labelledby="pansphaira-icon-positive-title pansphaira-icon-positive-desc" xmlns="http://www.w3.org/2000/svg" width="1254" height="1254" viewBox="0 0 1254 1254">
+  <title id="pansphaira-icon-positive-title">PanSphaira icon</title>
+  <desc id="pansphaira-icon-positive-desc">Black geometric icon composed of seven connected circles.</desc>
+  <g fill="none" stroke="#000000" stroke-width="17.5">
+    <g stroke-linecap="round">
+      <line x1="278.873" y1="517.392" x2="349.293" y2="652.881"/>
+      <line x1="215.021" y1="856.736" x2="330.476" y2="754.438"/>
+      <line x1="442.598" y1="693.425" x2="554.190" y2="662.344"/>
+      <line x1="568.370" y1="321.053" x2="619.388" y2="554.014"/>
+      <line x1="715.858" y1="600.179" x2="840.836" y2="537.865"/>
+      <line x1="616.509" y1="723.304" x2="582.871" y2="855.253"/>
+    </g>
+    <circle cx="215" cy="394.5" r="138.5"/>
+    <circle cx="555" cy="260" r="62.5"/>
+    <circle cx="997" cy="460" r="174.5"/>
+    <circle cx="638" cy="639" r="87"/>
+    <circle cx="379.5" cy="711" r="65.5"/>
+    <circle cx="164.5" cy="901.5" r="67.5"/>
+    <circle cx="541" cy="1019.5" r="169.5"/>
+  </g>
+</svg></span><div><strong>PanSphaira</strong><p>Dein geschützter Arbeitsplatz</p></div></div><div id="workspace.invoice-search" class="workspace-global-search"></div><div class="product-session"><span>Lokale Sitzung</span><button id="shell.logout" type="button">Abmelden</button></div></header>
+<div class="shell-layout"><aside class="workspace-sidebar"><div class="workspace-nav-heading"><span class="workspace-nav-dot" aria-hidden="true"></span>Mein Arbeitsplatz</div><nav id="shell.navigation" aria-label="Arbeitsbereiche"></nav><p class="workspace-nav-note">Deine Aufgaben.<br>Ein klarer Überblick.</p></aside><div class="workspace"><div class="workspace-toolbar"><p class="workspace-breadcrumb">Arbeitsplatz <span aria-hidden="true">›</span> <strong id="workspace.section-name">Einrichtung</strong></p><details class="workspace-personal-details" id="workspace.profile-details"><summary aria-label="Darstellung anpassen">Darstellung anpassen</summary><section id="profile.controls" aria-label="Persönliches Darstellungsprofil"></section></details></div><section id="shell.notifications" hidden aria-label="Persönliche Hinweise und Benachrichtigungen"></section><div class="mobile-workspace-switch" role="group" aria-label="Arbeitsbereich wählen"><button id="workspace.mode-task" type="button" aria-pressed="true">Rechnung</button><button id="workspace.mode-assistant" type="button" aria-pressed="false">Assistent</button></div><div id="profile.canvas" class="profile-canvas"><section id="shell.widgets" role="status">Geschützter Arbeitsplatz wird geladen …</section><details id="pan.workspace.boundary" aria-label="Darstellungsgrenze"><summary>Darstellung &amp; Grenzen</summary><h2>Darstellungsgrenze</h2><p>Reihenfolge, Sichtbarkeit und Größe sind persönliche Darstellung. Fachwerte und aktuelle Rechte bleiben beim Backend; ausgeblendete Panels erteilen keine Authority.</p></details><main id="shell.main" tabindex="-1" aria-live="polite"></main><aside id="shell.panels" tabindex="-1" hidden aria-label="Informationen zum Vorgang"></aside></div><section id="shell.actions" aria-label="Vorgangsaktionen"></section></div></div>
+<details class="workspace-context-details" id="workspace.context-details"><summary>Kontext &amp; Berechtigungen</summary><section id="shell.context-selection" hidden aria-labelledby="shell.context-selection.heading"></section></details>
+<details class="workspace-system-details"><summary>System &amp; Sicherheit</summary><footer>Trusted-in-process: ausschließlich codeeigene Factories. Keine Sandbox für unvertrauenswürdigen Code, keine externe Plugininstallation und keine Rechte aus Layout oder Pluginmetadaten.</footer></details></body></html>

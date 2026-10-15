@@ -15,7 +15,7 @@ export const ervPluginV1: BrowserShellPluginV1 = {
     { id: browserWorkspaceStringValuesV1[75] as string, kind: browserWorkspaceStringValuesV1[126], slot: browserWorkspaceStringValuesV1[215], factoryId: browserWorkspaceStringValuesV1[75] as string, routeId: browserWorkspaceStringValuesV1[29], path: null, label: "Informationspanel öffnen" },
   ],
 };
-const euros = (value: number) => (value / 100).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " EUR";
+const euros = (value: number,currency:string) => new Intl.NumberFormat("de-DE",{style:"currency",currency}).format(value/100);
 export function createErvViewV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<HTMLElement> {
   return { kind: "VIEW", async render({ target, signal }) {
     target.append(text("h1", browserWorkspaceStringValuesV1[67] as string)); readState(target, "erv", browserWorkspaceStringValuesV1[26] as string, "Fachlicher Readback aus dem führenden nativen Speicher wird geladen …");
@@ -25,15 +25,17 @@ export function createErvViewV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<
     const value = validateBrowserErvReadV1(response.value);
     if (value.tenantId !== api.context().tenantId || value.invoiceId !== api.context().objectId) throw new Error("ERV_CURRENT_CONTEXT_DENIED");
     api.rememberInvoice(value);
-    readState(target, "erv", browserWorkspaceStringValuesV1[20] as string, "Echter fachlicher Readback empfangen — nur lesen, keine Buchung und kein Zahlungsauftrag.");
-    // Lead with the same validated native amounts, not invented dashboard metrics.
-    const summary = document.createElement('section'); summary.className = 'erv-financial-summary'; summary.setAttribute('aria-label', 'Native Beträge der aktuellen Rechnung');
-    for (const [label, amount] of [[browserWorkspaceStringValuesV1[206] as string, value.invoiceAmountMinor], [browserWorkspaceStringValuesV1[161] as string, value.expectedAmountMinor], [browserWorkspaceStringValuesV1[124] as string, value.varianceMinor]] as const) {
-      const card = document.createElement('div'); card.className = 'erv-value-card'; facts(card, [[label, euros(amount)]]); summary.append(card);
-    }
-    target.append(summary);
-    facts(target, [["Rechnung / Vorgang", value.invoiceId], ["Native Objektversion", String(value.revision)], ["Bestellt / angenommen / berechnet", [value.orderedQuantity, value.acceptedQuantity, value.invoicedQuantity].join(" / ")], ["Entscheidung des vorhandenen Prüfers", value.decisionOutcome], ["Fachlicher Status", value.status]]);
-    target.append(text("p", "Lokaler synthetischer Fall im vorhandenen führenden SQLite-Ziel. Diese Anzeige ersetzt keine externe Fiskal-/Archiv-/FiBuqualifikation und gewährt keine Buchungs- oder Zahlungsrechte."));
+    target.classList.add('erv-workspace');const heading=target.querySelector('h1')!;heading.className='erv-workspace-title';
+    const header=document.createElement('div');header.className='erv-workspace-heading';const symbol=text('span','');symbol.className='erv-workspace-symbol';symbol.setAttribute('aria-hidden','true');symbol.textContent='▤';header.append(symbol,heading);target.prepend(header);
+    const intro=text('p','Referenz: '+value.invoiceId);intro.className='erv-workspace-subtitle';header.append(intro);
+    const work=document.createElement('div');work.className='erv-review-layout';const record=document.createElement('section');record.className='erv-record-card';record.dataset.invoiceReference=value.invoiceId;record.dataset.nativeRevision=String(value.revision);record.setAttribute('aria-label','Belegkontext und nativer Abgleich');record.append(text('h2','Beleg & Abgleich'));const match=text('p',value.varianceMinor===0?'Die Beträge stimmen im nativen Abgleich überein.':'Betragsabweichung: Bitte den Vorgang klären.');match.className=value.varianceMinor===0?'erv-match':'erv-attention';record.append(match);
+    if(value.status!=='RELEASED_LOCAL_SYNTHETIC'){const warnings:Readonly<Record<string,string>>={UNRESOLVED_AMOUNT_DEVIATION:'Betragsabweichung — Klärung erforderlich.',UNRESOLVED_PARTIAL_INVOICE:'Teilrechnung — Klärung erforderlich.',UNRESOLVED_CONFIRMATION_CHANGE_NOT_APPROVED:'Bestätigungsänderung noch nicht freigegeben.'};const warning=text('p',warnings[value.status]??'Prüfstand nicht freigegeben.');warning.className='erv-attention';record.append(warning);}
+    const quantities=document.createElement('dl');quantities.className='erv-quantity-summary';for(const[label,quantity]of[['Bestellt',value.orderedQuantity],['Angenommen',value.acceptedQuantity],['Berechnet',value.invoicedQuantity]]as const){const item=document.createElement('div'),amount=text('dd',new Intl.NumberFormat('de-DE').format(quantity)+' '),unit=text('span','Einheit nicht bestätigt');unit.className='erv-quantity-unit';amount.append(unit);item.append(text('dt',label),amount);quantities.append(item);}const linked=text('p','');linked.className='erv-linked-reference';linked.hidden=true;record.append(quantities,linked);work.append(record);
+    const summary=document.createElement('section');summary.className='erv-financial-summary';summary.setAttribute('aria-label','Native Beträge der aktuellen Rechnung');
+    for(const[label,amount]of[[browserWorkspaceStringValuesV1[206]as string,value.invoiceAmountMinor],[browserWorkspaceStringValuesV1[161]as string,value.expectedAmountMinor],[browserWorkspaceStringValuesV1[124]as string,value.varianceMinor]]as const){const card=document.createElement('div');card.className='erv-value-card';const display=document.createElement('dl');display.className='erv-amount';display.append(text('dt',label),text('dd',euros(amount,value.currency)));card.append(display);summary.append(card);}target.append(summary);
+    const decision=document.createElement('div');decision.className='erv-decision-slot';work.append(decision);target.append(work);
+    const source=document.createElement('details');source.className='erv-source-details';source.append(text('summary','Vorgang & Quelldaten'));const sourceFacts=document.createElement('div');facts(sourceFacts,[['Rechnung / Vorgang',value.invoiceId],['Native Objektversion',String(value.revision)],['Bestellt / angenommen / berechnet',[value.orderedQuantity,value.acceptedQuantity,value.invoicedQuantity].join(' / ')],['Entscheidung des vorhandenen Prüfers',value.decisionOutcome],['Fachlicher Status',value.status]]);source.append(sourceFacts,text('p','Lokaler synthetischer Fall im vorhandenen führenden SQLite-Ziel. Keine externe Fiskal-/Archiv-/FiBuqualifikation; keine Buchungs- oder Zahlungsrechte.'));target.append(source);
+    const readback=document.createElement('details');readback.className='erv-readback-details';readback.append(text('summary','Datenherkunft & Lesestatus'));readState(readback,'erv',browserWorkspaceStringValuesV1[20]as string,'Echter fachlicher Readback empfangen — nur lesen, keine Buchung und kein Zahlungsauftrag.');target.append(readback);
   } };
 }
 export function createErvPanelV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<HTMLElement> {

@@ -24,6 +24,9 @@ async function start() {
   const scope = /^\/t\/([a-z0-9][a-z0-9-]{0,63})\/workspace$/.exec(location.pathname); if (!scope) throw new Error("WORKSPACE_ROUTE_DENIED");
   const base = "/t/" + scope[1]; const main = element(browserWorkspaceStringValuesV1[17] as string); const panel = element(browserWorkspaceStringValuesV1[218] as string); const actions = element(browserWorkspaceStringValuesV1[215] as string); const nav = element(browserWorkspaceStringValuesV1[37] as string); const widget = element(browserWorkspaceStringValuesV1[119] as string);
   const lifetime = new AbortController(); let invoice: BrowserErvReadV1 | null = null; let link: BrowserDeepLinkV1 | null = null;
+  const taskMode=element('workspace.mode-task')as HTMLButtonElement,assistantMode=element('workspace.mode-assistant')as HTMLButtonElement;document.body.dataset.mobileWorkArea='TASK';assistantMode.disabled=true;
+  function mobileArea(area:'TASK'|'ASSISTANT'){if(area==='ASSISTANT'&&!document.getElementById('shell.agent-panel'))area='TASK';document.body.dataset.mobileWorkArea=area;taskMode.setAttribute('aria-pressed',String(area==='TASK'));assistantMode.setAttribute('aria-pressed',String(area==='ASSISTANT'));if(area==='TASK'&&!main.hidden)main.focus({preventScroll:true});else document.getElementById('shell.agent-panel')?.querySelector<HTMLElement>('.agent-title')?.focus({preventScroll:true});}
+  taskMode.addEventListener('click',()=>mobileArea('TASK'),{signal:lifetime.signal});assistantMode.addEventListener('click',()=>mobileArea('ASSISTANT'),{signal:lifetime.signal});
   let profileEditor: Awaited<ReturnType<typeof createWorkspaceProfileEditorV1>> | null = null;
   let presentation: BrowserProfileReadV1 | null = null; let panelEpoch = 0;
   let notifications: ReturnType<typeof createWorkspaceNotificationsV1> | null = null;
@@ -93,8 +96,8 @@ async function start() {
       if(lifetime.signal.aborted)return null;
       const editor=module.createWorkspaceModuleViewEditorV1({main,context:contextSelection,signal:lifetime.signal});moduleViewEditor=editor;
       if(document.body.dataset.ownerAgentRuns==="true")void import(base+"/workspace/agent-run/app.js")
-        .then(module=>{if(!lifetime.signal.aborted)module.createWorkspaceAgentPanelV1({container:canvas,context:contextSelection,editor,signal:lifetime.signal});})
-        .catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Auftragspanel nicht verfügbar. Kein Lauf bestätigt; Fachnavigation, Profile und Abmelden bleiben unabhängig.'));});
+        .then(module=>{if(!lifetime.signal.aborted){module.createWorkspaceAgentPanelV1({container:canvas,context:contextSelection,editor,signal:lifetime.signal,showTask:()=>mobileArea('TASK'),openInfo:()=>{mobileArea('TASK');api.openInvoicePanel();}});assistantMode.disabled=false;}})
+        .catch(()=>{if(!lifetime.signal.aborted){assistantMode.disabled=true;mobileArea('TASK');canvas.append(text('p','Auftragspanel nicht verfügbar. Kein Lauf bestätigt; Fachnavigation, Profile und Abmelden bleiben unabhängig.'));}});
       return editor;
     }).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text("p","Persönliche Modulansicht nicht verfügbar. Kein gespeicherter Effekt oder Auftrag bestätigt; andere Module und Abmelden bleiben unabhängig."));return null;}) : Promise.resolve(null);
   if (document.body.dataset.ownerHumanDecisions === "true" && contextSelection) void import(base+"/workspace/erv-human/app.js")
@@ -115,9 +118,9 @@ async function start() {
   const analysisEnabled = document.body.dataset.ownerAnalysisReader === "true";
   const plugins = [document.body.dataset.ownerAdministration==="true"?setupPluginV1:{...setupPluginV1,contributions:setupPluginV1.contributions.filter(c=>!c.id.startsWith("pan.setup.administration."))}, ervPluginV1]; if (analysisEnabled) plugins.push(analysisPluginV1); if(document.body.dataset.ownerKnowledgeExplorer==="true"&&contextSelection)plugins.push(knowledgePluginV1); if (configurationEnabled) plugins.push(configurationDraftPluginV1); if (diagnostic) plugins.push(diagnostic.broken, diagnostic.disabled, diagnostic.missing);
   const diagnosticStates: string[] = [];
-  function showStates(message: string) {
-    widget.replaceChildren(text("p", message));
-    if (diagnosticStates.length) { const list = document.createElement("ul"); for (const state of diagnosticStates) list.append(text("li", state)); widget.append(list); }
+  function showStates(message: string,critical=false) {
+    widget.dataset.critical=String(critical);const details=document.createElement('details');details.className='workspace-connection-details';details.open=critical;details.append(text('summary',critical?'Verbindung prüfen':'Verbindung & Status'),text('p',message));widget.replaceChildren(details);
+    if(diagnosticStates.length){const list=document.createElement('ul');for(const state of diagnosticStates)list.append(text('li',state));details.append(list);}
   }
   const factories = new Map<string, BrowserShellFactoryV1<HTMLElement>>([
     [browserWorkspaceStringValuesV1[112] as string, createSetupViewV1(api)], [browserWorkspaceStringValuesV1[30] as string, createErvViewV1(api)], [browserWorkspaceStringValuesV1[13] as string, createErvPanelV1(api)], [browserWorkspaceStringValuesV1[75] as string, createErvActionV1(api)],
@@ -131,13 +134,15 @@ async function start() {
   for (const plugin of plugins) for (const c of plugin.contributions) if (c.kind === browserWorkspaceStringValuesV1[12]) {
     const route = plugin.contributions.find(r => r.kind === "ROUTE" && r.id === c.routeId);
     factories.set(c.factoryId, { kind: browserWorkspaceStringValuesV1[12], render({ target, signal }) {
-      const button = text(browserWorkspaceStringValuesV1[1] as string, c.label) as HTMLButtonElement; button.type = browserWorkspaceStringValuesV1[1];
+      const short:Readonly<Record<string,string>>={'/workspace/setup':'Einrichtung','/workspace/erv':'Rechnungen','/workspace/analysis':'Analysen','/workspace/knowledge':'Wissen','/workspace/configuration':'Konfiguration','/workspace/administration':'Administration'};
+      const paths:Readonly<Record<string,string>>={'/workspace/setup':'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2','/workspace/erv':'M7 3h7l4 4v14H7zM14 3v5h4M10 12h5m-5 4h5','/workspace/analysis':'M4 20V11m7 9V4m7 16v-7M2 21h20','/workspace/knowledge':'M3 5h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 7v15','/workspace/configuration':'M4 6h16M4 12h16M4 18h16M8 3v6m8 0v6M9 15v6','/workspace/administration':'M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6z'};
+      const button=text('button','')as HTMLButtonElement;button.type='button';button.setAttribute('aria-label',c.label);button.title=c.label;button.className='workspace-nav-item';const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('aria-hidden','true');const line=document.createElementNS('http://www.w3.org/2000/svg','path');line.setAttribute('d',paths[route?.path??'']??'M4 4h16v16H4z');icon.append(line);const label=text('span',short[route?.path??'']??(c.label==='Technischer Rendererfehlernachweis'?'Diagnostik':c.label));label.className='nav-label';button.append(icon,label);
       if (route?.path === link?.path) button.setAttribute("aria-current", "page");
       button.disabled = registry.status(plugin.id).outcome !== browserWorkspaceStringValuesV1[21];
       button.addEventListener("click", () => { if (route?.path) location.hash = "#" + route.path; }, { signal }); target.append(button);
     } });
   }
-  registry = createBrowserShellRegistryV1({ factories, reportFault(fault) { showStates("Pluginfehler: " + fault.outcome + ". Andere Module und Abmelden bleiben bedienbar."); } });
+  registry = createBrowserShellRegistryV1({ factories, reportFault(fault) { showStates("Pluginfehler: " + fault.outcome + ". Andere Module und Abmelden bleiben bedienbar.",true); } });
   for (const plugin of plugins) {
     const result = registry.register(plugin);
     if ([setupPluginV1.id, ervPluginV1.id, ...(analysisEnabled ? [analysisPluginV1.id] : [])].includes(plugin.id) && result.outcome !== browserWorkspaceStringValuesV1[21]) throw new Error("WORKSPACE_PLUGIN_REGISTRATION_DENIED");
@@ -154,7 +159,7 @@ async function start() {
       const c = owner.context(); owner.switchContext({ ...c, objectId: null, revision: c.revision + 1 }); disposal();
       document.body.dataset.nativeRevision = browserWorkspaceStringValuesV1[58]; main.hidden = false;
       main.append(text("h1", browserWorkspaceStringValuesV1[235] as string), text("p", "Session, Berechtigung oder aktueller Objektstand nicht mehr bestätigt. Frühere fachliche Inhalte und Kontextlisteners wurden verworfen. Arbeitsbereich mit aktueller Session neu laden."));
-      widget.dataset.state = browserWorkspaceStringValuesV1[2]; widget.textContent = "Aktueller Zugriff nicht bestätigt — keine alten Vorgangsinhalte.";
+      widget.dataset.critical="true";widget.dataset.state = browserWorkspaceStringValuesV1[2]; widget.textContent = "Aktueller Zugriff nicht bestätigt — keine alten Vorgangsinhalte.";
     },
     openTarget(value) {
       if (registry.status(value.target.pluginId).outcome !== browserWorkspaceStringValuesV1[21] || !registry.routes().some(r => r.pluginId === value.target.pluginId && r.routeId === value.target.routeId && r.state === browserWorkspaceStringValuesV1[21] && r.path === browserWorkspaceStringValuesV1[42])) throw new Error("WORKSPACE_NOTIFICATION_ROUTE_DENIED");
@@ -181,7 +186,7 @@ async function start() {
       void notifications?.refresh();
       main.hidden = false;
       main.append(text("h1", "Deep Link verweigert"), text("p", "Route, Tenant, Session, Objektparameter oder Version sind nicht gültig. Keine Anfrage an einen fremden Tenant."));
-      showStates("Deep Link verweigert — terminaler Zustand. Persönliche Hinweise werden unabhängig mit der aktuellen Session geprüft.");
+      showStates("Deep Link verweigert — terminaler Zustand. Persönliche Hinweise werden unabhängig mit der aktuellen Session geprüft.",true);
       for (const plugin of plugins) for (const c of plugin.contributions) if (c.kind === browserWorkspaceStringValuesV1[12]) {
         const rendered = await registry.render(c.id, nav); if (!activation.live() || rendered.outcome === browserWorkspaceStringValuesV1[120]) return;
       }
@@ -189,7 +194,7 @@ async function start() {
     }
     document.body.dataset.administrationActive=String(document.body.dataset.ownerAdministration==='true'&&selected.path==='/workspace/administration');
     if(document.body.dataset.ownerAdministration==='true'){const heading=document.querySelector('header strong'),description=document.querySelector('header p');if(heading)heading.textContent='PanSphaira';if(description)description.textContent=selected.path==='/workspace/administration'?'Geschützte Einrichtung, Freigaben und Wiederaufnahme':'Gemeinsamer Arbeitsplatz · native Fachansichten';}
-    link = selected;
+    link = selected;const routeNames:Readonly<Record<string,string>>={'/workspace/setup':'Einrichtung','/workspace/erv':'Rechnungen','/workspace/analysis':'Analysen','/workspace/knowledge':'Wissen','/workspace/configuration':'Konfiguration','/workspace/administration':'Administration'};element('workspace.section-name').textContent=routeNames[selected.path]??'Arbeitsplatz';document.body.dataset.workspaceRoute=selected.path;taskMode.textContent=selected.path==='/workspace/erv'?'Rechnung':(routeNames[selected.path]??'Arbeitsplatz');
     targetTransition=!!native;try{owner.switchContext({ ...current, objectId: selected.path === browserWorkspaceStringValuesV1[42] ? selected.objectId ?? browserWorkspaceStringValuesV1[94] : selected.path === browserWorkspaceStringValuesV1[89] ? selected.objectId ?? "analysis:common-trade-01:stock" : null, revision: current.revision + 1 });}finally{targetTransition=false;}disposal();
     const activation = captureActivation(invocation); if (!activation.live()) return;
     document.body.dataset.contextRevision = String(owner.context().revision); document.body.dataset.nativeRevision = browserWorkspaceStringValuesV1[58];
@@ -227,6 +232,7 @@ async function start() {
   element(browserWorkspaceStringValuesV1[216] as string).addEventListener("click", async () => {
     const response = await fetch(base + "/workspace/logout", { method: "POST", credentials: browserWorkspaceStringValuesV1[6] });
     if (response.status !== 200) { widget.textContent = "Abmelden nicht bestätigt. Keine Erfolgsmeldung."; return; }
+    mobileArea('TASK');taskMode.disabled=true;assistantMode.disabled=true;
     contextSelection?.close(); owner.close(); registry.close(); lifetime.abort(); invoice = null; nav.replaceChildren(); actions.replaceChildren(); panel.replaceChildren(); panel.hidden = true;
     main.hidden = false;
     main.replaceChildren(text("h1", "Abgemeldet"), text("p", "Die aktuelle Session wurde serverseitig widerrufen."));
@@ -248,6 +254,6 @@ async function start() {
   if(document.body.dataset.ownerMailLocalV1==='true'&&contextSelection){try{const module=await import(base+'/workspace/mail-local/app.js');if(!lifetime.signal.aborted)module.createWorkspaceMailLocalV1({container:canvas,context:contextSelection,signal:lifetime.signal});}catch{canvas.append(text('p','Lokale synthetische Nachrichtenquelle nicht verbunden; keine Mail-, Modell- oder Versandrechte.'));}}
   if(document.body.dataset.ownerReadonlyEventsV1==='true'&&contextSelection){try{const module=await import(base+'/workspace/readonly-events/app.js');if(!lifetime.signal.aborted)module.createWorkspaceReadonlyEventsV1({container:canvas,context:contextSelection,signal:lifetime.signal});}catch{canvas.append(text('p','Native Ereignisquelle nicht verbunden; keine Frische oder Werte erfunden.'));}}
   if(document.body.dataset.ownerContextProjectionV1==='true'&&contextSelection){try{const module=await import(base+'/workspace/context-projection/app.js');if(!lifetime.signal.aborted)module.createWorkspaceContextProjectionV1({container:canvas,context:contextSelection,signal:lifetime.signal,rulesVertical:document.body.dataset.ownerRulesVerticalV1==='true'});}catch{canvas.append(text('p','Lokaler Kontextvertrag nicht verbunden; Fachnavigation bleibt unabhängig.'));}}
-  if(document.body.dataset.ownerInvoiceNavigation==='true'&&contextSelection&&moduleViewEditor){try{const module=await import(base+'/workspace/invoice-navigation/app.js');if(lifetime.signal.aborted)return;navigation=module.createWorkspaceInvoiceNavigationV1({container:canvas,context:contextSelection,signal:lifetime.signal,drafts:draftOwners,editor:moduleViewEditor,profile:profileEditor,shellContext:owner.context,registry,activate});}catch{canvas.append(text('p','Suche nicht verfügbar.'));}}
+  if(document.body.dataset.ownerInvoiceNavigation==='true'&&contextSelection&&moduleViewEditor){try{const module=await import(base+'/workspace/invoice-navigation/app.js');if(lifetime.signal.aborted)return;navigation=module.createWorkspaceInvoiceNavigationV1({container:element('workspace.invoice-search'),context:contextSelection,signal:lifetime.signal,drafts:draftOwners,editor:moduleViewEditor,profile:profileEditor,shellContext:owner.context,registry,activate});}catch{canvas.append(text('p','Suche nicht verfügbar.'));}}
 }
 void start().catch(() => { const main = element(browserWorkspaceStringValuesV1[17] as string); main.replaceChildren(text("h1", "Arbeitsplatz nicht verfügbar"), text("p", "Keine gültige aktuelle Session oder kein gültiges Frontendbinding. Es wurde kein fachlicher Erfolg bestätigt.")); });
