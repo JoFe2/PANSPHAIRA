@@ -1,6 +1,7 @@
 // PAN597 owns Surface/Delivery only. PAN548 owns the referenced task projection;
 // SAME native SQLite connection/transaction, no task engine/model/audio grants.
 import {createHash,randomBytes,timingSafeEqual}from'node:crypto';
+import {createNativeBrowserPairHandshakeV1}from'./native-browser-pairing-v1.mjs';
 import {isNativeWorkspaceContextSelectionV1}from'../pan548/native-context-selection.mjs';
 import {nativeWorkspaceUiTaskOwnerConnectionV2,uiTaskClosedV2,uiTaskDigestV2}from'../pan548/native-ui-task-projection-v2.mjs';
 import {isNativeSurfaceProjectionReaderV2}from'../pan546/native-surface-projection-v2.mjs';
@@ -45,7 +46,9 @@ export function createNativeWorkspaceSurfacesV2(options){
  function result(headers,row){return {schemaVersion:'pansphaira.workspace-surface/delivery-readback/v2',commandId:row.command_id,status:row.status,originalCommand:command(row),requestDigest:t.readRow(row.command_id).request_digest,task:tasks.read(headers,row.command_id),render:row.result_json?JSON.parse(row.result_json):null,...noEffects};}
  const readback=(headers,row)=>result(headers,row);
  function missingDelivery(headers,commandId){const original=tasks.original(headers,commandId);transaction(()=>{t.principal(headers);db.prepare("UPDATE workspace_ui_tasks_v2 SET state='OUTCOME_UNCONFIRMED',revision=revision+1 WHERE command_id=? AND state='ACCEPTED'").run(commandId);});return {schemaVersion:'pansphaira.workspace-surface/delivery-readback/v2',commandId,status:'OUTCOME_UNCONFIRMED',originalCommand:original.command,requestDigest:original.requestDigest,task:tasks.read(headers,commandId),render:null,...noEffects};}
+ const browserPairs=createNativeBrowserPairHandshakeV1({db,transaction,bootEpoch:t.bootEpoch,actor,livePeer,reader,binding:sessions.binding});
  const owner=Object.freeze({
+  browserPairingV1(headers,value){return browserPairs.call(headers,value);},
   register(headers,value){
    const c=uiTaskClosedV2(value,['schemaVersion','previousSurfaceId','previousProof','localGeneration','pinned','dirty']);if(c.schemaVersion!=='pansphaira.workspace-surface/register/v2'||typeof c.pinned!=='boolean'||typeof c.dirty!=='boolean')throw Error('SURFACE_INPUT_DENIED');integer(c.localGeneration,1);const a=authorization(headers);let prior=null;
    if(c.previousSurfaceId!==null){prior=surfaceRow(c.previousSurfaceId);if(!prior||prior.principal_digest!==a.digest||prior.session_id!==a.binding.sessionId||typeof c.previousProof!=='string'||!sameSecret(prior.proof_digest,hash(c.previousProof)))throw Error('SURFACE_RECONNECT_DENIED');}
@@ -89,7 +92,7 @@ export function createNativeWorkspaceSurfacesV2(options){
   },
   read(headers,value){const c=uiTaskClosedV2(value,['schemaVersion','commandId']);if(c.schemaVersion!=='pansphaira.workspace-surface/read/v2')throw Error('SURFACE_INPUT_DENIED');actor(headers);tasks.read(headers,c.commandId);const row=delivery(c.commandId);if(!row)return missingDelivery(headers,c.commandId);return readback(headers,row);},
   revoke(headers,value){const c=uiTaskClosedV2(value,['schemaVersion']);if(c.schemaVersion!=='pansphaira.workspace-surface/revoke/v2')throw Error('SURFACE_INPUT_DENIED');const a=actor(headers);transaction(()=>{actor(headers);db.prepare('UPDATE workspace_surfaces_v2 SET revoked=1,local_generation=local_generation+1 WHERE surface_id=?').run(a.row.surface_id);db.prepare("UPDATE workspace_surface_outbox_v2 SET status='REVOKED' WHERE (target_id=? OR source_id=?) AND status<>'RENDERED'").run(a.row.surface_id,a.row.surface_id);db.prepare("UPDATE workspace_ui_tasks_v2 SET state='REVOKED',revision=revision+1 WHERE command_id IN(SELECT command_id FROM workspace_surface_outbox_v2 WHERE (target_id=? OR source_id=?) AND status='REVOKED') AND state<>'COMPLETED'").run(a.row.surface_id,a.row.surface_id);});return {schemaVersion:'pansphaira.workspace-surface/revoke-readback/v2',outcome:'REVOKED',...noEffects};},
-  close(){if(closed)return;closed=true;owned.delete(owner);},
+  close(){if(closed)return;closed=true;browserPairs.close();owned.delete(owner); },
  });
  // Code-only same-owner snapshot/validation for PAN548 invocation admission.
  // This is not another surface registry or an HTTP capability/grant method.
