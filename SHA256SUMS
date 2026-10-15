@@ -2378,7 +2378,7 @@ c55d96998f5d604655041125c4ce91ee83024cb77ef313936038f712f34c0f86  ./tests/pan537
 663b4fea870eb55074b718c415081a2331ce8313cfac49e7c37e7cb3ef7194c9  ./tests/pan538/setup-overflow.test.mjs
 664cef55e3043f46aba891edb67ed2640d0dd6e57ce8bb5e809478a21e23aaab  ./tests/pan541/browser-context-safety.test.mjs
 b72c8747114882ea25445f7c38e9e4d5df71b0d69143006d738ff2771ec0a841  ./tests/pan541/browser-plugin-fault.test.mjs
-1d1d6399f03610eefada0ad0f800ec571a92c5d42951b3660129e3c3e87e9e24  ./tests/pan541/browser-workspace.test.mjs
+8cb607af4114bfde7529c93e38b577f48e296933e0d339f3ce09cea1321e416f  ./tests/pan541/browser-workspace.test.mjs
 66b83e5855b766f3f031fc09f78a6297253ef42cd4a1ad83da8b852018baf5e7  ./tests/pan541/context-native.test.mjs
 a95f3bde5dabce26036d99092b8306f7029413ce81930ba796809e33fb35931e  ./tests/pan541/deep-link.test.mjs
 ae137dead74b01648addf2bcb5878aac43969522e922901003965f14b8bb0dbf  ./tests/pan541/descriptor-types.ts
@@ -2802,5 +2802,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-08b3d11f6086649a7d058c9c528df736f7bef2e215387d79485d719bc7c0a28a  ./verification/verification-dag-v2.json
+0ce9a79edc29fb20d7a961101a86d9195db1350cc649dc1a75c13f27857de572  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

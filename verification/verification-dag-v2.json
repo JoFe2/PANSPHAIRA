@@ -10046,7 +10046,7 @@
         {
           "path": "tests/pan541/browser-workspace.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1d1d6399f03610eefada0ad0f800ec571a92c5d42951b3660129e3c3e87e9e24"
+          "sha256": "8cb607af4114bfde7529c93e38b577f48e296933e0d339f3ce09cea1321e416f"
         },
         {
           "path": "tests/pan541/context-native.test.mjs",
