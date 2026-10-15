@@ -9976,7 +9976,7 @@
         {
           "path": "packages/browser-workspace/src/app.ts",
           "role": "SOURCE",
-          "sha256": "c03219db985b7218bec3ae443aab9b3dc203fdd07f8956dc7a47fdeb2a35c23e"
+          "sha256": "b52ca5576ef53400753f89afd14659637ba9b15caebc83131d800b7cd51180b2"
         },
         {
           "path": "packages/browser-workspace/src/plugin-diagnostics-v1.ts",
@@ -9996,7 +9996,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "7620dfceed345e5e6180f0567438dc18011fc34ce566e62ed80435a6dce5b158"
+          "sha256": "7c622726294eb1395fec7d3f95289a4387868ce3859a90a1aedd3434f13ca231"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -10041,12 +10041,12 @@
         {
           "path": "tests/pan541/browser-plugin-fault.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "99a56a2357378b5d0ce8bdd44d147bdbbab08e570add98f857831b95c28c9059"
+          "sha256": "b72c8747114882ea25445f7c38e9e4d5df71b0d69143006d738ff2771ec0a841"
         },
         {
           "path": "tests/pan541/browser-workspace.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "01ec29e29994e18ac2439cb04aa7dd9e547724ea3cdd211499e75df5da74008a"
+          "sha256": "1d1d6399f03610eefada0ad0f800ec571a92c5d42951b3660129e3c3e87e9e24"
         },
         {
           "path": "tests/pan541/context-native.test.mjs",
@@ -10511,7 +10511,7 @@
         {
           "path": "tests/pan550/browser-administration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "373b317d33845c7b4f8b762d79c64f9f07364f2bed5135ec365bf9877262ba3b"
+          "sha256": "93e97ca5db732c61b53e0088cd75da4d750cf93c9add6d9c8f2e957c81fbb826"
         },
         {
           "path": "tests/pan550/browser-approval.test.mjs",
@@ -11145,7 +11145,7 @@
         {
           "path": "tests/pan549/browser-lifecycle-analysis.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e9c71e16dc247dfebcd9f8d6e1c3992c4a09d5a3beb0df33d6090d3243df712c"
+          "sha256": "ba05f978026ff517877093ffc71fcfba16b54351fb5bee971dcde3d7ee9828fd"
         },
         {
           "path": "tests/pan549/cohort-analysis.test.mjs",

@@ -772,7 +772,7 @@ e1073a5c5f79329c3181057079fdc879eb84e7b690c179488f925ea98953a5e8  ./packages/bro
 68da85391ddce193cfda2030e166b7a25c1c0c2a0aa201978fc02777c80e42b6  ./packages/browser-shell/src/registry-v1.ts
 e7d68a928312f3ae8d7261518da183d5cd2e3db6928a6ef0dd36466676aad946  ./packages/browser-workspace/src/analysis-v1.css
 a7ba2825670abfc09963f08582bfdb9055a948337c1df89cffdfedc06522b01a  ./packages/browser-workspace/src/api-v1.ts
-c03219db985b7218bec3ae443aab9b3dc203fdd07f8956dc7a47fdeb2a35c23e  ./packages/browser-workspace/src/app.ts
+b52ca5576ef53400753f89afd14659637ba9b15caebc83131d800b7cd51180b2  ./packages/browser-workspace/src/app.ts
 40264fc0ed45537a4d00c203b833439e03cbb50cb88e3955dc1220e33b894e6b  ./packages/browser-workspace/src/configuration-application-v1.ts
 4d5b6b23f41f895112ac616f3cefbb2400307fd1c1efb135aac7ed4a802d0ce1  ./packages/browser-workspace/src/configuration-draft-v1.css
 2f8ecda47e8bb296a7193deb31f7c424f5cc00940d0c0fe462af1150642a1e62  ./packages/browser-workspace/src/configuration-draft-view-v1.ts
@@ -816,7 +816,7 @@ cc6c51fa4e4a14a4bf98c370eda77cc18bdf6c5896afe1157114c0e04d40b641  ./packages/bro
 507ffe97dba92bf70d6e466f9b9ba76f160a8c6e0be8e731e6110664faf844b4  ./packages/browser-workspace/src/workspace-readonly-events-v1.ts
 a32e5848eccc41aabc0b5f061637f820de40bdd85ca1bb7cb3dcd74c6309103a  ./packages/browser-workspace/src/workspace-surfaces-v2.css
 cea3795e093319ffd1c280f1de1e79ae326b1102ae89bfadafcf9de6854d9c03  ./packages/browser-workspace/src/workspace-surfaces-v2.ts
-7620dfceed345e5e6180f0567438dc18011fc34ce566e62ed80435a6dce5b158  ./packages/browser-workspace/src/workspace.css
+7c622726294eb1395fec7d3f95289a4387868ce3859a90a1aedd3434f13ca231  ./packages/browser-workspace/src/workspace.css
 6cf086c0ef23c283282ee4628c100835e28f6a91099d444eb1f342385a93e5d1  ./packages/browser-workspace/src/workspace.html
 72b5f28175673cbc8328d9005a849b8409dadb58a8dce61153c049bd7a46a1c1  ./packages/cks/src/applicability-aware-retrieval-indexed.ts
 187c4a5f5f5c78afe92d737e84aa08061b1cad64ecfb6e14ee84ac6db4398c78  ./packages/cks/src/applicability-aware-retrieval.ts
@@ -2377,8 +2377,8 @@ c2cb4ab2e8c7ceba237a7e19d7c2421c7db2f8ede304fd9ee8b94b8daae54ff6  ./tests/pan537
 c55d96998f5d604655041125c4ce91ee83024cb77ef313936038f712f34c0f86  ./tests/pan537/test-runner.test.mjs
 663b4fea870eb55074b718c415081a2331ce8313cfac49e7c37e7cb3ef7194c9  ./tests/pan538/setup-overflow.test.mjs
 664cef55e3043f46aba891edb67ed2640d0dd6e57ce8bb5e809478a21e23aaab  ./tests/pan541/browser-context-safety.test.mjs
-99a56a2357378b5d0ce8bdd44d147bdbbab08e570add98f857831b95c28c9059  ./tests/pan541/browser-plugin-fault.test.mjs
-01ec29e29994e18ac2439cb04aa7dd9e547724ea3cdd211499e75df5da74008a  ./tests/pan541/browser-workspace.test.mjs
+b72c8747114882ea25445f7c38e9e4d5df71b0d69143006d738ff2771ec0a841  ./tests/pan541/browser-plugin-fault.test.mjs
+1d1d6399f03610eefada0ad0f800ec571a92c5d42951b3660129e3c3e87e9e24  ./tests/pan541/browser-workspace.test.mjs
 66b83e5855b766f3f031fc09f78a6297253ef42cd4a1ad83da8b852018baf5e7  ./tests/pan541/context-native.test.mjs
 a95f3bde5dabce26036d99092b8306f7029413ce81930ba796809e33fb35931e  ./tests/pan541/deep-link.test.mjs
 ae137dead74b01648addf2bcb5878aac43969522e922901003965f14b8bb0dbf  ./tests/pan541/descriptor-types.ts
@@ -2438,12 +2438,12 @@ cf15d3a99223807224a533fee64f218f08ab818fe1151a527120820542a6de41  ./tests/pan548
 051b8f377b56d2f5aa351c0d9d76e4051f094335278d0168ee5b2c6920fca91a  ./tests/pan548/registration.test.mjs
 33e068b5f322552e43a52f1a7bc339973594534f3dac9cd188d032dccf1ce7da  ./tests/pan549/browser-analysis.test.mjs
 4857bd4b4d3eef45a37d280826a1eb5620093904d6729cf30c386a50afe6b0bd  ./tests/pan549/browser-fixture.mjs
-e9c71e16dc247dfebcd9f8d6e1c3992c4a09d5a3beb0df33d6090d3243df712c  ./tests/pan549/browser-lifecycle-analysis.test.mjs
+ba05f978026ff517877093ffc71fcfba16b54351fb5bee971dcde3d7ee9828fd  ./tests/pan549/browser-lifecycle-analysis.test.mjs
 7c13c7f5c57e5ff686668072b54e439827ca92f24a4ed3698cdd67180ce8724b  ./tests/pan549/cohort-analysis.test.mjs
 4552da296047a8729002f8e11e919c3a7719800c50fb1874fb550c78c0083192  ./tests/pan549/native-analysis-read.test.mjs
 dedf739d8ff62acf186eea044ca0340cb231adb47f053e2996ea2564e980d62e  ./tests/pan549/protected-analysis.test.mjs
 48759829c1bff38b0dd0ad59e184f6b548531cbc1b2eee8cfcd9176635b3f43d  ./tests/pan549/registration.test.mjs
-373b317d33845c7b4f8b762d79c64f9f07364f2bed5135ec365bf9877262ba3b  ./tests/pan550/browser-administration.test.mjs
+93e97ca5db732c61b53e0088cd75da4d750cf93c9add6d9c8f2e957c81fbb826  ./tests/pan550/browser-administration.test.mjs
 0e4bf68340568a4361e859d4303a6c72df3992ed4f113dbc637788a546657b60  ./tests/pan550/browser-approval.test.mjs
 3987868308edd8998eab221856bf3c58a07fe029c91168fb2529587d08bbf48f  ./tests/pan550/browser-fixture.mjs
 d8896289a6aa4217c132e9b59b4e660dfc32bccd92a7fe186d313a45e290e998  ./tests/pan550/native-administration.test.mjs
@@ -2802,5 +2802,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-2686915969e4b1f966c73f8c3133ba6c254581fae854a6d5cec9d44cc9964460  ./verification/verification-dag-v2.json
+08b3d11f6086649a7d058c9c528df736f7bef2e215387d79485d719bc7c0a28a  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

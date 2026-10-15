@@ -45,12 +45,15 @@ test("PUI-01-AC03 actual shared-browser navigation reads both native Setup/ERV b
     assert.match(await page.locator('[id="shell.panels"]').innerText(), /AP-PAN516-MATCHED-01/);
     await page.screenshot({ path: join(process.env.PAN541_BROWSER_EVIDENCE, "desktop-erv-panel.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
+    // Observe the completed native responsive frame, not an intermediate container-query layout.
+    await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
     await page.screenshot({ path: join(process.env.PAN541_BROWSER_EVIDENCE, "390-erv-panel.png"), fullPage: true });
     const titleTailLines = await page.locator("main h1").evaluate(heading => {
       const node = heading.firstChild; const range = document.createRange();
       range.setStart(node, node.textContent.length - 7); range.setEnd(node, node.textContent.length);
       return range.getClientRects().length;
     });
+    console.log("PAN541_ACTUAL_NATIVE_HEADING_LAYOUT "+JSON.stringify(await page.locator("main h1").evaluate(h=>({text:h.textContent,width:h.getBoundingClientRect().width,font:getComputedStyle(h).fontFamily,fontSize:getComputedStyle(h).fontSize,canvasWidth:document.getElementById("profile.canvas").getBoundingClientRect().width,canvasDisplay:getComputedStyle(document.getElementById("profile.canvas")).display}))));
     assert.equal(titleTailLines, 1, "LONG_GERMAN_HEADING_STRANDS_FINAL_G_ON_390PX");
     const dimensions = await page.evaluate(() => ({ viewport: innerWidth, width: document.documentElement.scrollWidth, controls: [...document.querySelectorAll("button:not(:disabled),a")].filter(e => e.getClientRects().length).map(e => { const r = e.getBoundingClientRect(); return { label: e.textContent, x: r.x, right: r.right, width: r.width, height: r.height }; }) }));
     assert.ok(dimensions.width <= dimensions.viewport); assert.ok(dimensions.controls.every(c => c.width > 0 && c.height > 0 && c.x >= 0 && c.right <= dimensions.viewport));

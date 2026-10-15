@@ -88,7 +88,7 @@ async function start() {
   } });
   const contextSelection = document.body.dataset.ownerContextSelection === "true"
     ? createWorkspaceContextSelectionV1({ root: element("shell.context-selection"), base, context: owner.context, signal: lifetime.signal }) : null;
-  if(document.body.dataset.ownerAdministration==='true'&&document.body.dataset.ownerAgentRuns!=='true'&&contextSelection)void import(base+'/workspace/administration/app.js').then(module=>{if(!lifetime.signal.aborted)module.mountWorkspaceAdministrationManualPanelV1({container:canvas,context:contextSelection,signal:lifetime.signal});}).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Gemeinsames Manuellpanel nicht verfügbar; Einrichtung, Fachnavigation und Abmelden bleiben unabhängig.'));});
+  if(document.body.dataset.ownerAdministration==='true'&&document.body.dataset.ownerAgentRuns!=='true'&&contextSelection)void import(base+'/workspace/administration/app.js').then(async module=>{if(!lifetime.signal.aborted){await module.mountWorkspaceAdministrationManualPanelV1({container:canvas,context:contextSelection,signal:lifetime.signal});if(!lifetime.signal.aborted)assistantMode.disabled=!document.getElementById('shell.agent-panel');}}).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Gemeinsames Manuellpanel nicht verfügbar; Einrichtung, Fachnavigation und Abmelden bleiben unabhängig.'));});
   let moduleViewEditor: ReturnType<typeof createWorkspaceModuleViewEditorV1> | null = null;
   // Optional editor transport never gates the shared registry, navigation or logout.
   const moduleViewReady = document.body.dataset.ownerModuleViews === "true" && contextSelection
