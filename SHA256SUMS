@@ -787,7 +787,7 @@ e491c2ddfc09734f2ec68eca0e0367d95871ef9515a4ec5e766448e31dbbbbde  ./packages/bro
 96c853936a30e9ab05241a247ea18422c5a03b582f346efdb981cb1d85904ca7  ./packages/browser-workspace/src/plugin-analysis-v1.ts
 6cbb057b1893b90ef84a7cd1cb7d5e4ff79f393f72d7b61f4be6aca04fa26497  ./packages/browser-workspace/src/plugin-configuration-draft-v1.ts
 e4b0cd19aae52c1fe34365b9acaba780aa4d4bb73f05edadf070188d8a4cd1c0  ./packages/browser-workspace/src/plugin-diagnostics-v1.ts
-d108abc4f1230d9f56ef4ff590ba8c6888a7226306e8e5e1b7769ef26dd036eb  ./packages/browser-workspace/src/plugin-erv-v1.ts
+34dc1db08b8e3c12e0d5b6becc53b1678b68a16d16edab450a58df187dce5984  ./packages/browser-workspace/src/plugin-erv-v1.ts
 f8dcc776f05a95a8a3ec33baa198caf397b564d76b4d949df7bce661940b8613  ./packages/browser-workspace/src/plugin-knowledge-v1.ts
 3d090b1a454e3c2e1641c2df4d08e3a6335e87c554fd3addf12b39c7d70b7edd  ./packages/browser-workspace/src/plugin-setup-v1.ts
 d23335eb9b5dbef170c3aebd3a63edf263523d3e80abfd016e62b8951d242476  ./packages/browser-workspace/src/profile-editor-v1.ts
@@ -816,7 +816,7 @@ cc6c51fa4e4a14a4bf98c370eda77cc18bdf6c5896afe1157114c0e04d40b641  ./packages/bro
 507ffe97dba92bf70d6e466f9b9ba76f160a8c6e0be8e731e6110664faf844b4  ./packages/browser-workspace/src/workspace-readonly-events-v1.ts
 a32e5848eccc41aabc0b5f061637f820de40bdd85ca1bb7cb3dcd74c6309103a  ./packages/browser-workspace/src/workspace-surfaces-v2.css
 cea3795e093319ffd1c280f1de1e79ae326b1102ae89bfadafcf9de6854d9c03  ./packages/browser-workspace/src/workspace-surfaces-v2.ts
-4045a7014eed371096985272389cd89685971aafd9b25c2aa6caa500679c13bd  ./packages/browser-workspace/src/workspace.css
+e7b7acbdfcf87288b93737f42b74b270027df20f22f0e8b5df4d4f1badfcdc77  ./packages/browser-workspace/src/workspace.css
 1893a4781941c3c2045da5115d54092467b8577d9debebdb07d99f3ad67bb4fd  ./packages/browser-workspace/src/workspace.html
 72b5f28175673cbc8328d9005a849b8409dadb58a8dce61153c049bd7a46a1c1  ./packages/cks/src/applicability-aware-retrieval-indexed.ts
 187c4a5f5f5c78afe92d737e84aa08061b1cad64ecfb6e14ee84ac6db4398c78  ./packages/cks/src/applicability-aware-retrieval.ts
@@ -2408,7 +2408,7 @@ fd288832e262cb222e256fb3aa4c56651f2f11bce6848b5b034b141acca22170  ./tests/pan544
 d4f6c55b811fbcdea3e7733254319e8ee2c276b0de464b9a5570bb213f66cec2  ./tests/pan546/browser-human-combined.test.mjs
 f5f2d0aea71e367af2f042561952852b3d4bb8792113ac83c3b1a4357ff296fd  ./tests/pan546/browser-human.test.mjs
 57e0879047f7af9a6518ff046ecf4f908b4c9e2adc3534a536b7183650841881  ./tests/pan546/browser-navigation.test.mjs
-1c186d7054641b620e54cd72c9169fee858eb47ef928aaa0491b90930e0e00f8  ./tests/pan546/browser-view.test.mjs
+84e64add1e6d5349da9d02c5687d5e5bad2e93e0fd70c665ae86681afcfe7bef  ./tests/pan546/browser-view.test.mjs
 5002e1cf01f45e5fc6b2ea638e7c211324fd69301fee3b050c56a2f293762ab1  ./tests/pan546/module-view.test.mjs
 76faadef8d3fde1173d6c4243f2035a5fd28f4fa73a34f256d92ac2e02fac5ed  ./tests/pan546/native-association.test.mjs
 f9e130d33b355a0d502b977bec7b02f163a81b9318a948d62057d75405e0dce3  ./tests/pan546/native-fixture.mjs
@@ -2802,5 +2802,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-b7eee855368bd894e810edb33c50adc7561360b2b97a4120fe361fadc724bba7  ./verification/verification-dag-v2.json
+0f24f9a6bd57bdf591740b5759e9fde8530fc3382e482928fd82086923b2b311  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

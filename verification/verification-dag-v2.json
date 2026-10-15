@@ -9986,7 +9986,7 @@
         {
           "path": "packages/browser-workspace/src/plugin-erv-v1.ts",
           "role": "SOURCE",
-          "sha256": "d108abc4f1230d9f56ef4ff590ba8c6888a7226306e8e5e1b7769ef26dd036eb"
+          "sha256": "34dc1db08b8e3c12e0d5b6becc53b1678b68a16d16edab450a58df187dce5984"
         },
         {
           "path": "packages/browser-workspace/src/plugin-setup-v1.ts",
@@ -9996,7 +9996,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "4045a7014eed371096985272389cd89685971aafd9b25c2aa6caa500679c13bd"
+          "sha256": "e7b7acbdfcf87288b93737f42b74b270027df20f22f0e8b5df4d4f1badfcdc77"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -10296,7 +10296,7 @@
         {
           "path": "tests/pan546/browser-view.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1c186d7054641b620e54cd72c9169fee858eb47ef928aaa0491b90930e0e00f8"
+          "sha256": "84e64add1e6d5349da9d02c5687d5e5bad2e93e0fd70c665ae86681afcfe7bef"
         },
         {
           "path": "tests/pan546/browser-human.test.mjs",
