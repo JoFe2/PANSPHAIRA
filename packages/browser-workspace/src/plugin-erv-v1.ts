@@ -26,7 +26,13 @@ export function createErvViewV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<
     if (value.tenantId !== api.context().tenantId || value.invoiceId !== api.context().objectId) throw new Error("ERV_CURRENT_CONTEXT_DENIED");
     api.rememberInvoice(value);
     readState(target, "erv", browserWorkspaceStringValuesV1[20] as string, "Echter fachlicher Readback empfangen — nur lesen, keine Buchung und kein Zahlungsauftrag.");
-    facts(target, [["Rechnung / Vorgang", value.invoiceId], ["Native Objektversion", String(value.revision)], [browserWorkspaceStringValuesV1[206] as string, euros(value.invoiceAmountMinor)], [browserWorkspaceStringValuesV1[161] as string, euros(value.expectedAmountMinor)], [browserWorkspaceStringValuesV1[124] as string, euros(value.varianceMinor)], ["Bestellt / angenommen / berechnet", [value.orderedQuantity, value.acceptedQuantity, value.invoicedQuantity].join(" / ")], ["Entscheidung des vorhandenen Prüfers", value.decisionOutcome], ["Fachlicher Status", value.status]]);
+    // Lead with the same validated native amounts, not invented dashboard metrics.
+    const summary = document.createElement('section'); summary.className = 'erv-financial-summary'; summary.setAttribute('aria-label', 'Native Beträge der aktuellen Rechnung');
+    for (const [label, amount] of [[browserWorkspaceStringValuesV1[206] as string, value.invoiceAmountMinor], [browserWorkspaceStringValuesV1[161] as string, value.expectedAmountMinor], [browserWorkspaceStringValuesV1[124] as string, value.varianceMinor]] as const) {
+      const card = document.createElement('div'); card.className = 'erv-value-card'; facts(card, [[label, euros(amount)]]); summary.append(card);
+    }
+    target.append(summary);
+    facts(target, [["Rechnung / Vorgang", value.invoiceId], ["Native Objektversion", String(value.revision)], ["Bestellt / angenommen / berechnet", [value.orderedQuantity, value.acceptedQuantity, value.invoicedQuantity].join(" / ")], ["Entscheidung des vorhandenen Prüfers", value.decisionOutcome], ["Fachlicher Status", value.status]]);
     target.append(text("p", "Lokaler synthetischer Fall im vorhandenen führenden SQLite-Ziel. Diese Anzeige ersetzt keine externe Fiskal-/Archiv-/FiBuqualifikation und gewährt keine Buchungs- oder Zahlungsrechte."));
   } };
 }

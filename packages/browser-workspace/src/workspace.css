@@ -82,3 +82,59 @@ footer { color: #425b6b; border-top: 1px solid #cbd6de; padding: 1rem 1.5rem; fo
 [id="shell.context-selection"] button { max-width: 100%; min-width: 0; flex: 1 1 16rem; }
 [id="shell.context-selection"] button[aria-pressed="true"] { background: #dbeaf2; border-color: #173b51; }
 @media (max-width: 680px) { [id="shell.context-selection"] { margin: 0 1rem 1rem; max-width: calc(100% - 2rem); padding: .75rem; } }
+
+/* Existing core workspace: Notebook hierarchy and an Orbit-like compact rail.
+   Presentation only: native fields, state labels, profile and rights stay owned. */
+:root { --work-ink: #202f4b; --work-muted: #52617a; --work-blue: #2463cc; --work-line: #dce4f1; --work-paper: #fff; color: var(--work-ink); background: #f4f7fc; }
+body { background: linear-gradient(180deg, #eaf1fe 0, #f6f8fc 22rem); }
+header { padding: .9rem 1.5rem; color: var(--work-ink); background: #fff; border-block-end: 1px solid var(--work-line); }
+header strong { font-size: 1.15rem; letter-spacing: -.02em; }
+header p { color: var(--work-muted); font-size: .9rem; }
+button { border-color: #bacbe3; border-radius: .65rem; }
+button:hover { background: #edf4ff; border-color: #789bd0; }
+:focus-visible { outline-color: #2463cc; }
+.shell-layout { grid-template-columns: minmax(11rem, 13rem) minmax(0, 1fr); padding: 1.25rem; gap: 1.25rem; }
+.shell-layout > nav { padding: .75rem; background: #edf3fe; border: 1px solid #dce7f7; border-radius: 1rem; align-self: start; }
+nav button { border-color: transparent; background: transparent; font-size: .9rem; }
+nav button[aria-current="page"] { background: #fff; color: #164fa5; border-color: #c7d8f3; box-shadow: 0 2px 6px #233f6c0a; }
+main, aside, .profile-canvas > [id="pan.workspace.boundary"] { border-color: var(--work-line); border-radius: 1rem; box-shadow: 0 3px 14px #233f6c05; }
+h1 { font-size: 1.65rem; letter-spacing: -.035em; line-height: 1.2; }
+h2 { font-size: 1.1rem; letter-spacing: -.015em; }
+h3 { font-size: 1rem; }
+.read-state { border-left-color: #6388b5; background: #f0f5fc; border-radius: .5rem; font-size: .9rem; }
+.facts { gap: .65rem 1rem; }
+.facts dt { color: #52617a; font-size: .9rem; }
+.facts dd { color: var(--work-ink); }
+.erv-financial-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); gap: .75rem; margin: 1rem 0 1.25rem; }
+.erv-value-card { min-width: 0; padding: .85rem; border: 1px solid #dce7f5; border-radius: .8rem; background: #f5f8ff; }
+.erv-value-card .facts { grid-template-columns: minmax(0, 1fr); gap: .4rem; margin: 0; }
+.erv-value-card .facts dt { font-size: .8rem; }
+.erv-value-card .facts dd { font-size: 1.35rem; font-weight: 700; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+[id="profile.controls"] { display: flex; align-items: center; flex-wrap: wrap; gap: .65rem 1rem; }
+[id="profile.controls"] > [role="status"] { flex: 1 1 20rem; margin: 0; padding: .65rem .85rem; border-left: 0; border-radius: .6rem; font-size: .85rem; }
+[id="profile.editor"] { flex-basis: 100%; }
+[id="shell.widgets"] { font-size: .85rem; background: #f2f5fb; }
+[id="shell.context-selection"] { border-color: var(--work-line); border-left-width: 1px; border-radius: 1rem; }
+.profile-canvas > .workspace-agent { background: #f8faff; border-color: #d2def2; border-radius: 1rem; }
+.profile-canvas > .workspace-agent h2 { color: #243a70; }
+.profile-canvas > .workspace-agent .workspace-agent-controls { gap: .5rem; }
+@container workspace (min-width: 56rem) {
+  .profile-canvas:has(> .workspace-agent) { grid-template-columns: minmax(28rem, 1fr) minmax(19rem, 22rem); grid-template-rows: min-content min-content auto; }
+  .profile-canvas:has(> .workspace-agent) > main { grid-row: span 3; }
+  .profile-canvas > .workspace-agent { grid-column: 2; grid-row: 1; }
+  .profile-canvas:has(> .workspace-agent) > [id="shell.panels"] { grid-column: 2; grid-row: 2; }
+}
+@container shell (max-width: 68.75rem) {
+  .shell-layout { grid-template-columns: minmax(0, 1fr); }
+  .shell-layout > nav { flex-direction: row; flex-wrap: wrap; }
+}
+@media (max-width: 680px) {
+  header { padding: .8rem 1rem; }
+  .shell-layout { padding: .75rem; gap: .85rem; }
+  .shell-layout > nav { padding: .5rem; gap: .4rem; }
+  nav button { flex: 1 1 9rem; width: auto; font-size: .85rem; }
+  h1 { font-size: 1.35rem; }
+  .erv-financial-summary { grid-template-columns: minmax(0, 1fr); }
+  main, aside { border-radius: .85rem; }
+  [id="profile.controls"] { align-items: stretch; }
+}
