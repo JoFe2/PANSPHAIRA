@@ -2509,7 +2509,7 @@ b29913112d0308c809aae89709565e0eb789b2cfd39a3fb0c9bb9623973fa1e8  ./tests/pan575
 5f2ac566aa06a5ec24e32649de09d2d9c52b3df6b51b9ec415bf29e35498caa9  ./tests/pan575/protocol-fixture.mjs
 111556c3f60a2e02aa70835f89e139617f77bb7884ab1f4081e3f9070d6da15d  ./tests/pan575/registration.test.mjs
 180118e8b674f553bb050fc17c600c3822095221b5113db88da1da27c5cdecc6  ./tests/pan575/tool-transcript.test.mjs
-14495e9f2595ce44f1d3a8c2de518caa59fbf29320c1297ed6217977cd642373  ./tests/pan597/browser-pairing.test.mjs
+220700e574266d37598de29457e2f1ec1f81d031626d0f9a3613eb6e801e68eb  ./tests/pan597/browser-pairing.test.mjs
 da80f7b759241bf0e20a422501ca65ae39ee333ceba256a85f14181324020494  ./tests/pan597/browser-surfaces.test.mjs
 94104f725fef2fedd59896a26ca9d088dd3f168cbf4ca3a1c7383b5277c61b9f  ./tests/pan597/native-browser-pairing.test.mjs
 44f09934be93430d6c66f7e40e36b1e192e589c4a2cd1e5c1690715a460204df  ./tests/pan597/native-surfaces.test.mjs
@@ -2802,5 +2802,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-ea9ef2831c4de5171cabade57f961d6188dfe9bb88dffad27aa838b0b1888bec  ./verification/verification-dag-v2.json
+b7eee855368bd894e810edb33c50adc7561360b2b97a4120fe361fadc724bba7  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
