@@ -33,7 +33,10 @@ async function start() {
   let navigation:WorkspaceNavigationDriverV1|null=null,targetTransition=false,acceptedHash=location.hash||browserWorkspaceStringValuesV1[90] as string;
   let surfacesV2:ReturnType<typeof import('./workspace-surfaces-v2.js').createWorkspaceSurfacesV2>|null=null;
   const draftOwners=new Set<WorkspaceDirtyDraftV1>();
-  const canvas = element("profile.canvas"); const boundary = element(browserWorkspaceStringValuesV1[113] as string);
+  const canvas = element("profile.canvas");
+  const assistantHost=element('workspace.assistant-host');
+  function fitAssistantDock(){if(lifetime.signal.aborted)return;const root=assistantHost.querySelector<HTMLElement>('[id="shell.agent-panel"]');if(!root||!root.getClientRects().length)return;const available=Math.max(180,window.innerHeight-Math.max(0,assistantHost.getBoundingClientRect().top)-12),height=Math.floor(available)+'px';if(assistantHost.style.getPropertyValue('--workspace-assistant-height')!==height)assistantHost.style.setProperty('--workspace-assistant-height',height);}
+  const dockObserver=new ResizeObserver(()=>requestAnimationFrame(fitAssistantDock));for(const e of [document.querySelector('.product-header'),document.querySelector('.workspace-module-strip'),document.querySelector('.workspace-workarea')])if(e)dockObserver.observe(e);window.addEventListener('resize',()=>requestAnimationFrame(fitAssistantDock),{signal:lifetime.signal});window.addEventListener('scroll',()=>requestAnimationFrame(fitAssistantDock),{passive:true,signal:lifetime.signal});lifetime.signal.addEventListener('abort',()=>dockObserver.disconnect(),{once:true}); const boundary = element(browserWorkspaceStringValuesV1[113] as string);
   const cards = new Map([[browserWorkspaceStringValuesV1[17] as string, main], [browserWorkspaceStringValuesV1[119] as string, widget], [browserWorkspaceStringValuesV1[113] as string, boundary], [browserWorkspaceStringValuesV1[13] as string, panel]]);
   async function renderPanel() {
     const epoch = ++panelEpoch;
@@ -88,15 +91,36 @@ async function start() {
   } });
   const contextSelection = document.body.dataset.ownerContextSelection === "true"
     ? createWorkspaceContextSelectionV1({ root: element("shell.context-selection"), base, context: owner.context, signal: lifetime.signal }) : null;
-  if(document.body.dataset.ownerAdministration==='true'&&document.body.dataset.ownerAgentRuns!=='true'&&contextSelection)void import(base+'/workspace/administration/app.js').then(async module=>{if(!lifetime.signal.aborted){await module.mountWorkspaceAdministrationManualPanelV1({container:canvas,context:contextSelection,signal:lifetime.signal});if(!lifetime.signal.aborted)assistantMode.disabled=!document.getElementById('shell.agent-panel');}}).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Gemeinsames Manuellpanel nicht verfügbar; Einrichtung, Fachnavigation und Abmelden bleiben unabhängig.'));});
+  if(document.body.dataset.ownerAdministration==='true'&&document.body.dataset.ownerAgentRuns!=='true'&&contextSelection)void import(base+'/workspace/administration/app.js').then(async module=>{if(!lifetime.signal.aborted){await module.mountWorkspaceAdministrationManualPanelV1({container:element("workspace.assistant-host"),context:contextSelection,signal:lifetime.signal});if(!lifetime.signal.aborted)assistantMode.disabled=!document.getElementById('shell.agent-panel');syncWorkspaceNavigation();}}).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Gemeinsames Manuellpanel nicht verfügbar; Einrichtung, Fachnavigation und Abmelden bleiben unabhängig.'));});
   let moduleViewEditor: ReturnType<typeof createWorkspaceModuleViewEditorV1> | null = null;
+  let workspaceArea='TASK';
+  function composeReferenceModules(){
+    const native=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')],byPath=new Map(native.map(b=>[b.dataset.workspaceModule,b])),used=new Set<HTMLButtonElement>();const result:HTMLElement[]=[];
+    const icons:Readonly<Record<string,string>>={projects:'M3 5h7l2 2h9v13H3z',erp:'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7m-7 4h7',documents:'M5 3h10l4 4v14H5zM14 3v5h5',bi:'M4 20V11m7 9V4m7 16v-7M2 21h20',agent:'M12 3v3M4 9h16v11H4zM8 13h1m6 0h1M9 17h6',settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M12 2v3m0 14v3M2 12h3m14 0h3'};
+    const slots=[['projects','Projekte',null],['erp','ERP','/workspace/erv'],['documents','Dokumente',null],['bi','BI','/workspace/analysis'],['agent','Agent','@assistant'],['settings','Einstellungen','/workspace/setup']]as const;
+    for(const[key,label,path]of slots){const existing=path?byPath.get(path):undefined;const b=existing??text('button','')as HTMLButtonElement;b.type='button';b.className='workspace-nav-item';b.dataset.referenceModule=key;
+      if(existing){used.add(b);const l=b.querySelector('.nav-label');if(l)l.textContent=label;}
+      else{const svg=document.createElementNS('http://www.w3.org/2000/svg','svg'),p=document.createElementNS('http://www.w3.org/2000/svg','path');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');p.setAttribute('d',icons[key]!);svg.append(p);const l=text('span',label);l.className='nav-label';b.append(svg,l);b.disabled=true;b.setAttribute('aria-label',label+' — Noch nicht angebunden');const state=text('small','Noch nicht angebunden');state.className='nav-binding-state';b.append(state);if(key==='agent'){b.dataset.workspaceView='ASSISTANT';b.setAttribute('aria-label','Vorhandene lokale Assistenz über Agent-Register öffnen');}else b.dataset.unboundCapability='true';}
+      result.push(b);
+    }
+    const plus=text('button','+')as HTMLButtonElement;plus.type='button';plus.disabled=true;plus.className='workspace-add-module';plus.setAttribute('aria-label','Modul hinzufügen — Noch nicht angebunden');plus.title='Noch nicht angebunden';result.push(plus);
+    for(const b of native)if(!used.has(b))result.push(b);nav.replaceChildren(...result);
+  }
+  function syncWorkspaceNavigation(){requestAnimationFrame(fitAssistantDock);for(const a of document.querySelectorAll<HTMLAnchorElement>('a[data-workspace-module-link]')){const path=a.dataset.workspaceModuleLink,b=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===path);a.hidden=!b||b.disabled||lifetime.signal.aborted;if(path===link?.path)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');}
+    for(const b of document.querySelectorAll<HTMLButtonElement>('button[data-workspace-module-action]')){const target=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===b.dataset.workspaceModuleAction),available=!lifetime.signal.aborted&&!!target&&!target.disabled;b.disabled=!available;const hint=b.querySelector('small');if(hint)hint.textContent=available?'Nur lesen':'Noch nicht angebunden';b.setAttribute('aria-label',available?'Vorhandene gebundene Bestandsanalyse über die Seitenleiste öffnen':'BI — Noch nicht angebunden');if(available&&b.dataset.workspaceModuleAction===link?.path)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}
+    const live=!lifetime.signal.aborted,hasSource=!!main.querySelector('.erv-source-details'),hasAssistant=!!document.getElementById('shell.agent-panel');const sessionLabel=document.getElementById('workspace.session-label'),sessionState=document.getElementById('workspace.session-state');if(sessionLabel&&sessionState){if(!live){sessionLabel.textContent='Sitzung beendet';sessionState.textContent='Abgemeldet';}else{try{sessionLabel.textContent='Mandant '+owner.context().tenantId;sessionState.textContent='Geschützte Sitzung';}catch{sessionLabel.textContent='Lokale Sitzung';sessionState.textContent='Nicht bestätigt';}}}
+    for(const b of document.querySelectorAll<HTMLButtonElement>('button[data-workspace-view]')){const key=b.dataset.workspaceView;b.disabled=!live||(key==='ASSISTANT'?!hasAssistant||assistantMode.disabled:key==='PROFILE'?!profileEditor:key==='SOURCES'?!hasSource:key==='CONTEXT'?!contextSelection:main.hidden);b.setAttribute('aria-pressed',String(key===workspaceArea));if(b.closest('.workspace-module-tools'))b.hidden=key==='ASSISTANT'?!hasAssistant:key==='PROFILE'?!profileEditor:!hasSource;if(key==='CONTEXT'){const card=b.closest<HTMLElement>('.erv-context-card');if(card)card.hidden=!contextSelection;}if(b.dataset.referenceModule==='agent'){const s=b.querySelector('.nav-binding-state');if(s)s.textContent=hasAssistant?'Lokal':'Noch nicht angebunden';}}
+    const label=document.getElementById('workspace.sidebar-context'),object=document.getElementById('workspace.sidebar-object');if(label)label.textContent=element('workspace.section-name').textContent;if(object)object.textContent=invoice?.invoiceId??'Bereich ohne ausgewählten Beleg';
+  }
+  document.addEventListener('click',event=>{const moduleAction=(event.target as Element|null)?.closest<HTMLButtonElement>('button[data-workspace-module-action]');if(moduleAction){if(moduleAction.disabled||lifetime.signal.aborted)return;const target=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===moduleAction.dataset.workspaceModuleAction);if(target&&!target.disabled)target.click();return;}const b=(event.target as Element|null)?.closest<HTMLButtonElement>('button[data-workspace-view]');if(!b||b.disabled||lifetime.signal.aborted)return;const key=b.dataset.workspaceView;workspaceArea=key??'TASK';if(key==='ASSISTANT')mobileArea('ASSISTANT');else{mobileArea('TASK');if(key==='PROFILE'){if(!moduleViewEditor?.openManual()){const d=element('workspace.profile-details')as HTMLDetailsElement;d.open=true;d.querySelector<HTMLElement>('summary')?.focus();}}else if(key==='SOURCES'){const d=main.querySelector<HTMLDetailsElement>('.erv-source-details');if(d){d.open=true;d.scrollIntoView({block:'nearest'});d.querySelector<HTMLElement>('summary')?.focus();}}else if(key==='CONTEXT'){const d=element('workspace.context-details')as HTMLDetailsElement;d.open=true;d.querySelector<HTMLElement>('summary')?.focus();}else main.focus({preventScroll:true});}syncWorkspaceNavigation();},{signal:lifetime.signal});
+  function mountWorkspaceTabs(target:HTMLElement){const template=document.getElementById('workspace.context-tabs-template')as HTMLTemplateElement|null;if(!template)return;const tabs=template.content.cloneNode(true);element('workspace.context-nav').replaceChildren(tabs);syncWorkspaceNavigation();}
   // Optional editor transport never gates the shared registry, navigation or logout.
   const moduleViewReady = document.body.dataset.ownerModuleViews === "true" && contextSelection
     ? import(base+"/workspace/module-view/app.js").then(module=>{
       if(lifetime.signal.aborted)return null;
       const editor=module.createWorkspaceModuleViewEditorV1({main,context:contextSelection,signal:lifetime.signal});moduleViewEditor=editor;
       if(document.body.dataset.ownerAgentRuns==="true")void import(base+"/workspace/agent-run/app.js")
-        .then(module=>{if(!lifetime.signal.aborted){module.createWorkspaceAgentPanelV1({container:canvas,context:contextSelection,editor,signal:lifetime.signal,showTask:()=>mobileArea('TASK'),openInfo:()=>{mobileArea('TASK');api.openInvoicePanel();}});assistantMode.disabled=false;}})
+        .then(module=>{if(!lifetime.signal.aborted){module.createWorkspaceAgentPanelV1({container:element("workspace.assistant-host"),context:contextSelection,editor,signal:lifetime.signal,showTask:()=>mobileArea('TASK'),openInfo:()=>{mobileArea('TASK');api.openInvoicePanel();}});assistantMode.disabled=false;syncWorkspaceNavigation();}})
         .catch(()=>{if(!lifetime.signal.aborted){assistantMode.disabled=true;mobileArea('TASK');canvas.append(text('p','Auftragspanel nicht verfügbar. Kein Lauf bestätigt; Fachnavigation, Profile und Abmelden bleiben unabhängig.'));}});
       return editor;
     }).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text("p","Persönliche Modulansicht nicht verfügbar. Kein gespeicherter Effekt oder Auftrag bestätigt; andere Module und Abmelden bleiben unabhängig."));return null;}) : Promise.resolve(null);
@@ -136,7 +160,7 @@ async function start() {
     factories.set(c.factoryId, { kind: browserWorkspaceStringValuesV1[12], render({ target, signal }) {
       const short:Readonly<Record<string,string>>={'/workspace/setup':'Einrichtung','/workspace/erv':'Rechnungen','/workspace/analysis':'Analysen','/workspace/knowledge':'Wissen','/workspace/configuration':'Konfiguration','/workspace/administration':'Administration'};
       const paths:Readonly<Record<string,string>>={'/workspace/setup':'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2','/workspace/erv':'M7 3h7l4 4v14H7zM14 3v5h4M10 12h5m-5 4h5','/workspace/analysis':'M4 20V11m7 9V4m7 16v-7M2 21h20','/workspace/knowledge':'M3 5h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 7v15','/workspace/configuration':'M4 6h16M4 12h16M4 18h16M8 3v6m8 0v6M9 15v6','/workspace/administration':'M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6z'};
-      const button=text('button','')as HTMLButtonElement;button.type='button';button.setAttribute('aria-label',c.label);button.title=c.label;button.className='workspace-nav-item';const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('aria-hidden','true');const line=document.createElementNS('http://www.w3.org/2000/svg','path');line.setAttribute('d',paths[route?.path??'']??'M4 4h16v16H4z');icon.append(line);const label=text('span',short[route?.path??'']??(c.label==='Technischer Rendererfehlernachweis'?'Diagnostik':c.label));label.className='nav-label';button.append(icon,label);
+      const button=text('button','')as HTMLButtonElement;button.type='button';button.setAttribute('aria-label',c.label);button.title=c.label;button.className='workspace-nav-item';button.dataset.workspaceModule=route?.path??'diagnostic';const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('aria-hidden','true');const line=document.createElementNS('http://www.w3.org/2000/svg','path');line.setAttribute('d',paths[route?.path??'']??'M4 4h16v16H4z');icon.append(line);const label=text('span',short[route?.path??'']??(c.label==='Technischer Rendererfehlernachweis'?'Diagnostik':c.label));label.className='nav-label';button.append(icon,label);
       if (route?.path === link?.path) button.setAttribute("aria-current", "page");
       button.disabled = registry.status(plugin.id).outcome !== browserWorkspaceStringValuesV1[21];
       button.addEventListener("click", () => { if (route?.path) location.hash = "#" + route.path; }, { signal }); target.append(button);
@@ -166,7 +190,7 @@ async function start() {
       const c = owner.context(); location.hash = buildBrowserDeepLinkV1({ path: browserWorkspaceStringValuesV1[42] as string, tenantId: c.tenantId, sessionId: c.sessionId, objectId: value.invoice.invoiceId, revision: value.invoice.revision });
     },
   });
-  function disposal() { owner.onDispose(() => { if(!targetTransition)contextSelection?.retire(); panelEpoch++; registry.retireAll(); invoice = null; delete document.body.dataset.analysisResultRevision; main.replaceChildren(); actions.replaceChildren(); panel.replaceChildren(); panel.hidden = true; canvas.classList.remove(browserWorkspaceStringValuesV1[187] as string); nav.replaceChildren(); }); }
+  function disposal() { owner.onDispose(() => { if(!targetTransition)contextSelection?.retire(); panelEpoch++; registry.retireAll(); invoice = null; delete document.body.dataset.analysisResultRevision; main.replaceChildren(); actions.replaceChildren(); panel.replaceChildren(); panel.hidden = true; canvas.classList.remove(browserWorkspaceStringValuesV1[187] as string); nav.replaceChildren(); element('workspace.context-nav').replaceChildren(); syncWorkspaceNavigation(); }); }
   let latestActivation: object | null = null;
   function captureActivation(invocation: object) {
     const binding = owner.context(), nativeContextEpoch = contextSelection?.epoch();
@@ -190,6 +214,7 @@ async function start() {
       for (const plugin of plugins) for (const c of plugin.contributions) if (c.kind === browserWorkspaceStringValuesV1[12]) {
         const rendered = await registry.render(c.id, nav); if (!activation.live() || rendered.outcome === browserWorkspaceStringValuesV1[120]) return;
       }
+      composeReferenceModules();syncWorkspaceNavigation();
       return;
     }
     document.body.dataset.administrationActive=String(document.body.dataset.ownerAdministration==='true'&&selected.path==='/workspace/administration');
@@ -203,12 +228,14 @@ async function start() {
     for (const plugin of plugins) for (const c of plugin.contributions) if (c.kind === browserWorkspaceStringValuesV1[12]) {
       const rendered = await registry.render(c.id, nav); if (!activation.live() || rendered.outcome === browserWorkspaceStringValuesV1[120]) return;
     }
+    composeReferenceModules();syncWorkspaceNavigation();
     const plugin = plugins.find(p => p.contributions.some(c => c.kind === "ROUTE" && c.path === selected.path));
     const route=plugin?.contributions.find(c=>c.kind==="ROUTE"&&c.path===selected.path);const view = plugin?.contributions.find(c => c.kind === "VIEW" && c.routeId===route?.id); if (!view) throw new Error("WORKSPACE_VIEW_MISSING");
     const nativeContextEpoch = activation.nativeContextEpoch;
     const target = document.createElement(browserWorkspaceStringValuesV1[10]); main.append(target); const result = await registry.render(view.id, target);
     if (!activation.live()) return;
     if (result.outcome !== browserWorkspaceStringValuesV1[118]) { if (result.outcome !== browserWorkspaceStringValuesV1[120]) { target.append(text("p", "Pluginansicht konnte nicht gerendert werden.")); if (nativeContextEpoch !== undefined) contextSelection?.unavailable(nativeContextEpoch); } return; }
+    mountWorkspaceTabs(target);
     // Optional context transport must not hold the existing native actions,
     // deep link, navigation or logout hostage to a slow/failed context request.
     const readback = invoice;
@@ -233,7 +260,7 @@ async function start() {
     const response = await fetch(base + "/workspace/logout", { method: "POST", credentials: browserWorkspaceStringValuesV1[6] });
     if (response.status !== 200) { widget.textContent = "Abmelden nicht bestätigt. Keine Erfolgsmeldung."; return; }
     mobileArea('TASK');taskMode.disabled=true;assistantMode.disabled=true;
-    contextSelection?.close(); owner.close(); registry.close(); lifetime.abort(); invoice = null; nav.replaceChildren(); actions.replaceChildren(); panel.replaceChildren(); panel.hidden = true;
+    contextSelection?.close(); owner.close(); registry.close(); lifetime.abort(); invoice = null; syncWorkspaceNavigation(); nav.replaceChildren(); actions.replaceChildren(); panel.replaceChildren(); panel.hidden = true;
     main.hidden = false;
     main.replaceChildren(text("h1", "Abgemeldet"), text("p", "Die aktuelle Session wurde serverseitig widerrufen."));
     (element(browserWorkspaceStringValuesV1[216] as string) as HTMLButtonElement).disabled = true; widget.textContent = "Session beendet.";
@@ -243,6 +270,7 @@ async function start() {
   });
   await activate();
   profileEditor = await profileReady;
+  syncWorkspaceNavigation();
   await moduleViewReady; if(lifetime.signal.aborted)return;
   if(document.body.dataset.ownerSurfacesV2==='true'&&contextSelection){try{const module=await import(base+'/workspace/surfaces/app.js');if(lifetime.signal.aborted)return;surfacesV2=module.createWorkspaceSurfacesV2({container:canvas,main,context:contextSelection,signal:lifetime.signal,dirty:()=>!!(moduleViewEditor?.isDirty()||profileEditor?.isDirty()||[...draftOwners].some(d=>d.isDirty())),returnToWorkspace:()=>{void activate();},render(projection:import('../../contracts/src/workspace-surface-v2.js').WorkspaceSurfaceProjectionV2){
     latestActivation=Object.freeze({});panelEpoch++;registry.retireAll();invoice=null;actions.replaceChildren();panel.replaceChildren();panel.hidden=true;contextSelection.adoptSurfaceContextV2(projection.routeId,projection.objectId);
