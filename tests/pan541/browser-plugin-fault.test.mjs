@@ -28,10 +28,11 @@ test("PUI-01-AC05 visible disabled/dependency/version and actual renderer failur
     const page = await context.newPage(); const errors = []; page.on("pageerror", error => errors.push(error.message));
     await page.goto(tls.origin + "/t/tenant-a/workspace"); await page.locator('[data-backend="setup"][data-outcome="READBACK_RECEIVED"]').waitFor();
     const widget = page.locator('[id="shell.widgets"]');
+    const nativeStatusDetails=widget.locator(":scope > details.workspace-connection-details");if(await nativeStatusDetails.getAttribute("open")===null)await nativeStatusDetails.locator(":scope > summary").click();
     assert.match(await widget.innerText(), /Deaktiviert/); assert.match(await widget.innerText(), /Fehlende Pflichtabhängigkeit/); assert.match(await widget.innerText(), /Inkompatible Shellversion/);
     await page.getByRole("button", { name: "Technischer Rendererfehlernachweis", exact: true }).click();
     await page.getByText("Pluginansicht konnte nicht gerendert werden.", { exact: true }).waitFor();
-    assert.match(await widget.innerText(), /RENDER_FAILED/); assert.match(await page.locator("footer").innerText(), /Keine Sandbox/);
+    assert.match(await widget.innerText(), /RENDER_FAILED/);const trustDetails=page.locator("footer").locator("xpath=ancestor::details[1]");if(await trustDetails.getAttribute("open")===null)await trustDetails.locator(":scope > summary").click(); assert.match(await page.locator("footer").innerText(), /Keine Sandbox/);
     await page.screenshot({ path: join(process.env.PAN541_BROWSER_EVIDENCE, "390-plugin-renderer-error.png"), fullPage: true });
     await page.getByRole("button", { name: "Einrichtung und Betriebszustand", exact: true }).click(); await page.locator('[data-backend="setup"][data-outcome="READBACK_RECEIVED"]').waitFor();
     await page.getByRole("button", { name: "Abmelden", exact: true }).click(); await page.getByRole("heading", { name: "Abgemeldet", exact: true }).waitFor();

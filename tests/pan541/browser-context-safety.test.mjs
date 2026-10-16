@@ -61,7 +61,7 @@ test("PUI-01-AC04 real delayed native replies cannot revive a retired module/ses
     assert.doesNotMatch(await page.locator("main").innerText(), /AP-PAN516-MATCHED-01|600,00/); assert.equal(await page.locator('[id="shell.actions"] button').count(), 0);
     await page.screenshot({ path: join(process.env.PAN541_BROWSER_EVIDENCE, "390-session-replaced-denied.png"), fullPage: true });
     assert.equal((await context.cookies(tls.origin)).find(c => c.name === "__Host-pan527-session")?.value === replacement.cookieHeader.split("=")[1], true, "RETIRED_NATIVE_READ_RESPONSE_OVERWRITES_REPLACEMENT_SESSION_COOKIE");
-    await page.reload(); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor();
+    await page.reload(); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor({state:'attached'});
     await page.getByRole("button", { name: "Einrichtung und Betriebszustand", exact: true }).click(); await page.locator('[data-backend="setup"][data-outcome="READBACK_RECEIVED"]').waitFor();
     await page.evaluate(() => { location.hash = "#/workspace/erv?tenantId=tenant-b"; });
     await page.getByRole("heading", { name: "Deep Link verweigert", exact: true }).waitFor();
@@ -103,7 +103,7 @@ test("UIDOD-03/04/05 actual native revision conflict and expiry deny without fac
     const setCookie = async value => context.addCookies([{ name: "__Host-pan527-session", value: value.cookieHeader.split("=")[1], url: tls.origin, secure: true, httpOnly: true, sameSite: "Strict" }]);
     await setCookie(issued); const page = await context.newPage(); page.setDefaultTimeout(6000); const errors = []; const statuses = [];
     page.on("pageerror", error => errors.push(error.message)); page.on("response", r => { if (new URL(r.url()).pathname === "/t/tenant-a/workspace/erv") statuses.push(r.status()); });
-    await page.goto(tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor();
+    await page.goto(tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor({state:'attached'});
     await page.getByRole("button", { name: "Informationspanel zum aktuellen Vorgang öffnen", exact: true }).click(); await page.getByRole("heading", { name: "Informationen zum aktuellen Rechnungsvorgang", exact: true }).waitFor();
     await page.evaluate(() => { document.documentElement.style.zoom = "2"; });
     const zoom = await page.evaluate(() => ({ actualCssZoom: getComputedStyle(document.documentElement).zoom, viewport: innerWidth, width: document.documentElement.scrollWidth, controls: [...document.querySelectorAll("button:not(:disabled), a:not(.skip-link)")].filter(e => e.getClientRects().length).map(e => { const r = e.getBoundingClientRect(); return { label: e.textContent, left: r.left, right: r.right, width: r.width, height: r.height }; }) }));
