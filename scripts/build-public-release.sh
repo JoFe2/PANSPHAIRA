@@ -612,6 +612,7 @@ repository_only_files = {
     "docs/architecture/browser-profile-v1.md",
     "packages/browser-workspace/src/profile-editor-v1.ts",
     "packages/contracts/src/browser-profile-v1.ts",
+    # v84 closed appearance: optional owned source only, not legacy runnable payload.
     "scripts/run-pan543-browser-profile-tests.mjs",
     "scripts/refresh-pan543-integrity.mjs",
     "src/pan543/profile-store.mjs",

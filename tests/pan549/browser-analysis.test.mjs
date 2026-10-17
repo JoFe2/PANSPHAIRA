@@ -36,7 +36,7 @@ test('PUI-08-AC01/04 actual protected shared-shell action consumes the native re
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push({method:r.method(),path:new URL(r.url()).pathname}));
   page.on('response',async r=>{if(new URL(r.url()).pathname.endsWith('/workspace/analysis')&&r.status()===200)results.push(await r.json());});
   await page.goto(tls.origin+'/t/tenant-a/workspace');await page.locator('[data-backend="setup"][data-outcome="READBACK_RECEIVED"]').waitFor();
-  const sidebarBI=page.locator('.workspace-module-links button').filter({hasText:/^BI/});assert.equal(await sidebarBI.count(),1);assert.equal(await sidebarBI.isDisabled(),false,'Existing native analysis is available but Notebook BI sidebar is incorrectly unbound');
+  const sidebarBI=page.locator('.workspace-module-links button[data-workspace-module-action="/workspace/analysis"]');assert.equal(await sidebarBI.count(),1);assert.equal(await sidebarBI.isDisabled(),false,'Existing native analysis is available but Notebook BI sidebar is incorrectly unbound');
   const action=page.getByRole('button',{name:'Gebundene Bestandsanalyse — nur lesen',exact:true});
   assert.equal(await action.count(),1,'PAN549_REAL_SHARED_SHELL_ANALYSIS_NAVIGATION_AND_RENDERER_NOT_IMPLEMENTED');await action.click();
   await page.locator('[data-backend="analysis"][data-outcome="READBACK_RECEIVED"]').waitFor();

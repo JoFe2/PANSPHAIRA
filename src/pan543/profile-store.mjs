@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { defaultBrowserProfileV1, migrateBrowserProfileV1, resolveBrowserProfileV1, validateBrowserProfileWriteV1 } from "../../dist/packages/contracts/src/browser-profile-v1.js";
 import { defaultWorkspaceModuleViewV1, validateWorkspaceModuleViewV1 } from "../../dist/packages/contracts/src/workspace-module-view-v1.js";
 import { modelConnectionClosedV1, validateModelConnectionLimitsV1, MODEL_CONNECTION_PHASES_V1 } from '../../dist/packages/contracts/src/workspace-model-connection-v1.js';
+import {defaultWorkspaceAppearanceV1,validateWorkspaceAppearanceV1,validateWorkspaceAppearanceWriteV1,validateWorkspaceAppearanceReadV1} from '../../dist/packages/contracts/src/browser-profile-v1.js';
 const ownedModuleViewStores = new WeakMap();
 const ownedProfileStores = new WeakMap();
 export const isBrowserProfileStoreV1 = (store,root) => ownedProfileStores.get(store) === root;
@@ -85,7 +86,24 @@ export function createBrowserProfileStoreV1({ root, catalog }) {
       const target = readModelConnection(principal); db.exec('COMMIT'); return target;
     } catch (e) { if(db.isTransaction) db.exec('ROLLBACK'); throw e; }
   }
-  const store = Object.freeze({ read, write, readModelConnection, writeModelConnection, close() { if (!closed) { closed = true; db.close(); ownedProfileStores.delete(store); } } });
+  // Separate closed appearance contract in this SAME personal-profile owner/DB.
+  // Legacy browser_profiles rows, schema and revision remain untouched.
+  let appearanceTable=false;
+  function appearanceReady(){if(!appearanceTable){db.exec('CREATE TABLE IF NOT EXISTS workspace_appearance_v1 (tenant_id TEXT NOT NULL,subject_id TEXT NOT NULL,revision INTEGER NOT NULL CHECK(revision>=1),appearance_json TEXT NOT NULL,previous_json TEXT,PRIMARY KEY(tenant_id,subject_id)) STRICT;');appearanceTable=true;}}
+  function readAppearance(principal){
+    const pair=identity(principal);appearanceReady();const row=db.prepare('SELECT revision,appearance_json,previous_json FROM workspace_appearance_v1 WHERE tenant_id=? AND subject_id=?').get(...pair);
+    let appearance=defaultWorkspaceAppearanceV1(),previousAppearance=null,status=row?'SAVED':'DEFAULT';
+    if(row){try{appearance=validateWorkspaceAppearanceV1(JSON.parse(row.appearance_json));previousAppearance=row.previous_json===null?null:validateWorkspaceAppearanceV1(JSON.parse(row.previous_json));}catch{appearance=defaultWorkspaceAppearanceV1();previousAppearance=null;status='DEFAULT_UNSUPPORTED';}}
+    return validateWorkspaceAppearanceReadV1({schemaVersion:'pansphaira.workspace-appearance/readback/v1',catalogVersion:'1.0.0',revision:row?.revision??0,appearance,previousAppearance,persisted:!!row,status});
+  }
+  function writeAppearance(principal,value,verifyAtCommit){
+    const pair=identity(principal),command=validateWorkspaceAppearanceWriteV1(value);if(typeof verifyAtCommit!=='function')throw Error('APPEARANCE_SESSION_DENIED');appearanceReady();db.exec('BEGIN IMMEDIATE');
+    try{const before=readAppearance(principal);if(before.revision!==command.expectedRevision)throw Error('APPEARANCE_REVISION_CONFLICT');if(verifyAtCommit()!==true)throw Error('APPEARANCE_SESSION_DENIED');
+      db.prepare('INSERT INTO workspace_appearance_v1 VALUES(?,?,?,?,?) ON CONFLICT(tenant_id,subject_id) DO UPDATE SET revision=excluded.revision,appearance_json=excluded.appearance_json,previous_json=excluded.previous_json').run(...pair,before.revision+1,JSON.stringify(command.appearance),JSON.stringify(before.appearance));
+      const result=readAppearance(principal);db.exec('COMMIT');return result;
+    }catch(error){if(db.isTransaction)db.exec('ROLLBACK');throw error;}
+  }
+  const store = Object.freeze({ read, write, readAppearance, writeAppearance, readModelConnection, writeModelConnection, close() { if (!closed) { closed = true; db.close(); ownedProfileStores.delete(store); } } });
   ownedProfileStores.set(store,root); return store;
 }
 

@@ -1,3 +1,4 @@
+import {composeWorkspaceNavigationV1,workspaceModuleLabelV1,workspaceNavigationPresentationV1} from '../../browser-shell/src/registry-v1.js';
 import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
 import { createBrowserContextOwnerV1, type BrowserContextV1 } from "../../browser-shell/src/context-owner-v1.js";
 import { createBrowserShellRegistryV1, type BrowserShellFactoryV1 } from "../../browser-shell/src/registry-v1.js";
@@ -25,7 +26,7 @@ async function start() {
   const base = "/t/" + scope[1]; const main = element(browserWorkspaceStringValuesV1[17] as string); const panel = element(browserWorkspaceStringValuesV1[218] as string); const actions = element(browserWorkspaceStringValuesV1[215] as string); const nav = element(browserWorkspaceStringValuesV1[37] as string); const widget = element(browserWorkspaceStringValuesV1[119] as string);
   const lifetime = new AbortController(); let invoice: BrowserErvReadV1 | null = null; let link: BrowserDeepLinkV1 | null = null;
   const taskMode=element('workspace.mode-task')as HTMLButtonElement,assistantMode=element('workspace.mode-assistant')as HTMLButtonElement;document.body.dataset.mobileWorkArea='TASK';assistantMode.disabled=true;
-  function mobileArea(area:'TASK'|'ASSISTANT'){if(area==='ASSISTANT'&&!document.getElementById('shell.agent-panel'))area='TASK';document.body.dataset.mobileWorkArea=area;taskMode.setAttribute('aria-pressed',String(area==='TASK'));assistantMode.setAttribute('aria-pressed',String(area==='ASSISTANT'));if(area==='TASK'&&!main.hidden)main.focus({preventScroll:true});else document.getElementById('shell.agent-panel')?.querySelector<HTMLElement>('.agent-title')?.focus({preventScroll:true});}
+  function mobileArea(area:'TASK'|'ASSISTANT',focus=true){if(area==='ASSISTANT'&&!document.getElementById('shell.agent-panel'))area='TASK';document.body.dataset.mobileWorkArea=area;taskMode.setAttribute('aria-pressed',String(area==='TASK'));assistantMode.setAttribute('aria-pressed',String(area==='ASSISTANT'));if(!focus)return;if(area==='TASK'&&!main.hidden)main.focus({preventScroll:true});else document.getElementById('shell.agent-panel')?.querySelector<HTMLElement>('.agent-title')?.focus({preventScroll:true});}
   taskMode.addEventListener('click',()=>mobileArea('TASK'),{signal:lifetime.signal});assistantMode.addEventListener('click',()=>mobileArea('ASSISTANT'),{signal:lifetime.signal});
   let profileEditor: Awaited<ReturnType<typeof createWorkspaceProfileEditorV1>> | null = null;
   let presentation: BrowserProfileReadV1 | null = null; let panelEpoch = 0;
@@ -35,9 +36,15 @@ async function start() {
   const draftOwners=new Set<WorkspaceDirtyDraftV1>();
   const canvas = element("profile.canvas");
   const assistantHost=element('workspace.assistant-host');
-  function fitAssistantDock(){if(lifetime.signal.aborted)return;const root=assistantHost.querySelector<HTMLElement>('[id="shell.agent-panel"]');if(!root||!root.getClientRects().length)return;const available=Math.max(180,window.innerHeight-Math.max(0,assistantHost.getBoundingClientRect().top)-12),height=Math.floor(available)+'px';if(assistantHost.style.getPropertyValue('--workspace-assistant-height')!==height)assistantHost.style.setProperty('--workspace-assistant-height',height);}
+  function fitAssistantDock(){if(lifetime.signal.aborted)return;const root=assistantHost.querySelector<HTMLElement>('[id="shell.agent-panel"]'),visible=!!root?.getClientRects().length;
+    // Project the existing owned information slot; never clone it or create a second owner.
+    if(visible&&!panel.hidden&&panel.parentElement!==assistantHost)assistantHost.append(panel);
+    else if(!visible&&panel.parentElement===assistantHost){const order=presentation?.profile.items??[],index=order.findIndex(item=>cards.get(item.id)===panel),next=order.slice(index+1).map(item=>cards.get(item.id)).find(node=>node?.parentElement===canvas);canvas.insertBefore(panel,next??null);}
+    if(!visible||!root)return;const aligned=document.body.dataset.designProfile==='notebook'&&document.body.clientWidth>=1280&&document.body.dataset.agentPresentation==='docked',offset=aligned?Math.max(0,main.getBoundingClientRect().top-(document.querySelector('.workspace-workarea')?.getBoundingClientRect().top??assistantHost.getBoundingClientRect().top)):0,padding=offset+'px';if(assistantHost.style.getPropertyValue('--workspace-assistant-offset')!==padding)assistantHost.style.setProperty('--workspace-assistant-offset',padding);
+    const available=Math.max(180,window.innerHeight-Math.max(0,root.getBoundingClientRect().top)-12),height=Math.floor(available)+'px';if(assistantHost.style.getPropertyValue('--workspace-assistant-height')!==height)assistantHost.style.setProperty('--workspace-assistant-height',height);
+  }
   const dockObserver=new ResizeObserver(()=>requestAnimationFrame(fitAssistantDock));for(const e of [document.querySelector('.product-header'),document.querySelector('.workspace-module-strip'),document.querySelector('.workspace-workarea')])if(e)dockObserver.observe(e);window.addEventListener('resize',()=>requestAnimationFrame(fitAssistantDock),{signal:lifetime.signal});window.addEventListener('scroll',()=>requestAnimationFrame(fitAssistantDock),{passive:true,signal:lifetime.signal});lifetime.signal.addEventListener('abort',()=>dockObserver.disconnect(),{once:true}); const boundary = element(browserWorkspaceStringValuesV1[113] as string);
-  const cards = new Map([[browserWorkspaceStringValuesV1[17] as string, main], [browserWorkspaceStringValuesV1[119] as string, widget], [browserWorkspaceStringValuesV1[113] as string, boundary], [browserWorkspaceStringValuesV1[13] as string, panel]]);
+  const cards=new Map([...canvas.children].filter((node):node is HTMLElement=>node instanceof HTMLElement&&!!node.id).map(node=>[node.dataset.profileContribution??node.id,node]));
   async function renderPanel() {
     const epoch = ++panelEpoch;
     const visible = presentation?.effectiveItems.some(i => i.id === browserWorkspaceStringValuesV1[13] && i.visible);
@@ -47,15 +54,18 @@ async function start() {
     const result = await registry.render(knowledge?"pan.knowledge.context":browserWorkspaceStringValuesV1[13] as string, panel);
     if (epoch !== panelEpoch || (!invoice&&!knowledge)) return;
     if (result.outcome !== browserWorkspaceStringValuesV1[118]) { panel.hidden = true; panel.replaceChildren(); }
+    fitAssistantDock();
   }
   function applyPresentation(value: BrowserProfileReadV1) {
     const configurationFocus = document.body.dataset.ownerConfigurationDrafts === "true" && document.activeElement instanceof HTMLElement && document.activeElement.closest(".configuration-draft") ? document.activeElement : null;
     presentation = value;
+    const protectedCompositionOwner=value.catalog.some(c=>c.id==='pan.setup.navigation'&&c.state==='AVAILABLE');
     for (const [id, node] of cards) {
       const item = value.effectiveItems.find(i => i.id === id);
       node.classList.remove("profile-compact", "profile-regular", "profile-large");
       if (item) node.classList.add("profile-" + item.size);
       node.hidden = !item?.visible || (id === browserWorkspaceStringValuesV1[13] && !invoice && link?.path!=="/workspace/knowledge");
+      if(protectedCompositionOwner&&['shell.main','shell.widgets','pan.workspace.boundary'].includes(id))node.hidden=false;
     }
     // MAIN is the stable native analysis attachment. Reorder the other cards
     // around it, and do not manufacture removal/reinsert records for an
@@ -63,6 +73,7 @@ async function start() {
     let next: ChildNode | null = null;
     for (const item of [...value.profile.items].reverse()) {
       const card = cards.get(item.id); if (!card) continue;
+      if(card===panel&&panel.parentElement===assistantHost)continue;
       if (card !== main && (card.parentNode !== canvas || card.nextSibling !== next)) canvas.insertBefore(card, next);
       next = card;
     }
@@ -94,22 +105,11 @@ async function start() {
   if(document.body.dataset.ownerAdministration==='true'&&document.body.dataset.ownerAgentRuns!=='true'&&contextSelection)void import(base+'/workspace/administration/app.js').then(async module=>{if(!lifetime.signal.aborted){await module.mountWorkspaceAdministrationManualPanelV1({container:element("workspace.assistant-host"),context:contextSelection,signal:lifetime.signal});if(!lifetime.signal.aborted)assistantMode.disabled=!document.getElementById('shell.agent-panel');syncWorkspaceNavigation();}}).catch(()=>{if(!lifetime.signal.aborted)canvas.append(text('p','Gemeinsames Manuellpanel nicht verfügbar; Einrichtung, Fachnavigation und Abmelden bleiben unabhängig.'));});
   let moduleViewEditor: ReturnType<typeof createWorkspaceModuleViewEditorV1> | null = null;
   let workspaceArea='TASK';
-  function composeReferenceModules(){
-    const native=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')],byPath=new Map(native.map(b=>[b.dataset.workspaceModule,b])),used=new Set<HTMLButtonElement>();const result:HTMLElement[]=[];
-    const icons:Readonly<Record<string,string>>={projects:'M3 5h7l2 2h9v13H3z',erp:'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7m-7 4h7',documents:'M5 3h10l4 4v14H5zM14 3v5h5',bi:'M4 20V11m7 9V4m7 16v-7M2 21h20',agent:'M12 3v3M4 9h16v11H4zM8 13h1m6 0h1M9 17h6',settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M12 2v3m0 14v3M2 12h3m14 0h3'};
-    const slots=[['projects','Projekte',null],['erp','ERP','/workspace/erv'],['documents','Dokumente',null],['bi','BI','/workspace/analysis'],['agent','Agent','@assistant'],['settings','Einstellungen','/workspace/setup']]as const;
-    for(const[key,label,path]of slots){const existing=path?byPath.get(path):undefined;const b=existing??text('button','')as HTMLButtonElement;b.type='button';b.className='workspace-nav-item';b.dataset.referenceModule=key;
-      if(existing){used.add(b);const l=b.querySelector('.nav-label');if(l)l.textContent=label;}
-      else{const svg=document.createElementNS('http://www.w3.org/2000/svg','svg'),p=document.createElementNS('http://www.w3.org/2000/svg','path');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');p.setAttribute('d',icons[key]!);svg.append(p);const l=text('span',label);l.className='nav-label';b.append(svg,l);b.disabled=true;b.setAttribute('aria-label',label+' — Noch nicht angebunden');const state=text('small','Noch nicht angebunden');state.className='nav-binding-state';b.append(state);if(key==='agent'){b.dataset.workspaceView='ASSISTANT';b.setAttribute('aria-label','Vorhandene lokale Assistenz über Agent-Register öffnen');}else b.dataset.unboundCapability='true';}
-      result.push(b);
-    }
-    const plus=text('button','+')as HTMLButtonElement;plus.type='button';plus.disabled=true;plus.className='workspace-add-module';plus.setAttribute('aria-label','Modul hinzufügen — Noch nicht angebunden');plus.title='Noch nicht angebunden';result.push(plus);
-    for(const b of native)if(!used.has(b))result.push(b);nav.replaceChildren(...result);
-  }
-  function syncWorkspaceNavigation(){requestAnimationFrame(fitAssistantDock);for(const a of document.querySelectorAll<HTMLAnchorElement>('a[data-workspace-module-link]')){const path=a.dataset.workspaceModuleLink,b=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===path);a.hidden=!b||b.disabled||lifetime.signal.aborted;if(path===link?.path)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');}
-    for(const b of document.querySelectorAll<HTMLButtonElement>('button[data-workspace-module-action]')){const target=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===b.dataset.workspaceModuleAction),available=!lifetime.signal.aborted&&!!target&&!target.disabled;b.disabled=!available;const hint=b.querySelector('small');if(hint)hint.textContent=available?'Nur lesen':'Noch nicht angebunden';b.setAttribute('aria-label',available?'Vorhandene gebundene Bestandsanalyse über die Seitenleiste öffnen':'BI — Noch nicht angebunden');if(available&&b.dataset.workspaceModuleAction===link?.path)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}
-    const live=!lifetime.signal.aborted,hasSource=!!main.querySelector('.erv-source-details'),hasAssistant=!!document.getElementById('shell.agent-panel');const sessionLabel=document.getElementById('workspace.session-label'),sessionState=document.getElementById('workspace.session-state');if(sessionLabel&&sessionState){if(!live){sessionLabel.textContent='Sitzung beendet';sessionState.textContent='Abgemeldet';}else{try{sessionLabel.textContent='Mandant '+owner.context().tenantId;sessionState.textContent='Geschützte Sitzung';}catch{sessionLabel.textContent='Lokale Sitzung';sessionState.textContent='Nicht bestätigt';}}}
-    for(const b of document.querySelectorAll<HTMLButtonElement>('button[data-workspace-view]')){const key=b.dataset.workspaceView;b.disabled=!live||(key==='ASSISTANT'?!hasAssistant||assistantMode.disabled:key==='PROFILE'?!profileEditor:key==='SOURCES'?!hasSource:key==='CONTEXT'?!contextSelection:main.hidden);b.setAttribute('aria-pressed',String(key===workspaceArea));if(b.closest('.workspace-module-tools'))b.hidden=key==='ASSISTANT'?!hasAssistant:key==='PROFILE'?!profileEditor:!hasSource;if(key==='CONTEXT'){const card=b.closest<HTMLElement>('.erv-context-card');if(card)card.hidden=!contextSelection;}if(b.dataset.referenceModule==='agent'){const s=b.querySelector('.nav-binding-state');if(s)s.textContent=hasAssistant?'Lokal':'Noch nicht angebunden';}}
+  function composeReferenceModules(){composeWorkspaceNavigationV1(nav);}
+  function syncWorkspaceNavigation(){requestAnimationFrame(fitAssistantDock);for(const a of document.querySelectorAll<HTMLAnchorElement>('a[data-workspace-module-link]')){const path=a.dataset.workspaceModuleLink,b=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===path);a.hidden=!b||b.disabled||b.hidden||lifetime.signal.aborted;if(path===link?.path)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');}
+    for(const b of document.querySelectorAll<HTMLButtonElement>('button[data-workspace-module-action]')){const target=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===b.dataset.workspaceModuleAction),available=!lifetime.signal.aborted&&!!target&&!target.disabled;b.hidden=!!target?.hidden;b.disabled=!available;const hint=b.querySelector('small');if(hint)hint.textContent=available?'Nur lesen':'Noch nicht angebunden';b.setAttribute('aria-label',available?'Vorhandene gebundene Bestandsanalyse über die Seitenleiste öffnen':'BI — Noch nicht angebunden');if(available&&b.dataset.workspaceModuleAction===link?.path)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}
+    const live=!lifetime.signal.aborted,hasSource=!!main.querySelector('.erv-source-details'),hasAssistant=!!document.getElementById('shell.agent-panel'),hasPersonalView=!!moduleViewEditor?.frame()||!!profileEditor;const sessionLabel=document.getElementById('workspace.session-label'),sessionState=document.getElementById('workspace.session-state');if(sessionLabel&&sessionState){if(!live){sessionLabel.textContent='Sitzung beendet';sessionState.textContent='Abgemeldet';}else{try{sessionLabel.textContent='Mandant '+owner.context().tenantId;sessionState.textContent='Geschützte Sitzung';}catch{sessionLabel.textContent='Lokale Sitzung';sessionState.textContent='Nicht bestätigt';}}}
+    for(const b of document.querySelectorAll<HTMLButtonElement>('button[data-workspace-view]')){const key=b.dataset.workspaceView;b.disabled=!live||(key==='ASSISTANT'?!hasAssistant||assistantMode.disabled:key==='PROFILE'?!hasPersonalView:key==='SOURCES'?!hasSource:key==='CONTEXT'?!contextSelection:main.hidden);b.setAttribute('aria-pressed',String(key===workspaceArea));if(b.closest('.workspace-module-tools'))b.hidden=key==='ASSISTANT'?!hasAssistant:key==='PROFILE'?!hasPersonalView:!hasSource;if(key==='CONTEXT'){const card=b.closest<HTMLElement>('.erv-context-card');if(card)card.hidden=!contextSelection;}if(b.dataset.referenceModule==='agent'){const s=b.querySelector('.nav-binding-state');if(s)s.textContent=hasAssistant?'Lokal':'Noch nicht angebunden';}}
     const label=document.getElementById('workspace.sidebar-context'),object=document.getElementById('workspace.sidebar-object');if(label)label.textContent=element('workspace.section-name').textContent;if(object)object.textContent=invoice?.invoiceId??'Bereich ohne ausgewählten Beleg';
   }
   document.addEventListener('click',event=>{const moduleAction=(event.target as Element|null)?.closest<HTMLButtonElement>('button[data-workspace-module-action]');if(moduleAction){if(moduleAction.disabled||lifetime.signal.aborted)return;const target=[...nav.querySelectorAll<HTMLButtonElement>('button[data-workspace-module]')].find(e=>e.dataset.workspaceModule===moduleAction.dataset.workspaceModuleAction);if(target&&!target.disabled)target.click();return;}const b=(event.target as Element|null)?.closest<HTMLButtonElement>('button[data-workspace-view]');if(!b||b.disabled||lifetime.signal.aborted)return;const key=b.dataset.workspaceView;workspaceArea=key??'TASK';if(key==='ASSISTANT')mobileArea('ASSISTANT');else{mobileArea('TASK');if(key==='PROFILE'){if(!moduleViewEditor?.openManual()){const d=element('workspace.profile-details')as HTMLDetailsElement;d.open=true;d.querySelector<HTMLElement>('summary')?.focus();}}else if(key==='SOURCES'){const d=main.querySelector<HTMLDetailsElement>('.erv-source-details');if(d){d.open=true;d.scrollIntoView({block:'nearest'});d.querySelector<HTMLElement>('summary')?.focus();}}else if(key==='CONTEXT'){const d=element('workspace.context-details')as HTMLDetailsElement;d.open=true;d.querySelector<HTMLElement>('summary')?.focus();}else main.focus({preventScroll:true});}syncWorkspaceNavigation();},{signal:lifetime.signal});
@@ -118,7 +118,7 @@ async function start() {
   const moduleViewReady = document.body.dataset.ownerModuleViews === "true" && contextSelection
     ? import(base+"/workspace/module-view/app.js").then(module=>{
       if(lifetime.signal.aborted)return null;
-      const editor=module.createWorkspaceModuleViewEditorV1({main,context:contextSelection,signal:lifetime.signal});moduleViewEditor=editor;
+      const editor=module.createWorkspaceModuleViewEditorV1({main,context:contextSelection,signal:lifetime.signal});moduleViewEditor=editor;editor.subscribeFrame(syncWorkspaceNavigation);
       if(document.body.dataset.ownerAgentRuns==="true")void import(base+"/workspace/agent-run/app.js")
         .then(module=>{if(!lifetime.signal.aborted){module.createWorkspaceAgentPanelV1({container:element("workspace.assistant-host"),context:contextSelection,editor,signal:lifetime.signal,showTask:()=>mobileArea('TASK'),openInfo:()=>{mobileArea('TASK');api.openInvoicePanel();}});assistantMode.disabled=false;syncWorkspaceNavigation();}})
         .catch(()=>{if(!lifetime.signal.aborted){assistantMode.disabled=true;mobileArea('TASK');canvas.append(text('p','Auftragspanel nicht verfügbar. Kein Lauf bestätigt; Fachnavigation, Profile und Abmelden bleiben unabhängig.'));}});
@@ -158,10 +158,10 @@ async function start() {
   for (const plugin of plugins) for (const c of plugin.contributions) if (c.kind === browserWorkspaceStringValuesV1[12]) {
     const route = plugin.contributions.find(r => r.kind === "ROUTE" && r.id === c.routeId);
     factories.set(c.factoryId, { kind: browserWorkspaceStringValuesV1[12], render({ target, signal }) {
-      const short:Readonly<Record<string,string>>={'/workspace/setup':'Einrichtung','/workspace/erv':'Rechnungen','/workspace/analysis':'Analysen','/workspace/knowledge':'Wissen','/workspace/configuration':'Konfiguration','/workspace/administration':'Administration'};
-      const paths:Readonly<Record<string,string>>={'/workspace/setup':'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2','/workspace/erv':'M7 3h7l4 4v14H7zM14 3v5h4M10 12h5m-5 4h5','/workspace/analysis':'M4 20V11m7 9V4m7 16v-7M2 21h20','/workspace/knowledge':'M3 5h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 7v15','/workspace/configuration':'M4 6h16M4 12h16M4 18h16M8 3v6m8 0v6M9 15v6','/workspace/administration':'M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6z'};
-      const button=text('button','')as HTMLButtonElement;button.type='button';button.setAttribute('aria-label',c.label);button.title=c.label;button.className='workspace-nav-item';button.dataset.workspaceModule=route?.path??'diagnostic';const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('aria-hidden','true');const line=document.createElementNS('http://www.w3.org/2000/svg','path');line.setAttribute('d',paths[route?.path??'']??'M4 4h16v16H4z');icon.append(line);const label=text('span',short[route?.path??'']??(c.label==='Technischer Rendererfehlernachweis'?'Diagnostik':c.label));label.className='nav-label';button.append(icon,label);
+      const appearance=workspaceNavigationPresentationV1(plugin.id,c.id,c.label);
+      const button=text('button','')as HTMLButtonElement;button.type='button';button.setAttribute('aria-label',c.label);button.title=c.label;button.className='workspace-nav-item';button.dataset.workspaceModule=route?.path??'diagnostic';const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('aria-hidden','true');const line=document.createElementNS('http://www.w3.org/2000/svg','path');line.setAttribute('d',appearance.icon);icon.append(line);const label=text('span',appearance.label);label.className='nav-label';button.append(icon,label);
       if (route?.path === link?.path) button.setAttribute("aria-current", "page");
+      button.dataset.workspacePlugin=plugin.id;button.dataset.workspaceContribution=c.id;
       button.disabled = registry.status(plugin.id).outcome !== browserWorkspaceStringValuesV1[21];
       button.addEventListener("click", () => { if (route?.path) location.hash = "#" + route.path; }, { signal }); target.append(button);
     } });
@@ -178,6 +178,7 @@ async function start() {
     if (result.outcome !== browserWorkspaceStringValuesV1[2] || !(browserWorkspaceStringValuesV1[83] in result) || result.reason !== browserWorkspaceStringValuesV1[196]) throw new Error("DIAGNOSTIC_VERSION_DENIAL_MISSING");
     diagnosticStates.push("Inkompatible Shellversion: " + diagnostic.incompatible.id);
   }
+  if(document.body.dataset.ownerAppearanceV1==='true')void import(base+'/workspace/appearance/app.js').then(module=>{if(lifetime.signal.aborted)return;const appearance=module.createWorkspaceAppearanceEditorV1({base,sessionId:owner.context().sessionId,signal:lifetime.signal,main,nav,assistantHost,context:owner.context,routes:()=>registry.routes(),openEditor(){if(moduleViewEditor?.openManual())return true;const d=element('workspace.profile-details')as HTMLDetailsElement;d.open=true;d.querySelector<HTMLElement>('summary')?.focus();return !!profileEditor;},openInfo:api.openInvoicePanel,primaryArea:(area:'TASK'|'ASSISTANT')=>mobileArea(area,false),changed:syncWorkspaceNavigation,denied(){if(lifetime.signal.aborted)return;contextSelection?.close();owner.close();registry.close();lifetime.abort();main.hidden=false;main.replaceChildren(text('h1','Zugriff nicht bestätigt'),text('p','Sitzungsbindung nicht mehr aktuell. Alte Inhalte und Bedienung wurden verworfen; kein gespeicherter Erfolg behauptet.'));}});draftOwners.add(appearance);lifetime.signal.addEventListener('abort',()=>draftOwners.delete(appearance),{once:true});}).catch(()=>{if(!lifetime.signal.aborted)widget.append(text('p','Designprofile nicht verfügbar. Notebook, native Arbeit und Abmelden bleiben unabhängig.'));});
   if (document.body.dataset.ownerNotifications === "true") notifications = createWorkspaceNotificationsV1({ root: element(browserWorkspaceStringValuesV1[217] as string), base, context: owner.context, signal: lifetime.signal,
     onSessionDenied() {
       const c = owner.context(); owner.switchContext({ ...c, objectId: null, revision: c.revision + 1 }); disposal();
@@ -211,7 +212,7 @@ async function start() {
       main.hidden = false;
       main.append(text("h1", "Deep Link verweigert"), text("p", "Route, Tenant, Session, Objektparameter oder Version sind nicht gültig. Keine Anfrage an einen fremden Tenant."));
       showStates("Deep Link verweigert — terminaler Zustand. Persönliche Hinweise werden unabhängig mit der aktuellen Session geprüft.",true);
-      for (const plugin of plugins) for (const c of plugin.contributions) if (c.kind === browserWorkspaceStringValuesV1[12]) {
+      for (const c of registry.contributions()) if (c.kind === browserWorkspaceStringValuesV1[12]) {
         const rendered = await registry.render(c.id, nav); if (!activation.live() || rendered.outcome === browserWorkspaceStringValuesV1[120]) return;
       }
       composeReferenceModules();syncWorkspaceNavigation();
@@ -219,18 +220,17 @@ async function start() {
     }
     document.body.dataset.administrationActive=String(document.body.dataset.ownerAdministration==='true'&&selected.path==='/workspace/administration');
     if(document.body.dataset.ownerAdministration==='true'){const heading=document.querySelector('header strong'),description=document.querySelector('header p');if(heading)heading.textContent='PanSphaira';if(description)description.textContent=selected.path==='/workspace/administration'?'Geschützte Einrichtung, Freigaben und Wiederaufnahme':'Gemeinsamer Arbeitsplatz · native Fachansichten';}
-    link = selected;const routeNames:Readonly<Record<string,string>>={'/workspace/setup':'Einrichtung','/workspace/erv':'Rechnungen','/workspace/analysis':'Analysen','/workspace/knowledge':'Wissen','/workspace/configuration':'Konfiguration','/workspace/administration':'Administration'};element('workspace.section-name').textContent=routeNames[selected.path]??'Arbeitsplatz';document.body.dataset.workspaceRoute=selected.path;taskMode.textContent=selected.path==='/workspace/erv'?'Rechnung':(routeNames[selected.path]??'Arbeitsplatz');
+    link=selected;const selectedRoute=registry.routes().find(r=>r.path===selected.path),routeLabel=selectedRoute?workspaceModuleLabelV1(selectedRoute.pluginId,selectedRoute.label):'Arbeitsplatz';element('workspace.section-name').textContent=routeLabel;document.body.dataset.workspaceRoute=selected.path;taskMode.textContent=selected.path==='/workspace/erv'?'Rechnung':routeLabel;
     targetTransition=!!native;try{owner.switchContext({ ...current, objectId: selected.path === browserWorkspaceStringValuesV1[42] ? selected.objectId ?? browserWorkspaceStringValuesV1[94] : selected.path === browserWorkspaceStringValuesV1[89] ? selected.objectId ?? "analysis:common-trade-01:stock" : null, revision: current.revision + 1 });}finally{targetTransition=false;}disposal();
     const activation = captureActivation(invocation); if (!activation.live()) return;
     document.body.dataset.contextRevision = String(owner.context().revision); document.body.dataset.nativeRevision = browserWorkspaceStringValuesV1[58];
     void notifications?.refresh();
     showStates("Lesender Arbeitsplatz. Pluginmetadaten gewähren keine Backendrechte.");
-    for (const plugin of plugins) for (const c of plugin.contributions) if (c.kind === browserWorkspaceStringValuesV1[12]) {
+    for (const c of registry.contributions()) if (c.kind === browserWorkspaceStringValuesV1[12]) {
       const rendered = await registry.render(c.id, nav); if (!activation.live() || rendered.outcome === browserWorkspaceStringValuesV1[120]) return;
     }
     composeReferenceModules();syncWorkspaceNavigation();
-    const plugin = plugins.find(p => p.contributions.some(c => c.kind === "ROUTE" && c.path === selected.path));
-    const route=plugin?.contributions.find(c=>c.kind==="ROUTE"&&c.path===selected.path);const view = plugin?.contributions.find(c => c.kind === "VIEW" && c.routeId===route?.id); if (!view) throw new Error("WORKSPACE_VIEW_MISSING");
+    const route=registry.routes().find(r=>r.path===selected.path&&r.state==="REGISTERED"),view=registry.contributions().find(c=>c.kind==="VIEW"&&c.routeId===route?.routeId&&c.pluginId===route?.pluginId);if(!route||!view)throw Error("WORKSPACE_VIEW_MISSING");
     const nativeContextEpoch = activation.nativeContextEpoch;
     const target = document.createElement(browserWorkspaceStringValuesV1[10]); main.append(target); const result = await registry.render(view.id, target);
     if (!activation.live()) return;
@@ -241,7 +241,7 @@ async function start() {
     const readback = invoice;
     const nativeInvoice = readback && selected.path === browserWorkspaceStringValuesV1[42] && activation.binding.objectId === readback.invoiceId
       ? { objectId: readback.invoiceId, revision: readback.revision } : null;
-    if (contextSelection && nativeContextEpoch !== undefined){const binding=contextSelection.bind({ localEpoch: nativeContextEpoch, moduleId: plugin!.id, viewId: view.id,
+    if (contextSelection && nativeContextEpoch !== undefined){const binding=contextSelection.bind({ localEpoch: nativeContextEpoch, moduleId: route.pluginId, viewId: view.id,
       primaryObjectId: nativeInvoice?.objectId ?? null, domainRevision: nativeInvoice?.revision ?? null });if(native)await binding;else void binding;}
     if(!activation.live())return;
     if (nativeInvoice) {

@@ -69,3 +69,62 @@ Direkte Consumer sind der bestehende Browserapp-Entrypoint, dessen Shellslots un
 `node scripts/refresh-pan543-integrity.mjs` aktualisiert ausschließlich diese begrenzte Inventur und die zugehörigen tatsächlichen Digests/Checksummen. Fremder Digestdrift wird vor Schreibzugriff abgewiesen; weder Secure-Default-Evidence noch Test-/Review-/Lieferclaims werden generiert. Der allgemeine vorhandene Refresh kennt dieselben additiven Bindungen für die spätere serielle Integration.
 
 Unabhängiger fokussierter Review, tatsächliche visuelle Sichtung, vollständige kanonische CI/Integrity/Governance, aktuelle Mainreconciliation, geschützter Merge, funktionaler Release und anonymer Readback sind getrennte Nachweise. Ein lokal getesteter Commit ist ein Kandidat, keine Lieferung oder Issue-Closure. Es gibt keinen Produktiv-, Provider-, Host-Docker-, Geräte- oder Human-PASS aus diesen lokalen synthetischen Proben.
+
+## Workspace design profiles v1
+
+Status: bounded local UI implementation. Independent review, Main original-image comparison, deployment and whole-product acceptance remain separate gates.
+
+### One shell, five curated presentations
+
+Notebook Workspace, Orbit Command, Prism Modules, Insight Motion and Jarvis Pulse are code-owned presentations of the existing native shell. No separate app, routing/session owner, graphics library, model or audio capability is introduced. Essential / 2D is the implemented quality tier in every presentation.
+
+`packages/contracts/src/browser-profile-v1.ts` owns the closed `1.0.0` design catalog, semantic tokens, layout catalog and finite logical-width thresholds. Accepted appearance keys are exactly `schemaVersion`, `templateId`, `templateVersion`, `layout`, `density`, `agentPresentation`, `motion`. CSS, JavaScript, URLs, identity, rights, business values, microphone and arbitrary quality fields are rejected.
+
+The design selector changes design only. Layout, density, agent presentation and motion remain independently editable. `Kuratierte Vorlage als Vorschau` is the explicit action for applying a profile's curated layout/density/agent defaults; it preserves the motion preference. Notebook default and previous-appearance actions are also previews, never implicit writes.
+
+### Existing personal owner and protected transport
+
+The existing personal-profile owner in `src/pan543/profile-store.mjs` stores appearance in a separate STRICT `workspace_appearance_v1` table in the same owned `browser-profiles.sqlite`. Tenant/subject are derived from the existing authenticated principal, never from a write payload. Appearance has an independent revision CAS and previous appearance. The existing `browser_profiles` rows, closed legacy v1 schema and legacy revisions are not modified or broadened.
+
+The existing protected workspace ingress mounts:
+
+- `GET /t/:tenant/workspace/appearance` — current own appearance and appearance revision.
+- `POST /t/:tenant/workspace/appearance` — closed `pansphaira.workspace-appearance/write/v1`, `expectedRevision`, `appearance`.
+- `GET /t/:tenant/workspace/appearance/app.js` and `style.css` — authenticated same-origin owned assets.
+
+Writes retain session binding, exact Origin, bounded JSON and owner revalidation. No ingress/asset byte limit or permission rule is raised. Query/extra identity selectors and unregistered arbitrary properties remain rejected. A missing/default appearance is not treated as a stored revision.
+
+### Confirmation and failure states
+
+Selection is local preview. `Änderungen prüfen` freezes and shows a before/after candidate. Only `Genau diese Erscheinung bestätigen und speichern` sends the candidate CAS. The UI reports success only after an independent fresh GET with the expected next appearance revision and exact candidate, with session/context binding rechecked after responses.
+
+A conflict preserves the current preview, blocks overwrite/retry and requires explicit reload. A lost reply yields `WRITE_OUTCOME_UNKNOWN`, not success. Only independent readback can confirm the once-attempted CAS; no blind write replay is offered. Previous appearance is a preview and is restored only by a new explicitly confirmed CAS. Unknown stored appearance falls back visibly and can be replaced by an explicitly confirmed notebook candidate; no silent migration rewrites legacy or unknown data.
+
+### Real registry and renderer contributions
+
+`registry-v1.ts::contributions()` exposes frozen actual contribution snapshots and real registry outcomes. Native routes and factories remain the permission/lifecycle source. `workspace-presentation-v1.ts` owns one bounded presentation catalog; known-domain placeholders explicitly remain unavailable, while an unknown genuinely registered route retains its actual path and label.
+
+Native renderer-owned cards call `registerWorkspaceCardV1` with their lifetime signal. `workspaceCardsV1` projects only connected, nonempty, live, symbol-registered contributions. A forged DOM data attribute alone does not register a card. Card metadata and appearance grant no rights. Native capability flags and existing controller availability remain authoritative.
+
+Insight's chart compares the three amounts from one actual native invoice read, same currency and native revision. It is not history, prediction or a new business metric. Jarvis's orb and Orbit's horizon are labeled/static decoration, not a microphone, running model, 3D or product telemetry.
+
+### Context, accessibility and native continuity
+
+Profile/layout changes apply to the stable shell and registered native nodes. They do not call native registry render again, restart a session, navigate to another invoice, mutate an invoice/revision, clear module-view drafts or replace the current local assistant/input. Mandatory native source/role/decision surfaces and logout remain independent of optional agent presentation.
+
+A native multi-profile/viewport reproducer exposed a persistent computed-navigation-mode mismatch after a curated Prism mobile transition: valid live CSS/CSSOM requested grid while the same navigation node remained computed flex with 1px labels. CSS-only and width-class-only attempts are preserved as failed evidence; the underlying browser-engine cause is not asserted. The bounded `projectWidth` repair checks the actual expected mode and reattaches the SAME navigation presentation node only on mismatch, preserving actual focus. It neither invokes registry render nor replaces any native child/controller. Native tests assert navigation/main/invoice/assistant/input identity, context/revision, draft/input retention and actual focus across width/zoom transitions.
+
+Finite native qualification covers all five curated presentations at 1586×992, 1024×768 and 390×844, independent axes, real 390px/200% CSS zoom, reduced/system motion, confirmation/CAS/readback/reload/conflict/lost reply/recovery and affected original native journeys. These are local owned-Chromium and synthetic-native-data results, not physical-device, cross-engine, Main, Jo or independent-review acceptance.
+
+### Preserved original native constraints
+
+The qualified default also retains native labels and visibly displays the actual invoice identifier. Stateless palette/inspector/extra-profile headings attach only in their applicable profile; a hidden inspector must not reserve a phantom assistant column in a legacy no-agent workspace. The existing owned information panel is projected as the same node beside the native work surface when the actual assistant is present, and returns to its personal canvas slot otherwise. No second panel or data owner is manufactured. The dock offset uses the normal-flow work area rather than sticky viewport geometry, so scrolling does not change its logical alignment.
+
+The existing native human preview button is directly keyboard-reachable outside the optional technical disclosure. Its existing preview, role checks, separate explicit confirmation and native readback stay unchanged. This is an existing-function affordance, not a new decision capability. Original native layout/primary-action and legacy right-panel assertions remain unchanged and are qualified separately from the new appearance journeys.
+
+### Explicit non-delivery and deployment boundary
+
+Missing project management, general DMS, notes, conversational model, model pricing/connection, audio/microphone, Rich/3D and other unavailable native capabilities are not delivered by this presentation package. Existing disabled entries remain honestly marked. Existing model/pricing and other issue/security holds are unchanged.
+
+The v83 LAN source/service must remain unchanged during the user test. A frozen v84 source/build snapshot can be prepared for a later authorized Main preview update. Do not automatically deploy, restart the LAN service, push, launch hosted workflows, merge, release or close issues from this local UI result. Remaining independent-review budget is zero; this document and owner testing do not grant or replace that review.
+

@@ -5,7 +5,11 @@ import { enableWorkspaceBrowserV1 } from "../../src/pan541/workspace-browser.mjs
 if (!process.send || process.argv.length !== 4) throw new Error("PAN543_BACKEND_FIXTURE_OWNER_REQUIRED");
 const options = JSON.parse(process.argv[2]); const nativeRoot = process.argv[3];
 const gateway = createOptionalHttpsProductIngressV1(options);
-const workspace = enableWorkspaceBrowserV1({ optIn: true, gateway, tenantId: "tenant-a", origin: options.origin, nativeReader: createNativeErvReadAdapterV1({ tenantId: "tenant-a", root: nativeRoot }) });
+// The parent browserFixture543 explicitly opts into this legacy v1 catalog.
+// Preserve that same owner across its real restarts; do not substitute the new
+// product-default composition catalog or weaken its exact readback assertions.
+const profileCatalogV1=()=>['shell.main','shell.widgets','pan.workspace.boundary','pan.erv.information'].map(id=>({id,version:'1.0.0',state:'AVAILABLE'}));
+const workspace = enableWorkspaceBrowserV1({ optIn: true, gateway, tenantId: "tenant-a", origin: options.origin, nativeReader: createNativeErvReadAdapterV1({ tenantId: "tenant-a", root: nativeRoot }),profileCatalogV1 });
 const port = Number(new URL(options.origin).port);
 await new Promise((resolve, reject) => { gateway.server.once("error", reject); gateway.server.listen(port, "127.0.0.1", resolve); });
 process.send({ state: "READY", pid: process.pid });

@@ -20,7 +20,7 @@ test("PUI-01-AC04 real delayed native replies cannot revive a retired module/ses
     workspace = mountProtectedWorkspaceDocumentV1(tls.gateway, {
       optIn: true, tenantId: "tenant-a", origin: tls.origin, identityDigest: tls.gateway.sessionAdapter("tenant-a").binding.identityDigest,
       html: readFileSync(new URL("../../packages/browser-workspace/src/workspace.html", import.meta.url), "utf8"),
-      style: readFileSync(new URL("../../packages/browser-workspace/src/workspace.css", import.meta.url), "utf8"),
+      style: readFileSync(new URL("../../packages/browser-workspace/src/workspace.css", import.meta.url), "utf8").split("/*__PANSPHAIRA_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\n")[0],
       script: readFileSync(new URL("../../dist/browser-workspace/app.js", import.meta.url), "utf8"),
       async readErv(request, principal) {
         const gate = held; held = null;
@@ -84,7 +84,7 @@ test("UIDOD-03/04/05 actual native revision conflict and expiry deny without fac
     workspace = mountProtectedWorkspaceDocumentV1(tls.gateway, {
       optIn: true, tenantId: "tenant-a", origin: tls.origin, identityDigest: tls.gateway.sessionAdapter("tenant-a").binding.identityDigest,
       html: readFileSync(new URL("../../packages/browser-workspace/src/workspace.html", import.meta.url), "utf8"),
-      style: readFileSync(new URL("../../packages/browser-workspace/src/workspace.css", import.meta.url), "utf8"),
+      style: readFileSync(new URL("../../packages/browser-workspace/src/workspace.css", import.meta.url), "utf8").split("/*__PANSPHAIRA_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\n")[0],
       script: readFileSync(new URL("../../dist/browser-workspace/app.js", import.meta.url), "utf8"),
       async readErv(request, principal) {
         const actual = reader.read({ tenantId: principal.tenantId, objectId: request.objectId, expectedRevision: request.expectedRevision });

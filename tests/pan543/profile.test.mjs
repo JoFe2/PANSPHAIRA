@@ -60,3 +60,19 @@ test("PUI-02 durable SQLite CAS retains exact own-user/tenant presentation acros
     a.write(owner, { expectedRevision: fallback.revision, profile: fallback.profile }); assert.equal(a.read(owner).revision, 2);
   } finally { a?.close(); b?.close(); rmSync(root, { recursive: true, force: true }); }
 });
+
+
+test("DESIGN-PROFILES closed five-profile catalog and independent appearance CAS preserve exact legacy v1 rows", async () => {
+ const file=new URL('../../dist/packages/contracts/src/browser-profile-v1.js',import.meta.url),c=existsSync(file)?await import(file):{};
+ assert.equal(typeof c.validateWorkspaceAppearanceV1,'function','DESIGN_APPEARANCE_CLOSED_CONTRACT_MISSING');
+ assert.deepEqual(c.WORKSPACE_DESIGN_PROFILES_V1.map(p=>p.id),['notebook','orbit','prism','insight','jarvis']);assert.ok(Object.isFrozen(c.WORKSPACE_DESIGN_PROFILES_V1));
+ const original=contract.defaultBrowserProfileV1();assert.throws(()=>contract.validateBrowserProfileV1({...original,appearance:c.defaultWorkspaceAppearanceV1()}),'Legacy v1 must not accept unknown appearance fields');
+ for(const profile of c.WORKSPACE_DESIGN_PROFILES_V1){const value=c.workspaceAppearancePresetV1(profile.id);assert.equal(value.templateId,profile.id);assert.deepEqual(c.validateWorkspaceAppearanceV1(value),value);for(const extra of[{css:'body{}'},{script:'alert(1)'},{url:'https://invalid.example'},{rights:['all']},{microphone:true},{quality:'immersive'}])assert.throws(()=>c.validateWorkspaceAppearanceV1({...value,...extra}));}
+ const value=c.defaultWorkspaceAppearanceV1();for(const extra of[{templateId:'unknown'},{templateVersion:'99.0.0'},{layout:'arbitrary-pixels'},{density:'tiny'},{agentPresentation:'new-service'},{motion:'script'}])assert.throws(()=>c.validateWorkspaceAppearanceV1({...value,...extra}));
+ let touched=false;const accessor={...value};Object.defineProperty(accessor,'templateId',{enumerable:true,get(){touched=true;return'notebook';}});assert.throws(()=>c.validateWorkspaceAppearanceV1(accessor));assert.equal(touched,false);
+ const root=mkdtempSync(join(process.env.TMPDIR,'pan543-appearance-'));let a,b;try{a=store.createBrowserProfileStoreV1({root,catalog});b=store.createBrowserProfileStoreV1({root,catalog});const legacy=JSON.stringify(a.read(owner)),initial=a.readAppearance(owner);assert.equal(initial.revision,0);assert.equal(initial.appearance.templateId,'notebook');
+  const command={schemaVersion:'pansphaira.workspace-appearance/write/v1',expectedRevision:0,appearance:c.workspaceAppearancePresetV1('orbit')};const saved=a.writeAppearance(owner,command,()=>true);assert.equal(saved.revision,1);assert.deepEqual(b.readAppearance(owner),saved);assert.equal(JSON.stringify(a.read(owner)),legacy);assert.throws(()=>b.writeAppearance(owner,command,()=>true),/APPEARANCE_REVISION_CONFLICT/);assert.equal(b.readAppearance({...owner,subjectId:'another-user'}).revision,0);
+  assert.throws(()=>a.writeAppearance(owner,{...command,expectedRevision:1,appearance:c.workspaceAppearancePresetV1('prism')},()=>false),/APPEARANCE_SESSION_DENIED/);assert.equal(a.readAppearance(owner).revision,1);assert.equal(JSON.stringify(a.read(owner)),legacy);
+  const restored=b.writeAppearance(owner,{...command,expectedRevision:1,appearance:saved.previousAppearance},()=>true);assert.equal(restored.revision,2);assert.deepEqual(restored.appearance,initial.appearance);a.close();b.close();a=store.createBrowserProfileStoreV1({root,catalog});assert.deepEqual(a.readAppearance(owner),restored);assert.equal(JSON.stringify(a.read(owner)),legacy);
+ }finally{a?.close();b?.close();rmSync(root,{recursive:true,force:true});}
+});
