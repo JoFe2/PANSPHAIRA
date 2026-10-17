@@ -2428,7 +2428,7 @@ ca02796f18e6e5be89408b00df9acf4338720113b3d33ced2c88755514cd9801  ./tests/pan546
 17b1f2835fb4bf76b0386909d1837a0b78315f37ea10f47123838b0146b9d0c2  ./tests/pan547/native-knowledge.test.mjs
 92821231e1e83a5bc457377874727ef9c0dc8c15a438c9104a1d05a9fb8091bb  ./tests/pan547/registration.test.mjs
 389c12fb5fb89c59955c794ed69dc58b54279de96e5756067ace0c41b8f09aef  ./tests/pan548/agent-run-transport-contract.test.mjs
-cfc146e455f64f5370644b8c6e7359e653d46e94e2c1a6693efbe3666cd95c4c  ./tests/pan548/browser-agent-panel.test.mjs
+38b38e12ea88aa638a70cd942390ee04a6d92ede3258508db01bf899b2045183  ./tests/pan548/browser-agent-panel.test.mjs
 47e44bc2a0ff97807dd8e8857d24bec052399faad865477f12b152d53cae6847  ./tests/pan548/browser-context.test.mjs
 3aee8250d0a32756eeb0c36c90a0d95afcf16f5f97d682f3e8095e3056c201ef  ./tests/pan548/context-contract.test.mjs
 1ee94c8f680a048643fc4d16676b8f5c694353c391bf85d04d31c5070250ff6e  ./tests/pan548/native-agent-run.test.mjs
@@ -2802,5 +2802,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-d5749218aa05f6a4577d58e6ec8888cfae95dd4873de31cc6e98dac2763d23e1  ./verification/verification-dag-v2.json
+eb49746e52584d07a10a2b169e5916b6e376713470e0c9cf464d908498b3f545  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

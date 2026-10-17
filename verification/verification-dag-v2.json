@@ -11288,7 +11288,7 @@
         {
           "path": "tests/pan548/browser-agent-panel.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "cfc146e455f64f5370644b8c6e7359e653d46e94e2c1a6693efbe3666cd95c4c"
+          "sha256": "38b38e12ea88aa638a70cd942390ee04a6d92ede3258508db01bf899b2045183"
         },
         {
           "path": "src/pan548/native-ui-task-projection-v2.mjs",
