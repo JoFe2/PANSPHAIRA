@@ -34,7 +34,26 @@ function classifyImmutableRuntimeBudgetDevelopmentProfile(path, line, digest) {
     ? "exact-digest-immutable-runtime-budget-development-profile" : null;
 }
 
+// Closed internal stylesheet partition, not current product display text.
+// Bind the exact existing path, complete file digest and technical line; no wildcard.
+const closedWorkspaceAppearanceStyleBindings = Object.freeze({
+  "packages/browser-workspace/src/workspace.css": Object.freeze({ sha256: "ed1b9afdf16219f7bde421b9a39f0490cccb9b67e8156a72e11c417cc0bfc4bc", lines: Object.freeze(["/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/"]) }),
+  "src/pan541/workspace-browser.mjs": Object.freeze({ sha256: "4cc1c8ce881e353d020e16a9d126aa7b88963ab3f3b8ab44ecfee15ca289b925", lines: Object.freeze(["const appearanceStyleBoundaryV1=\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\\n\";"]) }),
+  "tests/pan541/browser-context-safety.test.mjs": Object.freeze({ sha256: "f27e6bb0a0af24906ab442be639591e0978cad81a49710d6ffbbb818c458df97", lines: Object.freeze(["style: readFileSync(new URL(\"../../packages/browser-workspace/src/workspace.css\", import.meta.url), \"utf8\").split(\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\\n\")[0],"]) }),
+});
+
+function classifyClosedWorkspaceAppearanceStyleBoundary(path, line, digest) {
+  if (!Object.hasOwn(closedWorkspaceAppearanceStyleBindings, path)) return null;
+  const binding = closedWorkspaceAppearanceStyleBindings[path];
+  return digest === binding.sha256 && binding.lines.includes(line.trim())
+    ? "exact-digest-closed-workspace-style-boundary" : null;
+}
+
 function classify(path, line) {
+  const closedStyleClassification = classifyClosedWorkspaceAppearanceStyleBoundary(path, line,
+    Object.hasOwn(closedWorkspaceAppearanceStyleBindings, path)
+      ? createHash("sha256").update(read(path)).digest("hex") : null);
+  if (closedStyleClassification !== null) return closedStyleClassification;
   const immutableBudgetClassification = classifyImmutableRuntimeBudgetDevelopmentProfile(path, line,
     path === "contracts/runtime-budget/candidates/runtime-budget-development-v1.json"
       ? createHash("sha256").update(read(path)).digest("hex") : null);
@@ -275,6 +294,26 @@ test("immutable H05 native-store profile admission is exact-path digest and line
   assert.equal(classifyImmutableRuntimeBudgetDevelopmentProfile(path, `"unexpected": "${legacyDisplay}",`, digest), null);
   assert.equal(classifyImmutableRuntimeBudgetDevelopmentProfile("toString", line, digest), null);
   assert.equal(classify("docs/architecture/pan529-runtime-budget-v1.md", `new ${legacyDisplay} display`), null);
+});
+
+test("closed workspace stylesheet marker admission binds path, whole bytes and exact technical line", () => {
+  for (const [path, binding] of Object.entries(closedWorkspaceAppearanceStyleBindings)) {
+    const bytes = read(path);
+    const digest = createHash("sha256").update(bytes).digest("hex");
+    assert.equal(digest, binding.sha256);
+    for (const line of binding.lines) {
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line, digest), "exact-digest-closed-workspace-style-boundary");
+      assert.equal(classify(path, line), "exact-digest-closed-workspace-style-boundary");
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line, "0".repeat(64)), null);
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line, createHash("sha256").update(bytes + "\n").digest("hex")), null);
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line + " unexpected", digest), null);
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line.replace("CLOSED_", "OPEN_"), digest), null);
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path + ".neighbor", line, digest), null);
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary("toString", line, digest), null);
+      assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, `new ${legacyDisplay} display`, digest), null);
+    }
+  }
+  assert.equal(classify("README.md", `new ${legacyDisplay} display`), null);
 });
 
 test("every retained all-caps token has an explicit KEEP classification", (t) => {
