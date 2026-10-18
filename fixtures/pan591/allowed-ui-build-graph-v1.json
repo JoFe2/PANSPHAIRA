@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "pansphaira.ui-build-admission/graph/v1",
+  "graphId": "pan591.own-synthetic-ui",
+  "version": "1.0.0",
+  "base": {
+    "commitSha": "e755299161a122f1655d3b54c639b69ce56fbe97",
+    "treeSha": "28a9640b02bb0e7f288184bed13b1440a0b7827a"
+  },
+  "entrypoint": "entry",
+  "operation": "PACKAGE_PINNED_SOURCE_ONLY",
+  "network": {
+    "mode": "NONE",
+    "origins": []
+  },
+  "resources": [
+    {
+      "id": "entry",
+      "kind": "SOURCE",
+      "version": "1.0.0",
+      "path": "fixtures/pan591/own-ui/entry.mjs",
+      "sha256": "7fffc8480d424ed26bdf4aabb6843c17d862fd47d711a66b48b5bcc484d57079",
+      "sourceRef": "OWN_SYNTHETIC:pan591:1.0.0",
+      "licence": "Apache-2.0",
+      "licenceSha256": "835083c307550077500f6817fa1d3ecbcb5f559d41029ff34f2ccacf5c3bbe07",
+      "noticeSha256": "d450ed03544412c411173e098a89976228d98f9a76634b0ec09e19134382ef74",
+      "rights": "OWN_SYNTHETIC_SOURCE_ONLY",
+      "distribution": "BUNDLED_SOURCE",
+      "egress": [],
+      "dependsOn": [
+        "geometry",
+        "font-glyphs",
+        "check",
+        "panel",
+        "node"
+      ]
+    },
+    {
+      "id": "geometry",
+      "kind": "DEPENDENCY",
+      "version": "1.0.0",
+      "path": "fixtures/pan591/own-ui/geometry.mjs",
+      "sha256": "f8e4e1021f8e3f5d5f5cea29630dac3de6a73123a04bb18fcc46a44e1968d125",
+      "sourceRef": "OWN_SYNTHETIC:pan591:1.0.0",
+      "licence": "Apache-2.0",
+      "licenceSha256": "835083c307550077500f6817fa1d3ecbcb5f559d41029ff34f2ccacf5c3bbe07",
+      "noticeSha256": "d450ed03544412c411173e098a89976228d98f9a76634b0ec09e19134382ef74",
+      "rights": "OWN_SYNTHETIC_SOURCE_ONLY",
+      "distribution": "BUNDLED_SOURCE",
+      "egress": [],
+      "dependsOn": []
+    },
+    {
+      "id": "font-glyphs",
+      "kind": "FONT",
+      "version": "1.0.0",
+      "path": "fixtures/pan591/own-ui/font-glyphs.json",
+      "sha256": "2219c95036bbdab100a172a967ace00e4ab22b26043f46e7782850ffc7713949",
+      "sourceRef": "OWN_SYNTHETIC:pan591:1.0.0",
+      "licence": "Apache-2.0",
+      "licenceSha256": "835083c307550077500f6817fa1d3ecbcb5f559d41029ff34f2ccacf5c3bbe07",
+      "noticeSha256": "d450ed03544412c411173e098a89976228d98f9a76634b0ec09e19134382ef74",
+      "rights": "OWN_SYNTHETIC_SOURCE_ONLY",
+      "distribution": "BUNDLED_SOURCE",
+      "egress": [],
+      "dependsOn": []
+    },
+    {
+      "id": "check",
+      "kind": "ICON",
+      "version": "1.0.0",
+      "path": "fixtures/pan591/own-ui/check.svg",
+      "sha256": "9c98ba09e8436273bbe0f7094283f617179333914177c0789d760b3d65e2ba47",
+      "sourceRef": "OWN_SYNTHETIC:pan591:1.0.0",
+      "licence": "Apache-2.0",
+      "licenceSha256": "835083c307550077500f6817fa1d3ecbcb5f559d41029ff34f2ccacf5c3bbe07",
+      "noticeSha256": "d450ed03544412c411173e098a89976228d98f9a76634b0ec09e19134382ef74",
+      "rights": "OWN_SYNTHETIC_SOURCE_ONLY",
+      "distribution": "BUNDLED_SOURCE",
+      "egress": [],
+      "dependsOn": []
+    },
+    {
+      "id": "panel",
+      "kind": "ASSET",
+      "version": "1.0.0",
+      "path": "fixtures/pan591/own-ui/panel.svg",
+      "sha256": "98badcdcfcb935279f93066400524c1219d64ffc9767b1a93bfcb4f072a66401",
+      "sourceRef": "OWN_SYNTHETIC:pan591:1.0.0",
+      "licence": "Apache-2.0",
+      "licenceSha256": "835083c307550077500f6817fa1d3ecbcb5f559d41029ff34f2ccacf5c3bbe07",
+      "noticeSha256": "d450ed03544412c411173e098a89976228d98f9a76634b0ec09e19134382ef74",
+      "rights": "OWN_SYNTHETIC_SOURCE_ONLY",
+      "distribution": "BUNDLED_SOURCE",
+      "egress": [],
+      "dependsOn": []
+    },
+    {
+      "id": "node",
+      "kind": "RUNTIME",
+      "version": "24.14.1",
+      "path": "$QUALIFIED_NODE",
+      "sha256": "bf9112eb83a827dc9f9c8d19bb7bddcbf00f7b2fedae18fdcaee05406981f20a",
+      "sourceRef": "OFFICIAL_PREQUALIFIED:node:24.14.1:linux-x64",
+      "licence": "LicenseRef-Node24-Distribution",
+      "licenceSha256": "4573185d56580da2b890ba34a85a409257640f1c5632eade4300137266194d18",
+      "noticeSha256": "4573185d56580da2b890ba34a85a409257640f1c5632eade4300137266194d18",
+      "rights": "EXISTING_QUALIFIED_LOCAL_EXECUTION_ONLY",
+      "distribution": "NOT_DISTRIBUTED",
+      "egress": [],
+      "dependsOn": []
+    }
+  ],
+  "graphDigest": "5a16c108e28bc811bf39afe6cd7bbb4a69e9a8296528d90e1e4d759ee5f05a90"
+}

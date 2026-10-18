@@ -330,3 +330,68 @@ export function evaluateExternalPluginPreflightV1(value: unknown): ExternalPlugi
 export function renderPublicExternalPluginPreflightV1(value: unknown): string {
   return canonicalJson(evaluateExternalPluginPreflightV1(value));
 }
+
+
+/** PAN591/DUI13: additive, exact closed UI graph admission. STATIC_CLEAR above
+ * remains execution-free and never becomes a rights or installation grant.
+ * The trusted owner supplies the separately byte-verified allowlisted graph;
+ * a caller-signed digest, repo license or adapter license is not that policy.
+ */
+export const UI_BUILD_GRAPH_SCHEMA_V1 = "pansphaira.ui-build-admission/graph/v1" as const;
+export interface UiBuildResourceV1 {
+  readonly id:string; readonly kind:string; readonly version:string; readonly path:string;
+  readonly sha256:string; readonly sourceRef:string; readonly licence:string;
+  readonly licenceSha256:string; readonly noticeSha256:string; readonly rights:string;
+  readonly distribution:string; readonly egress:readonly string[]; readonly dependsOn:readonly string[];
+}
+export interface UiBuildGraphV1 {
+  readonly schemaVersion:typeof UI_BUILD_GRAPH_SCHEMA_V1; readonly graphId:string; readonly version:string;
+  readonly base:{readonly commitSha:string;readonly treeSha:string}; readonly entrypoint:string;
+  readonly operation:"PACKAGE_PINNED_SOURCE_ONLY";
+  readonly network:{readonly mode:"NONE";readonly origins:readonly string[]};
+  readonly resources:readonly UiBuildResourceV1[]; readonly graphDigest:string;
+}
+export function uiBuildGraphDigestV1(value:UiBuildGraphV1):string {
+  const {graphDigest:_stored,...body}=value;
+  return digest(canonicalJson(body));
+}
+export type UiBuildAdmissionV1 = Readonly<{outcome:"GRAPH_ADMISSIBLE"|"DENIED";reasonCodes:readonly string[];graphDigest?:string}>;
+export function evaluateUiBuildAdmissionV1(value:unknown, trustedPolicy:unknown):UiBuildAdmissionV1 {
+  const no=(code:string):UiBuildAdmissionV1=>Object.freeze({outcome:"DENIED",reasonCodes:Object.freeze([code])});
+  try {
+    if(!isSafeJsonData(value)||!exact(value,["schemaVersion","graphId","version","base","entrypoint","operation","network","resources","graphDigest"])
+      ||value.schemaVersion!==UI_BUILD_GRAPH_SCHEMA_V1||typeof value.graphId!=="string"||!/^[a-z0-9.-]{3,96}$/.test(value.graphId)
+      ||typeof value.version!=="string"||!exact(value.base,["commitSha","treeSha"])
+      ||![value.base.commitSha,value.base.treeSha].every(x=>typeof x==="string"&&/^[a-f0-9]{40}$/.test(x))
+      ||typeof value.entrypoint!=="string"||value.operation!=="PACKAGE_PINNED_SOURCE_ONLY"
+      ||!exact(value.network,["mode","origins"])||!Array.isArray(value.network.origins)
+      ||!Array.isArray(value.resources)||value.resources.length<1||value.resources.length>32||typeof value.graphDigest!=="string")
+      return no("UI_ADMISSION_SCHEMA_DENIED");
+    if(value.network.mode!=="NONE"||value.network.origins.length!==0)return no("UI_ADMISSION_EGRESS_DENIED");
+    const resourceKeys=["id","kind","version","path","sha256","sourceRef","licence","licenceSha256","noticeSha256","rights","distribution","egress","dependsOn"];
+    for(const r of value.resources){
+      if(!exact(r,resourceKeys)||![r.id,r.kind,r.version,r.path,r.sha256,r.sourceRef,r.licence,r.rights,r.distribution].every(x=>typeof x==="string")
+        ||!Array.isArray(r.egress)||!Array.isArray(r.dependsOn)||!r.dependsOn.every(x=>typeof x==="string"))return no("UI_ADMISSION_SCHEMA_DENIED");
+      if(!/^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(r.version as string))return no("UI_ADMISSION_FLOATING_DEPENDENCY_DENIED");
+      if(["MODEL_WEIGHTS","VOICE","STT","TTS","VAD"].includes(r.kind as string))return no("UI_ADMISSION_SEPARATE_MEDIA_RIGHTS_REQUIRED");
+      if(!["SOURCE","DEPENDENCY","RUNTIME","FONT","ICON","ASSET"].includes(r.kind as string))return no("UI_ADMISSION_RESOURCE_KIND_DENIED");
+      if(/^AGPL/i.test(r.licence as string))return no("UI_ADMISSION_AGPL_DECISION_REQUIRED");
+      if(!["Apache-2.0","LicenseRef-Node24-Distribution"].includes(r.licence as string)
+        ||!["OWN_SYNTHETIC_SOURCE_ONLY","EXISTING_QUALIFIED_LOCAL_EXECUTION_ONLY"].includes(r.rights as string))return no("UI_ADMISSION_RIGHTS_UNKNOWN");
+      if(![r.sha256,r.licenceSha256,r.noticeSha256].every(x=>typeof x==="string"&&DIGEST.test(x)))return no("UI_ADMISSION_NOTICE_OR_LICENCE_PIN_DENIED");
+      if(r.egress.length!==0)return no("UI_ADMISSION_EGRESS_DENIED");
+      if((r.kind==="RUNTIME"&&(r.distribution!=="NOT_DISTRIBUTED"||r.rights!=="EXISTING_QUALIFIED_LOCAL_EXECUTION_ONLY"))
+        ||(r.kind!=="RUNTIME"&&(r.distribution!=="BUNDLED_SOURCE"||r.rights!=="OWN_SYNTHETIC_SOURCE_ONLY")))return no("UI_ADMISSION_RIGHTS_SCOPE_DENIED");
+    }
+    const g=value as unknown as UiBuildGraphV1,ids=new Set(g.resources.map(r=>r.id));
+    if(ids.size!==g.resources.length||new Set(g.resources.map(r=>r.path)).size!==g.resources.length||!ids.has(g.entrypoint)
+      ||g.resources.some(r=>r.dependsOn.some(id=>!ids.has(id)||id===r.id)||new Set(r.dependsOn).size!==r.dependsOn.length))return no("UI_ADMISSION_DEPENDENCY_CLOSURE_DENIED");
+    const active=new Set<string>(),visited=new Set<string>();
+    const visit=(id:string):boolean=>{if(active.has(id))return false;if(visited.has(id))return true;active.add(id);for(const next of g.resources.find(r=>r.id===id)!.dependsOn)if(!visit(next))return false;active.delete(id);visited.add(id);return true;};
+    if(!visit(g.entrypoint)||visited.size!==g.resources.length)return no("UI_ADMISSION_DEPENDENCY_CLOSURE_DENIED");
+    if(uiBuildGraphDigestV1(g)!==g.graphDigest)return no("UI_ADMISSION_CONTENT_DIGEST_DENIED");
+    if(!isSafeJsonData(trustedPolicy)||!exact(trustedPolicy,["schemaVersion","graphId","version","base","entrypoint","operation","network","resources","graphDigest"])
+      ||canonicalJson(g)!==canonicalJson(trustedPolicy))return no("UI_ADMISSION_EXACT_OWNER_POLICY_DENIED");
+    return Object.freeze({outcome:"GRAPH_ADMISSIBLE",reasonCodes:Object.freeze(["UI_ADMISSION_EXACT_OWN_GRAPH_QUALIFIED"]),graphDigest:g.graphDigest});
+  } catch {return no("UI_ADMISSION_SCHEMA_DENIED");}
+}

@@ -3751,6 +3751,31 @@ for(const id of ['pan548-authentic-context-selection-v1','pan597-native-browser-
 let rules612=dag.nodes.find(n=>n.id==='pan612-model-free-rules-context-vertical-v1');if(!rules612){rules612={id:'pan612-model-free-rules-context-vertical-v1',dependsOn:['pan607-native-context-checkpoint-projection-v1','pan608-model-free-invocations-v1'],inputs:[],ownedTests:[],invariants:['Reuse actual548 task/session/context and existing546597 original target readers; no new store, policy/task/broker engine or target redispatch.','Fix exactly two independently resolved native document-render and reversible-preview references within the existing607 checkpoint owner transaction; copied methods, caller hashes or route flags grant no authority.','Preserve actual reviewer/session/tenant/tab/context, origin/CSRF, privacy/retention and immutable no-send/NOT_RUN constraints through same existing browser checkpoint controls and independently read target proofs.','MODEL_FREE_RULES_CONTEXT_VERTICAL is separately deliverable under original612AC06; native local PREPARED/INCLUDED_IN_PROMPT/RESULT_CHECKED are not genuine575 Main-model consideration, live voice or original612 all-criteria closure.'],riskClass:'HIGH',globalInvalidation:false};dag.nodes.push(rules612);}
 rules612.inputs=pan612Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)}));rules612.ownedTests=['npm run pan612:test'];dag.graphVersion=104;
 
+// PAN591 extends the existing external-plugin preflight owner. Keep the
+// unchanged 64-command bound: this focused test is not a 65th integration test.
+const pan591Inputs = [
+  ["src/pan591/ui-build-admission.mjs", "SOURCE"],
+  ["tests/pan591/admission.test.mjs", "VALIDATOR"],
+  ["fixtures/pan591/allowed-ui-build-graph-v1.json", "FIXTURE"],
+  ["fixtures/pan591/own-ui/entry.mjs", "FIXTURE"],
+  ["fixtures/pan591/own-ui/geometry.mjs", "FIXTURE"],
+  ["fixtures/pan591/own-ui/font-glyphs.json", "FIXTURE"],
+  ["fixtures/pan591/own-ui/check.svg", "FIXTURE"],
+  ["fixtures/pan591/own-ui/panel.svg", "FIXTURE"],
+  ["docs/architecture/pan591-ui-build-admission-v1.md", "DERIVED_EVIDENCE"],
+];
+for (const [inputPath, role] of pan591Inputs) {
+  if (!externalPluginNode.inputs.some(({ path: ownedPath }) => ownedPath === inputPath)) {
+    externalPluginNode.inputs.push({ path: inputPath, role, sha256: digest(inputPath) });
+  }
+}
+if (!externalPluginNode.ownedTests.includes("npm run pan591:test")) {
+  externalPluginNode.ownedTests.push("npm run pan591:test");
+}
+repositoryIntegrityNode.ownedTests = repositoryIntegrityNode.ownedTests.filter(
+  (command) => command !== "npm run pan591:test",
+);
+
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
 // not be duplicated on the integration owner. The integration owner keeps
@@ -3781,6 +3806,7 @@ const entries = new Map(readFileSync(sumsPath, "utf8").trimEnd().split("\n").map
 for (const line of readFileSync(path.join(root, "release/public-files.manifest"), "utf8").split("\n")) {
   if (line && !line.startsWith("#")) entries.set(line.split("\t")[0], null);
 }
+for (const [inputPath] of pan591Inputs) entries.set(inputPath, null);
 for(const[inputPath]of[...pan607NativeInputs,...pan607Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan604NativeInputs,...pan604Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan602NativeInputs,...pan602Inputs])entries.set(inputPath,null);

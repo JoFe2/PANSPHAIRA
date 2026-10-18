@@ -208,6 +208,16 @@ repository_only_files = {
     "contracts/pan574/original-context-v1/D0/erp-profile-original.schema.json",
     "contracts/pan574/original-context-v1/D0/inventory-boundary-original.txt",
     "contracts/pan574/original-context-v1/S/manifest.json",
+    # PAN591 bounded exact own graph admission is source-only; no runtime/media grant.
+    "src/pan591/ui-build-admission.mjs",
+    "tests/pan591/admission.test.mjs",
+    "fixtures/pan591/allowed-ui-build-graph-v1.json",
+    "fixtures/pan591/own-ui/entry.mjs",
+    "fixtures/pan591/own-ui/geometry.mjs",
+    "fixtures/pan591/own-ui/font-glyphs.json",
+    "fixtures/pan591/own-ui/check.svg",
+    "fixtures/pan591/own-ui/panel.svg",
+    "docs/architecture/pan591-ui-build-admission-v1.md",
     # PAN576 finite separated workload is source-only, not a legacy runnable entry.
     "scripts/pan576-kernel-guard.c",
     "scripts/pan576-isolated-worker.mjs",

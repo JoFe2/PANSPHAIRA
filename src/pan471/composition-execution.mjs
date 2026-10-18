@@ -9,6 +9,7 @@ import {IMAGE_ID} from '../pan454/journey-profile.mjs';
 import {runBoundedProcessV1} from '../../scripts/extension-dynamic-process-lifecycle.mjs';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
 import {createPan471CompositionSession, discoverPan471CompositionBindings} from './composition-bindings.mjs';
+import {admitPan591UiBuildGraph,packagePan591AdmittedGraph} from '../pan591/ui-build-admission.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const IMAGE = 'node@' + IMAGE_ID;
@@ -278,6 +279,11 @@ export function createPan471CompositionExecutor() {
   function freeze(untrusted) {
     if(closed||busy)throw new Error('PAN576_OWNER_STATE_DENIED');
     const submission=dataCopy(untrusted);
+    if(submission?.schemaVersion==='pansphaira.ui-build-admission/graph/v1') {
+      const held=admitPan591UiBuildGraph(submission);
+      const handle=Object.freeze({schemaVersion:submission.schemaVersion,graphDigest:held.graph.graphDigest,catalogDigest:held.catalogDigest});
+      grants.set(handle,{kind:'UI_ADMISSION_ONLY',held});return handle;
+    }
     if(!keysEqual(submission,['schemaVersion','version','entrypoint','code'])
       ||submission.schemaVersion!=='pansphaira.pan471/composition-submission/v1'||submission.version!=='1.0.0'
       ||submission.entrypoint!=='run(ctx,input)'||typeof submission.code!=='string'
@@ -296,6 +302,7 @@ export function createPan471CompositionExecutor() {
     if(pendingFailure)return denied('OWN_RESOURCE_OR_EFFECT_RECONCILIATION_REQUIRED');
     if(unreconciled.size>0)return denied('UNRECONCILED_NATIVE_EFFECT');
     const held=grants.get(handle);
+    if(held.kind==='UI_ADMISSION_ONLY')return denied('UI_GRAPH_ADMISSION_IS_NOT_CODE_EXECUTION_AUTHORITY');
     try {
       for(const member of held.build.binding.files)if(sha(readFileSync(member.path))!==member.sha256)return denied('BUILD_DRIFT_DENIED');
     } catch {return denied('BUILD_DRIFT_DENIED');}
@@ -473,11 +480,16 @@ export function createPan471CompositionExecutor() {
       return {...denied('NATIVE_TARGET_NOT_VERIFIED'),signatureValid:true};
     return {outcome:'VERIFIED_NATIVE_TARGET',signatureValid:true,runId:actual.report.runId};
   }
+  function packageUiGraph(handle) {
+    if(closed||busy||pendingFailure||unreconciled.size>0||!handle||typeof handle!=='object'||!grants.has(handle))return denied('AUTHORITY_DENIED');
+    const grant=grants.get(handle);if(grant.kind!=='UI_ADMISSION_ONLY')return denied('AUTHORITY_DENIED');
+    try{return packagePan591AdmittedGraph(grant.held);}catch(error){return denied(error.message);}
+  }
   function close() {
     if(busy)throw new Error('PAN576_OWN_WORKLOAD_ACTIVE');
     if(pendingFailure)throw new Error('PAN576_OWN_RESOURCE_RECOVERY_REQUIRED');
     if(unreconciled.size>0)throw new Error('PAN576_NATIVE_RECONCILIATION_REQUIRED');
     closed=true;signingKey.fill(0);records.clear();unreconciled.clear();rmSync(root,{recursive:true,force:true});
   }
-  return {controller:Object.freeze({freeze,verify,reconcile,activeEvidence,abort,pendingOutcome,recoverPending,sealStatement,verifyStatement,close}),tools:Object.freeze({run})};
+  return {controller:Object.freeze({freeze,verify,reconcile,activeEvidence,abort,pendingOutcome,recoverPending,sealStatement,verifyStatement,close}),tools:Object.freeze({run,packageUiGraph})};
 }
