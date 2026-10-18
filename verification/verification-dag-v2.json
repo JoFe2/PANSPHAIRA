@@ -10251,7 +10251,7 @@
         {
           "path": "tests/pan546/browser-navigation.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "310ddcebc0ddd3feedef9619bdf49f4a6fb0099b1658884720c0dc8be3b6e6b5"
+          "sha256": "b5509f58db32e562db634a611e88c9fb1f674080ea12b4e93f2ca47cee302d8c"
         },
         {
           "path": "scripts/run-pan546-native-view-human-tests.mjs",
