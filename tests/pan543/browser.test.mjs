@@ -12,6 +12,11 @@ import { createNativeErvReadAdapterV1 } from "../../src/pan541/native-erv-read-a
 import { enableWorkspaceBrowserV1 } from "../../src/pan541/workspace-browser.mjs";
 import { defaultBrowserProfileV1 } from "../../dist/packages/contracts/src/browser-profile-v1.js";
 
+async function assertNativeProfileOrder543(page,label,widgetsFirst=true){
+ const actual=await page.evaluate(()=>{const canvas=document.getElementById('profile.canvas'),main=document.getElementById('shell.main'),widgets=document.getElementById('shell.widgets'),a=main.getBoundingClientRect(),b=widgets.getBoundingClientRect();return{dom:[...canvas.children].map(e=>e.id),main:{top:a.top,bottom:a.bottom,width:a.width,height:a.height,visible:main.checkVisibility()},widgets:{top:b.top,bottom:b.bottom,width:b.width,height:b.height,visible:widgets.checkVisibility()}};});
+ assert.equal(actual.dom.indexOf('shell.widgets')<actual.dom.indexOf('shell.main'),widgetsFirst,'ACTUAL_NATIVE_PROFILE_DOM_ORDER:'+label+JSON.stringify(actual));assert.ok(actual.main.visible&&actual.widgets.visible&&actual.main.width>0&&actual.widgets.width>0,'REAL_PROFILE_CARDS_REQUIRED:'+label+JSON.stringify(actual));assert.ok(widgetsFirst?actual.widgets.bottom<=actual.main.top+1:actual.main.bottom<=actual.widgets.top+1,'ACTUAL_NATIVE_PROFILE_ORDER_MUST_CONTROL_VISIBLE_GEOMETRY:'+label+JSON.stringify(actual));return actual;
+}
+
 export async function browserFixture543() {
   assert.ok(process.env.PAN527_BROWSER_MODULE && process.env.PAN527_CERTUTIL && process.env.PAN543_BROWSER_EVIDENCE, "owned browser/CA tooling and evidence required, no skip");
   const { chromium } = await import(process.env.PAN527_BROWSER_MODULE);
@@ -66,6 +71,7 @@ export async function dimensions543(page) {
 }
 
 export async function readability543(page, label) {
+  mkdirSync(process.env.PAN543_BROWSER_EVIDENCE,{recursive:true,mode:0o700});for(const selector of [".erv-source-details",".workspace-connection-details"]){const d=page.locator(selector);if(await d.count()&&await d.getAttribute("open")===null)await d.locator(":scope > summary").click();}
   const metrics = await page.evaluate(() => {
     const box = e => { const s = getComputedStyle(e); const r = e.getBoundingClientRect(); const content = e.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight); return { width: r.width, height: r.height, contentEm: content / parseFloat(s.fontSize), display: s.display, overflowX: s.overflowX, overflowY: s.overflowY }; };
     const lines = e => {
@@ -83,11 +89,13 @@ export async function readability543(page, label) {
       profileRevision: document.querySelector('[data-profile-state]').getAttribute("data-profile-revision"),
       main: box(main), heading: { text: heading.textContent, ...box(heading), ...lines(heading) }, note: { text: note.textContent, ...box(note), ...lines(note) },
       facts: [...main.querySelectorAll(".facts")].map(e => box(e)),
+      amountCells:[...main.querySelectorAll(".erv-amount dt,.erv-amount dd")].map(e=>{const r=e.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(e);const rects=[...range.getClientRects()];return{text:e.textContent,...box(e),...lines(e),visible:e.checkVisibility(),actualBox:r.toJSON(),actualGlyphRects:rects.map(v=>v.toJSON()),wholeTextFits:rects.length>0&&rects.every(v=>v.left>=r.left-1&&v.right<=r.right+1&&v.top>=r.top-1&&v.bottom<=r.bottom+1)};}),
       cells: [...main.querySelectorAll(".facts dt,.facts dd"), ...panel.querySelectorAll(".facts dt,.facts dd")].map(e => ({ text: e.textContent, ...box(e), ...lines(e) })) };
   });
   writeFileSync(join(process.env.PAN543_BROWSER_EVIDENCE, label + "-readability.json"), JSON.stringify(metrics, null, 2) + "\n");
   assert.ok(metrics.main.contentEm >= 18, "PAN543_MAIN_READABILITY_MIN18EM:" + JSON.stringify(metrics));
   assert.ok(metrics.facts.length && metrics.facts.every(f => f.contentEm >= 18), "PAN543_FACTS_READABILITY_MIN18EM:" + JSON.stringify(metrics));
+  assert.equal(metrics.amountCells.length,6,"ALL_THREE_NATIVE_MONEY_READOUTS_AND_LABELS_REQUIRED");assert.ok(metrics.amountCells.every(v=>v.visible&&v.wholeTextFits&&v.max>=Math.min(8,v.total)&&v.width>0&&v.height>0&&!["hidden","clip"].includes(v.overflowX)),"PAN543_ACTUAL_AMOUNT_GLYPHS_MUST_BE_COMPLETE_VISIBLE_NOT_CLIPPED:"+JSON.stringify(metrics.amountCells));
   for (const item of [metrics.heading, metrics.note]) assert.ok(item.max >= Math.min(12,item.total), "PAN543_NEAR_SINGLE_GLYPH_LINES:" + JSON.stringify(item));
   assert.match(metrics.heading.text, /Eingangsrechnungsprüfung/); assert.match(metrics.note.text, /Pluginmetadaten gewähren keine Backendrechte/);
   assert.ok(metrics.cells.length && metrics.cells.every(c => c.contentEm >= 8 && c.max >= Math.min(8,c.total)), "PAN543_FACT_CELL_READABILITY_MIN8EM:" + JSON.stringify(metrics.cells));
@@ -100,11 +108,11 @@ test("PAN543-VISUAL-01 fast real saved-large-panel revision2 CSSzoom2 readabilit
   try {
     const business = JSON.stringify(nativeRows(f.native.root, "SELECT revision,effect_key,command,event FROM pan516_events ORDER BY revision"));
     const page = await f.context.newPage(); let posts = 0; page.on("request", r => { if (r.method() === "POST" && new URL(r.url()).pathname.endsWith("/workspace/profile")) posts++; });
-    await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor();
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor({state:'attached'});
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
     await page.getByRole("checkbox", { name: "Informationspanel anzeigen", exact: true }).check(); await page.getByRole("slider", { name: "Informationspanel Größe", exact: true }).press("End");
-    await page.getByRole("button", { name: "Betriebsstatus nach oben", exact: true }).click(); await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).uncheck();
-    const save = async () => { await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await page.locator('[data-profile-state="SAVED"]').waitFor(); };
+    await page.getByRole("button", { name: "Betriebsstatus nach oben", exact: true }).click();await assertNativeProfileOrder543(page,"local-preview-before-any-confirmation"); await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).uncheck();
+    const save = async () => { await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="SAVED"]').waitFor(); };
     await save(); await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).check(); await save();
     const persisted = JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader })).body); assert.equal(persisted.revision, 2); assert.equal(persisted.profile.items.find(i => i.id === "pan.erv.information").size, "large");
     await page.evaluate(() => { document.body.style.zoom = "2"; });
@@ -128,11 +136,11 @@ test("PUI-02 actual browser edits/confirm/CAS/readback, simultaneous independent
     const page = await f.context.newPage(); const requests = []; const errors = [];
     page.on("request", r => requests.push({ method: r.method(), path: new URL(r.url()).pathname, body: r.postData() })); page.on("pageerror", e => errors.push(e.message));
     await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv");
-    await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor();
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click({ timeout: 3000 });
+    await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor({state:'attached'});
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click({ timeout: 3000 });
     await page.getByRole("checkbox", { name: "Informationspanel anzeigen", exact: true }).check();
     const range = page.getByRole("slider", { name: "Informationspanel Größe", exact: true }); await range.focus(); await range.press("End");
-    await page.getByRole("button", { name: "Betriebsstatus nach oben", exact: true }).click();
+    await page.getByRole("button", { name: "Betriebsstatus nach oben", exact: true }).click();await assertNativeProfileOrder543(page,"local-preview-before-any-confirmation");
     await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).uncheck();
     const main = page.locator('[id="shell.main"]'); const panel = page.locator('[id="shell.panels"]'); await panel.getByRole("heading").waitFor();
     const geometry = await page.evaluate(() => { const a = document.getElementById("shell.main").getBoundingClientRect(); const b = document.getElementById("shell.panels").getBoundingClientRect(); return { main: { x: a.x, right: a.right, top: a.top, bottom: a.bottom, width: a.width }, panel: { x: b.x, top: b.top, bottom: b.bottom, width: b.width } }; });
@@ -141,23 +149,23 @@ test("PUI-02 actual browser edits/confirm/CAS/readback, simultaneous independent
     await page.getByRole("heading", { name: "Darstellungsänderungen prüfen", exact: true }).waitFor();
     assert.match(await page.locator('[data-profile="diff"]').innerText(), /ausgeblendet.*angezeigt/s); assert.equal(requests.filter(r => r.method === "POST").length, 0, "preview is not persistence");
     await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click();
-    await page.locator('[data-profile-state="SAVED"]').waitFor();
+    await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="SAVED"]').waitFor();
     const posts = requests.filter(r => r.method === "POST" && r.path.endsWith("/workspace/profile")); assert.equal(posts.length, 1);
     const payload = JSON.parse(posts[0].body); assert.equal(payload.expectedRevision, 0);
-    const saved = JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader })).body); assert.deepEqual(saved.profile, payload.profile); assert.equal(saved.revision, 1);
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    const saved = JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader })).body); assert.deepEqual(saved.profile, payload.profile); assert.equal(saved.revision, 1);await assertNativeProfileOrder543(page,"confirmed-native-profile");
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
     const desktop = await dimensions543(page); await snap543(page, "desktop-saved-right-panel");
     const simultaneous = await page.evaluate(() => ["shell.main", "shell.panels"].map(id => { const r = document.getElementById(id).getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0 && r.width > 0 && r.height > 0; })); assert.ok(simultaneous.every(Boolean), "ERV_AND_RIGHT_PANEL_MUST_BE_IN_VIEWPORT_TOGETHER");
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
     const secondContext = await f.browser.newContext({ ignoreHTTPSErrors: false, viewport: { width: 1440, height: 1000 } }); secondContext.setDefaultTimeout(5000);
     await secondContext.route("**/*", route => new URL(route.request().url()).origin === f.tls.origin ? route.continue() : route.abort());
     const secondSession = f.tls.gateway.sessionAdapter("tenant-a").issueOwnerSession({ subjectId: "synthetic-browser-profile-user", role: "reader", expiresAtMs: Date.now() + 600000 });
     await secondContext.addCookies([{ name: "__Host-pan527-session", value: secondSession.cookieHeader.split("=")[1], url: f.tls.origin, secure: true, httpOnly: true, sameSite: "Strict" }]);
     const stale = await secondContext.newPage(); const secondStatuses = []; stale.on("response", r => { if (new URL(r.url()).pathname.endsWith("/workspace/profile")) secondStatuses.push(r.status()); });
-    await stale.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await stale.locator('[data-profile-state="READY"]').waitFor();
-    await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).check(); await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await page.locator('[data-profile-state="SAVED"]').waitFor();
-    await stale.getByRole("button", { name: "Darstellung anpassen", exact: true }).click(); await stale.getByRole("checkbox", { name: "Betriebsstatus anzeigen", exact: true }).uncheck(); await stale.getByRole("button", { name: "Profil speichern", exact: true }).click(); await stale.getByRole("button", { name: "Speichern bestätigen", exact: true }).click();
-    await stale.locator('[data-profile-state="CONFLICT"]').waitFor(); await snap543(stale, "desktop-conflict"); assert.equal(JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader })).body).revision, 2);
+    await stale.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await showCurrentProfileDetailsUI(stale);await stale.locator('[data-profile-state="READY"]').waitFor();
+    await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).check(); await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="SAVED"]').waitFor();
+    await showCurrentProfileDetailsUI(stale);await stale.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click(); await stale.getByRole("checkbox", { name: "Betriebsstatus anzeigen", exact: true }).uncheck(); await stale.getByRole("button", { name: "Profil speichern", exact: true }).click(); await stale.getByRole("button", { name: "Speichern bestätigen", exact: true }).click();
+    await showCurrentProfileDetailsUI(stale);await stale.locator('[data-profile-state="CONFLICT"]').waitFor(); await snap543(stale, "desktop-conflict"); assert.equal(JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader })).body).revision, 2);
     assert.ok(secondStatuses.includes(409)); await secondContext.close();
     const desktopProfile = JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader })).body);
     await page.setViewportSize({ width: 390, height: 844 }); await snap543(page, "390-editor-right-panel"); const mobile = await dimensions543(page);
@@ -167,22 +175,22 @@ test("PUI-02 actual browser edits/confirm/CAS/readback, simultaneous independent
     await page.getByRole("checkbox", { name: "Hauptfläche anzeigen", exact: true }).uncheck();
     await page.getByRole("button", { name: "Abmelden", exact: true }).click(); await page.getByRole("heading", { name: "Abgemeldet", exact: true }).waitFor();
     assert.equal(await page.getByRole("button", { name: "Profil speichern", exact: true }).count(), 0);
-    await f.login(); await page.reload(); await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();
+    await f.login(); await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();await assertNativeProfileOrder543(page,"native-relogin-readback");
     // A real certificate-verified idle TLS preconnection must not prevent
     // backend replacement while the authenticated browser remains open.
     const idle = tlsConnect({ host: "127.0.0.1", port: f.tls.port, servername: "pan527.test", ca: f.tls.cert, rejectUnauthorized: true });
     await new Promise((resolve, reject) => { idle.once("secureConnect", resolve); idle.once("error", reject); }); assert.equal(idle.authorized, true);
     try { await f.restart(); } finally { idle.destroy(); }
-    await page.reload(); await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();
+    await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();
     assert.ok(f.backendRestarts?.length && f.backendRestarts[0] !== process.pid, "REAL_BACKEND_PROCESS_RESTART_REQUIRED");
-    await f.restart(); await page.reload(); await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();
+    await f.restart(); await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();
     assert.notEqual(f.backendRestarts[0], f.backendRestarts[1]);
     const cookies = await f.context.cookies(); const cookie = cookies.find(c => c.name === "__Host-pan527-session");
     assert.deepEqual(JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: cookie.name + "=" + cookie.value })).body), desktopProfile);
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click(); await page.getByRole("button", { name: "Standarddarstellung wiederherstellen", exact: true }).click();
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click(); await page.getByRole("button", { name: "Standarddarstellung wiederherstellen", exact: true }).click();
     assert.equal(await page.getByRole("checkbox", { name: "Informationspanel anzeigen", exact: true }).isChecked(), false); assert.equal(JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: cookie.name + "=" + cookie.value })).body).revision, 2, "default preview must not silently write");
-    await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await page.locator('[data-profile-state="SAVED"]').waitFor();
-    const restoredDefault = JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: cookie.name + "=" + cookie.value })).body); assert.equal(restoredDefault.revision, 3); assert.deepEqual(restoredDefault.profile, defaultBrowserProfileV1());
+    await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="SAVED"]').waitFor();
+    const restoredDefault = JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: cookie.name + "=" + cookie.value })).body); assert.equal(restoredDefault.revision, 3); assert.deepEqual(restoredDefault.profile, defaultBrowserProfileV1());await assertNativeProfileOrder543(page,"confirmed-default-order",false);
     assert.deepEqual(errors, []); assert.equal(JSON.stringify(nativeRows(f.native.root, "SELECT revision,effect_key,command,event FROM pan516_events ORDER BY revision")), before);
     writeFileSync(join(process.env.PAN543_BROWSER_EVIDENCE, "journey.json"), JSON.stringify({ browser: f.browser.version(), viewports: [1440, 390], requests, secondStatuses, geometry, desktop, mobile, zoomReadability, targetReadback: desktopProfile, restoredDefault, backendRestarts: f.backendRestarts, businessHistoryUnchanged: true, errors }, null, 2));
   } finally { await f.close(); }
@@ -192,8 +200,8 @@ test("PUI-02 real pointer drag/keyboard resize, removed/denied panel projection 
   const f = await browserFixture543();
   try {
     const page = await f.context.newPage(); const errors = []; page.on("pageerror", e => errors.push(e.message));
-    await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor();
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor({state:'attached'});
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
     await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).evaluate(e => { window.retiredProfileControl = e; });
     await page.locator('[data-profile-item="pan.workspace.boundary"] h3').dragTo(page.locator('[data-profile-item="shell.main"] h3'));
     await page.evaluate(() => { window.retiredProfileControl.checked = false; window.retiredProfileControl.dispatchEvent(new Event("change")); });
@@ -203,17 +211,17 @@ test("PUI-02 real pointer drag/keyboard resize, removed/denied panel projection 
     assert.equal(await page.locator(".profile-row").nth(1).getAttribute("data-profile-item"), "pan.workspace.boundary");
     const check = page.getByRole("checkbox", { name: "Informationspanel anzeigen", exact: true }); await check.focus(); await check.press("Space");
     const size = page.getByRole("slider", { name: "Informationspanel Größe", exact: true }); await size.focus(); await size.press("Home"); assert.equal(await size.inputValue(), "0"); await size.press("ArrowRight"); assert.equal(await size.inputValue(), "1");
-    await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await page.locator('[data-profile-state="SAVED"]').waitFor();
+    await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="SAVED"]').waitFor();
     await page.locator('[id="shell.panels"] h2').waitFor();
-    f.setCatalogState("MISSING"); await page.reload(); await page.locator('[data-profile-state="READY"]').waitFor(); await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    f.setCatalogState("MISSING"); await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
     assert.equal(await page.locator('[id="shell.panels"]').isVisible(), false); assert.equal(await page.getByRole("checkbox", { name: "Informationspanel anzeigen", exact: true }).isDisabled(), true);
     assert.match(await page.locator('[id="profile.controls"]').innerText(), /MISSING/); await snap543(page, "desktop-orphan-missing");
-    f.setCatalogState("DENIED"); await page.reload(); await page.locator('[data-profile-state="READY"]').waitFor(); await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    f.setCatalogState("DENIED"); await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
     assert.match(await page.locator('[id="profile.controls"]').innerText(), /DENIED/); await page.getByRole("button", { name: "Informationspanel zum aktuellen Vorgang öffnen", exact: true }).click(); assert.equal(await page.locator('[id="shell.panels"]').isVisible(), false);
     await page.setViewportSize({ width: 390, height: 844 }); await dimensions543(page); await snap543(page, "390-contribution-denied");
     const other = f.tls.gateway.sessionAdapter("tenant-a").issueOwnerSession({ subjectId: "synthetic-replacement-user", role: "reader", expiresAtMs: Date.now() + 60000 });
     await f.context.addCookies([{ name: "__Host-pan527-session", value: other.cookieHeader.split("=")[1], url: f.tls.origin, secure: true, httpOnly: true, sameSite: "Strict" }]);
-    await page.getByRole("button", { name: "Gespeichertes Profil neu laden — lokale Änderungen verwerfen", exact: true }).click(); await page.locator('[data-profile-state="DENIED"]').waitFor();
+    await page.getByRole("button", { name: "Gespeichertes Profil neu laden — lokale Änderungen verwerfen", exact: true }).click(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="DENIED"]').waitFor();
     assert.doesNotMatch(await page.locator("main").innerText(), /AP-PAN516-MATCHED-01|600,00/); assert.equal(await page.locator('[id="shell.panels"]').isVisible(), false);
     await snap543(page, "390-session-denied"); assert.equal(JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: other.cookieHeader })).body).revision, 0);
     await page.setViewportSize({ width: 1440, height: 1000 }); await dimensions543(page); await snap543(page, "desktop-session-denied"); assert.deepEqual(errors, []);
@@ -231,12 +239,12 @@ test("PUI-02 actual applied-but-unacknowledged write remains outcome_unknown wit
         assert.equal(actual.status, 200); await route.abort("failed");
       } else await route.continue();
     });
-    await page.goto(f.tls.origin + "/t/tenant-a/workspace"); await page.locator('[data-profile-state="READY"]').waitFor(); await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    await page.goto(f.tls.origin + "/t/tenant-a/workspace"); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
     await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).uncheck(); await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click();
-    await page.locator('[data-profile-state="OUTCOME_UNKNOWN"]').waitFor(); assert.equal(posts, 1); assert.equal(await page.getByRole("button", { name: "Profil speichern", exact: true }).isDisabled(), true);
+    await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="OUTCOME_UNKNOWN"]').waitFor(); assert.equal(posts, 1); assert.equal(await page.getByRole("button", { name: "Profil speichern", exact: true }).isDisabled(), true);
     assert.equal(JSON.parse((await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader })).body).revision, 1);
     await snap543(page, "desktop-outcome-unknown"); await page.setViewportSize({ width: 390, height: 844 }); await dimensions543(page); await snap543(page, "390-outcome-unknown");
-    await page.getByRole("button", { name: "Gespeichertes Profil neu laden — lokale Änderungen verwerfen", exact: true }).click(); await page.locator('[data-profile-state="READY"]').waitFor(); assert.equal(posts, 1);
+    await page.getByRole("button", { name: "Gespeichertes Profil neu laden — lokale Änderungen verwerfen", exact: true }).click(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); assert.equal(posts, 1);
     assert.equal(await page.getByRole("checkbox", { name: "Darstellungsgrenze anzeigen", exact: true }).isChecked(), false);
   } finally { await f.close(); }
 });
@@ -248,25 +256,25 @@ test("PUI-02 actual empty/loading/unavailable and versioned native migration/fal
     const page = await f.context.newPage(); let release; const wait = new Promise(r => { release = r; }); let entered; const reached = new Promise(r => { entered = r; });
     await page.route("**/workspace/profile", async route => { entered(); await wait; await route.continue(); });
     const navigation = page.goto(f.tls.origin + "/t/tenant-a/workspace"); await reached;
-    await page.locator('[data-profile-state="LOADING"]').waitFor();
+    await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="LOADING"]').waitFor();
     await page.getByRole("button", { name: "Eingangsrechnungsprüfung — nur lesen", exact: true }).waitFor();
     await snap543(page, "desktop-loading"); await page.setViewportSize({ width: 390, height: 844 }); await dimensions543(page); await snap543(page, "390-loading");
-    release(); await navigation; await page.locator('[data-profile-state="READY"]').waitFor(); assert.match(await page.locator('[id="profile.controls"]').innerText(), /Noch kein persönliches Profil/); await snap543(page, "390-empty");
+    release(); await navigation; await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); assert.match(await page.locator('[id="profile.controls"]').innerText(), /Noch kein persönliches Profil/); await snap543(page, "390-empty");
     await page.unroute("**/workspace/profile"); await page.setViewportSize({ width: 1440, height: 1000 }); await snap543(page, "desktop-empty");
-    await page.route("**/workspace/profile", route => route.abort("failed")); await page.reload(); await page.locator('[data-profile-state="UNAVAILABLE"]').waitFor(); await snap543(page, "desktop-unavailable"); await page.setViewportSize({ width: 390, height: 844 }); await dimensions543(page); await snap543(page, "390-unavailable");
+    await page.route("**/workspace/profile", route => route.abort("failed")); await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="UNAVAILABLE"]').waitFor(); await snap543(page, "desktop-unavailable"); await page.setViewportSize({ width: 390, height: 844 }); await dimensions543(page); await snap543(page, "390-unavailable");
     await page.unroute("**/workspace/profile");
     const path = join(f.tls.tenants[0].productRoot, "browser-profiles.sqlite"); const db = new DatabaseSync(path);
     const old = { schemaVersion: "pansphaira.browser-profile/v0", items: [{ id: "shell.main", version: "1.0.0", visible: true, size: 2 }, { id: "pan.erv.information", version: "1.0.0", visible: true, size: 3 }] };
     db.prepare("INSERT INTO browser_profiles(tenant_id,subject_id,revision,profile) VALUES(?,?,?,?)").run("tenant-a", "synthetic-browser-profile-user", 7, JSON.stringify(old));
     const migratedTarget = await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: f.session.cookieHeader }); console.log("PAN543 migration target", migratedTarget.status, migratedTarget.body); assert.equal(migratedTarget.status, 200);
-    await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.reload(); await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();
+    await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[id="shell.panels"] h2').waitFor();
     assert.match(await page.locator('[id="profile.controls"]').innerText(), /V0_TO_V1/); assert.equal(db.prepare("SELECT profile FROM browser_profiles").get().profile, JSON.stringify(old), "migration read must not write"); await snap543(page, "390-migration-preview");
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
-    await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await page.locator('[data-profile-state="SAVED"]').waitFor();
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click();
+    await page.getByRole("button", { name: "Profil speichern", exact: true }).click(); await page.getByRole("button", { name: "Speichern bestätigen", exact: true }).click(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="SAVED"]').waitFor();
     const persistedMigration = db.prepare("SELECT revision,profile FROM browser_profiles").get(); assert.equal(persistedMigration.revision, 8); assert.equal(JSON.parse(persistedMigration.profile).schemaVersion, "pansphaira.browser-profile/v1");
     await page.getByRole("button", { name: "Standarddarstellung wiederherstellen", exact: true }).click();
     assert.equal(await page.getByRole("checkbox", { name: "Betriebsstatus anzeigen", exact: true }).isDisabled(), false, "default restore must include catalog contributions omitted by saved profile");
-    db.prepare("UPDATE browser_profiles SET profile=?").run(JSON.stringify({ ...old, items: [{ ...old.items[0], size: 100 }] })); await page.reload(); await page.locator('[data-profile-state="READY"]').waitFor(); assert.match(await page.locator('[id="profile.controls"]').innerText(), /DEFAULT_UNSUPPORTED/);
+    db.prepare("UPDATE browser_profiles SET profile=?").run(JSON.stringify({ ...old, items: [{ ...old.items[0], size: 100 }] })); await page.reload(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); assert.match(await page.locator('[id="profile.controls"]').innerText(), /DEFAULT_UNSUPPORTED/);
     assert.equal(db.prepare("SELECT revision FROM browser_profiles").get().revision, 8); db.close();
     await snap543(page, "390-invalid-migration-default"); await page.setViewportSize({ width: 1440, height: 1000 }); await snap543(page, "desktop-invalid-migration-default");
   } finally { await f.close(); }
@@ -275,16 +283,18 @@ test("PUI-02 actual empty/loading/unavailable and versioned native migration/fal
 test("PUI-02 late actual profile response from a retired session cannot restore stale display or report READY", async () => {
   const f = await browserFixture543(); let release;
   try {
-    const page = await f.context.newPage(); await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor();
+    const page = await f.context.newPage(); await page.goto(f.tls.origin + "/t/tenant-a/workspace#/workspace/erv"); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); await page.locator('[data-backend="erv"][data-outcome="READBACK_RECEIVED"]').waitFor({state:'attached'});
     let entered; const reached = new Promise(r => { entered = r; }); const held = new Promise(r => { release = r; });
     await page.route("**/workspace/profile", async route => {
       const actual = await request527(f.tls, "/t/tenant-a/workspace/profile", { cookie: route.request().headers().cookie, "x-pan543-session": route.request().headers()["x-pan543-session"] });
       assert.equal(actual.status, 200); entered(); await held;
       await route.fulfill({ status: actual.status, headers: { "content-type": "application/json" }, body: actual.body });
     });
-    await page.getByRole("button", { name: "Darstellung anpassen", exact: true }).click(); await page.getByRole("button", { name: "Gespeichertes Profil neu laden — lokale Änderungen verwerfen", exact: true }).click(); await reached;
+    await showCurrentProfileDetailsUI(page);await page.locator('[id="profile.controls"]').getByRole("button", { name: "Darstellung anpassen", exact: true }).click(); await page.getByRole("button", { name: "Gespeichertes Profil neu laden — lokale Änderungen verwerfen", exact: true }).click(); await reached;
     assert.equal((await request527(f.tls, "/t/tenant-a/workspace/logout", { cookie: f.session.cookieHeader, origin: f.tls.origin }, "POST")).status, 200);
-    await f.login(); release(); await page.locator('[data-profile-state="DENIED"]').waitFor();
+    await f.login(); release(); await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="DENIED"]').waitFor();
     assert.doesNotMatch(await page.locator("main").innerText(), /AP-PAN516-MATCHED-01|600,00/);
   } finally { release?.(); await f.close(); }
 });
+
+async function showCurrentProfileDetailsUI(page){const d=page.locator('[id="workspace.profile-details"]');if(await d.getAttribute('open')===null)await d.locator(':scope > summary').click();}

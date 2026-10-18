@@ -36,6 +36,7 @@ test('PUI-08-AC01/04 actual protected shared-shell action consumes the native re
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push({method:r.method(),path:new URL(r.url()).pathname}));
   page.on('response',async r=>{if(new URL(r.url()).pathname.endsWith('/workspace/analysis')&&r.status()===200)results.push(await r.json());});
   await page.goto(tls.origin+'/t/tenant-a/workspace');await page.locator('[data-backend="setup"][data-outcome="READBACK_RECEIVED"]').waitFor();
+  const sidebarBI=page.locator('.workspace-module-links button[data-workspace-module-action="/workspace/analysis"]');assert.equal(await sidebarBI.count(),1);assert.equal(await sidebarBI.isDisabled(),false,'Existing native analysis is available but Notebook BI sidebar is incorrectly unbound');
   const action=page.getByRole('button',{name:'Gebundene Bestandsanalyse — nur lesen',exact:true});
   assert.equal(await action.count(),1,'PAN549_REAL_SHARED_SHELL_ANALYSIS_NAVIGATION_AND_RENDERER_NOT_IMPLEMENTED');await action.click();
   await page.locator('[data-backend="analysis"][data-outcome="READBACK_RECEIVED"]').waitFor();
@@ -55,6 +56,7 @@ test('PUI-08-AC01/04 actual protected shared-shell action consumes the native re
   assert.ok(dimensions.width<=dimensions.viewport,'PAN549_390_NATIVE_RESULT_PAGE_OVERFLOW');assert.ok(dimensions.table.width>0&&dimensions.table.x>=0&&dimensions.table.right<=390);
   assert.ok(dimensions.controls.every(c=>c.width>0&&c.height>0&&c.x>=0&&c.right<=390));
   assert.equal(results.length,1);assert.equal(results[0].rows.find(r=>r.key==='physical').value,sourcePhysical);
+  await page.setViewportSize({width:1280,height:900});await page.getByRole('button',{name:'Einrichtung und Betriebszustand',exact:true}).click();await page.locator('[data-backend="setup"][data-outcome="READBACK_RECEIVED"]').waitFor();await sidebarBI.focus();await sidebarBI.press('Enter');await page.locator('[data-backend="analysis"][data-outcome="READBACK_RECEIVED"]').waitFor();assert.equal(await sidebarBI.getAttribute('aria-current'),'page');assert.equal(await physical.innerText(),String(sourcePhysical));assert.equal(await sidebarBI.isDisabled(),false);
   assert.deepEqual(errors,[]);assert.deepEqual(nativeRows(native.root,'SELECT revision,command,event FROM pan515_events ORDER BY revision'),before);
   // This receipt is actual execution, not an independent human/image review.
   writeFileSync(join(process.env.PAN549_BROWSER_EVIDENCE,'actual-source-network-rendered-value-pairing.json'),JSON.stringify({sourcePhysical,renderedPhysical:await physical.innerText(),actualNativeResult:results[0],requests,dimensions,browser:browser.version(),visualSighted:false,scope:'Real permitted local synthetic source/HTTPS/browser, not production/provider/human acceptance'},null,2)+'\n');

@@ -87,9 +87,9 @@ test('A2 browser action -> actual protected backend -> persisted identical readb
     let release;const gate=new Promise(r=>{release=r;});
     await page.route('**/workspace/configuration',async route=>{if(route.request().method()==='GET'){await gate;await route.continue();}else await route.continue();});
     await page.goto(url);await page.locator('[data-backend="configuration"][data-outcome="LOADING"]').waitFor();
-    await page.locator('[data-profile-state="READY"]').waitFor();await shot('desktop-loading',page,false);
+    await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor();await shot('desktop-loading',page,false);
     release();await ready(page);await page.unroute('**/workspace/configuration');
-    await page.locator('[data-profile-state="READY"]').waitFor(); // Existing Main profile bootstrap must finish, not arbitrary delay or prewarming.
+    await showCurrentProfileDetailsUI(page);await page.locator('[data-profile-state="READY"]').waitFor(); // Existing Main profile bootstrap must finish, not arbitrary delay or prewarming.
     assert.equal(await page.evaluate(()=>window.isSecureContext),true);assert.equal(await page.evaluate(()=>document.cookie),'');
     assert.match(await page.locator('.configuration-draft').getByRole('status').innerText(),/Noch kein gespeicherter Entwurf/);
     await shot('desktop-empty');
@@ -187,3 +187,5 @@ test('A2 browser action -> actual protected backend -> persisted identical readb
     writeFileSync(join(evidence,'browser-evidence.json'),JSON.stringify(binding,null,2)+'\n');console.log(JSON.stringify(binding));
   }finally{await context?.close();await browser?.close();await f.close();}
 });
+
+async function showCurrentProfileDetailsUI(page){const d=page.locator('[id="workspace.profile-details"]');if(await d.getAttribute('open')===null)await d.locator(':scope > summary').click();}
