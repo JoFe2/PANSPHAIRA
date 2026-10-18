@@ -3579,7 +3579,7 @@
         {
           "path": "packages/contracts/src/external-plugin-preflight.ts",
           "role": "SECURITY",
-          "sha256": "fe637bed21ee249f3fccfd8e1141b8326d6f084a290ee6ad00ac52a8884303ca"
+          "sha256": "6b0b684d6150eddfba40a4e447f5b264f6d727af4382482013215fb49840c582"
         },
         {
           "path": "schemas/contracts/external-plugin-preflight-v1.schema.json",
@@ -3615,10 +3615,56 @@
           "path": "docs/EXTERNAL-PLUGIN-PREFLIGHT.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "f9bf95fca23d503b5c030fad3d4775dc0d539ae3f3bd7b35bd075edffd6b3a89"
+        },
+        {
+          "path": "src/pan591/ui-build-admission.mjs",
+          "role": "SOURCE",
+          "sha256": "cbec783dc3fcb3b2181d5ab50eb8fd8ba50eb69c06a7310f262c28a46eeed27b"
+        },
+        {
+          "path": "tests/pan591/admission.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "71aab3eaf787c230513b469bddfd7d49005e4379bf863074b8df62a5675f7784"
+        },
+        {
+          "path": "fixtures/pan591/allowed-ui-build-graph-v1.json",
+          "role": "FIXTURE",
+          "sha256": "a6805ea5989b621ff2216b805e91cb1b4824d273f8080c22dbd0ac3d0b748e77"
+        },
+        {
+          "path": "fixtures/pan591/own-ui/entry.mjs",
+          "role": "FIXTURE",
+          "sha256": "7fffc8480d424ed26bdf4aabb6843c17d862fd47d711a66b48b5bcc484d57079"
+        },
+        {
+          "path": "fixtures/pan591/own-ui/geometry.mjs",
+          "role": "FIXTURE",
+          "sha256": "f8e4e1021f8e3f5d5f5cea29630dac3de6a73123a04bb18fcc46a44e1968d125"
+        },
+        {
+          "path": "fixtures/pan591/own-ui/font-glyphs.json",
+          "role": "FIXTURE",
+          "sha256": "2219c95036bbdab100a172a967ace00e4ab22b26043f46e7782850ffc7713949"
+        },
+        {
+          "path": "fixtures/pan591/own-ui/check.svg",
+          "role": "FIXTURE",
+          "sha256": "9c98ba09e8436273bbe0f7094283f617179333914177c0789d760b3d65e2ba47"
+        },
+        {
+          "path": "fixtures/pan591/own-ui/panel.svg",
+          "role": "FIXTURE",
+          "sha256": "98badcdcfcb935279f93066400524c1219d64ffc9767b1a93bfcb4f072a66401"
+        },
+        {
+          "path": "docs/architecture/pan591-ui-build-admission-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "2800d29cd5be142c073b909ff02a1cbde031ae6aec64ef354e3a4cbc946e4469"
         }
       ],
       "ownedTests": [
-        "npm run external-plugin-preflight:test"
+        "npm run external-plugin-preflight:test",
+        "npm run pan591:test"
       ],
       "invariants": [
         "Preflight consumes caller-supplied immutable bytes without filesystem, network, process or foreign-harness execution authority.",
@@ -4926,7 +4972,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d106905d1be4b89bc5f13330d970da826710449ec1ffa8da52e46f4f7589c44a"
+          "sha256": "e530f646590d5f4acfbd9d1c59333b00bbdc4647f06a92ebe3b5fbe4d60d41af"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -4981,7 +5027,7 @@
         {
           "path": "src/pan471/composition-execution.mjs",
           "role": "SECURITY",
-          "sha256": "a5db27da0747fae1badb9a035ca8b4e380f8ebc8f0ab4ed8fc54fd5fe49f863a"
+          "sha256": "c1f2813f00157535e3c7297000ae8e3bf4a42828b89c0c8bb7a01c143dcf686f"
         },
         {
           "path": "tests/adaptability-ai-blind-semantic-grade.test.mjs",
@@ -4991,7 +5037,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "4bf267becf626b573b165341a60fbc7c41df0790ba198025176e51b67b3f3160"
+          "sha256": "6590c01b3dad59d612b0a135ffcc4843e46a533b77a703741ee15ac52c81ee38"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5116,7 +5162,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "f09d27ea5a06b18af49b36de74ae909e6beceab7e7b73dda01800204ad79d200"
+          "sha256": "42ab330f7578274924a74277ef350ecf8010cc8df8052c9f08042444f1507d86"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5778,7 +5824,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "eb7d31949312332f883be146d729f5422e2ad937e605e80ee2120ac15021a7b4"
+          "sha256": "a2f0ad712ab3fc743d667908a67f78c17408e7aa2533afc283ef4e60a876cbfb"
         },
         {
           "path": "package-lock.json",

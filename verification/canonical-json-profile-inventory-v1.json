@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "4bf267becf626b573b165341a60fbc7c41df0790ba198025176e51b67b3f3160"
+        "sha256": "6590c01b3dad59d612b0a135ffcc4843e46a533b77a703741ee15ac52c81ee38"
       }
     ]
   },
@@ -867,6 +867,14 @@
       "fromSha256": "7e96ecabccc9d1500a1060324bfb79dbfec6cc0e43286d492a1bdbecc6472b52",
       "toSha256": "698906c1f4e18908cc66a319414209a677d5e6c69b5d99def438615e5961b096",
       "reason": "Register the five already-reviewed source-only limited605 native browser-pair contract/UI/native-browser test members on existing597 SURF and548 ledger ownership. Actual unchanged scanner observes files1275/import-sites338/import-files337/ledger2806. Retain graph104/all109,128-input/64-command bounds, immutable21 admitted byte obligations/13 profiles, every prior migration, unchanged scanner/validator/negative cases, legacy1792 and all product security/time/authority gates. Pairing grants no field/data-class/projection/display/business/model/audio/device authority; neither whole605 nor606 closure is inferred."
+    },
+    {
+      "migrationId": "PAN591-EXACT-PROVIDER-FREE-ADMISSION/INTEGRITY-GENERATOR/V98",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 98,
+      "fromSha256": "698906c1f4e18908cc66a319414209a677d5e6c69b5d99def438615e5961b096",
+      "toSha256": "19a42a71189f06d4b574412c6a37598726530a3b56e2c2a3669a2575b90a2c6c",
+      "reason": "Register exactly nine source-only own admission/fixture/test/document members on the existing external-plugin-preflight owner, not a 65th repository-integrity command. Preserve graph104/all109, unchanged max128 inputs/max64 tests, every old owner/test/hard gate, immutable21 base byte obligations/13 pinned profiles, complete earlier migrations and unchanged mechanical scanner/validator/negative semantics/legacy1792. Actual fresh census1277/import-sites340/import-files339/ledger2815 includes the exact provider-free graph. Admission implementation and original15 positive/negative cases remain byte-identical to the independently reviewed snapshot; no build execution, installation, model/voice/media rights, new platform or full portfolio authority."
     }
   ],
   "scanScope": {
@@ -909,15 +917,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1275,
+    "filesScanned": 1277,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 338,
-    "importFiles": 337,
+    "importSites": 340,
+    "importFiles": 339,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2806,
-    "ledgerUniquePaths": 2806
+    "ledgerEntries": 2815,
+    "ledgerUniquePaths": 2815
   },
   "profiles": [
     {
@@ -990,7 +998,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "698906c1f4e18908cc66a319414209a677d5e6c69b5d99def438615e5961b096"
+      "sha256": "19a42a71189f06d4b574412c6a37598726530a3b56e2c2a3669a2575b90a2c6c"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1466,6 +1474,11 @@
       "importFiles": 2
     },
     {
+      "owner": "pan591",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
       "owner": "pan597",
       "importSites": 2,
       "importFiles": 2
@@ -1492,8 +1505,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 75,
-      "importFiles": 74
+      "importSites": 76,
+      "importFiles": 75
     },
     {
       "owner": "usage-insights",
@@ -1786,7 +1799,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "698906c1f4e18908cc66a319414209a677d5e6c69b5d99def438615e5961b096",
+      "sha256": "19a42a71189f06d4b574412c6a37598726530a3b56e2c2a3669a2575b90a2c6c",
       "basis": "profile-version-migration"
     },
     {
