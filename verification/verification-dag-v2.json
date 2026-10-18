@@ -3624,7 +3624,7 @@
         {
           "path": "tests/pan591/admission.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "3bc07a509e20fc9e9858ab45f9772c787b5657b42223476d0bb8333360d9b9dc"
+          "sha256": "71aab3eaf787c230513b469bddfd7d49005e4379bf863074b8df62a5675f7784"
         },
         {
           "path": "fixtures/pan591/allowed-ui-build-graph-v1.json",

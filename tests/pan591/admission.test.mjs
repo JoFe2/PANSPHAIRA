@@ -21,7 +21,7 @@ test('PAN591 AC01..03: exact own UI graph enters actual existing intake and prin
   assert.ok(Object.isFrozen(handle));
   const result=e.tools.packageUiGraph(handle);
   assert.equal(result.outcome,'ADMITTED_SOURCE_GRAPH_READ_BACK');
-  const own=mkdtempSync(join(process.env.TMPDIR,'pan591-positive-'));
+  const own=mkdtempSync(join(process.env.TMPDIR||process.env.RUNNER_TEMP,'pan591-positive-'));
   try{
     const target=join(own,'qualified-source-package.json');writeFileSync(target,result.packageBytes);
     const independentlyRead=readFileSync(target,'utf8'),payload=JSON.parse(independentlyRead);
