@@ -10222,7 +10222,7 @@
         {
           "path": "packages/browser-workspace/src/module-view-editor-v1.ts",
           "role": "SOURCE",
-          "sha256": "64dde0351c4a17ef428259fcff2b653b62f968b697b3fd7750457d094b61d34f"
+          "sha256": "8dee1154cc68a41b36b54a188a19517a3a35a434e7b6d25cd0a927beb928b518"
         },
         {
           "path": "packages/browser-workspace/src/module-view-v1.css",
