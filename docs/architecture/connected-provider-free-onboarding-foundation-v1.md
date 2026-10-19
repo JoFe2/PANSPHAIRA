@@ -1,0 +1,51 @@
+# Connected provider-free browser onboarding foundation
+
+## Scope and runtime identity
+
+This is the original560 Epic A provider-free foundation, not Epic B's real AI assistant, universal installation, production activation or portfolio completion. It connects the existing protected first-possession owner, canonical configuration draft, common shell, model-connection owner and confirmed native reference application. It is not a new platform, policy store, runtime engine or public model-provider option.
+
+The assembly in `src/pan562/native-browser-bootstrap.mjs` gives the existing `enableWorkspaceBrowserV1` a code-owned `modelConnections:[]`. An empty catalog is deliberate: the actual565 status view is available without a provider, connection, secret reference, consent or transport. It reports `NO_AUTHORIZED_CONNECTION`, four `NOT_RUN` checks, no inference offer and `realModelAcceptance:false`. Public bootstrap options remain closed; callers cannot inject a catalog, URL, credentials or model. A missing optional frontend asset is a distinct unavailable view, not a fabricated successful model connection. The existing model dialog now uses the same shared surface/text/border/radius/focus tokens as the common workspace instead of an isolated legacy-dark palette; no third theme or layout system is introduced.
+
+The source-only verification profile uses the trusted Node24.14.1/npm11.16.0 parent on Linux x86_64 and the existing genuine Chromium/Playwright, TLS and NSS test prerequisites. These tools, browser and runtime are not shipped as a turnkey deployment or DockerREADY image. A frozen source identity and freshly built browser-asset hashes are evidence inputs, not authority to perform arbitrary effects. Real inference, audio, physical devices, private-source access, cloud accounts, production changes and external mail are outside this foundation.
+
+## The connected journey, not child-status aggregation
+
+The new `tests/pan560/connected-foundation.test.mjs` executes one actual instance through:
+
+1. A fresh owned native bootstrap process, existing protected HTTPS origin, one-time instance-bound first-possession proof and actual browser session.
+2. All five existing views: Einstieg, Profil, Modellverbindung, Konfigurationsgespräch, Plan und Ergebnis. They share the current shell, source context and one authoritative draft. Desktop and390px images are taken from actual renderings; raw technical state is not substituted for the UI.
+3. A real empty565 read, a separately persisted `model.reference=NONE` partial draft, reload and source readback. The existing helper can resume an already confirmed NONE value without attempting a disabled control or repeating a save.
+4. Actual source-defined questions, a supported bounded reference goal/profile, exact current parameters and a complete versioned native draft. The template selects capabilities; profile names and user text cannot grant rights.
+5. Prepare the exact instance/revision/digest/lease-bound plan. This creates no reference result and consumes no runtime unit. Explicit confirmation is a separate operation and still creates no reference result.
+6. One explicit APPLY through the existing528 owner, then a fresh independent application read and separate result reconciliation. `readPan515TradeState` independently reads the actual persisted leading target: revision2; physical10, reserved6, blocked0, available4, shipped0, returned0. Runtime consumption is1 and model consumption0.
+7. Open the registered result in the existing Fachmodule and compare the actual observed business value. This is a bounded synthetic reference, not employee capability, book-entry or payment authority.
+8. Logout, actually stop/restart the same owned native service, refuse first-owner replay, obtain the existing private RESUME grant, log in through the real browser and independently recover the same draft and persisted target without a second APPLY. A later separately saved runtime draft cannot overwrite the last-qualified leading result.
+
+Fresh ownership, initialized resume and the explicitly synthetic demo are separate existing entry paths. A stored model reference, successful HTTP response, child exit, screenshot or closed child issue alone is never Epic acceptance.
+
+## Original acceptance retained
+
+- E1-AC01: integrate existing A1..A5 implementations and their source/delivery evidence; exercise a fresh instance and actual initialized resume, preserving demo separation. The related owners are #562 protected bootstrap, #563 native draft, #564 conversation/form, #565 model connection and #566 confirmed first result. Their independent scopes and any unqualified provider claims are not closed by proxy.
+- E1-AC02: the new full browser case joins first ownership, actual source-selected goal/profile fields, precise plan, separate confirmation, one APPLY, independent515 readback and the actually opened existing result module on the same instance.
+- E1-AC03: model-free setup remains useful. Empty catalog, no inference offer, no consent and four NOT_RUN states are genuine native reads. A forged connection/select/probe/consent request cannot create a provider or authorize inference.
+- E1-AC04: connected cases cover reload, two real tabs with stale approval, missing fields, foreign tenant, role/schema forgery, lost real native200 after effect, duplicate409, offline clearing and preserved last-qualified target. The fixed entry also retains all existing real session-expiry, native plan/context lease-expiry, cancellation, current-role, schema and stale-source cases; no test is replaced with child-status aggregation.
+- E1-AC05: five real views in the common design on desktop and390px, actual keyboard/focus actions, native error/empty/denied/offline states and source-bound images. Existing canonical UI checks retain long German labels and the actual supported CSS200-percent geometry scope. This does not claim physical-device or browser-chrome zoom acceptance. Evidence requires actual visual inspection, not just image existence.
+- E1-AC06: a focused independent review of the exact connected candidate, relevant registered tests and all required Source/Main canonical CI, protected exact-SHA merge, functional source-only release, anonymous exact source/archive/native readback and release/governance-event proof are required before original closure. This document is a contract, not a prewritten claim that those steps passed.
+
+All original common/concept criteria remain in force: no semantic inference from an unknown response; no blind replay or refunded consumption; current principal/tenant/instance/revision/context checks before effects; unresolved mandatory values block affected activation, not draft save; separate draft/provider/application readiness; minimized data, secret-free UI/evidence and redacted export/import boundaries; least privilege, explicit limits and unsupported capabilities shown honestly. The existing closed contracts, native policy, templates, broker and builder remain the authorities.
+
+## Mandatory negative paths in the same canonical owner
+
+The new family proves an empty565 catalog cannot accept forged model authority; an actual missing optional565 asset503 does not destroy manual configuration; source role/schema and foreign-tenant requests deny before target creation; a second actual tab makes an old confirmation unusable; confirmed cancellation has no target effect; a real delivered native200 is lost at the browser after the actual effect and becomes UNKNOWN, requiring independent reconciliation, with a second identical APPLY denied409 and no second runtime unit. Stopping the actual native process clears previously accepted application values instead of retaining false success.
+
+The existing566 native/browser files remain mandatory, including real wall-clock session and61-second plan/context expiry rather than fake clocks. The unchanged protected-bootstrap entry retains first-owner atomic race/replay/foreign-instance/CSRF/source-identity and secure-cookie/storage tests. Registered model-connection tests retain exact scoped route/redirect/DNS/metadata/private-network and consent/phase guards. Reuse does not convert synthetic transports into real model acceptance.
+
+## One existing canonical entry and exact public membership
+
+Run `npm run pan566:test` with the documented existing browser/TLS prerequisites and owned scratch/evidence directories. The fixed entry compiles the source, builds the actual common browser assets and runs every original566 test plus every `tests/pan560/*.test.mjs` in one serial family. Its original argument/environment guard remains closed: no skip, shard, selector, test marker or injected loader is admitted as canonical acceptance. Local correction-only selected probes are not a substitute for the unfiltered entry.
+
+One local qualification invocation owns one bootstrap and browser engine at a time, at most two tabs, at most900 seconds and at most64MiB of owned evidence output. These outer limits do not enlarge any native provider, request, byte, lease, model, runtime or canonical-CI limit. Source-level trusted-parent limitations remain explicit.
+
+The three new inputs are registered on the existing `pan563-configuration-draft-v1` node through `scripts/refresh-integrity-data.mjs`, `verification/verification-dag-v2.json`, `SHA256SUMS` and the public source-only release builder. The existing566 command owns their tests; there is no65th integration command, new DAG owner or package alias. The current DAG topology/version104,109 nodes, hard gates, per-node128 input bound, scanner policy and1792-file frozen legacy manifest remain unchanged. Regeneration updates the actual affected hashes and additive source membership rather than weakening a gate or labeling preparation as product acceptance.
+
+The public builder includes only declared source inputs; private qualification roots, proof values, session cookies, TLS keys, live invitations and screenshots are not added to its source list. Source-only artifact and anonymous native-readback receipts must identify the exact released commit/tree, archive bytes and actual runtime separately. They must not imply turnkey support, genuine AI, a fourth foreign-app build or completion of unrelated issues.

@@ -1,7 +1,7 @@
 import {spawnSync} from 'node:child_process';
 import {mkdtempSync} from 'node:fs';
 import {join} from 'node:path';
-const files=["tests/pan566/browser-application.test.mjs","tests/pan566/browser-application-flow.test.mjs","tests/pan566/browser-application-negatives.test.mjs","tests/pan566/native-application.test.mjs","tests/pan566/contract.test.mjs","tests/pan566/registration.test.mjs"];
+const files=["tests/pan566/browser-application.test.mjs","tests/pan566/browser-application-flow.test.mjs","tests/pan566/browser-application-negatives.test.mjs","tests/pan566/native-application.test.mjs","tests/pan566/contract.test.mjs","tests/pan566/registration.test.mjs","tests/pan560/connected-foundation.test.mjs","tests/pan560/registration.test.mjs"];
 // Same Node24 ParseNodeOptionsEnvVar grammar and closed admission boundary as
 // the qualified existing PAN549 entry; trusted Node/npm parent remains required.
 function nodeOptionTokens(raw){
@@ -38,7 +38,7 @@ try{
   if(!env.PAN562_BROWSER_EVIDENCE){env.PAN562_BROWSER_EVIDENCE=mkdtempSync(join(env.TMPDIR,'pan566-browser-evidence-'));process.stdout.write('PAN562_BROWSER_EVIDENCE_DIR='+env.PAN562_BROWSER_EVIDENCE+'\n');}
 
   env.PAN527_BROWSER_MODULE=env.PAN527_BROWSER_MODULE||import.meta.resolve('playwright');env.PAN527_CERTUTIL=env.PAN527_CERTUTIL||'certutil';
-  for(const argv of [['node_modules/typescript/bin/tsc','-p','tsconfig.json'],['scripts/build-pan541-browser.mjs'],['--test','--test-concurrency=3','--test-reporter=tap',...files]]){
+  for(const argv of [['node_modules/typescript/bin/tsc','-p','tsconfig.json'],['scripts/build-pan541-browser.mjs'],['--test','--test-concurrency=1','--test-reporter=tap',...files]]){
    const run=spawnSync(process.execPath,argv,{env,stdio:'inherit'});if(run.error||run.signal||run.status===null)throw new Error('PAN566_TEST_PROCESS_INTERRUPTED');if(run.status!==0){process.exitCode=run.status;break;}
   }
  }

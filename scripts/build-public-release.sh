@@ -677,6 +677,9 @@ repository_only_files = {
     "tests/pan566/contract.test.mjs",
     "tests/pan566/registration.test.mjs",
     "tests/pan566/helpers.mjs",
+    "docs/architecture/connected-provider-free-onboarding-foundation-v1.md",
+    "tests/pan560/connected-foundation.test.mjs",
+    "tests/pan560/registration.test.mjs",
     # PAN569 original B3: existing configuration owner only; source evidence, no activation.
     "packages/contracts/src/agent-configuration-transfer-v1.ts",
     "packages/browser-workspace/src/configuration-draft-view-v1.ts",
