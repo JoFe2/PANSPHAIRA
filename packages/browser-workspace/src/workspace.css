@@ -928,9 +928,24 @@ body[data-personal-composition-cards="true"] [id="shell.main"] .erv-review-layou
 body[data-personal-composition-cards="true"] .profile-workflow-heading { display:none!important; }
 @media(max-width:799px) { .composition-groups { grid-template-columns:minmax(0,1fr); }.workspace-composition-editor { padding:10px; } }
 
-
-
-
-
-
-
+/* Required reference-composition delta: native Notebook routes share the ribbon;
+   the dock remains at the workspace header, not the invoice/banner below it. */
+body[data-design-profile="notebook"]:is([data-presentation-width="wide"],[data-presentation-width="medium"])>.workspace-module-strip { width:100%; }
+/* The additional orb geometry is static and decorative in the same assistant.
+   No animation, listening waveform, canvas, renderer loop or availability claim. */
+.agent-orb-sphere { display:none; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .workspace-assistant-column>[id="shell.agent-panel"] { height:min(700px,calc(100dvh - 212px)); }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .agent-welcome { position:relative; isolation:isolate; flex:0 0 auto; padding:18px 20px 12px; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .agent-welcome::before { content:''; position:absolute; z-index:-1; left:5%; right:5%; bottom:48px; height:38px; border-radius:50%; border-top:1px solid #68baff88; box-shadow:0 -8px 24px #359cff25; pointer-events:none; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .workspace-agent .agent-orb { width:224px; height:224px; margin:0 auto 24px; border:2px solid #83dbff; background:radial-gradient(ellipse at 80% 65%,#ac5de075,transparent 47%),radial-gradient(circle at 32% 25%,#358bd64d,transparent 38%),radial-gradient(circle at 50% 50%,#102652 43%,#267eb67a 67%,#8ae3ffcc 72%,#122c54 78%); box-shadow:0 0 9px #91e6ff9c,0 0 36px #318dff70,inset -20px -12px 30px #091934,0 0 0 16px #4eb3ff05; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .workspace-agent .agent-orb>svg:not(.agent-orb-sphere) { display:none; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .workspace-agent .agent-orb>.agent-orb-sphere { display:block; position:absolute; inset:0; width:100%; height:100%; filter:none; opacity:.65; fill:none; stroke:#87d8ff; stroke-width:.7; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .agent-integrated-composer { display:grid; grid-template-columns:minmax(0,1fr) minmax(120px,160px); column-gap:10px; row-gap:4px; flex:0 0 auto; width:calc(100% - 48px); max-width:760px; margin:0 auto 10px; padding:10px; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .agent-integrated-composer>label { grid-column:1/-1; margin:0; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .agent-integrated-composer>textarea { grid-column:1; grid-row:2; height:54px; min-height:54px; font-size:12px; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .agent-integrated-composer>button { grid-column:2; grid-row:2; margin:0; min-height:44px; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="wide"],[data-presentation-width="medium"]) .agent-integrated-composer>p { grid-column:1/-1; margin:3px 0 0; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width="medium"] .workspace-agent .agent-orb { width:128px; height:128px; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width="medium"] .agent-welcome { padding-top:12px; padding-bottom:8px; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width="medium"] .agent-integrated-composer { grid-template-columns:minmax(0,1fr) 120px; width:calc(100% - 32px); }
+/* End of bounded default reference-composition styles. */

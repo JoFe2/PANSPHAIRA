@@ -63,3 +63,43 @@ test('A4-UI integration Jarvis focus preserves native unsent input and reachable
   assert.equal(posts(f,'select').length+posts(f,'probe').length+posts(f,'consent').length,0);assert.equal(f.requests.filter(r=>r.method==='POST'&&/\/(?:agent-run\/(?:plan|start)|profile|appearance|module-view\/confirm)$/.test(r.path)).length,0);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
  }finally{await f.close();}
 });
+
+// Actual shared native owners, an EMPTY model catalogue, and only local previews.
+// The original image defines composition, never audio/model/agent authority.
+test('UI reference default composition keeps Jarvis orb primary and Notebook navigation aligned with the same native owners',{timeout:120000},async()=>{
+ const f=await nativeViewBrowserFixture546({subjectId:'synthetic:erv-reviewer',humanDecisions:true,agentRuns:true,invoiceNavigation:true,configurationDrafts:true,modelConnections:[]});
+ const observations=[],mutations=[];let before;
+ try{
+  const p=f.page;before=f.business();const draft='Lokaler ungesendeter Kompositionsentwurf; keine Ausführung.';
+  p.on('request',r=>{if(r.method()==='POST'&&/\/(?:appearance|profile|module-view\/confirm|model-connection\/(?:select|probe|consent)|agent-run\/(?:plan|start))$/.test(new URL(r.url()).pathname))mutations.push(new URL(r.url()).pathname);});
+  await p.setViewportSize({width:1586,height:992});await p.goto(f.tls.origin+'/t/tenant-a/workspace');
+  await p.getByRole('button',{name:'Eingangsrechnungsprüfung — nur lesen',exact:true}).click();
+  await p.locator('[id="shell.erv-human"][data-state="CURRENT_HUMAN_READ"]').waitFor();
+  await p.locator('[id="workspace.appearance"][data-state="READY"]').waitFor({state:'attached'});
+  await p.locator(root+'[data-state="NO_AUTHORIZED_CONNECTION"]').waitFor();
+  await p.locator('#pan548-agent-intent').fill(draft);
+  await p.evaluate(()=>{window.__defaultCompositionNodes={input:document.getElementById('pan548-agent-intent'),agent:document.getElementById('shell.agent-panel'),main:document.getElementById('shell.main'),nav:document.getElementById('shell.navigation'),native:document.querySelector('[data-workspace-card-id="pan.erv.summary"]'),model:document.getElementById('shell.model-connection')};});
+  const pins={};for(const path of ['packages/browser-workspace/src/app.ts','packages/browser-workspace/src/workspace.css','packages/browser-workspace/src/workspace-agent-panel-v1.ts','tests/pan565/browser-model-connection.test.mjs','dist/browser-workspace/app.js','dist/browser-workspace/workspace-agent-panel.js','dist/browser-workspace/workspace-appearance.js'])pins[path]=sha(readFileSync(path));
+  async function chooseProfile(id){await p.getByRole('button',{name:'Design und Layout konfigurieren',exact:true}).click();await p.getByRole('combobox',{name:'Designprofil',exact:true}).selectOption(id);await p.getByRole('button',{name:'Kuratierte Vorlage als Vorschau',exact:true}).click();await p.getByRole('button',{name:'Zur Arbeitsfläche',exact:true}).click();await p.waitForFunction(id=>document.body.dataset.designProfile===id,id);}
+  async function measure(profile,viewport){
+   await p.setViewportSize(viewport);await p.evaluate(async()=>{scrollTo(0,0);await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+   const actual=await p.evaluate(()=>{const b=n=>{if(!n)return null;const r=n.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom,right:r.right,visible:!!n.getClientRects().length&&getComputedStyle(n).display!=='none'};},saved=window.__defaultCompositionNodes,nav=document.getElementById('shell.navigation'),nodes={input:document.getElementById('pan548-agent-intent'),agent:document.getElementById('shell.agent-panel'),main:document.getElementById('shell.main'),nav,native:document.querySelector('[data-workspace-card-id="pan.erv.summary"]'),model:document.getElementById('shell.model-connection')};return{profile:document.body.dataset.designProfile,widthClass:document.body.dataset.presentationWidth,area:document.body.dataset.mobileWorkArea,viewport:{width:innerWidth,height:innerHeight},documentWidth:document.documentElement.scrollWidth,workarea:b(document.querySelector('.workspace-workarea')),agent:b(nodes.agent),input:b(nodes.input),orb:b(document.querySelector('.agent-orb')),composer:b(document.querySelector('.agent-integrated-composer')),native:b(nodes.main),navItems:[...nav.querySelectorAll('.workspace-nav-item')].filter(n=>n.getClientRects().length).map(n=>({label:n.textContent,...b(n)})),sameNativeNodes:Object.entries(nodes).every(([key,value])=>value===saved[key]),requiredBoundary:!!document.getElementById('workspace.required-boundary'),modelState:nodes.model.dataset.state,modelBodyHidden:document.getElementById('pan565-connection-body').hidden,graphics:document.querySelector('.appearance-chip')?.textContent,noCanvas:document.querySelectorAll('canvas').length===0};});
+   const name='default-composition-'+profile+'-'+viewport.width,path=join(evidence(),name+'.png');await p.screenshot({path,fullPage:false});const row={profile,actual,pins,imagePath:path,imageSHA256:sha(readFileSync(path)),realModelAudioOrExecution:false,mainAcceptance:false,physicalDevice:false};writeFileSync(path+'.json',JSON.stringify(row,null,2)+'\n');observations.push(row);writeFileSync(join(evidence(),'default-composition-actual-observations.json'),JSON.stringify(observations,null,2)+'\n');
+   assert.equal(actual.profile,profile);assert.equal(actual.sameNativeNodes,true);assert.equal(actual.requiredBoundary,true);assert.equal(actual.modelState,'NO_AUTHORIZED_CONNECTION');assert.equal(actual.modelBodyHidden,true);assert.equal(actual.noCanvas,true);assert.ok(actual.documentWidth<=viewport.width,'DEFAULT_COMPOSITION_HORIZONTAL_OVERFLOW');assert.equal(await p.locator('#pan548-agent-intent').inputValue(),draft);
+   if(profile==='jarvis'){assert.equal(actual.area,'ASSISTANT');assert.ok(actual.input.visible&&actual.input.bottom<viewport.height,'DEFAULT_JARVIS_INPUT_OUTSIDE_FIRST_VIEWPORT');}
+   else if(viewport.width===390){assert.equal(actual.area,'TASK');assert.equal(await p.locator('[id="shell.agent-panel"]').isVisible(),false);}
+   return actual;
+  }
+  await chooseProfile('notebook');const notebook=await measure('notebook',{width:1586,height:992});await measure('notebook',{width:1024,height:768});await measure('notebook',{width:390,height:844});
+  await p.setViewportSize({width:1586,height:992});await chooseProfile('jarvis');const jarvis=await measure('jarvis',{width:1586,height:992});await measure('jarvis',{width:1024,height:768});await measure('jarvis',{width:390,height:844});
+  await p.locator('[id="workspace.mode-task"]').click();assert.equal(await p.locator('[id="shell.agent-panel"]').isVisible(),false);assert.equal(await p.locator('[id="shell.main"]').isVisible(),true);await p.locator('[id="workspace.mode-assistant"]').click();assert.equal(await p.locator('[id="shell.main"]').isVisible(),false);assert.equal(await p.locator('#pan548-agent-intent').inputValue(),draft);
+  assert.deepEqual(mutations,[]);assert.equal(f.business(),before);assert.equal(f.readPersisted().revision,0);assert.deepEqual(f.errors,[]);
+  const failures=[];
+  if(new Set(notebook.navItems.map(n=>Math.round(n.y))).size!==1)failures.push('NOTEBOOK_REGISTERED_NAVIGATION_WRAPS_ON_DEFAULT_DESKTOP');
+  if(Math.abs(notebook.agent.y-notebook.workarea.y)>16)failures.push('NOTEBOOK_ASSISTANT_ALIGNED_TO_INVOICE_NOT_WORKSPACE');
+  if(jarvis.orb.width<200||jarvis.orb.width>280)failures.push('JARVIS_DEFAULT_ORB_NOT_REFERENCE_SCALE');
+  if(jarvis.composer.height>jarvis.orb.height*.8)failures.push('JARVIS_FORM_DOMINATES_THE_CENTRAL_ORB');
+  assert.deepEqual(failures,[],failures.join('; '));
+ }finally{await f.close();}
+});
+// End of bounded default-composition regression.

@@ -10022,7 +10022,7 @@
         {
           "path": "packages/browser-workspace/src/app.ts",
           "role": "SOURCE",
-          "sha256": "e87c882a72367219b923751bcc856dd8228367e9053a0b22a43a20bef243e25c"
+          "sha256": "bda79ffc6b921e2fe8b4eae7195612bcc3a10281a214e86e27f5e12ce8684752"
         },
         {
           "path": "packages/browser-workspace/src/plugin-diagnostics-v1.ts",
@@ -10042,7 +10042,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "ed1b9afdf16219f7bde421b9a39f0490cccb9b67e8156a72e11c417cc0bfc4bc"
+          "sha256": "44b42f512b424250c994f69458358e2a4db12fd191233b33d32a5116db32f469"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -10432,7 +10432,7 @@
         {
           "path": "tests/pan565/browser-model-connection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "c84b90648832da0ba138de506c9052037a49f56c2066c20f25ebae6b2763e71f"
+          "sha256": "0f66a7677556eb3b7934948fd5d06c8d9c24e8557668bd47e9dd72e939dcb09f"
         },
         {
           "path": "tests/pan565/registration.test.mjs",
@@ -11324,7 +11324,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-agent-panel-v1.ts",
           "role": "SOURCE",
-          "sha256": "59e550465e056aa3648f8abee4f12c5a786b4491d9bbaefca7b2aca5d64e8f50"
+          "sha256": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c"
         },
         {
           "path": "packages/contracts/src/workspace-agent-run-v1.ts",
