@@ -5037,7 +5037,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "6590c01b3dad59d612b0a135ffcc4843e46a533b77a703741ee15ac52c81ee38"
+          "sha256": "6e73f1361d6be3814457af625f29a855788dc5ed68b3941fb7e4eab276f3cbd3"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5162,7 +5162,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "42ab330f7578274924a74277ef350ecf8010cc8df8052c9f08042444f1507d86"
+          "sha256": "30aa708f4a33482d8ff3fb330678695846ab88516ac945657877daf8f01175e8"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
