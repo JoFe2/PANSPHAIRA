@@ -45,7 +45,12 @@ test('A3 five states are reachable in the same protected shell and conversation/
    await page.locator('[data-configuration-steps]').getByRole('button',{name:label,exact:true}).click();await page.locator('[data-backend="configuration"][data-configuration-state="'+state+'"]').waitFor();
    assert.equal(new URL(page.url()).hash,'#/workspace/configuration');
   }
-  await page.locator('[data-configuration-steps]').getByRole('button',{name:'Modellverbindung',exact:true}).click();await page.getByRole('button',{name:'Vorhandenen Verbindungsstatus anzeigen',exact:true}).click();await page.locator('[data-backend="configuration"][data-outcome="MODEL_NOT_CONFIGURED"]').waitFor();assert.match(await page.locator('[data-backend="configuration"] > [role="status"]').innerText(),/nicht eingebunden/);
+  const beforeModel=await nativeRead(page);
+  await page.locator('[data-configuration-steps]').getByRole('button',{name:'Modellverbindung',exact:true}).click();await page.getByRole('button',{name:'Vorhandenen Verbindungsstatus anzeigen',exact:true}).click();await page.locator('[id="shell.model-connection"][data-state="NO_AUTHORIZED_CONNECTION"]').waitFor();
+  const model=await page.evaluate(async()=>{const context=await(await fetch('/t/tenant-a/workspace/context',{credentials:'same-origin',cache:'no-store'})).json();const response=await fetch('/t/tenant-a/workspace/model-connection',{credentials:'same-origin',cache:'no-store',headers:{'x-pan565-session':context.sessionId}});return{status:response.status,value:await response.json()};});
+  assert.equal(model.status,200);assert.deepEqual(model.value.connections,[]);assert.equal(model.value.consent,'NOT_GRANTED');assert.equal(model.value.inferenceOffer,null);assert.equal(model.value.readyForInference,false);assert.equal(model.value.realModelAcceptance,false);assert.ok(Object.values(model.value.checks).every(check=>check.state==='NOT_RUN'));
+  const afterModel=await nativeRead(page);assert.equal(afterModel.value.revision,beforeModel.value.revision);assert.deepEqual(afterModel.value.draft,beforeModel.value.draft);assert.equal(f.requests.filter(r=>r.method==='POST'&&/\/model-connection\/(select|probe|consent)$/.test(r.path)).length,0);
+  await page.getByRole('button',{name:'Verbindungsdialog schließen',exact:true}).click();
   await page.locator('[data-configuration-steps]').getByRole('button',{name:'Konfigurationsgespräch',exact:true}).click();
   await page.getByRole('button',{name:'Konfigurationsgespräch — modelllos',exact:true}).click();
   await page.getByRole('combobox',{name:goal,exact:true}).selectOption(JSON.stringify('employee.business.help'));
