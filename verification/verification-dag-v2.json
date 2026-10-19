@@ -4972,7 +4972,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "e530f646590d5f4acfbd9d1c59333b00bbdc4647f06a92ebe3b5fbe4d60d41af"
+          "sha256": "ff5ad2b241515c5e59e61d0b9ff4455e941db2cc7d9b4b70c1b1ae0f010e5788"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -10397,7 +10397,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-model-connection-v1.css",
           "role": "SOURCE",
-          "sha256": "cc6c51fa4e4a14a4bf98c370eda77cc18bdf6c5896afe1157114c0e04d40b641"
+          "sha256": "57765ec2668650497c7d1d797c2e7a10baa39e784b121911f815a4b986e13c85"
         },
         {
           "path": "src/pan565/native-model-connection.mjs",
@@ -10607,7 +10607,7 @@
         {
           "path": "src/pan562/native-browser-bootstrap.mjs",
           "role": "SECURITY",
-          "sha256": "d4f3f250a49a10fad8aa57fe7d587bb0e7e085629a375a7ae64cee979277f2e3"
+          "sha256": "25a1d10f8de1fa2d8a7903621c9e0a40487a6ed6294b929f249f0c587a1427fb"
         },
         {
           "path": "tests/pan562/bootstrap-contract.test.mjs",
@@ -10822,7 +10822,7 @@
         {
           "path": "scripts/run-pan566-confirmed-configuration-application-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "0dbefa655e01f8c6b2287d412dafeb698c0e5dc2f279fff14786745167c69f14"
+          "sha256": "a81cfbffc5acacadaac3175a2ec9b865d937b147deec604d3acb82303a8f8da8"
         },
         {
           "path": "tests/pan566/browser-application.test.mjs",
@@ -10852,12 +10852,27 @@
         {
           "path": "tests/pan566/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "c3432ee4bebfcefec1d977069bfe3364704ca4e343690b0ab17b83535fa06714"
+          "sha256": "91c49484751e44a54e418fe722c4687c4a3d6adca324f0f6f5cae0ed579352b4"
         },
         {
           "path": "tests/pan566/helpers.mjs",
           "role": "VALIDATOR",
-          "sha256": "441b5b261982444701cc47cd810cfbbae04fc964b55d95da9f09e5e488f6e609"
+          "sha256": "661004be5832735060bb1a5c28ccbcbaf12fb820ea1f32b938b58c8243787cdf"
+        },
+        {
+          "path": "docs/architecture/connected-provider-free-onboarding-foundation-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "4a34f16ea6123e8b527db0db60b6faa4104d4a201285f98d60ca7dfc9f15afae"
+        },
+        {
+          "path": "tests/pan560/connected-foundation.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "b5828b186d70cfc12977259652867c7486a4552ada9a7e0266e391d6e27d745f"
+        },
+        {
+          "path": "tests/pan560/registration.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "852dbe7b0f3749f597abcb7cacf2285885cdf5bf7cd354cf8bac4812b246a6a5"
         },
         {
           "path": "packages/contracts/src/agent-configuration-transfer-v1.ts",

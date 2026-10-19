@@ -3490,6 +3490,25 @@ const pan566Inputs=[
 ];
 for(const[inputPath,role,ownerId]of pan566Inputs){const owner=dag.nodes.find(node=>node.id===ownerId);if(!owner)throw Error('PAN566_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});if(!owner.ownedTests.includes('npm run pan566:test'))owner.ownedTests.push('npm run pan566:test');}
 if(!repositoryIntegrityNode.ownedTests.includes('npm run pan566:test'))repositoryIntegrityNode.ownedTests.push('npm run pan566:test');
+// Original PAN560 connected provider-free family; existing566 command/563 owner.
+const pan560Inputs=[
+  [
+    "docs/architecture/connected-provider-free-onboarding-foundation-v1.md",
+    "DERIVED_EVIDENCE",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan560/connected-foundation.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ],
+  [
+    "tests/pan560/registration.test.mjs",
+    "VALIDATOR",
+    "pan563-configuration-draft-v1"
+  ]
+];
+for(const[inputPath,role,ownerId]of pan560Inputs){const owner=dag.nodes.find(n=>n.id===ownerId);if(!owner)throw Error('PAN560_EXISTING_OWNER_MISSING');owner.inputs.push({path:inputPath,role,sha256:digest(inputPath)});}
 // PAN569 original B3: additive configuration intent on existing owners only.
 const pan569Inputs=[
   [
@@ -3807,6 +3826,7 @@ for (const line of readFileSync(path.join(root, "release/public-files.manifest")
   if (line && !line.startsWith("#")) entries.set(line.split("\t")[0], null);
 }
 for (const [inputPath] of pan591Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan560Inputs) entries.set(inputPath, null);
 for(const[inputPath]of[...pan607NativeInputs,...pan607Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan604NativeInputs,...pan604Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan602NativeInputs,...pan602Inputs])entries.set(inputPath,null);
