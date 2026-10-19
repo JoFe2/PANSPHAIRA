@@ -10397,7 +10397,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-model-connection-v1.css",
           "role": "SOURCE",
-          "sha256": "57765ec2668650497c7d1d797c2e7a10baa39e784b121911f815a4b986e13c85"
+          "sha256": "31c483663067b35939f8ea33019a744848ef2a4d34ad1880b98dd39c2319540f"
         },
         {
           "path": "src/pan565/native-model-connection.mjs",
@@ -10432,7 +10432,7 @@
         {
           "path": "tests/pan565/browser-model-connection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "cc6234cd8066d98e70239552015bea13241caf69b12b04e7ae4959058ac373ce"
+          "sha256": "c84b90648832da0ba138de506c9052037a49f56c2066c20f25ebae6b2763e71f"
         },
         {
           "path": "tests/pan565/registration.test.mjs",
