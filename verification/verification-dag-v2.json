@@ -4850,6 +4850,11 @@
           "sha256": "7542ea6524096e5471b5d5d087a55a041c39c52efbe97d8f1885bee53cae403a"
         },
         {
+          "path": "docs/architecture/native-reference-rights-contract-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a611de0f3252faad7421ca6683612fc08ee6bca7b61829c6f1e3635e36744e20"
+        },
+        {
           "path": "docs/architecture/pan574-composition-bindings-v1.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "3f519738478dab98c00fbfbe1cfe3cb6756b4835a7bf4a8856b68248ef13f2e2"
@@ -10633,11 +10638,6 @@
           "path": "packages/browser-workspace/src/configuration-application-v1.ts",
           "role": "SOURCE",
           "sha256": "40264fc0ed45537a4d00c203b833439e03cbb50cb88e3955dc1220e33b894e6b"
-        },
-        {
-          "path": "docs/architecture/native-reference-rights-contract-v1.md",
-          "role": "DERIVED_EVIDENCE",
-          "sha256": "a611de0f3252faad7421ca6683612fc08ee6bca7b61829c6f1e3635e36744e20"
         }
       ],
       "ownedTests": [
