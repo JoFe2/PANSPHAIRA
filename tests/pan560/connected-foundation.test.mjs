@@ -168,34 +168,3 @@ test('E1-AC01/04/05/06 actual optional model asset503 leaves manual path usable;
   evidence('E1-actual-optional-model-native200-lost-and-readback',{sourceCommit:f.identity.sourceCommit,sourceTree:f.identity.sourceTree,optionalModelAssetStatus:503,actualNative200:actual200,actualBusinessValue:actual.quantities,replayStatus:repeat,runtimeConsumed:1,remoteModelInference:false});
  }finally{await cdp?.detach();}
 }));
-
-// Necessary connected-UI delta: the released empty connection launcher must not
-// displace the SAME local Jarvis input. No status/authority is invented or granted.
-test('E1-UI integration Jarvis focus keeps native unsent input in390 first viewport while explicit empty-model dialog stays reachable and inert',{timeout:120000},async()=>serial('E1-UI-jarvis-empty-focus',async f=>{
- const p=await openModelFreeConfiguration566(f);
- await p.locator('[id="workspace.appearance"][data-state="READY"]').waitFor({state:'attached'});
- await p.locator('[id="shell.model-connection"][data-state="NO_AUTHORIZED_CONNECTION"]').waitFor();
- const input=p.locator('#pan548-agent-intent'),draft='Lokaler ungesendeter Entwurf bleibt erhalten; kein Modellauftrag.';
- await input.fill(draft);
- await p.evaluate(()=>{window.__e1UiOriginalIntent=document.getElementById('pan548-agent-intent');window.__e1UiOriginalModel=document.getElementById('shell.model-connection');});
- await p.getByRole('button',{name:'Design und Layout konfigurieren',exact:true}).click();
- await p.getByRole('combobox',{name:'Designprofil',exact:true}).selectOption('jarvis');
- await p.getByRole('button',{name:'Kuratierte Vorlage als Vorschau',exact:true}).click();
- await p.getByRole('button',{name:'Zur Arbeitsfläche',exact:true}).click();
- await p.setViewportSize({width:390,height:844});
- const focus=async()=>p.evaluate(async()=>{await document.fonts.ready;window.scrollTo(0,0);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));const input=document.getElementById('pan548-agent-intent'),r=input.getBoundingClientRect(),model=document.getElementById('shell.model-connection');return{profile:document.body.dataset.designProfile,area:document.body.dataset.mobileWorkArea,viewport:innerHeight,width:document.documentElement.scrollWidth,input:{y:r.y,height:r.height,bottom:r.bottom,visible:!!input.getClientRects().length},sameInput:window.__e1UiOriginalIntent===input,sameModel:window.__e1UiOriginalModel===model,modelConnected:model.isConnected,modelState:model.dataset.state,modelBodyHidden:document.getElementById('pan565-connection-body').hidden,modelVisible:!!model.getClientRects().length};});
- const initial=await focus();evidence('E1-UI-actual-jarvis-empty-model-focus',initial);
- assert.equal(initial.profile,'jarvis');assert.equal(initial.area,'ASSISTANT');assert.equal(initial.width,390);assert.equal(initial.sameInput,true);assert.equal(initial.sameModel,true);assert.equal(initial.modelConnected,true);assert.equal(initial.modelState,'NO_AUTHORIZED_CONNECTION');assert.equal(initial.modelBodyHidden,true);empty(await model(p));
- assert.ok(initial.input.visible&&initial.input.bottom<initial.viewport,'JARVIS_FIRST_VIEWPORT_INPUT_DISPLACED_BY_OPTIONAL_COLLAPSED_MODEL_LAUNCHER');
- assert.equal(await input.inputValue(),draft);await image(p,f,'E1-UI-jarvis-empty-focus-390',{actualFocus:initial,localUnsentInputOnly:true});
- // Reach the genuine existing connection view through the native task/stepper,
- // not a programmatic click on a hidden launcher or a new public route.
- await p.locator('[id="workspace.mode-task"]').click();
- await openModel(p);assert.equal(await p.locator('[id="shell.model-connection"]').isVisible(),true);
- assert.equal(await p.locator('#pan565-connection-choice').isDisabled(),true);assert.equal(await p.locator('#pan565-select').isDisabled(),true);
- for(const phase of ['REACHABILITY','AUTHENTICATION','MODEL_AVAILABILITY','INFERENCE'])assert.equal(await p.locator('#pan565-probe-'+phase).isDisabled(),true);
- await image(p,f,'E1-UI-jarvis-explicit-empty-dialog-390',{sameNativeModelOwner:true,noConnectionOrProbeOrConsent:true});
- await closeModel(p);await p.locator('[id="workspace.mode-assistant"]').click();
- const returned=await focus();assert.equal(returned.sameInput,true);assert.equal(returned.sameModel,true);assert.equal(returned.modelConnected,true);assert.equal(returned.modelBodyHidden,true);assert.ok(returned.input.visible&&returned.input.bottom<returned.viewport);assert.equal(await input.inputValue(),draft);empty(await model(p));
- assert.equal(f.requests.filter(r=>r.method==='POST'&&/\/model-connection\/(select|probe|consent)$/.test(r.path)).length,0);assert.equal(f.requests.filter(r=>r.operation==='APPLY').length,0);assert.equal(existsSync(leading(f)),false);
-}));

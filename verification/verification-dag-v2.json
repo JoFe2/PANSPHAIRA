@@ -10432,7 +10432,7 @@
         {
           "path": "tests/pan565/browser-model-connection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "cc6234cd8066d98e70239552015bea13241caf69b12b04e7ae4959058ac373ce"
+          "sha256": "c84b90648832da0ba138de506c9052037a49f56c2066c20f25ebae6b2763e71f"
         },
         {
           "path": "tests/pan565/registration.test.mjs",
@@ -10867,7 +10867,7 @@
         {
           "path": "tests/pan560/connected-foundation.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "217db312fa4f2ba37d90f1603b681dbadabf5215c7bca22d0afd46bf819b293c"
+          "sha256": "b5828b186d70cfc12977259652867c7486a4552ada9a7e0266e391d6e27d745f"
         },
         {
           "path": "tests/pan560/registration.test.mjs",
