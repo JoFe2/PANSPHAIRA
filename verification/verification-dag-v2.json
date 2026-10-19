@@ -10772,7 +10772,7 @@
         {
           "path": "tests/pan563/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f195d665a649c46ce4d09c24e51d6593380b4864296c7813e0a0b763a2a67428"
+          "sha256": "23b8b66bbf2b76e3551dad1524c37f0ab2ea685acb51878645d5ba6e20a86dcc"
         },
         {
           "path": "tests/pan563/zoom-extension/manifest.json",

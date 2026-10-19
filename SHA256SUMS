@@ -2483,7 +2483,7 @@ e18e8c1c8105f953c54a55c917b9c5f4eee973b135102260984d81033c04aa9f  ./tests/pan563
 5e4b68e30364296945bc81836126f7b29b1dee567842950a3b3e98c258d8da87  ./tests/pan563/process-observation.mjs
 d902a48977cced680a3498ee06a86899f95dff12de373f29304b9f7024549850  ./tests/pan563/process-writer.mjs
 339c1c2f19b4d1c58002ceb8d804f269e486461aa8519e9bfb208b029f986843  ./tests/pan563/protected-draft.test.mjs
-f195d665a649c46ce4d09c24e51d6593380b4864296c7813e0a0b763a2a67428  ./tests/pan563/registration.test.mjs
+23b8b66bbf2b76e3551dad1524c37f0ab2ea685acb51878645d5ba6e20a86dcc  ./tests/pan563/registration.test.mjs
 988276c5b40dc0323144b0d7788f50730f5209b5ab6a8f30cfed092fc9ff2016  ./tests/pan563/zoom-extension/manifest.json
 33d3d6e7c69c9cd56d124494e863db241a6478b488a12f61e55ac1d03f78cde8  ./tests/pan563/zoom-extension/worker.js
 d57597ee9f2a0c79008d116ae64b1e06b5e34db1149c3e38dc388275c92c6293  ./tests/pan564/browser-conversation-form.test.mjs
@@ -2814,5 +2814,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-3cd1d8559d4b69e2129732c8f6938d433d4ad1ad97fd1df82d9f12a451f774a9  ./verification/verification-dag-v2.json
+11960f023143fcb7aac768cdceb685f45ce5aae0b20cb7da00e3c51cd33c4d0f  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
