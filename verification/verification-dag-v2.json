@@ -10397,7 +10397,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-model-connection-v1.css",
           "role": "SOURCE",
-          "sha256": "57765ec2668650497c7d1d797c2e7a10baa39e784b121911f815a4b986e13c85"
+          "sha256": "31c483663067b35939f8ea33019a744848ef2a4d34ad1880b98dd39c2319540f"
         },
         {
           "path": "src/pan565/native-model-connection.mjs",
