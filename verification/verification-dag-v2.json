@@ -10072,7 +10072,7 @@
         {
           "path": "src/pan541/native-erv-read-adapter.mjs",
           "role": "SOURCE",
-          "sha256": "c12033567d6c6147d94a4e60700bd94969ff82ad86abfe7a50ebfe7e6560a4a1"
+          "sha256": "f15e635f27cb4d00b26fca3ee21981bf04a20281726dc50b195100de39bd5e74"
         },
         {
           "path": "src/pan541/workspace-browser.mjs",
@@ -10237,7 +10237,7 @@
         {
           "path": "src/pan546/native-data-catalog.mjs",
           "role": "SECURITY",
-          "sha256": "cf2d8e8794bfac87fd707f2e3a3439445f1c08e2b5d324a8521643bc4fbb25ab"
+          "sha256": "a4a9ce58a9bc1912de11b29063534bb4d8753b0cd6c9e9dfd249d7a549ac406d"
         },
         {
           "path": "src/pan546/native-view-owner.mjs",
@@ -10312,7 +10312,7 @@
         {
           "path": "tests/pan546/native-view.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1a7dd3bc414642246f35ee607145a93575e92c354f588fc958e73189101b92d5"
+          "sha256": "ac4e3f5d1de8bae15a82835dc1dc8ca985448ebc88adcf46f61766bc56b56cee"
         },
         {
           "path": "tests/pan546/transport.test.mjs",
@@ -10633,6 +10633,11 @@
           "path": "packages/browser-workspace/src/configuration-application-v1.ts",
           "role": "SOURCE",
           "sha256": "40264fc0ed45537a4d00c203b833439e03cbb50cb88e3955dc1220e33b894e6b"
+        },
+        {
+          "path": "docs/architecture/native-reference-rights-contract-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "e468d014b23f122fdfec7d9cf833b0febdf7cf76d1be689403251d06c104cb4c"
         }
       ],
       "ownedTests": [

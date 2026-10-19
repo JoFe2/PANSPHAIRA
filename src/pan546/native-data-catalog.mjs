@@ -48,6 +48,25 @@ export function createNativeWorkspaceDataCatalogV1(options){
  }
  const owner=Object.freeze({
   metadata(headers,verification){return freeze(metadataOf(leading(headers,verification)));},
+  // Source qualification is not a metadata/object/field/relation grant. Reuse
+  // the REAL protected parent read and return no supplier value or live rows.
+  // This owner-local contract is not registered as an HTTP/UI read capability.
+  referenceContract(headers,command){
+   exact(command,['schemaVersion','context','relationId'],'DATA_REFERENCE_REQUEST_DENIED');
+   if(command.schemaVersion!=='pansphaira.workspace-native-reference/read-v1')throw new Error('DATA_REFERENCE_REQUEST_DENIED');
+   const r=leading(headers,command.context);
+   if(command.relationId!=='native.order-supplier-reference')throw new Error('DATA_REFERENCE_RELATION_DENIED');
+   const request={tenantId:r.invoice.tenantId,objectId:r.invoice.invoiceId,expectedRevision:r.invoice.revision};
+   const source=nativeReader.referenceEvidence(request);
+   if(source.schemaVersion!=='pansphaira.native-order-supplier-source-evidence/v1'||source.tenantId!==r.invoice.tenantId||source.invoiceId!==r.invoice.invoiceId||source.nativeRevision!==r.invoice.revision||!Number.isSafeInteger(source.sourceRecordCount)||source.sourceRecordCount<0||source.sourceRecordCount>1||!/^([0-9a-f]{64})$/.test(source.sourceDigest)||source.readOnly!==true||source.fieldRightsQualified!==false||source.relationRightsQualified!==false||source.directoryAvailable!==false||source.executionAuthorityGranted!==false||source.bookingAuthorityGranted!==false||source.paymentOrderAuthorized!==false)throw new Error('DATA_REFERENCE_SOURCE_CONFLICT');
+   const current=leading(headers,command.context),again=nativeReader.referenceEvidence(request);
+   if(current.sourceDigest!==r.sourceDigest||current.context.contextHandle!==r.context.contextHandle||again.sourceDigest!==source.sourceDigest)throw new Error('DATA_REFERENCE_REVISION_STALE');
+   return freeze({schemaVersion:'pansphaira.workspace-native-reference-contract/v1',moduleId:'pan.erv',viewId:'pan.erv.view',contextHandle:current.context.contextHandle,objectId:current.invoice.invoiceId,
+    relationId:command.relationId,state:'UNAVAILABLE',reason:'NATIVE_METADATA_OR_FIELD_RIGHTS_NOT_QUALIFIED',grain:'ONE_NATIVE_ORDER_SUPPLIER_REFERENCE_NOT_SUPPLIER_ENTITY',unit:'NATIVE_REFERENCE_ID',
+    sourceEvidence:source,authorizedFieldIds:[],fieldRightsQualified:false,relationRightsQualified:false,directoryAvailable:false,rows:[],rowCount:null,
+    budgets:{maximumSourceRecords:1,maximumRows:1,maximumRelationDepth:0,paginationAllowed:false,freeQueriesAllowed:false},
+    readOnly:true,businessEffectProduced:false,executionAuthorityGranted:false,bookingAuthorityGranted:false,paymentOrderAuthorized:false});
+  },
   read(headers,command){
    exact(command,['schemaVersion','context','fieldIds'],'DATA_QUERY_DENIED');
    if(command.schemaVersion!=='pansphaira.workspace-data-read/v1'||!Array.isArray(command.fieldIds)||Object.getPrototypeOf(command.fieldIds)!==Array.prototype||command.fieldIds.length<1||command.fieldIds.length>8)throw new Error('DATA_QUERY_BUDGET_DENIED');
