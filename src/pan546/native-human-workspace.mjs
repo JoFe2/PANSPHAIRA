@@ -21,6 +21,18 @@ export function createNativeWorkspaceErvHumanV1(options){
  if(!isProtectedSessionAdapterV1(sessions,sessions?.binding?.tenantId)||!isNativeWorkspaceContextSelectionV1(contextSelection,sessions.binding))throw Error('HUMAN_WORKSPACE_OWNER_DENIED');
  const native=createNativeErvHumanBackendV1({root:humanRoot,sessions});let closed=false;
  const api=Object.freeze({
+  // Code-owner read composition for the EXISTING protected GET catalog.
+  // It uses actual session/context/native-role checks, not fabricated Origin
+  // or a caller DTO/grant. The public call() Origin/CSRF boundary stays intact.
+  readReferences(headers,request){
+   if(closed)throw Error('HUMAN_WORKSPACE_ATTACHMENT_RETIRED');
+   exact(request,['context']);const c=contextSelection.verify(headers,request.context);
+   if(c.moduleId!=='pan.erv'||c.viewId!=='pan.erv.view'||!c.primaryObject)throw Error('HUMAN_WORKSPACE_SCOPE_DENIED');
+   const read=native.read(headers,{invoiceId:c.primaryObject.objectId});
+   if(read.nativeRevision!==c.primaryObject.revision)throw Error('HUMAN_REFERENCE_NATIVE_BASIS_STALE');
+   const value=projection(read,humanRoot);contextSelection.verify(headers,request.context);
+   return Object.freeze({schemaVersion:'pansphaira.workspace-erv-human/references/v1',contextHandle:c.contextHandle,value});
+  },
   call(headers,operation,request){
    if(closed)throw Error('HUMAN_WORKSPACE_ATTACHMENT_RETIRED');
    exact(request,operation==='read'?['context']:operation==='decide'?['context','command']:operation==='reconcile'?['context','effectId']:[]);

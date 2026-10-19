@@ -3811,6 +3811,8 @@ repositoryIntegrityNode.inputs = repositoryIntegrityNode.inputs.filter(
 );
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
+// Original546 guide belongs to the existing shared shell owner, not a new gate.
+pan541Node.inputs.push({path:"docs/architecture/native-reference-rights-contract-v1.md",role:"DERIVED_EVIDENCE",sha256:digest("docs/architecture/native-reference-rights-contract-v1.md")});
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

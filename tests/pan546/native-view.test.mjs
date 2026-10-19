@@ -59,6 +59,53 @@ test('DUI-16 native reference contract rejects actual changed native revision an
   const afterOwnedSourceMutation=allNativeRows546(f);assert.throws(()=>f.reader.referenceEvidence({tenantId:'tenant-a',objectId:t.context.primaryObject.objectId,expectedRevision:prior.sourceEvidence.nativeRevision}),/ERV_OBJECT_REVISION_STALE/);assert.throws(()=>f.data.referenceContract(t.headers,request),/ERV_OBJECT_REVISION_STALE|CONTEXT_REVISION_STALE/);assert.deepEqual(allNativeRows546(f),afterOwnedSourceMutation);assert.deepEqual(counts(f),{views:0,history:0,legacy:0});
  }finally{await f.close();}
 });
+
+import {createNativeWorkspaceErvHumanV1} from '../../src/pan546/native-human-workspace.mjs';
+import {nativeViewCatalogV1,nativeViewCellsV1} from '../../dist/packages/browser-workspace/src/module-view-native-v1.js';
+const authorizedReferenceFields546=['erv.invoice.orderReference','erv.invoice.positionReference','erv.invoice.receiptCount'];
+
+test('DUI-16 authorized reference fields come from the actual protected existing Human read for the same native parent, never observed supplier rights',async()=>{
+ const f=await nativeViewFixture546();let provider;try{
+  provider=createNativeWorkspaceErvHumanV1({sessions:f.sessions,contextSelection:f.context,humanRoot:f.native.root});const before=allNativeRows546(f);
+  for(const [subject,role]of[['synthetic:erv-reviewer','reviewer'],['synthetic:erv-reader','reader'],['synthetic:erv-approver','reviewer']]){
+   const t=f.tab(f.issue(subject,role)),approved=provider.call(t.headers,'read',{context:f.verification(t)}).value,metadata=f.data.metadata(t.headers,f.verification(t)),data=f.query(t,authorizedReferenceFields546);
+   const getHeaders={...t.headers};delete getHeaders.origin;assert.throws(()=>provider.call(getHeaders,'read',{context:f.verification(t)}),/HUMAN_WORKSPACE_SCOPE_DENIED/);const allowedGET=provider.readReferences(getHeaders,{context:f.verification(t)});assert.equal(allowedGET.value.references.orderId,approved.references.orderId);assert.deepEqual(f.data.read(getHeaders,{schemaVersion:'pansphaira.workspace-data-read/v1',context:f.verification(t),fieldIds:authorizedReferenceFields546}).cells.map(c=>c.value),data.cells.map(c=>c.value));
+   assert.deepEqual(data.cells.map(c=>c.value),[approved.references.orderId,approved.references.positionId,approved.references.receiptIds.length]);assert.deepEqual(data.cells.map(c=>c.unit),['NATIVE_REFERENCE_ID','NATIVE_REFERENCE_ID','COUNT']);assert.ok(data.cells.every(c=>c.source==='ERV_NATIVE'&&c.state==='AVAILABLE'&&c.sourceRevision===approved.nativeRevision));
+   const typedMetadata=nativeViewCatalogV1(metadata,t.context),typedCells=nativeViewCellsV1(data,t.context,typedMetadata,authorizedReferenceFields546);assert.deepEqual(typedCells.map(c=>c.value),data.cells.map(c=>c.value));assert.equal(metadata.budgets.maximumRows,1);assert.equal(metadata.budgets.maximumRelationDepth,0);assert.equal(data.businessEffectProduced,false);assert.equal(data.bookingAuthorityGranted,false);assert.equal(data.paymentOrderAuthorized,false);assert.deepEqual(data.unavailableRelations.map(r=>[r.relationId,r.state]),[['supplier','UNAVAILABLE'],['assignee','UNAVAILABLE'],['document-number','UNAVAILABLE']]);
+   assert.ok(!JSON.stringify(data).includes('lieferant:synthetic-01'));assert.ok(!JSON.stringify(data).includes(t.headers.cookie));assert.ok(!metadata.fields.some(x=>/supplier|assignee/.test(x.fieldId)));
+  }
+  assert.deepEqual(allNativeRows546(f),before);assert.deepEqual(counts(f),{views:0,history:0,legacy:0});
+ }finally{provider?.close();await f.close();}
+});
+
+test('DUI-16 authorized reference fields use the same bounded TABLE BIND preview consent CAS and independent persisted readback without native mutation',async()=>{
+ const f=await nativeViewFixture546();try{
+  const t=f.tab(),nativeBefore=allNativeRows546(f),operations=[{kind:'BIND',instanceId:'invoice-table',binding:{fieldIds:authorizedReferenceFields546,unit:'PER_FIELD'}}];
+  const a=f.preview(t,operations),b=f.preview(t,JSON.parse(JSON.stringify(operations)));assert.equal(a.candidateDigest,b.candidateDigest);assert.deepEqual(allNativeRows546(f),nativeBefore);assert.deepEqual(counts(f),{views:0,history:0,legacy:0});
+  assert.throws(()=>f.preview(t,[{...operations[0],binding:{fieldIds:authorizedReferenceFields546,unit:'COUNT'}}]),/VIEW_BINDING_DENIED/);assert.throws(()=>f.preview(t,[{kind:'BIND',instanceId:'invoice-value',binding:{fieldIds:['erv.invoice.orderReference'],unit:'NATIVE_REFERENCE_ID'}}]),/VIEW_BINDING_DENIED/);assert.throws(()=>f.preview(t,[{...operations[0],binding:{fieldIds:['erv.invoice.supplierReference'],unit:'PER_FIELD'}}]),/VIEW_BINDING_DENIED/);
+  const consent=f.preview(t,operations),receipt=f.view.confirm(t.headers,f.confirmation(t,consent));assert.equal(receipt.revision,1);assert.equal(receipt.businessEffectProduced,false);f.fresh(t);const read=f.otherView.read(t.headers,f.verification(t));assert.equal(read.confirmedCandidateDigest,consent.candidateDigest);assert.deepEqual(read.view.instances.find(i=>i.instanceId==='invoice-table').binding,operations[0].binding);const q=f.query(t,authorizedReferenceFields546);assert.ok(q.cells.every(c=>c.state==='AVAILABLE'));assert.deepEqual(allNativeRows546(f),nativeBefore);assert.deepEqual(counts(f),{views:1,history:2,legacy:0});
+ }finally{await f.close();}
+});
+
+test('DUI-16 authorized reference fields retain genuine tenant session native-subject field and caller-grant denials before publishing data',async()=>{
+ const f=await nativeViewFixture546();try{
+  const t=f.tab(),good=f.query(t,authorizedReferenceFields546),before=allNativeRows546(f),command={schemaVersion:'pansphaira.workspace-data-read/v1',context:f.verification(t),fieldIds:authorizedReferenceFields546};assert.equal(good.cells.length,3);
+  assert.throws(()=>f.data.read({},command),/HOSTED_SESSION_DENIED/);assert.throws(()=>f.data.metadata({...t.headers,'x-role':'reviewer'},f.verification(t)),/HOSTED_HEADER_AUTHORITY_DENIED/);assert.throws(()=>f.data.read(t.headers,{...command,grant:true}),/DATA_QUERY_DENIED/);assert.throws(()=>f.data.read(t.headers,{...command,relation:'supplier'}),/DATA_QUERY_DENIED/);assert.throws(()=>f.query(t,['erv.invoice.supplierReference']),/DATA_FIELD_DENIED/);assert.throws(()=>f.query(t,['erv.human.assignee']),/DATA_FIELD_DENIED/);
+  let called=0;const fields=[];Object.defineProperty(fields,'0',{enumerable:true,get(){called++;return authorizedReferenceFields546[0];}});assert.throws(()=>f.data.read(t.headers,{...command,fieldIds:fields}),/DATA_QUERY_DENIED/);assert.equal(called,0);
+  const tenantB=f.tls.gateway.sessionAdapter('tenant-b'),issued=tenantB.issueOwnerSession({subjectId:'synthetic:erv-reviewer',role:'reviewer',expiresAtMs:Date.now()+180000}),foreign={...t.headers,cookie:issued.cookieHeader,'x-pan527-csrf':issued.csrf};assert.equal(tenantB.authenticate(foreign).tenantId,'tenant-b');assert.throws(()=>f.data.read(foreign,command),/HOSTED_SESSION_DENIED/);
+  assert.throws(()=>{const unknown=f.tab(f.issue('synthetic:not-native-authorized','reviewer'));return f.query(unknown,authorizedReferenceFields546);},/ERV_HUMAN_NATIVE_ROLE_REQUIRED_DENIED/);assert.deepEqual(allNativeRows546(f),before);assert.deepEqual(counts(f),{views:0,history:0,legacy:0});
+ }finally{await f.close();}
+});
+
+test('DUI-16 authorized reference fields and typed consumers deny stale actual native revision and foreign or wrong-unit readbacks',async()=>{
+ const f=await nativeViewFixture546();try{
+  const t=f.tab(),metadata=f.data.metadata(t.headers,f.verification(t)),q=f.query(t,authorizedReferenceFields546),typed=nativeViewCatalogV1(metadata,t.context),bad=JSON.parse(JSON.stringify(q));bad.cells[0].unit='COUNT';assert.throws(()=>nativeViewCellsV1(bad,t.context,typed,authorizedReferenceFields546),/MODULE_VIEW_NATIVE_RESPONSE_DENIED/);assert.throws(()=>nativeViewCellsV1({...q,objectId:'AP-PAN516-PARTIAL-01'},t.context,typed,authorizedReferenceFields546),/MODULE_VIEW_NATIVE_RESPONSE_DENIED/);
+  const wrongType=JSON.parse(JSON.stringify(metadata));wrongType.fields.find(f=>f.fieldId==='erv.invoice.orderReference').type='NUMBER';assert.throws(()=>nativeViewCatalogV1(wrongType,t.context),/MODULE_VIEW_NATIVE_RESPONSE_DENIED/);
+  const state=readPan516Procurement({root:f.native.root}),last=state.confirmations.at(-1),command={schemaVersion:'pansphaira.pan516/procurement-command/v1',effectId:'synthetic:pan546-authorized-ref-drift',transportId:'synthetic:pan546-authorized-ref-drift-wire',expectedRevision:state.revision,orderId:state.effectiveDraft.bestellungId,positionId:state.effectiveDraft.positionen[0].positionId,supplierId:state.effectiveDraft.lieferantId,kind:'CONFIRM',receipt:null,sourceReference:'synthetic:pan546-authorized-ref-source',confirmation:{revision:last.revision+1,previousConfirmationDigest:last.confirmationDigest,terms:last.terms,confirmedAt:'2026-07-05T12:00:00Z'}};
+  executePan516ProcurementCommand({root:f.native.root,command,grant:authorizePan516ProcurementCommand({root:f.native.root,owner:'LOCAL_SYNTHETIC_OWNER',command})});const after=allNativeRows546(f);assert.throws(()=>f.query(t,authorizedReferenceFields546),/CONTEXT_REVISION_STALE|ERV_OBJECT_REVISION_STALE/);assert.deepEqual(allNativeRows546(f),after);
+ }finally{await f.close();}
+});
+
 const move=position=>[{kind:'MOVE',instanceId:'native-review',position}];
 const hash=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
 function counts(f){const db=new DatabaseSync(join(f.root,'browser-profiles.sqlite'),{readOnly:true});try{return {views:db.prepare('SELECT COUNT(*) AS n FROM workspace_module_views').get().n,history:db.prepare('SELECT COUNT(*) AS n FROM workspace_module_view_history').get().n,legacy:db.prepare('SELECT COUNT(*) AS n FROM browser_profiles').get().n};}finally{db.close();}}

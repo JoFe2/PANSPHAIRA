@@ -3,6 +3,8 @@ import { isProtectedSessionAdapterV1 } from '../pan527/origin-session-adapter.mj
 import { isNativeWorkspaceContextSelectionV1 } from '../pan548/native-context-selection.mjs';
 import { isNativeErvReadAdapterV1 } from '../pan541/native-erv-read-adapter.mjs';
 import { createNativeErvHumanBackendV1 } from '../pan542/native-human-backend.mjs';
+import {createNativeWorkspaceErvHumanV1} from './native-human-workspace.mjs';
+import {validateWorkspaceErvHumanReadV1} from '../../dist/packages/contracts/src/workspace-erv-human-v1.js';
 const owned=new WeakMap();
 const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
 function exact(value,keys,code){if(!value||typeof value!=='object'||Object.getPrototypeOf(value)!==Object.prototype)throw new Error(code);const ds=Object.getOwnPropertyDescriptors(value);if(Reflect.ownKeys(ds).length!==keys.length||keys.some(k=>!Object.hasOwn(ds,k))||Object.values(ds).some(d=>!d.enumerable||!('value'in d)))throw new Error(code);}
@@ -18,6 +20,11 @@ export const nativeWorkspaceViewFieldsV1=freeze([
  {fieldId:'erv.invoice.orderedQuantity',source:'ERV_NATIVE',type:'NUMBER',unit:'QUANTITY'},
  {fieldId:'erv.invoice.acceptedQuantity',source:'ERV_NATIVE',type:'NUMBER',unit:'QUANTITY'},
  {fieldId:'erv.invoice.invoicedQuantity',source:'ERV_NATIVE',type:'NUMBER',unit:'QUANTITY'},
+ // Subset of the ACTUAL existing protected Human read's native references.
+ // Not supplier observations, arbitrary grants, entity metadata or new roles.
+ {fieldId:'erv.invoice.orderReference',source:'ERV_NATIVE',type:'STRING',unit:'NATIVE_REFERENCE_ID'},
+ {fieldId:'erv.invoice.positionReference',source:'ERV_NATIVE',type:'STRING',unit:'NATIVE_REFERENCE_ID'},
+ {fieldId:'erv.invoice.receiptCount',source:'ERV_NATIVE',type:'NUMBER',unit:'COUNT'},
  {fieldId:'erv.human.reviewState',source:'HUMAN_NATIVE',type:'STRING',unit:'REVIEW_STATE'},
 ]);
 // No second invoice database, human status derivation, free query or installer.
@@ -26,7 +33,8 @@ export function createNativeWorkspaceDataCatalogV1(options){
  exact(options,['sessions','contextSelection','nativeReader','humanRoot'],'DATA_CATALOG_OWNER_DENIED');
  const {sessions,contextSelection,nativeReader,humanRoot}=options;
  if(!isProtectedSessionAdapterV1(sessions,sessions?.binding?.tenantId)||!isNativeWorkspaceContextSelectionV1(contextSelection,sessions.binding)||!isNativeErvReadAdapterV1(nativeReader,sessions.binding.tenantId))throw new Error('DATA_CATALOG_OWNER_DENIED');
- const human=createNativeErvHumanBackendV1({root:humanRoot,sessions});let closed=false;
+ const human=createNativeErvHumanBackendV1({root:humanRoot,sessions});
+ const referenceRead=createNativeWorkspaceErvHumanV1({sessions,contextSelection,humanRoot});let closed=false;
  function leading(headers,verification){
   if(closed)throw new Error('DATA_CATALOG_CLOSED');
   const principal=sessions.authenticate(headers),context=contextSelection.verify(headers,verification);
@@ -34,10 +42,14 @@ export function createNativeWorkspaceDataCatalogV1(options){
   const invoice=nativeReader.read({tenantId:principal.tenantId,objectId:context.primaryObject.objectId,expectedRevision:context.primaryObject.revision});
   const review=human.read(headers,{invoiceId:invoice.invoiceId});
   if(review.invoiceId!==invoice.invoiceId||review.nativeRevision!==invoice.revision||review.basisDigest!==invoice.basisDigest||review.nativeStatus!==invoice.status||review.executionAuthorityGranted!==false)throw new Error('DATA_NATIVE_SOURCE_CONFLICT');
+  // Execute the real already-authorized public read owner. A DTO-shaped
+  // caller result or supplier source fact can never stand in for this call.
+  const authorized=validateWorkspaceErvHumanReadV1(referenceRead.readReferences(headers,{context:verification}).value,invoice.invoiceId,invoice.revision);
+  if(authorized.proposalDigest!==review.proposalDigest||authorized.proposalRevision!==review.proposalRevision)throw new Error('DATA_NATIVE_SOURCE_CONFLICT');
   const fresh=contextSelection.verify(headers,verification);
   const reviewedAgain=human.read(headers,{invoiceId:invoice.invoiceId});
   if(fresh.contextHandle!==context.contextHandle||reviewedAgain.proposalDigest!==review.proposalDigest)throw new Error('DATA_NATIVE_REVISION_STALE');
-  return {context,invoice,review,sourceDigest:hash({invoiceId:invoice.invoiceId,nativeRevision:invoice.revision,basisDigest:invoice.basisDigest,invoiceSourceSha256:invoice.invoiceSourceSha256,humanBindingDigest:review.bindingDigest,humanProposalRevision:review.proposalRevision,humanProposalDigest:review.proposalDigest})};
+  return {context,invoice,review,references:authorized.references,sourceDigest:hash({invoiceId:invoice.invoiceId,nativeRevision:invoice.revision,basisDigest:invoice.basisDigest,invoiceSourceSha256:invoice.invoiceSourceSha256,humanBindingDigest:review.bindingDigest,humanProposalRevision:review.proposalRevision,humanProposalDigest:review.proposalDigest,authorizedNativeReferencesDigest:hash(authorized.references)})};
  }
  function metadataOf(read){
   return {schemaVersion:'pansphaira.workspace-data-catalog/v1',moduleId:'pan.erv',viewId:'pan.erv.view',contextHandle:read.context.contextHandle,objectId:read.invoice.invoiceId,
@@ -79,6 +91,7 @@ export function createNativeWorkspaceDataCatalogV1(options){
     'erv.invoice.amountMinor':r.invoice.invoiceAmountMinor,'erv.invoice.currency':r.invoice.currency,'erv.invoice.liabilityStatus':r.invoice.status,
     'erv.invoice.expectedAmountMinor':r.invoice.expectedAmountMinor,'erv.invoice.varianceMinor':r.invoice.varianceMinor,
     'erv.invoice.orderedQuantity':r.invoice.orderedQuantity,'erv.invoice.acceptedQuantity':r.invoice.acceptedQuantity,'erv.invoice.invoicedQuantity':r.invoice.invoicedQuantity,
+    'erv.invoice.orderReference':r.references.orderId,'erv.invoice.positionReference':r.references.positionId,'erv.invoice.receiptCount':r.references.receiptIds.length,
     // This is the native PAN542 review projection, NEVER liability/workflow,
     // reviewerSubject, assignee, a fabricated supplier or a demo document name.
     'erv.human.reviewState':r.review.state,
@@ -86,7 +99,7 @@ export function createNativeWorkspaceDataCatalogV1(options){
    return freeze({...metadataOf(r),schemaVersion:'pansphaira.workspace-data-readback/v1',cells:command.fieldIds.map(id=>({fieldId:id,unit:allowed.get(id).unit,state:values[id]===null?'UNKNOWN':'AVAILABLE',value:values[id],source:allowed.get(id).source,sourceRevision:allowed.get(id).source==='HUMAN_NATIVE'?r.review.proposalRevision:r.invoice.revision,leadingStore:allowed.get(id).source==='HUMAN_NATIVE'?r.review.leadingStore:r.invoice.leadingStore})),
     unavailableRelations:[{relationId:'supplier',state:'UNAVAILABLE',reason:'NO_AUTHORIZED_NATIVE_RELATION'},{relationId:'assignee',state:'UNAVAILABLE',reason:'NO_AUTHORIZED_NATIVE_RELATION'},{relationId:'document-number',state:'UNAVAILABLE',reason:'NO_AUTHORIZED_NATIVE_FIELD'}],bookingAuthorityGranted:false,paymentOrderAuthorized:false});
   },
-  close(){closed=true;},
+  close(){closed=true;referenceRead.close();},
  });owned.set(owner,{binding:sessions.binding,contextSelection});return owner;
 }
 export const isNativeWorkspaceDataCatalogV1=(owner,binding,contextSelection)=>owned.has(owner)&&JSON.stringify(owned.get(owner).binding)===JSON.stringify(binding)&&(contextSelection===undefined||owned.get(owner).contextSelection===contextSelection);
