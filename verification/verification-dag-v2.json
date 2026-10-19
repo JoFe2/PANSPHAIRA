@@ -10342,7 +10342,7 @@
         {
           "path": "tests/pan546/browser-view.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "c2185184f0e41027987e0008967939c1a151ef8b5b503faf4383764ab5fd90c7"
+          "sha256": "90a9650ac683442e779f485a85f2eb8473f1e66faf8d30154b9991f6dfa93e71"
         },
         {
           "path": "tests/pan546/browser-human.test.mjs",
