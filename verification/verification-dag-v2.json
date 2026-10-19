@@ -10867,7 +10867,7 @@
         {
           "path": "tests/pan560/connected-foundation.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b5828b186d70cfc12977259652867c7486a4552ada9a7e0266e391d6e27d745f"
+          "sha256": "217db312fa4f2ba37d90f1603b681dbadabf5215c7bca22d0afd46bf819b293c"
         },
         {
           "path": "tests/pan560/registration.test.mjs",

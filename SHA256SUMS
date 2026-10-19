@@ -2459,7 +2459,7 @@ d8896289a6aa4217c132e9b59b4e660dfc32bccd92a7fe186d313a45e290e998  ./tests/pan550
 dff9f1887ef743e75076a5103b237dc53fc6b74130c843e638883aa11f186f43  ./tests/pan550/native-approval.test.mjs
 ebd687bc365f9c28cbd69bbe2d4d73f4d949e2e1cbd69d2d09e1b72c782f967e  ./tests/pan550/native-coupled-context.test.mjs
 076a5e41b4075de6ec63e1a38c50a986db734de3dffb6a74a331038be34fb189  ./tests/pan550/registration.test.mjs
-b5828b186d70cfc12977259652867c7486a4552ada9a7e0266e391d6e27d745f  ./tests/pan560/connected-foundation.test.mjs
+217db312fa4f2ba37d90f1603b681dbadabf5215c7bca22d0afd46bf819b293c  ./tests/pan560/connected-foundation.test.mjs
 852dbe7b0f3749f597abcb7cacf2285885cdf5bf7cd354cf8bac4812b246a6a5  ./tests/pan560/registration.test.mjs
 14affa10523e9c7ceaf5e1ba535414e86011da392f0f433435f8aefc92428bd2  ./tests/pan562/bootstrap-contract.test.mjs
 a328a21a5585839419970b4d67d6e574b443ad8ccade8d4823c59f80c0ef7001  ./tests/pan562/bootstrap-fixture.mjs
@@ -2814,5 +2814,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-d3bc5151396ba1a79f7776da7f7c96a28f73328794238258d2600e66379006fd  ./verification/verification-dag-v2.json
+2070c096e41b6094286e9d2715a7c911be26106bbd1b701f6ed100c109c05d6f  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
