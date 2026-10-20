@@ -13,7 +13,7 @@ test("PAN529 native template and budget have one additive owner in authoritative
   const owner = owners[0];
   assert.equal(graph.graphVersion,104);
   assert.deepEqual(owner.dependsOn, ["pan526-portable-runtime-v1"]);
-  assert.deepEqual(owner.ownedTests, ["npm run pan529:test"]);
+  assert.deepEqual(owner.ownedTests, ["npm run pan529:test", "npm run pan592:test"]);
   assert.equal(owner.riskClass, "HIGH"); assert.equal(owner.globalInvalidation, false);
   assert.deepEqual(graph.hardGates, ["npm run lint", "npm run release-governance:verify", "npm run supply-chain:verify", "sha256sum -c SHA256SUMS", "./scripts/build-public-release.sh --output <isolated-absolute-path>"]);
   const required = ["packages/contracts/src/model-access-broker.ts", "demo/runtime/atomic-resource-budget.mjs", "src/pan529/runtime-template-contract.mjs", "src/pan529/native-budget-controller.mjs", "contracts/runtime-budget/candidates/runtime-budget-development-v1.json", "tests/pan529/native-process-integration.test.mjs", "tests/pan529/native-provider-worker.mjs", "tests/pan529/registration.test.mjs", "scripts/run-pan529-runtime-budget-tests.mjs"];
@@ -41,7 +41,7 @@ test("PAN529 native template and budget have one additive owner in authoritative
       assert.deepEqual(plan.selectedTests, [...new Set(graph.nodes.flatMap((node) => node.ownedTests))].sort((a, b) => a.localeCompare(b, "en")));
     } else {
       assert.deepEqual(plan.selectedNodes, ["pan528-guided-native-browser-v1", owner.id, "pan563-configuration-draft-v1"]);
-      assert.deepEqual(plan.selectedTests, ["npm run pan528:test", "npm run pan529:test", "npm run pan563:test", "npm run pan564:test", "npm run pan566:test", "npm run pan568:test", "npm run pan569:test"]);
+      assert.deepEqual(plan.selectedTests, ["npm run pan528:test", "npm run pan529:test", "npm run pan563:test", "npm run pan564:test", "npm run pan566:test", "npm run pan568:test", "npm run pan569:test", "npm run pan592:test"]);
     }
     assert.deepEqual(plan.hardGates, [...graph.hardGates].sort((a, b) => a.localeCompare(b, "en")));
   }

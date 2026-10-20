@@ -6189,7 +6189,7 @@
         {
           "path": "tests/verification-fabric-v2.test.ts",
           "role": "VALIDATOR",
-          "sha256": "02cbf0f1ba932af97bd982b6321d4cc9bb74005ad58ab2c0ca724e05b9cdd190"
+          "sha256": "04e82a196b1072f23dc94b52d555fc62026b160af8a2d20187bf473fb4d4a9f7"
         },
         {
           "path": "docs/VERIFICATION-FABRIC-SHADOW.md",
@@ -8649,7 +8649,7 @@
         {
           "path": "tests/pan515/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "51dd89155f8ea7f1e43abc9e8400aa93c966e0f6967e55dd76594e643807f806"
+          "sha256": "04982c51dd221d2eba439fc1c07e1ff349f2e5d0b010c34c7cd6c4910941c285"
         },
         {
           "path": "docs/architecture/pan515-native-trade-state-v1.md",
@@ -8715,7 +8715,7 @@
         {
           "path": "tests/procurement-434/procurement-registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "10c55cf572724593fe2c939eb2942667599a94b8f4e2df560766490ac25e9e1d"
+          "sha256": "e7ace3a92cd87d6baf4b9bb76157f839e6b83207cc861f5884cd10bb726f7c71"
         },
         {
           "path": "docs/architecture/pan516-native-procurement-v1.md",
@@ -8771,7 +8771,7 @@
         {
           "path": "tests/pan517/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "72478333cd9cb438b5682ec0fc7b147ba944f73e9da5c663acb98dced09125d8"
+          "sha256": "333fffca9feaf272945bcf7dcbdb1bd77567db9f1cec077459d5fa5e9b767ae3"
         },
         {
           "path": "docs/architecture/pan517-native-fulfilment-v1.md",
@@ -8888,7 +8888,7 @@
         {
           "path": "tests/pan520/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f8c2452a66c2c554f6e20493bda9634a6da415b25895db06d0fea70f6547bce1"
+          "sha256": "279915dc00e348c48a7967272c5617d1387deab735357fb9c5047a228ce03960"
         },
         {
           "path": "docs/architecture/pan520-native-projections-v1.md",
@@ -9050,7 +9050,7 @@
         {
           "path": "tests/pan526/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b14983ae4ea9966c7f3fa146afe30bae6bd51c19f068ea84c79dbb14aa39e3bd"
+          "sha256": "3fb49821afee6e4ba13f46e943fbe5545171ef507e03545781bc4e278e759e5d"
         },
         {
           "path": "docs/architecture/pan526-runtime-identity-development-v1.md",
@@ -9185,7 +9185,7 @@
         {
           "path": "tests/pan527/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "6636855b81acfbf856203fc9586dd9a748328fabce7f9ca06a1209e43d67a75c"
+          "sha256": "d8121aca4f21addab5c15c8d11fc812e02139b8a5d7bfe0a5bf971a3df3d8228"
         },
         {
           "path": "tests/pan527/test-runner.test.mjs",
@@ -9359,7 +9359,7 @@
         {
           "path": "tests/pan529/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f42f7d58d4c8d19f4d18cd1dbe22d03016890159f3ec8f03548f691e85fbf335"
+          "sha256": "f720e53abbd5a75f075b7a7ae6ec6cf5e37e36f653a81e881016491e16ee7f19"
         },
         {
           "path": "tests/pan529/test-runner.test.mjs",
@@ -10128,7 +10128,7 @@
         {
           "path": "tests/pan541/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0063dac7be17518831cef3dc67fe1ad0fd99a052f80314dc5acd4a280b1a35f6"
+          "sha256": "518ab9404bba09e3c701669b95a458a7c7e4792169f24b72ea54eb330db69cc2"
         },
         {
           "path": "tests/pan541/registry.test.mjs",
@@ -10198,7 +10198,7 @@
         {
           "path": "tests/pan543/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "c193f511fafce3411601d015d180b36e7665f0f2c98b3577b240fe54a5b3952c"
+          "sha256": "69ba444ec8255fb1f3beba2cb331fc89449832b53986ac0fd850e043e094c799"
         },
         {
           "path": "tests/pan543/transport.test.mjs",
