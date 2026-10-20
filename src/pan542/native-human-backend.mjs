@@ -18,7 +18,7 @@ const sourcePaths=['src/pan542/native-human-backend.mjs','src/pan527/origin-sess
   'src/pan472/draft-profile.mjs','src/pan473/scope-profile.mjs','src/pan515/trade-state.mjs',
   'src/procurement-434/bestellung-lifecycle.mjs','src/procurement-434/bestellung-liability.mjs',
   'dist/packages/contracts/src/incoming-invoice-erv.js','contracts/trade/pan516-invoice-cases-v1.json',
-  'demo/runtime/local-journal-owner.mjs'];
+  'demo/runtime/local-journal-owner.mjs','src/pan542/source-compatibility-catalog-v1.json'];
 const guards=['pan542_binding','pan542_events'].flatMap(table=>['UPDATE','DELETE'].map(action=>({
   name:`${table}_${action.toLowerCase()}_immutable`,
   sql:`CREATE TRIGGER ${table}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${table} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_HISTORY_IMMUTABLE_DENIED'); END`})));
@@ -49,14 +49,123 @@ function leading(db,tradeBinding,invoiceId){
     invoiceSource:liability.source.invoiceSource,confirmationDigest:liability.source.confirmationDigest,
     decisionOutcome:liability.decision.outcome,nativeStatus:liability.status};
 }
-function binding(db,tradeBinding){
+
+// Source compatibility is a separate v1 owner operation, not an extension of
+// decision/session rights or a rewrite of the original configuration. The
+// closed code-owned catalog is deliberately updated separately from integrity
+// refresh; callers cannot provide hashes, policies, grants or transition data.
+const sourceCatalogPath='src/pan542/source-compatibility-catalog-v1.json';
+const transitionId='PAN542_ORIGIN_SESSION_SURFACE_CORRECTIONS_V1';
+const originalPrimary={commit:'177c267e67b000e0f16bebd406d77993dda7f8bf',tree:'1e0cce88ed57ed86b5d4938edb6eff8d54287295',releaseId:417452014};
+const releasedBasePrimary={commit:'0505b9618561af464b77ff55af62a011b9b2f345',tree:'b831b408e29ae16a02ba33ecd893e2b2801875bd',releaseId:418681528};
+const originalSourceDigest='8fe44dd665e0e9943b3393ef950c2b47a5315835feb600fec5f8133e4e2a3ffc';
+const releasedBaseSourceDigest='c1a6cc586e73672a560847181177acc9280ec89b6bbb390b7378f6dcf2ccc44e';
+const compatibilityTable='pan542_source_compatibility_v1';
+const compatibilityDDL='CREATE TABLE pan542_source_compatibility_v1(id INTEGER PRIMARY KEY CHECK(id=1),record TEXT NOT NULL) STRICT';
+const compatibilityGuards=[...['UPDATE','DELETE'].map(action=>({
+  name:`${compatibilityTable}_${action.toLowerCase()}_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTable}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${compatibilityTable} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`})),{
+  name:`${compatibilityTable}_insert_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTable}_insert_immutable BEFORE INSERT ON ${compatibilityTable} WHEN EXISTS(SELECT 1 FROM ${compatibilityTable}) BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`}];
+function sourceCatalog(current){
+  const bytes=readFileSync(new URL('../../'+sourceCatalogPath,import.meta.url));let catalog;
+  try{catalog=JSON.parse(bytes);}catch{fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');}
+  closed(catalog,['schemaVersion','transitionId','originalPrimary','releasedBasePrimary','originalSourceIdentity','releasedBaseSourceIdentity','targetFiles'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  if(catalog.schemaVersion!=='pansphaira.erv-human/source-compatibility-catalog/v1'||catalog.transitionId!==transitionId
+    ||canonicalJson(catalog.originalPrimary)!==canonicalJson(originalPrimary)||canonicalJson(catalog.releasedBasePrimary)!==canonicalJson(releasedBasePrimary)
+    ||digest(catalog.originalSourceIdentity)!==originalSourceDigest||digest(catalog.releasedBaseSourceIdentity)!==releasedBaseSourceDigest
+    ||!Array.isArray(catalog.targetFiles)||catalog.targetFiles.length!==sourcePaths.length-1)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  for(const [index,row]of catalog.targetFiles.entries()){
+    closed(row,['path','sha256'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    if(row.path!==sourcePaths[index]||typeof row.sha256!=='string'||!/^[a-f0-9]{64}$/.test(row.sha256))fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    // Only this implementation and the already released adapter differ from
+    // the original ten-file closure. No arbitrary dependency drift is admitted.
+    if(row.path!=='src/pan542/native-human-backend.mjs'&&row.sha256!==catalog.releasedBaseSourceIdentity[index].sha256)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  }
+  const catalogSHA256=createHash('sha256').update(bytes).digest('hex');
+  if(canonicalJson(current)!==canonicalJson([...catalog.targetFiles,{path:sourceCatalogPath,sha256:catalogSHA256}]))fail('ERV_HUMAN_SOURCE_TARGET_DENIED');
+  return {catalog,catalogSHA256};
+}
+function transitionCore(record,current){
+  const {catalog,catalogSHA256}=sourceCatalog(current);
+  if(canonicalJson(record.sourceIdentity)!==canonicalJson(catalog.originalSourceIdentity))fail('ERV_HUMAN_SOURCE_ORIGINAL_DENIED');
+  return {schemaVersion:'pansphaira.erv-human/source-compatibility/v1',transitionId,
+    originalPrimary,releasedBasePrimary,originalBindingDigest:record.bindingDigest,
+    originalSourceIdentity:record.sourceIdentity,effectiveSourceIdentity:current,sourceCatalogSHA256:catalogSHA256,
+    sessionBindingDigest:digest(record.sessionBinding),tradeBindingDigest:record.tradeBindingDigest,
+    roleMappingDigest:digest({version:record.roleMappingVersion,roles:record.roles,invoiceIds:record.invoiceIds}),
+    originalBindingAndHistoryUnchanged:true,sessionAndNativeRolesUnchanged:true,
+    bookingAuthorityGranted:false,paymentOrderAuthorized:false,productiveDispatchAuthorized:false,executionAuthorityGranted:false};
+}
+function compatibilityState(db){
+  const objects=db.prepare("SELECT type,name,sql FROM sqlite_master WHERE name=? OR name LIKE ? ORDER BY name").all(compatibilityTable,compatibilityTable+'_%');
+  if(!objects.length)return false;
+  const table=objects.find(o=>o.type==='table'&&o.name===compatibilityTable);
+  if(!table||table.sql!==compatibilityDDL||objects.length!==compatibilityGuards.length+1||!guardsMatch(db,compatibilityGuards))fail('ERV_HUMAN_SOURCE_HISTORY_GUARDS_DENIED');
+  return true;
+}
+function sourceCompatibility(db,record,current){
+  if(!compatibilityState(db))fail('ERV_HUMAN_CONFIGURATION_BINDING_DENIED');
+  const rows=db.prepare('SELECT id,record FROM pan542_source_compatibility_v1 ORDER BY id LIMIT 2').all();
+  if(rows.length!==1||rows[0].id!==1)fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  let receipt;try{receipt=JSON.parse(rows[0].record);}catch{fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');}
+  const core=transitionCore(record,current),expected={...core,transitionDigest:digest(core)};
+  if(canonicalJson(receipt)!==canonicalJson(expected))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  return frozen(receipt);
+}
+
+function configuredBinding(db,tradeBinding){
   if(!guardsMatch(db,guards))fail('ERV_HUMAN_HISTORY_GUARDS_DENIED');
   const row=db.prepare('SELECT record FROM pan542_binding WHERE id=1').get();if(!row)fail('ERV_HUMAN_CONFIGURATION_REQUIRED_DENIED');
   const record=JSON.parse(row.record),{bindingDigest,...core}=record;
-  if(bindingDigest!==digest(core)||canonicalJson(core.sourceIdentity)!==canonicalJson(sourceIdentity())
+  if(bindingDigest!==digest(core)||core.schemaVersion!=='pansphaira.erv-human/native-configuration/v1'
+    ||core.scenarioId!=='PAN542_COMMON_TRADE_NATIVE_ERV_V1'||core.scope!=='LOCAL_SYNTHETIC_BACKEND_ONLY'||core.executionAuthorityGranted!==false
     ||core.tradeBindingDigest!==digest(tradeBinding)||core.roleMappingVersion!==1||canonicalJson(core.roles)!==canonicalJson(roles)
     ||canonicalJson(core.invoiceIds)!==canonicalJson(invoiceIds))fail('ERV_HUMAN_CONFIGURATION_BINDING_DENIED');
   return record;
+}
+function binding(db,tradeBinding){
+  const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
+  if(canonicalJson(record.sourceIdentity)!==canonicalJson(current))sourceCompatibility(db,record,current);
+  // V1 decision readbacks retain the ORIGINAL configuration/source/event basis.
+  // Effective source provenance is returned by the separate versioned owner API.
+  return record;
+}
+function sourceTransitionLocal(root,work){
+  const lease=acquireLocalJournalOwner(join(root,'pan453-owned-v2'));let db,held=true;
+  try{
+    const trade=readPan515TradeState({root});db=openNative(root,'target',false);
+    return transaction(db,()=>work(db,trade.binding,()=>{lease.release();held=false;}));
+  }finally{db?.close();if(held)lease.release();}
+}
+export function transitionNativeErvHumanSourceCompatibilityV1(options){
+  closed(options,['root','owner','sessions'],'ERV_HUMAN_SOURCE_OWNER_OPTIONS_DENIED');
+  if(options.owner!=='LOCAL_SYNTHETIC_OWNER')fail('ERV_HUMAN_SOURCE_LOCAL_OWNER_REQUIRED_DENIED');
+  const {root,sessions}=options;
+  if(!isProtectedSessionAdapterV1(sessions,sessions?.binding?.tenantId))fail('ERV_HUMAN_PROTECTED_SESSION_OWNER_REQUIRED_DENIED');
+  return sourceTransitionLocal(root,(db,tradeBinding,releaseNamespaceFence)=>{
+    const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
+    if(canonicalJson(record.sessionBinding)!==canonicalJson(sessionScope(sessions.binding)))fail('ERV_HUMAN_SESSION_BINDING_DENIED');
+    // Validate existing task-attached immutable event chains, but create no task,
+    // decision, nonce, grant, role mapping, budget entry or dispatch ourselves.
+    for(const invoiceId of invoiceIds)history(db,record,invoiceId,root);
+    if(canonicalJson(record.sourceIdentity)===canonicalJson(current)){
+      if(compatibilityState(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+      return frozen({schemaVersion:'pansphaira.erv-human/source-compatibility-noop/v1',outcome:'ALREADY_SOURCE_BOUND',originalBindingDigest:record.bindingDigest,executionAuthorityGranted:false});
+    }
+    const core=transitionCore(record,current);
+    if(compatibilityState(db))return sourceCompatibility(db,record,current);
+    // The native namespace fence was acquired and all history/admission was
+    // checked while holding the SQLite writer transaction. Only source metadata
+    // remains: release the namespace lease before DDL, keeping SQLite's writer
+    // lock throughout. A crash here rolls back metadata without orphaning a
+    // business-operation lease. This does NOT recover or remove an existing
+    // fence; death earlier during fenced admission stays fail-closed as before.
+    releaseNamespaceFence();
+    db.exec(compatibilityDDL);for(const guard of compatibilityGuards)db.exec(guard.sql);
+    db.prepare('INSERT INTO pan542_source_compatibility_v1 VALUES(1,?)').run(canonicalJson({...core,transitionDigest:digest(core)}));
+    return sourceCompatibility(db,record,current);
+  });
 }
 function mapped(record,principal){
   if(principal.tenantId!==record.sessionBinding.tenantId||principal.instanceId!==record.sessionBinding.instanceId

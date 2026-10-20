@@ -2901,6 +2901,8 @@ const pan542Inputs = [
     "src/pan542/native-human-backend.mjs",
     "SECURITY"
   ],
+  ["src/pan542/source-compatibility-catalog-v1.json", "SECURITY"],
+  ["tests/pan542/source-compatibility-fixture.mjs", "VALIDATOR"],
   [
     "tests/pan542/native-human-backend.test.mjs",
     "VALIDATOR"
@@ -4074,6 +4076,9 @@ for (const relative of [
   "tests/pan470/producer-handoff-v2.test.mjs",
   "verification/pan470-handoff-effort-boundary-v1.json",
 ]) entries.set(relative, null);
+// Deliberate bounded PAN542 source-compatibility additions; never infer an
+// admissible source transition or policy from the checksum refresh itself.
+for (const relative of ["src/pan542/source-compatibility-catalog-v1.json", "tests/pan542/source-compatibility-fixture.mjs"]) entries.set(relative, null);
 for (const relative of [...entries.keys()]) {
   if (!existsSync(path.join(root, relative))) entries.delete(relative);
 }
