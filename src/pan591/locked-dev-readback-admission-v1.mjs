@@ -10,7 +10,7 @@ import{spawnSync}from'node:child_process';
 import{canonicalJson}from'../../dist/packages/contracts/src/canonical-json.js';
 import{createEvidenceProvenanceRecordV1,verifyEvidenceProvenanceV1}from'../../dist/packages/contracts/src/evidence-provenance.js';
 const ROOT=fileURLToPath(new URL('../../',import.meta.url));
-const POLICY='fixtures/pan594/locked-ajv2020-dev-readback-policy-v1.json',POLICY_SHA="39b3847dd6136e398eff7ec1c9626ba846d4de7a7370b4301854a20f48a91b96";
+const POLICY='fixtures/pan594/locked-ajv2020-dev-readback-policy-v1.json',POLICY_SHA="8cba56bb516b8e0b9b5c30332cc38943228794afd6f8ad587513e6d9a60557fb";
 export const PAN591_LOCKED_DEV_READBACK_SCHEMA_V1='pansphaira.ui-build-admission/locked-dev-readback/v1';
 const HELD=new WeakSet(),sha=b=>createHash('sha256').update(b).digest('hex'),hash=v=>sha(canonicalJson(v));
 const fail=c=>{throw Error(c);};

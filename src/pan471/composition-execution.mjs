@@ -276,7 +276,7 @@ function streamNativeWorkload(id,input,onInvoke,onAbortReady) {
 // code paths/signers are exposed in the untrusted ctx or any registered model tool.
 export function createPan471CompositionExecutor() {
   const root=mkdtempSync(join(parentOwned(),'pan576-owner-'));
-  const grants=new WeakMap(),results=new WeakMap(),records=new Map(),unreconciled=new Set();
+  let grants=new WeakMap();const results=new WeakMap(),records=new Map(),unreconciled=new Set();
   const signingKey=randomBytes(32);let busy=false,closed=false,activeWorkload=null,pendingFailure=null;
   function freeze(untrusted) {
     if(closed||busy)throw new Error('PAN576_OWNER_STATE_DENIED');
@@ -500,14 +500,14 @@ export function createPan471CompositionExecutor() {
       // Native semantic/authority guards precede compiler creation; no caller schema.
       const projection=requirePan594('../../dist/packages/contracts/src/workspace-invocation-v1.js').verifyWorkspaceInvocationObservationV1(input.observation,input.invocationId),resources=requirePan594('../pan591/locked-dev-readback-admission-v1.mjs').revalidatePan591LockedDevReadbackGraph(grant.held);
       if(!grant.diagnostic)grant.diagnostic=requirePan594('../pan594/dev-readback-diagnostic-v1.mjs').createPan594DevReadbackDiagnostic(resources.schema,requirePan594('ajv/dist/2020.js').default);
-      return Object.freeze({outcome:'READ_ONLY_DEV_OBSERVATION',projection:grant.diagnostic.readProjection(projection),compileObservation:grant.diagnostic.compile,resourceCatalogDigest:resources.catalogDigest,verifiedDependencyMembers:resources.verifiedMemberCount,nativeEffectAuthority:false,arbitraryUiBuildExecution:false,installationAuthority:false,activationAuthority:false,model:'NOT_RUN',audio:'NOT_RUN'});
+      return Object.freeze({outcome:'READ_ONLY_DEV_OBSERVATION',inputTrust:'CALLER_SUPPLIED_READBACK_SNAPSHOT',nativeEvidenceVerified:false,resultClass:'DEVELOPER_TYPE_DIAGNOSTIC_NOT_NATIVE_TRUTH',projection:grant.diagnostic.readProjection(projection),compileObservation:grant.diagnostic.compile,resourceCatalogDigest:resources.catalogDigest,verifiedDependencyMembers:resources.verifiedMemberCount,nativeEffectAuthority:false,arbitraryUiBuildExecution:false,installationAuthority:false,activationAuthority:false,model:'NOT_RUN',audio:'NOT_RUN'});
     } catch(error){return denied(error.message);}
   }
   function close() {
     if(busy)throw new Error('PAN576_OWN_WORKLOAD_ACTIVE');
     if(pendingFailure)throw new Error('PAN576_OWN_RESOURCE_RECOVERY_REQUIRED');
     if(unreconciled.size>0)throw new Error('PAN576_NATIVE_RECONCILIATION_REQUIRED');
-    closed=true;signingKey.fill(0);records.clear();unreconciled.clear();rmSync(root,{recursive:true,force:true});
+    closed=true;grants=new WeakMap();signingKey.fill(0);records.clear();unreconciled.clear();rmSync(root,{recursive:true,force:true});
   }
   return {controller:Object.freeze({freeze,verify,reconcile,activeEvidence,abort,pendingOutcome,recoverPending,sealStatement,verifyStatement,close}),tools:Object.freeze({run,packageUiGraph,devReadback})};
 }

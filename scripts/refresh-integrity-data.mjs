@@ -3831,6 +3831,65 @@ repositoryIntegrityNode.ownedTests = repositoryIntegrityNode.ownedTests.filter(
   (command) => command !== "npm run pan591:test",
 );
 
+// Original594: one fixed dev-readback comparison at the existing PAN591 owner, not a new registry or a65th root command.
+const pan594Inputs = [
+  [
+    "src/pan591/locked-dev-readback-admission-v1.mjs",
+    "SECURITY"
+  ],
+  [
+    "src/pan594/dev-readback-diagnostic-v1.mjs",
+    "SOURCE"
+  ],
+  [
+    "fixtures/pan594/locked-ajv2020-dev-readback-policy-v1.json",
+    "CONTRACT"
+  ],
+  [
+    "fixtures/pan594/native-observation-projection-schema-v1.json",
+    "SCHEMA"
+  ],
+  [
+    "scripts/run-pan594-dev-readback-comparison.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan594/browser-comparison.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan594/bundle-adapter-entry.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan594/bundle-native-entry.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan594/fixture.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan594/measurement.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan594/native-comparison.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan594/registration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "docs/architecture/pan594-native-dev-readback-comparison-v1.md",
+    "DERIVED_EVIDENCE"
+  ]
+];
+for(const [inputPath,role]of pan594Inputs){if(!externalPluginNode.inputs.some(i=>i.path===inputPath))externalPluginNode.inputs.push({path:inputPath,role,sha256:digest(inputPath)});}
+for(const parent of["pan608-model-free-invocations-v1","pan529-runtime-budget-v1"])if(!externalPluginNode.dependsOn.includes(parent))externalPluginNode.dependsOn.push(parent);
+if(!externalPluginNode.ownedTests.includes("npm run pan594:test"))externalPluginNode.ownedTests.push("npm run pan594:test");
+
 // PAN462 canonical CI hard-gate correction: bounded integration ownership.
 // A byte that already has its own bounded task owner is OWNED THERE and must
 // not be duplicated on the integration owner. The integration owner keeps
@@ -3867,6 +3926,7 @@ for (const line of readFileSync(path.join(root, "release/public-files.manifest")
   if (line && !line.startsWith("#")) entries.set(line.split("\t")[0], null);
 }
 for (const [inputPath] of pan591Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan594Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan560Inputs) entries.set(inputPath, null);
 for(const[inputPath]of[...pan607NativeInputs,...pan607Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan604NativeInputs,...pan604Inputs])entries.set(inputPath,null);
