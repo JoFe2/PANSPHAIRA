@@ -899,6 +899,14 @@
       "fromSha256": "16b6d491736160ae4126abca5e611c39e785159919aaf83ab61737ca9a290c40",
       "toSha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca",
       "reason": "Bind the independently accepted exact source-guide ownership correction and deterministic existing canonical ordering at e6a5f02b: the same guide DERIVED_EVIDENCE digest moves from shared-shell129 to existing repository-integrity, preserving shared-shell128/root96, original128-input/64-command bounds, graph104/all109, every owner/edge/test/hard gate and ledger2819 membership. Preserve all earlier migration records and immutable21 base obligations/13 profiles; no scanner/validator/negative case/runtime/rights relaxation. Both later PAN602 callback FAILs remain historical, and subsequent observer acceptance/local or hosted slice GREEN is not full Source/Main/release/archive acceptance. Original546 stays OPEN; supplier/directory/assignee/document-number remain UNAVAILABLE."
+    },
+    {
+      "migrationId": "ORIGINAL592-BOUNDED-MODEL-FREE-DURABLE-UI-TASKS/INTEGRITY-GENERATOR/V102",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 102,
+      "fromSha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca",
+      "toSha256": "627a587e906b4574e43f9ab44ae606da8cde91f76c345ad40921926b5d8e1fc4",
+      "reason": "Register exactly eight source-only bounded original592 fixed native/browser/registration/real-process fixture/task-budget binding/doc members on existing548/529/597/608 owners; preserve one existing task/journal and atomic native budget truth. Unchanged mechanical scanner observes files1286/import-sites341/import-files340/ledger2827. Retain graph104/all109/shared-shell128/root64 command bound, all earlier inputs/tests/security/time gates, immutable21 admitted-base obligations/13 profiles/full previous migrations, scanner/validator and every negative plus legacy1792. Independent authenticated observation never replaces a writer, advances boot_epoch, emits source events, settles UNKNOWN or grants execution; authorized replacement is distinct and quiescent. Model-free COUNT units are not currency/model-provider usage. No second engine/database/controller/pipeline, model/audio/cloud/private/production/KS authority; bounded scope is not whole592/B26/M1, broad concurrency, CI/release/archive/public closure acceptance."
     }
   ],
   "scanScope": {
@@ -941,15 +949,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1279,
+    "filesScanned": 1286,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 340,
-    "importFiles": 339,
+    "importSites": 341,
+    "importFiles": 340,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2819,
-    "ledgerUniquePaths": 2819
+    "ledgerEntries": 2827,
+    "ledgerUniquePaths": 2827
   },
   "profiles": [
     {
@@ -1022,7 +1030,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca"
+      "sha256": "627a587e906b4574e43f9ab44ae606da8cde91f76c345ad40921926b5d8e1fc4"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1469,8 +1477,8 @@
     },
     {
       "owner": "pan548",
-      "importSites": 9,
-      "importFiles": 9
+      "importSites": 10,
+      "importFiles": 10
     },
     {
       "owner": "pan549",
@@ -1823,7 +1831,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca",
+      "sha256": "627a587e906b4574e43f9ab44ae606da8cde91f76c345ad40921926b5d8e1fc4",
       "basis": "profile-version-migration"
     },
     {

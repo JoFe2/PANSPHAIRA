@@ -3737,6 +3737,42 @@ for(const n of[task548,surface597])if(!n.ownedTests.includes('npm run pan608:tes
 let invocation608=dag.nodes.find(n=>n.id==='pan608-model-free-invocations-v1');if(!invocation608){invocation608={id:'pan608-model-free-invocations-v1',dependsOn:['pan548-authentic-context-selection-v1','pan597-native-browser-surfaces-v2'],inputs:[],ownedTests:[],invariants:['Whole final typed text and actual native card/document/target membership build complete owner-issued candidates; no ID, arguments, authority or model provider is invented.','Request/set/argument/policy digests, current registered capability/principal/purpose/constraints/lease and source-target revisions/generation are revalidated independently immediately before one native effect attempt on the existing548 ledger.','No-send/local-only grants no send, personal save, shared publish, business, model/cost/audio/private/production or KS authority; native validated preview, actual DOM render, explicit profile-CAS/readback and restored Undo remain distinct.','Local discard/stop require no router/provider/network; lost replies/restart/offline Undo preserve original markers and never auto-replay or claim rollback of foreign effects.'],riskClass:'HIGH',globalInvalidation:false};dag.nodes.push(invocation608);}
 invocation608.inputs=pan608Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)}));invocation608.ownedTests=['npm run pan608:test'];dag.graphVersion=100;
 
+// Original592 bounded model-free task/budget profile, same548/529 engines.
+const pan592Inputs = [
+  [
+    "scripts/run-pan592-model-free-durable-tests.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan592/native-durable.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan592/browser-durable.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan592/registration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan592/native-fixture.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan592/process-worker.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "docs/architecture/model-free-durable-native-ui-tasks-v1.md",
+    "DERIVED_EVIDENCE"
+  ]
+];
+for(const [inputPath,role] of pan592Inputs)invocation608.inputs.push({path:inputPath,role,sha256:digest(inputPath)});
+if(!task548.inputs.some(i=>i.path==='src/pan548/native-ui-task-budget-v1.mjs'))task548.inputs.push({path:'src/pan548/native-ui-task-budget-v1.mjs',role:'SECURITY',sha256:digest('src/pan548/native-ui-task-budget-v1.mjs')});
+for(const id of ['pan529-runtime-budget-v1','pan548-authentic-context-selection-v1','pan597-native-browser-surfaces-v2','pan608-model-free-invocations-v1']){const n=dag.nodes.find(n=>n.id===id);if(!n)throw Error('PAN592_EXISTING_OWNER_REQUIRED:'+id);if(!n.ownedTests.includes('npm run pan592:test'))n.ownedTests.push('npm run pan592:test');}
+
+
 
 // PAN607 native CONTEXT/outbox/checkpoint references the same548 task owner.
 const pan607NativeInputs=[["src/pan548/native-context-journal-v1.mjs","SECURITY"],["src/pan548/native-context-checkpoints-v1.mjs","SECURITY"],["src/pan548/native-context-projection-v1.mjs","SOURCE"]];
@@ -3876,6 +3912,8 @@ for (const [inputPath] of pan569Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan568Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan597Inputs) entries.set(inputPath,null);
 for (const [inputPath] of pan608Inputs) entries.set(inputPath,null);
+for (const [inputPath] of pan592Inputs) entries.set(inputPath,null);
+entries.set('src/pan548/native-ui-task-budget-v1.mjs',null);
 for (const inputPath of pan608NativeInputs) entries.set(inputPath,null);
 entries.set('src/pan548/native-ui-task-projection-v2.mjs',null);
 for (const [inputPath] of pan542Inputs) entries.set(inputPath, null);

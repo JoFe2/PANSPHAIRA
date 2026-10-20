@@ -1,6 +1,7 @@
 // PAN548-owned signed projection/outbox on its existing task ledger. This is
 // neither a second task engine nor a caller proof/signing/dispatch capability.
 import {createHash,createHmac} from 'node:crypto';
+import {modelFreeUiTaskReservationV1} from './native-ui-task-budget-v1.mjs';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
 const digest=value=>createHash('sha256').update(canonicalJson(value)).digest('hex');
 const fixedConstraints=Object.freeze({localOnly:true,noSend:true,personalSave:false,sharedPublish:false});
@@ -11,7 +12,8 @@ function freeze(value){if(value&&typeof value==='object'){for(const child of Obj
 export function nativeUiContextTaskCoreV1(row){
  const command=JSON.parse(row.original_command);if(digest(command)!==row.request_digest)throw Error('CONTEXT_JOURNAL_TASK_BYTES_DENIED');
  let capability,argumentBytes,resourceRefs,scope,expiresAtMs,constraints;
- if(command.schemaVersion==='pansphaira.workspace-invocation/effect-command/v1'&&command.invocationId===row.command_id){
+ if(['pansphaira.workspace-invocation/effect-command/v1','pansphaira.workspace-invocation/effect-command/v2'].includes(command.schemaVersion)&&command.invocationId===row.command_id){
+  if(command.schemaVersion.endsWith('/v2'))modelFreeUiTaskReservationV1(row);
   const c=command.candidate;if(!c||!['pan.workspace.view.preview/v1','pan.workspace.document.display/v2'].includes(c.capability))throw Error('CONTEXT_JOURNAL_CAPABILITY_DENIED');
   capability=c.capability;argumentBytes=c.argumentBytes;scope=c.scope;expiresAtMs=c.expiresAtMs;constraints=c.constraints;
   if(typeof argumentBytes!=='string'||digest(JSON.parse(argumentBytes))!==c.argumentDigest)throw Error('CONTEXT_JOURNAL_ARGUMENT_BYTES_DENIED');

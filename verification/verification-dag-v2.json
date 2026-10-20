@@ -4977,7 +4977,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "586f7340a8f67d2b363396cca94f95fd3a1aa62cda335c5a2f9f2ac80513aaad"
+          "sha256": "72eb48f76ffc20ca68f3295d42877e1894c57273a6daa141b6c3bac2d1d6bd0a"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5042,7 +5042,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "c253cf3107af662e54aa602e8c6f1161467856a3bc4e386159801c038f4f62bc"
+          "sha256": "e84cb91ed1e82776b9a6a20bc99be298cd5e4d217c2170b9392d79af19314856"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5167,7 +5167,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "aa6bc591e709e541fdf7bde67dd210bf49ccf22fcba2e9cb4e613dba7d95690a"
+          "sha256": "e02a5f6272bbb63f0361cab1f89457810b8cecea94a071ea43aae5e6caf58504"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5829,7 +5829,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "a2f0ad712ab3fc743d667908a67f78c17408e7aa2533afc283ef4e60a876cbfb"
+          "sha256": "182b37f11794cca44a3dd0831c48d319c5b54312b314e992bc31ac00bdb03767"
         },
         {
           "path": "package-lock.json",
@@ -9125,7 +9125,7 @@
         {
           "path": "src/pan527/origin-session-adapter.mjs",
           "role": "SOURCE",
-          "sha256": "eac8736d86ee5daa88efd3ebc5b3e4c33ad36a60649ecff52cf632fa12a78604"
+          "sha256": "2af4a02061c46637193eeb0a452314a76c1f2ff2d0a157573d91b77480209dcd"
         },
         {
           "path": "scripts/run-pan527-origin-session-tests.mjs",
@@ -9279,7 +9279,7 @@
         {
           "path": "demo/runtime/atomic-resource-budget.mjs",
           "role": "SOURCE",
-          "sha256": "6c972d662cbf8faf1d3de143378b0bc423a5631848065bdfd89d2e8cf31f2a25"
+          "sha256": "a243b5c9be62afec4e48bd3411412bc9d4906df91accc8c3124bf570b55a8ed2"
         },
         {
           "path": "src/pan529/runtime-template-contract.mjs",
@@ -9413,7 +9413,8 @@
         }
       ],
       "ownedTests": [
-        "npm run pan529:test"
+        "npm run pan529:test",
+        "npm run pan592:test"
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false,
@@ -11359,7 +11360,7 @@
         {
           "path": "src/pan548/native-ui-task-projection-v2.mjs",
           "role": "SOURCE",
-          "sha256": "9ed1b5382a82f21162843dea24033c20ec2c6f4063d66a3f049cc2a3851d1bbd"
+          "sha256": "33eb81ccbbd036f7adf26384ceab298ab25e5cd74d244194f11cb77ac67bc506"
         },
         {
           "path": "src/pan548/model-free-final-text-v1.mjs",
@@ -11369,7 +11370,7 @@
         {
           "path": "src/pan548/native-model-free-invocations-v1.mjs",
           "role": "SOURCE",
-          "sha256": "6a899b1af264651602eaf32371760113f8ae7f7d0ad3692b0fb05a7b94bce7a9"
+          "sha256": "e16d10c5456748b0ff32383156a71db1131c38648371094cdc8d6ac8a36cf3ac"
         },
         {
           "path": "src/pan548/native-invocation-executor-v1.mjs",
@@ -11377,9 +11378,14 @@
           "sha256": "344a9a9bf3c6514fc4e9ee6d26a2ddae29f55cf8b848c0590f40752636df461e"
         },
         {
+          "path": "src/pan548/native-ui-task-budget-v1.mjs",
+          "role": "SECURITY",
+          "sha256": "d5691ed04c8a0dd94285d7a2ebc62f76e6ef97d39a2cdbab1d465670e1579819"
+        },
+        {
           "path": "src/pan548/native-context-journal-v1.mjs",
           "role": "SECURITY",
-          "sha256": "74e1129da2b2ff48874eacf0cd38e7b895781c71ed0326ff92678dbd3c9ed03d"
+          "sha256": "3bb936c5682b3e4451e153a0a2c94f3ac8ce6533f7c29981f26cd66c0e595084"
         },
         {
           "path": "src/pan548/native-context-checkpoints-v1.mjs",
@@ -11414,7 +11420,8 @@
         "npm run pan607:test",
         "npm run pan604:test",
         "npm run pan602:test",
-        "npm run pan612:test"
+        "npm run pan612:test",
+        "npm run pan592:test"
       ],
       "riskClass": "HIGH",
       "globalInvalidation": false,
@@ -11469,7 +11476,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-surfaces-v2.ts",
           "role": "SOURCE",
-          "sha256": "cea3795e093319ffd1c280f1de1e79ae326b1102ae89bfadafcf9de6854d9c03"
+          "sha256": "bab828840a4de07856bb0aa57c74e354ab8613efb40c5744462c86f4e3864ca8"
         },
         {
           "path": "packages/browser-workspace/src/workspace-surfaces-v2.css",
@@ -11520,6 +11527,7 @@
       "ownedTests": [
         "npm run pan597:test",
         "npm run pan608:test",
+        "npm run pan592:test",
         "npm run pan607:test",
         "npm run pan604:test",
         "npm run pan612:test"
@@ -11542,12 +11550,12 @@
         {
           "path": "packages/contracts/src/workspace-invocation-v1.ts",
           "role": "CONTRACT",
-          "sha256": "cb541288291a28209604333dfabb0c3ecf41c2ee635bc9d4b63045fae3b1a66c"
+          "sha256": "8919c6d6d1903aa8b833285e7286612f58868f760fe57fd137aa0b240936423b"
         },
         {
           "path": "packages/browser-workspace/src/workspace-invocations-v1.ts",
           "role": "SOURCE",
-          "sha256": "182f894e14d6047259553ac72fa2ce96d9760f89501faa25be0645dabea3b3a8"
+          "sha256": "2b30cd10963bf71fae9e5bbc8b393e56bf690308ba167f4a2e641e788afdf3b5"
         },
         {
           "path": "packages/browser-workspace/src/workspace-invocations-v1.css",
@@ -11583,10 +11591,46 @@
           "path": "docs/architecture/model-free-native-invocations-v1.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "8c97a6a00f3061dc4e6f5e56ee30d0e7b66e68e2a1c1d557c75e26c3ba3f999f"
+        },
+        {
+          "path": "scripts/run-pan592-model-free-durable-tests.mjs",
+          "role": "VALIDATOR",
+          "sha256": "24f23ad47a828230bff140a6a0cf5decf0239b7ded450061b5a2cbeb07c5c6d0"
+        },
+        {
+          "path": "tests/pan592/native-durable.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "86358268fe07b5b91cf2c09e94b6f33c959a574663bf4ea237edee8350e5e869"
+        },
+        {
+          "path": "tests/pan592/browser-durable.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "711b309b6e62c6b914ef55323c6c6dee79f9f14813183f00534ece0695f4ebce"
+        },
+        {
+          "path": "tests/pan592/registration.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "27179d3dfce67bfcda8476b1650a357585fe25e0e19dfa544d4c3366ed1a5ea4"
+        },
+        {
+          "path": "tests/pan592/native-fixture.mjs",
+          "role": "VALIDATOR",
+          "sha256": "534b28560c01b76741efcc54a7fa2756585de8f7b44b603ef53bba15ead11bbe"
+        },
+        {
+          "path": "tests/pan592/process-worker.mjs",
+          "role": "VALIDATOR",
+          "sha256": "203fc27176c3b109f0c8c9b42e87d85fb0a754273c65d9cf714b75bf00b0778a"
+        },
+        {
+          "path": "docs/architecture/model-free-durable-native-ui-tasks-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "08e7fd1c4769287f375e95143c00bed507454a1c3378f3ad1d9967b502b5c914"
         }
       ],
       "ownedTests": [
         "npm run pan608:test",
+        "npm run pan592:test",
         "npm run pan612:test"
       ],
       "invariants": [

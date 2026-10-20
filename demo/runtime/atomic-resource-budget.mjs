@@ -1,6 +1,6 @@
-import { lstatSync, mkdirSync } from "node:fs";
+import { lstatSync, mkdirSync, realpathSync } from "node:fs";
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
-import { isAbsolute, join } from "node:path";
+import { isAbsolute, join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { canonicalJson } from "../../dist/packages/contracts/src/canonical-json.js";
 import { makeCcpCostBudgetV1 } from "../../dist/packages/contracts/src/ccp-cost-budget.js";
@@ -57,10 +57,12 @@ export function createResourceBudgetStoreV1(value) {
     }
   };
   let completionKey;
+  let ownerTransactionActiveV2 = false;
   const transaction = (body) => {
-    db.exec("BEGIN IMMEDIATE");
+    db.exec("BEGIN IMMEDIATE"); ownerTransactionActiveV2 = true;
     try { const result = body(); db.exec("COMMIT"); return result; }
     catch (error) { db.exec("ROLLBACK"); throw error; }
+    finally { ownerTransactionActiveV2 = false; }
   };
   try {
     initialize(() => {
@@ -101,13 +103,13 @@ export function createResourceBudgetStoreV1(value) {
     });
     return Object.freeze({ model: receipt("model"), runtime: receipt("runtime"), reservations: totals.reservations });
   };
-  const reserve = (candidate) => {
+  const reserveInsideTransactionV2 = (candidate) => {
     const command = closed(candidate, ["operationId", "requestDigest", "modelUnits", "runtimeUnits"]);
     assertCcpStringV1(command.operationId, operationPattern, denied);
     assertCcpDigestV1(command.requestDigest, denied);
     unsigned(command.modelUnits); unsigned(command.runtimeUnits);
     if (command.modelUnits + command.runtimeUnits === 0) ccpStrictDenyV1(denied);
-    return transaction(() => {
+    return (() => {
       const prior = read(command.operationId);
       if (prior !== null) {
         if (prior.request_digest !== command.requestDigest || prior.model_units !== command.modelUnits || prior.runtime_units !== command.runtimeUnits) ccpStrictDenyV1("RESOURCE_BUDGET_RETRY_CONFLICT_DENIED");
@@ -117,15 +119,17 @@ export function createResourceBudgetStoreV1(value) {
       if (command.modelUnits > available.model.remainingUnits || command.runtimeUnits > available.runtime.remainingUnits) ccpStrictDenyV1("RESOURCE_BUDGET_EXHAUSTED_DENIED");
       db.prepare("INSERT INTO reservations(operation_id,request_digest,model_units,runtime_units) VALUES(?,?,?,?)").run(command.operationId, command.requestDigest, command.modelUnits, command.runtimeUnits);
       return Object.freeze({ reservation: read(command.operationId), replayed: false });
-    });
+    })();
   };
-  const markUnknownUsage = (operationId) => transaction(() => {
+  const reserve = (candidate) => transaction(() => reserveInsideTransactionV2(candidate));
+  const markUnknownInsideTransactionV2 = (operationId) => {
     const prior = read(operationId);
     if (prior === null) ccpStrictDenyV1("RESOURCE_BUDGET_RESERVATION_REQUIRED_DENIED");
     if (prior.state !== "RESERVED") return Object.freeze({ reservation: prior, dispatchGranted: false });
     db.prepare("UPDATE reservations SET state='UNKNOWN_USAGE' WHERE operation_id=? AND state='RESERVED'").run(operationId);
     return Object.freeze({ reservation: read(operationId), dispatchGranted: true });
-  });
+  };
+  const markUnknownUsage = (operationId) => transaction(() => markUnknownInsideTransactionV2(operationId));
   const completionPayload = (candidate) => {
     const receipt = closed(candidate, ["operationId", "requestDigest", "modelUnits", "runtimeUnits", "evidenceDigest"]);
     assertCcpStringV1(receipt.operationId, operationPattern, denied);
@@ -172,6 +176,43 @@ export function createResourceBudgetStoreV1(value) {
     if (storeClosedV2) return;
     storeClosedV2 = true; ownerConnectionsV2.delete(store); db.close();
   } });
-  ownerConnectionsV2.set(store, Object.freeze({ db, transaction, closed: () => storeClosedV2 }));
+  ownerConnectionsV2.set(store, Object.freeze({ db, transaction, closed: () => storeClosedV2,
+    reserveInsideOwnerTransactionV2(candidate) {
+      if (storeClosedV2 || !ownerTransactionActiveV2) ccpStrictDenyV1("RESOURCE_BUDGET_OWNER_TRANSACTION_REQUIRED");
+      return reserveInsideTransactionV2(candidate);
+    },
+    markUnknownInsideOwnerTransactionV2(operationId) {
+      if (storeClosedV2 || !ownerTransactionActiveV2) ccpStrictDenyV1("RESOURCE_BUDGET_OWNER_TRANSACTION_REQUIRED");
+      return markUnknownInsideTransactionV2(operationId);
+    },
+  }));
   return store;
+}
+
+// Owner-local independent observation of the SAME PAN529 ledger. Never opens a
+// writer, initializes a schema/key, reserves, settles or creates a directory.
+export function openResourceBudgetReadonlyConnectionV2(value) {
+  const o = closed(value, ["optIn", "stateRoot", "tenantId", "bindingDigest", "limits"]);
+  if (o.optIn !== true) ccpStrictDenyV1("RESOURCE_BUDGET_OPT_IN_REQUIRED");
+  const limits = closed(o.limits, ["modelUnits", "runtimeUnits"]);
+  for (const units of Object.values(limits)) {
+    assertCcpSafePositiveIntegerV1(units, denied);
+    if (units > 1_000_000) ccpStrictDenyV1(denied);
+  }
+  assertCcpStringV1(o.tenantId, TENANT_ID_PATTERN, denied); assertCcpDigestV1(o.bindingDigest, denied);
+  if (typeof o.stateRoot !== "string" || !isAbsolute(o.stateRoot) || resolve(o.stateRoot) !== o.stateRoot || realpathSync(o.stateRoot) !== o.stateRoot) ccpStrictDenyV1("RESOURCE_BUDGET_OWNED_ROOT_REQUIRED");
+  const root = lstatSync(o.stateRoot), file = join(o.stateRoot, "resource-budget.sqlite"), stat = lstatSync(file);
+  if (!root.isDirectory() || root.isSymbolicLink() || root.uid !== process.getuid?.() || (root.mode & 0o077) !== 0 || !stat.isFile() || stat.isSymbolicLink() || stat.uid !== process.getuid?.() || stat.nlink !== 1) ccpStrictDenyV1("RESOURCE_BUDGET_OWNED_FILE_REQUIRED");
+  const db = new DatabaseSync(file, { readOnly: true }); let closedReader = false;
+  try {
+    db.exec("PRAGMA query_only=ON; PRAGMA busy_timeout=15000");
+    const actual = db.prepare("SELECT binding FROM settings WHERE id=1").get()?.binding;
+    if (actual !== canonicalJson({ tenantId:o.tenantId, bindingDigest:o.bindingDigest, limits:{...limits} })) ccpStrictDenyV1("RESOURCE_BUDGET_BINDING_DRIFT_DENIED");
+  } catch (error) { db.close(); throw error; }
+  return Object.freeze({ db, snapshot(body) {
+    if (closedReader || typeof body !== "function") ccpStrictDenyV1("RESOURCE_BUDGET_READER_CLOSED");
+    db.exec("BEGIN");
+    try { const result = body(); db.exec("COMMIT"); return result; }
+    catch (error) { db.exec("ROLLBACK"); throw error; }
+  }, close() { if (!closedReader) { closedReader=true; db.close(); } } });
 }
