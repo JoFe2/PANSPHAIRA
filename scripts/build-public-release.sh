@@ -771,6 +771,17 @@ repository_only_files = {
     "tests/pan608/registration.test.mjs",
     "docs/architecture/model-free-native-invocations-v1.md",
 
+    # Bounded original592 native model-free task/budget observation; source only.
+    "scripts/run-pan592-model-free-durable-tests.mjs",
+    "src/pan548/native-ui-task-budget-v1.mjs",
+    "tests/pan592/native-durable.test.mjs",
+    "tests/pan592/browser-durable.test.mjs",
+    "tests/pan592/registration.test.mjs",
+    "tests/pan592/native-fixture.mjs",
+    "tests/pan592/process-worker.mjs",
+    "docs/architecture/model-free-durable-native-ui-tasks-v1.md",
+
+
     # PAN597 model-free versioned native Surface/Delivery, source evidence only.
     "src/pan548/native-ui-task-projection-v2.mjs",
     "packages/contracts/src/workspace-surface-v2.ts",

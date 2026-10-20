@@ -1086,6 +1086,10 @@ export function createOptionalHttpsProductIngressV1(options) {
       if(['KNOWLEDGE_SCHEMA_DENIED','KNOWLEDGE_SELECTOR_DENIED'].includes(code))return reply(response,400,code);
       if(['KNOWLEDGE_GENERATION_STALE','KNOWLEDGE_CONTEXT_STALE','KNOWLEDGE_ATTACHMENT_RETIRED'].includes(code))return reply(response,409,code);
       if(['KNOWLEDGE_CONTEXT_DENIED','KNOWLEDGE_SOURCE_RIGHTS_DENIED'].includes(code))return reply(response,403,code);
+      if(['UI_TASK_SCOPE_DENIED','UI_TASK_READER_OWNER_DENIED'].includes(code))return reply(response,403,code);
+      if(['UI_TASK_READER_INPUT_DENIED','UI_TASK_ID_DENIED'].includes(code))return reply(response,400,code);
+      if(['UI_TASK_READER_EPOCH_STALE','UI_TASK_OWNER_REPLACED','UI_TASK_OWNER_CLOSED','UI_TASK_READER_CLOSED','UI_TASK_BUDGET_CUSTODY_DENIED','UI_TASK_BUDGET_TASK_STATE_CONFLICT','UI_TASK_BUDGET_BINDING_DENIED','UI_TASK_BUDGET_TASK_BYTES_DENIED','UI_TASK_BUDGET_TASK_SCHEMA_DENIED','UI_TASK_BUDGET_EPOCH_DENIED'].includes(code))return reply(response,409,code);
+      if(code==='RESOURCE_BUDGET_EXHAUSTED_DENIED')return reply(response,429,code);
       if(code.startsWith('INVOCATION_')){const status=code.includes('EXPIRED')||code.includes('DEADLINE')?410:code.includes('CAPACITY')?429:code.includes('STALE')||code.includes('ATTEMPT')||code.includes('ALREADY')?409:code.includes('SCOPE')||code.includes('ADMISSION_REQUIRED')||code.includes('CAPABILITY')?403:400;return reply(response,status,code);}
       if(code.startsWith('MODEL_CONNECTION_')){const status=['MODEL_CONNECTION_SCOPE_DENIED','MODEL_CONNECTION_PRODUCT_CONSENT_DENIED'].includes(code)?403:['MODEL_CONNECTION_REVISION_CONFLICT','MODEL_CONNECTION_STALE_DENIED','MODEL_CONNECTION_BUSY','MODEL_CONNECTION_UNKNOWN_USAGE_RETAINED','MODEL_CONNECTION_OWNER_CLOSED'].includes(code)?409:['MODEL_CONNECTION_CAPACITY_DENIED','MODEL_CONNECTION_LIMIT_DENIED'].includes(code)?429:400;return reply(response,status,code);}
       if (["HOSTED_HEADER_AUTHORITY_DENIED", "HOSTED_ROLE_DENIED", "HOSTED_CSRF_DENIED", "GUIDED_BOUND_PRINCIPAL_DENIED"].includes(code)) reply(response, 403, code);
