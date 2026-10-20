@@ -2448,7 +2448,7 @@ ca02796f18e6e5be89408b00df9acf4338720113b3d33ced2c88755514cd9801  ./tests/pan546
 2773aba4d302c8c1ece891df46706eb8ed553f5c06b541403379545f75bac80c  ./tests/pan548/native-context.test.mjs
 cf15d3a99223807224a533fee64f218f08ab818fe1151a527120820542a6de41  ./tests/pan548/native-expiry.test.mjs
 6c5587a49a0c2711dcd19e1ce51b232f16dc64bb1530f493459b1463484fcf1f  ./tests/pan548/native-reentrant.test.mjs
-051b8f377b56d2f5aa351c0d9d76e4051f094335278d0168ee5b2c6920fca91a  ./tests/pan548/registration.test.mjs
+c63d4ca5b8ee4b7553964d23f39a68dd663b6616d533448c6b1b64c018be1c22  ./tests/pan548/registration.test.mjs
 b4be51e1263d49b2d2bdf42cce5e0b7bfd1c4322492d1cde8bf0cd8a9c5aca25  ./tests/pan549/browser-analysis.test.mjs
 4857bd4b4d3eef45a37d280826a1eb5620093904d6729cf30c386a50afe6b0bd  ./tests/pan549/browser-fixture.mjs
 f9a039f7780063c40828defc4f4d0d0a6e70d70c7c7c4f359335d9d21eee6f92  ./tests/pan549/browser-lifecycle-analysis.test.mjs
@@ -2522,7 +2522,7 @@ ed59f54438d1f9c3c9e6fbce4cd75de88c918bec0c0fd1482bfa45e3019f7f5a  ./tests/pan569
 ca8d841936fb3598334cfcfe4c870dbff4ce7bcc7c5004fd8dd9ac56e0b91d7e  ./tests/pan575/broker-feedback-native.test.mjs
 b29913112d0308c809aae89709565e0eb789b2cfd39a3fb0c9bb9623973fa1e8  ./tests/pan575/native-ui-consumer.test.mjs
 5f2ac566aa06a5ec24e32649de09d2d9c52b3df6b51b9ec415bf29e35498caa9  ./tests/pan575/protocol-fixture.mjs
-111556c3f60a2e02aa70835f89e139617f77bb7884ab1f4081e3f9070d6da15d  ./tests/pan575/registration.test.mjs
+fedbb64d348de75f5bff12712444f90afcaaa40ff0ccc60048faff3e505253d5  ./tests/pan575/registration.test.mjs
 180118e8b674f553bb050fc17c600c3822095221b5113db88da1da27c5cdecc6  ./tests/pan575/tool-transcript.test.mjs
 71aab3eaf787c230513b469bddfd7d49005e4379bf863074b8df62a5675f7784  ./tests/pan591/admission.test.mjs
 711b309b6e62c6b914ef55323c6c6dee79f9f14813183f00534ece0695f4ebce  ./tests/pan592/browser-durable.test.mjs
@@ -2823,5 +2823,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-9c3a8d06088e9ed8e3da425874a020a0dd181cb162c8a1b5dc85c7b030c92862  ./verification/verification-dag-v2.json
+e374b06fd7d6bcef48870d1df4de028cf74be1724e3ce3776358e432eff7fdbe  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
