@@ -40,8 +40,8 @@ test("PAN529 native template and budget have one additive owner in authoritative
       assert.deepEqual(plan.selectedNodes, graph.nodes.map((node) => node.id).sort((a, b) => a.localeCompare(b, "en")));
       assert.deepEqual(plan.selectedTests, [...new Set(graph.nodes.flatMap((node) => node.ownedTests))].sort((a, b) => a.localeCompare(b, "en")));
     } else {
-      assert.deepEqual(plan.selectedNodes, ["pan528-guided-native-browser-v1", owner.id, "pan563-configuration-draft-v1"]);
-      assert.deepEqual(plan.selectedTests, ["npm run pan528:test", "npm run pan529:test", "npm run pan563:test", "npm run pan564:test", "npm run pan566:test", "npm run pan568:test", "npm run pan569:test", "npm run pan592:test"]);
+      assert.deepEqual(plan.selectedNodes, ["awi-plugin-01-knowledge-harvest-v1", "etl-02-external-plugin-preflight-v1", "pan528-guided-native-browser-v1", owner.id, "pan563-configuration-draft-v1"]);
+      assert.deepEqual(plan.selectedTests, ["npm run external-plugin-preflight:test", "npm run pan528:test", "npm run pan529:test", "npm run pan563:test", "npm run pan564:test", "npm run pan566:test", "npm run pan568:test", "npm run pan569:test", "npm run pan591:test", "npm run pan592:test", "npm run pan594:test", "npm run plugin-knowledge-harvest:test"]);
     }
     assert.deepEqual(plan.hardGates, [...graph.hardGates].sort((a, b) => a.localeCompare(b, "en")));
   }
