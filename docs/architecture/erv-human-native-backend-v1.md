@@ -45,3 +45,66 @@ Use the repository's pinned Node/npm versions and a regular locked dependency in
 The native product cases execute the existing real synthetic trade/procurement fixture first. They exercise review/query/evidence approval, distinct allowed/denied roles, missing/spoofed roles, foreign invoice, independently rehashed false revisions, duplicate decision under new transport, client taskstore rejection, native confirmation drift, and preserved STOP/REVOKE/task boundaries. The fresh-process consumer opens the same persisted native database and protected session store. The response-loss case actually commits in an owned child process, terminates that child without delivering its response, and reconciles the native result without issuing a second effect. This is controlled response loss, not a fabricated vendor failure.
 
 Development execution, registered metadata tests, frozen source qualification, self-check/retained review scopes, whole canonical proof, required hosted CI, protected merge and exact new release/archive/event readbacks are separate evidence. No local development PASS alone completes issue #542. Integrated browser/request/UI/image qualification belongs to the dependent browser journey; this backend issue adds no fake screenshot or browser acceptance.
+
+
+## Deliberate preserved-source compatibility v1
+
+`transitionNativeErvHumanSourceCompatibilityV1({root, owner, sessions})` is a
+privileged code-owner API, never an HTTP route or user/role grant. It requires
+`LOCAL_SYNTHETIC_OWNER`, a real existing branded protected session adapter, and
+the exact immutable native configuration's origin/audience/tenant/instance/
+generation/identity scope. Plain objects, foreign scopes, additional fields,
+caller-supplied source hashes, catalogs and grants are denied. PAN548/native
+capability, task, decision, budget and runtime permission authority is unchanged.
+
+The code-owned `source-compatibility-catalog-v1.json` admits exactly the ten
+original source pins from primary177c267e/tree1e0cce88 (release417452014), through
+released primary0505b961/treeb831b408 (release418681528), into this explicitly
+pinned corrected native implementation. Only the adapter's already released
+eac8736d→f07c3c34 change and this implementation may differ from that original
+closure. The catalog's original/base identities are independently fixed in code;
+the target files have exact checked-in hashes. Catalog edits are deliberate
+security-policy changes, not an effect of integrity refresh. The trusted source
+package and its catalog must be released and qualified before operational use.
+This is not a generic 'trust the currently observed hash' adoption API.
+
+A single immutable metadata row is appended to `pan542_source_compatibility_v1`
+in the SAME leading target SQLite database. Its separate versioned receipt
+binds original configuration digest, old/new exact source closures, catalog
+bytes, primary provenance, session/trade/role-map digests and false authority
+flags. UPDATE, DELETE and INSERT OR REPLACE are denied by checked native guards.
+An existing partial, unguarded, empty, conflicting or tampered transition is
+denied, not repaired. The original `pan542_binding` and `pan542_events` rows and
+guards are never updated, deleted or replaced. No personal data, role, native
+task, task fence, outbox, nonce, budget or business effect is created or reset.
+
+Every migrated native constructor/read/decision rechecks the exact current
+source closure AND the immutable transition. The catalog itself is included
+in the effective source identity. V1 business readbacks retain their ORIGINAL
+configuration/source/event basis; the distinct versioned owner receipt exposes
+effective source provenance. A fresh current-source configuration needs no
+transition. Repeating a valid transition returns the identical receipt. This
+version intentionally authorizes only one exact transition; further source
+changes require a new deliberate policy/version, not replacement of its row.
+
+Admission holds the existing native namespace fence and a SQLite writer
+transaction. After all admission/history checks, the namespace fence is
+released only for the source-metadata DDL/insert while SQLite's writer lock
+remains held. DDL, all new guards and the receipt commit atomically. A real
+process death in that metadata phase rolls back the whole transition; restart
+can commit exactly once. A pre-existing namespace fence is never removed or
+recovered by this API. Death earlier during fenced admission stays fail-closed
+under the existing journal protocol; it is NOT automatic dead-worker recovery.
+
+Tests use the genuine historical primary source and its real initializer, not
+caller-minted source facts. Isolated altered-source copies exist only to prove
+DENIAL. They are not hybrid deployments or substituted preserved-data GREEN.
+Legacy test inputs come from exact local primary history (no network/install),
+or an explicitly supplied test-only exact primary checkout whose clean tree
+and all ten historical source pins are verified. The operational API has no
+source-input override.
+
+Deployment still requires exact released-source custody, a consistent private
+preserved-data copy, staging at the real Origin, rollback and final-Origin
+qualification before cutover. Source compatibility alone is not LAN, physical
+monitor, popup-block, whole-design, model/audio or complete605/606 acceptance.

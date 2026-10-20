@@ -6,7 +6,7 @@
   `dac921d459cbcfc16e4912dff558c8786e6438de`
 - **Companion artifacts:**
   - `verification/canonical-json-profile-inventory-v1.json` — machine-testable inventory
-  - `tests/canonical-json-profile-inventory.test.ts` — deterministic scanner + fail-closed validator (31 tests)
+  - `tests/canonical-json-profile-inventory.test.ts` — deterministic scanner + fail-closed validator (37 tests)
 - **Process context preserved (not re-litigated):** Operating Model v1.1 and decisions D-001 through D-007. No new process variant is introduced by this slice.
 
 ## Purpose and decision
@@ -479,3 +479,25 @@ authenticate caller snapshots or confer native authority. Native remains default
 without measured benefit. This registration is not actual independent acceptance,
 required canonical/Source/Main proof, protected merge, anonymous released product/
 governance/event/public readback, wholeM1 or issue closure.
+
+
+## Jo240897 necessary native source-compatibility census admission (profile104)
+
+The exact v104 migration admits the already independently inspected integrity
+generator for the two closed PAN542 source-only catalog/fixture inputs. The
+unchanged scanner measures1297 scanned files,342 import sites in341 files,
+37 declarations/files,7 reexports,30 similar-shape sites and2842 unique checksum
+paths without duplicates. Graph104/all109 owners,21 immutable base obligations,
+13 admitted profiles, all previous migrations/classes/consumer families and
+NOT-PROVEN equivalence remain intact; the legacy1792 runnable manifest does not
+expand. All35 existing validation cases remain, with two additional negatives
+for caller replacement of the last target hash or neighboring control path.
+
+This narrowly repairs the actual seven census failures in the first hosted
+compatibility candidate. That failed run remains historical FAIL. No scanner or
+validator rule, native product/policy, public classifier or reviewed generator
+byte is changed; no old pin or migration is regenerated. Current exact source
+CI, protected merge, Main CI, release/archive/event and released-source staging
+remain required. A census metadata admission is neither a second independent
+product acceptance nor a budget/review reset, native permission, live cutover,
+expiry renewal or complete605606 acceptance.

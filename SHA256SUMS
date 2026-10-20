@@ -348,7 +348,7 @@ e0a9107c308047d680bacb2b5026b3b4a7554d4c0395e915992cd19f7986a2e6  ./docs/archite
 2ae479bde1560a3acba1c4d265957376adf8f80e6ac19f215dc7053e42b27052  ./docs/architecture/broker-tool-feedback-v1.md
 6c23eee1b90a99b34c3850d3c52621966bf97687647baf16305b2c2fc27054a8  ./docs/architecture/browser-profile-v1.md
 d9fd55f9cda9c00735a5facf7f78fb89c00461a3050c12fa9bdff5d1ed380a2f  ./docs/architecture/browser-shell-plugin-v1.md
-bb4ee93ff50cdad16849abcb9d314d3288f860bd0125c9ed2d5419dd6f47183d  ./docs/architecture/canonical-json-profile-inventory.md
+20fa0e9801bfe47d8fb8f32f9806c26c2af79a2ddddeb13d01e7888284fe0870  ./docs/architecture/canonical-json-profile-inventory.md
 65629f8e98d827eb40782090b741661a271f30e83c3d400ad339b6141a85177c  ./docs/architecture/cks-10-analytics-bridge-decision-v1.md
 88471960fcb36fa6432a049fec23f10ee4252379351f1c5f7102ac207a6aad3f  ./docs/architecture/cks-11-function-extraction-v1.md
 6f96c5b26a2b982aee479ba093f3c8c0afaecf3619df55fdf0a4c18ae633cc4b  ./docs/architecture/cks-11-governance-decision-v1.md
@@ -364,7 +364,7 @@ f8677d544972ae6e0463b1fda2eefc37a5ab32b15d4e66aead20e6840a570476  ./docs/archite
 ab892473a3c1b3ea7442876ac093a91fd123df5e32c74a86189b9cebfb8b00f8  ./docs/architecture/cscl-08-party-mapping-application-guide-v1.md
 4ec1240149ba3e5a0716cad00ddb4d471f6dd456ebb04d806c0c7fa6db06872c  ./docs/architecture/cscl-09-product-mapping-application-guide-v1.md
 f547a7eabbdd9766816136016815aac20ce06d6fc40328df2c3dd70510cec36e  ./docs/architecture/cscl-10-sales-mapping-application-guide-v1.md
-e621ef216e3ec53e726de8285fb4fb09c4f98afd89c50694c65de5165f89966d  ./docs/architecture/erv-human-native-backend-v1.md
+ad5d4dbc0e59bac8a55c83a801071b8032595ea0d16123b93e2ffd55cf0ea2a2  ./docs/architecture/erv-human-native-backend-v1.md
 87dc1e6e62775438f24903d56d3878ff8ac60a2d321d39764833b5a340407b41  ./docs/architecture/erv-workflow-native-evidence-v1.md
 c1dddfea754c30f1a647fdb0d3fed8dec52fcf97a950ba6c4167c2a3c483a85e  ./docs/architecture/existing-configuration-change-recovery-redacted-transfer-v1.md
 d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e  ./docs/architecture/ks238-order-source-handoff-v1.md
@@ -1203,7 +1203,7 @@ fdce43a3eabf1d57c1d9ce2e78d3ec9bc061f7151feb222d3537e393989084eb  ./scripts/buil
 0d324ce33e9c32254d6b229a13b879609fbaecc9150149627f3b41bf31aef489  ./scripts/build-offline-release.py
 4bcb7e4e4936989a23523d4b0d28b0b43f3bb2ac45184e2a768d68bd687f0faa  ./scripts/build-pan541-browser.mjs
 06138a5dce89b0b191eac0c494f4675eca0311de593e8063575820e16e40c953  ./scripts/build-producer-analytics-manifest.mjs
-2ccf697f069f3f33930b9f56f9ba9dbcb0c3557045133d143bc480efdc26b64f  ./scripts/build-public-release.sh
+d19fb7289ec6e6167e2833879fb73d89ec41b0a25c8fdb35a2fdce899f5770fe  ./scripts/build-public-release.sh
 292ca7497e40869234c196eec327317cad01104e9c246f72ea9389e62931a51a  ./scripts/build-rks-01-pilot-corpora.mjs
 b7cb4e1f43374e0b586d56825460f03d18e93498d072a3eeb719fa0cadc0eb36  ./scripts/capture-cscl-11-source-locators.mjs
 e861dae3f7159536cc8c6bc389b4c93dc5b9c9d456f0cc876ec8b8831bf9c992  ./scripts/capture-rks-01-sources.mjs
@@ -1241,7 +1241,7 @@ b66b496c7add5a584875c02b7bde587509795c406d0924111a6bc18975595084  ./scripts/pan3
 2d29fa72201c9c00e3c241436cdb789d2084cff00384a4c8336d1664dd7b7a0f  ./scripts/pan576-kernel-guard.c
 0972fe5381f3e4ed72b436666582739e5ebbfc1569d0bb1e3ad78e0ac1d9f977  ./scripts/read-pan525-qualified-pair-v1.mjs
 56038ba48834d272de4ba933bdb00e4c98a6a6eba8b68af88d00d77a8f6485dc  ./scripts/read-pan526-portable-local-runtime-v1.mjs
-bcecbd9b6cc57b5913be206ae87bbdd21aa69edc92a0b7994f3570ead8f59151  ./scripts/refresh-integrity-data.mjs
+b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693  ./scripts/refresh-integrity-data.mjs
 c5d73abab0dab045ad5507e6f9a2314b69c3ac1b53deda31306f470b37b1e240  ./scripts/refresh-pan543-integrity.mjs
 8cef62545a40571ea167393b82695292e1d0c94dd21a4bd1d6759ae3a18017e8  ./scripts/render-asf-public-readback.mjs
 297a975b6588c9cd334a730fd8cde328420bb870936f4ff1aab103aa53e955fa  ./scripts/render-ccp-m1-evidence.mjs
@@ -1465,7 +1465,8 @@ bef38c0767e79c5cc3736985c1b74896c6bdd8382f8dc6c529ef69dadd1d64d9  ./src/pan528/g
 3d1554a56fe123fd0abf69102e5c5cb3053945e5f4878f7d78be194e19872c03  ./src/pan529/runtime-template-contract.mjs
 f15e635f27cb4d00b26fca3ee21981bf04a20281726dc50b195100de39bd5e74  ./src/pan541/native-erv-read-adapter.mjs
 4cc1c8ce881e353d020e16a9d126aa7b88963ab3f3b8ab44ecfee15ca289b925  ./src/pan541/workspace-browser.mjs
-6ee9e19bc65dc3e5a1ba5d14a451803fec6aed9c59df84ebdb73f00312e74745  ./src/pan542/native-human-backend.mjs
+92f25d5d5884d1cc4d47a62d2d3712a992614c346eb0458d68585e5f0a92a45a  ./src/pan542/native-human-backend.mjs
+fc4eb5c75f5ba1612570b54f009d42131df3773301fd452de2e19dd395ea3cd7  ./src/pan542/source-compatibility-catalog-v1.json
 e0a0cd3c23d3f64e0125f96f91042e9ba69a863f100dfd4cdc0154fdedfed703  ./src/pan543/profile-store.mjs
 c3467eed027e35417adfe2a830db4839c7c6e4312b13942d1a26665eab6c34ad  ./src/pan544/native-notifications.mjs
 20f68ca6d14d5009854e7089059a073115e85e83fc52f37fa1446ae646892b36  ./src/pan546/native-data-catalog.mjs
@@ -1563,7 +1564,7 @@ d7460b81e2855d881f6f1a2836ce0a16eb3235497289d097cb122c2e15cf988c  ./tests/builde
 2861051684d67a61ad62e484a2178cacf300af620bf369541909e8e6e5398028  ./tests/builder-integration-plan.test.ts
 4c2de11b24976709c3571306546d5c458a25bc86f62177a2c361cd5645c9e759  ./tests/builder-quality-evidence.test.ts
 8875de9745ef77b5ea182208d68aa0c47905e288b3fd5b865d4018c4b5c04b06  ./tests/builder-reuse-conformance.test.mjs
-3ea9673e07792b281894492f8fe18c232cd12fb4cea8e6da77e6b399bcbaa2fe  ./tests/canonical-json-profile-inventory.test.ts
+a3c9ba5aa81dea42d45d64a01f1af1d1a5584c5dffd21e2e002a50a4bef548d5  ./tests/canonical-json-profile-inventory.test.ts
 929ab3a426ed99e3aaadf00b0a8ffe6866503bdaadebbd348995a871b63f2ed2  ./tests/canonical-json-runtime-parity.test.mjs
 3276f78d38bd88ad67b0f3c0468865b72784fd255aed778c6d5cf1ee8fdd4f5a  ./tests/capability-catalogue.test.ts
 2697dc2108511a992917837d0eebf0c52beb34298c74eb9b9b1e24abd6141281  ./tests/ccp-admission-gate.test.ts
@@ -2407,9 +2408,10 @@ e932690fa7c8838b8219cdb2a8d875e8dc483d025b970c7de5d539f3060de30c  ./tests/pan541
 5e410fe17025b8e82391874869d01138716544fa30a5b572a4fe949571b1fb0c  ./tests/pan541/registry.test.mjs
 4e55d2f425ee41fdcb8573ecb60a8fb3f2a17c23234feaad6d4a008d83b4e78d  ./tests/pan541/test-runner.test.mjs
 2edfb2acd6137471d41faedbcf5db55cd49e1bb0860a7efa146e4122df01e692  ./tests/pan541/workspace-native.test.mjs
-58ab3e35df13cb44485aefb15618f8dcd180b1573211d3141f73f8537f661567  ./tests/pan542/native-human-backend.test.mjs
-8abc3530c602a2b64e0aeee9988abfda24d7d48fdee436d8032d5756a681b5d0  ./tests/pan542/registration.test.mjs
+2a5fe17a7c1f459728d07259ced90b33821bd6b01fe17938e5bf05c5cf0b9b0e  ./tests/pan542/native-human-backend.test.mjs
+f927866040758540e7f9e0e7770c3ad25259be169c3fd0fa4bacb133f3e058a9  ./tests/pan542/registration.test.mjs
 5d12bfd721307162c6fe47198258e247ab40b90a0d5d3fa18ded885a4761131d  ./tests/pan542/restart-reader.mjs
+7ba195c6936acd74c2825682e8665aa9776cbbb6666b80b2f1c75114abf18532  ./tests/pan542/source-compatibility-fixture.mjs
 0e47afb16703fe8ffa9c84b4df6b5d82b1d6c53b6d82aaeda8e548e423fc750b  ./tests/pan543/backend-fixture.mjs
 51624077d3f77bd1abe98947c725f50dbbe952c854b880229809656a4c90cd46  ./tests/pan543/browser.test.mjs
 8798626653709bf4f9f0cbf3698f1a42f4eb2b470a7acb4fa779521e58754b1f  ./tests/pan543/profile-types.ts
@@ -2692,7 +2694,7 @@ f86763bdd1a23123a244541d87254c46a512fb5941ac15859ec0923add825838  ./tsconfig.jso
 b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification/awi-03-knowledge-envelope-evidence-v1.json
 40b6a9bbe263b9cd67ef034dec0eb87c350aa1587904e385a2acb1072b3e0bc3  ./verification/bi-002-crm-read-connector-evidence-v1.json
 93f42b3e9e78b32cc1e1193e3f7a7ef59ca7ccd2e4116bd184d22d504987d46a  ./verification/bi-003-erp-read-connector-evidence-v1.json
-6e7ff62dceb7e02ea8c151eb06aa233ba56a4f081fd18a4b35858f6642b7077b  ./verification/canonical-json-profile-inventory-v1.json
+d391aeddfe50616e895892d573de7af8b27d474e8a8355d6dc3fdf040a8c60af  ./verification/canonical-json-profile-inventory-v1.json
 1e25b300491c6eeabe7f4a88c3358b59651dbd0e474ff1e8ce4a11fa18c52da3  ./verification/cks-03-public-manifests-v1.json
 81ab161fc2f4cd38ca0cc0f40d8c289f5d37b036fd4aef7a31e16ef47bf72e05  ./verification/cks-04-baseline-manifest-template-v1.json
 5e83eb24a343b7d29c0c0e99f54c26855b645b99f63df03acfd598d75222928c  ./verification/cks-04-no-finetune-baseline-evidence-v1.json
@@ -2836,5 +2838,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-e3ee7404a9fe51d9d262b1a3cda54af9a350b47ea22edfa4630a6a7c4f14ed77  ./verification/verification-dag-v2.json
+dafdf63c9d425fddda206456bde4e2ed6be61f38c30c73324c223fcd2f03a7c3  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

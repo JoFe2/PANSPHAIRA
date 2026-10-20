@@ -28,7 +28,7 @@ test('PUI-04 registration: one additive existing-boundary owner preserves every 
   const owners=graph.nodes.filter(n=>n.id==='pan542-native-erv-human-v1');
   assert.equal(owners.length,1,'PAN542_DERIVED_DAG_OWNER_MISSING');const owner=owners[0];
   assert.deepEqual(owner.ownedTests,['npm run pan542:test']);assert.equal(owner.riskClass,'HIGH');assert.equal(owner.globalInvalidation,false);
-  const expected=[['docs/architecture/erv-human-native-backend-v1.md','DERIVED_EVIDENCE'],[entry,'VALIDATOR'],['src/pan542/native-human-backend.mjs','SECURITY'],[files[0],'VALIDATOR'],[files[1],'VALIDATOR'],['tests/pan542/restart-reader.mjs','VALIDATOR']];
+  const expected=[['docs/architecture/erv-human-native-backend-v1.md','DERIVED_EVIDENCE'],[entry,'VALIDATOR'],['src/pan542/native-human-backend.mjs','SECURITY'],['src/pan542/source-compatibility-catalog-v1.json','SECURITY'],['tests/pan542/source-compatibility-fixture.mjs','VALIDATOR'],[files[0],'VALIDATOR'],[files[1],'VALIDATOR'],['tests/pan542/restart-reader.mjs','VALIDATOR']];
   assert.deepEqual(owner.inputs.map(({path,role})=>[path,role]),expected);
   for(const [path] of expected)assert.deepEqual(graph.nodes.filter(n=>n.inputs.some(i=>i.path===path)).map(n=>n.id),[owner.id]);
   assert.deepEqual(graph.hardGates,['npm run lint','npm run release-governance:verify','npm run supply-chain:verify','sha256sum -c SHA256SUMS','./scripts/build-public-release.sh --output <isolated-absolute-path>']);

@@ -833,6 +833,8 @@ repository_only_files = {
     "docs/architecture/erv-human-native-backend-v1.md",
     "scripts/run-pan542-native-human-tests.mjs",
     "src/pan542/native-human-backend.mjs",
+    "src/pan542/source-compatibility-catalog-v1.json",
+    "tests/pan542/source-compatibility-fixture.mjs",
     "tests/pan542/native-human-backend.test.mjs",
     "tests/pan542/registration.test.mjs",
     "tests/pan542/restart-reader.mjs",
