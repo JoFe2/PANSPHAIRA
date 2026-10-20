@@ -2528,7 +2528,7 @@ a91d5dee9fa47912ddf3410295b69e4dafc165409a18738fe7d432cddc9683f4  ./tests/pan597
 44f09934be93430d6c66f7e40e36b1e192e589c4a2cd1e5c1690715a460204df  ./tests/pan597/native-surfaces.test.mjs
 f816e7890839adf0e5d00d92abbdfe5bfe51b153caf8de34352f956b06a33e63  ./tests/pan597/process-restart.test.mjs
 96100301119f76c6fbb5b6f0caac99e3373179d43cfc7bf6492a1ad59d4a4748  ./tests/pan597/registration.test.mjs
-5a57a55a636af75d5d3a2f2d257e31ecb4d57d2da3c6b832f3b9268975ba209e  ./tests/pan602/browser-mail-local.test.mjs
+d7cde5bdb89c51d1d1c663c8accd08845fbe4bc203ed17d693c5674987783452  ./tests/pan602/browser-mail-local.test.mjs
 eed57104cc96dc593d58a7ce0f1437fec81a02f7d9c95771944a2ed5dc953f29  ./tests/pan602/native-mail-bounds.test.mjs
 4d6506225352eba310b95d898defda45eb342bf67716df953e94740c1d4f4ad0  ./tests/pan602/native-mail-local.test.mjs
 bd1b216074f2d78b043d3fdb6db42424dcbdc992e72a6bdc272904a20c4b3e0e  ./tests/pan602/native-mail-process-probe.mjs
@@ -2815,5 +2815,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-6cc3640d8ca4315540256d019b5e505f6e678d57a93af7e13c86507fb23261e1  ./verification/verification-dag-v2.json
+98f9da73c2cb3c2df114587fb1a83d2d1e354d3f922e9d195ce0fcbf6692a86d  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

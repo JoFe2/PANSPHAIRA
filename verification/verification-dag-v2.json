@@ -11801,7 +11801,7 @@
         {
           "path": "tests/pan602/browser-mail-local.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5a57a55a636af75d5d3a2f2d257e31ecb4d57d2da3c6b832f3b9268975ba209e"
+          "sha256": "d7cde5bdb89c51d1d1c663c8accd08845fbe4bc203ed17d693c5674987783452"
         },
         {
           "path": "tests/pan602/native-mail-bounds.test.mjs",
