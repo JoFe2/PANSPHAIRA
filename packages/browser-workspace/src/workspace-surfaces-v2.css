@@ -20,3 +20,12 @@
 .surface-pair-controls :focus-visible{outline:3px solid #235b8a;outline-offset:3px;}
 @container workspace (min-width:56rem){.surface-pair-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}}
 
+
+/* Readable native foreground; original JSON remains exactly available on explicit disclosure. */
+.surface-document>.erv-record-card,.surface-setup-summary,.surface-provenance { min-width:0; max-width:100%; margin-block:.85rem; padding:1rem; border:1px solid var(--ui-line,#cbd6de); border-radius:.6rem; background:var(--ui-surface,#fff); color:var(--ui-text,#173b51); }
+.surface-document .erv-financial-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr)); gap:.8rem; }
+.surface-provenance .facts,.surface-setup-summary .facts { grid-template-columns:minmax(7rem,1fr) minmax(0,2fr); font-size:.85rem; }
+.surface-technical-details { min-width:0; margin-block:1rem; border-top:1px solid var(--ui-line,#cbd6de); padding-top:.6rem; }
+.surface-technical-details>summary { min-height:44px; padding:.6rem; cursor:pointer; overflow-wrap:anywhere; }
+.surface-technical-details>summary:focus-visible { outline:3px solid var(--ui-accent,#235b8a); outline-offset:2px; }
+.surface-setup-summary .stages { padding-left:1.3rem; line-height:1.65; }

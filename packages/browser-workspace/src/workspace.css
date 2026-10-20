@@ -530,9 +530,13 @@ body:has(.workspace-assistant-column>*) .workspace-module-strip { width:calc(100
  .workspace-context-tabs>button small { white-space:normal; }
 }
 
-/* Extra registered routes retain their real controls; wrap instead of overflowing the native row. */
-.workspace-module-strip>[id="shell.navigation"]:has(>button[data-workspace-module]:not([data-reference-module])) { flex-wrap:wrap; }
+/* Extra registered routes retain their real controls inside the scrollable native row. */
+.workspace-module-strip>[id="shell.navigation"]:has(>button[data-workspace-module]:not([data-reference-module])) { flex-wrap:nowrap; overflow:auto; }
 
+/* Generic registered-module readability: preserve words/rows and scroll the owned navigation, never hide modules. */
+.workspace-module-strip>[id="shell.navigation"] { flex-wrap:nowrap; overflow:auto; overscroll-behavior-inline:contain; scroll-padding:.25rem; }
+.workspace-module-strip>[id="shell.navigation"] .workspace-nav-item { flex-shrink:0; min-width:max-content; }
+.workspace-module-strip>[id="shell.navigation"] .workspace-nav-item .nav-label { white-space:nowrap; overflow-wrap:normal; word-break:normal; }
 /*__PANSPHAIRA_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/
 /* Essential 2D: one semantic system, five curated compositions. No remote assets. */
 body[data-design-profile] { --ink:var(--ui-text); --muted:var(--ui-muted); --line:var(--ui-line); --blue:var(--ui-accent); color:var(--ui-text); color-scheme:light; }

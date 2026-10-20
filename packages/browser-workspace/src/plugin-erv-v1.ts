@@ -1,5 +1,6 @@
 import {registerWorkspaceCardV1} from '../../browser-shell/src/registry-v1.js';
 import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-plugin-v1.js";
+import type { BrowserErvReadV1 } from "../../contracts/src/browser-erv-read-v1.js";
 import { validateBrowserErvReadV1 } from "../../contracts/src/browser-erv-read-v1.js";
 import type { BrowserShellPluginV1 } from "../../contracts/src/browser-shell-plugin-v1.js";
 import type { BrowserShellFactoryV1 } from "../../browser-shell/src/registry-v1.js";
@@ -17,6 +18,16 @@ export const ervPluginV1: BrowserShellPluginV1 = {
   ],
 };
 const euros = (value: number,currency:string) => new Intl.NumberFormat("de-DE",{style:"currency",currency}).format(value/100);
+// One synchronous read-only invoice card shared by the canonical view and verified surface projection.
+export function createErvRecordCardV1(value:BrowserErvReadV1,heading:HTMLElement):HTMLElement {
+    heading.className='erv-workspace-title';
+    const header=document.createElement('div');header.className='erv-workspace-heading';const symbol=text('span','▤');symbol.className='erv-workspace-symbol';symbol.setAttribute('aria-hidden','true');header.append(symbol,heading,text('p','Aktuelle Eingangsrechnung · '+value.invoiceId));header.lastElementChild!.className='erv-workspace-subtitle';
+    const record=document.createElement('section');record.className='erv-record-card';record.dataset.invoiceReference=value.invoiceId;record.dataset.nativeRevision=String(value.revision);record.setAttribute('aria-label','Belegkontext und nativer Abgleich');record.append(header);
+    const match=text('p',value.varianceMinor===0?'Beträge im nativen Abgleich stimmig':'Betragsabweichung: Bitte den Vorgang klären.');match.className=value.varianceMinor===0?'erv-match':'erv-attention';record.append(match);
+    if(value.status!=='RELEASED_LOCAL_SYNTHETIC'){const warnings:Readonly<Record<string,string>>={UNRESOLVED_AMOUNT_DEVIATION:'Betragsabweichung — Klärung erforderlich.',UNRESOLVED_PARTIAL_INVOICE:'Teilrechnung — Klärung erforderlich.',UNRESOLVED_CONFIRMATION_CHANGE_NOT_APPROVED:'Bestätigungsänderung noch nicht freigegeben.'};const warning=text('p',warnings[value.status]??'Prüfstand nicht freigegeben.');warning.className='erv-attention';record.append(warning);}
+    const summary=document.createElement('section');summary.className='erv-financial-summary';summary.setAttribute('aria-label','Native Beträge der aktuellen Rechnung');for(const[label,amount]of[[browserWorkspaceStringValuesV1[206]as string,value.invoiceAmountMinor],[browserWorkspaceStringValuesV1[161]as string,value.expectedAmountMinor],[browserWorkspaceStringValuesV1[124]as string,value.varianceMinor]]as const){const card=document.createElement('div');card.className='erv-value-card';card.dataset.nativeAmountMinor=String(amount);card.dataset.nativeCurrency=value.currency;card.dataset.nativeRevision=String(value.revision);const display=document.createElement('dl');display.className='erv-amount';display.append(text('dt',label),text('dd',euros(amount,value.currency)));card.append(display);summary.append(card);}record.append(summary);
+    return record;
+}
 export function createErvViewV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<HTMLElement> {
   return { kind: "VIEW", async render({ target, signal }) {
     target.append(text("h1", browserWorkspaceStringValuesV1[67] as string)); readState(target, "erv", browserWorkspaceStringValuesV1[26] as string, "Fachlicher Readback aus dem führenden nativen Speicher wird geladen …");
@@ -26,14 +37,10 @@ export function createErvViewV1(api: WorkspaceViewApiV1): BrowserShellFactoryV1<
     const value = validateBrowserErvReadV1(response.value);
     if (value.tenantId !== api.context().tenantId || value.invoiceId !== api.context().objectId) throw new Error("ERV_CURRENT_CONTEXT_DENIED");
     api.rememberInvoice(value);
-    target.classList.add('erv-workspace');const heading=target.querySelector('h1')!;heading.className='erv-workspace-title';
-    const header=document.createElement('div');header.className='erv-workspace-heading';const symbol=text('span','▤');symbol.className='erv-workspace-symbol';symbol.setAttribute('aria-hidden','true');header.append(symbol,heading,text('p','Aktuelle Eingangsrechnung · '+value.invoiceId));header.lastElementChild!.className='erv-workspace-subtitle';
+    target.classList.add('erv-workspace');const heading=target.querySelector('h1')!;
     const template=document.getElementById('workspace.invoice-banner-template')as HTMLTemplateElement|null;if(template)target.append(template.content.cloneNode(true));
     const work=document.createElement('div');work.className='erv-review-layout';
-    const record=document.createElement('section');record.className='erv-record-card';record.dataset.invoiceReference=value.invoiceId;record.dataset.nativeRevision=String(value.revision);record.setAttribute('aria-label','Belegkontext und nativer Abgleich');record.append(header);
-    const match=text('p',value.varianceMinor===0?'Beträge im nativen Abgleich stimmig':'Betragsabweichung: Bitte den Vorgang klären.');match.className=value.varianceMinor===0?'erv-match':'erv-attention';record.append(match);
-    if(value.status!=='RELEASED_LOCAL_SYNTHETIC'){const warnings:Readonly<Record<string,string>>={UNRESOLVED_AMOUNT_DEVIATION:'Betragsabweichung — Klärung erforderlich.',UNRESOLVED_PARTIAL_INVOICE:'Teilrechnung — Klärung erforderlich.',UNRESOLVED_CONFIRMATION_CHANGE_NOT_APPROVED:'Bestätigungsänderung noch nicht freigegeben.'};const warning=text('p',warnings[value.status]??'Prüfstand nicht freigegeben.');warning.className='erv-attention';record.append(warning);}
-    const summary=document.createElement('section');summary.className='erv-financial-summary';summary.setAttribute('aria-label','Native Beträge der aktuellen Rechnung');for(const[label,amount]of[[browserWorkspaceStringValuesV1[206]as string,value.invoiceAmountMinor],[browserWorkspaceStringValuesV1[161]as string,value.expectedAmountMinor],[browserWorkspaceStringValuesV1[124]as string,value.varianceMinor]]as const){const card=document.createElement('div');card.className='erv-value-card';card.dataset.nativeAmountMinor=String(amount);card.dataset.nativeCurrency=value.currency;card.dataset.nativeRevision=String(value.revision);const display=document.createElement('dl');display.className='erv-amount';display.append(text('dt',label),text('dd',euros(amount,value.currency)));card.append(display);summary.append(card);}record.append(summary);work.append(record);
+    const record=createErvRecordCardV1(value,heading);work.append(record);
     const decision=document.createElement('div');decision.className='erv-decision-slot';work.append(decision);
     const documentCard=document.createElement('section');documentCard.className='erv-document-card';documentCard.dataset.invoiceReference=value.invoiceId;documentCard.dataset.nativeRevision=String(value.revision);documentCard.setAttribute('aria-label','Aktuelle native Belegbezüge');const references=document.createElement('div');references.className='erv-document-references';references.append(text('p','Keine bestätigten Belegbezüge im aktuellen Lesestand.'));documentCard.append(text('h2','Belege & Mengen'),references);
     const quantities=document.createElement('dl');quantities.className='erv-quantity-summary';for(const[label,quantity]of[['Bestellt',value.orderedQuantity],['Angenommen',value.acceptedQuantity],['Berechnet',value.invoicedQuantity]]as const){const item=document.createElement('div'),amount=text('dd',new Intl.NumberFormat('de-DE').format(quantity)+' '),unit=text('span','Einheit nicht bestätigt');unit.className='erv-quantity-unit';amount.append(unit);item.append(text('dt',label),amount);quantities.append(item);}const linked=text('p','');linked.className='erv-linked-reference visually-hidden';linked.hidden=true;documentCard.append(quantities,linked);work.append(documentCard);
