@@ -883,6 +883,22 @@
       "fromSha256": "19a42a71189f06d4b574412c6a37598726530a3b56e2c2a3669a2575b90a2c6c",
       "toSha256": "44b0ff692907d9838b0aa1ecd1e08d950b3b72106b4cd124e346327e604fb349",
       "reason": "Register exactly three source-only connected560 document/test members on existing566 ownership, preserving graph104/all109, max128 inputs/max64 tests, every old input/test/security/time gate and unchanged legacy1792. The unchanged mechanical scanner observes files1279/import-sites340/import-files339/ledger2818. Append only this exact generator migration; preserve all prior migrations, immutable21 admitted-base obligations/13 profiles, scanner/validator and every original fail-closed negative. Existing562/565/566/515 owners implement provider-free first ownership, five views/draft, separate exact-plan confirmation, one synthetic native effect, independent persisted readback and restart/resume. No second platform, public arbitrary connection, model/inference/audio/cloud/private/production/device/KS authority or genuine model acceptance. Census correction is not full Source/Main CI, independent acceptance, release/archive readback or original560 closure."
+    },
+    {
+      "migrationId": "ORIGINAL546-NATIVE-REFERENCE-SOURCE-GUIDE/INTEGRITY-GENERATOR/V100",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 100,
+      "fromSha256": "44b0ff692907d9838b0aa1ecd1e08d950b3b72106b4cd124e346327e604fb349",
+      "toSha256": "16b6d491736160ae4126abca5e611c39e785159919aaf83ab61737ca9a290c40",
+      "reason": "Retain the exact original546 source-only native-reference rights guide registration from the independently assessed f1f4cf source. The ledger adds only this guide: actual unchanged scanner files1279/import-sites340/import-files339/ledger2819. Preserve every immutable admitted and earlier reviewed generator digest, all21 base byte obligations/13 pinned profiles and all existing scanner, validator and negative semantics. Historical shared-shell129-input Source failure remains FAIL; this provenance entry is not canonical, delivery, whole546 or rights acceptance."
+    },
+    {
+      "migrationId": "ORIGINAL546-SOURCE-GUIDE-OWNER-CORRECTION/INTEGRITY-GENERATOR/V101",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 101,
+      "fromSha256": "16b6d491736160ae4126abca5e611c39e785159919aaf83ab61737ca9a290c40",
+      "toSha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca",
+      "reason": "Bind the independently accepted exact source-guide ownership correction and deterministic existing canonical ordering at e6a5f02b: the same guide DERIVED_EVIDENCE digest moves from shared-shell129 to existing repository-integrity, preserving shared-shell128/root96, original128-input/64-command bounds, graph104/all109, every owner/edge/test/hard gate and ledger2819 membership. Preserve all earlier migration records and immutable21 base obligations/13 profiles; no scanner/validator/negative case/runtime/rights relaxation. Both later PAN602 callback FAILs remain historical, and subsequent observer acceptance/local or hosted slice GREEN is not full Source/Main/release/archive acceptance. Original546 stays OPEN; supplier/directory/assignee/document-number remain UNAVAILABLE."
     }
   ],
   "scanScope": {
@@ -925,16 +941,16 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-   "filesScanned": 1279,
-   "declarationSites": 37,
-   "declarationFiles": 37,
-   "importSites": 340,
-   "importFiles": 339,
-   "reexportSites": 7,
-   "similarShapeSites": 30,
-   "ledgerEntries": 2818,
-   "ledgerUniquePaths": 2818
- },
+    "filesScanned": 1279,
+    "declarationSites": 37,
+    "declarationFiles": 37,
+    "importSites": 340,
+    "importFiles": 339,
+    "reexportSites": 7,
+    "similarShapeSites": 30,
+    "ledgerEntries": 2819,
+    "ledgerUniquePaths": 2819
+  },
   "profiles": [
     {
       "file": "demo/runtime/enforcement-gate.mjs",
@@ -1006,7 +1022,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "44b0ff692907d9838b0aa1ecd1e08d950b3b72106b4cd124e346327e604fb349"
+      "sha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1807,7 +1823,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "44b0ff692907d9838b0aa1ecd1e08d950b3b72106b4cd124e346327e604fb349",
+      "sha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca",
       "basis": "profile-version-migration"
     },
     {
