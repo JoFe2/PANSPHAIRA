@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readPan516Procurement } from "../procurement-434/bestellung-lifecycle.mjs";
 import { evaluatePan516ProcurementLiabilitySnapshot } from "../procurement-434/bestellung-liability.mjs";
 import { validateBrowserErvReadV1 } from "../../dist/packages/contracts/src/browser-erv-read-v1.js";
@@ -39,6 +40,31 @@ export function createNativeErvReadAdapterV1(options) {
         confirmationDigest: liability.source.confirmationDigest, invoiceSourceSha256: liability.source.invoiceSource.sha256,
         readOnly: true, bookingAuthorityGranted: false, paymentOrderAuthorized: false });
     },
+    // Owner-local evidence about the SAME observed native parent source. This
+    // intentionally publishes no order/supplier ID and confers no field or
+    // supplier-entity read grant. Protected catalog scope remains separate.
+    referenceEvidence(request) {
+      const invoice = reader.read(request), state = readPan516Procurement({ root });
+      if (JSON.stringify(state.binding) !== initialBinding) throw new Error("ERV_NATIVE_LEADING_BINDING_DRIFT_DENIED");
+      if (state.revision !== invoice.revision) throw new Error("ERV_OBJECT_REVISION_STALE");
+      const draft = state.effectiveDraft, terms = state.confirmations.at(-1)?.terms;
+      const reference = value => typeof value === "string" && value.length > 0 ? value : null;
+      const orderReference = reference(draft?.bestellungId), supplierReference = reference(draft?.lieferantId);
+      const sourceDigest = createHash("sha256").update(JSON.stringify({
+        schemaVersion: "pansphaira.native-order-supplier-source-evidence/v1", tenantId,
+        invoiceId: invoice.invoiceId, nativeRevision: state.revision, binding: state.binding,
+        orderReference, supplierReference, quantityUnit: terms?.unit ?? null, currency: terms?.currency ?? null,
+      })).digest("hex");
+      return Object.freeze({
+        schemaVersion: "pansphaira.native-order-supplier-source-evidence/v1", tenantId,
+        invoiceId: invoice.invoiceId, nativeRevision: state.revision, sourceDigest,
+        leadingStore: state.leadingStore, sourceRecordCount: draft ? 1 : 0,
+        sourceFacts: Object.freeze({orderReference: orderReference === null ? "UNKNOWN" : "AVAILABLE",
+          supplierReference: supplierReference === null ? "UNKNOWN" : "AVAILABLE", supplierDisplayName: "UNKNOWN", assignee: "UNAVAILABLE"}),
+        readOnly: true, fieldRightsQualified: false, relationRightsQualified: false, directoryAvailable: false,
+        executionAuthorityGranted: false, bookingAuthorityGranted: false, paymentOrderAuthorized: false,
+      });
+    },
     search(request) {
       exact(request, ["tenantId", "query"], "ERV_SEARCH_REQUEST_DENIED");
       if (request.tenantId !== tenantId) throw new Error("ERV_TENANT_BINDING_DENIED");
@@ -59,6 +85,6 @@ export function createNativeErvReadAdapterV1(options) {
 export function createUnconfiguredNativeErvReadAdapterV1(tenantId) {
   if(typeof tenantId!=='string'||!/^[a-z0-9][a-z0-9-]{0,63}$/.test(tenantId))throw new Error('ERV_NATIVE_OWNER_BINDING_DENIED');
   const unavailable=()=>{throw new Error('ERV_NATIVE_SOURCE_NOT_CONFIGURED');};
-  const reader=Object.freeze({read:unavailable,search:unavailable});owned.set(reader,tenantId);return reader;
+  const reader=Object.freeze({read:unavailable,search:unavailable,referenceEvidence:unavailable});owned.set(reader,tenantId);return reader;
 }
 export const isNativeErvReadAdapterV1 = (reader, tenantId) => typeof tenantId === "string" && owned.has(reader) && owned.get(reader) === tenantId;

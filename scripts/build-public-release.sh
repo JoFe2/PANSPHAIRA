@@ -196,6 +196,8 @@ if total_bytes > 100 * 1024 * 1024:
 
 expected = set(destinations)
 repository_only_files = {
+    # Original546 native-reference guide is source-only, never a runtime/rights grant.
+    "docs/architecture/native-reference-rights-contract-v1.md",
     # PAN574 original contexts, independent examples and native export are source-only.
     "src/pan471/composition-bindings.mjs",
     "scripts/run-pan574-composition-contracts.mjs",

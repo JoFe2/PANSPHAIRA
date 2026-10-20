@@ -16,6 +16,14 @@
 .module-view-card[data-size="compact"] { padding: .75rem; }
 .module-view-card[data-size="large"] { padding: 1.5rem; min-height: 12rem; }
 .module-view-card p { font-size: .95rem; overflow-wrap: anywhere; }
+.module-view-table-scroll { min-width: 0; max-width: 100%; overflow-x: auto; }
+.module-view-table-grain { max-width: 100%; font-weight: 600; overflow-wrap: anywhere; }
+.module-view-editor[data-editing="false"] .module-view-content { grid-template-columns: minmax(0, 1fr); }
+@container module-view (max-width: 22rem) { .module-view-card, .module-view-card[data-size="compact"], .module-view-card[data-size="large"] { padding: .4rem; } .module-view-card > button { padding: .4rem .5rem; } }
+.module-view-table-scroll:focus-visible { outline: 3px solid #164f7c; outline-offset: 2px; }
+.module-view-native-table { border-collapse: collapse; width: max-content; min-width: 100%; }
+.module-view-native-table caption { text-align: left; padding-block: .5rem; font-weight: 600; }
+.module-view-native-table th, .module-view-native-table td { min-width: 10rem; max-width: 22rem; padding: .65rem; border-bottom: 1px solid #cbd6de; text-align: left; vertical-align: top; white-space: normal; overflow-wrap: anywhere; font-size: .95rem; }
 .module-view-properties { display: flex; flex-wrap: wrap; gap: .75rem; border: 1px solid #cbd6de; border-radius: .6rem; padding: 1rem; min-width: 0; }
 .module-view-properties legend { font-weight: 650; max-width: 100%; }
 .module-view-properties label, .module-view-properties select { flex-basis: 100%; min-width: 0; max-width: 100%; }

@@ -3811,6 +3811,11 @@ repositoryIntegrityNode.inputs = repositoryIntegrityNode.inputs.filter(
 );
 repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 
+// Original546 source-only guide stays with existing repository integrity, not a129th shared-shell input.
+if (!repositoryIntegrityNode.inputs.some(({path}) => path === "docs/architecture/native-reference-rights-contract-v1.md")) {
+  repositoryIntegrityNode.inputs.push({path:"docs/architecture/native-reference-rights-contract-v1.md",role:"DERIVED_EVIDENCE",sha256:digest("docs/architecture/native-reference-rights-contract-v1.md")});
+}
+repositoryIntegrityNode.inputs.sort((left, right) => left.path.localeCompare(right.path, "en"));
 for (const node of dag.nodes) {
   node.inputs = node.inputs.map((input) => ({ ...input, sha256: digest(input.path) }));
 }

@@ -1,14 +1,14 @@
 import {browserWorkspaceStringValuesV1} from "./browser-shell-plugin-v1.js";
 // Additive data-free personal module view. A valid shape/catalog is NOT native
 // authentication, a context handle, consent, a write receipt or a business grant.
-export type WorkspaceViewUnitV1 = "CURRENCY_MINOR" | "ISO4217" | "LIABILITY_STATE" | "REVIEW_STATE" | "COUNT" | "QUANTITY" | "PER_FIELD";
+export type WorkspaceViewUnitV1 = "CURRENCY_MINOR" | "ISO4217" | "LIABILITY_STATE" | "REVIEW_STATE" | "COUNT" | "QUANTITY" | "NATIVE_REFERENCE_ID" | "PER_FIELD";
 export interface WorkspaceViewFieldV1 { readonly fieldId: string; readonly source: "ERV_NATIVE" | "HUMAN_NATIVE"; readonly type: "NUMBER" | "STRING"; readonly unit: Exclude<WorkspaceViewUnitV1, "PER_FIELD"> }
 export interface WorkspaceViewBindingV1 { readonly fieldIds: readonly string[]; readonly unit: WorkspaceViewUnitV1 }
 export interface WorkspaceViewInstanceV1 { readonly instanceId: string; readonly componentId: "VALUE" | "TABLE" | "HUMAN_REVIEW"; readonly size: "compact" | "regular" | "large"; readonly visible: boolean; readonly binding: WorkspaceViewBindingV1 }
 export interface WorkspaceModuleViewV1 { readonly schemaVersion: "pansphaira.workspace-module-view/v1"; readonly moduleId: "pan.erv"; readonly viewId: "pan.erv.view"; readonly catalogVersion: "pansphaira.workspace-data-catalog/v1"; readonly instances: readonly WorkspaceViewInstanceV1[] }
 export type WorkspaceViewOperationV1 = { readonly kind: "MOVE"; readonly instanceId: string; readonly position: number } | { readonly kind: "RESIZE"; readonly instanceId: string; readonly size: WorkspaceViewInstanceV1["size"] } | { readonly kind: "SHOW"; readonly instanceId: string; readonly visible: boolean } | { readonly kind: "BIND"; readonly instanceId: string; readonly binding: WorkspaceViewBindingV1 };
 export interface WorkspaceViewDeltaV1 { readonly schemaVersion: "pansphaira.workspace-module-view/delta/v1"; readonly operations: readonly WorkspaceViewOperationV1[] }
-const units: readonly string[] = [browserWorkspaceStringValuesV1[45] as string, browserWorkspaceStringValuesV1[173] as string, browserWorkspaceStringValuesV1[175] as string, browserWorkspaceStringValuesV1[85] as string, "COUNT", browserWorkspaceStringValuesV1[201] as string, browserWorkspaceStringValuesV1[54] as string];
+const units: readonly string[] = [browserWorkspaceStringValuesV1[45] as string, browserWorkspaceStringValuesV1[173] as string, browserWorkspaceStringValuesV1[175] as string, browserWorkspaceStringValuesV1[85] as string, "COUNT", browserWorkspaceStringValuesV1[201] as string, "NATIVE_REFERENCE_ID", browserWorkspaceStringValuesV1[54] as string];
 const sizes: readonly string[] = [browserWorkspaceStringValuesV1[139] as string, browserWorkspaceStringValuesV1[14] as string, "large"];
 const components: readonly string[] = ["VALUE", "TABLE", browserWorkspaceStringValuesV1[34] as string];
 function fail(reason: string): never { throw new Error(reason); }
@@ -32,6 +32,7 @@ function catalogMap(value: readonly WorkspaceViewFieldV1[]): Map<string, Workspa
   for (const item of list(value, 32)) {
     const v = exact(item, [browserWorkspaceStringValuesV1[102] as string, browserWorkspaceStringValuesV1[86] as string, "type", "unit"]); const fieldId = identifier(v.fieldId);
     if (map.has(fieldId) || ![browserWorkspaceStringValuesV1[25] as string, browserWorkspaceStringValuesV1[71] as string].includes(v.source as string) || ![browserWorkspaceStringValuesV1[50] as string, browserWorkspaceStringValuesV1[222] as string].includes(v.type as string) || !units.includes(v.unit as string) || v.unit === browserWorkspaceStringValuesV1[54]) return fail("VIEW_CATALOG_DENIED");
+    if (v.unit === "NATIVE_REFERENCE_ID" && (v.type !== "STRING" || v.source !== "ERV_NATIVE")) return fail("VIEW_CATALOG_DENIED");
     map.set(fieldId, { fieldId, source: v.source as WorkspaceViewFieldV1["source"], type: v.type as WorkspaceViewFieldV1["type"], unit: v.unit as WorkspaceViewFieldV1["unit"] });
   }
   return map;
