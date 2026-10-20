@@ -10,6 +10,8 @@ import {runBoundedProcessV1} from '../../scripts/extension-dynamic-process-lifec
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
 import {createPan471CompositionSession, discoverPan471CompositionBindings} from './composition-bindings.mjs';
 import {admitPan591UiBuildGraph,packagePan591AdmittedGraph} from '../pan591/ui-build-admission.mjs';
+import {createRequire} from 'node:module';
+const requirePan594=createRequire(import.meta.url),PAN591_LOCKED_DEV_READBACK_SCHEMA_V1='pansphaira.ui-build-admission/locked-dev-readback/v1';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const IMAGE = 'node@' + IMAGE_ID;
@@ -279,6 +281,11 @@ export function createPan471CompositionExecutor() {
   function freeze(untrusted) {
     if(closed||busy)throw new Error('PAN576_OWNER_STATE_DENIED');
     const submission=dataCopy(untrusted);
+    if(submission?.schemaVersion===PAN591_LOCKED_DEV_READBACK_SCHEMA_V1) {
+      const held=requirePan594('../pan591/locked-dev-readback-admission-v1.mjs').admitPan591LockedDevReadbackGraph(submission);
+      const handle=Object.freeze({schemaVersion:submission.schemaVersion,graphDigest:held.catalogDigest,catalogDigest:held.catalogDigest});
+      grants.set(handle,{kind:'UI_ADMISSION_ONLY',held,diagnostic:null});return handle;
+    }
     if(submission?.schemaVersion==='pansphaira.ui-build-admission/graph/v1') {
       const held=admitPan591UiBuildGraph(submission);
       const handle=Object.freeze({schemaVersion:submission.schemaVersion,graphDigest:held.graph.graphDigest,catalogDigest:held.catalogDigest});
@@ -483,7 +490,18 @@ export function createPan471CompositionExecutor() {
   function packageUiGraph(handle) {
     if(closed||busy||pendingFailure||unreconciled.size>0||!handle||typeof handle!=='object'||!grants.has(handle))return denied('AUTHORITY_DENIED');
     const grant=grants.get(handle);if(grant.kind!=='UI_ADMISSION_ONLY')return denied('AUTHORITY_DENIED');
-    try{return packagePan591AdmittedGraph(grant.held);}catch(error){return denied(error.message);}
+    try{return grant.held.kind==='LOCKED_DEV_READBACK'?requirePan594('../pan591/locked-dev-readback-admission-v1.mjs').packagePan591LockedDevReadbackGraph(grant.held):packagePan591AdmittedGraph(grant.held);}catch(error){return denied(error.message);}
+  }
+  function devReadback(handle,untrusted) {
+    if(closed||busy||pendingFailure||unreconciled.size>0||!handle||typeof handle!=='object'||!grants.has(handle))return denied('AUTHORITY_DENIED');
+    const grant=grants.get(handle);if(grant.kind!=='UI_ADMISSION_ONLY'||grant.held.kind!=='LOCKED_DEV_READBACK')return denied('PAN591_DEV_NATIVE_ADMISSION_REQUIRED');
+    try {
+      const input=dataCopy(untrusted);if(!keysEqual(input,['schemaVersion','invocationId','observation'])||input.schemaVersion!=='pansphaira.dev-readback/observe/v1')return denied('PAN594_DEV_INPUT_DENIED');
+      // Native semantic/authority guards precede compiler creation; no caller schema.
+      const projection=requirePan594('../../dist/packages/contracts/src/workspace-invocation-v1.js').verifyWorkspaceInvocationObservationV1(input.observation,input.invocationId),resources=requirePan594('../pan591/locked-dev-readback-admission-v1.mjs').revalidatePan591LockedDevReadbackGraph(grant.held);
+      if(!grant.diagnostic)grant.diagnostic=requirePan594('../pan594/dev-readback-diagnostic-v1.mjs').createPan594DevReadbackDiagnostic(resources.schema,requirePan594('ajv/dist/2020.js').default);
+      return Object.freeze({outcome:'READ_ONLY_DEV_OBSERVATION',projection:grant.diagnostic.readProjection(projection),compileObservation:grant.diagnostic.compile,resourceCatalogDigest:resources.catalogDigest,verifiedDependencyMembers:resources.verifiedMemberCount,nativeEffectAuthority:false,arbitraryUiBuildExecution:false,installationAuthority:false,activationAuthority:false,model:'NOT_RUN',audio:'NOT_RUN'});
+    } catch(error){return denied(error.message);}
   }
   function close() {
     if(busy)throw new Error('PAN576_OWN_WORKLOAD_ACTIVE');
@@ -491,5 +509,5 @@ export function createPan471CompositionExecutor() {
     if(unreconciled.size>0)throw new Error('PAN576_NATIVE_RECONCILIATION_REQUIRED');
     closed=true;signingKey.fill(0);records.clear();unreconciled.clear();rmSync(root,{recursive:true,force:true});
   }
-  return {controller:Object.freeze({freeze,verify,reconcile,activeEvidence,abort,pendingOutcome,recoverPending,sealStatement,verifyStatement,close}),tools:Object.freeze({run,packageUiGraph})};
+  return {controller:Object.freeze({freeze,verify,reconcile,activeEvidence,abort,pendingOutcome,recoverPending,sealStatement,verifyStatement,close}),tools:Object.freeze({run,packageUiGraph,devReadback})};
 }

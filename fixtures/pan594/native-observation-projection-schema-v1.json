@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "writerEpoch",
+    "quality",
+    "taskState",
+    "budgetState",
+    "runtimeReservedUnits",
+    "runtimeConsumedUnits"
+  ],
+  "properties": {
+    "writerEpoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "quality": {
+      "enum": [
+        "CONFIRMED_NATIVE_TASK_AND_USAGE",
+        "UNKNOWN_EFFECT_OR_USAGE"
+      ]
+    },
+    "taskState": {
+      "enum": [
+        "ACCEPTED",
+        "OUTCOME_UNCONFIRMED",
+        "COMPLETED",
+        "REVOKED"
+      ]
+    },
+    "budgetState": {
+      "enum": [
+        "UNAVAILABLE",
+        "UNKNOWN_USAGE",
+        "SETTLED"
+      ]
+    },
+    "runtimeReservedUnits": {
+      "enum": [
+        null,
+        1
+      ]
+    },
+    "runtimeConsumedUnits": {
+      "enum": [
+        null,
+        0,
+        1
+      ]
+    }
+  }
+}
