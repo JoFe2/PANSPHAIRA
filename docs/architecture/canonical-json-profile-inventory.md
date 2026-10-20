@@ -456,3 +456,26 @@ model575 feedback and548 DUI09 are NOT_RUN. Remaining native product owner/admis
 integration is own internal implementation, not an external block or user decision.
 Registration is not real-model consent/acceptance, whole548, original575 closure,
 CI/WholeCanonical, protected merge, release or anonymous/public delivery.
+
+
+## Optional single developer readback comparison (V103)
+
+The unchanged mechanical scanner observes1296 source files,37 declaration
+sites/files,342 import sites in341 files,7 reexports,30 similar-shape sites and
+2840 unique checksum paths. Exactly13 new source-only policy/schema/entry/core/
+fixture/native/real-browser/bundle/measurement/registration/document inputs extend
+the existing critical external-plugin/PAN591 owner. Needed608 model-free native
+readback and529 atomic COUNT budget are actual same-source provider dependencies,
+not whole540/546 CLOSED gates. All109 graph104 nodes, every previous owner/test/
+hard gate, shared-shell128/root64 bounds, legacy1792, immutable21 obligations,
+13 pinned profiles and all previous migration bytes remain intact. Only the
+explicit current generator V103 pin and observed census metadata advance.
+
+The generic591 own-source graph still denies licensed/unknown dependency rights;
+one exact native-owned local developer-reference profile does not become a
+second catalog/task/database/agent engine or arbitrary UI-code/model/audio/cloud/
+install/activation grant. A native-first typed projection diagnostic cannot
+authenticate caller snapshots or confer native authority. Native remains default
+without measured benefit. This registration is not actual independent acceptance,
+required canonical/Source/Main proof, protected merge, anonymous released product/
+governance/event/public readback, wholeM1 or issue closure.

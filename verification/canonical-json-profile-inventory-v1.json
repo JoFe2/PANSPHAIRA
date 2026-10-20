@@ -907,6 +907,14 @@
       "fromSha256": "33875b6878be412a1369d103e4a6debb58dca4fda1009b06e9d9dbf25cd5efca",
       "toSha256": "627a587e906b4574e43f9ab44ae606da8cde91f76c345ad40921926b5d8e1fc4",
       "reason": "Register exactly eight source-only bounded original592 fixed native/browser/registration/real-process fixture/task-budget binding/doc members on existing548/529/597/608 owners; preserve one existing task/journal and atomic native budget truth. Unchanged mechanical scanner observes files1286/import-sites341/import-files340/ledger2827. Retain graph104/all109/shared-shell128/root64 command bound, all earlier inputs/tests/security/time gates, immutable21 admitted-base obligations/13 profiles/full previous migrations, scanner/validator and every negative plus legacy1792. Independent authenticated observation never replaces a writer, advances boot_epoch, emits source events, settles UNKNOWN or grants execution; authorized replacement is distinct and quiescent. Model-free COUNT units are not currency/model-provider usage. No second engine/database/controller/pipeline, model/audio/cloud/private/production/KS authority; bounded scope is not whole592/B26/M1, broad concurrency, CI/release/archive/public closure acceptance."
+    },
+    {
+      "migrationId": "ORIGINAL594-SINGLE-DEV-READBACK-COMPARISON/INTEGRITY-GENERATOR/V103",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 103,
+      "fromSha256": "627a587e906b4574e43f9ab44ae606da8cde91f76c345ad40921926b5d8e1fc4",
+      "toSha256": "bcecbd9b6cc57b5913be206ae87bbdd21aa69edc92a0b7994f3570ead8f59151",
+      "reason": "Register exactly13 source-only fixed optional Ajv2020 developer-readback policy/schema/core/entry/native/real-browser/bundle/measurement/registration/doc inputs on existing PAN591 external-plugin owner with needed same-source608/529 provider dependencies. Preserve generic591 own-source denial and native548 verifier/catalog/journal plus529 atomic COUNT budget authority/default. Unchanged mechanical scanner observes files1296/import-sites342/import-files341/ledger2840; retain all109 graph104 nodes, shared-shell128/root64 bounds, every old test/security/hard gate, legacy1792, immutable21 obligations/13 admitted profiles and previous migration bytes. One code-owned exact537-member locked5package source/license/runtime reference is not caller-approved rights, a second registry/engine/database, arbitrary UI code/install/activation, model/audio/cloud/private/production authority or authenticated native truth. Fixed native-first developer type diagnostics and sampled costs/egress/lifecycle are not global leak/noLeak or independent/CI/release/wholeM1 acceptance; native remains default absent measured advantage."
     }
   ],
   "scanScope": {
@@ -949,15 +957,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1286,
+    "filesScanned": 1296,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 341,
-    "importFiles": 340,
+    "importSites": 342,
+    "importFiles": 341,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2827,
-    "ledgerUniquePaths": 2827
+    "ledgerEntries": 2840,
+    "ledgerUniquePaths": 2840
   },
   "profiles": [
     {
@@ -1030,7 +1038,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "627a587e906b4574e43f9ab44ae606da8cde91f76c345ad40921926b5d8e1fc4"
+      "sha256": "bcecbd9b6cc57b5913be206ae87bbdd21aa69edc92a0b7994f3570ead8f59151"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1507,8 +1515,8 @@
     },
     {
       "owner": "pan591",
-      "importSites": 1,
-      "importFiles": 1
+      "importSites": 2,
+      "importFiles": 2
     },
     {
       "owner": "pan597",
@@ -1831,7 +1839,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "627a587e906b4574e43f9ab44ae606da8cde91f76c345ad40921926b5d8e1fc4",
+      "sha256": "bcecbd9b6cc57b5913be206ae87bbdd21aa69edc92a0b7994f3570ead8f59151",
       "basis": "profile-version-migration"
     },
     {
