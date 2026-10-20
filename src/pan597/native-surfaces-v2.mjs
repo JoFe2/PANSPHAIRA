@@ -54,7 +54,7 @@ export function createNativeWorkspaceSurfacesV2(options){
   labelsV1(headers,value){
    const operation=value&&typeof value==='object'?Object.getOwnPropertyDescriptor(value,'operation')?.value:undefined;const c=uiTaskClosedV2(value,operation==='set'?['schemaVersion','operation','label']:['schemaVersion','operation'],'SURFACE_LABEL_SCHEMA_DENIED');
    if(c.schemaVersion!=='pansphaira.workspace-surface/labels-command/v1'||!['list','set'].includes(c.operation))throw Error('SURFACE_LABEL_SCHEMA_DENIED');
-   if(c.operation==='set'&&(typeof c.label!=='string'||c.label.length>40||/[\u0000-\u001f\u007f-\u009f\u2028-\u202e\u2066-\u2069]/.test(c.label)||c.label.length>0&&c.label.trim().length===0))throw Error('SURFACE_LABEL_DENIED');
+   if(c.operation==='set'&&(typeof c.label!=='string'||c.label.length>40||/[\u0000-\u001f\u007f-\u009f\u061c\u200e-\u200f\u2028-\u202e\u2066-\u2069]/.test(c.label)||c.label.length>0&&c.label.trim().length===0))throw Error('SURFACE_LABEL_DENIED');
    const a=actor(headers);
    // Self-label metadata must not depend on a concurrently changing business-view epoch.
    // actor() still fences native principal/session/tab/proof/revocation/current boot;

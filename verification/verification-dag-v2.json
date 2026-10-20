@@ -11539,7 +11539,7 @@
         {
           "path": "packages/contracts/src/workspace-surface-v2.ts",
           "role": "CONTRACT",
-          "sha256": "c97d41832bc0d3f5c46672025ac77fbc1f98530844b9c63aff31c79255e1e10f"
+          "sha256": "d2d45b1c1510cdd65edb8800c4bf08bffc8788487f45e055b7f70b39ebc9d2b4"
         },
         {
           "path": "packages/browser-workspace/src/workspace-surfaces-v2.ts",
@@ -11559,7 +11559,7 @@
         {
           "path": "src/pan597/native-surfaces-v2.mjs",
           "role": "SOURCE",
-          "sha256": "95767b132a3f1a0e40a1bc631275c5e98d97658a893f1bdb4fc8814f623761fd"
+          "sha256": "0938084b1b418554cf9a62a99a3989cd141dfce582137adee49a2a96658de37e"
         },
         {
           "path": "scripts/run-pan597-native-surface-tests.mjs",
@@ -11569,7 +11569,7 @@
         {
           "path": "tests/pan597/native-surfaces.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e5a1486d3e38b7ceeb94d5189c3321c4b0886d81c14d6ba55d43262d5c6f3a39"
+          "sha256": "03cbaa23f2dd0f50226d4080535e157f593462cea5fc5698655a09fc5807d277"
         },
         {
           "path": "tests/pan597/browser-surfaces.test.mjs",
