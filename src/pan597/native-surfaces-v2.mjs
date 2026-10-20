@@ -27,6 +27,8 @@ export function createNativeWorkspaceSurfacesV2(options){
  ) STRICT;
  CREATE TABLE IF NOT EXISTS workspace_surface_events_v2(seq INTEGER PRIMARY KEY AUTOINCREMENT,surface_id TEXT NOT NULL,command_id TEXT NOT NULL,phase TEXT NOT NULL);
  `);
+ // Add self-label metadata to this SAME native surface table; never another registry.
+ transaction(()=>{if(!db.prepare('PRAGMA table_info(workspace_surfaces_v2)').all().some(c=>c.name==='display_label_v1'))db.exec("ALTER TABLE workspace_surfaces_v2 ADD COLUMN display_label_v1 TEXT NOT NULL DEFAULT ''");});
  // Restart never silently redelivers an old epoch or clears unresolved markers.
  transaction(()=>{db.prepare("UPDATE workspace_surface_outbox_v2 SET status='OUTCOME_UNCONFIRMED' WHERE boot_epoch<>? AND status NOT IN('RENDERED','REVOKED','DENIED','EXPIRED')").run(t.bootEpoch);db.prepare("UPDATE workspace_ui_tasks_v2 SET state='OUTCOME_UNCONFIRMED',revision=revision+1 WHERE command_id IN(SELECT command_id FROM workspace_surface_outbox_v2 WHERE status='OUTCOME_UNCONFIRMED') AND state='ACCEPTED'").run();});
  function authorization(headers){if(closed)throw Error('SURFACE_OWNER_CLOSED');const a=t.principal(headers),binding=contextSelection.surfaceBindingV2(headers);if(binding.subjectId!==a.p.subjectId||binding.role!==a.p.role)throw Error('SURFACE_SCOPE_DENIED');return {...a,binding};}
@@ -48,6 +50,20 @@ export function createNativeWorkspaceSurfacesV2(options){
  function missingDelivery(headers,commandId){const original=tasks.original(headers,commandId);transaction(()=>{t.principal(headers);db.prepare("UPDATE workspace_ui_tasks_v2 SET state='OUTCOME_UNCONFIRMED',revision=revision+1 WHERE command_id=? AND state='ACCEPTED'").run(commandId);});return {schemaVersion:'pansphaira.workspace-surface/delivery-readback/v2',commandId,status:'OUTCOME_UNCONFIRMED',originalCommand:original.command,requestDigest:original.requestDigest,task:tasks.read(headers,commandId),render:null,...noEffects};}
  const browserPairs=createNativeBrowserPairHandshakeV1({db,transaction,bootEpoch:t.bootEpoch,actor,livePeer,reader,binding:sessions.binding});
  const owner=Object.freeze({
+  // Separate closed labels/v1 contract: self label is display metadata, never a route/proof/role.
+  labelsV1(headers,value){
+   const operation=value&&typeof value==='object'?Object.getOwnPropertyDescriptor(value,'operation')?.value:undefined;const c=uiTaskClosedV2(value,operation==='set'?['schemaVersion','operation','label']:['schemaVersion','operation'],'SURFACE_LABEL_SCHEMA_DENIED');
+   if(c.schemaVersion!=='pansphaira.workspace-surface/labels-command/v1'||!['list','set'].includes(c.operation))throw Error('SURFACE_LABEL_SCHEMA_DENIED');
+   if(c.operation==='set'&&(typeof c.label!=='string'||c.label.length>40||/[\u0000-\u001f\u007f-\u009f\u061c\u200e-\u200f\u2028-\u202e\u2066-\u2069]/.test(c.label)||c.label.length>0&&c.label.trim().length===0))throw Error('SURFACE_LABEL_DENIED');
+   const a=actor(headers);
+   // Self-label metadata must not depend on a concurrently changing business-view epoch.
+   // actor() still fences native principal/session/tab/proof/revocation/current boot;
+   // actual display guard()/livePeer() and every original command remain unchanged.
+   if(c.operation==='set')transaction(()=>{const current=actor(headers);db.prepare('UPDATE workspace_surfaces_v2 SET display_label_v1=? WHERE surface_id=?').run(c.label,current.row.surface_id);});
+   actor(headers);
+   const rows=db.prepare('SELECT * FROM workspace_surfaces_v2 WHERE principal_digest=? AND session_id=? AND boot_epoch=? AND revoked=0 ORDER BY rowid').all(a.digest,a.binding.sessionId,t.bootEpoch);
+   return {schemaVersion:'pansphaira.workspace-surface/labels-readback/v1',selfSurfaceId:a.row.surface_id,labels:rows.map(r=>({surfaceId:r.surface_id,connectionEpoch:r.connection_epoch,label:r.display_label_v1})),labelAuthorityGranted:false,...noEffects};
+  },
   browserPairingV1(headers,value){return browserPairs.call(headers,value);},
   register(headers,value){
    const c=uiTaskClosedV2(value,['schemaVersion','previousSurfaceId','previousProof','localGeneration','pinned','dirty']);if(c.schemaVersion!=='pansphaira.workspace-surface/register/v2'||typeof c.pinned!=='boolean'||typeof c.dirty!=='boolean')throw Error('SURFACE_INPUT_DENIED');integer(c.localGeneration,1);const a=authorization(headers);let prior=null;
