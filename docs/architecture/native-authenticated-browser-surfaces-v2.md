@@ -38,3 +38,50 @@ The existing SURF panel exposes manual source/receiver/confirm/readback/revoke c
 
 `npm run pan597:test` retains every original native/browser/restart/registration case and adds the registered pairing native and actual browser cases. Actual two persistent Chromium profiles use separate physical profile directories and separately issued authenticated sessions, with storage-isolation and protected session-ID readback. Those are not another engine or physical device. The unchanged existing PAN563 test-only `tabs.setZoom/getZoom` fixture supplies native browser200/CSS1 and painted raster for the new controls; no product extension is introduced. Tests never open microphone/audio; source fixtures are public synthetic data and their native history is checked unchanged. Loopback TLS/native SQLite/authentication probes are not Docker/runtime/device/productive-source or human-perception acceptance. Source/review/required CI/merge/classified release/anonymous readback remain separate gates.
 
+
+## Jo240897: self-label metadata v1, manual route and precise denial
+
+`POST /t/<tenant>/workspace/surfaces/labels-v1` deliberately adds a separate
+`pansphaira.workspace-surface/labels-command/v1` / `labels-readback/v1` ABI.
+`list` accepts only schemaVersion and operation; `set` additionally accepts
+one exact printable label (at most40 UTF-16 code units, empty clears it).
+The authenticated current actor can label ONLY its own native Surface.
+No caller Surface ID, role, rights, revision digest or other grant is accepted.
+The existing native Surface table/connection gains `display_label_v1`; no
+second registry/table/controller is created. Reconnect preserves the same
+Surface's label, but all actual IDs, epochs, proof, native context/revision,
+Pin/Dirty and task/UNKNOWN fences remain authoritative. Labels never grant
+routing rights. The original closed v2 list/register/display/task/projection
+shapes remain unchanged. The separate labels/v1 readback is closed, bounded
+to the existing32 surfaces, scoped to the actual principal/session/current
+boot, and explicitly sets labelAuthorityGranted and effect/grant flags false.
+
+The panel presents confirmed self-labels and human-first destination options
+alongside their actual Surface IDs/connection epochs. A newer unsaved label
+edit and its focus survive a delayed native save response. A name is saved
+metadata, not evidence of document loading or rendering.
+
+The same panel always shows the normal same-Origin workspace URL and manual
+second-window instructions. Open a window in the SAME browser profile and
+navigate normally; do not copy cookies/invitations or perform another login
+that replaces the first window's shared session. Source popup opening uses
+noopener and reports only an opening REQUEST, never a successful registry,
+render or blocked-popup verdict from a null return. The existing actual
+normal-URL/manual second-window route is reusable. Actual popup blocking and
+physical monitor placement remain separate, unqualified boundaries unless
+observed. No extension, companion, OS-global window authority, automatic
+placement or permission request is introduced; manual placement remains usable.
+
+The existing PAN527 transport now retains native SURFACE-domain errors rather
+than masking them as503/HOSTED_AUTH_UNAVAILABLE: proof/scope/target authority
+errors403, unknown destination404, stale/reconnect/conflict/retired outcomes409,
+bounded capacity/backpressure429, and other closed schema/input errors400.
+The client shows the exact authenticated native code and HTTP status while
+retaining the original command bytes. A native denial is not a render receipt
+or proof that an earlier task was settled. A network/unconfirmed reply stays
+UNKNOWN; no reconstruction, redispatch, refund or marker cleanup follows.
+Stopped/foreign counterprobes independently reopen the native ledger and
+assert no new task/outbox/DOM receipt. Existing pin/draft/native original-byte
+and owner-restart UNKNOWN tests remain intact. This bounded correction is not
+whole605/606, cross-session data delivery, other-engine/device, Main sighting,
+full design, native zoom, model/audio/cloud or production qualification.

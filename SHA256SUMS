@@ -372,7 +372,7 @@ d16ee7dea6ba9f183f596c65f1acf68816b5e56ef5f113d59844740d13c0b258  ./docs/archite
 08e7fd1c4769287f375e95143c00bed507454a1c3378f3ad1d9967b502b5c914  ./docs/architecture/model-free-durable-native-ui-tasks-v1.md
 8c97a6a00f3061dc4e6f5e56ee30d0e7b66e68e2a1c1d557c75e26c3ba3f999f  ./docs/architecture/model-free-native-invocations-v1.md
 4c831b513c46ee767834ab4f2cd63e0cc29f1ba016b207a5d66d70b4c3666323  ./docs/architecture/native-administration-approval-browser-v1.md
-c10c5e0aabab52025e8c31e6e486c8d0d7bb09a79cd7d097fbd84557f1cf96d1  ./docs/architecture/native-authenticated-browser-surfaces-v2.md
+fd68c21edddb04e4bc0fc0e837c54327a0f5efa823f9722acaccc70ff33f856b  ./docs/architecture/native-authenticated-browser-surfaces-v2.md
 ad6b745afb1b8cfa7edd493ce4a1507ff250d8545de90c4971949e3fa4753ab8  ./docs/architecture/native-context-checkpoint-projection-v1.md
 be84541e4df3e4475883a459889098f42f8f7fb7b7ae7142aa3a759612aed161  ./docs/architecture/native-invoice-navigation-browser-v1.md
 6c7e1924623c8ea8cce9a13d369c86eb570604d6dbce428b1d08e82afcef34fc  ./docs/architecture/native-knowledge-capability-browser-v1.md
@@ -791,7 +791,7 @@ bda79ffc6b921e2fe8b4eae7195612bcc3a10281a214e86e27f5e12ce8684752  ./packages/bro
 2f8ecda47e8bb296a7193deb31f7c424f5cc00940d0c0fe462af1150642a1e62  ./packages/browser-workspace/src/configuration-draft-view-v1.ts
 0048566008f2748920a7b258c7458918eac628b2460ac288931a7cec8af69599  ./packages/browser-workspace/src/configuration-goals-v1.ts
 75156f7fb0b8a56dc7c513c9327196fcecc65a2eb9e6be17c94f4c6d903ce918  ./packages/browser-workspace/src/configuration-transfer-v1.ts
-ab7cfaf82328eb8e3db48517c880069fc4f2edd4e23377ef2884be66fe02c30d  ./packages/browser-workspace/src/context-selection-v1.ts
+4a4ff21ca2ff28ff0957408598afad222ef877689320dae8d4f103ba88d230e5  ./packages/browser-workspace/src/context-selection-v1.ts
 a9910d507c54a4f5dc25785e60fc1b1668b59468223c0c105c288468865949d1  ./packages/browser-workspace/src/erv-human-v1.ts
 8dee1154cc68a41b36b54a188a19517a3a35a434e7b6d25cd0a927beb928b518  ./packages/browser-workspace/src/module-view-editor-v1.ts
 f5d3649bd0ac92cec4db2ca65a2020b3bcb8c82ab89e17b10059af93c011a721  ./packages/browser-workspace/src/module-view-native-v1.ts
@@ -827,8 +827,8 @@ c0888372244f11a4afcf0f6f90fecefe9c6f3c177a69df07dbb95e943ceb1613  ./packages/bro
 57eec09287d97cdc6235c793672986b49105c05c71e1a6d1403f3ebb8997303c  ./packages/browser-workspace/src/workspace-model-connection-v1.ts
 11e31cda99266db3c6592339d7999d1e4e31a0c9022586922752e9930ddb64cf  ./packages/browser-workspace/src/workspace-readonly-events-v1.css
 507ffe97dba92bf70d6e466f9b9ba76f160a8c6e0be8e731e6110664faf844b4  ./packages/browser-workspace/src/workspace-readonly-events-v1.ts
-a32e5848eccc41aabc0b5f061637f820de40bdd85ca1bb7cb3dcd74c6309103a  ./packages/browser-workspace/src/workspace-surfaces-v2.css
-bab828840a4de07856bb0aa57c74e354ab8613efb40c5744462c86f4e3864ca8  ./packages/browser-workspace/src/workspace-surfaces-v2.ts
+6ed10bb6c819d9579362da5243d266b8ff67eb98b8ccfc96b750b37aa967acf9  ./packages/browser-workspace/src/workspace-surfaces-v2.css
+0cb2a6f437352569f9e3fa24546bad0240a941581b2557dab59998089bf501ae  ./packages/browser-workspace/src/workspace-surfaces-v2.ts
 44b42f512b424250c994f69458358e2a4db12fd191233b33d32a5116db32f469  ./packages/browser-workspace/src/workspace.css
 a80e15d9a8bfd07d3e80725840d39b202e192810c44013ab8c68e42399c200ca  ./packages/browser-workspace/src/workspace.html
 72b5f28175673cbc8328d9005a849b8409dadb58a8dce61153c049bd7a46a1c1  ./packages/cks/src/applicability-aware-retrieval-indexed.ts
@@ -1021,7 +1021,7 @@ fdb36918b4a357d1fede97a842a568c85a762352a394a802a66a8f399ca34e07  ./packages/con
 6bdfb2f505932cd035eb5b0b36660ffab023eddc88234bb671d195b7e4ab3879  ./packages/contracts/src/workspace-module-view-v1.ts
 6da1503391fe89a2306c86c6f63e2030668ab564b82d72585c5e1a4696d205c2  ./packages/contracts/src/workspace-notifications-v1.ts
 94a9c2d329b3519fb9cf8e1010f4235f8949e7f4ed4a793f02b037c4c3deb355  ./packages/contracts/src/workspace-readonly-events-v1.ts
-38e8baa4ea7e05bca86a25026fc302c4a826d0b9a683de63ef7fded196bee803  ./packages/contracts/src/workspace-surface-v2.ts
+c97d41832bc0d3f5c46672025ac77fbc1f98530844b9c63aff31c79255e1e10f  ./packages/contracts/src/workspace-surface-v2.ts
 1509f7722dcefb6fd75e27dfc3d9a50116a53b11f804d77458195174520cde2e  ./packages/dev-worker/src/cli.ts
 443bea4e94436b4d49cb45db8aa2cb5e6511848dc88b0fc78e9c743f1caaa125  ./packages/dev-worker/src/controller.ts
 b2717b420cff3db392bc280f0b716f17f82cc82954c25015fde81b386b426b6c  ./packages/dev-worker/src/m3-governance.ts
@@ -1450,7 +1450,7 @@ d96b26d1d256b647f33d6359f6185e1ed6799ce0909280fba76d4cf29ee9079d  ./src/pan522/m
 38a632a382f0f2fad882011a12d99f3f02f289da670843af2da3304993fa4f73  ./src/pan525/exact-pair-qualification.mjs
 46d7622ce8385afdd9c2568a3e284cb4552f2997f9889aced66d2bd374c30a3c  ./src/pan526/local-runtime-adapter.mjs
 6eac3aaebe8f4ebac94a5b2406de46fcfec3e9456f1ab9d55ba727dd4711cdc2  ./src/pan526/runtime-contract.mjs
-2af4a02061c46637193eeb0a452314a76c1f2ff2d0a157573d91b77480209dcd  ./src/pan527/origin-session-adapter.mjs
+f07c3c348818bf719c4fb878cd6b09f8b742512e2738f5dd5063be90f77b84a4  ./src/pan527/origin-session-adapter.mjs
 167085ee092bc0bb454e2959fc69d465c70c9bb2ec52d5eaa5217de71649eec3  ./src/pan528/app.js
 24c795a4574b3cb02600c33920dd2127dd14ea4a159ad9885ad33298b1fbbcc2  ./src/pan528/configuration-application.mjs
 610c6d392f133830bba9d6ae0c4da5ef3f921c5ef8a127d9cb15578df40ce4c3  ./src/pan528/guided-browser.mjs
@@ -1503,7 +1503,7 @@ baf051d88ddefefebc51bfcac43fc95a20c18b979aa267df4cbddc3d509ac335  ./src/pan565/c
 cbec783dc3fcb3b2181d5ab50eb8fd8ba50eb69c06a7310f262c28a46eeed27b  ./src/pan591/ui-build-admission.mjs
 560a32d09a50c9209fa7b71ab6b00a25a6a3e65e23866e0f014dea7e8472d932  ./src/pan594/dev-readback-diagnostic-v1.mjs
 547e1efffd760bf3cc956918b1f7b876273a523493c58eee2354af802f5368fd  ./src/pan597/native-browser-pairing-v1.mjs
-2afc6bef511302a4a48680224ac42e676a99aedc8d2ec4d375a77e24472efacf  ./src/pan597/native-surfaces-v2.mjs
+95767b132a3f1a0e40a1bc631275c5e98d97658a893f1bdb4fc8814f623761fd  ./src/pan597/native-surfaces-v2.mjs
 f4a39582822b2531d37d00a1450a51d310d59747dbb881481d60a3abce14d6d5  ./src/procurement-434/bestellung-cli.mjs
 7ee400e6703a1db93936c0a5e04e3a687cff7ccc821a1bb2cff513f8dc6c280f  ./src/procurement-434/bestellung-liability.mjs
 75d2fe66f879876f0de2975fdf4a5e3623b5596cba167ff0184553b593cca325  ./src/procurement-434/bestellung-lifecycle.mjs
@@ -2544,9 +2544,9 @@ a1ec26ffaa3d66acbb714ed6c0d069b077d2e531fd32802b564942dc45498629  ./tests/pan594
 e88fe6436f24b626e3fae227ea72f7a3ab33e7d560970ef708eb7377aaf6121c  ./tests/pan594/native-comparison.test.mjs
 d05c7585a4b94271978b35fe0eef0dbcd377860329597a24721385650c2f5d43  ./tests/pan594/registration.test.mjs
 220700e574266d37598de29457e2f1ec1f81d031626d0f9a3613eb6e801e68eb  ./tests/pan597/browser-pairing.test.mjs
-a91d5dee9fa47912ddf3410295b69e4dafc165409a18738fe7d432cddc9683f4  ./tests/pan597/browser-surfaces.test.mjs
+2950bea176f81ae1426ff848a8097dd819afd3cd9a44fd9d3743bc2905588f8c  ./tests/pan597/browser-surfaces.test.mjs
 94104f725fef2fedd59896a26ca9d088dd3f168cbf4ca3a1c7383b5277c61b9f  ./tests/pan597/native-browser-pairing.test.mjs
-44f09934be93430d6c66f7e40e36b1e192e589c4a2cd1e5c1690715a460204df  ./tests/pan597/native-surfaces.test.mjs
+e5a1486d3e38b7ceeb94d5189c3321c4b0886d81c14d6ba55d43262d5c6f3a39  ./tests/pan597/native-surfaces.test.mjs
 f816e7890839adf0e5d00d92abbdfe5bfe51b153caf8de34352f956b06a33e63  ./tests/pan597/process-restart.test.mjs
 96100301119f76c6fbb5b6f0caac99e3373179d43cfc7bf6492a1ad59d4a4748  ./tests/pan597/registration.test.mjs
 d7cde5bdb89c51d1d1c663c8accd08845fbe4bc203ed17d693c5674987783452  ./tests/pan602/browser-mail-local.test.mjs
@@ -2836,5 +2836,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-7c889e2a979fc75d83a5884477dee1896da8299c745c203f8eecedddcd8f3092  ./verification/verification-dag-v2.json
+f7fbb4773f425790d25d8aaaa5085adde0770572721276c23d71e78e12cd5465  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
