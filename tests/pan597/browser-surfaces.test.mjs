@@ -79,11 +79,11 @@ test('JO240897 actual fresh foreign authenticated destination is not selectable 
 
 
 // Same existing native owners, synthetic scope and one Chromium engine/two windows.
-async function readableFixture240897(){
+async function readableFixture240897({diagnosticPlugins=false}={}){
  const f=await browserFixture549({surfaces:true,cohort:null,analysis:false});let b,extra,store;
  try{
   f.unmount();const {protectedGuidedOwnerContextV1}=await import('../../src/pan527/origin-session-adapter.mjs'),{createAgentConfigurationDraftStoreV1}=await import('../../src/pan563/draft-store.mjs'),{bindRuntimeTemplateV1}=await import('../../src/pan529/runtime-template-contract.mjs'),{pan441EmployeeProfileV1}=await import('../../dist/packages/contracts/src/pan441-employee-profile.js'),{enableWorkspaceBrowserV1}=await import('../../src/pan541/workspace-browser.mjs'),{createNativeErvReadAdapterV1}=await import('../../src/pan541/native-erv-read-adapter.mjs');
-  const owned=protectedGuidedOwnerContextV1(f.tls.gateway,{optIn:true,tenantId:'tenant-a',origin:f.tls.origin,identityDigest:f.sessions.binding.identityDigest}),root=join(owned.productRoot,'readable-ui-configuration');mkdirSync(root,{mode:0o700});store=createAgentConfigurationDraftStoreV1({root,profile:pan441EmployeeProfileV1(),template:bindRuntimeTemplateV1(owned.identity)});extra=enableWorkspaceBrowserV1({optIn:true,gateway:f.tls.gateway,tenantId:'tenant-a',origin:f.tls.origin,nativeReader:createNativeErvReadAdapterV1({tenantId:'tenant-a',root:f.native.root}),contextSelection:true,surfaces:true,administration:true,configurationDrafts:store});
+  const owned=protectedGuidedOwnerContextV1(f.tls.gateway,{optIn:true,tenantId:'tenant-a',origin:f.tls.origin,identityDigest:f.sessions.binding.identityDigest}),root=join(owned.productRoot,'readable-ui-configuration');mkdirSync(root,{mode:0o700});store=createAgentConfigurationDraftStoreV1({root,profile:pan441EmployeeProfileV1(),template:bindRuntimeTemplateV1(owned.identity)});extra=enableWorkspaceBrowserV1({optIn:true,gateway:f.tls.gateway,tenantId:'tenant-a',origin:f.tls.origin,nativeReader:createNativeErvReadAdapterV1({tenantId:'tenant-a',root:f.native.root}),contextSelection:true,surfaces:true,administration:true,configurationDrafts:store,diagnosticPlugins});
   b=await launch549(f);await b.login(f.issue('reviewer'));assert.equal(b.context.pages().length,1);const source=b.context.pages()[0];source.setDefaultTimeout(10000);await source.goto(f.tls.origin+base);await source.locator('.workspace-surfaces[data-state="SURFACE_READY"]').waitFor();const popup=b.context.waitForEvent('page');await source.getByRole('button',{name:'Zweite Browserfläche öffnen',exact:true}).click();const target=await popup;target.setDefaultTimeout(10000);await target.waitForLoadState();await target.locator('.workspace-surfaces[data-state="SURFACE_READY"]').waitFor();assert.equal(b.context.pages().length,2);return{f,b,source,target,async close(){await b.context.close();extra.close();store.close();await f.close();}};
  }catch(e){await b?.context.close();extra?.close();store?.close();await f.close();throw e;}
 }
@@ -98,7 +98,46 @@ test('JO240897 common navigation keeps whole module labels and adaptive accessib
    await x.source.setViewportSize({width:390,height:844});assert.ok(await x.source.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   }x.f.unchanged();
  }finally{await x.close();}
+ await assertNativeNavigationWordPaint240897();
 });
+
+// B1: button rectangles alone do not prove that the browser paints every whole word.
+async function navigationWordPaint240897(page){return page.evaluate(()=>{
+ const nav=document.getElementById('shell.navigation');
+ return {viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,zoom:getComputedStyle(document.body).zoom,items:[...nav.querySelectorAll('.workspace-nav-item')].map(button=>{
+  const label=button.querySelector('.nav-label'),box=button.getBoundingClientRect(),style=getComputedStyle(button),scale=box.width/button.offsetWidth,words=[];
+  const walker=document.createTreeWalker(label,NodeFilter.SHOW_TEXT);let node;
+  while((node=walker.nextNode()))for(const match of node.textContent.matchAll(/\S+/gu)){
+   const range=document.createRange();range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);
+   const rectangles=[...range.getClientRects()].filter(r=>r.width>0&&r.height>0).map(r=>({left:r.left,right:r.right,top:r.top,bottom:r.bottom}));
+   words.push({word:match[0],rectangles});
+  }
+  return {label:label.textContent,visible:button.getClientRects().length>0,button:{left:box.left,right:box.right,top:box.top,bottom:box.bottom},paint:{left:box.left+parseFloat(style.paddingLeft)*scale,right:box.right-parseFloat(style.paddingRight)*scale},words};
+ })};
+});}
+async function assertNativeNavigationWordPaint240897(){
+ const x=await readableFixture240897({diagnosticPlugins:true});try{
+  const root=process.env.PAN549_BROWSER_EVIDENCE;assert.ok(root);mkdirSync(root,{recursive:true,mode:0o700});const observations=[];
+  for(const state of[{width:390,zoom:1},{width:390,zoom:2},{width:1280,zoom:1}]){
+   await x.source.setViewportSize({width:state.width,height:900});await x.source.evaluate(zoom=>{document.body.style.zoom=String(zoom);window.scrollTo(0,0);},state.zoom);
+   await x.source.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+   const actual=await navigationWordPaint240897(x.source);observations.push(actual);
+   writeFileSync(join(root,'b1-native-word-paint.json'),JSON.stringify(observations,null,2)+'\n');
+   const nav=await x.source.locator('[id="shell.navigation"]').boundingBox();assert.ok(nav);await x.source.screenshot({path:join(root,`b1-native-navigation-${state.width}-zoom${state.zoom}.png`),fullPage:true,clip:{x:Math.max(0,nav.x),y:Math.max(0,nav.y),width:Math.min(state.width-Math.max(0,nav.x),nav.width),height:nav.height}});
+   assert.ok(actual.items.some(item=>item.label.includes('Rendererfehlernachweis')),'ACTUAL_REGISTERED_DIAGNOSTIC_LABEL_REQUIRED');
+   assert.ok(actual.documentWidth<=actual.viewport,'B1_NAVIGATION_MUST_OWN_OVERFLOW');
+   for(const item of actual.items){assert.equal(item.visible,true,'B1_NO_MODULE_HIDING');for(const word of item.words){
+    assert.equal(word.rectangles.length,1,'B1_WORD_MUST_NOT_SPLIT '+JSON.stringify({state,label:item.label,word}));
+    const rect=word.rectangles[0];assert.ok(rect.left>=item.paint.left-1&&rect.right<=item.paint.right+1&&rect.top>=item.button.top-1&&rect.bottom<=item.button.bottom+1,'B1_NAVIGATION_WORD_PAINT_CLIPPING '+JSON.stringify({state,item,word}));
+   }}
+   for(const button of await x.source.locator('[id="shell.navigation"] .workspace-nav-item:not(:disabled)').all()){
+    await button.focus();assert.equal(await button.evaluate(b=>document.activeElement===b),true);
+    assert.equal(await button.evaluate(b=>{const n=b.closest('nav').getBoundingClientRect(),r=b.getBoundingClientRect();return r.left>=n.left-1&&r.right<=n.right+1;}),true,'B1_FOCUSED_MODULE_FULLY_REACHABLE_IN_OWNED_NAVIGATION');
+   }
+  }x.f.unchanged();
+ }finally{await x.close();}
+}
+
 test('JO240897 readable native document and setup monitor reuse canonical fields and keep exact JSON in collapsed technical details',async()=>{
  const x=await readableFixture240897();try{
   for(const kind of['DOCUMENT','MONITOR']){
