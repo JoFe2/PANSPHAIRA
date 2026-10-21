@@ -829,7 +829,7 @@ c0888372244f11a4afcf0f6f90fecefe9c6f3c177a69df07dbb95e943ceb1613  ./packages/bro
 507ffe97dba92bf70d6e466f9b9ba76f160a8c6e0be8e731e6110664faf844b4  ./packages/browser-workspace/src/workspace-readonly-events-v1.ts
 40285386015a5340bed6a98068a237a2865a6569c92e9a738b054f1f234e8537  ./packages/browser-workspace/src/workspace-surfaces-v2.css
 39383453794b8b3f91f5dccbd15d6cd1f028453f53b8eb4c126f469eb4b3723f  ./packages/browser-workspace/src/workspace-surfaces-v2.ts
-58059126e3ff3b32325c622ac8ec3b2a55d5f273c44f946c1a06531a38dc1c36  ./packages/browser-workspace/src/workspace.css
+e5f907b9dc57ed0f278b4f2283d8dc2f4776893abd5a22ffb3b2f66b8275fa09  ./packages/browser-workspace/src/workspace.css
 a80e15d9a8bfd07d3e80725840d39b202e192810c44013ab8c68e42399c200ca  ./packages/browser-workspace/src/workspace.html
 72b5f28175673cbc8328d9005a849b8409dadb58a8dce61153c049bd7a46a1c1  ./packages/cks/src/applicability-aware-retrieval-indexed.ts
 187c4a5f5f5c78afe92d737e84aa08061b1cad64ecfb6e14ee84ac6db4398c78  ./packages/cks/src/applicability-aware-retrieval.ts
@@ -2429,7 +2429,7 @@ fd288832e262cb222e256fb3aa4c56651f2f11bce6848b5b034b141acca22170  ./tests/pan544
 556995614c340fbea24464a7c2fe590db01b44c812ad5f7a39621558189eafcc  ./tests/pan546/browser-human-combined.test.mjs
 0c7cd1e960a0ea4c48b31e50d5ccc62936deba7af108d8cd3b8109873f8df016  ./tests/pan546/browser-human.test.mjs
 b5509f58db32e562db634a611e88c9fb1f674080ea12b4e93f2ca47cee302d8c  ./tests/pan546/browser-navigation.test.mjs
-f62d7ca60de03cafb95b629bd3fd1091bf7971b6db41a9a9dd23413d6b544a58  ./tests/pan546/browser-view.test.mjs
+1743b3b4a89483e4a439b1e9478ca6e25ed9ba7c2a466a73d66c7bca4b6b3058  ./tests/pan546/browser-view.test.mjs
 5002e1cf01f45e5fc6b2ea638e7c211324fd69301fee3b050c56a2f293762ab1  ./tests/pan546/module-view.test.mjs
 76faadef8d3fde1173d6c4243f2035a5fd28f4fa73a34f256d92ac2e02fac5ed  ./tests/pan546/native-association.test.mjs
 f9e130d33b355a0d502b977bec7b02f163a81b9318a948d62057d75405e0dce3  ./tests/pan546/native-fixture.mjs
@@ -2595,7 +2595,7 @@ ee2c6292a287faa01b9422303498520a2001448421e48c901c275bb11273bb8e  ./tests/procur
 beb037277565ae40641138ea4009e146c0f10aa574cb1e1016e76f26a7d3c593  ./tests/procurement-434/rechnungsabgleich-path.test.mjs
 16c194ab294be01e0812af96a90a6d5dbc96dfb2c94416c74b77328e96ec26c6  ./tests/producer-analytics-manifest.test.ts
 dfe7338a6655c3a70f304f59c3a3e1e748ad62a8b78726eeb125db4e3f16332d  ./tests/protected-audit-timeline.test.ts
-994d03f4066a6a81a34e799aaaa41460fa18a1e802d632d5c1be754ac869dbb9  ./tests/public-product-spelling.test.mjs
+3eaaee8f6a8479c3f41b241c82163aef076b002840839aeb263d1f1b692da0aa  ./tests/public-product-spelling.test.mjs
 33bbaa426b5d1a3c40c5aa38a54b34014277c9accc15c43c01bff2f9bb693597  ./tests/rechnungsabgleich-match-v1.test.ts
 117070e07d3f966d3248e81956ad270ce089dacf6453014a8a2879a596e6c23a  ./tests/rechnungsabgleich-v1.test.ts
 2c09dbd462f49c60887be25d06838306dc7a7024051f9379310fbd6e5dcfc299  ./tests/release-governance.test.mjs
@@ -2838,5 +2838,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-9b14fd3da744c541be84ca977eb85bfce5c22c93b7bfc27b290b1bf80efad3a3  ./verification/verification-dag-v2.json
+afe2a6a3e704b9a5737e14d37441b70bd7ccceb50c6186da506bde52758f5dbb  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

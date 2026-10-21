@@ -535,6 +535,8 @@ body:has(.workspace-assistant-column>*) .workspace-module-strip { width:calc(100
 
 /* Generic registered-module readability: reflow complete intrinsic controls in an adaptive grid; retain owned overflow for wider content and keyboard focus. */
 .workspace-module-strip>[id="shell.navigation"] { display:grid; flex-wrap:wrap; overflow:auto; overscroll-behavior-inline:contain; scroll-padding:.25rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); }
+/* The utility control owns an intrinsic trailing track, not a full module slot. */
+.workspace-module-strip>[id="shell.navigation"]>.workspace-add-module { grid-column:-1; grid-row:1; }
 .workspace-module-strip>[id="shell.navigation"] .workspace-nav-item { flex-shrink:1; flex-basis:max-content; min-width:min-content; grid-template-columns:16px minmax(min-content,1fr); column-gap:4px; padding-inline:8px; }
 .workspace-module-strip>[id="shell.navigation"] .workspace-nav-item .nav-label { white-space:normal; overflow-wrap:normal; word-break:normal; }
 /*__PANSPHAIRA_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/

@@ -5220,7 +5220,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "994d03f4066a6a81a34e799aaaa41460fa18a1e802d632d5c1be754ac869dbb9"
+          "sha256": "3eaaee8f6a8479c3f41b241c82163aef076b002840839aeb263d1f1b692da0aa"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -10116,7 +10116,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "58059126e3ff3b32325c622ac8ec3b2a55d5f273c44f946c1a06531a38dc1c36"
+          "sha256": "e5f907b9dc57ed0f278b4f2283d8dc2f4776893abd5a22ffb3b2f66b8275fa09"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -10416,7 +10416,7 @@
         {
           "path": "tests/pan546/browser-view.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f62d7ca60de03cafb95b629bd3fd1091bf7971b6db41a9a9dd23413d6b544a58"
+          "sha256": "1743b3b4a89483e4a439b1e9478ca6e25ed9ba7c2a466a73d66c7bca4b6b3058"
         },
         {
           "path": "tests/pan546/browser-human.test.mjs",
