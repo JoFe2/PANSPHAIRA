@@ -530,11 +530,11 @@ body:has(.workspace-assistant-column>*) .workspace-module-strip { width:calc(100
  .workspace-context-tabs>button small { white-space:normal; }
 }
 
-/* Extra registered routes retain their real controls inside the scrollable native row. */
-.workspace-module-strip>[id="shell.navigation"]:has(>button[data-workspace-module]:not([data-reference-module])) { flex-wrap:nowrap; overflow:auto; }
+/* Extra registered routes wrap complete controls before using owned overflow. */
+.workspace-module-strip>[id="shell.navigation"]:has(>button[data-workspace-module]:not([data-reference-module])) { flex-wrap:wrap; overflow:auto; }
 
-/* Generic registered-module readability: preserve whole words, allow natural label lines, and scroll only when the row cannot fit. */
-.workspace-module-strip>[id="shell.navigation"] { flex-wrap:nowrap; overflow:auto; overscroll-behavior-inline:contain; scroll-padding:.25rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr)); }
+/* Generic registered-module readability: preserve whole words, wrap complete controls, and retain owned overflow for intrinsically wider content. */
+.workspace-module-strip>[id="shell.navigation"] { flex-wrap:wrap; overflow:auto; overscroll-behavior-inline:contain; scroll-padding:.25rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr)); }
 .workspace-module-strip>[id="shell.navigation"] .workspace-nav-item { flex-shrink:1; flex-basis:max-content; min-width:min-content; grid-template-columns:16px minmax(min-content,1fr); column-gap:4px; padding-inline:8px; }
 .workspace-module-strip>[id="shell.navigation"] .workspace-nav-item .nav-label { white-space:normal; overflow-wrap:normal; word-break:normal; }
 /*__PANSPHAIRA_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/
