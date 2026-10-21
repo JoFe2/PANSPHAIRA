@@ -5220,7 +5220,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "3eaaee8f6a8479c3f41b241c82163aef076b002840839aeb263d1f1b692da0aa"
+          "sha256": "416406241e04c938fc5169351fba5629aa0f70770608048598f9ef364547663d"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -10116,7 +10116,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "e5f907b9dc57ed0f278b4f2283d8dc2f4776893abd5a22ffb3b2f66b8275fa09"
+          "sha256": "71d9c109407ffdbefb2c259941b2182229facd4c0d1e9c0ed76a757535292de2"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
