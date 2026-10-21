@@ -533,10 +533,10 @@ body:has(.workspace-assistant-column>*) .workspace-module-strip { width:calc(100
 /* Extra registered routes retain their real controls inside the scrollable native row. */
 .workspace-module-strip>[id="shell.navigation"]:has(>button[data-workspace-module]:not([data-reference-module])) { flex-wrap:nowrap; overflow:auto; }
 
-/* Generic registered-module readability: preserve words/rows and scroll the owned navigation, never hide modules. */
+/* Generic registered-module readability: preserve whole words, allow natural label lines, and scroll only when the row cannot fit. */
 .workspace-module-strip>[id="shell.navigation"] { flex-wrap:nowrap; overflow:auto; overscroll-behavior-inline:contain; scroll-padding:.25rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr)); }
-.workspace-module-strip>[id="shell.navigation"] .workspace-nav-item { flex-shrink:0; flex-basis:max-content; min-width:0; }
-.workspace-module-strip>[id="shell.navigation"] .workspace-nav-item .nav-label { white-space:nowrap; overflow-wrap:normal; word-break:normal; }
+.workspace-module-strip>[id="shell.navigation"] .workspace-nav-item { flex-shrink:1; flex-basis:max-content; min-width:min-content; }
+.workspace-module-strip>[id="shell.navigation"] .workspace-nav-item .nav-label { white-space:normal; overflow-wrap:normal; word-break:normal; }
 /*__PANSPHAIRA_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/
 /* Essential 2D: one semantic system, five curated compositions. No remote assets. */
 body[data-design-profile] { --ink:var(--ui-text); --muted:var(--ui-muted); --line:var(--ui-line); --blue:var(--ui-accent); color:var(--ui-text); color-scheme:light; }
