@@ -1,7 +1,23 @@
 import type{createWorkspaceContextSelectionV1}from'./context-selection-v1.js';
 import {createWorkspaceBrowserPairingV1}from'./workspace-browser-pairing-v1.js';
 import{validateWorkspaceSurfaceLabelsV1,surfaceResponseV2,surfaceRecordV2,validateWorkspaceSurfaceV2,validateWorkspaceSurfaceRouteV2,verifyWorkspaceSurfaceProjectionV2,type WorkspaceSurfaceV2,type WorkspaceSurfaceCapabilityV2,type WorkspaceSurfaceRouteV2,type WorkspaceSurfaceProjectionV2}from'../../contracts/src/workspace-surface-v2.js';
-import{text}from'./api-v1.js';
+import{text,facts}from'./api-v1.js';
+import{validateBrowserErvReadV1}from'../../contracts/src/browser-erv-read-v1.js';
+import{createErvRecordCardV1}from'./plugin-erv-v1.js';
+import{renderSetupStatusSummaryV1}from'./plugin-setup-v1.js';
+// Presentation only, in the existing lazy surface asset; synchronous and no additional read/store/authority.
+export function createSurfaceProjectionFrameV2(projection:WorkspaceSurfaceProjectionV2,tenantId:string):HTMLElement {
+    const frame=document.createElement('section');frame.className='surface-document';frame.dataset.surfaceRenderV2='true';frame.append(text('h1',projection.title));
+    if(projection.kind==='DOCUMENT'){
+      const value=validateBrowserErvReadV1(projection.data);if(value.invoiceId!==projection.objectId||value.revision!==projection.dataRevision||value.tenantId!==tenantId)throw Error('SURFACE_NATIVE_READ_DRIFT');
+      const card=createErvRecordCardV1(value,text('h2','Rechnungsübersicht'));card.dataset.readableNative='DOCUMENT';frame.append(card);
+    }else if(projection.kind==='MONITOR'){
+      const status=document.createElement('section');status.className='surface-setup-summary';status.dataset.readableNative='MONITOR';status.append(text('h2','Einrichtungsstatus'));renderSetupStatusSummaryV1(status,projection.data);frame.append(status);
+    }
+    const provenance=document.createElement('section');provenance.className='surface-provenance';provenance.setAttribute('aria-label','Native Quelle und Revision');facts(provenance,[['Quelle',projection.kind==='DOCUMENT'?'Führender nativer Rechnungsspeicher':projection.kind==='MONITOR'?'Vorhandener Setupkoordinator':'Vorhandene native Projektion'],['Objektreferenz',projection.objectId],['Datenrevision',String(projection.dataRevision)],['Ergebnisrevision',projection.resultRevision]]);frame.append(provenance);
+    const technical=document.createElement('details');technical.className='surface-technical-details';if(projection.kind!=='DOCUMENT'&&projection.kind!=='MONITOR')technical.open=true;technical.append(text('summary','Technische Quelldaten (JSON)'));const source=text('pre',JSON.stringify(projection.source,null,2));source.className='surface-source';const content=text('pre',JSON.stringify(projection.data,null,2));content.className='surface-content';technical.append(text('h2','Führende Quellenreferenz'),source,text('h2','Tatsächlicher nativer Browserread'),content);const boundary=projection.kind==='DOCUMENT'?'Native Rechnungsreferenz, kein Original-PDF oder DMS.':projection.kind==='MONITOR'?'Vorhandener Einrichtungsmonitor; kein neuer Ready-, Modell- oder Produktivnachweis.':'Vorhandene native Projektion; keine neue Fachausführung.';frame.append(technical,text('p','Nur lesen. '+boundary+' Physische Pixelsicht und Fachwirkung sind nicht bestätigt.'));
+    return frame;
+}
 // Existing context transport and renderer own the tab/lifecycle. No Broadcast-
 // Channel authorization, Shared-Cookie role write or second task controller.
 export function createWorkspaceSurfacesV2(o:{container:HTMLElement;main:HTMLElement;context:ReturnType<typeof createWorkspaceContextSelectionV1>;signal:AbortSignal;dirty:()=>boolean;render:(projection:WorkspaceSurfaceProjectionV2)=>void;returnToWorkspace:()=>void}){

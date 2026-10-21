@@ -37,7 +37,7 @@ function classifyImmutableRuntimeBudgetDevelopmentProfile(path, line, digest) {
 // Closed internal stylesheet partition, not current product display text.
 // Bind the exact existing path, complete file digest and technical line; no wildcard.
 const closedWorkspaceAppearanceStyleBindings = Object.freeze({
-  "packages/browser-workspace/src/workspace.css": Object.freeze({ sha256: "a012da99389779ff39f946236a68290c9563a5d6805a46277172c27aada063fa", lines: Object.freeze(["/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/"]) }),
+  "packages/browser-workspace/src/workspace.css": Object.freeze({ sha256: "a01be7bde42549449a25510342caa0fdcf527c53dadee1376bfeffe551ce4380", lines: Object.freeze(["/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/"]) }),
   "src/pan541/workspace-browser.mjs": Object.freeze({ sha256: "4cc1c8ce881e353d020e16a9d126aa7b88963ab3f3b8ab44ecfee15ca289b925", lines: Object.freeze(["const appearanceStyleBoundaryV1=\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\\n\";"]) }),
   "tests/pan541/browser-context-safety.test.mjs": Object.freeze({ sha256: "f27e6bb0a0af24906ab442be639591e0978cad81a49710d6ffbbb818c458df97", lines: Object.freeze(["style: readFileSync(new URL(\"../../packages/browser-workspace/src/workspace.css\", import.meta.url), \"utf8\").split(\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\\n\")[0],"]) }),
 });
@@ -306,7 +306,7 @@ test("closed workspace stylesheet marker admission binds path, whole bytes and e
       assert.equal(classify(path, line), "exact-digest-closed-workspace-style-boundary");
       assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line, "0".repeat(64)), null);
       // The retained published digest is not authority for these successor bytes.
-      if (path === "packages/browser-workspace/src/workspace.css") for (const predecessor of ["ed1b9afdf16219f7bde421b9a39f0490cccb9b67e8156a72e11c417cc0bfc4bc", "44b42f512b424250c994f69458358e2a4db12fd191233b33d32a5116db32f469"]) assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line, predecessor), null);
+      if (path === "packages/browser-workspace/src/workspace.css") for (const predecessor of ["ed1b9afdf16219f7bde421b9a39f0490cccb9b67e8156a72e11c417cc0bfc4bc", "44b42f512b424250c994f69458358e2a4db12fd191233b33d32a5116db32f469", "a012da99389779ff39f946236a68290c9563a5d6805a46277172c27aada063fa"]) assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line, predecessor), null);
       assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line, createHash("sha256").update(bytes + "\n").digest("hex")), null);
       assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line + " unexpected", digest), null);
       assert.equal(classifyClosedWorkspaceAppearanceStyleBoundary(path, line.replace("CLOSED_", "OPEN_"), digest), null);

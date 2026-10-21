@@ -3,12 +3,12 @@ import {browserWorkspaceStringValuesV1} from "../../contracts/src/browser-shell-
 import { createBrowserContextOwnerV1, type BrowserContextV1 } from "../../browser-shell/src/context-owner-v1.js";
 import { createBrowserShellRegistryV1, type BrowserShellFactoryV1 } from "../../browser-shell/src/registry-v1.js";
 import { parseBrowserDeepLinkV1, buildBrowserDeepLinkV1, type BrowserDeepLinkV1 } from "../../browser-shell/src/deep-link-v1.js";
-import { validateBrowserErvReadV1, type BrowserErvReadV1 } from "../../contracts/src/browser-erv-read-v1.js";
-import { setupPluginV1, createSetupViewV1, renderSetupStatusSummaryV1 } from "./plugin-setup-v1.js";
-import { ervPluginV1, createErvViewV1, createErvPanelV1, createErvActionV1, createErvRecordCardV1 } from "./plugin-erv-v1.js";
+import type { BrowserErvReadV1 } from "../../contracts/src/browser-erv-read-v1.js";
+import { setupPluginV1, createSetupViewV1 } from "./plugin-setup-v1.js";
+import { ervPluginV1, createErvViewV1, createErvPanelV1, createErvActionV1 } from "./plugin-erv-v1.js";
 import { diagnosticPluginsV1, diagnosticFailingViewV1 } from "./plugin-diagnostics-v1.js";
 import { configurationDraftPluginV1, createConfigurationDraftViewV1 } from "./plugin-configuration-draft-v1.js";
-import { text, facts, type WorkspaceViewApiV1 } from "./api-v1.js";
+import { text, type WorkspaceViewApiV1 } from "./api-v1.js";
 import { createWorkspaceProfileEditorV1 } from "./profile-editor-v1.js";
 import type { BrowserProfileReadV1 } from "../../contracts/src/browser-profile-v1.js";
 import { createWorkspaceNotificationsV1 } from "./notifications-v1.js";
@@ -277,15 +277,7 @@ async function start() {
   await moduleViewReady; if(lifetime.signal.aborted)return;
   if(document.body.dataset.ownerSurfacesV2==='true'&&contextSelection){try{const module=await import(base+'/workspace/surfaces/app.js');if(lifetime.signal.aborted)return;surfacesV2=module.createWorkspaceSurfacesV2({container:canvas,main,context:contextSelection,signal:lifetime.signal,dirty:()=>!!(moduleViewEditor?.isDirty()||profileEditor?.isDirty()||[...draftOwners].some(d=>d.isDirty())),returnToWorkspace:()=>{void activate();},render(projection:import('../../contracts/src/workspace-surface-v2.js').WorkspaceSurfaceProjectionV2){
     latestActivation=Object.freeze({});panelEpoch++;registry.retireAll();invoice=null;actions.replaceChildren();panel.replaceChildren();panel.hidden=true;contextSelection.adoptSurfaceContextV2(projection.routeId,projection.objectId);
-    const frame=document.createElement('section');frame.className='surface-document';frame.dataset.surfaceRenderV2='true';frame.append(text('h1',projection.title));
-    if(projection.kind==='DOCUMENT'){
-      const value=validateBrowserErvReadV1(projection.data);if(value.invoiceId!==projection.objectId||value.revision!==projection.dataRevision||value.tenantId!==owner.context().tenantId)throw Error('SURFACE_NATIVE_READ_DRIFT');
-      const card=createErvRecordCardV1(value,text('h2','Rechnungsübersicht'));card.dataset.readableNative='DOCUMENT';frame.append(card);
-    }else if(projection.kind==='MONITOR'){
-      const status=document.createElement('section');status.className='surface-setup-summary';status.dataset.readableNative='MONITOR';status.append(text('h2','Einrichtungsstatus'));renderSetupStatusSummaryV1(status,projection.data);frame.append(status);
-    }
-    const provenance=document.createElement('section');provenance.className='surface-provenance';provenance.setAttribute('aria-label','Native Quelle und Revision');facts(provenance,[['Quelle',projection.kind==='DOCUMENT'?'Führender nativer Rechnungsspeicher':projection.kind==='MONITOR'?'Vorhandener Setupkoordinator':'Vorhandene native Projektion'],['Objektreferenz',projection.objectId],['Datenrevision',String(projection.dataRevision)],['Ergebnisrevision',projection.resultRevision]]);frame.append(provenance);
-    const technical=document.createElement('details');technical.className='surface-technical-details';if(projection.kind!=='DOCUMENT'&&projection.kind!=='MONITOR')technical.open=true;technical.append(text('summary','Technische Quelldaten (JSON)'));const source=text('pre',JSON.stringify(projection.source,null,2));source.className='surface-source';const content=text('pre',JSON.stringify(projection.data,null,2));content.className='surface-content';technical.append(text('h2','Führende Quellenreferenz'),source,text('h2','Tatsächlicher nativer Browserread'),content);frame.append(technical,text('p','Nur lesen. Dokument ist eine native Rechnungsreferenz, kein Original-PDF oder DMS. Physische Pixelsicht und Fachwirkung sind nicht bestätigt.'));
+    const frame=module.createSurfaceProjectionFrameV2(projection,owner.context().tenantId);
     main.hidden=false;main.replaceChildren(frame);main.dataset.surfaceObjectId=projection.objectId;main.dataset.surfaceProjectionDigest=projection.projectionDigest;document.body.dataset.nativeRevision=String(projection.dataRevision);
   }});}catch{canvas.append(text('p','Surfaceanzeige nicht verbunden. Fachnavigation und Abmelden bleiben unabhängig.'));}}
   if(document.body.dataset.ownerInvocationsV1==='true'&&contextSelection&&moduleViewEditor&&surfacesV2){try{const module=await import(base+'/workspace/invocations/app.js');if(!lifetime.signal.aborted)module.createWorkspaceInvocationsV1({container:canvas,context:contextSelection,editor:moduleViewEditor,surfaces:surfacesV2,signal:lifetime.signal});}catch{canvas.append(text('p','Modellfreier Schnellauftrag nicht verbunden; native Fachnavigation bleibt unabhängig.'));}}
