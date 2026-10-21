@@ -85,3 +85,16 @@ assert no new task/outbox/DOM receipt. Existing pin/draft/native original-byte
 and owner-restart UNKNOWN tests remain intact. This bounded correction is not
 whole605/606, cross-session data delivery, other-engine/device, Main sighting,
 full design, native zoom, model/audio/cloud or production qualification.
+
+
+## Readable native document and setup-monitor presentation
+
+The shared browser workspace renders the already-authorized DOCUMENT and MONITOR projections as labelled native information. DOCUMENT reuses the canonical synchronous native invoice card, including the actual invoice reference, revision, amounts and unresolved-status warning. MONITOR reuses the canonical setup-status summary and stage list, including the actual offline/no-live-model evidence. Neither view performs a second read or creates a second data store or authority path. Missing information is not invented.
+
+Source/object/data revision and the exact result revision remain visible as provenance. The original source and data JSON remain byte-equivalent JSON values in keyboard-operable, initially collapsed technical details. The existing unrelated ANALYSIS presentation is not converted into a new analysis capability. A native invoice reference is not an original PDF or DMS document.
+
+The synchronous existing before-DOM/commit/ACK boundary remains unchanged: accepted transport, loaded native data and a rendered target receipt remain distinct. Destination selection, native IDs/epochs/revisions, tenant/session denials, pinned or dirty content and original UNKNOWN custody are not relaxed. Rendering does not grant booking, payment, model, audio or productive rights.
+
+The common registered-module navigation retains whole-word labels and one adaptive module row where the existing layout is horizontal. Overflow stays inside the existing navigation; keyboard focus scrolls the complete actual focused module into that region. No module is hidden or renamed to obtain fit, and no profile-specific exception is introduced. The existing five design compositions and narrow-screen layout remain separate from full original-profile visual acceptance.
+
+The focused browser regressions cover actual 1280px five-profile navigation, narrow overflow/focus and real native DOCUMENT/MONITOR target rendering with exact raw JSON disclosure. Earlier source-bound generic-composition matrices remain historical evidence; their narrower positive verdict is not a claim that these subsequently observed readability defects were already absent. Whole issue605/606, physical monitors and actual popup-blocking acceptance remain separate.
