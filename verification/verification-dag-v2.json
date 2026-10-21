@@ -5220,7 +5220,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "83ffc3afbcdb921b69c0737334970b2796543e0d62bb985ac2048e9013c3ecc1"
+          "sha256": "746dd24c966e0ba778cf0f215234b0c759e23b0da84436aec41ebddd9facaf57"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -10116,7 +10116,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "00b5f0fb93a1771484ed6f8d2de3dbc84b43dd079a162b6f22151597abd3a3f7"
+          "sha256": "b08ab6112ab36e43d7f4f3563b8404e3ef471df0c14c383f15cb53d4bf1a5982"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -11584,7 +11584,7 @@
         {
           "path": "tests/pan597/browser-surfaces.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b8a7006bc20101754ce7c8c7d391a4523830d11fc957ef18e8ed42db0dbc6069"
+          "sha256": "228e55e75005aa5fe0ba87ee77ae182584b7a6920d15d59d1a1cd48c3e409f93"
         },
         {
           "path": "tests/pan597/process-restart.test.mjs",

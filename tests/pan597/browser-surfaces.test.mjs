@@ -88,12 +88,24 @@ async function readableFixture240897({diagnosticPlugins=false}={}){
  }catch(e){await b?.context.close();extra?.close();store?.close();await f.close();throw e;}
 }
 async function navigationReadability240897(page){return page.evaluate(()=>{const nav=document.getElementById('shell.navigation');return{orientation:getComputedStyle(nav).flexDirection,display:getComputedStyle(nav).display,documentWidth:document.documentElement.scrollWidth,viewport:innerWidth,items:[...nav.querySelectorAll('.workspace-nav-item')].map(button=>{const label=button.querySelector('.nav-label'),range=document.createRange();range.selectNodeContents(label);return{id:button.dataset.workspaceModule??button.dataset.referenceModule,label:label.textContent,lines:new Set([...range.getClientRects()].filter(r=>r.width>0).map(r=>Math.round(r.top))).size,top:Math.round(button.getBoundingClientRect().top),visible:!!button.getClientRects().length};})};});}
+async function assertIntrinsicNavigationContainer240897(page,profile){
+ const nav=page.locator('[id="shell.navigation"]'),before=await nav.getAttribute('style');
+ try{
+  await nav.evaluate(e=>e.style.setProperty('max-width','320px'));
+  const n=await navigationReadability240897(page),actual=await nav.evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return{left:r.left,right:r.right,width:r.width,scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,display:s.display,overflowX:s.overflowX,overflowY:s.overflowY};});
+  const evidence=process.env.PAN549_BROWSER_EVIDENCE;if(evidence){const fs=await import('node:fs'),path=await import('node:path');fs.mkdirSync(evidence,{recursive:true});fs.writeFileSync(path.join(evidence,'intrinsic-container-'+profile+'.json'),JSON.stringify({profile,controlledConstraint:'actual native navigation max-width320px at1280 viewport; no font/data/registration override',actual,readability:n},null,2)+'\n');await page.screenshot({path:path.join(evidence,'intrinsic-container-'+profile+'.png'),fullPage:false});}
+  assert.ok(n.items.every(i=>i.visible&&i.lines===1),'INTRINSIC_CONTAINER_WHOLE_MODULE_WORDS '+profile+': '+JSON.stringify(n));assert.ok(n.documentWidth<=n.viewport);
+  if(n.orientation==='row'&&n.display!=='grid')assert.equal(new Set(n.items.map(i=>i.top)).size,1,'ADAPTIVE_INTRINSIC_CONTAINER_MODULE_ROW '+profile);
+  for(const button of await nav.locator('.workspace-nav-item:not(:disabled)').all()){await button.focus();assert.equal(await button.evaluate(b=>document.activeElement===b),true);assert.equal(await button.evaluate(b=>{const n=b.closest('nav').getBoundingClientRect(),r=b.getBoundingClientRect();return r.left>=n.left-1&&r.right<=n.right+1;}),true,'Intrinsic-container keyboard focus remains in its owned navigation viewport');}
+ }finally{await nav.evaluate((e,style)=>{if(style===null)e.removeAttribute('style');else e.setAttribute('style',style);},before);}
+}
 test('JO240897 common navigation keeps whole module labels and adaptive accessible overflow across five profiles',async()=>{
  const x=await readableFixture240897();try{
   let originalIds;
   for(const profile of['notebook','orbit','prism','insight','jarvis']){
    await x.source.getByRole('button',{name:'Design und Layout konfigurieren',exact:true}).click();await x.source.getByRole('combobox',{name:'Designprofil',exact:true}).selectOption(profile);await x.source.getByRole('button',{name:'Kuratierte Vorlage als Vorschau',exact:true}).click();await x.source.getByRole('button',{name:'Zur Arbeitsfläche',exact:true}).click();await x.source.waitForFunction(p=>document.body.dataset.designProfile===p,profile);await x.source.setViewportSize({width:1280,height:900});
    const n=await navigationReadability240897(x.source);assert.ok(n.items.some(i=>i.label==='Administration'));assert.ok(n.items.some(i=>i.label==='Konfiguration'));assert.ok(n.items.every(i=>i.visible&&i.lines===1),'WHOLE_MODULE_WORDS_NOT_COMPRESSED '+profile+': '+JSON.stringify(n));if(n.orientation==='row'&&n.display!=='grid')assert.equal(new Set(n.items.map(i=>i.top)).size,1,'SINGLE_ADAPTIVE_MODULE_ROW '+profile);assert.ok(n.documentWidth<=n.viewport);const ids=n.items.map(i=>i.id);if(originalIds)assert.deepEqual(ids,originalIds);else originalIds=ids;
+   await assertIntrinsicNavigationContainer240897(x.source,profile);
    for(const button of await x.source.locator('[id="shell.navigation"] .workspace-nav-item:not(:disabled)').all()){await button.focus();assert.equal(await button.evaluate(b=>document.activeElement===b),true);const visible=await button.evaluate(b=>{const n=b.closest('nav').getBoundingClientRect(),r=b.getBoundingClientRect();return r.left>=n.left-1&&r.right<=n.right+1;});assert.equal(visible,true,'Keyboard focus brings overflowing registered module into its navigation viewport');}
    await x.source.setViewportSize({width:390,height:844});assert.ok(await x.source.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   }x.f.unchanged();
