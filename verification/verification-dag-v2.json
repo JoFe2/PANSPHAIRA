@@ -5045,7 +5045,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d19fb7289ec6e6167e2833879fb73d89ec41b0a25c8fdb35a2fdce899f5770fe"
+          "sha256": "ac4ae6d58ff5d1a29ffe602f3fa336b0309f0d1aee1be0f9892354f57a18a88b"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5110,7 +5110,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "a3c9ba5aa81dea42d45d64a01f1af1d1a5584c5dffd21e2e002a50a4bef548d5"
+          "sha256": "b14fef85cc50fb45aaed2f0a811ffe24493022a5494a9b3ab618db5beaf07ef6"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5235,7 +5235,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "d391aeddfe50616e895892d573de7af8b27d474e8a8355d6dc3fdf040a8c60af"
+          "sha256": "04b3a6bde502df6bf71dd58422a2c21a1f544b5fe877654ef4bfa7e591019f24"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",

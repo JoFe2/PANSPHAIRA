@@ -98,7 +98,71 @@ test("public release staging accepts an isolated Git worktree control file", asy
       `${output}.tar.gz`,
     );
     assert.ok(metadata.size > 0);
+    // These optional native-source descriptors never become legacy runtime files.
+    const sourceOnly = [
+      "src/pan542/source-compatibility-catalog-v2.json",
+      "docs/architecture/erv-human-source-compatibility-v2.md",
+    ];
+    const manifest = await readFile(path.join(root, "release/public-files.manifest"), "utf8");
+    const manifestPaths = new Set(manifest.split("\n").filter(line => line && !line.startsWith("#")).map(line => line.split("\t")[0]));
+    assert.ok(manifestPaths.has("scripts/build-public-release.sh"));
+    assert.ok(manifestPaths.has("release/public-files.manifest"));
+    for (const relative of sourceOnly) {
+      assert.ok(!manifestPaths.has(relative));
+      await assert.rejects(readFile(path.join(output, relative)), { code: "ENOENT" });
+    }
+    // Reuse this actual built legacy payload as an isolated input. Neighbor
+    // denials happen before staging, without another full fixture copy or
+    // mutation of the repository's source, personal data or immutable inputs.
+    const { readdir, stat } = await import("node:fs/promises");
+    const stagedBuilder = path.join(output, "scripts/build-public-release.sh");
+    const neighbors = [
+      "src/pan542/source-compatibility-catalog-v3.json",
+      "docs/architecture/erv-human-source-compatibility-v3.md",
+    ];
+    for (const [index, neighbor] of neighbors.entries()) {
+      const location = path.join(output, neighbor);
+      await mkdir(path.dirname(location), { recursive: true });
+      await writeFile(location, "{}\n");
+      const deniedOutput = path.join(target, `cm-product-increment-rc-20261022-unknown-${index}`);
+      try {
+        await assert.rejects(execFile(stagedBuilder, ["--output", deniedOutput]), (error) => {
+          assert.equal(error.code, 1);
+          assert.ok(error.stderr.includes(`UNMANIFESTED_SOURCE_FILE:${neighbor}`));
+          return true;
+        });
+        await assert.rejects(stat(deniedOutput), { code: "ENOENT" });
+        await assert.rejects(stat(`${deniedOutput}.tar.gz`), { code: "ENOENT" });
+      } finally {
+        await unlink(location);
+      }
+    }
+    console.log("P0_ERV_SOURCE_ONLY_PUBLIC_STAGING_BOUNDARY", JSON.stringify({
+      sourceOnlyAbsentFromPayload: sourceOnly,
+      realUnmanifestedNeighborDenials: neighbors,
+      additionalTransientNeighborFileBytesWritten: Buffer.byteLength("{}\n") * neighbors.length,
+      archiveBytes: metadata.size,
+      noRuntimeManifestExpansion: true,
+    }));
   } finally {
+    const { readdir, stat } = await import("node:fs/promises");
+    async function actualGenerated(directory) {
+      let bytes = 0, files = 0;
+      for (const entry of await readdir(directory, { withFileTypes: true })) {
+        const file = path.join(directory, entry.name);
+        if (entry.isDirectory()) {
+          const nested = await actualGenerated(file); bytes += nested.bytes; files += nested.files;
+        } else {
+          assert.ok(entry.isFile()); bytes += (await stat(file)).size; files += 1;
+        }
+      }
+      return { bytes, files };
+    }
+    console.log("P0_ERV_SOURCE_ONLY_PUBLIC_STAGING_ACCOUNTING", JSON.stringify({
+      beforeMandatoryOwnCleanup: await actualGenerated(target),
+      conservativeShortNeighborWriteReserveBytes: 1024,
+      notAResourceGrantOrRuntimeQualification: true,
+    }));
     await rm(target, { recursive: true, force: true });
   }
 });
