@@ -1,9 +1,9 @@
 // Historical-source test input only, not a hybrid deployment or product authority.
 import assert from 'node:assert/strict';
 import {after} from 'node:test';
-import {mkdirSync,mkdtempSync,readFileSync,rmSync,symlinkSync,copyFileSync,realpathSync} from 'node:fs';
+import {mkdirSync,mkdtempSync,readFileSync,writeFileSync,rmSync,symlinkSync,copyFileSync,realpathSync} from 'node:fs';
 import {tmpdir} from 'node:os';
-import {join,dirname} from 'node:path';
+import {join,dirname,resolve} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
@@ -51,6 +51,14 @@ export function predecessorSourceInput(){
     predecessorTemporary=mkdtempSync(join(tmpdir(),'pan542-v1-predecessor-input-'));predecessorCached=predecessorTemporary;
     const archive=execFileSync('git',['archive','--format=tar',policy.predecessorPrimary.commit],{cwd:repo,maxBuffer:256*1024*1024});
     execFileSync('tar',['-x','-C',predecessorCached],{input:archive,maxBuffer:1024*1024});
+    // Preserve the literal primary Git identity for the unchanged nested V1 fixture.
+    // Only Git metadata is attached; archive payload and source catalog stay exact.
+    const common=execFileSync('git',['rev-parse','--git-common-dir'],{cwd:repo,encoding:'utf8'}).trim();
+    execFileSync('git',['init','--quiet',predecessorCached],{cwd:repo,maxBuffer:1024*1024});
+    writeFileSync(join(predecessorCached,'.git/objects/info/alternates'),resolve(repo,common,'objects')+'\n',{mode:0o600});
+    writeFileSync(join(predecessorCached,'.git/HEAD'),policy.predecessorPrimary.commit+'\n',{mode:0o600});
+    writeFileSync(join(predecessorCached,'.git/info/exclude'),'/node_modules\n',{mode:0o600});
+    execFileSync('git',['read-tree',policy.predecessorPrimary.commit],{cwd:predecessorCached,maxBuffer:1024*1024});
     symlinkSync(join(repo,'node_modules'),join(predecessorCached,'node_modules'),'dir');
     execFileSync(process.execPath,[join(repo,'node_modules/typescript/bin/tsc'),'-p',join(predecessorCached,'tsconfig.json')],{cwd:predecessorCached,maxBuffer:4*1024*1024});
   }

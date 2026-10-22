@@ -11122,7 +11122,7 @@
         {
           "path": "tests/pan542/source-compatibility-fixture.mjs",
           "role": "VALIDATOR",
-          "sha256": "b10c09f03a8438d9dd084a6cdc33371ce427fe6eda012691d388892066a4c6f4"
+          "sha256": "a5b6e801436bd0acf316f1550fb81d62b81ef40a4f693e6d42c242ba87a1c9fb"
         },
         {
           "path": "tests/pan542/native-human-backend.test.mjs",
