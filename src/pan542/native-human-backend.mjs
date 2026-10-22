@@ -19,6 +19,7 @@ const sourcePaths=['src/pan542/native-human-backend.mjs','src/pan527/origin-sess
   'src/procurement-434/bestellung-lifecycle.mjs','src/procurement-434/bestellung-liability.mjs',
   'dist/packages/contracts/src/incoming-invoice-erv.js','contracts/trade/pan516-invoice-cases-v1.json',
   'demo/runtime/local-journal-owner.mjs','src/pan542/source-compatibility-catalog-v1.json'];
+const sourcePathsV2=[...sourcePaths,'src/pan542/source-compatibility-catalog-v2.json'];
 const guards=['pan542_binding','pan542_events'].flatMap(table=>['UPDATE','DELETE'].map(action=>({
   name:`${table}_${action.toLowerCase()}_immutable`,
   sql:`CREATE TRIGGER ${table}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${table} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_HISTORY_IMMUTABLE_DENIED'); END`})));
@@ -29,7 +30,7 @@ function closed(value,keys,code){
     ||Object.values(ds).some(d=>!d.enumerable||!('value' in d)))fail(code);
 }
 function frozen(value){if(value&&typeof value==='object'){for(const v of Object.values(value))frozen(v);Object.freeze(value);}return value;}
-function sourceIdentity(){return sourcePaths.map(path=>({path,sha256:createHash('sha256').update(readFileSync(new URL('../../'+path,import.meta.url))).digest('hex')}));}
+function sourceIdentity(){return sourcePathsV2.map(path=>({path,sha256:createHash('sha256').update(readFileSync(new URL('../../'+path,import.meta.url))).digest('hex')}));}
 function sessionScope(binding){
   return {origin:binding.origin,audience:binding.audience,tenantId:binding.tenantId,instanceId:binding.instanceId,generation:binding.generation,identityDigest:binding.identityDigest};
 }
@@ -114,6 +115,100 @@ function sourceCompatibility(db,record,current){
   return frozen(receipt);
 }
 
+// Explicit v2 source-owner successor. V1 catalog/receipt/guards remain historical
+// facts. This is metadata in the existing native target, never another rights
+// registry, HTTP route, source override, business migration or execution grant.
+const sourceCatalogPathV2='src/pan542/source-compatibility-catalog-v2.json';
+const transitionIdV2='PAN542_NATIVE_REVOKE_CLASSIFICATION_CORRECTION_V2';
+const predecessorPrimaryV2={commit:'3a54908b377b749e0df229fc6212492acfa9ea15',tree:'44d113fd044590f055d273364d800ce4506ded9d',releaseId:420127236};
+const predecessorSourceDigestV2='75ac3462868ba56fb2a4894159f81a524782624f6b1aa83ac52250fe73d3171c';
+const predecessorCatalogSHA256V2='fc4eb5c75f5ba1612570b54f009d42131df3773301fd452de2e19dd395ea3cd7';
+const revokeAdapterSHA256V2='b2118a7cea483fcd61f416e273c41d651739640f375aec38823c0fc89053c777';
+const compatibilityTableV2='pan542_source_compatibility_v2';
+const compatibilityDDLV2='CREATE TABLE pan542_source_compatibility_v2(id INTEGER PRIMARY KEY CHECK(id=1),record TEXT NOT NULL) STRICT';
+const compatibilityGuardsV2=[...['UPDATE','DELETE'].map(action=>({
+  name:`${compatibilityTableV2}_${action.toLowerCase()}_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTableV2}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${compatibilityTableV2} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`})),{
+  name:`${compatibilityTableV2}_insert_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTableV2}_insert_immutable BEFORE INSERT ON ${compatibilityTableV2} WHEN EXISTS(SELECT 1 FROM ${compatibilityTableV2}) BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`}];
+function sourceCatalogV2(current){
+  const bytes=readFileSync(new URL('../../'+sourceCatalogPathV2,import.meta.url));let catalog;
+  try{catalog=JSON.parse(bytes);}catch{fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');}
+  closed(catalog,['schemaVersion','transitionId','predecessorTransitionId','predecessorPrimary','predecessorSourceCatalogSHA256','predecessorSourceIdentity','targetFiles'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  if(catalog.schemaVersion!=='pansphaira.erv-human/source-compatibility-catalog/v2'||catalog.transitionId!==transitionIdV2
+    ||catalog.predecessorTransitionId!==transitionId||canonicalJson(catalog.predecessorPrimary)!==canonicalJson(predecessorPrimaryV2)
+    ||catalog.predecessorSourceCatalogSHA256!==predecessorCatalogSHA256V2||digest(catalog.predecessorSourceIdentity)!==predecessorSourceDigestV2
+    ||!Array.isArray(catalog.targetFiles)||catalog.targetFiles.length!==sourcePaths.length)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  const predecessor=sourceCatalog(catalog.predecessorSourceIdentity);
+  if(predecessor.catalogSHA256!==predecessorCatalogSHA256V2)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  for(const[index,row]of catalog.targetFiles.entries()){
+    closed(row,['path','sha256'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    if(row.path!==sourcePaths[index]||typeof row.sha256!=='string'||!/^[a-f0-9]{64}$/.test(row.sha256))fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    if(row.path==='src/pan527/origin-session-adapter.mjs'){
+      if(row.sha256!==revokeAdapterSHA256V2)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    }else if(row.path!=='src/pan542/native-human-backend.mjs'&&row.sha256!==catalog.predecessorSourceIdentity[index].sha256)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  }
+  const catalogSHA256=createHash('sha256').update(bytes).digest('hex');
+  if(canonicalJson(current)!==canonicalJson([...catalog.targetFiles,{path:sourceCatalogPathV2,sha256:catalogSHA256}]))fail('ERV_HUMAN_SOURCE_TARGET_DENIED');
+  return {catalog,catalogSHA256};
+}
+function compatibilityStateV2(db){
+  const objects=db.prepare("SELECT type,name,sql FROM sqlite_master WHERE name=? OR name LIKE ? ORDER BY name").all(compatibilityTableV2,compatibilityTableV2+'_%');
+  if(!objects.length)return false;
+  const table=objects.find(o=>o.type==='table'&&o.name===compatibilityTableV2);
+  if(!table||table.sql!==compatibilityDDLV2||objects.length!==compatibilityGuardsV2.length+1||!guardsMatch(db,compatibilityGuardsV2))fail('ERV_HUMAN_SOURCE_HISTORY_GUARDS_DENIED');
+  return true;
+}
+function transitionCoreV2(db,record,current){
+  const {catalog,catalogSHA256}=sourceCatalogV2(current);let predecessorTransitionDigest=null;
+  if(canonicalJson(record.sourceIdentity)===canonicalJson(catalog.predecessorSourceIdentity)){
+    if(compatibilityState(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  }else{
+    // A genuine original177c binding needs its immutable, independently valid
+    // V1 receipt. Never synthesize/adopt that predecessor or rewrite its basis.
+    predecessorTransitionDigest=sourceCompatibility(db,record,catalog.predecessorSourceIdentity).transitionDigest;
+  }
+  return {schemaVersion:'pansphaira.erv-human/source-compatibility/v2',transitionId:transitionIdV2,
+    predecessorPrimary:predecessorPrimaryV2,predecessorTransitionId:transitionId,predecessorTransitionDigest,
+    originalBindingDigest:record.bindingDigest,originalSourceIdentity:record.sourceIdentity,
+    predecessorSourceIdentity:catalog.predecessorSourceIdentity,effectiveSourceIdentity:current,
+    sourceCatalogSHA256:catalogSHA256,predecessorSourceCatalogSHA256:predecessorCatalogSHA256V2,
+    sessionBindingDigest:digest(record.sessionBinding),tradeBindingDigest:record.tradeBindingDigest,
+    roleMappingDigest:digest({version:record.roleMappingVersion,roles:record.roles,invoiceIds:record.invoiceIds}),
+    originalBindingAndHistoryUnchanged:true,predecessorReceiptUnchanged:true,sessionAndNativeRolesUnchanged:true,
+    bookingAuthorityGranted:false,paymentOrderAuthorized:false,productiveDispatchAuthorized:false,executionAuthorityGranted:false};
+}
+function sourceCompatibilityV2(db,record,current){
+  if(!compatibilityStateV2(db))fail('ERV_HUMAN_CONFIGURATION_BINDING_DENIED');
+  const rows=db.prepare('SELECT id,record FROM pan542_source_compatibility_v2 ORDER BY id LIMIT 2').all();
+  if(rows.length!==1||rows[0].id!==1)fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  let receipt;try{receipt=JSON.parse(rows[0].record);}catch{fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');}
+  const core=transitionCoreV2(db,record,current),expected={...core,transitionDigest:digest(core)};
+  if(canonicalJson(receipt)!==canonicalJson(expected))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  return frozen(receipt);
+}
+export function transitionNativeErvHumanSourceCompatibilityV2(options){
+  closed(options,['root','owner','sessions'],'ERV_HUMAN_SOURCE_OWNER_OPTIONS_DENIED');
+  if(options.owner!=='LOCAL_SYNTHETIC_OWNER')fail('ERV_HUMAN_SOURCE_LOCAL_OWNER_REQUIRED_DENIED');
+  const {root,sessions}=options;
+  if(!isProtectedSessionAdapterV1(sessions,sessions?.binding?.tenantId))fail('ERV_HUMAN_PROTECTED_SESSION_OWNER_REQUIRED_DENIED');
+  return sourceTransitionLocal(root,(db,tradeBinding,releaseNamespaceFence)=>{
+    const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
+    if(canonicalJson(record.sessionBinding)!==canonicalJson(sessionScope(sessions.binding)))fail('ERV_HUMAN_SESSION_BINDING_DENIED');
+    for(const invoiceId of invoiceIds)history(db,record,invoiceId,root);
+    if(canonicalJson(record.sourceIdentity)===canonicalJson(current)){
+      if(compatibilityStateV2(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+      return frozen({schemaVersion:'pansphaira.erv-human/source-compatibility-noop/v2',outcome:'ALREADY_SOURCE_BOUND',originalBindingDigest:record.bindingDigest,executionAuthorityGranted:false});
+    }
+    const core=transitionCoreV2(db,record,current);
+    if(compatibilityStateV2(db))return sourceCompatibilityV2(db,record,current);
+    // Same fenced admission / SQLite writer-lock / crash-rollback boundary as V1.
+    releaseNamespaceFence();db.exec(compatibilityDDLV2);for(const guard of compatibilityGuardsV2)db.exec(guard.sql);
+    db.prepare('INSERT INTO pan542_source_compatibility_v2 VALUES(1,?)').run(canonicalJson({...core,transitionDigest:digest(core)}));
+    return sourceCompatibilityV2(db,record,current);
+  });
+}
+
 function configuredBinding(db,tradeBinding){
   if(!guardsMatch(db,guards))fail('ERV_HUMAN_HISTORY_GUARDS_DENIED');
   const row=db.prepare('SELECT record FROM pan542_binding WHERE id=1').get();if(!row)fail('ERV_HUMAN_CONFIGURATION_REQUIRED_DENIED');
@@ -126,7 +221,7 @@ function configuredBinding(db,tradeBinding){
 }
 function binding(db,tradeBinding){
   const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
-  if(canonicalJson(record.sourceIdentity)!==canonicalJson(current))sourceCompatibility(db,record,current);
+  if(canonicalJson(record.sourceIdentity)!==canonicalJson(current))sourceCompatibilityV2(db,record,current);
   // V1 decision readbacks retain the ORIGINAL configuration/source/event basis.
   // Effective source provenance is returned by the separate versioned owner API.
   return record;
