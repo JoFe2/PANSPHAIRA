@@ -431,6 +431,9 @@ body:has(.workspace-assistant-column>*) .workspace-module-strip { width:calc(100
 .erv-record-card .erv-workspace-subtitle { line-height:1.2; }
 .erv-record-card .erv-match { padding:2px 7px; line-height:1.3; margin-bottom:6px; }
 .erv-record-card .erv-financial-summary { padding-top:7px; }
+/* Keep native amounts inside their own fact at narrow or zoomed widths. */
+body[data-design-profile="notebook"] .erv-record-card .erv-financial-summary { grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr)); }
+body[data-design-profile="notebook"] .erv-record-card .erv-amount dd { white-space:normal; overflow-wrap:anywhere; }
 .erv-record-card .erv-amount dt { line-height:1.3; }
 .erv-record-card .erv-value-card:first-child dd { font-size:22px; line-height:1.4; }
 .erv-context-card>p { font-size:14px; }

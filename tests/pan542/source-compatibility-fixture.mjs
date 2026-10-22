@@ -12,7 +12,7 @@ import {financeFixture} from '../pan519/native-fixture.mjs';
 import {createProtectedSessionAdapterV1} from '../../src/pan527/origin-session-adapter.mjs';
 import {shapeIdentity527} from '../pan527/helpers.mjs';
 import catalog from '../../src/pan542/source-compatibility-catalog-v1.json' with {type:'json'};
-const repo=fileURLToPath(new URL('../../',import.meta.url));let cached=null,temporary=null;
+const repo=fileURLToPath(new URL('../../',import.meta.url));let cached=null,temporary=null,predecessorCached=null,predecessorTemporary=null;
 const hash=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
 export function legacySourceInput(){
   if(cached)return cached;
@@ -34,7 +34,30 @@ export function legacySourceInput(){
   for(const row of catalog.originalSourceIdentity)assert.equal(hash(join(cached,row.path)),row.sha256,'GENUINE_LEGACY_SOURCE_INPUT_REQUIRED:'+row.path);
   return cached;
 }
-after(()=>{if(temporary)rmSync(temporary,{recursive:true,force:true});});
+after(()=>{if(temporary)rmSync(temporary,{recursive:true,force:true});if(predecessorTemporary)rmSync(predecessorTemporary,{recursive:true,force:true});});
+
+// Genuine complete immutable V1 release for V1 history tests and the explicit V2
+// predecessor stage. Never splice a current adapter/backend into that source.
+export function predecessorSourceInput(){
+  if(predecessorCached)return predecessorCached;
+  const policy=JSON.parse(readFileSync(new URL('../../src/pan542/source-compatibility-catalog-v2.json',import.meta.url),'utf8'));
+  if(process.env.PAN542_PREDECESSOR_SOURCE_INPUT){
+    predecessorCached=realpathSync(process.env.PAN542_PREDECESSOR_SOURCE_INPUT);
+    assert.equal(execFileSync('git',['rev-parse','HEAD'],{cwd:predecessorCached,encoding:'utf8'}).trim(),policy.predecessorPrimary.commit);
+    assert.equal(execFileSync('git',['rev-parse','HEAD^{tree}'],{cwd:predecessorCached,encoding:'utf8'}).trim(),policy.predecessorPrimary.tree);
+    assert.equal(execFileSync('git',['status','--porcelain'],{cwd:predecessorCached,encoding:'utf8'}),'');
+  }else{
+    assert.equal(execFileSync('git',['rev-parse',policy.predecessorPrimary.commit+'^{tree}'],{cwd:repo,encoding:'utf8'}).trim(),policy.predecessorPrimary.tree);
+    predecessorTemporary=mkdtempSync(join(tmpdir(),'pan542-v1-predecessor-input-'));predecessorCached=predecessorTemporary;
+    const archive=execFileSync('git',['archive','--format=tar',policy.predecessorPrimary.commit],{cwd:repo,maxBuffer:256*1024*1024});
+    execFileSync('tar',['-x','-C',predecessorCached],{input:archive,maxBuffer:1024*1024});
+    symlinkSync(join(repo,'node_modules'),join(predecessorCached,'node_modules'),'dir');
+    execFileSync(process.execPath,[join(repo,'node_modules/typescript/bin/tsc'),'-p',join(predecessorCached,'tsconfig.json')],{cwd:predecessorCached,maxBuffer:4*1024*1024});
+  }
+  for(const row of policy.predecessorSourceIdentity)assert.equal(hash(join(predecessorCached,row.path)),row.sha256,'GENUINE_V1_PREDECESSOR_SOURCE_INPUT_REQUIRED:'+row.path);
+  return predecessorCached;
+}
+
 export const compatibilityOrigin='https://pan542-compatibility.test:4443';
 export function sessionOptions(stateRoot,overrides={}){return {optIn:true,origin:compatibilityOrigin,identity:shapeIdentity527('tenant-a'),stateRoot,...overrides};}
 export async function compatibilityFixture({unbound=false,legacyOverride=null}={}){
@@ -55,9 +78,9 @@ export function sourceNegativeFixture(input,parent){
   // Exact-byte local copies/symlinks solely for isolated DENIAL tests. They are
   // never admitted as a deployment, source archive or preserved-data GREEN.
   const root=join(parent,'untrusted-source-negative');mkdirSync(root,{mode:0o700});
-  const paths=[...catalog.originalSourceIdentity.map(r=>r.path),'src/pan542/source-compatibility-catalog-v1.json'];
+  const paths=[...catalog.originalSourceIdentity.map(r=>r.path),'src/pan542/source-compatibility-catalog-v1.json','src/pan542/source-compatibility-catalog-v2.json'];
   for(const path of paths){const src=join(input,path),dst=join(root,path);mkdirSync(dirname(dst),{recursive:true,mode:0o700});
-    if(path==='src/pan542/native-human-backend.mjs'||path.endsWith('source-compatibility-catalog-v1.json')){try{copyFileSync(src,dst);}catch(e){if(e.code!=='ENOENT')throw e;}}
+    if(path==='src/pan542/native-human-backend.mjs'||/source-compatibility-catalog-v[12]\.json$/.test(path)){try{copyFileSync(src,dst);}catch(e){if(e.code!=='ENOENT')throw e;}}
     else symlinkSync(src,dst);
   }
   return root;
