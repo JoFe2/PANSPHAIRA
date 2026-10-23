@@ -965,3 +965,23 @@ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-present
 body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width="medium"] .agent-welcome { padding-top:12px; padding-bottom:8px; }
 body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width="medium"] .agent-integrated-composer { grid-template-columns:minmax(0,1fr) 120px; width:calc(100% - 32px); }
 /* End of bounded default reference-composition styles. */
+
+/* Contextual Prism properties reuse the existing profile controls and CAS owner. */
+.profile-palette-card-row { display:grid; grid-template-columns:minmax(0,1fr) 36px; gap:4px; align-items:stretch; }
+.profile-palette-card-row>button { min-width:0; width:100%; }
+.profile-palette-card-row>button[data-prism-card-configure] { padding:4px; font-size:16px; }
+.profile-layout-properties { flex:0 1 auto; }
+.prism-properties-panel { min-width:0; margin-top:12px; color:var(--ui-text); }
+.prism-properties-panel>header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.prism-properties-panel>header h3 { margin:0; font-size:14px; }
+.prism-properties-panel>header button { width:auto; }
+.prism-properties-panel .workspace-composition-editor { margin:10px 0; padding:0; border:0; }
+.prism-properties-panel .composition-row { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; padding:10px; }
+.prism-properties-panel :is(label,select,button) { max-width:100%; min-width:0; }
+.prism-properties-panel .profile-tools { display:flex; flex-wrap:wrap; gap:8px; }
+.prism-properties-panel .profile-tools button { flex:1 1 100%; margin:0; }
+.prism-properties-panel [data-profile="diff"] { max-height:42dvh; overflow:auto; overflow-wrap:anywhere; }
+.prism-properties-dialog { width:min(34rem,calc(100vw - 24px)); max-width:calc(100vw - 24px); max-height:calc(100dvh - 24px); overflow:auto; padding:16px; border:1px solid var(--ui-line); border-radius:12px; background:var(--ui-surface); color:var(--ui-text); }
+.prism-properties-dialog::backdrop { background:#05101b88; }
+.prism-properties-dialog .prism-properties-panel { margin:0; }
+
