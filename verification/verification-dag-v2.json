@@ -5045,7 +5045,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "ac4ae6d58ff5d1a29ffe602f3fa336b0309f0d1aee1be0f9892354f57a18a88b"
+          "sha256": "b0aaa0e22b9bb3457878d8a7fdb21ccf97c3b47b95d42837c94851097aa09b8f"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -10116,7 +10116,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "bc258b6542e4e76a06f768bae993593062fbdb9a11b68cb7a12eb4c3d45db0bc"
+          "sha256": "ec8289058cb101dd21fe34dfe4613ced73dbfcdb66f1578fc2e0e1d48eb68872"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -10216,12 +10216,12 @@
         {
           "path": "docs/architecture/browser-profile-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "6c23eee1b90a99b34c3850d3c52621966bf97687647baf16305b2c2fc27054a8"
+          "sha256": "84bb8949e8802d8a20bff5bfa43fec2fc54f249ed383addd280f565e8767837e"
         },
         {
           "path": "packages/browser-workspace/src/profile-editor-v1.ts",
           "role": "SOURCE",
-          "sha256": "592ac27a45747e17ac50e1e67b837ef74a1c1f6697f9257c34d146fda3b0e41f"
+          "sha256": "e6064259b3179f22b413925b64ddf382cbce67e51d4765930d3af789b6dc256a"
         },
         {
           "path": "packages/contracts/src/browser-profile-v1.ts",
@@ -10231,12 +10231,12 @@
         {
           "path": "scripts/run-pan543-browser-profile-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "06cb6158360f0e5e7c738cc61d997e36069caf50b72fc36b345edbaeb6ba502c"
+          "sha256": "ea724273ecc9f0c84fa81b55c27fa7dfca036d5ad84861fa2a76f5b3ca038de2"
         },
         {
           "path": "scripts/refresh-pan543-integrity.mjs",
           "role": "SOURCE",
-          "sha256": "c5d73abab0dab045ad5507e6f9a2314b69c3ac1b53deda31306f470b37b1e240"
+          "sha256": "0ec7d671e6d6386449c7853dcdd7bd10e71421225f450dead9f7ca147007042e"
         },
         {
           "path": "src/pan543/profile-store.mjs",
@@ -10266,7 +10266,7 @@
         {
           "path": "tests/pan543/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "82d14283a7cdf97ed620bbfa002be0ee358ea53972d8b698d826f52151f2cd8a"
+          "sha256": "b20fb080e0161a646c35ba1ccff01c0f596a38a7363df59dcdcbb6b08d5e3f4c"
         },
         {
           "path": "tests/pan543/transport.test.mjs",
@@ -10707,6 +10707,11 @@
           "path": "packages/browser-workspace/src/configuration-application-v1.ts",
           "role": "SOURCE",
           "sha256": "40264fc0ed45537a4d00c203b833439e03cbb50cb88e3955dc1220e33b894e6b"
+        },
+        {
+          "path": "tests/pan543/prism-properties.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "abfe29c3e433aa14cbf1813e0bcaf6dfb699417069ddd6dc4a3f319a5ebd3de4"
         }
       ],
       "ownedTests": [

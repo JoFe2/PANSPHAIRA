@@ -972,10 +972,18 @@ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-present
 .profile-palette-card-row>button[data-prism-card-configure] { padding:4px; font-size:16px; }
 .profile-layout-properties { flex:0 1 auto; }
 .prism-properties-panel { min-width:0; margin-top:12px; color:var(--ui-text); }
-.prism-properties-panel>header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.prism-properties-panel>header { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:0; border:0; background:transparent; color:var(--ui-text); }
 .prism-properties-panel>header h3 { margin:0; font-size:14px; }
+.workspace-design-inspector[data-contextual-properties="true"]>:not([data-prism-properties-host]) { display:none; }
+.prism-properties-panel .composition-contextual>[data-composition-title] { display:none; }
+.prism-properties-panel .prism-properties-boundary { margin:8px 0; font-size:11px; line-height:1.5; }
+.prism-properties-panel [data-profile-state] { font-size:11px; line-height:1.5; }
+.prism-composition-details { margin:8px 0; font-size:11px; }
+.prism-properties-panel [hidden] { display:none!important; }
 .prism-properties-panel>header button { width:auto; }
 .prism-properties-panel .workspace-composition-editor { margin:10px 0; padding:0; border:0; }
+.prism-properties-panel .composition-groups { display:block; width:100%; min-width:0; }
+.prism-properties-panel .composition-groups>fieldset { width:100%; min-width:0; box-sizing:border-box; margin:0; }
 .prism-properties-panel .composition-row { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; padding:10px; }
 .prism-properties-panel :is(label,select,button) { max-width:100%; min-width:0; }
 .prism-properties-panel .profile-tools { display:flex; flex-wrap:wrap; gap:8px; }

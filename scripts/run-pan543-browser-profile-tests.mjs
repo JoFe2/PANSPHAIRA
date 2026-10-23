@@ -3,7 +3,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
 // Own bounded mandatory suite; no silent browser/native skips or file filters.
-const files = ["tests/pan543/profile.test.mjs", "tests/pan543/transport.test.mjs", "tests/pan543/browser.test.mjs", "tests/pan543/registration.test.mjs"];
+const files = ["tests/pan543/profile.test.mjs", "tests/pan543/transport.test.mjs", "tests/pan543/browser.test.mjs", "tests/pan543/prism-properties.test.mjs", "tests/pan543/registration.test.mjs"];
 const args = process.argv.slice(2);
 if (args.length === 1 && args[0] === "--list") process.stdout.write(JSON.stringify(files) + "\n");
 else {

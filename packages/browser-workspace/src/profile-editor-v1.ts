@@ -265,23 +265,23 @@ function createWorkspaceCompositionEditorV1(o:Options,propertiesHost:HTMLElement
  // Selection is local presentation only; the existing bridge owns every edit/CAS.
  let prism=false,selectedId:string|null=null,returnFocus:HTMLElement|null=null;
  const propertyPanel=el('section');propertyPanel.dataset.prismPropertiesPanel='';propertyPanel.className='prism-properties-panel';
- const propertyHeading=el('h3','Bausteinkonfiguration');propertyHeading.id='workspace.prism-properties-title';
+ const propertyHeading=el('h3','Eigenschaften');propertyHeading.id='workspace.prism-properties-title';
  const propertyClose=el('button','Schließen');propertyClose.type='button';propertyClose.setAttribute('aria-label','Bausteinkonfiguration schließen');
- const propertyHeader=el('header');propertyHeader.append(propertyHeading,propertyClose);propertyPanel.append(propertyHeader);
+ const propertyHeader=el('header');propertyHeader.append(propertyHeading,propertyClose);const propertyBoundary=el('p','Lokale Vorschau · keine Fachwerte oder Rechte. Erst prüfen und ausdrücklich bestätigen.');propertyBoundary.className='prism-properties-boundary';propertyPanel.append(propertyHeader,propertyBoundary);const compositionDetails=el('details');compositionDetails.className='prism-composition-details';compositionDetails.append(el('summary','Komposition & Schutzdetails'));
  const propertiesDialog=el('dialog');propertiesDialog.dataset.prismPropertiesDialog='';propertiesDialog.className='prism-properties-dialog';propertiesDialog.setAttribute('aria-labelledby',propertyHeading.id);document.body.append(propertiesDialog);
  const projections:Array<{node:HTMLElement;anchor:Comment}>=[];
  function canConfigure(id?:string){const value=current();return !closed&&!!bridge?.editable()&&!!value&&available(value).some(e=>id===undefined||e.id===id);}
  function closeProperties(focus=true){
   if(selectedId===null)return;selectedId=null;delete root.dataset.compositionSelection;root.classList.remove('composition-contextual');add.hidden=false;
   for(const {node,anchor}of projections.splice(0)){if(anchor.parentNode)anchor.replaceWith(node);else node.remove();}
-  propertyPanel.remove();if(propertiesDialog.open)propertiesDialog.close();
+  root.insertBefore(note,chooseLabel);root.insertBefore(status,chooseLabel);compositionDetails.remove();delete propertiesHost.parentElement!.dataset.contextualProperties;const hint=propertiesHost.querySelector<HTMLElement>(':scope > p');if(hint)hint.hidden=false;propertyPanel.remove();if(propertiesDialog.open)propertiesDialog.close();
   for(const row of root.querySelectorAll<HTMLElement>('[data-profile-item]'))row.hidden=false;for(const group of [...groups.children])if(group instanceof HTMLElement)group.hidden=false;
   if(focus){const fallback=document.querySelector<HTMLElement>('[data-prism-properties-open]'),target=returnFocus?.isConnected&&returnFocus.checkVisibility()?returnFocus:fallback;if(target?.isConnected)target.focus({preventScroll:true});}returnFocus=null;
  }
  function projectSelection(){
   if(selectedId===null)return;
   const value=current();if(!prism||!value||!available(value).some(e=>e.id===selectedId)){closeProperties(false);return;}
-  root.dataset.compositionSelection=selectedId;root.classList.add('composition-contextual');choose.value=selectedId;add.hidden=true;
+  root.dataset.compositionSelection=selectedId;root.classList.add('composition-contextual');choose.value=selectedId;add.hidden=true;propertiesHost.parentElement!.dataset.contextualProperties='true';const hint=propertiesHost.querySelector<HTMLElement>(':scope > p');if(hint)hint.hidden=true;
   for(const row of root.querySelectorAll<HTMLElement>('[data-profile-item]'))row.hidden=row.dataset.profileItem!==selectedId;
   for(const group of [...groups.children])if(group instanceof HTMLElement)group.hidden=![...group.querySelectorAll<HTMLElement>('[data-profile-item]')].some(row=>!row.hidden);
   const narrow=document.body.clientWidth<=WORKSPACE_PRESENTATION_WIDTHS_V1.narrowMaximum;
@@ -292,10 +292,10 @@ function createWorkspaceCompositionEditorV1(o:Options,propertiesHost:HTMLElement
   inspect();if(!prism||!canConfigure(id))return false;const value=current()!;
   const entry=id?available(value).find(e=>e.id===id):available(value).find(e=>e.kind==='card')??available(value)[0];if(!entry)return false;
   if(selectedId===null){returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
-   const tools=bridge!.root.querySelector<HTMLElement>('.profile-tools'),diff=bridge!.root.querySelector<HTMLElement>('[data-profile="diff"]');if(!tools||!diff)return false;
-   for(const node of [root,tools,diff]){const anchor=document.createComment('existing profile control position');node.replaceWith(anchor);projections.push({node,anchor});propertyPanel.append(node);}
+   const tools=bridge!.root.querySelector<HTMLElement>('.profile-tools'),diff=bridge!.root.querySelector<HTMLElement>('[data-profile="diff"]'),nativeStatus=bridge!.root.parentElement?.querySelector<HTMLElement>('[data-profile-state]');if(!tools||!diff||!nativeStatus)return false;
+   for(const node of [nativeStatus,root,tools,diff]){const anchor=document.createComment('existing profile control position');node.replaceWith(anchor);projections.push({node,anchor});propertyPanel.append(node);}
   }
-  selectedId=entry.id;o.primaryArea('TASK');projectSelection();
+  compositionDetails.append(note,status);root.insertBefore(compositionDetails,chooseLabel);selectedId=entry.id;o.primaryArea('TASK');projectSelection();
   const size=[...root.querySelectorAll<HTMLElement>('[data-profile-item]')].find(e=>e.dataset.profileItem===selectedId)?.querySelector<HTMLElement>('[data-composition-size]');size?.focus({preventScroll:true});return true;
  }
  propertyClose.addEventListener('click',()=>closeProperties(),{signal:o.signal});propertiesDialog.addEventListener('cancel',event=>{event.preventDefault();closeProperties();},{signal:o.signal});window.addEventListener('resize',projectSelection,{signal:o.signal});
