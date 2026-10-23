@@ -11,6 +11,8 @@ else {
   const env = { ...process.env, TMPDIR: process.env.TMPDIR || process.env.RUNNER_TEMP };
   if (!env.TMPDIR) throw new Error("PAN543_OWNED_SCRATCH_REQUIRED");
   if (!env.PAN543_BROWSER_EVIDENCE) env.PAN543_BROWSER_EVIDENCE = mkdtempSync(join(env.TMPDIR, "pan543-browser-evidence-"));
+  env.PAN543_PRISM_EVIDENCE ||= join(env.PAN543_BROWSER_EVIDENCE, "prism-properties");
+  env.PAN546_BROWSER_EVIDENCE ||= env.PAN543_PRISM_EVIDENCE;
   env.PAN527_BROWSER_MODULE ||= import.meta.resolve("playwright"); env.PAN527_CERTUTIL ||= "certutil";
   process.stdout.write("PAN543_BROWSER_EVIDENCE_DIR=" + env.PAN543_BROWSER_EVIDENCE + "\n");
   const build = spawnSync(process.execPath, ["scripts/build-pan541-browser.mjs"], { env, stdio: "inherit" });
