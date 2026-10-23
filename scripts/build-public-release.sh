@@ -644,7 +644,6 @@ repository_only_files = {
     "src/pan543/profile-store.mjs",
     "tests/pan543/backend-fixture.mjs",
     "tests/pan543/browser.test.mjs",
-    "tests/pan543/prism-properties.test.mjs",
     "tests/pan543/profile-types.ts",
     "tests/pan543/profile.test.mjs",
     "tests/pan543/registration.test.mjs",

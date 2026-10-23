@@ -5045,7 +5045,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "b0aaa0e22b9bb3457878d8a7fdb21ccf97c3b47b95d42837c94851097aa09b8f"
+          "sha256": "ac4ae6d58ff5d1a29ffe602f3fa336b0309f0d1aee1be0f9892354f57a18a88b"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -10216,7 +10216,7 @@
         {
           "path": "docs/architecture/browser-profile-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "84bb8949e8802d8a20bff5bfa43fec2fc54f249ed383addd280f565e8767837e"
+          "sha256": "7b4e82d57c109a46b3c6aa3938f45bd75f498e3197ca9d283206fba62034bff3"
         },
         {
           "path": "packages/browser-workspace/src/profile-editor-v1.ts",
@@ -10231,12 +10231,12 @@
         {
           "path": "scripts/run-pan543-browser-profile-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "f7bd7e2b66830770a361a4ac983e3676c353544d2597b261ed5511faba927093"
+          "sha256": "f15b04ed4b67f33e20900e6f60ffbfa45909cbac08939a7a45511666a9b13929"
         },
         {
           "path": "scripts/refresh-pan543-integrity.mjs",
           "role": "SOURCE",
-          "sha256": "b4ca7f348ad08b54ef68400beb079c77e74320b490703b3ad58a2de91645a691"
+          "sha256": "399005627efb742fedab5b280d140897bdc0b1a62f99e49c64ed6ce09ddabd59"
         },
         {
           "path": "src/pan543/profile-store.mjs",
@@ -10251,7 +10251,7 @@
         {
           "path": "tests/pan543/browser.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "51624077d3f77bd1abe98947c725f50dbbe952c854b880229809656a4c90cd46"
+          "sha256": "c00df3784938f80a0e7fe43dfdf18ec823635a6bac46a06c8a6c6b5cc4405b3e"
         },
         {
           "path": "tests/pan543/profile-types.ts",
@@ -10266,7 +10266,7 @@
         {
           "path": "tests/pan543/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b20fb080e0161a646c35ba1ccff01c0f596a38a7363df59dcdcbb6b08d5e3f4c"
+          "sha256": "82d14283a7cdf97ed620bbfa002be0ee358ea53972d8b698d826f52151f2cd8a"
         },
         {
           "path": "tests/pan543/transport.test.mjs",
@@ -10707,11 +10707,6 @@
           "path": "packages/browser-workspace/src/configuration-application-v1.ts",
           "role": "SOURCE",
           "sha256": "40264fc0ed45537a4d00c203b833439e03cbb50cb88e3955dc1220e33b894e6b"
-        },
-        {
-          "path": "tests/pan543/prism-properties.test.mjs",
-          "role": "VALIDATOR",
-          "sha256": "abfe29c3e433aa14cbf1813e0bcaf6dfb699417069ddd6dc4a3f319a5ebd3de4"
         }
       ],
       "ownedTests": [

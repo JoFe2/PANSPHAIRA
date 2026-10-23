@@ -130,7 +130,7 @@ The contextual inspector projects the same existing composition section, native 
 
 At narrow logical widths the same controls move into an owned dialog. Closing, Escape, the normal + editor or leaving Prism restores the original controls to their existing positions without discarding the local draft. Saving still requires the existing separate review and explicit confirmation, then native CAS and independent fresh readback. Lost replies retain the native blocked/unknown state and no blind write retry. The original native field-view editor remains a separate function; no arbitrary raster, plugin install, data-source editor or business/model authority is implied.
 
-Targeted native browser qualification is registered in `tests/pan543/prism-properties.test.mjs` through the existing fixed `pan543:test` runner. The original five-profile visual milestone and Main's source/image-specific acceptance remain separate from this bounded integration delta.
+Targeted native browser qualification is registered in `tests/pan543/browser.test.mjs` through the existing fixed `pan543:test` runner. The original five-profile visual milestone and Main's source/image-specific acceptance remain separate from this bounded integration delta.
 
 ### Explicit non-delivery and deployment boundary
 

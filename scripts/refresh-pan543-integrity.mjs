@@ -14,7 +14,6 @@ const inputs = [
   ["src/pan543/profile-store.mjs", "SECURITY"],
   ["tests/pan543/backend-fixture.mjs", "VALIDATOR"],
   ["tests/pan543/browser.test.mjs", "VALIDATOR"],
-  ["tests/pan543/prism-properties.test.mjs", "VALIDATOR"],
   ["tests/pan543/profile-types.ts", "VALIDATOR"],
   ["tests/pan543/profile.test.mjs", "VALIDATOR"],
   ["tests/pan543/registration.test.mjs", "VALIDATOR"],
