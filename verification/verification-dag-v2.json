@@ -5912,7 +5912,7 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "74cdefe8b48f7b005ec0a105cafdf94be0f18107225499f681ad7c456c51b180"
+          "sha256": "60ef6576d7d93e1604d28a7d62cfd8122baa38b3cdf68d2e0b684c94f85cfc68"
         }
       ],
       "ownedTests": [
