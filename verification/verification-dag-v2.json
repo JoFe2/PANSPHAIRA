@@ -10216,12 +10216,12 @@
         {
           "path": "docs/architecture/browser-profile-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "7b4e82d57c109a46b3c6aa3938f45bd75f498e3197ca9d283206fba62034bff3"
+          "sha256": "6da726901345d601eb88838498a9ba3e7a77f2d20f1906c2e30652a207db8c9c"
         },
         {
           "path": "packages/browser-workspace/src/profile-editor-v1.ts",
           "role": "SOURCE",
-          "sha256": "e6064259b3179f22b413925b64ddf382cbce67e51d4765930d3af789b6dc256a"
+          "sha256": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3"
         },
         {
           "path": "packages/contracts/src/browser-profile-v1.ts",
@@ -10251,7 +10251,7 @@
         {
           "path": "tests/pan543/browser.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "c00df3784938f80a0e7fe43dfdf18ec823635a6bac46a06c8a6c6b5cc4405b3e"
+          "sha256": "97e181a33fef15105b1e62f0ca5ca0be5374d45aa844ec019d8c5565a84b6dd6"
         },
         {
           "path": "tests/pan543/profile-types.ts",
