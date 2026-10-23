@@ -963,6 +963,14 @@ Object.freeze({
   "toSha256": "b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693",
   "reason": "Admit the exact independently inspected native-source-compatibility generator which adds only the two closed source-only PAN542 catalog/fixture inputs to the existing owner and checksum recipe. The unchanged mechanical scanner measures1297 files,342 import sites in341 files and2842 unique ledger paths. Keep graph104/all109 owners, all historical migration bytes, immutable21 base obligations,13 pinned profiles, every old classification/consumer/non-equivalence assertion, original hard gates and legacy1792 runnable payload. This narrow census admission neither extends independent product review to these new control bytes nor resets a review/budget, waives CI, grants arbitrary sources/roles, rewrites native history or claims LAN/whole605606 delivery."
 }),
+Object.freeze({
+  "migrationId": "C01-REQUIRED-CI-ORCHESTRATION/secure-default-proof-profile/v2",
+  "path": "scripts/verify-secure-default-proof.mjs",
+  "profileVersion": 2,
+  "fromSha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
+  "toSha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229",
+  "reason": "C01 required-CI timeout recovery adds bounded live proof-command progress and owned asynchronous child lifecycle to this whole-file-pinned verifier. Its canonicalJson routine bytes, serialization domain, mandatory commands and per-product/security deadlines are unchanged. Preserve the immutable admitted v1 digest and every prior migration; admit only this exact independently assessed orchestration file, never a candidate-reseeded digest or cross-profile equivalence."
+}),
 ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -1778,6 +1786,36 @@ test("integrity generator migration chain preserves immutable admitted and revie
     previousDigest = migration.toSha256;
   }
   assert.equal(sha256OfFile(migrations.at(-1)!.path), previousDigest);
+});
+
+test("secure-default orchestration v2 preserves immutable v1 and rejects every rewritten migration field", () => {
+  const file = "scripts/verify-secure-default-proof.mjs";
+  const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: candidate }) => candidate === file);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2]);
+  const migration = migrations[0]!;
+  const base = loadBaseObligations();
+  assert.equal(base.pinnedProfiles.find(({ path: candidate }) => candidate === file)?.sha256, migration.fromSha256);
+  assert.equal(base.byteObligations.find(({ path: candidate }) => candidate === file)?.sha256, migration.fromSha256);
+  assert.equal(migration.fromSha256, "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1");
+  assert.equal(migration.toSha256, "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229");
+  assert.equal(sha256OfFile(file), migration.toSha256);
+  const routine = readFileSync(path.join(ROOT, file), "utf8")
+    .split("export function canonicalJson(value) {")[1]?.split("\nconst sha256 =")[0];
+  assert.equal(typeof routine, "string");
+  assert.equal(crypto.createHash("sha256").update(routine!).digest("hex"),
+    "2a0ae97ab0e7f0cae41b0eef42ab75f357fd8b46f784dc6f5eba91121db38d0b",
+    "whole-file orchestration migration must not rewrite the admitted serialization routine");
+  for (const [field, value] of Object.entries({
+    path: "scripts/unadmitted-proof.mjs",
+    profileVersion: 3,
+    fromSha256: "0".repeat(64),
+    toSha256: "f".repeat(64),
+  })) {
+    assertFails((inv) => {
+      const entry = inv.profileVersionMigrations.find((item: any) => item.migrationId === migration.migrationId);
+      entry[field] = value;
+    }, "profile-version-migration:");
+  }
 });
 
 test("no equivalence claim is made: stance NOT-PROVEN, unicode+number evidence missing", () => {

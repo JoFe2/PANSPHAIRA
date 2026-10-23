@@ -4915,7 +4915,7 @@
         {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "20fa0e9801bfe47d8fb8f32f9806c26c2af79a2ddddeb13d01e7888284fe0870"
+          "sha256": "103e4f452519483492dfac3830fdfadfded08ca6e27b480eb8e1bc0999e583c4"
         },
         {
           "path": "docs/architecture/native-reference-rights-contract-v1.md",
@@ -5110,7 +5110,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "b14fef85cc50fb45aaed2f0a811ffe24493022a5494a9b3ab618db5beaf07ef6"
+          "sha256": "5394f140dc10116813438205a26225e9e7093e546eb9f8041f0702f65a0b385b"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5235,7 +5235,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "04b3a6bde502df6bf71dd58422a2c21a1f544b5fe877654ef4bfa7e591019f24"
+          "sha256": "84dd274b0000e8b1dff723ff0b9b3111408eccc8506430e84d748e130e4abaf8"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",

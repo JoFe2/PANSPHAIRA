@@ -501,3 +501,10 @@ CI, protected merge, Main CI, release/archive/event and released-source staging
 remain required. A census metadata admission is neither a second independent
 product acceptance nor a budget/review reset, native permission, live cutover,
 expiry renewal or complete605606 acceptance.
+
+
+## C01 whole-file proof-orchestrator profile v2
+
+The code-owned migration `C01-REQUIRED-CI-ORCHESTRATION/secure-default-proof-profile/v2` admits only the exact verifier file from immutable v1 `4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1` to orchestration v2 `5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229`. Required-CI recovery adds bounded live progress and owned asynchronous proof-command lifecycle, not a serialization redesign. The admitted `canonicalJson` routine section remains byte-identical, SHA256 `2a0ae97ab0e7f0cae41b0eef42ab75f357fd8b46f784dc6f5eba91121db38d0b`; its new focused case rejects changes to migration path, version, source digest and target digest.
+
+The immutable base fixture, all previous migrations, scanner/classification rules, fresh counts, 13 pinned profiles, 21 byte obligations, evidence dimensions and NOT-PROVEN non-equivalence stance remain unchanged. Only this profile's current digest/basis and the appended exact migration are derived. Historical v1 is not overwritten or reseeded from a candidate ledger. This census registration requires its own focused independent disposition; acceptance of the unchanged verifier does not accept these new control bytes, waive required hosted gates, publish a release or complete the whole five-profile UI.
