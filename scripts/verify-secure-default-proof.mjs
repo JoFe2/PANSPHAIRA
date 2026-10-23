@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { lstatSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -201,31 +201,81 @@ export function validateSecureDefaultProof(root = process.cwd(), { evidencePath 
   return [...new Set(issues)].sort();
 }
 
-function run(command, root) {
+export function runProofCommand(command, root, {
+  output = (chunk) => process.stderr.write(chunk),
+  phase = (value) => process.stderr.write(`PROOF_PHASE ${JSON.stringify(value)}\n`),
+  maxBuffer = 32 * 1024 * 1024,
+} = {}) {
+  // The test seam may tighten, never enlarge, the original combined byte cap.
+  if (!Number.isSafeInteger(maxBuffer) || maxBuffer < 1 || maxBuffer > 32 * 1024 * 1024) {
+    return Promise.reject(new Error("PROOF_OUTPUT_BOUND_INVALID"));
+  }
   const environment = { ...process.env };
   for (const name of Object.keys(environment)) {
     if (/(?:TOKEN|PASSWORD|SECRET|API_KEY|PRIVATE_KEY)/i.test(name)) delete environment[name];
   }
-  const result = spawnSync(command, {
-    cwd: root,
-    shell: true,
-    encoding: "utf8",
-    env: environment,
-    maxBuffer: 32 * 1024 * 1024,
+  return new Promise((resolve, reject) => {
+    const started = process.hrtime.bigint();
+    phase({ event: "START", command });
+    const child = spawn(command, {
+      cwd: root,
+      shell: true,
+      env: environment,
+      stdio: ["ignore", "pipe", "pipe"],
+      detached: process.platform !== "win32",
+    });
+    let bytes = 0;
+    let commandError;
+    const terminateOwnedCommand = () => {
+      if (!child.pid) return;
+      try {
+        if (process.platform === "win32") child.kill("SIGKILL");
+        else process.kill(-child.pid, "SIGKILL");
+      } catch (error) {
+        if (error.code !== "ESRCH") commandError ??= error;
+      }
+    };
+    const interrupted = () => {
+      commandError ??= new Error("PROOF_COMMAND_INTERRUPTED");
+      terminateOwnedCommand();
+    };
+    const forward = (chunk) => {
+      bytes += chunk.length;
+      if (bytes > maxBuffer) {
+        commandError ??= new Error("PROOF_COMMAND_OUTPUT_LIMIT");
+        terminateOwnedCommand();
+      } else if (!commandError) {
+        try { output(chunk); } catch (error) {
+          commandError = error;
+          terminateOwnedCommand();
+        }
+      }
+    };
+    process.once("SIGINT", interrupted);
+    process.once("SIGTERM", interrupted);
+    child.stdout.on("data", forward);
+    child.stderr.on("data", forward);
+    child.once("error", (error) => { commandError = error; });
+    // close, not exit, establishes that both output streams have drained.
+    child.once("close", (code, signal) => {
+      process.off("SIGINT", interrupted);
+      process.off("SIGTERM", interrupted);
+      const passed = !commandError && code === 0;
+      phase({ event: "END", command, exit: code, signal,
+        elapsedMilliseconds: Number(process.hrtime.bigint() - started) / 1e6,
+        outputBytes: bytes, outcome: passed ? "PASS" : "FAIL" });
+      if (!passed) reject(new Error(`PROOF_COMMAND_FAILED:${command}`, { cause: commandError }));
+      else resolve();
+    });
   });
-  if (result.status !== 0) {
-    process.stderr.write(result.stdout ?? "");
-    process.stderr.write(result.stderr ?? "");
-    throw new Error(`PROOF_COMMAND_FAILED:${command}`);
-  }
 }
 
-function main() {
+async function main() {
   const root = process.cwd();
   const issues = validateSecureDefaultProof(root);
   if (issues.length) throw new Error(issues.join("\n"));
   const manifest = JSON.parse(readFileSync(path.join(root, MANIFEST_PATH), "utf8"));
-  for (const command of [...manifest.commands.focused, manifest.commands.authoritative]) run(command, root);
+  for (const command of [...manifest.commands.focused, manifest.commands.authoritative]) await runProofCommand(command, root);
   const actual = buildSecureDefaultEvidence(manifest);
   const checked = JSON.parse(readFileSync(path.join(root, EVIDENCE_PATH), "utf8"));
   if (canonicalJson(actual) !== canonicalJson(checked)) throw new Error("CHECKED_EVIDENCE_NOT_REPRODUCIBLE_DENIED");
@@ -240,5 +290,5 @@ function main() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  try { main(); } catch (error) { console.error(error.message); process.exitCode = 2; }
+  main().catch((error) => { console.error(error.message); process.exitCode = 2; });
 }

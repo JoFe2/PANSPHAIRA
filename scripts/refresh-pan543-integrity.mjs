@@ -27,6 +27,9 @@ const allowed = new Set([...inputs.map(([p]) => p),
   "tests/pan541/registration.test.mjs", "tests/pan527/registration.test.mjs",
   "tests/pan526/registration.test.mjs", "tests/pan515/registration.test.mjs",
   "tests/procurement-434/procurement-registration.test.mjs", "tests/verification-fabric-v2.test.ts",
+  // Direct consumer: exact whole-CSS technical-marker admission is renewed,
+  // retaining path/line/byte-drift negatives and every predecessor denial.
+  "tests/public-product-spelling.test.mjs",
   "verification/verification-dag-v2.json",
 ]);
 const graphPath = "verification/verification-dag-v2.json";

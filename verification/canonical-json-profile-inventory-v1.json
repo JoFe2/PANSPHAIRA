@@ -923,6 +923,14 @@
       "fromSha256": "bcecbd9b6cc57b5913be206ae87bbdd21aa69edc92a0b7994f3570ead8f59151",
       "toSha256": "b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693",
       "reason": "Admit the exact independently inspected native-source-compatibility generator which adds only the two closed source-only PAN542 catalog/fixture inputs to the existing owner and checksum recipe. The unchanged mechanical scanner measures1297 files,342 import sites in341 files and2842 unique ledger paths. Keep graph104/all109 owners, all historical migration bytes, immutable21 base obligations,13 pinned profiles, every old classification/consumer/non-equivalence assertion, original hard gates and legacy1792 runnable payload. This narrow census admission neither extends independent product review to these new control bytes nor resets a review/budget, waives CI, grants arbitrary sources/roles, rewrites native history or claims LAN/whole605606 delivery."
+    },
+    {
+      "migrationId": "C01-REQUIRED-CI-ORCHESTRATION/secure-default-proof-profile/v2",
+      "path": "scripts/verify-secure-default-proof.mjs",
+      "profileVersion": 2,
+      "fromSha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
+      "toSha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229",
+      "reason": "C01 required-CI timeout recovery adds bounded live proof-command progress and owned asynchronous child lifecycle to this whole-file-pinned verifier. Its canonicalJson routine bytes, serialization domain, mandatory commands and per-product/security deadlines are unchanged. Preserve the immutable admitted v1 digest and every prior migration; admit only this exact independently assessed orchestration file, never a candidate-reseeded digest or cross-profile equivalence."
     }
   ],
   "scanScope": {
@@ -1070,7 +1078,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1"
+      "sha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229"
     },
     {
       "file": "scripts/verify-supply-chain.mjs",
@@ -1857,8 +1865,8 @@
     },
     {
       "path": "scripts/verify-secure-default-proof.mjs",
-      "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
-      "basis": "profile-implementation"
+      "sha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229",
+      "basis": "profile-version-migration"
     },
     {
       "path": "scripts/verify-supply-chain.mjs",

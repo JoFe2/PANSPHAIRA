@@ -4915,7 +4915,7 @@
         {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "20fa0e9801bfe47d8fb8f32f9806c26c2af79a2ddddeb13d01e7888284fe0870"
+          "sha256": "103e4f452519483492dfac3830fdfadfded08ca6e27b480eb8e1bc0999e583c4"
         },
         {
           "path": "docs/architecture/native-reference-rights-contract-v1.md",
@@ -5110,7 +5110,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "b14fef85cc50fb45aaed2f0a811ffe24493022a5494a9b3ab618db5beaf07ef6"
+          "sha256": "bcf7a6d7ce19ad2eababa4aab7dcd0e67239ea1ccd5ae25a68ea5b15174cfcde"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5220,7 +5220,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "654e85d09f64694702f5ba2f4c1b383170581c9b933e5b400eba470b560d5741"
+          "sha256": "5b8a747d2f253b0a2e08577846e6a7a446585358ead77d66ebf57f163b9b9bd0"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -5235,7 +5235,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "04b3a6bde502df6bf71dd58422a2c21a1f544b5fe877654ef4bfa7e591019f24"
+          "sha256": "84dd274b0000e8b1dff723ff0b9b3111408eccc8506430e84d748e130e4abaf8"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5851,7 +5851,7 @@
         {
           "path": "security/secure-default-proof-v1.json",
           "role": "CONTRACT",
-          "sha256": "f85cf02b491edeaffebaf6973ad5117663ee61533c5aa63e3491e96791cdac6a"
+          "sha256": "956715ca1d9b17b34defe1502898d3af59a73081d650f4b5c229c03cf2f5c06e"
         },
         {
           "path": "schemas/security/secure-default-proof-v1.schema.json",
@@ -5861,17 +5861,17 @@
         {
           "path": "security/secure-default-proof-evidence-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "06c163fb446d8928ae33637e295fe5b6822f6b8beeb679fea63fcdc808e38b6c"
+          "sha256": "a73c55a2bb09c732a6251dd6fa5e0d73ec693ae3669c7a0874c5ba6cf474fd00"
         },
         {
           "path": "scripts/verify-secure-default-proof.mjs",
           "role": "SECURITY",
-          "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1"
+          "sha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229"
         },
         {
           "path": "tests/secure-default-proof.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "599d23f5a6f3616e39100a802505bd39d395cc19a911d82b75f40a88141278f0"
+          "sha256": "294499381b68e8f6d6254cbd965d719950e0935d257456c59e94072ade1120b4"
         },
         {
           "path": "docs/SECURE-DEFAULT-PROOF.md",
@@ -5912,7 +5912,7 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "74cdefe8b48f7b005ec0a105cafdf94be0f18107225499f681ad7c456c51b180"
+          "sha256": "c3f404d7b9bcf514ea943c74e20411c746801bbbe69817067e3f2756e6ae7f90"
         }
       ],
       "ownedTests": [
@@ -10116,7 +10116,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "bc258b6542e4e76a06f768bae993593062fbdb9a11b68cb7a12eb4c3d45db0bc"
+          "sha256": "ec8289058cb101dd21fe34dfe4613ced73dbfcdb66f1578fc2e0e1d48eb68872"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -10216,12 +10216,12 @@
         {
           "path": "docs/architecture/browser-profile-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "6c23eee1b90a99b34c3850d3c52621966bf97687647baf16305b2c2fc27054a8"
+          "sha256": "6da726901345d601eb88838498a9ba3e7a77f2d20f1906c2e30652a207db8c9c"
         },
         {
           "path": "packages/browser-workspace/src/profile-editor-v1.ts",
           "role": "SOURCE",
-          "sha256": "592ac27a45747e17ac50e1e67b837ef74a1c1f6697f9257c34d146fda3b0e41f"
+          "sha256": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3"
         },
         {
           "path": "packages/contracts/src/browser-profile-v1.ts",
@@ -10231,12 +10231,12 @@
         {
           "path": "scripts/run-pan543-browser-profile-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "06cb6158360f0e5e7c738cc61d997e36069caf50b72fc36b345edbaeb6ba502c"
+          "sha256": "f15b04ed4b67f33e20900e6f60ffbfa45909cbac08939a7a45511666a9b13929"
         },
         {
           "path": "scripts/refresh-pan543-integrity.mjs",
           "role": "SOURCE",
-          "sha256": "c5d73abab0dab045ad5507e6f9a2314b69c3ac1b53deda31306f470b37b1e240"
+          "sha256": "399005627efb742fedab5b280d140897bdc0b1a62f99e49c64ed6ce09ddabd59"
         },
         {
           "path": "src/pan543/profile-store.mjs",
@@ -10251,7 +10251,7 @@
         {
           "path": "tests/pan543/browser.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "51624077d3f77bd1abe98947c725f50dbbe952c854b880229809656a4c90cd46"
+          "sha256": "97e181a33fef15105b1e62f0ca5ca0be5374d45aa844ec019d8c5565a84b6dd6"
         },
         {
           "path": "tests/pan543/profile-types.ts",
@@ -10416,7 +10416,7 @@
         {
           "path": "tests/pan546/browser-view.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1743b3b4a89483e4a439b1e9478ca6e25ed9ba7c2a466a73d66c7bca4b6b3058"
+          "sha256": "b2a112b80487f01bdae01dee298271c74371fbafdfd211fffbd5677dd0ee417e"
         },
         {
           "path": "tests/pan546/browser-human.test.mjs",

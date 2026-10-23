@@ -122,9 +122,21 @@ The qualified default also retains native labels and visibly displays the actual
 
 The existing native human preview button is directly keyboard-reachable outside the optional technical disclosure. Its existing preview, role checks, separate explicit confirmation and native readback stay unchanged. This is an existing-function affordance, not a new decision capability. Original native layout/primary-action and legacy right-panel assertions remain unchanged and are qualified separately from the new appearance journeys.
 
+### Contextual Prism contribution properties
+
+Prism's palette now offers a separate configuration action for each available registered card. The normal locate action remains distinct. `Bausteine konfigurieren` also reaches this view at tablet/mobile widths where the palette is not shown. Selection is local presentation only; it neither adds a contribution nor writes a profile. An available contribution omitted from a valid saved composition retains the existing explicit `Beitrag in Vorschau aufnehmen` action; selection alone still does not include it or write anything.
+
+The contextual inspector projects the same existing composition section, native profile status, review tools and confirmation diff through the existing personal-profile bridge. It does not clone a draft, CAS transport, native business component, assistant or storage owner. Size, order and optional visibility use the unchanged closed v1 catalog and mandatory-contribution policy. Full composition explanations remain in an accessible disclosure; actual native saved/conflict/unknown status stays visible.
+
+At narrow logical widths, or when the inspector is actually suppressed by the docked assistant or chosen layout, the same controls move into an owned dialog. Docking while properties are already open rehomes the same controls; it does not discard native drafts or assistant input. Closing, Escape, the normal + editor or leaving Prism restores the original controls to their existing positions without discarding the local draft. Saving still requires the existing separate review and explicit confirmation, then native CAS and independent fresh readback. Lost replies retain the native blocked/unknown state and no blind write retry. The original native field-view editor remains a separate function; no arbitrary raster, plugin install, data-source editor or business/model authority is implied.
+
+Targeted native browser qualification is registered in `tests/pan543/browser.test.mjs` through the existing fixed `pan543:test` runner. The original five-profile visual milestone and Main's source/image-specific acceptance remain separate from this bounded integration delta.
+
 ### Explicit non-delivery and deployment boundary
 
 Missing project management, general DMS, notes, conversational model, model pricing/connection, audio/microphone, Rich/3D and other unavailable native capabilities are not delivered by this presentation package. Existing disabled entries remain honestly marked. Existing model/pricing and other issue/security holds are unchanged.
 
-The v83 LAN source/service must remain unchanged during the user test. A frozen v84 source/build snapshot can be prepared for a later authorized Main preview update. Do not automatically deploy, restart the LAN service, push, launch hosted workflows, merge, release or close issues from this local UI result. Remaining independent-review budget is zero; this document and owner testing do not grant or replace that review.
+Historical v83/v84 work-order disposition (retained): The v83 LAN source/service must remain unchanged during the user test. A frozen v84 source/build snapshot can be prepared for a later authorized Main preview update. Do not automatically deploy, restart the LAN service, push, launch hosted workflows, merge, release or close issues from this local UI result. Remaining independent-review budget is zero; this document and owner testing do not grant or replace that review.
+
+That paragraph records the old local-task scope, not a whole-program veto. The later explicit five-profile completion mandate permits necessary ordinary targeted independent technical QS and qualified CI/merge/source-release/readback, while preserving its historical consumption and genuine aggregate limits. The separately running released LAN consumer remains frozen and is not updated by this UI candidate.
 
