@@ -5851,7 +5851,7 @@
         {
           "path": "security/secure-default-proof-v1.json",
           "role": "CONTRACT",
-          "sha256": "f85cf02b491edeaffebaf6973ad5117663ee61533c5aa63e3491e96791cdac6a"
+          "sha256": "956715ca1d9b17b34defe1502898d3af59a73081d650f4b5c229c03cf2f5c06e"
         },
         {
           "path": "schemas/security/secure-default-proof-v1.schema.json",
@@ -5861,17 +5861,17 @@
         {
           "path": "security/secure-default-proof-evidence-v1.json",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "06c163fb446d8928ae33637e295fe5b6822f6b8beeb679fea63fcdc808e38b6c"
+          "sha256": "a73c55a2bb09c732a6251dd6fa5e0d73ec693ae3669c7a0874c5ba6cf474fd00"
         },
         {
           "path": "scripts/verify-secure-default-proof.mjs",
           "role": "SECURITY",
-          "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1"
+          "sha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229"
         },
         {
           "path": "tests/secure-default-proof.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "599d23f5a6f3616e39100a802505bd39d395cc19a911d82b75f40a88141278f0"
+          "sha256": "294499381b68e8f6d6254cbd965d719950e0935d257456c59e94072ade1120b4"
         },
         {
           "path": "docs/SECURE-DEFAULT-PROOF.md",
@@ -5912,7 +5912,7 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "60ef6576d7d93e1604d28a7d62cfd8122baa38b3cdf68d2e0b684c94f85cfc68"
+          "sha256": "c3f404d7b9bcf514ea943c74e20411c746801bbbe69817067e3f2756e6ae7f90"
         }
       ],
       "ownedTests": [

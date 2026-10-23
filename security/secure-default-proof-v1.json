@@ -13,9 +13,9 @@
   },
   "verifier": {
     "path": "scripts/verify-secure-default-proof.mjs",
-    "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
+    "sha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229",
     "negativeTestPath": "tests/secure-default-proof.test.mjs",
-    "negativeTestSha256": "599d23f5a6f3616e39100a802505bd39d395cc19a911d82b75f40a88141278f0"
+    "negativeTestSha256": "294499381b68e8f6d6254cbd965d719950e0935d257456c59e94072ade1120b4"
   },
   "commands": {
     "proof": "npm run proof:secure-default",
@@ -34,12 +34,12 @@
     {
       "path": "scripts/verify-secure-default-proof.mjs",
       "role": "VERIFIER",
-      "sha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1"
+      "sha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229"
     },
     {
       "path": "tests/secure-default-proof.test.mjs",
       "role": "TEST",
-      "sha256": "599d23f5a6f3616e39100a802505bd39d395cc19a911d82b75f40a88141278f0"
+      "sha256": "294499381b68e8f6d6254cbd965d719950e0935d257456c59e94072ade1120b4"
     },
     {
       "path": "docs/SECURE-DEFAULT-PROOF.md",

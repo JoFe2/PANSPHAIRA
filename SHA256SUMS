@@ -4,7 +4,7 @@ be11d10c855ee8c64ac199042dbe0aa3b86954c992a047e74faad0d56b185cf5  ./.github/ISSU
 b26d1df4ca91d7d4265db817d2fd528f76b595e5c6a7d2fe6b28401fa1a7df6a  ./.github/ISSUE_TEMPLATE/delivery-contract.yml
 bc9b83b752e2d2196cf1a3b0aba43e12ab7f3485cfbdc96d2c072f92b59356a4  ./.github/ISSUE_TEMPLATE/feature-request.yml
 8d4dc55523a85a46a7b50f53c53995e44b495f126dbe797e0216050239b4b8f7  ./.github/PULL_REQUEST_TEMPLATE.md
-60ef6576d7d93e1604d28a7d62cfd8122baa38b3cdf68d2e0b684c94f85cfc68  ./.github/workflows/ci.yml
+c3f404d7b9bcf514ea943c74e20411c746801bbbe69817067e3f2756e6ae7f90  ./.github/workflows/ci.yml
 3cb93d13f4a3ed8f4666fbd68d033aa5446d473ddd35a39b12fad8e57e29b00a  ./.github/workflows/daily-poc-candidate.yml
 58b7743dc986a6f4c9faf661ab9a774446f02bf3d215315578d041af0ca477e4  ./.github/workflows/demo-current-head-e2e.yml
 9d4ce3ce2b2ceeb992b6f31ebfd9e7e0fbcd8ff5b4e9b40c1888c11c71be55cf  ./.github/workflows/docs-pages.yml
@@ -1340,7 +1340,7 @@ d9425a27b387b69f62c0a53d9b1ffee6b5b48a99c53c2ea3ef1493a547ea238e  ./scripts/veri
 1b479c55c78100314dbe8488b950ae4b153e7cf4ea5d6cca5996546a3920e7e1  ./scripts/verify-release-governance.mjs
 23be0636b84ce283db547c7a4af0c4dc9c9921d7a51bb5721c22f6f848f7cb63  ./scripts/verify-rks-01-comparative-results.mjs
 8ccafa81587cc84b438f80962a418debef3cd64a9beebd1778d53d79a0032a79  ./scripts/verify-rks-02-results.mjs
-4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1  ./scripts/verify-secure-default-proof.mjs
+5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229  ./scripts/verify-secure-default-proof.mjs
 1d03380cb0f6d5c1c51eacce009f8ca312af1c0a4599d4189a11ad0e30d75641  ./scripts/verify-supply-chain.mjs
 0c5f9689b0c41557a78ee911e107c9cd4683c8e0188436b1052fe4e0c7e4a72e  ./scripts/verify-wikimedia-pilot.mjs
 0bec85125b688f735c6cc3572b58760c65084685a499d16978d341b24439c9c9  ./security/openclaw-m1.1-evidence-v1.json
@@ -1348,8 +1348,8 @@ d9425a27b387b69f62c0a53d9b1ffee6b5b48a99c53c2ea3ef1493a547ea238e  ./scripts/veri
 f5545b9c65c4c136baf60fe8f190e253f9a397ef805647fdf61a8ec45e0a29e2  ./security/openclaw-m1.3-evidence-v1.json
 c4359d5548a5b6cfaee765979879cb348283b34f47f4d3273c188c6eeaea7da6  ./security/openclaw-m1.4-evidence-v1.json
 9827bf56a836d90d54ca109b15797bc9229972cbf53b3218ab589b03be264f91  ./security/openclaw-m1.5-evidence-index-v1.json
-06c163fb446d8928ae33637e295fe5b6822f6b8beeb679fea63fcdc808e38b6c  ./security/secure-default-proof-evidence-v1.json
-f85cf02b491edeaffebaf6973ad5117663ee61533c5aa63e3491e96791cdac6a  ./security/secure-default-proof-v1.json
+a73c55a2bb09c732a6251dd6fa5e0d73ec693ae3669c7a0874c5ba6cf474fd00  ./security/secure-default-proof-evidence-v1.json
+956715ca1d9b17b34defe1502898d3af59a73081d650f4b5c229c03cf2f5c06e  ./security/secure-default-proof-v1.json
 352a243176465a3e1b970208fdf98fb9c1f1dd27afd60f5edd590c2fccb93de7  ./src/analytics/paired-analytics-parity.ts
 2b9db328687ab886b38c060440ac0b2b6e1c2ed6b874dce61cff8126abc30969  ./src/analytics/producer-analytics-manifest.ts
 31a23830db55875a0a98f93c4f40b518acf243e7384cc8c7b7e2533af66838b2  ./src/cks-10/projection-envelope-guards.mjs
@@ -2610,12 +2610,12 @@ ddb19d5bf87548212af37876a7020a2d09847454ec31313bb98a9ae3cd4bb3bf  ./tests/rks-01
 dbe9e5c5e3cbf402fa7bab68765114bb887e9bcd5239bcac60cc351e272124a7  ./tests/rks-02/core-small-vs-raw.test.mjs
 a89c8dbc6a2a9d288c0ed1a81461692c3229f5d2e9748e58c1be33ea24ba8568  ./tests/sales-stock-journey-cli.test.mjs
 6f335ca58d2f95ad0a677607e0ffd10d4106da717c40838465e4bf7b49edbbcd  ./tests/sales-stock-journey-v1.test.ts
-599d23f5a6f3616e39100a802505bd39d395cc19a911d82b75f40a88141278f0  ./tests/secure-default-proof.test.mjs
+294499381b68e8f6d6254cbd965d719950e0935d257456c59e94072ade1120b4  ./tests/secure-default-proof.test.mjs
 74d7c28fbe12bfeab992ed4c108a29ea49fdd1b07d5e8552bed550c3b2002783  ./tests/signal-release-intake.test.ts
 b8c70273fd4992a13e46b671603b19f75e3876e5a1e07f6e7f92045830f872dd  ./tests/skill-admission.test.ts
 b4cb7c2f3b2570316979405def59070160fb3df38ca0a9fce7a5a5dd7ad2ce28  ./tests/skill-bundle.test.ts
 c8af7f838bc55e306651ae8407e0fabce3f1c9c7ea284d9f91695266318a0fcf  ./tests/status-truth-profile.test.ts
-2f4df854cf0e698303a04575149e5315e66fa07b20758e316cb7b1f0a89fa06f  ./tests/supply-chain-verifier.test.mjs
+1cc07a2984dba9b084a7af552f5dd78f821b29d89d971ca2cc0c1f8837e3f306  ./tests/supply-chain-verifier.test.mjs
 b8cf73a89ca40426a56ce9dbb6c938f12a4d6917d7592c9233719163ab9c64de  ./tests/trust-compatibility-foundation-closure.test.ts
 b3f43cff22245094bd576a572a88b0709808dcee53b256066b33002a0e853da6  ./tests/update-apply-journal.test.ts
 b60165c6b39347c3e1a9888ad550214436c522726323001f4b285e1a263f5560  ./tests/update-apply-postcondition.test.ts
@@ -2840,5 +2840,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-c56c9f87d36e6e6487a76e3de3488ad6a64b9d6b7fd7025c88eed592418be878  ./verification/verification-dag-v2.json
+7030faca936d390be6d85a50c205dcdc5598fe049814ac63d9d104d9c6968b9d  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

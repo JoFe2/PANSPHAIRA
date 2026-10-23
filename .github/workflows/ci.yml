@@ -24,8 +24,11 @@ jobs:
     runs-on: ubuntu-26.04
     # The complete pretest/test/posttest, focused proof, setup and required tail
     # share this bounded scheduling envelope. Product/security deadlines stay
-    # unchanged; the previously qualified proof alone took 1660 seconds.
-    timeout-minutes: 45
+    # unchanged. Retained source/main proofs took 2226s/2002s; a later proof
+    # reached posttest but was cancelled at 2658s by the 45m job envelope.
+    # Live bounded child progress distinguishes duration from a stalled child;
+    # this finite envelope is not a product PASS or permission to omit the tail.
+    timeout-minutes: 60
 
     steps:
       - name: Check out repository
@@ -114,7 +117,7 @@ jobs:
         run: |
           epoch="$(date +%s)"
           printf 'epoch=%s\n' "$epoch" >> "$GITHUB_OUTPUT"
-          printf 'CI_PHASE SAFE_GUIDED start_epoch=%s budget_minutes=45\n' "$epoch"
+          printf 'CI_PHASE SAFE_GUIDED start_epoch=%s budget_minutes=60\n' "$epoch"
 
       - name: Run SAFE_GUIDED secure-default proof and full project suite
         id: secure_default

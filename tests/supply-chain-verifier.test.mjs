@@ -371,7 +371,9 @@ test('PAN576 Core selects the fixed existing linux7 x64 hosted runner while pres
   const core=workflow.match(/^  validate:\n([\s\S]*?)(?=^  workflow-lint:)/m)?.[1];assert.ok(core);
   assert.match(core,/^    runs-on: ubuntu-26\.04$/m);
   // Bounded orchestration envelope; product/native/security deadlines stay fixed.
-  assert.match(core,/^    timeout-minutes: 45$/m);
+  assert.match(core,/^    timeout-minutes: 60$/m);
+  assert.match(core,/budget_minutes=60/);
+  assert.match(workflow,/^    timeout-minutes: 10$/m);
   assert.match(core,/^          node-version: 24\.14\.1$/m);
   assert.equal((core.match(/^        run: npm run proof:secure-default$/gm)??[]).length,1);
   assert.equal((core.match(/^        run: npm (?:test|run test)$/gm)??[]).length,0);
