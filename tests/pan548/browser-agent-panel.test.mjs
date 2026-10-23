@@ -25,7 +25,7 @@ async function state(f,s){
    const nativeNetwork=(f.nativeNetwork??[]).filter(r=>operation(r.path)).map(r=>({operation:operation(r.path),method:['GET','POST'].includes(r.method)?r.method:null,receivedAt:Number.isSafeInteger(r.receivedAt)?r.receivedAt:null,finishedAt:Number.isSafeInteger(r.finishedAt)?r.finishedAt:null,closedAt:Number.isSafeInteger(r.closedAt)?r.closedAt:null,status:Number.isInteger(r.status)?r.status:null,requestFailed:typeof r.browserFailure==='string'}));
    const posts=typeof f.posts==='function'?f.posts():null;
    console.error('PAN548_ACTUAL_AGENT_STATE_FAILURE',{expected:s,actual:safePhase(await f.page.locator(root).getAttribute('data-state')),nowMs:Date.now(),planExpiresAtMs:Number.isSafeInteger(plan?.expiresAtMs)?plan.expiresAtMs:null,modelPosts:Number.isSafeInteger(posts)&&posts>=0?posts:null,nativeResponses,nativeNetwork,rawBodiesAndCredentialsOmitted:true});
-  }catch{console.error('PAN548_ACTUAL_AGENT_STATE_FAILURE',{expected:s,diagnosticCollectionFailed:true,rawBodiesAndCredentialsOmitted:true});}
+  }catch{try{console.error('PAN548_ACTUAL_AGENT_STATE_FAILURE',{expected:s,diagnosticCollectionFailed:true,rawBodiesAndCredentialsOmitted:true});}catch{}}
   throw error;
  }
 }

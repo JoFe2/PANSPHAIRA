@@ -2451,7 +2451,7 @@ b17b7b2d1d7c4903338ba22a5ff933a313a11ad5b0e18d78e7c102222297daaa  ./tests/pan547
 17b1f2835fb4bf76b0386909d1837a0b78315f37ea10f47123838b0146b9d0c2  ./tests/pan547/native-knowledge.test.mjs
 92821231e1e83a5bc457377874727ef9c0dc8c15a438c9104a1d05a9fb8091bb  ./tests/pan547/registration.test.mjs
 389c12fb5fb89c59955c794ed69dc58b54279de96e5756067ace0c41b8f09aef  ./tests/pan548/agent-run-transport-contract.test.mjs
-6c0b24e1ca410d6ab2941c17618ebba48352f68d2a915ea600487e0506627ae9  ./tests/pan548/browser-agent-panel.test.mjs
+cb2ae053ffc4dc159d24eaae7cac82cd8c22715d4c8420a27fa5a7dd5e83e31c  ./tests/pan548/browser-agent-panel.test.mjs
 47e44bc2a0ff97807dd8e8857d24bec052399faad865477f12b152d53cae6847  ./tests/pan548/browser-context.test.mjs
 3aee8250d0a32756eeb0c36c90a0d95afcf16f5f97d682f3e8095e3056c201ef  ./tests/pan548/context-contract.test.mjs
 1ee94c8f680a048643fc4d16676b8f5c694353c391bf85d04d31c5070250ff6e  ./tests/pan548/native-agent-run.test.mjs
@@ -2840,5 +2840,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-cea21497eb107ec63497c2330b805d849f0477e2918cb124d77b3189c0afcd26  ./verification/verification-dag-v2.json
+939fc83892a4a353e3c309c05a2cec7d4fe834025d77595129d3e6230cf273c6  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
