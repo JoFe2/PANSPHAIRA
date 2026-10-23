@@ -10416,7 +10416,7 @@
         {
           "path": "tests/pan546/browser-view.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1743b3b4a89483e4a439b1e9478ca6e25ed9ba7c2a466a73d66c7bca4b6b3058"
+          "sha256": "b2a112b80487f01bdae01dee298271c74371fbafdfd211fffbd5677dd0ee417e"
         },
         {
           "path": "tests/pan546/browser-human.test.mjs",
