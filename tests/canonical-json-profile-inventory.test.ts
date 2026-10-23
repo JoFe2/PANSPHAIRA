@@ -2051,12 +2051,22 @@ test("negative: omitted re-export site fails validation", () => {
 
 test("negative: exact v104 successor generator target cannot be replaced by a caller hash", () => {
   assertFails((inv) => {
-    inv.profileVersionMigrations.at(-1).toSha256 = "f".repeat(64);
+    const migration = inv.profileVersionMigrations.find((entry: any) =>
+      entry.migrationId === "JO240897-NATIVE-SOURCE-COMPATIBILITY/INTEGRITY-GENERATOR/V104");
+    assert.ok(migration, "the exact legacy v104 migration must remain present");
+    assert.equal(migration.path, "scripts/refresh-integrity-data.mjs");
+    assert.equal(migration.profileVersion, 104);
+    migration.toSha256 = "f".repeat(64);
   }, "profile-version-migration:");
 });
 
 test("negative: exact v104 successor admission cannot migrate a neighboring control path", () => {
   assertFails((inv) => {
-    inv.profileVersionMigrations.at(-1).path = "scripts/build-public-release.sh";
+    const migration = inv.profileVersionMigrations.find((entry: any) =>
+      entry.migrationId === "JO240897-NATIVE-SOURCE-COMPATIBILITY/INTEGRITY-GENERATOR/V104");
+    assert.ok(migration, "the exact legacy v104 migration must remain present");
+    assert.equal(migration.path, "scripts/refresh-integrity-data.mjs");
+    assert.equal(migration.profileVersion, 104);
+    migration.path = "scripts/build-public-release.sh";
   }, "profile-version-migration:");
 });

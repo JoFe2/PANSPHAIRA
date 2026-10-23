@@ -5110,7 +5110,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "5394f140dc10116813438205a26225e9e7093e546eb9f8041f0702f65a0b385b"
+          "sha256": "bcf7a6d7ce19ad2eababa4aab7dcd0e67239ea1ccd5ae25a68ea5b15174cfcde"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
