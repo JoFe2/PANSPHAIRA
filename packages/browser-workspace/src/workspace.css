@@ -1013,3 +1013,9 @@ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-present
 @media (min-width:800px) and (max-width:1199px) {
  body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width="medium"] .workspace-agent .agent-orb { width:96px; height:96px; }
 }
+
+/* Preserve the existing narrow-container control viewport at CSS layout zoom. */
+@container shell (max-width:20rem) {
+ body[data-design-profile][data-presentation-width] .workspace-module-strip>[id="shell.navigation"] { grid-template-columns:minmax(min-content,1fr); }
+ body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-nav-item { display:flex; flex-direction:column; align-items:flex-start; }
+}
