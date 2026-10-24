@@ -363,3 +363,55 @@ test('PUI-08 actual native stock table computed header contrast tracks all five 
  }finally{await live?.context.close();await f.close();}
 });
 // PAN549_HEADER_READABILITY_NATIVE_END
+
+// PAN549_RESPONSIVE_WORKSPACE_NATIVE_BEGIN
+import responsiveTest549 from 'node:test';
+import responsiveAssert549 from 'node:assert/strict';
+import {mkdirSync as responsiveMkdir549} from 'node:fs';
+import {join as responsiveJoin549} from 'node:path';
+responsiveTest549('PAN549 shared responsive registered navigation and five preset native tools retain input and context without model or business writes',{timeout:120000},async()=>{
+ const root=new URL('../../',import.meta.url),load=p=>import(new URL(p,root).href);
+ const{browserFixture549,launch549}=await load('tests/pan549/browser-fixture.mjs');
+ const{enableWorkspaceBrowserV1}=await load('src/pan541/workspace-browser.mjs');
+ const{createNativeErvReadAdapterV1}=await load('src/pan541/native-erv-read-adapter.mjs');
+ const{initializeNativeErvHumanBackendV1}=await load('src/pan542/native-human-backend.mjs');
+ const{protectedGuidedOwnerContextV1}=await load('src/pan527/origin-session-adapter.mjs');
+ const{createAgentConfigurationDraftStoreV1}=await load('src/pan563/draft-store.mjs');
+ const{pan441EmployeeProfileV1}=await load('dist/packages/contracts/src/pan441-employee-profile.js');
+ const{bindRuntimeTemplateV1}=await load('src/pan529/runtime-template-contract.mjs');
+ const{nativeRows}=await load('tests/fixtures/pan515/native-trade-fixture.mjs');
+ let fixture,browser,workspace,configuration;
+ try{
+  fixture=await browserFixture549({cohort:'EMPTY',analysis:true});fixture.unmount();
+  initializeNativeErvHumanBackendV1({root:fixture.native.root,owner:'LOCAL_SYNTHETIC_OWNER',sessionBinding:fixture.sessions.binding});
+  const owner=protectedGuidedOwnerContextV1(fixture.tls.gateway,{optIn:true,tenantId:'tenant-a',origin:fixture.tls.origin,identityDigest:fixture.sessions.binding.identityDigest});
+  const draftRoot=responsiveJoin549(owner.productRoot,'responsive-configuration');responsiveMkdir549(draftRoot,{mode:0o700});
+  configuration=createAgentConfigurationDraftStoreV1({root:draftRoot,profile:pan441EmployeeProfileV1(),template:bindRuntimeTemplateV1(owner.identity)});
+  workspace=enableWorkspaceBrowserV1({optIn:true,gateway:fixture.tls.gateway,tenantId:'tenant-a',origin:fixture.tls.origin,nativeReader:createNativeErvReadAdapterV1({tenantId:'tenant-a',root:fixture.native.root}),analysisReader:fixture.reader,contextSelection:true,moduleViews:{schemaVersion:'pansphaira.workspace-native-module-views/owner-v1',humanRoot:fixture.native.root},humanDecisions:true,agentRuns:true,modelConnections:[],invoiceNavigation:true,administration:true,configurationDrafts:configuration});
+  const before=JSON.stringify(nativeRows(fixture.native.root,'SELECT revision,effect_key,command,event FROM pan516_events ORDER BY revision'));
+  browser=await launch549(fixture);await browser.login(fixture.sessions.issueOwnerSession({subjectId:'synthetic:erv-reviewer',role:'reviewer',expiresAtMs:Date.now()+600000}));
+  const pages=browser.context.pages();responsiveAssert549.equal(pages.length,1);const[page]=pages;page.setDefaultTimeout(10000);
+  const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push({method:r.method(),path:new URL(r.url()).pathname}));
+  await page.goto(fixture.tls.origin+'/t/tenant-a/workspace');await page.getByRole('button',{name:'Eingangsrechnungsprüfung — nur lesen',exact:true}).click();
+  await page.locator('[id="shell.module-view"][data-state="CURRENT_NATIVE_VIEW"]').waitFor({state:'attached'});await page.locator('[id="workspace.appearance"][data-state="READY"]').waitFor({state:'attached'});
+  const input=page.locator('#pan548-agent-intent'),text='Ungesendete lokale Ansichtsanfrage bleibt bei Profilwechsel erhalten.';await input.fill(text);
+  const identity=await page.evaluateHandle(()=>({context:document.getElementById('shell.context-selection'),view:document.getElementById('shell.module-view'),input:document.getElementById('pan548-agent-intent')}));
+  for(const profile of ['notebook','orbit','prism','insight','jarvis']){
+   await page.getByRole('button',{name:'Design und Layout konfigurieren',exact:true}).click();await page.getByRole('combobox',{name:'Designprofil',exact:true}).selectOption(profile);await page.getByRole('button',{name:'Kuratierte Vorlage als Vorschau',exact:true}).click();await page.locator('[id="workspace.appearance-dialog"]').getByRole('button',{name:'Zur Arbeitsfläche',exact:true}).click();
+   for(const viewport of [{width:1586,height:992},{width:1024,height:768},{width:390,height:844}]){
+    await page.setViewportSize(viewport);await page.keyboard.press('Control+Home');await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    const observed=await page.evaluate(()=>{const rect=e=>{const r=e.getBoundingClientRect();return{x:r.x,right:r.right,y:r.y,bottom:r.bottom,width:r.width,height:r.height};};return{width:innerWidth,height:innerHeight,documentWidth:document.documentElement.scrollWidth,navigation:[...document.querySelectorAll('[id="shell.navigation"] .nav-label')].filter(e=>e.checkVisibility()).map(e=>{const range=document.createRange();range.selectNodeContents(e);const r=range.getBoundingClientRect();return{x:r.x,right:r.right,width:r.width,height:r.height};}),tools:[...document.querySelectorAll('.agent-quick-actions button')].filter(e=>e.checkVisibility()).map(rect),input:rect(document.getElementById('pan548-agent-intent'))};});
+    responsiveAssert549.ok(observed.documentWidth<=observed.width);responsiveAssert549.ok(observed.navigation.length>0&&observed.navigation.every(r=>r.x>=0&&r.right<=observed.width&&r.width>0&&r.height>0),'Registered navigation glyphs remain within viewport');
+    if(profile==='jarvis'&&viewport.width<1200){responsiveAssert549.equal(observed.tools.length,3);responsiveAssert549.ok(observed.tools.every(r=>r.x>=0&&r.right<=observed.width&&r.y>=0&&r.bottom<=observed.height&&r.width>0&&r.height>0),'Initial local actions visible');responsiveAssert549.ok(observed.input.y>=0&&observed.input.bottom<=observed.height&&observed.input.height>0,'Initial input visible');}
+   }
+   await page.locator('[id="workspace.mode-task"]').click();responsiveAssert549.equal(await page.locator('[id="shell.main"]').isVisible(),true);
+   await page.locator('[id="workspace.mode-assistant"]').click();responsiveAssert549.equal(await page.locator('[id="shell.agent-panel"]').isVisible(),true);
+   await page.locator('.agent-quick-actions').getByRole('button',{name:'Ansicht bearbeiten',exact:true}).click();responsiveAssert549.equal(await page.locator('#pan546-instance-size').isVisible(),true);
+   responsiveAssert549.equal(await input.inputValue(),text);responsiveAssert549.equal(await identity.evaluate(v=>v.context===document.getElementById('shell.context-selection')&&v.view===document.getElementById('shell.module-view')&&v.input===document.getElementById('pan548-agent-intent')),true);
+   await page.locator('[id="workspace.mode-assistant"]').click();
+  }
+  await identity.dispose();responsiveAssert549.deepEqual(errors,[]);responsiveAssert549.equal(requests.filter(r=>r.method==='POST'&&/\/(?:agent-run\/(?:plan|start)|model-connection\/probe|erv-human\/decide)$/.test(r.path)).length,0);
+  fixture.unchanged();responsiveAssert549.equal(JSON.stringify(nativeRows(fixture.native.root,'SELECT revision,effect_key,command,event FROM pan516_events ORDER BY revision')),before);
+ }finally{try{await browser?.context.close();}finally{workspace?.close();configuration?.close();await fixture?.close();}}
+});
+// PAN549_RESPONSIVE_WORKSPACE_NATIVE_END
