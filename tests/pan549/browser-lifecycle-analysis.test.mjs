@@ -304,3 +304,62 @@ test('PAN shared profile presentation keeps captured MAIN during native analysis
 });
 
 async function showCurrentProfileDetailsUI(page){const d=page.locator('[id="workspace.profile-details"]');if(await d.getAttribute('open')===null)await d.locator(':scope > summary').click();}
+
+// PAN549_HEADER_READABILITY_STATIC_BEGIN
+import {createHash as headerHash549} from 'node:crypto';
+import {WORKSPACE_DESIGN_PROFILES_V1 as headerProfiles549} from '../../dist/packages/contracts/src/browser-profile-v1.js';
+const headerCSS549=readFileSync(new URL('../../packages/browser-workspace/src/analysis-v1.css',import.meta.url),'utf8');
+function headerRGB549(value){
+ const s=value.trim();if(/^#[a-f0-9]{6}$/i.test(s))return [1,3,5].map(i=>parseInt(s.slice(i,i+2),16));
+ const m=/^rgba?\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)(?:\s*,\s*([\d.]+))?\s*\)$/.exec(s);
+ assert.ok(m&&(!m[4]||Number(m[4])===1),'PAN549_HEADER_REQUIRES_OPAQUE_RESOLVED_COLOR:'+s);return m.slice(1,4).map(Number);
+}
+function headerContrast549(fg,bg){
+ const luminance=value=>{const rgb=headerRGB549(value).map(n=>{const s=n/255;return s<=0.04045?s/12.92:((s+0.055)/1.055)**2.4;});return rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722;};
+ const a=luminance(fg),b=luminance(bg);return (Math.max(a,b)+0.05)/(Math.min(a,b)+0.05);
+}
+function headerDeclaredPair549(tokens){
+ const rules=[...headerCSS549.matchAll(/\.analysis-table-scroll\s+thead\s*\{([^}]*)\}/g)];assert.equal(rules.length,1,'PAN549_ONE_SHARED_HEADER_RULE_REQUIRED');
+ const declarations=Object.fromEntries(rules[0][1].split(';').map(v=>v.trim()).filter(Boolean).map(v=>{const i=v.indexOf(':');return [v.slice(0,i).trim(),v.slice(i+1).trim()];}));
+ const resolve=value=>{const v=/^var\(--ui-([a-z]+),\s*(#[a-f0-9]{6})\)$/i.exec(value);return v?(tokens[v[1]]??v[2]):value;};
+ return {foreground:resolve(declarations.color??tokens.text??'#17324a'),background:resolve(declarations.background??declarations['background-color'])};
+}
+test('PUI-08 shared readonly header declares one paired generic semantic foreground/background with safe legacy fallback',()=>{
+ assert.match(headerCSS549,/background:\s*var\(--ui-raised,\s*#eaf3f7\)/);assert.match(headerCSS549,/color:\s*var\(--ui-text,\s*#17324a\)/);
+ const pair=headerDeclaredPair549({});assert.ok(headerContrast549(pair.foreground,pair.background)>=4.5,'PAN549_HEADER_LEGACY_FALLBACK_CONTRAST');
+});
+for(const profile of headerProfiles549)test('PUI-08 source-declared shared readonly header normal-text contrast '+profile.id,()=>{
+ const pair=headerDeclaredPair549(profile.tokens),ratio=headerContrast549(pair.foreground,pair.background);assert.ok(ratio>=4.5,'PAN549_HEADER_TOKEN_CONTRAST:'+profile.id+':'+ratio.toFixed(3));
+});
+test('PUI-08 shared readonly header opaque unthemed fallback normal-text contrast',()=>{const pair=headerDeclaredPair549({});assert.ok(headerContrast549(pair.foreground,pair.background)>=4.5,'PAN549_HEADER_UNTHEMED_CONTRAST');});
+// PAN549_HEADER_READABILITY_STATIC_END
+
+// PAN549_HEADER_READABILITY_NATIVE_BEGIN
+// Changed rendering only: preserve existing493 invoice/drilldown/business proof, do not rerun that unchanged journey here.
+test('PUI-08 actual native stock table computed header contrast tracks all five curated profiles without changing focus rows or readonly effects',{timeout:120000},async()=>{
+ const f=await browserFixture549({cohort:'EMPTY',surfaces:true});let live;const observations=[];const errors=[];
+ try{
+  live=await launch549(f);const existingHeaderPages=live.context.pages();assert.equal(existingHeaderPages.length,1,'PAN549_EXACTLY_ONE_PERSISTENT_STARTUP_PAGE');const [page]=existingHeaderPages;page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));await start549(page,f);
+  for(const profile of [...headerProfiles549.filter(p=>p.id!=='notebook'),...headerProfiles549.filter(p=>p.id==='notebook')]){
+   await page.locator('[id="workspace.appearance"][data-state="READY"], [id="workspace.appearance"][data-state="SAVED_AND_READBACK_CONFIRMED"]').waitFor();
+   await page.getByRole('button',{name:'Design und Layout konfigurieren',exact:true}).click();await page.getByRole('combobox',{name:'Designprofil',exact:true}).selectOption(profile.id);await page.getByRole('button',{name:'Kuratierte Vorlage als Vorschau',exact:true}).click();await page.getByRole('button',{name:'Änderungen prüfen',exact:true}).click();await page.getByRole('button',{name:'Genau diese Erscheinung bestätigen und speichern',exact:true}).click();await page.locator('[id="workspace.appearance"][data-state="SAVED_AND_READBACK_CONFIRMED"]').waitFor();await page.getByRole('button',{name:'Zur Arbeitsfläche',exact:true}).click();
+   assert.equal(await page.locator('body').getAttribute('data-design-profile'),profile.id);await enter549(page);await page.locator('[data-backend="analysis"][data-outcome="READBACK_RECEIVED"]').waitFor();assert.equal(await page.locator('tr[data-analysis-key]').count(),6);assert.equal(await page.locator('tr[data-analysis-key="physical"] td[data-analysis-value]').innerText(),'2');assert.equal(f.usage.consentStatus().state,'DISABLED');
+   const region=page.getByRole('region',{name:'Bestandswerte — Tabelle lokal horizontal scrollbar',exact:true});
+   for(const viewport of [{width:1280,height:900},{width:390,height:844}]){
+    await page.setViewportSize(viewport);await region.focus();assert.equal(await region.evaluate(n=>n===document.activeElement),true);
+    const headers=await region.getByRole('columnheader').evaluateAll(nodes=>nodes.map(n=>{let owner=n,bg='';while(owner){bg=getComputedStyle(owner).backgroundColor;if(!['transparent','rgba(0, 0, 0, 0)'].includes(bg))break;owner=owner.parentElement;}return {text:n.textContent,foreground:getComputedStyle(n).color,background:bg,fontSize:getComputedStyle(n).fontSize,fontWeight:getComputedStyle(n).fontWeight};}));
+    assert.equal(headers.length,5);for(const h of headers){assert.ok(headerContrast549(h.foreground,h.background)>=4.5,'PAN549_ACTUAL_HEADER_CONTRAST:'+profile.id+':'+viewport.width+':'+h.text);assert.deepEqual(headerRGB549(h.foreground),headerRGB549(profile.tokens.text));assert.deepEqual(headerRGB549(h.background),headerRGB549(profile.tokens.raised));}
+    if(viewport.width===390){await region.press('ArrowRight');await page.waitForFunction(()=>document.querySelector('[role="region"][aria-label="Bestandswerte — Tabelle lokal horizontal scrollbar"]')?.scrollLeft>0);}
+    const dims=await region.evaluate(n=>{const r=n.getBoundingClientRect();return {x:r.x,right:r.right,clientWidth:n.clientWidth,scrollWidth:n.scrollWidth,scrollLeft:n.scrollLeft,documentWidth:document.documentElement.scrollWidth,viewport:innerWidth,overflow:getComputedStyle(n).overflowX};});assert.ok(dims.documentWidth<=dims.viewport&&dims.x>=0&&dims.right<=dims.viewport);if(viewport.width===390)assert.ok(dims.scrollWidth>dims.clientWidth&&dims.scrollLeft>0&&dims.overflow==='auto');
+    observations.push({profile:profile.id,scheme:profile.scheme,viewport,headers,dims});
+    if(['prism','insight'].includes(profile.id)){
+     const file=join(process.env.PAN549_BROWSER_EVIDENCE,viewport.width+'-'+profile.id+'-actual-native-header-readability.png');await region.scrollIntoViewIfNeeded();const captureHeaderBounds=await region.getByRole('columnheader',{name:'Fachwert',exact:true}).boundingBox();assert.ok(captureHeaderBounds&&captureHeaderBounds.height>0&&captureHeaderBounds.y>=0&&captureHeaderBounds.y+captureHeaderBounds.height<=viewport.height,'PAN549_ACTUAL_HEADER_WITHIN_CAPTURE_VIEWPORT');await page.screenshot({path:file,fullPage:false});const candidatePins=Object.fromEntries(['packages/browser-workspace/src/analysis-v1.css','tests/pan549/browser-lifecycle-analysis.test.mjs','packages/contracts/src/browser-profile-v1.ts','packages/browser-workspace/src/profile-editor-v1.ts','packages/browser-workspace/src/workspace.css'].map(p=>[p,headerHash549('sha256').update(readFileSync(p)).digest('hex')]));
+     const {writeFileSync}=await import('node:fs');writeFileSync(file+'.json',JSON.stringify({imageSHA256:headerHash549('sha256').update(readFileSync(file)).digest('hex'),actualNative:true,syntheticData:true,physicalDevice:false,visualAcceptance:false,candidatePins,profile:profile.id,scheme:profile.scheme,viewport,headers,dims,captureHeaderBounds},null,2)+'\n');
+    }
+   }
+  }
+  assert.equal(observations.length,10);f.unchanged();assert.deepEqual(errors,[]);assert.equal(await page.evaluate(()=>isSecureContext),true);assert.equal(await page.evaluate(()=>document.cookie),'');
+  const {writeFileSync}=await import('node:fs');writeFileSync(join(process.env.PAN549_BROWSER_EVIDENCE,'actual-native-header-readability-computed-styles.json'),JSON.stringify({actualNative:true,observations,nativeStockEventsUnchanged:true,modelAudioNetworkConsentUnchanged:true,wholeUIAccepted:false,visualAcceptance:false},null,2)+'\n');
+ }finally{await live?.context.close();await f.close();}
+});
+// PAN549_HEADER_READABILITY_NATIVE_END

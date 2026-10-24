@@ -11265,7 +11265,7 @@
         {
           "path": "packages/browser-workspace/src/analysis-v1.css",
           "role": "SOURCE",
-          "sha256": "e7d68a928312f3ae8d7261518da183d5cd2e3db6928a6ef0dd36466676aad946"
+          "sha256": "2479f02088792aff8dbebd3877a5aaf669f046618216c2501e17cde55375b2ac"
         },
         {
           "path": "packages/browser-workspace/src/plugin-analysis-v1.ts",
@@ -11300,7 +11300,7 @@
         {
           "path": "tests/pan549/browser-lifecycle-analysis.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f9a039f7780063c40828defc4f4d0d0a6e70d70c7c7c4f359335d9d21eee6f92"
+          "sha256": "507982baf6c5fc9b1b5d984b5fad8905db1896a1cf1ed3c27a423b58c68c37d2"
         },
         {
           "path": "tests/pan549/cohort-analysis.test.mjs",
