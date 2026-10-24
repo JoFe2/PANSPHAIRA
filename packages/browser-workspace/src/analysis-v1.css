@@ -11,4 +11,4 @@
 /* Exact state/unit identifiers remain whole; wider facts stay locally scrollable. */
 .analysis-table-scroll thead th:nth-child(2), .analysis-table-scroll tbody td:nth-child(2), .analysis-table-scroll tbody td:nth-child(4) { white-space: nowrap; }
 .analysis-table-scroll tbody td:nth-child(4) { min-width: 6rem; }
-.analysis-table-scroll thead { background: #eaf3f7; }
+.analysis-table-scroll thead { background: var(--ui-raised, #eaf3f7); color: var(--ui-text, #17324a); }
