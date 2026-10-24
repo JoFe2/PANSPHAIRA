@@ -996,17 +996,17 @@ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-present
 
 /* Keep the registered navigation compact without clipping or hiding routes. */
 @media (max-width:1199px) {
- body[data-design-profile][data-presentation-width] .workspace-module-strip>[id="shell.navigation"] { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:4px; overflow:visible; }
- body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-nav-item { display:grid; grid-template-columns:16px minmax(0,1fr); grid-column:auto; grid-row:auto; width:100%; min-width:0; max-width:100%; }
+ body[data-design-profile][data-presentation-width] .workspace-module-strip>[id="shell.navigation"] { display:grid; grid-template-columns:repeat(5,minmax(min-content,1fr)); gap:4px; overflow:auto; }
+ body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-nav-item { display:grid; grid-template-columns:16px minmax(min-content,1fr); grid-column:auto; grid-row:auto; width:100%; min-width:min-content; max-width:100%; }
  body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-nav-item:not([data-composition-size="large"]) { min-height:44px; padding:6px 8px; }
- body[data-design-profile][data-presentation-width] [id="shell.navigation"] :is(.nav-label,.nav-binding-state) { min-width:0; max-width:100%; white-space:normal; overflow-wrap:anywhere; word-break:normal; }
+ body[data-design-profile][data-presentation-width] [id="shell.navigation"] :is(.nav-label,.nav-binding-state) { min-width:min-content; max-width:100%; white-space:normal; overflow-wrap:normal; word-break:normal; }
  body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-add-module { display:flex; grid-column:auto; grid-row:auto; align-items:center; justify-content:center; width:100%; min-width:0; min-height:44px; }
  /* Existing focus composition: useful local actions before the unbound planner. */
  body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] .agent-quick-actions { order:2; }
  body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] .agent-integrated-composer { order:3; }
 }
 @media (max-width:799px) {
- body[data-design-profile][data-presentation-width] .workspace-module-strip>[id="shell.navigation"] { grid-template-columns:repeat(3,minmax(0,1fr)); }
+ body[data-design-profile][data-presentation-width] .workspace-module-strip>[id="shell.navigation"] { grid-template-columns:repeat(3,minmax(min-content,1fr)); }
 }
 
 /* Keep the tablet input and existing local actions in the initial viewport. */
