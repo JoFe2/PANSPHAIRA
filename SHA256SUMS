@@ -829,7 +829,7 @@ c0888372244f11a4afcf0f6f90fecefe9c6f3c177a69df07dbb95e943ceb1613  ./packages/bro
 11e31cda99266db3c6592339d7999d1e4e31a0c9022586922752e9930ddb64cf  ./packages/browser-workspace/src/workspace-readonly-events-v1.css
 507ffe97dba92bf70d6e466f9b9ba76f160a8c6e0be8e731e6110664faf844b4  ./packages/browser-workspace/src/workspace-readonly-events-v1.ts
 40285386015a5340bed6a98068a237a2865a6569c92e9a738b054f1f234e8537  ./packages/browser-workspace/src/workspace-surfaces-v2.css
-39383453794b8b3f91f5dccbd15d6cd1f028453f53b8eb4c126f469eb4b3723f  ./packages/browser-workspace/src/workspace-surfaces-v2.ts
+1f55e406efb641ce60d4300d883515fb6a2ce367a1fe43bd28ccad644d30b987  ./packages/browser-workspace/src/workspace-surfaces-v2.ts
 ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9  ./packages/browser-workspace/src/workspace.css
 a80e15d9a8bfd07d3e80725840d39b202e192810c44013ab8c68e42399c200ca  ./packages/browser-workspace/src/workspace.html
 72b5f28175673cbc8328d9005a849b8409dadb58a8dce61153c049bd7a46a1c1  ./packages/cks/src/applicability-aware-retrieval-indexed.ts
@@ -2548,7 +2548,7 @@ a1ec26ffaa3d66acbb714ed6c0d069b077d2e531fd32802b564942dc45498629  ./tests/pan594
 e88fe6436f24b626e3fae227ea72f7a3ab33e7d560970ef708eb7377aaf6121c  ./tests/pan594/native-comparison.test.mjs
 d05c7585a4b94271978b35fe0eef0dbcd377860329597a24721385650c2f5d43  ./tests/pan594/registration.test.mjs
 220700e574266d37598de29457e2f1ec1f81d031626d0f9a3613eb6e801e68eb  ./tests/pan597/browser-pairing.test.mjs
-228e55e75005aa5fe0ba87ee77ae182584b7a6920d15d59d1a1cd48c3e409f93  ./tests/pan597/browser-surfaces.test.mjs
+61d00135555856d96dbe323a2ac0efd50e0932668071ead026db4eab42d8416c  ./tests/pan597/browser-surfaces.test.mjs
 94104f725fef2fedd59896a26ca9d088dd3f168cbf4ca3a1c7383b5277c61b9f  ./tests/pan597/native-browser-pairing.test.mjs
 03cbaa23f2dd0f50226d4080535e157f593462cea5fc5698655a09fc5807d277  ./tests/pan597/native-surfaces.test.mjs
 f816e7890839adf0e5d00d92abbdfe5bfe51b153caf8de34352f956b06a33e63  ./tests/pan597/process-restart.test.mjs
@@ -2840,5 +2840,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-88ba7fc12aef3d1821168e77fded751e73b7b67b00deb707e6976285d95568d2  ./verification/verification-dag-v2.json
+a3d190149632dc59b8dd565221c65775180e76f9f963f117b4ec42be34a08fb0  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

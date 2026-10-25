@@ -11564,7 +11564,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-surfaces-v2.ts",
           "role": "SOURCE",
-          "sha256": "39383453794b8b3f91f5dccbd15d6cd1f028453f53b8eb4c126f469eb4b3723f"
+          "sha256": "1f55e406efb641ce60d4300d883515fb6a2ce367a1fe43bd28ccad644d30b987"
         },
         {
           "path": "packages/browser-workspace/src/workspace-surfaces-v2.css",
@@ -11594,7 +11594,7 @@
         {
           "path": "tests/pan597/browser-surfaces.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "228e55e75005aa5fe0ba87ee77ae182584b7a6920d15d59d1a1cd48c3e409f93"
+          "sha256": "61d00135555856d96dbe323a2ac0efd50e0932668071ead026db4eab42d8416c"
         },
         {
           "path": "tests/pan597/process-restart.test.mjs",
