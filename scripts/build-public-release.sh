@@ -806,6 +806,8 @@ repository_only_files = {
     "src/pan546/native-surface-projection-v2.mjs",
     "src/pan597/native-surfaces-v2.mjs",
     "src/pan597/native-browser-pairing-v1.mjs",
+    "src/pan597/native-display-session-v1.mjs",
+    "src/pan597/native-display-ingress-v1.mjs",
     "scripts/run-pan597-native-surface-tests.mjs",
     "tests/pan597/native-browser-pairing.test.mjs",
     "tests/pan597/browser-pairing.test.mjs",

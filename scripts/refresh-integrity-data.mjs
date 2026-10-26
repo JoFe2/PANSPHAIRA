@@ -3637,6 +3637,8 @@ const pan597Inputs=[
   ["packages/contracts/src/workspace-browser-pairing-v1.ts", "CONTRACT"],
   ["packages/browser-workspace/src/workspace-browser-pairing-v1.ts", "SOURCE"],
   ["src/pan597/native-browser-pairing-v1.mjs", "SOURCE"],
+  ["src/pan597/native-display-session-v1.mjs", "SOURCE"],
+  ["src/pan597/native-display-ingress-v1.mjs", "SOURCE"],
   ["tests/pan597/native-browser-pairing.test.mjs", "VALIDATOR"],
   [
     "packages/contracts/src/workspace-surface-v2.ts",

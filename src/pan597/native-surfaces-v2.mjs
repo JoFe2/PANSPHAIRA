@@ -126,7 +126,8 @@ export function createNativeWorkspaceSurfacesV2(options){
   },
   validateDisplay(headers,value){const a=actor(headers);if(value.sourceSurfaceId!==a.row.surface_id||value.sourceSurfaceId===value.targetSurfaceId)throw Error('SURFACE_TARGET_DENIED');guard(headers,{command_id:value.commandId,original_command:canonicalJson(value),source_id:value.sourceSurfaceId,target_id:value.targetSurfaceId,boot_epoch:t.bootEpoch});reader.read(headers,{routeId:value.routeId,objectId:value.objectId,expectedRevision:value.expectedRevision},a.binding);return true;},
  });
- owned.set(owner,{binding:sessions.binding,contextSelection,invocation});return owner;
+ owned.set(owner,{binding:sessions.binding,contextSelection,invocation,displayConnection:Object.freeze({db,transaction,bootEpoch:t.bootEpoch,pairs:browserPairs})});return owner;
 }
+export function nativeWorkspaceSurfaceDisplayConnectionV1(owner,binding){const entry=owned.get(owner);if(!entry||!isNativeWorkspaceSurfacesV2(owner,binding,entry.contextSelection))throw Error('DISPLAY_OWNER_DENIED');return entry.displayConnection;}
 export function nativeWorkspaceSurfaceInvocationConnectionV1(owner,binding,contextSelection){if(!isNativeWorkspaceSurfacesV2(owner,binding,contextSelection))throw Error('SURFACE_INVOCATION_OWNER_DENIED');return owned.get(owner).invocation;}
 export const isNativeWorkspaceSurfacesV2=(owner,binding,context)=>owned.has(owner)&&canonicalJson(owned.get(owner).binding)===canonicalJson(binding)&&owned.get(owner).contextSelection===context;
