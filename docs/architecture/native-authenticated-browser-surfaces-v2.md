@@ -98,3 +98,12 @@ The synchronous existing before-DOM/commit/ACK boundary remains unchanged: accep
 The common registered-module navigation retains whole-word labels and one adaptive module row where the existing layout is horizontal. Overflow stays inside the existing navigation; keyboard focus scrolls the complete actual focused module into that region. No module is hidden or renamed to obtain fit, and no profile-specific exception is introduced. The existing five design compositions and narrow-screen layout remain separate from full original-profile visual acceptance.
 
 The focused browser regressions cover actual 1280px five-profile navigation, narrow overflow/focus and real native DOCUMENT/MONITOR target rendering with exact raw JSON disclosure. Earlier source-bound generic-composition matrices remain historical evidence; their narrower positive verdict is not a claim that these subsequently observed readability defects were already absent. Whole issue605/606, physical monitors and actual popup-blocking acceptance remain separate.
+
+
+## Separate restricted one-document presentation
+
+The unchanged bilateral browser-pair/v1 contract grants no field or data delivery. A separate native display-session/v1 composes that live witness on the SAME PAN597 SQLite ledger. Source and receiver separately confirm exactly `ERV_INVOICE_REFERENCE_MINIMAL`: invoiceId, revision, currency, invoiceAmountMinor and status. No full document, arbitrary field/class, write, administration, model or audio authority follows from pairing.
+
+The restricted renderer runs on a separate loopback TLS Origin with its own one-time ticket and read-only bearer display principal. Its router does not authenticate workspace cookies and denies all other routes. The embedded renderer is distinct from the surrounding user workspace, which remains visible as its own login; this is not a full-principal kiosk or physical-device qualification. Current source/receiver sessions, context witnesses and exact native revision are checked on each read.
+
+Native grants default to at most60s; an explicitly shorter source request may reduce, never extend, that bound. Server expiry/revoke invalidates the principal. The renderer also clears at the server-derived remaining lifetime using wall and monotonic clocks, on network/offline loss and page departure, without browser storage or automatic restoration. The native render acknowledgement reports browser DOM commit and independent native read consistency, never human perception.

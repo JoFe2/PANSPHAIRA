@@ -39,7 +39,7 @@ function classifyImmutableRuntimeBudgetDevelopmentProfile(path, line, digest) {
 const closedWorkspaceAppearanceStyleBindings = Object.freeze({
   "tests/pan546/browser-human-combined.test.mjs": Object.freeze({ sha256: "3b58ad3c613f51320bb2f19069f2bc9513383c5983e0bd4c21cd63b44edf20dd", lines: Object.freeze(["const source=readFileSync('packages/browser-workspace/src/workspace.css','utf8'),parts=source.split(\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\"+String.fromCharCode(10));assert.equal(parts.length,2);"]) }),
   "packages/browser-workspace/src/workspace.css": Object.freeze({ sha256: "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9", lines: Object.freeze(["/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/"]) }),
-  "src/pan541/workspace-browser.mjs": Object.freeze({ sha256: "4cc1c8ce881e353d020e16a9d126aa7b88963ab3f3b8ab44ecfee15ca289b925", lines: Object.freeze(["const appearanceStyleBoundaryV1=\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\\n\";"]) }),
+  "src/pan541/workspace-browser.mjs": Object.freeze({ sha256: "3e986032be9ba8592ac878470ae7da62e217fd5248f3d067a94ffea7a669e651", lines: Object.freeze(["const appearanceStyleBoundaryV1=\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\\n\";"]) }),
   "tests/pan541/browser-context-safety.test.mjs": Object.freeze({ sha256: "f27e6bb0a0af24906ab442be639591e0978cad81a49710d6ffbbb818c458df97", lines: Object.freeze(["style: readFileSync(new URL(\"../../packages/browser-workspace/src/workspace.css\", import.meta.url), \"utf8\").split(\"/*__" + legacyDisplay + "_CLOSED_WORKSPACE_APPEARANCE_V1_STYLES__*/\\n\")[0],"]) }),
 });
 
