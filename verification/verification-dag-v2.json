@@ -5130,7 +5130,7 @@
         {
           "path": "tests/docs-site.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0adb7c13c96c20dc4c30589c10bd4952c8b6a7ebc038599a4e3de8e239e4345d"
+          "sha256": "0b026d5465c56289d712b4da40f65b8a4491ad6436adec6188f7b1151226ced1"
         },
         {
           "path": "tests/fixtures/canonical-json-profile-base-obligations-v1.json",
@@ -5897,12 +5897,12 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "f0a56e49e02b6f9e24d8defc08e53482e1be76ed246cadf262344a3db39e0d5a"
+          "sha256": "4a11acf615b59d8b7cddaf4762b609e398e57cd941fd69948aed19086b486c0f"
         },
         {
           "path": "package-lock.json",
           "role": "TOOLCHAIN",
-          "sha256": "a3cc62b6d7f82385f1b90879242a9dcd7f971702156d2d46e16e2c374d351516"
+          "sha256": "ca886aa0f9941926480e32282e4d64184fd52fd7eb8659cfddf38ce8292be73f"
         },
         {
           "path": "tsconfig.json",

@@ -778,8 +778,8 @@ f8e4e1021f8e3f5d5f5cea29630dac3de6a73123a04bb18fcc46a44e1968d125  ./fixtures/pan
 98badcdcfcb935279f93066400524c1219d64ffc9767b1a93bfcb4f072a66401  ./fixtures/pan591/own-ui/panel.svg
 8cba56bb516b8e0b9b5c30332cc38943228794afd6f8ad587513e6d9a60557fb  ./fixtures/pan594/locked-ajv2020-dev-readback-policy-v1.json
 8843a66df3a7c99e4c0f0640c687ad2c587f405214001991aedeaa99421fedaa  ./fixtures/pan594/native-observation-projection-schema-v1.json
-a3cc62b6d7f82385f1b90879242a9dcd7f971702156d2d46e16e2c374d351516  ./package-lock.json
-f0a56e49e02b6f9e24d8defc08e53482e1be76ed246cadf262344a3db39e0d5a  ./package.json
+ca886aa0f9941926480e32282e4d64184fd52fd7eb8659cfddf38ce8292be73f  ./package-lock.json
+4a11acf615b59d8b7cddaf4762b609e398e57cd941fd69948aed19086b486c0f  ./package.json
 e1073a5c5f79329c3181057079fdc879eb84e7b690c179488f925ea98953a5e8  ./packages/browser-shell/src/context-owner-v1.ts
 10b5c2465b811d6e503ada17d7531cac3dae8b37b72473d391bd889d89a09029  ./packages/browser-shell/src/deep-link-v1.ts
 81b959f82e92d38487609f95e481b7b0ab1d3233a57f594298c24c9711540a95  ./packages/browser-shell/src/extended-context-owner-v1.ts
@@ -1708,7 +1708,7 @@ ba12408a713468d0cf116c19cd29506f6fe9eb48107859102790fd975753f271  ./tests/demo-p
 6e8012075dc47f8354e4d18e98b7e14090abcdc335615849c320d6c710fdff01  ./tests/demo-policy-lifecycle.test.mjs
 fe46a39b489284ab53debb0219eca220aceca514bf0a9593eba217fd25e47b4c  ./tests/development-worker-m3.test.ts
 cef5f276993d68d70242571292564eb0956f4287a7fa9fb161b5c9f07d506117  ./tests/development-worker.test.ts
-0adb7c13c96c20dc4c30589c10bd4952c8b6a7ebc038599a4e3de8e239e4345d  ./tests/docs-site.test.mjs
+0b026d5465c56289d712b4da40f65b8a4491ad6436adec6188f7b1151226ced1  ./tests/docs-site.test.mjs
 7d98acfa30bc054954fa1c8268794164662128515b0324244695c5dc5b9bb347  ./tests/effective-rights.test.ts
 5d1463db1bcb4cf16aa5fa8f76fd2437e9bd8f9041016b78c6a6ff87458567ef  ./tests/erp-order-capability-cell.test.ts
 6dc00ffa1982e4833d0b7cd837ed77974a50c1c82a5ea662e76f43d5089dbe16  ./tests/erp-read-connector.test.ts
@@ -2840,5 +2840,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-a3d190149632dc59b8dd565221c65775180e76f9f963f117b4ec42be34a08fb0  ./verification/verification-dag-v2.json
+d7716c15d3632eacaadf14ceee0ded14de78198f9f0b6bd080fb24b73e2e7c22  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

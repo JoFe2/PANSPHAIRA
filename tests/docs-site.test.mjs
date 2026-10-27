@@ -33,6 +33,23 @@ const curatedPages = [
   ["use-cases/governed-agent-actions.html", `${baseUrl}use-cases/governed-agent-actions`],
 ];
 
+test("Vite security floor covers every locked and installed docs dependency", () => {
+  const manifest = JSON.parse(readFileSync("package.json", "utf8"));
+  const lock = JSON.parse(readFileSync("package-lock.json", "utf8"));
+  const viteEntries = Object.entries(lock.packages).filter(([path]) => /(?:^|\/)node_modules\/vite$/.test(path));
+  assert.ok(viteEntries.length > 0, "Vite must remain covered by this guard");
+  const override = manifest.overrides.vite;
+  // The five October 2026 advisories are fixed in the existing compatible 6.x line at 6.4.4.
+  const version = /^6\.(\d+)\.(\d+)$/.exec(override);
+  assert.ok(version && (Number(version[1]) > 4 || (Number(version[1]) === 4 && Number(version[2]) >= 4)),
+    `Vite override ${override} must be a stable 6.x release >=6.4.4`);
+  for (const [path, metadata] of viteEntries) {
+    assert.equal(metadata.version, override, `${path} must use the patched override`);
+    const installed = JSON.parse(readFileSync(join(path, "package.json"), "utf8"));
+    assert.equal(installed.version, metadata.version, `${path} installed/lock version drift`);
+  }
+});
+
 function html(relativePath) {
   return readFileSync(join(output, relativePath), "utf8");
 }
