@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
-const files=['tests/pan575/tool-transcript.test.mjs','tests/pan575/broker-feedback-native.test.mjs','tests/pan575/native-ui-consumer.test.mjs','tests/pan575/registration.test.mjs'];
-const inputs=[['docs/architecture/broker-tool-feedback-v1.md','DERIVED_EVIDENCE'],['packages/contracts/src/model-tool-transcript-v1.ts','CONTRACT'],['src/pan575/broker-tool-feedback.mjs','SECURITY'],['src/pan575/native-composition-tools.mjs','SECURITY'],['tests/pan575/protocol-fixture.mjs','VALIDATOR'],...files.map(p=>[p,'VALIDATOR'])];
+const files=['tests/pan575/tool-transcript.test.mjs','tests/pan575/broker-feedback-native.test.mjs','tests/pan575/native-ui-consumer.test.mjs','tests/pan575/local-model-qualification.test.mjs','tests/pan575/registration.test.mjs'];
+const inputs=[['docs/architecture/broker-tool-feedback-v1.md','DERIVED_EVIDENCE'],['packages/contracts/src/model-tool-transcript-v1.ts','CONTRACT'],['src/pan575/broker-tool-feedback.mjs','SECURITY'],['src/pan575/native-composition-tools.mjs','SECURITY'],['tests/pan575/protocol-fixture.mjs','VALIDATOR'],...files.map(p=>[p,'VALIDATOR']),['scripts/run-pan575-local-model-qualification.mjs','SOURCE'],['docs/architecture/pan575-local-model-qualification-v1.md','DERIVED_EVIDENCE']];
 const load=p=>JSON.parse(readFileSync(p,'utf8')),sha=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
 test('575 additive registration stays on existing529 closed whole suite; every original case retained, no new pipeline/test gate',()=>{
  const pkg=load('package.json');assert.equal(pkg.scripts['pan529:test'],'node scripts/run-pan529-runtime-budget-tests.mjs');assert.equal(pkg.scripts['pan575:test'],undefined);assert.equal(pkg.scripts.pretest.split('npm run pan529:test').length,2);

@@ -2134,7 +2134,10 @@ const pan575Inputs = [
   ["tests/pan575/tool-transcript.test.mjs", "VALIDATOR"],
   ["tests/pan575/broker-feedback-native.test.mjs", "VALIDATOR"],
   ["tests/pan575/native-ui-consumer.test.mjs", "VALIDATOR"],
+  ["tests/pan575/local-model-qualification.test.mjs", "VALIDATOR"],
   ["tests/pan575/registration.test.mjs", "VALIDATOR"],
+  ["scripts/run-pan575-local-model-qualification.mjs", "SOURCE"],
+  ["docs/architecture/pan575-local-model-qualification-v1.md", "DERIVED_EVIDENCE"],
 ];
 pan529Inputs.push(...pan575Inputs);
 let pan529Node = dag.nodes.find(({id}) => id === "pan529-runtime-budget-v1");
@@ -2914,6 +2917,14 @@ const pan542Inputs = [
   [
     "tests/pan542/restart-reader.mjs",
     "VALIDATOR"
+  ],
+  [
+    "src/pan542/source-compatibility-catalog-v2.json",
+    "SECURITY"
+  ],
+  [
+    "docs/architecture/erv-human-source-compatibility-v2.md",
+    "DERIVED_EVIDENCE"
   ]
 ];
 let pan542Node = dag.nodes.find(({ id }) => id === "pan542-native-erv-human-v1");

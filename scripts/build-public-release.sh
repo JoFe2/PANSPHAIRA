@@ -1007,7 +1007,10 @@ repository_only_files = {
     "tests/pan575/tool-transcript.test.mjs",
     "tests/pan575/broker-feedback-native.test.mjs",
     "tests/pan575/native-ui-consumer.test.mjs",
+    "tests/pan575/local-model-qualification.test.mjs",
     "tests/pan575/registration.test.mjs",
+    "scripts/run-pan575-local-model-qualification.mjs",
+    "docs/architecture/pan575-local-model-qualification-v1.md",
 
     # PAN468 module-contribution impact selection — repository-only
     # (corrects the impact/compare consumer classification and bounds the

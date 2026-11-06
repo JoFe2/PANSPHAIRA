@@ -5045,7 +5045,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "ac4ae6d58ff5d1a29ffe602f3fa336b0309f0d1aee1be0f9892354f57a18a88b"
+          "sha256": "9bb3d54cd8e6828d4b70f33fad1d57c13a6dde4dc9cc3914e68c852885579919"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -9367,7 +9367,7 @@
         {
           "path": "scripts/run-pan529-runtime-budget-tests.mjs",
           "role": "SOURCE",
-          "sha256": "7cf3e3138fdf4d98dbc944f01cd68a20e756add21f9fc5edc1d91e903ee6885f"
+          "sha256": "05372269db64c908596af0ef319cf962a8903e891a18c8bd4bb7627635db1f65"
         },
         {
           "path": "docs/architecture/pan529-runtime-budget-v1.md",
@@ -9432,7 +9432,7 @@
         {
           "path": "tests/pan529/test-runner.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "66ac3166b12a276ea3078f504e37552a914cff3220a3a293a16303aaf4d48f07"
+          "sha256": "987a8aed92682fe45f11516f7ae0a47738e412563731dd3b7606080c572ac04f"
         },
         {
           "path": "docs/architecture/broker-tool-feedback-v1.md",
@@ -9475,9 +9475,24 @@
           "sha256": "b29913112d0308c809aae89709565e0eb789b2cfd39a3fb0c9bb9623973fa1e8"
         },
         {
+          "path": "tests/pan575/local-model-qualification.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "1d66b2f7f7ab583a3edc67dcad6f13f0ec6238d32db5803e233a3525fbff5d8c"
+        },
+        {
           "path": "tests/pan575/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "fedbb64d348de75f5bff12712444f90afcaaa40ff0ccc60048faff3e505253d5"
+          "sha256": "b45b9c22bdf45b47bd6d75df9ac4b3a3379d67e84bd328f9878c4bd007be4bb4"
+        },
+        {
+          "path": "scripts/run-pan575-local-model-qualification.mjs",
+          "role": "SOURCE",
+          "sha256": "54ccb31477283697717307f5229c7d952aa1dd0e44ca131b5f6f7d248be1e72e"
+        },
+        {
+          "path": "docs/architecture/pan575-local-model-qualification-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "5902279ca3b0dd0550681e73f193d7ef1a5a0c0ee79f578173517f59f3b3ac01"
         }
       ],
       "ownedTests": [
