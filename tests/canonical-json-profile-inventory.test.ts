@@ -979,6 +979,14 @@ Object.freeze({
   "toSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
   "reason": "Bind the reviewed PAN575 local model qualification utility registration inside the integrity generator as the exact byte-bound successor of admitted V104 on the same closed owner and checksum recipe. The unchanged mechanical scanner measures1299 files,344 import sites in343 files and2847 unique ledger paths, with scripts consumers16 sites/16 files and tests consumers77 sites/76 files. Retain all historical migration bytes, immutable21 base obligations,13 pinned profiles, every old classification/consumer/non-equivalence assertion, original hard gates, legacy1792 runnable payload and the two closed source-only PAN542 catalog/fixture baseline bindings byte-identical. This bounded local utility census evidence makes no real-model success claim, no CI/merge/release qualification and no whole575/565/548 issue acceptance."
   }),
+  Object.freeze({
+  "migrationId": "PAN575-NATIVE-UI-WIRE/INTEGRITY-GENERATOR/V106",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 106,
+  "fromSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
+  "toSha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
+  "reason": "Bind only the two additive native UI wire protocol test/document registration entries to their exact reviewed generator bytes. Preserve every prior migration and original ownership, classification, equivalence and release gate. Fresh unchanged scanner measures1300 files,344 imports in343 files and2849 unique ledger paths. This source/synthetic protocol increment grants no actual model, browser or whole-issue acceptance."
+}),
   ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -991,7 +999,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1299,
+  "filesScanned": 1300,
   "declarationSites": 37,
   "declarationFiles": 37,
   "importSites": 344,
@@ -1001,7 +1009,7 @@ const EXPECTED_COUNTS = {
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2847,"uniquePaths":2847,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2849,"uniquePaths":2849,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1784,7 +1792,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;

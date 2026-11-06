@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "d5580c7cbbee23cfcb0243fd1576b441ce7197e36169072954e46085f6aa01dd"
+        "sha256": "176f358b66fe8bda22fde20baa0236319699f5eccd28ba3c4a7c506392714bb8"
       }
     ]
   },
@@ -939,6 +939,14 @@
       "fromSha256": "b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693",
       "toSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
       "reason": "Bind the reviewed PAN575 local model qualification utility registration inside the integrity generator as the exact byte-bound successor of admitted V104 on the same closed owner and checksum recipe. The unchanged mechanical scanner measures1299 files,344 import sites in343 files and2847 unique ledger paths, with scripts consumers16 sites/16 files and tests consumers77 sites/76 files. Retain all historical migration bytes, immutable21 base obligations,13 pinned profiles, every old classification/consumer/non-equivalence assertion, original hard gates, legacy1792 runnable payload and the two closed source-only PAN542 catalog/fixture baseline bindings byte-identical. This bounded local utility census evidence makes no real-model success claim, no CI/merge/release qualification and no whole575/565/548 issue acceptance."
+    },
+    {
+      "migrationId": "PAN575-NATIVE-UI-WIRE/INTEGRITY-GENERATOR/V106",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 106,
+      "fromSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
+      "toSha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
+      "reason": "Bind only the two additive native UI wire protocol test/document registration entries to their exact reviewed generator bytes. Preserve every prior migration and original ownership, classification, equivalence and release gate. Fresh unchanged scanner measures1300 files,344 imports in343 files and2849 unique ledger paths. This source/synthetic protocol increment grants no actual model, browser or whole-issue acceptance."
     }
   ],
   "scanScope": {
@@ -981,16 +989,16 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-  "filesScanned": 1299,
-  "declarationSites": 37,
-  "declarationFiles": 37,
-  "importSites": 344,
-  "importFiles": 343,
-  "reexportSites": 7,
-  "similarShapeSites": 30,
-  "ledgerEntries": 2847,
-  "ledgerUniquePaths": 2847
-},
+    "filesScanned": 1300,
+    "declarationSites": 37,
+    "declarationFiles": 37,
+    "importSites": 344,
+    "importFiles": 343,
+    "reexportSites": 7,
+    "similarShapeSites": 30,
+    "ledgerEntries": 2849,
+    "ledgerUniquePaths": 2849
+  },
   "profiles": [
     {
       "file": "demo/runtime/enforcement-gate.mjs",
@@ -1062,7 +1070,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd"
+      "sha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1863,7 +1871,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
+      "sha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
       "basis": "profile-version-migration"
     },
     {
