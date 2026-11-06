@@ -10,6 +10,13 @@ import {connectionOptions565,syntheticCredential565} from '../pan565/native-fixt
 import {syntheticWorkspaceViewChatFeedbackModelV1} from '../../src/pan548/native-agent-run.mjs';
 const root='[id="shell.agent-panel"]',view='[id="shell.module-view"]';
 const hash=b=>createHash('sha256').update(b).digest('hex');
+// Fixture-owned literal expectation for the synthetic HTTP framing peer below.
+// The actual565 transport renames exactly the two native UI tool identities to
+// the closed provider wire aliases before dispatch, so the peer sees and must
+// answer with exactly these wire names. Test-owned literals, not the production
+// mapping imported as its own oracle; no generic or runtime-configurable registry.
+const wireAliasPeer548=Object.freeze({'ui.view.read':'ui_view_read','ui.view.propose':'ui_view_propose'});
+const wireNamesPeer548=Object.freeze(Object.values(wireAliasPeer548));
 function evidence(){assert.ok(process.env.PAN548_BROWSER_EVIDENCE,'PAN548 requires actual evidence, never skip');mkdirSync(process.env.PAN548_BROWSER_EVIDENCE,{recursive:true,mode:0o700});return process.env.PAN548_BROWSER_EVIDENCE;}
 const count=(f,suffix)=>f.requests.filter(r=>r.path.endsWith('/agent-run/'+suffix)).length;
 async function state(f,s){
@@ -51,10 +58,20 @@ async function connectedFixture({taskPurpose=true,empty=false,unknown=false}={})
    observations.push({method:req.method,credentialPresent:typeof req.headers.authorization==='string',body});
    res.writeHead(200,{'content-type':'application/json'});
    if(req.method==='GET'){res.end(JSON.stringify({data:[{id:'model:synthetic-v1'}]}));return;}
-   posts++;const result=await peer.providerCall({request:body},new AbortController().signal);
+   posts++;
+   // The peer obeys the actual provider framing: like the real server it accepts
+   // ONLY the closed wire names it was actually given (declared tools AND the
+   // assistant transcript) and rejects any unexpected/dotted name instead of
+   // silently inventing aliases. The native source keeps rejecting such echoes.
+   const declared=[];for(const t of body?.tools??[])if(typeof t?.function?.name==='string')declared.push(t.function.name);
+   for(const m of body?.messages??[])if(m?.role==='assistant'&&Array.isArray(m.tool_calls))for(const c of m.tool_calls)if(typeof c?.function?.name==='string')declared.push(c.function.name);
+   assert.ok(declared.length>0&&declared.every(n=>wireNamesPeer548.includes(n)),'PAN548_SYNTHETIC_PEER_OUTGOING_NOT_CLOSED_WIRE:'+JSON.stringify(declared));
+   const result=await peer.providerCall({request:body},new AbortController().signal);
    if(unknown&&!result.toolCalls.length){const final=JSON.parse(result.text);final.answers[0].sum=0;result.text=JSON.stringify(final);}
-   res.end(JSON.stringify({model:'model:synthetic-v1',choices:[{message:{content:result.toolCalls.length?null:result.text,tool_calls:result.toolCalls.map(c=>({id:c.id,type:'function',function:{name:c.name,arguments:JSON.stringify(c.arguments)}}))}}],usage:{prompt_tokens:2,completion_tokens:3}}));
-  }catch{res.destroy();}
+   // Echo the advertised aliases; call IDs, arguments and content are preserved.
+   const echoNames=result.toolCalls.map(c=>{const alias=wireAliasPeer548[c.name];assert.ok(typeof alias==='string','PAN548_SYNTHETIC_PEER_UNEXPECTED_NATIVE_TOOL:'+String(c.name));return alias;});
+   res.end(JSON.stringify({model:'model:synthetic-v1',choices:[{message:{content:result.toolCalls.length?null:result.text,tool_calls:result.toolCalls.map((c,i)=>({id:c.id,type:'function',function:{name:echoNames[i],arguments:JSON.stringify(c.arguments)}}))}}],usage:{prompt_tokens:2,completion_tokens:3}}));
+  }catch(error){try{console.error('PAN548_SYNTHETIC_PEER_FAILURE',String(error?.message??error));}catch{}res.destroy();}
  });
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const options=connectionOptions565({origin:'http://127.0.0.1:'+server.address().port},credentialFile);
@@ -123,6 +140,11 @@ test('DUI09 internal connected browser native565 dynamic selection -> exact unch
   assert.deepEqual(command.inferenceConsent,{offerDigest:fresh.inferenceConsentOffer.offerDigest,confirm:true});
   assert.equal(f.posts(),2);assert.equal(count(f,'start'),1);assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
   assert.deepEqual(f.observations.filter(r=>r.method==='POST')[1].body.messages.map(m=>m.role),['user','assistant','tool','tool']);
+  // Exact closed wire names as actually observed on the outgoing transport bytes
+  // (fixture-owned literals; the production adapter is not its own oracle here).
+  const peerPosts=f.observations.filter(r=>r.method==='POST');
+  assert.deepEqual(peerPosts[0].body.tools.map(t=>t.function.name),[...wireNamesPeer548],'BROWSER_OUTGOING_DECLARED_TOOLS_EXACT_CLOSED_WIRE');
+  assert.deepEqual(peerPosts[1].body.messages[1].tool_calls.map(c=>c.function.name),[...wireNamesPeer548],'BROWSER_OUTGOING_ASSISTANT_TOOLCALLS_EXACT_CLOSED_WIRE');
   assert.equal((f.responses.filter(r=>(r.path.endsWith('/agent-run/start')||r.path.endsWith('/agent-run/read'))&&r.status===200).at(-1).value).modelMode,'OWNER_BOUND_PROVIDER');
   await f.page.setViewportSize({width:1280,height:900});await connectedCapture(f,'desktop-native-owner-result-preview-only');
   await preview(f);assert.equal(f.readPersisted().revision,0);await connectedCapture(f,'desktop-native-owner-separate546-before-after');
