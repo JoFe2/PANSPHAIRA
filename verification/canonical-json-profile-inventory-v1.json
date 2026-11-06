@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "6590c01b3dad59d612b0a135ffcc4843e46a533b77a703741ee15ac52c81ee38"
+        "sha256": "d5580c7cbbee23cfcb0243fd1576b441ce7197e36169072954e46085f6aa01dd"
       }
     ]
   },
@@ -931,6 +931,14 @@
       "fromSha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
       "toSha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229",
       "reason": "C01 required-CI timeout recovery adds bounded live proof-command progress and owned asynchronous child lifecycle to this whole-file-pinned verifier. Its canonicalJson routine bytes, serialization domain, mandatory commands and per-product/security deadlines are unchanged. Preserve the immutable admitted v1 digest and every prior migration; admit only this exact independently assessed orchestration file, never a candidate-reseeded digest or cross-profile equivalence."
+    },
+    {
+      "migrationId": "PAN575-LOCAL-MODEL-QUALIFICATION/INTEGRITY-GENERATOR/V105",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 105,
+      "fromSha256": "b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693",
+      "toSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
+      "reason": "Bind the reviewed PAN575 local model qualification utility registration inside the integrity generator as the exact byte-bound successor of admitted V104 on the same closed owner and checksum recipe. The unchanged mechanical scanner measures1299 files,344 import sites in343 files and2847 unique ledger paths, with scripts consumers16 sites/16 files and tests consumers77 sites/76 files. Retain all historical migration bytes, immutable21 base obligations,13 pinned profiles, every old classification/consumer/non-equivalence assertion, original hard gates, legacy1792 runnable payload and the two closed source-only PAN542 catalog/fixture baseline bindings byte-identical. This bounded local utility census evidence makes no real-model success claim, no CI/merge/release qualification and no whole575/565/548 issue acceptance."
     }
   ],
   "scanScope": {
@@ -973,15 +981,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-  "filesScanned": 1297,
+  "filesScanned": 1299,
   "declarationSites": 37,
   "declarationFiles": 37,
-  "importSites": 342,
-  "importFiles": 341,
+  "importSites": 344,
+  "importFiles": 343,
   "reexportSites": 7,
   "similarShapeSites": 30,
-  "ledgerEntries": 2844,
-  "ledgerUniquePaths": 2844
+  "ledgerEntries": 2847,
+  "ledgerUniquePaths": 2847
 },
   "profiles": [
     {
@@ -1054,7 +1062,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693"
+      "sha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1556,13 +1564,13 @@
     },
     {
       "owner": "scripts",
-      "importSites": 15,
-      "importFiles": 15
+      "importSites": 16,
+      "importFiles": 16
     },
     {
       "owner": "tests",
-      "importSites": 76,
-      "importFiles": 75
+      "importSites": 77,
+      "importFiles": 76
     },
     {
       "owner": "usage-insights",
@@ -1855,7 +1863,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693",
+      "sha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
       "basis": "profile-version-migration"
     },
     {
