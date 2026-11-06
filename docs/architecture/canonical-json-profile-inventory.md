@@ -508,3 +508,26 @@ expiry renewal or complete605606 acceptance.
 The code-owned migration `C01-REQUIRED-CI-ORCHESTRATION/secure-default-proof-profile/v2` admits only the exact verifier file from immutable v1 `4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1` to orchestration v2 `5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229`. Required-CI recovery adds bounded live progress and owned asynchronous proof-command lifecycle, not a serialization redesign. The admitted `canonicalJson` routine section remains byte-identical, SHA256 `2a0ae97ab0e7f0cae41b0eef42ab75f357fd8b46f784dc6f5eba91121db38d0b`; its new focused case rejects changes to migration path, version, source digest and target digest.
 
 The immutable base fixture, all previous migrations, scanner/classification rules, fresh counts, 13 pinned profiles, 21 byte obligations, evidence dimensions and NOT-PROVEN non-equivalence stance remain unchanged. Only this profile's current digest/basis and the appended exact migration are derived. Historical v1 is not overwritten or reseeded from a candidate ledger. This census registration requires its own focused independent disposition; acceptance of the unchanged verifier does not accept these new control bytes, waive required hosted gates, publish a release or complete the whole five-profile UI.
+
+## PAN575 local-qualification utility census correction (current, V105)
+
+All counts recorded in the sections above stay labeled historical. On the current
+candidate the unchanged mechanical scanner measures1299 scanned files,37
+declarations/files,344 import sites in343 files,7 reexports,30 similar-shape
+sites and2847 unique checksum ledger paths without duplicates. Consumer families
+move only for scripts16 sites/16 files and tests77 sites/76 files; every other
+family is intact. The append-only migration
+`PAN575-LOCAL-MODEL-QUALIFICATION/INTEGRITY-GENERATOR/V105` binds the actual
+reviewed PAN575 utility registration inside the integrity generator from the
+admitted V104 digest `b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693`
+to `9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd`, keeping the
+two closed source-only PAN542 catalog/fixture baseline bindings byte-identical.
+The immutable admitted-base obligations, historical SHA chain,21 byte obligations,
+13 pinned profiles, owners, classifications and NOT-PROVEN non-equivalence stance
+are unchanged, and the legacy1792 runnable manifest does not expand. One focused
+new negative rejects caller substitution of the exact V105 target digest.
+
+This is a bounded census/generator-binding correction for the actual PAN575
+utility registration only. It makes no real-model success claim, no full
+CI/WholeCanonical, protected-merge, release or closure claim, and does not accept
+issues575/565/548; the previously failed hosted run remains historical FAIL.
