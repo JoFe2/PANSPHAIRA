@@ -9457,7 +9457,7 @@
         {
           "path": "tests/pan575/protocol-fixture.mjs",
           "role": "VALIDATOR",
-          "sha256": "5f2ac566aa06a5ec24e32649de09d2d9c52b3df6b51b9ec415bf29e35498caa9"
+          "sha256": "73cf4528e224e443bcd9ed35af18c98fc726aea26be130ad3bdb7f67b0602aea"
         },
         {
           "path": "tests/pan575/tool-transcript.test.mjs",
@@ -9472,17 +9472,17 @@
         {
           "path": "tests/pan575/native-ui-consumer.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "536a6108335cca61ba21917c23981ec467f68bf5cae15010c518c44a39a4de5c"
+          "sha256": "a67519af280b5637fec87477bdad2e87cc4cc78186b5a831e2173efb3a6a1783"
         },
         {
           "path": "tests/pan575/local-model-qualification.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1d66b2f7f7ab583a3edc67dcad6f13f0ec6238d32db5803e233a3525fbff5d8c"
+          "sha256": "ce0bbc604cf788c0cef12c586d26a2016832b7f60aeafbf3720a28aa897bf88a"
         },
         {
           "path": "tests/pan575/native-ui-wire-adapter.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "dc8dd97c93ecbc87b117af73891d2235d444cc0a166f85c2f02e3f1983c636e4"
+          "sha256": "8e794ffddb3afe85ffc31d177695be08a802743c42412af3b7ab001cefff0fe1"
         },
         {
           "path": "tests/pan575/registration.test.mjs",
@@ -9492,12 +9492,12 @@
         {
           "path": "scripts/run-pan575-local-model-qualification.mjs",
           "role": "SOURCE",
-          "sha256": "54ccb31477283697717307f5229c7d952aa1dd0e44ca131b5f6f7d248be1e72e"
+          "sha256": "2bbe5744a70ea4677d8c44320f3e4a2de88f622813089a92373a8a1f36172d0f"
         },
         {
           "path": "docs/architecture/pan575-local-model-qualification-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "5902279ca3b0dd0550681e73f193d7ef1a5a0c0ee79f578173517f59f3b3ac01"
+          "sha256": "141dca8532991cdea189cf720ad2a9afb9bd44cf004e8ffd5785b22c4f0a6d63"
         },
         {
           "path": "docs/architecture/pan575-native-ui-wire-alias-v1.md",
@@ -10506,7 +10506,7 @@
         {
           "path": "src/pan565/connection-transport.mjs",
           "role": "SECURITY",
-          "sha256": "2fc5477c4e4cb0c0ca58f9f3e729b587f7f8ea2e7430126b2b7e843f4bb1963a"
+          "sha256": "0a1be8642c4d9f080784cda2a889b6b50986d6b1e5f1fa73bd5f183fc4680e42"
         },
         {
           "path": "scripts/run-pan565-model-connection-tests.mjs",

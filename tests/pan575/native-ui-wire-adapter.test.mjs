@@ -128,15 +128,44 @@ test('575 closed adapter unit closure: rename plus transcript, unmappable/unknow
  const x=await strictWirePeer();try{await assert.rejects(x.transport.providerToolStepCall({request:{model:'model:synthetic-v1',messages:[],tools:[{type:'function',function:{name:'ui.view.read'}},{type:'function',function:{name:'ui.personal.save'}}]}},new AbortController().signal,()=>true,limits565),/MODEL_CONNECTION_WIRE_NAME_DENIED/);assert.equal(x.posts(),0,'unknown dotted name: refused BEFORE dispatch, zero POST');}finally{await x.close();}
 });
 
-test('575 non-UI composition pass-through: original574 dotted capability names (no UI-catalog name) leave the closed adapter byte-identical and unaliased; UI-catalog plus foreign dotted name stays fail-closed',()=>{
- const {adaptNativeUiWireRequestV1}=pan565Transport;
- // Stable literals matching the ACTUAL original574 binding capability ids
- // (src/pan471/composition-bindings.mjs) — not the closed UI catalog.
- const composition={model:'m',messages:[{role:'user',content:'orig574'},{role:'assistant',content:null,tool_calls:[{id:'call_PlAnAa9',type:'function',function:{name:'pan522.material.plan',arguments:'{}'}},{id:'call_CeLlBb8',type:'function',function:{name:'erp.order.create',arguments:'{}'}}]}],tools:[{type:'function',function:{name:'pan522.material.plan'}},{type:'function',function:{name:'erp.order.create'}}]};
- const snapshot=JSON.stringify(composition),pass=adaptNativeUiWireRequestV1(composition);
- assert.equal(pass.request,composition,'no UI-catalog name: the SAME request object passes through, untouched');
- assert.equal(pass.aliases,null,'no alias map: response names stay native, original broker/tool guards decide');
- assert.equal(JSON.stringify(composition),snapshot,'byte-identical after adaptation: no dotted composition name renamed, frozen or blocked');
- assert.deepEqual(composition.tools.map(t=>t.function.name),['pan522.material.plan','erp.order.create'],'original574 capability ids keep their exact native dotted names');
- assert.throws(()=>adaptNativeUiWireRequestV1({model:'m',messages:[],tools:[{type:'function',function:{name:'ui.view.read'}},{type:'function',function:{name:'pan522.material.plan'}}]}),/MODEL_CONNECTION_WIRE_NAME_DENIED/,'a UI-catalog request combined with a foreign dotted composition name stays fail-closed BEFORE dispatch');
+test('575 closed composition alias: exact pair renamed on declared tools AND assistant transcript, inverse aliases restore only the dotted natives; unknown/forged alias, caller mapping, subset, extra and UI-mixture refused; unrelated dotted catalog stays byte-identical',async()=>{
+ const {adaptNativeUiWireRequestV1,MODEL_COMPOSITION_WIRE_ALIAS_V1}=pan565Transport;
+ // Stable test-owned literals for the ACTUAL original574 binding capability
+// ids (src/pan471/composition-bindings.mjs) and their provider-safe wire
+// names; nothing expected is derived from the adapter under test.
+ const COMP_ALIAS_V1=Object.freeze({'pan522.material.plan':'pan522_material_plan','erp.order.create':'erp_order_create'});
+ assert.deepEqual({...MODEL_COMPOSITION_WIRE_ALIAS_V1.binding},COMP_ALIAS_V1,'closed code-owned composition registry holds exactly the literal provider-safe names');
+ const pair=()=>structuredClone([{type:'function',function:{name:'pan522.material.plan'}},{type:'function',function:{name:'erp.order.create'}}]);
+ const composition={model:'m',messages:[{role:'user',content:'orig574'},{role:'assistant',content:null,tool_calls:[{id:'call_PlAnAa9',type:'function',function:{name:'pan522.material.plan',arguments:'{}'}},{id:'call_CeLlBb8',type:'function',function:{name:'erp.order.create',arguments:'{}'}}]}],tools:pair()};
+ const snapshot=JSON.stringify(composition),b=adaptNativeUiWireRequestV1(composition);
+ assert.notEqual(b.request,composition,'the exact composition pair now engages the closed adapter: no untouched pass-through any more');
+ assert.deepEqual(b.request.tools.map(t=>t.function.name),['pan522_material_plan','erp_order_create'],'outgoing DECLARED tools carry exactly the closed provider-safe aliases');
+ assert.deepEqual(b.request.messages[1].tool_calls.map(c=>c.function.name),['pan522_material_plan','erp_order_create'],'the assistant transcript uses the SAME closed mapping');
+ assert.deepEqual([...b.aliases.entries()],[['pan522_material_plan','pan522.material.plan'],['erp_order_create','erp.order.create']],'the inverse aliases restore only the exact dotted native identities');
+ assert.equal(JSON.stringify(composition),snapshot,'the original request object is never mutated by the adapter');
+ // Closed negatives, all refused BEFORE dispatch: only the exact pair.
+ assert.throws(()=>adaptNativeUiWireRequestV1({model:'m',messages:[],tools:[{type:'function',function:{name:'pan522.material.plan'}}]}),/MODEL_CONNECTION_WIRE_NAME_DENIED/,'a proper subset of the exact pair is refused, no dotted fallback');
+ assert.throws(()=>adaptNativeUiWireRequestV1({model:'m',messages:[],tools:[...pair(),{type:'function',function:{name:'crm.order.snapshot'}}]}),/MODEL_CONNECTION_WIRE_NAME_DENIED/,'an added foreign dotted name beyond the exact pair is refused');
+ assert.throws(()=>adaptNativeUiWireRequestV1({model:'m',messages:[],tools:[...pair(),{type:'function',function:{name:'unrelated_tool'}}]}),/MODEL_CONNECTION_WIRE_NAME_DENIED/,'an added third undotted name is refused too: the whole pair and nothing else');
+ assert.throws(()=>adaptNativeUiWireRequestV1({model:'m',messages:[],tools:[{type:'function',function:{name:'ui.view.read'}},{type:'function',function:{name:'pan522.material.plan'}}]}),/MODEL_CONNECTION_WIRE_NAME_DENIED/,'a UI/composition mixture stays fail-closed BEFORE dispatch');
+ assert.throws(()=>adaptNativeUiWireRequestV1(composition,COMP_ALIAS_V1),/MODEL_CONNECTION_WIRE_ALIAS_DENIED/,'no caller-selected mapping: even the literally correct composition binding as second argument is refused explicitly');
+ assert.throws(()=>adaptNativeUiWireRequestV1(composition,{'pan522.material.plan':'pan522_material_plann','erp.order.create':'erp_order_create'}),/MODEL_CONNECTION_WIRE_ALIAS_DENIED/,'a forged alias mapping is refused explicitly, never honoured or silently ignored');
+ const unrelated={model:'m',messages:[{role:'user',content:'x'}],tools:[{type:'function',function:{name:'crm.order.snapshot'}}]};
+ const pass=adaptNativeUiWireRequestV1(unrelated);assert.equal(pass.request,unrelated);assert.equal(pass.aliases,null,'an unrelated dotted catalog outside both closed pairs stays a byte-identical pass-through with a null alias map');
+ // Response-side closed negatives over the ACTUAL transport with a strict
+// literal peer: a response name that is not one of the known composition
+// wire aliases is refused, never normalized. The peer echoes exactly what it
+// was given, including the outgoing declared tool names it actually saw.
+ const f=await nativeViewFixture546();let server=null,peerName='pan522_material_plann',peerDeclared=[];
+ try{const credentialFile=join(f.root,'composition-wire-secret');writeFileSync(credentialFile,syntheticCredential565,{mode:0o600});
+  server=createServer(async(req,res)=>{let bytes='';for await(const chunk of req)bytes+=chunk;peerDeclared=(JSON.parse(bytes).tools??[]).map(t=>t?.function?.name);res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify({model:'model:synthetic-v1',choices:[{message:{content:null,tool_calls:[{id:'call_PlAnAa9',type:'function',function:{name:peerName,arguments:'{}'}}]}}],usage:{prompt_tokens:2,completion_tokens:3}}));});
+  await new Promise(r=>server.listen(0,'127.0.0.1',r));
+  const transport=pan565Transport.bindModelConnectionTransportV1(structuredClone(connectionOptions565({origin:'http://127.0.0.1:'+server.address().port},credentialFile)));
+  const providerRequest={model:'model:synthetic-v1',messages:[],tools:pair()},providerSnapshot=JSON.stringify(providerRequest);
+  await assert.rejects(transport.providerToolStepCall({request:providerRequest},new AbortController().signal,()=>true,limits565),err=>{assert.equal(err.message,'MODEL_CONNECTION_WIRE_ALIAS_DENIED');return true;},'an unknown alias-shaped response name is denied, not normalized to valid');
+  assert.deepEqual(peerDeclared,['pan522_material_plan','erp_order_create'],'the outgoing declared tools actually reached the wire as provider-safe aliases');
+  assert.equal(JSON.stringify(providerRequest),providerSnapshot,'the original provider request stays unmutated');
+  peerName='ui_view_read';// an exact alias of the OTHER closed purpose is still foreign here
+  await assert.rejects(transport.providerToolStepCall({request:providerRequest},new AbortController().signal,()=>true,limits565),err=>{assert.equal(err.message,'MODEL_CONNECTION_WIRE_ALIAS_DENIED');return true;},'a UI alias response name on the composition wire stays denied');
+ }finally{if(server){server.closeAllConnections();await new Promise(r=>server.close(r));}await f.close();}
 });

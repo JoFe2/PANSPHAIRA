@@ -14,7 +14,7 @@ import {createNativeWorkspaceAgentRunV1,syntheticWorkspaceViewChatFeedbackModelV
 import {validateWorkspaceAgentReadV1} from '../../dist/packages/contracts/src/workspace-agent-run-v1.js';
 import {nativeWorkspaceViewFieldsV1} from '../../src/pan546/native-data-catalog.mjs';
 import * as nativeModelConnection from '../../src/pan565/native-model-connection.mjs';
-import {MODEL_UI_WIRE_ALIAS_V1} from '../../src/pan565/connection-transport.mjs';
+import {MODEL_UI_WIRE_ALIAS_V1,MODEL_COMPOSITION_WIRE_ALIAS_V1} from '../../src/pan565/connection-transport.mjs';
 
 test('575 own missing native565 product-owner capability must exist; delivered synthetic callback is not owner admission',()=>{
  assert.equal(typeof nativeModelConnection.createNativeWorkspaceFeedbackModelV1,'function','OWN INTERNAL MISSING NATIVE MODEL OWNER BINDING; not a user/route blocker');
@@ -159,6 +159,7 @@ for(const mode of ['BAD_FRESH_INFORMATION','SECRET_RETIRED_AFTER_FIRST'])test('5
 // post-result feedback, owner-derived settlement and UNKNOWN/reopen.
 async function compositionOwnerFixture({mode='OK',purposes=[nativeModelConnection.MODEL_CONNECTION_COMPOSITION_PURPOSE_V1],limits={}}={}){
  const f=await nativeViewFixture546(),observations=[],sockets=new Set(),credentialFile=join(f.root,'composition-synthetic-existing-secret');let post=0;
+ const compAlias=MODEL_COMPOSITION_WIRE_ALIAS_V1.binding;
  writeFileSync(credentialFile,syntheticCredential565,{mode:0o600});
  const server=createServer(async(req,res)=>{let bytes='';for await(const chunk of req)bytes+=chunk;const body=bytes?JSON.parse(bytes):null;observations.push({method:req.method,body});
   if(req.method==='GET'){res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify({data:[{id:'model:synthetic-v1'}]}));return;}
@@ -166,9 +167,15 @@ async function compositionOwnerFixture({mode='OK',purposes=[nativeModelConnectio
   const results=(body.messages??[]).filter(m=>m.role==='tool');
   const erpArgs={requestId:'request:erp-cell-pan575-composition',sku:'SYN-PAN575',quantity:13};
   if(!results.length){
+   // The local framing peer behaves like the real provider: it verifies and
+   // echoes only the provider-safe wire names the closed composition binding
+   // actually declared; native dotted identities stay owner/loop/ledger-side.
+   const declared=(body.tools??[]).map(v=>v?.function?.name);observations[observations.length-1].declaredToolNames=declared;
+   const wireNames=Object.values(compAlias);
+   if(declared.length!==wireNames.length||declared.some((n,i)=>n!==wireNames[i]||n.includes('.'))){res.writeHead(400,{'content-type':'application/json'});res.end(JSON.stringify({error:'unexpected declared wire names'}));return;}
    const calls=mode==='SWAPPED'
-    ?[{id:'call_CompBb2',function:{name:'erp.order.create',arguments:JSON.stringify(erpArgs)}},{id:'call_CompAa1',function:{name:'pan522.material.plan',arguments:JSON.stringify(materialInput575())}}]
-    :[{id:'call_CompAa1',function:{name:'pan522.material.plan',arguments:JSON.stringify(materialInput575())}},{id:'call_CompBb2',function:{name:mode==='UNKNOWN_TOOL'?'unknown.tool.execute':'erp.order.create',arguments:JSON.stringify(erpArgs)}}];
+    ?[{id:'call_CompBb2',function:{name:compAlias['erp.order.create'],arguments:JSON.stringify(erpArgs)}},{id:'call_CompAa1',function:{name:compAlias['pan522.material.plan'],arguments:JSON.stringify(materialInput575())}}]
+    :[{id:'call_CompAa1',function:{name:compAlias['pan522.material.plan'],arguments:JSON.stringify(materialInput575())}},{id:'call_CompBb2',function:{name:mode==='UNKNOWN_TOOL'?'unknown_tool_execute':compAlias['erp.order.create'],arguments:JSON.stringify(erpArgs)}}];
    res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify({model:'model:synthetic-v1',choices:[{message:{content:null,tool_calls:(mode==='FIRST_ONLY'?calls.slice(0,1):calls).map(c=>({id:c.id,type:'function',function:c.function}))}}],usage:{prompt_tokens:2,completion_tokens:3}}));return;}
   const answers=results.map(m=>{const p=JSON.parse(m.content),feedback=p.feedback;return {callId:feedback.callId,challengeId:feedback.challengeId,sum:feedback.left+feedback.right};});
   if(mode==='BAD_FRESH')answers[0].sum+=1;
@@ -203,8 +210,11 @@ test('575/565 composition admission runs the actual original pair with correlate
   assert.equal(r.actualToolActions,2);assert.equal(r.actualRequests,2);assert.equal(r.realModelAcceptance,false);
   assert.deepEqual(r.toolReadbacks.map(v=>v.toolName),['pan522.material.plan','erp.order.create']);
   const postsObs=x.observations.filter(v=>v.method==='POST');assert.equal(postsObs.length,2);
-  // The wire keeps the dotted native identity untouched: no UI alias rights.
-  assert.deepEqual(postsObs[0].body.tools.map(v=>v.function.name),['pan522.material.plan','erp.order.create']);
+  // The closed composition binding renames the exact pair to provider-safe
+  // wire names for transport (declared tools AND assistant transcript); the
+  // broker/owner/ledger identities above stay the exact dotted originals.
+  assert.deepEqual(postsObs[0].body.tools.map(v=>v.function.name),['pan522_material_plan','erp_order_create']);
+  assert.deepEqual(postsObs[1].body.messages.find(v=>v.role==='assistant').tool_calls.map(c=>c.function.name),['pan522_material_plan','erp_order_create']);
   // Correlated post-result feedback: tool-data carries the fresh challenge,
   // bound to the actual call id, absent from the first (pre-call) prompt body.
   const toolMsgs=postsObs[1].body.messages.filter(m=>m.role==='tool');assert.equal(toolMsgs.length,2);
