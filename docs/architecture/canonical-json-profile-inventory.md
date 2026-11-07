@@ -531,3 +531,16 @@ This is a bounded census/generator-binding correction for the actual PAN575
 utility registration only. It makes no real-model success claim, no full
 CI/WholeCanonical, protected-merge, release or closure claim, and does not accept
 issues575/565/548; the previously failed hosted run remains historical FAIL.
+
+## Native running-context readback census correction (current)
+
+The unchanged mechanical scanner now measures 1300 scanned files, 37 declaration
+sites/files, 345 import sites in 344 files, 7 reexports, 30 similar-shape sites
+and 2849 unique checksum ledger paths without duplicates. The added canonical
+JSON import in the native agent-run regression changes only the tests consumer
+family to 78 sites in 77 files. All other families, scanner/validator semantics,
+immutable base obligations, prior migrations, ownership, classifications and
+non-equivalence stance are unchanged. The current inventory binds these measured
+counts and the exact validator bytes; historical counts above stay historical.
+This metadata reconciliation does not qualify a real model, waive hosted CI,
+claim a release or complete the original composition/onboarding/agent issues.

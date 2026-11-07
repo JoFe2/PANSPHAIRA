@@ -348,7 +348,7 @@ e0a9107c308047d680bacb2b5026b3b4a7554d4c0395e915992cd19f7986a2e6  ./docs/archite
 af5513e76cfb62613ad8a2878e1efb2c0d996b1a97201059ddbcea2faf31c141  ./docs/architecture/broker-tool-feedback-v1.md
 6da726901345d601eb88838498a9ba3e7a77f2d20f1906c2e30652a207db8c9c  ./docs/architecture/browser-profile-v1.md
 d9fd55f9cda9c00735a5facf7f78fb89c00461a3050c12fa9bdff5d1ed380a2f  ./docs/architecture/browser-shell-plugin-v1.md
-a9976d6591c5706119776ed43457d02ae5b06c6bcc6a7cdb102d7533fa6160af  ./docs/architecture/canonical-json-profile-inventory.md
+45e690850c8488fd6013ddd4422bc7dab1dfc94789190e02327a45d92dcaafa5  ./docs/architecture/canonical-json-profile-inventory.md
 65629f8e98d827eb40782090b741661a271f30e83c3d400ad339b6141a85177c  ./docs/architecture/cks-10-analytics-bridge-decision-v1.md
 88471960fcb36fa6432a049fec23f10ee4252379351f1c5f7102ac207a6aad3f  ./docs/architecture/cks-11-function-extraction-v1.md
 6f96c5b26a2b982aee479ba093f3c8c0afaecf3619df55fdf0a4c18ae633cc4b  ./docs/architecture/cks-11-governance-decision-v1.md
@@ -1569,7 +1569,7 @@ d7460b81e2855d881f6f1a2836ce0a16eb3235497289d097cb122c2e15cf988c  ./tests/builde
 2861051684d67a61ad62e484a2178cacf300af620bf369541909e8e6e5398028  ./tests/builder-integration-plan.test.ts
 4c2de11b24976709c3571306546d5c458a25bc86f62177a2c361cd5645c9e759  ./tests/builder-quality-evidence.test.ts
 8875de9745ef77b5ea182208d68aa0c47905e288b3fd5b865d4018c4b5c04b06  ./tests/builder-reuse-conformance.test.mjs
-176f358b66fe8bda22fde20baa0236319699f5eccd28ba3c4a7c506392714bb8  ./tests/canonical-json-profile-inventory.test.ts
+d27347694d19c97bdebe8f42540e07265ff49cf988a7bc026c9cab07375f06ae  ./tests/canonical-json-profile-inventory.test.ts
 929ab3a426ed99e3aaadf00b0a8ffe6866503bdaadebbd348995a871b63f2ed2  ./tests/canonical-json-runtime-parity.test.mjs
 3276f78d38bd88ad67b0f3c0468865b72784fd255aed778c6d5cf1ee8fdd4f5a  ./tests/capability-catalogue.test.ts
 2697dc2108511a992917837d0eebf0c52beb34298c74eb9b9b1e24abd6141281  ./tests/ccp-admission-gate.test.ts
@@ -2701,7 +2701,7 @@ f86763bdd1a23123a244541d87254c46a512fb5941ac15859ec0923add825838  ./tsconfig.jso
 b81903d977822ca156e09d48ddf824dcb17de2552d76cf566aaa9ac5f2bfc58f  ./verification/awi-03-knowledge-envelope-evidence-v1.json
 40b6a9bbe263b9cd67ef034dec0eb87c350aa1587904e385a2acb1072b3e0bc3  ./verification/bi-002-crm-read-connector-evidence-v1.json
 93f42b3e9e78b32cc1e1193e3f7a7ef59ca7ccd2e4116bd184d22d504987d46a  ./verification/bi-003-erp-read-connector-evidence-v1.json
-74720d1fd1c81dd359da77a4d8bd241fdbd4e694a94649bd9cd64a17e2ba25ff  ./verification/canonical-json-profile-inventory-v1.json
+017f686d925ecd9649e954eadcc9282d4ec1a0ee19754212d29d87de66bf5590  ./verification/canonical-json-profile-inventory-v1.json
 1e25b300491c6eeabe7f4a88c3358b59651dbd0e474ff1e8ce4a11fa18c52da3  ./verification/cks-03-public-manifests-v1.json
 81ab161fc2f4cd38ca0cc0f40d8c289f5d37b036fd4aef7a31e16ef47bf72e05  ./verification/cks-04-baseline-manifest-template-v1.json
 5e83eb24a343b7d29c0c0e99f54c26855b645b99f63df03acfd598d75222928c  ./verification/cks-04-no-finetune-baseline-evidence-v1.json
@@ -2845,5 +2845,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-10da825b9cd0d31548976976b8233fd71646d0776a37c44305c22b5b38dcfaaf  ./verification/verification-dag-v2.json
+93c4ca8e82d63a915524d49f5c7f1a6cf4dd5097d0839d9fb254221bada0912a  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

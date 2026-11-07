@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "176f358b66fe8bda22fde20baa0236319699f5eccd28ba3c4a7c506392714bb8"
+        "sha256": "d27347694d19c97bdebe8f42540e07265ff49cf988a7bc026c9cab07375f06ae"
       }
     ]
   },
@@ -992,8 +992,8 @@
     "filesScanned": 1300,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 344,
-    "importFiles": 343,
+    "importSites": 345,
+    "importFiles": 344,
     "reexportSites": 7,
     "similarShapeSites": 30,
     "ledgerEntries": 2849,
@@ -1577,8 +1577,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 77,
-      "importFiles": 76
+      "importSites": 78,
+      "importFiles": 77
     },
     {
       "owner": "usage-insights",
