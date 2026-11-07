@@ -10,7 +10,8 @@ import {isNativeWorkspaceViewOwnerV1} from '../pan546/native-view-owner.mjs';
 import {ModelAccessBrokerV1,syntheticModelAccessPolicyV1} from '../../dist/packages/contracts/src/model-access-broker.js';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
 import {reduceWorkspaceModuleViewV1} from '../../dist/packages/contracts/src/workspace-module-view-v1.js';
-import {createResourceBudgetStoreV1} from '../../demo/runtime/atomic-resource-budget.mjs';
+import {createResourceBudgetStoreV1,resourceBudgetOwnerConnectionV2} from '../../demo/runtime/atomic-resource-budget.mjs';
+import {WORKSPACE_AGENT_FAILURE_REASONS_V1} from '../../dist/packages/contracts/src/workspace-agent-run-v1.js';
 import {runExistingBrokerToolFeedbackV1,isCompletedBrokerToolFeedbackV1} from '../pan575/broker-tool-feedback.mjs';
 import {isNativeWorkspaceFeedbackModelV1,prepareNativeWorkspaceFeedbackV1,runNativeWorkspaceFeedbackV1} from '../pan565/native-model-connection.mjs';
 const owned=new WeakMap(),hash=v=>createHash('sha256').update(canonicalJson(v)).digest('hex');
@@ -30,6 +31,37 @@ function json(v,seen=new WeakSet(),depth=0){
 function freeze(v){if(v&&typeof v==='object'){for(const x of Object.values(v))freeze(x);Object.freeze(v);}return v;}
 const secret=/(?:sk-[A-Za-z0-9_-]{12,}|-----BEGIN .*PRIVATE KEY-----|(?:password|api[_-]?key|access[_-]?token)\s*[:=]\s*\S+)/i;
 const operations=freeze({cancel:{available:false,reason:'NO_NATIVE_MODEL_TASK_CANCEL_CONTRACT'},resume:{available:false,reason:'NO_NATIVE_MODEL_TASK_RESUME_CONTRACT'}});
+// Minimized closed failure diagnosis on the SAME native ledger connection
+// (existing owner attachment, same convention as the PAN548 UI-task projection).
+// Additive only: the full UNKNOWN_USAGE hold stays authoritative, the counts
+// distinguish broker-measured values from unavailable (null, never invented
+// zero) and raw provider/error text never reaches this table or the readback.
+const failureReasons=new Set(WORKSPACE_AGENT_FAILURE_REASONS_V1);
+// Exact closed-broker exit classification mirrored from the native575 loop:
+// the eight budget reasons end with exit 3, every other allowed reason and
+// the generic fallback with exit 2.
+const failureBudgetReasons=new Set(['LOOP_TIME_LIMIT','LOOP_TURN_LIMIT','LOOP_TOOL_LIMIT','LOOP_REQUEST_LIMIT','LOOP_COST_LIMIT','LOOP_TOKEN_LIMIT','LOOP_INPUT_LIMIT','LOOP_OUTPUT_LIMIT']);
+const failureDdl=`CREATE TABLE IF NOT EXISTS native_run_failure_diagnosis(operation_id TEXT PRIMARY KEY,request_digest TEXT NOT NULL,reason TEXT NOT NULL,exit_code INTEGER NOT NULL CHECK(exit_code IN (2,3)),actual_requests INTEGER CHECK(actual_requests IS NULL OR typeof(actual_requests)='integer' AND actual_requests>=0),actual_tool_actions INTEGER CHECK(actual_tool_actions IS NULL OR typeof(actual_tool_actions)='integer' AND actual_tool_actions>=0)) STRICT`;
+function failureDiagnosisV1(runId,requestDigest,reason,exitCode,requests,actions){
+ const count=v=>Number.isSafeInteger(v)&&v>=0?v:null;
+ // Corrupt retained data (e.g. a forged row pairing a valid reason with a
+ // contradictory exit class) minimizes to the explicit safe fallback instead
+ // of manufacturing an inconsistent reason/exit pair; the retained UNKNOWN
+ // hold and full reservation stay authoritative either way.
+ const consistent=failureReasons.has(reason)&&(exitCode===2||exitCode===3)&&exitCode===(failureBudgetReasons.has(reason)?3:2);
+ return freeze({schemaVersion:'pansphaira.workspace-agent/failure-diagnosis/v1',runId,requestDigest,reason:consistent?reason:'LOOP_FAILURE_UNCLASSIFIED',exitCode:consistent?exitCode:2,actualRequests:count(requests),actualToolActions:count(actions),settledUsageConfirmed:false,realModelAcceptance:false});
+}
+function recordNativeFailureDiagnosisV1(store,runId,requestDigest,loop){
+ try{
+  if(store.read(runId)?.state!=='UNKNOWN_USAGE')return;
+  const observed=loop&&typeof loop==='object'&&loop.schemaVersion==='pansphaira.broker-tool-feedback/readback/v1',diagnosis=failureDiagnosisV1(runId,requestDigest,observed?loop.endReason:undefined,observed?loop.exitCode:undefined,observed?loop.actualRequests:undefined,observed?loop.actualToolActions:undefined);
+  const connection=resourceBudgetOwnerConnectionV2(store);
+  connection.transaction(()=>{connection.db.exec(failureDdl);connection.db.prepare('INSERT OR REPLACE INTO native_run_failure_diagnosis VALUES(?,?,?,?,?,?)').run(runId,requestDigest,diagnosis.reason,diagnosis.exitCode,diagnosis.actualRequests,diagnosis.actualToolActions);});
+ }catch{/* a missing diagnosis write never relaxes the retained hold or blocks readback */}
+}
+function readNativeFailureDiagnosisV1(store,row){
+ try{const found=resourceBudgetOwnerConnectionV2(store).db.prepare('SELECT reason,exit_code,actual_requests,actual_tool_actions FROM native_run_failure_diagnosis WHERE operation_id=? AND request_digest=?').get(row.operation_id,row.request_digest);return found===undefined?null:failureDiagnosisV1(row.operation_id,row.request_digest,found.reason,found.exit_code,found.actual_requests,found.actual_tool_actions);}catch{return null;}
+}
 const deltaSchema=freeze({type:'object',additionalProperties:false,required:['schemaVersion','operations'],properties:{schemaVersion:{const:'pansphaira.workspace-module-view/delta/v1'},operations:{type:'array',minItems:1,maxItems:1,items:{oneOf:[{type:'object',additionalProperties:false,required:['kind','instanceId','position'],properties:{kind:{const:'MOVE'},instanceId:{type:'string'},position:{type:'integer',minimum:0,maximum:15}}},{type:'object',additionalProperties:false,required:['kind','instanceId','size'],properties:{kind:{const:'RESIZE'},instanceId:{type:'string'},size:{enum:['compact','regular','large']}}}]}}}});
 export function createNativeWorkspaceAgentRunV1(options){
  const o=exact(options,['sessions','contextSelection','dataCatalog','viewOwner','root','model'],'AGENT_NATIVE_OWNER_DENIED');
@@ -58,7 +90,7 @@ export function createNativeWorkspaceAgentRunV1(options){
  function projection(row,s){
   if(!row)fail('AGENT_RUN_UNKNOWN_DENIED');const b=s.snapshot();
   if(row.state==='SETTLED'&&row.result_json!==null){const result=JSON.parse(row.result_json);return freeze({...result,budget:b});}
-  return freeze({schemaVersion:'pansphaira.workspace-agent/readback/v1',runId:row.operation_id,phase:'OUTCOME_UNCONFIRMED',requestDigest:row.request_digest,binding:null,sourceDigest:null,sourceRevisions:null,modelMode:model.mode,realModelAcceptance:false,proposal:null,text:'Nativer Dispatch-/Nutzungsausgang unbestätigt. Vollständige Reservierung bleibt erhalten; kein blindes Wiederholen oder erfundenes Resume. Vorherige Kontextdetails sind nicht aus diesem Ledger rekonstruierbar.',operations,budget:b,personalViewPersistenceProduced:false,businessEffectProduced:false,executionAuthorityGranted:false});
+  return freeze({schemaVersion:'pansphaira.workspace-agent/readback/v1',runId:row.operation_id,phase:'OUTCOME_UNCONFIRMED',requestDigest:row.request_digest,binding:null,sourceDigest:null,sourceRevisions:null,modelMode:model.mode,realModelAcceptance:false,proposal:null,text:'Nativer Dispatch-/Nutzungsausgang unbestätigt. Vollständige Reservierung bleibt erhalten; kein blindes Wiederholen oder erfundenes Resume. Vorherige Kontextdetails sind nicht aus diesem Ledger rekonstruierbar.',operations,budget:b,failureDiagnosis:readNativeFailureDiagnosisV1(s,row),personalViewPersistenceProduced:false,businessEffectProduced:false,executionAuthorityGranted:false});
  }
  function plan(headers,command){
   const c=exact(command,['schemaVersion','context','text']);if(c.schemaVersion!=='pansphaira.workspace-agent/plan/v1'||typeof c.text!=='string'||!c.text.trim()||Buffer.byteLength(c.text)>1024||secret.test(c.text))fail();
@@ -102,7 +134,7 @@ export function createNativeWorkspaceAgentRunV1(options){
   }catch(error){
    // Provider error, stale/revoke/timeout/invalid output never settles unknown
    // as zero use. Only independent native reads reconcile; no caller signer.
-   if(!dispatched)throw error;return projection(s.read(p.core.runId),s);
+   if(!dispatched)throw error;recordNativeFailureDiagnosisV1(s,p.core.runId,requestDigest,null);return projection(s.read(p.core.runId),s);
   }
  }
  async function performChatFeedback(headers,verification,p,s,a,requestDigest){
@@ -124,10 +156,10 @@ export function createNativeWorkspaceAgentRunV1(options){
     return runExistingBrokerToolFeedbackV1({broker:new ModelAccessBrokerV1(activePolicy),request,providerCall:(bound,signal,remaining)=>{authorize();return admitted?admitted.providerCall(bound,signal,remaining):model.providerCall(bound,signal,remaining);},tools,limits,signal:admitted?AbortSignal.any([lifetime.signal,admitted.signal]):lifetime.signal,authorize});
    };
    const loop=native?await runNativeWorkspaceFeedbackV1(o.model,headers,p.admission.ticket,p.confirmation,execute,verifyContext):await execute(null);
-   if(!isCompletedBrokerToolFeedbackV1(loop)||loop.actualToolActions!==2||!proposal||canonicalJson(loop.toolReadbacks.map(r=>r.toolName))!==canonicalJson(['ui.view.read','ui.view.propose']))return projection(s.read(p.core.runId),s);
+   if(!isCompletedBrokerToolFeedbackV1(loop)||loop.actualToolActions!==2||!proposal||canonicalJson(loop.toolReadbacks.map(r=>r.toolName))!==canonicalJson(['ui.view.read','ui.view.propose'])){recordNativeFailureDiagnosisV1(s,p.core.runId,requestDigest,loop);return projection(s.read(p.core.runId),s);}
    verifyContext();const result={schemaVersion:'pansphaira.workspace-agent/readback/v1',runId:p.core.runId,phase:'RESULT_READY',requestDigest,binding:p.core.binding,sourceDigest:p.core.sourceDigest,sourceRevisions:p.core.sourceRevisions,modelMode:model.mode,realModelAcceptance:false,proposal,text:loop.text,operations,budget:s.snapshot(),personalViewPersistenceProduced:false,businessEffectProduced:false,executionAuthorityGranted:false};
    const evidence=s.ownerCompletionEvidence({operationId:p.core.runId,requestDigest,modelUnits:loop.usage.inputTokens+loop.usage.outputTokens,runtimeUnits:loop.actualRequests,evidenceDigest:hash(result)});s.settle(evidence,result,verifyContext);return projection(s.read(p.core.runId),s);
-  }catch{if(closed)fail('AGENT_OWNER_CLOSED');return projection(s.read(p.core.runId),s);}finally{loopControllers.delete(lifetime);lifetime.abort();}
+  }catch{if(closed)fail('AGENT_OWNER_CLOSED');recordNativeFailureDiagnosisV1(s,p.core.runId,requestDigest,null);return projection(s.read(p.core.runId),s);}finally{loopControllers.delete(lifetime);lifetime.abort();}
  }
  async function start(headers,command){
   const c=exact(command,['schemaVersion','context','planHandle','planDigest',...(native?['inferenceConsent']:[])]);if(c.schemaVersion!=='pansphaira.workspace-agent/start/v1'||typeof c.planHandle!=='string'||!/^task-plan:[a-f0-9]{64}$/.test(c.planHandle)||typeof c.planDigest!=='string'||!/^[a-f0-9]{64}$/.test(c.planDigest))fail();
