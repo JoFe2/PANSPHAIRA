@@ -9437,7 +9437,7 @@
         {
           "path": "docs/architecture/broker-tool-feedback-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "7e0f9de21d20772b225e1f31c98ba3fe246386388802889ad8c8baefd52e31db"
+          "sha256": "af5513e76cfb62613ad8a2878e1efb2c0d996b1a97201059ddbcea2faf31c141"
         },
         {
           "path": "packages/contracts/src/model-tool-transcript-v1.ts",
@@ -9472,7 +9472,7 @@
         {
           "path": "tests/pan575/native-ui-consumer.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "adef43edd9a03bbe087991e77894abd8e3199ef4495d921ae3d95e20e20fa2b2"
+          "sha256": "536a6108335cca61ba21917c23981ec467f68bf5cae15010c518c44a39a4de5c"
         },
         {
           "path": "tests/pan575/local-model-qualification.test.mjs",
@@ -10266,7 +10266,7 @@
         {
           "path": "src/pan543/profile-store.mjs",
           "role": "SECURITY",
-          "sha256": "e0a0cd3c23d3f64e0125f96f91042e9ba69a863f100dfd4cdc0154fdedfed703"
+          "sha256": "961a437109a3fb6fffefe5dc1fd0fd3a1b3e3938e1c837584b54bdbffe15f26b"
         },
         {
           "path": "tests/pan543/backend-fixture.mjs",
@@ -10501,12 +10501,12 @@
         {
           "path": "src/pan565/native-model-connection.mjs",
           "role": "SECURITY",
-          "sha256": "3d8dcdbc27fb76542df89a3887a0fd852b7262eedb354e576de4ad961b1b55d6"
+          "sha256": "5f94e6bf0b8f47422c563e7edd72142e91fda0bbe13e5e6876ba3926e21a772e"
         },
         {
           "path": "src/pan565/connection-transport.mjs",
           "role": "SECURITY",
-          "sha256": "4a0b03a8ddceb71b290df68fb3c90fe02964955288a4813bd926036e0eb7f3f2"
+          "sha256": "2fc5477c4e4cb0c0ca58f9f3e729b587f7f8ea2e7430126b2b7e843f4bb1963a"
         },
         {
           "path": "scripts/run-pan565-model-connection-tests.mjs",
@@ -10521,7 +10521,7 @@
         {
           "path": "tests/pan565/native-model-connection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "b846fd5f93b0e9ea0ac1d7281f20462872b04912537d58f5475120ac2c7357a2"
+          "sha256": "650fe0bfa4ba42a04a16b6fc2676432db9786e703ce12b52ca640b214f8071ed"
         },
         {
           "path": "tests/pan565/transport-price-bound.test.mjs",

@@ -29,6 +29,14 @@ const sha=v=>createHash('sha256').update(v).digest('hex'),fail=(c='MODEL_CONNECT
 // identity through the EXISTING owner identity check. Aliases never mint
 // authority; the separate #546 preview/confirmation/CAS authority is untouched.
 export const MODEL_UI_WIRE_ALIAS_V1=Object.freeze({schemaVersion:'pansphaira.model-connection/ui-wire-alias/v1',binding:Object.freeze({'ui.view.read':'ui_view_read','ui.view.propose':'ui_view_propose'})});
+// Original574 composition admission runs on this SAME owner/consent/ledger
+// with its OWN code-owned purpose. The exact original capability pair
+// pan522.material.plan + erp.order.create keeps its dotted native wire names
+// (no alias rights here); admission requires this purpose to be explicitly
+// enumerated in the owner-bound product grant. A probe/UI-only grant can
+// never admit composition and this purpose alone can never admit a UI task:
+// closed third purpose, not a widened or client-selectable catalog.
+export const MODEL_CONNECTION_COMPOSITION_PURPOSE_V1='purpose:pan574-composition-feedback';
 const wireAliasTokenV1=/^[A-Za-z0-9_-]{1,64}$/;
 export function adaptNativeUiWireRequestV1(request,binding=MODEL_UI_WIRE_ALIAS_V1.binding){
  if(!request||typeof request!=='object'||Array.isArray(request)||!binding||typeof binding!=='object'||Array.isArray(binding))fail('MODEL_CONNECTION_WIRE_ALIAS_DENIED');
@@ -82,7 +90,7 @@ export function bindModelConnectionTransportV1(value){
  // Nonzero-priced real calls require an independently owner-bound product
  // grant in addition to the exact browser confirmation. Null is default deny.
  const grant=o.productGrant===null?null:exact(o.productGrant,Object.hasOwn(o.productGrant,'allowedPurposes')?['limits','testDataDigest','expiresAtMs','allowedPurposes']:['limits','testDataDigest','expiresAtMs']);
- if(grant){grant.limits=validateModelConnectionLimitsV1(grant.limits);if(Object.hasOwn(grant,'allowedPurposes')){grant.allowedPurposes=modelConnectionArrayV1(grant.allowedPurposes,2);if(!grant.allowedPurposes.length||new Set(grant.allowedPurposes).size!==grant.allowedPurposes.length||grant.allowedPurposes.some(p=>!['purpose:ui-connection-probe','purpose:ui-view-proposal'].includes(p)))fail('MODEL_CONNECTION_PRODUCT_CONSENT_DENIED');}}
+ if(grant){grant.limits=validateModelConnectionLimitsV1(grant.limits);if(Object.hasOwn(grant,'allowedPurposes')){grant.allowedPurposes=modelConnectionArrayV1(grant.allowedPurposes,3);if(!grant.allowedPurposes.length||new Set(grant.allowedPurposes).size!==grant.allowedPurposes.length||grant.allowedPurposes.some(p=>!['purpose:ui-connection-probe','purpose:ui-view-proposal',MODEL_CONNECTION_COMPOSITION_PURPOSE_V1].includes(p)))fail('MODEL_CONNECTION_PRODUCT_CONSENT_DENIED');}}
  const secret=()=>{if(summary.authMethod==='NONE_LOCAL')return {value:null,fingerprint:null};let b;try{b=readProtectedOwnerSecretFileV1(o.credentialFile);}catch{fail('MODEL_CONNECTION_SECRET_UNAVAILABLE');}const value=b.toString('utf8').trim();b.fill(0);if(!/^[A-Za-z0-9._~-]{8,4096}$/.test(value))fail('MODEL_CONNECTION_SECRET_UNAVAILABLE');return {value,fingerprint:sha(value)};};
  async function addresses(signal){
   if(signal.aborted)fail('MODEL_CONNECTION_TIMEOUT');
