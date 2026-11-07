@@ -186,13 +186,36 @@ export function createWorkspaceContextSelectionV1(options: {
     },
     // Trusted shell composition only: callers never receive the session/tab
     // proof, choose a free URL, replace context or create mutation authority.
-    async moduleViewRequest(operation: WorkspaceModuleViewRequestV1, payload?: Readonly<Record<string, unknown>>, csrfProof?: string): Promise<WorkspaceModuleViewResponseV1> {
+    async moduleViewRequest(operation: WorkspaceModuleViewRequestV1, payload?: Readonly<Record<string, unknown>>, csrfProof?: string, requestTransportMs?: number): Promise<WorkspaceModuleViewResponseV1> {
       const suffixes: Readonly<Record<WorkspaceModuleViewRequestV1, string>> = { READ: "", CATALOG: "/catalog", DATA: "/data", PREVIEW: "/preview", UNDO_PREVIEW: "/undo-preview", CONFIRM: "/confirm", CANCEL: "/cancel", HUMAN_READ: "/read", HUMAN_DECIDE: "/decide", HUMAN_RECONCILE: browserWorkspaceStringValuesV1[122] as string, AGENT_PLAN: "/plan", AGENT_START: "/start", AGENT_READ: "/read", NAV_SEARCH: "/search", NAV_REQUEST: "/request", NAV_READ: "/read", NAV_ACK: "/ack", CONFIGURATION_READ:"", CONFIGURATION_APP_READ:"", CONFIGURATION_APP_COMMAND:"", ADMIN_APPROVAL_READ:"/approval", ADMIN_APPROVAL_COMMAND:"/approval", ADMIN_READ:"/read", ADMIN_COMMAND:"/read", KNOWLEDGE_READ:"/read", KNOWLEDGE_PREFLIGHT:"/read" };
       if (!Object.hasOwn(suffixes, operation) || !current || !proof || !tabId || closed) return { outcome: browserWorkspaceStringValuesV1[47], error: "CURRENT_NATIVE_CONTEXT_REQUIRED" };
       if (payload && (Object.getPrototypeOf(payload) !== Object.prototype || Reflect.ownKeys(payload).some(k => typeof k !== "string" || k === browserWorkspaceStringValuesV1[64]) || Object.values(Object.getOwnPropertyDescriptors(payload)).some(d => !d.enumerable || !("value" in d)))) return { outcome: browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_PAYLOAD_DENIED" };
       const captured = current, capturedEpoch = epoch, capturedLifetime = lifetime;
       const live = () => !closed && epoch === capturedEpoch && lifetime === capturedLifetime && current === captured && localLive(captured.context, capturedEpoch);
-      return serialized(async (): Promise<WorkspaceModuleViewResponseV1> => {
+      // RUN55: the actual same-shell read concurrency boundary. The manual
+      // read-only AGENT_READ and the CATALOG readback its result validation
+      // needs must reach the native server even while one admitted AGENT_START
+      // is still outstanding IN THIS QUEUE: queueing a read behind a held
+      // write only observes that write's transport timeout, never a genuine
+      // RUNNING. This closed allowlist is a direct call, not a second queue:
+      // the operation body re-enters nothing queue-serialized (verify/select/
+      // bind/retire are separate closures; every other operation, including
+      // AGENT_PLAN/AGENT_START, DATA/PREVIEW/CONFIRM/CANCEL and all CAS
+      // writes, mutation/CAS/plan/start semantics stay effect-queue serialized).
+      // The read keeps every guard below unchanged: captured context/epoch/
+      // lifetime, verify before/after, drift check, no replay, no writeSent.
+      // RUN56: operation-specific bounded START transport. ONLY the admitted
+      // one-time AGENT_START may carry a wider fetch window, and only when the
+      // caller passes the exact finite grant bound (offer limits.maxTimeMs) of
+      // the already-authorized run being started: the native server itself is
+      // bound to settle that reply within the same cap, so the browser waits
+      // cap + one 5000ms round-trip margin and no longer aborts its own write
+      // before the already-authorized run can answer. Every other operation —
+      // reads, plan, verify, all CAS writes — keeps the unchanged 5000ms
+      // window. No global timeout was raised or removed, no retry was added,
+      // and a still-lost START reply keeps writeSent → UNKNOWN (no replay).
+      const transportMs = operation === "AGENT_START" && Number.isSafeInteger(requestTransportMs) && (requestTransportMs as number) > 0 && (requestTransportMs as number) <= 600_000 ? (requestTransportMs as number) + 5_000 : 5_000;
+      const runOperation = async (): Promise<WorkspaceModuleViewResponseV1> => {
         let writeSent = false;
         try {
           if (!live()) return { outcome: browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string };
@@ -205,7 +228,7 @@ export function createWorkspaceContextSelectionV1(options: {
           const body = operation === "READ" || operation === "CONFIGURATION_READ" || operation === browserWorkspaceStringValuesV1[127] ? undefined : operation === browserWorkspaceStringValuesV1[62] ? verification : { ...payload, context: verification };
           if (body !== undefined) headers[browserWorkspaceStringValuesV1[141]] = browserWorkspaceStringValuesV1[31] as string;
           writeSent = operation === browserWorkspaceStringValuesV1[63] || operation === browserWorkspaceStringValuesV1[168] || operation === "AGENT_START" || operation === "ADMIN_COMMAND" || operation === "ADMIN_APPROVAL_COMMAND" || operation === "CONFIGURATION_APP_COMMAND";
-          const response = await fetch(base + (operation.startsWith("CONFIGURATION_APP_") ? "/workspace/configuration-application" : operation === "CONFIGURATION_READ" ? "/workspace/configuration" : operation.startsWith("ADMIN_") ? "/workspace/administration" : operation.startsWith("KNOWLEDGE_") ? "/workspace/knowledge" : operation.startsWith("NAV_") ? "/workspace/invoice-navigation" : operation.startsWith("AGENT_") ? "/workspace/agent-run" : operation.startsWith("HUMAN_") ? "/workspace/erv-human" : "/workspace/module-view") + suffixes[operation], { credentials: browserWorkspaceStringValuesV1[6], cache: browserWorkspaceStringValuesV1[7], headers, ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.any([options.signal, AbortSignal.timeout(5000)]) });
+          const response = await fetch(base + (operation.startsWith("CONFIGURATION_APP_") ? "/workspace/configuration-application" : operation === "CONFIGURATION_READ" ? "/workspace/configuration" : operation.startsWith("ADMIN_") ? "/workspace/administration" : operation.startsWith("KNOWLEDGE_") ? "/workspace/knowledge" : operation.startsWith("NAV_") ? "/workspace/invoice-navigation" : operation.startsWith("AGENT_") ? "/workspace/agent-run" : operation.startsWith("HUMAN_") ? "/workspace/erv-human" : "/workspace/module-view") + suffixes[operation], { credentials: browserWorkspaceStringValuesV1[6], cache: browserWorkspaceStringValuesV1[7], headers, ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.any([options.signal, AbortSignal.timeout(transportMs)]) });
           if (!live()) return { outcome: writeSent ? browserWorkspaceStringValuesV1[107] : browserWorkspaceStringValuesV1[57], error: browserWorkspaceStringValuesV1[27] as string };
           if (response.status !== 200) return { outcome: browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_SERVER_DENIED_" + response.status };
           const value: unknown = await response.json();
@@ -218,7 +241,8 @@ export function createWorkspaceContextSelectionV1(options: {
         } catch {
           return { outcome: writeSent ? browserWorkspaceStringValuesV1[107] : browserWorkspaceStringValuesV1[47], error: "MODULE_VIEW_RESPONSE_NOT_CONFIRMED" };
         }
-      });
+      };
+      return operation === "AGENT_READ" || operation === "CATALOG" ? runOperation() : serialized(runOperation);
     },
     async refreshModuleViewContext(source?: WorkspaceContextReadbackV1): Promise<boolean> {
       const captured = current?.context ?? source;
