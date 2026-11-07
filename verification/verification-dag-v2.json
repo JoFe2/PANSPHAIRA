@@ -10121,7 +10121,7 @@
         {
           "path": "packages/browser-workspace/src/app.ts",
           "role": "SOURCE",
-          "sha256": "454598b9c2e5220aa514c36cdd64ffa6544a2add587cba6d316357e6e3ab6e0f"
+          "sha256": "8ba872826d0091f159c2b8e3ebd41b9a7b2fc79bfa881c1fbdd51bd482cbe7d1"
         },
         {
           "path": "packages/browser-workspace/src/plugin-diagnostics-v1.ts",
