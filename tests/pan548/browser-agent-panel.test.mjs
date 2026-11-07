@@ -146,7 +146,7 @@ test('DUI09 internal connected browser native565 dynamic selection -> exact unch
   assert.deepEqual(peerPosts[0].body.tools.map(t=>t.function.name),[...wireNamesPeer548],'BROWSER_OUTGOING_DECLARED_TOOLS_EXACT_CLOSED_WIRE');
   assert.deepEqual(peerPosts[1].body.messages[1].tool_calls.map(c=>c.function.name),[...wireNamesPeer548],'BROWSER_OUTGOING_ASSISTANT_TOOLCALLS_EXACT_CLOSED_WIRE');
   assert.equal((f.responses.filter(r=>(r.path.endsWith('/agent-run/start')||r.path.endsWith('/agent-run/read'))&&r.status===200).at(-1).value).modelMode,'OWNER_BOUND_PROVIDER');
-  await f.page.setViewportSize({width:1280,height:900});await connectedCapture(f,'desktop-native-owner-result-preview-only');
+  await f.page.setViewportSize({width:1280,height:900});assert.ok(!(await f.page.locator(root).innerText()).includes('Fehlerdiagnose'),'RESULT_READY_MUST_NOT_SHOW_FAILURE_DIAGNOSIS');await connectedCapture(f,'desktop-native-owner-result-preview-only');
   await preview(f);assert.equal(f.readPersisted().revision,0);await connectedCapture(f,'desktop-native-owner-separate546-before-after');
   await confirm(f);assert.equal(f.readPersisted().revision,1);assert.equal(f.business(),before);
   await showCurrentViewDetailsUI(f.page);await f.page.locator(view).getByRole('button',{name:'Letzten gespeicherten Viewstand zurückholen',exact:true}).click();await f.page.locator(view+'[data-state="PREVIEW_ONLY"]').waitFor();await confirm(f);
@@ -173,11 +173,118 @@ test('DUI09 internal connected malformed fresh tool feedback stays native UNKNOW
   await state(f,'OUTCOME_UNCONFIRMED');await f.flushResponses();assert.equal(f.posts(),2);assert.equal(count(f,'start'),1);assert.equal(f.readPersisted().revision,0);
   await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();await state(f,'OUTCOME_UNCONFIRMED');await f.flushResponses();
   const r=f.responses.filter(r=>r.path.endsWith('/agent-run/read')&&r.status===200).at(-1).value;assert.equal(r.proposal,null);assert.ok(r.budget.model.committedUnits>0);
+  // The actual readback must carry the exact minimized diagnosis observed by
+  // the native broker loop for this synthetic tampered final answer.
+  assert.deepEqual(r.failureDiagnosis,{schemaVersion:'pansphaira.workspace-agent/failure-diagnosis/v1',runId:p.runId,requestDigest:r.requestDigest,reason:'LOOP_FRESH_INFORMATION_DENIED',exitCode:2,actualRequests:2,actualToolActions:2,settledUsageConfirmed:false,realModelAcceptance:false});
+  // The real panel DOM (not a helper projection) renders the fixed code-owned
+  // German labels and the measured counts; no raw reason code, no JSON dump,
+  // and no enabled retry/resume appears next to the diagnosis.
+  const visible=await f.page.locator(root).innerText();
+  for(const literal of ['Fehlerdiagnose (minimiert, native Projektion)','Frische Werkzeuginformation nicht bestätigt','Exit 2','Anfragen 2 · Werkzeugaktionen 2','Verbrauch nicht bestätigt — volle Reservierung bleibt erhalten'])assert.ok(visible.includes(literal),'PAN548_ACTUAL_PANEL_DIAGNOSIS_LABEL_MISSING:'+literal);
+  for(const counter of ['LOOP_FRESH_INFORMATION_DENIED','{"schemaVersion"','RESULT_READY'])assert.ok(!visible.includes(counter),'PAN548_ACTUAL_PANEL_DIAGNOSIS_RAW_OR_SUCCESS_LEAK:'+counter);
+  for(const label of ['Lauf abbrechen — nicht verfügbar','Lauf fortsetzen — nicht verfügbar'])assert.equal(await f.page.locator(root).getByRole('button',{name:label,exact:true}).isDisabled(),true,'PAN548_DIAGNOSIS_MUST_NOT_ENABLE_TASK_CONTROL:'+label);
+  await connectedCapture(f,'desktop-native-owner-unknown-failure-diagnosis');
   await f.page.setViewportSize({width:390,height:844});await connectedCapture(f,'390-native-owner-unknown-retained-no-retry');
   await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();await state(f,'OUTCOME_UNCONFIRMED');
+  await f.page.evaluate(()=>{document.body.style.zoom='2';});await connectedCapture(f,'390-zoom200-native-owner-unknown-failure-diagnosis');await f.page.evaluate(()=>{document.body.style.zoom='1';});
   await f.page.reload();await showCurrentContextDetailsUI(f.page);await f.page.locator('[id="shell.context-selection"][data-module="pan.erv"][data-state="CURRENT_CONTEXT"]').waitFor();await state(f,'OUTCOME_UNCONFIRMED');
   assert.equal(await f.page.locator(root).getAttribute('data-run'),p.runId);assert.equal(f.posts(),2);assert.equal(count(f,'start'),1);assert.equal(await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).isDisabled(),true);assert.deepEqual(f.errors,[]);
+  // The independent post-reload native read retained the same observed
+  // diagnosis and counts in the real panel; keyboard re-read stays dispatch-
+  // neutral (no new start, no new model POST).
+  assert.ok((await f.page.locator(root).innerText()).includes('Anfragen 2 · Werkzeugaktionen 2'),'PAN548_DIAGNOSIS_NOT_RETAINED_AFTER_RELOAD');
+  await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).focus();await f.page.keyboard.press('Enter');await state(f,'OUTCOME_UNCONFIRMED');
+  assert.equal(count(f,'start'),1);assert.equal(f.posts(),2);assert.equal(f.readPersisted().revision,0);
  }finally{await f.close();}
+});
+
+// Test-only synthetic browser-response mutation (labelled honestly): the read
+// responses below travel over the genuine browser-native strict-TLS transport
+// (same NSS-trusted fetch, same headers/cookies, no second Node-side TLS
+// transport). A page-side wrapper around the captured original window.fetch
+// awaits that genuine browser fetch and mutates ONLY the failureDiagnosis field
+// of the exact same-origin agent-run/read response via a closed test mode;
+// status/headers are preserved and the native fetch is restored in finally.
+// This is a synthetic browser-response mutation, not a native retained-ledger
+// change. The old-record and forged cases are deterministic public fixtures for
+// the consumer boundary, not replays of historical ledger rows or LLM evidence.
+test('PUI07 actual browser panel diagnosis consumer: diagnosis-less read stays unclassified, measured zero distinct from null, forged diagnosis denied without stale output, context switch clears; NOT LLM',async()=>{
+ const f=await connectedFixture({unknown:true});try{
+  const before=f.business();await open(f);await selectConnectedView(f);await connect(f);await boundPlan(f);
+  await f.page.locator('#pan548-agent-inference-consent').check();await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'OUTCOME_UNCONFIRMED');await f.flushResponses();
+  const genuine=f.responses.filter(r=>r.path.endsWith('/agent-run/start')&&r.status===200).at(-1).value;
+  assert.equal(genuine.failureDiagnosis?.reason,'LOOP_FRESH_INFORMATION_DENIED');assert.equal(genuine.failureDiagnosis?.actualRequests,2);
+  assert.ok((await f.page.locator(root).innerText()).includes('Frische Werkzeuginformation nicht bestätigt'),'PAN548_START_PROJECTION_DIAGNOSIS_MISSING');
+  const readClick=async()=>{await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();};
+  // Test-only synthetic browser-response mutation: the captured original
+  // window.fetch stays the ONLY transport (genuine browser NSS-trusted strict
+  // TLS, original headers/cookies, no redirect re-issue, no Node-side Playwright
+  // API request context). The wrapper awaits that genuine browser fetch, matches
+  // the exact same-origin agent-run/read response, preserves status/statusText/
+  // headers and swaps only failureDiagnosis through the closed mode allowlist.
+  await f.page.evaluate(()=>{const original=window.fetch;window.__pan548OriginalFetch548=original;const done={seq:0,mode:null};window.__pan548SyntheticRead548=done;window.__pan548SyntheticMode548={mode:'NONE',baseline:null};
+   const closedModes={NONE:v=>v,DROP_DIAGNOSIS:v=>{delete v.failureDiagnosis;return v;},ZERO_VS_NULL:(v,b)=>Object.assign(v,{failureDiagnosis:{...b,actualRequests:0,actualToolActions:null}}),FORGED_PAIR:(v,b)=>Object.assign(v,{failureDiagnosis:{...b,reason:'LOOP_TIME_LIMIT'}}),FORGED_REASON:(v,b)=>Object.assign(v,{failureDiagnosis:{...b,reason:'LOOP_MALICIOUS_CANARY'}})};
+   window.fetch=async(input,init)=>{const response=await original(input,init);
+    try{const url=new URL(response.url);
+     if(url.origin===location.origin&&url.pathname.endsWith('/workspace/agent-run/read')){const spec=window.__pan548SyntheticMode548;
+      if(spec.mode!=='NONE'&&response.status===200){const value=await response.clone().json();const mutated=closedModes[spec.mode](structuredClone(value),spec.baseline);const headers=new Headers(response.headers);headers.delete('content-length');done.seq+=1;done.mode=spec.mode;return new Response(JSON.stringify(mutated),{status:response.status,statusText:response.statusText,headers});}
+      done.seq+=1;done.mode='NONE';}}
+    catch(error){window.__pan548SyntheticReadFailure548=String(error?.message??error);}
+    return response;};});
+  const setSyntheticMode=mode=>f.page.evaluate(spec=>{window.__pan548SyntheticMode548=spec;},{mode,baseline:genuine.failureDiagnosis});
+  // Each case observes THIS click's completed response: a fresh wrapper sequence
+  // number under the expected closed mode, not whatever promises already exist.
+  const syntheticRead=async mode=>{const before=await f.page.evaluate(()=>window.__pan548SyntheticRead548.seq);await readClick();await f.page.waitForFunction(([n,m])=>window.__pan548SyntheticRead548.seq>n&&window.__pan548SyntheticRead548.mode===m,[before,mode]);await f.flushResponses();};
+  const panelShows=(present,absent)=>f.page.waitForFunction(([p,a])=>{const t=document.querySelector('[id="shell.agent-panel"]')?.innerText??'';return p.every(x=>t.includes(x))&&a.every(x=>!t.includes(x));},[present,absent]);
+  // Older additive record without any diagnosis: explicitly unclassified, not
+  // reconstructed, and the previous valid diagnosis must not persist as current.
+  await setSyntheticMode('DROP_DIAGNOSIS');await syntheticRead('DROP_DIAGNOSIS');
+  await panelShows(['Keine hinterlegt — dieser Lauf bleibt unklassifiziert, keine Rekonstruktion','Anfragen nicht gemessen (kein Nullwert) · Werkzeugaktionen nicht gemessen (kein Nullwert)'],['Frische Werkzeuginformation','Exit ']);
+  await state(f,'OUTCOME_UNCONFIRMED');
+  let visible=await f.page.locator(root).innerText();
+  assert.ok(visible.includes('Keine hinterlegt — dieser Lauf bleibt unklassifiziert, keine Rekonstruktion')&&visible.includes('Anfragen nicht gemessen (kein Nullwert) · Werkzeugaktionen nicht gemessen (kein Nullwert)'),'PAN548_LEGACY_RECORD_MUST_STAY_UNCLASSIFIED');
+  assert.ok(!visible.includes('Frische Werkzeuginformation')&&!visible.includes('Exit '),'PAN548_STALE_DIAGNOSIS_AFTER_DIAGNOSIS_LESS_READ');
+  await connectedCapture(f,'desktop-agent-failure-diagnosis-legacy-record-unclassified');
+  // Genuinely measured zero stays zero; null stays not-measured (never zero).
+  await setSyntheticMode('ZERO_VS_NULL');await syntheticRead('ZERO_VS_NULL');
+  await panelShows(['Anfragen 0 · Werkzeugaktionen nicht gemessen (kein Nullwert)'],['Anfragen 2','Keine hinterlegt','Anfragen nicht gemessen']);
+  await state(f,'OUTCOME_UNCONFIRMED');
+  visible=await f.page.locator(root).innerText();
+  assert.ok(visible.includes('Anfragen 0 · Werkzeugaktionen nicht gemessen (kein Nullwert)'),'PAN548_MEASURED_ZERO_VS_NULL_NOT_DISTINCT');
+  assert.ok(!visible.includes('Anfragen 2'),'PAN548_NULL_COUNT_RENDERED_AS_ZERO_OR_STALE');
+  // Forged reason/exit pair (budget reason with exit 2) is denied by the strict
+  // DTO at the panel boundary: no stale diagnosis may remain shown. The observable
+  // fresh OUTCOME_UNCONFIRMED->RUN_READ_DENIED transition IS this read's result.
+  await setSyntheticMode('FORGED_PAIR');await syntheticRead('FORGED_PAIR');
+  await state(f,'RUN_READ_DENIED');
+  visible=await f.page.locator(root).innerText();
+  assert.ok(!visible.includes('Fehlerdiagnose')&&!visible.includes('Exit '),'PAN548_FORGED_PAIR_MUST_NOT_LEAVE_STALE_DIAGNOSIS');
+  // Intermediate genuine passthrough read restores the diagnosis so that the
+  // next forged denial is again a fresh observable transition instead of a
+  // second identical RUN_READ_DENIED re-match. This adds one read-only GET and
+  // never an extra dispatch, start or model POST.
+  await setSyntheticMode('NONE');await syntheticRead('NONE');
+  await state(f,'OUTCOME_UNCONFIRMED');await panelShows(['Frische Werkzeuginformation nicht bestätigt'],['Keine hinterlegt']);
+  // Forged reason outside the closed allowlist denies the read the same way;
+  // the OUTCOME_UNCONFIRMED->RUN_READ_DENIED transition observes THIS response.
+  await setSyntheticMode('FORGED_REASON');await syntheticRead('FORGED_REASON');
+  await state(f,'RUN_READ_DENIED');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'RUN_READ_DENIED');
+  assert.ok(!(await f.page.locator(root).innerText()).includes('LOOP_MALICIOUS_CANARY'),'PAN548_FORGED_REASON_LEAKED_INTO_PANEL');
+  assert.ok(!(await f.page.locator(root).innerText()).includes('Fehlerdiagnose'),'PAN548_FORGED_REASON_MUST_NOT_LEAVE_STALE_DIAGNOSIS');
+  await f.page.setViewportSize({width:390,height:844});await connectedCapture(f,'390-agent-failure-diagnosis-denied-no-stale');await f.page.setViewportSize({width:1280,height:900});
+  // Only a fresh genuine read shows the actual state again.
+  await setSyntheticMode('NONE');await syntheticRead('NONE');
+  await state(f,'OUTCOME_UNCONFIRMED');await panelShows(['Frische Werkzeuginformation nicht bestätigt'],['Keine hinterlegt']);
+  assert.ok((await f.page.locator(root).innerText()).includes('Frische Werkzeuginformation nicht bestätigt'),'PAN548_FRESH_VALID_READ_MUST_RESTORE_DIAGNOSIS');
+  // Navigating away clears the diagnosis as old context.
+  await f.page.getByRole('button',{name:'Einrichtung und Betriebszustand',exact:true}).click();
+  await f.page.locator('[id="shell.context-selection"][data-module="pan.setup"][data-state="CURRENT_CONTEXT"]').waitFor();await state(f,'CURRENT_SCOPE');
+  assert.ok(!(await f.page.locator(root).innerText()).includes('Fehlerdiagnose'),'PAN548_CONTEXT_SWITCH_MUST_CLEAR_DIAGNOSIS');
+  assert.equal(count(f,'start'),1);assert.equal(f.posts(),2);assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
+  assert.equal(await f.page.evaluate(()=>window.__pan548SyntheticReadFailure548),undefined,'PAN548_SYNTHETIC_READ_MUTATION_TRANSPORT_FAILURE');
+ }finally{try{await f.page.evaluate(()=>{window.fetch=window.__pan548OriginalFetch548;});}catch{}await f.close();}
 });
 
 test('PUI07/DUI06 real mounted browser keyboard native selection -> plan once -> native synthetic run -> reload fresh persistent status -> separate546 preview/cancel/confirm/CAS/GET/Undo, chip dock focus same task; desktop390 zoom',async()=>{

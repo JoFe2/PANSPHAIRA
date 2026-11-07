@@ -144,6 +144,29 @@ own logout. Desktop and 390px/CSS200% layouts use bounded wrapping; concept
 Notebook/Prism references guide hierarchy/spacing, not fictional data or pixel
 baseline claims.
 
+## Minimized failure-diagnosis readback consumer
+
+A validated `OUTCOME_UNCONFIRMED` read (strict DTO plus run/context/owner checks
+first) additionally renders the additive `failureDiagnosis` from the existing
+native ledger readback: fixed code-owned German labels for the closed reason
+allowlist, the closed broker exit classification (3 budget / 2 rejection) and
+the actually measured request/tool-action counts. `null` renders explicitly as
+not measured — never as zero; a genuinely measured zero renders as zero. The
+diagnosis text is code-owned projection only: no provider raw body, secret,
+tenant data, caller HTML or JSON dump. The full held-reservation explanation and
+read-only reconciliation remain authoritative; no retry, resume or new plan is
+implied or manufactured, and a successful `RESULT_READY` projection is unchanged.
+
+Denied, malformed, cross-owner or stale reads clear the diagnosis and native
+detail content, so a previously valid diagnosis is never shown as current; the
+context-change clear already in force applies equally. Older retained records
+without this additive field stay explicitly unclassified and are not
+reconstructed. Evidence: SOURCE_EVIDENCE_ONLY — the native diagnosis mechanism
+is the delivered #575 readback; the actual-browser consumer checks run against
+labelled deterministic synthetic local HTTP fixtures under real Chromium
+operation (no actual-model qualification attempt here, no retry of earlier
+model observations; historical unknown usage stays retained).
+
 ## Original criteria and verification boundary
 
 PUI-07-AC01: exact native plan/scope/prerequisites/run/source/revision projection
