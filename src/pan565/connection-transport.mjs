@@ -30,13 +30,25 @@ const sha=v=>createHash('sha256').update(v).digest('hex'),fail=(c='MODEL_CONNECT
 // authority; the separate #546 preview/confirmation/CAS authority is untouched.
 export const MODEL_UI_WIRE_ALIAS_V1=Object.freeze({schemaVersion:'pansphaira.model-connection/ui-wire-alias/v1',binding:Object.freeze({'ui.view.read':'ui_view_read','ui.view.propose':'ui_view_propose'})});
 // Original574 composition admission runs on this SAME owner/consent/ledger
-// with its OWN code-owned purpose. The exact original capability pair
-// pan522.material.plan + erp.order.create keeps its dotted native wire names
-// (no alias rights here); admission requires this purpose to be explicitly
-// enumerated in the owner-bound product grant. A probe/UI-only grant can
-// never admit composition and this purpose alone can never admit a UI task:
-// closed third purpose, not a widened or client-selectable catalog.
+// with its OWN code-owned purpose; admission requires this purpose to be
+// explicitly enumerated in the owner-bound product grant. A probe/UI-only
+// grant can never admit composition and this purpose alone can never admit
+// a UI task: closed third purpose, not a widened or client-selectable
+// catalog. The exact original capability pair keeps its dotted NATIVE
+// identity end-to-end; only the closed provider-wire binding below renames
+// it for transport, because the controlled existing peer and the real local
+// Qwen server reject dotted function names.
 export const MODEL_CONNECTION_COMPOSITION_PURPOSE_V1='purpose:pan574-composition-feedback';
+// MINIMAL closed composition-specific wire adaptation, authorized for this
+// EXACT two-name composition purpose/catalog only. Provider-safe aliases
+// (identical to the portable names already proven against the real server
+// in run04); no generic normalization, no caller-selected mapping, no
+// dotted fallback, no added authority. The native descriptors, catalog,
+// offer/payload digests, native effect and native readback identity stay
+// exact: the outgoing assistant transcript and the incoming response-name
+// inversion use the SAME mapping, so the ORIGINAL broker/tool guards only
+// ever see the dotted native identities.
+export const MODEL_COMPOSITION_WIRE_ALIAS_V1=Object.freeze({schemaVersion:'pansphaira.model-connection/composition-wire-alias/v1',binding:Object.freeze({'pan522.material.plan':'pan522_material_plan','erp.order.create':'erp_order_create'})});
 const wireAliasTokenV1=/^[A-Za-z0-9_-]{1,64}$/;
 export function adaptNativeUiWireRequestV1(request,binding=MODEL_UI_WIRE_ALIAS_V1.binding){
  if(!request||typeof request!=='object'||Array.isArray(request)||!binding||typeof binding!=='object'||Array.isArray(binding))fail('MODEL_CONNECTION_WIRE_ALIAS_DENIED');
@@ -52,24 +64,36 @@ export function adaptNativeUiWireRequestV1(request,binding=MODEL_UI_WIRE_ALIAS_V
  for(const t of tools)if(typeof t?.function?.name==='string')declared.add(t.function.name);
  for(const m of messages)if(m?.role==='assistant'&&Array.isArray(m.tool_calls))for(const c of m.tool_calls)if(typeof c?.function?.name==='string')declared.add(c.function.name);
  // Integration seam: this closed adapter engages ONLY on requests that
- // actually declare the UI catalog. Every binding key is dotted, so a request
- // without a single UI-catalog name (e.g. the original574 native composition
- // tools with their own dotted capability ids pan522.material.plan /
- // erp.order.create) is the untouched pre-existing provider path: byte-
- // identical pass-through, aliases null, and the ORIGINAL broker/tool guards
- // decide there — never renamed, never blocked here, never admitted as a
- // capability by this adapter.
- if(![...declared].some(n=>aliasOf.has(n)))return {request,aliases:null};
- const dotted=[...declared].filter(n=>n.includes('.'));
- // Actual UI-catalog request: every dotted/mixed name must map exactly through
- // the closed binding. Unknown or colliding dotted/mixed names (including a
- // UI-catalog name combined with a foreign dotted name) are refused BEFORE
- // dispatch; the provider-incompatible name is never silently renamed/dropped.
- if(dotted.some(n=>!aliasOf.has(n))||declared.size!==new Set([...declared].map(n=>aliasOf.get(n)??n)).size)fail('MODEL_CONNECTION_WIRE_NAME_DENIED');
- // Outbound: native -> wire for declared tools AND the assistant transcript.
- // Responses are restored through the separate wire -> native map; any
- // response name that is not exactly a known wire alias is refused below.
- const toWire=new Map(dotted.map(n=>[n,aliasOf.get(n)])),aliases=new Map(dotted.map(n=>[aliasOf.get(n),n])),wire=structuredClone(request);
+ // actually declare a code-owned dotted catalog: the UI pair above, or the
+ // EXACT original574 composition pair. A request with no code-owned dotted
+ // name at all is the untouched pre-existing provider path: byte-identical
+ // pass-through, aliases null, the ORIGINAL broker/tool guards decide there.
+ const compOf=MODEL_COMPOSITION_WIRE_ALIAS_V1.binding,declaredList=[...declared];
+ const uiCatalog=declaredList.some(n=>aliasOf.has(n)),compositionCatalog=declaredList.some(n=>Object.hasOwn(compOf,n));
+ if(!uiCatalog&&!compositionCatalog)return {request,aliases:null};
+ const dotted=declaredList.filter(n=>n.includes('.'));
+ let mapOf;
+ if(uiCatalog){
+  // Actual UI-catalog request: every dotted/mixed name must map exactly through
+  // the closed UI binding. Unknown or colliding dotted/mixed names (including a
+  // UI-catalog name combined with a foreign dotted name — even a composition
+  // name) are refused BEFORE dispatch; the provider-incompatible name is never
+  // silently renamed/dropped and strict purpose isolation stays unchanged.
+  if(dotted.some(n=>!aliasOf.has(n))||declared.size!==new Set(declaredList.map(n=>aliasOf.get(n)??n)).size)fail('MODEL_CONNECTION_WIRE_NAME_DENIED');
+  mapOf=aliasOf;
+ }else{
+  // Closed composition-only request: the ONLY admitted shape is the exact
+  // two-name composition catalog — every declared name one of the pair, the
+  // whole pair, nothing else. A proper subset, an added name or any UI
+  // mixture is refused BEFORE dispatch; no dotted fallback.
+  if(declared.size!==2||!declaredList.every(n=>Object.hasOwn(compOf,n)))fail('MODEL_CONNECTION_WIRE_NAME_DENIED');
+  mapOf=new Map(Object.entries(compOf));
+ }
+ // Outbound: native -> wire for declared tools AND the assistant transcript
+ // (the SAME closed mapping in both). Responses are restored through the
+ // separate wire -> native map; any response name that is not exactly a
+ // known wire alias is refused below.
+ const toWire=new Map(dotted.map(n=>[n,mapOf.get(n)])),aliases=new Map(dotted.map(n=>[mapOf.get(n),n])),wire=structuredClone(request);
  for(const t of(wire.tools??[]))if(toWire.has(t?.function?.name))t.function.name=toWire.get(t.function.name);
  for(const m of(wire.messages??[]))if(m?.role==='assistant'&&Array.isArray(m.tool_calls))for(const c of m.tool_calls)if(toWire.has(c?.function?.name))c.function.name=toWire.get(c.function.name);
  return {request:wire,aliases};
