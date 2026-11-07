@@ -62,3 +62,12 @@
 .agent-integrated-composer>label { font-size:11px; color:#6b7d95; }.agent-integrated-composer>p { font-size:10px; line-height:1.5; color:#667b95; }
 .workspace-agent .agent-integrated-composer textarea { min-height:48px; font-size:11px; padding:8px; }.workspace-agent .agent-integrated-composer>button { font-size:11px; }
 @media (max-width:799px) { .agent-suggestions h3 { display:none; }.agent-suggestions { margin-top:0; padding-top:0; } }
+/* Mobile assistant dock: the fitted height variable must never pin the panel
+shorter than its own flow, because the composer then renders outside the panel
+box and overlaps the following native sections. This is profile-independent: any
+data-design-profile value (including the template defaults the fixtures persist)
+previously kept the pinned height active on mobile. The panel grows with its
+content up to the existing mobile max-height; inside that cap the body stays the
+only scrollport, so diagnosis rows scroll inside the panel and the composer
+stays inside the panel bounds. Desktop (>799px) keeps the fitted dock height. */
+@media (max-width:799px) { .workspace-assistant-column>.workspace-agent { height:auto; max-height:calc(100dvh - 244px); } }

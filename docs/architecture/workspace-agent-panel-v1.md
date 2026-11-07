@@ -167,6 +167,36 @@ labelled deterministic synthetic local HTTP fixtures under real Chromium
 operation (no actual-model qualification attempt here, no retry of earlier
 model observations; historical unknown usage stays retained).
 
+Capture evidence for that consumer is now geometric, not just horizontal: every
+actual-browser capture explicitly opens the panel's technical details, scrolls a
+code-owned diagnosis row into view, and asserts for each rendered diagnosis row
+that it is topmost hit-testable and lies fully inside its scroll viewport, the
+visible viewport and the panel bounds, plus that the composer stays inside the
+panel without intersecting any following sibling section. A filename referring
+to the diagnosis is not itself proof of the diagnosis being on the image; the
+per-capture sidecar now carries those vertical/visibility facts. On narrow
+screens the assistant panel grows with its content up to the existing mobile
+max-height instead of being pinned to the fitted dock height; the fitted height
+is still the lower bound via the dock sizing owner, which additionally never
+reports less than the panel header plus composer chrome. The earlier
+no-design-profile-only exception did not cover the profile-persisting fixtures
+and the actual-browser run still showed four geometry failures, so this
+correction is profile-independent and its browser evidence is pending the next
+actual run. Template profiles and the desktop arrangement, mobile Assistent
+selection, dock/focus, keyboard and collapsed behaviour are unchanged. This is
+a presentation/capture correction only — no business, model, consent or ledger
+semantics changed.
+
+At 390px viewport with 200% body zoom the fixed panel scrollport cannot show all
+four diagnosis rows simultaneously, so the consumer now captures them in an
+explicit sequential pass: each of the four required label/value identities is
+scrolled fully into the actual panel body scrollport, re-measured, hit-tested at
+centre and all four corners, and recorded as its own actual screenshot with its
+own hash, source pins and non-empty exact row text; the pass fails on a missing,
+empty or duplicate identity, and the per-capture receipt references these
+sequential evidence files. The composer containment/nonoverlap assertions and
+all base capture names/sidecar fields are unchanged.
+
 ## Original criteria and verification boundary
 
 PUI-07-AC01: exact native plan/scope/prerequisites/run/source/revision projection
