@@ -9,6 +9,8 @@ import {nativeViewBrowserFixture546} from '../pan546/browser-fixture.mjs';
 import {connectionOptions565,syntheticCredential565} from '../pan565/native-fixture.mjs';
 import {syntheticWorkspaceViewChatFeedbackModelV1} from '../../src/pan548/native-agent-run.mjs';
 const root='[id="shell.agent-panel"]',view='[id="shell.module-view"]';
+// RUN82: the guided recovery navigation's single accessible name, bound exactly once here so both new journeys assert the SAME accessible name the product sets.
+const connectionNavLabelV1='Vorhandenen sicheren Verbindungsbereich öffnen und fokussieren — keine automatische Anfrage, keine Auswahländerung';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 // Fixture-owned literal expectation for the synthetic HTTP framing peer below.
 // The actual565 transport renames exactly the two native UI tool identities to
@@ -129,6 +131,118 @@ async function connectedCapture(f,name){
  for(const path of ['src/pan565/native-model-connection.mjs','src/pan565/connection-transport.mjs','src/pan543/profile-store.mjs','src/pan575/broker-tool-feedback.mjs','packages/contracts/src/workspace-model-connection-v1.ts'])r.pins[path]=hash(readFileSync(path));
  writeFileSync(sidecar,JSON.stringify(r,null,2)+'\n');return n;
 }
+// RUN62: readable RUNNING/result/readback journey in the same shell, built only
+// on the existing single body scrollport and the existing native controls. It
+// exercises the real keyboard focus route (details summary -> Tab -> the
+// independent native read control -> Shift+Tab back), scrolls deliberately with
+// real wheel input, then measures the aria-live phase notice and each bound
+// run/source/budget row with positive dimensions AND actual visible/hit-tested
+// rectangles (elementFromPoint after clipping to the scrollport and viewport) —
+// not just locator.isVisible or DOM text. The scrollport clip is deliberate
+// scrolling, not occlusion: a real header/composer overlap survives the clip
+// and fails the hit test, because header and composer are panel-mounted
+// siblings and never flow inside the scrollport. Records scrolled viewport
+// screenshots, the facts-dl row crops and a sidecar binding state, run, the
+// last genuine native read DTO, the context scope and source pins. Read-only
+// observation: no dispatch, retry, preview, apply or new authority.
+// RUN63 closes three concrete evidence holes in this SAME journey, without any
+// product change: (1) the host state() helper already calls showAgentTechnicalUI
+// before the journey runs, so the entry disclosure state is recorded as a direct
+// observation only — never asserted as a fabricated native-open expectation;
+// (2) the summary focus image is captured after the real keyboard-return route
+// (the CSS ring is bound to :focus-visible, which a programmatic focus() alone
+// does not reach) and the keyboard focus-visible state itself is asserted;
+// (3) at 390 the oversized dl element screenshot (whose locator.screenshot
+// auto-scroll changed the very nested viewport it claimed to prove) is replaced
+// by per-row real scroll reach with the viewport screenshot and the matching
+// rectangles bound at the SAME scroll position before any later capture moves
+// it; the row readability bar is now "whole cell, or the complete visible
+// scrollport chunk for a longer value the user scrolls through" instead of a
+// fixed 15px strip.
+const agentFactsV162={running:['Nativer Lauf','Modellstatus','Wirkung','Native Auftragsbindung','Verbrauch/Reservierung','Native Laufausführung','Native Quelle','Native Quellenrevisionen'],terminal:['Nativer Lauf','Modellstatus','Wirkung','Native Auftragsbindung','Verbrauch/Reservierung','Native Quelle','Native Quellenrevisionen']};
+async function runReadJourneyV162(f,name,expectedPhase,expectedFacts){
+ const page=f.page,summary=page.locator(root+' .agent-technical-details>summary');
+ await page.locator(root+'[data-state="'+expectedPhase+'"]').waitFor({state:'attached'});
+ // RUN63: the host state() helper has ALREADY called showAgentTechnicalUI
+ // before this journey is entered, so any open state seen here cannot be
+ // attributed to the product alone. Record it as a direct observation at
+ // journey entry, before this helper touches open at all; for the held
+ // RUNNING and the reload RESULT_READY journeys no fabricated expected
+ // disclosure state is asserted.
+ const disclosureObservedAtEntry=await page.locator(root+' .agent-technical-details').evaluate(n=>n.open===true).catch(()=>null);
+ await showAgentTechnicalUI(page);
+ await summary.focus();
+ assert.ok(await page.evaluate(()=>document.activeElement?.matches('[id="shell.agent-panel"] .agent-technical-details>summary')===true),'PAN548_JOURNEY_KEYBOARD_FOCUS_SUMMARY');
+ await page.keyboard.press('Tab');
+ const tabTarget=await page.evaluate(()=>{const a=document.activeElement;return a?.tagName==='BUTTON'?(a.getAttribute('aria-label')??a.textContent?.trim()??null):null;});
+ assert.equal(tabTarget,'Laufstatus unabhängig nativ lesen','PAN548_JOURNEY_TAB_MUST_REACH_INDEPENDENT_NATIVE_READ');
+ const readFocus=await page.evaluate(()=>{const a=document.activeElement,r=a?.getBoundingClientRect();if(!r)return null;const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return{width:r.width,height:r.height,hitFocused:!!hit&&(hit===a||a.contains(hit))};});
+ assert.ok(readFocus&&readFocus.width>0&&readFocus.height>0&&readFocus.hitFocused,'PAN548_JOURNEY_READ_CONTROL_NOT_HIT_TESTABLE_AFTER_TAB:'+JSON.stringify(readFocus));
+ await page.keyboard.press('Shift+Tab');
+ assert.ok(await page.evaluate(()=>document.activeElement?.matches('[id="shell.agent-panel"] .agent-technical-details>summary')===true),'PAN548_JOURNEY_KEYBOARD_FOCUS_MUST_RETURN_TO_SUMMARY');
+ // RUN63: the summary focus ring is bound to :focus-visible in
+ // workspace-agent-panel-v1.css, which a programmatic focus() alone does not
+ // reach. This focus arrived through the real keyboard route (Shift+Tab), so
+ // assert the actual keyboard focus-visible state, then capture the image in
+ // exactly that state — no assertion of activeElement alone, no programmatic-
+ // focus screenshot pretending to show the ring.
+ const summaryKeyboardFocusVisible=await page.evaluate(()=>document.activeElement?.matches(':focus-visible')===true);
+ assert.ok(summaryKeyboardFocusVisible,'PAN548_JOURNEY_SUMMARY_RETURNED_FOCUS_NOT_A_VISIBLE_KEYBOARD_STATE');
+ await page.screenshot({path:join(evidence(),name+'-keyboard-focus-details-summary.png')});
+ const statusEvidence=await page.evaluate(()=>{const s=document.querySelector('[id="shell.agent-panel"] [role="status"]');s.scrollIntoView({block:'center'});const r=s.getBoundingClientRect(),p=document.getElementById('pan548-agent-body').getBoundingClientRect();const top=Math.max(r.top,p.top,0),bottom=Math.min(r.bottom,p.bottom,innerHeight),left=Math.max(r.left,p.left,0),right=Math.min(r.right,p.right,innerWidth),hit=document.elementFromPoint((left+right)/2,(top+bottom)/2);return{text:s.textContent,width:Math.round(r.width),height:Math.round(r.height),readableHeight:Math.round(bottom-top),hitSelf:!!hit&&(hit===s||s.contains(hit))};});
+ assert.ok(statusEvidence.width>0&&statusEvidence.height>0&&statusEvidence.readableHeight>=14&&statusEvidence.hitSelf,'PAN548_JOURNEY_PHASE_NOTICE_NOT_READABLE:'+JSON.stringify(statusEvidence));
+ await page.screenshot({path:join(evidence(),name+'-phase-viewport.png')});
+ const wheelToBottom=async()=>{await page.evaluate(()=>document.getElementById('pan548-agent-body').scrollIntoView({block:'center'}));const c=await page.evaluate(()=>{const r=document.getElementById('pan548-agent-body').getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+Math.min(Math.max(r.height/2,20),Math.max(r.height-20,20))};});await page.mouse.move(c.x,c.y);for(let i=0;i<12;i++){await page.mouse.wheel(0,400);if(await page.evaluate(()=>{const p=document.getElementById('pan548-agent-body');return p.scrollTop>=p.scrollHeight-p.clientHeight-2;}))return i+1;}await page.waitForFunction(()=>{const p=document.getElementById('pan548-agent-body');return p.scrollTop>=p.scrollHeight-p.clientHeight-2;},null,{timeout:4000});return 12;};
+ const wheels=await wheelToBottom();
+ const measureRows=(scroll=true)=>page.evaluate(({labels,scroll})=>{const panel=document.getElementById('shell.agent-panel'),port=document.getElementById('pan548-agent-body');return labels.map(label=>{const dt=[...panel.querySelectorAll('.agent-technical-details>dl dt')].find(n=>n.textContent?.trim()===label),dd=dt?.nextElementSibling??null;if(!dt||!dd)return{label,missing:true};const measure=el=>{if(scroll)el.scrollIntoView({block:'center'});const r=el.getBoundingClientRect(),p=port.getBoundingClientRect();const top=Math.max(r.top,p.top,0),bottom=Math.min(r.bottom,p.bottom,innerHeight),left=Math.max(r.left,p.left,0),right=Math.min(r.right,p.right,innerWidth),visiblePort=Math.max(0,Math.min(p.bottom,innerHeight)-Math.max(p.top,0)),hit=document.elementFromPoint((left+right)/2,(top+bottom)/2);return{width:Math.round(r.width),height:Math.round(r.height),readableHeight:Math.round(bottom-top),visiblePortHeight:Math.round(visiblePort),hitSelf:!!hit&&(hit===el||el.contains(hit)),text:el.textContent?.slice(0,220)};};const labelCell=measure(dt),valueCell=measure(dd);return{label,dt:labelCell,dd:valueCell};});},{labels:expectedFacts,scroll});
+ // RUN63: a fixed 15px strip proved nothing. After the deliberate reach, a
+ // cell's readable chunk must cover the WHOLE cell when it fits the visible
+ // scrollport, or the COMPLETE visible scrollport when the value is longer —
+ // the chunk a real user reads before scrolling on; never a sliver.
+ const assertRows=rows=>{for(const row of rows){assert.ok(!row.missing,'PAN548_JOURNEY_BOUND_FACT_ROW_MISSING:'+row.label);for(const cell of[row.dt,row.dd]){assert.ok(cell.width>0&&cell.height>0&&cell.readableHeight>=14&&cell.hitSelf,'PAN548_JOURNEY_BOUND_FACT_ROW_NOT_READABLE:'+row.label+':'+JSON.stringify(cell));assert.ok(cell.readableHeight>=Math.min(cell.height,cell.visiblePortHeight)-2,'PAN548_JOURNEY_BOUND_FACT_ROW_CHUNK_NOT_FULLY_READABLE:'+row.label+':'+JSON.stringify(cell));}}};
+ // RUN63 replaces the oversized-dl element screenshot (locator.screenshot
+ // auto-scrolls and thereby MOVES the nested viewport it claims to prove, so
+ // the "complete rows" image actually showed only the last row) with per-row
+ // evidence: real scroll reach pins the row label at the scrollport top, the
+ // viewport screenshot is taken at that exact scroll position, and only then
+ // re-measured without any new scroll — both label and value cells must be
+ // hit-testable, reach from their actual top inside the visible scrollport,
+ // show their complete readable chunk, and keep their rectangles within 1px
+ // across the capture. A longer value keeps its top chunk visible and simply
+ // continues below the fold, where the user scrolls to it naturally.
+ const captureRowEvidence=async prefix=>{const refs=[];for(const[label,index]of expectedFacts.map((label,i)=>[label,i])){
+  const rowAt=scroll=>page.evaluate(({label,scroll})=>{const panel=document.getElementById('shell.agent-panel'),dt=[...panel.querySelectorAll('.agent-technical-details>dl dt')].find(n=>n.textContent?.trim()===label),dd=dt?.nextElementSibling??null;if(!dt||!dd)return null;if(scroll)dt.scrollIntoView({block:'start'});const port=document.getElementById('pan548-agent-body').getBoundingClientRect(),measure=el=>{const r=el.getBoundingClientRect(),top=Math.max(r.top,port.top,0),bottom=Math.min(r.bottom,port.bottom,innerHeight),left=Math.max(r.left,port.left,0),right=Math.min(r.right,port.right,innerWidth),hit=document.elementFromPoint((left+right)/2,(top+bottom)/2);return{top:Math.round(r.top),bottom:Math.round(r.bottom),left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),height:Math.round(r.height),readableHeight:Math.round(bottom-top),chunkCeil:Math.round(Math.min(r.height,Math.max(0,Math.min(port.bottom,innerHeight)-Math.max(r.top,0)))),inPortTop:r.top>=port.top-1&&r.top<=Math.min(port.bottom,innerHeight)-1,hitSelf:!!hit&&(hit===el||el.contains(hit)),text:el.textContent?.slice(0,220)};};return{label,dt:measure(dt),dd:measure(dd)};},{label,scroll});
+  const assertBound=(pair,stage)=>{assert.ok(pair,'PAN548_JOURNEY_ROW_EVIDENCE_IDENTITY_MISSING_'+stage+':'+label);for(const cell of[pair.dt,pair.dd])assert.ok(cell.width>0&&cell.height>0&&cell.readableHeight>=14&&cell.inPortTop&&cell.readableHeight>=cell.chunkCeil-2&&cell.hitSelf,'PAN548_JOURNEY_ROW_EVIDENCE_NOT_READABLE_'+stage+':'+label+':'+JSON.stringify(cell));};
+  const pre=await rowAt(true);assertBound(pre,'PRE');
+  const image=join(evidence(),prefix+'-'+(index+1)+'.png');
+  await page.screenshot({path:image,fullPage:false});
+  const post=await rowAt(false);assertBound(post,'POST_CAPTURE');
+  assert.ok(post.dt.text===pre.dt.text&&post.dd.text===pre.dd.text,'PAN548_JOURNEY_ROW_EVIDENCE_TEXT_NOT_BOUND_TO_CAPTURE:'+label);
+  assert.ok(['top','bottom','left','right'].every(key=>Math.abs(post.dt[key]-pre.dt[key])<=1&&Math.abs(post.dd[key]-pre.dd[key])<=1),'PAN548_JOURNEY_ROW_EVIDENCE_RECT_NOT_BOUND_WITHIN_1PX:'+label+':pre='+JSON.stringify({dt:{top:pre.dt.top,bottom:pre.dt.bottom,left:pre.dt.left,right:pre.dt.right},dd:{top:pre.dd.top,bottom:pre.dd.bottom,left:pre.dd.left,right:pre.dd.right}})+':post='+JSON.stringify({dt:{top:post.dt.top,bottom:post.dt.bottom,left:post.dt.left,right:post.dt.right},dd:{top:post.dd.top,bottom:post.dd.bottom,left:post.dd.left,right:post.dd.right}}));
+  const imageSHA256=hash(readFileSync(image));
+  writeFileSync(image+'.json',JSON.stringify({journeyRowFactsEvidence:true,label,preCaptureGeometry:pre,postCaptureGeometry:post,screenshotMode:'VIEWPORT_FULLPAGE_FALSE',captureBoundToMeasuredGeometryWithin1px:true,imageSHA256},null,2)+'\n');
+  refs.push({label,rowIndex:index+1,image,sidecar:image+'.json',imageSHA256});
+ }
+ assert.equal(refs.length,expectedFacts.length,'PAN548_JOURNEY_ROW_EVIDENCE_COUNT_MISMATCH:'+JSON.stringify(refs.map(r=>r.label)));
+ return refs;};
+ const desktopRows=await measureRows();await assertRows(desktopRows);
+ await page.screenshot({path:join(evidence(),name+'-scrolled-viewport.png')});
+ const desktopRowEvidence=await captureRowEvidence(name+'-row');
+ await connectedCapture(f,name);
+ await f.page.setViewportSize({width:390,height:844});await connectedCapture(f,name+'-390');await wheelToBottom();const rows390=await measureRows();await assertRows(rows390);
+ await page.screenshot({path:join(evidence(),name+'-390-scrolled-viewport.png')});
+ const viewport390RowEvidence=await captureRowEvidence(name+'-390-row');
+ await page.evaluate(()=>{document.body.style.zoom='2';});
+ const rowsZoom=await measureRows();await assertRows(rowsZoom);
+ // zoom200 keeps the strengthened full-chunk assertion on every cell; this one
+ // viewport image documents the actual 200% state at the measured end-of-scroll
+ // position — the per-row bound captures above carry the readability proof.
+ await page.screenshot({path:join(evidence(),name+'-390-zoom200-scrolled-viewport.png')});
+ await page.evaluate(()=>{document.body.style.zoom='1';});await f.page.setViewportSize({width:1280,height:900});
+ const lastRead=f.responses.filter(r=>(r.method==='GET'||r.method==='POST')&&(r.path.endsWith('/agent-run/read')||r.path.endsWith('/agent-run/start'))&&r.status===200).at(-1)?.value;
+ const meta={expectedPhase,actualState:await page.locator(root).getAttribute('data-state'),actualRun:await page.locator(root).getAttribute('data-run'),phaseNoticeText:statusEvidence.text,scopeText:await page.locator(root+' [data-agent-scope]').innerText(),explanationText:await page.locator(root+' [data-agent-explanation]').innerText(),lastGenuineNativeReadDTO:lastRead?{runId:lastRead.runId,phase:lastRead.phase,requestDigest:lastRead.requestDigest,sourceDigest:lastRead.sourceDigest,sourceRevisions:lastRead.sourceRevisions,budget:lastRead.budget}:null,expectedFacts,keyboardRoute:{summaryFocused:true,tabReachedIndependentRead:true,returnedToSummary:true,summaryKeyboardFocusVisible},disclosureObservedAtEntry,disclosureNote:'recorded at journey entry before this helper touched open; the host state() helper already called showAgentTechnicalUI beforehand, so no fabricated native-open expectation is asserted',wheelScrollWheels:wheels,rows:{desktop:desktopRows,viewport390:rows390,zoom200:rowsZoom},boundRowViewportEvidence:{desktop:desktopRowEvidence,viewport390:viewport390RowEvidence},evidenceNote:'per-cell hit-tested rectangles after deliberate wheel/scroll reach; readable chunk must cover the whole cell or the complete visible scrollport for longer values; per-row viewport screenshots are bound to the measured rectangles at the same scroll position within 1px; scrollport clip is intended scrolling, header/composer are panel-mounted siblings outside the scrollport',controlledLocalHTTPNotLLM:true,actualModelPosts:f.posts(),pins:Object.fromEntries(['src/pan565/native-model-connection.mjs','src/pan565/connection-transport.mjs','src/pan543/profile-store.mjs','src/pan575/broker-tool-feedback.mjs','packages/contracts/src/workspace-model-connection-v1.ts','packages/browser-workspace/src/workspace-agent-panel-v1.ts','packages/browser-workspace/src/workspace-agent-panel-v1.css'].map(p=>[p,hash(readFileSync(p))]))};
+ writeFileSync(join(evidence(),name+'.journey.json'),JSON.stringify(meta,null,2)+'\n');
+}
 test('DUI09 internal connected browser native565 dynamic selection -> exact unchecked purpose/payload offer -> once-only actual HTTP/two native tools -> separate546 preview/CAS/read/Undo/reload; NOT LLM',async()=>{
  const f=await connectedFixture();try{
   const before=f.business();await open(f);await selectConnectedView(f);await connect(f);
@@ -160,6 +274,7 @@ test('DUI09 internal connected browser native565 dynamic selection -> exact unch
   await showCurrentViewDetailsUI(f.page);await f.page.locator(view).getByRole('button',{name:'Letzten gespeicherten Viewstand zurückholen',exact:true}).click();await f.page.locator(view+'[data-state="PREVIEW_ONLY"]').waitFor();await confirm(f);
   await f.page.locator(view+'[data-state="SAVED_AND_NATIVE_READBACK_CONFIRMED"]').waitFor();assert.equal(f.readPersisted().revision,2);
   await f.page.reload();await showCurrentContextDetailsUI(f.page);await f.page.locator('[id="shell.context-selection"][data-module="pan.erv"][data-state="CURRENT_CONTEXT"]').waitFor();await state(f,'RESULT_READY');
+  await runReadJourneyV162(f,'desktop-native-owner-result-ready-reload-readback','RESULT_READY',agentFactsV162.terminal);
   assert.equal(await f.page.locator(root).getAttribute('data-run'),fresh.runId);assert.equal(f.posts(),2);assert.equal(count(f,'start'),1);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
  }finally{await f.close();}
 });
@@ -277,6 +392,7 @@ test('PUI07 actual browser independent read of the genuine running native row wh
   assert.equal(await f.page.locator(root).getAttribute('data-run'),p.runId);
   assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
   await connectedCapture(f,'desktop-native-owner-running-held-peer');
+  await runReadJourneyV162(f,'desktop-native-owner-running-held-peer-journey','RUNNING',agentFactsV162.running);
   f.releasePeer();
   await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();await state(f,'RESULT_READY');await f.flushResponses();
   const terminal=f.responses.filter(r=>r.method==='GET'&&r.path.endsWith('/agent-run/read')&&r.status===200).at(-1).value;
@@ -309,6 +425,7 @@ test('PUI07 actual browser independent read of the genuine running native row wh
   assert.deepEqual(terminal.binding,p.binding,'PAN548_TERMINAL_PROVENANCE_BINDING_CHANGED');assert.equal(terminal.sourceDigest,p.sourceDigest,'PAN548_TERMINAL_PROVENANCE_SOURCE_DIGEST_CHANGED');assert.deepEqual(terminal.sourceRevisions,p.sourceRevisions,'PAN548_TERMINAL_PROVENANCE_REVISIONS_CHANGED');
   assert.equal(f.posts(),2);assert.equal(count(f,'start'),1);assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
   await connectedCapture(f,'desktop-native-owner-running-released-result-ready');
+  await runReadJourneyV162(f,'desktop-native-owner-running-released-result-ready-journey','RESULT_READY',agentFactsV162.terminal);
   assert.deepEqual(f.errors,[]);
  }finally{try{f.releasePeer();}catch{/* gate already open or fixture owned */}await f.close();}
 });
@@ -444,6 +561,7 @@ test('PUI07 same-shell genuine in-flight status without reload: the manual indep
   assert.equal(await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).isDisabled(),false,'PAN548_TERMINAL_PROPOSAL_MUST_BE_INDEPENDENTLY_PREVIEWABLE');
   await preview(f);assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
   await connectedCapture(f,'desktop-native-owner-same-shell-release-result-ready');
+  await runReadJourneyV162(f,'desktop-native-owner-same-shell-release-result-ready-journey','RESULT_READY',agentFactsV162.terminal);
   assert.deepEqual(f.errors,[]);
  }finally{try{f.releasePeer();}catch{/* gate already open or fixture owned */}await f.close();}
 });
@@ -1024,3 +1142,1030 @@ async function captureDiagnosisRowsSequentialV1(f,name,pins){
  assert.equal(new Set(refs.map(r=>r.sequentialIdentity)).size,4,'PAN548_DIAGNOSIS_SEQUENTIAL_ROWS_DUPLICATE_IDENTITY:'+JSON.stringify(refs.map(r=>r.sequentialIdentity)));
  return refs;
 }
+
+// RUN65: the coherent original548 PUI07-AC04 authority-LOSS journey in the real
+// browser assembly. The revocation is the ACTUAL trusted native565 connection
+// owner close, surfaced through the existing fixture seam
+// (browser-fixture.mjs modelConnectionOwner -> workspace-browser.mjs
+// modelConnectionOwnerV1 — the very same frozen owner object the mount created,
+// no forged DTO, no route, no fetch stub, no invented browser cancel API).
+// Sequence: exactly one browser START reaches a genuine held RUNNING through
+// the existing same-shell independent read; the ORIGINAL context stays fully
+// current (asserted on the real context-selection milestone); ONLY the bound
+// admission is revoked. The shell's own in-flight start reply — not a re-read
+// and not a reload — carries the honest terminal OUTCOME_UNCONFIRMED: the
+// aborted admission lifetime surfaces as the closed LOOP_FAILURE_UNCLASSIFIED
+// diagnosis with null counts, the full UNKNOWN hold stays retained untouched
+// (nothing settles, resets or consumes), and the original admitted provenance
+// survives. An independent same-shell read reconfirms UNKNOWN through the
+// still-open agent owner; every control that is unavailable stays disabled and
+// explained; a forced click cannot replay the start. Releasing the held peer
+// revives nothing and never consumes a second provider POST. A real reload
+// preserves the original provenance and the full retained hold, and the closed
+// connection owner honestly DENIES its own readback (the connection panel
+// explains the unavailable operation instead of pretending readiness).
+// Controlled local HTTP framing only — explicitly NOT LLM evidence.
+test('PUI07 actual browser bound admission revoked by the real565 owner close during a genuinely held start: RUNNING stops to honest OUTCOME_UNCONFIRMED with the full UNKNOWN hold and original provenance on the start reply itself, independent read reconfirms, reload preserves provenance/hold with honest closed-owner read denial, peer release revives nothing; NOT LLM',async()=>{
+ const f=await connectedFixture({holdPeer:true,maxTimeMs:25000});try{
+  const before=f.business();await open(f);await selectConnectedView(f);await connect(f);const p=await boundPlan(f);
+  await f.page.locator('#pan548-agent-inference-consent').check();
+  const start=f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true});
+  // Retained real DOM identity: the applied RUNNING read rewrites this same
+  // button's label; identity/guard assertions stay bound to the real node.
+  const startControl=await start.elementHandle();
+  const readButton=f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true});
+  await start.click();await f.peerHeld;await f.flushResponses();
+  assert.equal(f.posts(),1,'PAN548_REVOCATION_EXACTLY_ONE_HELD_PROVIDER_POST');assert.equal(count(f,'start'),1);
+  // Genuine RUNNING in the same still-open shell through the existing manual
+  // independent read — no reload, no polling, no fabricated cancellation.
+  await showAgentTechnicalUI(f.page);await readButton.click();await state(f,'RUNNING');await f.flushResponses();
+  const running=getReadsV1548(f).filter(r=>r.status===200).at(-1).value;
+  assert.ok(running,'PAN548_REVOCATION_CASE_IN_FLIGHT_RUNNING_READ_MISSING');
+  assert.equal(running.runId,p.runId);assert.equal(running.phase,'RUNNING');assert.equal(running.proposal,null);
+  assert.deepEqual(running.binding,p.binding,'PAN548_REVOCATION_RUNNING_READ_LOST_THE_ADMITTED_BINDING');
+  assert.equal(running.sourceDigest,p.sourceDigest);assert.deepEqual(running.sourceRevisions,p.sourceRevisions);
+  const retained=running.budget;
+  assert.ok(retained.model.committedUnits>0&&retained.runtime.committedUnits>0&&retained.model.consumedUnits===0&&retained.runtime.consumedUnits===0,'PAN548_REVOCATION_RUNNING_HOLD_NOT_FULL:'+JSON.stringify(retained));
+  assert.equal(retained.reservations,1,'PAN548_REVOCATION_HELD_RESERVATION_COUNT_NOT_ONE');
+  await f.page.locator(root).screenshot({path:join(evidence(),'desktop-native-owner-admission-revocation-running-held-peer.png')});
+  // Revoke the bound admission ITSELF: the real trusted 565 owner close while
+  // the peer still holds that one POST. Nothing else is touched — no reload,
+  // no navigation, no context change.
+  const modelOwner=f.modelConnectionOwner();
+  assert.ok(modelOwner&&typeof modelOwner.close==='function','PAN548_REVOCATION_REAL565_OWNER_MISSING_FROM_FIXTURE_SEAM');
+  const readsAtRevoke=getReadsV1548(f).length;
+  modelOwner.close();
+  // The ORIGINAL context is still fully current at the revocation instant —
+  // the context-selection still shows its confirmed pan.erv milestone, so the
+  // stopped RUNNING proof below is attributable to the revoked admission
+  // alone, not to a retired or stale context.
+  assert.deepEqual(await f.page.locator('[id=\"shell.context-selection\"]').evaluate(e=>({state:e.dataset.state,module:e.dataset.module})),{state:'CURRENT_CONTEXT',module:'pan.erv'},'PAN548_REVOCATION_CONTEXT_NOT_CURRENT_AT_REVOCATION_INSTANT');
+  // The synchronously aborted admission lifetime ends the RUNNING proof on
+  // this shell's OWN in-flight start reply — no re-read, no reload, no wait
+  // for the unreturned peer hold.
+  await state(f,'OUTCOME_UNCONFIRMED');await f.flushResponses();
+  assert.ok(f.nativeNetwork.some(r=>r.path.endsWith('/agent-run/start')&&r.status===200&&Number.isSafeInteger(r.finishedAt)),'PAN548_REVOCATION_START_REPLY_MUST_HAVE_FINISHED_AT_THE_GATEWAY');
+  assert.equal(getReadsV1548(f).length,readsAtRevoke,'PAN548_REVOCATION_TERMINAL_MUST_ARRIVE_ON_THE_START_REPLY_NOT_A_RE_READ');
+  const terminal=f.responses.filter(r=>r.path.endsWith('/agent-run/start')&&r.status===200).at(-1).value;
+  assert.ok(terminal,'PAN548_REVOCATION_START_200_REPLY_MISSING');
+  assert.equal(terminal.phase,'OUTCOME_UNCONFIRMED');assert.equal(terminal.runId,p.runId);assert.equal(terminal.proposal,null);assert.equal(terminal.realModelAcceptance,false);
+  // The aborted execution records the explicit unclassified failure with null
+  // counts through the existing565 task-authority recheck — never a
+  // fabricated success and never a zero-usage settle.
+  assert.deepEqual(terminal.failureDiagnosis,{schemaVersion:'pansphaira.workspace-agent/failure-diagnosis/v1',runId:p.runId,requestDigest:terminal.requestDigest,reason:'LOOP_FAILURE_UNCLASSIFIED',exitCode:2,actualRequests:null,actualToolActions:null,settledUsageConfirmed:false,realModelAcceptance:false},'PAN548_REVOCATION_TERMINAL_DIAGNOSIS_NOT_THE_ABORTED_ADMISSION_TRUTH');
+  assert.equal(terminal.budget.model.committedUnits,retained.model.committedUnits,'PAN548_REVOCATION_RESET_THE_MODEL_HOLD');
+  assert.equal(terminal.budget.runtime.committedUnits,retained.runtime.committedUnits,'PAN548_REVOCATION_RESET_THE_RUNTIME_HOLD');
+  assert.equal(terminal.budget.model.consumedUnits,0,'PAN548_REVOCATION_SETTLED_MODEL_UNITS');
+  assert.equal(terminal.budget.runtime.consumedUnits,0,'PAN548_REVOCATION_SETTLED_RUNTIME_UNITS');
+  assert.equal(terminal.budget.reservations,1,'PAN548_REVOCATION_DUPLICATED_OR_DROPPED_THE_RESERVATION');
+  // An independent same-shell read honestly reconciles the same UNKNOWN
+  // through the still-open agent owner: the closed connection owner denies
+  // ITS OWN readback, but the agent ledger read stays independent and stays
+  // terminal with the unchanged request binding and provenance.
+  const readsBeforeReconfirm=getReadsV1548(f).length;
+  await readButton.click();
+  await waitForActualV1548(()=>getReadsV1548(f).length>readsBeforeReconfirm,'POST_REVOCATION_INDEPENDENT_READ');await f.flushResponses();
+  await state(f,'OUTCOME_UNCONFIRMED');
+  const reconfirmed=getReadsV1548(f).filter(r=>r.status===200).at(-1).value;
+  assert.equal(reconfirmed.phase,'OUTCOME_UNCONFIRMED');assert.equal(reconfirmed.runId,p.runId);
+  assert.equal(reconfirmed.requestDigest,terminal.requestDigest,'PAN548_POST_REVOCATION_READ_REQUEST_DIGEST_CHANGED');
+  assert.deepEqual(reconfirmed.binding,p.binding,'PAN548_POST_REVOCATION_READ_LOST_THE_ORIGINAL_PROVENANCE');
+  assert.equal(reconfirmed.sourceDigest,p.sourceDigest);assert.deepEqual(reconfirmed.sourceRevisions,p.sourceRevisions);
+  assert.equal(reconfirmed.budget.model.committedUnits,retained.model.committedUnits);assert.equal(reconfirmed.budget.model.consumedUnits,0,'PAN548_POST_REVOCATION_READ_CONSUMED_THE_RETAINED_HOLD');
+  // The real panel DOM explains the revoked state: minimized diagnosis with
+  // explicitly-not-measured counts, retained-hold settlement row, historical
+  // original provenance — and no stale RUNNING/success anywhere.
+  const visible=await f.page.locator(root).innerText();
+  for(const literal of ['Fehlerdiagnose (minimiert, native Projektion)','Ausfall nicht klassifiziert — keine minimierten Details verfügbar','Exit 2 — fachliche Ablehnung ohne Budgettreffer','Anfragen nicht gemessen (kein Nullwert) · Werkzeugaktionen nicht gemessen (kein Nullwert)','Verbrauch nicht bestätigt — volle Reservierung bleibt erhalten','Historische Laufquelle des nativen Laufs','Historische Laufquellenrevisionen des nativen Laufs',p.sourceDigest,'ERV '+p.sourceRevisions.erv+' · Human '+p.sourceRevisions.human,'ursprünglich zum Lauf aufgezeichnet; nicht aktuell verifiziert; keine Freigabe zum Speichern, Anwenden oder Wiederholen'])assert.ok(visible.includes(literal),'PAN548_REVOCATION_PANEL_ROW_MISSING:'+literal);
+  for(const stale of ['Native Laufausführung','Aktuell beobachtet','RESULT_READY'])assert.ok(!visible.includes(stale),'PAN548_REVOCATION_STALE_RUNNING_OR_SUCCESS_LEAK:'+stale);
+  // Every unavailable operation stays disabled and label-explained; the one
+  // admitted start cannot be replayed by a forced click on the retained node.
+  for(const label of ['Lauf abbrechen — nicht verfügbar','Lauf fortsetzen — nicht verfügbar'])assert.equal(await f.page.locator(root).getByRole('button',{name:label,exact:true}).isDisabled(),true,'PAN548_REVOCATION_MUST_NOT_ENABLE_TASK_CONTROL:'+label);
+  assert.equal(await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).isDisabled(),true,'PAN548_REVOCATION_MUST_NOT_KEEP_PREVIEW_AUTHORITY');
+  assert.equal(await startControl.evaluate(e=>e.disabled),true,'PAN548_REVOCATION_MUST_NOT_ENABLE_A_START_RETRY');
+  await startControl.evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  assert.equal(count(f,'start'),1,'PAN548_REVOCATION_FORCED_CLICK_REPLAYED_THE_START');
+  assert.equal(f.posts(),1,'PAN548_REVOCATION_DISPATCHED_A_SECOND_PROVIDER_POST');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
+  await connectedCapture(f,'desktop-native-owner-admission-revoked-unknown-no-retry');
+  // Releasing the still-held peer revives nothing: a genuine further round
+  // trip re-reads the SAME terminal UNKNOWN and the peer still saw exactly
+  // one POST — the released, already-aborted callback never becomes a retry.
+  f.releasePeer();
+  const readsBeforeReleaseRead=getReadsV1548(f).length;
+  await readButton.click();
+  await waitForActualV1548(()=>getReadsV1548(f).length>readsBeforeReleaseRead,'POST_RELEASE_READ');await f.flushResponses();
+  await state(f,'OUTCOME_UNCONFIRMED');
+  const afterRelease=getReadsV1548(f).filter(r=>r.status===200).at(-1).value;
+  assert.equal(afterRelease.phase,'OUTCOME_UNCONFIRMED');assert.equal(afterRelease.requestDigest,terminal.requestDigest,'PAN548_POST_RELEASE_READ_REQUEST_DIGEST_CHANGED');
+  assert.equal(afterRelease.budget.model.consumedUnits,0,'PAN548_PEER_RELEASE_SETTLED_THE_RETAINED_HOLD');
+  assert.equal(f.posts(),1,'PAN548_PEER_RELEASE_REVIVED_A_SECOND_PROVIDER_POST');assert.equal(count(f,'start'),1);
+  // A real reload preserves the original provenance and the full retained
+  // hold; the auto-reconciled read stays terminal UNKNOWN. The reload
+  // registered a fresh current tab — the retained historical binding belongs
+  // to the ORIGINAL tab and is never relabeled.
+  await f.page.reload();await showCurrentContextDetailsUI(f.page);await f.page.locator('[id=\"shell.context-selection\"][data-module=\"pan.erv\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();await state(f,'OUTCOME_UNCONFIRMED');await f.flushResponses();
+  const reopened=f.responses.filter(r=>r.method==='GET'&&r.path.endsWith('/agent-run/read')&&r.status===200).at(-1).value;
+  assert.ok(reopened,'PAN548_REVOCATION_RELOAD_AUTOMATIC_NATIVE_READ_MISSING');
+  assert.equal(reopened.runId,p.runId,'PAN548_REVOCATION_REOPENED_READ_NOT_THE_SAME_RUN');
+  assert.equal(reopened.requestDigest,terminal.requestDigest,'PAN548_REVOCATION_RELOADED_READ_REQUEST_DIGEST_CHANGED');
+  assert.equal(reopened.phase,'OUTCOME_UNCONFIRMED');
+  const currentTab=f.responses.filter(r=>r.method==='POST'&&r.path.endsWith('/context-selection')&&r.status===200).at(-1).value.context.binding;
+  assert.notEqual(currentTab.tabId,p.binding.tabId,'PAN548_REVOCATION_RELOAD_EXPECTED_A_FRESH_CURRENT_TAB');
+  assert.deepEqual(reopened.binding,p.binding,'PAN548_REVOCATION_RELOAD_RELABELED_THE_ORIGINAL_BINDING');
+  assert.equal(reopened.sourceDigest,p.sourceDigest,'PAN548_REVOCATION_HISTORICAL_SOURCE_DIGEST_CHANGED_AFTER_RELOAD');
+  assert.deepEqual(reopened.sourceRevisions,p.sourceRevisions,'PAN548_REVOCATION_HISTORICAL_SOURCE_REVISIONS_CHANGED_AFTER_RELOAD');
+  assert.equal(reopened.budget.model.committedUnits,retained.model.committedUnits,'PAN548_REVOCATION_MODEL_HOLD_NOT_INTACT_AFTER_RELOAD');
+  assert.equal(reopened.budget.runtime.committedUnits,retained.runtime.committedUnits,'PAN548_REVOCATION_RUNTIME_HOLD_NOT_INTACT_AFTER_RELOAD');
+  assert.equal(reopened.budget.model.consumedUnits,0);assert.equal(reopened.budget.reservations,1,'PAN548_REVOCATION_RESERVATION_COUNT_CHANGED_AFTER_RELOAD');
+  const reopenedVisible=await f.page.locator(root).innerText();
+  for(const literal of ['Historische Laufquelle des nativen Laufs','Ausfall nicht klassifiziert — keine minimierten Details verfügbar','Verbrauch nicht bestätigt — volle Reservierung bleibt erhalten'])assert.ok(reopenedVisible.includes(literal),'PAN548_REVOCATION_PROVENANCE_NOT_RETAINED_AFTER_RELOAD:'+literal);
+  // The closed connection owner DENIES its own readback after reload — the
+  // actual closed-owner read denial the contract requires, explained by the
+  // connection panel instead of any fabricated readiness, and without the
+  // unavailability touching the independent agent ledger read above. The
+  // dialog starts collapsed (body.hidden, so innerText excludes it): the real
+  // user path opens the existing disclosure first, then reads the explanation.
+  await f.page.locator('[id=\"shell.model-connection\"]').getByRole('button',{name:'Sichere Modellverbindung öffnen',exact:true}).click();
+  const connectionVisible=await f.page.locator('[id=\"shell.model-connection\"]').innerText();
+  assert.ok(connectionVisible.includes('nicht aktuell bestätigt'),'PAN548_REVOKED_CONNECTION_MUST_HONESTLY_DENY_THE_READ_AFTER_RELOAD:'+connectionVisible.slice(0,300));
+  // RUN66: the closed owner's own read denial is ALSO proven as the real
+  // HTTP fact the shared collector recorded — the genuine GET409
+  // (MODEL_CONNECTION_OWNER_CLOSED through the protected ingress). The
+  // product request() rejects this denied response BEFORE consuming its
+  // body, so the honest observation is exactly method/path/status409 with
+  // the body left unparsed/null: no invented DTO, no invented body-read
+  // failure the page itself never attempted, no swallowed denial.
+  const closedOwnerRead=f.responses.filter(r=>r.method==='GET'&&r.path.endsWith('/workspace/model-connection')).at(-1);
+  assert.ok(closedOwnerRead&&closedOwnerRead.status===409,'PAN548_REVOKED_MODEL_CONNECTION_MUST_HAVE_A_REAL_409_READ_DENIAL:'+JSON.stringify(f.responses.filter(r=>r.path.includes('model-connection')).map(({method,path,status})=>({method,path,status}))));
+  assert.equal(closedOwnerRead.value,null,'PAN548_REVOKED_MODEL_CONNECTION_409_MUST_NOT_INVENT_A_BODY_VALUE');
+  assert.equal(Object.hasOwn(closedOwnerRead,'bodyReadFailure'),false,'PAN548_REVOKED_MODEL_CONNECTION_409_MUST_NOT_RECORD_A_BODY_FAILURE_THE_PAGE_NEVER_CONSUMED');
+  assert.equal(closedOwnerRead.bodyNotObserved,'NON_200_BODY_NOT_OBSERVED_BY_FIXTURE','PAN548_REVOKED_MODEL_CONNECTION_409_MUST_DECLARE_THE_UNOBSERVED_BODY_HONESTLY');
+  assert.ok(!(await f.page.locator('body').innerText()).includes(syntheticCredential565),'NATIVE_OWNER_SECRET_VISIBLE');
+  assert.equal(f.posts(),1);assert.equal(count(f,'start'),1);assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
+ }finally{try{f.releasePeer();}catch{/* gate already open or fixture owned */}await f.close();}
+});
+// RUN76: the displayed native plan/offer deadline lifecycle on the real mounts.
+// The browser-only clock seam (Playwright page.clock, the same shape the
+// accepted565 expiry journey proved) is installed BEFORE navigation so the
+// product's own plan/offer expiry timer genuinely lives in the fake queue.
+// It moves nothing but the page clock: the native backend, its plan/lease/
+// offer verdicts, the closed DTO checks and the ledger keep their real
+// authority; no response, consent or body is fabricated and no case claims
+// real model inference. The backend authority in every assertion below is the
+// actual captured native plan response (f.responses), never a test-invented
+// timestamp.
+test('PUI07 RUN76 actual browser plain synthetic displayed plan deadline: a browser-only clock installed before navigation reaches the exact native plan timestamp, latches the truthful Browseruhr expiry reason, disables the stale cached start against a forced click with zero hidden requests, clock realignment revives nothing while an edit clears only the stale explanation and preserves the unsent text, and only an explicit re-plan on the still-valid native context publishes a NEW plan whose one real start reaches RESULT_READY; NOT LLM',async()=>{
+ const f=await nativeViewBrowserFixture546({agentRuns:true});
+ try{
+  const before=f.business();
+  await f.page.clock.install();
+  await open(f);await select(f);
+  const ta=f.page.locator('#pan548-agent-intent');
+  const intentText='Ausgewähltes Viewelement kleiner darstellen, zunächst nur Vorschlag.';
+  await ta.fill(intentText);
+  const p=await plan(f);
+  assert.ok(Number.isSafeInteger(p.expiresAtMs)&&p.expiresAtMs>await f.page.evaluate(()=>Date.now()),'PAN548_RUN76_PLAN_DEADLINE_NOT_FRESH_AT_PLAN');
+  const deadlineView=await f.page.locator(root+' dl').innerText();
+  assert.ok(deadlineView.includes('Ablauf des Plans (exakter Zeitstempel)')&&deadlineView.includes(new Date(p.expiresAtMs).toISOString()),'PAN548_RUN76_DISPLAYED_DEADLINE_NOT_THE_NATIVE_PLAN_TIMESTAMP');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN76_EXPIRY_MARKER_BEFORE_DEADLINE');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'true','PAN548_RUN76_START_NOT_ACTIONABLE_BEFORE_EXPIRY');
+  const requestsBefore=f.requests.length;
+  await f.page.clock.fastForward(p.expiresAtMs-await f.page.evaluate(()=>Date.now())+250);
+  await f.page.locator(root+'[data-plan-expired-reason]').waitFor();
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),'PLAN_EXPIRED','PAN548_RUN76_SYNTHETIC_EXPIRY_REASON_NOT_PLAN_ONLY');
+  const expiryNote=f.page.locator('[data-agent-plan-expiry="true"]');
+  const noteText=await expiryNote.innerText();
+  assert.ok(noteText.includes('Der angezeigte native Plan ist abgelaufen (Ablauf '+new Date(p.expiresAtMs).toISOString()+', Browseruhr)')&&noteText.includes('Browseruhr entfernt nur die Handlungsbarkeit')&&noteText.includes('Der Auftragstext oben bleibt unverändert und wurde nicht gesendet'),'PAN548_RUN76_SYNTHETIC_EXPIRY_NOTE_NOT_TRUTHFUL:'+noteText);
+  assert.ok(!noteText.includes('Das angezeigte gebundene Angebot'),'PAN548_RUN76_SYNTHETIC_EXPIRY_FABRICATED_AN_OFFER');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'PLANNED_NOT_DISPATCHED','PAN548_RUN76_LOCAL_EXPIRY_CHANGED_PHASE');
+  assert.ok((await f.page.locator(root+' p[role="status"]').innerText()).includes('kein automatischer Neuversuch'),'PAN548_RUN76_EXPIRY_STATUS_NOT_HONEST_NO_RETRY');
+  const startControl=f.page.locator(root).getByRole('button',{name:'Genau diesen synthetischen Lauf starten',exact:true});
+  assert.equal(await startControl.isDisabled(),true,'PAN548_RUN76_STALE_START_STILL_ENABLED');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN76_STALE_START_STILL_MARKED_ACTIONABLE');
+  await startControl.evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  assert.equal(count(f,'start'),0,'PAN548_RUN76_FORCED_STALE_CLICK_DISPATCHED');
+  assert.equal(await ta.inputValue(),intentText,'PAN548_RUN76_UNSENT_TEXT_NOT_PRESERVED_AT_EXPIRY');
+  await capture(f,'desktop-agent-synthetic-plan-expired');
+  // A corrected browser clock revives nothing: the native backend still
+  // considers this plan fully valid (real time barely moved), so ONLY the
+  // per-plan latch can keep the stale start disabled at this point.
+  await f.page.clock.setSystemTime(Date.now());
+  assert.equal(await expiryNote.isVisible(),true,'PAN548_RUN76_CORRECTED_CLOCK_DROPPED_LATCH');
+  assert.equal(await startControl.isDisabled(),true,'PAN548_RUN76_CORRECTED_CLOCK_ENABLED_STALE_START');
+  // An edit clears only the stale explanation and its marker; the unsent
+  // text survives, still never sent, and no dispatch or request follows.
+  await ta.click();await ta.press('End');await ta.pressSequentially(' und kompakter.');
+  assert.equal(await expiryNote.isVisible(),false,'PAN548_RUN76_EDIT_KEPT_STALE_EXPIRY_NOTE');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN76_EDIT_KEPT_STALE_EXPIRY_MARKER');
+  assert.equal(await ta.inputValue(),intentText+' und kompakter.','PAN548_RUN76_EDIT_LOST_UNSENT_TEXT');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN76_EDIT_RESURRECTED_START');
+  assert.equal(count(f,'start'),0,'PAN548_RUN76_EDIT_TRIGGERED_DISPATCH');
+  await f.flushResponses();
+  assert.equal(f.requests.length,requestsBefore,'PAN548_RUN76_HIDDEN_REQUESTS_DURING_EXPIRY_HANDLING');
+  // Only the explicit re-plan on the still-valid native context publishes a
+  // NEW plan (new handle, new run) that can start again.
+  await f.page.locator(root).getByRole('button',{name:'Begrenzten Testauftrag planen',exact:true}).click();
+  await state(f,'PLANNED_NOT_DISPATCHED');await f.flushResponses();
+  const p2=f.responses.filter(r=>r.path.endsWith('/agent-run/plan')&&r.status===200).at(-1).value;
+  assert.notEqual(p2.planHandle,p.planHandle,'PAN548_RUN76_REPLAN_REPUBLISHED_OLD_PLAN_HANDLE');
+  assert.notEqual(p2.runId,p.runId,'PAN548_RUN76_REPLAN_REPUBLISHED_OLD_RUN');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN76_REPLAN_KEPT_STALE_MARKER');
+  assert.equal(await expiryNote.isVisible(),false,'PAN548_RUN76_REPLAN_KEPT_STALE_NOTE');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'true','PAN548_RUN76_NEW_PLAN_START_NOT_ACTIONABLE');
+  await run(f);
+  assert.equal(count(f,'start'),1,'PAN548_RUN76_RECOVERY_DISPATCHED_MORE_THAN_ONCE');
+  assert.equal(f.readPersisted().revision,0,'PAN548_RUN76_RECOVERY_PERSISTED_VIEW');
+  assert.equal(f.business(),before,'PAN548_RUN76_RECOVERY_BUSINESS_EFFECT');
+  assert.equal(await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).isDisabled(),false,'PAN548_RUN76_RECOVERY_LOST_SEPARATE_PREVIEW');
+  await capture(f,'desktop-agent-synthetic-plan-expiry-recovered');
+  assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+test('PUI07 RUN76 actual browser owner-bound synthetic offer deadline independent of the plan deadline: a browser-only clock past the exact native offer timestamp unchecks and disables the exact offer while the separate plan facts stay displayed and truthful, a corrected browser clock revives no consent, and an explicit fresh prepare publishes a NEW unchecked offer that dispatches exactly one bounded dispatch only after the separate manual consent, whose genuine completed feedback round is exactly two provider POSTs (tool-call turn plus tool-feedback answer); NOT LLM',async()=>{
+ const f=await connectedFixture();
+ try{
+  const before=f.business();
+  await f.page.clock.install();
+  await open(f);await selectConnectedView(f);await connect(f);
+  const p=await boundPlan(f);const o=p.inferenceConsentOffer;
+  assert.ok(o.expiresAtMs<p.expiresAtMs,'PAN548_RUN76_OFFER_NOT_THE_EARLIER_SEPARATE_DEADLINE');
+  const deadlineView=await f.page.locator(root+' dl').innerText();
+  assert.ok(deadlineView.includes(new Date(p.expiresAtMs).toISOString())&&deadlineView.includes(new Date(o.expiresAtMs).toISOString()),'PAN548_RUN76_OFFER_DEADLINE_NOT_DISPLAYED_VERBATIM');
+  const consent=f.page.locator('#pan548-agent-inference-consent');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN76_FRESH_OFFER_AUTO_CONSENTED');
+  const startsBefore=count(f,'start');const requestsBefore=f.requests.length;
+  await f.page.clock.fastForward(o.expiresAtMs-await f.page.evaluate(()=>Date.now())+250);
+  await f.page.locator(root+'[data-plan-expired-reason]').waitFor();
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),'OFFER_EXPIRED','PAN548_RUN76_OFFER_EXPIRY_REASON_NOT_OFFER_ONLY');
+  const expiryNote=f.page.locator('[data-agent-plan-expiry="true"]');
+  const noteText=await expiryNote.innerText();
+  assert.ok(noteText.includes('Das angezeigte gebundene Angebot ist abgelaufen (Ablauf '+new Date(o.expiresAtMs).toISOString()+', Browseruhr)'),'PAN548_RUN76_OFFER_EXPIRY_NOTE_NOT_TRUTHFUL:'+noteText);
+  assert.ok(!noteText.includes('Der angezeigte native Plan ist abgelaufen'),'PAN548_RUN76_OFFER_EXPIRY_FAKED_PLAN_EXPIRY');
+  // The plan deadline, the lease and the persisted history stay distinct
+  // facts: the still-valid plan rows remain displayed, unrewritten.
+  assert.ok((await f.page.locator(root+' dl').innerText()).includes(new Date(p.expiresAtMs).toISOString()),'PAN548_RUN76_PLAN_FACTS_REWRITTEN_ON_OFFER_EXPIRY');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN76_OFFER_EXPIRY_KEPT_CONSENT_CHECKED');
+  assert.equal(await consent.isDisabled(),true,'PAN548_RUN76_STALE_OFFER_CONSENT_STILL_ENABLED');
+  assert.equal(await f.page.evaluate(()=>document.querySelector('label[for="pan548-agent-inference-consent"]').hidden),true,'PAN548_RUN76_STALE_OFFER_LABEL_STILL_SHOWN');
+  const startControl=f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true});
+  assert.equal(await startControl.isDisabled(),true,'PAN548_RUN76_STALE_BOUND_START_STILL_ENABLED');
+  await startControl.evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN76_FORCED_STALE_BOUND_CLICK_DISPATCHED');
+  assert.equal(f.posts(),0,'PAN548_RUN76_PROVIDER_POST_AFTER_STALE_BOUND_CLICK');
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(f.requests.length,requestsBefore,'PAN548_RUN76_HIDDEN_REQUESTS_AFTER_OFFER_EXPIRY');
+  await connectedCapture(f,'desktop-agent-bound-offer-expired');
+  // The corrected browser clock revives no consent: natively the owner
+  // grant, the lease and the ledger are untouched — only the shown offer
+  // window lapsed by page clock, and the latch keeps that honest.
+  await f.page.clock.setSystemTime(Date.now());
+  assert.equal(await expiryNote.isVisible(),true,'PAN548_RUN76_CORRECTED_CLOCK_DROPPED_OFFER_LATCH');
+  assert.equal(await startControl.isDisabled(),true,'PAN548_RUN76_CORRECTED_CLOCK_ENABLED_STALE_BOUND_START');
+  assert.equal(await consent.isDisabled(),true,'PAN548_RUN76_CORRECTED_CLOCK_REVIVED_STALE_OFFER');
+  // Only the explicit fresh prepare from the still-valid native selection
+  // publishes a NEW plan with a NEW unchecked offer.
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLANNED_NOT_DISPATCHED');await f.flushResponses();
+  const p2=f.responses.filter(r=>r.path.endsWith('/agent-run/plan')&&r.status===200).at(-1).value;
+  assert.notEqual(p2.planHandle,p.planHandle,'PAN548_RUN76_REPLAN_REPUBLISHED_OLD_BOUND_PLAN');
+  assert.notEqual(p2.runId,p.runId,'PAN548_RUN76_REPLAN_REPUBLISHED_OLD_BOUND_RUN');
+  assert.equal(p2.inferenceConsentOffer.purpose,'purpose:ui-view-proposal','PAN548_RUN76_REPLACED_OFFER_PURPOSE_DRIFT');
+  assert.ok(p2.inferenceConsentOffer.expiresAtMs>await f.page.evaluate(()=>Date.now()),'PAN548_RUN76_REPLACED_OFFER_NOT_FRESH');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN76_REPLAN_KEPT_STALE_OFFER_MARKER');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN76_FRESH_OFFER_AUTO_CONSENTED_AFTER_REPLAN');
+  assert.equal(await consent.isDisabled(),false,'PAN548_RUN76_FRESH_OFFER_CONSENT_NOT_ENABLED');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN76_BOUND_START_ACTIONABLE_WITHOUT_FRESH_CONSENT');
+  await consent.check();
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'true','PAN548_RUN76_FRESH_CONSENT_DID_NOT_ENABLE_START');
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  assert.equal(count(f,'start'),startsBefore+1,'PAN548_RUN76_RECOVERY_BOUND_DISPATCH_COUNT');
+  // The genuine same-origin framing peer answers the admitted bounded round
+  // exactly like the real OpenAI-compatible server: a tool-bearing first
+  // provider POST and the final second POST carrying the two native tool
+  // feedbacks. One AGENT_START is one dispatch, never one HTTP request; every
+  // existing completed-round test in this file asserts the same two POSTs.
+  assert.equal(f.posts(),2,'PAN548_RUN76_RECOVERY_PROVIDER_POSTS');
+  assert.equal(await expiryNote.isVisible(),false,'PAN548_RUN76_DISPATCH_KEPT_STALE_OFFER_NOTE');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN76_DISPATCH_KEPT_STALE_OFFER_MARKER');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
+  await connectedCapture(f,'desktop-agent-bound-offer-expiry-recovered');
+  assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+test('PUI07 RUN76 stale offer-expiry timer during a genuinely held same-shell dispatch never overwrites the true DISPATCHING run: fast-forwarding the browser-only clock past the displayed offer deadline while the exact one-time start is held keeps DISPATCHING with no expiry latch and no extra request, and releasing the peer settles RESULT_READY with exactly one dispatch delivering the genuine two-POST tool feedback round (tool-call turn plus tool-feedback answer); NOT LLM',async()=>{
+ // The fixture raises ONLY its own already-closed grant limit maxTimeMs to
+ // 30000 — the existing contracts ceiling (workspace-model-connection-v1.ts
+ // ceilings). The product then derives the START transport as
+ // offer.limits.maxTimeMs + the unchanged 5000ms round-trip margin
+ // (context-selection-v1.ts AGENT_START rule) = 35000ms, so the in-flight
+ // genuine one-time START survives the deliberate ~30250ms fake-clock
+ // advance; no global timeout was raised or removed. Server-side real time
+ // — grant (+180000ms), lease (+300000ms), offer (min(now+30000ms)) and the
+ // admitted loop — barely moves, while the installed page clock alone jumps
+ // past the displayed offer deadline and fires the page expiry timer. RUN90:
+ // because this installed page clock patches AbortSignal.timeout as well, the
+ // ~30250ms jump already consumes the 35000ms START window; the release window
+ // therefore freezes the browser-only fake clock (pauseAt) so the deliberately
+ // advanced in-flight signal is not spent by the test's own orchestration
+ // wall-clock, and resumes after the genuine terminal response settled — see
+ // the RUN90 note at the release below.
+ const f=await connectedFixture({holdPeer:true,maxTimeMs:30000});
+ try{
+  const before=f.business();
+  await f.page.clock.install();
+  await open(f);await selectConnectedView(f);await connect(f);
+  const p=await boundPlan(f);const o=p.inferenceConsentOffer;
+  // RUN78: retain the ACTUAL control identities before admission. The
+  // genuine terminal resultOf() clears the plan (workspace-agent-panel-v1.ts:85)
+  // and update() then rewrites the SAME retained start button's label to the
+  // closed synthetic label with the offer absent (:73), so a post-terminal
+  // lookup by the old bound accessible name is a stale observer, not an
+  // identity. Before the terminal the retained node must itself be the one
+  // start control of the panel, attached, carrying the bound label.
+  const startControl=await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).elementHandle();
+  const previewControl=await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).elementHandle();
+  const preterminalStartDomV178=await startControl.evaluate(b=>{const panel=document.getElementById('shell.agent-panel'),startLabels=['Genau diesen gebundenen Lauf einmalig starten','Genau diesen synthetischen Lauf starten'],buttons=panel?[...panel.querySelectorAll('button')]:[],startButtons=buttons.filter(x=>startLabels.includes(x.textContent??''));return{connected:b.isConnected,inPanel:panel?.contains(b)===true,startButtonCount:startButtons.length,isTheRetainedNode:startButtons.length===1&&startButtons[0]===b,text:b.textContent??''};});
+  assert.equal(preterminalStartDomV178.connected,true,'PAN548_RUN78_HELD_START_CONTROL_NOT_ATTACHED_BEFORE_ADMISSION');
+  assert.equal(preterminalStartDomV178.inPanel,true,'PAN548_RUN78_HELD_START_CONTROL_LEFT_PANEL_BEFORE_ADMISSION');
+  assert.equal(preterminalStartDomV178.startButtonCount,1,'PAN548_RUN78_HELD_DUPLICATED_START_CONTROL_BEFORE_ADMISSION');
+  assert.equal(preterminalStartDomV178.isTheRetainedNode,true,'PAN548_RUN78_HELD_START_CONTROL_IS_NOT_THE_ONE_START_CONTROL');
+  assert.equal(preterminalStartDomV178.text,'Genau diesen gebundenen Lauf einmalig starten','PAN548_RUN78_HELD_PRETERMINAL_START_LABEL_NOT_THE_BOUND_NAME');
+  await f.page.locator('#pan548-agent-inference-consent').check();
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await waitForActualV1548(()=>f.posts()>=1,'RUN76_HELD_START_PEER_REACHED');
+  await state(f,'DISPATCHING');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-in-flight'),'true','PAN548_RUN76_HELD_START_NOT_IN_FLIGHT');
+  const requestsInFlight=f.requests.length;
+  // The displayed offer deadline passes on the PAGE clock while the genuine
+  // one-time start is still held. The page expiry timer fires into the
+  // panel's dispatching/attempted guards (workspace-agent-panel-v1.ts), so
+  // the stale timer must not overwrite the true DISPATCHING run, latch or
+  // announce — and the offer-aligned START transport above keeps the real
+  // dispatch alive instead of manufacturing an abort.
+  await f.page.clock.fastForward(o.expiresAtMs-await f.page.evaluate(()=>Date.now())+250);
+  await new Promise(r=>setTimeout(r,150));
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'DISPATCHING','PAN548_RUN76_STALE_TIMER_OVERWROTE_DISPATCHING');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN76_STALE_TIMER_LATCHED_DURING_DISPATCH');
+  assert.equal(await f.page.locator('[data-agent-plan-expiry="true"]').isVisible(),false,'PAN548_RUN76_STALE_TIMER_ANNOUNCED_DURING_DISPATCH');
+  assert.equal(count(f,'read'),0,'PAN548_RUN76_STALE_TIMER_TRIGGERED_A_READ');
+  await f.flushResponses();
+  assert.equal(f.requests.length,requestsInFlight,'PAN548_RUN76_STALE_TIMER_TRIGGERED_HIDDEN_REQUESTS');
+  // RUN90: the genuine START fetch is guarded by the real offer-bound transport
+  // AbortSignal.timeout(maxTimeMs+5000)=35000ms (context-selection-v1.ts:217/:231)
+  // and Playwright's installed page clock patches AbortSignal.timeout too. The
+  // deliberate ~30250ms fast-forward above has already consumed that window, so
+  // only the ~4.75s remainder minus the pre-jump real elapsed time is left for
+  // the release round-trip — the actual RUN76 failure evidence (browser
+  // requestfailed, OUTCOME_UNCONFIRMED despite a real native 200) is exactly
+  // this remainder being spent by the test's own orchestration wall-clock while
+  // the peer gate was still closed. Freeze the browser-only fake clock at its
+  // current page time immediately BEFORE the release so no orchestrated
+  // real-world milliseconds can consume the deliberately advanced in-flight
+  // transport signal while the genuine peer, native server and terminal
+  // response run on their untouched real clocks; resume once the true terminal
+  // START response settled. No expiry assertion was weakened, no production
+  // limit raised or removed, and no reply was faked.
+  const fakeNowAtReleaseV190=await f.page.evaluate(()=>Date.now());
+  await f.page.clock.pauseAt(fakeNowAtReleaseV190);
+  f.releasePeer();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  await f.page.clock.resume();
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-in-flight'),'false','PAN548_RUN76_RELEASE_LEFT_DISPATCH_IN_FLIGHT');
+  assert.equal(count(f,'start'),1,'PAN548_RUN76_RELEASE_REPLAYED_THE_START');
+  // The released genuine peer completes the admitted bounded round: the held
+  // tool-bearing first POST plus the final second POST carrying the two
+  // native tool feedbacks. One dispatch — two real provider HTTP requests.
+  assert.equal(f.posts(),2,'PAN548_RUN76_RELEASE_FEEDBACK_ROUND_POSTS');
+  // RUN78: the terminal DOM truth is asserted on the retained real node, not
+  // on the outdated accessible name. Per workspace-agent-panel-v1.ts, the
+  // genuine RESULT_READY resultOf() clears the plan (:85) and update() then
+  // rewrites the SAME retained start button to the closed synthetic label
+  // and disables it via the absent plan (:73); the terminal proposal-preview
+  // authority (review.disabled=held||!freshProposal(), :73) stays separately
+  // intact. Still exactly one start-label button in the panel, and it IS the
+  // retained node — a re-created duplicate or a dropped node fails closed.
+  const terminalStartDomV178=await startControl.evaluate(b=>{const panel=document.getElementById('shell.agent-panel'),startLabels=['Genau diesen gebundenen Lauf einmalig starten','Genau diesen synthetischen Lauf starten'],buttons=panel?[...panel.querySelectorAll('button')]:[],startButtons=buttons.filter(x=>startLabels.includes(x.textContent??''));return{connected:b.isConnected,inPanel:panel?.contains(b)===true,startButtonCount:startButtons.length,isTheRetainedNode:startButtons.length===1&&startButtons[0]===b,disabled:b.disabled,text:b.textContent??''};});
+  assert.equal(terminalStartDomV178.connected,true,'PAN548_RUN78_TERMINAL_START_CONTROL_DETACHED');
+  assert.equal(terminalStartDomV178.inPanel,true,'PAN548_RUN78_TERMINAL_START_CONTROL_LEFT_THE_PANEL');
+  assert.equal(terminalStartDomV178.startButtonCount,1,'PAN548_RUN78_TERMINAL_DUPLICATED_THE_RETAINED_START_CONTROL');
+  assert.equal(terminalStartDomV178.isTheRetainedNode,true,'PAN548_RUN78_TERMINAL_START_CONTROL_IS_NOT_THE_RETAINED_NODE');
+  assert.equal(terminalStartDomV178.text,'Genau diesen synthetischen Lauf starten','PAN548_RUN78_TERMINAL_START_LABEL_NOT_THE_CLEARED_SYNTHETIC');
+  assert.equal(terminalStartDomV178.disabled,true,'PAN548_RUN78_TERMINAL_RETAINED_START_NOT_DISABLED');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN78_TERMINAL_DISPATCH_STILL_AVAILABLE');
+  // The no-replay countermeasure tests the REAL same control: a forced
+  // synthetic click dispatched directly on the retained node after the
+  // terminal. Whether Chromium suppresses the click on the disabled control
+  // or the dispatch() guards (absent plan, attempted handle) reject it, the
+  // observable truth is identical: no third start, no extra provider POST,
+  // no hidden request after the settled two-POST feedback round.
+  const requestsAfterTerminal=f.requests.length;
+  await startControl.evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(count(f,'start'),1,'PAN548_RUN76_FORCED_CLICK_REPLAYED_THE_DISPATCHED_START');
+  assert.equal(f.posts(),2,'PAN548_RUN78_FORCED_CLICK_ADDED_A_PROVIDER_POST');
+  assert.equal(f.requests.length,requestsAfterTerminal,'PAN548_RUN78_FORCED_CLICK_TRIGGERED_HIDDEN_REQUESTS');
+  assert.equal(await previewControl.evaluate(b=>b.disabled),false,'PAN548_RUN76_TERMINAL_LOST_SEPARATE_PREVIEW');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
+  assert.deepEqual(f.errors,[]);
+ }finally{try{await f.page.clock.resume();}catch{/* clock never installed or page/browser already gone */}try{f.releasePeer();}catch{/* gate already open */}await f.close();}
+});
+// RUN79: the actual #565/#548 same-shell gap — the agent panel caches an exact
+// owner-bound plan/offer after AGENT_PLAN while the independently mounted
+// native connection module can change the actual connection revision and its
+// prerequisites inside the SAME ERV/context. The two new journeys below run on
+// the existing real 565 owner and the real mounted panel (synthetic protocol
+// peer only). The payload-free document hint may ONLY revoke cached offer
+// actionability; it grants/extends/resets nothing, never auto-replans, never
+// touches the unsent task text, and a late plan response or logout teardown
+// cannot revive or leak it. The backend admission stays authoritative.
+test('PUI07 RUN79 actual same-shell connection prerequisite change revokes only the cached bound offer: after a checked exact offer, a real re-probe through the mounted 565 dialog raises the native connection revision inside the unchanged ERV context, the stale offer/consent/startability is removed without touching the unsent task text or issuing any hidden/dispatch request, and only an explicit fresh prepare publishes a NEW unchecked offer whose separate manual consent enables exactly one start with the genuine two feedback POSTs; NOT LLM',async()=>{
+ const f=await connectedFixture();
+ try{
+  const before=f.business(),connection='[id="shell.model-connection"]';
+  await open(f);await selectConnectedView(f);await connect(f);
+  // The genuine native readback revision shown by the real dialog is the
+  // connection-state witness — no DOM-name inference, no forged DTO.
+  const revOf=async()=>Number(/Revision (\d+)\./.exec(await f.page.locator(connection+' > p[role="status"]').innerText())?.[1]??-1);
+  const revisionBefore=await revOf();
+  const p=await boundPlan(f);
+  const consent=f.page.locator('#pan548-agent-inference-consent');
+  // RUN78 lesson retained: update() rewrites the SAME start button's label
+  // when the offer disappears, so the revocation-window assertions bind to the
+  // retained real node, not to a stale accessible name.
+  const startControl=await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).elementHandle();
+  await consent.check();
+  assert.equal(await startControl.evaluate(b=>b.disabled),false,'PAN548_RUN79_CONSENTED_OFFER_START_NOT_ENABLED');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'true','PAN548_RUN79_CONSENTED_OFFER_NOT_ACTIONABLE');
+  const taskText=await f.page.locator('#pan548-agent-intent').inputValue();
+  assert.notEqual(taskText,'','PAN548_RUN79_MISSING_UNSENT_TASK_TEXT');
+  const startsBefore=count(f,'start');
+  // THE actual mutation: re-running one prerequisite check through the real
+  // dialog persists a new connection revision while the displayed task stays
+  // in the same ERV/context — the cached offer belongs to the old confirmed
+  // prerequisite state and must lose actionability on its own.
+  await f.page.locator(connection).getByRole('button',{name:'Authentifizierung separat prüfen',exact:true}).click();
+  await state(f,'CONNECTION_CHANGE_OFFER_REVOKED');await f.flushResponses();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();
+  const revisionAfter=await revOf();
+  assert.ok(revisionAfter>revisionBefore,'PAN548_RUN79_NO_ACTUAL_CONNECTION_REVISION_CHANGE:'+revisionBefore+'/'+revisionAfter);
+  assert.equal(await f.page.locator('[id="shell.context-selection"][data-module="pan.erv"][data-state="CURRENT_CONTEXT"]').count(),1,'PAN548_RUN79_ERV_CONTEXT_NOT_UNCHANGED');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN79_REVOKED_OFFER_CONSENT_LABEL_STILL_SHOWN');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN79_REVOKED_OFFER_CONSENT_STILL_CHECKED');
+  assert.equal(await startControl.evaluate(b=>b.disabled),true,'PAN548_RUN79_REVOKED_OFFER_START_STILL_ENABLED');
+  assert.equal(await startControl.evaluate(b=>b.isConnected),true,'PAN548_RUN79_REVOCATION_DROPPED_THE_RETAINED_START_NODE');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN79_REVOKED_OFFER_STILL_DISPATCH_AVAILABLE');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN79_REVOCATION_FAKED_AS_DEADLINE_EXPIRY');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN79_REVOCATION_LOST_UNSENT_TASK_TEXT');
+  // A forced click on the retained start control dispatches nothing and no
+  // hidden read/replan hides behind the revocation.
+  const requestsAfterRevoke=f.requests.length;
+  await startControl.evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN79_FORCED_CLICK_ON_REVOKED_OFFER_DISPATCHED');
+  assert.equal(f.posts(),0,'PAN548_RUN79_PROVIDER_POST_AFTER_REVOKED_OFFER');
+  assert.equal(f.requests.length,requestsAfterRevoke,'PAN548_RUN79_FORCED_CLICK_OR_REVOCATION_TRIGGERED_HIDDEN_REQUESTS');
+  await connectedCapture(f,'desktop-agent-connection-change-cached-offer-revoked-text-retained');
+  // RUN80 correction of the RUN79 assumption, keeping the backend guard
+  // exactly as it is: the native owner intentionally reset the downstream
+  // MODEL_AVAILABILITY check when AUTHENTICATION was re-probed (source
+  // src/pan565/native-model-connection.mjs:100 — NOT_RUN · PREREQUISITE_RECHECKED,
+  // visible in the real dialog readback), and task-plan admission requires all
+  // three fresh prerequisite PASSes (native-model-connection.mjs:136). So an
+  // immediate fresh plan after an invalidating re-probe is a truthful 400
+  // PLAN_DENIED, not a missing UI. The honest recovery order is: first the
+  // explicit fresh manual re-probe of exactly the reset prerequisite THROUGH
+  // the mounted dialog — no backend relaxation, no auto-recheck, no forged
+  // readiness — witnessed by the actual dialog readback, and only then the
+  // explicit fresh prepare. The re-probe itself is a connection-module action
+  // outside the panel: it restores no offer, no consent and no startability.
+  const phasesV1=await f.page.locator(connection+' ul').innerText();
+  assert.ok(phasesV1.includes('Modellverfügbarkeit: NOT_RUN · PREREQUISITE_RECHECKED'),'PAN548_RUN79_REPROBE_DID_NOT_TRUTHFULLY_RESET_MODEL_AVAILABILITY:'+phasesV1);
+  await f.page.locator(connection).getByRole('button',{name:'Modellverfügbarkeit separat prüfen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  const requalifiedV1=await f.page.locator(connection+' ul').innerText();
+  assert.ok(requalifiedV1.includes('Modellverfügbarkeit: PASS'),'PAN548_RUN79_REQUALIFICATION_NOT_ACTUALLY_PASSED:'+requalifiedV1);
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'CONNECTION_CHANGE_OFFER_REVOKED','PAN548_RUN79_REQUALIFICATION_REVIVED_CACHED_OFFER');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN79_REQUALIFICATION_REVIVED_STARTABILITY');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN79_REQUALIFICATION_REVIVED_STALE_CONSENT');
+  // Only the explicit fresh prepare from the ACTUAL current connection state
+  // publishes a NEW plan with a NEW unchecked offer; the connection readback
+  // and the manual re-probe alone revived nothing before this click.
+  const fresh=await boundPlan(f);
+  assert.notEqual(fresh.planHandle,p.planHandle,'PAN548_RUN79_REPLAN_AFTER_REVOCATION_REPUBLISHED_OLD_PLAN');
+  assert.notEqual(fresh.runId,p.runId,'PAN548_RUN79_REPLAN_AFTER_REVOCATION_REPUBLISHED_OLD_RUN');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN79_FRESH_OFFER_AFTER_REVOCATION_AUTO_CONSENTED');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN79_FRESH_OFFER_ACTIONABLE_WITHOUT_MANUAL_CONSENT');
+  await consent.check();
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'true','PAN548_RUN79_MANUAL_CONSENT_AFTER_REVOCATION_DID_NOT_ENABLE_START');
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  assert.equal(count(f,'start'),startsBefore+1,'PAN548_RUN79_POST_REVOCATION_DISPATCH_COUNT');
+  // One admitted bounded round answers like the real server: the tool-bearing
+  // first POST plus the final feedback POST — one dispatch, two real POSTs.
+  assert.equal(f.posts(),2,'PAN548_RUN79_POST_REVOCATION_FEEDBACK_ROUND_POSTS');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN79_TERMINAL_LOST_TASK_TEXT');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
+  assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+test('PUI07 RUN79 unconfirmed connection mutation and independent re-read never restore stale bound readiness: a persisted-but-unacknowledged probe revokes the checked cached offer, the later fresh connection read confirms the true new state while reviving no offer/consent/startability, a late genuine plan response that lands after a connection change during its own planning window stays discarded, and only a fresh explicit prepare plus separate manual consent recovers exactly one start with the genuine two feedback POSTs; logout teardown leaves no revived panel and no leaking listener; NOT LLM',async()=>{
+ const f=await connectedFixture();
+ // RUN81 lexical-scope repair: cleanup state MUST live outside the try so the
+ // finally block cannot throw a ReferenceError (the RUN80 failure at the old
+ // line 1782 masked the primary assertion AND skipped f.close, orphaning the
+ // test child). observerFailureV1/planHeldRequestIdV1/teardownV1 are cleanup
+ // ownership, not flow-local data.
+ let cdp,observerFailureV1=null,planHeldRequestIdV1=null,teardownV1=false;
+ try{
+  const before=f.business(),connection='[id="shell.model-connection"]';
+  // The real dialog's native readback line is the revision witness — no DOM
+  // name inference and no forged DTO anywhere in this journey.
+  const revOfV1=async()=>Number(/Revision (\d+)\./.exec(await f.page.locator(connection+' > p[role="status"]').innerText())?.[1]??-1);
+  await open(f);await selectConnectedView(f);await connect(f);
+  const p=await boundPlan(f);
+  const consent=f.page.locator('#pan548-agent-inference-consent');
+  await consent.check();
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'true','PAN548_RUN79_UNCONFIRMED_FLOW_PRECONDITION_NOT_ACTIONABLE');
+  const taskText=await f.page.locator('#pan548-agent-intent').inputValue();
+  // The probe mutation reaches the server (HTTP 200 at the browser boundary)
+  // but its acknowledgement is lost. An unconfirmed mutation is a LOSS for
+  // cached readiness, never a renewal: the panel must revoke, not guess.
+  // RUN80: observer failures must reach the awaited test flow and EVERY
+  // intercepted request must be settled — genuine 200, unexpected non-200,
+  // handler error and teardown alike. A throw inside a requestPaused callback
+  // leaves the request paused and the deferred unresolved (the RUN79 orphaned
+  // test child), so this observer records its first failure, always releases
+  // the interception, and the awaited flow rethrows it at the next boundary
+  // (assertObserverFlowV1) or via the held-plan promise below. No polling, no
+  // generic control framework, no fabricated 200, no relaxed real TLS/authority.
+  cdp=await f.context.newCDPSession(f.page);
+  const noteObserverFailureV1=m=>{if(observerFailureV1===null)observerFailureV1=Error(m);};
+  const assertObserverFlowV1=()=>{if(observerFailureV1!==null)throw observerFailureV1;};
+  // RUN81: the swallow here must not erase a REAL settlement failure. Absence
+  // of a throw is not proof a request settled: while the awaited flow is still
+  // active (teardownV1 false), a failed release is recorded as an observer
+  // failure and resurfaces at the next assertObserverFlowV1 boundary. Only
+  // during the finally teardown (session/page already gone, "already settled"
+  // races with Fetch.disable) may a settle error legitimately vanish.
+  const settleInterceptedV1=async(requestId,method='Fetch.continueResponse')=>{try{await cdp.send(method,{requestId,...(method==='Fetch.failRequest'?{errorReason:'Failed'}:{})});}catch(error){if(!teardownV1)noteObserverFailureV1('PAN548_RUN79_INTERCEPTED_REQUEST_SETTLE_NOT_CONFIRMED:'+method+':'+String(error?.message??error));}};
+  await cdp.send('Fetch.enable',{patterns:[{urlPattern:f.tls.origin+'*/workspace/model-connection/probe',requestStage:'Response'}]});
+  cdp.once('Fetch.requestPaused',e=>{(async()=>{if(!e.request.url.endsWith('/workspace/model-connection/probe'))return void await settleInterceptedV1(e.requestId);
+   if(e.responseStatusCode===200)return void await settleInterceptedV1(e.requestId,'Fetch.failRequest');
+   noteObserverFailureV1('PAN548_RUN79_UNCONFIRMED_PROBE_ACK_NOT_GENUINE_200:'+e.responseStatusCode);await settleInterceptedV1(e.requestId);})().catch(error=>{noteObserverFailureV1('PAN548_RUN79_PROBE_INTERCEPTION_NOT_SETTLED:'+String(error?.message??error));void settleInterceptedV1(e.requestId);});});
+  await f.page.locator(connection).getByRole('button',{name:'Authentifizierung separat prüfen',exact:true}).click();
+  await state(f,'CONNECTION_CHANGE_OFFER_REVOKED');
+  await f.page.locator(connection+'[data-state="READBACK_NOT_CONFIRMED"]').waitFor();await f.flushResponses();
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN79_UNCONFIRMED_MUTATION_KEPT_CONSENT_VISIBLE');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN79_UNCONFIRMED_MUTATION_KEPT_CONSENT_CHECKED');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN79_UNCONFIRMED_MUTATION_LEFT_DISPATCH_AVAILABLE');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN79_UNCONFIRMED_MUTATION_LOST_TASK_TEXT');
+  assert.equal(count(f,'start'),0,'PAN548_RUN79_UNCONFIRMED_MUTATION_DISPATCHED');assert.equal(f.posts(),0,'PAN548_RUN79_UNCONFIRMED_MUTATION_PROVIDER_POST');
+  assertObserverFlowV1();
+  // The independent read shows the true persisted state (the probe DID apply)
+  // — and revives nothing: confirming the new connection state restores no
+  // cached offer, no consent and no startability by itself.
+  await cdp.send('Fetch.disable');
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  await new Promise(r=>setTimeout(r,150));
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'CONNECTION_CHANGE_OFFER_REVOKED','PAN548_RUN79_INDEPENDENT_READ_REVIVED_STALE_READINESS');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN79_INDEPENDENT_READ_REVIVED_STALE_CONSENT');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN79_INDEPENDENT_READ_REVIVED_STARTABILITY');
+  assert.equal(count(f,'start'),0,'PAN548_RUN79_INDEPENDENT_READ_DISPATCHED');assert.equal(f.posts(),0,'PAN548_RUN79_INDEPENDENT_READ_PROVIDER_POST');
+  await connectedCapture(f,'desktop-agent-connection-unconfirmed-mutation-read-no-revive');
+  // RUN80: the late-response race is only genuine when the CURRENT persisted
+  // connection is actually eligible again first. The unacknowledged probe DID
+  // apply server-side and truthfully reset MODEL_AVAILABILITY, and the
+  // independent read alone must not (and does not) fake readiness: the panel
+  // stays revoked, and only the explicit manual re-probe of exactly the reset
+  // prerequisite THROUGH the mounted dialog re-qualifies it. The plan below
+  // then earns a real HTTP 200 at the browser boundary — no fabricated
+  // response, no DTO, no relaxed guard.
+  const stalePhasesV1=await f.page.locator(connection+' ul').innerText();
+  assert.ok(stalePhasesV1.includes('Modellverfügbarkeit: NOT_RUN · PREREQUISITE_RECHECKED'),'PAN548_RUN79_INDEPENDENT_READ_FAKED_PREREQUISITE_ELIGIBILITY:'+stalePhasesV1);
+  await f.page.locator(connection).getByRole('button',{name:'Modellverfügbarkeit separat prüfen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  const requalifiedV1=await f.page.locator(connection+' ul').innerText();
+  assert.ok(requalifiedV1.includes('Modellverfügbarkeit: PASS'),'PAN548_RUN79_LATE_PLAN_RACE_WITHOUT_REAL_ELIGIBILITY:'+requalifiedV1);
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'CONNECTION_CHANGE_OFFER_REVOKED','PAN548_RUN79_REQUALIFICATION_REVIVED_CACHED_OFFER_BEFORE_LATE_PLAN');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN79_REQUALIFICATION_REVIVED_STARTABILITY_BEFORE_LATE_PLAN');
+  // Late-response boundary: while a fresh plan is genuinely in flight (its
+  // real 200 response held at the browser boundary), a real connection probe
+  // mutation completes and raises the native revision. The late plan response
+  // may not republish a cached offer for a connection state that already
+  // moved on; the panel's connection-epoch guard discards it fail-closed.
+  let holdLatePlanV1,rejectLatePlanV1;const latePlanHeld=new Promise((resolve,reject)=>{holdLatePlanV1=resolve;rejectLatePlanV1=reject;});
+  latePlanHeld.catch(()=>{/* the awaited flow below rethrows the rejection */});
+  await cdp.send('Fetch.enable',{patterns:[{urlPattern:f.tls.origin+'*/workspace/agent-run/plan',requestStage:'Response'}]});
+  // RUN81 listener lifetime: the plan interceptor is registered under a name
+  // and removed as soon as the held response has genuinely continued — no
+  // lingering CDP listener survives past its interception window.
+  const planInterceptorV1=e=>{(async()=>{if(!e.request.url.endsWith('/workspace/agent-run/plan'))return void await settleInterceptedV1(e.requestId);
+   if(e.responseStatusCode!==200){noteObserverFailureV1('PAN548_RUN79_LATE_PLAN_NOT_GENUINE:'+e.responseStatusCode);await settleInterceptedV1(e.requestId);rejectLatePlanV1(observerFailureV1);return;}
+   planHeldRequestIdV1=e.requestId;holdLatePlanV1(e);})().catch(error=>{noteObserverFailureV1('PAN548_RUN79_LATE_PLAN_INTERCEPTION_NOT_SETTLED:'+String(error?.message??error));planHeldRequestIdV1=e.requestId;void settleInterceptedV1(e.requestId);rejectLatePlanV1(observerFailureV1);});};
+  cdp.on('Fetch.requestPaused',planInterceptorV1);
+  const planResponse=f.page.waitForResponse(r=>r.url().endsWith('/workspace/agent-run/plan'));
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  // An observer failure surfaces here as a real rejection of the awaited flow,
+  // never as an uncaught throw inside the paused CDP callback.
+  const held=await latePlanHeld;
+  // Wait for the persistent post-mutation dialog readback (the actual revision
+  // bump shown by the real status line) — the durable witness that the
+  // invalidation hint fired BEFORE the held plan response continues. A
+  // transient REQUESTING blip is not a dependable wait anchor, and the stale
+  // CURRENT_CONNECTION text from the requalification render would otherwise be
+  // matched by plain attribute waits.
+  const lateRevBefore=await revOfV1();
+  await f.page.locator(connection).getByRole('button',{name:'Erreichbarkeit separat prüfen',exact:true}).click();
+  await f.page.waitForFunction(expected=>{const m=/Revision (\d+)\./.exec(document.querySelector('[id="shell.model-connection"] > p[role="status"]')?.innerText??'');return m!==null&&Number(m[1])>expected;},lateRevBefore);
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();
+  assertObserverFlowV1();
+  await cdp.send('Fetch.continueResponse',{requestId:held.requestId});planHeldRequestIdV1=null;cdp.off('Fetch.requestPaused',planInterceptorV1);await cdp.send('Fetch.disable');
+  await planResponse;await f.flushResponses();await new Promise(r=>setTimeout(r,150));
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'CONNECTION_CHANGE_OFFER_REVOKED','PAN548_RUN79_LATE_PLAN_REPUBLISHED_CACHED_OFFER');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN79_LATE_PLAN_LEFT_DISPATCH_AVAILABLE');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN79_LATE_PLAN_SHOWED_STALE_CONSENT');
+  assert.equal(count(f,'start'),0,'PAN548_RUN79_LATE_PLAN_DISPATCHED');assert.equal(f.posts(),0,'PAN548_RUN79_LATE_PLAN_PROVIDER_POST');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN79_LATE_PLAN_LOST_TASK_TEXT');
+  // Recovery is explicit valid requalification of the checks the late race
+  // really reset (AUTHENTICATION behind the fresh REACHABILITY probe, then
+  // MODEL_AVAILABILITY), then the explicit fresh prepare plus the separate
+  // manual consent: one start, the genuine two-POST feedback round.
+  await f.page.locator(connection).getByRole('button',{name:'Authentifizierung separat prüfen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  await f.page.locator(connection).getByRole('button',{name:'Modellverfügbarkeit separat prüfen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  const recoveryPhasesV1=await f.page.locator(connection+' ul').innerText();
+  assert.ok(recoveryPhasesV1.includes('Modellverfügbarkeit: PASS'),'PAN548_RUN79_RECOVERY_REQUALIFICATION_NOT_ACTUALLY_PASSED:'+recoveryPhasesV1);
+  const fresh=await boundPlan(f);
+  assert.notEqual(fresh.planHandle,p.planHandle,'PAN548_RUN79_RECOVERY_REPUBLISHED_OLD_PLAN');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN79_RECOVERY_OFFER_AUTO_CONSENTED');
+  await consent.check();
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  assert.equal(count(f,'start'),1,'PAN548_RUN79_RECOVERY_DISPATCH_COUNT');
+  assert.equal(f.posts(),2,'PAN548_RUN79_RECOVERY_FEEDBACK_ROUND_POSTS');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN79_RECOVERY_LOST_TASK_TEXT');
+  // Lifetime boundary: logout aborts the panel lifetime, which removes the
+  // document listener with the same signal. A late forged local event is then
+  // a silent no-op — no revived panel, no thrown page error, no leak.
+  await f.page.getByRole('button',{name:'Abmelden',exact:true}).click();
+  await f.page.getByRole('heading',{name:'Abgemeldet',exact:true}).waitFor();
+  await f.page.evaluate(()=>document.dispatchEvent(new CustomEvent('pansphaira.model-connection-invalidated-v1',{bubbles:false,cancelable:false})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(await f.page.locator(root).count(),0,'PAN548_RUN79_TEARDOWN_LEFT_PANEL_MOUNTED');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);
+  assert.deepEqual(f.errors,[]);
+  assertObserverFlowV1();
+ }finally{
+  // RUN81 cleanup ownership: teardownV1 is set first, so a settle error that
+  // races the concurrent Fetch.disable/f.close teardown can no longer be
+  // mistaken for (or mask) a primary assertion; every cleanup step is
+  // individually guarded and f.close runs unconditionally — after the
+  // lexical-scope repair nothing in this block can throw a ReferenceError or
+  // otherwise skip fixture shutdown.
+  teardownV1=true;
+  if(cdp&&planHeldRequestIdV1!==null){try{await cdp.send('Fetch.continueResponse',{requestId:planHeldRequestIdV1});}catch{/* already settled */}planHeldRequestIdV1=null;}
+  try{await cdp?.send('Fetch.disable');}catch{/* session already gone */}await f.close();
+ }
+});
+// RUN82: the guided MANUAL connection-recovery journey from inside the SAME nonmodal task panel. The navigation is navigation only: it reopens/focuses the existing native565 dialog through the dialog's OWN opener lifecycle and triggers no request, probe, consent, selection mutation, inference or automatic planning of its own; the unsent task text and native selection stay untouched; the native dialog remains the sole authority, so a requalified connection revives no old offer, consent or startability and only a fresh explicit prepare plus the separate manual consent produces exactly one start with the two genuine synthetic feedback POSTs.
+test('PUI07 RUN82 actual same-shell guided recovery: after a genuine prerequisite revocation the new panel quick action opens and focuses the mounted native565 dialog with zero added requests, unchanged provider counts and the unsent task text intact; the honest guidance names the missing step; requalification through the dialog revives no stale offer, consent or startability and only a fresh explicit plan plus separate manual consent yields exactly one start and the two genuine feedback POSTs; NOT LLM',async()=>{
+ const f=await connectedFixture();
+ try{
+  const before=f.business(),connection='[id="shell.model-connection"]',consent=f.page.locator('#pan548-agent-inference-consent'),guidance=f.page.locator(root+' [data-agent-connection-guidance="true"]');
+  await open(f);await selectConnectedView(f);await connect(f);
+  const p=await boundPlan(f);
+  await consent.check();
+  const taskText=await f.page.locator('#pan548-agent-intent').inputValue(),startsBefore=count(f,'start');
+  // Genuine revocation: the independent AUTH re-probe resets the downstream passes while a bound unchecked offer and checked consent stand in the panel.
+  await f.page.locator(connection).getByRole('button',{name:'Authentifizierung separat prüfen',exact:true}).click();
+  await state(f,'CONNECTION_CHANGE_OFFER_REVOKED');await f.flushResponses();
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN82_REVOCATION KEPT A STALE CONSENT VISIBLE');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN82_REVOCATION KEPT A STALE CHECKED CONSENT');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN82_REVOCATION KEPT STARTABILITY');
+  // The honest guidance appears exactly in this revoked state and names the missing step plus the manual action without claiming anything itself.
+  assert.equal(await guidance.isVisible(),true,'PAN548_RUN82 GUIDANCE ABSENT WHILE OFFER REVOKED');
+  const guidanceText=await guidance.innerText();
+  assert.ok(guidanceText.includes('Fehlender Schritt')&&guidanceText.includes('Verbindungsbereich öffnen'),'PAN548_RUN82 GUIDANCE DOES NOT NAME THE MISSING STEP AND THE MANUAL ACTION: '+guidanceText);
+  // Close the dialog through its OWN close control, so the navigation must genuinely reopen it.
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsdialog schließen',exact:true}).click();
+  assert.equal(await f.page.locator('#pan565-connection-body').isHidden(),true,'PAN548_RUN82 DIALOG DID NOT CLOSE VIA ITS OWN CONTROL');
+  const requestsAtNav=f.requests.length,responsesAtNav=f.responses.length,connectionRequestsAtNav=f.requests.filter(r=>r.path.includes('/model-connection')).length;
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(f,'CONNECTION_AREA_FOCUSED');
+  assert.equal(await f.page.locator(connection+' > button').getAttribute('aria-expanded'),'true','PAN548_RUN82 NAVIGATION DID NOT OPEN THE EXISTING DIALOG');
+  assert.equal(await f.page.locator('#pan565-connection-body').isHidden(),false,'PAN548_RUN82 NAVIGATION DID NOT REVEAL THE EXISTING DIALOG BODY');
+  assert.ok(await f.page.evaluate(()=>document.activeElement?.closest('#pan565-connection-body')!==null),'PAN548_RUN82 NAVIGATION DID NOT FOCUS INSIDE THE EXISTING DIALOG');
+  await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtNav,'PAN548_RUN82 NAVIGATION TRIGGERED FURTHER REQUESTS');
+  assert.equal(f.responses.length,responsesAtNav,'PAN548_RUN82 NAVIGATION TRIGGERED FURTHER RESPONSES');
+  assert.equal(f.requests.filter(r=>r.path.includes('/model-connection')).length,connectionRequestsAtNav,'PAN548_RUN82 NAVIGATION TRIGGERED CONNECTION REVALIDATION');
+  assert.equal(f.posts(),0,'PAN548_RUN82 NAVIGATION TRIGGERED PROVIDER OR FEEDBACK POSTS');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN82 NAVIGATION TRIGGERED A START');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN82 NAVIGATION LOST THE UNSENT TASK TEXT');
+  await f.page.waitForFunction(()=>document.querySelector('[id="shell.context-selection"] button[aria-pressed="true"]')?.textContent==='Kontextauswahl: Persönliches Viewelement: invoice-value');
+  await connectedCapture(f,'desktop-agent-guided-connection-revoked-guidance');
+  // Genuine requalification THROUGH the focused dialog restores nothing panel-side — no revived offer, consent or startability.
+  await f.page.locator(connection).getByRole('button',{name:'Modellverfügbarkeit separat prüfen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  const requalified=await f.page.locator(connection+' ul').innerText();
+  assert.ok(requalified.includes('Modellverfügbarkeit: PASS'),'PAN548_RUN82 REQUALIFICATION DID NOT READ BACK GENUINELY: '+requalified);
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN82 REQUALIFICATION REVIVED A STALE CONSENT OFFER');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN82 REQUALIFICATION REVIVED STARTABILITY');
+  await connectedCapture(f,'desktop-agent-guided-connection-requalification');
+  // Only the fresh explicit plan plus the separate manual consent makes exactly one start available; the run then produces the two genuine synthetic feedback POSTs.
+  const fresh=await boundPlan(f);
+  assert.notEqual(fresh.planHandle,p.planHandle,'PAN548_RUN82 FRESH PLAN REUSED THE REVOKED HANDLE');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN82 FRESH OFFER CAME PRECHECKED');
+  await consent.check();
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  assert.equal(count(f,'start'),startsBefore+1,'PAN548_RUN82 FRESH CONSENT DID NOT YIELD EXACTLY ONE START');
+  assert.equal(f.posts(),2,'PAN548_RUN82 GENUINE FEEDBACK POST PAIR MISSING');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN82 JOURNEY LOST THE UNSENT TASK TEXT');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+// RUN82 direct negatives/lifetime: with the optional connection module genuinely absent or failing to load, the panel stays honest — no fake connection action, no connection revalidation request, the explicit denial path stays truthful and the unsent text survives; synthetic no-owner mode stays operable; logout removes the recovery control with the panel.
+test('PUI07 RUN82 absent or erroring optional connection module keeps the guided navigation honest without a fake connection action, request or lost unsent text; synthetic no-owner mode stays operable and logout leaves no stale recovery control; NOT LLM',async()=>{
+ // (1) Real connected owner mount whose connection module script genuinely fails to load.
+ const f=await connectedFixture();
+ try{
+  await f.page.route('**/t/tenant-a/workspace/model-connection/app.js',route=>void route.abort());
+  await open(f);await selectConnectedView(f);
+  assert.equal(await f.page.locator('[id="shell.model-connection"]').count(),0,'PAN548_RUN82 ABORTED MODULE STILL MOUNTED A DIALOG');
+  const taskText=await f.page.locator('#pan548-agent-intent').inputValue();
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(f,'CONNECTION_AREA_UNAVAILABLE');
+  assert.equal(await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).getAttribute('data-connection-target-available'),'false','PAN548_RUN82 UNAVAILABLE NAVIGATION CLAIMED A TARGET');
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLAN_DENIED');await f.flushResponses();
+  const denied=await f.page.locator(root).innerText();
+  assert.ok(denied.includes('kein synthetischer Fallback')&&denied.includes('Verbindungsbereich öffnen'),'PAN548_RUN82 DENIAL PATH LOST THE HONEST POINTER: '+denied);
+  const guidance=f.page.locator(root+' [data-agent-connection-guidance="true"]');
+  assert.equal(await guidance.isVisible(),true,'PAN548_RUN82 GUIDANCE ABSENT WHILE AREA UNAVAILABLE');
+  const guidanceText=await guidance.innerText();
+  assert.ok(guidanceText.includes('fehlt oder meldet einen Fehler')&&guidanceText.includes('keine erfundene Verbindungshandlung'),'PAN548_RUN82 GUIDANCE FAKED A CONNECTION ACTION: '+guidanceText);
+  assert.equal(f.requests.filter(r=>r.path.includes('/model-connection')&&!r.path.endsWith('/app.js')).length,0,'PAN548_RUN82 ABSENT MODULE TRIGGERED A CONNECTION REVALIDATION REQUEST');
+  assert.equal(f.posts(),0,'PAN548_RUN82 ABSENT MODULE TRIGGERED PROVIDER OR FEEDBACK POSTS');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN82 ABSENT MODULE PATH LOST THE UNSENT TASK TEXT');
+  assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+ // (2) Owner-free synthetic mode: the navigation honestly reports no area, the existing synthetic journey stays operable, logout leaves no stale control.
+ const g=await nativeViewBrowserFixture546({agentRuns:true});
+ try{
+  await open(g);await select(g);
+  const taskText=await g.page.locator('#pan548-agent-intent').inputValue();
+  await g.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(g,'CONNECTION_AREA_UNAVAILABLE');
+  assert.ok((await g.page.locator(root).innerText()).includes('Kein vorhandener Verbindungsbereich'),'PAN548_RUN82 SYNTHETIC MODE CLAIMED A CONNECTION AREA');
+  assert.equal(g.requests.filter(r=>r.path.includes('/model-connection')).length,0,'PAN548_RUN82 SYNTHETIC MODE TRIGGERED A CONNECTION REQUEST');
+  // Synthetic mode stays usable exactly as before: the explicit synthetic plan still plans.
+  await plan(g);
+  assert.equal(await g.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN82 SYNTHETIC MODE LOST THE UNSENT TASK TEXT');
+  await g.page.getByRole('button',{name:'Abmelden',exact:true}).click();
+  await g.page.getByRole('heading',{name:'Abgemeldet',exact:true}).waitFor();
+  assert.equal(await g.page.locator(root).count(),0,'PAN548_RUN82 PANEL SURVIVED LOGOUT');
+  assert.equal(await g.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).count(),0,'PAN548_RUN82 STALE RECOVERY CONTROL SURVIVED LOGOUT');
+  assert.deepEqual(g.errors,[]);
+ }finally{await g.close();}
+});
+// RUN83: focused registered coverage for the actual product-defect boundary found by the independent review of RUN82: pure guided navigation to the existing native565 connection area must never replace or misrepresent the actual native task projection. Across a true RESULT_READY terminal, a genuine malformed-feedback OUTCOME_UNCONFIRMED with the full retained hold, and an observed RUNNING, the panel keeps its exact data-state, truthful native status and retained hold rows across reopen/focus/Escape of the dialog's OWN lifecycle; the navigation outcome is reported only in the panel's separate navigation live region; navigation itself adds zero requests, provider posts and starts, preserves the unsent task text and selection, and a later independent read stays truthful (the stale navigation echo retires on the next real state transition). NOT LLM.
+test('PUI07 RUN83 actual terminal/UNKNOWN task-truth preservation under guided connection navigation: RESULT_READY, the retained OUTCOME_UNCONFIRMED hold and observed RUNNING keep their exact phase, status and facts across reopen/focus/Escape while the navigation outcome reports in its own live region with zero added requests, posts or starts; the independent read stays terminal and no stale navigation echo survives; NOT LLM',async()=>{
+ const outcomeSel=root+' [data-agent-connection-nav-outcome="true"]',guidanceSel=root+' [data-agent-connection-guidance="true"]';
+ // (1) True RESULT_READY terminal: navigation keeps phase/status/rows, focuses an enabled dialog control, the real Escape lifecycle returns to the dialog's own opener, a later independent read stays terminal and retires the navigation echo.
+ const f=await connectedFixture();
+ try{
+  const before=f.business();
+  await open(f);await selectConnectedView(f);await connect(f);await boundPlan(f);
+  await f.page.locator('#pan548-agent-inference-consent').check();
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  const statusText=await f.page.locator(root+' [role="status"]').first().innerText(),explanationText=await f.page.locator(root+' [data-agent-explanation="true"]').innerText();
+  assert.ok(statusText.includes('Native Laufprojektion gelesen'),'PAN548_RUN83 TEST BASE MISSING TRUE TERMINAL STATUS: '+statusText);
+  const requestsAtNav=f.requests.length,responsesAtNav=f.responses.length,connectionRequestsAtNav=f.requests.filter(r=>r.path.includes('/model-connection')).length,taskText=await f.page.locator('#pan548-agent-intent').inputValue();
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'RESULT_READY','PAN548_RUN83 NAVIGATION REPLACED THE TRUE TERMINAL PHASE');
+  assert.equal(await f.page.locator(root+' [role="status"]').first().innerText(),statusText,'PAN548_RUN83 NAVIGATION REPLACED THE TRUTHFUL NATIVE TERMINAL STATUS');
+  assert.equal(await f.page.locator(outcomeSel).isVisible(),true,'PAN548_RUN83 NAVIGATION OUTCOME NOT REPORTED IN ITS OWN LIVE REGION');
+  assert.ok((await f.page.locator(outcomeSel).innerText()).includes('Verbindungsbereich geöffnet und fokussiert'),'PAN548_RUN83 NAVIGATION OUTCOME MISSING THE HONEST ECHO');
+  assert.equal(await f.page.locator(guidanceSel).isVisible(),false,'PAN548_RUN83 NAVIGATION CLAIMED A MISSING STEP WHILE THE CONNECTION WAS HEALTHY');
+  assert.ok(await f.page.evaluate(()=>document.activeElement?.closest('#pan565-connection-body')!==null),'PAN548_RUN83 NAVIGATION DID NOT FOCUS INSIDE THE EXISTING DIALOG');
+  assert.equal(await f.page.evaluate(()=>document.activeElement instanceof HTMLElement&&!document.activeElement.disabled&&document.activeElement.closest('#pan565-connection-body')!==null),true,'PAN548_RUN83 NAVIGATION FOCUS DID NOT LAND ON AN ENABLED CONTROL');
+  await f.page.keyboard.press('Escape');
+  assert.equal(await f.page.locator('#pan565-connection-body').isHidden(),true,'PAN548_RUN83 REAL ESCAPE DID NOT CLOSE THE EXISTING DIALOG');
+  assert.equal(await f.page.evaluate(()=>document.activeElement?.parentElement?.id??''),'shell.model-connection','PAN548_RUN83 ESCAPE DID NOT RETURN FOCUS TO THE DIALOG OWN OPENER');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'RESULT_READY','PAN548_RUN83 ESCAPE LIFECYCLE ALTERED THE TASK PHASE');
+  await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtNav,'PAN548_RUN83 NAVIGATION TRIGGERED FURTHER REQUESTS');
+  assert.equal(f.responses.length,responsesAtNav,'PAN548_RUN83 NAVIGATION TRIGGERED FURTHER RESPONSES');
+  assert.equal(f.requests.filter(r=>r.path.includes('/model-connection')).length,connectionRequestsAtNav,'PAN548_RUN83 NAVIGATION TRIGGERED CONNECTION REVALIDATION');
+  assert.equal(f.posts(),2,'PAN548_RUN83 NAVIGATION TRIGGERED FURTHER PROVIDER OR FEEDBACK POSTS');
+  assert.equal(count(f,'start'),1,'PAN548_RUN83 NAVIGATION TRIGGERED ANOTHER START');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN83 NAVIGATION LOST THE UNSENT TASK TEXT');
+  assert.equal(await f.page.locator(root+' [data-agent-explanation="true"]').innerText(),explanationText,'PAN548_RUN83 NAVIGATION CLOBBERED THE RUN EXPLANATION');
+  await connectedCapture(f,'desktop-agent-navigation-terminal-truth-preserved');
+  // The independent read stays available, stays truthful and retires the stale navigation echo with its state transition.
+  assert.equal(await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).isDisabled(),false,'PAN548_RUN83 INDEPENDENT READ UNAVAILABLE AFTER NAVIGATION');
+  await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  assert.equal(count(f,'read'),1,'PAN548_RUN83 INDEPENDENT READ DID NOT STAY THE EXACT ONE READ');
+  assert.equal(await f.page.locator(outcomeSel).isVisible(),false,'PAN548_RUN83 STALE NAVIGATION ECHO SURVIVED THE NEXT NATIVE STATE TRANSITION');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+ // (2) Genuine malformed-feedback OUTCOME_UNCONFIRMED: the retained UNKNOWN hold (phase, status notice, budget/diagnosis rows) survives navigation untouched; navigation adds nothing and the independent read stays terminal.
+ const g=await connectedFixture({unknown:true});
+ try{
+  const before=g.business();
+  await open(g);await selectConnectedView(g);await connect(g);await boundPlan(g);
+  await g.page.locator('#pan548-agent-inference-consent').check();
+  await g.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(g,'OUTCOME_UNCONFIRMED');await g.flushResponses();
+  const holdNotice=await g.page.locator(root+' [role="status"]').first().innerText();
+  assert.ok(holdNotice.includes('Schreib-/Nutzungsausgang unbestätigt')&&holdNotice.includes('Budget bleibt gebunden'),'PAN548_RUN83 TEST BASE MISSING THE RETAINED HOLD NOTICE: '+holdNotice);
+  const holdRows=await g.page.locator(root+' dl').first().innerText();
+  assert.ok(holdRows.includes('Verbrauch nicht bestätigt — volle Reservierung bleibt erhalten'),'PAN548_RUN83 TEST BASE MISSING THE RETAINED RESERVATION ROW');
+  const requestsAtNav=g.requests.length,postsAtNav=g.posts(),taskText=await g.page.locator('#pan548-agent-intent').inputValue();
+  await g.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  assert.equal(await g.page.locator(root).getAttribute('data-state'),'OUTCOME_UNCONFIRMED','PAN548_RUN83 NAVIGATION REPLACED THE RETAINED UNKNOWN HOLD PHASE');
+  assert.equal(await g.page.locator(root+' [role="status"]').first().innerText(),holdNotice,'PAN548_RUN83 NAVIGATION REPLACED THE TRUTHFUL RETAINED HOLD NOTICE');
+  assert.ok((await g.page.locator(root+' dl').first().innerText()).includes('volle Reservierung bleibt erhalten'),'PAN548_RUN83 NAVIGATION DROPPED THE RETAINED HOLD FACTS');
+  assert.equal(await g.page.locator(outcomeSel).isVisible(),true,'PAN548_RUN83 UNKNOWN-HOLD NAVIGATION OUTCOME NOT REPORTED SEPARATELY');
+  assert.ok((await g.page.locator(outcomeSel).innerText()).includes('weder Fortsetzen, Abbrechen noch Wiederholen'),'PAN548_RUN83 NAVIGATION ECHO IMPLIED RESUME/CANCEL/RETRY AUTHORITY');
+  assert.ok(await g.page.evaluate(()=>document.activeElement?.closest('#pan565-connection-body')!==null),'PAN548_RUN83 UNKNOWN-HOLD NAVIGATION DID NOT FOCUS INSIDE THE EXISTING DIALOG');
+  await g.flushResponses();
+  assert.equal(g.requests.length,requestsAtNav,'PAN548_RUN83 UNKNOWN-HOLD NAVIGATION TRIGGERED FURTHER REQUESTS');
+  assert.equal(g.posts(),postsAtNav,'PAN548_RUN83 UNKNOWN-HOLD NAVIGATION TRIGGERED FURTHER PROVIDER OR FEEDBACK POSTS');
+  assert.equal(count(g,'start'),1,'PAN548_RUN83 UNKNOWN-HOLD NAVIGATION TRIGGERED ANOTHER START');
+  assert.equal(await g.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN83 UNKNOWN-HOLD NAVIGATION LOST THE UNSENT TASK TEXT');
+  await g.page.keyboard.press('Escape');
+  assert.equal(await g.page.locator('#pan565-connection-body').isHidden(),true,'PAN548_RUN83 UNKNOWN-HOLD REAL ESCAPE DID NOT CLOSE THE EXISTING DIALOG');
+  assert.equal(await g.page.locator(root).getAttribute('data-state'),'OUTCOME_UNCONFIRMED','PAN548_RUN83 UNKNOWN-HOLD ESCAPE ALTERED THE HOLD PHASE');
+  await g.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();
+  await state(g,'OUTCOME_UNCONFIRMED');await g.flushResponses();
+  assert.equal(g.posts(),postsAtNav,'PAN548_RUN83 TERMINAL READ TRIGGERED PROVIDER OR FEEDBACK POSTS');
+  assert.equal(await g.page.locator(root+' [role="status"]').first().innerText(),holdNotice,'PAN548_RUN83 TERMINAL READ DID NOT RESTORE THE SAME TRUTHFUL HOLD NOTICE');
+  assert.equal(await g.page.locator(outcomeSel).isVisible(),false,'PAN548_RUN83 STALE NAVIGATION ECHO SURVIVED THE UNKNOWN-HOLD READ');
+  assert.equal(g.readPersisted().revision,0);assert.equal(g.business(),before);assert.deepEqual(g.errors,[]);
+ }finally{await g.close();}
+ // (3) Observed RUNNING under a held start: navigation is honestly unavailable while the operation is in flight, and after real settlement the true RESULT_READY stays untouched by navigation.
+ const h=await connectedFixture({holdPeer:true,maxTimeMs:25000});
+ try{
+  const before=h.business();
+  await open(h);await selectConnectedView(h);await connect(h);await boundPlan(h);
+  await h.page.locator('#pan548-agent-inference-consent').check();
+  await h.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await h.peerHeld;await h.flushResponses();
+  await h.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();
+  await state(h,'RUNNING');await h.flushResponses();
+  const nav=h.page.getByRole('button',{name:connectionNavLabelV1,exact:true});
+  assert.equal(await nav.isDisabled(),true,'PAN548_RUN83 NAVIGATION FALSIFYINGLY AVAILABLE WHILE THE START IS STILL IN FLIGHT');
+  assert.equal(await h.page.locator(root).getAttribute('data-state'),'RUNNING','PAN548_RUN83 IN-FLIGHT WINDOW ALTERED THE OBSERVED RUNNING PHASE');
+  h.releasePeer();await state(h,'RESULT_READY');await h.flushResponses();
+  assert.equal(h.posts(),2,'PAN548_RUN83 RELEASE DID NOT SETTLE THE TWO FEEDBACK POSTS');
+  const requestsAtNav=h.requests.length;
+  await nav.click();
+  assert.equal(await h.page.locator(root).getAttribute('data-state'),'RESULT_READY','PAN548_RUN83 POST-SETTLEMENT NAVIGATION REPLACED THE TRUE TERMINAL PHASE');
+  await h.flushResponses();
+  assert.equal(h.requests.length,requestsAtNav,'PAN548_RUN83 POST-SETTLEMENT NAVIGATION TRIGGERED FURTHER REQUESTS');
+  assert.equal(count(h,'start'),1,'PAN548_RUN83 POST-SETTLEMENT NAVIGATION TRIGGERED ANOTHER START');
+  assert.equal(h.readPersisted().revision,0);assert.equal(h.business(),before);assert.deepEqual(h.errors,[]);
+ }finally{try{h.releasePeer();}catch{/* gate already open or fixture owned */}await h.close();}
+});
+// RUN88 PUI-07-AC02: readable honest missing-operation reasons in the usable
+// task view on the SAME nonmodal panel, on the existing synthetic native
+// fixture. The reasons come only from the currently validated plan/read
+// projection (typed closed operations through the unchanged production
+// boundary): no raw DTO token, no new handler, endpoint or grant. Unavailable
+// controls stay disabled and request-free under attempted activation, the
+// actual independent status read stays manual, and unverified/native-read-
+// denied states retire stale validated operation evidence instead of keeping
+// claiming it. Desktop and 390 captures use the existing overflow/clipping
+// assertions. Synthetic fixture: NOT real-model/LLM evidence. RUN89: the bound
+// and unbound reason lines are concise per operation; the current-validation-
+// vs-contract-binding explanation lives once in a shared note in the same
+// group, and the desktop plus 390 acceptance is proven by real Tab reach,
+// per-element full-viewport scroll reveal, hit-test visibility and viewport
+// (non-full-page) captures of the reasons themselves.
+test('PUI07 RUN88 READABLE MISSING-OPERATION REASONS SURVIVE PLAN RUN READ DENIAL AND RELOAD WHILE CONTROLS STAY DISABLED AND REQUEST-FREE',async()=>{
+ const f=await nativeViewBrowserFixture546({agentRuns:true});const images=[];
+ const opsBox=f.page.locator('#pan548-agent-task-operations'),cancelLine=f.page.locator('#pan548-agent-cancel-unavailable-reason'),resumeLine=f.page.locator('#pan548-agent-resume-unavailable-reason'),bindingNote=f.page.locator('#pan548-agent-task-operation-binding-note'),statusNote=opsBox.locator('small');
+ const panelButton=name=>f.page.locator(root).getByRole('button',{name,exact:true});
+ async function expectOperationReasons(binding,cancelPhrase,resumePhrase){
+  await showAgentTechnicalUI(f.page);
+  assert.equal(await opsBox.getAttribute('data-task-operation-binding'),binding,'PAN548_RUN88_OPERATION_REASON_BINDING_PHASE_MISMATCH');
+  assert.ok(await opsBox.isVisible(),'PAN548_RUN88_MISSING_OPERATION_REASONS_NOT_VISIBLE');
+  const cancel=await cancelLine.innerText(),resume=await resumeLine.innerText();
+  for(const[line,phrase,label]of[[cancel,cancelPhrase,'cancel'],[resume,resumePhrase,'resume']])assert.ok(line.includes(phrase)&&line.includes('nicht verfügbar'),'PAN548_RUN88_'+label.toUpperCase()+'_REASON_MISSING:'+line);
+  for(const line of [cancel,resume]){assert.ok(!line.includes('NO_NATIVE_MODEL_TASK'),'PAN548_RUN88_RAW_REASON_TOKEN_LEAKED');assert.ok(!line.includes('erfolgreich abgebrochen')&&!line.includes('erfolgreich fortgesetzt'),'PAN548_RUN88_FAKE_OPERATION_CLAIM');}
+  // RUN89: the current-validation-vs-contract-binding explanation is stated exactly once, in the
+  // shared note inside the same reachable group — separation in both states, provenance from the
+  // current validated projection when bound, honest no-current-evidence when unbound.
+  const note=await bindingNote.innerText();
+  assert.ok(note.includes('vom aktuellen Taskbinding'),'PAN548_RUN89_SHARED_BINDING_NOTE_MISSING_SEPARATION:'+note);
+  assert.ok(note.includes(binding==='CURRENT_VALIDATED_PROJECTION'?'aktuell im Panel validierten nativen Projektion':'nicht als aktuell behauptet'),'PAN548_RUN89_SHARED_BINDING_NOTE_NOT_HONEST_ABOUT_CURRENT_VALIDATION:'+note);
+  assert.ok(await statusNote.innerText().then(t=>t.includes('einzige aktuelle Statusaktion')&&t.includes('weder abbrechen noch fortsetzen')&&t.includes('keine Freigabe')),'PAN548_RUN88_STATUS_READ_NOTE_INCOMPLETE');
+  const cancelBtn=panelButton('Lauf abbrechen — nicht verfügbar'),resumeBtn=panelButton('Lauf fortsetzen — nicht verfügbar');
+  assert.equal(await cancelBtn.getAttribute('aria-describedby'),'pan548-agent-cancel-unavailable-reason','disabled controls must describe their visible reason to assistive technology');
+  assert.equal(await resumeBtn.getAttribute('aria-describedby'),'pan548-agent-resume-unavailable-reason');
+  assert.equal(await cancelBtn.isDisabled(),true);assert.equal(await resumeBtn.isDisabled(),true);
+ }
+ // RUN89: genuine keyboard and scroll access, not isVisible(). The group is reached by Tab from
+ // the details summary; then EVERY complete reason line, the shared binding note and the manual
+ // status-read limitation are individually scrolled to center and measured: the full box must sit
+ // inside the real viewport through natural scrolling only (no helper-opened panel proves
+ // anything), the text must not be horizontally clipped, and the centered hit test must land on
+ // the element itself. Scrolling dispatches no request and changes no task state.
+ async function expectReasonScrollAndKeyboardAccessV1(label){
+  const requestsBeforeScroll=f.requests.length,stateBeforeScroll=await f.page.locator(root).getAttribute('data-state');
+  await f.page.locator('.agent-technical-details').locator(':scope > summary').focus();
+  let reachedBox=false;for(let i=0;i<8&&!reachedBox;i++){await f.page.keyboard.press('Tab');reachedBox=await f.page.evaluate(()=>document.activeElement?.id==='pan548-agent-task-operations');}
+  assert.ok(reachedBox,'PAN548_RUN89_REASON_GROUP_NOT_KEYBOARD_REACHABLE_'+label);
+  for(const[el,name]of[[opsBox,'reason-group'],[cancelLine,'cancel-reason'],[resumeLine,'resume-reason'],[bindingNote,'binding-note'],[statusNote,'status-read-note']]){
+   await el.evaluate(n=>n.scrollIntoView({block:'center'}));
+   const g=await el.evaluate(n=>{const r=n.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height,vw:innerWidth,vh:innerHeight,scrollWidth:n.scrollWidth,clientWidth:n.clientWidth};});
+   assert.ok(g.height>0&&g.top>=0&&g.bottom<=g.vh,'PAN548_RUN89_REASON_NOT_FULLY_REVEALABLE_BY_SCROLL_'+label+':'+name+':'+JSON.stringify(g));
+   assert.ok(g.left>=0&&g.right<=g.vw&&g.scrollWidth<=g.clientWidth+1,'PAN548_RUN89_REASON_HORIZONTALLY_CLIPPED_'+label+':'+name+':'+JSON.stringify(g));
+   const hitSelf=await el.evaluate(n=>{const r=n.getBoundingClientRect(),hit=document.elementFromPoint(Math.min(Math.max(r.left+r.width/2,0),innerWidth-1),Math.min(Math.max(r.top+r.height/2,0),innerHeight-1));return hit===n||n.contains(hit);});
+   assert.ok(hitSelf,'PAN548_RUN89_REASON_NOT_ACTUALLY_SHOWN_ON_TOP_'+label+':'+name);
+  }
+  assert.equal(f.requests.length,requestsBeforeScroll,'PAN548_RUN89_SCROLL_ACCESS_TRIGGERED_A_REQUEST');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),stateBeforeScroll,'PAN548_RUN89_SCROLL_ACCESS_CHANGED_TASK_STATE');
+ }
+ // RUN89: the acceptance capture is a viewport screenshot taken only after the whole reason group
+ // is proven fully inside the live viewport — unlike the old full-page overview that showed the
+ // default assistant view without ever proving the reasons were visible where the user looks.
+ async function visibleCaptureV1(name){
+  const g=await opsBox.evaluate(n=>{const r=n.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,vw:innerWidth,vh:innerHeight};});
+  assert.ok(g.top>=0&&g.bottom<=g.vh&&g.left>=0&&g.right<=g.vw,'PAN548_RUN89_REASON_GROUP_NOT_FULLY_IN_VIEWPORT_FOR_CAPTURE:'+name+':'+JSON.stringify(g));
+  const image=join(evidence(),name+'.png');await f.page.screenshot({path:image,fullPage:false});
+  images.push({name,image,viewportCapture:true,geometry:g,sha256:createHash('sha256').update(readFileSync(image)).digest('hex')});
+ }
+ try{
+  await open(f);await showAgentTechnicalUI(f.page);
+  // Unverified start: honest no-binding wording, nothing claimed yet — the shared binding note
+  // carries the contract-vs-binding separation and the no-current-evidence honesty (checked in
+  // the helper above).
+  await expectOperationReasons('NO_CURRENT_BINDING','weiterhin keinen Modelllauf-Abbruchvertrag','weiterhin keinen Modelllauf-Fortsetzungsvertrag');
+  await select(f);const p=await plan(f);
+  // Actual validated plan projection: the closed reasons become readable, and EVERY complete
+  // reason line, the shared note and the manual status-read limitation are keyboard-reachable
+  // and fully revealable by natural scrolling in the real desktop viewport; the viewport capture
+  // below proves them visible where the user looks.
+  await expectOperationReasons('CURRENT_VALIDATED_PROJECTION','es existiert kein nativer Modelllauf-Abbruchvertrag','es existiert kein nativer Modelllauf-Fortsetzungsvertrag');
+  await expectReasonScrollAndKeyboardAccessV1('desktop-planned');
+  await opsBox.evaluate(n=>n.scrollIntoView({block:'center'}));
+  await visibleCaptureV1('run89-agent-task-operation-reasons-desktop-visible');
+  // Attempted activation of the unavailable controls triggers no request and
+  // changes no state; the actual status read stays manual.
+  const requestsBeforeAttempt=f.requests.length,stateBeforeAttempt=await f.page.locator(root).getAttribute('data-state');
+  await panelButton('Lauf abbrechen — nicht verfügbar').evaluate(n=>n.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await panelButton('Lauf fortsetzen — nicht verfügbar').evaluate(n=>n.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  assert.equal(f.requests.length,requestsBeforeAttempt,'PAN548_RUN88_UNAVAILABLE_CONTROL_ACTIVATION_TRIGGERED_A_REQUEST');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),stateBeforeAttempt);
+  // Keyboard/AT reachability: the reason group is tabbable after the summary.
+  await f.page.locator('.agent-technical-details').locator(':scope > summary').focus();
+  let reachedBox=false;for(let i=0;i<8&&!reachedBox;i++){await f.page.keyboard.press('Tab');reachedBox=await f.page.evaluate(()=>document.activeElement?.id==='pan548-agent-task-operations');}
+  assert.ok(reachedBox,'PAN548_RUN88_MISSING_OPERATION_REASONS_NOT_KEYBOARD_REACHABLE');
+  images.push(await capture(f,'run88-agent-task-operation-reasons-planned'));
+  const r=await run(f);assert.equal(r.phase,'RESULT_READY');
+  // True terminal via the real native run: reasons stay bound and truthful.
+  await expectOperationReasons('CURRENT_VALIDATED_PROJECTION','es existiert kein nativer Modelllauf-Abbruchvertrag','es existiert kein nativer Modelllauf-Fortsetzungsvertrag');
+  assert.equal(await f.page.locator(root).getAttribute('data-run'),p.runId);assert.equal(count(f,'start'),1);
+  // Manual independent re-read keeps the bound presentation identical.
+  await panelButton('Laufstatus unabhängig nativ lesen').click();await state(f,'RESULT_READY');await f.flushResponses();
+  await expectOperationReasons('CURRENT_VALIDATED_PROJECTION','es existiert kein nativer Modelllauf-Abbruchvertrag','es existiert kein nativer Modelllauf-Fortsetzungsvertrag');
+  // Denied independent read over a genuine reload (no current validated
+  // projection in this fresh page): the old validated evidence retires honestly
+  // instead of being claimed as current. A denied read AFTER an already
+  // confirmed terminal deliberately keeps the terminal projection, so this is
+  // the actual RUN_READ_DENIED path of the existing source semantics.
+  await f.page.route('**/workspace/agent-run/read',route=>route.abort('failed'));
+  await f.page.reload();await showCurrentContextDetailsUI(f.page);await f.page.locator('[id="shell.context-selection"][data-module="pan.erv"][data-state="CURRENT_CONTEXT"]').waitFor();await state(f,'RUN_READ_DENIED');await f.flushResponses();
+  await expectOperationReasons('NO_CURRENT_BINDING','weiterhin keinen Modelllauf-Abbruchvertrag','weiterhin keinen Modelllauf-Fortsetzungsvertrag');
+  assert.ok((await bindingNote.innerText()).includes('nicht als aktuell behauptet'),'a denied read must not keep claiming old validated operation evidence');
+  assert.equal(count(f,'start'),1,'PAN548_RUN88_DENIED_READ_STARTED_ANOTHER_RUN');
+  await f.page.unroute('**/workspace/agent-run/read');
+  await panelButton('Laufstatus unabhängig nativ lesen').click();await state(f,'RESULT_READY');await f.flushResponses();
+  await expectOperationReasons('CURRENT_VALIDATED_PROJECTION','es existiert kein nativer Modelllauf-Abbruchvertrag','es existiert kein nativer Modelllauf-Fortsetzungsvertrag');
+  // Genuine reload with the automatic independent read: reasons survive the
+  // true terminal, the reload and the fresh read with all hold/source facts.
+  await f.page.reload();await showCurrentContextDetailsUI(f.page);await f.page.locator('[id="shell.context-selection"][data-module="pan.erv"][data-state="CURRENT_CONTEXT"]').waitFor();await state(f,'RESULT_READY');await f.flushResponses();
+  await expectOperationReasons('CURRENT_VALIDATED_PROJECTION','es existiert kein nativer Modelllauf-Abbruchvertrag','es existiert kein nativer Modelllauf-Fortsetzungsvertrag');
+  assert.equal(count(f,'start'),1,'PAN548_RUN88_RELOAD_OR_REASON_RENDERS_STARTED_ANOTHER_RUN');
+  // 390: the reasons remain visible, wrapped and unclipped beside the controls — and every one
+  // of them, plus the shared note and the status-read limitation, is keyboard-reachable and
+  // fully revealable by natural scrolling at phone width; the viewport capture below proves it.
+  await f.page.setViewportSize({width:390,height:844});await showAgentTechnicalUI(f.page);
+  await expectOperationReasons('CURRENT_VALIDATED_PROJECTION','es existiert kein nativer Modelllauf-Abbruchvertrag','es existiert kein nativer Modelllauf-Fortsetzungsvertrag');
+  await expectReasonScrollAndKeyboardAccessV1('phone390');
+  await opsBox.evaluate(n=>n.scrollIntoView({block:'center'}));
+  await visibleCaptureV1('run89-agent-task-operation-reasons-390-visible');
+  images.push(await capture(f,'run88-agent-task-operation-reasons-390'));
+  assert.equal(f.readPersisted().revision,0,'the reason presentation persists nothing');
+  assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});

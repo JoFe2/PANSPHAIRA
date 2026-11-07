@@ -124,6 +124,10 @@ export function enableWorkspaceBrowserV1(options) {
       }
     }
   } catch (error) { mailLocal?.close();readonlyEvents?.close();contextProjection?.close();invocations?.close();surfaces?.close();uiTasks?.close();configurationApplication?.close();administration?.close();knowledge?.close();knowledgeSource?.close();modelConnection?.close(); nativeModelOwner?.close(); navigation?.close(); agent?.close(); human?.close(); moduleViews?.close(); viewOwner?.close(); dataCatalog?.close(); contextSelection?.close(); moduleStore?.close(); analysis?.close(); notifications?.close(); attachment?.close(); mounted?.close(); profiles.close(); throw error; }
-  const result=Object.freeze({ close() { mailLocalWorkspaceOwners.delete(result);mailLocal?.close();readonlyEvents?.close();contextProjection?.close();invocations?.close();surfaces?.close();uiTasks?.close();configurationApplication?.close();administration?.close();knowledge?.close();knowledgeSource?.close();modelConnection?.close(); navigation?.close(); agent?.close(); human?.close(); moduleViews?.close(); viewOwner?.close(); dataCatalog?.close(); contextSelection?.close(); moduleStore?.close(); analysis?.close(); notifications?.close(); attachment?.close(); mounted.close(); profiles.close(); } });
+  // RUN65 owner-side exposure only: the ACTUAL trusted native565 connection
+  // owner created above (undefined without modelConnections). No new control
+  // API, no HTTP endpoint, no DTO — the mounting owner gets the very same
+  // frozen owner whose close() synchronously revokes admitted task lifetimes.
+  const result=Object.freeze({ modelConnectionOwnerV1(){return nativeModelOwner;}, close() { mailLocalWorkspaceOwners.delete(result);mailLocal?.close();readonlyEvents?.close();contextProjection?.close();invocations?.close();surfaces?.close();uiTasks?.close();configurationApplication?.close();administration?.close();knowledge?.close();knowledgeSource?.close();modelConnection?.close(); navigation?.close(); agent?.close(); human?.close(); moduleViews?.close(); viewOwner?.close(); dataCatalog?.close(); contextSelection?.close(); moduleStore?.close(); analysis?.close(); notifications?.close(); attachment?.close(); mounted.close(); profiles.close(); } });
   if(nativeMailLocal)mailLocalWorkspaceOwners.set(result,{sessions,nativeOwner:nativeMailLocal});return result;
 }

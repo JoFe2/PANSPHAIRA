@@ -9,6 +9,10 @@ const expected=[['contracts/workspace-analysis/pan549-early-candidate-v1.json','
 test('PUI-08 registration: complete fixed native, real cohort, protected ingress and actual browser suite has one canonical entry',()=>{
  const pkg=JSON.parse(readFileSync('package.json','utf8'));assert.equal(pkg.scripts['pan549:test'],'TMPDIR="${TMPDIR:-${RUNNER_TEMP:?PAN549_OWNED_SCRATCH_REQUIRED}}" node '+entry,'PAN549_FIXED_CANONICAL_ENTRY_MISSING');assert.equal(pkg.scripts.pretest.split('npm run pan549:test').length,2);
  const list=spawnSync(process.execPath,[entry,'--list'],{encoding:'utf8'});assert.equal(list.status,0,list.stderr);assert.deepEqual(JSON.parse(list.stdout),files);
+ // RUN89: the registered browser-lifecycle case drives nativeViewBrowserFixture546, whose own gate
+ // requires PAN546_BROWSER_EVIDENCE. The canonical entry must therefore link that prerequisite to
+ // the explicitly owned 546 directory or the owned 549 provision — after provisioning, never before.
+ const runnerSrc=readFileSync(entry,'utf8');const link546='env.PAN546_BROWSER_EVIDENCE=env.PAN546_BROWSER_EVIDENCE||env.PAN549_BROWSER_EVIDENCE;';const linkAt=runnerSrc.indexOf(link546);assert.ok(linkAt>=0,'PAN549_REGISTERED_546_EVIDENCE_LINK_MISSING');assert.ok(linkAt>runnerSrc.indexOf('env.PAN549_BROWSER_EVIDENCE=mkdtempSync'),'PAN549_546_EVIDENCE_LINK_MUST_FOLLOW_OWNED_549_PROVISION');
 });
 test('PUI-08 registration: selection, skip and missing owned scratch deny before product work',()=>{
  const probeEnv={...process.env};delete probeEnv.NODE_TEST_CONTEXT;

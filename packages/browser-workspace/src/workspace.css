@@ -1001,9 +1001,30 @@ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-present
  body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-nav-item:not([data-composition-size="large"]) { min-height:44px; padding:6px 8px; }
  body[data-design-profile][data-presentation-width] [id="shell.navigation"] :is(.nav-label,.nav-binding-state) { min-width:min-content; max-width:100%; white-space:normal; overflow-wrap:normal; word-break:normal; }
  body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-add-module { display:flex; grid-column:auto; grid-row:auto; align-items:center; justify-content:center; width:100%; min-width:0; min-height:44px; }
- /* Existing focus composition: useful local actions before the unbound planner. */
- body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] .agent-quick-actions { order:2; }
+ /* RUN85: useful local actions stay before the unbound planner, but the four
+ registered actions (three original tools plus the guided connection action)
+ form exactly one row here. With the optional 4th action present, the inherited
+ three-column grid wrapped it onto a second row above the composer, which pushed
+ the unsent composer below the first viewport at the tested 1024/390 widths. */
+ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] .agent-quick-actions { order:2; grid-template-columns:repeat(4,minmax(0,1fr)); }
  body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] .agent-integrated-composer { order:3; }
+ /* RUN86: at these widths the guided connection action carries the longest
+ label in the four-column row ("Verbindungsbereich öffnen"). The base sheet
+ already allows wrapping and anywhere-break; compact the inherited padding by
+ one step and the font to the existing 11px small-control size so the FULL
+ label wraps inside its own hit target instead of spilling over the neighbour
+ at phone width. Exact labels, min hit height and keyboard activation stay. */
+ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] .agent-quick-actions button { min-height:48px; padding:6px; font-size:11px; line-height:1.3; white-space:normal; overflow-wrap:anywhere; }
+ /* The greeting/orb follows the input below the fold at <=1199, matching the
+ already-accepted narrow order; at the tested tablet width it otherwise pushed
+ the composer past the first-viewport edge. Its native owner and reference orb
+ are unchanged. RUN86: the honest missing-step guidance row takes the free slot
+ directly below the composer (order:4) and the greeting yields to order:5 —
+ the accepted greeting-before-status sequence keeps its relative order, only
+ the guidance line is inserted between composer and greeting, so a
+ guidance-visible connection denial never adds a row above the unsent textarea. */
+ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] [data-agent-connection-guidance="true"] { order:4; margin:0 12px 6px; }
+ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-presentation-width] .agent-welcome { order:5; }
 }
 @media (max-width:799px) {
  body[data-design-profile][data-presentation-width] .workspace-module-strip>[id="shell.navigation"] { grid-template-columns:repeat(3,minmax(min-content,1fr)); }
@@ -1019,3 +1040,22 @@ body[data-design-profile="jarvis"][data-agent-presentation="focus"][data-present
  body[data-design-profile][data-presentation-width] .workspace-module-strip>[id="shell.navigation"] { grid-template-columns:minmax(min-content,1fr); }
  body[data-design-profile][data-presentation-width] [id="shell.navigation"]>.workspace-nav-item { display:flex; flex-direction:column; align-items:flex-start; }
 }
+
+/* RUN85: on the actual phone widths the composed first viewport is the usable
+contract: the unsent native textarea must stay fully above the fold even with
+the optional guided connection action present. Mirror the existing fixed-height
+medium/wide jarvis textarea treatment at the already-specified 60px intent and
+compact the section-nav offset by a few px, so the whole quick-action row plus
+composer remain inside the initial viewport. */
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="narrow"],[data-presentation-width="tiny"]) .agent-section-nav { margin:6px 18px 0; }
+body[data-design-profile="jarvis"][data-agent-presentation="focus"]:is([data-presentation-width="narrow"],[data-presentation-width="tiny"]) .agent-integrated-composer>textarea { height:60px; min-height:60px; }
+
+/* RUN86: the connection-limited missing-step guidance is one compact flow line
+of the assistant body, not a fifth quick-action grid cell. At the accepted
+desktop order it lands inside the actions group directly below the four
+buttons (same order value, DOM after the grid); the <=1199 block above places
+it directly below the composer it gates. It claims nothing by itself — the
+exact wording remains the panel's honest projection of the actual native565
+readback state, including requalification and the retained hold honesty of
+RUN82/RUN83. */
+body[data-design-profile="jarvis"][data-agent-presentation="focus"] [data-agent-connection-guidance="true"] { order:4; margin:0 24px 8px; font-size:11px; line-height:1.45; color:var(--ui-muted); }

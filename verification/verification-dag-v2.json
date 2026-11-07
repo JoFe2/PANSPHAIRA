@@ -5220,7 +5220,7 @@
         {
           "path": "tests/public-product-spelling.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "db77a61f79df005b4686c6c5baecf5e9a3de52d4124dc88cd042a2772d5ac61a"
+          "sha256": "776b4321b1e5fcefe2eb7ce837d02c40c3762fc5ac6d5ac5cd17c61be6aaab02"
         },
         {
           "path": "tests/release-governance.test.mjs",
@@ -10141,7 +10141,7 @@
         {
           "path": "packages/browser-workspace/src/workspace.css",
           "role": "SOURCE",
-          "sha256": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9"
+          "sha256": "71dd7b88de0497bbb501d32f337c5701216f9dba2b5982fec5dc9d1052bde61d"
         },
         {
           "path": "packages/browser-workspace/src/workspace.html",
@@ -10176,7 +10176,7 @@
         {
           "path": "src/pan541/workspace-browser.mjs",
           "role": "SOURCE",
-          "sha256": "4cc1c8ce881e353d020e16a9d126aa7b88963ab3f3b8ab44ecfee15ca289b925"
+          "sha256": "77517a00eadad695936e51bcf0983a1d57e24a2d0946cec637cfa6d0df252e6e"
         },
         {
           "path": "tests/pan541/browser-context-safety.test.mjs",
@@ -10466,7 +10466,7 @@
         {
           "path": "tests/pan546/browser-fixture.mjs",
           "role": "VALIDATOR",
-          "sha256": "1e5253506d54e9f0cff01b556cb501abb14b3578a22c33350b072ffc146dd187"
+          "sha256": "ef91451cdccfc584244277201516e44cf7af76ad88878df9a1b128b74584e4a1"
         },
         {
           "path": "tests/pan546/native-profile-reservation-probe.mjs",
@@ -10486,12 +10486,12 @@
         {
           "path": "packages/contracts/src/workspace-model-connection-v1.ts",
           "role": "CONTRACT",
-          "sha256": "4f3202fdf0ddb2e11185dae824a217dd11a0a1414ae871c1f4bacbd1980ada5b"
+          "sha256": "0f3ba9f3326bd71d077ea6170122fed81757dce17e0674c479e7c2518e424db4"
         },
         {
           "path": "packages/browser-workspace/src/workspace-model-connection-v1.ts",
           "role": "SOURCE",
-          "sha256": "57eec09287d97cdc6235c793672986b49105c05c71e1a6d1403f3ebb8997303c"
+          "sha256": "6b3bb4ef63ea70222b96dc77d06f3467cb4a7b168ec30af27ed64183f3a74615"
         },
         {
           "path": "packages/browser-workspace/src/workspace-model-connection-v1.css",
@@ -10501,7 +10501,7 @@
         {
           "path": "src/pan565/native-model-connection.mjs",
           "role": "SECURITY",
-          "sha256": "5f94e6bf0b8f47422c563e7edd72142e91fda0bbe13e5e6876ba3926e21a772e"
+          "sha256": "4ee3258e973d0cded20a034b2a2e111fba64fbf1d6b9ede5b1f9e3189c3c642d"
         },
         {
           "path": "src/pan565/connection-transport.mjs",
@@ -10521,7 +10521,7 @@
         {
           "path": "tests/pan565/native-model-connection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "650fe0bfa4ba42a04a16b6fc2676432db9786e703ce12b52ca640b214f8071ed"
+          "sha256": "a754937e89bba55ed5629c9dda4b6c50c715255862252aebbab64d5091249fe1"
         },
         {
           "path": "tests/pan565/transport-price-bound.test.mjs",
@@ -10531,7 +10531,7 @@
         {
           "path": "tests/pan565/browser-model-connection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0f66a7677556eb3b7934948fd5d06c8d9c24e8557668bd47e9dd72e939dcb09f"
+          "sha256": "9e8f688f8eac6182f17889107aba5bdcb59fee5e98872761f19ffa6417e24959"
         },
         {
           "path": "tests/pan565/registration.test.mjs",
@@ -11305,7 +11305,7 @@
         {
           "path": "scripts/run-pan549-native-analysis-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "690b4ee0692f0cc2ecfe7dec1c5deac230614facfb37d9b6b183ae405302b8ad"
+          "sha256": "9acf8a807cd0225d796522101311a4ace5839d9d1f133c523017cbd548165481"
         },
         {
           "path": "src/pan549/native-analysis-read.mjs",
@@ -11325,7 +11325,7 @@
         {
           "path": "tests/pan549/browser-lifecycle-analysis.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "5d9778918e6ae3fb5a65e8015a60281c9253c33da1056f1ee2ce3001632cd386"
+          "sha256": "aa7c13945da53936456923e5bcd4bfde5a0059bd0cc4feff7f028b23e12a9624"
         },
         {
           "path": "tests/pan549/cohort-analysis.test.mjs",
@@ -11345,7 +11345,7 @@
         {
           "path": "tests/pan549/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "48759829c1bff38b0dd0ad59e184f6b548531cbc1b2eee8cfcd9176635b3f43d"
+          "sha256": "e39f984ae459e6b8bbaa63061bccb3535d754ca02da0f462d92f2188ccb1e213"
         }
       ],
       "ownedTests": [
@@ -11438,17 +11438,17 @@
         {
           "path": "packages/browser-workspace/src/workspace-agent-panel-v1.css",
           "role": "SOURCE",
-          "sha256": "5eca3f899496d5f724b2784e34fcabd59f687d7b3ee271bb36ebf720fd201a83"
+          "sha256": "921476ec64b797c940ef3ec3fc94d7d0b58d2818c6ee8205ff08a73a532f3001"
         },
         {
           "path": "packages/browser-workspace/src/workspace-agent-panel-v1.ts",
           "role": "SOURCE",
-          "sha256": "ffa90e0cd4d54e688b7ee6ae1946ca7ce29d0b2e7d2c5c2f5e50a5dca7005c63"
+          "sha256": "ce256cd9d06ff4d5e6af548f55964e6f6c5a5ea69439f3a97d5618939ce9ea3b"
         },
         {
           "path": "packages/contracts/src/workspace-agent-run-v1.ts",
           "role": "CONTRACT",
-          "sha256": "4cb70ef9bdc15fb073d8de9d3adf4dd856b9d5df1cf79d8ec68c3c34bb0ff324"
+          "sha256": "ec8ce643617558575be20a3a85d70263d0f6f2206c686e853e8a4dff0b8fa641"
         },
         {
           "path": "src/pan548/native-agent-run.mjs",
@@ -11458,7 +11458,7 @@
         {
           "path": "tests/pan548/native-agent-run.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "3d3d926cf29151f53ffc5b323137d4177ce147377985391f5914304b5de31bdc"
+          "sha256": "47ff054967a1541e3114641736830ed19b56a97e378ae4e552b02175236c7a85"
         },
         {
           "path": "tests/pan548/agent-run-transport-contract.test.mjs",
@@ -11468,7 +11468,7 @@
         {
           "path": "tests/pan548/browser-agent-panel.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "a23f20edf0759cf18ddecf4fe6e55a203ea40f7464fb9531921ea2b8c9353767"
+          "sha256": "5b9027c06272a69d5db5b9dcfe102d348cd888430c767fe6ac00ebcd44c61aec"
         },
         {
           "path": "src/pan548/native-ui-task-projection-v2.mjs",
