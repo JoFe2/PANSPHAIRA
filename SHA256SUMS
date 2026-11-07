@@ -440,7 +440,7 @@ a33ee0fb62647e545f42f154ae116c7ebca9423dde62bddaf807cdfef468c1ee  ./docs/archite
 cbf1ed6a03e936dd74b4cd66d9328a2318999212eb63c589934202a652b815c0  ./docs/architecture/rks-01-real-source-utility-result-v1.md
 8c5df07f13c5fb706d45ebac88e616244d2122548099b7c7fd107df8117924a8  ./docs/architecture/rks-01-source-governance-v1.md
 bdf3fbfa63b2f549fa827a5a81eaa3876a7c813b02368c7441c62f37bac2ffd2  ./docs/architecture/rks-02-core-small-vs-raw-result-v1.md
-395be9b564695360a18e689193afac87008ca460d59d7cbae8bd3c01f7d7c283  ./docs/architecture/workspace-agent-panel-v1.md
+4e2087f29df5322a4bc627533e2d46d7e5b40a64925ed45bcf72cbc18c00f6fd  ./docs/architecture/workspace-agent-panel-v1.md
 929d52c286f4156ae2e93858a8ce9da94fb8ab5d0538ccbb2128ec52006b3dc7  ./docs/architecture/workspace-context-selection-v1.md
 dd317b4c45b2394f0f88949f9a4c8ebea7affc8cb60c452477130987571161f5  ./docs/architecture/workspace-model-connection-v1.md
 e260999399a4e024054ea967d0ba836d9bfc2c381613a4c510c4bc9ffb69d2b6  ./docs/asf-lifecycle-recovery-guide.md
@@ -788,7 +788,7 @@ e1073a5c5f79329c3181057079fdc879eb84e7b690c179488f925ea98953a5e8  ./packages/bro
 d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7  ./packages/browser-shell/src/registry-v1.ts
 2479f02088792aff8dbebd3877a5aaf669f046618216c2501e17cde55375b2ac  ./packages/browser-workspace/src/analysis-v1.css
 a7ba2825670abfc09963f08582bfdb9055a948337c1df89cffdfedc06522b01a  ./packages/browser-workspace/src/api-v1.ts
-ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766  ./packages/browser-workspace/src/app.ts
+8ba872826d0091f159c2b8e3ebd41b9a7b2fc79bfa881c1fbdd51bd482cbe7d1  ./packages/browser-workspace/src/app.ts
 40264fc0ed45537a4d00c203b833439e03cbb50cb88e3955dc1220e33b894e6b  ./packages/browser-workspace/src/configuration-application-v1.ts
 4d5b6b23f41f895112ac616f3cefbb2400307fd1c1efb135aac7ed4a802d0ce1  ./packages/browser-workspace/src/configuration-draft-v1.css
 2f8ecda47e8bb296a7193deb31f7c424f5cc00940d0c0fe462af1150642a1e62  ./packages/browser-workspace/src/configuration-draft-view-v1.ts
@@ -809,8 +809,8 @@ c04f3eb6b558f25608ad6af7d62369d677095243bcac5ba3ee71e9cbe01093f6  ./packages/bro
 bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3  ./packages/browser-workspace/src/profile-editor-v1.ts
 b05970e556c39567111f492964c8a397d84d8bdef05aa9a9ebbd7753e467a9bc  ./packages/browser-workspace/src/workspace-administration-v1.css
 15efd5b2ccc4b9addee0848311f54bf4793cd1af78740f6950d5e1637dc527a9  ./packages/browser-workspace/src/workspace-administration-v1.ts
-29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db  ./packages/browser-workspace/src/workspace-agent-panel-v1.css
-5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c  ./packages/browser-workspace/src/workspace-agent-panel-v1.ts
+5eca3f899496d5f724b2784e34fcabd59f687d7b3ee271bb36ebf720fd201a83  ./packages/browser-workspace/src/workspace-agent-panel-v1.css
+65304c3149f54e342c8eb7c74726d0c7a975a4b106001fd297b04fe75f7ec49d  ./packages/browser-workspace/src/workspace-agent-panel-v1.ts
 ea92ee7b785b6863e5f0794c0419593fbd603186eea2fbb96737d381a950ac58  ./packages/browser-workspace/src/workspace-bootstrap-v1.css
 5c5475084e22d2fdd8d40910d5951682c6301eaa5dab8afbb8a1bb725d69d8c8  ./packages/browser-workspace/src/workspace-bootstrap-v1.html
 46cd7df3495fc3c6f927c19c8e023258a1b119bf9693dc856e7da1e1c4f1a2c7  ./packages/browser-workspace/src/workspace-bootstrap-v1.ts
@@ -2454,7 +2454,7 @@ b17b7b2d1d7c4903338ba22a5ff933a313a11ad5b0e18d78e7c102222297daaa  ./tests/pan547
 17b1f2835fb4bf76b0386909d1837a0b78315f37ea10f47123838b0146b9d0c2  ./tests/pan547/native-knowledge.test.mjs
 92821231e1e83a5bc457377874727ef9c0dc8c15a438c9104a1d05a9fb8091bb  ./tests/pan547/registration.test.mjs
 389c12fb5fb89c59955c794ed69dc58b54279de96e5756067ace0c41b8f09aef  ./tests/pan548/agent-run-transport-contract.test.mjs
-001b2dcdce1a064f23c60a513628759a5d4510807dfd4983bd19ef18b4141b1a  ./tests/pan548/browser-agent-panel.test.mjs
+7fb3e27689fd0887799f43c12f903a743e4dd18e39912224dfd22a9a7b19f0ba  ./tests/pan548/browser-agent-panel.test.mjs
 47e44bc2a0ff97807dd8e8857d24bec052399faad865477f12b152d53cae6847  ./tests/pan548/browser-context.test.mjs
 3aee8250d0a32756eeb0c36c90a0d95afcf16f5f97d682f3e8095e3056c201ef  ./tests/pan548/context-contract.test.mjs
 1ee94c8f680a048643fc4d16676b8f5c694353c391bf85d04d31c5070250ff6e  ./tests/pan548/native-agent-run.test.mjs
@@ -2845,5 +2845,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-b968a3c9a181416b2057c47b8c66168790a39554ecb817bb734efab169698c0e  ./verification/verification-dag-v2.json
+f8e8a78f0ff5afd29a90985a2192cc3a8a7b64908b21c74cf68da086d74821b0  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

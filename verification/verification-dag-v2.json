@@ -10121,7 +10121,7 @@
         {
           "path": "packages/browser-workspace/src/app.ts",
           "role": "SOURCE",
-          "sha256": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766"
+          "sha256": "8ba872826d0091f159c2b8e3ebd41b9a7b2fc79bfa881c1fbdd51bd482cbe7d1"
         },
         {
           "path": "packages/browser-workspace/src/plugin-diagnostics-v1.ts",
@@ -11433,17 +11433,17 @@
         {
           "path": "docs/architecture/workspace-agent-panel-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "395be9b564695360a18e689193afac87008ca460d59d7cbae8bd3c01f7d7c283"
+          "sha256": "4e2087f29df5322a4bc627533e2d46d7e5b40a64925ed45bcf72cbc18c00f6fd"
         },
         {
           "path": "packages/browser-workspace/src/workspace-agent-panel-v1.css",
           "role": "SOURCE",
-          "sha256": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db"
+          "sha256": "5eca3f899496d5f724b2784e34fcabd59f687d7b3ee271bb36ebf720fd201a83"
         },
         {
           "path": "packages/browser-workspace/src/workspace-agent-panel-v1.ts",
           "role": "SOURCE",
-          "sha256": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c"
+          "sha256": "65304c3149f54e342c8eb7c74726d0c7a975a4b106001fd297b04fe75f7ec49d"
         },
         {
           "path": "packages/contracts/src/workspace-agent-run-v1.ts",
@@ -11468,7 +11468,7 @@
         {
           "path": "tests/pan548/browser-agent-panel.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "001b2dcdce1a064f23c60a513628759a5d4510807dfd4983bd19ef18b4141b1a"
+          "sha256": "7fb3e27689fd0887799f43c12f903a743e4dd18e39912224dfd22a9a7b19f0ba"
         },
         {
           "path": "src/pan548/native-ui-task-projection-v2.mjs",
