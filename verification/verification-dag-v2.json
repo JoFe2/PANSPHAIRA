@@ -11383,7 +11383,7 @@
         {
           "path": "packages/browser-workspace/src/context-selection-v1.ts",
           "role": "SOURCE",
-          "sha256": "4a4ff21ca2ff28ff0957408598afad222ef877689320dae8d4f103ba88d230e5"
+          "sha256": "b4af4e25ef64af4c5dab5175a037a0e7ad3ef385f8b783a98f7debc950344bb5"
         },
         {
           "path": "packages/contracts/src/workspace-context-selection-v1.ts",
@@ -11443,22 +11443,22 @@
         {
           "path": "packages/browser-workspace/src/workspace-agent-panel-v1.ts",
           "role": "SOURCE",
-          "sha256": "65304c3149f54e342c8eb7c74726d0c7a975a4b106001fd297b04fe75f7ec49d"
+          "sha256": "ffa90e0cd4d54e688b7ee6ae1946ca7ce29d0b2e7d2c5c2f5e50a5dca7005c63"
         },
         {
           "path": "packages/contracts/src/workspace-agent-run-v1.ts",
           "role": "CONTRACT",
-          "sha256": "ec2f6673a14f7379e7ff05e5ea53b36e132347797afa2a781a4839d55a38fe05"
+          "sha256": "4cb70ef9bdc15fb073d8de9d3adf4dd856b9d5df1cf79d8ec68c3c34bb0ff324"
         },
         {
           "path": "src/pan548/native-agent-run.mjs",
           "role": "SECURITY",
-          "sha256": "4ebeacb51bfaf1ceb231dabbbf2f2573e0786e24a059688f4b56fa4e2be0596e"
+          "sha256": "73f20c1213daed38dd6409cc55dc7eee6236659f1abb67dbfddc282d5a98247a"
         },
         {
           "path": "tests/pan548/native-agent-run.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1ee94c8f680a048643fc4d16676b8f5c694353c391bf85d04d31c5070250ff6e"
+          "sha256": "3d3d926cf29151f53ffc5b323137d4177ce147377985391f5914304b5de31bdc"
         },
         {
           "path": "tests/pan548/agent-run-transport-contract.test.mjs",
@@ -11468,7 +11468,7 @@
         {
           "path": "tests/pan548/browser-agent-panel.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "7fb3e27689fd0887799f43c12f903a743e4dd18e39912224dfd22a9a7b19f0ba"
+          "sha256": "a23f20edf0759cf18ddecf4fe6e55a203ea40f7464fb9531921ea2b8c9353767"
         },
         {
           "path": "src/pan548/native-ui-task-projection-v2.mjs",
