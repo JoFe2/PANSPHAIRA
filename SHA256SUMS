@@ -442,7 +442,7 @@ cbf1ed6a03e936dd74b4cd66d9328a2318999212eb63c589934202a652b815c0  ./docs/archite
 bdf3fbfa63b2f549fa827a5a81eaa3876a7c813b02368c7441c62f37bac2ffd2  ./docs/architecture/rks-02-core-small-vs-raw-result-v1.md
 4e2087f29df5322a4bc627533e2d46d7e5b40a64925ed45bcf72cbc18c00f6fd  ./docs/architecture/workspace-agent-panel-v1.md
 929d52c286f4156ae2e93858a8ce9da94fb8ab5d0538ccbb2128ec52006b3dc7  ./docs/architecture/workspace-context-selection-v1.md
-f4bf96b49383fca9d10b470f1256bc99c235c7b9bd0256bae1db30637f0a0827  ./docs/architecture/workspace-model-connection-v1.md
+771e75801eed8dd81f81f2577776f415275a83437b5fef068cdcdcba69d93971  ./docs/architecture/workspace-model-connection-v1.md
 e260999399a4e024054ea967d0ba836d9bfc2c381613a4c510c4bc9ffb69d2b6  ./docs/asf-lifecycle-recovery-guide.md
 9d58a7c84f6c45f1cd1cac9dadb3f802d80e7fb76f10e168eda5c903d1691122  ./docs/asf-lifecycle-synthetic-proof.md
 a652a843a0e6c83661cab3883ac25db52eb6037cb90f3f78f02a1fd54ca0b7e1  ./docs/benchmarks/cks-05-falsification-report-template-v1.md
@@ -2854,5 +2854,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-064eab1a141129e6470b0b2f326ecff3ab0b85149ea969ce9a356f822d98dc9a  ./verification/verification-dag-v2.json
+b55edbb9b3909f84466567be13148ff79c2135edbd7c0811ec50b52711464e63  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json

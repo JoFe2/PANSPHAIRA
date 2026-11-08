@@ -10481,7 +10481,7 @@
         {
           "path": "docs/architecture/workspace-model-connection-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "f4bf96b49383fca9d10b470f1256bc99c235c7b9bd0256bae1db30637f0a0827"
+          "sha256": "771e75801eed8dd81f81f2577776f415275a83437b5fef068cdcdcba69d93971"
         },
         {
           "path": "packages/contracts/src/workspace-model-connection-v1.ts",
