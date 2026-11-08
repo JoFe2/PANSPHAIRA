@@ -402,7 +402,7 @@ responsiveTest549('PAN549 shared responsive registered navigation and five prese
     await page.setViewportSize(viewport);await page.keyboard.press('Control+Home');await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const observed=await page.evaluate(()=>{const rect=e=>{const r=e.getBoundingClientRect();return{x:r.x,right:r.right,y:r.y,bottom:r.bottom,width:r.width,height:r.height};};return{width:innerWidth,height:innerHeight,documentWidth:document.documentElement.scrollWidth,navigation:[...document.querySelectorAll('[id="shell.navigation"] .nav-label')].filter(e=>e.checkVisibility()).map(e=>{const range=document.createRange();range.selectNodeContents(e);const r=range.getBoundingClientRect();return{x:r.x,right:r.right,width:r.width,height:r.height};}),tools:[...document.querySelectorAll('.agent-quick-actions button')].filter(e=>e.checkVisibility()).map(rect),input:rect(document.getElementById('pan548-agent-intent'))};});
     responsiveAssert549.ok(observed.documentWidth<=observed.width);responsiveAssert549.ok(observed.navigation.length>0&&observed.navigation.every(r=>r.x>=0&&r.right<=observed.width&&r.width>0&&r.height>0),'Registered navigation glyphs remain within viewport');
-    if(profile==='jarvis'&&viewport.width<1200){responsiveAssert549.equal(observed.tools.length,3);responsiveAssert549.ok(observed.tools.every(r=>r.x>=0&&r.right<=observed.width&&r.y>=0&&r.bottom<=observed.height&&r.width>0&&r.height>0),'Initial local actions visible');responsiveAssert549.ok(observed.input.y>=0&&observed.input.bottom<=observed.height&&observed.input.height>0,'Initial input visible');}
+    if(profile==='jarvis'&&viewport.width<1200){responsiveAssert549.equal(observed.tools.length,4);responsiveAssert549.ok(observed.tools.every(r=>r.x>=0&&r.right<=observed.width&&r.y>=0&&r.bottom<=observed.height&&r.width>0&&r.height>0),'Initial local actions visible');responsiveAssert549.ok(observed.input.y>=0&&observed.input.bottom<=observed.height&&observed.input.height>0,'Initial input visible');}
    }
    await page.locator('[id="workspace.mode-task"]').click();responsiveAssert549.equal(await page.locator('[id="shell.main"]').isVisible(),true);
    await page.locator('[id="workspace.mode-assistant"]').click();responsiveAssert549.equal(await page.locator('[id="shell.agent-panel"]').isVisible(),true);
@@ -413,5 +413,115 @@ responsiveTest549('PAN549 shared responsive registered navigation and five prese
   await identity.dispose();responsiveAssert549.deepEqual(errors,[]);responsiveAssert549.equal(requests.filter(r=>r.method==='POST'&&/\/(?:agent-run\/(?:plan|start)|model-connection\/probe|erv-human\/decide)$/.test(r.path)).length,0);
   fixture.unchanged();responsiveAssert549.equal(JSON.stringify(nativeRows(fixture.native.root,'SELECT revision,effect_key,command,event FROM pan516_events ORDER BY revision')),before);
  }finally{try{await browser?.context.close();}finally{workspace?.close();configuration?.close();await fixture?.close();}}
+});
+// RUN86/RUN87: registered real-browser regression for the guidance-VISIBLE connection-limited
+// state. Explicit fixture choice (RUN87): the already-qualified nativeViewBrowserFixture546 owns
+// this native565→548 journey with the genuine current native owners — no fullchannel549
+// dependency, and the separately unaccepted full549 prerequisites stay exactly that. The genuine
+// EMPTY modelConnections catalogue renders NO_AUTHORIZED_CONNECTION; one explicit user plan click
+// is denied by the unchanged native owner (PLAN_DENIED — the proven owner behaviour for an empty
+// catalogue), followed by the pure guided navigation. RUN87 corrections from the parent-run
+// evidence: (1) the optional565 root is observed ATTACHED with its real data-state because the
+// Jarvis ASSISTANT area legitimately hides it — no invented visible-wait for an operation the UI
+// never performs; (2) the Rechnungswert selection uses the REAL task-area toggle plus the existing
+// module-editor disclosure before the profile switch, and the journey returns through the real
+// workspace.mode-assistant control afterwards; (3) the oracle spells what the product actually
+// renders — 'autorisierte Modellroute' and '…neuer Plan…'; the earlier 'autoriserte' misspelling
+// was a test-oracle defect, not a product change. It asserts full action-label containment inside
+// each hit target, guidance-row containment, and the unsent textarea inside the initial viewport
+// at tablet1024 and phone390 with scrollY pinned to 0 — the first viewport is proven without any
+// scroll assistance, never by scrolling into view. Finally it walks the native dialog's OWN
+// keyboard Escape return inside the real task area.
+responsiveTest549('PAN549_RUN86 guided recovery denial keeps honest guidance, all four full action labels inside their hit targets and the unsent textarea in the first viewport at tablet1024 and phone390; pure navigation to the existing area adds no request, keeps the unsent text and the native dialog Escape return stays usable; NOT LLM',{timeout:120000},async()=>{
+ const root=new URL('../../',import.meta.url),load=p=>import(new URL(p,root).href);
+ const{nativeViewBrowserFixture546}=await load('tests/pan546/browser-fixture.mjs');
+ const{writeFileSync:write86}=await import('node:fs');
+ let f;
+ try{
+  // Explicit, honest fixture choice: the SAME already-qualified native546 owner assembly the
+  // registered 565 UI integration cases use, with the genuine EMPTY modelConnections catalogue.
+  // Real current native546 owners (strictTLS, nonpersistent); no fake DTO, route, grant, probe,
+  // consent or start, no local fake model server and no new role.
+  f=await nativeViewBrowserFixture546({subjectId:'synthetic:erv-reviewer',humanDecisions:true,agentRuns:true,invoiceNavigation:true,configurationDrafts:true,modelConnections:[]});
+  const page=f.page,before=f.business(),taskToggle=page.locator('[id="workspace.mode-task"]'),assistantToggle=page.locator('[id="workspace.mode-assistant"]');
+  await page.setViewportSize({width:1586,height:992});await page.goto(f.tls.origin+'/t/tenant-a/workspace');
+  await page.getByRole('button',{name:'Eingangsrechnungsprüfung — nur lesen',exact:true}).click();
+  await page.locator('[id="shell.module-view"][data-state="CURRENT_NATIVE_VIEW"]').waitFor({state:'attached'});await page.locator('[id="workspace.appearance"][data-state="READY"]').waitFor({state:'attached'});
+  // The REAL native task-area contract before the Jarvis profile hides the view (the same
+  // registered disclosure opener as #548): real area toggle when visible, THEN the existing
+  // module-editor disclosure, THEN the card focus+Enter. No forced click on hidden DOM.
+  if(await taskToggle.isVisible())await taskToggle.click();
+  const viewDetails=page.locator('[id="workspace.module-editor-details"]');await viewDetails.waitFor({state:'attached'});
+  if(await viewDetails.getAttribute('open')===null)await viewDetails.locator(':scope > summary').click();
+  await page.locator('[id="shell.module-view"]').getByRole('button',{name:'Rechnungswert',exact:true}).focus();await page.keyboard.press('Enter');
+  await page.waitForFunction(()=>document.querySelector('[id="shell.context-selection"] button[aria-pressed="true"]')?.textContent==='Kontextauswahl: Persönliches Viewelement: invoice-value');
+  await page.getByRole('button',{name:'Design und Layout konfigurieren',exact:true}).click();await page.getByRole('combobox',{name:'Designprofil',exact:true}).selectOption('jarvis');await page.getByRole('button',{name:'Kuratierte Vorlage als Vorschau',exact:true}).click();await page.locator('[id="workspace.appearance-dialog"]').getByRole('button',{name:'Zur Arbeitsfläche',exact:true}).click();
+  responsiveAssert549.equal(await page.locator('body').getAttribute('data-design-profile'),'jarvis');
+  // The actual native565 readback for an owner with zero authorized routes — observed truthfully:
+  // the root is ATTACHED and its data-state IS the connection-limited state. The Jarvis ASSISTANT
+  // area legitimately hides the optional module, so no visible-wait invents an operation the UI
+  // never performs; the panel guidance names exactly this real state.
+  await page.locator('[id="shell.model-connection"]').waitFor({state:'attached'});
+  await page.waitForFunction(()=>document.getElementById('shell.model-connection')?.dataset.state==='NO_AUTHORIZED_CONNECTION');
+  const unsent='Ungesendeter Auftrag: geführte Wiederherstellung';await page.locator('#pan548-agent-intent').fill(unsent);
+  await page.evaluate(()=>{window.__run86Nodes={input:document.getElementById('pan548-agent-intent'),agent:document.getElementById('shell.agent-panel'),model:document.getElementById('shell.model-connection')};});
+  await page.locator('[id="shell.agent-panel"]').getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await page.locator('[id="shell.agent-panel"][data-state="PLAN_DENIED"]').waitFor();
+  const guidance=page.locator('[id="shell.agent-panel"] [data-agent-connection-guidance="true"]');
+  responsiveAssert549.equal(await guidance.isVisible(),true,'PAN549_RUN86 GUIDANCE ABSENT IN THE ACTUAL CONNECTION-LIMITED DENIAL');
+  const guidanceText=await guidance.innerText();
+  // Oracle against the ACTUAL rendered product copy (workspace-agent-panel-v1.ts): 'autorisierte
+  // Modellroute' and '…ein ausdrücklicher neuer Plan liefern…' — the test spells what the product
+  // speaks; the previous 'autoriserte'/'neuen Plan' oracle strings matched nothing real.
+  responsiveAssert549.ok(guidanceText.includes('Fehlender Schritt')&&guidanceText.includes('Verbindungsbereich öffnen')&&guidanceText.includes('autorisierte Modellroute')&&guidanceText.includes('neuer Plan'),'PAN549_RUN86 GUIDANCE NOT HONEST ABOUT THE MISSING STEP AND THE MANUAL REQUALIFICATION: '+guidanceText);
+  for(const viewport of [{width:1024,height:768},{width:390,height:844}]){
+   await page.setViewportSize(viewport);
+   if(await assistantToggle.isVisible())await assistantToggle.click();
+   await page.keyboard.press('Control+Home');await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+   const observed=await page.evaluate(()=>{const rect=e=>{const r=e.getBoundingClientRect();return{x:r.x,right:r.right,y:r.y,bottom:r.bottom,width:r.width,height:r.height};};const textRect=e=>{const range=document.createRange();range.selectNodeContents(e);const r=range.getBoundingClientRect();return{x:r.x,right:r.right,y:r.y,bottom:r.bottom};};const buttons=[...document.querySelectorAll('.agent-quick-actions button')].filter(e=>e.checkVisibility());const guidanceEl=document.querySelector('[data-agent-connection-guidance="true"]');const input=document.getElementById('pan548-agent-intent');return{width:innerWidth,height:innerHeight,documentWidth:document.documentElement.scrollWidth,documentHeight:document.documentElement.scrollHeight,scrollY:scrollY,buttons:buttons.map(rect),labels:buttons.map(textRect),guidance:rect(guidanceEl),guidanceLabel:textRect(guidanceEl),input:rect(input)};});
+   responsiveAssert549.equal(observed.scrollY,0,'PAN549_RUN86 FIRST VIEWPORT MUST BE PROVEN WITHOUT SCROLL ASSISTANCE');
+   responsiveAssert549.ok(observed.documentWidth<=observed.width,'PAN549_RUN86_GLOBAL_OVERFLOW_'+viewport.width);
+   responsiveAssert549.equal(observed.buttons.length,4,'PAN549_RUN86_FOUR_GUIDED_ACTIONS_MISSING_'+viewport.width);
+   observed.buttons.forEach((b,i)=>{
+    responsiveAssert549.ok(b.x>=0&&b.right<=observed.width&&b.y>=0&&b.bottom<=observed.height&&b.width>0&&b.height>0,'PAN549_RUN86_ACTION_HIT_TARGET_OUTSIDE_FIRST_VIEWPORT_'+viewport.width+':'+i);
+    responsiveAssert549.ok(observed.labels[i].x>=b.x-1&&observed.labels[i].right<=b.right+1&&observed.labels[i].y>=b.y-1&&observed.labels[i].bottom<=b.bottom+1,'PAN549_RUN86_FULL_ACTION_LABEL_NOT_INSIDE_HIT_TARGET_'+viewport.width+':'+i);
+   });
+   responsiveAssert549.ok(observed.input.x>=0&&observed.input.right<=observed.width&&observed.input.y>=0&&observed.input.bottom<=observed.height&&observed.input.height>0,'PAN549_RUN86_UNSENT_TEXTAREA_OUTSIDE_FIRST_VIEWPORT_'+viewport.width);
+   responsiveAssert549.ok(observed.guidance.x>=0&&observed.guidance.right<=observed.width&&observed.guidance.width>0&&observed.guidance.height>0&&observed.guidance.bottom<=observed.documentHeight,'PAN549_RUN86_GUIDANCE_ROW_NOT_CONTAINED_'+viewport.width);
+   responsiveAssert549.ok(observed.guidanceLabel.x>=observed.guidance.x-1&&observed.guidanceLabel.right<=observed.guidance.right+1&&observed.guidanceLabel.y>=observed.guidance.y-1&&observed.guidanceLabel.bottom<=observed.guidance.bottom+1,'PAN549_RUN86_GUIDANCE_TEXT_OUTSIDE_ITS_ROW_'+viewport.width);
+   const image=responsiveJoin549(process.env.PAN546_BROWSER_EVIDENCE,'run86-guidance-visible-'+viewport.width+'.png');await page.screenshot({path:image,fullPage:false});
+   write86(image+'.json',JSON.stringify({actualNative:true,fixture:'nativeViewBrowserFixture546',syntheticData:true,physicalDevice:false,visualAcceptance:false,wholeVisualAcceptance:false,state:'PLAN_DENIED',connectionAreaState:'NO_AUTHORIZED_CONNECTION',guidanceText,viewport,observed},null,2)+'\n');
+  }
+  // The pure navigation itself: zero requests of its own, the denial truth stands, the typed text survives.
+  responsiveAssert549.equal(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/agent-run/plan')).length,1,'PAN549_RUN86_DENIAL_REACHED_WITHOUT_THE_EXACT_ONE_MANUAL_PLAN_REQUEST');
+  const requestsBeforeNav=f.requests.length;
+  await page.getByRole('button',{name:'Vorhandenen sicheren Verbindungsbereich öffnen und fokussieren — keine automatische Anfrage, keine Auswahländerung',exact:true}).click();
+  await page.locator('[id="shell.agent-panel"][data-state="CONNECTION_AREA_FOCUSED"]').waitFor();
+  const statusText=await page.locator('[id="shell.agent-panel"] [role="status"]').first().innerText();
+  responsiveAssert549.ok(statusText.includes('Vorhandener Verbindungsbereich geöffnet und fokussiert')&&statusText.includes('Keine Anfrage, keine Freigabe, keine Planung'),'PAN549_RUN86 NAVIGATION OUTCOME NOT TRUTHFUL FOR THE EMPTY-ROUTE AREA: '+statusText);
+  responsiveAssert549.equal(await guidance.isHidden(),true,'PAN549_RUN86 GUIDANCE OUTLIVED THE CONNECTION-LIMITED STATE');
+  responsiveAssert549.equal(f.requests.length,requestsBeforeNav,'PAN549_RUN86_PURE_NAVIGATION_ADDED_A_REQUEST');
+  responsiveAssert549.equal(f.requests.filter(r=>r.method==='POST'&&(r.path.endsWith('/agent-run/start')||r.path.includes('/model-connection/probe')||r.path.endsWith('/erv-human/decide'))).length,0,'PAN549_RUN86_GUIDED_RECOVERY_SENT_AN_AUTOMATIC_REQUEST');
+  // The dialog's OWN keyboard contract inside the REAL task area: the guided navigation reopened
+  // the dialog through its own opener; Escape from the focused dialog control closes it and hands
+  // focus back to that opener — with zero requests of its own.
+  await taskToggle.click();
+  const dialogOpener=page.locator('[id="shell.model-connection"] > button');
+  await page.locator('#pan565-connection-body').waitFor();await dialogOpener.waitFor();
+  responsiveAssert549.equal(await dialogOpener.innerText(),'Verbindungsdialog schließen','PAN549_RUN86 GUIDED NAVIGATION DID NOT REOPEN THE NATIVE DIALOG THROUGH ITS OWN OPENER');
+  await page.locator('#pan565-read').focus();
+  await page.keyboard.press('Escape');
+  responsiveAssert549.equal(await page.locator('#pan565-connection-body').isHidden(),true,'PAN549_RUN86 NATIVE ESCAPE DID NOT CLOSE THE GUIDED DIALOG');
+  responsiveAssert549.equal(await dialogOpener.getAttribute('aria-expanded'),'false','PAN549_RUN86 NATIVE ESCAPE LEFT THE DIALOG EXPANDED');
+  responsiveAssert549.equal(await page.evaluate(()=>document.activeElement?.textContent==='Sichere Modellverbindung öffnen'),true,'PAN549_RUN86 ESCAPE DID NOT RETURN FOCUS TO THE REAL OPENER');
+  // Same native nodes, caret position and unchanged NO_AUTHORIZED connection truth after the whole guided journey.
+  responsiveAssert549.equal(await page.evaluate(()=>{const saved=window.__run86Nodes,input=document.getElementById('pan548-agent-intent'),model=document.getElementById('shell.model-connection');return saved.input===input&&saved.agent===document.getElementById('shell.agent-panel')&&saved.model===model&&input.value==='Ungesendeter Auftrag: geführte Wiederherstellung'&&input.selectionStart===input.value.length&&input.selectionEnd===input.value.length&&model.dataset.state==='NO_AUTHORIZED_CONNECTION';}),true,'PAN549_RUN86 GUIDED RECOVERY MOVED NODES, CARET OR CONNECTION TRUTH');
+  await assistantToggle.click();
+  responsiveAssert549.equal(await page.locator('#pan548-agent-intent').inputValue(),unsent,'PAN549_RUN86_GUIDED_RECOVERY_LOST_THE_UNSENT_TEXT');
+  responsiveAssert549.equal(f.requests.length,requestsBeforeNav,'PAN549_RUN86_ESCAPE_OR_AREA_RETURN_ADDED_A_REQUEST');
+  responsiveAssert549.deepEqual(f.errors,[]);
+  responsiveAssert549.equal(f.business(),before,'PAN549_RUN86_GUIDED_RECOVERY_TOUCHED_THE_BUSINESS_SOURCE');
+  responsiveAssert549.equal(f.readPersisted().revision,0,'PAN549_RUN86_GUIDED_RECOVERY_PERSISTED_A_PROFILE_REVISION');
+ }finally{await f?.close();}
 });
 // PAN549_RESPONSIVE_WORKSPACE_NATIVE_END

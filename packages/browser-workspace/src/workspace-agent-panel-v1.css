@@ -16,7 +16,9 @@
 .agent-welcome { text-align:center; padding:6px 0 1px; }.agent-orb { display:grid; place-items:center; width:59px; height:59px; margin:0 auto 12px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#aeeaff,#c4c8ff 55%,#ded0ff); box-shadow:0 0 0 7px #f5f6fd; }.agent-orb svg { width:40px; height:40px; opacity:.65; }
 .agent-welcome h3 { margin:0 0 7px; font-size:20px; font-weight:650; letter-spacing:-.035em; color:#2e3f5d; }.agent-welcome p { max-width:31ch; margin:0 auto; font-size:11px; line-height:1.6; color:#7b8ba3; }
 .agent-quick-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }.workspace-agent .agent-quick-actions button { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:84px; padding:9px 6px; text-align:center; font-size:10px; border-color:#e6eaf5; box-shadow:0 2px 5px #2a427003; }
-.agent-quick-actions button:before { content:'▦'; margin-bottom:7px; color:#3b8ee6; font-size:23px; line-height:1.2; }.agent-quick-actions button:nth-child(2):before { content:'◎'; color:#6386d9; }.agent-quick-actions button:nth-child(3):before { content:'▤'; color:#9273d3; }
+.agent-quick-actions button:before { content:'▦'; margin-bottom:7px; color:#3b8ee6; font-size:23px; line-height:1.2; }.agent-quick-actions button:nth-child(2):before { content:'◎'; color:#6386d9; }.agent-quick-actions button:nth-child(3):before { content:'▤'; color:#9273d3; }.agent-quick-actions button:nth-child(4):before { content:'⇄'; color:#3b9a76; }
+/* RUN82: the honest guidance line spans the full quick-action row; it only ever appears in connection-limited owner-bound states and claims no readiness itself. */
+.workspace-agent .agent-quick-actions small { grid-column:1/-1; margin:0; padding:7px 9px; border:1px solid #ecd7ad; border-radius:8px; background:#fff5e6; color:#946225; font-size:10px; line-height:1.5; text-align:left; }
 .workspace-agent-body>[role="status"] { margin:0; padding:9px 11px; border:1px solid #e2eaf6; border-radius:8px; background:#eff5ff; color:#6c83a2; font-size:10px; line-height:1.6; }
 .workspace-agent[data-state*="DENIED"] .workspace-agent-body>[role="status"],.workspace-agent[data-state*="UNCONFIRMED"] .workspace-agent-body>[role="status"] { background:#fff5e6; border-color:#ecd7ad; color:#946225; }
 .agent-suggestions { padding-top:2px; }.agent-suggestions h3 { margin:0 0 8px; color:#657b9a; font-size:10px; font-weight:600; }
@@ -71,3 +73,16 @@ content up to the existing mobile max-height; inside that cap the body stays the
 only scrollport, so diagnosis rows scroll inside the panel and the composer
 stays inside the panel bounds. Desktop (>799px) keeps the fitted dock height. */
 @media (max-width:799px) { .workspace-assistant-column>.workspace-agent { height:auto; max-height:calc(100dvh - 244px); } }
+
+/* RUN88 PUI-07-AC02: honest missing-operation block inside the existing
+compose form. It spans one flex row so the accepted control geometry above it
+is unchanged; the short reason lines stay readable and wrap on desktop and 390
+without overflow. The focus outline matches the panel's keyboard convention so
+the keyboard/AT-reachable group (disabled buttons cannot focus; each reason
+line is its button's aria-describedby target) is visible when tabbed to.
+Presentation only: no new action, state or grant is styled in. */
+.workspace-agent .workspace-agent-task-operations { flex-basis:100%; margin:0; padding:8px 9px; border:1px solid #e2eaf6; border-radius:8px; background:#f7f9ff; color:#607895; font-size:10px; line-height:1.55; }
+.workspace-agent .workspace-agent-task-operations p { margin:0 0 5px; overflow-wrap:anywhere; }
+.workspace-agent .workspace-agent-task-operations p:last-child { margin-bottom:0; }
+.workspace-agent .workspace-agent-task-operations small { display:block; color:#7387a1; }
+.workspace-agent .workspace-agent-task-operations:focus-visible { outline:3px solid #2b7de0; outline-offset:3px; }

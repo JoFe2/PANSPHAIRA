@@ -12,7 +12,7 @@ import * as nativeModelConnection from '../../src/pan565/native-model-connection
 import {MODEL_UI_WIRE_ALIAS_V1} from '../../src/pan565/connection-transport.mjs';
 import {syntheticModelAccessPolicyV1} from '../../dist/packages/contracts/src/model-access-broker.js';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
-import {validateWorkspaceAgentReadV1} from '../../dist/packages/contracts/src/workspace-agent-run-v1.js';
+import {validateWorkspaceAgentReadV1,validateWorkspaceAgentPlanV1} from '../../dist/packages/contracts/src/workspace-agent-run-v1.js';
 import {nativeWorkspaceViewFieldsV1} from '../../src/pan546/native-data-catalog.mjs';
 async function fixture(change=()=>{}){
  const {createNativeWorkspaceAgentRunV1}=await import('../../src/pan548/native-agent-run.mjs');
@@ -335,3 +335,18 @@ test('PAN548_NATIVE_BOUND_ADMISSION_REVOKE_STOPS_RUNNING_WITH_CURRENT_ORIGINAL_C
   assert.equal(x.posts(),1,'the released callback never becomes a second POST');
  }finally{x.release();await x.close();}
 });
+// RUN88 PUI-07-AC02: direct forged operations/reason/schema negatives at the
+// closed DTO boundary, now that the typed operations travel on BOTH plan and
+// read. The existing validators already denied malformed values and are NOT
+// loosened: exactly {available:false, exact closed reason} per operation
+// survives; every other availability, swapped/foreign reason, missing or extra
+// key, wrapper shape or the whole-field removal denies through the SAME
+// production boundary the HMI consumer relies on.
+test('PAN548_RUN88_CLOSED_TASK_OPERATIONS_DTO_DENIES_FORGED_AVAILABILITY_REASON_OR_SHAPE_ON_PLAN_AND_READ',async()=>{const x=await fixture();try{
+ const p=x.plan('Nur Rechnungswert größer.'),readDto=JSON.parse(JSON.stringify(await x.start(p))),planDto=JSON.parse(JSON.stringify(p));
+ const checkRead=v=>validateWorkspaceAgentReadV1(v,x.t.context,nativeWorkspaceViewFieldsV1),checkPlan=v=>validateWorkspaceAgentPlanV1(v,x.t.context),closed={cancel:{available:false,reason:'NO_NATIVE_MODEL_TASK_CANCEL_CONTRACT'},resume:{available:false,reason:'NO_NATIVE_MODEL_TASK_RESUME_CONTRACT'}};
+ assert.deepEqual(checkRead(readDto).operations,closed,'the true native read carries exactly the closed operations contract through the boundary');
+ assert.deepEqual(checkPlan(planDto).operations,closed,'the true native plan carries exactly the closed operations contract through the boundary');
+ const forgeries=[v=>{v.operations.cancel.available=true;},v=>{v.operations.resume.available=true;},v=>{v.operations.cancel.reason='CANCEL_QUEUED_BY_CALLER';},v=>{v.operations.resume.reason='NO_NATIVE_MODEL_TASK_CANCEL_CONTRACT';},v=>{v.operations.cancel.reason='NO_NATIVE_MODEL_TASK_RESUME_CONTRACT';},v=>{v.operations.cancel={available:false};},v=>{v.operations.resume={available:false,reason:'NO_NATIVE_MODEL_TASK_RESUME_CONTRACT',queued:true};},v=>{v.operations={cancel:{available:false,reason:'NO_NATIVE_MODEL_TASK_CANCEL_CONTRACT'}};},v=>{v.operations={resume:{available:false,reason:'NO_NATIVE_MODEL_TASK_RESUME_CONTRACT'}};},v=>{v.operations={};},v=>{v.operations=null;},v=>{v.operations='NO_NATIVE_MODEL_TASK_CANCEL_CONTRACT';},v=>{delete v.operations;}];
+ for(const forge of forgeries){const a=structuredClone(readDto),b=structuredClone(planDto);forge(a);forge(b);assert.throws(()=>checkRead(a),/WORKSPACE_AGENT_DTO_DENIED/,'forged operations must deny on the closed read DTO');assert.throws(()=>checkPlan(b),/WORKSPACE_AGENT_DTO_DENIED/,'forged operations must deny on the closed plan DTO');}
+}catch(error){throw error;}finally{await x.close();}});

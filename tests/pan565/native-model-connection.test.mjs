@@ -52,3 +52,50 @@ test('543 closed native task grant schema admits exactly the two code-owned task
  const accepted=f.profiles.readModelConnection(p).state;assert.equal(accepted.grant.purpose,'purpose:pan574-composition-feedback');assert.equal(accepted.grant.payloadDigest,'d'.repeat(64));
  rev=write(rev,grant({})).revision;assert.equal(rev,row.revision+3);// the ordinary probe-consent shape without task keys stays admitted
  assert.equal(f.server.post(),0);}));
+// RUN73: current-owner consent-grant expiry remains real native source authority. The closed
+// readback now discloses the actual consent expiry (never the owner offer expiry) so consumers
+// can expire cached readiness truthfully. Independent reads keep the past grant as a historic
+// record, dispatch stays denied, and explicit re-consent works only while the real original
+// prerequisites and owner offer still permit it. No provider POST, no ledger change, no retry.
+test('565 consent-grant expiry is native-authoritative: disclosed consent expiry is distinct from the owner offer, expiry keeps history readable, denies dispatch and re-consent needs genuine prerequisites',()=>use(async f=>{
+ await f.prerequisites();
+ const pre=f.read();
+ assert.equal(pre.consent,'NOT_GRANTED');assert.equal(pre.consentExpiresAtMs,null);
+ assert.throws(()=>validateModelConnectionReadbackV1({...pre,consentExpiresAtMs:Date.now()}),/READBACK_DENIED/);// NOT_GRANTED never carries a grant expiry record
+ const granted=f.consent();
+ assert.equal(granted.consent,'BOUNDED_ONCE');assert.equal(granted.readyForInference,true);
+ assert.ok(Number.isSafeInteger(granted.consentExpiresAtMs)&&granted.consentExpiresAtMs>Date.now()&&granted.consentExpiresAtMs<=Date.now()+30000,'consent expiry must be the bounded session grant window');
+ assert.ok(granted.consentExpiresAtMs<granted.inferenceOffer.expiresAtMs,'consent grant expiry must stay distinct from and inside the current owner product offer expiry');
+ for(const forged of [null,'7',-1,1.5])assert.throws(()=>validateModelConnectionReadbackV1({...granted,consentExpiresAtMs:forged}),/READBACK_DENIED/,'direct negative validation for forged consent expiry '+JSON.stringify(forged));
+ // Advance only the test-time clock seam past the persisted grant expiry while the real 60s
+ // prerequisite lifetime is still inside: the server itself, not any browser, now says expired.
+ const advanced=Date.now()+31000,clock=mock.method(Date,'now',()=>advanced);let again;
+ try{
+  const r=f.read();
+  assert.equal(r.consent,'EXPIRED_OR_STALE');
+  assert.equal(r.consentExpiresAtMs,granted.consentExpiresAtMs);// the independently-read past grant stays a truthful historic record
+  assert.equal(r.readyForInference,false);
+  assert.equal(r.inferenceOffer.expiresAtMs,f.options.productGrant.expiresAtMs);// the owner offer remains the current, separate authority
+  assert.deepEqual(Object.values(r.checks).map(c=>c.state),['PASS','PASS','PASS','NOT_RUN']);// independently confirmed records are shown as history, not rewritten
+  await assert.rejects(f.probe('INFERENCE'),/CONSENT_DENIED/);// visible expiry is enforced natively before any dispatch
+  assert.equal(f.server.post(),0);assert.equal(f.server.get(),3);
+  assert.ok(!JSON.stringify(r).includes(syntheticCredential565));// no secret or raw data enters the expiry surface
+  // Explicit fresh consent succeeds again only from the still-valid original prerequisites.
+  again=f.consent();
+  assert.equal(again.consent,'BOUNDED_ONCE');assert.equal(again.readyForInference,true);
+  assert.ok(again.consentExpiresAtMs>advanced&&again.consentExpiresAtMs<=advanced+30000&&again.consentExpiresAtMs<again.inferenceOffer.expiresAtMs);
+  assert.notEqual(again.consentExpiresAtMs,granted.consentExpiresAtMs);// a renewed bounded grant, not an extension of the old one
+  assert.equal(f.server.post(),0);
+ }finally{clock.mock.restore();}
+ // Once the genuine 60s prerequisite lifetime has passed, the expired grant is not silently renewed.
+ const stale=Date.now()+61000,clock2=mock.method(Date,'now',()=>stale);
+ try{
+  const r=f.read();
+  assert.deepEqual(Object.values(r.checks).map(c=>c.state),['STALE','STALE','STALE','NOT_RUN']);
+  assert.equal(r.consent,'EXPIRED_OR_STALE');assert.equal(r.consentExpiresAtMs,again.consentExpiresAtMs);
+  assert.equal(r.readyForInference,false);
+  assert.throws(f.consent,/PRODUCT_CONSENT_DENIED/);
+  assert.equal(f.server.post(),0);assert.equal(f.server.get(),3);
+ }finally{clock2.mock.restore();}
+ assert.equal(holds(f).length,0);// the expiry journey touched the ledger neither for holds nor for resets
+}));

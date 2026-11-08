@@ -43,6 +43,12 @@ try{
   if(!env.TMPDIR)throw new Error('PAN549_OWNED_SCRATCH_REQUIRED');
   if(!env.PAN549_BROWSER_EVIDENCE){env.PAN549_BROWSER_EVIDENCE=mkdtempSync(join(env.TMPDIR,'pan549-browser-evidence-'));process.stdout.write('PAN549_BROWSER_EVIDENCE_DIR='+env.PAN549_BROWSER_EVIDENCE+'\n');}
   env.PAN527_BROWSER_MODULE=env.PAN527_BROWSER_MODULE||import.meta.resolve('playwright');env.PAN527_CERTUTIL=env.PAN527_CERTUTIL||'certutil';
+  // RUN89 canonical prerequisite: the registered PAN549_RUN86 real-browser case drives the genuine
+  // nativeViewBrowserFixture546, whose own gate requires PAN546_BROWSER_EVIDENCE. The ordinary
+  // runner links it to the explicitly owned 546 directory or, absent that, to the owned 549
+  // evidence directory provisioned above under the same scratch rules — a registered browser test
+  // can never run without its real evidence directory, and an explicit owned env always wins.
+  env.PAN546_BROWSER_EVIDENCE=env.PAN546_BROWSER_EVIDENCE||env.PAN549_BROWSER_EVIDENCE;
   for(const argv of [['node_modules/typescript/bin/tsc','-p','tsconfig.json'],['scripts/build-pan541-browser.mjs'],['--test','--test-concurrency=1','--test-reporter=tap',...files]]){
    const run=spawnSync(process.execPath,argv,{env,stdio:'inherit'});if(run.error||run.signal||run.status===null)throw new Error('PAN549_TEST_PROCESS_INTERRUPTED');if(run.status!==0){process.exitCode=run.status;break;}
   }
