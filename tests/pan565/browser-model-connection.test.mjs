@@ -9,11 +9,12 @@ import {nativeViewBrowserFixture546} from '../pan546/browser-fixture.mjs';
 import {localModelServer565,limits565,syntheticCredential565} from './native-fixture.mjs';
 import {connectionTransportIdentityV1} from '../../src/pan565/connection-transport.mjs';
 import {MODEL_CONNECTION_TEST_DATA_DIGEST_V1} from '../../src/pan565/native-model-connection.mjs';
+import {request527} from '../pan527/helpers.mjs';
 const root='[id="shell.model-connection"]',schema='pansphaira.workspace-model-connection/';
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const posts=(f,suffix)=>f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/'+suffix));
 function evidence(){assert.ok(process.env.PAN565_BROWSER_EVIDENCE,'PAN565 actual evidence required, never skip');mkdirSync(process.env.PAN565_BROWSER_EVIDENCE,{recursive:true,mode:0o700});return process.env.PAN565_BROWSER_EVIDENCE;}
-async function fixture({grant=false,empty=false,two=false}={}){const server=await localModelServer565(),privateRoot=mkdtempSync(join(tmpdir(),'pan565-browser-existing-secret-')),credentialFile=join(privateRoot,'existing-model-credential');writeFileSync(credentialFile,syntheticCredential565+'\n',{mode:0o600});const identity=connectionTransportIdentityV1(),summary={connectionId:'connection:synthetic-v1',routeId:'route:synthetic-openai-chat-completions',provider:'provider:synthetic-model',model:'model:synthetic-v1',protocol:'OPENAI_CHAT_COMPLETIONS',authMethod:'EXISTING_SECRET_REFERENCE',secretReference:'credential-handle:synthetic-model-v1',evidenceClass:'SYNTHETIC_ONLY',availability:{runtime:true,provider:true,auth:true,model:true,functions:true},selectable:true,identity:{...identity,deploymentId:'deployment:synthetic-local-v1',configurationRevision:1}};const options={summary,target:{origin:server.origin,allowedAddresses:['127.0.0.1'],localOnly:true},credentialFile,pricing:null,productGrant:grant?{limits:limits565,testDataDigest:MODEL_CONNECTION_TEST_DATA_DIGEST_V1,expiresAtMs:Date.now()+180000}:null};let f;const connections=[options];if(two){options.summary={...summary,connectionId:'connection:synthetic-common-prefix-aaaaaaaaaaaa-first-v1'};connections.push({...options,summary:{...options.summary,connectionId:'connection:synthetic-common-prefix-aaaaaaaaaaaa-second-v1'}});}try{f=await nativeViewBrowserFixture546({modelConnections:empty?[]:connections});}catch(e){await server.close();rmSync(privateRoot,{recursive:true,force:true});throw e;}return {...f,server,credentialFile,async close(){try{await f.close();}finally{await server.close();rmSync(privateRoot,{recursive:true,force:true});}}};}
+async function fixture({grant=false,empty=false,two=false,ownerBound=false}={}){const server=await localModelServer565(),privateRoot=mkdtempSync(join(tmpdir(),'pan565-browser-existing-secret-')),credentialFile=join(privateRoot,'existing-model-credential');writeFileSync(credentialFile,syntheticCredential565+'\n',{mode:0o600});const identity=connectionTransportIdentityV1(),summary={connectionId:'connection:synthetic-v1',routeId:'route:synthetic-openai-chat-completions',provider:'provider:synthetic-model',model:'model:synthetic-v1',protocol:'OPENAI_CHAT_COMPLETIONS',authMethod:'EXISTING_SECRET_REFERENCE',secretReference:'credential-handle:synthetic-model-v1',evidenceClass:'SYNTHETIC_ONLY',availability:{runtime:true,provider:true,auth:true,model:true,functions:true},selectable:true,identity:{...identity,deploymentId:'deployment:synthetic-local-v1',configurationRevision:1}};if(ownerBound)Object.assign(summary,{evidenceClass:'OWNER_BOUND_NOT_QUALIFIED',provider:'provider:local-owner-test'});const options={summary,target:{origin:server.origin,allowedAddresses:['127.0.0.1'],localOnly:true},credentialFile,pricing:ownerBound?{currency:'EUR',revision:1,inputMicrosPerMillionTokens:0,outputMicrosPerMillionTokens:0}:null,productGrant:grant?{limits:limits565,testDataDigest:MODEL_CONNECTION_TEST_DATA_DIGEST_V1,expiresAtMs:Date.now()+180000}:null};let f;const connections=[options];if(two){options.summary={...summary,connectionId:'connection:synthetic-common-prefix-aaaaaaaaaaaa-first-v1'};connections.push({...options,summary:{...options.summary,connectionId:'connection:synthetic-common-prefix-aaaaaaaaaaaa-second-v1'}});}try{f=await nativeViewBrowserFixture546({modelConnections:empty?[]:connections});}catch(e){await server.close();rmSync(privateRoot,{recursive:true,force:true});throw e;}return {...f,server,credentialFile,async close(){try{await f.close();}finally{await server.close();rmSync(privateRoot,{recursive:true,force:true});}}};}
 async function current(f){await f.page.locator(root+'[data-state="CURRENT_CONNECTION"]').waitFor();}
 async function open(f){await f.page.goto(f.tls.origin+'/t/tenant-a/workspace');await f.page.locator(root).waitFor();await f.page.locator(root).getByRole('button',{name:'Sichere Modellverbindung öffnen',exact:true}).click();}
 async function snapshot(f){let timer;try{await Promise.race([f.flushResponses(),new Promise((_,reject)=>{timer=setTimeout(()=>{console.log('PAN565 actual incomplete browser responses '+JSON.stringify(f.responses.map(r=>({path:r.path,status:r.status,method:r.method,bodyReadCompleted:r.value!==null,bodyReadFailure:r.bodyReadFailure??null}))));reject(Error('PAN565_NATIVE_RESPONSE_BODY_NOT_COMPLETED'));},10000);})]);}finally{clearTimeout(timer);}return f.responses.filter(r=>r.path.endsWith('/model-connection')&&r.method==='GET'&&r.status===200).at(-1)?.value;}
@@ -25,6 +26,14 @@ async function probe(f,label,phase){await f.page.locator(root).getByRole('button
 // Existing test-owned leading source only: no new public ledger enumeration,
 // no owner reopen, no new endpoint or DTO.
 function persistedConnectionRow565(f){const db=new DatabaseSync(join(f.root,'browser-profiles.sqlite'),{readOnly:true});try{const rows=db.prepare("SELECT revision,state,instance,generation FROM workspace_model_connections WHERE tenant='tenant-a' AND subject='synthetic:erv-reader'").all();assert.equal(rows.length,1,'PAN565_MUTATION_PERSISTED_ROW_NOT_IN_REAL_SOURCE');return{revision:rows[0].revision,instance:rows[0].instance,generation:rows[0].generation,state:JSON.parse(rows[0].state)};}finally{db.close();}}
+// RUN104: closed-route reconciliation probes. The fixture deliberately does not parse non-200
+// bodies (RUN66), so every in-page probe reads its OWN real response body: a bare non-200 would
+// pass vacuously on the closed route gate before the owner. The raw request527 probes cover the
+// Origin/CSRF gates that a real browser always sends implicitly, so each denial names its exact
+// authority (closed route/method gate, ingress origin, route CSRF, session-bound scope, owner
+// reason) as the real [status,error] facts.
+async function reconcileProbe565(f,cases){return f.page.evaluate(async(cs)=>{const out=[];for(const c of cs){const headers={'content-type':'application/json',...(c.session===undefined?{}:{'x-pan565-session':c.session})};const response=await fetch('/t/tenant-a/workspace/model-connection/reconcile',{method:'POST',credentials:'same-origin',headers,body:JSON.stringify(c.body)});let error=null;try{error=(await response.json()).error;}catch{}out.push([c.name,response.status,error]);}return out;},cases);}
+async function rawProbe565(f,path,{method='POST',headers={},body}={}){const r=await request527(f.tls,path,{cookie:f.session().cookieHeader.split(';')[0],...headers},method,body);let error=null;try{error=JSON.parse(r.body).error;}catch{}return[r.status,error];}
 // RUN69: deterministic REAL state observation. The attach observer watches
 // childList on the document NODE itself — documentElement may not exist yet
 // when an addInitScript runs, and observing it recorded nothing at all (the
@@ -695,3 +704,194 @@ test('UI reference default composition keeps Jarvis orb primary and Notebook nav
  }finally{await f.close();}
 });
 // End of bounded default-composition regression.
+// RUN103/RUN104: a retained UNKNOWN_USAGE hold on the code-owned synthetic zero-price route is an
+// honestly disclosed, recoverable dialog state instead of a browser dead end. The closed readback
+// discloses the exact held operation; the dialog shows it and offers exactly ONE action — the
+// EXISTING owner reconciliation over its narrowly closed protected route POST. RUN104 completed
+// that end-to-end path in src/pan527/origin-session-adapter.mjs: the closed route regexp and the
+// closed POST allowlist now admit exactly app.js/select/probe/consent/reconcile — no wildcard
+// owner-method exposure — so the browser action really reaches the generic owner branch instead
+// of dying at HOSTED_ROUTE_DENIED, with the same mandatory independent readback every other
+// mutation performs. Negatives ride the same journey and each asserts its EXACT authority answer,
+// never a bare non-200: the closed route/method gate, the ingress Origin gate, the route CSRF gate,
+// the session-bound scope and the owner's own MODEL_CONNECTION_RECONCILIATION_DENIED /
+// MODEL_CONNECTION_INPUT_DENIED reason all name themselves; a settled operation cannot be
+// reconciled twice; after logout the route denies before the owner. The reconcile triggers no
+// provider retry and no provider GET, the persisted source row keeps the settled operation, and
+// recovery continues only over the existing honest path (reference reset, fresh phases, fresh
+// capped consent, exactly one new bounded synthetic inference). Nothing here is real-model
+// acceptance; the timed-out original dispatch is settled as zero-price-synthetic, never re-run.
+test('565 retained synthetic UNKNOWN hold: exact operation disclosed, forged reconcile denied by the owner, explicit zero-price reconcile over the existing route settles with one POST plus independent readback and zero provider retry, then fresh prerequisites/consent/inference recover; NOT model acceptance',async()=>{
+ const f=await fixture({grant:true});
+ try{
+  await open(f);await current(f);await choose(f);
+  for(const[label,phase]of[['Erreichbarkeit','REACHABILITY'],['Authentifizierung','AUTHENTICATION'],['Modellverfügbarkeit','MODEL_AVAILABILITY']])await probe(f,label,phase);
+  const rPre=await snapshot(f);assert.equal(rPre.unknownUsage,null,'PAN565_HOLD_DISCLOSED_BEFORE_ANY_DISPATCH');
+  await f.page.locator(root).getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();await current(f);
+  f.server.setMode('TIMEOUT');
+  await f.page.locator('#pan565-probe-INFERENCE').click();
+  await f.page.locator(root+'[data-state="CURRENT_CONNECTION"]').waitFor();
+  const rHold=await snapshot(f);
+  assert.equal(rHold.checks.INFERENCE.state,'UNKNOWN_USAGE');assert.equal(rHold.reason,'UNKNOWN_USAGE_RETAINED');
+  assert.match(rHold.unknownUsage.operationId,/^operation:mc-[a-f0-9]{40}$/,'PAN565_HELD_OPERATION_ID_NOT_DISCLOSED');
+  assert.equal(rHold.unknownUsage.reconcilable,true);assert.equal(rHold.readyForInference,false);
+  const holdView=await f.page.locator(root).innerText();
+  assert.ok(holdView.includes('Nativer Nutzungs-Hold'),'PAN565_HOLD_NOT_TRUTHFULLY_DISPLAYED');
+  assert.ok(holdView.includes(rHold.unknownUsage.operationId),'PAN565_HELD_OPERATION_ID_NOT_VISIBLE');
+  assert.ok(!holdView.includes(syntheticCredential565),'PAN565_SECRET_VISIBLE_IN_HOLD_STATE');
+  await capture(f,'desktop-synthetic-unknown-hold-disclosed');
+  assert.equal(f.server.post(),1,'PAN565_PROVIDER_POSTS_AT_HOLD');assert.equal(posts(f,'reconcile').length,0,'PAN565_RECONCILE_POST_BEFORE_USER_ACTION');
+  // Negatives first, each asserting its exact authority answer (RUN104: a bare non-200 could
+  // pass vacuously at the closed route gate before the owner). The hold, its disclosure and the
+  // revision stay exactly as they were, nothing replays.
+  const heldOp=rHold.unknownUsage.operationId,sid=rHold.binding.sessionId,idg=rHold.identityDigest;
+  assert.deepEqual(await reconcileProbe565(f,[
+    {name:'missing-session-header',body:{operationId:heldOp,identityDigest:idg}},
+    {name:'foreign-session-header',session:'session:'+'0'.repeat(64),body:{operationId:heldOp,identityDigest:idg}},
+    {name:'forged-operation-id',session:sid,body:{operationId:'operation:mc-'+'b'.repeat(40),identityDigest:idg}},
+    {name:'forged-identity',session:sid,body:{operationId:heldOp,identityDigest:'f'.repeat(64)}},
+    {name:'extra-body-key',session:sid,body:{operationId:heldOp,identityDigest:idg,usageMicros:0}},
+  ]),[
+    ['missing-session-header',403,'MODEL_CONNECTION_SCOPE_DENIED'],
+    ['foreign-session-header',403,'MODEL_CONNECTION_SCOPE_DENIED'],
+    ['forged-operation-id',400,'MODEL_CONNECTION_RECONCILIATION_DENIED'],
+    ['forged-identity',400,'MODEL_CONNECTION_RECONCILIATION_DENIED'],
+    ['extra-body-key',400,'MODEL_CONNECTION_INPUT_DENIED'],
+  ],'PAN565_RECONCILE_DENIAL_NOT_OWNER_EXACT');
+  // The closed route/method admission and the gates a real browser always sends are made visible
+  // raw: wrong method, an owner method outside the closed admission, missing Origin and a foreign
+  // Origin each name their own gate BEFORE the owner and cannot reach or alter the hold.
+  assert.deepEqual([
+    await rawProbe565(f,'/t/tenant-a/workspace/model-connection/reconcile',{method:'GET'}),
+    await rawProbe565(f,'/t/tenant-a/workspace/model-connection/close',{headers:{origin:f.tls.origin},body:{operationId:heldOp,identityDigest:idg}}),
+    await rawProbe565(f,'/t/tenant-a/workspace/model-connection/reconcile',{body:{operationId:heldOp,identityDigest:idg}}),
+    await rawProbe565(f,'/t/tenant-a/workspace/model-connection/reconcile',{headers:{origin:'https://evil.invalid'},body:{operationId:heldOp,identityDigest:idg}}),
+  ],[
+    [404,'HOSTED_ROUTE_DENIED'],
+    [404,'HOSTED_ROUTE_DENIED'],
+    [403,'HOSTED_CSRF_DENIED'],
+    [403,'HOSTED_ORIGIN_DENIED'],
+  ],'PAN565_RECONCILE_ROUTE_OR_CSRF_GATE_NOT_EXACT');
+  await f.page.locator('#pan565-read').click();await current(f);
+  const rForged=await snapshot(f);
+  assert.equal(rForged.revision,rHold.revision,'PAN565_DENIED_RECONCILE_MOVED_REVISION');
+  assert.deepEqual(rForged.unknownUsage,rHold.unknownUsage,'PAN565_DENIED_RECONCILE_LOST_THE_HOLD');
+  assert.equal(posts(f,'reconcile').length,5,'PAN565_DENIED_RECONCILE_POST_COUNT');
+  assert.equal(f.server.post(),1,'PAN565_DENIED_RECONCILE_TOUCHED_PROVIDER');assert.equal(f.server.get(),3,'PAN565_DENIED_RECONCILE_EXTRA_PROVIDER_GET');
+  assert.equal(persistedConnectionRow565(f).state.lastOperation,heldOp,'PAN565_HOLD_NOT_PERSISTED_IN_REAL_SOURCE');
+  // The explicit user action: exactly the disclosed id over the existing route, then the
+  // existing mandatory independent readback. Hold gone from readback, dialog and ledger.
+  await f.page.locator(root).getByRole('button',{name:'Nullpreis-Hold jetzt abgleichen',exact:true}).click();
+  await f.page.locator(root+'[data-state="CURRENT_CONNECTION"]').waitFor();
+  const rDone=await snapshot(f);
+  assert.equal(rDone.unknownUsage,null,'PAN565_HOLD_STILL_DISCLOSED_AFTER_RECONCILE');
+  assert.equal(rDone.checks.INFERENCE.state,'FAILED');assert.equal(rDone.checks.INFERENCE.reason,'SYNTHETIC_ZERO_PRICE_RECONCILED_NO_MODEL_PASS');
+  assert.equal(rDone.revision,rForged.revision+1,'PAN565_RECONCILE_REVISION_DRIFT');
+  assert.equal(posts(f,'reconcile').length,6,'PAN565_RECONCILE_POSTS_NOT_EXACTLY_ONE_USER_POST');
+  assert.equal(f.server.post(),1,'PAN565_RECONCILE_RETRIED_PROVIDER');assert.equal(f.server.get(),3,'PAN565_RECONCILE_EXTRA_PROVIDER_GET');
+  assert.ok(!(await f.page.locator(root).innerText()).includes('Nativer Nutzungs-Hold'),'PAN565_HOLD_ROW_STILL_SHOWN_AFTER_SETTLEMENT');
+  assert.equal(await f.page.locator('#pan565-reconcile').count(),0,'PAN565_RECONCILE_ACTION_OFFERED_WITHOUT_HOLD');
+  await capture(f,'desktop-synthetic-hold-reconciled-owner-route');
+  assert.equal(persistedConnectionRow565(f).state.lastOperation,rHold.unknownUsage.operationId,'PAN565_SETTLED_OPERATION_RECORD_ERASED_FROM_SOURCE');
+  // Lifetime edge: a SETTLED operation cannot be reconciled a second time. The exact same body
+  // lands on the owner's own held-state check — no second settlement, no revision drift, no
+  // provider traffic and no request-budget refund.
+  assert.deepEqual(await reconcileProbe565(f,[{name:'replay-after-settlement',session:sid,body:{operationId:heldOp,identityDigest:idg}}]),[['replay-after-settlement',400,'MODEL_CONNECTION_RECONCILIATION_DENIED']],'PAN565_SETTLED_OPERATION_RECONCILED_TWICE');
+  await f.page.locator('#pan565-read').click();await current(f);
+  const rReplay=await snapshot(f);
+  assert.equal(rReplay.revision,rDone.revision,'PAN565_REPLAY_MOVED_REVISION');
+  assert.equal(rReplay.unknownUsage,null,'PAN565_REPLAY_REDISCLOSED_THE_HOLD');
+  assert.equal(posts(f,'reconcile').length,7,'PAN565_REPLAY_POST_COUNT');
+  assert.equal(f.server.post(),1,'PAN565_REPLAY_TOUCHED_PROVIDER');assert.equal(f.server.get(),3,'PAN565_REPLAY_EXTRA_PROVIDER_GET');
+  // Recovery continues ONLY over the existing honest path: reference reset, fresh phases,
+  // fresh capped consent, exactly one new bounded synthetic inference.
+  f.server.setMode('OK');
+  await choose(f);
+  for(const[label,phase]of[['Erreichbarkeit','REACHABILITY'],['Authentifizierung','AUTHENTICATION'],['Modellverfügbarkeit','MODEL_AVAILABILITY']])await probe(f,label,phase);
+  await f.page.locator(root).getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();await current(f);
+  await probe(f,'Begrenzte Inferenz','INFERENCE');
+  const rFinal=await snapshot(f);
+  assert.equal(rFinal.checks.INFERENCE.state,'PASS');assert.equal(rFinal.unknownUsage,null);assert.equal(rFinal.realModelAcceptance,false);
+  assert.equal(f.server.post(),2,'PAN565_RECOVERY_PROVIDER_POSTS_NOT_EXACTLY_TWO');assert.equal(f.server.get(),6,'PAN565_RECOVERY_PROVIDER_GETS_NOT_EXACTLY_SIX');
+  // Retired session: after logout the protected route's own authentication denies the reconcile
+  // before the owner — an expired session gains nothing from the reconciliation path, and the
+  // settled ledger keeps zero provider replay.
+  const retired=await f.page.evaluate(async body=>{const logout=await fetch('/t/tenant-a/workspace/logout',{method:'POST',credentials:'same-origin'});const response=await fetch('/t/tenant-a/workspace/model-connection/reconcile',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify(body)});let error=null;try{error=(await response.json()).error;}catch{}return[logout.status,response.status,error];},{operationId:heldOp,identityDigest:idg});
+  assert.deepEqual(retired,[200,401,'HOSTED_SESSION_DENIED'],'PAN565_RETIRED_SESSION_RECONCILE_NOT_DENIED_BEFORE_OWNER');
+  assert.equal(posts(f,'reconcile').length,8,'PAN565_TOTAL_RECONCILE_POST_COUNT');
+  assert.equal(f.server.post(),2,'PAN565_RETIRED_SESSION_PROVIDER_DRIFT');assert.equal(f.server.get(),6,'PAN565_RETIRED_SESSION_PROVIDER_GET_DRIFT');
+  assert.deepEqual(f.errors,[]);
+ }finally{f.server.setMode('OK');await f.close();}
+});
+// RUN103/RUN104 negative on an externally priced route: the retained hold is disclosed honestly
+// with reconcilable false and NO browser action at all; a direct authenticated POST now really
+// reaches the owner and is denied there with the exact MODEL_CONNECTION_USAGE_ORACLE_UNAVAILABLE
+// (RUN104 strengthened: not a bare non-200), and the full hold stays retained. The browser never
+// gains settlement authority for foreign prices, and the honest owner-reader-only line is shown
+// instead of a fake button.
+test('565 owner-bound retained hold discloses reconcilable false with no browser reconcile action; a direct route denial keeps the full hold and the honest owner-only line',async()=>{
+ const f=await fixture({grant:true,ownerBound:true});
+ try{
+  await open(f);await current(f);await choose(f);
+  for(const[label,phase]of[['Erreichbarkeit','REACHABILITY'],['Authentifizierung','AUTHENTICATION'],['Modellverfügbarkeit','MODEL_AVAILABILITY']])await probe(f,label,phase);
+  await f.page.locator(root).getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();await current(f);
+  f.server.setMode('TIMEOUT');
+  await f.page.locator('#pan565-probe-INFERENCE').click();await f.page.locator(root+'[data-state="CURRENT_CONNECTION"]').waitFor();
+  const rHold=await snapshot(f);
+  assert.equal(rHold.checks.INFERENCE.state,'UNKNOWN_USAGE');assert.equal(rHold.unknownUsage.reconcilable,false,'PAN565_OWNER_BOUND_HOLD_OFFERS_RECONCILIATION');
+  assert.equal(await f.page.locator('#pan565-reconcile').count(),0,'PAN565_BROWSER_RECONCILE_OFFERED_FOR_FOREIGN_PRICE');
+  const view=await f.page.locator(root).innerText();
+  assert.ok(view.includes('nur durch qualifizierten Owner-Nutzungsleser'),'PAN565_OWNER_BOUND_HOLD_HINT_MISSING');
+  assert.ok(view.includes(rHold.unknownUsage.operationId),'PAN565_OWNER_BOUND_HELD_OPERATION_ID_NOT_VISIBLE');
+  await capture(f,'desktop-owner-bound-unknown-hold-owner-only');
+  // RUN104: the strengthened probe asserts the owner's own oracle denial, not a bare non-200 —
+  // the closed route now admits the exact reconcile operation, so this route-specific refusal can
+  // only come from the owner itself. The full hold stays retained across the denial.
+  assert.deepEqual(await reconcileProbe565(f,[{name:'owner-bound-direct-reconcile',session:rHold.binding.sessionId,body:{operationId:rHold.unknownUsage.operationId,identityDigest:rHold.identityDigest}}]),[['owner-bound-direct-reconcile',400,'MODEL_CONNECTION_USAGE_ORACLE_UNAVAILABLE']],'PAN565_OWNER_BOUND_RECONCILE_DENIAL_NOT_OWNER_EXACT');
+  assert.equal(posts(f,'reconcile').length,1,'PAN565_OWNER_BOUND_RECONCILE_POST_COUNT');
+  await f.page.locator('#pan565-read').click();await current(f);
+  const rAfter=await snapshot(f);
+  assert.deepEqual(rAfter.unknownUsage,rHold.unknownUsage,'PAN565_DENIED_RECONCILE_ALTERED_THE_HOLD');
+  assert.equal(f.server.post(),1,'PAN565_DENIED_RECONCILE_TOUCHED_PROVIDER');assert.equal(f.server.get(),3,'PAN565_DENIED_RECONCILE_EXTRA_PROVIDER_GET');
+  assert.deepEqual(f.errors,[]);
+ }finally{f.server.setMode('OK');await f.close();}
+});
+// RUN105 complementary native-browser coverage: a genuine provider-transport TIMEOUT (the POST is
+// answered by NOTHING, not by a test-side hold release) retains the full reservation through the
+// EXISTING owner fence while the provider GET route stays genuinely live — exactly the composed-548
+// shell's real situation during the timed-out probe. The explicit zero-price reconcile then settles
+// the hold over the real closed route with one POST plus independent readback while the provider
+// transport stays frozen at exactly one attempted POST. Existing RUN104 bytes untouched; the new
+// HOLD_PROBE peer mode is additive in the shared565 fixture.
+test('565 RUN105 genuine provider timeout with live GET: HOLD_PROBE retains the full synthetic hold, the explicit reconcile settles it over the real route with the GET route still answering and the provider frozen at one POST; NOT model acceptance',async()=>{
+ const f=await fixture({grant:true});
+ try{
+  await open(f);await current(f);await choose(f);
+  for(const[label,phase]of[['Erreichbarkeit','REACHABILITY'],['Authentifizierung','AUTHENTICATION'],['Modellverfügbarkeit','MODEL_AVAILABILITY']])await probe(f,label,phase);
+  await f.page.locator(root).getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();await current(f);
+  f.server.setMode('HOLD_PROBE');
+  await f.page.locator('#pan565-probe-INFERENCE').click();
+  await f.page.locator(root+'[data-state="CURRENT_CONNECTION"]').waitFor();
+  const rHold=await snapshot(f);
+  assert.equal(rHold.checks.INFERENCE.state,'UNKNOWN_USAGE');assert.equal(rHold.reason,'UNKNOWN_USAGE_RETAINED');
+  assert.equal(rHold.unknownUsage.reconcilable,true,'PAN565_RUN105_SYNTHETIC_TIMEOUT_HOLD_NOT_RECONCILABLE');
+  assert.match(rHold.unknownUsage.operationId,/^operation:mc-[a-f0-9]{40}$/,'PAN565_RUN105_TIMEOUT_HELD_OPERATION_NOT_DISCLOSED');
+  assert.equal(f.server.post(),1,'PAN565_RUN105_TIMEOUT_PROVIDER_RETRY');
+  // The GET provider path was never frozen by the hung POST: a genuine REACHABILITY re-probe reaches the live peer while the hold stands. It rewrites only the minimized phase checks — the disclosed full hold is unchanged.
+  const rProbe=await probe(f,'Erreichbarkeit','REACHABILITY');
+  assert.equal(f.server.get(),4,'PAN565_RUN105_LIVE_GET_FROZEN_BY_THE_POST_HOLD');
+  assert.equal(f.server.post(),1,'PAN565_RUN105_REPROBE_REDISPATCHED_THE_PROVIDER_POST');
+  assert.deepEqual(rProbe.unknownUsage,rHold.unknownUsage,'PAN565_RUN105_REPROBE_ALTERED_THE_DISCLOSED_HOLD');
+  await capture(f,'desktop-run105-timeout-hold-live-get');
+  await f.page.locator('#pan565-reconcile').click();
+  await f.page.locator(root+'[data-state="CURRENT_CONNECTION"]').waitFor();
+  const rSettled=await snapshot(f);
+  assert.equal(rSettled.unknownUsage,null,'PAN565_RUN105_TIMEOUT_HOLD_STILL_DISCLOSED');
+  assert.equal(rSettled.revision,rProbe.revision+1,'PAN565_RUN105_TIMEOUT_SETTLEMENT_REVISION_DRIFT');
+  assert.equal(rSettled.checks.INFERENCE.reason,'SYNTHETIC_ZERO_PRICE_RECONCILED_NO_MODEL_PASS','PAN565_RUN105_TIMEOUT_SETTLEMENT_NOT_HONESTLY_RE_READ');
+  assert.equal(posts(f,'reconcile').length,1,'PAN565_RUN105_TIMEOUT_RECONCILE_POST_COUNT');
+  assert.equal(f.server.post(),1,'PAN565_RUN105_TIMEOUT_RECONCILE_TOUCHED_PROVIDER');
+  await capture(f,'desktop-run105-timeout-hold-settled-zero-price');
+  assert.deepEqual(f.errors,[]);
+ }finally{f.server.setMode('OK');await f.close();}
+});

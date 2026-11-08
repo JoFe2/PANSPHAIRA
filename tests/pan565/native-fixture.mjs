@@ -10,18 +10,21 @@ import {createNativeModelConnectionV1,MODEL_CONNECTION_TEST_DATA_DIGEST_V1} from
 export const limits565={maxCostMicros:50000,maxTimeMs:1500,maxTurns:3,maxTools:2,maxRequests:3,maxTokens:512,maxInputBytes:16384,maxOutputBytes:8192};
 export const syntheticCredential565='SYNTHETIC_PRIVATE_FILE_CANARY_NOT_A_REAL_CREDENTIAL';
 export async function localModelServer565(){
- let mode='OK',get=0,post=0,release=null;const observations=[],postWaiters=[];
+ let mode='OK',get=0,post=0,release=null,responseText=null;const observations=[],postWaiters=[];
  const server=createServer(async(req,res)=>{let body='';for await(const c of req)body+=c;const method=req.method;if(method==='GET')get++;else{post++;for(const waiter of postWaiters.splice(0))waiter();}observations.push({method,path:req.url,credentialPresent:typeof req.headers.authorization==='string',body:body?JSON.parse(body):null});
   if(mode==='TIMEOUT'){release=()=>{if(!res.destroyed&&!res.writableEnded&&!res.headersSent){res.writeHead(200,{'content-type':'application/json'});res.end('{}');}};return;}
+  // RUN105: holds ONLY the provider POST pending (the genuine inference-probe dispatch) while GETs keep answering, so the real owner-side provider timeout retains the full reservation as a real UNKNOWN_USAGE hold in the composed548 shell without freezing the connection probes.
+  if(mode==='HOLD_PROBE'&&method!=='GET'){release=()=>{if(!res.destroyed&&!res.writableEnded&&!res.headersSent){res.writeHead(200,{'content-type':'application/json'});res.end('{}');}};return;}
   if(mode==='REDIRECT'){res.writeHead(302,{location:'http://169.254.169.254/latest/meta-data'});res.end();return;}
   const authorized=req.headers.authorization==='Bearer '+syntheticCredential565;
   if(mode==='AUTH_FAILED'||method==='GET'&&!authorized){res.writeHead(401,{'content-type':'application/json'});res.end('{"error":"minimized-auth-failure"}');return;}
   res.writeHead(200,{'content-type':'application/json'});
   if(method==='GET'){res.end(JSON.stringify({data:[{id:mode==='MODEL_MISSING'?'model:not-listed':'model:synthetic-v1'}]}));return;}
   if(mode==='MALFORMED'){res.end('not-json');return;}
+  if(mode==='TEXT'){res.end(JSON.stringify({model:'model:synthetic-v1',choices:[{message:{content:responseText,tool_calls:[]}}],usage:{prompt_tokens:2,completion_tokens:3}}));return;}
   res.end(JSON.stringify({model:mode==='WRONG_MODEL'?'model:wrong-model':'model:synthetic-v1',choices:[{message:{content:mode==='SECRET_ECHO'?syntheticCredential565:'Synthetic framing only; not a model.',tool_calls:[]}}],usage:{prompt_tokens:2,completion_tokens:3}}));
- });await new Promise(r=>server.listen(0,'127.0.0.1',r));
- return {origin:'http://127.0.0.1:'+server.address().port,observations,get:()=>get,post:()=>post,waitForPost(){return post?Promise.resolve():new Promise(r=>postWaiters.push(r));},setMode(v){mode=v;},release(){release?.();},async close(){release?.();server.closeAllConnections();await new Promise(r=>server.close(r));}};
+});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ return {origin:'http://127.0.0.1:'+server.address().port,observations,get:()=>get,post:()=>post,waitForPost(){return post?Promise.resolve():new Promise(r=>postWaiters.push(r));},setMode(v){mode=v;},setResponseText(v){responseText=v;mode='TEXT';},release(){release?.()},async close(){release?.();server.closeAllConnections();await new Promise(r=>server.close(r));}};
 }
 export function connectionOptions565(server,credentialFile,{grant=true}={}){return {summary:{connectionId:'connection:synthetic-existing',routeId:'route:synthetic-openai-chat-completions',provider:'provider:synthetic-model',model:'model:synthetic-v1',protocol:'OPENAI_CHAT_COMPLETIONS',evidenceClass:'SYNTHETIC_ONLY',secretReference:'credential-handle:synthetic-model-v1',authMethod:'EXISTING_SECRET_REFERENCE',identity:{...connectionTransportIdentityV1(),deploymentId:'synthetic-local-http-fixture-not-model',configurationRevision:1},availability:{runtime:true,provider:true,auth:true,model:true,functions:true},selectable:true},target:{origin:server.origin,allowedAddresses:['127.0.0.1'],localOnly:true},credentialFile,pricing:null,productGrant:grant?{limits:limits565,testDataDigest:MODEL_CONNECTION_TEST_DATA_DIGEST_V1,expiresAtMs:Date.now()+180000}:null};}
 export async function nativeFixture565({grant=true,alter=()=>{}}={}){

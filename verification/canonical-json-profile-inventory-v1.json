@@ -947,6 +947,14 @@
       "fromSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
       "toSha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
       "reason": "Bind only the two additive native UI wire protocol test/document registration entries to their exact reviewed generator bytes. Preserve every prior migration and original ownership, classification, equivalence and release gate. Fresh unchanged scanner measures1300 files,344 imports in343 files and2849 unique ledger paths. This source/synthetic protocol increment grants no actual model, browser or whole-issue acceptance."
+    },
+    {
+      "migrationId": "PAN567-EXPLICIT-ONBOARDING-PROPOSALS/INTEGRITY-GENERATOR/V107",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 107,
+      "fromSha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
+      "toSha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
+      "reason": "Register exactly nine source-only proposal contract/browser/owner/runner/test members on the existing configuration-draft owner. Preserve all109 graph104 nodes, original128-input/64-command bounds, every prior owner/test/hard gate, immutable21 base byte obligations/13 profiles, all earlier migrations, unchanged scanner/validator and legacy1792 runnable inventory. Fresh mechanical scan observes1309 files,348 import sites in347 files and2858 unique checksum paths. This synthetic-fixture scope grants no actual model, UNKNOWN retry, activation, whole-issue or release acceptance."
     }
   ],
   "scanScope": {
@@ -989,15 +997,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1300,
+    "filesScanned": 1309,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 345,
-    "importFiles": 344,
+    "importSites": 348,
+    "importFiles": 347,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2849,
-    "ledgerUniquePaths": 2849
+    "ledgerEntries": 2858,
+    "ledgerUniquePaths": 2858
   },
   "profiles": [
     {
@@ -1070,7 +1078,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce"
+      "sha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1357,8 +1365,8 @@
     },
     {
       "owner": "contracts",
-      "importSites": 150,
-      "importFiles": 150
+      "importSites": 151,
+      "importFiles": 151
     },
     {
       "owner": "cscl-03",
@@ -1541,6 +1549,11 @@
       "importFiles": 1
     },
     {
+      "owner": "pan567",
+      "importSites": 1,
+      "importFiles": 1
+    },
+    {
       "owner": "pan575",
       "importSites": 2,
       "importFiles": 2
@@ -1577,8 +1590,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 78,
-      "importFiles": 77
+      "importSites": 79,
+      "importFiles": 78
     },
     {
       "owner": "usage-insights",
@@ -1871,7 +1884,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
+      "sha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
       "basis": "profile-version-migration"
     },
     {
