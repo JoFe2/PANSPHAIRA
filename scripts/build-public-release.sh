@@ -837,6 +837,8 @@ repository_only_files = {
     # Exact connected ERV V2 source metadata; no legacy runtime member or rights grant.
     "src/pan542/source-compatibility-catalog-v2.json",
     "docs/architecture/erv-human-source-compatibility-v2.md",
+    "src/pan542/source-compatibility-catalog-v3.json",
+    "docs/architecture/erv-human-source-compatibility-v3.md",
     "tests/pan542/source-compatibility-fixture.mjs",
     "tests/pan542/native-human-backend.test.mjs",
     "tests/pan542/registration.test.mjs",

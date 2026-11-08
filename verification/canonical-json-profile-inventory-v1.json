@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "d27347694d19c97bdebe8f42540e07265ff49cf988a7bc026c9cab07375f06ae"
+        "sha256": "1a26b7dda71dfecc35a0885b36fd16ea7ff24ef9223092d9a4d90d4233102735"
       }
     ]
   },
@@ -955,6 +955,14 @@
       "fromSha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
       "toSha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
       "reason": "Register exactly nine source-only proposal contract/browser/owner/runner/test members on the existing configuration-draft owner. Preserve all109 graph104 nodes, original128-input/64-command bounds, every prior owner/test/hard gate, immutable21 base byte obligations/13 profiles, all earlier migrations, unchanged scanner/validator and legacy1792 runnable inventory. Fresh mechanical scan observes1309 files,348 import sites in347 files and2858 unique checksum paths. This synthetic-fixture scope grants no actual model, UNKNOWN retry, activation, whole-issue or release acceptance."
+    },
+    {
+      "migrationId": "PAN542-PR691-SOURCE-COMPATIBILITY-V3/INTEGRITY-GENERATOR/V108",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 108,
+      "fromSha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
+      "toSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
+      "reason": "Register exactly the two V3 source-compatibility catalog and documentation paths on the existing native ERV owner for the accepted PR691 adapter delta. Preserve all prior migrations, immutable admitted obligations, scanner/validator semantics, native guards and runnable inventory. The unchanged mechanical scan retains1309 files and348 import sites in347 files; only the checksum inventory grows from2858 to2860 paths. No source drift is adopted automatically and no model or whole-parent acceptance is granted."
     }
   ],
   "scanScope": {
@@ -1004,8 +1012,8 @@
     "importFiles": 347,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2858,
-    "ledgerUniquePaths": 2858
+    "ledgerEntries": 2860,
+    "ledgerUniquePaths": 2860
   },
   "profiles": [
     {
@@ -1078,7 +1086,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781"
+      "sha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1884,7 +1892,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
+      "sha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
       "basis": "profile-version-migration"
     },
     {

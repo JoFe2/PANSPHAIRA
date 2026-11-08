@@ -20,6 +20,7 @@ const sourcePaths=['src/pan542/native-human-backend.mjs','src/pan527/origin-sess
   'dist/packages/contracts/src/incoming-invoice-erv.js','contracts/trade/pan516-invoice-cases-v1.json',
   'demo/runtime/local-journal-owner.mjs','src/pan542/source-compatibility-catalog-v1.json'];
 const sourcePathsV2=[...sourcePaths,'src/pan542/source-compatibility-catalog-v2.json'];
+const sourcePathsV3=[...sourcePathsV2,'src/pan542/source-compatibility-catalog-v3.json'];
 const guards=['pan542_binding','pan542_events'].flatMap(table=>['UPDATE','DELETE'].map(action=>({
   name:`${table}_${action.toLowerCase()}_immutable`,
   sql:`CREATE TRIGGER ${table}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${table} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_HISTORY_IMMUTABLE_DENIED'); END`})));
@@ -30,7 +31,7 @@ function closed(value,keys,code){
     ||Object.values(ds).some(d=>!d.enumerable||!('value' in d)))fail(code);
 }
 function frozen(value){if(value&&typeof value==='object'){for(const v of Object.values(value))frozen(v);Object.freeze(value);}return value;}
-function sourceIdentity(){return sourcePathsV2.map(path=>({path,sha256:createHash('sha256').update(readFileSync(new URL('../../'+path,import.meta.url))).digest('hex')}));}
+function sourceIdentity(){return sourcePathsV3.map(path=>({path,sha256:createHash('sha256').update(readFileSync(new URL('../../'+path,import.meta.url))).digest('hex')}));}
 function sessionScope(binding){
   return {origin:binding.origin,audience:binding.audience,tenantId:binding.tenantId,instanceId:binding.instanceId,generation:binding.generation,identityDigest:binding.identityDigest};
 }
@@ -209,6 +210,115 @@ export function transitionNativeErvHumanSourceCompatibilityV2(options){
   });
 }
 
+// Explicit v3 source-owner successor for the reviewed adapter route-glue delta.
+// V1/V2 catalogs, receipts and guards remain historical facts bound to their own
+// complete released source closures; nothing is re-hashed in place, auto-adopted
+// or refreshed. Only the reviewed backend successor and the reviewed adapter may
+// differ from the genuine released V2 predecessor closure; the new code-owned v3
+// catalog is itself source-bound.
+const sourceCatalogPathV3='src/pan542/source-compatibility-catalog-v3.json';
+const transitionIdV3='PAN542_ROUTE_GLUE_ADAPTER_COMPATIBILITY_V3';
+const predecessorPrimaryV3={commit:'79df9fda08411514426b2931c6f30b0aa3dc40a1',tree:'9bb0e5548be0158fba58a14a02afb180e467143a',releaseId:438045921};
+// Mechanical bind slot: canonical digest of the v3 catalog's exact predecessor
+// identity below. The invalid marker keeps every v3 operation fail-closed until
+// the code owner binds the actual computed digest; no caller can supply it.
+const predecessorSourceDigestV3='13febee7bf71922f38587a2a104d054be7e6cbecbb5ed12312f5260c3a3eada0';
+const predecessorCatalogSHA256V3='455c3a941bd2b4eef351dc31403501b1e39692d9f62a4f5fcc8b0f4cd9268fb9';
+const routeGlueAdapterSHA256V3='730aac6dccda3024b51d3261437d5aeeb107d0cd78cee7428f2f87e1df4584d5';
+const compatibilityTableV3='pan542_source_compatibility_v3';
+const compatibilityDDLV3='CREATE TABLE pan542_source_compatibility_v3(id INTEGER PRIMARY KEY CHECK(id=1),record TEXT NOT NULL) STRICT';
+const compatibilityGuardsV3=[...['UPDATE','DELETE'].map(action=>({
+  name:`${compatibilityTableV3}_${action.toLowerCase()}_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTableV3}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${compatibilityTableV3} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`})),{
+  name:`${compatibilityTableV3}_insert_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTableV3}_insert_immutable BEFORE INSERT ON ${compatibilityTableV3} WHEN EXISTS(SELECT 1 FROM ${compatibilityTableV3}) BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`}];
+function sourceCatalogV3(current){
+  const bytes=readFileSync(new URL('../../'+sourceCatalogPathV3,import.meta.url));let catalog;
+  try{catalog=JSON.parse(bytes);}catch{fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');}
+  closed(catalog,['schemaVersion','transitionId','predecessorTransitionId','predecessorPrimary','predecessorSourceCatalogSHA256','predecessorSourceIdentity','targetFiles'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  if(catalog.schemaVersion!=='pansphaira.erv-human/source-compatibility-catalog/v3'||catalog.transitionId!==transitionIdV3
+    ||catalog.predecessorTransitionId!==transitionIdV2||canonicalJson(catalog.predecessorPrimary)!==canonicalJson(predecessorPrimaryV3)
+    ||catalog.predecessorSourceCatalogSHA256!==predecessorCatalogSHA256V3||digest(catalog.predecessorSourceIdentity)!==predecessorSourceDigestV3
+    ||!Array.isArray(catalog.targetFiles)||catalog.targetFiles.length!==sourcePathsV2.length)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  // The declared predecessor must be the genuine complete released V2 closure,
+  // revalidated structurally through the unchanged V2 catalog loader and the
+  // actual immutable v2 catalog bytes, not through a caller-supplied table.
+  const predecessorRelease=sourceCatalogV2(catalog.predecessorSourceIdentity);
+  if(predecessorRelease.catalogSHA256!==predecessorCatalogSHA256V3)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  for(const[index,row]of catalog.targetFiles.entries()){
+    closed(row,['path','sha256'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    if(row.path!==sourcePathsV2[index]||typeof row.sha256!=='string')fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    if(row.path==='src/pan527/origin-session-adapter.mjs'){
+      if(row.sha256!==routeGlueAdapterSHA256V3)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    }else if(row.path!=='src/pan542/native-human-backend.mjs'){
+      if(!/^[a-f0-9]{64}$/.test(row.sha256)||row.sha256!==catalog.predecessorSourceIdentity[index].sha256)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    }else if(row.sha256!==predecessorSourceDigestV3&&!/^[a-f0-9]{64}$/.test(row.sha256))fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    // The backend row alone may carry the mechanical bind marker; every other
+    // row must already be an exact hex pin. The final closure check below then
+    // rejects any drift between the bound pins and the actual measured bytes.
+  }
+  const catalogSHA256=createHash('sha256').update(bytes).digest('hex');
+  if(canonicalJson(current)!==canonicalJson([...catalog.targetFiles,{path:sourceCatalogPathV3,sha256:catalogSHA256}]))fail('ERV_HUMAN_SOURCE_TARGET_DENIED');
+  return {catalog,catalogSHA256};
+}
+function compatibilityStateV3(db){
+  const objects=db.prepare("SELECT type,name,sql FROM sqlite_master WHERE name=? OR name LIKE ? ORDER BY name").all(compatibilityTableV3,compatibilityTableV3+'_%');
+  if(!objects.length)return false;
+  const table=objects.find(o=>o.type==='table'&&o.name===compatibilityTableV3);
+  if(!table||table.sql!==compatibilityDDLV3||objects.length!==compatibilityGuardsV3.length+1||!guardsMatch(db,compatibilityGuardsV3))fail('ERV_HUMAN_SOURCE_HISTORY_GUARDS_DENIED');
+  return true;
+}
+function transitionCoreV3(db,record,current){
+  const {catalog,catalogSHA256}=sourceCatalogV3(current);let predecessorTransitionDigest=null;
+  if(canonicalJson(record.sourceIdentity)===canonicalJson(catalog.predecessorSourceIdentity)){
+    if(compatibilityStateV2(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  }else{
+    // A genuine V2-predecessor-era binding needs its immutable, independently
+    // valid V2 receipt. Never synthesize/adopt that predecessor or rewrite its
+    // basis; the V2 chain check keeps validating the V1 receipt itself.
+    predecessorTransitionDigest=sourceCompatibilityV2(db,record,catalog.predecessorSourceIdentity).transitionDigest;
+  }
+  return {schemaVersion:'pansphaira.erv-human/source-compatibility/v3',transitionId:transitionIdV3,
+    predecessorPrimary:predecessorPrimaryV3,predecessorTransitionId:transitionIdV2,predecessorTransitionDigest,
+    originalBindingDigest:record.bindingDigest,originalSourceIdentity:record.sourceIdentity,
+    predecessorSourceIdentity:catalog.predecessorSourceIdentity,effectiveSourceIdentity:current,
+    sourceCatalogSHA256:catalogSHA256,predecessorSourceCatalogSHA256:predecessorCatalogSHA256V3,
+    sessionBindingDigest:digest(record.sessionBinding),tradeBindingDigest:record.tradeBindingDigest,
+    roleMappingDigest:digest({version:record.roleMappingVersion,roles:record.roles,invoiceIds:record.invoiceIds}),
+    originalBindingAndHistoryUnchanged:true,predecessorReceiptUnchanged:true,sessionAndNativeRolesUnchanged:true,
+    bookingAuthorityGranted:false,paymentOrderAuthorized:false,productiveDispatchAuthorized:false,executionAuthorityGranted:false};
+}
+function sourceCompatibilityV3(db,record,current){
+  if(!compatibilityStateV3(db))fail('ERV_HUMAN_CONFIGURATION_BINDING_DENIED');
+  const rows=db.prepare('SELECT id,record FROM pan542_source_compatibility_v3 ORDER BY id LIMIT 2').all();
+  if(rows.length!==1||rows[0].id!==1)fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  let receipt;try{receipt=JSON.parse(rows[0].record);}catch{fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');}
+  const core=transitionCoreV3(db,record,current),expected={...core,transitionDigest:digest(core)};
+  if(canonicalJson(receipt)!==canonicalJson(expected))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  return frozen(receipt);
+}
+export function transitionNativeErvHumanSourceCompatibilityV3(options){
+  closed(options,['root','owner','sessions'],'ERV_HUMAN_SOURCE_OWNER_OPTIONS_DENIED');
+  if(options.owner!=='LOCAL_SYNTHETIC_OWNER')fail('ERV_HUMAN_SOURCE_LOCAL_OWNER_REQUIRED_DENIED');
+  const {root,sessions}=options;
+  if(!isProtectedSessionAdapterV1(sessions,sessions?.binding?.tenantId))fail('ERV_HUMAN_PROTECTED_SESSION_OWNER_REQUIRED_DENIED');
+  return sourceTransitionLocal(root,(db,tradeBinding,releaseNamespaceFence)=>{
+    const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
+    if(canonicalJson(record.sessionBinding)!==canonicalJson(sessionScope(sessions.binding)))fail('ERV_HUMAN_SESSION_BINDING_DENIED');
+    for(const invoiceId of invoiceIds)history(db,record,invoiceId,root);
+    if(canonicalJson(record.sourceIdentity)===canonicalJson(current)){
+      if(compatibilityStateV3(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+      return frozen({schemaVersion:'pansphaira.erv-human/source-compatibility-noop/v3',outcome:'ALREADY_SOURCE_BOUND',originalBindingDigest:record.bindingDigest,executionAuthorityGranted:false});
+    }
+    const core=transitionCoreV3(db,record,current);
+    if(compatibilityStateV3(db))return sourceCompatibilityV3(db,record,current);
+    // Same fenced admission / SQLite writer-lock / crash-rollback boundary as V1/V2.
+    releaseNamespaceFence();db.exec(compatibilityDDLV3);for(const guard of compatibilityGuardsV3)db.exec(guard.sql);
+    db.prepare('INSERT INTO pan542_source_compatibility_v3 VALUES(1,?)').run(canonicalJson({...core,transitionDigest:digest(core)}));
+    return sourceCompatibilityV3(db,record,current);
+  });
+}
+
 function configuredBinding(db,tradeBinding){
   if(!guardsMatch(db,guards))fail('ERV_HUMAN_HISTORY_GUARDS_DENIED');
   const row=db.prepare('SELECT record FROM pan542_binding WHERE id=1').get();if(!row)fail('ERV_HUMAN_CONFIGURATION_REQUIRED_DENIED');
@@ -221,7 +331,7 @@ function configuredBinding(db,tradeBinding){
 }
 function binding(db,tradeBinding){
   const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
-  if(canonicalJson(record.sourceIdentity)!==canonicalJson(current))sourceCompatibilityV2(db,record,current);
+  if(canonicalJson(record.sourceIdentity)!==canonicalJson(current))sourceCompatibilityV3(db,record,current);
   // V1 decision readbacks retain the ORIGINAL configuration/source/event basis.
   // Effective source provenance is returned by the separate versioned owner API.
   return record;

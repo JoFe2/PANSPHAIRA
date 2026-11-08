@@ -102,6 +102,8 @@ test("public release staging accepts an isolated Git worktree control file", asy
     const sourceOnly = [
       "src/pan542/source-compatibility-catalog-v2.json",
       "docs/architecture/erv-human-source-compatibility-v2.md",
+    "src/pan542/source-compatibility-catalog-v3.json",
+    "docs/architecture/erv-human-source-compatibility-v3.md",
     ];
     const manifest = await readFile(path.join(root, "release/public-files.manifest"), "utf8");
     const manifestPaths = new Set(manifest.split("\n").filter(line => line && !line.startsWith("#")).map(line => line.split("\t")[0]));
@@ -117,8 +119,8 @@ test("public release staging accepts an isolated Git worktree control file", asy
     const { readdir, stat } = await import("node:fs/promises");
     const stagedBuilder = path.join(output, "scripts/build-public-release.sh");
     const neighbors = [
-      "src/pan542/source-compatibility-catalog-v3.json",
-      "docs/architecture/erv-human-source-compatibility-v3.md",
+      "src/pan542/source-compatibility-catalog-v4.json",
+      "docs/architecture/erv-human-source-compatibility-v4.md",
     ];
     for (const [index, neighbor] of neighbors.entries()) {
       const location = path.join(output, neighbor);

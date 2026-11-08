@@ -5045,7 +5045,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "4aea2b3afbdfdc65ce63adb07fc4a3a05d03bfb7d999ec8e016c04ca429a7e68"
+          "sha256": "a1a1db90501ae9802f38cb2eff7210730533d47501eed1372bac994619605dfc"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5110,7 +5110,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "79b3f7202435b67bac47ce1d29d479d74df0054340b8e261e9edc04349f1cd7f"
+          "sha256": "1a26b7dda71dfecc35a0885b36fd16ea7ff24ef9223092d9a4d90d4233102735"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5235,7 +5235,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "b5f8eb5a2af4b1092731fc78c5e14cfd7b3a07b1a289ffe0d3943e44129e6add"
+          "sha256": "9b6fe47a817018f9ac6a37adc7718330ae32509ed5be946f998d7a966829da61"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -11183,7 +11183,7 @@
         {
           "path": "src/pan542/native-human-backend.mjs",
           "role": "SECURITY",
-          "sha256": "6d3b2479f39acc39dcd5fb497dabfa3229c4adf917e10395ebcb7ea7e4754802"
+          "sha256": "4caad3f8a794940a008b4c1b2517fc309be849685e1e06aac5ffd1e5eba0c2f2"
         },
         {
           "path": "src/pan542/source-compatibility-catalog-v1.json",
@@ -11193,17 +11193,17 @@
         {
           "path": "tests/pan542/source-compatibility-fixture.mjs",
           "role": "VALIDATOR",
-          "sha256": "a5b6e801436bd0acf316f1550fb81d62b81ef40a4f693e6d42c242ba87a1c9fb"
+          "sha256": "b8b0b2313a9219836998db1c54b5b743fba89b302208605b2135442e7fc5b793"
         },
         {
           "path": "tests/pan542/native-human-backend.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "a6155e6babd4ee84bd8935bbb3b94be58dea2dc9f223c970cbabf2a67184bcd1"
+          "sha256": "1b9ba8dd99c55c18d0e32af105eab46f38f7c94b08c02d5ef182f7094e3a95de"
         },
         {
           "path": "tests/pan542/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1ca942fe8d80413abd9033e82e2990c71860301c780f3164b3e5c908bc1237a6"
+          "sha256": "61bc8c1c90d2d1a450fb38e513b21c4a0fca38682f783c58a80ae343f2cc5b2f"
         },
         {
           "path": "tests/pan542/restart-reader.mjs",
@@ -11219,6 +11219,16 @@
           "path": "docs/architecture/erv-human-source-compatibility-v2.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "30c92219c5b8a34bd93b1529d864d2aea4587efa9e5a73a801992071389460f3"
+        },
+        {
+          "path": "src/pan542/source-compatibility-catalog-v3.json",
+          "role": "SECURITY",
+          "sha256": "399c3cc4f1dacd26781679a3704b2c4c5a757d3f5d13dd202a6117291a55bc8c"
+        },
+        {
+          "path": "docs/architecture/erv-human-source-compatibility-v3.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "a44c3c8bdc2cfd7e1c0e48023bb59256ac56934328aded19fac79442bedf507b"
         }
       ],
       "ownedTests": [
