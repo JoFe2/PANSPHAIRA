@@ -709,15 +709,38 @@ test('PUI07 context retirement during a same-shell in-flight RUNNING: the retire
   // actual panel screenshot; every heavyweight full-page/geometry capture
   // runs only after the release, so no helper wait burns the held window.
   await f.page.locator(root).screenshot({path:join(evidence(),'desktop-native-owner-same-shell-running-before-retirement.png')});
+  // RUN95: phase-correlated retirement observer over the REAL shared element,
+  // installed BEFORE the navigation click. Every mutation records one ordered
+  // snapshot {state,module,selection,pending}, where pending is the actual
+  // text of the element's own role=status paragraph — the exact node pending()
+  // writes. Observation only: no second transport, no authority, no product
+  // path change.
+  await f.page.evaluate(()=>{const el=document.getElementById('shell.context-selection');
+   const snap=()=>({state:el?.dataset.state??null,module:el?.dataset.module??null,selection:el?.dataset.selection??null,pending:el?.querySelector('[role="status"]')?.textContent??''});
+   window.__pan548RetirementMilestones548=[snap()];
+   new MutationObserver(()=>{window.__pan548RetirementMilestones548.push(snap());}).observe(el,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['data-state','data-module','data-selection']});});
   await f.page.getByRole('button',{name:'Einrichtung und Betriebszustand',exact:true}).click();
-  // Actual new navigation event, asserted on the real milestone that MUST
-  // already have happened while the START is still held: the bound context is
-  // retired into the unbound UPDATING_CONTEXT pending state, and NO new
-  // confirmed native context is claimed yet (module/selection cleared).
-  const contextSelection=f.page.locator('[id=\"shell.context-selection\"]');
-  await f.page.waitForFunction(()=>document.getElementById('shell.context-selection')?.dataset.state==='UPDATING_CONTEXT');
-  assert.deepEqual(await contextSelection.evaluate(e=>({state:e.dataset.state,module:e.dataset.module,selection:e.dataset.selection})),{state:'UPDATING_CONTEXT',module:'',selection:''},'PAN548_UNBOUND_RETIREMENT_CLAIMS_A_CONFIRMED_CONTEXT');
-  assert.ok((await contextSelection.innerText()).includes('Nativen Seitenkontext prüfen'),'PAN548_UNBOUND_RETIREMENT_PENDING_MESSAGE_MISSING');
+  // RUN95 (source-correlated correction of the RUN54 oracle): the real source
+  // produces TWO legitimate unbound-retirement milestones with different
+  // pending text — the synchronous immediate retirement retire() at
+  // context-selection-v1.ts:144 ("Kontextwechsel: Alte Auswahl und ausstehende
+  // Antworten werden verworfen …", invalidate + cleared module/selection) and
+  // the successor bind()'s own announcement at :271 ("Nativen Seitenkontext
+  // prüfen …"), which is effect-queue serialized behind the still-held admitted
+  // START and may therefore legally arrive later on a slower runner. The
+  // oracle reads the FIRST recorded UPDATING_CONTEXT snapshot from the real
+  // ordered event stream (no sleep, no broad text waiver): cleared module/
+  // selection AND a pending message exactly equal to one of the two closed
+  // retirement texts the source itself can write in this state. NO new
+  // confirmed native context is claimed yet; anything else fails closed.
+  await f.page.waitForFunction(()=>window.__pan548RetirementMilestones548.some(m=>m.state==='UPDATING_CONTEXT'));
+  const contextSelection=f.page.locator('[id="shell.context-selection"]');
+  const retirementMilestonesV195=await f.page.evaluate(()=>window.__pan548RetirementMilestones548);
+  const firstUnboundV195=retirementMilestonesV195.findIndex(m=>m.state==='UPDATING_CONTEXT');
+  assert.ok(firstUnboundV195>=0,'PAN548_UNBOUND_RETIREMENT_MILESTONE_NOT_RECORDED');
+  const firstUnboundSnapshotV195=retirementMilestonesV195[firstUnboundV195];
+  assert.deepEqual({state:firstUnboundSnapshotV195.state,module:firstUnboundSnapshotV195.module,selection:firstUnboundSnapshotV195.selection},{state:'UPDATING_CONTEXT',module:'',selection:''},'PAN548_UNBOUND_RETIREMENT_CLAIMS_A_CONFIRMED_CONTEXT');
+  assert.ok(firstUnboundSnapshotV195.pending==='Kontextwechsel: Alte Auswahl und ausstehende Antworten werden verworfen …'||firstUnboundSnapshotV195.pending==='Nativen Seitenkontext prüfen …','PAN548_UNBOUND_RETIREMENT_PENDING_MESSAGE_MISSING:'+JSON.stringify(firstUnboundSnapshotV195));
   await state(f,'CURRENT_SCOPE');
   const retired=await f.page.locator(root).innerText();
   for(const stale of ['Native Laufausführung','Aktuell beobachtet','RESULT_READY','Fehlerdiagnose','Historische Laufquelle',p.runId,p.planDigest])assert.ok(!retired.includes(stale),'PAN548_RETIREMENT_LEAKS_OLD_RUN_STATE:'+stale);
@@ -757,7 +780,7 @@ test('PUI07 context retirement during a same-shell in-flight RUNNING: the retire
   assert.ok(!Number.isSafeInteger(admitted()?.finishedAt)&&admitted()?.closedAt===undefined,'PAN548_RELEASE_MUST_HAPPEN_WHILE_THE_START_IS_STILL_HELD');
   const releasedAtMs=Date.now();
   assert.ok(releasedAtMs-admittedAtMs<25_000,'PAN548_RELEASE_MUST_PRECEDE_THE_GRANT_TIME_BOUND');
-  writeFileSync(join(evidence(),'retirement-held-window-v157.json'),JSON.stringify({admittedAtMs,releasedAtMs,heldMs:releasedAtMs-admittedAtMs,grantMaxTimeMs:25_000,contextSelection:await contextSelection.evaluate(e=>({state:e.dataset.state,module:e.dataset.module})),panel:retired,nativeNetwork:f.nativeNetwork},null,2)+'\n');
+  writeFileSync(join(evidence(),'retirement-held-window-v157.json'),JSON.stringify({admittedAtMs,releasedAtMs,heldMs:releasedAtMs-admittedAtMs,grantMaxTimeMs:25_000,contextSelection:await contextSelection.evaluate(e=>({state:e.dataset.state,module:e.dataset.module})),panel:retired,nativeNetwork:f.nativeNetwork,retirementMilestones:await f.page.evaluate(()=>window.__pan548RetirementMilestones548)},null,2)+'\n');
   f.releasePeer();
   // The late start response lands on the retired serial. Its actual server
   // evidence: received before the release, finished at or after it, within
@@ -825,7 +848,16 @@ test('PUI07 context retirement during a same-shell in-flight RUNNING: the retire
   // Only now the queued genuine setup binding runs (it was serialized behind
   // the admitted START): the new native context binds and the SAME retained
   // read control becomes actually hidden right here — not before.
-  await f.page.locator('[id=\"shell.context-selection\"][data-module=\"pan.setup\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await f.page.locator('[id="shell.context-selection"][data-module="pan.setup"][data-state="CURRENT_CONTEXT"]').waitFor();
+  // RUN95: the recorded stream must ALSO contain the genuine successor bind
+  // milestone — bind() writes its own closed pending text synchronously at
+  // entry (context-selection-v1.ts:271), so a real pan.setup CURRENT_CONTEXT
+  // binding without that recorded UPDATING_CONTEXT milestone would mean the
+  // binding bypassed the source's retirement path. Phase-correlated evidence,
+  // read from the same ordered observer stream installed before the click.
+  const boundMilestonesV195=await f.page.evaluate(()=>window.__pan548RetirementMilestones548);
+  assert.ok(boundMilestonesV195.length>=retirementMilestonesV195.length,'PAN548_RETIREMENT_MILESTONE_STREAM_WAS_RESET');
+  assert.ok(boundMilestonesV195.slice(firstUnboundV195).some(m=>m.state==='UPDATING_CONTEXT'&&m.pending==='Nativen Seitenkontext prüfen …'),'PAN548_SETUP_BIND_MILESTONE_NOT_RECORDED');
   assert.equal(await f.page.locator(root).getAttribute('data-state'),'CURRENT_SCOPE');
   assert.equal(await f.page.locator(root).getAttribute('data-dispatch-in-flight'),'false');
   assert.equal(await f.page.locator(root).getAttribute('data-run'),'none');
