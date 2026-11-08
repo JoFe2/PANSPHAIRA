@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdirSync,mkdtempSync,readFileSync,writeFileSync,rmSync} from 'node:fs';
+import {mkdirSync,mkdtempSync,readdirSync,readFileSync,writeFileSync,rmSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {createServer} from 'node:http';
+import {DatabaseSync} from 'node:sqlite';
 import {nativeViewBrowserFixture546} from '../pan546/browser-fixture.mjs';
 import {connectionOptions565,syntheticCredential565} from '../pan565/native-fixture.mjs';
 import {syntheticWorkspaceViewChatFeedbackModelV1} from '../../src/pan548/native-agent-run.mjs';
@@ -54,21 +55,28 @@ async function confirm(f){await f.page.locator(view).getByRole('button',{name:'G
 // same-origin protocol peer stays the only model-speaking party — no fake
 // native response, no polling), and maxTimeMs raises only this fixture's own
 // already-closed grant limit for the held-window test. Nothing else changes.
-async function connectedFixture({taskPurpose=true,empty=false,unknown=false,holdPeer=false,maxTimeMs=15000}={}){
+async function connectedFixture({taskPurpose=true,empty=false,unknown=false,holdPeer=false,maxTimeMs=15000,hangInferenceProbeOnce=false,ownerBoundPriced=false}={}){
  const privateRoot=mkdtempSync(join(tmpdir(),'pan548-browser-native-owner-'));
  const credentialFile=join(privateRoot,'existing-local-test-secret');
  writeFileSync(credentialFile,syntheticCredential565,{mode:0o600});
- const peer=syntheticWorkspaceViewChatFeedbackModelV1('tenant-a'),observations=[];let posts=0,f;
+ const peer=syntheticWorkspaceViewChatFeedbackModelV1('tenant-a'),observations=[];let posts=0,f,expectedCredential=syntheticCredential565;
+ // RUN105 seam (default OFF, accepted journeys byte-identical): the single toolless POST — the genuine565 inference-probe dispatch through the real transport — is never answered, so the REAL owner-side provider timeout inside the mounted product retains the full reservation as a real UNKNOWN_USAGE connection hold. Nothing is injected; GETs and every tool-bearing feedback POST keep answering honestly.
+ let hangProbeOnce=hangInferenceProbeOnce;
  let markPeerHeld,resolvedPeerHeld=false;const peerHeld=new Promise(r=>{markPeerHeld=()=>{resolvedPeerHeld=true;r();};});peerHeld.catch(()=>{});let releasePeerGate;const peerGate=new Promise(r=>{releasePeerGate=r;});
  const server=createServer(async(req,res)=>{
   try{
    let bytes='';for await(const chunk of req)bytes+=chunk;
    const body=bytes?JSON.parse(bytes):null;
-   observations.push({method:req.method,credentialPresent:typeof req.headers.authorization==='string',body});
+   observations.push({method:req.method,credentialPresent:typeof req.headers.authorization==='string',credentialDigest:typeof req.headers.authorization==='string'?hash(req.headers.authorization.slice('Bearer '.length)):null,body});
+   // RUN109: the local protocol peer answers only the CURRENT fixture-generated synthetic bearer bytes, exactly like the accepted565 peer; the observation records only the DIGEST, never credential bytes. Without rotation every accepted journey presents syntheticCredential565 and behaves byte-identically.
+   if(req.headers.authorization!=='Bearer '+expectedCredential){res.writeHead(401,{'content-type':'application/json'});res.end('{"error":"minimized-auth-failure"}');return;}
    res.writeHead(200,{'content-type':'application/json'});
    if(req.method==='GET'){res.end(JSON.stringify({data:[{id:'model:synthetic-v1'}]}));return;}
    posts++;
+   if(hangProbeOnce&&posts===1&&!body?.tools?.length){hangProbeOnce=false;return;}
    if(holdPeer&&posts===1){markPeerHeld();await peerGate;}
+   // RUN108: a genuine INFERENCE-probe dispatch is a tool-less bounded request, so the local peer answers it exactly like the accepted565 peer: plain synthetic framing with observed usage, no tool_calls. The closed outgoing-wire oracle below applies only to the tool-bearing feedback loop, so every accepted journey (whose only tool-less POST is the deliberately hung first probe) stays byte-identical.
+   if(!body?.tools?.length){res.end(JSON.stringify({model:'model:synthetic-v1',choices:[{message:{content:'Synthetic framing only; not a model.',tool_calls:[]}}],usage:{prompt_tokens:2,completion_tokens:3}}));return;}
    // The peer obeys the actual provider framing: like the real server it accepts
    // ONLY the closed wire names it was actually given (declared tools AND the
    // assistant transcript) and rejects any unexpected/dotted name instead of
@@ -87,12 +95,16 @@ async function connectedFixture({taskPurpose=true,empty=false,unknown=false,hold
  const options=connectionOptions565({origin:'http://127.0.0.1:'+server.address().port},credentialFile);
  options.productGrant.limits={...options.productGrant.limits,maxTimeMs,maxInputBytes:32768};
  if(taskPurpose)options.productGrant.allowedPurposes=['purpose:ui-connection-probe','purpose:ui-view-proposal'];
+ // RUN105 (default OFF): the same local peer behind an externally priced owner-bound reference — the only honest way to show a NON-reconcilable retained hold: settlement stays with the qualified owner usage reader, never a fake browser zero-price.
+ if(ownerBoundPriced){options.summary.evidenceClass='OWNER_BOUND_NOT_QUALIFIED';options.summary.provider='provider:local-owner-test';options.pricing={currency:'EUR',revision:1,inputMicrosPerMillionTokens:0,outputMicrosPerMillionTokens:0};}
  try{f=await nativeViewBrowserFixture546({agentRuns:true,modelConnections:empty?[]:[options]});}
  catch(error){server.closeAllConnections();await new Promise(resolve=>server.close(resolve));rmSync(privateRoot,{recursive:true,force:true});throw error;}
  const nativeNetwork=[];
  f.tls.gateway.server.prependListener('request',(request,response)=>{if(!request.url.includes('/workspace/agent-run/'))return;const entry={path:request.url,method:request.method,receivedAt:Date.now()};nativeNetwork.push(entry);response.once('finish',()=>{entry.finishedAt=Date.now();entry.status=response.statusCode;});response.once('close',()=>{entry.closedAt=Date.now();});});
  f.page.on('requestfailed',request=>{if(request.url().includes('/workspace/agent-run/'))nativeNetwork.push({path:new URL(request.url()).pathname,browserFailure:request.failure()?.errorText,at:Date.now()});});
- return {...f,observations,nativeNetwork,connectionId:options.summary.connectionId,posts:()=>posts,peerHeld,releasePeer(){releasePeerGate();},async close(){releasePeerGate();markPeerHeld();try{await f.close();}finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));rmSync(privateRoot,{recursive:true,force:true});}}};
+ return {...f,observations,nativeNetwork,connectionId:options.summary.connectionId,credentialFile,posts:()=>posts,peerHeld,releasePeer(){releasePeerGate();},async close(){releasePeerGate();markPeerHeld();try{await f.close();}finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));rmSync(privateRoot,{recursive:true,force:true});}},
+  // RUN109: the parent-controlled fixture owner rotates ONLY its OWN generated synthetic credential bytes (no host secret, no host mount) and the local peer's accepted bytes move together — the fixture owner re-establishes its synthetic supported credential through the SAME existing write mechanism it used at creation. Secret bytes never enter observations/logs; only their digest is exposed.
+  rotateSyntheticCredential(bytes){assert.ok(/^[A-Za-z0-9._~-]{8,4096}$/.test(bytes)&&bytes!==expectedCredential,'PAN548_RUN109_SYNTHETIC_ROTATION_MUST_CHANGE_THE_GENERATED_BYTES');writeFileSync(credentialFile,bytes,{mode:0o600});expectedCredential=bytes;},currentCredentialDigest(){return hash(expectedCredential);}};
 }
 async function selectConnectedView(f){
  await f.page.locator(view).getByRole('button',{name:'Rechnungswert',exact:true}).focus();
@@ -2198,6 +2210,1080 @@ test('PUI07 RUN88 READABLE MISSING-OPERATION REASONS SURVIVE PLAN RUN READ DENIA
   await visibleCaptureV1('run89-agent-task-operation-reasons-390-visible');
   images.push(await capture(f,'run88-agent-task-operation-reasons-390'));
   assert.equal(f.readPersisted().revision,0,'the reason presentation persists nothing');
+  assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+// RUN105 helpers: the SAME registered assembly observes its own real persistence — a read-only
+// second connection to the actual profile database the mounted565 owner writes (existing test-owned
+// leading source only, same seam the565 browser suite was accepted with) — plus an in-page reconcile
+// probe that reads its OWN real body (a bare non-200 passes vacuously) and a last-readback getter.
+function persistedConnectionRow548(f){const db=new DatabaseSync(join(f.root,'browser-profiles.sqlite'),{readOnly:true});try{const rows=db.prepare("SELECT revision,state FROM workspace_model_connections WHERE tenant='tenant-a' AND subject='synthetic:erv-reader'").all();assert.equal(rows.length,1,'PAN548_RUN105_REAL_SOURCE_ROW_MISSING');return{revision:rows[0].revision,state:JSON.parse(rows[0].state)};}finally{db.close();}}
+// RUN108: read-only observation of the ACTUAL persisted native budget ledger behind this fixture's single
+// route/principal — the accounting truth every refund/reset/exhaustion claim is checked against. The SELECT
+// mutates, refunds or resets nothing; the WAL fallback merely keeps the observation possible while the
+// owner writer holds the ledger open.
+function nativeLedgerRows548(f){const dirs=readdirSync(f.root).filter(n=>n.startsWith('native-model-budget-'));assert.equal(dirs.length,1,'PAN548_RUN107 exactly one native budget ledger is expected for this fixture principal/route');const file=join(f.root,dirs[0],'resource-budget.sqlite');let db;try{db=new DatabaseSync(file,{readOnly:true});}catch{db=new DatabaseSync(file);db.exec('PRAGMA busy_timeout=15000');}try{return db.prepare('SELECT operation_id,state,runtime_units,runtime_consumed FROM reservations').all();}finally{db.close();}}
+const connectionReadbacks548=f=>f.responses.filter(r=>r.path.endsWith('/workspace/model-connection')&&r.method==='GET'&&r.status===200);
+const reconcilePosts548=f=>f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/reconcile'));
+// RUN106: the protected owner route admits the EXACT session scope BEFORE the owner usage oracle, so an
+// owner-bound probe must carry the actual held readback's own binding.sessionId behind x-pan565-session —
+// the same seam the accepted565 probe uses (browser-model-connection.test.mjs:35/850). Omitting the session
+// keeps a genuine scope-negative: the route denies with 403 MODEL_CONNECTION_SCOPE_DENIED before the owner.
+async function reconcileProbe548(f,body,session){return f.page.evaluate(async payload=>{const response=await fetch('/t/tenant-a/workspace/model-connection/reconcile',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json',...(payload.session===undefined?{}:{'x-pan565-session':payload.session})},body:JSON.stringify(payload.body)});let error=null;try{error=(await response.json()).error;}catch{}return[response.status,error];},{body,session});}
+// RUN109: a direct forced connection-mutation POST over the EXACT owner route, witnessing the backend's exact denial of a stale cached authority (session taken from the actually-read readback itself).
+async function probePostV1109(f,body,session){return f.page.evaluate(async payload=>{const response=await fetch('/t/tenant-a/workspace/model-connection/probe',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json','x-pan565-session':payload.session},body:JSON.stringify(payload.body)});let error=null;try{error=(await response.json()).error;}catch{}return[response.status,error];},{body,session});}
+async function retainedProbeHold548(f){
+ await f.page.locator('[id="shell.model-connection"]').getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();
+ await f.page.locator('[id="shell.model-connection"]').getByRole('button',{name:'Begrenzte Inferenz separat prüfen',exact:true}).click();
+ await f.page.locator('[id="shell.model-connection"][data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+ const held=connectionReadbacks548(f).at(-1).value;
+ assert.equal(held.reason,'UNKNOWN_USAGE_RETAINED','PAN548_RUN105 the real provider timeout did not retain the usage hold');
+ assert.equal(held.checks.INFERENCE.state,'UNKNOWN_USAGE');assert.equal(held.unknownUsage.reconcilable,true);
+ assert.match(held.unknownUsage.operationId,/^operation:mc-[a-f0-9]{40}$/,'PAN548_RUN105 held operation not disclosed');
+ assert.equal(f.posts(),1,'PAN548_RUN105 the timed-out original dispatch was retried');
+ return held;}
+// RUN105 positive journey on the existing registered real-browser assembly: the genuine probe-timeout
+// UNKNOWN_USAGE connection hold, disclosed by the mounted565 dialog from its independent readback,
+// drives the548 panel's hold guidance; the guided navigation focuses the dialog's OWN reconcile
+// control without triggering anything; the explicit keyboard activation settles exactly one route POST
+// plus the mandatory independent GET and the real source row at revision+1 — only the connection cost
+// at the code-owned synthetic zero price. The panel re-honests to the generic missing-step line, the
+// plan denial stands (a settled zero-price connection cost does not revive task startability), the
+// unsent text, provider counts and every authority stay untouched. NOT LLM.
+test('PUI07 RUN105 actual same-shell retained connection hold drives the548 panel guidance into the565 dialog: the genuine probe-timeout UNKNOWN_USAGE hold discloses the exact operation, real navigation focuses the existing reconcile control with zero added requests, the explicit keyboard reconcile settles only the connection cost over the real route plus independent readback and persisted source, then the panel re-honests to the generic missing-step guidance with no provider retry, no task authority and no lost unsent text; NOT LLM',async()=>{
+ const f=await connectedFixture({hangInferenceProbeOnce:true,maxTimeMs:3000});
+ try{
+  const before=f.business(),connection='[id="shell.model-connection"]',guidance=f.page.locator(root+' [data-agent-connection-guidance="true"]');
+  await open(f);await selectConnectedView(f);await connect(f);
+  const held=await retainedProbeHold548(f),heldOperation=held.unknownUsage.operationId;
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-hold'),'RECONCILABLE_ZERO_PRICE','PAN548_RUN105 the dialog discloses no live hold presentation');
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-operation-id'),heldOperation,'PAN548_RUN105 the dialog hold presentation drifted from the readback');
+  assert.ok((await f.page.locator(connection).innerText()).includes('Nativer Nutzungs-Hold'),'PAN548_RUN105 the dialog hold row is not truthfully displayed');
+  // The genuine plan denial while the connection hold stands: the guidance now explains THIS hold instead of the generic read-then-replan sentence.
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLAN_DENIED');await f.flushResponses();
+  assert.equal(f.posts(),1,'PAN548_RUN105 the plan denial touched the provider transport');
+  assert.equal(await guidance.isVisible(),true,'PAN548_RUN105 guidance absent while the hold denied the plan');
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'RECONCILABLE_ZERO_PRICE','PAN548_RUN105 guidance ignored the current hold disclosure');
+  const guidanceText=await guidance.innerText();
+  for(const claim of[heldOperation,'vollständige Reservierung','Verbrauch nicht bestätigt','kein automatischer Retry','Nullpreis-Hold jetzt abgleichen','keine Erstattung'])assert.ok(guidanceText.includes(claim),'PAN548_RUN105 hold guidance lacks the truthful claim '+claim+': '+guidanceText);
+  assert.ok(!guidanceText.includes('Fehlender Schritt'),'PAN548_RUN105 the generic guidance displaced the actual hold explanation');
+  await connectedCapture(f,'desktop-run105-panel-hold-guidance');
+  await f.page.setViewportSize({width:390,height:844});await connectedCapture(f,'desktop-run105-panel-hold-guidance-390');await f.page.setViewportSize({width:1280,height:900});
+  // Close the dialog through its OWN control, then navigate from the panel: pure navigation now lands focus on the dialog's own reconcile control and triggers nothing.
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsdialog schließen',exact:true}).click();
+  const requestsAtNav=f.requests.length,responsesAtNav=f.responses.length,readsAtNav=connectionReadbacks548(f).length,taskText=await f.page.locator('#pan548-agent-intent').inputValue(),startsBefore=count(f,'start');
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(f,'CONNECTION_AREA_FOCUSED');
+  assert.equal(await f.page.evaluate(()=>document.activeElement?.id),'pan565-reconcile','PAN548_RUN105 navigation did not focus the dialog\u2019s own reconcile control');
+  const focusHit=await f.page.evaluate(()=>{const a=document.activeElement,r=a.getBoundingClientRect(),hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return{width:r.width,height:r.height,hitSelf:!!hit&&(hit===a||a.contains(hit))};});
+  assert.ok(focusHit.width>0&&focusHit.height>0&&focusHit.hitSelf,'PAN548_RUN105 the focused reconcile control is not hit-testable: '+JSON.stringify(focusHit));
+  // No run-truth phase stood in the status here (PLAN_DENIED), so the existing CONNECTION_AREA_FOCUSED reporting carries the honest hold message in the native status line.
+  const navStatusText=await f.page.locator(root+' [role="status"]').first().innerText();
+  for(const claim of[heldOperation,'kein Abgleich','keine Erstattung'])assert.ok(navStatusText.includes(claim),'PAN548_RUN105 the navigation status lacks the truthful hold message '+claim+': '+navStatusText);
+  await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtNav,'PAN548_RUN105 navigation triggered added requests');
+  assert.equal(f.responses.length,responsesAtNav,'PAN548_RUN105 navigation triggered added responses');
+  assert.equal(connectionReadbacks548(f).length,readsAtNav,'PAN548_RUN105 navigation triggered a connection revalidation');
+  assert.equal(f.posts(),1,'PAN548_RUN105 navigation triggered a provider or feedback POST');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN105 navigation triggered a start');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN105 navigation lost the unsent task text');
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-hold'),'RECONCILABLE_ZERO_PRICE','PAN548_RUN105 navigation settled the hold');
+  // Explicit KEYBOARD activation of the focused dialog control: exactly one route POST plus the mandatory independent GET, the real source row persists the settlement at revision+1 and the provider stays silent.
+  const rowBefore=persistedConnectionRow548(f);
+  await f.page.keyboard.press('Enter');
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  assert.equal(reconcilePosts548(f).length,1,'PAN548_RUN105 the reconcile POST is not exactly one');
+  assert.equal(connectionReadbacks548(f).length,readsAtNav+1,'PAN548_RUN105 the mandatory independent readback is missing or doubled');
+  const settled=connectionReadbacks548(f).at(-1).value;
+  assert.equal(settled.unknownUsage,null,'PAN548_RUN105 the hold is still disclosed after settlement');
+  assert.equal(settled.revision,rowBefore.revision+1,'PAN548_RUN105 the independent readback disagrees with the persisted revision');
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-hold'),null,'PAN548_RUN105 a stale hold presentation survived the settlement');
+  assert.equal(await f.page.locator('#pan565-unknown-usage').count(),0,'PAN548_RUN105 the stale hold row survived the settlement');
+  assert.ok((await f.page.locator(connection).innerText()).includes('SYNTHETIC_ZERO_PRICE_RECONCILED_NO_MODEL_PASS'),'PAN548_RUN105 the settled inference state is not honestly re-read');
+  assert.equal(f.posts(),1,'PAN548_RUN105 the reconcile touched the provider transport');
+  const rowAfter=persistedConnectionRow548(f);
+  assert.equal(rowAfter.revision,rowBefore.revision+1,'PAN548_RUN105 the persisted settlement revision drifted');
+  assert.equal(rowAfter.state.lastOperation,heldOperation,'PAN548_RUN105 the settled operation vanished from the real source row');
+  // The panel stays honest: the navigation state stands, the guidance retired with the settlement and a fresh explicit plan attempt still denies — RUN107: since the dialog now genuinely discloses a confirmed current readback with no hold, the guidance tells the truth (CONNECTION_CONFIRMED_TASK_DENIED) instead of the old GENERIC 'connection not confirmed or revoked' sentence, and still claims no hold.
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'CONNECTION_AREA_FOCUSED','PAN548_RUN105 the settlement overwrote the panel state');
+  assert.equal(await guidance.isVisible(),false,'PAN548_RUN105 the guidance stayed visible after the settlement');
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLAN_DENIED');await f.flushResponses();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_CONFIRMED_TASK_DENIED','PAN548_RUN105/RUN107 a stale hold guidance was resurrected after the settlement, or the confirmed-connection denial truth was not told');
+  assert.ok(!(await guidance.innerText()).includes('Nutzungs-Hold'),'PAN548_RUN105 the settled hold is still claimed in the guidance');
+  assert.equal(f.posts(),1,'PAN548_RUN105 the post-settlement plan attempt touched the provider');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN105 a fake task startability revived after the settlement');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN105 the journey lost the unsent task text');
+  assert.equal(await f.page.locator('#pan548-agent-inference-consent').isVisible(),false,'PAN548_RUN105 a stale consent checkbox revived');
+  await connectedCapture(f,'desktop-run105-panel-after-settlement');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+// RUN105 stale-presentation journey: the ONLY hold source is the connection module's live disclosure.
+// The actual unconfirmed read discards it (the panel falls back to the honest generic denial guidance
+// with no hold claim), the fresh independent read re-discloses the still-held operation live and the
+// panel re-sources it on the next render pass; the navigation focuses the reconcile control again;
+// logout retires the panel with its guidance while the route itself denies the late reconcile with
+// 401 — no resurrected cached offer anywhere; the provider stays frozen at the one timed-out attempt.
+test('PUI07 RUN105 stale retained-hold presentation: a real unconfirmed connection read discards the live hold disclosure and the panel falls back to the generic denial guidance, a fresh independent read re-discloses the still-held operation live, logout retires the panel guidance while the route denies the late reconcile with HOSTED_SESSION_DENIED, and the provider stays frozen at exactly one attempt; NOT LLM',async()=>{
+ const f=await connectedFixture({hangInferenceProbeOnce:true,maxTimeMs:3000});let cdp;
+ try{
+  const connection='[id="shell.model-connection"]',guidance=f.page.locator(root+' [data-agent-connection-guidance="true"]');
+  await open(f);await selectConnectedView(f);await connect(f);
+  const held=await retainedProbeHold548(f),heldOperation=held.unknownUsage.operationId;
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLAN_DENIED');await f.flushResponses();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'RECONCILABLE_ZERO_PRICE','PAN548_RUN105 the hold guidance was absent before the denial');
+  // A REAL lost independent read: the genuine GET is failed at the transport, the product lands on READBACK_NOT_CONFIRMED and must discard the live hold presentation.
+  cdp=await f.context.newCDPSession(f.page);
+  let denied,resolvePaused;const paused=new Promise(r=>{resolvePaused=r;});
+  await cdp.send('Fetch.enable',{patterns:[{urlPattern:f.tls.origin+'*/workspace/model-connection',requestStage:'Response'}]});
+  cdp.on('Fetch.requestPaused',event=>{if(event.request.method==='GET'){denied=event;resolvePaused();}});
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await paused;
+  await cdp.send('Fetch.failRequest',{requestId:denied.requestId,errorReason:'Failed'});
+  await f.page.locator(connection+'[data-state="READBACK_NOT_CONFIRMED"]').waitFor();await f.flushResponses();
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-hold'),null,'PAN548_RUN105 the stale hold presentation survived the unconfirmed read');
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'GENERIC','PAN548_RUN105 the hold guidance was kept as a cached offer through the denial');
+  const deniedGuidance=await guidance.innerText();
+  assert.ok(deniedGuidance.includes('nicht bestätigt')&&!deniedGuidance.includes('Nutzungs-Hold'),'PAN548_RUN105 the denial guidance still claims a hold: '+deniedGuidance);
+  await cdp.send('Fetch.disable');
+  // The fresh independent read re-discloses the STILL-HELD operation live; the next panel render pass re-sources it — presentation, never a cached offer.
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-hold'),'RECONCILABLE_ZERO_PRICE','PAN548_RUN105 the fresh read did not re-disclose the still-held operation');
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-operation-id'),heldOperation,'PAN548_RUN105 the re-disclosed hold names a different operation');
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLAN_DENIED');await f.flushResponses();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'RECONCILABLE_ZERO_PRICE','PAN548_RUN105 the panel did not re-source the live hold on the next render');
+  // Navigation focuses the reconcile control again, then logout retires the whole panel presentation.
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsdialog schließen',exact:true}).click();
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(f,'CONNECTION_AREA_FOCUSED');
+  assert.equal(await f.page.evaluate(()=>document.activeElement?.id),'pan565-reconcile','PAN548_RUN105 the re-sourced navigation did not focus the reconcile control');
+  await f.page.getByRole('button',{name:'Abmelden',exact:true}).click();
+  await f.page.getByRole('heading',{name:'Abgemeldet',exact:true}).waitFor();
+  assert.equal(await f.page.locator(root).count(),0,'PAN548_RUN105 the panel survived the logout');
+  assert.equal(await f.page.locator(root+' [data-agent-connection-guidance="true"]').count(),0,'PAN548_RUN105 a stale guidance survived the logout');
+  assert.deepEqual(await reconcileProbe548(f,{operationId:heldOperation,identityDigest:held.identityDigest}),[401,'HOSTED_SESSION_DENIED'],'PAN548_RUN105 the retired session reconciled anyway');
+  assert.equal(f.posts(),1,'PAN548_RUN105 the retired session touched the provider');
+  assert.deepEqual(f.errors,[]);
+ }finally{await cdp?.detach();await f.close();}
+});
+// RUN105 negative: a task-level unconfirmed outcome WITHOUT a connection-level hold earns no
+// connection-hold claim. The genuine malformed-feedback OUTCOME_UNCONFIRMED keeps its exact phase
+// across the guided navigation; the guidance stays hidden (no false hold, no fake settlement) and the
+// connection root discloses nothing; zero added requests, no provider retry, unsent text intact.
+test('PUI07 RUN105 task-level unconfirmed outcome without a connection hold earns no connection-hold claim: the genuine malformed-feedback OUTCOME_UNCONFIRMED keeps its phase across guided navigation while the panel guidance stays hidden, the connection root discloses no hold and the feedback provider counts stay frozen; NOT LLM',async()=>{
+ const f=await connectedFixture({unknown:true});
+ try{
+  const connection='[id="shell.model-connection"]',guidance=f.page.locator(root+' [data-agent-connection-guidance="true"]'),outcome=f.page.locator(root+' [data-agent-connection-nav-outcome="true"]');
+  await open(f);await selectConnectedView(f);await connect(f);await boundPlan(f);
+  await f.page.locator('#pan548-agent-inference-consent').check();
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'OUTCOME_UNCONFIRMED');await f.flushResponses();
+  assert.equal(f.posts(),2,'PAN548_RUN105 the genuine feedback round did not happen exactly once');
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-hold'),null,'PAN548_RUN105 a connection hold was claimed without a retained connection hold');
+  assert.equal(await guidance.isVisible(),false,'PAN548_RUN105 a hold guidance claimed the task-only unconfirmed state');
+  const requestsAtNav=f.requests.length,responsesAtNav=f.responses.length,taskText=await f.page.locator('#pan548-agent-intent').inputValue();
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'OUTCOME_UNCONFIRMED','PAN548_RUN105 the navigation overwrote the retained task phase');
+  assert.equal(await guidance.isVisible(),false,'PAN548_RUN105 the navigation conjured a hold guidance in the task-only unconfirmed state');
+  const outcomeText=await outcome.innerText();
+  assert.ok(outcomeText.includes('geöffnet und fokussiert')&&outcomeText.includes('Auftragstext bleibt erhalten')&&outcomeText.includes('weder Fortsetzen'),'PAN548_RUN105 the navigation echo is not the honest no-action report: '+outcomeText);
+  await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtNav,'PAN548_RUN105 the navigation triggered added requests');
+  assert.equal(f.responses.length,responsesAtNav,'PAN548_RUN105 the navigation triggered added responses');
+  assert.equal(f.posts(),2,'PAN548_RUN105 the navigation retried provider or feedback traffic');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN105 the navigation lost the unsent task text');
+  assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+// RUN105 owner-bound negative: an externally priced retained hold stays with the qualified owner
+// usage reader. The composed UI discloses reconcilable=false, the panel guidance and the navigation
+// echo name the owner reader with no fake browser settlement, the dialog offers NO reconcile control,
+// the focus route keeps the first ENABLED dialog control and the exact reconcile POST is denied by
+// the owner with MODEL_CONNECTION_USAGE_ORACLE_UNAVAILABLE while the hold, its revision and the
+// frozen provider count survive the denial.
+test('PUI07 RUN105 externally priced retained hold stays owner-reader-only in the composed UI: reconcilable=false discloses without a fake browser settlement, guidance and navigation echo name the qualified owner reader, the exact reconcile POST is denied by MODEL_CONNECTION_USAGE_ORACLE_UNAVAILABLE and the full hold survives; NOT LLM',async()=>{
+ const f=await connectedFixture({hangInferenceProbeOnce:true,ownerBoundPriced:true,maxTimeMs:3000});
+ try{
+  const connection='[id="shell.model-connection"]',guidance=f.page.locator(root+' [data-agent-connection-guidance="true"]');
+  await open(f);await selectConnectedView(f);await connect(f);
+  await f.page.locator(connection).getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();
+  await f.page.locator(connection).getByRole('button',{name:'Begrenzte Inferenz separat prüfen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  const held=connectionReadbacks548(f).at(-1).value;
+  assert.equal(held.reason,'UNKNOWN_USAGE_RETAINED');assert.equal(held.unknownUsage.reconcilable,false,'PAN548_RUN105 the priced route claimed browser reconcilability');
+  const heldOperation=held.unknownUsage.operationId;
+  assert.equal(await f.page.locator(connection).getAttribute('data-unknown-usage-hold'),'OWNER_READER_ONLY','PAN548_RUN105 the priced hold disclosure is missing or misclassified');
+  assert.equal(await f.page.locator('#pan565-reconcile').count(),0,'PAN548_RUN105 a fake browser settlement appeared for the priced hold');
+  assert.ok((await f.page.locator(connection).innerText()).includes('Owner-Nutzungsleser'),'PAN548_RUN105 the dialog hides the owner-reader-only settlement');
+  assert.equal(f.posts(),1,'PAN548_RUN105 the priced-route timeout was retried');
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLAN_DENIED');await f.flushResponses();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'OWNER_READER_ONLY','PAN548_RUN105 the panel guidance ignored the priced hold disclosure');
+  const guidanceText=await guidance.innerText();
+  assert.ok(guidanceText.includes(heldOperation)&&guidanceText.includes('Owner-Nutzungsleser')&&guidanceText.includes('vollständige Reservierung'),'PAN548_RUN105 the priced guidance lacks the truthful claims: '+guidanceText);
+  assert.ok(!guidanceText.includes('Nullpreis'),'PAN548_RUN105 the priced guidance invented a zero-price settlement: '+guidanceText);
+  await connectedCapture(f,'desktop-run105-owner-bound-hold-guidance');
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsdialog schließen',exact:true}).click();
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(f,'CONNECTION_AREA_FOCUSED');
+  assert.equal(await f.page.evaluate(()=>document.activeElement?.id),'pan565-connection-choice','PAN548_RUN105 the priced-route navigation faked a reconcile focus');
+  const navStatusText=await f.page.locator(root+' [role="status"]').first().innerText();
+  assert.ok(navStatusText.includes('keine Browser-Abgleichaktion')&&navStatusText.includes(heldOperation),'PAN548_RUN105 the priced-route navigation status is not honest: '+navStatusText);
+  // RUN106: scope admission happens BEFORE the owner usage oracle on the protected route. The missing/foreign
+  // header probes are separate exact403 scope-negative coverage, never a substitute for the owner's own refusal;
+  // the owner-bound probe carries the ACTUAL held readback's own binding.sessionId, so the exact400 below can
+  // only come from the owner's oracle — not from any earlier gate.
+  assert.deepEqual(await reconcileProbe548(f,{operationId:heldOperation,identityDigest:held.identityDigest}),[403,'MODEL_CONNECTION_SCOPE_DENIED'],'PAN548_RUN106 the headerless priced probe was not denied by scope admission exactly');
+  assert.deepEqual(await reconcileProbe548(f,{operationId:heldOperation,identityDigest:held.identityDigest},'session:'+'0'.repeat(64)),[403,'MODEL_CONNECTION_SCOPE_DENIED'],'PAN548_RUN106 the foreign-session priced probe was not denied by scope admission exactly');
+  assert.deepEqual(await reconcileProbe548(f,{operationId:heldOperation,identityDigest:held.identityDigest},held.binding.sessionId),[400,'MODEL_CONNECTION_USAGE_ORACLE_UNAVAILABLE'],'PAN548_RUN106 the same-session probe reconciled the priced hold anyway or was denied before the owner oracle');
+  assert.equal(reconcilePosts548(f).length,3,'PAN548_RUN106 the reconcile probe POST accounting drifted');
+  await f.flushResponses();
+  // Every denial mutates nothing: the EXPLICIT independent product read re-discloses the FULL hold live (the
+  // owner-derived accounting truth) and the real persisted source row stands at its unchanged revision with the
+  // held operation and the UNKNOWN_USAGE phase retained — read-only observation of the actual source, no fixture state.
+  const readsAtProbe=connectionReadbacks548(f).length;
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await f.page.locator(connection+'[data-state="CURRENT_CONNECTION"]').waitFor();await f.flushResponses();
+  assert.equal(connectionReadbacks548(f).length,readsAtProbe+1,'PAN548_RUN106 the post-denial independent read is missing or doubled');
+  const after=connectionReadbacks548(f).at(-1).value;
+  assert.deepEqual(after.unknownUsage,held.unknownUsage,'PAN548_RUN106 the denied reconcile altered the disclosed hold');
+  assert.equal(after.revision,held.revision,'PAN548_RUN105 the denial mutated the hold');
+  const rowAfter=persistedConnectionRow548(f);
+  assert.equal(rowAfter.revision,held.revision,'PAN548_RUN106 the denied reconcile advanced the persisted source revision');
+  assert.equal(rowAfter.state.lastOperation,heldOperation,'PAN548_RUN106 the denied reconcile dropped the held operation from the real source');
+  assert.equal(rowAfter.state.checks.INFERENCE.state,'UNKNOWN_USAGE','PAN548_RUN106 the real source no longer retains the priced hold');
+  assert.equal(f.posts(),1,'PAN548_RUN105 the denied reconcile touched the provider');
+  assert.equal(f.readPersisted().revision,0);assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+// RUN107/RUN108 PUI-07-AC01/AC03/04 + UIDOD-03/07 with #565 A4-AC05/06: the USEFUL connected requalification journey after the genuine settled hold, on the UNCHANGED closed caps. The only guidance source stays the connection module's live validated disclosure: while the dialog currently discloses a confirmed readback (CURRENT_CONNECTION, no hold) but the TASK layer stays denied, the panel tells that truth (CONNECTION_CONFIRMED_TASK_DENIED) instead of the old false 'connection not confirmed or revoked' sentence. The denial survives an unconfirmed read (honest GENERIC fallback) and is re-sourced live by the fresh read — never a cached offer. RUN108 removed the invalid RUN107 fixture boost: the contract's closed ceiling (validateModelConnectionLimitsV1: maxRequests<=3) rejects 6, and the same-grant task admission reserves the grant's ENTIRE request ceiling (native-model-connection.mjs prepareFeedback: budgetSnapshot.runtime.committedUnits+limits.maxRequests>g.limits.maxRequests), so any single consumed request legitimately blocks that grant's task forever. A same-grant task positive is therefore NOT source-supported here — this journey fabricates none, resets no ledger, issues no new grant, falls back to no provider and relaxes no guard; the accepted fresh-native positive journeys in this file run on unspent grants and stay retained. Instead the truth is proven live: the genuine settlement, the honest denial guidance, the explicit dialog re-selection plus prerequisite rechecks that genuinely pass, the connection layer re-earning its OWN positive within the remaining request budget through its own controls (two further real synthetic provider requests, settled with observed usage), the actual persisted native ledger settling exactly the three real requests with no refund, the exhausted closed grant disclosed honestly as BUDGET_EXHAUSTED in both layers, and the task denial that never auto-retries nor promises success. Desktop and 390 captures prove the changed rendering is actually readable and hit-reachable. Controlled synthetic transport: NOT LLM.
+test('PUI07 RUN107 connected settled-hold requalification on the unchanged closed caps: after the genuine zero-price settlement the confirmed connection earns the honest CONNECTION_CONFIRMED_TASK_DENIED guidance instead of a false not-confirmed claim, the spent-grant task denial survives the fresh explicit rechecks without any forged same-grant task positive or refund, the connection layer re-earns its own positive within the remaining request budget through its own controls, the persisted native ledger settles exactly the three real requests, and the exhausted closed grant plus the still-denied task honestly offer nothing more; NOT LLM',async()=>{
+ const f=await connectedFixture({hangInferenceProbeOnce:true,maxTimeMs:3000});
+ try{
+  const before=f.business(),connection='[id=\"shell.model-connection\"]',guidance=f.page.locator(root+' [data-agent-connection-guidance=\"true\"]'),consent=f.page.locator('#pan548-agent-inference-consent');
+  const planAgain=async()=>{await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();await state(f,'PLAN_DENIED');await f.flushResponses();};
+  const guidanceGeometryV1=async label=>{await guidance.evaluate(n=>n.scrollIntoView({block:'center'}));const g=await guidance.evaluate(n=>{const r=n.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height,vw:innerWidth,vh:innerHeight,scrollWidth:n.scrollWidth,clientWidth:n.clientWidth};});assert.ok(g.height>0&&g.top>=0&&g.bottom<=g.vh,'PAN548_RUN107_GUIDANCE_NOT_FULLY_REVEALABLE_BY_SCROLL_'+label+':'+JSON.stringify(g));assert.ok(g.left>=0&&g.right<=g.vw&&g.scrollWidth<=g.clientWidth+1,'PAN548_RUN107_GUIDANCE_HORIZONTALLY_CLIPPED_'+label+':'+JSON.stringify(g));const hitSelf=await guidance.evaluate(n=>{const r=n.getBoundingClientRect(),hit=document.elementFromPoint(Math.min(Math.max(r.left+r.width/2,0),innerWidth-1),Math.min(Math.max(r.top+r.height/2,1),innerHeight-1));return hit===n||n.contains(hit);});assert.ok(hitSelf,'PAN548_RUN107_GUIDANCE_NOT_ACTUALLY_SHOWN_ON_TOP_'+label+':'+JSON.stringify(g));};
+  await open(f);await selectConnectedView(f);await connect(f);
+  // Test base: the genuine probe-timeout hold still denies the plan with its own truthful hold line.
+  const held=await retainedProbeHold548(f),heldOperation=held.unknownUsage.operationId;
+  await planAgain();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'RECONCILABLE_ZERO_PRICE','PAN548_RUN107 the test base lacks the live hold guidance');
+  // Existing explicit zero-price settlement through the dialog's OWN focused control, keyboard-operated: exactly one reconcile POST plus the mandatory independent readback, the real source row persists the settlement with the operation retained.
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsdialog schließen',exact:true}).click();
+  const taskText=await f.page.locator('#pan548-agent-intent').inputValue(),startsBefore=count(f,'start'),readsAtNav=connectionReadbacks548(f).length;
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(f,'CONNECTION_AREA_FOCUSED');
+  assert.equal(await f.page.evaluate(()=>document.activeElement?.id),'pan565-reconcile','PAN548_RUN107 navigation did not focus the dialog’s own reconcile control');
+  await f.page.keyboard.press('Enter');
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  assert.equal(reconcilePosts548(f).length,1,'PAN548_RUN107 the settlement reconcile POST is not exactly one');
+  assert.equal(connectionReadbacks548(f).length,readsAtNav+1,'PAN548_RUN107 the mandatory independent readback is missing or doubled');
+  const settledRow=persistedConnectionRow548(f);
+  assert.equal(settledRow.state.lastOperation,heldOperation,'PAN548_RUN107 the settled operation vanished from the real source');
+  assert.ok((await f.page.locator(connection).innerText()).includes('SYNTHETIC_ZERO_PRICE_RECONCILED_NO_MODEL_PASS'),'PAN548_RUN107 the settled inference state is not honestly re-read');
+  // (A) The confirmed-connection denial truth replaces the old GENERIC lie while the task layer stands denied.
+  await planAgain();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_CONFIRMED_TASK_DENIED','PAN548_RUN107 the confirmed connection was still denied with the old not-confirmed claim');
+  const guidanceText=await guidance.innerText();
+  for(const claim of['Fehlender Schritt','unabhängig gelesen','weder Abschluss noch Wiederaufnahme','Anfragen-Budget','Verbindungsbereich öffnen','Verweigert bleibt verweigert','keine Erstattung','kein automatischer Retry','Owner-Freigabe'])assert.ok(guidanceText.includes(claim),'PAN548_RUN107 the confirmed-connection guidance lacks the truth '+claim+': '+guidanceText);
+  for(const absent of['Nutzungs-Hold','Nullpreis','nicht bestätigt oder entwertet','abgehakt'])assert.ok(!guidanceText.includes(absent),'PAN548_RUN107 the confirmed-connection guidance claims '+absent+': '+guidanceText);
+  assert.equal(await f.page.locator('#pan565-reconcile').count(),0,'PAN548_RUN107 a fabricated browser settlement appeared after the settlement');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN107 a stale consent revived while the task stays denied');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN107 the confirmed connection forged task startability');
+  assert.equal(f.posts(),1,'PAN548_RUN107 the requalification guidance stage touched the provider');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN107 the denied requalification started a task');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN107 the denied stage lost the unsent task text');
+  // The changed rendering is actually readable and hit-reachable at desktop AND 390, then captured.
+  await guidanceGeometryV1('desktop');
+  await connectedCapture(f,'desktop-run107-confirmed-connection-task-denied-guidance');
+  await f.page.setViewportSize({width:390,height:844});
+  await showAgentTechnicalUI(f.page);
+  await guidanceGeometryV1('phone390');
+  await connectedCapture(f,'desktop-run107-confirmed-connection-task-denied-guidance-390');
+  await f.page.setViewportSize({width:1280,height:900});
+  // (B) Denied-state staleness: a REAL lost independent read demotes the guidance to the honest GENERIC sentence; the fresh read re-sources the confirmed-connection truth on the next panel render pass — presentation, never a cached offer. The denial itself mutates nothing in the real source.
+  await f.page.route('**/workspace/model-connection',route=>route.request().method()==='GET'?void route.abort('failed'):void route.continue());
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await f.page.locator(connection+'[data-state=\"READBACK_NOT_CONFIRMED\"]').waitFor();await f.flushResponses();
+  await planAgain();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'GENERIC','PAN548_RUN107 the unconfirmed read kept claiming a confirmed connection');
+  const deniedGuidance=await guidance.innerText();
+  assert.ok(deniedGuidance.includes('nicht bestätigt')&&!deniedGuidance.includes('Nutzungs-Hold'),'PAN548_RUN107 the lost-read guidance misreports the state: '+deniedGuidance);
+  await f.page.unroute('**/workspace/model-connection');
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  await planAgain();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_CONFIRMED_TASK_DENIED','PAN548_RUN107 the fresh read did not re-source the confirmed-connection denial truth live');
+  const denialRow=persistedConnectionRow548(f);
+  assert.equal(denialRow.revision,settledRow.revision,'PAN548_RUN107 the denied requalification advanced the persisted revision (no refund, no reset)');
+  assert.equal(denialRow.state.lastOperation,heldOperation,'PAN548_RUN107 the denied requalification dropped the settled operation barrier');
+  assert.equal(f.posts(),1,'PAN548_RUN107 the denied requalification touched the provider');
+  // (C) Genuine requalification ONLY through the dialog's OWN controls: the explicit reference re-selection lifts the settled operation barrier and resets the check evidence honestly; the explicit prerequisite rechecks pass for real.
+  await f.page.locator(connection).getByRole('button',{name:'Genau diese Referenz setzen',exact:true}).click();
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  const reselected=connectionReadbacks548(f).at(-1).value;
+  assert.equal(reselected.unknownUsage,null,'PAN548_RUN107 the re-selection disclosed a phantom hold');
+  assert.equal(reselected.revision,settledRow.revision+1,'PAN548_RUN107 the explicit re-selection did not persist exactly one revision bump');
+  assert.equal(persistedConnectionRow548(f).state.lastOperation,null,'PAN548_RUN107 the settled operation barrier survived the explicit reference reset');
+  const resetPhases=await f.page.locator(connection+' ul').innerText();
+  assert.ok(resetPhases.includes('Erreichbarkeit: NOT_RUN'),'PAN548_RUN107 the re-selection did not reset the check evidence honestly: '+resetPhases);
+  for(const label of['Erreichbarkeit','Authentifizierung','Modellverfügbarkeit']){await f.page.locator(connection).getByRole('button',{name:label+' separat prüfen',exact:true}).click();await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();}
+  const requalifiedPhases=await f.page.locator(connection+' ul').innerText();
+  assert.ok(requalifiedPhases.includes('Modellverfügbarkeit: PASS'),'PAN548_RUN107 the prerequisite recheck did not genuinely pass: '+requalifiedPhases);
+  assert.equal(f.posts(),1,'PAN548_RUN107 the recheck stage touched the provider');
+  // (D) The real stock-cap truth under the unchanged closed contract ceiling: settlement refunded nothing, and a task plan reserves the grant's ENTIRE request ceiling, so any task on this same grant stays denied for good — no ledger reset, no new grant, no provider fallback, no guard relaxation. This journey fabricates no same-grant task positive (the accepted fresh-native positive journeys in this file run on unspent grants); it proves the accounting truth live instead.
+  await planAgain();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_CONFIRMED_TASK_DENIED','PAN548_RUN107 the freshly rechecked confirmed connection was still denied with the old not-confirmed claim');
+  assert.ok((await guidance.innerText()).includes('Anfragen-Budget'),'PAN548_RUN107 the spent-grant guidance no longer names the consumed request budget as a real barrier');
+  const spent=connectionReadbacks548(f).at(-1).value;
+  assert.equal(spent.reason,'REFERENCE_SELECTED_NOT_INFERENCE','PAN548_RUN107 the connection layer stopped honestly disclosing the re-read reference with remaining probe budget');
+  assert.notEqual(spent.inferenceOffer,null,'PAN548_RUN107 the connection layer hid the probe budget that genuinely remains below the closed ceiling');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN107 a stale task consent revived while the spent grant denies the task');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN107 the spent grant falsely promised task startability');
+  assert.equal(f.posts(),1,'PAN548_RUN107 the spent-grant task denial touched the provider');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN107 the spent-grant task denial started a task');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN107 the spent-grant denial lost the unsent task text');
+  // The connection layer itself re-earns an honest positive where the remaining request budget permits, using ONLY its own controls: one explicit consent, one real provider request, settled with observed usage in the existing ledger.
+  await f.page.locator(connection).getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  assert.equal(connectionReadbacks548(f).at(-1).value.consent,'BOUNDED_ONCE','PAN548_RUN107 the second explicit probe consent was not honestly re-read');
+  await f.page.locator(connection).getByRole('button',{name:'Begrenzte Inferenz separat prüfen',exact:true}).click();
+  await f.page.locator(connection+' li',{hasText:'Begrenzte Inferenz: PASS'}).first().waitFor();await f.flushResponses();
+  const reprobe=connectionReadbacks548(f).at(-1).value;
+  assert.equal(reprobe.checks.INFERENCE.reason,'SYNTHETIC_INFERENCE_FORMAT_ONLY','PAN548_RUN107 the second real probe did not honestly disclose the synthetic format observation');
+  assert.equal(reprobe.unknownUsage,null,'PAN548_RUN107 the second probe did not settle with its observed usage');
+  assert.equal(reprobe.reason,'REFERENCE_SELECTED_NOT_INFERENCE','PAN548_RUN107 the connection layer stopped honestly disclosing the remaining budget after the second probe');
+  const rowProbe2=persistedConnectionRow548(f);
+  assert.match(rowProbe2.state.lastOperation,/^operation:mc-[a-f0-9]{40}$/,'PAN548_RUN107 the second probe did not persist its own native operation');
+  assert.notEqual(rowProbe2.state.lastOperation,heldOperation,'PAN548_RUN107 the second probe reused the settled operation');
+  assert.ok(rowProbe2.revision>reselected.revision,'PAN548_RUN107 the re-earned positive did not advance the persisted source revision');
+  assert.equal(f.posts(),2,'PAN548_RUN107 the second probe did not add exactly one provider request');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN107 the re-earned connection positive falsely promised a task consent');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN107 the re-earned connection positive started a task');
+  // The whole closed ceiling: one more complete cycle consumes the third and last request of this grant; the actual persisted native ledger settles exactly the three real requests, and both layers then honestly offer nothing more.
+  await f.page.locator(connection).getByRole('button',{name:'Genau diese Referenz setzen',exact:true}).click();
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  for(const label of['Erreichbarkeit','Authentifizierung','Modellverfügbarkeit']){await f.page.locator(connection).getByRole('button',{name:label+' separat prüfen',exact:true}).click();await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();}
+  await f.page.locator(connection).getByRole('button',{name:'Genau diese gedeckelte Inferenzprobe freigeben',exact:true}).click();
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  await f.page.locator(connection).getByRole('button',{name:'Begrenzte Inferenz separat prüfen',exact:true}).click();
+  await f.page.locator(connection+' li',{hasText:'Begrenzte Inferenz: PASS'}).first().waitFor();await f.flushResponses();
+  const exhausted=connectionReadbacks548(f).at(-1).value;
+  assert.equal(exhausted.reason,'BUDGET_EXHAUSTED','PAN548_RUN107 the genuinely spent closed grant was not disclosed as exhausted');
+  assert.equal(exhausted.inferenceOffer,null,'PAN548_RUN107 a stale offer survived the genuinely spent grant');
+  assert.equal(exhausted.consent,'NOT_GRANTED','PAN548_RUN107 a stale consent survived the spent grant');
+  assert.equal(await f.page.locator('#pan565-consent').count(),0,'PAN548_RUN107 the dialog offered another probe past the closed request ceiling');
+  assert.ok((await f.page.locator(connection).innerText()).includes('Natives Budget ersch'),'PAN548_RUN107 the dialog does not honestly disclose the exhausted native budget');
+  const ledgerRows=nativeLedgerRows548(f);
+  assert.equal(ledgerRows.length,3,'PAN548_RUN107 the persisted native ledger does not contain exactly the three real probe operations');
+  for(const row of ledgerRows){assert.equal(row.state,'SETTLED','PAN548_RUN107 a native probe request was not settled in the persisted ledger');assert.equal(row.runtime_units,1,'PAN548_RUN107 a native probe over-reserved its request');assert.equal(row.runtime_consumed,1,'PAN548_RUN107 a genuinely consumed native request was refunded on the ledger');}
+  assert.equal(f.posts(),3,'PAN548_RUN107 the actual accounting drifted from exactly three provider requests');
+  // Both layers keep telling the denial truth: a confirmed connection plus a spent grant yields no offer, no consent, no start and no automatic retry.
+  await planAgain();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_CONFIRMED_TASK_DENIED','PAN548_RUN107 the guidance stopped telling the denial truth once the grant was genuinely spent');
+  assert.ok((await guidance.innerText()).includes('Verweigert bleibt verweigert'),'PAN548_RUN107 the spent-grant guidance lost the denial truth');
+  await planAgain();
+  assert.equal(f.posts(),3,'PAN548_RUN107 the denial automatically retried the provider');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN107 the spent grant falsely started a task');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN107 the spent-grant journey lost the unsent task text');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN107 a stale consent revived at the true terminal');
+  await connectedCapture(f,'desktop-run107-stock-cap-spent-denial');
+  // (E) Session retirement discards the whole panel presentation.
+  await f.page.getByRole('button',{name:'Abmelden',exact:true}).click();
+  await f.page.getByRole('heading',{name:'Abgemeldet',exact:true}).waitFor();
+  assert.equal(await f.page.locator(root).count(),0,'PAN548_RUN107 the panel survived the logout');
+  assert.equal(await f.page.locator(root+' [data-agent-connection-guidance=\"true\"]').count(),0,'PAN548_RUN107 a stale guidance survived the logout');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),before);assert.deepEqual(f.errors,[]);
+ }finally{await f.close();}
+});
+// RUN109 #565 A4-AC05 ("Rechtsentzug/Secretrotation deaktiviert abhängige Bereitschaft") + #548 PUI-07-AC01/03/04 on the REAL composed connected mount. The server already invalidated the dependent state (persisted secretFingerprint vs the freshly read transport fingerprint in native-model-connection.mjs current()/projection: checks demote to STALE · IDENTITY_OR_SECRET_CHANGED, every dependent mutation answers 409 MODEL_CONNECTION_STALE_DENIED via origin-session-adapter.mjs) — the genuine connected gap was the SAME-shell browser: the RUN79 revocation hint only watched revision/selectedConnectionId/identityDigest, all UNCHANGED by a rotation, so a checked cached task offer survived the rotation read, and the RUN107 guidance would have told the rotation state as 'confirmed connection, task denied'. This journey closes the user's coherent recovery path with the two narrow product fixes (workspace-model-connection-v1.ts: mirror the validated closed reason + compare the closed readiness-truth vector in the invalidation hint; workspace-agent-panel-v1.ts: tell the rotation truth CONNECTION_SECRET_OR_IDENTITY_CHANGED). The fixture owner rotates ONLY its own generated synthetic bytes; the local peer accepts only the current bytes, so the rotation is real on the wire — digests are recorded, secret bytes never. No new grant/identity/budget reset/provider fallback/UNKNOWN retry; secret/config identity stays separate from session ownership (the same session, origin and profile row survive; only the fingerprint binding re-earns); the native565 direct rotation regression stays independent; NOTHING here claims whole567/original-issue/visual acceptance.
+test('PUI07 RUN109 actual connected synthetic secret rotation deactivates dependent task readiness in the same shell: the forced cached authority is denied exactly by the backend with zero provider traffic, the real independent read revokes the checked cached offer/consent/startability while the unsent text survives, the panel tells the rotation truth instead of a false confirmed-denial claim, a lost read restores nothing, and safe recovery rides ONLY the existing reference-set plus prerequisite rechecks, a fresh explicit plan and the separate unchecked consent into exactly one two-POST synthetic backend run on the same initially unspent grant with persisted independent readback and reload, and RUN112: the recovered task stays useful through the EXISTING separate546 view editor (explicit before/after preview, cancellation leaves the persistent target unchanged, only the separate deliberate confirmation CAS-saves, independent persisted read and reload show the actual bounded personal-view change, the existing Undo is again explicitly confirmed and read) and RUN114: while that preview is open a second authenticated tab of the same session performs its own bounded preview plus separate deliberate confirmation which wins exactly one CAS, the late first-tab confirmation is denied truthfully with the persisted revision conflict (409 SAVE_DENIED, draft preserved, no blind retry, no lost-update overwrite), the explicit re-read keeps the draft while the discarded draft renders the winner and the Undo history appends on top of the winner) while the run/source/phase and connection truth stay coherent with zero added provider traffic; NOT LLM',async()=>{
+ const f=await connectedFixture();let cdp,second;
+ try{
+  const before=f.business(),connection='[id=\"shell.model-connection\"]',guidance=f.page.locator(root+' [data-agent-connection-guidance=\"true\"]'),consent=f.page.locator('#pan548-agent-inference-consent');
+  const rotatedV1='SYNTHETIC_PRIVATE_FILE_CANARY_ROTATED_RUN109_NOT_A_REAL_CREDENTIAL';
+  const guidanceGeometryV1=async label=>{await guidance.evaluate(n=>n.scrollIntoView({block:'center'}));const g=await guidance.evaluate(n=>{const r=n.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height,vw:innerWidth,vh:innerHeight,scrollWidth:n.scrollWidth,clientWidth:n.clientWidth};});assert.ok(g.height>0&&g.top>=0&&g.bottom<=g.vh,'PAN548_RUN109_GUIDANCE_NOT_FULLY_REVEALABLE_BY_SCROLL_'+label+':'+JSON.stringify(g));assert.ok(g.left>=0&&g.right<=g.vw&&g.scrollWidth<=g.clientWidth+1,'PAN548_RUN109_GUIDANCE_HORIZONTALLY_CLIPPED_'+label+':'+JSON.stringify(g));const hitSelf=await guidance.evaluate(n=>{const r=n.getBoundingClientRect(),hit=document.elementFromPoint(Math.min(Math.max(r.left+r.width/2,0),innerWidth-1),Math.min(Math.max(r.top+r.height/2,1),innerHeight-1));return hit===n||n.contains(hit);});assert.ok(hitSelf,'PAN548_RUN109_GUIDANCE_NOT_ACTUALLY_SHOWN_ON_TOP_'+label+':'+JSON.stringify(g));};
+  await open(f);await selectConnectedView(f);await connect(f);
+  const readbackPre=connectionReadbacks548(f).at(-1).value,identityPre=readbackPre.identityDigest,revisionPre=readbackPre.revision,sessionV1=readbackPre.binding.sessionId;
+  // RUN111: from the FIRST connected readback on, the passing reachability check is honestly disclosed as UNAUTHENTICATED reachability (the product deliberately probes it without a bearer; see the phase-ordered wire oracle below) — so the whole journey proves the same oracle on both sides of the rotation.
+  assert.equal(readbackPre.checks.REACHABILITY.reason,'TARGET_REACHED_NOT_AUTH_OR_INFERENCE','PAN548_RUN109 the pre-rotation reachability pass was not honestly disclosed as unauthenticated reachability');
+  const p=await boundPlan(f);
+  const startControl=await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).elementHandle();
+  await consent.check();
+  assert.equal(await startControl.evaluate(b=>b.disabled),false,'PAN548_RUN109 the checked exact offer was not actionable before the rotation');
+  const taskText=await f.page.locator('#pan548-agent-intent').inputValue();
+  assert.notEqual(taskText,'','PAN548_RUN109 missing unsent task text');
+  const startsBefore=count(f,'start'),probePostsBefore=f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/probe')).length;
+  assert.equal(f.posts(),0,'PAN548_RUN109 the checked offer had already touched the provider');
+  // THE rotation: the fixture owner rotates ONLY its own generated synthetic credential bytes (no host secret, no configuration/target change).
+  await f.rotateSyntheticCredential(rotatedV1);
+  assert.equal(f.currentCredentialDigest(),hash(rotatedV1),'PAN548_RUN109 the fixture rotation did not take effect');
+  // Forced activation of the stale cached authority over the EXACT route: the owner denies BEFORE dispatch — parent-exact denial, zero provider traffic, persisted row untouched.
+  assert.deepEqual(await probePostV1109(f,{schemaVersion:'pansphaira.workspace-model-connection/probe/v1',expectedRevision:revisionPre,identityDigest:identityPre,phase:'REACHABILITY'},sessionV1),[409,'MODEL_CONNECTION_STALE_DENIED'],'PAN548_RUN109 the forced stale cached probe authority was not denied exactly by the backend');
+  await f.flushResponses();
+  assert.equal(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/probe')).length,probePostsBefore+1,'PAN548_RUN109 the forced stale probe POST was not exactly one');
+  assert.equal(f.posts(),0,'PAN548_RUN109 the forced stale cached authority dispatched provider inference');
+  const rowForced=persistedConnectionRow548(f);
+  assert.equal(rowForced.revision,revisionPre,'PAN548_RUN109 the denied forced probe mutated the persisted connection revision');
+  assert.equal(rowForced.state.lastOperation,null,'PAN548_RUN109 the denied forced probe left an operation barrier');
+  // The ACTUAL independent connection read exposes the stale/not-ready truth and invalidates the dependent cached task readiness — unsent text and native truth stay intact.
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await state(f,'CONNECTION_CHANGE_OFFER_REVOKED');
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  const stale=connectionReadbacks548(f).at(-1).value;
+  assert.equal(stale.reason,'IDENTITY_OR_SECRET_CHANGED','PAN548_RUN109 the independent read did not expose the rotated secret as the reason');
+  assert.equal(stale.readyForInference,false,'PAN548_RUN109 the stale read still claimed readiness');
+  assert.equal(stale.unknownUsage,null,'PAN548_RUN109 the rotation read invented a usage hold');
+  assert.equal(stale.revision,revisionPre,'PAN548_RUN109 the rotation alone bumped the persisted revision (secret identity is not session ownership)');
+  assert.equal(stale.identityDigest,identityPre,'PAN548_RUN109 the secret rotation changed the target identity itself');
+  for(const phase of['REACHABILITY','AUTHENTICATION','MODEL_AVAILABILITY']){assert.equal(stale.checks[phase].state,'STALE','PAN548_RUN109 the rotation did not demote '+phase);assert.equal(stale.checks[phase].reason,'IDENTITY_OR_SECRET_CHANGED','PAN548_RUN109 the demotion of '+phase+' lacks the truthful reason');}
+  assert.equal(stale.checks.INFERENCE.state,'NOT_RUN','PAN548_RUN109 the rotation faked an inference-state demotion');
+  const dialogText=await f.page.locator(connection).innerText();
+  assert.ok(dialogText.includes('Erreichbarkeit: STALE · IDENTITY_OR_SECRET_CHANGED'),'PAN548_RUN109 the dialog does not honestly re-read the demoted evidence:'+dialogText);
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN109 the rotation left a stale task consent visible');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN109 the rotation left a stale task consent checked');
+  assert.equal(await startControl.evaluate(b=>b.disabled),true,'PAN548_RUN109 the rotation left the cached start enabled');
+  assert.equal(await startControl.evaluate(b=>b.isConnected),true,'PAN548_RUN109 the revocation dropped the retained start node');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN109 the rotation left a cached startability');
+  assert.equal(await f.page.locator(root).getAttribute('data-plan-expired-reason'),null,'PAN548_RUN109 the rotation revocation was faked as a deadline expiry');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN109 the rotation revocation lost the unsent task text');
+  // The rotation truth is told AS the rotation truth — not as a confirmed-connection task denial, not as a generic unconfirmed state.
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_SECRET_OR_IDENTITY_CHANGED','PAN548_RUN109 the panel told the rotation state with the wrong truth kind');
+  const guidanceText=await guidance.innerText();
+  for(const claim of['Secret- oder Konfigurationsidentität','geändert','ausdrücklich neu','jede Phase unabhängig','frisches, nicht angehaktes Angebot','kein automatischer Retry','keine Erstattung','kein Providerwechsel','Verbindungsbereich öffnen','Auftragstext bleibt erhalten'])assert.ok(guidanceText.includes(claim),'PAN548_RUN109 the rotation guidance lacks the truth '+claim+': '+guidanceText);
+  for(const absent of['Nutzungs-Hold','Nullpreis','nicht bestätigt oder entwertet','Verweigert bleibt verweigert','abgehakt'])assert.ok(!guidanceText.includes(absent),'PAN548_RUN109 the rotation guidance claims '+absent+': '+guidanceText);
+  await guidanceGeometryV1('desktop');
+  await connectedCapture(f,'desktop-run109-rotated-secret-stale-readiness-revoked');
+  await f.page.setViewportSize({width:390,height:844});
+  await showAgentTechnicalUI(f.page);
+  await guidanceGeometryV1('390');
+  await connectedCapture(f,'390-run109-rotated-secret-stale-readiness-revoked');
+  await f.page.setViewportSize({width:1280,height:900});
+  // A forced click on the retained disabled start dispatches nothing; no hidden read/replan hides behind the revocation.
+  const requestsAtRevoke=f.requests.length;
+  await startControl.evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN109 a forced click on the revoked stale start dispatched');
+  assert.equal(f.requests.length,requestsAtRevoke,'PAN548_RUN109 the forced click or the revocation triggered a hidden request');
+  // Ordinary guided navigation (RUN82 lifecycle): zero added traffic, focus lands on the stale dialog's own first enabled control.
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsdialog schließen',exact:true}).click();
+  const requestsAtNav=f.requests.length,responsesAtNav=f.responses.length;
+  await f.page.getByRole('button',{name:connectionNavLabelV1,exact:true}).click();
+  await state(f,'CONNECTION_AREA_FOCUSED');
+  assert.equal(await f.page.evaluate(()=>document.activeElement?.id),'pan565-connection-choice','PAN548_RUN109 the guided navigation did not focus the stale dialog reference control');
+  assert.equal(f.requests.length,requestsAtNav,'PAN548_RUN109 the guided navigation issued added requests');
+  assert.equal(f.responses.length,responsesAtNav,'PAN548_RUN109 the guided navigation issued added responses');
+  // Forced task activation with the panel's cached plan authority: the backend denies it exactly AGAIN; nothing started, nothing touched the provider.
+  await f.page.locator(root).getByRole('button',{name:'Gebundenen Auftrag und Angebot planen',exact:true}).click();
+  await state(f,'PLAN_DENIED');await f.flushResponses();
+  assert.equal(f.responses.filter(r=>r.path.endsWith('/agent-run/plan')).at(-1).status,409,'PAN548_RUN109 the stale cached task authority was not denied exactly by the backend');
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_SECRET_OR_IDENTITY_CHANGED','PAN548_RUN109 the plan denial lost the rotation truth');
+  assert.equal(f.posts(),0,'PAN548_RUN109 the stale task denial touched the provider');
+  assert.equal(count(f,'start'),startsBefore,'PAN548_RUN109 the stale task denial started a task');
+  // A REAL lost independent read never restores readiness — the honest generic fallback stands until a fresh read.
+  cdp=await f.context.newCDPSession(f.page);
+  let denied,resolvePaused;const paused=new Promise(r=>{resolvePaused=r;});
+  await cdp.send('Fetch.enable',{patterns:[{urlPattern:f.tls.origin+'*/workspace/model-connection',requestStage:'Response'}]});
+  cdp.on('Fetch.requestPaused',event=>{if(event.request.method==='GET'){denied=event;resolvePaused();}});
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await paused;
+  await cdp.send('Fetch.failRequest',{requestId:denied.requestId,errorReason:'Failed'});
+  await f.page.locator(connection+'[data-state=\"READBACK_NOT_CONFIRMED\"]').waitFor();await f.flushResponses();
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'GENERIC','PAN548_RUN109 the lost read kept presenting a freshly confirmed truth');
+  const lostGuidance=await guidance.innerText();
+  assert.ok(lostGuidance.includes('nicht bestätigt')&&!lostGuidance.includes('Secret'),'PAN548_RUN109 the lost-read guidance misrepresented the state: '+lostGuidance);
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN109 the lost read restored a readiness');
+  assert.equal(await consent.isVisible(),false,'PAN548_RUN109 the lost read revived a stale consent');
+  await cdp.send('Fetch.disable');
+  // The fresh read correctly re-sources the current truth; the whole denial sequence mutated nothing (no refund, no reset, no retry).
+  await f.page.locator(connection).getByRole('button',{name:'Verbindungsstatus unabhängig lesen',exact:true}).click();
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  assert.equal(connectionReadbacks548(f).at(-1).value.reason,'IDENTITY_OR_SECRET_CHANGED','PAN548_RUN109 the fresh read did not re-source the rotation truth live');
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_SECRET_OR_IDENTITY_CHANGED','PAN548_RUN109 the fresh read did not re-source the rotation guidance');
+  assert.equal(persistedConnectionRow548(f).revision,revisionPre,'PAN548_RUN109 a stale-leg denial mutated the persisted revision');
+  assert.equal(f.posts(),0,'PAN548_RUN109 a stale leg touched the provider');
+  // Safe recovery ONLY through the existing explicit reference re-set (keyboard-operated): it re-binds the rotated fingerprint honestly with checks back at NOT_RUN and revives no offer.
+  await f.page.locator(connection).getByRole('button',{name:'Genau diese Referenz setzen',exact:true}).focus();
+  await f.page.keyboard.press('Enter');
+  await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();
+  const reselected=connectionReadbacks548(f).at(-1).value;
+  assert.equal(reselected.reason,'REFERENCE_SELECTED_NOT_INFERENCE','PAN548_RUN109 the explicit re-selection did not honestly re-bind the rotated fingerprint');
+  for(const phase of['REACHABILITY','AUTHENTICATION','MODEL_AVAILABILITY','INFERENCE'])assert.equal(reselected.checks[phase].state,'NOT_RUN','PAN548_RUN109 the re-selection did not honestly reset '+phase);
+  const rowResel=persistedConnectionRow548(f);
+  assert.equal(rowResel.revision,revisionPre+1,'PAN548_RUN109 the explicit re-selection did not persist exactly one revision bump');
+  assert.equal(rowResel.state.lastOperation,null,'PAN548_RUN109 the re-selection carried an operation barrier');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'PLAN_DENIED','PAN548_RUN109 the re-selection revived a cached offer');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN109 the re-selection revived a startability');
+  assert.equal(await guidance.getAttribute('data-agent-connection-guidance-kind'),'CONNECTION_CONFIRMED_TASK_DENIED','PAN548_RUN109 the re-bound connection was not honestly separated from the still-denied task');
+  // The three explicit prerequisite rechecks genuinely PASS — the peer answers ONLY the rotated bytes, so the wire proves the rotation (digests only, never secret bytes). RUN111: the credential oracle is PHASE-CORRECT and source-bound: probe() (src/pan565/native-model-connection.mjs:104) passes withCredential=false for REACHABILITY and the transport (src/pan565/connection-transport.mjs:137-139) attaches an authorization header ONLY when credential material was loaded — the reachability check is deliberately UNAUTHENTICATED, and the peer's honest 401 counts as reachability (TARGET_REACHED_NOT_AUTH_OR_INFERENCE, native-model-connection.mjs:105), never as authentication or inference. So exactly the two reachability GETs (first in each phase trio) travel credential-free on BOTH sides of the rotation, while exactly the four authenticated checks present the original, then the rotated bearer — the ordered vector below is the whole wire truth, with no tolerance and no credential leak.
+  for(const label of['Erreichbarkeit','Authentifizierung','Modellverfügbarkeit']){await f.page.locator(connection).getByRole('button',{name:label+' separat prüfen',exact:true}).click();await f.page.locator(connection+'[data-state=\"CURRENT_CONNECTION\"]').waitFor();await f.flushResponses();}
+  const rechecked=connectionReadbacks548(f).at(-1).value;
+  for(const phase of['REACHABILITY','AUTHENTICATION','MODEL_AVAILABILITY'])assert.equal(rechecked.checks[phase].state,'PASS','PAN548_RUN109 the prerequisite recheck did not genuinely pass on the rotated credential: '+phase);
+  assert.equal(rechecked.checks.REACHABILITY.reason,'TARGET_REACHED_NOT_AUTH_OR_INFERENCE','PAN548_RUN109 the passing reachability recheck claimed authentication instead of honest unauthenticated reachability');
+  const getObservations=f.observations.filter(o=>o.method==='GET');
+  assert.equal(getObservations.length,6,'PAN548_RUN109 unexpected provider GET traffic:'+JSON.stringify(getObservations.map(o=>[o.credentialPresent,o.credentialDigest])));
+  // Exact ordered credential vector over the six provider GETs (click order, serialized by the backend's phase-order guard): reachability unauthenticated (peer 401, correctly accepted as reachability), authentication and model availability ONLY ever carrying the exact original, then the exact rotated bearer.
+  assert.deepEqual(getObservations.map(o=>({credentialPresent:o.credentialPresent,credentialDigest:o.credentialDigest})),[{credentialPresent:false,credentialDigest:null},{credentialPresent:true,credentialDigest:hash(syntheticCredential565)},{credentialPresent:true,credentialDigest:hash(syntheticCredential565)},{credentialPresent:false,credentialDigest:null},{credentialPresent:true,credentialDigest:hash(rotatedV1)},{credentialPresent:true,credentialDigest:hash(rotatedV1)}],'PAN548_RUN109 the phase-ordered credential vector on the wire drifted from credential-free reachability with original-then-rotated authenticated checks');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'PLAN_DENIED','PAN548_RUN109 the prerequisite rechecks revived a cached offer');
+  // Only now the fresh explicit plan plus the SEPARATE manual unchecked consent; the SAME initially unspent grant carries the one real two-POST run to RESULT_READY.
+  const fresh=await boundPlan(f);
+  assert.notEqual(fresh.planHandle,p.planHandle,'PAN548_RUN109 the recovery republished the old plan');
+  assert.notEqual(fresh.runId,p.runId,'PAN548_RUN109 the recovery republished the old run');
+  assert.equal(await consent.isChecked(),false,'PAN548_RUN109 the fresh offer auto-consented');
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'false','PAN548_RUN109 the fresh offer was actionable without the separate manual consent');
+  await consent.check();
+  assert.equal(await f.page.locator(root).getAttribute('data-dispatch-available'),'true','PAN548_RUN109 the separate manual consent did not enable exactly one start');
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  const result=f.responses.filter(r=>r.path.endsWith('/agent-run/start')&&r.status===200).at(-1).value;
+  assert.equal(result.phase,'RESULT_READY','PAN548_RUN109 the recovered run did not reach the genuine terminal');
+  assert.equal(result.modelMode,'OWNER_BOUND_PROVIDER','PAN548_RUN109 the recovered run lost the real owner binding');
+  assert.equal(result.realModelAcceptance,false,'PAN548_RUN109 the recovered run claimed real-model acceptance');
+  assert.equal(result.budget.runtime.consumedUnits,2,'PAN548_RUN109 the recovered run did not settle its two observed requests');
+  assert.equal(f.posts(),2,'PAN548_RUN109 the recovered run deviated from exactly the two genuine synthetic POSTs');
+  assert.equal(count(f,'start'),1,'PAN548_RUN109 the journey started more than one task');
+  const ledgerRows=nativeLedgerRows548(f);
+  assert.equal(ledgerRows.length,1,'PAN548_RUN109 the same-grant journey left more than one native ledger operation');
+  assert.equal(ledgerRows[0].state,'SETTLED','PAN548_RUN109 the recovered run did not settle in the persisted native ledger');
+  assert.equal(ledgerRows[0].runtime_units,3,'PAN548_RUN109 the whole-run reservation did not cover the closed ceiling before dispatch');
+  assert.equal(ledgerRows[0].runtime_consumed,2,'PAN548_RUN109 the observed consumption was refunded or reset on the ledger');
+  const rowAfterRun=persistedConnectionRow548(f);
+  assert.equal(rowAfterRun.state.identityDigest,identityPre,'PAN548_RUN109 the rotation changed the target identity itself (new identity invented?)');
+  assert.equal(rowAfterRun.state.lastOperation,fresh.runId,'PAN548_RUN109 the recovered run did not persist its own operation');
+  assert.equal(rowAfterRun.state.checks.INFERENCE.reason,'SYNTHETIC_TOOL_FEEDBACK_ONLY','PAN548_RUN109 the recovered run did not honestly disclose its synthetic tool feedback');
+  // Persisted independent readback plus a real reload keep the truth (PUI-07-AC04), with no new traffic.
+  await f.page.locator(root).getByRole('button',{name:'Laufstatus unabhängig nativ lesen',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  const runRead=f.responses.filter(r=>r.method==='GET'&&r.path.endsWith('/agent-run/read')&&r.status===200).at(-1).value;
+  assert.equal(runRead.runId,fresh.runId,'PAN548_RUN109 the independent read bound a different run');
+  assert.equal(runRead.requestDigest,result.requestDigest,'PAN548_RUN109 the independent read drifted from the persisted request binding');
+  await f.page.reload();await showCurrentContextDetailsUI(f.page);
+  await f.page.locator('[id=\"shell.context-selection\"][data-module=\"pan.erv\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await state(f,'RESULT_READY');await showCurrentViewDetailsUI(f.page);await f.flushResponses();
+  assert.equal(await f.page.locator(root).getAttribute('data-run'),fresh.runId,'PAN548_RUN109 the reload lost the persisted run truth');
+  assert.equal(count(f,'start'),1,'PAN548_RUN109 the reload replayed the start');
+  assert.equal(f.posts(),2,'PAN548_RUN109 the reload touched the provider');
+  // RUN112 continuation seam: the recovered owner-bound RESULT_READY task must remain USEFUL through the EXISTING separate 546 view editor. The accepted 546 machinery (preview/CAS/read/Undo) was only ever proven on a non-rotated connected run (DUI09 baseline) or the plain fixture; on the rotated connection this leg proves: the reloaded recovered proposal needs the same fresh native selection before preview, the explicit before/after preview persists nothing, cancellation leaves the persistent target byte-unchanged, ONLY the separate deliberate confirmation CAS-saves, the independent persisted read and a real reload show the actual bounded personal-view change, and the existing Undo is again explicitly previewed, confirmed and read — while the view persistence never touches the connection row, the ledger or the provider (connection readiness is never view-persist permission and vice versa).
+  const planRequestsAtEditorV112=count(f,'plan'),probePostsAtEditorV112=f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/probe')).length;
+  // RUN113 temporal-oracle correction: the no-mutation baseline of THIS seam is an INDEPENDENT persisted snapshot taken at the exact meaningful boundary — AFTER the recovered run fully wrote its own legitimate connection-row history (re-selection bump, three persisted prerequisite probe writes at native-model-connection.mjs:111, runFeedback start write at :161 and finally write at :170) and BEFORE the first editor action — never an earlier in-journey revision. Grounded against the accepted post-run assertions above: the independent run read and the reload are reads, so the boundary row must still equal the post-run row (revision and full state).
+  const rowPostRunPreEditorV112=persistedConnectionRow548(f),ledgerPostRunPreEditorV112=nativeLedgerRows548(f);
+  assert.equal(rowPostRunPreEditorV112.revision,rowAfterRun.revision,'PAN548_RUN113 the independent run read or the reload mutated the connection row before the editor leg began');
+  assert.deepEqual(rowPostRunPreEditorV112.state,rowAfterRun.state,'PAN548_RUN113 the independent run read or the reload changed the persisted connection state before the editor leg began');
+  assert.equal(await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).isDisabled(),true,'PAN548_RUN112 the reloaded recovered proposal was previewable without a fresh native selection');
+  await selectConnectedView(f);await state(f,'RESULT_READY');
+  await preview(f);assert.equal(f.readPersisted().revision,0,'PAN548_RUN112 the explicit before/after preview already persisted the recovered proposal');
+  await connectedCapture(f,'desktop-run112-recovered-proposal-separate546-before-after');
+  await f.page.locator(view).getByRole('button',{name:'Vorschau abbrechen — nichts speichern',exact:true}).click();
+  await f.page.locator(view+'[data-state=\"LOCAL_DRAFT_DISCARDED\"]').waitFor();
+  assert.equal(f.readPersisted().revision,0,'PAN548_RUN112 the explicit preview cancellation changed the persistent target');
+  await preview(f);
+  // RUN114 stale-confirmation seam on THIS connected rotated journey: a SECOND authenticated tab of the SAME existing session (context cookies are context-issued; per-tab context proofs stay independent) performs its own bounded view save WHILE the recovered proposal's before/after preview is still open in the first tab, then the deliberate first-tab confirmation must answer with the truthful revision conflict. Source-bound: the546 owner checks the persisted CAS revision under the reservation and denies BEFORE any write with VIEW_REVISION_CONFLICT (src/pan546/native-view-owner.mjs:52), the gateway maps exactly that class to409 (src/pan527/origin-session-adapter.mjs:1146), and the editor's persist() catch keeps the candidate in attemptedCandidates — deterministic409 denial means SAVE_DENIED with the draft preserved, never a blind replay (packages/browser-workspace/src/module-view-editor-v1.ts:75). The candidate registries are per TAB (native-view-owner.mjs:38), so the two previews genuinely race; browser-side conflict was proven before ONLY for the appearance store (tests/pan546/browser-view.test.mjs:163) and in the plain-fixture unit journey (tests/pan546/native-view.test.mjs:142,:160) — NEVER as a second-tab save racing an open AGENT-proposal preview on this rotated connected mount. Because the panel re-fences the proposal against the CURRENT frame revision (workspace-agent-panel-v1.ts:95), a deliberate save that moved the revision makes the SAME late proposal inactionable for good: no second preview, no resave, no invented re-qualification API. The second tab saves 'compact' (different from the proposal's 'large'), so loser-bleed, blind-overwrite and UNKNOWN-confusion are all mutually distinguishable at the persisted truth. This is the SAME view-store CAS machinery already accepted at revision 0→1 (browser-view.test.mjs DUI-01): the second tab rides no NEW save path; only the first tab's late proposal save becomes the conflict leg, and the accepted Undo leg below now runs against the winner's revision 1: its preview restores the persisted revision-0 snapshot and its separate confirmation CAS-appends history on top of the winner, so the accepted undo assertions keep their exact meaning while the proposal itself stays honestly unresaved.
+  // RUN115 async-lifetime correction (RUN114 unhandledRejection 'Target page, context or browser closed' here): context.newPage() returns a Promise, so it IS awaited (accepted precedent tests/pan546/browser-view.test.mjs:161). RUN116 factual correction: setDefaultTimeout/setDefaultNavigationTimeout are SYNCHRONOUS void setters, not Promises — the accepted546 fixture calls them exactly this way, unawaited, at tests/pan546/browser-fixture.mjs:39; nothing here awaits them. What keeps a later fixture close from rejecting an outstanding lifecycle Promise is the awaited newPage plus the owned second?.close() in the journey's finally, which swallows close errors so cleanup can never mask the primary failure.
+  second=await f.context.newPage();second.setDefaultTimeout(10000);second.setDefaultNavigationTimeout(15000);
+  const secondErrors=[],secondConfirms=[],secondBinds=[];let secondPreview=null;
+  second.on('pageerror',e=>secondErrors.push(e.message));
+  second.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname.endsWith('/workspace/module-view/confirm'))secondConfirms.push(r.postDataJSON());});
+  second.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname==='/t/tenant-a/workspace/context-selection')secondBinds.push(r.postDataJSON());});
+  second.on('response',r=>{if(r.status()===200&&new URL(r.url()).pathname.endsWith('/workspace/module-view/preview'))r.json().then(v=>{secondPreview=v;}).catch(()=>{});});
+  // RUN116 target-context correction (RUN115 timeout waiting for the second tab's pan.erv CURRENT_CONTEXT): a bare /t/tenant-a/workspace load routes from location.hash||default (app.ts:36,:219,:221), i.e. the pan.setup default context; only the first tab's accepted ordinary navigation (open(f):42) and hash-retaining reload reach pan.erv. The second tab therefore rides the SAME existing ordinary navigation button — no hand-copied first-tab deep-link hash, no new API: the button's click builds the deep link from the SECOND tab's own freshly bootstrapped context (tab-scoped owner: context-selection-v1.ts:265-292 → native-context-selection.mjs:92,:100,:104), so the target module, its server-confirmed CURRENT_CONTEXT and the tab's independent selection proof are all its own.
+  await second.goto(f.tls.origin+'/t/tenant-a/workspace');await showCurrentContextDetailsUI(second);
+  await second.locator('[id=\"shell.context-selection\"][data-module=\"pan.setup\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await second.getByRole('button',{name:'Eingangsrechnungsprüfung — nur lesen',exact:true}).click();
+  await showCurrentViewDetailsUI(second);
+  await second.locator('[id=\"shell.context-selection\"][data-module=\"pan.erv\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await second.locator(view+'[data-state=\"CURRENT_NATIVE_VIEW\"]').waitFor();
+  // Wire-level independence proof, not just the per-page DOM: module entry binds context ONLY through the tab-scoped owner, so the second tab must own exactly one server-confirmed pan.erv bind carrying its OWN freshly bootstrapped tab id, distinct from the first tab's current pan.erv selection (the candidate store is likewise per sessionId+tabId, native-view-owner.mjs:38 — the two previews genuinely race as independent tabs).
+  const secondPanErvBindsV116=secondBinds.filter(b=>b.moduleId==='pan.erv');
+  assert.equal(secondPanErvBindsV116.length,1,'PAN548_RUN116 the second tab did not issue exactly one own pan.erv context-selection bind through the existing navigation:'+JSON.stringify(secondBinds.map(b=>b.moduleId)));
+  const firstTabPanErvSelectionV116=f.requests.filter(r=>r.method==='POST'&&r.path==='/t/tenant-a/workspace/context-selection'&&r.body?.moduleId==='pan.erv').at(-1);
+  assert.ok(firstTabPanErvSelectionV116&&/^tab:[a-f0-9]{32}$/.test(secondPanErvBindsV116[0].tabId)&&secondPanErvBindsV116[0].tabId!==firstTabPanErvSelectionV116.body.tabId,'PAN548_RUN116 the second tab pan.erv context was not bound under its own independent freshly bootstrapped tab proof');
+  assert.equal(await second.locator(view).getAttribute('data-revision'),'0','PAN548_RUN114 the second authenticated tab did not independently read the same pre-conflict persisted revision');
+  await second.locator(view).getByRole('button',{name:'View bearbeiten',exact:true}).click();
+  await second.locator('#pan546-instance-size').selectOption('compact');
+  await second.locator(view).getByRole('button',{name:'Vorher/Nachher prüfen',exact:true}).click();
+  await second.locator(view+'[data-state=\"PREVIEW_ONLY\"]').waitFor();
+  assert.ok(secondPreview&&secondPreview.expectedRevision===0&&secondPreview.previewOnly===true&&secondPreview.persistenceProduced===false,'PAN548_RUN114 the second tab preview was not an honest revision-0 no-write preview:'+JSON.stringify(secondPreview));
+  await second.locator(view).getByRole('button',{name:'Genau diese persönliche View bestätigen und speichern',exact:true}).click();
+  await second.locator(view+'[data-state=\"SAVED_AND_NATIVE_READBACK_CONFIRMED\"]').waitFor();
+  assert.equal(secondConfirms.length,1,'PAN548_RUN114 the second tab persisted more than one bounded view save');
+  const winnerV114=f.readPersisted();
+  assert.equal(winnerV114.revision,1,'PAN548_RUN114 the separate deliberate confirmation by the second tab did not persist exactly one CAS save');
+  assert.equal(winnerV114.view.instances.find(i=>i.instanceId==='invoice-value').size,'compact','PAN548_RUN114 the persisted winner is not the bounded save of the second tab');
+  assert.equal(winnerV114.confirmedCandidateDigest,secondPreview.candidateDigest,'PAN548_RUN114 the persisted winner is not bound to the previewed candidate of the second tab');
+  assert.equal(winnerV114.viewDigest,secondPreview.afterDigest,'PAN548_RUN114 the persisted winner digest drifted from the afterDigest of the second tab preview');
+  // The open first-tab preview is NOT silently replaced or overwritten by the other tab's save — it stays the honest before/after PREVIEW_ONLY, still bound to revision 0.
+  assert.equal(await f.page.locator(view).getAttribute('data-state'),'PREVIEW_ONLY','PAN548_RUN114 the second tab save silently replaced the open first-tab proposal preview');
+  assert.equal(await f.page.locator(view).getAttribute('data-revision'),'0','PAN548_RUN114 the open first-tab preview silently re-based away from the pre-conflict revision');
+  // RUN117 authority-chain correction (RUN116 grounded the REAL first-tab SAVE_DENIED with conflictObserved null — not a timing artifact, not a product defect, not a missed observer event): the deliberate stale first-tab confirmation never reaches the owner's CAS, and that IS the genuine functional authority path. Every moduleViewRequest verifies its own tab's context snapshot BEFORE any confirm byte is dispatched (packages/browser-workspace/src/context-selection-v1.ts:222; the helper throws on non-200 at :66). The server's verify recomputes the tab state, whose viewRevision includes the personal view store's revision (src/pan548/native-context-selection.mjs:108,:90) — the second tab's winner CAS moved the persisted revision 0→1, so the first tab's revision-0 context snapshot is genuinely stale: the context layer denies the preflight exactly with CONTEXT_REVISION_STALE, which the gateway maps to 409 (src/pan527/origin-session-adapter.mjs:1167), moduleViewRequest returns the closed outcome MODULE_VIEW_DENIED before any write dispatch (context-selection-v1.ts:242), and the editor's persist() catch renders precisely that as SAVE_DENIED with the draft preserved (packages/browser-workspace/src/module-view-editor-v1.ts:75). The owner's own CAS denial VIEW_REVISION_CONFLICT (src/pan546/native-view-owner.mjs:52) still guards every confirmation that passes the context layer — here it is never reached, which is the strongest no-blind-write form: ZERO confirm bytes leave the first tab. So capture the real replies on BOTH candidate wire stages, pass them through unmodified, and assert the exact closed denial plus the first tab's own context binding — no arbitrary error-set widening, no CAS bypass.
+  const cdpConflict=await f.context.newCDPSession(f.page);const conflictWireV117=[];
+  try{
+   await cdpConflict.send('Fetch.enable',{patterns:[{urlPattern:f.tls.origin+'*/workspace/context-selection/verify',requestStage:'Response'},{urlPattern:f.tls.origin+'*/workspace/module-view/confirm',requestStage:'Response'}]});
+   cdpConflict.on('Fetch.requestPaused',event=>{void(async()=>{try{const body=await cdpConflict.send('Fetch.getResponseBody',{requestId:event.requestId});let parsed=null;try{parsed=JSON.parse(Buffer.from(body.body,body.base64Encoded?'base64':'utf8').toString());}catch{}conflictWireV117.push({path:new URL(event.request.url).pathname,status:event.responseStatusCode,error:parsed&&typeof parsed.error==='string'?parsed.error:null});}finally{try{await cdpConflict.send('Fetch.continueResponse',{requestId:event.requestId});}catch{}}})();});
+   await f.page.locator(view).getByRole('button',{name:'Genau diese persönliche View bestätigen und speichern',exact:true}).click();
+   await f.page.locator(view+'[data-state=\"SAVE_DENIED\"]').waitFor();await f.flushResponses();
+  }finally{await cdpConflict.send('Fetch.disable').catch(()=>{});await cdpConflict.detach().catch(()=>{});}
+  assert.deepEqual(conflictWireV117,[{path:'/t/tenant-a/workspace/context-selection/verify',status:409,error:'CONTEXT_REVISION_STALE'}],'PAN548_RUN114 the stale final confirmation was not denied exactly once, at the context layer, by the persisted revision conflict on the wire:'+JSON.stringify(conflictWireV117));
+  assert.equal(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/workspace/module-view/confirm')).length,0,'PAN548_RUN114 the stale context denial still dispatched a first-tab confirm write');
+  const deniedVerifyV117=f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/workspace/context-selection/verify')).at(-1);
+  assert.ok(deniedVerifyV117&&deniedVerifyV117.body&&deniedVerifyV117.body.schemaVersion==='pansphaira.workspace-context/verify/v1'&&typeof deniedVerifyV117.body.contextHandle==='string'&&deniedVerifyV117.body.contextHandle.startsWith('context:'),'PAN548_RUN114 the denied context preflight carried no first-tab own context verification payload:'+JSON.stringify(deniedVerifyV117?.body??null));
+  assert.equal(f.requests.at(-1),deniedVerifyV117,'PAN548_RUN114 a hidden request followed the truthful context-layer denial');
+  assert.equal(secondConfirms[0].context.schemaVersion,'pansphaira.workspace-context/verify/v1','PAN548_RUN114 the winner CAS was not bound by the exact context verification schema');
+  assert.ok(deniedVerifyV117.body.tabId===firstTabPanErvSelectionV116.body.tabId&&secondConfirms[0].context.tabId!==deniedVerifyV117.body.tabId,'PAN548_RUN114 the denied first-tab preflight or the winner CAS did not carry their own independent tab proofs');
+  assert.ok(typeof secondConfirms[0].context.contextHandle==='string'&&secondConfirms[0].context.contextHandle!==deniedVerifyV117.body.contextHandle,'PAN548_RUN114 the second tab CAS reused the first tab context handle');
+  const denialTextV114=await f.page.locator(view).innerText();
+  assert.ok(denialTextV114.includes('Speichern verweigert; Entwurf erhalten. Kein Retry'),'PAN548_RUN114 the conflict denial does not tell the truth:'+denialTextV114);
+  // No blind retry: the attempted candidate is never offered again, and a forced dispatch on the retained disabled control creates no second write.
+  const conflictConfirmV114=f.page.locator(view).getByRole('button',{name:'Genau diese persönliche View bestätigen und speichern',exact:true});
+  assert.equal(await conflictConfirmV114.isDisabled(),true,'PAN548_RUN114 the denied stale candidate was offered again for a blind retry');
+  const requestsAtReplayV117=f.requests.length;
+  await conflictConfirmV114.evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtReplayV117,'PAN548_RUN114 the forced click replayed the denied confirmation');
+  assert.equal(await f.page.locator(view).getAttribute('data-state'),'SAVE_DENIED','PAN548_RUN114 the forced replay changed the honest denial state');
+  // The winner stays untouched by the loser: the independent persisted read still shows exactly the second tab's bounded save — no large-bleed of the denied proposal, no lost update.
+  const afterDeniedV114=f.readPersisted();
+  assert.equal(afterDeniedV114.revision,1,'PAN548_RUN114 the denied stale confirmation still mutated the persisted revision');
+  assert.equal(afterDeniedV114.view.instances.find(i=>i.instanceId==='invoice-value').size,'compact','PAN548_RUN114 the denied stale confirmation overwrote the real winner');
+  assert.equal(afterDeniedV114.viewDigest,winnerV114.viewDigest,'PAN548_RUN114 the denied stale confirmation drifted the winner digest');
+  // Safe re-qualification rides ONLY the existing owner path: 'Neu lesen — Entwurf behalten' re-reads natively with the draft preserved (module-view-editor-v1.ts reloadCurrent), then the explicit cancellation discards the local draft; only the persisted winner renders.
+  await f.page.locator(view).getByRole('button',{name:'Neu lesen — Entwurf behalten',exact:true}).click();
+  await f.page.locator(view+'[data-state=\"CURRENT_NATIVE_VIEW\"]').waitFor();await f.flushResponses();
+  assert.equal(await f.page.locator(view).getAttribute('data-revision'),'1','PAN548_RUN114 the explicit re-read did not surface the winner revision');
+  assert.equal(await f.page.locator(view).getAttribute('data-editing'),'true','PAN548_RUN114 the explicit re-read silently dropped the local draft');
+  await f.page.locator(view).getByRole('button',{name:'Vorschau abbrechen — nichts speichern',exact:true}).click();
+  await f.page.locator(view+'[data-state=\"LOCAL_DRAFT_DISCARDED\"]').waitFor();
+  assert.equal(await f.page.locator(view+' [data-instance=\"invoice-value\"]').getAttribute('data-size'),'compact','PAN548_RUN114 after draft discard the first tab does not render the persisted winner');
+  // The late proposal is honestly inactionable forever: the panel re-fences it against the CURRENT frame (expectedRevision 0 vs frame revision 1), so the SAME unsaved proposal never gets a second preview or resave on this mount.
+  assert.equal(await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).isDisabled(),true,'PAN548_RUN114 the stale proposal stayed previewable after a deliberate save moved the revision');
+  assert.equal(await second.locator(view).getAttribute('data-revision'),'1','PAN548_RUN114 the independent readback on the second tab after its own CAS did not confirm the winner revision; the cross-tab truth is the shared persisted view revision, not the per-page local context counter in app.ts');
+  assert.deepEqual(secondErrors,[],'PAN548_RUN114 the second tab produced page errors');
+  assert.equal(f.readPersisted().revision,1,'PAN548_RUN114 more than the winner plus the denied stale confirmation persisted during the conflict leg');
+  await second.close();
+  await showCurrentViewDetailsUI(f.page);await f.page.locator(view).getByRole('button',{name:'Letzten gespeicherten Viewstand zurückholen',exact:true}).click();
+  await f.page.locator(view+'[data-state=\"PREVIEW_ONLY\"]').waitFor();
+  assert.equal(f.readPersisted().revision,1,'PAN548_RUN112 the undo preview already rewrote the persisted view');
+  await confirm(f);
+  const undoneViewV112=f.readPersisted();
+  assert.equal(undoneViewV112.revision,2,'PAN548_RUN112 the confirmed undo did not persist exactly one further CAS save');
+  assert.equal(undoneViewV112.view.instances.find(i=>i.instanceId==='invoice-value').size,'regular','PAN548_RUN112 the confirmed undo did not restore the original bounded view');
+  await state(f,'RESULT_READY');
+  assert.equal(await f.page.locator(root).getAttribute('data-run'),fresh.runId,'PAN548_RUN112 the editor continuation disturbed the recovered run projection');
+  await f.page.reload();await showCurrentContextDetailsUI(f.page);
+  await f.page.locator('[id=\"shell.context-selection\"][data-module=\"pan.erv\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await state(f,'RESULT_READY');await showCurrentViewDetailsUI(f.page);await f.page.locator(view+'[data-state=\"CURRENT_NATIVE_VIEW\"]').waitFor();await f.flushResponses();
+  assert.equal(f.readPersisted().revision,2,'PAN548_RUN112 the reload lost the two explicitly confirmed bounded view saves');
+  assert.equal(await f.page.locator(view+' [data-instance=\"invoice-value\"]').getAttribute('data-size'),'regular','PAN548_RUN112 the reload did not render the confirmed undo');
+  assert.equal(count(f,'start'),1,'PAN548_RUN112 the editor-continuation reload replayed the recovered start');
+  // Coherence negatives of THIS seam: the whole editor continuation rides ONLY the existing 546 gateway — no hidden inference or replan, no added provider GETs, no new connection probe, no connection-row or ledger mutation, no business effect.
+  assert.equal(f.posts(),2,'PAN548_RUN112 the separate 546 editor continuation touched the provider');
+  assert.equal(f.observations.filter(o=>o.method==='GET').length,6,'PAN548_RUN112 the editor continuation added provider GET traffic');
+  assert.equal(count(f,'plan'),planRequestsAtEditorV112,'PAN548_RUN112 the editor continuation issued a hidden replan');
+  assert.equal(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/probe')).length,probePostsAtEditorV112,'PAN548_RUN112 the editor continuation issued a hidden connection probe');
+  const rowAfterEditorV112=persistedConnectionRow548(f);
+  assert.equal(rowAfterEditorV112.revision,rowPostRunPreEditorV112.revision,'PAN548_RUN113 the separate view persistence mutated the persisted connection revision against the independent post-run/pre-editor baseline');
+  assert.deepEqual(rowAfterEditorV112.state,rowPostRunPreEditorV112.state,'PAN548_RUN113 the separate view persistence changed the persisted connection state (identity, grant, checks or operation binding) against the independent post-run/pre-editor baseline');
+  assert.equal(rowAfterEditorV112.state.lastOperation,fresh.runId,'PAN548_RUN112 the separate view persistence displaced the recovered run operation binding');
+  const ledgerAfterEditorV112=nativeLedgerRows548(f);
+  assert.deepEqual(ledgerAfterEditorV112,ledgerPostRunPreEditorV112,'PAN548_RUN113 the editor continuation disturbed the persisted native ledger against the independent post-run/pre-editor baseline');
+  assert.equal(ledgerAfterEditorV112.length,1,'PAN548_RUN112 the editor continuation added a native ledger operation');
+  assert.equal(ledgerAfterEditorV112[0].state,'SETTLED','PAN548_RUN112 the editor continuation disturbed the settled ledger');
+  assert.equal(ledgerAfterEditorV112[0].runtime_units,3,'PAN548_RUN112 the editor continuation refunded the closed reservation');
+  assert.equal(ledgerAfterEditorV112[0].runtime_consumed,2,'PAN548_RUN112 the editor continuation reset the observed consumption');
+  // Secret bytes never reach DOM/observations; the final rendering is the honest recovered state.
+  const bodyText=await f.page.locator('body').innerText();
+  assert.ok(!bodyText.includes(syntheticCredential565)&&!bodyText.includes(rotatedV1),'PAN548_RUN109 a synthetic credential reached the DOM');
+  const observationText=JSON.stringify(f.observations);
+  assert.ok(!observationText.includes(syntheticCredential565)&&!observationText.includes(rotatedV1),'PAN548_RUN109 credential bytes reached the peer observations (digests only allowed)');
+  await connectedCapture(f,'desktop-run109-rotated-secret-recovered-two-post-run');
+  // Session retirement discards the whole panel presentation (ownership lifetime unchanged throughout).
+  await f.page.getByRole('button',{name:'Abmelden',exact:true}).click();
+  await f.page.getByRole('heading',{name:'Abgemeldet',exact:true}).waitFor();
+  assert.equal(await f.page.locator(root).count(),0,'PAN548_RUN109 the panel survived the logout');
+  assert.equal(await f.page.locator(root+' [data-agent-connection-guidance=\"true\"]').count(),0,'PAN548_RUN109 a rotation guidance survived the logout');
+  assert.equal(f.readPersisted().revision,2,'PAN548_RUN112 the journey persisted anything beyond the two explicitly confirmed bounded view CAS saves');
+  assert.equal(f.business(),before,'PAN548_RUN109 the journey produced a business effect');
+  assert.deepEqual(f.errors,[]);
+ }finally{await second?.close().catch(()=>{});await cdp?.detach().catch(()=>{});await f.close();}
+});
+// RUN118: the genuinely missing connected criterion on this mount. Lost-confirm-reply reconciliation was
+// accepted ONLY for MANUAL saves on the plain546 fixture (browser-view.test.mjs DUI-01, browser-navigation
+// .test.mjs DUI05/AC03) and the accepted connected RUN112 journey only ever rode the REACHED-receipt path.
+// Never proven here: the recovered AGENT proposal's ONE deliberate CONFIRM committing while only its REPLY
+// is lost, the persisted exact candidate being independently true in the owner store WHILE the reply is
+// still held, and the EXISTING reconcile control (module-view-editor-v1.ts:26,:74 — 'Unklaren Schreibausgang
+// unabhängig zurücklesen') distinguishing the actually applied exact candidate from BOTH a foreign winner
+// (revision/digest moved by another tab's own CAS) and an unconfirmed dropped write — each against the REAL
+// owner SQLite read (fixture store.read — the same store the mounted546 owner writes), with zero automatic
+// or forced replay (attemptedCandidates, module-view-editor-v1.ts:19,:36,:75) and the writeSent→UNKNOWN
+// closed outcome (context-selection-v1.ts:230-242) as the only browser-side truth. No fake DTO, no fixture
+// state injection, no new framework; every leg rides the existing product paths.
+test('PUI07 RUN118 actual connected recovered agent proposal whose single deliberate CONFIRM genuinely commits while only its reply is lost: the exact candidate is already persisted while the reply is held, the lost reply leaves exactly the UNKNOWN hold with the unsent text and retained draft and zero automatic or forced replay, the EXISTING independent reconcile read rejects a later foreign winner instead of claiming success, and the same reconcile later confirms ONLY the exact applied candidate of a second genuinely lost undo write against the real owner SQLite read, while run/source/phase, the native565 connection row, the SETTLED ledger and provider traffic stay coherent; NOT LLM',async()=>{
+ const f=await connectedFixture();let cdp,second;
+ try{
+  const before=f.business(),consent=f.page.locator('#pan548-agent-inference-consent');
+  const confirmControl=()=>f.page.locator(view).getByRole('button',{name:'Genau diese persönliche View bestätigen und speichern',exact:true});
+  const reconcileControl=()=>f.page.locator(view).getByRole('button',{name:'Unklaren Schreibausgang unabhängig zurücklesen',exact:true});
+  const viewStatus=()=>f.page.locator(view+' [role="status"]').innerText();
+  await open(f);await selectConnectedView(f);await connect(f);
+  await boundPlan(f);
+  const planBaseline=count(f,'plan'),probeBaseline=f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/probe')).length;
+  await consent.check();
+  await f.page.locator(root).getByRole('button',{name:'Genau diesen gebundenen Lauf einmalig starten',exact:true}).click();
+  await state(f,'RESULT_READY');await f.flushResponses();
+  const result=f.responses.filter(r=>r.path.endsWith('/agent-run/start')&&r.status===200).at(-1).value;
+  assert.equal(result.phase,'RESULT_READY');assert.equal(result.modelMode,'OWNER_BOUND_PROVIDER');assert.equal(result.realModelAcceptance,false);
+  assert.ok(result.proposal&&result.proposal.expectedRevision===0&&result.proposal.persistenceProduced===false&&result.proposal.afterView.instances.some(i=>i.instanceId==='invoice-value'&&i.size==='large'),'PAN548_RUN118 the recovered run did not deliver the bounded non-persisted large-size proposal:'+JSON.stringify(result.proposal));
+  assert.equal(count(f,'start'),1,'PAN548_RUN118 the journey started more than one task');
+  assert.equal(f.posts(),2,'PAN548_RUN118 the synthetic run deviated from exactly the two genuine provider POSTs');
+  const taskText=await f.page.locator('#pan548-agent-intent').inputValue();
+  assert.notEqual(taskText,'','PAN548_RUN118 missing unsent task text');
+  // RUN113-style temporal oracle: the no-mutation baseline is taken AFTER the run fully wrote its own
+  // legitimate connection/ledger history and BEFORE the first editor action.
+  const rowPostRunPreEditorV118=persistedConnectionRow548(f),ledgerPostRunPreEditorV118=nativeLedgerRows548(f);
+  assert.equal(ledgerPostRunPreEditorV118.length,1);assert.equal(ledgerPostRunPreEditorV118[0].state,'SETTLED');
+  assert.equal(ledgerPostRunPreEditorV118[0].runtime_units,3);assert.equal(ledgerPostRunPreEditorV118[0].runtime_consumed,2);
+  assert.equal(rowPostRunPreEditorV118.state.lastOperation,result.runId,'PAN548_RUN118 the run did not persist its own operation binding');
+  // Fresh native selection, then the proposal rides ONLY the existing panel→editor preview leg.
+  await selectConnectedView(f);await state(f,'RESULT_READY');
+  await preview(f);
+  const agentPreview=f.responses.filter(r=>r.path.endsWith('/workspace/module-view/preview')&&r.status===200).at(-1).value;
+  assert.ok(agentPreview&&agentPreview.expectedRevision===0&&agentPreview.previewOnly===true&&agentPreview.persistenceProduced===false,'PAN548_RUN118 the agent preview was not an honest revision-0 no-write preview:'+JSON.stringify(agentPreview));
+  assert.equal(agentPreview.afterDigest,result.proposal.afterDigest,'PAN548_RUN118 the separate editor preview drifted from the proposal through the shared reducer');
+  const firstTabPanErvBindV118=f.requests.filter(r=>r.method==='POST'&&r.path==='/t/tenant-a/workspace/context-selection'&&r.body?.moduleId==='pan.erv').at(-1);
+  assert.equal(f.readPersisted().revision,0,'PAN548_RUN118 the agent preview already persisted the proposal');
+  // LEG A — the ONE deliberate CONFIRM: intercepted at the actual REPLY stage, so the owner fully processed
+  // and persisted the exact CAS before the reply is destroyed (lost AFTER the persisted effect, never a
+  // skipped write). While the genuine reply is still held, the independent owner SQLite read already shows
+  // the exact applied candidate — persistence precedes receipt; the held window itself is the delayed case.
+  cdp=await f.context.newCDPSession(f.page);
+  let heldReply,replySettledV118=false;const replyPaused=new Promise(r=>{heldReply=r;});
+  await cdp.send('Fetch.enable',{patterns:[{urlPattern:f.tls.origin+'*/workspace/module-view/confirm',requestStage:'Response'}]});
+  cdp.on('Fetch.requestPaused',event=>{void(async()=>{if(!replySettledV118){replySettledV118=true;heldReply(event);}else await cdp.send('Fetch.continueResponse',{requestId:event.requestId}).catch(()=>{});})().catch(()=>{});});
+  const requestsAtConfirmV118=f.requests.length;
+  await confirmControl().click();
+  await f.page.locator(view+'[data-state="CONFIRMING"]').waitFor();
+  const racedConfirmV118=await Promise.race([replyPaused.then(event=>({event})),new Promise(r=>setTimeout(()=>r(null),4000))]);
+  if(!racedConfirmV118)throw Error('PAN548_RUN118 the deliberate confirm was never dispatched on the wire');
+  const pausedEvent=racedConfirmV118.event;
+  assert.equal(pausedEvent.request.method,'POST');assert.ok(new URL(pausedEvent.request.url).pathname.endsWith('/workspace/module-view/confirm'),'PAN548_RUN118 the intercepted reply was not the confirm route');
+  const confirmBodyV118=JSON.parse(pausedEvent.request.postData??'{}');
+  assert.deepEqual([confirmBodyV118.schemaVersion,confirmBodyV118.candidateHandle,confirmBodyV118.candidateDigest,confirmBodyV118.confirmation],['pansphaira.workspace-module-view/confirm/v1',agentPreview.candidateHandle,agentPreview.candidateDigest,'CONFIRM_PERSONAL_VIEW'],'PAN548_RUN118 the dispatched confirm was not bound to the exact previewed agent candidate');
+  assert.ok(confirmBodyV118.context?.schemaVersion==='pansphaira.workspace-context/verify/v1'&&confirmBodyV118.context.tabId===firstTabPanErvBindV118.body.tabId,'PAN548_RUN118 the confirm did not carry the first tab\u0027s own context verification');
+  const receiptBytes=await cdp.send('Fetch.getResponseBody',{requestId:pausedEvent.requestId});
+  const receiptV118=JSON.parse(Buffer.from(receiptBytes.body,receiptBytes.base64Encoded?'base64':'utf8').toString());
+  assert.equal(pausedEvent.responseStatusCode,200);
+  assert.deepEqual([receiptV118.outcome,receiptV118.kind,receiptV118.revision,receiptV118.viewDigest,receiptV118.confirmedCandidateDigest,receiptV118.personalViewPersistenceProduced,receiptV118.businessEffectProduced,receiptV118.executionAuthorityGranted,receiptV118.independentReadbackRequired],['VIEW_PERSISTED','DELTA',1,agentPreview.afterDigest,agentPreview.candidateDigest,true,false,false,true],'PAN548_RUN118 the genuine confirm reply was not the exact one-CAS personal-only receipt:'+JSON.stringify(receiptV118));
+  // The persisted effect is independently TRUE while the reply is still in flight: real owner SQLite read.
+  const persistedInFlightV118=f.readPersisted();
+  assert.deepEqual([persistedInFlightV118.revision,persistedInFlightV118.viewDigest,persistedInFlightV118.confirmedCandidateDigest,persistedInFlightV118.view.instances.find(i=>i.instanceId==='invoice-value').size],[1,agentPreview.afterDigest,agentPreview.candidateDigest,'large'],'PAN548_RUN118 the persisted exact candidate drifted while the confirm reply was still held');
+  // Held window: no timeout-driven auto-retry and no second dispatch while the reply is merely delayed.
+  // RUN119 source-grounded wire accounting: the ACTUAL suffix after the deliberate click is exactly the
+  // product's own mandated same-context verify preflight (context-selection-v1.ts:222 awaits
+  // verify(captured.context) before ANY operation fetch at :231; verify POSTs
+  // /t/tenant-a/workspace/context-selection/verify with the first tab's captured tabId/contextHandle at
+  // :89-92) followed by exactly ONE confirm dispatch — and nothing else. CONFIRM is writeSent
+  // (context-selection-v1.ts:230), so the success-path re-verify at :239 is source-excluded while the
+  // reply is held. A bare total delta (+1) wrongly counted this legitimate preflight as a second
+  // dispatch; the exact ordered suffix keeps the once-only confirm, exact candidate binding and
+  // zero-hidden-traffic fences strictly stronger, not looser.
+  const forcedDuringHold=await confirmControl().evaluate(e=>{e.dispatchEvent(new MouseEvent('click',{bubbles:true}));return e.disabled;});
+  assert.equal(forcedDuringHold,true,'PAN548_RUN118 the confirm stayed enabled during the in-flight hold');
+  const heldWindowSuffixV118=f.requests.slice(requestsAtConfirmV118);
+  assert.deepEqual(heldWindowSuffixV118.map(r=>[r.method,r.path]),[['POST','/t/tenant-a/workspace/context-selection/verify'],['POST','/t/tenant-a/workspace/module-view/confirm']],'PAN548_RUN118 the held-reply window is not exactly the source-mandated context-verify preflight followed by exactly one confirm dispatch with zero hidden traffic:'+JSON.stringify(heldWindowSuffixV118.map(r=>[r.method,r.path])));
+  assert.deepEqual([heldWindowSuffixV118[0].body?.schemaVersion,heldWindowSuffixV118[0].body?.tabId,heldWindowSuffixV118[0].body?.contextHandle],['pansphaira.workspace-context/verify/v1',firstTabPanErvBindV118.body.tabId,confirmBodyV118.context.contextHandle],'PAN548_RUN118 the confirm preflight was not the first tab\u0027s own captured-context verification bound to the same context the confirm carried');
+  await cdp.send('Fetch.failRequest',{requestId:pausedEvent.requestId,errorReason:'ConnectionClosed'});
+  await f.page.locator(view+'[data-state=\"WRITE_OUTCOME_UNCONFIRMED\"]').waitFor();await f.flushResponses();
+  await cdp.send('Fetch.disable');await cdp.detach().catch(()=>{});cdp=undefined;
+  // The honest UNKNOWN hold: truthful text, draft and unsent text preserved, reconciliation offered, the
+  // attempted candidate never offered again, and the denied-route probe proves no hidden follow-up.
+  assert.match(await viewStatus(),/Schreibausgang unklar; Entwurf erhalten\. Kein Save-\/Undo-Retry\. Ziel unabhängig nativ lesen\./,'PAN548_RUN118 the UNKNOWN hold does not tell the truth (module-view-editor-v1.ts:35 literal)');
+  assert.equal(await f.page.locator(view).getAttribute('data-editing'),'true','PAN548_RUN118 the UNKNOWN hold lost the local draft');
+  assert.equal(await f.page.locator(view+' .module-view-comparison').isVisible(),true,'PAN548_RUN118 the UNKNOWN hold discarded the retained before/after comparison');
+  // RUN119: the disclosure id literally contains a dot (module-view-editor-v1.ts:11), so a CSS
+  // '#workspace.module-editor-details' parses as id=workspace + class=module-editor-details and matches
+  // nothing. Exact-ID attribute binding, the same selector the fixture and every accepted leg use.
+  assert.equal(await f.page.locator('[id=\"workspace.module-editor-details\"]').getAttribute('open')!==null,true,'PAN548_RUN118 the UNKNOWN hold did not disclose the unconfirmed state');
+  assert.equal(await reconcileControl().isVisible(),true,'PAN548_RUN118 the existing independent reconcile control was not offered');
+  assert.equal(await reconcileControl().isEnabled(),true,'PAN548_RUN118 the reconcile control was not operable');
+  assert.equal(await confirmControl().isDisabled(),true,'PAN548_RUN118 the attempted candidate was offered again for a blind retry');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN118 the lost reply lost the unsent task text');
+  assert.equal(count(f,'start'),1,'PAN548_RUN118 the lost reply restarted the task');
+  assert.equal(f.posts(),2,'PAN548_RUN118 the lost reply touched the provider');
+  assert.equal(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/workspace/module-view/confirm')).length,1,'PAN548_RUN118 more than one confirm left the first tab');
+  assert.equal(f.requests.at(-1).path,'/t/tenant-a/workspace/module-view/confirm','PAN548_RUN118 a hidden request followed the lost confirm');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'RESULT_READY','PAN548_RUN118 the UNKNOWN hold disturbed the run projection');
+  assert.equal(await f.page.locator(root).getAttribute('data-run'),result.runId,'PAN548_RUN118 the UNKNOWN hold lost the run binding');
+  await connectedCapture(f,'desktop-run118-agent-confirm-reply-lost-unknown');
+  // LEG B — a foreign winner: a SECOND authenticated tab of the same session performs its own bounded
+  // preview plus separate deliberate confirmation (CAS 1→2 compact) through its OWN freshly bootstrapped
+  // tab context (accepted RUN116 lifecycle precedent). The first tab must stay quiescent: no push channel,
+  // no hidden refresh, its UNKNOWN hold untouched.
+  const requestsAtForeignV118=f.requests.length;
+  second=await f.context.newPage();second.setDefaultTimeout(10000);second.setDefaultNavigationTimeout(15000);
+  const secondErrorsV118=[],secondConfirmsV118=[],secondBindsV118=[];let secondPreviewV118=null;
+  second.on('pageerror',e=>secondErrorsV118.push(e.message));
+  second.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname.endsWith('/workspace/module-view/confirm'))secondConfirmsV118.push(r.postDataJSON());});
+  second.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname==='/t/tenant-a/workspace/context-selection')secondBindsV118.push(r.postDataJSON());});
+  second.on('response',r=>{if(r.status()===200&&new URL(r.url()).pathname.endsWith('/workspace/module-view/preview'))r.json().then(v=>{secondPreviewV118=v;}).catch(()=>{});});
+  await second.goto(f.tls.origin+'/t/tenant-a/workspace');await showCurrentContextDetailsUI(second);
+  await second.locator('[id=\"shell.context-selection\"][data-module=\"pan.setup\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await second.getByRole('button',{name:'Eingangsrechnungsprüfung — nur lesen',exact:true}).click();
+  await showCurrentViewDetailsUI(second);
+  await second.locator('[id=\"shell.context-selection\"][data-module=\"pan.erv\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await second.locator(view+'[data-state=\"CURRENT_NATIVE_VIEW\"]').waitFor();
+  const secondPanErvBindsV118=secondBindsV118.filter(b=>b.moduleId==='pan.erv');
+  assert.equal(secondPanErvBindsV118.length,1,'PAN548_RUN118 the second tab did not bind pan.erv exactly once through the existing navigation');
+  assert.ok(/^tab:[a-f0-9]{32}$/.test(secondPanErvBindsV118[0].tabId)&&secondPanErvBindsV118[0].tabId!==firstTabPanErvBindV118.body.tabId,'PAN548_RUN118 the foreign winner tab was not its own independent tab proof');
+  // Independent second-tab native read of the FIRST tab's persisted effect: revision 1, exactly the agent
+  // candidate rendered — the applied truth does not depend on the first tab's lost receipt.
+  assert.equal(await second.locator(view).getAttribute('data-revision'),'1','PAN548_RUN118 the foreign tab did not independently read the applied revision');
+  assert.equal(await second.locator(view+' [data-instance=\"invoice-value\"]').getAttribute('data-size'),'large','PAN548_RUN118 the independently read persisted view is not the exact agent candidate');
+  await second.locator(view).getByRole('button',{name:'View bearbeiten',exact:true}).click();
+  await second.locator('#pan546-instance-size').selectOption('compact');
+  await second.locator(view).getByRole('button',{name:'Vorher/Nachher prüfen',exact:true}).click();
+  await second.locator(view+'[data-state=\"PREVIEW_ONLY\"]').waitFor();
+  assert.ok(secondPreviewV118&&secondPreviewV118.expectedRevision===1&&secondPreviewV118.previewOnly===true&&secondPreviewV118.persistenceProduced===false,'PAN548_RUN118 the foreign winner preview was not an honest revision-1 no-write preview:'+JSON.stringify(secondPreviewV118));
+  await second.locator(view).getByRole('button',{name:'Genau diese persönliche View bestätigen und speichern',exact:true}).click();
+  await second.locator(view+'[data-state=\"SAVED_AND_NATIVE_READBACK_CONFIRMED\"]').waitFor();
+  assert.equal(secondConfirmsV118.length,1,'PAN548_RUN118 the foreign tab persisted more than one bounded save');
+  const winnerV118=f.readPersisted();
+  assert.deepEqual([winnerV118.revision,winnerV118.viewDigest,winnerV118.confirmedCandidateDigest,winnerV118.view.instances.find(i=>i.instanceId==='invoice-value').size],[2,secondPreviewV118.afterDigest,secondPreviewV118.candidateDigest,'compact'],'PAN548_RUN118 the persisted foreign winner drifted from its own previewed candidate');
+  assert.ok(secondConfirmsV118[0].context.contextHandle!==confirmBodyV118.context.contextHandle,'PAN548_RUN118 the foreign winner reused the first tab context handle');
+  assert.equal(await f.page.locator(view).getAttribute('data-state'),'WRITE_OUTCOME_UNCONFIRMED','PAN548_RUN118 the foreign winner silently resolved the first tab\u0027s UNKNOWN hold');
+  assert.equal(await f.page.locator(view).getAttribute('data-revision'),'0','PAN548_RUN118 the UNKNOWN tab silently re-based on the foreign winner');
+  assert.equal(f.requests.length,requestsAtForeignV118,'PAN548_RUN118 the UNKNOWN tab issued hidden traffic during the foreign winner leg');
+  // LEG C — negative arm of the EXISTING reconcile: reading the CURRENT persisted truth natively must NOT
+  // pass off the foreign winner as the first tab's own confirmation. readback() refreshes the context,
+  // re-reads (module-view-editor-v1.ts:74) and the exact-candidate check denies with
+  // NATIVE_TARGET_NOT_CONFIRMED → the truthful UNKNOWN hold stands with the fresh revision rendered.
+  const dataPostsBeforeRejectV118=f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/workspace/module-view/data')).length;
+  await reconcileControl().click();
+  {const deadline=Date.now()+5000;while(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/workspace/module-view/data')).length<=dataPostsBeforeRejectV118&&Date.now()<deadline)await new Promise(r=>setTimeout(r,25));}
+  await f.flushResponses();await new Promise(r=>setTimeout(r,150));
+  assert.equal(await f.page.locator(view).getAttribute('data-state'),'WRITE_OUTCOME_UNCONFIRMED','PAN548_RUN118 the independent reconcile passed a foreign winner off as the own confirmation');
+  assert.equal(await f.page.locator(view).getAttribute('data-revision'),'2','PAN548_RUN118 the reconcile did not re-read the current persisted revision natively');
+  assert.equal(await f.page.locator(view).getAttribute('data-editing'),'false','PAN548_RUN118 the reconcile kept presenting the superseded local draft as current');
+  assert.equal(await f.page.locator(view+' [data-instance=\"invoice-value\"]').getAttribute('data-size'),'compact','PAN548_RUN118 the reconcile did not render the actual persisted foreign winner');
+  assert.equal(await reconcileControl().isVisible(),true,'PAN548_RUN118 the rejected UNKNOWN lost its reconciliation control');
+  assert.equal(await confirmControl().isDisabled(),true,'PAN548_RUN118 the rejected candidate was offered for a blind retry');
+  const requestsAtRejectedReplayV118=f.requests.length;
+  await confirmControl().evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtRejectedReplayV118,'PAN548_RUN118 the forced click replayed the unconfirmed write');
+  assert.equal(await f.page.locator(view).getAttribute('data-state'),'WRITE_OUTCOME_UNCONFIRMED','PAN548_RUN118 the forced replay changed the honest UNKNOWN state');
+  assert.equal(await f.page.locator('#pan548-agent-intent').inputValue(),taskText,'PAN548_RUN118 the rejected reconcile lost the unsent task text');
+  assert.equal(f.readPersisted().revision,2,'PAN548_RUN118 the rejected reconcile persisted anything');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'RESULT_READY','PAN548_RUN118 the rejected reconcile disturbed the run projection');
+  await connectedCapture(f,'desktop-run118-foreign-winner-rejected-unknown');
+  await second.close();second=undefined;
+  // Real reload: the whole hold is a presentation state over the SAME persisted truth — revision 2 renders,
+  // the run stays, nothing replays, and the applied-then-superseded proposal is honestly inactionable.
+  await f.page.reload();await showCurrentContextDetailsUI(f.page);
+  await f.page.locator('[id=\"shell.context-selection\"][data-module=\"pan.erv\"][data-state=\"CURRENT_CONTEXT\"]').waitFor();
+  await state(f,'RESULT_READY');await showCurrentViewDetailsUI(f.page);
+  await f.page.locator(view+'[data-state=\"CURRENT_NATIVE_VIEW\"]').waitFor();await f.flushResponses();
+  assert.equal(await f.page.locator(view).getAttribute('data-revision'),'2','PAN548_RUN118 the reload lost the two confirmed bounded saves');
+  assert.equal(await f.page.locator(view+' [data-instance=\"invoice-value\"]').getAttribute('data-size'),'compact','PAN548_RUN118 the reload did not render the foreign winner');
+  assert.equal(await f.page.locator(root).getAttribute('data-run'),result.runId,'PAN548_RUN118 the reload lost the run truth');
+  assert.equal(count(f,'start'),1,'PAN548_RUN118 the reload replayed the start');
+  assert.equal(f.posts(),2,'PAN548_RUN118 the reload touched the provider');
+  assert.equal(await f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true}).isDisabled(),true,'PAN548_RUN118 the applied-then-superseded proposal stayed previewable against the moved revision');
+  // LEG D — a SECOND genuinely lost write for the POSITIVE arm: the existing Undo previews revision 1,
+  // the deliberate confirmation commits CAS 2→3 and ONLY its reply is lost at the Response stage again.
+  await f.page.locator(view).getByRole('button',{name:'Letzten gespeicherten Viewstand zurückholen',exact:true}).click();
+  await f.page.locator(view+'[data-state=\"PREVIEW_ONLY\"]').waitFor();
+  const undoPreview=f.responses.filter(r=>r.path.endsWith('/workspace/module-view/undo-preview')&&r.status===200).at(-1).value;
+  assert.ok(undoPreview&&undoPreview.kind==='UNDO'&&undoPreview.expectedRevision===2&&undoPreview.previewOnly===true,'PAN548_RUN118 the undo preview was not an honest revision-2 UNDO preview:'+JSON.stringify(undoPreview));
+  assert.equal(f.readPersisted().revision,2,'PAN548_RUN118 the undo preview already persisted');
+  const cdpUndo=await f.context.newCDPSession(f.page);
+  try{
+   await cdpUndo.send('Fetch.enable',{patterns:[{urlPattern:f.tls.origin+'*/workspace/module-view/confirm',requestStage:'Response'}]});
+   let heldUndo;const undoPaused=new Promise(r=>{heldUndo=r;});let undoSettled=false;
+   cdpUndo.on('Fetch.requestPaused',event=>{void(async()=>{if(!undoSettled){undoSettled=true;heldUndo(event);}else await cdpUndo.send('Fetch.continueResponse',{requestId:event.requestId}).catch(()=>{});})().catch(()=>{});});
+   await confirmControl().click();
+   const racedUndoV118=await Promise.race([undoPaused.then(event=>({event})),new Promise(r=>setTimeout(()=>r(null),4000))]);
+   if(!racedUndoV118)throw Error('PAN548_RUN118 the undo confirm was never dispatched on the wire');
+   const undoEvent=racedUndoV118.event;
+   const undoReceiptBytes=await cdpUndo.send('Fetch.getResponseBody',{requestId:undoEvent.requestId});
+   const undoReceipt=JSON.parse(Buffer.from(undoReceiptBytes.body,undoReceiptBytes.base64Encoded?'base64':'utf8').toString());
+   assert.equal(undoEvent.responseStatusCode,200);
+   assert.deepEqual([undoReceipt.outcome,undoReceipt.kind,undoReceipt.revision,undoReceipt.viewDigest,undoReceipt.confirmedCandidateDigest],['VIEW_PERSISTED','UNDO',3,undoPreview.afterDigest,undoPreview.candidateDigest],'PAN548_RUN118 the undo reply was not the exact persisted UNDO receipt before being destroyed:'+JSON.stringify(undoReceipt));
+   await cdpUndo.send('Fetch.failRequest',{requestId:undoEvent.requestId,errorReason:'ConnectionClosed'});
+  }finally{await cdpUndo.send('Fetch.disable').catch(()=>{});await cdpUndo.detach().catch(()=>{});}
+  await f.page.locator(view+'[data-state=\"WRITE_OUTCOME_UNCONFIRMED\"]').waitFor();await f.flushResponses();
+  assert.equal(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/workspace/module-view/confirm')).length,2,'PAN548_RUN118 the first tab dispatched more than its two deliberate confirms');
+  const forcedAtUndoUnknownV118=f.requests.length;
+  await confirmControl().evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(f.requests.length,forcedAtUndoUnknownV118,'PAN548_RUN118 the lost undo reply was auto-replayed by a forced click');
+  // LEG E — positive arm of the SAME reconcile control: against the actually applied exact candidate the
+  // existing independent readback must affirm and settle — the distinction lives in the exact
+  // revision/digest/confirmed-candidate binding, not in any label.
+  await reconcileControl().click();
+  await f.page.locator(view+'[data-state=\"SAVED_AND_NATIVE_READBACK_CONFIRMED\"]').waitFor();await f.flushResponses();
+  assert.equal(await f.page.locator(view).getAttribute('data-effect-phase'),'RESTORED','PAN548_RUN118 the reconciled UNDO did not render its honest effect phase');
+  assert.match(await viewStatus(),/View gespeichert, separat nativ bestätigt/,'PAN548_RUN118 the confirmed reconcile readback text drifted');
+  const finalPersistedV118=f.readPersisted();
+  assert.deepEqual([finalPersistedV118.revision,finalPersistedV118.viewDigest,finalPersistedV118.confirmedCandidateDigest,finalPersistedV118.view.instances.find(i=>i.instanceId==='invoice-value').size],[3,undoPreview.afterDigest,undoPreview.candidateDigest,'large'],'PAN548_RUN118 the independently confirmed persisted truth drifted from the reconciled undo candidate');
+  assert.equal(await reconcileControl().isVisible(),false,'PAN548_RUN118 the settled hold kept a stale reconciliation control');
+  assert.equal(await f.page.locator(root).getAttribute('data-state'),'RESULT_READY','PAN548_RUN118 the reconcile disturbed the run projection');
+  assert.equal(await f.page.locator(root).getAttribute('data-run'),result.runId,'PAN548_RUN118 the reconcile lost the run binding');
+  // Coherence fences of THIS seam: the whole lost-reply/reconcile/winner journey rides ONLY the existing
+  //546 gateway — no added provider traffic, no hidden replan/probe, no connection-row or ledger mutation.
+  assert.equal(f.posts(),2,'PAN548_RUN118 the editor journey touched the provider beyond the two synthetic POSTs');
+  const getObservationsV118=f.observations.filter(o=>o.method==='GET');
+  assert.equal(getObservationsV118.length,3,'PAN548_RUN118 unexpected provider GET traffic:'+JSON.stringify(getObservationsV118.map(o=>[o.credentialPresent,o.credentialDigest])));
+  assert.deepEqual(getObservationsV118.map(o=>({credentialPresent:o.credentialPresent,credentialDigest:o.credentialDigest})),[{credentialPresent:false,credentialDigest:null},{credentialPresent:true,credentialDigest:hash(syntheticCredential565)},{credentialPresent:true,credentialDigest:hash(syntheticCredential565)}],'PAN548_RUN118 the credential vector drifted from credential-free reachability plus the two authenticated checks');
+  assert.equal(count(f,'plan'),planBaseline,'PAN548_RUN118 the journey issued a hidden replan');
+  assert.equal(f.requests.filter(r=>r.method==='POST'&&r.path.endsWith('/model-connection/probe')).length,probeBaseline,'PAN548_RUN118 the journey issued a hidden connection probe');
+  const rowFinalV118=persistedConnectionRow548(f);
+  assert.equal(rowFinalV118.revision,rowPostRunPreEditorV118.revision,'PAN548_RUN118 the lost-reply/reconcile journey mutated the persisted connection revision against the independent post-run/pre-editor baseline');
+  assert.deepEqual(rowFinalV118.state,rowPostRunPreEditorV118.state,'PAN548_RUN118 the lost-reply/reconcile journey changed the persisted connection state against the independent post-run/pre-editor baseline');
+  assert.equal(rowFinalV118.state.lastOperation,result.runId,'PAN548_RUN118 the journey displaced the run operation binding');
+  assert.deepEqual(nativeLedgerRows548(f),ledgerPostRunPreEditorV118,'PAN548_RUN118 the journey disturbed the persisted native ledger against the independent post-run/pre-editor baseline');
+  // Privacy and session retirement: secrets never surface, logout discards the whole presentation.
+  const bodyTextV118=await f.page.locator('body').innerText();
+  assert.ok(!bodyTextV118.includes(syntheticCredential565),'PAN548_RUN118 a synthetic credential reached the DOM');
+  assert.ok(!JSON.stringify(f.observations).includes(syntheticCredential565),'PAN548_RUN118 credential bytes reached the peer observations');
+  await connectedCapture(f,'desktop-run118-lost-reply-reconciled-truth');
+  await f.page.getByRole('button',{name:'Abmelden',exact:true}).click();
+  await f.page.getByRole('heading',{name:'Abgemeldet',exact:true}).waitFor();
+  assert.equal(await f.page.locator(root).count(),0,'PAN548_RUN118 the panel survived the logout');
+  assert.deepEqual(secondErrorsV118,[],'PAN548_RUN118 the second tab produced page errors');
+  assert.equal(f.business(),before,'PAN548_RUN118 the journey produced a business effect');
+  assert.deepEqual(f.errors,[]);
+ }finally{await second?.close().catch(()=>{});await cdp?.detach().catch(()=>{});await f.close();}
+});
+
+// RUN120 — direct regression evidence for the connected product change in
+// workspace-agent-panel-v1.ts (proposalFreshnessV1/renderProposalFreshnessV1). Source-bound gap:
+// #548 PUI-07-AC02 demands every unavailable operation be "disabled mit Grund" and UIDOD-02 keeps
+// proposal/decision/authority/effect separate — yet the separate proposal review (the panel's own
+// operation into the existing 546 editor) went silently dead whenever its EXISTING freshness fence
+// failed, while the RESULT_READY rows kept promising "separate aktuelle Vorschau und Bestätigung
+// bleiben nötig". The accepted RUN112/RUN114/RUN118 legs asserted the disable and DUI06's literal
+// 'RELOADED_PROPOSAL_NEEDS_FRESH_NATIVE_SELECTION'/'OLD_PROPOSAL_NOT_REAPPLIED_AFTER_CAS' fences
+// prove the state happens; none of them could assert an explanation because none existed. This
+// journey rides ONLY the existing plain synthetic assembly (no provider at all): the closed kind on
+// the existing reachable group, the honest reason line, the aria binding, zero hidden traffic and
+// the real recovery paths (fresh selection, explicit re-plan, one new bounded run) are asserted on
+// the actual mounted product. Controlled local HTTP framing only — explicitly NOT LLM evidence.
+test('PUI07 RUN120 actual browser honest unavailable-reason for the freshness-fenced separate proposal review: the reload-before-reselection names the moved native selection with zero requests and the fresh selection clears it without any new plan, preview cancellation keeps the fence fresh, the genuine CAS save names the exact Revision 0→1 move while a forced click cannot dispatch anything, an explicit new plan retires the stale line honestly and one fresh bounded run restores exactly one reviewable proposal; NOT LLM',async()=>{
+ const f=await nativeViewBrowserFixture546({agentRuns:true});
+ const opsBox=f.page.locator('#pan548-agent-task-operations'),freshnessNote=f.page.locator('#pan548-agent-proposal-freshness-reason');
+ const reviewBtn=()=>f.page.locator(root).getByRole('button',{name:'Diesen Vorschlag separat im Vieweditor prüfen',exact:true});
+ const freshnessV1=async()=>{await showAgentTechnicalUI(f.page);return opsBox.getAttribute('data-proposal-freshness');};
+ try{
+  const before=f.business();await open(f);await select(f);await plan(f);const result=await run(f);
+  assert.equal(result.phase,'RESULT_READY');
+  // Leg A — fence passes: an actual RESULT_READY proposal with fresh selection is reviewable and
+  // NO reason line occupies the group (the note must never invent staleness).
+  assert.equal(await freshnessV1(),'FRESH','PAN548_RUN120 the fresh terminal proposal did not classify FRESH');
+  assert.equal(await freshnessNote.isVisible(),false,'PAN548_RUN120 a fresh proposal showed an unavailable-reason line');
+  assert.equal(await reviewBtn().isEnabled(),true,'PAN548_RUN120 the fresh proposal was not reviewable');
+  assert.equal(await reviewBtn().getAttribute('aria-describedby'),null,'PAN548_RUN120 the review button described a reason while the fence passed');
+  // Leg B — genuine reload with the automatic independent read: the reloaded projection is real
+  // but this fresh tab page carries no native selection yet, so the SAME fence the accepted DUI06
+  // leg asserts (review disabled, needs fresh selection) must now NAME that moved predicate.
+  await f.page.reload();await showCurrentContextDetailsUI(f.page);
+  await f.page.locator('[id="shell.context-selection"][data-module="pan.erv"][data-state="CURRENT_CONTEXT"]').waitFor();
+  await state(f,'RESULT_READY');await showCurrentViewDetailsUI(f.page);await f.page.locator(view+'[data-state="CURRENT_NATIVE_VIEW"]').waitFor();await f.flushResponses();
+  assert.equal(await freshnessV1(),'SELECTION_MOVED','PAN548_RUN120 the reloaded proposal without fresh selection did not classify through the closed fence');
+  assert.equal(await freshnessNote.isVisible(),true,'PAN548_RUN120 the silently disabled review still showed no reason');
+  const movedText=await freshnessNote.innerText();
+  assert.ok(movedText.includes('nicht mehr genau das vorgeschlagene Viewelement invoice-value')&&movedText.includes('erneut aus')&&movedText.includes('sendet nichts, dispatcht nichts, löscht nichts'),'PAN548_RUN120 the selection-moved reason does not tell the recoverable present-tense truth:'+movedText);
+  assert.ok(!movedText.includes('angewendet wurde')&&!movedText.includes('gespeichert')&&!movedText.includes('nichts wurde gesendet'),'PAN548_RUN120 the selection-moved reason claims a historical persistence effect the fence cannot establish:'+movedText);
+  assert.equal(await reviewBtn().isDisabled(),true,'PAN548_RUN120 the unbound reloaded proposal stayed reviewable');
+  assert.equal(await reviewBtn().getAttribute('aria-describedby'),'pan548-agent-proposal-freshness-reason','PAN548_RUN120 the disabled review did not describe its visible reason to assistive technology');
+  assert.equal(await freshnessNote.evaluate(n=>n.closest('#pan548-agent-task-operations')!==null),true,'PAN548_RUN120 the reason line sits outside the existing reachable reason group');
+  const requestsAtStaleReload=f.requests.length;
+  await reviewBtn().evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtStaleReload,'PAN548_RUN120 the forced click on the unavailable review dispatched something');
+  assert.equal(f.readPersisted().revision,0,'PAN548_RUN120 the unavailable review persisted anything');
+  await capture(f,'run120-agent-reloaded-selection-moved-reason-desktop');
+  // Recovery leg 1 — the honest recovery the line itself names: re-selecting exactly the proposed
+  // element passes the fence again WITHOUT any new plan, dispatch or provider/owner round trip.
+  const startsAtReloadV120=count(f,'start');
+  await select(f);await state(f,'RESULT_READY');
+  assert.equal(await freshnessV1(),'FRESH','PAN548_RUN120 the fresh native selection did not restore fence freshness');
+  assert.equal(await freshnessNote.isVisible(),false,'PAN548_RUN120 the reason line survived the recovery it names');
+  assert.equal(await reviewBtn().isEnabled(),true,'PAN548_RUN120 the recovered proposal stayed unreviewable');
+  assert.equal(count(f,'start'),startsAtReloadV120,'PAN548_RUN120 the selection recovery started another task');
+  // Leg C — an open preview is not staleness: the fence ignores the PREVIEW_ONLY presentation
+  // itself and cancelling it changes nothing.
+  await preview(f);
+  assert.equal(await freshnessV1(),'FRESH','PAN548_RUN120 the open preview was misclassified as staleness');
+  await f.page.locator(view).getByRole('button',{name:'Vorschau abbrechen — nichts speichern',exact:true}).click();
+  await f.page.locator(view+'[data-state="LOCAL_DRAFT_DISCARDED"]').waitFor();
+  assert.equal(await freshnessV1(),'FRESH','PAN548_RUN120 the cancelled preview was misclassified as staleness');
+  assert.equal(await reviewBtn().isEnabled(),true,'PAN548_RUN120 the cancelled preview disabled the review');
+  // Leg D — the SAME deliberate CAS save DUI06/RUN114 already fence-tested: after the persisted
+  // revision moved 0→1 the still-displayed proposal must be explained by the EXACT binding-vs-
+  // current revision pair, never by a fake success or a silent dead button. RUN121: this save is the
+  // panel's OWN preview+confirm (SAVED_AND_NATIVE_READBACK_CONFIRMED) — the fence sees only the
+  // PRESENT revision inequality and cannot derive WHO moved the revision, so the reason must not
+  // claim a historical non-application ('nicht angewendet') over its own confirmed save; it names
+  // its derivability limit and the CURRENT custody state instead.
+  await preview(f);await confirm(f);
+  assert.equal(f.readPersisted().revision,1,'PAN548_RUN120 the deliberate save did not persist revision 1');
+  assert.equal(await freshnessV1(),'REVISION_MOVED','PAN548_RUN120 the externally moved revision did not classify through the closed fence');
+  const movedRevisionText=await freshnessNote.innerText();
+  assert.ok(movedRevisionText.includes('Revision 0')&&movedRevisionText.includes('Revision 1'),'PAN548_RUN120 the revision-moved reason does not carry the concrete before/after pair:'+movedRevisionText);
+  assert.ok(!movedRevisionText.includes('nicht angewendet'),'INDEPENDENT120_CONFIRMED_OWN_CAS_MUST_NOT_CLAIM_NON_APPLICATION:'+movedRevisionText);
+  assert.ok(movedRevisionText.includes('nicht ableitbar')&&movedRevisionText.includes('bleibt in der angezeigten Laufprojektion erhalten'),'PAN548_RUN120 the revision-moved reason neither names its own derivability limit nor the current proposal custody:'+movedRevisionText);
+  assert.equal(await reviewBtn().isDisabled(),true,'PAN548_RUN120 the stale proposal stayed reviewable after the CAS move');
+  assert.equal(await reviewBtn().getAttribute('aria-describedby'),'pan548-agent-proposal-freshness-reason','PAN548_RUN120 the stale review lost its described reason');
+  const requestsAtMoved=f.requests.length;
+  await reviewBtn().evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await new Promise(r=>setTimeout(r,150));await f.flushResponses();
+  assert.equal(f.requests.length,requestsAtMoved,'PAN548_RUN120 the forced click on the stale review dispatched something');
+  assert.equal(f.readPersisted().revision,1,'PAN548_RUN120 the stale review mutated the persisted view');
+  assert.equal(count(f,'start'),1,'PAN548_RUN120 the stale review started another task');
+  await capture(f,'run120-agent-stale-proposal-revision-moved-reason-desktop');
+  // Leg E — the explicit new plan retires the stale projection honestly: no proposal, no reason
+  // line, no lingering REVISION_MOVED claim over a state that has no proposal at all.
+  await plan(f);
+  assert.equal(await freshnessV1(),'NO_CURRENT_PROPOSAL','PAN548_RUN120 the explicit re-plan kept claiming a stale proposal');
+  assert.equal(await freshnessNote.isVisible(),false,'PAN548_RUN120 the retired proposal kept showing a reason line');
+  assert.equal(await reviewBtn().getAttribute('aria-describedby'),null,'PAN548_RUN120 the re-planned review still described a retired reason');
+  // Leg F — one fresh bounded run from the current revision delivers a NEW proposal bound to
+  // revision 1: the fence passes again and exactly one reviewable proposal exists.
+  const result2=await run(f);
+  assert.equal(result2.phase,'RESULT_READY');assert.equal(result2.proposal.expectedRevision,1,'PAN548_RUN120 the second proposal was not bound to the CURRENT persisted revision');
+  assert.equal(await freshnessV1(),'FRESH','PAN548_RUN120 the new revision-bound proposal did not classify FRESH');
+  assert.equal(await freshnessNote.isVisible(),false,'PAN548_RUN120 the fresh second proposal showed a reason line');
+  assert.equal(await reviewBtn().isEnabled(),true,'PAN548_RUN120 the new proposal was not reviewable');
+  assert.equal(count(f,'start'),2,'PAN548_RUN120 the recovery journey started more than the two deliberate runs');
+  assert.equal(f.readPersisted().revision,1,'PAN548_RUN120 the second run persisted anything');
+  // 390 — the reason line is actually readable where the user looks: fully revealable by natural
+  // scroll inside the real viewport, no horizontal clipping, hit-testable at center. The stale
+  // state is re-created deterministically by the deliberate Undo write through the existing 546 leg.
+  await f.page.locator(view).getByRole('button',{name:'Letzten gespeicherten Viewstand zurückholen',exact:true}).click();
+  await f.page.locator(view+'[data-state="PREVIEW_ONLY"]').waitFor();
+  await confirm(f);
+  assert.equal(await freshnessV1(),'REVISION_MOVED','PAN548_RUN120 the undo-moved revision did not classify through the closed fence');
+  await f.page.setViewportSize({width:390,height:844});await showAgentTechnicalUI(f.page);
+  assert.equal(await freshnessNote.isVisible(),true,'PAN548_RUN120 the reason line vanished at phone width');
+  await freshnessNote.evaluate(n=>n.scrollIntoView({block:'center'}));
+  const g=await freshnessNote.evaluate(n=>{const r=n.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height,vw:innerWidth,vh:innerHeight,scrollWidth:n.scrollWidth,clientWidth:n.clientWidth};});
+  assert.ok(g.height>0&&g.top>=0&&g.bottom<=g.vh,'PAN548_RUN120_REASON_NOT_FULLY_REVEALABLE_BY_SCROLL_390:'+JSON.stringify(g));
+  assert.ok(g.left>=0&&g.right<=g.vw&&g.scrollWidth<=g.clientWidth+1,'PAN548_RUN120_REASON_HORIZONTALLY_CLIPPED_390:'+JSON.stringify(g));
+  const hitSelf=await freshnessNote.evaluate(n=>{const r=n.getBoundingClientRect(),hit=document.elementFromPoint(Math.min(Math.max(r.left+r.width/2,0),innerWidth-1),Math.min(Math.max(r.top+r.height/2,0),innerHeight-1));return hit===n||n.contains(hit);});
+  assert.ok(hitSelf,'PAN548_RUN120_REASON_NOT_ACTUALLY_SHOWN_ON_TOP_390');
+  const image390=join(evidence(),'run120-agent-revision-moved-reason-390-visible.png');await f.page.screenshot({path:image390,fullPage:false});
+  assert.ok(readFileSync(image390).length>0,'PAN548_RUN120 missing 390 viewport capture');
+  await f.page.setViewportSize({width:1280,height:900});
+  // Coherence and privacy fences of this seam: only personal-view persistence ever happened, no
+  // business effect, and the logout retires the whole presentation with the panel.
+  assert.equal(f.business(),before,'PAN548_RUN120 the journey produced a business effect');
+  await f.page.getByRole('button',{name:'Abmelden',exact:true}).click();
+  await f.page.getByRole('heading',{name:'Abgemeldet',exact:true}).waitFor();
+  assert.equal(await f.page.locator(root).count(),0,'PAN548_RUN120 the panel survived the logout');
   assert.deepEqual(f.errors,[]);
  }finally{await f.close();}
 });

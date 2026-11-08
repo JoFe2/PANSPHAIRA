@@ -99,3 +99,64 @@ test('565 consent-grant expiry is native-authoritative: disclosed consent expiry
  }finally{clock2.mock.restore();}
  assert.equal(holds(f).length,0);// the expiry journey touched the ledger neither for holds nor for resets
 }));
+// RUN103: the retained UNKNOWN_USAGE hold is now a recoverable, honestly disclosed state on the
+// closed readback. The disclosure names the exact persisted operation and derives reconcilable
+// solely from reconcile()'s own precondition; the EXISTING owner reconciliation (no new route,
+// no caller amount, no evidence digest) settles only the code-owned synthetic zero-price hold.
+// The mandatory independent readback afterwards shows: hold gone, ledger SETTLED at zero
+// consumed, no extra provider request, and the existing reference-reset journey reopens fresh
+// prerequisites, fresh bounded consent and exactly one new synthetic inference. Nothing here is
+// real-model acceptance; the timed-out original dispatch stays settled-as-unknown, never retried.
+test('565 retained synthetic UNKNOWN hold is disclosed with its exact operation id, settled only by the existing owner reconciliation, and the same route then re-admits fresh prerequisites, consent and one inference',()=>use(async f=>{
+ await f.prerequisites();
+ assert.equal(f.read().unknownUsage,null,'PAN565_HOLD_DISCLOSED_BEFORE_ANY_DISPATCH');
+ f.consent({...limits565,maxTimeMs:50});
+ f.server.setMode('TIMEOUT');
+ const held=await f.probe('INFERENCE');
+ assert.equal(held.checks.INFERENCE.state,'UNKNOWN_USAGE');assert.equal(held.reason,'UNKNOWN_USAGE_RETAINED');
+ assert.deepEqual(held.unknownUsage,{operationId:holds(f)[0].operation_id,reconcilable:true},'PAN565_SYNTHETIC_HOLD_NOT_DISCLOSED_EXACTLY');
+ assert.equal(holds(f)[0].state,'UNKNOWN_USAGE');assert.equal(holds(f)[0].model_units,limits565.maxCostMicros);
+ assert.equal(f.server.post(),1);
+ f.server.release();f.reopen();
+ const reread=f.read();
+ assert.deepEqual(reread.unknownUsage,held.unknownUsage,'PAN565_HOLD_DISCLOSURE_NOT_STABLE_ACROSS_FRESH_OWNER');
+ assert.throws(f.select,/UNKNOWN_USAGE_RETAINED/);
+ const after=f.owner.reconcile(f.headers,{operationId:held.unknownUsage.operationId,identityDigest:reread.identityDigest});
+ assert.equal(after.unknownUsage,null,'PAN565_HOLD_STILL_DISCLOSED_AFTER_RECONCILIATION');
+ assert.equal(after.checks.INFERENCE.state,'FAILED');assert.equal(after.checks.INFERENCE.reason,'SYNTHETIC_ZERO_PRICE_RECONCILED_NO_MODEL_PASS');
+ assert.equal(after.realModelAcceptance,false);
+ assert.equal(holds(f)[0].state,'SETTLED');assert.equal(holds(f)[0].model_consumed,0);
+ assert.equal(f.server.post(),1,'PAN565_RECONCILIATION_TOUCHED_PROVIDER');assert.equal(f.server.get(),3,'PAN565_RECONCILIATION_EXTRA_PROVIDER_GET');
+ // Recovery over the existing honest path only: reference reset, fresh phases, fresh bounded
+ // consent, exactly one new synthetic inference. The settled hold is never reused or replayed.
+ f.server.setMode('OK');
+ await f.prerequisites();f.consent();
+ const again=await f.probe('INFERENCE');
+ assert.equal(again.checks.INFERENCE.state,'PASS');assert.equal(again.unknownUsage,null);
+ assert.equal(f.server.post(),2,'PAN565_RECOVERY_PROVIDER_POSTS_NOT_EXACTLY_TWO');assert.equal(f.server.get(),6);
+}));
+test('565 unknownUsage disclosure is closed-DTO correlated: missing, extra, malformed or state-contradictory records deny while the honest null and the correlated record validate',()=>use(async f=>{
+ const plain=f.select();
+ assert.equal(plain.unknownUsage,null);
+ assert.ok(validateModelConnectionReadbackV1(plain));
+ const{unknownUsage:_droven,...withoutKey}=plain;
+ assert.throws(()=>validateModelConnectionReadbackV1(withoutKey),/INPUT_DENIED/,'closed DTO must require the additive key');
+ const op='operation:mc-'+'a'.repeat(40);
+ for(const forged of [{operationId:op,reconcilable:true,usageMicros:0},{operationId:op},{reconcilable:true},{operationId:'operation:Mc',reconcilable:true},{operationId:'operation:mc_x1',reconcilable:true},{operationId:'operation:ab1',reconcilable:true},{operationId:op,reconcilable:'true'},{operationId:op,reconcilable:null}])
+  assert.throws(()=>validateModelConnectionReadbackV1({...plain,unknownUsage:forged}),/DENIED/,'forged unknownUsage '+JSON.stringify(forged));
+ // Correlation: a well-formed record without the retained INFERENCE hold state or reason denies.
+ assert.throws(()=>validateModelConnectionReadbackV1({...plain,unknownUsage:{operationId:op,reconcilable:true}}),/READBACK_DENIED/,'disclosure while INFERENCE is NOT_RUN');
+ assert.throws(()=>validateModelConnectionReadbackV1({...plain,reason:'UNKNOWN_USAGE_RETAINED',unknownUsage:{operationId:op,reconcilable:true}}),/READBACK_DENIED/,'disclosure without the UNKNOWN_USAGE check state');
+ assert.equal(f.server.get(),0);assert.equal(f.server.post(),0);
+}));
+test('565 non-synthetic retained hold discloses reconcilable false and the owner oracle denial keeps the full hold disclosed and retained',()=>use(async f=>{
+ await f.prerequisites();f.consent({...limits565,maxTimeMs:50});f.server.setMode('TIMEOUT');
+ const r=await f.probe('INFERENCE');
+ assert.equal(r.checks.INFERENCE.state,'UNKNOWN_USAGE');
+ assert.deepEqual(r.unknownUsage,{operationId:holds(f)[0].operation_id,reconcilable:false},'PAN565_OWNER_BOUND_HOLD_DISCLOSURE_WRONG');
+ assert.throws(()=>f.owner.reconcile(f.headers,{operationId:r.unknownUsage.operationId,identityDigest:r.identityDigest}),/USAGE_ORACLE_UNAVAILABLE/);
+ const row=holds(f)[0];assert.equal(row.state,'UNKNOWN_USAGE');assert.equal(row.model_units,limits565.maxCostMicros);
+ assert.deepEqual(f.read().unknownUsage,r.unknownUsage,'PAN565_DENIED_RECONCILIATION_ALTERED_THE_DISCLOSURE');
+ assert.equal(f.server.post(),1);
+ f.server.release();
+},{alter:o=>{o.summary.evidenceClass='OWNER_BOUND_NOT_QUALIFIED';o.summary.provider='provider:local-owner-test';o.pricing={currency:'EUR',revision:1,inputMicrosPerMillionTokens:0,outputMicrosPerMillionTokens:0};}}));

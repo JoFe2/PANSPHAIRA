@@ -39,6 +39,14 @@ export const MODEL_UI_WIRE_ALIAS_V1=Object.freeze({schemaVersion:'pansphaira.mod
 // it for transport, because the controlled existing peer and the real local
 // Qwen server reject dotted function names.
 export const MODEL_CONNECTION_COMPOSITION_PURPOSE_V1='purpose:pan574-composition-feedback';
+// Original #567 B1 proposal-only onboarding admission rides this SAME owner,
+// consent, transport and COST ledger with its OWN closed fourth purpose: a
+// single tool-less bounded call that must answer with one closed typed
+// configuration proposal (contracts agent-configuration-proposal-v1). A probe,
+// UI or composition consent is never inherited and this purpose alone can
+// never admit a probe/UI/composition task. No client-selectable catalog, no
+// widened guard, no new broker, task database or authority store.
+export const MODEL_CONNECTION_PROPOSAL_PURPOSE_V1='purpose:configuration-onboarding-proposal';
 // MINIMAL closed composition-specific wire adaptation, authorized for this
 // EXACT two-name composition purpose/catalog only. Provider-safe aliases
 // (identical to the portable names already proven against the real server
@@ -114,7 +122,7 @@ export function bindModelConnectionTransportV1(value){
  // Nonzero-priced real calls require an independently owner-bound product
  // grant in addition to the exact browser confirmation. Null is default deny.
  const grant=o.productGrant===null?null:exact(o.productGrant,Object.hasOwn(o.productGrant,'allowedPurposes')?['limits','testDataDigest','expiresAtMs','allowedPurposes']:['limits','testDataDigest','expiresAtMs']);
- if(grant){grant.limits=validateModelConnectionLimitsV1(grant.limits);if(Object.hasOwn(grant,'allowedPurposes')){grant.allowedPurposes=modelConnectionArrayV1(grant.allowedPurposes,3);if(!grant.allowedPurposes.length||new Set(grant.allowedPurposes).size!==grant.allowedPurposes.length||grant.allowedPurposes.some(p=>!['purpose:ui-connection-probe','purpose:ui-view-proposal',MODEL_CONNECTION_COMPOSITION_PURPOSE_V1].includes(p)))fail('MODEL_CONNECTION_PRODUCT_CONSENT_DENIED');}}
+ if(grant){grant.limits=validateModelConnectionLimitsV1(grant.limits);if(Object.hasOwn(grant,'allowedPurposes')){grant.allowedPurposes=modelConnectionArrayV1(grant.allowedPurposes,4);if(!grant.allowedPurposes.length||new Set(grant.allowedPurposes).size!==grant.allowedPurposes.length||grant.allowedPurposes.some(p=>!['purpose:ui-connection-probe','purpose:ui-view-proposal',MODEL_CONNECTION_COMPOSITION_PURPOSE_V1,MODEL_CONNECTION_PROPOSAL_PURPOSE_V1].includes(p)))fail('MODEL_CONNECTION_PRODUCT_CONSENT_DENIED');}}
  const secret=()=>{if(summary.authMethod==='NONE_LOCAL')return {value:null,fingerprint:null};let b;try{b=readProtectedOwnerSecretFileV1(o.credentialFile);}catch{fail('MODEL_CONNECTION_SECRET_UNAVAILABLE');}const value=b.toString('utf8').trim();b.fill(0);if(!/^[A-Za-z0-9._~-]{8,4096}$/.test(value))fail('MODEL_CONNECTION_SECRET_UNAVAILABLE');return {value,fingerprint:sha(value)};};
  async function addresses(signal){
   if(signal.aborted)fail('MODEL_CONNECTION_TIMEOUT');
