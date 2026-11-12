@@ -5,6 +5,7 @@
   "use strict";
   const B = "http://127.0.0.1:8097";
   const $ = s => document.querySelector(s);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const $$ = s => [...document.querySelectorAll(s)];
   const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hhmm = d => new Date(d).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
@@ -37,7 +38,7 @@
   // ── Quittung · Chronik · Tretspur ────────────────────────────────────────────────────────────
   function quitt(vor, nach) {
     const feld = $("#quitt");
-    if (feld) feld.innerHTML = "Vorher: " + vor + " → <b>Nachher: " + nach + "</b> · Undo 30s · " + hhmmss(Date.now());
+    if (feld) feld.innerHTML = "Vorher: " + esc(vor) + " → <b>Nachher: " + esc(nach) + "</b> · Undo 30s · " + hhmmss(Date.now());
   }
   function chrono(tat) {
     const li = document.createElement("li");
@@ -71,12 +72,12 @@
     const feld = $("#warum"); if (!feld || !wurzel()) return;
     const k = knoten(wurzel(), id); if (!k) return;
     const tw = wirksam(id, "theme.wahl");
-    const zeilen = ["<b>theme.wahl</b> = " + tw.wert + " — gesetzt in <code>" + tw.werSetzt + "</code>"];
+    const zeilen = ["<b>theme.wahl</b> = " + esc(tw.wert) + " — gesetzt in <code>" + esc(tw.werSetzt) + "</code>"];
     for (const p of (kette(wurzel(), id) || [])) if (p.warumSo) for (const [th, tx] of Object.entries(p.warumSo))
-      zeilen.push("<small>" + p.id + " · " + th + ": " + tx + "</small>");
+      zeilen.push("<small>" + esc(p.id) + " · " + esc(th) + ": " + esc(tx) + "</small>");
     zeilen.push("Reihenfolge hier: Deskriptor-Reihenfolge" + (meinBlatt().reihenfolge ? " — <b>person-eigene Sortierung</b> aktiv (" + person + ") " + meinBlatt().reihenfolge.map(zonenTitel).join(" → ") : " — keine person-eigene Sortierung"));
-    zeilen.push("Sperren hier: " + ((k.sperren && k.sperren.length) ? k.sperren.join(", ") : "keine"));
-    if (k.eigentum) zeilen.push("Eigentum: " + k.eigentum.wer.typ + " " + k.eigentum.wer.id + " · Rechte: " + k.eigentum.rechte.join(","));
+    zeilen.push("Sperren hier: " + ((k.sperren && k.sperren.length) ? esc(k.sperren.join(", ")) : "keine"));
+    if (k.eigentum) zeilen.push("Eigentum: " + esc(k.eigentum.wer.typ) + " " + esc(k.eigentum.wer.id) + " · Rechte: " + esc(k.eigentum.rechte.join(",")));
     feld.innerHTML = zeilen.join("<br>");
   }
 
@@ -182,10 +183,10 @@
         '<polyline fill="none" stroke="' + farben[n] + '" stroke-width="2" points="' + x.werte.map((v, i) => px(i) + "," + py(v)).join(" ") + '"/>' +
         '<text x="' + (px(11) + 6) + '" y="' + (py(x.werte[11]) + 3) + '" font-size="10" font-family="ui-monospace,monospace" fill="' + farben[n] + '">' + x.werte[11] + "</text>").join("");
       feld.innerHTML = '<div class="trend"><svg viewBox="0 0 640 140" role="img" aria-label="Trend, ' + reihen.length + ' Reihen, zuletzt: ' +
-        reihen.map(x => x.titel + " " + x.werte[11]).join(", ") + '">' + kurven + "</svg></div>" +
-        '<ul class="trend-legende">' + reihen.map((x, n) => '<li><i style="background:' + farben[n] + '"></i>' + x.titel + " · zuletzt " + x.werte[11] + "</li>").join("") + "</ul>" +
+        reihen.map(x => esc(x.titel) + " " + x.werte[11]).join(", ") + '">' + kurven + "</svg></div>" +
+        '<ul class="trend-legende">' + reihen.map((x, n) => '<li><i style="background:' + farben[n] + '"></i>' + esc(x.titel) + " · zuletzt " + x.werte[11] + "</li>").join("") + "</ul>" +
         "<table><caption class='kette'>Wochenwerte — dieselben Zahlen wie in der Zeichnung</caption><thead><tr><th>Woche</th>" +
-        reihen.map(x => "<th>" + x.titel + "</th>").join("") + "<th>Ø</th></tr></thead><tbody>" +
+        reihen.map(x => "<th>" + esc(x.titel) + "</th>").join("") + "<th>Ø</th></tr></thead><tbody>" +
         wochen.map((w, i) => "<tr><td>" + w + "</td>" + reihen.map(x => "<td>" + x.werte[i] + "</td>").join("") +
           "<td>" + Math.round(reihen.reduce((t, x) => t + x.werte[i], 0) / reihen.length) + "</td></tr>").join("") + "</tbody></table>";
       lvStand();
@@ -246,16 +247,16 @@
   }
   function zoneKopf(k, istFinanzen) {
     const theme = wirksam(k.id, "theme.wahl").wert;
-    const auswahl = '<select data-theme="' + k.id + '" aria-label="Theme für Zone ' + zonenTitel(k.id) + '">' +
+    const auswahl = '<select data-theme="' + esc(k.id) + '" aria-label="Theme für Zone ' + zonenTitel(k.id) + '">' +
       ["essential-2d", "pulse", "orbit"].map(t => '<option value="' + t + '"' + (t === theme ? " selected" : "") + ">" + t + "</option>").join("") + "</select>";
-    const buttons = '<button class="ghost" data-hoch="' + k.id + '" aria-label="Zone höher anordnen" type="button">↑</button>' +
-      '<button class="ghost" data-runter="' + k.id + '" aria-label="Zone tiefer anordnen" type="button">↓</button>' + auswahl +
-      '<button class="ghost" data-warum="' + k.id + '" type="button">Warum so?</button>' +
-      '<button class="ghost" data-toggle="' + k.id + '" type="button">Zone aus</button>' +
+    const buttons = '<button class="ghost" data-hoch="' + esc(k.id) + '" aria-label="Zone höher anordnen" type="button">↑</button>' +
+      '<button class="ghost" data-runter="' + esc(k.id) + '" aria-label="Zone tiefer anordnen" type="button">↓</button>' + auswahl +
+      '<button class="ghost" data-warum="' + esc(k.id) + '" type="button">Warum so?</button>' +
+      '<button class="ghost" data-toggle="' + esc(k.id) + '" type="button">Zone aus</button>' +
       (istFinanzen ? '<button id="undoBtn" class="ghost" type="button" hidden>Rückgängig (Modul)</button>' : "");
     return '<header class="zone-head"><b>' + zonenTitel(k.id) + "</b>" +
       '<span class="tid">' + ((k.vorlagen.find(v => v.schicht === "layout") || {}).katalogId || "layout") + "</span>" +
-      '<span class="tid">theme.' + theme + "</span>" +
+      '<span class="tid">theme.' + esc(theme) + "</span>" +
       (istFinanzen ? '<div class="actions">' : '<div class="aktionen" style="margin-left:auto;display:flex;gap:6px;align-items:center">') +
       buttons + "</div></header>";
   }
@@ -302,8 +303,8 @@
       if (blatt.zonen[id] && blatt.zonen[id].aus) continue;
       const istFinanzen = id.includes("finanzen");
       const theme = wirksam(id, "theme.wahl").wert;
-      html += '<section class="zone" data-zone="' + id + '">' + zoneKopf(k, istFinanzen) +
-        '<div class="zone-body theme-' + theme + '" data-body="' + id + '">' +
+      html += '<section class="zone" data-zone="' + esc(id) + '">' + zoneKopf(k, istFinanzen) +
+        '<div class="zone-body theme-' + esc(theme) + '" data-body="' + esc(id) + '">' +
         (istFinanzen ? finanzenInhalt() : startseiteInhalt()) + "</div></section>";
     }
     zonenFeld.innerHTML = html;

@@ -176,3 +176,4 @@ liegt jetzt rein in der JSONL-Datei, der Ledger wird vom Spur-Zweig nicht mehr a
 - BI-Glas öffnet nur noch mit Rahmen-Auftrag (`?bi` in der Werksbank), direkte Prototyp-Tests
 bleiben bei der Einzelprüfung; `window.biUmbauen` erlaubt Nachbardateien das Abnehmen der Brille.
 - Matte: m123 21/21 · M5 17/17 · M6 18/18 · M7-Audit 13/13 · Epic 19/19 · BI/Strom/Spur/Zeiger-Trio grün.
+- Nachzug PC-Fremdreview (Branch psai-ui-review, 5 Abschnitte, gpt-6.1-sol/xhigh): Werksbank und Broker binden jetzt 127.0.0.1; CSRF vergleicht den EINGEREICHTEN Wert gegen den gespeicherten Digest und prüft Ablauf; Ticker-Texte aus /api/event werden vor innerHTML escaped. Befunde B05/B06/B07/B08 (Idempotenz, mutierende GETs, Limits, Spuren-Autorität) sind als P0/P1-Maßnahmen im Review dokumentiert und noch offen.
