@@ -1,16 +1,8 @@
 {
   "schritte": [
-    {
-      "ziel": "Zone aus",
-      "spruch": "Diese Zone abstellen — der Zeiger startet hier"
-    },
-    {
-      "ziel": "Layout Split",
-      "spruch": "Zurück ins Raster: Layout Split"
-    },
-    {
-      "ziel": "Layout Detail",
-      "spruch": "Und groß: Layout Detail — dann zurück von vorn"
-    }
+    { "ziel": "Zone aus", "spruch": "Diese Zone blende ich aus" },
+    { "ziel": "Liste", "spruch": "Layout Liste: alle Flächen untereinander" },
+    { "ziel": "Vergleich", "spruch": "Layout Split: zwei Zeitlinsen im Vergleich" },
+    { "ziel": "Eigene Änderungen verwerfen", "spruch": "Und zurück: die Zone ist wieder da — so geht es im Kreis" }
   ]
 }

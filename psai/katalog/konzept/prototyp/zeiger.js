@@ -142,6 +142,7 @@
 
   function inhaltGekommen(art) {
     if (!INHALT_ZIEL[art]) return;
+    if (autoModus) return;   // Demo-Auftrag: die Schleife selbst ist die Show, kein Blick-Konkurrent
     if (!running && schleife && !reduziert() && !pauseLaeuft) { blick(art); return; }   // rundenloser Leerlauf
     if (running) {                     // mitten im Lauf: gemerkt wird der Blick in jedem Fall —
       if (blicke.indexOf(art) < 0) blicke.push(art);   // einer hinter dem anderen, nichts überdeckt nichts
@@ -181,11 +182,12 @@
     if (meinTakt !== folge) return;
     if (!schleife) { blaseZeigt("Fertig — du bist dran."); return; }   // einmalig: bleibt stehen
     blaseZeigt("Gleich noch mal — oder einfach selbst klicken");
-    await pausiere(2600);
+    await pausiere(autoModus ? 1200 : 2600);   // Demo-Takt: flinker, von Hand lass Luft
     if (meinTakt !== folge) { blaseZeigt("Fertig — du bist dran."); return; }   // in der Pause abgeschaltet: sauber melden
     if (!schleife) { blaseZeigt("Fertig — du bist dran."); return; }
-    while (blicke.length) {                     // der Strom hat gewartet: erst vorzeigen, dann führen
-      var art = blicke.shift();
+    if (blicke.length) {                        // der Strom hat gewartet: höchstens EIN Vorzeigen pro Runde,
+      var art = blicke.pop();                   // sonst verhungert die Schleife an einem lebenden Geber —
+      blicke.length = 0;                        // der älteste Blick zählt als gesehen
       await blick(art, meinTakt);
       if (meinTakt !== folge) return;
     }
@@ -231,7 +233,7 @@
   var autoModus = /[?&]zeige/.test(location.search);
   var manuell = sessionStorage.getItem("zeiger.schleife.manuell");
   if (manuell === "1") { schleifeSet(true); setTimeout(starte, 600); }            // von Hand gestartet: überlebt Neuladen
-  else if (autoModus && manuell !== "0") { setTimeout(starte, 1200); }             // nur mit Auto-Auftrag des Rahmens
+  else if (autoModus && (/[?&]frisch/.test(location.search) || manuell !== "0")) { if (/[?&]frisch/.test(location.search)) schleifeSet(true); setTimeout(starte, 1200); }             // nur mit Auto-Auftrag des Rahmens
   try { sessionStorage.removeItem("zeiger.schleife"); } catch (e) { }          // Altlast ohne Unterscheidung entsorgen
 
   var stil = document.createElement("style");

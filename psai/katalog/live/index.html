@@ -17,6 +17,10 @@
 </head>
 <body>
 <iframe id="rahmen" title="Prototyp" src="/psai/katalog/konzept/prototyp/index.html?skin=pulse&bi=offen"></iframe>
+<script>
+  /* ?zeige an den Rahmen weiterreichen: die Klickanleitung läuft nur mit Auftrag des Rahmens. */
+  if (/[?&]zeige/.test(location.search)) document.getElementById("rahmen").src += "&zeige=auto";
+</script>
 <button id="umschalter" type="button" title="F = Takt stufenweise ändern (5s · 10s · 30s · aus), R = sofort">Werkbank · nächster Neuaufbau in –</button>
 <script>
 (function () {
