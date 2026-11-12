@@ -92,7 +92,7 @@ async function handle(req, res) {
       if (!row) throw new Error('HOSTED_SESSION_DENIED');
       const csrf = req.headers['x-pan527-csrf'];
       if (typeof csrf !== 'string' || !/^[a-f0-9]{64}$/.test(csrf)) throw new Error('HOSTED_CSRF_DENIED');
-      if (Date.now() > (row.expiresAtMs || 0)) throw new Error('HOSTED_SESSION_EXPIRED');
+      const ab = Number(row.expiresAtMs); if (!(ab > Date.now())) throw new Error('HOSTED_SESSION_EXPIRED');
       if (!timingSafeEqual(Buffer.from(hash(csrf), 'hex'), Buffer.from(row.csrfDigest, 'hex'))) throw new Error('HOSTED_CSRF_DENIED');
     }
     if (p === '/strom') {
@@ -115,7 +115,7 @@ async function handle(req, res) {
       return json(202, { ok: true, verworft: versuche.length - zeilen.length });
     }
     if (p === '/api/spur') {
-      let alle = []; try { alle = (await readFile(SPUR, 'utf8')).trim().split('\n').slice(-Number(url.searchParams.get('seit') || 200)).map(l => JSON.parse(l)); } catch { }
+      let alle = []; try { alle = (await readFile(SPUR, 'utf8')).trim().split('\n').slice(-Math.min(500, Math.max(1, Number(url.searchParams.get('seit')) || 200))).map(l => JSON.parse(l)); } catch { }
       return json(200, { spuren: alle });
     }
     if (p === '/api/deskriptor') {

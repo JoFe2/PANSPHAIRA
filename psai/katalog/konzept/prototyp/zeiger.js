@@ -125,7 +125,7 @@
   // aber nur, wenn gerade Pause ist oder er nichts tut; mitten im Schritt funkelt nichts dazwischen.
   // Auch die Tour-Umschreibung kommt als Ereignis (tour- Halt vom Werksbank-Server).
   var BROKER = (typeof localStorage !== "undefined" && localStorage.getItem("psai.proto.broker")) || "http://127.0.0.1:8097";
-  var INHALT_ZIEL = { ticker: "#ticker", kpi: "#kz", trend: "#trend" };
+  var INHALT_ZIEL = { ticker: "#ticker", kpi: "#kz", trend: "#trendBild" };
   var INHALT_SPRUCH = { ticker: "Neue Meldung — hier im Ticker", kpi: "Kennzahl frisch vom Fachhost", trend: "Trendfortschreibung eingetroffen" };
   var blicke = [], blickLaeuft = false, pauseLaeuft = false;
 

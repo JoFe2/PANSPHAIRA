@@ -3,36 +3,123 @@
   "$id": "psai-katalog-eintrag.schema.json",
   "title": "PsAI Katalog-Eintrag (AP-H1.1)",
   "type": "object",
-  "required": ["katalogId", "art", "titel", "version", "optionen", "screens", "beispielDeskriptor", "kanonCheck"],
+  "required": [
+    "katalogId",
+    "art",
+    "titel",
+    "version",
+    "optionen",
+    "screens",
+    "beispielDeskriptor",
+    "kanonCheck"
+  ],
   "additionalProperties": false,
   "properties": {
-    "katalogId": { "type": "string", "pattern": "^(layout|theme|modul|komponente|shell)\\.[a-z0-9.-]+$" },
-    "art": { "enum": ["layout", "design", "funktion", "shell"] },
-    "titel": { "type": "string" },
-    "version": { "type": "string" },
-    "optionen": { "type": "array", "items": { "type": "string" } },
-    "screens": {
-      "type": "array", "minItems": 3,
+    "katalogId": {
+      "type": "string",
+      "pattern": "^(layout|theme|modul|komponente|shell)\\.[a-z0-9.-]+$"
+    },
+    "art": {
+      "enum": [
+        "layout",
+        "design",
+        "funktion",
+        "shell"
+      ]
+    },
+    "titel": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "optionen": {
+      "type": "array",
       "items": {
-        "type": "object", "required": ["breite", "pfad"],
-        "properties": { "breite": { "enum": [390, 1024, 1586] }, "pfad": { "type": "string" } },
+        "type": "string"
+      }
+    },
+    "screens": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "breite",
+          "pfad"
+        ],
+        "properties": {
+          "breite": {
+            "enum": [
+              390,
+              1024,
+              1586
+            ]
+          },
+          "pfad": {
+            "type": "string"
+          }
+        },
         "additionalProperties": false
       }
     },
-    "beispielDeskriptor": { "type": "string", "description": "Pfad zu JSON/Snippet, das den Eintrag nutzt" },
-    "lizenz": { "type": "string", "default": "MIT" },
+    "beispielDeskriptor": {
+      "type": "string",
+      "description": "Pfad zu JSON/Snippet, das den Eintrag nutzt"
+    },
+    "lizenz": {
+      "type": "string",
+      "default": "MIT"
+    },
     "kanonCheck": {
       "type": "object",
-      "required": ["ehrlichkeit", "quittung", "optionalitaet", "nurLesenGrenze", "datenredlichkeit"],
+      "required": [
+        "ehrlichkeit",
+        "quittung",
+        "optionalitaet",
+        "nurLesenGrenze",
+        "datenredlichkeit"
+      ],
       "properties": {
-        "ehrlichkeit": { "enum": ["ok", "einschraenkung"] },
-        "quittung": { "enum": ["ok", "einschraenkung"] },
-        "optionalitaet": { "enum": ["ok", "einschraenkung"] },
-        "nurLesenGrenze": { "enum": ["ok", "einschraenkung"] },
-        "datenredlichkeit": { "enum": ["ok", "einschraenkung"] },
-        "anmerkung": { "type": "string" }
+        "ehrlichkeit": {
+          "enum": [
+            "ok",
+            "einschraenkung"
+          ]
+        },
+        "quittung": {
+          "enum": [
+            "ok",
+            "einschraenkung"
+          ]
+        },
+        "optionalitaet": {
+          "enum": [
+            "ok",
+            "einschraenkung"
+          ]
+        },
+        "nurLesenGrenze": {
+          "enum": [
+            "ok",
+            "einschraenkung"
+          ]
+        },
+        "datenredlichkeit": {
+          "enum": [
+            "ok",
+            "einschraenkung"
+          ]
+        },
+        "anmerkung": {
+          "type": "string"
+        }
       },
       "additionalProperties": false
+    },
+    "datenquellen": {
+      "type": "array",
+      "description": "Optional: Datenquell-Verweise wie im Modul-Manifest"
     }
   }
 }

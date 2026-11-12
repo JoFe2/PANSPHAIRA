@@ -145,7 +145,7 @@
     for (const e of alle) zaehler.set(e.gruppe, (zaehler.get(e.gruppe) || 0) + 1);
     let html = "", seen = new Set();
     for (const e of alle) {
-      if (!seen.has(e.gruppe)) { seen.add(e.gruppe); html += '<li class="tick-gruppe"><span>' + e.gruppe + "</span><span>· " + zaehler.get(e.gruppe) + "</span></li>"; }
+      if (!seen.has(e.gruppe)) { seen.add(e.gruppe); html += '<li class="tick-gruppe"><span>' + esc(e.gruppe) + "</span><span>· " + zaehler.get(e.gruppe) + "</span></li>"; }
       html += "<li><time>" + hhmm(e.zeit) + "</time><b>" + esc(e.gruppe) + "</b> " + esc(e.text) + "</li>"; 
     }
     list.innerHTML = html;
@@ -467,9 +467,9 @@
     else if (el.id === "agBis") { agent.bis = el.value || null; }
     }, true);
   document.addEventListener("click", e => {
-    const t = e.target.closest && e.target.closest("[data-nav],[data-warum],[data-toggle],[data-hoch],[data-runter],[data-pers],[data-mod],[data-kz],[data-tp],#undoBtn,#erststart,#dwBtn,#hautKnopf,#resetBtn,#tickNeu,[data-dw-rueck]");
+    const t = e.target.closest && e.target.closest("[data-nav],[data-warum],[data-toggle],[data-hoch],[data-runter],[data-pers],[data-mod],[data-kz],[data-tp],#undoBtn,#erststart,#dwBtn,#hautKnopf,#resetBtn,#tickNeu,#dwZu,[data-dw-rueck]");
     if (!t) return;
-    if (t.dataset.dwRueck !== undefined) { drawerZu(); }
+    if (t.dataset.dwRueck !== undefined || t.id === "dwZu") { drawerZu(); }
     else if (t.dataset.nav) {
       $$("nav button[data-nav]").forEach(b => b.setAttribute("aria-pressed", String(b === t)));
       const ziel = document.querySelector('[data-body="' + t.dataset.nav + '"]');
@@ -485,11 +485,11 @@
     }
     else if (t.dataset.hoch || t.dataset.runter) {
       const id = t.dataset.hoch || t.dataset.runter;
-      const ab = reihenfolge(); const i = ab.indexOf(id); const j = t.dataset.hoch ? i - 1 : i + 1;
+      const ab = reihenfolge(); const vorher = ab.slice(); const i = ab.indexOf(id); const j = t.dataset.hoch ? i - 1 : i + 1;
       if (i >= 0 && j >= 0 && j < ab.length) { const x = ab[i]; ab[i] = ab[j]; ab[j] = x; }
       meinBlatt().reihenfolge = ab; meinSpeichern();
       rohlog.push({ zeit: new Date().toISOString(), aktion: "sortierung", zone: id, agentStufe: agent.stufe });
-      quitt(reihenfolge().map(zonenTitel).join(" → "), ab.map(zonenTitel).join(" → "));
+      quitt(vorher.map(zonenTitel).join(" → "), ab.map(zonenTitel).join(" → "));
       chrono("Zone " + zonenTitel(id) + (t.dataset.hoch ? " höher" : " tiefer") + " angeordnet"); zeichne();
     }
     else if (t.dataset.pers) perspektiveWechsel(t.dataset.pers);
@@ -499,7 +499,7 @@
     else if (t.dataset.kz === "pause") {
       kzPausiert = !kzPausiert; t.textContent = kzPausiert ? "Weiter" : "Pause";
       rohlog.push({ zeit: new Date().toISOString(), aktion: kzPausiert ? "pausiert" : "weiter", agentStufe: agent.stufe });
-      quitt(kzPausiert ? "pausiert" : "läuft", kzPausiert ? "läuft" : "pausiert");
+      quitt(kzPausiert ? "läuft" : "pausiert", kzPausiert ? "pausiert" : "läuft");
       chrono(kzPausiert ? "Kennzahl pausiert" : "Kennzahl weiter");
       if (kzPausiert) clearTimeout(kzTimer); else { kzTick(); planeKz(); }
     }
