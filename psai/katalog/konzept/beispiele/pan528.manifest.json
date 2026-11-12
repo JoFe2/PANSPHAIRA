@@ -1,0 +1,33 @@
+{
+  "id": "modul.pan528",
+  "titel": "Eingangsrechnungsprüfung",
+  "version": "1.1",
+  "icon": "brand/inv.svg",
+  "mitlieferTemplate": [
+    { "katalogId": "layout.split-detail", "schicht": "layout" },
+    { "katalogId": "theme.essential-2d", "schicht": "design" }
+  ],
+  "datenquellen": [
+    { "id": "dq.beleg", "adapter": "rest", "zugriff": "nur-lesen", "intervallSek": 30, "readback": true },
+    { "id": "dq.mengen", "adapter": "rest", "zugriff": "nur-lesen", "intervallSek": 60, "readback": true }
+  ],
+  "aktionen": [
+    { "id": "RUN_STARTER", "effekt": "Prüflauf starten: 10 STK Wareneingang, 6 reserviert, erwartet 4 verfügbar", "quittung": true, "undoFensterSek": 30, "rollen": ["sachbearbeitung", "pruefer"] },
+    { "id": "ABORT_STARTER", "effekt": "Ungelösenden Lauf abbrechen (nur vor Kinder-Abschluss)", "quittung": true, "undoFensterSek": 0, "rollen": ["sachbearbeitung"] },
+    { "id": "RESET_STARTER", "effekt": "Eigenen abgeschlossenen Starter zurücksetzen; Budget bleibt verbraucht", "quittung": true, "undoFensterSek": 30, "rollen": ["sachbearbeitung"] },
+    { "id": "SUGGEST_STARTER", "effekt": "Tipisierter Vorschlag ohne Ausführung", "quittung": true, "undoFensterSek": 0, "rollen": ["sachbearbeitung", "pruefer"] }
+  ],
+  "slots": [
+    { "slot": "nav", "minGroesse": "40x200" },
+    { "slot": "home-kachel", "minGroesse": "148x96" },
+    { "slot": "detail-panel", "minGroesse": "320x240" },
+    { "slot": "overlay-inhalt", "minGroesse": "480x320", "praefertOverlay": true },
+    { "slot": "chronik", "minGroesse": "1x160" }
+  ],
+  "optionen": [
+    { "schluessel": "kachel.typ", "default": "inhalt", "werte": ["nav", "inhalt"], "anzeigeort": "einstellungen" },
+    { "schluessel": "detailkarte.zeigen", "default": true, "werte": [true, false], "anzeigeort": "panel" },
+    { "schluessel": "live.intervallSek", "default": 30, "werte": [10, 30, 60, 300], "rollenfreigabe": ["admin", "gruppe.finanzen"], "anzeigeort": "panel" }
+  ],
+  "rechte": ["nur-lesen-fachschicht"]
+}

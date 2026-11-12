@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PsAI · Template T2 „Nachtwache“ V3 (Leitstand, der mitarbeitet)</title>
+<style>
+/* ── Design-Token T2 „Nachtwache“ V2 ────────────────────────────────
+   V1 unverändert als Referenz. V2-Ansatz: statisches Mockup → bedienbare Konsole.
+   Leitstand-Tempo: Kommandoleiste, j/k-Fokus, Queue-Zähler, Readback in der Karte.
+   Motion-Regel: 140ms ease-out, Glow nur an Handlungsakzenten, reduced-motion heilig. */
+:root{
+  --ps-bg:#0c1116; --ps-layer:#121a22; --ps-layer2:#18222c;
+  --ps-text:#dbe4ec; --ps-text2:#9fb0bf; --ps-line:#223039;
+  --ps-action:#e9a23b; --ps-action-hover:#f2b558; --ps-on-action:#1c1204;
+  --ps-info:#57d9a3; --ps-warn:#e9a23b; --ps-danger:#ff7b72;
+  --ps-focus:#e9a23b; --ps-radius:8px; --ps-gap:8px;
+  --ps-sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ps-mono:ui-monospace,'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;font:400 13.5px/1.6 var(--ps-sans);background:var(--ps-bg);color:var(--ps-text)}
+a{color:var(--ps-info)}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--ps-action);color:var(--ps-on-action);padding:10px 16px;z-index:9}
+:focus-visible{outline:2px solid var(--ps-focus);outline-offset:2px}
+header{display:flex;align-items:center;gap:14px;height:52px;padding:0 20px;border-bottom:1px solid var(--ps-line);background:var(--ps-layer);position:sticky;top:0;z-index:5}
+.brand{font:700 14px var(--ps-mono);letter-spacing:.12em}
+.brand i{color:var(--ps-action);font-style:normal}
+.ver{font:700 9px var(--ps-mono);letter-spacing:.14em;color:var(--ps-action);border:1px solid #5a4520;border-radius:999px;padding:2px 7px}
+.env{font:600 10px var(--ps-mono);letter-spacing:.14em;color:var(--ps-info);border:1px solid #1f4436;background:#0f1f1a;border-radius:999px;padding:3px 10px}
+.cmdk{margin-left:auto;font:400 12.5px var(--ps-mono);color:var(--ps-text2);border:1px solid var(--ps-line);border-radius:var(--ps-radius);background:var(--ps-bg);padding:7px 12px;cursor:pointer;display:flex;gap:10px;min-width:230px}
+.cmdk kbd{margin-left:auto;border:1px solid var(--ps-line);border-radius:3px;padding:1px 5px;font-size:10.5px}
+.user{font:400 12px var(--ps-mono);color:var(--ps-text2)}
+.layout{display:grid;grid-template-columns:232px minmax(0,1fr) 330px;min-height:calc(100vh - 52px - 32px)}
+nav{border-right:1px solid var(--ps-line);background:var(--ps-layer);padding:14px 0}
+nav p.grp{font:600 10px/1 var(--ps-mono);letter-spacing:.18em;color:var(--ps-text2);margin:14px 18px 6px;text-transform:uppercase}
+nav a{display:flex;gap:10px;align-items:center;padding:9px 18px;min-height:42px;color:var(--ps-text);text-decoration:none;border-left:2px solid transparent;font-size:13px}
+nav a:hover{background:var(--ps-layer2)}
+nav a[aria-current]{border-left-color:var(--ps-action);background:var(--ps-layer2);color:#fff;font-weight:600}
+nav .badge{margin-left:auto;font:700 10.5px var(--ps-mono);color:var(--ps-on-action);background:var(--ps-action);border-radius:999px;padding:1px 7px}
+nav .cnt{margin-left:auto;font:600 10.5px var(--ps-mono);color:var(--ps-text2)}
+nav .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--ps-info)}
+nav .dot.warn{background:var(--ps-warn)}
+@media (prefers-reduced-motion: no-preference){nav .dot.warn{animation:pulse 2.4s ease-in-out infinite}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #e9a23b55}50%{box-shadow:0 0 0 5px #e9a23b00}}
+nav .mod{font:400 11px var(--ps-mono);color:var(--ps-text2);padding:4px 18px}
+main{padding:22px 26px;min-width:0}
+h1{font:700 21px/1.3 var(--ps-sans);margin:0;display:inline}
+.pill{font:600 10.5px var(--ps-mono);letter-spacing:.08em;border:1px solid var(--ps-line);color:var(--ps-text2);border-radius:999px;padding:3px 9px;margin-left:10px}
+.pill.warn{color:var(--ps-warn);border-color:#5a4520;background:#1f1810}
+.sub{color:var(--ps-text2);margin:6px 0 12px;font-size:13px}
+/* V2: Kommandoleiste — Leitstand-Tempo für risikoarme Massenware */
+.cmd-bar{display:flex;gap:8px;align-items:center;border:1px dashed var(--ps-line);border-radius:var(--ps-radius);padding:8px 10px;margin-bottom:14px;background:var(--ps-layer)}
+.cmd-bar small{color:var(--ps-text2);font:400 11.5px var(--ps-sans);margin-right:auto}
+button{font:600 12.5px var(--ps-sans);border-radius:6px;padding:9px 14px;min-height:38px;cursor:pointer;border:1px solid var(--ps-action);background:var(--ps-action);color:var(--ps-on-action)}
+button:hover{background:var(--ps-action-hover)}
+button.small{padding:5px 10px;min-height:30px;font-size:11.5px}
+button.ghost{background:transparent;color:var(--ps-text);border-color:var(--ps-line)}
+button.ghost:hover{background:var(--ps-layer2)}
+button.danger{background:transparent;color:var(--ps-danger);border-color:#5b2b28}
+.card{background:var(--ps-layer);border:1px solid var(--ps-line);border-radius:var(--ps-radius);padding:14px 16px;margin-bottom:10px}
+.card[data-focus="true"]{border-color:var(--ps-action);box-shadow:0 0 0 1px var(--ps-action),0 0 18px -6px #e9a23b66}
+.card h2{margin:0;font:600 14px var(--ps-sans)}
+.card h2 code{font:600 12px var(--ps-mono);color:var(--ps-action)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--ps-text2);font:400 11.5px var(--ps-mono);margin:6px 0 8px}
+.meta b{color:var(--ps-text)}
+.card p{margin:4px 0 10px;font-size:13px}
+.acts{display:flex;gap:8px}
+details{margin-top:8px;color:var(--ps-text2)}
+summary{cursor:pointer;font:600 11.5px var(--ps-mono);letter-spacing:.04em}
+pre{background:var(--ps-bg);border:1px solid var(--ps-line);border-radius:6px;padding:10px;font:400 11.5px/1.6 var(--ps-mono);overflow:auto;color:var(--ps-text)}
+.progress{height:4px;background:var(--ps-layer2);border-radius:2px;overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;width:0;background:var(--ps-action);box-shadow:0 0 8px #e9a23b88}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:6px 0 2px}
+.steps span{height:3px;border-radius:2px;background:var(--ps-layer2)}
+.steps span.done{background:var(--ps-info)}
+.steps span.now{background:var(--ps-action)}
+.ok{color:var(--ps-info)}
+/* V2: Entscheidungs-Zustände + Quittung in der Karte + Undo-Fenster */
+.card.decided{opacity:.85}
+.card.decided.approved{border-left:3px solid var(--ps-info)}
+.card.decided.rejected{border-left:3px solid var(--ps-danger)}
+.rcpt-inline{border:1px solid #1f4436;background:#0f1f1a;border-radius:6px;padding:9px 11px;font-size:12.5px;margin-top:8px}
+.rcpt-inline.no{border-color:#5b2b28;background:#1c1213}
+.flowline{font:600 12.5px var(--ps-mono);margin-top:6px}
+.flowline s{color:var(--ps-text2);text-decoration:none}
+.flowline b{color:var(--ps-info)}
+.undo{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px}
+.undo i{position:absolute;left:0;bottom:0;height:2px;background:var(--ps-action);width:100%;transform-origin:left}
+aside{border-left:1px solid var(--ps-line);background:var(--ps-layer);padding:18px}
+aside h2{font:600 10.5px var(--ps-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ps-text2);margin:18px 0 8px}
+aside h2:first-child{margin-top:0}
+.rcpt{border:1px solid var(--ps-line);border-radius:6px;padding:9px 11px;margin-bottom:7px;font-size:12.5px}
+.rcpt time{display:block;font:400 11px var(--ps-mono);color:var(--ps-text2);margin-top:2px}
+.note{border:1px dashed #5a4520;background:#191510;color:#e4c184;border-radius:6px;padding:10px;font-size:12.5px}
+.keys{list-style:none;margin:0;padding:0;font-size:12px;color:var(--ps-text2)}
+.keys li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--ps-line)}
+.keys kbd{font:600 10.5px var(--ps-mono);border:1px solid var(--ps-line);border-radius:3px;padding:1px 6px;background:var(--ps-bg)}
+footer{display:flex;gap:18px;border-top:1px solid var(--ps-line);background:var(--ps-layer);padding:7px 20px;font:400 11px var(--ps-mono);color:var(--ps-text2)}
+footer .ok{color:var(--ps-info)}
+/* V2: ⌘K-Palette und Kürzelhilfe als echte Dialoge (Fokusfalle, Esc) */
+dialog{border:1px solid var(--ps-line);background:var(--ps-layer);color:var(--ps-text);border-radius:10px;padding:0;max-width:520px;width:92vw;margin:12vh auto auto}
+dialog::backdrop{background:#05080bcc}
+.palette input{width:100%;border:0;border-bottom:1px solid var(--ps-line);background:var(--ps-bg);color:var(--ps-text);font:400 14px var(--ps-mono);padding:14px 16px;outline-offset:-2px}
+.palette ul{list-style:none;margin:0;padding:6px;max-height:300px;overflow:auto}
+.palette li{padding:9px 12px;border-radius:6px;font-size:13px;cursor:pointer;display:flex;gap:10px}
+.palette li small{margin-left:auto;color:var(--ps-text2);font:400 10.5px var(--ps-mono)}
+.palette li[aria-selected="true"],.palette li:hover{background:var(--ps-layer2);outline:1px solid var(--ps-line)}
+.palette li em{font-style:normal;color:var(--ps-action)}
+.help{padding:18px}
+.help h2{margin:0 0 10px;font:600 15px var(--ps-sans)}
+.demo-hint{margin-left:auto;align-self:center;background:var(--ps-layer2);border:1px solid var(--ps-line);border-radius:999px;padding:5px 12px;font:600 10.5px var(--ps-mono);color:var(--ps-text2);letter-spacing:.08em}
+@media(max-width:1180px){.layout{grid-template-columns:210px minmax(0,1fr)}aside{display:none}}
+@media(max-width:820px){.layout{grid-template-columns:1fr}nav{border-right:none;border-bottom:1px solid var(--ps-line)}}
+@media (prefers-reduced-motion: no-preference){a,button,.card{transition:background .12s,border-color .14s ease-out,box-shadow .14s ease-out,opacity .14s}}
+
+/* ── V3-Schicht ─────────────────────────────────────────────────── */
+.filters{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.filters button{font:600 11.5px/1 var(--ps-mono);letter-spacing:.04em;border:1px solid var(--ps-line);background:var(--ps-layer);color:var(--ps-text2);border-radius:999px;padding:7px 12px;cursor:pointer;min-height:32px}
+.filters button[aria-pressed="true"]{border-color:var(--ps-action);color:var(--ps-action);background:var(--ps-bg)}
+.filters [data-c]{opacity:.75;margin-left:6px}
+.card.verborgen{display:none}
+.wirk-zeile{font:400 12px/1.7 var(--ps-mono);border:1px solid var(--ps-line);border-radius:6px;padding:8px 10px;margin:0 0 10px;background:var(--ps-bg)}
+.wirk-zeile s{color:var(--ps-text2)}
+.wirk-zeile b{color:var(--ps-info)}
+input.menge{width:54px;font:600 12px var(--ps-mono);border:1px solid var(--ps-line);border-radius:4px;background:var(--ps-layer);color:var(--ps-text);padding:3px 6px;text-align:center}
+.empty{border:1px dashed var(--ps-line);border-radius:10px;padding:28px;text-align:center;color:var(--ps-text2);background:var(--ps-layer)}
+.empty b{display:block;font:600 15px var(--ps-sans);color:var(--ps-text);margin-bottom:4px}
+footer .blink{animation:psblink 1.1s ease-out}
+@keyframes psblink{0%{color:var(--ps-action)}100%{}}
+@media (prefers-reduced-motion: reduce){footer .blink{animation:none}}
+.legend{display:flex;gap:12px;align-items:center;font:400 10.5px var(--ps-mono);color:var(--ps-text2);padding:2px 18px}
+.legend i{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;background:var(--ps-info,var(--ps-info))}
+.legend i.warn{background:var(--ps-warn)}
+</style>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+<header>
+  <span class="brand">PAN<i>SPHAIRA</i></span>
+  <span class="ver" title="V3: Live-Job, Filter, Wirksameldung, Sammel-Freigabe">V3 · LEITSTAND</span>
+  <span class="env">SYNTHETISCH · LOOPBACK</span>
+  <button class="cmdk" id="openPalette">Befehl, View oder Vorgang … <kbd>⌘K</kbd></button>
+  <span class="user">j.falk@sachbearbeitung</span>
+</header>
+<div class="layout">
+<nav aria-label="Hauptnavigation">
+  <p class="grp">Betrieb</p>
+  <a href="#genehmigungen" aria-current="page">Genehmigungen <span class="badge" id="navCount">3</span></a>
+  <a href="#vorgaenge">Vorgänge · Quittungen <span class="cnt">14</span></a>
+  <a href="#richtlinien">Richtlinien <span class="cnt">9</span></a>
+  <p class="grp">Module (Plugins)</p>
+  <a href="#wareneingang">Warenkorb-Starter <span class="dot" title="aktiv"></span></a>
+  <a href="#belege">Beleg-Navigation <span class="dot" title="aktiv"></span></a>
+  <a href="#mail">Mail (lokal) <span class="dot warn" title="Einschränkung: nur Sent-Ordner"></span></a>
+  <a href="#modell">Modell-Anbindung</a>
+  <p class="mod">4/4 Module geladen · v1</p>
+  <p class="legend"><span><i></i>aktiv</span><span><i class="warn"></i>Einschränkung</span></p>
+
+  <p class="grp">Administration</p>
+  <a href="#diag">Diagnose</a>
+  <a href="#config">Konfiguration</a>
+</nav>
+<main id="inhalt">
+  <h1 id="genehmigungen">Genehmigungs-Warteschlange</h1>
+  <span class="pill" id="queuePill">3 ausstehend</span><span class="pill warn">BUDGET 62 %</span>
+  <p class="sub">Nichts läuft ohne Freigabe. Der Readback belegt anschließend, was das Zielsystem wirklich geändert hat.</p>
+  <div class="filters" role="group" aria-label="Warteschlange filtern">
+    <button type="button" data-filter="all" aria-pressed="true">Alle <span data-c>3</span></button>
+    <button type="button" data-filter="low" aria-pressed="false">Risikoarm <span data-c>2</span></button>
+    <button type="button" data-filter="busy" aria-pressed="false">Laufend <span data-c>1</span></button>
+  </div>
+
+  <!-- V2-Neu: Kommandoleiste. Risikoarm = Richtlinie mit Kosten 0 und Loopback-System. -->
+  <div class="cmd-bar">
+    <small>Risikoarme Vorschläge (Kosten 0,00 € · loopback) lassen sich gesammelt freigeben — jede einzeln quittiert.</small>
+    <button class="small ghost" id="approveAll" type="button">Alle risikoarmen genehmigen</button>
+    <button class="small ghost" id="focusNext" type="button">Nächste fokussieren <kbd style="font:600 9.5px var(--ps-mono)">J</kbd></button>
+  </div>
+
+  <article class="card" id="v4711" aria-labelledby="h4711" data-risk="low">
+    <h2 id="h4711"><code>WARE-4711</code> — Wareneingang buchen (10 Stück)</h2>
+    <p class="meta">Agent <b>Bestands-Assistent</b> · Richtlinie <b>RG-07</b> Bestand&lt;Meldebestand · System <b>ERP-Sandbox</b> · Kosten <b>0,00 €</b> · vor 2 min</p>
+    <p>Angemeldet: Eingang 10 Stück, Reservierung B-3302 um 6. Verifiziert nach Ausführung: verfügbar 4. Hinweis „Meldebestand erreicht“ kommt als eigener Vorschlag.</p>
+    <p class="wirk-zeile">Menge anpassen: <input class="menge" id="menge" type="number" value="10" min="1" max="40" aria-label="Stückzahl anpassen"> Stk · Wirkung: <s>verfügbar 14</s> → <b id="wkVerf">24</b> · <span style="white-space:nowrap">Reservierung B-3302 auf <b id="wkRes">6</b></span></p>
+    <div class="acts">
+      <button type="button" data-act="approve">↩ Ausführen genehmigen <kbd style="font:600 9.5px var(--ps-mono);opacity:.7">g↵</kbd></button>
+      <button class="ghost" type="button" data-act="reject">Ablehnen <kbd style="font:600 9.5px var(--ps-mono);opacity:.7">gx</kbd></button>
+      <button class="ghost" type="button">Vorschlag bearbeiten</button>
+    </div>
+    <details><summary>ROH-VORSCHLAG</summary>
+      <pre>POST /sandbuch/wareneingang  { menge: 10, lager: "N1" }
+reservation: B-3302 → 6 · readback erwartet: verfügbar == 4</pre>
+    </details>
+  </article>
+
+  <article class="card" id="belg" aria-labelledby="hlaufend" aria-busy="true">
+    <h2 id="hlaufend"><code>BELG-0912</code> — Beleg kryptografisch versiegeln</h2>
+    <p class="meta">Modul <b>Verschluss</b> · Richtlinie <b>RL-02</b> Pflichtversiegelung · vor 40 s</p>
+    <div class="progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Versiegelungsfortschritt"><i id="pbar"></i></div>
+    <!-- V2-Neu: Schrittliste macht "Schritt 3/5" begreifbar -->
+    <div class="steps" aria-hidden="true"><span class="done"></span><span class="done"></span><span class="now"></span><span></span><span></span></div>
+    <p class="meta" id="stepText" style="margin:0 0 8px;color:var(--ps-text)">SCHRITT 3/5 · Hash gebildet, Siegel wird geschrieben</p>
+    <div class="acts"><button class="danger" type="button">Abbrechen (Entwurf bleibt erhalten)</button></div>
+  </article>
+
+  <article class="card" id="v2210" aria-labelledby="h2210" data-risk="low">
+    <h2 id="h2210"><code>MAIL-2210</code> — Kunde über Teillieferung informieren</h2>
+    <p class="meta">Agent <b>Kommunikation</b> · Richtlinie <b>RG-11</b> Abweichungs-Information · Kanal <b>Mail lokal</b> · vor 8 min</p>
+    <div class="acts">
+      <button type="button" data-act="approve">↩ Ausführen genehmigen <kbd style="font:600 9.5px var(--ps-mono);opacity:.7">g↵</kbd></button>
+      <button class="ghost" type="button" data-act="reject">Ablehnen <kbd style="font:600 9.5px var(--ps-mono);opacity:.7">gx</kbd></button>
+    </div>
+  </article>
+
+  <div class="empty" id="emptyState" hidden><b>Warteschlange erschöpft.</b><span id="emptySummary">Alle Vorschläge sind entschieden.</span> Die Chronik rechts belegt jede Entscheidung einzeln.</div>
+</main>
+<aside aria-label="Quittungen und Hinweise">
+  <h2>Letzte Quittungen</h2>
+  <div id="rcptFeed">
+    <div class="rcpt"><span class="ok">✔</span> <b>WARE-4709</b> ausgeführt — Readback: verfügbar 14→24
+      <time>09:41:07 · q-8812 · <a href="#log">Rohlog</a></time></div>
+    <div class="rcpt"><span style="color:var(--ps-danger)">✖</span> <b>RLG-0908</b> abgelehnt (J. Falk) — keine Wirkung
+      <time>09:12:55 · q-8805 · <a href="#log">Rohlog</a></time></div>
+  </div>
+  <h2>Sicherheitsgrenze</h2>
+  <p class="note">Synthetische Werkstatt: loopback-only · keine Produktivbuchung · kein bezahlter Modellanruf. Die Grenze steht an jeder gefährlichen Aktion.</p>
+  <h2>Tastatur</h2>
+  <ul class="keys">
+    <li>Befehle / Sprung <kbd>⌘K</kbd></li>
+    <li>Nächste / vorige Karte <kbd>J</kbd><kbd>K</kbd></li>
+    <li>Genehmigen <kbd>g</kbd>↵</li>
+    <li>Ablehnen <kbd>g</kbd><kbd>x</kbd></li>
+    <li>Details <kbd>Space</kbd></li>
+    <li>Kürzelhilfe <kbd>?</kbd></li>
+  </ul>
+</aside>
+</div>
+<footer><span role="status" id="statusLine">broker.loopback:18443</span><span>Budget 62 %</span><span class="ok">Readback 14/14 bestätigt</span><span>main 79df9fd</span><span class="demo-hint">DEMO-MOCKUP V3 · INTERAKTION NUR VISUELL</span></footer>
+
+<!-- V2-Neu: echte ⌘K-Palette (filtert Karten + Sprünge) -->
+<dialog id="palette" class="palette" aria-label="Befehlspalette">
+  <form method="dialog">
+    <input id="palInput" type="search" placeholder="Vorgang, View oder Befehl …" aria-label="Befehl oder Vorgang suchen" autocomplete="off">
+    <ul id="palList" role="listbox" aria-label="Treffer"></ul>
+  </form>
+</dialog>
+<!-- V2-Neu: Kürzelhilfe (? ) -->
+<dialog id="help" class="help" aria-labelledby="helpTitle">
+  <h2 id="helpTitle">Tastatur-Kürzel</h2>
+  <ul class="keys">
+    <li>Palette öffnen <kbd>⌘K</kbd></li>
+    <li>Karten wandern <kbd>J</kbd> / <kbd>K</kbd></li>
+    <li>Fokusierte genehmigen <kbd>g</kbd> dann <kbd>↵</kbd></li>
+    <li>Fokusierte ablehnen <kbd>g</kbd> dann <kbd>X</kbd></li>
+    <li>Hilfe schließen <kbd>Esc</kbd></li>
+  </ul>
+  <p style="color:var(--ps-text2);font-size:12px;margin:12px 0 0">Kürzel sind Zweitweg — jede Aktion liegt auch sichtbar auf der Karte.</p>
+</dialog>
+
+<script>
+(() => {
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const cards=$$("article.card[data-risk]");
+let focusIdx=-1, chord=false, pendingUndo=null;
+
+/* ── Zähler synchron halten (Nav-Badge, Pill, Statuszeile) ── */
+function openCount(){return cards.filter(c=>!c.classList.contains("decided")).length;}
+function syncCounts(){
+  const n=openCount();
+  $("#navCount").textContent=n;
+  $("#queuePill").textContent=n+" ausstehend";
+  if(!n)$("#queuePill").classList.add("ok-pill");
+}
+function say(msg){const l=$("#statusLine");l.textContent=msg;l.setAttribute("role","status");}
+
+/* ── Entscheidungsfluss: Karte → Quittung inline + Undo-Fenster ── */
+function decide(card,kind){
+  if(card.classList.contains("decided"))return;
+  const id=card.querySelector("code").textContent;
+  card.classList.add("decided",kind);
+  const acts=card.querySelector(".acts");
+  const rcpt=document.createElement("div");
+  rcpt.className="rcpt-inline"+(kind==="rejected"?" no":"");
+  rcpt.setAttribute("role","status");
+  rcpt.innerHTML=kind==="approved"
+    ? '✔ <b>'+id+'</b> genehmigt — Readback eingetroffen: <span class="flowline"><s>verfügbar 14</s> → <b>24</b> · q-'+Math.floor(8800+Math.random()*90)+'</span>'
+    : '✖ <b>'+id+'</b> abgelehnt (J. Falk) — Wirkung: keine.';
+  const undo=document.createElement("button");
+  undo.type="button";undo.className="ghost small undo";undo.innerHTML='Rückgängig <i></i>';
+  acts.replaceChildren(rcpt,undo);
+  /* aside-Feed spiegelt die Entscheidung (Provenienz wie in V1 gefordert) */
+  const feed=$("#rcptFeed"),row=document.createElement("div");
+  row.className="rcpt";
+  row.innerHTML=(kind==="approved"?'<span class="ok">✔</span> <b>'+id+'</b> genehmigt':'<span style="color:var(--ps-danger)">✖</span> <b>'+id+'</b> abgelehnt')
+    +' — <time>jetzt · Demo-Quittung</time>';
+  feed.prepend(row);
+  syncCounts();
+  say(kind==="approved"?id+" genehmigt — Rückgängig 6 Sekunden möglich":id+" abgelehnt — keine Wirkung");
+  /* Undo-Fenster: 6 s Countdown-Balken */
+  const bar=undo.querySelector("i");let left=6000;
+  const t=setInterval(()=>{left-=100;bar.style.transform="scaleX("+(left/6000)+")";
+    if(left<=0){clearInterval(t);undo.remove();}},100);
+  pendingUndo=()=>{clearInterval(t);card.classList.remove("decided","approved","rejected");
+    rebuildActs(card);syncCounts();say(id+" — Entscheidung zurückgenommen");};
+  undo.addEventListener("click",()=>{if(pendingUndo){pendingUndo();pendingUndo=null;}});
+}
+function rebuildActs(card){
+  const acts=card.querySelector(".acts");
+  acts.innerHTML='<button type="button" data-act="approve">↩ Ausführen genehmigen</button>'
+    +'<button class="ghost" type="button" data-act="reject">Ablehnen</button>'
+    +(card.id==="v4711"?'<button class="ghost" type="button">Vorschlag bearbeiten</button>':"");
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;
+  decide(b.closest("article.card"),b.dataset.act==="approve"?"approved":"rejected");
+});
+/* V2-Neu: Sammelgenehmigung risikoarmer Vorschläge */
+$("#approveAll").addEventListener("click",()=>{
+  const low=cards.filter(c=>c.dataset.risk==="low"&&!c.classList.contains("decided"));
+  low.forEach(c=>decide(c,"approved"));
+  if(low.length)say(low.length+" risikoarme Vorschläge genehmigt — je einzeln quittiert");
+});
+
+/* ── j/k-Fokus + g-Chord (nur wenn keine Eingabe aktiv) ── */
+function setFocus(i){
+  cards.forEach((c,k)=>c.dataset.focus=k===i);
+  focusIdx=i;
+  if(i>=0)cards[i].scrollIntoView({block:"nearest",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}
+$("#focusNext").addEventListener("click",()=>setFocus(Math.min(focusIdx+1,cards.length-1)));
+document.addEventListener("keydown",e=>{
+  const typing=/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  const dlgOpen=$("dialog[open]");
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openPal();return;}
+  if(e.key==="Escape"&&dlgOpen){dlgOpen.close();return;}
+  if(dlgOpen||typing)return;
+  if(e.key==="?" ){e.preventDefault();$("#help").showModal();return;}
+  if(e.key==="j"||e.key==="ArrowDown"){e.preventDefault();setFocus(Math.min(focusIdx+1,cards.length-1));}
+  else if(e.key==="k"||e.key==="ArrowUp"){e.preventDefault();setFocus(Math.max(focusIdx-1,0));}
+  else if(e.key==="g"){chord=true;setTimeout(()=>chord=false,900);say("Warte auf ↵ (genehmigen) oder x (ablehnen)");}
+  else if(chord&&(e.key==="Enter"||e.key.toLowerCase()==="x")){
+    e.preventDefault();
+    if(focusIdx>=0)decide(cards[focusIdx],e.key==="Enter"?"approved":"rejected");
+    chord=false;
+  }
+});
+
+/* ── ⌘K-Palette: Karten + Sprünge, Pfeiltasten, Enter ── */
+const pal=$("#palette"),palIn=$("#palInput"),palList=$("#palList");
+const entries=[
+  ...cards.map(c=>({label:c.querySelector("code").textContent+" · "+c.querySelector("h2").textContent.split("— ")[1],hint:"Vorschlag",go:()=>c.scrollIntoView({block:"center"})})),
+  {label:"Alle risikoarmen genehmigen",hint:"Befehl",go:()=>$("#approveAll").click()},
+  {label:"Kürzelhilfe",hint:"?",go:()=>$("#help").showModal()},
+  {label:"Diagnose",hint:"Ansicht",go:()=>say("Demo: Ansicht folgt in echter Implementierung")}
+];
+let sel=0,shown=[];
+function renderPal(q=""){
+  shown=entries.filter(en=>en.label.toLowerCase().includes(q.toLowerCase()));
+  sel=Math.min(sel,Math.max(shown.length-1,0));
+  palList.replaceChildren(...shown.map((en,i)=>{
+    const li=document.createElement("li");li.setAttribute("role","option");
+    li.setAttribute("aria-selected",i===sel);
+    li.innerHTML="<em>"+en.label+"</em><small>"+en.hint+"</small>";
+    li.addEventListener("click",()=>{en.go();pal.close();});
+    return li;}));
+}
+function openPal(){pal.showModal();palIn.value="";sel=0;renderPal();palIn.focus();}
+palIn.addEventListener("input",()=>{sel=0;renderPal(palIn.value);});
+palIn.addEventListener("keydown",e=>{
+  if(e.key==="ArrowDown"){e.preventDefault();sel=Math.min(sel+1,shown.length-1);renderPal(palIn.value);}
+  if(e.key==="ArrowUp"){e.preventDefault();sel=Math.max(sel-1,0);renderPal(palIn.value);}
+  if(e.key==="Enter"&&shown[sel]){e.preventDefault();shown[sel].go();pal.close();}
+});
+$("#openPalette").addEventListener("click",openPal);
+
+/* ── Fortschrittsbalken fährt einmal hoch (respektiert reduced-motion) ── */
+requestAnimationFrame(()=>{$("#pbar").style.transition=matchMedia("(prefers-reduced-motion: reduce)").matches?"none":"width 1.2s ease-out";$("#pbar").style.width="62%";});
+setFocus(0);syncCounts();
+})();
+</script>
+
+<script>
+(()=>{ /* V3-Erweiterung: Live-Job, Filter, Wirksameldung, Leerzustand, Fokusfluss, Statusleben */
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const cards=$$("article.card");
+const rm=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const open=c=>!c.classList.contains("decided");
+const st=$("#statusLine");
+new MutationObserver(()=>{st.classList.remove("blink");void st.offsetWidth;st.classList.add("blink");}).observe(st,{childList:true,characterData:true,subtree:true});
+function labelCounts(){
+  const set=(f,n)=>{const b=document.querySelector('.filters [data-filter='+f+'] [data-c]');if(b)b.textContent=n;};
+  set("all",cards.filter(open).length);
+  set("low",cards.filter(c=>open(c)&&c.dataset.risk==="low").length);
+  set("busy",cards.filter(c=>open(c)&&!c.dataset.risk).length);
+}
+function updateEmpty(){
+  const es=$("#emptyState");if(!es)return;
+  const off=cards.filter(c=>c.classList.contains("decided"));
+  if(off.length===cards.length){es.hidden=false;
+    $("#emptySummary").textContent=off.length+" Vorschläge sind entschieden."; const a=cards.filter(c=>c.classList.contains("approved")).length,r=cards.filter(c=>c.classList.contains("rejected")).length;$("#emptySummary").textContent=off.length+" Vorschläge entschieden: "+a+" genehmigt, "+r+" abgelehnt, 1 automatisch versiegelt.";var cb=document.querySelector(".cmd-bar");if(cb)cb.setAttribute("hidden","");var fl=document.querySelector(".filters");if(fl)fl.setAttribute("hidden","");}
+}
+function setFilter(f){
+  cards.forEach(c=>{const show=f==="all"||(f==="low"?c.dataset.risk==="low":!c.dataset.risk);c.classList.toggle("verborgen",!show);});
+  $$(".filters button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.filter===f)));
+  updateEmpty();
+}
+$$(".filters button").forEach(b=>b.addEventListener("click",()=>setFilter(b.dataset.filter)));
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act],.undo,#undoBtn");if(!b)return;
+  const card=b.closest("article.card");
+  setTimeout(()=>{
+    labelCounts();updateEmpty();
+    if(card&&card.classList.contains("decided")){
+      const i=cards.indexOf(card);
+      for(const c of cards.slice(i+1).concat(cards.slice(0,i))){
+        if(open(c)&&!c.classList.contains("verborgen")){cards.forEach(x=>x.dataset.focus=false);c.dataset.focus=true;break;}
+      }
+    }
+  },0);
+},true);
+const menge=$("#menge");
+if(menge){const upd=()=>{const n=Math.max(1,Math.min(40,+menge.value||1));$("#wkVerf").textContent=14+n;$("#wkRes").textContent=Math.max(16-n,0);};menge.addEventListener("input",upd);upd();}
+/* Live-Job: BELG läuft sichtbar zu Ende */
+const belg=document.getElementById("belg");
+if(belg){
+  let pct=62;
+  const bar=$("#pbar")||belg.querySelector(".progress i");
+  const steps=$$(".steps span");
+  const line=$("#stepText");
+  const STEP={1:"SCHRITT 1/5 · Beleg geladen",2:"SCHRITT 2/5 · Kanonisiert",3:"SCHRITT 3/5 · Hash gebildet, Siegel wird geschrieben",4:"SCHRITT 4/5 · Siegel signiert, Readback läuft",5:"SCHRITT 5/5 · Readback trifft ein"};
+  const t=setInterval(()=>{
+    pct=Math.min(100,pct+(rm?38:5));
+    if(bar){bar.style.transition=rm?"none":"width .85s linear";bar.style.width=pct+"%";}
+    const pr=belg.querySelector(".progress");if(pr)pr.setAttribute("aria-valuenow",Math.round(pct));
+    const step=Math.min(5,Math.max(1,Math.ceil(pct/20)));
+    steps.forEach((s,i)=>{s.className=i+1<step?"done":(i+1===step?"now":"");});
+    if(line)line.textContent=STEP[step];
+    if(pct>=100){clearInterval(t);
+      belg.classList.add("decided");belg.removeAttribute("aria-busy");
+      belg.querySelector(".acts").outerHTML="<div class='rcpt-inline' role='status'>✔ <b>BELG-0912</b> versiegelt — Readback: Siegel-Hash im Beleg hinterlegt · q-8841</div>";
+      const fd=document.createElement('div');fd.className='rcpt';fd.innerHTML='✔ <b>BELG-0912</b> versiegelt — Readback bestätigt <time>jetzt</time>';document.getElementById('rcptFeed').prepend(fd);
+      steps.forEach(function(s){s.className="done";});if(bar){bar.style.background="var(--ps-info)";bar.style.boxShadow="none";}st.textContent="BELG-0912 fertig — Siegel geschrieben, Readback bestätigt";
+      labelCounts();updateEmpty();
+    }
+  },900);
+}
+let raf=0;
+new MutationObserver(()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;labelCounts();updateEmpty();});}).observe(document.querySelector("main"),{subtree:true,attributes:true,attributeFilter:["class"]});
+labelCounts();updateEmpty();
+})();
+</script>
+</body>
+</html>

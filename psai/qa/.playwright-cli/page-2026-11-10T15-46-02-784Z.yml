@@ -1,0 +1,516 @@
+- main [ref=e2]:
+  - paragraph [ref=e3]: PanSphaira · Designkatalog · Stand 2026-11-09 · main 79df9fd
+  - 'heading "Drei tragfähige Templates, ein geistiges Eigentum: das Plugin-Prinzip." [level=1] [ref=e4]': "Drei tragfähige Templates,ein geistiges Eigentum: das Plugin-Prinzip."
+  - paragraph [ref=e5]: "Alle drei Templates zeigen denselben PsAI-Workspace: Shell mit Domänen-Navigation, Module (Plugins) als eigene Gruppe, Genehmigungs-Warteschlange als Herzstück, Quittungen/Readback als rechte Spur und die Sicherheitsgrenze, die man immer sieht. Der Inhalt ist aus dem Bestand (Modulnamen, Vorgangsvokabular); die Templates ergänzen die bestehende v1-UI, sie ersetzen nichts. Jedes Template gibt es in drei Stufen: V1 ruhendes Mockup, V2 bedienbarer Genehmigungsfluss (Klick, j/k, g↵/gx, Undo), V3 die Ausschöpfungsrunde: Der Verschluss-Job läuft sichtbar zu Ende und quittiert sich selbst, Filter-Chips zählen die Warteschlange, der Mengen-Stepper rechnet die Wirkung live um, und ist alles entschieden, spricht die Seite ein ruhiges Resümee. Konzepte: KONZEPT-V2.md, KONZEPT-V3.md."
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - heading "1 · Navigation folgt der Zuständigkeit" [level=2] [ref=e8]
+      - paragraph [ref=e9]:
+        - text: Gruppen
+        - code [ref=e10]: Betrieb / Module / Administration
+        - text: . Plugins hängen nie im Global-Menü — sie kontribuieren in die Modulgruppe (entspricht
+        - code [ref=e11]: module:check
+        - text: "-Regime des Repos)."
+    - generic [ref=e12]:
+      - heading "2 · Genehmigung ist der Primärpfad" [level=2] [ref=e13]
+      - paragraph [ref=e14]: "Genehmigen/Ablehnen immer sichtbar, Wirkung in einem Satz, Roh-Vorschlag nur aufklappbar (Nielsen 8: Dichte ja, Rauschen nein)."
+    - generic [ref=e15]:
+      - heading "3 · Quittung schlägt Erfolgsmeldung" [level=2] [ref=e16]
+      - paragraph [ref=e17]: Readback mit Vorher/Nachher und Rohlog-Link (Carbon-for-AI-Provenienz). Grün ist Bewiesenes, nicht Gemeldetes.
+    - generic [ref=e18]:
+      - heading "4 · Ein Template pro View" [level=2] [ref=e19]
+      - paragraph [ref=e20]:
+        - text: Tokens als
+        - code [ref=e21]: "--ps-*"
+        - text: "-Variablen; Mischbetrieb nur über die Shell-Grenze. Bestehende v1-CSS-Views bleiben gültig — Migration nur nach Auftrag."
+    - generic [ref=e22]:
+      - heading "5 · A11y ist Auslieferkriterium" [level=2] [ref=e23]
+      - paragraph [ref=e24]:
+        - text: Alle drei Templates bestehen den axe-Lauf (0 Verletzungen), Landmarks+Sprungmarke, 44px-Ziele, Fokus als Ring,
+        - code [ref=e25]: role=status
+        - text: "-Zeile, reduced-motion-Pfad."
+    - generic [ref=e26]:
+      - heading "6 · Shortcuts sind Zweitweg, nie der einzige Weg" [level=2] [ref=e27]
+      - paragraph [ref=e28]:
+        - code [ref=e29]: ⌘K
+        - text: "-Palette,"
+        - code [ref=e30]: g↵
+        - text: /
+        - code [ref=e31]: gx
+        - text: genehmigen/ablehnen,
+        - code [ref=e32]: "?"
+        - text: als Kürzelhilfe — alles auch per Maus/Tastatur ohne Kürzelwissen.
+  - generic [ref=e33]:
+    - heading "T1 · Arbeitsprofil (Hell)" [level=2] [ref=e34]
+    - paragraph [ref=e35]: "IBM-Carbon-Haltung: neutrale Layer, eine Handlungsblau-Aktion, 4px-Rundung, 8px-Raster. Wirkt wie ein Werkzeug, ideal für Tageslicht-Sachbearbeitung. Quelle der Entscheidungen: Carbon-Referenz + ui-ux-pro-max-Palette „Governed Ops“."
+    - generic [ref=e36]:
+      - group "Version umschalten Template T1 Arbeitsprofil" [ref=e37]:
+        - button "V1 · Mockup" [pressed] [ref=e38] [cursor=pointer]
+        - button "V2 · Bedienbar" [ref=e39] [cursor=pointer]
+        - button "V3 · Ausgereift" [ref=e40] [cursor=pointer]
+      - generic [ref=e41]: V3 VERFÜGBAR
+    - paragraph [ref=e42]: "Bewertung: Carbon-treuest — Side-Panel für Verlauf, Pflicht-Begründung beim Ablehnen, Budget mit Bezugswert. V3 ergänzt Live-Job, Filter, Wirksameldung und echten Hilfedialog (?). Motion karg wie bei Carbon üblich — für hohes Tagespensum."
+    - iframe [ref=e44]:
+      - generic [ref=f1e1]:
+        - link "Zum Inhalt springen" [ref=f1e2] [cursor=pointer]:
+          - /url: "#inhalt"
+        - banner [ref=f1e3]:
+          - generic [ref=f1e4]: PanSphaira
+          - generic [ref=f1e5]: Werkstatt Nord · synthetischer Vorgangsraum
+          - button "⌘K Befehl oder View suchen ⌘K" [ref=f1e6] [cursor=pointer]:
+            - text: ⌘K Befehl oder View suchen
+            - generic [ref=f1e7]: ⌘K
+          - generic [ref=f1e8]:
+            - generic [aria-hidden] [ref=f1e9]: JF
+            - text: J. Falk · Sachbearbeitung
+        - generic [ref=f1e10]:
+          - navigation "Hauptnavigation" [ref=f1e11]:
+            - paragraph [ref=f1e12]: Betrieb
+            - link "Genehmigungswarteschlange 3" [ref=f1e13] [cursor=pointer]:
+              - /url: "#genehmigungen"
+              - text: Genehmigungswarteschlange
+              - generic [ref=f1e14]: "3"
+            - link "Vorgänge und Quittungen" [ref=f1e15] [cursor=pointer]:
+              - /url: "#vorgaenge"
+            - link "Richtlinien" [ref=f1e16] [cursor=pointer]:
+              - /url: "#richtlinien"
+            - paragraph [ref=f1e17]: Module (Plugins)
+            - link "Warenkorb-Starter aktiv" [ref=f1e18] [cursor=pointer]:
+              - /url: "#wareneingang"
+              - text: Warenkorb-Starter
+              - generic "aktiv" [ref=f1e19]
+            - link "Beleg-Navigation aktiv" [ref=f1e20] [cursor=pointer]:
+              - /url: "#belege"
+              - text: Beleg-Navigation
+              - generic "aktiv" [ref=f1e21]
+            - link "Mail (lokal) Einschränkung" [ref=f1e22] [cursor=pointer]:
+              - /url: "#mail"
+              - text: Mail (lokal)
+              - generic "Einschränkung" [ref=f1e23]
+            - link "Modell-Anbindung" [ref=f1e24] [cursor=pointer]:
+              - /url: "#modell"
+            - paragraph [ref=f1e25]: 4 von 4 geladen · v1
+            - paragraph [ref=f1e26]: Administration
+            - link "Diagnose" [ref=f1e27] [cursor=pointer]:
+              - /url: "#diag"
+            - link "Konfiguration" [ref=f1e28] [cursor=pointer]:
+              - /url: "#config"
+          - main [ref=f1e29]:
+            - generic [ref=f1e30]:
+              - heading "Genehmigungs-Warteschlange" [level=1] [ref=f1e31]
+              - generic [ref=f1e32]: 3 ausstehend
+              - generic [ref=f1e33]: Budget 62 %
+            - paragraph [ref=f1e34]: Kein Vorschlag läuft ohne Ihre Genehmigung. Nach der Ausführung zeigt der Readback, was das Zielsystem wirklich geändert hat.
+            - article [ref=f1e35]:
+              - heading "WARE-4711 · Wareneingang buchen (10 Stück)" [level=2] [ref=f1e36]
+              - paragraph [ref=f1e37]:
+                - text: "Vorschlag: Agent"
+                - generic [ref=f1e38]: Bestands-Assistent
+                - text: · Richtlinie
+                - generic [ref=f1e39]: RG-07 Bestand < Meldebestand
+                - text: · System
+                - generic [ref=f1e40]: ERP-Sandbox (loopback)
+                - text: · Kosten
+                - generic [ref=f1e41]: 0,00 €
+                - text: · Vor 2 Min
+              - paragraph [ref=f1e42]: "Zwei Effekte angemeldet: Wareneingang 10 Stück, Bestellung B-3302 um 6 reserviert. Restbestand danach 4 — Schwelle erreicht, Hinweis folgt als separater Vorschlag."
+              - generic [ref=f1e43]:
+                - button "Ausführen genehmigen" [ref=f1e44] [cursor=pointer]
+                - button "Ablehnen" [ref=f1e45] [cursor=pointer]
+                - button "Nur Vorschlag bearbeiten" [ref=f1e46] [cursor=pointer]
+              - group [ref=f1e47]:
+                - generic "Wirkungsvorschau und Roh-Vorschlag" [ref=f1e48]
+            - article [ref=f1e49]:
+              - heading "BELG-0912 · Beleg kryptografisch versiegeln" [level=2] [ref=f1e50]
+              - paragraph [ref=f1e51]:
+                - text: Ausgeführt von
+                - generic [ref=f1e52]: Verschluss-Modul
+                - text: · Richtlinie
+                - generic [ref=f1e53]: RL-02 Pflichtversiegelung
+                - text: · vor 40 s
+              - progressbar "Versiegelungsfortschritt" [ref=f1e54]
+              - paragraph [ref=f1e56]: Schritt 3 von 5 · Hash gebildet, Siegel wird geschrieben
+              - button "Abbrechen (Siegel bleibt entwürfe)" [ref=f1e58] [cursor=pointer]
+            - article [ref=f1e59]:
+              - heading "MAIL-2210 · Kunde über Teillieferung informieren" [level=2] [ref=f1e60]
+              - paragraph [ref=f1e61]:
+                - text: "Vorschlag: Agent"
+                - generic [ref=f1e62]: Kommunikation
+                - text: · Richtlinie
+                - generic [ref=f1e63]: RG-11 Kunde informiert bei Abweichung
+                - text: · Kanal
+                - generic [ref=f1e64]: Mail (lokal, Sent-Ordner)
+                - text: · Vor 8 Min
+              - generic [ref=f1e65]:
+                - button "Ausführen genehmigen" [ref=f1e66] [cursor=pointer]
+                - button "Ablehnen" [ref=f1e67] [cursor=pointer]
+          - complementary "Quittungen und Hinweise" [ref=f1e68]:
+            - heading "Letzte Quittungen" [level=2] [ref=f1e69]
+            - generic [ref=f1e70]:
+              - text: "WARE-4709 ausgeführt · Readback bestätigt: verfügbar 14 → 24."
+              - time [ref=f1e71]:
+                - text: 09:41:07 · Vorgang-ID q-8812 ·
+                - link "Rohlog" [ref=f1e72] [cursor=pointer]:
+                  - /url: "#log"
+            - generic [ref=f1e73]:
+              - text: "RLG-0908 abgelehnt von J. Falk · Wirkung: keine."
+              - time [ref=f1e74]:
+                - text: 09:12:55 · Vorgang-ID q-8805 ·
+                - link "Rohlog" [ref=f1e75] [cursor=pointer]:
+                  - /url: "#log"
+            - heading "Sicherheitsgrenze" [level=2] [ref=f1e76]
+            - paragraph [ref=f1e77]: "Synthetische Werkstatt: Loopback-only, keine Produktivbuchung, kein bezahlter Modellanruf. Diese Grenze steht an jeder gefährlichen Aktion."
+            - heading "Tastatur" [level=2] [ref=f1e78]
+            - list [ref=f1e79]:
+              - listitem [ref=f1e80]:
+                - text: Befehle / Sprung
+                - generic [ref=f1e81]: ⌘K
+              - listitem [ref=f1e82]:
+                - text: Genehmigen im Fokus
+                - generic [ref=f1e83]: g
+                - text: dann
+                - generic [ref=f1e84]: Enter
+              - listitem [ref=f1e85]:
+                - text: Ablehnen
+                - generic [ref=f1e86]: g
+                - text: dann
+                - generic [ref=f1e87]: x
+              - listitem [ref=f1e88]:
+                - text: Details aufklappen
+                - generic [ref=f1e89]: Space
+              - listitem [ref=f1e90]:
+                - text: Übersicht Kürzel
+                - generic [ref=f1e91]: "?"
+        - contentinfo [ref=f1e92]:
+          - text: "\x01"
+          - status [ref=f1e93]: "Verbunden: broker.loopback:18443"
+          - generic [ref=f1e94]: Modellbudget heute 62 %
+          - generic [ref=f1e95]: "Geprüft: Readback 14/14 bestätigt"
+          - generic [ref=f1e96]: Stand main 79df9fd
+  - generic [ref=e45]:
+    - heading "T2 · Nachtwache (Dunkel)" [level=2] [ref=e46]
+    - paragraph [ref=e47]: "Fortschreibung des bestehenden dunklen Workspace-v1-Charakters, aber ruhiger: tiefes Blaugrau statt Schwarz, Bernstein nur fürs Handeln, Mint nur für Bewiesenes, Monospace für Metadaten. Für Leitstand-/Dauersicht."
+    - generic [ref=e48]:
+      - group "Version umschalten Template T2 Nachtwache" [ref=e49]:
+        - button "V1 · Mockup" [pressed] [ref=e50] [cursor=pointer]
+        - button "V2 · Bedienbar" [ref=e51] [cursor=pointer]
+        - button "V3 · Ausgereift" [ref=e52] [cursor=pointer]
+      - generic [ref=e53]: V3 VERFÜGBAR
+    - paragraph [ref=e54]: "Bewertung: größter Sprung über alle Runden — V2 brachte Palette und Sammel-Freigabe, V3 den mitarbeitenden Leitstand: Der Siegel-Job steigt live von 62 auf 100 %, die Schrittliste wandert, die Erfolgsmeldung läuft in Chronik und Statuszeile. Für Leitstand-Tempo."
+    - iframe [ref=e56]:
+      - generic [ref=f2e1]:
+        - link "Zum Inhalt springen" [ref=f2e2] [cursor=pointer]:
+          - /url: "#inhalt"
+        - banner [ref=f2e3]:
+          - generic [ref=f2e4]: PANSPHAIRA
+          - generic [ref=f2e5]: SYNTHETISCH · LOOPBACK
+          - button "Befehl, View oder Vorgang … ⌘K" [ref=f2e6] [cursor=pointer]:
+            - text: Befehl, View oder Vorgang …
+            - generic [ref=f2e7]: ⌘K
+          - generic [ref=f2e8]: j.falk@sachbearbeitung
+        - generic [ref=f2e9]:
+          - navigation "Hauptnavigation" [ref=f2e10]:
+            - paragraph [ref=f2e11]: Betrieb
+            - link "Genehmigungen 3" [ref=f2e12] [cursor=pointer]:
+              - /url: "#genehmigungen"
+              - text: Genehmigungen
+              - generic [ref=f2e13]: "3"
+            - link "Vorgänge · Quittungen" [ref=f2e14] [cursor=pointer]:
+              - /url: "#vorgaenge"
+            - link "Richtlinien" [ref=f2e15] [cursor=pointer]:
+              - /url: "#richtlinien"
+            - paragraph [ref=f2e16]: Module (Plugins)
+            - link "Warenkorb-Starter aktiv" [ref=f2e17] [cursor=pointer]:
+              - /url: "#wareneingang"
+              - text: Warenkorb-Starter
+              - generic "aktiv" [ref=f2e18]
+            - link "Beleg-Navigation aktiv" [ref=f2e19] [cursor=pointer]:
+              - /url: "#belege"
+              - text: Beleg-Navigation
+              - generic "aktiv" [ref=f2e20]
+            - link "Mail (lokal) Einschränkung" [ref=f2e21] [cursor=pointer]:
+              - /url: "#mail"
+              - text: Mail (lokal)
+              - generic "Einschränkung" [ref=f2e22]
+            - link "Modell-Anbindung" [ref=f2e23] [cursor=pointer]:
+              - /url: "#modell"
+            - paragraph [ref=f2e24]: 4/4 Module geladen · v1
+            - paragraph [ref=f2e25]: Administration
+            - link "Diagnose" [ref=f2e26] [cursor=pointer]:
+              - /url: "#diag"
+            - link "Konfiguration" [ref=f2e27] [cursor=pointer]:
+              - /url: "#config"
+          - main [ref=f2e28]:
+            - heading "Genehmigungs-Warteschlange" [level=1] [ref=f2e29]
+            - text: 3 ausstehendBUDGET 62 %
+            - paragraph [ref=f2e30]: Nichts läuft ohne Freigabe. Der Readback belegt anschließend, was das Zielsystem wirklich geändert hat.
+            - article [ref=f2e31]:
+              - heading [level=2] [ref=f2e32]:
+                - code [ref=f2e33]: WARE-4711
+                - text: — Wareneingang buchen (10 Stück)
+              - paragraph [ref=f2e34]:
+                - text: Agent
+                - generic [ref=f2e35]: Bestands-Assistent
+                - text: · Richtlinie
+                - generic [ref=f2e36]: RG-07
+                - text: Bestand<Meldebestand · System
+                - generic [ref=f2e37]: ERP-Sandbox
+                - text: · Kosten
+                - generic [ref=f2e38]: 0,00 €
+                - text: · vor 2 min
+              - paragraph [ref=f2e39]: "Angemeldet: Eingang 10 Stück, Reservierung B-3302 um 6. Verifiziert nach Ausführung: verfügbar 4. Hinweis „Meldebestand erreicht“ kommt als eigener Vorschlag."
+              - generic [ref=f2e40]:
+                - button "↩ Ausführen genehmigen" [ref=f2e41] [cursor=pointer]
+                - button "Ablehnen" [ref=f2e42] [cursor=pointer]
+                - button "Vorschlag bearbeiten" [ref=f2e43] [cursor=pointer]
+              - group [ref=f2e44]:
+                - generic "ROH-VORSCHLAG" [ref=f2e45] [cursor=pointer]
+            - article [ref=f2e46]:
+              - heading [level=2] [ref=f2e47]:
+                - code [ref=f2e48]: BELG-0912
+                - text: — Beleg kryptografisch versiegeln
+              - paragraph [ref=f2e49]:
+                - text: Modul
+                - generic [ref=f2e50]: Verschluss
+                - text: · Richtlinie
+                - generic [ref=f2e51]: RL-02
+                - text: Pflichtversiegelung · vor 40 s
+              - progressbar "Versiegelungsfortschritt" [ref=f2e52]
+              - paragraph [ref=f2e54]: SCHRITT 3/5 · Hash gebildet, Siegel wird geschrieben
+              - button "Abbrechen (Entwurf bleibt erhalten)" [ref=f2e56] [cursor=pointer]
+            - article [ref=f2e57]:
+              - heading [level=2] [ref=f2e58]:
+                - code [ref=f2e59]: MAIL-2210
+                - text: — Kunde über Teillieferung informieren
+              - paragraph [ref=f2e60]:
+                - text: Agent
+                - generic [ref=f2e61]: Kommunikation
+                - text: · Richtlinie
+                - generic [ref=f2e62]: RG-11
+                - text: Abweichungs-Information · Kanal
+                - generic [ref=f2e63]: Mail lokal
+                - text: · vor 8 min
+              - generic [ref=f2e64]:
+                - button "↩ Ausführen genehmigen" [ref=f2e65] [cursor=pointer]
+                - button "Ablehnen" [ref=f2e66] [cursor=pointer]
+          - complementary "Quittungen und Hinweise" [ref=f2e67]:
+            - heading "Letzte Quittungen" [level=2] [ref=f2e68]
+            - generic [ref=f2e69]:
+              - text: "✔ WARE-4709 ausgeführt — Readback: verfügbar 14→24"
+              - time [ref=f2e70]:
+                - text: 09:41:07 · q-8812 ·
+                - link "Rohlog" [ref=f2e71] [cursor=pointer]:
+                  - /url: "#log"
+            - generic [ref=f2e72]:
+              - text: ✖ RLG-0908 abgelehnt (J. Falk) — keine Wirkung
+              - time [ref=f2e73]:
+                - text: 09:12:55 · q-8805 ·
+                - link "Rohlog" [ref=f2e74] [cursor=pointer]:
+                  - /url: "#log"
+            - heading "Sicherheitsgrenze" [level=2] [ref=f2e75]
+            - paragraph [ref=f2e76]: "Synthetische Werkstatt: loopback-only · keine Produktivbuchung · kein bezahlter Modellanruf. Die Grenze steht an jeder gefährlichen Aktion."
+            - heading "Tastatur" [level=2] [ref=f2e77]
+            - list [ref=f2e78]:
+              - listitem [ref=f2e79]:
+                - text: Befehle / Sprung
+                - generic [ref=f2e80]: ⌘K
+              - listitem [ref=f2e81]:
+                - text: Genehmigen
+                - generic [ref=f2e82]: g
+                - text: ↵
+              - listitem [ref=f2e83]:
+                - text: Ablehnen
+                - generic [ref=f2e84]: g
+                - generic [ref=f2e85]: x
+              - listitem [ref=f2e86]:
+                - text: Details
+                - generic [ref=f2e87]: Space
+              - listitem [ref=f2e88]:
+                - text: Kürzelhilfe
+                - generic [ref=f2e89]: "?"
+        - contentinfo [ref=f2e90]:
+          - text: "\x01"
+          - status [ref=f2e91]: broker.loopback:18443
+          - generic [ref=f2e92]: Budget 62 %
+          - generic [ref=f2e93]: Readback 14/14 bestätigt
+          - generic [ref=f2e94]: main 79df9fd
+  - generic [ref=e57]:
+    - heading "T3 · Redaktionell (Ruhe)" [level=2] [ref=e58]
+    - paragraph [ref=e59]: "Impeccable-Haltung: Text zuerst, Serif für Struktur, Terrakotta als einzige Signalfarbe, große Atemabstände. Für Sichten, in denen Abwägen schneller sein soll als Klicken (Revision, Eskalation)."
+    - generic [ref=e60]:
+      - group "Version umschalten Template T3 Redaktionell" [ref=e61]:
+        - button "V1 · Mockup" [pressed] [ref=e62] [cursor=pointer]
+        - button "V2 · Bedienbar" [ref=e63] [cursor=pointer]
+        - button "V3 · Ausgereift" [ref=e64] [cursor=pointer]
+      - generic [ref=e65]: V3 VERFÜGBAR
+    - paragraph [ref=e66]: "Bewertung: konsequent textzentriert — große Wirkungszeile plus V3-Diff-Tabelle Feld für Feld, Tagesanker in der Chronik, und der Ablehnungs-Entwurf überlebt das Neuladen. Für Abwägen und Revision."
+    - iframe [ref=e68]:
+      - generic [ref=f3e1]:
+        - link "Zum Inhalt springen" [ref=f3e2] [cursor=pointer]:
+          - /url: "#inhalt"
+        - banner [ref=f3e3]:
+          - generic [ref=f3e4]: PanSphaira
+          - generic [ref=f3e5]: Werkstatt Nord — synthetischer Vorgangsraum
+          - button "Befehl oder View suchen ⌘K" [ref=f3e6] [cursor=pointer]:
+            - text: Befehl oder View suchen
+            - generic [ref=f3e7]: ⌘K
+          - generic [ref=f3e8]: J. Falk · Sachbearbeitung
+        - generic [ref=f3e9]:
+          - navigation "Hauptnavigation" [ref=f3e10]:
+            - paragraph [ref=f3e11]: Betrieb
+            - link "— Genehmigungswarteschlange 3" [ref=f3e12] [cursor=pointer]:
+              - /url: "#genehmigungen"
+              - text: — Genehmigungswarteschlange
+              - generic [ref=f3e13]: "3"
+            - link "Vorgänge und Quittungen" [ref=f3e14] [cursor=pointer]:
+              - /url: "#vorgaenge"
+            - link "Richtlinien" [ref=f3e15] [cursor=pointer]:
+              - /url: "#richtlinien"
+            - paragraph [ref=f3e16]: Module (Plugins)
+            - link "Warenkorb-Starter aktiv" [ref=f3e17] [cursor=pointer]:
+              - /url: "#wareneingang"
+              - text: Warenkorb-Starter
+              - generic "aktiv" [ref=f3e18]
+            - link "Beleg-Navigation aktiv" [ref=f3e19] [cursor=pointer]:
+              - /url: "#belege"
+              - text: Beleg-Navigation
+              - generic "aktiv" [ref=f3e20]
+            - link "Mail (lokal) Einschränkung" [ref=f3e21] [cursor=pointer]:
+              - /url: "#mail"
+              - text: Mail (lokal)
+              - generic "Einschränkung" [ref=f3e22]
+            - link "Modell-Anbindung" [ref=f3e23] [cursor=pointer]:
+              - /url: "#modell"
+            - paragraph [ref=f3e24]: 4 von 4 geladen · v1
+            - paragraph [ref=f3e25]: Administration
+            - link "Diagnose" [ref=f3e26] [cursor=pointer]:
+              - /url: "#diag"
+            - link "Konfiguration" [ref=f3e27] [cursor=pointer]:
+              - /url: "#config"
+          - main [ref=f3e28]:
+            - heading "Genehmigungs-Warteschlange" [level=1] [ref=f3e29]
+            - generic [ref=f3e30]:
+              - generic [ref=f3e31]: 3 ausstehend
+              - generic [ref=f3e32]: Budget 62 %
+            - paragraph [ref=f3e33]: Kein Vorschlag läuft ohne Ihre Genehmigung. Nach der Ausführung zeigt der Readback, was das Zielsystem wirklich geändert hat — die Quittung rechts belegt es.
+            - article "Wareneingang buchen (10 Stück)" [ref=f3e34]:
+              - heading [level=2] [ref=f3e35]:
+                - code [ref=f3e36]: WARE-4711
+                - text: · Wareneingang buchen (10 Stück)
+              - paragraph [ref=f3e37]: Agent Bestands-Assistent · Richtlinie RG-07 Bestand < Meldebestand · System ERP-Sandbox (loopback) · Kosten 0,00 €
+              - paragraph [ref=f3e38]: "Zwei Effekte sind angemeldet: Wareneingang 10 Stück; Bestellung B-3302 um 6 reserviert. Verifiziert nach Ausführung: verfügbar 4. Der Hinweis „Meldebestand erreicht“ folgt als separater Vorschlag — hier wird nichts versteckt."
+              - generic [ref=f3e39]:
+                - button "Ausführen genehmigen" [ref=f3e40] [cursor=pointer]
+                - button "Ablehnen" [ref=f3e41] [cursor=pointer]
+                - button "Nur Vorschlag bearbeiten" [ref=f3e42] [cursor=pointer]
+              - group [ref=f3e43]:
+                - generic "Wirkungsvorschau und Roh-Vorschlag" [ref=f3e44] [cursor=pointer]
+            - article "Beleg kryptografisch versiegeln" [ref=f3e45]:
+              - heading [level=2] [ref=f3e46]:
+                - code [ref=f3e47]: BELG-0912
+                - text: · Beleg kryptografisch versiegeln
+              - paragraph [ref=f3e48]: Ausgeführt von Verschluss-Modul · Richtlinie RL-02 Pflichtversiegelung · vor 40 s
+              - progressbar "Versiegelungsfortschritt" [ref=f3e49]
+              - paragraph [ref=f3e51]: Schritt 3 von 5 — Hash gebildet, Siegel wird geschrieben
+              - button "Abbrechen (Entwurf bleibt erhalten)" [ref=f3e53] [cursor=pointer]
+            - article "Kunde über Teillieferung informieren" [ref=f3e54]:
+              - heading [level=2] [ref=f3e55]:
+                - code [ref=f3e56]: MAIL-2210
+                - text: · Kunde über Teillieferung informieren
+              - paragraph [ref=f3e57]: Agent Kommunikation · Richtlinie RG-11 Kunde informiert bei Abweichung · Kanal Mail (lokal, Sent-Ordner)
+              - generic [ref=f3e58]:
+                - button "Ausführen genehmigen" [ref=f3e59] [cursor=pointer]
+                - button "Ablehnen" [ref=f3e60] [cursor=pointer]
+          - complementary "Quittungen und Hinweise" [ref=f3e61]:
+            - heading "Letzte Quittungen" [level=2] [ref=f3e62]
+            - generic [ref=f3e63]:
+              - text: "✓ WARE-4709 ausgeführt — Readback bestätigt: verfügbar 14 → 24."
+              - time [ref=f3e64]:
+                - text: 09:41:07 · Vorgang-ID q-8812 ·
+                - link "Rohlog" [ref=f3e65] [cursor=pointer]:
+                  - /url: "#log"
+            - generic [ref=f3e66]:
+              - text: "RLG-0908 abgelehnt von J. Falk — Wirkung: keine."
+              - time [ref=f3e67]:
+                - text: 09:12:55 · Vorgang-ID q-8805 ·
+                - link "Rohlog" [ref=f3e68] [cursor=pointer]:
+                  - /url: "#log"
+            - heading "Sicherheitsgrenze" [level=2] [ref=f3e69]
+            - paragraph [ref=f3e70]: "Synthetische Werkstatt: Loopback-only, keine Produktivbuchung, kein bezahlter Modellanruf. Diese Grenze steht an jeder gefährlichen Aktion."
+            - heading "Tastatur" [level=2] [ref=f3e71]
+            - list [ref=f3e72]:
+              - listitem [ref=f3e73]:
+                - text: Befehle / Sprung
+                - generic [ref=f3e74]: ⌘K
+              - listitem [ref=f3e75]:
+                - text: Genehmigen im Fokus
+                - generic [ref=f3e76]: g
+                - text: dann
+                - generic [ref=f3e77]: Enter
+              - listitem [ref=f3e78]:
+                - text: Ablehnen
+                - generic [ref=f3e79]: g
+                - text: dann
+                - generic [ref=f3e80]: x
+              - listitem [ref=f3e81]:
+                - text: Details aufklappen
+                - generic [ref=f3e82]: Space
+              - listitem [ref=f3e83]:
+                - text: Übersicht Kürzel
+                - generic [ref=f3e84]: "?"
+        - contentinfo [ref=f3e85]:
+          - text: "\x01"
+          - status [ref=f3e86]: "Verbunden: broker.loopback:18443"
+          - generic [ref=f3e87]: Modellbudget heute 62 %
+          - generic [ref=f3e88]: Readback 14/14 bestätigt
+          - generic [ref=f3e89]: Stand main 79df9fd
+  - heading "Token-Vergleich" [level=2] [ref=e69]
+  - table [ref=e70]:
+    - rowgroup [ref=e71]:
+      - row [ref=e72]:
+        - columnheader "Token" [ref=e73]
+        - columnheader "T1 Arbeitsprofil" [ref=e74]
+        - columnheader "T2 Nachtwache" [ref=e75]
+        - columnheader "T3 Redaktionell" [ref=e76]
+      - row [ref=e77]:
+        - cell "--ps-bg" [ref=e78]
+        - cell "#f4f4f4" [ref=e79]
+        - cell "#0c1116" [ref=e81]
+        - cell "#f7f4ee" [ref=e83]
+      - row [ref=e85]:
+        - cell "--ps-action" [ref=e86]
+        - cell "#0f62fe" [ref=e87]
+        - cell "#e9a23b" [ref=e89]
+        - cell "#b4441d" [ref=e91]
+      - row [ref=e93]:
+        - cell "--ps-text" [ref=e94]
+        - cell "#161616" [ref=e95]
+        - cell "#dbe4ec" [ref=e97]
+        - cell "#231f1a" [ref=e99]
+      - row [ref=e101]:
+        - cell "Beweis-Ton" [ref=e102]
+        - cell "#24a148" [ref=e103]
+        - cell "#57d9a3" [ref=e105]
+        - cell "#3c7d4a" [ref=e107]
+      - row [ref=e109]:
+        - cell "Schrift Kopf" [ref=e110]
+        - cell "IBM Plex Sans" [ref=e111]
+        - cell "System-Grotesk" [ref=e112]
+        - cell "Iowan/Serif" [ref=e113]
+      - row [ref=e114]:
+        - cell "Metadaten" [ref=e115]
+        - cell "Plex Mono 12" [ref=e116]
+        - cell "Mono 11.5 dominant" [ref=e117]
+        - cell "Mono 12 sparsam" [ref=e118]
+      - row [ref=e119]:
+        - cell "Raster/Rundung" [ref=e120]
+        - cell "8 px / 4 px" [ref=e121]
+        - cell "8 px / 8 px" [ref=e122]
+        - cell "8 px / pill+10 px" [ref=e123]
+  - heading "Wie es weitergeht (nichts davon ist bereits passiert)" [level=2] [ref=e124]
+  - paragraph [ref=e125]:
+    - text: "Vorschlag in dieser Reihenfolge: ① Feedback zu Richtung/Token-Werten pro Template, ② ein Pilot-View (z. B. Genehmigungswarteschlange) als echtes"
+    - code [ref=e126]: "-v2"
+    - text: "-Modul im Plugin-Regime, ③ axe- und Playwright-Gates als Pflicht im Repo-CI ergänzen, ④ danach erst Migration weiterer Views. Bestehende Komponenten wurden an keiner Stelle ungefragt verändert."
+  - paragraph [ref=e127]: "Historie: V1 (Mockup-Runde, axe 0) → V2 (Interaktions- und Feedback-Runde je Template, axe 0, Playwright-geprüft: Klick, j/k, g-Chord, ⌘K, Undo, Inline-Validierung) → V3 (Ausschöpfungsrunde: Live-Job bis 100 % mit Selbstquittung, Filter-Chips, Mengen-Stepper mit Umrechnung, Leerzustand, Fokusfluss, Statusleben; axe 0). Details: KONZEPT-V2.md, KONZEPT-V3.md."
+  - generic [ref=e128]: "Gebaut nach enterprise-app-ux · Quellen: IBM Carbon, Carbon for AI-Prinzipien, WAI-ARIA-Entwurfsmuster, Nielsen-Heuristiken, web-design-guidelines (Vercel), ui-ux-pro-max, impeccable. Verifikation: axe-core 0 Befunde, Screenshots unter katalog/shots/ (je Template V1 und V2). Katalog-Version 3."

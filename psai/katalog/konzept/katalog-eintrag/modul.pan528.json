@@ -1,0 +1,50 @@
+{
+  "katalogId": "modul.pan528",
+  "art": "funktion",
+  "titel": "Eingangsrechnungsprüfung pan528",
+  "version": "1.2",
+  "optionen": [
+    "kachel.typ",
+    "detailkarte.zeigen",
+    "live.intervallSek"
+  ],
+  "screens": [
+    {
+      "breite": 390,
+      "pfad": "shots/pan528-390.png"
+    },
+    {
+      "breite": 1024,
+      "pfad": "shots/pan528-1024.png"
+    },
+    {
+      "breite": 1586,
+      "pfad": "shots/pan528-1586.png"
+    }
+  ],
+  "beispielDeskriptor": "http://127.0.0.1:8097/screen.html",
+  "lizenz": "MIT",
+  "kanonCheck": {
+    "ehrlichkeit": "ok",
+    "quittung": "ok",
+    "optionalitaet": "ok",
+    "nurLesenGrenze": "ok",
+    "datenredlichkeit": "ok",
+    "anmerkung": "Quittungsformat seit M1; seit M4 Readback gegen führenden Speicher und produktiver CSRF-Bootstrap (HMAC). Screenshots vom Fachschichten-Adapter."
+  },
+  "datenquellen": [
+    {
+      "id": "dq.beleg",
+      "art": "rest-fachschicht",
+      "pfad": "/guided/status|/guided/command",
+      "redlich": "führender Dateispeicher, Readback vor Quittung (M4)",
+      "fallback": "mock (Adapter-Option psai.proto.broker)"
+    },
+    {
+      "id": "dq.mengen",
+      "art": "rest-fachschicht",
+      "pfad": "/api/kennzahl",
+      "redlich": "Wert aus führendem Speicher, Alterung bei Ausfall"
+    }
+  ]
+}

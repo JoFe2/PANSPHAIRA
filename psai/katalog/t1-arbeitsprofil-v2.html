@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PsAI · Template T1 „Arbeitsprofil“ V2 (Genehmigungstag mit Verlaufsschiene)</title>
+<style>
+/* ── Design-Token T1 „Arbeitsprofil“ V2 ─────────────────────────────
+   V1 unverändert. V2: Tagesarbeits-Tempo. Carbon-Muster Side-Panel + Inline-Validierung,
+   Motion bewusst karg (110 ms linear, keine Schatten) — Dichte und Klarheit tragen. */
+:root{
+  --ps-bg:#f4f4f4; --ps-layer:#ffffff; --ps-layer2:#edf0f4;
+  --ps-text:#161616; --ps-text2:#4d5560; --ps-line:#c6cdd6;
+  --ps-action:#0f62fe; --ps-action-hover:#0353e9; --ps-on-action:#ffffff;
+  --ps-ok:#24a148; --ps-warn:#b28600; --ps-danger:#da1e28;
+  --ps-focus:#0f62fe; --ps-radius:4px; --ps-gap:8px;
+  --ps-sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ps-mono:'IBM Plex Mono',ui-monospace,'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;font:400 14px/1.6 var(--ps-sans);background:var(--ps-bg);color:var(--ps-text)}
+a{color:var(--ps-action)}
+.skip{position:absolute;left:-999px;top:0;background:var(--ps-action);color:#fff;padding:10px 16px;z-index:9}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:2px solid var(--ps-focus);outline-offset:2px}
+header{display:flex;align-items:center;gap:16px;background:var(--ps-layer);border-bottom:1px solid var(--ps-line);padding:0 24px;height:56px;position:sticky;top:0;z-index:5}
+.brand{font:600 15px var(--ps-sans);letter-spacing:.01em}
+.brand b{color:var(--ps-action)}
+.ver{font:700 10px var(--ps-mono);letter-spacing:.12em;color:var(--ps-action);border:1px solid #a8c4ff;border-radius:999px;padding:2px 8px}
+.crumbs{color:var(--ps-text2);font-size:13px}
+.cmdk{margin-left:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--ps-line);border-radius:var(--ps-radius);background:var(--ps-layer2);color:var(--ps-text2);padding:7px 12px;font:400 13px var(--ps-sans);cursor:pointer;min-width:220px}
+.cmdk kbd{margin-left:auto;font:600 11px var(--ps-mono);border:1px solid var(--ps-line);border-radius:3px;padding:1px 5px;background:var(--ps-layer)}
+.user{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ps-text2)}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--ps-action);color:#fff;display:grid;place-items:center;font:600 12px var(--ps-sans)}
+.layout{display:grid;grid-template-columns:248px minmax(0,1fr) 320px;gap:0;min-height:calc(100vh - 56px - 34px)}
+nav{background:var(--ps-layer);border-right:1px solid var(--ps-line);padding:16px 0}
+nav p.grp{font:600 11px/1 var(--ps-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ps-text2);margin:14px 20px 6px}
+nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:var(--ps-text);text-decoration:none;border-left:3px solid transparent;min-height:44px}
+nav a:hover{background:var(--ps-layer2)}
+nav a[aria-current]{border-left-color:var(--ps-action);background:#edf5ff;font-weight:600}
+nav .badge{margin-left:auto;font:600 11px var(--ps-mono);background:var(--ps-action);color:#fff;border-radius:999px;padding:2px 8px}
+nav .dot{width:8px;height:8px;border-radius:50%;background:var(--ps-ok);margin-left:auto}
+nav .dot.warn{background:var(--ps-warn)}
+nav .mod{display:flex;gap:8px;align-items:center;font:400 12px var(--ps-mono);color:var(--ps-text2);padding:2px 20px 8px}
+main{padding:24px 28px;min-width:0}
+.head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+h1{font:600 24px/1.3 var(--ps-sans);margin:0}
+.pill{font:600 11px var(--ps-mono);letter-spacing:.06em;border-radius:999px;padding:3px 10px;border:1px solid var(--ps-line);color:var(--ps-text2)}
+.pill.warn{color:#6b5400;border-color:#c8a900;background:#fcf4d6}
+/* V2-Neu: Budget als Mini-Balken im Pill — Zahl plus Einordnung in einem Blick */
+.budget{display:inline-flex;align-items:center;gap:8px;font:600 11px var(--ps-mono);letter-spacing:.06em;border-radius:999px;padding:3px 10px;border:1px solid #c8a900;background:#fcf4d6;color:#6b5400}
+.budget i{display:block;width:56px;height:4px;border-radius:2px;background:#e6dcab;overflow:hidden}
+.budget i b{display:block;height:100%;width:62%;background:var(--ps-warn)}
+.sub{color:var(--ps-text2);margin:0 0 20px}
+.card{background:var(--ps-layer);border:1px solid var(--ps-line);border-radius:var(--ps-radius);padding:16px;margin-bottom:12px}
+.card[data-focus="true"]{outline:2px solid var(--ps-action);outline-offset:1px}
+.card h2{margin:0 0 2px;font:600 15px var(--ps-sans)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--ps-text2);font:400 12px var(--ps-mono);margin:6px 0 10px}
+.meta b{color:var(--ps-text);font-weight:600}
+.acts{display:flex;gap:8px;align-items:center}
+button{font:600 13px var(--ps-sans);border-radius:var(--ps-radius);padding:10px 16px;cursor:pointer;min-height:40px;border:1px solid var(--ps-action);background:var(--ps-action);color:var(--ps-on-action)}
+button:hover{background:var(--ps-action-hover)}
+button.small{padding:5px 10px;min-height:30px;font-size:12px}
+button.ghost{background:transparent;color:var(--ps-text);border-color:var(--ps-line)}
+button.ghost:hover{background:var(--ps-layer2)}
+button.danger{background:transparent;color:var(--ps-danger);border-color:var(--ps-danger)}
+details{margin-top:10px;font:400 12px var(--ps-mono);color:var(--ps-text2)}
+pre{background:var(--ps-layer2);border:1px solid var(--ps-line);border-radius:var(--ps-radius);padding:10px;overflow:auto;font:400 12px/1.5 var(--ps-mono)}
+.progress{height:6px;background:var(--ps-layer2);border-radius:3px;overflow:hidden;margin:10px 0 4px}
+.progress i{display:block;height:100%;width:62%;background:var(--ps-action)}
+aside{border-left:1px solid var(--ps-line);background:var(--ps-layer);padding:20px}
+aside h2{font:600 13px var(--ps-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ps-text2);margin:0 0 10px}
+aside h2:not(:first-child){margin-top:26px}
+.rcpt{border:1px solid var(--ps-line);border-left:3px solid var(--ps-ok);border-radius:var(--ps-radius);padding:10px 12px;margin-bottom:8px;font-size:12.5px}
+.rcpt time{display:block;font:400 11px var(--ps-mono);color:#5a636e}
+.note{border:1px solid #c8a900;background:#fcf4d6;border-radius:var(--ps-radius);padding:10px 12px;font-size:12.5px;color:#6b5400}
+.keys{list-style:none;margin:0;padding:0;font-size:12.5px;color:var(--ps-text2)}
+.keys li{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dotted var(--ps-line)}
+.keys kbd{font:600 11px var(--ps-mono);border:1px solid var(--ps-line);border-radius:3px;padding:1px 6px;background:var(--ps-layer2)}
+footer{display:flex;gap:20px;background:var(--ps-layer);border-top:1px solid var(--ps-line);padding:8px 24px;font:400 12px var(--ps-mono);color:var(--ps-text2)}
+/* V2-Neu: Carbon-Side-Panel — Verlaufs-/Readback-Kontext je Vorgang, ohne Kontextverlust */
+#panel{position:fixed;top:0;right:0;height:100vh;width:min(400px,92vw);background:var(--ps-layer);border-left:1px solid var(--ps-line);z-index:7;transform:translateX(100%);visibility:hidden;transition:transform .11s linear,visibility 0s .11s;display:flex;flex-direction:column}
+#panel[data-open]{transform:none;visibility:visible;transition:transform .11s linear}
+/* Carbon-Side-Panel ist Push, kein Overlay: Content bricht um statt verdeckt */
+body[data-panel]{--panel-w:min(400px,92vw)}
+body[data-panel] header,body[data-panel] footer{padding-right:calc(24px + var(--panel-w))}
+body[data-panel] main{padding-right:calc(28px + var(--panel-w))}
+#panel header{height:48px;padding:0 16px;gap:8px}
+#panel h2{font:600 14px var(--ps-sans);margin:0}
+#panel .body{padding:16px;overflow:auto}
+.tl{list-style:none;margin:0;padding:0;border-left:2px solid var(--ps-line)}
+.tl li{position:relative;padding:0 0 14px 16px;font-size:13px}
+.tl li::before{content:'';position:absolute;left:-5px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--ps-action)}
+.tl li.ok::before{background:var(--ps-ok)}
+.tl time{display:block;font:400 11px var(--ps-mono);color:var(--ps-text2)}
+/* V2-Neu: Ablehnen braucht einen Grund — Inline-Validierung, Pflichtfeld, ein Klick weniger als Modal */
+.reject-form{border:1px solid var(--ps-danger);border-radius:var(--ps-radius);background:#fff1f1;padding:10px 12px;margin-top:8px}
+.reject-form label{display:block;font:600 12px var(--ps-sans);margin-bottom:4px}
+.reject-form textarea{width:100%;min-height:56px;border:1px solid var(--ps-line);border-radius:var(--ps-radius);padding:8px;font:400 13px var(--ps-sans);background:#fff}
+.reject-form output{display:none;color:var(--ps-danger);font:600 12px var(--ps-sans);margin-top:4px}
+.reject-form[data-invalid="true"] textarea{border-color:var(--ps-danger)}
+.reject-form[data-invalid="true"] output{display:block}
+.demo-hint{position:fixed;right:16px;bottom:46px;background:var(--ps-layer2);border:1px solid var(--ps-line);border-radius:999px;padding:5px 12px;font:600 10.5px var(--ps-mono);color:var(--ps-text2);letter-spacing:.08em}
+@media(max-width:1180px){.layout{grid-template-columns:220px minmax(0,1fr)}aside{display:none}}
+@media(max-width:820px){.layout{grid-template-columns:1fr}nav{border-right:none;border-bottom:1px solid var(--ps-line)}}
+@media (prefers-reduced-motion: reduce){#panel{transition:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+<header>
+  <span class="brand">Pan<b>Sphaira</b></span>
+  <span class="ver" title="Dieses Mockup ist interaktiv bedienbar">V2</span>
+  <span class="crumbs">Werkstatt Nord · synthetischer Vorgangsraum</span>
+  <button class="cmdk">Befehl oder View suchen <kbd>⌘K</kbd></button>
+  <span class="user"><span class="avatar" aria-hidden="true">JF</span> J. Falk · Sachbearbeitung</span>
+</header>
+<div class="layout">
+<nav aria-label="Hauptnavigation">
+  <p class="grp">Betrieb</p>
+  <a href="#genehmigungen" aria-current="page">Genehmigungswarteschlange <span class="badge" id="navCount">3</span></a>
+  <a href="#vorgaenge">Vorgänge und Quittungen</a>
+  <a href="#richtlinien">Richtlinien</a>
+  <p class="grp">Module (Plugins)</p>
+  <a href="#wareneingang">Warenkorb-Starter <span class="dot" title="aktiv"></span></a>
+  <a href="#belege">Beleg-Navigation <span class="dot" title="aktiv"></span></a>
+  <a href="#mail">Mail (lokal) <span class="dot warn" title="Einschränkung: nur Sent-Ordner"></span></a>
+  <a href="#modell">Modell-Anbindung</a>
+  <p class="mod">4 von 4 geladen · v1</p>
+  <p class="grp">Administration</p>
+  <a href="#diag">Diagnose</a>
+  <a href="#config">Konfiguration</a>
+</nav>
+<main id="inhalt">
+  <div class="head">
+    <h1 id="genehmigungen">Genehmigungs-Warteschlange</h1>
+    <span class="pill" id="queuePill">3 ausstehend</span>
+    <!-- V2-Neu: Budget-Pill mit Füllbalken -->
+    <span class="budget" title="Tagesbudget Modellaufrufe">BUDGET HEUTE <i><b></b></i> 62 %</span>
+  </div>
+  <p class="sub">Kein Vorschlag läuft ohne Ihre Genehmigung. Nach der Ausführung zeigt der Readback, was das Zielsystem wirklich geändert hat.</p>
+
+  <article class="card" id="v4711" data-risk="low">
+    <h2>WARE-4711 · Wareneingang buchen (10 Stück)</h2>
+    <p class="meta">Vorschlag: Agent <b>Bestands-Assistent</b> · Richtlinie <b>RG-07 Bestand &lt; Meldebestand</b> · System <b>ERP-Sandbox (loopback)</b> · Kosten <b>0,00 €</b> · Vor 2&nbsp;Min</p>
+    <p>Zwei Effekte angemeldet: Wareneingang 10 Stück, Bestellung B-3302 um 6 reserviert. Restbestand danach 4 — Schwelle erreicht, Hinweis folgt als separater Vorschlag.</p>
+    <div class="acts">
+      <button type="button" data-act="approve">Ausführen genehmigen</button>
+      <button class="ghost" type="button" data-act="ask-reject">Ablehnen</button>
+      <button class="ghost" type="button" data-act="history">Verlauf ansehen</button>
+    </div>
+    <details><summary>Wirkungsvorschau und Roh-Vorschlag</summary>
+      <pre>POST /sandbuch/wareneingang  { menge: 10, lager: "N1" }
+reservation: B-3302 → 6 · readback erwartet: verfügbar == 4</pre>
+    </details>
+  </article>
+
+  <article class="card" id="belg" aria-busy="true">
+    <h2>BELG-0912 · Beleg kryptografisch versiegeln</h2>
+    <p class="meta">Ausgeführt von <b>Verschluss-Modul</b> · Richtlinie <b>RL-02 Pflichtversiegelung</b> · vor 40&nbsp;s</p>
+    <div class="progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Versiegelungsfortschritt"><i></i></div>
+    <p class="meta" style="margin-bottom:6px">Schritt 3 von 5 · Hash gebildet, Siegel wird geschrieben</p>
+    <div class="acts"><button class="danger" type="button">Abbrechen (Entwurf bleibt erhalten)</button></div>
+  </article>
+
+  <article class="card" id="v2210" data-risk="low">
+    <h2>MAIL-2210 · Kunde über Teillieferung informieren</h2>
+    <p class="meta">Vorschlag: Agent <b>Kommunikation</b> · Richtlinie <b>RG-11 Kunde informiert bei Abweichung</b> · Kanal <b>Mail (lokal, Sent-Ordner)</b> · Vor 8&nbsp;Min</p>
+    <div class="acts">
+      <button type="button" data-act="approve">Ausführen genehmigen</button>
+      <button class="ghost" type="button" data-act="ask-reject">Ablehnen</button>
+      <button class="ghost" type="button" data-act="history">Verlauf ansehen</button>
+    </div>
+  </article>
+</main>
+<aside aria-label="Quittungen und Hinweise">
+  <h2>Letzte Quittungen</h2>
+  <div id="rcptFeed">
+    <div class="rcpt"><b>WARE-4709</b> ausgeführt · Readback bestätigt: verfügbar 14 → 24.
+      <time>09:41:07 · Vorgang-ID q-8812 · <a href="#log">Rohlog</a></time></div>
+    <div class="rcpt"><b>RLG-0908</b> abgelehnt von J. Falk · Wirkung: keine.
+      <time>09:12:55 · Vorgang-ID q-8805 · <a href="#log">Rohlog</a></time></div>
+  </div>
+  <h2>Sicherheitsgrenze</h2>
+  <p class="note">Synthetische Werkstatt: Loopback-only, keine Produktivbuchung, kein bezahlter Modellanruf. Diese Grenze steht an jeder gefährlichen Aktion.</p>
+  <h2>Tastatur</h2>
+  <ul class="keys">
+    <li>Befehle / Sprung <kbd>⌘K</kbd></li>
+    <li>Karten wandern <kbd>J</kbd> / <kbd>K</kbd></li>
+    <li>Genehmigen <kbd>G</kbd> dann <kbd>Enter</kbd></li>
+    <li>Ablehnen <kbd>G</kbd> dann <kbd>X</kbd></li>
+    <li>Übersicht Kürzel <kbd>?</kbd></li>
+  </ul>
+</aside>
+</div>
+<footer><span role="status" id="statusLine">Verbunden: broker.loopback:18443</span><span id="budgetFoot">Modellbudget heute 62 %</span><span>Geprüft: Readback 14/14 bestätigt</span><span>Stand main 79df9fd</span></footer>
+<div class="demo-hint" aria-hidden="true">DEMO-MOCKUP · INTERAKTION NUR VISUELL</div>
+
+<!-- V2-Neu: Side-Panel (Carbon-Muster) — Chronologie + Readback-Kontext je Vorgang -->
+<aside id="panel" aria-label="Verlauf und Readback">
+  <header>
+    <h2 id="panelTitle">Verlauf</h2>
+    <button class="ghost small" id="panelClose" style="margin-left:auto" type="button">Schließen Esc</button>
+  </header>
+  <div class="body">
+    <ol class="tl" id="panelTl"></ol>
+    <p class="note" id="panelNote">Readback-Auszug: jede Zustandsänderung mit Vorher/Nachher und Rohlog-Verweis. Panel öffnet neben der Warteschlange — der Kontext bleibt sichtbar.</p>
+  </div>
+</aside>
+
+<script>
+(() => {
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const cards=$$("article.card[data-risk]");
+let focusIdx=-1, chord=false;
+function openCount(){return cards.filter(c=>!c.classList.contains("decided")).length;}
+function syncCounts(){$("#navCount").textContent=openCount();$("#queuePill").textContent=openCount()+" ausstehend";}
+function say(m){$("#statusLine").textContent=m;}
+
+/* Entscheidung mit Quittung + Undo; Ablehnen nur mit Grund (Inline-Validierung) */
+function approve(card){
+  if(card.classList.contains("decided"))return;
+  const id=card.querySelector("h2").textContent.split(" · ")[0];
+  card.classList.add("decided");
+  card.querySelector(".acts").innerHTML='<span class="rcpt" style="margin:0" role="status">✔ '+id+' genehmigt · Readback: verfügbar 14 → 24 · <a href="#log">Rohlog</a> · <button class="ghost small" id="undoBtn" type="button">Rückgängig</button></span>';
+  feedRow('✔ <b>'+id+'</b> genehmigt · Demo-Quittung');
+  syncCounts();say(id+" genehmigt — Rückgängig möglich, solange die Zeile steht");
+  $("#undoBtn").addEventListener("click",()=>{card.classList.remove("decided");rebuild(card);syncCounts();say(id+" — Entscheidung zurückgenommen");});
+}
+function askReject(card){
+  if(card.querySelector(".reject-form"))return;
+  const form=document.createElement("form");
+  form.className="reject-form";form.noValidate=true;
+  form.innerHTML='<label for="rg-'+card.id+'">Grund der Ablehnung (Pflicht — er landet in der Richtlinie)</label>'
+    +'<textarea id="rg-'+card.id+'" required></textarea><output>Für die Protokollkette brauchen wir einen Satz.</output>'
+    +'<div class="acts" style="margin-top:8px"><button class="small" type="submit">Ablehnung bestätigen</button>'
+    +'<button class="ghost small" type="button" data-cancel>Abbrechen</button></div>';
+  card.appendChild(form);
+  form.querySelector("textarea").focus();
+  form.addEventListener("submit",e=>{
+    e.preventDefault();
+    const t=form.querySelector("textarea");
+    if(!t.value.trim()){form.dataset.invalid="true";t.setAttribute("aria-invalid","true");t.focus();return;}
+    reject(card,t.value.trim());
+  });
+  form.querySelector("[data-cancel]").addEventListener("click",()=>form.remove());
+}
+function reject(card,grund){
+  const id=card.querySelector("h2").textContent.split(" · ")[0];
+  card.classList.add("decided");
+  card.querySelector(".acts").innerHTML='<span class="rcpt" style="margin:0;border-left-color:var(--ps-danger)" role="status">✖ '+id+' abgelehnt (J. Falk) · Wirkung: keine · Grund: „'+grund+'“</span>';
+  form_remove(card);feedRow('✖ <b>'+id+'</b> abgelehnt · „'+grund+'“');
+  syncCounts();say(id+" abgelehnt — Grund protokolliert");
+}
+function form_remove(card){const f=card.querySelector(".reject-form");if(f)f.remove();}
+function rebuild(card){card.querySelector(".acts").innerHTML='<button type="button" data-act="approve">Ausführen genehmigen</button><button class="ghost" type="button" data-act="ask-reject">Ablehnen</button><button class="ghost" type="button" data-act="history">Verlauf ansehen</button>';}
+function feedRow(html){const d=document.createElement("div");d.className="rcpt";d.innerHTML=html+' <time>jetzt</time>';$("#rcptFeed").prepend(d);}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const card=b.closest("article.card");
+  if(b.dataset.act==="approve")approve(card);
+  if(b.dataset.act==="ask-reject")askReject(card);
+  if(b.dataset.act==="history")openPanel(card);
+});
+
+/* Side-Panel */
+const panel=$("#panel");
+function openPanel(card){
+  const id=card.querySelector("h2").textContent.split(" · ")[0];
+  $("#panelTitle").textContent="Verlauf · "+id;
+  panel.setAttribute("aria-hidden","false");
+  $("#panelTl").innerHTML=
+     '<li class="ok">Readback angefordert — Zielsystem antwortet in 40 ms<time>vor 40 s · q-88'+Math.floor(Math.random()*90)+'</time></li>'
+    +'<li>Richtlinie RG-07 erfüllt — Auslösung berechtigt<time>vor 2 min</time></li>'
+    +'<li>Agent „Bestands-Assistent“ meldet Vorschlag — zwei Effekte angemeldet<time>vor 2 min</time></li>';
+  panel.toggleAttribute("data-open",true);
+  document.body.toggleAttribute("data-panel",true);
+  $("#panelClose").focus();
+}
+$("#panelClose").addEventListener("click",closePanel);
+function closePanel(){panel.removeAttribute("data-open");document.body.removeAttribute("data-panel");}
+
+/* j/k-Fokus + g-Chord */
+function setFocus(i){cards.forEach((c,k)=>c.dataset.focus=k===i);focusIdx=i;if(i>=0)cards[i].scrollIntoView({block:"nearest"});}
+document.addEventListener("keydown",e=>{
+  const typing=/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  if(e.key==="Escape"){closePanel();return;}
+  if(typing)return;
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();say("Demo: ⌘K-Palette wie in T2 geöffnet");return;}
+  if(e.key==="?"){say("Demo: Kürzelhilfe stehen in der rechten Spur.");return;}
+  if(e.key==="j"){setFocus(Math.min(focusIdx+1,cards.length-1));}
+  else if(e.key==="k"){setFocus(Math.max(focusIdx-1,0));}
+  else if(e.key==="g"){chord=true;setTimeout(()=>chord=false,900);}
+  else if(chord&&e.key==="Enter"){e.preventDefault();if(focusIdx>=0)approve(cards[focusIdx]);chord=false;}
+  else if(chord&&e.key.toLowerCase()==="x"){e.preventDefault();if(focusIdx>=0)askReject(cards[focusIdx]);chord=false;}
+});
+setFocus(0);syncCounts();
+})();
+</script>
+</body>
+</html>

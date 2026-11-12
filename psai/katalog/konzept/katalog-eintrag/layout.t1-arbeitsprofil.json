@@ -1,0 +1,34 @@
+{
+ "katalogId": "layout.t1-arbeitsprofil",
+ "art": "layout",
+ "titel": "Arbeitsprofil T1 (Carbon-hell)",
+ "version": "1.0",
+ "optionen": [
+  "dichte",
+  "filter-chips",
+  "live-job-anzeige"
+ ],
+ "screens": [
+  {
+   "breite": 390,
+   "pfad": "shots/t1-arbeitsprofil-390.png"
+  },
+  {
+   "breite": 1024,
+   "pfad": "shots/t1-arbeitsprofil-1024.png"
+  },
+  {
+   "breite": 1586,
+   "pfad": "shots/t1-arbeitsprofil-1586.png"
+  }
+ ],
+ "beispielDeskriptor": "../../t1-arbeitsprofil-v3.html",
+ "lizenz": "MIT",
+ "kanonCheck": {
+  "ehrlichkeit": "ok",
+  "quittung": "ok",
+  "optionalitaet": "ok",
+  "nurLesenGrenze": "ok",
+  "datenredlichkeit": "ok"
+ }
+}

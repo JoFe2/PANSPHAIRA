@@ -1,0 +1,33 @@
+{
+  "katalogId": "shell.statuszone",
+  "art": "shell",
+  "titel": "Shell-Statuszone mit Quellen-Lebensanzeige",
+  "version": "1.0",
+  "optionen": [
+    "statuszone.zeigeStand"
+  ],
+  "screens": [
+    {
+      "breite": 390,
+      "pfad": "shots/m5-statuszone-390.png"
+    },
+    {
+      "breite": 1024,
+      "pfad": "shots/m5-statuszone-1024.png"
+    },
+    {
+      "breite": 1586,
+      "pfad": "shots/m5-statuszone-1586.png"
+    }
+  ],
+  "beispielDeskriptor": "http://127.0.0.1:8099/psai/katalog/konzept/prototyp/index.html",
+  "lizenz": "MIT",
+  "kanonCheck": {
+    "ehrlichkeit": "ok",
+    "quittung": "ok",
+    "optionalitaet": "ok",
+    "nurLesenGrenze": "ok",
+    "datenredlichkeit": "ok",
+    "anmerkung": "M5 am Prototyp geprüft: Puffern statt Daueransage, Gruppierung, axe 0 (m5-tests.mjs)."
+  }
+}

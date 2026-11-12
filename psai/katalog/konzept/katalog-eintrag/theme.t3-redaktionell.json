@@ -1,0 +1,34 @@
+{
+ "katalogId": "theme.t3-redaktionell",
+ "art": "design",
+ "titel": "Redaktionell T3 (Ruhe, Text zuerst)",
+ "version": "1.0",
+ "optionen": [
+  "diff-tabelle",
+  "tagesanker",
+  "ablehnungsentwurf-persist"
+ ],
+ "screens": [
+  {
+   "breite": 390,
+   "pfad": "shots/t3-redaktionell-390.png"
+  },
+  {
+   "breite": 1024,
+   "pfad": "shots/t3-redaktionell-1024.png"
+  },
+  {
+   "breite": 1586,
+   "pfad": "shots/t3-redaktionell-1586.png"
+  }
+ ],
+ "beispielDeskriptor": "../../t3-redaktionell-v3.html",
+ "lizenz": "MIT",
+ "kanonCheck": {
+  "ehrlichkeit": "ok",
+  "quittung": "ok",
+  "optionalitaet": "ok",
+  "nurLesenGrenze": "ok",
+  "datenredlichkeit": "ok"
+ }
+}

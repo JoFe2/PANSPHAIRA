@@ -1,0 +1,34 @@
+{
+ "katalogId": "theme.t2-nachtwache",
+ "art": "design",
+ "titel": "Nachtwache T2 (Leitstand dunkel)",
+ "version": "1.0",
+ "optionen": [
+  "palette-switch",
+  "sammel-freigabe",
+  "kurzel-jk"
+ ],
+ "screens": [
+  {
+   "breite": 390,
+   "pfad": "shots/t2-nachtwache-390.png"
+  },
+  {
+   "breite": 1024,
+   "pfad": "shots/t2-nachtwache-1024.png"
+  },
+  {
+   "breite": 1586,
+   "pfad": "shots/t2-nachtwache-1586.png"
+  }
+ ],
+ "beispielDeskriptor": "../../t2-nachtwache-v3.html",
+ "lizenz": "MIT",
+ "kanonCheck": {
+  "ehrlichkeit": "ok",
+  "quittung": "ok",
+  "optionalitaet": "ok",
+  "nurLesenGrenze": "ok",
+  "datenredlichkeit": "ok"
+ }
+}

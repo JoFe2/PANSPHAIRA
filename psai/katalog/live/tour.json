@@ -1,0 +1,9 @@
+{
+  "schritte": [
+    { "ziel": "Finanzen (pan528)", "spruch": "Bereich Finanzen öffnen" },
+    { "ziel": "aktualisieren", "spruch": "Neuesten Stand holen" },
+    { "ziel": "Warum so?", "spruch": "Fragen, warum hier so gebaut ist" },
+    { "ziel": "Chronik-Drawer", "spruch": "In die Chronik schauen" },
+    { "ziel": "Haut:", "spruch": "Zur nächsten Oberflächenhaut wechseln", "warte": 900 }
+  ]
+}

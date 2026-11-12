@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "root": {
+    "id": "unternehmen",
+    "typ": "unternehmen",
+    "warumSo": {
+      "struktur": "Root rahmt Zonen; Kinder füllen innerhalb des Rahmens",
+      "feinwerk": "innerhalb einer Zone führt der tiefste Knoten",
+      "tokens": "Root-Defaults gelten; Kinder überschreiben außer bei Sperre; semantic überschreibt core nie"
+    },
+    "sperren": ["marke.name", "marke.logo"],
+    "optionen": { "marke.name": "PanSphaira", "marke.logo": "brand/ps.svg", "theme.wahl": "essential-2d", "live.intervallSek": 60 },
+    "eigentum": { "wer": { "typ": "rolle", "id": "admin" }, "rechte": ["lesen", "schreiben", "vorlagenBinden", "sperrenSetzen", "delegieren"], "gueltigBis": null },
+    "children": [
+      {
+        "id": "mandant.tenant-a",
+        "typ": "mandant",
+        "optionen": { "mandant.kennung": "tenant.a" },
+        "eigentum": { "wer": { "typ": "gruppe", "id": "tenant-a-admins" }, "rechte": ["lesen", "schreiben", "delegieren"], "gueltigBis": null },
+        "children": [
+          {
+            "id": "mandant.tenant-a.shell",
+            "typ": "shell",
+            "vorlagen": [ { "katalogId": "layout.sidebar-content-rail", "schicht": "layout", "gewichtung": 10 },
+                           { "katalogId": "theme.essential-2d", "schicht": "design", "gewichtung": 10 } ],
+            "optionen": { "marke.sichtbar": true, "nav.eintraege": ["projekte", "rechnungen", "dokumente", "analysen", "agent"] },
+            "eigentum": { "wer": { "typ": "gruppe", "id": "tenant-a-admins" }, "rechte": ["lesen", "schreiben"], "gueltigBis": null },
+            "children": []
+          },
+          {
+            "id": "mandant.tenant-a.bereich.startseite",
+            "typ": "bereich",
+            "vorlagen": [ { "katalogId": "layout.kachel-grid", "schicht": "layout", "gewichtung": 10 },
+                           { "katalogId": "theme.pulse", "schicht": "design", "gewichtung": 10 } ],
+            "optionen": { "theme.wahl": "pulse", "mosaik.erlaubt": true },
+            "warumSo": { "tokens": "Design-Mosaik: theme.pulse gilt nur innerhalb dieser Zone (B7)" },
+            "eigentum": { "wer": { "typ": "person", "id": "jo" }, "rechte": ["lesen", "schreiben"], "gueltigBis": null },
+            "delegationen": [ { "wer": { "typ": "agent", "id": "max" }, "rechte": ["lesen"], "gueltigBis": "2027-12-31T23:59:59Z" } ],
+            "children": []
+          },
+          {
+            "id": "mandant.tenant-a.domaene.finanzen",
+            "typ": "domaene",
+            "vorlagen": [ { "katalogId": "layout.split-detail", "schicht": "layout", "gewichtung": 10 },
+                           { "katalogId": "theme.essential-2d", "schicht": "design", "gewichtung": 10 } ],
+            "optionen": { "theme.wahl": "essential-2d", "overlay.erlaubt": true },
+            "sperren": ["token.text.groesse.min"],
+            "eigentum": { "wer": { "typ": "gruppe", "id": "gruppe.finanzen" }, "rechte": ["lesen", "schreiben", "vorlagenBinden", "delegieren"], "gueltigBis": null },
+            "children": [
+              {
+                "id": "mandant.tenant-a.domaene.finanzen.modul.pan528",
+                "typ": "modul",
+                "vorlagen": [ { "katalogId": "modul.pan528", "schicht": "funktion", "gewichtung": 10 } ],
+                "optionen": { "live.intervallSek": 30, "kachel.typ": "inhalt", "detailkarte.zeigen": true },
+                "warumSo": { "tokens": "Modul erbt essential-2d von domaene.finanzen; eigenes Theme nicht gesetzt" },
+                "eigentum": { "wer": { "typ": "gruppe", "id": "gruppe.finanzen" }, "rechte": ["lesen", "schreiben"], "gueltigBis": null },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

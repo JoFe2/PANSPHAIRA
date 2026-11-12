@@ -1,0 +1,161 @@
+- generic [active] [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#inhalt"
+  - banner [ref=e3]:
+    - generic [ref=e4]: PANSPHAIRA
+    - 'generic "V3: Live-Job, Filter, Wirksameldung, Sammel-Freigabe" [ref=e5]': V3 · LEITSTAND
+    - generic [ref=e6]: SYNTHETISCH · LOOPBACK
+    - button "Befehl, View oder Vorgang … ⌘K" [ref=e7] [cursor=pointer]:
+      - text: Befehl, View oder Vorgang …
+      - generic [ref=e8]: ⌘K
+    - generic [ref=e9]: j.falk@sachbearbeitung
+  - generic [ref=e10]:
+    - navigation "Hauptnavigation" [ref=e11]:
+      - paragraph [ref=e12]: Betrieb
+      - link "Genehmigungen 2" [ref=e13] [cursor=pointer]:
+        - /url: "#genehmigungen"
+        - text: Genehmigungen
+        - generic [ref=e14]: "2"
+      - link "Vorgänge · Quittungen 14" [ref=e15] [cursor=pointer]:
+        - /url: "#vorgaenge"
+        - text: Vorgänge · Quittungen
+        - generic [ref=e16]: "14"
+      - link "Richtlinien 9" [ref=e17] [cursor=pointer]:
+        - /url: "#richtlinien"
+        - text: Richtlinien
+        - generic [ref=e18]: "9"
+      - paragraph [ref=e19]: Module (Plugins)
+      - link "Warenkorb-Starter aktiv" [ref=e20] [cursor=pointer]:
+        - /url: "#wareneingang"
+        - text: Warenkorb-Starter
+        - generic "aktiv" [ref=e21]
+      - link "Beleg-Navigation aktiv" [ref=e22] [cursor=pointer]:
+        - /url: "#belege"
+        - text: Beleg-Navigation
+        - generic "aktiv" [ref=e23]
+      - 'link "Mail (lokal) Einschränkung: nur Sent-Ordner" [ref=e24] [cursor=pointer]':
+        - /url: "#mail"
+        - text: Mail (lokal)
+        - 'generic "Einschränkung: nur Sent-Ordner" [ref=e25]'
+      - link "Modell-Anbindung" [ref=e26] [cursor=pointer]:
+        - /url: "#modell"
+      - paragraph [ref=e27]: 4/4 Module geladen · v1
+      - paragraph [ref=e28]:
+        - generic [ref=e29]: aktiv
+        - generic [ref=e31]: Einschränkung
+      - paragraph [ref=e33]: Administration
+      - link "Diagnose" [ref=e34] [cursor=pointer]:
+        - /url: "#diag"
+      - link "Konfiguration" [ref=e35] [cursor=pointer]:
+        - /url: "#config"
+    - main [ref=e36]:
+      - heading "Genehmigungs-Warteschlange" [level=1] [ref=e37]
+      - text: 2 ausstehendBUDGET 62 %
+      - paragraph [ref=e38]: Nichts läuft ohne Freigabe. Der Readback belegt anschließend, was das Zielsystem wirklich geändert hat.
+      - group "Warteschlange filtern" [ref=e39]:
+        - button "Alle 3" [pressed] [ref=e40] [cursor=pointer]
+        - button "Risikoarm 2" [ref=e41] [cursor=pointer]
+        - button "Laufend 1" [ref=e42] [cursor=pointer]
+      - generic [ref=e43]:
+        - generic [ref=e44]: Risikoarme Vorschläge (Kosten 0,00 € · loopback) lassen sich gesammelt freigeben — jede einzeln quittiert.
+        - button "Alle risikoarmen genehmigen" [ref=e45] [cursor=pointer]
+        - button "Nächste fokussieren J" [ref=e46] [cursor=pointer]
+      - article [ref=e47]:
+        - heading [level=2] [ref=e48]:
+          - code [ref=e49]: WARE-4711
+          - text: — Wareneingang buchen (10 Stück)
+        - paragraph [ref=e50]:
+          - text: Agent
+          - generic [ref=e51]: Bestands-Assistent
+          - text: · Richtlinie
+          - generic [ref=e52]: RG-07
+          - text: Bestand<Meldebestand · System
+          - generic [ref=e53]: ERP-Sandbox
+          - text: · Kosten
+          - generic [ref=e54]: 0,00 €
+          - text: · vor 2 min
+        - paragraph [ref=e55]: "Angemeldet: Eingang 10 Stück, Reservierung B-3302 um 6. Verifiziert nach Ausführung: verfügbar 4. Hinweis „Meldebestand erreicht“ kommt als eigener Vorschlag."
+        - paragraph [ref=e56]:
+          - text: "Menge anpassen:"
+          - spinbutton "Stückzahl anpassen" [ref=e57]: "10"
+          - text: "· Wirkung: verfügbar 14 → 24 · Reservierung B-3302 auf 6"
+        - generic [ref=e58]:
+          - button "↩ Ausführen genehmigen g↵" [ref=e59] [cursor=pointer]
+          - button "Ablehnen gx" [ref=e60] [cursor=pointer]
+          - button "Vorschlag bearbeiten" [ref=e61] [cursor=pointer]
+        - group [ref=e62]:
+          - generic "ROH-VORSCHLAG" [ref=e63] [cursor=pointer]
+      - article [ref=e64]:
+        - heading [level=2] [ref=e65]:
+          - code [ref=e66]: BELG-0912
+          - text: — Beleg kryptografisch versiegeln
+        - paragraph [ref=e67]:
+          - text: Modul
+          - generic [ref=e68]: Verschluss
+          - text: · Richtlinie
+          - generic [ref=e69]: RL-02
+          - text: Pflichtversiegelung · vor 40 s
+        - progressbar "Versiegelungsfortschritt" [ref=e70]
+        - paragraph [ref=e78]: SCHRITT 3/5 · Hash gebildet, Siegel wird geschrieben
+        - button "Abbrechen (Entwurf bleibt erhalten)" [ref=e80] [cursor=pointer]
+      - article [ref=e81]:
+        - heading [level=2] [ref=e82]:
+          - code [ref=e83]: MAIL-2210
+          - text: — Kunde über Teillieferung informieren
+        - paragraph [ref=e84]:
+          - text: Agent
+          - generic [ref=e85]: Kommunikation
+          - text: · Richtlinie
+          - generic [ref=e86]: RG-11
+          - text: Abweichungs-Information · Kanal
+          - generic [ref=e87]: Mail lokal
+          - text: · vor 8 min
+        - generic [ref=e88]:
+          - button "↩ Ausführen genehmigen g↵" [ref=e89] [cursor=pointer]
+          - button "Ablehnen gx" [ref=e90] [cursor=pointer]
+    - complementary "Quittungen und Hinweise" [ref=e91]:
+      - heading "Letzte Quittungen" [level=2] [ref=e92]
+      - generic [ref=e93]:
+        - generic [ref=e94]:
+          - text: "✔ WARE-4709 ausgeführt — Readback: verfügbar 14→24"
+          - time [ref=e95]:
+            - text: 09:41:07 · q-8812 ·
+            - link "Rohlog" [ref=e96] [cursor=pointer]:
+              - /url: "#log"
+        - generic [ref=e97]:
+          - text: ✖ RLG-0908 abgelehnt (J. Falk) — keine Wirkung
+          - time [ref=e98]:
+            - text: 09:12:55 · q-8805 ·
+            - link "Rohlog" [ref=e99] [cursor=pointer]:
+              - /url: "#log"
+      - heading "Sicherheitsgrenze" [level=2] [ref=e100]
+      - paragraph [ref=e101]: "Synthetische Werkstatt: loopback-only · keine Produktivbuchung · kein bezahlter Modellanruf. Die Grenze steht an jeder gefährlichen Aktion."
+      - heading "Tastatur" [level=2] [ref=e102]
+      - list [ref=e103]:
+        - listitem [ref=e104]:
+          - text: Befehle / Sprung
+          - generic [ref=e105]: ⌘K
+        - listitem [ref=e106]:
+          - text: Nächste / vorige Karte
+          - generic [ref=e107]: J
+          - generic [ref=e108]: K
+        - listitem [ref=e109]:
+          - text: Genehmigen
+          - generic [ref=e110]: g
+          - text: ↵
+        - listitem [ref=e111]:
+          - text: Ablehnen
+          - generic [ref=e112]: g
+          - generic [ref=e113]: x
+        - listitem [ref=e114]:
+          - text: Details
+          - generic [ref=e115]: Space
+        - listitem [ref=e116]:
+          - text: Kürzelhilfe
+          - generic [ref=e117]: "?"
+  - contentinfo [ref=e118]:
+    - status [ref=e119]: broker.loopback:18443
+    - generic [ref=e120]: Budget 62 %
+    - generic [ref=e121]: Readback 14/14 bestätigt
+    - generic [ref=e122]: main 79df9fd
+  - generic [aria-hidden] [ref=e123]: DEMO-MOCKUP V3 · INTERAKTION NUR VISUELL

@@ -1,0 +1,34 @@
+{
+  "katalogId": "komponente.drawer-mechanik",
+  "art": "funktion",
+  "titel": "Drawer mit Fokus-Fang, Esc und Scroll-Merker",
+  "version": "1.0",
+  "optionen": [
+    "drawer.breite",
+    "drawer.inhalt"
+  ],
+  "screens": [
+    {
+      "breite": 390,
+      "pfad": "shots/m6-drawer-390.png"
+    },
+    {
+      "breite": 1024,
+      "pfad": "shots/m6-drawer-1024.png"
+    },
+    {
+      "breite": 1586,
+      "pfad": "shots/m6-drawer-1586.png"
+    }
+  ],
+  "beispielDeskriptor": "http://127.0.0.1:8099/psai/katalog/konzept/prototyp/index.html",
+  "lizenz": "MIT",
+  "kanonCheck": {
+    "ehrlichkeit": "ok",
+    "quittung": "ok",
+    "optionalitaet": "ok",
+    "nurLesenGrenze": "ok",
+    "datenredlichkeit": "ok",
+    "anmerkung": "M6 am Prototyp geprüft: Fokus-Fang/Esc/Scroll-Merker, Stufen 0–3 mit Enddatum, axe 0 (m6-tests.mjs)."
+  }
+}

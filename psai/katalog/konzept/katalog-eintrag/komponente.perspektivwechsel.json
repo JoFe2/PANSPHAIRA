@@ -1,0 +1,33 @@
+{
+  "katalogId": "komponente.perspektivwechsel",
+  "art": "funktion",
+  "titel": "Perspektiven Liste/Vergleich/Rohlog am Modul",
+  "version": "1.0",
+  "optionen": [
+    "modul.perspektive"
+  ],
+  "screens": [
+    {
+      "breite": 390,
+      "pfad": "shots/m6-perspektiven-390.png"
+    },
+    {
+      "breite": 1024,
+      "pfad": "shots/m6-perspektiven-1024.png"
+    },
+    {
+      "breite": 1586,
+      "pfad": "shots/m6-perspektiven-1586.png"
+    }
+  ],
+  "beispielDeskriptor": "http://127.0.0.1:8099/psai/katalog/konzept/prototyp/index.html",
+  "lizenz": "MIT",
+  "kanonCheck": {
+    "ehrlichkeit": "ok",
+    "quittung": "ok",
+    "optionalitaet": "ok",
+    "nurLesenGrenze": "ok",
+    "datenredlichkeit": "ok",
+    "anmerkung": "M6 am Prototyp geprüft: Fokus-Fang/Esc/Scroll-Merker, Stufen 0–3 mit Enddatum, axe 0 (m6-tests.mjs)."
+  }
+}

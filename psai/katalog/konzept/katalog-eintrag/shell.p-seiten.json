@@ -1,0 +1,35 @@
+{
+ "katalogId": "shell.p-seiten",
+ "art": "shell",
+ "titel": "PsAI-Shell (Header/Nav/Rail/Status)",
+ "version": "1.0",
+ "optionen": [
+  "theme.wahl",
+  "zone.sichtbarkeit",
+  "marke.sichtbar"
+ ],
+ "screens": [
+  {
+   "breite": 390,
+   "pfad": "shots/p-seiten-390.png"
+  },
+  {
+   "breite": 1024,
+   "pfad": "shots/p-seiten-1024.png"
+  },
+  {
+   "breite": 1586,
+   "pfad": "shots/p-seiten-1586.png"
+  }
+ ],
+ "beispielDeskriptor": "../prototyp/index.html",
+ "lizenz": "MIT",
+ "kanonCheck": {
+  "ehrlichkeit": "ok",
+  "quittung": "ok",
+  "optionalitaet": "ok",
+  "nurLesenGrenze": "ok",
+  "datenredlichkeit": "ok",
+  "anmerkung": "Person-Overrides (Intervall, Theme, Zone, Reihenfolge) laufen im Prototyp."
+ }
+}

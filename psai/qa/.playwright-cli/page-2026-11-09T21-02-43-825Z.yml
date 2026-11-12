@@ -1,0 +1,134 @@
+- generic [active] [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#inhalt"
+  - banner [ref=e3]:
+    - generic [ref=e4]: PanSphaira
+    - generic "Dieses Mockup ist interaktiv bedienbar" [ref=e5]: V2
+    - generic [ref=e6]: Werkstatt Nord — synthetischer Vorgangsraum
+    - button "Befehl oder View suchen ⌘K" [ref=e7] [cursor=pointer]:
+      - text: Befehl oder View suchen
+      - generic [ref=e8]: ⌘K
+    - generic [ref=e9]: J. Falk · Sachbearbeitung
+  - generic [ref=e10]:
+    - navigation "Hauptnavigation" [ref=e11]:
+      - paragraph [ref=e12]: Betrieb
+      - link "— Genehmigungswarteschlange 2" [ref=e13] [cursor=pointer]:
+        - /url: "#genehmigungen"
+        - text: — Genehmigungswarteschlange
+        - generic [ref=e14]: "2"
+      - link "Vorgänge und Quittungen" [ref=e15] [cursor=pointer]:
+        - /url: "#vorgaenge"
+      - link "Richtlinien" [ref=e16] [cursor=pointer]:
+        - /url: "#richtlinien"
+      - paragraph [ref=e17]: Module (Plugins)
+      - link "Warenkorb-Starter aktiv" [ref=e18] [cursor=pointer]:
+        - /url: "#wareneingang"
+        - text: Warenkorb-Starter
+        - generic "aktiv" [ref=e19]
+      - link "Beleg-Navigation aktiv" [ref=e20] [cursor=pointer]:
+        - /url: "#belege"
+        - text: Beleg-Navigation
+        - generic "aktiv" [ref=e21]
+      - 'link "Mail (lokal) Einschränkung: nur Sent-Ordner" [ref=e22] [cursor=pointer]':
+        - /url: "#mail"
+        - text: Mail (lokal)
+        - 'generic "Einschränkung: nur Sent-Ordner" [ref=e23]'
+      - link "Modell-Anbindung" [ref=e24] [cursor=pointer]:
+        - /url: "#modell"
+      - paragraph [ref=e25]: 4 von 4 geladen · v1
+      - paragraph [ref=e26]: Administration
+      - link "Diagnose" [ref=e27] [cursor=pointer]:
+        - /url: "#diag"
+      - link "Konfiguration" [ref=e28] [cursor=pointer]:
+        - /url: "#config"
+    - main [ref=e29]:
+      - heading "Genehmigungs-Warteschlange" [level=1] [ref=e30]
+      - generic [ref=e31]:
+        - generic [ref=e32]: 2 ausstehend
+        - generic [ref=e33]: Budget 62 %
+      - paragraph [ref=e34]: Kein Vorschlag läuft ohne Ihre Genehmigung. Nach der Ausführung zeigt der Readback, was das Zielsystem wirklich geändert hat — die Chronik rechts belegt es.
+      - article [ref=e35]:
+        - heading [level=2] [ref=e36]:
+          - code [ref=e37]: WARE-4711
+          - text: · Wareneingang buchen (10 Stück)
+        - paragraph [ref=e38]: Agent Bestands-Assistent · Richtlinie RG-07 Bestand < Meldebestand · System ERP-Sandbox (loopback) · Kosten 0,00 €
+        - generic [ref=e39]:
+          - generic [ref=e40]: Angemeldete Wirkung
+          - generic [ref=e41]: verfügbar 14
+          - generic [ref=e42]: → verfügbar 24, Reservierung B-3302 auf 6
+          - generic [ref=e43]: Meldebestand erreicht — Hinweis folgt als eigener Vorschlag.
+        - generic [ref=e44]:
+          - button "Ausführen genehmigen" [ref=e45] [cursor=pointer]
+          - button "Ablehnen" [ref=e46] [cursor=pointer]
+        - group [ref=e47]:
+          - generic "Wirkungsvorschau und Roh-Vorschlag" [ref=e48] [cursor=pointer]
+      - article [ref=e49]:
+        - heading [level=2] [ref=e50]:
+          - code [ref=e51]: BELG-0912
+          - text: · Beleg kryptografisch versiegeln
+        - paragraph [ref=e52]: Ausgeführt von Verschluss-Modul · Richtlinie RL-02 Pflichtversiegelung · vor 40 s
+        - progressbar "Versiegelungsfortschritt" [ref=e53]
+        - paragraph [ref=e55]: Schritt 3 von 5 — Hash gebildet, Siegel wird geschrieben
+        - button "Abbrechen (Entwurf bleibt erhalten)" [ref=e57] [cursor=pointer]
+      - article [ref=e58]:
+        - heading [level=2] [ref=e59]:
+          - code [ref=e60]: MAIL-2210
+          - text: · Kunde über Teillieferung informieren
+        - paragraph [ref=e61]: Agent Kommunikation · Richtlinie RG-11 Kunde informiert bei Abweichung · Kanal Mail (lokal, Sent-Ordner)
+        - generic [ref=e62]:
+          - generic [ref=e63]: Angemeldete Wirkung
+          - generic [ref=e64]: Kunde wartet
+          - generic [ref=e65]: → Information liegt im Sent-Ordner, Beleg verlinkt
+          - generic [ref=e66]: Kein Versand nach außen — die Werkstatt schreibt nur lokal.
+        - generic [ref=e67]:
+          - button "Ausführen genehmigen" [ref=e68] [cursor=pointer]
+          - button "Ablehnen" [ref=e69] [cursor=pointer]
+    - complementary "Chronik und Hinweise" [ref=e70]:
+      - heading "Chronik" [level=2] [ref=e71]
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - text: "✓ WARE-4709 ausgeführt — Readback bestätigt: verfügbar 14 → 24."
+          - time [ref=e74]:
+            - text: HEUTE · 09:41:07 · q-8812 ·
+            - link "Rohlog" [ref=e75] [cursor=pointer]:
+              - /url: "#log"
+        - generic [ref=e76]:
+          - text: "RLG-0908 abgelehnt von J. Falk — Wirkung: keine."
+          - time [ref=e77]:
+            - text: HEUTE · 09:12:55 · q-8805 ·
+            - link "Rohlog" [ref=e78] [cursor=pointer]:
+              - /url: "#log"
+        - generic [ref=e79]:
+          - text: RG-07 erstellt — Meldebestand als Richtlinie hinterlegt.
+          - time [ref=e80]: GESTERN · 17:03 · q-8790
+      - heading "Sicherheitsgrenze" [level=2] [ref=e81]
+      - paragraph [ref=e82]: "Synthetische Werkstatt: Loopback-only, keine Produktivbuchung, kein bezahlter Modellanruf. Diese Grenze steht an jeder gefährlichen Aktion."
+      - heading "Tastatur" [level=2] [ref=e83]
+      - list [ref=e84]:
+        - listitem [ref=e85]:
+          - text: Befehle / Sprung
+          - generic [ref=e86]: ⌘K
+        - listitem [ref=e87]:
+          - text: Karten wandern
+          - generic [ref=e88]: J
+          - text: /
+          - generic [ref=e89]: K
+        - listitem [ref=e90]:
+          - text: Genehmigen
+          - generic [ref=e91]: G
+          - text: dann
+          - generic [ref=e92]: Enter
+        - listitem [ref=e93]:
+          - text: Ablehnen
+          - generic [ref=e94]: G
+          - text: dann
+          - generic [ref=e95]: X
+        - listitem [ref=e96]:
+          - text: Übersicht Kürzel
+          - generic [ref=e97]: "?"
+  - contentinfo [ref=e98]:
+    - status [ref=e99]: "Verbunden: broker.loopback:18443"
+    - generic [ref=e100]: Modellbudget heute 62 %
+    - generic [ref=e101]: Readback 14/14 bestätigt
+    - generic [ref=e102]: Stand main 79df9fd
+  - generic [aria-hidden] [ref=e103]: DEMO-MOCKUP · INTERAKTION NUR VISUELL

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PsAI · Template T3 „Redaktionell“ (Ruhe, Impeccable-Haltung)</title>
+<style>
+/* ── Design-Token T3 „Redaktionell“ ─────────────────────────────────
+   Impeccable-Haltung: Ruhe vor Effekt, Text zuerst, Flächen flach,
+   eine Signalfarbe. ui-ux-pro-max-Tipp: Editorial + Produktivität =
+   Serif für Struktur, Grotesk für Bedienelemente. Weniger Linien, mehr Abstand. */
+:root{
+  --ps-bg:#f7f4ee; --ps-layer:#fffdf8; --ps-layer2:#efe9df;
+  --ps-text:#231f1a; --ps-text2:#6b6157; --ps-line:#ddd5c8;
+  --ps-action:#b4441d; --ps-action-hover:#96371a; --ps-on-action:#fffaf5;
+  --ps-ok:#3c7d4a; --ps-warn:#9a7400; --ps-danger:#b3261e;
+  --ps-focus:#b4441d; --ps-radius:10px; --ps-gap:8px;
+  --ps-serif:'Iowan Old Style','Source Serif 4',Georgia,serif;
+  --ps-sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ps-mono:ui-monospace,'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;font:400 15px/1.65 var(--ps-serif);background:var(--ps-bg);color:var(--ps-text)}
+a{color:var(--ps-action)}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--ps-action);color:var(--ps-on-action);padding:10px 16px;z-index:9}
+:focus-visible{outline:2px solid var(--ps-focus);outline-offset:3px;border-radius:2px}
+header{display:flex;align-items:center;gap:18px;padding:18px 32px;border-bottom:1px solid var(--ps-line)}
+.brand{font:600 20px var(--ps-serif);letter-spacing:-.01em}
+.brand i{font-style:italic;color:var(--ps-action)}
+.env{font:400 12.5px var(--ps-serif);font-style:italic;color:var(--ps-text2)}
+.cmdk{margin-left:auto;font:400 13px var(--ps-sans);color:var(--ps-text2);background:var(--ps-layer);border:1px solid var(--ps-line);border-radius:999px;padding:9px 18px;cursor:pointer;display:flex;gap:10px;min-width:220px}
+.cmdk kbd{margin-left:auto;font:600 10.5px var(--ps-mono);border:1px solid var(--ps-line);border-radius:4px;padding:1px 6px;background:var(--ps-bg)}
+.user{font:400 13px var(--ps-sans);color:var(--ps-text2)}
+.layout{display:grid;grid-template-columns:236px minmax(0,1fr) 340px}
+nav{padding:10px 0 30px}
+nav p.grp{font:600 11px var(--ps-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ps-text2);margin:22px 28px 6px}
+nav a{display:flex;align-items:center;gap:8px;padding:9px 28px;min-height:44px;color:var(--ps-text);text-decoration:none;font:400 14.5px var(--ps-serif)}
+nav a:hover{color:var(--ps-action)}
+nav a[aria-current]{color:var(--ps-action);font-weight:600}
+nav a[aria-current]::before{content:'—';margin-left:-18px;margin-right:2px}
+nav .badge{margin-left:auto;font:600 11px var(--ps-mono);color:var(--ps-on-action);background:var(--ps-action);border-radius:999px;padding:2px 8px}
+nav .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--ps-ok)}
+nav .dot.warn{background:var(--ps-warn)}
+nav .mod{font:400 11.5px var(--ps-mono);color:var(--ps-text2);padding:4px 28px}
+main{padding:30px 36px;min-width:0;border-left:1px solid var(--ps-line)}
+h1{font:600 32px/1.2 var(--ps-serif);margin:0;letter-spacing:-.01em}
+.pill{display:inline-block;font:600 11px var(--ps-mono);letter-spacing:.06em;color:var(--ps-text2);border:1px solid var(--ps-line);border-radius:999px;padding:3px 10px;margin:6px 6px 0 0}
+.pill.warn{color:#7a5c00;border-color:#cbb26a}
+.sub{color:var(--ps-text2);margin:8px 0 26px;max-width:64ch}
+.card{background:var(--ps-layer);border:1px solid var(--ps-line);border-radius:var(--ps-radius);padding:20px 22px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font:600 18px/1.35 var(--ps-serif)}
+.card h2 code{font:600 12px var(--ps-mono);color:var(--ps-text2);letter-spacing:.05em}
+.meta{color:var(--ps-text2);font:400 12px/1.7 var(--ps-mono);margin:4px 0 10px}
+.meta b{color:var(--ps-text)}
+.card p.lead{margin:0 0 14px}
+.acts{display:flex;gap:10px}
+button{font:600 14px var(--ps-sans);border-radius:999px;padding:10px 20px;min-height:42px;cursor:pointer;border:1px solid var(--ps-action);background:var(--ps-action);color:var(--ps-on-action)}
+button:hover{background:var(--ps-action-hover)}
+button.ghost{background:transparent;color:var(--ps-text);border-color:var(--ps-line)}
+button.ghost:hover{background:var(--ps-layer2)}
+button.danger{background:transparent;color:var(--ps-danger);border-color:#c99}
+details{margin-top:12px;color:var(--ps-text2)}
+summary{cursor:pointer;font:600 12px var(--ps-sans);letter-spacing:.04em}
+pre{background:var(--ps-layer2);border-radius:8px;padding:12px;font:400 12px/1.6 var(--ps-mono);overflow:auto}
+.progress{height:5px;background:var(--ps-layer2);border-radius:3px;overflow:hidden;margin:10px 0 4px}
+.progress i{display:block;height:100%;width:62%;background:var(--ps-action)}
+aside{border-left:1px solid var(--ps-line);padding:26px 26px 40px}
+aside h2{font:600 12px var(--ps-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ps-text2);margin:24px 0 10px}
+aside h2:first-child{margin-top:0}
+.rcpt{padding:10px 0;border-bottom:1px solid var(--ps-line);font-size:14px}
+.rcpt time{display:block;font:400 11.5px var(--ps-mono);color:var(--ps-text2);margin-top:2px}
+.ok{color:var(--ps-ok)}
+.note{border-left:3px solid var(--ps-action);background:var(--ps-layer);border-radius:0 8px 8px 0;padding:12px 14px;font-size:13.5px;color:var(--ps-text2)}
+.keys{list-style:none;margin:0;padding:0;font:400 13px var(--ps-sans);color:var(--ps-text2)}
+.keys li{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dotted var(--ps-line)}
+.keys kbd{font:600 10.5px var(--ps-mono);border:1px solid var(--ps-line);border-radius:4px;padding:1px 6px;background:var(--ps-layer)}
+footer{display:flex;gap:22px;border-top:1px solid var(--ps-line);padding:10px 32px;font:400 11.5px var(--ps-mono);color:var(--ps-text2)}
+@media(max-width:1180px){.layout{grid-template-columns:220px minmax(0,1fr)}aside{display:none}}
+@media(max-width:820px){.layout{grid-template-columns:1fr}nav{border-bottom:1px solid var(--ps-line)}}
+@media (prefers-reduced-motion: no-preference){a,button{transition:color .15s,background .15s}}
+</style>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+<header>
+  <span class="brand">Pan<i>Sphaira</i></span>
+  <span class="env">Werkstatt Nord — synthetischer Vorgangsraum</span>
+  <button class="cmdk">Befehl oder View suchen <kbd>⌘K</kbd></button>
+  <span class="user">J. Falk · Sachbearbeitung</span>
+</header>
+<div class="layout">
+<nav aria-label="Hauptnavigation">
+  <p class="grp">Betrieb</p>
+  <a href="#genehmigungen" aria-current="page">Genehmigungswarteschlange <span class="badge">3</span></a>
+  <a href="#vorgaenge">Vorgänge und Quittungen</a>
+  <a href="#richtlinien">Richtlinien</a>
+  <p class="grp">Module (Plugins)</p>
+  <a href="#wareneingang">Warenkorb-Starter <span class="dot" title="aktiv"></span></a>
+  <a href="#belege">Beleg-Navigation <span class="dot" title="aktiv"></span></a>
+  <a href="#mail">Mail (lokal) <span class="dot warn" title="Einschränkung"></span></a>
+  <a href="#modell">Modell-Anbindung</a>
+  <p class="mod">4 von 4 geladen · v1</p>
+  <p class="grp">Administration</p>
+  <a href="#diag">Diagnose</a>
+  <a href="#config">Konfiguration</a>
+</nav>
+<main id="inhalt">
+  <h1 id="genehmigungen">Genehmigungs-Warteschlange</h1>
+  <div><span class="pill">3 ausstehend</span><span class="pill warn">Budget 62 %</span></div>
+  <p class="sub">Kein Vorschlag läuft ohne Ihre Genehmigung. Nach der Ausführung zeigt der Readback, was das Zielsystem wirklich geändert hat — die Quittung rechts belegt es.</p>
+
+  <article class="card" aria-labelledby="v4711">
+    <h2><code>WARE-4711</code> · <span id="v4711">Wareneingang buchen (10 Stück)</span></h2>
+    <p class="meta">Agent <b>Bestands-Assistent</b> · Richtlinie <b>RG-07 Bestand &lt; Meldebestand</b> · System <b>ERP-Sandbox (loopback)</b> · Kosten <b>0,00 €</b></p>
+    <p class="lead">Zwei Effekte sind angemeldet: Wareneingang 10 Stück; Bestellung B-3302 um 6 reserviert. Verifiziert nach Ausführung: verfügbar 4. Der Hinweis „Meldebestand erreicht“ folgt als separater Vorschlag — hier wird nichts versteckt.</p>
+    <div class="acts">
+      <button type="button">Ausführen genehmigen</button>
+      <button class="ghost" type="button">Ablehnen</button>
+      <button class="ghost" type="button">Nur Vorschlag bearbeiten</button>
+    </div>
+    <details><summary>Wirkungsvorschau und Roh-Vorschlag</summary>
+      <pre>POST /sandbuch/wareneingang  { menge: 10, lager: "N1" }
+reservation: B-3302 → 6 · readback erwartet: verfügbar == 4</pre>
+    </details>
+  </article>
+
+  <article class="card" aria-labelledby="laufend" aria-busy="true">
+    <h2><code>BELG-0912</code> · <span id="laufend">Beleg kryptografisch versiegeln</span></h2>
+    <p class="meta">Ausgeführt von <b>Verschluss-Modul</b> · Richtlinie <b>RL-02 Pflichtversiegelung</b> · vor 40&nbsp;s</p>
+    <div class="progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Versiegelungsfortschritt"><i></i></div>
+    <p class="meta">Schritt 3 von 5 — Hash gebildet, Siegel wird geschrieben</p>
+    <div class="acts"><button class="danger" type="button">Abbrechen (Entwurf bleibt erhalten)</button></div>
+  </article>
+
+  <article class="card" aria-labelledby="v4712">
+    <h2><code>MAIL-2210</code> · <span id="v4712">Kunde über Teillieferung informieren</span></h2>
+    <p class="meta">Agent <b>Kommunikation</b> · Richtlinie <b>RG-11 Kunde informiert bei Abweichung</b> · Kanal <b>Mail (lokal, Sent-Ordner)</b></p>
+    <div class="acts">
+      <button type="button">Ausführen genehmigen</button>
+      <button class="ghost" type="button">Ablehnen</button>
+    </div>
+  </article>
+</main>
+<aside aria-label="Quittungen und Hinweise">
+  <h2>Letzte Quittungen</h2>
+  <div class="rcpt"><span class="ok">✓</span> <b>WARE-4709</b> ausgeführt — Readback bestätigt: verfügbar 14 → 24.
+    <time>09:41:07 · Vorgang-ID q-8812 · <a href="#log">Rohlog</a></time></div>
+  <div class="rcpt" style="border-bottom:none"><b>RLG-0908</b> abgelehnt von J. Falk — Wirkung: keine.
+    <time>09:12:55 · Vorgang-ID q-8805 · <a href="#log">Rohlog</a></time></div>
+  <h2>Sicherheitsgrenze</h2>
+  <p class="note">Synthetische Werkstatt: Loopback-only, keine Produktivbuchung, kein bezahlter Modellanruf. Diese Grenze steht an jeder gefährlichen Aktion.</p>
+  <h2>Tastatur</h2>
+  <ul class="keys">
+    <li>Befehle / Sprung <kbd>⌘K</kbd></li>
+    <li>Genehmigen im Fokus <kbd>g</kbd> dann <kbd>Enter</kbd></li>
+    <li>Ablehnen <kbd>g</kbd> dann <kbd>x</kbd></li>
+    <li>Details aufklappen <kbd>Space</kbd></li>
+    <li>Übersicht Kürzel <kbd>?</kbd></li>
+  </ul>
+</aside>
+</div>
+<footer><span role="status">Verbunden: broker.loopback:18443</span><span>Modellbudget heute 62 %</span><span>Readback 14/14 bestätigt</span><span>Stand main 79df9fd</span>
+</footer>
+</body>
+</html>

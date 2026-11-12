@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PsAI Composer-Prototyp · Minimalbaum</title>
+<style>
+/* Shell-Theme = essential-2d (MOSAIK-Regel 4); Zonenthemes per Klasse */
+:root{--ps-bg:#f5f6f8;--ps-layer:#fff;--ps-layer2:#eef0f4;--ps-line:#d7dbe2;--ps-text:#1c2330;--ps-text2:#566172;--ps-btn:#2563eb;--ps-blue:#2563eb;--ps-oktx:#0e6027;--ps-warntx:#92620a;--ps-amberbg:#fffbeb;--ps-r:10px;
+--sans:system-ui,-apple-system,'Segoe UI',sans-serif;--mono:ui-monospace,'JetBrains Mono',monospace}
+.theme-essential-2d{--z-bg:#fff;--z-layer:#f5f6f8;--z-line:#d7dbe2;--z-text:#1c2330;--z-text2:#566172}
+.theme-pulse{--z-bg:#0a0f1a;--z-layer:#0f1826;--z-line:#1e293b;--z-text:#e5e7eb;--z-text2:#94a3b8}
+.theme-orbit{--z-bg:#0a0e14;--z-layer:#11161f;--z-line:#1f2733;--z-text:#e6eaf0;--z-text2:#8a94a3}
+/* Zonen-Lokaltöne: Grün/Gelb immer theme-abgestimmt (MOSAIK A11y-Grenze) */
+.theme-pulse .badge-ok,.theme-orbit .badge-ok{color:#4ade80;border-color:#4ade80}
+.theme-pulse .oktx,.theme-orbit .oktx{color:#4ade80}
+.zone-body button.ghost{color:var(--z-text);border-color:var(--z-line)}
+.zone-body button.warnbtn{color:var(--z-warntx);border-color:var(--z-warntx)}
+*{box-sizing:border-box}
+body{margin:0;font:400 13.5px/1.6 var(--sans);background:var(--ps-bg);color:var(--ps-text)}
+a{color:var(--ps-blue)}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--ps-btn);color:#fff;padding:10px;z-index:9}
+:focus-visible{outline:2px solid var(--ps-btn);outline-offset:2px;border-radius:3px}
+header{display:flex;align-items:center;gap:12px;height:52px;padding:0 16px;border-bottom:1px solid var(--ps-line);background:var(--ps-layer);position:sticky;top:0;z-index:5}
+.brand{font:700 14.5px var(--sans)}.brand i{font-style:normal;color:var(--ps-blue)}
+.chip{font:600 9.5px var(--mono);letter-spacing:.1em;color:var(--ps-text2);border:1px solid var(--ps-line);border-radius:999px;padding:4px 9px;margin-left:auto}
+.layout{display:grid;grid-template-columns:200px minmax(0,1fr) 300px;min-height:calc(100vh - 52px - 30px)}
+nav{border-right:1px solid var(--ps-line);background:var(--ps-layer);padding:10px 0}
+nav p.grp{font:600 9.5px/1 var(--mono);letter-spacing:.16em;color:var(--ps-text2);margin:10px 14px 6px;text-transform:uppercase}
+nav button{display:flex;width:100%;gap:8px;align-items:center;padding:8px 14px;min-height:40px;color:var(--ps-text);text-align:left;background:none;border:0;border-left:2px solid transparent;font:400 13px var(--sans);cursor:pointer}
+nav button:hover{background:var(--ps-layer2)}
+nav button[aria-pressed="true"]{border-left-color:var(--ps-btn);background:var(--ps-layer2);font-weight:600}
+main{padding:16px 20px;min-width:0}
+h1{font:700 19px var(--sans);margin:0 0 2px}
+.sub1{color:var(--ps-text2);margin:0 0 14px;font-size:12.5px}
+.zone{border:1px solid var(--ps-line);border-radius:var(--ps-r);margin-bottom:12px;overflow:hidden}
+.zone-head{display:flex;gap:10px;align-items:center;padding:9px 13px;background:var(--ps-layer);border-bottom:1px solid var(--ps-line)}
+.zone-head b{font:600 13px var(--sans)}
+.zone-head .tid{font:600 9px var(--mono);letter-spacing:.1em;color:var(--ps-text2);border:1px solid var(--ps-line);border-radius:999px;padding:2px 8px}
+.zone-head .actions{margin-left:auto;display:flex;gap:6px}
+.zone-body{background:var(--z-bg);color:var(--z-text);padding:13px;--z-oktx:var(--ps-oktx);--z-warntx:var(--ps-warntx)}
+.theme-pulse.zone-body,.theme-orbit.zone-body{--z-oktx:#4ade80;--z-warntx:#fbbf24}
+.zone-body .card{background:var(--z-layer);border:1px solid var(--z-line);border-radius:8px;padding:11px 12px;margin-bottom:8px}
+button{font:600 12.5px var(--sans);border-radius:6px;padding:7px 12px;min-height:34px;cursor:pointer;border:1px solid var(--ps-btn);background:var(--ps-btn);color:#fff}
+button.ghost{background:transparent;color:var(--ps-text);border-color:var(--ps-line)}
+button.warnbtn{background:transparent;color:var(--ps-warntx);border-color:#7a5a12}
+select{font:400 12px var(--sans);background:var(--ps-layer);border:1px solid var(--ps-line);border-radius:6px;color:var(--ps-text);padding:6px 8px}
+.betrag{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.betrag div{border:1px solid var(--z-line);border-radius:8px;padding:8px 10px;background:var(--z-bg)}
+.betrag small{display:block;font:600 9px var(--mono);letter-spacing:.1em;color:var(--z-text2);text-transform:uppercase}
+.betrag b{font:700 16px var(--mono)}
+.oktx{color:var(--ps-oktx)}
+.badge-ok{font:600 10px var(--mono);color:var(--ps-oktx);border:1px solid var(--ps-oktx);border-radius:999px;padding:2px 9px}
+.kette{font:400 11px var(--mono);color:var(--z-text2)}
+aside.as{border-left:1px solid var(--ps-line);background:var(--ps-layer);padding:13px;display:flex;flex-direction:column;gap:10px}
+.as h2{font:600 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ps-text2);margin:0}
+#warum,#quitt,#chronik{border:1px solid var(--ps-line);border-radius:8px;background:var(--ps-bg);padding:9px 11px;font:400 11.5px var(--sans);max-height:220px;overflow:auto}
+#chronik ol{margin:4px 0 0 16px;padding:0}
+footer{display:flex;gap:14px;align-items:center;border-top:1px solid var(--ps-line);background:var(--ps-layer);padding:6px 16px;font:400 10.5px var(--mono);color:var(--ps-text2)}
+.demo-hint{margin-left:auto;border:1px solid var(--ps-line);border-radius:999px;padding:3px 10px;letter-spacing:.08em}
+/* M5 Live-Komponenten */
+.tick-gruppe{font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--z-text2);margin:8px 0 3px;display:flex;gap:6px}
+.tick-liste{list-style:none;margin:0;padding:0;max-height:150px;overflow:auto}
+.tick-liste li{padding:4px 0;border-top:1px solid var(--z-line);font:400 12px var(--sans)}
+.tick-liste li time{font:400 10px var(--mono);color:var(--z-text2);margin-right:8px}
+.tick-neu-wrap{display:flex;gap:8px;align-items:center;min-height:34px}
+.tick-neu-wrap output{font:600 11px var(--mono);color:var(--ps-blue)}
+.trend-legende{list-style:none;display:flex;gap:14px;margin:6px 0 0;padding:0;flex-wrap:wrap;font:600 11px var(--sans)}
+.trend-legende i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.trend svg{width:100%;height:auto;display:block}
+@media (prefers-reduced-motion: no-preference){.trend polyline{transition:all .4s ease}}
+footer .lv{border:1px solid var(--ps-line);border-radius:999px;padding:2px 8px}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,92vw);background:var(--ps-layer);border-left:1px solid var(--ps-line);z-index:20;box-shadow:-8px 0 24px rgba(0,0,0,.15)}
+#drawer[hidden]{display:none}
+.pers {display:flex;gap:4px;margin:6px 0}
+.pers button[aria-pressed="true"]{background:var(--ps-btn);color:#fff}
+.pers button[aria-pressed="false"]{background:transparent;color:var(--z-text,var(--ps-text));border-color:var(--z-line)}
+#modulPers table{border-collapse:collapse;font:400 12px var(--sans)}
+#modulPers th,#modulPers td{border:1px solid var(--z-line);padding:4px 10px;text-align:left}
+@media(max-width:1100px){.layout{grid-template-columns:180px minmax(0,1fr)}aside.as{display:none}}
+/* B6.1 Ultrawide-Blickfenster: Primärzonen mittig ~60 %, Assistenz an den Außenkanten */
+@media(min-width:2000px){main#inhalt{max-width:60vw;margin-inline:auto;padding:16px 28px}}
+@media(max-width:760px){.layout{grid-template-columns:1fr}nav{border-right:none;border-bottom:1px solid var(--ps-line)}}
+
+/*Skin P1 „Jarvis-Pulse“: aktiv via ?skin=pulse — reines Token-Overlay, Mechanik unverändert */
+body.skin-pulse{color-scheme:dark;--ps-bg:#070b12;--ps-layer:#0d1520;--ps-layer2:#111c2b;--ps-line:#1c2a3d;--ps-text:#e8eef7;--ps-text2:#9fb0c6;--ps-btn:#0369a1;--ps-blue:#38bdf8;--ps-oktx:#4ade80;--ps-warntx:#fbbf24;--ps-r:14px}
+.skin-pulse header{background:linear-gradient(180deg,#0d1520,#0a1119);border-bottom-color:#164e63;box-shadow:0 1px 0 rgba(56,189,248,.25)}
+.skin-pulse .brand i{color:#38bdf8;text-shadow:0 0 12px rgba(56,189,248,.8)}
+.skin-pulse .chip{border-color:#164e63;color:#7dd3fc;background:rgba(8,47,73,.55)}
+.skin-pulse nav,.skin-pulse aside.as,.skin-pulse footer{background:var(--ps-layer);border-color:#1c2a3d}
+.skin-pulse nav button[aria-pressed="true"]{border-left-color:#38bdf8;background:linear-gradient(90deg,rgba(14,165,233,.18),transparent)}
+.skin-pulse .zone{border-color:#1c2a3d;background:var(--ps-layer);box-shadow:0 10px 30px rgba(2,8,20,.6)}
+.skin-pulse .zone-head{background:#0d1520;border-bottom-color:#1c2a3d}
+.skin-pulse .zone-head .tid{border-color:#164e63;color:#7dd3fc}
+.skin-pulse button:not(.ghost):not(.warnbtn){box-shadow:0 0 0 1px #0ea5e9 inset,0 6px 18px rgba(2,132,199,.35)}
+.skin-pulse .demo-hint{border-color:#164e63;color:#7dd3fc}
+.skin-pulse footer .lv{border-color:#164e63}
+.skin-pulse #warum,.skin-pulse #quitt,.skin-pulse #chronik{background:#0a1119;border-color:#1c2a3d}
+.skin-pulse #drawer{background:var(--ps-layer);border-left-color:#164e63;box-shadow:-12px 0 40px rgba(2,8,20,.8)}
+.skin-pulse a{color:#38bdf8}
+.skin-pulse .theme-essential-2d.zone-body{--z-oktx:#0e6027;--z-warntx:#92600a}
+.skin-pulse .theme-essential-2d .badge-ok{color:#0e6027;border-color:#0e6027}
+.skin-pulse .theme-essential-2d .oktx{color:#0e6027}
+.skin-pulse main h1{text-shadow:0 0 18px rgba(56,189,248,.35)}
+/*Skin-Variante Orbit: gleiche Anatomie, amber/violette Akzente */
+.skin-pulse.skin-orbit{--ps-bg:#08070d;--ps-layer:#12101a;--ps-layer2:#181524;--ps-line:#2a2438;--ps-btn:#7c3aed;--ps-blue:#c4b5fd;--ps-text2:#a79fbd;--ps-r:12px}
+.skin-pulse.skin-orbit .brand i{color:#f59e0b;text-shadow:0 0 12px rgba(245,158,11,.7)}
+.skin-pulse.skin-orbit .chip,.skin-pulse.skin-orbit .zone-head .tid,.skin-pulse.skin-orbit .demo-hint,.skin-pulse.skin-orbit footer .lv{border-color:#4c1d95;color:#c4b5fd;background:rgba(46,16,101,.4)}
+.skin-pulse.skin-orbit button:not(.ghost):not(.warnbtn){box-shadow:0 0 0 1px #8b5cf6 inset,0 6px 18px rgba(124,58,237,.35)}
+.skin-pulse.skin-orbit nav button[aria-pressed="true"]{border-left-color:#f59e0b;background:linear-gradient(90deg,rgba(124,58,237,.2),transparent)}
+.skin-pulse.skin-orbit header{border-bottom-color:#4c1d95;box-shadow:0 1px 0 rgba(196,181,253,.2)}
+@media (prefers-reduced-motion: no-preference){.skin-pulse .zone{transition:box-shadow .3s ease}}
+
+@media(max-width:1023px){
+  body{min-width:1024px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+<header>
+  <span class="brand" id="marke">Pan<i>Sphaira</i></span>
+  <span style="font:400 11px var(--sans);color:var(--ps-text2)">Composer-Prototyp · Deskriptor-gesteuert</span>
+  <span class="chip">MANDANT TENANT.A · GESCHÜTZTE SITZUNG</span>
+  <button class="ghost" id="resetBtn" type="button">Eigene Änderungen verwerfen</button>
+</header>
+<div class="layout">
+  <nav aria-label="Hauptnavigation"><p class="grp">Bereiche</p><div id="navList"></div></nav>
+  <main id="inhalt">
+    <h1>Workspace aus Deskriptor</h1>
+    <p class="sub1">Gerendert aus <code>beispiele/workspace.minimal.json</code> + <code>pan528.manifest.json</code>.
+       Themes pro Zone (Mosaik), Zonen aus/ an, Modul-Lebenszyklus mit Quittung. Änderungen bleiben als person-Overrides in localStorage.</p>
+    <div id="zonen"></div>
+  </main>
+  <aside class="as" aria-label="Warum-so und Quittungen">
+    <h2>Warum sieht das so aus?</h2>
+    <div id="warum" role="region" aria-live="off" tabindex="0" aria-label="Warum-so-Auflösung">Zone oben wählen (Schritt „Warum so?“) — hier erscheint der Auflösungspfad.</div>
+    <h2>Quittungen</h2>
+    <div id="quitt" role="status" tabindex="0" aria-label="Quittungen">Noch keine Aktion.</div>
+    <h2>Chronik</h2>
+    <div id="chronik" role="region" tabindex="0" aria-label="Chronik"><ol id="chronikList"></ol></div>
+  </aside>
+</div>
+<footer><span id="statusLine">Deskriptor geladen.</span><span class="lv" id="lvStatus" role="status">Quelle: verbinde…</span><span class="lv" id="lvStand">Stand –</span><span>NUR-LESEN-FACHSCHICHT</span><span class="demo-hint">PROTO · EPIC G · M5</span></footer>
+<script>if(new URLSearchParams(location.search).get("skin")==="pulse")document.body.classList.add("skin-pulse");if(new URLSearchParams(location.search).get("skin")==="orbit")document.body.classList.add("skin-pulse","skin-orbit");</script>
+<script src="bi-glas.js"></script>
+<script src="proto.js"></script>
+<script src="zeiger.js"></script>
+</body>
+</html>

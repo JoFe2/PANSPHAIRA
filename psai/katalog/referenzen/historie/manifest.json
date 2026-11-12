@@ -1,0 +1,651 @@
+{
+  "originals": {
+    "notebook": {
+      "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/pansphera_notebook_workspace_mit_ki_assistent.png",
+      "sha256": "abf6e99e10b4d80b89ccee02725de35a3c0641778132a4f37ffa67316e7a058b",
+      "bytes": 1562999
+    },
+    "orbit": {
+      "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/pansphera_orbit_command_dashboard.png",
+      "sha256": "625c0be3b77fa1f3fae679ea98c29b44118c5c44663037a9a68a17f056642bed",
+      "bytes": 1670887
+    },
+    "prism": {
+      "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/prism_dashboard_für_acme_corp.png",
+      "sha256": "dfe09d6e27c54443b6ec82cc418e868f5263891f64e5c8145f51672bc03141d8",
+      "bytes": 1506567
+    },
+    "insight": {
+      "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/pansphera_psi_insight_motion_dashboard.png",
+      "sha256": "8f6814d679ab84fa937bfaf1a9e189b8f6841831f18f3adf363d40560cd1c629",
+      "bytes": 1865025
+    },
+    "jarvis": {
+      "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/futuristisches_jarvis_dashboard_im_neonlicht.png",
+      "sha256": "683a08a59b0cf0cf16da11b4bc094fca08ee057ce81779f5afde912c5fa38a49",
+      "bytes": 1669013
+    }
+  },
+  "captures": {
+    "atUTC": "2026-10-24T12:25:11.737725+00:00",
+    "state": "CURRENT_FINAL_CSS_FIVE_PROFILE_COMPARISON_EVIDENCE_NOT_BLANKET_ACCEPTANCE",
+    "candidateSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+    "candidateTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+    "CSS": {
+      "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/workspace.css",
+      "sha256": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+      "bytes": 155296
+    },
+    "frames": [
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/notebook-1024-initial.png",
+        "sha256": "b21483eef30d38bd558cb126a4a2422d5490c291bf000f91e8d5b16ba6782f5d",
+        "profile": "notebook",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/notebook-390-initial.png",
+        "sha256": "097baefeda279830369e9658c668df32ee64a6a30c0e2512642e4ae8482227a9",
+        "profile": "notebook",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/orbit-1024-initial.png",
+        "sha256": "d9a3dcb85694cb8864ab42820dc8c8795339a4cf482b9cebcf03a8d0bf263032",
+        "profile": "orbit",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/orbit-390-initial.png",
+        "sha256": "96275c139355ead1ffb59350f00895727d37a087d47bdc6868022d34c7fdd110",
+        "profile": "orbit",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/prism-1024-initial.png",
+        "sha256": "0758a91862e5b7d2b987b7ef1d2556f0cff5df05dc1dadd8a4d313a47e2c13d0",
+        "profile": "prism",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/prism-390-initial.png",
+        "sha256": "cd1f25fd21ff0b688603fbc673c3534bb3f75852db573abeb16e02af96a27bcf",
+        "profile": "prism",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/insight-1024-initial.png",
+        "sha256": "9ca647289439fdfb13b043d1974c818f07307b27bd9595e8789625966b07e2d4",
+        "profile": "insight",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/insight-390-initial.png",
+        "sha256": "b16dfaf05c8b7406e4d101716ef8e1e08f96f27bc633a1f690bae4f148535369",
+        "profile": "insight",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/jarvis-1024-initial.png",
+        "sha256": "793ac8046a3784e891c13e970e6cde23a045100a4d93eb1ea7755b1226aa6918",
+        "profile": "jarvis",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/jarvis-390-initial.png",
+        "sha256": "cfe19c5e54b5223e8949c1497023fb99b4e67ae121c3d9551b5fb26d12b64101",
+        "profile": "jarvis",
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sourceCommit": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+        "sourceTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "ae4658e691ac2e9bc9affd46270cacb1d9129d62d18e2e9fd2631c2398b936e9",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "physicalDevice": false,
+        "mainVisualAcceptance": false,
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "ACTUAL_CHANGED_RESPONSIVE_CAPTURE_RENDERED_PINS_EQUAL_FINAL_CANDIDATE_METADATA_ONLY_DIFFERENCE"
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/candidate-all-five-defaults-and-common-mixed-native/evidence/notebook-1586-initial.png",
+        "sha256": "cbe4f0a13796d73bc4a84423aaf4f8f1797ab60a00f44c14c70029c2ae2e0722",
+        "profile": "notebook",
+        "viewport": {
+          "width": 1586,
+          "height": 992
+        },
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "sourceCommit": "22442eac67bc213524184a358a28e369ab6cd1c9",
+        "sourceTree": "a12459da93a3adf2f5421dc1b81330b40dcbe954",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "2a051502e7c5ca7fcb27bdd315a74d16957deecf9634395b74224c4249576b71",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "REUSED_UNCHANGED_DESKTOP_IMAGE_NOT_FRESH_CAPTURE",
+        "sourceReuseProof": {
+          "source": "22442eac67bc213524184a358a28e369ab6cd1c9",
+          "actualCapturedViewport": {
+            "width": 1586,
+            "height": 992
+          },
+          "allChangedResponsiveMediaMaxWidth": 1199,
+          "newNarrowShellContainerMaxRem": 20,
+          "defaultDesktopBodyInlineSizeExceedsContainerThreshold": true,
+          "compiledTSHTMLAndOtherStylesUnchanged": true,
+          "entireCSSByteEqualityNotClaimed": true,
+          "changedRulesDoNotMatchThisDefaultDesktopState": true
+        }
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/candidate-all-five-defaults-and-common-mixed-native/evidence/orbit-1586-initial.png",
+        "sha256": "df1984eeb0dd1d52b164ebdbfbeaed2b38be3c81316a5b422c08851b98180229",
+        "profile": "orbit",
+        "viewport": {
+          "width": 1586,
+          "height": 992
+        },
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "sourceCommit": "22442eac67bc213524184a358a28e369ab6cd1c9",
+        "sourceTree": "a12459da93a3adf2f5421dc1b81330b40dcbe954",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "2a051502e7c5ca7fcb27bdd315a74d16957deecf9634395b74224c4249576b71",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "REUSED_UNCHANGED_DESKTOP_IMAGE_NOT_FRESH_CAPTURE",
+        "sourceReuseProof": {
+          "source": "22442eac67bc213524184a358a28e369ab6cd1c9",
+          "actualCapturedViewport": {
+            "width": 1586,
+            "height": 992
+          },
+          "allChangedResponsiveMediaMaxWidth": 1199,
+          "newNarrowShellContainerMaxRem": 20,
+          "defaultDesktopBodyInlineSizeExceedsContainerThreshold": true,
+          "compiledTSHTMLAndOtherStylesUnchanged": true,
+          "entireCSSByteEqualityNotClaimed": true,
+          "changedRulesDoNotMatchThisDefaultDesktopState": true
+        }
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/candidate-all-five-defaults-and-common-mixed-native/evidence/prism-1586-initial.png",
+        "sha256": "d13c44db2029cfb48b679617e83476d16774422fa5dd1bc4a3711320764a5240",
+        "profile": "prism",
+        "viewport": {
+          "width": 1586,
+          "height": 992
+        },
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "sourceCommit": "22442eac67bc213524184a358a28e369ab6cd1c9",
+        "sourceTree": "a12459da93a3adf2f5421dc1b81330b40dcbe954",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "2a051502e7c5ca7fcb27bdd315a74d16957deecf9634395b74224c4249576b71",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "REUSED_UNCHANGED_DESKTOP_IMAGE_NOT_FRESH_CAPTURE",
+        "sourceReuseProof": {
+          "source": "22442eac67bc213524184a358a28e369ab6cd1c9",
+          "actualCapturedViewport": {
+            "width": 1586,
+            "height": 992
+          },
+          "allChangedResponsiveMediaMaxWidth": 1199,
+          "newNarrowShellContainerMaxRem": 20,
+          "defaultDesktopBodyInlineSizeExceedsContainerThreshold": true,
+          "compiledTSHTMLAndOtherStylesUnchanged": true,
+          "entireCSSByteEqualityNotClaimed": true,
+          "changedRulesDoNotMatchThisDefaultDesktopState": true
+        }
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/candidate-all-five-defaults-and-common-mixed-native/evidence/insight-1586-initial.png",
+        "sha256": "73bcc58ffc318b7f2f9a6bd0c94a5984fd51339babb351e6acb37f99af63ce73",
+        "profile": "insight",
+        "viewport": {
+          "width": 1586,
+          "height": 992
+        },
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "sourceCommit": "22442eac67bc213524184a358a28e369ab6cd1c9",
+        "sourceTree": "a12459da93a3adf2f5421dc1b81330b40dcbe954",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "2a051502e7c5ca7fcb27bdd315a74d16957deecf9634395b74224c4249576b71",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "REUSED_UNCHANGED_DESKTOP_IMAGE_NOT_FRESH_CAPTURE",
+        "sourceReuseProof": {
+          "source": "22442eac67bc213524184a358a28e369ab6cd1c9",
+          "actualCapturedViewport": {
+            "width": 1586,
+            "height": 992
+          },
+          "allChangedResponsiveMediaMaxWidth": 1199,
+          "newNarrowShellContainerMaxRem": 20,
+          "defaultDesktopBodyInlineSizeExceedsContainerThreshold": true,
+          "compiledTSHTMLAndOtherStylesUnchanged": true,
+          "entireCSSByteEqualityNotClaimed": true,
+          "changedRulesDoNotMatchThisDefaultDesktopState": true
+        }
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/candidate-all-five-defaults-and-common-mixed-native/evidence/jarvis-1586-initial.png",
+        "sha256": "74dc31209e6dad9b9929c94e3390676f0234702ced7ad7388edd09783193c2c7",
+        "profile": "jarvis",
+        "viewport": {
+          "width": 1586,
+          "height": 992
+        },
+        "configurationClass": "EXPLICIT_CURATED_DEFAULT",
+        "sourceCommit": "22442eac67bc213524184a358a28e369ab6cd1c9",
+        "sourceTree": "a12459da93a3adf2f5421dc1b81330b40dcbe954",
+        "buildPins": {
+          "packages/contracts/src/browser-profile-v1.ts": "59c589a42ce842adcfc651af9d403a0e4c963f1ba8144e4ee8a91f3868829aac",
+          "packages/browser-shell/src/registry-v1.ts": "d74ec8502b3ea28783b343ed917655845e06e04bf894bed32c5cb733dc7c65c7",
+          "packages/browser-workspace/src/app.ts": "ad6bbaf9f92ee434933b1e01e31703968663de05cef73d9b4be730c57560f766",
+          "packages/browser-workspace/src/profile-editor-v1.ts": "bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3",
+          "packages/browser-workspace/src/workspace.css": "2a051502e7c5ca7fcb27bdd315a74d16957deecf9634395b74224c4249576b71",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.ts": "5a2b9f71cd938f63ab274134b0dc9a1a762e0a5ea76ab2e0282f5f62857a074c",
+          "packages/browser-workspace/src/workspace-agent-panel-v1.css": "29b56d55eb6ad18520a7d84ac179c8be2bc911c8876b083b662d5300807d32db",
+          "dist/browser-workspace/app.js": "c5ccc6652f1eb95d9db723252efee56eb7ac736e200375a043dd320b7d2ca6b6",
+          "dist/browser-workspace/workspace-appearance.js": "3cfc15e4cbf8bf00149e303d4be2c3fb2b4c94530d4e72e4b82bbf55ff08fe23",
+          "dist/browser-workspace/workspace-agent-panel.js": "0bd470f7396b0b767e69abfcc28d8b86a8ff94ca6453120a0632a68ad742f27e",
+          "dist/browser-workspace/workspace-module-view-editor.js": "3d1be888766dca1a28b372b3eba91b5c400289c6c4feb4cbda2befc7f1278008"
+        },
+        "candidateBoundSource": "4ff138fb12099adb1088a78843ebdc8f90b7eea4",
+        "candidateBoundTree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef",
+        "binding": "REUSED_UNCHANGED_DESKTOP_IMAGE_NOT_FRESH_CAPTURE",
+        "sourceReuseProof": {
+          "source": "22442eac67bc213524184a358a28e369ab6cd1c9",
+          "actualCapturedViewport": {
+            "width": 1586,
+            "height": 992
+          },
+          "allChangedResponsiveMediaMaxWidth": 1199,
+          "newNarrowShellContainerMaxRem": 20,
+          "defaultDesktopBodyInlineSizeExceedsContainerThreshold": true,
+          "compiledTSHTMLAndOtherStylesUnchanged": true,
+          "entireCSSByteEqualityNotClaimed": true,
+          "changedRulesDoNotMatchThisDefaultDesktopState": true
+        }
+      }
+    ],
+    "freshChangedResponsiveFrameCount": 10,
+    "selectorBoundReusedDesktopFrameCount": 5,
+    "originalReferences": [
+      {
+        "notebook": {
+          "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/pansphera_notebook_workspace_mit_ki_assistent.png",
+          "sha256": "abf6e99e10b4d80b89ccee02725de35a3c0641778132a4f37ffa67316e7a058b",
+          "bytes": 1562999
+        }
+      },
+      {
+        "orbit": {
+          "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/pansphera_orbit_command_dashboard.png",
+          "sha256": "625c0be3b77fa1f3fae679ea98c29b44118c5c44663037a9a68a17f056642bed",
+          "bytes": 1670887
+        }
+      },
+      {
+        "prism": {
+          "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/prism_dashboard_für_acme_corp.png",
+          "sha256": "dfe09d6e27c54443b6ec82cc418e868f5263891f64e5c8145f51672bc03141d8",
+          "bytes": 1506567
+        }
+      },
+      {
+        "insight": {
+          "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/pansphera_psi_insight_motion_dashboard.png",
+          "sha256": "8f6814d679ab84fa937bfaf1a9e189b8f6841831f18f3adf363d40560cd1c629",
+          "bytes": 1865025
+        }
+      },
+      {
+        "jarvis": {
+          "path": "/mnt/data2/hermes/home/research/PANSPHAIRA-UI-DESIGN/07b5cea5d00b659f/extracted/futuristisches_jarvis_dashboard_im_neonlicht.png",
+          "sha256": "683a08a59b0cf0cf16da11b4bc094fca08ee057ce81779f5afde912c5fa38a49",
+          "bytes": 1669013
+        }
+      }
+    ],
+    "priorOriginalVersusCurrentDesktopComparisons": [
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/actual-reference-comparison/notebook-original-versus-actual-desktop.png",
+        "sha256": "c14a3118614fae7eb1372f9e4faf456ab8786a64edf493fb3ae65f8f6f919585",
+        "bytes": 641188
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/actual-reference-comparison/orbit-original-versus-actual-desktop.png",
+        "sha256": "97de04abb153c2a28d812f6e7574adaaca6c03b47e349efd222f7350a28b9808",
+        "bytes": 630707
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/actual-reference-comparison/prism-original-versus-actual-desktop.png",
+        "sha256": "163a60e98c7af63e3f20bbdc80237cebb07656a95d8bf6bf2c87d08aa5ce5004",
+        "bytes": 570629
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/actual-reference-comparison/insight-original-versus-actual-desktop.png",
+        "sha256": "276fb86411baf70a65166ec2750bee3896e3aa4e6ee5b3aae7e7470ff20a708f",
+        "bytes": 667140
+      },
+      {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/actual-reference-comparison/jarvis-original-versus-actual-desktop.png",
+        "sha256": "5eade7508929dd15ec6baf75f0867d47cf7dc18ee93d0efdd40797432e2de40f",
+        "bytes": 610850
+      }
+    ],
+    "configurationAxesAndNativeState": {
+      "tenCurrentFramesGeometryReport": {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/ten-current-responsive-defaults-only/evidence/actual-curated-default-captures.json",
+        "sha256": "7c2d69482af16c10ef7cf7b572dddd00d612c40a25b4c8e959b2788c2b5526bf",
+        "bytes": 318851
+      },
+      "allFiveSourceBoundNativeCase": {
+        "path": "/mnt/data2/hermes/home/workers/astra-pan-xhigh-20260930/workspace/handoffs/UI-REFERENCE-CLOSURE-20261023/five-profile-finite-completion-owner-20261024/pr677-exact-word-paint-owner-correction-20261024/html-zoom-narrow-container-correction/necessary-new-case-after-container-fix/ACTUAL-CURRENT-JARVIS-NATIVE-RESULT.json",
+        "sha256": "57ff0fffe07147a07721e93693add6876e962c89110ab23530343f9ce2abf904",
+        "bytes": 1030
+      },
+      "mixedCASReadbackAndReload": "Prior exact-implementation common mixed evidence retained; changed product scope is CSS only, no config owner change"
+    },
+    "sourceEqualityForRender": {
+      "allChangedPathsRelativeToReleasedMain": [
+        "SHA256SUMS",
+        "packages/browser-workspace/src/workspace.css",
+        "tests/pan549/browser-lifecycle-analysis.test.mjs",
+        "tests/public-product-spelling.test.mjs",
+        "verification/verification-dag-v2.json"
+      ],
+      "publicProductionTSJSHTMLSourceUnchanged": true,
+      "currentCapturePrototype": "ccf6c332dcaa63936bfd9a21723c4d6473fbfacc",
+      "prototypeTree": "aafc28ceca4bbc777c9377168bbfb42931e66e65",
+      "allCurrentResponsiveBuildPinsRecorded": true,
+      "compiledBuildReusedHonestlyNoColdCopy": true,
+      "newReleaseFreshCompilationStillRequired": true
+    },
+    "physicalDevice": false,
+    "independentTechnicalAcceptance": false,
+    "MainPersonalVisualAcceptance": "Existing scoped disposition remains, current10responsive frames supplied for comparison; no blanket or automatic acceptance inferred",
+    "requirementsDenominator": 15
+  },
+  "comparison_note": "New labeled side-by-side montage; unmodified originals included separately",
+  "historical_release": {
+    "tag": "v0.3.0-five-profile-native-responsive.1",
+    "main": "06f84646de7e29c6a58b73f3acaaf940a60e0775",
+    "tree": "6a0613ef9e21daaf4936cb1f189b873b4696f5ef"
+  }
+}

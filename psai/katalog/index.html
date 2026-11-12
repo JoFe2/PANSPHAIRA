@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PsAI · UI-Designkatalog — Templates für den Plugin-Workspace</title>
+<style>
+:root{--ink:#1c2126;--mut:#5c6672;--line:#d9dee4;--bg:#eef1f4;--acc:#0b4fcc}
+*{box-sizing:border-box}
+body{margin:0;font:400 15px/1.65 system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:1240px;margin:0 auto;padding:48px 28px 80px}
+h1{font:700 clamp(34px,5vw,54px)/1.05 system-ui;letter-spacing:-.02em;margin:14px 0 10px}
+.kick{font:700 12px ui-monospace,monospace;letter-spacing:.24em;text-transform:uppercase;color:#0b4fcc;margin:0}
+p.lead{font-size:17px;color:var(--mut);max-width:78ch}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
+.rule{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+.rule h2{margin:0 0 6px;font-size:15px}
+.rule p{margin:0;font-size:13.5px;color:var(--mut)}
+.rule code{font:600 12px ui-monospace,monospace;background:#eef2f6;padding:1px 5px;border-radius:4px}
+.tpl{margin:44px 0 10px}
+.tpl h2.tplh{font:700 24px system-ui;margin:0 0 4px}
+.tpl .desc{color:var(--mut);margin:0 0 14px;max-width:86ch}
+.shot{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 20px 50px -30px #0004}
+.shot iframe{width:100%;height:780px;border:0;display:block}
+.tokens{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13px}
+.tokens th,.tokens td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
+.tokens th{background:#f6f8fa;font:600 12px ui-monospace,monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--mut)}
+.tokens td:first-child{font:600 12px ui-monospace,monospace}
+.sw{display:inline-block;width:13px;height:13px;border-radius:3px;border:1px solid #0002;vertical-align:-2px;margin-right:6px}
+.note{border-left:3px solid var(--acc);background:#fff;border-radius:0 10px 10px 0;padding:14px 16px;color:#333b44;font-size:14px}
+footer{margin-top:48px;color:var(--mut);font:400 12px ui-monospace,monospace}
+a{color:var(--acc)}
+.tplhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:6px 0 8px}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font:600 12px ui-monospace,monospace}
+.toggle button{border:0;background:#fff;color:var(--mut);padding:5px 14px;cursor:pointer;font:inherit}
+.toggle button[aria-pressed="true"]{background:var(--acc);color:#fff}
+.verdict{font-size:13.5px;color:var(--mut);max-width:86ch;margin:0 0 14px}
+.verdict b{color:var(--ink)}
+.chip-v2{font:700 10px ui-monospace,monospace;letter-spacing:.14em;color:#0b4fcc;border:1px solid #a9c3f5;border-radius:999px;padding:2px 8px}
+.hist{font:400 12.5px ui-monospace,monospace;color:var(--mut)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="kick">PanSphaira · Designkatalog · Stand 2026-11-09 · main 79df9fd</p>
+  <h1>Drei tragfähige Templates,<br>ein geistiges Eigentum: das Plugin-Prinzip.</h1>
+  <p class="lead">Alle drei Templates zeigen denselben PsAI-Workspace: Shell mit Domänen-Navigation,
+  Module (Plugins) als eigene Gruppe, Genehmigungs-Warteschlange als Herzstück, Quittungen/Readback
+  als rechte Spur und die Sicherheitsgrenze, die man immer sieht. Der Inhalt ist aus dem Bestand
+  (Modulnamen, Vorgangsvokabular); die Templates <b>ergänzen</b> die bestehende v1-UI, sie ersetzen nichts. Jedes Template gibt es in drei Stufen: <b>V1</b> ruhendes Mockup, <b>V2</b> bedienbarer Genehmigungsfluss (Klick, j/k, g↵/gx, Undo), <b>V3</b> die Ausschöpfungsrunde: Der Verschluss-Job läuft sichtbar zu Ende und quittiert sich selbst, Filter-Chips zählen die Warteschlange, der Mengen-Stepper rechnet die Wirkung live um, und ist alles entschieden, spricht die Seite ein ruhiges Resümee. Konzepte: KONZEPT-V2.md, KONZEPT-V3.md.</p>
+
+  <div class="grid">
+    <div class="rule"><h2>1 · Navigation folgt der Zuständigkeit</h2><p>Gruppen <code>Betrieb / Module / Administration</code>. Plugins hängen nie im Global-Menü — sie kontribuieren in die Modulgruppe (entspricht <code>module:check</code>-Regime des Repos).</p></div>
+    <div class="rule"><h2>2 · Genehmigung ist der Primärpfad</h2><p>Genehmigen/Ablehnen immer sichtbar, Wirkung in einem Satz, Roh-Vorschlag nur aufklappbar (Nielsen 8: Dichte ja, Rauschen nein).</p></div>
+    <div class="rule"><h2>3 · Quittung schlägt Erfolgsmeldung</h2><p>Readback mit Vorher/Nachher und Rohlog-Link (Carbon-for-AI-Provenienz). Grün ist Bewiesenes, nicht Gemeldetes.</p></div>
+    <div class="rule"><h2>4 · Ein Template pro View</h2><p>Tokens als <code>--ps-*</code>-Variablen; Mischbetrieb nur über die Shell-Grenze. Bestehende v1-CSS-Views bleiben gültig — Migration nur nach Auftrag.</p></div>
+    <div class="rule"><h2>5 · A11y ist Auslieferkriterium</h2><p>Alle drei Templates bestehen den axe-Lauf (0 Verletzungen), Landmarks+Sprungmarke, 44px-Ziele, Fokus als Ring, <code>role=status</code>-Zeile, reduced-motion-Pfad.</p></div>
+    <div class="rule"><h2>6 · Shortcuts sind Zweitweg, nie der einzige Weg</h2><p><code>⌘K</code>-Palette, <code>g↵</code>/<code>gx</code> genehmigen/ablehnen, <code>?</code> als Kürzelhilfe — alles auch per Maus/Tastatur ohne Kürzelwissen.</p></div>
+  </div>
+
+  <div class="tpl">
+    <h2 class="tplh">T1 · Arbeitsprofil (Hell)</h2>
+    <p class="desc">IBM-Carbon-Haltung: neutrale Layer, eine Handlungsblau-Aktion, 4px-Rundung, 8px-Raster. Wirkt wie ein Werkzeug, ideal für Tageslicht-Sachbearbeitung. Quelle der Entscheidungen: Carbon-Referenz + ui-ux-pro-max-Palette „Governed Ops“.</p>
+    <div class="tplhead"><span class="toggle" role="group" aria-label="Version umschalten Template T1 Arbeitsprofil"><button type="button" data-frame="frame-t1" data-src="t1-arbeitsprofil.html" aria-pressed="true">V1 · Mockup</button><button type="button" data-frame="frame-t1" data-src="t1-arbeitsprofil-v2.html" aria-pressed="false">V2 · Bedienbar</button>
+           <button type="button" data-frame="frame-t1" data-src="t1-arbeitsprofil-v3.html" aria-pressed="false">V3 · Ausgereift</button></span><span class="chip-v2">V3 VERFÜGBAR</span></div><p class="verdict"><b>Bewertung:</b> Carbon-treuest — Side-Panel für Verlauf, Pflicht-Begründung beim Ablehnen, Budget mit Bezugswert. V3 ergänzt Live-Job, Filter, Wirksameldung und echten Hilfedialog (?). Motion karg wie bei Carbon üblich — für hohes Tagespensum.</p><div class="shot"><iframe id="frame-t1" src="t1-arbeitsprofil.html" title="Template T1 Arbeitsprofil"></iframe></div>
+  </div>
+  <div class="tpl">
+    <h2 class="tplh">T2 · Nachtwache (Dunkel)</h2>
+    <p class="desc">Fortschreibung des bestehenden dunklen Workspace-v1-Charakters, aber ruhiger: tiefes Blaugrau statt Schwarz, Bernstein nur fürs Handeln, Mint nur für Bewiesenes, Monospace für Metadaten. Für Leitstand-/Dauersicht.</p>
+    <div class="tplhead"><span class="toggle" role="group" aria-label="Version umschalten Template T2 Nachtwache"><button type="button" data-frame="frame-t2" data-src="t2-nachtwache.html" aria-pressed="true">V1 · Mockup</button><button type="button" data-frame="frame-t2" data-src="t2-nachtwache-v2.html" aria-pressed="false">V2 · Bedienbar</button>
+           <button type="button" data-frame="frame-t2" data-src="t2-nachtwache-v3.html" aria-pressed="false">V3 · Ausgereift</button></span><span class="chip-v2">V3 VERFÜGBAR</span></div><p class="verdict"><b>Bewertung:</b> größter Sprung über alle Runden — V2 brachte Palette und Sammel-Freigabe, V3 den mitarbeitenden Leitstand: Der Siegel-Job steigt live von 62 auf 100 %, die Schrittliste wandert, die Erfolgsmeldung läuft in Chronik und Statuszeile. Für Leitstand-Tempo.</p><div class="shot"><iframe id="frame-t2" src="t2-nachtwache.html" title="Template T2 Nachtwache"></iframe></div>
+  </div>
+  <div class="tpl">
+    <h2 class="tplh">T3 · Redaktionell (Ruhe)</h2>
+    <p class="desc">Impeccable-Haltung: Text zuerst, Serif für Struktur, Terrakotta als einzige Signalfarbe, große Atemabstände. Für Sichten, in denen Abwägen schneller sein soll als Klicken (Revision, Eskalation).</p>
+    <div class="tplhead"><span class="toggle" role="group" aria-label="Version umschalten Template T3 Redaktionell"><button type="button" data-frame="frame-t3" data-src="t3-redaktionell.html" aria-pressed="true">V1 · Mockup</button><button type="button" data-frame="frame-t3" data-src="t3-redaktionell-v2.html" aria-pressed="false">V2 · Bedienbar</button>
+           <button type="button" data-frame="frame-t3" data-src="t3-redaktionell-v3.html" aria-pressed="false">V3 · Ausgereift</button></span><span class="chip-v2">V3 VERFÜGBAR</span></div><p class="verdict"><b>Bewertung:</b> konsequent textzentriert — große Wirkungszeile plus V3-Diff-Tabelle Feld für Feld, Tagesanker in der Chronik, und der Ablehnungs-Entwurf überlebt das Neuladen. Für Abwägen und Revision.</p><div class="shot"><iframe id="frame-t3" src="t3-redaktionell.html" title="Template T3 Redaktionell"></iframe></div>
+  </div>
+
+  <h2 class="tplh">Fünf Designprofile — Zielbilder P1–P5 (Abgleich Stand 24.10.2026)</h2>
+  <p class="desc">Grundlage: Paket <i>Jarvis-Designs-und-Umsetzung</i> (unten abgelegt unter <code>referenzen/historie/</code>).
+  Die fünf Profile teilten sich 10/24 eine funktionale, ehrliche Hülle — die Signatur-Ideen der Entwürfe fehlten in der Präsentation.
+  Die Zielbilder überführen je einen Entwurf in die reale Datenlage (AP-PAN316-MATCHED-01, 600/600/0,00&nbsp;€, 10&nbsp;STK, „nur lesen“, kein Audio/Modell).
+  Details und Begründung: <a href="PROFILE-VGLICH.md">PROFILE-VGLICH.md</a>. Sprachbedienung/Jarnis-Vollausbau bleibt offene Abnahme — nichts hier suggeriert Mikrofon oder Modell.</p>
+  <div class="tpl"><h2 class="tplh">P1 · Jarvis Pulse <span class="chip-v2">ZIELBILD</span></h2>
+    <p class="verdict"><b><a href="p1-jarvis-pulse.html">Zielbild öffnen</a> —</b> Orb als ehrlicher Zustands-Ternal (bereit→denkend→notiert), Wellenform als Zierde ohne Audio-Anmutung, Arbeitsbereiche mit dezentem Glow wie im Entwurf.</p></div>
+  <div class="tpl"><h2 class="tplh">P2 · Notebook Workspace <span class="chip-v2">ZIELBILD</span></h2>
+    <p class="verdict"><b><a href="p2-notebook-workspace.html">Zielbild öffnen</a> —</b> farbcodierte Pill-Reiter mit echten Zustandswechseln, Hero als Flächenmotiv („dekorativ“ beschriftet), Unterreiter zeigen ehrliche Platzhalter statt Leere.</p></div>
+  <div class="tpl"><h2 class="tplh">P3 · Orbit Command <span class="chip-v2">ZIELBILD</span></h2>
+    <p class="verdict"><b><a href="p3-orbit-command.html">Zielbild öffnen</a> —</b> Ka-bis-Zahlung als lesbare Schritt-Kette (erledigt/aktiv/blockiert, Tastatur 1–3) — die Kernidee des Entwurfs, die die Umsetzung als Spaltenliste verschenkte.</p></div>
+  <div class="tpl"><h2 class="tplh">P4 · Prism Modules <span class="chip-v2">ZIELBILD</span></h2>
+    <p class="verdict"><b><a href="p4-prism-modules.html">Zielbild öffnen</a> —</b> Modulbausteine sind wählbar und antworten über das Eigenschaften-Panel; Badge-Ehrlichkeit (nur&nbsp;lesen/geschützt/Entwurf) bleibt, kein Drag-and-drop-Theater.</p></div>
+  <div class="tpl"><h2 class="tplh">P5 · Insight Motion <span class="chip-v2">ZIELBILD</span></h2>
+    <p class="verdict"><b><a href="p5-insight-motion.html">Zielbild öffnen</a> —</b> Bewegung nur an echten Zahlen: Count-up-KPIs, Betrags-/Mengenspiegel als Balken, Domains als Listenprofil statt Fake-Weltkarte.</p></div>
+
+  <h2 class="tplh">Token-Vergleich</h2>
+  <table class="tokens">
+    <tr><th>Token</th><th>T1 Arbeitsprofil</th><th>T2 Nachtwache</th><th>T3 Redaktionell</th></tr>
+    <tr><td>--ps-bg</td><td><span class="sw" style="background:#f4f4f4"></span>#f4f4f4</td><td><span class="sw" style="background:#0c1116"></span>#0c1116</td><td><span class="sw" style="background:#f7f4ee"></span>#f7f4ee</td></tr>
+    <tr><td>--ps-action</td><td><span class="sw" style="background:#0f62fe"></span>#0f62fe</td><td><span class="sw" style="background:#e9a23b"></span>#e9a23b</td><td><span class="sw" style="background:#b4441d"></span>#b4441d</td></tr>
+    <tr><td>--ps-text</td><td><span class="sw" style="background:#161616"></span>#161616</td><td><span class="sw" style="background:#dbe4ec"></span>#dbe4ec</td><td><span class="sw" style="background:#231f1a"></span>#231f1a</td></tr>
+    <tr><td>Beweis-Ton</td><td><span class="sw" style="background:#24a148"></span>#24a148</td><td><span class="sw" style="background:#57d9a3"></span>#57d9a3</td><td><span class="sw" style="background:#3c7d4a"></span>#3c7d4a</td></tr>
+    <tr><td>Schrift Kopf</td><td>IBM Plex Sans</td><td>System-Grotesk</td><td>Iowan/Serif</td></tr>
+    <tr><td>Metadaten</td><td>Plex Mono 12</td><td>Mono 11.5 dominant</td><td>Mono 12 sparsam</td></tr>
+    <tr><td>Raster/Rundung</td><td>8 px / 4 px</td><td>8 px / 8 px</td><td>8 px / pill+10 px</td></tr>
+  </table>
+
+  <h2 class="tplh">Wie es weitergeht (nichts davon ist bereits passiert)</h2>
+  <p class="note">Vorschlag in dieser Reihenfolge: ① Feedback zu Richtung/Token-Werten pro Template,
+  ② ein Pilot-View (z. B. Genehmigungswarteschlange) als echtes <code>-v2</code>-Modul im Plugin-Regime,
+  ③ axe- und Playwright-Gates als Pflicht im Repo-CI ergänzen, ④ danach erst Migration weiterer Views.
+  Bestehende Komponenten wurden an keiner Stelle ungefragt verändert.</p>
+
+  <p class="hist">Historie: V1 (Mockup-Runde, axe 0) → V2 (Interaktions- und Feedback-Runde je Template, axe 0, Playwright-geprüft: Klick, j/k, g-Chord, ⌘K, Undo, Inline-Validierung) → V3 (Ausschöpfungsrunde: Live-Job bis 100 % mit Selbstquittung, Filter-Chips, Mengen-Stepper mit Umrechnung, Leerzustand, Fokusfluss, Statusleben; axe 0). Details: KONZEPT-V2.md, KONZEPT-V3.md.</p>
+  <footer>Gebaut nach enterprise-app-ux · Quellen: IBM Carbon, Carbon for AI-Prinzipien, WAI-ARIA-Entwurfsmuster,
+  Nielsen-Heuristiken, web-design-guidelines (Vercel), ui-ux-pro-max, impeccable. Verifikation: axe-core 0 Befunde,
+  Screenshots unter katalog/shots/ (je Template V1 und V2). Katalog-Version 4: Zielbilder P1–P5 + Historien-Paket unter referenzen/historie/ (13 MB, 26 Dateien).</footer>
+</main>
+<script>
+document.querySelectorAll(".toggle button").forEach(b=>b.addEventListener("click",()=>{
+  const f=document.getElementById(b.dataset.frame);
+  f.src=b.dataset.src;
+  b.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+}));
+</script>
+</body>
+</html>

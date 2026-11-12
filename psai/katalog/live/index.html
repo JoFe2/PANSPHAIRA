@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>PsAI Live-Werkbank</title>
+<style>
+  body{margin:0;background:#070b12;color:#e8eef7;font:400 13.5px/1.6 system-ui,sans-serif}
+  #rahmen{position:fixed;inset:0;border:0;width:100%;height:100%}
+  /* Der Knopf sitzt absichtlich IM geladenen Dokument, nicht im Rahmen: der Rahmen muss beim
+     Neuaufbau leer bleiben können, sonst müsste sein Zustand bei jedem Laden neu erfunden werden. */
+  #umschalter{position:fixed;right:10px;bottom:8px;z-index:9;font:600 10px/1 ui-monospace,monospace;
+    color:#7dd3fc;background:rgba(8,47,73,.8);border:1px solid #164e63;border-radius:99px;
+    padding:4px 10px;letter-spacing:.06em;cursor:pointer}
+  #umschalter.ton{background:#0284c7;color:#fff}
+</style>
+</head>
+<body>
+<iframe id="rahmen" title="Prototyp" src="/psai/katalog/konzept/prototyp/index.html?skin=pulse&bi=offen"></iframe>
+<button id="umschalter" type="button" title="F = Takt stufenweise ändern (5s · 10s · 30s · aus), R = sofort">Werkbank · nächster Neuaufbau in –</button>
+<script>
+(function () {
+  var knopf = document.getElementById("umschalter");
+  var rahmen = document.getElementById("rahmen");
+  var gemerkt = null, aus = localStorage.getItem("werkbank.aus") === "1", notersatz = null;
+
+  function lade() {
+    rahmen.contentWindow.location.reload();
+    knopf.classList.add("ton"); setTimeout(function () { knopf.classList.remove("ton"); }, 700);
+  }
+  function anwenden(st) {
+    if (gemerkt !== null && st !== gemerkt && !aus) lade();
+    gemerkt = st;
+    if (!notersatz) knopf.textContent = aus ? "Reaktiv pausiert — R lädt manuell" : "Stream bereit · nichts zu tun";
+  }
+  var strom = new EventSource("/werkbank/strom");
+  strom.addEventListener("werkbank", function (e) { anwenden(JSON.parse(e.data).stand); });
+  strom.onerror = function () {
+    knopf.textContent = "Stream getrennt · frage vorsorglich nach";
+    if (!notersatz) notersatz = setInterval(function () {
+      fetch("/werkbank/neu", { cache: "no-store" }).then(function (a) { return a.json(); }).then(function (d) { anwenden(d.stand); });
+    }, 2000);
+  };
+  strom.onopen = function () { if (notersatz) { clearInterval(notersatz); notersatz = null; } knopf.textContent = "Stream bereit · nichts zu tun"; };
+  knopf.addEventListener("click", function () {
+    aus = !aus; localStorage.setItem("werkbank.aus", aus ? "1" : "0");
+    knopf.textContent = aus ? "Reaktiv pausiert — R lädt manuell" : "Stream bereit · nichts zu tun";
+  });
+  window.addEventListener("keydown", function (e) { if (e.key === "r") lade(); });
+})();
+</script>
+</body>
+</html>
+
+<!-- ERGÄNZUNG NACH DEM VOLLBILD-UMBAU: Der Takt-Knopf (#umschalter) lebt im geladenen Dokument,
+     nicht im Rahmen — der Rahmen muss beim Neuaufbau leer bleiben können. Wenn die Seite selbst
+     irgendwann ohne Rahmen auskommt (direkt auf /konzept/prototyp/), zieht der Knopf dorthin um. -->

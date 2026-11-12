@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "psai-workspace.schema.json",
+  "title": "PsAI Workspace-Deskriptor (AP-A2/A3)",
+  "type": "object",
+  "required": ["version", "root"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "minimum": 1, "description": "Deskriptor-Version; Migrationsregeln in FREIGABE-MATRIX.md" },
+    "root": { "$ref": "#/$defs/knoten" }
+  },
+  "$defs": {
+    "knoten": {
+      "type": "object",
+      "required": ["id", "typ", "children"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]*$", "description": "eindeutiger Pfad-Knoten, z.B. mandant.tenant-a.bereich.rechnungen" },
+        "typ": { "enum": ["unternehmen", "mandant", "domaene", "bereich", "shell", "modul", "person", "gruppe", "agent"] },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/knoten" } },
+        "vorlagen": { "type": "array", "items": { "$ref": "#/$defs/templateRef" } },
+        "optionen": { "type": "object", "additionalProperties": true, "description": "Overrides; Schlüssel nach Optionen-Register (D2)" },
+        "sperren": { "type": "array", "items": { "type": "string" }, "description": "Token-/Options-Schlüssel, die Kinder nicht überschreiben dürfen (B6)" },
+        "eigentum": { "$ref": "#/$defs/delegation", "description": "Stammeigentümer des Knotens" },
+        "delegationen": { "type": "array", "items": { "$ref": "#/$defs/delegation" } },
+        "warumSo": {
+          "type": "object", "additionalProperties": { "type": "string" },
+          "description": "AP-A3: je Eigenschaftsklasse die Auflösungsregel dieses Knotens, z.B. {\"tokens\": \"semantic überschreibt core nie; Root-Defaults gelten außer gesperrt\"}"
+        }
+      }
+    },
+    "templateRef": {
+      "type": "object",
+      "required": ["katalogId", "schicht"],
+      "additionalProperties": false,
+      "properties": {
+        "katalogId": { "type": "string", "description": "Verweis auf Katalog-Eintrag (H1), z.B. theme.pulse" },
+        "schicht": { "enum": ["layout", "design", "funktion"] },
+        "gewichtung": { "type": "integer", "default": 0, "description": "bei mehreren Refs derselben Schicht: höher führt" }
+      }
+    },
+    "delegation": {
+      "type": "object",
+      "required": ["wer", "rechte"],
+      "additionalProperties": false,
+      "properties": {
+        "wer": {
+          "type": "object", "required": ["typ", "id"], "additionalProperties": false,
+          "properties": {
+            "typ": { "enum": ["person", "gruppe", "rolle", "agent"] },
+            "id": { "type": "string" }
+          }
+        },
+        "rechte": { "type": "array", "items": { "enum": ["lesen", "schreiben", "vorlagenBinden", "sperrenSetzen", "delegieren"] }, "minItems": 1 },
+        "gueltigBis": { "type": ["string", "null"], "format": "date-time", "description": "Agenten-Delegationen brauchen zwingend ein Ende (GLOSSAR Abschnitt 3)" }
+      }
+    }
+  }
+}

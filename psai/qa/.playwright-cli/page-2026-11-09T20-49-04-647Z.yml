@@ -1,0 +1,41 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - paragraph [ref=e4]: PanSphaira · synthetic workspace
+    - heading "SAFE_GUIDED process demo" [level=1] [ref=e5]
+    - paragraph [ref=e6]: Use the bounded native starter. No production data, admin rights or paid model calls.
+  - region [ref=e7]:
+    - heading "Goods receipt and order reservation" [level=2] [ref=e8]
+    - paragraph [ref=e9]: Receive 10 synthetic pieces and reserve 6 for the existing synthetic customer order. The native leading SQLite target must independently show 4 available pieces. Only these two declared owned actions are admitted; no production postings.
+    - button "Run starter" [ref=e10] [cursor=pointer]
+    - button "Refresh status" [ref=e11] [cursor=pointer]
+    - button "Abort starter" [disabled] [ref=e12]
+    - button "Reset own starter" [disabled] [ref=e13]
+    - paragraph [ref=e14]: Reset removes only this completed synthetic starter. Consumed runtime budget is not replenished; unresolved effects cannot be reset.
+    - status [ref=e15]: Ready for an explicit bounded action.
+  - region [ref=e16]:
+    - heading "Optional guided helper" [level=2] [ref=e17]
+    - paragraph [ref=e18]: "A typed suggestion only: no model request, budget reservation, execution or rights grant. Use the separate Run starter button for an explicit bounded action."
+    - button "Suggest next step" [ref=e19] [cursor=pointer]
+    - status [ref=e20]: Not requested.
+    - group [ref=e21]:
+      - generic "Typed proposal and bounded template plan" [ref=e22] [cursor=pointer]
+  - region [ref=e23]:
+    - heading "Observed business result" [level=2] [ref=e24]
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - paragraph [ref=e27]: Expected available stock
+        - status [ref=e28]: Not run
+      - generic [ref=e29]:
+        - paragraph [ref=e30]: Observed available stock
+        - status [ref=e31]: Not run
+    - paragraph [ref=e32]:
+      - text: "Result:"
+      - status [ref=e33]: IDLE
+    - paragraph [ref=e34]:
+      - text: "Technical first completed visible result:"
+      - status [ref=e35]: Not measured
+      - text: ms in this browser view, frozen on first completion.
+    - group [ref=e36]:
+      - generic "Bounded native evidence and exact source/runtime/template identities" [ref=e37] [cursor=pointer]
+      - generic [ref=e38]: Not run. No native business result is accepted from HTTP success alone.
+  - generic [ref=e39]: Technical synthetic demonstration only. No human-study or external-runtime qualification claim.
