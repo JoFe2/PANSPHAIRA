@@ -2,6 +2,14 @@
 import { createRequire } from 'node:module';
 const require2 = createRequire('/Users/jo/.local/lib/');
 const { chromium } = require2('playwright-core');
+import { writeFileSync, readFileSync } from 'node:fs';
+const TOUR = '/Users/jo/frontend-kit/psai/katalog/live/tour.json';
+const tourVorher = readFileSync(TOUR, 'utf8');
+writeFileSync(TOUR, JSON.stringify({ schleife: true, schritte: [   // eigener Auftrag: keine Altlasten anderer Suiten
+  { ziel: 'Zone aus', spruch: 'Diese Zone blende ich aus' },
+  { ziel: 'Liste', spruch: 'Layout Liste: alles untereinander' },
+  { ziel: 'Vergleich', spruch: 'Layout Split: zwei Zeitlinsen' },
+  { ziel: 'Eigene Änderungen verwerfen', spruch: 'Und zurück — so geht es im Kreis' }] }));
 const b = await chromium.launch({ executablePath: '/Users/jo/.hermes/tools/chromium-1208/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing' });
 const pg = await (await b.newContext({ viewport: { width: 1500, height: 900 } })).newPage();
 await pg.goto('http://127.0.0.1:8099/psai/katalog/live/index.html?zeige=auto&frisch=1');
@@ -14,3 +22,4 @@ await pg.waitForTimeout(5000);
 const aktiv = await rahmen.locator('#zeigeBlase').filter({ hasText: /blende ich aus|Layout Liste|Layout Split|wieder da/ }).first().isVisible();
 console.log('Runde 2 läuft von selbst:', aktiv ? 'ja' : 'NEIN');
 await b.close();
+writeFileSync(TOUR, tourVorher);

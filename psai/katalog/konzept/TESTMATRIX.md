@@ -178,3 +178,37 @@ bleiben bei der Einzelprüfung; `window.biUmbauen` erlaubt Nachbardateien das Ab
 - Matte: m123 21/21 · M5 17/17 · M6 18/18 · M7-Audit 13/13 · Epic 19/19 · BI/Strom/Spur/Zeiger-Trio grün.
 - Nachzug PC-Fremdreview (Branch psai-ui-review, 5 Abschnitte, gpt-6.1-sol/xhigh): Werksbank und Broker binden jetzt 127.0.0.1; CSRF vergleicht den EINGEREICHTEN Wert gegen den gespeicherten Digest und prüft Ablauf; Ticker-Texte aus /api/event werden vor innerHTML escaped. Befunde B05/B06/B07/B08 (Idempotenz, mutierende GETs, Limits, Spuren-Autorität) sind als P0/P1-Maßnahmen im Review dokumentiert und noch offen.
 - Runde-2-Mikrowelle (Review 1dea6ed): Gruppenheader geescaped, Session-Ablauf fail-closed, spur?seit geklemmt, Drawer-Schließen verdrahtet, Zeiger-Trendziel #trendBild, Pause-/Sortier-Quittung fachlichrichtig (echter Vorher-Zustand), Viewport auf Live-Hülle, katalog-Schema duldet datenquellen. Matte 11/11 grün.
+
+
+## Nachtrag 2026-11-12 — Regie-Werkzeug (Agenten-Fernbedienung)
+
+- Neuer Endpunkt `POST /werkbank/regie` im Werksbank-Server: `play` (Schrittliste, Schleife oder
+einmalig), `gluehe` (Einzelnes Element anleuchten + Spruch), `stopp`, `status`. Ziele werden gegen
+das Live-Inventar validiert; unbekannte Ziele ⇒ 422 samt Liste der 24 erreichbaren Namen — der
+Agent korrigiert sich aus der Antwort selbst. Ereigniskanal `/werkbank/regie/ereignisse` (SSE),
+der Zeiger pollt zusätzlich alle 2 s als Fallback. CLI: `live/regie.py` (Stdlib, ein Aufruf).
+- Die Tour-Datei ist der Auftrag: `tour.json {schleife:true}` startet die Führung beim Seitenaufbau
+ohne Klick und ohne URL-Parameter. Mensch schlägt Agent: echter Klick bricht zuerst und dauerhaft,
+Hand-Start überlebt Neuladen, Datei-`stopp` des Agenten kippt nur agenten-gestartete Läufe.
+- `gluehe` bei vollem Zeiger wird nicht verworfen: Einzel-Slot, Vorzeigen an der nächsten
+Schritt-Grenze (nie mitten im Zeichenschritt) — deshalb war der Test zuerst ein Zufallstreffer.
+- matte: `regie-test.mjs` 6/6 (Start ohne Klick, Zweitschritt, 422-Pfad, Anleuchten, Stoppen),
+dreifach hintereinander. Alle Zeiger-Suiten schreiben jetzt ihren eigenen tour.json-Zustand
+(Isolation) und stellen den Vorher-Zustand wieder her. Matte: 12 Suites + Regie dreifach grün.
+
+
+## Nachtrag 2026-11-12 — Kettenfahrt (`regie.py kette`)
+
+- Neuer Regie-Auftrag `kette {anzahl, abstand, vor?, auch?}`: der **Client** plant die Route aus
+echter Geometrie (Knopf-Mittelpunkte in Seitenkoordinaten), der Agent äußert nur den Wunsch.
+Start oben links, dann Nachbar-Nächster mit Mindestabstand; bei Feststecken wählt der Weitblick
+eine Zwischenstation, die Nachfolger hat, statt das Ziel aufzugeben.
+- Glow-Semantik überall geändert: das aktuelle Ziel leuchtet, und sein Glanz **erlischt beim
+Aufbruch zum nächsten** (Datei-Tour wie Kette) — nie mehr als ein beleuchtetes Ziel gleichzeitig.
+- Vorbereitungsziele (`vor`) sind Bitten, keine Befehle: fehlt das Ziel (Fläche schon offen),
+fällt der Schritt still weg — 422 nur noch bei echten Tippfehlern in Pflichtzielen.
+- Die Kette zählt Flächen mit (`selektor`-Liste erweiterbar per `auch`), sammelt Ziele unterhalb
+der Falz ein (der Zeiger holt sie selbst ins Bild) und meldet ehrlich „N von M angesteuert".
+Der Client schreibt seinen Fahrbericht nach `window.zeigeKette` (geplant/angesteuert/wege).
+- Test `kette-test.mjs`: 7/7 — Annahme, Start, Ein-Glanz-Regel (Stichproben über die Fahrt),
+Abschlussmeldung, 25 verschiedene Ziele, ≥100px-Abstandskette, kein Doppelziel.

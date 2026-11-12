@@ -10,6 +10,8 @@ Beispiele:
   regie.py play "Zone aus|Diese Zone blende ich aus" "Liste|Layout Liste"   # im Kreis (Standard)
   regie.py play "Warum so?|Hier die Begründung" --einmal
   regie.py gluehe "Pause|Kurzer Blick auf die Bremsleiste"
+  regie.py kette --anzahl 25 --abstand 100   # Kettenfahrt: Client plant aus echter Geometrie
+  regie.py kette --zufall --seed 42          # Zufallsfahrt, mit Saat_same wiederholbar
   regie.py stopp
   regie.py inventar
 """
@@ -38,7 +40,11 @@ def schritt(text):
 
 def main():
     e = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    e.add_argument("aktion", choices=["play", "gluehe", "stopp", "status", "inventar"])
+    e.add_argument("aktion", choices=["play", "gluehe", "stopp", "status", "inventar", "kette"])
+    e.add_argument("--anzahl", type=int, default=25, help="kette: wie viele verschiedene Ziele (2-40)")
+    e.add_argument("--abstand", type=int, default=100, help="kette: Mindestabstand zweier Ziele in px")
+    e.add_argument("--zufall", action="store_true", help="kette: Route würfeln statt Nachbarschaft (Abstand bleibt Gesetz)")
+    e.add_argument("--seed", type=int, default=0, help="kette: Saat_same für wiederholbare Zufahrts-Routen")
     e.add_argument("schritte", nargs="*", help='"Zielname|Sprechblase" — bei play beliebig viele, bei gluehe genau eine')
     e.add_argument("--einmal", action="store_true", help="Tour einmal durchlaufen, nicht im Kreis")
     a = e.parse_args()
@@ -50,7 +56,12 @@ def main():
     if a.aktion == "status":
         print(json.dumps(sende("/werkbank/regie")[1], ensure_ascii=False, indent=1))
         return 0
-    if a.aktion == "stopp":
+    if a.aktion == "kette":
+        code, sach = sende("/werkbank/regie", {"aktion": "kette", "anzahl": a.anzahl, "abstand": a.abstand,
+                                               "zufall": a.zufall, "saatkorn": a.seed,
+                                               "vor": [{"ziel": "BI-Analyse öffnen"},
+                                                       {"ziel": "Chronik-Drawer", "nicht_da": "#dwZu"}]})
+    elif a.aktion == "stopp":
         code, sach = sende("/werkbank/regie", {"aktion": "stopp"})
     elif a.aktion == "gluehe":
         code, sach = sende("/werkbank/regie", {"aktion": "gluehe", **schritt(a.schritte[0])})

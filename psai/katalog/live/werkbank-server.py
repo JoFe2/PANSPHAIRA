@@ -137,6 +137,22 @@ class Handler(SimpleHTTPRequestHandler):
                                        "ziel": auftrag.get("ziel"), "spruch": auftrag.get("spruch", "")}))
                 del REGIE[:-16]
                 return antwort(202, {"ok": True})
+            if auftrag.get("aktion") == "kette":
+                # Der Client plant selbst: er kennt die echte Geometrie, der Agent nur den Wunsch.
+                vor = [v for v in (auftrag.get("vor") or [])[:4] if isinstance(v, dict)]
+                # Vorbereitung ist eine Bitte, kein Befehl: fehlt das Ziel (weil die Fläche schon offen),
+                # geht die Kette einfach ohne sie los — der Client prüft das live.
+                vor = [v for v in vor if not v.get("ziel") or bekannt(v.get("ziel")) is not False]
+                REGIE_ID[0] += 1
+                REGIE.append(("regie", {"art": "kette", "id": REGIE_ID[0],
+                                       "anzahl": max(2, min(40, int(auftrag.get("anzahl", 25)))),
+                                       "abstand": max(20, min(400, int(auftrag.get("abstand", 100)))),
+                                       "vor": vor,
+                                       "auch": [str(s)[:60] for s in (auftrag.get("auch") or [])[:8]],
+                                       "zufall": bool(auftrag.get("zufall")),
+                                       "saatkorn": int(auftrag.get("saatkorn", 0)) or None}))
+                del REGIE[:-16]
+                return antwort(202, {"ok": True})
             if auftrag.get("aktion") == "stopp":
                 with open(os.path.join(WURZEL, TOUR_DATEI), "w") as datei:
                     json.dump({"schleife": False, "schritte": []}, datei, ensure_ascii=False)

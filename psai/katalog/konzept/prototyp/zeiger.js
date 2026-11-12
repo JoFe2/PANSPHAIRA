@@ -144,11 +144,11 @@
   }
   function regieAusfuehren() {
     var d = REGIE_SLOT; REGIE_SLOT = null;
-    var el = elementZu(d.ziel); if (!el) return;
+    var el = elementZu(d.ziel); if (!el) return Promise.resolve();
     blickLaeuft = true;
-    glow(el).then(function () { return hin(el, d.spruch || ("Beachten: „" + d.ziel + "“")); })
+    return glow(el).then(function () { return hin(el, d.spruch || ("Beachten: „" + d.ziel + "“")); })
       .then(function () { return warte(reduziert() ? 60 : 1100); })
-      .then(function () { rueckzug(); blickLaeuft = false; if (REGIE_SLOT) regieAusfuehren(); })
+      .then(function () { rueckzug(); blickLaeuft = false; if (REGIE_SLOT) return regieAusfuehren(); })
       .catch(function () { blickLaeuft = false; });
   }
 
@@ -177,13 +177,100 @@
     });
     werkbankStrom.addEventListener("regie", function (ev) {  // Einmalgriff: anleuchten, nicht meutern
       var d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+      if (d.art === "kette") { kette(d); return; }
       if (d.art !== "gluehe") return;
       if (REGIE_SLOT) return;                       // nur ein Nachzügler — alter Auftrag weicht neuem nicht
       REGIE_SLOT = d;
-      if (blickLaeuft) return;                      // wird nachgereicht, wenn der aktuelle Griff endet
+      if (running || blickLaeuft) return;           // Tour tritt nur an der Schritt-Grenze ab — nie mitten im Strich
       regieAusfuehren();
     });
   } catch (e) { }
+
+
+  // ---- Kettenfahrt: nacheinander viele verschiedene Ziele, Glow bis Aufbruch, Mindestabstand ----
+  async function kette(d) {
+    var anzahl = Math.max(2, Math.min(40, d.anzahl || 25)), abstand = Math.max(20, Math.min(400, d.abstand || 100));
+    folge++; running = false;                       // laufende Runden (auch die Datei-Tour) treten ab
+    await warte(60);
+    (d.vor || []).forEach(function (v) {            // Vorbereitung: Flächen öffnen, wo sie noch zu sind
+      if (v.nicht_da && document.querySelector(v.nicht_da)) return;
+      var el = v.ziel ? elementZu(v.ziel) : null;
+      if (el) { try { el.click(); } catch (e) {} }
+    });
+    await warte(reduziert() ? 80 : 700);            // die Fläche soll Zeichenzeit haben
+    window.scrollTo(0, 0);                          // gemeinsamer Bezugsrahmen: die Kette fährt vom Seitenanfang
+    var sel = ["button", "a", "[role=button]", ".zone", "#trendBild"].concat(d.auch || []);
+    var kandidaten = [], gesehen = [];
+    Array.prototype.slice.call(document.querySelectorAll(sel.join(","))).forEach(function (el) {
+      if (!el.offsetParent || el.id === "zeigeStart") return;
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;            // Ziele unterhalb der Falz hollt der Zeiger selbst ins Bild
+      if (gesehen.indexOf(el) >= 0) return; gesehen.push(el);
+      kandidaten.push({ el: el, x: Math.round(r.left + Math.min(r.width, 500) / 2 + scrollX),
+                        y: Math.round(r.top + Math.min(r.height, 120) / 2 + scrollY),
+                        name: (el.textContent || el.id || el.className || "Fläche").trim().replace(/\s+/g, " ").slice(0, 28) });
+    });
+    kandidaten.sort(function (a, b) { return (a.y - b.y) || (a.x - b.x); });
+    if (!kandidaten.length) return;
+    var saatkorn = (typeof d.saatkorn === "number") ? (d.saatkorn >>> 0) : ((Date.now() % 1000000000) >>> 0);
+    function zufall() {                             // mulberry32 — derselbe Saat_same, dieselbe Tour
+      saatkorn = (saatkorn + 0x6D2B79F5) >>> 0;
+      var t = saatkorn; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function weitGenug(p, von) { return Math.hypot(p.x - von.x, p.y - von.y) >= abstand; }
+    function nachfolgerVon(p, pool) {
+      for (var q = 0; q < pool.length; q++) if (pool[q] !== p && weitGenug(p, pool[q])) return true;
+      return false;
+    }
+    var weg = [];
+    if (d.zufall) {                                 // Zufallsfahrt: erst frei würfeln, dann Abstand wahren
+      weg.push(kandidaten.splice(Math.floor(zufall() * kandidaten.length), 1)[0]);
+      while (weg.length < anzahl && kandidaten.length) {
+        var letzterZ = weg[weg.length - 1], feld = [], lebendig = [];
+        for (var iz = 0; iz < kandidaten.length; iz++) if (weitGenug(kandidaten[iz], letzterZ)) feld.push(iz);
+        if (!feld.length) break;                    // zu eng geworden — Fahrt endet ehrlich
+        for (var jz = 0; jz < feld.length; jz++)    // Sackgassen würfeln wir nicht raus, solange es lebige Ziele gibt
+          if (nachfolgerVon(kandidaten[feld[jz]], kandidaten)) lebendig.push(feld[jz]);
+        if (lebendig.length) feld = lebendig;
+        weg.push(kandidaten.splice(feld[Math.floor(zufall() * feld.length)], 1)[0]);
+      }
+    } else {
+    weg.push(kandidaten.shift());                   // Start oben links — nicht aus der Mitten-Waberei
+    while (weg.length < anzahl && kandidaten.length) {
+      var letzter = weg[weg.length - 1], best = null, bestD = Infinity;
+      for (var i = 0; i < kandidaten.length; i++) {
+        var dist = Math.hypot(kandidaten[i].x - letzter.x, kandidaten[i].y - letzter.y);
+        if (dist >= abstand && dist < bestD) { best = i; bestD = dist; }
+      }
+      if (best === null) {                          // festgefahren: Zwischenstation mit Weitblick — kein Ziel_opfer
+        best = -1; bestD = Infinity;
+        for (var j2 = 0; j2 < kandidaten.length; j2++) {
+          var d2 = Math.hypot(kandidaten[j2].x - letzter.x, kandidaten[j2].y - letzter.y);
+          if (d2 < bestD && nachfolgerVon(kandidaten[j2], kandidaten)) { best = j2; bestD = d2; }
+        }
+        if (best === -1) break;                     // nichts liegt mehr in Reichweite — Fahrt endet ehrlich
+      }
+      weg.push(kandidaten.splice(best, 1)[0]);
+    }
+    }
+    window.zeigeKette = { geplant: weg.length, gewuenscht: anzahl, angesteuert: 0, saatkorn: d.saatkorn || 0, modus: d.zufall ? "zufall" : "kette", wege: [] };
+    running = true; var takt = folge;
+    for (var j = 0; j < weg.length; j++) {
+      var k = weg[j];
+      document.querySelectorAll(".zeigerGlow").forEach(function (x) { if (x !== k.el) x.classList.remove("zeigerGlow"); });  // Aufbruch: alter Glanz aus
+      k.el.classList.add("zeigerGlow");             // neuer Glanz AN, bevor der Zeiger losfährt
+      await hin(k.el, (j + 1) + "/" + weg.length + " — " + k.name);
+      window.zeigeKette.angesteuert = j + 1;
+      window.zeigeKette.wege.push({ x: k.x, y: k.y, name: k.name });
+      await warte(reduziert() ? 30 : 180);
+      if (takt !== folge) return;                   // echter Handgriff: Übernahme, Fahrt aus
+    }
+    blaseZeigt("Kette: " + weg.length + " von " + anzahl + " angesteuert");
+    window.zeigeKette.fertig = true;
+    await warte(reduziert() ? 60 : 1600);
+    rueckzug(); running = false;
+  }
 
   async function durchgang(meinTakt) {
     await tourLaden();                          // der Agent darf den Weg zwischen den Runden umlegen —
@@ -194,12 +281,14 @@
       var schritt = tour.schritte[i];
       var el = elementZu(schritt.ziel);
       if (!el) continue;
+      document.querySelectorAll(".zeigerGlow").forEach(function (x) { if (x !== el) x.classList.remove("zeigerGlow"); });  // Aufbruch: vorheriges Ziel erlischt
       await glow(el);
       await hin(el, schritt.spruch || ("Klicke: „" + schritt.ziel + "“"));
       if (meinTakt !== folge) return;
       eignerKlick = el;                // vor dem Klick gemerkt: der Hörer sieht ihn als unseren
       try { el.click(); } finally { eignerKlick = null; }
       await warte(reduziert() ? 60 : (schritt.warte || 700));
+      if (REGIE_SLOT) { await regieAusfuehren(); if (meinTakt !== folge) return; }   // abgesetzter Regie-Griff tritt an der Grenze an
     }
     if (meinTakt !== folge) return;
     if (!schleife) { blaseZeigt("Fertig — du bist dran."); return; }   // einmalig: bleibt stehen
