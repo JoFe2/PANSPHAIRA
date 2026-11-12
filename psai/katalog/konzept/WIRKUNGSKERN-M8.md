@@ -65,3 +65,28 @@ Identität beider ist die Bedingung für Grün; Abweichung ⇒ gelb mit Differen
 Broker: `/guided/command` wird Adapter auf `/api/kommando`; `/mock/*` bleiben Entwicklungsschalter
 mit eigenem, unkritischen Pfad. Matte: m123/epic auf Kommando-Kanal umstellen, Negativfälle 1–8
 als neue Suite `m8-tests.mjs`; alte konstante Erfolgsassertionen ersetzen.
+
+## AT-Abgleich (Runde-3-Abnahmetests des Fremdreviews, Commit ebf5d29)
+Die drei vorgeschlagenen Abnahmetests sind vertragstauglich; `m8-tests.mjs` setzt sie mit
+unseren Mitteln (Playwright + Broker-Fehlerpunkte) um. Verschärfungen gegenüber diesem Dokument:
+- **Fehlerpunkt-Matrix (AT1):** jeder Testlauf wiederholt den Kommandopfad über alle
+  Commit-Grenzen: vor/nach Aufnahme-Journal, nach Aufnahme vor Wirkung, vor/nach
+  Fachhost-Commit, vor/nach Quittungs-Journal, Antwortverlust, Neustart nach Erfolg.
+  Überall gilt: Wirkung ≤ 1 je Operation, identische Quittung bei Wiederholung.
+- **Neustart/Wiederanlauf (AT1):** Idempotenzregister und Quittungen überleben
+  Prozess-Neustart ohne Löschinitialisierung; Wiederanlauf erfolgt über Journal/Reconciler —
+  GET-Handler sind niemals Ausführer. Bleibt die Wirkung zuordenbar unklar: `OUTCOME_UNKNOWN`,
+  weitere Wirkung derselben Operation gesperrt, Klärung erzwungen (kein stilles Nochmal).
+- **Negativmatrix je angenommenem Kommando (AT1):** geänderter Payload, Aktion, Ziel,
+  OperationId oder erwartete Revision bei frischem Schlüssel ⇒ ABGELEHNT/KONFLIKT VOR Wirkung,
+  führender Speicher byte-identisch.
+- **Rechte-Matrix (AT2):** No-Session, falscher CSRF, abgelaufene Session, fremder Mandant,
+  fremdes Objekt, Rolle ohne Aktionsrecht, fremde Operation, widerrufene Delegation —
+  Status/Readback/Abort/Reset verweigern rechtgemäß, verändern nichts, und fremde Quittungen
+  werden nicht offenbart. Lese-Audit darf protokollieren, aber nie Fach-/Laufmutation.
+- **Unabhängige Bestätigung (AT2/AT3):** kein Grün ohne gegen den führenden Fachhost
+  bestätigte Revision; Adapter-eigene Meldungen genügen nicht.
+- **Undo-Races (AT3):** Gegenwirkung trägt `originalOperationId`, Kategorie und erwartete
+  Revision; Fristablauf, neue Zielrevision, Teilwirkung, Antwortverlust und Absturz nach
+  Gegen-Commit sind eigene Fälle; reine Lesen/Vorschläge haben per Manifest keine Gegenwirkung
+  (kein Undo-Knopf).

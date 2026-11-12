@@ -119,7 +119,33 @@
     },
     "datenquellen": {
       "type": "array",
-      "description": "Optional: Datenquell-Verweise wie im Modul-Manifest"
+      "minItems": 1,
+      "description": "Katalogseitige Datenquellen-Beschreibung; verbindlich ist das Modul-Manifest",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "art"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "art": {
+            "type": "string"
+          },
+          "pfad": {
+            "type": "string"
+          },
+          "redlich": {
+            "type": "string"
+          },
+          "fallback": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
     }
   }
 }
