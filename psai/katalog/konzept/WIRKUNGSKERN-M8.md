@@ -67,26 +67,21 @@ mit eigenem, unkritischen Pfad. Matte: m123/epic auf Kommando-Kanal umstellen, N
 als neue Suite `m8-tests.mjs`; alte konstante Erfolgsassertionen ersetzen.
 
 ## AT-Abgleich (Runde-3-Abnahmetests des Fremdreviews, Commit ebf5d29)
-Die drei vorgeschlagenen Abnahmetests sind vertragstauglich; `m8-tests.mjs` setzt sie mit
-unseren Mitteln (Playwright + Broker-Fehlerpunkte) um. Verschärfungen gegenüber diesem Dokument:
-- **Fehlerpunkt-Matrix (AT1):** jeder Testlauf wiederholt den Kommandopfad über alle
-  Commit-Grenzen: vor/nach Aufnahme-Journal, nach Aufnahme vor Wirkung, vor/nach
-  Fachhost-Commit, vor/nach Quittungs-Journal, Antwortverlust, Neustart nach Erfolg.
-  Überall gilt: Wirkung ≤ 1 je Operation, identische Quittung bei Wiederholung.
-- **Neustart/Wiederanlauf (AT1):** Idempotenzregister und Quittungen überleben
-  Prozess-Neustart ohne Löschinitialisierung; Wiederanlauf erfolgt über Journal/Reconciler —
-  GET-Handler sind niemals Ausführer. Bleibt die Wirkung zuordenbar unklar: `OUTCOME_UNKNOWN`,
-  weitere Wirkung derselben Operation gesperrt, Klärung erzwungen (kein stilles Nochmal).
-- **Negativmatrix je angenommenem Kommando (AT1):** geänderter Payload, Aktion, Ziel,
-  OperationId oder erwartete Revision bei frischem Schlüssel ⇒ ABGELEHNT/KONFLIKT VOR Wirkung,
-  führender Speicher byte-identisch.
-- **Rechte-Matrix (AT2):** No-Session, falscher CSRF, abgelaufene Session, fremder Mandant,
-  fremdes Objekt, Rolle ohne Aktionsrecht, fremde Operation, widerrufene Delegation —
-  Status/Readback/Abort/Reset verweigern rechtgemäß, verändern nichts, und fremde Quittungen
-  werden nicht offenbart. Lese-Audit darf protokollieren, aber nie Fach-/Laufmutation.
-- **Unabhängige Bestätigung (AT2/AT3):** kein Grün ohne gegen den führenden Fachhost
-  bestätigte Revision; Adapter-eigene Meldungen genügen nicht.
-- **Undo-Races (AT3):** Gegenwirkung trägt `originalOperationId`, Kategorie und erwartete
-  Revision; Fristablauf, neue Zielrevision, Teilwirkung, Antwortverlust und Absturz nach
-  Gegen-Commit sind eigene Fälle; reine Lesen/Vorschläge haben per Manifest keine Gegenwirkung
-  (kein Undo-Knopf).
+Die ATs sind als Zielbild protokolliert; ihre volle Breite (Crash-/Restartmatrix,
+Commit-Barriers, zwei Prozesse, Reconciler, "unabhängiger Fachhost") ist Production-Abnahme
+und hier bewusst DEMO-STUFE: NACHSTELLUNG. Grund: der Mock-Broker spielt selbst den Fachhost —
+"Grün nur gegen unabhängigen Host" setzt zwei Systeme voraus, die es noch nicht gibt.
+
+Demostufe von `m8-tests.mjs` (muss fallen können, negative zuerst):
+1. Retry mit gleicher Operation+Payload ⇒ `WIEDERHOLT`, identische Quittung, Wirkung ≤ 1.
+2. Gleiche Operation, anderer Payload ⇒ `ABGELEHNT`, Speicher unverändert.
+3. Zwei Aufträge, eine erwartete Revision ⇒ einer `WIRKSAM`, einer `KONFLIKT`.
+4. Fremder Abbruch ⇒ `ABGELEHNT`; Abbruch der aktiven Operation vor Wirkung ⇒ `ABGEBROCHEN`.
+5. 100× Status-GET ⇒ Zähler unverändert.
+6. Antwort simuliert verloren ⇒ Zustand `unbestätigt` (gelb), erst Readback klärt; kein stilles Nochmal.
+7. Rückbau stellt Vorher-Zustand her; Gegenbuchung referenziert Original; ohne Manifest-Kategorie
+   kein Undo-Knopf.
+
+Production-Stufe (bewusst zurückgestellt, wenn es einen echten Fachhost gibt):
+Fehlerpunkt-Matrix an Commit-Grenzen, Neustart/Wiederanlauf aus Journal, Rechte-Matrix gegen
+echte Sessions/Mandanten, Unabhängigkeitsnachweis, Undo-Races in der Breite.
