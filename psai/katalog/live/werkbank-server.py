@@ -110,4 +110,4 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    ThreadingHTTPServer(("0.0.0.0", 8099), Handler).serve_forever()
+    ThreadingHTTPServer(("127.0.0.1", 8099), Handler).serve_forever()

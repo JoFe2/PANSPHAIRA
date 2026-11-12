@@ -145,7 +145,7 @@
     let html = "", seen = new Set();
     for (const e of alle) {
       if (!seen.has(e.gruppe)) { seen.add(e.gruppe); html += '<li class="tick-gruppe"><span>' + e.gruppe + "</span><span>· " + zaehler.get(e.gruppe) + "</span></li>"; }
-      html += "<li><time>" + hhmm(e.zeit) + "</time><b>" + e.gruppe + "</b> " + e.text + "</li>";
+      html += "<li><time>" + hhmm(e.zeit) + "</time><b>" + esc(e.gruppe) + "</b> " + esc(e.text) + "</li>"; 
     }
     list.innerHTML = html;
   }

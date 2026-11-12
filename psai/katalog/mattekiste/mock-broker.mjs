@@ -92,8 +92,8 @@ async function handle(req, res) {
       if (!row) throw new Error('HOSTED_SESSION_DENIED');
       const csrf = req.headers['x-pan527-csrf'];
       if (typeof csrf !== 'string' || !/^[a-f0-9]{64}$/.test(csrf)) throw new Error('HOSTED_CSRF_DENIED');
-      const expect = createHmac('sha256', await keyBytes()).update('workspace-csrf-v1:' + token).digest('hex');
-      if (!timingSafeEqual(Buffer.from(hash(expect), 'hex'), Buffer.from(row.csrfDigest, 'hex'))) throw new Error('HOSTED_CSRF_DENIED');
+      if (Date.now() > (row.expiresAtMs || 0)) throw new Error('HOSTED_SESSION_EXPIRED');
+      if (!timingSafeEqual(Buffer.from(hash(csrf), 'hex'), Buffer.from(row.csrfDigest, 'hex'))) throw new Error('HOSTED_CSRF_DENIED');
     }
     if (p === '/strom') {
       res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-store', 'connection': 'keep-alive', ...cors });
@@ -226,5 +226,5 @@ async function handle(req, res) {
     res.end(body);
   } catch (e) { json(403, { error: String(e.message || e) }); }
 }
-http.createServer((req, res) => handle(req, res).catch(() => { res.writeHead(404); res.end('not found'); })).listen(PORT);
+http.createServer((req, res) => handle(req, res).catch(() => { res.writeHead(404); res.end('not found'); })).listen(PORT, '127.0.0.1');
 console.log('fachschichten-adapter :' + PORT + ' ledger=' + LEDGER);
