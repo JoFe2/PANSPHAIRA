@@ -45,6 +45,10 @@ def tour_stand():
         return "fehlt"
 
 
+REGIE = []            # Einmal-Ereignisse (z.B. gluehe) mit Zähler — jeder Strom-Hörer sieht jedes
+REGIE_ID = [0]
+
+
 class Handler(SimpleHTTPRequestHandler):
     ELEMENTE = []   # letzte Meldung des Rahmens — damit der Agent die Bedienlandschaft abfragen kann
     def __init__(self, *args, **kwargs):
@@ -57,7 +61,7 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_header("Cache-Control", "no-store")
             self.send_header("Connection", "keep-alive")
             self.end_headers()
-            letzter, letzter_tour, tick = None, None, 0
+            letzter, letzter_tour, tick, regie_kursor = None, None, 0, len(REGIE)
             try:
                 while True:
                     s = stand()
@@ -69,6 +73,10 @@ class Handler(SimpleHTTPRequestHandler):
                         if t != letzter_tour:
                             letzter_tour = t
                             self.wfile.write(b"event: tour\ndata: {}\n\n")
+                        while regie_kursor < len(REGIE):
+                            art, daten = REGIE[regie_kursor]
+                            regie_kursor += 1
+                            self.wfile.write(b"event: regie\ndata: " + json.dumps(daten, ensure_ascii=False).encode() + b"\n\n")
                     if letzter and letzter_tour and tick % 20 == 0:
                         self.wfile.write(b":ping\n\n")
                     tick += 1
@@ -80,6 +88,15 @@ class Handler(SimpleHTTPRequestHandler):
             koerper = json.dumps({"stand": stand()}).encode()
         elif self.path.startswith("/werkbank/elemente"):
             koerper = json.dumps(self.ELEMENTE, ensure_ascii=False).encode()
+        elif self.path.startswith("/werkbank/regie"):
+            try:
+                with open(os.path.join(WURZEL, TOUR_DATEI)) as datei:
+                    weg = json.load(datei)
+            except (OSError, ValueError):
+                weg = {}
+            koerper = json.dumps({"schleife": bool(weg.get("schleife")),
+                                  "schritte": len(weg.get("schritte", [])),
+                                  "inventar": len(self.ELEMENTE)}, ensure_ascii=False).encode()
         else:
             super().do_GET()
             return
@@ -91,6 +108,54 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(koerper)
 
     def do_POST(self):
+        if self.path.startswith("/werkbank/regie"):
+            # Der Werkzeugkasten für Agenten-Vorführungen: Tour setzen, etwas anleuchten, stoppen.
+            laenge = int(self.headers.get("Content-Length", 0))
+            if laenge > 64 * 1024:
+                self.send_response(413); self.end_headers(); return
+            try:
+                auftrag = json.loads(self.rfile.read(laenge).decode())
+            except (ValueError, UnicodeDecodeError):
+                self.send_response(400); self.end_headers(); return
+            def antwort(code, sach):
+                koerper = json.dumps(sach, ensure_ascii=False).encode()
+                self.send_response(code)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(koerper)))
+                self.end_headers()
+                self.wfile.write(koerper)
+            def bekannt(ziel):   # gleiche Lesart wie der Zeiger: genügt als Namensstück
+                z = str(ziel).lower()
+                return any(z in name.lower() for name in Handler.ELEMENTE) if Handler.ELEMENTE else None
+            if auftrag.get("aktion") == "gluehe":
+                pruef = bekannt(auftrag.get("ziel", ""))
+                if pruef is False:
+                    return antwort(422, {"grund": "ziel unbekannt", "inventar": Handler.ELEMENTE})
+                REGIE_ID[0] += 1
+                REGIE.append(("regie", {"art": "gluehe", "id": REGIE_ID[0],
+                                       "ziel": auftrag.get("ziel"), "spruch": auftrag.get("spruch", "")}))
+                del REGIE[:-16]
+                return antwort(202, {"ok": True})
+            if auftrag.get("aktion") == "stopp":
+                with open(os.path.join(WURZEL, TOUR_DATEI), "w") as datei:
+                    json.dump({"schleife": False, "schritte": []}, datei, ensure_ascii=False)
+                return antwort(202, {"ok": True})
+            schritte = auftrag.get("schritte")
+            if isinstance(schritte, list) and schritte:
+                for schritt in schritte[:20]:
+                    pruef = bekannt(schritt.get("ziel", ""))
+                    if pruef is False:
+                        return antwort(422, {"grund": "ziel unbekannt", "inventar": Handler.ELEMENTE,
+                                             "gemeint": schritt.get("ziel")})
+                with open(os.path.join(WURZEL, TOUR_DATEI), "w") as datei:
+                    json.dump({"schleife": bool(auftrag.get("schleife", True)),
+                               "schritte": [{"ziel": str(s.get("ziel"))[:60],
+                                             "spruch": str(s.get("spruch", ""))[:140],
+                                             **({"warte": max(0, min(20000, int(s["warte"])))} if "warte" in s else {})}
+                                            for s in schritte[:20]]}, datei, ensure_ascii=False)
+                return antwort(202, {"ok": True, "uebernommen": len(schritte[:20])})
+            return antwort(400, {"grund": "Auftrag unverständlich — schritte|aktion gluehe|aktion stopp"})
         if self.path.startswith("/werkbank/elemente"):
             laenge = int(self.headers.get("Content-Length", 0))
             try:

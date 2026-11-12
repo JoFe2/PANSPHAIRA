@@ -73,12 +73,14 @@
     { ziel: "Chronik-Drawer", spruch: "Klicke: „Chronik-Drawer“" }
   ] };
   var tour = DEFAULT_TOUR;
-  var running = false, schleife = false, eignerKlick = null, folge = 0, pauseWachen = [];
+  var running = false, schleife = false, eignerKlick = null, folge = 0, pauseWachen = [], handStart = false;
 
   function tourLaden() {   // in jeder Runde neu: der Agent kann den Weg zwischen zwei Runden umlegen
     return fetch("/psai/katalog/live/tour.json?ums=" + Date.now(), { cache: "no-store" })
       .then(function (a) { return a.ok ? a.json() : Promise.reject(); })
-      .then(function (d) { if (d && Array.isArray(d.schritte) && d.schritte.length) tour = d; })
+      .then(function (d) {
+        if (d && Array.isArray(d.schritte)) { tour = d; demoModus = autoModus || d.schleife === true; }
+      })
       .catch(function () { tour = DEFAULT_TOUR; });
   }
 
@@ -127,7 +129,7 @@
   var BROKER = (typeof localStorage !== "undefined" && localStorage.getItem("psai.proto.broker")) || "http://127.0.0.1:8097";
   var INHALT_ZIEL = { ticker: "#ticker", kpi: "#kz", trend: "#trendBild" };
   var INHALT_SPRUCH = { ticker: "Neue Meldung — hier im Ticker", kpi: "Kennzahl frisch vom Fachhost", trend: "Trendfortschreibung eingetroffen" };
-  var blicke = [], blickLaeuft = false, pauseLaeuft = false;
+  var blicke = [], blickLaeuft = false, pauseLaeuft = false, demoModus = false, REGIE_SLOT = null;
 
   async function blick(art, meinTakt) {   // hinsehen, leuchten, vorzeigen — KEIN Klick
     var ziel = INHALT_ZIEL[art]; if (!ziel || blickLaeuft) return;
@@ -138,11 +140,21 @@
     await warte(reduziert() ? 60 : 900);
     if (meinTakt === undefined || meinTakt === folge) rueckzug();
     blickLaeuft = false;
+    if (REGIE_SLOT) regieAusfuehren();              // nachgeordneter Regie-Griff kommt jetzt dran
+  }
+  function regieAusfuehren() {
+    var d = REGIE_SLOT; REGIE_SLOT = null;
+    var el = elementZu(d.ziel); if (!el) return;
+    blickLaeuft = true;
+    glow(el).then(function () { return hin(el, d.spruch || ("Beachten: „" + d.ziel + "“")); })
+      .then(function () { return warte(reduziert() ? 60 : 1100); })
+      .then(function () { rueckzug(); blickLaeuft = false; if (REGIE_SLOT) regieAusfuehren(); })
+      .catch(function () { blickLaeuft = false; });
   }
 
   function inhaltGekommen(art) {
     if (!INHALT_ZIEL[art]) return;
-    if (autoModus) return;   // Demo-Auftrag: die Schleife selbst ist die Show, kein Blick-Konkurrent
+    if (demoModus) return;   // Demo-Auftrag (Parameter oder Datei-Auftrag): Schleife ist die Show
     if (!running && schleife && !reduziert() && !pauseLaeuft) { blick(art); return; }   // rundenloser Leerlauf
     if (running) {                     // mitten im Lauf: gemerkt wird der Blick in jedem Fall —
       if (blicke.indexOf(art) < 0) blicke.push(art);   // einer hinter dem anderen, nichts überdeckt nichts
@@ -160,12 +172,22 @@
   try {
     var werkbankStrom = new EventSource("/werkbank/strom");
     werkbankStrom.addEventListener("tour", function () {   // Agent hat den Weg umgeschrieben: zügig neue Runde
-      if (running && pauseLaeuft) pauseWachen.splice(0).forEach(function (w) { w(); });
+      if (running && pauseLaeuft) { pauseWachen.splice(0).forEach(function (w) { w(); }); return; }
+      if (!running) tourLaden().then(function () { if (tour.schleife === true && tour.schritte.length) starte(); });
+    });
+    werkbankStrom.addEventListener("regie", function (ev) {  // Einmalgriff: anleuchten, nicht meutern
+      var d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+      if (d.art !== "gluehe") return;
+      if (REGIE_SLOT) return;                       // nur ein Nachzügler — alter Auftrag weicht neuem nicht
+      REGIE_SLOT = d;
+      if (blickLaeuft) return;                      // wird nachgereicht, wenn der aktuelle Griff endet
+      regieAusfuehren();
     });
   } catch (e) { }
 
   async function durchgang(meinTakt) {
-    await tourLaden();                          // der Agent darf den Weg zwischen den Runden umlegen
+    await tourLaden();                          // der Agent darf den Weg zwischen den Runden umlegen —
+    if (tour.schleife === false && schleife && !handStart) schleifeSet(false);   // nur der Agentenauftrag „stopp" meint es ernst   // sein „stopp" wirkt noch in der laufenden Führung
     elementeMelden();                           // und sieht beim nächsten Mal, was hier bedienbar ist
     for (var i = 0; i < tour.schritte.length; i++) {
       if (meinTakt !== folge) return;
@@ -213,7 +235,7 @@
   start.textContent = "Zeigerführung ansehen";
   start.style.cssText = "position:fixed;right:12px;bottom:34px;z-index:2147483002";
   start.addEventListener("click", function () {
-    if (running || schleife) { abschalten(); } else { starte(); }   // Aus in jeder Phase / An für neuen Lauf
+    if (running || schleife) { abschalten(); } else { handStart = true; starte(); }   // Aus in jeder Phase / An für neuen Lauf
   });
   document.body.appendChild(start);
 
@@ -231,9 +253,13 @@
   // ?zeige=auto (die Werksbank schreibt es in den Rahmen): die Schleife ist hier der Dauerzustand,
   // bis jemand durch echten Handgriff übernimmt — die Übernahme bleibt über Neuladen hinweg respektiert.
   var autoModus = /[?&]zeige/.test(location.search);
+  if (/[?&]frisch/.test(location.search)) sessionStorage.removeItem("zeiger.schleife.manuell");   // Frisch-Auftrag des Agenten beginnt ohne Altlasten
   var manuell = sessionStorage.getItem("zeiger.schleife.manuell");
-  if (manuell === "1") { schleifeSet(true); setTimeout(starte, 600); }            // von Hand gestartet: überlebt Neuladen
-  else if (autoModus && (/[?&]frisch/.test(location.search) || manuell !== "0")) { if (/[?&]frisch/.test(location.search)) schleifeSet(true); setTimeout(starte, 1200); }             // nur mit Auto-Auftrag des Rahmens
+  tourLaden().then(function () {   // Regie-Auftrag aus der Datei gilt auch ohne Rahmen-Parameter
+    if (tour.schleife === true && tour.schritte.length && manuell !== "0" && !running && !schleife) setTimeout(starte, 1200);
+  });
+  if (manuell === "1") { handStart = true; schleifeSet(true); setTimeout(starte, 600); }            // von Hand gestartet: überlebt Neuladen
+  else if (autoModus && manuell !== "0") { schleifeSet(true); setTimeout(starte, 1200); }           // nur mit Auto-Auftrag des Rahmens
   try { sessionStorage.removeItem("zeiger.schleife"); } catch (e) { }          // Altlast ohne Unterscheidung entsorgen
 
   var stil = document.createElement("style");
