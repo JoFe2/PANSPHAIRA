@@ -5045,7 +5045,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "a1a1db90501ae9802f38cb2eff7210730533d47501eed1372bac994619605dfc"
+          "sha256": "a9dc1381697d258e4b56f472b391eeaaa9b828a25ac6105cbd5b5dcfd88b933a"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5912,7 +5912,7 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "c3f404d7b9bcf514ea943c74e20411c746801bbbe69817067e3f2756e6ae7f90"
+          "sha256": "c6399da394eebbf011d8ab887590b52026e9119d431f8a8401cc9e2c2fd0fac0"
         }
       ],
       "ownedTests": [
@@ -11178,7 +11178,7 @@
         {
           "path": "scripts/run-pan542-native-human-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "f3165550dafe788c1e4e8b40f98e436c9699b6db9511fca589cca97a1e4ec194"
+          "sha256": "a4f28aba98a81b45c2340f763b7ab04ee50372067e025a359b9ecdfe9da9b611"
         },
         {
           "path": "src/pan542/native-human-backend.mjs",
@@ -11201,9 +11201,14 @@
           "sha256": "1b9ba8dd99c55c18d0e32af105eab46f38f7c94b08c02d5ef182f7094e3a95de"
         },
         {
+          "path": "tests/pan542/ks-price-variance-query.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "8ee0679a36d1de94cbc096c9882fa3726037445c66de691bbb5631040f39e1fd"
+        },
+        {
           "path": "tests/pan542/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "61bc8c1c90d2d1a450fb38e513b21c4a0fca38682f783c58a80ae343f2cc5b2f"
+          "sha256": "d6fa2b0017b7ec4c3454d44a4ba5323d490456d60d25132211e27b2e3e85cf37"
         },
         {
           "path": "tests/pan542/restart-reader.mjs",
@@ -11229,6 +11234,16 @@
           "path": "docs/architecture/erv-human-source-compatibility-v3.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "a44c3c8bdc2cfd7e1c0e48023bb59256ac56934328aded19fac79442bedf507b"
+        },
+        {
+          "path": "src/pan542/ks-price-variance-query.mjs",
+          "role": "SECURITY",
+          "sha256": "ba2f2b6143043b2bad50aa963ea724a6ec800ef10304e2bfd6f29b84860c467e"
+        },
+        {
+          "path": "docs/architecture/erv-human-ks-price-variance-query-v1.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "d87c0ea314a965fdc26c7ae9d5793007e0bdfd4c03952bb4ccafdef3039e39d4"
         }
       ],
       "ownedTests": [

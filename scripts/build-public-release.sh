@@ -843,6 +843,10 @@ repository_only_files = {
     "tests/pan542/native-human-backend.test.mjs",
     "tests/pan542/registration.test.mjs",
     "tests/pan542/restart-reader.mjs",
+    # PAN692 bounded KS price-variance QUERY adapter: source-only, no new runtime member.
+    "src/pan542/ks-price-variance-query.mjs",
+    "tests/pan542/ks-price-variance-query.test.mjs",
+    "docs/architecture/erv-human-ks-price-variance-query-v1.md",
 
     # PAN544 personal native feed: source-only; legacy payload and rights unchanged.
     "docs/architecture/native-workspace-notifications-v1.md",
