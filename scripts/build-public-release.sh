@@ -809,6 +809,8 @@ repository_only_files = {
     "src/pan546/native-surface-projection-v2.mjs",
     "src/pan597/native-surfaces-v2.mjs",
     "src/pan597/native-browser-pairing-v1.mjs",
+    "src/pan597/native-display-session-v1.mjs",
+    "src/pan597/native-display-ingress-v1.mjs",
     "scripts/run-pan597-native-surface-tests.mjs",
     "tests/pan597/native-browser-pairing.test.mjs",
     "tests/pan597/browser-pairing.test.mjs",
@@ -842,6 +844,9 @@ repository_only_files = {
     "docs/architecture/erv-human-source-compatibility-v2.md",
     "src/pan542/source-compatibility-catalog-v3.json",
     "docs/architecture/erv-human-source-compatibility-v3.md",
+    # Exact V4 source metadata only; legacy payload and rights remain unchanged.
+    "src/pan542/source-compatibility-catalog-v4.json",
+    "docs/architecture/erv-human-source-compatibility-v4.md",
     "tests/pan542/source-compatibility-fixture.mjs",
     "tests/pan542/native-human-backend.test.mjs",
     "tests/pan542/registration.test.mjs",

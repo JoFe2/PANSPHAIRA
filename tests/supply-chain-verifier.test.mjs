@@ -102,18 +102,31 @@ test("public release staging accepts an isolated Git worktree control file", asy
     const sourceOnly = [
       "src/pan542/source-compatibility-catalog-v2.json",
       "docs/architecture/erv-human-source-compatibility-v2.md",
-    "src/pan542/source-compatibility-catalog-v3.json",
-    "docs/architecture/erv-human-source-compatibility-v3.md",
-    "src/pan542/ks-price-variance-query.mjs",
-    "tests/pan542/ks-price-variance-query.test.mjs",
-    "docs/architecture/erv-human-ks-price-variance-query-v1.md",
+      "src/pan542/source-compatibility-catalog-v3.json",
+      "docs/architecture/erv-human-source-compatibility-v3.md",
+      "src/pan542/source-compatibility-catalog-v4.json",
+      "docs/architecture/erv-human-source-compatibility-v4.md",
+      "src/pan542/ks-price-variance-query.mjs",
+      "tests/pan542/ks-price-variance-query.test.mjs",
+      "docs/architecture/erv-human-ks-price-variance-query-v1.md",
     ];
     const manifest = await readFile(path.join(root, "release/public-files.manifest"), "utf8");
     const manifestPaths = new Set(manifest.split("\n").filter(line => line && !line.startsWith("#")).map(line => line.split("\t")[0]));
     assert.ok(manifestPaths.has("scripts/build-public-release.sh"));
     assert.ok(manifestPaths.has("release/public-files.manifest"));
+    const builder = await readFile(path.join(root, "scripts/build-public-release.sh"), "utf8");
+    const exact = [...builder.match(/^repository_only_files = \{([\s\S]*?)^\}/m)[1]
+      .matchAll(/^\s+"([^"]+)",$/gm)].map(match => match[1]);
+    const prefixes = [...builder.match(/^repository_only_prefixes = \(([\s\S]*?)^\)/m)[1]
+      .matchAll(/^\s+"([^"]+)",$/gm)].map(match => match[1]);
+    const { stdout: archiveListing } = await execFile("tar", ["-tzf", `${output}.tar.gz`]);
+    const archivePaths = new Set(archiveListing.trim().split("\n")
+      .map(member => member.slice(path.basename(output).length + 1)));
     for (const relative of sourceOnly) {
+      assert.equal(exact.filter(file => file === relative).length, 1);
+      assert.ok(!prefixes.some(prefix => relative.startsWith(prefix)));
       assert.ok(!manifestPaths.has(relative));
+      assert.ok(!archivePaths.has(relative));
       await assert.rejects(readFile(path.join(output, relative)), { code: "ENOENT" });
     }
     // Reuse this actual built legacy payload as an isolated input. Neighbor
@@ -122,8 +135,10 @@ test("public release staging accepts an isolated Git worktree control file", asy
     const { readdir, stat } = await import("node:fs/promises");
     const stagedBuilder = path.join(output, "scripts/build-public-release.sh");
     const neighbors = [
-      "src/pan542/source-compatibility-catalog-v4.json",
-      "docs/architecture/erv-human-source-compatibility-v4.md",
+      "src/pan542/source-compatibility-catalog-v5.json",
+      "docs/architecture/erv-human-source-compatibility-v5.md",
+      "src/pan542/source-compatibility-catalog-v4-neighbor.json",
+      "docs/architecture/erv-human-source-compatibility-v4-neighbor.md",
     ];
     for (const [index, neighbor] of neighbors.entries()) {
       const location = path.join(output, neighbor);
@@ -144,6 +159,7 @@ test("public release staging accepts an isolated Git worktree control file", asy
     }
     console.log("P0_ERV_SOURCE_ONLY_PUBLIC_STAGING_BOUNDARY", JSON.stringify({
       sourceOnlyAbsentFromPayload: sourceOnly,
+      sourceOnlyAbsentFromArchive: sourceOnly,
       realUnmanifestedNeighborDenials: neighbors,
       additionalTransientNeighborFileBytesWritten: Buffer.byteLength("{}\n") * neighbors.length,
       archiveBytes: metadata.size,

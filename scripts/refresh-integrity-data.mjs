@@ -2929,7 +2929,9 @@ const pan542Inputs = [
     "DERIVED_EVIDENCE"
   ],
   ["src/pan542/source-compatibility-catalog-v3.json", "SECURITY"],
-  ["docs/architecture/erv-human-source-compatibility-v3.md", "DERIVED_EVIDENCE"]
+  ["docs/architecture/erv-human-source-compatibility-v3.md", "DERIVED_EVIDENCE"],
+  ["src/pan542/source-compatibility-catalog-v4.json", "SECURITY"],
+  ["docs/architecture/erv-human-source-compatibility-v4.md", "DERIVED_EVIDENCE"]
 ];
 let pan542Node = dag.nodes.find(({ id }) => id === "pan542-native-erv-human-v1");
 if (pan542Node === undefined) {
@@ -3695,6 +3697,8 @@ const pan597Inputs=[
   ["packages/contracts/src/workspace-browser-pairing-v1.ts", "CONTRACT"],
   ["packages/browser-workspace/src/workspace-browser-pairing-v1.ts", "SOURCE"],
   ["src/pan597/native-browser-pairing-v1.mjs", "SOURCE"],
+  ["src/pan597/native-display-session-v1.mjs", "SOURCE"],
+  ["src/pan597/native-display-ingress-v1.mjs", "SOURCE"],
   ["tests/pan597/native-browser-pairing.test.mjs", "VALIDATOR"],
   [
     "packages/contracts/src/workspace-surface-v2.ts",

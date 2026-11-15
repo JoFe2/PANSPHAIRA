@@ -43,6 +43,28 @@ function commandFor(proposal,action,id){return {schemaVersion:'pansphaira.erv-hu
   effectId:'synthetic:erv-'+id,transportId:'synthetic:erv-wire-'+id,expectedNativeRevision:proposal.nativeRevision,
   expectedProposalRevision:proposal.proposalRevision,proposalDigest:proposal.proposalDigest,action};}
 
+// STATIC_SOURCE_BOUNDARY_BEGIN: executable without native store admission.
+test('PAN542 static current closure admits exact reviewed display bytes through a closed V4 successor',()=>{
+  const path='src/pan542/source-compatibility-catalog-v4.json';
+  const selected=existsSync(path)?path:'src/pan542/source-compatibility-catalog-v3.json';
+  const policy=JSON.parse(readFileSync(selected,'utf8'));
+  for(const row of policy.targetFiles)assert.equal(createHash('sha256').update(readFileSync(row.path)).digest('hex'),row.sha256,'CURRENT_CLOSED_TARGET:'+row.path);
+  assert.equal(selected,path,'EXPLICIT_V4_SUCCESSOR_REQUIRED');
+  assert.deepEqual(policy.predecessorPrimary,{provenance:'GIT_ONLY_NOT_RELEASE',commit:'ba3447175ae767eb25d2592780fc0dbdc67345cd',tree:'3eb89615acb24857ab42208328016984fb40f7c3'});
+  assert.equal(policy.predecessorSourceIdentity.length,13);
+  const historical=JSON.parse(readFileSync('src/pan542/source-compatibility-catalog-v3.json','utf8'));
+  assert.deepEqual(policy.predecessorSourceIdentity,[...historical.targetFiles,{path:'src/pan542/source-compatibility-catalog-v3.json',sha256:createHash('sha256').update(readFileSync('src/pan542/source-compatibility-catalog-v3.json')).digest('hex')}]);
+  for(const row of policy.predecessorSourceIdentity){
+    if(row.path.startsWith('dist/'))continue; // generated contract is verified by the normally compiled complete Git fixture.
+    const blob=spawnSync('git',['show',policy.predecessorPrimary.commit+':'+row.path]);
+    assert.equal(blob.status,0,blob.stderr.toString());
+    assert.equal(createHash('sha256').update(blob.stdout).digest('hex'),row.sha256,'GENUINE_GIT_V3_CLOSURE:'+row.path);
+  }
+  for(const [i,row]of policy.targetFiles.entries())if(!['src/pan542/native-human-backend.mjs','src/pan527/origin-session-adapter.mjs'].includes(row.path))assert.deepEqual(row,policy.predecessorSourceIdentity[i]);
+  assert.equal(policy.targetFiles[1].sha256,'7ac3d4cff8336f29a8050e7b957bddc45dbe9a1665fb1e67d5b3fcd2ebc66a6d');
+});
+// STATIC_SOURCE_BOUNDARY_END
+
 test('PUI-04-AC01 native configuration records actual current source bytes for every direct existing native boundary',async()=>{
   const f=await humanFixture();
   try{
@@ -50,7 +72,7 @@ test('PUI-04-AC01 native configuration records actual current source bytes for e
     const required=['src/pan542/native-human-backend.mjs','src/pan527/origin-session-adapter.mjs','src/pan472/draft-profile.mjs',
       'src/pan473/scope-profile.mjs','src/pan515/trade-state.mjs','src/procurement-434/bestellung-lifecycle.mjs',
       'src/procurement-434/bestellung-liability.mjs','dist/packages/contracts/src/incoming-invoice-erv.js',
-      'contracts/trade/pan516-invoice-cases-v1.json','demo/runtime/local-journal-owner.mjs','src/pan542/source-compatibility-catalog-v1.json','src/pan542/source-compatibility-catalog-v2.json','src/pan542/source-compatibility-catalog-v3.json'];
+      'contracts/trade/pan516-invoice-cases-v1.json','demo/runtime/local-journal-owner.mjs','src/pan542/source-compatibility-catalog-v1.json','src/pan542/source-compatibility-catalog-v2.json','src/pan542/source-compatibility-catalog-v3.json','src/pan542/source-compatibility-catalog-v4.json'];
     assert.deepEqual(current.sourceIdentity.map(x=>x.path).sort(),required.sort(),'PAN542_DIRECT_NATIVE_SOURCE_IDENTITY_INCOMPLETE');
     for(const row of current.sourceIdentity)assert.equal(row.sha256,createHash('sha256').update(readFileSync(row.path)).digest('hex'),row.path);
     const nativeBinding=JSON.parse(nativeRows(f.root,'SELECT record FROM pan542_binding WHERE id=1')[0].record);
@@ -450,8 +472,12 @@ test('PAN542 source compatibility v1 refuses empty and forged pre-existing guard
 import {after as afterSourceV3} from 'node:test';
 import {readdirSync as readDirV3,lstatSync as statV3} from 'node:fs';
 import {acquireLocalJournalOwner as sourceFenceV3} from '../../demo/runtime/local-journal-owner.mjs';
-import {releasedV2SourceInput} from './source-compatibility-fixture.mjs';
+import {v3GitSourceInput,releasedV2SourceInput} from './source-compatibility-fixture.mjs';
 const historyV2Root=releasedV2SourceInput();
+const historyV3Root=v3GitSourceInput();
+const historicalV3CatalogBytes=readFileSync(join(historyV3Root,'src/pan542/source-compatibility-catalog-v3.json'),'utf8');
+const backendV3History=await import(pathToFileURL(join(historyV3Root,'src/pan542/native-human-backend.mjs')));
+const adapterModuleV3History=await import(pathToFileURL(join(historyV3Root,'src/pan527/origin-session-adapter.mjs')));
 // The fixture module's after() cleanup (registered at its module load, before
 // afterSourceV3) removes this materialized temp source first. Capture the
 // genuine verified historical V2 catalog bytes in memory at materialization
@@ -464,15 +490,15 @@ const backendV1Prior=await import(pathToFileURL(join(historyV1Root,'src/pan542/n
 const adapterModuleV1Prior=await import(pathToFileURL(join(historyV1Root,'src/pan527/origin-session-adapter.mjs')));
 const sourceV3Results=[];let sourceV3RemovedBytes=0;
 const transitionV2History=f=>backendV2.transitionNativeErvHumanSourceCompatibilityV2({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions});
-const transitionV3=f=>backend.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions});
+const transitionV3=f=>backendV3History.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions});
 function allNativeRowsV3(root){const db=new DatabaseSync(join(root,'target.sqlite'),{readOnly:true});try{return Object.fromEntries(db.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all().map(({name})=>[name,JSON.parse(JSON.stringify(db.prepare('SELECT * FROM "'+name.replaceAll('"','""')+'" ORDER BY rowid').all()))]));}finally{db.close();}}
 function preservedV3(root,before,added=[]){const after=allNativeRowsV3(root);assert.deepEqual(Object.fromEntries(Object.keys(before).map(k=>[k,after[k]])),before,'EVERY_PREEXISTING_NATIVE_TABLE_ROW_INCLUDING_V1_V2_RECEIPTS_UNCHANGED');assert.deepEqual(Object.keys(after).filter(k=>!(k in before)),added);}
 function meteredV3(f){const close=f.close;let closed=false;f.close=()=>{if(closed)return;closed=true;let bytes=0;function walk(p){for(const e of readDirV3(p,{withFileTypes:true})){const q=join(p,e.name);if(e.isDirectory())walk(q);else bytes+=statV3(q).size;}}walk(f.parent);try{close();}finally{assert.equal(existsSync(f.parent),false);sourceV3RemovedBytes+=bytes;}};return f;}
 function sessionsWith(adapterModule,parent,name){const authRoot=join(parent,name);mkdirSync(authRoot,{mode:0o700});return {authRoot,sessions:adapterModule.createProtectedSessionAdapterV1(compatibilitySessionOptions(authRoot))};}
 const adapterModuleCurrent={createProtectedSessionAdapterV1};
 function currentSessionsV3(parent,name){return sessionsWith(adapterModuleCurrent,parent,name);}
-async function preservedV3Fixture(){const f=meteredV3(await fixtureModuleV2.compatibilityFixture());try{const v1Stage=sessionsWith(adapterModuleV1Prior,f.parent,'v1-stage-auth'),v1Receipt=backendV1Prior.transitionNativeErvHumanSourceCompatibilityV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:v1Stage.sessions}),v2Receipt=backendV2.transitionNativeErvHumanSourceCompatibilityV2({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions}),v2Headers=issue(f.sessions,'synthetic:erv-reviewer'),priorApi=backendV2.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions}),proposal=priorApi.read(v2Headers,{invoiceId});priorApi.decide(v2Headers,commandFor(proposal,'REVIEW','preserved-v2-review'));const priorView=priorApi.read(v2Headers,{invoiceId}),priorSessions=f.sessions,cur=currentSessionsV3(f.parent,'v3-current-auth');return {...f,authRoot:cur.authRoot,sessions:cur.sessions,priorSessions,v1Receipt,v2Receipt,v2Headers,priorView};}catch(error){f.close();throw error;}}
-afterSourceV3(()=>{if(process.env.P0_ERV_OUT)writeFileSync(join(process.env.P0_ERV_OUT,'ACTUAL-REGISTERED-NATIVE-SOURCE-V3-RESULTS.json'),JSON.stringify({schemaVersion:1,sourceV3Results,runtimeRemovedNoRefundLogicalBytes:sourceV3RemovedBytes,historicalV2SourcePins:JSON.parse(historicalV2CatalogBytes),actualCurrentSourcePins:JSON.parse(readFileSync(new URL('../../src/pan542/source-compatibility-catalog-v3.json',import.meta.url),'utf8')),noLANOriginalDataOrProductionAccess:true},null,2)+'\n',{mode:0o600});});
+async function preservedV2FixtureForSuccessor(adapter=adapterModuleCurrent){const f=meteredV3(await fixtureModuleV2.compatibilityFixture());try{const v1Stage=sessionsWith(adapterModuleV1Prior,f.parent,'v1-stage-auth'),v1Receipt=backendV1Prior.transitionNativeErvHumanSourceCompatibilityV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:v1Stage.sessions}),v2Receipt=backendV2.transitionNativeErvHumanSourceCompatibilityV2({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions}),v2Headers=issue(f.sessions,'synthetic:erv-reviewer'),priorApi=backendV2.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions}),proposal=priorApi.read(v2Headers,{invoiceId});priorApi.decide(v2Headers,commandFor(proposal,'REVIEW','preserved-v2-review'));const priorView=priorApi.read(v2Headers,{invoiceId}),priorSessions=f.sessions,cur=sessionsWith(adapter,f.parent,'v3-current-auth');return {...f,authRoot:cur.authRoot,sessions:cur.sessions,priorSessions,v1Receipt,v2Receipt,v2Headers,priorView};}catch(error){f.close();throw error;}}
+afterSourceV3(()=>{if(process.env.P0_ERV_OUT)writeFileSync(join(process.env.P0_ERV_OUT,'ACTUAL-REGISTERED-NATIVE-SOURCE-V3-RESULTS.json'),JSON.stringify({schemaVersion:1,sourceV3Results,runtimeRemovedNoRefundLogicalBytes:sourceV3RemovedBytes,historicalV2SourcePins:JSON.parse(historicalV2CatalogBytes),historicalV3SourcePins:JSON.parse(historicalV3CatalogBytes),actualCurrentSourcePins:JSON.parse(readFileSync(new URL('../../src/pan542/source-compatibility-catalog-v4.json',import.meta.url),'utf8')),noLANOriginalDataOrProductionAccess:true},null,2)+'\n',{mode:0o600});});
 
 // Historical V2 assertions: the genuine complete released V2 source is the actor.
 test('PAN542 source compatibility v2 history genuine V1 preserved receipt and decision stay explicit GREEN, idempotent and guarded inside the released V2 source itself',async()=>{const f=meteredV3(await fixtureModuleV2.compatibilityFixture());try{const v1Stage=sessionsWith(adapterModuleV1Prior,f.parent,'v1-stage-auth'),v1Receipt=backendV1Prior.transitionNativeErvHumanSourceCompatibilityV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:v1Stage.sessions}),v1Api=backendV1Prior.createNativeErvHumanBackendV1({root:f.root,sessions:v1Stage.sessions}),v1Headers=issue(v1Stage.sessions,'synthetic:erv-reviewer'),v1Proposal=v1Api.read(v1Headers,{invoiceId});v1Api.decide(v1Headers,commandFor(v1Proposal,'REVIEW','preserved-v1-history-review'));const v1PriorView=v1Api.read(v1Headers,{invoiceId}),before=allNativeRowsV3(f.root);assert.ok(before.pan542_events.length>0,'the genuine V1 review decision must be retained in the native event history before the released V2 transition');const cur=currentSessionsV3(f.parent,'v3-history-denial-auth');
@@ -511,8 +537,13 @@ const restart=spawnSync(process.execPath,['--input-type=module','-e',`import {cr
 assert.equal(restart.status,0,restart.stderr);assert.equal(restart.stdout.trim(),transitionV2History(f).transitionDigest);assert.equal(nativeRows(f.root,'SELECT count(*) AS n FROM pan542_source_compatibility_v2')[0].n,1);
 assert.ok(v1Receipt.transitionDigest,'the preserved V1 receipt remains the unchanged chain root');sourceV3Results.push({case:'released-v2-history-interrupted-ddl-rollback-restart-once',rollbackClean:true,committedOnce:true});}finally{if(child?.exitCode===null)child.kill('SIGKILL');f.close();}});
 
-// Current-source assertions: the candidate itself owns the v3 successor.
-test('PAN542 source compatibility v3 genuine preserved V2 predecessor configuration, decision and receipts become an explicit current-source successor with every prior row, receipt and guard intact',async()=>{const f=await preservedV3Fixture();try{const before=allNativeRowsV3(f.root);
+// Historical V3 assertions execute only inside the genuine complete Git V3 closure.
+{
+const backend=backendV3History;
+const {createProtectedSessionAdapterV1}=adapterModuleV3History;
+const currentSessionsV3=(parent,name)=>sessionsWith(adapterModuleV3History,parent,name);
+const preservedV3Fixture=()=>preservedV2FixtureForSuccessor(adapterModuleV3History);
+test('PAN542 source compatibility v3 history genuine preserved V2 predecessor configuration, decision and receipts become an explicit genuine V3-source successor with every prior row, receipt and guard intact',async()=>{const f=await preservedV3Fixture();try{const before=allNativeRowsV3(f.root);
 assert.throws(()=>backend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions}),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/);
 const receipt=transitionV3(f);assert.equal(receipt.schemaVersion,'pansphaira.erv-human/source-compatibility/v3');assert.equal(receipt.transitionId,'PAN542_ROUTE_GLUE_ADAPTER_COMPATIBILITY_V3');assert.equal(receipt.predecessorTransitionId,'PAN542_NATIVE_REVOKE_CLASSIFICATION_CORRECTION_V2');assert.equal(receipt.predecessorTransitionDigest,f.v2Receipt.transitionDigest);assert.equal(receipt.predecessorPrimary.commit,'79df9fda08411514426b2931c6f30b0aa3dc40a1');assert.equal(receipt.predecessorPrimary.tree,'9bb0e5548be0158fba58a14a02afb180e467143a');assert.equal(receipt.predecessorPrimary.releaseId,438045921);assert.equal(receipt.predecessorSourceCatalogSHA256,'455c3a941bd2b4eef351dc31403501b1e39692d9f62a4f5fcc8b0f4cd9268fb9');assert.equal(receipt.originalBindingAndHistoryUnchanged,true);assert.equal(receipt.predecessorReceiptUnchanged,true);assert.equal(receipt.sessionAndNativeRolesUnchanged,true);assert.equal(receipt.bookingAuthorityGranted,false);assert.equal(receipt.paymentOrderAuthorized,false);assert.equal(receipt.productiveDispatchAuthorized,false);assert.equal(receipt.executionAuthorityGranted,false);
 preservedV3(f.root,before,['pan542_source_compatibility_v3']);assert.deepEqual(transitionV3(f),receipt);
@@ -522,19 +553,19 @@ assert.deepEqual(backendV2.transitionNativeErvHumanSourceCompatibilityV2({root:f
 const guarded=allNativeRowsV3(f.root),db=new DatabaseSync(join(f.root,'target.sqlite'));try{for(const table of ['pan542_source_compatibility_v1','pan542_source_compatibility_v2','pan542_source_compatibility_v3'])for(const sql of [`UPDATE ${table} SET record='{}' WHERE id=1`,`DELETE FROM ${table} WHERE id=1`,`INSERT OR REPLACE INTO ${table} VALUES(1,'{}')`])assert.throws(()=>db.exec(sql),/SOURCE_HISTORY_IMMUTABLE_DENIED/);}finally{db.close();}
 assert.deepEqual(allNativeRowsV3(f.root),guarded);sourceV3Results.push({case:'genuine-preserved-v2-history-explicit-v3',preexistingDecisionEvents:before.pan542_events.length,v1ReceiptDigest:f.v1Receipt.transitionDigest,v2ReceiptDigest:f.v2Receipt.transitionDigest,v3ReceiptDigest:receipt.transitionDigest,allPriorRowsUnchanged:true});}finally{f.close();}});
 
-test('PAN542 source compatibility v3 fresh current-source initialization is strict-bound at once and the owner operation is an explicit no-op without a new table',async()=>{const f=await financeFixture();try{const cur=currentSessionsV3(f.parent,'v3-fresh-auth'),record=backend.initializeNativeErvHumanBackendV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessionBinding:cur.sessions.binding});
+test('PAN542 source compatibility v3 history fresh genuine V3-source initialization is strict-bound at once and the owner operation is an explicit no-op without a new table',async()=>{const f=await financeFixture();try{const cur=currentSessionsV3(f.parent,'v3-fresh-auth'),record=backend.initializeNativeErvHumanBackendV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessionBinding:cur.sessions.binding});
 const bytes=readFileSync(new URL('../../src/pan542/source-compatibility-catalog-v3.json',import.meta.url),'utf8'),catalogV3=JSON.parse(bytes);
 assert.deepEqual(record.sourceIdentity,[...catalogV3.targetFiles,{path:'src/pan542/source-compatibility-catalog-v3.json',sha256:createHash('sha256').update(bytes).digest('hex')}],'CURRENT_STRICT_SOURCE_BINDING_CATALOG_V3');
 const noop=backend.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:cur.sessions});assert.equal(noop.schemaVersion,'pansphaira.erv-human/source-compatibility-noop/v3');assert.equal(noop.outcome,'ALREADY_SOURCE_BOUND');assert.equal(noop.originalBindingDigest,record.bindingDigest);assert.equal(noop.executionAuthorityGranted,false);
 assert.equal('pan542_source_compatibility_v3' in allNativeRowsV3(f.root),false);assert.deepEqual(backend.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:cur.sessions}),noop);
 const api=backend.createNativeErvHumanBackendV1({root:f.root,sessions:cur.sessions});assert.equal(api.read(issue(cur.sessions,'synthetic:erv-reviewer'),{invoiceId}).executionAuthorityGranted,false);sourceV3Results.push({case:'fresh-current-source-strict-noop',noNewTable:true,strictBindingVerifiedAgainstCatalogV3:true});}finally{f.close();}});
 
-test('PAN542 source compatibility v3 exact directly initialized released V2 source binding transitions without inventing a V2 receipt',async()=>{const f=meteredV3(await fixtureModuleV2.compatibilityFixture({legacyOverride:join(historyV2Root,'src/pan542/native-human-backend.mjs')}));try{const before=allNativeRowsV3(f.root);assert.equal('pan542_source_compatibility_v2' in before,false);assert.equal('pan542_source_compatibility_v1' in before,false);const cur=currentSessionsV3(f.parent,'v3-direct-auth'),receipt=backend.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:cur.sessions});
+test('PAN542 source compatibility v3 history exact directly initialized released V2 source binding transitions without inventing a V2 receipt',async()=>{const f=meteredV3(await fixtureModuleV2.compatibilityFixture({legacyOverride:join(historyV2Root,'src/pan542/native-human-backend.mjs')}));try{const before=allNativeRowsV3(f.root);assert.equal('pan542_source_compatibility_v2' in before,false);assert.equal('pan542_source_compatibility_v1' in before,false);const cur=currentSessionsV3(f.parent,'v3-direct-auth'),receipt=backend.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:cur.sessions});
 assert.equal(receipt.predecessorTransitionDigest,null);assert.equal(receipt.originalSourceIdentity.length,12);preservedV3(f.root,before,['pan542_source_compatibility_v3']);assert.equal('pan542_source_compatibility_v2' in allNativeRowsV3(f.root),false);
 const view=backend.createNativeErvHumanBackendV1({root:f.root,sessions:cur.sessions}).read(issue(cur.sessions,'synthetic:erv-reviewer'),{invoiceId});assert.deepEqual(view.sourceIdentity,receipt.predecessorSourceIdentity);assert.equal(view.executionAuthorityGranted,false);
 sourceV3Results.push({case:'genuine-direct-v2-binding-explicit-v3',allPriorRowsUnchanged:true,noInventedV2Receipt:true,v3ReceiptDigest:receipt.transitionDigest});}finally{f.close();}});
 
-test('PAN542 source compatibility v3 exact owner, brand, caller hashes, foreign tenant, retired historical entries and active namespace fence are denied without metadata, role or task effects',async()=>{const f=await preservedV3Fixture();try{const before=allNativeRowsV3(f.root),options={root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions};
+test('PAN542 source compatibility v3 history exact owner, brand, caller hashes, foreign tenant, retired historical entries and active namespace fence are denied without metadata, role or task effects',async()=>{const f=await preservedV3Fixture();try{const before=allNativeRowsV3(f.root),options={root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions};
 for(const owner of [null,'HTTP_USER','APPROVER'])assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV3({...options,owner}),/SOURCE_LOCAL_OWNER_REQUIRED_DENIED/);
 assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV3({...options,sessions:{binding:f.sessions.binding}}),/PROTECTED_SESSION_OWNER_REQUIRED_DENIED/);
 for(const extra of [{sourceIdentity:[]},{sourceHash:'0'.repeat(64)},{transitionId:'forged'},{grant:true},{predecessorCommit:'0'.repeat(40)}])assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV3({...options,...extra}),/SOURCE_OWNER_OPTIONS_DENIED/);
@@ -548,21 +579,196 @@ const fence=sourceFenceV3(join(f.root,'pan453-owned-v2'));try{assert.throws(()=>
 assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),taskLedgerBefore,'the fence denial adds no human task and drops no pre-existing native task');
 preservedV3(f.root,before);sourceV3Results.push({case:'v3-owner-brand-hash-tenant-historical-entry-and-fence-denials',allPriorRowsUnchanged:true,noMetadataAdoption:true,noRoleOrTaskEffects:true});}finally{f.close();}});
 
-test('PAN542 source compatibility v3 released V2 legacy source without a genuine V2 predecessor receipt remains denied rather than silently bridged',async()=>{const f=meteredV3(await fixtureModuleV2.compatibilityFixture());try{const before=allNativeRowsV3(f.root),cur=currentSessionsV3(f.parent,'v3-missing-auth');assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:cur.sessions}),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/);preservedV3(f.root,before);sourceV3Results.push({case:'v3-missing-genuine-v2-predecessor',denied:true,allPriorRowsUnchanged:true});}finally{f.close();}});
+test('PAN542 source compatibility v3 history released V2 legacy source without a genuine V2 predecessor receipt remains denied rather than silently bridged',async()=>{const f=meteredV3(await fixtureModuleV2.compatibilityFixture());try{const before=allNativeRowsV3(f.root),cur=currentSessionsV3(f.parent,'v3-missing-auth');assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:cur.sessions}),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/);preservedV3(f.root,before);sourceV3Results.push({case:'v3-missing-genuine-v2-predecessor',denied:true,allPriorRowsUnchanged:true});}finally{f.close();}});
 
-test('PAN542 source compatibility v3 actual changed current target bytes and forged V3 predecessor catalog remain denied, not caller-adopted source',async()=>{const f=await preservedV3Fixture();try{const before=allNativeRowsV3(f.root);for(const kind of ['target','catalog']){const parent=join(f.parent,'v3-untrusted-'+kind);mkdirSync(parent,{mode:0o700});const root=sourceNegativeFixture(process.cwd(),parent),entry=join(root,'src/pan542/native-human-backend.mjs');if(kind==='target')appendFileSync(entry,'\n// untrusted current target drift\n');else{const path=join(root,'src/pan542/source-compatibility-catalog-v3.json'),policy=JSON.parse(readFileSync(path,'utf8'));policy.predecessorPrimary.commit='0'.repeat(40);writeFileSync(path,JSON.stringify(policy));}const untrusted=await import(pathToFileURL(entry));assert.throws(()=>untrusted.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions}),/ERV_HUMAN_SOURCE_(TARGET|CATALOG)_DENIED/);preservedV3(f.root,before);}sourceV3Results.push({case:'v3-actual-target-and-catalog-negatives',bothActualDenials:true,allPriorRowsUnchanged:true,noUntrustedSourceAccepted:true});}finally{f.close();}});
+test('PAN542 source compatibility v3 history actual changed historical V3 target bytes and forged V3 predecessor catalog remain denied, not caller-adopted source',async()=>{const f=await preservedV3Fixture();try{const before=allNativeRowsV3(f.root);for(const kind of ['target','catalog']){const parent=join(f.parent,'v3-untrusted-'+kind);mkdirSync(parent,{mode:0o700});const root=sourceNegativeFixture(historyV3Root,parent),entry=join(root,'src/pan542/native-human-backend.mjs');if(kind==='target')appendFileSync(entry,'\n// untrusted current target drift\n');else{const path=join(root,'src/pan542/source-compatibility-catalog-v3.json'),policy=JSON.parse(readFileSync(path,'utf8'));policy.predecessorPrimary.commit='0'.repeat(40);writeFileSync(path,JSON.stringify(policy));}const untrusted=await import(pathToFileURL(entry));assert.throws(()=>untrusted.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions}),/ERV_HUMAN_SOURCE_(TARGET|CATALOG)_DENIED/);preservedV3(f.root,before);}sourceV3Results.push({case:'v3-actual-target-and-catalog-negatives',bothActualDenials:true,allPriorRowsUnchanged:true,noUntrustedSourceAccepted:true});}finally{f.close();}});
 
-test('PAN542 source compatibility v3 interrupted actual DDL rolls back cleanly, restart commits once, every prior receipt and the decision history survive',async()=>{const f=await preservedV3Fixture();let child;try{const before=allNativeRowsV3(f.root),opts=JSON.stringify(compatibilitySessionOptions(currentSessionsV3(f.parent,'v3-crash-child-auth').authRoot)),root=JSON.stringify(f.root),script=`import {DatabaseSync} from 'node:sqlite';import {createProtectedSessionAdapterV1} from './src/pan527/origin-session-adapter.mjs';import {transitionNativeErvHumanSourceCompatibilityV3} from './src/pan542/native-human-backend.mjs';const original=DatabaseSync.prototype.exec;DatabaseSync.prototype.exec=function(sql){const result=original.call(this,sql);if(sql.startsWith('CREATE TABLE pan542_source_compatibility_v3(')){process.stdout.write('V3_ACTUAL_DDL_REACHED\\n');process.kill(process.pid,'SIGSTOP');}return result;};const sessions=createProtectedSessionAdapterV1(${opts});transitionNativeErvHumanSourceCompatibilityV3({root:${root},owner:'LOCAL_SYNTHETIC_OWNER',sessions});`;
-child=spawn(process.execPath,['--input-type=module','-e',script],{cwd:process.cwd(),stdio:['ignore','pipe','pipe']});let stderr='';child.stderr.on('data',b=>{stderr+=b;});
+test('PAN542 source compatibility v3 history interrupted actual DDL rolls back cleanly, restart commits once, every prior receipt and the decision history survive',async()=>{const f=await preservedV3Fixture();let child;try{const before=allNativeRowsV3(f.root),opts=JSON.stringify(compatibilitySessionOptions(currentSessionsV3(f.parent,'v3-crash-child-auth').authRoot)),root=JSON.stringify(f.root),script=`import {DatabaseSync} from 'node:sqlite';import {createProtectedSessionAdapterV1} from './src/pan527/origin-session-adapter.mjs';import {transitionNativeErvHumanSourceCompatibilityV3} from './src/pan542/native-human-backend.mjs';const original=DatabaseSync.prototype.exec;DatabaseSync.prototype.exec=function(sql){const result=original.call(this,sql);if(sql.startsWith('CREATE TABLE pan542_source_compatibility_v3(')){process.stdout.write('V3_ACTUAL_DDL_REACHED\\n');process.kill(process.pid,'SIGSTOP');}return result;};const sessions=createProtectedSessionAdapterV1(${opts});transitionNativeErvHumanSourceCompatibilityV3({root:${root},owner:'LOCAL_SYNTHETIC_OWNER',sessions});`;
+child=spawn(process.execPath,['--input-type=module','-e',script],{cwd:historyV3Root,stdio:['ignore','pipe','pipe']});let stderr='';child.stderr.on('data',b=>{stderr+=b;});
 await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(Error('V3_TRANSITION_DDL_NOT_REACHED:'+stderr)),10000);child.stdout.on('data',b=>{out+=b;if(out.includes('V3_ACTUAL_DDL_REACHED')){clearTimeout(timer);resolve();}});child.once('exit',code=>{clearTimeout(timer);reject(Error('V3_CHILD_PREMATURE_EXIT:'+code+':'+stderr));});});
 const ended=new Promise(resolve=>child.once('exit',(code,signal)=>resolve({code,signal})));child.kill('SIGKILL');const actual=await ended;assert.equal(actual.signal,'SIGKILL');
 preservedV3(f.root,before);
 assert.throws(()=>backend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions}),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/,'an interrupted transition leaves no half state');
 const receipt=transitionV3(f);assert.deepEqual(transitionV3(f),receipt);
-const restart=spawnSync(process.execPath,['--input-type=module','-e',`import {createProtectedSessionAdapterV1} from './src/pan527/origin-session-adapter.mjs';import {transitionNativeErvHumanSourceCompatibilityV3} from './src/pan542/native-human-backend.mjs';const sessions=createProtectedSessionAdapterV1(${opts});const receipt=transitionNativeErvHumanSourceCompatibilityV3({root:${root},owner:'LOCAL_SYNTHETIC_OWNER',sessions});console.log(receipt.transitionDigest);`],{cwd:process.cwd(),encoding:'utf8'});
+const restart=spawnSync(process.execPath,['--input-type=module','-e',`import {createProtectedSessionAdapterV1} from './src/pan527/origin-session-adapter.mjs';import {transitionNativeErvHumanSourceCompatibilityV3} from './src/pan542/native-human-backend.mjs';const sessions=createProtectedSessionAdapterV1(${opts});const receipt=transitionNativeErvHumanSourceCompatibilityV3({root:${root},owner:'LOCAL_SYNTHETIC_OWNER',sessions});console.log(receipt.transitionDigest);`],{cwd:historyV3Root,encoding:'utf8'});
 assert.equal(restart.status,0,restart.stderr);assert.equal(restart.stdout.trim(),receipt.transitionDigest,'restart is an idempotent revalidation, never a second commit');
 assert.equal(nativeRows(f.root,'SELECT count(*) AS n FROM pan542_source_compatibility_v3')[0].n,1);assert.deepEqual(allNativeRowsV3(f.root).pan542_source_compatibility_v1,before.pan542_source_compatibility_v1);assert.deepEqual(allNativeRowsV3(f.root).pan542_source_compatibility_v2,before.pan542_source_compatibility_v2);assert.deepEqual(allNativeRowsV3(f.root).pan542_events,before.pan542_events);sourceV3Results.push({case:'v3-interrupted-ddl-rollback-restart-once',rollbackClean:true,committedOnce:true});}finally{if(child?.exitCode===null)child.kill('SIGKILL');f.close();}});
 
 
 // Retired duplicate v2-transition block (commented in run124, removed here): its released-V2 history coverage
 // runs live in the "v2 history" tests above and the current-source coverage in the explicit v3 tests above.
+
+}
+
+// Current V4 owner; the genuine Git-only V3 actor creates the predecessor receipt.
+const transitionV4=f=>backend.transitionNativeErvHumanSourceCompatibilityV4({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions});
+async function preservedV4Fixture(){
+  const f=await preservedV2FixtureForSuccessor(adapterModuleV3History);
+  try{
+    const v3Receipt=transitionV3(f),v3Sessions=f.sessions,v3Headers=issue(v3Sessions,'synthetic:erv-reviewer');
+    const v3Api=backendV3History.createNativeErvHumanBackendV1({root:f.root,sessions:v3Sessions});
+    v3Api.decide(v3Headers,commandFor(v3Api.read(v3Headers,{invoiceId}),'QUERY','genuine-v3-query'));
+    const v3View=v3Api.read(v3Headers,{invoiceId});
+    const sessions=createProtectedSessionAdapterV1(compatibilitySessionOptions(f.authRoot));
+    return {...f,sessions,v3Receipt,v3Sessions,v3Headers,v3Api,v3View};
+  }catch(e){f.close();throw e;}
+}
+const sourceV4Results=[];
+afterSourceV3(()=>{if(process.env.P0_ERV_OUT)writeFileSync(join(process.env.P0_ERV_OUT,'ACTUAL-REGISTERED-NATIVE-SOURCE-V4-RESULTS.json'),JSON.stringify({schemaVersion:1,sourceV4Results,historicalV3SourcePins:JSON.parse(historicalV3CatalogBytes),actualCurrentSourcePins:JSON.parse(readFileSync('src/pan542/source-compatibility-catalog-v4.json','utf8')),provenance:'GIT_ONLY_NOT_RELEASE',executionAuthorityGranted:false},null,2)+'\n',{mode:0o600});});
+
+test('PAN542 source compatibility v4 real V3 receipt and decision survive explicit owner transition, all historical rows/tasks/readbacks and receipt meanings remain unchanged',async()=>{
+  const f=await preservedV4Fixture();try{
+    const before=allNativeRowsV3(f.root),tasks=readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2'));
+    assert.ok(before.pan542_events.length>=2);assert.ok(f.v3Receipt.transitionDigest);
+    assert.throws(()=>backend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions}),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/);
+    preservedV3(f.root,before); // read/startup must never auto-transition.
+    const receipt=transitionV4(f);
+    assert.equal(receipt.schemaVersion,'pansphaira.erv-human/source-compatibility/v4');
+    assert.equal(receipt.transitionId,'PAN542_RESTRICTED_DISPLAY_ADAPTER_COMPATIBILITY_V4');
+    assert.equal(receipt.predecessorTransitionId,'PAN542_ROUTE_GLUE_ADAPTER_COMPATIBILITY_V3');
+    assert.equal(receipt.predecessorTransitionDigest,f.v3Receipt.transitionDigest);
+    assert.deepEqual(receipt.predecessorPrimary,{provenance:'GIT_ONLY_NOT_RELEASE',commit:'ba3447175ae767eb25d2592780fc0dbdc67345cd',tree:'3eb89615acb24857ab42208328016984fb40f7c3'});
+    assert.equal(receipt.predecessorSourceCatalogSHA256,'399c3cc4f1dacd26781679a3704b2c4c5a757d3f5d13dd202a6117291a55bc8c');
+    for(const k of ['originalBindingAndHistoryUnchanged','predecessorReceiptUnchanged','sessionAndNativeRolesUnchanged'])assert.equal(receipt[k],true);
+    for(const k of ['bookingAuthorityGranted','paymentOrderAuthorized','productiveDispatchAuthorized','executionAuthorityGranted'])assert.equal(receipt[k],false);
+    preservedV3(f.root,before,['pan542_source_compatibility_v4']);assert.deepEqual(transitionV4(f),receipt);
+    assert.equal(nativeRows(f.root,'SELECT count(*) AS n FROM pan542_source_compatibility_v4')[0].n,1);
+    assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasks);
+    const api=backend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions});
+    assert.deepEqual(api.read(f.v3Headers,{invoiceId}),f.v3View);
+    assert.deepEqual(f.v3Api.read(f.v3Headers,{invoiceId}),f.v3View,'genuine V3 rollback actor still reads the exact original decision basis');
+    assert.deepEqual(backendV3History.transitionNativeErvHumanSourceCompatibilityV3({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.v3Sessions}),f.v3Receipt);
+    const guarded=allNativeRowsV3(f.root),db=new DatabaseSync(join(f.root,'target.sqlite'));
+    try{for(const version of [1,2,3,4])for(const sql of [`UPDATE pan542_source_compatibility_v${version} SET record='{}' WHERE id=1`,`DELETE FROM pan542_source_compatibility_v${version} WHERE id=1`,`INSERT INTO pan542_source_compatibility_v${version} VALUES(1,'{}')`,`INSERT OR REPLACE INTO pan542_source_compatibility_v${version} VALUES(1,'{}')`])assert.throws(()=>db.exec(sql),/SOURCE_HISTORY_IMMUTABLE_DENIED/);}finally{db.close();}
+    assert.deepEqual(allNativeRowsV3(f.root),guarded);
+    sourceV4Results.push({case:'genuine-v3-receipt-decision-idempotent-v4',v3ReceiptDigest:f.v3Receipt.transitionDigest,v4ReceiptDigest:receipt.transitionDigest,allPriorRowsAndTasksUnchanged:true});
+  }finally{f.close();}
+});
+
+test('PAN542 source compatibility v4 exact direct Git V3 binding needs no invented predecessor receipt',async()=>{
+  const f=meteredV3(await fixtureModuleV2.compatibilityFixture({legacyOverride:join(historyV3Root,'src/pan542/native-human-backend.mjs')}));try{
+    const cur=currentSessionsV3(f.parent,'v4-direct-auth'),before=allNativeRowsV3(f.root);
+    for(const v of [1,2,3])assert.equal(`pan542_source_compatibility_v${v}` in before,false);
+    const receipt=transitionV4({...f,sessions:cur.sessions});
+    assert.equal(receipt.predecessorTransitionDigest,null);assert.equal(receipt.originalSourceIdentity.length,13);
+    preservedV3(f.root,before,['pan542_source_compatibility_v4']);
+    assert.deepEqual(backend.createNativeErvHumanBackendV1({root:f.root,sessions:cur.sessions}).read(issue(cur.sessions,'synthetic:erv-reviewer'),{invoiceId}).sourceIdentity,receipt.predecessorSourceIdentity);
+    sourceV4Results.push({case:'direct-git-v3-no-invented-receipt',v4ReceiptDigest:receipt.transitionDigest});
+  }finally{f.close();}
+});
+
+test('PAN542 source compatibility v4 fresh current init is strict-bound and explicit no-op adds no metadata; retired V1 V2 V3 entries deny even fresh current source',async()=>{
+  const f=await financeFixture();try{
+    const cur=currentSessionsV3(f.parent,'v4-fresh-auth'),record=backend.initializeNativeErvHumanBackendV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessionBinding:cur.sessions.binding});
+    const bytes=readFileSync('src/pan542/source-compatibility-catalog-v4.json'),catalog=JSON.parse(bytes);
+    assert.deepEqual(record.sourceIdentity,[...catalog.targetFiles,{path:'src/pan542/source-compatibility-catalog-v4.json',sha256:createHash('sha256').update(bytes).digest('hex')}]);
+    const before=allNativeRowsV3(f.root),options={root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:cur.sessions},noop=backend.transitionNativeErvHumanSourceCompatibilityV4(options);
+    assert.equal(noop.schemaVersion,'pansphaira.erv-human/source-compatibility-noop/v4');assert.equal(noop.outcome,'ALREADY_SOURCE_BOUND');assert.equal(noop.originalBindingDigest,record.bindingDigest);assert.equal(noop.executionAuthorityGranted,false);
+    assert.deepEqual(backend.transitionNativeErvHumanSourceCompatibilityV4(options),noop);
+    for(const v of [1,2,3])assert.throws(()=>backend[`transitionNativeErvHumanSourceCompatibilityV${v}`](options),/ERV_HUMAN_SOURCE_TARGET_DENIED/);
+    preservedV3(f.root,before);assert.equal('pan542_source_compatibility_v4' in before,false);
+    assert.equal(backend.createNativeErvHumanBackendV1({root:f.root,sessions:cur.sessions}).read(issue(cur.sessions,'synthetic:erv-reviewer'),{invoiceId}).executionAuthorityGranted,false);
+    sourceV4Results.push({case:'fresh-v4-strict-noop-no-table',strictBindingVerifiedAgainstCatalogV4:true});
+  }finally{f.close();}
+});
+
+test('PAN542 source compatibility v4 denies wrong owner, facade, caller hashes, tenant/session drift and active fence with no row/task effects',async()=>{
+  const f=await preservedV4Fixture();try{
+    const before=allNativeRowsV3(f.root),tasks=readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),options={root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions:f.sessions};
+    for(const owner of [null,'HTTP_USER','APPROVER'])assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV4({...options,owner}),/SOURCE_LOCAL_OWNER_REQUIRED_DENIED/);
+    for(const sessions of [{binding:f.sessions.binding},Object.freeze({...f.sessions})])assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV4({...options,sessions}),/PROTECTED_SESSION_OWNER_REQUIRED_DENIED/);
+    for(const extra of [{sourceIdentity:[]},{sourceHash:'0'.repeat(64)},{targetFiles:[]},{grant:true},{predecessorCommit:'0'.repeat(40)}])assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV4({...options,...extra}),/SOURCE_OWNER_OPTIONS_DENIED/);
+    for(const [name,overrides]of [['tenant',{identity:shapeIdentity527('tenant-b')}],['origin',{origin:'https://foreign-v4.test:4443'}],['generation',{identity:{...shapeIdentity527('tenant-a'),generation:2}}]]){
+      const auth=join(f.parent,'v4-foreign-'+name);mkdirSync(auth,{mode:0o700});
+      const sessions=createProtectedSessionAdapterV1(compatibilitySessionOptions(auth,overrides));
+      assert.throws(()=>backend.transitionNativeErvHumanSourceCompatibilityV4({...options,sessions}),/ERV_HUMAN_SESSION_BINDING_DENIED/);
+    }
+    for(const v of [1,2,3])assert.throws(()=>backend[`transitionNativeErvHumanSourceCompatibilityV${v}`](options),/ERV_HUMAN_SOURCE_TARGET_DENIED/);
+    const lease=sourceFenceV3(join(f.root,'pan453-owned-v2'));try{assert.throws(()=>transitionV4(f),{message:'BTH_JOURNAL_FENCED_DENIED'});}finally{lease.release();}
+    preservedV3(f.root,before);assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasks);
+  }finally{f.close();}
+});
+
+test('PAN542 source compatibility v4 missing genuine V3 predecessor remains denied with real V1 V2 receipts present',async()=>{
+  const f=await preservedV2FixtureForSuccessor();try{const before=allNativeRowsV3(f.root);assert.ok(before.pan542_source_compatibility_v2);assert.throws(()=>transitionV4(f),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/);preservedV3(f.root,before);}finally{f.close();}
+});
+
+test('PAN542 source compatibility v4 unbound native store is not initialized or adopted',async()=>{
+  const f=await compatibilityFixture({unbound:true});try{const before=allNativeRowsV3(f.root);assert.throws(()=>transitionV4(f),/ERV_HUMAN_(HISTORY_GUARDS|CONFIGURATION_REQUIRED)_DENIED/);preservedV3(f.root,before);}finally{f.close();}
+});
+
+test('PAN542 source compatibility v4 actual backend/adapter target drift and forged predecessor provenance/catalog are denied',async()=>{
+  const f=await preservedV4Fixture();try{
+    const before=allNativeRowsV3(f.root);
+    for(const kind of ['backend','adapter','provenance','predecessor','catalog-v3']){
+      const parent=join(f.parent,'v4-untrusted-'+kind);mkdirSync(parent,{mode:0o700});
+      const root=sourceNegativeFixture(process.cwd(),parent),entry=join(root,'src/pan542/native-human-backend.mjs');let sessions=f.sessions;
+      if(kind==='backend')appendFileSync(entry,'\n// actual unadmitted backend drift\n');
+      else if(kind==='adapter'){
+        // Unlink only the isolated negative fixture symlink; never mutate its real source.
+        const {unlinkSync}=await import('node:fs'),path=join(root,'src/pan527/origin-session-adapter.mjs'),bytes=readFileSync(path);
+        unlinkSync(path);writeFileSync(path,Buffer.concat([bytes,Buffer.from('\n// actual unadmitted adapter drift\n')]));
+        const adapter=await import(pathToFileURL(path));sessions=adapter.createProtectedSessionAdapterV1(compatibilitySessionOptions(f.authRoot));
+      }else{
+        const path=join(root,`src/pan542/source-compatibility-catalog-${kind==='catalog-v3'?'v3':'v4'}.json`),policy=JSON.parse(readFileSync(path,'utf8'));
+        if(kind==='predecessor')policy.predecessorSourceIdentity[0].sha256='0'.repeat(64);else policy.predecessorPrimary={...policy.predecessorPrimary,releaseId:438045921};
+        writeFileSync(path,JSON.stringify(policy));
+      }
+      const untrusted=await import(pathToFileURL(entry));
+      assert.throws(()=>untrusted.transitionNativeErvHumanSourceCompatibilityV4({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessions}),/ERV_HUMAN_SOURCE_(TARGET|CATALOG)_DENIED/,kind);
+      preservedV3(f.root,before);
+    }
+  }finally{f.close();}
+});
+
+test('PAN542 source compatibility v4 interrupted real DDL rolls back and restart commits exactly once without orphan fence',async()=>{
+  const f=await preservedV4Fixture();let child;try{
+    const before=allNativeRowsV3(f.root),tasks=readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),opts=JSON.stringify(compatibilitySessionOptions(f.authRoot)),root=JSON.stringify(f.root);
+    const script=`import {DatabaseSync} from 'node:sqlite';import {createProtectedSessionAdapterV1} from './src/pan527/origin-session-adapter.mjs';import {transitionNativeErvHumanSourceCompatibilityV4} from './src/pan542/native-human-backend.mjs';const original=DatabaseSync.prototype.exec;DatabaseSync.prototype.exec=function(sql){const result=original.call(this,sql);if(sql.startsWith('CREATE TABLE pan542_source_compatibility_v4(')){process.stdout.write('V4_ACTUAL_DDL_REACHED\\n');process.kill(process.pid,'SIGSTOP');}return result;};const sessions=createProtectedSessionAdapterV1(${opts});transitionNativeErvHumanSourceCompatibilityV4({root:${root},owner:'LOCAL_SYNTHETIC_OWNER',sessions});`;
+    child=spawn(process.execPath,['--input-type=module','-e',script],{cwd:process.cwd(),stdio:['ignore','pipe','pipe']});let stderr='';child.stderr.on('data',b=>{stderr+=b;});
+    await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(Error('V4_TRANSITION_DDL_NOT_REACHED:'+stderr)),10000);child.stdout.on('data',b=>{out+=b;if(out.includes('V4_ACTUAL_DDL_REACHED')){clearTimeout(timer);resolve();}});child.once('exit',code=>{clearTimeout(timer);reject(Error('V4_CHILD_PREMATURE_EXIT:'+code+':'+stderr));});});
+    const ended=new Promise(resolve=>child.once('exit',(code,signal)=>resolve({code,signal})));child.kill('SIGKILL');assert.equal((await ended).signal,'SIGKILL');
+    preservedV3(f.root,before);assert.throws(()=>backend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions}),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/);
+    const restart=spawnSync(process.execPath,['--input-type=module','-e',`import {createProtectedSessionAdapterV1} from './src/pan527/origin-session-adapter.mjs';import {transitionNativeErvHumanSourceCompatibilityV4,createNativeErvHumanBackendV1} from './src/pan542/native-human-backend.mjs';const sessions=createProtectedSessionAdapterV1(${opts});const receipt=transitionNativeErvHumanSourceCompatibilityV4({root:${root},owner:'LOCAL_SYNTHETIC_OWNER',sessions});createNativeErvHumanBackendV1({root:${root},sessions});console.log(receipt.transitionDigest);`],{cwd:process.cwd(),encoding:'utf8'});
+    assert.equal(restart.status,0,restart.stderr);assert.equal(restart.stdout.trim(),transitionV4(f).transitionDigest);
+    preservedV3(f.root,before,['pan542_source_compatibility_v4']);assert.equal(nativeRows(f.root,'SELECT count(*) AS n FROM pan542_source_compatibility_v4')[0].n,1);
+    assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasks);
+    sourceV4Results.push({case:'v4-real-ddl-rollback-restart-once',rollbackClean:true,committedOnce:true});
+  }finally{if(child?.exitCode===null)child.kill('SIGKILL');f.close();}
+});
+
+
+test('PAN542 source compatibility v4 rejects empty forged replaced predecessor/successor receipts and malformed immutable guards without repairing history',async()=>{
+  for(const version of [3,4])for(const kind of ['empty','forged','replaced','guard']){
+    const f=await preservedV4Fixture();try{
+      if(version===4)transitionV4(f);
+      const table=`pan542_source_compatibility_v${version}`,db=new DatabaseSync(join(f.root,'target.sqlite'));
+      try{
+        const guards=db.prepare("SELECT name,sql FROM sqlite_master WHERE type='trigger' AND tbl_name=? ORDER BY name").all(table);
+        if(kind==='guard')db.exec(`DROP TRIGGER ${guards[0].name}`);
+        else{
+          for(const guard of guards)db.exec(`DROP TRIGGER ${guard.name}`);
+          if(kind==='empty')db.exec(`DELETE FROM ${table}`);
+          else if(kind==='forged')db.exec(`UPDATE ${table} SET record='{}'`);
+          else{const record=JSON.parse(db.prepare(`SELECT record FROM ${table}`).get().record);record.predecessorTransitionDigest='0'.repeat(64);db.prepare(`INSERT OR REPLACE INTO ${table} VALUES(1,?)`).run(JSON.stringify(record));}
+          for(const guard of guards)db.exec(guard.sql);
+        }
+      }finally{db.close();}
+      const before=allNativeRowsV3(f.root),tasks=readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2'));
+      assert.throws(()=>transitionV4(f),kind==='guard'?/ERV_HUMAN_SOURCE_HISTORY_GUARDS_DENIED/:/ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED/);
+      if(version===4)assert.throws(()=>backend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions}),kind==='guard'?/ERV_HUMAN_SOURCE_HISTORY_GUARDS_DENIED/:/ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED/);
+      preservedV3(f.root,before);assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasks);
+    }finally{f.close();}
+  }
+});
+
+test('PAN542 source compatibility v4 unknown actually measured predecessor source is not silently retargeted or adopted',async()=>{
+  const f=await compatibilityFixture({unbound:true});try{
+    const negative=sourceNegativeFixture(historyV3Root,f.parent),entry=join(negative,'src/pan542/native-human-backend.mjs');
+    appendFileSync(entry,'\n// unknown actual V3 predecessor closure\n');
+    const untrusted=await import(pathToFileURL(entry));
+    untrusted.initializeNativeErvHumanBackendV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessionBinding:f.sessions.binding});
+    const before=allNativeRowsV3(f.root);
+    assert.throws(()=>transitionV4(f),/ERV_HUMAN_CONFIGURATION_BINDING_DENIED/);preservedV3(f.root,before);
+  }finally{f.close();}
+});
