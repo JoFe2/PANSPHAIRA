@@ -1003,6 +1003,14 @@ Object.freeze({
   "toSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
   "reason": "Register exactly the two V3 source-compatibility catalog and documentation paths on the existing native ERV owner for the accepted PR691 adapter delta. Preserve all prior migrations, immutable admitted obligations, scanner/validator semantics, native guards and runnable inventory. The unchanged mechanical scan retains1309 files and348 import sites in347 files; only the checksum inventory grows from2858 to2860 paths. No source drift is adopted automatically and no model or whole-parent acceptance is granted."
 }),
+  Object.freeze({
+  "migrationId": "PR681-FAST-URI-3.1.9-DEV-POLICY-V2/INTEGRITY-GENERATOR/V109",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 109,
+  "fromSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
+  "toSha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
+  "reason": "Register only the explicit PAN594 developer-readback v2 policy and its structural contract test at the existing critical owner. Preserve historical v1, all prior migrations, admitted-base obligations, scanner semantics, exact Linux x64 runtime/installed-byte guards, closed runner and runnable inventory. This PR681 branch successor derives from its actual V108 tip; parallel unmerged PR679 migrations are not imported. No native, performance, release or independent acceptance is asserted."
+}),
   ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -1015,7 +1023,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1312,
+  "filesScanned": 1313,
   "declarationSites": 37,
   "declarationFiles": 37,
   "importSites": 349,
@@ -1025,7 +1033,7 @@ const EXPECTED_COUNTS = {
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2864,"uniquePaths":2864,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2866,"uniquePaths":2866,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1808,7 +1816,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
@@ -2134,6 +2142,21 @@ test("negative: exact v108 native source successor generator target cannot be re
     migration.toSha256 = "f".repeat(64);
   }, "profile-version-migration:");
 });
+test("negative: PR681 v109 closed generator successor rejects caller target hashes", () => {
+  const inventory = loadInventory() as any;
+  const migration = inventory.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR681-FAST-URI-3.1.9-DEV-POLICY-V2/INTEGRITY-GENERATOR/V109");
+  assert.ok(migration, "explicit PR681 generator successor must be registered");
+  assert.equal(migration.fromSha256, "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205");
+  assert.equal(migration.profileVersion, 109);
+  assertFails((inv) => { inv.profileVersionMigrations.find((entry: any) => entry.migrationId === migration.migrationId).toSha256 = "f".repeat(64); }, "profile-version-migration:");
+});
+test("negative: PR681 v109 cannot migrate a neighboring control path", () => {
+  const inventory = loadInventory() as any;
+  const migration = inventory.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR681-FAST-URI-3.1.9-DEV-POLICY-V2/INTEGRITY-GENERATOR/V109");
+  assert.ok(migration, "explicit PR681 generator successor must be registered");
+  assertFails((inv) => { inv.profileVersionMigrations.find((entry: any) => entry.migrationId === migration.migrationId).path = "demo/runtime/local-journal-owner.mjs"; }, "profile-version-migration:");
+});
+
 test("negative: exact v108 native source successor cannot migrate a neighboring control path", () => {
   assertFails((inv) => {
     const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR691-SOURCE-COMPATIBILITY-V3/INTEGRITY-GENERATOR/V108");

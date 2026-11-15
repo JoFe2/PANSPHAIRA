@@ -3666,7 +3666,7 @@
         {
           "path": "src/pan591/locked-dev-readback-admission-v1.mjs",
           "role": "SECURITY",
-          "sha256": "9f02daf9ae808d7c88ad2ea658814a07bf7ec92087c7a4423f5cc0d02be41481"
+          "sha256": "4659857ad54e13609a277ecbb0a89f4b185c995d5d469edbc5ced48175a4e9e2"
         },
         {
           "path": "src/pan594/dev-readback-diagnostic-v1.mjs",
@@ -3686,12 +3686,12 @@
         {
           "path": "scripts/run-pan594-dev-readback-comparison.mjs",
           "role": "VALIDATOR",
-          "sha256": "c4133ddd12bff8e9d6e1b50d8610099acc7a1dab2e33fd4384dfa94ee125989f"
+          "sha256": "e277de57c6a7e683d3aae9350556a9fbc55affeb87b472450530cafd8b0d6365"
         },
         {
           "path": "tests/pan594/browser-comparison.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "6570a92d88bff60df659a79a34809eb0e3afe44b4bea8ace549b83d7201bae75"
+          "sha256": "14e22593555fb33f785008898145b23a14224b4b1dc8275064d33dd1b2f3b952"
         },
         {
           "path": "tests/pan594/bundle-adapter-entry.mjs",
@@ -3706,27 +3706,37 @@
         {
           "path": "tests/pan594/fixture.mjs",
           "role": "VALIDATOR",
-          "sha256": "a1ec26ffaa3d66acbb714ed6c0d069b077d2e531fd32802b564942dc45498629"
+          "sha256": "c809685b9bc387f78179055523aba397d7892337a700f0fd4a343529d4c4e74f"
         },
         {
           "path": "tests/pan594/measurement.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "59c3a9436054fcf65dfd5c744ae0533ed475ae4e921c3fe923082d2e9d8e2468"
+          "sha256": "6123b07afc87abe9f9c7aa8bc601beee6e4a1bac304b185e9bb08ba2b91555c9"
         },
         {
           "path": "tests/pan594/native-comparison.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "e88fe6436f24b626e3fae227ea72f7a3ab33e7d560970ef708eb7377aaf6121c"
+          "sha256": "2f56e5ffc8c12f20fffbe2c3387c9ac84a8bae33eb77d476b40d6bb0a977a4b8"
         },
         {
           "path": "tests/pan594/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "a72da6afe0e34d67a53e1d230a92a6d6473c901c111c68a923cbc76192a90bef"
+          "sha256": "ccae6e116066d63a641171bebd1fff5c8044cfc80acaa502e1bedd242cddb5f1"
         },
         {
           "path": "docs/architecture/pan594-native-dev-readback-comparison-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "5ed7d624df9abff22c9a3b676aaca90e2e7c5a3f1e6c7dd6ea6e5bcfee488e67"
+          "sha256": "c4653762f29b5fbf5d13f9c1eea059f788de969ac188e85db1429b945686669e"
+        },
+        {
+          "path": "fixtures/pan594/locked-ajv2020-dev-readback-policy-v2.json",
+          "role": "CONTRACT",
+          "sha256": "4f3124ca6b6b6dc15ccbe1491f7ea4ba772ac4b0f4e9daa8f8b1e9ac414c7784"
+        },
+        {
+          "path": "tests/pan594/policy-successor.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "a6b7681c37ee51faff65770f12c7f80f4d35e7706ef4d50a3ae9dae4b04838df"
         }
       ],
       "ownedTests": [
@@ -5045,7 +5055,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "7f48ae7ccbccd9f3be0a82b390a7547174d14f71870cb9fed931a68022c35bf5"
+          "sha256": "21ce1ac86d85f2ebb31ec6ab02977e04a788bf8942a77fcf67e5e0920f235150"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5110,7 +5120,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "2a6941ce3a33f51c3db9ea1b7df7217c44572dec41b4918bbc77e8f5f4363290"
+          "sha256": "5b66705d2327200460ba8ddf8764ab1d8455e5bbe6698c41d2087ef45d8b3acd"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5235,7 +5245,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "c1986fc02ba2fc9cafbe3449c15bb1974e4fceee6b0d2b3e7c6e7e950243991f"
+          "sha256": "6a66025301b6e3d204702c7e6358b928379f1d8762fd709b60bb80d25ce78b63"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -5902,7 +5912,7 @@
         {
           "path": "package-lock.json",
           "role": "TOOLCHAIN",
-          "sha256": "ca886aa0f9941926480e32282e4d64184fd52fd7eb8659cfddf38ce8292be73f"
+          "sha256": "921fd8c135928a0206d129a219d544dbf4969644aa9a6869c6770075743ec850"
         },
         {
           "path": "tsconfig.json",
