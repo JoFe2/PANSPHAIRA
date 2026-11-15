@@ -5110,7 +5110,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "01afe6aee1bd4c83bb19282f2a8a05e229c2ae0f35e85b55d7d65405feab3d0d"
+          "sha256": "44ada93e925afe2fd375a8ff546041192af8a12aa7025fbd483b48b5e0ff325e"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5235,7 +5235,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "6cdd25ce5388a1d792f5931fc15a424b21eeb984e36e3e32eef8e1547dad74e5"
+          "sha256": "22ccc765da9df352f13aacba9b376b29a99ad19801ed6d11b468cd1126c9ed78"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -11183,7 +11183,7 @@
         {
           "path": "src/pan542/native-human-backend.mjs",
           "role": "SECURITY",
-          "sha256": "4caad3f8a794940a008b4c1b2517fc309be849685e1e06aac5ffd1e5eba0c2f2"
+          "sha256": "6104f4cea4200a335f13c622099caccd0e6a1e8ae31fa8f7ecaf1c553cc1664f"
         },
         {
           "path": "src/pan542/source-compatibility-catalog-v1.json",
@@ -11193,12 +11193,12 @@
         {
           "path": "tests/pan542/source-compatibility-fixture.mjs",
           "role": "VALIDATOR",
-          "sha256": "b8b0b2313a9219836998db1c54b5b743fba89b302208605b2135442e7fc5b793"
+          "sha256": "150ccb31164a4d34e20cc198df0c1f3fc926e8152bc20d42ead02213a95f22a0"
         },
         {
           "path": "tests/pan542/native-human-backend.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "1b9ba8dd99c55c18d0e32af105eab46f38f7c94b08c02d5ef182f7094e3a95de"
+          "sha256": "2e44d4f40327144f8fc49a2f7637ee7bf2649c4c0ba447627c289604c9f66dee"
         },
         {
           "path": "tests/pan542/ks-price-variance-query.test.mjs",
@@ -11208,7 +11208,7 @@
         {
           "path": "tests/pan542/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "d6fa2b0017b7ec4c3454d44a4ba5323d490456d60d25132211e27b2e3e85cf37"
+          "sha256": "3122def80340b401bddaac4f13f5da7a005be156f9fe541f35e83e9e835f402e"
         },
         {
           "path": "tests/pan542/restart-reader.mjs",
@@ -11234,6 +11234,16 @@
           "path": "docs/architecture/erv-human-source-compatibility-v3.md",
           "role": "DERIVED_EVIDENCE",
           "sha256": "a44c3c8bdc2cfd7e1c0e48023bb59256ac56934328aded19fac79442bedf507b"
+        },
+        {
+          "path": "src/pan542/source-compatibility-catalog-v4.json",
+          "role": "SECURITY",
+          "sha256": "0b96925c4824090777a55e11e492f38e37579f7b913a7674d591c2dc0750c9dc"
+        },
+        {
+          "path": "docs/architecture/erv-human-source-compatibility-v4.md",
+          "role": "DERIVED_EVIDENCE",
+          "sha256": "7f93bc0b8851165d5338d1c5a522986151f60c3d891e903fd6fca9f4379e7178"
         },
         {
           "path": "src/pan542/ks-price-variance-query.mjs",

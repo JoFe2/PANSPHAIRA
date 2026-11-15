@@ -2929,7 +2929,9 @@ const pan542Inputs = [
     "DERIVED_EVIDENCE"
   ],
   ["src/pan542/source-compatibility-catalog-v3.json", "SECURITY"],
-  ["docs/architecture/erv-human-source-compatibility-v3.md", "DERIVED_EVIDENCE"]
+  ["docs/architecture/erv-human-source-compatibility-v3.md", "DERIVED_EVIDENCE"],
+  ["src/pan542/source-compatibility-catalog-v4.json", "SECURITY"],
+  ["docs/architecture/erv-human-source-compatibility-v4.md", "DERIVED_EVIDENCE"]
 ];
 let pan542Node = dag.nodes.find(({ id }) => id === "pan542-native-erv-human-v1");
 if (pan542Node === undefined) {

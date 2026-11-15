@@ -1011,6 +1011,14 @@ Object.freeze({
   "toSha256": "49e9f1213fe75f712a75439c2185b505f3ef660135b17ef016c633615201dccf",
   "reason": "Bind only the retained PR679 two source-only native display session/ingress registrations to the existing PAN597 owner as an exact successor of V108. Current-main ba3447175ae767eb25d2592780fc0dbdc67345cd contributes the new UI observation test. The unchanged mechanical scanner measures1314 files,350 import sites in349 files and2866 unique ledger paths. Preserve every historical migration and immutable admitted fixture, all21 base obligations/13 pinned profiles, graph104/all109 owners, scanner/validator semantics, original byte caps, native principal/CSP/no-selector guards and legacy runnable inventory. This current-main compatibility admission makes no supported Linux, authenticated browser, CI, release or whole-issue acceptance claim."
 }),
+Object.freeze({
+  "migrationId": "PAN542-PR679-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 110,
+  "fromSha256": "49e9f1213fe75f712a75439c2185b505f3ef660135b17ef016c633615201dccf",
+  "toSha256": "3ce32a42ad50731e7eb8cb5dc7d3c73183a3d60fb518f88edce4aaab17cd9400",
+  "reason": "Register exactly the V4 catalog SECURITY and documentation DERIVED_EVIDENCE inputs on the one existing PAN542 native ERV owner, preserving its runner and every hard gate. The unchanged compiled mechanical scanner measures 1314 files, 350 import sites in 349 files and 2868 unique ledger paths. Preserve all historical migrations, immutable base obligations and fixtures, scanner/validator semantics, historical source catalog pins, all owners and original byte caps. Runtime source catalog V4 is distinct from this inventory migration V110. This registration grants no supported Linux, KS, native, browser, CI or release acceptance."
+}),
   ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -1033,7 +1041,7 @@ const EXPECTED_COUNTS = {
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2866,"uniquePaths":2866,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2868,"uniquePaths":2868,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1816,7 +1824,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
@@ -2160,6 +2168,21 @@ test("negative: exact v109 display source successor generator target cannot be r
 test("negative: exact v109 display source successor cannot migrate a neighboring control path", () => {
   assertFails((inv) => {
     const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN597-PR679-RESTRICTED-DISPLAY-SOURCE/INTEGRITY-GENERATOR/V109");
+    assert.ok(migration); migration.path = "scripts/build-public-release.sh";
+  }, "profile-version-migration:");
+});
+
+
+test("negative: exact v110 V4 registration successor generator target cannot be replaced by a caller hash", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR679-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
+    assert.ok(migration); assert.equal(migration.path, "scripts/refresh-integrity-data.mjs"); assert.equal(migration.profileVersion, 110);
+    migration.toSha256 = "f".repeat(64);
+  }, "profile-version-migration:");
+});
+test("negative: exact v110 V4 registration successor cannot migrate a neighboring control path", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR679-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
     assert.ok(migration); migration.path = "scripts/build-public-release.sh";
   }, "profile-version-migration:");
 });
