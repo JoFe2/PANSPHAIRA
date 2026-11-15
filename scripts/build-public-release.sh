@@ -839,10 +839,16 @@ repository_only_files = {
     # Exact connected ERV V2 source metadata; no legacy runtime member or rights grant.
     "src/pan542/source-compatibility-catalog-v2.json",
     "docs/architecture/erv-human-source-compatibility-v2.md",
+    "src/pan542/source-compatibility-catalog-v3.json",
+    "docs/architecture/erv-human-source-compatibility-v3.md",
     "tests/pan542/source-compatibility-fixture.mjs",
     "tests/pan542/native-human-backend.test.mjs",
     "tests/pan542/registration.test.mjs",
     "tests/pan542/restart-reader.mjs",
+    # PAN692 bounded KS price-variance QUERY adapter: source-only, no new runtime member.
+    "src/pan542/ks-price-variance-query.mjs",
+    "tests/pan542/ks-price-variance-query.test.mjs",
+    "docs/architecture/erv-human-ks-price-variance-query-v1.md",
 
     # PAN544 personal native feed: source-only; legacy payload and rights unchanged.
     "docs/architecture/native-workspace-notifications-v1.md",
@@ -1000,6 +1006,16 @@ repository_only_files = {
     "tests/pan565/transport-price-bound.test.mjs",
     "tests/pan565/browser-model-connection.test.mjs",
     "tests/pan565/registration.test.mjs",
+    # PAN567 explicit proposal-only onboarding on existing563/565; source evidence only.
+    "packages/contracts/src/agent-configuration-proposal-v1.ts",
+    "packages/browser-workspace/src/configuration-proposal-v1.ts",
+    "src/pan567/configuration-proposal-owner.mjs",
+    "scripts/run-pan567-configuration-proposal-tests.mjs",
+    "tests/pan567/proposal-contract.test.mjs",
+    "tests/pan567/owner-dialogue.test.mjs",
+    "tests/pan567/confirmation-semantics.test.mjs",
+    "tests/pan567/browser-proposal.test.mjs",
+    "tests/pan567/registration.test.mjs",
     # PAN575 shared broker feedback source-only; no new runnable payload.
     "docs/architecture/broker-tool-feedback-v1.md",
     "packages/contracts/src/model-tool-transcript-v1.ts",
@@ -1009,7 +1025,12 @@ repository_only_files = {
     "tests/pan575/tool-transcript.test.mjs",
     "tests/pan575/broker-feedback-native.test.mjs",
     "tests/pan575/native-ui-consumer.test.mjs",
+    "tests/pan575/local-model-qualification.test.mjs",
+    "tests/pan575/native-ui-wire-adapter.test.mjs",
     "tests/pan575/registration.test.mjs",
+    "scripts/run-pan575-local-model-qualification.mjs",
+    "docs/architecture/pan575-local-model-qualification-v1.md",
+    "docs/architecture/pan575-native-ui-wire-alias-v1.md",
 
     # PAN468 module-contribution impact selection — repository-only
     # (corrects the impact/compare consumer classification and bounds the

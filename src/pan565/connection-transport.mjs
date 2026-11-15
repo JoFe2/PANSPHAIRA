@@ -11,6 +11,101 @@ import {readProtectedOwnerSecretFileV1} from '../pan527/origin-session-adapter.m
 import {modelConnectionClosedV1 as exact,modelConnectionArrayV1,validateModelConnectionSummaryV1,validateModelConnectionLimitsV1} from '../../dist/packages/contracts/src/workspace-model-connection-v1.js';
 import {isModelChatCallIdV1} from '../../dist/packages/contracts/src/model-tool-transcript-v1.js';
 const sha=v=>createHash('sha256').update(v).digest('hex'),fail=(c='MODEL_CONNECTION_TARGET_DENIED')=>{throw Error(c);};
+// Closed, versioned provider-wire name adaptation for the ACTUAL native UI
+// owner path (#565 owner -> #575 shared loop -> #548 consumer). The available
+// local server enforces dotted-free function names (real HTTP 400 observed on
+// dotted wire names). This binding is a presentation-only rename of the two
+// exact native UI capabilities: native names, rights, schemas, invoke/validate,
+// opaque case-sensitive call_ids, fresh challenges and owner settlement stay
+// original, and every response name is restored to the exact known native
+// identity before broker/owner validation. No generic normalization, no free
+// registry, no model-selectable alias rights, no new capability. The adapter
+// engages ONLY on requests that actually declare a UI-catalog name; a request
+// carrying only other dotted names (the original574 native composition
+// capability ids) passes through byte-identical and keeps its ORIGINAL
+// broker/tool guards. These bytes
+// are covered by the file-byte adapterDigest/parserDigest below, so changed
+// adapter bytes invalidate every bound summary, freshness check and ledger
+// identity through the EXISTING owner identity check. Aliases never mint
+// authority; the separate #546 preview/confirmation/CAS authority is untouched.
+export const MODEL_UI_WIRE_ALIAS_V1=Object.freeze({schemaVersion:'pansphaira.model-connection/ui-wire-alias/v1',binding:Object.freeze({'ui.view.read':'ui_view_read','ui.view.propose':'ui_view_propose'})});
+// Original574 composition admission runs on this SAME owner/consent/ledger
+// with its OWN code-owned purpose; admission requires this purpose to be
+// explicitly enumerated in the owner-bound product grant. A probe/UI-only
+// grant can never admit composition and this purpose alone can never admit
+// a UI task: closed third purpose, not a widened or client-selectable
+// catalog. The exact original capability pair keeps its dotted NATIVE
+// identity end-to-end; only the closed provider-wire binding below renames
+// it for transport, because the controlled existing peer and the real local
+// Qwen server reject dotted function names.
+export const MODEL_CONNECTION_COMPOSITION_PURPOSE_V1='purpose:pan574-composition-feedback';
+// Original #567 B1 proposal-only onboarding admission rides this SAME owner,
+// consent, transport and COST ledger with its OWN closed fourth purpose: a
+// single tool-less bounded call that must answer with one closed typed
+// configuration proposal (contracts agent-configuration-proposal-v1). A probe,
+// UI or composition consent is never inherited and this purpose alone can
+// never admit a probe/UI/composition task. No client-selectable catalog, no
+// widened guard, no new broker, task database or authority store.
+export const MODEL_CONNECTION_PROPOSAL_PURPOSE_V1='purpose:configuration-onboarding-proposal';
+// MINIMAL closed composition-specific wire adaptation, authorized for this
+// EXACT two-name composition purpose/catalog only. Provider-safe aliases
+// (identical to the portable names already proven against the real server
+// in run04); no generic normalization, no caller-selected mapping, no
+// dotted fallback, no added authority. The native descriptors, catalog,
+// offer/payload digests, native effect and native readback identity stay
+// exact: the outgoing assistant transcript and the incoming response-name
+// inversion use the SAME mapping, so the ORIGINAL broker/tool guards only
+// ever see the dotted native identities.
+export const MODEL_COMPOSITION_WIRE_ALIAS_V1=Object.freeze({schemaVersion:'pansphaira.model-connection/composition-wire-alias/v1',binding:Object.freeze({'pan522.material.plan':'pan522_material_plan','erp.order.create':'erp_order_create'})});
+const wireAliasTokenV1=/^[A-Za-z0-9_-]{1,64}$/;
+export function adaptNativeUiWireRequestV1(request,binding=MODEL_UI_WIRE_ALIAS_V1.binding){
+ if(!request||typeof request!=='object'||Array.isArray(request)||!binding||typeof binding!=='object'||Array.isArray(binding))fail('MODEL_CONNECTION_WIRE_ALIAS_DENIED');
+ // Closed registry: the ONLY accepted mapping is the exact code-owned binding.
+ // A caller-supplied second argument that deviates in any way (forged, foreign
+ // or partial) is refused explicitly — never silently honoured, never silently
+ // ignored. There is no free registry configuration.
+ const owned=Object.entries(MODEL_UI_WIRE_ALIAS_V1.binding),entries=Object.entries(binding);
+ if(entries.length!==owned.length||entries.some(([n,a])=>MODEL_UI_WIRE_ALIAS_V1.binding[n]!==a))fail('MODEL_CONNECTION_WIRE_ALIAS_DENIED');
+ const aliasOf=new Map(entries);
+ if(!entries.length||entries.some(([n,a])=>typeof n!=='string'||!n.includes('.')||typeof a!=='string'||!wireAliasTokenV1.test(a)||a===n)||new Set(entries.map(([,a])=>a)).size!==entries.length)fail('MODEL_CONNECTION_WIRE_ALIAS_DENIED');
+ const declared=new Set(),tools=Array.isArray(request.tools)?request.tools:[],messages=Array.isArray(request.messages)?request.messages:[];
+ for(const t of tools)if(typeof t?.function?.name==='string')declared.add(t.function.name);
+ for(const m of messages)if(m?.role==='assistant'&&Array.isArray(m.tool_calls))for(const c of m.tool_calls)if(typeof c?.function?.name==='string')declared.add(c.function.name);
+ // Integration seam: this closed adapter engages ONLY on requests that
+ // actually declare a code-owned dotted catalog: the UI pair above, or the
+ // EXACT original574 composition pair. A request with no code-owned dotted
+ // name at all is the untouched pre-existing provider path: byte-identical
+ // pass-through, aliases null, the ORIGINAL broker/tool guards decide there.
+ const compOf=MODEL_COMPOSITION_WIRE_ALIAS_V1.binding,declaredList=[...declared];
+ const uiCatalog=declaredList.some(n=>aliasOf.has(n)),compositionCatalog=declaredList.some(n=>Object.hasOwn(compOf,n));
+ if(!uiCatalog&&!compositionCatalog)return {request,aliases:null};
+ const dotted=declaredList.filter(n=>n.includes('.'));
+ let mapOf;
+ if(uiCatalog){
+  // Actual UI-catalog request: every dotted/mixed name must map exactly through
+  // the closed UI binding. Unknown or colliding dotted/mixed names (including a
+  // UI-catalog name combined with a foreign dotted name — even a composition
+  // name) are refused BEFORE dispatch; the provider-incompatible name is never
+  // silently renamed/dropped and strict purpose isolation stays unchanged.
+  if(dotted.some(n=>!aliasOf.has(n))||declared.size!==new Set(declaredList.map(n=>aliasOf.get(n)??n)).size)fail('MODEL_CONNECTION_WIRE_NAME_DENIED');
+  mapOf=aliasOf;
+ }else{
+  // Closed composition-only request: the ONLY admitted shape is the exact
+  // two-name composition catalog — every declared name one of the pair, the
+  // whole pair, nothing else. A proper subset, an added name or any UI
+  // mixture is refused BEFORE dispatch; no dotted fallback.
+  if(declared.size!==2||!declaredList.every(n=>Object.hasOwn(compOf,n)))fail('MODEL_CONNECTION_WIRE_NAME_DENIED');
+  mapOf=new Map(Object.entries(compOf));
+ }
+ // Outbound: native -> wire for declared tools AND the assistant transcript
+ // (the SAME closed mapping in both). Responses are restored through the
+ // separate wire -> native map; any response name that is not exactly a
+ // known wire alias is refused below.
+ const toWire=new Map(dotted.map(n=>[n,mapOf.get(n)])),aliases=new Map(dotted.map(n=>[mapOf.get(n),n])),wire=structuredClone(request);
+ for(const t of(wire.tools??[]))if(toWire.has(t?.function?.name))t.function.name=toWire.get(t.function.name);
+ for(const m of(wire.messages??[]))if(m?.role==='assistant'&&Array.isArray(m.tool_calls))for(const c of m.tool_calls)if(toWire.has(c?.function?.name))c.function.name=toWire.get(c.function.name);
+ return {request:wire,aliases};
+}
 export const connectionTransportIdentityV1=()=>({adapterDigest:sha(readFileSync(new URL('./connection-transport.mjs',import.meta.url))),parserDigest:sha(readFileSync(new URL('./connection-transport.mjs',import.meta.url)))});
 const publicV4=ip=>{if(isIP(ip)!==4)return false;const[a,b]=ip.split('.').map(Number);return !(a===0||a===10||a===127||a===169&&b===254||a===172&&b>=16&&b<=31||a===192&&[0,168].includes(b)||a===100&&b>=64&&b<=127||a===198&&[18,19,51].includes(b)||a===203&&b===0||a>=224);};
 export function bindModelConnectionTransportV1(value){
@@ -27,7 +122,7 @@ export function bindModelConnectionTransportV1(value){
  // Nonzero-priced real calls require an independently owner-bound product
  // grant in addition to the exact browser confirmation. Null is default deny.
  const grant=o.productGrant===null?null:exact(o.productGrant,Object.hasOwn(o.productGrant,'allowedPurposes')?['limits','testDataDigest','expiresAtMs','allowedPurposes']:['limits','testDataDigest','expiresAtMs']);
- if(grant){grant.limits=validateModelConnectionLimitsV1(grant.limits);if(Object.hasOwn(grant,'allowedPurposes')){grant.allowedPurposes=modelConnectionArrayV1(grant.allowedPurposes,2);if(!grant.allowedPurposes.length||new Set(grant.allowedPurposes).size!==grant.allowedPurposes.length||grant.allowedPurposes.some(p=>!['purpose:ui-connection-probe','purpose:ui-view-proposal'].includes(p)))fail('MODEL_CONNECTION_PRODUCT_CONSENT_DENIED');}}
+ if(grant){grant.limits=validateModelConnectionLimitsV1(grant.limits);if(Object.hasOwn(grant,'allowedPurposes')){grant.allowedPurposes=modelConnectionArrayV1(grant.allowedPurposes,4);if(!grant.allowedPurposes.length||new Set(grant.allowedPurposes).size!==grant.allowedPurposes.length||grant.allowedPurposes.some(p=>!['purpose:ui-connection-probe','purpose:ui-view-proposal',MODEL_CONNECTION_COMPOSITION_PURPOSE_V1,MODEL_CONNECTION_PROPOSAL_PURPOSE_V1].includes(p)))fail('MODEL_CONNECTION_PRODUCT_CONSENT_DENIED');}}
  const secret=()=>{if(summary.authMethod==='NONE_LOCAL')return {value:null,fingerprint:null};let b;try{b=readProtectedOwnerSecretFileV1(o.credentialFile);}catch{fail('MODEL_CONNECTION_SECRET_UNAVAILABLE');}const value=b.toString('utf8').trim();b.fill(0);if(!/^[A-Za-z0-9._~-]{8,4096}$/.test(value))fail('MODEL_CONNECTION_SECRET_UNAVAILABLE');return {value,fingerprint:sha(value)};};
  async function addresses(signal){
   if(signal.aborted)fail('MODEL_CONNECTION_TIMEOUT');
@@ -56,14 +151,15 @@ export function bindModelConnectionTransportV1(value){
  async function providerCall(bound,signal,authorize,limits,toolStep=false){
   limits=validateModelConnectionLimitsV1(limits);
   if(summary.evidenceClass!=='SYNTHETIC_ONLY'){if(!pricing)fail('MODEL_CONNECTION_PRICING_DENIED');const maximum=(BigInt(Buffer.byteLength(JSON.stringify(bound.request),'utf8'))*BigInt(pricing.inputMicrosPerMillionTokens)+BigInt(limits.maxTokens)*BigInt(pricing.outputMicrosPerMillionTokens)+999999n)/1000000n;if(maximum>BigInt(limits.maxCostMicros))fail('MODEL_CONNECTION_PRICE_BOUND_DENIED');}
-  const r=await exchange('POST','/v1/chat/completions',bound.request,signal,authorize);
+  const wire=adaptNativeUiWireRequestV1(bound.request);
+ const r=await exchange('POST','/v1/chat/completions',wire.request,signal,authorize);
   if(r.status!==200||r.data.model!==summary.model)fail('MODEL_CONNECTION_MODEL_ID_DENIED');
   const data=r.data,msg=data.choices?.[0]?.message,u=data.usage;
   const credential=secret().value;if(credential&&JSON.stringify(data).includes(credential))fail('MODEL_CONNECTION_SECRET_ECHO_DENIED');
   const calls=msg?.tool_calls??[];
   if(!msg||!Array.isArray(calls)||calls.length>32||typeof msg.content!=='string'&&!(toolStep&&msg.content===null&&calls.length>0)||!u||!Number.isSafeInteger(u.prompt_tokens)||u.prompt_tokens<0||!Number.isSafeInteger(u.completion_tokens)||u.completion_tokens<0)fail('MODEL_CONNECTION_USAGE_UNKNOWN');
   const ids=new Set();
-  const toolCalls=calls.map(t=>{if(!t||typeof t.id!=='string'||(toolStep?!isModelChatCallIdV1(t.id)||ids.has(t.id):!/^tool:[a-z0-9._-]{3,80}$/.test(t.id))||t.type!=='function'||typeof t.function?.name!=='string'||typeof t.function.arguments!=='string')fail('MODEL_CONNECTION_TOOL_FORMAT_DENIED');let args;try{args=JSON.parse(t.function.arguments);}catch{fail('MODEL_CONNECTION_TOOL_FORMAT_DENIED');}ids.add(t.id);return {id:t.id,name:t.function.name,arguments:args};});
+  const toolCalls=calls.map(t=>{if(!t||typeof t.id!=='string'||(toolStep?!isModelChatCallIdV1(t.id)||ids.has(t.id):!/^tool:[a-z0-9._-]{3,80}$/.test(t.id))||t.type!=='function'||typeof t.function?.name!=='string'||typeof t.function.arguments!=='string')fail('MODEL_CONNECTION_TOOL_FORMAT_DENIED');let args;try{args=JSON.parse(t.function.arguments);}catch{fail('MODEL_CONNECTION_TOOL_FORMAT_DENIED');}ids.add(t.id);let name=t.function.name;if(wire.aliases){if(!wire.aliases.has(name))fail('MODEL_CONNECTION_WIRE_ALIAS_DENIED');name=wire.aliases.get(name);}return {id:t.id,name,arguments:args};});
   let costMicros=0;if(summary.evidenceClass!=='SYNTHETIC_ONLY'){if(!pricing)fail('MODEL_CONNECTION_USAGE_UNKNOWN');costMicros=Math.ceil((u.prompt_tokens*pricing.inputMicrosPerMillionTokens+u.completion_tokens*pricing.outputMicrosPerMillionTokens)/1000000);if(!Number.isSafeInteger(costMicros))fail('MODEL_CONNECTION_USAGE_UNKNOWN');}
   return {contentType:'text/plain',text:msg.content??'',toolCalls,usage:{inputTokens:u.prompt_tokens,outputTokens:u.completion_tokens,costMicros}};
  }

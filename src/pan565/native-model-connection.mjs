@@ -9,12 +9,25 @@ import {modelConnectionClosedV1 as exact,modelConnectionArrayV1,validateModelCon
 import {isProtectedSessionAdapterV1} from '../pan527/origin-session-adapter.mjs';
 import {isBrowserProfileStoreV1} from '../pan543/profile-store.mjs';
 import {createResourceBudgetStoreV1} from '../../demo/runtime/atomic-resource-budget.mjs';
-import {bindModelConnectionTransportV1} from './connection-transport.mjs';
-import {isCompletedBrokerToolFeedbackV1} from '../pan575/broker-tool-feedback.mjs';
-const feedbackModels=new WeakMap();
+import {bindModelConnectionTransportV1,MODEL_CONNECTION_COMPOSITION_PURPOSE_V1,MODEL_CONNECTION_PROPOSAL_PURPOSE_V1} from './connection-transport.mjs';
+import {isCompletedBrokerToolFeedbackV1,runExistingBrokerToolFeedbackV1} from '../pan575/broker-tool-feedback.mjs';
+import {createNativeCompositionFeedbackToolsV1} from '../pan575/native-composition-tools.mjs';
+const feedbackModels=new WeakMap(),compositionModels=new WeakMap();
 const owned=new WeakMap(),hash=v=>createHash('sha256').update(canonicalJson(v)).digest('hex'),fail=(c='MODEL_CONNECTION_INPUT_DENIED')=>{throw Error(c);};
 export const MODEL_CONNECTION_TEST_TEXT_V1='Public synthetic connection qualification only; return a short text. No customer data, no tool execution and no authority.';
 export const MODEL_CONNECTION_TEST_DATA_DIGEST_V1=hash(MODEL_CONNECTION_TEST_TEXT_V1);
+// Original574 composition admission rides this SAME owner/consent/transport/
+// ledger with its OWN purpose (connection-transport.mjs), operation namespace
+// and exact code-owned original capability pair. The pair is closed: no
+// client/model-selectable catalog, no copied brands, no UI/probe consent
+// inheritance and no caller-generated completion or usage.
+export {MODEL_CONNECTION_COMPOSITION_PURPOSE_V1};
+// Original #567 B1: closed fourth purpose for tool-less proposal-only
+// onboarding inference on this SAME owner/consent/transport/ledger.
+export {MODEL_CONNECTION_PROPOSAL_PURPOSE_V1};
+export const MODEL_CONNECTION_COMPOSITION_CAPABILITIES_V1=Object.freeze(['pan522.material.plan','erp.order.create']);
+export const MODEL_CONNECTION_COMPOSITION_TEST_TEXT_V1='Public synthetic original574 composition admission only; use exactly the two declared native tools once each. No customer data, no ERP authority, no extra capability and no authority.';
+export const MODEL_CONNECTION_COMPOSITION_TEST_DATA_DIGEST_V1=hash(MODEL_CONNECTION_COMPOSITION_TEST_TEXT_V1);
 const emptyChecks=()=>Object.fromEntries(MODEL_CONNECTION_PHASES_V1.map(p=>[p,{state:'NOT_RUN',checkedAtMs:null,identityDigest:null,reason:'NOT_EXECUTED'}]));
 const freeze=v=>{if(v&&typeof v==='object'){for(const c of Object.values(v))freeze(c);Object.freeze(v);}return v;};
 export function createNativeModelConnectionV1(value){
@@ -51,10 +64,17 @@ export function createNativeModelConnectionV1(value){
   const grant=row.state?.grant,fresh=valid&&grantFresh(a,t,grant,d),eligible=valid&&t.productGrant&&t.productGrant.expiresAtMs>Date.now()&&(t.pricing||t.summary.evidenceClass==='SYNTHETIC_ONLY'),offeredLimits=fresh?grant.limits:t?.productGrant?.limits,available=!!eligible&&capacity(a,t,d,offeredLimits);
   const held=row.state?.lastOperation?ledger(a,null,row.state.identityDigest).read(row.state.lastOperation):null;
   if(held&&held.state==='UNKNOWN_USAGE'){checks={...checks,INFERENCE:{state:'UNKNOWN_USAGE',checkedAtMs:checks.INFERENCE.checkedAtMs,identityDigest:row.state.identityDigest,reason:'UNKNOWN_USAGE_RETAINED'}};reason='UNKNOWN_USAGE_RETAINED';}
+  // RUN103 additive closed disclosure: a retained full hold names its exact persisted
+  // operation and whether the EXISTING owner reconciliation may settle it. reconcilable is
+  // derived here, never trusted from a caller: it is true only for a currently identity- and
+  // secret-valid SYNTHETIC_ONLY route — exactly reconcile()'s own precondition. The hold
+  // itself stays authoritative and unchanged; this discloses, grants, settles and retries
+  // nothing, and an unbound route (missing transport) minimizes to null instead of guessing.
+  const unknownUsage=held?.state==='UNKNOWN_USAGE'&&t?{operationId:row.state.lastOperation,reconcilable:valid&&t.summary.evidenceClass==='SYNTHETIC_ONLY'}:null;
   if(eligible&&!available&&reason!=='UNKNOWN_USAGE_RETAINED')reason='BUDGET_EXHAUSTED';
   const ready=!!fresh&&available&&MODEL_CONNECTION_PHASES_V1.slice(0,3).every(p=>checkFresh(checks[p],d))&&checks.INFERENCE.state!=='UNKNOWN_USAGE'&&!row.state.lastOperation;
   const synthetic=t?.summary.evidenceClass==='SYNTHETIC_ONLY',inferenceOffer=available?{limits:offeredLimits,testDataDigest:t.productGrant.testDataDigest,expiresAtMs:t.productGrant.expiresAtMs,currency:synthetic?'NONE':t.pricing.currency,pricingClass:synthetic?'CODE_OWNED_SYNTHETIC_ZERO_PRICE':'OWNER_BOUND_FIXED_PRICE',priceRevision:synthetic?null:t.pricing.revision}:null;
-  return freeze(validateModelConnectionReadbackV1({inferenceOffer,schemaVersion:'pansphaira.workspace-model-connection/readback/v1',binding:{tenantId:a.p.tenantId,subjectId:a.p.subjectId,instanceId:a.p.instanceId,generation:a.p.generation,sessionId:a.sessionId},revision:row.revision,persisted:row.persisted,connections:transports.map(t=>t.snapshot().summary),selectedConnectionId:t?row.state.connectionId:null,identityDigest:d,checks,consent:!grant?'NOT_GRANTED':fresh?'BOUNDED_ONCE':'EXPIRED_OR_STALE',readyForInference:ready,realModelAcceptance:false,reason}));
+  return freeze(validateModelConnectionReadbackV1({inferenceOffer,unknownUsage,schemaVersion:'pansphaira.workspace-model-connection/readback/v1',binding:{tenantId:a.p.tenantId,subjectId:a.p.subjectId,instanceId:a.p.instanceId,generation:a.p.generation,sessionId:a.sessionId},revision:row.revision,persisted:row.persisted,connections:transports.map(t=>t.snapshot().summary),selectedConnectionId:t?row.state.connectionId:null,identityDigest:d,checks,consent:!grant?'NOT_GRANTED':fresh?'BOUNDED_ONCE':'EXPIRED_OR_STALE',consentExpiresAtMs:grant?grant.expiresAtMs:null,readyForInference:ready,realModelAcceptance:false,reason}));
  }
  function write(a,t,row,state,headers){return profiles.writeModelConnection(a.p,row.revision,state,()=>{current(a,t,row,headers);return true;});}
  function select(headers,value){
@@ -151,7 +171,123 @@ export function createNativeModelConnectionV1(value){
   }
   return loop;
  }
- const owner=Object.freeze({read:projection,select,probe,consent,reconcile,close(){if(closed)return;closed=true;feedbackTickets.clear();for(const c of controllers)c.abort();controllers.clear();for(const l of ledgers.values())l.close();ledgers.clear();owned.delete(owner);}});owned.set(owner,{binding:sessions.binding,profiles,prepareFeedback,runFeedback});return owner;
+ // Original574 composition admission: same owner session/profile/expiry,
+ // same reserve-before-dispatch and UNKNOWN mechanics, same per-principal
+ // COST ledger and owner-derived settlement. The exact original pair and the
+ // server-derived descriptor/payload binding below are code-owned; the caller
+ // supplies only its run id and a bounded expiry. A probe/UI consent is
+ // never inherited and the caller cannot forge completion or usage.
+ const compositionTickets=new Map();
+ function compositionCurrent(a,t,row,headers,offer){current(a,t,row,headers);const g=t.productGrant;if(!g?.allowedPurposes?.includes(MODEL_CONNECTION_COMPOSITION_PURPOSE_V1)||hash(g)!==offer.ownerGrantDigest||identity(t)!==offer.identityDigest||offer.expiresAtMs<=Date.now()||!MODEL_CONNECTION_PHASES_V1.slice(0,3).every(p=>checkFresh(row.state.checks[p],offer.identityDigest)))fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');}
+ function prepareCompositionFeedback(headers,value,comp){
+  headers=workspaceHeaders(headers);const c=exact(value,['runId','expiresAtMs']),a=principal(headers,true),row=profiles.readModelConnection(a.p),t=map.get(row.state?.connectionId),g=t?.productGrant;
+  if(typeof c.runId!=='string'||!/^operation:pan574-[a-f0-9]{48}$/.test(c.runId)||!Number.isSafeInteger(c.expiresAtMs)||c.expiresAtMs<=Date.now()||!t||!g?.allowedPurposes?.includes(MODEL_CONNECTION_COMPOSITION_PURPOSE_V1)||g.expiresAtMs<=Date.now()||row.state.lastOperation||busy.has(a.key)||!t.pricing&&t.summary.evidenceClass!=='SYNTHETIC_ONLY')fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');
+  current(a,t,row,headers);if(!MODEL_CONNECTION_PHASES_V1.slice(0,3).every(p=>checkFresh(row.state.checks[p],row.state.identityDigest)))fail('MODEL_CONNECTION_TASK_PREREQUISITES_DENIED');
+  const limits=validateModelConnectionLimitsV1(g.limits),budgetSnapshot=ledger(a,t,row.state.identityDigest).snapshot();if(limits.maxTurns<2||limits.maxTools<2||limits.maxRequests<2||budgetSnapshot.model.committedUnits+limits.maxCostMicros>g.limits.maxCostMicros||budgetSnapshot.runtime.committedUnits+limits.maxRequests>g.limits.maxRequests)fail('MODEL_CONNECTION_BUDGET_EXHAUSTED');
+  const expiresAtMs=Math.min(Date.now()+30000,g.expiresAtMs,c.expiresAtMs),synthetic=t.summary.evidenceClass==='SYNTHETIC_ONLY',descriptors=comp.tools.map(v=>v.descriptor);
+  const base={schemaVersion:'pansphaira.workspace-model-composition-feedback/offer/v1',purpose:MODEL_CONNECTION_COMPOSITION_PURPOSE_V1,capabilities:MODEL_CONNECTION_COMPOSITION_CAPABILITIES_V1,descriptorDigest:hash(descriptors),payloadDigest:hash({purpose:MODEL_CONNECTION_COMPOSITION_PURPOSE_V1,capabilities:MODEL_CONNECTION_COMPOSITION_CAPABILITIES_V1,descriptors,bindings:comp.bindings}),identityDigest:row.state.identityDigest,ownerGrantDigest:hash(g),routeId:t.summary.routeId,provider:t.summary.provider,model:t.summary.model,evidenceClass:t.summary.evidenceClass,limits,currency:synthetic?'NONE':t.pricing.currency,pricingClass:synthetic?'CODE_OWNED_SYNTHETIC_ZERO_PRICE':'OWNER_BOUND_FIXED_PRICE',priceRevision:synthetic?null:t.pricing.revision,expiresAtMs},offer=freeze({...base,offerDigest:hash(base)});
+  const policy=freeze({schemaVersion:'chimpmaera.model/model-access-policy/v1',routes:[{routeId:t.summary.routeId,provider:t.summary.provider,model:t.summary.model,protocol:t.summary.protocol,credentialHandle:t.summary.secretReference??'credential-handle:local-no-auth',allowedTenants:['tenant:'+a.p.tenantId],allowedPurposes:[MODEL_CONNECTION_COMPOSITION_PURPOSE_V1],optionalFields:[],attachmentMediaTypes:[]}],workloadIdentities:['workload:composition-feedback'],userIdentities:['user:workspace-personal-view'],maxBudget:{maxInputBytes:limits.maxInputBytes,maxOutputBytes:limits.maxOutputBytes,maxTokens:limits.maxTokens,maxCostMicros:limits.maxCostMicros,maxRequests:limits.maxRequests,timeoutMs:limits.maxTimeMs}});
+  for(const[k,v]of compositionTickets)if(v.offer.expiresAtMs<=Date.now())compositionTickets.delete(k);if(compositionTickets.size>=128)fail('MODEL_CONNECTION_CAPACITY_DENIED');const ticket=Object.freeze({});compositionTickets.set(ticket,{a,t,row,c,offer,policy,used:false});return {ticket,offer,policy};
+ }
+ async function runCompositionFeedback(headers,ticket,confirmation,comp){
+  headers=workspaceHeaders(headers);const cf=exact(confirmation,['offerDigest','confirm']);if(!cf||cf.confirm!==true)fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');const r=compositionTickets.get(ticket);if(!r||r.used||cf.offerDigest!==r.offer.offerDigest)fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');const {a,t,row,offer,policy}=r;
+  compositionCurrent(a,t,row,headers,offer);if(busy.has(a.key))fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');
+  const s=ledger(a,t,offer.identityDigest),b=s.snapshot();if(b.model.committedUnits+offer.limits.maxCostMicros>t.productGrant.limits.maxCostMicros||b.runtime.committedUnits+offer.limits.maxRequests>t.productGrant.limits.maxRequests)fail('MODEL_CONNECTION_BUDGET_EXHAUSTED');
+  r.used=true;busy.add(a.key);const lifetime=new AbortController();controllers.add(lifetime);let active=row,loop=null;
+  const operationId=r.c.runId,requestDigest=hash({operationId,offer}),g={identityDigest:offer.identityDigest,sessionId:a.sessionId,ownerGrantDigest:offer.ownerGrantDigest,limits:offer.limits,expiresAtMs:offer.expiresAtMs,consentId:'consent:'+randomBytes(24).toString('hex'),testDataDigest:t.productGrant.testDataDigest,purpose:offer.purpose,payloadDigest:offer.payloadDigest};
+  const authorize=()=>{compositionCurrent(a,t,active,headers,offer);if(lifetime.signal.aborted||!grantFresh(a,t,active.state.grant,offer.identityDigest,offer.purpose)||active.state.grant.payloadDigest!==offer.payloadDigest||active.state.lastOperation!==operationId)fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');return true;};
+  try{
+   // Whole-run reservation is persisted BEFORE dispatch; a crash or unconfirmed
+   // completion leaves the full hold in the existing ledger, never zero usage.
+   active=write(a,t,row,{...row.state,grant:g,lastOperation:operationId},headers);
+   s.reserve({operationId,requestDigest,modelUnits:offer.limits.maxCostMicros,runtimeUnits:offer.limits.maxRequests});authorize();const fence=s.markUnknownUsage(operationId);if(!fence.dispatchGranted)fail('MODEL_CONNECTION_UNKNOWN_USAGE_RETAINED');authorize();
+   const providerCall=(bound,signal,remaining)=>{authorize();const limits=validateModelConnectionLimitsV1(remaining);if(Object.keys(limits).some(k=>limits[k]>offer.limits[k]))fail('MODEL_CONNECTION_LIMIT_DENIED');return t.providerToolStepCall(bound,AbortSignal.any([signal,lifetime.signal]),authorize,limits);};
+   // Per-run closed wrapper over the SAME code-owned pair: the actual native
+   // execution order must equal the exact declared pair, enforced BEFORE the
+   // first wrong tool effect via the existing loop denial semantics. Shared
+   // descriptors/state are never mutated; the closure is per-run only.
+   let executed=0;const orderedTools=comp.tools.map(v=>Object.freeze({descriptor:v.descriptor,validate:v.validate,invoke:(input,signal)=>{const step=MODEL_CONNECTION_COMPOSITION_CAPABILITIES_V1[executed];executed++;if(step!==v.descriptor.name)fail('LOOP_TOOL_DENIED');return v.invoke(input,signal);}}));
+   const request={schemaVersion:'chimpmaera.model/model-request/v1',workloadIdentity:'workload:composition-feedback',userIdentity:'user:workspace-personal-view',tenant:'tenant:'+a.p.tenantId,purpose:offer.purpose,delegationDigest:requestDigest,operationId,correlationId:'correlation:'+operationId.slice(10),routeId:t.summary.routeId,provider:t.summary.provider,model:t.summary.model,protocol:t.summary.protocol,dataClassification:'PUBLIC',trustClass:'UNTRUSTED_AGENT_INPUT',text:MODEL_CONNECTION_COMPOSITION_TEST_TEXT_V1,attachments:[],tools:comp.tools.map(v=>v.descriptor),structuredOutput:null,optionalFields:{},budget:policy.maxBudget};
+   loop=await runExistingBrokerToolFeedbackV1({broker:new ModelAccessBrokerV1(policy),request,providerCall,tools:orderedTools,limits:offer.limits,signal:lifetime.signal,authorize});
+   const admitted=isCompletedBrokerToolFeedbackV1(loop)&&loop.actualToolActions===2&&canonicalJson(loop.toolReadbacks.map(v=>v.toolName))===canonicalJson(MODEL_CONNECTION_COMPOSITION_CAPABILITIES_V1);
+   if(admitted){
+    const observed={operationId,identityDigest:offer.identityDigest,payloadDigest:offer.payloadDigest,purpose:offer.purpose,usage:loop.usage,actualRequests:loop.actualRequests,realModelAcceptance:false};s.settle(s.ownerCompletionEvidence({operationId,requestDigest,modelUnits:loop.usage.costMicros,runtimeUnits:loop.actualRequests,evidenceDigest:hash(observed)}),observed,authorize);
+   }else if(isCompletedBrokerToolFeedbackV1(loop)){
+    // Owner boundary: a genuine shared-loop RESULT_READY that did not consume
+    // the exact original pair (e.g. a valid fresh final after only the first
+    // declared tool) is NOT an admitted composition completion. It must never
+    // escape with the completed brand; the owner answers with the existing
+    // closed denial readback, the whole-run hold stays UNKNOWN_USAGE in the
+    // ledger, partial work is neither settled nor rebranded, no model retry.
+    loop=freeze({schemaVersion:'pansphaira.broker-tool-feedback/readback/v1',outcome:'DENIED',exitCode:2,endReason:'LOOP_FRESH_INFORMATION_DENIED',realModelAcceptance:false,usageState:'UNKNOWN_USAGE_RETAINED',actualToolActions:loop.actualToolActions,actualRequests:loop.actualRequests,toolReadbacks:[],text:null,usage:loop.usage,elapsedMs:loop.elapsedMs});
+   }
+  }finally{
+   controllers.delete(lifetime);lifetime.abort();busy.delete(a.key);compositionTickets.delete(ticket);
+   if(!closed){try{current(a,t,active,headers);const held=s.read(operationId),ok=held?.state==='SETTLED';write(a,t,active,{...active.state,grant:null,checks:{...active.state.checks,INFERENCE:{state:ok?'PASS':'UNKNOWN_USAGE',checkedAtMs:Date.now(),identityDigest:offer.identityDigest,reason:ok?t.summary.evidenceClass==='SYNTHETIC_ONLY'?'SYNTHETIC_COMPOSITION_FEEDBACK_ONLY':'OWNER_BOUND_COMPOSITION_FEEDBACK_OBSERVED_NOT_MODEL_ACCEPTANCE':'UNKNOWN_USAGE_RETAINED'}}},headers);}catch{/* Stale/revoked owner cannot write. Existing UNKNOWN remains held. */}}
+  }
+  return loop;
+ }
+ // Original #567 B1 proposal-only admission: single tool-less bounded call on
+// this SAME owner session/profile/expiry, same reserve-before-dispatch and
+// UNKNOWN_USAGE retention, same per-principal COST ledger and owner-derived
+// settlement. The caller supplies only its run id, bounded expiry and the
+// server-built closed context text; the closed proposal validation is code-
+// owned plumbing (contracts agent-configuration-proposal-v1) passed per run —
+// a copied label, policy or callback cannot reproduce this brand. A genuine
+// dispatch always settles with the OBSERVED usage even when the returned text
+// fails closed-proposal format: no invented zero cost, no automatic retry, no
+// provider change; the caller retains the same draft for manual continuation.
+const proposalTickets=new Map();
+function proposalCurrent(a,t,row,headers,offer){current(a,t,row,headers);const g=t.productGrant;if(!g?.allowedPurposes?.includes(MODEL_CONNECTION_PROPOSAL_PURPOSE_V1)||hash(g)!==offer.ownerGrantDigest||identity(t)!==offer.identityDigest||offer.expiresAtMs<=Date.now()||!MODEL_CONNECTION_PHASES_V1.slice(0,3).every(p=>checkFresh(row.state.checks[p],offer.identityDigest)))fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');}
+function prepareProposal(headers,value,proposal){
+ headers=workspaceHeaders(headers);const c=exact(value,['runId','expiresAtMs']),a=principal(headers,true),row=profiles.readModelConnection(a.p),t=map.get(row.state?.connectionId),g=t?.productGrant;
+ if(typeof c.runId!=='string'||!/^operation:pan567-[a-f0-9]{48}$/.test(c.runId)||!Number.isSafeInteger(c.expiresAtMs)||c.expiresAtMs<=Date.now()||!t||!g?.allowedPurposes?.includes(MODEL_CONNECTION_PROPOSAL_PURPOSE_V1)||g.expiresAtMs<=Date.now()||row.state.lastOperation||busy.has(a.key)||!t.pricing&&t.summary.evidenceClass!=='SYNTHETIC_ONLY'
+   ||!proposal||typeof proposal.contextText!=='string'||!proposal.contextText.length||Buffer.byteLength(proposal.contextText,'utf8')>20000
+   ||typeof proposal.contextDigest!=='string'||!/^[a-f0-9]{64}$/.test(proposal.contextDigest)||hash(proposal.contextText)!==proposal.contextDigest)fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');
+ current(a,t,row,headers);if(!MODEL_CONNECTION_PHASES_V1.slice(0,3).every(p=>checkFresh(row.state.checks[p],row.state.identityDigest)))fail('MODEL_CONNECTION_TASK_PREREQUISITES_DENIED');
+ const limits=validateModelConnectionLimitsV1(g.limits),budgetSnapshot=ledger(a,t,row.state.identityDigest).snapshot();if(limits.maxRequests<1||budgetSnapshot.model.committedUnits+limits.maxCostMicros>g.limits.maxCostMicros||budgetSnapshot.runtime.committedUnits+1>g.limits.maxRequests)fail('MODEL_CONNECTION_BUDGET_EXHAUSTED');
+ if(Buffer.byteLength(proposal.contextText,'utf8')>limits.maxInputBytes)fail('MODEL_CONNECTION_INPUT_DENIED');
+ const expiresAtMs=Math.min(Date.now()+30000,g.expiresAtMs,c.expiresAtMs),synthetic=t.summary.evidenceClass==='SYNTHETIC_ONLY';
+ const base={schemaVersion:'pansphaira.workspace-model-proposal/offer/v1',purpose:MODEL_CONNECTION_PROPOSAL_PURPOSE_V1,contextDigest:proposal.contextDigest,identityDigest:row.state.identityDigest,ownerGrantDigest:hash(g),routeId:t.summary.routeId,provider:t.summary.provider,model:t.summary.model,evidenceClass:t.summary.evidenceClass,limits,currency:synthetic?'NONE':t.pricing.currency,pricingClass:synthetic?'CODE_OWNED_SYNTHETIC_ZERO_PRICE':'OWNER_BOUND_FIXED_PRICE',priceRevision:synthetic?null:t.pricing.revision,expiresAtMs},offer=freeze({...base,offerDigest:hash(base)});
+ const policy=freeze({schemaVersion:'chimpmaera.model/model-access-policy/v1',routes:[{routeId:t.summary.routeId,provider:t.summary.provider,model:t.summary.model,protocol:t.summary.protocol,credentialHandle:t.summary.secretReference??'credential-handle:local-no-auth',allowedTenants:['tenant:'+a.p.tenantId],allowedPurposes:[MODEL_CONNECTION_PROPOSAL_PURPOSE_V1],optionalFields:[],attachmentMediaTypes:[]}],workloadIdentities:['workload:configuration-onboarding'],userIdentities:['user:workspace-personal-view'],maxBudget:{maxInputBytes:limits.maxInputBytes,maxOutputBytes:limits.maxOutputBytes,maxTokens:limits.maxTokens,maxCostMicros:limits.maxCostMicros,maxRequests:1,timeoutMs:limits.maxTimeMs}});
+ for(const[k,v]of proposalTickets)if(v.offer.expiresAtMs<=Date.now())proposalTickets.delete(k);if(proposalTickets.size>=128)fail('MODEL_CONNECTION_CAPACITY_DENIED');const ticket=Object.freeze({});proposalTickets.set(ticket,{a,t,row,c,offer,policy,used:false});return {ticket,offer};
+}
+async function runProposal(headers,ticket,confirmation,proposal){
+ headers=workspaceHeaders(headers);const cf=exact(confirmation,['offerDigest','confirm']);if(!cf||cf.confirm!==true)fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');const r=proposalTickets.get(ticket);if(!r||r.used||cf.offerDigest!==r.offer.offerDigest||!proposal||typeof proposal.validate!=='function'||typeof proposal.contextText!=='string'||proposal.contextDigest!==r.offer.contextDigest||hash(proposal.contextText)!==r.offer.contextDigest)fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');const {a,t,row,offer,policy}=r;
+ proposalCurrent(a,t,row,headers,offer);if(busy.has(a.key))fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');
+ const s=ledger(a,t,offer.identityDigest),b=s.snapshot();if(b.model.committedUnits+offer.limits.maxCostMicros>t.productGrant.limits.maxCostMicros||b.runtime.committedUnits+1>t.productGrant.limits.maxRequests)fail('MODEL_CONNECTION_BUDGET_EXHAUSTED');
+ r.used=true;busy.add(a.key);const lifetime=new AbortController();controllers.add(lifetime);let active=row,result=null,attempted=false;
+ const operationId=r.c.runId,requestDigest=hash({operationId,offer}),g={identityDigest:offer.identityDigest,sessionId:a.sessionId,ownerGrantDigest:offer.ownerGrantDigest,limits:offer.limits,expiresAtMs:offer.expiresAtMs,consentId:'consent:'+randomBytes(24).toString('hex'),testDataDigest:t.productGrant.testDataDigest,purpose:offer.purpose,payloadDigest:offer.contextDigest};
+ const authorize=()=>{proposalCurrent(a,t,active,headers,offer);if(lifetime.signal.aborted||!grantFresh(a,t,active.state.grant,offer.identityDigest,offer.purpose)||active.state.grant.payloadDigest!==offer.contextDigest||active.state.lastOperation!==operationId)fail('MODEL_CONNECTION_TASK_CONSENT_DENIED');return true;};
+ try{
+  // Whole-run reservation persisted BEFORE dispatch; a crash leaves the full
+  // hold UNKNOWN in the existing ledger, never zero usage, never a re-usable
+  // consent, never a model retry.
+  active=write(a,t,row,{...row.state,grant:g,lastOperation:operationId},headers);
+  s.reserve({operationId,requestDigest,modelUnits:offer.limits.maxCostMicros,runtimeUnits:1});authorize();const fence=s.markUnknownUsage(operationId);if(!fence.dispatchGranted)fail('MODEL_CONNECTION_UNKNOWN_USAGE_RETAINED');authorize();
+  const request={schemaVersion:'chimpmaera.model/model-request/v1',workloadIdentity:'workload:configuration-onboarding',userIdentity:'user:workspace-personal-view',tenant:'tenant:'+a.p.tenantId,purpose:offer.purpose,delegationDigest:requestDigest,operationId,correlationId:'correlation:'+operationId.slice(10),routeId:t.summary.routeId,provider:t.summary.provider,model:t.summary.model,protocol:t.summary.protocol,dataClassification:'PUBLIC',trustClass:'UNTRUSTED_AGENT_INPUT',text:proposal.contextText,attachments:[],tools:[],structuredOutput:null,optionalFields:{},budget:policy.maxBudget};
+  const invoked=await new ModelAccessBrokerV1(policy).invoke(request,async(bound,signal)=>{authorize();attempted=true;return t.providerCall(bound,AbortSignal.any([signal,lifetime.signal]),()=>authorize(),offer.limits);});
+  if(invoked.outcome==='ALLOW'){
+   const usage=invoked.response.usage,observed={operationId,identityDigest:offer.identityDigest,contextDigest:offer.contextDigest,purpose:offer.purpose,usage,actualRequests:1,realModelAcceptance:false};
+   s.settle(s.ownerCompletionEvidence({operationId,requestDigest,modelUnits:usage.costMicros,runtimeUnits:1,evidenceDigest:hash(observed)}),observed,authorize);
+   const validated=proposal.validate(invoked.response.text);
+   result=validated.outcome==='VALID'?{outcome:'PROPOSED',proposal:validated.proposal}:{outcome:'INVALID_FORMAT',reason:validated.code};
+  }else if(!attempted){const observed={operationId,identityDigest:offer.identityDigest,noDispatchWitnessed:true};s.settle(s.ownerCompletionEvidence({operationId,requestDigest,modelUnits:0,runtimeUnits:0,evidenceDigest:hash(observed)}),observed,()=>{current(a,t,active,headers);return true;});result={outcome:'MODEL_ERROR',reason:'BROKER_DENIAL_NO_DISPATCH'};}
+  else result={outcome:'MODEL_ERROR',reason:'PROVIDER_DISPATCH_UNCONFIRMED'};
+ }catch{ /* No raw transport error, content, secret or invented zero usage. */ }finally{
+  controllers.delete(lifetime);lifetime.abort();busy.delete(a.key);proposalTickets.delete(ticket);
+  // The ledger is the only usage truth: a real reserved hold stays UNKNOWN,
+  // a settled run reports OBSERVED usage, and a pre-dispatch denial before
+  // ANY reservation reports a closed FAILED check — never an invented
+  // UNKNOWN load, never a zero-cost "settled" claim, never a retry.
+  const heldFinal=s.read(operationId);
+  if(!closed){try{current(a,t,active,headers);const held=heldFinal,ok=held?.state==='SETTLED',preDispatch=!held&&result===null;write(a,t,active,{...active.state,grant:null,lastOperation:ok||preDispatch?null:active.state.lastOperation,checks:{...active.state.checks,INFERENCE:{state:ok?'PASS':preDispatch?'FAILED':'UNKNOWN_USAGE',checkedAtMs:Date.now(),identityDigest:offer.identityDigest,reason:ok?t.summary.evidenceClass==='SYNTHETIC_ONLY'?'SYNTHETIC_PROPOSAL_FORMAT_ONLY':'OWNER_BOUND_PROPOSAL_OBSERVED_NOT_MODEL_ACCEPTANCE':preDispatch?'PROPOSAL_PRE_DISPATCH_DENIED':'UNKNOWN_USAGE_RETAINED'}}},headers);}catch{/* Stale/revoked owner cannot write. Existing UNKNOWN remains held. */}}
+  if(!result&&!heldFinal)result={outcome:'MODEL_ERROR',reason:'PROPOSAL_PRE_DISPATCH_DENIED'};
+ }
+ if(!result)result={outcome:'MODEL_ERROR',reason:'MODEL_UNAVAILABLE_NO_RETRY'};
+ return {...result,usageState:s.read(operationId)?.state==='SETTLED'?'SETTLED':s.read(operationId)?'UNKNOWN_USAGE_RETAINED':'NO_USAGE_RESERVED',identity:{identityDigest:offer.identityDigest,provider:offer.provider,model:offer.model,routeId:offer.routeId,evidenceClass:offer.evidenceClass}};
+}
+const owner=Object.freeze({read:projection,select,probe,consent,reconcile,close(){if(closed)return;closed=true;feedbackTickets.clear();compositionTickets.clear();proposalTickets.clear();for(const c of controllers)c.abort();controllers.clear();for(const l of ledgers.values())l.close();ledgers.clear();owned.delete(owner);}});owned.set(owner,{binding:sessions.binding,profiles,prepareFeedback,runFeedback,prepareCompositionFeedback,runCompositionFeedback,prepareProposal,runProposal,proposalSession(headers){const a=principal(headers);return Object.freeze({principal:a.p,sessionId:a.sessionId});}});return owner;
 }
 export const isNativeModelConnectionV1=(owner,binding)=>owned.has(owner)&&canonicalJson(owned.get(owner).binding)===canonicalJson(binding);
 // These opaque native capabilities are code-owner plumbing, not HTTP fields.
@@ -160,3 +296,33 @@ export function createNativeWorkspaceFeedbackModelV1(owner,binding){if(!isNative
 export const isNativeWorkspaceFeedbackModelV1=(model,binding)=>feedbackModels.has(model)&&isNativeModelConnectionV1(feedbackModels.get(model).owner,binding)&&canonicalJson(feedbackModels.get(model).binding)===canonicalJson(binding);
 export function prepareNativeWorkspaceFeedbackV1(model,headers,value){const x=feedbackModels.get(model);if(!x||!isNativeModelConnectionV1(x.owner,x.binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');return owned.get(x.owner).prepareFeedback(headers,value);}
 export function runNativeWorkspaceFeedbackV1(model,headers,ticket,confirmation,execute,verifyTask){const x=feedbackModels.get(model);if(!x||!isNativeModelConnectionV1(x.owner,x.binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');return owned.get(x.owner).runFeedback(headers,ticket,confirmation,execute,verifyTask);}
+// The composition model capability owns the actual native574 tool pair; a
+// copied label, policy or callback cannot reproduce this brand, and the
+// consumer cannot substitute its own catalog: descriptors are revalidated
+// against the exact original pair at construction and at settlement.
+export function createNativeCompositionFeedbackModelV1(owner,binding){
+ if(!isNativeModelConnectionV1(owner,binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');
+ const comp=createNativeCompositionFeedbackToolsV1();
+ if(canonicalJson(comp.tools.map(v=>v.descriptor.name))!==canonicalJson(MODEL_CONNECTION_COMPOSITION_CAPABILITIES_V1)||canonicalJson(comp.bindings.map(v=>v.capabilityId))!==canonicalJson(MODEL_CONNECTION_COMPOSITION_CAPABILITIES_V1))fail('AGENT_NATIVE_COMPOSITION_CAPABILITY_DENIED');
+ const model=Object.freeze({mode:'OWNER_BOUND_PROVIDER_COMPOSITION',policy:null,providerCall:()=>fail('MODEL_CONNECTION_TASK_ADMISSION_REQUIRED')});
+ compositionModels.set(model,{owner,binding,comp});return model;
+}
+export const isNativeCompositionFeedbackModelV1=(model,binding)=>compositionModels.has(model)&&isNativeModelConnectionV1(compositionModels.get(model).owner,binding)&&canonicalJson(compositionModels.get(model).binding)===canonicalJson(binding);
+export function prepareNativeCompositionFeedbackV1(model,headers,value){const x=compositionModels.get(model);if(!x||!isNativeCompositionFeedbackModelV1(model,x.binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');return owned.get(x.owner).prepareCompositionFeedback(headers,value,x.comp);}
+export async function runNativeCompositionFeedbackV1(model,headers,ticket,confirmation){const x=compositionModels.get(model);if(!x||!isNativeCompositionFeedbackModelV1(model,x.binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');return await owned.get(x.owner).runCompositionFeedback(headers,ticket,confirmation,x.comp);}
+// Original #567 B1 proposal-only model capability: an opaque brand over the
+// SAME connection owner; copied labels, policies or callbacks cannot reproduce
+// it and the consumer cannot substitute its own context or validator brand.
+const proposalModels=new WeakMap();
+export function createNativeConfigurationProposalModelV1(owner,binding){if(!isNativeModelConnectionV1(owner,binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');const model=Object.freeze({mode:'OWNER_BOUND_PROVIDER_PROPOSAL',policy:null,providerCall:()=>fail('MODEL_CONNECTION_TASK_ADMISSION_REQUIRED')});proposalModels.set(model,{owner,binding});return model;}
+export const isNativeConfigurationProposalModelV1=(model,binding)=>proposalModels.has(model)&&isNativeModelConnectionV1(proposalModels.get(model).owner,binding)&&canonicalJson(proposalModels.get(model).binding)===canonicalJson(binding);
+export function prepareNativeConfigurationProposalV1(model,headers,value,proposal){const x=proposalModels.get(model);if(!x||!isNativeConfigurationProposalModelV1(model,x.binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');return owned.get(x.owner).prepareProposal(headers,value,proposal);}
+export async function runNativeConfigurationProposalV1(model,headers,ticket,confirmation,proposal){const x=proposalModels.get(model);if(!x||!isNativeConfigurationProposalModelV1(model,x.binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');return await owned.get(x.owner).runProposal(headers,ticket,confirmation,proposal);}
+// Original #567 B1 session binding: the code-authenticated exact originating
+// native565 session behind these headers — the SAME session store, origin,
+// lifetime and revocation checks the proposal transport itself enforces.
+// A copied label, an absent or a mismatched session claim, a foreign session,
+// an expired or logged-out session and a closed owner all fail; the returned
+// session identity is derived in code from the authenticated cookie, never
+// trusted from a request header alone.
+export function authenticateNativeConfigurationProposalSessionV1(model,headers){const x=proposalModels.get(model);if(!x||!isNativeConfigurationProposalModelV1(model,x.binding))fail('AGENT_NATIVE_MODEL_OWNER_DENIED');return owned.get(x.owner).proposalSession(headers);}

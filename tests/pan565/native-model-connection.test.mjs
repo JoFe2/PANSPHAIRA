@@ -38,3 +38,125 @@ test('553-R2 prerequisite expiring during actual async transport admission never
 test('553-R3 exhausted native ledger is not offered as executable readiness or consent after reselect',()=>use(async f=>{for(let i=0;i<3;i++){await f.prerequisites();f.consent();await f.probe('INFERENCE');}await f.prerequisites();const r=f.read();assert.equal(r.readyForInference,false);assert.equal(r.reason,'BUDGET_EXHAUSTED');assert.equal(r.inferenceOffer,null);assert.throws(f.consent,/BUDGET_EXHAUSTED/);assert.equal(f.server.post(),3);}));
 test('553-R4 DNS held past unchanged real 5000ms native phase deadline finishes timely; late result opens no socket',()=>use(async f=>{let release,entered,opened=0,timer;const pending=new Promise(r=>{release=r;}),started=new Promise(r=>{entered=r;}),originalLookup=dns.lookup,originalRequest=https.request;dns.lookup=()=>{entered();return pending;};https.request=()=>{opened++;throw Error('DNS_LATE_SOCKET_TEST_DENIED');};syncBuiltinESMExports();try{f.options.summary={...f.options.summary,evidenceClass:'OWNER_BOUND_NOT_QUALIFIED',provider:'provider:owner-dns-deadline',model:'model:owner-dns-deadline'};f.options.target={origin:'https://model-qualification.invalid',allowedAddresses:['8.8.8.8'],localOnly:false};f.options.productGrant=null;f.reopen();f.select();const operation=f.probe('REACHABILITY');await started;const result=await Promise.race([operation.then(value=>({timely:true,value})),new Promise(r=>{timer=setTimeout(()=>r({timely:false}),6500);})]);clearTimeout(timer);if(!result.timely){release([{address:'8.8.8.8',family:4}]);await operation;assert.fail('DNS_DEADLINE_NOT_ENFORCED');}assert.equal(result.value.checks.REACHABILITY.state,'FAILED');assert.equal(result.value.checks.REACHABILITY.reason,'PROBE_TIMEOUT');release([{address:'8.8.8.8',family:4}]);await new Promise(r=>setImmediate(r));assert.equal(opened,0);assert.equal(f.server.post(),0);}finally{clearTimeout(timer);release([{address:'8.8.8.8',family:4}]);dns.lookup=originalLookup;https.request=originalRequest;syncBuiltinESMExports();}}));
 test('553-R4 native owner close aborts genuinely observed local TIMEOUT transport promptly and preserves durable full unknown hold',()=>use(async f=>{await f.prerequisites();f.consent({...limits565,maxTimeMs:1000});f.server.setMode('TIMEOUT');const operation=f.probe('INFERENCE'),ending=operation.then(()=>({ended:true,code:'UNEXPECTED_SUCCESS'}),e=>({ended:true,code:e.message}));await f.server.waitForPost();f.owner.close();let timer;try{const result=await Promise.race([ending,new Promise(r=>{timer=setTimeout(()=>r({ended:false}),300);})]);if(!result.ended){f.server.release();await ending;assert.fail('OWNER_CLOSE_DID_NOT_ABORT_TRANSPORT');}assert.match(result.code,/OWNER_CLOSED/);assert.equal(f.server.post(),1);const held=holds(f)[0];assert.equal(held.state,'UNKNOWN_USAGE');assert.equal(held.model_units,limits565.maxCostMicros);f.reopen();assert.equal(f.read().checks.INFERENCE.state,'UNKNOWN_USAGE');assert.equal(f.read().readyForInference,false);assert.equal(holds(f)[0].state,'UNKNOWN_USAGE');}finally{clearTimeout(timer);f.server.release();await ending;}}));
+// The existing profile-store grant validator keeps its closed task-key schema
+// and exact code-owned purpose allowlist: the UI proposal task purpose plus the
+// exact composition task purpose ONLY; any other purpose, missing task digest
+// or probe-purpose-as-task forgery is denied without touching the stored row.
+test('543 closed native task grant schema admits exactly the two code-owned task purposes and denies unknown purpose, probe purpose or missing task digest',()=>use(async f=>{await f.prerequisites();const p=f.sessions.authenticate(f.headers),row=f.profiles.readModelConnection(p);
+ const grant=task=>({identityDigest:row.state.identityDigest,sessionId:'session:'+'a'.repeat(64),ownerGrantDigest:'b'.repeat(64),limits:limits565,expiresAtMs:Date.now()+30000,consentId:'consent:'+'c'.repeat(48),testDataDigest:'e'.repeat(64),...task});
+ const write=(rev,g)=>f.profiles.writeModelConnection(p,rev,{...row.state,grant:g},()=>true);
+ for(const bad of [{purpose:'purpose:pan574-composition-feedbac',payloadDigest:'d'.repeat(64)},{purpose:'purpose:ui-view-proposalX',payloadDigest:'d'.repeat(64)},{purpose:'purpose:ui-connection-probe',payloadDigest:'d'.repeat(64)},{purpose:'purpose:ui-view-proposal'},{payloadDigest:'d'.repeat(64)}])assert.throws(()=>write(row.revision,grant(bad)),/MODEL_CONNECTION_INPUT_DENIED/);
+ assert.equal(f.profiles.readModelConnection(p).revision,row.revision);// denied writes never touched the stored row
+ let rev=write(row.revision,grant({purpose:'purpose:ui-view-proposal',payloadDigest:'d'.repeat(64)})).revision;assert.equal(rev,row.revision+1);
+ rev=write(rev,grant({purpose:'purpose:pan574-composition-feedback',payloadDigest:'d'.repeat(64)})).revision;assert.equal(rev,row.revision+2);
+ const accepted=f.profiles.readModelConnection(p).state;assert.equal(accepted.grant.purpose,'purpose:pan574-composition-feedback');assert.equal(accepted.grant.payloadDigest,'d'.repeat(64));
+ rev=write(rev,grant({})).revision;assert.equal(rev,row.revision+3);// the ordinary probe-consent shape without task keys stays admitted
+ assert.equal(f.server.post(),0);}));
+// RUN73: current-owner consent-grant expiry remains real native source authority. The closed
+// readback now discloses the actual consent expiry (never the owner offer expiry) so consumers
+// can expire cached readiness truthfully. Independent reads keep the past grant as a historic
+// record, dispatch stays denied, and explicit re-consent works only while the real original
+// prerequisites and owner offer still permit it. No provider POST, no ledger change, no retry.
+test('565 consent-grant expiry is native-authoritative: disclosed consent expiry is distinct from the owner offer, expiry keeps history readable, denies dispatch and re-consent needs genuine prerequisites',()=>use(async f=>{
+ await f.prerequisites();
+ const pre=f.read();
+ assert.equal(pre.consent,'NOT_GRANTED');assert.equal(pre.consentExpiresAtMs,null);
+ assert.throws(()=>validateModelConnectionReadbackV1({...pre,consentExpiresAtMs:Date.now()}),/READBACK_DENIED/);// NOT_GRANTED never carries a grant expiry record
+ const granted=f.consent();
+ assert.equal(granted.consent,'BOUNDED_ONCE');assert.equal(granted.readyForInference,true);
+ assert.ok(Number.isSafeInteger(granted.consentExpiresAtMs)&&granted.consentExpiresAtMs>Date.now()&&granted.consentExpiresAtMs<=Date.now()+30000,'consent expiry must be the bounded session grant window');
+ assert.ok(granted.consentExpiresAtMs<granted.inferenceOffer.expiresAtMs,'consent grant expiry must stay distinct from and inside the current owner product offer expiry');
+ for(const forged of [null,'7',-1,1.5])assert.throws(()=>validateModelConnectionReadbackV1({...granted,consentExpiresAtMs:forged}),/READBACK_DENIED/,'direct negative validation for forged consent expiry '+JSON.stringify(forged));
+ // Advance only the test-time clock seam past the persisted grant expiry while the real 60s
+ // prerequisite lifetime is still inside: the server itself, not any browser, now says expired.
+ const advanced=Date.now()+31000,clock=mock.method(Date,'now',()=>advanced);let again;
+ try{
+  const r=f.read();
+  assert.equal(r.consent,'EXPIRED_OR_STALE');
+  assert.equal(r.consentExpiresAtMs,granted.consentExpiresAtMs);// the independently-read past grant stays a truthful historic record
+  assert.equal(r.readyForInference,false);
+  assert.equal(r.inferenceOffer.expiresAtMs,f.options.productGrant.expiresAtMs);// the owner offer remains the current, separate authority
+  assert.deepEqual(Object.values(r.checks).map(c=>c.state),['PASS','PASS','PASS','NOT_RUN']);// independently confirmed records are shown as history, not rewritten
+  await assert.rejects(f.probe('INFERENCE'),/CONSENT_DENIED/);// visible expiry is enforced natively before any dispatch
+  assert.equal(f.server.post(),0);assert.equal(f.server.get(),3);
+  assert.ok(!JSON.stringify(r).includes(syntheticCredential565));// no secret or raw data enters the expiry surface
+  // Explicit fresh consent succeeds again only from the still-valid original prerequisites.
+  again=f.consent();
+  assert.equal(again.consent,'BOUNDED_ONCE');assert.equal(again.readyForInference,true);
+  assert.ok(again.consentExpiresAtMs>advanced&&again.consentExpiresAtMs<=advanced+30000&&again.consentExpiresAtMs<again.inferenceOffer.expiresAtMs);
+  assert.notEqual(again.consentExpiresAtMs,granted.consentExpiresAtMs);// a renewed bounded grant, not an extension of the old one
+  assert.equal(f.server.post(),0);
+ }finally{clock.mock.restore();}
+ // Once the genuine 60s prerequisite lifetime has passed, the expired grant is not silently renewed.
+ const stale=Date.now()+61000,clock2=mock.method(Date,'now',()=>stale);
+ try{
+  const r=f.read();
+  assert.deepEqual(Object.values(r.checks).map(c=>c.state),['STALE','STALE','STALE','NOT_RUN']);
+  assert.equal(r.consent,'EXPIRED_OR_STALE');assert.equal(r.consentExpiresAtMs,again.consentExpiresAtMs);
+  assert.equal(r.readyForInference,false);
+  assert.throws(f.consent,/PRODUCT_CONSENT_DENIED/);
+  assert.equal(f.server.post(),0);assert.equal(f.server.get(),3);
+ }finally{clock2.mock.restore();}
+ assert.equal(holds(f).length,0);// the expiry journey touched the ledger neither for holds nor for resets
+}));
+// RUN103: the retained UNKNOWN_USAGE hold is now a recoverable, honestly disclosed state on the
+// closed readback. The disclosure names the exact persisted operation and derives reconcilable
+// solely from reconcile()'s own precondition; the EXISTING owner reconciliation (no new route,
+// no caller amount, no evidence digest) settles only the code-owned synthetic zero-price hold.
+// The mandatory independent readback afterwards shows: hold gone, ledger SETTLED at zero
+// consumed, no extra provider request, and the existing reference-reset journey reopens fresh
+// prerequisites, fresh bounded consent and exactly one new synthetic inference. Nothing here is
+// real-model acceptance; the timed-out original dispatch stays settled-as-unknown, never retried.
+test('565 retained synthetic UNKNOWN hold is disclosed with its exact operation id, settled only by the existing owner reconciliation, and the same route then re-admits fresh prerequisites, consent and one inference',()=>use(async f=>{
+ await f.prerequisites();
+ assert.equal(f.read().unknownUsage,null,'PAN565_HOLD_DISCLOSED_BEFORE_ANY_DISPATCH');
+ f.consent({...limits565,maxTimeMs:50});
+ f.server.setMode('TIMEOUT');
+ const held=await f.probe('INFERENCE');
+ assert.equal(held.checks.INFERENCE.state,'UNKNOWN_USAGE');assert.equal(held.reason,'UNKNOWN_USAGE_RETAINED');
+ assert.deepEqual(held.unknownUsage,{operationId:holds(f)[0].operation_id,reconcilable:true},'PAN565_SYNTHETIC_HOLD_NOT_DISCLOSED_EXACTLY');
+ assert.equal(holds(f)[0].state,'UNKNOWN_USAGE');assert.equal(holds(f)[0].model_units,limits565.maxCostMicros);
+ assert.equal(f.server.post(),1);
+ f.server.release();f.reopen();
+ const reread=f.read();
+ assert.deepEqual(reread.unknownUsage,held.unknownUsage,'PAN565_HOLD_DISCLOSURE_NOT_STABLE_ACROSS_FRESH_OWNER');
+ assert.throws(f.select,/UNKNOWN_USAGE_RETAINED/);
+ const after=f.owner.reconcile(f.headers,{operationId:held.unknownUsage.operationId,identityDigest:reread.identityDigest});
+ assert.equal(after.unknownUsage,null,'PAN565_HOLD_STILL_DISCLOSED_AFTER_RECONCILIATION');
+ assert.equal(after.checks.INFERENCE.state,'FAILED');assert.equal(after.checks.INFERENCE.reason,'SYNTHETIC_ZERO_PRICE_RECONCILED_NO_MODEL_PASS');
+ assert.equal(after.realModelAcceptance,false);
+ assert.equal(holds(f)[0].state,'SETTLED');assert.equal(holds(f)[0].model_consumed,0);
+ assert.equal(f.server.post(),1,'PAN565_RECONCILIATION_TOUCHED_PROVIDER');assert.equal(f.server.get(),3,'PAN565_RECONCILIATION_EXTRA_PROVIDER_GET');
+ // Recovery over the existing honest path only: reference reset, fresh phases, fresh bounded
+ // consent, exactly one new synthetic inference. The settled hold is never reused or replayed.
+ f.server.setMode('OK');
+ await f.prerequisites();f.consent();
+ const again=await f.probe('INFERENCE');
+ assert.equal(again.checks.INFERENCE.state,'PASS');assert.equal(again.unknownUsage,null);
+ assert.equal(f.server.post(),2,'PAN565_RECOVERY_PROVIDER_POSTS_NOT_EXACTLY_TWO');assert.equal(f.server.get(),6);
+}));
+test('565 unknownUsage disclosure is closed-DTO correlated: missing, extra, malformed or state-contradictory records deny while the honest null and the correlated record validate',()=>use(async f=>{
+ const plain=f.select();
+ assert.equal(plain.unknownUsage,null);
+ assert.ok(validateModelConnectionReadbackV1(plain));
+ const{unknownUsage:_droven,...withoutKey}=plain;
+ assert.throws(()=>validateModelConnectionReadbackV1(withoutKey),/INPUT_DENIED/,'closed DTO must require the additive key');
+ const op='operation:mc-'+'a'.repeat(40);
+ for(const forged of [{operationId:op,reconcilable:true,usageMicros:0},{operationId:op},{reconcilable:true},{operationId:'operation:Mc',reconcilable:true},{operationId:'operation:mc_x1',reconcilable:true},{operationId:'operation:ab1',reconcilable:true},{operationId:op,reconcilable:'true'},{operationId:op,reconcilable:null}])
+  assert.throws(()=>validateModelConnectionReadbackV1({...plain,unknownUsage:forged}),/DENIED/,'forged unknownUsage '+JSON.stringify(forged));
+ // Correlation: a well-formed record without the retained INFERENCE hold state or reason denies.
+ assert.throws(()=>validateModelConnectionReadbackV1({...plain,unknownUsage:{operationId:op,reconcilable:true}}),/READBACK_DENIED/,'disclosure while INFERENCE is NOT_RUN');
+ assert.throws(()=>validateModelConnectionReadbackV1({...plain,reason:'UNKNOWN_USAGE_RETAINED',unknownUsage:{operationId:op,reconcilable:true}}),/READBACK_DENIED/,'disclosure without the UNKNOWN_USAGE check state');
+ assert.equal(f.server.get(),0);assert.equal(f.server.post(),0);
+}));
+test('565 non-synthetic retained hold discloses reconcilable false and the owner oracle denial keeps the full hold disclosed and retained',()=>use(async f=>{
+ await f.prerequisites();f.consent({...limits565,maxTimeMs:50});f.server.setMode('TIMEOUT');
+ const r=await f.probe('INFERENCE');
+ assert.equal(r.checks.INFERENCE.state,'UNKNOWN_USAGE');
+ assert.deepEqual(r.unknownUsage,{operationId:holds(f)[0].operation_id,reconcilable:false},'PAN565_OWNER_BOUND_HOLD_DISCLOSURE_WRONG');
+ assert.throws(()=>f.owner.reconcile(f.headers,{operationId:r.unknownUsage.operationId,identityDigest:r.identityDigest}),/USAGE_ORACLE_UNAVAILABLE/);
+ const row=holds(f)[0];assert.equal(row.state,'UNKNOWN_USAGE');assert.equal(row.model_units,limits565.maxCostMicros);
+ assert.deepEqual(f.read().unknownUsage,r.unknownUsage,'PAN565_DENIED_RECONCILIATION_ALTERED_THE_DISCLOSURE');
+ assert.equal(f.server.post(),1);
+ f.server.release();
+},{alter:o=>{o.summary.evidenceClass='OWNER_BOUND_NOT_QUALIFIED';o.summary.provider='provider:local-owner-test';o.pricing={currency:'EUR',revision:1,inputMicrosPerMillionTokens:0,outputMicrosPerMillionTokens:0};}}));

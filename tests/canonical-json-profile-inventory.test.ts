@@ -970,8 +970,40 @@ Object.freeze({
   "fromSha256": "4cc5b1c775f07620649bf8f94ec8e47bf0681e595c81da46173af1b7e83791e1",
   "toSha256": "5bcecccb29b81127b489c38d0543d24bfdd93d42dc2c615f6ce0d416ec94b229",
   "reason": "C01 required-CI timeout recovery adds bounded live proof-command progress and owned asynchronous child lifecycle to this whole-file-pinned verifier. Its canonicalJson routine bytes, serialization domain, mandatory commands and per-product/security deadlines are unchanged. Preserve the immutable admitted v1 digest and every prior migration; admit only this exact independently assessed orchestration file, never a candidate-reseeded digest or cross-profile equivalence."
+  }),
+  Object.freeze({
+  "migrationId": "PAN575-LOCAL-MODEL-QUALIFICATION/INTEGRITY-GENERATOR/V105",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 105,
+  "fromSha256": "b3af4df5fda4a2343690815a4a28e42ffffb2cf8760e6810bb4f2f138a10f693",
+  "toSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
+  "reason": "Bind the reviewed PAN575 local model qualification utility registration inside the integrity generator as the exact byte-bound successor of admitted V104 on the same closed owner and checksum recipe. The unchanged mechanical scanner measures1299 files,344 import sites in343 files and2847 unique ledger paths, with scripts consumers16 sites/16 files and tests consumers77 sites/76 files. Retain all historical migration bytes, immutable21 base obligations,13 pinned profiles, every old classification/consumer/non-equivalence assertion, original hard gates, legacy1792 runnable payload and the two closed source-only PAN542 catalog/fixture baseline bindings byte-identical. This bounded local utility census evidence makes no real-model success claim, no CI/merge/release qualification and no whole575/565/548 issue acceptance."
+  }),
+  Object.freeze({
+  "migrationId": "PAN575-NATIVE-UI-WIRE/INTEGRITY-GENERATOR/V106",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 106,
+  "fromSha256": "9b50d1e03006e63c903f9c7a0e7c4970af825dfa37a7edcbe6b1fada242e7fdd",
+  "toSha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
+  "reason": "Bind only the two additive native UI wire protocol test/document registration entries to their exact reviewed generator bytes. Preserve every prior migration and original ownership, classification, equivalence and release gate. Fresh unchanged scanner measures1300 files,344 imports in343 files and2849 unique ledger paths. This source/synthetic protocol increment grants no actual model, browser or whole-issue acceptance."
 }),
-]);
+  Object.freeze({
+  "migrationId": "PAN567-EXPLICIT-ONBOARDING-PROPOSALS/INTEGRITY-GENERATOR/V107",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 107,
+  "fromSha256": "3085a468ec8802a1888988508864dcde81fd51172a11d2d783d1bc2e83b924ce",
+  "toSha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
+  "reason": "Register exactly nine source-only proposal contract/browser/owner/runner/test members on the existing configuration-draft owner. Preserve all109 graph104 nodes, original128-input/64-command bounds, every prior owner/test/hard gate, immutable21 base byte obligations/13 profiles, all earlier migrations, unchanged scanner/validator and legacy1792 runnable inventory. Fresh mechanical scan observes1309 files,348 import sites in347 files and2858 unique checksum paths. This synthetic-fixture scope grants no actual model, UNKNOWN retry, activation, whole-issue or release acceptance."
+}),
+  Object.freeze({
+  "migrationId": "PAN542-PR691-SOURCE-COMPATIBILITY-V3/INTEGRITY-GENERATOR/V108",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 108,
+  "fromSha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
+  "toSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
+  "reason": "Register exactly the two V3 source-compatibility catalog and documentation paths on the existing native ERV owner for the accepted PR691 adapter delta. Preserve all prior migrations, immutable admitted obligations, scanner/validator semantics, native guards and runnable inventory. The unchanged mechanical scan retains1309 files and348 import sites in347 files; only the checksum inventory grows from2858 to2860 paths. No source drift is adopted automatically and no model or whole-parent acceptance is granted."
+}),
+  ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
 const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
@@ -983,17 +1015,17 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1297,
+  "filesScanned": 1311,
   "declarationSites": 37,
   "declarationFiles": 37,
-  "importSites": 342,
-  "importFiles": 341,
+  "importSites": 348,
+  "importFiles": 347,
   "reexportSites": 7,
   "similarShapeSites": 30,
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2844,"uniquePaths":2844,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2863,"uniquePaths":2863,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1776,7 +1808,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
@@ -2068,5 +2100,43 @@ test("negative: exact v104 successor admission cannot migrate a neighboring cont
     assert.equal(migration.path, "scripts/refresh-integrity-data.mjs");
     assert.equal(migration.profileVersion, 104);
     migration.path = "scripts/build-public-release.sh";
+  }, "profile-version-migration:");
+});
+
+
+test("negative: exact v107 proposal registration generator target cannot be replaced by a caller hash", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) =>
+      entry.migrationId === "PAN567-EXPLICIT-ONBOARDING-PROPOSALS/INTEGRITY-GENERATOR/V107");
+    assert.ok(migration);
+    assert.equal(migration.path, "scripts/refresh-integrity-data.mjs");
+    assert.equal(migration.profileVersion, 107);
+    migration.toSha256 = "0".repeat(64);
+  }, "profile-version-migration:");
+});
+
+test("negative: exact v105 successor generator target cannot be replaced by a caller hash", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) =>
+      entry.migrationId === "PAN575-LOCAL-MODEL-QUALIFICATION/INTEGRITY-GENERATOR/V105");
+    assert.ok(migration, "the exact v105 census migration must remain present");
+    assert.equal(migration.path, "scripts/refresh-integrity-data.mjs");
+    assert.equal(migration.profileVersion, 105);
+    migration.toSha256 = "0".repeat(64);
+  }, "profile-version-migration:");
+});
+
+
+test("negative: exact v108 native source successor generator target cannot be replaced by a caller hash", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR691-SOURCE-COMPATIBILITY-V3/INTEGRITY-GENERATOR/V108");
+    assert.ok(migration); assert.equal(migration.path, "scripts/refresh-integrity-data.mjs"); assert.equal(migration.profileVersion, 108);
+    migration.toSha256 = "f".repeat(64);
+  }, "profile-version-migration:");
+});
+test("negative: exact v108 native source successor cannot migrate a neighboring control path", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR691-SOURCE-COMPATIBILITY-V3/INTEGRITY-GENERATOR/V108");
+    assert.ok(migration); migration.path = "demo/runtime/local-journal-owner.mjs";
   }, "profile-version-migration:");
 });

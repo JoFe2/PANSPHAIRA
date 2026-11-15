@@ -2134,7 +2134,12 @@ const pan575Inputs = [
   ["tests/pan575/tool-transcript.test.mjs", "VALIDATOR"],
   ["tests/pan575/broker-feedback-native.test.mjs", "VALIDATOR"],
   ["tests/pan575/native-ui-consumer.test.mjs", "VALIDATOR"],
+  ["tests/pan575/local-model-qualification.test.mjs", "VALIDATOR"],
+  ["tests/pan575/native-ui-wire-adapter.test.mjs", "VALIDATOR"],
   ["tests/pan575/registration.test.mjs", "VALIDATOR"],
+  ["scripts/run-pan575-local-model-qualification.mjs", "SOURCE"],
+  ["docs/architecture/pan575-local-model-qualification-v1.md", "DERIVED_EVIDENCE"],
+  ["docs/architecture/pan575-native-ui-wire-alias-v1.md", "DERIVED_EVIDENCE"],
 ];
 pan529Inputs.push(...pan575Inputs);
 let pan529Node = dag.nodes.find(({id}) => id === "pan529-runtime-budget-v1");
@@ -2914,7 +2919,17 @@ const pan542Inputs = [
   [
     "tests/pan542/restart-reader.mjs",
     "VALIDATOR"
-  ]
+  ],
+  [
+    "src/pan542/source-compatibility-catalog-v2.json",
+    "SECURITY"
+  ],
+  [
+    "docs/architecture/erv-human-source-compatibility-v2.md",
+    "DERIVED_EVIDENCE"
+  ],
+  ["src/pan542/source-compatibility-catalog-v3.json", "SECURITY"],
+  ["docs/architecture/erv-human-source-compatibility-v3.md", "DERIVED_EVIDENCE"]
 ];
 let pan542Node = dag.nodes.find(({ id }) => id === "pan542-native-erv-human-v1");
 if (pan542Node === undefined) {
@@ -3426,6 +3441,49 @@ for(const[inputPath,role]of pan564Inputs)pan563Node.inputs.push({path:inputPath,
 if(!pan563Node.ownedTests.includes('npm run pan564:test'))pan563Node.ownedTests.push('npm run pan564:test');
 if(!repositoryIntegrityNode.ownedTests.includes('npm run pan564:test'))repositoryIntegrityNode.ownedTests.push('npm run pan564:test');
 
+
+// PAN567 proposal-only onboarding attaches to the existing563 draft owner.
+const pan567Inputs = [
+  [
+    "packages/contracts/src/agent-configuration-proposal-v1.ts",
+    "CONTRACT"
+  ],
+  [
+    "packages/browser-workspace/src/configuration-proposal-v1.ts",
+    "SOURCE"
+  ],
+  [
+    "src/pan567/configuration-proposal-owner.mjs",
+    "SECURITY"
+  ],
+  [
+    "scripts/run-pan567-configuration-proposal-tests.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan567/proposal-contract.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan567/owner-dialogue.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan567/confirmation-semantics.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan567/browser-proposal.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan567/registration.test.mjs",
+    "VALIDATOR"
+  ]
+];
+for (const [inputPath, role] of pan567Inputs) pan563Node.inputs.push({path: inputPath, role, sha256: digest(inputPath)});
+if (!pan563Node.ownedTests.includes("npm run pan567:test")) pan563Node.ownedTests.push("npm run pan567:test");
+// Canonical pretest already runs this command. Preserve the existing64 root bound.
 
 // PAN566 is an attachment of existing528 journal and563 draft, not a new owner.
 const pan566Inputs=[
@@ -3971,6 +4029,7 @@ for (const [inputPath] of pan541Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan543Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan563Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan564Inputs) entries.set(inputPath, null);
+for (const [inputPath] of pan567Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan566Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan569Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan568Inputs) entries.set(inputPath, null);

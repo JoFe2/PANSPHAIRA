@@ -3,9 +3,14 @@
 // kernels to exercise the internal implementation without credential/cost.
 import {createServer} from 'node:http';
 import {ModelAccessBrokerV1,syntheticCanonicalModelRequestV1,syntheticModelAccessPolicyV1} from '../../dist/packages/contracts/src/model-access-broker.js';
-import {bindModelConnectionTransportV1,connectionTransportIdentityV1} from '../../src/pan565/connection-transport.mjs';
+import {bindModelConnectionTransportV1,connectionTransportIdentityV1,MODEL_COMPOSITION_WIRE_ALIAS_V1} from '../../src/pan565/connection-transport.mjs';
 import {createNativeCompositionFeedbackToolsV1} from '../../src/pan575/native-composition-tools.mjs';
 import {runExistingBrokerToolFeedbackV1} from '../../src/pan575/broker-tool-feedback.mjs';
+// The fixture peer behaves like the ACTUAL local server: it answers only with
+// the exact provider-safe wire names the closed code-owned binding declares.
+// Native descriptors/invokes/readbacks and native payloads keep their dotted
+// identity; only the wire response names below are renamed.
+const compWireAlias575=MODEL_COMPOSITION_WIRE_ALIAS_V1.binding;
 export const feedbackLimits575={maxCostMicros:50000,maxTimeMs:1500,maxTurns:3,maxTools:2,maxRequests:3,maxTokens:512,maxInputBytes:32768,maxOutputBytes:8192};
 export const materialInput575=()=>({schema:'pansphaira.pan522/material-plan-input/v1',asOf:'2026-10-07',horizonEnd:'2026-10-31',calendars:[{id:'CAL575',timezone:'UTC',weekdays:[1,2,3,4,5],holidays:[],validFrom:'2026-01-01',validUntil:'2027-01-01'}],items:[{id:'ITEM575',stockArticleId:'SYN-ART-575',warehouseId:'LAGER-575',unit:'STK',supply:'BUY',safetyStock:0,lotMinimum:0,lotMultiple:1,leadWorkdays:2,calendarId:'CAL575'}],boms:[],demands:[{id:'DEMAND575',itemId:'ITEM575',unit:'STK',quantity:17,dueDate:'2026-10-14'}],stock:[{itemId:'ITEM575',unit:'STK',physical:4,reserved:0,blocked:0,sourceRevision:'snapshot-575',observedOn:'2026-10-07'}],receipts:[]});
 export async function protocolFixture575({mode='OK',limits=feedbackLimits575,authorize=()=>true}={}){
@@ -17,7 +22,13 @@ export async function protocolFixture575({mode='OK',limits=feedbackLimits575,aut
   res.writeHead(200,{'content-type':'application/json'});if(mode==='MALFORMED'){res.end('not-json');return;}
   const results=(body.messages??[]).filter(m=>m.role==='tool');let message;
   if(!results.length){
-   const candidates=[{id:'call_PlAnAa9',type:'function',function:{name:mode==='UNKNOWN_TOOL'?'unknown.tool.execute':'pan522.material.plan',arguments:JSON.stringify(materialInput575())}},{id:mode==='DUPLICATE_ID'?'call_PlAnAa9':'call_CeLlBb8',type:'function',function:{name:'erp.order.create',arguments:JSON.stringify({requestId:'request:erp-cell-pan575-feedback',sku:'SYN-PAN575',quantity:mode==='BAD_TOOL_ARGS'?101:13})}}];
+   // Verify the ACTUAL declared provider-safe names the closed adapter put on
+   // the wire; any other declared shape is a protocol violation the fixture
+   // refuses exactly like the real server would, never a silent rename.
+   const declared=(body.tools??[]).map(t=>t?.function?.name);observations[observations.length-1].declaredToolNames=declared;
+   const wireNames=Object.values(compWireAlias575);
+   if(declared.length!==wireNames.length||declared.some((n,i)=>n!==wireNames[i]||n.includes('.'))){res.end(JSON.stringify({model:'model:wire-name-violation',choices:[{message:{content:'fixture refused unexpected declared wire names',tool_calls:[]}}],usage:{prompt_tokens:1,completion_tokens:1}}));return;}
+   const candidates=[{id:'call_PlAnAa9',type:'function',function:{name:mode==='UNKNOWN_TOOL'?'unknown_tool_execute':compWireAlias575['pan522.material.plan'],arguments:JSON.stringify(materialInput575())}},{id:mode==='DUPLICATE_ID'?'call_PlAnAa9':'call_CeLlBb8',type:'function',function:{name:compWireAlias575['erp.order.create'],arguments:JSON.stringify({requestId:'request:erp-cell-pan575-feedback',sku:'SYN-PAN575',quantity:mode==='BAD_TOOL_ARGS'?101:13})}}];
    message={content:null,tool_calls:candidates};
   }else{
    const answers=results.map(m=>{const r=JSON.parse(m.content),f=r.feedback;return {callId:f.callId,challengeId:f.challengeId,sum:f.left+f.right};});
