@@ -8,6 +8,7 @@ import {createNativeWorkspaceUiTaskProjectionV2,nativeWorkspaceUiTaskOwnerConnec
 import {createNativeSurfaceProjectionReaderV2}from'../../src/pan546/native-surface-projection-v2.mjs';
 import {createNativeWorkspaceSurfacesV2}from'../../src/pan597/native-surfaces-v2.mjs';
 import {createNativeWorkspaceInvocationsV1,nativeWorkspaceInvocationExecutorConnectionV1}from'../../src/pan548/native-model-free-invocations-v1.mjs';
+import {canonicalJson}from'../../dist/packages/contracts/src/canonical-json.js';
 import {executeNativeWorkspaceInvocationV1}from'../../src/pan548/native-invocation-executor-v1.mjs';
 import {protectedWorkspaceSetupStatusV1}from'../../src/pan527/origin-session-adapter.mjs';
 import {createHash}from'node:crypto';
@@ -108,5 +109,63 @@ test('696 ACT-01 read-only observation denies unknown fields, forged handles and
   assert.throws(()=>x.observe({...OBS,invocationId:a.invocationId},foreignHeaders(x)),/SCOPE_DENIED|SESSION_DENIED|HOSTED_/);
   assert.equal(x.count(),0);assert.deepEqual(x.before(),prior);
   const o=x.observe({...OBS,invocationId:a.invocationId});assert.equal(o.phase,'ADMITTED');assert.equal(o.attempt,0);assert.equal(x.count(),0);
+ }finally{await x.close();}
+});
+async function privacyFixture(){
+ const {fixture:projectionFixture}=await import('../pan607/native-fixture.mjs');return projectionFixture();
+}
+const retiredKeys=['schemaVersion','runId','taskId','stepId','attempt','taskRevision','phase','privacyRetired','resultPhase','proof','rendered','personalViewPersistenceProduced','physicalPixelSightCertified','model','modelPlanLineage','executionAuthorityGranted','businessEffectProduced'].sort();
+function assertRetired(x,id,why){const o=x.invocations.observe(x.tab.headers,{...OBS,invocationId:id});
+ assert.equal(o.phase,'PRIVACY_RETIRED',why);assert.equal(o.privacyRetired,true);assert.equal(o.proof,null);assert.equal(o.resultPhase,null);assert.equal(o.executionAuthorityGranted,false);assert.equal(o.taskId,id);
+ assert.deepEqual(Object.keys(o).sort(),retiredKeys,why+': retired observation exposes only the minimal retirement fields');
+ assert.equal(Object.hasOwn(o,'argumentDigest'),false);assert.equal(Object.hasOwn(o,'setDigest'),false);assert.equal(Object.hasOwn(o,'candidateId'),false);assert.equal(Object.hasOwn(o,'actor'),false);assert.equal(Object.hasOwn(o,'semanticTarget'),false);assert.equal(Object.hasOwn(o,'idempotency'),false);assert.equal(Object.hasOwn(o,'capabilityAvailability'),false);return o;}
+test('696 ACT-01 live observation binds its origin privacy epoch: revoke retires row-backed and in-memory proposals, revoke+providerSwitch keeps retirement, no retroactive current epoch, no revived references',async()=>{
+ const x=await privacyFixture();try{
+  const result=x.preview(),id=result.observation.taskId;
+  assert.equal(result.observation.phase,'RESULT_CONFIRMED');
+  x.projection.revoke(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+  assert.throws(()=>x.snapshot(),/CONTEXT_PRIVACY_REVOKED/,'the #607 snapshot already denies live reads after revoke');
+  assertRetired(x,id,'observation must not disclose retired object/proof/digests after revoke');
+  x.projection.providerSwitch(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+  const after=x.snapshot(),retired=after.tasks.filter(v=>v.taskId===id);
+  assert.equal(retired.length,1);assert.equal(retired[0].privacyRedacted,true);assert.equal(retired[0].proof,null);assert.equal(retired[0].requestDigest,null);
+  assertRetired(x,id,'providerSwitch must not retroactively re-adopt the old invocation under the new current epoch');
+  const r=x.invocations.resolve(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resolve/v1',input:{schemaVersion:'pansphaira.workspace-invocation/final-text/v1',inputKind:'TYPED_FINAL_TEXT',final:true,text:'Mach die Karte kleiner'},context:x.f.verification(x.tab),selectedCardId:'native-review',targetSurfaceId:null});
+  assert.equal(x.invocations.observe(x.tab.headers,{...OBS,invocationId:r.set.invocationId}).phase,'PROPOSED','a fresh post-switch proposal is live in the current epoch');
+  const a=x.invocations.admit(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/admit/v1',setId:r.set.setId,requestDigest:r.set.requestDigest,setDigest:r.set.setDigest,candidateId:r.set.selectedCandidateId,argumentDigest:r.set.candidates.find(c=>c.candidateId===r.set.selectedCandidateId).argumentDigest,policyRef:r.set.policyRef});
+  assert.equal(x.invocations.observe(x.tab.headers,{...OBS,invocationId:a.invocationId}).phase,'ADMITTED');
+  x.projection.revoke(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+  assertRetired(x,a.invocationId,'an in-memory admission must not survive revoke as a live disclosure');assert.equal(x.invocations.observe(x.tab.headers,{...OBS,invocationId:a.invocationId}).attempt,0,'a retired admission has no dispatch attempt');
+ }finally{await x.close();}
+});
+test('696 ACT-01 observation keeps a durable successful effect when its origin epoch retires mid-finish: separate explicit unavailability, no added authority/proof, no redispatch',async()=>{
+ const x=await privacyFixture();try{
+  const r=x.invocations.resolve(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resolve/v1',input:{schemaVersion:'pansphaira.workspace-invocation/final-text/v1',inputKind:'TYPED_FINAL_TEXT',final:true,text:'Mach die Karte kleiner'},context:x.f.verification(x.tab),selectedCardId:'native-review',targetSurfaceId:null}),set=r.set,c=set.candidates.find(v=>v.candidateId===set.selectedCandidateId);
+  const a=x.invocations.admit(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/admit/v1',setId:set.setId,requestDigest:set.requestDigest,setDigest:set.setDigest,candidateId:c.candidateId,argumentDigest:c.argumentDigest,policyRef:set.policyRef});
+  const connection=nativeWorkspaceInvocationExecutorConnectionV1(x.invocations),effect=connection.begin(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/execute/v1',invocationId:a.invocationId,admissionToken:a.admissionToken,requestDigest:a.requestDigest,setDigest:a.setDigest,candidateId:a.candidateId,argumentDigest:a.argumentDigest,policyRef:a.policyRef});
+  const preview=x.f.view.preview(x.tab.headers,JSON.parse(effect.member.argumentBytes));
+  x.projection.providerSwitch(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+  const result=connection.finish(x.tab.headers,effect,{phase:'PREVIEW_VALIDATED',preview,clientRendered:false,personalProfileSaved:false,restored:false});
+  assert.equal(result.observation.phase,'PRIVACY_RETIRED');assert.equal(result.observation.proof,null);assert.equal(result.observation.taskId,a.invocationId);assert.equal(result.observation.executionAuthorityGranted,false);
+  assert.equal(result.task.state,'COMPLETED','a durable successful effect must not be converted into an executor error by observation unavailability');
+  assert.equal(result.executionAuthorityGranted,false);assert.equal(result.personalViewPersistenceProduced,false);
+  assertRetired(x,a.invocationId,'post-finish observation must report retired availability');
+  assert.throws(()=>connection.begin(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/execute/v1',invocationId:a.invocationId,admissionToken:a.admissionToken,requestDigest:a.requestDigest,setDigest:a.setDigest,candidateId:a.candidateId,argumentDigest:a.argumentDigest,policyRef:a.policyRef}),/INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK|INVOCATION_ADMISSION_REQUIRED/,'retired observation must not grant a redispatch');
+  const audit=x.projection.audit(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/audit/v1',taskId:a.invocationId});
+  assert.equal(audit.historicalAudit,true);assert.ok(audit.events.some(e=>e.kind==='INTENT_COMPLETED'),'historical audit under the origin epoch still holds the durable completion event');
+ }finally{await x.close();}
+});
+test('696 ACT-01 preview observation binds the actual expected view/native revisions; row observation bytes are digest-validated; taskRevision stays separate from attempt',async()=>{
+ const x=await fixture();try{const r=x.owner.resolve(x.source.headers,x.request()),member=r.set.candidates.find(c=>c.candidateId===r.set.selectedCandidateId),a=x.owner.admit(x.source.headers,x.selection(r));
+  const result=executeNativeWorkspaceInvocationV1(x.owner,x.source.headers,x.execution(a)),o=result.observation;
+  assert.equal(o.expectedRevision,member.revisions.viewRevision,'preview must bind the actual expected view revision, not null');
+  assert.deepEqual(o.expectedRevisions,member.revisions,'preview must bind the full actual expected revision set (native/view)');
+  assert.equal(o.attempt,1);assert.equal(o.taskRevision,result.task.revision);assert.notEqual(o.attempt,o.taskRevision);
+  const row=x.n.readRow(a.invocationId);
+  const saved=JSON.parse(row.original_command);row.original_command=JSON.stringify({...saved,invocationId:'invocation:'+'e'.repeat(32)});
+  x.n.db.prepare('UPDATE workspace_ui_tasks_v2 SET original_command=? WHERE command_id=?').run(row.original_command,a.invocationId);
+  assert.throws(()=>x.observe({...OBS,invocationId:a.invocationId}),/CONTEXT_JOURNAL_TASK_BYTES_DENIED/,'observation must validate persisted original_command bytes before trusting them');
+  x.n.db.prepare('UPDATE workspace_ui_tasks_v2 SET original_command=? WHERE command_id=?').run(canonicalJson(saved),a.invocationId);
+  assert.equal(x.observe({...OBS,invocationId:a.invocationId}).phase,'RESULT_CONFIRMED');
  }finally{await x.close();}
 });
