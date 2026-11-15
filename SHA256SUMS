@@ -2562,7 +2562,7 @@ d29b9b1a671a316100236dee4c5138cf68c220dd74773a39e5db68809187d4c5  ./tests/pan594
 a1ec26ffaa3d66acbb714ed6c0d069b077d2e531fd32802b564942dc45498629  ./tests/pan594/fixture.mjs
 59c3a9436054fcf65dfd5c744ae0533ed475ae4e921c3fe923082d2e9d8e2468  ./tests/pan594/measurement.test.mjs
 e88fe6436f24b626e3fae227ea72f7a3ab33e7d560970ef708eb7377aaf6121c  ./tests/pan594/native-comparison.test.mjs
-d05c7585a4b94271978b35fe0eef0dbcd377860329597a24721385650c2f5d43  ./tests/pan594/registration.test.mjs
+a72da6afe0e34d67a53e1d230a92a6d6473c901c111c68a923cbc76192a90bef  ./tests/pan594/registration.test.mjs
 220700e574266d37598de29457e2f1ec1f81d031626d0f9a3613eb6e801e68eb  ./tests/pan597/browser-pairing.test.mjs
 61d00135555856d96dbe323a2ac0efd50e0932668071ead026db4eab42d8416c  ./tests/pan597/browser-surfaces.test.mjs
 94104f725fef2fedd59896a26ca9d088dd3f168cbf4ca3a1c7383b5277c61b9f  ./tests/pan597/native-browser-pairing.test.mjs
@@ -2856,5 +2856,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-fd8b106c9adf9cec2828343de95fa3e9c6fa2b9f6926df0e05e24c79c34ab32a  ./verification/verification-dag-v2.json
+04571b7a1ddafd46752670f5cb977b286787100ab2ff9152222ae43cbd9b3726  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
