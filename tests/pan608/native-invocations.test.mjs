@@ -145,7 +145,15 @@ test('698 ACT-03 fence between begin and dispatch blocks TARGET_ATTEMPTED with n
   // reservation: no TARGET_ATTEMPTED, no target call, no duplicate task.
   assert.equal(x.count(),1);
   assert.equal(x.n.db.prepare('SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind=?').get(a.invocationId,'TARGET_ATTEMPTED').n,0);
+  // The executor wrapper cannot convert the fenced unsent attempt into a
+  // fabricated dispatched fact or a journalled UNKNOWN: a wrapper rerun on the
+  // existing attempt is refused by the readback guard before any target call,
+  // the task keeps its genuine ACCEPTED identity, and no factual UNKNOWN event
+  // exists for the never-dispatched attempt (a fence won inside a fresh begin
+  // instead throws before the wrapper try block, proven by test 1's zero rows).
+  assert.throws(()=>executeNativeWorkspaceInvocationV1(x.owner,x.source.headers,c),/INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK/);
   assert.equal(x.n.db.prepare("SELECT state FROM workspace_ui_tasks_v2 WHERE command_id=?").get(a.invocationId).state,'ACCEPTED');
+  assert.equal(x.n.db.prepare('SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind=?').get(a.invocationId,'OUTCOME_UNKNOWN').n,0);
   // A second pause attempt while a fenced-but-attempted admission is pending
   // sees no open TARGET_ATTEMPTED work: PAUSED is still provable honestly.
   const ack=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1});

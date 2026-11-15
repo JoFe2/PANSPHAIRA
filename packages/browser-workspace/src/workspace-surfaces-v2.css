@@ -29,3 +29,4 @@
 .surface-technical-details>summary { min-height:44px; padding:.6rem; cursor:pointer; overflow-wrap:anywhere; }
 .surface-technical-details>summary:focus-visible { outline:3px solid var(--ui-accent,#235b8a); outline-offset:2px; }
 .surface-setup-summary .stages { padding-left:1.3rem; line-height:1.65; }
+.surface-native-presentation{min-width:0;max-width:100%}.surface-native-presentation h4{margin:.75rem 0}.native-display-host{min-width:0;max-width:100%}.native-display-frame{display:block;width:100%;max-width:100%;min-height:24rem;box-sizing:border-box;border:1px solid currentColor;border-radius:.5rem;background:#111820}

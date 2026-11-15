@@ -94,5 +94,15 @@ export function createNativeBrowserPairHandshakeV1({db,transaction,bootEpoch,act
   }
   return readback(row);
  }
- return Object.freeze({call,close(){closed=true;witnesses.clear();}});
+ // Code-only attachment for the separate PAN606 display principal. Neither
+ // method is a browser-pair operation, field grant or cross-session Surface call.
+ function presentationParticipant(headers,pairId){const a=checkActor(headers),row=permitted(a,get(pairId));return {actorSurfaceId:a.row.surface_id,pair:readback(row)};}
+ function presentationSnapshot(pairId){
+  const row=current(get(pairId));if(row.status!=='PAIRED')throw Error('DISPLAY_PAIR_NOT_CURRENT');const w=witnesses.get(row.pair_id);if(!w?.targetHeaders)throw Error('DISPLAY_PAIR_NOT_CURRENT');
+  const source=checkWitness(w.sourceHeaders,row.source_fence),target=checkWitness(w.targetHeaders,row.target_fence),scope=JSON.parse(row.scope_json),selector={routeId:scope.routeId,objectId:scope.objectId,expectedRevision:scope.dataRevision};
+  const projection=reader.read(w.sourceHeaders,selector,source.binding),recipient=reader.read(w.targetHeaders,selector,target.binding);
+  if(projection.projectionDigest!==scope.projectionDigest||recipient.projectionDigest!==scope.projectionDigest||current(get(pairId)).status!=='PAIRED')throw Error('DISPLAY_PAIR_NOT_CURRENT');
+  return {sourceSurfaceId:row.source_id,targetSurfaceId:row.target_id,scope,scopeDigest:row.scope_digest,expiresAtMs:row.expires_at,projection};
+ }
+ return Object.freeze({call,presentationParticipant,presentationSnapshot,close(){closed=true;witnesses.clear();}});
 }

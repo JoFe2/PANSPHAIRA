@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "5b66705d2327200460ba8ddf8764ab1d8455e5bbe6698c41d2087ef45d8b3acd"
+        "sha256": "d6ca2e9bda51c7d34a8b0cf375b2b9a624a78703c03b13986f583cdcb8209744"
       }
     ]
   },
@@ -971,6 +971,14 @@
       "fromSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
       "toSha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
       "reason": "Register only the explicit PAN594 developer-readback v2 policy and its structural contract test at the existing critical owner. Preserve historical v1, all prior migrations, admitted-base obligations, scanner semantics, exact Linux x64 runtime/installed-byte guards, closed runner and runnable inventory. This PR681 branch successor derives from its actual V108 tip; parallel unmerged PR679 migrations are not imported. No native, performance, release or independent acceptance is asserted."
+    },
+    {
+      "migrationId": "PR679-RESTRICTED-DISPLAY-AND-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 110,
+      "fromSha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
+      "toSha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
+      "reason": "Register exactly the two PR679 source-only native display session/ingress inputs at the existing PAN597 owner and the frozen V4 catalog SECURITY/documentation DERIVED_EVIDENCE inputs at the existing PAN542 owner as one closed successor of published Main PR681 V109. Preserve every published migration including the fast-uri 3.1.9 developer-policy v2 registration and immutable v1, all admitted base obligations/13 pinned profiles, graph104/all109 owners, scanner/validator semantics, original byte caps, native guards and runnable inventory. The unchanged mechanical scanner measures 1315 files,350 import sites in349 files and2870 unique ledger paths. Supersede only unpublished branch generator V109/V110 registrations; historical Git commits and frozen runtime V1-V4 source catalogs remain unchanged. This inventory registration grants no native, browser, CI, release or whole-issue acceptance."
     }
   ],
   "scanScope": {
@@ -1013,15 +1021,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1313,
+    "filesScanned": 1315,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 349,
-    "importFiles": 348,
+    "importSites": 350,
+    "importFiles": 349,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2866,
-    "ledgerUniquePaths": 2866
+    "ledgerEntries": 2870,
+    "ledgerUniquePaths": 2870
   },
   "profiles": [
     {
@@ -1094,7 +1102,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c"
+      "sha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1581,8 +1589,8 @@
     },
     {
       "owner": "pan597",
-      "importSites": 2,
-      "importFiles": 2
+      "importSites": 3,
+      "importFiles": 3
     },
     {
       "owner": "procurement-434",
@@ -1900,7 +1908,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
+      "sha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
       "basis": "profile-version-migration"
     },
     {

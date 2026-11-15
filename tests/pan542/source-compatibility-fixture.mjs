@@ -1,7 +1,7 @@
 // Historical-source test input only, not a hybrid deployment or product authority.
 import assert from 'node:assert/strict';
 import {after} from 'node:test';
-import {mkdirSync,mkdtempSync,readFileSync,writeFileSync,rmSync,symlinkSync,copyFileSync,realpathSync} from 'node:fs';
+import {mkdirSync,mkdtempSync,readFileSync,writeFileSync,rmSync,symlinkSync,copyFileSync,realpathSync,existsSync,readdirSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,dirname,resolve} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
@@ -12,7 +12,7 @@ import {financeFixture} from '../pan519/native-fixture.mjs';
 import {createProtectedSessionAdapterV1} from '../../src/pan527/origin-session-adapter.mjs';
 import {shapeIdentity527} from '../pan527/helpers.mjs';
 import catalog from '../../src/pan542/source-compatibility-catalog-v1.json' with {type:'json'};
-const repo=fileURLToPath(new URL('../../',import.meta.url));let cached=null,temporary=null,predecessorCached=null,predecessorTemporary=null,releasedV2Cached=null,releasedV2Temporary=null;
+const repo=fileURLToPath(new URL('../../',import.meta.url));let cached=null,temporary=null,predecessorCached=null,predecessorTemporary=null,releasedV2Cached=null,releasedV2Temporary=null,v3GitCached=null,v3GitTemporary=null;
 const hash=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
 export function legacySourceInput(){
   if(cached)return cached;
@@ -34,7 +34,7 @@ export function legacySourceInput(){
   for(const row of catalog.originalSourceIdentity)assert.equal(hash(join(cached,row.path)),row.sha256,'GENUINE_LEGACY_SOURCE_INPUT_REQUIRED:'+row.path);
   return cached;
 }
-after(()=>{if(temporary)rmSync(temporary,{recursive:true,force:true});if(predecessorTemporary)rmSync(predecessorTemporary,{recursive:true,force:true});if(releasedV2Temporary)rmSync(releasedV2Temporary,{recursive:true,force:true});});
+after(()=>{if(temporary)rmSync(temporary,{recursive:true,force:true});if(predecessorTemporary)rmSync(predecessorTemporary,{recursive:true,force:true});if(releasedV2Temporary)rmSync(releasedV2Temporary,{recursive:true,force:true});if(v3GitTemporary)rmSync(v3GitTemporary,{recursive:true,force:true});});
 
 // Genuine complete immutable V1 release for V1 history tests and the explicit V2
 // predecessor stage. Never splice a current adapter/backend into that source.
@@ -98,6 +98,37 @@ export function releasedV2SourceInput(){
   return releasedV2Cached;
 }
 
+// Complete verified Git V3 closure; no published V3 release is claimed.
+export function v3GitSourceInput(){
+  if(v3GitCached)return v3GitCached;
+  const policy=JSON.parse(readFileSync(new URL('../../src/pan542/source-compatibility-catalog-v4.json',import.meta.url),'utf8'));
+  assert.equal(policy.predecessorPrimary.provenance,'GIT_ONLY_NOT_RELEASE');
+  assert.equal('releaseId' in policy.predecessorPrimary,false);
+  if(process.env.PAN542_V3_GIT_SOURCE_INPUT){
+    v3GitCached=realpathSync(process.env.PAN542_V3_GIT_SOURCE_INPUT);
+    assert.equal(execFileSync('git',['rev-parse','HEAD'],{cwd:v3GitCached,encoding:'utf8'}).trim(),policy.predecessorPrimary.commit);
+    assert.equal(execFileSync('git',['rev-parse','HEAD^{tree}'],{cwd:v3GitCached,encoding:'utf8'}).trim(),policy.predecessorPrimary.tree);
+    assert.equal(execFileSync('git',['status','--porcelain'],{cwd:v3GitCached,encoding:'utf8'}),'');
+  }else{
+    assert.equal(execFileSync('git',['rev-parse',policy.predecessorPrimary.commit+'^{tree}'],{cwd:repo,encoding:'utf8'}).trim(),policy.predecessorPrimary.tree);
+    v3GitTemporary=mkdtempSync(join(tmpdir(),'pan542-v3-git-only-input-'));v3GitCached=v3GitTemporary;
+    const archive=execFileSync('git',['archive','--format=tar',policy.predecessorPrimary.commit],{cwd:repo,maxBuffer:256*1024*1024});
+    execFileSync('tar',['-x','-C',v3GitCached],{input:archive,maxBuffer:1024*1024});
+    // Preserve the literal primary Git identity for the unchanged nested historical fixtures.
+    // Only Git metadata is attached; archive payload and source catalogs stay exact.
+    const common=execFileSync('git',['rev-parse','--git-common-dir'],{cwd:repo,encoding:'utf8'}).trim();
+    execFileSync('git',['init','--quiet',v3GitCached],{cwd:repo,maxBuffer:1024*1024});
+    writeFileSync(join(v3GitCached,'.git/objects/info/alternates'),resolve(repo,common,'objects')+'\n',{mode:0o600});
+    writeFileSync(join(v3GitCached,'.git/HEAD'),policy.predecessorPrimary.commit+'\n',{mode:0o600});
+    writeFileSync(join(v3GitCached,'.git/info/exclude'),'/node_modules\n',{mode:0o600});
+    execFileSync('git',['read-tree',policy.predecessorPrimary.commit],{cwd:v3GitCached,maxBuffer:1024*1024});
+    symlinkSync(join(repo,'node_modules'),join(v3GitCached,'node_modules'),'dir');
+    execFileSync(process.execPath,[join(repo,'node_modules/typescript/bin/tsc'),'-p',join(v3GitCached,'tsconfig.json')],{cwd:v3GitCached,maxBuffer:4*1024*1024});
+  }
+  for(const row of policy.predecessorSourceIdentity)assert.equal(hash(join(v3GitCached,row.path)),row.sha256,'GENUINE_COMPLETE_V3_GIT_SOURCE_INPUT_REQUIRED:'+row.path);
+  return v3GitCached;
+}
+
 export const compatibilityOrigin='https://pan542-compatibility.test:4443';
 export function sessionOptions(stateRoot,overrides={}){return {optIn:true,origin:compatibilityOrigin,identity:shapeIdentity527('tenant-a'),stateRoot,...overrides};}
 export async function compatibilityFixture({unbound=false,legacyOverride=null}={}){
@@ -118,10 +149,20 @@ export function sourceNegativeFixture(input,parent){
   // Exact-byte local copies/symlinks solely for isolated DENIAL tests. They are
   // never admitted as a deployment, source archive or preserved-data GREEN.
   const root=join(parent,'untrusted-source-negative');mkdirSync(root,{mode:0o700});
-  const paths=[...catalog.originalSourceIdentity.map(r=>r.path),'src/pan542/source-compatibility-catalog-v1.json','src/pan542/source-compatibility-catalog-v2.json','src/pan542/source-compatibility-catalog-v3.json'];
+  const paths=[...catalog.originalSourceIdentity.map(r=>r.path),'src/pan542/source-compatibility-catalog-v1.json','src/pan542/source-compatibility-catalog-v2.json','src/pan542/source-compatibility-catalog-v3.json','src/pan542/source-compatibility-catalog-v4.json'];
   for(const path of paths){const src=join(input,path),dst=join(root,path);mkdirSync(dirname(dst),{recursive:true,mode:0o700});
-    if(path==='src/pan542/native-human-backend.mjs'||/source-compatibility-catalog-v[123]\.json$/.test(path)){try{copyFileSync(src,dst);}catch(e){if(e.code!=='ENOENT')throw e;}}
+    if(path==='src/pan542/native-human-backend.mjs'||/source-compatibility-catalog-v[1234]\.json$/.test(path)){try{copyFileSync(src,dst);}catch(e){if(e.code!=='ENOENT')throw e;}}
     else symlinkSync(src,dst);
   }
+  // Fill only absent dependencies with read-only-by-convention symlinks, so an
+  // isolated copied adapter can resolve its real imports in target-drift tests.
+  function dependencies(source,target){for(const e of readdirSync(source,{withFileTypes:true})){
+    const src=join(source,e.name),dst=join(target,e.name);
+    if(!existsSync(dst))symlinkSync(src,dst,e.isDirectory()?'dir':'file');
+    else if(e.isDirectory())dependencies(src,dst);
+  }}
+  dependencies(join(input,'src'),join(root,'src'));
+  dependencies(join(input,'dist'),join(root,'dist'));
+  symlinkSync(join(input,'node_modules'),join(root,'node_modules'),'dir');
   return root;
 }
