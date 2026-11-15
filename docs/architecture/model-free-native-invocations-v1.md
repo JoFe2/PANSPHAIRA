@@ -69,3 +69,43 @@ Desktop/390/CSS-zoom evidence to current build bytes. CSS zoom, native browser
 zoom, DOM geometry, painted raster and actual image sighting are separate.
 This functional release is SOURCE_EVIDENCE_ONLY, not a prebuilt installer or
 real-model/physical-device/whole-design acceptance.
+
+## PAN696 ACT-01 bounded action observation (source-only, same owners)
+
+The existing admission/executor seam additionally exposes a read-only
+versioned observation of one invocation: request
+`pansphaira.workspace-action-observation/request/v1` accepts only
+`schemaVersion` and the existing `invocationId` handle; any unknown field,
+forged handle or foreign principal is denied at the same authenticated
+boundary, and observation alone never dispatches, grants rights or mutates.
+The response `pansphaira.workspace-action-observation/v1` binds the actual
+run/task/step/attempt (real dispatch ordinal; `taskRevision` is the separate
+durable task row revision, never the attempt count), the authenticated
+tenant/actor, the admitted capability and argument schema, the object
+reference with its expected revision set plus the actual expected view/native
+revisions, the exact canonical argument digest, the causal context-set digest
+binding, the idempotency operation, and an optional code-owned semantic UI
+target. `PROPOSED`/`ADMITTED`/`DISPATCHED`/`RESULT_CONFIRMED`/`UNKNOWN` and
+`DOCUMENT_ACCEPTED` are derived only from existing journal/row facts; the
+executor readback carries the same binding even when the caller ignores it.
+A genuine after-begin reply loss stays `UNKNOWN` with attempt 1 retained and
+confers no re-dispatch right. Accepted is never rendered, and rendered is
+never persisted: `personalViewPersistenceProduced` requires the existing
+personal-save CAS/readback, `physicalPixelSightCertified` remains false here,
+and `model`/`modelPlanLineage` stay `NOT_RUN`/`null` — observation infers no
+model plan lineage and grants no new authority; effective authorization and
+limits remain at the existing owner/executor. The existing unavailable native
+pause/cancel/resume (PAN698) and the offer-line API (PAN704) stay explicitly
+unavailable; this observation is neither.
+
+Observations are origin-epoch bound: a privacy revoke (including one followed
+by a providerSwitch) retires the row-backed and in-memory proposals, after
+which observation returns the minimal `PRIVACY_RETIRED` DTO with no object,
+proof, argument/set digests or actor disclosure and never retroactively
+adopts the newer current epoch. A durable effect committed before retirement
+survives as historical audit under the origin epoch; mid-finish retirement
+shows explicit `availability: "PRIVACY_RETIRED"` in the executor readback
+instead of an executor error, without redispatch. Row-backed observations
+revalidate the persisted original-command bytes through the existing task
+core before trusting them. Journal expansion (PAN697), UI surface (PAN699)
+and observation history (PAN700) remain unimplemented here.
