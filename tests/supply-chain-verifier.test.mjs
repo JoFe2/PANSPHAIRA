@@ -104,6 +104,9 @@ test("public release staging accepts an isolated Git worktree control file", asy
       "docs/architecture/erv-human-source-compatibility-v2.md",
     "src/pan542/source-compatibility-catalog-v3.json",
     "docs/architecture/erv-human-source-compatibility-v3.md",
+    "src/pan542/ks-price-variance-query.mjs",
+    "tests/pan542/ks-price-variance-query.test.mjs",
+    "docs/architecture/erv-human-ks-price-variance-query-v1.md",
     ];
     const manifest = await readFile(path.join(root, "release/public-files.manifest"), "utf8");
     const manifestPaths = new Set(manifest.split("\n").filter(line => line && !line.startsWith("#")).map(line => line.split("\t")[0]));

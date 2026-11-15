@@ -110,6 +110,23 @@ jobs:
         # Never substitute a floating tag or broaden workload permissions.
         run: docker pull --platform linux/amd64 node@sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03
 
+      # KS is the actual pinned public code for the registered PAN542
+      # KS price-variance QUERY tests, not a real data source. Missing code
+      # must fail here; no skip or fixture substitution.
+      - name: Fetch the pinned public PAN692 KS code without credentials
+        env:
+          GIT_TERMINAL_PROMPT: '0'
+        run: |
+          ks_root="$RUNNER_TEMP/pan692-ks"
+          git init "$ks_root"
+          git -C "$ks_root" -c credential.helper= fetch --depth=1 https://github.com/JoFe2/KaleidoSphere.git 5550c603b005c9c168f39f4047b1b46d2c076409
+          git -C "$ks_root" checkout --detach FETCH_HEAD
+          test "$(git -C "$ks_root" rev-parse --verify HEAD)" = '5550c603b005c9c168f39f4047b1b46d2c076409'
+          test "$(git -C "$ks_root" status --porcelain=v1 --untracked-files=no)" = ''
+          sha256sum "$ks_root/services/bi-control/src/business-bi/procurement-analysis.mjs" \
+            | grep -q '^7eb01232c7ae93f42e9fa390f20acae26e543b6f0970a1b31567acfc3b957cf6  '
+          printf 'KS692_KS_SOURCE=%s\n' "$ks_root" >> "$GITHUB_ENV"
+
       # Includes the authoritative npm test lifecycle (pretest + test + posttest)
       # in the proof's sanitized child environment; do not run it a second time.
       - name: Record authoritative proof phase start
