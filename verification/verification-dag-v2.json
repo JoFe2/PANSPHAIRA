@@ -11569,7 +11569,7 @@
         {
           "path": "src/pan548/native-context-journal-v1.mjs",
           "role": "SECURITY",
-          "sha256": "65cce9b33f1458d973a7de1b2c52439b27eddfaae067464157ed20dd6670d91b"
+          "sha256": "f5258cb8a32befb63af95165e59646b469baa16801f9c9a66a5307fca30610f2"
         },
         {
           "path": "src/pan548/native-context-checkpoints-v1.mjs",
@@ -11579,7 +11579,7 @@
         {
           "path": "src/pan548/native-context-projection-v1.mjs",
           "role": "SOURCE",
-          "sha256": "988cd00099a9053ec9fb41b79ce8a28dfa9f4726180da062e1cc4d1fc77fb181"
+          "sha256": "eb7e37f93c974a88acad5287a764dabd4ad656c3136fdee8ca99befe14d7083d"
         },
         {
           "path": "src/pan548/native-readonly-event-projection-v1.mjs",
@@ -11862,7 +11862,7 @@
         {
           "path": "tests/pan607/native-context-projection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "74c89ce78e1585f4efaef4819a0abb783ea6fc25c207c3f6b044b6d3b34d5901"
+          "sha256": "12d08b86d0dc754a2b1dde8c281e70e290be446a0c7dc38c3ff7c2a5c2edad66"
         },
         {
           "path": "tests/pan607/native-checkpoints.test.mjs",

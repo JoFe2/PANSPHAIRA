@@ -27,6 +27,22 @@ export function nativeUiContextTaskCoreV1(row){
  if(canonicalJson(constraints)!==canonicalJson(fixedConstraints))throw Error('CONTEXT_JOURNAL_NO_SEND_DENIED');
  return {taskId:row.command_id,requestDigest:row.request_digest,argumentDigest:digest(JSON.parse(argumentBytes)),argumentBytes,capability,scope,expiresAtMs,constraints:{...fixedConstraints},resourceRefs};
 }
+function actionDescriptor(row,task){
+ // ACT-02 #697 owner-issued versioned action descriptor of THIS attempt, derived
+ // only from the durable original command bytes. Facts the owning task family does
+ // not carry (checkpoint/display have no budget run or causal set) stay explicitly
+ // null — never fabricated and never backfilled later from polling wallclock.
+ const command=JSON.parse(row.original_command),args=JSON.parse(task.argumentBytes);
+ const binding=command.budgetBinding??null,set=command.set??null,candidate=command.candidate??null;
+ return {schemaVersion:'pansphaira.workspace-context/event-action/v1',taskId:task.taskId,
+  runId:binding?binding.operationId:null,stepId:'step:'+row.command_id,attempt:1,
+  capability:task.capability,operationSchemaVersion:typeof args.schemaVersion==="string"?args.schemaVersion:null,
+  requestDigest:task.requestDigest,argumentDigest:task.argumentDigest,
+  expectedRevisions:candidate?candidate.revisions??null:null,
+  causal:set?{setId:set.setId,setDigest:set.setDigest}:null,
+  idempotency:{operationId:binding?binding.operationId:null,taskRequestDigest:task.requestDigest},
+  model:'NOT_RUN',executionAuthorityGranted:false};
+}
 export function createNativeUiContextJournalV1({db,transaction,binding,principal,readRow,bootEpoch}){
  db.exec(`CREATE TABLE IF NOT EXISTS workspace_ui_context_scope_v1(principal_digest TEXT PRIMARY KEY,privacy_epoch INTEGER NOT NULL CHECK(privacy_epoch>0),provider_epoch INTEGER NOT NULL CHECK(provider_epoch>0),revoked INTEGER NOT NULL CHECK(revoked IN(0,1))) STRICT;
  CREATE TABLE IF NOT EXISTS workspace_ui_context_outbox_v1(principal_digest TEXT NOT NULL,seq INTEGER NOT NULL,event_key TEXT NOT NULL,task_id TEXT NOT NULL,task_revision INTEGER NOT NULL,kind TEXT NOT NULL,privacy_epoch INTEGER NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,PRIMARY KEY(principal_digest,seq),UNIQUE(principal_digest,event_key)) STRICT;
@@ -49,7 +65,7 @@ export function createNativeUiContextJournalV1({db,transaction,binding,principal
   const old=stream(a);if(old.head.seq>=4096)throw Error('CONTEXT_EVENT_CAPACITY_DENIED');
   const payload={requestDigest:task.requestDigest,argumentDigest:task.argumentDigest,capability:task.capability,constraints:task.constraints,resourceRefs:task.resourceRefs,state:row.state,resultDigest:row.result_json===null?null:digest(JSON.parse(row.result_json)),proofRef};
   const intent=kind==='INTENT_ACCEPTED'?null:db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,row.command_id),eventEpoch=intent?verifiedEnvelope(intent,'event').privacyEpoch:s.privacy_epoch;
-  const e={schemaVersion:'pansphaira.workspace-context/event/v1',seq:old.head.seq+1,eventKey:key,taskId:row.command_id,taskRevision:row.revision,kind,principalDigest:a.digest,privacyEpoch:eventEpoch,previousDigest:old.head.digest,payload},bytes=canonicalJson(e),signature=sign('event',bytes);
+  const e={schemaVersion:'pansphaira.workspace-context/event/v1',seq:old.head.seq+1,eventKey:key,taskId:row.command_id,taskRevision:row.revision,kind,principalDigest:a.digest,privacyEpoch:eventEpoch,previousDigest:old.head.digest,action:actionDescriptor(row,task),payload},bytes=canonicalJson(e),signature=sign('event',bytes);
   // Additive clock sidecar of THIS producer append in the SAME owner transaction.
   // Legacy events are never backfilled from polling/restart wallclock.
   const sourceTimeMs=Date.now();if(!Number.isSafeInteger(sourceTimeMs)||sourceTimeMs<0||!Number.isSafeInteger(bootEpoch)||bootEpoch<1)throw Error('EVENT_SOURCE_CLOCK_OWNER_DENIED');
