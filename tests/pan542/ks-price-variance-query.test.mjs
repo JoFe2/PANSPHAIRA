@@ -3,10 +3,11 @@
 // existing native PAN542 QUERY effect. No new metric kernel, store or rights.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {existsSync,mkdirSync,readFileSync,cpSync,appendFileSync,mkdtempSync} from 'node:fs';
+import {existsSync,mkdirSync,readFileSync,writeFileSync,cpSync,appendFileSync,mkdtempSync} from 'node:fs';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
+import {DatabaseSync} from 'node:sqlite';
 import {financeFixture} from '../pan519/native-fixture.mjs';
 import {nativeRows} from '../fixtures/pan515/native-trade-fixture.mjs';
 import * as procurement from '../../src/procurement-434/bestellung-lifecycle.mjs';
@@ -58,6 +59,9 @@ async function fixture(){
     const authRoot=join(f.parent,'ks-query-session-state');
     mkdirSync(authRoot,{mode:0o700});
     const sessions=createProtectedSessionAdapterV1(sessionOptions(authRoot));
+    // Trusted-owner startup: the existing native owner initializes exactly once
+    // before any adapter attaches; the adapter itself must stay read-only.
+    nativeBackend.initializeNativeErvHumanBackendV1({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',sessionBinding:sessions.binding});
     const adapter=existsSync(new URL('../../src/pan542/ks-price-variance-query.mjs',import.meta.url))
       ?await import('../../src/pan542/ks-price-variance-query.mjs'):null;
     assert.equal(typeof adapter?.createNativeKsPriceVarianceQueryV1,'function','PAN692_KS_PRICE_VARIANCE_QUERY_ADAPTER_NOT_IMPLEMENTED');
@@ -179,15 +183,22 @@ test('PAN692 denials: confirm shape, handle/digest drift, foreign role and CSRF 
     assert.throws(()=>f.q.prepare(f.reviewer,{invoiceId:'AP-OTHER'}),/KS_PRICE_VARIANCE_INVOICE_BINDING_DENIED/);
     assert.throws(()=>C({confirm:false}),/KS_PRICE_VARIANCE_CONFIRM_DENIED/);
     assert.throws(()=>C({extra:1}),/KS_PRICE_VARIANCE_CONFIRM_DENIED/);
-    // Wrong handle suffix or wrong digest never bind a dispatch.
+    // Wrong handle suffix or wrong digest never bind a dispatch. Both digest
+    // mutations are guaranteed different from the original (a pinned digest
+    // ending in '0' would make slice+0 a no-op and the deny a coincidence).
+    const tamperedDigest=prepared.candidateDigest.endsWith('0')?prepared.candidateDigest.slice(0,63)+'1':prepared.candidateDigest.slice(0,63)+'0';
+    assert.notEqual(tamperedDigest,prepared.candidateDigest,'PAN692_DIGEST_MUTATION_MUST_DIFFER');
     assert.throws(()=>f.q.confirm(f.reviewer,{candidateHandle:'synthetic:ks692-'+'a'.repeat(16),candidateDigest:prepared.candidateDigest,confirm:true}),/KS_PRICE_VARIANCE_CONFIRM_STALE_OR_FOREIGN_DENIED/);
-    assert.throws(()=>f.q.confirm(f.reviewer,{candidateHandle:prepared.candidateHandle,candidateDigest:prepared.candidateDigest.slice(0,63)+'0',confirm:true}),/KS_PRICE_VARIANCE_CONFIRM_STALE_OR_FOREIGN_DENIED/);
+    assert.throws(()=>f.q.confirm(f.reviewer,{candidateHandle:prepared.candidateHandle,candidateDigest:tamperedDigest,confirm:true}),/KS_PRICE_VARIANCE_CONFIRM_STALE_OR_FOREIGN_DENIED/);
     // A foreign native role (approver) recomputes a different candidate and cannot bind it.
     assert.throws(()=>f.q.confirm(f.approver,{candidateHandle:prepared.candidateHandle,candidateDigest:prepared.candidateDigest,confirm:true}),/KS_PRICE_VARIANCE_CONFIRM_STALE_OR_FOREIGN_DENIED/);
     // Missing CSRF origin binding denies at mutation authorization, not silently.
     assert.throws(()=>f.q.confirm({...f.reviewer,origin:'https://pan692-evil.test:4443'},{candidateHandle:prepared.candidateHandle,candidateDigest:prepared.candidateDigest,confirm:true}),/HOSTED_CSRF_DENIED/);
-    // A tampered session cookie is no session at all.
-    assert.throws(()=>f.q.prepare({...f.reviewer,cookie:f.reviewer.cookie.slice(0,-1)+'0'},{invoiceId}),/HOSTED_SESSION_DENIED/);
+    // A tampered session cookie is no session at all. The flipped final hex
+    // digit is guaranteed different (a trailing '0' would make +'0' a no-op).
+    const tamperedCookie=f.reviewer.cookie.endsWith('0')?f.reviewer.cookie.slice(0,-1)+'1':f.reviewer.cookie.slice(0,-1)+'0';
+    assert.notEqual(tamperedCookie,f.reviewer.cookie,'PAN692_COOKIE_MUTATION_MUST_DIFFER');
+    assert.throws(()=>f.q.prepare({...f.reviewer,cookie:tamperedCookie},{invoiceId}),/HOSTED_SESSION_DENIED/);
 
     assert.equal(nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,eventsBefore,'PAN692_DENIAL_CREATED_EFFECT');
     assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasksBefore,'PAN692_DENIAL_TOUCHED_FENCE');
@@ -219,45 +230,129 @@ test('PAN692 drift and controls: native price change after prepare, STOP and REV
 
 test('PAN692 KS source drift and adapter re-creation: foreign/drifted pinned source and a new instance after real confirmation',async()=>{
   const ksRoot=ksSource();
-  // A foreign checkout without the pinned commit/HEAD denies adapter creation.
+  // A foreign checkout without the pinned commit/HEAD denies adapter creation
+  // for real provenance reasons: a valid real session plus a root without the
+  // pinned HEAD must reach the native provenance denial, never a mere session
+  // brand from sessions:{}.
   const foreign=mkdtempSync(process.env.TMPDIR+'/ks692-foreign-');
-  await assert.rejects(()=>import('../../src/pan542/ks-price-variance-query.mjs').then(m=>m.createNativeKsPriceVarianceQueryV1({root:'unused',sessions:{},ksSourceRoot:foreign})),
-    /KS_PRICE_VARIANCE_SOURCE_PROVENANCE_DENIED|KS_PRICE_VARIANCE_SESSION_OWNER_REQUIRED_DENIED/);
-
   const f=await fixture();
   try{
     confirmNativePrice(f,6200);
+    mkdirSync(join(f.parent,'ks-query-session-state-2'),{mode:0o700});
+    const sessions2=createProtectedSessionAdapterV1(sessionOptions(join(f.parent,'ks-query-session-state-2')));
+    const {createNativeKsPriceVarianceQueryV1}=await import('../../src/pan542/ks-price-variance-query.mjs');
+    // Fresh empty repo: HEAD cannot be verified at all -> provenance denial.
+    execFileSync('git',['init','-q',foreign]);
+    await assert.rejects(()=>createNativeKsPriceVarianceQueryV1({root:f.root,sessions:sessions2,ksSourceRoot:foreign}),/KS_PRICE_VARIANCE_SOURCE_PROVENANCE_DENIED/);
+    // A real different commit in a clean checkout -> pinned-commit denial.
+    execFileSync('cp',['-a',join(ksRoot,KS_FILE.split('/')[0]),foreign]);
+    execFileSync('git',['-c','safe.directory='+foreign,'-c','user.email=ks692@synthetic.test','-c','user.name=ks692','-C',foreign,'add','-A']);
+    execFileSync('git',['-c','safe.directory='+foreign,'-c','user.email=ks692@synthetic.test','-c','user.name=ks692','-C',foreign,'commit','-q','-m','synthetic foreign commit']);
+    await assert.rejects(()=>createNativeKsPriceVarianceQueryV1({root:f.root,sessions:sessions2,ksSourceRoot:foreign}),/KS_PRICE_VARIANCE_PINNED_SOURCE_DENIED/);
     // A moved copy whose KS file drifted after checkout is never attested unchanged.
     const drifted=mkdtempSync(process.env.TMPDIR+'/ks692-drifted-')+'/ks';
     execFileSync('cp',['-a',ksRoot+'/.',drifted]);
     execFileSync('chmod',['-R','u+w',drifted]);
     appendFileSync(join(drifted,KS_FILE),'\n// synthetic drift\n');
-    const {createNativeKsPriceVarianceQueryV1}=await import('../../src/pan542/ks-price-variance-query.mjs');
-    mkdirSync(join(f.parent,'ks-query-session-state-2'),{mode:0o700});
-    const sessions2=createProtectedSessionAdapterV1(sessionOptions(join(f.parent,'ks-query-session-state-2')));
     await assert.rejects(()=>createNativeKsPriceVarianceQueryV1({root:f.root,sessions:sessions2,ksSourceRoot:drifted}),/KS_PRICE_VARIANCE_PINNED_SOURCE_DENIED/);
 
     const prepared=f.q.prepare(f.reviewer,{invoiceId});
     const pending=f.q.confirm(f.reviewer,{candidateHandle:prepared.candidateHandle,candidateDigest:prepared.candidateDigest,confirm:true});
     assert.equal(pending.state,'QUERY_PENDING_LOCAL_EVIDENCE_ONLY');
 
-    // A new backend instance over the same store reads and reconciles, but the
-    // old confirmation cannot replay and the KS adapter cannot re-initialize.
-    const fresh=await createNativeKsPriceVarianceQueryV1({root:f.root,sessions:f.sessions,ksSourceRoot:ksRoot})
-      .then(()=>'RESOLVED',e=>e.message);
-    assert.equal(fresh,'ERV_HUMAN_EXISTING_STORE_ADOPTION_DENIED','PAN692_ADAPTER_REINITIALIZATION_MUST_DENY');
-    const api=nativeBackend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions});
-    const {nativeRole:r1,subjectId:s1,...freshRest}=api.read(f.approver,{invoiceId});
+    // Gap1: a new adapter instance attaches read-only to the SAME already
+    // initialized root/session binding. Existing events and the binding record
+    // stay byte-identical (no reinitialization), read/reconcile work, and the
+    // old confirmation cannot replay a second decision effect.
+    const fresh=await createNativeKsPriceVarianceQueryV1({root:f.root,sessions:f.sessions,ksSourceRoot:ksRoot});
+    const bindingRows=nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_binding')[0].count;
+    assert.equal(bindingRows,1,'PAN692_ADAPTER_REINITIALIZED_BINDING');
+    const {nativeRole:r1,subjectId:s1,...freshRest}=fresh.read(f.approver,{invoiceId});
     const {nativeRole:r2,subjectId:s2,...pendingRest}=pending;
     assert.deepEqual(freshRest,pendingRest,'PAN692_INDEPENDENT_NATIVE_GET_DRIFTED');
     assert.equal(r1,'APPROVER');assert.equal(s1,'synthetic:erv-approver');
     assert.equal(r2,'REVIEWER');assert.equal(s2,'synthetic:erv-reviewer');
-    const rec=api.reconcile(f.approver,{invoiceId,effectId:prepared.candidate.queryEffectId});
+    const rec=fresh.reconcile(f.approver,{invoiceId,effectId:prepared.candidate.queryEffectId});
     assert.equal(rec.outcome,'RECONCILED_LOCAL_DECISION_NO_NEW_EFFECT');
     assert.equal(nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,1);
+    assert.throws(()=>fresh.confirm(f.reviewer,{candidateHandle:prepared.candidateHandle,candidateDigest:prepared.candidateDigest,confirm:true}),
+      /KS_PRICE_VARIANCE_CONFIRM_STALE_OR_FOREIGN_DENIED|ERV_HUMAN_ALREADY_DECIDED_RECONCILE_REQUIRED/,'PAN692_OLD_CONFIRMATION_MUST_STAY_INEFFECTIVE');
+    assert.equal(nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,1);
+    const api=nativeBackend.createNativeErvHumanBackendV1({root:f.root,sessions:f.sessions});
     assert.throws(()=>api.decide(f.reviewer,{schemaVersion:'pansphaira.erv-human/decision/v1',invoiceId,
       effectId:prepared.candidate.queryEffectId,transportId:'synthetic:ks692-replay',expectedNativeRevision:pending.nativeRevision,
       expectedProposalRevision:1,proposalDigest:pending.proposalDigest,action:'QUERY'}),/ERV_HUMAN_ALREADY_DECIDED_RECONCILE_REQUIRED/);
     assert.equal(nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,1);
+  }finally{f.close();}
+});
+
+test('PAN692 no-variance and dimension conflict: no deviation and a native dimension denial never become a bound price finding',async()=>{
+  // Untouched financeFixture: the real KS variance over the confirmed native
+  // price is exactly 0, so no QUERY is allowed and confirm denies for the
+  // business reason with zero query effects and zero new fences.
+  const f=await fixture();
+  try{
+    const eventsBefore=nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count;
+    const tasksBefore=readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2'));
+    const prepared=f.q.prepare(f.reviewer,{invoiceId});
+    assert.equal(prepared.candidate.ks.outcome,'COMPLETE');
+    assert.equal(prepared.candidate.ks.varianceMinor,0,'PAN692_UNTOUCHED_KS_VARIANCE_NOT_ZERO');
+    assert.equal(prepared.candidate.amountMinor,0);
+    assert.equal(prepared.candidate.queryAllowed,false,'PAN692_ZERO_VARIANCE_MUST_NOT_ALLOW_QUERY');
+    assert.throws(()=>f.q.confirm(f.reviewer,{candidateHandle:prepared.candidateHandle,candidateDigest:prepared.candidateDigest,confirm:true}),
+      /KS_PRICE_VARIANCE_NO_QUERY_ALLOWED_DENIED/,'PAN692_ZERO_VARIANCE_DENIAL_REASON');
+    assert.equal(nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,eventsBefore,'PAN692_NO_VARIANCE_CREATED_EFFECT');
+    assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasksBefore,'PAN692_NO_VARIANCE_TOUCHED_FENCE');
+
+    // A genuinely non-matching unit/currency through the valid existing native
+    // CONFIRM denies on the native dimension chain itself, so the drifted
+    // dimension never reaches the adapter as a bindable price finding.
+    const native=procurement.readPan516Procurement({root:f.root}),last=native.confirmations.at(-1);
+    const conflicting={schemaVersion:'pansphaira.pan516/procurement-command/v1',effectId:'synthetic:ks692-dimension-conflict',transportId:'synthetic:ks692-dimension-conflict-wire',
+      expectedRevision:native.revision,orderId:native.binding.draft.bestellungId,positionId:native.binding.draft.positionen[0].positionId,
+      supplierId:native.binding.draft.lieferantId,kind:'CONFIRM',receipt:null,sourceReference:'synthetic:ks692-dimension-source',
+      confirmation:{revision:last.revision+1,previousConfirmationDigest:last.confirmationDigest,terms:{...last.terms,currency:'USD'},confirmedAt:'2026-06-22T08:00:00Z'}};
+    assert.throws(()=>procurement.executePan516ProcurementCommand({root:f.root,command:conflicting,
+      grant:procurement.authorizePan516ProcurementCommand({root:f.root,owner:'LOCAL_SYNTHETIC_OWNER',command:conflicting})}),
+      /PAN516_EXISTING_RECEIPT_DIMENSION_CHANGE_DENIED/,'PAN692_DIMENSION_CONFLICT_DENIAL_REASON');
+    const after=f.q.prepare(f.reviewer,{invoiceId});
+    assert.equal(after.candidateDigest,prepared.candidateDigest,'PAN692_DENIED_DIMENSION_CHANGED_FINDING');
+    assert.equal(after.candidate.queryAllowed,false);
+    assert.equal(nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,eventsBefore,'PAN692_DIMENSION_DENIAL_CREATED_EFFECT');
+    assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasksBefore,'PAN692_DIMENSION_DENIAL_TOUCHED_FENCE');
+  }finally{f.close();}
+});
+
+test('PAN692 commit-time KS re-verification: own copied source drifting after the real BEGIN IMMEDIATE denies with zero events and zero new fences',async()=>{
+  const ksRoot=ksSource();
+  // Own moved copy of the pinned checkout; the ORIGINAL pinned source stays untouched.
+  const copy=mkdtempSync(process.env.TMPDIR+'/ks692-copy-')+'/ks';
+  execFileSync('cp',['-a',ksRoot+'/.',copy]);
+  execFileSync('chmod',['-R','u+w',copy]);
+  const f=await fixture();
+  try{
+    confirmNativePrice(f,6200);
+    const {createNativeKsPriceVarianceQueryV1}=await import('../../src/pan542/ks-price-variance-query.mjs');
+    const q=await createNativeKsPriceVarianceQueryV1({root:f.root,sessions:f.sessions,ksSourceRoot:copy});
+    const tasksBefore=readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2'));
+    const prepared=q.prepare(f.reviewer,{invoiceId});
+    // Existing test seam (already used by other native tests): mark the one
+    // BEGIN IMMEDIATE the real native decide path actually executes, then drift
+    // exactly this copied KS source before the owner commit callback runs.
+    const original=DatabaseSync.prototype.exec;let marked=false;
+    DatabaseSync.prototype.exec=function(sql){
+      const result=original.call(this,sql);
+      if(!marked&&typeof sql==='string'&&sql.startsWith('BEGIN IMMEDIATE')){marked=true;appendFileSync(join(copy,KS_FILE),'\n// synthetic post-begin drift\n');}
+      return result;
+    };
+    try{
+      assert.throws(()=>q.confirm(f.reviewer,{candidateHandle:prepared.candidateHandle,candidateDigest:prepared.candidateDigest,confirm:true}),
+        /KS_PRICE_VARIANCE_PINNED_SOURCE_DENIED/,'PAN692_POST_BEGIN_KS_DRIFT_MUST_DENY_AT_COMMIT');
+    }finally{DatabaseSync.prototype.exec=original;}
+    assert.equal(marked,true,'PAN692_REAL_BEGIN_IMMEDIATE_NOT_REACHED');
+    assert.equal(nativeRows(f.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,0,'PAN692_POST_BEGIN_DRIFT_CREATED_EFFECT');
+    assert.deepEqual(readLocalJournalTaskIdentity(join(f.root,'pan453-owned-v2')),tasksBefore,'PAN692_POST_BEGIN_DRIFT_TOUCHED_FENCE');
+    // The original pinned checkout is provably unchanged by all of this.
+    ksSource();
   }finally{f.close();}
 });

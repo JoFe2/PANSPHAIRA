@@ -57,7 +57,10 @@ export async function createNativeKsPriceVarianceQueryV1(options){
   if(sha(ksBytes)!==KS_FILE_SHA)fail('KS_PRICE_VARIANCE_PINNED_SOURCE_DENIED');
   const {deriveProcurementV1}=await import('data:text/javascript;base64,'+ksBytes.toString('base64'));
   if(typeof deriveProcurementV1!=='function')fail('KS_PRICE_VARIANCE_ENTRY_DENIED');
-  backend.initializeNativeErvHumanBackendV1({root,owner:'LOCAL_SYNTHETIC_OWNER',sessionBinding:sessions.binding});
+  // Pure read-only attachment to the already correctly initialized native owner.
+  // Startup/initialization stays with the trusted native owner; this adapter
+  // never initializes or adopts state (no catch-and-ignore adoption). A missing
+  // or foreign binding denies here via the native owner's own guards.
   const api=backend.createNativeErvHumanBackendV1({root,sessions});
 
   function candidateFor(headers,invoiceId){
@@ -149,7 +152,13 @@ export async function createNativeKsPriceVarianceQueryV1(options){
         effectId:prepared.queryEffectId,transportId:'synthetic:ks692-wire-'+prepared.candidateDigest.slice(8,24),
         expectedNativeRevision:prepared.readback.nativeRevision,expectedProposalRevision:bound.proposalRevision,
         proposalDigest:bound.proposalDigest,action:'QUERY'},
-        before=>{if(before.proposalDigest!==bound.proposalDigest||before.basisDigest!==prepared.core.nativeBasis.basisDigest)fail('KS_PRICE_VARIANCE_COMMIT_RACE_DENIED');});
+        before=>{
+          // At-commit the pinned KS source is re-verified byte-exact: the real
+          // BEGIN IMMEDIATE can wait, and a source drifted after the candidate
+          // was recomputed must never be attested by the owner commit callback.
+          verifyKs();
+          if(before.proposalDigest!==bound.proposalDigest||before.basisDigest!==prepared.core.nativeBasis.basisDigest)fail('KS_PRICE_VARIANCE_COMMIT_RACE_DENIED');
+        });
     },
     read(headers,request){return api.read(headers,request);},
     reconcile(headers,request){return api.reconcile(headers,request);},
