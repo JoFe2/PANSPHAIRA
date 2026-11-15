@@ -842,6 +842,9 @@ repository_only_files = {
     "docs/architecture/erv-human-source-compatibility-v2.md",
     "src/pan542/source-compatibility-catalog-v3.json",
     "docs/architecture/erv-human-source-compatibility-v3.md",
+    # Exact V4 source metadata only; legacy payload and rights remain unchanged.
+    "src/pan542/source-compatibility-catalog-v4.json",
+    "docs/architecture/erv-human-source-compatibility-v4.md",
     "tests/pan542/source-compatibility-fixture.mjs",
     "tests/pan542/native-human-backend.test.mjs",
     "tests/pan542/registration.test.mjs",
