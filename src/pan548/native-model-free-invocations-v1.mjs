@@ -6,7 +6,8 @@ import {isNativeWorkspaceContextSelectionV1} from './native-context-selection.mj
 import {nativeWorkspaceUiTaskOwnerConnectionV2,createNativeWorkspaceUiTaskReadbackV2,uiTaskClosedV2,uiTaskDigestV2} from './native-ui-task-projection-v2.mjs';
 import {isNativeWorkspaceViewOwnerV1,nativeWorkspaceViewContextProofConnectionV1} from '../pan546/native-view-owner.mjs';
 import {nativeWorkspaceSurfaceInvocationConnectionV1} from '../pan597/native-surfaces-v2.mjs';
-import {modelFreeUiBudgetBindingV1,modelFreeUiTaskReservationV1,readModelFreeUiTaskBudgetV1} from './native-ui-task-budget-v1.mjs';
+import {modelFreeUiBudgetBindingV1,modelFreeUiBudgetOperationV1,modelFreeUiTaskReservationV1,readModelFreeUiTaskBudgetV1} from './native-ui-task-budget-v1.mjs';
+import {nativeUiContextTaskCoreV1} from './native-context-journal-v1.mjs';
 import {parseModelFreeFinalTextV1} from './model-free-final-text-v1.mjs';
 import {executeNativeWorkspaceInvocationV1} from './native-invocation-executor-v1.mjs';
 const owned=new WeakMap();
@@ -24,6 +25,7 @@ const same=(a,b)=>typeof a==='string'&&typeof b==='string'&&a.length===b.length&
 const resolutionKeys=['schemaVersion','input','context','selectedCardId','targetSurfaceId'];
 const selectKeys=['schemaVersion','setId','requestDigest','setDigest','candidateId','argumentDigest','policyRef'];
 const executeKeys=['schemaVersion','invocationId','admissionToken','requestDigest','setDigest','candidateId','argumentDigest','policyRef'];
+const observeKeys=['schemaVersion','invocationId'];
 export function createNativeWorkspaceInvocationsV1(options){
  const {sessions,contextSelection,tasks,viewOwner,surfaces}=uiTaskClosedV2(options,['sessions','contextSelection','tasks','viewOwner','surfaces'],'INVOCATION_OWNER_DENIED');
  if(!isNativeWorkspaceContextSelectionV1(contextSelection,sessions?.binding)||!isNativeWorkspaceViewOwnerV1(viewOwner,sessions?.binding,contextSelection))throw Error('INVOCATION_OWNER_DENIED');
@@ -52,6 +54,56 @@ export function createNativeWorkspaceInvocationsV1(options){
    surface.validateDisplay(headers,JSON.parse(member.argumentBytes));
   }
   leading(headers);contextSelection.verify(headers,s.request.context);if(Date.now()>=member.expiresAtMs)throw Error('INVOCATION_DEADLINE_OR_SCOPE_DENIED');return true;
+ }
+ // ACT-01 #696 read-only observation of ACTUAL owner facts. One closed DTO
+ // input; never dispatches, grants or infers model plan lineage; observation
+ // itself accepts no caller authority, selector or success fields.
+ function finishObservation(headers,invocationId){
+  // The durable effect is already committed here; a failed read authorization
+  // or retired epoch may not convert it into an executor error or a retry.
+  try{return observationFor(headers,invocationId);}
+  catch(error){if(error.message==='CONTEXT_PRIVACY_REVOKED'||error.message==='INVOCATION_OBSERVATION_PRIVACY_RETIRED')
+   return freeze({schemaVersion:'pansphaira.workspace-action-observation/v1',runId:modelFreeUiBudgetOperationV1(invocationId),taskId:invocationId,stepId:'step:'+invocationId.slice(11),attempt:1,taskRevision:null,phase:'PRIVACY_RETIRED',privacyRetired:true,resultPhase:null,proof:null,rendered:false,personalViewPersistenceProduced:false,physicalPixelSightCertified:false,model:'NOT_RUN',modelPlanLineage:'NOT_INFERRED',executionAuthorityGranted:false,...noEffects});throw error;}
+ }
+ function observationFor(headers,invocationId){
+  const a=leading(headers),row=t.readRow(invocationId),admission=row?null:admissions.get(invocationId);
+  let s=admission?admission.s:undefined,member=admission?admission.member:null;
+  if(!admission&&row){nativeUiContextTaskCoreV1(row);const original=JSON.parse(row.original_command);s=original.set;member=original.candidate;}
+  else if(s===undefined)s=[...sets.values()].find(x=>x.core.invocationId===invocationId&&x.principalDigest===a.digest)??null;
+  const core=s?.core??s,setDigest=core?.setDigest??s?.setDigest??null;
+  if(core)member??=core.candidates.find(x=>x.candidateId===core.selectedCandidateId)??null;
+  if(!core||!member||(!row&&Date.now()>=core.expiresAtMs))throw Error('INVOCATION_OBSERVATION_UNBOUND');
+  if((row?row.principal_digest:s.principalDigest)!==a.digest)throw Error('INVOCATION_OBSERVATION_SCOPE_DENIED');
+  // Origin-bound privacy: live observation ends with the INTENT/request privacy
+  // epoch it was issued under; a retired epoch never adopts a newer current one.
+  let originEpoch,currentEpoch;
+  try{originEpoch=row?t.contextJournal.originPrivacyEpoch(headers,invocationId):s.privacyEpoch;currentEpoch=t.contextJournal.scope(a).privacy_epoch;}
+  catch(error){if(error.message!=='CONTEXT_PRIVACY_REVOKED')throw error;currentEpoch=null;}
+  if(currentEpoch===null||originEpoch!==currentEpoch)return freeze({schemaVersion:'pansphaira.workspace-action-observation/v1',
+   runId:modelFreeUiBudgetOperationV1(invocationId),taskId:invocationId,stepId:'step:'+invocationId.slice(11),attempt:row?1:0,taskRevision:row?.revision??null,
+   phase:'PRIVACY_RETIRED',privacyRetired:true,resultPhase:null,proof:null,rendered:false,personalViewPersistenceProduced:false,physicalPixelSightCertified:false,
+   model:'NOT_RUN',modelPlanLineage:'NOT_INFERRED',executionAuthorityGranted:false,...noEffects});
+  const state=row?.state??null;
+  const proof=row&&(state==='COMPLETED'||state==='OUTCOME_UNCONFIRMED')?t.contextJournal.bestProof(headers,invocationId):null;
+  const phase=!row?(admission?'ADMITTED':'PROPOSED'):state==='ACCEPTED'?'DISPATCHED':state==='COMPLETED'&&proof?'RESULT_CONFIRMED':'UNKNOWN';
+  const result=row?.result_json===null||row===undefined?null:JSON.parse(row.result_json);
+  const semanticTarget=member.capability===capabilities[0]
+   ?freeze({kind:'MODULE_CARD_INSTANCE',moduleId:member.objectRef.moduleId,viewId:member.objectRef.viewId,objectId:member.objectRef.objectId,instanceId:member.objectRef.instanceId})
+   :freeze({kind:'REGISTERED_SURFACE_DOCUMENT',objectId:member.objectRef.objectId,surfaceId:member.targetRef.surfaceId});
+  return freeze({schemaVersion:'pansphaira.workspace-action-observation/v1',
+   runId:modelFreeUiBudgetOperationV1(invocationId),taskId:invocationId,stepId:'step:'+invocationId.slice(11),attempt:row?1:0,taskRevision:row?row.revision:null,
+   actor:{tenantId:a.p.tenantId,subjectId:a.p.subjectId,role:a.p.role},
+   capability:member.capability,operationSchemaVersion:JSON.parse(member.argumentBytes).schemaVersion,
+   objectRef:member.objectRef,expectedRevision:member.capability===capabilities[0]?member.revisions.viewRevision:member.documentRef?.dataRevision??null,expectedRevisions:copy(member.revisions),
+   argumentDigest:member.argumentDigest,candidateId:member.candidateId,semanticTarget,
+   causal:{setId:core.setId,setDigest},
+   idempotency:{operationId:modelFreeUiBudgetOperationV1(invocationId),taskRequestDigest:row?row.request_digest:s.core.requestDigest},
+   phase,resultPhase:phase==='RESULT_CONFIRMED'?result?.phase??null:null,
+   proof:proof?freeze({proofRef:proof.proofId,issuerKind:proof.kind,argumentDigest:proof.argumentDigest}):null,
+   rendered:proof?.kind==='PAN597_DOCUMENT_RENDERED',personalViewPersistenceProduced:result?.personalProfileSaved===true,physicalPixelSightCertified:false,
+   expiresAtMs:member.expiresAtMs,constraints:{...member.constraints},
+   model:'NOT_RUN',modelPlanLineage:'NOT_INFERRED',executionAuthorityGranted:false,
+   capabilityAvailability:freeze({pause:'UNAVAILABLE',resume:'UNAVAILABLE',cancel:'UNAVAILABLE',offerLineAdapter:'NOT_IMPLEMENTED'})});
  }
  function candidate(base,args){const argumentBytes=canonicalJson(args),argumentDigest=uiTaskDigestV2(args);const unsigned={schemaVersion:'pansphaira.workspace-invocation/candidate/v1',...base,argumentBytes,argumentDigest,policyRef:workspaceInvocationPolicyRefV1,purpose,constraints};return freeze({...unsigned,candidateId:'candidate:'+uiTaskDigestV2(unsigned)});}
  const owner=Object.freeze({
@@ -88,7 +140,7 @@ export function createNativeWorkspaceInvocationsV1(options){
    const core=freeze({schemaVersion:'pansphaira.workspace-invocation/candidate-set/v1',setId,invocationId,requestDigest:uiTaskDigestV2(request),policyRef:workspaceInvocationPolicyRefV1,expiresAtMs,outcome,selectedCandidateId:selected.length===1?selected[0].candidateId:null,candidates});
    for(const [id,s]of sets)if(Date.now()>=s.core.expiresAtMs){sets.delete(id);admissions.delete(s.core.invocationId);}
    if(sets.size>=128)throw Error('INVOCATION_SET_CAPACITY_DENIED');
-   const setDigest=uiTaskDigestV2(core);sets.set(setId,{core,setDigest,request,principalDigest:a.digest,context:copy(context),binding:copy(snapshot.binding),source:copy(snapshot.source)});
+   const setDigest=uiTaskDigestV2(core);sets.set(setId,{core,setDigest,privacyEpoch:t.contextJournal.scope(a).privacy_epoch,request,principalDigest:a.digest,context:copy(context),binding:copy(snapshot.binding),source:copy(snapshot.source)});
    return freeze({schemaVersion:'pansphaira.workspace-invocation/resolution/v1',outcome,reason:selected.length===1?'ONE_COMPLETE_SELECTED_CANDIDATE':missing?'SELECTION_REQUIRED':outcome==='NONE'?'NO_ELIGIBLE_EFFECT':'SELECTION_NOT_UNAMBIGUOUS',set:{...core,setDigest},...noEffects});
   },
   admit(headers,value){
@@ -99,6 +151,7 @@ export function createNativeWorkspaceInvocationsV1(options){
    return freeze({schemaVersion:'pansphaira.workspace-invocation/admission/v1',invocationId:s.core.invocationId,admissionToken,requestDigest:c.requestDigest,setDigest:c.setDigest,candidateId:c.candidateId,argumentDigest:c.argumentDigest,policyRef:c.policyRef,capability:member.capability,expiresAtMs:member.expiresAtMs,constraints,...noEffects});
   },
   execute(headers,value){return executeNativeWorkspaceInvocationV1(owner,headers,value);},
+  observe(headers,value){const c=uiTaskClosedV2(value,observeKeys,'INVOCATION_OBSERVATION_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-action-observation/observe/v1'||typeof c.invocationId!=='string'||!/^invocation:[a-f0-9]{32}$/.test(c.invocationId))throw Error('INVOCATION_OBSERVATION_INPUT_DENIED');leading(headers);return observationFor(headers,c.invocationId);},
   read(headers,value){const c=uiTaskClosedV2(value,['schemaVersion','invocationId'],'INVOCATION_READ_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-invocation/read/v1')throw Error('INVOCATION_READ_INPUT_DENIED');leading(headers);const custody=independentReader.read(headers,{schemaVersion:'pansphaira.workspace-ui-task/observe/v1',commandId:c.invocationId,expectedWriterEpoch:t.bootEpoch});return freeze({schemaVersion:'pansphaira.workspace-invocation/readback/v1',invocationId:c.invocationId,task:custody.task,custody,independentRead:true,...noEffects});},
   close(){closed=true;independentReader.close();sets.clear();admissions.clear();owned.delete(owner);},
  });
@@ -122,7 +175,7 @@ export function createNativeWorkspaceInvocationsV1(options){
     t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='COMPLETED',revision=revision+1,result_json=? WHERE command_id=? AND state='ACCEPTED'").run(canonicalJson(result),effect.invocationId);t.contextJournal.record(headers,effect.invocationId,'INTENT_COMPLETED',proof.proofId);return true;
    };
    if(binding){const receipt=t.ledger.ownerCompletionEvidence({operationId:binding.operationId,requestDigest:binding.requestDigest,modelUnits:0,runtimeUnits:1,evidenceDigest:uiTaskDigestV2(result)});t.ledger.settle(receipt,result,commit);}else t.transaction(commit);
-   return freeze({schemaVersion:'pansphaira.workspace-invocation/effect-readback/v1',invocationId:effect.invocationId,capability:effect.member.capability,expiresAtMs:effect.member.expiresAtMs,result,task:tasks.read(headers,effect.invocationId),...noEffects});
+   return freeze({schemaVersion:'pansphaira.workspace-invocation/effect-readback/v1',invocationId:effect.invocationId,capability:effect.member.capability,expiresAtMs:effect.member.expiresAtMs,result,task:tasks.read(headers,effect.invocationId),observation:finishObservation(headers,effect.invocationId),...noEffects});
   },
   failed(effect){t.transaction(()=>{if(t.db.prepare('SELECT boot_epoch FROM workspace_ui_task_settings_v2 WHERE id=1').get()?.boot_epoch!==t.bootEpoch)throw Error('UI_TASK_OWNER_REPLACED');t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='OUTCOME_UNCONFIRMED',revision=revision+1 WHERE command_id=? AND state='ACCEPTED'").run(effect.invocationId);});},
   // Native owner-only recovery; not an HTTP operation, retry, cancel or resume.

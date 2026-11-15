@@ -5045,7 +5045,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "d62d690399782f64f1bd55944b7a28d1ec2371206c3dbf8e78492663dba28400"
+          "sha256": "35a68f70af6e64a26a8957303a95c188f43ce6ef7a9456f4888a946274d2a0ff"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5110,7 +5110,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "98e6b974c402d3a042c5a61c0992511f637f25a09b51bbd2ae22c41f24826a9c"
+          "sha256": "01afe6aee1bd4c83bb19282f2a8a05e229c2ae0f35e85b55d7d65405feab3d0d"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5235,7 +5235,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "a30f93250d2de6d7e239e2df404e9dcb559e5b727119e7290d5e1dc83229e049"
+          "sha256": "6cdd25ce5388a1d792f5931fc15a424b21eeb984e36e3e32eef8e1547dad74e5"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -11554,7 +11554,7 @@
         {
           "path": "src/pan548/native-model-free-invocations-v1.mjs",
           "role": "SOURCE",
-          "sha256": "e16d10c5456748b0ff32383156a71db1131c38648371094cdc8d6ac8a36cf3ac"
+          "sha256": "63189f185590053ade0c74ba2d7c9418e9e9a60310b75c62bd77501c50e94b91"
         },
         {
           "path": "src/pan548/native-invocation-executor-v1.mjs",
@@ -11569,7 +11569,7 @@
         {
           "path": "src/pan548/native-context-journal-v1.mjs",
           "role": "SECURITY",
-          "sha256": "3bb936c5682b3e4451e153a0a2c94f3ac8ce6533f7c29981f26cd66c0e595084"
+          "sha256": "65cce9b33f1458d973a7de1b2c52439b27eddfaae067464157ed20dd6670d91b"
         },
         {
           "path": "src/pan548/native-context-checkpoints-v1.mjs",
@@ -11759,7 +11759,7 @@
         {
           "path": "scripts/run-pan608-native-invocation-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "2f889e0a42bce9416bf3540cccbae01809ed06eb8011f318c38367c34da866e3"
+          "sha256": "d143ab851d88d10711860f2054a5cd8752595415e50cebea94987994cd8cae9d"
         },
         {
           "path": "tests/pan608/final-text-grammar.test.mjs",
@@ -11779,12 +11779,17 @@
         {
           "path": "tests/pan608/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "56f66bb739ded34041aaa70f3e33e7163d3b6c3faa73fdeca6cac86032d993ff"
+          "sha256": "6d2263c65722a71bf15f03f30a62209b21d5b23e393828eabaa7ee43d497d9e0"
+        },
+        {
+          "path": "tests/pan608/action-observation.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "6edd2ce2b2ad737369af3a654fe44b712cb76d3b6ecfd488e5df8f93fcb51e2c"
         },
         {
           "path": "docs/architecture/model-free-native-invocations-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "8c97a6a00f3061dc4e6f5e56ee30d0e7b66e68e2a1c1d557c75e26c3ba3f999f"
+          "sha256": "9dd5a1a94ad56919a6e16875746aba96691a470d7fcbace0aa35599b5aaf2b89"
         },
         {
           "path": "scripts/run-pan592-model-free-durable-tests.mjs",

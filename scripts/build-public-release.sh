@@ -783,6 +783,7 @@ repository_only_files = {
     "tests/pan608/native-invocations.test.mjs",
     "tests/pan608/browser-invocations.test.mjs",
     "tests/pan608/registration.test.mjs",
+    "tests/pan608/action-observation.test.mjs",
     "docs/architecture/model-free-native-invocations-v1.md",
 
     # Bounded original592 native model-free task/budget observation; source only.

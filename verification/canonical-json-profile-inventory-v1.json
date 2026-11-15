@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "98e6b974c402d3a042c5a61c0992511f637f25a09b51bbd2ae22c41f24826a9c"
+        "sha256": "01afe6aee1bd4c83bb19282f2a8a05e229c2ae0f35e85b55d7d65405feab3d0d"
       }
     ]
   },
@@ -963,6 +963,14 @@
       "fromSha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
       "toSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
       "reason": "Register exactly the two V3 source-compatibility catalog and documentation paths on the existing native ERV owner for the accepted PR691 adapter delta. Preserve all prior migrations, immutable admitted obligations, scanner/validator semantics, native guards and runnable inventory. The unchanged mechanical scan retains1309 files and348 import sites in347 files; only the checksum inventory grows from2858 to2860 paths. No source drift is adopted automatically and no model or whole-parent acceptance is granted."
+    },
+    {
+      "migrationId": "PAN597-PR679-RESTRICTED-DISPLAY-SOURCE/INTEGRITY-GENERATOR/V109",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 109,
+      "fromSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
+      "toSha256": "49e9f1213fe75f712a75439c2185b505f3ef660135b17ef016c633615201dccf",
+      "reason": "Bind only the retained PR679 two source-only native display session/ingress registrations to the existing PAN597 owner as an exact successor of V108. Current-main ba3447175ae767eb25d2592780fc0dbdc67345cd contributes the new UI observation test. The unchanged mechanical scanner measures1314 files,350 import sites in349 files and2866 unique ledger paths. Preserve every historical migration and immutable admitted fixture, all21 base obligations/13 pinned profiles, graph104/all109 owners, scanner/validator semantics, original byte caps, native principal/CSP/no-selector guards and legacy runnable inventory. This current-main compatibility admission makes no supported Linux, authenticated browser, CI, release or whole-issue acceptance claim."
     }
   ],
   "scanScope": {
@@ -1005,15 +1013,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1311,
+    "filesScanned": 1314,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 348,
-    "importFiles": 347,
+    "importSites": 350,
+    "importFiles": 349,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2863,
-    "ledgerUniquePaths": 2863
+    "ledgerEntries": 2866,
+    "ledgerUniquePaths": 2866
   },
   "profiles": [
     {
@@ -1086,7 +1094,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205"
+      "sha256": "49e9f1213fe75f712a75439c2185b505f3ef660135b17ef016c633615201dccf"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1573,8 +1581,8 @@
     },
     {
       "owner": "pan597",
-      "importSites": 2,
-      "importFiles": 2
+      "importSites": 3,
+      "importFiles": 3
     },
     {
       "owner": "procurement-434",
@@ -1598,8 +1606,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 79,
-      "importFiles": 78
+      "importSites": 80,
+      "importFiles": 79
     },
     {
       "owner": "usage-insights",
@@ -1892,7 +1900,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
+      "sha256": "49e9f1213fe75f712a75439c2185b505f3ef660135b17ef016c633615201dccf",
       "basis": "profile-version-migration"
     },
     {
