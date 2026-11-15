@@ -214,6 +214,8 @@ repository_only_files = {
     "src/pan591/locked-dev-readback-admission-v1.mjs",
     "src/pan594/dev-readback-diagnostic-v1.mjs",
     "fixtures/pan594/locked-ajv2020-dev-readback-policy-v1.json",
+    "fixtures/pan594/locked-ajv2020-dev-readback-policy-v2.json",
+    "tests/pan594/policy-successor.test.mjs",
     "fixtures/pan594/native-observation-projection-schema-v1.json",
     "scripts/run-pan594-dev-readback-comparison.mjs",
     "tests/pan594/browser-comparison.test.mjs",

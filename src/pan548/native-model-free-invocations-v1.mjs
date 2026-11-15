@@ -177,12 +177,15 @@ export function createNativeWorkspaceInvocationsV1(options){
   // untrusted caller and never inferred later during projection or replay.
   dispatch(headers,effect){
    const a=leading(headers);
-   const handle=begun.get(effect);if(!handle)throw Error('INVOCATION_HANDLE_UNBOUND');
+   const handle=begun.get(effect);
+   // Private minted identity governs: a mutable public field may never retarget
+   // the append onto another genuinely minted ACCEPTED task of this actor.
+   if(!handle||handle.invocationId!==effect.invocationId)throw Error('INVOCATION_HANDLE_UNBOUND');
    t.transaction(()=>{
     revalidate(headers,effect.s,effect.member);
-    const row=t.readRow(effect.invocationId);
+    const row=t.readRow(handle.invocationId);
     if(!row||row.state!=='ACCEPTED'||row.principal_digest!==a.digest)throw Error('INVOCATION_DISPATCH_CUSTODY_DENIED');
-    t.contextJournal.dispatchAttempted(headers,effect.invocationId);
+    t.contextJournal.dispatchAttempted(headers,handle.invocationId);
    });
    // The dispatch receipt exists only after the append committed: an aborted journalling
    // transaction leaves zero durable TARGET_ATTEMPTED, zero receipt and zero target call.
@@ -190,15 +193,16 @@ export function createNativeWorkspaceInvocationsV1(options){
    return effect;
   },
   finish(headers,effect,result){
-   leading(headers);const row=t.readRow(effect.invocationId),binding=modelFreeUiTaskReservationV1(row);
-   const commit=()=>{leading(headers);const fresh=t.readRow(effect.invocationId);if(fresh.state!=='ACCEPTED'||fresh.principal_digest!==t.principal(headers).digest)throw Error('INVOCATION_FINISH_CUSTODY_DENIED');let proof=null;
-    if(effect.member.capability===capabilities[0]){const evidence=nativeWorkspaceViewContextProofConnectionV1(viewOwner,sessions.binding,contextSelection).verifyPreview(headers,effect.member.argumentBytes,result.preview);proof=t.contextJournal.issueTargetProof(headers,effect.invocationId,'PAN546_PREVIEW_VALIDATED',evidence);t.contextJournal.record(headers,effect.invocationId,'PROPOSAL_VALIDATED',proof.proofId);}
+   leading(headers);const handle=begun.get(effect);if(!handle||handle.invocationId!==effect.invocationId)throw Error('INVOCATION_HANDLE_UNBOUND');
+   const row=t.readRow(handle.invocationId),binding=modelFreeUiTaskReservationV1(row);
+   const commit=()=>{leading(headers);const fresh=t.readRow(handle.invocationId);if(fresh.state!=='ACCEPTED'||fresh.principal_digest!==t.principal(headers).digest)throw Error('INVOCATION_FINISH_CUSTODY_DENIED');let proof=null;
+    if(effect.member.capability===capabilities[0]){const evidence=nativeWorkspaceViewContextProofConnectionV1(viewOwner,sessions.binding,contextSelection).verifyPreview(headers,effect.member.argumentBytes,result.preview);proof=t.contextJournal.issueTargetProof(headers,handle.invocationId,'PAN546_PREVIEW_VALIDATED',evidence);t.contextJournal.record(headers,handle.invocationId,'PROPOSAL_VALIDATED',proof.proofId);}
     else proof=t.contextJournal.bestProof(headers,JSON.parse(effect.member.argumentBytes).commandId);
     if(!proof)throw Error('INVOCATION_CONTEXT_NATIVE_TARGET_PROOF_REQUIRED');
-    t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='COMPLETED',revision=revision+1,result_json=? WHERE command_id=? AND state='ACCEPTED'").run(canonicalJson(result),effect.invocationId);t.contextJournal.record(headers,effect.invocationId,'INTENT_COMPLETED',proof.proofId);return true;
+    t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='COMPLETED',revision=revision+1,result_json=? WHERE command_id=? AND state='ACCEPTED'").run(canonicalJson(result),handle.invocationId);t.contextJournal.record(headers,handle.invocationId,'INTENT_COMPLETED',proof.proofId);return true;
    };
    if(binding){const receipt=t.ledger.ownerCompletionEvidence({operationId:binding.operationId,requestDigest:binding.requestDigest,modelUnits:0,runtimeUnits:1,evidenceDigest:uiTaskDigestV2(result)});t.ledger.settle(receipt,result,commit);}else t.transaction(commit);
-   return freeze({schemaVersion:'pansphaira.workspace-invocation/effect-readback/v1',invocationId:effect.invocationId,capability:effect.member.capability,expiresAtMs:effect.member.expiresAtMs,result,task:tasks.read(headers,effect.invocationId),observation:finishObservation(headers,effect.invocationId),...noEffects});
+   return freeze({schemaVersion:'pansphaira.workspace-invocation/effect-readback/v1',invocationId:handle.invocationId,capability:effect.member.capability,expiresAtMs:effect.member.expiresAtMs,result,task:tasks.read(headers,handle.invocationId),observation:finishObservation(headers,handle.invocationId),...noEffects});
   },
   failed(effect){
    // A begun attempt always transitions to outcome-unconfirmed (existing CAS), but
@@ -207,7 +211,12 @@ export function createNativeWorkspaceInvocationsV1(options){
    // so a later privacy revocation or session retirement cannot erase it, while a
    // durable completion is never overwritten and a duplicate call cannot duplicate.
    const handle=begun.get(effect),dispatch=dispatched.get(effect);
-   if(!handle||handle.invocationId!==effect.invocationId)throw Error('INVOCATION_HANDLE_UNBOUND');
+   if(!handle)throw Error('INVOCATION_HANDLE_UNBOUND');
+   // A legitimately minted handle whose mutable public id was reassigned keeps
+   // its ORIGINAL identity: a dispatched attempt must still persist its factual
+   // UNKNOWN on the original task before the retarget itself is rejected.
+   const retargeted=handle.invocationId!==effect.invocationId;
+   if(retargeted&&!dispatch)throw Error('INVOCATION_HANDLE_UNBOUND');
    t.transaction(()=>{
     if(t.db.prepare('SELECT boot_epoch FROM workspace_ui_task_settings_v2 WHERE id=1').get()?.boot_epoch!==t.bootEpoch)throw Error('UI_TASK_OWNER_REPLACED');
     const prior=t.readRow(handle.invocationId);if(!prior||prior.principal_digest!==handle.principalDigest)throw Error('INVOCATION_FINISH_CUSTODY_DENIED');
@@ -215,6 +224,7 @@ export function createNativeWorkspaceInvocationsV1(options){
     const row=t.readRow(handle.invocationId);
     if(dispatch&&row.state==='OUTCOME_UNCONFIRMED'&&row.principal_digest===dispatch.principalDigest)t.contextJournal.ownerOutcomeUnknown({principalDigest:dispatch.principalDigest,privacyEpoch:dispatch.privacyEpoch,row});
    });
+   if(retargeted)throw Error('INVOCATION_HANDLE_UNBOUND');
   },
   // Native owner-only recovery; not an HTTP operation, retry, cancel or resume.
   // A persisted, same-principal PAN597 target proof is mandatory; preview-only

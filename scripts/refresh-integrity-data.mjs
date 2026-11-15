@@ -3893,6 +3893,8 @@ repositoryIntegrityNode.ownedTests = repositoryIntegrityNode.ownedTests.filter(
 
 // Original594: one fixed dev-readback comparison at the existing PAN591 owner, not a new registry or a65th root command.
 const pan594Inputs = [
+  ["fixtures/pan594/locked-ajv2020-dev-readback-policy-v2.json", "CONTRACT"],
+  ["tests/pan594/policy-successor.test.mjs", "VALIDATOR"],
   [
     "src/pan591/locked-dev-readback-admission-v1.mjs",
     "SECURITY"

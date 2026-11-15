@@ -3,7 +3,7 @@ import{createPan471CompositionExecutor}from'../../src/pan471/composition-executi
 import{durableFixture592}from'../pan592/native-fixture.mjs';
 import{verifyWorkspaceInvocationObservationV1}from'../../dist/packages/contracts/src/workspace-invocation-v1.js';
 export{createPan471CompositionExecutor,verifyWorkspaceInvocationObservationV1};
-export const policyPath594='fixtures/pan594/locked-ajv2020-dev-readback-policy-v1.json';
+export const policyPath594='fixtures/pan594/locked-ajv2020-dev-readback-policy-v2.json';
 export const sha594=b=>createHash('sha256').update(b).digest('hex');
 export function selector594(){const bytes=readFileSync(policyPath594),p=JSON.parse(bytes);return{schemaVersion:'pansphaira.ui-build-admission/locked-dev-readback/v1',profileId:p.profileId,version:p.version,catalogDigest:sha594(bytes)};}
 export function input594(observation,invocationId){return{schemaVersion:'pansphaira.dev-readback/observe/v1',observation,invocationId};}

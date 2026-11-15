@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "2a6941ce3a33f51c3db9ea1b7df7217c44572dec41b4918bbc77e8f5f4363290"
+        "sha256": "5b66705d2327200460ba8ddf8764ab1d8455e5bbe6698c41d2087ef45d8b3acd"
       }
     ]
   },
@@ -963,6 +963,14 @@
       "fromSha256": "2a1919795dd9cc52feec0be5a4257b6eb9eaa3cc0f694c9001ce85eca4110781",
       "toSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
       "reason": "Register exactly the two V3 source-compatibility catalog and documentation paths on the existing native ERV owner for the accepted PR691 adapter delta. Preserve all prior migrations, immutable admitted obligations, scanner/validator semantics, native guards and runnable inventory. The unchanged mechanical scan retains1309 files and348 import sites in347 files; only the checksum inventory grows from2858 to2860 paths. No source drift is adopted automatically and no model or whole-parent acceptance is granted."
+    },
+    {
+      "migrationId": "PR681-FAST-URI-3.1.9-DEV-POLICY-V2/INTEGRITY-GENERATOR/V109",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 109,
+      "fromSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
+      "toSha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
+      "reason": "Register only the explicit PAN594 developer-readback v2 policy and its structural contract test at the existing critical owner. Preserve historical v1, all prior migrations, admitted-base obligations, scanner semantics, exact Linux x64 runtime/installed-byte guards, closed runner and runnable inventory. This PR681 branch successor derives from its actual V108 tip; parallel unmerged PR679 migrations are not imported. No native, performance, release or independent acceptance is asserted."
     }
   ],
   "scanScope": {
@@ -1005,15 +1013,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1312,
+    "filesScanned": 1313,
     "declarationSites": 37,
     "declarationFiles": 37,
     "importSites": 349,
     "importFiles": 348,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2864,
-    "ledgerUniquePaths": 2864
+    "ledgerEntries": 2866,
+    "ledgerUniquePaths": 2866
   },
   "profiles": [
     {
@@ -1086,7 +1094,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205"
+      "sha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1892,7 +1900,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
+      "sha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
       "basis": "profile-version-migration"
     },
     {

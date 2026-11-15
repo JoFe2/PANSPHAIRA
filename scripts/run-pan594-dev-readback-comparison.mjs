@@ -1,7 +1,7 @@
 import {spawnSync} from 'node:child_process';
 import {mkdtempSync,openSync,closeSync,rmSync} from 'node:fs';
 import {join} from 'node:path';
-const files=['tests/pan594/native-comparison.test.mjs','tests/pan594/measurement.test.mjs','tests/pan594/browser-comparison.test.mjs','tests/pan594/registration.test.mjs'];
+const files=['tests/pan594/native-comparison.test.mjs','tests/pan594/measurement.test.mjs','tests/pan594/browser-comparison.test.mjs','tests/pan594/registration.test.mjs','tests/pan594/policy-successor.test.mjs'];
 // Same Node24 ParseNodeOptionsEnvVar grammar and closed admission boundary as
 // the qualified existing PAN549 entry; trusted Node/npm parent remains required.
 function nodeOptionTokens(raw){

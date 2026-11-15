@@ -206,3 +206,35 @@ test('607 specific B2: authentic pre-journal legacy accepted row stays UNKNOWN w
  const valid=x.preview(),legacy=genuineAcceptedWithoutTarget(x),{db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);db.prepare('DELETE FROM workspace_ui_context_projection_v1 WHERE seq IN(SELECT seq FROM workspace_ui_context_outbox_v1 WHERE task_id=?)').run(legacy.invocationId);db.prepare('DELETE FROM workspace_ui_context_outbox_v1 WHERE task_id=?').run(legacy.invocationId);const completion=db.prepare("SELECT seq FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='INTENT_COMPLETED'").get(valid.invocationId);db.prepare('DELETE FROM workspace_ui_context_projection_v1 WHERE seq=?').run(completion.seq);assert.equal(x.snapshot().tasks.find(t=>t.taskId===legacy.invocationId).legacyUnregisteredIntent,true);
  const result=x.projection.reconcile(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/reconcile/v1'});assert.equal(result.repaired,1);assert.equal(result.targetRedispatched,false);const row=x.snapshot().tasks.find(t=>t.taskId===legacy.invocationId);assert.equal(row.state,'OUTCOME_UNCONFIRMED');assert.equal(row.independentTargetEffectVerified,false);assert.equal(x.snapshot().events.filter(e=>e.taskId===legacy.invocationId).length,0);assert.equal(x.snapshot().constraints.noSend,true);assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0);
  }finally{await x.close();}});
+test('697 ACT-02 retargeting a genuinely minted handle onto a different minted ACCEPTED task records zero false facts and a post-dispatch retarget still persists the original task UNKNOWN atomically',async()=>{const x=await fixture();try{
+ const connection=nativeWorkspaceInvocationExecutorConnectionV1(x.invocations),{db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const resolve=()=>x.invocations.resolve(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resolve/v1',input:{schemaVersion:'pansphaira.workspace-invocation/final-text/v1',inputKind:'TYPED_FINAL_TEXT',final:true,text:'Mach die Karte kleiner'},context:x.f.verification(x.tab),selectedCardId:'native-review',targetSurfaceId:null});
+ const admit=r=>x.invocations.admit(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/admit/v1',setId:r.set.setId,requestDigest:r.set.requestDigest,setDigest:r.set.setDigest,candidateId:r.set.candidates.find(c=>c.candidateId===r.set.selectedCandidateId).candidateId,argumentDigest:r.set.candidates.find(c=>c.candidateId===r.set.selectedCandidateId).argumentDigest,policyRef:r.set.policyRef});
+ const exec=a=>({schemaVersion:'pansphaira.workspace-invocation/execute/v1',invocationId:a.invocationId,admissionToken:a.admissionToken,requestDigest:a.requestDigest,setDigest:a.setDigest,candidateId:a.candidateId,argumentDigest:a.argumentDigest,policyRef:a.policyRef});
+ const a=admit(resolve()),b=admit(resolve());
+ const effectA=connection.begin(x.tab.headers,exec(a)),effectB=connection.begin(x.tab.headers,exec(b));
+ const facts=()=>db.prepare('SELECT task_id,kind,seq FROM workspace_ui_context_outbox_v1 WHERE task_id IN(?,?) ORDER BY seq').all(a.invocationId,b.invocationId);
+ const rows=()=>[a.invocationId,b.invocationId].map(id=>db.prepare('SELECT state,revision FROM workspace_ui_tasks_v2 WHERE command_id=?').get(id));
+ // Pre-dispatch retarget borrows no rights: zero facts/rows move on either real task.
+ const beforeFacts=facts(),beforeRows=rows();
+ effectA.invocationId=b.invocationId;
+ assert.throws(()=>connection.dispatch(x.tab.headers,effectA),/INVOCATION_HANDLE_UNBOUND/,'a retargeted genuine handle cannot borrow the second task dispatch boundary');
+ assert.deepEqual(facts(),beforeFacts,'a rejected pre-dispatch retarget appends zero outbox facts on either task');
+ assert.deepEqual(rows(),beforeRows,'a rejected pre-dispatch retarget transitions zero task rows');
+ // The untouched handle still owns its own real boundary.
+ connection.dispatch(x.tab.headers,effectB);
+ connection.failed(effectB);
+ assert.equal(db.prepare("SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='TARGET_ATTEMPTED'").get(b.invocationId).n,1,'the genuine handle still records its own dispatch');
+ // Post-dispatch retarget: the original dispatched task keeps exactly one UNKNOWN
+ // despite the rejection; the never-dispatched second task stays untouched.
+ const c=admit(resolve()),d=admit(resolve());
+ const effectC=connection.begin(x.tab.headers,exec(c)),effectD=connection.begin(x.tab.headers,exec(d));
+ connection.dispatch(x.tab.headers,effectC);
+ effectC.invocationId=d.invocationId;
+ assert.throws(()=>connection.failed(effectC),/INVOCATION_HANDLE_UNBOUND/,'a retargeted dispatched handle is still rejected');
+ assert.equal(db.prepare('SELECT state FROM workspace_ui_tasks_v2 WHERE command_id=?').get(c.invocationId).state,'OUTCOME_UNCONFIRMED','the actually dispatched attempt keeps its outcome-unconfirmed transition');
+ assert.equal(db.prepare("SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='OUTCOME_UNKNOWN'").get(c.invocationId).n,1,'retargeting cannot discard the original task factual UNKNOWN');
+ assert.equal(db.prepare("SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='OUTCOME_UNKNOWN'").get(d.invocationId).n,0,'no UNKNOWN fact may be misattributed to the never-dispatched task');
+ assert.equal(db.prepare('SELECT state FROM workspace_ui_tasks_v2 WHERE command_id=?').get(d.invocationId).state,'ACCEPTED','a retargeted failed call cannot transition the never-dispatched task');
+ connection.failed(effectD);
+}finally{await x.close();}});
