@@ -21,6 +21,7 @@ const sourcePaths=['src/pan542/native-human-backend.mjs','src/pan527/origin-sess
   'demo/runtime/local-journal-owner.mjs','src/pan542/source-compatibility-catalog-v1.json'];
 const sourcePathsV2=[...sourcePaths,'src/pan542/source-compatibility-catalog-v2.json'];
 const sourcePathsV3=[...sourcePathsV2,'src/pan542/source-compatibility-catalog-v3.json'];
+const sourcePathsV4=[...sourcePathsV3,'src/pan542/source-compatibility-catalog-v4.json'];
 const guards=['pan542_binding','pan542_events'].flatMap(table=>['UPDATE','DELETE'].map(action=>({
   name:`${table}_${action.toLowerCase()}_immutable`,
   sql:`CREATE TRIGGER ${table}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${table} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_HISTORY_IMMUTABLE_DENIED'); END`})));
@@ -31,7 +32,7 @@ function closed(value,keys,code){
     ||Object.values(ds).some(d=>!d.enumerable||!('value' in d)))fail(code);
 }
 function frozen(value){if(value&&typeof value==='object'){for(const v of Object.values(value))frozen(v);Object.freeze(value);}return value;}
-function sourceIdentity(){return sourcePathsV3.map(path=>({path,sha256:createHash('sha256').update(readFileSync(new URL('../../'+path,import.meta.url))).digest('hex')}));}
+function sourceIdentity(){return sourcePathsV4.map(path=>({path,sha256:createHash('sha256').update(readFileSync(new URL('../../'+path,import.meta.url))).digest('hex')}));}
 function sessionScope(binding){
   return {origin:binding.origin,audience:binding.audience,tenantId:binding.tenantId,instanceId:binding.instanceId,generation:binding.generation,identityDigest:binding.identityDigest};
 }
@@ -198,6 +199,7 @@ export function transitionNativeErvHumanSourceCompatibilityV2(options){
     if(canonicalJson(record.sessionBinding)!==canonicalJson(sessionScope(sessions.binding)))fail('ERV_HUMAN_SESSION_BINDING_DENIED');
     for(const invoiceId of invoiceIds)history(db,record,invoiceId,root);
     if(canonicalJson(record.sourceIdentity)===canonicalJson(current)){
+      sourceCatalogV2(current);
       if(compatibilityStateV2(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
       return frozen({schemaVersion:'pansphaira.erv-human/source-compatibility-noop/v2',outcome:'ALREADY_SOURCE_BOUND',originalBindingDigest:record.bindingDigest,executionAuthorityGranted:false});
     }
@@ -307,6 +309,7 @@ export function transitionNativeErvHumanSourceCompatibilityV3(options){
     if(canonicalJson(record.sessionBinding)!==canonicalJson(sessionScope(sessions.binding)))fail('ERV_HUMAN_SESSION_BINDING_DENIED');
     for(const invoiceId of invoiceIds)history(db,record,invoiceId,root);
     if(canonicalJson(record.sourceIdentity)===canonicalJson(current)){
+      sourceCatalogV3(current);
       if(compatibilityStateV3(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
       return frozen({schemaVersion:'pansphaira.erv-human/source-compatibility-noop/v3',outcome:'ALREADY_SOURCE_BOUND',originalBindingDigest:record.bindingDigest,executionAuthorityGranted:false});
     }
@@ -316,6 +319,98 @@ export function transitionNativeErvHumanSourceCompatibilityV3(options){
     releaseNamespaceFence();db.exec(compatibilityDDLV3);for(const guard of compatibilityGuardsV3)db.exec(guard.sql);
     db.prepare('INSERT INTO pan542_source_compatibility_v3 VALUES(1,?)').run(canonicalJson({...core,transitionDigest:digest(core)}));
     return sourceCompatibilityV3(db,record,current);
+  });
+}
+
+// Closed Git-only V3 → reviewed restricted-display source metadata successor.
+const sourceCatalogPathV4='src/pan542/source-compatibility-catalog-v4.json';
+const transitionIdV4='PAN542_RESTRICTED_DISPLAY_ADAPTER_COMPATIBILITY_V4';
+const predecessorPrimaryV4={provenance:'GIT_ONLY_NOT_RELEASE',commit:'ba3447175ae767eb25d2592780fc0dbdc67345cd',tree:'3eb89615acb24857ab42208328016984fb40f7c3'};
+const predecessorSourceDigestV4='cb80f3123f047dda6cdc069db1c20918d5fa7cdc05f3c32e9398457a53720a21';
+const predecessorCatalogSHA256V4='399c3cc4f1dacd26781679a3704b2c4c5a757d3f5d13dd202a6117291a55bc8c';
+const displayAdapterSHA256V4='7ac3d4cff8336f29a8050e7b957bddc45dbe9a1665fb1e67d5b3fcd2ebc66a6d';
+const compatibilityTableV4='pan542_source_compatibility_v4';
+const compatibilityDDLV4='CREATE TABLE pan542_source_compatibility_v4(id INTEGER PRIMARY KEY CHECK(id=1),record TEXT NOT NULL) STRICT';
+const compatibilityGuardsV4=[...['UPDATE','DELETE'].map(action=>({
+  name:`${compatibilityTableV4}_${action.toLowerCase()}_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTableV4}_${action.toLowerCase()}_immutable BEFORE ${action} ON ${compatibilityTableV4} BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`})),{
+  name:`${compatibilityTableV4}_insert_immutable`,
+  sql:`CREATE TRIGGER ${compatibilityTableV4}_insert_immutable BEFORE INSERT ON ${compatibilityTableV4} WHEN EXISTS(SELECT 1 FROM ${compatibilityTableV4}) BEGIN SELECT RAISE(ABORT,'ERV_HUMAN_SOURCE_HISTORY_IMMUTABLE_DENIED'); END`}];
+function sourceCatalogV4(current){
+  const bytes=readFileSync(new URL('../../'+sourceCatalogPathV4,import.meta.url));let catalog;
+  try{catalog=JSON.parse(bytes);}catch{fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');}
+  closed(catalog,['schemaVersion','transitionId','predecessorTransitionId','predecessorPrimary','predecessorSourceCatalogSHA256','predecessorSourceIdentity','targetFiles'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  if(catalog.schemaVersion!=='pansphaira.erv-human/source-compatibility-catalog/v4'||catalog.transitionId!==transitionIdV4
+    ||catalog.predecessorTransitionId!==transitionIdV3||canonicalJson(catalog.predecessorPrimary)!==canonicalJson(predecessorPrimaryV4)
+    ||catalog.predecessorSourceCatalogSHA256!==predecessorCatalogSHA256V4||digest(catalog.predecessorSourceIdentity)!==predecessorSourceDigestV4
+    ||!Array.isArray(catalog.targetFiles)||catalog.targetFiles.length!==sourcePathsV3.length)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  const predecessorRelease=sourceCatalogV3(catalog.predecessorSourceIdentity);
+  if(predecessorRelease.catalogSHA256!==predecessorCatalogSHA256V4)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+  for(const[index,row]of catalog.targetFiles.entries()){
+    closed(row,['path','sha256'],'ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    if(row.path!==sourcePathsV3[index]||typeof row.sha256!=='string'||!/^[a-f0-9]{64}$/.test(row.sha256))fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    if(row.path==='src/pan527/origin-session-adapter.mjs'){
+      if(row.sha256!==displayAdapterSHA256V4)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    }else if(row.path!=='src/pan542/native-human-backend.mjs'){
+      if(!/^[a-f0-9]{64}$/.test(row.sha256)||row.sha256!==catalog.predecessorSourceIdentity[index].sha256)fail('ERV_HUMAN_SOURCE_CATALOG_DENIED');
+    }
+  }
+  const catalogSHA256=createHash('sha256').update(bytes).digest('hex');
+  if(canonicalJson(current)!==canonicalJson([...catalog.targetFiles,{path:sourceCatalogPathV4,sha256:catalogSHA256}]))fail('ERV_HUMAN_SOURCE_TARGET_DENIED');
+  return {catalog,catalogSHA256};
+}
+function compatibilityStateV4(db){
+  const objects=db.prepare("SELECT type,name,sql FROM sqlite_master WHERE name=? OR name LIKE ? ORDER BY name").all(compatibilityTableV4,compatibilityTableV4+'_%');
+  if(!objects.length)return false;
+  const table=objects.find(o=>o.type==='table'&&o.name===compatibilityTableV4);
+  if(!table||table.sql!==compatibilityDDLV4||objects.length!==compatibilityGuardsV4.length+1||!guardsMatch(db,compatibilityGuardsV4))fail('ERV_HUMAN_SOURCE_HISTORY_GUARDS_DENIED');
+  return true;
+}
+function transitionCoreV4(db,record,current){
+  const {catalog,catalogSHA256}=sourceCatalogV4(current);let predecessorTransitionDigest=null;
+  if(canonicalJson(record.sourceIdentity)===canonicalJson(catalog.predecessorSourceIdentity)){
+    if(compatibilityStateV3(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  }else{
+    predecessorTransitionDigest=sourceCompatibilityV3(db,record,catalog.predecessorSourceIdentity).transitionDigest;
+  }
+  return {schemaVersion:'pansphaira.erv-human/source-compatibility/v4',transitionId:transitionIdV4,
+    predecessorPrimary:predecessorPrimaryV4,predecessorTransitionId:transitionIdV3,predecessorTransitionDigest,
+    originalBindingDigest:record.bindingDigest,originalSourceIdentity:record.sourceIdentity,
+    predecessorSourceIdentity:catalog.predecessorSourceIdentity,effectiveSourceIdentity:current,
+    sourceCatalogSHA256:catalogSHA256,predecessorSourceCatalogSHA256:predecessorCatalogSHA256V4,
+    sessionBindingDigest:digest(record.sessionBinding),tradeBindingDigest:record.tradeBindingDigest,
+    roleMappingDigest:digest({version:record.roleMappingVersion,roles:record.roles,invoiceIds:record.invoiceIds}),
+    originalBindingAndHistoryUnchanged:true,predecessorReceiptUnchanged:true,sessionAndNativeRolesUnchanged:true,
+    bookingAuthorityGranted:false,paymentOrderAuthorized:false,productiveDispatchAuthorized:false,executionAuthorityGranted:false};
+}
+function sourceCompatibilityV4(db,record,current){
+  if(!compatibilityStateV4(db))fail('ERV_HUMAN_CONFIGURATION_BINDING_DENIED');
+  const rows=db.prepare('SELECT id,record FROM pan542_source_compatibility_v4 ORDER BY id LIMIT 2').all();
+  if(rows.length!==1||rows[0].id!==1)fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  let receipt;try{receipt=JSON.parse(rows[0].record);}catch{fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');}
+  const core=transitionCoreV4(db,record,current),expected={...core,transitionDigest:digest(core)};
+  if(canonicalJson(receipt)!==canonicalJson(expected))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+  return frozen(receipt);
+}
+export function transitionNativeErvHumanSourceCompatibilityV4(options){
+  closed(options,['root','owner','sessions'],'ERV_HUMAN_SOURCE_OWNER_OPTIONS_DENIED');
+  if(options.owner!=='LOCAL_SYNTHETIC_OWNER')fail('ERV_HUMAN_SOURCE_LOCAL_OWNER_REQUIRED_DENIED');
+  const {root,sessions}=options;
+  if(!isProtectedSessionAdapterV1(sessions,sessions?.binding?.tenantId))fail('ERV_HUMAN_PROTECTED_SESSION_OWNER_REQUIRED_DENIED');
+  return sourceTransitionLocal(root,(db,tradeBinding,releaseNamespaceFence)=>{
+    const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
+    sourceCatalogV4(current);
+    if(canonicalJson(record.sessionBinding)!==canonicalJson(sessionScope(sessions.binding)))fail('ERV_HUMAN_SESSION_BINDING_DENIED');
+    for(const invoiceId of invoiceIds)history(db,record,invoiceId,root);
+    if(canonicalJson(record.sourceIdentity)===canonicalJson(current)){
+      if(compatibilityStateV4(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
+      return frozen({schemaVersion:'pansphaira.erv-human/source-compatibility-noop/v4',outcome:'ALREADY_SOURCE_BOUND',originalBindingDigest:record.bindingDigest,executionAuthorityGranted:false});
+    }
+    const core=transitionCoreV4(db,record,current);
+    if(compatibilityStateV4(db))return sourceCompatibilityV4(db,record,current);
+    releaseNamespaceFence();db.exec(compatibilityDDLV4);for(const guard of compatibilityGuardsV4)db.exec(guard.sql);
+    db.prepare('INSERT INTO pan542_source_compatibility_v4 VALUES(1,?)').run(canonicalJson({...core,transitionDigest:digest(core)}));
+    return sourceCompatibilityV4(db,record,current);
   });
 }
 
@@ -331,7 +426,8 @@ function configuredBinding(db,tradeBinding){
 }
 function binding(db,tradeBinding){
   const record=configuredBinding(db,tradeBinding),current=sourceIdentity();
-  if(canonicalJson(record.sourceIdentity)!==canonicalJson(current))sourceCompatibilityV3(db,record,current);
+  sourceCatalogV4(current);
+  if(canonicalJson(record.sourceIdentity)!==canonicalJson(current))sourceCompatibilityV4(db,record,current);
   // V1 decision readbacks retain the ORIGINAL configuration/source/event basis.
   // Effective source provenance is returned by the separate versioned owner API.
   return record;
@@ -355,6 +451,7 @@ export function transitionNativeErvHumanSourceCompatibilityV1(options){
     // decision, nonce, grant, role mapping, budget entry or dispatch ourselves.
     for(const invoiceId of invoiceIds)history(db,record,invoiceId,root);
     if(canonicalJson(record.sourceIdentity)===canonicalJson(current)){
+      sourceCatalog(current);
       if(compatibilityState(db))fail('ERV_HUMAN_SOURCE_HISTORY_CONFLICT_DENIED');
       return frozen({schemaVersion:'pansphaira.erv-human/source-compatibility-noop/v1',outcome:'ALREADY_SOURCE_BOUND',originalBindingDigest:record.bindingDigest,executionAuthorityGranted:false});
     }
@@ -410,10 +507,11 @@ export function initializeNativeErvHumanBackendV1(options){
   if(typeof scope.tenantId!=='string'||!/^tenant-[a-z0-9-]{1,48}$/.test(scope.tenantId)||typeof scope.instanceId!=='string'
     ||!Number.isSafeInteger(scope.generation)||scope.generation<1||typeof scope.identityDigest!=='string'||! /^[a-f0-9]{64}$/.test(scope.identityDigest))fail('ERV_HUMAN_SESSION_BINDING_DENIED');
   return local(options.root,true,(db,tradeBinding)=>{
+    const current=sourceIdentity();sourceCatalogV4(current);
     leading(db,tradeBinding,invoiceIds[0]);
     if(db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('pan542_binding','pan542_events')").all().length)fail('ERV_HUMAN_EXISTING_STORE_ADOPTION_DENIED');
     const core={schemaVersion:'pansphaira.erv-human/native-configuration/v1',scenarioId:'PAN542_COMMON_TRADE_NATIVE_ERV_V1',
-      sessionBinding:scope,roleMappingVersion:1,roles,invoiceIds,sourceIdentity:sourceIdentity(),tradeBindingDigest:digest(tradeBinding),
+      sessionBinding:scope,roleMappingVersion:1,roles,invoiceIds,sourceIdentity:current,tradeBindingDigest:digest(tradeBinding),
       scope:'LOCAL_SYNTHETIC_BACKEND_ONLY',executionAuthorityGranted:false};
     const record={...core,bindingDigest:digest(core)};
     db.exec('CREATE TABLE pan542_binding(id INTEGER PRIMARY KEY CHECK(id=1),record TEXT NOT NULL) STRICT; CREATE TABLE pan542_events(ordinal INTEGER PRIMARY KEY,effect_key TEXT UNIQUE NOT NULL,command TEXT NOT NULL,event TEXT NOT NULL) STRICT;');
