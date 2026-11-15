@@ -837,6 +837,8 @@ repository_only_files = {
     # Exact connected ERV V2 source metadata; no legacy runtime member or rights grant.
     "src/pan542/source-compatibility-catalog-v2.json",
     "docs/architecture/erv-human-source-compatibility-v2.md",
+    "src/pan542/source-compatibility-catalog-v3.json",
+    "docs/architecture/erv-human-source-compatibility-v3.md",
     "tests/pan542/source-compatibility-fixture.mjs",
     "tests/pan542/native-human-backend.test.mjs",
     "tests/pan542/registration.test.mjs",
@@ -998,6 +1000,16 @@ repository_only_files = {
     "tests/pan565/transport-price-bound.test.mjs",
     "tests/pan565/browser-model-connection.test.mjs",
     "tests/pan565/registration.test.mjs",
+    # PAN567 explicit proposal-only onboarding on existing563/565; source evidence only.
+    "packages/contracts/src/agent-configuration-proposal-v1.ts",
+    "packages/browser-workspace/src/configuration-proposal-v1.ts",
+    "src/pan567/configuration-proposal-owner.mjs",
+    "scripts/run-pan567-configuration-proposal-tests.mjs",
+    "tests/pan567/proposal-contract.test.mjs",
+    "tests/pan567/owner-dialogue.test.mjs",
+    "tests/pan567/confirmation-semantics.test.mjs",
+    "tests/pan567/browser-proposal.test.mjs",
+    "tests/pan567/registration.test.mjs",
     # PAN575 shared broker feedback source-only; no new runnable payload.
     "docs/architecture/broker-tool-feedback-v1.md",
     "packages/contracts/src/model-tool-transcript-v1.ts",

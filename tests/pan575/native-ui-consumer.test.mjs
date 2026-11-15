@@ -346,3 +346,32 @@ test('575/565 composition closed prepare/confirmation schema and opaque UI/compo
   assert.equal(isCompletedBrokerToolFeedbackV1(r),true,JSON.stringify(r));assert.equal(r.actualToolActions,2);assert.equal(r.actualRequests,2);assert.equal(x.posts(),2);
  }finally{await x.close();}
 });
+// RUN103: the 548 edge of the disclosure. When a genuine UI TASK run retains
+// the full UNKNOWN_USAGE hold, the same closed connection readback names the
+// exact operation:ui-run and marks the code-owned synthetic route reconcilable.
+// The existing owner reconciliation settles the cost hold to zero without any
+// provider retry; the spent request slots stay spent (no budget reset through
+// reconciliation), so the next plan honestly denies with BUDGET_EXHAUSTED and
+// dispatches nothing.
+test('548+575+565 retained UI-task hold discloses its exact run id in the connection readback; owner reconciliation zeroes the cost hold without retry while the spent request slots keep the next plan honestly BUDGET_EXHAUSTED',async()=>{
+ const x=await failedNativeRun('OVERSIZED_FINAL');try{
+  const p=x.plan(),r=await x.start(p);assert.equal(r.phase,'OUTCOME_UNCONFIRMED',JSON.stringify(r));
+  const held=x.readConnection();
+  assert.equal(held.checks.INFERENCE.state,'UNKNOWN_USAGE');
+  assert.deepEqual(held.unknownUsage,{operationId:p.runId,reconcilable:true},'PAN575_UI_RUN_HOLD_NOT_DISCLOSED');
+  assert.match(held.unknownUsage.operationId,/^operation:ui-[a-f0-9]{48}$/);
+  const posts=x.posts();assert.equal(posts,2,'PAN575_TWO_GENUINE_LOOP_REQUESTS_BEFORE_HOLD');
+  const after=x.connection.reconcile(x.headers,{operationId:held.unknownUsage.operationId,identityDigest:held.identityDigest});
+  assert.equal(after.unknownUsage,null,'PAN575_UI_HOLD_STILL_DISCLOSED_AFTER_RECONCILIATION');
+  assert.equal(after.checks.INFERENCE.state,'FAILED');assert.equal(after.checks.INFERENCE.reason,'SYNTHETIC_ZERO_PRICE_RECONCILED_NO_MODEL_PASS');
+  assert.equal(after.realModelAcceptance,false);
+  assert.equal(x.posts(),posts,'PAN575_RECONCILIATION_RETRIED_PROVIDER');
+  // Honest continuation: the settled attempt keeps its reserved request slots;
+  // reconciliation zeroes the cost claim, it never refunds the aggregate budget.
+  await x.prerequisites();
+  const drained=x.readConnection();
+  assert.equal(drained.unknownUsage,null);assert.equal(drained.reason,'BUDGET_EXHAUSTED');assert.equal(drained.inferenceOffer,null);
+  assert.throws(x.plan,/MODEL_CONNECTION_BUDGET_EXHAUSTED/);
+  assert.equal(x.posts(),posts,'PAN575_DRAINED_PLAN_DISPATCHED_ANYWAY');
+ }finally{await x.close();}
+});
