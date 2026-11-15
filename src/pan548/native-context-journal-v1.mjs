@@ -48,7 +48,8 @@ export function createNativeUiContextJournalV1({db,transaction,binding,principal
  CREATE TABLE IF NOT EXISTS workspace_ui_context_outbox_v1(principal_digest TEXT NOT NULL,seq INTEGER NOT NULL,event_key TEXT NOT NULL,task_id TEXT NOT NULL,task_revision INTEGER NOT NULL,kind TEXT NOT NULL,privacy_epoch INTEGER NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,PRIMARY KEY(principal_digest,seq),UNIQUE(principal_digest,event_key)) STRICT;
  CREATE TABLE IF NOT EXISTS workspace_ui_context_projection_v1(principal_digest TEXT NOT NULL,seq INTEGER NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,PRIMARY KEY(principal_digest,seq)) STRICT;
  CREATE TABLE IF NOT EXISTS workspace_ui_context_event_clock_v1(principal_digest TEXT NOT NULL,seq INTEGER NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,PRIMARY KEY(principal_digest,seq)) STRICT;
- CREATE TABLE IF NOT EXISTS workspace_ui_context_proofs_v1(proof_id TEXT PRIMARY KEY,principal_digest TEXT NOT NULL,task_id TEXT NOT NULL,kind TEXT NOT NULL,argument_digest TEXT NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,UNIQUE(principal_digest,task_id,kind)) STRICT;`);
+ CREATE TABLE IF NOT EXISTS workspace_ui_context_proofs_v1(proof_id TEXT PRIMARY KEY,principal_digest TEXT NOT NULL,task_id TEXT NOT NULL,kind TEXT NOT NULL,argument_digest TEXT NOT NULL,bytes TEXT NOT NULL,signature TEXT NOT NULL,UNIQUE(principal_digest,task_id,kind)) STRICT;
+ CREATE TABLE IF NOT EXISTS workspace_ui_context_control_v1(id INTEGER PRIMARY KEY CHECK(id=1),owner_principal_digest TEXT NOT NULL,control_revision INTEGER NOT NULL CHECK(control_revision>=0),pause_state TEXT NOT NULL CHECK(pause_state IN('RUNNING','PAUSE_REQUESTED','PAUSING','PAUSED'))) STRICT;`);
  const nativeKey=db.prepare('SELECT completion_key FROM settings WHERE id=1').get().completion_key;
  const sign=(domain,bytes)=>createHmac('sha256',nativeKey).update('pan548.context/v1\0'+domain+'\0'+canonicalJson(binding)+'\0'+bytes).digest('hex');
  function scope(a){db.prepare('INSERT OR IGNORE INTO workspace_ui_context_scope_v1 VALUES(?,1,1,0)').run(a.digest);return db.prepare('SELECT * FROM workspace_ui_context_scope_v1 WHERE principal_digest=?').get(a.digest);}
@@ -80,8 +81,58 @@ function boundProof(a,row,ref){const core=origin(a,row),p=proofFor(a,ref);
   const own=p.taskId===core.taskId,child=core.capability==='pan.workspace.document.display/v2'&&row.command_id.startsWith('invocation:')&&JSON.parse(core.argumentBytes).commandId===p.taskId&&p.kind.startsWith('PAN597_');
   if(!own&&!child||p.argumentDigest!==core.argumentDigest||own&&(p.originalRequestDigest!==core.requestDigest||canonicalJson(p.scope)!==canonicalJson(core.scope))||p.resourceRefs.objectRef.objectId!==core.resourceRefs.objectRef.objectId||p.resourceRefs.target.surfaceId!==core.resourceRefs.target.surfaceId)throw Error('CONTEXT_PROOF_TASK_BYTES_CONFLICT');return p;
  }
+ // ACT-03 #698 owner-bound cooperative pause control. Durable in the SAME owner
+ // database/transaction domain as the task rows and TARGET_ATTEMPTED append, so a
+ // pause transaction and a dispatch transaction linearize on the owner DB; the
+ // fence is never an in-memory UI flag. One finite control row, owner-principal
+ // bound, CAS on control_revision: a stale revision never rewrites a newer state.
+ function controlRow(){return db.prepare('SELECT * FROM workspace_ui_context_control_v1 WHERE id=1').get();}
+ function controlSnapshot(){const c=controlRow();return freeze({schemaVersion:'pansphaira.workspace-invocation/control/v1',state:c?.pause_state??'RUNNING',controlRevision:c?.control_revision??0,ownerBound:c!==undefined});}
+ function controlOwned(a){db.prepare('INSERT OR IGNORE INTO workspace_ui_context_control_v1 VALUES(1,?,?,?)').run(a.digest,0,'RUNNING');const c=controlRow();
+  if(c.owner_principal_digest!==a.digest)throw Error('INVOCATION_CONTROL_SCOPE_DENIED');return c;}
+ function pauseInsideOwnerTransaction(headers,expectedControlRevision){
+  const a=actor(headers),c=controlOwned(a);
+  if(expectedControlRevision!==c.control_revision)throw Error('INVOCATION_CONTROL_STALE_REVISION');
+  let next=c.pause_state;
+  if(c.pause_state==='RUNNING')next='PAUSE_REQUESTED';
+  else if(c.pause_state==='PAUSE_REQUESTED'||c.pause_state==='PAUSING'){
+   // Barrier honesty: PAUSED acknowledges that no NEW dispatch can cross the
+   // fence (already fenced since the first transition). Work whose dispatch
+   // transaction won the race keeps completing or staying OUTCOME_UNCONFIRMED
+   // through the original #697 paths — it is neither rolled back nor undone —
+   // so while such a genuinely TARGET_ATTEMPTED attempt is still open the owner
+   // reports PAUSING. A merely accepted, never-dispatched step is unfired work
+   // held behind the fence and must not postpone PAUSED forever.
+   const attemptedOpen=db.prepare("SELECT count(*) n FROM workspace_ui_tasks_v2 t WHERE t.state='ACCEPTED' AND t.principal_digest=? AND EXISTS(SELECT 1 FROM workspace_ui_context_outbox_v1 e WHERE e.principal_digest=t.principal_digest AND e.task_id=t.command_id AND e.kind='TARGET_ATTEMPTED')").get(a.digest).n;
+   next=attemptedOpen?'PAUSING':'PAUSED';
+  }
+  if(next!==c.pause_state)db.prepare('UPDATE workspace_ui_context_control_v1 SET pause_state=?,control_revision=control_revision+1 WHERE id=1').run(next);
+  return controlSnapshot();
+ }
+ function resumeInsideOwnerTransaction(headers,expectedControlRevision){
+  const a=actor(headers),c=controlOwned(a);
+  if(expectedControlRevision!==c.control_revision)throw Error('INVOCATION_CONTROL_STALE_REVISION');
+  if(c.pause_state!=='RUNNING')db.prepare("UPDATE workspace_ui_context_control_v1 SET pause_state='RUNNING',control_revision=control_revision+1 WHERE id=1").run();
+  return controlSnapshot();
+ }
+ // Reads authenticate and, once an owner has bound the row, deny foreign actors
+ // without leaking the owner identity; a never-bound journal reads as plain
+ // RUNNING/revision 0 without claiming ownership for the reader.
+ function controlRead(headers){const a=actor(headers),c=controlRow();
+  if(c&&c.owner_principal_digest!==a.digest)throw Error('INVOCATION_CONTROL_SCOPE_DENIED');
+  return controlSnapshot();}
+ // Dispatch-fence guard called by the owning executor inside its begin/dispatch
+ // transaction: only the control owner's own dispatch is fenced; a foreign or
+ // control-less principal keeps its existing rights, and RUNNING keeps every
+ // path identical to the pre-#698 behavior.
+ function guardDispatch(headers){const a=actor(headers),c=controlRow();
+  if(c&&c.owner_principal_digest===a.digest&&c.pause_state!=='RUNNING')throw Error('INVOCATION_PAUSED');}
  const journal=Object.freeze({
   actor,stream,origin,
+  controlRead,guardDispatch,
+  pause(headers,expectedControlRevision){return transaction(()=>journal.pauseInsideOwnerTransaction(headers,expectedControlRevision));},
+  resume(headers,expectedControlRevision){return transaction(()=>journal.resumeInsideOwnerTransaction(headers,expectedControlRevision));},
+  pauseInsideOwnerTransaction,resumeInsideOwnerTransaction,
   originPrivacyEpoch(headers,taskId){const a=actor(headers),intent=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,taskId);if(!intent)throw Error('CONTEXT_OWNER_INTENT_REQUIRED');const e=verifiedEnvelope(intent,'event');if(e.privacyEpoch!==intent.privacy_epoch)throw Error('CONTEXT_OWNER_PRIVACY_EPOCH_BYTES_CONFLICT');return e.privacyEpoch;},
   sourceClock(a,e){
    const row=db.prepare('SELECT * FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').get(a.digest,e.seq);if(!row)return null;
