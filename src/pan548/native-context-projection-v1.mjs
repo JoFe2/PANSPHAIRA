@@ -39,6 +39,39 @@ export function createNativeWorkspaceContextProjectionV1(options){
   const snapshotBytes=canonicalJson(core);if(Buffer.byteLength(snapshotBytes)>65536)throw Error('CONTEXT_PROJECTION_SNAPSHOT_LIMIT_DENIED');
   return immutable({...core,schemaVersion:'pansphaira.workspace-context-projection/owner-snapshot/v1',snapshotBytes,snapshotDigest:uiTaskDigestV2(core),phase:'PREPARED',model:'NOT_RUN',executionAuthorityGranted:false,independentTargetEffectVerified:core.tasks.some(x=>x.independentTargetEffectVerified),checkpointRequestSent:false,journalContractImplemented:true});
  }
+ // PAN700 REC-01 bounded HISTORY read on the SAME owner/auth/redaction path: state
+ // derives ONLY from signed recorded envelopes <= the requested owner seq, never from
+ // the current task row, wallclock or caller proof. Replay/seek grants no rights.
+ function historyInsideOwnerTransaction(headers,value){
+  const request=uiTaskClosedV2(value,['schemaVersion','audience','ownerSeq'],'CONTEXT_PROJECTION_REQUEST_DENIED');
+  if(request.schemaVersion!=='pansphaira.workspace-context-projection/history-request/v1'||!['MAIN_CONTRACT','SPECIALIST_PREVIEW'].includes(request.audience))throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
+  if(!Number.isSafeInteger(request.ownerSeq)||request.ownerSeq<1)throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
+  const a=leading(headers);let stream;
+  try{stream=j.stream(a);}
+  catch(error){if(error.message==='CONTEXT_STREAM_GAP_OR_BYTES_DENIED')return immutable(historyResponse(request,a,null,{reason:'EVENT_GAP',requestedSeq:request.ownerSeq}));throw error;}
+  if(request.ownerSeq>stream.head.seq)return immutable(historyResponse(request,a,stream.head,{reason:'SEQ_UNRECORDED',requestedSeq:request.ownerSeq}));
+  const window=stream.events.filter(e=>e.seq<=request.ownerSeq);
+  const redacted=e=>e.privacyEpoch!==a.privacy.privacy_epoch;
+  if(window.every(redacted))return immutable(historyResponse(request,a,stream.head,{reason:'SOURCE_RETIRED',requestedSeq:request.ownerSeq},window));
+  return immutable(historyResponse(request,a,stream.head,null,window));
+ }
+ function historyResponse(request,a,head,gap,window=[]){
+  const steps=window.map(e=>e.privacyEpoch!==a.privacy.privacy_epoch
+   ?{seq:e.seq,taskId:e.taskId,kind:'PRIVACY_REDACTED',taskRevision:e.taskRevision,state:'UNAVAILABLE',privacyEpoch:e.privacyEpoch,eventDigest:uiTaskDigestV2(e),action:null,resultDigest:null,sourceTimeAvailable:false}
+   :{seq:e.seq,taskId:e.taskId,kind:e.kind,taskRevision:e.taskRevision,state:e.payload.state,privacyEpoch:e.privacyEpoch,eventDigest:uiTaskDigestV2(e),resultDigest:e.payload.resultDigest,sourceTimeAvailable:true,...(request.audience==='MAIN_CONTRACT'&&e.action!==undefined?{action:e.action}:{}),...(request.audience==='MAIN_CONTRACT'?{resourceRefs:e.payload.resourceRefs}:{})});
+  const latest=new Map();for(const e of window)if(e.privacyEpoch===a.privacy.privacy_epoch)latest.set(e.taskId,{taskId:e.taskId,state:e.payload.state,revision:e.taskRevision,derivedFromSeq:e.seq,derivedFromKind:e.kind});
+  const core={schemaVersion:'pansphaira.workspace-context-projection/history-read/v1',projectorVersion:'PAN548_NATIVE_CONTEXT_V1',mode:'HISTORY',
+   source:{taskOwner:'pan548.native-ui-task-projection/v2',eventOwner:'pan548.signed-native-context-outbox/v1',ledgerBindingDigest:uiTaskDigestV2(sessions.binding)},
+   audience:request.audience,ownerSeq:request.ownerSeq,availability:gap?'UNAVAILABLE':'AVAILABLE',gap,
+   principalDigest:a.digest,privacyEpoch:a.privacy.privacy_epoch,providerEpoch:a.privacy.provider_epoch,
+   streamHead:head,includedSequences:steps.map(s=>s.seq),steps,taskStates:[...latest.values()],
+   scope:{neutralStepListOnly:true,businessViewReconstruction:'UNAVAILABLE_NOT_RECORDED',legacyOrAbsentFacts:'UNAVAILABLE',retiredRefsRedacted:true},
+   liveMayContinueSeparately:true,nativePauseDelivered:false,replayGrantsNoRights:true,readerEffects:'NONE',targetRedispatched:false,
+   constraints:{...constraints},retention:{maxSnapshotBytes:65536,maxOwnerEvents:4096,storage:'LOCAL_OWNER_STORE',rawTextExport:false,audioExport:false},
+   executionAuthorityGranted:false,model:'NOT_RUN'};
+  const snapshotBytes=canonicalJson(core);if(Buffer.byteLength(snapshotBytes)>65536)throw Error('CONTEXT_PROJECTION_SNAPSHOT_LIMIT_DENIED');
+  return {...core,snapshotBytes,snapshotDigest:uiTaskDigestV2(core),phase:'HISTORY_READ',journalContractImplemented:true};
+ }
  function reconcile(headers,value){const c=uiTaskClosedV2(value,['schemaVersion'],'CONTEXT_RECONCILE_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-context-projection/reconcile/v1')throw Error('CONTEXT_RECONCILE_INPUT_DENIED');return immutable(t.transaction(()=>{
   const a=leading(headers);let completed=0,unknown=0,retired=0,legacyUnknown=0;
   for(const row of t.db.prepare("SELECT * FROM workspace_ui_tasks_v2 WHERE principal_digest=? AND command_id LIKE 'invocation:%' AND state IN('ACCEPTED','OUTCOME_UNCONFIRMED') ORDER BY command_id").all(a.digest)){
@@ -53,7 +86,8 @@ export function createNativeWorkspaceContextProjectionV1(options){
   const repaired=j.repairInsideOwnerTransaction(headers);return {schemaVersion:'pansphaira.workspace-context-projection/reconcile-readback/v1',completed,unknown,retired,legacyUnknown,...repaired,targetRedispatched:false,model:'NOT_RUN',executionAuthorityGranted:false};
  }));}
  const checkpoints=createNativeUiContextCheckpointsV1({sessions,tasks,t,j,contextSelection,snapshot:snapshotInsideOwnerTransaction,leading});
- const owner=Object.freeze({snapshot(headers,value){return t.transaction(()=>snapshotInsideOwnerTransaction(headers,value));},reconcile,
+ const owner=Object.freeze({snapshot(headers,value){return t.transaction(()=>snapshotInsideOwnerTransaction(headers,value));},
+  history(headers,value){return t.transaction(()=>historyInsideOwnerTransaction(headers,value));},reconcile,
   resolveProof(headers,value){const a=leading(headers);const c=uiTaskClosedV2(value,['schemaVersion','taskId','proofRef'],'CONTEXT_PROOF_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-context-projection/resolve-proof/v1')throw Error('CONTEXT_PROOF_INPUT_DENIED');const intent=t.db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,c.taskId);if(!intent||intent.privacy_epoch!==a.privacy.privacy_epoch)throw Error('CONTEXT_PROOF_RETIRED_OR_UNREGISTERED');j.origin(a,t.readRow(c.taskId));return immutable(j.resolveProof(headers,c.taskId,c.proofRef));},
   audit(headers,value){if(closed||t.closed())throw Error('CONTEXT_PROJECTION_OWNER_CLOSED');const c=uiTaskClosedV2(value,['schemaVersion','taskId'],'CONTEXT_AUDIT_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-context-projection/audit/v1')throw Error('CONTEXT_AUDIT_INPUT_DENIED');return j.audit(headers,c.taskId);},
   prepare:checkpoints.prepare,checkResult:checkpoints.checkResult,correct:checkpoints.correct,revoke:checkpoints.revoke,providerSwitch:checkpoints.providerSwitch,checkpoint:checkpoints.read,

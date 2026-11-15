@@ -11589,7 +11589,7 @@
         {
           "path": "src/pan548/native-context-projection-v1.mjs",
           "role": "SOURCE",
-          "sha256": "eb7e37f93c974a88acad5287a764dabd4ad656c3136fdee8ca99befe14d7083d"
+          "sha256": "9a612558f26215a0ac437bb582b1447a346054af9e32c041817fe5ca5bc474c0"
         },
         {
           "path": "src/pan548/native-readonly-event-projection-v1.mjs",
@@ -11872,7 +11872,7 @@
         {
           "path": "tests/pan607/native-context-projection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "12d08b86d0dc754a2b1dde8c281e70e290be446a0c7dc38c3ff7c2a5c2edad66"
+          "sha256": "3ab7dd44ce08f01a358ed66905297fa9675157dfe0df2667167bc14a522c5782"
         },
         {
           "path": "tests/pan607/native-checkpoints.test.mjs",
