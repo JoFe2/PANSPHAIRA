@@ -81,7 +81,7 @@ export function createNativeWorkspaceContextProjectionV1(options){
    if(proof&&['PAN597_DOCUMENT_RENDERED','PAN546_PREVIEW_VALIDATED'].includes(proof.kind)){
     const result={phase:proof.kind==='PAN597_DOCUMENT_RENDERED'?'DOCUMENT_RENDERED':'PREVIEW_VALIDATED',reconciledFromIndependentTarget:true,proofRef:proof.proofId,clientRendered:proof.evidence.clientReportedDomCommit===true,personalProfileSaved:false,restored:false};
     t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='COMPLETED',revision=revision+1,result_json=? WHERE command_id=? AND state IN('ACCEPTED','OUTCOME_UNCONFIRMED')").run(canonicalJson(result),row.command_id);j.record(headers,row.command_id,'INTENT_COMPLETED',proof.proofId);completed++;
-   }else{if(row.state==='ACCEPTED')t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='OUTCOME_UNCONFIRMED',revision=revision+1 WHERE command_id=? AND state='ACCEPTED'").run(row.command_id);j.record(headers,row.command_id,'OUTCOME_UNKNOWN');unknown++;}
+   }else{if(row.state==='ACCEPTED')t.db.prepare("UPDATE workspace_ui_tasks_v2 SET state='OUTCOME_UNCONFIRMED',revision=revision+1 WHERE command_id=? AND state='ACCEPTED'").run(row.command_id);j.ownerOutcomeUnknown({principalDigest:a.digest,privacyEpoch:a.privacy.privacy_epoch,row:t.readRow(row.command_id)});unknown++;}
   }
   const repaired=j.repairInsideOwnerTransaction(headers);return {schemaVersion:'pansphaira.workspace-context-projection/reconcile-readback/v1',completed,unknown,retired,legacyUnknown,...repaired,targetRedispatched:false,model:'NOT_RUN',executionAuthorityGranted:false};
  }));}
