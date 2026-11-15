@@ -1003,22 +1003,23 @@ Object.freeze({
   "toSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
   "reason": "Register exactly the two V3 source-compatibility catalog and documentation paths on the existing native ERV owner for the accepted PR691 adapter delta. Preserve all prior migrations, immutable admitted obligations, scanner/validator semantics, native guards and runnable inventory. The unchanged mechanical scan retains1309 files and348 import sites in347 files; only the checksum inventory grows from2858 to2860 paths. No source drift is adopted automatically and no model or whole-parent acceptance is granted."
 }),
-Object.freeze({
-  "migrationId": "PAN597-PR679-RESTRICTED-DISPLAY-SOURCE/INTEGRITY-GENERATOR/V109",
+  Object.freeze({
+  "migrationId": "PR681-FAST-URI-3.1.9-DEV-POLICY-V2/INTEGRITY-GENERATOR/V109",
   "path": "scripts/refresh-integrity-data.mjs",
   "profileVersion": 109,
   "fromSha256": "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205",
-  "toSha256": "49e9f1213fe75f712a75439c2185b505f3ef660135b17ef016c633615201dccf",
-  "reason": "Bind only the retained PR679 two source-only native display session/ingress registrations to the existing PAN597 owner as an exact successor of V108. Current-main ba3447175ae767eb25d2592780fc0dbdc67345cd contributes the new UI observation test. The unchanged mechanical scanner measures1314 files,350 import sites in349 files and2866 unique ledger paths. Preserve every historical migration and immutable admitted fixture, all21 base obligations/13 pinned profiles, graph104/all109 owners, scanner/validator semantics, original byte caps, native principal/CSP/no-selector guards and legacy runnable inventory. This current-main compatibility admission makes no supported Linux, authenticated browser, CI, release or whole-issue acceptance claim."
+  "toSha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
+  "reason": "Register only the explicit PAN594 developer-readback v2 policy and its structural contract test at the existing critical owner. Preserve historical v1, all prior migrations, admitted-base obligations, scanner semantics, exact Linux x64 runtime/installed-byte guards, closed runner and runnable inventory. This PR681 branch successor derives from its actual V108 tip; parallel unmerged PR679 migrations are not imported. No native, performance, release or independent acceptance is asserted."
 }),
 Object.freeze({
-  "migrationId": "PAN542-PR679-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110",
+  "migrationId": "PR679-RESTRICTED-DISPLAY-AND-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110",
   "path": "scripts/refresh-integrity-data.mjs",
   "profileVersion": 110,
-  "fromSha256": "49e9f1213fe75f712a75439c2185b505f3ef660135b17ef016c633615201dccf",
-  "toSha256": "3ce32a42ad50731e7eb8cb5dc7d3c73183a3d60fb518f88edce4aaab17cd9400",
-  "reason": "Register exactly the V4 catalog SECURITY and documentation DERIVED_EVIDENCE inputs on the one existing PAN542 native ERV owner, preserving its runner and every hard gate. The unchanged compiled mechanical scanner measures 1314 files, 350 import sites in 349 files and 2868 unique ledger paths. Preserve all historical migrations, immutable base obligations and fixtures, scanner/validator semantics, historical source catalog pins, all owners and original byte caps. Runtime source catalog V4 is distinct from this inventory migration V110. This registration grants no supported Linux, KS, native, browser, CI or release acceptance."
-}),
+  "fromSha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
+  "toSha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
+  "reason": "Register exactly the two PR679 source-only native display session/ingress inputs at the existing PAN597 owner and the frozen V4 catalog SECURITY/documentation DERIVED_EVIDENCE inputs at the existing PAN542 owner as one closed successor of published Main PR681 V109. Preserve every published migration including the fast-uri 3.1.9 developer-policy v2 registration and immutable v1, all admitted base obligations/13 pinned profiles, graph104/all109 owners, scanner/validator semantics, original byte caps, native guards and runnable inventory. The unchanged mechanical scanner measures 1315 files,350 import sites in349 files and2870 unique ledger paths. Supersede only unpublished branch generator V109/V110 registrations; historical Git commits and frozen runtime V1-V4 source catalogs remain unchanged. This inventory registration grants no native, browser, CI, release or whole-issue acceptance."
+}
+),
   ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -1031,7 +1032,7 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1314,
+  "filesScanned": 1315,
   "declarationSites": 37,
   "declarationFiles": 37,
   "importSites": 350,
@@ -1041,7 +1042,7 @@ const EXPECTED_COUNTS = {
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2868,"uniquePaths":2868,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2870,"uniquePaths":2870,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -2150,6 +2151,21 @@ test("negative: exact v108 native source successor generator target cannot be re
     migration.toSha256 = "f".repeat(64);
   }, "profile-version-migration:");
 });
+test("negative: PR681 v109 closed generator successor rejects caller target hashes", () => {
+  const inventory = loadInventory() as any;
+  const migration = inventory.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR681-FAST-URI-3.1.9-DEV-POLICY-V2/INTEGRITY-GENERATOR/V109");
+  assert.ok(migration, "explicit PR681 generator successor must be registered");
+  assert.equal(migration.fromSha256, "8b10937c815a13e6019735f5904b65afe815b1883033692841ba0a7ffec1f205");
+  assert.equal(migration.profileVersion, 109);
+  assertFails((inv) => { inv.profileVersionMigrations.find((entry: any) => entry.migrationId === migration.migrationId).toSha256 = "f".repeat(64); }, "profile-version-migration:");
+});
+test("negative: PR681 v109 cannot migrate a neighboring control path", () => {
+  const inventory = loadInventory() as any;
+  const migration = inventory.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR681-FAST-URI-3.1.9-DEV-POLICY-V2/INTEGRITY-GENERATOR/V109");
+  assert.ok(migration, "explicit PR681 generator successor must be registered");
+  assertFails((inv) => { inv.profileVersionMigrations.find((entry: any) => entry.migrationId === migration.migrationId).path = "demo/runtime/local-journal-owner.mjs"; }, "profile-version-migration:");
+});
+
 test("negative: exact v108 native source successor cannot migrate a neighboring control path", () => {
   assertFails((inv) => {
     const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR691-SOURCE-COMPATIBILITY-V3/INTEGRITY-GENERATOR/V108");
@@ -2158,16 +2174,16 @@ test("negative: exact v108 native source successor cannot migrate a neighboring 
 });
 
 
-test("negative: exact v109 display source successor generator target cannot be replaced by a caller hash", () => {
+test("negative: exact v110 combined display source successor generator target cannot be replaced by a caller hash", () => {
   assertFails((inv) => {
-    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN597-PR679-RESTRICTED-DISPLAY-SOURCE/INTEGRITY-GENERATOR/V109");
-    assert.ok(migration); assert.equal(migration.path, "scripts/refresh-integrity-data.mjs"); assert.equal(migration.profileVersion, 109);
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR679-RESTRICTED-DISPLAY-AND-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
+    assert.ok(migration); assert.equal(migration.path, "scripts/refresh-integrity-data.mjs"); assert.equal(migration.profileVersion, 110);
     migration.toSha256 = "f".repeat(64);
   }, "profile-version-migration:");
 });
-test("negative: exact v109 display source successor cannot migrate a neighboring control path", () => {
+test("negative: exact v110 combined display source successor cannot migrate a neighboring control path", () => {
   assertFails((inv) => {
-    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN597-PR679-RESTRICTED-DISPLAY-SOURCE/INTEGRITY-GENERATOR/V109");
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR679-RESTRICTED-DISPLAY-AND-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
     assert.ok(migration); migration.path = "scripts/build-public-release.sh";
   }, "profile-version-migration:");
 });
@@ -2175,14 +2191,14 @@ test("negative: exact v109 display source successor cannot migrate a neighboring
 
 test("negative: exact v110 V4 registration successor generator target cannot be replaced by a caller hash", () => {
   assertFails((inv) => {
-    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR679-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR679-RESTRICTED-DISPLAY-AND-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
     assert.ok(migration); assert.equal(migration.path, "scripts/refresh-integrity-data.mjs"); assert.equal(migration.profileVersion, 110);
     migration.toSha256 = "f".repeat(64);
   }, "profile-version-migration:");
 });
 test("negative: exact v110 V4 registration successor cannot migrate a neighboring control path", () => {
   assertFails((inv) => {
-    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PAN542-PR679-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR679-RESTRICTED-DISPLAY-AND-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
     assert.ok(migration); migration.path = "scripts/build-public-release.sh";
   }, "profile-version-migration:");
 });
