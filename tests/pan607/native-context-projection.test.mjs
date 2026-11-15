@@ -241,7 +241,7 @@ test('700 REC-01 HISTORY stays persistently distinct from LIVE: live reads perfo
  assert.equal(live.mode,undefined,'live snapshot is not the historical response object');
  assert.equal(h.mode,'HISTORY');assert.equal(live.tasks.find(t=>t.taskId===result.invocationId).state,'COMPLETED','live shows today state, history keeps recorded ACCEPTED');
  assert.equal(h.steps.find(s=>s.seq===acceptedSeq).state,'ACCEPTED','the historical object was not mutated by the fresh live read');
- assert.equal(live.streamHead.seq,3);assert.equal(h.streamHead.seq,3,'history honestly reports the current signed stream head');
+ assert.equal(live.streamHead.seq,p.events.length);assert.equal(h.streamHead.seq,p.events.length,'history honestly reports the current signed stream head');
  for(const bad of [{...historyRequest(1),proof:'EXECUTOR'},{...historyRequest(1),audience:'FOREIGN_MODEL'},{...historyRequest(1),ownerSeq:1.5},{...historyRequest(1),grant:true},historyRequest(0)])
   assert.throws(()=>x.projection.history(x.tab.headers,bad),/CONTEXT_PROJECTION_REQUEST_DENIED/,'closed request contract: no caller proof/actor/grant extras, no non-positive or fractional owner seq');
  assert.throws(()=>x.projection.history(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/history-request/v2',audience:'MAIN_CONTRACT',ownerSeq:1}),/CONTEXT_PROJECTION_REQUEST_DENIED/,'unsupported version denied honestly');
@@ -327,4 +327,29 @@ test('697 ACT-02 retargeting a genuinely minted handle onto a different minted A
  assert.equal(db.prepare("SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='OUTCOME_UNKNOWN'").get(d.invocationId).n,0,'no UNKNOWN fact may be misattributed to the never-dispatched task');
  assert.equal(db.prepare('SELECT state FROM workspace_ui_tasks_v2 WHERE command_id=?').get(d.invocationId).state,'ACCEPTED','a retargeted failed call cannot transition the never-dispatched task');
  connection.failed(effectD);
+}finally{await x.close();}});
+test('700 REC-01 repair03 sourceTimeAvailable tracks only the verified signed producer-clock sidecar: genuine preview true, absent legacy clock false/null, tampered clock fails closed, history state rights unchanged',async()=>{const x=await fixture();try{
+ const r=x.preview(),p=x.snapshot(),acc=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===r.invocationId),done=p.events.find(e=>e.kind==='INTENT_COMPLETED'&&e.taskId===r.invocationId);
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const genuine=x.projection.history(x.tab.headers,historyRequest(acc.seq));
+ const gstep=genuine.steps.find(s=>s.seq===acc.seq);
+ assert.equal(gstep.sourceTimeAvailable,true,'authentic same-transaction append has a signed clock row');
+ assert.ok(Number.isSafeInteger(gstep.sourceTimeMs)&&gstep.sourceTimeMs>=0,'exposed time is the existing verified sidecar value, not wallclock inference');
+ assert.deepEqual(effectCounters(x),effectCounters(x),'clock exposure reads the same signed store');
+ const effects=effectCounters(x);
+ db.prepare('DELETE FROM workspace_ui_context_event_clock_v1 WHERE seq=?').run(acc.seq);
+ const legacy=x.projection.history(x.tab.headers,historyRequest(done.seq));
+ const lstep=legacy.steps.find(s=>s.seq===acc.seq);
+ assert.equal(lstep.sourceTimeAvailable,false,'absent sidecar (pre-clock legacy scenario) must not claim time available');
+ assert.equal(lstep.sourceTimeMs,null,'no timestamp may be synthesized for a missing sidecar');
+ assert.equal(lstep.state,'ACCEPTED','missing clock evidence does not strip the genuinely recorded historical state');
+ assert.equal(legacy.availability,'AVAILABLE','missing clock degrades time honesty only, never history rights');
+ assert.deepEqual(effectCounters(x),effects,'missing-clock probe caused zero reader effects');
+ const clockRow=db.prepare('SELECT bytes FROM workspace_ui_context_event_clock_v1 WHERE seq=?').get(done.seq);
+ db.prepare('UPDATE workspace_ui_context_event_clock_v1 SET bytes=? WHERE seq=?').run(clockRow.bytes.replace('"unit":"COUNT"','"unit":"MS"'),done.seq);
+ assert.throws(()=>x.projection.history(x.tab.headers,historyRequest(done.seq)),/EVENT_SOURCE_CLOCK_SIGNATURE_DENIED|EVENT_SOURCE_CLOCK_BYTES_DENIED/,'tampered clock fails closed, no cached fallback');
+ db.prepare('UPDATE workspace_ui_context_event_clock_v1 SET bytes=? WHERE seq=?').run(clockRow.bytes,done.seq);
+ const restored=x.projection.history(x.tab.headers,historyRequest(done.seq));
+ assert.equal(restored.steps.find(s=>s.seq===done.seq).sourceTimeAvailable,true,'restored genuine sidecar reads available again deterministically');
+ assert.deepEqual(effectCounters(x),effects,'tamper probe left the signed store byte-identical: zero reader effects');
 }finally{await x.close();}});

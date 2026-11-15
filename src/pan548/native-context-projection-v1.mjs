@@ -56,9 +56,14 @@ export function createNativeWorkspaceContextProjectionV1(options){
   return immutable(historyResponse(request,a,stream.head,null,window));
  }
  function historyResponse(request,a,head,gap,window=[]){
-  const steps=window.map(e=>e.privacyEpoch!==a.privacy.privacy_epoch
-   ?{seq:e.seq,taskId:e.taskId,kind:'PRIVACY_REDACTED',taskRevision:e.taskRevision,state:'UNAVAILABLE',privacyEpoch:e.privacyEpoch,eventDigest:uiTaskDigestV2(e),action:null,resultDigest:null,sourceTimeAvailable:false}
-   :{seq:e.seq,taskId:e.taskId,kind:e.kind,taskRevision:e.taskRevision,state:e.payload.state,privacyEpoch:e.privacyEpoch,eventDigest:uiTaskDigestV2(e),resultDigest:e.payload.resultDigest,sourceTimeAvailable:true,...(request.audience==='MAIN_CONTRACT'&&e.action!==undefined?{action:e.action}:{}),...(request.audience==='MAIN_CONTRACT'?{resourceRefs:e.payload.resourceRefs}:{})});
+  // Truthful time availability: ONLY the existing signed producer-clock sidecar (verified
+  // by the journal accessor; tamper keeps failing closed) counts as evidence. Absent
+  // legacy rows stay false/null; never inferred from epoch equality or polling wallclock.
+  const steps=window.map(e=>{
+   if(e.privacyEpoch!==a.privacy.privacy_epoch)return{seq:e.seq,taskId:e.taskId,kind:'PRIVACY_REDACTED',taskRevision:e.taskRevision,state:'UNAVAILABLE',privacyEpoch:e.privacyEpoch,eventDigest:uiTaskDigestV2(e),action:null,resultDigest:null,sourceTimeAvailable:false,sourceTimeMs:null};
+   const clock=j.sourceClock(a,e);
+   return{seq:e.seq,taskId:e.taskId,kind:e.kind,taskRevision:e.taskRevision,state:e.payload.state,privacyEpoch:e.privacyEpoch,eventDigest:uiTaskDigestV2(e),resultDigest:e.payload.resultDigest,sourceTimeAvailable:clock!==null,sourceTimeMs:clock?clock.sourceTimeMs:null,...(request.audience==='MAIN_CONTRACT'&&e.action!==undefined?{action:e.action}:{}),...(request.audience==='MAIN_CONTRACT'?{resourceRefs:e.payload.resourceRefs}:{})};
+  });
   const latest=new Map();for(const e of window)if(e.privacyEpoch===a.privacy.privacy_epoch)latest.set(e.taskId,{taskId:e.taskId,state:e.payload.state,revision:e.taskRevision,derivedFromSeq:e.seq,derivedFromKind:e.kind});
   const core={schemaVersion:'pansphaira.workspace-context-projection/history-read/v1',projectorVersion:'PAN548_NATIVE_CONTEXT_V1',mode:'HISTORY',
    source:{taskOwner:'pan548.native-ui-task-projection/v2',eventOwner:'pan548.signed-native-context-outbox/v1',ledgerBindingDigest:uiTaskDigestV2(sessions.binding)},
