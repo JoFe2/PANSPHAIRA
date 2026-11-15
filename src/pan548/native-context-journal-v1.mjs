@@ -5,7 +5,7 @@ import {modelFreeUiTaskReservationV1} from './native-ui-task-budget-v1.mjs';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
 const digest=value=>createHash('sha256').update(canonicalJson(value)).digest('hex');
 const fixedConstraints=Object.freeze({localOnly:true,noSend:true,personalSave:false,sharedPublish:false});
-const phaseKinds=new Set(['INTENT_ACCEPTED','PROPOSAL_VALIDATED','TARGET_ACCEPTED','TARGET_RENDERED','INTENT_COMPLETED','OUTCOME_UNKNOWN','INTENT_REVOKED','USER_CONSTRAINT','CHECKPOINT_PREPARED','REQUEST_INCLUDED','RESULT_CHECKED','PLAN_INVALIDATED']);
+const phaseKinds=new Set(['INTENT_ACCEPTED','TARGET_ATTEMPTED','PROPOSAL_VALIDATED','TARGET_ACCEPTED','TARGET_RENDERED','INTENT_COMPLETED','OUTCOME_UNKNOWN','INTENT_REVOKED','USER_CONSTRAINT','CHECKPOINT_PREPARED','REQUEST_INCLUDED','RESULT_CHECKED','PLAN_INVALIDATED']);
 const proofKinds=new Set(['PAN546_PREVIEW_VALIDATED','PAN597_DOCUMENT_ACCEPTED','PAN597_DOCUMENT_RENDERED']);
 const id=value=>{if(typeof value!=='string'||!/^(?:display|invocation|checkpoint):[a-f0-9]{32}$/.test(value))throw Error('CONTEXT_JOURNAL_TASK_ID_DENIED');return value;};
 function freeze(value){if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;}
@@ -59,12 +59,12 @@ export function createNativeUiContextJournalV1({db,transaction,binding,principal
   for(const row of rows){const e=verifiedEnvelope(row,'event');if(row.seq!==++seq||e.seq!==row.seq||e.principalDigest!==a.digest||e.previousDigest!==previous||e.eventKey!==row.event_key||e.taskId!==row.task_id||e.kind!==row.kind||e.taskRevision!==row.task_revision||e.privacyEpoch!==row.privacy_epoch)throw Error('CONTEXT_STREAM_GAP_OR_BYTES_DENIED');previous=digest(e);events.push(e);}
   return {events,head:{seq,digest:previous}};
  }
- function append(a,row,kind,proofRef=null){
+ function append(a,row,kind,proofRef=null,epochOverride=null){
   if(!phaseKinds.has(kind))throw Error('CONTEXT_EVENT_KIND_DENIED');const task=nativeUiContextTaskCoreV1(row),s=scope(a),key=row.command_id+':'+row.revision+':'+kind;
   const prior=db.prepare('SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND event_key=?').get(a.digest,key);if(prior){verifiedEnvelope(prior,'event');return JSON.parse(prior.bytes);}
   const old=stream(a);if(old.head.seq>=4096)throw Error('CONTEXT_EVENT_CAPACITY_DENIED');
   const payload={requestDigest:task.requestDigest,argumentDigest:task.argumentDigest,capability:task.capability,constraints:task.constraints,resourceRefs:task.resourceRefs,state:row.state,resultDigest:row.result_json===null?null:digest(JSON.parse(row.result_json)),proofRef};
-  const intent=kind==='INTENT_ACCEPTED'?null:db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,row.command_id),eventEpoch=intent?verifiedEnvelope(intent,'event').privacyEpoch:s.privacy_epoch;
+  const intent=kind==='INTENT_ACCEPTED'?null:db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,row.command_id),eventEpoch=epochOverride??(intent?verifiedEnvelope(intent,'event').privacyEpoch:s.privacy_epoch);
   const e={schemaVersion:'pansphaira.workspace-context/event/v1',seq:old.head.seq+1,eventKey:key,taskId:row.command_id,taskRevision:row.revision,kind,principalDigest:a.digest,privacyEpoch:eventEpoch,previousDigest:old.head.digest,action:actionDescriptor(row,task),payload},bytes=canonicalJson(e),signature=sign('event',bytes);
   // Additive clock sidecar of THIS producer append in the SAME owner transaction.
   // Legacy events are never backfilled from polling/restart wallclock.
@@ -91,7 +91,30 @@ function boundProof(a,row,ref){const core=origin(a,row),p=proofFor(a,ref);
   sealProjection(bytes){if(typeof bytes!=='string')throw Error('CONTEXT_PROJECTION_BYTES_DENIED');return sign('projection',bytes);},
   verifyProjection(bytes,signature){if(typeof bytes!=='string'||sign('projection',bytes)!==signature)throw Error('CONTEXT_OWNER_PROJECTION_SIGNATURE_DENIED');return JSON.parse(bytes);},
   accepted(headers,taskId){const a=actor(headers),row=rowFor(a,taskId);return append(a,row,'INTENT_ACCEPTED');},
-  record(headers,taskId,kind,proofRef=null){const a=actor(headers),row=rowFor(a,taskId);const checkRow=['TARGET_RENDERED','INTENT_COMPLETED','RESULT_CHECKED'].includes(kind)&&row.state==='COMPLETED'?{...row,state:'ACCEPTED'}:row;origin(a,checkRow);if(proofRef!==null)boundProof(a,checkRow,proofRef);return append(a,row,kind,proofRef);},
+  record(headers,taskId,kind,proofRef=null){if(kind==='TARGET_ATTEMPTED'||kind==='OUTCOME_UNKNOWN')throw Error('CONTEXT_EVENT_KIND_DENIED');const a=actor(headers),row=rowFor(a,taskId);const checkRow=['TARGET_RENDERED','INTENT_COMPLETED','RESULT_CHECKED'].includes(kind)&&row.state==='COMPLETED'?{...row,state:'ACCEPTED'}:row;origin(a,checkRow);if(proofRef!==null)boundProof(a,checkRow,proofRef);return append(a,row,kind,proofRef);},
+  // Owner dispatcher boundary fact, callable only inside the owning executor
+  // transaction after the live fence recheck: bound to the intent's origin epoch
+  // so a later privacy revocation cannot erase the fact that a dispatch began.
+  dispatchAttempted(headers,taskId){
+   const a=actor(headers),row=rowFor(a,taskId);
+   if(row.state!=='ACCEPTED')throw Error('CONTEXT_DISPATCH_STATE_DENIED');
+   const intent=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,row.command_id);
+   if(!intent)throw Error('CONTEXT_OWNER_INTENT_REQUIRED');
+   const e=verifiedEnvelope(intent,'event');
+   if(e.privacyEpoch!==intent.privacy_epoch)throw Error('CONTEXT_OWNER_PRIVACY_EPOCH_BYTES_CONFLICT');
+   return append({digest:a.digest},row,'TARGET_ATTEMPTED',null,e.privacyEpoch);
+  },
+  // Internal factual UNKNOWN writer for an already-dispatched owner attempt. The
+  // caller passes the durable row and the intent's origin epoch, never a phase or
+  // audience of its choice; the append stays in the caller's owner transaction.
+  ownerOutcomeUnknown({principalDigest,privacyEpoch,row}){
+   if(row.state!=='OUTCOME_UNCONFIRMED')throw Error('CONTEXT_OUTCOME_STATE_DENIED');
+   const intent=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(principalDigest,row.command_id);
+   if(!intent)throw Error('CONTEXT_OWNER_INTENT_REQUIRED');
+   const e=verifiedEnvelope(intent,'event');
+   if(e.privacyEpoch!==intent.privacy_epoch||e.privacyEpoch!==privacyEpoch||e.principalDigest!==principalDigest)throw Error('CONTEXT_OWNER_PRIVACY_EPOCH_BYTES_CONFLICT');
+   return append({digest:principalDigest},row,'OUTCOME_UNKNOWN',null,privacyEpoch);
+  },
   issueTargetProof(headers,taskId,kind,evidence){
    if(!proofKinds.has(kind))throw Error('CONTEXT_TARGET_PROOF_KIND_DENIED');const a=actor(headers),row=rowFor(a,taskId),core=origin(a,kind==='PAN597_DOCUMENT_RENDERED'&&row.state==='COMPLETED'?{...row,state:'ACCEPTED'}:row);
    const identity={taskId:core.taskId,principalDigest:a.digest,kind,argumentDigest:core.argumentDigest,evidence},proofId='context-proof:'+digest(identity),body={schemaVersion:'pansphaira.workspace-context/target-proof/v1',proofId,...identity,originalRequestDigest:core.requestDigest,scope:core.scope,resourceRefs:core.resourceRefs,constraints:core.constraints,issuedPrivacyEpoch:a.privacy.privacy_epoch},bytes=canonicalJson(body),signature=sign('proof',bytes);

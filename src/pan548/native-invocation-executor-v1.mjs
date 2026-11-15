@@ -5,7 +5,7 @@ import {nativeWorkspaceInvocationExecutorConnectionV1} from './native-model-free
 export function executeNativeWorkspaceInvocationV1(owner,headers,value){
  const connection=nativeWorkspaceInvocationExecutorConnectionV1(owner),effect=connection.begin(headers,value);
  try{
-  connection.revalidate(headers,effect);
+  connection.revalidate(headers,effect);connection.dispatch(headers,effect);
   const args=JSON.parse(effect.member.argumentBytes);
   let result;
   if(effect.member.capability==='pan.workspace.view.preview/v1'){
