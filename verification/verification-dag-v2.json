@@ -11554,12 +11554,12 @@
         {
           "path": "src/pan548/native-model-free-invocations-v1.mjs",
           "role": "SOURCE",
-          "sha256": "63189f185590053ade0c74ba2d7c9418e9e9a60310b75c62bd77501c50e94b91"
+          "sha256": "40b9f99685e371ebd52ad4565bc3d7c19d3d3dacdafd0c9cef62f630b6ec49dd"
         },
         {
           "path": "src/pan548/native-invocation-executor-v1.mjs",
           "role": "SOURCE",
-          "sha256": "344a9a9bf3c6514fc4e9ee6d26a2ddae29f55cf8b848c0590f40752636df461e"
+          "sha256": "a51102b3d20273d225bfee7f472396dd957ae2667c3089efa63d65377072a3bf"
         },
         {
           "path": "src/pan548/native-ui-task-budget-v1.mjs",
@@ -11569,7 +11569,7 @@
         {
           "path": "src/pan548/native-context-journal-v1.mjs",
           "role": "SECURITY",
-          "sha256": "f5258cb8a32befb63af95165e59646b469baa16801f9c9a66a5307fca30610f2"
+          "sha256": "164321dcac47a4d17cbeafed1d21a7db915050702d398602a1318a79d9715b8c"
         },
         {
           "path": "src/pan548/native-context-checkpoints-v1.mjs",
@@ -11579,7 +11579,7 @@
         {
           "path": "src/pan548/native-context-projection-v1.mjs",
           "role": "SOURCE",
-          "sha256": "eb7e37f93c974a88acad5287a764dabd4ad656c3136fdee8ca99befe14d7083d"
+          "sha256": "64833bd0eef55be2f53b2e9cb1d6c6be98c62aeed7167e37fb3169d3ae1285af"
         },
         {
           "path": "src/pan548/native-readonly-event-projection-v1.mjs",
@@ -11862,7 +11862,7 @@
         {
           "path": "tests/pan607/native-context-projection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "12d08b86d0dc754a2b1dde8c281e70e290be446a0c7dc38c3ff7c2a5c2edad66"
+          "sha256": "f2e378eb82e3ceaa4a392346b15e11b5833e06b2d6c840cfb77e35640811762a"
         },
         {
           "path": "tests/pan607/native-checkpoints.test.mjs",
@@ -11924,7 +11924,7 @@
         {
           "path": "packages/contracts/src/workspace-readonly-events-v1.ts",
           "role": "CONTRACT",
-          "sha256": "94a9c2d329b3519fb9cf8e1010f4235f8949e7f4ed4a793f02b037c4c3deb355"
+          "sha256": "32438101dd32f36a51f1eec5c5721e4dac7048a92bc7e4bc79e3e7557f6a53d4"
         },
         {
           "path": "packages/browser-workspace/src/workspace-readonly-events-v1.ts",
