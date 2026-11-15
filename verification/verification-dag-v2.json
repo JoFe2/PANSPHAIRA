@@ -11630,7 +11630,7 @@
         {
           "path": "tests/pan597/browser-pairing.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "653d6c6791ec58f6720a401a9ccb61cee74f52d1f44d8ecf4e5c4a4074eb25a9"
+          "sha256": "a4f6c004a7fd2d634ea2eac5a6239027f2c15dc87512ec0618f184a9049a8dba"
         },
         {
           "path": "packages/contracts/src/workspace-browser-pairing-v1.ts",
@@ -11640,7 +11640,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-browser-pairing-v1.ts",
           "role": "SOURCE",
-          "sha256": "9ffe3676145180d7bdd8bb9dcb2e00e9bb218847d8732c38f6e8922c0d7a6da0"
+          "sha256": "f450b06670368c9013f68067d480aec5e47543ca2ed39776b3e2da6f586ddffd"
         },
         {
           "path": "src/pan597/native-browser-pairing-v1.mjs",

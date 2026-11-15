@@ -97,4 +97,27 @@ test('606 real native display denial is an accessible focused alert; unconfirmed
   await x.source.route('**/workspace/surfaces/display-session-v1',lostRead);const code=x.source.getByLabel('Code aus dem anderen Browserprofil',{exact:true});await code.focus();await x.source.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();await code.focus();await seen;await x.source.waitForFunction(()=>document.querySelector('.surface-native-presentation [role="alert"]')?.textContent.includes('DISPLAY_OUTCOME_UNCONFIRMED'));assert.equal(await code.evaluate(e=>document.activeElement===e),true);assert.match(await display.getByRole('alert').textContent(),/Keine automatische Wiederholung/);assert.equal(await display.locator('iframe').count(),0);assert.equal(writes,1,'Only explicit user action, never an automatic offer/confirm/revoke retry');x.f.unchanged();
  }finally{await x.close();}
 });
+test('606 delayed native display reads cannot undo confirm/revoke or newer read/error ordering',async()=>{
+ const x=await fixture();const pending=[];let hold=false;
+ try{
+  await claim(x,await offer(x));await confirm(x);
+  const sourceOffer=x.source.getByRole('button',{name:'Begrenzte native Dokumentpräsentation freigeben',exact:true}),receiverConfirm=x.target.getByRole('button',{name:'Begrenzte Dokumentanzeige als Empfänger bestätigen',exact:true}),receiverRevoke=x.target.getByRole('button',{name:'Dokumentpräsentation widerrufen',exact:true}),display=x.target.locator('.surface-native-presentation');
+  await sourceOffer.click();await x.target.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_OFFERED');
+  // Forward real native reads unchanged, delaying only their transport completion.
+  // All subsequent reads are held too, so a later poll cannot mask a stale commit.
+  await x.target.route('**/workspace/surfaces/display-session-v1',async route=>{
+   if(!hold||route.request().postDataJSON()?.operation!=='read'){await route.continue();return;}
+   const actual=await forward549(x.f,route);assert.equal(actual.status,200);assert.equal(actual.tlsAuthorized,true);
+   let release,settled;const gate=new Promise(r=>release=r),done=new Promise(r=>settled=r);pending.push({actual,release,done});
+   const fail=await gate;try{if(fail)await route.abort('connectionfailed');else await route.fulfill({status:actual.status,headers:actual.headers,body:actual.body});}finally{settled();}
+  });
+  const nextRead=async()=>{const index=pending.length;await x.target.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();const end=Date.now()+8000;while(pending.length===index){assert.ok(Date.now()<end,'Actual native display read must be observed');await new Promise(r=>setTimeout(r,10));}return pending[index];};
+  const release=async(row,fail=false)=>{const completed=x.target.waitForEvent(fail?'requestfailed':'requestfinished',r=>r.url().endsWith('/workspace/surfaces/display-session-v1')&&r.postDataJSON()?.operation==='read');row.release(fail);await row.done;await completed;await x.target.evaluate(()=>new Promise(r=>setTimeout(r,0)));};
+  hold=true;const oldOffer=await nextRead();assert.equal(JSON.parse(oldOffer.actual.body).session.state,'OFFERED');await receiverConfirm.focus();await receiverConfirm.press('Enter');await display.locator('iframe').waitFor();await release(oldOffer);assert.equal(await display.getAttribute('data-state'),'DISPLAY_ACTIVE');assert.equal(await display.locator('iframe').count(),1);assert.equal(await receiverConfirm.isDisabled(),true);
+  const oldActive=await nextRead();assert.equal(JSON.parse(oldActive.actual.body).session.state,'ACTIVE');await receiverRevoke.click();await x.target.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_REVOKED');await release(oldActive);assert.equal(await display.getAttribute('data-state'),'DISPLAY_REVOKED');assert.equal(await display.locator('iframe').count(),0);assert.equal(await receiverConfirm.isDisabled(),true);
+  // Two older reads (including an eventual transport error) must lose to a newer
+  // native OFFERED read, with no mutation in this receiver between completions.
+  const older=await nextRead(),olderError=await nextRead();await sourceOffer.click();await x.source.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_OFFERED');hold=false;const newer=x.target.waitForResponse(r=>r.url().endsWith('/workspace/surfaces/display-session-v1')&&r.request().postDataJSON()?.operation==='read'&&r.status()===200);await x.target.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();assert.equal((await(await newer).json()).session.state,'OFFERED');await x.target.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_OFFERED');await release(older);assert.equal(await display.getAttribute('data-state'),'DISPLAY_OFFERED');await release(olderError,true);assert.equal(await display.getAttribute('data-state'),'DISPLAY_OFFERED');assert.equal(await display.getByRole('alert').count(),0);assert.equal(await receiverConfirm.isDisabled(),false);x.f.unchanged();
+ }finally{hold=false;for(const row of pending)row.release(false);await Promise.all(pending.map(row=>row.done));await x.close();}
+});
 // JO259457_RESTRICTED_NATIVE_DISPLAY_END
