@@ -14,11 +14,59 @@ const registration={schemaVersion:'pansphaira.workspace-surface/register/v2',pre
 import {fixture} from './native-fixture.mjs';
 test('607 initial owner projection reads actual existing548 native task rows without raw text, authority or a fabricated Main request',async()=>{const x=await fixture();try{const p=x.snapshot();assert.equal(p.tasks.length,0);assert.equal(p.phase,'PREPARED');assert.equal(p.model,'NOT_RUN');assert.equal(p.executionAuthorityGranted,false);assert.equal(p.independentTargetEffectVerified,false);assert.equal(p.checkpointRequestSent,false);assert.equal(uiTaskDigestV2(JSON.parse(p.snapshotBytes)),p.snapshotDigest);assert.ok(Object.isFrozen(p));}finally{await x.close();}});
 test('607 initial actual608 native preview task remains separate from rendering/profile save; owner snapshot retains native no-send and exact row result digest',async()=>{const x=await fixture();try{const result=x.preview(),p=x.snapshot(),row=p.tasks.find(r=>r.taskId===result.invocationId);assert.equal(row.state,'COMPLETED');assert.equal(row.resultPhase,'PREVIEW_VALIDATED');assert.equal(row.resultDigest,uiTaskDigestV2(result.result));assert.deepEqual(row.constraints,{localOnly:true,noSend:true,personalSave:false,sharedPublish:false});assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0);assert.equal(p.snapshotBytes.includes('Mach die Karte kleiner'),false);assert.equal(p.snapshotBytes.includes('admissionToken'),false);assert.equal(row.independentTargetEffectVerified,true);assert.equal(row.proof.issuerKind,'PAN546_PREVIEW_VALIDATED');assert.equal(row.proof.clientReportedDomCommit,false);assert.equal(row.proof.personalViewPersistenceProduced,false);}finally{await x.close();}});
+test('697 ACT-02 every signed journal event carries the owner-issued versioned action descriptor bound to actual run/task/step/attempt, operation/schema/digests/idempotency/causality; intent acceptance alone never claims rendered or model activity',async()=>{const x=await fixture();try{
+ const result=x.preview(),set=result.observation,p=x.snapshot();
+ const intent=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===result.invocationId),done=p.events.find(e=>e.kind==='INTENT_COMPLETED'&&e.taskId===result.invocationId);
+ assert.ok(intent&&done,'actual signed journal events exist for the preview attempt');
+ const action=intent.action;
+ assert.ok(action,'owner snapshot must carry the owner-issued action descriptor on the signed journal event');
+ assert.equal(action.schemaVersion,'pansphaira.workspace-context/event-action/v1');
+ assert.equal(action.taskId,result.invocationId);
+ assert.equal(action.runId,'operation:ui-invocation-'+result.invocationId.slice(11));
+ assert.equal(action.stepId,'step:'+result.invocationId,'step identity is the full unambiguous owner task id');
+ assert.equal(action.attempt,1,'the actual reserved attempt is attempt 1');
+ assert.equal(action.capability,'pan.workspace.view.preview/v1');
+ assert.equal(action.operationSchemaVersion,'pansphaira.workspace-module-view/preview/v1');
+ assert.equal(action.argumentDigest,intent.payload.argumentDigest);
+ assert.equal(action.requestDigest,intent.payload.requestDigest);
+ assert.deepEqual(action.idempotency,{operationId:action.runId,taskRequestDigest:intent.payload.requestDigest},'idempotency binds the real budget operation and row request digest');
+ assert.deepEqual(action.causal,set.causal,'causal binding matches the actual admitted candidate set');
+ assert.deepEqual(action.expectedRevisions,set.expectedRevisions,'expected revisions come from the actual admitted candidate');
+ assert.equal(action.model,'NOT_RUN');assert.equal(action.executionAuthorityGranted,false);
+ assert.ok(Object.isFrozen(action));
+ assert.deepEqual(done.action,action,'the same attempt descriptor is stable across events of the task');
+ assert.ok(p.events.filter(e=>e.taskId===result.invocationId).every(e=>e.action!==undefined));
+ const small=x.snapshot('SPECIALIST_PREVIEW');
+ assert.equal(small.events.find(e=>e.taskId===result.invocationId).action,undefined,'specialist audience stays minimized');
+ // descriptor exposes no raw args/prompt and no independent effect claim beyond accepted intent
+ assert.equal(JSON.stringify(p.events).includes('Mach die Karte kleiner'),false);
+ assert.equal(intent.payload.state,'ACCEPTED');
+ // checkpoint family has no budget run/causal set: the descriptor states those
+ // facts as explicitly unavailable nulls instead of fabricating them.
+ x.projection.correct(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/resource-correction/v1',context:x.f.verification(x.tab),kind:'OBJECT',objectId:'AP-PAN516-MATCHED-01',valueRef:'OBJ:CORRECTED-ONE'});
+ const after=x.snapshot(),cp=after.events.find(e=>e.taskId.startsWith('checkpoint:'));
+ assert.ok(cp&&cp.action,'checkpoint events carry the same versioned descriptor shape');
+ assert.equal(cp.action.runId,null,'no native budget run exists for a checkpoint task');
+ assert.equal(cp.action.causal,null);assert.equal(cp.action.expectedRevisions,null);assert.equal(cp.action.operationSchemaVersion,null,'checkpoint arguments carry no operation schema; never fabricated');
+ assert.equal(cp.action.taskId,cp.taskId);assert.equal(cp.action.model,'NOT_RUN');
+ // origin-epoch redaction applies to the descriptor itself: after revoke/switch no
+ // retired run binding, digest or causal ref survives in the live projection bytes.
+ const runId=intent.action.runId,argDigest=intent.payload.argumentDigest;
+ x.projection.revoke(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+ x.projection.providerSwitch(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+ const retiredView=x.snapshot();
+ assert.ok(retiredView.events.some(e=>e.taskId===result.invocationId&&e.kind==='PRIVACY_REDACTED'&&e.action===undefined),'retired-epoch events expose no action descriptor');
+ assert.equal(retiredView.snapshotBytes.includes(runId),false,'retired run binding must not reappear');
+ assert.equal(retiredView.snapshotBytes.includes(argDigest),false,'retired argument digest must not reappear');
+}finally{await x.close();}});
+
 test('607 initial native owner close/reopen retains same canonical task snapshot, not a process-restart or completion-event acceptance claim',async()=>{const x=await fixture();try{x.preview();const before=x.snapshot();x.reopenOwner();const after=x.snapshot();assert.equal(after.snapshotDigest,before.snapshotDigest);assert.equal(after.snapshotBytes,before.snapshotBytes);assert.equal(after.tasks.length,1);assert.equal(after.tasks[0].state,'COMPLETED');assert.equal(after.journalContractImplemented,true);assert.equal(after.independentTargetEffectVerified,true);assert.equal(after.events.filter(e=>e.kind==='INTENT_COMPLETED').length,1);}finally{await x.close();}});
 test('607 initial specialist audience is its own minimized native task projection, not the complete Main task bytes',async()=>{const x=await fixture();try{x.preview();const main=x.snapshot(),small=x.snapshot('SPECIALIST_PREVIEW');assert.equal(small.audience,'SPECIALIST_PREVIEW');assert.notEqual(small.snapshotDigest,main.snapshotDigest);assert.equal(small.tasks.length,1);assert.equal(Object.hasOwn(small.tasks[0],'resourceRefs'),false);assert.equal(small.tasks[0].constraints.noSend,true);assert.equal(small.snapshotBytes.includes('AP-PAN516-MATCHED-01'),false);assert.equal(small.executionAuthorityGranted,false);}finally{await x.close();}});
 test('607 initial owner snapshot denies caller proof/authority/audience/data extras, copied owner and accessors before reading; foreign principal cannot read own task',async()=>{const x=await fixture();try{x.preview();const req={schemaVersion:'pansphaira.workspace-context-projection/snapshot-request/v1',audience:'MAIN_CONTRACT'};for(const bad of [{...req,noSend:false},{...req,proof:'EXECUTOR'},{...req,tasks:[]},{...req,audience:'FOREIGN_MODEL'}])assert.throws(()=>x.projection.snapshot(x.tab.headers,bad),/CONTEXT_PROJECTION_/);let reads=0;const bad={schemaVersion:req.schemaVersion};Object.defineProperty(bad,'audience',{enumerable:true,get(){reads++;return req.audience;}});assert.throws(()=>x.projection.snapshot(x.tab.headers,bad),/CONTEXT_PROJECTION_/);assert.equal(reads,0);assert.throws(()=>createNativeWorkspaceContextProjectionV1({sessions:x.f.sessions,tasks:{...x.tasks}}),/UI_TASK_OWNER_DENIED/);const foreign=x.f.tab(x.f.issue('synthetic:other-reader','reader'));assert.equal(x.projection.snapshot(foreign.headers,req).tasks.length,0);assert.equal(x.snapshot().tasks.length,1);}finally{await x.close();}});
 
 test('607 actual existing597 document target completion/current548 display task is projected, never omitted or promoted from acceptance to render',async()=>{
+
+
  const x=await fixture();try{
   const target=x.f.tab(x.tab.headers);target.surface=x.surfaces.register(target.headers,registration);target.headers={...target.headers,'x-pan597-surface':target.surface.surfaceId,'x-pan597-proof':target.surface.surfaceProof};
   const source=x.surfaces.register(x.tab.headers,{...registration,previousSurfaceId:x.tab.headers['x-pan597-surface'],previousProof:x.tab.headers['x-pan597-proof']});x.tab.headers={...x.tab.headers,'x-pan597-surface':source.surfaceId,'x-pan597-proof':source.surfaceProof};
