@@ -1,5 +1,5 @@
 import {spawnSync} from 'node:child_process';
-const files=['tests/pan542/native-human-backend.test.mjs','tests/pan542/registration.test.mjs'];
+const files=['tests/pan542/native-human-backend.test.mjs','tests/pan542/ks-price-variance-query.test.mjs','tests/pan542/registration.test.mjs'];
 try {
   const args=process.argv.slice(2);
   if(args.length===1&&args[0]==='--list')process.stdout.write(JSON.stringify(files)+'\n');
