@@ -66,6 +66,7 @@ function boundProof(a,row,ref){const core=origin(a,row),p=proofFor(a,ref);
  }
  const journal=Object.freeze({
   actor,stream,origin,
+  originPrivacyEpoch(headers,taskId){const a=actor(headers),intent=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,taskId);if(!intent)throw Error('CONTEXT_OWNER_INTENT_REQUIRED');const e=verifiedEnvelope(intent,'event');if(e.privacyEpoch!==intent.privacy_epoch)throw Error('CONTEXT_OWNER_PRIVACY_EPOCH_BYTES_CONFLICT');return e.privacyEpoch;},
   sourceClock(a,e){
    const row=db.prepare('SELECT * FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').get(a.digest,e.seq);if(!row)return null;
    if(typeof row.bytes!=='string'||sign('event-clock',row.bytes)!==row.signature)throw Error('EVENT_SOURCE_CLOCK_SIGNATURE_DENIED');
