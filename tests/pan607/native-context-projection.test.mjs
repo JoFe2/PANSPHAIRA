@@ -353,3 +353,119 @@ test('700 REC-01 repair03 sourceTimeAvailable tracks only the verified signed pr
  assert.equal(restored.steps.find(s=>s.seq===done.seq).sourceTimeAvailable,true,'restored genuine sidecar reads available again deterministically');
  assert.deepEqual(effectCounters(x),effects,'tamper probe left the signed store byte-identical: zero reader effects');
 }finally{await x.close();}});
+
+const stepDetailRequest=(ownerSeq,audience='MAIN_CONTRACT')=>({schemaVersion:'pansphaira.workspace-context-projection/step-detail-request/v1',audience,ownerSeq});
+function stepDetailFacts(x){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ return {taskRows:JSON.stringify(db.prepare('SELECT command_id,request_digest,original_command,principal_digest,state,revision,result_json FROM workspace_ui_tasks_v2 ORDER BY command_id').all()),
+  outbox:JSON.stringify(db.prepare('SELECT principal_digest,seq,event_key,task_id,task_revision,kind,privacy_epoch,bytes,signature FROM workspace_ui_context_outbox_v1 ORDER BY seq').all()),
+  projection:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_projection_v1 ORDER BY seq').all()),
+  clocks:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_event_clock_v1 ORDER BY seq').all()),
+  proofs:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_proofs_v1 ORDER BY proof_id').all()),
+  control:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_control_v1').all()),
+  storeRevision:x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,
+  snapshotDigest:x.snapshot().snapshotDigest};}
+test('701 REC-02 step detail binds the exact signed recorded step: owner seq/run/step/attempt, recorded operation and digests, version-exact recorded refs, step-attached proof only, recorded facts separated from honest unavailables, zero reader effects',async()=>{const x=await fixture();try{
+ assert.equal(typeof x.projection.stepDetail,'function','REC-02 step-detail owner read not yet delivered');
+ const result=x.preview(),p=x.snapshot();
+ const accepted=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===result.invocationId),completed=p.events.find(e=>e.kind==='INTENT_COMPLETED'&&e.taskId===result.invocationId);
+ const before=stepDetailFacts(x);
+ const d=x.projection.stepDetail(x.tab.headers,stepDetailRequest(accepted.seq));
+ assert.equal(d.mode,'STEP_DETAIL');assert.equal(d.schemaVersion,'pansphaira.workspace-context-projection/step-detail/v1');
+ assert.equal(d.availability,'AVAILABLE');assert.equal(d.gap,null);assert.equal(d.ownerSeq,accepted.seq);assert.ok(Object.isFrozen(d));
+ assert.equal(d.step.taskId,result.invocationId,'detail binds the exact recorded task of the selected signed step');
+ assert.equal(d.step.kind,'INTENT_ACCEPTED');assert.equal(d.step.ownerSequence,accepted.seq,'owner sequence is the selected signed seq, never renumbered');
+ assert.equal(d.step.taskRevision,accepted.taskRevision);assert.equal(d.step.eventDigest,accepted.eventDigest);
+ assert.equal(d.step.action.runId,'operation:ui-invocation-'+result.invocationId.slice(11),'run/step/attempt come from the recorded action descriptor');
+ assert.equal(d.step.action.stepId,'step:'+result.invocationId);assert.equal(d.step.action.attempt,1);
+ assert.equal(d.step.action.capability,'pan.workspace.view.preview/v1');assert.equal(d.step.action.operationSchemaVersion,'pansphaira.workspace-module-view/preview/v1','recorded operation schema version, never today inference');
+ assert.equal(d.step.recorded.requestDigest,accepted.payload.requestDigest);assert.equal(d.step.recorded.argumentDigest,accepted.payload.argumentDigest);
+ assert.equal(d.step.recorded.state,'ACCEPTED','recorded state at the selected seq, never the current COMPLETED row');
+ assert.equal(d.step.recorded.resultDigest,null,'no completion result existed at the selected seq');
+ assert.deepEqual(d.step.recorded.resourceRefs,accepted.payload.resourceRefs,'version-exact recorded refs come from the signed envelope');
+ assert.equal(d.step.recorded.resourceRefs.objectRef.objectId,x.tab.context.primaryObject.objectId);
+ assert.deepEqual(d.step.recorded.expectedRevisions,result.observation.expectedRevisions,'expected revisions are the recorded admitted-candidate refs');
+ assert.equal(d.step.proof.present,false,'the selected INTENT_ACCEPTED step carries no attached proof; no later completion proof backfill');
+ assert.equal(d.step.proof.reason,'NO_PROOF_ATTACHED_TO_SELECTED_STEP');
+ assert.equal(d.step.sourceTimeAvailable,true,'the signed producer-clock sidecar of this append is the only source time');
+ assert.equal(d.decisionRationale.availability,'UNAVAILABLE_NOT_RECORDED','no rationale was ever recorded: honest absence, no invented model reasoning');
+ assert.equal(d.businessBeforeAfter.availability,'UNAVAILABLE_NOT_RECORDED','no business before/after payload was recorded on this preview seam');
+ assert.equal(d.approval.availability,'UNAVAILABLE_NOT_RECORDED','this qualified path records no approval fact');
+ assert.equal(d.derivedSummaries.available,false);assert.equal(d.derivedSummaries.reason,'NO_DERIVED_SUMMARY_SOURCE');assert.equal(d.model,'NOT_RUN');
+ assert.equal(d.sourceProof.independentTargetEffectVerified,false,'a digest is not permission or independent source proof');
+ assert.equal(d.requestSelection.requestArguments,'NOT_EXPORTED','raw recorded arguments stay inside the owner: digests only');
+ assert.equal(d.requestSelection.selectedEventResult,'RECORDED',d.step.kind);
+ assert.equal(canonicalJson(d).includes('Mach die Karte kleiner'),false,'no raw prompt/private context in detail bytes');
+ assert.deepEqual(stepDetailFacts(x),before,'step detail causes zero task/outbox/proof/clock/control/store/snapshot effects');
+ // forward detail on the later completion step: exactly the recorded result/proof facts of THAT step
+ const d2=x.projection.stepDetail(x.tab.headers,stepDetailRequest(completed.seq));
+ assert.equal(d2.step.kind,'INTENT_COMPLETED');assert.equal(d2.step.recorded.state,'COMPLETED');
+ assert.equal(d2.step.recorded.resultDigest,completed.payload.resultDigest);assert.equal(d2.step.recorded.resultDigest,uiTaskDigestV2(result.result));
+ assert.equal(d2.step.proof.present,true,'the completion step carries its own bound step-attached proof');
+ assert.equal(d2.step.proof.proofRef,completed.payload.proofRef);
+ assert.equal(d2.step.proof.issuerKind,'PAN546_PREVIEW_VALIDATED');assert.equal(d2.step.proof.argumentDigest,accepted.payload.argumentDigest,'proof must bind the recorded original argument digest');
+ assert.equal(d2.step.proof.evidence.clientReportedDomCommit,false,'proof evidence stays exactly the recorded target facts');
+ assert.equal(d2.step.proof.originalRequestDigest,accepted.payload.requestDigest,'proof binds the recorded original request digest');
+ assert.equal(d2.step.proof.originalRequestDigest,result.observation.idempotency.taskRequestDigest,'proof request digest matches the actual durable task-row request digest');
+ assert.deepEqual(stepDetailFacts(x),before,'both details still cause zero effects');
+ // HISTORY-vs-detail consistency and repeated backwards/forwards selects cause zero effects
+ for(const seq of [accepted.seq,completed.seq,accepted.seq,completed.seq,accepted.seq]){
+  const h=x.projection.history(x.tab.headers,historyRequest(seq)),dd=x.projection.stepDetail(x.tab.headers,stepDetailRequest(seq));
+  const hs=h.steps.find(s=>s.seq===seq);
+  assert.equal(dd.step.state,hs.state,'detail and neutral history steps agree on the recorded state');
+  assert.equal(dd.step.eventDigest,hs.eventDigest);}
+ assert.deepEqual(stepDetailFacts(x),before,'repeated backwards/forwards selects cause zero FACH/TOOL/PROVIDER/APPROVE/RESUME/DISPATCH effects');
+ // audience minimization and typed request closedness before any access
+ const small=x.projection.stepDetail(x.tab.headers,stepDetailRequest(accepted.seq,'SPECIALIST_PREVIEW'));
+ assert.equal(Object.hasOwn(small.step,'action'),false,'specialist audience never receives the action descriptor');
+ assert.equal(Object.hasOwn(small.step.recorded,'resourceRefs'),false,'specialist audience never receives recorded resource refs');
+ assert.deepEqual(stepDetailFacts(x),before,'minimized reads change nothing either');
+ for(const bad of [{...stepDetailRequest(1),proof:'EXECUTOR'},{...stepDetailRequest(1),audience:'FOREIGN_MODEL'},{...stepDetailRequest(1),ownerSeq:1.5},{...stepDetailRequest(1),grant:true},stepDetailRequest(0),{...stepDetailRequest(1),taskId:result.invocationId}])
+  assert.throws(()=>x.projection.stepDetail(x.tab.headers,bad),/CONTEXT_PROJECTION_REQUEST_DENIED/,'closed request contract: no caller proof/grant/taskId selectors, no bad seq, no foreign audience');
+ assert.throws(()=>x.projection.stepDetail(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/step-detail-request/v2',audience:'MAIN_CONTRACT',ownerSeq:1}),/CONTEXT_PROJECTION_REQUEST_DENIED/,'unsupported version denied honestly');
+ // forged proof bytes on the step-attached proof fail closed via the existing journal fence
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const proofRow=db.prepare('SELECT * FROM workspace_ui_context_proofs_v1 WHERE task_id=?').get(result.invocationId);
+ db.prepare('UPDATE workspace_ui_context_proofs_v1 SET bytes=? WHERE proof_id=?').run(proofRow.bytes.replace('"PAN546_PREVIEW_VALIDATED"','"PAN597_DOCUMENT_ACCEPTED"'),proofRow.proof_id);
+ assert.throws(()=>x.projection.stepDetail(x.tab.headers,stepDetailRequest(completed.seq)),/CONTEXT_OWNER_SIGNATURE_DENIED|CONTEXT_PROOF_BYTES_DENIED/,'changed original proof bytes deny the detail; no cached fallback');
+ db.prepare('UPDATE workspace_ui_context_proofs_v1 SET bytes=? WHERE proof_id=?').run(proofRow.bytes,proofRow.proof_id);
+ db.prepare('UPDATE workspace_ui_context_proofs_v1 SET principal_digest=? WHERE proof_id=?').run('foreign-principal-digest',proofRow.proof_id);
+ assert.throws(()=>x.projection.stepDetail(x.tab.headers,stepDetailRequest(completed.seq)),/CONTEXT_PROOF_SCOPE_DENIED/,'proof reassigned to a foreign principal cannot launder the step detail');
+ db.prepare('UPDATE workspace_ui_context_proofs_v1 SET principal_digest=? WHERE proof_id=?').run(proofRow.principal_digest,proofRow.proof_id);
+ const reforged=x.projection.stepDetail(x.tab.headers,stepDetailRequest(completed.seq));
+ assert.equal(reforged.step.proof.proofRef,completed.payload.proofRef,'restored genuine step-attached proof reads deterministically');
+ assert.deepEqual(stepDetailFacts(x),before,'forgery probes leave the signed store byte-identical: zero reader effects');
+ // unrecorded future seq stays an honest gap bound to the current signed head
+ const future=x.projection.stepDetail(x.tab.headers,stepDetailRequest(p.streamHead.seq+5));
+ assert.equal(future.availability,'UNAVAILABLE');assert.equal(future.gap.reason,'SEQ_UNRECORDED');assert.equal(future.step,null);assert.equal(future.streamHead.seq,p.streamHead.seq,'no renumbering');
+ assert.deepEqual(stepDetailFacts(x),before,'gap reads change nothing');
+ // #701 review01: no fabricated pause availability claims; pause is a separate owner control
+ assert.equal(Object.hasOwn(d,'nativePauseDelivered'),false,'a step-detail read must not claim pause delivery either way');
+ assert.equal(d.pauseOrResumeAuthorized,false);
+ // specialist minimization: raw proof evidence/request digests stay MAIN_CONTRACT-only
+ const smallDone=x.projection.stepDetail(x.tab.headers,stepDetailRequest(completed.seq,'SPECIALIST_PREVIEW'));
+ assert.equal(smallDone.step.proof.present,true,'specialist still sees the minimized step-proof summary');
+ assert.equal(smallDone.step.proof.issuerKind,'PAN546_PREVIEW_VALIDATED');
+ assert.equal(Object.hasOwn(smallDone.step.proof,'evidence'),false,'raw proof evidence never crosses to the specialist audience');
+ assert.equal(Object.hasOwn(smallDone.step.proof,'originalRequestDigest'),false,'original request digest stays MAIN_CONTRACT-only');
+ assert.equal(Object.hasOwn(smallDone.step,'action'),false);
+ assert.equal(canonicalJson(smallDone).includes(x.tab.context.primaryObject.objectId),false,'specialist detail bytes carry no source refs');
+ assert.deepEqual(stepDetailFacts(x),before,'minimized detail reads change nothing');
+ // foreign principal: zero-effect honest gap or scoped denial, never another tenant content
+ const foreign=x.f.tab(x.f.issue('synthetic:other-detail','reader'));
+ const fr=x.projection.stepDetail(foreign.headers,stepDetailRequest(accepted.seq));
+ assert.equal(fr.availability,'UNAVAILABLE');assert.equal(fr.gap.reason,'SEQ_UNRECORDED','foreign principal has no recorded step at that seq; nothing leaks');
+ assert.deepEqual(stepDetailFacts(x),before,'foreign probe changes nothing on the owner store');
+ // current authorization applies on every read: revoke denies content, providerSwitch cannot resurrect retired refs.
+ // The LIVE snapshot legitimately re-derives after a privacy switch, so compare signed durable rows only here.
+ const {snapshotDigest:preSwitchSnapshotDigest,...preSwitch}=stepDetailFacts(x);
+ x.projection.revoke(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+ assert.throws(()=>x.projection.stepDetail(x.tab.headers,stepDetailRequest(accepted.seq)),/CONTEXT_PRIVACY_REVOKED/,'revoked reader gets no historical detail restore');
+ x.projection.providerSwitch(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+ const retired=x.projection.stepDetail(x.tab.headers,stepDetailRequest(accepted.seq));
+ assert.equal(retired.availability,'UNAVAILABLE');assert.equal(retired.gap.reason,'SOURCE_RETIRED');assert.equal(retired.step,null);
+ assert.equal(canonicalJson(retired).includes(x.tab.context.primaryObject.objectId),false,'revoke+providerSwitch cannot resurrect retired refs or raw bytes');
+ assert.equal(canonicalJson(retired).includes('operation:ui-invocation-'+result.invocationId.slice(11)),false,'retired run binding never restored');
+ assert.equal(stepDetailFacts(x).snapshotDigest!==preSwitchSnapshotDigest,true,'the owner revoke/switch itself honestly re-derives the LIVE snapshot');
+ const {snapshotDigest:postSwitchSnapshotDigest,...switched}=stepDetailFacts(x);
+ assert.deepEqual(switched,preSwitch,'the step-detail reads around revoke/switch changed zero signed task/outbox/proof/clock rows: retired steps stay redacted, never rewritten');
+}finally{await x.close();}});
