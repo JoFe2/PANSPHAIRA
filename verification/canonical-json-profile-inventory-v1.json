@@ -987,6 +987,14 @@
       "fromSha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
       "toSha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e",
       "reason": "Register exactly the two UI-ACT-699 source-only semantic action-anchor inputs (resolver SOURCE and focused contract test VALIDATOR) as additive members of the existing PAN548 owner inside the generator registration lists and the checksum ledger, without executing a broad refresh. Preserve all 110 prior migrations, immutable base obligations, 13 pinned profiles, graph104/all109 owners, unchanged scanner/validator semantics, original byte caps, native guards and the 1792-entry runnable inventory. The unchanged mechanical scanner measures 1317 files, 352 import sites in 351 files and 2872 unique ledger paths after these two additive source files. This inventory registration grants no browser, CI, release or whole699 acceptance."
+    },
+    {
+      "migrationId": "UI-REC-702-NATIVE-REJECT/INTEGRITY-GENERATOR/V112",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 112,
+      "fromSha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e",
+      "toSha256": "265554d9eff84c0415f6beaea328f471d651de2324ffa9322740a2d44831cdcc",
+      "reason": "Fold the UI-REC-702 native REJECT backend regression into the already-owned PAN541-governed tests/pan550/native-approval.test.mjs, keeping the existing PAN541 shared-shell owner at its published 128-input bound with no new file, member or pipeline; all prior browser tests, assertions and the 550 owned-browser guard are retained. The generator additionally restores four previously published generator-owned DAG inputs (pan542 KS-price-variance query test/source/doc and pan608 action-observation test) that an earlier regeneration had dropped from the generator assembly, preserving all published tuples and relative order. Preserve all 120 prior migrations, immutable base obligations, 13 pinned profiles, graph104/all109 owners, unchanged scanner/validator semantics, original byte caps, native guards and the 1792-entry runnable inventory. The unchanged mechanical scanner measures 1317 files, 352 import sites in 351 files and 2872 unique ledger paths, identical to published main. This inventory registration grants no browser, CI, release or whole702 acceptance; the guarded550 browser seams remain unsupported NONPASS here."
     }
   ],
   "scanScope": {
@@ -1110,7 +1118,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e"
+      "sha256": "265554d9eff84c0415f6beaea328f471d651de2324ffa9322740a2d44831cdcc"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1916,7 +1924,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e",
+      "sha256": "265554d9eff84c0415f6beaea328f471d651de2324ffa9322740a2d44831cdcc",
       "basis": "profile-version-migration"
     },
     {
