@@ -1034,8 +1034,8 @@ Object.freeze({
   "path": "scripts/refresh-integrity-data.mjs",
   "profileVersion": 112,
   "fromSha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e",
-  "toSha256": "92c4e7468914488d468abd24bfd3e133c5fa029909f28841b2edbd14c59f6549",
-  "reason": "Register exactly the one UI-REC-702 source-only native-reject backend test (VALIDATOR) as an additive member of the existing PAN541 shared-shell owner inside the generator registration lists and the checksum ledger, without executing a broad refresh. Preserve all 120 prior migrations, immutable base obligations, 13 pinned profiles, graph104/all109 owners, unchanged scanner/validator semantics, original byte caps, native guards and the 1792-entry runnable inventory. The unchanged mechanical scanner measures 1318 files, 352 import sites in 351 files and 2873 unique ledger paths after this single additive source file. This inventory registration grants no browser, CI, release or whole702 acceptance; the guarded550 browser seams remain unsupported NONPASS here."
+  "toSha256": "0ddaea5c7d2a97e2825578795d90fd663ab9c463aaefe8cd829eaa25cb315319",
+  "reason": "Register exactly the one UI-REC-702 source-only native-reject backend test (VALIDATOR) as an additive member of the existing PAN541 shared-shell owner inside the generator registration lists and the checksum ledger, without executing a broad refresh. Preserve all 120 prior migrations, immutable base obligations, 13 pinned profiles, graph104/all109 owners, unchanged scanner/validator semantics, original byte caps, native guards and the 1792-entry runnable inventory. The unchanged mechanical scanner measures 1318 files, 352 import sites in 351 files and 2873 unique ledger paths after this single additive source file, restoring four previously published generator-owned DAG inputs (pan542 KS-price-variance query test/source/doc and pan608 action-observation test) that an earlier regeneration had dropped from the generator assembly. This inventory registration grants no browser, CI, release or whole702 acceptance; the guarded550 browser seams remain unsupported NONPASS here."
 }
 ),
   ]);
