@@ -10,6 +10,7 @@ import {protectedWorkspaceSetupStatusV1} from '../../src/pan527/origin-session-a
 import {createNativeWorkspaceContextProjectionV1} from '../../src/pan548/native-context-projection-v1.mjs';
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
 import {nativeWorkspaceInvocationExecutorConnectionV1} from '../../src/pan548/native-model-free-invocations-v1.mjs';
+import {nativeRows} from '../fixtures/pan515/native-trade-fixture.mjs';
 const registration={schemaVersion:'pansphaira.workspace-surface/register/v2',previousSurfaceId:null,previousProof:null,localGeneration:1,pinned:false,dirty:false};
 import {fixture} from './native-fixture.mjs';
 test('607 initial owner projection reads actual existing548 native task rows without raw text, authority or a fabricated Main request',async()=>{const x=await fixture();try{const p=x.snapshot();assert.equal(p.tasks.length,0);assert.equal(p.phase,'PREPARED');assert.equal(p.model,'NOT_RUN');assert.equal(p.executionAuthorityGranted,false);assert.equal(p.independentTargetEffectVerified,false);assert.equal(p.checkpointRequestSent,false);assert.equal(uiTaskDigestV2(JSON.parse(p.snapshotBytes)),p.snapshotDigest);assert.ok(Object.isFrozen(p));}finally{await x.close();}});
@@ -469,3 +470,188 @@ test('701 REC-02 step detail binds the exact signed recorded step: owner seq/run
  const {snapshotDigest:postSwitchSnapshotDigest,...switched}=stepDetailFacts(x);
  assert.deepEqual(switched,preSwitch,'the step-detail reads around revoke/switch changed zero signed task/outbox/proof/clock rows: retired steps stay redacted, never rewritten');
 }finally{await x.close();}});
+
+// #704 first finite integration trace (REC-05 partial, Preview/Display only):
+// real #608 typed preview + admitted document display over the existing independent
+// executor, #698 pause fence BEFORE the display dispatch, #700/#701 history and
+// step-detail reads under PAUSED with zero counter movement, explicit resume, one
+// real display dispatch plus597 load/permit/ACK (backend protocol receipt, not
+// browser pixels), persisted owner readback via the actual owner reopen, and an
+// honest posthoc controlled negative. No offer line, no single-approval UI, no
+// whole #704 AC02 claim; the unmerged #702/45b delta stays out of this cut.
+const integrationControl=x=>{const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);const c=db.prepare('SELECT * FROM workspace_ui_context_control_v1 WHERE id=1').get();return {state:c?.pause_state??'RUNNING',revision:c?.control_revision??0};};
+const integrationCounters=x=>{const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ return {tasks:JSON.stringify(db.prepare('SELECT command_id,state,revision,result_json FROM workspace_ui_tasks_v2 ORDER BY command_id').all()),
+  outbox:JSON.stringify(db.prepare('SELECT seq,event_key,kind,bytes,signature FROM workspace_ui_context_outbox_v1 ORDER BY seq').all()),
+  proofs:db.prepare('SELECT COUNT(*) c FROM workspace_ui_context_proofs_v1').get().c,
+  fachEvents:nativeRows(x.f.native.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,
+  storeRevision:x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision};};
+test('704 first integration trace: real608 preview then paused admitted display, bounded history/step-detail under PAUSE, explicit resume, single real dispatch with persisted owner seq/proof/idempotency readback',async()=>{const x=await fixture();try{
+ assert.equal(typeof x.invocations.pause,'function','ACT-03 #698 pause must be delivered on the existing invocation owner');
+ // (1) REAL typed preview through the existing independent executor.
+ const preview=x.preview();
+ assert.equal(preview.result.phase,'PREVIEW_VALIDATED');assert.equal(preview.task.state,'COMPLETED');
+ let p=x.snapshot();
+ const accepted=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===preview.invocationId),previewDone=p.events.find(e=>e.kind==='INTENT_COMPLETED'&&e.taskId===preview.invocationId);
+ assert.equal(p.events.filter(e=>e.kind==='TARGET_ATTEMPTED'&&e.taskId===preview.invocationId).length,1,'the actual dispatch boundary is signed exactly once');
+ const previewRow=p.tasks.find(r=>r.taskId===preview.invocationId);
+ assert.equal(previewRow.proof.issuerKind,'PAN546_PREVIEW_VALIDATED');assert.equal(previewRow.resultDigest,uiTaskDigestV2(preview.result));
+ // (2) REAL document display prepared/admitted to a SECOND registered surface with
+ // current selection context (existing608 two-tab recipe), then owner pause BEFORE
+ // the next actual dispatch: the unattempted admission is held behind the fence.
+ const second=x.f.tab(x.tab.headers);
+ second.surface=x.surfaces.register(second.headers,registration);
+ const secondHeaders={...second.headers,'x-pan597-surface':second.surface.surfaceId,'x-pan597-proof':second.surface.surfaceProof};
+ const display=x.invocations.resolve(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resolve/v1',input:{schemaVersion:'pansphaira.workspace-invocation/final-text/v1',inputKind:'TYPED_FINAL_TEXT',final:true,text:'Zeige das ausgewählte Dokument rechts'},context:x.f.verification(x.tab),selectedCardId:'native-review',targetSurfaceId:second.surface.surfaceId});
+ assert.equal(display.outcome,'RESOLVED');
+ const displayMember=display.set.candidates[0];
+ assert.equal(displayMember.capability,'pan.workspace.document.display/v2');
+ const admitted=x.invocations.admit(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/admit/v1',setId:display.set.setId,requestDigest:display.set.requestDigest,setDigest:display.set.setDigest,candidateId:displayMember.candidateId,argumentDigest:displayMember.argumentDigest,policyRef:display.set.policyRef});
+ const displayExecution={schemaVersion:'pansphaira.workspace-invocation/execute/v1',invocationId:admitted.invocationId,admissionToken:admitted.admissionToken,requestDigest:admitted.requestDigest,setDigest:admitted.setDigest,candidateId:admitted.candidateId,argumentDigest:admitted.argumentDigest,policyRef:admitted.policyRef};
+ const pause1=x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0});
+ assert.equal(pause1.state,'PAUSE_REQUESTED');assert.equal(pause1.controlRevision,1);
+ const paused=x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1});
+ assert.equal(paused.state,'PAUSED','the never-dispatched admission is unfired work and must not postpone PAUSED');
+ assert.deepEqual(integrationControl(x),{state:'PAUSED',revision:2});
+ const held=x.snapshot().tasks.find(r=>r.taskId===admitted.invocationId);
+ assert.equal(held===undefined,true,'pause before dispatch leaves no task row behind');
+ assert.equal(x.snapshot().events.some(e=>e.taskId===admitted.invocationId),false,'no journal fact exists for the unattempted display');
+ // (3) WHILE PAUSED: bounded history/step-detail over the preview recorded owner seqs
+ // and the admitted/display-pending timeline via the EXISTING APIs only.
+ const beforeReads=stepDetailFacts(x),countersBefore=integrationCounters(x);
+ const previewDetail=x.projection.stepDetail(x.tab.headers,stepDetailRequest(accepted.seq));
+ assert.equal(previewDetail.step.state,'ACCEPTED','historical detail keeps the recorded per-step state');
+ const previewDoneDetail=x.projection.stepDetail(x.tab.headers,stepDetailRequest(previewDone.seq));
+ assert.equal(previewDoneDetail.step.proof.issuerKind,'PAN546_PREVIEW_VALIDATED','the preview detail binds its own step-attached proof');
+ assert.equal(previewDoneDetail.step.recorded.resultDigest,uiTaskDigestV2(preview.result),'the preview result digest is the signed preview fact, not any later display result');
+ for(const seq of [accepted.seq,previewDone.seq,p.streamHead.seq,previewDone.seq,accepted.seq,p.streamHead.seq+1,accepted.seq]){
+  const h=x.projection.history(x.tab.headers,historyRequest(seq));
+  assert.equal(h.mode,'HISTORY');assert.equal(h.readerEffects,'NONE');assert.equal(h.targetRedispatched,false);assert.equal(h.replayGrantsNoRights,true);
+  if(seq>p.streamHead.seq){assert.equal(h.availability,'UNAVAILABLE');assert.equal(h.gap.reason,'SEQ_UNRECORDED','no invented sequence when no event was recorded');continue;}
+  assert.equal(h.availability,'AVAILABLE');
+  const atSeq=h.steps.find(s=>s.seq===seq);
+  const d=x.projection.stepDetail(x.tab.headers,stepDetailRequest(seq));
+  assert.equal(d.step.eventDigest,atSeq.eventDigest,'back/forward reads agree on the same signed envelope');
+  assert.equal(integrationControl(x).state,'PAUSED','reader loop never touches the pause fence');
+ }
+ assert.deepEqual(stepDetailFacts(x),beforeReads,'reader loop changes zero signed task/outbox/proof/clock rows');
+ assert.deepEqual(integrationCounters(x),countersBefore,'reader loop causes zero Fach/dispatch/profile effects across the paused timeline');
+ assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0,'no personal profile save on Preview/Display');
+ assert.equal(nativeRows(x.f.native.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,0,'independent FACH store untouched by preview, pause and scrubbing');
+ assert.throws(()=>x.invocations.execute(x.tab.headers,displayExecution),/INVOCATION_PAUSED/,'mutation despite pause is a hard error');
+ assert.equal(x.snapshot().events.some(e=>e.taskId===admitted.invocationId&&e.kind==='TARGET_ATTEMPTED'),false,'the denied dispatch journalled no TARGET_ATTEMPTED');
+ assert.deepEqual(integrationCounters(x),countersBefore,'the pause denial itself produced no task/outbox/proof effect');
+ // (4) Explicit authorized resume at the current control revision; the SAME
+ // unattempted admission then dispatches exactly once through the real executor.
+ const resumed=x.invocations.resume(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:2});
+ assert.deepEqual(resumed,{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'RUNNING',controlRevision:3,ownerBound:true});
+ const displayResult=x.invocations.execute(x.tab.headers,displayExecution);
+ assert.equal(displayResult.result.phase,'DOCUMENT_ACCEPTED');assert.equal(displayResult.result.clientRendered,false);assert.equal(displayResult.result.personalProfileSaved,false);
+ const displayCommand=displayResult.result.delivery.originalCommand;
+ assert.throws(()=>x.invocations.execute(x.tab.headers,displayExecution),/INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK/,'retry/replay cannot redispatch the same attempt');
+ // Existing597 backend load/permit/ACK protocol (a backend protocol receipt; NOT
+ // actual browser pixels: physicalPixelSightCertified stays false).
+ x.surfaces.events(secondHeaders,{schemaVersion:'pansphaira.workspace-surface/events/v2',cursor:0});
+ const load=x.surfaces.load(secondHeaders,{schemaVersion:'pansphaira.workspace-surface/load/v2',commandId:displayCommand.commandId});
+ assert.equal(load.projection.objectId,displayCommand.objectId);
+ const permit=x.surfaces.beforeCommit(secondHeaders,{schemaVersion:'pansphaira.workspace-surface/before-dom/v2',commandId:displayCommand.commandId,readToken:load.readToken,projectionDigest:load.projection.projectionDigest,localGeneration:1});
+ const ack=x.surfaces.acknowledge(secondHeaders,{schemaVersion:'pansphaira.workspace-surface/render-ack/v2',commandId:displayCommand.commandId,commitToken:permit.commitToken,projectionDigest:load.projection.projectionDigest,localGeneration:1,contextEpoch:permit.surface.contextEpoch,domCommitted:true});
+ assert.equal(ack.status,'RENDERED');assert.equal(ack.render.physicalPixelSightCertified,false,'backend protocol receipt only, no pixel-sight claim');
+ // LIVE fresh snapshot: display row completed honestly; preview attempt stays single.
+ const live=x.snapshot();
+ assert.equal(live.phase,'PREPARED');assert.equal(live.model,'NOT_RUN');assert.equal(live.executionAuthorityGranted,false);
+ const displayRow=live.tasks.find(r=>r.taskId===admitted.invocationId);
+ assert.equal(displayRow.state,'COMPLETED');assert.equal(displayRow.resultDigest,uiTaskDigestV2(displayResult.result));
+ const displayDone=live.events.find(e=>e.taskId===displayCommand.commandId&&e.kind==='INTENT_COMPLETED');
+ assert.ok(displayDone,'the child display command completed inside the same signed owner stream');
+ assert.equal(live.events.filter(e=>e.taskId===preview.invocationId&&e.kind==='TARGET_ATTEMPTED').length,1,'preview dispatch stayed exactly one across the whole trace');
+ assert.equal(live.events.filter(e=>e.taskId===admitted.invocationId&&e.kind==='TARGET_ATTEMPTED').length,1,'display dispatch journalled exactly once');
+ // The PREVIEW step detail must not borrow the later DISPLAY result/current refs.
+ const previewDetailAgain=x.projection.stepDetail(x.tab.headers,stepDetailRequest(previewDone.seq));
+ assert.deepEqual(previewDetailAgain.step,previewDoneDetail.step,'the selected signed preview step is invariant under the later display completion: no borrowed DISPLAY result/current refs and no later proof backfill');
+ assert.equal(previewDetailAgain.streamHead.seq,live.streamHead.seq,'detail honestly reports the current signed stream head after the display completion, never a renumbered or frozen one');
+ assert.equal(canonicalJson(previewDetailAgain.step).includes(displayCommand.commandId),false,'no later display command ref leaks into the earlier preview step');
+ // (5/6) Persisted owner journal/task readback through the ACTUAL owner reopen:
+ // real attempt identities, seq and result refs survive; bounded retention honest.
+ const countersBeforeReopen=integrationCounters(x);
+ x.reopenOwner();
+ const reopened=x.snapshot();
+ assert.deepEqual(reopened.events.map(e=>e.seq),live.events.map(e=>e.seq),'owner reopen re-reads the same signed owner sequences, never renumbers');
+ const reopenedDetail=x.projection.stepDetail(x.tab.headers,stepDetailRequest(previewDone.seq));
+ assert.deepEqual(reopenedDetail.step,previewDoneDetail.step,'step detail after reopen binds the same persisted attempt identity/result digest');
+ assert.deepEqual(integrationCounters(x),countersBeforeReopen,'historical reads and owner reopen cause zero FACH/dispatch/profile effects');
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const idemRow=db.prepare('SELECT original_command FROM workspace_ui_tasks_v2 WHERE command_id=?').get(preview.invocationId);
+ assert.equal(JSON.parse(idemRow.original_command).budgetBinding.operationId,'operation:ui-invocation-'+preview.invocationId.slice(11),'durable idempotency identity remains bound to the real budget operation');
+ assert.deepEqual(integrationControl(x),{state:'RUNNING',revision:3},'the trace ends RUNNING at the durable control frontier');
+}finally{await x.close();}});
+
+test('704 pause-fence part 2: unattempted display admission denied while PAUSED with zero journal/task rows; fence survives history replay; acknowledged pause replay is idempotent; after resume the same admission dispatches once',async()=>{const x=await fixture();try{
+ const preview=x.preview();
+ const second=x.f.tab(x.tab.headers);
+ second.surface=x.surfaces.register(second.headers,registration);
+ const display=x.invocations.resolve(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resolve/v1',input:{schemaVersion:'pansphaira.workspace-invocation/final-text/v1',inputKind:'TYPED_FINAL_TEXT',final:true,text:'Zeige das ausgewählte Dokument rechts'},context:x.f.verification(x.tab),selectedCardId:'native-review',targetSurfaceId:second.surface.surfaceId});
+ const member=display.set.candidates[0];
+ const admitted=x.invocations.admit(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/admit/v1',setId:display.set.setId,requestDigest:display.set.requestDigest,setDigest:display.set.setDigest,candidateId:member.candidateId,argumentDigest:member.argumentDigest,policyRef:display.set.policyRef});
+ const execution={schemaVersion:'pansphaira.workspace-invocation/execute/v1',invocationId:admitted.invocationId,admissionToken:admitted.admissionToken,requestDigest:admitted.requestDigest,setDigest:admitted.setDigest,candidateId:admitted.candidateId,argumentDigest:admitted.argumentDigest,policyRef:admitted.policyRef};
+ assert.deepEqual(x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0}),{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'PAUSE_REQUESTED',controlRevision:1,ownerBound:true});
+ const paused=x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1});
+ assert.deepEqual(paused,{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'PAUSED',controlRevision:2,ownerBound:true});
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const quiet=()=>JSON.stringify(db.prepare('SELECT command_id,state,revision FROM workspace_ui_tasks_v2 ORDER BY command_id').all())+JSON.stringify(db.prepare('SELECT seq,kind,bytes,signature FROM workspace_ui_context_outbox_v1 ORDER BY seq').all());
+ const before=quiet(),beforeStore=x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision;
+ assert.throws(()=>x.invocations.execute(x.tab.headers,execution),/INVOCATION_PAUSED/);
+ assert.equal(nativeRows(x.f.native.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,0);
+ const p=x.snapshot();
+ const previewAccepted=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===preview.invocationId);
+ // Historical replay grants no resume and no rights: reads under PAUSED stay quiet.
+ x.projection.history(x.tab.headers,historyRequest(previewAccepted.seq));
+ x.projection.stepDetail(x.tab.headers,stepDetailRequest(p.streamHead.seq));
+ assert.deepEqual(quiet(),before,'pause denial plus history/step-detail replay change zero task/outbox bytes');
+ // Replay of the acknowledged pause revision is idempotent, not a new pause owner.
+ assert.deepEqual(x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:2}),paused);
+ assert.throws(()=>x.invocations.execute(x.tab.headers,execution),/INVOCATION_PAUSED/,'a second denial attempt is still fenced, still no rows');
+ assert.deepEqual(quiet(),before);
+ assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,beforeStore);
+ // Explicit resume re-opens exactly the same unattempted admission; one real dispatch follows.
+ const resumed=x.invocations.resume(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:2});
+ assert.equal(resumed.state,'RUNNING');assert.equal(resumed.controlRevision,3);
+ const result=x.invocations.execute(x.tab.headers,execution);
+ assert.equal(result.result.phase,'DOCUMENT_ACCEPTED');
+ assert.equal(db.prepare('SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind=?').get(admitted.invocationId,'TARGET_ATTEMPTED').n,1,'after resume the same admission dispatches exactly once');
+}finally{await x.close();}});
+
+test('704 POSTHOC controlled negative (labeled): a deliberately target-drifted display admission after an authorized resume fires the real TARGET_SCOPE_STALE fence once pre-dispatch with zero accept/attempt/UNKNOWN facts and an identical repeat denial; oracle sensitivity on already-GREEN source, not a product RED',async()=>{const x=await fixture();try{
+ const second=x.f.tab(x.tab.headers);
+ second.surface=x.surfaces.register(second.headers,registration);
+ const secondHeaders={...second.headers,'x-pan597-surface':second.surface.surfaceId,'x-pan597-proof':second.surface.surfaceProof};
+ const display=x.invocations.resolve(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resolve/v1',input:{schemaVersion:'pansphaira.workspace-invocation/final-text/v1',inputKind:'TYPED_FINAL_TEXT',final:true,text:'Zeige das ausgewählte Dokument rechts'},context:x.f.verification(x.tab),selectedCardId:'native-review',targetSurfaceId:second.surface.surfaceId});
+ const member=display.set.candidates[0];
+ const admitted=x.invocations.admit(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/admit/v1',setId:display.set.setId,requestDigest:display.set.requestDigest,setDigest:display.set.setDigest,candidateId:member.candidateId,argumentDigest:member.argumentDigest,policyRef:display.set.policyRef});
+ const execution={schemaVersion:'pansphaira.workspace-invocation/execute/v1',invocationId:admitted.invocationId,admissionToken:admitted.admissionToken,requestDigest:admitted.requestDigest,setDigest:admitted.setDigest,candidateId:admitted.candidateId,argumentDigest:admitted.argumentDigest,policyRef:admitted.policyRef};
+ // Fresh fixture: mint the real control row through the observed frontier
+ // 0 -> PAUSE_REQUESTED(1) -> PAUSED(2), then explicitly resume to RUNNING(3).
+ assert.deepEqual(x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0}),{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'PAUSE_REQUESTED',controlRevision:1,ownerBound:true});
+ assert.deepEqual(x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1}),{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'PAUSED',controlRevision:2,ownerBound:true});
+ assert.throws(()=>x.invocations.pause(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0}),/INVOCATION_CONTROL_STALE_REVISION/,'a stale control revision is a hard denial, never a new pause');
+ assert.deepEqual(x.invocations.resume(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:2}),{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'RUNNING',controlRevision:3,ownerBound:true});
+ // The deliberate fault: after the authorized resume, the recorded target peer
+ // drifts, so the real revalidation fence denies BEFORE any accept/dispatch.
+ x.surfaces.state(secondHeaders,{schemaVersion:'pansphaira.workspace-surface/state/v2',connectionEpoch:1,expectedGeneration:1,localGeneration:2,pinned:false,dirty:false});
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const outboxKinds=()=>db.prepare('SELECT kind FROM workspace_ui_context_outbox_v1 WHERE task_id=? ORDER BY seq').all(admitted.invocationId).map(e=>e.kind);
+ assert.deepEqual(outboxKinds(),[],'drift alone records nothing for the unattempted admission');
+ // The injected fault actually fires on the real code path: stale peer denies in
+ // begin() revalidation, so zero accept/attempt/UNKNOWN facts are journalled.
+ assert.throws(()=>x.invocations.execute(x.tab.headers,execution),/INVOCATION_TARGET_SCOPE_STALE/);
+ assert.deepEqual(outboxKinds(),[],'the denied stale admission journalled no INTENT_ACCEPTED/TARGET_ATTEMPTED at all');
+ assert.equal(db.prepare('SELECT count(*) n FROM workspace_ui_tasks_v2 WHERE command_id=?').get(admitted.invocationId).n,0,'no task row was ever created for the denied drift');
+ assert.equal(nativeRows(x.f.native.root,'SELECT COUNT(*) AS count FROM pan542_events')[0].count,0,'the drifted display produced zero FACH mutation');
+ // Replay of the same stale admission repeats the same single denial: no
+ // redispatch, no duplicate events, no blind retry.
+ assert.throws(()=>x.invocations.execute(x.tab.headers,execution),/INVOCATION_TARGET_SCOPE_STALE/);
+ assert.deepEqual(outboxKinds(),[],'the replay cannot duplicate events or blindly retry');
+ assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0,'no profile persistence entered the fault path');
+ assert.deepEqual(integrationControl(x),{state:'RUNNING',revision:3},'the denial changed no control state');
+}finally{await x.close();}});
+
