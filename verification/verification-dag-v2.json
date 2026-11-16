@@ -11902,7 +11902,7 @@
         {
           "path": "tests/pan607/native-context-projection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "21342a0ca918884ac6487fc19e7f290680dcc60f64b58562ee3d9926ff0bc2ae"
+          "sha256": "e0b28e8131782ce1392812e76498fddabaab2650e3b3eb34999479eef7a55272"
         },
         {
           "path": "tests/pan607/native-checkpoints.test.mjs",
