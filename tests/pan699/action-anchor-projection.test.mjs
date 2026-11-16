@@ -91,14 +91,15 @@ test('699 stale current context (epoch change, revision drift, changed view, rem
   assert.equal(revisionDrift.status,'FALLBACK');assert.equal(revisionDrift.reason,'CONTEXT_REVISION_STALE');assert.equal(revisionDrift.uiTargetRef,null);
   const viewChanged=resolver(o,x.current(x.source,{view:{revision:cur.view.revision+1,viewDigest:'0'.repeat(64)}}));
   assert.equal(viewChanged.status,'FALLBACK');assert.equal(viewChanged.reason,'CONTEXT_REVISION_STALE');assert.equal(viewChanged.highlightAllowed,false,'a changed/removed view must not keep a confirmed highlight');
-  // Regression (699-04): connection.begin ALONE has NOT dispatched — the owner
-  // journal holds zero TARGET_ATTEMPTED facts. A legacy ACCEPTED-row observation
-  // carries phase DISPATCHED but no dispatch attestation, so the projection must
-  // stay honest ADMITTED/PENDING and never claim a real target attempt. Exact
-  // dispatch classification after a real connection.dispatch stays OPEN in 699.
+  // Regression (699-04, truth boundary fixed in 699-06): connection.begin ALONE
+  // has NOT dispatched — the owner journal holds zero TARGET_ATTEMPTED facts and
+  // the observation now projects the honest ADMITTED phase (never DISPATCHED
+  // without the durable fact), so the projection stays honest ADMITTED/PENDING
+  // and never claims a real target attempt.
   const connection=nativeWorkspaceInvocationExecutorConnectionV1(x.owner),c0=x.owner.resolve(x.source.headers,x.request('Mach die Karte kleiner','native-review')),a0=x.owner.admit(x.source.headers,x.selection(c0));
   const effect=connection.begin(x.source.headers,x.execution(a0));
-  assert.equal(x.observe(a0.invocationId).phase,'DISPATCHED','sanity: legacy observation says DISPATCHED after begin only');
+  assert.equal(x.observe(a0.invocationId).phase,'ADMITTED','sanity: begin-only is honestly ADMITTED, not DISPATCHED');
+  assert.equal(x.observe(a0.invocationId).attempt,0,'no TARGET_ATTEMPTED fact yet, so no attempt is attested');
   assert.equal(x.journalEvents(a0.invocationId).filter(e=>e.kind==='TARGET_ATTEMPTED').length,0,'sanity: begin journalled no dispatch fact');
   const begun=resolver(x.observe(a0.invocationId),x.current(x.source));
   assert.equal(begun.status,'PENDING');assert.equal(begun.displayPhase,'ADMITTED');assert.equal(begun.highlightAllowed,false);assert.notEqual(begun.displayPhase,'TARGET_ATTEMPTED','begin without connection.dispatch is not proof of a real target attempt');

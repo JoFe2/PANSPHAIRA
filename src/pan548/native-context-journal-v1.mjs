@@ -142,6 +142,11 @@ function boundProof(a,row,ref){const core=origin(a,row),p=proofFor(a,ref);
   sealProjection(bytes){if(typeof bytes!=='string')throw Error('CONTEXT_PROJECTION_BYTES_DENIED');return sign('projection',bytes);},
   verifyProjection(bytes,signature){if(typeof bytes!=='string'||sign('projection',bytes)!==signature)throw Error('CONTEXT_OWNER_PROJECTION_SIGNATURE_DENIED');return JSON.parse(bytes);},
   accepted(headers,taskId){const a=actor(headers),row=rowFor(a,taskId);return append(a,row,'INTENT_ACCEPTED');},
+  // Read-only projection of the data-capability owner's OWN durable dispatch
+  // fact: does a genuine TARGET_ATTEMPTED event exist for this actor's task?
+  // Bound to actor/principal/current-epoch like every other owner read; never a
+  // private DB read from an unbound transport level, never caller-supplied.
+  targetAttempted(headers,taskId){const a=actor(headers),row=rowFor(a,taskId);return db.prepare("SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='TARGET_ATTEMPTED'").get(a.digest,row.command_id).n>0;},
   record(headers,taskId,kind,proofRef=null){if(kind==='TARGET_ATTEMPTED'||kind==='OUTCOME_UNKNOWN')throw Error('CONTEXT_EVENT_KIND_DENIED');const a=actor(headers),row=rowFor(a,taskId);const checkRow=['TARGET_RENDERED','INTENT_COMPLETED','RESULT_CHECKED'].includes(kind)&&row.state==='COMPLETED'?{...row,state:'ACCEPTED'}:row;origin(a,checkRow);if(proofRef!==null)boundProof(a,checkRow,proofRef);return append(a,row,kind,proofRef);},
   // Owner dispatcher boundary fact, callable only inside the owning executor
   // transaction after the live fence recheck: bound to the intent's origin epoch

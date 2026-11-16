@@ -89,13 +89,20 @@ export function createNativeWorkspaceInvocationsV1(options){
    model:'NOT_RUN',modelPlanLineage:'NOT_INFERRED',executionAuthorityGranted:false,...noEffects});
   const state=row?.state??null;
   const proof=row&&(state==='COMPLETED'||state==='OUTCOME_UNCONFIRMED')?t.contextJournal.bestProof(headers,invocationId):null;
-  const phase=!row?(admission?'ADMITTED':'PROPOSED'):state==='ACCEPTED'?'DISPATCHED':state==='COMPLETED'&&proof?'RESULT_CONFIRMED':'UNKNOWN';
+  // Truth boundary (699 P2): DISPATCHED is attested ONLY by the owner's own
+  // durable TARGET_ATTEMPTED journal fact, never by a bare ACCEPTED row —
+  // connection.begin alone reserves the attempt but has not dispatched.
+  const attempted=!!row&&t.contextJournal.targetAttempted(headers,invocationId);
+  const phase=!row?(admission?'ADMITTED':'PROPOSED'):state==='ACCEPTED'?(attempted?'DISPATCHED':'ADMITTED'):state==='COMPLETED'&&proof?'RESULT_CONFIRMED':'UNKNOWN';
+  // Attempt attestation follows the same evidence: a genuine TARGET_ATTEMPTED
+  // fact or a settled outcome row, never a bare reservation.
+  const attempt=!row?0:attempted||state==='COMPLETED'||state==='OUTCOME_UNCONFIRMED'?1:0;
   const result=row?.result_json===null||row===undefined?null:JSON.parse(row.result_json);
   const semanticTarget=member.capability===capabilities[0]
    ?freeze({kind:'MODULE_CARD_INSTANCE',moduleId:member.objectRef.moduleId,viewId:member.objectRef.viewId,objectId:member.objectRef.objectId,instanceId:member.objectRef.instanceId})
    :freeze({kind:'REGISTERED_SURFACE_DOCUMENT',objectId:member.objectRef.objectId,surfaceId:member.targetRef.surfaceId});
   return freeze({schemaVersion:'pansphaira.workspace-action-observation/v1',
-   runId:modelFreeUiBudgetOperationV1(invocationId),taskId:invocationId,stepId:'step:'+invocationId.slice(11),attempt:row?1:0,taskRevision:row?row.revision:null,
+   runId:modelFreeUiBudgetOperationV1(invocationId),taskId:invocationId,stepId:'step:'+invocationId.slice(11),attempt,taskRevision:row?row.revision:null,
    actor:{tenantId:a.p.tenantId,subjectId:a.p.subjectId,role:a.p.role},
    capability:member.capability,operationSchemaVersion:JSON.parse(member.argumentBytes).schemaVersion,
    objectRef:member.objectRef,expectedRevision:member.capability===capabilities[0]?member.revisions.viewRevision:member.documentRef?.dataRevision??null,expectedRevisions:copy(member.revisions),
