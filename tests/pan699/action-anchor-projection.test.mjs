@@ -153,6 +153,41 @@ test('699 accessor/prototype inputs are denied descriptor-safe: no caller getter
   assert.deepEqual(x.before(),prior);assert.equal(x.count(),1);
  }finally{await x.close();}
 });
+ test('699 REVIEW02 C5 class: caller array-index and deep nested accessors never execute; validation consumes only descriptor-safe snapshots and fails closed with typed denial',async()=>{
+ const x=await fixture();try{
+  const r=x.owner.resolve(x.source.headers,x.request('Mach die Karte kleiner','native-review'));
+  const a=x.owner.admit(x.source.headers,x.selection(r));
+  const o=x.owner.execute(x.source.headers,x.execution(a)).observation,cur=x.current(x.source);
+  assert.equal(resolver(o,cur).status,'BOUND','sanity: genuine owner DTOs still bind after the validation-class fix');
+  const d=x.owner.resolve(x.source.headers,x.request('Zeige das ausgewählte Dokument rechts',null,x.target.surface.surfaceId)),da=x.owner.admit(x.source.headers,x.selection(d));
+  const dobs=x.observe(da.invocationId);
+  const docPeer={surfaceId:x.target.surface.surfaceId,revisions:JSON.parse(canonicalJson(d.set.candidates[0].revisions.target))};
+  // Counter measured AFTER all owned setup executes: it spans ONLY resolver
+  // reads below, so any ledger movement there is a product effect.
+  const countBefore=x.count(),beforeRead=x.before();
+  let hits=0;
+  const trap=(base,key)=>{const c={...base};Object.defineProperty(c,key,{enumerable:true,get(){hits++;return c[key];}});return c;};
+  const deny=/ANCHOR_PROJECTION_INPUT_DENIED|ANCHOR_UI_TARGET_REPRESENTATION_ONLY/,why='caller getters must never execute: array indices and every nested revision depth are validated descriptor-safe before any read';
+  // 1) surfaces ARRAY ELEMENT as a getter at a real index (card and document paths).
+  const elementTrap=(arr,key)=>{const c=[...arr];Object.defineProperty(c,key,{enumerable:true,get(){hits++;return arr[key];}});return c;};
+  assert.throws(()=>resolver(o,{...cur,surfaces:elementTrap(cur.surfaces,0)}),deny,why);
+  assert.throws(()=>resolver(dobs,{...cur,surfaces:elementTrap([docPeer],0)}),deny,why);
+  // 2) deep nested accessor inside current.revisions (3rd level+), symmetric in
+  // observation.expectedRevisions.native: even a getter that RETURNS the valid
+  // value is denied outright, it never becomes authority behind a BOUND result.
+  assert.throws(()=>resolver(o,{...cur,revisions:{...cur.revisions,marker:{get deep(){hits++;return 7;}}}}),deny,why);
+  assert.throws(()=>resolver({...o,expectedRevisions:{...o.expectedRevisions,native:{...o.expectedRevisions.native,marker:{get deep(){hits++;return 7;}}}}},cur),deny,why);
+  // 3) array index inside a nested revisions subtree.
+  assert.throws(()=>resolver(o,{...cur,revisions:{...cur.revisions,list:((l)=>{Object.defineProperty(l,0,{enumerable:true,get(){hits++;return 1;}});return l;})([1])}}),deny,why);
+  // 4) length-only hostile array (zero-index getter, invalid length descriptor).
+  assert.throws(()=>resolver(o,{...cur,surfaces:Object.assign(Object.create(Array.prototype),{length:{value:0}})}),deny,why);
+  assert.equal(hits,0,'zero caller getter callbacks may execute across raw array indices and all deeper revision fields');
+  // 5) positives still work and the owner ledger is untouched across ALL reads.
+  assert.equal(resolver(o,cur).status,'BOUND','valid native DTOs still resolve post-fix');
+  assert.equal(x.count(),countBefore,'validation reads never create tasks');
+  assert.deepEqual(x.before(),beforeRead,'validation reads never mutate the owner store');
+ }finally{await x.close();}
+});
 test('699 registry is closed and versioned: exports are exactly the resolver plus read-only registry data, frozen, selector-free',async()=>{
  const mod=await import('../../src/pan548/native-action-anchor-projection-v1.mjs');
  assert.deepEqual(Object.keys(mod).sort(),['resolveWorkspaceActionAnchorV1','workspaceActionAnchorProjectionStatusesV1','workspaceActionAnchorRegistryVersionV1','workspaceSemanticAnchorRegistryV1'].sort(),'no registration or authority-granting export may exist');

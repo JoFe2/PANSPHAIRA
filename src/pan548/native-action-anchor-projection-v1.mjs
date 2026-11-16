@@ -48,6 +48,44 @@ function plainData(value, code) {
   return out;
 }
 
+// Whole-class input validation: recursion covers EVERY depth a read can reach
+// (canonicalJson recursion, array element indices, nested revision objects).
+// Elements/properties are enumerated via own property descriptors only, so no
+// iterator, Symbol or index [[Get]] ever executes a caller callback; accessor,
+// inherited, symbol or extra-invalid descriptors are denied before any read.
+const maxPlainDepth = 8;
+function plainDataDeep(value, code, depth) {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return value;
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw Error(code);
+    return value;
+  }
+  if (typeof value !== 'object' || depth >= maxPlainDepth) throw Error(code);
+  if (Array.isArray(value)) {
+    if (Object.getPrototypeOf(value) !== Array.prototype) throw Error(code);
+    const d = Object.getOwnPropertyDescriptors(value);
+    const ld = Object.prototype.hasOwnProperty.call(d, 'length') ? d.length : null;
+    if (ld === null || !('value' in ld) || ld.enumerable === true || ld.configurable === true
+      || !Number.isSafeInteger(ld.value) || Reflect.ownKeys(d).length !== ld.value + 1) throw Error(code);
+    const out = [];
+    for (let i = 0; i < ld.value; i++) {
+      const ed = Object.prototype.hasOwnProperty.call(d, String(i)) ? d[String(i)] : null;
+      if (ed === null || !ed.enumerable || !('value' in ed)) throw Error(code);
+      out.push(plainDataDeep(ed.value, code, depth + 1));
+    }
+    return out;
+  }
+  if (Object.getPrototypeOf(value) !== Object.prototype) throw Error(code);
+  const d = Object.getOwnPropertyDescriptors(value);
+  const out = {};
+  for (const k of Reflect.ownKeys(d)) {
+    const x = d[k];
+    if (typeof k === 'symbol' || !x.enumerable || !('value' in x)) throw Error(code);
+    out[k] = plainDataDeep(x.value, code, depth + 1);
+  }
+  return out;
+}
+
 function findAnchor(target) {
   return anchors.find((a) => a.kind === target.kind
     && (a.moduleId === undefined || a.moduleId === target.moduleId)
@@ -71,13 +109,19 @@ function validateCurrent(current) {
     throw Error('ANCHOR_PROJECTION_INPUT_DENIED');
   }
   if (c.view !== null) uiTaskClosedV2(c.view, ['revision', 'viewDigest'], 'ANCHOR_PROJECTION_INPUT_DENIED');
+  // Validate the whole surfaces container descriptor-safe first (element
+  // indices are read via descriptors, never [[Get]]), THEN iterate only the
+  // validated plain snapshot: no caller array-element getter may execute.
+  const surfaces = plainDataDeep(c.surfaces, 'ANCHOR_PROJECTION_INPUT_DENIED', 0);
   const seen = new Set();
-  for (const s of c.surfaces) {
+  for (const s of surfaces) {
     const surface = uiTaskClosedV2(s, ['surfaceId', 'revisions'], 'ANCHOR_PROJECTION_INPUT_DENIED');
     if (typeof surface.surfaceId !== 'string' || seen.has(surface.surfaceId)) throw Error('ANCHOR_PROJECTION_INPUT_DENIED');
     seen.add(surface.surfaceId);
   }
-  return c;
+  // Revisions participate in canonicalJson compares at arbitrary depth:
+  // snapshot fully (accessors denied at every depth) before any compare.
+  return {...c, surfaces, revisions: plainDataDeep(c.revisions, 'ANCHOR_PROJECTION_INPUT_DENIED', 0)};
 }
 
 function validateObservation(observation) {
@@ -91,10 +135,11 @@ function validateObservation(observation) {
     || !o.semanticTarget || typeof o.semanticTarget !== 'object') {
     throw Error('ANCHOR_PROJECTION_INPUT_DENIED');
   }
-  // expectedRevisions participates in canonicalJson compares, which execute
-  // getters: snapshot it descriptor-safe first, deny accessors outright.
-  plainData(o.expectedRevisions, 'ANCHOR_PROJECTION_INPUT_DENIED');
-  return o;
+  // expectedRevisions participates in canonicalJson compares at arbitrary
+  // depth: snapshot it fully descriptor-safe first, denying accessors at
+  // EVERY nested depth before any read or compare executes.
+  const expectedRevisions = plainDataDeep(o.expectedRevisions, 'ANCHOR_PROJECTION_INPUT_DENIED', 0);
+  return {...o, expectedRevisions};
 }
 
 function project(status, fields) {
@@ -126,7 +171,6 @@ export function resolveWorkspaceActionAnchorV1(observation, current) {
   if (anchor.capability !== o.capability) return project('FALLBACK', {...base, reason: 'ANCHOR_CAPABILITY_MISMATCH'});
   if (target.objectId !== c.primaryObjectId) return project('FALLBACK', {...base, anchorId: anchor.anchorId, reason: 'OBJECT_MISMATCH'});
   if (c.epoch !== c.expectedEpoch) return project('FALLBACK', {...base, anchorId: anchor.anchorId, reason: 'CONTEXT_EPOCH_STALE'});
-  plainData(c.revisions, 'ANCHOR_PROJECTION_INPUT_DENIED');
   if (canonicalJson(c.revisions)!==canonicalJson(o.expectedRevisions.native)) {
     return project('FALLBACK', {...base, anchorId: anchor.anchorId, reason: 'CONTEXT_REVISION_STALE'});
   }
