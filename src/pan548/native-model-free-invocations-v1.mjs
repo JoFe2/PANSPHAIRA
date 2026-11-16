@@ -26,6 +26,7 @@ const resolutionKeys=['schemaVersion','input','context','selectedCardId','target
 const selectKeys=['schemaVersion','setId','requestDigest','setDigest','candidateId','argumentDigest','policyRef'];
 const executeKeys=['schemaVersion','invocationId','admissionToken','requestDigest','setDigest','candidateId','argumentDigest','policyRef'];
 const observeKeys=['schemaVersion','invocationId'];
+const controlKeys=['schemaVersion','expectedControlRevision'];
 export function createNativeWorkspaceInvocationsV1(options){
  const {sessions,contextSelection,tasks,viewOwner,surfaces}=uiTaskClosedV2(options,['sessions','contextSelection','tasks','viewOwner','surfaces'],'INVOCATION_OWNER_DENIED');
  if(!isNativeWorkspaceContextSelectionV1(contextSelection,sessions?.binding)||!isNativeWorkspaceViewOwnerV1(viewOwner,sessions?.binding,contextSelection))throw Error('INVOCATION_OWNER_DENIED');
@@ -106,9 +107,19 @@ export function createNativeWorkspaceInvocationsV1(options){
    rendered:proof?.kind==='PAN597_DOCUMENT_RENDERED',personalViewPersistenceProduced:result?.personalProfileSaved===true,physicalPixelSightCertified:false,
    expiresAtMs:member.expiresAtMs,constraints:{...member.constraints},
    model:'NOT_RUN',modelPlanLineage:'NOT_INFERRED',executionAuthorityGranted:false,
-   capabilityAvailability:freeze({pause:'UNAVAILABLE',resume:'UNAVAILABLE',cancel:'UNAVAILABLE',offerLineAdapter:'NOT_IMPLEMENTED'})});
+   // ACT-03 #698: pause/resume are real owner-bound control states on the
+   // invocation owner (pause()/resume()/control()). cancel and the offer-line
+   // adapter stay honestly unavailable; pause never claims to cancel, roll back
+   // or undispatch an already-attempted effect.
+   capabilityAvailability:freeze({pause:'AVAILABLE_OWNER_BOUND',resume:'AVAILABLE_OWNER_BOUND',cancel:'UNAVAILABLE',offerLineAdapter:'NOT_IMPLEMENTED'})});
  }
  function candidate(base,args){const argumentBytes=canonicalJson(args),argumentDigest=uiTaskDigestV2(args);const unsigned={schemaVersion:'pansphaira.workspace-invocation/candidate/v1',...base,argumentBytes,argumentDigest,policyRef:workspaceInvocationPolicyRefV1,purpose,constraints};return freeze({...unsigned,candidateId:'candidate:'+uiTaskDigestV2(unsigned)});}
+ function controlRequest(kind,headers,value){
+  const c=uiTaskClosedV2(value,controlKeys,'INVOCATION_CONTROL_INPUT_DENIED');
+  if(c.schemaVersion!=='pansphaira.workspace-invocation/'+kind+'/v1'||!Number.isSafeInteger(c.expectedControlRevision)||c.expectedControlRevision<0)throw Error('INVOCATION_CONTROL_INPUT_DENIED');
+  leading(headers);
+  return kind==='pause'?t.contextJournal.pause(headers,c.expectedControlRevision):t.contextJournal.resume(headers,c.expectedControlRevision);
+ }
  const owner=Object.freeze({
   resolve(headers,value){
    const raw=uiTaskClosedV2(value,resolutionKeys,'INVOCATION_REQUEST_DENIED');
@@ -154,6 +165,13 @@ export function createNativeWorkspaceInvocationsV1(options){
    return freeze({schemaVersion:'pansphaira.workspace-invocation/admission/v1',invocationId:s.core.invocationId,admissionToken,requestDigest:c.requestDigest,setDigest:c.setDigest,candidateId:c.candidateId,argumentDigest:c.argumentDigest,policyRef:c.policyRef,capability:member.capability,expiresAtMs:member.expiresAtMs,constraints,...noEffects});
   },
   execute(headers,value){return executeNativeWorkspaceInvocationV1(owner,headers,value);},
+  // ACT-03 #698 owner-bound cooperative pause/resume/control. Versioned, narrowly
+  // authorized request objects on the existing authenticated owner surface; the
+  // state machine and dispatch fence live in the owner's own SQLite/transaction
+  // domain. Denials never depend on pointer position, response timing or history.
+  pause(headers,value){return controlRequest('pause',headers,value);},
+  resume(headers,value){return controlRequest('resume',headers,value);},
+  control(headers,value){const c=uiTaskClosedV2(value,['schemaVersion'],'INVOCATION_CONTROL_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-invocation/control-read/v1')throw Error('INVOCATION_CONTROL_INPUT_DENIED');leading(headers);return t.contextJournal.controlRead(headers);},
   observe(headers,value){const c=uiTaskClosedV2(value,observeKeys,'INVOCATION_OBSERVATION_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-action-observation/observe/v1'||typeof c.invocationId!=='string'||!/^invocation:[a-f0-9]{32}$/.test(c.invocationId))throw Error('INVOCATION_OBSERVATION_INPUT_DENIED');leading(headers);return observationFor(headers,c.invocationId);},
   read(headers,value){const c=uiTaskClosedV2(value,['schemaVersion','invocationId'],'INVOCATION_READ_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-invocation/read/v1')throw Error('INVOCATION_READ_INPUT_DENIED');leading(headers);const custody=independentReader.read(headers,{schemaVersion:'pansphaira.workspace-ui-task/observe/v1',commandId:c.invocationId,expectedWriterEpoch:t.bootEpoch});return freeze({schemaVersion:'pansphaira.workspace-invocation/readback/v1',invocationId:c.invocationId,task:custody.task,custody,independentRead:true,...noEffects});},
   close(){closed=true;independentReader.close();sets.clear();admissions.clear();owned.delete(owner);},
@@ -165,7 +183,7 @@ export function createNativeWorkspaceInvocationsV1(options){
    const {s,member}=admission;validateSelection(s,c);revalidate(headers,s,member);
    if(t.readRow(c.invocationId))throw Error('INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK');
    const original={schemaVersion:'pansphaira.workspace-invocation/effect-command/v2',invocationId:c.invocationId,request:s.request,set:{...s.core,setDigest:s.setDigest},candidate:member,budgetBinding:modelFreeUiBudgetBindingV1(c.invocationId,t.bootEpoch)};
-   t.transaction(()=>{revalidate(headers,s,member);if(t.readRow(c.invocationId))throw Error('INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK');if(t.db.prepare('SELECT count(*) n FROM workspace_ui_tasks_v2').get().n>=128)throw Error('INVOCATION_TASK_CAPACITY_DENIED');const requestDigest=uiTaskDigestV2(original),binding=modelFreeUiTaskReservationV1({command_id:c.invocationId,original_command:canonicalJson(original),request_digest:requestDigest,principal_digest:a.digest}),{writerEpoch,...reservation}=binding;const reserved=t.budgetConnection.reserveInsideOwnerTransactionV2(reservation);if(reserved.replayed||!t.budgetConnection.markUnknownInsideOwnerTransactionV2(binding.operationId).dispatchGranted)throw Error('INVOCATION_BUDGET_ALREADY_REQUIRES_READBACK');t.db.prepare("INSERT INTO workspace_ui_tasks_v2 VALUES(?,?,?,?,'ACCEPTED',1,NULL)").run(c.invocationId,requestDigest,canonicalJson(original),a.digest);t.contextJournal.accepted(headers,c.invocationId);});
+   t.transaction(()=>{revalidate(headers,s,member);t.contextJournal.guardDispatch(headers);if(t.readRow(c.invocationId))throw Error('INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK');if(t.db.prepare('SELECT count(*) n FROM workspace_ui_tasks_v2').get().n>=128)throw Error('INVOCATION_TASK_CAPACITY_DENIED');const requestDigest=uiTaskDigestV2(original),binding=modelFreeUiTaskReservationV1({command_id:c.invocationId,original_command:canonicalJson(original),request_digest:requestDigest,principal_digest:a.digest}),{writerEpoch,...reservation}=binding;const reserved=t.budgetConnection.reserveInsideOwnerTransactionV2(reservation);if(reserved.replayed||!t.budgetConnection.markUnknownInsideOwnerTransactionV2(binding.operationId).dispatchGranted)throw Error('INVOCATION_BUDGET_ALREADY_REQUIRES_READBACK');t.db.prepare("INSERT INTO workspace_ui_tasks_v2 VALUES(?,?,?,?,'ACCEPTED',1,NULL)").run(c.invocationId,requestDigest,canonicalJson(original),a.digest);t.contextJournal.accepted(headers,c.invocationId);});
    // The owner-issued handle identity is bound privately AFTER commit: a copied or
    // caller-forged object never carries begin/dispatch/UNKNOWN authority, and an
    // aborted begin transaction leaves no handle behind.
@@ -183,6 +201,7 @@ export function createNativeWorkspaceInvocationsV1(options){
    if(!handle||handle.invocationId!==effect.invocationId)throw Error('INVOCATION_HANDLE_UNBOUND');
    t.transaction(()=>{
     revalidate(headers,effect.s,effect.member);
+    t.contextJournal.guardDispatch(headers);
     const row=t.readRow(handle.invocationId);
     if(!row||row.state!=='ACCEPTED'||row.principal_digest!==a.digest)throw Error('INVOCATION_DISPATCH_CUSTODY_DENIED');
     t.contextJournal.dispatchAttempted(headers,handle.invocationId);

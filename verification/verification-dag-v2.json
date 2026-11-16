@@ -11574,7 +11574,7 @@
         {
           "path": "src/pan548/native-model-free-invocations-v1.mjs",
           "role": "SOURCE",
-          "sha256": "8dab25219f27a1295a730d9384eb5450af5c3805e8a214a810ddbce132fa0caf"
+          "sha256": "701c28cc877bbd8325b754c4f66e81b901fabd58fe2dfa16e8872f62eb2c820b"
         },
         {
           "path": "src/pan548/native-invocation-executor-v1.mjs",
@@ -11589,7 +11589,7 @@
         {
           "path": "src/pan548/native-context-journal-v1.mjs",
           "role": "SECURITY",
-          "sha256": "164321dcac47a4d17cbeafed1d21a7db915050702d398602a1318a79d9715b8c"
+          "sha256": "ce82d9110ae260180aafdeb3e9519bf4d0fba997c7ee5fee0d7f7420aa1255a6"
         },
         {
           "path": "src/pan548/native-context-checkpoints-v1.mjs",
@@ -11650,7 +11650,7 @@
         {
           "path": "tests/pan597/browser-pairing.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "73289635b9bb7fda6202a1b8cade0b69b8cbb745dc99df89c59e91ececddd8ff"
+          "sha256": "a2c01acfb2befcdd182edc2e49be99dd9e613e13f40413cb670910db2baf1119"
         },
         {
           "path": "packages/contracts/src/workspace-browser-pairing-v1.ts",
@@ -11789,7 +11789,7 @@
         {
           "path": "tests/pan608/native-invocations.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "3599f7742450ed802a709504e35d2dff3e166aebafda57012493dd0217f732b8"
+          "sha256": "60048c53173cbcf715ea2cfb32d95ab0ad90a95feb977b61045099527395da5e"
         },
         {
           "path": "tests/pan608/browser-invocations.test.mjs",
@@ -11804,7 +11804,7 @@
         {
           "path": "tests/pan608/action-observation.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "6edd2ce2b2ad737369af3a654fe44b712cb76d3b6ecfd488e5df8f93fcb51e2c"
+          "sha256": "27d3f6abf1fb1d8576dc10b6a847ac5c2462db64e4dc8777e94ad4cc899f02dd"
         },
         {
           "path": "docs/architecture/model-free-native-invocations-v1.md",

@@ -1,9 +1,9 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {join}from'node:path';
+import test from 'node:test';import assert from 'node:assert/strict';import {join}from'node:path';import{createHash}from'node:crypto';
 import {nativeViewFixture546}from'../pan546/native-fixture.mjs';
 import {createNativeWorkspaceUiTaskProjectionV2,nativeWorkspaceUiTaskOwnerConnectionV2,uiTaskDigestV2}from'../../src/pan548/native-ui-task-projection-v2.mjs';
 import {createNativeSurfaceProjectionReaderV2}from'../../src/pan546/native-surface-projection-v2.mjs';
 import {createNativeWorkspaceSurfacesV2}from'../../src/pan597/native-surfaces-v2.mjs';
-import {createNativeWorkspaceInvocationsV1,workspaceInvocationPolicyRefV1}from'../../src/pan548/native-model-free-invocations-v1.mjs';
+import {createNativeWorkspaceInvocationsV1,nativeWorkspaceInvocationExecutorConnectionV1,workspaceInvocationPolicyRefV1}from'../../src/pan548/native-model-free-invocations-v1.mjs';
 import {executeNativeWorkspaceInvocationV1}from'../../src/pan548/native-invocation-executor-v1.mjs';
 import {protectedWorkspaceSetupStatusV1}from'../../src/pan527/origin-session-adapter.mjs';
 import {nativeRows}from'../fixtures/pan515/native-trade-fixture.mjs';
@@ -58,4 +58,157 @@ test('608 direct invocation input closes nested data without running caller gett
 
 test('608 native card selection proof cannot be replaced by a caller-selected different legitimate instance',async()=>{
  const x=await fixture();try{const r=x.owner.resolve(x.source.headers,x.request('Mach die Karte kleiner','invoice-value'));assert.equal(r.outcome,'CLARIFY');assert.ok(r.set.candidates.some(c=>c.objectRef.instanceId==='invoice-value'));assert.throws(()=>x.owner.admit(x.source.headers,x.selection(r)),/SELECTION_DENIED/);assert.equal(x.count(),0);assert.equal(x.before().revision,0);}finally{await x.close();}
+});
+
+test('698 ACT-03 owner pause fences the next real dispatch and acknowledges PAUSED with finite control revision',async()=>{
+ const x=await fixture();try{
+  const prior=x.before();
+  assert.equal(typeof x.owner.pause,'function','ACT-03 #698 owner pause control not delivered on the existing invocation owner');
+  const running=x.owner.control(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/control-read/v1'});
+  assert.deepEqual(running,{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'RUNNING',controlRevision:0,ownerBound:false});
+  const r=x.owner.resolve(x.source.headers,x.request()),a=x.owner.admit(x.source.headers,x.selection(r)),c=x.execution(a);
+  const p=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0});
+  assert.equal(p.state,'PAUSE_REQUESTED');assert.equal(p.controlRevision,1);assert.equal(p.ownerBound,true);
+  assert.throws(()=>x.owner.execute(x.source.headers,c),/INVOCATION_PAUSED/);
+  assert.equal(x.count(),0);assert.deepEqual(x.before(),prior);
+  const ack=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1});
+  assert.equal(ack.state,'PAUSED');assert.equal(ack.controlRevision,2);
+  // Repeated/idempotent pause at the acknowledged frontier cannot duplicate the
+  // transition or inflate the revision; a stale-control replay is denied.
+  assert.deepEqual(x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:2}),ack);
+  assert.throws(()=>x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1}),/INVOCATION_CONTROL_STALE_REVISION/);
+  for(const bad of [{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:3,extra:1},{schemaVersion:'pansphaira.workspace-invocation/pause/v2',expectedControlRevision:2},{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:-1}])
+   assert.throws(()=>x.owner.pause(x.source.headers,bad),/INVOCATION_CONTROL_INPUT_DENIED/);
+  // Foreign actor: no rights from pointer/history/timing, no state learned, no fence lifted.
+  const issued=x.f.sessions.issueOwnerSession({subjectId:'synthetic:other-reader',role:'reader',expiresAtMs:Date.now()+60000});
+  const foreign={cookie:issued.cookieHeader,origin:x.f.tls.origin,'x-pan527-csrf':issued.csrf,'x-pan548-session':'session:'+createHash('sha256').update(issued.cookieHeader).digest('hex')};
+  assert.throws(()=>x.owner.pause(foreign,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:2}),/INVOCATION_CONTROL_SCOPE_DENIED/);
+  assert.throws(()=>x.owner.resume(foreign,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:2}),/INVOCATION_CONTROL_SCOPE_DENIED/);
+  assert.throws(()=>x.owner.control(foreign,{schemaVersion:'pansphaira.workspace-invocation/control-read/v1'}),/INVOCATION_CONTROL_SCOPE_DENIED/);
+  assert.deepEqual(x.owner.control(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/control-read/v1'}),ack);
+  assert.throws(()=>x.owner.execute(x.source.headers,c),/INVOCATION_PAUSED/);
+  assert.equal(x.count(),0);assert.deepEqual(x.before(),prior);
+  // Resume re-opens exactly the next dispatch; the existing executor revalidation
+  // still decides custody, and the same admission completes through real paths.
+  const res=x.owner.resume(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:2});
+  assert.deepEqual(res,{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'RUNNING',controlRevision:3,ownerBound:true});
+  assert.deepEqual(x.owner.resume(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:3}),res);
+  assert.throws(()=>x.owner.resume(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:2}),/INVOCATION_CONTROL_STALE_REVISION/);
+  const result=executeNativeWorkspaceInvocationV1(x.owner,x.source.headers,c);
+  assert.equal(result.result.phase,'PREVIEW_VALIDATED');assert.equal(result.task.state,'COMPLETED');
+  assert.equal(x.count(),1);assert.deepEqual(x.before(),prior);
+  // A completed attempt cannot be replayed by a later pause/resume round.
+  const p2=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:3});assert.equal(p2.state,'PAUSE_REQUESTED');assert.equal(p2.controlRevision,4);
+  assert.deepEqual(x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:4}),{schemaVersion:'pansphaira.workspace-invocation/control/v1',state:'PAUSED',controlRevision:5,ownerBound:true});
+  assert.throws(()=>executeNativeWorkspaceInvocationV1(x.owner,x.source.headers,c),/ATTEMPT_ALREADY_REQUIRES_READBACK/);
+  assert.equal(x.count(),1);assert.deepEqual(x.before(),prior);
+ }finally{await x.close();}
+});
+
+test('698 ACT-03 barrier pause mid-dispatch keeps the dispatch-won attempt honest and never undispatches it',async()=>{
+ const x=await fixture();try{
+  const prior=x.before();
+  const r=x.owner.resolve(x.source.headers,x.request()),a=x.owner.admit(x.source.headers,x.selection(r)),c=x.execution(a);
+  const connection=nativeWorkspaceInvocationExecutorConnectionV1(x.owner);
+  const effect=connection.begin(x.source.headers,c);
+  // The dispatch transaction wins the linearization race against this pause.
+  connection.dispatch(x.source.headers,effect);
+  const p=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0});
+  assert.equal(p.state,'PAUSE_REQUESTED');assert.equal(p.controlRevision,1);
+  const pa=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1});
+  assert.equal(pa.state,'PAUSING');assert.equal(pa.controlRevision,2);
+  const finish=connection.finish(x.source.headers,effect,{phase:'PREVIEW_VALIDATED',preview:x.f.view.preview(x.source.headers,JSON.parse(effect.member.argumentBytes)),clientRendered:false,personalProfileSaved:false,restored:false});
+  assert.equal(finish.task.state,'COMPLETED');
+  const ack=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:2});
+  assert.equal(ack.state,'PAUSED');assert.equal(ack.controlRevision,3);
+  assert.equal(x.count(),1);assert.deepEqual(x.before(),prior);
+  // No new dispatch crosses the fence, but the original completion stays real:
+  // neither rollback, cancel nor undispatch is claimed or performed.
+  const r2=x.owner.resolve(x.source.headers,x.request()),a2=x.owner.admit(x.source.headers,x.selection(r2));
+  assert.throws(()=>executeNativeWorkspaceInvocationV1(x.owner,x.source.headers,x.execution(a2)),/INVOCATION_PAUSED/);
+  assert.equal(x.count(),1);
+  const row=x.n.db.prepare('SELECT state,revision FROM workspace_ui_tasks_v2 WHERE command_id=?').get(a.invocationId);
+  assert.deepEqual({...row},{state:'COMPLETED',revision:2});
+ }finally{await x.close();}
+});
+
+test('698 ACT-03 fence between begin and dispatch blocks TARGET_ATTEMPTED with no receipt, and resume-revalidated dispatch stays single',async()=>{
+ const x=await fixture();try{
+  const prior=x.before();
+  const r=x.owner.resolve(x.source.headers,x.request()),a=x.owner.admit(x.source.headers,x.selection(r)),c=x.execution(a);
+  const connection=nativeWorkspaceInvocationExecutorConnectionV1(x.owner);
+  const effect=connection.begin(x.source.headers,c);
+  const p=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0});
+  assert.equal(p.state,'PAUSE_REQUESTED');
+  assert.throws(()=>connection.dispatch(x.source.headers,effect),/INVOCATION_PAUSED/);
+  // The fenced attempt already holds a real ACCEPTED task row and budget
+  // reservation: no TARGET_ATTEMPTED, no target call, no duplicate task.
+  assert.equal(x.count(),1);
+  assert.equal(x.n.db.prepare('SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind=?').get(a.invocationId,'TARGET_ATTEMPTED').n,0);
+  // The executor wrapper cannot convert the fenced unsent attempt into a
+  // fabricated dispatched fact or a journalled UNKNOWN: a wrapper rerun on the
+  // existing attempt is refused by the readback guard before any target call,
+  // the task keeps its genuine ACCEPTED identity, and no factual UNKNOWN event
+  // exists for the never-dispatched attempt (a fence won inside a fresh begin
+  // instead throws before the wrapper try block, proven by test 1's zero rows).
+  assert.throws(()=>executeNativeWorkspaceInvocationV1(x.owner,x.source.headers,c),/INVOCATION_ATTEMPT_ALREADY_REQUIRES_READBACK/);
+  assert.equal(x.n.db.prepare("SELECT state FROM workspace_ui_tasks_v2 WHERE command_id=?").get(a.invocationId).state,'ACCEPTED');
+  assert.equal(x.n.db.prepare('SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind=?').get(a.invocationId,'OUTCOME_UNKNOWN').n,0);
+  // A second pause attempt while a fenced-but-attempted admission is pending
+  // sees no open TARGET_ATTEMPTED work: PAUSED is still provable honestly.
+  const ack=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1});
+  assert.equal(ack.state,'PAUSED');assert.equal(ack.controlRevision,2);
+  const res=x.owner.resume(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:2});
+  assert.equal(res.state,'RUNNING');assert.equal(res.controlRevision,3);
+  connection.dispatch(x.source.headers,effect);
+  const finish=connection.finish(x.source.headers,effect,{phase:'PREVIEW_VALIDATED',preview:x.f.view.preview(x.source.headers,JSON.parse(effect.member.argumentBytes)),clientRendered:false,personalProfileSaved:false,restored:false});
+  assert.equal(finish.task.state,'COMPLETED');assert.equal(finish.task.revision,2);
+  assert.equal(x.n.db.prepare('SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind=?').get(a.invocationId,'TARGET_ATTEMPTED').n,1);
+  assert.equal(x.count(),1);assert.deepEqual(x.before(),prior);
+  // Stale pre-fence pause cannot undo the newer RUNNING revision.
+  assert.throws(()=>x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:2}),/INVOCATION_CONTROL_STALE_REVISION/);
+  assert.equal(x.owner.control(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/control-read/v1'}).state,'RUNNING');
+ }finally{await x.close();}
+});
+
+test('698 ACT-03 fenced dispatch-won attempt keeps original UNKNOWN, restart keeps durable pause authority',async()=>{
+ const x=await fixture();try{
+  const prior=x.before();
+  const r=x.owner.resolve(x.source.headers,x.request()),a=x.owner.admit(x.source.headers,x.selection(r)),c=x.execution(a);
+  const connection=nativeWorkspaceInvocationExecutorConnectionV1(x.owner);
+  const effect=connection.begin(x.source.headers,c);
+  connection.dispatch(x.source.headers,effect);
+  const p=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0});
+  assert.equal(p.state,'PAUSE_REQUESTED');
+  // Real lost-reply path for the already-dispatched attempt.
+  connection.failed(effect);
+  const row=x.n.db.prepare('SELECT state,revision FROM workspace_ui_tasks_v2 WHERE command_id=?').get(a.invocationId);
+  assert.equal(row.state,'OUTCOME_UNCONFIRMED');
+  assert.equal(x.n.db.prepare('SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind=?').get(a.invocationId,'OUTCOME_UNKNOWN').n,1);
+  // The dispatch-won attempt settled to original UNKNOWN, not an open ACCEPTED
+  // attempt: fence acknowledged; UNKNOWN keeps its source identity either way.
+  const pa=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:1});
+  assert.equal(pa.state,'PAUSED');assert.equal(pa.controlRevision,2);
+  // Actual owner restart: a fresh owner over the SAME durable ledger must keep
+  // the pause fence authority and revision; old boot handles fail independently.
+  const boot=x.n.bootEpoch;
+  x.owner.close();x.surfaces.close();x.tasks.close();
+  const tasks2=createNativeWorkspaceUiTaskProjectionV2({sessions:x.f.sessions,root:x.n.root}),n2=nativeWorkspaceUiTaskOwnerConnectionV2(tasks2,x.f.sessions.binding),surfaces2=createNativeWorkspaceSurfacesV2({sessions:x.f.sessions,contextSelection:x.f.context,tasks:tasks2,reader:x.reader}),owner2=createNativeWorkspaceInvocationsV1({...x.options,tasks:tasks2,surfaces:surfaces2});
+  try{
+   assert.equal(n2.bootEpoch,boot+1);
+   const ctrl=owner2.control(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/control-read/v1'});
+   assert.equal(ctrl.state,'PAUSED');assert.equal(ctrl.controlRevision,2);assert.equal(ctrl.ownerBound,true);
+   // Restart reconciled nothing itself: UNKNOWN keeps source identity via the
+   // original epoch; the fence still blocks a fresh admission's dispatch. The
+   // honest reconnect path is required: old surface proofs fail on the new
+   // surfaces owner, so re-register the same tab first.
+   assert.throws(()=>owner2.resolve(x.source.headers,x.request()),/SURFACE_RECONNECT_REQUIRED/);
+   x.source.surface=surfaces2.register(x.source.headers,reg);
+   const reheaders={...x.source.headers,'x-pan597-surface':x.source.surface.surfaceId,'x-pan597-proof':x.source.surface.surfaceProof};
+   const r2=owner2.resolve(reheaders,x.request()),a2=owner2.admit(reheaders,x.selection(r2));
+   assert.throws(()=>executeNativeWorkspaceInvocationV1(owner2,reheaders,x.execution(a2)),/INVOCATION_PAUSED/);
+   const ack=owner2.pause(reheaders,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:2});
+   assert.deepEqual(ack,ctrl);
+  }finally{owner2.close();surfaces2.close();tasks2.close();await x.f.close();}
+ }finally{}
 });
