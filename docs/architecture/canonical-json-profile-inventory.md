@@ -544,3 +544,21 @@ non-equivalence stance are unchanged. The current inventory binds these measured
 counts and the exact validator bytes; historical counts above stay historical.
 This metadata reconciliation does not qualify a real model, waive hosted CI,
 claim a release or complete the original composition/onboarding/agent issues.
+
+
+## Additive current UI-ACT-699 semantic action-anchor registration (V111)
+
+The existing PAN548 owner gains exactly two code-registered source-only
+members: the versioned semantic action-anchor projection helper
+(`src/pan548/native-action-anchor-projection-v1.mjs`) and its focused
+contract test (`tests/pan699/action-anchor-projection.test.mjs`). The
+incoming uiTargetRef stays a representation-only display binding: unknown,
+stale, forged or cross-surface refs resolve to typed neutral fallback and
+never become a CSS selector, DOM node, click or dispatch authority. The
+V110 generator digest advances to the actual current generator bytes
+through the explicit append-only V111 migration; scanner, validator,
+immutable base obligations, pinned profiles, graph104/all109 owners, the
+1792-entry runnable inventory and every historical migration remain
+unchanged. The unchanged mechanical scanner measures 1317 files, 352
+import sites in 351 files and 2872 unique ledger paths. Registration is
+not browser, CI, release, merge or whole699 acceptance.

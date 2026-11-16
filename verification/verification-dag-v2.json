@@ -4925,7 +4925,7 @@
         {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "45e690850c8488fd6013ddd4422bc7dab1dfc94789190e02327a45d92dcaafa5"
+          "sha256": "0b71cf415b5429fdc46e8bd847bd9a81c0efd4f367a9018e4889204ec53377f1"
         },
         {
           "path": "docs/architecture/native-reference-rights-contract-v1.md",
@@ -5055,7 +5055,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "532951bfdaa9a292a8cfffb19a2c3c659b9c62aad6f543ec73774e2b725c313b"
+          "sha256": "2f27ff4e4e2aaa96fcd2699b2afd06dbb8bbe2b7ebdda3cfe1f89189bf6dea71"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5120,7 +5120,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "d6ca2e9bda51c7d34a8b0cf375b2b9a624a78703c03b13986f583cdcb8209744"
+          "sha256": "b2887c429da052b3fd8bb308a5f3ba38ffa8e6e98a49b02945b95de5a1f46b28"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5245,7 +5245,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "7e8a11133186f41fcde99a64e741944273facd9cc2bc549195088b4daed8893b"
+          "sha256": "b61c273035325dcf5dda0e0d2830ff5542b8eab9cf8447968b6a331f2498516a"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -11519,7 +11519,7 @@
         {
           "path": "tests/pan548/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "c63d4ca5b8ee4b7553964d23f39a68dd663b6616d533448c6b1b64c018be1c22"
+          "sha256": "88b769d4b2eeac7c1c17766d8dba91c28e5837153bdb42b7b69990ff7fdcdd89"
         },
         {
           "path": "docs/architecture/workspace-agent-panel-v1.md",
@@ -11615,6 +11615,16 @@
           "path": "src/pan548/native-rules-vertical-v1.mjs",
           "role": "SECURITY",
           "sha256": "08e5bc2ae0c92fc53da2794558c39d15339f85f45a0add4f291d881e7e4f0e3b"
+        },
+        {
+          "path": "src/pan548/native-action-anchor-projection-v1.mjs",
+          "role": "SOURCE",
+          "sha256": "2497bbbbb1cc3d81f2e7f8231ed3469139183f3a741b05a58a8b3052d78e4f19"
+        },
+        {
+          "path": "tests/pan699/action-anchor-projection.test.mjs",
+          "role": "VALIDATOR",
+          "sha256": "eb99a32388d94942e91e625fb276a1cad10a840f2c4e8492abfc507fb1a4bee9"
         }
       ],
       "ownedTests": [

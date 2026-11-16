@@ -1020,6 +1020,15 @@ Object.freeze({
   "reason": "Register exactly the two PR679 source-only native display session/ingress inputs at the existing PAN597 owner and the frozen V4 catalog SECURITY/documentation DERIVED_EVIDENCE inputs at the existing PAN542 owner as one closed successor of published Main PR681 V109. Preserve every published migration including the fast-uri 3.1.9 developer-policy v2 registration and immutable v1, all admitted base obligations/13 pinned profiles, graph104/all109 owners, scanner/validator semantics, original byte caps, native guards and runnable inventory. The unchanged mechanical scanner measures 1315 files,350 import sites in349 files and2870 unique ledger paths. Supersede only unpublished branch generator V109/V110 registrations; historical Git commits and frozen runtime V1-V4 source catalogs remain unchanged. This inventory registration grants no native, browser, CI, release or whole-issue acceptance."
 }
 ),
+Object.freeze({
+  "migrationId": "UI-ACT-699-ACTION-ANCHOR-PROJECTION/INTEGRITY-GENERATOR/V111",
+  "path": "scripts/refresh-integrity-data.mjs",
+  "profileVersion": 111,
+  "fromSha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
+  "toSha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e",
+  "reason": "Register exactly the two UI-ACT-699 source-only semantic action-anchor inputs (resolver SOURCE and focused contract test VALIDATOR) as additive members of the existing PAN548 owner inside the generator registration lists and the checksum ledger, without executing a broad refresh. Preserve all 110 prior migrations, immutable base obligations, 13 pinned profiles, graph104/all109 owners, unchanged scanner/validator semantics, original byte caps, native guards and the 1792-entry runnable inventory. The unchanged mechanical scanner measures 1317 files, 352 import sites in 351 files and 2872 unique ledger paths after these two additive source files. This inventory registration grants no browser, CI, release or whole699 acceptance."
+}
+),
   ]);
 
 const REQUIRED_DIMENSIONS = ["valid", "invalid", "unicode", "number"] as const;
@@ -1032,17 +1041,17 @@ const CLASSIFICATIONS = new Set(["implementation", "alias", "wrapper"]);
  * sites) are historical hints only — the fresh mechanical scan supersedes them.
  */
 const EXPECTED_COUNTS = {
-  "filesScanned": 1315,
+  "filesScanned": 1317,
   "declarationSites": 37,
   "declarationFiles": 37,
-  "importSites": 350,
-  "importFiles": 349,
+  "importSites": 352,
+  "importFiles": 351,
   "reexportSites": 7,
   "similarShapeSites": 30,
   "byteObligations": 21,
   "pinnedProfileFiles": 13
 } as const;
-const EXPECTED_LEDGER = {"entries":2870,"uniquePaths":2870,"duplicatePaths":0} as const;
+const EXPECTED_LEDGER = {"entries":2872,"uniquePaths":2872,"duplicatePaths":0} as const;
 
 type Classification = "implementation" | "alias" | "wrapper";
 
@@ -1825,7 +1834,7 @@ test("all admitted pinned profiles keep their immutable digest or exact version 
 test("integrity generator migration chain preserves immutable admitted and reviewed obligations", () => {
   const base = loadBaseObligations();
   const migrations = PROFILE_VERSION_MIGRATIONS.filter(({ path: file }) => file === "scripts/refresh-integrity-data.mjs");
-  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110]);
+  assert.deepEqual(migrations.map(({ profileVersion }) => profileVersion), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111]);
   const baseDigest = base.pinnedProfiles.find(({ path: file }) => file === migrations[0]?.path)?.sha256;
   assert.equal(baseDigest, base.byteObligations.find(({ path: file }) => file === migrations[0]?.path)?.sha256);
   let previousDigest = baseDigest;
@@ -2200,5 +2209,19 @@ test("negative: exact v110 V4 registration successor cannot migrate a neighborin
   assertFails((inv) => {
     const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "PR679-RESTRICTED-DISPLAY-AND-SOURCE-COMPATIBILITY-V4/INTEGRITY-GENERATOR/V110");
     assert.ok(migration); migration.path = "scripts/build-public-release.sh";
+  }, "profile-version-migration:");
+});
+
+test("negative: exact v111 action-anchor successor generator target cannot be replaced by a caller hash", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "UI-ACT-699-ACTION-ANCHOR-PROJECTION/INTEGRITY-GENERATOR/V111");
+    assert.ok(migration, "UI-ACT-699 generator successor must be registered"); assert.equal(migration.path, "scripts/refresh-integrity-data.mjs"); assert.equal(migration.profileVersion, 111);
+    migration.toSha256 = "f".repeat(64);
+  }, "profile-version-migration:");
+});
+test("negative: exact v111 action-anchor successor cannot migrate a neighboring control path", () => {
+  assertFails((inv) => {
+    const migration = inv.profileVersionMigrations.find((entry: any) => entry.migrationId === "UI-ACT-699-ACTION-ANCHOR-PROJECTION/INTEGRITY-GENERATOR/V111");
+    assert.ok(migration, "UI-ACT-699 generator successor must be registered"); migration.path = "scripts/build-public-release.sh";
   }, "profile-version-migration:");
 });
