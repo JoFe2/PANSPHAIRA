@@ -11574,7 +11574,7 @@
         {
           "path": "src/pan548/native-model-free-invocations-v1.mjs",
           "role": "SOURCE",
-          "sha256": "701c28cc877bbd8325b754c4f66e81b901fabd58fe2dfa16e8872f62eb2c820b"
+          "sha256": "8047b3ab9c61884ce24f3384d97c5c01772bf91d1f8472bdce78b36d78f6236c"
         },
         {
           "path": "src/pan548/native-invocation-executor-v1.mjs",
@@ -11799,7 +11799,7 @@
         {
           "path": "tests/pan608/native-invocations.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "60048c53173cbcf715ea2cfb32d95ab0ad90a95feb977b61045099527395da5e"
+          "sha256": "bf6a83222b4378775c4ea80224374afe10484f6705972fa88883a544a91042c5"
         },
         {
           "path": "tests/pan608/browser-invocations.test.mjs",
