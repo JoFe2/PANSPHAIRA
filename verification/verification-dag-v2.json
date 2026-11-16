@@ -11779,12 +11779,12 @@
         {
           "path": "packages/browser-workspace/src/workspace-invocations-v1.ts",
           "role": "SOURCE",
-          "sha256": "2b30cd10963bf71fae9e5bbc8b393e56bf690308ba167f4a2e641e788afdf3b5"
+          "sha256": "ce094783c51fea1d2cca7d8846b4b8086368312e0d1b4bedc601a9afd03056b6"
         },
         {
           "path": "packages/browser-workspace/src/workspace-invocations-v1.css",
           "role": "SOURCE",
-          "sha256": "66a550cc6bf1ad81d953b6379fbfb56751e5b766f4648e798d93621e405cac9e"
+          "sha256": "14910c475eca943e7b0fd11722701ef60272dd5f89161991fe7efb5358d1cfa7"
         },
         {
           "path": "scripts/run-pan608-native-invocation-tests.mjs",
@@ -11804,7 +11804,7 @@
         {
           "path": "tests/pan608/browser-invocations.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "dc1941833833747eb9e112f74afb59a6724ff03d032d983026281066a13eca4b"
+          "sha256": "b0f6e0a31bf7760e6701d61f6523453546d1cde500d843701707190c26f131f2"
         },
         {
           "path": "tests/pan608/registration.test.mjs",

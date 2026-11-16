@@ -28,3 +28,48 @@ test('B1 narrow review: explicitly cleared prior native card remains null throug
 async function showCurrentContextDetailsUI(page){const d=page.locator('[id="workspace.context-details"]');if(await d.getAttribute('open')===null)await d.locator(':scope > summary').click();}
 
 async function showCurrentViewDetailsUI(page){const d=page.locator('[id="workspace.module-editor-details"]');await d.waitFor({state:'attached'});if(await d.getAttribute('open')===null)await d.locator(':scope > summary').click();}
+
+// #699 visible slice: after a real preview, one extra closed observe DTO read
+// rides the unchanged protected read route and an honest readonly status zone
+// shows the truthful owner phase. Missing observe DTO/zone was the behavior RED.
+const zone='.workspace-invocations .invocation-observation',OBSERVE_SCHEMA='pansphaira.workspace-action-observation/observe/v1';
+function gateReads699(f){const reads=[],pending=[];const hold=new Promise(r=>pending.push(r));
+ void f.page.route('**/workspace/invocations/read',async route=>{reads.push(route.request().postDataJSON());const response=await forward549(f,route);assert.equal(response.tlsAuthorized,true);if(reads.length>1)await hold;await route.fulfill({status:response.status,body:response.body,contentType:'application/json'});});
+ return{reads,release(){for(const r of pending.splice(0))r();},async wait(count,ms=8000){const began=Date.now();while(reads.length<count){if(Date.now()-began>ms)throw Error('699_OBSERVE_READ_NOT_REQUESTED '+JSON.stringify(reads.map(v=>v&&v.schemaVersion)));await new Promise(r=>setTimeout(r,20));}}};}
+test('699 visible: independent read sends one extra closed observe DTO on the existing read route and shows an honest readonly status zone without effects or focus theft',async()=>{
+ const f=await fixture();try{const business=f.business(),calls=[];f.page.on('request',r=>{if(r.url().includes('/workspace/invocations/')||r.url().includes('/module-view/confirm'))calls.push({path:new URL(r.url()).pathname,body:r.method()==='POST'?r.postDataJSON():null});});
+  await selectCard(f);const started=await run(f,'Mach die Karte kleiner');assert.equal(started.result.phase,'PREVIEW_VALIDATED');await f.page.locator(inv+'[data-state="PREVIEW_RENDERED"]').waitFor();assert.equal(await f.page.locator(view+' [data-instance="native-review"]').getAttribute('data-size'),'compact');
+  const g=gateReads699(f);
+  await f.page.getByRole('button',{name:'Auftrag unabhängig lesen',exact:true}).click();await g.wait(2);
+  const observe=g.reads.find(v=>v?.schemaVersion===OBSERVE_SCHEMA);
+  assert.ok(observe,'the panel issues one additional closed observe DTO read on the unchanged protected read route');
+  assert.deepEqual(Object.keys(observe).sort(),['invocationId','schemaVersion'],'the observe DTO stays closed to schemaVersion plus invocationId');
+  assert.equal(observe.invocationId,started.invocationId);
+  assert.ok(g.reads.some(v=>v?.schemaVersion==='pansphaira.workspace-invocation/read/v1'),'the existing read/v1 request stays unchanged');
+  g.release();
+  const zoneLocator=f.page.locator(zone);await zoneLocator.waitFor({state:'attached'});
+  const zoneText=await zoneLocator.textContent();
+  assert.ok(zoneText.includes(started.invocationId),'the honest status names the original invocation ID');
+  assert.ok(zoneText.includes('nichts gespeichert')&&zoneText.includes('NICHT_ZERTIFIZIERT'),'the honest status states plainly: nothing was saved, no physical certification');
+  assert.ok(zoneText.includes('lokale DOM-Vorschau'),'preview validation is distinguished from any physical certification claim');
+  assert.equal(await zoneLocator.getAttribute('role'),'status');assert.equal(await zoneLocator.getAttribute('aria-live'),'polite');
+  assert.ok(await f.page.evaluate(()=>!document.querySelector('.invocation-observation')?.contains(document.activeElement)),'the new readonly status zone never takes focus itself');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),business);
+  assert.equal(calls.filter(c=>c.path.endsWith('/execute')).length,1,'the independent observe read never re-executes the invocation');
+  assert.equal(calls.filter(c=>c.path.endsWith('/module-view/confirm')).length,0,'no profile save happened');
+  await capture(f,'desktop699-observe-status');assert.deepEqual(f.errors,[]);}finally{await f.close();}
+});
+test('699 visible negatives: a late observe reply after an explicit ID change never repopulates stale zone details; a fresh read shows them again',async()=>{
+ const f=await fixture();try{const business=f.business();await selectCard(f);const started=await run(f,'Mach die Karte kleiner');await f.page.locator(inv+'[data-state="PREVIEW_RENDERED"]').waitFor();
+  const g=gateReads699(f);
+  await f.page.getByRole('button',{name:'Auftrag unabhängig lesen',exact:true}).click();await g.wait(2);
+  await f.page.getByLabel('Ursprüngliche native Auftrags-ID',{exact:true}).fill('invocation:'+'0'.repeat(32));
+  g.release();await f.page.waitForTimeout(300);
+  const zoneLocator=f.page.locator(zone),stale=await zoneLocator.textContent();
+  assert.ok(!stale.includes(started.invocationId),'a late reply for the discarded ID never repopulates the stale zone');
+  assert.equal(await zoneLocator.evaluate(e=>e.dataset.invocationId??'NONE'),'NONE','stale invocation metadata is cleared on ID change');
+  await f.page.getByLabel('Ursprüngliche native Auftrags-ID',{exact:true}).fill(started.invocationId);
+  await f.page.getByRole('button',{name:'Auftrag unabhängig lesen',exact:true}).click();await g.wait(4);await f.page.waitForTimeout(300);
+  assert.ok((await zoneLocator.textContent()).includes(started.invocationId),'after a fresh read the honest status returns');
+  assert.equal(f.readPersisted().revision,0);assert.equal(f.business(),business);assert.deepEqual(f.errors,[]);}finally{await f.close();}
+});
