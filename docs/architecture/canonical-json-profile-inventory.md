@@ -562,3 +562,20 @@ immutable base obligations, pinned profiles, graph104/all109 owners, the
 unchanged. The unchanged mechanical scanner measures 1317 files, 352
 import sites in 351 files and 2872 unique ledger paths. Registration is
 not browser, CI, release, merge or whole699 acceptance.
+
+## Additive current UI-REC-702 native REJECT backend registration (V112)
+
+The existing PAN541 shared-shell owner gains exactly one code-registered
+source-only member: the Node-only protected native REJECT regression test
+(`tests/pan550/native-reject.test.mjs`). It exercises the closed versioned
+REJECT operation on the existing approval workbench decide path with durable
+REJECTED decision/receipt readback, no authority, zero business effects and
+reject finality; it launches no Chromium, so the guarded550 browser seams
+stay unsupported NONPASS and no accessible-modal or timeline claim is made.
+The V111 generator digest advances to the actual current generator bytes
+through the explicit append-only V112 migration; scanner, validator,
+immutable base obligations, pinned profiles, graph104/all109 owners, the
+1792-entry runnable inventory and every historical migration remain
+unchanged. The unchanged mechanical scanner measures 1318 files, 352
+import sites in 351 files and 2873 unique ledger paths. Registration is
+not browser, CI, release, merge or whole702 acceptance.
