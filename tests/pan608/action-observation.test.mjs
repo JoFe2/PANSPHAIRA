@@ -59,7 +59,7 @@ test('696 ACT-01 completed real preview observation binds run/task/step/attempt,
   assert.equal(o.proof.issuerKind,'PAN546_PREVIEW_VALIDATED');assert.equal(o.proof.argumentDigest,a.argumentDigest);
   assert.equal(o.rendered,false);assert.equal(o.personalViewPersistenceProduced,false);assert.equal(o.physicalPixelSightCertified,false);
   assert.equal(o.model,'NOT_RUN');assert.equal(o.modelPlanLineage,'NOT_INFERRED');assert.equal(o.executionAuthorityGranted,false);
-  assert.deepEqual(o.capabilityAvailability,{pause:'UNAVAILABLE',resume:'UNAVAILABLE',cancel:'UNAVAILABLE',offerLineAdapter:'NOT_IMPLEMENTED'});
+  assert.deepEqual(o.capabilityAvailability,{pause:'AVAILABLE_OWNER_BOUND',resume:'AVAILABLE_OWNER_BOUND',cancel:'UNAVAILABLE',offerLineAdapter:'NOT_IMPLEMENTED'});
   assert.ok(Object.isFrozen(o));assert.deepEqual(x.before(),prior);
   const read=x.owner.read(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/read/v1',invocationId:a.invocationId});
   assert.deepEqual(x.observe({...OBS,invocationId:a.invocationId}),o,'observation is reproducible from owner facts');
