@@ -4925,7 +4925,7 @@
         {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "35ba8798aae65868c83552186551038e12162eb63e7ec959769be66e857f6c0e"
+          "sha256": "da38bef4ae4544a29334fb27d49998d03393fc0390cb511577df4cbe03793a2b"
         },
         {
           "path": "docs/architecture/native-reference-rights-contract-v1.md",
@@ -5055,7 +5055,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "cf0171148434190b80193a7baa89294c3f97b3114a1abb18229a360c1939037a"
+          "sha256": "2f27ff4e4e2aaa96fcd2699b2afd06dbb8bbe2b7ebdda3cfe1f89189bf6dea71"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -5120,7 +5120,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "1e934674388aa7dc13b7e19242f26dcee318758b3f4750bc0049e9f9f6dc5ecf"
+          "sha256": "0264dd651fefb27effb63691cc3d2bff77f58fea809776fe6d0f1df9ba1f8150"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5245,7 +5245,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "06b3e04e9df1a770d63423d8cb1439f0d95009a9fbd84fc46c29c6d49bd78300"
+          "sha256": "31ac46f9998f251850843567f32b897de88d94e2c8aba02739cdf038f2ae9835"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -10646,7 +10646,7 @@
         {
           "path": "scripts/run-pan550-native-administration-tests.mjs",
           "role": "VALIDATOR",
-          "sha256": "651f00354762336b372ad249f27c7a8a89cb9f48961e2082c45f958ded85953c"
+          "sha256": "3ae4d65e84ba2589cbc26870cbb22d4fa5ff546e1f07069d5fcfdee6a327fbcb"
         },
         {
           "path": "tests/pan550/native-administration.test.mjs",
@@ -10656,7 +10656,7 @@
         {
           "path": "tests/pan550/native-approval.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "dff9f1887ef743e75076a5103b237dc53fc6b74130c843e638883aa11f186f43"
+          "sha256": "78bee3f59b5539e3f53bdb64f65c9a81efb9040b874bb0be3fd7759ae27bfa67"
         },
         {
           "path": "tests/pan550/browser-fixture.mjs",
@@ -10676,17 +10676,12 @@
         {
           "path": "tests/pan550/registration.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "9fadac29021f0810c3f23ce2aa6382ae44ab058edec6ea92cd03e44392173550"
+          "sha256": "076a5e41b4075de6ec63e1a38c50a986db734de3dffb6a74a331038be34fb189"
         },
         {
           "path": "tests/pan550/native-coupled-context.test.mjs",
           "role": "VALIDATOR",
           "sha256": "ebd687bc365f9c28cbd69bbe2d4d73f4d949e2e1cbd69d2d09e1b72c782f967e"
-        },
-        {
-          "path": "tests/pan550/native-reject.test.mjs",
-          "role": "VALIDATOR",
-          "sha256": "435a156f78b6c7e2a1bfafaaa746005fb30ec250bfd9f59869952547175c1c7e"
         },
         {
           "path": "docs/architecture/protected-browser-bootstrap-resume-v1.md",

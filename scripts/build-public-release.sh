@@ -971,7 +971,6 @@ repository_only_files = {
     "tests/pan550/browser-administration.test.mjs",
     "tests/pan550/browser-approval.test.mjs",
     "tests/pan550/registration.test.mjs",
-    "tests/pan550/native-reject.test.mjs",
     "docs/architecture/protected-browser-bootstrap-resume-v1.md",
     "packages/browser-workspace/src/workspace-bootstrap-v1.css",
     "packages/browser-workspace/src/workspace-bootstrap-v1.html",

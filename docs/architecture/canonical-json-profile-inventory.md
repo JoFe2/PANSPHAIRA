@@ -563,19 +563,24 @@ unchanged. The unchanged mechanical scanner measures 1317 files, 352
 import sites in 351 files and 2872 unique ledger paths. Registration is
 not browser, CI, release, merge or whole699 acceptance.
 
-## Additive current UI-REC-702 native REJECT backend registration (V112)
+## Bounded current UI-REC-702 native REJECT backend registration (V112)
 
-The existing PAN541 shared-shell owner gains exactly one code-registered
-source-only member: the Node-only protected native REJECT regression test
-(`tests/pan550/native-reject.test.mjs`). It exercises the closed versioned
-REJECT operation on the existing approval workbench decide path with durable
-REJECTED decision/receipt readback, no authority, zero business effects and
-reject finality; it launches no Chromium, so the guarded550 browser seams
-stay unsupported NONPASS and no accessible-modal or timeline claim is made.
-The V111 generator digest advances to the actual current generator bytes
-through the explicit append-only V112 migration; scanner, validator,
-immutable base obligations, pinned profiles, graph104/all109 owners, the
-1792-entry runnable inventory and every historical migration remain
-unchanged. The unchanged mechanical scanner measures 1318 files, 352
-import sites in 351 files and 2873 unique ledger paths. Registration is
-not browser, CI, release, merge or whole702 acceptance.
+The UI-REC-702 Node-only protected native REJECT regression is folded into
+the already PAN541-governed `tests/pan550/native-approval.test.mjs`, so the
+existing PAN541 shared-shell owner stays at its published 128-input bound
+with no new file, member or pipeline. The folded case exercises the closed
+versioned REJECT operation on the existing approval workbench decide path
+with durable REJECTED decision/receipt readback, no authority, zero business
+effects and reject finality; it launches no Chromium, so the guarded550
+browser seams stay unsupported NONPASS and no accessible-modal or timeline
+claim is made. The V111 generator digest advances to the actual current
+generator bytes through the explicit append-only V112 migration, which also
+restores four previously published generator-owned DAG inputs (pan542
+KS-price-variance query test/source/doc and pan608 action-observation test)
+that an earlier regeneration had dropped from the generator assembly.
+Scanner, validator, immutable base obligations, pinned profiles, graph104/
+all109 owners, the 1792-entry runnable inventory and every historical
+migration remain unchanged. The unchanged mechanical scanner measures 1317
+files, 352 import sites in 351 files and 2872 unique ledger paths, identical
+to published main. Registration is not browser, CI, release, merge or
+whole702 acceptance.

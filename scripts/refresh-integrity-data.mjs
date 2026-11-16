@@ -3279,10 +3279,6 @@ const pan550Inputs = [
   [
     "tests/pan550/native-coupled-context.test.mjs",
     "VALIDATOR"
-  ],
-  [
-    "tests/pan550/native-reject.test.mjs",
-    "VALIDATOR"
   ]
 ];
 const pan547Inputs = [
