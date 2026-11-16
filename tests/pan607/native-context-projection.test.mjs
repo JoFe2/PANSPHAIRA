@@ -202,6 +202,96 @@ test('607 specific B1: genuine retired accepted invocation cannot recreate old r
  const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding),origin=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='INTENT_ACCEPTED'").get(accepted.invocationId);db.prepare('UPDATE workspace_ui_context_outbox_v1 SET privacy_epoch=? WHERE task_id=?').run(snapshot.privacyEpoch,accepted.invocationId);assert.throws(()=>x.snapshot(),/CONTEXT_STREAM_GAP_OR_BYTES_DENIED/);db.prepare('UPDATE workspace_ui_context_outbox_v1 SET privacy_epoch=? WHERE task_id=?').run(origin.privacy_epoch,accepted.invocationId);
  const p=x.projection.prepare(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/prepare/v1',audience:'MAIN_CONTRACT',context:x.f.verification(x.tab),boundary:'TURN',previousRequestId:null,cursor:0});assert.equal(p.snapshotBytes.includes(objectId),false);assert.equal(p.payloadBytes.includes(objectId),false);assert.equal(p.promptBytes.includes(objectId),false);assert.equal(p.model,'NOT_RUN');
  }finally{await x.close();}});
+const historyRequest=(ownerSeq,audience='MAIN_CONTRACT')=>({schemaVersion:'pansphaira.workspace-context-projection/history-request/v1',audience,ownerSeq});
+function effectCounters(x){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ return {orders:JSON.stringify(db.prepare('SELECT command_id,state,revision,result_json FROM workspace_ui_tasks_v2 ORDER BY command_id').all()),
+  outbox:JSON.stringify(db.prepare('SELECT seq,event_key,kind,bytes,signature FROM workspace_ui_context_outbox_v1 ORDER BY seq').all()),
+  proofs:db.prepare('SELECT COUNT(*) c FROM workspace_ui_context_proofs_v1').get().c,
+  storeRevision:x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,
+  snapshotDigest:x.snapshot().snapshotDigest};}
+test('700 REC-01 seek to recorded INTENT_ACCEPTED owner seq returns the recorded earlier ACCEPTED state, not today COMPLETED row, with neutral step-list scope and retained source-bound action',async()=>{const x=await fixture();try{
+ const result=x.preview(),p=x.snapshot();
+ const accepted=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===result.invocationId);
+ assert.ok(accepted,'actual recorded INTENT_ACCEPTED owner seq exists before completion');
+ assert.equal(typeof x.projection.history,'function','REC-01 owner-authorized versioned history read not yet delivered');
+ const before=effectCounters(x);
+ const h=x.projection.history(x.tab.headers,historyRequest(accepted.seq));
+ assert.equal(h.mode,'HISTORY');assert.equal(h.ownerSeq,accepted.seq);assert.equal(h.availability,'AVAILABLE');assert.equal(h.gap,null);
+ const step=h.steps.find(s=>s.seq===accepted.seq);
+ assert.equal(step.taskId,result.invocationId);assert.equal(step.kind,'INTENT_ACCEPTED');assert.equal(step.state,'ACCEPTED','recorded earlier ACCEPTED state, never today COMPLETED row');
+ assert.equal(step.resultDigest,null,'no completion result existed at the recorded accepted seq');
+ const taskState=h.taskStates.find(s=>s.taskId===result.invocationId);
+ assert.equal(taskState.state,'ACCEPTED');assert.equal(taskState.derivedFromSeq,accepted.seq);
+ assert.equal(step.action.runId,'operation:ui-invocation-'+result.invocationId.slice(11),'source-bound run/step/attempt/causality retained from the recorded event, never inferred from current task state');
+ assert.equal(step.action.stepId,'step:'+result.invocationId);assert.equal(step.action.attempt,1);
+ assert.deepEqual(step.action.causal,result.observation.causal);
+ assert.equal(h.scope.businessViewReconstruction,'UNAVAILABLE_NOT_RECORDED','no old view/object bytes were ever recorded; no fake full historical reconstruction');
+ assert.equal(h.liveMayContinueSeparately,true);assert.equal(h.nativePauseDelivered,false);
+ assert.equal(h.executionAuthorityGranted,false);assert.equal(h.model,'NOT_RUN');assert.equal(h.readerEffects,'NONE');assert.equal(h.targetRedispatched,false);
+ assert.deepEqual(h.constraints,{localOnly:true,noSend:true,personalSave:false,sharedPublish:false});
+ assert.ok(Object.isFrozen(h));
+ assert.deepEqual(effectCounters(x),before,'history read causes zero task/outbox/proof/store/snapshot effects');
+ assert.equal(canonicalJson(h.steps).includes('Mach die Karte kleiner'),false,'no raw prompt text in historical step bytes');
+}finally{await x.close();}});
+test('700 REC-01 HISTORY stays persistently distinct from LIVE: live reads perform a fresh current authorized snapshot and never reuse the historical object; reader input contract denies caller extras and unsupported versions',async()=>{const x=await fixture();try{
+ const result=x.preview(),p=x.snapshot(),acceptedSeq=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===result.invocationId).seq;
+ const h=x.projection.history(x.tab.headers,historyRequest(acceptedSeq));
+ const live=x.snapshot();
+ assert.equal(live.schemaVersion,'pansphaira.workspace-context-projection/owner-snapshot/v1','live re-reads the existing fresh authorized owner snapshot');
+ assert.equal(live.mode,undefined,'live snapshot is not the historical response object');
+ assert.equal(h.mode,'HISTORY');assert.equal(live.tasks.find(t=>t.taskId===result.invocationId).state,'COMPLETED','live shows today state, history keeps recorded ACCEPTED');
+ assert.equal(h.steps.find(s=>s.seq===acceptedSeq).state,'ACCEPTED','the historical object was not mutated by the fresh live read');
+ assert.equal(live.streamHead.seq,p.events.length);assert.equal(h.streamHead.seq,p.events.length,'history honestly reports the current signed stream head');
+ for(const bad of [{...historyRequest(1),proof:'EXECUTOR'},{...historyRequest(1),audience:'FOREIGN_MODEL'},{...historyRequest(1),ownerSeq:1.5},{...historyRequest(1),grant:true},historyRequest(0)])
+  assert.throws(()=>x.projection.history(x.tab.headers,bad),/CONTEXT_PROJECTION_REQUEST_DENIED/,'closed request contract: no caller proof/actor/grant extras, no non-positive or fractional owner seq');
+ assert.throws(()=>x.projection.history(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/history-request/v2',audience:'MAIN_CONTRACT',ownerSeq:1}),/CONTEXT_PROJECTION_REQUEST_DENIED/,'unsupported version denied honestly');
+ const small=x.projection.history(x.tab.headers,historyRequest(acceptedSeq,'SPECIALIST_PREVIEW'));
+ assert.equal(small.steps.find(s=>s.seq===acceptedSeq).action,undefined,'specialist history audience stays minimized like the live snapshot');
+ assert.equal(Object.hasOwn(small.steps.find(s=>s.seq===acceptedSeq),'resourceRefs'),false);
+}finally{await x.close();}});
+test('700 REC-01 future/foreign/unrecorded seq and missing facts stay honest UNAVAILABLE gaps without renumbering or fake backfill; 100 rapid forward/back seeks cause zero effects',async()=>{const x=await fixture();try{
+ const result=x.preview(),p=x.snapshot(),head=p.streamHead,acceptedSeq=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===result.invocationId).seq;
+ const before=effectCounters(x);
+ const future=x.projection.history(x.tab.headers,historyRequest(head.seq+5));
+ assert.equal(future.availability,'UNAVAILABLE');assert.equal(future.gap.reason,'SEQ_UNRECORDED');assert.deepEqual(future.steps,[]);assert.equal(future.streamHead.seq,head.seq,'no renumbering: current signed head reported honestly');
+ const foreign=x.f.tab(x.f.issue('synthetic:other-history','reader'));
+ const foreignRead=x.projection.history(foreign.headers,historyRequest(acceptedSeq));
+ assert.equal(foreignRead.availability,'UNAVAILABLE');assert.equal(foreignRead.gap.reason,'SEQ_UNRECORDED','foreign principal has no recorded events at that seq; nothing leaks');
+ for(let i=0;i<100;i++){
+  const seq=1+(i%head.seq);
+  const h=x.projection.history(x.tab.headers,historyRequest(seq));
+  assert.equal(h.mode,'HISTORY');
+  assert.ok(h.steps.every(s=>s.seq<=seq),'never exposes events beyond the requested owner seq');
+ }
+ assert.deepEqual(effectCounters(x),before,'100 rapid forward/back seeks produce zero FACH/TOOL/PROVIDER/APPROVE/RESUME/DISPATCH effects and no new producer facts');
+}finally{await x.close();}});
+test('700 REC-01 revocation/switch cannot restore retired historical content or grants; event gap and actual proof mismatch are honest failures with no cached-bytes fallback',async()=>{const x=await fixture();try{
+ const result=x.preview(),p=x.snapshot(),acceptedSeq=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===result.invocationId).seq,objectId=x.tab.context.primaryObject.objectId;
+ x.projection.revoke(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+ assert.throws(()=>x.projection.history(x.tab.headers,historyRequest(acceptedSeq)),/CONTEXT_PRIVACY_REVOKED/,'revoked reads get no historical content restore');
+ x.projection.providerSwitch(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+ const retired=x.projection.history(x.tab.headers,historyRequest(acceptedSeq));
+ assert.equal(retired.availability,'UNAVAILABLE');assert.equal(retired.gap.reason,'SOURCE_RETIRED','providerSwitch cannot revive retired sources');
+ assert.equal(retired.steps.every(s=>s.state==='UNAVAILABLE'&&s.action===null),true);
+ assert.equal(canonicalJson(retired).includes(objectId),false,'retired resource refs never reappear');
+ assert.equal(canonicalJson(retired).includes('operation:ui-invocation-'+result.invocationId.slice(11)),false,'retired run binding never restored from history');
+ assert.equal(canonicalJson(retired).includes(p.events.find(e=>e.seq===acceptedSeq).payload.argumentDigest),false,'retired argument digest never restored');
+ const before=effectCounters(x);
+ // genuine event gap: remove one recorded outbox envelope inside the requested window
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding),gapRow=db.prepare('SELECT * FROM workspace_ui_context_outbox_v1 WHERE seq=2').get();
+ db.prepare('DELETE FROM workspace_ui_context_outbox_v1 WHERE seq=2').run();
+ const gapped=x.projection.history(x.tab.headers,historyRequest(3));
+ assert.equal(gapped.availability,'UNAVAILABLE');assert.equal(gapped.gap.reason,'EVENT_GAP','gap is reported, never silently skipped or backfilled');
+ db.prepare('INSERT INTO workspace_ui_context_outbox_v1 VALUES(?,?,?,?,?,?,?,?,?)').run(gapRow.principal_digest,gapRow.seq,gapRow.event_key,gapRow.task_id,gapRow.task_revision,gapRow.kind,gapRow.privacy_epoch,gapRow.bytes,gapRow.signature);
+ // actual proof mismatch: altered signed envelope bytes must fail, not fall back to cached bytes
+ const tampered=db.prepare('SELECT * FROM workspace_ui_context_outbox_v1 WHERE seq=1').get();
+ db.prepare('UPDATE workspace_ui_context_outbox_v1 SET bytes=? WHERE seq=1').run(tampered.bytes.replace('"noSend":true','"noSend":false'));
+ assert.throws(()=>x.projection.history(x.tab.headers,historyRequest(1)),/CONTEXT_OWNER_SIGNATURE_DENIED/,'proof mismatch denies the read; no cached-bytes fallback');
+ db.prepare('UPDATE workspace_ui_context_outbox_v1 SET bytes=? WHERE seq=1').run(tampered.bytes);
+ assert.equal(effectCounters(x).outbox,before.outbox,'gap/tamper probes left the restored signed outbox byte-identical: no reader-side repair mutation');
+ const live=x.projection.history(x.tab.headers,historyRequest(3));
+ assert.equal(live.availability,'UNAVAILABLE');assert.equal(live.gap.reason,'SOURCE_RETIRED','after honest failures the restored genuine record re-reads identically retired: deterministic, no cached-bytes fallback');
+}finally{await x.close();}});
 test('607 specific B2: authentic pre-journal legacy accepted row stays UNKNOWN while unrelated signed projection repair proceeds without redispatch or fake authority',async()=>{const x=await fixture();try{
  const valid=x.preview(),legacy=genuineAcceptedWithoutTarget(x),{db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);db.prepare('DELETE FROM workspace_ui_context_projection_v1 WHERE seq IN(SELECT seq FROM workspace_ui_context_outbox_v1 WHERE task_id=?)').run(legacy.invocationId);db.prepare('DELETE FROM workspace_ui_context_outbox_v1 WHERE task_id=?').run(legacy.invocationId);const completion=db.prepare("SELECT seq FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='INTENT_COMPLETED'").get(valid.invocationId);db.prepare('DELETE FROM workspace_ui_context_projection_v1 WHERE seq=?').run(completion.seq);assert.equal(x.snapshot().tasks.find(t=>t.taskId===legacy.invocationId).legacyUnregisteredIntent,true);
  const result=x.projection.reconcile(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/reconcile/v1'});assert.equal(result.repaired,1);assert.equal(result.targetRedispatched,false);const row=x.snapshot().tasks.find(t=>t.taskId===legacy.invocationId);assert.equal(row.state,'OUTCOME_UNCONFIRMED');assert.equal(row.independentTargetEffectVerified,false);assert.equal(x.snapshot().events.filter(e=>e.taskId===legacy.invocationId).length,0);assert.equal(x.snapshot().constraints.noSend,true);assert.equal(x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,0);
@@ -237,4 +327,29 @@ test('697 ACT-02 retargeting a genuinely minted handle onto a different minted A
  assert.equal(db.prepare("SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='OUTCOME_UNKNOWN'").get(d.invocationId).n,0,'no UNKNOWN fact may be misattributed to the never-dispatched task');
  assert.equal(db.prepare('SELECT state FROM workspace_ui_tasks_v2 WHERE command_id=?').get(d.invocationId).state,'ACCEPTED','a retargeted failed call cannot transition the never-dispatched task');
  connection.failed(effectD);
+}finally{await x.close();}});
+test('700 REC-01 repair03 sourceTimeAvailable tracks only the verified signed producer-clock sidecar: genuine preview true, absent legacy clock false/null, tampered clock fails closed, history state rights unchanged',async()=>{const x=await fixture();try{
+ const r=x.preview(),p=x.snapshot(),acc=p.events.find(e=>e.kind==='INTENT_ACCEPTED'&&e.taskId===r.invocationId),done=p.events.find(e=>e.kind==='INTENT_COMPLETED'&&e.taskId===r.invocationId);
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const genuine=x.projection.history(x.tab.headers,historyRequest(acc.seq));
+ const gstep=genuine.steps.find(s=>s.seq===acc.seq);
+ assert.equal(gstep.sourceTimeAvailable,true,'authentic same-transaction append has a signed clock row');
+ assert.ok(Number.isSafeInteger(gstep.sourceTimeMs)&&gstep.sourceTimeMs>=0,'exposed time is the existing verified sidecar value, not wallclock inference');
+ assert.deepEqual(effectCounters(x),effectCounters(x),'clock exposure reads the same signed store');
+ const effects=effectCounters(x);
+ db.prepare('DELETE FROM workspace_ui_context_event_clock_v1 WHERE seq=?').run(acc.seq);
+ const legacy=x.projection.history(x.tab.headers,historyRequest(done.seq));
+ const lstep=legacy.steps.find(s=>s.seq===acc.seq);
+ assert.equal(lstep.sourceTimeAvailable,false,'absent sidecar (pre-clock legacy scenario) must not claim time available');
+ assert.equal(lstep.sourceTimeMs,null,'no timestamp may be synthesized for a missing sidecar');
+ assert.equal(lstep.state,'ACCEPTED','missing clock evidence does not strip the genuinely recorded historical state');
+ assert.equal(legacy.availability,'AVAILABLE','missing clock degrades time honesty only, never history rights');
+ assert.deepEqual(effectCounters(x),effects,'missing-clock probe caused zero reader effects');
+ const clockRow=db.prepare('SELECT bytes FROM workspace_ui_context_event_clock_v1 WHERE seq=?').get(done.seq);
+ db.prepare('UPDATE workspace_ui_context_event_clock_v1 SET bytes=? WHERE seq=?').run(clockRow.bytes.replace('"unit":"COUNT"','"unit":"MS"'),done.seq);
+ assert.throws(()=>x.projection.history(x.tab.headers,historyRequest(done.seq)),/EVENT_SOURCE_CLOCK_SIGNATURE_DENIED|EVENT_SOURCE_CLOCK_BYTES_DENIED/,'tampered clock fails closed, no cached fallback');
+ db.prepare('UPDATE workspace_ui_context_event_clock_v1 SET bytes=? WHERE seq=?').run(clockRow.bytes,done.seq);
+ const restored=x.projection.history(x.tab.headers,historyRequest(done.seq));
+ assert.equal(restored.steps.find(s=>s.seq===done.seq).sourceTimeAvailable,true,'restored genuine sidecar reads available again deterministically');
+ assert.deepEqual(effectCounters(x),effects,'tamper probe left the signed store byte-identical: zero reader effects');
 }finally{await x.close();}});
