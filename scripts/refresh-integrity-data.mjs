@@ -2913,6 +2913,10 @@ const pan542Inputs = [
     "VALIDATOR"
   ],
   [
+    "tests/pan542/ks-price-variance-query.test.mjs",
+    "VALIDATOR"
+  ],
+  [
     "tests/pan542/registration.test.mjs",
     "VALIDATOR"
   ],
@@ -2931,7 +2935,9 @@ const pan542Inputs = [
   ["src/pan542/source-compatibility-catalog-v3.json", "SECURITY"],
   ["docs/architecture/erv-human-source-compatibility-v3.md", "DERIVED_EVIDENCE"],
   ["src/pan542/source-compatibility-catalog-v4.json", "SECURITY"],
-  ["docs/architecture/erv-human-source-compatibility-v4.md", "DERIVED_EVIDENCE"]
+  ["docs/architecture/erv-human-source-compatibility-v4.md", "DERIVED_EVIDENCE"],
+  ["src/pan542/ks-price-variance-query.mjs", "SECURITY"],
+  ["docs/architecture/erv-human-ks-price-variance-query-v1.md", "DERIVED_EVIDENCE"]
 ];
 let pan542Node = dag.nodes.find(({ id }) => id === "pan542-native-erv-human-v1");
 if (pan542Node === undefined) {
@@ -3697,8 +3703,6 @@ const pan597Inputs=[
   ["packages/contracts/src/workspace-browser-pairing-v1.ts", "CONTRACT"],
   ["packages/browser-workspace/src/workspace-browser-pairing-v1.ts", "SOURCE"],
   ["src/pan597/native-browser-pairing-v1.mjs", "SOURCE"],
-  ["src/pan597/native-display-session-v1.mjs", "SOURCE"],
-  ["src/pan597/native-display-ingress-v1.mjs", "SOURCE"],
   ["tests/pan597/native-browser-pairing.test.mjs", "VALIDATOR"],
   [
     "packages/contracts/src/workspace-surface-v2.ts",
@@ -3743,7 +3747,9 @@ const pan597Inputs=[
   [
     "docs/architecture/native-authenticated-browser-surfaces-v2.md",
     "DERIVED_EVIDENCE"
-  ]
+  ],
+  ["src/pan597/native-display-session-v1.mjs", "SOURCE"],
+  ["src/pan597/native-display-ingress-v1.mjs", "SOURCE"]
 ];
 const task548=dag.nodes.find(n=>n.id==='pan548-authentic-context-selection-v1');if(!task548)throw Error('PAN597_TASK_OWNER_MISSING');
 task548.inputs.push({path:'src/pan548/native-ui-task-projection-v2.mjs',role:'SOURCE',sha256:digest('src/pan548/native-ui-task-projection-v2.mjs')});if(!task548.ownedTests.includes('npm run pan597:test'))task548.ownedTests.push('npm run pan597:test');
@@ -3784,6 +3790,10 @@ const pan608Inputs=[
   ],
   [
     "tests/pan608/registration.test.mjs",
+    "VALIDATOR"
+  ],
+  [
+    "tests/pan608/action-observation.test.mjs",
     "VALIDATOR"
   ],
   [
@@ -3904,8 +3914,6 @@ repositoryIntegrityNode.ownedTests = repositoryIntegrityNode.ownedTests.filter(
 
 // Original594: one fixed dev-readback comparison at the existing PAN591 owner, not a new registry or a65th root command.
 const pan594Inputs = [
-  ["fixtures/pan594/locked-ajv2020-dev-readback-policy-v2.json", "CONTRACT"],
-  ["tests/pan594/policy-successor.test.mjs", "VALIDATOR"],
   [
     "src/pan591/locked-dev-readback-admission-v1.mjs",
     "SECURITY"
@@ -3957,7 +3965,9 @@ const pan594Inputs = [
   [
     "docs/architecture/pan594-native-dev-readback-comparison-v1.md",
     "DERIVED_EVIDENCE"
-  ]
+  ],
+  ["fixtures/pan594/locked-ajv2020-dev-readback-policy-v2.json", "CONTRACT"],
+  ["tests/pan594/policy-successor.test.mjs", "VALIDATOR"]
 ];
 for(const [inputPath,role]of pan594Inputs){if(!externalPluginNode.inputs.some(i=>i.path===inputPath))externalPluginNode.inputs.push({path:inputPath,role,sha256:digest(inputPath)});}
 for(const parent of["pan608-model-free-invocations-v1","pan529-runtime-budget-v1"])if(!externalPluginNode.dependsOn.includes(parent))externalPluginNode.dependsOn.push(parent);

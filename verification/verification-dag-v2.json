@@ -4925,7 +4925,7 @@
         {
           "path": "docs/architecture/canonical-json-profile-inventory.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "0b71cf415b5429fdc46e8bd847bd9a81c0efd4f367a9018e4889204ec53377f1"
+          "sha256": "da38bef4ae4544a29334fb27d49998d03393fc0390cb511577df4cbe03793a2b"
         },
         {
           "path": "docs/architecture/native-reference-rights-contract-v1.md",
@@ -5120,7 +5120,7 @@
         {
           "path": "tests/canonical-json-profile-inventory.test.ts",
           "role": "VALIDATOR",
-          "sha256": "b2887c429da052b3fd8bb308a5f3ba38ffa8e6e98a49b02945b95de5a1f46b28"
+          "sha256": "0264dd651fefb27effb63691cc3d2bff77f58fea809776fe6d0f1df9ba1f8150"
         },
         {
           "path": "tests/demo-current-head-e2e-entry.test.mjs",
@@ -5245,7 +5245,7 @@
         {
           "path": "verification/canonical-json-profile-inventory-v1.json",
           "role": "CONTRACT",
-          "sha256": "b61c273035325dcf5dda0e0d2830ff5542b8eab9cf8447968b6a331f2498516a"
+          "sha256": "31ac46f9998f251850843567f32b897de88d94e2c8aba02739cdf038f2ae9835"
         },
         {
           "path": "verification/demo-current-head-e2e/contract-v1.json",
@@ -10621,7 +10621,7 @@
         {
           "path": "packages/contracts/src/workspace-administration-approval-v1.ts",
           "role": "CONTRACT",
-          "sha256": "15efbd0ffcfb1b95d0c9d27b08648811b407cab568e5606295ebc8556464f2b1"
+          "sha256": "3d8fcd813c4aaae004c225999085afa6c122cb6a361a62d357e8855541967c89"
         },
         {
           "path": "packages/browser-workspace/src/workspace-administration-v1.ts",
@@ -10641,7 +10641,7 @@
         {
           "path": "src/pan550/native-approval-source.mjs",
           "role": "SECURITY",
-          "sha256": "3854a6b7c88ed69c7d216fd7510b9321e63879e5cfaac1c8ab30dd9939498231"
+          "sha256": "2a9b6a4f665e91ec438092b61795d664cae59e71e1fa267c7f1f2ec715eda414"
         },
         {
           "path": "scripts/run-pan550-native-administration-tests.mjs",
@@ -10656,7 +10656,7 @@
         {
           "path": "tests/pan550/native-approval.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "dff9f1887ef743e75076a5103b237dc53fc6b74130c843e638883aa11f186f43"
+          "sha256": "78bee3f59b5539e3f53bdb64f65c9a81efb9040b874bb0be3fd7759ae27bfa67"
         },
         {
           "path": "tests/pan550/browser-fixture.mjs",
