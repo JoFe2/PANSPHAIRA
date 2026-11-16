@@ -11599,7 +11599,7 @@
         {
           "path": "src/pan548/native-context-projection-v1.mjs",
           "role": "SOURCE",
-          "sha256": "64833bd0eef55be2f53b2e9cb1d6c6be98c62aeed7167e37fb3169d3ae1285af"
+          "sha256": "31ff626a214e07aa8caefd6ac29f60b9d8c1a7f95dc4922f4fdab281833ea03f"
         },
         {
           "path": "src/pan548/native-readonly-event-projection-v1.mjs",
@@ -11650,7 +11650,7 @@
         {
           "path": "tests/pan597/browser-pairing.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8aeca0d80ab7455501e71721603bebe52493b7965db545624d7b401423a957bd"
+          "sha256": "73289635b9bb7fda6202a1b8cade0b69b8cbb745dc99df89c59e91ececddd8ff"
         },
         {
           "path": "packages/contracts/src/workspace-browser-pairing-v1.ts",
@@ -11892,7 +11892,7 @@
         {
           "path": "tests/pan607/native-context-projection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "02fc34cf28d761577cf0dbec58fa38391a98a586c392365e47b6075c9781b393"
+          "sha256": "fc344bc823b6758d7000f9ee275c5460752158080666424d4a07db3e0187b176"
         },
         {
           "path": "tests/pan607/native-checkpoints.test.mjs",
