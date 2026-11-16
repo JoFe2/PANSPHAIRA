@@ -212,3 +212,43 @@ test('698 ACT-03 fenced dispatch-won attempt keeps original UNKNOWN, restart kee
   }finally{owner2.close();surfaces2.close();tasks2.close();await x.f.close();}
  }finally{}
 });
+
+// PAN699 transport slice: the existing owner-bound read-only observation is served by the
+// EXISTING protected /workspace/invocations/read route as one additional explicitly versioned
+// read projection of the closed observe DTO. No new route, no scope/authority change, no
+// browser pixel integration yet (that stays open under #699).
+test('699 protected read route projects the closed observe DTO with honest readback; foreign origin/context and schema tampering deny without new effects',async()=>{
+ const x=await fixture();try{
+  const {mountProtectedWorkspaceInvocationsV1,mountProtectedWorkspaceSurfacesV2}=await import('../../src/pan527/origin-session-adapter.mjs');
+  const {request527}=await import('../pan527/helpers.mjs');
+  const {readFileSync}=await import('node:fs');
+  const prior=x.before();
+  const surfacesAttachment=mountProtectedWorkspaceSurfacesV2(x.f.tls.gateway,{optIn:true,tenantId:'tenant-a',origin:x.f.tls.origin,identityDigest:x.f.sessions.binding.identityDigest,adapterVersion:'pan597-native-surfaces/v2',owner:x.surfaces,script:readFileSync('dist/browser-workspace/workspace-surfaces.js','utf8')});
+  const invocationAttachment=mountProtectedWorkspaceInvocationsV1(x.f.tls.gateway,{optIn:true,tenantId:'tenant-a',origin:x.f.tls.origin,identityDigest:x.f.sessions.binding.identityDigest,adapterVersion:'pan548-model-free-invocations/v1',owner:x.owner,script:readFileSync('dist/browser-workspace/workspace-invocations.js','utf8')});
+  try{
+   const r=x.owner.resolve(x.source.headers,x.request()),a=x.owner.admit(x.source.headers,x.selection(r));
+   const OBSERVE={schemaVersion:'pansphaira.workspace-action-observation/observe/v1',invocationId:a.invocationId};
+   const response=await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',x.source.headers,'POST',OBSERVE);
+   assert.equal(response.status,200,'the protected read route serves the closed observe DTO');
+   const transported=JSON.parse(response.body);
+   assert.deepEqual(transported,x.owner.observe(x.source.headers,OBSERVE),'transport readback equals the independent owner observation byte for byte');
+   assert.equal(transported.schemaVersion,'pansphaira.workspace-action-observation/v1');assert.equal(transported.taskId,a.invocationId);assert.equal(transported.phase,'ADMITTED');assert.equal(transported.attempt,0);
+   assert.equal(transported.model,'NOT_RUN');assert.equal(transported.executionAuthorityGranted,false);assert.equal(transported.rendered,false);assert.equal(transported.personalViewPersistenceProduced,false);assert.equal(transported.physicalPixelSightCertified,false,'transport observe never inflates an admitted invocation into a rendered or dispatched claim');
+   const legacyDeny=await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',x.source.headers,'POST',{schemaVersion:'pansphaira.workspace-invocation/read/v1',invocationId:a.invocationId});
+   assert.equal(legacyDeny.status,403,'the unchanged read/v1 keeps requiring an actual persisted task: admission alone has no readback');
+   assert.equal(x.count(),0);assert.deepEqual(x.before(),prior,'observe over transport creates no task, effect or authority');
+   x.owner.execute(x.source.headers,x.execution(a));
+   const legacy=await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',x.source.headers,'POST',{schemaVersion:'pansphaira.workspace-invocation/read/v1',invocationId:a.invocationId});
+   assert.equal(legacy.status,200);const legacyBody=JSON.parse(legacy.body);
+   assert.equal(legacyBody.schemaVersion,'pansphaira.workspace-invocation/readback/v1');assert.equal(legacyBody.independentRead,true);assert.equal(legacyBody.invocationId,a.invocationId,'the existing read/v1 projection keeps its exact shape and scope');
+   const foreign=x.f.tab(x.f.issue('synthetic:foreign-reader','reader'));
+   assert.equal((await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',{...foreign.headers},'POST',OBSERVE)).status,403,'a foreign principal cannot read another actors observation');
+   assert.equal((await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',{...x.source.headers,origin:'https://pan699-foreign.invalid'},'POST',OBSERVE)).status,403,'foreign origin is denied before any owner read');
+   assert.equal((await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',{origin:x.f.tls.origin,'x-pan527-csrf':'0'.repeat(32)},'POST',OBSERVE)).status,401,'no session, no observation');
+   assert.equal((await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',x.source.headers,'POST',{schemaVersion:'pansphaira.workspace-action-observation/observe/v2',invocationId:a.invocationId})).status,400,'a wrong DTO version is denied by the unchanged read owner');
+   assert.equal((await request527(x.f.tls,'/t/tenant-a/workspace/invocations/read',x.source.headers,'POST',{schemaVersion:'pansphaira.workspace-action-observation/observe/v1',invocationId:a.invocationId,noSend:false})).status,400,'the observe DTO stays closed: no extra fields');
+   assert.equal(x.count(),1,'only the one executed invocation task exists; the observe transport slice itself added none');
+   assert.deepEqual(x.before(),prior,'observe over transport never persists the personal view');
+  }finally{invocationAttachment.close();surfacesAttachment.close();}
+ }finally{await x.close();}
+});

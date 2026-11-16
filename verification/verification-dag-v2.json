@@ -11574,7 +11574,7 @@
         {
           "path": "src/pan548/native-model-free-invocations-v1.mjs",
           "role": "SOURCE",
-          "sha256": "701c28cc877bbd8325b754c4f66e81b901fabd58fe2dfa16e8872f62eb2c820b"
+          "sha256": "0d854fb1220ca08103839e7ce222130c5f782416b3db786f407541c8c860f26d"
         },
         {
           "path": "src/pan548/native-invocation-executor-v1.mjs",
@@ -11589,7 +11589,7 @@
         {
           "path": "src/pan548/native-context-journal-v1.mjs",
           "role": "SECURITY",
-          "sha256": "ce82d9110ae260180aafdeb3e9519bf4d0fba997c7ee5fee0d7f7420aa1255a6"
+          "sha256": "5495d9d1bb8f50ad29ab7ba91895a2f89d71fec9c0b911fb83e39da5435809ac"
         },
         {
           "path": "src/pan548/native-context-checkpoints-v1.mjs",
@@ -11624,7 +11624,7 @@
         {
           "path": "tests/pan699/action-anchor-projection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "eb99a32388d94942e91e625fb276a1cad10a840f2c4e8492abfc507fb1a4bee9"
+          "sha256": "f2be925471194a26bef01734407287fb3df1aaad08838e8007c7eb134889195b"
         }
       ],
       "ownedTests": [
@@ -11799,7 +11799,7 @@
         {
           "path": "tests/pan608/native-invocations.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "60048c53173cbcf715ea2cfb32d95ab0ad90a95feb977b61045099527395da5e"
+          "sha256": "bf6a83222b4378775c4ea80224374afe10484f6705972fa88883a544a91042c5"
         },
         {
           "path": "tests/pan608/browser-invocations.test.mjs",
@@ -11814,7 +11814,7 @@
         {
           "path": "tests/pan608/action-observation.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "27d3f6abf1fb1d8576dc10b6a847ac5c2462db64e4dc8777e94ad4cc899f02dd"
+          "sha256": "fb9e32955ba1e029e5112520089ffaa8846c898a6479971bb83a654c227478d4"
         },
         {
           "path": "docs/architecture/model-free-native-invocations-v1.md",

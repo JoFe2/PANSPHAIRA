@@ -89,13 +89,20 @@ export function createNativeWorkspaceInvocationsV1(options){
    model:'NOT_RUN',modelPlanLineage:'NOT_INFERRED',executionAuthorityGranted:false,...noEffects});
   const state=row?.state??null;
   const proof=row&&(state==='COMPLETED'||state==='OUTCOME_UNCONFIRMED')?t.contextJournal.bestProof(headers,invocationId):null;
-  const phase=!row?(admission?'ADMITTED':'PROPOSED'):state==='ACCEPTED'?'DISPATCHED':state==='COMPLETED'&&proof?'RESULT_CONFIRMED':'UNKNOWN';
+  // Truth boundary (699 P2): DISPATCHED is attested ONLY by the owner's own
+  // durable TARGET_ATTEMPTED journal fact, never by a bare ACCEPTED row —
+  // connection.begin alone reserves the attempt but has not dispatched.
+  const attempted=!!row&&t.contextJournal.targetAttempted(headers,invocationId);
+  const phase=!row?(admission?'ADMITTED':'PROPOSED'):state==='ACCEPTED'?(attempted?'DISPATCHED':'ADMITTED'):state==='COMPLETED'&&proof?'RESULT_CONFIRMED':'UNKNOWN';
+  // Attempt attestation follows the same evidence: a genuine TARGET_ATTEMPTED
+  // fact or a settled outcome row, never a bare reservation.
+  const attempt=!row?0:attempted||state==='COMPLETED'||state==='OUTCOME_UNCONFIRMED'?1:0;
   const result=row?.result_json===null||row===undefined?null:JSON.parse(row.result_json);
   const semanticTarget=member.capability===capabilities[0]
    ?freeze({kind:'MODULE_CARD_INSTANCE',moduleId:member.objectRef.moduleId,viewId:member.objectRef.viewId,objectId:member.objectRef.objectId,instanceId:member.objectRef.instanceId})
    :freeze({kind:'REGISTERED_SURFACE_DOCUMENT',objectId:member.objectRef.objectId,surfaceId:member.targetRef.surfaceId});
   return freeze({schemaVersion:'pansphaira.workspace-action-observation/v1',
-   runId:modelFreeUiBudgetOperationV1(invocationId),taskId:invocationId,stepId:'step:'+invocationId.slice(11),attempt:row?1:0,taskRevision:row?row.revision:null,
+   runId:modelFreeUiBudgetOperationV1(invocationId),taskId:invocationId,stepId:'step:'+invocationId.slice(11),attempt,taskRevision:row?row.revision:null,
    actor:{tenantId:a.p.tenantId,subjectId:a.p.subjectId,role:a.p.role},
    capability:member.capability,operationSchemaVersion:JSON.parse(member.argumentBytes).schemaVersion,
    objectRef:member.objectRef,expectedRevision:member.capability===capabilities[0]?member.revisions.viewRevision:member.documentRef?.dataRevision??null,expectedRevisions:copy(member.revisions),
@@ -173,7 +180,7 @@ export function createNativeWorkspaceInvocationsV1(options){
   resume(headers,value){return controlRequest('resume',headers,value);},
   control(headers,value){const c=uiTaskClosedV2(value,['schemaVersion'],'INVOCATION_CONTROL_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-invocation/control-read/v1')throw Error('INVOCATION_CONTROL_INPUT_DENIED');leading(headers);return t.contextJournal.controlRead(headers);},
   observe(headers,value){const c=uiTaskClosedV2(value,observeKeys,'INVOCATION_OBSERVATION_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-action-observation/observe/v1'||typeof c.invocationId!=='string'||!/^invocation:[a-f0-9]{32}$/.test(c.invocationId))throw Error('INVOCATION_OBSERVATION_INPUT_DENIED');leading(headers);return observationFor(headers,c.invocationId);},
-  read(headers,value){const c=uiTaskClosedV2(value,['schemaVersion','invocationId'],'INVOCATION_READ_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-invocation/read/v1')throw Error('INVOCATION_READ_INPUT_DENIED');leading(headers);const custody=independentReader.read(headers,{schemaVersion:'pansphaira.workspace-ui-task/observe/v1',commandId:c.invocationId,expectedWriterEpoch:t.bootEpoch});return freeze({schemaVersion:'pansphaira.workspace-invocation/readback/v1',invocationId:c.invocationId,task:custody.task,custody,independentRead:true,...noEffects});},
+  read(headers,value){const c=uiTaskClosedV2(value,['schemaVersion','invocationId'],'INVOCATION_READ_INPUT_DENIED');if(c.schemaVersion==='pansphaira.workspace-action-observation/observe/v1'){if(typeof c.invocationId!=='string'||!/^invocation:[a-f0-9]{32}$/.test(c.invocationId))throw Error('INVOCATION_READ_INPUT_DENIED');leading(headers);return observationFor(headers,c.invocationId);}if(c.schemaVersion!=='pansphaira.workspace-invocation/read/v1')throw Error('INVOCATION_READ_INPUT_DENIED');leading(headers);const custody=independentReader.read(headers,{schemaVersion:'pansphaira.workspace-ui-task/observe/v1',commandId:c.invocationId,expectedWriterEpoch:t.bootEpoch});return freeze({schemaVersion:'pansphaira.workspace-invocation/readback/v1',invocationId:c.invocationId,task:custody.task,custody,independentRead:true,...noEffects});},
   close(){closed=true;independentReader.close();sets.clear();admissions.clear();owned.delete(owner);},
  });
  const connection=Object.freeze({sessions,contextSelection,viewOwner,surfaces,tasks,

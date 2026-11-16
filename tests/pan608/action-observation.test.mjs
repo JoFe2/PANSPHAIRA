@@ -169,3 +169,41 @@ test('696 ACT-01 preview observation binds the actual expected view/native revis
   assert.equal(x.observe({...OBS,invocationId:a.invocationId}).phase,'RESULT_CONFIRMED');
  }finally{await x.close();}
 });
+test('699 P2 begin-only observation proves no dispatch: honest ADMITTED/attempt0 bound to the durable TARGET_ATTEMPTED fact; a real dispatch flips it; a blocked pause between begin and dispatch stays neutral and retires under revoke',async()=>{
+ const x=await fixture();try{const prior=x.before(),r=x.owner.resolve(x.source.headers,x.request()),a=x.owner.admit(x.source.headers,x.selection(r));
+  const connection=nativeWorkspaceInvocationExecutorConnectionV1(x.owner),effect=connection.begin(x.source.headers,x.execution(a));
+  // Genuine begin-only probe: the task row is ACCEPTED, the journal holds ZERO
+  // TARGET_ATTEMPTED facts, so no observation may claim DISPATCHED or attempt 1.
+  assert.equal(x.n.db.prepare('SELECT count(*) n FROM workspace_ui_tasks_v2 WHERE command_id=?').get(a.invocationId).n,1,'begin persisted the reserved task row');
+  assert.equal(x.n.db.prepare("SELECT count(*) n FROM workspace_ui_context_outbox_v1 WHERE task_id=? AND kind='TARGET_ATTEMPTED'").get(a.invocationId).n,0,'begin journalled no dispatch fact');
+  const begun=x.observe({...OBS,invocationId:a.invocationId});
+  assert.equal(begun.phase,'ADMITTED','begin-only must not sell bare admission as dispatch');
+  assert.equal(begun.attempt,0,'no genuine TARGET_ATTEMPTED fact exists yet, so no attempt may be attested');
+  assert.equal(begun.executionAuthorityGranted,false);assert.equal(begun.rendered,false);assert.equal(begun.proof,null);
+  // A blocked pause between begin and dispatch stays a neutral control state and
+  // grants no new dispatch right; observation stays honest ADMITTED throughout.
+  const p=x.owner.pause(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/pause/v1',expectedControlRevision:0});
+  assert.equal(p.state,'PAUSE_REQUESTED');
+  assert.equal(x.observe({...OBS,invocationId:a.invocationId}).phase,'ADMITTED','a pause fence never fabricates a dispatch fact');
+  const res=x.owner.resume(x.source.headers,{schemaVersion:'pansphaira.workspace-invocation/resume/v1',expectedControlRevision:1});
+  assert.equal(res.state,'RUNNING');
+  assert.equal(x.observe({...OBS,invocationId:a.invocationId}).phase,'ADMITTED');
+  // The real dispatcher boundary: only after the journalled TARGET_ATTEMPTED
+  // fact may the observation project DISPATCHED with attempt 1.
+  connection.dispatch(x.source.headers,effect);
+  const dispatched=x.observe({...OBS,invocationId:a.invocationId});
+  assert.equal(dispatched.phase,'DISPATCHED','the owner journalled exactly one real TARGET_ATTEMPTED fact');
+  assert.equal(dispatched.attempt,1);assert.equal(dispatched.rendered,false);assert.equal(dispatched.executionAuthorityGranted,false);
+  const finish=connection.finish(x.source.headers,effect,{phase:'PREVIEW_VALIDATED',preview:x.f.view.preview(x.source.headers,JSON.parse(effect.member.argumentBytes)),clientRendered:false,personalProfileSaved:false,restored:false});
+  assert.equal(finish.observation.phase,'RESULT_CONFIRMED');assert.equal(finish.observation.attempt,1);
+  assert.equal(x.count(),1);assert.deepEqual(x.before(),prior,'observation, pause fence and dispatch alone persist no personal view');
+ }finally{await x.close();}
+ const y=await privacyFixture();try{
+  // Focused revoke/current-privacy negative over a genuinely dispatched attempt:
+  // live observation retires and never exposes the dispatch phase afterwards.
+  const res=y.preview();const id=res.observation.taskId;
+  assert.equal(res.observation.phase,'RESULT_CONFIRMED');
+  y.projection.revoke(y.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+  assertRetired(y,id,'a revoked dispatched attempt must retire, not disclose its dispatch phase');
+ }finally{await y.close();}
+});
