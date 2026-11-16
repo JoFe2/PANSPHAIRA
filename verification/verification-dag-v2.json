@@ -11660,7 +11660,7 @@
         {
           "path": "tests/pan597/browser-pairing.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "aac47f2012d925c2be4b8339f26538a2ef36fe965c3f8f672c4718659f80be1b"
+          "sha256": "8ae9ccedfb5920c9fb974dc068955492acabfe0724166a7d8ac3279649adff50"
         },
         {
           "path": "packages/contracts/src/workspace-browser-pairing-v1.ts",
