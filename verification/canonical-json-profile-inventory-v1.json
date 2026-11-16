@@ -23,7 +23,7 @@
       {
         "path": "tests/canonical-json-profile-inventory.test.ts",
         "role": "VALIDATOR",
-        "sha256": "d6ca2e9bda51c7d34a8b0cf375b2b9a624a78703c03b13986f583cdcb8209744"
+        "sha256": "b2887c429da052b3fd8bb308a5f3ba38ffa8e6e98a49b02945b95de5a1f46b28"
       }
     ]
   },
@@ -979,6 +979,14 @@
       "fromSha256": "bbebbba3b8d306ef41d882f25d6fce48ced059f19354a9d607e011a525f3d60c",
       "toSha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
       "reason": "Register exactly the two PR679 source-only native display session/ingress inputs at the existing PAN597 owner and the frozen V4 catalog SECURITY/documentation DERIVED_EVIDENCE inputs at the existing PAN542 owner as one closed successor of published Main PR681 V109. Preserve every published migration including the fast-uri 3.1.9 developer-policy v2 registration and immutable v1, all admitted base obligations/13 pinned profiles, graph104/all109 owners, scanner/validator semantics, original byte caps, native guards and runnable inventory. The unchanged mechanical scanner measures 1315 files,350 import sites in349 files and2870 unique ledger paths. Supersede only unpublished branch generator V109/V110 registrations; historical Git commits and frozen runtime V1-V4 source catalogs remain unchanged. This inventory registration grants no native, browser, CI, release or whole-issue acceptance."
+    },
+    {
+      "migrationId": "UI-ACT-699-ACTION-ANCHOR-PROJECTION/INTEGRITY-GENERATOR/V111",
+      "path": "scripts/refresh-integrity-data.mjs",
+      "profileVersion": 111,
+      "fromSha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
+      "toSha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e",
+      "reason": "Register exactly the two UI-ACT-699 source-only semantic action-anchor inputs (resolver SOURCE and focused contract test VALIDATOR) as additive members of the existing PAN548 owner inside the generator registration lists and the checksum ledger, without executing a broad refresh. Preserve all 110 prior migrations, immutable base obligations, 13 pinned profiles, graph104/all109 owners, unchanged scanner/validator semantics, original byte caps, native guards and the 1792-entry runnable inventory. The unchanged mechanical scanner measures 1317 files, 352 import sites in 351 files and 2872 unique ledger paths after these two additive source files. This inventory registration grants no browser, CI, release or whole699 acceptance."
     }
   ],
   "scanScope": {
@@ -1021,15 +1029,15 @@
     "Historical pin state and byte obligations derive only from the immutable admitted-base fixture; candidate-ledger regeneration cannot redefine them."
   ],
   "freshCounts": {
-    "filesScanned": 1315,
+    "filesScanned": 1317,
     "declarationSites": 37,
     "declarationFiles": 37,
-    "importSites": 350,
-    "importFiles": 349,
+    "importSites": 352,
+    "importFiles": 351,
     "reexportSites": 7,
     "similarShapeSites": 30,
-    "ledgerEntries": 2870,
-    "ledgerUniquePaths": 2870
+    "ledgerEntries": 2872,
+    "ledgerUniquePaths": 2872
   },
   "profiles": [
     {
@@ -1102,7 +1110,7 @@
       "classification": "implementation",
       "owner": "scripts",
       "pinned": true,
-      "sha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b"
+      "sha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e"
     },
     {
       "file": "scripts/render-asf-public-readback.mjs",
@@ -1549,8 +1557,8 @@
     },
     {
       "owner": "pan548",
-      "importSites": 10,
-      "importFiles": 10
+      "importSites": 11,
+      "importFiles": 11
     },
     {
       "owner": "pan549",
@@ -1614,8 +1622,8 @@
     },
     {
       "owner": "tests",
-      "importSites": 80,
-      "importFiles": 79
+      "importSites": 81,
+      "importFiles": 80
     },
     {
       "owner": "usage-insights",
@@ -1908,7 +1916,7 @@
     },
     {
       "path": "scripts/refresh-integrity-data.mjs",
-      "sha256": "e98709600ed78630b605a94fae28e7f6c2ef4993a8277900b7e87baa07927b3b",
+      "sha256": "e7e23d0577cced9b760e9a12cb3e6f575e6e6ffbb94d5083105998ee5301e12e",
       "basis": "profile-version-migration"
     },
     {

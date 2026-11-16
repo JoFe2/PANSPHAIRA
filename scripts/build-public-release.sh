@@ -773,6 +773,10 @@ repository_only_files = {
     "tests/pan607/native-process-restart.test.mjs",
     "tests/pan607/registration.test.mjs",
 
+    # UI-ACT-699 semantic action-anchor projection; source-only display representation.
+    "src/pan548/native-action-anchor-projection-v1.mjs",
+    "tests/pan699/action-anchor-projection.test.mjs",
+
     # PAN608 model-free typed invocation; existing548/546/597 consumer only.
     "src/pan548/model-free-final-text-v1.mjs",
     "src/pan548/native-model-free-invocations-v1.mjs",

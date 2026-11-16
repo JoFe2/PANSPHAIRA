@@ -3870,6 +3870,13 @@ for(const id of ['pan548-authentic-context-selection-v1','pan597-native-browser-
 let rules612=dag.nodes.find(n=>n.id==='pan612-model-free-rules-context-vertical-v1');if(!rules612){rules612={id:'pan612-model-free-rules-context-vertical-v1',dependsOn:['pan607-native-context-checkpoint-projection-v1','pan608-model-free-invocations-v1'],inputs:[],ownedTests:[],invariants:['Reuse actual548 task/session/context and existing546597 original target readers; no new store, policy/task/broker engine or target redispatch.','Fix exactly two independently resolved native document-render and reversible-preview references within the existing607 checkpoint owner transaction; copied methods, caller hashes or route flags grant no authority.','Preserve actual reviewer/session/tenant/tab/context, origin/CSRF, privacy/retention and immutable no-send/NOT_RUN constraints through same existing browser checkpoint controls and independently read target proofs.','MODEL_FREE_RULES_CONTEXT_VERTICAL is separately deliverable under original612AC06; native local PREPARED/INCLUDED_IN_PROMPT/RESULT_CHECKED are not genuine575 Main-model consideration, live voice or original612 all-criteria closure.'],riskClass:'HIGH',globalInvalidation:false};dag.nodes.push(rules612);}
 rules612.inputs=pan612Inputs.map(([inputPath,role])=>({path:inputPath,role,sha256:digest(inputPath)}));rules612.ownedTests=['npm run pan612:test'];dag.graphVersion=104;
 
+// UI-ACT-699 bounded code-owned semantic action-anchor presentation inputs on
+// the existing548 owner: representation-only display binding, source evidence
+// only; no browser acceptance, no owned-test manifest or graph change.
+const pan699NativeInputs=[["src/pan548/native-action-anchor-projection-v1.mjs","SOURCE"]];
+const pan699Inputs=[["tests/pan699/action-anchor-projection.test.mjs","VALIDATOR"]];
+for(const[inputPath,role]of[...pan699NativeInputs,...pan699Inputs])if(!task548.inputs.some(i=>i.path===inputPath))task548.inputs.push({path:inputPath,role,sha256:digest(inputPath)});
+
 // PAN591 extends the existing external-plugin preflight owner. Keep the
 // unchanged 64-command bound: this focused test is not a 65th integration test.
 const pan591Inputs = [
@@ -3999,6 +4006,7 @@ for(const[inputPath]of[...pan604NativeInputs,...pan604Inputs])entries.set(inputP
 for(const[inputPath]of[...pan602NativeInputs,...pan602Inputs])entries.set(inputPath,null);
 for(const[inputPath]of[...pan612NativeInputs,...pan612Inputs])entries.set(inputPath,null);
 for (const [inputPath] of pan615Inputs) entries.set(inputPath, null);
+for(const[inputPath]of[...pan699NativeInputs,...pan699Inputs])entries.set(inputPath,null);
 for (const [inputPath] of pan463Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan547Inputs) entries.set(inputPath, null);
 for (const [inputPath] of pan550Inputs) entries.set(inputPath, null);
