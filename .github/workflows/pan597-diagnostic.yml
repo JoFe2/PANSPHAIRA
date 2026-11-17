@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: [direct, proof-child]
+        mode: [proof-child, late-native-warm]
     env:
       PAN597_EXECUTION_MODE: ${{ matrix.mode }}
       DIAGNOSTIC_WORKFLOW_SHA: ${{ github.sha }}
@@ -52,6 +52,48 @@ jobs:
       - name: Install unchanged locked dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
 
+      - name: Set up supported Docker Compose
+        env:
+          CM_COMPOSE_URL: https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-x86_64
+          CM_COMPOSE_SHA256: dba9d98e1ba5bfe11d88c99b9bd32fc4a0624a30fafe68eea34d61a3e42fd372
+        run: |
+          compose_root="$RUNNER_TEMP/chimpmaera-docker-config"
+          plugin_dir="$compose_root/cli-plugins"
+          compose_binary="$plugin_dir/docker-compose"
+          mkdir -p "$plugin_dir"
+          curl --fail --location --silent --show-error \
+            --output "$compose_binary" "$CM_COMPOSE_URL"
+          printf '%s  %s\n' "$CM_COMPOSE_SHA256" "$compose_binary" \
+            | sha256sum --check -
+          chmod 0755 "$compose_binary"
+          printf 'DOCKER_CONFIG=%s\n' "$compose_root" >> "$GITHUB_ENV"
+          test "v$(DOCKER_CONFIG="$compose_root" docker compose version --short)" = v2.40.3
+
+      - name: Prepare embedded PostgreSQL runtime
+        run: |
+          npm rebuild @embedded-postgres/linux-x64
+          node_modules/@embedded-postgres/linux-x64/native/bin/initdb --version
+          node_modules/@embedded-postgres/linux-x64/native/bin/postgres --version
+
+      - name: Prepare the exact public PAN454 synthetic runtime image
+        # Image acquisition is outside the NETWORK_NONE execution window.
+        # Never substitute a floating tag or broaden workload permissions.
+        run: docker pull --platform linux/amd64 node@sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03
+
+      - name: Fetch the pinned public PAN692 KS code without credentials
+        env:
+          GIT_TERMINAL_PROMPT: '0'
+        run: |
+          ks_root="$RUNNER_TEMP/pan692-ks"
+          git init "$ks_root"
+          git -C "$ks_root" -c credential.helper= fetch --depth=1 https://github.com/JoFe2/KaleidoSphere.git 5550c603b005c9c168f39f4047b1b46d2c076409
+          git -C "$ks_root" checkout --detach FETCH_HEAD
+          test "$(git -C "$ks_root" rev-parse --verify HEAD)" = '5550c603b005c9c168f39f4047b1b46d2c076409'
+          test "$(git -C "$ks_root" status --porcelain=v1 --untracked-files=no)" = ''
+          sha256sum "$ks_root/services/bi-control/src/business-bi/procurement-analysis.mjs" \
+            | grep -q '^7eb01232c7ae93f42e9fa390f20acae26e543b6f0970a1b31567acfc3b957cf6  '
+          printf 'KS692_KS_SOURCE=%s\n' "$ks_root" >> "$GITHUB_ENV"
+
       - name: Prepare exact private PAN527 browser and NSS tooling
         env:
           PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/pan527-browsers
@@ -85,13 +127,26 @@ jobs:
           set -euo pipefail
           printf 'PAN597_EXECUTION_MODE=%s\n' "$PAN597_EXECUTION_MODE"
           sha256sum scripts/verify-secure-default-proof.mjs
-          if test "$PAN597_EXECUTION_MODE" = proof-child; then
-            node --input-type=module -e "import { runProofCommand } from './scripts/verify-secure-default-proof.mjs'; await runProofCommand('npm run pan597:test', process.cwd());"
-          elif test "$PAN597_EXECUTION_MODE" = direct; then
-            npm run pan597:test
-          else
-            exit 2
-          fi
+          node --input-type=module <<'JS'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {join} from 'node:path';
+          import {runProofCommand} from './scripts/verify-secure-default-proof.mjs';
+          const samplePath=join(process.env.RUNNER_TEMP,'pan597-resource-sample.mjs');
+          writeFileSync(samplePath,"import{readdirSync,readFileSync}from'node:fs';import{loadavg,freemem,totalmem}from'node:os';const names=['node','chrome','chromium','postgres','Xvfb','certutil'],counts=Object.fromEntries(names.map(n=>[n,0]));for(const pid of readdirSync('/proc')){if(!/^[0-9]+$/.test(pid))continue;try{const name=readFileSync('/proc/'+pid+'/comm','utf8').trim();if(names.includes(name))counts[name]++;}catch{}}console.log('PAN597_RESOURCE_SAMPLE '+JSON.stringify({timeMs:Date.now(),loadavg:loadavg(),freeBytes:freemem(),totalBytes:totalmem(),processNameCounts:counts}));",{flag:'wx'});
+          const sample=JSON.stringify(process.execPath)+' '+JSON.stringify(samplePath);
+          const mode=process.env.PAN597_EXECUTION_MODE;
+          if(mode==='proof-child'){
+            await runProofCommand(sample+' && npm run pan597:test',process.cwd());
+          }else if(mode==='late-native-warm'){
+            const commands=JSON.parse(readFileSync('package.json','utf8')).scripts.pretest.split(' && ');
+            const first=commands.indexOf('npm run pan565:test'),last=commands.indexOf('npm run pan597:test');
+            if(first<0||last<=first||last-first!==8)throw Error('DIAGNOSTIC_PREFIX_IDENTITY_DENIED');
+            const prefix=commands.slice(first,last);
+            console.log('DIAGNOSTIC_PREDECESSOR_PREFIX '+JSON.stringify(prefix));
+            const chain=['npm run build --silent',sample,...prefix.flatMap(command=>[command,sample]),'npm run pan597:test'];
+            await runProofCommand(chain.join(' && '),process.cwd());
+          }else{throw Error('DIAGNOSTIC_MODE_DENIED');}
+          JS
 
       - name: Stage bounded PAN597 case evidence
         if: always()
