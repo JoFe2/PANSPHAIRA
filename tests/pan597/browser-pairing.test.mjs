@@ -117,7 +117,7 @@ async function keyboardReachability606(x,frame,offered,observation){
  return lastFieldGeometry;
 }
 // Each independent case owns two real profiles, the exact source reference and
-// its own native grants. Only the freshness/stale-order cases share sequential
+// its own native grants. Only the freshness/stale-order/short-lease cases share sequential
 // grants: those comparisons are causal, never inherited image or focus evidence.
 const displayPath606='**/workspace/surfaces/display-session-v1',displayPanel606='.surface-native-presentation';
 const fields606=['invoiceId','revision','currency','invoiceAmountMinor','status'];
@@ -263,6 +263,14 @@ test('606 freshness: three explicitly confirmed and individually revoked grants 
 }));
 test('606 short native lease: confirmed fields clear at actual deadline while the real revoked SSE is stalled, without Offline',async()=>displayCase606(async c=>{
  const {x}=c;
+ // Exercise default-to-short succession in THIS owner/pair. Fully close both
+ // real default grants before installing the short handler or starting its5s.
+ const predecessors=[],predecessorRevocations=[];
+ for(let index=0;index<2;index++){
+  const prior=await confirmDisplay606(c,await offerDisplay606(c));
+  predecessorRevocations.push(await revokeDisplay606(c,prior));await closedDisplay606(c,prior);
+  predecessors.push(prior.offered);
+ }
  const shortHandler=async route=>{if(route.request().postDataJSON()?.operation!=='offer'){await route.continue();return;}const actual=await forward549(x.f,route,s=>s.maximumAgeMs=5000);await route.fulfill({status:actual.status,headers:actual.headers,body:actual.body});};
  // Prepare CDP before the short grant; the real network fault starts only after
  // this grant's independently verified render. Never widen the native5s lease.
@@ -271,6 +279,8 @@ test('606 short native lease: confirmed fields clear at actual deadline while th
  await x.source.route(displayPath606,shortHandler);
  try{
   const grant=await offerDisplay606(c);assert.ok(grant.offered.expiresAtMs-Date.now()<=5000);liveDisplay606(grant.offered,'Short native offer');
+  assert.notEqual(grant.offered.sessionId,predecessors[0].sessionId);
+  assert.notEqual(grant.offered.sessionId,predecessors[1].sessionId);
   const {nativeWorkspaceDisplayTransportConnectionV1}=await import('../../src/pan527/origin-session-adapter.mjs');
   transport=nativeWorkspaceDisplayTransportConnectionV1(x.f.tls.gateway,{tenantId:'tenant-a',origin:x.f.tls.origin,identityDigest:x.f.sessions.binding.identityDigest});
   const nativeStreams=[];observeNativeStream=(request,response)=>{if(request.url==='/display/events')nativeStreams.push(response);};transport.server.on('request',observeNativeStream);
@@ -289,7 +299,7 @@ test('606 short native lease: confirmed fields clear at actual deadline while th
   try{await connection.send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});}finally{await connection.detach();}
  }
  await closedDisplay606(c,g);
- return [{name:'606-short-lease-stalled-sse',state:'REAL_NATIVE_SHORT_LEASE_STALLED_SSE_COMPLETED',...revoked,stalledNativeSSEWithoutOfflineClearedAtNativeLeaseDeadline:true}];
+ return [{name:'606-short-lease-stalled-sse',state:'REAL_NATIVE_SHORT_LEASE_STALLED_SSE_COMPLETED',...revoked,predecessorRevocations,stalledNativeSSEWithoutOfflineClearedAtNativeLeaseDeadline:true}];
 }));
 test('606 real native display denial is an accessible focused alert; unconfirmed read clears content without stealing focus or retrying writes',async()=>{
  const x=await fixture();try{
