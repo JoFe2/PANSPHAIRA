@@ -1,0 +1,111 @@
+name: PAN597 diagnostic whole native entry
+
+on:
+  push:
+    branches:
+      - diagnostic/pan597-442-native-loop
+
+permissions:
+  contents: read
+
+jobs:
+  native-diagnostic:
+    name: Supplemental unchanged PAN597 entry on pinned 442 payload
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    env:
+      DIAGNOSTIC_WORKFLOW_SHA: ${{ github.sha }}
+      PAN597_PAYLOAD_SHA: 442c168acd2c1f6905f1da3589bacd4f613ed83f
+      TMPDIR: ${{ runner.temp }}
+    steps:
+      - name: Check out exact unchanged diagnostic payload, not workflow revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: 442c168acd2c1f6905f1da3589bacd4f613ed83f
+          fetch-depth: 0
+
+      - name: Bind workflow and payload identities separately
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$PAN597_PAYLOAD_SHA"
+          test "$(git rev-parse HEAD^{tree})" = 0d3e8e381b01488d26d878105532c382704f4008
+          printf 'DIAGNOSTIC_WORKFLOW_SHA=%s\nPAN597_PAYLOAD_SHA=%s\n' "$DIAGNOSTIC_WORKFLOW_SHA" "$PAN597_PAYLOAD_SHA"
+          printf '%s  %s\n' 1ee9465b311e2129c1da69905c2ede9d95b8b6835a7f281047f40aea6a526b90 scripts/run-pan597-native-surface-tests.mjs | sha256sum --check -
+          printf '%s  %s\n' a1a9c3347bd67d5466ab453d479a8b67da6b5bfb07c044388d1a60241af6b9f5 tests/pan597/browser-pairing.test.mjs | sha256sum --check -
+          sha256sum --check SHA256SUMS
+          printf '%s\n' 'Supplemental reproduction only: no full-suite, release or merge approval.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Set up exact existing Node version
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.14.1
+          cache: npm
+
+      - name: Set up supported npm on ephemeral hosted runner
+        run: npm install --global npm@11.16.0
+
+      - name: Install unchanged locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Prepare exact private PAN527 browser and NSS tooling
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/pan527-browsers
+          PAN527_NSS_URL: https://snapshot.ubuntu.com/ubuntu/20261022T080000Z/pool/main/n/nss/libnss3-tools_3.98-1ubuntu0.2_amd64.deb
+          PAN527_NSS_SHA256: e5b42390b02c21851bc04e9557ec48539a913f9b09637220c4b1db0d1386b3fb
+        run: |
+          tooling="$RUNNER_TEMP/pan527-nss"
+          install -d -m 700 "$tooling"
+          curl --fail --location --silent --show-error \
+            --output "$tooling/nss.deb" "$PAN527_NSS_URL"
+          printf '%s  %s\n' "$PAN527_NSS_SHA256" "$tooling/nss.deb" \
+            | sha256sum --check -
+          dpkg-deb -x "$tooling/nss.deb" "$tooling/extracted"
+          test -x "$tooling/extracted/usr/bin/certutil"
+          node node_modules/playwright/cli.js install chromium
+          printf 'PLAYWRIGHT_BROWSERS_PATH=%s\n' "$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          printf 'PAN527_CERTUTIL=%s\n' "$tooling/extracted/usr/bin/certutil" >> "$GITHUB_ENV"
+
+      - name: Record actual diagnostic runtime
+        run: |
+          node -e 'console.log(JSON.stringify({node:process.version,platform:process.platform,arch:process.arch}))'
+          npm --version
+          node node_modules/playwright/cli.js --version
+          uname -srmo
+
+      - name: Run entire unchanged guarded PAN597 entry without selectors
+        run: npm run pan597:test
+
+      - name: Stage bounded PAN597 case evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="${RUNNER_TEMP}/pan597-selected-case-evidence"
+          mkdir -p "$output"
+          for directory in "${RUNNER_TEMP}"/pan597-browser-evidence-*; do
+            test -d "$directory" && ! test -L "$directory" || continue
+            destination="$output/${directory##*/}"
+            for name in 606-authority.json 606-keyboard-bottom.json 606-source-raster.json 606-receiver-raster.json 606-grant-freshness.json 606-short-lease-stalled-sse.json 606-stale-read-ordering.json jo259457-native-display-source.png jo259457-native-display-restricted-receiver-390.png jo259457-native-display-restricted-receiver-390-bottom.png; do
+              if test -f "$directory/$name" && ! test -L "$directory/$name"; then
+                mkdir -p "$destination"
+                cp -- "$directory/$name" "$destination/$name"
+              fi
+            done
+          done
+
+      - name: Retain only bounded synthetic case evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pan597-diagnostic-${{ github.sha }}
+          path: ${{ runner.temp }}/pan597-selected-case-evidence
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Verify unchanged payload after diagnostic execution
+        if: always()
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$PAN597_PAYLOAD_SHA"
+          git diff --exit-code
