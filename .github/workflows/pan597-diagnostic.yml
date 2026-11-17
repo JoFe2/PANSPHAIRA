@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: [initial-prefix-warm, early-native-a-warm, early-native-b-warm]
+        mode: [focused-only-warm, focused-initial-a-warm]
     env:
       PAN597_EXECUTION_MODE: ${{ matrix.mode }}
       DIAGNOSTIC_WORKFLOW_SHA: ${{ github.sha }}
@@ -138,14 +138,12 @@ jobs:
           const firstNative=commands.indexOf('npm run pan527:test'),lateNative=commands.indexOf('npm run pan565:test');
           if(firstNative!==40||lateNative-firstNative!==16)throw Error('DIAGNOSTIC_PREFIX_IDENTITY_DENIED');
           const mode=process.env.PAN597_EXECUTION_MODE;
+          const focused=JSON.parse(readFileSync('security/secure-default-proof-v1.json','utf8')).commands.focused;
           let prefix;
-          if(mode==='initial-prefix-warm'){
-            const focused=JSON.parse(readFileSync('security/secure-default-proof-v1.json','utf8')).commands.focused;
-            prefix=[...focused,...commands.slice(0,firstNative)];
-          }else if(mode==='early-native-a-warm'){
-            prefix=['npm run build --silent',...commands.slice(firstNative,firstNative+8)];
-          }else if(mode==='early-native-b-warm'){
-            prefix=['npm run build --silent',...commands.slice(firstNative+8,lateNative)];
+          if(mode==='focused-only-warm'){
+            prefix=[...focused];
+          }else if(mode==='focused-initial-a-warm'){
+            prefix=[...focused,...commands.slice(0,20)];
           }else{throw Error('DIAGNOSTIC_MODE_DENIED');}
           console.log('DIAGNOSTIC_PREDECESSOR_PREFIX '+JSON.stringify(prefix));
           const chain=[sample,...prefix.flatMap(command=>[command,sample]),'npm run pan597:test'];
