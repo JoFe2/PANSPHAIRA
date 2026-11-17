@@ -10,10 +10,15 @@ permissions:
 
 jobs:
   native-diagnostic:
-    name: Supplemental unchanged PAN597 entry on pinned 442 payload
+    name: Supplemental pinned 442 native entry (${{ matrix.mode }})
     runs-on: ubuntu-26.04
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [direct, proof-child]
     env:
+      PAN597_EXECUTION_MODE: ${{ matrix.mode }}
       DIAGNOSTIC_WORKFLOW_SHA: ${{ github.sha }}
       PAN597_PAYLOAD_SHA: 442c168acd2c1f6905f1da3589bacd4f613ed83f
     steps:
@@ -72,10 +77,21 @@ jobs:
           node node_modules/playwright/cli.js --version
           uname -srmo
 
-      - name: Run entire unchanged guarded PAN597 entry without selectors
+      - name: Run entire unchanged native entry in the declared execution context
         env:
           TMPDIR: ${{ runner.temp }}
-        run: npm run pan597:test
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'PAN597_EXECUTION_MODE=%s\n' "$PAN597_EXECUTION_MODE"
+          sha256sum scripts/verify-secure-default-proof.mjs
+          if test "$PAN597_EXECUTION_MODE" = proof-child; then
+            node --input-type=module -e "import { runProofCommand } from './scripts/verify-secure-default-proof.mjs'; await runProofCommand('npm run pan597:test', process.cwd());"
+          elif test "$PAN597_EXECUTION_MODE" = direct; then
+            npm run pan597:test
+          else
+            exit 2
+          fi
 
       - name: Stage bounded PAN597 case evidence
         if: always()
@@ -99,7 +115,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: pan597-diagnostic-${{ github.sha }}
+          name: pan597-diagnostic-${{ github.sha }}-${{ matrix.mode }}
           path: ${{ runner.temp }}/pan597-selected-case-evidence
           if-no-files-found: warn
           retention-days: 7
