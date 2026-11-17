@@ -12,11 +12,11 @@ jobs:
   native-diagnostic:
     name: Supplemental pinned 442 native entry (${{ matrix.mode }})
     runs-on: ubuntu-26.04
-    timeout-minutes: 20
+    timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
-        mode: [proof-child, late-native-warm]
+        mode: [initial-prefix-warm, early-native-a-warm, early-native-b-warm]
     env:
       PAN597_EXECUTION_MODE: ${{ matrix.mode }}
       DIAGNOSTIC_WORKFLOW_SHA: ${{ github.sha }}
@@ -132,20 +132,24 @@ jobs:
           import {join} from 'node:path';
           import {runProofCommand} from './scripts/verify-secure-default-proof.mjs';
           const samplePath=join(process.env.RUNNER_TEMP,'pan597-resource-sample.mjs');
-          writeFileSync(samplePath,"import{readdirSync,readFileSync}from'node:fs';import{loadavg,freemem,totalmem}from'node:os';const names=['node','chrome','chromium','postgres','Xvfb','certutil'],counts=Object.fromEntries(names.map(n=>[n,0]));for(const pid of readdirSync('/proc')){if(!/^[0-9]+$/.test(pid))continue;try{const name=readFileSync('/proc/'+pid+'/comm','utf8').trim();if(names.includes(name))counts[name]++;}catch{}}console.log('PAN597_RESOURCE_SAMPLE '+JSON.stringify({timeMs:Date.now(),loadavg:loadavg(),freeBytes:freemem(),totalBytes:totalmem(),processNameCounts:counts}));",{flag:'wx'});
+          writeFileSync(samplePath,"import{readdirSync,readFileSync,readlinkSync}from'node:fs';import{basename}from'node:path';import{loadavg,freemem,totalmem}from'node:os';const counts={node:0,browser:0,postgres:0,Xvfb:0,certutil:0,ffmpeg:0,python:0};let unreadable=0;for(const pid of readdirSync('/proc')){if(!/^[0-9]+$/.test(pid))continue;try{const name=basename(readlinkSync('/proc/'+pid+'/exe'));if(name==='node')counts.node++;else if(name.startsWith('chrome')||name.startsWith('chromium'))counts.browser++;else if(name.startsWith('python'))counts.python++;else if(Object.hasOwn(counts,name))counts[name]++;}catch{unreadable++;}}console.log('PAN597_RESOURCE_SAMPLE '+JSON.stringify({timeMs:Date.now(),loadavg:loadavg(),freeBytes:freemem(),totalBytes:totalmem(),executableCounts:counts,unreadableProcesses:unreadable,selfComm:readFileSync('/proc/self/comm','utf8').trim(),selfExecutable:basename(readlinkSync('/proc/self/exe'))}));",{flag:'wx'});
           const sample=JSON.stringify(process.execPath)+' '+JSON.stringify(samplePath);
+          const commands=JSON.parse(readFileSync('package.json','utf8')).scripts.pretest.split(' && ');
+          const firstNative=commands.indexOf('npm run pan527:test'),lateNative=commands.indexOf('npm run pan565:test');
+          if(firstNative!==40||lateNative-firstNative!==16)throw Error('DIAGNOSTIC_PREFIX_IDENTITY_DENIED');
           const mode=process.env.PAN597_EXECUTION_MODE;
-          if(mode==='proof-child'){
-            await runProofCommand(sample+' && npm run pan597:test',process.cwd());
-          }else if(mode==='late-native-warm'){
-            const commands=JSON.parse(readFileSync('package.json','utf8')).scripts.pretest.split(' && ');
-            const first=commands.indexOf('npm run pan565:test'),last=commands.indexOf('npm run pan597:test');
-            if(first<0||last<=first||last-first!==8)throw Error('DIAGNOSTIC_PREFIX_IDENTITY_DENIED');
-            const prefix=commands.slice(first,last);
-            console.log('DIAGNOSTIC_PREDECESSOR_PREFIX '+JSON.stringify(prefix));
-            const chain=['npm run build --silent',sample,...prefix.flatMap(command=>[command,sample]),'npm run pan597:test'];
-            await runProofCommand(chain.join(' && '),process.cwd());
+          let prefix;
+          if(mode==='initial-prefix-warm'){
+            const focused=JSON.parse(readFileSync('security/secure-default-proof-v1.json','utf8')).commands.focused;
+            prefix=[...focused,...commands.slice(0,firstNative)];
+          }else if(mode==='early-native-a-warm'){
+            prefix=['npm run build --silent',...commands.slice(firstNative,firstNative+8)];
+          }else if(mode==='early-native-b-warm'){
+            prefix=['npm run build --silent',...commands.slice(firstNative+8,lateNative)];
           }else{throw Error('DIAGNOSTIC_MODE_DENIED');}
+          console.log('DIAGNOSTIC_PREDECESSOR_PREFIX '+JSON.stringify(prefix));
+          const chain=[sample,...prefix.flatMap(command=>[command,sample]),'npm run pan597:test'];
+          await runProofCommand(chain.join(' && '),process.cwd());
           JS
 
       - name: Stage bounded PAN597 case evidence
