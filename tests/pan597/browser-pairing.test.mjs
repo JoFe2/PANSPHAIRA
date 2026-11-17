@@ -169,20 +169,29 @@ async function offerDisplay606(c){
  await x.b.context.route(offered.displayOrigin+'/**',route=>route.continue());liveDisplay606(offered,'Explicit source offer');
  return {offered,offerWire};
 }
-function displaySnapshot606(){return {state:document.body.dataset.state,principal:document.body.dataset.principalClass,origin:location.origin,hash:location.hash,controls:document.querySelectorAll('button,input,form,audio,video').length,fields:Object.fromEntries([...document.querySelectorAll('[data-field]')].map(n=>[n.dataset.field,n.textContent]))};}
-async function confirmDisplay606(c,grant){
+function displaySnapshot606({whenRendered=false}={}){if(whenRendered&&document.body?.dataset.state!=='DISPLAY_RENDERED')return false;const snapshot={state:document.body.dataset.state,principal:document.body.dataset.principalClass,origin:location.origin,hash:location.hash,controls:document.querySelectorAll('button,input,form,audio,video').length,fields:Object.fromEntries([...document.querySelectorAll('[data-field]')].map(n=>[n.dataset.field,n.textContent]))};return whenRendered?{snapshot,observedAtMs:Date.now()}:snapshot;}
+async function confirmDisplay606(c,grant,{afterCommit}={}){
  const {x,expected}=c,{offered}=grant;
  await x.target.waitForFunction(()=>[...document.querySelectorAll('button')].some(b=>b.textContent==='Begrenzte Dokumentanzeige als Empfänger bestätigen'&&!b.disabled));
  const response=displayResponse606(x.target,'confirm'),stream=x.target.waitForRequest(r=>r.url()===offered.displayOrigin+'/display/events'),redeem=x.target.waitForResponse(r=>r.url()===offered.displayOrigin+'/display/redeem');
  const button=x.target.getByRole('button',{name:'Begrenzte Dokumentanzeige als Empfänger bestätigen',exact:true});await button.focus();await button.press('Enter');
  const wire=await response;assert.equal(wire.status(),200);const confirmed=await wire.json();
  assert.equal(confirmed.state,'ACTIVE');assert.equal(confirmed.sessionId,offered.sessionId);assert.equal(confirmed.grantDigest,offered.grantDigest);assert.equal(confirmed.expiresAtMs,offered.expiresAtMs);assert.equal(confirmed.fieldProjectionGranted,true);
+ // A native200 alone precedes the client's mutation commit. Release stale reads
+ // only once this session's ACTIVE UI and newly attached launch frame both exist;
+ // independent redeem/field/backend-ACK proofs still run below, not in this hook.
+ if(afterCommit){await x.target.waitForFunction(({id,src})=>{const d=document.querySelector('.surface-native-presentation'),f=d?.querySelector('iframe.native-display-frame');return d?.dataset.state==='DISPLAY_ACTIVE'&&d.dataset.sessionId===id&&f?.getAttribute('src')===src;},{id:offered.sessionId,src:offered.displayOrigin+'/display/#'+confirmed.restrictedLaunch.ticket});await afterCommit();}
  const redeemWire=await redeem;assert.equal(redeemWire.status(),200);const redeemed=await redeemWire.json(),headers=await(await stream).allHeaders();
  assert.equal(redeemWire.request().postDataJSON().ticket,confirmed.restrictedLaunch.ticket);assert.equal(redeemed.sessionId,offered.sessionId);assert.equal(redeemed.expiresAtMs,offered.expiresAtMs);assert.equal(redeemed.principalClass,'RESTRICTED_DISPLAY_ONLY');
  assert.match(headers.authorization,/^PAN-DISPLAY [a-f0-9]{64}$/);assert.equal(headers.authorization,'PAN-DISPLAY '+redeemed.displayCapability);assert.equal(headers.cookie,undefined,'Restricted data fetch uses only its own principal, never copied workspace cookies');
- const frame=x.target.frameLocator('iframe[title="Eingeschränkte native Dokumentpräsentation"]');await frame.locator('body[data-state="DISPLAY_RENDERED"]').waitFor();
+ const frame=x.target.frameLocator('iframe[title="Eingeschränkte native Dokumentpräsentation"]');
  const documentFrame=x.target.frames().find(f=>f.url()===offered.displayOrigin+'/display/');assert.ok(documentFrame);
- assert.deepEqual(await documentFrame.evaluate(displaySnapshot606),{state:'DISPLAY_RENDERED',principal:'RESTRICTED_DISPLAY_ONLY',origin:offered.displayOrigin,hash:'',controls:0,fields:expected});
+ // State and all five fields belong to one actual child-DOM observation, not a
+ // state-only wait followed by a later DOM read across a live grant boundary.
+ const rendered=await documentFrame.waitForFunction(displaySnapshot606,{whenRendered:true});let observed;
+ try{observed=await rendered.jsonValue();}finally{await rendered.dispose();}
+ assert.ok(observed.observedAtMs<offered.expiresAtMs,'Actual child render observation must precede its native deadline');
+ assert.deepEqual(observed.snapshot,{state:'DISPLAY_RENDERED',principal:'RESTRICTED_DISPLAY_ONLY',origin:offered.displayOrigin,hash:'',controls:0,fields:expected});
  await x.source.waitForFunction(id=>{const d=document.querySelector('.surface-native-presentation');return d?.dataset.sessionId===id&&d.textContent.includes('Zielanzeige RENDERED');},offered.sessionId);
  liveDisplay606(offered,'Independent principal, native fields and receiver/backend render acknowledgement');
  return {...grant,confirmed,headers,frame,documentFrame};
@@ -285,6 +294,8 @@ test('606 short native lease: confirmed fields clear at actual deadline while th
   transport=nativeWorkspaceDisplayTransportConnectionV1(x.f.tls.gateway,{tenantId:'tenant-a',origin:x.f.tls.origin,identityDigest:x.f.sessions.binding.identityDigest});
   const nativeStreams=[];observeNativeStream=(request,response)=>{if(request.url==='/display/events')nativeStreams.push(response);};transport.server.on('request',observeNativeStream);
   g=await confirmDisplay606(c,grant);assert.equal(nativeStreams.length,1);nativeStream=nativeStreams[0];socket=nativeStream.socket;nativeEnd=nativeStream.end;
+  // The earlier atomic preparation is not a later live witness for this fault.
+  assert.deepEqual(await g.documentFrame.evaluate(displaySnapshot606),{state:'DISPLAY_RENDERED',principal:'RESTRICTED_DISPLAY_ONLY',origin:g.offered.displayOrigin,hash:'',controls:0,fields:c.expected});liveDisplay606(g.offered,'Live rendered child before the actual SSE stall');
   let heldReady;const held=new Promise(resolve=>heldReady=resolve);socket.cork();nativeStream.end=function(...args){heldArgs=args;heldReady();return this;};
   await connection.send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:1,uploadThroughput:1048576});
   assert.equal(await x.target.evaluate(()=>navigator.onLine),true);assert.ok(g.offered.expiresAtMs-Date.now()>500,'Actual native revocation must precede the declared lease deadline while the receiver stream is stalled');
@@ -313,6 +324,13 @@ test('606 real native display denial is an accessible focused alert; unconfirmed
   await x.source.route('**/workspace/surfaces/display-session-v1',lostRead);const code=x.source.getByLabel('Code aus dem anderen Browserprofil',{exact:true});await code.focus();await x.source.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();await code.focus();await seen;await x.source.waitForFunction(()=>document.querySelector('.surface-native-presentation [role="alert"]')?.textContent.includes('DISPLAY_OUTCOME_UNCONFIRMED'));assert.equal(await code.evaluate(e=>document.activeElement===e),true);assert.match(await display.getByRole('alert').textContent(),/Keine automatische Wiederholung/);assert.equal(await display.locator('iframe').count(),0);assert.equal(writes,1,'Only explicit user action, never an automatic offer/confirm/revoke retry');x.f.unchanged();
  }finally{await x.close();}
 });
+function observeReadTerminal606(page,request){
+ // Install before native forwarding: Playwright terminal events are not replayed.
+ // Resolve failures too, but never reinterpret cancellation as successful delivery.
+ let timer,settle;const listeners=[];
+ const done=new Promise(resolve=>{settle=event=>{clearTimeout(timer);for(const [name,listener]of listeners)page.removeListener(name,listener);resolve({event,failure:request.failure()});};for(const event of ['requestfinished','requestfailed']){const listener=r=>{if(r===request)settle(event);};listeners.push([event,listener]);page.on(event,listener);}timer=setTimeout(()=>settle('timeout'),8000);});
+ return {done,close(){settle('disposed');}};
+}
 test('606 delayed native display reads cannot undo confirm/revoke or newer read/error ordering',async()=>displayCase606(async c=>{
  const {x}=c,pending=[];let hold=false,readObserved;
  try{
@@ -322,22 +340,23 @@ test('606 delayed native display reads cannot undo confirm/revoke or newer read/
   // All subsequent reads are held too, so a later poll cannot mask a stale commit.
   await x.target.route('**/workspace/surfaces/display-session-v1',async route=>{
    if(!hold||route.request().postDataJSON()?.operation!=='read'){await route.continue();return;}
-   const actual=await forward549(x.f,route);assert.equal(actual.status,200);assert.equal(actual.tlsAuthorized,true);
-   let release,settled;const gate=new Promise(r=>release=r),done=new Promise(r=>settled=r);pending.push({actual,request:route.request(),release,done});readObserved?.();
+   const terminal=observeReadTerminal606(x.target,route.request());let actual;
+   try{actual=await forward549(x.f,route);assert.equal(actual.status,200);assert.equal(actual.tlsAuthorized,true);}catch(error){terminal.close();throw error;}
+   let release,settled;const gate=new Promise(r=>release=r),done=new Promise(r=>settled=r);pending.push({actual,request:route.request(),terminal,release,done});readObserved?.();
    const fail=await gate;try{if(fail)await route.abort('connectionfailed');else await route.fulfill({status:actual.status,headers:actual.headers,body:actual.body});}finally{settled();}
   });
   // Event-driven observation of the real forwarded read, under the same8s bound;
   // no polling sleeps or retried product writes.
   const nextRead=async()=>{const index=pending.length;let timer;const seen=new Promise((resolve,reject)=>{timer=setTimeout(()=>reject(Error('Actual native display read must be observed')),8000);readObserved=resolve;});try{await x.target.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();await seen;return pending[index];}finally{clearTimeout(timer);readObserved=null;}};
-  const release=async(row,fail=false)=>{const completed=x.target.waitForEvent(fail?'requestfailed':'requestfinished',r=>r===row.request);row.release(fail);await row.done;await completed;await x.target.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));};
+  const release=async(row,fail=false)=>{row.release(fail);await row.done;const completed=await row.terminal.done;assert.equal(completed.event,fail?'requestfailed':'requestfinished','The exact held native read must reach its intended terminal event, never CANCELLED as success');if(fail)assert.match(completed.failure?.errorText??'',/ERR_CONNECTION_FAILED/,'Only the explicitly injected transport error is this case');else{assert.equal(completed.failure,null);const response=await row.request.response();assert.ok(response);assert.equal(response.status(),row.actual.status);assert.equal(await response.finished(),null);assert.deepEqual(await response.body(),Buffer.from(row.actual.body),'The exact original native response body must really reach this client');}await x.target.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));};
   hold=true;const oldOffer=await nextRead();assert.equal(JSON.parse(oldOffer.actual.body).session.state,'OFFERED');
-  const g=await confirmDisplay606(c,first);await release(oldOffer);assert.equal(await display.getAttribute('data-state'),'DISPLAY_ACTIVE');assert.equal(await display.locator('iframe').count(),1);assert.equal(await receiverConfirm.isDisabled(),true);
+  const g=await confirmDisplay606(c,first,{afterCommit:()=>release(oldOffer)});assert.equal(await display.getAttribute('data-state'),'DISPLAY_ACTIVE');assert.equal(await display.locator('iframe').count(),1);assert.equal(await receiverConfirm.isDisabled(),true);
   const oldActive=await nextRead();assert.equal(JSON.parse(oldActive.actual.body).session.state,'ACTIVE');const revoked=await revokeDisplay606(c,g,x.target);await x.target.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_REVOKED');await release(oldActive);assert.equal(await display.getAttribute('data-state'),'DISPLAY_REVOKED');assert.equal(await display.locator('iframe').count(),0);assert.equal(await receiverConfirm.isDisabled(),true);await closedDisplay606(c,g);
   // Two older reads (including an eventual transport error) must lose to a newer
   // native OFFERED read, with no mutation in this receiver between completions.
   const older=await nextRead(),olderError=await nextRead(),next=await offerDisplay606(c);await x.source.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_OFFERED');hold=false;const newer=x.target.waitForResponse(r=>r.url().endsWith('/workspace/surfaces/display-session-v1')&&r.request().postDataJSON()?.operation==='read'&&r.status()===200);await x.target.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();assert.equal((await(await newer).json()).session.state,'OFFERED');await x.target.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_OFFERED');await release(older);assert.equal(await display.getAttribute('data-state'),'DISPLAY_OFFERED');await release(olderError,true);assert.equal(await display.getAttribute('data-state'),'DISPLAY_OFFERED');assert.equal(await display.getByRole('alert').count(),0);assert.equal(await receiverConfirm.isDisabled(),false);
   const fresh=await confirmDisplay606(c,next),freshRevoked=await revokeDisplay606(c,fresh);await closedDisplay606(c,fresh);
   return [{name:'606-stale-read-ordering',state:'REAL_NATIVE_STALE_READ_ORDERING_COMPLETED',revocations:[revoked,freshRevoked]}];
- }finally{hold=false;for(const row of pending)row.release(false);await Promise.all(pending.map(row=>row.done));await x.target.unroute('**/workspace/surfaces/display-session-v1');}
+ }finally{hold=false;for(const row of pending)row.release(false);await Promise.all(pending.map(row=>row.done));for(const row of pending)row.terminal.close();await x.target.unroute('**/workspace/surfaces/display-session-v1');}
 }));
 // JO259457_RESTRICTED_NATIVE_DISPLAY_END
