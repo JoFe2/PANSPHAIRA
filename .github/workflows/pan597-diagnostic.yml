@@ -16,7 +16,6 @@ jobs:
     env:
       DIAGNOSTIC_WORKFLOW_SHA: ${{ github.sha }}
       PAN597_PAYLOAD_SHA: 442c168acd2c1f6905f1da3589bacd4f613ed83f
-      TMPDIR: ${{ runner.temp }}
     steps:
       - name: Check out exact unchanged diagnostic payload, not workflow revision
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -74,6 +73,8 @@ jobs:
           uname -srmo
 
       - name: Run entire unchanged guarded PAN597 entry without selectors
+        env:
+          TMPDIR: ${{ runner.temp }}
         run: npm run pan597:test
 
       - name: Stage bounded PAN597 case evidence
