@@ -3,29 +3,25 @@ name: PAN597 diagnostic whole native entry
 on:
   push:
     branches:
-      - diagnostic/pan597-442-native-loop
+      - diagnostic/pan597-c2-native-entry
 
 permissions:
   contents: read
 
 jobs:
   native-diagnostic:
-    name: Supplemental pinned 442 native entry (${{ matrix.mode }})
+    name: Supplemental pinned c2 whole native entry
     runs-on: ubuntu-26.04
     timeout-minutes: 35
-    strategy:
-      fail-fast: false
-      matrix:
-        mode: [paired-build-only, paired-initial-20]
     env:
-      PAN597_EXECUTION_MODE: ${{ matrix.mode }}
+      PAN597_EXECUTION_MODE: reviewed-c2-whole-entry
       DIAGNOSTIC_WORKFLOW_SHA: ${{ github.sha }}
-      PAN597_PAYLOAD_SHA: 442c168acd2c1f6905f1da3589bacd4f613ed83f
+      PAN597_PAYLOAD_SHA: c2eff2927a4706f1e134072ef96df19a550e488f
     steps:
       - name: Check out exact unchanged diagnostic payload, not workflow revision
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          ref: 442c168acd2c1f6905f1da3589bacd4f613ed83f
+          ref: c2eff2927a4706f1e134072ef96df19a550e488f
           fetch-depth: 0
 
       - name: Bind workflow and payload identities separately
@@ -33,10 +29,10 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$PAN597_PAYLOAD_SHA"
-          test "$(git rev-parse HEAD^{tree})" = 0d3e8e381b01488d26d878105532c382704f4008
+          test "$(git rev-parse HEAD^{tree})" = a88ae5332d08dc9e33c4ca002e30e208c0e36221
           printf 'DIAGNOSTIC_WORKFLOW_SHA=%s\nPAN597_PAYLOAD_SHA=%s\n' "$DIAGNOSTIC_WORKFLOW_SHA" "$PAN597_PAYLOAD_SHA"
           printf '%s  %s\n' 1ee9465b311e2129c1da69905c2ede9d95b8b6835a7f281047f40aea6a526b90 scripts/run-pan597-native-surface-tests.mjs | sha256sum --check -
-          printf '%s  %s\n' a1a9c3347bd67d5466ab453d479a8b67da6b5bfb07c044388d1a60241af6b9f5 tests/pan597/browser-pairing.test.mjs | sha256sum --check -
+          printf '%s  %s\n' 08aa561bd364a838c65f0c63d2bdb587a9ea25536b39e584b900b1f289e10b8e tests/pan597/browser-pairing.test.mjs | sha256sum --check -
           sha256sum --check SHA256SUMS
           printf '%s\n' 'Supplemental reproduction only: no full-suite, release or merge approval.' >> "$GITHUB_STEP_SUMMARY"
 
@@ -134,21 +130,7 @@ jobs:
           const samplePath=join(process.env.RUNNER_TEMP,'pan597-resource-sample.mjs');
           writeFileSync(samplePath,"import{readdirSync,readFileSync,readlinkSync}from'node:fs';import{basename}from'node:path';import{loadavg,freemem,totalmem}from'node:os';const counts={node:0,browser:0,postgres:0,Xvfb:0,certutil:0,ffmpeg:0,python:0};let unreadable=0;for(const pid of readdirSync('/proc')){if(!/^[0-9]+$/.test(pid))continue;try{const name=basename(readlinkSync('/proc/'+pid+'/exe'));if(name==='node')counts.node++;else if(name.startsWith('chrome')||name.startsWith('chromium'))counts.browser++;else if(name.startsWith('python'))counts.python++;else if(Object.hasOwn(counts,name))counts[name]++;}catch{unreadable++;}}console.log('PAN597_RESOURCE_SAMPLE '+JSON.stringify({timeMs:Date.now(),loadavg:loadavg(),freeBytes:freemem(),totalBytes:totalmem(),executableCounts:counts,unreadableProcesses:unreadable,selfComm:readFileSync('/proc/self/comm','utf8').trim(),selfExecutable:basename(readlinkSync('/proc/self/exe'))}));",{flag:'wx'});
           const sample=JSON.stringify(process.execPath)+' '+JSON.stringify(samplePath);
-          const commands=JSON.parse(readFileSync('package.json','utf8')).scripts.pretest.split(' && ');
-          const firstNative=commands.indexOf('npm run pan527:test'),lateNative=commands.indexOf('npm run pan565:test');
-          if(firstNative!==40||lateNative-firstNative!==16)throw Error('DIAGNOSTIC_PREFIX_IDENTITY_DENIED');
-          const mode=process.env.PAN597_EXECUTION_MODE;
-          const focused=JSON.parse(readFileSync('security/secure-default-proof-v1.json','utf8')).commands.focused;
-          let prefix;
-          if(mode==='paired-build-only'){
-            prefix=commands.slice(0,1);
-          }else if(mode==='paired-initial-20'){
-            prefix=commands.slice(0,20);
-          }else{throw Error('DIAGNOSTIC_MODE_DENIED');}
-          const mark=phase=>JSON.stringify(process.execPath)+' -e '+JSON.stringify('console.log('+JSON.stringify('PAN597_PAIRED_PHASE '+phase)+')');
-          console.log('DIAGNOSTIC_PREDECESSOR_PREFIX '+JSON.stringify(prefix));
-          const chain=[sample,...focused,mark('COLD_NATIVE_BEGIN'),'npm run pan597:test',mark('COLD_NATIVE_PASS'),sample,mark('PREFIX_BEGIN'),...prefix,sample,mark('WARM_NATIVE_BEGIN'),'npm run pan597:test',mark('WARM_NATIVE_PASS'),sample];
-          await runProofCommand(chain.join(' && '),process.cwd());
+          await runProofCommand(sample+' && npm run pan597:test && '+sample,process.cwd());
           JS
 
       - name: Stage bounded PAN597 case evidence
@@ -173,7 +155,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: pan597-diagnostic-${{ github.sha }}-${{ matrix.mode }}
+          name: pan597-diagnostic-${{ github.sha }}-reviewed-c2-whole-entry
           path: ${{ runner.temp }}/pan597-selected-case-evidence
           if-no-files-found: warn
           retention-days: 7
