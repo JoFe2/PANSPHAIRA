@@ -141,7 +141,14 @@ export function createNativeWorkspaceContextProjectionV1(options){
   // Unlike the writer's scope(), a miss must not initialize a reader's epoch.
   const privacy=t.db.prepare('SELECT privacy_epoch,revoked FROM workspace_ui_context_scope_v1 WHERE principal_digest=?').get(a.digest);
   if(privacy?.revoked)throw Error('CONTEXT_PRIVACY_REVOKED');
-  const e=j.stream(a).events[request.ownerSeq-1];
+  const stream=j.stream(a);
+  // A contiguous prefix is not a complete stream if append sidecars remain past its head.
+  // Use these rows only to deny an inconsistent read, never to recover a missing event.
+  if(t.db.prepare(`SELECT 1 AS gap WHERE
+   EXISTS(SELECT 1 FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq>?) OR
+   EXISTS(SELECT 1 FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq>?)`)
+   .get(a.digest,stream.head.seq,a.digest,stream.head.seq))throw Error('CONTEXT_STREAM_GAP_OR_BYTES_DENIED');
+  const e=stream.events[request.ownerSeq-1];
   if(!e)return response('SEQ_UNRECORDED');
   if(e.privacyEpoch!==privacy?.privacy_epoch)return response('SOURCE_RETIRED');
   const {action,payload}=e,capability='pan.workspace.view.preview/v1';

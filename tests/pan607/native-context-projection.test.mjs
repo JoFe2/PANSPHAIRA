@@ -367,6 +367,28 @@ function stepDetailFacts(x){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.
   snapshotDigest:x.snapshot().snapshotDigest};}
 
 const producerRequest=ownerSeq=>({schemaVersion:'pansphaira.workspace-context-projection/preview-producer-request/v1',ownerSeq});
+test('697 producer projection reports a truncated signed outbox tail rather than an unrecorded sequence',async()=>{const x=await fixture();try{
+ const result=x.preview(),snapshot=x.snapshot(),event=snapshot.events.at(-1);
+ assert.equal(event.taskId,result.invocationId);assert.equal(event.kind,'INTENT_COMPLETED');
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding),args=[snapshot.principalDigest,event.seq];
+ const read=seq=>x.projection.previewProducer(x.tab.headers,producerRequest(seq));
+ assert.equal(read(event.seq).availability,'AVAILABLE');
+ assert.equal(read(event.seq+1).reason,'SEQ_UNRECORDED');
+ const clock=db.prepare('SELECT * FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').get(...args);
+ const projection=db.prepare('SELECT * FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq=?').get(...args);
+ assert.equal(canonicalJson(JSON.parse(projection.bytes)),projection.bytes);
+ assert.equal(JSON.parse(clock.bytes).eventDigest,event.eventDigest);
+ assert.equal(db.prepare('DELETE FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND seq=?').run(...args).changes,1);
+ for(const seq of [event.seq-1,event.seq,event.seq+1])assert.throws(()=>read(seq),/CONTEXT_STREAM_GAP_OR_BYTES_DENIED/);
+ db.prepare('DELETE FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').run(...args);
+ assert.throws(()=>read(event.seq),/CONTEXT_STREAM_GAP_OR_BYTES_DENIED/,'projection alone proves inconsistency');
+ db.prepare('DELETE FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq=?').run(...args);
+ db.prepare('INSERT INTO workspace_ui_context_event_clock_v1 VALUES(?,?,?,?)').run(...args,clock.bytes,clock.signature);
+ assert.throws(()=>read(event.seq),/CONTEXT_STREAM_GAP_OR_BYTES_DENIED/,'clock alone proves inconsistency');
+ assert.equal(db.prepare('SELECT count(*) AS n FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND seq=?').get(...args).n,0,'reader never repairs the damaged outbox');
+ const other=x.f.tab(x.f.issue('synthetic:foreign-truncated-tail','reader'));
+ assert.equal(x.projection.previewProducer(other.headers,producerRequest(event.seq)).reason,'SEQ_UNRECORDED','a foreign tail cannot affect this principal');
+}finally{await x.close();}});
 test('697 producer projection binds the signed preview completion to its attached proof, append clock and independent persisted readback',async()=>{const x=await fixture();try{
  const preview=x.preview(),view=x.snapshot(),event=view.events.find(e=>e.taskId===preview.invocationId&&e.kind==='INTENT_COMPLETED');
  const detail=x.projection.stepDetail(x.tab.headers,stepDetailRequest(event.seq)).step;
