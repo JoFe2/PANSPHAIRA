@@ -356,7 +356,7 @@ test('700 REC-01 repair03 sourceTimeAvailable tracks only the verified signed pr
 }finally{await x.close();}});
 
 const stepDetailRequest=(ownerSeq,audience='MAIN_CONTRACT')=>({schemaVersion:'pansphaira.workspace-context-projection/step-detail-request/v1',audience,ownerSeq});
-function stepDetailFacts(x){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+function stepDetailFacts(x,{includeSnapshot=true}={}){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
  return {taskRows:JSON.stringify(db.prepare('SELECT command_id,request_digest,original_command,principal_digest,state,revision,result_json FROM workspace_ui_tasks_v2 ORDER BY command_id').all()),
   outbox:JSON.stringify(db.prepare('SELECT principal_digest,seq,event_key,task_id,task_revision,kind,privacy_epoch,bytes,signature FROM workspace_ui_context_outbox_v1 ORDER BY seq').all()),
   projection:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_projection_v1 ORDER BY seq').all()),
@@ -364,7 +364,7 @@ function stepDetailFacts(x){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.
   proofs:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_proofs_v1 ORDER BY proof_id').all()),
   control:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_control_v1').all()),
   storeRevision:x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,
-  snapshotDigest:x.snapshot().snapshotDigest};}
+  ...(includeSnapshot?{snapshotDigest:x.snapshot().snapshotDigest}:{})};}
 
 const producerRequest=ownerSeq=>({schemaVersion:'pansphaira.workspace-context-projection/preview-producer-request/v1',ownerSeq});
 test('697 producer projection reports a truncated signed outbox tail rather than an unrecorded sequence',async()=>{const x=await fixture();try{
@@ -388,6 +388,37 @@ test('697 producer projection reports a truncated signed outbox tail rather than
  assert.equal(db.prepare('SELECT count(*) AS n FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND seq=?').get(...args).n,0,'reader never repairs the damaged outbox');
  const other=x.f.tab(x.f.issue('synthetic:foreign-truncated-tail','reader'));
  assert.equal(x.projection.previewProducer(other.headers,producerRequest(event.seq)).reason,'SEQ_UNRECORDED','a foreign tail cannot affect this principal');
+}finally{await x.close();}});
+for(const sidecar of ['projection','clock'])test(`REC-01/02 historical reads report a truncated tail with only the ${sidecar} witness`,async()=>{const x=await fixture();try{
+ const preview=x.preview(),snapshot=x.snapshot(),end=snapshot.events.at(-1);
+ assert.equal(end.taskId,preview.invocationId);assert.equal(end.kind,'INTENT_COMPLETED');
+ const readers=[
+  {call:(headers,seq)=>x.projection.history(headers,historyRequest(seq)),empty:r=>assert.deepEqual([r.steps,r.taskStates],[[],[]])},
+  {call:(headers,seq)=>x.projection.stepDetail(headers,stepDetailRequest(seq)),empty:r=>assert.equal(r.step,null)},
+ ];
+ const foreign=x.f.tab(x.f.issue('synthetic:foreign-historical-tail','reader'));
+ const foreignBefore=readers.map(({call})=>call(foreign.headers,end.seq));
+ for(const {call} of readers){assert.equal(call(x.tab.headers,end.seq).availability,'AVAILABLE');assert.equal(call(x.tab.headers,end.seq+1).gap.reason,'SEQ_UNRECORDED');}
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding),args=[snapshot.principalDigest,end.seq];
+ const lose=sidecar==='projection'?'DELETE FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?':'DELETE FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq=?';
+ assert.equal(db.prepare('DELETE FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND seq=?').run(...args).changes,1);
+ assert.equal(db.prepare(lose).run(...args).changes,1);
+ // A LIVE snapshot already denies this loss because task completion lacks its outbox row.
+ const rowsOnly={includeSnapshot:false},before=stepDetailFacts(x,rowsOnly),sequences=[end.seq-1,end.seq,end.seq+1];
+ const observed=readers.map(({call},i)=>sequences.map(seq=>{
+  try{return call(x.tab.headers,seq);}catch(error){
+   if(error.message!=='CONTEXT_COMPLETION_OUTBOX_REQUIRED')throw error;
+   return {mode:i===0?'HISTORY':'STEP_DETAIL',availability:'THREW',gap:{reason:error.message}};
+  }
+ }));
+ assert.deepEqual(observed.map(results=>results.map(r=>[r.mode,r.availability,r.gap?.reason??null])),
+  ['HISTORY','STEP_DETAIL'].map(mode=>sequences.map(()=>[mode,'UNAVAILABLE','EVENT_GAP'])), 'retained outbox tail witness must not look like an unrecorded sequence or a complete prefix');
+ for(const [i,{empty}] of readers.entries())for(const [j,seq] of sequences.entries()){
+  const r=observed[i][j];assert.deepEqual(r.gap,{reason:'EVENT_GAP',requestedSeq:seq});assert.equal(r.streamHead,null);
+  empty(r);assert.equal(r.readerEffects,'NONE');assert.equal(r.targetRedispatched,false);assert.equal(r.executionAuthorityGranted,false);
+ }
+ assert.deepEqual(readers.map(({call})=>call(foreign.headers,end.seq)),foreignBefore,'tail witness must be scoped to the authenticated principal');
+ assert.deepEqual(stepDetailFacts(x,rowsOnly),before,'historical readers never repair, append or change the store');
 }finally{await x.close();}});
 test('697 producer projection binds the signed preview completion to its attached proof, append clock and independent persisted readback',async()=>{const x=await fixture();try{
  const preview=x.preview(),view=x.snapshot(),event=view.events.find(e=>e.taskId===preview.invocationId&&e.kind==='INTENT_COMPLETED');

@@ -15,6 +15,16 @@ export function createNativeWorkspaceContextProjectionV1(options){
  const {sessions,tasks,contextSelection=null}=optionsOf(options),t=nativeWorkspaceUiTaskOwnerConnectionV2(tasks,sessions?.binding),j=t.contextJournal;
  if(t.sessions!==sessions||contextSelection!==null&&!isNativeWorkspaceContextSelectionV1(contextSelection,sessions.binding))throw Error('CONTEXT_PROJECTION_OWNER_DENIED');let closed=false;
  function leading(headers){if(closed||t.closed())throw Error('CONTEXT_PROJECTION_OWNER_CLOSED');return j.actor(headers);}
+ function completeRecordedStream(a){
+  const stream=j.stream(a);
+  // A signed prefix is not a complete stream when an append sidecar extends past its head.
+  // Sidecars can deny an inconsistent read, but never supply a missing event.
+  if(t.db.prepare(`SELECT 1 AS gap WHERE
+   EXISTS(SELECT 1 FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq>?) OR
+   EXISTS(SELECT 1 FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq>?)`)
+   .get(a.digest,stream.head.seq,a.digest,stream.head.seq))throw Error('CONTEXT_STREAM_GAP_OR_BYTES_DENIED');
+  return stream;
+ }
  function taskProjection(headers,row,audience,a){
   const core=nativeUiContextTaskCoreV1(row),original=JSON.parse(row.original_command);
   if(row.command_id.startsWith('invocation:')&&original.candidate.policyRef!==workspaceInvocationPolicyRefV1)throw Error('CONTEXT_PROJECTION_OWNER_POLICY_DENIED');
@@ -47,7 +57,7 @@ export function createNativeWorkspaceContextProjectionV1(options){
   if(request.schemaVersion!=='pansphaira.workspace-context-projection/history-request/v1'||!['MAIN_CONTRACT','SPECIALIST_PREVIEW'].includes(request.audience))throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
   if(!Number.isSafeInteger(request.ownerSeq)||request.ownerSeq<1)throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
   const a=leading(headers);let stream;
-  try{stream=j.stream(a);}
+  try{stream=completeRecordedStream(a);}
   catch(error){if(error.message==='CONTEXT_STREAM_GAP_OR_BYTES_DENIED')return immutable(historyResponse(request,a,null,{reason:'EVENT_GAP',requestedSeq:request.ownerSeq}));throw error;}
   if(request.ownerSeq>stream.head.seq)return immutable(historyResponse(request,a,stream.head,{reason:'SEQ_UNRECORDED',requestedSeq:request.ownerSeq}));
   const window=stream.events.filter(e=>e.seq<=request.ownerSeq);
@@ -89,7 +99,7 @@ export function createNativeWorkspaceContextProjectionV1(options){
   if(request.schemaVersion!=='pansphaira.workspace-context-projection/step-detail-request/v1'||!['MAIN_CONTRACT','SPECIALIST_PREVIEW'].includes(request.audience))throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
   if(!Number.isSafeInteger(request.ownerSeq)||request.ownerSeq<1)throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
   const a=leading(headers);let stream;
-  try{stream=j.stream(a);}
+  try{stream=completeRecordedStream(a);}
   catch(error){if(error.message==='CONTEXT_STREAM_GAP_OR_BYTES_DENIED')return immutable(stepDetailResponse(request,a,null,{reason:'EVENT_GAP',requestedSeq:request.ownerSeq}));throw error;}
   if(request.ownerSeq>stream.head.seq)return immutable(stepDetailResponse(request,a,stream.head,{reason:'SEQ_UNRECORDED',requestedSeq:request.ownerSeq}));
   const e=stream.events.find(x=>x.seq===request.ownerSeq);
@@ -141,13 +151,7 @@ export function createNativeWorkspaceContextProjectionV1(options){
   // Unlike the writer's scope(), a miss must not initialize a reader's epoch.
   const privacy=t.db.prepare('SELECT privacy_epoch,revoked FROM workspace_ui_context_scope_v1 WHERE principal_digest=?').get(a.digest);
   if(privacy?.revoked)throw Error('CONTEXT_PRIVACY_REVOKED');
-  const stream=j.stream(a);
-  // A contiguous prefix is not a complete stream if append sidecars remain past its head.
-  // Use these rows only to deny an inconsistent read, never to recover a missing event.
-  if(t.db.prepare(`SELECT 1 AS gap WHERE
-   EXISTS(SELECT 1 FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq>?) OR
-   EXISTS(SELECT 1 FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq>?)`)
-   .get(a.digest,stream.head.seq,a.digest,stream.head.seq))throw Error('CONTEXT_STREAM_GAP_OR_BYTES_DENIED');
+  const stream=completeRecordedStream(a);
   const e=stream.events[request.ownerSeq-1];
   if(!e)return response('SEQ_UNRECORDED');
   if(e.privacyEpoch!==privacy?.privacy_epoch)return response('SOURCE_RETIRED');
