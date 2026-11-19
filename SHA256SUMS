@@ -1496,7 +1496,7 @@ a6229a7540535fd080884cf9686cdf0bbca2904e6da021466e64c7a60a07ae2e  ./src/pan546/n
 73f20c1213daed38dd6409cc55dc7eee6236659f1abb67dbfddc282d5a98247a  ./src/pan548/native-agent-run.mjs
 b56517e738bcd17e6c28779b26622a363747734b5ecc11302b7a9658c7f337ab  ./src/pan548/native-context-checkpoints-v1.mjs
 5495d9d1bb8f50ad29ab7ba91895a2f89d71fec9c0b911fb83e39da5435809ac  ./src/pan548/native-context-journal-v1.mjs
-0163e2b9b75fa6f7dde9fdc5f1cb380e70c6a8d4b6d6f59d8b0ba169170a401c  ./src/pan548/native-context-projection-v1.mjs
+3d4cae41c74357439c0a11ee041952333c38624d4958253270688e7a22127320  ./src/pan548/native-context-projection-v1.mjs
 0ed05ef722196fdd955ee460520fa7afeb556ae2a5a652b3f13452deafab7915  ./src/pan548/native-context-selection.mjs
 a51102b3d20273d225bfee7f472396dd957ae2667c3089efa63d65377072a3bf  ./src/pan548/native-invocation-executor-v1.mjs
 e8c0936bc55cfb11fe766533ca4ce8d6f26a4571066ddb9770ffc585165c767b  ./src/pan548/native-mail-local-v1.mjs
@@ -2597,7 +2597,7 @@ d59df68393ea97307a221a781757e406f88878722b6362387d1fff258f1b62e3  ./tests/pan604
 2d83159d3a4e9f75773620fa87d2e6c9d83cffd44159da65b272f9f6776b8eb9  ./tests/pan604/registration.test.mjs
 798b815deeae920244c73790670936cd0350f6ba109a93b097da20ad96e569ba  ./tests/pan607/browser-context-projection.test.mjs
 61c60835ed95639e41acf25d5936dbaadb1a2f1bc14e143e33301510ad065f4b  ./tests/pan607/native-checkpoints.test.mjs
-e0b28e8131782ce1392812e76498fddabaab2650e3b3eb34999479eef7a55272  ./tests/pan607/native-context-projection.test.mjs
+f1b810f58ff132117f508e8f3969ab5aa952e9c28f845e28660686bd3065a2fb  ./tests/pan607/native-context-projection.test.mjs
 4d6fa355ddda363648f8941739d9678d754f957a76488927478edc56edfdf00f  ./tests/pan607/native-fixture.mjs
 0ba406ec7a5db26d8ba3036ed761c7dab3c950738af2a772aa569e50f31741ca  ./tests/pan607/native-process-probe.mjs
 dacdd67ae63880fe0da7c0949a0daaeaf81000ce251a32057b08cc382fe4a87a  ./tests/pan607/native-process-restart.test.mjs
@@ -2868,5 +2868,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-f79418885b790086d3ea6292c555eadd6f18359d5f38ba67bb5ed9702f771c5c  ./verification/verification-dag-v2.json
+e84e365bc7deb6aca7c2c0bf615237b9c0fd503ca1174c45298348e27ce05c38  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
