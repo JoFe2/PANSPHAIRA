@@ -813,7 +813,7 @@ f8dcc776f05a95a8a3ec33baa198caf397b564d76b4d949df7bce661940b8613  ./packages/bro
 c04f3eb6b558f25608ad6af7d62369d677095243bcac5ba3ee71e9cbe01093f6  ./packages/browser-workspace/src/plugin-setup-v1.ts
 bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3  ./packages/browser-workspace/src/profile-editor-v1.ts
 b05970e556c39567111f492964c8a397d84d8bdef05aa9a9ebbd7753e467a9bc  ./packages/browser-workspace/src/workspace-administration-v1.css
-15efd5b2ccc4b9addee0848311f54bf4793cd1af78740f6950d5e1637dc527a9  ./packages/browser-workspace/src/workspace-administration-v1.ts
+e51fa6168cb29b9671b6a212e430a956827509854a3b24a4c0450bf0a5a3f823  ./packages/browser-workspace/src/workspace-administration-v1.ts
 921476ec64b797c940ef3ec3fc94d7d0b58d2818c6ee8205ff08a73a532f3001  ./packages/browser-workspace/src/workspace-agent-panel-v1.css
 fc7ecdca68b20449a2e3a4c323b6ae5e2ed28b9fac0922c81461acff626e60a6  ./packages/browser-workspace/src/workspace-agent-panel-v1.ts
 ea92ee7b785b6863e5f0794c0419593fbd603186eea2fbb96737d381a950ac58  ./packages/browser-workspace/src/workspace-bootstrap-v1.css
@@ -2485,7 +2485,7 @@ aa7c13945da53936456923e5bcd4bfde5a0059bd0cc4feff7f028b23e12a9624  ./tests/pan549
 dedf739d8ff62acf186eea044ca0340cb231adb47f053e2996ea2564e980d62e  ./tests/pan549/protected-analysis.test.mjs
 e39f984ae459e6b8bbaa63061bccb3535d754ca02da0f462d92f2188ccb1e213  ./tests/pan549/registration.test.mjs
 93e97ca5db732c61b53e0088cd75da4d750cf93c9add6d9c8f2e957c81fbb826  ./tests/pan550/browser-administration.test.mjs
-0e4bf68340568a4361e859d4303a6c72df3992ed4f113dbc637788a546657b60  ./tests/pan550/browser-approval.test.mjs
+39343c55394767e45fc399f3a93087a98a14f2221561ed9d3e2134cb9f7c81cc  ./tests/pan550/browser-approval.test.mjs
 3987868308edd8998eab221856bf3c58a07fe029c91168fb2529587d08bbf48f  ./tests/pan550/browser-fixture.mjs
 d8896289a6aa4217c132e9b59b4e660dfc32bccd92a7fe186d313a45e290e998  ./tests/pan550/native-administration.test.mjs
 78bee3f59b5539e3f53bdb64f65c9a81efb9040b874bb0be3fd7759ae27bfa67  ./tests/pan550/native-approval.test.mjs
@@ -2868,5 +2868,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-f79418885b790086d3ea6292c555eadd6f18359d5f38ba67bb5ed9702f771c5c  ./verification/verification-dag-v2.json
+b98fbb193d4173684acdd2fd5da9ab68855b3ce0487669aa0078dba0b4b663dc  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
