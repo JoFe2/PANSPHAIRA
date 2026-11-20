@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
 import {join} from 'node:path';
 import {nativeViewFixture546} from '../pan546/native-fixture.mjs';
 import {createNativeWorkspaceUiTaskProjectionV2, nativeWorkspaceUiTaskOwnerConnectionV2, uiTaskDigestV2} from '../../src/pan548/native-ui-task-projection-v2.mjs';
@@ -367,6 +368,48 @@ function stepDetailFacts(x){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.
   snapshotDigest:x.snapshot().snapshotDigest};}
 
 const producerRequest=ownerSeq=>({schemaVersion:'pansphaira.workspace-context-projection/preview-producer-request/v1',ownerSeq});
+const batchRequest=(privacyEpoch,firstOwnerSeq=1,lastOwnerSeq=8)=>({schemaVersion:'pansphaira.workspace-context-projection/preview-producer-batch-request/v1',firstOwnerSeq,lastOwnerSeq,expectedPrivacyEpoch:privacyEpoch});
+test('697 batch preview uses one existing owner transaction and returns exactly the two real completions',async t=>{const x=await fixture();try{
+ x.preview();x.preview();const snapshot=x.snapshot();const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const peer=new DatabaseSync(db.prepare('PRAGMA database_list').all().find(r=>r.name==='main').file);
+ try{
+  peer.exec('PRAGMA busy_timeout=0');const expected=[4,8].map(n=>x.projection.previewProducer(x.tab.headers,producerRequest(n)).fact),original=DatabaseSync.prototype.prepare,changes=db.prepare('SELECT total_changes() AS n').get().n;
+  let attempted=0;const mark=t.mock.method(DatabaseSync.prototype,'prepare',function(sql){
+   if(this===db&&sql.includes('FROM workspace_ui_context_event_clock_v1')&&sql.includes('seq=?')&&!attempted++){
+    assert.equal(db.isTransaction,true);
+    assert.throws(()=>peer.exec('BEGIN IMMEDIATE'),err=>err.errcode===5);
+   }
+   return original.call(this,sql);
+  });
+  let result;try{assert.equal(typeof x.projection.previewProducerBatch,'function','one bounded owner transaction for both facts is missing');result=x.projection.previewProducerBatch(x.tab.headers,batchRequest(snapshot.privacyEpoch));}finally{mark.mock.restore();}
+  assert.ok(attempted>0,'writer contention checked during real clock access');
+  assert.deepEqual(result,{schemaVersion:'pansphaira.workspace-context-projection/preview-producer-batch/v1',availability:'AVAILABLE',reason:null,firstUnresolvedOwnerSeq:null,facts:expected,executionAuthorityGranted:false});
+  assert.ok(Object.isFrozen(result.facts)&&Object.isFrozen(result.facts[0]));assert.equal(db.prepare('SELECT total_changes() AS n').get().n,changes);
+  peer.exec('BEGIN IMMEDIATE; ROLLBACK');
+ }finally{peer.close();}
+}finally{await x.close();}});
+
+test('697 batch preview never returns a partial batch when a later fact is missing its source clock or the range exceeds the head',async()=>{const x=await fixture();try{
+ x.preview();x.preview();const {privacyEpoch,principalDigest}=x.snapshot(),{db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const headers=x.tab.headers,batch=(first=1,last=8)=>x.projection.previewProducerBatch(headers,batchRequest(privacyEpoch,first,last));
+ db.prepare('DELETE FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=8').run(principalDigest);
+ const original=x.projection.previewProducer(headers,producerRequest(4));assert.equal(original.availability,'AVAILABLE');
+ const blocked=batch();assert.equal(blocked.reason,'SOURCE_CLOCK_UNAVAILABLE');assert.equal(blocked.firstUnresolvedOwnerSeq,8);assert.deepEqual(blocked.facts,[]);
+ const beyond=batch(4,9);assert.equal(beyond.reason,'SEQ_UNRECORDED');assert.equal(beyond.firstUnresolvedOwnerSeq,9);assert.deepEqual(beyond.facts,[]);
+ assert.deepEqual(x.projection.previewProducer(headers,producerRequest(4)),original);
+}finally{await x.close();}});
+
+test('697 batch preview denies retired epochs, foreign scope and invalid ranges without facts',async()=>{const x=await fixture();try{
+ x.preview();x.preview();const {privacyEpoch}=x.snapshot(),headers=x.tab.headers,request=batchRequest(privacyEpoch);
+ for(const invalid of [batchRequest(privacyEpoch,1,17),batchRequest(privacyEpoch,8,7),batchRequest(privacyEpoch,0,8),batchRequest(0),{...request,principalDigest:'forged'}])
+  assert.throws(()=>x.projection.previewProducerBatch(headers,invalid),/CONTEXT_PROJECTION_REQUEST_DENIED/);
+ const foreign=x.projection.previewProducerBatch(x.f.issue('synthetic:foreign-owner-preview-batch','reader'),request);assert.equal(foreign.availability,'UNAVAILABLE');assert.deepEqual(foreign.facts,[]);
+ x.projection.revoke(headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+ assert.throws(()=>x.projection.previewProducerBatch(headers,request),/CONTEXT_PRIVACY_REVOKED/);
+ x.projection.providerSwitch(headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+ const retired=x.projection.previewProducerBatch(headers,request);assert.equal(retired.reason,'SOURCE_RETIRED');assert.deepEqual(retired.facts,[]);
+}finally{await x.close();}});
+
 test('697 producer projection reports a truncated signed outbox tail rather than an unrecorded sequence',async()=>{const x=await fixture();try{
  const result=x.preview(),snapshot=x.snapshot(),event=snapshot.events.at(-1);
  assert.equal(event.taskId,result.invocationId);assert.equal(event.kind,'INTENT_COMPLETED');

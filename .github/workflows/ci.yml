@@ -185,6 +185,33 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Stage bounded PAN597 case evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="${RUNNER_TEMP}/pan597-selected-case-evidence"
+          mkdir -p "$output"
+          for directory in "${RUNNER_TEMP}"/pan597-browser-evidence-*; do
+            test -d "$directory" && ! test -L "$directory" || continue
+            destination="$output/${directory##*/}"
+            for name in 606-authority.json 606-keyboard-bottom.json 606-source-raster.json 606-receiver-raster.json 606-grant-freshness.json 606-short-lease-stalled-sse.json 606-stale-read-ordering.json jo259457-native-display-source.png jo259457-native-display-restricted-receiver-390.png jo259457-native-display-restricted-receiver-390-bottom.png; do
+              if test -f "$directory/$name" && ! test -L "$directory/$name"; then
+                mkdir -p "$destination"
+                cp -- "$directory/$name" "$destination/$name"
+              fi
+            done
+          done
+
+      - name: Retain bounded PAN597 case evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pan597-cases-${{ github.sha }}
+          path: ${{ runner.temp }}/pan597-selected-case-evidence
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Confirm tests did not modify tracked files
         run: git diff --exit-code
 
