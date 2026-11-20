@@ -1,7 +1,7 @@
 // Model-free PAN607 projection. PAN548 remains the sole task/session owner;
 // PAN546/PAN597 supply separately issued target evidence. No model provider.
 import {canonicalJson} from '../../dist/packages/contracts/src/canonical-json.js';
-import {nativeWorkspaceUiTaskOwnerConnectionV2,uiTaskClosedV2,uiTaskDigestV2} from './native-ui-task-projection-v2.mjs';
+import {createNativeWorkspaceUiTaskReadbackV2,nativeWorkspaceUiTaskOwnerConnectionV2,uiTaskClosedV2,uiTaskDigestV2} from './native-ui-task-projection-v2.mjs';
 import {nativeUiContextTaskCoreV1} from './native-context-journal-v1.mjs';
 import {workspaceInvocationPolicyRefV1} from './native-model-free-invocations-v1.mjs';
 import {isNativeWorkspaceContextSelectionV1} from './native-context-selection.mjs';
@@ -130,6 +130,72 @@ export function createNativeWorkspaceContextProjectionV1(options){
   const snapshotBytes=canonicalJson(core);if(Buffer.byteLength(snapshotBytes)>65536)throw Error('CONTEXT_PROJECTION_SNAPSHOT_LIMIT_DENIED');
   return {...core,snapshotBytes,snapshotDigest:uiTaskDigestV2(core),phase:'STEP_DETAIL',journalContractImplemented:true};
  }
+ // Local producer read, not a wire event. The signed action's full task-based
+ // stepId is canonical here; the legacy observation's shorter ID is unchanged.
+ function previewProducerSource(headers){
+  if(closed||t.closed())throw Error('CONTEXT_PROJECTION_OWNER_CLOSED');
+  const a=t.principal(headers);
+  // Unlike the writer's scope(), a miss must not initialize a reader's epoch.
+  const privacy=t.db.prepare('SELECT privacy_epoch,revoked FROM workspace_ui_context_scope_v1 WHERE principal_digest=?').get(a.digest);
+  if(privacy?.revoked)throw Error('CONTEXT_PRIVACY_REVOKED');
+  const stream=j.stream(a);
+  // A contiguous prefix is not a complete stream if append sidecars remain past its head.
+  // Use these rows only to deny an inconsistent read, never to recover a missing event.
+  if(t.db.prepare(`SELECT 1 AS gap WHERE
+   EXISTS(SELECT 1 FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq>?) OR
+   EXISTS(SELECT 1 FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq>?)`)
+   .get(a.digest,stream.head.seq,a.digest,stream.head.seq))throw Error('CONTEXT_STREAM_GAP_OR_BYTES_DENIED');
+  return {a,privacy,stream};
+ }
+ function previewProducerFact(headers,{a,privacy,stream},ownerSeq){
+  const response=(reason,fact=null)=>immutable({schemaVersion:'pansphaira.workspace-context-projection/preview-producer/v1',availability:fact===null?'UNAVAILABLE':'AVAILABLE',reason,fact,executionAuthorityGranted:false});
+  const e=stream.events[ownerSeq-1];
+  if(!e)return response('SEQ_UNRECORDED');
+  if(e.privacyEpoch!==privacy?.privacy_epoch)return response('SOURCE_RETIRED');
+  const {action,payload}=e,capability='pan.workspace.view.preview/v1';
+  if(e.kind!=='INTENT_COMPLETED'||payload.state!=='COMPLETED'||payload.capability!==capability||!e.taskId.startsWith('invocation:')||!payload.proofRef||!action?.runId)
+   return response('PREVIEW_COMPLETION_NOT_OBSERVED');
+  if(action.schemaVersion!=='pansphaira.workspace-context/event-action/v1'||action.taskId!==e.taskId||action.stepId!=='step:'+e.taskId||action.attempt!==1||action.capability!==capability||action.requestDigest!==payload.requestDigest||action.argumentDigest!==payload.argumentDigest)
+   throw Error('CONTEXT_PREVIEW_PRODUCER_BINDING_DENIED');
+  const proof=j.resolveProof(headers,e.taskId,payload.proofRef);
+  if(proof.kind!=='PAN546_PREVIEW_VALIDATED'||proof.taskId!==e.taskId||proof.issuedPrivacyEpoch!==e.privacyEpoch||proof.originalRequestDigest!==payload.requestDigest||proof.argumentDigest!==payload.argumentDigest)
+   throw Error('CONTEXT_PREVIEW_PRODUCER_BINDING_DENIED');
+  const clock=j.sourceClock(a,e);
+  if(clock===null)return response('SOURCE_CLOCK_UNAVAILABLE');
+  const reader=createNativeWorkspaceUiTaskReadbackV2({sessions,root:t.root});
+  try{
+   const {task,independentRead,writerEpoch}=reader.read(headers,{schemaVersion:'pansphaira.workspace-ui-task/observe/v1',commandId:e.taskId,expectedWriterEpoch:t.bootEpoch});
+   if(!independentRead||task.commandId!==e.taskId||task.state!==payload.state||task.revision!==e.taskRevision||task.requestDigest!==payload.requestDigest||task.result?.phase!=='PREVIEW_VALIDATED'||uiTaskDigestV2(task.result)!==payload.resultDigest)
+    throw Error('CONTEXT_PREVIEW_PRODUCER_BINDING_DENIED');
+   return response(null,{ownerSequence:e.seq,eventDigest:clock.eventDigest,privacyEpoch:e.privacyEpoch,taskId:e.taskId,runId:action.runId,stepId:action.stepId,attempt:action.attempt,taskRevision:e.taskRevision,
+    capability,phase:'RESULT_CONFIRMED',resultPhase:task.result.phase,requestDigest:payload.requestDigest,argumentDigest:payload.argumentDigest,resultDigest:payload.resultDigest,
+    proof:{proofRef:proof.proofId,issuerKind:proof.kind},readback:{independentRead,writerEpoch},appendClock:{sourceTimeMs:clock.sourceTimeMs,sourceBootEpoch:clock.sourceBootEpoch}});
+  }finally{reader.close();}
+ }
+ function previewProducerInsideOwnerTransaction(headers,value){
+  const request=uiTaskClosedV2(value,['schemaVersion','ownerSeq'],'CONTEXT_PROJECTION_REQUEST_DENIED');
+  if(request.schemaVersion!=='pansphaira.workspace-context-projection/preview-producer-request/v1'||!Number.isSafeInteger(request.ownerSeq)||request.ownerSeq<1)throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
+  return previewProducerFact(headers,previewProducerSource(headers),request.ownerSeq);
+ }
+ // One local owner transaction, not a cursor commit or cross-service export.
+ function previewProducerBatchInsideOwnerTransaction(headers,value){
+  const {schemaVersion,firstOwnerSeq,lastOwnerSeq,expectedPrivacyEpoch}=uiTaskClosedV2(value,['schemaVersion','firstOwnerSeq','lastOwnerSeq','expectedPrivacyEpoch'],'CONTEXT_PROJECTION_REQUEST_DENIED');
+  if(schemaVersion!=='pansphaira.workspace-context-projection/preview-producer-batch-request/v1'||
+   ![firstOwnerSeq,lastOwnerSeq,expectedPrivacyEpoch].every(n=>Number.isSafeInteger(n)&&n>0)||lastOwnerSeq<firstOwnerSeq||lastOwnerSeq-firstOwnerSeq>=16)
+   throw Error('CONTEXT_PROJECTION_REQUEST_DENIED');
+  const source=previewProducerSource(headers);
+  const response=(reason,firstUnresolvedOwnerSeq,facts=[])=>immutable({schemaVersion:'pansphaira.workspace-context-projection/preview-producer-batch/v1',availability:reason===null?'AVAILABLE':'UNAVAILABLE',reason,firstUnresolvedOwnerSeq,facts,executionAuthorityGranted:false});
+  if(!source.privacy)return response('SEQ_UNRECORDED',firstOwnerSeq);
+  if(source.privacy.privacy_epoch!==expectedPrivacyEpoch)return response('SOURCE_RETIRED',firstOwnerSeq);
+  if(lastOwnerSeq>source.stream.head.seq)return response('SEQ_UNRECORDED',Math.max(firstOwnerSeq,source.stream.head.seq+1));
+  const facts=[];
+  for(let seq=firstOwnerSeq;seq<=lastOwnerSeq;seq++){
+   const result=previewProducerFact(headers,source,seq);
+   if(result.availability==='AVAILABLE')facts.push(result.fact);
+   else if(result.reason!=='PREVIEW_COMPLETION_NOT_OBSERVED')return response(result.reason,seq);
+  }
+  return response(null,null,facts);
+ }
  function reconcile(headers,value){const c=uiTaskClosedV2(value,['schemaVersion'],'CONTEXT_RECONCILE_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-context-projection/reconcile/v1')throw Error('CONTEXT_RECONCILE_INPUT_DENIED');return immutable(t.transaction(()=>{
   const a=leading(headers);let completed=0,unknown=0,retired=0,legacyUnknown=0;
   for(const row of t.db.prepare("SELECT * FROM workspace_ui_tasks_v2 WHERE principal_digest=? AND command_id LIKE 'invocation:%' AND state IN('ACCEPTED','OUTCOME_UNCONFIRMED') ORDER BY command_id").all(a.digest)){
@@ -146,7 +212,9 @@ export function createNativeWorkspaceContextProjectionV1(options){
  const checkpoints=createNativeUiContextCheckpointsV1({sessions,tasks,t,j,contextSelection,snapshot:snapshotInsideOwnerTransaction,leading});
  const owner=Object.freeze({snapshot(headers,value){return t.transaction(()=>snapshotInsideOwnerTransaction(headers,value));},
   history(headers,value){return t.transaction(()=>historyInsideOwnerTransaction(headers,value));},
-  stepDetail(headers,value){return t.transaction(()=>stepDetailInsideOwnerTransaction(headers,value));},reconcile,
+  stepDetail(headers,value){return t.transaction(()=>stepDetailInsideOwnerTransaction(headers,value));},
+  previewProducer(headers,value){return t.transaction(()=>previewProducerInsideOwnerTransaction(headers,value));},
+  previewProducerBatch(headers,value){return t.transaction(()=>previewProducerBatchInsideOwnerTransaction(headers,value));},reconcile,
   resolveProof(headers,value){const a=leading(headers);const c=uiTaskClosedV2(value,['schemaVersion','taskId','proofRef'],'CONTEXT_PROOF_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-context-projection/resolve-proof/v1')throw Error('CONTEXT_PROOF_INPUT_DENIED');const intent=t.db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,c.taskId);if(!intent||intent.privacy_epoch!==a.privacy.privacy_epoch)throw Error('CONTEXT_PROOF_RETIRED_OR_UNREGISTERED');j.origin(a,t.readRow(c.taskId));return immutable(j.resolveProof(headers,c.taskId,c.proofRef));},
   audit(headers,value){if(closed||t.closed())throw Error('CONTEXT_PROJECTION_OWNER_CLOSED');const c=uiTaskClosedV2(value,['schemaVersion','taskId'],'CONTEXT_AUDIT_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-context-projection/audit/v1')throw Error('CONTEXT_AUDIT_INPUT_DENIED');return j.audit(headers,c.taskId);},
   prepare:checkpoints.prepare,checkResult:checkpoints.checkResult,correct:checkpoints.correct,revoke:checkpoints.revoke,providerSwitch:checkpoints.providerSwitch,checkpoint:checkpoints.read,

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
 import {join} from 'node:path';
 import {nativeViewFixture546} from '../pan546/native-fixture.mjs';
 import {createNativeWorkspaceUiTaskProjectionV2, nativeWorkspaceUiTaskOwnerConnectionV2, uiTaskDigestV2} from '../../src/pan548/native-ui-task-projection-v2.mjs';
@@ -365,6 +366,137 @@ function stepDetailFacts(x){const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.
   control:JSON.stringify(db.prepare('SELECT * FROM workspace_ui_context_control_v1').all()),
   storeRevision:x.f.store.read(x.f.sessions.authenticate(x.tab.headers)).revision,
   snapshotDigest:x.snapshot().snapshotDigest};}
+
+const producerRequest=ownerSeq=>({schemaVersion:'pansphaira.workspace-context-projection/preview-producer-request/v1',ownerSeq});
+const batchRequest=(privacyEpoch,firstOwnerSeq=1,lastOwnerSeq=8)=>({schemaVersion:'pansphaira.workspace-context-projection/preview-producer-batch-request/v1',firstOwnerSeq,lastOwnerSeq,expectedPrivacyEpoch:privacyEpoch});
+test('697 batch preview uses one existing owner transaction and returns exactly the two real completions',async t=>{const x=await fixture();try{
+ x.preview();x.preview();const snapshot=x.snapshot();const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const peer=new DatabaseSync(db.prepare('PRAGMA database_list').all().find(r=>r.name==='main').file);
+ try{
+  peer.exec('PRAGMA busy_timeout=0');const expected=[4,8].map(n=>x.projection.previewProducer(x.tab.headers,producerRequest(n)).fact),original=DatabaseSync.prototype.prepare,changes=db.prepare('SELECT total_changes() AS n').get().n;
+  let attempted=0;const mark=t.mock.method(DatabaseSync.prototype,'prepare',function(sql){
+   if(this===db&&sql.includes('FROM workspace_ui_context_event_clock_v1')&&sql.includes('seq=?')&&!attempted++){
+    assert.equal(db.isTransaction,true);
+    assert.throws(()=>peer.exec('BEGIN IMMEDIATE'),err=>err.errcode===5);
+   }
+   return original.call(this,sql);
+  });
+  let result;try{assert.equal(typeof x.projection.previewProducerBatch,'function','one bounded owner transaction for both facts is missing');result=x.projection.previewProducerBatch(x.tab.headers,batchRequest(snapshot.privacyEpoch));}finally{mark.mock.restore();}
+  assert.ok(attempted>0,'writer contention checked during real clock access');
+  assert.deepEqual(result,{schemaVersion:'pansphaira.workspace-context-projection/preview-producer-batch/v1',availability:'AVAILABLE',reason:null,firstUnresolvedOwnerSeq:null,facts:expected,executionAuthorityGranted:false});
+  assert.ok(Object.isFrozen(result.facts)&&Object.isFrozen(result.facts[0]));assert.equal(db.prepare('SELECT total_changes() AS n').get().n,changes);
+  peer.exec('BEGIN IMMEDIATE; ROLLBACK');
+ }finally{peer.close();}
+}finally{await x.close();}});
+
+test('697 batch preview never returns a partial batch when a later fact is missing its source clock or the range exceeds the head',async()=>{const x=await fixture();try{
+ x.preview();x.preview();const {privacyEpoch,principalDigest}=x.snapshot(),{db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const headers=x.tab.headers,batch=(first=1,last=8)=>x.projection.previewProducerBatch(headers,batchRequest(privacyEpoch,first,last));
+ db.prepare('DELETE FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=8').run(principalDigest);
+ const original=x.projection.previewProducer(headers,producerRequest(4));assert.equal(original.availability,'AVAILABLE');
+ const blocked=batch();assert.equal(blocked.reason,'SOURCE_CLOCK_UNAVAILABLE');assert.equal(blocked.firstUnresolvedOwnerSeq,8);assert.deepEqual(blocked.facts,[]);
+ const beyond=batch(4,9);assert.equal(beyond.reason,'SEQ_UNRECORDED');assert.equal(beyond.firstUnresolvedOwnerSeq,9);assert.deepEqual(beyond.facts,[]);
+ assert.deepEqual(x.projection.previewProducer(headers,producerRequest(4)),original);
+}finally{await x.close();}});
+
+test('697 batch preview denies retired epochs, foreign scope and invalid ranges without facts',async()=>{const x=await fixture();try{
+ x.preview();x.preview();const {privacyEpoch}=x.snapshot(),headers=x.tab.headers,request=batchRequest(privacyEpoch);
+ for(const invalid of [batchRequest(privacyEpoch,1,17),batchRequest(privacyEpoch,8,7),batchRequest(privacyEpoch,0,8),batchRequest(0),{...request,principalDigest:'forged'}])
+  assert.throws(()=>x.projection.previewProducerBatch(headers,invalid),/CONTEXT_PROJECTION_REQUEST_DENIED/);
+ const foreign=x.projection.previewProducerBatch(x.f.issue('synthetic:foreign-owner-preview-batch','reader'),request);assert.equal(foreign.availability,'UNAVAILABLE');assert.deepEqual(foreign.facts,[]);
+ x.projection.revoke(headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+ assert.throws(()=>x.projection.previewProducerBatch(headers,request),/CONTEXT_PRIVACY_REVOKED/);
+ x.projection.providerSwitch(headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+ const retired=x.projection.previewProducerBatch(headers,request);assert.equal(retired.reason,'SOURCE_RETIRED');assert.deepEqual(retired.facts,[]);
+}finally{await x.close();}});
+
+test('697 producer projection reports a truncated signed outbox tail rather than an unrecorded sequence',async()=>{const x=await fixture();try{
+ const result=x.preview(),snapshot=x.snapshot(),event=snapshot.events.at(-1);
+ assert.equal(event.taskId,result.invocationId);assert.equal(event.kind,'INTENT_COMPLETED');
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding),args=[snapshot.principalDigest,event.seq];
+ const read=seq=>x.projection.previewProducer(x.tab.headers,producerRequest(seq));
+ assert.equal(read(event.seq).availability,'AVAILABLE');
+ assert.equal(read(event.seq+1).reason,'SEQ_UNRECORDED');
+ const clock=db.prepare('SELECT * FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').get(...args);
+ const projection=db.prepare('SELECT * FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq=?').get(...args);
+ assert.equal(canonicalJson(JSON.parse(projection.bytes)),projection.bytes);
+ assert.equal(JSON.parse(clock.bytes).eventDigest,event.eventDigest);
+ assert.equal(db.prepare('DELETE FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND seq=?').run(...args).changes,1);
+ for(const seq of [event.seq-1,event.seq,event.seq+1])assert.throws(()=>read(seq),/CONTEXT_STREAM_GAP_OR_BYTES_DENIED/);
+ db.prepare('DELETE FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').run(...args);
+ assert.throws(()=>read(event.seq),/CONTEXT_STREAM_GAP_OR_BYTES_DENIED/,'projection alone proves inconsistency');
+ db.prepare('DELETE FROM workspace_ui_context_projection_v1 WHERE principal_digest=? AND seq=?').run(...args);
+ db.prepare('INSERT INTO workspace_ui_context_event_clock_v1 VALUES(?,?,?,?)').run(...args,clock.bytes,clock.signature);
+ assert.throws(()=>read(event.seq),/CONTEXT_STREAM_GAP_OR_BYTES_DENIED/,'clock alone proves inconsistency');
+ assert.equal(db.prepare('SELECT count(*) AS n FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND seq=?').get(...args).n,0,'reader never repairs the damaged outbox');
+ const other=x.f.tab(x.f.issue('synthetic:foreign-truncated-tail','reader'));
+ assert.equal(x.projection.previewProducer(other.headers,producerRequest(event.seq)).reason,'SEQ_UNRECORDED','a foreign tail cannot affect this principal');
+}finally{await x.close();}});
+test('697 producer projection binds the signed preview completion to its attached proof, append clock and independent persisted readback',async()=>{const x=await fixture();try{
+ const preview=x.preview(),view=x.snapshot(),event=view.events.find(e=>e.taskId===preview.invocationId&&e.kind==='INTENT_COMPLETED');
+ const detail=x.projection.stepDetail(x.tab.headers,stepDetailRequest(event.seq)).step;
+ const custody=x.invocations.read(x.tab.headers,{schemaVersion:'pansphaira.workspace-invocation/read/v1',invocationId:preview.invocationId}).custody;
+ const before=stepDetailFacts(x),request=producerRequest(event.seq);
+ assert.equal(typeof x.projection.previewProducer,'function','confirmed preview lacks a local owner producer projection');
+ const read=x.projection.previewProducer(x.tab.headers,request);
+ assert.deepEqual(read,{
+  schemaVersion:'pansphaira.workspace-context-projection/preview-producer/v1',availability:'AVAILABLE',reason:null,
+  fact:{ownerSequence:event.seq,eventDigest:event.eventDigest,privacyEpoch:event.privacyEpoch,
+   runId:event.action.runId,taskId:event.taskId,stepId:event.action.stepId,attempt:event.action.attempt,taskRevision:custody.task.revision,
+   capability:'pan.workspace.view.preview/v1',phase:preview.observation.phase,resultPhase:custody.task.result.phase,
+   requestDigest:custody.task.requestDigest,argumentDigest:event.payload.argumentDigest,resultDigest:uiTaskDigestV2(custody.task.result),
+   proof:{proofRef:event.payload.proofRef,issuerKind:detail.proof.issuerKind},
+   readback:{independentRead:true,writerEpoch:custody.writerEpoch},
+   appendClock:{sourceTimeMs:detail.sourceTimeMs,sourceBootEpoch:custody.writerEpoch}},
+  executionAuthorityGranted:false,
+ });
+ assert.notEqual(read.fact.stepId,preview.observation.stepId,'the signed full task step ID is canonical here; the legacy observe DTO remains unchanged');
+ assert.ok(Object.isFrozen(read.fact.proof));
+ for(let i=0;i<3;i++)assert.deepEqual(x.projection.previewProducer(x.tab.headers,request),read);
+ assert.deepEqual(stepDetailFacts(x),before,'re-reads do not touch the existing task rows, signed outbox, proof, clock or live snapshot');
+}finally{await x.close();}});
+
+test('697 producer projection never exports an earlier, unrecorded, foreign or retired step',async()=>{const x=await fixture();try{
+ const preview=x.preview(),view=x.snapshot(),events=view.events.filter(e=>e.taskId===preview.invocationId);
+ const seq=events.find(e=>e.kind==='INTENT_COMPLETED').seq,read=(n,headers=x.tab.headers)=>x.projection.previewProducer(headers,producerRequest(n));
+ const unavailable=(result,reason)=>assert.deepEqual(result,{schemaVersion:'pansphaira.workspace-context-projection/preview-producer/v1',availability:'UNAVAILABLE',reason,fact:null,executionAuthorityGranted:false});
+ for(const e of events.filter(e=>e.seq!==seq))unavailable(read(e.seq),'PREVIEW_COMPLETION_NOT_OBSERVED');
+ unavailable(read(view.streamHead.seq+1),'SEQ_UNRECORDED');
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding);
+ const scopes=()=>db.prepare('SELECT * FROM workspace_ui_context_scope_v1 ORDER BY principal_digest').all(),before=scopes();
+ unavailable(read(seq,x.f.issue('synthetic:other-producer-reader','reader')),'SEQ_UNRECORDED');
+ assert.deepEqual(scopes(),before,'foreign read must not create a scope or return anyone else’s owner fact');
+ for(const request of [{...producerRequest(seq),proofRef:events.at(-1).payload.proofRef},{...producerRequest(seq),phase:'RESULT_CONFIRMED'},producerRequest(0),producerRequest(1.5)])
+  assert.throws(()=>x.projection.previewProducer(x.tab.headers,request),/CONTEXT_PROJECTION_REQUEST_DENIED/);
+ x.projection.revoke(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/privacy-revoke/v1'});
+ assert.throws(()=>read(seq),/CONTEXT_PRIVACY_REVOKED/);
+ x.projection.providerSwitch(x.tab.headers,{schemaVersion:'pansphaira.workspace-context-projection/contract-session-switch/v1',context:x.f.verification(x.tab)});
+ unavailable(read(seq),'SOURCE_RETIRED');
+}finally{await x.close();}});
+
+test('697 producer projection denies a substituted proof binding and does not infer a missing append clock',async()=>{const x=await fixture();try{
+ const preview=x.preview(),event=x.snapshot().events.find(e=>e.taskId===preview.invocationId&&e.kind==='INTENT_COMPLETED');
+ const read=()=>x.projection.previewProducer(x.tab.headers,producerRequest(event.seq)),genuine=read();
+ const {db}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding),before=stepDetailFacts(x);
+ const proof=db.prepare('SELECT principal_digest FROM workspace_ui_context_proofs_v1 WHERE proof_id=?').get(event.payload.proofRef);
+ const other=x.f.issue('synthetic:other-proof-binding','reader');
+ const {digest}=nativeWorkspaceUiTaskOwnerConnectionV2(x.tasks,x.f.sessions.binding).principal(other);
+ const setPrincipal=db.prepare('UPDATE workspace_ui_context_proofs_v1 SET principal_digest=? WHERE proof_id=?');
+ setPrincipal.run(digest,event.payload.proofRef);
+ assert.throws(read,/CONTEXT_PROOF_SCOPE_DENIED/,'the selected completion cannot borrow a proof assigned to a different principal');
+ setPrincipal.run(proof.principal_digest,event.payload.proofRef);
+ const clock=db.prepare('SELECT * FROM workspace_ui_context_event_clock_v1 WHERE seq=?').get(event.seq);
+ const setClock=db.prepare('UPDATE workspace_ui_context_event_clock_v1 SET signature=? WHERE principal_digest=? AND seq=?');
+ setClock.run('0'.repeat(64),clock.principal_digest,clock.seq);
+ assert.throws(read,/EVENT_SOURCE_CLOCK_SIGNATURE_DENIED/);
+ db.prepare('DELETE FROM workspace_ui_context_event_clock_v1 WHERE principal_digest=? AND seq=?').run(clock.principal_digest,clock.seq);
+ const absent=read();
+ assert.equal(absent.availability,'UNAVAILABLE');assert.equal(absent.reason,'SOURCE_CLOCK_UNAVAILABLE');assert.equal(absent.fact,null);
+ db.prepare('INSERT INTO workspace_ui_context_event_clock_v1 VALUES(?,?,?,?)').run(clock.principal_digest,clock.seq,clock.bytes,clock.signature);
+ assert.deepEqual(read(),genuine);
+ assert.deepEqual(stepDetailFacts(x),before,'the read never repairs, rewrites or backfills owner facts');
+}finally{await x.close();}});
+
 test('701 REC-02 step detail binds the exact signed recorded step: owner seq/run/step/attempt, recorded operation and digests, version-exact recorded refs, step-attached proof only, recorded facts separated from honest unavailables, zero reader effects',async()=>{const x=await fixture();try{
  assert.equal(typeof x.projection.stepDetail,'function','REC-02 step-detail owner read not yet delivered');
  const result=x.preview(),p=x.snapshot();
