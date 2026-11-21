@@ -10626,7 +10626,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-administration-v1.ts",
           "role": "SOURCE",
-          "sha256": "15efd5b2ccc4b9addee0848311f54bf4793cd1af78740f6950d5e1637dc527a9"
+          "sha256": "e51fa6168cb29b9671b6a212e430a956827509854a3b24a4c0450bf0a5a3f823"
         },
         {
           "path": "packages/browser-workspace/src/workspace-administration-v1.css",
@@ -10671,7 +10671,7 @@
         {
           "path": "tests/pan550/browser-approval.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0e4bf68340568a4361e859d4303a6c72df3992ed4f113dbc637788a546657b60"
+          "sha256": "39343c55394767e45fc399f3a93087a98a14f2221561ed9d3e2134cb9f7c81cc"
         },
         {
           "path": "tests/pan550/registration.test.mjs",
