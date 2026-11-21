@@ -813,7 +813,7 @@ f8dcc776f05a95a8a3ec33baa198caf397b564d76b4d949df7bce661940b8613  ./packages/bro
 c04f3eb6b558f25608ad6af7d62369d677095243bcac5ba3ee71e9cbe01093f6  ./packages/browser-workspace/src/plugin-setup-v1.ts
 bd93f94619a2963e1b98af3a7ddf1af74b2fdc37a7acb693f0ed95553ccb2cb3  ./packages/browser-workspace/src/profile-editor-v1.ts
 b05970e556c39567111f492964c8a397d84d8bdef05aa9a9ebbd7753e467a9bc  ./packages/browser-workspace/src/workspace-administration-v1.css
-e51fa6168cb29b9671b6a212e430a956827509854a3b24a4c0450bf0a5a3f823  ./packages/browser-workspace/src/workspace-administration-v1.ts
+b4fff7efed0a67eb3a20b97b05871ea8fd1ebd21205c3b6be0780e943a33d8ad  ./packages/browser-workspace/src/workspace-administration-v1.ts
 921476ec64b797c940ef3ec3fc94d7d0b58d2818c6ee8205ff08a73a532f3001  ./packages/browser-workspace/src/workspace-agent-panel-v1.css
 fc7ecdca68b20449a2e3a4c323b6ae5e2ed28b9fac0922c81461acff626e60a6  ./packages/browser-workspace/src/workspace-agent-panel-v1.ts
 ea92ee7b785b6863e5f0794c0419593fbd603186eea2fbb96737d381a950ac58  ./packages/browser-workspace/src/workspace-bootstrap-v1.css
@@ -2868,5 +2868,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-7e13ab5e157af33c88fbcaffa2a6969316b56ef533cafe0f7a42f23f8edf51a6  ./verification/verification-dag-v2.json
+c3ec351d86964a2edda7819bcdf5653e93db01236313d0b9aceacfade44a783d  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
