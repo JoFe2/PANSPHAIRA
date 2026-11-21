@@ -5922,7 +5922,7 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "c6399da394eebbf011d8ab887590b52026e9119d431f8a8401cc9e2c2fd0fac0"
+          "sha256": "d1c078d2b2cebaebe07fe8589666e73a578fdbd44bb4daad1c0ef43d2e1131c7"
         }
       ],
       "ownedTests": [
@@ -10626,7 +10626,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-administration-v1.ts",
           "role": "SOURCE",
-          "sha256": "15efd5b2ccc4b9addee0848311f54bf4793cd1af78740f6950d5e1637dc527a9"
+          "sha256": "e51fa6168cb29b9671b6a212e430a956827509854a3b24a4c0450bf0a5a3f823"
         },
         {
           "path": "packages/browser-workspace/src/workspace-administration-v1.css",
@@ -10671,7 +10671,7 @@
         {
           "path": "tests/pan550/browser-approval.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "0e4bf68340568a4361e859d4303a6c72df3992ed4f113dbc637788a546657b60"
+          "sha256": "39343c55394767e45fc399f3a93087a98a14f2221561ed9d3e2134cb9f7c81cc"
         },
         {
           "path": "tests/pan550/registration.test.mjs",
@@ -11660,7 +11660,7 @@
         {
           "path": "tests/pan597/browser-pairing.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "8ae9ccedfb5920c9fb974dc068955492acabfe0724166a7d8ac3279649adff50"
+          "sha256": "a5840c10c2c34c9a7456c7fa7f73e21c31732fc825d1a5d5bcac827b5197ae7d"
         },
         {
           "path": "packages/contracts/src/workspace-browser-pairing-v1.ts",
