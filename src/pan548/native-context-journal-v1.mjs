@@ -178,6 +178,29 @@ function boundProof(a,row,ref){const core=origin(a,row),p=proofFor(a,ref);
    db.prepare('INSERT INTO workspace_ui_context_proofs_v1 VALUES(?,?,?,?,?,?,?)').run(proofId,a.digest,taskId,kind,core.argumentDigest,bytes,signature);return body;
   },
   resolveProof(headers,taskId,ref){const a=actor(headers,{audit:true}),row=rowFor(a,taskId),proof=boundProof(a,row,ref);return freeze({...proof,independentOwnerRegisterVerified:true,executionAuthorityGranted:false});},
+  // Unlike historical audit, a snapshot join must not provision missing scope
+  // or admit a previous privacy epoch. The caller owns the read transaction.
+  resolveProofInCurrentPrivacySnapshot(headers,taskId,ref){
+   if(!db.isTransaction)throw Error('CONTEXT_PROOF_READ_SNAPSHOT_REQUIRED');
+   const a=principal(headers),privacy=db.prepare('SELECT privacy_epoch,revoked FROM workspace_ui_context_scope_v1 WHERE principal_digest=?').get(a.digest);
+   const deny=()=>{throw Error('CONTEXT_PROOF_RETIRED_OR_UNREGISTERED');};
+   if(!privacy||privacy.revoked!==0)deny();
+   function requireCurrentIntent(row){
+    const intent=db.prepare("SELECT * FROM workspace_ui_context_outbox_v1 WHERE principal_digest=? AND task_id=? AND kind='INTENT_ACCEPTED' ORDER BY seq LIMIT 1").get(a.digest,row.command_id);
+    if(!intent||intent.privacy_epoch!==privacy.privacy_epoch)deny();
+    const event=verifiedEnvelope(intent,'event'),core=nativeUiContextTaskCoreV1(row),payload=event.payload;
+    if(event.privacyEpoch!==privacy.privacy_epoch||event.principalDigest!==a.digest||event.taskId!==row.command_id||event.kind!=='INTENT_ACCEPTED'||
+       !payload||payload.requestDigest!==core.requestDigest||payload.argumentDigest!==core.argumentDigest||payload.capability!==core.capability||
+       canonicalJson(payload.constraints)!==canonicalJson(core.constraints)||canonicalJson(payload.resourceRefs)!==canonicalJson(core.resourceRefs))deny();
+   }
+   const row=rowFor(a,taskId);
+   requireCurrentIntent(row);
+   const proof=boundProof(a,row,ref);
+   if(proof.issuedPrivacyEpoch!==privacy.privacy_epoch)deny();
+   // A proof issued in this epoch does not renew its contributing display intent.
+   if(proof.taskId!==row.command_id)requireCurrentIntent(rowFor(a,proof.taskId));
+   return freeze({...proof,independentOwnerRegisterVerified:true,executionAuthorityGranted:false});
+  },
   bestProof(headers,taskId){const a=actor(headers,{audit:true}),row=rowFor(a,taskId),core=origin(a,row),child=core.capability==='pan.workspace.document.display/v2'&&taskId.startsWith('invocation:')?JSON.parse(core.argumentBytes).commandId:taskId;const rows=db.prepare('SELECT * FROM workspace_ui_context_proofs_v1 WHERE principal_digest=? AND task_id IN(?,?) ORDER BY kind').all(a.digest,taskId,child);const proofs=rows.map(r=>journal.resolveProof(headers,taskId,r.proof_id));return proofs.find(p=>p.kind==='PAN597_DOCUMENT_RENDERED')??proofs.find(p=>p.kind==='PAN546_PREVIEW_VALIDATED')??proofs.find(p=>p.kind==='PAN597_DOCUMENT_ACCEPTED')??null;},
   audit(headers,taskId){const a=actor(headers,{audit:true}),row=rowFor(a,taskId);return freeze({task:nativeUiContextTaskCoreV1(row),events:stream(a).events.filter(e=>e.taskId===taskId),proof:journal.bestProof(headers,taskId),historicalAudit:true,executionAuthorityGranted:false});},
   repairInsideOwnerTransaction(headers){return (()=>{const a=actor(headers),current=stream(a);let repaired=0;

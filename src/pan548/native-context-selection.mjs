@@ -138,7 +138,9 @@ export function createNativeWorkspaceContextSelectionV1(options){
   },
   close(){if(closed)return;closed=true;tabs.clear();},
  });const checkpointRead=headers=>{const {a,tab}=tabFor(headers);a.headers=headers;const native=state(a,tab),binding=owner.surfaceBindingV2(headers);return Object.freeze({binding,primaryObject:tab.surfaceContextV2?{objectId:tab.surfaceContextV2.objectId,revision:tab.surfaceContextV2.dataRevision}:native.primaryObject});};
- owned.set(owner,{binding:sessions.binding,moduleViewStore,nativeReader,knowledgeSource,checkpointRead});return owner;
+ // Authenticate the tab without state(), which refreshes live view bookkeeping.
+ const surfaceCredentials=headers=>{const {a,tab}=tabFor(headers);return {subjectId:a.principal.subjectId,role:a.principal.role,sessionId:a.sessionId,tabId:tab.id};};
+ owned.set(owner,{binding:sessions.binding,moduleViewStore,nativeReader,knowledgeSource,checkpointRead,surfaceCredentials});return owner;
 }
 export const isNativeWorkspaceContextSelectionV1=(owner,binding)=>owned.has(owner)&&same(owned.get(owner).binding,binding);
 // Owner-local composition fence only. A second authentic reader for the same
@@ -146,6 +148,8 @@ export const isNativeWorkspaceContextSelectionV1=(owner,binding)=>owned.has(owne
 export const isNativeWorkspaceReaderContextSelectionV1=(owner,binding,reader)=>isNativeWorkspaceContextSelectionV1(owner,binding)&&owned.get(owner).nativeReader===reader;
 export const isNativeWorkspaceModuleViewContextSelectionV1=(owner,binding,store)=>isNativeWorkspaceContextSelectionV1(owner,binding)&&sameWorkspaceModuleViewStoreV1(owned.get(owner).moduleViewStore,store);
 export const isNativeWorkspaceKnowledgeContextSelectionV1=(owner,binding,source)=>isNativeWorkspaceContextSelectionV1(owner,binding)&&owned.get(owner).knowledgeSource===source;
+
+export function nativeWorkspaceContextSurfaceCredentialsV2(owner,binding){if(!isNativeWorkspaceContextSelectionV1(owner,binding))throw Error('CONTEXT_SURFACE_OWNER_DENIED');return owned.get(owner).surfaceCredentials;}
 
 // Code-only current object/resource read, not a widened v1 browser payload.
 export function nativeWorkspaceContextCheckpointReaderV1(owner,binding){if(!isNativeWorkspaceContextSelectionV1(owner,binding))throw Error('CONTEXT_CHECKPOINT_SOURCE_OWNER_DENIED');return Object.freeze({read:owned.get(owner).checkpointRead});}
