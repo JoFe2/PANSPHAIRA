@@ -11819,7 +11819,7 @@
         {
           "path": "docs/architecture/model-free-native-invocations-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "9dd5a1a94ad56919a6e16875746aba96691a470d7fcbace0aa35599b5aaf2b89"
+          "sha256": "ba5ff1d9b4f3dac3099da917c9408bdfe5c100b7670254cfc5ea99bbe95d9dd4"
         },
         {
           "path": "scripts/run-pan592-model-free-durable-tests.mjs",
