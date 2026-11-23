@@ -374,7 +374,7 @@ c1dddfea754c30f1a647fdb0d3fed8dec52fcf97a950ba6c4167c2a3c483a85e  ./docs/archite
 d33a55dabb163748587da37d6028afd18ee041fbea773d2217bffb9835c6435e  ./docs/architecture/ks238-order-source-handoff-v1.md
 d16ee7dea6ba9f183f596c65f1acf68816b5e56ef5f113d59844740d13c0b258  ./docs/architecture/model-free-configuration-conversation-form-v1.md
 08e7fd1c4769287f375e95143c00bed507454a1c3378f3ad1d9967b502b5c914  ./docs/architecture/model-free-durable-native-ui-tasks-v1.md
-9dd5a1a94ad56919a6e16875746aba96691a470d7fcbace0aa35599b5aaf2b89  ./docs/architecture/model-free-native-invocations-v1.md
+ba5ff1d9b4f3dac3099da917c9408bdfe5c100b7670254cfc5ea99bbe95d9dd4  ./docs/architecture/model-free-native-invocations-v1.md
 4c831b513c46ee767834ab4f2cd63e0cc29f1ba016b207a5d66d70b4c3666323  ./docs/architecture/native-administration-approval-browser-v1.md
 b86e92e68756fbe0328bd65bf620fe53b07388e9ca35806a75e16aaa69fb0abb  ./docs/architecture/native-authenticated-browser-surfaces-v2.md
 ad6b745afb1b8cfa7edd493ce4a1507ff250d8545de90c4971949e3fa4753ab8  ./docs/architecture/native-context-checkpoint-projection-v1.md
@@ -2868,5 +2868,5 @@ bbbe24fa998be7227241509e8dfd98b9f8a273d8dd0fa9de55763ddae3320301  ./verification
 c96d8176e5303faad02c363871f2b86e0b1219aa589d0dbce80325ef15a1e3bf  ./verification/rks-01-source-capture-receipt-v1.json
 e65896e711d88ae357d138f03914c1909270ba57218691ef9f9b0e2778e34f8f  ./verification/rks-02-falsification-report-v1.json
 9a39365b3feeb3e0dd56f0551294492969ca2bb32b321695b9ef9dd396bdaee9  ./verification/trust-compatibility-foundation-closure-v1.json
-fbbca831ab896f8a826297fd66ad568d093092311fe5ca48e12994685876faae  ./verification/verification-dag-v2.json
+a213bab159779e7c65c316942633fa33707a06800df100264fa744855142223d  ./verification/verification-dag-v2.json
 bbfedced8b1f5e4af0feb6d72564f7f292c56d5e7eb686f8f5f4a05d7a5310a3  ./verification/wikimedia-m0-evidence-v1.json
