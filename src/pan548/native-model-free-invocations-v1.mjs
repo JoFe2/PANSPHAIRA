@@ -184,6 +184,39 @@ export function createNativeWorkspaceInvocationsV1(options){
   close(){closed=true;independentReader.close();sets.clear();admissions.clear();owned.delete(owner);},
  });
  const connection=Object.freeze({sessions,contextSelection,viewOwner,surfaces,tasks,
+  // Snapshot-relative proof verification, not a live view or execution grant.
+  readDocumentProofBindingV1(headers,value){
+   const code='INVOCATION_DOCUMENT_PROOF_BINDING_INPUT_DENIED',c=uiTaskClosedV2(value,['schemaVersion','invocationId','proofRef'],code);
+   if(c.schemaVersion!=='pansphaira.workspace-invocation/native-document-proof-binding/v1'||typeof c.invocationId!=='string'||!/^invocation:[a-f0-9]{32}$/.test(c.invocationId)||
+      typeof c.proofRef!=='string'||!/^context-proof:[a-f0-9]{64}$/.test(c.proofRef))throw Error(code);
+   if(t.db.isTransaction)throw Error('INVOCATION_DOCUMENT_PROOF_BINDING_SNAPSHOT_DENIED');
+   t.db.exec('BEGIN DEFERRED');
+   try{
+    const a=leading(headers),row=t.readRow(c.invocationId);
+    if(!row||row.principal_digest!==a.digest)throw Error('INVOCATION_CHILD_BINDING_SCOPE_DENIED');
+    const core=nativeUiContextTaskCoreV1(row),original=JSON.parse(row.original_command);
+    if(core.capability!==capabilities[1]||row.state!=='COMPLETED')throw Error('INVOCATION_CHILD_BINDING_UNAVAILABLE');
+    const {candidate:member,set}=original;
+    if(canonicalJson(original)!==row.original_command||!set||!Array.isArray(set.candidates))throw Error('INVOCATION_CHILD_BINDING_MEMBER_DENIED');
+    const {setDigest,...unsigned}=set,selected=set.candidates.filter(x=>x?.candidateId===set.selectedCandidateId);
+    if(set.invocationId!==c.invocationId||set.outcome!=='RESOLVED'||setDigest!==uiTaskDigestV2(unsigned)||
+       member?.invocationId!==c.invocationId||selected.length!==1||canonicalJson(selected[0])!==canonicalJson(member))throw Error('INVOCATION_CHILD_BINDING_MEMBER_DENIED');
+    const child={schemaVersion:'pansphaira.workspace-invocation/native-child-binding-readback/v1',invocationId:c.invocationId,invocationRequestDigest:row.request_digest,
+     ...surface.readInvocationDisplayChild(headers,tasks,core.argumentBytes,core.argumentDigest)};
+    const proof=t.contextJournal.resolveProofInCurrentPrivacySnapshot(headers,c.invocationId,c.proofRef);
+    const {sourceSurfaceId,targetSurfaceId,sourceConnectionEpoch,targetConnectionEpoch,targetLocalGeneration,routeId,objectId,expectedRevision}=child.command;
+    const scope={sourceSurfaceId,targetSurfaceId,sourceConnectionEpoch,targetConnectionEpoch,targetLocalGeneration};
+    const resourceRefs={objectRef:{objectId},documentRef:{routeId,objectId,dataRevision:expectedRevision},target:{kind:'REGISTERED_BROWSER_SURFACE',surfaceId:targetSurfaceId}};
+    const rendered=child.deliveryStatus==='RENDERED',kind=rendered?'PAN597_DOCUMENT_RENDERED':'PAN597_DOCUMENT_ACCEPTED';
+    const evidence={issuer:'PAN597_NATIVE_SURFACE_OWNER',...(rendered?child.renderReceipt:{surfaceId:targetSurfaceId,connectionEpoch:targetConnectionEpoch,
+     localGeneration:targetLocalGeneration,objectId,dataRevision:expectedRevision,resultRevision:null,deliveryAccepted:true,clientReportedDomCommit:false,physicalPixelSightCertified:false})};
+    if(proof.taskId!==child.childCommandId||proof.argumentDigest!==child.childRequestDigest||proof.originalRequestDigest!==child.childRequestDigest||proof.kind!==kind||
+       canonicalJson(proof.scope)!==canonicalJson(scope)||canonicalJson(proof.resourceRefs)!==canonicalJson(resourceRefs)||canonicalJson(proof.evidence)!==canonicalJson(evidence))
+     throw Error('INVOCATION_DOCUMENT_PROOF_BINDING_MISMATCH');
+    return freeze({schemaVersion:'pansphaira.workspace-invocation/native-document-proof-binding-readback/v1',invocationId:c.invocationId,invocationRevision:row.revision,child,proof,
+     executionAuthorityGranted:false,physicalPixelSightCertified:false});
+   }finally{t.db.exec('ROLLBACK');}
+  },
   begin(headers,value){
    const c=uiTaskClosedV2(value,executeKeys,'INVOCATION_EXECUTOR_INPUT_DENIED');if(c.schemaVersion!=='pansphaira.workspace-invocation/execute/v1')throw Error('INVOCATION_EXECUTOR_INPUT_DENIED');
    const a=leading(headers);if(typeof c.invocationId!=='string'||!/^invocation:[a-f0-9]{32}$/.test(c.invocationId)||typeof c.admissionToken!=='string'||!/^[a-f0-9]{64}$/.test(c.admissionToken))throw Error('INVOCATION_ADMISSION_REQUIRED');const admission=admissions.get(c.invocationId);if(!admission||!same(uiTaskDigestV2(c.admissionToken),admission.tokenDigest))throw Error('INVOCATION_ADMISSION_REQUIRED');

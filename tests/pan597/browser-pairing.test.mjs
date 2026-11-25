@@ -112,7 +112,11 @@ function observeDisplay606(x){
 async function restrictedHttp606(f,origin,path,{method='GET',headers={},body}={}){const {request}=await import('node:https');const bytes=body===undefined?null:Buffer.from(JSON.stringify(body));return await new Promise((resolve,reject)=>{const r=request(origin+path,{method,lookup:(_host,_options,done)=>done(null,'127.0.0.1',4),ca:readFileSync(f.tls.options.tls.certPath),rejectUnauthorized:true,minVersion:'TLSv1.3',headers:{...headers,...(bytes?{'content-type':'application/json','content-length':bytes.length}:{})}},res=>{const chunks=[];res.on('data',c=>chunks.push(c));res.on('end',()=>resolve({status:res.statusCode,headers:res.headers,body:Buffer.concat(chunks).toString()}));});r.setTimeout(5000,()=>r.destroy(Error('NATIVE_HTTP_BOUND')));r.on('error',reject);if(bytes)r.write(bytes);r.end();});}
 async function keyboardReachability606(x,frame,offered,observation){
  assert.ok(Date.now()<offered.expiresAtMs,'Keyboard must start inside the actual offered grant');
- await observation.sampleBoth('before-focus');await frame.getByRole('main',{name:'Freigegebene native Dokumentfelder',exact:true}).click();await observation.sampleBoth('after-focus');await x.target.keyboard.press('Control+End');await observation.sampleBoth('after-key');const keyboardFrame=x.target.frames().find(f=>f.url().startsWith(offered.displayOrigin+'/display/'));assert.ok(keyboardFrame);await observation.sampleBoth('before-geometry-wait');await keyboardFrame.waitForFunction(()=>{const n=document.querySelector('[data-field="status"]');if(!n)return false;const r=n.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth;});await observation.sampleBoth('after-geometry-wait');const lastFieldGeometry=await frame.locator('[data-field="status"]').evaluate(n=>{const r=n.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:innerWidth,height:innerHeight,scrollY};});assert.ok(lastFieldGeometry.top>=0&&lastFieldGeometry.bottom<=lastFieldGeometry.height&&lastFieldGeometry.left>=0&&lastFieldGeometry.right<=lastFieldGeometry.width,'All projected fields remain reachable by actual keyboard scrolling inside the390px restricted frame');
+ await observation.sampleBoth('before-focus');
+ const main=frame.getByRole('main',{name:'Freigegebene native Dokumentfelder',exact:true});
+ // This case checks keyboard scrolling, not pointer activation or navigation.
+ await main.focus();assert.equal(await main.evaluate(node=>document.hasFocus()&&document.activeElement===node),true);
+ await observation.sampleBoth('after-focus');await x.target.keyboard.press('Control+End');await observation.sampleBoth('after-key');const keyboardFrame=x.target.frames().find(f=>f.url().startsWith(offered.displayOrigin+'/display/'));assert.ok(keyboardFrame);await observation.sampleBoth('before-geometry-wait');await keyboardFrame.waitForFunction(()=>{const n=document.querySelector('[data-field="status"]');if(!n)return false;const r=n.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth;});await observation.sampleBoth('after-geometry-wait');const lastFieldGeometry=await frame.locator('[data-field="status"]').evaluate(n=>{const r=n.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:innerWidth,height:innerHeight,scrollY};});assert.ok(lastFieldGeometry.top>=0&&lastFieldGeometry.bottom<=lastFieldGeometry.height&&lastFieldGeometry.left>=0&&lastFieldGeometry.right<=lastFieldGeometry.width,'All projected fields remain reachable by actual keyboard scrolling inside the390px restricted frame');
  assert.ok(Date.now()<offered.expiresAtMs,'Actual keyboard geometry must complete inside the offered grant');
  return lastFieldGeometry;
 }
@@ -171,11 +175,22 @@ async function offerDisplay606(c){
 }
 function displaySnapshot606({whenRendered=false}={}){if(whenRendered&&document.body?.dataset.state!=='DISPLAY_RENDERED')return false;const snapshot={state:document.body.dataset.state,principal:document.body.dataset.principalClass,origin:location.origin,hash:location.hash,controls:document.querySelectorAll('button,input,form,audio,video').length,fields:Object.fromEntries([...document.querySelectorAll('[data-field]')].map(n=>[n.dataset.field,n.textContent]))};return whenRendered?{snapshot,observedAtMs:Date.now()}:snapshot;}
 function sourceRendered606(id){const d=document.querySelector('.surface-native-presentation');return d?.dataset.sessionId===id&&d.textContent.includes('Zielanzeige RENDERED');}
+async function refreshPair606(page){
+ const button=page.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true});
+ assert.equal(await button.isEnabled(),true,'The normal pairing refresh must be enabled');
+ await button.press('Enter');
+}
 async function confirmDisplay606(c,grant,{afterCommit,refreshSourceAfterAck=false}={}){
  const {x,expected}=c,{offered}=grant;
  await x.target.waitForFunction(()=>[...document.querySelectorAll('button')].some(b=>b.textContent==='Begrenzte Dokumentanzeige als Empfänger bestätigen'&&!b.disabled));
  const response=displayResponse606(x.target,'confirm'),stream=x.target.waitForRequest(r=>r.url()===offered.displayOrigin+'/display/events'),redeem=x.target.waitForResponse(r=>r.url()===offered.displayOrigin+'/display/redeem');
- const ack=refreshSourceAfterAck?x.target.waitForResponse(w=>w.url()===offered.displayOrigin+'/display/ack'&&w.request().method()==='POST'&&w.request().postDataJSON()?.sessionId===offered.sessionId).then(wire=>({wire}),error=>({error})):null;
+ // Start the ordinary source read as soon as the real ACK comes back, while
+ // the independent child checks below collect the rendered fields.
+ const ack=refreshSourceAfterAck?x.target.waitForResponse(w=>w.url()===offered.displayOrigin+'/display/ack'&&w.request().method()==='POST'&&w.request().postDataJSON()?.sessionId===offered.sessionId).then(async wire=>{
+  assert.equal(wire.status(),200);
+  if(!await x.source.evaluate(sourceRendered606,offered.sessionId))await refreshPair606(x.source);
+  return {wire};
+ }).catch(error=>({error})):null;
  const button=x.target.getByRole('button',{name:'Begrenzte Dokumentanzeige als Empfänger bestätigen',exact:true});await button.focus();await button.press('Enter');
  const wire=await response;assert.equal(wire.status(),200);const confirmed=await wire.json();
  assert.equal(confirmed.state,'ACTIVE');assert.equal(confirmed.sessionId,offered.sessionId);assert.equal(confirmed.grantDigest,offered.grantDigest);assert.equal(confirmed.expiresAtMs,offered.expiresAtMs);assert.equal(confirmed.fieldProjectionGranted,true);
@@ -194,11 +209,9 @@ async function confirmDisplay606(c,grant,{afterCommit,refreshSourceAfterAck=fals
  try{observed=await rendered.jsonValue();}finally{await rendered.dispose();}
  assert.ok(observed.observedAtMs<offered.expiresAtMs,'Actual child render observation must precede its native deadline');
  assert.deepEqual(observed.snapshot,{state:'DISPLAY_RENDERED',principal:'RESTRICTED_DISPLAY_ONLY',origin:offered.displayOrigin,hash:'',controls:0,fields:expected});
- // The short-lease fixture must not spend its revocation margin waiting for passive polling.
  if(ack){
   const {wire,error}=await ack;if(error)throw error;
-  assert.equal(wire.request().frame(),documentFrame);assert.equal(wire.status(),200);
-  if(!await x.source.evaluate(sourceRendered606,offered.sessionId))await x.source.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();
+  assert.equal(wire.request().frame(),documentFrame);
  }
  await x.source.waitForFunction(sourceRendered606,offered.sessionId);
  liveDisplay606(offered,'Independent principal, native fields and receiver/backend render acknowledgement');
@@ -293,6 +306,7 @@ test('606 short native lease: confirmed fields clear at actual deadline while th
  const shortHandler=async route=>{if(route.request().postDataJSON()?.operation!=='offer'){await route.continue();return;}const actual=await forward549(x.f,route,s=>s.maximumAgeMs=5000);await route.fulfill({status:actual.status,headers:actual.headers,body:actual.body});};
  // Prepare CDP before the short grant; the real network fault starts only after
  // this grant's independently verified render. Never widen the native5s lease.
+ const {nativeWorkspaceDisplayTransportConnectionV1}=await import('../../src/pan527/origin-session-adapter.mjs');
  const connection=await x.b.context.newCDPSession(x.target);await connection.send('Network.enable');
  let transport,observeNativeStream,nativeStream,socket,nativeEnd,g,revoked,heldArgs=null;
  await x.source.route(displayPath606,shortHandler);
@@ -300,9 +314,11 @@ test('606 short native lease: confirmed fields clear at actual deadline while th
   const grant=await offerDisplay606(c);assert.ok(grant.offered.expiresAtMs-Date.now()<=5000);liveDisplay606(grant.offered,'Short native offer');
   assert.notEqual(grant.offered.sessionId,predecessors[0].sessionId);
   assert.notEqual(grant.offered.sessionId,predecessors[1].sessionId);
-  const {nativeWorkspaceDisplayTransportConnectionV1}=await import('../../src/pan527/origin-session-adapter.mjs');
   transport=nativeWorkspaceDisplayTransportConnectionV1(x.f.tls.gateway,{tenantId:'tenant-a',origin:x.f.tls.origin,identityDigest:x.f.sessions.binding.identityDigest});
   const nativeStreams=[];observeNativeStream=(request,response)=>{if(request.url==='/display/events')nativeStreams.push(response);};transport.server.on('request',observeNativeStream);
+  // Request the actual receiver state instead of spending part of the fixed
+  // lease waiting for the next passive poll. Confirm still waits for consent.
+  await refreshPair606(x.target);
   g=await confirmDisplay606(c,grant,{refreshSourceAfterAck:true});assert.equal(nativeStreams.length,1);nativeStream=nativeStreams[0];socket=nativeStream.socket;nativeEnd=nativeStream.end;
   // The earlier atomic preparation is not a later live witness for this fault.
   assert.deepEqual(await g.documentFrame.evaluate(displaySnapshot606),{state:'DISPLAY_RENDERED',principal:'RESTRICTED_DISPLAY_ONLY',origin:g.offered.displayOrigin,hash:'',controls:0,fields:c.expected});liveDisplay606(g.offered,'Live rendered child before the actual SSE stall');
@@ -361,7 +377,18 @@ test('606 delayed native display reads cannot undo confirm/revoke or newer read/
   const release=async(row,fail=false)=>{row.release(fail);await row.done;const completed=await row.terminal.done;assert.equal(completed.event,fail?'requestfailed':'requestfinished','The exact held native read must reach its intended terminal event, never CANCELLED as success');if(fail)assert.match(completed.failure?.errorText??'',/ERR_CONNECTION_FAILED/,'Only the explicitly injected transport error is this case');else{assert.equal(completed.failure,null);const response=await row.request.response();assert.ok(response);assert.equal(response.status(),row.actual.status);assert.equal(await response.finished(),null);assert.deepEqual(await response.body(),Buffer.from(row.actual.body),'The exact original native response body must really reach this client');}await x.target.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));};
   hold=true;const oldOffer=await nextRead();assert.equal(JSON.parse(oldOffer.actual.body).session.state,'OFFERED');
   const g=await confirmDisplay606(c,first,{afterCommit:()=>release(oldOffer)});assert.equal(await display.getAttribute('data-state'),'DISPLAY_ACTIVE');assert.equal(await display.locator('iframe').count(),1);assert.equal(await receiverConfirm.isDisabled(),true);
-  const oldActive=await nextRead();assert.equal(JSON.parse(oldActive.actual.body).session.state,'ACTIVE');const revoked=await revokeDisplay606(c,g,x.target,{focusBeforeEnter:false});await x.target.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_REVOKED');await release(oldActive);assert.equal(await display.getAttribute('data-state'),'DISPLAY_REVOKED');assert.equal(await display.locator('iframe').count(),0);assert.equal(await receiverConfirm.isDisabled(),true);await closedDisplay606(c,g);
+  const oldActive=await nextRead();assert.equal(JSON.parse(oldActive.actual.body).session.state,'ACTIVE');
+  // The original read has its own transport timeout. Release on the actual
+  // matching DOM commit, without waiting for the test driver to read the
+  // revoke response body first. Both independently verified outcomes matter.
+  const [revokeResult,releaseResult]=await Promise.allSettled([
+   revokeDisplay606(c,g,x.target,{focusBeforeEnter:false}),
+   x.target.waitForFunction(id=>{const panel=document.querySelector('.surface-native-presentation');return panel?.dataset.sessionId===id&&panel.dataset.state==='DISPLAY_REVOKED';},g.offered.sessionId,{timeout:8000}).then(()=>release(oldActive)),
+  ]);
+  if(revokeResult.status==='rejected')throw revokeResult.reason;
+  if(releaseResult.status==='rejected')throw releaseResult.reason;
+  const revoked=revokeResult.value;
+  assert.equal(await display.getAttribute('data-state'),'DISPLAY_REVOKED');assert.equal(await display.locator('iframe').count(),0);assert.equal(await receiverConfirm.isDisabled(),true);await closedDisplay606(c,g);
   // Two older reads (including an eventual transport error) must lose to a newer
   // native OFFERED read, with no mutation in this receiver between completions.
   const older=await nextRead(),olderError=await nextRead(),next=await offerDisplay606(c);await x.source.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_OFFERED');hold=false;const newer=x.target.waitForResponse(r=>r.url().endsWith('/workspace/surfaces/display-session-v1')&&r.request().postDataJSON()?.operation==='read'&&r.status()===200);await x.target.getByRole('button',{name:'Kopplungsstatus prüfen',exact:true}).click();assert.equal((await(await newer).json()).session.state,'OFFERED');await x.target.waitForFunction(()=>document.querySelector('.surface-native-presentation').dataset.state==='DISPLAY_OFFERED');await release(older);assert.equal(await display.getAttribute('data-state'),'DISPLAY_OFFERED');await release(olderError,true);assert.equal(await display.getAttribute('data-state'),'DISPLAY_OFFERED');assert.equal(await display.getByRole('alert').count(),0);assert.equal(await receiverConfirm.isDisabled(),false);

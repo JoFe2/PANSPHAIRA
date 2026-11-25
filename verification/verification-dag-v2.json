@@ -5055,7 +5055,7 @@
         {
           "path": "scripts/build-public-release.sh",
           "role": "SECURITY",
-          "sha256": "2f27ff4e4e2aaa96fcd2699b2afd06dbb8bbe2b7ebdda3cfe1f89189bf6dea71"
+          "sha256": "4eee9068abfb4d080972335765f7ad1e407ff0a67105e23d7cb08eccf38e0474"
         },
         {
           "path": "scripts/demo-current-head-e2e.mjs",
@@ -11489,7 +11489,7 @@
         {
           "path": "src/pan548/native-context-selection.mjs",
           "role": "SECURITY",
-          "sha256": "0ed05ef722196fdd955ee460520fa7afeb556ae2a5a652b3f13452deafab7915"
+          "sha256": "3b84d31a61eb85764b6646ce0d2fa3238e20938c09ea6bdbdaebd8423346e3f1"
         },
         {
           "path": "tests/pan548/context-contract.test.mjs",
@@ -11574,7 +11574,7 @@
         {
           "path": "src/pan548/native-model-free-invocations-v1.mjs",
           "role": "SOURCE",
-          "sha256": "0d854fb1220ca08103839e7ce222130c5f782416b3db786f407541c8c860f26d"
+          "sha256": "e059b429673376757fdcc74de46fbc00531d262455e8d3b13e87f0794eb88386"
         },
         {
           "path": "src/pan548/native-invocation-executor-v1.mjs",
@@ -11589,7 +11589,7 @@
         {
           "path": "src/pan548/native-context-journal-v1.mjs",
           "role": "SECURITY",
-          "sha256": "5495d9d1bb8f50ad29ab7ba91895a2f89d71fec9c0b911fb83e39da5435809ac"
+          "sha256": "bee7912a8add70d06ee98113ae28af6f03a8039279abdc0c446684a4c32fb1b9"
         },
         {
           "path": "src/pan548/native-context-checkpoints-v1.mjs",
@@ -11599,7 +11599,7 @@
         {
           "path": "src/pan548/native-context-projection-v1.mjs",
           "role": "SOURCE",
-          "sha256": "ccf6dc28b851038394dd736a3816959340e05c436fc6a66e63bdc2f5d217f72c"
+          "sha256": "a0c142e8e1286cdf52bd2302f480504aa44001a35ae54f987d6cffef33332c72"
         },
         {
           "path": "src/pan548/native-readonly-event-projection-v1.mjs",
@@ -11660,7 +11660,7 @@
         {
           "path": "tests/pan597/browser-pairing.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "a5840c10c2c34c9a7456c7fa7f73e21c31732fc825d1a5d5bcac827b5197ae7d"
+          "sha256": "cdc49bf2fc549e7c2a0105907f0480c361b6a90b32d1be427ef06dcb742430d5"
         },
         {
           "path": "packages/contracts/src/workspace-browser-pairing-v1.ts",
@@ -11705,7 +11705,7 @@
         {
           "path": "src/pan597/native-surfaces-v2.mjs",
           "role": "SOURCE",
-          "sha256": "99fc7d272fd1934090ec5bd808932686577e1c47f2b9596393669831c563092f"
+          "sha256": "9a45623c8a9ee249e3765286eb8b96e377c8a439e6b941f5161e8831117a1768"
         },
         {
           "path": "scripts/run-pan597-native-surface-tests.mjs",
@@ -11819,7 +11819,7 @@
         {
           "path": "docs/architecture/model-free-native-invocations-v1.md",
           "role": "DERIVED_EVIDENCE",
-          "sha256": "9dd5a1a94ad56919a6e16875746aba96691a470d7fcbace0aa35599b5aaf2b89"
+          "sha256": "ba5ff1d9b4f3dac3099da917c9408bdfe5c100b7670254cfc5ea99bbe95d9dd4"
         },
         {
           "path": "scripts/run-pan592-model-free-durable-tests.mjs",
@@ -11902,7 +11902,7 @@
         {
           "path": "tests/pan607/native-context-projection.test.mjs",
           "role": "VALIDATOR",
-          "sha256": "f1044971f55ef40974a6814d4bab304d90914766bd20567b3e5c3150854da293"
+          "sha256": "8f3ec18acbdab02ae53bec9e04ab912936056a7cb8f2165bc844dbb24f913447"
         },
         {
           "path": "tests/pan607/native-checkpoints.test.mjs",
