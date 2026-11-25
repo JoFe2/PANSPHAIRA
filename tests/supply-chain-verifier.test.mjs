@@ -357,6 +357,53 @@ test("unsafe or malformed public manifest entries fail closed", async () => {
   }
 });
 
+test("the PR scope accepts a bound feature change but sends shared or changed policy to the full suite", async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), "pr-scope-"));
+  try {
+    const git = (...args) => execFile("git", ["-C", dir, ...args]);
+    const commit = async () => {
+      await git("add", ".");
+      await git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "fixture");
+      return (await git("rev-parse", "HEAD")).stdout.trim();
+    };
+    const select = async (base, head) => (await execFile("python3", [path.join(root, ".github/ci-scope.py"), base, head], {cwd: dir})).stdout.trim();
+    const file = "packages/browser-workspace/src/workspace-administration-v1.css";
+    const graph = "verification/verification-dag-v2.json";
+    const digest = async (p) => (await import("node:crypto")).createHash("sha256").update(await readFile(path.join(dir, p))).digest("hex");
+    async function update(text, command = "same", subject = file) {
+      await mkdir(path.join(dir, path.dirname(subject)), {recursive:true});
+      await writeFile(path.join(dir, subject), text);
+      await writeFile(path.join(dir, graph), JSON.stringify({nodes:[{id:"ui", inputs:[{path:subject, sha256:await digest(subject)}], command}]}, null, 2) + "\n");
+      await writeFile(path.join(dir, "SHA256SUMS"), `${await digest(subject)}  ./${subject}\n${await digest(graph)}  ./${graph}\n`);
+      return commit();
+    }
+    await git("init", "-q", "--template=");
+    await mkdir(path.join(dir, "verification"));
+    const base = await update("before");
+    const feature = await update("after");
+    assert.equal(await select(base, feature), "approval");
+    assert.equal(await select(feature, feature), "full");
+    const changedPolicy = await update("after again", "changed");
+    assert.equal(await select(feature, changedPolicy), "full");
+    await writeFile(path.join(dir, "shared.mjs"), "export {};\n");
+    assert.equal(await select(changedPolicy, await commit()), "full");
+    const expected = {
+      "packages/contracts/src/incoming-invoice-extraction-benchmark.ts": "full",
+      "packages/browser-workspace/src/workspace-invocations-v1.ts": "full",
+      "packages/browser-workspace/src/workspace-invocations-v1.css": "full",
+      "tests/incoming-invoice-extraction-benchmark.test.ts": "invoice",
+      "tests/pan608/browser-invocations.test.mjs": "invocations",
+      "docs/architecture/model-free-native-invocations-v1.md": "invocations",
+    };
+    const actual = {};
+    for (const subject of Object.keys(expected)) {
+      const before = await update("before", "same", subject);
+      actual[subject] = await select(before, await update("after", "same", subject));
+    }
+    assert.deepEqual(actual, expected);
+  } finally { await rm(dir, {recursive:true, force:true}); }
+});
+
 test("CI runs the complete authoritative lifecycle once through secure-default proof", async () => {
   const workflow = await readFile(path.join(root, ".github/workflows/ci.yml"), "utf8");
   const manifest = JSON.parse(await readFile(path.join(root, "security/secure-default-proof-v1.json"), "utf8"));
@@ -364,6 +411,22 @@ test("CI runs the complete authoritative lifecycle once through secure-default p
   assert.equal((workflow.match(/^\s+run: npm (?:test|run test)$/gm) ?? []).length, 0,
     "proof already runs npm test including pretest and posttest");
   assert.equal(manifest.commands.authoritative, "npm test");
+  const step = (name) => workflow.split(/^      - name: /m).find(block => block.startsWith(name + "\n"));
+  assert.match(step("Run SAFE_GUIDED secure-default proof and full project suite"), /if: steps\.scope\.outputs\.group == 'full'/);
+  const compact = step("Run scoped PR checks");
+  assert.match(compact, /if: steps\.scope\.outputs\.group != 'full'/);
+  assert.doesNotMatch(step("Set up supported Docker Compose"), /^        if:/m, "all SAFE_GUIDED routes use pinned Compose");
+  assert.match(compact, /approval: \[[^\]\n]*'npm run pan562:test'/, "administration changes also exercise setup after restart");
+  for (const command of ["npm run pan597:test", "npm run pan550:test", "npm run pan608:test", "npm run docs:test", "npm run incoming-invoice-extraction:test:compiled"]) assert.ok(compact.includes(command), command);
+  assert.match(compact, /runProofCommand/);
+  assert.match(compact, /const browser = \['approval', 'invocations', 'surfaces'\]\.includes\(group\)/);
+  assert.match(compact, /if \(browser\) await runProofCommand\('npm run pan597:test', root\)/);
+  const routing = step("Choose PR verification scope");
+  assert.match(routing, /group=full/);
+  assert.match(routing, /GITHUB_EVENT_NAME\" == pull_request/);
+  assert.match(routing, /\$PR_BASE:\.github\/ci-scope\.py/);
+  assert.doesNotMatch(routing, /workflow_dispatch|TIMING_GROUP/);
+  assert.match(workflow, /^    name: Build, test and verify$/m);
   assert.match(workflow, /run: git diff --exit-code/);
 });
 
@@ -377,7 +440,9 @@ test("canonical lifecycle builds once and compiled variants preserve standalone 
   }
   const expanded = ["pretest", "test", "posttest"].flatMap(leaves);
   assert.equal(expanded.filter(command => command === "tsc -p tsconfig.json").length, 1);
-  assert.equal(scripts.pretest.split(" && ")[0], "npm run build");
+  const front = scripts.pretest.split(" && ");
+  assert.deepEqual(front.slice(0, 2), ["npm run build", "npm run pan597:test"], "surface failures must not wait behind unrelated groups");
+  assert.equal(front.filter(command => command === "npm run pan597:test").length, 1);
   const compiled = Object.keys(scripts).filter(name => name.endsWith(":compiled"));
   assert.ok(compiled.length > 0);
   for (const name of compiled) {
