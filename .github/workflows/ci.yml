@@ -35,6 +35,27 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Choose PR verification scope
+        id: scope
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          group=full
+          # A PR cannot promote its own classifier. Missing policy (including
+          # this change's first integration), unfamiliar diffs and main stay full.
+          if [[ "$GITHUB_EVENT_NAME" == pull_request && "$PR_BASE" =~ ^[0-9a-f]{40}$ && "$PR_HEAD" =~ ^[0-9a-f]{40}$ ]] &&
+             [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" && "$(git show -s --format=%P HEAD)" == "$PR_BASE $PR_HEAD" ]] &&
+             git show "$PR_BASE:.github/ci-scope.py" > "$RUNNER_TEMP/ci-scope.py"; then
+            group="$(python3 -I "$RUNNER_TEMP/ci-scope.py" "$PR_BASE" "$GITHUB_SHA")"
+          fi
+          case "$group" in full|docs|approval|invocations|surfaces|invoice) ;; *) exit 1 ;; esac
+          printf 'group=%s\n' "$group" >> "$GITHUB_OUTPUT"
+          printf 'Verification scope for `%s`: **%s**. Only `full` runs the authoritative lifecycle.\n' "$GITHUB_SHA" "$group" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -76,12 +97,14 @@ jobs:
       # The locked native package ships symlink metadata, not usable library
       # links. Keep other dependency scripts disabled; hydrate only this package.
       - name: Prepare embedded PostgreSQL runtime
+        if: steps.scope.outputs.group == 'full'
         run: |
           npm rebuild @embedded-postgres/linux-x64
           node_modules/@embedded-postgres/linux-x64/native/bin/initdb --version
           node_modules/@embedded-postgres/linux-x64/native/bin/postgres --version
 
       - name: Prepare exact private PAN527 browser and NSS tooling
+        if: steps.scope.outputs.group != 'docs' && steps.scope.outputs.group != 'invoice'
         env:
           PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/pan527-browsers
           PAN527_NSS_URL: https://snapshot.ubuntu.com/ubuntu/20261022T080000Z/pool/main/n/nss/libnss3-tools_3.98-1ubuntu0.2_amd64.deb
@@ -106,6 +129,7 @@ jobs:
         run: npm run supply-chain:verify
 
       - name: Prepare the exact public PAN454 synthetic runtime image
+        if: steps.scope.outputs.group == 'full'
         # Image acquisition is outside the NETWORK_NONE execution window.
         # Never substitute a floating tag or broaden workload permissions.
         run: docker pull --platform linux/amd64 node@sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03
@@ -114,6 +138,7 @@ jobs:
       # KS price-variance QUERY tests, not a real data source. Missing code
       # must fail here; no skip or fixture substitution.
       - name: Fetch the pinned public PAN692 KS code without credentials
+        if: steps.scope.outputs.group == 'full'
         env:
           GIT_TERMINAL_PROMPT: '0'
         run: |
@@ -131,6 +156,7 @@ jobs:
       # in the proof's sanitized child environment; do not run it a second time.
       - name: Record authoritative proof phase start
         id: proof_clock
+        if: steps.scope.outputs.group == 'full'
         run: |
           epoch="$(date +%s)"
           printf 'epoch=%s\n' "$epoch" >> "$GITHUB_OUTPUT"
@@ -138,10 +164,11 @@ jobs:
 
       - name: Run SAFE_GUIDED secure-default proof and full project suite
         id: secure_default
+        if: steps.scope.outputs.group == 'full'
         run: npm run proof:secure-default
 
       - name: Report authoritative proof phase duration and outcome
-        if: always()
+        if: always() && steps.scope.outputs.group == 'full'
         env:
           CM_PROOF_STARTED_EPOCH: ${{ steps.proof_clock.outputs.epoch }}
           CM_PROOF_OUTCOME: ${{ steps.secure_default.outcome }}
@@ -152,6 +179,37 @@ jobs:
           fi
           elapsed=$(( $(date +%s) - CM_PROOF_STARTED_EPOCH ))
           printf 'CI_PHASE SAFE_GUIDED elapsed_seconds=%s outcome=%s\n' "$elapsed" "$CM_PROOF_OUTCOME"
+
+      - name: Run scoped PR checks
+        if: steps.scope.outputs.group != 'full'
+        env:
+          PR_GROUP: ${{ steps.scope.outputs.group }}
+        run: |
+          node --input-type=module <<'JS'
+          import {readFileSync} from 'node:fs';
+          import {runProofCommand, validateSecureDefaultProof} from './scripts/verify-secure-default-proof.mjs';
+          const root = process.cwd();
+          const issues = validateSecureDefaultProof(root);
+          if (issues.length) throw new Error(issues.join('\n'));
+          const byGroup = {
+            docs: ['npm run docs:test', 'node --test tests/module-contribution-workflow.test.mjs'],
+            approval: ['npm run pan550:test', 'npm run pan562:test'],
+            invocations: ['npm run pan608:test'],
+            surfaces: [], // Its full native/browser group runs below.
+            invoice: ['npm run incoming-invoice-extraction:test:compiled']
+          };
+          const group = process.env.PR_GROUP;
+          if (!Object.hasOwn(byGroup, group)) throw new Error('Unknown PR test group');
+          // Browser groups provide a fresh TypeScript build; non-browser paths
+          // use the proof's own build instead of starting an unrelated browser.
+          const browser = ['approval', 'invocations', 'surfaces'].includes(group);
+          if (browser) await runProofCommand('npm run pan597:test', root);
+          const {commands} = JSON.parse(readFileSync('security/secure-default-proof-v1.json'));
+          for (const cmd of [...commands.focused.filter(cmd => !browser || cmd !== 'npm run build --silent'), ...byGroup[group]]) {
+            await runProofCommand(cmd, root);
+          }
+          JS
+          ./scripts/build-public-release.sh --output "$RUNNER_TEMP/cm-product-increment-rc-$(date -u +%Y%m%d)-pr"
 
       - name: Verify external video service boundary
         run: npm run external-video-service:test
@@ -186,7 +244,7 @@ jobs:
           retention-days: 30
 
       - name: Stage bounded PAN597 case evidence
-        if: always()
+        if: always() && steps.scope.outputs.group != 'docs' && steps.scope.outputs.group != 'invoice'
         shell: bash
         run: |
           set -euo pipefail
@@ -204,7 +262,7 @@ jobs:
           done
 
       - name: Retain bounded PAN597 case evidence
-        if: always()
+        if: always() && steps.scope.outputs.group != 'docs' && steps.scope.outputs.group != 'invoice'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: pan597-cases-${{ github.sha }}

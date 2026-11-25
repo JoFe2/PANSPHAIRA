@@ -5907,7 +5907,7 @@
         {
           "path": "package.json",
           "role": "TOOLCHAIN",
-          "sha256": "fe98372cb7af703f9413252aac442b1e3ec7682684b3fc1be8742d0daa0cf359"
+          "sha256": "b08a39c9e134a2a9bbc21afa751d7f845a54cea72722e03c3eb837888351b357"
         },
         {
           "path": "package-lock.json",
@@ -5922,7 +5922,12 @@
         {
           "path": ".github/workflows/ci.yml",
           "role": "ENVIRONMENT",
-          "sha256": "d1c078d2b2cebaebe07fe8589666e73a578fdbd44bb4daad1c0ef43d2e1131c7"
+          "sha256": "107a71c8d9fad68e0edf48e1aa802c5f5e9a832076d40a954ddac8c5d6344c5e"
+        },
+        {
+          "path": ".github/ci-scope.py",
+          "role": "ENVIRONMENT",
+          "sha256": "dd1f338960de3556a3ac95b38ccc66d92aebd350e71e8067762aba826f732644"
         }
       ],
       "ownedTests": [
