@@ -10626,7 +10626,7 @@
         {
           "path": "packages/browser-workspace/src/workspace-administration-v1.ts",
           "role": "SOURCE",
-          "sha256": "e51fa6168cb29b9671b6a212e430a956827509854a3b24a4c0450bf0a5a3f823"
+          "sha256": "b4fff7efed0a67eb3a20b97b05871ea8fd1ebd21205c3b6be0780e943a33d8ad"
         },
         {
           "path": "packages/browser-workspace/src/workspace-administration-v1.css",
