@@ -2,7 +2,7 @@
 // SAME native SQLite connection/transaction, no task engine/model/audio grants.
 import {createHash,randomBytes,timingSafeEqual}from'node:crypto';
 import {createNativeBrowserPairHandshakeV1}from'./native-browser-pairing-v1.mjs';
-import {isNativeWorkspaceContextSelectionV1}from'../pan548/native-context-selection.mjs';
+import {isNativeWorkspaceContextSelectionV1,nativeWorkspaceContextSurfaceCredentialsV2}from'../pan548/native-context-selection.mjs';
 import {nativeWorkspaceUiTaskOwnerConnectionV2,uiTaskClosedV2,uiTaskDigestV2}from'../pan548/native-ui-task-projection-v2.mjs';
 import {isNativeSurfaceProjectionReaderV2}from'../pan546/native-surface-projection-v2.mjs';
 import {canonicalJson}from'../../dist/packages/contracts/src/canonical-json.js';
@@ -14,6 +14,7 @@ function id(v,prefix){if(typeof v!=='string'||!new RegExp('^'+prefix+':[a-f0-9]{
 export function createNativeWorkspaceSurfacesV2(options){
  const {sessions,contextSelection,tasks,reader}=uiTaskClosedV2(options,['sessions','contextSelection','tasks','reader'],'SURFACE_OWNER_DENIED');
  if(!isNativeWorkspaceContextSelectionV1(contextSelection,sessions?.binding)||!isNativeSurfaceProjectionReaderV2(reader,sessions?.binding,contextSelection))throw Error('SURFACE_OWNER_DENIED');
+ const surfaceCredentials=nativeWorkspaceContextSurfaceCredentialsV2(contextSelection,sessions.binding);
  const t=nativeWorkspaceUiTaskOwnerConnectionV2(tasks,sessions.binding),{db,transaction}=t;let closed=false;
  db.exec(`CREATE TABLE IF NOT EXISTS workspace_surfaces_v2(
   surface_id TEXT PRIMARY KEY, proof_digest TEXT NOT NULL, principal_digest TEXT NOT NULL,
@@ -34,7 +35,8 @@ export function createNativeWorkspaceSurfacesV2(options){
  function authorization(headers){if(closed)throw Error('SURFACE_OWNER_CLOSED');const a=t.principal(headers),binding=contextSelection.surfaceBindingV2(headers);if(binding.subjectId!==a.p.subjectId||binding.role!==a.p.role)throw Error('SURFACE_SCOPE_DENIED');return {...a,binding};}
  function surfaceRow(v){return db.prepare('SELECT * FROM workspace_surfaces_v2 WHERE surface_id=?').get(id(v,'surface'));}
  function publicSurface(r){return {surfaceId:r.surface_id,connectionEpoch:r.connection_epoch,localGeneration:r.local_generation,pinned:!!r.pinned,dirty:!!r.dirty,contextEpoch:r.context_epoch,revisionDigest:r.revision_digest,context:r.route_json?JSON.parse(r.route_json):null,available:r.boot_epoch===t.bootEpoch&&!r.revoked};}
- function actor(headers){const a=authorization(headers),r=surfaceRow(headers['x-pan597-surface']);if(!r||r.principal_digest!==a.digest||r.session_id!==a.binding.sessionId||r.tab_id!==a.binding.tabId||typeof headers['x-pan597-proof']!=='string'||!/^[a-f0-9]{64}$/.test(headers['x-pan597-proof'])||!sameSecret(r.proof_digest,hash(headers['x-pan597-proof'])))throw Error('SURFACE_PROOF_DENIED');if(r.revoked||r.boot_epoch!==t.bootEpoch)throw Error('SURFACE_RECONNECT_REQUIRED');return {...a,row:r};}
+ function surfaceActor(headers,a){const r=surfaceRow(headers['x-pan597-surface']);if(!r||r.principal_digest!==a.digest||r.session_id!==a.binding.sessionId||r.tab_id!==a.binding.tabId||typeof headers['x-pan597-proof']!=='string'||!/^[a-f0-9]{64}$/.test(headers['x-pan597-proof'])||!sameSecret(r.proof_digest,hash(headers['x-pan597-proof'])))throw Error('SURFACE_PROOF_DENIED');if(r.revoked||r.boot_epoch!==t.bootEpoch)throw Error('SURFACE_RECONNECT_REQUIRED');return {...a,row:r};}
+ function actor(headers){return surfaceActor(headers,authorization(headers));}
  function livePeer(headers,r){if(!r||r.revoked||r.boot_epoch!==t.bootEpoch)throw Error('SURFACE_STALE_DENIED');const a=authorization(headers);if(r.principal_digest!==a.digest||r.session_id!==a.binding.sessionId)throw Error('SURFACE_SCOPE_DENIED');const peer=contextSelection.surfacePeerBindingV2(headers,r.tab_id);if(peer.contextEpoch!==r.context_epoch)throw Error('SURFACE_CONTEXT_STALE_DENIED');if(peer.currentV2){const v=peer.currentV2,projection=reader.read(headers,{routeId:v.routeId,objectId:v.objectId,expectedRevision:v.dataRevision},peer);if(projection.projectionDigest!==v.projectionDigest)throw Error('SURFACE_VIEW_REVISION_STALE');}return peer;}
  function event(surfaceId,commandId,phase){db.prepare('INSERT INTO workspace_surface_events_v2(surface_id,command_id,phase)VALUES(?,?,?)').run(surfaceId,commandId,phase);const head=db.prepare('SELECT coalesce(max(seq),0) n FROM workspace_surface_events_v2').get().n;db.prepare('DELETE FROM workspace_surface_events_v2 WHERE seq<=?').run(Math.max(0,head-128));}
  function delivery(idValue){return db.prepare('SELECT * FROM workspace_surface_outbox_v2 WHERE command_id=?').get(id(idValue,'display'));}
@@ -125,6 +127,39 @@ export function createNativeWorkspaceSurfacesV2(options){
    return {binding:a.binding,source:publicSurface(a.row),targets,catalog:reader.catalog(headers,a.binding)};
   },
   validateDisplay(headers,value){const a=actor(headers);if(value.sourceSurfaceId!==a.row.surface_id||value.sourceSurfaceId===value.targetSurfaceId)throw Error('SURFACE_TARGET_DENIED');guard(headers,{command_id:value.commandId,original_command:canonicalJson(value),source_id:value.sourceSurfaceId,target_id:value.targetSurfaceId,boot_epoch:t.bootEpoch});reader.read(headers,{routeId:value.routeId,objectId:value.objectId,expectedRevision:value.expectedRevision},a.binding);return true;},
+  readInvocationDisplayChild(headers,taskOwner,argumentBytes,argumentDigest){
+   if(closed)throw Error('SURFACE_OWNER_CLOSED');
+   if(taskOwner!==tasks||!db.isTransaction)throw Error('SURFACE_CHILD_BINDING_OWNER_DENIED');
+   const principal=t.principal(headers),binding=surfaceCredentials(headers);
+   if(binding.subjectId!==principal.p.subjectId||binding.role!==principal.p.role)throw Error('SURFACE_SCOPE_DENIED');
+   const a=surfaceActor(headers,{...principal,binding}),c=JSON.parse(argumentBytes),denied='SURFACE_CHILD_BINDING_BYTES_DENIED';
+   if(c?.schemaVersion!=='pansphaira.workspace-surface/display-command/v2'||canonicalJson(c)!==argumentBytes||uiTaskDigestV2(c)!==argumentDigest||c.sourceSurfaceId===c.targetSurfaceId)throw Error(denied);
+   const source=a.row.surface_id===c.sourceSurfaceId&&a.row.connection_epoch===c.sourceConnectionEpoch;
+   const target=a.row.surface_id===c.targetSurfaceId&&a.row.connection_epoch===c.targetConnectionEpoch;
+   if(!source&&!target)throw Error('SURFACE_CHILD_BINDING_ROLE_DENIED');
+   const d=delivery(c.commandId),child=t.readRow(c.commandId);
+   if(!d||!child)throw Error('SURFACE_CHILD_BINDING_UNAVAILABLE');
+   if(child.principal_digest!==a.digest||child.request_digest!==argumentDigest||child.original_command!==argumentBytes||
+      d.original_command!==argumentBytes||d.source_id!==c.sourceSurfaceId||d.target_id!==c.targetSurfaceId||d.boot_epoch!==t.bootEpoch)throw Error(denied);
+
+   let renderReceipt=null;
+   if(d.status==='ACCEPTED'){
+    if(child.state!=='ACCEPTED'||child.result_json!==null||d.result_json!==null||d.projection_json!==null||d.read_token!==null||d.commit_token!==null)throw Error(denied);
+   }else if(d.status==='RENDERED'){
+    const renderDenied='SURFACE_CHILD_BINDING_RENDER_DENIED';
+    if(child.state!=='COMPLETED'||d.result_json===null||child.result_json!==d.result_json||d.projection_json===null||!d.read_token||!d.commit_token)throw Error(renderDenied);
+    const projection=JSON.parse(d.projection_json),{projectionDigest,...unsigned}=projection;
+    // The receipt binds this command's activation, not the target's live view.
+    if(projection.schemaVersion!=='pansphaira.workspace-surface/projection/v2'||projection.kind!=='DOCUMENT'||
+       projection.routeId!==c.routeId||projection.objectId!==c.objectId||projection.dataRevision!==c.expectedRevision||
+       projectionDigest!==uiTaskDigestV2(unsigned)||projection.resultRevision!==uiTaskDigestV2(projection.data))throw Error(renderDenied);
+    renderReceipt={schemaVersion:'pansphaira.workspace-surface/render-receipt/v2',surfaceId:c.targetSurfaceId,connectionEpoch:c.targetConnectionEpoch,
+     localGeneration:c.targetLocalGeneration,contextEpoch:integer(c.targetContextEpoch+1,1),routeId:c.routeId,objectId:c.objectId,
+     dataRevision:c.expectedRevision,resultRevision:projection.resultRevision,projectionDigest,clientReportedDomCommit:true,nativeReadVerified:true,physicalPixelSightCertified:false};
+    if(d.result_json!==canonicalJson(renderReceipt))throw Error(renderDenied);
+   }else throw Error('SURFACE_CHILD_BINDING_UNAVAILABLE');
+   return {childCommandId:child.command_id,childRequestDigest:child.request_digest,deliveryStatus:d.status,command:c,renderReceipt};
+  },
  });
  owned.set(owner,{binding:sessions.binding,contextSelection,invocation,displayConnection:Object.freeze({db,transaction,bootEpoch:t.bootEpoch,pairs:browserPairs})});return owner;
 }

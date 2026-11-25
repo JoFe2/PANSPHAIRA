@@ -74,7 +74,7 @@ real-model/physical-device/whole-design acceptance.
 
 The existing admission/executor seam additionally exposes a read-only
 versioned observation of one invocation: request
-`pansphaira.workspace-action-observation/request/v1` accepts only
+`pansphaira.workspace-action-observation/observe/v1` accepts only
 `schemaVersion` and the existing `invocationId` handle; any unknown field,
 forged handle or foreign principal is denied at the same authenticated
 boundary, and observation alone never dispatches, grants rights or mutates.
@@ -92,7 +92,7 @@ A genuine after-begin reply loss stays `UNKNOWN` with attempt 1 retained and
 confers no re-dispatch right. Accepted is never rendered, and rendered is
 never persisted: `personalViewPersistenceProduced` requires the existing
 personal-save CAS/readback, `physicalPixelSightCertified` remains false here,
-and `model`/`modelPlanLineage` stay `NOT_RUN`/`null` — observation infers no
+and `model`/`modelPlanLineage` stay `NOT_RUN`/`NOT_INFERRED` — observation infers no
 model plan lineage and grants no new authority; effective authorization and
 limits remain at the existing owner/executor. The existing unavailable native
 pause/cancel/resume (PAN698) and the offer-line API (PAN704) stay explicitly

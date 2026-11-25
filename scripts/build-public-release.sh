@@ -1238,7 +1238,7 @@ PY
 find "$temporary" -exec touch -h -d '@0' -- {} +
 (
   cd "$temporary"
-  find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+  find . -type f ! -path './SHA256SUMS' -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
 )
 chmod 0644 "$temporary/SHA256SUMS"
 touch -d '@0' "$temporary/SHA256SUMS"
